@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.common.collect.Sets;
 import com.mikepenz.fastadapter.ICollapsible;
@@ -42,6 +43,7 @@ import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.IProtocolHandler;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
+import de.kuschku.libquassel.events.StatusMessageEvent;
 import de.kuschku.libquassel.exceptions.UnknownTypeException;
 import de.kuschku.libquassel.functions.types.HandshakeFunction;
 import de.kuschku.libquassel.localtypes.Buffer;
@@ -320,6 +322,10 @@ public class MainActivity extends AppCompatActivity {
         } else if (event.action == BufferViewManagerChangedEvent.Action.MODIFY && event.id == selectedProfile) {
             header.setActiveProfile(selectedProfile, true);
         }
+    }
+
+    public void onEventMainThread(StatusMessageEvent event) {
+        Toast.makeText(this, String.format("%s: %s", event.scope, event.message), Toast.LENGTH_LONG).show();
     }
 
     public void onEventMainThread(GeneralErrorEvent event) {

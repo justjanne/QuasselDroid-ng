@@ -11,6 +11,7 @@ import java.util.Map;
 import de.kuschku.libquassel.backlogmanagers.BacklogManager;
 import de.kuschku.libquassel.backlogmanagers.SimpleBacklogManager;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
+import de.kuschku.libquassel.events.StatusMessageEvent;
 import de.kuschku.libquassel.functions.types.InitRequestFunction;
 import de.kuschku.libquassel.functions.types.RpcCallFunction;
 import de.kuschku.libquassel.localtypes.Buffer;
@@ -62,6 +63,10 @@ public class Client {
 
     public void displayMsg(final Message message) {
         backlogManager.displayMessage(message.bufferInfo.id, message);
+    }
+
+    public void displayStatusMsg(String scope, String message) {
+        busProvider.sendEvent(new StatusMessageEvent(scope, message));
     }
 
     public void putNetwork(final Network network) {

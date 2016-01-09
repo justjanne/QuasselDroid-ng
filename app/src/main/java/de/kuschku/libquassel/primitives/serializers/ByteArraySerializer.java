@@ -50,7 +50,7 @@ public class ByteArraySerializer implements PrimitiveSerializer<String> {
                 // Get rid of the null byte at the end
                 contentBuffer.limit(len - 1);
             }
-            return Charsets.ISO_8859_1.decode(contentBuffer).toString();
+            return Charsets.UTF_8.decode(contentBuffer).toString();
         }
     }
 }
