@@ -27,6 +27,11 @@ android {
     }
 }
 
+if(project.hasProperty("Android.signing")
+        && new File((String) project.property("Android.signing") + ".gradle").exists()) {
+    apply from: project.property("Android.signing") + ".gradle";
+}
+
 dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
