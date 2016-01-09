@@ -12,10 +12,10 @@ import de.kuschku.libquassel.functions.types.SerializedFunction;
 import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.objects.serializers.StringObjectMapSerializer;
-import de.kuschku.libquassel.syncables.types.IrcChannel;
-import de.kuschku.libquassel.syncables.types.IrcUser;
 import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.primitives.types.QVariant;
+import de.kuschku.libquassel.syncables.types.IrcChannel;
+import de.kuschku.libquassel.syncables.types.IrcUser;
 import de.kuschku.libquassel.syncables.types.Network;
 
 public class NetworkSerializer implements ObjectSerializer<Network> {

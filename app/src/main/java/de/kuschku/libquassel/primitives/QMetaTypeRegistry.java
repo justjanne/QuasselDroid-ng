@@ -3,6 +3,7 @@ package de.kuschku.libquassel.primitives;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
 import java.util.HashMap;
@@ -42,85 +43,85 @@ public class QMetaTypeRegistry {
     private static final Map<String, QMetaType> stringSerializerMap = new HashMap<>();
 
     static {
-        addType(QMetaType.Type.Void, new VoidSerializer());
-        addType(QMetaType.Type.Bool, new BoolSerializer());
-        addType(QMetaType.Type.Int, new IntSerializer());
-        addType(QMetaType.Type.UserType, "BufferId", new IntSerializer());
-        addType(QMetaType.Type.UserType, "NetworkId", new IntSerializer());
-        addType(QMetaType.Type.UserType, "IdentityId", new IntSerializer());
-        addType(QMetaType.Type.UserType, "MsgId", new IntSerializer());
-        addType(QMetaType.Type.UserType, "BufferInfo", new BufferInfoSerializer());
-        addType(QMetaType.Type.UserType, "Message", new MessageSerializer());
-        addType(QMetaType.Type.UserType, "Identity", new UserTypeSerializer<>(new IdentitySerializer()));
-        addType(QMetaType.Type.UserType, "Network::Server", new UserTypeSerializer<>(new NetworkServerSerializer()));
-        addType(QMetaType.Type.UInt, new IntSerializer());
-        addType(QMetaType.Type.UShort, new ShortSerializer());
+        addType(Void.class, QMetaType.Type.Void, new VoidSerializer());
+        addType(boolean.class, QMetaType.Type.Bool, new BoolSerializer());
+        addType(int.class, QMetaType.Type.Int, new IntSerializer());
+        addType(int.class, QMetaType.Type.UserType, "BufferId", new IntSerializer());
+        addType(int.class, QMetaType.Type.UserType, "NetworkId", new IntSerializer());
+        addType(int.class, QMetaType.Type.UserType, "IdentityId", new IntSerializer());
+        addType(int.class, QMetaType.Type.UserType, "MsgId", new IntSerializer());
+        addType(BufferInfo.class, QMetaType.Type.UserType, "BufferInfo", new BufferInfoSerializer());
+        addType(Message.class, QMetaType.Type.UserType, "Message", new MessageSerializer());
+        addType(Identity.class, QMetaType.Type.UserType, "Identity", new UserTypeSerializer<>(new IdentitySerializer()));
+        addType(NetworkServer.class, QMetaType.Type.UserType, "Network::Server", new UserTypeSerializer<>(new NetworkServerSerializer()));
+        addType(int.class, QMetaType.Type.UInt, new IntSerializer());
+        addType(short.class, QMetaType.Type.UShort, new ShortSerializer());
 
         // TODO: Implement more custom quassel types
 
-        addType(QMetaType.Type.QTime, new TimeSerializer());
-        addType(QMetaType.Type.LongLong);
-        addType(QMetaType.Type.ULongLong);
-        addType(QMetaType.Type.Double);
-        addType(QMetaType.Type.QChar, new CharSerializer());
-        addType(QMetaType.Type.QVariantList, new VariantListSerializer<>());
-        addType(QMetaType.Type.QVariantMap, new VariantMapSerializer<>());
-        addType(QMetaType.Type.QStringList, new StringListSerializer());
-        addType(QMetaType.Type.QString, new StringSerializer());
-        addType(QMetaType.Type.QByteArray, new ByteArraySerializer());
-        addType(QMetaType.Type.QBitArray);
-        addType(QMetaType.Type.QDate);
-        addType(QMetaType.Type.QDateTime, new DateTimeSerializer());
-        addType(QMetaType.Type.QUrl);
-        addType(QMetaType.Type.QLocale);
-        addType(QMetaType.Type.QRect);
-        addType(QMetaType.Type.QRectF);
-        addType(QMetaType.Type.QSize);
-        addType(QMetaType.Type.QSizeF);
-        addType(QMetaType.Type.QLine);
-        addType(QMetaType.Type.QLineF);
-        addType(QMetaType.Type.QPoint);
-        addType(QMetaType.Type.QPointF);
+        addType(DateTime.class, QMetaType.Type.QTime, new TimeSerializer());
+        addType(BigDecimal.class, QMetaType.Type.LongLong);
+        addType(BigDecimal.class, QMetaType.Type.ULongLong);
+        addType(double.class, QMetaType.Type.Double);
+        addType(char.class, QMetaType.Type.QChar, new CharSerializer());
+        addType(List.class, QMetaType.Type.QVariantList, new VariantListSerializer());
+        addType(Map.class, QMetaType.Type.QVariantMap, new VariantMapSerializer());
+        addType(List.class, QMetaType.Type.QStringList, new StringListSerializer());
+        addType(String.class, QMetaType.Type.QString, new StringSerializer());
+        addType(String.class, QMetaType.Type.QByteArray, new ByteArraySerializer());
+        addType(void.class, QMetaType.Type.QBitArray);
+        addType(void.class, QMetaType.Type.QDate);
+        addType(DateTime.class, QMetaType.Type.QDateTime, new DateTimeSerializer());
+        addType(void.class, QMetaType.Type.QUrl);
+        addType(void.class, QMetaType.Type.QLocale);
+        addType(void.class, QMetaType.Type.QRect);
+        addType(void.class, QMetaType.Type.QRectF);
+        addType(void.class, QMetaType.Type.QSize);
+        addType(void.class, QMetaType.Type.QSizeF);
+        addType(void.class, QMetaType.Type.QLine);
+        addType(void.class, QMetaType.Type.QLineF);
+        addType(void.class, QMetaType.Type.QPoint);
+        addType(void.class, QMetaType.Type.QPointF);
         // TODO: Handle QRegExp for the IgnoreListManager
-        addType(QMetaType.Type.QRegExp);
-        addType(QMetaType.Type.QVariantHash);
-        addType(QMetaType.Type.QEasingCurve);
+        addType(void.class, QMetaType.Type.QRegExp);
+        addType(void.class, QMetaType.Type.QVariantHash);
+        addType(void.class, QMetaType.Type.QEasingCurve);
 
         // UI Types
-        addType(QMetaType.Type.QFont);
-        addType(QMetaType.Type.QPixmap);
-        addType(QMetaType.Type.QBrush);
-        addType(QMetaType.Type.QColor);
-        addType(QMetaType.Type.QPalette);
-        addType(QMetaType.Type.QIcon);
-        addType(QMetaType.Type.QImage);
-        addType(QMetaType.Type.QPolygon);
-        addType(QMetaType.Type.QRegion);
-        addType(QMetaType.Type.QBitmap);
-        addType(QMetaType.Type.QCursor);
-        addType(QMetaType.Type.QSizePolicy);
-        addType(QMetaType.Type.QKeySequence);
-        addType(QMetaType.Type.QPen);
-        addType(QMetaType.Type.QTextLength);
-        addType(QMetaType.Type.QTextFormat);
-        addType(QMetaType.Type.QMatrix);
-        addType(QMetaType.Type.QTransform);
-        addType(QMetaType.Type.QMatrix4x4);
-        addType(QMetaType.Type.QVector2D);
-        addType(QMetaType.Type.QVector3D);
-        addType(QMetaType.Type.QVector4D);
-        addType(QMetaType.Type.QQuaternion);
+        addType(void.class, QMetaType.Type.QFont);
+        addType(void.class, QMetaType.Type.QPixmap);
+        addType(void.class, QMetaType.Type.QBrush);
+        addType(void.class, QMetaType.Type.QColor);
+        addType(void.class, QMetaType.Type.QPalette);
+        addType(void.class, QMetaType.Type.QIcon);
+        addType(void.class, QMetaType.Type.QImage);
+        addType(void.class, QMetaType.Type.QPolygon);
+        addType(void.class, QMetaType.Type.QRegion);
+        addType(void.class, QMetaType.Type.QBitmap);
+        addType(void.class, QMetaType.Type.QCursor);
+        addType(void.class, QMetaType.Type.QSizePolicy);
+        addType(void.class, QMetaType.Type.QKeySequence);
+        addType(void.class, QMetaType.Type.QPen);
+        addType(void.class, QMetaType.Type.QTextLength);
+        addType(void.class, QMetaType.Type.QTextFormat);
+        addType(void.class, QMetaType.Type.QMatrix);
+        addType(void.class, QMetaType.Type.QTransform);
+        addType(void.class, QMetaType.Type.QMatrix4x4);
+        addType(void.class, QMetaType.Type.QVector2D);
+        addType(void.class, QMetaType.Type.QVector3D);
+        addType(void.class, QMetaType.Type.QVector4D);
+        addType(void.class, QMetaType.Type.QQuaternion);
 
-        addType(QMetaType.Type.VoidStar, "void*");
-        addType(QMetaType.Type.Long, new LongSerializer());
-        addType(QMetaType.Type.Short, new ShortSerializer());
-        addType(QMetaType.Type.Char, new ByteSerializer());
-        addType(QMetaType.Type.ULong, new LongSerializer());
-        addType(QMetaType.Type.UChar, new ByteSerializer());
-        addType(QMetaType.Type.Float);
-        addType(QMetaType.Type.QObjectStar, "QObject*");
-        addType(QMetaType.Type.QWidgetStar, "QWidget*");
-        addType(QMetaType.Type.QVariant, new VariantSerializer());
+        addType(void.class, QMetaType.Type.VoidStar, "void*");
+        addType(long.class, QMetaType.Type.Long, new LongSerializer());
+        addType(short.class, QMetaType.Type.Short, new ShortSerializer());
+        addType(byte.class, QMetaType.Type.Char, new ByteSerializer());
+        addType(long.class, QMetaType.Type.ULong, new LongSerializer());
+        addType(byte.class, QMetaType.Type.UChar, new ByteSerializer());
+        addType(void.class, QMetaType.Type.Float);
+        addType(void.class, QMetaType.Type.QObjectStar, "QObject*");
+        addType(void.class, QMetaType.Type.QWidgetStar, "QWidget*");
+        addType(QVariant.class, QMetaType.Type.QVariant, new VariantSerializer());
     }
 
     // Disable Constructor
@@ -128,20 +129,20 @@ public class QMetaTypeRegistry {
 
     }
 
-    private static <T> void addType(final QMetaType.Type type, final String name, final PrimitiveSerializer<T> serializer) {
-        addType(new QMetaType<T>(type, name, serializer));
+    private static <T> void addType(final Class cl, final QMetaType.Type type, final String name, final PrimitiveSerializer<T> serializer) {
+        addType(new QMetaType<T>(cl, type, name, serializer));
     }
 
-    private static <T> void addType(final QMetaType.Type type, final String name) {
-        addType(new QMetaType<T>(type, name));
+    private static <T> void addType(final Class cl, final QMetaType.Type type, final String name) {
+        addType(new QMetaType<T>(cl, type, name));
     }
 
-    private static <T> void addType(final QMetaType.Type type, final PrimitiveSerializer<T> serializer) {
-        addType(new QMetaType<T>(type, serializer));
+    private static <T> void addType(final Class cl, final QMetaType.Type type, final PrimitiveSerializer<T> serializer) {
+        addType(new QMetaType<T>(cl, type, serializer));
     }
 
-    private static <T> void addType(final QMetaType.Type type) {
-        addType(new QMetaType<T>(type));
+    private static <T> void addType(final Class cl, final QMetaType.Type type) {
+        addType(new QMetaType<T>(cl, type));
     }
 
     private static <T> void addType(final QMetaType<T> metaType) {
@@ -213,7 +214,7 @@ public class QMetaTypeRegistry {
             if (((List) type).size() > 0 && ((List) type).get(0) instanceof String)
                 return (QMetaType<T>) typeSerializerMap.get(QMetaType.Type.QStringList);
             else if (((List) type).size() > 0 && ((List) type).get(0) instanceof QVariant)
-                return (QMetaType<T>) new QMetaType<T>(QMetaType.Type.QVariantList, new VariantVariantListSerializer());
+                return new QMetaType<>((Class) type.getClass(), QMetaType.Type.QVariantList, new VariantVariantListSerializer());
             else
                 return (QMetaType<T>) typeSerializerMap.get(QMetaType.Type.QVariantList);
         } else if (type instanceof Map)

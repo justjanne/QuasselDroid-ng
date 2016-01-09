@@ -9,13 +9,13 @@ import de.kuschku.quasseldroid_ng.BufferDrawerItem;
 public class StatusBuffer implements Buffer {
     private final BufferInfo info;
     private final Network network;
+    private IDrawerItem drawerElement = new BufferDrawerItem(this);
 
     public StatusBuffer(BufferInfo info, Network network) {
         this.info = info;
         this.network = network;
     }
 
-    private IDrawerItem drawerElement = new BufferDrawerItem(this);
     public IDrawerItem getDrawerElement() {
         return drawerElement;
     }

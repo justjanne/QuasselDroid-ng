@@ -6,6 +6,10 @@ public class SyncInvocationException extends InvocationTargetException {
     public SyncInvocationException() {
     }
 
+    public SyncInvocationException(String detailMessage) {
+        super(null, detailMessage);
+    }
+
     public SyncInvocationException(Throwable exception) {
         super(exception);
     }

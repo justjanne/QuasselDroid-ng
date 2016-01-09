@@ -27,12 +27,12 @@ public abstract class SyncableObject {
         return objectName;
     }
 
-    public void renameObject(String objectName) {
-        setObjectName(objectName);
-    }
-
     public void setObjectName(String objectName) {
         this.objectName = objectName;
+    }
+
+    public void renameObject(String objectName) {
+        setObjectName(objectName);
     }
 
     public abstract void init(InitDataFunction function, BusProvider provider, Client client);

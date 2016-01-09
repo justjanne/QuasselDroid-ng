@@ -10,8 +10,8 @@ import de.kuschku.libquassel.functions.types.PackedFunction;
 import de.kuschku.libquassel.functions.types.SerializedFunction;
 import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
-import de.kuschku.libquassel.syncables.types.IrcUser;
 import de.kuschku.libquassel.primitives.types.QVariant;
+import de.kuschku.libquassel.syncables.types.IrcUser;
 
 public class IrcUserSerializer implements ObjectSerializer<IrcUser> {
     @Override

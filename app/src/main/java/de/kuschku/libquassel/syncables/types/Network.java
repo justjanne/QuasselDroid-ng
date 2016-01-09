@@ -124,7 +124,7 @@ public class Network extends SyncableObject {
     }
 
     public void addIrcUser(String sender) {
-        provider.dispatch(new InitRequestFunction("IrcUser", getObjectName()+"/"+sender));
+        provider.dispatch(new InitRequestFunction("IrcUser", getObjectName() + "/" + sender));
     }
 
     public IrcUser getUser(String name) {

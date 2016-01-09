@@ -1,7 +1,5 @@
 package de.kuschku.libquassel;
 
-import android.util.Log;
-
 import java.util.UUID;
 
 import de.greenrobot.event.EventBus;

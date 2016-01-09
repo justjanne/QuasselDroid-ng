@@ -1,7 +1,5 @@
 package de.kuschku.libquassel;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,7 +21,6 @@ import de.kuschku.libquassel.primitives.types.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.BufferSyncer;
 import de.kuschku.libquassel.syncables.types.BufferViewManager;
-import de.kuschku.libquassel.syncables.types.IrcUser;
 import de.kuschku.libquassel.syncables.types.Network;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.util.Stream;
@@ -35,14 +32,13 @@ public class Client {
     private final List<String> initDataQueue = new ArrayList<>();
     private final BacklogManager backlogManager;
     private final BusProvider busProvider;
+    public int lag;
     private ConnectionChangeEvent.Status connectionStatus;
     private ClientInitAck core;
     private SessionState state;
     private BufferViewManager bufferViewManager;
     private BufferSyncer bufferSyncer;
     private ClientData clientData;
-
-    public int lag;
 
     public Client(final BusProvider busProvider) {
         this(new SimpleBacklogManager(busProvider), busProvider);
@@ -176,11 +172,6 @@ public class Client {
         this.core = core;
     }
 
-    public void setConnectionStatus(final ConnectionChangeEvent.Status connectionStatus) {
-        this.connectionStatus = connectionStatus;
-        busProvider.sendEvent(new ConnectionChangeEvent(connectionStatus));
-    }
-
     public void setClientData(ClientData clientData) {
         this.clientData = clientData;
     }
@@ -195,5 +186,10 @@ public class Client {
 
     public ConnectionChangeEvent.Status getConnectionStatus() {
         return connectionStatus;
+    }
+
+    public void setConnectionStatus(final ConnectionChangeEvent.Status connectionStatus) {
+        this.connectionStatus = connectionStatus;
+        busProvider.sendEvent(new ConnectionChangeEvent(connectionStatus));
     }
 }

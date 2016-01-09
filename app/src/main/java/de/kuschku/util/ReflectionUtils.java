@@ -1,13 +1,13 @@
 package de.kuschku.util;
 
-import java.lang.reflect.InvocationTargetException;
+import android.support.annotation.NonNull;
+
+import com.google.common.primitives.Primitives;
+
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.exceptions.SyncInvocationException;
 
 public class ReflectionUtils {
@@ -16,68 +16,53 @@ public class ReflectionUtils {
     }
 
     public static void invokeMethod(Object o, String name, Object[] argv) throws SyncInvocationException {
-        Method m;
-        try {
-            m = getMethodFromSignature(name, argv.length, o.getClass());
-            try {
-                m.invoke(o, argv);
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new SyncInvocationException(e, String.format("Unknown method: %s::%s with arguments: %s", o.getClass().getSimpleName(), name, Arrays.toString(argv)));
-            }
-        } catch (SyncInvocationException e) {
-            throw e;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SyncInvocationException(e, String.format("Unknown method: %s::%s with arguments: %s", o.getClass().getSimpleName(), name, Arrays.toString(argv)));
+        name = stripName(name);
+
+        Class<?>[] classes = new Class<?>[argv.length];
+        for (int i = 0; i < argv.length; i++) {
+            classes[i] = argv[i].getClass();
         }
+        Method m = getMethodFromSignature(name, o.getClass(), classes);
+        try {
+
+            if (m != null) {
+                m.invoke(o, argv);
+            }
+
+        } catch (Exception e) {
+            throw new SyncInvocationException(e, String.format("Error invoking %s::%s with arguments %s", o.getClass().getSimpleName(), name, Arrays.toString(argv)));
+        }
+        throw new SyncInvocationException(String.format("Error invoking %s::%s with arguments %s", o.getClass().getSimpleName(), name, Arrays.toString(argv)));
+    }
+
+    @NonNull
+    private static String stripName(String name) {
+        return (name.contains("(")) ? name.substring(0, name.indexOf("(")) : name;
     }
 
     public static void invokeMethod(Object o, String name, List argv) throws SyncInvocationException {
         invokeMethod(o, name, argv.toArray(new Object[argv.size()]));
     }
 
-    private static Method getMethodFromSignature(String methodName, int parameterCount, Class cl) {
-        String[] types = new String[] {};
-        if (methodName.contains("(")) {
-            types = methodName.substring(methodName.indexOf("(")+1, methodName.indexOf(")")).split(",");
-            methodName = methodName.substring(0, methodName.indexOf("("));
-        }
+    private static Method getMethodFromSignature(String methodName, Class cl, Class<?>[] parameterTypes) {
+        Method[] methods = cl.getMethods();
+        looper:
+        for (Method m : methods) {
+            if (m.getName().equals(methodName) && m.getParameterTypes().length == parameterTypes.length) {
+                for (int i = 0; i < parameterTypes.length; i++) {
+                    Class mParam = m.getParameterTypes()[i];
+                    Class vParam = parameterTypes[i];
+                    if (mParam.isPrimitive() && Primitives.isWrapperType(vParam))
+                        vParam = Primitives.unwrap(vParam);
 
-        List<Method> candidates = new ArrayList<>();
-        for (final Method m : cl.getDeclaredMethods()) {
-            if (m.getName().equals(methodName) && m.getParameterTypes().length == parameterCount) {
-                candidates.add(m);
-            }
-        }
-        if (candidates.size() == 1) return candidates.get(0);
-        else if (candidates.size() > 1){
-            for (Method m : candidates) {
-                if (matches(types, m.getParameterTypes()))
-                    return m;
-            }
-        }
-
-        throw new IllegalArgumentException("Could not find a method with proper arguments");
-    }
-
-    private static boolean matches(String[] types, Class[] classes) {
-        paramater_loop: for (int i = 0; i < types.length; i++) {
-            Class cl = classes[i];
-            while (cl != Object.class) {
-                if (cl.getSimpleName().equals(types[i])) {
-                    continue paramater_loop;
-                } else {
-                    for (Class in : cl.getInterfaces()) {
-                        if (in.getSimpleName().equals(types[i])) {
-                            continue paramater_loop;
-                        }
+                    if (mParam != vParam && !mParam.isAssignableFrom(vParam)) {
+                        continue looper;
                     }
                 }
-                cl = cl.getSuperclass();
+                return m;
             }
-            return false;
         }
-        return true;
+
+        return null;
     }
 }

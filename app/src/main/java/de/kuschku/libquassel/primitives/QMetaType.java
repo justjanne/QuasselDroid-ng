@@ -38,21 +38,23 @@ import de.kuschku.libquassel.primitives.serializers.PrimitiveSerializer;
 public class QMetaType<T> {
     public final Type type;
     public final String name;
+    public final Class cl;
     public final PrimitiveSerializer<T> serializer;
 
-    public QMetaType(Type type) {
-        this(type, type.getSerializableName());
+    public QMetaType(Class cl, Type type) {
+        this(cl, type, type.getSerializableName());
     }
 
-    public QMetaType(Type type, String name) {
-        this(type, name, null);
+    public QMetaType(Class cl, Type type, String name) {
+        this(cl, type, name, null);
     }
 
-    public QMetaType(Type type, PrimitiveSerializer<T> serializer) {
-        this(type, type.getSerializableName(), serializer);
+    public QMetaType(Class cl, Type type, PrimitiveSerializer<T> serializer) {
+        this(cl, type, type.getSerializableName(), serializer);
     }
 
-    public QMetaType(Type type, String name, PrimitiveSerializer<T> serializer) {
+    public QMetaType(Class cl, Type type, String name, PrimitiveSerializer<T> serializer) {
+        this.cl = cl;
         this.type = type;
         this.name = name;
         this.serializer = serializer;

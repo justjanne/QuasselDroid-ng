@@ -59,7 +59,7 @@ public class IrcChannel extends SyncableObject {
         if (UserModes.get(nick) == null)
             UserModes.put(nick, mode);
         else if (!UserModes.get(nick).contains(mode))
-            UserModes.put(nick, UserModes.get(nick)+mode);
+            UserModes.put(nick, UserModes.get(nick) + mode);
     }
 
     public void removeUserMode(String nick, String mode) {

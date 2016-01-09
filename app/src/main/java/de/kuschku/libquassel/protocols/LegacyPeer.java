@@ -56,7 +56,7 @@ public class LegacyPeer implements RemotePeer {
     public final void onEventBackgroundThread(SyncFunction func) {
         final List serialize = new UnpackedSyncFunctionSerializer().serialize(func);
         connection.getOutputExecutor().submit(new OutputRunnable<>(new VariantSerializer<List>(),
-                new QVariant<>(new QMetaType<List>(QMetaType.Type.QVariantList, new VariantVariantListSerializer()),
+                new QVariant<>(new QMetaType<List>(List.class, QMetaType.Type.QVariantList, new VariantVariantListSerializer()),
                         serialize)));
     }
 

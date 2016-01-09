@@ -12,13 +12,13 @@ import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.functions.types.InitRequestFunction;
 import de.kuschku.libquassel.functions.types.RpcCallFunction;
 import de.kuschku.libquassel.functions.types.SyncFunction;
-import de.kuschku.libquassel.syncables.SyncableRegistry;
 import de.kuschku.libquassel.objects.types.ClientInitAck;
 import de.kuschku.libquassel.objects.types.ClientInitReject;
 import de.kuschku.libquassel.objects.types.ClientLoginAck;
 import de.kuschku.libquassel.objects.types.ClientLoginReject;
 import de.kuschku.libquassel.objects.types.SessionInit;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
+import de.kuschku.libquassel.syncables.SyncableRegistry;
 import de.kuschku.util.ReflectionUtils;
 
 public class ProtocolHandler implements IProtocolHandler {

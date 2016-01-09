@@ -1,19 +1,12 @@
 package de.kuschku.libquassel.syncables.types;
 
-import android.util.Log;
-
-import com.google.common.collect.Lists;
-
 import org.joda.time.DateTime;
 
-import java.util.Arrays;
 import java.util.List;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
-import de.kuschku.libquassel.syncables.types.SyncableObject;
-import de.kuschku.util.Stream;
 
 public class IrcUser extends SyncableObject {
     public String server;

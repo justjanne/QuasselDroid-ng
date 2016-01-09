@@ -162,7 +162,8 @@ public class MainActivity extends AppCompatActivity {
                                     .setPositiveButton("Connect", (dialog, which) -> {
                                         EditText hostname = ((EditText) coreview.findViewById(R.id.server));
                                         EditText port = ((EditText) coreview.findViewById(R.id.port));
-                                        if (binder.getBackgroundThread() != null) binder.getBackgroundThread().provider.event.unregister(this);
+                                        if (binder.getBackgroundThread() != null)
+                                            binder.getBackgroundThread().provider.event.unregister(this);
                                         binder.stopBackgroundThread();
                                         BusProvider provider = new BusProvider();
                                         provider.event.register(this);
@@ -206,42 +207,6 @@ public class MainActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
     }
 
-    class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
-        ObservableList<Message> messageList = new ObservableList<>(Message.class);
-
-        public void setMessageList(ObservableList<Message> messageList) {
-            this.messageList.setCallback(null);
-            this.messageList = messageList;
-            this.messageList.setCallback(new ObservableList.RecyclerViewAdapterCallback(this));
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MessageViewHolder(LayoutInflater.from(MainActivity.this).inflate(android.R.layout.simple_list_item_1, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(MessageViewHolder holder, int position) {
-            holder.text1.setText(messageList.list.get(position).toString());
-        }
-
-        @Override
-        public int getItemCount() {
-            return messageList.list.size();
-        }
-    };
-
-    class MessageViewHolder extends RecyclerView.ViewHolder {
-        @Bind(android.R.id.text1)
-        TextView text1;
-
-        public MessageViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-    }
-
     private void switchBuffer(int bufferId) {
         this.bufferId = bufferId;
 
@@ -256,6 +221,8 @@ public class MainActivity extends AppCompatActivity {
         drawer.setSelection(this.bufferId, false);
         drawer.closeDrawer();
     }
+
+    ;
 
     @Override
     protected void onDestroy() {
@@ -314,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
                 );
                 break;
         }
-        Collections.sort(header.getProfiles(), (x,y) -> x.getIdentifier() - y.getIdentifier());
+        Collections.sort(header.getProfiles(), (x, y) -> x.getIdentifier() - y.getIdentifier());
         if (event.action == BufferViewManagerChangedEvent.Action.REMOVE && event.id == selectedProfile) {
             ArrayList<IProfile> profiles = header.getProfiles();
             if (!profiles.isEmpty())
@@ -332,6 +299,42 @@ public class MainActivity extends AppCompatActivity {
         if (event.exception != null && !(event.exception instanceof UnknownTypeException)) {
             Log.e("libquassel", event.toString());
             Snackbar.make(messages, event.toString(), Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
+        ObservableList<Message> messageList = new ObservableList<>(Message.class);
+
+        public void setMessageList(ObservableList<Message> messageList) {
+            this.messageList.setCallback(null);
+            this.messageList = messageList;
+            this.messageList.setCallback(new ObservableList.RecyclerViewAdapterCallback(this));
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new MessageViewHolder(LayoutInflater.from(MainActivity.this).inflate(android.R.layout.simple_list_item_1, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(MessageViewHolder holder, int position) {
+            holder.text1.setText(messageList.list.get(position).toString());
+        }
+
+        @Override
+        public int getItemCount() {
+            return messageList.list.size();
+        }
+    }
+
+    class MessageViewHolder extends RecyclerView.ViewHolder {
+        @Bind(android.R.id.text1)
+        TextView text1;
+
+        public MessageViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

@@ -2,8 +2,6 @@ package de.kuschku.libquassel.primitives.types;
 
 import android.support.annotation.NonNull;
 
-import com.mikepenz.fastadapter.IItem;
-
 import org.joda.time.DateTime;
 
 import java.io.Serializable;

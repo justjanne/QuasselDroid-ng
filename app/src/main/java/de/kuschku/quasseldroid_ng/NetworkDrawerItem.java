@@ -32,6 +32,6 @@ public class NetworkDrawerItem extends PrimaryDrawerItem {
 
     @Override
     public int getIdentifier() {
-        return network.getNetworkId()* Short.MAX_VALUE;
+        return network.getNetworkId() * Short.MAX_VALUE;
     }
 }
