@@ -243,8 +243,14 @@ public class MainActivity extends AppCompatActivity {
     private void switchBuffer(int bufferId) {
         this.bufferId = bufferId;
 
+        Buffer buffer = handler.getClient().getBuffer(this.bufferId);
         adapter.setMessageList(handler.getClient().getBacklogManager().get(this.bufferId));
-        toolbar.setTitle(handler.getClient().getBuffer(this.bufferId).getName());
+        if (buffer == null) {
+            toolbar.setTitle(R.string.app_name);
+        } else {
+            toolbar.setTitle(buffer.getName());
+        }
+
         drawer.setSelection(this.bufferId, false);
         drawer.closeDrawer();
     }
