@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="iconServer" format="reference" />
+    <attr name="messagesBackground" format="reference" />
+    <attr name="chatlineBackground" format="reference" />
+    <attr name="dividerColor" format="reference"/>
+</resources>

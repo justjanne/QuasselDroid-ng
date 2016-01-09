@@ -1,0 +1,12 @@
+bin/*
+gen/*
+/.classpath
+**/build/*
+*.iml
+local.properties
+.gradle/*
+.idea/*
+gradle*
+gradle.properties
+QuasselDroid/version.properties
+deploy.sh
