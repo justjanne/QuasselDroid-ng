@@ -1,11 +1,11 @@
-package de.kuschku.util.collectors;
+package de.kuschku.util.backports.collectors;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.kuschku.util.ICollector;
-import de.kuschku.util.Stream;
+import de.kuschku.util.backports.ICollector;
+import de.kuschku.util.backports.Stream;
 
 public class MapCollector<T> implements ICollector<T, Map<T, T>> {
     @Override

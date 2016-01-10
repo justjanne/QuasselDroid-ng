@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import de.kuschku.util.backports.Stream;
+
 public class SortedListWrapper<T> implements List<T> {
     final SortedList<T> list;
 

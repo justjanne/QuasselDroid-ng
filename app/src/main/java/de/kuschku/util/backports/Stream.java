@@ -1,4 +1,4 @@
-package de.kuschku.util;
+package de.kuschku.util.backports;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import de.kuschku.util.collectors.Collectors;
+import de.kuschku.util.backports.collectors.Collectors;
 
 public class Stream<T> {
     List<T> list;

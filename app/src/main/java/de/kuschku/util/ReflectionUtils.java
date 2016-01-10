@@ -23,16 +23,14 @@ public class ReflectionUtils {
             classes[i] = argv[i].getClass();
         }
         Method m = getMethodFromSignature(name, o.getClass(), classes);
+        if (m == null)
+            throw new SyncInvocationException(String.format("Error invoking %s::%s with arguments %s", o.getClass().getSimpleName(), name, Arrays.toString(argv)));
+
         try {
-
-            if (m != null) {
-                m.invoke(o, argv);
-            }
-
+            m.invoke(o, argv);
         } catch (Exception e) {
             throw new SyncInvocationException(e, String.format("Error invoking %s::%s with arguments %s", o.getClass().getSimpleName(), name, Arrays.toString(argv)));
         }
-        throw new SyncInvocationException(String.format("Error invoking %s::%s with arguments %s", o.getClass().getSimpleName(), name, Arrays.toString(argv)));
     }
 
     @NonNull

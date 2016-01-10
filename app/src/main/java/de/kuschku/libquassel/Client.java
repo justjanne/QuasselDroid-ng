@@ -23,7 +23,7 @@ import de.kuschku.libquassel.syncables.types.BufferSyncer;
 import de.kuschku.libquassel.syncables.types.BufferViewManager;
 import de.kuschku.libquassel.syncables.types.Network;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
-import de.kuschku.util.Stream;
+import de.kuschku.util.backports.Stream;
 
 
 public class Client {

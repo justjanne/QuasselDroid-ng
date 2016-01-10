@@ -9,7 +9,7 @@ import java.util.Set;
 
 import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.syncables.types.Network;
-import de.kuschku.util.Stream;
+import de.kuschku.util.backports.Stream;
 
 public class NetworkDrawerItem extends PrimaryDrawerItem {
     final Network network;

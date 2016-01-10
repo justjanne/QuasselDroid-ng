@@ -1,51 +1,59 @@
-package de.kuschku.util;
+package de.kuschku.util.backports;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
 
-public class Absent<T> implements Optional<T> {
+public class Present<T> implements Optional<T> {
+    T value;
+
+    public Present(T value) {
+        this.value = value;
+    }
+
     @Override
     public Optional<T> filter(Predicate<? super T> predicate) {
-        return this;
+        if (predicate.apply(value)) return this;
+        else return Optionals.absent();
     }
 
     @Override
     public <U> Optional<U> flatMap(Function<? super T, Optional<U>> mapper) {
-        return Optionals.absent();
+        return mapper.apply(value);
     }
 
     @Override
     public <U> Optional<U> map(Function<? super T, U> mapper) {
-        return Optionals.absent();
+        return Optionals.of(mapper.apply(value));
     }
 
     @Override
     public T get() {
-        return null;
+        return value;
     }
 
     @Override
     public void ifPresent(Consumer<? super T> consumer) {
+        consumer.apply(value);
     }
 
     @Override
     public boolean isPresent() {
-        return false;
+        return true;
     }
 
     @Override
     public T orElse(T other) {
-        return other;
+        return value;
     }
 
     @Override
     public T orElseGet(Supplier<? extends T> other) {
-        return other.get();
+        return value;
     }
 
     @Override
     public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
-        throw exceptionSupplier.get();
+        return value;
     }
 }

@@ -7,12 +7,18 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.Snackbar;
+import android.support.v4.text.TextUtilsCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +39,9 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.util.KeyboardUtil;
 
+import org.joda.time.format.DateTimeFormat;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -52,8 +61,9 @@ import de.kuschku.libquassel.primitives.types.Message;
 import de.kuschku.libquassel.syncables.types.BufferViewConfig;
 import de.kuschku.libquassel.syncables.types.Network;
 import de.kuschku.quasseldroid_ng.utils.ServerAddress;
+import de.kuschku.util.IrcUserUtils;
 import de.kuschku.util.ObservableList;
-import de.kuschku.util.Stream;
+import de.kuschku.util.backports.Stream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -319,7 +329,40 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(MessageViewHolder holder, int position) {
-            holder.text1.setText(messageList.list.get(position).toString());
+            int[] colors = {
+                    R.color.md_pink_500,
+                    R.color.md_purple_500,
+                    R.color.md_red_500,
+                    R.color.md_green_500,
+                    R.color.md_cyan_500,
+                    R.color.md_deep_purple_500,
+                    R.color.md_amber_500,
+                    R.color.md_blue_500,
+                    R.color.md_pink_700,
+                    R.color.md_purple_700,
+                    R.color.md_red_700,
+                    R.color.md_green_700,
+                    R.color.md_cyan_700,
+                    R.color.md_deep_purple_700,
+                    R.color.md_amber_700,
+                    R.color.md_blue_700
+            };
+
+            Message msg = messageList.list.get(position);
+            SpannableString timeSpan = new SpannableString(DateTimeFormat.forPattern("[hh:mm]").print(msg.time));
+            timeSpan.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.md_light_secondary)), 0, timeSpan.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+
+            String nick = IrcUserUtils.getNick(msg.sender);
+            SpannableString nickSpan = new SpannableString(nick);
+            nickSpan.setSpan(new ForegroundColorSpan(getResources().getColor(colors[IrcUserUtils.getSenderColor(nick)])), 0, nickSpan.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+
+            holder.text1.setText(TextUtils.concat(
+                    timeSpan,
+                    " ",
+                    nickSpan,
+                    " ",
+                    msg.content
+            ));
         }
 
         @Override
