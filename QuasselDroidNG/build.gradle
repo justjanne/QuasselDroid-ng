@@ -13,17 +13,36 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
+        versionName "0.1.0"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    output.outputFile = new File(output.outputFile.parent, output.outputFile.name.replace(".apk", "-" + defaultConfig.versionName + "-build" + versionCode + ".apk"))
+                }
+            }
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_7
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
     }
 }
 
@@ -39,6 +58,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.google.guava:guava:19.0'
     compile 'joda-time:joda-time:2.9.1'
+    compile 'org.joda:joda-convert:1.8'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.bignerdranch.android:expandablerecyclerview:2.0.4'
     compile('com.mikepenz:materialdrawer:5.0.0.fastAdapter.b5-SNAPSHOT@aar') {

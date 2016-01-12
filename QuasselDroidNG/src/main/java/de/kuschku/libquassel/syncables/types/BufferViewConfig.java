@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.syncables.types;
 
+import android.util.Log;
+
 import java.util.List;
 
 import de.kuschku.libquassel.BusProvider;
@@ -164,5 +166,14 @@ public class BufferViewConfig extends SyncableObject {
     public void SYNC_addBuffer(int bufferId, int position) {
         addBuffer(bufferId, position);
         sync("addBuffer", new Object[] {bufferId, position});
+    }
+
+    public void removeBuffer(int bufferId) {
+        if (BufferList.contains(bufferId)) BufferList.remove(BufferList.indexOf(bufferId));
+    }
+
+    public void SYNC_removeBuffer(int bufferId) {
+        removeBuffer(bufferId);
+        sync("removeBuffer", new Object[] {bufferId});
     }
 }
