@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
 
-import de.kuschku.libquassel.primitives.types.Message;
+import de.kuschku.libquassel.message.Message;
 
 public class MessageSerializer implements PrimitiveSerializer<Message> {
     @Override

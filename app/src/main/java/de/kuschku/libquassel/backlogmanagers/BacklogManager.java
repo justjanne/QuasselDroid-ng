@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.List;
 
-import de.kuschku.libquassel.primitives.types.Message;
+import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.util.ObservableList;
 
@@ -19,4 +19,6 @@ public abstract class BacklogManager extends SyncableObject {
     public abstract ObservableList<Message> get(int bufferId);
 
     public abstract void bind(int bufferId, @Nullable RecyclerView.Adapter adapter);
+
+    public abstract void requestMoreBacklog(int bufferId, int count);
 }

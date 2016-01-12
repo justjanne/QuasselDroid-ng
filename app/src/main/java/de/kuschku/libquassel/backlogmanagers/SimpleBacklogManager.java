@@ -10,9 +10,10 @@ import java.util.List;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
+import de.kuschku.libquassel.events.BacklogReceivedEvent;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.functions.types.SyncFunction;
-import de.kuschku.libquassel.primitives.types.Message;
+import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.util.ObservableList;
 
@@ -36,6 +37,8 @@ public class SimpleBacklogManager extends BacklogManager {
 
     public void receiveBacklog(int bufferId, int from, int to, int count, int extra, List<Message> messages) {
         get(bufferId).list.addAll(messages);
+
+        busProvider.sendEvent(new BacklogReceivedEvent(bufferId));
     }
 
     @Override
@@ -48,6 +51,17 @@ public class SimpleBacklogManager extends BacklogManager {
             get(bufferId).setCallback(null);
         else
             get(bufferId).setCallback(new ObservableList.RecyclerViewAdapterCallback(adapter));
+    }
+
+    @Override
+    public void requestMoreBacklog(int bufferId, int count) {
+        ObservableList<Message> backlog = backlogs.get(bufferId);
+        int messageId =
+                (backlog == null) ? -1 :
+                (backlog.first() == null) ? -1 :
+                backlog.first().messageId;
+
+        requestBacklog(bufferId, -1, -1, count, 0);
     }
 
     public ObservableList<Message> get(int bufferId) {

@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng.utils;
+package de.kuschku.quasseldroid_ng.util;
 
 public class ServerAddress {
     public final String host;

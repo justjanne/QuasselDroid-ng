@@ -24,7 +24,7 @@ import de.kuschku.libquassel.primitives.types.Protocol;
 import de.kuschku.libquassel.protocols.DatastreamPeer;
 import de.kuschku.libquassel.protocols.LegacyPeer;
 import de.kuschku.libquassel.protocols.RemotePeer;
-import de.kuschku.quasseldroid_ng.utils.ServerAddress;
+import de.kuschku.quasseldroid_ng.util.ServerAddress;
 import de.kuschku.util.niohelpers.WrappedChannel;
 
 import static de.kuschku.libquassel.primitives.QMetaType.Type.UInt;
@@ -62,11 +62,12 @@ public class CoreConnection {
      * This method opens a socket to the specified address and starts the connection process.
      *
      * @throws IOException
+     * @param supportsKeepAlive
      */
-    public void open() throws IOException {
+    public void open(boolean supportsKeepAlive) throws IOException {
         // Intialize socket
         socket = new Socket();
-        socket.setKeepAlive(true);
+        if (supportsKeepAlive) socket.setKeepAlive(true);
         socket.connect(new InetSocketAddress(address.host, address.port), 10000);
 
         // Wrap socket in channel for nio functions

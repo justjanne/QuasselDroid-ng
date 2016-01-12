@@ -4,7 +4,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.Network;
-import de.kuschku.quasseldroid_ng.BufferDrawerItem;
+import de.kuschku.quasseldroid_ng.ui.BufferDrawerItem;
 
 public class StatusBuffer implements Buffer {
     private final BufferInfo info;

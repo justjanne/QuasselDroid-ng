@@ -8,7 +8,8 @@ import de.kuschku.libquassel.CoreConnection;
 import de.kuschku.libquassel.ProtocolHandler;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.protocols.RemotePeer;
-import de.kuschku.quasseldroid_ng.utils.ServerAddress;
+import de.kuschku.quasseldroid_ng.util.CompatibilityUtils;
+import de.kuschku.quasseldroid_ng.util.ServerAddress;
 
 public class ClientBackgroundThread implements Runnable {
     public static final ClientData CLIENT_DATA = new ClientData(
@@ -33,7 +34,7 @@ public class ClientBackgroundThread implements Runnable {
     @Override
     public void run() {
         try {
-            connection.open();
+            connection.open(!CompatibilityUtils.isChromiumDevice());
         } catch (IOException e) {
             provider.sendEvent(new GeneralErrorEvent(e));
         }

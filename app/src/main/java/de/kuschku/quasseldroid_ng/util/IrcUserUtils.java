@@ -1,4 +1,4 @@
-package de.kuschku.util;
+package de.kuschku.quasseldroid_ng.util;
 
 import java.nio.charset.Charset;
 import java.util.Locale;
@@ -70,10 +70,15 @@ public class IrcUserUtils {
     }
 
     public static String getUser(String hostmask) {
-        return hostmask.split("!")[1].split("@")[0];
+        return getMask(hostmask).split("@")[0];
     }
 
     public static String getHost(String hostmask) {
-        return hostmask.split("@")[1];
+        return getMask(hostmask).split("@")[1];
+    }
+
+
+    public static String getMask(String hostmask) {
+        return hostmask.split("!")[1];
     }
 }

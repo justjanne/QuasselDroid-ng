@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng;
+package de.kuschku.quasseldroid_ng.ui;
 
 import com.mikepenz.materialdrawer.holder.ImageHolder;
 import com.mikepenz.materialdrawer.holder.StringHolder;
@@ -6,6 +6,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 
 import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.localtypes.ChannelBuffer;
+import de.kuschku.quasseldroid_ng.R;
 
 public class BufferDrawerItem extends SecondaryDrawerItem {
     final Buffer buffer;

@@ -6,7 +6,7 @@ import android.os.Binder;
 import android.os.IBinder;
 
 import de.kuschku.libquassel.BusProvider;
-import de.kuschku.quasseldroid_ng.utils.ServerAddress;
+import de.kuschku.quasseldroid_ng.util.ServerAddress;
 
 public class QuasselService extends Service {
     private final IBinder binder = new LocalBinder();

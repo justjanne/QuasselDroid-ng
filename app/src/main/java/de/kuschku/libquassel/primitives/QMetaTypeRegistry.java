@@ -33,7 +33,7 @@ import de.kuschku.libquassel.primitives.serializers.VariantSerializer;
 import de.kuschku.libquassel.primitives.serializers.VariantVariantListSerializer;
 import de.kuschku.libquassel.primitives.serializers.VoidSerializer;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
-import de.kuschku.libquassel.primitives.types.Message;
+import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.IdentitySerializer;
 import de.kuschku.libquassel.syncables.types.Identity;

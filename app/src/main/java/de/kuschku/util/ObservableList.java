@@ -22,7 +22,15 @@ public class ObservableList<T extends ContentComparable<T>> {
     }
 
     public T last() {
+        if (list.size() == 0) return null;
+
         return list.get(list.size() - 1);
+    }
+
+    public T first() {
+        if (list.size() == 0) return null;
+
+        return list.get(0);
     }
 
     public interface UICallback {

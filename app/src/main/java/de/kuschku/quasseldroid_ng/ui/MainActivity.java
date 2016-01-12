@@ -1,30 +1,26 @@
-package de.kuschku.quasseldroid_ng;
+package de.kuschku.quasseldroid_ng.ui;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.Snackbar;
-import android.support.v4.text.TextUtilsCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.common.collect.Sets;
@@ -39,17 +35,17 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.util.KeyboardUtil;
 
-import org.joda.time.format.DateTimeFormat;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.BusProvider;
+import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.IProtocolHandler;
+import de.kuschku.libquassel.events.BacklogReceivedEvent;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.StatusMessageEvent;
@@ -57,15 +53,27 @@ import de.kuschku.libquassel.exceptions.UnknownTypeException;
 import de.kuschku.libquassel.functions.types.HandshakeFunction;
 import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.objects.types.ClientLogin;
-import de.kuschku.libquassel.primitives.types.Message;
 import de.kuschku.libquassel.syncables.types.BufferViewConfig;
+import de.kuschku.libquassel.syncables.types.BufferViewManager;
 import de.kuschku.libquassel.syncables.types.Network;
-import de.kuschku.quasseldroid_ng.utils.ServerAddress;
-import de.kuschku.util.IrcUserUtils;
-import de.kuschku.util.ObservableList;
+import de.kuschku.quasseldroid_ng.BufferViewManagerChangedEvent;
+import de.kuschku.quasseldroid_ng.BuildConfig;
+import de.kuschku.quasseldroid_ng.QuasselService;
+import de.kuschku.quasseldroid_ng.R;
+import de.kuschku.quasseldroid_ng.util.CompatibilityUtils;
+import de.kuschku.quasseldroid_ng.util.ServerAddress;
 import de.kuschku.util.backports.Stream;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String BUFFER_ID = "BUFFER_ID";
+    private static final String BUFFER_VIEW_ID = "BUFFER_VIEW_ID";
+
+    private static final String KEY_HOST = "beta_hostname";
+    private static final String KEY_PORT = "beta_port";
+    private static final String KEY_USER = "beta_username";
+    private static final String KEY_PASS = "beta_password";
+
+    SharedPreferences pref;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -79,9 +87,12 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.send)
     AppCompatImageButton send;
 
+    @Bind(R.id.swipeview)
+    SwipeRefreshLayout swipeView;
+
     Drawer drawer;
     AccountHeader header;
-    MessageAdapter adapter = new MessageAdapter();
+    MessageAdapter adapter;
 
     QuasselService.LocalBinder binder;
 
@@ -90,7 +101,20 @@ public class MainActivity extends AppCompatActivity {
             if (service instanceof QuasselService.LocalBinder) {
                 MainActivity.this.binder = (QuasselService.LocalBinder) service;
                 if (binder.getBackgroundThread() != null) {
+                    handler = binder.getBackgroundThread().handler;
+
                     toolbar.setSubtitle(binder.getBackgroundThread().connection.getStatus().name());
+                    if (bufferId != -1) switchBuffer(bufferId);
+                    if (bufferViewId != -1) switchBufferView(bufferViewId);
+
+                    // Horrible hack to load bufferviews back, should use ObservableList
+                    Client client = handler == null ? null : handler.getClient();
+                    BufferViewManager bufferViewManager = client == null ? null : client.getBufferViewManager();
+                    Map<Integer, BufferViewConfig> bufferViews = bufferViewManager == null ? null : bufferViewManager.BufferViews;
+                    if (bufferViews != null)
+                    for (int id : bufferViews.keySet()) {
+                        onEventMainThread(new BufferViewManagerChangedEvent(id, BufferViewManagerChangedEvent.Action.ADD));
+                    }
                 }
             }
         }
@@ -101,17 +125,23 @@ public class MainActivity extends AppCompatActivity {
 
     private IProtocolHandler handler;
     private int bufferId;
+    private int bufferViewId;
+    private BusProvider provider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //setTheme(R.style.AppTheme);
-        setTheme(R.style.AppTheme_Light);
+
+        // TODO: ADD THEME SELECTION
+        setTheme(R.style.Quassel);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
+
+        pref = getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
+        adapter = new MessageAdapter(this);
 
         // This fixes a horrible bug android has where opening the keyboard doesn’t resize the layout
         KeyboardUtil keyboardUtil = new KeyboardUtil(this, findViewById(R.id.layout));
@@ -126,34 +156,9 @@ public class MainActivity extends AppCompatActivity {
                 .withSavedInstance(savedInstanceState)
                 .withCompactStyle(true)
                 .withProfileImagesVisible(false)
+                // TODO: REWRITE THIS
                 .withOnAccountHeaderListener((view, profile, current) -> {
-                    BufferViewConfig config = handler.getClient().getBufferViewManager().BufferViews.get(profile.getIdentifier());
-                    ArrayList<IDrawerItem> items = new ArrayList<>();
-                    if (config.getNetworkId() == 0) {
-                        items.addAll(
-                                new Stream<>(handler.getClient().getNetworks())
-                                        .map(network -> new NetworkDrawerItem(network,
-                                                Sets.intersection(network.getBuffers(), new HashSet<>(
-                                                        new Stream<>(config.getBufferList())
-                                                                .map(handler.getClient()::getBuffer)
-                                                                .list()
-                                                ))))
-                                        .list()
-                        );
-                    } else {
-                        Network network = handler.getClient().getNetwork(config.getNetworkId());
-                        items.add(new NetworkDrawerItem(network,
-                                Sets.intersection(network.getBuffers(), new HashSet<>(
-                                        new Stream<>(config.getBufferList())
-                                                .map(handler.getClient()::getBuffer)
-                                                .list()
-                                ))
-                        ));
-                    }
-                    drawer.setItems(items);
-                    for (int i = 0; i < drawer.getAdapter().getItemCount(); i++) {
-                        drawer.getAdapter().open(i);
-                    }
+                    switchBufferView(profile.getIdentifier());
                     return true;
                 })
                 .build();
@@ -162,22 +167,34 @@ public class MainActivity extends AppCompatActivity {
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(header)
+                // TODO: REWRITE THIS
                 .withOnDrawerItemClickListener((view, position, drawerItem) -> {
                     if (drawerItem != null) {
                         if (position == -1) {
                             binder.stopBackgroundThread();
                             View coreview = View.inflate(this, R.layout.core_dialog, null);
+                            EditText hostname = ((EditText) coreview.findViewById(R.id.server));
+                            EditText port = ((EditText) coreview.findViewById(R.id.port));
+
+                            hostname.setText(pref.getString(KEY_HOST, ""));
+                            port.setText(String.valueOf(pref.getInt(KEY_PORT, 4242)));
                             new AlertDialog.Builder(this)
                                     .setView(coreview)
                                     .setPositiveButton("Connect", (dialog, which) -> {
-                                        EditText hostname = ((EditText) coreview.findViewById(R.id.server));
-                                        EditText port = ((EditText) coreview.findViewById(R.id.port));
-                                        if (binder.getBackgroundThread() != null)
-                                            binder.getBackgroundThread().provider.event.unregister(this);
+                                        if (provider != null) provider.event.unregister(this);
                                         binder.stopBackgroundThread();
-                                        BusProvider provider = new BusProvider();
+                                        provider = new BusProvider();
                                         provider.event.register(this);
-                                        binder.startBackgroundThread(provider, new ServerAddress(hostname.getText().toString().trim(), Integer.valueOf(port.getText().toString().trim())));
+
+                                        String value_hostname = hostname.getText().toString().trim();
+                                        Integer value_port = Integer.valueOf(port.getText().toString().trim());
+
+                                        SharedPreferences.Editor edit = pref.edit();
+                                        edit.putString(KEY_HOST, value_hostname);
+                                        edit.putInt(KEY_PORT, value_port);
+                                        edit.commit();
+
+                                        binder.startBackgroundThread(provider, new ServerAddress(value_hostname, value_port));
                                         handler = binder.getBackgroundThread().handler;
                                     })
                                     .setNegativeButton("Cancel", (dialog, which) -> {
@@ -200,23 +217,89 @@ public class MainActivity extends AppCompatActivity {
                 .withShowDrawerOnFirstLaunch(true)
                 .build();
 
+        // TODO: REWRITE THIS
+        if (CompatibilityUtils.isChromiumDevice()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary, getTheme()));
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+            }
+        }
+
         drawer.addStickyFooterItem(new PrimaryDrawerItem().withName("(Re-)Connect").withIcon(R.drawable.ic_server_light));
 
         messages.setAdapter(adapter);
         messages.setLayoutManager(new LinearLayoutManager(this));
+        swipeView.setOnRefreshListener(() -> {
+            if (handler != null) handler.getClient().getBacklogManager().requestMoreBacklog(bufferId, 20);
+            else swipeView.setRefreshing(false);
+        });
 
-        send.setOnClickListener((view) -> {
-            Buffer buffer = handler.getClient().getBuffer(bufferId);
-            handler.getClient().sendInput(buffer.getInfo(), chatline.getText().toString());
-            chatline.setText("");
+        send.setOnClickListener(view -> {
+            sendInput();
+        });
+        chatline.setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_DOWN && (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER))
+                sendInput();
+
+            return false;
         });
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(BUFFER_ID, bufferId);
+        outState.putInt(BUFFER_VIEW_ID, bufferViewId);
+        drawer.saveInstanceState(outState);
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            bufferId = savedInstanceState.getInt(BUFFER_ID, -1);
+            bufferViewId = savedInstanceState.getInt(BUFFER_VIEW_ID, -1);
+        }
+    }
+
+    // TODO: USE OBSERVABLELIST FOR THIS
+    private void switchBufferView(int bufferviewId) {
+        this.bufferViewId = bufferviewId;
+        adapter.setClient(handler.getClient());
+        BufferViewConfig config = handler.getClient().getBufferViewManager().BufferViews.get(bufferviewId);
+        ArrayList<IDrawerItem> items = new ArrayList<>();
+        if (config != null) {
+            if (config.getNetworkId() == 0) {
+                items.addAll(
+                        new Stream<>(handler.getClient().getNetworks())
+                                .map(network -> new NetworkDrawerItem(network,
+                                        Sets.intersection(network.getBuffers(), new HashSet<>(
+                                                new Stream<>(config.getBufferList())
+                                                        .map(handler.getClient()::getBuffer)
+                                                        .list()
+                                        ))))
+                                .list()
+                );
+            } else {
+                Network network = handler.getClient().getNetwork(config.getNetworkId());
+                items.add(new NetworkDrawerItem(network,
+                        Sets.intersection(network.getBuffers(), new HashSet<>(
+                                new Stream<>(config.getBufferList())
+                                        .map(handler.getClient()::getBuffer)
+                                        .list()
+                        ))
+                ));
+            }
+        }
+        drawer.setItems(items);
+        for (int i = 0; i < drawer.getAdapter().getItemCount(); i++) {
+            drawer.getAdapter().open(i);
+        }
+    }
+
+
+    // TODO: REWRITE THIS
     private void switchBuffer(int bufferId) {
         this.bufferId = bufferId;
 
@@ -232,7 +315,27 @@ public class MainActivity extends AppCompatActivity {
         drawer.closeDrawer();
     }
 
-    ;
+    // TODO: REWRITE THIS
+    private void sendInput() {
+        Buffer buffer = null;
+        Client client = null;
+        if (handler != null) client = handler.getClient();
+        if (client != null) buffer = client.getBuffer(bufferId);
+
+        String str = chatline.getText().toString();
+        if (buffer != null && !str.isEmpty())  handler.getClient().sendInput(buffer.getInfo(), str);
+        chatline.setText("");
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     @Override
     protected void onDestroy() {
@@ -240,21 +343,38 @@ public class MainActivity extends AppCompatActivity {
         unbindService(serviceConnection);
     }
 
+    // TODO: REWRITE THIS
     public void onEventMainThread(ConnectionChangeEvent event) {
         switch (event.status) {
             case DISCONNECTED:
                 binder.stopBackgroundThread();
                 break;
             case CONNECTED:
+                // TODO: COMMENT THIS
+                System.gc();
+                if (bufferViewId == -1 && header.getProfiles().size() > 0)
+                    switchBufferView(header.getProfiles().get(0).getIdentifier());
                 break;
             case LOGIN_REQUIRED:
                 View loginview = View.inflate(this, R.layout.login_dialog, null);
+                EditText username = ((EditText) loginview.findViewById(R.id.username));
+                EditText password = ((EditText) loginview.findViewById(R.id.password));
+                username.setText(pref.getString(KEY_USER, ""));
+                password.setText(pref.getString(KEY_PASS, ""));
                 new AlertDialog.Builder(this)
                         .setView(loginview)
                         .setPositiveButton("Login", (dialog, which) -> {
+                            String value_user = username.getText().toString();
+                            String value_pass = password.getText().toString();
+
+                            SharedPreferences.Editor edit = pref.edit();
+                            edit.putString(KEY_USER, value_user);
+                            edit.putString(KEY_PASS, value_pass);
+                            edit.commit();
+
                             binder.getBackgroundThread().provider.dispatch(new HandshakeFunction(new ClientLogin(
-                                    ((EditText) loginview.findViewById(R.id.username)).getText().toString(),
-                                    ((EditText) loginview.findViewById(R.id.password)).getText().toString()
+                                    value_user,
+                                    value_pass
                             )));
                         })
                         .setNegativeButton("Cancel", (dialog, which) -> {
@@ -268,9 +388,9 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setSubtitle(event.status.name());
     }
 
+    // TODO: USE OBSERVABLE LIST FOR THIS SHIT
     public void onEventMainThread(BufferViewManagerChangedEvent event) {
         IProfile activeProfile = header.getActiveProfile();
-        int selectedProfile = activeProfile == null ? -1 : activeProfile.getIdentifier();
         switch (event.action) {
             case ADD:
                 BufferViewConfig add = handler.getClient().getBufferViewManager().BufferViews.get(event.id);
@@ -292,92 +412,29 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         Collections.sort(header.getProfiles(), (x, y) -> x.getIdentifier() - y.getIdentifier());
-        if (event.action == BufferViewManagerChangedEvent.Action.REMOVE && event.id == selectedProfile) {
+        if (event.action == BufferViewManagerChangedEvent.Action.REMOVE && event.id == bufferViewId) {
             ArrayList<IProfile> profiles = header.getProfiles();
             if (!profiles.isEmpty())
                 header.setActiveProfile(profiles.get(0), true);
-        } else if (event.action == BufferViewManagerChangedEvent.Action.MODIFY && event.id == selectedProfile) {
-            header.setActiveProfile(selectedProfile, true);
+        } else if (event.action == BufferViewManagerChangedEvent.Action.MODIFY && event.id == bufferViewId) {
+            header.setActiveProfile(bufferViewId, true);
         }
     }
 
+    public void onEventMainThread(BacklogReceivedEvent event) {
+        if (event.bufferId == bufferId) swipeView.setRefreshing(false);
+    }
+
+    // TODO: REWRITE THIS
     public void onEventMainThread(StatusMessageEvent event) {
         Toast.makeText(this, String.format("%s: %s", event.scope, event.message), Toast.LENGTH_LONG).show();
     }
 
+    // TODO: REWRITE THIS
     public void onEventMainThread(GeneralErrorEvent event) {
         if (event.exception != null && !(event.exception instanceof UnknownTypeException)) {
-            Log.e("libquassel", event.toString());
+            event.exception.printStackTrace();
             Snackbar.make(messages, event.toString(), Snackbar.LENGTH_LONG).show();
-        }
-    }
-
-    class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
-        ObservableList<Message> messageList = new ObservableList<>(Message.class);
-
-        public void setMessageList(ObservableList<Message> messageList) {
-            this.messageList.setCallback(null);
-            this.messageList = messageList;
-            this.messageList.setCallback(new ObservableList.RecyclerViewAdapterCallback(this));
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MessageViewHolder(LayoutInflater.from(MainActivity.this).inflate(android.R.layout.simple_list_item_1, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(MessageViewHolder holder, int position) {
-            int[] colors = {
-                    R.color.md_pink_500,
-                    R.color.md_purple_500,
-                    R.color.md_red_500,
-                    R.color.md_green_500,
-                    R.color.md_cyan_500,
-                    R.color.md_deep_purple_500,
-                    R.color.md_amber_500,
-                    R.color.md_blue_500,
-                    R.color.md_pink_700,
-                    R.color.md_purple_700,
-                    R.color.md_red_700,
-                    R.color.md_green_700,
-                    R.color.md_cyan_700,
-                    R.color.md_deep_purple_700,
-                    R.color.md_amber_700,
-                    R.color.md_blue_700
-            };
-
-            Message msg = messageList.list.get(position);
-            SpannableString timeSpan = new SpannableString(DateTimeFormat.forPattern("[hh:mm]").print(msg.time));
-            timeSpan.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.md_light_secondary)), 0, timeSpan.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-
-            String nick = IrcUserUtils.getNick(msg.sender);
-            SpannableString nickSpan = new SpannableString(nick);
-            nickSpan.setSpan(new ForegroundColorSpan(getResources().getColor(colors[IrcUserUtils.getSenderColor(nick)])), 0, nickSpan.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-
-            holder.text1.setText(TextUtils.concat(
-                    timeSpan,
-                    " ",
-                    nickSpan,
-                    " ",
-                    msg.content
-            ));
-        }
-
-        @Override
-        public int getItemCount() {
-            return messageList.list.size();
-        }
-    }
-
-    class MessageViewHolder extends RecyclerView.ViewHolder {
-        @Bind(android.R.id.text1)
-        TextView text1;
-
-        public MessageViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
         }
     }
 }

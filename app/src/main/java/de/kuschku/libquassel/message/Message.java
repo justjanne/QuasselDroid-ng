@@ -1,4 +1,4 @@
-package de.kuschku.libquassel.primitives.types;
+package de.kuschku.libquassel.message;
 
 import android.support.annotation.NonNull;
 
@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.util.ContentComparable;
 
 public class Message implements ContentComparable<Message> {

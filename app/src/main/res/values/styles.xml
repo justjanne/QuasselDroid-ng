@@ -1,25 +1,23 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="MaterialDrawerTheme">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-        <item name="iconServer">@drawable/ic_server_light</item>
         <item name="dividerColor">@color/material_drawer_dark_divider</item>
         <item name="messagesBackground">@color/messagesBackgroundDark</item>
         <item name="chatlineBackground">@color/md_dark_cards</item>
     </style>
 
-    <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme.Light" parent="MaterialDrawerTheme.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-        <item name="iconServer">@drawable/ic_server_dark</item>
         <item name="dividerColor">@color/material_drawer_divider</item>
         <item name="messagesBackground">@color/messagesBackgroundLight</item>
         <item name="chatlineBackground">@color/md_light_cards</item>
@@ -28,5 +26,4 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
-
 </resources>

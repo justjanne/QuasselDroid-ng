@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Material_Dark" parent="AppTheme">
+        <item name="senderColor0">@color/md_pink_500</item>
+        <item name="senderColor1">@color/md_purple_500</item>
+        <item name="senderColor2">@color/md_red_500</item>
+        <item name="senderColor3">@color/md_green_500</item>
+        <item name="senderColor4">@color/md_cyan_500</item>
+        <item name="senderColor5">@color/md_deep_purple_500</item>
+        <item name="senderColor6">@color/md_amber_500</item>
+        <item name="senderColor7">@color/md_blue_500</item>
+        <item name="senderColor8">@color/md_pink_500</item>
+        <item name="senderColor9">@color/md_purple_500</item>
+        <item name="senderColorA">@color/md_red_500</item>
+        <item name="senderColorB">@color/md_green_500</item>
+        <item name="senderColorC">@color/md_cyan_500</item>
+        <item name="senderColorD">@color/md_deep_purple_500</item>
+        <item name="senderColorE">@color/md_amber_500</item>
+        <item name="senderColorF">@color/md_blue_500</item>
+
+        <item name="colorForeground">@color/md_dark_primary_text</item>
+        <item name="colorForegroundHighlight">@color/md_dark_primary_text</item>
+        <item name="colorForegroundSecondary">@color/md_dark_secondary</item>
+
+        <item name="colorBackground">@color/md_dark_background</item>
+        <item name="colorBackgroundHighlight">#ff8811</item>
+        <item name="colorBackgroundCard">@color/md_dark_cards</item>
+
+        <item name="colorTintActivity">#88cc33</item>
+        <item name="colorTintMessage">#2277dd</item>
+        <item name="colorTintHighlight">#ff8811</item>
+    </style>
+
+    <style name="Material_Light" parent="AppTheme">
+        <item name="senderColor0">@color/md_pink_500</item>
+        <item name="senderColor1">@color/md_purple_500</item>
+        <item name="senderColor2">@color/md_red_500</item>
+        <item name="senderColor3">@color/md_green_500</item>
+        <item name="senderColor4">@color/md_cyan_500</item>
+        <item name="senderColor5">@color/md_deep_purple_500</item>
+        <item name="senderColor6">@color/md_amber_500</item>
+        <item name="senderColor7">@color/md_blue_500</item>
+        <item name="senderColor8">@color/md_pink_500</item>
+        <item name="senderColor9">@color/md_purple_500</item>
+        <item name="senderColorA">@color/md_red_500</item>
+        <item name="senderColorB">@color/md_green_500</item>
+        <item name="senderColorC">@color/md_cyan_500</item>
+        <item name="senderColorD">@color/md_deep_purple_500</item>
+        <item name="senderColorE">@color/md_amber_500</item>
+        <item name="senderColorF">@color/md_blue_500</item>
+
+        <item name="colorForeground">@color/md_light_primary_text</item>
+        <item name="colorForegroundHighlight">@color/md_light_primary_text</item>
+        <item name="colorForegroundSecondary">@color/md_light_secondary</item>
+
+        <item name="colorBackground">@color/md_light_background</item>
+        <item name="colorBackgroundHighlight">#ff8811</item>
+        <item name="colorBackgroundCard">@color/md_light_cards</item>
+
+        <item name="colorTintActivity">#88cc33</item>
+        <item name="colorTintMessage">#2277dd</item>
+        <item name="colorTintHighlight">#ff8811</item>
+    </style>
+
+    <style name="Quassel" parent="AppTheme.Light">
+        <item name="senderColor0">#e90d7f</item>
+        <item name="senderColor1">#8e55e9</item>
+        <item name="senderColor2">#b30e0e</item>
+        <item name="senderColor3">#17b339</item>
+        <item name="senderColor4">#58afb3</item>
+        <item name="senderColor5">#9d54b3</item>
+        <item name="senderColor6">#b39775</item>
+        <item name="senderColor7">#3176b3</item>
+        <item name="senderColor8">#e90d7f</item>
+        <item name="senderColor9">#8e55e9</item>
+        <item name="senderColorA">#b30e0e</item>
+        <item name="senderColorB">#17b339</item>
+        <item name="senderColorC">#58afb3</item>
+        <item name="senderColorD">#9d54b3</item>
+        <item name="senderColorE">#b39775</item>
+        <item name="senderColorF">#3176b3</item>
+
+        <item name="colorForeground">@color/md_light_primary_text</item>
+        <item name="colorForegroundHighlight">@color/md_light_primary_text</item>
+        <item name="colorForegroundSecondary">@color/md_light_secondary</item>
+
+        <item name="colorBackground">@color/md_light_background</item>
+        <item name="colorBackgroundHighlight">#ff8811</item>
+        <item name="colorBackgroundCard">@color/md_light_cards</item>
+
+        <item name="colorTintActivity">#88cc33</item>
+        <item name="colorTintMessage">#2277dd</item>
+        <item name="colorTintHighlight">#ff8811</item>
+    </style>
+</resources>

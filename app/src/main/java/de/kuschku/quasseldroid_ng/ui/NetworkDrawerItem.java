@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng;
+package de.kuschku.quasseldroid_ng.ui;
 
 import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;

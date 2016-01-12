@@ -17,7 +17,7 @@ import de.kuschku.libquassel.localtypes.Buffers;
 import de.kuschku.libquassel.objects.types.ClientInitAck;
 import de.kuschku.libquassel.objects.types.SessionState;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
-import de.kuschku.libquassel.primitives.types.Message;
+import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.BufferSyncer;
 import de.kuschku.libquassel.syncables.types.BufferViewManager;
@@ -33,6 +33,8 @@ public class Client {
     private final BacklogManager backlogManager;
     private final BusProvider busProvider;
     public int lag;
+    public int openBuffer;
+    public int openBufferView;
     private ConnectionChangeEvent.Status connectionStatus;
     private ClientInitAck core;
     private SessionState state;

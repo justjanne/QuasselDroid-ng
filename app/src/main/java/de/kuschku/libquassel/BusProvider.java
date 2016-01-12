@@ -18,17 +18,14 @@ public class BusProvider {
     }
 
     public void handle(Object o) {
-        //Log.d("HANDLE", o.getClass().getSimpleName());
         this.handle.post(o);
     }
 
     public void dispatch(Object o) {
-        //Log.d("DISPATCH", o.getClass().getSimpleName());
         this.dispatch.post(o);
     }
 
     public void sendEvent(Object o) {
-        //Log.d("EVENT", o.getClass().getSimpleName());
         this.event.post(o);
     }
 }

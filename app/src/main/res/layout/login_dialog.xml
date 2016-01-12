@@ -6,14 +6,12 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/username"
-        android:text="test"/>
+        android:id="@+id/username" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/password"
-        android:inputType="textPassword"
-        android:text="password"/>
+        android:inputType="textPassword" />
 
 </LinearLayout>
