@@ -9,6 +9,15 @@ import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class UnpackedRpcCallFunctionSerializer implements FunctionSerializer<RpcCallFunction> {
+    private static final UnpackedRpcCallFunctionSerializer serializer = new UnpackedRpcCallFunctionSerializer();
+
+    private UnpackedRpcCallFunctionSerializer() {
+    }
+
+    public static UnpackedRpcCallFunctionSerializer get() {
+        return serializer;
+    }
+
     @Override
     public List serialize(final RpcCallFunction data) {
         final List func = new ArrayList<>();

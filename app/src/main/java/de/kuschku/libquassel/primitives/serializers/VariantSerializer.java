@@ -9,12 +9,24 @@ import de.kuschku.libquassel.primitives.QMetaTypeRegistry;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class VariantSerializer<T> implements PrimitiveSerializer<QVariant<T>> {
+    private static final VariantSerializer serializer = new VariantSerializer();
+
+    private VariantSerializer() {
+    }
+
+    public static <T> VariantSerializer<T> get() {
+        return serializer;
+    }
+
     @Override
     public void serialize(final ByteChannel channel, final QVariant<T> data) throws IOException {
-        new IntSerializer().serialize(channel, data.type.type.getValue());
-        new BoolSerializer().serialize(channel, data.data == null);
+        IntSerializer.get().serialize(channel, data.type.type.getValue());
+        BoolSerializer.get().serialize(channel, data.data == null);
         if (data.type.type == QMetaType.Type.UserType) {
-            new ByteArraySerializer(true).serialize(channel, data.type.name);
+            ByteArraySerializer.get(true).serialize(channel, data.type.name);
+        }
+        if (data.type.serializer == null) {
+            throw new IOException("Unknown type: " + data.type.name);
         }
         data.type.serializer.serialize(channel, data.data);
     }
@@ -22,11 +34,11 @@ public class VariantSerializer<T> implements PrimitiveSerializer<QVariant<T>> {
     @Override
     public QVariant<T> deserialize(final ByteBuffer buffer) throws IOException {
         // Read original type
-        final QMetaType.Type type = QMetaType.Type.fromId(new IntSerializer().deserialize(buffer));
+        final QMetaType.Type type = QMetaType.Type.fromId(IntSerializer.get().deserialize(buffer));
 
         // Read if the data is defined or null
         // TODO: For some reason, this is completely ignored. Figure out why and document.
-        final boolean isNull = new BoolSerializer().deserialize(buffer);
+        final boolean isNull = BoolSerializer.get().deserialize(buffer);
 
         // Get the actual serialized type
         final QMetaType<T> mtype;
@@ -34,7 +46,7 @@ public class VariantSerializer<T> implements PrimitiveSerializer<QVariant<T>> {
             // If the type is a user-defined type, read type name
             // WARNING: This ByteArray has a trailing null byte, which we can’t deserialize.
             //          Therefore we have to pass a flag to make sure the serializer removes it.
-            final String typeName = new ByteArraySerializer(true).deserialize(buffer);
+            final String typeName = ByteArraySerializer.get(true).deserialize(buffer);
             mtype = QMetaTypeRegistry.getType(typeName);
 
             if (mtype == null || mtype.serializer == null) {

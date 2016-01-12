@@ -156,4 +156,13 @@ public class BufferViewConfig extends SyncableObject {
         client.getBufferViewManager().BufferViews.put(Integer.valueOf(function.objectName), this);
         provider.sendEvent(new BufferViewManagerChangedEvent(Integer.valueOf(function.objectName), BufferViewManagerChangedEvent.Action.ADD));
     }
+
+    public void addBuffer(int bufferId, int position) {
+        BufferList.add(position, bufferId);
+    }
+
+    public void SYNC_addBuffer(int bufferId, int position) {
+        addBuffer(bufferId, position);
+        sync("addBuffer", new Object[] {bufferId, position});
+    }
 }

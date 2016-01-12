@@ -10,9 +10,18 @@ import de.kuschku.libquassel.objects.types.SetupData;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class SetupDataInitializer implements ObjectSerializer<SetupData> {
+    private static final SetupDataInitializer serializer = new SetupDataInitializer();
+
+    private SetupDataInitializer() {
+    }
+
+    public static SetupDataInitializer get() {
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(final SetupData data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());
+        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
         map.data.put("AdminPasswd", new QVariant<>(data.AdminPasswd));
         map.data.put("AdminUser", new QVariant<>(data.AdminUser));
         map.data.put("Backend", new QVariant<>(data.Backend));

@@ -15,10 +15,12 @@ import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
-import de.kuschku.util.ObservableList;
+import de.kuschku.util.observablelists.AutoScroller;
+import de.kuschku.util.observablelists.ObservableSortedList;
+import de.kuschku.util.observablelists.RecyclerViewAdapterCallback;
 
 public class SimpleBacklogManager extends BacklogManager {
-    SparseArray<ObservableList<Message>> backlogs = new SparseArray<>();
+    SparseArray<ObservableSortedList<Message>> backlogs = new SparseArray<>();
     private BusProvider busProvider;
 
     public SimpleBacklogManager(BusProvider busProvider) {
@@ -46,27 +48,27 @@ public class SimpleBacklogManager extends BacklogManager {
         get(bufferId).list.add(message);
     }
 
-    public void bind(int bufferId, @Nullable RecyclerView.Adapter adapter) {
+    public void bind(int bufferId, @Nullable RecyclerView.Adapter adapter, AutoScroller scroller) {
         if (adapter == null)
             get(bufferId).setCallback(null);
         else
-            get(bufferId).setCallback(new ObservableList.RecyclerViewAdapterCallback(adapter));
+            get(bufferId).setCallback(new RecyclerViewAdapterCallback(adapter, scroller));
     }
 
     @Override
     public void requestMoreBacklog(int bufferId, int count) {
-        ObservableList<Message> backlog = backlogs.get(bufferId);
+        ObservableSortedList<Message> backlog = backlogs.get(bufferId);
         int messageId =
                 (backlog == null) ? -1 :
-                (backlog.first() == null) ? -1 :
-                backlog.first().messageId;
+                (backlog.last() == null) ? -1 :
+                backlog.last().messageId;
 
         requestBacklog(bufferId, -1, messageId, count, 0);
     }
 
-    public ObservableList<Message> get(int bufferId) {
+    public ObservableSortedList<Message> get(int bufferId) {
         if (backlogs.get(bufferId) == null)
-            backlogs.put(bufferId, new ObservableList<>(Message.class));
+            backlogs.put(bufferId, new ObservableSortedList<>(Message.class, true));
 
         return backlogs.get(bufferId);
     }

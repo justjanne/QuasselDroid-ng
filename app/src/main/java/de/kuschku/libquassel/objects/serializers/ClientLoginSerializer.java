@@ -10,9 +10,18 @@ import de.kuschku.libquassel.objects.types.ClientLogin;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class ClientLoginSerializer implements ObjectSerializer<ClientLogin> {
+    private static final ClientLoginSerializer serializer = new ClientLoginSerializer();
+
+    private ClientLoginSerializer() {
+    }
+
+    public static ClientLoginSerializer get() {
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(final ClientLogin data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());
+        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
         map.data.put("User", new QVariant<>(data.User));
         map.data.put("Password", new QVariant<>(data.Password));
         return map;

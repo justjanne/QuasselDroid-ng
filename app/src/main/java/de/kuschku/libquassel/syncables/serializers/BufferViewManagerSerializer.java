@@ -11,6 +11,12 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.BufferViewManager;
 
 public class BufferViewManagerSerializer implements ObjectSerializer<BufferViewManager> {
+    private static final BufferViewManagerSerializer serializer = new BufferViewManagerSerializer();
+    private BufferViewManagerSerializer() {}
+    public static BufferViewManagerSerializer get(){
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(BufferViewManager data) {
         return null;

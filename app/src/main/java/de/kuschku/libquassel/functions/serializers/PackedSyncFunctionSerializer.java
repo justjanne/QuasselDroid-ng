@@ -10,6 +10,15 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.protocols.DatastreamPeer;
 
 public class PackedSyncFunctionSerializer implements FunctionSerializer<SyncFunction> {
+    private static final PackedSyncFunctionSerializer serializer = new PackedSyncFunctionSerializer();
+
+    private PackedSyncFunctionSerializer() {
+    }
+
+    public static PackedSyncFunctionSerializer get() {
+        return serializer;
+    }
+
     @Override
     public List serialize(final SyncFunction data) {
         final List func = new ArrayList<>();

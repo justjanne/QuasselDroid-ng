@@ -14,6 +14,12 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.IrcUser;
 
 public class IrcUserSerializer implements ObjectSerializer<IrcUser> {
+    private static final IrcUserSerializer serializer = new IrcUserSerializer();
+    private IrcUserSerializer() {}
+    public static IrcUserSerializer get(){
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(IrcUser data) {
         final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());

@@ -10,9 +10,18 @@ import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class NetworkServerSerializer implements ObjectSerializer<NetworkServer> {
+    private static final NetworkServerSerializer serializer = new NetworkServerSerializer();
+
+    private NetworkServerSerializer() {
+    }
+
+    public static NetworkServerSerializer get() {
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(NetworkServer data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());
+        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
         map.data.put("UseSSL", new QVariant<>(data.UseSSL));
         map.data.put("sslVersion", new QVariant<>(data.sslVersion));
         map.data.put("Host", new QVariant<>(data.Host));

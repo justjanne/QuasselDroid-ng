@@ -1,6 +1,8 @@
 package de.kuschku.libquassel;
 
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -15,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
+import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.HandshakeFailedEvent;
 import de.kuschku.libquassel.functions.types.HandshakeFunction;
 import de.kuschku.libquassel.objects.types.ClientInit;
@@ -175,7 +178,7 @@ public class CoreConnection {
                         final ByteBuffer buffer = ByteBuffer.allocate(4);
                         getChannel().read(buffer);
 
-                        final Protocol protocol = new ProtocolSerializer().deserialize(buffer);
+                        final Protocol protocol = ProtocolSerializer.get().deserialize(buffer);
 
                         // Wrap socket in deflater if compression is enabled
                         setCompression(protocol.protocolFlags.supportsCompression);
@@ -210,9 +213,9 @@ public class CoreConnection {
                     }
                 }
             } catch (SocketException e) {
-                Logger.getLogger("libquassel").log(Level.FINEST, "Socket closed while reading");
-            } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("libquassel", "Socket closed while reading");
+            } catch (Exception e) {
+                busProvider.sendEvent(new GeneralErrorEvent(e));
             }
         }
     }

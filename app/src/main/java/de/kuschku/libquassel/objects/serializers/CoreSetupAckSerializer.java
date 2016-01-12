@@ -10,9 +10,18 @@ import de.kuschku.libquassel.objects.types.CoreSetupAck;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class CoreSetupAckSerializer implements ObjectSerializer<CoreSetupAck> {
+    private static final CoreSetupAckSerializer serializer = new CoreSetupAckSerializer();
+
+    private CoreSetupAckSerializer() {
+    }
+
+    public static CoreSetupAckSerializer get() {
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(final CoreSetupAck data) {
-        return new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());
+        return new QVariant<>(new HashMap<>());
     }
 
     @Override

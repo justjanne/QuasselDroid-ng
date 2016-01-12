@@ -43,35 +43,35 @@ public class QMetaTypeRegistry {
     private static final Map<String, QMetaType> stringSerializerMap = new HashMap<>();
 
     static {
-        addType(Void.class, QMetaType.Type.Void, new VoidSerializer());
-        addType(boolean.class, QMetaType.Type.Bool, new BoolSerializer());
-        addType(int.class, QMetaType.Type.Int, new IntSerializer());
-        addType(int.class, QMetaType.Type.UserType, "BufferId", new IntSerializer());
-        addType(int.class, QMetaType.Type.UserType, "NetworkId", new IntSerializer());
-        addType(int.class, QMetaType.Type.UserType, "IdentityId", new IntSerializer());
-        addType(int.class, QMetaType.Type.UserType, "MsgId", new IntSerializer());
-        addType(BufferInfo.class, QMetaType.Type.UserType, "BufferInfo", new BufferInfoSerializer());
-        addType(Message.class, QMetaType.Type.UserType, "Message", new MessageSerializer());
-        addType(Identity.class, QMetaType.Type.UserType, "Identity", new UserTypeSerializer<>(new IdentitySerializer()));
-        addType(NetworkServer.class, QMetaType.Type.UserType, "Network::Server", new UserTypeSerializer<>(new NetworkServerSerializer()));
-        addType(int.class, QMetaType.Type.UInt, new IntSerializer());
-        addType(short.class, QMetaType.Type.UShort, new ShortSerializer());
+        addType(Void.class, QMetaType.Type.Void, VoidSerializer.get());
+        addType(boolean.class, QMetaType.Type.Bool, BoolSerializer.get());
+        addType(int.class, QMetaType.Type.Int, IntSerializer.get());
+        addType(int.class, QMetaType.Type.UserType, "BufferId", IntSerializer.get());
+        addType(int.class, QMetaType.Type.UserType, "NetworkId", IntSerializer.get());
+        addType(int.class, QMetaType.Type.UserType, "IdentityId", IntSerializer.get());
+        addType(int.class, QMetaType.Type.UserType, "MsgId", IntSerializer.get());
+        addType(BufferInfo.class, QMetaType.Type.UserType, "BufferInfo", BufferInfoSerializer.get());
+        addType(Message.class, QMetaType.Type.UserType, "Message", MessageSerializer.get());
+        addType(Identity.class, QMetaType.Type.UserType, "Identity", new UserTypeSerializer<>(IdentitySerializer.get()));
+        addType(NetworkServer.class, QMetaType.Type.UserType, "Network::Server", new UserTypeSerializer<>(NetworkServerSerializer.get()));
+        addType(int.class, QMetaType.Type.UInt, IntSerializer.get());
+        addType(short.class, QMetaType.Type.UShort, ShortSerializer.get());
 
         // TODO: Implement more custom quassel types
 
-        addType(DateTime.class, QMetaType.Type.QTime, new TimeSerializer());
+        addType(DateTime.class, QMetaType.Type.QTime, TimeSerializer.get());
         addType(BigDecimal.class, QMetaType.Type.LongLong);
         addType(BigDecimal.class, QMetaType.Type.ULongLong);
         addType(double.class, QMetaType.Type.Double);
-        addType(char.class, QMetaType.Type.QChar, new CharSerializer());
-        addType(List.class, QMetaType.Type.QVariantList, new VariantListSerializer());
-        addType(Map.class, QMetaType.Type.QVariantMap, new VariantMapSerializer());
-        addType(List.class, QMetaType.Type.QStringList, new StringListSerializer());
-        addType(String.class, QMetaType.Type.QString, new StringSerializer());
-        addType(String.class, QMetaType.Type.QByteArray, new ByteArraySerializer());
+        addType(char.class, QMetaType.Type.QChar, CharSerializer.get());
+        addType(List.class, QMetaType.Type.QVariantList, VariantListSerializer.get());
+        addType(Map.class, QMetaType.Type.QVariantMap, VariantMapSerializer.get());
+        addType(List.class, QMetaType.Type.QStringList, StringListSerializer.get());
+        addType(String.class, QMetaType.Type.QString, StringSerializer.get());
+        addType(String.class, QMetaType.Type.QByteArray, ByteArraySerializer.get());
         addType(void.class, QMetaType.Type.QBitArray);
         addType(void.class, QMetaType.Type.QDate);
-        addType(DateTime.class, QMetaType.Type.QDateTime, new DateTimeSerializer());
+        addType(DateTime.class, QMetaType.Type.QDateTime, DateTimeSerializer.get());
         addType(void.class, QMetaType.Type.QUrl);
         addType(void.class, QMetaType.Type.QLocale);
         addType(void.class, QMetaType.Type.QRect);
@@ -113,15 +113,15 @@ public class QMetaTypeRegistry {
         addType(void.class, QMetaType.Type.QQuaternion);
 
         addType(void.class, QMetaType.Type.VoidStar, "void*");
-        addType(long.class, QMetaType.Type.Long, new LongSerializer());
-        addType(short.class, QMetaType.Type.Short, new ShortSerializer());
-        addType(byte.class, QMetaType.Type.Char, new ByteSerializer());
-        addType(long.class, QMetaType.Type.ULong, new LongSerializer());
-        addType(byte.class, QMetaType.Type.UChar, new ByteSerializer());
+        addType(long.class, QMetaType.Type.Long, LongSerializer.get());
+        addType(short.class, QMetaType.Type.Short, ShortSerializer.get());
+        addType(byte.class, QMetaType.Type.Char, ByteSerializer.get());
+        addType(long.class, QMetaType.Type.ULong, LongSerializer.get());
+        addType(byte.class, QMetaType.Type.UChar, ByteSerializer.get());
         addType(void.class, QMetaType.Type.Float);
         addType(void.class, QMetaType.Type.QObjectStar, "QObject*");
         addType(void.class, QMetaType.Type.QWidgetStar, "QWidget*");
-        addType(QVariant.class, QMetaType.Type.QVariant, new VariantSerializer());
+        addType(QVariant.class, QMetaType.Type.QVariant, VariantSerializer.get());
     }
 
     // Disable Constructor
@@ -158,11 +158,11 @@ public class QMetaTypeRegistry {
     }
 
     public static <T> T deserialize(final QMetaType.Type type, final ByteBuffer buffer) throws IOException {
-        return deserialize(((QMetaType<T>) typeSerializerMap.get(type)), buffer);
+        return deserialize((getMetaTypeByType(type)), buffer);
     }
 
     public static <T> T deserialize(final String type, final ByteBuffer buffer) throws IOException {
-        return deserialize(((QMetaType<T>) stringSerializerMap.get(type)), buffer);
+        return deserialize((getMetaTypeByString(type)), buffer);
     }
 
     public static <T> T deserialize(final QMetaType<T> type, final ByteBuffer buffer) throws IOException {
@@ -191,42 +191,58 @@ public class QMetaTypeRegistry {
     }
 
     public static <T> QMetaType<T> getType(String typeName) {
-        return ((QMetaType<T>) stringSerializerMap.get(typeName));
+        return getMetaTypeByString(typeName);
+    }
+
+    private static <T> QMetaType<T> getMetaTypeByString(String typeName) {
+        QMetaType<T> result = stringSerializerMap.get(typeName);
+        if (result == null || result.serializer == null) {
+            throw new RuntimeException("Unknown type: " + typeName);
+        }
+        return result;
     }
 
     public static <T> QMetaType<T> getType(QMetaType.Type type) {
-        return ((QMetaType<T>) typeSerializerMap.get(type));
+        return getMetaTypeByType(type);
+    }
+
+    private static <T> QMetaType<T> getMetaTypeByType(QMetaType.Type type) {
+        QMetaType<T> result = typeSerializerMap.get(type);
+        if (result == null || result.serializer == null) {
+            throw new RuntimeException("Unknown type: " + type.toString());
+        }
+        return result;
     }
 
     public static <T> QMetaType<T> getTypeByObject(T type) {
-        if (type instanceof Void) return (QMetaType<T>) typeSerializerMap.get(QMetaType.Type.Void);
+        if (type instanceof Void) return getMetaTypeByType(QMetaType.Type.Void);
         else if (type instanceof Boolean)
-            return (QMetaType<T>) typeSerializerMap.get(QMetaType.Type.Bool);
+            return getMetaTypeByType(QMetaType.Type.Bool);
         else if (type instanceof Integer)
-            return (QMetaType<T>) typeSerializerMap.get(QMetaType.Type.Int);
+            return getMetaTypeByType(QMetaType.Type.Int);
         else if (type instanceof Short)
-            return (QMetaType<T>) typeSerializerMap.get(QMetaType.Type.Short);
+            return getMetaTypeByType(QMetaType.Type.Short);
         else if (type instanceof DateTime)
-            return (QMetaType<T>) typeSerializerMap.get(QMetaType.Type.QDateTime);
+            return getMetaTypeByType(QMetaType.Type.QDateTime);
         else if (type instanceof Character)
-            return (QMetaType<T>) typeSerializerMap.get(QMetaType.Type.QChar);
+            return getMetaTypeByType(QMetaType.Type.QChar);
         else if (type instanceof List) {
             if (((List) type).size() > 0 && ((List) type).get(0) instanceof String)
-                return (QMetaType<T>) typeSerializerMap.get(QMetaType.Type.QStringList);
+                return getMetaTypeByType(QMetaType.Type.QStringList);
             else if (((List) type).size() > 0 && ((List) type).get(0) instanceof QVariant)
-                return new QMetaType<>((Class) type.getClass(), QMetaType.Type.QVariantList, new VariantVariantListSerializer());
+                return new QMetaType<>((Class) type.getClass(), QMetaType.Type.QVariantList, (PrimitiveSerializer<T>) VariantVariantListSerializer.get());
             else
-                return (QMetaType<T>) typeSerializerMap.get(QMetaType.Type.QVariantList);
+                return getMetaTypeByType(QMetaType.Type.QVariantList);
         } else if (type instanceof Map)
-            return (QMetaType<T>) typeSerializerMap.get(QMetaType.Type.QVariantMap);
+            return getMetaTypeByType(QMetaType.Type.QVariantMap);
         else if (type instanceof String)
-            return (QMetaType<T>) typeSerializerMap.get(QMetaType.Type.QString);
+            return getMetaTypeByType(QMetaType.Type.QString);
         else if (type instanceof Long)
-            return (QMetaType<T>) typeSerializerMap.get(QMetaType.Type.Long);
+            return getMetaTypeByType(QMetaType.Type.Long);
         else if (type instanceof Byte)
-            return (QMetaType<T>) typeSerializerMap.get(QMetaType.Type.Char);
+            return getMetaTypeByType(QMetaType.Type.Char);
         else if (type instanceof QVariant)
-            return (QMetaType<T>) typeSerializerMap.get(QMetaType.Type.QVariant);
+            return getMetaTypeByType(QMetaType.Type.QVariant);
         else if (type instanceof Message) return stringSerializerMap.get("Message");
         else if (type instanceof BufferInfo) return stringSerializerMap.get("BufferInfo");
         else

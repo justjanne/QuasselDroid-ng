@@ -9,9 +9,18 @@ import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class StringObjectMapSerializer<T> implements ObjectSerializer<Map<String, T>> {
+    private static final StringObjectMapSerializer serializer = new StringObjectMapSerializer();
+
+    private StringObjectMapSerializer() {
+    }
+
+    public static <T> StringObjectMapSerializer<T> get() {
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(Map<String, T> data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());
+        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
         for (Map.Entry<String, T> entry : data.entrySet()) {
             map.data.put(entry.getKey(), new QVariant<>(entry.getValue()));
         }

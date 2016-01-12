@@ -19,6 +19,12 @@ import de.kuschku.libquassel.syncables.types.IrcUser;
 import de.kuschku.libquassel.syncables.types.Network;
 
 public class NetworkSerializer implements ObjectSerializer<Network> {
+    private static final NetworkSerializer serializer = new NetworkSerializer();
+    private NetworkSerializer() {}
+    public static NetworkSerializer get(){
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(Network data) {
         // TODO: Implement this
@@ -42,7 +48,7 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
                 channelMap,
                 userMap,
                 (List<NetworkServer>) map.get("ServerList").data,
-                (Map<String, String>) new StringObjectMapSerializer().fromLegacy((Map<String, QVariant>) map.get("Supports").data),
+                (Map<String, String>) StringObjectMapSerializer.<String>get().fromLegacy((Map<String, QVariant>) map.get("Supports").data),
                 (String) map.get("autoIdentifyPassword").data,
                 (String) map.get("autoIdentifyService").data,
                 (int) map.get("autoReconnectInterval").data,
@@ -133,11 +139,11 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
         final Map<String, QVariant<Map<String, QVariant>>> wrappedUsers = usersAndChannels.get("users").data;
         final Map<String, IrcChannel> channels = new HashMap<>(wrappedChannels.size());
         for (Map.Entry<String, QVariant<Map<String, QVariant>>> entry : wrappedChannels.entrySet()) {
-            final IrcChannel ircChannel = new IrcChannelSerializer().fromLegacy(entry.getValue().data);
+            final IrcChannel ircChannel = IrcChannelSerializer.get().fromLegacy(entry.getValue().data);
             channels.put(ircChannel.name, ircChannel);
         }
         final Map<String, IrcUser> users = new HashMap<>(wrappedUsers.size());
-        final Map<String, String> supports = (Map<String, String>) new StringObjectMapSerializer().fromLegacy((Map<String, QVariant>) map.get("Supports").data);
+        final Map<String, String> supports = (Map<String, String>) StringObjectMapSerializer.<String>get().fromLegacy((Map<String, QVariant>) map.get("Supports").data);
         Network network = new Network(
                 channels,
                 new HashMap<>(wrappedUsers.size()),
@@ -168,7 +174,7 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
                 (boolean) map.get("useSasl").data
         );
         for (Map.Entry<String, QVariant<Map<String, QVariant>>> entry : wrappedUsers.entrySet()) {
-            final IrcUser ircUser = new IrcUserSerializer().fromLegacy(entry.getValue().data);
+            final IrcUser ircUser = IrcUserSerializer.get().fromLegacy(entry.getValue().data);
             ircUser.setNetwork(network);
         }
         return network;

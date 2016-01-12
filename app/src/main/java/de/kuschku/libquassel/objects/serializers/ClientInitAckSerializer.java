@@ -15,15 +15,24 @@ import de.kuschku.libquassel.objects.types.StorageBackend;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class ClientInitAckSerializer implements ObjectSerializer<ClientInitAck> {
+    private static ClientInitAckSerializer serializer = new ClientInitAckSerializer();
+
+    private ClientInitAckSerializer() {
+    }
+
+    public static ClientInitAckSerializer get() {
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(final ClientInitAck data) {
         final List<Map<String, QVariant>> storageBackends = new ArrayList<>();
-        final StorageBackendSerializer storageBackendSerializer = new StorageBackendSerializer();
+        final StorageBackendSerializer storageBackendSerializer = StorageBackendSerializer.get();
         for (StorageBackend backend : data.StorageBackends) {
             storageBackends.add((Map<String, QVariant>) storageBackendSerializer.toVariantMap(backend));
         }
 
-        final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());
+        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
         map.data.put("Configured", new QVariant<>(data.Configured));
         map.data.put("LoginEnabled", new QVariant<>(data.LoginEnabled));
         map.data.put("StorageBackends", new QVariant<>(storageBackends));
@@ -40,7 +49,7 @@ public class ClientInitAckSerializer implements ObjectSerializer<ClientInitAck> 
     public ClientInitAck fromLegacy(Map<String, QVariant> map) {
         final List<StorageBackend> storageBackends = new ArrayList<StorageBackend>();
         if (map.containsKey("StorageBackends")) {
-            final StorageBackendSerializer storageBackendSerializer = new StorageBackendSerializer();
+            final StorageBackendSerializer storageBackendSerializer = StorageBackendSerializer.get();
             for (Map<String, QVariant> backend : (List<Map<String, QVariant>>) map.get("StorageBackends").data) {
                 storageBackends.add(storageBackendSerializer.fromLegacy(backend));
             }

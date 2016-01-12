@@ -10,9 +10,18 @@ import de.kuschku.libquassel.objects.types.ClientInitReject;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class ClientInitRejectSerializer implements ObjectSerializer<ClientInitReject> {
+    private static final ClientInitRejectSerializer serializer = new ClientInitRejectSerializer();
+
+    private ClientInitRejectSerializer() {
+    }
+
+    public static ClientInitRejectSerializer get() {
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(final ClientInitReject data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());
+        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
         map.data.put("Error", new QVariant<>(data.Error));
         return map;
     }

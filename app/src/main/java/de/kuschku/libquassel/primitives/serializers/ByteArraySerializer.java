@@ -1,6 +1,7 @@
 package de.kuschku.libquassel.primitives.serializers;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.common.base.Charsets;
 
@@ -9,23 +10,30 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
 
 public class ByteArraySerializer implements PrimitiveSerializer<String> {
-    public final boolean trimLastByte;
+    private static final ByteArraySerializer serializerFalse = new ByteArraySerializer(false);
+    private static final ByteArraySerializer serializerTrue = new ByteArraySerializer(true);
 
-    public ByteArraySerializer() {
-        this(false);
+    public static ByteArraySerializer get() {
+        return get(false);
+    }
+    public static ByteArraySerializer get(boolean trimLastByte) {
+        if (trimLastByte) return serializerTrue;
+        else return serializerFalse;
     }
 
-    public ByteArraySerializer(boolean trimLastByte) {
+    public final boolean trimLastByte;
+
+    private ByteArraySerializer(boolean trimLastByte) {
         this.trimLastByte = trimLastByte;
     }
 
     @Override
     public void serialize(final ByteChannel channel, final String data) throws IOException {
         if (data == null) {
-            new IntSerializer().serialize(channel, 0xffffffff);
+            IntSerializer.get().serialize(channel, 0xffffffff);
         } else {
             final ByteBuffer contentBuffer = Charsets.ISO_8859_1.encode(data);
-            new IntSerializer().serialize(channel, contentBuffer.limit() + (trimLastByte ? 1 : 0));
+            IntSerializer.get().serialize(channel, contentBuffer.limit() + (trimLastByte ? 1 : 0));
             channel.write(contentBuffer);
             if (trimLastByte) channel.write(ByteBuffer.allocate(1));
         }
@@ -34,7 +42,7 @@ public class ByteArraySerializer implements PrimitiveSerializer<String> {
     @Nullable
     @Override
     public String deserialize(final ByteBuffer buffer) throws IOException {
-        final int len = new IntSerializer().deserialize(buffer);
+        final int len = IntSerializer.get().deserialize(buffer);
         if (len == 0xffffffff)
             return null;
         else if (len == 0)

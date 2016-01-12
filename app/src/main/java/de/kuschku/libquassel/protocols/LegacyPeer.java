@@ -40,9 +40,6 @@ import static de.kuschku.libquassel.primitives.QMetaType.Type.QVariantMap;
  * @author Janne Koschinski
  */
 public class LegacyPeer implements RemotePeer {
-    private final IntSerializer intSerializer = new IntSerializer();
-    private final VariantSerializer variantSerializer = new VariantSerializer();
-
     private ByteBuffer buffer;
     private CoreConnection connection;
     private BusProvider busProvider;
@@ -54,60 +51,60 @@ public class LegacyPeer implements RemotePeer {
     }
 
     public final void onEventBackgroundThread(SyncFunction func) {
-        final List serialize = new UnpackedSyncFunctionSerializer().serialize(func);
-        connection.getOutputExecutor().submit(new OutputRunnable<>(new VariantSerializer<List>(),
-                new QVariant<>(new QMetaType<List>(List.class, QMetaType.Type.QVariantList, new VariantVariantListSerializer()),
+        final List serialize = UnpackedSyncFunctionSerializer.get().serialize(func);
+        connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
+                new QVariant(new QMetaType(List.class, QMetaType.Type.QVariantList, VariantVariantListSerializer.get()),
                         serialize)));
     }
 
     public void onEventBackgroundThread(RpcCallFunction func) {
-        connection.getOutputExecutor().submit(new OutputRunnable<>(new VariantSerializer<List>(),
-                new QVariant<>(new UnpackedRpcCallFunctionSerializer().serialize(func))));
+        connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
+                new QVariant<>(UnpackedRpcCallFunctionSerializer.get().serialize(func))));
     }
 
     public void onEventBackgroundThread(InitRequestFunction func) {
-        connection.getOutputExecutor().submit(new OutputRunnable<>(new VariantSerializer<List>(),
-                new QVariant<>(new InitRequestFunctionSerializer().serialize(func))));
+        connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
+                new QVariant<>(InitRequestFunctionSerializer.get().serialize(func))));
     }
 
     public void onEventBackgroundThread(InitDataFunction func) {
-        connection.getOutputExecutor().submit(new OutputRunnable<>(new VariantSerializer<List>(),
-                new QVariant<>(new InitDataFunctionSerializer().serialize(func))));
+        connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
+                new QVariant<>(InitDataFunctionSerializer.get().serialize(func))));
     }
 
     public void onEventBackgroundThread(HandshakeFunction func) {
         connection.getOutputExecutor().submit(new OutputRunnable<>(
-                new VariantSerializer<>(), MessageTypeRegistry.toVariantMap(func.data)));
+                VariantSerializer.get(), MessageTypeRegistry.toVariantMap(func.data)));
     }
 
     public void processMessage() throws IOException {
         buffer = ByteBuffer.allocate(4);
         connection.getChannel().read(buffer);
 
-        final int size = intSerializer.deserialize(buffer);
+        final int size = IntSerializer.get().deserialize(buffer);
         if (size == 0) return;
 
         buffer = ByteBuffer.allocate(size);
         connection.getChannel().read(buffer);
 
         // TODO: Put this into a future with a time limit, and parallelize it.
-        final QVariant data = variantSerializer.deserialize(buffer);
+        final QVariant data = VariantSerializer.get().deserialize(buffer);
         if (data.type.type == QVariantMap) {
             busProvider.handle(MessageTypeRegistry.from((Map<String, QVariant>) data.data));
         } else if (data.type.type == QVariantList) {
             final FunctionType type = FunctionType.fromId((Integer) ((List<Object>) data.data).remove(0));
             switch (type) {
                 case SYNC:
-                    busProvider.handle(new UnpackedSyncFunctionSerializer().deserialize((List<QVariant>) data.data));
+                    busProvider.handle(UnpackedSyncFunctionSerializer.get().deserialize((List<QVariant>) data.data));
                     break;
                 case RPCCALL:
-                    busProvider.handle(new UnpackedRpcCallFunctionSerializer().deserialize((List<QVariant>) data.data));
+                    busProvider.handle(UnpackedRpcCallFunctionSerializer.get().deserialize((List<QVariant>) data.data));
                     break;
                 case INITREQUEST:
-                    busProvider.handle(new InitRequestFunctionSerializer().deserialize((List<QVariant>) data.data));
+                    busProvider.handle(InitRequestFunctionSerializer.get().deserialize((List<QVariant>) data.data));
                     break;
                 case INITDATA:
-                    busProvider.handle(new UnpackedInitDataFunctionSerializer().deserialize((List<QVariant>) data.data));
+                    busProvider.handle(UnpackedInitDataFunctionSerializer.get().deserialize((List<QVariant>) data.data));
                     break;
                 case HEARTBEAT:
                 case HEARTBEATREPLY:
@@ -150,7 +147,7 @@ public class LegacyPeer implements RemotePeer {
                 // Serialize the object into the buffer-channel
                 serializer.serialize(fakeChannel, data);
                 // Write the size of the buffer over the network
-                new IntSerializer().serialize(connection.getChannel(), out.size());
+                IntSerializer.get().serialize(connection.getChannel(), out.size());
                 // Write the content of the buffer over the network
                 connection.getChannel().write(ByteBuffer.wrap(out.toByteArray()));
                 // Flush the deflater, if existing

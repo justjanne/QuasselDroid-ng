@@ -24,6 +24,7 @@
 
         <item name="colorBackground">@color/md_dark_background</item>
         <item name="colorBackgroundHighlight">#ff8811</item>
+        <item name="colorBackgroundSecondary">@android:color/transparent</item>
         <item name="colorBackgroundCard">@color/md_dark_cards</item>
 
         <item name="colorTintActivity">#88cc33</item>
@@ -55,6 +56,7 @@
 
         <item name="colorBackground">@color/md_light_background</item>
         <item name="colorBackgroundHighlight">#ff8811</item>
+        <item name="colorBackgroundSecondary">@android:color/transparent</item>
         <item name="colorBackgroundCard">@color/md_light_cards</item>
 
         <item name="colorTintActivity">#88cc33</item>
@@ -86,6 +88,7 @@
 
         <item name="colorBackground">@color/md_light_background</item>
         <item name="colorBackgroundHighlight">#ff8811</item>
+        <item name="colorBackgroundSecondary">@android:color/transparent</item>
         <item name="colorBackgroundCard">@color/md_light_cards</item>
 
         <item name="colorTintActivity">#88cc33</item>

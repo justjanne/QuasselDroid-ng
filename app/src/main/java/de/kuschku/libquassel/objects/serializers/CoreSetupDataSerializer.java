@@ -10,10 +10,19 @@ import de.kuschku.libquassel.objects.types.CoreSetupData;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class CoreSetupDataSerializer implements ObjectSerializer<CoreSetupData> {
+    private static final CoreSetupDataSerializer serializer = new CoreSetupDataSerializer();
+
+    private CoreSetupDataSerializer() {
+    }
+
+    public static CoreSetupDataSerializer get() {
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(final CoreSetupData data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());
-        map.data.put("SetupData", new SetupDataInitializer().toVariantMap(data.SetupData));
+        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
+        map.data.put("SetupData", SetupDataInitializer.get().toVariantMap(data.SetupData));
         return map;
     }
 
@@ -25,7 +34,7 @@ public class CoreSetupDataSerializer implements ObjectSerializer<CoreSetupData> 
     @Override
     public CoreSetupData fromLegacy(Map<String, QVariant> map) {
         return new CoreSetupData(
-                new SetupDataInitializer().fromLegacy((Map<String, QVariant>) map.get("SetupData").data)
+                SetupDataInitializer.get().fromLegacy((Map<String, QVariant>) map.get("SetupData").data)
         );
     }
 

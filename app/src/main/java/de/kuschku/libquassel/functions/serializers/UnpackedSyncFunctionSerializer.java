@@ -9,6 +9,15 @@ import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class UnpackedSyncFunctionSerializer implements FunctionSerializer<SyncFunction> {
+    private static final UnpackedSyncFunctionSerializer serializer = new UnpackedSyncFunctionSerializer();
+
+    private UnpackedSyncFunctionSerializer() {
+    }
+
+    public static UnpackedSyncFunctionSerializer get() {
+        return serializer;
+    }
+
     @Override
     public List serialize(final SyncFunction data) {
         final List func = new ArrayList<>();

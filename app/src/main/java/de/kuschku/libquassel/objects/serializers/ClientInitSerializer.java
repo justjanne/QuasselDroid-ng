@@ -10,9 +10,18 @@ import de.kuschku.libquassel.objects.types.ClientInit;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class ClientInitSerializer implements ObjectSerializer<ClientInit> {
+    private static final ClientInitSerializer serializer = new ClientInitSerializer();
+
+    private ClientInitSerializer() {
+    }
+
+    public static ClientInitSerializer get() {
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(final ClientInit data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());
+        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
         map.data.put("ClientDate", new QVariant<>(data.ClientDate));
         map.data.put("UseSsl", new QVariant<>(data.UseSsl));
         map.data.put("ClientVersion", new QVariant<>(data.ClientVersion));

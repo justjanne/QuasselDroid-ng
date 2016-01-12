@@ -11,6 +11,15 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import static de.kuschku.libquassel.primitives.QMetaType.Type.QByteArray;
 
 public class InitRequestFunctionSerializer implements FunctionSerializer<InitRequestFunction> {
+    private static final InitRequestFunctionSerializer serializer = new InitRequestFunctionSerializer();
+
+    private InitRequestFunctionSerializer() {
+    }
+
+    public static InitRequestFunctionSerializer get() {
+        return serializer;
+    }
+
     @Override
     public List serialize(final InitRequestFunction data) {
         return Lists.newArrayList(

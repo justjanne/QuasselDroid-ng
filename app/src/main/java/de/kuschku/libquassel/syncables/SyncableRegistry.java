@@ -19,13 +19,13 @@ public class SyncableRegistry {
     private static final Map<String, ObjectSerializer<? extends SyncableObject>> map = new HashMap<>();
 
     static {
-        map.put("BufferSyncer", new BufferSyncerSerializer());
-        map.put("BufferViewConfig", new BufferViewConfigSerializer());
-        map.put("BufferViewManager", new BufferViewManagerSerializer());
-        map.put("Identity", new IdentitySerializer());
-        map.put("IrcChannel", new IrcChannelSerializer());
-        map.put("IrcUser", new IrcUserSerializer());
-        map.put("Network", new NetworkSerializer());
+        map.put("BufferSyncer", BufferSyncerSerializer.get());
+        map.put("BufferViewConfig", BufferViewConfigSerializer.get());
+        map.put("BufferViewManager", BufferViewManagerSerializer.get());
+        map.put("Identity", IdentitySerializer.get());
+        map.put("IrcChannel", IrcChannelSerializer.get());
+        map.put("IrcUser", IrcUserSerializer.get());
+        map.put("Network", NetworkSerializer.get());
     }
 
     private SyncableRegistry() {

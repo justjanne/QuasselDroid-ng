@@ -7,12 +7,21 @@ import de.kuschku.libquassel.functions.types.PackedInitDataFunction;
 import de.kuschku.libquassel.functions.types.UnpackedInitDataFunction;
 
 public class InitDataFunctionSerializer implements FunctionSerializer<InitDataFunction> {
+    private static final InitDataFunctionSerializer serializer = new InitDataFunctionSerializer();
+
+    private InitDataFunctionSerializer() {
+    }
+
+    public static InitDataFunctionSerializer get() {
+        return serializer;
+    }
+
     @Override
     public List serialize(final InitDataFunction data) {
         if (data instanceof UnpackedInitDataFunction) {
-            return new PackedInitDataFunctionSerializer().serialize((UnpackedInitDataFunction) data);
+            return PackedInitDataFunctionSerializer.get().serialize((UnpackedInitDataFunction) data);
         } else if (data instanceof PackedInitDataFunction) {
-            return new UnpackedInitDataFunctionSerializer().serialize((PackedInitDataFunction) data);
+            return UnpackedInitDataFunctionSerializer.get().serialize((PackedInitDataFunction) data);
         } else {
             throw new IllegalArgumentException("Can not be applied to these arguments");
         }

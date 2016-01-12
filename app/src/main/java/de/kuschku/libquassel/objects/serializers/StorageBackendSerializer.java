@@ -11,9 +11,18 @@ import de.kuschku.libquassel.objects.types.StorageBackend;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class StorageBackendSerializer implements ObjectSerializer<StorageBackend> {
+    private static final StorageBackendSerializer serializer = new StorageBackendSerializer();
+
+    private StorageBackendSerializer() {
+    }
+
+    public static StorageBackendSerializer get() {
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(final StorageBackend data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());
+        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
         map.data.put("DisplayName", new QVariant<>(data.DisplayName));
         map.data.put("SetupDefaults", new QVariant<>(data.SetupDefaults));
         map.data.put("Description", new QVariant<>(data.Description));

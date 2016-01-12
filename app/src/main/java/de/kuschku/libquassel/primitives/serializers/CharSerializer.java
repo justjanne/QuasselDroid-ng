@@ -6,6 +6,15 @@ import java.nio.channels.ByteChannel;
 import java.nio.charset.Charset;
 
 public class CharSerializer implements PrimitiveSerializer<Character> {
+    private static final CharSerializer serializer = new CharSerializer();
+
+    private CharSerializer() {
+    }
+
+    public static CharSerializer get() {
+        return serializer;
+    }
+
     @Override
     public void serialize(final ByteChannel channel, final Character data) throws IOException {
         final ByteBuffer buffer = Charset.forName("UTF-16BE").encode(String.valueOf(data.charValue()));

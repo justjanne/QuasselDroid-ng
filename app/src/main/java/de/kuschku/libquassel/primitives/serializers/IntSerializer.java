@@ -5,6 +5,15 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
 
 public class IntSerializer implements PrimitiveSerializer<Integer> {
+    private static final IntSerializer serializer = new IntSerializer();
+
+    private IntSerializer() {
+    }
+
+    public static IntSerializer get() {
+        return serializer;
+    }
+
     @Override
     public void serialize(final ByteChannel channel, final Integer data) throws IOException {
         final ByteBuffer buffer = ByteBuffer.allocate(4);

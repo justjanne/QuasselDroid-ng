@@ -5,6 +5,12 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
 
 public class BoolSerializer implements PrimitiveSerializer<Boolean> {
+    private static final BoolSerializer serializer = new BoolSerializer();
+    private BoolSerializer() {}
+    public static BoolSerializer get(){
+        return serializer;
+    }
+
     @Override
     public void serialize(final ByteChannel channel, final Boolean data) throws IOException {
         final ByteBuffer buffer = ByteBuffer.allocate(1);

@@ -23,6 +23,8 @@ import de.kuschku.libquassel.syncables.types.BufferSyncer;
 import de.kuschku.libquassel.syncables.types.BufferViewManager;
 import de.kuschku.libquassel.syncables.types.Network;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
+import de.kuschku.util.backports.Optional;
+import de.kuschku.util.backports.Optionals;
 import de.kuschku.util.backports.Stream;
 
 
@@ -101,7 +103,13 @@ public class Client {
     }
 
     public void __objectRenamed__(String className, String newName, String oldName) {
-        getObjectByIdentifier(className, oldName).renameObject(newName);
+        safeGetObjectByIdentifier(className, oldName).renameObject(newName);
+    }
+
+    private SyncableObject safeGetObjectByIdentifier(String className, String oldName) {
+        SyncableObject val = getObjectByIdentifier(className, oldName);
+        if (val == null) throw new IllegalArgumentException(String.format("Object %s::%s does not exist", className, oldName));
+        else return val;
     }
 
     public SyncableObject getObjectByIdentifier(final String className, final String objectName) {

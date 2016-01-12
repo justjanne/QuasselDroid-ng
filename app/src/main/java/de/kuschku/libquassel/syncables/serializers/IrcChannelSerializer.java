@@ -12,13 +12,19 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.IrcChannel;
 
 public class IrcChannelSerializer implements ObjectSerializer<IrcChannel> {
+    private static final IrcChannelSerializer serializer = new IrcChannelSerializer();
+    private IrcChannelSerializer() {}
+    public static IrcChannelSerializer get(){
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(IrcChannel data) {
         final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());
         map.data.put("name", new QVariant<>(data.name));
         map.data.put("topic", new QVariant<>(data.topic));
         map.data.put("password", new QVariant<>(data.password));
-        map.data.put("UserModes", new StringObjectMapSerializer<String>().toVariantMap(data.UserModes));
+        map.data.put("UserModes", StringObjectMapSerializer.<String>get().toVariantMap(data.UserModes));
         map.data.put("ChanModes", new QVariant<>(data.ChanModes));
         map.data.put("encrypted", new QVariant<>(data.encrypted));
         return map;
@@ -35,7 +41,7 @@ public class IrcChannelSerializer implements ObjectSerializer<IrcChannel> {
                 (String) map.get("name").data,
                 (String) map.get("topic").data,
                 (String) map.get("password").data,
-                new StringObjectMapSerializer<String>().fromLegacy(((QVariant<Map<String, QVariant>>) map.get("UserModes")).data),
+                StringObjectMapSerializer.<String>get().fromLegacy(((QVariant<Map<String, QVariant>>) map.get("UserModes")).data),
                 (Map<String, Object>) map.get("ChanModes").data,
                 (boolean) map.get("encrypted").data
         );

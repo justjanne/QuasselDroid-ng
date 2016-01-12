@@ -9,13 +9,21 @@ import java.util.Map;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class VariantMapSerializer<T> implements PrimitiveSerializer<Map<String, QVariant<T>>> {
+    private static final VariantMapSerializer serializer = new VariantMapSerializer();
 
-    private PrimitiveSerializer<String> stringSerializer = new StringSerializer();
-    private VariantSerializer<T> variantSerializer = new VariantSerializer<>();
+    private VariantMapSerializer() {
+    }
+
+    public static <T> VariantMapSerializer<T> get() {
+        return serializer;
+    }
+
+    private PrimitiveSerializer<String> stringSerializer = StringSerializer.get();
+    private VariantSerializer<T> variantSerializer = VariantSerializer.get();
 
     @Override
     public void serialize(final ByteChannel channel, final Map<String, QVariant<T>> data) throws IOException {
-        new IntSerializer().serialize(channel, data.size());
+        IntSerializer.get().serialize(channel, data.size());
 
         for (Map.Entry<String, QVariant<T>> element : data.entrySet()) {
             stringSerializer.serialize(channel, element.getKey());
@@ -25,7 +33,7 @@ public class VariantMapSerializer<T> implements PrimitiveSerializer<Map<String, 
 
     @Override
     public Map<String, QVariant<T>> deserialize(final ByteBuffer buffer) throws IOException {
-        final int length = new IntSerializer().deserialize(buffer);
+        final int length = IntSerializer.get().deserialize(buffer);
         final Map<String, QVariant<T>> map = new HashMap<>(length);
 
         for (int i = 0; i < length; i++) {

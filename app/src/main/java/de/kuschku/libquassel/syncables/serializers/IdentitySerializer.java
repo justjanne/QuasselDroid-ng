@@ -12,6 +12,12 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.Identity;
 
 public class IdentitySerializer implements ObjectSerializer<Identity> {
+    private static final IdentitySerializer serializer = new IdentitySerializer();
+    private IdentitySerializer() {}
+    public static IdentitySerializer get(){
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(Identity data) {
         final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());

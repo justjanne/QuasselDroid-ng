@@ -9,6 +9,15 @@ import de.kuschku.libquassel.functions.types.PackedInitDataFunction;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class UnpackedInitDataFunctionSerializer implements FunctionSerializer<PackedInitDataFunction> {
+    private static final UnpackedInitDataFunctionSerializer serializer = new UnpackedInitDataFunctionSerializer();
+
+    private UnpackedInitDataFunctionSerializer() {
+    }
+
+    public static UnpackedInitDataFunctionSerializer get() {
+        return serializer;
+    }
+
     @Override
     public List serialize(final PackedInitDataFunction data) {
         final List func = new ArrayList<>();

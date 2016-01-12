@@ -17,11 +17,11 @@ public class UserTypeSerializer<T> implements PrimitiveSerializer<T> {
 
     @Override
     public void serialize(ByteChannel channel, T data) throws IOException {
-        new VariantSerializer<Map<String, QVariant>>().serialize(channel, objectSerializer.toVariantMap(data));
+        VariantSerializer.<Map<String, QVariant>>get().serialize(channel, objectSerializer.toVariantMap(data));
     }
 
     @Override
     public T deserialize(ByteBuffer buffer) throws IOException {
-        return (T) objectSerializer.fromLegacy(new VariantMapSerializer().deserialize(buffer));
+        return (T) objectSerializer.fromLegacy(((VariantMapSerializer) VariantMapSerializer.get()).deserialize(buffer));
     }
 }

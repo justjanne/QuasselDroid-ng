@@ -20,16 +20,16 @@ public class MessageTypeRegistry {
     private static Map<String, ObjectSerializer> serializerMap = new HashMap<String, ObjectSerializer>();
 
     static {
-        serializerMap.put("ClientInit", new ClientInitSerializer());
-        serializerMap.put("ClientInitAck", new ClientInitAckSerializer());
-        serializerMap.put("ClientInitReject", new ClientInitRejectSerializer());
-        serializerMap.put("ClientLogin", new ClientLoginSerializer());
-        serializerMap.put("ClientLoginAck", new ClientLoginAckSerializer());
-        serializerMap.put("ClientLoginReject", new ClientLoginRejectSerializer());
-        serializerMap.put("CoreSetupData", new CoreSetupDataSerializer());
-        serializerMap.put("CoreSetupAck", new CoreSetupAckSerializer());
-        serializerMap.put("CoreSetupReject", new CoreSetupRejectSerializer());
-        serializerMap.put("SessionInit", new SessionInitSerializer());
+        serializerMap.put("ClientInit", ClientInitSerializer.get());
+        serializerMap.put("ClientInitAck", ClientInitAckSerializer.get());
+        serializerMap.put("ClientInitReject", ClientInitRejectSerializer.get());
+        serializerMap.put("ClientLogin", ClientLoginSerializer.get());
+        serializerMap.put("ClientLoginAck", ClientLoginAckSerializer.get());
+        serializerMap.put("ClientLoginReject", ClientLoginRejectSerializer.get());
+        serializerMap.put("CoreSetupData", CoreSetupDataSerializer.get());
+        serializerMap.put("CoreSetupAck", CoreSetupAckSerializer.get());
+        serializerMap.put("CoreSetupReject", CoreSetupRejectSerializer.get());
+        serializerMap.put("SessionInit", SessionInitSerializer.get());
     }
 
     // Disable Constructor

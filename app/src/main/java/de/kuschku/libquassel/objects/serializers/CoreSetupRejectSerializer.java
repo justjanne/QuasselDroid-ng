@@ -10,9 +10,18 @@ import de.kuschku.libquassel.objects.types.CoreSetupReject;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class CoreSetupRejectSerializer implements ObjectSerializer<CoreSetupReject> {
+    private static final CoreSetupRejectSerializer serializer = new CoreSetupRejectSerializer();
+
+    private CoreSetupRejectSerializer() {
+    }
+
+    public static CoreSetupRejectSerializer get() {
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(final CoreSetupReject data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());
+        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
         map.data.put("Error", new QVariant<>(data.Error));
         return map;
     }

@@ -12,6 +12,12 @@ import de.kuschku.libquassel.protocols.DatastreamPeer;
 import de.kuschku.libquassel.syncables.types.BufferSyncer;
 
 public class BufferSyncerSerializer implements ObjectSerializer<BufferSyncer> {
+    private static final BufferSyncerSerializer serializer = new BufferSyncerSerializer();
+    private BufferSyncerSerializer() {}
+    public static BufferSyncerSerializer get(){
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(BufferSyncer data) {
         // TODO: Implement this

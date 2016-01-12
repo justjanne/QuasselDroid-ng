@@ -17,11 +17,9 @@ import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.google.common.collect.Sets;
@@ -66,6 +64,7 @@ import de.kuschku.quasseldroid_ng.QuasselService;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.util.CompatibilityUtils;
 import de.kuschku.quasseldroid_ng.util.ServerAddress;
+import de.kuschku.util.observablelists.AutoScroller;
 import de.kuschku.util.backports.Stream;
 
 public class MainActivity extends AppCompatActivity {
@@ -76,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String KEY_PORT = "beta_port";
     private static final String KEY_USER = "beta_username";
     private static final String KEY_PASS = "beta_password";
-
-    SharedPreferences pref;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -104,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
     AccountHeader header;
     MessageAdapter adapter;
 
+    SharedPreferences pref;
     QuasselService.LocalBinder binder;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -112,12 +110,14 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.binder = (QuasselService.LocalBinder) service;
                 if (binder.getBackgroundThread() != null) {
                     handler = binder.getBackgroundThread().handler;
+                    provider = binder.getBackgroundThread().provider;
+                    provider.event.register(MainActivity.this);
 
                     toolbar.setSubtitle(binder.getBackgroundThread().connection.getStatus().name());
                     if (bufferId != -1) switchBuffer(bufferId);
                     if (bufferViewId != -1) switchBufferView(bufferViewId);
 
-                    // Horrible hack to load bufferviews back, should use ObservableList
+                    // Horrible hack to load bufferviews back, should use ObservableSortedList
                     Client client = handler == null ? null : handler.getClient();
                     BufferViewManager bufferViewManager = client == null ? null : client.getBufferViewManager();
                     Map<Integer, BufferViewConfig> bufferViews = bufferViewManager == null ? null : bufferViewManager.BufferViews;
@@ -134,17 +134,20 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private IProtocolHandler handler;
+    private BusProvider provider;
+
     private int bufferId;
     private int bufferViewId;
-    private BusProvider provider;
 
     private ItemAdapter<IDrawerItem> hackyHistoryAdapter = new ItemAdapter<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        pref = getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
 
         // TODO: ADD THEME SELECTION
         setTheme(R.style.Quassel);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -152,16 +155,27 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        pref = getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
-        adapter = new MessageAdapter(this);
-
         // This fixes a horrible bug android has where opening the keyboard doesn’t resize the layout
         KeyboardUtil keyboardUtil = new KeyboardUtil(this, slidingLayout);
         keyboardUtil.enable();
 
+        initServive();
+
+        initDrawer(savedInstanceState);
+
+        initMessageList();
+
+        initSendCallbacks();
+
+        initMsgHistory();
+    }
+
+    private void initServive() {
         startService(new Intent(this, QuasselService.class));
         bindService(new Intent(this, QuasselService.class), serviceConnection, BIND_AUTO_CREATE);
+    }
 
+    private void initDrawer(Bundle savedInstanceState) {
         header = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.bg)
@@ -239,14 +253,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         drawer.addStickyFooterItem(new PrimaryDrawerItem().withName("(Re-)Connect").withIcon(R.drawable.ic_server_light));
+    }
 
-        messages.setAdapter(adapter);
-        messages.setLayoutManager(new LinearLayoutManager(this));
-        swipeView.setOnRefreshListener(() -> {
-            if (handler != null) handler.getClient().getBacklogManager().requestMoreBacklog(bufferId, 20);
-            else swipeView.setRefreshing(false);
-        });
-
+    private void initSendCallbacks() {
         send.setOnClickListener(view -> {
             sendInput();
         });
@@ -256,12 +265,25 @@ public class MainActivity extends AppCompatActivity {
 
             return false;
         });
+    }
 
+    private void initMsgHistory() {
         slidingLayout.setScrollableView(msgHistory);
         FastAdapter<IDrawerItem> adapter = new FastAdapter<>();
         hackyHistoryAdapter.wrap(adapter);
         msgHistory.setAdapter(adapter);
         msgHistory.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void initMessageList() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
+        adapter = new MessageAdapter(this, new AutoScroller(messages, layoutManager));
+        messages.setAdapter(adapter);
+        messages.setLayoutManager(layoutManager);
+        swipeView.setOnRefreshListener(() -> {
+            if (handler != null) handler.getClient().getBacklogManager().requestMoreBacklog(bufferId, 20);
+            else swipeView.setRefreshing(false);
+        });
     }
 
     @Override

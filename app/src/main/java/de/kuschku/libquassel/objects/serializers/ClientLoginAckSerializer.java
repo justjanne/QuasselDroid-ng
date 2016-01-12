@@ -10,10 +10,18 @@ import de.kuschku.libquassel.objects.types.ClientLoginAck;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public class ClientLoginAckSerializer implements ObjectSerializer<ClientLoginAck> {
+    private static final ClientLoginAckSerializer serializer = new ClientLoginAckSerializer();
+
+    private ClientLoginAckSerializer() {
+    }
+
+    public static ClientLoginAckSerializer get() {
+        return serializer;
+    }
+
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(final ClientLoginAck data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());
-        return map;
+        return new QVariant<>(new HashMap<>());
     }
 
     @Override

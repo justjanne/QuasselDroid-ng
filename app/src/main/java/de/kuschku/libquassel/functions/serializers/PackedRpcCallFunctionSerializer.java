@@ -10,6 +10,15 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.protocols.DatastreamPeer;
 
 public class PackedRpcCallFunctionSerializer implements FunctionSerializer<RpcCallFunction> {
+    private static final PackedRpcCallFunctionSerializer serializer = new PackedRpcCallFunctionSerializer();
+
+    private PackedRpcCallFunctionSerializer() {
+    }
+
+    public static PackedRpcCallFunctionSerializer get() {
+        return serializer;
+    }
+
     @Override
     public List serialize(final RpcCallFunction data) {
         final List func = new ArrayList<>();

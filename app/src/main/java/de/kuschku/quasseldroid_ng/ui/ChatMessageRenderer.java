@@ -1,6 +1,8 @@
 package de.kuschku.quasseldroid_ng.ui;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.support.annotation.ColorInt;
 import android.text.SpannableString;
 import android.text.TextUtils;
 
@@ -24,7 +26,7 @@ public class ChatMessageRenderer {
     private final IrcFormatHelper helper;
 
     private Client client;
-    private boolean fullHostmask = false;
+    private boolean fullHostmask = true;
 
     public ChatMessageRenderer(Context ctx) {
         this.themeUtil = new ThemeUtil(ctx);
@@ -37,16 +39,36 @@ public class ChatMessageRenderer {
         this.client = client;
     }
 
-    private void setColors(MessageViewHolder holder, boolean highlight) {
+    private void setColors(MessageViewHolder holder, boolean highlight, boolean isServerAction) {
         if (highlight) {
-            holder.content.setTextColor(themeUtil.colors.colorForegroundHighlight);
-            holder.time.setTextColor(themeUtil.colors.colorForegroundHighlight);
-            holder.itemView.setBackgroundColor(themeUtil.colors.colorBackgroundHighlight);
+            applyStyle(holder,
+                    themeUtil.colors.colorForegroundHighlight,
+                    Typeface.NORMAL,
+                    themeUtil.colors.colorForegroundHighlight,
+                    themeUtil.colors.colorBackgroundHighlight
+            );
+        } else if (isServerAction) {
+            applyStyle(holder,
+                    themeUtil.colors.colorForegroundSecondary,
+                    Typeface.ITALIC,
+                    themeUtil.colors.colorForegroundSecondary,
+                    themeUtil.colors.colorBackgroundSecondary
+            );
         } else {
-            holder.content.setTextColor(themeUtil.colors.colorForeground);
-            holder.time.setTextColor(themeUtil.colors.colorForegroundSecondary);
-            holder.itemView.setBackgroundColor(themeUtil.colors.transparent);
+            applyStyle(holder,
+                    themeUtil.colors.colorForeground,
+                    Typeface.NORMAL,
+                    themeUtil.colors.colorForegroundSecondary,
+                    themeUtil.colors.transparent
+            );
         }
+    }
+
+    private void applyStyle(MessageViewHolder holder, @ColorInt int textColor, int style, @ColorInt int timeColor, @ColorInt int bgColor) {
+        holder.content.setTextColor(textColor);
+        holder.content.setTypeface(null, style);
+        holder.time.setTextColor(timeColor);
+        holder.itemView.setBackgroundColor(bgColor);
     }
 
     private CharSequence formatNick(String hostmask, boolean full) {
@@ -161,61 +183,78 @@ public class ChatMessageRenderer {
     }
     
     public void onBind(MessageViewHolder holder, Message message) {
-        setColors(holder, message.flags.Highlight);
         holder.time.setText(format.print(message.time));
         switch (message.type) {
             case Plain:
+                setColors(holder, message.flags.Highlight, false);
                 onBindPlain(holder, message);
                 break;
             case Notice:
+                setColors(holder, message.flags.Highlight, false);
                 onBindNotice(holder, message);
                 break;
             case Action:
+                setColors(holder, message.flags.Highlight, false);
                 onBindAction(holder, message);
                 break;
             case Nick:
+                setColors(holder, message.flags.Highlight, true);
                 onBindNick(holder, message);
                 break;
             case Mode:
+                setColors(holder, message.flags.Highlight, true);
                 onBindMode(holder, message);
                 break;
             case Join:
+                setColors(holder, message.flags.Highlight, true);
                 onBindJoin(holder, message);
                 break;
             case Part:
+                setColors(holder, message.flags.Highlight, true);
                 onBindPart(holder, message);
                 break;
             case Quit:
+                setColors(holder, message.flags.Highlight, true);
                 onBindQuit(holder, message);
                 break;
             case Kick:
+                setColors(holder, message.flags.Highlight, true);
                 onBindKick(holder, message);
                 break;
             case Kill:
+                setColors(holder, message.flags.Highlight, true);
                 onBindKill(holder, message);
                 break;
             case Server:
+                setColors(holder, message.flags.Highlight, false);
                 onBindServer(holder, message);
                 break;
             case Info:
+                setColors(holder, message.flags.Highlight, false);
                 onBindInfo(holder, message);
                 break;
             case Error:
+                setColors(holder, message.flags.Highlight, false);
                 onBindError(holder, message);
                 break;
             case DayChange:
+                setColors(holder, message.flags.Highlight, true);
                 onBindDayChange(holder, message);
                 break;
             case Topic:
+                setColors(holder, message.flags.Highlight, true);
                 onBindTopic(holder, message);
                 break;
             case NetsplitJoin:
+                setColors(holder, message.flags.Highlight, true);
                 onBindNetsplitJoin(holder, message);
                 break;
             case NetsplitQuit:
+                setColors(holder, message.flags.Highlight, true);
                 onBindNetsplitQuit(holder, message);
                 break;
             case Invite:
+                setColors(holder, message.flags.Highlight, true);
                 onBindInvite(holder, message);
                 break;
         }
