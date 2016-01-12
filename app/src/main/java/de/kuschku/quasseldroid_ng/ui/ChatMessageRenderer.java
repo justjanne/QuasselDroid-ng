@@ -72,7 +72,10 @@ public class ChatMessageRenderer {
     }
 
     public void onBindNotice(MessageViewHolder holder, Message message) {
-        holder.content.setText(message.toString());
+        holder.content.setText(strings.formatAction(
+                formatNick(message.sender, false),
+                helper.formatIrcMessage(message.content)
+        ));
     }
 
     public void onBindAction(MessageViewHolder holder, Message message) {

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:clickable="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/chatlineBackground"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/chatline"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="Write a message..."
+            android:imeOptions="actionSend"
+            android:inputType="textShortMessage|textCapSentences|textAutoCorrect"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:textSize="16sp" />
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/send"
+            style="?attr/buttonStyleSmall"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="12dp"
+            android:src="@drawable/ic_send"
+            android:tint="?attr/colorAccent" />
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/msg_history"
+        android:background="?attr/chatlineBackground"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1" />
+</LinearLayout>

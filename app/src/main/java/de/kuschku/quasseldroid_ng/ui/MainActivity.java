@@ -21,10 +21,13 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.google.common.collect.Sets;
+import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.ICollapsible;
+import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -34,6 +37,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.util.KeyboardUtil;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -90,6 +94,12 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.swipeview)
     SwipeRefreshLayout swipeView;
 
+    @Bind(R.id.sliding_layout)
+    SlidingUpPanelLayout slidingLayout;
+
+    @Bind(R.id.msg_history)
+    RecyclerView msgHistory;
+
     Drawer drawer;
     AccountHeader header;
     MessageAdapter adapter;
@@ -128,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
     private int bufferViewId;
     private BusProvider provider;
 
+    private ItemAdapter<IDrawerItem> hackyHistoryAdapter = new ItemAdapter<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -144,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MessageAdapter(this);
 
         // This fixes a horrible bug android has where opening the keyboard doesn’t resize the layout
-        KeyboardUtil keyboardUtil = new KeyboardUtil(this, findViewById(R.id.layout));
+        KeyboardUtil keyboardUtil = new KeyboardUtil(this, slidingLayout);
         keyboardUtil.enable();
 
         startService(new Intent(this, QuasselService.class));
@@ -244,6 +256,12 @@ public class MainActivity extends AppCompatActivity {
 
             return false;
         });
+
+        slidingLayout.setScrollableView(msgHistory);
+        FastAdapter<IDrawerItem> adapter = new FastAdapter<>();
+        hackyHistoryAdapter.wrap(adapter);
+        msgHistory.setAdapter(adapter);
+        msgHistory.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -323,6 +341,7 @@ public class MainActivity extends AppCompatActivity {
         if (client != null) buffer = client.getBuffer(bufferId);
 
         String str = chatline.getText().toString();
+        hackyHistoryAdapter.add(new PrimaryDrawerItem().withName(str));
         if (buffer != null && !str.isEmpty())  handler.getClient().sendInput(buffer.getInfo(), str);
         chatline.setText("");
     }

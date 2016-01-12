@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:textAppearance="?android:attr/textAppearanceListItemSmall"
-    android:gravity="center_vertical"
+    android:gravity="top"
     android:paddingStart="?android:attr/listPreferredItemPaddingStart"
     android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
     android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
     android:paddingRight="?android:attr/listPreferredItemPaddingRight"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall" >
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp" >
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/time"
         android:layout_width="wrap_content"

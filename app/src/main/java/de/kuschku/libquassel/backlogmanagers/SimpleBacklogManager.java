@@ -61,7 +61,7 @@ public class SimpleBacklogManager extends BacklogManager {
                 (backlog.first() == null) ? -1 :
                 backlog.first().messageId;
 
-        requestBacklog(bufferId, -1, -1, count, 0);
+        requestBacklog(bufferId, -1, messageId, count, 0);
     }
 
     public ObservableList<Message> get(int bufferId) {

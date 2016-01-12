@@ -47,4 +47,5 @@ dependencies {
     compile('com.mikepenz:fastadapter:0.4.2-SNAPSHOT@aar') {
         transitive = true
     }
+    compile 'com.sothree.slidinguppanel:library:3.2.1'
 }
