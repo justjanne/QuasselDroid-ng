@@ -39,6 +39,8 @@ import de.kuschku.util.DrawerUtils;
 import de.kuschku.util.instancestateutil.Storable;
 import de.kuschku.util.instancestateutil.Store;
 
+import static de.kuschku.util.AndroidAssert.*;
+
 @UiThread
 public class ChatActivity extends AppCompatActivity {
     @Bind(R.id.drawer_left)
@@ -88,6 +90,9 @@ public class ChatActivity extends AppCompatActivity {
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @UiThread
         public void onServiceConnected(@NonNull ComponentName cn, @NonNull IBinder service) {
+            assertNotNull(cn);
+            assertNotNull(service);
+
             if (service instanceof QuasselService.LocalBinder) {
                 ChatActivity.this.binder = (QuasselService.LocalBinder) service;
                 if (binder.getBackgroundThread() != null) {
@@ -98,6 +103,8 @@ public class ChatActivity extends AppCompatActivity {
 
         @UiThread
         public void onServiceDisconnected(@NonNull ComponentName cn) {
+            assertNotNull(cn);
+
             backgroundThread = null;
             binder = null;
         }
@@ -133,18 +140,24 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        assertNotNull(savedInstanceState);
+
         super.onRestoreInstanceState(savedInstanceState);
         status.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        assertNotNull(outState);
+
         super.onSaveInstanceState(outState);
         status.onSaveInstanceState(outState);
     }
 
     private void connectToThread(@NonNull ClientBackgroundThread backgroundThread) {
+        assertNotNull(backgroundThread);
+
         if (this.backgroundThread != null) backgroundThread.provider.event.unregister(this);
 
         this.backgroundThread = backgroundThread;
@@ -154,10 +167,14 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void selectBufferViewConfig(@IntRange(from=-1) int bufferViewConfigId) {
+        assertTrue(bufferViewConfigId == -1 || null != this.backgroundThread.handler.client.getBufferViewManager().BufferViews.get(bufferViewConfigId));
 
+        // TODO: Implement this
     }
 
     private void selectBuffer(@IntRange(from=-1) int bufferId) {
+        assertTrue(bufferId == -1 || null != this.backgroundThread.handler.client.getBuffer(bufferId));
 
+        // TODO: Implement this
     }
 }
