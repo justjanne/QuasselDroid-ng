@@ -8,6 +8,4 @@ public interface Buffer {
     BufferInfo getInfo();
 
     String getName();
-
-    IDrawerItem getDrawerElement();
 }

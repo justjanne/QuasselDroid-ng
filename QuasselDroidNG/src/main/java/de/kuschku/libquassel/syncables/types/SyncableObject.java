@@ -6,6 +6,7 @@ import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.functions.types.SyncFunction;
+import de.kuschku.util.observables.ContentComparable;
 
 public abstract class SyncableObject {
     protected BusProvider provider;

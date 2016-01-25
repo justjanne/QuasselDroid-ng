@@ -1,19 +1,20 @@
 package de.kuschku.libquassel.syncables.types;
 
-import android.util.Log;
-
 import java.util.List;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
+import de.kuschku.libquassel.events.BufferViewManagerChangedEvent;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
-import de.kuschku.quasseldroid_ng.BufferViewManagerChangedEvent;
+import de.kuschku.util.observables.callbacks.ElementCallback;
+import de.kuschku.util.observables.lists.IObservableList;
+import de.kuschku.util.observables.lists.ObservableElementList;
 
 public class BufferViewConfig extends SyncableObject {
     String bufferViewName;
     List<Integer> TemporarilyRemovedBuffers;
     boolean hideInactiveNetworks;
-    List<Integer> BufferList;
+    IObservableList<ElementCallback<Integer>, Integer> BufferList;
     int allowedBufferTypes;
     boolean sortAlphabetically;
     boolean disableDecoration;
@@ -27,7 +28,7 @@ public class BufferViewConfig extends SyncableObject {
         this.bufferViewName = bufferViewName;
         TemporarilyRemovedBuffers = temporarilyRemovedBuffers;
         this.hideInactiveNetworks = hideInactiveNetworks;
-        BufferList = bufferList;
+        BufferList = new ObservableElementList<>(bufferList);
         this.allowedBufferTypes = allowedBufferTypes;
         this.sortAlphabetically = sortAlphabetically;
         this.disableDecoration = disableDecoration;
@@ -62,12 +63,16 @@ public class BufferViewConfig extends SyncableObject {
         this.hideInactiveNetworks = hideInactiveNetworks;
     }
 
-    public List<Integer> getBufferList() {
+    public IObservableList<ElementCallback<Integer>, Integer> getBufferList() {
         return BufferList;
     }
 
-    public void setBufferList(List<Integer> bufferList) {
+    public void setBufferList(IObservableList<ElementCallback<Integer>, Integer> bufferList) {
         BufferList = bufferList;
+    }
+
+    public void setBufferList(List<Integer> bufferList) {
+        BufferList = new ObservableElementList<>(bufferList);
     }
 
     public int getAllowedBufferTypes() {

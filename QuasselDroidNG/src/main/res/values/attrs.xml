@@ -47,6 +47,7 @@
     <attr name="colorForeground" format="color" />
     <attr name="colorForegroundHighlight" format="color" />
     <attr name="colorForegroundSecondary" format="color" />
+    <attr name="colorForegroundAction" />
 
     <attr name="colorBackground" format="color" />
     <attr name="colorBackgroundHighlight" format="color" />

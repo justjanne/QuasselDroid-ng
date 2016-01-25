@@ -123,8 +123,8 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
                         (String) channels.get("name").data.get(i),
                         (String) channels.get("topic").data.get(i),
                         (String) channels.get("password").data.get(i),
-                        (Map<String, String>) channels.get("UserModes").data.get(i),
-                        (Map<String, Object>) channels.get("ChanModes").data.get(i),
+                        StringObjectMapSerializer.<String>get().fromLegacy((Map<String, QVariant>) channels.get("UserModes").data.get(i)),
+                        StringObjectMapSerializer.get().fromLegacy((Map<String, QVariant>) channels.get("ChanModes").data.get(i)),
                         (boolean) channels.get("encrypted").data.get(i)
                 ));
             }

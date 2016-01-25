@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.syncables.serializers;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +44,7 @@ public class IrcChannelSerializer implements ObjectSerializer<IrcChannel> {
                 (String) map.get("topic").data,
                 (String) map.get("password").data,
                 StringObjectMapSerializer.<String>get().fromLegacy(((QVariant<Map<String, QVariant>>) map.get("UserModes")).data),
-                (Map<String, Object>) map.get("ChanModes").data,
+                StringObjectMapSerializer.get().fromLegacy((Map<String, QVariant>) map.get("ChanModes").data),
                 (boolean) map.get("encrypted").data
         );
     }

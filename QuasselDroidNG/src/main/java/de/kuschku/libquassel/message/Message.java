@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 import de.kuschku.libquassel.primitives.types.BufferInfo;
-import de.kuschku.util.observablelists.ContentComparable;
+import de.kuschku.util.observables.ContentComparable;
 
 public class Message implements ContentComparable<Message> {
     public final int messageId;

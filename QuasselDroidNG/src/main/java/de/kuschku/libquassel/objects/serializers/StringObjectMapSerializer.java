@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.objects.serializers;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
 

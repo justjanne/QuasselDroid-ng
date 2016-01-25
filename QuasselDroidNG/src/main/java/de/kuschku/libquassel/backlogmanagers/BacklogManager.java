@@ -7,8 +7,8 @@ import java.util.List;
 
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
-import de.kuschku.util.observablelists.AutoScroller;
-import de.kuschku.util.observablelists.ObservableSortedList;
+import de.kuschku.util.observables.AutoScroller;
+import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public abstract class BacklogManager extends SyncableObject {
     public abstract void requestBacklog(int bufferId, int from, int to, int count, int extra);

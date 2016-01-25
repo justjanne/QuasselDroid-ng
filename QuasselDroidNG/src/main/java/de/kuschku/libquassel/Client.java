@@ -23,13 +23,17 @@ import de.kuschku.libquassel.syncables.types.BufferSyncer;
 import de.kuschku.libquassel.syncables.types.BufferViewManager;
 import de.kuschku.libquassel.syncables.types.Network;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
-import de.kuschku.util.backports.Optional;
-import de.kuschku.util.backports.Optionals;
+import de.kuschku.quasseldroid_ng.ui.chat.drawer.NetworkWrapper;
 import de.kuschku.util.backports.Stream;
+import de.kuschku.util.observables.callbacks.UICallback;
+import de.kuschku.util.observables.lists.IObservableList;
+import de.kuschku.util.observables.lists.ObservableComparableSortedList;
+import de.kuschku.util.observables.lists.ObservableSortedList;
 
 
 public class Client {
     private final Map<Integer, Network> networks = new HashMap<>();
+    private final IObservableList<UICallback, NetworkWrapper> networkList = new ObservableComparableSortedList<>(NetworkWrapper.class);
     private final Map<Integer, Buffer> buffers = new HashMap<>();
     private final List<String> initDataQueue = new ArrayList<>();
     private final BacklogManager backlogManager;
@@ -201,5 +205,9 @@ public class Client {
     public void setConnectionStatus(final ConnectionChangeEvent.Status connectionStatus) {
         this.connectionStatus = connectionStatus;
         busProvider.sendEvent(new ConnectionChangeEvent(connectionStatus));
+    }
+
+    public IObservableList<UICallback, NetworkWrapper> getNetworkList() {
+        return networkList;
     }
 }

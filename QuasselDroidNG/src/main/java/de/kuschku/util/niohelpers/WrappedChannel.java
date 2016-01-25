@@ -1,5 +1,7 @@
 package de.kuschku.util.niohelpers;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.support.annotation.Nullable;
 
 import java.io.DataInputStream;
@@ -40,6 +42,7 @@ public class WrappedChannel implements Flushable, ByteChannel, InterruptibleChan
         return new WrappedChannel(s.getInputStream(), s.getOutputStream());
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static WrappedChannel withCompression(WrappedChannel channel) throws IOException {
         return new WrappedChannel(
                 new InflaterInputStream(channel.rawIn),

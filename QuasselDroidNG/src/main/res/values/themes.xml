@@ -21,6 +21,7 @@
         <item name="colorForeground">@color/md_dark_primary_text</item>
         <item name="colorForegroundHighlight">@color/md_dark_primary_text</item>
         <item name="colorForegroundSecondary">@color/md_dark_secondary</item>
+        <item name="colorForegroundAction">#7986cb</item>
 
         <item name="colorBackground">@color/md_dark_background</item>
         <item name="colorBackgroundHighlight">#ff8811</item>
@@ -53,6 +54,7 @@
         <item name="colorForeground">@color/md_light_primary_text</item>
         <item name="colorForegroundHighlight">@color/md_light_primary_text</item>
         <item name="colorForegroundSecondary">@color/md_light_secondary</item>
+        <item name="colorForegroundAction">#1a237e</item>
 
         <item name="colorBackground">@color/md_light_background</item>
         <item name="colorBackgroundHighlight">#ff8811</item>
@@ -85,6 +87,7 @@
         <item name="colorForeground">@color/md_light_primary_text</item>
         <item name="colorForegroundHighlight">@color/md_light_primary_text</item>
         <item name="colorForegroundSecondary">@color/md_light_secondary</item>
+        <item name="colorForegroundAction">#1a237e</item>
 
         <item name="colorBackground">@color/md_light_background</item>
         <item name="colorBackgroundHighlight">#ff8811</item>

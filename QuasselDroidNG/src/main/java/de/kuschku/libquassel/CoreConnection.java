@@ -13,8 +13,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
@@ -27,7 +25,7 @@ import de.kuschku.libquassel.primitives.types.Protocol;
 import de.kuschku.libquassel.protocols.DatastreamPeer;
 import de.kuschku.libquassel.protocols.LegacyPeer;
 import de.kuschku.libquassel.protocols.RemotePeer;
-import de.kuschku.quasseldroid_ng.util.ServerAddress;
+import de.kuschku.util.ServerAddress;
 import de.kuschku.util.niohelpers.WrappedChannel;
 
 import static de.kuschku.libquassel.primitives.QMetaType.Type.UInt;
@@ -65,7 +63,7 @@ public class CoreConnection {
      * This method opens a socket to the specified address and starts the connection process.
      *
      * @throws IOException
-     * @param supportsKeepAlive
+     * @param supportsKeepAlive If the connection may use keepAlive
      */
     public void open(boolean supportsKeepAlive) throws IOException {
         // Intialize socket
@@ -214,6 +212,7 @@ public class CoreConnection {
                 }
             } catch (SocketException e) {
                 Log.e("libquassel", "Socket closed while reading");
+                client.setConnectionStatus(ConnectionChangeEvent.Status.DISCONNECTED);
             } catch (Exception e) {
                 busProvider.sendEvent(new GeneralErrorEvent(e));
             }

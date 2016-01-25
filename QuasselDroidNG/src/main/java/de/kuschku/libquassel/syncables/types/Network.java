@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.syncables.types;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,8 +16,9 @@ import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.functions.types.InitRequestFunction;
 import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.objects.types.NetworkServer;
+import de.kuschku.util.observables.ContentComparable;
 
-public class Network extends SyncableObject {
+public class Network extends SyncableObject implements ContentComparable<Network> {
     private Map<String, IrcUser> users;
     private Map<String, IrcChannel> channels;
 
@@ -431,6 +434,16 @@ public class Network extends SyncableObject {
         getBuffers().addAll(client.getBuffers(getNetworkId()));
         initUsers();
         client.putNetwork(this);
+    }
+
+    @Override
+    public boolean equalsContent(Network other) {
+        return networkId == other.networkId;
+    }
+
+    @Override
+    public int compareTo(@NonNull Network another) {
+        return networkId - another.networkId;
     }
 
     public static class IrcMode {

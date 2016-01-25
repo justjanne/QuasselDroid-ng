@@ -15,9 +15,10 @@ import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
-import de.kuschku.util.observablelists.AutoScroller;
-import de.kuschku.util.observablelists.ObservableSortedList;
-import de.kuschku.util.observablelists.RecyclerViewAdapterCallback;
+import de.kuschku.util.observables.AutoScroller;
+import de.kuschku.util.observables.lists.ObservableComparableSortedList;
+import de.kuschku.util.observables.lists.ObservableSortedList;
+import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 
 public class SimpleBacklogManager extends BacklogManager {
     SparseArray<ObservableSortedList<Message>> backlogs = new SparseArray<>();
@@ -49,10 +50,7 @@ public class SimpleBacklogManager extends BacklogManager {
     }
 
     public void bind(int bufferId, @Nullable RecyclerView.Adapter adapter, AutoScroller scroller) {
-        if (adapter == null)
-            get(bufferId).setCallback(null);
-        else
-            get(bufferId).setCallback(new RecyclerViewAdapterCallback(adapter, scroller));
+        get(bufferId).addCallback(new AdapterUICallbackWrapper(adapter, scroller));
     }
 
     @Override
@@ -68,7 +66,7 @@ public class SimpleBacklogManager extends BacklogManager {
 
     public ObservableSortedList<Message> get(int bufferId) {
         if (backlogs.get(bufferId) == null)
-            backlogs.put(bufferId, new ObservableSortedList<>(Message.class, true));
+            backlogs.put(bufferId, new ObservableComparableSortedList<>(Message.class, true));
 
         return backlogs.get(bufferId);
     }

@@ -128,8 +128,9 @@ public class IrcUser extends SyncableObject {
     }
 
     public void renameObject(String objectName) {
+        // TODO: Check if this is designed well
         String nick = objectName.split("/")[1];
-        network.renameUser(this.nick, nick);
+        network.renameUser(this.getObjectName(), nick);
         for (String channelName : channels) {
             IrcChannel channel = network.getChannels().get(channelName);
             channel.renameUser(this.nick, nick);
