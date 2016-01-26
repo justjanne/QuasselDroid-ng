@@ -7,6 +7,10 @@ public class AutoScroller {
     private final RecyclerView recyclerView;
     private final LinearLayoutManager manager;
 
+    public AutoScroller(RecyclerView recyclerView) {
+        this(recyclerView, (LinearLayoutManager) recyclerView.getLayoutManager());
+    }
+
     public AutoScroller(RecyclerView recyclerView, LinearLayoutManager manager) {
         this.recyclerView = recyclerView;
         this.manager = manager;

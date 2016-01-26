@@ -7,7 +7,7 @@ import android.support.annotation.UiThread;
 import android.support.v7.view.ContextThemeWrapper;
 
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.quasseldroid_ng.ui.Themes;
+import de.kuschku.quasseldroid_ng.ui.AppTheme;
 import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.annotationbind.AutoColor;
 
@@ -19,7 +19,7 @@ public class ThemeUtil {
         initColors(new ContextThemeWrapper(ctx, ctx.getTheme()));
     }
 
-    public ThemeUtil(@NonNull Context ctx, @NonNull Themes theme) {
+    public ThemeUtil(@NonNull Context ctx, @NonNull AppTheme theme) {
         initColors(new ContextThemeWrapper(ctx, theme.themeId));
     }
 

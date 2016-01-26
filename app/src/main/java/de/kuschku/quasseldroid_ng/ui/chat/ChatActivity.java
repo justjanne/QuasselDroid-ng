@@ -1,9 +1,7 @@
 package de.kuschku.quasseldroid_ng.ui.chat;
 
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.IntRange;
@@ -29,15 +27,23 @@ import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.materialize.util.UIUtils;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import aspm.OnChangeListener;
+import aspm.PreferenceElement;
+import aspm.StringPreference;
+import aspm.annotations.Preference;
+import aspm.annotations.PreferenceWrapper;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.quasseldroid_ng.BuildConfig;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
 import de.kuschku.quasseldroid_ng.service.QuasselService;
+import de.kuschku.quasseldroid_ng.ui.AppTheme;
+import de.kuschku.quasseldroid_ng.ui.chat.chatview.MessageAdapter;
 import de.kuschku.util.DrawerUtils;
 import de.kuschku.util.instancestateutil.Storable;
 import de.kuschku.util.instancestateutil.Store;
+import de.kuschku.util.observables.AutoScroller;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 import static de.kuschku.util.AndroidAssert.assertTrue;
@@ -46,34 +52,55 @@ import static de.kuschku.util.AndroidAssert.assertTrue;
 public class ChatActivity extends AppCompatActivity {
     @NonNull
     private final Status status = new Status();
+
     @Bind(R.id.drawer_left)
     DrawerLayout drawerLeft;
+
     @Bind(R.id.navigation_left)
     NavigationView navigationLeft;
+
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+
     @Bind(R.id.sliding_layout)
     SlidingUpPanelLayout slidingLayout;
+
     @Bind(R.id.chatline)
     AppCompatEditText chatline;
+
     @Bind(R.id.send)
     AppCompatImageButton send;
+
     @Bind(R.id.msg_history)
     RecyclerView msgHistory;
+
     @Bind(R.id.swipe_view)
     SwipeRefreshLayout swipeView;
+
     @Bind(R.id.messages)
     RecyclerView messages;
+
     @Bind(R.id.navigation_header_container)
     RelativeLayout navigationHeaderContainer;
+
     @Bind(R.id.buffer_view_spinner)
     AppCompatSpinner bufferViewSpinner;
+
+
+    WrappedSettings settings;
+    @PreferenceWrapper(BuildConfig.APPLICATION_ID)
+    public static abstract class Settings {
+        String theme;
+        boolean fullHostmask;
+        int textSize;
+    }
+
     @Nullable
     private QuasselService.LocalBinder binder;
+
     @Nullable
     private ClientBackgroundThread backgroundThread;
-    private SharedPreferences preferences;
-    @Nullable
+
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @UiThread
         public void onServiceConnected(@NonNull ComponentName cn, @NonNull IBinder service) {
@@ -100,8 +127,8 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        preferences = getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
-        setTheme(R.style.Quassel);
+        settings = new WrappedSettings(this);
+        setTheme(AppTheme.resFromString(settings.theme.get()));
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -117,7 +144,7 @@ public class ChatActivity extends AppCompatActivity {
 
         messages.setLayoutManager(new LinearLayoutManager(this));
         messages.setItemAnimator(new DefaultItemAnimator());
-        messages.setAdapter(new FastAdapter<>());
+        messages.setAdapter(new MessageAdapter(this, new AutoScroller(messages)));
 
         msgHistory.setLayoutManager(new LinearLayoutManager(this));
         msgHistory.setItemAnimator(new DefaultItemAnimator());

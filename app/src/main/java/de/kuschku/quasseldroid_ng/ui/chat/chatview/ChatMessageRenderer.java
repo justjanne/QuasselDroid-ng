@@ -1,6 +1,7 @@
 package de.kuschku.quasseldroid_ng.ui.chat.chatview;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -13,7 +14,9 @@ import org.joda.time.format.DateTimeFormatter;
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.message.Message;
+import de.kuschku.quasseldroid_ng.BuildConfig;
 import de.kuschku.quasseldroid_ng.R;
+import de.kuschku.quasseldroid_ng.ui.AppTheme;
 import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.annotationbind.AutoString;
 import de.kuschku.util.irc.IrcFormatHelper;
@@ -30,23 +33,36 @@ public class ChatMessageRenderer {
     private final DateTimeFormatter format;
     @NonNull
     private final FormatStrings strings;
-    @NonNull
-    private final IrcFormatHelper helper;
-    @NonNull
-    private final MessageStyleContainer highlightStyle;
-    @NonNull
-    private final MessageStyleContainer serverStyle;
-    @NonNull
-    private final MessageStyleContainer actionStyle;
-    @NonNull
-    private final MessageStyleContainer plainStyle;
+
+    private IrcFormatHelper helper;
+    private MessageStyleContainer highlightStyle;
+    private MessageStyleContainer serverStyle;
+    private MessageStyleContainer actionStyle;
+    private MessageStyleContainer plainStyle;
+
     @Nullable
     private Client client;
-    private boolean fullHostmask = false;
+
+    //@NonNull
+    //private final SharedPreferences preferences;
+
     public ChatMessageRenderer(@NonNull Context ctx) {
-        ThemeUtil themeUtil = new ThemeUtil(ctx);
+        this(ctx, new ThemeUtil(ctx));
+    }
+
+    public ChatMessageRenderer(@NonNull Context ctx, @NonNull AppTheme theme) {
+        this(ctx, new ThemeUtil(ctx, theme));
+    }
+
+    public ChatMessageRenderer(@NonNull Context ctx, @NonNull ThemeUtil themeUtil) {
+        //this.preferences = ctx.getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
+
         this.format = DateFormatHelper.getTimeFormatter(ctx);
         this.strings = new FormatStrings(ctx);
+        setTheme(themeUtil);
+    }
+
+    public void setTheme(ThemeUtil themeUtil) {
         this.helper = new IrcFormatHelper(themeUtil.colors);
 
         this.highlightStyle = new MessageStyleContainer(
@@ -99,7 +115,7 @@ public class ChatMessageRenderer {
 
     @NonNull
     private CharSequence formatNick(@NonNull String hostmask) {
-        return formatNick(hostmask, fullHostmask);
+        return formatNick(hostmask, true);
     }
 
     @NonNull

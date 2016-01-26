@@ -6,24 +6,24 @@
 
     <application
         android:allowBackup="true"
-        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light">
+        android:theme="@style/AppTheme.Light">
+
         <service android:name=".service.QuasselService" />
 
         <activity
             android:name=".ui.chat.ChatActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:theme="@style/Quassel">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
