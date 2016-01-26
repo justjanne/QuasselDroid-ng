@@ -3,10 +3,11 @@ gen/*
 /.classpath
 **/build/*
 *.iml
+**/libs
 local.properties
 .gradle/*
 .idea/*
 gradle*
 gradle.properties
 */version.properties
-deploy.sh
+*.sh
