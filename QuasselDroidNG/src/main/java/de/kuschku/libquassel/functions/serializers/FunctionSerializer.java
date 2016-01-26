@@ -1,9 +1,13 @@
 package de.kuschku.libquassel.functions.serializers;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 public interface FunctionSerializer<T> {
-    List serialize(T data);
+    @NonNull
+    List serialize(@NonNull T data);
 
-    T deserialize(List packedFunc);
+    @NonNull
+    T deserialize(@NonNull List packedFunc);
 }

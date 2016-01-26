@@ -27,19 +27,21 @@ import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.util.ui.ThemeUtil;
 
 public class IrcFormatHelper {
-    private static final String scheme = "(?:(?:mailto:|(?:[+.-]?\\w)+://)|www(?=\\.\\S+\\.))";
-    private static final String authority = "(?:(?:[,.;@:]?[-\\w]+)+\\.?|\\[[0-9a-f:.]+\\])(?::\\d+)?";
-    private static final String urlChars = "(?:[,.;:]*[\\w~@/?&=+$()!%#*-])";
-    private static final String urlEnd = "(?:>|[,.;:\"]*\\s|\\b|$)";
-    private static final Pattern urlPattern = Pattern.compile(String.format("\\b(%s%s(?:/%s*)?)%s", scheme, authority, urlChars, urlEnd), Pattern.CASE_INSENSITIVE);
-    private static final Pattern channelPattern = Pattern.compile("((?:#|![A-Z0-9]{5})[^,:\\s]+(?::[^,:\\s]+)?)\\b", Pattern.CASE_INSENSITIVE);
+    @NonNull private static final String scheme = "(?:(?:mailto:|(?:[+.-]?\\w)+://)|www(?=\\.\\S+\\.))";
+    @NonNull private static final String authority = "(?:(?:[,.;@:]?[-\\w]+)+\\.?|\\[[0-9a-f:.]+\\])(?::\\d+)?";
+    @NonNull private static final String urlChars = "(?:[,.;:]*[\\w~@/?&=+$()!%#*-])";
+    @NonNull private static final String urlEnd = "(?:>|[,.;:\"]*\\s|\\b|$)";
+    @NonNull private static final Pattern urlPattern = Pattern.compile(String.format("\\b(%s%s(?:/%s*)?)%s", scheme, authority, urlChars, urlEnd), Pattern.CASE_INSENSITIVE);
+    @NonNull private static final Pattern channelPattern = Pattern.compile("((?:#|![A-Z0-9]{5})[^,:\\s]+(?::[^,:\\s]+)?)\\b", Pattern.CASE_INSENSITIVE);
 
+    @NonNull
     private final ThemeUtil.Colors colors;
 
     public IrcFormatHelper(@NonNull ThemeUtil.Colors colors) {
         this.colors = colors;
     }
 
+    @NonNull
     public CharSequence formatUserNick(@NonNull String nick) {
         int colorIndex = IrcUserUtils.getSenderColor(nick);
         int color = colors.senderColors[colorIndex];
@@ -50,6 +52,7 @@ public class IrcFormatHelper {
         return str;
     }
 
+    @NonNull
     public CharSequence formatIrcMessage(@NonNull String message) {
         List<FutureClickableSpan> spans = new LinkedList<>();
 
@@ -65,6 +68,7 @@ public class IrcFormatHelper {
     }
 
     private static class FutureClickableSpan {
+        @NonNull
         public final ClickableSpan span;
         public final int start;
         public final int end;
@@ -104,7 +108,7 @@ public class IrcFormatHelper {
         }
 
         @Override
-        public void onClick(View widget) {
+        public void onClick(@NonNull View widget) {
             Log.e("TEST", "THIS IS A TEST");
 
             Uri uri = Uri.parse(getURL());

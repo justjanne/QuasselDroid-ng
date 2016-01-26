@@ -1,5 +1,6 @@
 package de.kuschku.util.observables.callbacks.wrappers;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 
 import java.util.Arrays;
@@ -11,21 +12,23 @@ import de.kuschku.util.observables.callbacks.UICallback;
 
 @UiThread
 public class MultiUICallbackWrapper implements UICallback {
-    Set<UICallback> callbacks = new HashSet<>();
+    @NonNull
+    private final Set<UICallback> callbacks = new HashSet<>();
 
-    private MultiUICallbackWrapper(Collection<UICallback> callbacks) {
+    private MultiUICallbackWrapper(@NonNull Collection<UICallback> callbacks) {
         this.callbacks.addAll(callbacks);
     }
 
-    public static MultiUICallbackWrapper of(UICallback... callbacks) {
+    @NonNull
+    public static MultiUICallbackWrapper of(@NonNull UICallback... callbacks) {
         return new MultiUICallbackWrapper(Arrays.asList(callbacks));
     }
 
-    public void addCallback(UICallback callback) {
+    public void addCallback(@NonNull UICallback callback) {
         callbacks.add(callback);
     }
 
-    public void removeCallback(UICallback callback) {
+    public void removeCallback(@NonNull UICallback callback) {
         callbacks.remove(callback);
     }
 

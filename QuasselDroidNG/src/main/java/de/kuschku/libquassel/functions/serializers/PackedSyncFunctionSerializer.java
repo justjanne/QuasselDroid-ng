@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.functions.serializers;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,18 +11,24 @@ import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.protocols.DatastreamPeer;
 
-public class PackedSyncFunctionSerializer implements FunctionSerializer<SyncFunction> {
+import static de.kuschku.util.AndroidAssert.*;
+
+@SuppressWarnings({"unchecked", "ConstantConditions"})
+public class PackedSyncFunctionSerializer<T> implements FunctionSerializer<SyncFunction<T>> {
+    @NonNull
     private static final PackedSyncFunctionSerializer serializer = new PackedSyncFunctionSerializer();
 
     private PackedSyncFunctionSerializer() {
     }
 
+    @NonNull
     public static PackedSyncFunctionSerializer get() {
         return serializer;
     }
 
+    @NonNull
     @Override
-    public List serialize(final SyncFunction data) {
+    public List serialize(@NonNull final SyncFunction data) {
         final List func = new ArrayList<>();
         func.add(new QVariant<>(FunctionType.SYNC.id));
         func.add(new QVariant<>(QMetaType.Type.QByteArray, data.className));
@@ -30,9 +38,12 @@ public class PackedSyncFunctionSerializer implements FunctionSerializer<SyncFunc
         return func;
     }
 
+    @NonNull
     @Override
-    public SyncFunction deserialize(final List packedFunc) {
-        return new SyncFunction(
+    public SyncFunction<T> deserialize(@NonNull final List packedFunc) {
+        assertTrue(packedFunc.size() >= 3);
+
+        return new SyncFunction<>(
                 ((QVariant<String>) packedFunc.remove(0)).data,
                 ((QVariant<String>) packedFunc.remove(0)).data,
                 ((QVariant<String>) packedFunc.remove(0)).data,

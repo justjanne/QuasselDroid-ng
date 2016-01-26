@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.primitives.serializers;
 
+import android.support.annotation.NonNull;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
@@ -8,18 +10,21 @@ import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.QMetaTypeRegistry;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 public class VariantSerializer<T> implements PrimitiveSerializer<QVariant<T>> {
+    @NonNull
     private static final VariantSerializer serializer = new VariantSerializer();
 
     private VariantSerializer() {
     }
 
+    @NonNull
     public static <T> VariantSerializer<T> get() {
         return serializer;
     }
 
     @Override
-    public void serialize(final ByteChannel channel, final QVariant<T> data) throws IOException {
+    public void serialize(@NonNull final ByteChannel channel, @NonNull final QVariant<T> data) throws IOException {
         IntSerializer.get().serialize(channel, data.type.type.getValue());
         BoolSerializer.get().serialize(channel, data.data == null);
         if (data.type.type == QMetaType.Type.UserType) {
@@ -31,8 +36,9 @@ public class VariantSerializer<T> implements PrimitiveSerializer<QVariant<T>> {
         data.type.serializer.serialize(channel, data.data);
     }
 
+    @NonNull
     @Override
-    public QVariant<T> deserialize(final ByteBuffer buffer) throws IOException {
+    public QVariant<T> deserialize(@NonNull final ByteBuffer buffer) throws IOException {
         // Read original type
         final QMetaType.Type type = QMetaType.Type.fromId(IntSerializer.get().deserialize(buffer));
 

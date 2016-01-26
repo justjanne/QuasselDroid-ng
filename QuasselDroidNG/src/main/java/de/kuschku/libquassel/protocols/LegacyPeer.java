@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.protocols;
 
+import android.support.annotation.NonNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -39,40 +41,44 @@ import static de.kuschku.libquassel.primitives.QMetaType.Type.QVariantMap;
  *
  * @author Janne Koschinski
  */
+@SuppressWarnings({"unchecked"})
 public class LegacyPeer implements RemotePeer {
-    private ByteBuffer buffer;
-    private CoreConnection connection;
-    private BusProvider busProvider;
+    @NonNull
+    private ByteBuffer buffer = ByteBuffer.allocate(0);
+    @NonNull
+    private final CoreConnection connection;
+    @NonNull
+    private final BusProvider busProvider;
 
-    public LegacyPeer(CoreConnection connection, BusProvider busProvider) {
+    public LegacyPeer(@NonNull CoreConnection connection, @NonNull BusProvider busProvider) {
         this.connection = connection;
         this.busProvider = busProvider;
         this.busProvider.dispatch.register(this);
     }
 
-    public final void onEventBackgroundThread(SyncFunction func) {
+    public final void onEventBackgroundThread(@NonNull SyncFunction func) {
         final List serialize = UnpackedSyncFunctionSerializer.get().serialize(func);
         connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
                 new QVariant(new QMetaType(List.class, QMetaType.Type.QVariantList, VariantVariantListSerializer.get()),
                         serialize)));
     }
 
-    public void onEventBackgroundThread(RpcCallFunction func) {
+    public void onEventBackgroundThread(@NonNull RpcCallFunction func) {
         connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
                 new QVariant<>(UnpackedRpcCallFunctionSerializer.get().serialize(func))));
     }
 
-    public void onEventBackgroundThread(InitRequestFunction func) {
+    public void onEventBackgroundThread(@NonNull InitRequestFunction func) {
         connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
                 new QVariant<>(InitRequestFunctionSerializer.get().serialize(func))));
     }
 
-    public void onEventBackgroundThread(InitDataFunction func) {
+    public void onEventBackgroundThread(@NonNull InitDataFunction func) {
         connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
                 new QVariant<>(InitDataFunctionSerializer.get().serialize(func))));
     }
 
-    public void onEventBackgroundThread(HandshakeFunction func) {
+    public void onEventBackgroundThread(@NonNull HandshakeFunction func) {
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantSerializer.get(), MessageTypeRegistry.toVariantMap(func.data)));
     }
@@ -115,6 +121,7 @@ public class LegacyPeer implements RemotePeer {
         }
     }
 
+    @NonNull
     @Override
     public ByteBuffer getBuffer() {
         return buffer;
@@ -127,10 +134,12 @@ public class LegacyPeer implements RemotePeer {
      * @param <T>
      */
     private class OutputRunnable<T> implements Runnable {
+        @NonNull
         private final T data;
+        @NonNull
         private final PrimitiveSerializer<T> serializer;
 
-        public OutputRunnable(PrimitiveSerializer<T> serializer, T data) {
+        public OutputRunnable(@NonNull PrimitiveSerializer<T> serializer, @NonNull T data) {
             this.data = data;
             this.serializer = serializer;
         }

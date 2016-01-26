@@ -1,6 +1,6 @@
 package de.kuschku.libquassel.syncables.types;
 
-import android.util.Log;
+import android.support.annotation.NonNull;
 
 import java.util.List;
 import java.util.Map;
@@ -27,6 +27,7 @@ public class IrcChannel extends SyncableObject {
         this.encrypted = encrypted;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "IrcChannel{" +
@@ -39,7 +40,7 @@ public class IrcChannel extends SyncableObject {
                 '}';
     }
 
-    public void joinIrcUsers(List<String> users, List<String> modes) {
+    public void joinIrcUsers(@NonNull List<String> users, @NonNull List<String> modes) {
         for (int i = 0; i < users.size(); i++) {
             joinIrcUser(users.get(i), modes.get(i));
         }
@@ -57,14 +58,14 @@ public class IrcChannel extends SyncableObject {
         UserModes.put(nick, modes);
     }
 
-    public void addUserMode(String nick, String mode) {
+    public void addUserMode(String nick, @NonNull String mode) {
         if (UserModes.get(nick) == null)
             UserModes.put(nick, mode);
         else if (!UserModes.get(nick).contains(mode))
             UserModes.put(nick, UserModes.get(nick) + mode);
     }
 
-    public void removeUserMode(String nick, String mode) {
+    public void removeUserMode(String nick, @NonNull String mode) {
         if (UserModes.get(nick) == null && UserModes.get(nick).contains(mode))
             UserModes.put(nick, UserModes.get(nick).replace(mode, ""));
     }
@@ -75,7 +76,7 @@ public class IrcChannel extends SyncableObject {
     }
 
     @Override
-    public void init(InitDataFunction function, BusProvider provider, Client client) {
+    public void init(@NonNull InitDataFunction function, @NonNull BusProvider provider, @NonNull Client client) {
 
     }
 }

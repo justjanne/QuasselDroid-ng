@@ -1,7 +1,7 @@
 package de.kuschku.libquassel.protocols;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
+import android.support.annotation.Nullable;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -36,10 +36,11 @@ import de.kuschku.libquassel.objects.MessageTypeRegistry;
 import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.serializers.IntSerializer;
 import de.kuschku.libquassel.primitives.serializers.PrimitiveSerializer;
-import de.kuschku.libquassel.primitives.serializers.VariantListSerializer;
 import de.kuschku.libquassel.primitives.serializers.VariantVariantListSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.util.niohelpers.WrappedChannel;
+
+import static de.kuschku.util.AndroidAssert.*;
 
 /**
  * A helper class processing incoming and outgoing messages.
@@ -47,18 +48,23 @@ import de.kuschku.util.niohelpers.WrappedChannel;
  *
  * @author Janne Koschinski
  */
+@SuppressWarnings({"unchecked"})
 public class DatastreamPeer implements RemotePeer {
-    private ByteBuffer buffer;
-    private CoreConnection connection;
-    private BusProvider busProvider;
+    @NonNull
+    private ByteBuffer buffer = ByteBuffer.allocate(0);
+    @NonNull
+    private final CoreConnection connection;
+    @NonNull
+    private final BusProvider busProvider;
 
-    public DatastreamPeer(CoreConnection connection, BusProvider busProvider) {
+    public DatastreamPeer(@NonNull CoreConnection connection, @NonNull BusProvider busProvider) {
         this.connection = connection;
         this.busProvider = busProvider;
         this.busProvider.dispatch.register(this);
     }
 
-    public static List<QVariant<Object>> mapToList(Map<String, QVariant> data) {
+    @NonNull
+    public static List<QVariant<Object>> mapToList(@NonNull Map<String, QVariant> data) {
         final List<QVariant<Object>> list = new ArrayList<>(data.size() * 2);
         for (Map.Entry<String, QVariant> entry : data.entrySet()) {
             list.add(new QVariant<>(QMetaType.Type.QByteArray, entry.getKey()));
@@ -67,7 +73,8 @@ public class DatastreamPeer implements RemotePeer {
         return list;
     }
 
-    public static Map<String, QVariant> listToMap(List<QVariant> data) {
+    @NonNull
+    public static Map<String, QVariant> listToMap(@NonNull List<QVariant> data) {
         final Map<String, QVariant> map = new HashMap<>(data.size() / 2);
         for (int i = 0; i < data.size(); i += 2) {
             map.put((String) data.get(i).data, data.get(i + 1));
@@ -75,7 +82,8 @@ public class DatastreamPeer implements RemotePeer {
         return map;
     }
 
-    public static <T> Map<T, T> unboxedListToMap(List<T> data) {
+    @NonNull
+    public static <T> Map<T, T> unboxedListToMap(@NonNull List<T> data) {
         final Map<T, T> map = new HashMap<>(data.size() / 2);
         for (int i = 0; i < data.size(); i += 2) {
             map.put(data.get(i), data.get(i + 1));
@@ -84,55 +92,57 @@ public class DatastreamPeer implements RemotePeer {
     }
 
     @NonNull
-    public static List unboxList(List packedFunc) {
+    public static List unboxList(@NonNull List packedFunc) {
         return Lists.transform(packedFunc, new Function<QVariant, Object>() {
             @Override
-            public Object apply(QVariant input) {
+            public Object apply(@Nullable QVariant input) {
+                assertNotNull(input);
+
                 return input.data;
             }
         });
     }
 
-    public void onEventBackgroundThread(SyncFunction func) {
+    public void onEventBackgroundThread(@NonNull SyncFunction func) {
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantVariantListSerializer.<SyncFunction>get(),
                 UnpackedSyncFunctionSerializer.get().serialize(func)
         ));
     }
 
-    public void onEventBackgroundThread(RpcCallFunction func) {
+    public void onEventBackgroundThread(@NonNull RpcCallFunction func) {
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantVariantListSerializer.<RpcCallFunction>get(),
                 UnpackedRpcCallFunctionSerializer.get().serialize(func)
         ));
     }
 
-    public void onEventBackgroundThread(InitRequestFunction func) {
+    public void onEventBackgroundThread(@NonNull InitRequestFunction func) {
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantVariantListSerializer.<InitRequestFunction>get(),
                 InitRequestFunctionSerializer.get().serializePacked(func)
         ));
     }
 
-    public void onEventBackgroundThread(InitDataFunction func) {
+    public void onEventBackgroundThread(@NonNull InitDataFunction func) {
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantVariantListSerializer.<InitDataFunction>get(),
                 InitDataFunctionSerializer.get().serialize(func)
         ));
     }
 
-    public void onEventBackgroundThread(HandshakeFunction func) {
+    public void onEventBackgroundThread(@NonNull HandshakeFunction func) {
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantVariantListSerializer.get(),
                 DatastreamPeer.mapToList(MessageTypeRegistry.toVariantMap(func.data).data)
         ));
     }
 
-    private void handleHandshakeMessage(List data) {
+    private void handleHandshakeMessage(@NonNull List data) {
         busProvider.handle(MessageTypeRegistry.from(DatastreamPeer.listToMap(data)));
     }
 
-    private void handlePackedFunc(List<QVariant> data) {
+    private void handlePackedFunc(@NonNull List<QVariant> data) {
         final FunctionType type = FunctionType.fromId((Integer) data.remove(0).data);
         switch (type) {
             case SYNC:
@@ -179,6 +189,7 @@ public class DatastreamPeer implements RemotePeer {
         }
     }
 
+    @NonNull
     @Override
     public ByteBuffer getBuffer() {
         return buffer;
@@ -191,16 +202,20 @@ public class DatastreamPeer implements RemotePeer {
      * @param <T>
      */
     private class OutputRunnable<T> implements Runnable {
+        @NonNull
         private final T data;
+        @NonNull
         private final PrimitiveSerializer<T> serializer;
 
-        public OutputRunnable(PrimitiveSerializer<T> serializer, T data) {
+        public OutputRunnable(@NonNull PrimitiveSerializer<T> serializer, @NonNull T data) {
             this.data = data;
             this.serializer = serializer;
         }
 
         @Override
         public void run() {
+            assertNotNull(connection.getChannel());
+
             try {
                 // TODO: Reuse buffer
 

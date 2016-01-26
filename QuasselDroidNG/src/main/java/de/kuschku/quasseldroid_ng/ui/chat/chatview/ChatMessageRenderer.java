@@ -3,6 +3,8 @@ package de.kuschku.quasseldroid_ng.ui.chat.chatview;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.util.Log;
 
@@ -21,14 +23,17 @@ import de.kuschku.util.annotationbind.AutoBinder;
 
 @UiThread
 public class ChatMessageRenderer {
+    @NonNull
     private final DateTimeFormatter format;
+    @NonNull
     private final FormatStrings strings;
+    @NonNull
     private final IrcFormatHelper helper;
-
+    @Nullable
     private Client client;
     private boolean fullHostmask = false;
 
-    public ChatMessageRenderer(Context ctx) {
+    public ChatMessageRenderer(@NonNull Context ctx) {
         ThemeUtil themeUtil = new ThemeUtil(ctx);
         this.format = DateFormatHelper.getTimeFormatter(ctx);
         this.strings = new FormatStrings(ctx);
@@ -74,16 +79,20 @@ public class ChatMessageRenderer {
         }
     }
 
-    public MessageStyleContainer highlightStyle;
-    public MessageStyleContainer serverStyle;
-    public MessageStyleContainer actionStyle;
-    public MessageStyleContainer plainStyle;
+    @NonNull
+    private final MessageStyleContainer highlightStyle;
+    @NonNull
+    private final MessageStyleContainer serverStyle;
+    @NonNull
+    private final MessageStyleContainer actionStyle;
+    @NonNull
+    private final MessageStyleContainer plainStyle;
 
-    public void setClient(Client client) {
+    public void setClient(@NonNull Client client) {
         this.client = client;
     }
 
-    private void applyStyle(MessageViewHolder holder, MessageStyleContainer style, MessageStyleContainer highlightStyle, boolean highlight) {
+    private void applyStyle(@NonNull MessageViewHolder holder, @NonNull MessageStyleContainer style, @NonNull MessageStyleContainer highlightStyle, boolean highlight) {
         MessageStyleContainer container = highlight ? highlightStyle : style;
         holder.content.setTextColor(container.textColor);
         holder.content.setTypeface(null, container.fontstyle);
@@ -91,7 +100,8 @@ public class ChatMessageRenderer {
         holder.itemView.setBackgroundColor(container.bgColor);
     }
 
-    private CharSequence formatNick(String hostmask, boolean full) {
+    @NonNull
+    private CharSequence formatNick(@NonNull String hostmask, boolean full) {
         CharSequence formattedNick = helper.formatUserNick(IrcUserUtils.getNick(hostmask));
         if (full) {
             return strings.formatUsername(formattedNick, IrcUserUtils.getMask(hostmask));
@@ -100,11 +110,12 @@ public class ChatMessageRenderer {
         }
     }
 
-    private CharSequence formatNick(String hostmask) {
+    @NonNull
+    private CharSequence formatNick(@NonNull String hostmask) {
         return formatNick(hostmask, fullHostmask);
     }
 
-    public void onBindPlain(MessageViewHolder holder, Message message) {
+    private void onBindPlain(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, plainStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(
                 strings.formatPlain(
@@ -114,7 +125,7 @@ public class ChatMessageRenderer {
         );
     }
 
-    public void onBindNotice(MessageViewHolder holder, Message message) {
+    private void onBindNotice(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, plainStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(strings.formatAction(
                 formatNick(message.sender, false),
@@ -122,7 +133,7 @@ public class ChatMessageRenderer {
         ));
     }
 
-    public void onBindAction(MessageViewHolder holder, Message message) {
+    private void onBindAction(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, actionStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(
                 strings.formatAction(
@@ -132,7 +143,7 @@ public class ChatMessageRenderer {
         );
     }
 
-    public void onBindNick(MessageViewHolder holder, Message message) {
+    private void onBindNick(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         if (message.flags.Self)
             holder.content.setText(strings.formatNick(
@@ -145,12 +156,12 @@ public class ChatMessageRenderer {
             ));
     }
 
-    public void onBindMode(MessageViewHolder holder, Message message) {
-        
+    private void onBindMode(@NonNull MessageViewHolder holder, @NonNull Message message) {
+        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.toString());
     }
 
-    public void onBindJoin(MessageViewHolder holder, Message message) {
+    private void onBindJoin(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(strings.formatJoin(
                 formatNick(message.sender),
@@ -158,7 +169,7 @@ public class ChatMessageRenderer {
         ));
     }
 
-    public void onBindPart(MessageViewHolder holder, Message message) {
+    private void onBindPart(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(strings.formatPart(
                 formatNick(message.sender),
@@ -167,7 +178,7 @@ public class ChatMessageRenderer {
         ));
     }
 
-    public void onBindQuit(MessageViewHolder holder, Message message) {
+    private void onBindQuit(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(strings.formatQuit(
                 formatNick(message.sender),
@@ -175,57 +186,57 @@ public class ChatMessageRenderer {
         ));
     }
 
-    public void onBindKick(MessageViewHolder holder, Message message) {
+    private void onBindKick(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.toString());
     }
 
-    public void onBindKill(MessageViewHolder holder, Message message) {
+    private void onBindKill(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.toString());
     }
 
-    public void onBindServer(MessageViewHolder holder, Message message) {
+    private void onBindServer(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.toString());
     }
 
-    public void onBindInfo(MessageViewHolder holder, Message message) {
+    private void onBindInfo(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.toString());
     }
 
-    public void onBindError(MessageViewHolder holder, Message message) {
+    private void onBindError(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.toString());
     }
 
-    public void onBindDayChange(MessageViewHolder holder, Message message) {
+    private void onBindDayChange(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.toString());
     }
 
-    public void onBindTopic(MessageViewHolder holder, Message message) {
+    private void onBindTopic(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.toString());
     }
 
-    public void onBindNetsplitJoin(MessageViewHolder holder, Message message) {
+    private void onBindNetsplitJoin(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.toString());
     }
 
-    public void onBindNetsplitQuit(MessageViewHolder holder, Message message) {
+    private void onBindNetsplitQuit(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.toString());
     }
 
-    public void onBindInvite(MessageViewHolder holder, Message message) {
+    private void onBindInvite(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.toString());
     }
     
-    public void onBind(MessageViewHolder holder, Message message) {
+    public void onBind(@NonNull MessageViewHolder holder, @NonNull Message message) {
         holder.time.setText(format.print(message.time));
         switch (message.type) {
             case Plain:
@@ -331,7 +342,7 @@ public class ChatMessageRenderer {
         @AutoString(R.string.message_action)
         public String message_action;
 
-        public FormatStrings(Context ctx) {
+        public FormatStrings(@NonNull Context ctx) {
             try {
                 AutoBinder.bind(this, ctx);
             } catch (IllegalAccessException e) {
@@ -340,67 +351,82 @@ public class ChatMessageRenderer {
             }
         }
 
-        public CharSequence formatUsername(CharSequence nick, CharSequence hostmask) {
+        @NonNull
+        public CharSequence formatUsername(@NonNull CharSequence nick, @NonNull CharSequence hostmask) {
             return SpanFormatter.format(username_hostmask, nick, hostmask);
         }
 
-        public CharSequence formatJoin(CharSequence user, CharSequence channel) {
+        @NonNull
+        public CharSequence formatJoin(@NonNull CharSequence user, @NonNull CharSequence channel) {
             return SpanFormatter.format(message_join, user, channel);
         }
 
-        public CharSequence formatPart(CharSequence user, CharSequence channel) {
+        @NonNull
+        public CharSequence formatPart(@NonNull CharSequence user, @NonNull CharSequence channel) {
             return SpanFormatter.format(message_part, user, channel);
         }
-        public CharSequence formatPart(CharSequence user, CharSequence channel, CharSequence reason) {
+        @NonNull
+        public CharSequence formatPart(@NonNull CharSequence user, @NonNull CharSequence channel, @Nullable CharSequence reason) {
             if (reason == null || reason.length() == 0) return formatPart(user, channel);
 
             return SpanFormatter.format(message_part_extra, user, channel, reason);
         }
 
-        public CharSequence formatQuit(CharSequence user) {
+        @NonNull
+        public CharSequence formatQuit(@NonNull CharSequence user) {
             return SpanFormatter.format(message_quit, user);
         }
-        public CharSequence formatQuit(CharSequence user, CharSequence reason) {
+        @NonNull
+        public CharSequence formatQuit(@NonNull CharSequence user, @Nullable CharSequence reason) {
             if (reason == null || reason.length() == 0) return formatQuit(user);
 
             return SpanFormatter.format(message_quit_extra, user, reason);
         }
 
-        public CharSequence formatKill(CharSequence user, CharSequence channel) {
+        @NonNull
+        public CharSequence formatKill(@NonNull CharSequence user, @NonNull CharSequence channel) {
             return SpanFormatter.format(message_kill, user, channel);
         }
 
-        public CharSequence formatKick(CharSequence user, CharSequence kicked) {
+        @NonNull
+        public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked) {
             return SpanFormatter.format(message_kick, user, kicked);
         }
-        public CharSequence formatKick(CharSequence user, CharSequence kicked, CharSequence reason) {
+        @NonNull
+        public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked, @Nullable CharSequence reason) {
             if (reason == null || reason.length() == 0) return formatKick(user, kicked);
 
             return SpanFormatter.format(message_kick_extra, user, kicked, reason);
         }
 
-        public CharSequence formatMode(CharSequence mode, CharSequence user) {
+        @NonNull
+        public CharSequence formatMode(@NonNull CharSequence mode, @NonNull CharSequence user) {
             return SpanFormatter.format(message_mode, mode, user);
         }
 
-        public CharSequence formatNick(CharSequence newNick) {
+        @NonNull
+        public CharSequence formatNick(@NonNull CharSequence newNick) {
             return SpanFormatter.format(message_nick_self, newNick);
         }
-        public CharSequence formatNick(CharSequence oldNick, CharSequence newNick) {
+        @NonNull
+        public CharSequence formatNick(@NonNull CharSequence oldNick, @Nullable CharSequence newNick) {
             if (newNick == null || newNick.length() == 0) return formatNick(oldNick);
 
             return SpanFormatter.format(message_nick_other, oldNick, newNick);
         }
 
-        public CharSequence formatDayChange(CharSequence day) {
+        @NonNull
+        public CharSequence formatDayChange(@NonNull CharSequence day) {
             return SpanFormatter.format(message_daychange, day);
         }
 
-        public CharSequence formatAction(CharSequence user, CharSequence channel) {
+        @NonNull
+        public CharSequence formatAction(@NonNull CharSequence user, @NonNull CharSequence channel) {
             return SpanFormatter.format(message_action, user, channel);
         }
 
-        public CharSequence formatPlain(CharSequence nick, CharSequence message) {
+        @NonNull
+        public CharSequence formatPlain(@NonNull CharSequence nick, @NonNull CharSequence message) {
             return SpanFormatter.format(message_plain, nick, message);
         }
     }

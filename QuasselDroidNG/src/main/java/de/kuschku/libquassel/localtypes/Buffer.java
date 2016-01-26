@@ -1,11 +1,14 @@
 package de.kuschku.libquassel.localtypes;
 
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 
 public interface Buffer {
+    @NonNull
     BufferInfo getInfo();
 
+    @Nullable
     String getName();
 }

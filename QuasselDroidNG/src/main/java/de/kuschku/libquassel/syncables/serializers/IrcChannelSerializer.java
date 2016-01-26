@@ -1,6 +1,6 @@
 package de.kuschku.libquassel.syncables.serializers;
 
-import android.util.Log;
+import android.support.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,16 +13,20 @@ import de.kuschku.libquassel.objects.serializers.StringObjectMapSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.IrcChannel;
 
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 public class IrcChannelSerializer implements ObjectSerializer<IrcChannel> {
+    @NonNull
     private static final IrcChannelSerializer serializer = new IrcChannelSerializer();
     private IrcChannelSerializer() {}
+    @NonNull
     public static IrcChannelSerializer get(){
         return serializer;
     }
 
+    @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(IrcChannel data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());
+    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull IrcChannel data) {
+        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
         map.data.put("name", new QVariant<>(data.name));
         map.data.put("topic", new QVariant<>(data.topic));
         map.data.put("password", new QVariant<>(data.password));
@@ -32,13 +36,15 @@ public class IrcChannelSerializer implements ObjectSerializer<IrcChannel> {
         return map;
     }
 
+    @NonNull
     @Override
-    public IrcChannel fromDatastream(Map<String, QVariant> map) {
+    public IrcChannel fromDatastream(@NonNull Map<String, QVariant> map) {
         return fromLegacy(map);
     }
 
+    @NonNull
     @Override
-    public IrcChannel fromLegacy(Map<String, QVariant> map) {
+    public IrcChannel fromLegacy(@NonNull Map<String, QVariant> map) {
         return new IrcChannel(
                 (String) map.get("name").data,
                 (String) map.get("topic").data,
@@ -50,7 +56,7 @@ public class IrcChannelSerializer implements ObjectSerializer<IrcChannel> {
     }
 
     @Override
-    public IrcChannel from(SerializedFunction function) {
+    public IrcChannel from(@NonNull SerializedFunction function) {
         if (function instanceof PackedFunction)
             return fromLegacy(((PackedFunction) function).getData());
         else if (function instanceof UnpackedFunction)

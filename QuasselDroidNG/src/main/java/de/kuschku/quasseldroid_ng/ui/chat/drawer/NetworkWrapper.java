@@ -25,23 +25,27 @@ import de.kuschku.util.observables.callbacks.wrappers.ChildUICallbackWrapper;
 import de.kuschku.util.observables.callbacks.wrappers.MultiUIChildCallback;
 import de.kuschku.util.observables.ContentComparable;
 import de.kuschku.util.observables.callbacks.ElementCallback;
-import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.callbacks.UIChildCallback;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 import de.kuschku.util.ui.Bindable;
 
 @UiThread
 public class NetworkWrapper implements ParentListItem, Nameable<NetworkWrapper>,ContentComparable<NetworkWrapper> {
-    private MultiUIChildCallback callback = MultiUIChildCallback.of();
+    @NonNull
+    private final MultiUIChildCallback callback = MultiUIChildCallback.of();
 
+    @NonNull
     private final Network network;
+    @NonNull
     private final Client client;
 
-    private ObservableSortedList<BufferWrapper> buffers;
-    private ChildUICallbackWrapper wrapper = new ChildUICallbackWrapper(callback);
+    @NonNull
+    private ObservableSortedList<BufferWrapper> buffers = new ObservableSortedList<>(BufferWrapper.class, new BufferWrapperSorterWrapper(getSorter(SortMode.NONE)));
+    @NonNull
+    private final ChildUICallbackWrapper wrapper = new ChildUICallbackWrapper(callback);
     private int groupId;
 
-    public NetworkWrapper(Network network, Client client, BufferViewConfig bufferViewConfig, SortMode sortMode, int groupId) {
+    public NetworkWrapper(@NonNull Network network, @NonNull Client client, @NonNull BufferViewConfig bufferViewConfig, @NonNull SortMode sortMode, int groupId) {
         this.network = network;
         this.client = client;
         setSortMode(sortMode);
@@ -74,11 +78,11 @@ public class NetworkWrapper implements ParentListItem, Nameable<NetworkWrapper>,
         wrapper.setGroupPosition(groupId);
     }
 
-    public void addCallback(UIChildCallback callback) {
+    public void addCallback(@NonNull UIChildCallback callback) {
         this.callback.addCallback(callback);
     }
 
-    public void removeCallback(UIChildCallback callback) {
+    public void removeCallback(@NonNull UIChildCallback callback) {
         this.callback.removeCallback(callback);
     }
 
@@ -87,33 +91,28 @@ public class NetworkWrapper implements ParentListItem, Nameable<NetworkWrapper>,
         this.wrapper.setGroupPosition(groupId);
     }
 
-    public void setSortMode(SortMode sortMode) {
+    public void setSortMode(@NonNull SortMode sortMode) {
         ObservableSortedList.ItemComparator<BufferWrapper> sorter = new BufferWrapperSorterWrapper(getSorter(sortMode));
-        ObservableSortedList<BufferWrapper> newBuffers = new ObservableSortedList<BufferWrapper>(BufferWrapper.class, sorter);
-        if (buffers != null) {
-            if (buffers.size() > newBuffers.size()) {
-                for (int i = newBuffers.size(); i < buffers.size(); i++) {
-                    callback.notifyChildItemRemoved(groupId, i);
-                }
-            } else if (newBuffers.size() > buffers.size()) {
-                for (int i = buffers.size(); i < newBuffers.size(); i++) {
-                    callback.notifyChildItemInserted(groupId, i);
-                }
+        ObservableSortedList<BufferWrapper> newBuffers = new ObservableSortedList<>(BufferWrapper.class, sorter);
+        if (buffers.size() > newBuffers.size()) {
+            for (int i = newBuffers.size(); i < buffers.size(); i++) {
+                callback.notifyChildItemRemoved(groupId, i);
             }
-
-            int commonElementCount = Math.min(buffers.size(), newBuffers.size());
-            for (int i = 0; i < commonElementCount; i++) {
-                callback.notifyChildItemChanged(groupId, i);
-            }
-        } else {
-            for (int i = 0; i < newBuffers.size(); i++) {
+        } else if (newBuffers.size() > buffers.size()) {
+            for (int i = buffers.size(); i < newBuffers.size(); i++) {
                 callback.notifyChildItemInserted(groupId, i);
             }
+        }
+
+        int commonElementCount = Math.min(buffers.size(), newBuffers.size());
+        for (int i = 0; i < commonElementCount; i++) {
+            callback.notifyChildItemChanged(groupId, i);
         }
         buffers = newBuffers;
     }
 
-    private ObservableSortedList.ItemComparator<Buffer> getSorter(SortMode sortMode) {
+    @NonNull
+    private ObservableSortedList.ItemComparator<Buffer> getSorter(@NonNull SortMode sortMode) {
         switch (sortMode) {
             case ALPHABETICAL:
                 return new AlphabeticalBufferSorter();
@@ -126,6 +125,7 @@ public class NetworkWrapper implements ParentListItem, Nameable<NetworkWrapper>,
         }
     }
 
+    @NonNull
     @Override
     public List<?> getChildItemList() {
         return buffers;
@@ -136,28 +136,32 @@ public class NetworkWrapper implements ParentListItem, Nameable<NetworkWrapper>,
         return network.isConnected();
     }
 
+    @NonNull
     @Override
     public NetworkWrapper withName(String name) {
         return this;
     }
 
+    @NonNull
     @Override
     public NetworkWrapper withName(int nameRes) {
         return this;
     }
 
+    @NonNull
     @Override
     public NetworkWrapper withName(StringHolder name) {
         return this;
     }
 
+    @NonNull
     @Override
     public StringHolder getName() {
         return new StringHolder(network.getNetworkName());
     }
 
     @Override
-    public boolean equalsContent(NetworkWrapper other) {
+    public boolean equalsContent(@NonNull NetworkWrapper other) {
         return network.equalsContent(other.network);
     }
 
@@ -178,12 +182,12 @@ public class NetworkWrapper implements ParentListItem, Nameable<NetworkWrapper>,
         @Bind(R.id.material_drawer_badge)
         TextView materialDrawerBadge;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(NetworkWrapper wrapper) {
+        public void bind(@NonNull NetworkWrapper wrapper) {
             materialDrawerName.setText(wrapper.getName().getText());
         }
     }
@@ -196,49 +200,50 @@ public class NetworkWrapper implements ParentListItem, Nameable<NetworkWrapper>,
     }
 
     private static class BufferWrapperSorterWrapper implements ObservableSortedList.ItemComparator<BufferWrapper> {
+        @NonNull
         private final ObservableSortedList.ItemComparator<Buffer> wrapped;
 
-        public BufferWrapperSorterWrapper(ObservableSortedList.ItemComparator<Buffer> wrapped) {
+        public BufferWrapperSorterWrapper(@NonNull ObservableSortedList.ItemComparator<Buffer> wrapped) {
             this.wrapped = wrapped;
         }
 
         @Override
-        public int compare(BufferWrapper lhs, BufferWrapper rhs) {
+        public int compare(@NonNull BufferWrapper lhs, @NonNull BufferWrapper rhs) {
             return wrapped.compare(lhs.getBuffer(), rhs.getBuffer());
         }
 
         @Override
-        public boolean areContentsTheSame(BufferWrapper oldItem, BufferWrapper newItem) {
+        public boolean areContentsTheSame(@NonNull BufferWrapper oldItem, @NonNull BufferWrapper newItem) {
             return wrapped.areContentsTheSame(oldItem.getBuffer(), newItem.getBuffer());
         }
 
         @Override
-        public boolean areItemsTheSame(BufferWrapper item1, BufferWrapper item2) {
+        public boolean areItemsTheSame(@NonNull BufferWrapper item1, @NonNull BufferWrapper item2) {
             return areContentsTheSame(item1, item2);
         }
     }
 
     private class IdBufferSorter extends BasicBufferSorter {
         @Override
-        public int compare(Buffer lhs, Buffer rhs) {
+        public int compare(@NonNull Buffer lhs, @NonNull Buffer rhs) {
             return lhs.getInfo().id - rhs.getInfo().id;
         }
     }
 
     private class AlphabeticalBufferSorter extends BasicBufferSorter {
         @Override
-        public int compare(Buffer lhs, Buffer rhs) {
+        public int compare(@NonNull Buffer lhs, @NonNull Buffer rhs) {
             return lhs.getName().compareTo(rhs.getName());
         }
     }
 
     private class RecentActivityBufferSorter extends BasicBufferSorter {
         @Override
-        public int compare(Buffer lhs, Buffer rhs) {
+        public int compare(@NonNull Buffer lhs, @NonNull Buffer rhs) {
             return getLastMessageId(lhs) - getLastMessageId(rhs);
         }
 
-        private int getLastMessageId(Buffer buffer) {
+        private int getLastMessageId(@NonNull Buffer buffer) {
             int bufferId = buffer.getInfo().id;
             Message message = client.getBacklogManager().get(bufferId).last();
             return message == null ? -1 : message.messageId;
@@ -247,11 +252,11 @@ public class NetworkWrapper implements ParentListItem, Nameable<NetworkWrapper>,
 
     private class LastSeenBufferSorter extends BasicBufferSorter {
         @Override
-        public int compare(Buffer lhs, Buffer rhs) {
+        public int compare(@NonNull Buffer lhs, @NonNull Buffer rhs) {
             return getLastSeenMessageId(lhs) - getLastSeenMessageId(rhs);
         }
 
-        private int getLastSeenMessageId(Buffer buffer) {
+        private int getLastSeenMessageId(@NonNull Buffer buffer) {
             int bufferId = buffer.getInfo().id;
             return client.getBufferSyncer().getLastSeenMsg(bufferId);
         }
@@ -259,12 +264,12 @@ public class NetworkWrapper implements ParentListItem, Nameable<NetworkWrapper>,
 
     private abstract class BasicBufferSorter implements ObservableSortedList.ItemComparator<Buffer> {
         @Override
-        public boolean areContentsTheSame(Buffer oldItem, Buffer newItem) {
+        public boolean areContentsTheSame(@NonNull Buffer oldItem, @NonNull Buffer newItem) {
             return oldItem.getInfo().id == newItem.getInfo().id;
         }
 
         @Override
-        public boolean areItemsTheSame(Buffer item1, Buffer item2) {
+        public boolean areItemsTheSame(@NonNull Buffer item1, @NonNull Buffer item2) {
             return areContentsTheSame(item1, item2);
         }
     }

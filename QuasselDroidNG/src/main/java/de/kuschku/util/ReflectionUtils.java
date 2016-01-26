@@ -1,6 +1,7 @@
 package de.kuschku.util;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.common.primitives.Primitives;
 
@@ -11,19 +12,21 @@ import java.util.List;
 import de.kuschku.libquassel.exceptions.SyncInvocationException;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
+import static de.kuschku.util.AndroidAssert.*;
+
 public class ReflectionUtils {
     private ReflectionUtils() {
 
     }
 
-    private static void unboxList(Object[] list){
+    private static void unboxList(@NonNull Object[] list){
         for (int i = 0; i < list.length; i++) {
             if (list[i] instanceof QVariant)
                 list[i] = ((QVariant) list[i]).data;
         }
     }
 
-    public static void invokeMethod(Object o, String name, Object[] argv) throws SyncInvocationException {
+    public static void invokeMethod(@NonNull Object o, @NonNull String name, @NonNull Object[] argv) throws SyncInvocationException {
         name = stripName(name);
         unboxList(argv);
 
@@ -43,22 +46,30 @@ public class ReflectionUtils {
     }
 
     @NonNull
-    private static String stripName(String name) {
+    private static String stripName(@NonNull String name) {
         return (name.contains("(")) ? name.substring(0, name.indexOf("(")) : name;
     }
 
-    public static void invokeMethod(Object o, String name, List argv) throws SyncInvocationException {
+    public static void invokeMethod(@NonNull Object o, @NonNull String name, @NonNull List argv) throws SyncInvocationException {
         invokeMethod(o, name, argv.toArray(new Object[argv.size()]));
     }
 
-    private static Method getMethodFromSignature(String methodName, Class cl, Class<?>[] parameterTypes) {
+    @Nullable
+    private static <T> Method getMethodFromSignature(String methodName, @NonNull Class<T> cl, @NonNull Class<?>[] parameterTypes) {
         Method[] methods = cl.getMethods();
+        assertNotNull(methods);
+
         looper:
         for (Method m : methods) {
-            if (m.getName().equals(methodName) && m.getParameterTypes().length == parameterTypes.length) {
+            assertNotNull(m);
+            assertNotNull(m.getParameterTypes());
+
+            if (Objects.equals(m.getName(), methodName) && m.getParameterTypes().length == parameterTypes.length) {
                 for (int i = 0; i < parameterTypes.length; i++) {
-                    Class mParam = m.getParameterTypes()[i];
-                    Class vParam = parameterTypes[i];
+                    Class<?> mParam = m.getParameterTypes()[i];
+                    Class<?> vParam = parameterTypes[i];
+                    assertNotNull(vParam);
+
                     if (mParam.isPrimitive() && Primitives.isWrapperType(vParam))
                         vParam = Primitives.unwrap(vParam);
 

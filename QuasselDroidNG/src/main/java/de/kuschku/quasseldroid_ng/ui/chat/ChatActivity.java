@@ -45,13 +45,13 @@ import static de.kuschku.util.AndroidAssert.*;
 public class ChatActivity extends AppCompatActivity {
     @Bind(R.id.drawer_left)
     DrawerLayout drawerLeft;
-
+    
     @Bind(R.id.navigation_left)
     NavigationView navigationLeft;
-
+    
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-
+    
     @Bind(R.id.sliding_layout)
     SlidingUpPanelLayout slidingLayout;
 
@@ -76,17 +76,21 @@ public class ChatActivity extends AppCompatActivity {
     @Bind(R.id.buffer_view_spinner)
     AppCompatSpinner bufferViewSpinner;
 
+    @Nullable
     private QuasselService.LocalBinder binder;
+    @Nullable
     private ClientBackgroundThread backgroundThread;
 
     private SharedPreferences preferences;
 
-    private Status status = new Status();
+    @NonNull
+    private final Status status = new Status();
     private static class Status extends Storable {
         @Store public int bufferId = -1;
         @Store public int bufferViewConfigId = -1;
     }
 
+    @Nullable
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @UiThread
         public void onServiceConnected(@NonNull ComponentName cn, @NonNull IBinder service) {
@@ -95,6 +99,7 @@ public class ChatActivity extends AppCompatActivity {
 
             if (service instanceof QuasselService.LocalBinder) {
                 ChatActivity.this.binder = (QuasselService.LocalBinder) service;
+                assertNotNull(binder);
                 if (binder.getBackgroundThread() != null) {
                     connectToThread(binder.getBackgroundThread());
                 }
@@ -123,6 +128,7 @@ public class ChatActivity extends AppCompatActivity {
         DrawerUtils.initDrawer(this, drawerLeft, toolbar, R.string.open_drawer, R.string.close_drawer);
 
         ViewGroup.LayoutParams lp = navigationHeaderContainer.getLayoutParams();
+        assertNotNull(lp);
         lp.height = lp.height + UIUtils.getStatusBarHeight(this);
         navigationHeaderContainer.setLayoutParams(lp);
 
@@ -167,12 +173,26 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void selectBufferViewConfig(@IntRange(from=-1) int bufferViewConfigId) {
-        assertTrue(bufferViewConfigId == -1 || null != this.backgroundThread.handler.client.getBufferViewManager().BufferViews.get(bufferViewConfigId));
+        if (bufferViewConfigId == -1) {
+            // TODO: Implement this
 
-        // TODO: Implement this
+        } else {
+            assertNotNull(this.backgroundThread);
+            assertNotNull(this.backgroundThread.handler.client.getBufferViewManager());
+            assertNotNull(this.backgroundThread.handler.client.getBufferViewManager().BufferViews.get(bufferViewConfigId));
+
+            // TODO: Implement this
+        }
     }
 
     private void selectBuffer(@IntRange(from=-1) int bufferId) {
+        if (bufferId == -1) {
+
+        } else {
+            assertNotNull(this.backgroundThread);
+            assertNotNull(this.backgroundThread.handler.client.getBuffer(bufferId));
+
+        }
         assertTrue(bufferId == -1 || null != this.backgroundThread.handler.client.getBuffer(bufferId));
 
         // TODO: Implement this

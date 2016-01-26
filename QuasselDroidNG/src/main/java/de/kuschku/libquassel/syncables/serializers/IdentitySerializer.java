@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.syncables.serializers;
 
+import android.support.annotation.NonNull;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,16 +13,20 @@ import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.Identity;
 
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 public class IdentitySerializer implements ObjectSerializer<Identity> {
+    @NonNull
     private static final IdentitySerializer serializer = new IdentitySerializer();
     private IdentitySerializer() {}
+    @NonNull
     public static IdentitySerializer get(){
         return serializer;
     }
 
+    @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(Identity data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());
+    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull Identity data) {
+        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
         map.data.put("identityName", new QVariant(data.getIdentityName()));
         map.data.put("nicks", new QVariant(data.getNicks()));
         map.data.put("ident", new QVariant(data.getIdent()));
@@ -43,13 +49,15 @@ public class IdentitySerializer implements ObjectSerializer<Identity> {
         return map;
     }
 
+    @NonNull
     @Override
-    public Identity fromDatastream(Map<String, QVariant> map) {
+    public Identity fromDatastream(@NonNull Map<String, QVariant> map) {
         return fromLegacy(map);
     }
 
+    @NonNull
     @Override
-    public Identity fromLegacy(Map<String, QVariant> map) {
+    public Identity fromLegacy(@NonNull Map<String, QVariant> map) {
         return new Identity(
                 (String) map.get("identityName").data,
                 (List<String>) map.get("nicks").data,
@@ -74,7 +82,7 @@ public class IdentitySerializer implements ObjectSerializer<Identity> {
     }
 
     @Override
-    public Identity from(SerializedFunction function) {
+    public Identity from(@NonNull SerializedFunction function) {
         if (function instanceof PackedFunction)
             return fromLegacy(((PackedFunction) function).getData());
         else if (function instanceof UnpackedFunction)

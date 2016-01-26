@@ -2,6 +2,7 @@ package de.kuschku.util.instancestateutil;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
 import java.io.Serializable;
@@ -9,7 +10,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class Storable {
-    public boolean onRestoreInstanceState(Bundle in) {
+    public boolean onRestoreInstanceState(@NonNull Bundle in) {
         try {
             Field[] fields = getClass().getDeclaredFields();
             for (Field field : fields) {
@@ -26,7 +27,7 @@ public class Storable {
         }
     }
 
-    public boolean onSaveInstanceState(Bundle out) {
+    public boolean onSaveInstanceState(@NonNull Bundle out) {
         try {
             Field[] fields = getClass().getDeclaredFields();
             for (Field field : fields) {
@@ -43,7 +44,7 @@ public class Storable {
         }
     }
 
-    private void storeField(Bundle out, Store.Type type, String name, Object data) {
+    private void storeField(@NonNull Bundle out, @NonNull Store.Type type, @NonNull String name, Object data) {
         switch (type) {
             case BOOLEAN:
                 out.putBoolean(name, (Boolean) data);
@@ -135,7 +136,7 @@ public class Storable {
         }
     }
 
-    private void loadField(Bundle in, Store.Type type, String name, Field field) throws IllegalAccessException {
+    private void loadField(@NonNull Bundle in, @NonNull Store.Type type, @NonNull String name, @NonNull Field field) throws IllegalAccessException {
         if (!in.containsKey(name)) return;
 
         switch (type) {
@@ -229,7 +230,8 @@ public class Storable {
         }
     }
 
-    private Store.Type getTypeFromClass(Class cl) {
+    @NonNull
+    private Store.Type getTypeFromClass(@NonNull Class cl) {
         if (boolean.class.isAssignableFrom(cl)) return Store.Type.BOOLEAN;
         if (boolean[].class.isAssignableFrom(cl)) return Store.Type.BOOLEAN_ARRAY;
         if (byte.class.isAssignableFrom(cl)) return Store.Type.BYTE;

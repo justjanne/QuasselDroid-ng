@@ -1,5 +1,8 @@
 package de.kuschku.libquassel.syncables.types;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import org.joda.time.DateTime;
 
 import java.util.List;
@@ -7,6 +10,8 @@ import java.util.List;
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
+
+import static de.kuschku.util.AndroidAssert.*;
 
 public class IrcUser extends SyncableObject {
     public String server;
@@ -21,16 +26,17 @@ public class IrcUser extends SyncableObject {
     public String awayMessage;
     public DateTime loginTime;
     public boolean encrypted;
+    @NonNull
     public List<String> channels;
     public String host;
     public String userModes;
     public String user;
 
-    Network network;
+    private Network network;
 
     public IrcUser(String server, String ircOperator, boolean away, int lastAwayMessage, DateTime idleTime,
                    String whoisServiceReply, String suserHost, String nick, String realName, String awayMessage,
-                   DateTime loginTime, boolean encrypted, List<String> channels, String host, String userModes,
+                   DateTime loginTime, boolean encrypted, @NonNull List<String> channels, String host, String userModes,
                    String user) {
         this.server = server;
         this.ircOperator = ircOperator;
@@ -100,7 +106,7 @@ public class IrcUser extends SyncableObject {
         this.encrypted = encrypted;
     }
 
-    public void setChannels(List<String> channels) {
+    public void setChannels(@NonNull List<String> channels) {
         this.channels = channels;
     }
 
@@ -127,7 +133,9 @@ public class IrcUser extends SyncableObject {
         this.network.getUsers().put(nick, this);
     }
 
-    public void renameObject(String objectName) {
+    public void renameObject(@Nullable String objectName) {
+        assertNotNull(objectName);
+
         // TODO: Check if this is designed well
         String nick = objectName.split("/")[1];
         network.renameUser(this.getObjectName(), nick);
@@ -140,7 +148,7 @@ public class IrcUser extends SyncableObject {
     }
 
     @Override
-    public void init(InitDataFunction function, BusProvider provider, Client client) {
+    public void init(@NonNull InitDataFunction function, @NonNull BusProvider provider, @NonNull Client client) {
         final String networkId = function.objectName.split("/")[0];
         final Network network = client.getNetwork(Integer.parseInt(networkId));
         setObjectName(function.objectName);
@@ -155,7 +163,7 @@ public class IrcUser extends SyncableObject {
         joinChannel(network.getChannels().get(channelName));
     }
 
-    public void joinChannel(IrcChannel channel) {
+    public void joinChannel(@NonNull IrcChannel channel) {
         channel.joinIrcUser(this.nick, null);
     }
 
@@ -163,10 +171,11 @@ public class IrcUser extends SyncableObject {
         partChannel(network.getChannels().get(channelName));
     }
 
-    public void partChannel(IrcChannel channel) {
+    public void partChannel(@NonNull IrcChannel channel) {
         channel.part(this.nick);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "IrcUser{" +

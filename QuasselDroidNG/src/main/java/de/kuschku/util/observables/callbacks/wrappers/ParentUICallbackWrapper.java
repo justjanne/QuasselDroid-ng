@@ -1,5 +1,6 @@
 package de.kuschku.util.observables.callbacks.wrappers;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 
 import de.kuschku.util.observables.callbacks.UICallback;
@@ -7,9 +8,10 @@ import de.kuschku.util.observables.callbacks.UIParentCallback;
 
 @UiThread
 public class ParentUICallbackWrapper implements UICallback {
+    @NonNull
     private final UIParentCallback wrapped;
 
-    public ParentUICallbackWrapper(UIParentCallback wrapped) {
+    public ParentUICallbackWrapper(@NonNull UIParentCallback wrapped) {
         this.wrapped = wrapped;
     }
 

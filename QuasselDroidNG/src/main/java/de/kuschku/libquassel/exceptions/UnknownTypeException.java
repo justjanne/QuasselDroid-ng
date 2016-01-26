@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.exceptions;
 
+import android.support.annotation.Nullable;
+
 public class UnknownTypeException extends IllegalArgumentException {
     public final String typeName;
 
@@ -7,6 +9,7 @@ public class UnknownTypeException extends IllegalArgumentException {
         this.typeName = typeName;
     }
 
+    @Nullable
     @Override
     public String getLocalizedMessage() {
         return getMessage();

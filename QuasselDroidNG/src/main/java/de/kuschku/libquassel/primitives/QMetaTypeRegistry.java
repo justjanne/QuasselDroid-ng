@@ -1,5 +1,8 @@
 package de.kuschku.libquassel.primitives;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import org.joda.time.DateTime;
 
 import java.io.IOException;
@@ -38,8 +41,13 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.IdentitySerializer;
 import de.kuschku.libquassel.syncables.types.Identity;
 
+import static de.kuschku.util.AndroidAssert.*;
+
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 public class QMetaTypeRegistry {
+    @NonNull
     private static final Map<QMetaType.Type, QMetaType> typeSerializerMap = new HashMap<>();
+    @NonNull
     private static final Map<String, QMetaType> stringSerializerMap = new HashMap<>();
 
     static {
@@ -129,92 +137,103 @@ public class QMetaTypeRegistry {
 
     }
 
-    private static <T> void addType(final Class cl, final QMetaType.Type type, final String name, final PrimitiveSerializer<T> serializer) {
-        addType(new QMetaType<T>(cl, type, name, serializer));
+    private static <T> void addType(@NonNull final Class cl, @NonNull final QMetaType.Type type, @NonNull final String name, @Nullable final PrimitiveSerializer<T> serializer) {
+        addType(new QMetaType<>(cl, type, name, serializer));
     }
 
-    private static <T> void addType(final Class cl, final QMetaType.Type type, final String name) {
-        addType(new QMetaType<T>(cl, type, name));
+    private static <T> void addType(@NonNull final Class cl, @NonNull final QMetaType.Type type, @NonNull final String name) {
+        addType(new QMetaType<>(cl, type, name));
     }
 
-    private static <T> void addType(final Class cl, final QMetaType.Type type, final PrimitiveSerializer<T> serializer) {
-        addType(new QMetaType<T>(cl, type, serializer));
+    private static <T> void addType(@NonNull final Class cl, @NonNull final QMetaType.Type type, @Nullable final PrimitiveSerializer<T> serializer) {
+        addType(new QMetaType<>(cl, type, serializer));
     }
 
-    private static <T> void addType(final Class cl, final QMetaType.Type type) {
-        addType(new QMetaType<T>(cl, type));
+    private static <T> void addType(@NonNull final Class cl, @NonNull final QMetaType.Type type) {
+        addType(new QMetaType<>(cl, type));
     }
 
-    private static <T> void addType(final QMetaType<T> metaType) {
+    private static <T> void addType(@NonNull final QMetaType<T> metaType) {
         if (!typeSerializerMap.containsKey(metaType.type))
             typeSerializerMap.put(metaType.type, metaType);
         stringSerializerMap.put(metaType.name, metaType);
     }
 
-    public static <T> T deserialize(final ByteBuffer buffer) throws IOException {
+    @Nullable
+    public static <T> T deserialize(@NonNull final ByteBuffer buffer) throws IOException {
         final int id = deserialize(QMetaType.Type.UInt, buffer);
         final QMetaType.Type type = QMetaType.Type.fromId(id);
         return deserialize(type, buffer);
     }
 
-    public static <T> T deserialize(final QMetaType.Type type, final ByteBuffer buffer) throws IOException {
+    @Nullable
+    public static <T> T deserialize(@NonNull final QMetaType.Type type, @NonNull final ByteBuffer buffer) throws IOException {
         return deserialize((getMetaTypeByType(type)), buffer);
     }
 
-    public static <T> T deserialize(final String type, final ByteBuffer buffer) throws IOException {
+    @Nullable
+    public static <T> T deserialize(@NonNull final String type, @NonNull final ByteBuffer buffer) throws IOException {
         return deserialize((getMetaTypeByString(type)), buffer);
     }
 
-    public static <T> T deserialize(final QMetaType<T> type, final ByteBuffer buffer) throws IOException {
+    @Nullable
+    public static <T> T deserialize(@NonNull final QMetaType<T> type, @NonNull final ByteBuffer buffer) throws IOException {
         return type.serializer.deserialize(buffer);
     }
 
-    public static <T> void serialize(final QMetaType.Type type, final ByteChannel channel, final T data) throws IOException {
+    public static <T> void serialize(@NonNull final QMetaType.Type type, @NonNull final ByteChannel channel, @NonNull final T data) throws IOException {
         getType(type).serializer.serialize(channel, data);
     }
 
-    public static <T> void serialize(final String type, final ByteChannel channel, final T data) throws IOException {
+    public static <T> void serialize(@NonNull final String type, @NonNull final ByteChannel channel, @NonNull final T data) throws IOException {
         getType(type).serializer.serialize(channel, data);
     }
 
-    public static <T> void serializeWithType(final QMetaType.Type type, final ByteChannel channel, final T data) throws IOException {
+    public static <T> void serializeWithType(@NonNull final QMetaType.Type type, @NonNull final ByteChannel channel, @NonNull final T data) throws IOException {
         serialize(QMetaType.Type.UInt, channel, type.getValue());
         serialize(type, channel, data);
     }
 
+    @NonNull
     public static <T> PrimitiveSerializer<T> getSerializer(String typeName) {
         return (PrimitiveSerializer<T>) stringSerializerMap.get(typeName).serializer;
     }
 
+    @NonNull
     public static <T> PrimitiveSerializer<T> getSerializer(QMetaType.Type type) {
         return (PrimitiveSerializer<T>) typeSerializerMap.get(type);
     }
 
-    public static <T> QMetaType<T> getType(String typeName) {
+    @NonNull
+    public static <T> QMetaType<T> getType(@NonNull String typeName) {
         return getMetaTypeByString(typeName);
     }
 
-    private static <T> QMetaType<T> getMetaTypeByString(String typeName) {
+    @NonNull
+    private static <T> QMetaType<T> getMetaTypeByString(@NonNull String typeName) {
         QMetaType<T> result = stringSerializerMap.get(typeName);
-        if (result == null || result.serializer == null) {
-            throw new RuntimeException("Unknown type: " + typeName);
-        }
+        assertNotNull(String.format("Unknown type %s", typeName), result);
+        assertNotNull(String.format("Unknown type %s", typeName), result.serializer);
+
         return result;
     }
 
-    public static <T> QMetaType<T> getType(QMetaType.Type type) {
+    @NonNull
+    public static <T> QMetaType<T> getType(@NonNull QMetaType.Type type) {
         return getMetaTypeByType(type);
     }
 
-    private static <T> QMetaType<T> getMetaTypeByType(QMetaType.Type type) {
+    @NonNull
+    private static <T> QMetaType<T> getMetaTypeByType(@NonNull QMetaType.Type type) {
         QMetaType<T> result = typeSerializerMap.get(type);
-        if (result == null || result.serializer == null) {
-            throw new RuntimeException("Unknown type: " + type.toString());
-        }
+        assertNotNull(String.format("Unknown type %s", type.toString()), result);
+        assertNotNull(String.format("Unknown type %s", type.toString()), result.serializer);
+
         return result;
     }
 
-    public static <T> QMetaType<T> getTypeByObject(T type) {
+    @NonNull
+    public static <T> QMetaType<T> getTypeByObject(@NonNull T type) {
         if (type instanceof Void) return getMetaTypeByType(QMetaType.Type.Void);
         else if (type instanceof Boolean)
             return getMetaTypeByType(QMetaType.Type.Bool);
@@ -246,6 +265,6 @@ public class QMetaTypeRegistry {
         else if (type instanceof Message) return stringSerializerMap.get("Message");
         else if (type instanceof BufferInfo) return stringSerializerMap.get("BufferInfo");
         else
-            throw new IllegalArgumentException("Unsupported data type: " + type.getClass().getSimpleName());
+            throw new AssertionError("Unsupported data type: " + type.getClass().getSimpleName());
     }
 }

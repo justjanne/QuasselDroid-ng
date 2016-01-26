@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.primitives.serializers;
 
+import android.support.annotation.NonNull;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
 import org.joda.time.DateTimeZone;
@@ -8,22 +10,26 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
 
+import de.kuschku.util.Objects;
+
 public class DateTimeSerializer implements PrimitiveSerializer<DateTime> {
+    @NonNull
     private static final DateTimeSerializer serializer = new DateTimeSerializer();
 
     private DateTimeSerializer() {
     }
 
+    @NonNull
     public static DateTimeSerializer get() {
         return serializer;
     }
 
     @Override
-    public void serialize(final ByteChannel channel, final DateTime data) throws IOException {
+    public void serialize(@NonNull final ByteChannel channel, @NonNull final DateTime data) throws IOException {
         final boolean isUTC;
         final DateTimeZone zone = data.getZone();
-        if (zone.equals(DateTimeZone.UTC)) isUTC = true;
-        else if (zone.equals(DateTimeZone.getDefault())) isUTC = false;
+        if (Objects.equals(zone, DateTimeZone.UTC)) isUTC = true;
+        else if (Objects.equals(zone, DateTimeZone.getDefault())) isUTC = false;
             // TODO: Add serialization for other timezones
         else
             throw new IllegalArgumentException("Serialization of timezones except for local and UTC is not supported");
@@ -34,8 +40,9 @@ public class DateTimeSerializer implements PrimitiveSerializer<DateTime> {
         BoolSerializer.get().serialize(channel, isUTC);
     }
 
+    @NonNull
     @Override
-    public DateTime deserialize(final ByteBuffer buffer) throws IOException {
+    public DateTime deserialize(@NonNull final ByteBuffer buffer) throws IOException {
         final long julianDay = IntSerializer.get().deserialize(buffer);
         final int millisSinceMidnight = IntSerializer.get().deserialize(buffer);
 

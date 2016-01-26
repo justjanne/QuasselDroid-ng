@@ -1,9 +1,15 @@
 package de.kuschku.util;
 
+import android.support.annotation.Nullable;
 import android.support.design.BuildConfig;
 
-@SuppressWarnings("unused")
-public class AndroidAssert {
+import junit.framework.Assert;
+
+/**
+ * Class to provide the Assert functionality of JUnit at runtime for debug builds
+ */
+@SuppressWarnings({"unused", "WeakerAccess", "Contract"})
+public class AndroidAssert extends Assert {
     private AndroidAssert() {
     }
 
@@ -16,6 +22,16 @@ public class AndroidAssert {
     public static void assertTrue(boolean condition) {
         if (BuildConfig.DEBUG) {
             if (!condition) fail();
+        }
+    }
+
+    public static void assertTrueOrNotNull(boolean condition, @Nullable Object... nonNull) {
+        if (BuildConfig.DEBUG) {
+            if (condition) return;
+            if (nonNull == null) fail();
+            for (Object o : nonNull) {
+                if (o == null) fail();
+            }
         }
     }
 
@@ -163,25 +179,25 @@ public class AndroidAssert {
         }
     }
 
-    public static void assertNotNull(Object object) {
+    public static void assertNotNull(@Nullable Object object) {
         if (BuildConfig.DEBUG) {
             assertTrue(object != null);
         }
     }
 
-    public static void assertNotNull(String message, Object object) {
+    public static void assertNotNull(@Nullable String message, @Nullable Object object) {
         if (BuildConfig.DEBUG) {
             assertTrue(message, object != null);
         }
     }
 
-    public static void assertNull(Object object) {
+    public static void assertNull(@Nullable Object object) {
         if (BuildConfig.DEBUG) {
             assertTrue(object == null);
         }
     }
 
-    public static void assertNull(String message, Object object) {
+    public static void assertNull(String message, @Nullable Object object) {
         if (BuildConfig.DEBUG) {
             assertTrue(message, object == null);
         }

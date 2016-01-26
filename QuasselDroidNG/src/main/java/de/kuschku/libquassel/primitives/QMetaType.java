@@ -23,6 +23,9 @@
 
 package de.kuschku.libquassel.primitives;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.io.IOException;
 import java.util.Locale;
 
@@ -36,24 +39,27 @@ import de.kuschku.libquassel.primitives.serializers.PrimitiveSerializer;
  * @author Martin Sandsmark
  */
 public class QMetaType<T> {
+    @NonNull
     public final Type type;
+    @NonNull
     public final String name;
+    @NonNull
     public final Class cl;
     public final PrimitiveSerializer<T> serializer;
 
-    public QMetaType(Class cl, Type type) {
+    public QMetaType(@NonNull Class cl, @NonNull Type type) {
         this(cl, type, type.getSerializableName());
     }
 
-    public QMetaType(Class cl, Type type, String name) {
+    public QMetaType(@NonNull Class cl, @NonNull Type type, @NonNull String name) {
         this(cl, type, name, null);
     }
 
-    public QMetaType(Class cl, Type type, PrimitiveSerializer<T> serializer) {
+    public QMetaType(@NonNull Class cl, @NonNull Type type, @Nullable PrimitiveSerializer<T> serializer) {
         this(cl, type, type.getSerializableName(), serializer);
     }
 
-    public QMetaType(Class cl, Type type, String name, PrimitiveSerializer<T> serializer) {
+    public QMetaType(@NonNull Class cl, @NonNull Type type, @NonNull String name, @Nullable PrimitiveSerializer<T> serializer) {
         this.cl = cl;
         this.type = type;
         this.name = name;
@@ -61,6 +67,7 @@ public class QMetaType<T> {
 
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "QMetaType{" +
@@ -157,12 +164,13 @@ public class QMetaType<T> {
         UserType(127),
         LastType(0xffffffff);
 
-        int value;
+        final int value;
 
         Type(int value) {
             this.value = value;
         }
 
+        @NonNull
         public static Type fromId(int id) throws IOException {
             switch (id) {
                 case 0:
@@ -327,6 +335,7 @@ public class QMetaType<T> {
             return value;
         }
 
+        @NonNull
         public String getSerializableName() {
             if (name().startsWith("Q")) return name();
             else return name().toLowerCase(Locale.ENGLISH);

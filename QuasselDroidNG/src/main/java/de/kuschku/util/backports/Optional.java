@@ -1,25 +1,35 @@
 package de.kuschku.util.backports;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
 
 public interface Optional<T> {
-    Optional<T> filter(Predicate<? super T> predicate);
+    @NonNull
+    Optional<T> filter(@NonNull Predicate<? super T> predicate);
 
-    <U> Optional<U> flatMap(Function<? super T, Optional<U>> mapper);
+    @Nullable
+    <U> Optional<U> flatMap(@NonNull Function<? super T, Optional<U>> mapper);
 
-    <U> Optional<U> map(Function<? super T, U> mapper);
+    @NonNull
+    <U> Optional<U> map(@NonNull Function<? super T, U> mapper);
 
+    @Nullable
     T get();
 
-    void ifPresent(Consumer<? super T> consumer);
+    void ifPresent(@NonNull Consumer<? super T> consumer);
 
     boolean isPresent();
 
-    T orElse(T other);
+    @NonNull
+    T orElse(@NonNull T other);
 
-    T orElseGet(Supplier<? extends T> other);
+    @Nullable
+    T orElseGet(@NonNull Supplier<? extends T> other);
 
-    <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X;
+    @NonNull
+    <X extends Throwable> T orElseThrow(@NonNull Supplier<? extends X> exceptionSupplier) throws X;
 }

@@ -1,5 +1,8 @@
 package de.kuschku.util.backports;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -13,22 +16,23 @@ import java.util.List;
 import de.kuschku.util.backports.collectors.Collectors;
 
 public class Stream<T> {
-    List<T> list;
+    @NonNull
+    private final List<T> list;
 
-    public Stream(List<T> list) {
+    public Stream(@NonNull List<T> list) {
         this.list = list;
     }
 
-    public Stream(Collection<T> observers) {
+    public Stream(@NonNull Collection<T> observers) {
         list = new ArrayList<>(observers);
     }
 
-    public boolean allMatch(Predicate<T> predicate) {
+    public boolean allMatch(@NonNull Predicate<T> predicate) {
         return filter(predicate).count() == count();
     }
 
 
-    public boolean anyMatch(Predicate<T> predicate) {
+    public boolean anyMatch(@NonNull Predicate<T> predicate) {
         return filter(predicate).count() > 0;
     }
 
@@ -38,11 +42,13 @@ public class Stream<T> {
     }
 
 
+    @NonNull
     public Stream<T> filter(Predicate<? super T> predicate) {
         return new Stream<>(Lists.newArrayList(Collections2.filter(list, predicate)));
     }
 
 
+    @NonNull
     public Optional<T> findFirst() {
         if (list.size() > 0) {
             return Optionals.of(list.get(0));
@@ -52,33 +58,37 @@ public class Stream<T> {
     }
 
 
+    @NonNull
     public Optional<T> findAny() {
         return findFirst();
     }
 
 
-    public <S> Stream<S> map(Function<T, S> function) {
+    @NonNull
+    public <S> Stream<S> map(@NonNull Function<T, S> function) {
         return new Stream<>(Lists.transform(list, function));
     }
 
 
-    public void forEach(Consumer<T> function) {
+    public void forEach(@NonNull Consumer<T> function) {
         for (T elem : Collectors.toList(this)) {
             function.apply(elem);
         }
     }
 
 
+    @NonNull
     public Stream<T> limit(int maxSize) {
         return new Stream<>(list.subList(0, Math.min(maxSize, list.size())));
     }
 
 
-    public boolean noneMatch(Predicate<T> predicate) {
+    public boolean noneMatch(@NonNull Predicate<T> predicate) {
         return !anyMatch(predicate);
     }
 
 
+    @NonNull
     public Stream<T> skip(int n) {
         if (count() <= n) {
             return new Stream<>(Lists.newArrayList());
@@ -88,15 +98,18 @@ public class Stream<T> {
     }
 
 
-    public <R> R collect(ICollector<T, R> collector) {
-        return null;
+    @Nullable
+    public <R> R collect(@NonNull ICollector<T, R> collector) {
+        return collector.collect(this);
     }
 
 
+    @NonNull
     public Iterator<T> iterator() {
-        return null;
+        return list.iterator();
     }
 
+    @NonNull
     public List<T> list() {
         return list;
     }

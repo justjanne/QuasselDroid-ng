@@ -23,7 +23,8 @@ android {
 
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
-                    output.outputFile = new File(output.outputFile.parent, output.outputFile.name.replace(".apk", "-" + defaultConfig.versionName + "-build" + versionCode + ".apk"))
+                    def fileName = output.outputFile.name.replace(".apk", String.format("-%s-build%d.apk", defaultConfig.versionName, versionCode))
+                    output.outputFile = new File(output.outputFile.parent, fileName)
                 }
             }
         }

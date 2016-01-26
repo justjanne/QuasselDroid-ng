@@ -1,5 +1,6 @@
 package de.kuschku.libquassel.events;
 
+@SuppressWarnings("WeakerAccess")
 public class GeneralErrorEvent {
     public String debugInfo;
     public Exception exception;

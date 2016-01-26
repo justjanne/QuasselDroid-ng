@@ -1,13 +1,17 @@
 package de.kuschku.libquassel.objects.types;
 
+import android.support.annotation.NonNull;
+
 public class ClientInit {
+    @NonNull
     public final String ClientDate;
     public final boolean UseSsl;
+    @NonNull
     public final String ClientVersion;
     public final boolean UseCompression;
     public final int ProtocolVersion;
 
-    public ClientInit(String clientDate, boolean useSsl, String clientVersion, boolean useCompression,
+    public ClientInit(@NonNull String clientDate, boolean useSsl, @NonNull String clientVersion, boolean useCompression,
                       int protocolVersion) {
         ClientDate = clientDate;
         UseSsl = useSsl;
@@ -16,6 +20,7 @@ public class ClientInit {
         ProtocolVersion = protocolVersion;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ClientInit{" +

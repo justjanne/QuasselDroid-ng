@@ -1,13 +1,18 @@
 package de.kuschku.libquassel.primitives.types;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 public class BufferInfo {
     public final int id;
     public final int networkId;
+    @NonNull
     public final Type type;
     public final int groupId;
+    @Nullable
     public final String name;
 
-    public BufferInfo(int id, int networkId, Type type, int groupId, String name) {
+    public BufferInfo(int id, int networkId, @NonNull Type type, int groupId, @Nullable String name) {
         this.id = id;
         this.networkId = networkId;
         this.type = type;
@@ -15,6 +20,7 @@ public class BufferInfo {
         this.name = name;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "BufferInfo{" +
@@ -43,6 +49,7 @@ public class BufferInfo {
             this((short) id);
         }
 
+        @NonNull
         public static Type fromId(short id) {
             switch (id) {
                 case 0x01:

@@ -3,23 +3,30 @@ package de.kuschku.util.ui;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
+import android.support.v7.view.ContextThemeWrapper;
 
 import de.kuschku.quasseldroid_ng.R;
+import de.kuschku.quasseldroid_ng.ui.Themes;
 import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.annotationbind.AutoColor;
 
 public class ThemeUtil {
-    public final Colors colors = new Colors();
+    @NonNull public final Colors colors = new Colors();
 
-    public ThemeUtil(Context ctx) {
-        initColors(ctx.getTheme());
+    public ThemeUtil(@NonNull Context ctx) {
+        initColors(new ContextThemeWrapper(ctx, ctx.getTheme()));
+    }
+
+    public ThemeUtil(@NonNull Context ctx, @NonNull Themes theme) {
+        initColors(new ContextThemeWrapper(ctx, theme.themeId));
     }
 
     @UiThread
-    public void initColors(Resources.Theme theme) {
+    public void initColors(@NonNull ContextThemeWrapper wrapper) {
         try {
-            AutoBinder.bind(colors, theme);
+            AutoBinder.bind(colors, wrapper);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }

@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.objects;
 
+import android.support.annotation.NonNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,8 +18,12 @@ import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.objects.serializers.SessionInitSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
+import static de.kuschku.util.AndroidAssert.*;
+
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 public class MessageTypeRegistry {
-    private static Map<String, ObjectSerializer> serializerMap = new HashMap<String, ObjectSerializer>();
+    @NonNull
+    private static final Map<String, ObjectSerializer> serializerMap = new HashMap<>();
 
     static {
         serializerMap.put("ClientInit", ClientInitSerializer.get());
@@ -37,7 +43,8 @@ public class MessageTypeRegistry {
 
     }
 
-    public static <T> T from(final Map<String, QVariant> function) {
+    @NonNull
+    public static <T> T from(@NonNull final Map<String, QVariant> function) {
         final String msgType = (String) function.get("MsgType").data;
         if (serializerMap.containsKey(msgType))
             return (T) serializerMap.get(msgType).fromLegacy(function);
@@ -45,12 +52,12 @@ public class MessageTypeRegistry {
             throw new IllegalArgumentException(String.format("Unknown MessageType: %s", msgType));
     }
 
-    public static <T> QVariant<Map<String, QVariant>> toVariantMap(final T data) {
-        if (serializerMap.containsKey(data.getClass().getSimpleName())) {
-            final QVariant<Map<String, QVariant>> map = (QVariant<Map<String, QVariant>>) serializerMap.get(data.getClass().getSimpleName()).toVariantMap(data);
-            map.data.put("MsgType", new QVariant(data.getClass().getSimpleName()));
-            return map;
-        } else
-            throw new IllegalArgumentException(String.format("Unknown MessageType: %s", data.getClass().getSimpleName()));
+    @NonNull
+    public static <T> QVariant<Map<String, QVariant>> toVariantMap(@NonNull final T data) {
+        assertTrue(serializerMap.containsKey(data.getClass().getSimpleName()));
+
+        final QVariant<Map<String, QVariant>> map = (QVariant<Map<String, QVariant>>) serializerMap.get(data.getClass().getSimpleName()).toVariantMap(data);
+        map.data.put("MsgType", new QVariant(data.getClass().getSimpleName()));
+        return map;
     }
 }

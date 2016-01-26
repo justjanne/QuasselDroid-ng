@@ -1,5 +1,6 @@
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,32 +18,38 @@ import de.kuschku.util.ui.Bindable;
 
 @UiThread
 public class BufferWrapper implements Nameable<BufferWrapper> {
+    @NonNull
     private final Buffer buffer;
 
-    public BufferWrapper(Buffer buffer) {
+    public BufferWrapper(@NonNull Buffer buffer) {
         this.buffer = buffer;
     }
 
+    @NonNull
     @Override
     public BufferWrapper withName(String name) {
         return this;
     }
 
+    @NonNull
     @Override
     public BufferWrapper withName(int nameRes) {
         return this;
     }
 
+    @NonNull
     @Override
     public BufferWrapper withName(StringHolder name) {
         return this;
     }
 
+    @NonNull
     @Override
     public StringHolder getName() {
         return new StringHolder(buffer.getName());
     }
 
+    @NonNull
     public Buffer getBuffer() {
         return buffer;
     }
@@ -59,12 +66,12 @@ public class BufferWrapper implements Nameable<BufferWrapper> {
         @Bind(R.id.material_drawer_badge)
         TextView materialDrawerBadge;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(BufferWrapper wrapper) {
+        public void bind(@NonNull BufferWrapper wrapper) {
             materialDrawerName.setText(wrapper.getName().getText());
         }
     }

@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.syncables.types;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import de.kuschku.libquassel.BusProvider;
@@ -225,6 +227,7 @@ public class Identity extends SyncableObject {
         this.kickReason = kickReason;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Identity{" +
@@ -251,7 +254,7 @@ public class Identity extends SyncableObject {
     }
 
     @Override
-    public void init(InitDataFunction function, BusProvider provider, Client client) {
+    public void init(@NonNull InitDataFunction function, @NonNull BusProvider provider, @NonNull Client client) {
 
     }
 }

@@ -1,6 +1,7 @@
 package de.kuschku.libquassel.message;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
@@ -12,15 +13,21 @@ import de.kuschku.util.observables.ContentComparable;
 
 public class Message implements ContentComparable<Message> {
     public final int messageId;
+    @NonNull
     public final DateTime time;
+    @NonNull
     public final Type type;
+    @NonNull
     public final Flags flags;
+    @NonNull
     public final BufferInfo bufferInfo;
+    @NonNull
     public final String sender;
+    @NonNull
     public final String content;
 
-    public Message(int messageId, DateTime time, Type type, Flags flags, BufferInfo bufferInfo, String sender,
-                   String content) {
+    public Message(int messageId, @NonNull DateTime time, @NonNull Type type, @NonNull Flags flags, @NonNull BufferInfo bufferInfo, @NonNull String sender,
+                   @NonNull String content) {
         this.messageId = messageId;
         this.time = time;
         this.type = type;
@@ -30,6 +37,7 @@ public class Message implements ContentComparable<Message> {
         this.content = content;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Message{" +
@@ -44,22 +52,20 @@ public class Message implements ContentComparable<Message> {
     }
 
     @Override
-    public boolean equalsContent(Message message) {
+    public boolean equalsContent(@NonNull Message message) {
         return messageId == message.messageId &&
-                !(time != null ? !time.equals(message.time) : message.time != null) &&
+                time.equals(message.time) &&
                 type == message.type &&
-                !(flags != null ? !flags.equals(message.flags) : message.flags != null) &&
-                !(bufferInfo != null ? !bufferInfo.equals(message.bufferInfo) : message.bufferInfo != null) &&
-                !(sender != null ? !sender.equals(message.sender) : message.sender != null) &&
-                !(content != null ? !content.equals(message.content) : message.content != null);
+                flags.equals(message.flags) &&
+                bufferInfo.equals(message.bufferInfo) &&
+                sender.equals(message.sender) &&
+                content.equals(message.content);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(@Nullable Object o) {
+        return this == o || !(o == null || getClass() != o.getClass()) && messageId == ((Message) o).messageId;
 
-        return messageId == ((Message) o).messageId;
     }
 
     @Override
@@ -98,6 +104,7 @@ public class Message implements ContentComparable<Message> {
             this.value = value;
         }
 
+        @NonNull
         public static Type fromId(int id) {
             switch (id) {
                 case 0x00001:
@@ -174,6 +181,7 @@ public class Message implements ContentComparable<Message> {
             Backlog = (0 != (flags & 0x80));
         }
 
+        @NonNull
         @Override
         public String toString() {
             final StringBuilder output = new StringBuilder("Flags[, ");
@@ -191,12 +199,12 @@ public class Message implements ContentComparable<Message> {
 
     public static class MessageComparator implements Comparator<Message>, Serializable {
         @Override
-        public int compare(Message o1, Message o2) {
+        public int compare(@NonNull Message o1, @NonNull Message o2) {
             return o1.messageId - o2.messageId;
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(@Nullable Object obj) {
             return obj == this;
         }
     }

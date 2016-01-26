@@ -1,5 +1,6 @@
 package de.kuschku.libquassel;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
@@ -19,20 +20,24 @@ import de.kuschku.libquassel.objects.types.ClientLoginReject;
 import de.kuschku.libquassel.objects.types.SessionInit;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.SyncableRegistry;
+import de.kuschku.libquassel.syncables.types.SyncableObject;
+import de.kuschku.util.AndroidAssert;
 import de.kuschku.util.ReflectionUtils;
 
 public class ProtocolHandler implements IProtocolHandler {
+    @NonNull
     public final Client client;
-    private BusProvider busProvider;
+    @NonNull
+    private final BusProvider busProvider;
 
-    public ProtocolHandler(BusProvider busProvider) {
+    public ProtocolHandler(@NonNull BusProvider busProvider) {
         this.busProvider = busProvider;
         this.busProvider.handle.register(this);
         this.busProvider.event.register(this);
         this.client = new Client(busProvider);
     }
 
-    public void onEventMainThread(InitDataFunction packedFunc) {
+    public void onEventMainThread(@NonNull InitDataFunction packedFunc) {
         try {
             if (client.getConnectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
                 if (!packedFunc.className.equals("IrcUser"))
@@ -45,7 +50,10 @@ public class ProtocolHandler implements IProtocolHandler {
                     }
                 }
             }
-            SyncableRegistry.from(packedFunc).init(packedFunc, busProvider, client);
+            SyncableObject object = SyncableRegistry.from(packedFunc);
+            AndroidAssert.assertNotNull(object);
+
+            object.init(packedFunc, busProvider, client);
         } catch (Exception e) {
             busProvider.sendEvent(new GeneralErrorEvent(e));
         }
@@ -54,7 +62,7 @@ public class ProtocolHandler implements IProtocolHandler {
     public void onEventMainThread(InitRequestFunction packedFunc) {
     }
 
-    public void onEventMainThread(RpcCallFunction packedFunc) {
+    public void onEventMainThread(@NonNull RpcCallFunction packedFunc) {
         try {
             if (packedFunc.functionName.substring(0, 1).equals("2")) {
                 ReflectionUtils.invokeMethod(client, packedFunc.functionName.substring(1), packedFunc.params);
@@ -68,7 +76,7 @@ public class ProtocolHandler implements IProtocolHandler {
         }
     }
 
-    public void onEventMainThread(SyncFunction packedFunc) {
+    public void onEventMainThread(@NonNull SyncFunction packedFunc) {
         try {
             final Object syncable = client.getObjectByIdentifier(packedFunc.className, packedFunc.objectName);
             if (syncable != null) {
@@ -81,7 +89,7 @@ public class ProtocolHandler implements IProtocolHandler {
         }
     }
 
-    public void onEventMainThread(ClientInitReject message) {
+    public void onEventMainThread(@NonNull ClientInitReject message) {
         busProvider.sendEvent(new HandshakeFailedEvent(message.Error));
     }
 
@@ -102,11 +110,11 @@ public class ProtocolHandler implements IProtocolHandler {
         client.setConnectionStatus(ConnectionChangeEvent.Status.CONNECTING);
     }
 
-    public void onEventMainThread(ClientLoginReject message) {
+    public void onEventMainThread(@NonNull ClientLoginReject message) {
         busProvider.sendEvent(new LoginFailedEvent(message.Error));
     }
 
-    public void onEventMainThread(SessionInit message) {
+    public void onEventMainThread(@NonNull SessionInit message) {
         client.setState(message.SessionState);
 
         client.setConnectionStatus(ConnectionChangeEvent.Status.INITIALIZING_DATA);
@@ -126,6 +134,7 @@ public class ProtocolHandler implements IProtocolHandler {
         }
     }
 
+    @NonNull
     @Override
     public Client getClient() {
         return client;

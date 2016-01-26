@@ -3,7 +3,6 @@ package de.kuschku.libquassel.primitives.serializers;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -11,11 +10,13 @@ import java.nio.channels.ByteChannel;
 import java.nio.charset.Charset;
 
 public class StringSerializer implements PrimitiveSerializer<String> {
+    @NonNull
     private static final StringSerializer serializer = new StringSerializer();
 
     private StringSerializer() {
     }
 
+    @NonNull
     public static StringSerializer get() {
         return serializer;
     }
@@ -33,7 +34,7 @@ public class StringSerializer implements PrimitiveSerializer<String> {
 
     @Nullable
     @Override
-    public String deserialize(final ByteBuffer buffer) throws IOException {
+    public String deserialize(@NonNull final ByteBuffer buffer) throws IOException {
         final int len = IntSerializer.get().deserialize(buffer);
         if (len == 0xffffffff)
             return null;

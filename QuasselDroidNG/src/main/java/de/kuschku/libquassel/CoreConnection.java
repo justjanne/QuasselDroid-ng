@@ -1,6 +1,8 @@
 package de.kuschku.libquassel;
 
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.IOException;
@@ -29,6 +31,7 @@ import de.kuschku.util.ServerAddress;
 import de.kuschku.util.niohelpers.WrappedChannel;
 
 import static de.kuschku.libquassel.primitives.QMetaType.Type.UInt;
+import static de.kuschku.util.AndroidAssert.*;
 
 /**
  * Starts a connection to a core and handles the data in the backend.
@@ -38,23 +41,34 @@ import static de.kuschku.libquassel.primitives.QMetaType.Type.UInt;
  */
 public class CoreConnection {
 
+    @NonNull
     private final ServerAddress address;
+    @Nullable
     private ExecutorService outputExecutor;
+    @Nullable
     private ExecutorService inputExecutor;
+    @Nullable
     private RemotePeer remotePeer;
-    private ClientData clientData;
-    private BusProvider busProvider;
+    @NonNull
+    private final ClientData clientData;
+    @NonNull
+    private final BusProvider busProvider;
+    @Nullable
     private WrappedChannel channel;
+    @Nullable
     private Socket socket;
-    private ConnectionChangeEvent.Status status;
+    @NonNull
+    private ConnectionChangeEvent.Status status = ConnectionChangeEvent.Status.DISCONNECTED;
+    @Nullable
     private Client client;
 
-    public CoreConnection(final ServerAddress address, final ClientData clientData, final BusProvider busProvider) {
+    public CoreConnection(@NonNull final ServerAddress address, @NonNull final ClientData clientData, @NonNull final BusProvider busProvider) {
         this.address = address;
         this.clientData = clientData;
         this.busProvider = busProvider;
     }
 
+    @NonNull
     public ConnectionChangeEvent.Status getStatus() {
         return status;
     }
@@ -66,6 +80,8 @@ public class CoreConnection {
      * @param supportsKeepAlive If the connection may use keepAlive
      */
     public void open(boolean supportsKeepAlive) throws IOException {
+        assertNotNull(client);
+
         // Intialize socket
         socket = new Socket();
         if (supportsKeepAlive) socket.setKeepAlive(true);
@@ -91,6 +107,8 @@ public class CoreConnection {
      * @throws IOException
      */
     public void close() throws IOException {
+        assertNotNull(client);
+
         client.setConnectionStatus(ConnectionChangeEvent.Status.DISCONNECTED);
 
         // We can do this because we clean up the file handles ourselves
@@ -102,22 +120,29 @@ public class CoreConnection {
         if (socket != null) socket.close();
     }
 
+    @Nullable
     public ExecutorService getOutputExecutor() {
         return outputExecutor;
     }
 
+    @NonNull
     public ClientData getClientData() {
         return clientData;
     }
 
+    @NonNull
     public WrappedChannel getChannel() {
+        assertNotNull(channel);
+
         return channel;
     }
 
+    @Nullable
     public RemotePeer getRemotePeer() {
         return remotePeer;
     }
 
+    @Nullable
     public Socket getSocket() {
         return socket;
     }
@@ -128,6 +153,9 @@ public class CoreConnection {
      * @throws IOException
      */
     private void handshake() throws IOException {
+        assertNotNull(channel);
+        assertNotNull(inputExecutor);
+
         // Start protocol handshake with magic version and feature flags
         QMetaTypeRegistry.serialize(UInt, channel, 0x42b33f00 | clientData.flags.flags);
 
@@ -149,15 +177,15 @@ public class CoreConnection {
         }
     }
 
-    public void onEventAsync(ConnectionChangeEvent event) {
+    public void onEventAsync(@NonNull ConnectionChangeEvent event) {
         this.status = event.status;
     }
 
-    public void setCompression(boolean supportsCompression) throws IOException {
-        if (supportsCompression) channel = WrappedChannel.withCompression(channel);
+    public void setCompression(boolean supportsCompression) {
+        if (supportsCompression) channel = WrappedChannel.withCompression(getChannel());
     }
 
-    public void setClient(Client client) {
+    public void setClient(@NonNull Client client) {
         this.client = client;
     }
 
@@ -165,15 +193,16 @@ public class CoreConnection {
      * A runnable that reads from the channel and calls the functions responsible for processing the read data.
      */
     private class ReadRunnable implements Runnable {
-        public boolean running = true;
-
         @Override
         public void run() {
+            assertNotNull(client);
+
             try {
                 boolean hasReadPreHandshake = false;
-                while (running) {
+                while (true) {
                     if (!hasReadPreHandshake) {
                         final ByteBuffer buffer = ByteBuffer.allocate(4);
+                        assertNotNull(buffer);
                         getChannel().read(buffer);
 
                         final Protocol protocol = ProtocolSerializer.get().deserialize(buffer);
@@ -199,8 +228,10 @@ public class CoreConnection {
                         hasReadPreHandshake = true;
 
                         // Send client data to core
+                        String clientDate = new SimpleDateFormat("MMM dd yyyy HH:mm:ss", Locale.US).format(new Date());
+                        assertNotNull(clientDate);
                         busProvider.dispatch(new HandshakeFunction(new ClientInit(
-                                new SimpleDateFormat("MMM dd yyyy HH:mm:ss", Locale.US).format(new Date()),
+                                clientDate,
                                 protocol.protocolFlags.supportsSSL,
                                 getClientData().identifier,
                                 false,

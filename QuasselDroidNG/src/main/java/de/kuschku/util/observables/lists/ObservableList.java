@@ -6,32 +6,30 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import de.kuschku.util.observables.callbacks.UIChildCallback;
 import de.kuschku.util.observables.callbacks.wrappers.MultiUICallbackWrapper;
 import de.kuschku.util.observables.callbacks.UICallback;
 
 public class ObservableList<T> extends ArrayList<T> implements IObservableList<UICallback, T> {
-    MultiUICallbackWrapper callback = MultiUICallbackWrapper.of();
+    @NonNull
+    private final MultiUICallbackWrapper callback = MultiUICallbackWrapper.of();
+
+    public ObservableList() {
+        super();
+    }
 
     public ObservableList(int capacity) {
         super(capacity);
-        this.callback = callback;
     }
 
-    public ObservableList() {
-        this.callback = callback;
-    }
-
-    public ObservableList(Collection<? extends T> collection) {
+    public ObservableList(@NonNull Collection<? extends T> collection) {
         super(collection);
-        this.callback = callback;
     }
 
-    public void addCallback(UICallback callback) {
+    public void addCallback(@NonNull UICallback callback) {
         this.callback.addCallback(callback);
     }
 
-    public void removeCallback(UICallback callback) {
+    public void removeCallback(@NonNull UICallback callback) {
         this.callback.removeCallback(callback);
     }
 
@@ -52,12 +50,12 @@ public class ObservableList<T> extends ArrayList<T> implements IObservableList<U
     }
 
     @Override
-    public boolean addAll(Collection<? extends T> collection) {
+    public boolean addAll(@NonNull Collection<? extends T> collection) {
         return addAll(getPosition(), collection);
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends T> collection) {
+    public boolean addAll(int index, @NonNull Collection<? extends T> collection) {
         boolean result = super.addAll(index, collection);
         if (result)
             callback.notifyItemRangeInserted(index, collection.size());
@@ -87,16 +85,6 @@ public class ObservableList<T> extends ArrayList<T> implements IObservableList<U
     protected void removeRange(int fromIndex, int toIndex) {
         super.removeRange(fromIndex, toIndex);
         callback.notifyItemRangeRemoved(fromIndex, toIndex - fromIndex);
-    }
-
-    @Override
-    public boolean removeAll(@NonNull Collection<?> collection) {
-        return super.removeAll(collection);
-    }
-
-    @Override
-    public boolean retainAll(@NonNull Collection<?> collection) {
-        return super.retainAll(collection);
     }
 
     @Override

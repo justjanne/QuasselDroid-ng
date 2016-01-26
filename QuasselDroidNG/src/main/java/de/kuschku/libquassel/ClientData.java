@@ -1,21 +1,26 @@
 package de.kuschku.libquassel;
 
+import android.support.annotation.NonNull;
+
 import java.util.Arrays;
 
 public class ClientData {
     /**
      * The flags the client supports.
      */
+    @NonNull
     public final FeatureFlags flags;
 
     /**
      * The list of protocols supported, 0x01 is Legacy and 0x02 is Datastream.
      */
-    public final int[] supportedProtocols;
+    @NonNull
+    public final byte[] supportedProtocols;
 
     /**
      * A string identifying the client.
      */
+    @NonNull
     public final String identifier;
 
     /**
@@ -23,17 +28,19 @@ public class ClientData {
      */
     public final int protocolVersion;
 
-    public ClientData(FeatureFlags flags, int[] supportedProtocols, String identifier, int protocolVersion) {
+    public ClientData(@NonNull FeatureFlags flags, @NonNull byte[] supportedProtocols, @NonNull String identifier, int protocolVersion) {
         this.flags = flags;
-        this.supportedProtocols = supportedProtocols.clone();
+        this.supportedProtocols = supportedProtocols;
         this.identifier = identifier;
         this.protocolVersion = protocolVersion;
     }
 
-    public int[] getSupportedProtocols() {
+    @NonNull
+    public byte[] getSupportedProtocols() {
         return supportedProtocols;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ClientData{" +
@@ -62,6 +69,7 @@ public class ClientData {
                     (this.supportsCompression ? 0x02 : 0x00));
         }
 
+        @NonNull
         @Override
         public String toString() {
             return "FeatureFlags{" +

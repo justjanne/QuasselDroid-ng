@@ -1,5 +1,7 @@
 package de.kuschku.util.irc;
 
+import android.support.annotation.NonNull;
+
 import java.nio.charset.Charset;
 import java.util.Locale;
 
@@ -8,13 +10,14 @@ public class IrcUserUtils {
 
     }
 
-    public static int getSenderColor(String nick) {
+    public static int getSenderColor(@NonNull String nick) {
         nick = trimEnd(nick, '_').toLowerCase(Locale.US);
         byte[] data = nick.getBytes(Charset.forName("ISO-8859-1"));
         return (0xf & CRCUtils.qChecksum(data));
     }
 
-    public static String trimEnd(String str, char character) {
+    @NonNull
+    private static String trimEnd(@NonNull String str, char character) {
         char[] val = str.toCharArray();
         int len = val.length;
         while ((0 < len) && (val[len - 1] == character)) {
@@ -28,7 +31,7 @@ public class IrcUserUtils {
 
         }
 
-        public static int qChecksum(byte[] data) {
+        public static int qChecksum(@NonNull byte[] data) {
             int crc = 0xffff;
             int crcHighBitMask = 0x8000;
 
@@ -65,20 +68,23 @@ public class IrcUserUtils {
         }
     }
 
-    public static String getNick(String hostmask) {
+    @NonNull
+    public static String getNick(@NonNull String hostmask) {
         return hostmask.split("!")[0];
     }
 
-    public static String getUser(String hostmask) {
+    @NonNull
+    public static String getUser(@NonNull String hostmask) {
         return getMask(hostmask).split("@")[0];
     }
 
-    public static String getHost(String hostmask) {
+    @NonNull
+    public static String getHost(@NonNull String hostmask) {
         return getMask(hostmask).split("@")[1];
     }
 
-
-    public static String getMask(String hostmask) {
+    @NonNull
+    public static String getMask(@NonNull String hostmask) {
         return hostmask.split("!")[1];
     }
 }

@@ -1,5 +1,7 @@
 package de.kuschku.util.backports.collectors;
 
+import android.support.annotation.NonNull;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +10,9 @@ import de.kuschku.util.backports.ICollector;
 import de.kuschku.util.backports.Stream;
 
 public class MapCollector<T> implements ICollector<T, Map<T, T>> {
+    @NonNull
     @Override
-    public Map<T, T> collect(Stream<T> stream) {
+    public Map<T, T> collect(@NonNull Stream<T> stream) {
         Map<T, T> map = new HashMap<>(stream.count() / 2);
 
         if (stream.count() % 2 == 1)

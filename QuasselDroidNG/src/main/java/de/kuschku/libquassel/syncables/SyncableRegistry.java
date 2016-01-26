@@ -1,5 +1,8 @@
 package de.kuschku.libquassel.syncables;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +19,7 @@ import de.kuschku.libquassel.syncables.serializers.NetworkSerializer;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
 
 public class SyncableRegistry {
+    @NonNull
     private static final Map<String, ObjectSerializer<? extends SyncableObject>> map = new HashMap<>();
 
     static {
@@ -32,7 +36,8 @@ public class SyncableRegistry {
 
     }
 
-    public static SyncableObject from(InitDataFunction function) throws UnknownTypeException {
+    @Nullable
+    public static SyncableObject from(@NonNull InitDataFunction function) throws UnknownTypeException {
         ObjectSerializer<? extends SyncableObject> serializer = map.get(function.className);
         if (serializer == null) throw new UnknownTypeException(function.className);
         return serializer.from(function);

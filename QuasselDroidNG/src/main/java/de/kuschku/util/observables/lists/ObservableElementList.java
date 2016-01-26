@@ -10,7 +10,8 @@ import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.wrappers.MultiElementCallbackWrapper;
 
 public class ObservableElementList<T> extends ArrayList<T> implements IObservableList<ElementCallback<T>, T> {
-    MultiElementCallbackWrapper<T> callback = MultiElementCallbackWrapper.<T>of();
+    @NonNull
+    private final MultiElementCallbackWrapper<T> callback = MultiElementCallbackWrapper.<T>of();
 
     public ObservableElementList(int capacity) {
         super(capacity);
@@ -20,15 +21,15 @@ public class ObservableElementList<T> extends ArrayList<T> implements IObservabl
         super();
     }
 
-    public ObservableElementList(Collection<? extends T> collection) {
+    public ObservableElementList(@NonNull Collection<? extends T> collection) {
         super(collection);
     }
 
-    public void addCallback(ElementCallback<T> callback) {
+    public void addCallback(@NonNull ElementCallback<T> callback) {
         this.callback.addCallback(callback);
     }
 
-    public void removeCallback(ElementCallback<T> callback) {
+    public void removeCallback(@NonNull ElementCallback<T> callback) {
         this.callback.removeCallback(callback);
     }
 
@@ -86,16 +87,6 @@ public class ObservableElementList<T> extends ArrayList<T> implements IObservabl
         for (int i = fromIndex; i < toIndex; i++) {
             remove(get(i));
         }
-    }
-
-    @Override
-    public boolean removeAll(@NonNull Collection<?> collection) {
-        return super.removeAll(collection);
-    }
-
-    @Override
-    public boolean retainAll(@NonNull Collection<?> collection) {
-        return super.retainAll(collection);
     }
 
     @Override

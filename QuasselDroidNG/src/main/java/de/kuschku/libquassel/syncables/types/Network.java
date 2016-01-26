@@ -1,6 +1,7 @@
 package de.kuschku.libquassel.syncables.types;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,36 +19,54 @@ import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.util.observables.ContentComparable;
 
+import static de.kuschku.util.AndroidAssert.*;
+
 public class Network extends SyncableObject implements ContentComparable<Network> {
+    @NonNull
     private Map<String, IrcUser> users;
+    @NonNull
     private Map<String, IrcChannel> channels;
 
-    private Set<Buffer> buffers = new HashSet<>();
+    @NonNull
+    private final Set<Buffer> buffers = new HashSet<>();
 
+    @NonNull
     private List<NetworkServer> ServerList;
+    @NonNull
     private Map<String, String> Supports;
 
+    @Nullable
     private String autoIdentifyPassword;
+    @Nullable
     private String autoIdentifyService;
 
     private int autoReconnectInterval;
     private short autoReconnectRetries;
 
+    @Nullable
     private String codecForDecoding;
+    @Nullable
     private String codecForEncoding;
+    @Nullable
     private String codecForServer;
 
     private int connectionState;
+    @Nullable
     private String currentServer;
     private int identityId;
     private boolean isConnected;
     private int latency;
+    @Nullable
     private String myNick;
+    @Nullable
     private String networkName;
+    @NonNull
     private List<String> perform;
     private boolean rejoinChannels;
 
+    @Nullable
     private String saslAccount;
+    @Nullable
     private String saslPassword;
 
     private boolean unlimitedReconnectRetries;
@@ -56,47 +75,56 @@ public class Network extends SyncableObject implements ContentComparable<Network
     private boolean useRandomServer;
     private boolean useSasl;
 
+    @Nullable
     private Map<String, IrcMode> supportedModes;
     private int networkId;
 
-    public Network(Map<String, IrcChannel> channels, Map<String, IrcUser> users, List<NetworkServer> serverList, Map<String, String> supports, String autoIdentifyPassword,
-                   String autoIdentifyService, int autoReconnectInterval, short autoReconnectRetries,
-                   String codecForDecoding, String codecForEncoding, String codecForServer, int connectionState,
-                   String currentServer, int identityId, boolean isConnected, int latency, String myNick,
-                   String networkName, List<String> perform, boolean rejoinChannels, String saslAccount,
-                   String saslPassword, boolean unlimitedReconnectRetries, boolean useAutoIdentify,
+    public Network(@NonNull Map<String, IrcChannel> channels, @NonNull Map<String, IrcUser> users,
+                   @NonNull List<NetworkServer> serverList, @NonNull Map<String, String> supports,
+                   @NonNull String autoIdentifyPassword,  @NonNull String autoIdentifyService,
+                   int autoReconnectInterval, short autoReconnectRetries,
+                   @NonNull String codecForDecoding, @NonNull String codecForEncoding,
+                   @NonNull String codecForServer, int connectionState,
+                   @NonNull String currentServer, int identityId, boolean isConnected, int latency,
+                   @NonNull String myNick, @NonNull String networkName,
+                   @NonNull List<String> perform, boolean rejoinChannels,
+                   @NonNull String saslAccount, @NonNull String saslPassword,
+                   boolean unlimitedReconnectRetries, boolean useAutoIdentify,
                    boolean useAutoReconnect, boolean useRandomServer, boolean useSasl) {
-        this.setChannels(channels);
-        this.setUsers(users);
-        this.setServerList(serverList);
-        this.setSupports(supports);
-        this.setAutoIdentifyPassword(autoIdentifyPassword);
-        this.setAutoIdentifyService(autoIdentifyService);
-        this.setAutoReconnectInterval(autoReconnectInterval);
-        this.setAutoReconnectRetries(autoReconnectRetries);
-        this.setCodecForDecoding(codecForDecoding);
-        this.setCodecForEncoding(codecForEncoding);
-        this.setCodecForServer(codecForServer);
-        this.setConnectionState(connectionState);
-        this.setCurrentServer(currentServer);
-        this.setIdentityId(identityId);
-        this.setConnected(isConnected);
-        this.setLatency(latency);
-        this.setMyNick(myNick);
-        this.setNetworkName(networkName);
-        this.setPerform(perform);
-        this.setRejoinChannels(rejoinChannels);
-        this.setSaslAccount(saslAccount);
-        this.setSaslPassword(saslPassword);
-        this.setUnlimitedReconnectRetries(unlimitedReconnectRetries);
-        this.setUseAutoIdentify(useAutoIdentify);
-        this.setUseAutoReconnect(useAutoReconnect);
-        this.setUseRandomServer(useRandomServer);
-        this.setUseSasl(useSasl);
+        this.channels = channels;
+        this.users = users;
+        this.ServerList = serverList;
+        this.Supports = supports;
+        this.autoIdentifyPassword = autoIdentifyPassword;
+        this.autoIdentifyService = autoIdentifyService;
+        this.autoReconnectInterval = autoReconnectInterval;
+        this.autoReconnectRetries = autoReconnectRetries;
+        this.codecForDecoding = codecForDecoding;
+        this.codecForEncoding = codecForEncoding;
+        this.codecForServer = codecForServer;
+        this.connectionState = connectionState;
+        this.currentServer = currentServer;
+        this.identityId = identityId;
+        this.isConnected = isConnected;
+        this.latency = latency;
+        this.myNick = myNick;
+        this.networkName = networkName;
+        this.perform = perform;
+        this.rejoinChannels = rejoinChannels;
+        this.saslAccount = saslAccount;
+        this.saslPassword = saslPassword;
+        this.unlimitedReconnectRetries = unlimitedReconnectRetries;
+        this.useAutoIdentify = useAutoIdentify;
+        this.useAutoReconnect = useAutoReconnect;
+        this.useRandomServer = useRandomServer;
+        this.useSasl = useSasl;
         parsePrefix();
+        assertNotNull(supportedModes);
     }
 
-    public void initUsers() {
+    private void initUsers() {
+        assertNotNull(provider);
+
         for (IrcUser user : getUsers().values()) {
             provider.dispatch(new InitRequestFunction("IrcUser", getNetworkId() + "/" + user.nick));
         }
@@ -106,6 +134,7 @@ public class Network extends SyncableObject implements ContentComparable<Network
         if (!isConnected()) {
             setSupportedModes(new HashMap<>());
             return;
+
         } else if (!getSupports().containsKey("PREFIX")) {
             setSupportedModes(new HashMap<>());
             System.err.println("Network has no modes declared: " + getNetworkName());
@@ -130,11 +159,13 @@ public class Network extends SyncableObject implements ContentComparable<Network
         provider.dispatch(new InitRequestFunction("IrcUser", getObjectName() + "/" + sender));
     }
 
+    @Nullable
     public IrcUser getUser(String name) {
         return getUsers().get(name);
     }
 
-    public IrcMode getMode(String modes) {
+    @NonNull
+    public IrcMode getMode(@Nullable String modes) {
         if (modes == null) return new IrcMode(0, "");
 
         final List<IrcMode> usermodes = new ArrayList<>(modes.length());
@@ -146,55 +177,62 @@ public class Network extends SyncableObject implements ContentComparable<Network
         return usermodes.size() > 0 ? usermodes.get(0) : new IrcMode(0, "");
     }
 
+    @NonNull
     public Set<Buffer> getBuffers() {
         return buffers;
     }
 
+    @NonNull
     public Map<String, IrcUser> getUsers() {
         return users;
     }
 
-    public void setUsers(Map<String, IrcUser> users) {
+    public void setUsers(@NonNull Map<String, IrcUser> users) {
         this.users = users;
     }
 
+    @NonNull
     public Map<String, IrcChannel> getChannels() {
         return channels;
     }
 
-    public void setChannels(Map<String, IrcChannel> channels) {
+    public void setChannels(@NonNull Map<String, IrcChannel> channels) {
         this.channels = channels;
     }
 
+    @NonNull
     public List<NetworkServer> getServerList() {
         return ServerList;
     }
 
-    public void setServerList(List<NetworkServer> serverList) {
+    public void setServerList(@NonNull List<NetworkServer> serverList) {
         ServerList = serverList;
     }
 
+    @NonNull
     public Map<String, String> getSupports() {
         return Supports;
     }
 
-    public void setSupports(Map<String, String> supports) {
+    public void setSupports(@NonNull Map<String, String> supports) {
         Supports = supports;
     }
 
+    @Nullable
     public String getAutoIdentifyPassword() {
         return autoIdentifyPassword;
     }
 
-    public void setAutoIdentifyPassword(String autoIdentifyPassword) {
+    public void setAutoIdentifyPassword(@NonNull String autoIdentifyPassword) {
         this.autoIdentifyPassword = autoIdentifyPassword;
     }
 
+    @Nullable
     public String getAutoIdentifyService() {
         return autoIdentifyService;
     }
 
-    public void setAutoIdentifyService(String autoIdentifyService) {
+    public void setAutoIdentifyService(@NonNull String autoIdentifyService) {
         this.autoIdentifyService = autoIdentifyService;
     }
 
@@ -214,27 +252,30 @@ public class Network extends SyncableObject implements ContentComparable<Network
         this.autoReconnectRetries = autoReconnectRetries;
     }
 
+    @Nullable
     public String getCodecForDecoding() {
         return codecForDecoding;
     }
 
-    public void setCodecForDecoding(String codecForDecoding) {
+    public void setCodecForDecoding(@Nullable String codecForDecoding) {
         this.codecForDecoding = codecForDecoding;
     }
 
+    @Nullable
     public String getCodecForEncoding() {
         return codecForEncoding;
     }
 
-    public void setCodecForEncoding(String codecForEncoding) {
+    public void setCodecForEncoding(@Nullable String codecForEncoding) {
         this.codecForEncoding = codecForEncoding;
     }
 
+    @Nullable
     public String getCodecForServer() {
         return codecForServer;
     }
 
-    public void setCodecForServer(String codecForServer) {
+    public void setCodecForServer(@Nullable String codecForServer) {
         this.codecForServer = codecForServer;
     }
 
@@ -246,11 +287,12 @@ public class Network extends SyncableObject implements ContentComparable<Network
         this.connectionState = connectionState;
     }
 
+    @Nullable
     public String getCurrentServer() {
         return currentServer;
     }
 
-    public void setCurrentServer(String currentServer) {
+    public void setCurrentServer(@Nullable String currentServer) {
         this.currentServer = currentServer;
     }
 
@@ -278,27 +320,30 @@ public class Network extends SyncableObject implements ContentComparable<Network
         this.latency = latency;
     }
 
+    @Nullable
     public String getMyNick() {
         return myNick;
     }
 
-    public void setMyNick(String myNick) {
+    public void setMyNick(@Nullable String myNick) {
         this.myNick = myNick;
     }
 
+    @Nullable
     public String getNetworkName() {
         return networkName;
     }
 
-    public void setNetworkName(String networkName) {
+    public void setNetworkName(@Nullable String networkName) {
         this.networkName = networkName;
     }
 
+    @NonNull
     public List<String> getPerform() {
         return perform;
     }
 
-    public void setPerform(List<String> perform) {
+    public void setPerform(@NonNull List<String> perform) {
         this.perform = perform;
     }
 
@@ -310,19 +355,21 @@ public class Network extends SyncableObject implements ContentComparable<Network
         this.rejoinChannels = rejoinChannels;
     }
 
+    @Nullable
     public String getSaslAccount() {
         return saslAccount;
     }
 
-    public void setSaslAccount(String saslAccount) {
+    public void setSaslAccount(@Nullable String saslAccount) {
         this.saslAccount = saslAccount;
     }
 
+    @Nullable
     public String getSaslPassword() {
         return saslPassword;
     }
 
-    public void setSaslPassword(String saslPassword) {
+    public void setSaslPassword(@Nullable String saslPassword) {
         this.saslPassword = saslPassword;
     }
 
@@ -366,11 +413,12 @@ public class Network extends SyncableObject implements ContentComparable<Network
         this.useSasl = useSasl;
     }
 
+    @Nullable
     public Map<String, IrcMode> getSupportedModes() {
         return supportedModes;
     }
 
-    public void setSupportedModes(Map<String, IrcMode> supportedModes) {
+    public void setSupportedModes(@NonNull Map<String, IrcMode> supportedModes) {
         this.supportedModes = supportedModes;
     }
 
@@ -382,6 +430,7 @@ public class Network extends SyncableObject implements ContentComparable<Network
         this.networkId = networkId;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Network{" +
@@ -417,7 +466,7 @@ public class Network extends SyncableObject implements ContentComparable<Network
                 '}';
     }
 
-    public void renameUser(String oldNick, String newNick) {
+    public void renameUser(@Nullable String oldNick, @Nullable String newNick) {
         users.put(newNick, users.get(oldNick));
         users.remove(oldNick);
     }
@@ -427,7 +476,7 @@ public class Network extends SyncableObject implements ContentComparable<Network
     }
 
     @Override
-    public void init(InitDataFunction function, BusProvider provider, Client client) {
+    public void init(@NonNull InitDataFunction function, @NonNull BusProvider provider, @NonNull Client client) {
         setObjectName(function.objectName);
         setBusProvider(provider);
         setNetworkId(Integer.parseInt(function.objectName));
@@ -437,7 +486,7 @@ public class Network extends SyncableObject implements ContentComparable<Network
     }
 
     @Override
-    public boolean equalsContent(Network other) {
+    public boolean equalsContent(@NonNull Network other) {
         return networkId == other.networkId;
     }
 
@@ -455,6 +504,7 @@ public class Network extends SyncableObject implements ContentComparable<Network
             this.prefix = prefix;
         }
 
+        @NonNull
         @Override
         public String toString() {
             return "IrcMode{" +

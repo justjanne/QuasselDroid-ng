@@ -1,5 +1,7 @@
 package de.kuschku.util.observables.callbacks.wrappers;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
 
@@ -8,14 +10,17 @@ import de.kuschku.util.observables.callbacks.UICallback;
 
 @UiThread
 public class AdapterUICallbackWrapper implements UICallback {
+    @NonNull
     private final RecyclerView.Adapter adapter;
+
+    @Nullable
     private final AutoScroller scroller;
 
-    public AdapterUICallbackWrapper(RecyclerView.Adapter adapter) {
+    public AdapterUICallbackWrapper(@NonNull RecyclerView.Adapter adapter) {
         this(adapter, null);
     }
 
-    public AdapterUICallbackWrapper(RecyclerView.Adapter adapter, AutoScroller scroller) {
+    public AdapterUICallbackWrapper(@NonNull RecyclerView.Adapter adapter, @Nullable AutoScroller scroller) {
         this.adapter = adapter;
         this.scroller = scroller;
     }

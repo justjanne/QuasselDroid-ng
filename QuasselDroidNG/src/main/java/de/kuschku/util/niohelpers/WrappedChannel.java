@@ -1,7 +1,6 @@
 package de.kuschku.util.niohelpers;
 
-import android.annotation.TargetApi;
-import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.io.DataInputStream;
@@ -18,35 +17,41 @@ import java.nio.channels.InterruptibleChannel;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
+import de.kuschku.util.CompatibilityUtils;
+
 public class WrappedChannel implements Flushable, ByteChannel, InterruptibleChannel {
     @Nullable
     private DataInputStream in;
     @Nullable
     private DataOutputStream out;
 
-    private InputStream rawIn;
-    private OutputStream rawOut;
+    @Nullable
+    private final InputStream rawIn;
+    @Nullable
+    private final OutputStream rawOut;
 
-    private WrappedChannel(@Nullable InputStream in, @Nullable OutputStream out) throws IOException {
+    private WrappedChannel(@Nullable InputStream in, @Nullable OutputStream out) {
         this.rawIn = in;
         this.rawOut = out;
         if (this.rawIn != null) this.in = new DataInputStream(rawIn);
         if (this.rawOut != null) this.out = new DataOutputStream(rawOut);
     }
 
-    public static WrappedChannel ofStreams(InputStream in, OutputStream out) throws IOException {
+    @NonNull
+    public static WrappedChannel ofStreams(@Nullable InputStream in, @Nullable OutputStream out) {
         return new WrappedChannel(in, out);
     }
 
-    public static WrappedChannel ofSocket(Socket s) throws IOException {
+    @NonNull
+    public static WrappedChannel ofSocket(@NonNull Socket s) throws IOException {
         return new WrappedChannel(s.getInputStream(), s.getOutputStream());
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    public static WrappedChannel withCompression(WrappedChannel channel) throws IOException {
+    @Nullable
+    public static WrappedChannel withCompression(@NonNull WrappedChannel channel) {
         return new WrappedChannel(
                 new InflaterInputStream(channel.rawIn),
-                new DeflaterOutputStream(channel.rawOut, true)
+                CompatibilityUtils.createDeflaterOutputStream(channel.rawOut)
         );
     }
 
@@ -87,7 +92,7 @@ public class WrappedChannel implements Flushable, ByteChannel, InterruptibleChan
      * @throws IOException If some other I/O Error occurs
      */
     @Override
-    public int read(ByteBuffer dst) throws IOException {
+    public int read(@NonNull ByteBuffer dst) throws IOException {
         if (in == null) return 0;
 
         in.readFully(dst.array(), dst.arrayOffset(), dst.array().length - dst.arrayOffset());
@@ -126,7 +131,7 @@ public class WrappedChannel implements Flushable, ByteChannel, InterruptibleChan
      * @throws IOException If some other I/O Error occurs
      */
     @Override
-    public int write(ByteBuffer src) throws IOException {
+    public int write(@NonNull ByteBuffer src) throws IOException {
         if (out == null) return 0;
 
         out.write(src.array(), src.arrayOffset(), src.array().length - src.arrayOffset());
@@ -162,12 +167,8 @@ public class WrappedChannel implements Flushable, ByteChannel, InterruptibleChan
      */
     @Override
     public void close() throws IOException {
-        try {
-            rawIn.close();
-            rawOut.close();
-        } catch (IOException e) {
-
-        }
+        if (rawIn != null) rawIn.close();
+        if (rawOut != null) rawOut.close();
     }
 
     /**

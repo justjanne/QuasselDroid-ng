@@ -1,10 +1,12 @@
 package de.kuschku.util.observables.lists;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.util.SortedList;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -14,34 +16,43 @@ import de.kuschku.util.backports.Stream;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.callbacks.wrappers.MultiUICallbackWrapper;
 
-public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
-    public final SortedList<T> list;
-    Callback internal = new Callback();
-    boolean reverse;
+import static de.kuschku.util.AndroidAssert.*;
 
-    MultiUICallbackWrapper callback = MultiUICallbackWrapper.of();
-    ItemComparator<T> comparator;
+public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
+    @NonNull
+    public final SortedList<T> list;
+    private final boolean reverse;
+
+    @NonNull
+    private final MultiUICallbackWrapper callback = MultiUICallbackWrapper.of();
+    @NonNull
+    private ItemComparator<T> comparator;
 
     @Override
-    public void addCallback(UICallback callback) {
+    public void addCallback(@NonNull UICallback callback) {
         this.callback.addCallback(callback);
     }
 
     @Override
-    public void removeCallback(UICallback callback) {
+    public void removeCallback(@NonNull UICallback callback) {
         this.callback.removeCallback(callback);
     }
 
-    public ObservableSortedList(Class<T> cl, ItemComparator<T> comparator) {
+    public void setComparator(@NonNull ItemComparator<T> comparator) {
+        this.comparator = comparator;
+    }
+
+    public ObservableSortedList(@NonNull Class<T> cl, @NonNull ItemComparator<T> comparator) {
         this(cl, comparator, false);
     }
 
-    public ObservableSortedList(Class<T> cl, ItemComparator<T> comparator, boolean reverse) {
-        this.list = new SortedList<>(cl, internal);
+    public ObservableSortedList(@NonNull Class<T> cl, @NonNull ItemComparator<T> comparator, boolean reverse) {
+        this.list = new SortedList<>(cl, new Callback());
         this.comparator = comparator;
         this.reverse = reverse;
     }
 
+    @Nullable
     public T last() {
         if (list.size() == 0) return null;
 
@@ -78,7 +89,7 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
 
     @Override
     public boolean contains(Object object) {
-        return indexOf((T) object) != SortedList.INVALID_POSITION;
+        return indexOf(object) != SortedList.INVALID_POSITION;
     }
 
     @Override
@@ -112,6 +123,7 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
         return 0;
     }
 
+    @NonNull
     @Override
     public ListIterator<T> listIterator() {
         return new CallbackedSortedListIterator();
@@ -123,6 +135,7 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
         return new CallbackedSortedListIterator(location);
     }
 
+    @Nullable
     @Override
     public T remove(int location) {
         return null;
@@ -134,15 +147,16 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
     }
 
     @Override
-    public boolean removeAll(Collection<?> collection) {
+    public boolean removeAll(@NonNull Collection<?> collection) {
         return false;
     }
 
     @Override
-    public boolean retainAll(Collection<?> collection) {
+    public boolean retainAll(@NonNull Collection<?> collection) {
         return false;
     }
 
+    @Nullable
     @Override
     public T set(int location, T object) {
         return null;
@@ -156,7 +170,15 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
     @NonNull
     @Override
     public List<T> subList(int start, int end) {
-        return null;
+        assertTrue(start <= end);
+        assertTrue(start >= 0);
+        assertTrue(end <= list.size());
+
+        List<T> subList = new ArrayList<>(end - start);
+        for (int i = start; i < end; i++) {
+            subList.add(list.get(i));
+        }
+        return subList;
     }
 
     @NonNull
@@ -167,7 +189,7 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
 
     @NonNull
     @Override
-    public <T1> T1[] toArray(T1[] array) {
+    public <T1> T1[] toArray(@NonNull T1[] array) {
         throw new MaterialDialog.NotImplementedException("Not implemented");
     }
 

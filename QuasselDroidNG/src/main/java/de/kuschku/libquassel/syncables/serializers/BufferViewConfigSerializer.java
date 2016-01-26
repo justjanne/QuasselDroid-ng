@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.syncables.serializers;
 
+import android.support.annotation.NonNull;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,16 +13,20 @@ import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.BufferViewConfig;
 
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 public class BufferViewConfigSerializer implements ObjectSerializer<BufferViewConfig> {
+    @NonNull
     private static final BufferViewConfigSerializer serializer = new BufferViewConfigSerializer();
     private BufferViewConfigSerializer() {}
+    @NonNull
     public static BufferViewConfigSerializer get(){
         return serializer;
     }
 
+    @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(BufferViewConfig data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<>());
+    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull BufferViewConfig data) {
+        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
         map.data.put("bufferViewName", new QVariant<>(data.getBufferViewName()));
         map.data.put("TemporarilyRemovedBuffers", new QVariant<>(data.getTemporarilyRemovedBuffers()));
         map.data.put("hideInactiveNetworks", new QVariant<>(data.isHideInactiveNetworks()));
@@ -36,13 +42,15 @@ public class BufferViewConfigSerializer implements ObjectSerializer<BufferViewCo
         return map;
     }
 
+    @NonNull
     @Override
-    public BufferViewConfig fromDatastream(Map<String, QVariant> map) {
+    public BufferViewConfig fromDatastream(@NonNull Map<String, QVariant> map) {
         return fromLegacy(map);
     }
 
+    @NonNull
     @Override
-    public BufferViewConfig fromLegacy(Map<String, QVariant> map) {
+    public BufferViewConfig fromLegacy(@NonNull Map<String, QVariant> map) {
         return new BufferViewConfig(
                 (String) map.get("bufferViewName").data,
                 (List<Integer>) map.get("TemporarilyRemovedBuffers").data,
@@ -60,7 +68,7 @@ public class BufferViewConfigSerializer implements ObjectSerializer<BufferViewCo
     }
 
     @Override
-    public BufferViewConfig from(SerializedFunction function) {
+    public BufferViewConfig from(@NonNull SerializedFunction function) {
         if (function instanceof PackedFunction)
             return fromLegacy(((PackedFunction) function).getData());
         else if (function instanceof UnpackedFunction)

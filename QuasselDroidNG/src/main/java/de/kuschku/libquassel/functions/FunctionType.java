@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.functions;
 
+import android.support.annotation.NonNull;
+
 public enum FunctionType {
     INVALID(0),
     SYNC(1),
@@ -15,6 +17,7 @@ public enum FunctionType {
         this.id = id;
     }
 
+    @NonNull
     public static FunctionType fromId(int id) {
         switch (id) {
             case 1:

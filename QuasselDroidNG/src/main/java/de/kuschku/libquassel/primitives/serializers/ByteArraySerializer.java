@@ -1,7 +1,7 @@
 package de.kuschku.libquassel.primitives.serializers;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.google.common.base.Charsets;
 
@@ -10,25 +10,29 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
 
 public class ByteArraySerializer implements PrimitiveSerializer<String> {
+    @NonNull
     private static final ByteArraySerializer serializerFalse = new ByteArraySerializer(false);
+    @NonNull
     private static final ByteArraySerializer serializerTrue = new ByteArraySerializer(true);
 
+    @NonNull
     public static ByteArraySerializer get() {
         return get(false);
     }
+    @NonNull
     public static ByteArraySerializer get(boolean trimLastByte) {
         if (trimLastByte) return serializerTrue;
         else return serializerFalse;
     }
 
-    public final boolean trimLastByte;
+    private final boolean trimLastByte;
 
     private ByteArraySerializer(boolean trimLastByte) {
         this.trimLastByte = trimLastByte;
     }
 
     @Override
-    public void serialize(final ByteChannel channel, final String data) throws IOException {
+    public void serialize(@NonNull final ByteChannel channel, @Nullable final String data) throws IOException {
         if (data == null) {
             IntSerializer.get().serialize(channel, 0xffffffff);
         } else {
@@ -41,7 +45,7 @@ public class ByteArraySerializer implements PrimitiveSerializer<String> {
 
     @Nullable
     @Override
-    public String deserialize(final ByteBuffer buffer) throws IOException {
+    public String deserialize(@NonNull final ByteBuffer buffer) throws IOException {
         final int len = IntSerializer.get().deserialize(buffer);
         if (len == 0xffffffff)
             return null;

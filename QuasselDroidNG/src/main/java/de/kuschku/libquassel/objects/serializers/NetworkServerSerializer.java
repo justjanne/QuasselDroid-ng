@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.objects.serializers;
 
+import android.support.annotation.NonNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,19 +11,27 @@ import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
+import static de.kuschku.util.AndroidAssert.*;
+
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 public class NetworkServerSerializer implements ObjectSerializer<NetworkServer> {
+    @NonNull
     private static final NetworkServerSerializer serializer = new NetworkServerSerializer();
 
     private NetworkServerSerializer() {
     }
 
+    @NonNull
     public static NetworkServerSerializer get() {
         return serializer;
     }
 
+    @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(NetworkServer data) {
+    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull NetworkServer data) {
         final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
+        assertNotNull(map.data);
+
         map.data.put("UseSSL", new QVariant<>(data.UseSSL));
         map.data.put("sslVersion", new QVariant<>(data.sslVersion));
         map.data.put("Host", new QVariant<>(data.Host));
@@ -36,13 +46,15 @@ public class NetworkServerSerializer implements ObjectSerializer<NetworkServer> 
         return map;
     }
 
+    @NonNull
     @Override
-    public NetworkServer fromDatastream(Map<String, QVariant> map) {
+    public NetworkServer fromDatastream(@NonNull Map<String, QVariant> map) {
         return fromLegacy(map);
     }
 
+    @NonNull
     @Override
-    public NetworkServer fromLegacy(Map<String, QVariant> map) {
+    public NetworkServer fromLegacy(@NonNull Map<String, QVariant> map) {
         return new NetworkServer(
                 (boolean) map.get("UseSSL").data,
                 (int) map.get("sslVersion").data,
@@ -59,7 +71,7 @@ public class NetworkServerSerializer implements ObjectSerializer<NetworkServer> 
     }
 
     @Override
-    public NetworkServer from(SerializedFunction function) {
+    public NetworkServer from(@NonNull SerializedFunction function) {
         if (function instanceof PackedFunction)
             return fromLegacy(((PackedFunction) function).getData());
         else if (function instanceof UnpackedFunction)

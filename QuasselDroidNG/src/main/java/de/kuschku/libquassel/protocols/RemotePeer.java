@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.protocols;
 
+import android.support.annotation.NonNull;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
@@ -10,21 +12,22 @@ import de.kuschku.libquassel.functions.types.RpcCallFunction;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 
 public interface RemotePeer {
-    int DATASTREAM = 0x02;
-    int LEGACY = 0x01;
+    byte DATASTREAM = 0x02;
+    byte LEGACY = 0x01;
     int PROTOCOL_VERSION_LEGACY = 10;
 
-    void onEventBackgroundThread(SyncFunction func) throws IOException;
+    void onEventBackgroundThread(@NonNull SyncFunction func);
 
-    void onEventBackgroundThread(RpcCallFunction func) throws IOException;
+    void onEventBackgroundThread(@NonNull RpcCallFunction func);
 
-    void onEventBackgroundThread(InitRequestFunction func) throws IOException;
+    void onEventBackgroundThread(@NonNull InitRequestFunction func);
 
-    void onEventBackgroundThread(InitDataFunction func) throws IOException;
+    void onEventBackgroundThread(@NonNull InitDataFunction func);
 
-    void onEventBackgroundThread(HandshakeFunction func) throws IOException;
+    void onEventBackgroundThread(@NonNull HandshakeFunction func);
 
     void processMessage() throws IOException;
 
+    @NonNull
     ByteBuffer getBuffer();
 }

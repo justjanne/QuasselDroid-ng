@@ -1,5 +1,7 @@
 package de.kuschku.libquassel;
 
+import android.support.annotation.NonNull;
+
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.functions.types.InitRequestFunction;
 import de.kuschku.libquassel.functions.types.RpcCallFunction;
@@ -29,5 +31,6 @@ public interface IProtocolHandler {
 
     void onEventMainThread(SessionInit message);
 
+    @NonNull
     Client getClient();
 }

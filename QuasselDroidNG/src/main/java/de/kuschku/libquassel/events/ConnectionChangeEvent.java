@@ -1,18 +1,24 @@
 package de.kuschku.libquassel.events;
 
+import android.support.annotation.NonNull;
+
+@SuppressWarnings("WeakerAccess")
 public class ConnectionChangeEvent {
+    @NonNull
     public final Status status;
+    @NonNull
     public final String reason;
 
-    public ConnectionChangeEvent(Status status) {
+    public ConnectionChangeEvent(@NonNull Status status) {
         this(status, "");
     }
 
-    public ConnectionChangeEvent(Status status, String reason) {
+    public ConnectionChangeEvent(@NonNull Status status, @NonNull String reason) {
         this.status = status;
         this.reason = reason;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ConnectionChangeEvent{" +

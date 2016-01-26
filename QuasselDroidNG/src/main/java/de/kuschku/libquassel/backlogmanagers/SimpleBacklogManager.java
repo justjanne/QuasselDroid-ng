@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.backlogmanagers;
 
+import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
@@ -16,15 +18,19 @@ import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.util.observables.AutoScroller;
+import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 import de.kuschku.util.observables.lists.ObservableSortedList;
-import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
+
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class SimpleBacklogManager extends BacklogManager {
-    SparseArray<ObservableSortedList<Message>> backlogs = new SparseArray<>();
-    private BusProvider busProvider;
+    @NonNull
+    private final SparseArray<ObservableSortedList<Message>> backlogs = new SparseArray<>();
+    @NonNull
+    private final BusProvider busProvider;
 
-    public SimpleBacklogManager(BusProvider busProvider) {
+    public SimpleBacklogManager(@NonNull BusProvider busProvider) {
         this.busProvider = busProvider;
     }
 
@@ -38,23 +44,29 @@ public class SimpleBacklogManager extends BacklogManager {
         )));
     }
 
-    public void receiveBacklog(int bufferId, int from, int to, int count, int extra, List<Message> messages) {
+    public void receiveBacklog(@IntRange(from=0) int bufferId, int from, int to, int count, int extra, @NonNull List<Message> messages) {
         get(bufferId).list.addAll(messages);
 
         busProvider.sendEvent(new BacklogReceivedEvent(bufferId));
     }
 
     @Override
-    public void displayMessage(int bufferId, Message message) {
-        get(bufferId).list.add(message);
+    public void displayMessage(@IntRange(from=0) int bufferId, @NonNull Message message) {
+        ObservableSortedList<Message> messages = get(bufferId);
+        assertNotNull(messages);
+
+        messages.list.add(message);
     }
 
-    public void bind(int bufferId, @Nullable RecyclerView.Adapter adapter, AutoScroller scroller) {
-        get(bufferId).addCallback(new AdapterUICallbackWrapper(adapter, scroller));
+    public void bind(@IntRange(from=0) int bufferId, @NonNull RecyclerView.Adapter adapter, @Nullable AutoScroller scroller) {
+        ObservableSortedList<Message> messages = get(bufferId);
+        assertNotNull(messages);
+
+        messages.addCallback(new AdapterUICallbackWrapper(adapter, scroller));
     }
 
     @Override
-    public void requestMoreBacklog(int bufferId, int count) {
+    public void requestMoreBacklog(@IntRange(from=0) int bufferId, int count) {
         ObservableSortedList<Message> backlog = backlogs.get(bufferId);
         int messageId =
                 (backlog == null) ? -1 :
@@ -64,15 +76,18 @@ public class SimpleBacklogManager extends BacklogManager {
         requestBacklog(bufferId, -1, messageId, count, 0);
     }
 
-    public ObservableSortedList<Message> get(int bufferId) {
+    public ObservableSortedList<Message> get(@IntRange(from=0) int bufferId) {
         if (backlogs.get(bufferId) == null)
             backlogs.put(bufferId, new ObservableComparableSortedList<>(Message.class, true));
 
-        return backlogs.get(bufferId);
+        ObservableSortedList<Message> messages = backlogs.get(bufferId);
+        assertNotNull(messages);
+
+        return messages;
     }
 
     @Override
-    public void init(InitDataFunction function, BusProvider provider, Client client) {
+    public void init(@NonNull InitDataFunction function, @NonNull BusProvider provider, @NonNull Client client) {
 
     }
 }

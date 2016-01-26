@@ -20,6 +20,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.SpannedString;
@@ -32,7 +33,7 @@ import android.text.Spannable;
  *
  */
 public class SpanFormatter {
-    public static final Pattern FORMAT_SEQUENCE	= Pattern.compile("%([0-9]+\\$|<?)([^a-zA-z%]*)([[a-zA-Z%]&&[^tT]]|[tT][a-zA-Z])");
+    private static final Pattern FORMAT_SEQUENCE	= Pattern.compile("%([0-9]+\\$|<?)([^a-zA-z%]*)([[a-zA-Z%]&&[^tT]]|[tT][a-zA-Z])");
 
     private SpanFormatter(){}
 
@@ -49,7 +50,8 @@ public class SpanFormatter {
      *            additional arguments are ignored.
      * @return the formatted string (with spans).
      */
-    public static SpannedString format(CharSequence format, Object... args) {
+    @NonNull
+    public static SpannedString format(@NonNull CharSequence format, Object... args) {
         return format(Locale.getDefault(), format, args);
     }
 
@@ -67,7 +69,8 @@ public class SpanFormatter {
      * @return the formatted string (with spans).
      * @see String#format(Locale, String, Object...)
      */
-    public static SpannedString format(Locale locale, CharSequence format, Object... args){
+    @NonNull
+    public static SpannedString format(@NonNull Locale locale, @NonNull CharSequence format, Object... args){
         SpannableStringBuilder out = new SpannableStringBuilder(format);
 
         int i = 0;
@@ -87,13 +90,19 @@ public class SpanFormatter {
 
             if (typeTerm.equals("%")){
                 cookedArg = "%";
-            }else if (typeTerm.equals("%")){
-                cookedArg = "\n";
             }else{
-                int argIdx = 0;
-                if (argTerm.equals("")) argIdx = ++argAt;
-                else if (argTerm.equals("<")) argIdx = argAt;
-                else argIdx = Integer.parseInt(argTerm.substring(0, argTerm.length() - 1)) -1;
+                int argIdx;
+                switch (argTerm) {
+                    case "":
+                        argIdx = ++argAt;
+                        break;
+                    case "<":
+                        argIdx = argAt;
+                        break;
+                    default:
+                        argIdx = Integer.parseInt(argTerm.substring(0, argTerm.length() - 1)) - 1;
+                        break;
+                }
 
                 Object argItem = args[argIdx];
 

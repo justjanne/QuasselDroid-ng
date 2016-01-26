@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.syncables.serializers;
 
+import android.support.annotation.NonNull;
+
 import org.joda.time.DateTime;
 
 import java.util.HashMap;
@@ -13,16 +15,24 @@ import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.IrcUser;
 
+import static de.kuschku.util.AndroidAssert.*;
+
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 public class IrcUserSerializer implements ObjectSerializer<IrcUser> {
+    @NonNull
     private static final IrcUserSerializer serializer = new IrcUserSerializer();
     private IrcUserSerializer() {}
+    @NonNull
     public static IrcUserSerializer get(){
         return serializer;
     }
 
+    @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(IrcUser data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<Map<String, QVariant>>(new HashMap<String, QVariant>());
+    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull IrcUser data) {
+        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
+        assertNotNull(map.data);
+
         map.data.put("server", new QVariant<>(data.server));
         map.data.put("ircOperator", new QVariant<>(data.ircOperator));
         map.data.put("away", new QVariant<>(data.away));
@@ -42,13 +52,15 @@ public class IrcUserSerializer implements ObjectSerializer<IrcUser> {
         return map;
     }
 
+    @NonNull
     @Override
-    public IrcUser fromDatastream(Map<String, QVariant> map) {
+    public IrcUser fromDatastream(@NonNull Map<String, QVariant> map) {
         return fromLegacy(map);
     }
 
+    @NonNull
     @Override
-    public IrcUser fromLegacy(Map<String, QVariant> map) {
+    public IrcUser fromLegacy(@NonNull Map<String, QVariant> map) {
         return new IrcUser(
                 (String) map.get("server").data,
                 (String) map.get("ircOperator").data,
@@ -70,7 +82,7 @@ public class IrcUserSerializer implements ObjectSerializer<IrcUser> {
     }
 
     @Override
-    public IrcUser from(SerializedFunction function) {
+    public IrcUser from(@NonNull SerializedFunction function) {
         if (function instanceof PackedFunction)
             return fromLegacy(((PackedFunction) function).getData());
         else if (function instanceof UnpackedFunction)

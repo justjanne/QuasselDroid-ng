@@ -1,30 +1,31 @@
 package de.kuschku.libquassel.syncables.types;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
-import de.kuschku.libquassel.events.BufferViewManagerChangedEvent;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.lists.IObservableList;
 import de.kuschku.util.observables.lists.ObservableElementList;
 
 public class BufferViewConfig extends SyncableObject {
-    String bufferViewName;
-    List<Integer> TemporarilyRemovedBuffers;
-    boolean hideInactiveNetworks;
-    IObservableList<ElementCallback<Integer>, Integer> BufferList;
-    int allowedBufferTypes;
-    boolean sortAlphabetically;
-    boolean disableDecoration;
-    boolean addNewBuffersAutomatically;
-    int networkId;
-    int minimumActivity;
-    boolean hideInactiveBuffers;
-    List<Integer> RemovedBuffers;
+    private String bufferViewName;
+    private List<Integer> TemporarilyRemovedBuffers;
+    private boolean hideInactiveNetworks;
+    private IObservableList<ElementCallback<Integer>, Integer> BufferList;
+    private int allowedBufferTypes;
+    private boolean sortAlphabetically;
+    private boolean disableDecoration;
+    private boolean addNewBuffersAutomatically;
+    private int networkId;
+    private int minimumActivity;
+    private boolean hideInactiveBuffers;
+    private List<Integer> RemovedBuffers;
 
-    public BufferViewConfig(String bufferViewName, List<Integer> temporarilyRemovedBuffers, boolean hideInactiveNetworks, List<Integer> bufferList, int allowedBufferTypes, boolean sortAlphabetically, boolean disableDecoration, boolean addNewBuffersAutomatically, int networkId, int minimumActivity, boolean hideInactiveBuffers, List<Integer> removedBuffers) {
+    public BufferViewConfig(String bufferViewName, List<Integer> temporarilyRemovedBuffers, boolean hideInactiveNetworks, @NonNull List<Integer> bufferList, int allowedBufferTypes, boolean sortAlphabetically, boolean disableDecoration, boolean addNewBuffersAutomatically, int networkId, int minimumActivity, boolean hideInactiveBuffers, List<Integer> removedBuffers) {
         this.bufferViewName = bufferViewName;
         TemporarilyRemovedBuffers = temporarilyRemovedBuffers;
         this.hideInactiveNetworks = hideInactiveNetworks;
@@ -71,7 +72,7 @@ public class BufferViewConfig extends SyncableObject {
         BufferList = bufferList;
     }
 
-    public void setBufferList(List<Integer> bufferList) {
+    public void setBufferList(@NonNull List<Integer> bufferList) {
         BufferList = new ObservableElementList<>(bufferList);
     }
 
@@ -139,6 +140,7 @@ public class BufferViewConfig extends SyncableObject {
         RemovedBuffers = removedBuffers;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "BufferViewConfig{" +
@@ -158,10 +160,9 @@ public class BufferViewConfig extends SyncableObject {
     }
 
     @Override
-    public void init(InitDataFunction function, BusProvider provider, Client client) {
+    public void init(@NonNull InitDataFunction function, @NonNull BusProvider provider, @NonNull Client client) {
         setObjectName(function.objectName);
         client.getBufferViewManager().BufferViews.put(Integer.valueOf(function.objectName), this);
-        provider.sendEvent(new BufferViewManagerChangedEvent(Integer.valueOf(function.objectName), BufferViewManagerChangedEvent.Action.ADD));
     }
 
     public void addBuffer(int bufferId, int position) {

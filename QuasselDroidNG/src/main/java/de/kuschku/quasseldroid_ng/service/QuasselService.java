@@ -4,13 +4,17 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.util.ServerAddress;
 
 public class QuasselService extends Service {
+    @NonNull
     private final IBinder binder = new LocalBinder();
 
+    @Nullable
     private ClientBackgroundThread bgThread;
 
     @Override
@@ -34,11 +38,12 @@ public class QuasselService extends Service {
     }
 
     public class LocalBinder extends Binder {
-        public void startBackgroundThread(BusProvider provider, ServerAddress address) {
+        public void startBackgroundThread(@NonNull BusProvider provider, @NonNull ServerAddress address) {
             bgThread = new ClientBackgroundThread(provider, address);
             new Thread(bgThread).start();
         }
 
+        @Nullable
         public ClientBackgroundThread getBackgroundThread() {
             return bgThread;
         }

@@ -1,13 +1,16 @@
 package de.kuschku.libquassel;
 
+import android.support.annotation.NonNull;
+
 import java.util.UUID;
 
 import de.greenrobot.event.EventBus;
 
 public class BusProvider {
-    public final String id;
-    public final EventBus handle;
-    public final EventBus dispatch;
+    @NonNull private final String id;
+    @NonNull public final EventBus handle;
+    @NonNull public final EventBus dispatch;
+    @NonNull
     public final EventBus event;
 
     public BusProvider() {
@@ -27,5 +30,12 @@ public class BusProvider {
 
     public void sendEvent(Object o) {
         this.event.post(o);
+    }
+
+    @Override
+    public String toString() {
+        return "BusProvider{" +
+                "id='" + id + '\'' +
+                '}';
     }
 }

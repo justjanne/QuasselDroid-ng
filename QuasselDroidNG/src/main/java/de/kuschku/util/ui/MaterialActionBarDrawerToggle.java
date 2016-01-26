@@ -17,16 +17,6 @@ public class MaterialActionBarDrawerToggle extends ActionBarDrawerToggle {
     }
 
     @Override
-    public void onDrawerClosed(View drawerView) {
-        super.onDrawerClosed(drawerView);
-    }
-
-    @Override
-    public void onDrawerOpened(View drawerView) {
-        super.onDrawerOpened(drawerView);
-    }
-
-    @Override
     public void onDrawerSlide(View drawerView, float slideOffset) {
         super.onDrawerSlide(drawerView, 0);
     }

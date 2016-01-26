@@ -1,11 +1,15 @@
 package de.kuschku.libquassel.primitives.serializers;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
 
 public interface PrimitiveSerializer<T> {
-    void serialize(ByteChannel channel, T data) throws IOException;
+    void serialize(@NonNull ByteChannel channel, @NonNull T data) throws IOException;
 
-    T deserialize(ByteBuffer buffer) throws IOException;
+    @Nullable
+    T deserialize(@NonNull ByteBuffer buffer) throws IOException;
 }

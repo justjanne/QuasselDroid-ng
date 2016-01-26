@@ -1,13 +1,15 @@
 package de.kuschku.libquassel.syncables;
 
+import android.support.annotation.NonNull;
+
 import de.kuschku.libquassel.primitives.QMetaType;
 
 public @interface Syncable {
-    String name() default "";
+    @NonNull String name() default "";
 
-    QMetaType.Type type() default QMetaType.Type.LastType;
+    @NonNull QMetaType.Type type() default QMetaType.Type.LastType;
 
-    String userType() default "";
+    @NonNull String userType() default "";
 
-    QMetaType.Type[] paramTypes() default {};
+    @NonNull QMetaType.Type[] paramTypes() default {};
 }

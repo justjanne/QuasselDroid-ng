@@ -1,5 +1,8 @@
 package de.kuschku.libquassel.events;
 
+import android.support.annotation.NonNull;
+
+@SuppressWarnings("WeakerAccess")
 public class HandshakeFailedEvent {
     public final String reason;
 
@@ -7,6 +10,7 @@ public class HandshakeFailedEvent {
         this.reason = reason;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "HandshakeFailedEvent{" +

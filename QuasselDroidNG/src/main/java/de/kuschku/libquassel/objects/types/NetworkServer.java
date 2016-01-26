@@ -1,22 +1,30 @@
 package de.kuschku.libquassel.objects.types;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 public class NetworkServer {
     public final boolean UseSSL;
     public final int sslVersion;
 
+    @NonNull
     public final String Host;
     public final int Port;
+    @Nullable
     public final String Password;
 
     public final boolean UseProxy;
     public final int ProxyType;
+    @Nullable
     public final String ProxyHost;
     public final int ProxyPort;
+    @Nullable
     public final String ProxyUser;
+    @Nullable
     public final String ProxyPass;
 
-    public NetworkServer(boolean useSSL, int sslVersion, String host, int port, String password, boolean useProxy,
-                         int proxyType, String proxyHost, int proxyPort, String proxyUser, String proxyPass) {
+    public NetworkServer(boolean useSSL, int sslVersion, @NonNull String host, int port, @Nullable String password, boolean useProxy,
+                         int proxyType, @Nullable String proxyHost, int proxyPort, @Nullable String proxyUser, @Nullable String proxyPass) {
         this.UseSSL = useSSL;
         this.sslVersion = sslVersion;
         this.Host = host;
@@ -30,6 +38,7 @@ public class NetworkServer {
         this.ProxyPass = proxyPass;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "NetworkServer{" +

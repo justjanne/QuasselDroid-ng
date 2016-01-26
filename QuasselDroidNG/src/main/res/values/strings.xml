@@ -38,4 +38,5 @@
     <string name="preference_theme">preference_theme</string>
     <string name="open_drawer">open</string>
     <string name="close_drawer">close</string>
+    <string name="message_placeholder">Write a message…</string>
 </resources>

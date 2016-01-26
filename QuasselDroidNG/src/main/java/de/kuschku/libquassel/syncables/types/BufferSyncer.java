@@ -1,6 +1,7 @@
 package de.kuschku.libquassel.syncables.types;
 
-import android.util.SparseArray;
+import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.util.SparseIntArray;
 
 import java.util.Map;
@@ -8,16 +9,21 @@ import java.util.Map;
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
-import de.kuschku.util.observables.ContentComparable;
+import de.kuschku.libquassel.message.Message;
+import de.kuschku.util.AndroidAssert;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
+import static de.kuschku.util.AndroidAssert.*;
+
 public class BufferSyncer extends SyncableObject {
+    @NonNull
     private final SparseIntArray LastSeenMsg = new SparseIntArray();
+    @NonNull
     private final SparseIntArray MarkerLines = new SparseIntArray();
 
-    Client client;
+    private Client client;
 
-    public BufferSyncer(Map<Integer, Integer> LastSeenMsg, Map<Integer, Integer> MarkerLines) {
+    public BufferSyncer(@NonNull Map<Integer, Integer> LastSeenMsg, @NonNull Map<Integer, Integer> MarkerLines) {
         for (Map.Entry<Integer, Integer> entry : LastSeenMsg.entrySet()) {
             this.LastSeenMsg.put(entry.getKey(), entry.getValue());
         }
@@ -31,13 +37,19 @@ public class BufferSyncer extends SyncableObject {
     }
 
     @Override
-    public void init(InitDataFunction function, BusProvider provider, Client client) {
+    public void init(@NonNull InitDataFunction function, @NonNull BusProvider provider, @NonNull Client client) {
         client.setBufferSyncer(this);
         setClient(client);
     }
 
-    public void markBufferAsRead(int bufferId) {
-        int messageId = client.getBacklogManager().get(bufferId).last().messageId;
+    public void markBufferAsRead(@IntRange(from=0) int bufferId) {
+        ObservableSortedList<Message> buffer = client.getBacklogManager().get(bufferId);
+        assertNotNull(buffer);
+
+        Message last = buffer.last();
+        assertNotNull(last);
+
+        int messageId = last.messageId;
 
         setLastSeenMsg(bufferId, messageId);
         setMarkerLine(bufferId, messageId);

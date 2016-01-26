@@ -4,17 +4,16 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.support.annotation.ColorInt;
-import android.util.Log;
+import android.support.annotation.NonNull;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 
 public class AutoBinder {
     private AutoBinder() {
 
     }
 
-    public static void bind(Object o, Resources.Theme t) throws IllegalAccessException {
+    public static void bind(@NonNull Object o, @NonNull Resources.Theme t) throws IllegalAccessException {
         for (Field f : o.getClass().getFields()) {
             if (f.isAnnotationPresent(AutoColor.class)) {
                 int[] colors = obtainColors(f.getAnnotation(AutoColor.class).value(), t);
@@ -28,7 +27,7 @@ public class AutoBinder {
         }
     }
 
-    public static void bind(Object o, Context t) throws IllegalAccessException {
+    public static void bind(@NonNull Object o, @NonNull Context t) throws IllegalAccessException {
         Resources.Theme theme = t.getTheme();
         for (Field f : o.getClass().getFields()) {
             if (f.isAnnotationPresent(AutoColor.class)) {
@@ -51,8 +50,9 @@ public class AutoBinder {
         }
     }
 
+    @NonNull
     @ColorInt
-    private static int[] obtainColors(int[] res, Resources.Theme theme) {
+    private static int[] obtainColors(@NonNull int[] res, @NonNull Resources.Theme theme) {
         int[] result = new int[res.length];
         TypedArray t = theme.obtainStyledAttributes(res);
         for (int i = 0; i < res.length; i++) {
@@ -62,7 +62,8 @@ public class AutoBinder {
         return result;
     }
 
-    private static String[] obtainStrings(int[] res, Context ctx) {
+    @NonNull
+    private static String[] obtainStrings(@NonNull int[] res, @NonNull Context ctx) {
         String[] result = new String[res.length];
         for (int i = 0; i < res.length; i++) {
             result[i] = ctx.getString(res[i]);

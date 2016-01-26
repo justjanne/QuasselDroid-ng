@@ -2,6 +2,7 @@ package de.kuschku.util.ui.parcelableUtil;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,10 +15,14 @@ import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.util.backports.Stream;
 
+import static de.kuschku.util.AndroidAssert.*;
+
 public class StorageBackendParcelable extends StorageBackend implements Parcelable {
+    @NonNull
     public static Creator<StorageBackendParcelable> CREATOR = new Creator<StorageBackendParcelable>() {
+        @NonNull
         @Override
-        public StorageBackendParcelable createFromParcel(Parcel source) {
+        public StorageBackendParcelable createFromParcel(@NonNull Parcel source) {
             String DisplayName = source.readString();
             String Description = source.readString();
             List<String> SetupKeys = new ArrayList<>();
@@ -45,20 +50,24 @@ public class StorageBackendParcelable extends StorageBackend implements Parcelab
                 }
             }
 
+            assertNotNull(DisplayName);
+            assertNotNull(Description);
+
             return new StorageBackendParcelable(DisplayName, SetupDefaults, Description, SetupKeys);
         }
 
+        @NonNull
         @Override
         public StorageBackendParcelable[] newArray(int size) {
             return new StorageBackendParcelable[size];
         }
     };
 
-    public StorageBackendParcelable(StorageBackend backend) {
+    public StorageBackendParcelable(@NonNull StorageBackend backend) {
         this(backend.DisplayName, backend.SetupDefaults, backend.Description, backend.SetupKeys);
     }
 
-    public StorageBackendParcelable(String displayName, Map<String, QVariant> setupDefaults, String description, List<String> setupKeys) {
+    public StorageBackendParcelable(@NonNull String displayName, @NonNull Map<String, QVariant> setupDefaults, @NonNull String description, @NonNull List<String> setupKeys) {
         super(displayName, setupDefaults, description, setupKeys);
     }
 
@@ -68,7 +77,7 @@ public class StorageBackendParcelable extends StorageBackend implements Parcelab
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(DisplayName);
         dest.writeString(Description);
         dest.writeStringList(SetupKeys);
@@ -94,7 +103,8 @@ public class StorageBackendParcelable extends StorageBackend implements Parcelab
         }
     }
 
-    public static ArrayList<StorageBackendParcelable> wrap(List<StorageBackend> backends) {
+    @NonNull
+    public static ArrayList<StorageBackendParcelable> wrap(@NonNull List<StorageBackend> backends) {
         return new ArrayList<>(new Stream<>(backends).map(StorageBackendParcelable::new).list());
     }
 }

@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.objects.types;
 
+import android.support.annotation.NonNull;
+
 public class SessionInit {
     public final SessionState SessionState;
 
@@ -7,6 +9,7 @@ public class SessionInit {
         SessionState = sessionState;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SessionInit{" +
