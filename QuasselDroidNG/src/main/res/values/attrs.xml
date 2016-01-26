@@ -2,7 +2,7 @@
 <resources>
     <attr name="messagesBackground" format="reference" />
     <attr name="chatlineBackground" format="reference" />
-    <attr name="dividerColor" format="reference"/>
+    <attr name="dividerColor" format="reference" />
 
     <!-- sender colors -->
 

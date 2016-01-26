@@ -26,6 +26,26 @@ public class IrcUserUtils {
         return ((len < val.length)) ? str.substring(0, len) : str;
     }
 
+    @NonNull
+    public static String getNick(@NonNull String hostmask) {
+        return hostmask.split("!")[0];
+    }
+
+    @NonNull
+    public static String getUser(@NonNull String hostmask) {
+        return getMask(hostmask).split("@")[0];
+    }
+
+    @NonNull
+    public static String getHost(@NonNull String hostmask) {
+        return getMask(hostmask).split("@")[1];
+    }
+
+    @NonNull
+    public static String getMask(@NonNull String hostmask) {
+        return hostmask.split("!")[1];
+    }
+
     public static class CRCUtils {
         private CRCUtils() {
 
@@ -66,25 +86,5 @@ public class IrcUserUtils {
             }
             return crcout;
         }
-    }
-
-    @NonNull
-    public static String getNick(@NonNull String hostmask) {
-        return hostmask.split("!")[0];
-    }
-
-    @NonNull
-    public static String getUser(@NonNull String hostmask) {
-        return getMask(hostmask).split("@")[0];
-    }
-
-    @NonNull
-    public static String getHost(@NonNull String hostmask) {
-        return getMask(hostmask).split("@")[1];
-    }
-
-    @NonNull
-    public static String getMask(@NonNull String hostmask) {
-        return hostmask.split("!")[1];
     }
 }

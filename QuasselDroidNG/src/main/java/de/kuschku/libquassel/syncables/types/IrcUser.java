@@ -11,7 +11,7 @@ import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class IrcUser extends SyncableObject {
     public String server;

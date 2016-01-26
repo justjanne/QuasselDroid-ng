@@ -10,7 +10,7 @@ import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.QMetaTypeRegistry;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 @SuppressWarnings("unchecked")
 public class QVariantParcelable<T> extends QVariant<T> implements Parcelable {
@@ -34,7 +34,7 @@ public class QVariantParcelable<T> extends QVariant<T> implements Parcelable {
                         data = (source.readInt() > 0);
                         break;
                     default:
-                        throw new IllegalArgumentException("Can’t deserialize type "+type.name);
+                        throw new IllegalArgumentException("Can’t deserialize type " + type.name);
                 }
                 return new QVariantParcelable<>(type.name, data);
             } catch (IOException e) {
@@ -80,7 +80,7 @@ public class QVariantParcelable<T> extends QVariant<T> implements Parcelable {
                 dest.writeInt(((Boolean) data) ? 1 : 0);
                 break;
             default:
-                throw new IllegalArgumentException("Can’t serialize type "+type.name);
+                throw new IllegalArgumentException("Can’t serialize type " + type.name);
         }
     }
 }

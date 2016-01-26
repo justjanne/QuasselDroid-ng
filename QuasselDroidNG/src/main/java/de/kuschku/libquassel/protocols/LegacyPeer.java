@@ -44,11 +44,11 @@ import static de.kuschku.libquassel.primitives.QMetaType.Type.QVariantMap;
 @SuppressWarnings({"unchecked"})
 public class LegacyPeer implements RemotePeer {
     @NonNull
-    private ByteBuffer buffer = ByteBuffer.allocate(0);
-    @NonNull
     private final CoreConnection connection;
     @NonNull
     private final BusProvider busProvider;
+    @NonNull
+    private ByteBuffer buffer = ByteBuffer.allocate(0);
 
     public LegacyPeer(@NonNull CoreConnection connection, @NonNull BusProvider busProvider) {
         this.connection = connection;

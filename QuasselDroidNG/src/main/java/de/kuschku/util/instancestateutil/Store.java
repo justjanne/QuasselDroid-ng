@@ -11,6 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Store {
     @NonNull String name() default "";
+
     @NonNull Type type() default Type.INVALID;
 
     enum Type {

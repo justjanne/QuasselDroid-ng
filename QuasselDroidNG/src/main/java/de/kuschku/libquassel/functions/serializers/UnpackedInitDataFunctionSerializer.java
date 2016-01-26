@@ -10,7 +10,7 @@ import de.kuschku.libquassel.functions.FunctionType;
 import de.kuschku.libquassel.functions.types.PackedInitDataFunction;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertTrue;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class UnpackedInitDataFunctionSerializer implements FunctionSerializer<PackedInitDataFunction> {

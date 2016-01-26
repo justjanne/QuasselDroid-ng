@@ -10,7 +10,7 @@ import java.util.Map;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class UserTypeSerializer<T> implements PrimitiveSerializer<T> {
@@ -33,6 +33,6 @@ public class UserTypeSerializer<T> implements PrimitiveSerializer<T> {
     @NonNull
     @Override
     public T deserialize(@NonNull ByteBuffer buffer) throws IOException {
-        return (T)(Object) objectSerializer.fromLegacy(((VariantMapSerializer) VariantMapSerializer.get()).deserialize(buffer));
+        return (T) (Object) objectSerializer.fromLegacy(((VariantMapSerializer) VariantMapSerializer.get()).deserialize(buffer));
     }
 }

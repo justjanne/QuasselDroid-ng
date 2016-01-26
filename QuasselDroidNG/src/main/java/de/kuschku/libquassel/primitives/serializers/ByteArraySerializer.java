@@ -14,21 +14,21 @@ public class ByteArraySerializer implements PrimitiveSerializer<String> {
     private static final ByteArraySerializer serializerFalse = new ByteArraySerializer(false);
     @NonNull
     private static final ByteArraySerializer serializerTrue = new ByteArraySerializer(true);
+    private final boolean trimLastByte;
+
+    private ByteArraySerializer(boolean trimLastByte) {
+        this.trimLastByte = trimLastByte;
+    }
 
     @NonNull
     public static ByteArraySerializer get() {
         return get(false);
     }
+
     @NonNull
     public static ByteArraySerializer get(boolean trimLastByte) {
         if (trimLastByte) return serializerTrue;
         else return serializerFalse;
-    }
-
-    private final boolean trimLastByte;
-
-    private ByteArraySerializer(boolean trimLastByte) {
-        this.trimLastByte = trimLastByte;
     }
 
     @Override

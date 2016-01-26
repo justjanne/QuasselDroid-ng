@@ -16,8 +16,9 @@ public class CompatibilityUtils {
 
     /**
      * This method is used to check if the current device supports Sockets with the KeepAlive flag.
-     *
+     * <p>
      * As that feature is only missing on Chromium devices, we just check for that
+     *
      * @return Does the current device support KeepAlive sockets?
      */
     public static boolean deviceSupportsKeepAlive() {
@@ -26,8 +27,9 @@ public class CompatibilityUtils {
 
     /**
      * This method is used to check if the device supports SyncFlush
-     *
+     * <p>
      * As that feature was only added in KitKat, we just check for the device version.
+     *
      * @return Does the current device support SyncFlush natively?
      */
     public static boolean deviceSupportsCompression() {
@@ -37,6 +39,7 @@ public class CompatibilityUtils {
     /**
      * Creates a SyncFlush output stream, even if the current device does not support doing so
      * natively.
+     *
      * @param rawOut the raw output stream to be wrapped
      * @return The wrapping output stream
      */
@@ -48,18 +51,19 @@ public class CompatibilityUtils {
 
     /**
      * Creates a SyncFlush Deflater for use on pre-KitKat Android
+     *
      * @return The modified Deflater, or null if the creation failed
      */
     @Nullable
     private static Deflater createSyncFlushDeflater() {
         Deflater def = new Deflater();
-         try {
-             Field f = def.getClass().getDeclaredField("flushParm");
-             f.setAccessible(true);
-             f.setInt(def, 2); // Z_SYNC_FLUSH
-         } catch (Exception e) {
-             return null;
-         }
+        try {
+            Field f = def.getClass().getDeclaredField("flushParm");
+            f.setAccessible(true);
+            f.setInt(def, 2); // Z_SYNC_FLUSH
+        } catch (Exception e) {
+            return null;
+        }
         return def;
     }
 }

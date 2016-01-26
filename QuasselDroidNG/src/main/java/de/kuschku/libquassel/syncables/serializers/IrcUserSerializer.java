@@ -15,15 +15,18 @@ import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.IrcUser;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class IrcUserSerializer implements ObjectSerializer<IrcUser> {
     @NonNull
     private static final IrcUserSerializer serializer = new IrcUserSerializer();
-    private IrcUserSerializer() {}
+
+    private IrcUserSerializer() {
+    }
+
     @NonNull
-    public static IrcUserSerializer get(){
+    public static IrcUserSerializer get() {
         return serializer;
     }
 

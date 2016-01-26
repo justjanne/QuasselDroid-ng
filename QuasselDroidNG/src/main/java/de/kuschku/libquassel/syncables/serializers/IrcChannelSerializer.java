@@ -17,9 +17,12 @@ import de.kuschku.libquassel.syncables.types.IrcChannel;
 public class IrcChannelSerializer implements ObjectSerializer<IrcChannel> {
     @NonNull
     private static final IrcChannelSerializer serializer = new IrcChannelSerializer();
-    private IrcChannelSerializer() {}
+
+    private IrcChannelSerializer() {
+    }
+
     @NonNull
-    public static IrcChannelSerializer get(){
+    public static IrcChannelSerializer get() {
         return serializer;
     }
 

@@ -17,10 +17,10 @@ import de.kuschku.libquassel.functions.types.InitRequestFunction;
 import de.kuschku.libquassel.functions.types.RpcCallFunction;
 import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.localtypes.Buffers;
+import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.objects.types.ClientInitAck;
 import de.kuschku.libquassel.objects.types.SessionState;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
-import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.BufferSyncer;
 import de.kuschku.libquassel.syncables.types.BufferViewManager;
@@ -32,7 +32,7 @@ import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.IObservableList;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 
 public class Client {
@@ -129,7 +129,8 @@ public class Client {
     @NonNull
     private SyncableObject safeGetObjectByIdentifier(@NonNull String className, @NonNull String oldName) {
         SyncableObject val = getObjectByIdentifier(className, oldName);
-        if (val == null) throw new IllegalArgumentException(String.format("Object %s::%s does not exist", className, oldName));
+        if (val == null)
+            throw new IllegalArgumentException(String.format("Object %s::%s does not exist", className, oldName));
         else return val;
     }
 

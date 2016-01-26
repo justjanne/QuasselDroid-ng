@@ -11,9 +11,12 @@ import de.kuschku.libquassel.primitives.types.BufferInfo;
 public class BufferInfoSerializer implements PrimitiveSerializer<BufferInfo> {
     @NonNull
     private static final BufferInfoSerializer serializer = new BufferInfoSerializer();
-    private BufferInfoSerializer() {}
+
+    private BufferInfoSerializer() {
+    }
+
     @NonNull
-    public static BufferInfoSerializer get(){
+    public static BufferInfoSerializer get() {
         return serializer;
     }
 

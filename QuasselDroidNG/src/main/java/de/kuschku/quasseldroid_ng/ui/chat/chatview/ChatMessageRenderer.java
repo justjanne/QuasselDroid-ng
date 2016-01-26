@@ -11,15 +11,18 @@ import android.util.Log;
 import org.joda.time.format.DateTimeFormatter;
 
 import de.kuschku.libquassel.Client;
+import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.util.ui.DateFormatHelper;
+import de.kuschku.util.annotationbind.AutoBinder;
+import de.kuschku.util.annotationbind.AutoString;
 import de.kuschku.util.irc.IrcFormatHelper;
 import de.kuschku.util.irc.IrcUserUtils;
+import de.kuschku.util.ui.DateFormatHelper;
 import de.kuschku.util.ui.SpanFormatter;
 import de.kuschku.util.ui.ThemeUtil;
-import de.kuschku.util.annotationbind.AutoString;
-import de.kuschku.util.annotationbind.AutoBinder;
+
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 @UiThread
 public class ChatMessageRenderer {
@@ -29,10 +32,17 @@ public class ChatMessageRenderer {
     private final FormatStrings strings;
     @NonNull
     private final IrcFormatHelper helper;
+    @NonNull
+    private final MessageStyleContainer highlightStyle;
+    @NonNull
+    private final MessageStyleContainer serverStyle;
+    @NonNull
+    private final MessageStyleContainer actionStyle;
+    @NonNull
+    private final MessageStyleContainer plainStyle;
     @Nullable
     private Client client;
     private boolean fullHostmask = false;
-
     public ChatMessageRenderer(@NonNull Context ctx) {
         ThemeUtil themeUtil = new ThemeUtil(ctx);
         this.format = DateFormatHelper.getTimeFormatter(ctx);
@@ -65,29 +75,6 @@ public class ChatMessageRenderer {
         );
     }
 
-    private static class MessageStyleContainer{
-        public final @ColorInt int textColor;
-        public final int fontstyle;
-        public final @ColorInt int timeColor;
-        public final @ColorInt int bgColor;
-
-        public MessageStyleContainer(int textColor, int fontstyle, int timeColor, int bgColor) {
-            this.textColor = textColor;
-            this.fontstyle = fontstyle;
-            this.timeColor = timeColor;
-            this.bgColor = bgColor;
-        }
-    }
-
-    @NonNull
-    private final MessageStyleContainer highlightStyle;
-    @NonNull
-    private final MessageStyleContainer serverStyle;
-    @NonNull
-    private final MessageStyleContainer actionStyle;
-    @NonNull
-    private final MessageStyleContainer plainStyle;
-
     public void setClient(@NonNull Client client) {
         this.client = client;
     }
@@ -113,6 +100,16 @@ public class ChatMessageRenderer {
     @NonNull
     private CharSequence formatNick(@NonNull String hostmask) {
         return formatNick(hostmask, fullHostmask);
+    }
+
+    @NonNull
+    private CharSequence getBufferName(Message message) {
+        assertNotNull(client);
+        Buffer buffer = client.getBuffer(message.bufferInfo.id);
+        assertNotNull(buffer);
+        String name = buffer.getName();
+        assertNotNull(name);
+        return name;
     }
 
     private void onBindPlain(@NonNull MessageViewHolder holder, @NonNull Message message) {
@@ -165,7 +162,7 @@ public class ChatMessageRenderer {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(strings.formatJoin(
                 formatNick(message.sender),
-                client.getBuffer(message.bufferInfo.id).getName()
+                getBufferName(message)
         ));
     }
 
@@ -173,7 +170,7 @@ public class ChatMessageRenderer {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(strings.formatPart(
                 formatNick(message.sender),
-                client.getBuffer(message.bufferInfo.id).getName(),
+                getBufferName(message),
                 message.content
         ));
     }
@@ -235,7 +232,7 @@ public class ChatMessageRenderer {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.toString());
     }
-    
+
     public void onBind(@NonNull MessageViewHolder holder, @NonNull Message message) {
         holder.time.setText(format.print(message.time));
         switch (message.type) {
@@ -293,6 +290,26 @@ public class ChatMessageRenderer {
             case Invite:
                 onBindInvite(holder, message);
                 break;
+        }
+    }
+
+    private static class MessageStyleContainer {
+        public final
+        @ColorInt
+        int textColor;
+        public final int fontstyle;
+        public final
+        @ColorInt
+        int timeColor;
+        public final
+        @ColorInt
+        int bgColor;
+
+        public MessageStyleContainer(int textColor, int fontstyle, int timeColor, int bgColor) {
+            this.textColor = textColor;
+            this.fontstyle = fontstyle;
+            this.timeColor = timeColor;
+            this.bgColor = bgColor;
         }
     }
 
@@ -365,6 +382,7 @@ public class ChatMessageRenderer {
         public CharSequence formatPart(@NonNull CharSequence user, @NonNull CharSequence channel) {
             return SpanFormatter.format(message_part, user, channel);
         }
+
         @NonNull
         public CharSequence formatPart(@NonNull CharSequence user, @NonNull CharSequence channel, @Nullable CharSequence reason) {
             if (reason == null || reason.length() == 0) return formatPart(user, channel);
@@ -376,6 +394,7 @@ public class ChatMessageRenderer {
         public CharSequence formatQuit(@NonNull CharSequence user) {
             return SpanFormatter.format(message_quit, user);
         }
+
         @NonNull
         public CharSequence formatQuit(@NonNull CharSequence user, @Nullable CharSequence reason) {
             if (reason == null || reason.length() == 0) return formatQuit(user);
@@ -392,6 +411,7 @@ public class ChatMessageRenderer {
         public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked) {
             return SpanFormatter.format(message_kick, user, kicked);
         }
+
         @NonNull
         public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked, @Nullable CharSequence reason) {
             if (reason == null || reason.length() == 0) return formatKick(user, kicked);
@@ -408,6 +428,7 @@ public class ChatMessageRenderer {
         public CharSequence formatNick(@NonNull CharSequence newNick) {
             return SpanFormatter.format(message_nick_self, newNick);
         }
+
         @NonNull
         public CharSequence formatNick(@NonNull CharSequence oldNick, @Nullable CharSequence newNick) {
             if (newNick == null || newNick.length() == 0) return formatNick(oldNick);

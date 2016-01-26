@@ -12,7 +12,7 @@ public class QVariant<T> {
     @NonNull
     public final QMetaType<T> type;
 
-    public QVariant(@NonNull  T data) {
+    public QVariant(@NonNull T data) {
         this.type = QMetaTypeRegistry.getTypeByObject(data);
         this.data = data;
     }

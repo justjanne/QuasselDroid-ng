@@ -11,7 +11,7 @@ import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.protocols.DatastreamPeer;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertTrue;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class PackedSyncFunctionSerializer<T> implements FunctionSerializer<SyncFunction<T>> {

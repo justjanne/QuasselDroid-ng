@@ -31,7 +31,7 @@ import de.kuschku.util.ServerAddress;
 import de.kuschku.util.niohelpers.WrappedChannel;
 
 import static de.kuschku.libquassel.primitives.QMetaType.Type.UInt;
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 /**
  * Starts a connection to a core and handles the data in the backend.
@@ -43,16 +43,16 @@ public class CoreConnection {
 
     @NonNull
     private final ServerAddress address;
+    @NonNull
+    private final ClientData clientData;
+    @NonNull
+    private final BusProvider busProvider;
     @Nullable
     private ExecutorService outputExecutor;
     @Nullable
     private ExecutorService inputExecutor;
     @Nullable
     private RemotePeer remotePeer;
-    @NonNull
-    private final ClientData clientData;
-    @NonNull
-    private final BusProvider busProvider;
     @Nullable
     private WrappedChannel channel;
     @Nullable
@@ -76,8 +76,8 @@ public class CoreConnection {
     /**
      * This method opens a socket to the specified address and starts the connection process.
      *
-     * @throws IOException
      * @param supportsKeepAlive If the connection may use keepAlive
+     * @throws IOException
      */
     public void open(boolean supportsKeepAlive) throws IOException {
         assertNotNull(client);

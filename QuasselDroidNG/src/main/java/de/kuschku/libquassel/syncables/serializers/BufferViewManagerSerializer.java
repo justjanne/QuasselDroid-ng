@@ -17,9 +17,12 @@ import de.kuschku.libquassel.syncables.types.BufferViewManager;
 public class BufferViewManagerSerializer implements ObjectSerializer<BufferViewManager> {
     @NonNull
     private static final BufferViewManagerSerializer serializer = new BufferViewManagerSerializer();
-    private BufferViewManagerSerializer() {}
+
+    private BufferViewManagerSerializer() {
+    }
+
     @NonNull
-    public static BufferViewManagerSerializer get(){
+    public static BufferViewManagerSerializer get() {
         return serializer;
     }
 

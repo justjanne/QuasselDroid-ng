@@ -12,14 +12,14 @@ import java.util.List;
 import de.kuschku.libquassel.exceptions.SyncInvocationException;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class ReflectionUtils {
     private ReflectionUtils() {
 
     }
 
-    private static void unboxList(@NonNull Object[] list){
+    private static void unboxList(@NonNull Object[] list) {
         for (int i = 0; i < list.length; i++) {
             if (list[i] instanceof QVariant)
                 list[i] = ((QVariant) list[i]).data;

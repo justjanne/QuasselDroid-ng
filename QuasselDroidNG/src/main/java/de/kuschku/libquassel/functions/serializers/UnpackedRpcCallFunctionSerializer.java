@@ -10,7 +10,7 @@ import de.kuschku.libquassel.functions.types.RpcCallFunction;
 import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertTrue;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class UnpackedRpcCallFunctionSerializer implements FunctionSerializer<RpcCallFunction> {

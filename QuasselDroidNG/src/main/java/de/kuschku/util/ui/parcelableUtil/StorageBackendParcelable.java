@@ -15,7 +15,7 @@ import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.util.backports.Stream;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class StorageBackendParcelable extends StorageBackend implements Parcelable {
     @NonNull
@@ -44,7 +44,7 @@ public class StorageBackendParcelable extends StorageBackend implements Parcelab
                             SetupDefaults.put(key, new QVariant<>(type, source.readInt() > 0));
                             break;
                         default:
-                            throw new IllegalArgumentException("Can’t serialize type "+ type.name());
+                            throw new IllegalArgumentException("Can’t serialize type " + type.name());
                     }
                 } catch (IOException e) {
                 }
@@ -69,6 +69,11 @@ public class StorageBackendParcelable extends StorageBackend implements Parcelab
 
     public StorageBackendParcelable(@NonNull String displayName, @NonNull Map<String, QVariant> setupDefaults, @NonNull String description, @NonNull List<String> setupKeys) {
         super(displayName, setupDefaults, description, setupKeys);
+    }
+
+    @NonNull
+    public static ArrayList<StorageBackendParcelable> wrap(@NonNull List<StorageBackend> backends) {
+        return new ArrayList<>(new Stream<>(backends).map(StorageBackendParcelable::new).list());
     }
 
     @Override
@@ -98,13 +103,8 @@ public class StorageBackendParcelable extends StorageBackend implements Parcelab
                     dest.writeInt(((Boolean) q.data) ? 1 : 0);
                     break;
                 default:
-                    throw new IllegalArgumentException("Can’t serialize type "+q.type.name);
+                    throw new IllegalArgumentException("Can’t serialize type " + q.type.name);
             }
         }
-    }
-
-    @NonNull
-    public static ArrayList<StorageBackendParcelable> wrap(@NonNull List<StorageBackend> backends) {
-        return new ArrayList<>(new Stream<>(backends).map(StorageBackendParcelable::new).list());
     }
 }

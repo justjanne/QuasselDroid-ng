@@ -40,7 +40,7 @@ import de.kuschku.libquassel.primitives.serializers.VariantVariantListSerializer
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.util.niohelpers.WrappedChannel;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 /**
  * A helper class processing incoming and outgoing messages.
@@ -51,11 +51,11 @@ import static de.kuschku.util.AndroidAssert.*;
 @SuppressWarnings({"unchecked"})
 public class DatastreamPeer implements RemotePeer {
     @NonNull
-    private ByteBuffer buffer = ByteBuffer.allocate(0);
-    @NonNull
     private final CoreConnection connection;
     @NonNull
     private final BusProvider busProvider;
+    @NonNull
+    private ByteBuffer buffer = ByteBuffer.allocate(0);
 
     public DatastreamPeer(@NonNull CoreConnection connection, @NonNull BusProvider busProvider) {
         this.connection = connection;
@@ -155,7 +155,7 @@ public class DatastreamPeer implements RemotePeer {
                 busProvider.handle(InitRequestFunctionSerializer.get().deserialize(data));
                 break;
             case INITDATA:
-                busProvider.handle( PackedInitDataFunctionSerializer.get().deserialize(data));
+                busProvider.handle(PackedInitDataFunctionSerializer.get().deserialize(data));
                 break;
             case HEARTBEAT:
             case HEARTBEATREPLY:

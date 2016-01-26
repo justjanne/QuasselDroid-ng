@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.objects.serializers.NetworkServerSerializer;
 import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.primitives.serializers.BoolSerializer;
@@ -36,12 +37,11 @@ import de.kuschku.libquassel.primitives.serializers.VariantSerializer;
 import de.kuschku.libquassel.primitives.serializers.VariantVariantListSerializer;
 import de.kuschku.libquassel.primitives.serializers.VoidSerializer;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
-import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.IdentitySerializer;
 import de.kuschku.libquassel.syncables.types.Identity;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class QMetaTypeRegistry {

@@ -19,17 +19,15 @@ import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.util.observables.ContentComparable;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class Network extends SyncableObject implements ContentComparable<Network> {
+    @NonNull
+    private final Set<Buffer> buffers = new HashSet<>();
     @NonNull
     private Map<String, IrcUser> users;
     @NonNull
     private Map<String, IrcChannel> channels;
-
-    @NonNull
-    private final Set<Buffer> buffers = new HashSet<>();
-
     @NonNull
     private List<NetworkServer> ServerList;
     @NonNull
@@ -81,7 +79,7 @@ public class Network extends SyncableObject implements ContentComparable<Network
 
     public Network(@NonNull Map<String, IrcChannel> channels, @NonNull Map<String, IrcUser> users,
                    @NonNull List<NetworkServer> serverList, @NonNull Map<String, String> supports,
-                   @NonNull String autoIdentifyPassword,  @NonNull String autoIdentifyService,
+                   @NonNull String autoIdentifyPassword, @NonNull String autoIdentifyService,
                    int autoReconnectInterval, short autoReconnectRetries,
                    @NonNull String codecForDecoding, @NonNull String codecForEncoding,
                    @NonNull String codecForServer, int connectionState,

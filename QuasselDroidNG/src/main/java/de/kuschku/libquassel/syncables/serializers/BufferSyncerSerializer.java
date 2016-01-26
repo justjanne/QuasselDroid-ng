@@ -18,9 +18,12 @@ import de.kuschku.libquassel.syncables.types.BufferSyncer;
 public class BufferSyncerSerializer implements ObjectSerializer<BufferSyncer> {
     @NonNull
     private static final BufferSyncerSerializer serializer = new BufferSyncerSerializer();
-    private BufferSyncerSerializer() {}
+
+    private BufferSyncerSerializer() {
+    }
+
     @NonNull
-    public static BufferSyncerSerializer get(){
+    public static BufferSyncerSerializer get() {
         return serializer;
     }
 

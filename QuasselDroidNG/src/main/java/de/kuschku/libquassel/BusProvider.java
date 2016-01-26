@@ -7,11 +7,14 @@ import java.util.UUID;
 import de.greenrobot.event.EventBus;
 
 public class BusProvider {
-    @NonNull private final String id;
-    @NonNull public final EventBus handle;
-    @NonNull public final EventBus dispatch;
+    @NonNull
+    public final EventBus handle;
+    @NonNull
+    public final EventBus dispatch;
     @NonNull
     public final EventBus event;
+    @NonNull
+    private final String id;
 
     public BusProvider() {
         this.id = UUID.randomUUID().toString();

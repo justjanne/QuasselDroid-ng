@@ -171,7 +171,7 @@ public class BufferViewConfig extends SyncableObject {
 
     public void SYNC_addBuffer(int bufferId, int position) {
         addBuffer(bufferId, position);
-        sync("addBuffer", new Object[] {bufferId, position});
+        sync("addBuffer", new Object[]{bufferId, position});
     }
 
     public void removeBuffer(int bufferId) {
@@ -180,6 +180,6 @@ public class BufferViewConfig extends SyncableObject {
 
     public void SYNC_removeBuffer(int bufferId) {
         removeBuffer(bufferId);
-        sync("removeBuffer", new Object[] {bufferId});
+        sync("removeBuffer", new Object[]{bufferId});
     }
 }

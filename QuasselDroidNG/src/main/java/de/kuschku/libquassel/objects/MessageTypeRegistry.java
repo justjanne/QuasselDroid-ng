@@ -18,7 +18,7 @@ import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.objects.serializers.SessionInitSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertTrue;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class MessageTypeRegistry {

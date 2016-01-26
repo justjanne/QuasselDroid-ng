@@ -8,6 +8,5 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AutoColor {
-    @NonNull @AnyRes
-    int[] value() default {};
+    @NonNull @AnyRes int[] value() default {};
 }

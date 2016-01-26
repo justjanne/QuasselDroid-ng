@@ -10,10 +10,9 @@ import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.message.Message;
-import de.kuschku.util.AndroidAssert;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class BufferSyncer extends SyncableObject {
     @NonNull
@@ -42,7 +41,7 @@ public class BufferSyncer extends SyncableObject {
         setClient(client);
     }
 
-    public void markBufferAsRead(@IntRange(from=0) int bufferId) {
+    public void markBufferAsRead(@IntRange(from = 0) int bufferId) {
         ObservableSortedList<Message> buffer = client.getBacklogManager().get(bufferId);
         assertNotNull(buffer);
 

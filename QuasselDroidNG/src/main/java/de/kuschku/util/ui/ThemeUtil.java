@@ -1,7 +1,6 @@
 package de.kuschku.util.ui;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
@@ -13,7 +12,8 @@ import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.annotationbind.AutoColor;
 
 public class ThemeUtil {
-    @NonNull public final Colors colors = new Colors();
+    @NonNull
+    public final Colors colors = new Colors();
 
     public ThemeUtil(@NonNull Context ctx) {
         initColors(new ContextThemeWrapper(ctx, ctx.getTheme()));
@@ -34,51 +34,65 @@ public class ThemeUtil {
 
     public static class Colors {
         @AutoColor(android.R.color.transparent)
-        @ColorInt public int transparent;
+        @ColorInt
+        public int transparent;
 
         @AutoColor({R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
                 R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
                 R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
                 R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF})
-        @ColorInt public int[] senderColors;
+        @ColorInt
+        public int[] senderColors;
 
         @AutoColor({R.attr.mircColor0, R.attr.mircColor1, R.attr.mircColor2, R.attr.mircColor3,
                 R.attr.mircColor4, R.attr.mircColor5, R.attr.mircColor6, R.attr.mircColor7,
                 R.attr.mircColor8, R.attr.mircColor9, R.attr.mircColorA, R.attr.mircColorB,
                 R.attr.mircColorC, R.attr.mircColorD, R.attr.mircColorE, R.attr.mircColorF})
-        @ColorInt public int[] mircColors;
+        @ColorInt
+        public int[] mircColors;
 
         @AutoColor(R.attr.colorForeground)
-        @ColorInt public int colorForeground;
+        @ColorInt
+        public int colorForeground;
 
         @AutoColor(R.attr.colorForegroundHighlight)
-        @ColorInt public int colorForegroundHighlight;
+        @ColorInt
+        public int colorForegroundHighlight;
 
         @AutoColor(R.attr.colorForegroundSecondary)
-        @ColorInt public int colorForegroundSecondary;
+        @ColorInt
+        public int colorForegroundSecondary;
 
         @AutoColor(R.attr.colorForegroundAction)
-        @ColorInt public int colorForegroundAction;
+        @ColorInt
+        public int colorForegroundAction;
 
         @AutoColor(R.attr.colorBackground)
-        @ColorInt public int colorBackground;
+        @ColorInt
+        public int colorBackground;
 
         @AutoColor(R.attr.colorBackgroundHighlight)
-        @ColorInt public int colorBackgroundHighlight;
+        @ColorInt
+        public int colorBackgroundHighlight;
 
         @AutoColor(R.attr.colorBackgroundSecondary)
-        @ColorInt public int colorBackgroundSecondary;
+        @ColorInt
+        public int colorBackgroundSecondary;
 
         @AutoColor(R.attr.colorBackgroundCard)
-        @ColorInt public int colorBackgroundCard;
+        @ColorInt
+        public int colorBackgroundCard;
 
         @AutoColor(R.attr.colorTintActivity)
-        @ColorInt public int colorTintActivity;
+        @ColorInt
+        public int colorTintActivity;
 
         @AutoColor(R.attr.colorTintMessage)
-        @ColorInt public int colorTintMessage;
+        @ColorInt
+        public int colorTintMessage;
 
         @AutoColor(R.attr.colorTintHighlight)
-        @ColorInt public int colorTintHighlight;
+        @ColorInt
+        public int colorTintHighlight;
     }
 }

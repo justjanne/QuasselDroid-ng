@@ -17,9 +17,12 @@ import de.kuschku.libquassel.syncables.types.BufferViewConfig;
 public class BufferViewConfigSerializer implements ObjectSerializer<BufferViewConfig> {
     @NonNull
     private static final BufferViewConfigSerializer serializer = new BufferViewConfigSerializer();
-    private BufferViewConfigSerializer() {}
+
+    private BufferViewConfigSerializer() {
+    }
+
     @NonNull
-    public static BufferViewConfigSerializer get(){
+    public static BufferViewConfigSerializer get() {
         return serializer;
     }
 

@@ -27,12 +27,18 @@ import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.util.ui.ThemeUtil;
 
 public class IrcFormatHelper {
-    @NonNull private static final String scheme = "(?:(?:mailto:|(?:[+.-]?\\w)+://)|www(?=\\.\\S+\\.))";
-    @NonNull private static final String authority = "(?:(?:[,.;@:]?[-\\w]+)+\\.?|\\[[0-9a-f:.]+\\])(?::\\d+)?";
-    @NonNull private static final String urlChars = "(?:[,.;:]*[\\w~@/?&=+$()!%#*-])";
-    @NonNull private static final String urlEnd = "(?:>|[,.;:\"]*\\s|\\b|$)";
-    @NonNull private static final Pattern urlPattern = Pattern.compile(String.format("\\b(%s%s(?:/%s*)?)%s", scheme, authority, urlChars, urlEnd), Pattern.CASE_INSENSITIVE);
-    @NonNull private static final Pattern channelPattern = Pattern.compile("((?:#|![A-Z0-9]{5})[^,:\\s]+(?::[^,:\\s]+)?)\\b", Pattern.CASE_INSENSITIVE);
+    @NonNull
+    private static final String scheme = "(?:(?:mailto:|(?:[+.-]?\\w)+://)|www(?=\\.\\S+\\.))";
+    @NonNull
+    private static final String authority = "(?:(?:[,.;@:]?[-\\w]+)+\\.?|\\[[0-9a-f:.]+\\])(?::\\d+)?";
+    @NonNull
+    private static final String urlChars = "(?:[,.;:]*[\\w~@/?&=+$()!%#*-])";
+    @NonNull
+    private static final String urlEnd = "(?:>|[,.;:\"]*\\s|\\b|$)";
+    @NonNull
+    private static final Pattern urlPattern = Pattern.compile(String.format("\\b(%s%s(?:/%s*)?)%s", scheme, authority, urlChars, urlEnd), Pattern.CASE_INSENSITIVE);
+    @NonNull
+    private static final Pattern channelPattern = Pattern.compile("((?:#|![A-Z0-9]{5})[^,:\\s]+(?::[^,:\\s]+)?)\\b", Pattern.CASE_INSENSITIVE);
 
     @NonNull
     private final ThemeUtil.Colors colors;

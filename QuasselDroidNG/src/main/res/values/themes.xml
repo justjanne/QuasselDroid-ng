@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Material_Dark" parent="AppTheme">
         <item name="senderColor0">@color/md_pink_500</item>
         <item name="senderColor1">@color/md_purple_500</item>

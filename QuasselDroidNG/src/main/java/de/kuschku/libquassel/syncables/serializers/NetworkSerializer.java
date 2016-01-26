@@ -25,9 +25,12 @@ import de.kuschku.libquassel.syncables.types.Network;
 public class NetworkSerializer implements ObjectSerializer<Network> {
     @NonNull
     private static final NetworkSerializer serializer = new NetworkSerializer();
-    private NetworkSerializer() {}
+
+    private NetworkSerializer() {
+    }
+
     @NonNull
-    public static NetworkSerializer get(){
+    public static NetworkSerializer get() {
         return serializer;
     }
 

@@ -34,9 +34,9 @@ public class ClientInitAckSerializer implements ObjectSerializer<ClientInitAck> 
         final List<Map<String, QVariant>> storageBackends = new ArrayList<>();
         final StorageBackendSerializer storageBackendSerializer = StorageBackendSerializer.get();
         if (data.StorageBackends != null)
-        for (StorageBackend backend : data.StorageBackends) {
-            storageBackends.add((Map<String, QVariant>) storageBackendSerializer.toVariantMap(backend));
-        }
+            for (StorageBackend backend : data.StorageBackends) {
+                storageBackends.add((Map<String, QVariant>) storageBackendSerializer.toVariantMap(backend));
+            }
 
         final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
         map.data.put("Configured", new QVariant<>(data.Configured));

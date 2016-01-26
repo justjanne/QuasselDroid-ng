@@ -44,21 +44,21 @@ public class SimpleBacklogManager extends BacklogManager {
         )));
     }
 
-    public void receiveBacklog(@IntRange(from=0) int bufferId, int from, int to, int count, int extra, @NonNull List<Message> messages) {
+    public void receiveBacklog(@IntRange(from = 0) int bufferId, int from, int to, int count, int extra, @NonNull List<Message> messages) {
         get(bufferId).list.addAll(messages);
 
         busProvider.sendEvent(new BacklogReceivedEvent(bufferId));
     }
 
     @Override
-    public void displayMessage(@IntRange(from=0) int bufferId, @NonNull Message message) {
+    public void displayMessage(@IntRange(from = 0) int bufferId, @NonNull Message message) {
         ObservableSortedList<Message> messages = get(bufferId);
         assertNotNull(messages);
 
         messages.list.add(message);
     }
 
-    public void bind(@IntRange(from=0) int bufferId, @NonNull RecyclerView.Adapter adapter, @Nullable AutoScroller scroller) {
+    public void bind(@IntRange(from = 0) int bufferId, @NonNull RecyclerView.Adapter adapter, @Nullable AutoScroller scroller) {
         ObservableSortedList<Message> messages = get(bufferId);
         assertNotNull(messages);
 
@@ -66,17 +66,17 @@ public class SimpleBacklogManager extends BacklogManager {
     }
 
     @Override
-    public void requestMoreBacklog(@IntRange(from=0) int bufferId, int count) {
+    public void requestMoreBacklog(@IntRange(from = 0) int bufferId, int count) {
         ObservableSortedList<Message> backlog = backlogs.get(bufferId);
         int messageId =
                 (backlog == null) ? -1 :
-                (backlog.last() == null) ? -1 :
-                backlog.last().messageId;
+                        (backlog.last() == null) ? -1 :
+                                backlog.last().messageId;
 
         requestBacklog(bufferId, -1, messageId, count, 0);
     }
 
-    public ObservableSortedList<Message> get(@IntRange(from=0) int bufferId) {
+    public ObservableSortedList<Message> get(@IntRange(from = 0) int bufferId) {
         if (backlogs.get(bufferId) == null)
             backlogs.put(bufferId, new ObservableComparableSortedList<>(Message.class, true));
 

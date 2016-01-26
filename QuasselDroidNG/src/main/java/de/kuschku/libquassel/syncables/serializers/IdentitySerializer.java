@@ -17,9 +17,12 @@ import de.kuschku.libquassel.syncables.types.Identity;
 public class IdentitySerializer implements ObjectSerializer<Identity> {
     @NonNull
     private static final IdentitySerializer serializer = new IdentitySerializer();
-    private IdentitySerializer() {}
+
+    private IdentitySerializer() {
+    }
+
     @NonNull
-    public static IdentitySerializer get(){
+    public static IdentitySerializer get() {
         return serializer;
     }
 

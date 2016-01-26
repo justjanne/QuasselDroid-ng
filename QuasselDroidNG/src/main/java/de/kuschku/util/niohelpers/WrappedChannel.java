@@ -21,14 +21,13 @@ import de.kuschku.util.CompatibilityUtils;
 
 public class WrappedChannel implements Flushable, ByteChannel, InterruptibleChannel {
     @Nullable
-    private DataInputStream in;
-    @Nullable
-    private DataOutputStream out;
-
-    @Nullable
     private final InputStream rawIn;
     @Nullable
     private final OutputStream rawOut;
+    @Nullable
+    private DataInputStream in;
+    @Nullable
+    private DataOutputStream out;
 
     private WrappedChannel(@Nullable InputStream in, @Nullable OutputStream out) {
         this.rawIn = in;

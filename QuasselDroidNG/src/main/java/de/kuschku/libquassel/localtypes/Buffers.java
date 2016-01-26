@@ -5,9 +5,8 @@ import android.support.annotation.Nullable;
 
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.Network;
-import de.kuschku.util.AndroidAssert;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class Buffers {
     private Buffers() {

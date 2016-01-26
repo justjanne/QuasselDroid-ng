@@ -8,11 +8,13 @@ import java.util.Comparator;
 
 /**
  * Utility methods for objects.
+ *
  * @see java.util.Objects
  * @since 1.7
  */
 public final class Objects {
-    private Objects() {}
+    private Objects() {
+    }
 
     /**
      * Returns 0 if {@code a == b}, or {@code c.compare(a, b)} otherwise.

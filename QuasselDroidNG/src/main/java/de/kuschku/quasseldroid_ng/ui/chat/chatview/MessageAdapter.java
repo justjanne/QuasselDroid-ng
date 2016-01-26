@@ -13,23 +13,23 @@ import de.kuschku.libquassel.message.Message;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.util.observables.AutoScroller;
 import de.kuschku.util.observables.callbacks.UICallback;
+import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.observables.lists.IObservableList;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 import de.kuschku.util.observables.lists.ObservableSortedList;
-import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 @UiThread
 public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
-    @NonNull
-    private IObservableList<UICallback, Message> messageList = new ObservableComparableSortedList<>(Message.class);
     @NonNull
     private final ChatMessageRenderer renderer;
     @NonNull
     private final LayoutInflater inflater;
     @NonNull
     private final UICallback callback;
+    @NonNull
+    private IObservableList<UICallback, Message> messageList = new ObservableComparableSortedList<>(Message.class);
 
     public MessageAdapter(@NonNull Context ctx, @Nullable AutoScroller scroller) {
         this.inflater = LayoutInflater.from(ctx);

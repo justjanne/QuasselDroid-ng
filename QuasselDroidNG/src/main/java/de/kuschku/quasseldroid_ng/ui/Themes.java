@@ -10,6 +10,7 @@ public enum Themes {
     MATERIAL_LIGHT(R.style.Material_Light);
 
     public final int themeId;
+
     Themes(@StyleRes int themeId) {
         this.themeId = themeId;
     }

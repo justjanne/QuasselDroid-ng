@@ -11,7 +11,7 @@ import java.nio.channels.ByteChannel;
 
 import de.kuschku.libquassel.message.Message;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class MessageSerializer implements PrimitiveSerializer<Message> {
     @NonNull

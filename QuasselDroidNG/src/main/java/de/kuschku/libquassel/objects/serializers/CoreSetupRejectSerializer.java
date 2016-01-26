@@ -11,7 +11,7 @@ import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.types.CoreSetupReject;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class CoreSetupRejectSerializer implements ObjectSerializer<CoreSetupReject> {

@@ -39,57 +39,40 @@ import de.kuschku.util.DrawerUtils;
 import de.kuschku.util.instancestateutil.Storable;
 import de.kuschku.util.instancestateutil.Store;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
+import static de.kuschku.util.AndroidAssert.assertTrue;
 
 @UiThread
 public class ChatActivity extends AppCompatActivity {
+    @NonNull
+    private final Status status = new Status();
     @Bind(R.id.drawer_left)
     DrawerLayout drawerLeft;
-    
     @Bind(R.id.navigation_left)
     NavigationView navigationLeft;
-    
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    
     @Bind(R.id.sliding_layout)
     SlidingUpPanelLayout slidingLayout;
-
     @Bind(R.id.chatline)
     AppCompatEditText chatline;
-
     @Bind(R.id.send)
     AppCompatImageButton send;
-
     @Bind(R.id.msg_history)
     RecyclerView msgHistory;
-
     @Bind(R.id.swipe_view)
     SwipeRefreshLayout swipeView;
-
     @Bind(R.id.messages)
     RecyclerView messages;
-
     @Bind(R.id.navigation_header_container)
     RelativeLayout navigationHeaderContainer;
-
     @Bind(R.id.buffer_view_spinner)
     AppCompatSpinner bufferViewSpinner;
-
     @Nullable
     private QuasselService.LocalBinder binder;
     @Nullable
     private ClientBackgroundThread backgroundThread;
-
     private SharedPreferences preferences;
-
-    @NonNull
-    private final Status status = new Status();
-    private static class Status extends Storable {
-        @Store public int bufferId = -1;
-        @Store public int bufferViewConfigId = -1;
-    }
-
     @Nullable
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @UiThread
@@ -172,7 +155,7 @@ public class ChatActivity extends AppCompatActivity {
         selectBufferViewConfig(status.bufferViewConfigId);
     }
 
-    private void selectBufferViewConfig(@IntRange(from=-1) int bufferViewConfigId) {
+    private void selectBufferViewConfig(@IntRange(from = -1) int bufferViewConfigId) {
         if (bufferViewConfigId == -1) {
             // TODO: Implement this
 
@@ -185,7 +168,7 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private void selectBuffer(@IntRange(from=-1) int bufferId) {
+    private void selectBuffer(@IntRange(from = -1) int bufferId) {
         if (bufferId == -1) {
 
         } else {
@@ -196,5 +179,12 @@ public class ChatActivity extends AppCompatActivity {
         assertTrue(bufferId == -1 || null != this.backgroundThread.handler.client.getBuffer(bufferId));
 
         // TODO: Implement this
+    }
+
+    private static class Status extends Storable {
+        @Store
+        public int bufferId = -1;
+        @Store
+        public int bufferViewConfigId = -1;
     }
 }

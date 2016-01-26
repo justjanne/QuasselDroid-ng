@@ -16,7 +16,7 @@ import de.kuschku.util.backports.Stream;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.callbacks.wrappers.MultiUICallbackWrapper;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertTrue;
 
 public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
     @NonNull
@@ -27,6 +27,16 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
     private final MultiUICallbackWrapper callback = MultiUICallbackWrapper.of();
     @NonNull
     private ItemComparator<T> comparator;
+
+    public ObservableSortedList(@NonNull Class<T> cl, @NonNull ItemComparator<T> comparator) {
+        this(cl, comparator, false);
+    }
+
+    public ObservableSortedList(@NonNull Class<T> cl, @NonNull ItemComparator<T> comparator, boolean reverse) {
+        this.list = new SortedList<>(cl, new Callback());
+        this.comparator = comparator;
+        this.reverse = reverse;
+    }
 
     @Override
     public void addCallback(@NonNull UICallback callback) {
@@ -40,16 +50,6 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
 
     public void setComparator(@NonNull ItemComparator<T> comparator) {
         this.comparator = comparator;
-    }
-
-    public ObservableSortedList(@NonNull Class<T> cl, @NonNull ItemComparator<T> comparator) {
-        this(cl, comparator, false);
-    }
-
-    public ObservableSortedList(@NonNull Class<T> cl, @NonNull ItemComparator<T> comparator, boolean reverse) {
-        this.list = new SortedList<>(cl, new Callback());
-        this.comparator = comparator;
-        this.reverse = reverse;
     }
 
     @Nullable
@@ -193,6 +193,14 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
         throw new MaterialDialog.NotImplementedException("Not implemented");
     }
 
+    public interface ItemComparator<T> {
+        int compare(T o1, T o2);
+
+        boolean areContentsTheSame(T oldItem, T newItem);
+
+        boolean areItemsTheSame(T item1, T item2);
+    }
+
     class Callback extends SortedList.Callback<T> {
         @Override
         public int compare(T o1, T o2) {
@@ -276,7 +284,7 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
 
         @Override
         public int nextIndex() {
-            return position+1;
+            return position + 1;
         }
 
         @Override
@@ -286,7 +294,7 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
 
         @Override
         public int previousIndex() {
-            return position-1;
+            return position - 1;
         }
 
         @Override
@@ -300,13 +308,5 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
             list.remove(list.get(position));
             list.add(object);
         }
-    }
-
-    public interface ItemComparator<T> {
-        int compare(T o1, T o2);
-
-        boolean areContentsTheSame(T oldItem, T newItem);
-
-        boolean areItemsTheSame(T item1, T item2);
     }
 }

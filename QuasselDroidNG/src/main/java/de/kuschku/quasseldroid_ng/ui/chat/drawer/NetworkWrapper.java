@@ -21,16 +21,16 @@ import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.BufferViewConfig;
 import de.kuschku.libquassel.syncables.types.Network;
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.util.observables.callbacks.wrappers.ChildUICallbackWrapper;
-import de.kuschku.util.observables.callbacks.wrappers.MultiUIChildCallback;
 import de.kuschku.util.observables.ContentComparable;
 import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.UIChildCallback;
+import de.kuschku.util.observables.callbacks.wrappers.ChildUICallbackWrapper;
+import de.kuschku.util.observables.callbacks.wrappers.MultiUIChildCallback;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 import de.kuschku.util.ui.Bindable;
 
 @UiThread
-public class NetworkWrapper implements ParentListItem, Nameable<NetworkWrapper>,ContentComparable<NetworkWrapper> {
+public class NetworkWrapper implements ParentListItem, Nameable<NetworkWrapper>, ContentComparable<NetworkWrapper> {
     @NonNull
     private final MultiUIChildCallback callback = MultiUIChildCallback.of();
 
@@ -38,11 +38,10 @@ public class NetworkWrapper implements ParentListItem, Nameable<NetworkWrapper>,
     private final Network network;
     @NonNull
     private final Client client;
-
-    @NonNull
-    private ObservableSortedList<BufferWrapper> buffers = new ObservableSortedList<>(BufferWrapper.class, new BufferWrapperSorterWrapper(getSorter(SortMode.NONE)));
     @NonNull
     private final ChildUICallbackWrapper wrapper = new ChildUICallbackWrapper(callback);
+    @NonNull
+    private ObservableSortedList<BufferWrapper> buffers = new ObservableSortedList<>(BufferWrapper.class, new BufferWrapperSorterWrapper(getSorter(SortMode.NONE)));
     private int groupId;
 
     public NetworkWrapper(@NonNull Network network, @NonNull Client client, @NonNull BufferViewConfig bufferViewConfig, @NonNull SortMode sortMode, int groupId) {
@@ -170,6 +169,13 @@ public class NetworkWrapper implements ParentListItem, Nameable<NetworkWrapper>,
         return network.compareTo(another.network);
     }
 
+    public enum SortMode {
+        NONE,
+        ALPHABETICAL,
+        RECENT_ACTIVITY,
+        LAST_SEEN
+    }
+
     public static class ViewHolder extends ParentViewHolder implements Bindable<NetworkWrapper> {
         @Bind(R.id.material_drawer_icon)
         ImageView materialDrawerIcon;
@@ -190,13 +196,6 @@ public class NetworkWrapper implements ParentListItem, Nameable<NetworkWrapper>,
         public void bind(@NonNull NetworkWrapper wrapper) {
             materialDrawerName.setText(wrapper.getName().getText());
         }
-    }
-
-    public enum SortMode {
-        NONE,
-        ALPHABETICAL,
-        RECENT_ACTIVITY,
-        LAST_SEEN
     }
 
     private static class BufferWrapperSorterWrapper implements ObservableSortedList.ItemComparator<BufferWrapper> {

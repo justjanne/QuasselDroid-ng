@@ -9,9 +9,12 @@ import java.nio.channels.ByteChannel;
 public class BoolSerializer implements PrimitiveSerializer<Boolean> {
     @NonNull
     private static final BoolSerializer serializer = new BoolSerializer();
-    private BoolSerializer() {}
+
+    private BoolSerializer() {
+    }
+
     @NonNull
-    public static BoolSerializer get(){
+    public static BoolSerializer get() {
         return serializer;
     }
 

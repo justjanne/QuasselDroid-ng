@@ -11,7 +11,8 @@ import de.kuschku.libquassel.functions.types.InitRequestFunction;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 import static de.kuschku.libquassel.primitives.QMetaType.Type.QByteArray;
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
+import static de.kuschku.util.AndroidAssert.assertTrue;
 
 @SuppressWarnings("unchecked")
 public class InitRequestFunctionSerializer implements FunctionSerializer<InitRequestFunction> {
