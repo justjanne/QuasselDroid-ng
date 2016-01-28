@@ -14,14 +14,15 @@ import java.util.Set;
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
-import de.kuschku.libquassel.functions.types.InitRequestFunction;
 import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.objects.types.NetworkServer;
+import de.kuschku.libquassel.primitives.types.QVariant;
+import de.kuschku.libquassel.syncables.serializers.NetworkSerializer;
 import de.kuschku.util.observables.ContentComparable;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
-public class Network extends SyncableObject implements ContentComparable<Network> {
+public class Network extends SyncableObject<Network> implements ContentComparable<Network> {
     @NonNull
     private final Set<Buffer> buffers = new HashSet<>();
     @NonNull
@@ -76,6 +77,7 @@ public class Network extends SyncableObject implements ContentComparable<Network
     @Nullable
     private Map<String, IrcMode> supportedModes;
     private int networkId;
+    private Client client;
 
     public Network(@NonNull Map<String, IrcChannel> channels, @NonNull Map<String, IrcUser> users,
                    @NonNull List<NetworkServer> serverList, @NonNull Map<String, String> supports,
@@ -124,7 +126,7 @@ public class Network extends SyncableObject implements ContentComparable<Network
         assertNotNull(provider);
 
         for (IrcUser user : getUsers().values()) {
-            provider.dispatch(new InitRequestFunction("IrcUser", getNetworkId() + "/" + user.nick));
+            client.sendInitRequest("IrcUser", getNetworkId() + "/" + user.getNick());
         }
     }
 
@@ -154,7 +156,7 @@ public class Network extends SyncableObject implements ContentComparable<Network
     }
 
     public void addIrcUser(String sender) {
-        provider.dispatch(new InitRequestFunction("IrcUser", getObjectName() + "/" + sender));
+        client.sendInitRequest("IrcUser", getObjectName() + "/" + sender);
     }
 
     @Nullable
@@ -192,6 +194,19 @@ public class Network extends SyncableObject implements ContentComparable<Network
     @NonNull
     public Map<String, IrcChannel> getChannels() {
         return channels;
+    }
+
+    public void addIrcChannel(String channelName) {
+        IrcChannel ircChannel = new IrcChannel(
+                channelName,
+                null,
+                null,
+                new HashMap<>(),
+                new HashMap<>(),
+                false
+        );
+        ircChannel.setNetwork(this);
+        channels.put(channelName, ircChannel);
     }
 
     public void setChannels(@NonNull Map<String, IrcChannel> channels) {
@@ -476,11 +491,55 @@ public class Network extends SyncableObject implements ContentComparable<Network
     @Override
     public void init(@NonNull InitDataFunction function, @NonNull BusProvider provider, @NonNull Client client) {
         setObjectName(function.objectName);
-        setBusProvider(provider);
         setNetworkId(Integer.parseInt(function.objectName));
+        setBusProvider(provider);
+        setClient(client);
+        doInit();
+    }
+
+    @Override
+    public void doInit() {
         getBuffers().addAll(client.getBuffers(getNetworkId()));
         initUsers();
         client.putNetwork(this);
+    }
+
+    @Override
+    public void update(Network from) {
+        this.channels = from.channels;
+        this.users = from.users;
+        this.ServerList = from.ServerList;
+        this.Supports = from.Supports;
+        this.autoIdentifyPassword = from.autoIdentifyPassword;
+        this.autoIdentifyService = from.autoIdentifyService;
+        this.autoReconnectInterval = from.autoReconnectInterval;
+        this.autoReconnectRetries = from.autoReconnectRetries;
+        this.codecForDecoding = from.codecForDecoding;
+        this.codecForEncoding = from.codecForEncoding;
+        this.codecForServer = from.codecForServer;
+        this.connectionState = from.connectionState;
+        this.currentServer = from.currentServer;
+        this.identityId = from.identityId;
+        this.isConnected = from.isConnected;
+        this.latency = from.latency;
+        this.myNick = from.myNick;
+        this.networkName = from.networkName;
+        this.perform = from.perform;
+        this.rejoinChannels = from.rejoinChannels;
+        this.saslAccount = from.saslAccount;
+        this.saslPassword = from.saslPassword;
+        this.unlimitedReconnectRetries = from.unlimitedReconnectRetries;
+        this.useAutoIdentify = from.useAutoIdentify;
+        this.useAutoReconnect = from.useAutoReconnect;
+        this.useRandomServer = from.useRandomServer;
+        this.useSasl = from.useSasl;
+        parsePrefix();
+        assertNotNull(supportedModes);
+    }
+
+    @Override
+    public void update(Map<String, QVariant> from) {
+        update(NetworkSerializer.get().fromDatastream(from));
     }
 
     @Override
@@ -491,6 +550,10 @@ public class Network extends SyncableObject implements ContentComparable<Network
     @Override
     public int compareTo(@NonNull Network another) {
         return networkId - another.networkId;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public static class IrcMode {
@@ -510,5 +573,43 @@ public class Network extends SyncableObject implements ContentComparable<Network
                     ", prefix='" + prefix + '\'' +
                     '}';
         }
+    }
+
+    public ChannelModeType channelModeType(char mode) {
+        return channelModeType(String.copyValueOf(new char[]{mode}));
+    }
+
+    public ChannelModeType channelModeType(String mode) {
+        if (mode.isEmpty())
+            return ChannelModeType.NOT_A_CHANMODE;
+
+        String rawChanModes = getSupports().get("CHANMODES");
+        if (rawChanModes == null || rawChanModes.isEmpty())
+            return ChannelModeType.NOT_A_CHANMODE;
+
+        String[] chanModes = rawChanModes.split(",");
+        for (int i = 0; i < chanModes.length; i++) {
+            if (chanModes[i].contains(mode)) {
+                switch (i) {
+                    case 0: return ChannelModeType.A_CHANMODE;
+                    case 1: return ChannelModeType.B_CHANMODE;
+                    case 2: return ChannelModeType.C_CHANMODE;
+                    case 3: return ChannelModeType.D_CHANMODE;
+                    default: return ChannelModeType.NOT_A_CHANMODE;
+                }
+            }
+        }
+        return ChannelModeType.NOT_A_CHANMODE;
+    }
+
+    // see:
+    //  http://www.irc.org/tech_docs/005.html
+    //  http://www.irc.org/tech_docs/draft-brocklesby-irc-isupport-03.txt
+    public enum ChannelModeType {
+        NOT_A_CHANMODE,
+        A_CHANMODE,
+        B_CHANMODE,
+        C_CHANMODE,
+        D_CHANMODE
     }
 }

@@ -20,7 +20,7 @@ import static de.kuschku.util.AndroidAssert.assertTrue;
 
 public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
     @NonNull
-    public final SortedList<T> list;
+    private final SortedList<T> list;
     private final boolean reverse;
 
     @NonNull
@@ -120,7 +120,7 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
 
     @Override
     public int lastIndexOf(Object object) {
-        return 0;
+        return indexOf(object);
     }
 
     @NonNull
@@ -138,17 +138,28 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
     @Nullable
     @Override
     public T remove(int location) {
-        return null;
+        T item = list.get(location);
+        list.remove(item);
+        return item;
     }
 
     @Override
     public boolean remove(Object object) {
-        return false;
+        try {
+            list.remove((T) object);
+            return true;
+        } catch (ClassCastException e) {
+            return false;
+        }
     }
 
     @Override
     public boolean removeAll(@NonNull Collection<?> collection) {
-        return false;
+        boolean result = true;
+        for (Object o : collection) {
+            result &= remove(o);
+        }
+        return result;
     }
 
     @Override
@@ -164,7 +175,7 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
 
     @Override
     public int size() {
-        return 0;
+        return list.size();
     }
 
     @NonNull
@@ -191,6 +202,10 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
     @Override
     public <T1> T1[] toArray(@NonNull T1[] array) {
         throw new MaterialDialog.NotImplementedException("Not implemented");
+    }
+
+    public void notifyItemChanged(int position) {
+        callback.notifyItemChanged(position);
     }
 
     public interface ItemComparator<T> {

@@ -16,6 +16,7 @@ import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.quasseldroid_ng.BuildConfig;
 import de.kuschku.quasseldroid_ng.R;
+import de.kuschku.quasseldroid_ng.ui.AppContext;
 import de.kuschku.quasseldroid_ng.ui.AppTheme;
 import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.annotationbind.AutoString;
@@ -40,26 +41,14 @@ public class ChatMessageRenderer {
     private MessageStyleContainer actionStyle;
     private MessageStyleContainer plainStyle;
 
-    @Nullable
-    private Client client;
+    @NonNull
+    private AppContext context;
 
-    //@NonNull
-    //private final SharedPreferences preferences;
-
-    public ChatMessageRenderer(@NonNull Context ctx) {
-        this(ctx, new ThemeUtil(ctx));
-    }
-
-    public ChatMessageRenderer(@NonNull Context ctx, @NonNull AppTheme theme) {
-        this(ctx, new ThemeUtil(ctx, theme));
-    }
-
-    public ChatMessageRenderer(@NonNull Context ctx, @NonNull ThemeUtil themeUtil) {
-        //this.preferences = ctx.getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
-
+    public ChatMessageRenderer(@NonNull Context ctx, @NonNull AppContext context) {
         this.format = DateFormatHelper.getTimeFormatter(ctx);
         this.strings = new FormatStrings(ctx);
-        setTheme(themeUtil);
+        this.context = context;
+        setTheme(context.getThemeUtil());
     }
 
     public void setTheme(ThemeUtil themeUtil) {
@@ -91,10 +80,6 @@ public class ChatMessageRenderer {
         );
     }
 
-    public void setClient(@NonNull Client client) {
-        this.client = client;
-    }
-
     private void applyStyle(@NonNull MessageViewHolder holder, @NonNull MessageStyleContainer style, @NonNull MessageStyleContainer highlightStyle, boolean highlight) {
         MessageStyleContainer container = highlight ? highlightStyle : style;
         holder.content.setTextColor(container.textColor);
@@ -115,13 +100,13 @@ public class ChatMessageRenderer {
 
     @NonNull
     private CharSequence formatNick(@NonNull String hostmask) {
-        return formatNick(hostmask, true);
+        return formatNick(hostmask, context.getSettings().fullHostmask.or(false));
     }
 
     @NonNull
     private CharSequence getBufferName(Message message) {
-        assertNotNull(client);
-        Buffer buffer = client.getBuffer(message.bufferInfo.id);
+        assertNotNull(context.getClient());
+        Buffer buffer = context.getClient().getBuffer(message.bufferInfo.id);
         assertNotNull(buffer);
         String name = buffer.getName();
         assertNotNull(name);

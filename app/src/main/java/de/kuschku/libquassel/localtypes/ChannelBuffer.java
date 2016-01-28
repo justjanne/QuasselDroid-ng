@@ -9,10 +9,10 @@ import de.kuschku.libquassel.syncables.types.IrcChannel;
 public class ChannelBuffer implements Buffer {
     @NonNull
     private final BufferInfo info;
-    @NonNull
+    @Nullable
     private final IrcChannel channel;
 
-    public ChannelBuffer(@NonNull BufferInfo info, @NonNull IrcChannel channel) {
+    public ChannelBuffer(@NonNull BufferInfo info, @Nullable IrcChannel channel) {
         this.info = info;
         this.channel = channel;
     }
@@ -29,7 +29,12 @@ public class ChannelBuffer implements Buffer {
         return getInfo().name;
     }
 
-    @NonNull
+    @Override
+    public boolean isActive() {
+        return channel != null;
+    }
+
+    @Nullable
     public IrcChannel getChannel() {
         return channel;
     }

@@ -36,22 +36,22 @@ public class IrcUserSerializer implements ObjectSerializer<IrcUser> {
         final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
         assertNotNull(map.data);
 
-        map.data.put("server", new QVariant<>(data.server));
-        map.data.put("ircOperator", new QVariant<>(data.ircOperator));
-        map.data.put("away", new QVariant<>(data.away));
-        map.data.put("lastAwayMessage", new QVariant<>(data.lastAwayMessage));
-        map.data.put("idleTime", new QVariant<>(data.idleTime));
-        map.data.put("whoisServiceReply", new QVariant<>(data.whoisServiceReply));
-        map.data.put("suserHost", new QVariant<>(data.suserHost));
-        map.data.put("nick", new QVariant<>(data.nick));
-        map.data.put("realName", new QVariant<>(data.realName));
-        map.data.put("awayMessage", new QVariant<>(data.awayMessage));
-        map.data.put("loginTime", new QVariant<>(data.loginTime));
-        map.data.put("encrypted", new QVariant<>(data.encrypted));
-        map.data.put("channels", new QVariant<>(data.channels));
-        map.data.put("host", new QVariant<>(data.host));
-        map.data.put("userModes", new QVariant<>(data.userModes));
-        map.data.put("user", new QVariant<>(data.user));
+        map.data.put("server", new QVariant<>(data.getServer()));
+        map.data.put("ircOperator", new QVariant<>(data.getIrcOperator()));
+        map.data.put("away", new QVariant<>(data.isAway()));
+        map.data.put("lastAwayMessage", new QVariant<>(data.getLastAwayMessage()));
+        map.data.put("idleTime", new QVariant<>(data.getIdleTime()));
+        map.data.put("whoisServiceReply", new QVariant<>(data.getWhoisServiceReply()));
+        map.data.put("suserHost", new QVariant<>(data.getSuserHost()));
+        map.data.put("nick", new QVariant<>(data.getNick()));
+        map.data.put("realName", new QVariant<>(data.getRealName()));
+        map.data.put("awayMessage", new QVariant<>(data.getAwayMessage()));
+        map.data.put("loginTime", new QVariant<>(data.getLoginTime()));
+        map.data.put("encrypted", new QVariant<>(data.isEncrypted()));
+        map.data.put("channels", new QVariant<>(data.getChannels()));
+        map.data.put("host", new QVariant<>(data.getHost()));
+        map.data.put("userModes", new QVariant<>(data.getUserModes()));
+        map.data.put("user", new QVariant<>(data.getUser()));
         return map;
     }
 

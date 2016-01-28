@@ -2,6 +2,7 @@ package de.kuschku.libquassel.protocols;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -9,17 +10,25 @@ import com.google.common.collect.Lists;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.CoreConnection;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.functions.FunctionType;
+import de.kuschku.libquassel.functions.serializers.HeartbeatReplySerializer;
+import de.kuschku.libquassel.functions.serializers.HeartbeatSerializer;
 import de.kuschku.libquassel.functions.serializers.InitDataFunctionSerializer;
 import de.kuschku.libquassel.functions.serializers.InitRequestFunctionSerializer;
 import de.kuschku.libquassel.functions.serializers.PackedInitDataFunctionSerializer;
@@ -28,6 +37,8 @@ import de.kuschku.libquassel.functions.serializers.PackedSyncFunctionSerializer;
 import de.kuschku.libquassel.functions.serializers.UnpackedRpcCallFunctionSerializer;
 import de.kuschku.libquassel.functions.serializers.UnpackedSyncFunctionSerializer;
 import de.kuschku.libquassel.functions.types.HandshakeFunction;
+import de.kuschku.libquassel.functions.types.Heartbeat;
+import de.kuschku.libquassel.functions.types.HeartbeatReply;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.functions.types.InitRequestFunction;
 import de.kuschku.libquassel.functions.types.RpcCallFunction;
@@ -38,6 +49,7 @@ import de.kuschku.libquassel.primitives.serializers.IntSerializer;
 import de.kuschku.libquassel.primitives.serializers.PrimitiveSerializer;
 import de.kuschku.libquassel.primitives.serializers.VariantVariantListSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
+import de.kuschku.util.niohelpers.Helper;
 import de.kuschku.util.niohelpers.WrappedChannel;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -48,12 +60,14 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
  *
  * @author Janne Koschinski
  */
-@SuppressWarnings({"unchecked"})
+@SuppressWarnings({"unchecked", "unused"})
 public class DatastreamPeer implements RemotePeer {
     @NonNull
     private final CoreConnection connection;
     @NonNull
     private final BusProvider busProvider;
+    @NonNull
+    private final ExecutorService parseExecutor;
     @NonNull
     private ByteBuffer buffer = ByteBuffer.allocate(0);
 
@@ -61,6 +75,7 @@ public class DatastreamPeer implements RemotePeer {
         this.connection = connection;
         this.busProvider = busProvider;
         this.busProvider.dispatch.register(this);
+        this.parseExecutor = Executors.newCachedThreadPool();
     }
 
     @NonNull
@@ -104,6 +119,7 @@ public class DatastreamPeer implements RemotePeer {
     }
 
     public void onEventBackgroundThread(@NonNull SyncFunction func) {
+        assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantVariantListSerializer.<SyncFunction>get(),
                 UnpackedSyncFunctionSerializer.get().serialize(func)
@@ -111,6 +127,7 @@ public class DatastreamPeer implements RemotePeer {
     }
 
     public void onEventBackgroundThread(@NonNull RpcCallFunction func) {
+        assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantVariantListSerializer.<RpcCallFunction>get(),
                 UnpackedRpcCallFunctionSerializer.get().serialize(func)
@@ -118,6 +135,7 @@ public class DatastreamPeer implements RemotePeer {
     }
 
     public void onEventBackgroundThread(@NonNull InitRequestFunction func) {
+        assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantVariantListSerializer.<InitRequestFunction>get(),
                 InitRequestFunctionSerializer.get().serializePacked(func)
@@ -125,16 +143,36 @@ public class DatastreamPeer implements RemotePeer {
     }
 
     public void onEventBackgroundThread(@NonNull InitDataFunction func) {
+        assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantVariantListSerializer.<InitDataFunction>get(),
                 InitDataFunctionSerializer.get().serialize(func)
         ));
     }
 
+    public void onEventBackgroundThread(@NonNull Heartbeat func) {
+        assertNotNull(connection.getOutputExecutor());
+        connection.getOutputExecutor().submit(new OutputRunnable<>(
+                VariantVariantListSerializer.<InitDataFunction>get(),
+                HeartbeatSerializer.get().serialize(func)
+        ));
+    }
+
+    public void onEventBackgroundThread(@NonNull HeartbeatReply func) {
+        assertNotNull(connection.getOutputExecutor());
+        connection.getOutputExecutor().submit(new OutputRunnable<>(
+                VariantVariantListSerializer.<InitDataFunction>get(),
+                HeartbeatReplySerializer.get().serialize(func)
+        ));
+    }
+
     public void onEventBackgroundThread(@NonNull HandshakeFunction func) {
+        assertNotNull(connection.getOutputExecutor());
+        Map<String, QVariant> variantMap = MessageTypeRegistry.toVariantMap(func.data).data;
+        assertNotNull(variantMap);
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantVariantListSerializer.get(),
-                DatastreamPeer.mapToList(MessageTypeRegistry.toVariantMap(func.data).data)
+                DatastreamPeer.mapToList(variantMap)
         ));
     }
 
@@ -143,7 +181,7 @@ public class DatastreamPeer implements RemotePeer {
     }
 
     private void handlePackedFunc(@NonNull List<QVariant> data) {
-        final FunctionType type = FunctionType.fromId((Integer) data.remove(0).data);
+        final FunctionType type = FunctionType.fromId((int) data.remove(0).data);
         switch (type) {
             case SYNC:
                 busProvider.handle(PackedSyncFunctionSerializer.get().deserialize(data));
@@ -158,7 +196,11 @@ public class DatastreamPeer implements RemotePeer {
                 busProvider.handle(PackedInitDataFunctionSerializer.get().deserialize(data));
                 break;
             case HEARTBEAT:
+                busProvider.handle(HeartbeatSerializer.get().deserialize(data));
+                break;
             case HEARTBEATREPLY:
+                busProvider.handle(HeartbeatReplySerializer.get().deserialize(data));
+                break;
             default:
                 busProvider.sendEvent(new GeneralErrorEvent("Unknown package received: " + data));
                 break;
@@ -176,17 +218,7 @@ public class DatastreamPeer implements RemotePeer {
         buffer = ByteBuffer.allocate(size);
         connection.getChannel().read(buffer);
 
-        // TODO: Put this into a future with a time limit, and parallelize it.
-        final List data = VariantVariantListSerializer.get().deserialize(buffer);
-        if (connection.getStatus() == ConnectionChangeEvent.Status.CONNECTING
-                || connection.getStatus() == ConnectionChangeEvent.Status.HANDSHAKE
-                || connection.getStatus() == ConnectionChangeEvent.Status.CORE_SETUP_REQUIRED
-                || connection.getStatus() == ConnectionChangeEvent.Status.USER_SETUP_REQUIRED
-                || connection.getStatus() == ConnectionChangeEvent.Status.LOGIN_REQUIRED) {
-            handleHandshakeMessage(data);
-        } else {
-            handlePackedFunc(data);
-        }
+        parseExecutor.submit(new ParseRunnable(buffer));
     }
 
     @NonNull
@@ -235,6 +267,35 @@ public class DatastreamPeer implements RemotePeer {
                 fakeChannel.close();
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    private class ParseRunnable implements Runnable {
+        ByteBuffer buffer;
+        public ParseRunnable(ByteBuffer buffer) {
+            this.buffer = buffer;
+        }
+
+        @Override
+        public void run() {
+            try {
+                // TODO: Put this into a future with a time limit, and parallelize it.
+                final List data = VariantVariantListSerializer.get().deserialize(buffer);
+                if (connection.getStatus() == ConnectionChangeEvent.Status.CONNECTING
+                        || connection.getStatus() == ConnectionChangeEvent.Status.HANDSHAKE
+                        || connection.getStatus() == ConnectionChangeEvent.Status.CORE_SETUP_REQUIRED
+                        || connection.getStatus() == ConnectionChangeEvent.Status.USER_SETUP_REQUIRED
+                        || connection.getStatus() == ConnectionChangeEvent.Status.LOGIN_REQUIRED) {
+                    handleHandshakeMessage(data);
+                } else {
+                    handlePackedFunc(data);
+                }
+            } catch (BufferUnderflowException|BufferOverflowException e) {
+                Helper.printHexDump(buffer.array());
+                busProvider.sendEvent(new GeneralErrorEvent(e));
+            } catch (Exception e) {
+                busProvider.sendEvent(new GeneralErrorEvent(e));
             }
         }
     }

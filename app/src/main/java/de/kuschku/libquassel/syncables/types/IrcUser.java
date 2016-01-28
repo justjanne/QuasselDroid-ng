@@ -6,31 +6,35 @@ import android.support.annotation.Nullable;
 import org.joda.time.DateTime;
 
 import java.util.List;
+import java.util.Map;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
+import de.kuschku.libquassel.primitives.types.QVariant;
+import de.kuschku.libquassel.syncables.serializers.BufferSyncerSerializer;
+import de.kuschku.libquassel.syncables.serializers.IrcUserSerializer;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
-public class IrcUser extends SyncableObject {
-    public String server;
-    public String ircOperator;
-    public boolean away;
-    public int lastAwayMessage;
-    public DateTime idleTime;
-    public String whoisServiceReply;
-    public String suserHost;
-    public String nick;
-    public String realName;
-    public String awayMessage;
-    public DateTime loginTime;
-    public boolean encrypted;
+public class IrcUser extends SyncableObject<IrcUser> {
+    private String server;
+    private String ircOperator;
+    private boolean away;
+    private int lastAwayMessage;
+    private DateTime idleTime;
+    private String whoisServiceReply;
+    private String suserHost;
+    private String nick;
+    private String realName;
+    private String awayMessage;
+    private DateTime loginTime;
+    private boolean encrypted;
     @NonNull
-    public List<String> channels;
-    public String host;
-    public String userModes;
-    public String user;
+    private List<String> channels;
+    private String host;
+    private String userModes;
+    private String user;
 
     private Network network;
 
@@ -54,6 +58,71 @@ public class IrcUser extends SyncableObject {
         this.host = host;
         this.userModes = userModes;
         this.user = user;
+    }
+
+    public String getServer() {
+        return server;
+    }
+
+    public String getIrcOperator() {
+        return ircOperator;
+    }
+
+    public boolean isAway() {
+        return away;
+    }
+
+    public int getLastAwayMessage() {
+        return lastAwayMessage;
+    }
+
+    public DateTime getIdleTime() {
+        return idleTime;
+    }
+
+    public String getWhoisServiceReply() {
+        return whoisServiceReply;
+    }
+
+    public String getSuserHost() {
+        return suserHost;
+    }
+
+    public String getNick() {
+        return nick;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public String getAwayMessage() {
+        return awayMessage;
+    }
+
+    public DateTime getLoginTime() {
+        return loginTime;
+    }
+
+    public boolean isEncrypted() {
+        return encrypted;
+    }
+
+    @NonNull
+    public List<String> getChannels() {
+        return channels;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public String getUserModes() {
+        return userModes;
+    }
+
+    public String getUser() {
+        return user;
     }
 
     /* BEGIN SYNC */
@@ -153,6 +222,31 @@ public class IrcUser extends SyncableObject {
         final Network network = client.getNetwork(Integer.parseInt(networkId));
         setObjectName(function.objectName);
         setNetwork(network);
+    }
+
+    @Override
+    public void update(IrcUser from) {
+        this.server = from.server;
+        this.ircOperator = from.ircOperator;
+        this.away = from.away;
+        this.lastAwayMessage = from.lastAwayMessage;
+        this.idleTime = from.idleTime;
+        this.whoisServiceReply = from.whoisServiceReply;
+        this.suserHost = from.suserHost;
+        this.nick = from.nick;
+        this.realName = from.realName;
+        this.awayMessage = from.awayMessage;
+        this.loginTime = from.loginTime;
+        this.encrypted = from.encrypted;
+        this.channels = from.channels;
+        this.host = from.host;
+        this.userModes = from.userModes;
+        this.user = from.user;
+    }
+
+    @Override
+    public void update(Map<String, QVariant> from) {
+        update(IrcUserSerializer.get().fromDatastream(from));
     }
 
     public void quit() {

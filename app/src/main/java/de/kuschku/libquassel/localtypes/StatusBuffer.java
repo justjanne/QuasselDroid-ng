@@ -29,6 +29,11 @@ public class StatusBuffer implements Buffer {
         return network.getNetworkName();
     }
 
+    @Override
+    public boolean isActive() {
+        return network.isConnected();
+    }
+
     @NonNull
     @Override
     public String toString() {

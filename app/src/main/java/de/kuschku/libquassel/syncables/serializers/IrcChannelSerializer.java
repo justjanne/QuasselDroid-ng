@@ -30,12 +30,12 @@ public class IrcChannelSerializer implements ObjectSerializer<IrcChannel> {
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(@NonNull IrcChannel data) {
         final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        map.data.put("name", new QVariant<>(data.name));
-        map.data.put("topic", new QVariant<>(data.topic));
-        map.data.put("password", new QVariant<>(data.password));
-        map.data.put("UserModes", StringObjectMapSerializer.<String>get().toVariantMap(data.UserModes));
-        map.data.put("ChanModes", new QVariant<>(data.ChanModes));
-        map.data.put("encrypted", new QVariant<>(data.encrypted));
+        map.data.put("name", new QVariant<>(data.getName()));
+        map.data.put("topic", new QVariant<>(data.getTopic()));
+        map.data.put("password", new QVariant<>(data.getPassword()));
+        map.data.put("UserModes", StringObjectMapSerializer.<String>get().toVariantMap(data.getUserModes()));
+        map.data.put("ChanModes", new QVariant<>(data.getChanModes()));
+        map.data.put("encrypted", new QVariant<>(data.isEncrypted()));
         return map;
     }
 

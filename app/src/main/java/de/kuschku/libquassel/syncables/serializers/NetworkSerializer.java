@@ -37,8 +37,8 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
     @Nullable
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(@NonNull Network data) {
-        // FIXME: Implement this
-        return null;
+        // FIXME: IMPLEMENT
+        throw new IllegalArgumentException();
     }
 
     @NonNull
@@ -51,7 +51,7 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
 
         final Map<String, IrcChannel> channelMap = new HashMap<>(channels.size());
         for (IrcChannel channel : channels) {
-            channelMap.put(channel.name, channel);
+            channelMap.put(channel.getName(), channel);
         }
 
         final Map<String, IrcUser> userMap = new HashMap<>(users.size());
@@ -86,6 +86,9 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
         );
         for (IrcUser user : users) {
             user.setNetwork(network);
+        }
+        for (IrcChannel channel : channels) {
+            channel.setNetwork(network);
         }
 
         return network;
@@ -154,12 +157,12 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
         final Map<String, IrcChannel> channels = new HashMap<>(wrappedChannels.size());
         for (Map.Entry<String, QVariant<Map<String, QVariant>>> entry : wrappedChannels.entrySet()) {
             final IrcChannel ircChannel = IrcChannelSerializer.get().fromLegacy(entry.getValue().data);
-            channels.put(ircChannel.name, ircChannel);
+            channels.put(ircChannel.getName(), ircChannel);
         }
         final Map<String, IrcUser> users = new HashMap<>(wrappedUsers.size());
         for (Map.Entry<String, QVariant<Map<String, QVariant>>> entry : wrappedUsers.entrySet()) {
             final IrcUser ircUser = IrcUserSerializer.get().fromLegacy(entry.getValue().data);
-            users.put(ircUser.nick, ircUser);
+            users.put(ircUser.getNick(), ircUser);
         }
         final Map<String, String> supports = StringObjectMapSerializer.<String>get().fromLegacy((Map<String, QVariant>) map.get("Supports").data);
         Network network = new Network(

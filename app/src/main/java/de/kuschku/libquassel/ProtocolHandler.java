@@ -3,12 +3,16 @@ package de.kuschku.libquassel;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import org.joda.time.DateTime;
+
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.HandshakeFailedEvent;
 import de.kuschku.libquassel.events.LoginFailedEvent;
 import de.kuschku.libquassel.events.LoginSuccessfulEvent;
 import de.kuschku.libquassel.exceptions.UnknownTypeException;
+import de.kuschku.libquassel.functions.types.Heartbeat;
+import de.kuschku.libquassel.functions.types.HeartbeatReply;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.functions.types.InitRequestFunction;
 import de.kuschku.libquassel.functions.types.RpcCallFunction;
@@ -20,9 +24,12 @@ import de.kuschku.libquassel.objects.types.ClientLoginReject;
 import de.kuschku.libquassel.objects.types.SessionInit;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.SyncableRegistry;
+import de.kuschku.libquassel.syncables.types.BufferViewConfig;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.util.AndroidAssert;
 import de.kuschku.util.ReflectionUtils;
+
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class ProtocolHandler implements IProtocolHandler {
     @NonNull
@@ -51,7 +58,7 @@ public class ProtocolHandler implements IProtocolHandler {
                 }
             }
             SyncableObject object = SyncableRegistry.from(packedFunc);
-            AndroidAssert.assertNotNull(object);
+            assertNotNull(object);
 
             object.init(packedFunc, busProvider, client);
         } catch (Exception e) {
@@ -79,21 +86,21 @@ public class ProtocolHandler implements IProtocolHandler {
     public void onEventMainThread(@NonNull SyncFunction packedFunc) {
         try {
             final Object syncable = client.getObjectByIdentifier(packedFunc.className, packedFunc.objectName);
-            if (syncable != null) {
-                ReflectionUtils.invokeMethod(syncable, packedFunc.methodName, packedFunc.params);
-            } else {
-                busProvider.sendEvent(new GeneralErrorEvent(new UnknownTypeException(packedFunc.className)));
-            }
+            AndroidAssert.assertNotNull("Object not found: " + packedFunc.className+":"+packedFunc.objectName, syncable);
+            ReflectionUtils.invokeMethod(syncable, packedFunc.methodName, packedFunc.params);
         } catch (Exception e) {
-            busProvider.sendEvent(new GeneralErrorEvent(e));
+            busProvider.sendEvent(new GeneralErrorEvent(e, packedFunc.toString()));
+        } catch (Error e) {
+            e.printStackTrace();
+            Log.e("EVENT", packedFunc.toString());
         }
     }
 
-    public void onEventMainThread(@NonNull ClientInitReject message) {
+    public void onEvent(@NonNull ClientInitReject message) {
         busProvider.sendEvent(new HandshakeFailedEvent(message.Error));
     }
 
-    public void onEventMainThread(ClientInitAck message) {
+    public void onEvent(ClientInitAck message) {
         client.setCore(message);
 
         if (client.getCore().Configured) {
@@ -105,16 +112,16 @@ public class ProtocolHandler implements IProtocolHandler {
         }
     }
 
-    public void onEventMainThread(ClientLoginAck message) {
+    public void onEvent(ClientLoginAck message) {
         busProvider.sendEvent(new LoginSuccessfulEvent());
         client.setConnectionStatus(ConnectionChangeEvent.Status.CONNECTING);
     }
 
-    public void onEventMainThread(@NonNull ClientLoginReject message) {
+    public void onEvent(@NonNull ClientLoginReject message) {
         busProvider.sendEvent(new LoginFailedEvent(message.Error));
     }
 
-    public void onEventMainThread(@NonNull SessionInit message) {
+    public void onEvent(@NonNull SessionInit message) {
         client.setState(message.SessionState);
 
         client.setConnectionStatus(ConnectionChangeEvent.Status.INITIALIZING_DATA);
@@ -132,6 +139,17 @@ public class ProtocolHandler implements IProtocolHandler {
             final int initialBacklogCount = 10;
             client.getBacklogManager().requestBacklog(info.id, -1, -1, initialBacklogCount, 0);
         }
+    }
+
+    public void onEvent(@NonNull Heartbeat heartbeat) {
+        busProvider.dispatch(new HeartbeatReply(heartbeat.dateTime));
+    }
+
+    public void onEventMainThread(@NonNull HeartbeatReply heartbeat) {
+        long roundtrip = DateTime.now().getMillis() - heartbeat.dateTime.getMillis();
+        long lag = (long) (roundtrip * 0.5);
+
+        client.setLag(lag);
     }
 
     @NonNull

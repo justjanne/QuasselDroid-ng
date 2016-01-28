@@ -29,4 +29,11 @@ public enum AppTheme {
             case "QUASSEL": return QUASSEL;
         }
     }
+
+    @Override
+    public String toString() {
+        return name() + "{" +
+                "themeId=" + themeId +
+                '}';
+    }
 }

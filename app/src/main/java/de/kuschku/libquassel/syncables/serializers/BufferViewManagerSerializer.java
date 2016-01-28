@@ -29,7 +29,8 @@ public class BufferViewManagerSerializer implements ObjectSerializer<BufferViewM
     @Nullable
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(@NonNull BufferViewManager data) {
-        return null;
+        // FIXME: IMPLEMENT
+        throw new IllegalArgumentException();
     }
 
     @NonNull

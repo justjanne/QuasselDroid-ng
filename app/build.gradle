@@ -46,14 +46,10 @@ android {
 }
 
 
-
 dependencies {
     testCompile 'junit:junit:4.12'
 
-    compile('com.mikepenz:materialdrawer:5.0.0.fastAdapter.b5-SNAPSHOT@aar') {
-        transitive = true
-    }
-    compile('com.mikepenz:fastadapter:0.4.2-SNAPSHOT@aar') {
+    compile('com.mikepenz:materialdrawer:5.0.0.b21-SNAPSHOT@aar') {
         transitive = true
     }
     compile('com.github.afollestad.material-dialogs:core:0.8.5.3@aar') {

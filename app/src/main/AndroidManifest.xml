@@ -17,7 +17,7 @@
             android:name=".ui.chat.ChatActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.Light">
+            android:theme="@style/Quassel">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

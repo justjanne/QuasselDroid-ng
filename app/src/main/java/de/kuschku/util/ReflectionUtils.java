@@ -2,6 +2,7 @@ package de.kuschku.util;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.common.primitives.Primitives;
 
@@ -32,7 +33,8 @@ public class ReflectionUtils {
 
         Class<?>[] classes = new Class<?>[argv.length];
         for (int i = 0; i < argv.length; i++) {
-            classes[i] = argv[i].getClass();
+            if (argv[i] == null) classes[i] = null;
+            else classes[i] = argv[i].getClass();
         }
         Method m = getMethodFromSignature(name, o.getClass(), classes);
         if (m == null)
@@ -41,6 +43,7 @@ public class ReflectionUtils {
         try {
             m.invoke(o, argv);
         } catch (Exception e) {
+            Log.e("DEBUG", m.toString());
             throw new SyncInvocationException(e, String.format("Error invoking %s::%s with arguments %s and classes %s", o.getClass().getSimpleName(), name, Arrays.toString(argv), Arrays.toString(classes)));
         }
     }
@@ -68,6 +71,10 @@ public class ReflectionUtils {
                 for (int i = 0; i < parameterTypes.length; i++) {
                     Class<?> mParam = m.getParameterTypes()[i];
                     Class<?> vParam = parameterTypes[i];
+
+                    // Can’t check type of null values, so we’ll assume it will work
+                    if (vParam == null) continue;
+
                     assertNotNull(vParam);
 
                     if (mParam.isPrimitive() && Primitives.isWrapperType(vParam))

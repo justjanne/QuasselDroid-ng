@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.quasseldroid_ng.R;
+import de.kuschku.quasseldroid_ng.ui.AppContext;
 import de.kuschku.util.observables.AutoScroller;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
@@ -29,16 +30,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     @NonNull
     private final UICallback callback;
     @NonNull
-    private IObservableList<UICallback, Message> messageList = new ObservableComparableSortedList<>(Message.class);
+    private IObservableList<UICallback, Message> messageList = emptyList();
 
-    public MessageAdapter(@NonNull Context ctx, @Nullable AutoScroller scroller) {
+    public MessageAdapter(@NonNull Context ctx, @NonNull AppContext context, @Nullable AutoScroller scroller) {
         this.inflater = LayoutInflater.from(ctx);
-        this.renderer = new ChatMessageRenderer(ctx);
+        this.renderer = new ChatMessageRenderer(ctx, context);
         this.callback = new AdapterUICallbackWrapper(this, scroller);
-    }
-
-    public void setClient(@NonNull Client client) {
-        renderer.setClient(client);
     }
 
     public void setMessageList(@NonNull ObservableSortedList<Message> messageList) {
@@ -65,5 +62,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     @Override
     public int getItemCount() {
         return messageList.size();
+    }
+
+    private static ObservableSortedList<Message> emptyList = new ObservableComparableSortedList<Message>(Message.class);
+    public static ObservableSortedList<Message> emptyList() {
+        return emptyList;
     }
 }

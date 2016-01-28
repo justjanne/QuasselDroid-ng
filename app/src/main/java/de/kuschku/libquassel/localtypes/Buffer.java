@@ -11,4 +11,6 @@ public interface Buffer {
 
     @Nullable
     String getName();
+
+    boolean isActive();
 }

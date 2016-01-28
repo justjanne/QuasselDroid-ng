@@ -13,11 +13,18 @@ public class GeneralErrorEvent {
         this.exception = exception;
     }
 
+    public GeneralErrorEvent(Exception exception, String debugInfo) {
+        this.debugInfo = debugInfo;
+        this.exception = exception;
+    }
+
     @Override
     public String toString() {
         if (debugInfo == null)
             return String.format("%s: %s", exception.getClass().getSimpleName(), exception.getLocalizedMessage());
-        else
+        else if (exception == null)
             return debugInfo;
+        else
+            return String.format("%s: %s\n%s", exception.getClass().getSimpleName(), exception.getLocalizedMessage(), debugInfo);
     }
 }

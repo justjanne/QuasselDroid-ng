@@ -30,25 +30,22 @@ public class BufferSyncerSerializer implements ObjectSerializer<BufferSyncer> {
     @Nullable
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(@NonNull BufferSyncer data) {
-        // TODO: Implement this
-        return null;
+        // FIXME: IMPLEMENT
+        throw new IllegalArgumentException();
     }
 
     @NonNull
     @Override
     public BufferSyncer fromDatastream(@NonNull Map<String, QVariant> map) {
-        return new BufferSyncer(
-                DatastreamPeer.unboxedListToMap((List<Integer>) map.get("LastSeenMsg").data),
-                DatastreamPeer.unboxedListToMap((List<Integer>) map.get("MarkerLines").data)
-        );
+        return fromLegacy(map);
     }
 
     @NonNull
     @Override
     public BufferSyncer fromLegacy(@NonNull Map<String, QVariant> map) {
         return new BufferSyncer(
-                (Map<Integer, Integer>) map.get("LastSeenMsg").data,
-                (Map<Integer, Integer>) map.get("MarkerLines").data
+                DatastreamPeer.unboxedListToMap((List<Integer>) map.get("LastSeenMsg").data),
+                DatastreamPeer.unboxedListToMap((List<Integer>) map.get("LastSeenMsg").data)
         );
     }
 

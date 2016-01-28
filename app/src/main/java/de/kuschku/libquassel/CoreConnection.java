@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import org.joda.time.DateTime;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -20,6 +22,7 @@ import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.HandshakeFailedEvent;
 import de.kuschku.libquassel.functions.types.HandshakeFunction;
+import de.kuschku.libquassel.functions.types.Heartbeat;
 import de.kuschku.libquassel.objects.types.ClientInit;
 import de.kuschku.libquassel.primitives.QMetaTypeRegistry;
 import de.kuschku.libquassel.primitives.serializers.ProtocolSerializer;
@@ -50,7 +53,9 @@ public class CoreConnection {
     @Nullable
     private ExecutorService outputExecutor;
     @Nullable
-    private ExecutorService inputExecutor;
+    private EndableThread inputThread;
+    @Nullable
+    private EndableThread heartbeatThread;
     @Nullable
     private RemotePeer remotePeer;
     @Nullable
@@ -95,7 +100,6 @@ public class CoreConnection {
 
         // Create executor for write events
         outputExecutor = Executors.newSingleThreadExecutor();
-        inputExecutor = Executors.newSingleThreadExecutor();
 
         // Execute handshake
         handshake();
@@ -112,7 +116,8 @@ public class CoreConnection {
         client.setConnectionStatus(ConnectionChangeEvent.Status.DISCONNECTED);
 
         // We can do this because we clean up the file handles ourselves
-        if (inputExecutor != null) inputExecutor.shutdownNow();
+        if (inputThread != null) inputThread.end();
+        if (heartbeatThread != null) heartbeatThread.end();
         if (outputExecutor != null) outputExecutor.shutdownNow();
 
         // Which we do exactly here
@@ -154,7 +159,6 @@ public class CoreConnection {
      */
     private void handshake() throws IOException {
         assertNotNull(channel);
-        assertNotNull(inputExecutor);
 
         // Start protocol handshake with magic version and feature flags
         QMetaTypeRegistry.serialize(UInt, channel, 0x42b33f00 | clientData.flags.flags);
@@ -166,7 +170,10 @@ public class CoreConnection {
         QMetaTypeRegistry.serialize(UInt, channel, 0x01 << 31);
 
         // Spawn and start a new read thread
-        inputExecutor.submit(new ReadRunnable());
+        inputThread = new ReadThread();
+        heartbeatThread = new HeartbeatThread();
+        inputThread.start();
+        heartbeatThread.start();
     }
 
     public void onEventAsync(HandshakeFailedEvent event) {
@@ -192,14 +199,20 @@ public class CoreConnection {
     /**
      * A runnable that reads from the channel and calls the functions responsible for processing the read data.
      */
-    private class ReadRunnable implements Runnable {
+    private class ReadThread extends EndableThread {
+        private boolean running = true;
+
+        public ReadThread() {
+            setName(getClass().getSimpleName());
+        }
+
         @Override
         public void run() {
             assertNotNull(client);
 
             try {
                 boolean hasReadPreHandshake = false;
-                while (true) {
+                while (running) {
                     if (!hasReadPreHandshake) {
                         final ByteBuffer buffer = ByteBuffer.allocate(4);
                         assertNotNull(buffer);
@@ -248,5 +261,42 @@ public class CoreConnection {
                 busProvider.sendEvent(new GeneralErrorEvent(e));
             }
         }
+
+        @Override
+        public void end() {
+            running = false;
+        }
+    }
+
+    private class HeartbeatThread extends EndableThread {
+        private boolean running = true;
+
+        public HeartbeatThread() {
+            setName(getClass().getSimpleName());
+        }
+
+        @Override
+        public void run() {
+            try {
+                assertNotNull(client);
+
+                while (running) {
+                    busProvider.dispatch(new Heartbeat(DateTime.now()));
+
+                    Thread.sleep(30 * 1000);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void end() {
+            running = false;
+        }
+    }
+
+    private abstract class EndableThread extends Thread {
+        public abstract void end();
     }
 }

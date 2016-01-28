@@ -21,15 +21,15 @@ public interface IProtocolHandler {
 
     void onEventMainThread(SyncFunction packedFunc);
 
-    void onEventMainThread(ClientInitReject message);
+    void onEvent(ClientInitReject message);
 
-    void onEventMainThread(ClientInitAck message);
+    void onEvent(ClientInitAck message);
 
-    void onEventMainThread(ClientLoginAck message);
+    void onEvent(ClientLoginAck message);
 
-    void onEventMainThread(ClientLoginReject message);
+    void onEvent(ClientLoginReject message);
 
-    void onEventMainThread(SessionInit message);
+    void onEvent(SessionInit message);
 
     @NonNull
     Client getClient();

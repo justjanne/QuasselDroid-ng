@@ -3,6 +3,7 @@ package de.kuschku.libquassel.primitives.serializers;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import de.kuschku.libquassel.primitives.types.BufferInfo;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
@@ -39,18 +40,22 @@ public class MessageSerializer implements PrimitiveSerializer<Message> {
     @Nullable
     @Override
     public Message deserialize(@NonNull final ByteBuffer buffer) throws IOException {
+        Integer messageId = IntSerializer.get().deserialize(buffer);
+        DateTime time = new DateTime(((long) IntSerializer.get().deserialize(buffer)) * 1000);
+        Message.Type type = Message.Type.fromId(IntSerializer.get().deserialize(buffer));
+        Message.Flags flags = new Message.Flags(ByteSerializer.get().deserialize(buffer));
+        BufferInfo bufferInfo = BufferInfoSerializer.get().deserialize(buffer);
         String sender = ByteArraySerializer.get().deserialize(buffer);
         String message = ByteArraySerializer.get().deserialize(buffer);
 
         assertNotNull(sender);
         assertNotNull(message);
-
         return new Message(
-                IntSerializer.get().deserialize(buffer),
-                new DateTime(((long) IntSerializer.get().deserialize(buffer)) * 1000),
-                Message.Type.fromId(IntSerializer.get().deserialize(buffer)),
-                new Message.Flags(ByteSerializer.get().deserialize(buffer)),
-                BufferInfoSerializer.get().deserialize(buffer),
+                messageId,
+                time,
+                type,
+                flags,
+                bufferInfo,
                 sender,
                 message
         );

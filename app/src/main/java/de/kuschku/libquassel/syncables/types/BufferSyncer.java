@@ -10,15 +10,18 @@ import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.message.Message;
+import de.kuschku.libquassel.primitives.types.QVariant;
+import de.kuschku.libquassel.syncables.serializers.AliasManagerSerializer;
+import de.kuschku.libquassel.syncables.serializers.BufferSyncerSerializer;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
-public class BufferSyncer extends SyncableObject {
+public class BufferSyncer extends SyncableObject<BufferSyncer> {
     @NonNull
-    private final SparseIntArray LastSeenMsg = new SparseIntArray();
+    private SparseIntArray LastSeenMsg = new SparseIntArray();
     @NonNull
-    private final SparseIntArray MarkerLines = new SparseIntArray();
+    private SparseIntArray MarkerLines = new SparseIntArray();
 
     private Client client;
 
@@ -39,6 +42,17 @@ public class BufferSyncer extends SyncableObject {
     public void init(@NonNull InitDataFunction function, @NonNull BusProvider provider, @NonNull Client client) {
         client.setBufferSyncer(this);
         setClient(client);
+    }
+
+    @Override
+    public void update(BufferSyncer from) {
+        LastSeenMsg = from.LastSeenMsg;
+        MarkerLines = from.MarkerLines;
+    }
+
+    @Override
+    public void update(Map<String, QVariant> from) {
+        update(BufferSyncerSerializer.get().fromDatastream(from));
     }
 
     public void markBufferAsRead(@IntRange(from = 0) int bufferId) {
@@ -68,5 +82,10 @@ public class BufferSyncer extends SyncableObject {
 
     public int getMarkerLine(int bufferId) {
         return MarkerLines.get(bufferId, -1);
+    }
+
+    public void removeBuffer(int bufferId) {
+        LastSeenMsg.put(bufferId, -1);
+        MarkerLines.put(bufferId, -1);
     }
 }

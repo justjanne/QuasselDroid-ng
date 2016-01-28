@@ -29,6 +29,11 @@ public class QueryBuffer implements Buffer {
         return getInfo().name;
     }
 
+    @Override
+    public boolean isActive() {
+        return user != null;
+    }
+
     @Nullable
     public IrcUser getUser() {
         return user;

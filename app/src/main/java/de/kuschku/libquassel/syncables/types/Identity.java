@@ -3,13 +3,17 @@ package de.kuschku.libquassel.syncables.types;
 import android.support.annotation.NonNull;
 
 import java.util.List;
+import java.util.Map;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
+import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.Syncable;
+import de.kuschku.libquassel.syncables.serializers.BufferSyncerSerializer;
+import de.kuschku.libquassel.syncables.serializers.IdentitySerializer;
 
-public class Identity extends SyncableObject {
+public class Identity extends SyncableObject<Identity> {
     @Syncable
     private String identityName;
     @Syncable
@@ -256,5 +260,15 @@ public class Identity extends SyncableObject {
     @Override
     public void init(@NonNull InitDataFunction function, @NonNull BusProvider provider, @NonNull Client client) {
 
+    }
+
+    @Override
+    public void update(Identity from) {
+
+    }
+
+    @Override
+    public void update(Map<String, QVariant> from) {
+        update(IdentitySerializer.get().fromDatastream(from));
     }
 }
