@@ -43,7 +43,6 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:paddingTop="17dp"
-                android:text="@string/large_text"
                 android:textSize="16sp" />
 
         </ScrollView>
@@ -87,7 +86,8 @@
             android:layout_marginBottom="16.0dip"
             android:layout_marginLeft="16.0dip"
             android:layout_marginRight="16.0dip"
-            android:layout_marginTop="16.0dip">
+            android:layout_marginTop="16.0dip"
+            style="?attr/cardStyle">
 
             <LinearLayout
                 android:layout_width="fill_parent"

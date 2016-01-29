@@ -65,4 +65,6 @@
     <attr name="ic_format_underline" format="reference" />
     <attr name="ic_format_paint" format="reference" />
     <attr name="ic_format_fill" format="reference" />
+
+    <attr name="cardStyle" format="reference" />
 </resources>
