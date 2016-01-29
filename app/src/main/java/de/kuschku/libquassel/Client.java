@@ -30,6 +30,7 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.BufferSyncer;
 import de.kuschku.libquassel.syncables.types.BufferViewConfig;
 import de.kuschku.libquassel.syncables.types.BufferViewManager;
+import de.kuschku.libquassel.syncables.types.Identity;
 import de.kuschku.libquassel.syncables.types.IgnoreListManager;
 import de.kuschku.libquassel.syncables.types.IrcChannel;
 import de.kuschku.libquassel.syncables.types.IrcUser;
@@ -65,6 +66,7 @@ public class Client {
     private BufferSyncer bufferSyncer;
     private ClientData clientData;
     private IgnoreListManager ignoreListManager;
+    private Map<Integer, Identity> Identities = new HashMap<>();
 
     public Client(@NonNull final BusProvider busProvider) {
         this(new SimpleBacklogManager(busProvider), busProvider);
@@ -285,5 +287,13 @@ public class Client {
 
     public void setIgnoreListManager(IgnoreListManager ignoreListManager) {
         this.ignoreListManager = ignoreListManager;
+    }
+
+    public void addIdentity(int id, Identity identity) {
+        Identities.put(id, identity);
+    }
+
+    public Identity getIdentity(int id) {
+        return Identities.get(id);
     }
 }

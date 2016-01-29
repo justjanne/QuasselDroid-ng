@@ -58,4 +58,11 @@
     <attr name="colorTintMessage" format="color" />
     <attr name="colorTintHighlight" format="color" />
     <attr name="chatlineExpandedSize" />
+
+    <!-- Format icons -->
+    <attr name="ic_format_bold" format="reference" />
+    <attr name="ic_format_italic" format="reference" />
+    <attr name="ic_format_underline" format="reference" />
+    <attr name="ic_format_paint" format="reference" />
+    <attr name="ic_format_fill" format="reference" />
 </resources>

@@ -259,7 +259,7 @@ public class Identity extends SyncableObject<Identity> {
 
     @Override
     public void init(@NonNull InitDataFunction function, @NonNull BusProvider provider, @NonNull Client client) {
-
+        client.addIdentity(Integer.valueOf(function.objectName), this);
     }
 
     @Override

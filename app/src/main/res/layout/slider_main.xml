@@ -1,48 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/tools"
+    android:background="?attr/colorBackgroundCard"
+    android:clickable="false"
+    android:focusable="true"
+    android:gravity="bottom"
+    sothree:umanoFadeColor="#00000000"
+    sothree:umanoOverlay="true"
+    sothree:umanoPanelHeight="72dip"
+    sothree:umanoScrollableView="@+id/msg_history"
+    sothree:umanoShadowHeight="0.0dip">
 
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:background="?attr/colorBackgroundCard"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:paddingBottom="72dp">
 
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/chatline"
+        <ScrollView
+            android:id="@+id/chatlineScroller"
             android:layout_width="0dip"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:hint="@string/message_placeholder"
-            android:imeOptions="actionSend"
-            android:inputType="textCapSentences|textShortMessage|textAutoCorrect"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="19dp"
-            android:textSize="16sp"
-            android:gravity="top"
-            android:paddingBottom="19dp" />
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/send"
+            android:layout_toStartOf="@+id/send"
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/formatting_toolbar">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/chatline"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/transparent"
+                android:gravity="top"
+                android:hint="@string/message_placeholder"
+                android:inputType="textCapSentences|textShortMessage|textAutoCorrect"
+                android:paddingBottom="17dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="17dp"
+                android:text="@string/large_text"
+                android:textSize="16sp" />
+
+        </ScrollView>
 
         <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/send"
             style="?attr/buttonStyleSmall"
             android:layout_width="56dp"
             android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
             android:layout_gravity="top"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="12dp"
             android:src="@drawable/ic_send"
             android:tint="?attr/colorAccent" />
-    </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/msg_history"
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:background="?attr/colorBackgroundCard" />
-</LinearLayout>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/formatting_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+            <android.support.v7.widget.ActionMenuView
+                android:id="@+id/amvMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"/>
+        </android.support.v7.widget.Toolbar>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/card_panel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16.0dip"
+            android:layout_marginLeft="16.0dip"
+            android:layout_marginRight="16.0dip"
+            android:layout_marginTop="16.0dip">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="48.0dip"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="16.0dip"
+                    android:paddingRight="16.0dip"
+                    android:text="Message History"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="?attr/colorForegroundSecondary" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/msg_history"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </FrameLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

@@ -10,6 +10,12 @@
 
         <item name="colorControlHighlight">@color/colorAccentFocus</item>
         <item name="windowActionModeOverlay">true</item>
+        
+        <item name="ic_format_bold">@drawable/ic_format_bold_dark</item>
+        <item name="ic_format_italic">@drawable/ic_format_italic_dark</item>
+        <item name="ic_format_underline">@drawable/ic_format_underline_dark</item>
+        <item name="ic_format_paint">@drawable/ic_format_paint_dark</item>
+        <item name="ic_format_fill">@drawable/ic_format_fill_dark</item>
     </style>
 
     <style name="AppTheme.Light" parent="MaterialDrawerTheme.Light.DarkToolbar.TranslucentStatus">
@@ -21,6 +27,12 @@
 
         <item name="colorControlHighlight">@color/colorAccentFocus</item>
         <item name="windowActionModeOverlay">true</item>
+
+        <item name="ic_format_bold">@drawable/ic_format_bold_light</item>
+        <item name="ic_format_italic">@drawable/ic_format_italic_light</item>
+        <item name="ic_format_underline">@drawable/ic_format_underline_light</item>
+        <item name="ic_format_paint">@drawable/ic_format_paint_light</item>
+        <item name="ic_format_fill">@drawable/ic_format_fill_light</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

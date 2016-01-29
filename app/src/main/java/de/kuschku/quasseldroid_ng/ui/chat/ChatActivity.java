@@ -10,23 +10,31 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
+import android.widget.Scroller;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.base.Splitter;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IExpandable;
+import com.mikepenz.fastadapter.IItem;
+import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -34,6 +42,7 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.sothree.slidinguppanel.ScrollableViewHelper;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.Map;
@@ -78,6 +87,8 @@ public class ChatActivity extends AppCompatActivity {
     @Bind(R.id.sliding_layout)
     SlidingUpPanelLayout slidingLayout;
 
+    @Bind(R.id.chatlineScroller)
+    ScrollView chatlineScroller;
     @Bind(R.id.chatline)
     AppCompatEditText chatline;
     @Bind(R.id.send)
@@ -90,6 +101,9 @@ public class ChatActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeView;
     @Bind(R.id.messages)
     RecyclerView messages;
+
+    @Bind(R.id.amvMenu)
+    ActionMenuView formattingMenu;
 
     @PreferenceWrapper(BuildConfig.APPLICATION_ID)
     public static abstract class Settings {
@@ -216,12 +230,35 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        getMenuInflater().inflate(R.menu.formatting,formattingMenu.getMenu());
+
         messages.setItemAnimator(new DefaultItemAnimator());
         messages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
         messageAdapter = new MessageAdapter(this, context, new AutoScroller(messages));
         messages.setAdapter(messageAdapter);
 
-        msgHistory.setAdapter(new FastAdapter<>());
+        FastAdapter<IItem> fastAdapter = new FastAdapter<>();
+        ItemAdapter<IItem> itemAdapter = new ItemAdapter<>();
+        itemAdapter.wrap(fastAdapter);
+        itemAdapter.add(
+                new PrimaryDrawerItem().withName("Entry #1"),
+                new PrimaryDrawerItem().withName("Entry #2"),
+                new PrimaryDrawerItem().withName("Entry #3"),
+                new PrimaryDrawerItem().withName("Entry #4"),
+                new PrimaryDrawerItem().withName("Entry #5"),
+                new PrimaryDrawerItem().withName("Entry #6"),
+                new PrimaryDrawerItem().withName("Entry #7"),
+                new PrimaryDrawerItem().withName("Entry #8"),
+                new PrimaryDrawerItem().withName("Entry #9"),
+                new PrimaryDrawerItem().withName("Entry #10"),
+                new PrimaryDrawerItem().withName("Entry #11"),
+                new PrimaryDrawerItem().withName("Entry #12"),
+                new PrimaryDrawerItem().withName("Entry #13"),
+                new PrimaryDrawerItem().withName("Entry #14"),
+                new PrimaryDrawerItem().withName("Entry #15"),
+                new PrimaryDrawerItem().withName("Entry #16")
+        );
+        msgHistory.setAdapter(fastAdapter);
         msgHistory.setLayoutManager(new LinearLayoutManager(this));
         msgHistory.setItemAnimator(new DefaultItemAnimator());
 
@@ -233,6 +270,7 @@ public class ChatActivity extends AppCompatActivity {
 
         send.setOnClickListener(view -> sendInput());
 
+        slidingLayout.setAntiDragView(R.id.card_panel);
         slidingLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
@@ -241,24 +279,12 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onPanelCollapsed(View panel) {
-                int selectionStart = chatline.getSelectionStart();
-                int selectionEnd = chatline.getSelectionEnd();
-
-                chatline.getLayoutParams().height =context.getThemeUtil().res.actionBarSize;
-                chatline.setSingleLine(true);
-
-                chatline.setSelection(selectionStart, selectionEnd);
+                setChatlineExpanded(false);
             }
 
             @Override
             public void onPanelExpanded(View panel) {
-                int selectionStart = chatline.getSelectionStart();
-                int selectionEnd = chatline.getSelectionEnd();
-
-                chatline.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                chatline.setSingleLine(false);
-
-                chatline.setSelection(selectionStart, selectionEnd);
+                setChatlineExpanded(true);
             }
 
             @Override
@@ -271,6 +297,21 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
+        setChatlineExpanded(slidingLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED);
+    }
+
+    public void setChatlineExpanded(boolean expanded) {
+        int selectionStart = chatline.getSelectionStart();
+        int selectionEnd = chatline.getSelectionEnd();
+
+        if (expanded) {
+            chatlineScroller.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+        } else {
+            chatlineScroller.getLayoutParams().height = context.getThemeUtil().res.actionBarSize;
+        }
+        chatline.setSingleLine(!expanded);
+
+        chatline.setSelection(selectionStart, selectionEnd);
     }
 
     public void showThemeDialog() {
