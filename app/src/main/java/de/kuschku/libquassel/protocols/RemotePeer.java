@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import de.kuschku.libquassel.functions.types.HandshakeFunction;
+import de.kuschku.libquassel.functions.types.Heartbeat;
+import de.kuschku.libquassel.functions.types.HeartbeatReply;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.functions.types.InitRequestFunction;
 import de.kuschku.libquassel.functions.types.RpcCallFunction;
@@ -25,6 +27,10 @@ public interface RemotePeer {
     void onEventBackgroundThread(@NonNull InitDataFunction func);
 
     void onEventBackgroundThread(@NonNull HandshakeFunction func);
+
+    void onEventBackgroundThread(@NonNull Heartbeat func);
+
+    void onEventBackgroundThread(@NonNull HeartbeatReply func);
 
     void processMessage() throws IOException;
 

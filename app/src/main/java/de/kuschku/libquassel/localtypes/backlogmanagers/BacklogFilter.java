@@ -1,25 +1,35 @@
 package de.kuschku.libquassel.localtypes.backlogmanagers;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
-import com.android.internal.util.Predicate;
+import org.joda.time.DateTime;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.message.Message;
-import de.kuschku.quasseldroid_ng.ui.AppContext;
+import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public class BacklogFilter implements UICallback {
     @NonNull
     private final Client client;
+    private final int bufferId;
     @NonNull
     private final ObservableSortedList<Message> unfiltered;
     @NonNull
     private final ObservableSortedList<Message> filtered;
 
-    public BacklogFilter(@NonNull Client client, @NonNull ObservableSortedList<Message> unfiltered, @NonNull ObservableSortedList<Message> filtered) {
+    private final Set<Message.Type> filteredTypes = new HashSet<>();
+
+    private DateTime earliestMessage;
+
+    public BacklogFilter(@NonNull Client client, int bufferId, @NonNull ObservableSortedList<Message> unfiltered, @NonNull ObservableSortedList<Message> filtered) {
         this.client = client;
+        this.bufferId = bufferId;
         this.unfiltered = unfiltered;
         this.filtered = filtered;
     }
@@ -27,11 +37,66 @@ public class BacklogFilter implements UICallback {
     @Override
     public void notifyItemInserted(int position) {
         Message message = unfiltered.get(position);
-        if (filterItem(message)) filtered.add(message);
+        if (!filterItem(message)) filtered.add(message);
+        if (message.time.isBefore(earliestMessage)) earliestMessage = message.time;
+        updateDayChangeMessages();
+    }
+
+    private void updateDayChangeMessages() {
+        DateTime now = DateTime.now().withMillisOfDay(0);
+        int id = -1;
+        while (now.isAfter(earliestMessage)) {
+            filtered.add(new Message(
+                    id,
+                    now,
+                    Message.Type.DayChange,
+                    new Message.Flags(false, false, false, false, false),
+                    new BufferInfo(
+                            bufferId,
+                            -1,
+                            BufferInfo.Type.INVALID,
+                            -1,
+                            null
+                    ),
+                    "",
+                    ""
+            ));
+            now = now.minusDays(1);
+        }
     }
 
     private boolean filterItem(Message message) {
-        return !client.getIgnoreListManager().matches(message);
+        return client.getIgnoreListManager().matches(message) || filteredTypes.contains(message.type);
+    }
+
+    public void addFilter(Message.Type type) {
+        filteredTypes.add(type);
+        updateRemove();
+    }
+
+    public void removeFilter(Message.Type type) {
+        filteredTypes.remove(type);
+        updateAdd();
+    }
+
+    private void updateRemove() {
+        for (Message message : unfiltered) {
+            if (filterItem(message)) {
+                String simpleName = getClass().getSimpleName();
+                Log.e(simpleName, "Filtered: "+message);
+                filtered.remove(message);
+            }
+        }
+    }
+
+    private void updateAdd() {
+        for (Message message : unfiltered) {
+            if (!filterItem(message)) {
+                String simpleName = getClass().getSimpleName();
+                Log.e(simpleName, "Unfiltered: "+message);
+                filtered.add(message);
+            }
+        }
     }
 
     @Override

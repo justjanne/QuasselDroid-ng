@@ -5,7 +5,8 @@ import android.support.annotation.StyleRes;
 import de.kuschku.quasseldroid_ng.R;
 
 public enum AppTheme {
-    QUASSEL(R.style.Quassel),
+    QUASSEL_LIGHT(R.style.Quassel_Light),
+    QUASSEL_DARK(R.style.Quassel_Dark),
     MATERIAL_DARK(R.style.Material_Dark),
     MATERIAL_LIGHT(R.style.Material_Light);
 
@@ -24,9 +25,10 @@ public enum AppTheme {
         switch (s) {
             case "MATERIAL_DARK": return MATERIAL_DARK;
             case "MATERIAL_LIGHT": return MATERIAL_LIGHT;
+            case "QUASSEL_DARK": return QUASSEL_DARK;
 
             default:
-            case "QUASSEL": return QUASSEL;
+            case "QUASSEL_LIGHT": return QUASSEL_LIGHT;
         }
     }
 

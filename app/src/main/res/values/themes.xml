@@ -1,5 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Material_Light" parent="AppTheme.Light">
+        <item name="senderColor0">@color/md_pink_500</item>
+        <item name="senderColor1">@color/md_purple_500</item>
+        <item name="senderColor2">@color/md_red_500</item>
+        <item name="senderColor3">@color/md_green_500</item>
+        <item name="senderColor4">@color/md_cyan_500</item>
+        <item name="senderColor5">@color/md_deep_purple_500</item>
+        <item name="senderColor6">@color/md_amber_500</item>
+        <item name="senderColor7">@color/md_blue_500</item>
+        <item name="senderColor8">@color/md_pink_500</item>
+        <item name="senderColor9">@color/md_purple_500</item>
+        <item name="senderColorA">@color/md_red_500</item>
+        <item name="senderColorB">@color/md_green_500</item>
+        <item name="senderColorC">@color/md_cyan_500</item>
+        <item name="senderColorD">@color/md_deep_purple_500</item>
+        <item name="senderColorE">@color/md_amber_500</item>
+        <item name="senderColorF">@color/md_blue_500</item>
+
+        <item name="mircColor0">#f2f2f2</item>
+        <item name="mircColor1">#2c2c2c</item>
+        <item name="mircColor2">#2467be</item>
+        <item name="mircColor3">#568a34</item>
+        <item name="mircColor4">#ec5354</item>
+        <item name="mircColor5">#c3282d</item>
+        <item name="mircColor6">#6a2398</item>
+        <item name="mircColor7">#fc8e23</item>
+        <item name="mircColor8">#fc9f25</item>
+        <item name="mircColor9">#8cc251</item>
+        <item name="mircColorA">#17838e</item>
+        <item name="mircColorB">#39c6d9</item>
+        <item name="mircColorC">#6bb6f4</item>
+        <item name="mircColorD">#b96ac6</item>
+        <item name="mircColorE">#545454</item>
+        <item name="mircColorF">#e0e0e0</item>
+
+        <item name="colorForeground">@color/md_light_primary_text</item>
+        <item name="colorForegroundHighlight">@color/md_light_primary_text</item>
+        <item name="colorForegroundSecondary">@color/md_light_secondary</item>
+        <item name="colorForegroundAction">#1a237e</item>
+
+        <item name="colorBackground">@color/md_light_background</item>
+        <item name="colorBackgroundHighlight">#ff8811</item>
+        <item name="colorBackgroundSecondary">@android:color/transparent</item>
+        <item name="colorBackgroundCard">@color/md_light_cards</item>
+
+        <item name="colorTintActivity">#88cc33</item>
+        <item name="colorTintMessage">#2277dd</item>
+        <item name="colorTintHighlight">#ff8811</item>
+    </style>
 
     <style name="Material_Dark" parent="AppTheme">
         <item name="senderColor0">@color/md_pink_500</item>
@@ -19,6 +68,23 @@
         <item name="senderColorE">@color/md_amber_500</item>
         <item name="senderColorF">@color/md_blue_500</item>
 
+        <item name="mircColor0">#f2f2f2</item>
+        <item name="mircColor1">#2c2c2c</item>
+        <item name="mircColor2">#2467be</item>
+        <item name="mircColor3">#568a34</item>
+        <item name="mircColor4">#ec5354</item>
+        <item name="mircColor5">#c3282d</item>
+        <item name="mircColor6">#6a2398</item>
+        <item name="mircColor7">#fc8e23</item>
+        <item name="mircColor8">#fc9f25</item>
+        <item name="mircColor9">#8cc251</item>
+        <item name="mircColorA">#17838e</item>
+        <item name="mircColorB">#39c6d9</item>
+        <item name="mircColorC">#6bb6f4</item>
+        <item name="mircColorD">#b96ac6</item>
+        <item name="mircColorE">#545454</item>
+        <item name="mircColorF">#e0e0e0</item>
+
         <item name="colorForeground">@color/md_dark_primary_text</item>
         <item name="colorForegroundHighlight">@color/md_dark_primary_text</item>
         <item name="colorForegroundSecondary">@color/md_dark_secondary</item>
@@ -34,40 +100,7 @@
         <item name="colorTintHighlight">#ff8811</item>
     </style>
 
-    <style name="Material_Light" parent="AppTheme">
-        <item name="senderColor0">@color/md_pink_500</item>
-        <item name="senderColor1">@color/md_purple_500</item>
-        <item name="senderColor2">@color/md_red_500</item>
-        <item name="senderColor3">@color/md_green_500</item>
-        <item name="senderColor4">@color/md_cyan_500</item>
-        <item name="senderColor5">@color/md_deep_purple_500</item>
-        <item name="senderColor6">@color/md_amber_500</item>
-        <item name="senderColor7">@color/md_blue_500</item>
-        <item name="senderColor8">@color/md_pink_500</item>
-        <item name="senderColor9">@color/md_purple_500</item>
-        <item name="senderColorA">@color/md_red_500</item>
-        <item name="senderColorB">@color/md_green_500</item>
-        <item name="senderColorC">@color/md_cyan_500</item>
-        <item name="senderColorD">@color/md_deep_purple_500</item>
-        <item name="senderColorE">@color/md_amber_500</item>
-        <item name="senderColorF">@color/md_blue_500</item>
-
-        <item name="colorForeground">@color/md_light_primary_text</item>
-        <item name="colorForegroundHighlight">@color/md_light_primary_text</item>
-        <item name="colorForegroundSecondary">@color/md_light_secondary</item>
-        <item name="colorForegroundAction">#1a237e</item>
-
-        <item name="colorBackground">@color/md_light_background</item>
-        <item name="colorBackgroundHighlight">#ff8811</item>
-        <item name="colorBackgroundSecondary">@android:color/transparent</item>
-        <item name="colorBackgroundCard">@color/md_light_cards</item>
-
-        <item name="colorTintActivity">#88cc33</item>
-        <item name="colorTintMessage">#2277dd</item>
-        <item name="colorTintHighlight">#ff8811</item>
-    </style>
-
-    <style name="Quassel" parent="AppTheme.Light">
+    <style name="Quassel_Light" parent="AppTheme.Light">
         <item name="senderColor0">#e90d7f</item>
         <item name="senderColor1">#8e55e9</item>
         <item name="senderColor2">#b30e0e</item>
@@ -111,6 +144,56 @@
         <item name="colorBackgroundHighlight">#ff8811</item>
         <item name="colorBackgroundSecondary">@android:color/transparent</item>
         <item name="colorBackgroundCard">@color/md_light_cards</item>
+
+        <item name="colorTintActivity">#88cc33</item>
+        <item name="colorTintMessage">#2277dd</item>
+        <item name="colorTintHighlight">#ff8811</item>
+    </style>
+
+    <style name="Quassel_Dark" parent="AppTheme">
+        <item name="senderColor0">#e90d7f</item>
+        <item name="senderColor1">#8e55e9</item>
+        <item name="senderColor2">#b30e0e</item>
+        <item name="senderColor3">#17b339</item>
+        <item name="senderColor4">#58afb3</item>
+        <item name="senderColor5">#9d54b3</item>
+        <item name="senderColor6">#b39775</item>
+        <item name="senderColor7">#3176b3</item>
+        <item name="senderColor8">#e90d7f</item>
+        <item name="senderColor9">#8e55e9</item>
+        <item name="senderColorA">#b30e0e</item>
+        <item name="senderColorB">#17b339</item>
+        <item name="senderColorC">#58afb3</item>
+        <item name="senderColorD">#9d54b3</item>
+        <item name="senderColorE">#b39775</item>
+        <item name="senderColorF">#3176b3</item>
+
+        <item name="mircColor0">#ffffff</item>
+        <item name="mircColor1">#000000</item>
+        <item name="mircColor2">#000080</item>
+        <item name="mircColor3">#008000</item>
+        <item name="mircColor4">#ff0000</item>
+        <item name="mircColor5">#800000</item>
+        <item name="mircColor6">#800080</item>
+        <item name="mircColor7">#ffa500</item>
+        <item name="mircColor8">#ffff00</item>
+        <item name="mircColor9">#00ff00</item>
+        <item name="mircColorA">#008080</item>
+        <item name="mircColorB">#00ffff</item>
+        <item name="mircColorC">#4169e1</item>
+        <item name="mircColorD">#ff00ff</item>
+        <item name="mircColorE">#808080</item>
+        <item name="mircColorF">#c0c0c0</item>
+
+        <item name="colorForeground">@color/md_dark_primary_text</item>
+        <item name="colorForegroundHighlight">@color/md_dark_primary_text</item>
+        <item name="colorForegroundSecondary">@color/md_dark_secondary</item>
+        <item name="colorForegroundAction">#7986cb</item>
+
+        <item name="colorBackground">@color/md_dark_background</item>
+        <item name="colorBackgroundHighlight">#ff8811</item>
+        <item name="colorBackgroundSecondary">@android:color/transparent</item>
+        <item name="colorBackgroundCard">@color/md_dark_cards</item>
 
         <item name="colorTintActivity">#88cc33</item>
         <item name="colorTintMessage">#2277dd</item>

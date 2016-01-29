@@ -14,13 +14,16 @@ import de.kuschku.util.annotationbind.AutoColor;
 public class ThemeUtil {
     @NonNull
     public final Colors colors = new Colors();
+    public DateTimeFormatHelper formatter;
 
     public ThemeUtil(@NonNull Context ctx) {
         initColors(new ContextThemeWrapper(ctx, ctx.getTheme()));
+        formatter = new DateTimeFormatHelper(ctx);
     }
 
     public ThemeUtil(@NonNull Context ctx, @NonNull AppTheme theme) {
         initColors(new ContextThemeWrapper(ctx, theme.themeId));
+        formatter = new DateTimeFormatHelper(ctx);
     }
 
     @UiThread
@@ -36,6 +39,18 @@ public class ThemeUtil {
         @AutoColor(android.R.color.transparent)
         @ColorInt
         public int transparent;
+
+        @AutoColor(R.attr.colorPrimary)
+        @ColorInt
+        public int colorPrimary;
+
+        @AutoColor(R.attr.colorPrimaryDark)
+        @ColorInt
+        public int colorPrimaryDark;
+
+        @AutoColor(R.attr.colorAccent)
+        @ColorInt
+        public int colorAccent;
 
         @AutoColor({R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
                 R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,

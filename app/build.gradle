@@ -2,16 +2,54 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 
-android {
-    compileSdkVersion 'Google Inc.:Google APIs:23'
-    buildToolsVersion "23.0.2"
+if (project.hasProperty("storeFile")) {
+  android {
+    signingConfigs {
+      release {
+        storeFile file(project.property("storeFile"))
+        storePassword project.property("storePassword")
+        keyAlias project.property("keyAlias")
+        keyPassword project.property("keyPassword")
+      }
+    }
+    
+    buildTypes {
+      release {
+        signingConfig signingConfigs.release
+      }
+    }
+  }
+}
 
+def versionPropsFile = file('version.properties')
+def versionBuild = 0
+if (versionPropsFile.canRead()) {
+  def Properties versionProps = new Properties()
+
+  versionProps.load(new FileInputStream(versionPropsFile))
+  def runTasks = gradle.startParameter.taskNames
+  versionBuild = Integer.valueOf(versionProps['VERSION_BUILD'])
+  if ('assemble' in runTasks || 'assembleRelease' in runTasks || 'aR' in runTasks) {
+    versionBuild = versionBuild + 1
+  }
+  versionProps['VERSION_BUILD'] = versionBuild.toString()
+  versionProps.store(versionPropsFile.newWriter(), null)
+} else {
+  throw new GradleException("Could not read version.properties!"+versionPropsFile.toString())
+}
+
+def rawVersionName = "0.2.0"
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+    
     defaultConfig {
         applicationId "de.kuschku.quasseldroid_ng"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1
-        versionName "0.1.0"
+        versionCode versionBuild
+        versionName rawVersionName + " Build #" + versionBuild
     }
     buildTypes {
         release {
@@ -21,7 +59,9 @@ android {
 
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
-                    def fileName = output.outputFile.name.replace(".apk", String.format("-%s-build%d.apk", defaultConfig.versionName, versionCode))
+                    def fileName = output.outputFile.name
+                      .replace(".apk", String.format("-%s-build%d.apk", rawVersionName, versionCode))
+                      .replace("app-", "QuasselDroidNG-")
                     output.outputFile = new File(output.outputFile.parent, fileName)
                 }
             }

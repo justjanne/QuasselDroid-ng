@@ -75,7 +75,7 @@ public class Message implements ContentComparable<Message> {
 
     @Override
     public int compareTo(@NonNull Message another) {
-        return this.messageId - another.messageId;
+        return this.time.compareTo(another.time);
     }
 
     public enum Type {

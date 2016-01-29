@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/chatlineBackground"
+        android:background="?attr/colorBackgroundCard"
         android:orientation="horizontal">
 
         <android.support.v7.widget.AppCompatEditText
@@ -40,5 +40,5 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
-        android:background="?attr/chatlineBackground" />
+        android:background="?attr/colorBackgroundSecondary" />
 </LinearLayout>

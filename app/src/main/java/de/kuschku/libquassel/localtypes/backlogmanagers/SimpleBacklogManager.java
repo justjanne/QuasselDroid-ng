@@ -19,11 +19,13 @@ import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
+import de.kuschku.util.AndroidAssert;
 import de.kuschku.util.observables.AutoScroller;
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
+import static de.kuschku.util.AndroidAssert.*;
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class SimpleBacklogManager extends BacklogManager<SimpleBacklogManager> {
@@ -107,10 +109,11 @@ public class SimpleBacklogManager extends BacklogManager<SimpleBacklogManager> {
     }
 
     private void ensureExisting(@IntRange(from = -1) int bufferId) {
+        assertNotNull(client);
         if (backlogs.get(bufferId) == null) {
             ObservableComparableSortedList<Message> messages = new ObservableComparableSortedList<>(Message.class, true);
             ObservableComparableSortedList<Message> filteredMessages = new ObservableComparableSortedList<>(Message.class, true);
-            BacklogFilter backlogFilter = new BacklogFilter(client, messages, filteredMessages);
+            BacklogFilter backlogFilter = new BacklogFilter(client, bufferId, messages, filteredMessages);
             messages.addCallback(backlogFilter);
             backlogs.put(bufferId, messages);
             filteredBacklogs.put(bufferId, filteredMessages);

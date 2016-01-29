@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid_ng.ui.chat.chatview;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -11,18 +10,15 @@ import android.util.Log;
 
 import org.joda.time.format.DateTimeFormatter;
 
-import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.message.Message;
-import de.kuschku.quasseldroid_ng.BuildConfig;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.AppContext;
-import de.kuschku.quasseldroid_ng.ui.AppTheme;
 import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.annotationbind.AutoString;
 import de.kuschku.util.irc.IrcFormatHelper;
 import de.kuschku.util.irc.IrcUserUtils;
-import de.kuschku.util.ui.DateFormatHelper;
+import de.kuschku.util.ui.DateTimeFormatHelper;
 import de.kuschku.util.ui.SpanFormatter;
 import de.kuschku.util.ui.ThemeUtil;
 
@@ -30,8 +26,6 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 @UiThread
 public class ChatMessageRenderer {
-    @NonNull
-    private final DateTimeFormatter format;
     @NonNull
     private final FormatStrings strings;
 
@@ -45,7 +39,6 @@ public class ChatMessageRenderer {
     private AppContext context;
 
     public ChatMessageRenderer(@NonNull Context ctx, @NonNull AppContext context) {
-        this.format = DateFormatHelper.getTimeFormatter(ctx);
         this.strings = new FormatStrings(ctx);
         this.context = context;
         setTheme(context.getThemeUtil());
@@ -211,7 +204,9 @@ public class ChatMessageRenderer {
 
     private void onBindDayChange(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(message.toString());
+        holder.content.setText(strings.formatDayChange(
+                context.getThemeUtil().formatter.getLongDateFormatter().print(message.time)
+        ));
     }
 
     private void onBindTopic(@NonNull MessageViewHolder holder, @NonNull Message message) {
@@ -235,7 +230,7 @@ public class ChatMessageRenderer {
     }
 
     public void onBind(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        holder.time.setText(format.print(message.time));
+        holder.time.setText(context.getThemeUtil().formatter.getTimeFormatter().print(message.time));
         switch (message.type) {
             case Plain:
                 onBindPlain(holder, message);

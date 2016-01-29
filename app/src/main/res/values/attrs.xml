@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="messagesBackground" format="reference" />
-    <attr name="chatlineBackground" format="reference" />
-    <attr name="dividerColor" format="reference" />
-
     <!-- sender colors -->
 
     <attr name="senderColor0" format="color" />
