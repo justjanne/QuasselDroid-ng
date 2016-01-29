@@ -8,19 +8,16 @@ import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.util.Log;
 
-import org.joda.time.format.DateTimeFormatter;
-
 import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.quasseldroid_ng.ui.AppContext;
+import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.annotationbind.AutoString;
 import de.kuschku.util.irc.IrcFormatHelper;
 import de.kuschku.util.irc.IrcUserUtils;
-import de.kuschku.util.ui.DateTimeFormatHelper;
 import de.kuschku.util.ui.SpanFormatter;
-import de.kuschku.util.ui.ThemeUtil;
+import de.kuschku.quasseldroid_ng.ui.theme.ThemeUtil;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -45,31 +42,31 @@ public class ChatMessageRenderer {
     }
 
     public void setTheme(ThemeUtil themeUtil) {
-        this.helper = new IrcFormatHelper(themeUtil.colors);
+        this.helper = new IrcFormatHelper(themeUtil.res);
 
         this.highlightStyle = new MessageStyleContainer(
-                themeUtil.colors.colorForegroundHighlight,
+                themeUtil.res.colorForegroundHighlight,
                 Typeface.NORMAL,
-                themeUtil.colors.colorForegroundHighlight,
-                themeUtil.colors.colorBackgroundHighlight
+                themeUtil.res.colorForegroundHighlight,
+                themeUtil.res.colorBackgroundHighlight
         );
         this.serverStyle = new MessageStyleContainer(
-                themeUtil.colors.colorForegroundSecondary,
+                themeUtil.res.colorForegroundSecondary,
                 Typeface.ITALIC,
-                themeUtil.colors.colorForegroundSecondary,
-                themeUtil.colors.colorBackgroundSecondary
+                themeUtil.res.colorForegroundSecondary,
+                themeUtil.res.colorBackgroundSecondary
         );
         this.plainStyle = new MessageStyleContainer(
-                themeUtil.colors.colorForeground,
+                themeUtil.res.colorForeground,
                 Typeface.NORMAL,
-                themeUtil.colors.colorForegroundSecondary,
-                themeUtil.colors.transparent
+                themeUtil.res.colorForegroundSecondary,
+                themeUtil.res.transparent
         );
         this.actionStyle = new MessageStyleContainer(
-                themeUtil.colors.colorForegroundAction,
+                themeUtil.res.colorForegroundAction,
                 Typeface.ITALIC,
-                themeUtil.colors.colorForegroundSecondary,
-                themeUtil.colors.transparent
+                themeUtil.res.colorForegroundSecondary,
+                themeUtil.res.transparent
         );
     }
 

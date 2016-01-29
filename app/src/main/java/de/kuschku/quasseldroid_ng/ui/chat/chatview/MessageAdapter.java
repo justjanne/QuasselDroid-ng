@@ -8,10 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.quasseldroid_ng.ui.AppContext;
+import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.observables.AutoScroller;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;

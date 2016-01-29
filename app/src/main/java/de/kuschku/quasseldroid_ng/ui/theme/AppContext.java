@@ -1,9 +1,8 @@
-package de.kuschku.quasseldroid_ng.ui;
+package de.kuschku.quasseldroid_ng.ui.theme;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
 import de.kuschku.quasseldroid_ng.ui.chat.WrappedSettings;
-import de.kuschku.util.ui.ThemeUtil;
 
 public class AppContext {
     private ThemeUtil themeUtil;

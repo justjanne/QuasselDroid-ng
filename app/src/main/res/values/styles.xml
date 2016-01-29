@@ -6,6 +6,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccentFocus">@color/colorAccentFocus</item>
+
+        <item name="colorControlHighlight">@color/colorAccentFocus</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
     <style name="AppTheme.Light" parent="MaterialDrawerTheme.Light.DarkToolbar.TranslucentStatus">
@@ -13,6 +17,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccentFocus">@color/colorAccentFocus</item>
+
+        <item name="colorControlHighlight">@color/colorAccentFocus</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

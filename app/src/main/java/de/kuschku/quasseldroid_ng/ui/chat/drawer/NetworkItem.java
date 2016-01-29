@@ -1,34 +1,25 @@
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
-import android.content.Context;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.View;
-import android.widget.TextView;
 
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.mikepenz.materialdrawer.holder.ColorHolder;
 import com.mikepenz.materialdrawer.holder.StringHolder;
-import com.mikepenz.materialdrawer.model.BaseViewHolder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.syncables.types.BufferViewConfig;
 import de.kuschku.libquassel.syncables.types.Network;
-import de.kuschku.quasseldroid_ng.ui.AppContext;
-import de.kuschku.util.AndroidAssert;
+import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.observables.IObservable;
 import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.GeneralCallback;
 import de.kuschku.util.observables.callbacks.wrappers.GeneralCallbackWrapper;
 import de.kuschku.util.observables.lists.ObservableSortedList;
-
-import static de.kuschku.util.AndroidAssert.*;
 
 public class NetworkItem extends PrimaryDrawerItem implements IObservable<GeneralCallback>, GeneralCallback {
     private final AppContext context;

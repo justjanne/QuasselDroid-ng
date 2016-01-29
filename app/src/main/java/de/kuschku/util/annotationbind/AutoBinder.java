@@ -46,6 +46,14 @@ public class AutoBinder {
                     f.set(o, strings[0]);
                 else
                     throw new IllegalAccessException("Field length does not correspond to argument length");
+            } else if (f.isAnnotationPresent(AutoDimen.class)) {
+                int[] dimens = obtainDimen(f.getAnnotation(AutoDimen.class).value(), theme);
+                if (f.getType().isArray())
+                    f.set(o, dimens);
+                else if (dimens.length == 1)
+                    f.set(o, dimens[0]);
+                else
+                    throw new IllegalAccessException("Field length does not correspond to argument length");
             }
         }
     }
@@ -68,6 +76,17 @@ public class AutoBinder {
         for (int i = 0; i < res.length; i++) {
             result[i] = ctx.getString(res[i]);
         }
+        return result;
+    }
+
+    @NonNull
+    private static int[] obtainDimen(@NonNull int[] res, @NonNull Resources.Theme theme) {
+        int[] result = new int[res.length];
+        TypedArray t = theme.obtainStyledAttributes(res);
+        for (int i = 0; i < res.length; i++) {
+            result[i] = (int) t.getDimension(i, 0x00000000);
+        }
+        t.recycle();
         return result;
     }
 }

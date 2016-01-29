@@ -17,7 +17,7 @@ import de.kuschku.libquassel.localtypes.QueryBuffer;
 import de.kuschku.libquassel.localtypes.StatusBuffer;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.quasseldroid_ng.ui.AppContext;
+import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.observables.IObservable;
 import de.kuschku.util.observables.callbacks.GeneralCallback;
 import de.kuschku.util.observables.callbacks.wrappers.GeneralCallbackWrapper;

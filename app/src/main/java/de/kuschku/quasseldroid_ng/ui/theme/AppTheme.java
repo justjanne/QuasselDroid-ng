@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng.ui;
+package de.kuschku.quasseldroid_ng.ui.theme;
 
 import android.support.annotation.StyleRes;
 

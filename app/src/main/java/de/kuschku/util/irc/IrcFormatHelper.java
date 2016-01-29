@@ -24,7 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.util.ui.ThemeUtil;
+import de.kuschku.quasseldroid_ng.ui.theme.ThemeUtil;
 
 public class IrcFormatHelper {
     @NonNull

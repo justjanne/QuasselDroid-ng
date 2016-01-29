@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sothree.slidinguppanel.SlidingUpPanelLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom"
-    android:orientation="vertical"
-    app:umanoPanelHeight="?attr/actionBarSize"
-    app:umanoShadowHeight="4dp">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <include layout="@layout/toolbar" />
+
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <include layout="@layout/toolbar" />
+        android:gravity="bottom"
+        android:orientation="vertical"
+        app:umanoPanelHeight="?attr/actionBarSize"
+        app:umanoShadowHeight="4dp">
 
         <include layout="@layout/content_main" />
 
-    </LinearLayout>
+        <include layout="@layout/slider_main" />
 
-    <include layout="@layout/slider_main" />
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
-</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+</LinearLayout>

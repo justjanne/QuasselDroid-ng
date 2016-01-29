@@ -1,4 +1,4 @@
-package de.kuschku.util.ui;
+package de.kuschku.quasseldroid_ng.ui.theme;
 
 import android.content.Context;
 import android.support.annotation.ColorInt;
@@ -7,13 +7,14 @@ import android.support.annotation.UiThread;
 import android.support.v7.view.ContextThemeWrapper;
 
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.quasseldroid_ng.ui.AppTheme;
 import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.annotationbind.AutoColor;
+import de.kuschku.util.annotationbind.AutoDimen;
+import de.kuschku.util.ui.DateTimeFormatHelper;
 
 public class ThemeUtil {
     @NonNull
-    public final Colors colors = new Colors();
+    public final Colors res = new Colors();
     public DateTimeFormatHelper formatter;
 
     public ThemeUtil(@NonNull Context ctx) {
@@ -29,7 +30,7 @@ public class ThemeUtil {
     @UiThread
     public void initColors(@NonNull ContextThemeWrapper wrapper) {
         try {
-            AutoBinder.bind(colors, wrapper);
+            AutoBinder.bind(res, wrapper);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -51,6 +52,10 @@ public class ThemeUtil {
         @AutoColor(R.attr.colorAccent)
         @ColorInt
         public int colorAccent;
+
+        @AutoColor(R.attr.colorAccentFocus)
+        @ColorInt
+        public int colorAccentFocus;
 
         @AutoColor({R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
                 R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
@@ -109,5 +114,9 @@ public class ThemeUtil {
         @AutoColor(R.attr.colorTintHighlight)
         @ColorInt
         public int colorTintHighlight;
+
+        @AutoDimen(R.attr.actionBarSize)
+        @ColorInt
+        public int actionBarSize;
     }
 }

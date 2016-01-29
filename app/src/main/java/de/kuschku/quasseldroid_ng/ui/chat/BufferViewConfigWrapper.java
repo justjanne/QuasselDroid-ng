@@ -3,16 +3,13 @@ package de.kuschku.quasseldroid_ng.ui.chat;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.syncables.types.BufferViewConfig;
 import de.kuschku.libquassel.syncables.types.Network;
-import de.kuschku.quasseldroid_ng.ui.AppContext;
+import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.quasseldroid_ng.ui.chat.drawer.NetworkItem;
 import de.kuschku.util.observables.callbacks.ElementCallback;
-import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;

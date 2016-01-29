@@ -9,6 +9,8 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 
+import de.kuschku.quasseldroid_ng.ui.theme.ThemeUtil;
+
 public class MessageUtil {
     // Transparent in ARGB
     private static final int COLOR_TRANSPARENT = 0x00000000;
@@ -128,12 +130,12 @@ public class MessageUtil {
                     newString.setSpan(new StyleSpan(style), start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
                 }
 
-                if (fg != -1 && themeUtil.colors.mircColors[fg] != COLOR_TRANSPARENT) {
-                    newString.setSpan(new ForegroundColorSpan(themeUtil.colors.mircColors[fg]), start, end,
+                if (fg != -1 && themeUtil.res.mircColors[fg] != COLOR_TRANSPARENT) {
+                    newString.setSpan(new ForegroundColorSpan(themeUtil.res.mircColors[fg]), start, end,
                             Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
                 }
-                if (bg != -1 && themeUtil.colors.mircColors[fg] != COLOR_TRANSPARENT) {
-                    newString.setSpan(new BackgroundColorSpan(themeUtil.colors.mircColors[fg]), start, end,
+                if (bg != -1 && themeUtil.res.mircColors[fg] != COLOR_TRANSPARENT) {
+                    newString.setSpan(new BackgroundColorSpan(themeUtil.res.mircColors[fg]), start, end,
                             Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
                 }
             }

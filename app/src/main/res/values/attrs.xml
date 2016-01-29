@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="colorAccentFocus" />
+
     <!-- sender colors -->
 
     <attr name="senderColor0" format="color" />
@@ -55,4 +57,5 @@
     <attr name="colorTintActivity" format="color" />
     <attr name="colorTintMessage" format="color" />
     <attr name="colorTintHighlight" format="color" />
+    <attr name="chatlineExpandedSize" />
 </resources>

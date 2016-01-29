@@ -20,17 +20,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.base.Splitter;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IExpandable;
-import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -38,43 +34,40 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.Map;
 
+import aspm.annotations.BooleanPreference;
+import aspm.annotations.IntPreference;
 import aspm.annotations.PreferenceWrapper;
+import aspm.annotations.StringPreference;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.BusProvider;
-import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.events.BacklogReceivedEvent;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.LagChangedEvent;
-import de.kuschku.libquassel.exceptions.UnknownTypeException;
 import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.BufferViewConfig;
 import de.kuschku.libquassel.syncables.types.BufferViewManager;
-import de.kuschku.libquassel.syncables.types.Network;
 import de.kuschku.quasseldroid_ng.BuildConfig;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
 import de.kuschku.quasseldroid_ng.service.QuasselService;
-import de.kuschku.quasseldroid_ng.ui.AppContext;
-import de.kuschku.quasseldroid_ng.ui.AppTheme;
 import de.kuschku.quasseldroid_ng.ui.chat.chatview.MessageAdapter;
-import de.kuschku.quasseldroid_ng.ui.chat.drawer.NetworkItem;
-import de.kuschku.util.keyboardutils.DialogKeyboardUtil;
+import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
+import de.kuschku.quasseldroid_ng.ui.theme.AppTheme;
+import de.kuschku.quasseldroid_ng.ui.theme.ThemeUtil;
 import de.kuschku.util.ServerAddress;
 import de.kuschku.util.instancestateutil.Storable;
 import de.kuschku.util.instancestateutil.Store;
+import de.kuschku.util.keyboardutils.DialogKeyboardUtil;
 import de.kuschku.util.observables.AutoScroller;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 import de.kuschku.util.ui.SpanFormatter;
-import de.kuschku.util.ui.ThemeUtil;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -97,20 +90,19 @@ public class ChatActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeView;
     @Bind(R.id.messages)
     RecyclerView messages;
-    private boolean tr = true;
-
 
     @PreferenceWrapper(BuildConfig.APPLICATION_ID)
     public static abstract class Settings {
+        @StringPreference("QUASSEL_LIGHT")
         String theme;
-        boolean fullHostmask;
-        int textSize;
-        boolean mircColors;
+        @BooleanPreference(false)   boolean fullHostmask;
+        @IntPreference(2)           int textSize;
+        @BooleanPreference(true)    boolean mircColors;
 
-        String lastHost;
-        int lastPort;
-        String lastUsername;
-        String lastPassword;
+        @StringPreference("")       String lastHost;
+        @IntPreference(4242)        int lastPort;
+        @StringPreference("")       String lastUsername;
+        @StringPreference("")       String lastPassword;
     }
 
     private AppContext context = new AppContext();
@@ -207,9 +199,6 @@ public class ChatActivity extends AppCompatActivity {
         drawerLeft.addStickyFooterItem(new SecondaryDrawerItem().withName("Settings").withIdentifier(-2));
         drawerLeft.setOnDrawerItemClickListener((view, position, drawerItem) -> {
             long identifier = drawerItem.getIdentifier();
-            Log.e("DEBUG", "IDENT: "+identifier);
-            Log.e("DEBUG", "IDENT: "+(identifier==-1));
-            Log.e("DEBUG", "IDENT: "+(identifier==-2));
             if (identifier == -1) {
                 showConnectDialog();
                 return false;
@@ -236,13 +225,52 @@ public class ChatActivity extends AppCompatActivity {
         msgHistory.setLayoutManager(new LinearLayoutManager(this));
         msgHistory.setItemAnimator(new DefaultItemAnimator());
 
-        swipeView.setColorSchemeColors(context.getThemeUtil().colors.colorPrimary);
+        swipeView.setColorSchemeColors(context.getThemeUtil().res.colorPrimary);
         swipeView.setOnRefreshListener(() -> {
             assertNotNull(context.getClient());
             context.getClient().getBacklogManager().requestMoreBacklog(status.bufferId, 20);
         });
 
         send.setOnClickListener(view -> sendInput());
+
+        slidingLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+
+            }
+
+            @Override
+            public void onPanelCollapsed(View panel) {
+                int selectionStart = chatline.getSelectionStart();
+                int selectionEnd = chatline.getSelectionEnd();
+
+                chatline.getLayoutParams().height =context.getThemeUtil().res.actionBarSize;
+                chatline.setSingleLine(true);
+
+                chatline.setSelection(selectionStart, selectionEnd);
+            }
+
+            @Override
+            public void onPanelExpanded(View panel) {
+                int selectionStart = chatline.getSelectionStart();
+                int selectionEnd = chatline.getSelectionEnd();
+
+                chatline.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                chatline.setSingleLine(false);
+
+                chatline.setSelection(selectionStart, selectionEnd);
+            }
+
+            @Override
+            public void onPanelAnchored(View panel) {
+
+            }
+
+            @Override
+            public void onPanelHidden(View panel) {
+
+            }
+        });
     }
 
     public void showThemeDialog() {
@@ -257,13 +285,14 @@ public class ChatActivity extends AppCompatActivity {
         new MaterialDialog.Builder(this)
                 .items(strings)
                 .positiveText("Select Theme")
-                .neutralText("Cancel")
+                .negativeText("Cancel")
                 .itemsCallbackSingleChoice(startIndex, (dialog, itemView, which, text) -> {
                     context.getSettings().theme.set(strings[dialog.getSelectedIndex()]);
                     recreate();
                     return true;
                 })
-                .buttonRippleColor(context.getThemeUtil().colors.colorAccent)
+                .negativeColor(context.getThemeUtil().res.colorForeground)
+                .buttonRippleColor(context.getThemeUtil().res.colorAccentFocus)
                 .build()
                 .show();
     }
@@ -408,12 +437,14 @@ public class ChatActivity extends AppCompatActivity {
 
                     Log.e("TIME", String.valueOf(System.currentTimeMillis()));
                 })
+                .negativeColor(context.getThemeUtil().res.colorForeground)
+                .buttonRippleColor(context.getThemeUtil().res.colorAccentFocus)
                 .positiveText("Login")
-                .neutralText("Cancel")
+                .negativeText("Cancel")
                 .build();
         dialog.setOnKeyListener(new DialogKeyboardUtil(dialog));
-        ((AppCompatEditText) dialog.getView().findViewById(R.id.username)).setText(context.getSettings().lastUsername.or(""));
-        ((AppCompatEditText) dialog.getView().findViewById(R.id.password)).setText(context.getSettings().lastPassword.or(""));
+        ((AppCompatEditText) dialog.getView().findViewById(R.id.username)).setText(context.getSettings().lastUsername.get());
+        ((AppCompatEditText) dialog.getView().findViewById(R.id.password)).setText(context.getSettings().lastPassword.get());
         dialog.show();
     }
 
@@ -431,15 +462,16 @@ public class ChatActivity extends AppCompatActivity {
                     context.getSettings().lastPort.set(port);
                     serviceInterface.connect(new ServerAddress(host, port));
                 })
+                .negativeColor(context.getThemeUtil().res.colorForeground)
                 .positiveText("Connect")
-                .neutralText("Cancel")
+                .negativeText("Cancel")
                 .build();
         AppCompatEditText hostField = (AppCompatEditText) dialog.getView().findViewById(R.id.host);
         AppCompatEditText portField = (AppCompatEditText) dialog.getView().findViewById(R.id.port);
 
         dialog.setOnKeyListener(new DialogKeyboardUtil(dialog));
-        hostField.setText(context.getSettings().lastHost.or(""));
-        portField.setText(String.valueOf(context.getSettings().lastPort.or(4242)));
+        hostField.setText(context.getSettings().lastHost.get());
+        portField.setText(String.valueOf(context.getSettings().lastPort.get()));
 
         dialog.show();
     }
