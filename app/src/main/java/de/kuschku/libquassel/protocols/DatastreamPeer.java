@@ -119,8 +119,6 @@ public class DatastreamPeer implements RemotePeer {
     }
 
     public void onEventBackgroundThread(@NonNull SyncFunction func) {
-        assertNotNull(func);
-
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantVariantListSerializer.<SyncFunction>get(),
@@ -129,9 +127,6 @@ public class DatastreamPeer implements RemotePeer {
     }
 
     public void onEventBackgroundThread(@NonNull RpcCallFunction func) {
-        assertNotNull(func);
-
-        Log.e("TEST", String.valueOf(func));
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantVariantListSerializer.<RpcCallFunction>get(),
@@ -140,8 +135,6 @@ public class DatastreamPeer implements RemotePeer {
     }
 
     public void onEventBackgroundThread(@NonNull InitRequestFunction func) {
-        assertNotNull(func);
-
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantVariantListSerializer.<InitRequestFunction>get(),
@@ -150,8 +143,6 @@ public class DatastreamPeer implements RemotePeer {
     }
 
     public void onEventBackgroundThread(@NonNull InitDataFunction func) {
-        assertNotNull(func);
-
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantVariantListSerializer.<InitDataFunction>get(),
@@ -160,8 +151,6 @@ public class DatastreamPeer implements RemotePeer {
     }
 
     public void onEventBackgroundThread(@NonNull Heartbeat func) {
-        assertNotNull(func);
-
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantVariantListSerializer.<InitDataFunction>get(),
@@ -170,8 +159,6 @@ public class DatastreamPeer implements RemotePeer {
     }
 
     public void onEventBackgroundThread(@NonNull HeartbeatReply func) {
-        assertNotNull(func);
-
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantVariantListSerializer.<InitDataFunction>get(),
@@ -180,8 +167,6 @@ public class DatastreamPeer implements RemotePeer {
     }
 
     public void onEventBackgroundThread(@NonNull HandshakeFunction func) {
-        assertNotNull(func);
-
         assertNotNull(connection.getOutputExecutor());
         Map<String, QVariant> variantMap = MessageTypeRegistry.toVariantMap(func.data).data;
         assertNotNull(variantMap);

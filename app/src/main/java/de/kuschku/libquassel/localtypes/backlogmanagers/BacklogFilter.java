@@ -81,7 +81,7 @@ public class BacklogFilter implements UICallback {
 
     private void updateRemove() {
         for (Message message : unfiltered) {
-            if (filterItem(message)) {
+            if (filterItem(message) && filtered.contains(message)) {
                 String simpleName = getClass().getSimpleName();
                 Log.e(simpleName, "Filtered: "+message);
                 filtered.remove(message);
@@ -91,7 +91,7 @@ public class BacklogFilter implements UICallback {
 
     private void updateAdd() {
         for (Message message : unfiltered) {
-            if (!filterItem(message)) {
+            if (!filterItem(message) && !filtered.contains(message)) {
                 String simpleName = getClass().getSimpleName();
                 Log.e(simpleName, "Unfiltered: "+message);
                 filtered.add(message);

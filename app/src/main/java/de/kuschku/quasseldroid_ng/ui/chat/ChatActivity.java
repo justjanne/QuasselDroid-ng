@@ -20,8 +20,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.base.Splitter;
 import com.mikepenz.fastadapter.FastAdapter;
@@ -33,6 +37,7 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -92,6 +97,7 @@ public class ChatActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeView;
     @Bind(R.id.messages)
     RecyclerView messages;
+    private boolean tr = true;
 
 
     @PreferenceWrapper(BuildConfig.APPLICATION_ID)
@@ -130,20 +136,19 @@ public class ChatActivity extends AppCompatActivity {
 
         private void disconnect() {
             if (binder != null) binder.stopBackgroundThread();
-            if (backgroundThread != null) backgroundThread.provider.event.unregister(this);
-            backgroundThread = null;
+            if (context.getProvider() != null) context.getProvider().event.unregister(this);
+            context.setProvider(null);
+            context.setClient(null);
         }
     }
 
     private QuasselService.LocalBinder binder;
-    private ClientBackgroundThread backgroundThread;
 
     private MessageAdapter messageAdapter;
 
     private AccountHeader accountHeader;
     private Drawer drawerLeft;
     private BufferViewConfigWrapper wrapper;
-    private CharSequence subtitle;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @UiThread
@@ -166,7 +171,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         context.setSettings(new WrappedSettings(this));
-        AppTheme theme = AppTheme.QUASSEL;
+        AppTheme theme = AppTheme.themeFromString(context.getSettings().theme.get());
         setTheme(theme.themeId);
         context.setThemeUtil(new ThemeUtil(this, theme));
 
@@ -199,10 +204,17 @@ public class ChatActivity extends AppCompatActivity {
                 .withTranslucentStatusBar(true)
                 .build();
         drawerLeft.addStickyFooterItem(new PrimaryDrawerItem().withIcon(R.drawable.ic_server_light).withName("(Re-)Connect").withIdentifier(-1));
+        drawerLeft.addStickyFooterItem(new SecondaryDrawerItem().withName("Settings").withIdentifier(-2));
         drawerLeft.setOnDrawerItemClickListener((view, position, drawerItem) -> {
             long identifier = drawerItem.getIdentifier();
+            Log.e("DEBUG", "IDENT: "+identifier);
+            Log.e("DEBUG", "IDENT: "+(identifier==-1));
+            Log.e("DEBUG", "IDENT: "+(identifier==-2));
             if (identifier == -1) {
                 showConnectDialog();
+                return false;
+            } else if (identifier == -2) {
+                showThemeDialog();
                 return false;
             } else {
                 if (((IExpandable) drawerItem).getSubItems() != null) {
@@ -224,12 +236,36 @@ public class ChatActivity extends AppCompatActivity {
         msgHistory.setLayoutManager(new LinearLayoutManager(this));
         msgHistory.setItemAnimator(new DefaultItemAnimator());
 
+        swipeView.setColorSchemeColors(context.getThemeUtil().colors.colorPrimary);
         swipeView.setOnRefreshListener(() -> {
             assertNotNull(context.getClient());
             context.getClient().getBacklogManager().requestMoreBacklog(status.bufferId, 20);
         });
 
         send.setOnClickListener(view -> sendInput());
+    }
+
+    public void showThemeDialog() {
+        String[] strings = new String[AppTheme.values().length];
+        int startIndex = -1;
+        for (int i = 0; i < strings.length; i++) {
+            AppTheme theme = AppTheme.values()[i];
+            strings[i] = theme.name();
+            if (theme.name().equals(context.getSettings().theme.get())) startIndex = i;
+        }
+
+        new MaterialDialog.Builder(this)
+                .items(strings)
+                .positiveText("Select Theme")
+                .neutralText("Cancel")
+                .itemsCallbackSingleChoice(startIndex, (dialog, itemView, which, text) -> {
+                    context.getSettings().theme.set(strings[dialog.getSelectedIndex()]);
+                    recreate();
+                    return true;
+                })
+                .buttonRippleColor(context.getThemeUtil().colors.colorAccent)
+                .build()
+                .show();
     }
 
     @Override
@@ -253,10 +289,12 @@ public class ChatActivity extends AppCompatActivity {
 
         serviceInterface.disconnect();
 
-        this.backgroundThread = backgroundThread;
         backgroundThread.provider.event.register(this);
+        context.setClient(backgroundThread.handler.client);
+        context.setProvider(backgroundThread.provider);
         selectBuffer(status.bufferId);
         selectBufferViewConfig(status.bufferViewConfigId);
+        updateSubTitle();
     }
 
     private void selectBufferViewConfig(@IntRange(from = -1) int bufferViewConfigId) {
@@ -301,9 +339,8 @@ public class ChatActivity extends AppCompatActivity {
 
     private void onConnectionEstablished() {
         assertNotNull(binder);
-        this.backgroundThread = binder.getBackgroundThread();
-        assertNotNull(this.backgroundThread);
-        context.setClient(this.backgroundThread.handler.client);
+        assertNotNull(binder.getBackgroundThread());
+        context.setClient(binder.getBackgroundThread().handler.client);
         assertNotNull(context.getClient());
     }
 
@@ -314,10 +351,11 @@ public class ChatActivity extends AppCompatActivity {
 
         CharSequence text = chatline.getText();
         context.getClient().sendInput(buffer.getInfo(), text.toString());
+        chatline.setText("");
     }
 
     public void onEventMainThread(ConnectionChangeEvent event) {
-        setSubtitle(event.status.name());
+        updateSubTitle();
 
         switch (event.status) {
             case HANDSHAKE:
@@ -425,16 +463,11 @@ public class ChatActivity extends AppCompatActivity {
         updateSubTitle();
     }
 
-    protected void setSubtitle(CharSequence subtitle) {
-        this.subtitle = subtitle;
-        updateSubTitle();
-    }
-
     private void updateSubTitle() {
         if (context.getClient() != null) {
-            toolbar.setSubtitle(SpanFormatter.format("Lag: %.2f, %s", context.getClient().getLag() / 1000.0F, subtitle));
+            toolbar.setSubtitle(SpanFormatter.format("Lag: %.2f, %s", context.getClient().getLag() / 1000.0F, context.getClient().getConnectionStatus()));
         } else {
-            toolbar.setSubtitle(subtitle);
+            toolbar.setSubtitle("");
         }
     }
 }
