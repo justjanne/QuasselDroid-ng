@@ -16,6 +16,7 @@ import de.kuschku.libquassel.localtypes.ChannelBuffer;
 import de.kuschku.libquassel.localtypes.QueryBuffer;
 import de.kuschku.libquassel.localtypes.StatusBuffer;
 import de.kuschku.libquassel.message.Message;
+import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.observables.IObservable;
@@ -80,25 +81,28 @@ public class BufferItem extends SecondaryDrawerItem implements IObservable<Gener
 
     @Override
     public StringHolder getName() {
-        return new StringHolder(buffer.getName());
+        if (buffer instanceof StatusBuffer)
+            return new StringHolder(context.getThemeUtil().translations.title_status_buffer);
+        else
+            return new StringHolder(buffer.getName());
     }
 
     @Override
     public ImageHolder getIcon() {
         if (buffer instanceof ChannelBuffer) {
-            if (buffer.isActive()) {
+            if (buffer.getStatus() != BufferInfo.BufferStatus.OFFLINE) {
                 return new ImageHolder(R.drawable.ic_status_channel);
             } else {
                 return new ImageHolder(R.drawable.ic_status_channel_offline);
             }
         } else if (buffer instanceof StatusBuffer) {
-            if (buffer.isActive()) {
+            if (buffer.getStatus() != BufferInfo.BufferStatus.OFFLINE) {
                 return new ImageHolder(R.drawable.ic_status);
             } else {
                 return new ImageHolder(R.drawable.ic_status_offline);
             }
         } else {
-            if (buffer.isActive()) {
+            if (buffer.getStatus() != BufferInfo.BufferStatus.OFFLINE) {
                 return new ImageHolder(R.drawable.ic_status);
             } else {
                 return new ImageHolder(R.drawable.ic_status_offline);
@@ -107,8 +111,20 @@ public class BufferItem extends SecondaryDrawerItem implements IObservable<Gener
     }
 
     @Override
+    public boolean isIconTinted() {
+        return buffer.getStatus() == BufferInfo.BufferStatus.ONLINE;
+    }
+
+    @Override
     public ColorHolder getIconColor() {
-        return super.getIconColor();
+        return buffer.getStatus() == BufferInfo.BufferStatus.ONLINE  ?
+                ColorHolder.fromColor(context.getThemeUtil().res.colorAccent) :
+                new ColorHolder();
+    }
+
+    @Override
+    public ColorHolder getDescriptionTextColor() {
+        return ColorHolder.fromColor(context.getThemeUtil().res.colorForegroundSecondary);
     }
 
     @Override

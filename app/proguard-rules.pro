@@ -26,13 +26,16 @@
 -dontwarn sun.misc.Unsafe
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 -dontwarn javax.annotation.processing.ProcessingEnvironment
+-dontwarn com.nineoldandroids.view.animation.AnimatorProxy
 
--keepclasseswithmembernames class **.libquassel.** {
+-keepclasseswithmembernames class de.kuschku.** {
     <methods>;
+    <fields>;
 }
 
--keepclassmembers class **.libquassel.** {
+-keepclassmembers class de.kuschku.** {
     <methods>;
+    <fields>;
 }
 
 

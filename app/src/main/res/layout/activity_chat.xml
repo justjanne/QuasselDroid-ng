@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:gravity="bottom"
         android:orientation="vertical"
-        app:umanoScrollableView="@+id/chatlineScroller"
+        app:umanoScrollableView="@+id/chatline_scroller"
         app:umanoPanelHeight="?attr/actionBarSize"
         app:umanoShadowHeight="4dp">
 

@@ -2,6 +2,8 @@ package de.kuschku.libquassel;
 
 import android.support.annotation.NonNull;
 
+import de.kuschku.libquassel.functions.types.Heartbeat;
+import de.kuschku.libquassel.functions.types.HeartbeatReply;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.functions.types.InitRequestFunction;
 import de.kuschku.libquassel.functions.types.RpcCallFunction;
@@ -30,6 +32,10 @@ public interface IProtocolHandler {
     void onEvent(ClientLoginReject message);
 
     void onEvent(SessionInit message);
+
+    void onEvent(Heartbeat message);
+
+    void onEventMainThread(HeartbeatReply message);
 
     @NonNull
     Client getClient();

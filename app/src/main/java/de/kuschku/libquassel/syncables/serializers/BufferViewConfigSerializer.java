@@ -33,7 +33,7 @@ public class BufferViewConfigSerializer implements ObjectSerializer<BufferViewCo
         map.data.put("bufferViewName", new QVariant<>(data.getBufferViewName()));
         map.data.put("TemporarilyRemovedBuffers", new QVariant<>(data.getTemporarilyRemovedBuffers()));
         map.data.put("hideInactiveNetworks", new QVariant<>(data.isHideInactiveNetworks()));
-        map.data.put("BufferList", new QVariant<>(data.getBufferList()));
+        map.data.put("BufferList", new QVariant<>(data.getBuffers()));
         map.data.put("allowedBufferTypes", new QVariant<>(data.getAllowedBufferTypes()));
         map.data.put("sortAlphabetically", new QVariant<>(data.isSortAlphabetically()));
         map.data.put("disableDecoration", new QVariant<>(data.isDisableDecoration()));

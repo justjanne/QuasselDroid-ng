@@ -18,6 +18,7 @@ import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.NetworkSerializer;
+import de.kuschku.util.irc.IrcUserUtils;
 import de.kuschku.util.observables.ContentComparable;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -156,7 +157,7 @@ public class Network extends SyncableObject<Network> implements ContentComparabl
     }
 
     public void addIrcUser(String sender) {
-        client.sendInitRequest("IrcUser", getObjectName() + "/" + sender);
+        client.sendInitRequest("IrcUser", getObjectName() + "/" + IrcUserUtils.getNick(sender));
     }
 
     @Nullable
@@ -543,7 +544,12 @@ public class Network extends SyncableObject<Network> implements ContentComparabl
     }
 
     @Override
-    public boolean equalsContent(@NonNull Network other) {
+    public boolean areContentsTheSame(@NonNull Network other) {
+        return this == other;
+    }
+
+    @Override
+    public boolean areItemsTheSame(Network other) {
         return networkId == other.networkId;
     }
 

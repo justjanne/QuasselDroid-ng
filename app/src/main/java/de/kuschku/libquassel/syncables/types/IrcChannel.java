@@ -44,23 +44,32 @@ public class IrcChannel extends SyncableObject<IrcChannel> {
         this.encrypted = encrypted;
     }
 
+    @NonNull
     public Map<String, List<String>> getA_ChanModes() {
         if (ChanModes.get("A") == null) ChanModes.put("A", new HashMap<>());
         return (Map<String, List<String>>) ChanModes.get("A");
     }
 
+    @NonNull
     public Map<String, String> getB_ChanModes() {
         if (ChanModes.get("B") == null) ChanModes.put("B", new HashMap<>());
         return (Map<String, String>) ChanModes.get("B");
     }
 
+    @NonNull
     public Map<String, String> getC_ChanModes() {
         if (ChanModes.get("C") == null) ChanModes.put("C", new HashMap<>());
         return (Map<String, String>) ChanModes.get("C");
     }
 
+    @NonNull
     public Set<String> getD_ChanModes() {
-        if (ChanModes.get("D") == null) ChanModes.put("D", new HashSet<>());
+        if (ChanModes.get("D") instanceof String) {
+            List<String> list = Arrays.asList(((String) ChanModes.get("D")).split(""));
+            ChanModes.put("D", new HashSet<>(list));
+        } else if (ChanModes.get("D") == null) {
+            ChanModes.put("D", new HashSet<>());
+        }
         return (Set<String>) ChanModes.get("D");
     }
 

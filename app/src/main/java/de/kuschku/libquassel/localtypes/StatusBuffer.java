@@ -30,8 +30,8 @@ public class StatusBuffer implements Buffer {
     }
 
     @Override
-    public boolean isActive() {
-        return network.isConnected();
+    public BufferInfo.BufferStatus getStatus() {
+        return network.isConnected() ? BufferInfo.BufferStatus.ONLINE : BufferInfo.BufferStatus.OFFLINE;
     }
 
     @NonNull

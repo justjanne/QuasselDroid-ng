@@ -16,6 +16,7 @@
         <item name="ic_format_underline">@drawable/ic_format_underline_dark</item>
         <item name="ic_format_paint">@drawable/ic_format_paint_dark</item>
         <item name="ic_format_fill">@drawable/ic_format_fill_dark</item>
+        <item name="ic_history">@drawable/ic_history_dark</item>
 
         <item name="cardStyle">@style/CardView.Dark</item>
     </style>
@@ -35,6 +36,7 @@
         <item name="ic_format_underline">@drawable/ic_format_underline_light</item>
         <item name="ic_format_paint">@drawable/ic_format_paint_light</item>
         <item name="ic_format_fill">@drawable/ic_format_fill_light</item>
+        <item name="ic_history">@drawable/ic_history_light</item>
 
         <item name="cardStyle">@style/CardView.Light</item>
     </style>

@@ -3,18 +3,23 @@ package de.kuschku.quasseldroid_ng.ui.theme;
 import android.content.Context;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.v7.view.ContextThemeWrapper;
+import android.util.Log;
 
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.annotationbind.AutoColor;
 import de.kuschku.util.annotationbind.AutoDimen;
+import de.kuschku.util.annotationbind.AutoString;
 import de.kuschku.util.ui.DateTimeFormatHelper;
+import de.kuschku.util.ui.SpanFormatter;
 
 public class ThemeUtil {
     @NonNull
     public final Colors res = new Colors();
+    public final FormatStrings translations = new FormatStrings();
     public DateTimeFormatHelper formatter;
 
     public ThemeUtil(@NonNull Context ctx) {
@@ -31,8 +36,142 @@ public class ThemeUtil {
     public void initColors(@NonNull ContextThemeWrapper wrapper) {
         try {
             AutoBinder.bind(res, wrapper);
+            AutoBinder.bind(translations, wrapper);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static class FormatStrings {
+        @AutoString(R.string.username_hostmask)
+        public String username_hostmask;
+
+        @AutoString(R.string.message_plain)
+        public String message_plain;
+
+        @AutoString(R.string.message_join)
+        public String message_join;
+
+        @AutoString(R.string.message_part)
+        public String message_part;
+
+        @AutoString(R.string.message_part_extra)
+        public String message_part_extra;
+
+        @AutoString(R.string.message_quit)
+        public String message_quit;
+
+        @AutoString(R.string.message_quit_extra)
+        public String message_quit_extra;
+
+        @AutoString(R.string.message_kill)
+        public String message_kill;
+
+        @AutoString(R.string.message_kick)
+        public String message_kick;
+
+        @AutoString(R.string.message_kick_extra)
+        public String message_kick_extra;
+
+        @AutoString(R.string.message_mode)
+        public String message_mode;
+
+        @AutoString(R.string.message_nick_self)
+        public String message_nick_self;
+
+        @AutoString(R.string.message_nick_other)
+        public String message_nick_other;
+
+        @AutoString(R.string.message_daychange)
+        public String message_daychange;
+
+        @AutoString(R.string.message_action)
+        public String message_action;
+
+        @AutoString(R.string.title_status_buffer)
+        public String title_status_buffer;
+
+        @NonNull
+        public CharSequence formatUsername(@NonNull CharSequence nick, @NonNull CharSequence hostmask) {
+            return SpanFormatter.format(username_hostmask, nick, hostmask);
+        }
+
+        @NonNull
+        public CharSequence formatJoin(@NonNull CharSequence user, @NonNull CharSequence channel) {
+            return SpanFormatter.format(message_join, user, channel);
+        }
+
+        @NonNull
+        public CharSequence formatPart(@NonNull CharSequence user, @NonNull CharSequence channel) {
+            return SpanFormatter.format(message_part, user, channel);
+        }
+
+        @NonNull
+        public CharSequence formatPart(@NonNull CharSequence user, @NonNull CharSequence channel, @Nullable CharSequence reason) {
+            if (reason == null || reason.length() == 0) return formatPart(user, channel);
+
+            return SpanFormatter.format(message_part_extra, user, channel, reason);
+        }
+
+        @NonNull
+        public CharSequence formatQuit(@NonNull CharSequence user) {
+            return SpanFormatter.format(message_quit, user);
+        }
+
+        @NonNull
+        public CharSequence formatQuit(@NonNull CharSequence user, @Nullable CharSequence reason) {
+            if (reason == null || reason.length() == 0) return formatQuit(user);
+
+            return SpanFormatter.format(message_quit_extra, user, reason);
+        }
+
+        @NonNull
+        public CharSequence formatKill(@NonNull CharSequence user, @NonNull CharSequence channel) {
+            return SpanFormatter.format(message_kill, user, channel);
+        }
+
+        @NonNull
+        public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked) {
+            return SpanFormatter.format(message_kick, user, kicked);
+        }
+
+        @NonNull
+        public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked, @Nullable CharSequence reason) {
+            if (reason == null || reason.length() == 0) return formatKick(user, kicked);
+
+            return SpanFormatter.format(message_kick_extra, user, kicked, reason);
+        }
+
+        @NonNull
+        public CharSequence formatMode(@NonNull CharSequence mode, @NonNull CharSequence user) {
+            return SpanFormatter.format(message_mode, mode, user);
+        }
+
+        @NonNull
+        public CharSequence formatNick(@NonNull CharSequence newNick) {
+            return SpanFormatter.format(message_nick_self, newNick);
+        }
+
+        @NonNull
+        public CharSequence formatNick(@NonNull CharSequence oldNick, @Nullable CharSequence newNick) {
+            if (newNick == null || newNick.length() == 0) return formatNick(oldNick);
+
+            return SpanFormatter.format(message_nick_other, oldNick, newNick);
+        }
+
+        @NonNull
+        public CharSequence formatDayChange(@NonNull CharSequence day) {
+            return SpanFormatter.format(message_daychange, day);
+        }
+
+        @NonNull
+        public CharSequence formatAction(@NonNull CharSequence user, @NonNull CharSequence channel) {
+            return SpanFormatter.format(message_action, user, channel);
+        }
+
+        @NonNull
+        public CharSequence formatPlain(@NonNull CharSequence nick, @NonNull CharSequence message) {
+            return SpanFormatter.format(message_plain, nick, message);
         }
     }
 

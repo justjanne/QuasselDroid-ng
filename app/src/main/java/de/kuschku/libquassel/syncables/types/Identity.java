@@ -1,6 +1,8 @@
 package de.kuschku.libquassel.syncables.types;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.List;
 import java.util.Map;
@@ -258,8 +260,8 @@ public class Identity extends SyncableObject<Identity> {
     }
 
     @Override
-    public void init(@NonNull InitDataFunction function, @NonNull BusProvider provider, @NonNull Client client) {
-        client.addIdentity(Integer.valueOf(function.objectName), this);
+    public void init(@Nullable InitDataFunction function, @NonNull BusProvider provider, @NonNull Client client) {
+        client.addIdentity(getIdentityId(), this);
     }
 
     @Override

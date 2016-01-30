@@ -9,6 +9,7 @@ import java.util.List;
 
 import de.kuschku.libquassel.functions.FunctionType;
 import de.kuschku.libquassel.functions.types.Heartbeat;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 import static de.kuschku.util.AndroidAssert.assertTrue;
@@ -30,7 +31,7 @@ public class HeartbeatSerializer implements FunctionSerializer<Heartbeat> {
     public List serialize(@NonNull Heartbeat data) {
         return Arrays.asList(
                 FunctionType.HEARTBEAT.id,
-                new QVariant<>(data.dateTime)
+                new QVariant<>(QMetaType.Type.QDateTime, data.dateTime)
         );
     }
 

@@ -54,7 +54,7 @@ public class Client {
     @NonNull
     private final BacklogManager backlogManager;
     @NonNull
-    private final NotificationManager notificationManager = new NotificationManager();
+    private final NotificationManager notificationManager = new NotificationManager(this);
     @NonNull
     private final BusProvider busProvider;
     private long lag;
@@ -197,6 +197,7 @@ public class Client {
 
     public void setState(@Nullable SessionState state) {
         this.state = state;
+        Log.e("DEBUG", String.valueOf(this.state));
     }
 
     @NonNull

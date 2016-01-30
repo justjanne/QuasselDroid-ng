@@ -1,9 +1,9 @@
 package de.kuschku.libquassel.localtypes.backlogmanagers;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -47,7 +47,7 @@ public class BacklogFilter implements UICallback {
         int id = -1;
         while (now.isAfter(earliestMessage)) {
             filtered.add(new Message(
-                    id,
+                    (int) DateTimeUtils.toJulianDay(now.getMillis()),
                     now,
                     Message.Type.DayChange,
                     new Message.Flags(false, false, false, false, false),
@@ -79,21 +79,22 @@ public class BacklogFilter implements UICallback {
         updateAdd();
     }
 
-    private void updateRemove() {
+    public void update() {
+        updateAdd();
+        updateRemove();
+    }
+
+    public void updateRemove() {
         for (Message message : unfiltered) {
-            if (filterItem(message) && filtered.contains(message)) {
-                String simpleName = getClass().getSimpleName();
-                Log.e(simpleName, "Filtered: "+message);
+            if (filterItem(message)) {
                 filtered.remove(message);
             }
         }
     }
 
-    private void updateAdd() {
+    public void updateAdd() {
         for (Message message : unfiltered) {
-            if (!filterItem(message) && !filtered.contains(message)) {
-                String simpleName = getClass().getSimpleName();
-                Log.e(simpleName, "Unfiltered: "+message);
+            if (!filterItem(message)) {
                 filtered.add(message);
             }
         }
@@ -133,5 +134,30 @@ public class BacklogFilter implements UICallback {
         for (int i = position; i < position + count; i++) {
             notifyItemRemoved(i);
         }
+    }
+
+    public void setFilters(int filters) {
+        Set<Message.Type> removed = new HashSet<>();
+        for (Message.Type type : filteredTypes) {
+            if ((filters & type.value) == 0)
+                removed.add(type);
+        }
+        for (Message.Type type : removed) {
+            removeFilter(type);
+        }
+
+        for (Message.Type type : Message.Type.values()) {
+            if ((filters & type.value) != 0) {
+                addFilter(type);
+            }
+        }
+    }
+
+    public int getFilters() {
+        int filters = 0x00000000;
+        for (Message.Type type : filteredTypes) {
+            filters |= type.value;
+        }
+        return filters;
     }
 }

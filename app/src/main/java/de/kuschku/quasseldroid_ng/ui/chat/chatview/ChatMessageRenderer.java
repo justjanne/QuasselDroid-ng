@@ -16,6 +16,7 @@ import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.annotationbind.AutoString;
 import de.kuschku.util.irc.IrcFormatHelper;
 import de.kuschku.util.irc.IrcUserUtils;
+import de.kuschku.util.ui.MessageUtil;
 import de.kuschku.util.ui.SpanFormatter;
 import de.kuschku.quasseldroid_ng.ui.theme.ThemeUtil;
 
@@ -23,8 +24,6 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 @UiThread
 public class ChatMessageRenderer {
-    @NonNull
-    private final FormatStrings strings;
 
     private IrcFormatHelper helper;
     private MessageStyleContainer highlightStyle;
@@ -36,37 +35,36 @@ public class ChatMessageRenderer {
     private AppContext context;
 
     public ChatMessageRenderer(@NonNull Context ctx, @NonNull AppContext context) {
-        this.strings = new FormatStrings(ctx);
         this.context = context;
-        setTheme(context.getThemeUtil());
+        setTheme(context);
     }
 
-    public void setTheme(ThemeUtil themeUtil) {
-        this.helper = new IrcFormatHelper(themeUtil.res);
+    public void setTheme(AppContext context) {
+        this.helper = new IrcFormatHelper(context);
 
         this.highlightStyle = new MessageStyleContainer(
-                themeUtil.res.colorForegroundHighlight,
+                context.getThemeUtil().res.colorForegroundHighlight,
                 Typeface.NORMAL,
-                themeUtil.res.colorForegroundHighlight,
-                themeUtil.res.colorBackgroundHighlight
+                context.getThemeUtil().res.colorForegroundHighlight,
+                context.getThemeUtil().res.colorBackgroundHighlight
         );
         this.serverStyle = new MessageStyleContainer(
-                themeUtil.res.colorForegroundSecondary,
+                context.getThemeUtil().res.colorForegroundSecondary,
                 Typeface.ITALIC,
-                themeUtil.res.colorForegroundSecondary,
-                themeUtil.res.colorBackgroundSecondary
+                context.getThemeUtil().res.colorForegroundSecondary,
+                context.getThemeUtil().res.colorBackgroundSecondary
         );
         this.plainStyle = new MessageStyleContainer(
-                themeUtil.res.colorForeground,
+                context.getThemeUtil().res.colorForeground,
                 Typeface.NORMAL,
-                themeUtil.res.colorForegroundSecondary,
-                themeUtil.res.transparent
+                context.getThemeUtil().res.colorForegroundSecondary,
+                context.getThemeUtil().res.transparent
         );
         this.actionStyle = new MessageStyleContainer(
-                themeUtil.res.colorForegroundAction,
+                context.getThemeUtil().res.colorForegroundAction,
                 Typeface.ITALIC,
-                themeUtil.res.colorForegroundSecondary,
-                themeUtil.res.transparent
+                context.getThemeUtil().res.colorForegroundSecondary,
+                context.getThemeUtil().res.transparent
         );
     }
 
@@ -82,7 +80,7 @@ public class ChatMessageRenderer {
     private CharSequence formatNick(@NonNull String hostmask, boolean full) {
         CharSequence formattedNick = helper.formatUserNick(IrcUserUtils.getNick(hostmask));
         if (full) {
-            return strings.formatUsername(formattedNick, IrcUserUtils.getMask(hostmask));
+            return context.getThemeUtil().translations.formatUsername(formattedNick, IrcUserUtils.getMask(hostmask));
         } else {
             return formattedNick;
         }
@@ -106,7 +104,7 @@ public class ChatMessageRenderer {
     private void onBindPlain(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, plainStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(
-                strings.formatPlain(
+                context.getThemeUtil().translations.formatPlain(
                         formatNick(message.sender, false),
                         helper.formatIrcMessage(message.content)
                 )
@@ -115,7 +113,7 @@ public class ChatMessageRenderer {
 
     private void onBindNotice(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, plainStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(strings.formatAction(
+        holder.content.setText(context.getThemeUtil().translations.formatAction(
                 formatNick(message.sender, false),
                 helper.formatIrcMessage(message.content)
         ));
@@ -124,7 +122,7 @@ public class ChatMessageRenderer {
     private void onBindAction(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, actionStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(
-                strings.formatAction(
+                context.getThemeUtil().translations.formatAction(
                         formatNick(message.sender, false),
                         helper.formatIrcMessage(message.content)
                 )
@@ -134,11 +132,11 @@ public class ChatMessageRenderer {
     private void onBindNick(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         if (message.flags.Self)
-            holder.content.setText(strings.formatNick(
+            holder.content.setText(context.getThemeUtil().translations.formatNick(
                     formatNick(message.sender, false)
             ));
         else
-            holder.content.setText(strings.formatNick(
+            holder.content.setText(context.getThemeUtil().translations.formatNick(
                     formatNick(message.sender, false),
                     helper.formatUserNick(message.content)
             ));
@@ -151,7 +149,7 @@ public class ChatMessageRenderer {
 
     private void onBindJoin(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(strings.formatJoin(
+        holder.content.setText(context.getThemeUtil().translations.formatJoin(
                 formatNick(message.sender),
                 getBufferName(message)
         ));
@@ -159,7 +157,7 @@ public class ChatMessageRenderer {
 
     private void onBindPart(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(strings.formatPart(
+        holder.content.setText(context.getThemeUtil().translations.formatPart(
                 formatNick(message.sender),
                 getBufferName(message),
                 message.content
@@ -168,7 +166,7 @@ public class ChatMessageRenderer {
 
     private void onBindQuit(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(strings.formatQuit(
+        holder.content.setText(context.getThemeUtil().translations.formatQuit(
                 formatNick(message.sender),
                 message.content
         ));
@@ -201,7 +199,7 @@ public class ChatMessageRenderer {
 
     private void onBindDayChange(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(strings.formatDayChange(
+        holder.content.setText(context.getThemeUtil().translations.formatDayChange(
                 context.getThemeUtil().formatter.getLongDateFormatter().print(message.time)
         ));
     }
@@ -303,145 +301,6 @@ public class ChatMessageRenderer {
             this.fontstyle = fontstyle;
             this.timeColor = timeColor;
             this.bgColor = bgColor;
-        }
-    }
-
-    public static class FormatStrings {
-        @AutoString(R.string.username_hostmask)
-        public String username_hostmask;
-
-        @AutoString(R.string.message_plain)
-        public String message_plain;
-
-        @AutoString(R.string.message_join)
-        public String message_join;
-
-        @AutoString(R.string.message_part)
-        public String message_part;
-
-        @AutoString(R.string.message_part_extra)
-        public String message_part_extra;
-
-        @AutoString(R.string.message_quit)
-        public String message_quit;
-
-        @AutoString(R.string.message_quit_extra)
-        public String message_quit_extra;
-
-        @AutoString(R.string.message_kill)
-        public String message_kill;
-
-        @AutoString(R.string.message_kick)
-        public String message_kick;
-
-        @AutoString(R.string.message_kick_extra)
-        public String message_kick_extra;
-
-        @AutoString(R.string.message_mode)
-        public String message_mode;
-
-        @AutoString(R.string.message_nick_self)
-        public String message_nick_self;
-
-        @AutoString(R.string.message_nick_other)
-        public String message_nick_other;
-
-        @AutoString(R.string.message_daychange)
-        public String message_daychange;
-
-        @AutoString(R.string.message_action)
-        public String message_action;
-
-        public FormatStrings(@NonNull Context ctx) {
-            try {
-                AutoBinder.bind(this, ctx);
-            } catch (IllegalAccessException e) {
-                Log.e("ERROR", e.toString());
-                e.printStackTrace();
-            }
-        }
-
-        @NonNull
-        public CharSequence formatUsername(@NonNull CharSequence nick, @NonNull CharSequence hostmask) {
-            return SpanFormatter.format(username_hostmask, nick, hostmask);
-        }
-
-        @NonNull
-        public CharSequence formatJoin(@NonNull CharSequence user, @NonNull CharSequence channel) {
-            return SpanFormatter.format(message_join, user, channel);
-        }
-
-        @NonNull
-        public CharSequence formatPart(@NonNull CharSequence user, @NonNull CharSequence channel) {
-            return SpanFormatter.format(message_part, user, channel);
-        }
-
-        @NonNull
-        public CharSequence formatPart(@NonNull CharSequence user, @NonNull CharSequence channel, @Nullable CharSequence reason) {
-            if (reason == null || reason.length() == 0) return formatPart(user, channel);
-
-            return SpanFormatter.format(message_part_extra, user, channel, reason);
-        }
-
-        @NonNull
-        public CharSequence formatQuit(@NonNull CharSequence user) {
-            return SpanFormatter.format(message_quit, user);
-        }
-
-        @NonNull
-        public CharSequence formatQuit(@NonNull CharSequence user, @Nullable CharSequence reason) {
-            if (reason == null || reason.length() == 0) return formatQuit(user);
-
-            return SpanFormatter.format(message_quit_extra, user, reason);
-        }
-
-        @NonNull
-        public CharSequence formatKill(@NonNull CharSequence user, @NonNull CharSequence channel) {
-            return SpanFormatter.format(message_kill, user, channel);
-        }
-
-        @NonNull
-        public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked) {
-            return SpanFormatter.format(message_kick, user, kicked);
-        }
-
-        @NonNull
-        public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked, @Nullable CharSequence reason) {
-            if (reason == null || reason.length() == 0) return formatKick(user, kicked);
-
-            return SpanFormatter.format(message_kick_extra, user, kicked, reason);
-        }
-
-        @NonNull
-        public CharSequence formatMode(@NonNull CharSequence mode, @NonNull CharSequence user) {
-            return SpanFormatter.format(message_mode, mode, user);
-        }
-
-        @NonNull
-        public CharSequence formatNick(@NonNull CharSequence newNick) {
-            return SpanFormatter.format(message_nick_self, newNick);
-        }
-
-        @NonNull
-        public CharSequence formatNick(@NonNull CharSequence oldNick, @Nullable CharSequence newNick) {
-            if (newNick == null || newNick.length() == 0) return formatNick(oldNick);
-
-            return SpanFormatter.format(message_nick_other, oldNick, newNick);
-        }
-
-        @NonNull
-        public CharSequence formatDayChange(@NonNull CharSequence day) {
-            return SpanFormatter.format(message_daychange, day);
-        }
-
-        @NonNull
-        public CharSequence formatAction(@NonNull CharSequence user, @NonNull CharSequence channel) {
-            return SpanFormatter.format(message_action, user, channel);
-        }
-
-        @NonNull
-        public CharSequence formatPlain(@NonNull CharSequence nick, @NonNull CharSequence message) {
-            return SpanFormatter.format(message_plain, nick, message);
         }
     }
 }

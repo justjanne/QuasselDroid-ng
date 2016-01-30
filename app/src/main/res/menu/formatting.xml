@@ -26,4 +26,9 @@
         android:icon="?attr/ic_format_fill"
         app:showAsAction="always"
         android:title="@string/format_fill" />
+    <item
+        android:id="@+id/action_history"
+        android:icon="?attr/ic_history"
+        app:showAsAction="always"
+        android:title="@string/message_history" />
 </menu>

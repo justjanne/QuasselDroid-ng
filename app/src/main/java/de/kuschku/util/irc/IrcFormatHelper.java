@@ -24,7 +24,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.kuschku.quasseldroid_ng.R;
+import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.quasseldroid_ng.ui.theme.ThemeUtil;
+import de.kuschku.util.ui.MessageUtil;
 
 public class IrcFormatHelper {
     @NonNull
@@ -41,16 +43,16 @@ public class IrcFormatHelper {
     private static final Pattern channelPattern = Pattern.compile("((?:#|![A-Z0-9]{5})[^,:\\s]+(?::[^,:\\s]+)?)\\b", Pattern.CASE_INSENSITIVE);
 
     @NonNull
-    private final ThemeUtil.Colors colors;
+    private final AppContext context;
 
-    public IrcFormatHelper(@NonNull ThemeUtil.Colors colors) {
-        this.colors = colors;
+    public IrcFormatHelper(@NonNull AppContext context) {
+        this.context = context;
     }
 
     @NonNull
     public CharSequence formatUserNick(@NonNull String nick) {
         int colorIndex = IrcUserUtils.getSenderColor(nick);
-        int color = colors.senderColors[colorIndex];
+        int color = context.getThemeUtil().res.senderColors[colorIndex];
 
         SpannableString str = new SpannableString(nick);
         str.setSpan(new ForegroundColorSpan(color), 0, nick.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -62,7 +64,7 @@ public class IrcFormatHelper {
     public CharSequence formatIrcMessage(@NonNull String message) {
         List<FutureClickableSpan> spans = new LinkedList<>();
 
-        SpannableString str = new SpannableString(message);
+        SpannableString str = new SpannableString(MessageUtil.parseStyleCodes(context.getThemeUtil(), message, context.getSettings().mircColors.get()));
         Matcher urlMatcher = urlPattern.matcher(str);
         while (urlMatcher.find()) {
             spans.add(new FutureClickableSpan(new CustomURLSpan(urlMatcher.toString()), urlMatcher.start(), urlMatcher.end()));

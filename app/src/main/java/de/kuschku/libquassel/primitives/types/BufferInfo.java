@@ -65,4 +65,17 @@ public class BufferInfo {
             }
         }
     }
+
+    public enum BufferStatus {
+        OFFLINE,
+        AWAY,
+        ONLINE
+    }
+
+    public enum ContentStatus {
+        NONE,
+        ACTIVITY,
+        MESSAGES,
+        HIGHLIGHTS
+    }
 }

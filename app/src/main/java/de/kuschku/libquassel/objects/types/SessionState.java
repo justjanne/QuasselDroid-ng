@@ -3,20 +3,19 @@ package de.kuschku.libquassel.objects.types;
 import android.support.annotation.NonNull;
 
 import java.util.List;
-import java.util.Map;
 
 import de.kuschku.libquassel.primitives.types.BufferInfo;
-import de.kuschku.libquassel.primitives.types.QVariant;
+import de.kuschku.libquassel.syncables.types.Identity;
 
 public class SessionState {
     @NonNull
-    public final List<Map<String, QVariant>> Identities;
+    public final List<Identity> Identities;
     @NonNull
     public final List<BufferInfo> BufferInfos;
     @NonNull
     public final List<Integer> NetworkIds;
 
-    public SessionState(@NonNull List<Map<String, QVariant>> identities, @NonNull List<BufferInfo> bufferInfos,
+    public SessionState(@NonNull List<Identity> identities, @NonNull List<BufferInfo> bufferInfos,
                         @NonNull List<Integer> networkIds) {
         this.Identities = identities;
         this.BufferInfos = bufferInfos;

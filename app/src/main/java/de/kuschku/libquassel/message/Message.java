@@ -52,20 +52,13 @@ public class Message implements ContentComparable<Message> {
     }
 
     @Override
-    public boolean equalsContent(@NonNull Message message) {
-        return messageId == message.messageId &&
-                time.equals(message.time) &&
-                type == message.type &&
-                flags.equals(message.flags) &&
-                bufferInfo.equals(message.bufferInfo) &&
-                sender.equals(message.sender) &&
-                content.equals(message.content);
+    public boolean areContentsTheSame(@NonNull Message message) {
+        return this == message;
     }
 
     @Override
-    public boolean equals(@Nullable Object o) {
-        return this == o || !(o == null || getClass() != o.getClass()) && messageId == ((Message) o).messageId;
-
+    public boolean areItemsTheSame(Message other) {
+        return this.messageId == other.messageId;
     }
 
     @Override
@@ -75,7 +68,10 @@ public class Message implements ContentComparable<Message> {
 
     @Override
     public int compareTo(@NonNull Message another) {
-        return this.time.compareTo(another.time);
+        if (this.type != Type.DayChange && another.type != Type.DayChange)
+            return this.messageId - another.messageId;
+        else
+            return this.time.compareTo(another.time);
     }
 
     public enum Type {

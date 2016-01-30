@@ -30,8 +30,8 @@ public class ChannelBuffer implements Buffer {
     }
 
     @Override
-    public boolean isActive() {
-        return channel != null;
+    public BufferInfo.BufferStatus getStatus() {
+        return channel == null ? BufferInfo.BufferStatus.OFFLINE : BufferInfo.BufferStatus.ONLINE;
     }
 
     @Nullable

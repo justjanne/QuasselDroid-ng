@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.kuschku.libquassel.localtypes.Buffer;
+import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.BufferViewConfig;
 import de.kuschku.libquassel.syncables.types.Network;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
@@ -20,6 +21,11 @@ import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.GeneralCallback;
 import de.kuschku.util.observables.callbacks.wrappers.GeneralCallbackWrapper;
 import de.kuschku.util.observables.lists.ObservableSortedList;
+
+import static de.kuschku.libquassel.primitives.types.BufferInfo.Type.CHANNEL;
+import static de.kuschku.libquassel.primitives.types.BufferInfo.Type.GROUP;
+import static de.kuschku.libquassel.primitives.types.BufferInfo.Type.QUERY;
+import static de.kuschku.libquassel.primitives.types.BufferInfo.Type.STATUS;
 
 public class NetworkItem extends PrimaryDrawerItem implements IObservable<GeneralCallback>, GeneralCallback {
     private final AppContext context;
@@ -35,14 +41,13 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Genera
         this.network = network;
         this.config = config;
 
-        for (Integer bufferId : this.config.getBufferList()) {
+        for (Integer bufferId : this.config.getBuffers()) {
             Buffer buffer = context.getClient().getBuffer(bufferId);
             if (buffer != null && buffer.getInfo().networkId == network.getNetworkId()) {
                 this.buffers.add(new BufferItem(buffer, context));
-                Log.e("Drawer", "Buffer can not be null! BufferId: "+ bufferId);
             }
         }
-        this.config.getBufferList().addCallback(new ElementCallback<Integer>() {
+        this.config.getBuffers().addCallback(new ElementCallback<Integer>() {
             @Override
             public void notifyItemInserted(Integer element) {
                 if (network.getBuffers().contains(element)) {
@@ -131,17 +136,40 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Genera
     class AlphabeticalComparator implements ObservableSortedList.ItemComparator<BufferItem> {
         @Override
         public int compare(BufferItem o1, BufferItem o2) {
-            return o1.getName().getText().compareTo(o2.getName().getText());
+            BufferInfo.Type type1 = o1.getBuffer().getInfo().type;
+            BufferInfo.Type type2 = o2.getBuffer().getInfo().type;
+            if (type1 == type2) {
+                return o1.getBuffer().getName().compareTo(o2.getBuffer().getName());
+            } else {
+                // Type1 is status, Type2 isn’t
+                if (type1 == STATUS) return -1;
+                // Type2 is status, Type1 isn’t
+                if (type2 == STATUS) return 1;
+                // Type1 is channel, Type2 isn’t
+                if (type1 == CHANNEL) return -1;
+                // Type2 is channel, Type1 isn’t
+                if (type2 == CHANNEL) return 1;
+                // Type1 is group, Type2 isn’t
+                if (type1 == GROUP) return -1;
+                // Type2 is group, Type1 isn’t
+                if (type2 == GROUP) return 1;
+                // Type1 is query, Type2 isn’t
+                if (type1 == QUERY) return -1;
+                // Type2 is query, Type1 isn’t
+                if (type2 == QUERY) return 1;
+                // Per default, keep order
+                return -1;
+            }
         }
 
         @Override
-        public boolean areContentsTheSame(BufferItem oldItem, BufferItem newItem) {
-            return oldItem.getBuffer().getInfo().id == newItem.getBuffer().getInfo().id;
+        public boolean areContentsTheSame(BufferItem item1, BufferItem item2) {
+            return item1 == item2;
         }
 
         @Override
         public boolean areItemsTheSame(BufferItem item1, BufferItem item2) {
-            return item1 == item2;
+            return item1.getBuffer().getInfo().id == item2.getBuffer().getInfo().id;
         }
     }
     
@@ -152,13 +180,13 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Genera
         }
 
         @Override
-        public boolean areContentsTheSame(BufferItem oldItem, BufferItem newItem) {
-            return oldItem.getBuffer().getInfo().id == newItem.getBuffer().getInfo().id;
+        public boolean areContentsTheSame(BufferItem item1, BufferItem item2) {
+            return item1 == item2;
         }
 
         @Override
         public boolean areItemsTheSame(BufferItem item1, BufferItem item2) {
-            return item1 == item2;
+            return item1.getBuffer().getInfo().id == item2.getBuffer().getInfo().id;
         }
     }
 }

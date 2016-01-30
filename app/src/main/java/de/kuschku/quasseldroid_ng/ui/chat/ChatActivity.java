@@ -4,15 +4,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ActionMenuView;
@@ -22,17 +21,18 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
-import android.widget.Scroller;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.base.Splitter;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IExpandable;
+import com.mikepenz.fastadapter.IIdentifyable;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -42,9 +42,12 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.sothree.slidinguppanel.ScrollableViewHelper;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import aspm.annotations.BooleanPreference;
@@ -59,6 +62,8 @@ import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.LagChangedEvent;
 import de.kuschku.libquassel.localtypes.Buffer;
+import de.kuschku.libquassel.localtypes.ChannelBuffer;
+import de.kuschku.libquassel.localtypes.backlogmanagers.BacklogFilter;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.BufferViewConfig;
 import de.kuschku.libquassel.syncables.types.BufferViewManager;
@@ -67,10 +72,14 @@ import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
 import de.kuschku.quasseldroid_ng.service.QuasselService;
 import de.kuschku.quasseldroid_ng.ui.chat.chatview.MessageAdapter;
+import de.kuschku.quasseldroid_ng.ui.chat.drawer.BufferViewConfigWrapper;
+import de.kuschku.quasseldroid_ng.ui.chat.drawer.NetworkItem;
+import de.kuschku.quasseldroid_ng.ui.editor.AdvancedEditor;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.quasseldroid_ng.ui.theme.AppTheme;
 import de.kuschku.quasseldroid_ng.ui.theme.ThemeUtil;
 import de.kuschku.util.ServerAddress;
+import de.kuschku.util.backports.Stream;
 import de.kuschku.util.instancestateutil.Storable;
 import de.kuschku.util.instancestateutil.Store;
 import de.kuschku.util.keyboardutils.DialogKeyboardUtil;
@@ -86,8 +95,10 @@ public class ChatActivity extends AppCompatActivity {
     Toolbar toolbar;
     @Bind(R.id.sliding_layout)
     SlidingUpPanelLayout slidingLayout;
+    @Bind(R.id.sliding_layout_history)
+    SlidingUpPanelLayout slidingLayoutHistory;
 
-    @Bind(R.id.chatlineScroller)
+    @Bind(R.id.chatline_scroller)
     ScrollView chatlineScroller;
     @Bind(R.id.chatline)
     AppCompatEditText chatline;
@@ -102,8 +113,10 @@ public class ChatActivity extends AppCompatActivity {
     @Bind(R.id.messages)
     RecyclerView messages;
 
-    @Bind(R.id.amvMenu)
+    @Bind(R.id.formatting_menu)
     ActionMenuView formattingMenu;
+    @Bind(R.id.formatting_toolbar)
+    Toolbar formattingToolbar;
 
     @PreferenceWrapper(BuildConfig.APPLICATION_ID)
     public static abstract class Settings {
@@ -141,8 +154,8 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         private void disconnect() {
-            if (binder != null) binder.stopBackgroundThread();
-            if (context.getProvider() != null) context.getProvider().event.unregister(this);
+            if (context.getProvider() != null)
+                context.getProvider().event.unregister(this);
             context.setProvider(null);
             context.setClient(null);
         }
@@ -155,6 +168,7 @@ public class ChatActivity extends AppCompatActivity {
     private AccountHeader accountHeader;
     private Drawer drawerLeft;
     private BufferViewConfigWrapper wrapper;
+    private AdvancedEditor editor;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @UiThread
@@ -162,7 +176,16 @@ public class ChatActivity extends AppCompatActivity {
             if (service instanceof QuasselService.LocalBinder) {
                 ChatActivity.this.binder = (QuasselService.LocalBinder) service;
                 if (binder.getBackgroundThread() != null) {
-                    connectToThread(binder.getBackgroundThread());
+                    ClientBackgroundThread backgroundThread = binder.getBackgroundThread();
+                    assertNotNull(backgroundThread);
+
+                    serviceInterface.disconnect();
+
+                    backgroundThread.provider.event.register(ChatActivity.this);
+                    context.setClient(backgroundThread.handler.client);
+                    context.setProvider(backgroundThread.provider);
+                    updateBufferViewConfigs();
+                    updateSubTitle();
                 }
             }
         }
@@ -176,100 +199,37 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        context.setSettings(new WrappedSettings(this));
-        AppTheme theme = AppTheme.themeFromString(context.getSettings().theme.get());
-        setTheme(theme.themeId);
-        context.setThemeUtil(new ThemeUtil(this, theme));
+        setupContext();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        connectToService();
+        Intent intent = new Intent(this, QuasselService.class);
+        startService(intent);
 
-        accountHeader = new AccountHeaderBuilder()
-                .withActivity(this)
-                .withCompactStyle(true)
-                .withHeaderBackground(R.drawable.bg)
-                .withSavedInstance(savedInstanceState)
-                .withProfileImagesVisible(false)
-                .withOnAccountHeaderListener((view, profile, current) -> {
-                    if (!current) {
-                        selectBufferViewConfig((int) profile.getIdentifier());
-                    }
-                    return true;
-                })
-                .build();
+        setupHeader(savedInstanceState);
 
-        drawerLeft = new DrawerBuilder()
-                .withActivity(this)
-                .withToolbar(toolbar)
-                .withAccountHeader(accountHeader)
-                .withSavedInstance(savedInstanceState)
-                .withTranslucentStatusBar(true)
-                .build();
-        drawerLeft.addStickyFooterItem(new PrimaryDrawerItem().withIcon(R.drawable.ic_server_light).withName("(Re-)Connect").withIdentifier(-1));
-        drawerLeft.addStickyFooterItem(new SecondaryDrawerItem().withName("Settings").withIdentifier(-2));
-        drawerLeft.setOnDrawerItemClickListener((view, position, drawerItem) -> {
-            long identifier = drawerItem.getIdentifier();
-            if (identifier == -1) {
-                showConnectDialog();
-                return false;
-            } else if (identifier == -2) {
-                showThemeDialog();
-                return false;
-            } else {
-                if (((IExpandable) drawerItem).getSubItems() != null) {
-                    drawerLeft.getAdapter().toggleExpandable(position);
-                    return true;
-                } else {
-                    selectBuffer((int) drawerItem.getIdentifier());
-                    return false;
-                }
-            }
-        });
+        setupDrawer(savedInstanceState);
 
-        getMenuInflater().inflate(R.menu.formatting,formattingMenu.getMenu());
+        setupEditor();
 
-        messages.setItemAnimator(new DefaultItemAnimator());
-        messages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
-        messageAdapter = new MessageAdapter(this, context, new AutoScroller(messages));
-        messages.setAdapter(messageAdapter);
+        setupContent();
 
-        FastAdapter<IItem> fastAdapter = new FastAdapter<>();
-        ItemAdapter<IItem> itemAdapter = new ItemAdapter<>();
-        itemAdapter.wrap(fastAdapter);
-        itemAdapter.add(
-                new PrimaryDrawerItem().withName("Entry #1"),
-                new PrimaryDrawerItem().withName("Entry #2"),
-                new PrimaryDrawerItem().withName("Entry #3"),
-                new PrimaryDrawerItem().withName("Entry #4"),
-                new PrimaryDrawerItem().withName("Entry #5"),
-                new PrimaryDrawerItem().withName("Entry #6"),
-                new PrimaryDrawerItem().withName("Entry #7"),
-                new PrimaryDrawerItem().withName("Entry #8"),
-                new PrimaryDrawerItem().withName("Entry #9"),
-                new PrimaryDrawerItem().withName("Entry #10"),
-                new PrimaryDrawerItem().withName("Entry #11"),
-                new PrimaryDrawerItem().withName("Entry #12"),
-                new PrimaryDrawerItem().withName("Entry #13"),
-                new PrimaryDrawerItem().withName("Entry #14"),
-                new PrimaryDrawerItem().withName("Entry #15"),
-                new PrimaryDrawerItem().withName("Entry #16")
-        );
-        msgHistory.setAdapter(fastAdapter);
-        msgHistory.setLayoutManager(new LinearLayoutManager(this));
-        msgHistory.setItemAnimator(new DefaultItemAnimator());
+        setupHistory();
 
-        swipeView.setColorSchemeColors(context.getThemeUtil().res.colorPrimary);
-        swipeView.setOnRefreshListener(() -> {
-            assertNotNull(context.getClient());
-            context.getClient().getBacklogManager().requestMoreBacklog(status.bufferId, 20);
-        });
+        initLoader();
+    }
 
-        send.setOnClickListener(view -> sendInput());
+    private void setupContext() {
+        context.setSettings(new WrappedSettings(this));
+        AppTheme theme = AppTheme.themeFromString(context.getSettings().theme.get());
+        setTheme(theme.themeId);
+        context.setThemeUtil(new ThemeUtil(this, theme));
+    }
 
+    private void setupEditorLayout() {
         slidingLayout.setAntiDragView(R.id.card_panel);
         slidingLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
@@ -298,6 +258,211 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
         setChatlineExpanded(slidingLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED);
+    }
+
+    private void initLoader() {
+        swipeView.setEnabled(false);
+        swipeView.setColorSchemeColors(context.getThemeUtil().res.colorPrimary);
+        swipeView.setOnRefreshListener(() -> {
+            assertNotNull(context.getClient());
+            context.getClient().getBacklogManager().requestMoreBacklog(status.bufferId, 20);
+        });
+    }
+
+    private void setupHistory() {
+        FastAdapter<IItem> fastAdapter = new FastAdapter<>();
+        ItemAdapter<IItem> itemAdapter = new ItemAdapter<>();
+        itemAdapter.wrap(fastAdapter);
+        itemAdapter.add(
+                new PrimaryDrawerItem().withName("Entry #1"),
+                new PrimaryDrawerItem().withName("Entry #2"),
+                new PrimaryDrawerItem().withName("Entry #3"),
+                new PrimaryDrawerItem().withName("Entry #4"),
+                new PrimaryDrawerItem().withName("Entry #5"),
+                new PrimaryDrawerItem().withName("Entry #6"),
+                new PrimaryDrawerItem().withName("Entry #7"),
+                new PrimaryDrawerItem().withName("Entry #8"),
+                new PrimaryDrawerItem().withName("Entry #9"),
+                new PrimaryDrawerItem().withName("Entry #10"),
+                new PrimaryDrawerItem().withName("Entry #11"),
+                new PrimaryDrawerItem().withName("Entry #12"),
+                new PrimaryDrawerItem().withName("Entry #13"),
+                new PrimaryDrawerItem().withName("Entry #14"),
+                new PrimaryDrawerItem().withName("Entry #15"),
+                new PrimaryDrawerItem().withName("Entry #16")
+        );
+        msgHistory.setAdapter(fastAdapter);
+        msgHistory.setLayoutManager(new LinearLayoutManager(this));
+        msgHistory.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    private void setupContent() {
+        messages.setItemAnimator(new DefaultItemAnimator());
+        messages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
+        messageAdapter = new MessageAdapter(this, context, new AutoScroller(messages));
+        messages.setAdapter(messageAdapter);
+    }
+
+    private void setupEditor() {
+        getMenuInflater().inflate(R.menu.formatting, formattingMenu.getMenu());
+        formattingMenu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.format_bold:
+                    editor.toggleBold();
+                    return true;
+                case R.id.format_italic:
+                    editor.toggleItalic();
+                    return true;
+                case R.id.format_underline:
+                    editor.toggleUnderline();
+                    return true;
+                case R.id.action_history:
+                    slidingLayoutHistory.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                    return true;
+                default:
+                    return false;
+            }
+        });
+        editor = new AdvancedEditor(context, chatline);
+        send.setOnClickListener(view -> sendInput());
+
+        setupEditorLayout();
+    }
+
+    private void setupDrawer(@Nullable Bundle savedInstanceState) {
+        drawerLeft = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withAccountHeader(accountHeader)
+                .withSavedInstance(savedInstanceState)
+                .withTranslucentStatusBar(true)
+                .build();
+        drawerLeft.addStickyFooterItem(new PrimaryDrawerItem().withIcon(R.drawable.ic_server_light).withName("(Re-)Connect").withIdentifier(-1));
+        drawerLeft.addStickyFooterItem(new SecondaryDrawerItem().withName("Settings").withIdentifier(-2));
+        drawerLeft.setOnDrawerItemClickListener((view, position, drawerItem) -> {
+            long identifier = drawerItem.getIdentifier();
+            if (identifier == -1) {
+                showConnectDialog();
+                return false;
+            } else if (identifier == -2) {
+                showThemeDialog();
+                return false;
+            } else {
+                if (((IExpandable) drawerItem).getSubItems() != null) {
+                    drawerLeft.getAdapter().toggleExpandable(position);
+                    return true;
+                } else {
+                    selectBuffer((int) drawerItem.getIdentifier());
+                    return false;
+                }
+            }
+        });
+    }
+
+    private void setupHeader(@Nullable Bundle savedInstanceState) {
+        accountHeader = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withCompactStyle(true)
+                .withHeaderBackground(R.drawable.bg)
+                .withSavedInstance(savedInstanceState)
+                .withProfileImagesVisible(false)
+                .withOnAccountHeaderListener((view, profile, current) -> {
+                    if (!current) {
+                        selectBufferViewConfig((int) profile.getIdentifier());
+                    }
+                    return true;
+                })
+                .build();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.chat, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Checks whether a hardware keyboard is available
+        if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
+
+        } else if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
+
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        List<Integer> filterSettings = Arrays.asList(
+                Message.Type.Join.value,
+                Message.Type.Part.value,
+                Message.Type.Quit.value,
+                Message.Type.Nick.value,
+                Message.Type.Mode.value,
+                Message.Type.Topic.value
+        );
+        int[] filterSettingsInts = new int[filterSettings.size()];
+        for (int i = 0; i < filterSettingsInts.length; i++) { filterSettingsInts[i] = filterSettings.get(i); }
+
+        switch (item.getItemId()) {
+            case R.id.action_hide_events: {
+                if (context.getClient() != null) {
+                    BacklogFilter backlogFilter = context.getClient().getBacklogManager().getFilter(status.bufferId);
+                    if (backlogFilter != null) {
+                        int oldFilters = backlogFilter.getFilters();
+                        List<Integer> oldFiltersList = new ArrayList<>();
+                        for (int type : filterSettings) {
+                            if ((type & oldFilters) != 0)
+                                oldFiltersList.add(filterSettings.indexOf(type));
+                        }
+                        Integer[] selectedIndices = oldFiltersList.toArray(new Integer[oldFiltersList.size()]);
+                        new MaterialDialog.Builder(this)
+                                .items(
+                                        "Joins",
+                                        "Parts",
+                                        "Quits",
+                                        "Nick Changes",
+                                        "Mode Changes",
+                                        "Topic Changes"
+                                )
+                                .itemsIds(filterSettingsInts)
+                                .itemsCallbackMultiChoice(
+                                        selectedIndices,
+                                        (dialog, which, text) -> false
+                                )
+                                .positiveText("Select")
+                                .negativeText("Cancel")
+                                .onPositive((dialog, which) -> {
+                                    int filters = 0x00000000;
+                                    if (dialog.getSelectedIndices() != null)
+                                    for (int i : dialog.getSelectedIndices()) {
+                                        filters |= filterSettings.get(i);
+                                    }
+                                    backlogFilter.setFilters(filters);
+                                })
+                                .buttonRippleColorAttr(R.attr.colorAccentFocus)
+                                .build()
+                                .show();
+                    }
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        serviceInterface.disconnect();
+        unbindService(serviceConnection);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = new Intent(this, QuasselService.class);
+        bindService(intent, serviceConnection, Context.BIND_IMPORTANT);
     }
 
     public void setChatlineExpanded(boolean expanded) {
@@ -354,20 +519,10 @@ public class ChatActivity extends AppCompatActivity {
         status.onSaveInstanceState(outState);
     }
 
-    private void connectToThread(@NonNull ClientBackgroundThread backgroundThread) {
-        assertNotNull(backgroundThread);
-
-        serviceInterface.disconnect();
-
-        backgroundThread.provider.event.register(this);
-        context.setClient(backgroundThread.handler.client);
-        context.setProvider(backgroundThread.provider);
-        selectBuffer(status.bufferId);
-        selectBufferViewConfig(status.bufferViewConfigId);
-        updateSubTitle();
-    }
-
     private void selectBufferViewConfig(@IntRange(from = -1) int bufferViewConfigId) {
+        status.bufferViewConfigId = bufferViewConfigId;
+        accountHeader.setActiveProfile(bufferViewConfigId, false);
+
         if (wrapper != null) wrapper.setDrawer(null);
         drawerLeft.removeAllItems();
         if (bufferViewConfigId == -1) {
@@ -381,14 +536,19 @@ public class ChatActivity extends AppCompatActivity {
 
             wrapper = new BufferViewConfigWrapper(context, viewConfig, drawerLeft);
             wrapper.updateDrawerItems();
+            String name = viewConfig.getBufferViewName();
         }
     }
 
     private void selectBuffer(@IntRange(from = -1) int bufferId) {
         if (bufferId == -1) {
+            swipeView.setEnabled(false);
+
             messageAdapter.setMessageList(MessageAdapter.emptyList());
             toolbar.setTitle(getResources().getString(R.string.app_name));
         } else {
+            swipeView.setEnabled(true);
+
             status.bufferId = bufferId;
             // Make sure we are actually connected
             ObservableSortedList<Message> list = context.getClient().getBacklogManager().getFiltered(status.bufferId);
@@ -399,12 +559,25 @@ public class ChatActivity extends AppCompatActivity {
 
             messageAdapter.setMessageList(list);
             toolbar.setTitle(buffer.getName());
+            updateNoColor(buffer, formattingMenu.getMenu());
         }
     }
 
-    private void connectToService() {
-        Intent intent = new Intent(this, QuasselService.class);
-        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+    private static void updateNoColor(Buffer buffer, Menu menu) {
+        boolean isNoColor = isNoColor(buffer);
+        menu.findItem(R.id.format_bold).setEnabled(!isNoColor);
+        menu.findItem(R.id.format_italic).setEnabled(!isNoColor);
+        menu.findItem(R.id.format_underline).setEnabled(!isNoColor);
+        menu.findItem(R.id.format_paint).setEnabled(!isNoColor);
+        menu.findItem(R.id.format_fill).setEnabled(!isNoColor);
+    }
+
+    public static boolean isNoColor(Buffer buffer) {
+        if (buffer instanceof ChannelBuffer && ((ChannelBuffer) buffer).getChannel() != null) {
+            return ((ChannelBuffer) buffer).getChannel().getD_ChanModes().contains("c");
+        } else {
+            return false;
+        }
     }
 
     private void onConnectionEstablished() {
@@ -419,8 +592,8 @@ public class ChatActivity extends AppCompatActivity {
         Buffer buffer = context.getClient().getBuffer(status.bufferId);
         assertNotNull(buffer);
 
-        CharSequence text = chatline.getText();
-        context.getClient().sendInput(buffer.getInfo(), text.toString());
+        String text = editor.toFormatString();
+        context.getClient().sendInput(buffer.getInfo(), text);
         chatline.setText("");
     }
 
@@ -447,6 +620,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void updateBufferViewConfigs() {
+        assertNotNull(context.getClient().getBufferViewManager());
         Map<Integer, BufferViewConfig> bufferViews = context.getClient().getBufferViewManager().BufferViews;
         accountHeader.clear();
         for (Map.Entry<Integer, BufferViewConfig> entry : bufferViews.entrySet()) {
@@ -494,6 +668,8 @@ public class ChatActivity extends AppCompatActivity {
                 .title("Address")
                 .customView(R.layout.dialog_address, false)
                 .onPositive((dialog1, which) -> {
+                    if (binder != null && binder.getBackgroundThread() != null) binder.stopBackgroundThread();
+
                     View parent = dialog1.getCustomView();
                     AppCompatEditText hostField = (AppCompatEditText) parent.findViewById(R.id.host);
                     AppCompatEditText portField = (AppCompatEditText) parent.findViewById(R.id.port);

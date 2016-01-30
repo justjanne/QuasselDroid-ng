@@ -1,14 +1,22 @@
-package de.kuschku.quasseldroid_ng.ui.chat;
+package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
+import android.util.Log;
+
+import com.mikepenz.fastadapter.IIdentifyable;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import de.kuschku.libquassel.syncables.types.BufferViewConfig;
 import de.kuschku.libquassel.syncables.types.Network;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.quasseldroid_ng.ui.chat.drawer.NetworkItem;
+import de.kuschku.util.backports.Stream;
 import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
@@ -24,13 +32,13 @@ public class BufferViewConfigWrapper {
         }
 
         @Override
-        public boolean areContentsTheSame(NetworkItem oldItem, NetworkItem newItem) {
-            return oldItem.getNetwork().getNetworkId() == newItem.getNetwork().getNetworkId();
+        public boolean areContentsTheSame(NetworkItem item1, NetworkItem item2) {
+            return item1 == item2;
         }
 
         @Override
         public boolean areItemsTheSame(NetworkItem item1, NetworkItem item2) {
-            return item1 == item2;
+            return item1.getNetwork().getNetworkId() == item2.getNetwork().getNetworkId();
         }
     });
 

@@ -1,7 +1,7 @@
 package de.kuschku.libquassel.syncables.types;
 
-import android.net.*;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.Collections;
 import java.util.List;
@@ -11,20 +11,18 @@ import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.primitives.types.QVariant;
-import de.kuschku.libquassel.syncables.serializers.BufferSyncerSerializer;
 import de.kuschku.libquassel.syncables.serializers.BufferViewConfigSerializer;
-import de.kuschku.util.AndroidAssert;
 import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.lists.IObservableList;
 import de.kuschku.util.observables.lists.ObservableElementList;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
     private String bufferViewName;
-    private List<Integer> TemporarilyRemovedBuffers;
+    private List<Integer> temporarilyRemovedBuffers;
     private boolean hideInactiveNetworks;
-    private IObservableList<ElementCallback<Integer>, Integer> BufferList;
+    private IObservableList<ElementCallback<Integer>, Integer> buffers;
     private IObservableList<ElementCallback<Integer>, Integer> NetworkList = new ObservableElementList<>();
     private int allowedBufferTypes;
     private boolean sortAlphabetically;
@@ -33,14 +31,14 @@ public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
     private int networkId;
     private int minimumActivity;
     private boolean hideInactiveBuffers;
-    private List<Integer> RemovedBuffers;
+    private List<Integer> removedBuffers;
     private Client client;
 
     public BufferViewConfig(String bufferViewName, List<Integer> temporarilyRemovedBuffers, boolean hideInactiveNetworks, @NonNull List<Integer> bufferList, int allowedBufferTypes, boolean sortAlphabetically, boolean disableDecoration, boolean addNewBuffersAutomatically, int networkId, int minimumActivity, boolean hideInactiveBuffers, List<Integer> removedBuffers) {
         this.bufferViewName = bufferViewName;
-        this.TemporarilyRemovedBuffers = temporarilyRemovedBuffers;
+        this.temporarilyRemovedBuffers = temporarilyRemovedBuffers;
         this.hideInactiveNetworks = hideInactiveNetworks;
-        this.BufferList = new ObservableElementList<>(bufferList);
+        this.buffers = new ObservableElementList<>(bufferList);
         this.allowedBufferTypes = allowedBufferTypes;
         this.sortAlphabetically = sortAlphabetically;
         this.disableDecoration = disableDecoration;
@@ -48,7 +46,7 @@ public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
         this.networkId = networkId;
         this.minimumActivity = minimumActivity;
         this.hideInactiveBuffers = hideInactiveBuffers;
-        this.RemovedBuffers = removedBuffers;
+        this.removedBuffers = removedBuffers;
     }
 
     public String getBufferViewName() {
@@ -60,11 +58,11 @@ public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
     }
 
     public List<Integer> getTemporarilyRemovedBuffers() {
-        return TemporarilyRemovedBuffers;
+        return temporarilyRemovedBuffers;
     }
 
     public void setTemporarilyRemovedBuffers(List<Integer> temporarilyRemovedBuffers) {
-        TemporarilyRemovedBuffers = temporarilyRemovedBuffers;
+        this.temporarilyRemovedBuffers = temporarilyRemovedBuffers;
     }
 
     public boolean isHideInactiveNetworks() {
@@ -75,16 +73,23 @@ public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
         this.hideInactiveNetworks = hideInactiveNetworks;
     }
 
-    public IObservableList<ElementCallback<Integer>, Integer> getBufferList() {
-        return BufferList;
+
+    public void SYNC_setHideInactiveNetworks(boolean hideInactiveNetworks) {
+        if (this.hideInactiveNetworks == hideInactiveNetworks) return;
+        setHideInactiveNetworks(hideInactiveBuffers);
+        sync("setHideInactiveBuffers", new Object[]{hideInactiveNetworks});
     }
 
-    public void setBufferList(IObservableList<ElementCallback<Integer>, Integer> bufferList) {
-        BufferList = bufferList;
+    public IObservableList<ElementCallback<Integer>, Integer> getBuffers() {
+        return buffers;
+    }
+
+    public void setBuffers(IObservableList<ElementCallback<Integer>, Integer> buffers) {
+        this.buffers = buffers;
     }
 
     public void setBufferList(@NonNull List<Integer> bufferList) {
-        BufferList = new ObservableElementList<>(bufferList);
+        buffers = new ObservableElementList<>(bufferList);
     }
 
     public int getAllowedBufferTypes() {
@@ -125,10 +130,11 @@ public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
 
     public void setNetworkId(int networkId) {
         this.networkId = networkId;
-        if (this.networkId != -1) {
-            this.NetworkList.addAll(client.getNetworks());
+        if (this.networkId != 0) {
+            if (client.getNetworks().contains(networkId))
+                this.NetworkList.add(networkId);
         } else {
-            this.NetworkList.retainAll(Collections.singletonList(networkId));
+            this.NetworkList.addAll(client.getNetworks());
         }
     }
 
@@ -148,12 +154,18 @@ public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
         this.hideInactiveBuffers = hideInactiveBuffers;
     }
 
+    public void SYNC_setHideInactiveBuffers(boolean hideInactiveBuffers) {
+        if (this.hideInactiveBuffers == hideInactiveBuffers) return;
+        setHideInactiveBuffers(hideInactiveBuffers);
+        sync("setHideInactiveBuffers", new Object[]{hideInactiveBuffers});
+    }
+
     public List<Integer> getRemovedBuffers() {
-        return RemovedBuffers;
+        return removedBuffers;
     }
 
     public void setRemovedBuffers(List<Integer> removedBuffers) {
-        RemovedBuffers = removedBuffers;
+        this.removedBuffers = removedBuffers;
     }
 
     @NonNull
@@ -161,9 +173,9 @@ public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
     public String toString() {
         return "BufferViewConfig{" +
                 "bufferViewName='" + bufferViewName + '\'' +
-                ", TemporarilyRemovedBuffers=" + TemporarilyRemovedBuffers +
+                ", temporarilyRemovedBuffers=" + temporarilyRemovedBuffers +
                 ", hideInactiveNetworks=" + hideInactiveNetworks +
-                ", BufferList=" + BufferList +
+                ", buffers=" + buffers +
                 ", allowedBufferTypes=" + allowedBufferTypes +
                 ", sortAlphabetically=" + sortAlphabetically +
                 ", disableDecoration=" + disableDecoration +
@@ -171,7 +183,7 @@ public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
                 ", networkId=" + networkId +
                 ", minimumActivity=" + minimumActivity +
                 ", hideInactiveBuffers=" + hideInactiveBuffers +
-                ", RemovedBuffers=" + RemovedBuffers +
+                ", removedBuffers=" + removedBuffers +
                 '}';
     }
 
@@ -186,9 +198,9 @@ public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
     @Override
     public void update(BufferViewConfig from) {
         this.bufferViewName = from.bufferViewName;
-        this.TemporarilyRemovedBuffers = from.TemporarilyRemovedBuffers;
+        this.temporarilyRemovedBuffers = from.temporarilyRemovedBuffers;
         this.hideInactiveNetworks = from.hideInactiveNetworks;
-        this.BufferList = from.BufferList;
+        this.buffers = from.buffers;
         this.allowedBufferTypes = from.allowedBufferTypes;
         this.sortAlphabetically = from.sortAlphabetically;
         this.disableDecoration = from.disableDecoration;
@@ -196,7 +208,7 @@ public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
         this.networkId = from.networkId;
         this.minimumActivity = from.minimumActivity;
         this.hideInactiveBuffers = from.hideInactiveBuffers;
-        this.RemovedBuffers = from.RemovedBuffers;
+        this.removedBuffers = from.removedBuffers;
     }
 
     @Override
@@ -204,8 +216,22 @@ public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
         update(BufferViewConfigSerializer.get().fromDatastream(from));
     }
 
-    public void addBuffer(int bufferId, int position) {
-        BufferList.add(position, bufferId);
+    public void addBuffer(int bufferId, int pos) {
+        if (buffers.contains(bufferId))
+            return;
+
+        if (pos < 0)
+            pos = 0;
+        if (pos > buffers.size())
+            pos = buffers.size();
+
+        if (removedBuffers.contains(bufferId))
+            removedBuffers.remove(removedBuffers.indexOf(bufferId));
+
+        if (temporarilyRemovedBuffers.contains(bufferId))
+            temporarilyRemovedBuffers.remove(temporarilyRemovedBuffers.indexOf(bufferId));
+
+        buffers.add(pos, bufferId);
     }
 
     public void SYNC_addBuffer(int bufferId, int position) {
@@ -213,14 +239,57 @@ public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
         sync("addBuffer", new Object[]{bufferId, position});
     }
 
+    public void moveBuffer(int bufferId, int pos) {
+        if (!buffers.contains(bufferId))
+            return;
+
+        if (pos < 0)
+            pos = 0;
+        if (pos >= buffers.size())
+            pos = buffers.size() - 1;
+
+        int index = buffers.indexOf(bufferId);
+        if (pos == index)
+            return;
+        if (pos > index)
+            pos--;
+
+        buffers.remove(index);
+        buffers.add(pos, bufferId);
+    }
+
+    public void SYNC_moveBuffer(int bufferId, int position) {
+        moveBuffer(bufferId, position);
+        sync("moveBuffer", new Object[]{bufferId, position});
+    }
+
     public void removeBuffer(int bufferId) {
-        if (BufferList.contains(bufferId)) BufferList.remove(BufferList.indexOf(bufferId));
+        if (buffers.contains(bufferId))
+            buffers.remove(buffers.indexOf(bufferId));
+        if (removedBuffers.contains(bufferId))
+            removedBuffers.remove(removedBuffers.indexOf(bufferId));
+        temporarilyRemovedBuffers.add(bufferId);
     }
 
     public void SYNC_removeBuffer(int bufferId) {
         removeBuffer(bufferId);
         sync("removeBuffer", new Object[]{bufferId});
     }
+
+    public void removeBufferPermanently(int bufferId) {
+        if (buffers.contains(bufferId))
+            buffers.remove(buffers.indexOf(bufferId));
+        if (temporarilyRemovedBuffers.contains(bufferId))
+            temporarilyRemovedBuffers.remove(temporarilyRemovedBuffers.indexOf(bufferId));
+        removedBuffers.add(bufferId);
+    }
+
+    public void SYNC_removeBufferPermanently(int bufferId) {
+        removeBufferPermanently(bufferId);
+        sync("removeBufferPermanently", new Object[]{bufferId});
+    }
+
+
 
     @NonNull
     public IObservableList<ElementCallback<Integer>, Integer> getNetworkList() {

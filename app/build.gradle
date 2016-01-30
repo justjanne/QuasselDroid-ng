@@ -46,6 +46,7 @@ if (versionPropsFile.canRead()) {
   throw new GradleException("Could not read version.properties!"+versionPropsFile.toString())
 }
 
+
 def rawVersionName = "0.2.0"
 
 android {
@@ -61,20 +62,9 @@ android {
     }
     buildTypes {
         release {
-            //minifyEnabled true
-            //shrinkResources true
-            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    if ('assemble' in runTasks || 'assembleRelease' in runTasks || 'aR' in runTasks) {
-                        def fileName = output.outputFile.name
-                                .replace(".apk", String.format("-%s-build%d.apk", rawVersionName, versionCode))
-                                .replace("app-", "QuasselDroidNG-")
-                        output.outputFile = new File(output.outputFile.parent, fileName)
-                    }
-                }
-            }
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -92,6 +82,31 @@ android {
         exclude 'META-INF/license.txt'
         exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/LGPL2.1'
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+def runTasks = gradle.startParameter.taskNames
+if ('assemble' in runTasks || 'assembleRelease' in runTasks || 'aR' in runTasks) {
+    android {
+        buildTypes {
+            release {
+                //minifyEnabled true
+                //shrinkResources true
+                //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+                applicationVariants.all { variant ->
+                    variant.outputs.each { output ->
+                        def fileName = output.outputFile.name
+                                .replace(".apk", String.format("-%s-build%d.apk", rawVersionName, versionBuild))
+                                .replace("app-", "QuasselDroidNG-")
+                        output.outputFile = new File(output.outputFile.parent, fileName)
+                    }
+                }
+            }
+        }
     }
 }
 

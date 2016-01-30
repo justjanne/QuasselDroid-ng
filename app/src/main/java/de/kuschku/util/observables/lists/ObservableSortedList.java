@@ -7,6 +7,7 @@ import android.support.v7.util.SortedList;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -195,7 +196,11 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
     @NonNull
     @Override
     public Object[] toArray() {
-        throw new MaterialDialog.NotImplementedException("Not implemented");
+        Object[] array = new Object[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            array[i] = list.get(i);
+        }
+        return array;
     }
 
     @NonNull
@@ -214,6 +219,11 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
         boolean areContentsTheSame(T oldItem, T newItem);
 
         boolean areItemsTheSame(T item1, T item2);
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(toArray());
     }
 
     class Callback extends SortedList.Callback<T> {
@@ -284,12 +294,12 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
 
         @Override
         public boolean hasNext() {
-            return list.size() > position + 1;
+            return position < list.size();
         }
 
         @Override
         public boolean hasPrevious() {
-            return false;
+            return position >= 0;
         }
 
         @Override

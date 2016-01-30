@@ -13,6 +13,7 @@ import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.types.SessionState;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
+import de.kuschku.libquassel.syncables.types.Identity;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class SessionStateSerializer implements ObjectSerializer<SessionState> {
@@ -43,7 +44,7 @@ public class SessionStateSerializer implements ObjectSerializer<SessionState> {
     @Override
     public SessionState fromLegacy(@NonNull Map<String, QVariant> map) {
         return new SessionState(
-                (List<Map<String, QVariant>>) map.get("Identities").or(new ArrayList<>()),
+                (List<Identity>) map.get("Identities").or(new ArrayList<>()),
                 (List<BufferInfo>) map.get("BufferInfos").or(new ArrayList<>()),
                 (List<Integer>) map.get("NetworkIds").or(new ArrayList<>())
         );

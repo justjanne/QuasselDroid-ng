@@ -30,8 +30,10 @@ public class QueryBuffer implements Buffer {
     }
 
     @Override
-    public boolean isActive() {
-        return user != null;
+    public BufferInfo.BufferStatus getStatus() {
+        return  (user == null) ?    BufferInfo.BufferStatus.OFFLINE :
+                (user.isAway()) ?   BufferInfo.BufferStatus.AWAY :
+                                    BufferInfo.BufferStatus.ONLINE;
     }
 
     @Nullable

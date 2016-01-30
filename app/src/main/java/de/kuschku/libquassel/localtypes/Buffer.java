@@ -12,5 +12,5 @@ public interface Buffer {
     @Nullable
     String getName();
 
-    boolean isActive();
+    BufferInfo.BufferStatus getStatus();
 }

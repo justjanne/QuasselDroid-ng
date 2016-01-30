@@ -281,12 +281,13 @@ public class CoreConnection {
                 assertNotNull(client);
 
                 while (running) {
-                    busProvider.dispatch(new Heartbeat(DateTime.now()));
+                    Heartbeat heartbeat = new Heartbeat(DateTime.now());
+                    Log.e("heartbeat", String.valueOf(heartbeat));
+                    busProvider.dispatch(heartbeat);
 
                     Thread.sleep(30 * 1000);
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
 

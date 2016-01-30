@@ -5,6 +5,8 @@ import android.util.Log;
 
 import org.joda.time.DateTime;
 
+import java.util.List;
+
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.HandshakeFailedEvent;
@@ -25,6 +27,7 @@ import de.kuschku.libquassel.objects.types.SessionInit;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.SyncableRegistry;
 import de.kuschku.libquassel.syncables.types.BufferViewConfig;
+import de.kuschku.libquassel.syncables.types.Identity;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.util.AndroidAssert;
 import de.kuschku.util.ReflectionUtils;
@@ -135,6 +138,9 @@ public class ProtocolHandler implements IProtocolHandler {
         for (int NetworkId : client.getState().NetworkIds) {
             client.sendInitRequest("Network", String.valueOf(NetworkId), true);
         }
+        for (Identity identity : client.getState().Identities) {
+            identity.init(null, busProvider, client);
+        }
         for (BufferInfo info : message.SessionState.BufferInfos) {
             final int initialBacklogCount = 10;
             client.getBacklogManager().requestBacklog(info.id, -1, -1, initialBacklogCount, 0);
@@ -146,6 +152,8 @@ public class ProtocolHandler implements IProtocolHandler {
     }
 
     public void onEventMainThread(@NonNull HeartbeatReply heartbeat) {
+        Log.e("heartbeatreply", String.valueOf(heartbeat));
+
         long roundtrip = DateTime.now().getMillis() - heartbeat.dateTime.getMillis();
         long lag = (long) (roundtrip * 0.5);
 

@@ -24,12 +24,12 @@ public class ObservableComparableSortedList<T extends ContentComparable<T>> exte
 
         @Override
         public boolean areContentsTheSame(@NonNull T oldItem, @NonNull T newItem) {
-            return oldItem.equalsContent(newItem);
+            return oldItem.areContentsTheSame(newItem);
         }
 
         @Override
         public boolean areItemsTheSame(@NonNull T item1, @NonNull T item2) {
-            return item1.equals(item2);
+            return item1.areItemsTheSame(item2);
         }
     }
 }
