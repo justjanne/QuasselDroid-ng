@@ -5,11 +5,9 @@ import android.support.annotation.NonNull;
 import org.joda.time.DateTime;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import de.kuschku.libquassel.functions.FunctionType;
-import de.kuschku.libquassel.functions.types.Heartbeat;
 import de.kuschku.libquassel.functions.types.HeartbeatReply;
 import de.kuschku.libquassel.primitives.types.QVariant;
 

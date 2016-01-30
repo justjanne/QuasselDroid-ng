@@ -21,12 +21,12 @@ public class MessageUtil {
     public static SpannableString parseStyleCodes(ThemeUtil themeUtil, String content, boolean parse) {
         if (!parse) {
             return new SpannableString(content
-                    .replaceAll("\\x02","")
-                    .replaceAll("\\x0F","")
-                    .replaceAll("\\x1D","")
-                    .replaceAll("\\x1F","")
-                    .replaceAll("\\x03[0-9]{1,2}(,[0-9]{1,2})?","")
-                    .replaceAll("\\x03",""));
+                    .replaceAll("\\x02", "")
+                    .replaceAll("\\x0F", "")
+                    .replaceAll("\\x1D", "")
+                    .replaceAll("\\x1F", "")
+                    .replaceAll("\\x03[0-9]{1,2}(,[0-9]{1,2})?", "")
+                    .replaceAll("\\x03", ""));
         }
 
         final char boldIndicator = 2;

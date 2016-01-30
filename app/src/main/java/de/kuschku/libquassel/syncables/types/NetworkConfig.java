@@ -8,7 +8,6 @@ import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.primitives.types.QVariant;
-import de.kuschku.libquassel.syncables.serializers.BufferSyncerSerializer;
 import de.kuschku.libquassel.syncables.serializers.NetworkConfigSerializer;
 
 public class NetworkConfig extends SyncableObject<NetworkConfig> {

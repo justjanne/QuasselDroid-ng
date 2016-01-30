@@ -12,7 +12,6 @@ import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.primitives.types.QVariant;
-import de.kuschku.libquassel.syncables.serializers.BufferSyncerSerializer;
 import de.kuschku.libquassel.syncables.serializers.IrcUserSerializer;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -64,48 +63,98 @@ public class IrcUser extends SyncableObject<IrcUser> {
         return server;
     }
 
+    public void setServer(String server) {
+        this.server = server;
+    }
+
     public String getIrcOperator() {
         return ircOperator;
+    }
+
+    public void setIrcOperator(String ircOperator) {
+        this.ircOperator = ircOperator;
     }
 
     public boolean isAway() {
         return away;
     }
 
+    public void setAway(boolean away) {
+        this.away = away;
+    }
+
     public int getLastAwayMessage() {
         return lastAwayMessage;
+    }
+
+    public void setLastAwayMessage(int lastAwayMessage) {
+        this.lastAwayMessage = lastAwayMessage;
     }
 
     public DateTime getIdleTime() {
         return idleTime;
     }
 
+    public void setIdleTime(DateTime idleTime) {
+        this.idleTime = idleTime;
+    }
+
     public String getWhoisServiceReply() {
         return whoisServiceReply;
+    }
+
+    public void setWhoisServiceReply(String whoisServiceReply) {
+        this.whoisServiceReply = whoisServiceReply;
     }
 
     public String getSuserHost() {
         return suserHost;
     }
 
+    public void setSuserHost(String suserHost) {
+        this.suserHost = suserHost;
+    }
+
     public String getNick() {
         return nick;
     }
 
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+
+    /* BEGIN SYNC */
+
     public String getRealName() {
         return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
     public String getAwayMessage() {
         return awayMessage;
     }
 
+    public void setAwayMessage(String awayMessage) {
+        this.awayMessage = awayMessage;
+    }
+
     public DateTime getLoginTime() {
         return loginTime;
     }
 
+    public void setLoginTime(DateTime loginTime) {
+        this.loginTime = loginTime;
+    }
+
     public boolean isEncrypted() {
         return encrypted;
+    }
+
+    public void setEncrypted(boolean encrypted) {
+        this.encrypted = encrypted;
     }
 
     @NonNull
@@ -113,78 +162,28 @@ public class IrcUser extends SyncableObject<IrcUser> {
         return channels;
     }
 
-    public String getHost() {
-        return host;
-    }
-
-    public String getUserModes() {
-        return userModes;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    /* BEGIN SYNC */
-
-    public void setServer(String server) {
-        this.server = server;
-    }
-
-    public void setIrcOperator(String ircOperator) {
-        this.ircOperator = ircOperator;
-    }
-
-    public void setAway(boolean away) {
-        this.away = away;
-    }
-
-    public void setLastAwayMessage(int lastAwayMessage) {
-        this.lastAwayMessage = lastAwayMessage;
-    }
-
-    public void setIdleTime(DateTime idleTime) {
-        this.idleTime = idleTime;
-    }
-
-    public void setWhoisServiceReply(String whoisServiceReply) {
-        this.whoisServiceReply = whoisServiceReply;
-    }
-
-    public void setSuserHost(String suserHost) {
-        this.suserHost = suserHost;
-    }
-
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
-    public void setAwayMessage(String awayMessage) {
-        this.awayMessage = awayMessage;
-    }
-
-    public void setLoginTime(DateTime loginTime) {
-        this.loginTime = loginTime;
-    }
-
-    public void setEncrypted(boolean encrypted) {
-        this.encrypted = encrypted;
-    }
-
     public void setChannels(@NonNull List<String> channels) {
         this.channels = channels;
+    }
+
+    public String getHost() {
+        return host;
     }
 
     public void setHost(String host) {
         this.host = host;
     }
 
+    public String getUserModes() {
+        return userModes;
+    }
+
     public void setUserModes(String userModes) {
         this.userModes = userModes;
+    }
+
+    public String getUser() {
+        return user;
     }
 
     public void setUser(String user) {

@@ -11,7 +11,6 @@ import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
-import de.kuschku.libquassel.syncables.serializers.BufferSyncerSerializer;
 import de.kuschku.libquassel.syncables.serializers.IgnoreListManagerSerializer;
 
 import static de.kuschku.util.AndroidAssert.assertEquals;
@@ -22,7 +21,7 @@ public class IgnoreListManager extends SyncableObject<IgnoreListManager> {
     public IgnoreListManager(List<Integer> scope, List<Integer> ignoreType,
                              List<Boolean> isActive, List<String> scopeRule, List<Boolean> isRegEx,
                              List<Integer> strictness, List<String> ignoreRule) {
-        assertEquals(scope.size(),ignoreType.size(), isActive.size(),scopeRule.size(), isRegEx.size(), strictness.size(), ignoreRule.size());
+        assertEquals(scope.size(), ignoreType.size(), isActive.size(), scopeRule.size(), isRegEx.size(), strictness.size(), ignoreRule.size());
 
         for (int i = 0; i < scope.size(); i++) {
             ignoreRules.add(new IgnoreRule(
@@ -94,15 +93,21 @@ public class IgnoreListManager extends SyncableObject<IgnoreListManager> {
             HARD(2);
 
             public final int id;
+
             Strictness(int id) {
                 this.id = id;
             }
+
             public static Strictness of(int id) {
                 switch (id) {
-                    case 0: return UNMATCHED;
-                    case 1: return SOFT;
-                    case 2: return HARD;
-                    default: return INVALID;
+                    case 0:
+                        return UNMATCHED;
+                    case 1:
+                        return SOFT;
+                    case 2:
+                        return HARD;
+                    default:
+                        return INVALID;
                 }
             }
         }
@@ -114,15 +119,21 @@ public class IgnoreListManager extends SyncableObject<IgnoreListManager> {
             CTCP_IGNORE(2);
 
             public final int id;
+
             Type(int id) {
                 this.id = id;
             }
+
             public static Type of(int id) {
                 switch (id) {
-                    case 0: return SENDER_IGNORE;
-                    case 1: return MESSAGE_IGNORE;
-                    case 2: return CTCP_IGNORE;
-                    default: return INVALID;
+                    case 0:
+                        return SENDER_IGNORE;
+                    case 1:
+                        return MESSAGE_IGNORE;
+                    case 2:
+                        return CTCP_IGNORE;
+                    default:
+                        return INVALID;
                 }
             }
         }
@@ -134,15 +145,21 @@ public class IgnoreListManager extends SyncableObject<IgnoreListManager> {
             CHANNEL_SCOPE(2);
 
             public final int id;
+
             Scope(int id) {
                 this.id = id;
             }
+
             public static Scope of(int id) {
                 switch (id) {
-                    case 0: return GLOBAL_SCOPE;
-                    case 1: return NETWORK_SCOPE;
-                    case 2: return CHANNEL_SCOPE;
-                    default: return INVALID;
+                    case 0:
+                        return GLOBAL_SCOPE;
+                    case 1:
+                        return NETWORK_SCOPE;
+                    case 2:
+                        return CHANNEL_SCOPE;
+                    default:
+                        return INVALID;
                 }
             }
         }

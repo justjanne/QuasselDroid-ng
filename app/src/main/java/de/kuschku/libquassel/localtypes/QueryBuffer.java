@@ -31,9 +31,9 @@ public class QueryBuffer implements Buffer {
 
     @Override
     public BufferInfo.BufferStatus getStatus() {
-        return  (user == null) ?    BufferInfo.BufferStatus.OFFLINE :
-                (user.isAway()) ?   BufferInfo.BufferStatus.AWAY :
-                                    BufferInfo.BufferStatus.ONLINE;
+        return (user == null) ? BufferInfo.BufferStatus.OFFLINE :
+                (user.isAway()) ? BufferInfo.BufferStatus.AWAY :
+                        BufferInfo.BufferStatus.ONLINE;
     }
 
     @Nullable

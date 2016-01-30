@@ -17,26 +17,6 @@ public class DateTimeFormatHelper {
     }
 
     @NonNull
-    public DateTimeFormatter getTimeFormatter() {
-        return getTimeFormatter(context);
-    }
-
-    @NonNull
-    public DateTimeFormatter getDateFormatter() {
-        return getDateFormatter(context);
-    }
-
-    @NonNull
-    public DateTimeFormatter getLongDateFormatter() {
-        return getLongDateFormatter(context);
-    }
-
-    @NonNull
-    public  DateTimeFormatter getMediumDateFormatter() {
-        return getMediumDateFormatter(context);
-    }
-
-    @NonNull
     public static DateTimeFormatter getTimeFormatter(Context ctx) {
         return DateTimeFormat.forPattern(((SimpleDateFormat) android.text.format.DateFormat.getTimeFormat(ctx)).toLocalizedPattern());
     }
@@ -54,5 +34,25 @@ public class DateTimeFormatHelper {
     @NonNull
     public static DateTimeFormatter getMediumDateFormatter(Context ctx) {
         return DateTimeFormat.forPattern(((SimpleDateFormat) android.text.format.DateFormat.getMediumDateFormat(ctx)).toLocalizedPattern());
+    }
+
+    @NonNull
+    public DateTimeFormatter getTimeFormatter() {
+        return getTimeFormatter(context);
+    }
+
+    @NonNull
+    public DateTimeFormatter getDateFormatter() {
+        return getDateFormatter(context);
+    }
+
+    @NonNull
+    public DateTimeFormatter getLongDateFormatter() {
+        return getLongDateFormatter(context);
+    }
+
+    @NonNull
+    public DateTimeFormatter getMediumDateFormatter() {
+        return getMediumDateFormatter(context);
     }
 }

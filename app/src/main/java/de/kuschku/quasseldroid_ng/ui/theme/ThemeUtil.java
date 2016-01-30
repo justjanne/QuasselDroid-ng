@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.v7.view.ContextThemeWrapper;
-import android.util.Log;
 
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.util.annotationbind.AutoBinder;

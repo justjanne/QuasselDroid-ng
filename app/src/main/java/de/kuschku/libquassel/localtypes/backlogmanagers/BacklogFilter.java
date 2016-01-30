@@ -136,6 +136,14 @@ public class BacklogFilter implements UICallback {
         }
     }
 
+    public int getFilters() {
+        int filters = 0x00000000;
+        for (Message.Type type : filteredTypes) {
+            filters |= type.value;
+        }
+        return filters;
+    }
+
     public void setFilters(int filters) {
         Set<Message.Type> removed = new HashSet<>();
         for (Message.Type type : filteredTypes) {
@@ -151,13 +159,5 @@ public class BacklogFilter implements UICallback {
                 addFilter(type);
             }
         }
-    }
-
-    public int getFilters() {
-        int filters = 0x00000000;
-        for (Message.Type type : filteredTypes) {
-            filters |= type.value;
-        }
-        return filters;
     }
 }

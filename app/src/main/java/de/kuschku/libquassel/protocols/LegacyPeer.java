@@ -13,7 +13,6 @@ import java.util.concurrent.Executors;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.CoreConnection;
-import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.functions.FunctionType;
 import de.kuschku.libquassel.functions.serializers.HeartbeatReplySerializer;
@@ -37,12 +36,11 @@ import de.kuschku.libquassel.primitives.serializers.PrimitiveSerializer;
 import de.kuschku.libquassel.primitives.serializers.VariantSerializer;
 import de.kuschku.libquassel.primitives.serializers.VariantVariantListSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
-import de.kuschku.util.AndroidAssert;
 import de.kuschku.util.niohelpers.WrappedChannel;
 
 import static de.kuschku.libquassel.primitives.QMetaType.Type.QVariantList;
 import static de.kuschku.libquassel.primitives.QMetaType.Type.QVariantMap;
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 /**
  * A helper class processing incoming and outgoing messages.
@@ -175,6 +173,7 @@ public class LegacyPeer implements RemotePeer {
 
     private class ParseRunnable implements Runnable {
         ByteBuffer buffer;
+
         public ParseRunnable(ByteBuffer buffer) {
             this.buffer = buffer;
         }

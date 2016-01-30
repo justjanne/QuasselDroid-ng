@@ -1,6 +1,5 @@
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
-import android.util.Log;
 import android.util.SparseArray;
 
 import com.mikepenz.materialdrawer.holder.ColorHolder;
@@ -172,7 +171,7 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Genera
             return item1.getBuffer().getInfo().id == item2.getBuffer().getInfo().id;
         }
     }
-    
+
     class NoneComparator implements ObservableSortedList.ItemComparator<BufferItem> {
         @Override
         public int compare(BufferItem o1, BufferItem o2) {

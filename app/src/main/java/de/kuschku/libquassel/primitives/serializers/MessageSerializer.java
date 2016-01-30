@@ -3,7 +3,6 @@ package de.kuschku.libquassel.primitives.serializers;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import de.kuschku.libquassel.primitives.types.BufferInfo;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
@@ -11,6 +10,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
 
 import de.kuschku.libquassel.message.Message;
+import de.kuschku.libquassel.primitives.types.BufferInfo;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 

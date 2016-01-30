@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
@@ -19,17 +18,22 @@ import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.Synced;
 import de.kuschku.libquassel.syncables.serializers.IrcChannelSerializer;
-import de.kuschku.util.AndroidAssert;
 
-import static de.kuschku.util.AndroidAssert.*;
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class IrcChannel extends SyncableObject<IrcChannel> {
-    @Synced private String name;
-    @Synced private String topic;
-    @Synced private String password;
-    @Synced private Map<String, String> UserModes;
-    @Synced private Map<String, Object> ChanModes;
-    @Synced private boolean encrypted;
+    @Synced
+    private String name;
+    @Synced
+    private String topic;
+    @Synced
+    private String password;
+    @Synced
+    private Map<String, String> UserModes;
+    @Synced
+    private Map<String, Object> ChanModes;
+    @Synced
+    private boolean encrypted;
 
     @Nullable
     private Network network;
@@ -128,9 +132,11 @@ public class IrcChannel extends SyncableObject<IrcChannel> {
     public void addChannelMode(Character mode, String params) {
         addChannelMode(String.copyValueOf(new char[]{mode}), params);
     }
+
     public void addChannelMode(char mode, String params) {
         addChannelMode(String.copyValueOf(new char[]{mode}), params);
     }
+
     public void addChannelMode(String mode, String params) {
         assertNotNull(network);
 
@@ -157,12 +163,15 @@ public class IrcChannel extends SyncableObject<IrcChannel> {
                 break;
         }
     }
+
     public void removeChannelMode(Character mode, String params) {
         removeChannelMode(String.copyValueOf(new char[]{mode}), params);
     }
+
     public void removeChannelMode(char mode, String params) {
         removeChannelMode(String.copyValueOf(new char[]{mode}), params);
     }
+
     public void removeChannelMode(String mode, String params) {
         assertNotNull(network);
 
@@ -189,9 +198,11 @@ public class IrcChannel extends SyncableObject<IrcChannel> {
     public boolean hasMode(Character mode) {
         return hasMode(String.copyValueOf(new char[]{mode}));
     }
+
     public boolean hasMode(char mode) {
         return hasMode(String.copyValueOf(new char[]{mode}));
     }
+
     public boolean hasMode(String mode) {
         assertNotNull(network);
 

@@ -4,21 +4,13 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
-import android.util.Log;
 
 import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.message.Message;
-import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
-import de.kuschku.util.annotationbind.AutoBinder;
-import de.kuschku.util.annotationbind.AutoString;
 import de.kuschku.util.irc.IrcFormatHelper;
 import de.kuschku.util.irc.IrcUserUtils;
-import de.kuschku.util.ui.MessageUtil;
-import de.kuschku.util.ui.SpanFormatter;
-import de.kuschku.quasseldroid_ng.ui.theme.ThemeUtil;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 

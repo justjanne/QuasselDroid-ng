@@ -2,7 +2,6 @@ package de.kuschku.libquassel.syncables.types;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +11,6 @@ import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.Syncable;
-import de.kuschku.libquassel.syncables.serializers.BufferSyncerSerializer;
 import de.kuschku.libquassel.syncables.serializers.IdentitySerializer;
 
 public class Identity extends SyncableObject<Identity> {

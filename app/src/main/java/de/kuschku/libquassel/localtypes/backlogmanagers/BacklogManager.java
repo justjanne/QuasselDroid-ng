@@ -2,15 +2,12 @@ package de.kuschku.libquassel.localtypes.backlogmanagers;
 
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 
 import java.util.List;
 
 import de.kuschku.libquassel.Client;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
-import de.kuschku.util.observables.AutoScroller;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public abstract class BacklogManager<T extends BacklogManager<T>> extends SyncableObject<T> {

@@ -1,9 +1,7 @@
 package de.kuschku.libquassel.syncables.types;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -288,7 +286,6 @@ public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
         removeBufferPermanently(bufferId);
         sync("removeBufferPermanently", new Object[]{bufferId});
     }
-
 
 
     @NonNull

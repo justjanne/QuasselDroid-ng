@@ -17,13 +17,13 @@ public class AliasManagerSerializer implements ObjectSerializer<AliasManager> {
     @NonNull
     private static final AliasManagerSerializer serializer = new AliasManagerSerializer();
 
+    private AliasManagerSerializer() {
+
+    }
+
     @NonNull
     public static AliasManagerSerializer get() {
         return serializer;
-    }
-
-    private AliasManagerSerializer() {
-
     }
 
     @Nullable

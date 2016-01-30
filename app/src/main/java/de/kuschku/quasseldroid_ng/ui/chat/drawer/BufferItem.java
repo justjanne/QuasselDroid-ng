@@ -117,7 +117,7 @@ public class BufferItem extends SecondaryDrawerItem implements IObservable<Gener
 
     @Override
     public ColorHolder getIconColor() {
-        return buffer.getStatus() == BufferInfo.BufferStatus.ONLINE  ?
+        return buffer.getStatus() == BufferInfo.BufferStatus.ONLINE ?
                 ColorHolder.fromColor(context.getThemeUtil().res.colorAccent) :
                 new ColorHolder();
     }
@@ -151,10 +151,10 @@ public class BufferItem extends SecondaryDrawerItem implements IObservable<Gener
         super.onPostBindView(drawerItem, view);
 
         if (getDescription() != null && getDescription().getText() != null)
-        ((TextView) view.findViewById(R.id.material_drawer_description)).setText(MessageUtil.parseStyleCodes(
-                context.getThemeUtil(),
-                getDescription().getText(),
-                context.getSettings().mircColors.or(true)
-        ));
+            ((TextView) view.findViewById(R.id.material_drawer_description)).setText(MessageUtil.parseStyleCodes(
+                    context.getThemeUtil(),
+                    getDescription().getText(),
+                    context.getSettings().mircColors.or(true)
+            ));
     }
 }

@@ -14,10 +14,19 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.InterruptibleChannel;
+import java.security.GeneralSecurityException;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+
+import de.kuschku.libquassel.ssl.CertificateManager;
+import de.kuschku.libquassel.ssl.QuasselTrustManager;
 import de.kuschku.util.CompatibilityUtils;
+import de.kuschku.util.ServerAddress;
 
 public class WrappedChannel implements Flushable, ByteChannel, InterruptibleChannel {
     @Nullable
@@ -29,11 +38,19 @@ public class WrappedChannel implements Flushable, ByteChannel, InterruptibleChan
     @Nullable
     private DataOutputStream out;
 
+    @Nullable
+    private Socket socket = null;
+
     private WrappedChannel(@Nullable InputStream in, @Nullable OutputStream out) {
         this.rawIn = in;
         this.rawOut = out;
         if (this.rawIn != null) this.in = new DataInputStream(rawIn);
         if (this.rawOut != null) this.out = new DataOutputStream(rawOut);
+    }
+
+    public WrappedChannel(Socket s) throws IOException {
+        this(s.getInputStream(), s.getOutputStream());
+        this.socket = s;
     }
 
     @NonNull
@@ -43,7 +60,7 @@ public class WrappedChannel implements Flushable, ByteChannel, InterruptibleChan
 
     @NonNull
     public static WrappedChannel ofSocket(@NonNull Socket s) throws IOException {
-        return new WrappedChannel(s.getInputStream(), s.getOutputStream());
+        return new WrappedChannel(s);
     }
 
     @Nullable
@@ -52,6 +69,20 @@ public class WrappedChannel implements Flushable, ByteChannel, InterruptibleChan
                 new InflaterInputStream(channel.rawIn),
                 CompatibilityUtils.createDeflaterOutputStream(channel.rawOut)
         );
+    }
+
+
+    public static WrappedChannel withSSL(@NonNull WrappedChannel channel,
+                                         @NonNull CertificateManager certificateManager,
+                                         @NonNull ServerAddress address) throws GeneralSecurityException, IOException {
+        SSLContext context = SSLContext.getInstance("TLSv1.2");
+        TrustManager[] managers = new TrustManager[]{QuasselTrustManager.fromDefault(certificateManager, address)};
+        context.init(null, managers, null);
+        SSLSocketFactory factory = context.getSocketFactory();
+        SSLSocket socket = (SSLSocket) factory.createSocket(channel.socket, address.host, address.port, true);
+        socket.setUseClientMode(true);
+        socket.startHandshake();
+        return WrappedChannel.ofSocket(socket);
     }
 
     /**

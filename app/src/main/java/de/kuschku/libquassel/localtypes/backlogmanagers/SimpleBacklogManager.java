@@ -83,8 +83,8 @@ public class SimpleBacklogManager extends BacklogManager<SimpleBacklogManager> {
         ObservableSortedList<Message> backlog = backlogs.get(bufferId);
         int messageId =
                 (backlog == null) ? -1 :
-                (backlog.last() == null) ? -1 :
-                backlog.last().messageId;
+                        (backlog.last() == null) ? -1 :
+                                backlog.last().messageId;
 
         requestBacklog(bufferId, -1, messageId, count, 0);
     }

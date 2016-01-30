@@ -22,6 +22,7 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 @UiThread
 public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
+    private static ObservableSortedList<Message> emptyList = new ObservableComparableSortedList<Message>(Message.class);
     @NonNull
     private final ChatMessageRenderer renderer;
     @NonNull
@@ -35,6 +36,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         this.inflater = LayoutInflater.from(ctx);
         this.renderer = new ChatMessageRenderer(ctx, context);
         this.callback = new AdapterUICallbackWrapper(this, scroller);
+    }
+
+    public static ObservableSortedList<Message> emptyList() {
+        return emptyList;
     }
 
     public void setMessageList(@NonNull ObservableSortedList<Message> messageList) {
@@ -61,10 +66,5 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     @Override
     public int getItemCount() {
         return messageList.size();
-    }
-
-    private static ObservableSortedList<Message> emptyList = new ObservableComparableSortedList<Message>(Message.class);
-    public static ObservableSortedList<Message> emptyList() {
-        return emptyList;
     }
 }

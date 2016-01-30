@@ -22,6 +22,7 @@ public class AdvancedEditor {
     public void toggleUnderline() {
         toggleUnderline(editText.getSelectionStart(), editText.getSelectionEnd());
     }
+
     public void toggleUnderline(int start, int end) {
         boolean isUnderline = false;
         for (UnderlineSpan span : editText.getText().getSpans(start, end, UnderlineSpan.class)) {
@@ -41,6 +42,7 @@ public class AdvancedEditor {
     public void toggleBold() {
         toggleBold(editText.getSelectionStart(), editText.getSelectionEnd());
     }
+
     public void toggleBold(int start, int end) {
         boolean isBold = false;
         for (BoldSpan span : editText.getText().getSpans(start, end, BoldSpan.class)) {
@@ -59,6 +61,7 @@ public class AdvancedEditor {
     public void toggleItalic() {
         toggleItalic(editText.getSelectionStart(), editText.getSelectionEnd());
     }
+
     public void toggleItalic(int start, int end) {
         boolean isItalic = false;
         for (ItalicSpan span : editText.getText().getSpans(start, end, ItalicSpan.class)) {
@@ -77,6 +80,7 @@ public class AdvancedEditor {
     public void toggleForeground(@IntRange(from = 0, to = 15) int color) {
         toggleForeground(editText.getSelectionStart(), editText.getSelectionEnd(), color);
     }
+
     public void toggleForeground(int start, int end, @ColorInt int color) {
         boolean isColored = false;
         for (ForegroundColorSpan span : editText.getText().getSpans(start, end, ForegroundColorSpan.class)) {
@@ -95,6 +99,7 @@ public class AdvancedEditor {
     public void toggleBackground(@IntRange(from = 0, to = 15) int color) {
         toggleBackground(editText.getSelectionStart(), editText.getSelectionEnd(), color);
     }
+
     public void toggleBackground(int start, int end, @ColorInt int color) {
         boolean isColored = false;
         for (BackgroundColorSpan span : editText.getText().getSpans(start, end, BackgroundColorSpan.class)) {

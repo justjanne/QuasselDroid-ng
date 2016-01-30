@@ -10,17 +10,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.kuschku.libquassel.events.LagChangedEvent;
-import de.kuschku.libquassel.localtypes.NotificationManager;
-import de.kuschku.libquassel.localtypes.backlogmanagers.BacklogManager;
-import de.kuschku.libquassel.localtypes.backlogmanagers.SimpleBacklogManager;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
+import de.kuschku.libquassel.events.LagChangedEvent;
 import de.kuschku.libquassel.events.StatusMessageEvent;
 import de.kuschku.libquassel.functions.types.HandshakeFunction;
 import de.kuschku.libquassel.functions.types.InitRequestFunction;
 import de.kuschku.libquassel.functions.types.RpcCallFunction;
 import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.localtypes.Buffers;
+import de.kuschku.libquassel.localtypes.NotificationManager;
+import de.kuschku.libquassel.localtypes.backlogmanagers.BacklogManager;
+import de.kuschku.libquassel.localtypes.backlogmanagers.SimpleBacklogManager;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.objects.types.ClientInitAck;
 import de.kuschku.libquassel.objects.types.ClientLogin;
@@ -28,7 +28,6 @@ import de.kuschku.libquassel.objects.types.SessionState;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.BufferSyncer;
-import de.kuschku.libquassel.syncables.types.BufferViewConfig;
 import de.kuschku.libquassel.syncables.types.BufferViewManager;
 import de.kuschku.libquassel.syncables.types.Identity;
 import de.kuschku.libquassel.syncables.types.IgnoreListManager;
@@ -273,13 +272,13 @@ public class Client {
         return notificationManager;
     }
 
+    public long getLag() {
+        return lag;
+    }
+
     public void setLag(long l) {
         lag = l;
         busProvider.sendEvent(new LagChangedEvent(lag));
-    }
-
-    public long getLag() {
-        return lag;
     }
 
     public IgnoreListManager getIgnoreListManager() {

@@ -31,7 +31,7 @@ public class FormattingHelper {
     }
 
     private void withinParagraph(StringBuilder out, Spanned text,
-                                        int start, int end) {
+                                 int start, int end) {
         int next;
         for (int i = start; i < end; i = next) {
             next = text.nextSpanTransition(i, end, CharacterStyle.class);
@@ -87,7 +87,7 @@ public class FormattingHelper {
                 }
             }
 
-            out.append(text.subSequence(i,next));
+            out.append(text.subSequence(i, next));
 
             for (int j = style.length - 1; j >= 0; j--) {
                 if ((text.getSpanFlags(style[j]) & Spanned.SPAN_COMPOSING) != 0)

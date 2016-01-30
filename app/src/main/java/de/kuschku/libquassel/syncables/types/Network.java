@@ -197,6 +197,10 @@ public class Network extends SyncableObject<Network> implements ContentComparabl
         return channels;
     }
 
+    public void setChannels(@NonNull Map<String, IrcChannel> channels) {
+        this.channels = channels;
+    }
+
     public void addIrcChannel(String channelName) {
         IrcChannel ircChannel = new IrcChannel(
                 channelName,
@@ -208,10 +212,6 @@ public class Network extends SyncableObject<Network> implements ContentComparabl
         );
         ircChannel.setNetwork(this);
         channels.put(channelName, ircChannel);
-    }
-
-    public void setChannels(@NonNull Map<String, IrcChannel> channels) {
-        this.channels = channels;
     }
 
     @NonNull
@@ -562,6 +562,49 @@ public class Network extends SyncableObject<Network> implements ContentComparabl
         this.client = client;
     }
 
+    public ChannelModeType channelModeType(char mode) {
+        return channelModeType(String.copyValueOf(new char[]{mode}));
+    }
+
+    public ChannelModeType channelModeType(String mode) {
+        if (mode.isEmpty())
+            return ChannelModeType.NOT_A_CHANMODE;
+
+        String rawChanModes = getSupports().get("CHANMODES");
+        if (rawChanModes == null || rawChanModes.isEmpty())
+            return ChannelModeType.NOT_A_CHANMODE;
+
+        String[] chanModes = rawChanModes.split(",");
+        for (int i = 0; i < chanModes.length; i++) {
+            if (chanModes[i].contains(mode)) {
+                switch (i) {
+                    case 0:
+                        return ChannelModeType.A_CHANMODE;
+                    case 1:
+                        return ChannelModeType.B_CHANMODE;
+                    case 2:
+                        return ChannelModeType.C_CHANMODE;
+                    case 3:
+                        return ChannelModeType.D_CHANMODE;
+                    default:
+                        return ChannelModeType.NOT_A_CHANMODE;
+                }
+            }
+        }
+        return ChannelModeType.NOT_A_CHANMODE;
+    }
+
+    // see:
+    //  http://www.irc.org/tech_docs/005.html
+    //  http://www.irc.org/tech_docs/draft-brocklesby-irc-isupport-03.txt
+    public enum ChannelModeType {
+        NOT_A_CHANMODE,
+        A_CHANMODE,
+        B_CHANMODE,
+        C_CHANMODE,
+        D_CHANMODE
+    }
+
     public static class IrcMode {
         public final int rank;
         public final String prefix;
@@ -579,43 +622,5 @@ public class Network extends SyncableObject<Network> implements ContentComparabl
                     ", prefix='" + prefix + '\'' +
                     '}';
         }
-    }
-
-    public ChannelModeType channelModeType(char mode) {
-        return channelModeType(String.copyValueOf(new char[]{mode}));
-    }
-
-    public ChannelModeType channelModeType(String mode) {
-        if (mode.isEmpty())
-            return ChannelModeType.NOT_A_CHANMODE;
-
-        String rawChanModes = getSupports().get("CHANMODES");
-        if (rawChanModes == null || rawChanModes.isEmpty())
-            return ChannelModeType.NOT_A_CHANMODE;
-
-        String[] chanModes = rawChanModes.split(",");
-        for (int i = 0; i < chanModes.length; i++) {
-            if (chanModes[i].contains(mode)) {
-                switch (i) {
-                    case 0: return ChannelModeType.A_CHANMODE;
-                    case 1: return ChannelModeType.B_CHANMODE;
-                    case 2: return ChannelModeType.C_CHANMODE;
-                    case 3: return ChannelModeType.D_CHANMODE;
-                    default: return ChannelModeType.NOT_A_CHANMODE;
-                }
-            }
-        }
-        return ChannelModeType.NOT_A_CHANMODE;
-    }
-
-    // see:
-    //  http://www.irc.org/tech_docs/005.html
-    //  http://www.irc.org/tech_docs/draft-brocklesby-irc-isupport-03.txt
-    public enum ChannelModeType {
-        NOT_A_CHANMODE,
-        A_CHANMODE,
-        B_CHANMODE,
-        C_CHANMODE,
-        D_CHANMODE
     }
 }

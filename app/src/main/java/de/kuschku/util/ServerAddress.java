@@ -8,4 +8,8 @@ public class ServerAddress {
         this.host = host;
         this.port = port;
     }
+
+    public String print() {
+        return String.format("%s:%s", host, port);
+    }
 }

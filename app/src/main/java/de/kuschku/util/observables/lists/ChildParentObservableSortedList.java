@@ -3,7 +3,6 @@ package de.kuschku.util.observables.lists;
 import android.support.annotation.NonNull;
 
 import de.kuschku.util.observables.IObservable;
-import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.callbacks.UIChildCallback;
 import de.kuschku.util.observables.callbacks.UIChildParentCallback;
 import de.kuschku.util.observables.callbacks.UIParentCallback;

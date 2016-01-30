@@ -23,12 +23,16 @@ public enum AppTheme {
     public static AppTheme themeFromString(String s) {
         if (s == null) s = "";
         switch (s) {
-            case "MATERIAL_DARK": return MATERIAL_DARK;
-            case "MATERIAL_LIGHT": return MATERIAL_LIGHT;
-            case "QUASSEL_DARK": return QUASSEL_DARK;
+            case "MATERIAL_DARK":
+                return MATERIAL_DARK;
+            case "MATERIAL_LIGHT":
+                return MATERIAL_LIGHT;
+            case "QUASSEL_DARK":
+                return QUASSEL_DARK;
 
             default:
-            case "QUASSEL_LIGHT": return QUASSEL_LIGHT;
+            case "QUASSEL_LIGHT":
+                return QUASSEL_LIGHT;
         }
     }
 

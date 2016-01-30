@@ -21,6 +21,7 @@ import java.util.concurrent.Executors;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.HandshakeFailedEvent;
+import de.kuschku.libquassel.events.UnknownCertificateEvent;
 import de.kuschku.libquassel.functions.types.HandshakeFunction;
 import de.kuschku.libquassel.functions.types.Heartbeat;
 import de.kuschku.libquassel.objects.types.ClientInit;
@@ -30,6 +31,8 @@ import de.kuschku.libquassel.primitives.types.Protocol;
 import de.kuschku.libquassel.protocols.DatastreamPeer;
 import de.kuschku.libquassel.protocols.LegacyPeer;
 import de.kuschku.libquassel.protocols.RemotePeer;
+import de.kuschku.libquassel.ssl.CertificateManager;
+import de.kuschku.libquassel.ssl.UnknownCertificateException;
 import de.kuschku.util.ServerAddress;
 import de.kuschku.util.niohelpers.WrappedChannel;
 
@@ -66,11 +69,14 @@ public class CoreConnection {
     private ConnectionChangeEvent.Status status = ConnectionChangeEvent.Status.DISCONNECTED;
     @Nullable
     private Client client;
+    @NonNull
+    private CertificateManager certificateManager;
 
-    public CoreConnection(@NonNull final ServerAddress address, @NonNull final ClientData clientData, @NonNull final BusProvider busProvider) {
+    public CoreConnection(@NonNull final ServerAddress address, @NonNull final ClientData clientData, @NonNull final BusProvider busProvider, @NonNull CertificateManager certificateManager) {
         this.address = address;
         this.clientData = clientData;
         this.busProvider = busProvider;
+        this.certificateManager = certificateManager;
     }
 
     @NonNull
@@ -107,10 +113,8 @@ public class CoreConnection {
 
     /**
      * Closes the connection and interrupts all threads this connection has spawned.
-     *
-     * @throws IOException
      */
-    public void close() throws IOException {
+    public void close() {
         assertNotNull(client);
 
         client.setConnectionStatus(ConnectionChangeEvent.Status.DISCONNECTED);
@@ -121,8 +125,12 @@ public class CoreConnection {
         if (outputExecutor != null) outputExecutor.shutdownNow();
 
         // Which we do exactly here
-        if (channel != null) channel.close();
-        if (socket != null) socket.close();
+        try {
+            if (channel != null) channel.close();
+            if (socket != null) socket.close();
+        } catch (Exception e) {
+            // We won’t report these issues, as these don’t matter to us anyway anymore
+        }
     }
 
     @Nullable
@@ -177,11 +185,7 @@ public class CoreConnection {
     }
 
     public void onEventAsync(HandshakeFailedEvent event) {
-        try {
-            this.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.close();
     }
 
     public void onEventAsync(@NonNull ConnectionChangeEvent event) {
@@ -189,7 +193,23 @@ public class CoreConnection {
     }
 
     public void setCompression(boolean supportsCompression) {
-        if (supportsCompression) channel = WrappedChannel.withCompression(getChannel());
+        if (supportsCompression)
+            channel = WrappedChannel.withCompression(getChannel());
+    }
+
+    private void setSSL(boolean supportsSSL) {
+        if (supportsSSL) {
+            try {
+                channel = WrappedChannel.withSSL(getChannel(), certificateManager, address);
+            } catch (Exception e) {
+                if (e.getCause() instanceof UnknownCertificateException) {
+                    busProvider.sendEvent(new UnknownCertificateEvent((UnknownCertificateException) e.getCause()));
+                } else {
+                    busProvider.sendEvent(new GeneralErrorEvent(e));
+                }
+                close();
+            }
+        }
     }
 
     public void setClient(@NonNull Client client) {
@@ -220,6 +240,8 @@ public class CoreConnection {
 
                         final Protocol protocol = ProtocolSerializer.get().deserialize(buffer);
 
+                        // Wrap socket in SSL context if ssl is enabled
+                        setSSL(protocol.protocolFlags.supportsSSL);
                         // Wrap socket in deflater if compression is enabled
                         setCompression(protocol.protocolFlags.supportsCompression);
 

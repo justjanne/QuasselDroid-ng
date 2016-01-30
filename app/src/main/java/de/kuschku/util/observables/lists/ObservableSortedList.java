@@ -213,17 +213,17 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
         callback.notifyItemChanged(position);
     }
 
+    @Override
+    public String toString() {
+        return Arrays.toString(toArray());
+    }
+
     public interface ItemComparator<T> {
         int compare(T o1, T o2);
 
         boolean areContentsTheSame(T oldItem, T newItem);
 
         boolean areItemsTheSame(T item1, T item2);
-    }
-
-    @Override
-    public String toString() {
-        return Arrays.toString(toArray());
     }
 
     class Callback extends SortedList.Callback<T> {

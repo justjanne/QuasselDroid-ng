@@ -39,7 +39,7 @@ public class QuasselService extends Service {
 
     public class LocalBinder extends Binder {
         public void startBackgroundThread(@NonNull BusProvider provider, @NonNull ServerAddress address) {
-            bgThread = new ClientBackgroundThread(provider, address);
+            bgThread = new ClientBackgroundThread(provider, address, QuasselService.this);
             new Thread(bgThread).start();
         }
 

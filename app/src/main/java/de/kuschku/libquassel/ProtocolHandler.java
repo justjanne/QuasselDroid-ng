@@ -5,14 +5,11 @@ import android.util.Log;
 
 import org.joda.time.DateTime;
 
-import java.util.List;
-
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.HandshakeFailedEvent;
 import de.kuschku.libquassel.events.LoginFailedEvent;
 import de.kuschku.libquassel.events.LoginSuccessfulEvent;
-import de.kuschku.libquassel.exceptions.UnknownTypeException;
 import de.kuschku.libquassel.functions.types.Heartbeat;
 import de.kuschku.libquassel.functions.types.HeartbeatReply;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
@@ -26,7 +23,6 @@ import de.kuschku.libquassel.objects.types.ClientLoginReject;
 import de.kuschku.libquassel.objects.types.SessionInit;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.SyncableRegistry;
-import de.kuschku.libquassel.syncables.types.BufferViewConfig;
 import de.kuschku.libquassel.syncables.types.Identity;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.util.AndroidAssert;
@@ -89,7 +85,7 @@ public class ProtocolHandler implements IProtocolHandler {
     public void onEventMainThread(@NonNull SyncFunction packedFunc) {
         try {
             final Object syncable = client.getObjectByIdentifier(packedFunc.className, packedFunc.objectName);
-            AndroidAssert.assertNotNull("Object not found: " + packedFunc.className+":"+packedFunc.objectName, syncable);
+            AndroidAssert.assertNotNull("Object not found: " + packedFunc.className + ":" + packedFunc.objectName, syncable);
             ReflectionUtils.invokeMethod(syncable, packedFunc.methodName, packedFunc.params);
         } catch (Exception e) {
             busProvider.sendEvent(new GeneralErrorEvent(e, packedFunc.toString()));

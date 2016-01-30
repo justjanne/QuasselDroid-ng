@@ -11,16 +11,16 @@ import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.NetworkConfig;
-import de.kuschku.libquassel.syncables.types.SyncableObject;
 
 public class NetworkConfigSerializer implements ObjectSerializer<NetworkConfig> {
     private static NetworkConfigSerializer serializer = new NetworkConfigSerializer();
-    public static NetworkConfigSerializer get() {
-        return serializer;
-    }
 
     private NetworkConfigSerializer() {
 
+    }
+
+    public static NetworkConfigSerializer get() {
+        return serializer;
     }
 
     @Nullable

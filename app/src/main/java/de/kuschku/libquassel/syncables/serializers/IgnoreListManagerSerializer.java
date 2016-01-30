@@ -15,12 +15,13 @@ import de.kuschku.libquassel.syncables.types.IgnoreListManager;
 
 public class IgnoreListManagerSerializer implements ObjectSerializer<IgnoreListManager> {
     private static IgnoreListManagerSerializer serializer = new IgnoreListManagerSerializer();
-    public static IgnoreListManagerSerializer get() {
-        return serializer;
-    }
 
     private IgnoreListManagerSerializer() {
 
+    }
+
+    public static IgnoreListManagerSerializer get() {
+        return serializer;
     }
 
     @Nullable
