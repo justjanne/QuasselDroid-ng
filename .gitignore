@@ -7,7 +7,7 @@ gen/*
 local.properties
 .gradle/*
 .idea/*
-gradle*
+gradle/*
 gradle.properties
 */version.properties
 *.sh
