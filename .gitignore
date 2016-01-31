@@ -3,7 +3,6 @@ gen/*
 /.classpath
 **/build/*
 *.iml
-**/libs
 local.properties
 .gradle/*
 .idea/*
