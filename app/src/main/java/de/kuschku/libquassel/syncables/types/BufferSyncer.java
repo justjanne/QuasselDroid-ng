@@ -44,13 +44,13 @@ public class BufferSyncer extends SyncableObject<BufferSyncer> {
     }
 
     @Override
-    public void update(BufferSyncer from) {
+    public void update(@NonNull BufferSyncer from) {
         LastSeenMsg = from.LastSeenMsg;
         MarkerLines = from.MarkerLines;
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void update(@NonNull Map<String, QVariant> from) {
         update(BufferSyncerSerializer.get().fromDatastream(from));
     }
 

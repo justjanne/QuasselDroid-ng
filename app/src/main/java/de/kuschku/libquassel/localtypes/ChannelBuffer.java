@@ -29,6 +29,7 @@ public class ChannelBuffer implements Buffer {
         return getInfo().name;
     }
 
+    @NonNull
     @Override
     public BufferInfo.BufferStatus getStatus() {
         return channel == null ? BufferInfo.BufferStatus.OFFLINE : BufferInfo.BufferStatus.ONLINE;

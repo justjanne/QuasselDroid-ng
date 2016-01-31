@@ -5,8 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import org.joda.time.DateTime;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -70,7 +68,7 @@ public class CoreConnection {
     @Nullable
     private Client client;
     @NonNull
-    private CertificateManager certificateManager;
+    private final CertificateManager certificateManager;
 
     public CoreConnection(@NonNull final ServerAddress address, @NonNull final ClientData clientData, @NonNull final BusProvider busProvider, @NonNull CertificateManager certificateManager) {
         this.address = address;
@@ -260,6 +258,7 @@ public class CoreConnection {
 
                         // Mark prehandshake as read
                         hasReadPreHandshake = true;
+                        assertNotNull(heartbeatThread);
                         heartbeatThread.start();
 
                         // Send client data to core
@@ -303,7 +302,7 @@ public class CoreConnection {
                 assertNotNull(client);
 
                 while (running) {
-                    Heartbeat heartbeat = new Heartbeat(DateTime.now());
+                    Heartbeat heartbeat = new Heartbeat();
                     busProvider.dispatch(heartbeat);
 
                     Thread.sleep(30 * 1000);

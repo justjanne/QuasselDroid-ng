@@ -1,21 +1,25 @@
 package de.kuschku.quasseldroid_ng.ui.editor;
 
+import android.support.annotation.NonNull;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 
+import java.util.Locale;
+
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 
 public class FormattingHelper {
-    private AppContext context;
+    private final AppContext context;
 
     public FormattingHelper(AppContext context) {
         this.context = context;
     }
 
-    public String toEscapeCodes(Spanned text) {
+    @NonNull
+    public String toEscapeCodes(@NonNull Spanned text) {
         StringBuilder out = new StringBuilder();
         withinParagraph(out, text, 0, text.length());
         return out.toString();
@@ -30,7 +34,7 @@ public class FormattingHelper {
         return 0;
     }
 
-    private void withinParagraph(StringBuilder out, Spanned text,
+    private void withinParagraph(@NonNull StringBuilder out, @NonNull Spanned text,
                                  int start, int end) {
         int next;
         for (int i = start; i < end; i = next) {
@@ -65,7 +69,7 @@ public class FormattingHelper {
                         }
 
                         out.append((char) 0x03);
-                        out.append(String.format("%02d,%02d", fg, bg));
+                        out.append(String.format(Locale.US, "%02d,%02d", fg, bg));
 
                         jump = true;
                     } else if (style[j] instanceof BackgroundColorSpan) {
@@ -80,7 +84,7 @@ public class FormattingHelper {
                         bg = colorToId(((BackgroundColorSpan) style[j]).getBackgroundColor());
 
                         out.append((char) 0x03);
-                        out.append(String.format("%02d,%02d", fg, bg));
+                        out.append(String.format(Locale.US, "%02d,%02d", fg, bg));
 
                         jump = true;
                     }

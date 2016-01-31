@@ -224,7 +224,7 @@ public class IrcUser extends SyncableObject<IrcUser> {
     }
 
     @Override
-    public void update(IrcUser from) {
+    public void update(@NonNull IrcUser from) {
         this.server = from.server;
         this.ircOperator = from.ircOperator;
         this.away = from.away;
@@ -244,7 +244,7 @@ public class IrcUser extends SyncableObject<IrcUser> {
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void update(@NonNull Map<String, QVariant> from) {
         update(IrcUserSerializer.get().fromDatastream(from));
     }
 

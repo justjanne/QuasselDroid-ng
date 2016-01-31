@@ -1,5 +1,7 @@
 package de.kuschku.quasseldroid_ng.ui.theme;
 
+import android.support.annotation.NonNull;
+
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.Client;
 import de.kuschku.quasseldroid_ng.ui.chat.WrappedSettings;
@@ -18,6 +20,7 @@ public class AppContext {
         this.themeUtil = themeUtil;
     }
 
+    @NonNull
     public AppContext withThemeUtil(ThemeUtil themeUtil) {
         setThemeUtil(themeUtil);
         return this;
@@ -31,6 +34,7 @@ public class AppContext {
         this.settings = settings;
     }
 
+    @NonNull
     public AppContext withSettings(WrappedSettings settings) {
         setSettings(settings);
         return this;
@@ -44,6 +48,7 @@ public class AppContext {
         this.client = client;
     }
 
+    @NonNull
     public AppContext withClient(Client client) {
         setClient(client);
         return this;
@@ -57,6 +62,7 @@ public class AppContext {
         this.provider = provider;
     }
 
+    @NonNull
     public AppContext withProvider(BusProvider provider) {
         setProvider(provider);
         return this;

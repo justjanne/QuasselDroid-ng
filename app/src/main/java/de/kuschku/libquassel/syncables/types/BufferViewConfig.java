@@ -21,7 +21,8 @@ public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
     private List<Integer> temporarilyRemovedBuffers;
     private boolean hideInactiveNetworks;
     private IObservableList<ElementCallback<Integer>, Integer> buffers;
-    private IObservableList<ElementCallback<Integer>, Integer> NetworkList = new ObservableElementList<>();
+    @NonNull
+    private final IObservableList<ElementCallback<Integer>, Integer> NetworkList = new ObservableElementList<>();
     private int allowedBufferTypes;
     private boolean sortAlphabetically;
     private boolean disableDecoration;
@@ -194,7 +195,7 @@ public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
     }
 
     @Override
-    public void update(BufferViewConfig from) {
+    public void update(@NonNull BufferViewConfig from) {
         this.bufferViewName = from.bufferViewName;
         this.temporarilyRemovedBuffers = from.temporarilyRemovedBuffers;
         this.hideInactiveNetworks = from.hideInactiveNetworks;
@@ -210,7 +211,7 @@ public class BufferViewConfig extends SyncableObject<BufferViewConfig> {
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void update(@NonNull Map<String, QVariant> from) {
         update(BufferViewConfigSerializer.get().fromDatastream(from));
     }
 

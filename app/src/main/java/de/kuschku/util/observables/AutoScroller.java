@@ -1,5 +1,6 @@
 package de.kuschku.util.observables;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -7,7 +8,7 @@ public class AutoScroller {
     private final RecyclerView recyclerView;
     private final LinearLayoutManager manager;
 
-    public AutoScroller(RecyclerView recyclerView) {
+    public AutoScroller(@NonNull RecyclerView recyclerView) {
         this(recyclerView, (LinearLayoutManager) recyclerView.getLayoutManager());
     }
 

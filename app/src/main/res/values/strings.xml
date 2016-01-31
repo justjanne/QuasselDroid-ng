@@ -1,44 +1,60 @@
 <resources>
-    <string name="app_name">QuasselDroid</string>
-    <string name="action_settings">Settings</string>
+    <string name="appName">QuasselDroid</string>
+    <string name="appDescription">An Android-based client for the decentralized Quassel IRC client.</string>
+    <string name="appDescriptionLong">Quassel is a distributed, decentralized IRC client, written using C++ and Qt. QuasselDroid is a pure-java client for the Quassel core, allowing you to connect to your Quassel core using your Android™ phone.</string>
+    <string name="appLinkGithubTitle">GitHub</string>
+    <string name="appLinkGithubUrl" translatable="false">https://github.com/sandsmark/QuasselDroid</string>
+    <string name="appLinkCommunityTitle">Community</string>
+    <string name="appLinkCommunityUrl" translatable="false">https://plus.google.com/communities/104094956084217666662</string>
 
     <!-- Message format strings -->
-    <string name="message_plain">%1$s: %2$s</string>
+    <string name="usernameHostmask">%1$s (%2$s)</string>
 
-    <string name="message_join">%1$s has joined %2$s</string>
+    <string name="messagePlain">%1$s: %2$s</string>
 
-    <string name="message_part">%1$s has left %2$s</string>
-    <string name="message_part_extra">"%1$s has left %2$s (%3$s)</string>
+    <string name="messageJoin">%1$s has joined %2$s</string>
 
-    <string name="message_quit">%1$s has quit</string>
-    <string name="message_quit_extra">%1$s has quit (%2$s)</string>
+    <string name="messagePart">%1$s has left %2$s</string>
+    <string name="messagePartExtra">"%1$s has left %2$s (%3$s)</string>
 
-    <string name="message_kill">%1$s was killed: %2$s</string>
+    <string name="messageQuit">%1$s has quit</string>
+    <string name="messageQuitExtra">%1$s has quit (%2$s)</string>
 
-    <string name="message_kick">%1$s has kicked %2$s from %3$s</string>
-    <string name="message_kick_extra">%1$s has kicked %2$s from %3$s: %4$s</string>
+    <string name="messageKill">%1$s was killed: %2$s</string>
 
-    <string name="message_mode">Mode %1$s by %2$s</string>
+    <string name="messageKick">%1$s has kicked %2$s from %3$s</string>
+    <string name="messageKickExtra">%1$s has kicked %2$s from %3$s: %4$s</string>
 
-    <string name="message_nick_self">You are now known as %1$s</string>
-    <string name="message_nick_other">%1$s is now known as %2$s</string>
+    <string name="messageMode">Mode %1$s by %2$s</string>
 
-    <string name="message_daychange">{ Day changed to %1$s }</string>
+    <string name="messageNickSelf">You are now known as %1$s</string>
+    <string name="messageNickOther">%1$s is now known as %2$s</string>
 
-    <string name="message_action">* %1$s %2$s</string>
+    <string name="messageDayChange">{ Day changed to %1$s }</string>
+
+    <string name="messageAction">* %1$s %2$s</string>
 
     <!-- Editor UI -->
-    <string name="message_placeholder">Write a message…</string>
-    <string name="message_history">Message History</string>
-    <string name="format_bold">Bold</string>
-    <string name="format_italic">Italic</string>
-    <string name="format_underline">Underline</string>
-    <string name="format_color">Text Color</string>
-    <string name="format_fill">Background Color</string>
+    <string name="placeholder">Write a message…</string>
+    <string name="formatBold">Bold</string>
+    <string name="formatItalic">Italic</string>
+    <string name="formatUnderline">Underline</string>
+    <string name="formatColor">Text Color</string>
+    <string name="formatFill">Background Color</string>
 
-    <!-- Misc -->
-    <string name="username_hostmask">%1$s (%2$s)</string>
-    <string name="title_status_buffer">Status Buffer</string>
-    <string name="open_drawer">open</string>
-    <string name="close_drawer">close</string>
+    <!-- Actions -->
+    <string name="labelLogin">Login</string>
+    <string name="labelCancel">Cancel</string>
+    <string name="labelConnect">Connect</string>
+    <string name="labelSettings">Settings</string>
+    <string name="labelStatusBuffer">Status Buffer</string>
+    <string name="labelAddress">Address</string>
+    <string name="labelHistory">Input History</string>
+    <string name="labelHostname">Hostname</string>
+    <string name="labelPort">Port</string>
+    <string name="labelPassword">Password</string>
+    <string name="labelUsername">Username</string>
+    <string name="labelHideEvents">Hide events</string>
+
+    <string name="warningCertificate">Do you trust this certificate?</string>
 </resources>

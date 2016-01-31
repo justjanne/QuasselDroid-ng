@@ -29,6 +29,7 @@ public class QueryBuffer implements Buffer {
         return getInfo().name;
     }
 
+    @NonNull
     @Override
     public BufferInfo.BufferStatus getStatus() {
         return (user == null) ? BufferInfo.BufferStatus.OFFLINE :

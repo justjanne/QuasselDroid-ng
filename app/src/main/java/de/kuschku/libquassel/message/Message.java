@@ -57,7 +57,7 @@ public class Message implements ContentComparable<Message> {
     }
 
     @Override
-    public boolean areItemsTheSame(Message other) {
+    public boolean areItemsTheSame(@NonNull Message other) {
         return this.messageId == other.messageId;
     }
 

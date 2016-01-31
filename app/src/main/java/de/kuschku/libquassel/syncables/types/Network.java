@@ -156,7 +156,7 @@ public class Network extends SyncableObject<Network> implements ContentComparabl
         setSupportedModes(map);
     }
 
-    public void addIrcUser(String sender) {
+    public void addIrcUser(@NonNull String sender) {
         client.sendInitRequest("IrcUser", getObjectName() + "/" + IrcUserUtils.getNick(sender));
     }
 
@@ -170,9 +170,11 @@ public class Network extends SyncableObject<Network> implements ContentComparabl
         if (modes == null) return new IrcMode(0, "");
 
         final List<IrcMode> usermodes = new ArrayList<>(modes.length());
+        Map<String, IrcMode> supportedModes = getSupportedModes();
+        assertNotNull(supportedModes);
         for (String mode : modes.split("")) {
-            if (getSupportedModes().containsKey(mode))
-                usermodes.add(getSupportedModes().get(mode));
+            if (supportedModes.containsKey(mode))
+                usermodes.add(supportedModes.get(mode));
         }
         Collections.sort(usermodes, (o1, o2) -> o1.rank - o2.rank);
         return usermodes.size() > 0 ? usermodes.get(0) : new IrcMode(0, "");
@@ -506,7 +508,7 @@ public class Network extends SyncableObject<Network> implements ContentComparabl
     }
 
     @Override
-    public void update(Network from) {
+    public void update(@NonNull Network from) {
         this.channels = from.channels;
         this.users = from.users;
         this.ServerList = from.ServerList;
@@ -539,7 +541,7 @@ public class Network extends SyncableObject<Network> implements ContentComparabl
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void update(@NonNull Map<String, QVariant> from) {
         update(NetworkSerializer.get().fromDatastream(from));
     }
 
@@ -549,7 +551,7 @@ public class Network extends SyncableObject<Network> implements ContentComparabl
     }
 
     @Override
-    public boolean areItemsTheSame(Network other) {
+    public boolean areItemsTheSame(@NonNull Network other) {
         return networkId == other.networkId;
     }
 
@@ -562,11 +564,13 @@ public class Network extends SyncableObject<Network> implements ContentComparabl
         this.client = client;
     }
 
+    @NonNull
     public ChannelModeType channelModeType(char mode) {
         return channelModeType(String.copyValueOf(new char[]{mode}));
     }
 
-    public ChannelModeType channelModeType(String mode) {
+    @NonNull
+    public ChannelModeType channelModeType(@NonNull String mode) {
         if (mode.isEmpty())
             return ChannelModeType.NOT_A_CHANMODE;
 

@@ -1,6 +1,7 @@
 package de.kuschku.libquassel.localtypes.backlogmanagers;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
@@ -23,8 +24,10 @@ public class BacklogFilter implements UICallback {
     @NonNull
     private final ObservableSortedList<Message> filtered;
 
+    @NonNull
     private final Set<Message.Type> filteredTypes = new HashSet<>();
 
+    @Nullable
     private DateTime earliestMessage;
 
     public BacklogFilter(@NonNull Client client, int bufferId, @NonNull ObservableSortedList<Message> unfiltered, @NonNull ObservableSortedList<Message> filtered) {
@@ -44,7 +47,6 @@ public class BacklogFilter implements UICallback {
 
     private void updateDayChangeMessages() {
         DateTime now = DateTime.now().withMillisOfDay(0);
-        int id = -1;
         while (now.isAfter(earliestMessage)) {
             filtered.add(new Message(
                     (int) DateTimeUtils.toJulianDay(now.getMillis()),
@@ -65,7 +67,7 @@ public class BacklogFilter implements UICallback {
         }
     }
 
-    private boolean filterItem(Message message) {
+    private boolean filterItem(@NonNull Message message) {
         return (client.getIgnoreListManager() != null && client.getIgnoreListManager().matches(message)) || filteredTypes.contains(message.type);
     }
 

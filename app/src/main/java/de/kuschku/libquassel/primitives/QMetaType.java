@@ -45,6 +45,7 @@ public class QMetaType<T> {
     public final String name;
     @NonNull
     public final Class cl;
+    @Nullable
     public final PrimitiveSerializer<T> serializer;
 
     public QMetaType(@NonNull Class cl, @NonNull Type type) {

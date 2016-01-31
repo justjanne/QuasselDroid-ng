@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/message_history_panel_height">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingBottom="@dimen/message_history_panel_height"
+    tools:showIn="@layout/slider_main">
 
     <ScrollView
         android:id="@+id/chatline_scroller"
@@ -22,7 +23,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@android:color/transparent"
             android:gravity="top"
-            android:hint="@string/message_placeholder"
+            android:hint="@string/placeholder"
             android:inputType="textCapSentences|textShortMessage|textAutoCorrect"
             android:paddingBottom="17dp"
             android:paddingLeft="20dp"

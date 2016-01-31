@@ -53,6 +53,7 @@ public class ProtocolHandler implements IProtocolHandler {
                     client.getInitDataQueue().remove(packedFunc.className + ":" + packedFunc.objectName);
                     if (client.getInitDataQueue().isEmpty()) {
                         client.setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
+                        busProvider.dispatch(new Heartbeat());
                     }
                 }
             }
@@ -121,7 +122,7 @@ public class ProtocolHandler implements IProtocolHandler {
     }
 
     public void onEvent(@NonNull SessionInit message) {
-        busProvider.dispatch(new Heartbeat(DateTime.now()));
+        busProvider.dispatch(new Heartbeat());
 
         client.setState(message.SessionState);
 
@@ -133,6 +134,8 @@ public class ProtocolHandler implements IProtocolHandler {
         client.sendInitRequest("NetworkConfig", "GlobalNetworkConfig", true);
         client.sendInitRequest("IgnoreListManager", "", true);
         //sendInitRequest("TransferManager", ""); // This thing never gets sent...
+        
+        assertNotNull(client.getState());
         for (int NetworkId : client.getState().NetworkIds) {
             client.sendInitRequest("Network", String.valueOf(NetworkId), true);
         }

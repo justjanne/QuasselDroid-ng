@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.events;
 
+import android.support.annotation.NonNull;
+
 import java.security.cert.X509Certificate;
 
 import de.kuschku.libquassel.ssl.UnknownCertificateException;
@@ -14,7 +16,7 @@ public class UnknownCertificateEvent {
         this.address = address;
     }
 
-    public UnknownCertificateEvent(UnknownCertificateException cause) {
+    public UnknownCertificateEvent(@NonNull UnknownCertificateException cause) {
         this(cause.certificate, cause.address);
     }
 }

@@ -13,6 +13,9 @@ import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.AliasManager;
 
+import static de.kuschku.util.AndroidAssert.*;
+
+@SuppressWarnings("unchecked")
 public class AliasManagerSerializer implements ObjectSerializer<AliasManager> {
     @NonNull
     private static final AliasManagerSerializer serializer = new AliasManagerSerializer();
@@ -42,6 +45,7 @@ public class AliasManagerSerializer implements ObjectSerializer<AliasManager> {
     @Override
     public AliasManager fromLegacy(@NonNull Map<String, QVariant> map) {
         Map<String, QVariant<List<String>>> aliases = (Map<String, QVariant<List<String>>>) map.get("Aliases").data;
+        assertNotNull(aliases);
         return new AliasManager(
                 aliases.get("names").data,
                 aliases.get("expansions").data

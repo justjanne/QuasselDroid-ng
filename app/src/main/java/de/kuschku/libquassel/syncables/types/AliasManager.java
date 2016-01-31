@@ -12,8 +12,8 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.AliasManagerSerializer;
 
 public class AliasManager extends SyncableObject<AliasManager> {
-    public List<String> names;
-    public List<String> expansions;
+    private List<String> names;
+    private List<String> expansions;
 
     public AliasManager(List<String> names, List<String> expansions) {
         this.names = names;
@@ -26,13 +26,21 @@ public class AliasManager extends SyncableObject<AliasManager> {
     }
 
     @Override
-    public void update(AliasManager from) {
+    public void update(@NonNull AliasManager from) {
         names = from.names;
         expansions = from.expansions;
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void update(@NonNull Map<String, QVariant> from) {
         update(AliasManagerSerializer.get().fromDatastream(from));
+    }
+
+    public List<String> getNames() {
+        return names;
+    }
+
+    public List<String> getExpansions() {
+        return expansions;
     }
 }

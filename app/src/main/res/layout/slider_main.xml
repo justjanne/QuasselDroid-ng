@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sliding_layout_history"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -12,7 +13,8 @@
     sothree:umanoOverlay="true"
     sothree:umanoPanelHeight="@dimen/message_history_panel_height"
     sothree:umanoScrollableView="@+id/msg_history"
-    sothree:umanoShadowHeight="0.0dip">
+    sothree:umanoShadowHeight="0.0dip"
+    tools:showIn="@layout/activity_chat">
 
 
     <include layout="@layout/widget_editor" />
@@ -42,7 +44,7 @@
                     android:gravity="center_vertical"
                     android:paddingLeft="16.0dip"
                     android:paddingRight="16.0dip"
-                    android:text="@string/message_history"
+                    android:text="@string/labelHistory"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     android:textColor="?attr/colorForegroundSecondary" />
 

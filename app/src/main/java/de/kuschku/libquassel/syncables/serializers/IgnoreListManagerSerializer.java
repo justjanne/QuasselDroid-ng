@@ -13,13 +13,18 @@ import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.IgnoreListManager;
 
+import static de.kuschku.util.AndroidAssert.*;
+
+@SuppressWarnings("unchecked")
 public class IgnoreListManagerSerializer implements ObjectSerializer<IgnoreListManager> {
-    private static IgnoreListManagerSerializer serializer = new IgnoreListManagerSerializer();
+    @NonNull
+    private static final IgnoreListManagerSerializer serializer = new IgnoreListManagerSerializer();
 
     private IgnoreListManagerSerializer() {
 
     }
 
+    @NonNull
     public static IgnoreListManagerSerializer get() {
         return serializer;
     }
@@ -41,6 +46,7 @@ public class IgnoreListManagerSerializer implements ObjectSerializer<IgnoreListM
     @Override
     public IgnoreListManager fromLegacy(@NonNull Map<String, QVariant> map) {
         Map<String, QVariant> internalMap = (Map<String, QVariant>) map.get("IgnoreList").data;
+        assertNotNull(internalMap);
         return new IgnoreListManager(
                 (List<Integer>) internalMap.get("scope").data,
                 (List<Integer>) internalMap.get("ignoreType").data,

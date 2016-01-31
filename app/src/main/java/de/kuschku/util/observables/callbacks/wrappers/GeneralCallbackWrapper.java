@@ -1,5 +1,7 @@
 package de.kuschku.util.observables.callbacks.wrappers;
 
+import android.support.annotation.NonNull;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -7,7 +9,8 @@ import de.kuschku.util.observables.IObservable;
 import de.kuschku.util.observables.callbacks.GeneralCallback;
 
 public class GeneralCallbackWrapper implements IObservable<GeneralCallback>, GeneralCallback {
-    Set<GeneralCallback> callbacks = new HashSet<>();
+    @NonNull
+    final Set<GeneralCallback> callbacks = new HashSet<>();
 
     @Override
     public void notifyChanged() {

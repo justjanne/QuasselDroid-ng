@@ -1,5 +1,7 @@
 package de.kuschku.quasseldroid_ng.ui.theme;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 
 import de.kuschku.quasseldroid_ng.R;
@@ -20,7 +22,8 @@ public enum AppTheme {
         return themeFromString(s).themeId;
     }
 
-    public static AppTheme themeFromString(String s) {
+    @NonNull
+    public static AppTheme themeFromString(@Nullable String s) {
         if (s == null) s = "";
         switch (s) {
             case "MATERIAL_DARK":
@@ -36,6 +39,7 @@ public enum AppTheme {
         }
     }
 
+    @NonNull
     @Override
     public String toString() {
         return name() + "{" +

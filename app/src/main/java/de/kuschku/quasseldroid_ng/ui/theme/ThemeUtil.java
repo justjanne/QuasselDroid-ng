@@ -18,8 +18,10 @@ import de.kuschku.util.ui.SpanFormatter;
 public class ThemeUtil {
     @NonNull
     public final Colors res = new Colors();
+    @NonNull
     public final FormatStrings translations = new FormatStrings();
-    public DateTimeFormatHelper formatter;
+    @NonNull
+    public final DateTimeFormatHelper formatter;
 
     public ThemeUtil(@NonNull Context ctx) {
         initColors(new ContextThemeWrapper(ctx, ctx.getTheme()));
@@ -42,135 +44,137 @@ public class ThemeUtil {
     }
 
     public static class FormatStrings {
-        @AutoString(R.string.username_hostmask)
-        public String username_hostmask;
+        @AutoString(R.string.usernameHostmask)
+        public String usernameHostmask;
 
-        @AutoString(R.string.message_plain)
-        public String message_plain;
+        @AutoString(R.string.messagePlain)
+        public String messagePlain;
 
-        @AutoString(R.string.message_join)
-        public String message_join;
+        @AutoString(R.string.messageJoin)
+        public String messageJoin;
 
-        @AutoString(R.string.message_part)
-        public String message_part;
+        @AutoString(R.string.messagePart)
+        public String messagePart;
 
-        @AutoString(R.string.message_part_extra)
-        public String message_part_extra;
+        @AutoString(R.string.messagePartExtra)
+        public String messagePartExtra;
 
-        @AutoString(R.string.message_quit)
-        public String message_quit;
+        @AutoString(R.string.messageQuit)
+        public String messageQuit;
 
-        @AutoString(R.string.message_quit_extra)
-        public String message_quit_extra;
+        @AutoString(R.string.messageQuitExtra)
+        public String messageQuitExtra;
 
-        @AutoString(R.string.message_kill)
-        public String message_kill;
+        @AutoString(R.string.messageKill)
+        public String messageKill;
 
-        @AutoString(R.string.message_kick)
-        public String message_kick;
+        @AutoString(R.string.messageKick)
+        public String messageKick;
 
-        @AutoString(R.string.message_kick_extra)
-        public String message_kick_extra;
+        @AutoString(R.string.messageKickExtra)
+        public String messageKickExtra;
 
-        @AutoString(R.string.message_mode)
-        public String message_mode;
+        @AutoString(R.string.messageMode)
+        public String messageMode;
 
-        @AutoString(R.string.message_nick_self)
-        public String message_nick_self;
+        @AutoString(R.string.messageNickSelf)
+        public String messageNickSelf;
 
-        @AutoString(R.string.message_nick_other)
-        public String message_nick_other;
+        @AutoString(R.string.messageNickOther)
+        public String messageNickOther;
 
-        @AutoString(R.string.message_daychange)
-        public String message_daychange;
+        @AutoString(R.string.messageDayChange)
+        public String messageDaychange;
 
-        @AutoString(R.string.message_action)
-        public String message_action;
+        @AutoString(R.string.messageAction)
+        public String messageAction;
 
-        @AutoString(R.string.title_status_buffer)
-        public String title_status_buffer;
+        @AutoString(R.string.labelStatusBuffer)
+        public String titleStatusBuffer;
+        @AutoString(R.string.warningCertificate)
+        public String warningCertificate;
 
         @NonNull
         public CharSequence formatUsername(@NonNull CharSequence nick, @NonNull CharSequence hostmask) {
-            return SpanFormatter.format(username_hostmask, nick, hostmask);
+            return SpanFormatter.format(usernameHostmask, nick, hostmask);
         }
 
         @NonNull
         public CharSequence formatJoin(@NonNull CharSequence user, @NonNull CharSequence channel) {
-            return SpanFormatter.format(message_join, user, channel);
+            return SpanFormatter.format(messageJoin, user, channel);
         }
 
         @NonNull
         public CharSequence formatPart(@NonNull CharSequence user, @NonNull CharSequence channel) {
-            return SpanFormatter.format(message_part, user, channel);
+            return SpanFormatter.format(messagePart, user, channel);
         }
 
         @NonNull
         public CharSequence formatPart(@NonNull CharSequence user, @NonNull CharSequence channel, @Nullable CharSequence reason) {
             if (reason == null || reason.length() == 0) return formatPart(user, channel);
 
-            return SpanFormatter.format(message_part_extra, user, channel, reason);
+            return SpanFormatter.format(messagePartExtra, user, channel, reason);
         }
 
         @NonNull
         public CharSequence formatQuit(@NonNull CharSequence user) {
-            return SpanFormatter.format(message_quit, user);
+            return SpanFormatter.format(messageQuit, user);
         }
 
         @NonNull
         public CharSequence formatQuit(@NonNull CharSequence user, @Nullable CharSequence reason) {
             if (reason == null || reason.length() == 0) return formatQuit(user);
 
-            return SpanFormatter.format(message_quit_extra, user, reason);
+            return SpanFormatter.format(messageQuitExtra, user, reason);
         }
 
         @NonNull
         public CharSequence formatKill(@NonNull CharSequence user, @NonNull CharSequence channel) {
-            return SpanFormatter.format(message_kill, user, channel);
+            return SpanFormatter.format(messageKill, user, channel);
         }
 
         @NonNull
         public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked) {
-            return SpanFormatter.format(message_kick, user, kicked);
+            return SpanFormatter.format(messageKick, user, kicked);
         }
 
         @NonNull
         public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked, @Nullable CharSequence reason) {
             if (reason == null || reason.length() == 0) return formatKick(user, kicked);
 
-            return SpanFormatter.format(message_kick_extra, user, kicked, reason);
+            return SpanFormatter.format(messageKickExtra, user, kicked, reason);
         }
 
         @NonNull
         public CharSequence formatMode(@NonNull CharSequence mode, @NonNull CharSequence user) {
-            return SpanFormatter.format(message_mode, mode, user);
+            return SpanFormatter.format(messageMode, mode, user);
         }
 
         @NonNull
         public CharSequence formatNick(@NonNull CharSequence newNick) {
-            return SpanFormatter.format(message_nick_self, newNick);
+            return SpanFormatter.format(messageNickSelf, newNick);
         }
 
         @NonNull
         public CharSequence formatNick(@NonNull CharSequence oldNick, @Nullable CharSequence newNick) {
             if (newNick == null || newNick.length() == 0) return formatNick(oldNick);
 
-            return SpanFormatter.format(message_nick_other, oldNick, newNick);
+            return SpanFormatter.format(messageNickOther, oldNick, newNick);
         }
 
         @NonNull
         public CharSequence formatDayChange(@NonNull CharSequence day) {
-            return SpanFormatter.format(message_daychange, day);
+            return SpanFormatter.format(messageDaychange, day);
         }
 
         @NonNull
         public CharSequence formatAction(@NonNull CharSequence user, @NonNull CharSequence channel) {
-            return SpanFormatter.format(message_action, user, channel);
+            return SpanFormatter.format(messageAction, user, channel);
         }
 
         @NonNull
         public CharSequence formatPlain(@NonNull CharSequence nick, @NonNull CharSequence message) {
-            return SpanFormatter.format(message_plain, nick, message);
+            return SpanFormatter.format(messagePlain, nick, message);
         }
     }
 

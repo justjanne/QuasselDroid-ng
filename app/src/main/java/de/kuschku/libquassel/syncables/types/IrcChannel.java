@@ -31,7 +31,7 @@ public class IrcChannel extends SyncableObject<IrcChannel> {
     @Synced
     private Map<String, String> UserModes;
     @Synced
-    private Map<String, Object> ChanModes;
+    private ChanModes chanModes;
     @Synced
     private boolean encrypted;
 
@@ -39,42 +39,13 @@ public class IrcChannel extends SyncableObject<IrcChannel> {
     private Network network;
 
     public IrcChannel(String name, String topic, String password, Map<String, String> userModes,
-                      Map<String, Object> chanModes, boolean encrypted) {
+                      @NonNull Map<String, Object> chanModes, boolean encrypted) {
         this.name = name;
         this.topic = topic;
         this.password = password;
         this.UserModes = userModes;
-        this.ChanModes = chanModes;
+        this.chanModes = new ChanModes(chanModes);
         this.encrypted = encrypted;
-    }
-
-    @NonNull
-    public Map<String, List<String>> getA_ChanModes() {
-        if (ChanModes.get("A") == null) ChanModes.put("A", new HashMap<>());
-        return (Map<String, List<String>>) ChanModes.get("A");
-    }
-
-    @NonNull
-    public Map<String, String> getB_ChanModes() {
-        if (ChanModes.get("B") == null) ChanModes.put("B", new HashMap<>());
-        return (Map<String, String>) ChanModes.get("B");
-    }
-
-    @NonNull
-    public Map<String, String> getC_ChanModes() {
-        if (ChanModes.get("C") == null) ChanModes.put("C", new HashMap<>());
-        return (Map<String, String>) ChanModes.get("C");
-    }
-
-    @NonNull
-    public Set<String> getD_ChanModes() {
-        if (ChanModes.get("D") instanceof String) {
-            List<String> list = Arrays.asList(((String) ChanModes.get("D")).split(""));
-            ChanModes.put("D", new HashSet<>(list));
-        } else if (ChanModes.get("D") == null) {
-            ChanModes.put("D", new HashSet<>());
-        }
-        return (Set<String>) ChanModes.get("D");
     }
 
     @NonNull
@@ -85,7 +56,7 @@ public class IrcChannel extends SyncableObject<IrcChannel> {
                 ", topic='" + topic + '\'' +
                 ", password='" + password + '\'' +
                 ", UserModes=" + UserModes +
-                ", ChanModes=" + ChanModes +
+                ", ChanModes=" + chanModes +
                 ", encrypted=" + encrypted +
                 '}';
     }
@@ -137,7 +108,7 @@ public class IrcChannel extends SyncableObject<IrcChannel> {
         addChannelMode(String.copyValueOf(new char[]{mode}), params);
     }
 
-    public void addChannelMode(String mode, String params) {
+    public void addChannelMode(@NonNull String mode, String params) {
         assertNotNull(network);
 
         Network.ChannelModeType type = network.channelModeType(mode);
@@ -145,21 +116,21 @@ public class IrcChannel extends SyncableObject<IrcChannel> {
             case NOT_A_CHANMODE:
                 return;
             case A_CHANMODE:
-                if (!getA_ChanModes().containsKey(mode)) {
-                    getA_ChanModes().put(mode, new ArrayList<>(Collections.singleton(params)));
+                if (!chanModes.A.containsKey(mode)) {
+                    chanModes.A.put(mode, new ArrayList<>(Collections.singleton(params)));
                 } else {
-                    getA_ChanModes().get(mode).add(params);
+                    chanModes.A.get(mode).add(params);
                 }
                 break;
             case B_CHANMODE:
-                getB_ChanModes().put(mode, params);
+                chanModes.B.put(mode, params);
                 break;
             case C_CHANMODE:
-                getB_ChanModes().put(mode, params);
+                chanModes.C.put(mode, params);
                 break;
             case D_CHANMODE:
 
-                getD_ChanModes().add(mode);
+                chanModes.D.add(mode);
                 break;
         }
     }
@@ -172,7 +143,7 @@ public class IrcChannel extends SyncableObject<IrcChannel> {
         removeChannelMode(String.copyValueOf(new char[]{mode}), params);
     }
 
-    public void removeChannelMode(String mode, String params) {
+    public void removeChannelMode(@NonNull String mode, String params) {
         assertNotNull(network);
 
         Network.ChannelModeType type = network.channelModeType(mode);
@@ -180,17 +151,17 @@ public class IrcChannel extends SyncableObject<IrcChannel> {
             case NOT_A_CHANMODE:
                 return;
             case A_CHANMODE:
-                if (getA_ChanModes().containsKey(mode))
-                    getA_ChanModes().get(mode).removeAll(Collections.singleton(params));
+                if (chanModes.A.containsKey(mode))
+                    chanModes.A.get(mode).removeAll(Collections.singleton(params));
                 break;
             case B_CHANMODE:
-                getB_ChanModes().remove(mode);
+                chanModes.B.remove(mode);
                 break;
             case C_CHANMODE:
-                getB_ChanModes().remove(mode);
+                chanModes.C.remove(mode);
                 break;
             case D_CHANMODE:
-                getB_ChanModes().remove(mode);
+                chanModes.D.remove(mode);
                 break;
         }
     }
@@ -203,19 +174,19 @@ public class IrcChannel extends SyncableObject<IrcChannel> {
         return hasMode(String.copyValueOf(new char[]{mode}));
     }
 
-    public boolean hasMode(String mode) {
+    public boolean hasMode(@NonNull String mode) {
         assertNotNull(network);
 
         Network.ChannelModeType type = network.channelModeType(mode);
         switch (type) {
             case A_CHANMODE:
-                return getA_ChanModes().containsKey(mode);
+                return chanModes.A.containsKey(mode);
             case B_CHANMODE:
-                return getA_ChanModes().containsKey(mode);
+                return chanModes.B.containsKey(mode);
             case C_CHANMODE:
-                return getA_ChanModes().containsKey(mode);
+                return chanModes.C.containsKey(mode);
             case D_CHANMODE:
-                return getA_ChanModes().containsKey(mode);
+                return chanModes.D.contains(mode);
 
             default:
                 return false;
@@ -273,21 +244,61 @@ public class IrcChannel extends SyncableObject<IrcChannel> {
     }
 
     @Override
-    public void update(IrcChannel from) {
+    public void update(@NonNull IrcChannel from) {
         this.name = from.name;
         this.topic = from.topic;
         this.password = from.password;
         this.UserModes = from.UserModes;
-        this.ChanModes = from.ChanModes;
+        this.chanModes = from.chanModes;
         this.encrypted = from.encrypted;
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void update(@NonNull Map<String, QVariant> from) {
         update(IrcChannelSerializer.get().fromDatastream(from));
     }
 
-    public Map<String, Object> getChanModes() {
-        return ChanModes;
+    public ChanModes getChanModes() {
+        return chanModes;
+    }
+
+    public static class ChanModes {
+        @NonNull
+        public final Map<String, List<String>> A;
+        @NonNull
+        public final Map<String, String> B;
+        @NonNull
+        public final Map<String, String> C;
+        @NonNull
+        public final Set<String> D;
+
+        @SuppressWarnings("unchecked")
+        public ChanModes(@NonNull Map<String, Object> rawModes) {
+            A = (Map<String, List<String>>) rawModes.get("A");
+            B = (Map<String, String>) rawModes.get("B");
+            C = (Map<String, String>) rawModes.get("C");
+            D = new HashSet<>(Arrays.asList(((String) rawModes.get("D")).split("")));
+        }
+
+        @NonNull
+        public Map<String, Object> toMap() {
+            Map<String, Object> out = new HashMap<>();
+            out.put("A", A);
+            out.put("B", B);
+            out.put("C", C);
+            out.put("D", D);
+            return out;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return "ChanModes{" +
+                    "A=" + A +
+                    ", B=" + B +
+                    ", C=" + C +
+                    ", D=" + D +
+                    '}';
+        }
     }
 }

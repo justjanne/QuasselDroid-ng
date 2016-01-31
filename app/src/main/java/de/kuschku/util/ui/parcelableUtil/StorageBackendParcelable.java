@@ -94,12 +94,14 @@ public class StorageBackendParcelable extends StorageBackend implements Parcelab
             dest.writeInt(type.getValue());
             switch (type) {
                 case Int:
+                    assertNotNull(q.data);
                     dest.writeInt((Integer) q.data);
                     break;
                 case QString:
                     dest.writeString((String) q.data);
                     break;
                 case Bool:
+                    assertNotNull(q.data);
                     dest.writeInt(((Boolean) q.data) ? 1 : 0);
                     break;
                 default:

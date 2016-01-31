@@ -1,5 +1,6 @@
 package de.kuschku.util;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import junit.framework.Assert;
@@ -340,7 +341,7 @@ public class AndroidAssert extends Assert {
         }
     }
 
-    public static void assertEquals(int... elements) {
+    public static void assertEquals(@NonNull int... elements) {
         if (BuildConfig.DEBUG) {
             if (elements.length > 0) {
                 int first = elements[0];

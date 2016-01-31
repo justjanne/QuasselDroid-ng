@@ -48,7 +48,7 @@ public class WrappedChannel implements Flushable, ByteChannel, InterruptibleChan
         if (this.rawOut != null) this.out = new DataOutputStream(rawOut);
     }
 
-    public WrappedChannel(Socket s) throws IOException {
+    public WrappedChannel(@NonNull Socket s) throws IOException {
         this(s.getInputStream(), s.getOutputStream());
         this.socket = s;
     }

@@ -3,32 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/format_bold"
-        android:icon="?attr/ic_format_bold"
+        android:icon="?attr/iconFormatBold"
         app:showAsAction="always"
-        android:title="@string/format_bold" />
+        android:title="@string/formatBold" />
     <item
         android:id="@+id/format_italic"
-        android:icon="?attr/ic_format_italic"
+        android:icon="?attr/iconFormatItalic"
         app:showAsAction="always"
-        android:title="@string/format_italic" />
+        android:title="@string/formatItalic" />
     <item
         android:id="@+id/format_underline"
-        android:icon="?attr/ic_format_underline"
+        android:icon="?attr/iconFormatUnderline"
         app:showAsAction="always"
-        android:title="@string/format_underline" />
+        android:title="@string/formatUnderline" />
     <item
         android:id="@+id/format_paint"
-        android:icon="?attr/ic_format_paint"
+        android:icon="?attr/iconFormatPaint"
         app:showAsAction="always"
-        android:title="@string/format_color" />
+        android:title="@string/formatColor" />
     <item
         android:id="@+id/format_fill"
-        android:icon="?attr/ic_format_fill"
+        android:icon="?attr/iconFormatFill"
         app:showAsAction="always"
-        android:title="@string/format_fill" />
+        android:title="@string/formatFill" />
     <item
         android:id="@+id/action_history"
-        android:icon="?attr/ic_history"
+        android:icon="?attr/iconHistory"
         app:showAsAction="always"
-        android:title="@string/message_history" />
+        android:title="@string/labelHistory" />
 </menu>

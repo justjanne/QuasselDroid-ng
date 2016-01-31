@@ -39,7 +39,7 @@ public class BufferViewManager extends SyncableObject<BufferViewManager> {
     }
 
     @Override
-    public void update(BufferViewManager from) {
+    public void update(@NonNull BufferViewManager from) {
         this.BufferViews = from.BufferViews;
         for (int id : BufferViews.keySet()) {
             client.sendInitRequest("BufferViewConfig", String.valueOf(id));
@@ -47,7 +47,7 @@ public class BufferViewManager extends SyncableObject<BufferViewManager> {
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void update(@NonNull Map<String, QVariant> from) {
         update(BufferViewManagerSerializer.get().fromDatastream(from));
     }
 }

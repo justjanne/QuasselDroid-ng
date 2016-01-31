@@ -60,12 +60,12 @@
     <attr name="chatlineExpandedSize" />
 
     <!-- Format icons -->
-    <attr name="ic_format_bold" format="reference" />
-    <attr name="ic_format_italic" format="reference" />
-    <attr name="ic_format_underline" format="reference" />
-    <attr name="ic_format_paint" format="reference" />
-    <attr name="ic_format_fill" format="reference" />
-    <attr name="ic_history" format="reference" />
+    <attr name="iconFormatBold" format="reference" />
+    <attr name="iconFormatItalic" format="reference" />
+    <attr name="iconFormatUnderline" format="reference" />
+    <attr name="iconFormatPaint" format="reference" />
+    <attr name="iconFormatFill" format="reference" />
+    <attr name="iconHistory" format="reference" />
 
     <attr name="cardStyle" format="reference" />
 </resources>

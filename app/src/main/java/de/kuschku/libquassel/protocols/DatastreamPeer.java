@@ -297,7 +297,7 @@ public class DatastreamPeer implements RemotePeer {
                 } else {
                     handlePackedFunc(data);
                 }
-            } catch (BufferUnderflowException | BufferOverflowException e) {
+            } catch (@NonNull BufferUnderflowException | BufferOverflowException e) {
                 Helper.printHexDump(buffer.array());
                 busProvider.sendEvent(new GeneralErrorEvent(e));
             } catch (Exception e) {

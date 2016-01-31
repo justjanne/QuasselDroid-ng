@@ -57,15 +57,20 @@ public class Client {
     @NonNull
     private final BusProvider busProvider;
     private long lag;
-    private ConnectionChangeEvent.Status connectionStatus;
+    @NonNull
+    private ConnectionChangeEvent.Status connectionStatus = ConnectionChangeEvent.Status.DISCONNECTED;
+    @Nullable
     private ClientInitAck core;
     @Nullable
     private SessionState state;
+    @Nullable
     private BufferViewManager bufferViewManager;
+    @Nullable
     private BufferSyncer bufferSyncer;
-    private ClientData clientData;
+    @Nullable
     private IgnoreListManager ignoreListManager;
-    private Map<Integer, Identity> Identities = new HashMap<>();
+    @NonNull
+    private final Map<Integer, Identity> Identities = new HashMap<>();
 
     public Client(@NonNull final BusProvider busProvider) {
         this(new SimpleBacklogManager(busProvider), busProvider);
@@ -221,24 +226,22 @@ public class Client {
         }
     }
 
+    @Nullable
     public BufferSyncer getBufferSyncer() {
         return bufferSyncer;
     }
 
-    public void setBufferSyncer(BufferSyncer bufferSyncer) {
+    public void setBufferSyncer(@Nullable BufferSyncer bufferSyncer) {
         this.bufferSyncer = bufferSyncer;
     }
 
+    @Nullable
     public ClientInitAck getCore() {
         return core;
     }
 
-    public void setCore(ClientInitAck core) {
+    public void setCore(@Nullable ClientInitAck core) {
         this.core = core;
-    }
-
-    public void setClientData(ClientData clientData) {
-        this.clientData = clientData;
     }
 
     @NonNull
@@ -261,7 +264,7 @@ public class Client {
         busProvider.sendEvent(new ConnectionChangeEvent(connectionStatus));
     }
 
-    public void login(String username, String password) {
+    public void login(@NonNull String username, @NonNull String password) {
         busProvider.dispatch(new HandshakeFunction(new ClientLogin(
                 username, password
         )));
@@ -281,11 +284,12 @@ public class Client {
         busProvider.sendEvent(new LagChangedEvent(lag));
     }
 
+    @Nullable
     public IgnoreListManager getIgnoreListManager() {
         return ignoreListManager;
     }
 
-    public void setIgnoreListManager(IgnoreListManager ignoreListManager) {
+    public void setIgnoreListManager(@Nullable IgnoreListManager ignoreListManager) {
         this.ignoreListManager = ignoreListManager;
     }
 

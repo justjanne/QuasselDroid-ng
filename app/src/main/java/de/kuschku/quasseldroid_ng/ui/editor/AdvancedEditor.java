@@ -2,6 +2,7 @@ package de.kuschku.quasseldroid_ng.ui.editor;
 
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
@@ -11,8 +12,9 @@ import android.widget.EditText;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 
 public class AdvancedEditor {
-    private EditText editText;
-    private FormattingHelper helper;
+    private final EditText editText;
+    @NonNull
+    private final FormattingHelper helper;
 
     public AdvancedEditor(AppContext context, EditText editText) {
         this.helper = new FormattingHelper(context);
@@ -115,6 +117,7 @@ public class AdvancedEditor {
         }
     }
 
+    @NonNull
     public String toFormatString() {
         return helper.toEscapeCodes(editText.getText());
     }

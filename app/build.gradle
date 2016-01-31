@@ -36,7 +36,7 @@ if (versionPropsFile.canRead()) {
 
   versionProps.load(new FileInputStream(versionPropsFile))
   def runTasks = gradle.startParameter.taskNames
-  versionBuild = Integer.valueOf(versionProps['VERSION_BUILD'])
+  versionBuild = Integer.valueOf(versionProps['VERSION_BUILD'].toString())
   if ('assemble' in runTasks || 'assembleRelease' in runTasks || 'aR' in runTasks) {
     versionBuild = versionBuild + 1
   }

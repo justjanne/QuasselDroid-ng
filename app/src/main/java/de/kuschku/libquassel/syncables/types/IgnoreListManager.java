@@ -16,11 +16,12 @@ import de.kuschku.libquassel.syncables.serializers.IgnoreListManagerSerializer;
 import static de.kuschku.util.AndroidAssert.assertEquals;
 
 public class IgnoreListManager extends SyncableObject<IgnoreListManager> {
-    List<IgnoreRule> ignoreRules = new ArrayList<>();
+    @NonNull
+    final List<IgnoreRule> ignoreRules = new ArrayList<>();
 
-    public IgnoreListManager(List<Integer> scope, List<Integer> ignoreType,
-                             List<Boolean> isActive, List<String> scopeRule, List<Boolean> isRegEx,
-                             List<Integer> strictness, List<String> ignoreRule) {
+    public IgnoreListManager(@NonNull List<Integer> scope, @NonNull List<Integer> ignoreType,
+                             @NonNull List<Boolean> isActive, @NonNull List<String> scopeRule, @NonNull List<Boolean> isRegEx,
+                             @NonNull List<Integer> strictness, @NonNull List<String> ignoreRule) {
         assertEquals(scope.size(), ignoreType.size(), isActive.size(), scopeRule.size(), isRegEx.size(), strictness.size(), ignoreRule.size());
 
         for (int i = 0; i < scope.size(); i++) {
@@ -47,7 +48,7 @@ public class IgnoreListManager extends SyncableObject<IgnoreListManager> {
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void update(@NonNull Map<String, QVariant> from) {
         update(IgnoreListManagerSerializer.get().fromDatastream(from));
     }
 
@@ -56,13 +57,13 @@ public class IgnoreListManager extends SyncableObject<IgnoreListManager> {
     }
 
     public static class IgnoreRule {
-        private Scope scope;
-        private Type ignoreType;
-        private boolean isActive;
-        private String scopeRule;
-        private boolean isRegEx;
-        private Strictness strictness;
-        private String ignoreRule;
+        private final Scope scope;
+        private final Type ignoreType;
+        private final boolean isActive;
+        private final String scopeRule;
+        private final boolean isRegEx;
+        private final Strictness strictness;
+        private final String ignoreRule;
 
         public IgnoreRule(Integer scope, Integer ignoreType, boolean isActive, String scopeRule, boolean isRegEx, Integer strictness, String ignoreRule) {
             this(
@@ -98,6 +99,7 @@ public class IgnoreListManager extends SyncableObject<IgnoreListManager> {
                 this.id = id;
             }
 
+            @NonNull
             public static Strictness of(int id) {
                 switch (id) {
                     case 0:
@@ -124,6 +126,7 @@ public class IgnoreListManager extends SyncableObject<IgnoreListManager> {
                 this.id = id;
             }
 
+            @NonNull
             public static Type of(int id) {
                 switch (id) {
                     case 0:
@@ -150,6 +153,7 @@ public class IgnoreListManager extends SyncableObject<IgnoreListManager> {
                 this.id = id;
             }
 
+            @NonNull
             public static Scope of(int id) {
                 switch (id) {
                     case 0:

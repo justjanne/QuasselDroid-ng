@@ -1,5 +1,7 @@
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
+import android.support.annotation.NonNull;
+
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
@@ -15,10 +17,10 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class BufferViewConfigWrapper {
     private Drawer drawer;
-    private BufferViewConfig config;
-    private ObservableSortedList<NetworkItem> networks = new ObservableSortedList<>(NetworkItem.class, new ObservableSortedList.ItemComparator<NetworkItem>() {
+    @NonNull
+    private final ObservableSortedList<NetworkItem> networks = new ObservableSortedList<>(NetworkItem.class, new ObservableSortedList.ItemComparator<NetworkItem>() {
         @Override
-        public int compare(NetworkItem o1, NetworkItem o2) {
+        public int compare(@NonNull NetworkItem o1, @NonNull NetworkItem o2) {
             return o1.getName().getText().compareTo(o2.getName().getText());
         }
 
@@ -28,13 +30,12 @@ public class BufferViewConfigWrapper {
         }
 
         @Override
-        public boolean areItemsTheSame(NetworkItem item1, NetworkItem item2) {
+        public boolean areItemsTheSame(@NonNull NetworkItem item1, @NonNull NetworkItem item2) {
             return item1.getNetwork().getNetworkId() == item2.getNetwork().getNetworkId();
         }
     });
 
-    public BufferViewConfigWrapper(AppContext context, BufferViewConfig config, Drawer drawer) {
-        this.config = config;
+    public BufferViewConfigWrapper(@NonNull AppContext context, @NonNull BufferViewConfig config, Drawer drawer) {
         this.drawer = drawer;
         config.doLateInit();
         networks.clear();
@@ -90,6 +91,7 @@ public class BufferViewConfigWrapper {
         this.drawer = drawer;
     }
 
+    @NonNull
     public ArrayList<IDrawerItem> getItems() {
         ArrayList<IDrawerItem> items = new ArrayList<>();
         for (IDrawerItem item : networks) {

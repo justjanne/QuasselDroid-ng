@@ -13,12 +13,14 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.NetworkConfig;
 
 public class NetworkConfigSerializer implements ObjectSerializer<NetworkConfig> {
-    private static NetworkConfigSerializer serializer = new NetworkConfigSerializer();
+    @NonNull
+    private static final NetworkConfigSerializer serializer = new NetworkConfigSerializer();
 
     private NetworkConfigSerializer() {
 
     }
 
+    @NonNull
     public static NetworkConfigSerializer get() {
         return serializer;
     }

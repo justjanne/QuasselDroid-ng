@@ -18,8 +18,11 @@ public class BusProvider {
     @NonNull
     private final String id;
 
+    @NonNull
     private final BusHandler handleHandler = new BusHandler("QHANDLE");
+    @NonNull
     private final BusHandler dispatchHandler = new BusHandler("QDISPATCH");
+    @NonNull
     private final BusHandler eventHandler = new BusHandler("QEVENT");
 
     public BusProvider() {
@@ -44,6 +47,7 @@ public class BusProvider {
         this.event.post(o);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "BusProvider{" +

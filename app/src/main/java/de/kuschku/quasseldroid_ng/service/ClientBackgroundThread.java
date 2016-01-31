@@ -39,7 +39,6 @@ public class ClientBackgroundThread implements Runnable {
         this.certificateManager = new SQLiteCertificateManager(context);
         this.connection = new CoreConnection(address, CLIENT_DATA, provider, certificateManager);
         this.handler = new ProtocolHandler(provider);
-        this.handler.client.setClientData(CLIENT_DATA);
         this.connection.setClient(handler.client);
     }
 

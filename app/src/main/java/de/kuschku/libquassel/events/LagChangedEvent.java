@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.events;
 
+import android.support.annotation.NonNull;
+
 public class LagChangedEvent {
     public final long lag;
 
@@ -7,6 +9,7 @@ public class LagChangedEvent {
         this.lag = lag;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "LagChangedEvent{" +

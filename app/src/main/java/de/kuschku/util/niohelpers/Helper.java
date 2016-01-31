@@ -1,5 +1,6 @@
 package de.kuschku.util.niohelpers;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 public class Helper {
@@ -8,7 +9,7 @@ public class Helper {
 
     }
 
-    public static void printHexDump(byte[] data) {
+    public static void printHexDump(@NonNull byte[] data) {
         Log.e("HexDump", "Hexdump following: ");
         String bytes = "";
         String text = "";

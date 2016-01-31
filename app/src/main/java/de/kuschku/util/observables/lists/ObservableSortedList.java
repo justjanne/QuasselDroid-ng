@@ -19,6 +19,7 @@ import de.kuschku.util.observables.callbacks.wrappers.MultiUICallbackWrapper;
 
 import static de.kuschku.util.AndroidAssert.assertTrue;
 
+@SuppressWarnings("unchecked")
 public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
     @NonNull
     private final SortedList<T> list;
@@ -213,6 +214,7 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
         callback.notifyItemChanged(position);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return Arrays.toString(toArray());
@@ -234,35 +236,31 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
 
         @Override
         public void onInserted(int position, int count) {
-            if (callback != null)
-                if (count == 1)
-                    callback.notifyItemInserted(position);
-                else
-                    callback.notifyItemRangeInserted(position, count);
+            if (count == 1)
+                callback.notifyItemInserted(position);
+            else
+                callback.notifyItemRangeInserted(position, count);
         }
 
         @Override
         public void onRemoved(int position, int count) {
-            if (callback != null)
-                if (count == 1)
-                    callback.notifyItemRemoved(position);
-                else
-                    callback.notifyItemRangeRemoved(position, count);
+            if (count == 1)
+                callback.notifyItemRemoved(position);
+            else
+                callback.notifyItemRangeRemoved(position, count);
         }
 
         @Override
         public void onMoved(int fromPosition, int toPosition) {
-            if (callback != null)
-                callback.notifyItemMoved(fromPosition, toPosition);
+            callback.notifyItemMoved(fromPosition, toPosition);
         }
 
         @Override
         public void onChanged(int position, int count) {
-            if (callback != null)
-                if (count == 1)
-                    callback.notifyItemChanged(position);
-                else
-                    callback.notifyItemRangeChanged(position, count);
+            if (count == 1)
+                callback.notifyItemChanged(position);
+            else
+                callback.notifyItemRangeChanged(position, count);
         }
 
         @Override

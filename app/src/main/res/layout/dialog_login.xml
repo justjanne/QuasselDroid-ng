@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/username"
-            android:hint="Username"
+            android:hint="@string/labelUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text" />
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content">
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/password"
-            android:hint="Password"
+            android:hint="@string/labelPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword" />

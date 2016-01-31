@@ -23,16 +23,6 @@ public class QuasselService extends Service {
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_STICKY;
     }

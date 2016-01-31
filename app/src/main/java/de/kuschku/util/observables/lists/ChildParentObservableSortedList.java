@@ -10,8 +10,8 @@ import de.kuschku.util.observables.callbacks.wrappers.MultiUIChildParentCallback
 import de.kuschku.util.observables.callbacks.wrappers.ParentUICallbackWrapper;
 
 public class ChildParentObservableSortedList<T extends IObservable<UIChildCallback>> extends ObservableSortedList<T> {
-
-    private MultiUIChildParentCallback callback = MultiUIChildParentCallback.of();
+    @NonNull
+    private final MultiUIChildParentCallback callback = MultiUIChildParentCallback.of();
 
     public ChildParentObservableSortedList(@NonNull Class<T> cl, @NonNull ItemComparator<T> comparator) {
         super(cl, comparator);
@@ -47,21 +47,6 @@ public class ChildParentObservableSortedList<T extends IObservable<UIChildCallba
         }
 
         @Override
-        public void notifyItemChanged(int position) {
-            super.notifyItemChanged(position);
-        }
-
-        @Override
-        public void notifyItemRemoved(int position) {
-            super.notifyItemRemoved(position);
-        }
-
-        @Override
-        public void notifyItemMoved(int from, int to) {
-            super.notifyItemMoved(from, to);
-        }
-
-        @Override
         public void notifyItemRangeInserted(int position, int count) {
             super.notifyItemRangeInserted(position, count);
             for (int i = position; i < position + count; i++) {
@@ -69,14 +54,5 @@ public class ChildParentObservableSortedList<T extends IObservable<UIChildCallba
             }
         }
 
-        @Override
-        public void notifyItemRangeChanged(int position, int count) {
-            super.notifyItemRangeChanged(position, count);
-        }
-
-        @Override
-        public void notifyItemRangeRemoved(int position, int count) {
-            super.notifyItemRangeRemoved(position, count);
-        }
     }
 }

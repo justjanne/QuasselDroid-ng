@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/host"
-            android:hint="Hostname"
+            android:hint="@string/labelHostname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textUri" />
@@ -24,8 +24,7 @@
         android:layout_height="wrap_content">
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/port"
-            android:hint="Port"
-            android:text="4242"
+            android:hint="@string/labelPort"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number" />

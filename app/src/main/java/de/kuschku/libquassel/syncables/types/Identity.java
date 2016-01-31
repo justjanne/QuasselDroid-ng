@@ -268,7 +268,7 @@ public class Identity extends SyncableObject<Identity> {
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void update(@NonNull Map<String, QVariant> from) {
         update(IdentitySerializer.get().fromDatastream(from));
     }
 }

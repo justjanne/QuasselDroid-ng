@@ -1,6 +1,5 @@
 package de.kuschku.quasseldroid_ng.ui.chat.chatview;
 
-import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -24,14 +23,14 @@ public class ChatMessageRenderer {
     private MessageStyleContainer plainStyle;
 
     @NonNull
-    private AppContext context;
+    private final AppContext context;
 
-    public ChatMessageRenderer(@NonNull Context ctx, @NonNull AppContext context) {
+    public ChatMessageRenderer(@NonNull AppContext context) {
         this.context = context;
         setTheme(context);
     }
 
-    public void setTheme(AppContext context) {
+    public void setTheme(@NonNull AppContext context) {
         this.helper = new IrcFormatHelper(context);
 
         this.highlightStyle = new MessageStyleContainer(
@@ -84,7 +83,7 @@ public class ChatMessageRenderer {
     }
 
     @NonNull
-    private CharSequence getBufferName(Message message) {
+    private CharSequence getBufferName(@NonNull Message message) {
         assertNotNull(context.getClient());
         Buffer buffer = context.getClient().getBuffer(message.bufferInfo.id);
         assertNotNull(buffer);

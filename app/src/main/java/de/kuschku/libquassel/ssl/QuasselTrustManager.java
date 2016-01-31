@@ -21,7 +21,7 @@ public class QuasselTrustManager implements X509TrustManager {
     @NonNull
     private final CertificateManager certificateManager;
     @NonNull
-    private ServerAddress address;
+    private final ServerAddress address;
 
     public QuasselTrustManager(@NonNull X509TrustManager wrapped, @NonNull CertificateManager certificateManager, @NonNull ServerAddress address) {
         this.wrapped = wrapped;
@@ -29,6 +29,7 @@ public class QuasselTrustManager implements X509TrustManager {
         this.address = address;
     }
 
+    @NonNull
     public static QuasselTrustManager fromFactory(@NonNull TrustManagerFactory factory, @NonNull CertificateManager certificateManager, @NonNull ServerAddress address) throws GeneralSecurityException {
         TrustManager[] managers = factory.getTrustManagers();
         for (TrustManager manager : managers) {
@@ -39,6 +40,7 @@ public class QuasselTrustManager implements X509TrustManager {
         throw new GeneralSecurityException("Couldn’t find trustmanager provided by factory");
     }
 
+    @NonNull
     public static QuasselTrustManager fromDefault(@NonNull CertificateManager certificateManager, @NonNull ServerAddress address) throws GeneralSecurityException {
         TrustManagerFactory factory = TrustManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         factory.init((KeyStore) null);

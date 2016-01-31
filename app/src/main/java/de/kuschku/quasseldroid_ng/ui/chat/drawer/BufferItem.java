@@ -1,6 +1,8 @@
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
 import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
@@ -27,13 +29,17 @@ import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 import de.kuschku.util.ui.MessageUtil;
 
 public class BufferItem extends SecondaryDrawerItem implements IObservable<GeneralCallback>, GeneralCallback {
+    @NonNull
     private final Buffer buffer;
+    @NonNull
     private final AppContext context;
+    @NonNull
     private final ObservableComparableSortedList<Message> notifications;
 
-    private GeneralCallbackWrapper callback = new GeneralCallbackWrapper();
+    @NonNull
+    private final GeneralCallbackWrapper callback = new GeneralCallbackWrapper();
 
-    public BufferItem(Buffer buffer, AppContext context) {
+    public BufferItem(@NonNull Buffer buffer, @NonNull AppContext context) {
         this.buffer = buffer;
         this.context = context;
         notifications = context.getClient().getNotificationManager().getNotifications(buffer.getInfo().id);
@@ -49,6 +55,7 @@ public class BufferItem extends SecondaryDrawerItem implements IObservable<Gener
         callback.notifyChanged();
     }
 
+    @NonNull
     @Override
     public StringHolder getBadge() {
         return new StringHolder(String.valueOf(notifications.size()));
@@ -79,14 +86,16 @@ public class BufferItem extends SecondaryDrawerItem implements IObservable<Gener
         return super.getDescription();
     }
 
+    @Nullable
     @Override
     public StringHolder getName() {
         if (buffer instanceof StatusBuffer)
-            return new StringHolder(context.getThemeUtil().translations.title_status_buffer);
+            return new StringHolder(context.getThemeUtil().translations.titleStatusBuffer);
         else
             return new StringHolder(buffer.getName());
     }
 
+    @NonNull
     @Override
     public ImageHolder getIcon() {
         if (buffer instanceof ChannelBuffer) {
@@ -115,6 +124,7 @@ public class BufferItem extends SecondaryDrawerItem implements IObservable<Gener
         return buffer.getStatus() == BufferInfo.BufferStatus.ONLINE;
     }
 
+    @NonNull
     @Override
     public ColorHolder getIconColor() {
         return buffer.getStatus() == BufferInfo.BufferStatus.ONLINE ?
@@ -122,6 +132,7 @@ public class BufferItem extends SecondaryDrawerItem implements IObservable<Gener
                 new ColorHolder();
     }
 
+    @NonNull
     @Override
     public ColorHolder getDescriptionTextColor() {
         return ColorHolder.fromColor(context.getThemeUtil().res.colorForegroundSecondary);
@@ -137,6 +148,7 @@ public class BufferItem extends SecondaryDrawerItem implements IObservable<Gener
         this.callback.removeCallback(callback);
     }
 
+    @NonNull
     public Buffer getBuffer() {
         return buffer;
     }
@@ -147,7 +159,7 @@ public class BufferItem extends SecondaryDrawerItem implements IObservable<Gener
     }
 
     @Override
-    public void onPostBindView(IDrawerItem drawerItem, View view) {
+    public void onPostBindView(IDrawerItem drawerItem, @NonNull View view) {
         super.onPostBindView(drawerItem, view);
 
         if (getDescription() != null && getDescription().getText() != null)

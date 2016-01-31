@@ -101,7 +101,7 @@ public class NetworkConfig extends SyncableObject<NetworkConfig> {
     }
 
     @Override
-    public void update(NetworkConfig from) {
+    public void update(@NonNull NetworkConfig from) {
         this.autoWhoNickLimit = from.autoWhoNickLimit;
         this.autoWhoDelay = from.autoWhoDelay;
         this.autoWhoEnabled = from.autoWhoEnabled;
@@ -113,7 +113,7 @@ public class NetworkConfig extends SyncableObject<NetworkConfig> {
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void update(@NonNull Map<String, QVariant> from) {
         update(NetworkConfigSerializer.get().fromDatastream(from));
     }
 }

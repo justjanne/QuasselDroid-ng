@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+@SuppressWarnings("unchecked")
 public class Storable {
     public boolean onRestoreInstanceState(@NonNull Bundle in) {
         try {

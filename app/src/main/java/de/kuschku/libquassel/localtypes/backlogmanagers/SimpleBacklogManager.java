@@ -46,7 +46,7 @@ public class SimpleBacklogManager extends BacklogManager<SimpleBacklogManager> {
     }
 
     public void requestBacklog(int bufferId, int from, int to, int count, int extra) {
-        busProvider.dispatch(new SyncFunction<>("BacklogManager", "", "requestBacklog", Lists.newArrayList(
+        busProvider.dispatch(new SyncFunction<>("BacklogManager", "", "requestBacklog", Lists.<QVariant>newArrayList(
                 new QVariant<>("BufferId", bufferId),
                 new QVariant<>("MsgId", from),
                 new QVariant<>("MsgId", to),
@@ -56,6 +56,7 @@ public class SimpleBacklogManager extends BacklogManager<SimpleBacklogManager> {
     }
 
     public void receiveBacklog(@IntRange(from = 0) int bufferId, int from, int to, int count, int extra, @NonNull List<Message> messages) {
+        assertNotNull(client);
         get(bufferId).addAll(messages);
         client.getNotificationManager().receiveMessages(messages);
 
@@ -64,6 +65,7 @@ public class SimpleBacklogManager extends BacklogManager<SimpleBacklogManager> {
 
     @Override
     public void displayMessage(@IntRange(from = 0) int bufferId, @NonNull Message message) {
+        assertNotNull(client);
         ObservableSortedList<Message> messages = get(bufferId);
         assertNotNull(messages);
 
@@ -81,10 +83,7 @@ public class SimpleBacklogManager extends BacklogManager<SimpleBacklogManager> {
     @Override
     public void requestMoreBacklog(@IntRange(from = 0) int bufferId, int count) {
         ObservableSortedList<Message> backlog = backlogs.get(bufferId);
-        int messageId =
-                (backlog == null) ? -1 :
-                        (backlog.last() == null) ? -1 :
-                                backlog.last().messageId;
+        int messageId = (backlog == null || backlog.last() == null) ? -1 : backlog.last().messageId;
 
         requestBacklog(bufferId, -1, messageId, count, 0);
     }

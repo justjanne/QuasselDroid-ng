@@ -9,6 +9,7 @@ import java.util.Iterator;
 import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.wrappers.MultiElementCallbackWrapper;
 
+@SuppressWarnings("unchecked")
 public class ObservableElementList<T> extends ArrayList<T> implements IObservableList<ElementCallback<T>, T> {
     @NonNull
     private final MultiElementCallbackWrapper<T> callback = MultiElementCallbackWrapper.<T>of();

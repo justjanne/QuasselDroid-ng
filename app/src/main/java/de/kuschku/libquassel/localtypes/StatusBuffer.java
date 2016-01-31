@@ -29,6 +29,7 @@ public class StatusBuffer implements Buffer {
         return network.getNetworkName();
     }
 
+    @NonNull
     @Override
     public BufferInfo.BufferStatus getStatus() {
         return network.isConnected() ? BufferInfo.BufferStatus.ONLINE : BufferInfo.BufferStatus.OFFLINE;

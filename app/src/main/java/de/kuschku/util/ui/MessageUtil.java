@@ -1,6 +1,7 @@
 package de.kuschku.util.ui;
 
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -18,7 +19,8 @@ public class MessageUtil {
     /**
      * Parse mIRC style codes in IrcMessage
      */
-    public static SpannableString parseStyleCodes(ThemeUtil themeUtil, String content, boolean parse) {
+    @NonNull
+    public static SpannableString parseStyleCodes(@NonNull ThemeUtil themeUtil, @NonNull String content, boolean parse) {
         if (!parse) {
             return new SpannableString(content
                     .replaceAll("\\x02", "")
@@ -46,7 +48,6 @@ public class MessageUtil {
         int start, end, endSearchOffset, startIndicatorLength, style, fg, bg;
         while (true) {
             content = newString.toString();
-            start = -1;
             end = -1;
             startIndicatorLength = 1;
             style = 0;
