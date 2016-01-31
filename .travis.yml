@@ -1,0 +1,47 @@
+language: android
+script:
+- "./gradlew clean assembleDebug assembleRelease -x lintVitalRelease check"
+android:
+  components:
+  - build-tools-23.0.2
+  - android-23
+  - extra-android-m2repository
+before_cache:
+- rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+cache:
+  directories:
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
+  sudo: false
+before_install:
+- cat > app/signing.gradle.base64 <<EOL                                                                                                                                             
+  rl+qdMF/++Uw41Vcpyrc+oSGuJKg2iJIgvgOlQAPzyouSauThV/RB4MXZd5WPFd2rKPC0U5NQdK8
+  FgrdohEubukXtD8lHtddVqBfT94YEeGQqQsdWtfjpJqzp85LJRQ2VcxGuAvWv7KhwNBM0QG/DDCO
+  CB7OlNBV5gEbS0UgPWgf58XVpOqurHe8rbHgeetGMWZyHXpcMCKsJIproct8lzpamFXv+87qsHot
+  szoXarztxNyX94B3ku7Uy1MYPLb857AiFG016vlLLHtE8jGoxt1C7rdn2Vp6q9Q8HhbZohEldSdx
+  1k1Jq6N5qxA9ZeUTJhdlafHalkRhqiOopR2RPWrur2k9X4k/Agzd8Ht7KsyTYwNPfa1yphFzqAA6
+  FmA9Fuz3wa9exIWrI27hQxJR4fbBouM6cB5tmHnVVTC1FSHCx5kWnZatmEHshCPI1MHC+XNziaXQ
+  lJiGnPYGiJZ9YR+a6ZoMYejCDt9UEPz7JWXYz/UQJKVYe4uwVcoYUA42E4YzgsXaHIc2ZciAZEPc
+  eqcvHtHBhshZ7Hzy5cePRRXztyWcJZ6UtRaeKgliYb9GRoZSdTWXmbZ3+6f1fhQqLiSMBCFFmRKS
+  /GnMcXagh722OzCyNfUbWWYVoNLEMz4RMZWewxdhotRQX2K+3ikrQz22V7xCjB7zEUP6cvQLM3kw
+  1VY+sYoa9IiOWt1KDTMXmsnrAkmR3EXmMHrHeQBhf4K52wk0GHvlfDrb7jm9Q5v98DvE6Vu1XQpL
+  DKzVuM1SQSCEX5fo9UQH5JkOqUQ+ERdWEAI8KEQKQ/Vca5p5C0qJv47jQS2LVH8blJAZy5OVdkou
+  MmTk/4tBgq0gfm64wKyaqh/oTHAsDe0BC5CJ09z3dctJs/lAIOdUyHUjUij7Ls3Wbi0ob6mbW9nO
+  n0Hq0HXTw06kIS2+fttB0GreHyj81qVNEG/RCVYqKcuCVvJGcbZOXWcTpF+2X14rrF05026lHQhU
+  bjOPEQQ/8ZKX9TBn9kIfobW6Hbu+WG/sS1JwkDRS2JbM9/6PE74RakSMaP37HYoWZ4+GEGSuTjmX
+  HwDuyG3Wp6TSFDUT23EBM6NQ7oeTkjOryaBk+H1X4P38vKmJ+tEqZdtbkjZ11IADc0YljicITVmC
+  VUXbN7FV8WNQ3nS8V+xjQHCJrNyyUaH5tVajfoMosIsHdDP4wUVWV4BHw6UUy9UDSGmcmGDOoUyD
+  tG50s/KKJavyuT4rSm4aCmdb5VFJY5CImL6GM4BFsMcoBYyIooz/XU01kn1ycTRbISmQadtyGrmJ
+  x7CFYJYQlMUCC5MzZjQ4RlmWk9XLaXHzUISU92sMiT8r2zx8tf/dYeV6KVfD8QqhFpQU7CSuYWQf
+  yDUllDWsF8844vNIIrcAuMFxYydVUBU9WpucFPx75IIZIeEh0r9DPsmpfSpl7yipfOzhh0uQYxwk
+  ljUEck9Is9ibSBJJO589bTLY9l0qv2ZCFR9dqWYZNVag3IWhHjOAWFuBNwhKYIHTc/QDrH65DaP9
+  xBKdY7p30xsuxSjZjl6vuAECLmu3/qu8olJ5dST1YDfPzMxFfUTCPLdjbMttlaUG/GBbNgHYPOYf
+  Yxq+ZkCcUia6q44h/i8kxAMrVzULkQ4WSJ55KSa6UpDtdRBlTCQnsUNRvesuEry06q2jzrS4z57j
+  iALZy7FWxlVS23UX9lWWDnszciU7+OT27Ab9BLINqDzTd5SUx+LXD4CnxED89Tbbi3pxit3PwHsj
+  oZFJRYFIyOyqXPzOVRnMTCqzUtUDKKCrkFooAVHZS3nmqMRuoAjypf7L7JQCsaL7XR3PkzpA07Za
+  X8m6LOTiRNs5l7BubEV/lcBPnN5VhOdwlmydNsWsbtaNmo6RGRGBvbDMw/QYzu691nilN2I7egoH
+  wXsx0QPHfWYRDtjr2g==
+  EOL
+- base64 -d app/signing.gradle.base64 > app/signing.gradle.enc
+- openssl aes-256-cbc -K $encrypted_0794f823ff24_key -iv $encrypted_0794f823ff24_iv
+  -in signing.gradle.enc -out app/signing.gradle -d
