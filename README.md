@@ -4,6 +4,8 @@ Quassel is a distributed, decentralized IRC client, written using C++ and Qt.
 QuasselDroid is a pure-java client for the Quassel core, allowing you to connect
 to your Quassel core using your Android ™ phone.
 
+*Inspired by and based on [QuasselDroid](https://github.com/sandsmark/QuasselDroid)*
+
 ##Build Requirements
 
 QuasselDroid requires you to have the latest version of gradle installed, and 
