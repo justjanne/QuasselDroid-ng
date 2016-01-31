@@ -15,15 +15,16 @@ cache:
   - "$HOME/.gradle/wrapper/"
   sudo: false
 before_install:
-- export JAVA7_HOME=/usr/lib/jvm/java-7-oracle
-- export JAVA8_HOME=/usr/lib/jvm/java-8-oracle
-- export JAVA_HOME=$JAVA7_HOME
-- openssl aes-256-cbc -K $encrypted_0794f823ff24_key -iv $encrypted_0794f823ff24_iv
+  - export JAVA7_HOME=/usr/lib/jvm/java-7-oracle
+  - export JAVA8_HOME=/usr/lib/jvm/java-8-oracle
+  - export JAVA_HOME=$JAVA7_HOME
+  - openssl aes-256-cbc -K $encrypted_0794f823ff24_key -iv $encrypted_0794f823ff24_iv
   -in signing.gradle.enc -out app/signing.gradle -d
 deploy:
   provider: releases
   api_key:
     secure: ZR2AHNNHHn9WS/kiP3XYPFA78hstvPdpJBUadanXPEoFzi2nGvoZTlhLckD4sOPGycDmKjrwJ3aTK8b0ASV++7i7BFk/VZ+fnwL2P2aoiiXA+XDJFfGLmocwsMz6YAntNww4vaKynNcOU2tTXTdC7m0l0EF6EVZ65a43Dz7ta47EcedNjSluoeCXlevwPmNLFJRa2XpZggCCNBj2YwcFzMWJd4k93AlAwWlYVifBRGdeHyvWztmvr/djHA5x0ruF7jMYLEv7haqbiw35WGPW9h5R0muEmjNaf3rKwyFfnX6obpLS/ltZH1usnrkTO646D+2WPQR7T0N+3y4//KJ7nYken+O5LQV0c7Bubztr23cP7YUmf6/dePlhmXXQPNeifBPRxqhRMdA5X3QirP/EdII4rlWpsGnGmLxPdmz6UcfpjFDg2QywAih/udrOC0PdjdspOaJAoOItccgE0L3eGvCvqtyFMpps0/hhOxJrAXS6w9SSfbK9uT+uL3KNo0MWa3xoBb721GScs7EVBLWzP3ptMB06yHrpSr1gfQQ+4EJ5o+FC26sD8Chpi6f/DLjuB6TbwrOApXeXrNSUQMe4zQmBgPbAzKpWmIMHsgPYYigLo9qvAPG8sk2M6em0j3fmF1qlnCtiXLO6qmR+6QC9aICJefg1XKKNbIyrb889wlw=
+  file_glob: true
   file: app/build/outputs/apk/QuasselDroidNG-release-*-build*.apk
   on:
     repo: justjanne/QuasselDroid-ng
