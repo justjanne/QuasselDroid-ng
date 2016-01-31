@@ -202,10 +202,10 @@ public class LegacyPeer implements RemotePeer {
                             busProvider.handle(UnpackedInitDataFunctionSerializer.get().deserialize((List<QVariant>) data.data));
                             break;
                         case HEARTBEAT:
-                            busProvider.handle(HeartbeatSerializer.get().deserialize((List<QVariant>) data));
+                            busProvider.handle(HeartbeatSerializer.get().deserialize((List<QVariant>) data.data));
                             break;
                         case HEARTBEATREPLY:
-                            busProvider.handle(HeartbeatReplySerializer.get().deserialize((List<QVariant>) data));
+                            busProvider.handle(HeartbeatReplySerializer.get().deserialize((List<QVariant>) data.data));
                             break;
                         default:
                             busProvider.sendEvent(new GeneralErrorEvent("Unknown package received: " + data));

@@ -42,6 +42,8 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,6 +61,7 @@ import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.LagChangedEvent;
 import de.kuschku.libquassel.events.UnknownCertificateEvent;
+import de.kuschku.libquassel.functions.types.Heartbeat;
 import de.kuschku.libquassel.localtypes.Buffer;
 import de.kuschku.libquassel.localtypes.ChannelBuffer;
 import de.kuschku.libquassel.localtypes.backlogmanagers.BacklogFilter;
@@ -88,38 +91,76 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 @UiThread
 public class ChatActivity extends AppCompatActivity {
-    @NonNull
-    private final Status status = new Status();
+    // Main layout
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.sliding_layout)
     SlidingUpPanelLayout slidingLayout;
-    @Bind(R.id.sliding_layout_history)
-    SlidingUpPanelLayout slidingLayoutHistory;
+
+    // Input Line
     @Bind(R.id.chatline_scroller)
     ScrollView chatlineScroller;
     @Bind(R.id.chatline)
     AppCompatEditText chatline;
     @Bind(R.id.send)
     AppCompatImageButton send;
+
+    // Input History
+    @Bind(R.id.sliding_layout_history)
+    SlidingUpPanelLayout slidingLayoutHistory;
     @Bind(R.id.msg_history)
     RecyclerView msgHistory;
-    @Bind(R.id.swipe_view)
-    SwipeRefreshLayout swipeView;
-    @Bind(R.id.messages)
-    RecyclerView messages;
+
+    // Advanced Formatter
     @Bind(R.id.formatting_menu)
     ActionMenuView formattingMenu;
     @Bind(R.id.formatting_toolbar)
     Toolbar formattingToolbar;
-    private AppContext context = new AppContext();
-    private ServiceInterface serviceInterface = new ServiceInterface();
-    private QuasselService.LocalBinder binder;
+
+    // Content view
+    @Bind(R.id.swipe_view)
+    SwipeRefreshLayout swipeView;
+    @Bind(R.id.messages)
+    RecyclerView messages;
+
     private MessageAdapter messageAdapter;
     private AccountHeader accountHeader;
     private Drawer drawerLeft;
-    private BufferViewConfigWrapper wrapper;
     private AdvancedEditor editor;
+    private BufferViewConfigWrapper wrapper;
+
+    @NonNull
+    private final Status status = new Status();
+    private static class Status extends Storable {
+        @Store
+        int bufferId = -1;
+        @Store
+        int bufferViewConfigId = -1;
+    }
+
+    private ServiceInterface serviceInterface = new ServiceInterface();
+    private class ServiceInterface {
+        private void connect(@NonNull ServerAddress address) {
+            assertNotNull(binder);
+            disconnect();
+
+            context.setProvider(new BusProvider());
+            context.getProvider().event.register(ChatActivity.this);
+            binder.startBackgroundThread(context.getProvider(), address);
+            onConnectionEstablished();
+
+            context.getProvider().handle(new Heartbeat(DateTime.parse("1980-01-01T00:00")));
+        }
+
+        private void disconnect() {
+            if (context.getProvider() != null) {
+                context.getProvider().event.unregister(ChatActivity.this);
+            }
+            context.setProvider(null);
+            context.setClient(null);
+        }
+    }
+
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @UiThread
         public void onServiceConnected(@NonNull ComponentName cn, @NonNull IBinder service) {
@@ -131,9 +172,9 @@ public class ChatActivity extends AppCompatActivity {
 
                     serviceInterface.disconnect();
 
-                    backgroundThread.provider.event.register(ChatActivity.this);
-                    context.setClient(backgroundThread.handler.client);
                     context.setProvider(backgroundThread.provider);
+                    context.setClient(backgroundThread.handler.client);
+                    context.getProvider().event.register(ChatActivity.this);
                     updateBufferViewConfigs();
                     updateSubTitle();
                 }
@@ -147,19 +188,29 @@ public class ChatActivity extends AppCompatActivity {
         }
     };
 
-    private static void updateNoColor(Buffer buffer, Menu menu) {
-        boolean isNoColor = isNoColor(buffer);
-        menu.findItem(R.id.format_bold).setEnabled(!isNoColor);
-        menu.findItem(R.id.format_italic).setEnabled(!isNoColor);
-        menu.findItem(R.id.format_underline).setEnabled(!isNoColor);
-        menu.findItem(R.id.format_paint).setEnabled(!isNoColor);
-        menu.findItem(R.id.format_fill).setEnabled(!isNoColor);
+    @PreferenceWrapper(BuildConfig.APPLICATION_ID)
+    public static abstract class Settings {
+        @StringPreference("QUASSEL_LIGHT")
+        String theme;
+        @BooleanPreference(false)
+        boolean fullHostmask;
+        @IntPreference(2)
+        int textSize;
+        @BooleanPreference(true)
+        boolean mircColors;
+
+        @StringPreference("")
+        String lastHost;
+        @IntPreference(4242)
+        int lastPort;
+        @StringPreference("")
+        String lastUsername;
+        @StringPreference("")
+        String lastPassword;
     }
 
-    public static boolean isNoColor(Buffer buffer) {
-        return buffer instanceof ChannelBuffer && ((ChannelBuffer) buffer).getChannel() != null &&
-                ((ChannelBuffer) buffer).getChannel().getD_ChanModes().contains("c");
-    }
+    private AppContext context = new AppContext();
+    private QuasselService.LocalBinder binder;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -184,6 +235,141 @@ public class ChatActivity extends AppCompatActivity {
         setupHistory();
 
         initLoader();
+    }
+
+    @Override
+    protected void onPause() {
+        serviceInterface.disconnect();
+        unbindService(serviceConnection);
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = new Intent(this, QuasselService.class);
+        bindService(intent, serviceConnection, Context.BIND_IMPORTANT);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        assertNotNull(outState);
+
+        super.onSaveInstanceState(outState);
+        status.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        assertNotNull(savedInstanceState);
+
+        super.onRestoreInstanceState(savedInstanceState);
+        status.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.chat, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        List<Integer> filterSettings = Arrays.asList(
+                Message.Type.Join.value,
+                Message.Type.Part.value,
+                Message.Type.Quit.value,
+                Message.Type.Nick.value,
+                Message.Type.Mode.value,
+                Message.Type.Topic.value
+        );
+        int[] filterSettingsInts = new int[filterSettings.size()];
+        for (int i = 0; i < filterSettingsInts.length; i++) {
+            filterSettingsInts[i] = filterSettings.get(i);
+        }
+
+        switch (item.getItemId()) {
+            case R.id.action_hide_events: {
+                if (context.getClient() != null) {
+                    BacklogFilter backlogFilter = context.getClient().getBacklogManager().getFilter(status.bufferId);
+                    if (backlogFilter != null) {
+                        int oldFilters = backlogFilter.getFilters();
+                        List<Integer> oldFiltersList = new ArrayList<>();
+                        for (int type : filterSettings) {
+                            if ((type & oldFilters) != 0)
+                                oldFiltersList.add(filterSettings.indexOf(type));
+                        }
+                        Integer[] selectedIndices = oldFiltersList.toArray(new Integer[oldFiltersList.size()]);
+                        new MaterialDialog.Builder(this)
+                                .items(
+                                        "Joins",
+                                        "Parts",
+                                        "Quits",
+                                        "Nick Changes",
+                                        "Mode Changes",
+                                        "Topic Changes"
+                                )
+                                .itemsIds(filterSettingsInts)
+                                .itemsCallbackMultiChoice(
+                                        selectedIndices,
+                                        (dialog, which, text) -> false
+                                )
+                                .positiveText("Select")
+                                .negativeText("Cancel")
+                                .onPositive((dialog, which) -> {
+                                    int filters = 0x00000000;
+                                    if (dialog.getSelectedIndices() != null)
+                                        for (int i : dialog.getSelectedIndices()) {
+                                            filters |= filterSettings.get(i);
+                                        }
+                                    backlogFilter.setFilters(filters);
+                                })
+                                .build()
+                                .show();
+                    }
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private static void updateNoColor(Buffer buffer, Menu menu) {
+        boolean isNoColor = isNoColor(buffer);
+        menu.findItem(R.id.format_bold).setEnabled(!isNoColor);
+        menu.findItem(R.id.format_italic).setEnabled(!isNoColor);
+        menu.findItem(R.id.format_underline).setEnabled(!isNoColor);
+        menu.findItem(R.id.format_paint).setEnabled(!isNoColor);
+        menu.findItem(R.id.format_fill).setEnabled(!isNoColor);
+    }
+
+    public static boolean isNoColor(Buffer buffer) {
+        return buffer instanceof ChannelBuffer && ((ChannelBuffer) buffer).getChannel() != null &&
+                ((ChannelBuffer) buffer).getChannel().getD_ChanModes().contains("c");
     }
 
     private void setupContext() {
@@ -331,92 +517,10 @@ public class ChatActivity extends AppCompatActivity {
                 .withSavedInstance(savedInstanceState)
                 .withProfileImagesVisible(false)
                 .withOnAccountHeaderListener((view, profile, current) -> {
-                    if (!current) {
-                        selectBufferViewConfig((int) profile.getIdentifier());
-                    }
+                    selectBufferViewConfig((int) profile.getIdentifier());
                     return true;
                 })
                 .build();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.chat, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        List<Integer> filterSettings = Arrays.asList(
-                Message.Type.Join.value,
-                Message.Type.Part.value,
-                Message.Type.Quit.value,
-                Message.Type.Nick.value,
-                Message.Type.Mode.value,
-                Message.Type.Topic.value
-        );
-        int[] filterSettingsInts = new int[filterSettings.size()];
-        for (int i = 0; i < filterSettingsInts.length; i++) {
-            filterSettingsInts[i] = filterSettings.get(i);
-        }
-
-        switch (item.getItemId()) {
-            case R.id.action_hide_events: {
-                if (context.getClient() != null) {
-                    BacklogFilter backlogFilter = context.getClient().getBacklogManager().getFilter(status.bufferId);
-                    if (backlogFilter != null) {
-                        int oldFilters = backlogFilter.getFilters();
-                        List<Integer> oldFiltersList = new ArrayList<>();
-                        for (int type : filterSettings) {
-                            if ((type & oldFilters) != 0)
-                                oldFiltersList.add(filterSettings.indexOf(type));
-                        }
-                        Integer[] selectedIndices = oldFiltersList.toArray(new Integer[oldFiltersList.size()]);
-                        new MaterialDialog.Builder(this)
-                                .items(
-                                        "Joins",
-                                        "Parts",
-                                        "Quits",
-                                        "Nick Changes",
-                                        "Mode Changes",
-                                        "Topic Changes"
-                                )
-                                .itemsIds(filterSettingsInts)
-                                .itemsCallbackMultiChoice(
-                                        selectedIndices,
-                                        (dialog, which, text) -> false
-                                )
-                                .positiveText("Select")
-                                .negativeText("Cancel")
-                                .onPositive((dialog, which) -> {
-                                    int filters = 0x00000000;
-                                    if (dialog.getSelectedIndices() != null)
-                                        for (int i : dialog.getSelectedIndices()) {
-                                            filters |= filterSettings.get(i);
-                                        }
-                                    backlogFilter.setFilters(filters);
-                                })
-                                .build()
-                                .show();
-                    }
-                }
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        serviceInterface.disconnect();
-        unbindService(serviceConnection);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Intent intent = new Intent(this, QuasselService.class);
-        bindService(intent, serviceConnection, Context.BIND_IMPORTANT);
     }
 
     public void setChatlineExpanded(boolean expanded) {
@@ -424,9 +528,9 @@ public class ChatActivity extends AppCompatActivity {
         int selectionEnd = chatline.getSelectionEnd();
 
         if (expanded) {
-            chatlineScroller.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+            chatline.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
         } else {
-            chatlineScroller.getLayoutParams().height = context.getThemeUtil().res.actionBarSize;
+            chatline.getLayoutParams().height = context.getThemeUtil().res.actionBarSize;
         }
         chatline.setSingleLine(!expanded);
 
@@ -454,22 +558,6 @@ public class ChatActivity extends AppCompatActivity {
                 .negativeColor(context.getThemeUtil().res.colorForeground)
                 .build()
                 .show();
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        assertNotNull(savedInstanceState);
-
-        super.onRestoreInstanceState(savedInstanceState);
-        status.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        assertNotNull(outState);
-
-        super.onSaveInstanceState(outState);
-        status.onSaveInstanceState(outState);
     }
 
     private void selectBufferViewConfig(@IntRange(from = -1) int bufferViewConfigId) {
@@ -669,53 +757,6 @@ public class ChatActivity extends AppCompatActivity {
             toolbar.setSubtitle(SpanFormatter.format("Lag: %.2f, %s", context.getClient().getLag() / 1000.0F, context.getClient().getConnectionStatus()));
         } else {
             toolbar.setSubtitle("");
-        }
-    }
-
-    @PreferenceWrapper(BuildConfig.APPLICATION_ID)
-    public static abstract class Settings {
-        @StringPreference("QUASSEL_LIGHT")
-        String theme;
-        @BooleanPreference(false)
-        boolean fullHostmask;
-        @IntPreference(2)
-        int textSize;
-        @BooleanPreference(true)
-        boolean mircColors;
-
-        @StringPreference("")
-        String lastHost;
-        @IntPreference(4242)
-        int lastPort;
-        @StringPreference("")
-        String lastUsername;
-        @StringPreference("")
-        String lastPassword;
-    }
-
-    private static class Status extends Storable {
-        @Store
-        int bufferId = -1;
-        @Store
-        int bufferViewConfigId = -1;
-    }
-
-    private class ServiceInterface {
-        private void connect(@NonNull ServerAddress address) {
-            assertNotNull(binder);
-            disconnect();
-
-            BusProvider provider = new BusProvider();
-            provider.event.register(ChatActivity.this);
-            binder.startBackgroundThread(provider, address);
-            onConnectionEstablished();
-        }
-
-        private void disconnect() {
-            if (context.getProvider() != null)
-                context.getProvider().event.unregister(this);
-            context.setProvider(null);
-            context.setClient(null);
         }
     }
 }

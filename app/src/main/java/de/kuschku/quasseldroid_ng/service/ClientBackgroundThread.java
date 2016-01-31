@@ -20,7 +20,7 @@ public class ClientBackgroundThread implements Runnable {
     @NonNull
     private static final ClientData CLIENT_DATA = new ClientData(
             new ClientData.FeatureFlags(true, true),
-            new byte[]{RemotePeer.DATASTREAM, RemotePeer.LEGACY},
+            new byte[]{RemotePeer.DATASTREAM},
             "QuasselDroid-ng 0.1 | libquassel 0.2",
             RemotePeer.PROTOCOL_VERSION_LEGACY
     );

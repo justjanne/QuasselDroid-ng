@@ -66,7 +66,7 @@ public class BacklogFilter implements UICallback {
     }
 
     private boolean filterItem(Message message) {
-        return client.getIgnoreListManager().matches(message) || filteredTypes.contains(message.type);
+        return (client.getIgnoreListManager() != null && client.getIgnoreListManager().matches(message)) || filteredTypes.contains(message.type);
     }
 
     public void addFilter(Message.Type type) {

@@ -181,7 +181,6 @@ public class CoreConnection {
         inputThread = new ReadThread();
         heartbeatThread = new HeartbeatThread();
         inputThread.start();
-        heartbeatThread.start();
     }
 
     public void onEventAsync(HandshakeFailedEvent event) {
@@ -261,6 +260,7 @@ public class CoreConnection {
 
                         // Mark prehandshake as read
                         hasReadPreHandshake = true;
+                        heartbeatThread.start();
 
                         // Send client data to core
                         String clientDate = new SimpleDateFormat("MMM dd yyyy HH:mm:ss", Locale.US).format(new Date());
@@ -304,7 +304,6 @@ public class CoreConnection {
 
                 while (running) {
                     Heartbeat heartbeat = new Heartbeat(DateTime.now());
-                    Log.e("heartbeat", String.valueOf(heartbeat));
                     busProvider.dispatch(heartbeat);
 
                     Thread.sleep(30 * 1000);

@@ -121,6 +121,8 @@ public class ProtocolHandler implements IProtocolHandler {
     }
 
     public void onEvent(@NonNull SessionInit message) {
+        busProvider.dispatch(new Heartbeat(DateTime.now()));
+
         client.setState(message.SessionState);
 
         client.setConnectionStatus(ConnectionChangeEvent.Status.INITIALIZING_DATA);
@@ -148,8 +150,6 @@ public class ProtocolHandler implements IProtocolHandler {
     }
 
     public void onEventMainThread(@NonNull HeartbeatReply heartbeat) {
-        Log.e("heartbeatreply", String.valueOf(heartbeat));
-
         long roundtrip = DateTime.now().getMillis() - heartbeat.dateTime.getMillis();
         long lag = (long) (roundtrip * 0.5);
 

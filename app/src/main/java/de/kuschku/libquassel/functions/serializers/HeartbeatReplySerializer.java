@@ -29,7 +29,7 @@ public class HeartbeatReplySerializer implements FunctionSerializer<HeartbeatRep
     @Override
     public List serialize(@NonNull HeartbeatReply data) {
         return Arrays.asList(
-                FunctionType.HEARTBEATREPLY.id,
+                new QVariant<>(FunctionType.HEARTBEATREPLY.id),
                 new QVariant<>(data.dateTime)
         );
     }

@@ -1,10 +1,12 @@
 package de.kuschku.libquassel;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.UUID;
 
 import de.greenrobot.event.EventBus;
+import de.greenrobot.event.NoSubscriberEvent;
 
 public class BusProvider {
     @NonNull
@@ -16,11 +18,18 @@ public class BusProvider {
     @NonNull
     private final String id;
 
+    private final BusHandler handleHandler = new BusHandler("QHANDLE");
+    private final BusHandler dispatchHandler = new BusHandler("QDISPATCH");
+    private final BusHandler eventHandler = new BusHandler("QEVENT");
+
     public BusProvider() {
         this.id = UUID.randomUUID().toString();
         this.handle = new EventBus();
+        this.handle.register(handleHandler);
         this.dispatch = new EventBus();
+        this.dispatch.register(dispatchHandler);
         this.event = new EventBus();
+        this.event.register(eventHandler);
     }
 
     public void handle(Object o) {
@@ -40,5 +49,17 @@ public class BusProvider {
         return "BusProvider{" +
                 "id='" + id + '\'' +
                 '}';
+    }
+
+    public static class BusHandler {
+        private final String identifier;
+
+        public BusHandler(String identifier) {
+            this.identifier = identifier;
+        }
+
+        public void onEvent(NoSubscriberEvent event) {
+            Log.e(identifier, String.valueOf(event));
+        }
     }
 }
