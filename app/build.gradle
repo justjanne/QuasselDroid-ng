@@ -69,7 +69,7 @@ if (versionPropsFile.exists() && versionPropsFile.canRead()) {
 } else {
   // Why 187? Because that’s the last build number of our old build system before
   // we switched to travis
-  versionBuild = 187 + System.getenv("TRAVIS_JOB_ID")
+  versionBuild = Integer.valueOf(System.getenv("TRAVIS_JOB_ID")) + 187
 }
 
 
