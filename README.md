@@ -1,10 +1,15 @@
 # QuasselDroid-ng
 
+[![Build Status](https://api.travis-ci.org/justjanne/QuasselDroid-ng.svg)](https://travis-ci.org/justjanne/QuasselDroid-ng)
+[![Release Version](http://github-release-version.herokuapp.com/github/justjanne/QuasselDroid-ng/release.svg?style=flat)](https://github.com/justjanne/QuasselDroid-ng/releases)
+
 Quassel is a distributed, decentralized IRC client, written using C++ and Qt.
 QuasselDroid is a pure-java client for the Quassel core, allowing you to connect
 to your Quassel core using your Android ™ phone.
 
 *Inspired by and based on [QuasselDroid](https://github.com/sandsmark/QuasselDroid)*
+
+![Screenshot of QuasselDroid on Phone and Tablet](https://projects.kuschku.de/quasseldroid/assets/devices.png)
 
 ##Build Requirements
 
@@ -15,23 +20,33 @@ local.properties)
 Additionally, it requires you to build (in the same way) first the following
 libraries:
 
-* https://github.com/justjanne/AndroidSlidingUpPanel
-* https://github.com/justjanne/aspm
+* https://github.com/justjanne/AndroidSlidingUpPanel (for `library-release.aar`)
+* https://github.com/justjanne/aspm (for `annotations.jar` and
+  `compiler-all.jar`)
 
 The libraries of each have to be placed in `app/libs/` for gradle to find them.
 
 QuasselDroid uses the following libraries (although these are automatically
 downloaded from maven central):
 
-* [**libquassel-java**](https://github.com/justjanne/libquassel-java) LGPL 3.0
-* [**Guava**](https://github.com/google/guava) Apache 2.0
-* [**Joda-Time**](https://github.com/JodaOrg/joda-time/) Apache 2.0
-* [**Joda-Convert**](https://github.com/JodaOrg/joda-convert) Apache 2.0
-* [**Material Drawer**](https://github.com/mikepenz/MaterialDrawer) Apache 2.0
-* [**Material Dialogs**](https://github.com/google/guava) MIT
-* [**ButterKnife**](https://github.com/JakeWharton/butterknife/) Apache 2.0
-* [**Android Support Libraries**](http://developer.android.com/tools/support-library/index.html) Apache 2.0  
-*Android Support Library requires the corresponding package to be installed in the SDK manager*
+* [**libquassel-java**](https://github.com/justjanne/libquassel-java)
+  LGPL 3.0
+* [**Guava**](https://github.com/google/guava)
+  Apache 2.0
+* [**Joda-Time**](https://github.com/JodaOrg/joda-time/)
+  Apache 2.0
+* [**Joda-Convert**](https://github.com/JodaOrg/joda-convert)
+  Apache 2.0
+* [**Material Drawer**](https://github.com/mikepenz/MaterialDrawer)
+  Apache 2.0
+* [**Material Dialogs**](https://github.com/google/guava)
+  MIT
+* [**ButterKnife**](https://github.com/JakeWharton/butterknife/)
+  Apache 2.0
+* [**Android Support Libraries**](http://developer.android.com/tools/support-library/index.html)
+  Apache 2.0  
+  *Android Support Library requires the corresponding package to be installed in
+  the SDK manager*
 
 ##Building
 
