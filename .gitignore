@@ -11,4 +11,5 @@ gradle*
 gradle.properties
 */version.properties
 *.sh
+make
 signing.gradle
