@@ -65,3 +65,8 @@
 -keepclassmembers class * extends de.greenrobot.event.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
+
+#########################################
+## RetroLambda                         ##
+#########################################
+-dontwarn java.lang.invoke.*
