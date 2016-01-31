@@ -67,9 +67,8 @@ if (versionPropsFile.exists() && versionPropsFile.canRead()) {
   versionProps['VERSION_BUILD'] = versionBuild.toString()
   versionProps.store(versionPropsFile.newWriter(), null)
 } else {
-  // Why 187? Because that’s the last build number of our old build system before
-  // we switched to travis
-  versionBuild = Integer.valueOf(System.getenv("TRAVIS_JOB_ID")) + 187
+  // Get jenkins build number from environment
+  versionBuild = Integer.valueOf(System.getenv("BUILD_NUMBER"))
 }
 
 
