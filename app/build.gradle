@@ -158,8 +158,8 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.1.1'
 
     // Setting autobinding
-    compile(name:'aspm-annotations', ext:'jar')
-    apt(name:'aspm-compiler', ext:'jar')
+    compile(name:'annotations', ext:'jar')
+    apt(name:'compiler-all', ext:'jar')
 
     // UI autobinding
     compile 'com.jakewharton:butterknife:8.0.0-SNAPSHOT'
