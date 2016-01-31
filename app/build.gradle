@@ -55,7 +55,7 @@ if (project.hasProperty("storeFile")) {
 
 def versionPropsFile = file('version.properties')
 def versionBuild = 0
-if (versionPropsFile.canRead()) {
+if (versionPropsFile.exists() && versionPropsFile.canRead()) {
   def Properties versionProps = new Properties()
 
   versionProps.load(new FileInputStream(versionPropsFile))
@@ -67,7 +67,9 @@ if (versionPropsFile.canRead()) {
   versionProps['VERSION_BUILD'] = versionBuild.toString()
   versionProps.store(versionPropsFile.newWriter(), null)
 } else {
-  throw new GradleException("Could not read version.properties!"+versionPropsFile.toString())
+  // Why 187? Because that’s the last build number of our old build system before
+  // we switched to travis
+  versionBuild = 187 + System.getenv("TRAVIS_JOB_ID")
 }
 
 
