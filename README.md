@@ -1,6 +1,6 @@
 # QuasselDroid-ng
 
-[![Build Status](https://api.travis-ci.org/justjanne/QuasselDroid-ng.svg)](https://travis-ci.org/justjanne/QuasselDroid-ng)
+[![Build Status](https://img.shields.io/jenkins/s/https/ci.kuschku.de/QuasselDroid-ng.svg)](https://ci.kuschku.de/job/QuasselDroid-ng/)
 [![Release Version](http://github-release-version.herokuapp.com/github/justjanne/QuasselDroid-ng/release.svg?style=flat)](https://github.com/justjanne/QuasselDroid-ng/releases)
 
 Quassel is a distributed, decentralized IRC client, written using C++ and Qt.
