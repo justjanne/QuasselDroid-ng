@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.libquassel.syncables.serializers;
@@ -41,9 +38,11 @@ import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.objects.serializers.StringObjectMapSerializer;
 import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.primitives.types.QVariant;
-import de.kuschku.libquassel.syncables.types.IrcChannel;
-import de.kuschku.libquassel.syncables.types.IrcUser;
-import de.kuschku.libquassel.syncables.types.Network;
+import de.kuschku.libquassel.syncables.types.impl.IrcChannel;
+import de.kuschku.libquassel.syncables.types.impl.IrcUser;
+import de.kuschku.libquassel.syncables.types.impl.Network;
+import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
+import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class NetworkSerializer implements ObjectSerializer<Network> {
@@ -70,57 +69,33 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
     public Network fromDatastream(@NonNull Map<String, QVariant> map) {
         final Map<String, QVariant<Map<String, QVariant<List>>>> usersAndChannels = ((Map<String, QVariant<Map<String, QVariant<List>>>>) map.get("IrcUsersAndChannels").data);
 
-        final List<IrcChannel> channels = extractChannels(QVariant.orNull(usersAndChannels.get("Channels")));
-        final List<IrcUser> users = extractUsers(QVariant.orNull(usersAndChannels.get("Users")));
+        final List<QIrcChannel> channels = extractChannels(QVariant.orNull(usersAndChannels.get("Channels")));
+        final List<QIrcUser> users = extractUsers(QVariant.orNull(usersAndChannels.get("Users")));
 
-        final Map<String, IrcChannel> channelMap = new HashMap<>(channels.size());
-        for (IrcChannel channel : channels) {
-            channelMap.put(channel.getName(), channel);
+        final Map<String, QIrcChannel> channelMap = new HashMap<>(channels.size());
+        for (QIrcChannel channel : channels) {
+            channelMap.put(channel.name(), channel);
         }
 
-        final Map<String, IrcUser> userMap = new HashMap<>(users.size());
-        Network network = new Network(
+        final Map<String, QIrcUser> userMap = new HashMap<>(users.size());
+
+        return new Network(
                 channelMap,
                 userMap,
                 (List<NetworkServer>) map.get("ServerList").data,
                 StringObjectMapSerializer.<String>get().fromLegacy((Map<String, QVariant>) map.get("Supports").data),
-                (String) map.get("autoIdentifyPassword").data,
-                (String) map.get("autoIdentifyService").data,
-                (int) map.get("autoReconnectInterval").data,
-                (short) map.get("autoReconnectRetries").data,
-                (String) map.get("codecForDecoding").data,
-                (String) map.get("codecForEncoding").data,
-                (String) map.get("codecForServer").data,
                 (int) map.get("connectionState").data,
                 (String) map.get("currentServer").data,
-                (int) map.get("identityId").data,
                 (boolean) map.get("isConnected").data,
                 (int) map.get("latency").data,
                 (String) map.get("myNick").data,
-                (String) map.get("networkName").data,
-                (List<String>) map.get("perform").data,
-                (boolean) map.get("rejoinChannels").data,
-                (String) map.get("saslAccount").data,
-                (String) map.get("saslPassword").data,
-                (boolean) map.get("unlimitedReconnectRetries").data,
-                (boolean) map.get("useAutoIdentify").data,
-                (boolean) map.get("useAutoReconnect").data,
-                (boolean) map.get("useRandomServer").data,
-                (boolean) map.get("useSasl").data
+                NetworkInfoSerializer.get().fromLegacy(map)
         );
-        for (IrcUser user : users) {
-            user.setNetwork(network);
-        }
-        for (IrcChannel channel : channels) {
-            channel.setNetwork(network);
-        }
-
-        return network;
     }
 
     @NonNull
-    private List<IrcUser> extractUsers(@Nullable Map<String, QVariant<List>> users) {
-        final List<IrcUser> ircUsers;
+    private List<QIrcUser> extractUsers(@Nullable Map<String, QVariant<List>> users) {
+        final List<QIrcUser> ircUsers;
         if (users == null)
             ircUsers = new ArrayList<>();
         else {
@@ -151,8 +126,8 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
     }
 
     @NonNull
-    private List<IrcChannel> extractChannels(@Nullable Map<String, QVariant<List>> channels) {
-        final List<IrcChannel> ircChannels;
+    private List<QIrcChannel> extractChannels(@Nullable Map<String, QVariant<List>> channels) {
+        final List<QIrcChannel> ircChannels;
         if (channels == null)
             ircChannels = new ArrayList<>();
         else {
@@ -175,54 +150,31 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
     @NonNull
     @Override
     public Network fromLegacy(@NonNull Map<String, QVariant> map) {
-        final Map<String, QVariant<Map<String, QVariant<Map<String, QVariant>>>>> usersAndChannels = ((QVariant<Map<String, QVariant<Map<String, QVariant<Map<String, QVariant>>>>>>) map.get("IrcUsersAndChannels")).data;
+        final Map<String, QVariant<Map<String, QVariant<Map<String, QVariant>>>>> usersAndChannels = ((QVariant<Map<String, QVariant<Map<String, QVariant<Map<String, QVariant>>>>>>) map.get("QIrcUsersAndChannels")).data;
         final Map<String, QVariant<Map<String, QVariant>>> wrappedChannels = usersAndChannels.get("channels").data;
         final Map<String, QVariant<Map<String, QVariant>>> wrappedUsers = usersAndChannels.get("users").data;
-        final Map<String, IrcChannel> channels = new HashMap<>(wrappedChannels.size());
+        final Map<String, QIrcChannel> channels = new HashMap<>(wrappedChannels.size());
         for (Map.Entry<String, QVariant<Map<String, QVariant>>> entry : wrappedChannels.entrySet()) {
-            final IrcChannel ircChannel = IrcChannelSerializer.get().fromLegacy(entry.getValue().data);
-            channels.put(ircChannel.getName(), ircChannel);
+            final QIrcChannel ircChannel = IrcChannelSerializer.get().fromLegacy(entry.getValue().data);
+            channels.put(ircChannel.name(), ircChannel);
         }
-        final Map<String, IrcUser> users = new HashMap<>(wrappedUsers.size());
+        final Map<String, QIrcUser> users = new HashMap<>(wrappedUsers.size());
         for (Map.Entry<String, QVariant<Map<String, QVariant>>> entry : wrappedUsers.entrySet()) {
-            final IrcUser ircUser = IrcUserSerializer.get().fromLegacy(entry.getValue().data);
-            users.put(ircUser.getNick(), ircUser);
+            final QIrcUser ircUser = IrcUserSerializer.get().fromLegacy(entry.getValue().data);
+            users.put(ircUser.nick(), ircUser);
         }
         final Map<String, String> supports = StringObjectMapSerializer.<String>get().fromLegacy((Map<String, QVariant>) map.get("Supports").data);
-        Network network = new Network(
+        return new Network(
                 channels,
                 users,
-                (List<NetworkServer>) map.get("ServerList").data,
                 supports,
-                (String) map.get("autoIdentifyPassword").data,
-                (String) map.get("autoIdentifyService").data,
-                (int) map.get("autoReconnectInterval").data,
-                (short) map.get("autoReconnectRetries").data,
-                (String) map.get("codecForDecoding").data,
-                (String) map.get("codecForEncoding").data,
-                (String) map.get("codecForServer").data,
                 (int) map.get("connectionState").data,
                 (String) map.get("currentServer").data,
-                (int) map.get("identityId").data,
                 (boolean) map.get("isConnected").data,
                 (int) map.get("latency").data,
                 (String) map.get("myNick").data,
-                (String) map.get("networkName").data,
-                (List<String>) map.get("perform").data,
-                (boolean) map.get("rejoinChannels").data,
-                (String) map.get("saslAccount").data,
-                (String) map.get("saslPassword").data,
-                (boolean) map.get("unlimitedReconnectRetries").data,
-                (boolean) map.get("useAutoIdentify").data,
-                (boolean) map.get("useAutoReconnect").data,
-                (boolean) map.get("useRandomServer").data,
-                (boolean) map.get("useSasl").data
+                NetworkInfoSerializer.get().fromLegacy(map)
         );
-        for (Map.Entry<String, QVariant<Map<String, QVariant>>> entry : wrappedUsers.entrySet()) {
-            final IrcUser ircUser = IrcUserSerializer.get().fromLegacy(entry.getValue().data);
-            ircUser.setNetwork(network);
-        }
-        return network;
     }
 
     @Override

@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.libquassel.syncables.serializers;
@@ -35,7 +32,7 @@ import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.objects.serializers.StringObjectMapSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
-import de.kuschku.libquassel.syncables.types.IrcChannel;
+import de.kuschku.libquassel.syncables.types.impl.IrcChannel;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class IrcChannelSerializer implements ObjectSerializer<IrcChannel> {
@@ -54,12 +51,12 @@ public class IrcChannelSerializer implements ObjectSerializer<IrcChannel> {
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(@NonNull IrcChannel data) {
         final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        map.data.put("name", new QVariant<>(data.getName()));
-        map.data.put("topic", new QVariant<>(data.getTopic()));
-        map.data.put("password", new QVariant<>(data.getPassword()));
-        map.data.put("UserModes", StringObjectMapSerializer.<String>get().toVariantMap(data.getUserModes()));
-        map.data.put("ChanModes", new QVariant<>(data.getChanModes()));
-        map.data.put("encrypted", new QVariant<>(data.isEncrypted()));
+        map.data.put("name", new QVariant<>(data.name()));
+        map.data.put("topic", new QVariant<>(data.topic()));
+        map.data.put("password", new QVariant<>(data.password()));
+        map.data.put("UserModes", StringObjectMapSerializer.<String>get().toVariantMap(data.userModes()));
+        map.data.put("ChanModes", new QVariant<>(data.chanModes()));
+        map.data.put("encrypted", new QVariant<>(data.encrypted()));
         return map;
     }
 

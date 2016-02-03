@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
@@ -31,16 +28,11 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
 
-import de.kuschku.libquassel.syncables.types.BufferViewConfig;
-import de.kuschku.libquassel.syncables.types.Network;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
-import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
-import static de.kuschku.util.AndroidAssert.assertNotNull;
-
 public class BufferViewConfigWrapper {
-    private Drawer drawer;
     @NonNull
     private final ObservableSortedList<NetworkItem> networks = new ObservableSortedList<>(NetworkItem.class, new ObservableSortedList.ItemComparator<NetworkItem>() {
         @Override
@@ -55,45 +47,14 @@ public class BufferViewConfigWrapper {
 
         @Override
         public boolean areItemsTheSame(@NonNull NetworkItem item1, @NonNull NetworkItem item2) {
-            return item1.getNetwork().getNetworkId() == item2.getNetwork().getNetworkId();
+            return item1.getNetwork().networkId() == item2.getNetwork().networkId();
         }
     });
+    private Drawer drawer;
 
-    public BufferViewConfigWrapper(@NonNull AppContext context, @NonNull BufferViewConfig config, Drawer drawer) {
+    public BufferViewConfigWrapper(@NonNull AppContext context, @NonNull QBufferViewConfig config, Drawer drawer) {
         this.drawer = drawer;
-        config.doLateInit();
         networks.clear();
-        for (Integer networkId : config.getNetworkList()) {
-            Network network = context.getClient().getNetwork(networkId);
-            assertNotNull(network);
-            networks.add(new NetworkItem(context, network, config));
-        }
-        config.getNetworkList().addCallback(new ElementCallback<Integer>() {
-            @Override
-            public void notifyItemInserted(Integer element) {
-                networks.add(new NetworkItem(context, context.getClient().getNetwork(element), config));
-            }
-
-            @Override
-            public void notifyItemRemoved(Integer element) {
-                for (NetworkItem network : networks) {
-                    if (network.getNetwork().getNetworkId() == element) {
-                        networks.remove(network);
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            public void notifyItemChanged(Integer element) {
-                for (NetworkItem network : networks) {
-                    if (network.getNetwork().getNetworkId() == element) {
-                        networks.notifyItemChanged(networks.indexOf(network));
-                        break;
-                    }
-                }
-            }
-        });
     }
 
     public void updateDrawerItems() {

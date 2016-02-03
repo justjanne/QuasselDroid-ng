@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.libquassel.primitives.serializers;
@@ -34,7 +31,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
 
-import de.kuschku.util.Objects;
+import de.kuschku.util.backports.Objects;
 
 public class DateTimeSerializer implements PrimitiveSerializer<DateTime> {
     @NonNull
@@ -52,11 +49,14 @@ public class DateTimeSerializer implements PrimitiveSerializer<DateTime> {
     public void serialize(@NonNull final ByteChannel channel, @NonNull final DateTime data) throws IOException {
         final boolean isUTC;
         final DateTimeZone zone = data.getZone();
-        if (Objects.equals(zone, DateTimeZone.UTC)) isUTC = true;
-        else if (Objects.equals(zone, DateTimeZone.getDefault())) isUTC = false;
+        if (Objects.equals(zone, DateTimeZone.UTC)) {
+            isUTC = true;
+        } else if (Objects.equals(zone, DateTimeZone.getDefault())) {
+            isUTC = false;
             // TODO: Add serialization for other timezones
-        else
+        } else {
             throw new IllegalArgumentException("Serialization of timezones except for local and UTC is not supported");
+        }
 
 
         IntSerializer.get().serialize(channel, (int) DateTimeUtils.toJulianDayNumber(data.getMillis()));
@@ -81,8 +81,8 @@ public class DateTimeSerializer implements PrimitiveSerializer<DateTime> {
 
         DateTime time = new DateTime(DateTimeUtils.fromJulianDay(julianDay));
         time = time.millisOfDay().setCopy(millisSinceMidnight);
-        if (zone == 0) time = time.withZoneRetainFields(DateTimeZone.getDefault());
-        else time = time.withZoneRetainFields(DateTimeZone.UTC);
+        if (zone == 0) time = time.withZone(DateTimeZone.getDefault());
+        else time = time.withZone(DateTimeZone.UTC);
 
         return time;
     }

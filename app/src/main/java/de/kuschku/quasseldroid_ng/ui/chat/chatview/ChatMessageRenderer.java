@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.quasseldroid_ng.ui.chat.chatview;
@@ -29,7 +26,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 
-import de.kuschku.libquassel.localtypes.Buffer;
+import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.irc.IrcFormatHelper;
@@ -40,14 +37,13 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 @UiThread
 public class ChatMessageRenderer {
 
+    @NonNull
+    private final AppContext context;
     private IrcFormatHelper helper;
     private MessageStyleContainer highlightStyle;
     private MessageStyleContainer serverStyle;
     private MessageStyleContainer actionStyle;
     private MessageStyleContainer plainStyle;
-
-    @NonNull
-    private final AppContext context;
 
     public ChatMessageRenderer(@NonNull AppContext context) {
         this.context = context;
@@ -58,28 +54,28 @@ public class ChatMessageRenderer {
         this.helper = new IrcFormatHelper(context);
 
         this.highlightStyle = new MessageStyleContainer(
-                context.getThemeUtil().res.colorForegroundHighlight,
+                context.themeUtil().res.colorForegroundHighlight,
                 Typeface.NORMAL,
-                context.getThemeUtil().res.colorForegroundHighlight,
-                context.getThemeUtil().res.colorBackgroundHighlight
+                context.themeUtil().res.colorForegroundHighlight,
+                context.themeUtil().res.colorBackgroundHighlight
         );
         this.serverStyle = new MessageStyleContainer(
-                context.getThemeUtil().res.colorForegroundSecondary,
+                context.themeUtil().res.colorForegroundSecondary,
                 Typeface.ITALIC,
-                context.getThemeUtil().res.colorForegroundSecondary,
-                context.getThemeUtil().res.colorBackgroundSecondary
+                context.themeUtil().res.colorForegroundSecondary,
+                context.themeUtil().res.colorBackgroundSecondary
         );
         this.plainStyle = new MessageStyleContainer(
-                context.getThemeUtil().res.colorForeground,
+                context.themeUtil().res.colorForeground,
                 Typeface.NORMAL,
-                context.getThemeUtil().res.colorForegroundSecondary,
-                context.getThemeUtil().res.transparent
+                context.themeUtil().res.colorForegroundSecondary,
+                context.themeUtil().res.transparent
         );
         this.actionStyle = new MessageStyleContainer(
-                context.getThemeUtil().res.colorForegroundAction,
+                context.themeUtil().res.colorForegroundAction,
                 Typeface.ITALIC,
-                context.getThemeUtil().res.colorForegroundSecondary,
-                context.getThemeUtil().res.transparent
+                context.themeUtil().res.colorForegroundSecondary,
+                context.themeUtil().res.transparent
         );
     }
 
@@ -95,7 +91,7 @@ public class ChatMessageRenderer {
     private CharSequence formatNick(@NonNull String hostmask, boolean full) {
         CharSequence formattedNick = helper.formatUserNick(IrcUserUtils.getNick(hostmask));
         if (full) {
-            return context.getThemeUtil().translations.formatUsername(formattedNick, IrcUserUtils.getMask(hostmask));
+            return context.themeUtil().translations.formatUsername(formattedNick, IrcUserUtils.getMask(hostmask));
         } else {
             return formattedNick;
         }
@@ -103,13 +99,13 @@ public class ChatMessageRenderer {
 
     @NonNull
     private CharSequence formatNick(@NonNull String hostmask) {
-        return formatNick(hostmask, context.getSettings().fullHostmask.or(false));
+        return formatNick(hostmask, context.settings().fullHostmask.or(false));
     }
 
     @NonNull
     private CharSequence getBufferName(@NonNull Message message) {
-        assertNotNull(context.getClient());
-        Buffer buffer = context.getClient().getBuffer(message.bufferInfo.id);
+        assertNotNull(context.client());
+        Buffer buffer = context.client().bufferManager().buffer(message.bufferInfo.id());
         assertNotNull(buffer);
         String name = buffer.getName();
         assertNotNull(name);
@@ -119,7 +115,7 @@ public class ChatMessageRenderer {
     private void onBindPlain(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, plainStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(
-                context.getThemeUtil().translations.formatPlain(
+                context.themeUtil().translations.formatPlain(
                         formatNick(message.sender, false),
                         helper.formatIrcMessage(message.content)
                 )
@@ -128,7 +124,7 @@ public class ChatMessageRenderer {
 
     private void onBindNotice(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, plainStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(context.getThemeUtil().translations.formatAction(
+        holder.content.setText(context.themeUtil().translations.formatAction(
                 formatNick(message.sender, false),
                 helper.formatIrcMessage(message.content)
         ));
@@ -137,7 +133,7 @@ public class ChatMessageRenderer {
     private void onBindAction(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, actionStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(
-                context.getThemeUtil().translations.formatAction(
+                context.themeUtil().translations.formatAction(
                         formatNick(message.sender, false),
                         helper.formatIrcMessage(message.content)
                 )
@@ -147,11 +143,11 @@ public class ChatMessageRenderer {
     private void onBindNick(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         if (message.flags.Self)
-            holder.content.setText(context.getThemeUtil().translations.formatNick(
+            holder.content.setText(context.themeUtil().translations.formatNick(
                     formatNick(message.sender, false)
             ));
         else
-            holder.content.setText(context.getThemeUtil().translations.formatNick(
+            holder.content.setText(context.themeUtil().translations.formatNick(
                     formatNick(message.sender, false),
                     helper.formatUserNick(message.content)
             ));
@@ -164,7 +160,7 @@ public class ChatMessageRenderer {
 
     private void onBindJoin(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(context.getThemeUtil().translations.formatJoin(
+        holder.content.setText(context.themeUtil().translations.formatJoin(
                 formatNick(message.sender),
                 getBufferName(message)
         ));
@@ -172,7 +168,7 @@ public class ChatMessageRenderer {
 
     private void onBindPart(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(context.getThemeUtil().translations.formatPart(
+        holder.content.setText(context.themeUtil().translations.formatPart(
                 formatNick(message.sender),
                 getBufferName(message),
                 message.content
@@ -181,7 +177,7 @@ public class ChatMessageRenderer {
 
     private void onBindQuit(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(context.getThemeUtil().translations.formatQuit(
+        holder.content.setText(context.themeUtil().translations.formatQuit(
                 formatNick(message.sender),
                 message.content
         ));
@@ -214,8 +210,8 @@ public class ChatMessageRenderer {
 
     private void onBindDayChange(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(context.getThemeUtil().translations.formatDayChange(
-                context.getThemeUtil().formatter.getLongDateFormatter().print(message.time)
+        holder.content.setText(context.themeUtil().translations.formatDayChange(
+                context.themeUtil().formatter.getLongDateFormatter().print(message.time)
         ));
     }
 
@@ -240,7 +236,7 @@ public class ChatMessageRenderer {
     }
 
     public void onBind(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        holder.time.setText(context.getThemeUtil().formatter.getTimeFormatter().print(message.time));
+        holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
         switch (message.type) {
             case Plain:
                 onBindPlain(holder, message);

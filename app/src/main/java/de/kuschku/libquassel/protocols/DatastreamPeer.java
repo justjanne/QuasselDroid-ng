@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.libquassel.protocols;
@@ -210,7 +207,8 @@ public class DatastreamPeer implements RemotePeer {
     }
 
     private void handlePackedFunc(@NonNull List<QVariant> data) {
-        final FunctionType type = FunctionType.fromId((int) data.remove(0).data);
+        final FunctionType type = FunctionType.fromId((int) data.get(0).data);
+        data.remove(0);
         switch (type) {
             case SYNC:
                 busProvider.handle(PackedSyncFunctionSerializer.get().deserialize(data));
@@ -301,7 +299,7 @@ public class DatastreamPeer implements RemotePeer {
     }
 
     private class ParseRunnable implements Runnable {
-        ByteBuffer buffer;
+        final ByteBuffer buffer;
 
         public ParseRunnable(ByteBuffer buffer) {
             this.buffer = buffer;
@@ -312,11 +310,7 @@ public class DatastreamPeer implements RemotePeer {
             try {
                 // TODO: Put this into a future with a time limit, and parallelize it.
                 final List data = VariantVariantListSerializer.get().deserialize(buffer);
-                if (connection.getStatus() == ConnectionChangeEvent.Status.CONNECTING
-                        || connection.getStatus() == ConnectionChangeEvent.Status.HANDSHAKE
-                        || connection.getStatus() == ConnectionChangeEvent.Status.CORE_SETUP_REQUIRED
-                        || connection.getStatus() == ConnectionChangeEvent.Status.USER_SETUP_REQUIRED
-                        || connection.getStatus() == ConnectionChangeEvent.Status.LOGIN_REQUIRED) {
+                if (connection.getStatus() == ConnectionChangeEvent.Status.HANDSHAKE) {
                     handleHandshakeMessage(data);
                 } else {
                     handlePackedFunc(data);

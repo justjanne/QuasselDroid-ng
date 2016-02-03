@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.util.certificates;
@@ -40,25 +37,33 @@ import java.util.Map;
 
 public class CertificateDatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
-    @NonNull private static final String DATABASE_NAME = "certificates";
-    @NonNull private static final String TABLE_CERTIFICATES = "certificates";
+    @NonNull
+    private static final String DATABASE_NAME = "certificates";
+    @NonNull
+    private static final String TABLE_CERTIFICATES = "certificates";
 
-    @NonNull private static final String KEY_CORE_ADDRESS = "core_address";
-    @NonNull private static final String KEY_FINGERPRINT = "fingerprint";
+    @NonNull
+    private static final String KEY_CORE_ADDRESS = "core_address";
+    @NonNull
+    private static final String KEY_FINGERPRINT = "fingerprint";
 
     // Again we can only use String.format, as SQL doesn’t support table or column names to be bound
     // in prepared statements
-    @NonNull private static final String STATEMENT_INSERT =
+    @NonNull
+    private static final String STATEMENT_INSERT =
             String.format("INSERT OR IGNORE INTO %s(%s, %s) VALUES (?, ?)",
                     TABLE_CERTIFICATES, KEY_CORE_ADDRESS, KEY_FINGERPRINT);
-    @NonNull private static final String STATEMENT_DELETE =
+    @NonNull
+    private static final String STATEMENT_DELETE =
             String.format("DELETE FROM %s WHERE %s = ? AND %s = ?",
                     TABLE_CERTIFICATES, KEY_CORE_ADDRESS, KEY_FINGERPRINT);
-    @NonNull private static final String STATEMENT_DELETE_ALL =
+    @NonNull
+    private static final String STATEMENT_DELETE_ALL =
             String.format("DELETE FROM %s WHERE %s = ?",
                     TABLE_CERTIFICATES, KEY_CORE_ADDRESS);
 
-    @NonNull private static final String SPECIFIER_FIND_ALL = String.format("%s = ?", KEY_CORE_ADDRESS);
+    @NonNull
+    private static final String SPECIFIER_FIND_ALL = String.format("%s = ?", KEY_CORE_ADDRESS);
 
     public CertificateDatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

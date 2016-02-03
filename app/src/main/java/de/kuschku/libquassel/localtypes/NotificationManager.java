@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.libquassel.localtypes;
@@ -31,10 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import de.kuschku.libquassel.Client;
+import de.kuschku.libquassel.client.QClient;
 import de.kuschku.libquassel.message.Message;
-import de.kuschku.libquassel.syncables.types.Identity;
-import de.kuschku.libquassel.syncables.types.Network;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
 public class NotificationManager {
@@ -43,9 +38,9 @@ public class NotificationManager {
     @NonNull
     private final List<HighlightRule> highlights = new ArrayList<>();
     @NonNull
-    private final Client client;
+    private final QClient client;
 
-    public NotificationManager(@NonNull Client client) {
+    public NotificationManager(@NonNull QClient client) {
         this.client = client;
     }
 
@@ -63,28 +58,11 @@ public class NotificationManager {
 
     public void receiveMessage(@NonNull Message message) {
         if (checkMessage(message)) {
-            getNotifications(message.bufferInfo.id).add(message);
+            getNotifications(message.bufferInfo.id()).add(message);
         }
     }
 
     public boolean checkMessage(@NonNull Message message) {
-        Buffer buffer = client.getBuffer(message.bufferInfo.id);
-        if (buffer == null) return false;
-        Network network = client.getNetwork(buffer.getInfo().networkId);
-        if (network == null) return false;
-        Identity identity = client.getIdentity(network.getIdentityId());
-        if (identity == null) return false;
-
-        for (String nick : identity.getNicks()) {
-            if (message.content.contains(nick))
-                return true;
-        }
-        if (buffer.getName() == null)
-            return false;
-        for (HighlightRule rule : highlights) {
-            if (rule.matches(message.content, buffer.getName()))
-                return true;
-        }
         return false;
     }
 

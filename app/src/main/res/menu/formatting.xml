@@ -9,18 +9,15 @@
   ~ This program is free software: you can redistribute it and/or modify it
   ~ under the terms of the GNU General Public License as published by the Free
   ~ Software Foundation, either version 3 of the License, or (at your option)
-  ~ any later version, or under the terms of the GNU Lesser General Public
-  ~ License as published by the Free Software Foundation; either version 2.1 of
-  ~ the License, or (at your option) any later version.
+  ~ any later version.
   ~
   ~ This program is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
   ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   ~ GNU General Public License for more details.
   ~
-  ~ You should have received a copy of the GNU General Public License and the
-  ~ GNU Lesser General Public License along with this program.  If not, see
-  ~ <http://www.gnu.org/licenses/>.
+  ~ You should have received a copy of the GNU General Public License along
+  ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
@@ -28,31 +25,31 @@
     <item
         android:id="@+id/format_bold"
         android:icon="?attr/iconFormatBold"
-        app:showAsAction="always"
-        android:title="@string/formatBold" />
+        android:title="@string/formatBold"
+        app:showAsAction="always" />
     <item
         android:id="@+id/format_italic"
         android:icon="?attr/iconFormatItalic"
-        app:showAsAction="always"
-        android:title="@string/formatItalic" />
+        android:title="@string/formatItalic"
+        app:showAsAction="always" />
     <item
         android:id="@+id/format_underline"
         android:icon="?attr/iconFormatUnderline"
-        app:showAsAction="always"
-        android:title="@string/formatUnderline" />
+        android:title="@string/formatUnderline"
+        app:showAsAction="always" />
     <item
         android:id="@+id/format_paint"
         android:icon="?attr/iconFormatPaint"
-        app:showAsAction="always"
-        android:title="@string/formatColor" />
+        android:title="@string/formatColor"
+        app:showAsAction="always" />
     <item
         android:id="@+id/format_fill"
         android:icon="?attr/iconFormatFill"
-        app:showAsAction="always"
-        android:title="@string/formatFill" />
+        android:title="@string/formatFill"
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_history"
         android:icon="?attr/iconHistory"
-        app:showAsAction="always"
-        android:title="@string/labelHistory" />
+        android:title="@string/labelHistory"
+        app:showAsAction="always" />
 </menu>

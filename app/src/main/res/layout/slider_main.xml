@@ -9,18 +9,15 @@
   ~ This program is free software: you can redistribute it and/or modify it
   ~ under the terms of the GNU General Public License as published by the Free
   ~ Software Foundation, either version 3 of the License, or (at your option)
-  ~ any later version, or under the terms of the GNU Lesser General Public
-  ~ License as published by the Free Software Foundation; either version 2.1 of
-  ~ the License, or (at your option) any later version.
+  ~ any later version.
   ~
   ~ This program is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
   ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   ~ GNU General Public License for more details.
   ~
-  ~ You should have received a copy of the GNU General Public License and the
-  ~ GNU Lesser General Public License along with this program.  If not, see
-  ~ <http://www.gnu.org/licenses/>.
+  ~ You should have received a copy of the GNU General Public License along
+  ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -49,13 +46,13 @@
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.CardView
+            style="?attr/cardStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16.0dip"
             android:layout_marginLeft="16.0dip"
             android:layout_marginRight="16.0dip"
-            android:layout_marginTop="16.0dip"
-            style="?attr/cardStyle">
+            android:layout_marginTop="16.0dip">
 
             <LinearLayout
                 android:layout_width="fill_parent"

@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.libquassel.primitives.types;
@@ -28,19 +25,61 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 public class BufferInfo {
-    public final int id;
-    public final int networkId;
+    private int id;
+    private int networkId;
     @NonNull
-    public final Type type;
-    public final int groupId;
+    private Type type;
+    private int groupId;
     @Nullable
-    public final String name;
+    private String name;
 
     public BufferInfo(int id, int networkId, @NonNull Type type, int groupId, @Nullable String name) {
         this.id = id;
         this.networkId = networkId;
         this.type = type;
         this.groupId = groupId;
+        this.name = name;
+    }
+
+    public int id() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int networkId() {
+        return networkId;
+    }
+
+    public void setNetworkId(int networkId) {
+        this.networkId = networkId;
+    }
+
+    @NonNull
+    public Type type() {
+        return type;
+    }
+
+    public void setType(@NonNull Type type) {
+        this.type = type;
+    }
+
+    public int groupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
+    @Nullable
+    public String name() {
+        return name;
+    }
+
+    public void setName(@Nullable String name) {
         this.name = name;
     }
 

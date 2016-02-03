@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.libquassel.primitives;
@@ -63,7 +60,7 @@ import de.kuschku.libquassel.primitives.serializers.VoidSerializer;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.IdentitySerializer;
-import de.kuschku.libquassel.syncables.types.Identity;
+import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -82,9 +79,10 @@ public class QMetaTypeRegistry {
         addType(int.class, QMetaType.Type.UserType, "NetworkId", IntSerializer.get());
         addType(int.class, QMetaType.Type.UserType, "IdentityId", IntSerializer.get());
         addType(int.class, QMetaType.Type.UserType, "MsgId", IntSerializer.get());
+        addType(long.class, QMetaType.Type.UserType, "PeerPtr", LongSerializer.get());
         addType(BufferInfo.class, QMetaType.Type.UserType, "BufferInfo", BufferInfoSerializer.get());
         addType(Message.class, QMetaType.Type.UserType, "Message", MessageSerializer.get());
-        addType(Identity.class, QMetaType.Type.UserType, "Identity", new UserTypeSerializer<>(IdentitySerializer.get()));
+        addType(QIdentity.class, QMetaType.Type.UserType, "Identity", new UserTypeSerializer<>(IdentitySerializer.get()));
         addType(NetworkServer.class, QMetaType.Type.UserType, "Network::Server", new UserTypeSerializer<>(NetworkServerSerializer.get()));
         addType(int.class, QMetaType.Type.UInt, IntSerializer.get());
         addType(short.class, QMetaType.Type.UShort, ShortSerializer.get());
@@ -114,7 +112,6 @@ public class QMetaTypeRegistry {
         addType(void.class, QMetaType.Type.QLineF);
         addType(void.class, QMetaType.Type.QPoint);
         addType(void.class, QMetaType.Type.QPointF);
-        // TODO: Handle QRegExp for the IgnoreListManager
         addType(void.class, QMetaType.Type.QRegExp);
         addType(void.class, QMetaType.Type.QVariantHash);
         addType(void.class, QMetaType.Type.QEasingCurve);

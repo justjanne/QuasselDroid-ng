@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.quasseldroid_ng.ui.theme;
@@ -27,16 +24,16 @@ package de.kuschku.quasseldroid_ng.ui.theme;
 import android.support.annotation.NonNull;
 
 import de.kuschku.libquassel.BusProvider;
-import de.kuschku.libquassel.Client;
+import de.kuschku.libquassel.client.QClient;
 import de.kuschku.quasseldroid_ng.ui.chat.WrappedSettings;
 
 public class AppContext {
     private ThemeUtil themeUtil;
     private WrappedSettings settings;
-    private Client client;
+    private QClient client;
     private BusProvider provider;
 
-    public ThemeUtil getThemeUtil() {
+    public ThemeUtil themeUtil() {
         return themeUtil;
     }
 
@@ -50,7 +47,7 @@ public class AppContext {
         return this;
     }
 
-    public WrappedSettings getSettings() {
+    public WrappedSettings settings() {
         return settings;
     }
 
@@ -64,21 +61,21 @@ public class AppContext {
         return this;
     }
 
-    public Client getClient() {
+    public QClient client() {
         return client;
     }
 
-    public void setClient(Client client) {
+    public void setClient(QClient client) {
         this.client = client;
     }
 
     @NonNull
-    public AppContext withClient(Client client) {
+    public AppContext withClient(QClient client) {
         setClient(client);
         return this;
     }
 
-    public BusProvider getProvider() {
+    public BusProvider provider() {
         return provider;
     }
 

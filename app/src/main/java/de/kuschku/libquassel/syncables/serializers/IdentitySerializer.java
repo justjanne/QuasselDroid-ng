@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.libquassel.syncables.serializers;
@@ -35,7 +32,7 @@ import de.kuschku.libquassel.functions.types.SerializedFunction;
 import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
-import de.kuschku.libquassel.syncables.types.Identity;
+import de.kuschku.libquassel.syncables.types.impl.Identity;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class IdentitySerializer implements ObjectSerializer<Identity> {
@@ -54,25 +51,25 @@ public class IdentitySerializer implements ObjectSerializer<Identity> {
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(@NonNull Identity data) {
         final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        map.data.put("identityName", new QVariant(data.getIdentityName()));
-        map.data.put("nicks", new QVariant(data.getNicks()));
-        map.data.put("ident", new QVariant(data.getIdent()));
-        map.data.put("realName", new QVariant(data.getRealName()));
-        map.data.put("identityId", new QVariant(data.getIdentityId()));
-        map.data.put("autoAwayEnabled", new QVariant(data.isAutoAwayEnabled()));
-        map.data.put("autoAwayReasonEnabled", new QVariant(data.isAutoAwayReasonEnabled()));
-        map.data.put("autoAwayTime", new QVariant(data.getAutoAwayTime()));
-        map.data.put("awayNickEnabled", new QVariant(data.isAwayNickEnabled()));
-        map.data.put("awayReasonEnabled", new QVariant(data.isAwayReasonEnabled()));
-        map.data.put("detachAwayEnabled", new QVariant(data.isDetachAwayEnabled()));
-        map.data.put("detachAwayReasonEnabled", new QVariant(data.isDetachAwayReasonEnabled()));
-        map.data.put("awayReason", new QVariant(data.getAwayReason()));
-        map.data.put("autoAwayReason", new QVariant(data.getAutoAwayReason()));
-        map.data.put("detachAwayReason", new QVariant(data.getDetachAwayReason()));
-        map.data.put("partReason", new QVariant(data.getPartReason()));
-        map.data.put("quitReason", new QVariant(data.getQuitReason()));
-        map.data.put("awayNick", new QVariant(data.getAwayNick()));
-        map.data.put("kickReason", new QVariant(data.getKickReason()));
+        map.data.put("identityName", new QVariant(data.identityName()));
+        map.data.put("nicks", new QVariant(data.nicks()));
+        map.data.put("ident", new QVariant(data.ident()));
+        map.data.put("realName", new QVariant(data.realName()));
+        map.data.put("identityId", new QVariant(data.id()));
+        map.data.put("autoAwayEnabled", new QVariant(data.autoAwayEnabled()));
+        map.data.put("autoAwayReasonEnabled", new QVariant(data.autoAwayReasonEnabled()));
+        map.data.put("autoAwayTime", new QVariant(data.autoAwayTime()));
+        map.data.put("awayNickEnabled", new QVariant(data.awayNickEnabled()));
+        map.data.put("awayReasonEnabled", new QVariant(data.awayReasonEnabled()));
+        map.data.put("detachAwayEnabled", new QVariant(data.detachAwayEnabled()));
+        map.data.put("detachAwayReasonEnabled", new QVariant(data.detachAwayReasonEnabled()));
+        map.data.put("awayReason", new QVariant(data.awayReason()));
+        map.data.put("autoAwayReason", new QVariant(data.autoAwayReason()));
+        map.data.put("detachAwayReason", new QVariant(data.detachAwayReason()));
+        map.data.put("partReason", new QVariant(data.partReason()));
+        map.data.put("quitReason", new QVariant(data.quitReason()));
+        map.data.put("awayNick", new QVariant(data.awayNick()));
+        map.data.put("kickReason", new QVariant(data.kickReason()));
         return map;
     }
 
@@ -86,25 +83,25 @@ public class IdentitySerializer implements ObjectSerializer<Identity> {
     @Override
     public Identity fromLegacy(@NonNull Map<String, QVariant> map) {
         return new Identity(
-                (String) map.get("identityName").data,
-                (List<String>) map.get("nicks").data,
-                (String) map.get("ident").data,
-                (String) map.get("realName").data,
                 (int) map.get("identityId").data,
-                (boolean) map.get("autoAwayEnabled").data,
-                (boolean) map.get("autoAwayReasonEnabled").data,
-                (int) map.get("autoAwayTime").data,
-                (boolean) map.get("awayNickEnabled").data,
-                (boolean) map.get("awayReasonEnabled").data,
-                (boolean) map.get("detachAwayEnabled").data,
-                (boolean) map.get("detachAwayReasonEnabled").data,
-                (String) map.get("awayReason").data,
-                (String) map.get("autoAwayReason").data,
-                (String) map.get("detachAwayReason").data,
-                (String) map.get("partReason").data,
-                (String) map.get("quitReason").data,
+                (String) map.get("identityName").data,
+                (String) map.get("realName").data,
+                (List<String>) map.get("nicks").data,
                 (String) map.get("awayNick").data,
-                (String) map.get("kickReason").data
+                (boolean) map.get("awayNickEnabled").data,
+                (String) map.get("awayReason").data,
+                (boolean) map.get("awayReasonEnabled").data,
+                (boolean) map.get("autoAwayEnabled").data,
+                (int) map.get("autoAwayTime").data,
+                (String) map.get("autoAwayReason").data,
+                (boolean) map.get("autoAwayReasonEnabled").data,
+                (boolean) map.get("detachAwayEnabled").data,
+                (String) map.get("detachAwayReason").data,
+                (boolean) map.get("detachAwayReasonEnabled").data,
+                (String) map.get("ident").data,
+                (String) map.get("kickReason").data,
+                (String) map.get("partReason").data,
+                (String) map.get("quitReason").data
         );
     }
 

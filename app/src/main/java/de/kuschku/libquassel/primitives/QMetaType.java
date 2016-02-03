@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.libquassel.primitives;
@@ -45,7 +42,7 @@ public class QMetaType<T> {
     @NonNull
     public final String name;
     @NonNull
-    public final Class cl;
+    public final Class<T> cl;
     @Nullable
     public final PrimitiveSerializer<T> serializer;
 
@@ -61,6 +58,7 @@ public class QMetaType<T> {
         this(cl, type, type.getSerializableName(), serializer);
     }
 
+    @SuppressWarnings("unchecked")
     public QMetaType(@NonNull Class cl, @NonNull Type type, @NonNull String name, @Nullable PrimitiveSerializer<T> serializer) {
         this.cl = cl;
         this.type = type;

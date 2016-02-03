@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.libquassel.localtypes.backlogmanagers;
@@ -33,15 +30,16 @@ import org.joda.time.DateTimeUtils;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.kuschku.libquassel.Client;
+import de.kuschku.libquassel.client.QClient;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
+import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public class BacklogFilter implements UICallback {
     @NonNull
-    private final Client client;
+    private final QClient client;
     private final int bufferId;
     @NonNull
     private final ObservableSortedList<Message> unfiltered;
@@ -54,7 +52,7 @@ public class BacklogFilter implements UICallback {
     @Nullable
     private DateTime earliestMessage;
 
-    public BacklogFilter(@NonNull Client client, int bufferId, @NonNull ObservableSortedList<Message> unfiltered, @NonNull ObservableSortedList<Message> filtered) {
+    public BacklogFilter(@NonNull QClient client, int bufferId, @NonNull ObservableSortedList<Message> unfiltered, @NonNull ObservableSortedList<Message> filtered) {
         this.client = client;
         this.bufferId = bufferId;
         this.unfiltered = unfiltered;
@@ -92,7 +90,8 @@ public class BacklogFilter implements UICallback {
     }
 
     private boolean filterItem(@NonNull Message message) {
-        return (client.getIgnoreListManager() != null && client.getIgnoreListManager().matches(message)) || filteredTypes.contains(message.type);
+        QNetwork network = client.networkManager().network(message.bufferInfo.networkId());
+        return (client.ignoreListManager() != null && client.ignoreListManager().matches(message, network)) || filteredTypes.contains(message.type);
     }
 
     public void addFilter(Message.Type type) {

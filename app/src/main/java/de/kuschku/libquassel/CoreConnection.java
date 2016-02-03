@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.libquassel;
@@ -40,6 +37,8 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import de.kuschku.libquassel.client.ClientData;
+import de.kuschku.libquassel.client.QClient;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.HandshakeFailedEvent;
@@ -75,6 +74,10 @@ public class CoreConnection {
     private final ClientData clientData;
     @NonNull
     private final BusProvider busProvider;
+    @NonNull
+    private final QClient client;
+    @NonNull
+    private final CertificateManager certificateManager;
     @Nullable
     private ExecutorService outputExecutor;
     @Nullable
@@ -89,15 +92,16 @@ public class CoreConnection {
     private Socket socket;
     @NonNull
     private ConnectionChangeEvent.Status status = ConnectionChangeEvent.Status.DISCONNECTED;
-    @Nullable
-    private Client client;
-    @NonNull
-    private final CertificateManager certificateManager;
 
-    public CoreConnection(@NonNull final ServerAddress address, @NonNull final ClientData clientData, @NonNull final BusProvider busProvider, @NonNull CertificateManager certificateManager) {
+    public CoreConnection(@NonNull final ServerAddress address,
+                          @NonNull final ClientData clientData,
+                          @NonNull final BusProvider busProvider,
+                          @NonNull final QClient client,
+                          @NonNull CertificateManager certificateManager) {
         this.address = address;
         this.clientData = clientData;
         this.busProvider = busProvider;
+        this.client = client;
         this.certificateManager = certificateManager;
     }
 
@@ -115,6 +119,9 @@ public class CoreConnection {
     public void open(boolean supportsKeepAlive) throws IOException {
         assertNotNull(client);
 
+        status = ConnectionChangeEvent.Status.HANDSHAKE;
+        client.setConnectionStatus(status);
+
         // Intialize socket
         socket = new Socket();
         if (supportsKeepAlive) socket.setKeepAlive(true);
@@ -124,7 +131,6 @@ public class CoreConnection {
         channel = WrappedChannel.ofSocket(socket);
 
         busProvider.event.register(this);
-        client.setConnectionStatus(ConnectionChangeEvent.Status.HANDSHAKE);
 
         // Create executor for write events
         outputExecutor = Executors.newSingleThreadExecutor();
@@ -209,8 +215,10 @@ public class CoreConnection {
         this.close();
     }
 
-    public void onEventAsync(@NonNull ConnectionChangeEvent event) {
+    public void onEvent(@NonNull ConnectionChangeEvent event) {
         this.status = event.status;
+        if (event.status == ConnectionChangeEvent.Status.INITIALIZING_DATA && heartbeatThread != null)
+            heartbeatThread.start();
     }
 
     public void setCompression(boolean supportsCompression) {
@@ -231,10 +239,6 @@ public class CoreConnection {
                 close();
             }
         }
-    }
-
-    public void setClient(@NonNull Client client) {
-        this.client = client;
     }
 
     /**
@@ -283,7 +287,6 @@ public class CoreConnection {
                         // Mark prehandshake as read
                         hasReadPreHandshake = true;
                         assertNotNull(heartbeatThread);
-                        heartbeatThread.start();
 
                         // Send client data to core
                         String clientDate = new SimpleDateFormat("MMM dd yyyy HH:mm:ss", Locale.US).format(new Date());
@@ -328,6 +331,8 @@ public class CoreConnection {
                 while (running) {
                     Heartbeat heartbeat = new Heartbeat();
                     busProvider.dispatch(heartbeat);
+
+                    Log.d("libquassel", "Sending heartbeat");
 
                     Thread.sleep(30 * 1000);
                 }

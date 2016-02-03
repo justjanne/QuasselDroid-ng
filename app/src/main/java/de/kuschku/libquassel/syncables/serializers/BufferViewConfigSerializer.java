@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.libquassel.syncables.serializers;
@@ -35,7 +32,7 @@ import de.kuschku.libquassel.functions.types.SerializedFunction;
 import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
-import de.kuschku.libquassel.syncables.types.BufferViewConfig;
+import de.kuschku.libquassel.syncables.types.impl.BufferViewConfig;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class BufferViewConfigSerializer implements ObjectSerializer<BufferViewConfig> {
@@ -54,18 +51,18 @@ public class BufferViewConfigSerializer implements ObjectSerializer<BufferViewCo
     @Override
     public QVariant<Map<String, QVariant>> toVariantMap(@NonNull BufferViewConfig data) {
         final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        map.data.put("bufferViewName", new QVariant<>(data.getBufferViewName()));
-        map.data.put("TemporarilyRemovedBuffers", new QVariant<>(data.getTemporarilyRemovedBuffers()));
-        map.data.put("hideInactiveNetworks", new QVariant<>(data.isHideInactiveNetworks()));
-        map.data.put("BufferList", new QVariant<>(data.getBuffers()));
-        map.data.put("allowedBufferTypes", new QVariant<>(data.getAllowedBufferTypes()));
-        map.data.put("sortAlphabetically", new QVariant<>(data.isSortAlphabetically()));
-        map.data.put("disableDecoration", new QVariant<>(data.isDisableDecoration()));
-        map.data.put("addNewBuffersAutomatically", new QVariant<>(data.isAddNewBuffersAutomatically()));
-        map.data.put("networkId", new QVariant<>(data.getNetworkId()));
-        map.data.put("minimumActivity", new QVariant<>(data.getMinimumActivity()));
-        map.data.put("hideInactiveBuffers", new QVariant<>(data.isHideInactiveBuffers()));
-        map.data.put("RemovedBuffers", new QVariant<>(data.getRemovedBuffers()));
+        map.data.put("bufferViewName", new QVariant<>(data.bufferViewName()));
+        map.data.put("TemporarilyRemovedBuffers", new QVariant<>(data.temporarilyRemovedBuffers()));
+        map.data.put("hideInactiveNetworks", new QVariant<>(data.hideInactiveBuffers()));
+        map.data.put("BufferList", new QVariant<>(data.bufferList()));
+        map.data.put("allowedBufferTypes", new QVariant<>(data.allowedBufferTypes()));
+        map.data.put("sortAlphabetically", new QVariant<>(data.sortAlphabetically()));
+        map.data.put("disableDecoration", new QVariant<>(data.disableDecoration()));
+        map.data.put("addNewBuffersAutomatically", new QVariant<>(data.addNewBuffersAutomatically()));
+        map.data.put("networkId", new QVariant<>(data.networkId()));
+        map.data.put("minimumActivity", new QVariant<>(data.minimumActivity()));
+        map.data.put("hideInactiveBuffers", new QVariant<>(data.hideInactiveBuffers()));
+        map.data.put("RemovedBuffers", new QVariant<>(data.removedBuffers()));
         return map;
     }
 

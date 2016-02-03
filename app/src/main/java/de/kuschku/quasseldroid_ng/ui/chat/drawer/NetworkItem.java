@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
@@ -35,14 +32,14 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.kuschku.libquassel.localtypes.Buffer;
+import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
-import de.kuschku.libquassel.syncables.types.BufferViewConfig;
-import de.kuschku.libquassel.syncables.types.Network;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
+import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.observables.IObservable;
-import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.GeneralCallback;
+import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.callbacks.wrappers.GeneralCallbackWrapper;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
@@ -53,7 +50,7 @@ import static de.kuschku.libquassel.primitives.types.BufferInfo.Type.STATUS;
 
 public class NetworkItem extends PrimaryDrawerItem implements IObservable<GeneralCallback>, GeneralCallback {
     @NonNull
-    private final Network network;
+    private final QNetwork network;
     @NonNull
     private final ObservableSortedList<BufferItem> buffers = new ObservableSortedList<>(BufferItem.class, new AlphabeticalComparator());
     @NonNull
@@ -61,20 +58,21 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Genera
     @NonNull
     private final GeneralCallbackWrapper callback = new GeneralCallbackWrapper();
 
-    public NetworkItem(@NonNull AppContext context, @NonNull Network network, @NonNull BufferViewConfig config) {
+    public NetworkItem(@NonNull AppContext context, @NonNull QNetwork network, @NonNull QBufferViewConfig config) {
         this.network = network;
 
-        for (Integer bufferId : config.getBuffers()) {
-            Buffer buffer = context.getClient().getBuffer(bufferId);
-            if (buffer != null && buffer.getInfo().networkId == network.getNetworkId()) {
+        for (Integer bufferId : config.bufferList()) {
+            Buffer buffer = context.client().bufferManager().buffer(bufferId);
+            if (buffer != null && buffer.getInfo().networkId() == network.networkId()) {
                 this.buffers.add(new BufferItem(buffer, context));
             }
         }
-        config.getBuffers().addCallback(new ElementCallback<Integer>() {
+        config.bufferList().addCallback(new UICallback() {
             @Override
-            public void notifyItemInserted(Integer element) {
-                Buffer buffer = context.getClient().getBuffer(element);
-                if (network.getBuffers().contains(buffer)) {
+            public void notifyItemInserted(int position) {
+                int element = config.bufferList().get(position);
+                Buffer buffer = context.client().bufferManager().buffer(element);
+                if (buffer.getInfo().networkId() == network.networkId()) {
                     if (bufferIds.get(element) == null) {
                         BufferItem bufferItem = new BufferItem(buffer, context);
                         buffers.add(bufferItem);
@@ -86,7 +84,16 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Genera
             }
 
             @Override
-            public void notifyItemRemoved(Integer element) {
+            public void notifyItemChanged(int position) {
+                int element = config.bufferList().get(position);
+                if (bufferIds.get(element) != null) {
+                    notifyChanged();
+                }
+            }
+
+            @Override
+            public void notifyItemRemoved(int position) {
+                int element = config.bufferList().get(position);
                 if (bufferIds.get(element) != null) {
                     bufferIds.remove(element);
                     notifyChanged();
@@ -94,10 +101,27 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Genera
             }
 
             @Override
-            public void notifyItemChanged(Integer element) {
-                if (bufferIds.get(element) != null) {
-                    notifyChanged();
-                }
+            public void notifyItemMoved(int from, int to) {
+                notifyItemChanged(from);
+                notifyItemChanged(to);
+            }
+
+            @Override
+            public void notifyItemRangeInserted(int position, int count) {
+                for (int i = position; i < position + count; i++)
+                    notifyItemInserted(i);
+            }
+
+            @Override
+            public void notifyItemRangeChanged(int position, int count) {
+                for (int i = position; i < position + count; i++)
+                    notifyItemChanged(i);
+            }
+
+            @Override
+            public void notifyItemRangeRemoved(int position, int count) {
+                for (int i = position; i < position + count; i++)
+                    notifyItemRemoved(i);
             }
         });
     }
@@ -105,13 +129,13 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Genera
     @NonNull
     @Override
     public StringHolder getDescription() {
-        return new StringHolder(String.valueOf(network.getLatency()));
+        return new StringHolder(String.valueOf(network.latency()));
     }
 
     @Nullable
     @Override
     public StringHolder getName() {
-        return new StringHolder(network.getNetworkName());
+        return new StringHolder(network.networkName());
     }
 
     @NonNull
@@ -140,20 +164,20 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Genera
     }
 
     @NonNull
-    public Network getNetwork() {
+    public QNetwork getNetwork() {
         return network;
     }
 
     @Override
     public long getIdentifier() {
-        return network.getNetworkId();
+        return network.networkId();
     }
 
     class AlphabeticalComparator implements ObservableSortedList.ItemComparator<BufferItem> {
         @Override
         public int compare(@NonNull BufferItem o1, @NonNull BufferItem o2) {
-            BufferInfo.Type type1 = o1.getBuffer().getInfo().type;
-            BufferInfo.Type type2 = o2.getBuffer().getInfo().type;
+            BufferInfo.Type type1 = o1.getBuffer().getInfo().type();
+            BufferInfo.Type type2 = o2.getBuffer().getInfo().type();
             if (type1 == type2) {
                 if (o1.getBuffer().getName() == null)
                     return -1;
@@ -190,14 +214,14 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Genera
 
         @Override
         public boolean areItemsTheSame(@NonNull BufferItem item1, @NonNull BufferItem item2) {
-            return item1.getBuffer().getInfo().id == item2.getBuffer().getInfo().id;
+            return item1.getBuffer().getInfo().id() == item2.getBuffer().getInfo().id();
         }
     }
 
     class NoneComparator implements ObservableSortedList.ItemComparator<BufferItem> {
         @Override
         public int compare(@NonNull BufferItem o1, @NonNull BufferItem o2) {
-            return o1.getBuffer().getInfo().id - o2.getBuffer().getInfo().id;
+            return o1.getBuffer().getInfo().id() - o2.getBuffer().getInfo().id();
         }
 
         @Override
@@ -207,7 +231,7 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Genera
 
         @Override
         public boolean areItemsTheSame(@NonNull BufferItem item1, @NonNull BufferItem item2) {
-            return item1.getBuffer().getInfo().id == item2.getBuffer().getInfo().id;
+            return item1.getBuffer().getInfo().id() == item2.getBuffer().getInfo().id();
         }
     }
 }

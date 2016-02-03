@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.quasseldroid_ng.ui.chat;
@@ -69,7 +66,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import aspm.annotations.BooleanPreference;
 import aspm.annotations.IntPreference;
@@ -82,14 +78,15 @@ import de.kuschku.libquassel.events.BacklogReceivedEvent;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.LagChangedEvent;
+import de.kuschku.libquassel.events.LoginRequireEvent;
 import de.kuschku.libquassel.events.UnknownCertificateEvent;
-import de.kuschku.libquassel.localtypes.Buffer;
-import de.kuschku.libquassel.localtypes.ChannelBuffer;
 import de.kuschku.libquassel.localtypes.backlogmanagers.BacklogFilter;
+import de.kuschku.libquassel.localtypes.buffers.Buffer;
+import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.message.Message;
-import de.kuschku.libquassel.syncables.types.BufferViewConfig;
-import de.kuschku.libquassel.syncables.types.BufferViewManager;
-import de.kuschku.libquassel.syncables.types.IrcChannel;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
+import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.quasseldroid_ng.BuildConfig;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
@@ -112,12 +109,17 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 @UiThread
 public class ChatActivity extends AppCompatActivity {
+    @NonNull
+    private final Status status = new Status();
+    @NonNull
+    private final ServiceInterface serviceInterface = new ServiceInterface();
+    @NonNull
+    private final AppContext context = new AppContext();
     // Main layout
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.sliding_layout)
     SlidingUpPanelLayout slidingLayout;
-
     // Input Line
     @Bind(R.id.chatline_scroller)
     ScrollView chatlineScroller;
@@ -125,62 +127,28 @@ public class ChatActivity extends AppCompatActivity {
     AppCompatEditText chatline;
     @Bind(R.id.send)
     AppCompatImageButton send;
-
     // Input History
     @Bind(R.id.sliding_layout_history)
     SlidingUpPanelLayout slidingLayoutHistory;
     @Bind(R.id.msg_history)
     RecyclerView msgHistory;
-
     // Advanced Formatter
     @Bind(R.id.formatting_menu)
     ActionMenuView formattingMenu;
     @Bind(R.id.formatting_toolbar)
     Toolbar formattingToolbar;
-
     // Content view
     @Bind(R.id.swipe_view)
     SwipeRefreshLayout swipeView;
     @Bind(R.id.messages)
     RecyclerView messages;
-
     private MessageAdapter messageAdapter;
     private AccountHeader accountHeader;
     private Drawer drawerLeft;
     private AdvancedEditor editor;
     private BufferViewConfigWrapper wrapper;
-
-    @NonNull
-    private final Status status = new Status();
-    private static class Status extends Storable {
-        @Store
-        int bufferId = -1;
-        @Store
-        int bufferViewConfigId = -1;
-    }
-
-    @NonNull
-    private final ServiceInterface serviceInterface = new ServiceInterface();
-    private class ServiceInterface {
-        private void connect(@NonNull ServerAddress address) {
-            assertNotNull(binder);
-            disconnect();
-
-            context.setProvider(new BusProvider());
-            context.getProvider().event.register(ChatActivity.this);
-            binder.startBackgroundThread(context.getProvider(), address);
-            onConnectionEstablished();
-        }
-
-        private void disconnect() {
-            if (context.getProvider() != null) {
-                context.getProvider().event.unregister(ChatActivity.this);
-            }
-            context.setProvider(null);
-            context.setClient(null);
-        }
-    }
-
+    @Nullable
+    private QuasselService.LocalBinder binder;
     @Nullable
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @UiThread
@@ -193,12 +161,12 @@ public class ChatActivity extends AppCompatActivity {
 
                     serviceInterface.disconnect();
 
-                    context.setProvider(backgroundThread.provider);
-                    context.setClient(backgroundThread.handler.client);
-                    context.getProvider().event.register(ChatActivity.this);
+                    context.setProvider(backgroundThread.client().provider);
+                    context.setClient(backgroundThread.client().client);
+                    context.provider().event.register(ChatActivity.this);
 
                     updateSubTitle();
-                    if (context.getClient().getConnectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
+                    if (context.client().connectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
                         updateBufferViewConfigs();
                     }
                 }
@@ -212,31 +180,25 @@ public class ChatActivity extends AppCompatActivity {
         }
     };
 
-    @PreferenceWrapper(BuildConfig.APPLICATION_ID)
-    public static abstract class Settings {
-        @StringPreference("QUASSEL_LIGHT")
-        String theme;
-        @BooleanPreference(false)
-        boolean fullHostmask;
-        @IntPreference(2)
-        int textSize;
-        @BooleanPreference(true)
-        boolean mircColors;
-
-        @StringPreference("")
-        String lastHost;
-        @IntPreference(4242)
-        int lastPort;
-        @StringPreference("")
-        String lastUsername;
-        @StringPreference("")
-        String lastPassword;
+    private static void updateNoColor(Buffer buffer, @NonNull Menu menu) {
+        boolean isNoColor = isNoColor(buffer);
+        menu.findItem(R.id.format_bold).setEnabled(!isNoColor);
+        menu.findItem(R.id.format_italic).setEnabled(!isNoColor);
+        menu.findItem(R.id.format_underline).setEnabled(!isNoColor);
+        menu.findItem(R.id.format_paint).setEnabled(!isNoColor);
+        menu.findItem(R.id.format_fill).setEnabled(!isNoColor);
     }
 
-    @NonNull
-    private final AppContext context = new AppContext();
-    @Nullable
-    private QuasselService.LocalBinder binder;
+    public static boolean isNoColor(Buffer buffer) {
+        assertNotNull(buffer);
+        if (buffer instanceof ChannelBuffer) {
+            QIrcChannel channel = ((ChannelBuffer) buffer).getChannel();
+            assertNotNull(channel);
+            return channel.hasMode('c');
+        } else {
+            return false;
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -341,8 +303,8 @@ public class ChatActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.action_hide_events: {
-                if (context.getClient() != null) {
-                    BacklogFilter backlogFilter = context.getClient().getBacklogManager().getFilter(status.bufferId);
+                if (context.client() != null) {
+                    BacklogFilter backlogFilter = context.client().backlogManager().filter(status.bufferId);
                     if (backlogFilter != null) {
                         int oldFilters = backlogFilter.getFilters();
                         List<Integer> oldFiltersList = new ArrayList<>();
@@ -384,29 +346,9 @@ public class ChatActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private static void updateNoColor(Buffer buffer, @NonNull Menu menu) {
-        boolean isNoColor = isNoColor(buffer);
-        menu.findItem(R.id.format_bold).setEnabled(!isNoColor);
-        menu.findItem(R.id.format_italic).setEnabled(!isNoColor);
-        menu.findItem(R.id.format_underline).setEnabled(!isNoColor);
-        menu.findItem(R.id.format_paint).setEnabled(!isNoColor);
-        menu.findItem(R.id.format_fill).setEnabled(!isNoColor);
-    }
-
-    public static boolean isNoColor(Buffer buffer) {
-        assertNotNull(buffer);
-        if (buffer instanceof ChannelBuffer) {
-            IrcChannel channel = ((ChannelBuffer) buffer).getChannel();
-            assertNotNull(channel);
-            return channel.hasMode('c');
-        } else {
-            return false;
-        }
-    }
-
     private void setupContext() {
         context.setSettings(new WrappedSettings(this));
-        AppTheme theme = AppTheme.themeFromString(context.getSettings().theme.get());
+        AppTheme theme = AppTheme.themeFromString(context.settings().theme.get());
         setTheme(theme.themeId);
         context.setThemeUtil(new ThemeUtil(this, theme));
     }
@@ -444,10 +386,10 @@ public class ChatActivity extends AppCompatActivity {
 
     private void initLoader() {
         swipeView.setEnabled(false);
-        swipeView.setColorSchemeColors(context.getThemeUtil().res.colorPrimary);
+        swipeView.setColorSchemeColors(context.themeUtil().res.colorPrimary);
         swipeView.setOnRefreshListener(() -> {
-            assertNotNull(context.getClient());
-            context.getClient().getBacklogManager().requestMoreBacklog(status.bufferId, 20);
+            assertNotNull(context.client());
+            context.client().backlogManager().requestMoreBacklog(status.bufferId, 20);
         });
     }
 
@@ -562,7 +504,7 @@ public class ChatActivity extends AppCompatActivity {
         if (expanded) {
             chatline.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
         } else {
-            chatline.getLayoutParams().height = context.getThemeUtil().res.actionBarSize;
+            chatline.getLayoutParams().height = context.themeUtil().res.actionBarSize;
         }
         chatline.setSingleLine(!expanded);
 
@@ -575,7 +517,7 @@ public class ChatActivity extends AppCompatActivity {
         for (int i = 0; i < strings.length; i++) {
             AppTheme theme = AppTheme.values()[i];
             strings[i] = theme.name();
-            if (theme.name().equals(context.getSettings().theme.get())) startIndex = i;
+            if (theme.name().equals(context.settings().theme.get())) startIndex = i;
         }
 
         new MaterialDialog.Builder(this)
@@ -583,11 +525,11 @@ public class ChatActivity extends AppCompatActivity {
                 .positiveText("Select Theme")
                 .negativeText("Cancel")
                 .itemsCallbackSingleChoice(startIndex, (dialog, itemView, which, text) -> {
-                    context.getSettings().theme.set(strings[dialog.getSelectedIndex()]);
+                    context.settings().theme.set(strings[dialog.getSelectedIndex()]);
                     recreate();
                     return true;
                 })
-                .negativeColor(context.getThemeUtil().res.colorForeground)
+                .negativeColor(context.themeUtil().res.colorForeground)
                 .build()
                 .show();
     }
@@ -602,9 +544,9 @@ public class ChatActivity extends AppCompatActivity {
             drawerLeft.removeAllItems();
         } else {
             drawerLeft.removeAllItems();
-            BufferViewManager bufferViewManager = context.getClient().getBufferViewManager();
+            QBufferViewManager bufferViewManager = context.client().bufferViewManager();
             assertNotNull(bufferViewManager);
-            BufferViewConfig viewConfig = bufferViewManager.BufferViews.get(bufferViewConfigId);
+            QBufferViewConfig viewConfig = bufferViewManager.bufferViewConfig(bufferViewConfigId);
             assertNotNull(viewConfig);
 
             wrapper = new BufferViewConfigWrapper(context, viewConfig, drawerLeft);
@@ -622,9 +564,10 @@ public class ChatActivity extends AppCompatActivity {
             swipeView.setEnabled(true);
 
             status.bufferId = bufferId;
+
             // Make sure we are actually connected
-            ObservableSortedList<Message> list = context.getClient().getBacklogManager().getFiltered(status.bufferId);
-            Buffer buffer = context.getClient().getBuffer(status.bufferId);
+            ObservableSortedList<Message> list = context.client().backlogManager().filtered(bufferId);
+            Buffer buffer = context.client().bufferManager().buffer(bufferId);
             // Make sure everything is properly defined
             assertNotNull("Buffer is null: " + bufferId, buffer);
             assertNotNull(list);
@@ -638,18 +581,35 @@ public class ChatActivity extends AppCompatActivity {
     private void onConnectionEstablished() {
         assertNotNull(binder);
         assertNotNull(binder.getBackgroundThread());
-        context.setClient(binder.getBackgroundThread().handler.client);
-        assertNotNull(context.getClient());
+        context.setClient(binder.getBackgroundThread().client().client);
+        assertNotNull(context.client());
     }
 
     private void sendInput() {
-        if (context.getClient() == null) return;
-        Buffer buffer = context.getClient().getBuffer(status.bufferId);
-        assertNotNull(buffer);
+        if (context.client() == null) return;
 
-        String text = editor.toFormatString();
-        context.getClient().sendInput(buffer.getInfo(), text);
-        chatline.setText("");
+        int bufferId = status.bufferId;
+
+        if (bufferId >= 0) {
+            Buffer buffer = context.client().bufferManager().buffer(bufferId);
+            assertNotNull(buffer);
+
+            String text = editor.toFormatString();
+            context.client().sendInput(buffer.getInfo(), text);
+            chatline.setText("");
+        }
+    }
+
+    public void onEventMainThread(@NonNull LoginRequireEvent event) {
+        assertNotNull(context.client());
+
+        if (event.failedLast)
+            showLoginDialog();
+        else
+            context.client().login(
+                    context.settings().lastUsername.or(""),
+                    context.settings().lastPassword.or("")
+            );
     }
 
     public void onEventMainThread(@NonNull ConnectionChangeEvent event) {
@@ -658,32 +618,22 @@ public class ChatActivity extends AppCompatActivity {
         switch (event.status) {
             case HANDSHAKE:
                 break;
-            case CORE_SETUP_REQUIRED:
-                break;
-            case LOGIN_REQUIRED:
-                assertNotNull(context.getClient());
-
-                showLoginDialog();
-                break;
-            case USER_SETUP_REQUIRED:
-                break;
             case CONNECTED:
-                Log.e("TIME", String.valueOf(System.currentTimeMillis()));
                 updateBufferViewConfigs();
                 break;
         }
     }
 
     private void updateBufferViewConfigs() {
-        assertNotNull(context.getClient().getBufferViewManager());
-        Map<Integer, BufferViewConfig> bufferViews = context.getClient().getBufferViewManager().BufferViews;
+        assertNotNull(context.client().bufferViewManager());
+        List<QBufferViewConfig> bufferViews = context.client().bufferViewManager().bufferViewConfigs();
         accountHeader.clear();
-        for (Map.Entry<Integer, BufferViewConfig> entry : bufferViews.entrySet()) {
-            if (entry.getValue() != null) {
+        for (QBufferViewConfig viewConfig : bufferViews) {
+            if (viewConfig != null) {
                 accountHeader.addProfiles(
                         new ProfileDrawerItem()
-                                .withName(entry.getValue().getBufferViewName())
-                                .withIdentifier(entry.getKey())
+                                .withName(viewConfig.bufferViewName())
+                                .withIdentifier(viewConfig.bufferViewId())
                 );
             }
         }
@@ -702,21 +652,21 @@ public class ChatActivity extends AppCompatActivity {
                     AppCompatEditText passwordField = (AppCompatEditText) parent.findViewById(R.id.password);
                     String username = usernameField.getText().toString();
                     String password = passwordField.getText().toString();
-                    context.getSettings().lastUsername.set(username);
-                    context.getSettings().lastPassword.set(password);
-                    context.getClient().login(username, password);
+                    context.settings().lastUsername.set(username);
+                    context.settings().lastPassword.set(password);
+                    context.client().login(username, password);
                 })
                 .cancelListener(dialog1 -> {
                     if (binder != null)
                         binder.stopBackgroundThread();
                     serviceInterface.disconnect();
                 })
-                .negativeColor(context.getThemeUtil().res.colorForeground)
+                .negativeColor(context.themeUtil().res.colorForeground)
                 .positiveText(R.string.labelLogin)
                 .negativeText(R.string.labelCancel)
                 .build();
-        ((AppCompatEditText) dialog.getView().findViewById(R.id.username)).setText(context.getSettings().lastUsername.get());
-        ((AppCompatEditText) dialog.getView().findViewById(R.id.password)).setText(context.getSettings().lastPassword.get());
+        ((AppCompatEditText) dialog.getView().findViewById(R.id.username)).setText(context.settings().lastUsername.get());
+        ((AppCompatEditText) dialog.getView().findViewById(R.id.password)).setText(context.settings().lastPassword.get());
         dialog.show();
     }
 
@@ -734,19 +684,19 @@ public class ChatActivity extends AppCompatActivity {
                     AppCompatEditText portField = (AppCompatEditText) parent.findViewById(R.id.port);
                     String host = hostField.getText().toString().trim();
                     int port = Integer.valueOf(portField.getText().toString().trim());
-                    context.getSettings().lastHost.set(host);
-                    context.getSettings().lastPort.set(port);
+                    context.settings().lastHost.set(host);
+                    context.settings().lastPort.set(port);
                     serviceInterface.connect(new ServerAddress(host, port));
                 })
-                .negativeColor(context.getThemeUtil().res.colorForeground)
+                .negativeColor(context.themeUtil().res.colorForeground)
                 .positiveText(R.string.labelConnect)
                 .negativeText(R.string.labelCancel)
                 .build();
         AppCompatEditText hostField = (AppCompatEditText) dialog.getView().findViewById(R.id.host);
         AppCompatEditText portField = (AppCompatEditText) dialog.getView().findViewById(R.id.port);
 
-        hostField.setText(context.getSettings().lastHost.get());
-        portField.setText(String.valueOf(context.getSettings().lastPort.get()));
+        hostField.setText(context.settings().lastHost.get());
+        portField.setText(String.valueOf(context.settings().lastPort.get()));
 
         dialog.show();
     }
@@ -759,14 +709,14 @@ public class ChatActivity extends AppCompatActivity {
 
     public void onEventMainThread(@NonNull UnknownCertificateEvent event) {
         new MaterialDialog.Builder(this)
-                .content(context.getThemeUtil().translations.warningCertificate + "\n" + CertificateUtils.certificateToFingerprint(event.certificate, ""))
+                .content(context.themeUtil().translations.warningCertificate + "\n" + CertificateUtils.certificateToFingerprint(event.certificate, ""))
                 .title("Unknown Certificate")
                 .onPositive((dialog, which) -> {
-                    if (binder.getBackgroundThread() != null) {
-                        binder.getBackgroundThread().certificateManager.addCertificate(event.certificate, event.address);
+                    if (binder != null && binder.getBackgroundThread() != null) {
+                        binder.getBackgroundThread().client().certificateManager.addCertificate(event.certificate, event.address);
                     }
                 })
-                .negativeColor(context.getThemeUtil().res.colorForeground)
+                .negativeColor(context.themeUtil().res.colorForeground)
                 .positiveText("Yes")
                 .negativeText("No")
                 .build()
@@ -787,10 +737,58 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void updateSubTitle() {
-        if (context.getClient() != null) {
-            toolbar.setSubtitle(SpanFormatter.format("Lag: %.2f, %s", context.getClient().getLag() / 1000.0F, context.getClient().getConnectionStatus()));
+        if (context.client() != null) {
+            toolbar.setSubtitle(SpanFormatter.format("Lag: %.2f, %s", context.client().latency() / 1000.0F, context.client().connectionStatus()));
         } else {
             toolbar.setSubtitle("");
+        }
+    }
+
+    private static class Status extends Storable {
+        @Store
+        int bufferId = -1;
+        @Store
+        int bufferViewConfigId = -1;
+    }
+
+    @PreferenceWrapper(BuildConfig.APPLICATION_ID)
+    public static abstract class Settings {
+        @StringPreference("QUASSEL_LIGHT")
+        String theme;
+        @BooleanPreference(false)
+        boolean fullHostmask;
+        @IntPreference(2)
+        int textSize;
+        @BooleanPreference(true)
+        boolean mircColors;
+
+        @StringPreference("")
+        String lastHost;
+        @IntPreference(4242)
+        int lastPort;
+        @StringPreference("")
+        String lastUsername;
+        @StringPreference("")
+        String lastPassword;
+    }
+
+    private class ServiceInterface {
+        private void connect(@NonNull ServerAddress address) {
+            assertNotNull(binder);
+            disconnect();
+
+            context.setProvider(new BusProvider());
+            context.provider().event.register(ChatActivity.this);
+            binder.startBackgroundThread(context.provider(), address);
+            onConnectionEstablished();
+        }
+
+        private void disconnect() {
+            if (context.provider() != null) {
+                context.provider().event.unregister(ChatActivity.this);
+            }
+            context.setProvider(null);
+            context.setClient(null);
         }
     }
 }

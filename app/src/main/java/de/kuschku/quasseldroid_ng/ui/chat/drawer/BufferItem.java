@@ -8,18 +8,15 @@
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
- * any later version, or under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License and the
- * GNU Lesser General Public License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
@@ -37,10 +34,10 @@ import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-import de.kuschku.libquassel.localtypes.Buffer;
-import de.kuschku.libquassel.localtypes.ChannelBuffer;
-import de.kuschku.libquassel.localtypes.QueryBuffer;
-import de.kuschku.libquassel.localtypes.StatusBuffer;
+import de.kuschku.libquassel.localtypes.buffers.Buffer;
+import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
+import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
+import de.kuschku.libquassel.localtypes.buffers.StatusBuffer;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.quasseldroid_ng.R;
@@ -66,7 +63,7 @@ public class BufferItem extends SecondaryDrawerItem implements IObservable<Gener
     public BufferItem(@NonNull Buffer buffer, @NonNull AppContext context) {
         this.buffer = buffer;
         this.context = context;
-        notifications = context.getClient().getNotificationManager().getNotifications(buffer.getInfo().id);
+        notifications = context.client().notificationManager().getNotifications(buffer.getInfo().id());
         notifications.addCallback(new GeneralUICallbackWrapper() {
             @Override
             public void notifyChanged() {
@@ -99,13 +96,13 @@ public class BufferItem extends SecondaryDrawerItem implements IObservable<Gener
         if (buffer instanceof QueryBuffer) {
             QueryBuffer queryBuffer = (QueryBuffer) buffer;
             if (queryBuffer.getUser() != null)
-                return new StringHolder(queryBuffer.getUser().getRealName());
+                return new StringHolder(queryBuffer.getUser().realName());
         } else if (buffer instanceof StatusBuffer) {
 
         } else if (buffer instanceof ChannelBuffer) {
             ChannelBuffer channelBuffer = (ChannelBuffer) buffer;
             if (channelBuffer.getChannel() != null)
-                return new StringHolder(channelBuffer.getChannel().getTopic());
+                return new StringHolder(channelBuffer.getChannel().topic());
         }
         return super.getDescription();
     }
@@ -114,7 +111,7 @@ public class BufferItem extends SecondaryDrawerItem implements IObservable<Gener
     @Override
     public StringHolder getName() {
         if (buffer instanceof StatusBuffer)
-            return new StringHolder(context.getThemeUtil().translations.titleStatusBuffer);
+            return new StringHolder(context.themeUtil().translations.titleStatusBuffer);
         else
             return new StringHolder(buffer.getName());
     }
@@ -152,14 +149,14 @@ public class BufferItem extends SecondaryDrawerItem implements IObservable<Gener
     @Override
     public ColorHolder getIconColor() {
         return buffer.getStatus() == BufferInfo.BufferStatus.ONLINE ?
-                ColorHolder.fromColor(context.getThemeUtil().res.colorAccent) :
+                ColorHolder.fromColor(context.themeUtil().res.colorAccent) :
                 new ColorHolder();
     }
 
     @NonNull
     @Override
     public ColorHolder getDescriptionTextColor() {
-        return ColorHolder.fromColor(context.getThemeUtil().res.colorForegroundSecondary);
+        return ColorHolder.fromColor(context.themeUtil().res.colorForegroundSecondary);
     }
 
     @Override
@@ -179,7 +176,7 @@ public class BufferItem extends SecondaryDrawerItem implements IObservable<Gener
 
     @Override
     public long getIdentifier() {
-        return buffer.getInfo().id;
+        return buffer.getInfo().id();
     }
 
     @Override
@@ -188,9 +185,9 @@ public class BufferItem extends SecondaryDrawerItem implements IObservable<Gener
 
         if (getDescription() != null && getDescription().getText() != null)
             ((TextView) view.findViewById(R.id.material_drawer_description)).setText(MessageUtil.parseStyleCodes(
-                    context.getThemeUtil(),
+                    context.themeUtil(),
                     getDescription().getText(),
-                    context.getSettings().mircColors.or(true)
+                    context.settings().mircColors.or(true)
             ));
     }
 }

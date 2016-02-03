@@ -9,24 +9,21 @@
   ~ This program is free software: you can redistribute it and/or modify it
   ~ under the terms of the GNU General Public License as published by the Free
   ~ Software Foundation, either version 3 of the License, or (at your option)
-  ~ any later version, or under the terms of the GNU Lesser General Public
-  ~ License as published by the Free Software Foundation; either version 2.1 of
-  ~ the License, or (at your option) any later version.
+  ~ any later version.
   ~
   ~ This program is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
   ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   ~ GNU General Public License for more details.
   ~
-  ~ You should have received a copy of the GNU General Public License and the
-  ~ GNU Lesser General Public License along with this program.  If not, see
-  ~ <http://www.gnu.org/licenses/>.
+  ~ You should have received a copy of the GNU General Public License along
+  ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:paddingBottom="@dimen/message_history_panel_height"
     tools:showIn="@layout/slider_main">
 
@@ -34,12 +31,12 @@
         android:id="@+id/chatline_scroller"
         android:layout_width="0dip"
         android:layout_height="match_parent"
+        android:layout_above="@+id/formatting_toolbar_container"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/send"
-        android:layout_toStartOf="@+id/send"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/formatting_toolbar_container">
+        android:layout_toLeftOf="@+id/send"
+        android:layout_toStartOf="@+id/send">
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/chatline"
