@@ -413,11 +413,6 @@ public class IrcUser extends AIrcUser<IrcUser> {
     }
 
     @Override
-    public void init(Network network) {
-        this.network = network;
-        _update();
-    }
-
     public void init(QNetwork network) {
         this.network = network;
         channels = new HashSet<>();

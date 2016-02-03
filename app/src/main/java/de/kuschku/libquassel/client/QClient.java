@@ -432,6 +432,8 @@ public class QClient extends AClient {
 
     public void bufferSync(@NonNull SyncFunction packedFunc) {
         String key = hashName(packedFunc.className, packedFunc.objectName);
+        if (connectionStatus() == ConnectionChangeEvent.Status.CONNECTED)
+            Log.d("libquassel", "Queueing sync: " + packedFunc);
         if (!bufferedSyncs.containsKey(key))
             bufferedSyncs.put(key, new LinkedList<>());
         bufferedSyncs.get(key).add(packedFunc);

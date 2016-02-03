@@ -332,8 +332,6 @@ public class CoreConnection {
                     Heartbeat heartbeat = new Heartbeat();
                     busProvider.dispatch(heartbeat);
 
-                    Log.d("libquassel", "Sending heartbeat");
-
                     Thread.sleep(30 * 1000);
                 }
             } catch (InterruptedException e) {
