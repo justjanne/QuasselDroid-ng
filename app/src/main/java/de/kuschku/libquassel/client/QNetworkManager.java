@@ -24,14 +24,16 @@ package de.kuschku.libquassel.client;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
 
 import de.kuschku.libquassel.syncables.types.impl.Network;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 
-public class QNetworkManager {
+public class QNetworkManager extends Observable {
     @NonNull
     private final Map<Integer, QNetwork> networks = new HashMap<>();
     private final QClient client;
@@ -46,6 +48,7 @@ public class QNetworkManager {
 
     public void createNetwork(@NonNull QNetwork network) {
         networks.put(network.networkId(), network);
+        _update();
     }
 
     public QNetwork network(@IntRange(from = 0) int networkId) {
@@ -54,6 +57,7 @@ public class QNetworkManager {
 
     public void removeNetwork(@IntRange(from = 0) int network) {
         networks.remove(network);
+        _update();
     }
 
 
@@ -62,6 +66,12 @@ public class QNetworkManager {
             createNetwork(networkId);
             client.requestInitObject("Network", String.valueOf(networkId));
         }
+        _update();
+    }
+
+    private void _update() {
+        setChanged();
+        notifyObservers();
     }
 
     public void onDone(Runnable runnable) {
@@ -72,5 +82,10 @@ public class QNetworkManager {
         for (QNetwork network : networks.values()) {
             network.postInit();
         }
+        _update();
+    }
+
+    public List<QNetwork> networks() {
+        return new ArrayList<>(networks.values());
     }
 }

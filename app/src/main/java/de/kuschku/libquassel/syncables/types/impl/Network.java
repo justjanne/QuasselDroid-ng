@@ -754,6 +754,7 @@ public class Network extends ANetwork<Network> implements Observer {
     public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull QClient client) {
         super.init(objectName, provider, client);
         networkInfo._setNetworkId(Integer.parseInt(objectName));
+        client.networkManager().createNetwork(this);
     }
 
     @Override

@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.kuschku.libquassel.BusProvider;
+import de.kuschku.libquassel.client.QClient;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.IrcChannelSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.AIrcChannel;
@@ -424,9 +426,16 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
             }
         }
         if (cachedChanModes != null) {
+            if (cachedChanModes.get("A") != null)
             A_channelModes = (Map<Character, List<String>>) cachedChanModes.get("A");
+
+            if (cachedChanModes.get("B") != null)
             B_channelModes = (Map<Character, String>) cachedChanModes.get("B");
+
+            if (cachedChanModes.get("C") != null)
             C_channelModes = (Map<Character, String>) cachedChanModes.get("C");
+
+            if (cachedChanModes.get("D") != null)
             D_channelModes = ModeUtils.toModes((String) cachedChanModes.get("D"));
         }
 
@@ -464,4 +473,12 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
         return result;
     }
 
+    @Override
+    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull QClient client) {
+        super.init(objectName, provider, client);
+
+        String[] split = objectName.split("/");
+        assertEquals(split.length, 2);
+        init(client.networkManager().network(Integer.parseInt(split[0])));
+    }
 }

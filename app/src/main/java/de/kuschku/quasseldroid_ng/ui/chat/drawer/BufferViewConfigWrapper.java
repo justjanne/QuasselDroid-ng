@@ -29,6 +29,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import java.util.ArrayList;
 
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
+import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
@@ -50,11 +51,26 @@ public class BufferViewConfigWrapper {
             return item1.getNetwork().networkId() == item2.getNetwork().networkId();
         }
     });
+    @NonNull
+    private final AppContext context;
+    @NonNull
+    private final QBufferViewConfig config;
     private Drawer drawer;
 
     public BufferViewConfigWrapper(@NonNull AppContext context, @NonNull QBufferViewConfig config, Drawer drawer) {
+        this.context = context;
+        this.config = config;
         this.drawer = drawer;
+        updateNetworks();
+    }
+
+    public void updateNetworks() {
         networks.clear();
+        if (config.networkId() != 0)
+            networks.add(new NetworkItem(context, context.client().networkManager().network(config.networkId()), config));
+        else
+            for (QNetwork network : context.client().networkManager().networks())
+                networks.add(new NetworkItem(context, network, config));
     }
 
     public void updateDrawerItems() {

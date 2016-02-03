@@ -34,6 +34,8 @@ import de.kuschku.libquassel.localtypes.buffers.Buffers;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 
+import static de.kuschku.util.AndroidAssert.assertNotNull;
+
 public class QBufferManager {
     @NonNull
     private final Map<Integer, Buffer> buffers = new HashMap<>();
@@ -70,12 +72,14 @@ public class QBufferManager {
     }
 
     public void postInit() {
-        for (BufferInfo info : bufferInfos) {
-            QNetwork network = client.networkManager().network(info.networkId());
-            if (network == null) continue;
-            Buffer buffer = Buffers.fromType(info, network);
-            if (buffer == null) continue;
-            createBuffer(buffer);
+        if (bufferInfos != null) {
+            for (BufferInfo info : bufferInfos) {
+                QNetwork network = client.networkManager().network(info.networkId());
+                assertNotNull(network);
+                Buffer buffer = Buffers.fromType(info, network);
+                assertNotNull(buffer);
+                createBuffer(buffer);
+            }
         }
         bufferInfos = null;
     }

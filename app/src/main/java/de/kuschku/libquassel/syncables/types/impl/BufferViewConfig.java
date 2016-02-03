@@ -305,6 +305,7 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull QClient client) {
         bufferViewId = Integer.parseInt(objectName);
         super.init(objectName, provider, client);
+        client.bufferViewManager()._addBufferViewConfig(this);
         _update();
     }
 

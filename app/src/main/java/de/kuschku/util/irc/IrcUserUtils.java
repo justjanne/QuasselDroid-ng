@@ -49,22 +49,22 @@ public class IrcUserUtils {
 
     @NonNull
     public static String getNick(@NonNull String hostmask) {
-        return hostmask.split("!")[0];
+        return hostmask.split("!", -1)[0];
     }
 
     @NonNull
     public static String getUser(@NonNull String hostmask) {
-        return getMask(hostmask).split("@")[0];
+        return getMask(hostmask).split("@", -1)[0];
     }
 
     @NonNull
     public static String getHost(@NonNull String hostmask) {
-        return getMask(hostmask).split("@")[1];
+        return getMask(hostmask).split("@", -1)[1];
     }
 
     @NonNull
     public static String getMask(@NonNull String hostmask) {
-        return hostmask.split("!")[1];
+        return hostmask.split("!", -1)[1];
     }
 
     public static class CRCUtils {

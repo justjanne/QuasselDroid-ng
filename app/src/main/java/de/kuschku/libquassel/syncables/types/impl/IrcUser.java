@@ -34,6 +34,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import de.kuschku.libquassel.BusProvider;
+import de.kuschku.libquassel.client.QClient;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.AIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
@@ -41,6 +43,8 @@ import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.backports.Objects;
 import de.kuschku.util.irc.IrcUserUtils;
 import de.kuschku.util.irc.ModeUtils;
+
+import static de.kuschku.util.AndroidAssert.assertEquals;
 
 public class IrcUser extends AIrcUser<IrcUser> {
     @NonNull
@@ -87,6 +91,21 @@ public class IrcUser extends AIrcUser<IrcUser> {
 
     @NonNull
     public static IrcUser create(@NonNull String mask) {
+        String nick;
+        String host;
+        String user;
+
+        // Sometimes this is invoked with a nick instead, so we check
+        if (mask.contains("@")) {
+            nick = IrcUserUtils.getNick(mask);
+            host = IrcUserUtils.getHost(mask);
+            user = IrcUserUtils.getUser(mask);
+        } else {
+            nick = mask;
+            host = null;
+            user = null;
+        }
+
         return new IrcUser(
                 null,
                 null,
@@ -95,15 +114,15 @@ public class IrcUser extends AIrcUser<IrcUser> {
                 null,
                 null,
                 null,
-                IrcUserUtils.getNick(mask),
+                nick,
                 null,
                 null,
                 null,
                 false,
                 null,
-                IrcUserUtils.getHost(mask),
+                host,
                 null,
-                IrcUserUtils.getUser(mask)
+                user
         );
     }
 
@@ -416,10 +435,19 @@ public class IrcUser extends AIrcUser<IrcUser> {
     public void init(QNetwork network) {
         this.network = network;
         channels = new HashSet<>();
+        if (cachedChannels != null)
         for (String channelName : cachedChannels) {
             channels.add(network().newIrcChannel(channelName));
         }
         _update();
+    }
+
+    @Override
+    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull QClient client) {
+        super.init(objectName, provider, client);
+        String[] split = objectName.split("/");
+        assertEquals(split.length, 2);
+        init(client.networkManager().network(Integer.parseInt(split[0])));
     }
 
     @Override

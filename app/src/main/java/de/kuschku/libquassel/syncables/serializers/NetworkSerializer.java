@@ -78,6 +78,9 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
         }
 
         final Map<String, QIrcUser> userMap = new HashMap<>(users.size());
+        for (QIrcUser user : users) {
+            userMap.put(user.nick(), user);
+        }
 
         return new Network(
                 channelMap,

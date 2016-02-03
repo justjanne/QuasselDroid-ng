@@ -135,6 +135,8 @@ public class QClient extends AClient {
 
     @Override
     public void _displayStatusMsg(String network, String message) {
+        assertNotNull(provider);
+
         provider.sendEvent(new StatusMessageEvent(network, message));
     }
 
@@ -165,6 +167,8 @@ public class QClient extends AClient {
 
     @Override
     public void _passwordChanged(long peerPtr, boolean success) {
+        assertNotNull(provider);
+
         if (peerPtr != 0x0000000000000000L)
             provider.sendEvent(new CriticalErrorEvent("Your core has a critical vulnerability. Please update it."));
         provider.sendEvent(new PasswordChangeEvent(success));
@@ -183,13 +187,10 @@ public class QClient extends AClient {
         assertNotNull(provider);
 
         this.connectionStatus = connectionStatus;
-        switch (connectionStatus) {
-            case LOADING_BACKLOG: {
-                bufferManager.postInit();
-                networkManager.postInit();
-                setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
-            }
-            break;
+        if (connectionStatus == ConnectionChangeEvent.Status.LOADING_BACKLOG) {
+            networkManager.postInit();
+            bufferManager.postInit();
+            setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
         }
         provider.sendEvent(new ConnectionChangeEvent(connectionStatus));
     }
@@ -262,7 +263,11 @@ public class QClient extends AClient {
                 return globalNetworkConfig;
             }
             case "NetworkInfo": {
-                return getObjectByIdentifier(QNetwork.class, "Network", objectName).networkInfo();
+                QNetwork network = networkManager().network(Integer.parseInt(objectName));
+                if (network == null)
+                    return null;
+                else
+                    return network.networkInfo();
             }
             default: {
                 Log.w("libquassel", "Unknown type: " + className + " : " + objectName);
