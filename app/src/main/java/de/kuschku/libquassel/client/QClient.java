@@ -80,7 +80,7 @@ public class QClient extends AClient {
     private final NotificationManager notificationManager;
     private final List<String> initRequests = new LinkedList<>();
     private final List<Integer> backlogRequests = new LinkedList<>();
-    private final Map<String, SyncFunction> bufferedSyncs = new HashMap<>();
+    private final Map<String, List<SyncFunction>> bufferedSyncs = new HashMap<>();
     private final QBacklogManager backlogManager;
     private QBufferViewManager bufferViewManager;
     // local
@@ -347,7 +347,10 @@ public class QClient extends AClient {
         if (bufferedSyncs.size() > 0) {
             String key = hashName(className, objectName);
             if (bufferedSyncs.containsKey(key)) {
-                provider.handle(bufferedSyncs.get(key));
+                List<SyncFunction> functions = bufferedSyncs.get(key);
+                for (SyncFunction function : functions)
+                    provider.handle(function);
+                bufferedSyncs.remove(key);
             }
         }
     }
@@ -429,6 +432,8 @@ public class QClient extends AClient {
 
     public void bufferSync(@NonNull SyncFunction packedFunc) {
         String key = hashName(packedFunc.className, packedFunc.objectName);
-        bufferedSyncs.put(key, packedFunc);
+        if (!bufferedSyncs.containsKey(key))
+            bufferedSyncs.put(key, new LinkedList<>());
+        bufferedSyncs.get(key).add(packedFunc);
     }
 }
