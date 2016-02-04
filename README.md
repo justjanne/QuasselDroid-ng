@@ -14,21 +14,16 @@ to your Quassel core using your Android ™ phone.
 ##Build Requirements
 
 QuasselDroid requires you to have the latest version of gradle installed, and 
-a recent version of the Android SDK installed (and configures via sdk.dir in
-local.properties)
-
-Additionally, it requires you to build (in the same way) first the following
-libraries:
-
-* https://github.com/justjanne/AndroidSlidingUpPanel (for `library-release.aar`)
-* https://github.com/justjanne/aspm (for `annotations.jar` and
-  `compiler-all.jar`)
-
-The libraries of each have to be placed in `app/libs/` for gradle to find them.
+a recent version of the Android SDK installed (and configured via the
+environment variable ANDROID_HOME)
 
 QuasselDroid uses the following libraries (although these are automatically
 downloaded from maven central):
 
+* [**ASPM**](https://github.com/justjanne/aspm)
+  MPL 2.0
+* [**AndroidSlidingUpPanel**](https://github.com/justjanne/AndroidSlidingUpPanel)
+  Apache 2.0
 * [**libquassel-java**](https://github.com/justjanne/libquassel-java)
   LGPL 3.0
 * [**Guava**](https://github.com/google/guava)
