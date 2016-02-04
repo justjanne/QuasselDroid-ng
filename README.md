@@ -50,31 +50,22 @@ downloaded from maven central):
 
 ##Building
 
-The build process uses gradle. Run `gradle tasks` to see possible tasks,
-`gradle assembleRelease` to assemble a release build and `gradle installDebug`
-to install a debug build on a device connected via `adb`.
+The build process uses gradle, and requires it to be available as command
+"gradle". Use the `install.sh` script to pull and build the dependencies.
 
-To sign your releases, [generate a keypair]() and create a file named
-`signing.gradle` in the `app/` folder with the following content to let gradle
-automatically sign your builds
+Run `gradle tasks` to see possible tasks, `gradle assembleRelease` to assemble a
+release build and `gradle installDebug` to install a debug build on a device
+connected via `adb`.
 
-```groovy
-android {
-    signingConfigs {
-        release {
-            storeFile file("/path/to/your/keystore/here.keystore")
-            storePassword "passwordofyourkeystorehere"
-            keyAlias "nameofyourkeyhere"
-            keyPassword "passwordofyourkeyhere"
-        }
-    }
+To sign your releases, [generate a keypair](http://developer.android.com/tools/publishing/app-signing.html)
+and create a file named `signing.gradle` in the `app/` folder with the following
+content to let gradle automatically sign your builds.
 
-    buildTypes {
-        release {
-            signingConfig signingConfigs.release
-        }
-    }
-}
+```
+    storeFile=/path/to/your/keystore/here.keystore
+    storePassword=passwordofyourkeystorehere
+    keyAlias=nameofyourkeyhere
+    keyPassword=passwordofyourkeyhere
 ```
 
 ##Note
