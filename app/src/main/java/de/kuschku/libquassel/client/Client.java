@@ -193,6 +193,9 @@ public class Client extends AClient {
 
         this.connectionStatus = connectionStatus;
         if (connectionStatus == ConnectionChangeEvent.Status.LOADING_BACKLOG) {
+            for (QNetwork network : networkManager().networks()) {
+                Log.d("libquassel", String.valueOf(network.channels()));
+            }
             setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
         }
         provider.sendEvent(new ConnectionChangeEvent(connectionStatus));
@@ -457,7 +460,7 @@ public class Client extends AClient {
             Log.d("libquassel", "Creating buffer from message info: " + info.id());
         }
         if (bufferedBuffers.containsKey(info.id())) {
-            Pair<QBufferViewConfig, Integer> pair = bufferedBuffers.remove(info.id());
+            Pair<QBufferViewConfig, Integer> pair = bufferedBuffers.get(info.id());
             pair.first._addBuffer(info.id(), pair.second);
             Log.d("libquassel", "Un-Queueing buffer: " + info.id());
         }

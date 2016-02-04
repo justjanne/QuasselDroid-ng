@@ -405,9 +405,12 @@ public class Network extends ANetwork<Network> implements Observer {
 
     @Override
     public QIrcChannel newIrcChannel(@NonNull String channelname) {
-        QIrcChannel channel = IrcChannel.create(channelname);
-        channels.put(IrcCaseMapper.toLowerCase(channelname), channel);
-        return channel;
+        if (!channels.containsKey(IrcCaseMapper.toLowerCase(channelname))) {
+            QIrcChannel channel = IrcChannel.create(channelname);
+            channels.put(IrcCaseMapper.toLowerCase(channelname), channel);
+            channel.init(this, client);
+        }
+        return channels.get(IrcCaseMapper.toLowerCase(channelname));
     }
 
     @Nullable
@@ -757,7 +760,6 @@ public class Network extends ANetwork<Network> implements Observer {
         for (QIrcUser name : ircUsers()) {
             client.requestInitObject("IrcUser", networkId() + "/" + name.nick());
         }
-        client.bufferManager().postInit(String.valueOf(networkId()), this);
     }
 
     @Override

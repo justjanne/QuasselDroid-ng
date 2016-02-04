@@ -24,21 +24,19 @@ package de.kuschku.libquassel.localtypes.buffers;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 
-import static de.kuschku.util.AndroidAssert.assertNotNull;
-
 public class QueryBuffer implements Buffer {
-    @Nullable
-    private final QIrcUser user;
+    @NonNull
+    private final Client client;
     @NonNull
     private BufferInfo info;
 
-    public QueryBuffer(@NonNull BufferInfo info, @Nullable QIrcUser user) {
-        assertNotNull(user);
+    public QueryBuffer(@NonNull BufferInfo info, @NonNull Client client) {
         this.info = info;
-        this.user = user;
+        this.client = client;
     }
 
     @NonNull
@@ -61,19 +59,19 @@ public class QueryBuffer implements Buffer {
     @NonNull
     @Override
     public BufferInfo.BufferStatus getStatus() {
-        return (user == null) ? BufferInfo.BufferStatus.OFFLINE :
-                (user.isAway()) ? BufferInfo.BufferStatus.AWAY :
+        return (getUser() == null) ? BufferInfo.BufferStatus.OFFLINE :
+                (getUser().isAway()) ? BufferInfo.BufferStatus.AWAY :
                         BufferInfo.BufferStatus.ONLINE;
     }
 
     @Override
     public void renameBuffer(@NonNull String newName) {
-
+        info.setName(newName);
     }
 
     @Nullable
     public QIrcUser getUser() {
-        return user;
+        return client.networkManager().network(info.networkId()).ircUser(info.name());
     }
 
     @NonNull
@@ -81,7 +79,6 @@ public class QueryBuffer implements Buffer {
     public String toString() {
         return "QueryBuffer{" +
                 "info=" + info +
-                ", user=" + user +
                 '}';
     }
 }

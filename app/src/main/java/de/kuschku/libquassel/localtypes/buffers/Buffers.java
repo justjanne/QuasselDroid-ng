@@ -24,46 +24,25 @@ package de.kuschku.libquassel.localtypes.buffers;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
-import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
-
-import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class Buffers {
     private Buffers() {
 
     }
 
-    public static boolean exists(@NonNull BufferInfo info, @NonNull QNetwork network) {
-        switch (info.type()) {
-            case QUERY:
-                return info.name() != null && network.ircUser(info.name()) != null;
-            case CHANNEL:
-                return info.name() != null && network.ircChannel(info.name()) != null;
-            case STATUS:
-                return true;
-            default:
-                return false;
-        }
-    }
-
     @Nullable
-    public static Buffer fromType(@NonNull BufferInfo info, @NonNull QNetwork network) {
-        Buffer result;
+    public static Buffer fromType(@NonNull BufferInfo info, @NonNull Client client) {
         switch (info.type()) {
             case QUERY:
-                assertNotNull(info.name());
-                result = new QueryBuffer(info, network.ircUser(info.name()));
-                break;
+                return new QueryBuffer(info, client);
             case CHANNEL:
-                result = new ChannelBuffer(info, network.ircChannel(info.name()));
-                break;
+                return new ChannelBuffer(info, client);
             case STATUS:
-                result = new StatusBuffer(info, network);
-                break;
+                return new StatusBuffer(info, client);
             default:
                 return null;
         }
-        return result;
     }
 }

@@ -444,8 +444,6 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
         cachedChanModes = null;
 
         this.network._addIrcChannel(this);
-
-        client.bufferManager().postInit(network.networkId() + "/" + name(), this);
         _update();
     }
 

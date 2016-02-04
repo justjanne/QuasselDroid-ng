@@ -24,18 +24,19 @@ package de.kuschku.libquassel.localtypes.buffers;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 
 public class StatusBuffer implements Buffer {
     @NonNull
-    private final QNetwork network;
+    private final Client client;
     @NonNull
     private BufferInfo info;
 
-    public StatusBuffer(@NonNull BufferInfo info, @NonNull QNetwork network) {
+    public StatusBuffer(@NonNull BufferInfo info, @NonNull Client client) {
         this.info = info;
-        this.network = network;
+        this.client = client;
     }
 
     @NonNull
@@ -49,16 +50,20 @@ public class StatusBuffer implements Buffer {
         this.info = info;
     }
 
+    public QNetwork getNetwork() {
+        return client.networkManager().network(info.networkId());
+    }
+
     @Nullable
     @Override
     public String getName() {
-        return network.networkName();
+        return getNetwork().networkName();
     }
 
     @NonNull
     @Override
     public BufferInfo.BufferStatus getStatus() {
-        return network.isConnected() ? BufferInfo.BufferStatus.ONLINE : BufferInfo.BufferStatus.OFFLINE;
+        return getNetwork().isConnected() ? BufferInfo.BufferStatus.ONLINE : BufferInfo.BufferStatus.OFFLINE;
     }
 
     @Override
@@ -71,7 +76,6 @@ public class StatusBuffer implements Buffer {
     public String toString() {
         return "StatusBuffer{" +
                 "info=" + info +
-                ", network=" + network +
                 '}';
     }
 }

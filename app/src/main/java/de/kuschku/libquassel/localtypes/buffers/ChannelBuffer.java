@@ -24,21 +24,19 @@ package de.kuschku.libquassel.localtypes.buffers;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 
-import static de.kuschku.util.AndroidAssert.assertNotNull;
-
 public class ChannelBuffer implements Buffer {
     @NonNull
+    private final Client client;
+    @NonNull
     private BufferInfo info;
-    @Nullable
-    private QIrcChannel channel;
 
-    public ChannelBuffer(@NonNull BufferInfo info, @Nullable QIrcChannel channel) {
-        assertNotNull(channel);
+    public ChannelBuffer(@NonNull BufferInfo info, @NonNull Client client) {
         this.info = info;
-        this.channel = channel;
+        this.client = client;
     }
 
     @NonNull
@@ -61,21 +59,17 @@ public class ChannelBuffer implements Buffer {
     @NonNull
     @Override
     public BufferInfo.BufferStatus getStatus() {
-        return channel == null ? BufferInfo.BufferStatus.OFFLINE : BufferInfo.BufferStatus.ONLINE;
+        return getChannel() == null ? BufferInfo.BufferStatus.OFFLINE : BufferInfo.BufferStatus.ONLINE;
     }
 
     @Override
     public void renameBuffer(@NonNull String newName) {
-
+        info.setName(newName);
     }
 
     @Nullable
     public QIrcChannel getChannel() {
-        return channel;
-    }
-
-    public void setChannel(@Nullable QIrcChannel channel) {
-        this.channel = channel;
+        return client.networkManager().network(info.networkId()).ircChannel(info.name());
     }
 
     @NonNull
@@ -83,7 +77,6 @@ public class ChannelBuffer implements Buffer {
     public String toString() {
         return "ChannelBuffer{" +
                 "info=" + info +
-                ", channel=" + channel +
                 '}';
     }
 }

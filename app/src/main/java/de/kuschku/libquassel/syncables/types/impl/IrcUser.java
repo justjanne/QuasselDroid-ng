@@ -440,7 +440,6 @@ public class IrcUser extends AIrcUser<IrcUser> {
         for (String channelName : cachedChannels) {
             channels.add(network().newIrcChannel(channelName));
         }
-        client.bufferManager().postInit(network.networkId() + "/" + nick(), this);
         _update();
     }
 

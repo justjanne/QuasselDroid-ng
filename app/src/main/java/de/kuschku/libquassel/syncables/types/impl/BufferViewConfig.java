@@ -22,7 +22,6 @@
 package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.Collections;
 import java.util.List;
@@ -275,8 +274,6 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
 
     @Override
     public void _removeBuffer(int bufferId) {
-        Log.d("after", String.valueOf(buffers));
-
         int index;
         if ((index = buffers.indexOf(bufferId)) != -1) {
             buffers.remove(index);
@@ -286,8 +283,6 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
             removedBuffers.remove(bufferId);
 
         temporarilyRemovedBuffers.add(bufferId);
-
-        Log.d("after", String.valueOf(buffers));
         _update();
     }
 
