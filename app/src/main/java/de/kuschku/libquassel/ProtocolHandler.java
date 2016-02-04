@@ -26,7 +26,7 @@ import android.support.annotation.NonNull;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.CoreSetupRequiredEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
@@ -51,11 +51,11 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class ProtocolHandler implements IProtocolHandler {
     @NonNull
-    public final QClient client;
+    public final Client client;
     @NonNull
     private final BusProvider busProvider;
 
-    public ProtocolHandler(@NonNull BusProvider busProvider, @NonNull QClient client) {
+    public ProtocolHandler(@NonNull BusProvider busProvider, @NonNull Client client) {
         this.busProvider = busProvider;
         this.busProvider.handle.register(this);
         this.busProvider.event.register(this);
@@ -157,7 +157,7 @@ public class ProtocolHandler implements IProtocolHandler {
 
     @NonNull
     @Override
-    public QClient getClient() {
+    public Client getClient() {
         return client;
     }
 }

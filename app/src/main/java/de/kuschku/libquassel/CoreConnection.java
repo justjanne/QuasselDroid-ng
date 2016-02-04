@@ -37,8 +37,8 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.client.ClientData;
-import de.kuschku.libquassel.client.QClient;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.HandshakeFailedEvent;
@@ -75,7 +75,7 @@ public class CoreConnection {
     @NonNull
     private final BusProvider busProvider;
     @NonNull
-    private final QClient client;
+    private final Client client;
     @NonNull
     private final CertificateManager certificateManager;
     @Nullable
@@ -96,7 +96,7 @@ public class CoreConnection {
     public CoreConnection(@NonNull final ServerAddress address,
                           @NonNull final ClientData clientData,
                           @NonNull final BusProvider busProvider,
-                          @NonNull final QClient client,
+                          @NonNull final Client client,
                           @NonNull CertificateManager certificateManager) {
         this.address = address;
         this.clientData = clientData;

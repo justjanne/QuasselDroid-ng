@@ -27,7 +27,7 @@ import android.support.annotation.Nullable;
 import java.util.Map;
 
 import de.kuschku.libquassel.BusProvider;
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 public interface QSyncableObject<T extends QSyncableObject> {
@@ -50,5 +50,5 @@ public interface QSyncableObject<T extends QSyncableObject> {
 
     void setObjectName(@Nullable String objectName);
 
-    void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull QClient client);
+    void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull Client client);
 }

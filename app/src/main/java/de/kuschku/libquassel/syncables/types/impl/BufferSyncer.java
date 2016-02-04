@@ -27,7 +27,7 @@ import android.util.SparseIntArray;
 import java.util.Map;
 
 import de.kuschku.libquassel.BusProvider;
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
@@ -152,7 +152,7 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
     }
 
     @Override
-    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull QClient client) {
+    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull Client client) {
         super.init(objectName, provider, client);
         client.setBufferSyncer(this);
     }

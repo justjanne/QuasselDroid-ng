@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
@@ -38,9 +38,9 @@ public class NotificationManager {
     @NonNull
     private final List<HighlightRule> highlights = new ArrayList<>();
     @NonNull
-    private final QClient client;
+    private final Client client;
 
-    public NotificationManager(@NonNull QClient client) {
+    public NotificationManager(@NonNull Client client) {
         this.client = client;
     }
 

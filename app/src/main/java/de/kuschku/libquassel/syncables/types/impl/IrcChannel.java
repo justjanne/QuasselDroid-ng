@@ -36,7 +36,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.kuschku.libquassel.BusProvider;
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.IrcChannelSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.AIrcChannel;
@@ -416,7 +416,7 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void init(QNetwork network, QClient client) {
+    public void init(QNetwork network, Client client) {
         this.client = client;
         this.network = network;
 
@@ -479,7 +479,7 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     }
 
     @Override
-    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull QClient client) {
+    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull Client client) {
         super.init(objectName, provider, client);
         String[] split = objectName.split("/", 2);
         assertEquals(split.length, 2);

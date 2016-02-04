@@ -35,7 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.kuschku.libquassel.BusProvider;
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.objects.types.Command;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
@@ -61,7 +61,7 @@ public class AliasManager extends AAliasManager<AliasManager> {
     private List<String> names = new ArrayList<>();
     private List<Alias> aliases = new ArrayList<>();
 
-    private QClient client;
+    private Client client;
 
     public AliasManager(@NonNull List<String> names, @NonNull List<String> extensions) {
         for (int i = 0; i < names.size(); i++) {
@@ -223,7 +223,7 @@ public class AliasManager extends AAliasManager<AliasManager> {
     }
 
     @Override
-    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull QClient client) {
+    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull Client client) {
         this.client = client;
         super.init(objectName, provider, client);
         client.setAliasManager(this);

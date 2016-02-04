@@ -34,7 +34,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import de.kuschku.libquassel.BusProvider;
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.ANetwork;
@@ -747,7 +747,7 @@ public class Network extends ANetwork<Network> implements Observer {
     }
 
     @Override
-    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull QClient client) {
+    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull Client client) {
         super.init(objectName, provider, client);
         networkInfo._setNetworkId(Integer.parseInt(objectName));
         client.networkManager().createNetwork(this);

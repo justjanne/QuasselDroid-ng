@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.kuschku.libquassel.BusProvider;
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.AIdentity;
 import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
@@ -394,7 +394,7 @@ public class Identity extends AIdentity<Identity> {
     }
 
     @Override
-    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull QClient client) {
+    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull Client client) {
         super.init(objectName, provider, client);
         client.identityManager().createIdentity(this);
     }

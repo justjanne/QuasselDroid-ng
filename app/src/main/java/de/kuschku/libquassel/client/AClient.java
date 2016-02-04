@@ -39,10 +39,10 @@ import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
 import static de.kuschku.util.AndroidAssert.fail;
 import static junit.framework.Assert.assertNotNull;
 
-public abstract class AClient<T extends AClient<T>> extends SyncableObject<T> implements QClientInterface {
+public abstract class AClient<T extends AClient<T>> extends SyncableObject<T> implements QClient {
     @Override
     public void sendInput(BufferInfo info, String message) {
-        smartRpc("sendInput(BufferInfo, QString)", info, message);
+        smartRpc("sendInput(BufferInfo,QString)", info, message);
     }
 
     @Override
@@ -82,7 +82,7 @@ public abstract class AClient<T extends AClient<T>> extends SyncableObject<T> im
 
     @Override
     public void removeNetwork(int id) {
-        smartRpc("2removeNetwork(NetworkId)", id);
+        smartRpc("removeNetwork(NetworkId)", id);
     }
 
     @Override

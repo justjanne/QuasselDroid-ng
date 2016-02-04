@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import de.kuschku.libquassel.BusProvider;
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.IgnoreListManagerSerializer;
@@ -143,7 +143,7 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
     }
 
     @Override
-    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull QClient client) {
+    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull Client client) {
         super.init(objectName, provider, client);
         client.setIgnoreListManager(this);
     }

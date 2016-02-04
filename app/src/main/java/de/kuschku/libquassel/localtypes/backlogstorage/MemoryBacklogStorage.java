@@ -25,7 +25,7 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.localtypes.backlogmanagers.BacklogFilter;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
@@ -41,7 +41,7 @@ public class MemoryBacklogStorage implements BacklogStorage {
     @NonNull
     private final SparseArray<BacklogFilter> filters = new SparseArray<>();
 
-    private QClient client;
+    private Client client;
 
     @NonNull
     @Override
@@ -79,7 +79,7 @@ public class MemoryBacklogStorage implements BacklogStorage {
         }
     }
 
-    public void setClient(QClient client) {
+    public void setClient(Client client) {
         this.client = client;
     }
 

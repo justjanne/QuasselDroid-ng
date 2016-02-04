@@ -27,7 +27,7 @@ import android.support.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.localtypes.backlogmanagers.BacklogFilter;
 import de.kuschku.libquassel.localtypes.backlogstorage.BacklogStorage;
 import de.kuschku.libquassel.message.Message;
@@ -36,10 +36,10 @@ import de.kuschku.libquassel.syncables.types.abstracts.ABacklogManager;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
 public class BacklogManager extends ABacklogManager<BacklogManager> {
-    private final QClient client;
+    private final Client client;
     private final BacklogStorage storage;
 
-    public BacklogManager(QClient client, BacklogStorage storage) {
+    public BacklogManager(Client client, BacklogStorage storage) {
         this.client = client;
         this.storage = storage;
     }

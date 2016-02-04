@@ -30,7 +30,7 @@ import org.joda.time.DateTimeUtils;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
@@ -39,7 +39,7 @@ import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public class BacklogFilter implements UICallback {
     @NonNull
-    private final QClient client;
+    private final Client client;
     private final int bufferId;
     @NonNull
     private final ObservableSortedList<Message> unfiltered;
@@ -52,7 +52,7 @@ public class BacklogFilter implements UICallback {
     @Nullable
     private DateTime earliestMessage;
 
-    public BacklogFilter(@NonNull QClient client, int bufferId, @NonNull ObservableSortedList<Message> unfiltered, @NonNull ObservableSortedList<Message> filtered) {
+    public BacklogFilter(@NonNull Client client, int bufferId, @NonNull ObservableSortedList<Message> unfiltered, @NonNull ObservableSortedList<Message> filtered) {
         this.client = client;
         this.bufferId = bufferId;
         this.unfiltered = unfiltered;

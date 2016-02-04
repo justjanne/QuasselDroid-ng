@@ -41,16 +41,16 @@ import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
-public class QBufferManager {
+public class BufferManager {
     @NonNull
     private final Map<Integer, Buffer> buffers = new HashMap<>();
-    private final QClient client;
+    private final Client client;
 
     // We cache those, because the networks might not be initialized at begin
     @NonNull
     private Map<String, Set<BufferInfo>> bufferInfos = new HashMap<>();
 
-    public QBufferManager(QClient client) {
+    public BufferManager(Client client) {
         this.client = client;
     }
 

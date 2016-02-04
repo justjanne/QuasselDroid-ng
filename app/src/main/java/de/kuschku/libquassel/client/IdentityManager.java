@@ -30,12 +30,12 @@ import java.util.Map;
 
 import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
 
-public class QIdentityManager {
+public class IdentityManager {
     @NonNull
     private final Map<Integer, QIdentity> identities = new HashMap<>();
-    private final QClient client;
+    private final Client client;
 
-    public QIdentityManager(QClient client) {
+    public IdentityManager(Client client) {
         this.client = client;
     }
 

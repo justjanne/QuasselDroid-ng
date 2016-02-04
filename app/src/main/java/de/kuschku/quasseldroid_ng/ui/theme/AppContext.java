@@ -24,13 +24,13 @@ package de.kuschku.quasseldroid_ng.ui.theme;
 import android.support.annotation.NonNull;
 
 import de.kuschku.libquassel.BusProvider;
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.quasseldroid_ng.ui.chat.WrappedSettings;
 
 public class AppContext {
     private ThemeUtil themeUtil;
     private WrappedSettings settings;
-    private QClient client;
+    private Client client;
     private BusProvider provider;
 
     public ThemeUtil themeUtil() {
@@ -61,16 +61,16 @@ public class AppContext {
         return this;
     }
 
-    public QClient client() {
+    public Client client() {
         return client;
     }
 
-    public void setClient(QClient client) {
+    public void setClient(Client client) {
         this.client = client;
     }
 
     @NonNull
-    public AppContext withClient(QClient client) {
+    public AppContext withClient(Client client) {
         setClient(client);
         return this;
     }

@@ -27,7 +27,7 @@ import org.joda.time.DateTime;
 
 import java.util.List;
 
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.syncables.Synced;
 
 public interface QIrcUser {
@@ -203,5 +203,5 @@ public interface QIrcUser {
 
     void _removeUserModes(final String modes);
 
-    void init(QNetwork network, QClient client);
+    void init(QNetwork network, Client client);
 }

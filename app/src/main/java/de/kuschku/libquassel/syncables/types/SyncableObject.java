@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Observable;
 
 import de.kuschku.libquassel.BusProvider;
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.functions.types.RpcCallFunction;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.primitives.types.QVariant;
@@ -43,7 +43,7 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 public abstract class SyncableObject<T extends SyncableObject<T>> extends Observable implements QSyncableObject<T> {
     @Nullable
     protected BusProvider provider;
-    protected QClient client;
+    protected Client client;
     protected boolean initialized = false;
     @Nullable
     private String objectName;
@@ -110,7 +110,7 @@ public abstract class SyncableObject<T extends SyncableObject<T>> extends Observ
 
     @CallSuper
     @Override
-    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull QClient client) {
+    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull Client client) {
         this.provider = provider;
         this.objectName = objectName;
         this.client = client;

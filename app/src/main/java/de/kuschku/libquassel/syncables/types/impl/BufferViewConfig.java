@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.kuschku.libquassel.BusProvider;
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.BufferViewConfigSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.ABufferViewConfig;
@@ -302,7 +302,7 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     }
 
     @Override
-    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull QClient client) {
+    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull Client client) {
         bufferViewId = Integer.parseInt(objectName);
         super.init(objectName, provider, client);
         client.bufferViewManager()._addBufferViewConfig(this);

@@ -23,8 +23,8 @@ package de.kuschku.libquassel;
 
 import android.support.annotation.NonNull;
 
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.client.ClientData;
-import de.kuschku.libquassel.client.QClient;
 import de.kuschku.libquassel.localtypes.backlogstorage.BacklogStorage;
 import de.kuschku.libquassel.ssl.CertificateManager;
 import de.kuschku.util.ServerAddress;
@@ -37,7 +37,7 @@ public class QuasselClient {
     @NonNull
     public final ProtocolHandler handler;
     @NonNull
-    public final QClient client;
+    public final Client client;
     @NonNull
     public final CertificateManager certificateManager;
     @NonNull
@@ -53,7 +53,7 @@ public class QuasselClient {
         this.provider = provider;
         this.data = data;
         this.certificateManager = certificateManager;
-        this.client = new QClient(provider, backlogStorage);
+        this.client = new Client(provider, backlogStorage);
         this.handler = new ProtocolHandler(provider, this.client);
     }
 

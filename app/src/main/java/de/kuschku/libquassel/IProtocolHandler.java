@@ -23,7 +23,7 @@ package de.kuschku.libquassel;
 
 import android.support.annotation.NonNull;
 
-import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.functions.types.Heartbeat;
 import de.kuschku.libquassel.functions.types.HeartbeatReply;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
@@ -60,5 +60,5 @@ public interface IProtocolHandler {
     void onEventMainThread(HeartbeatReply message);
 
     @NonNull
-    QClient getClient();
+    Client getClient();
 }

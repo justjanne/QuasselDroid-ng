@@ -33,12 +33,12 @@ import java.util.Observable;
 import de.kuschku.libquassel.syncables.types.impl.Network;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 
-public class QNetworkManager extends Observable {
+public class NetworkManager extends Observable {
     @NonNull
     private final Map<Integer, QNetwork> networks = new HashMap<>();
-    private final QClient client;
+    private final Client client;
 
-    public QNetworkManager(QClient client) {
+    public NetworkManager(Client client) {
         this.client = client;
     }
 
