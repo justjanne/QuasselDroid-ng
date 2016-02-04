@@ -103,6 +103,7 @@ public class Client extends AClient {
         this.backlogManager = new BacklogManager(this, backlogStorage);
         this.backlogManager.init("", provider, this);
         this.notificationManager = new NotificationManager(this);
+        this.initialized = true;
     }
 
     public QBufferViewManager bufferViewManager() {

@@ -157,7 +157,7 @@ public class MessageUtil {
                             Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
                 }
                 if (bg != -1 && themeUtil.res.mircColors[fg] != COLOR_TRANSPARENT) {
-                    newString.setSpan(new BackgroundColorSpan(themeUtil.res.mircColors[fg]), start, end,
+                    newString.setSpan(new BackgroundColorSpan(themeUtil.res.mircColors[bg]), start, end,
                             Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
                 }
             }

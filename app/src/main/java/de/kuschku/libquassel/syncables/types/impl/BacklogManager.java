@@ -23,7 +23,6 @@ package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.HashSet;
 import java.util.List;
@@ -53,7 +52,6 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
 
     @Override
     public void requestMoreBacklog(int bufferId, int amount) {
-        Log.d("libquassel", "request more backlog for id " + bufferId + ": " + amount);
         Message last;
         if (storage.getUnfiltered(bufferId).isEmpty() || null == (last = storage.getUnfiltered(bufferId).last()))
             requestBacklogInitial(bufferId, amount);
@@ -64,14 +62,12 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
 
     @Override
     public void requestBacklogInitial(int id, int amount) {
-        Log.d("libquassel", "request initial backlog for id " + id + ": " + amount);
         requestBacklog(id, -1, -1, amount, 0);
     }
 
     @Override
     public void _requestBacklog(int id, int first, int last, int limit, int additional) {
         // Do nothing, we are on the client
-        Log.d("libquassel", "request backlog for id " + id);
     }
 
     @Override
@@ -81,14 +77,11 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
         storage.insertMessages(id, messages.toArray(new Message[messages.size()]));
         client.initBacklog(id);
         provider.sendEvent(new BacklogReceivedEvent(id));
-
-        Log.d("libquassel", "received backlog for id " + id);
     }
 
     @Override
     public void _requestBacklogAll(int first, int last, int limit, int additional) {
         // Do nothing, we are on the client
-        Log.d("libquassel", "request backlog for all");
     }
 
     @Override
@@ -102,7 +95,6 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
         }
         for (int id : buffers) {
             provider.sendEvent(new BacklogReceivedEvent(id));
-            Log.d("libquassel", "received backlog for id " + id);
         }
     }
 
