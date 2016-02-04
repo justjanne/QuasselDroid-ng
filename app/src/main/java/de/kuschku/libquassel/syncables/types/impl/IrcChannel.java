@@ -477,7 +477,7 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull QClient client) {
         super.init(objectName, provider, client);
 
-        String[] split = objectName.split("/");
+        String[] split = objectName.split("/", 2);
         assertEquals(split.length, 2);
         init(client.networkManager().network(Integer.parseInt(split[0])));
     }

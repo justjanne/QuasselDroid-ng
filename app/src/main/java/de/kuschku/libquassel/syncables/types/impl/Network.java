@@ -755,6 +755,12 @@ public class Network extends ANetwork<Network> implements Observer {
         super.init(objectName, provider, client);
         networkInfo._setNetworkId(Integer.parseInt(objectName));
         client.networkManager().createNetwork(this);
+        for (QIrcChannel name : ircChannels()) {
+            client.requestInitObject("IrcChannel", networkId() + "/" + name.name());
+        }
+        for (QIrcUser name : ircUsers()) {
+            client.requestInitObject("IrcUser", networkId() + "/" + name.nick());
+        }
     }
 
     @Override

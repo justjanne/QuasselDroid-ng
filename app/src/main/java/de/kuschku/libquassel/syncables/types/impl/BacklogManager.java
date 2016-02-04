@@ -77,22 +77,25 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
         }
     }
 
+    // FIXME: Implement
     @Nullable
     @Override
     public BacklogFilter filter(int id) {
         return null;
     }
 
+    // FIXME: Implement
     @Nullable
     @Override
     public ObservableComparableSortedList<Message> unfiltered(int id) {
-        return null;
+        return new ObservableComparableSortedList<>(Message.class);
     }
 
+    // FIXME: Implement
     @Nullable
     @Override
     public ObservableComparableSortedList<Message> filtered(int id) {
-        return null;
+        return new ObservableComparableSortedList<>(Message.class);
     }
 
     @Override

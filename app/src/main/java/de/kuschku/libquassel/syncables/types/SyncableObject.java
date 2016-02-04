@@ -24,7 +24,6 @@ package de.kuschku.libquassel.syncables.types;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -116,8 +115,6 @@ public abstract class SyncableObject<T extends SyncableObject<T>> extends Observ
         this.objectName = objectName;
         this.client = client;
         this.initialized = true;
-
-        Log.d("libquassel", "init: " + objectName);
     }
 
     public void _update() {
