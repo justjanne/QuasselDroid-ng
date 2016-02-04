@@ -38,6 +38,7 @@
         <item name="iconFormatPaint">@drawable/ic_format_paint_dark</item>
         <item name="iconFormatFill">@drawable/ic_format_fill_dark</item>
         <item name="iconHistory">@drawable/ic_history_dark</item>
+        <item name="iconDebug">@drawable/ic_bug_dark</item>
 
         <item name="cardStyle">@style/CardView.Dark</item>
     </style>
@@ -58,6 +59,7 @@
         <item name="iconFormatPaint">@drawable/ic_format_paint_light</item>
         <item name="iconFormatFill">@drawable/ic_format_fill_light</item>
         <item name="iconHistory">@drawable/ic_history_light</item>
+        <item name="iconDebug">@drawable/ic_bug_light</item>
 
         <item name="cardStyle">@style/CardView.Light</item>
     </style>

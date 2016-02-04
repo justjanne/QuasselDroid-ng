@@ -23,15 +23,20 @@ package de.kuschku.libquassel.client;
 
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
-import de.kuschku.libquassel.localtypes.buffers.Buffers;
+import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
+import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
+import de.kuschku.libquassel.localtypes.buffers.StatusBuffer;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
+import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
+import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -42,8 +47,8 @@ public class QBufferManager {
     private final QClient client;
 
     // We cache those, because the networks might not be initialized at begin
-    @Nullable
-    private List<BufferInfo> bufferInfos;
+    @NonNull
+    private Map<String, Set<BufferInfo>> bufferInfos = new HashMap<>();
 
     public QBufferManager(QClient client) {
         this.client = client;
@@ -68,19 +73,49 @@ public class QBufferManager {
     }
 
     public void init(List<BufferInfo> bufferInfos) {
-        this.bufferInfos = bufferInfos;
+        for (BufferInfo info : bufferInfos) {
+            if (this.bufferInfos.get(objectName(info)) == null)
+                this.bufferInfos.put(objectName(info), new HashSet<>());
+
+            this.bufferInfos.get(objectName(info)).add(info);
+        }
     }
 
-    public void postInit() {
-        if (bufferInfos != null) {
-            for (BufferInfo info : bufferInfos) {
+    private String objectName(BufferInfo info) {
+        if (info.type() == BufferInfo.Type.STATUS)
+            return String.valueOf(info.networkId());
+        else
+            return info.networkId() + "/" + info.name();
+    }
+
+    public void postInit(String objectName, QIrcUser ircUser) {
+        if (bufferInfos.get(objectName) != null)
+            for (BufferInfo info : bufferInfos.get(objectName)) {
                 QNetwork network = client.networkManager().network(info.networkId());
                 assertNotNull(network);
-                Buffer buffer = Buffers.fromType(info, network);
-                assertNotNull(buffer);
-                createBuffer(buffer);
+                createBuffer(new QueryBuffer(info, ircUser));
             }
-        }
-        bufferInfos = null;
+    }
+
+    public void postInit(String objectName, QNetwork ircUser) {
+        if (bufferInfos.get(objectName) != null)
+            for (BufferInfo info : bufferInfos.get(objectName)) {
+                QNetwork network = client.networkManager().network(info.networkId());
+                assertNotNull(network);
+                createBuffer(new StatusBuffer(info, ircUser));
+            }
+    }
+
+    public Map<Integer, Buffer> buffers() {
+        return buffers;
+    }
+
+    public void postInit(String objectName, QIrcChannel ircChannel) {
+        if (bufferInfos.get(objectName) != null)
+            for (BufferInfo info : bufferInfos.get(objectName)) {
+                QNetwork network = client.networkManager().network(info.networkId());
+                assertNotNull(network);
+                createBuffer(new ChannelBuffer(info, ircChannel));
+            }
     }
 }

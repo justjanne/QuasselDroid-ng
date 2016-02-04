@@ -78,4 +78,5 @@
     <string name="labelHideEvents">Hide events</string>
 
     <string name="warningCertificate">Do you trust this certificate?</string>
+    <string name="labelDebug">Debug</string>
 </resources>

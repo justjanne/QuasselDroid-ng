@@ -658,7 +658,7 @@ public class Network extends ANetwork<Network> implements Observer {
     @NonNull
     private QIrcUser newIrcUser(@NonNull String mask) {
         IrcUser user = IrcUser.create(mask);
-        user.init(this);
+        user.init(this, client);
         client.requestInitObject("IrcUser", user.getObjectName());
         nicks.put(user.nick(), user);
         _update();
@@ -731,13 +731,9 @@ public class Network extends ANetwork<Network> implements Observer {
         _update();
     }
 
-    public void postInit() {
-        for (QIrcChannel channel : ircChannels()) {
-            channel.init(this);
-        }
-        for (QIrcUser user : ircUsers()) {
-            user.init(this);
-        }
+    @Override
+    public void _addIrcChannel(IrcChannel ircChannel) {
+        channels.put(ircChannel.name(), ircChannel);
     }
 
     @Override
@@ -761,6 +757,7 @@ public class Network extends ANetwork<Network> implements Observer {
         for (QIrcUser name : ircUsers()) {
             client.requestInitObject("IrcUser", networkId() + "/" + name.nick());
         }
+        client.bufferManager().postInit(String.valueOf(networkId()), this);
     }
 
     @Override

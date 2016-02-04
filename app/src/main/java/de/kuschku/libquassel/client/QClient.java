@@ -188,8 +188,6 @@ public class QClient extends AClient {
 
         this.connectionStatus = connectionStatus;
         if (connectionStatus == ConnectionChangeEvent.Status.LOADING_BACKLOG) {
-            networkManager.postInit();
-            bufferManager.postInit();
             setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
         }
         provider.sendEvent(new ConnectionChangeEvent(connectionStatus));

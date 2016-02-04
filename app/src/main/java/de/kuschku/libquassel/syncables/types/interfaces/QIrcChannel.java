@@ -25,6 +25,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import de.kuschku.libquassel.client.QClient;
 import de.kuschku.libquassel.syncables.Synced;
 
 public interface QIrcChannel {
@@ -144,5 +145,5 @@ public interface QIrcChannel {
 
     void _removeChannelMode(final char mode, final String value);
 
-    void init(QNetwork network);
+    void init(QNetwork network, QClient client);
 }

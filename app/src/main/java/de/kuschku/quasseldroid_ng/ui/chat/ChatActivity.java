@@ -87,6 +87,8 @@ import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
+import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
+import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.BuildConfig;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
@@ -443,6 +445,22 @@ public class ChatActivity extends AppCompatActivity {
                 case R.id.action_history:
                     slidingLayoutHistory.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                     return true;
+                case R.id.debug_init_channels: {
+                    for (QNetwork network : context.client().networkManager().networks()) {
+                        for (QIrcChannel name : network.ircChannels()) {
+                            context.client().requestInitObject("IrcChannel", network.networkId() + "/" + name.name());
+                        }
+                    }
+                    return true;
+                }
+                case R.id.debug_init_users: {
+                    for (QNetwork network : context.client().networkManager().networks()) {
+                        for (QIrcUser name : network.ircUsers()) {
+                            context.client().requestInitObject("IrcUser", network.networkId() + "/" + name.nick());
+                        }
+                    }
+                    return true;
+                }
                 default:
                     return false;
             }

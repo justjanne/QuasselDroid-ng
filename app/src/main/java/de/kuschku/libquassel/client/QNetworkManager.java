@@ -78,13 +78,6 @@ public class QNetworkManager extends Observable {
 
     }
 
-    public void postInit() {
-        for (QNetwork network : networks.values()) {
-            network.postInit();
-        }
-        _update();
-    }
-
     public List<QNetwork> networks() {
         return new ArrayList<>(networks.values());
     }

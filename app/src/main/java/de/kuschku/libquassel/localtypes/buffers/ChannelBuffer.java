@@ -27,6 +27,8 @@ import android.support.annotation.Nullable;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 
+import static de.kuschku.util.AndroidAssert.assertNotNull;
+
 public class ChannelBuffer implements Buffer {
     @NonNull
     private BufferInfo info;
@@ -34,6 +36,7 @@ public class ChannelBuffer implements Buffer {
     private QIrcChannel channel;
 
     public ChannelBuffer(@NonNull BufferInfo info, @Nullable QIrcChannel channel) {
+        assertNotNull(channel);
         this.info = info;
         this.channel = channel;
     }

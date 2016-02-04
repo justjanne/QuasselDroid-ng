@@ -432,13 +432,16 @@ public class IrcUser extends AIrcUser<IrcUser> {
     }
 
     @Override
-    public void init(QNetwork network) {
+    public void init(QNetwork network, QClient client) {
         this.network = network;
+        this.client = client;
+
         channels = new HashSet<>();
         if (cachedChannels != null)
         for (String channelName : cachedChannels) {
             channels.add(network().newIrcChannel(channelName));
         }
+        client.bufferManager().postInit(network.networkId() + "/" + nick(), this);
         _update();
     }
 
@@ -447,7 +450,7 @@ public class IrcUser extends AIrcUser<IrcUser> {
         super.init(objectName, provider, client);
         String[] split = objectName.split("/", 2);
         assertEquals(split.length, 2);
-        init(client.networkManager().network(Integer.parseInt(split[0])));
+        init(client.networkManager().network(Integer.parseInt(split[0])), client);
     }
 
     @Override

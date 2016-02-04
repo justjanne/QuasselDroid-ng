@@ -87,6 +87,7 @@
     <attr name="iconFormatPaint" format="reference" />
     <attr name="iconFormatFill" format="reference" />
     <attr name="iconHistory" format="reference" />
+    <attr name="iconDebug" format="reference" />
 
     <attr name="cardStyle" format="reference" />
 </resources>

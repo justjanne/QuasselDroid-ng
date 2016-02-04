@@ -28,6 +28,7 @@ import java.util.List;
 
 import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.syncables.Synced;
+import de.kuschku.libquassel.syncables.types.impl.IrcChannel;
 import de.kuschku.libquassel.syncables.types.impl.NetworkInfo;
 
 public interface QNetwork {
@@ -340,7 +341,7 @@ public interface QNetwork {
 
     void _removeChansAndUsers();
 
-    void postInit();
+    void _addIrcChannel(IrcChannel ircChannel);
 
     enum ConnectionState {
         Disconnected(0),

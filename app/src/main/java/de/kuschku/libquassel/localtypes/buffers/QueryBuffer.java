@@ -27,6 +27,8 @@ import android.support.annotation.Nullable;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 
+import static de.kuschku.util.AndroidAssert.assertNotNull;
+
 public class QueryBuffer implements Buffer {
     @Nullable
     private final QIrcUser user;
@@ -34,6 +36,7 @@ public class QueryBuffer implements Buffer {
     private BufferInfo info;
 
     public QueryBuffer(@NonNull BufferInfo info, @Nullable QIrcUser user) {
+        assertNotNull(user);
         this.info = info;
         this.user = user;
     }

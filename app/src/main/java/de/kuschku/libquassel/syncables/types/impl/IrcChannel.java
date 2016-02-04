@@ -416,7 +416,8 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void init(QNetwork network) {
+    public void init(QNetwork network, QClient client) {
+        this.client = client;
         this.network = network;
 
 
@@ -441,6 +442,10 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
 
         cachedUserModes = null;
         cachedChanModes = null;
+
+        this.network._addIrcChannel(this);
+
+        client.bufferManager().postInit(network.networkId() + "/" + name(), this);
         _update();
     }
 
@@ -476,9 +481,8 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     @Override
     public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull QClient client) {
         super.init(objectName, provider, client);
-
         String[] split = objectName.split("/", 2);
         assertEquals(split.length, 2);
-        init(client.networkManager().network(Integer.parseInt(split[0])));
+        init(client.networkManager().network(Integer.parseInt(split[0])), client);
     }
 }
