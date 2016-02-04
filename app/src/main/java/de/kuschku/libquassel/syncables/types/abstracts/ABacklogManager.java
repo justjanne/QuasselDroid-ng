@@ -24,31 +24,34 @@ package de.kuschku.libquassel.syncables.types.abstracts;
 import java.util.List;
 
 import de.kuschku.libquassel.message.Message;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
 
-public abstract class ABacklogManager<T extends ABacklogManager<T>> extends SyncableObject<T> implements QBacklogManager {
+public abstract class ABacklogManager<T extends ABacklogManager<T>> extends SyncableObject<T> implements QBacklogManager<T> {
+    static String intName = QMetaType.Type.Int.getSerializableName();
+
     @Override
     public void requestBacklog(int id, int first, int last, int limit, int additional) {
         _requestBacklog(id, first, last, limit, additional);
-        syncVar("requestBacklog", id, first, last, limit, additional);
+        sync("requestBacklog", new String[]{"BufferId", "MsgId", "MsgId", intName, intName}, new Object[]{id, first, last, limit, additional});
     }
 
     @Override
     public void receiveBacklog(int id, int first, int last, int limit, int additional, List<Message> messages) {
         _receiveBacklog(id, first, last, limit, additional, messages);
-        syncVar("receiveBacklog", id, first, last, limit, additional, messages);
+        sync("receiveBacklog", new String[]{"BufferId", "MsgId", "MsgId", intName, intName}, new Object[]{id, first, last, limit, additional, messages});
     }
 
     @Override
     public void requestBacklogAll(int first, int last, int limit, int additional) {
         _requestBacklogAll(first, last, limit, additional);
-        syncVar("requestBacklogAll", first, last, limit, additional);
+        sync("requestBacklogAll", new String[]{"MsgId", "MsgId", intName, intName}, new Object[]{first, last, limit, additional});
     }
 
     @Override
     public void receiveBacklogAll(int first, int last, int limit, int additional, List<Message> messages) {
         _receiveBacklogAll(first, last, limit, additional, messages);
-        syncVar("receiveBacklogAll", first, last, limit, additional, messages);
+        sync("receiveBacklogAll", new String[]{"MsgId", "MsgId", intName, intName}, new Object[]{first, last, limit, additional, messages});
     }
 }

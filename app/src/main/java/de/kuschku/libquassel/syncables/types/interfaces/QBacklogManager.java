@@ -25,12 +25,12 @@ import android.support.annotation.Nullable;
 
 import java.util.List;
 
-import de.kuschku.libquassel.localtypes.backlogmanagers.BacklogFilter;
+import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.Synced;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
-public interface QBacklogManager {
+public interface QBacklogManager<T extends QSyncableObject<T>> extends QSyncableObject<T> {
     void requestMoreBacklog(int bufferId, int amount);
 
     void requestBacklogInitial(int id, int amount);

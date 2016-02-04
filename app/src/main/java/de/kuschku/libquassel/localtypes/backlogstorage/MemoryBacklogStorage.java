@@ -26,18 +26,17 @@ import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
 import de.kuschku.libquassel.client.Client;
-import de.kuschku.libquassel.localtypes.backlogmanagers.BacklogFilter;
+import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
-import de.kuschku.util.observables.lists.ObservableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class MemoryBacklogStorage implements BacklogStorage {
     @NonNull
-    private final SparseArray<ObservableSortedList<Message>> backlogs = new SparseArray<>();
+    private final SparseArray<ObservableComparableSortedList<Message>> backlogs = new SparseArray<>();
     @NonNull
-    private final SparseArray<ObservableSortedList<Message>> filteredBacklogs = new SparseArray<>();
+    private final SparseArray<ObservableComparableSortedList<Message>> filteredBacklogs = new SparseArray<>();
     @NonNull
     private final SparseArray<BacklogFilter> filters = new SparseArray<>();
 
@@ -45,14 +44,14 @@ public class MemoryBacklogStorage implements BacklogStorage {
 
     @NonNull
     @Override
-    public ObservableSortedList<Message> getUnfiltered(@IntRange(from = -1) int bufferid) {
+    public ObservableComparableSortedList<Message> getUnfiltered(@IntRange(from = -1) int bufferid) {
         ensureExisting(bufferid);
         return backlogs.get(bufferid);
     }
 
     @NonNull
     @Override
-    public ObservableSortedList<Message> getFiltered(@IntRange(from = -1) int bufferid) {
+    public ObservableComparableSortedList<Message> getFiltered(@IntRange(from = -1) int bufferid) {
         ensureExisting(bufferid);
         return filteredBacklogs.get(bufferid);
     }
@@ -73,9 +72,9 @@ public class MemoryBacklogStorage implements BacklogStorage {
 
     @Override
     public void insertMessages(@NonNull Message... messages) {
-        if (messages.length > 0) {
-            int bufferId = messages[0].bufferInfo.id();
-            insertMessages(bufferId, messages);
+        for (Message message : messages) {
+            ensureExisting(message.bufferInfo.id());
+            backlogs.get(message.bufferInfo.id()).add(message);
         }
     }
 

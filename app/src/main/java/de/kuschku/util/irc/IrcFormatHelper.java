@@ -87,7 +87,7 @@ public class IrcFormatHelper {
         SpannableString str = new SpannableString(MessageUtil.parseStyleCodes(context.themeUtil(), message, context.settings().mircColors.get()));
         Matcher urlMatcher = urlPattern.matcher(str);
         while (urlMatcher.find()) {
-            spans.add(new FutureClickableSpan(new CustomURLSpan(urlMatcher.toString()), urlMatcher.start(), urlMatcher.end()));
+            spans.add(new FutureClickableSpan(new CustomURLSpan(urlMatcher.group()), urlMatcher.start(), urlMatcher.end()));
         }
         for (FutureClickableSpan span : spans) {
             str.setSpan(span.span, span.start, span.end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -137,8 +137,6 @@ public class IrcFormatHelper {
 
         @Override
         public void onClick(@NonNull View widget) {
-            Log.e("TEST", "THIS IS A TEST");
-
             Uri uri = Uri.parse(getURL());
             Context context = widget.getContext();
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);

@@ -23,17 +23,24 @@ package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
-import de.kuschku.libquassel.localtypes.backlogmanagers.BacklogFilter;
+import de.kuschku.libquassel.events.BacklogReceivedEvent;
+import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.localtypes.backlogstorage.BacklogStorage;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.ABacklogManager;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
+
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class BacklogManager extends ABacklogManager<BacklogManager> {
     private final Client client;
@@ -46,56 +53,75 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
 
     @Override
     public void requestMoreBacklog(int bufferId, int amount) {
-
+        Log.d("libquassel", "request more backlog for id " + bufferId + ": " + amount);
+        Message last;
+        if (storage.getUnfiltered(bufferId).isEmpty() || null == (last = storage.getUnfiltered(bufferId).last()))
+            requestBacklogInitial(bufferId, amount);
+        else {
+            requestBacklog(bufferId, -1, last.messageId, amount, 0);
+        }
     }
 
     @Override
     public void requestBacklogInitial(int id, int amount) {
+        Log.d("libquassel", "request initial backlog for id " + id + ": " + amount);
         requestBacklog(id, -1, -1, amount, 0);
     }
 
     @Override
     public void _requestBacklog(int id, int first, int last, int limit, int additional) {
         // Do nothing, we are on the client
+        Log.d("libquassel", "request backlog for id " + id);
     }
 
     @Override
     public void _receiveBacklog(int id, int first, int last, int limit, int additional, @NonNull List<Message> messages) {
+        assertNotNull(provider);
+
         storage.insertMessages(id, messages.toArray(new Message[messages.size()]));
         client.initBacklog(id);
+        provider.sendEvent(new BacklogReceivedEvent(id));
+
+        Log.d("libquassel", "received backlog for id " + id);
     }
 
     @Override
     public void _requestBacklogAll(int first, int last, int limit, int additional) {
         // Do nothing, we are on the client
+        Log.d("libquassel", "request backlog for all");
     }
 
     @Override
     public void _receiveBacklogAll(int first, int last, int limit, int additional, @NonNull List<Message> messages) {
+        assertNotNull(provider);
+
+        Set<Integer> buffers = new HashSet<>();
         for (Message message : messages) {
             storage.insertMessages(message.bufferInfo.id(), message);
+            buffers.add(message.bufferInfo.id());
+        }
+        for (int id : buffers) {
+            provider.sendEvent(new BacklogReceivedEvent(id));
+            Log.d("libquassel", "received backlog for id " + id);
         }
     }
 
-    // FIXME: Implement
     @Nullable
     @Override
     public BacklogFilter filter(int id) {
-        return null;
+        return storage.getFilter(id);
     }
 
-    // FIXME: Implement
     @Nullable
     @Override
     public ObservableComparableSortedList<Message> unfiltered(int id) {
-        return new ObservableComparableSortedList<>(Message.class);
+        return storage.getUnfiltered(id);
     }
 
-    // FIXME: Implement
     @Nullable
     @Override
     public ObservableComparableSortedList<Message> filtered(int id) {
-        return new ObservableComparableSortedList<>(Message.class);
+        return storage.getFiltered(id);
     }
 
     @Override
@@ -106,5 +132,10 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
     @Override
     public void update(BacklogManager from) {
 
+    }
+
+    @Override
+    public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull Client client) {
+        super.init(objectName, provider, client);
     }
 }

@@ -26,7 +26,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 
@@ -39,6 +38,8 @@ import de.kuschku.libquassel.syncables.types.interfaces.QSyncableObject;
 import de.kuschku.util.backports.Objects;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
+import static de.kuschku.util.AndroidAssert.assertTrue;
+import static junit.framework.Assert.assertEquals;
 
 public abstract class SyncableObject<T extends SyncableObject<T>> extends Observable implements QSyncableObject<T> {
     @Nullable
@@ -53,9 +54,23 @@ public abstract class SyncableObject<T extends SyncableObject<T>> extends Observ
     }
 
     public void sync(@NonNull String methodName, @NonNull Object[] params) {
+        assertTrue(initialized);
         assertNotNull(provider);
 
-        provider.dispatch(new SyncFunction<>(getClassName(), getObjectName(), methodName, Arrays.asList(params)));
+        provider.dispatch(new SyncFunction<>(getClassName(), getObjectName(), methodName, toVariantList(params)));
+    }
+
+    public void sync(@NonNull String methodName, @NonNull String[] strings, @NonNull Object[] objects) {
+        assertTrue(initialized);
+        assertNotNull(provider);
+        assertEquals(strings.length, objects.length);
+
+        List<QVariant> params = new ArrayList<>();
+        for (int i = 0; i < strings.length; i++) {
+            params.add(new QVariant<>(strings[i], objects[i]));
+        }
+
+        provider.dispatch(new SyncFunction<>(getClassName(), getObjectName(), methodName, params));
     }
 
     @NonNull
@@ -90,6 +105,7 @@ public abstract class SyncableObject<T extends SyncableObject<T>> extends Observ
     }
 
     public void rpc(@NonNull String procedureName, @NonNull List<QVariant> params) {
+        assertTrue(initialized);
         assertNotNull(provider);
 
         RpcCallFunction function = new RpcCallFunction(procedureName, params);

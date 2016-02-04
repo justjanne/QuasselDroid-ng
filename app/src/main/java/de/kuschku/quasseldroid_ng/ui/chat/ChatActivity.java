@@ -80,7 +80,7 @@ import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.LagChangedEvent;
 import de.kuschku.libquassel.events.LoginRequireEvent;
 import de.kuschku.libquassel.events.UnknownCertificateEvent;
-import de.kuschku.libquassel.localtypes.backlogmanagers.BacklogFilter;
+import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.message.Message;

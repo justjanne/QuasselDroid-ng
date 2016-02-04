@@ -101,6 +101,7 @@ public class Client extends AClient {
         this.backlogStorage = backlogStorage;
         backlogStorage.setClient(this);
         this.backlogManager = new BacklogManager(this, backlogStorage);
+        this.backlogManager.init("", provider, this);
         this.notificationManager = new NotificationManager(this);
     }
 
@@ -365,7 +366,6 @@ public class Client extends AClient {
 
     public void initBacklog(int id) {
         backlogRequests.remove((Integer) id);
-        requestInitBacklog(id, 0);
         if (backlogRequests.isEmpty())
             setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
     }

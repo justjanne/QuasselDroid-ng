@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.localtypes.backlogmanagers;
+package de.kuschku.libquassel.localtypes;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,16 +35,16 @@ import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.observables.callbacks.UICallback;
-import de.kuschku.util.observables.lists.ObservableSortedList;
+import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
 public class BacklogFilter implements UICallback {
     @NonNull
     private final Client client;
     private final int bufferId;
     @NonNull
-    private final ObservableSortedList<Message> unfiltered;
+    private final ObservableComparableSortedList<Message> unfiltered;
     @NonNull
-    private final ObservableSortedList<Message> filtered;
+    private final ObservableComparableSortedList<Message> filtered;
 
     @NonNull
     private final Set<Message.Type> filteredTypes = new HashSet<>();
@@ -52,7 +52,7 @@ public class BacklogFilter implements UICallback {
     @Nullable
     private DateTime earliestMessage;
 
-    public BacklogFilter(@NonNull Client client, int bufferId, @NonNull ObservableSortedList<Message> unfiltered, @NonNull ObservableSortedList<Message> filtered) {
+    public BacklogFilter(@NonNull Client client, int bufferId, @NonNull ObservableComparableSortedList<Message> unfiltered, @NonNull ObservableComparableSortedList<Message> filtered) {
         this.client = client;
         this.bufferId = bufferId;
         this.unfiltered = unfiltered;

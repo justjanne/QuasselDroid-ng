@@ -25,16 +25,16 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 
 import de.kuschku.libquassel.client.Client;
-import de.kuschku.libquassel.localtypes.backlogmanagers.BacklogFilter;
+import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.message.Message;
-import de.kuschku.util.observables.lists.ObservableSortedList;
+import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
 public interface BacklogStorage {
     @NonNull
-    ObservableSortedList<Message> getUnfiltered(@IntRange(from = 0) int bufferid);
+    ObservableComparableSortedList<Message> getUnfiltered(@IntRange(from = 0) int bufferid);
 
     @NonNull
-    ObservableSortedList<Message> getFiltered(@IntRange(from = 0) int bufferid);
+    ObservableComparableSortedList<Message> getFiltered(@IntRange(from = 0) int bufferid);
 
     @NonNull
     BacklogFilter getFilter(@IntRange(from = 0) int bufferid);
