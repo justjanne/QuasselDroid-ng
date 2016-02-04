@@ -20,4 +20,3 @@ rm aspm/local.properties
 echo sdk.dir=$ANDROID_HOME > local.properties
 gradle assembleRelease -x lintVitalRelease
 rm local.properties
-rm app/libs/*

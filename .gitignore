@@ -11,3 +11,4 @@ gradle.properties
 *.sh
 make
 signing.gradle
+**/libs/*
