@@ -1,5 +1,7 @@
 #!/bin/sh
 
+mkdir -p app/libs/
+
 echo sdk.dir=$ANDROID_HOME > AndroidSlidingUpPanel/local.properties
 cd AndroidSlidingUpPanel
 gradle build
