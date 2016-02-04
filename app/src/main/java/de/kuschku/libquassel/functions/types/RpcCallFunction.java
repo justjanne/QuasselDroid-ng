@@ -32,7 +32,7 @@ public class RpcCallFunction {
     @NonNull
     public final List<Object> params;
 
-    public RpcCallFunction(@NonNull String functionName, @NonNull List<Object> params) {
+    public RpcCallFunction(@NonNull String functionName, @NonNull List params) {
         this.functionName = functionName;
         this.params = params;
     }

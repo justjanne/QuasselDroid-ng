@@ -22,6 +22,7 @@
 package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,11 +158,16 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
         private final SmartRegEx[] scopeRules;
         private boolean isActive;
 
-        public IgnoreListItem(int type, @NonNull String ignoreRule, boolean isRegEx, int strictness, int scope, @NonNull String scopeRule, boolean isActive) {
+        public IgnoreListItem(int type, @Nullable String ignoreRule, boolean isRegEx, int strictness, int scope, @Nullable String scopeRule, boolean isActive) {
             this(IgnoreType.of(type), ignoreRule, isRegEx, StrictnessType.of(strictness), ScopeType.of(scope), scopeRule, isActive);
         }
 
-        public IgnoreListItem(IgnoreType type, @NonNull String ignoreRule, boolean isRegEx, StrictnessType strictness, ScopeType scope, @NonNull String scopeRule, boolean isActive) {
+        public IgnoreListItem(IgnoreType type, @Nullable String ignoreRule, boolean isRegEx, StrictnessType strictness, ScopeType scope, @Nullable String scopeRule, boolean isActive) {
+            if (scopeRule == null)
+                scopeRule = "";
+            if (ignoreRule == null)
+                ignoreRule = "";
+
             this.type = type;
             this.ignoreRule = new SmartRegEx(ignoreRule, Pattern.CASE_INSENSITIVE, SmartRegEx.Syntax.WILDCARD);
             this.isRegEx = isRegEx;

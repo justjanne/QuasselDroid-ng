@@ -92,7 +92,8 @@ public abstract class SyncableObject<T extends SyncableObject<T>> extends Observ
     public void rpc(@NonNull String procedureName, @NonNull List<QVariant> params) {
         assertNotNull(provider);
 
-        provider.dispatch(new RpcCallFunction(procedureName, params));
+        RpcCallFunction function = new RpcCallFunction(procedureName, params);
+        provider.dispatch(function);
     }
 
     public void rpc(@NonNull String procedureName, @NonNull Object[] params) {

@@ -615,6 +615,8 @@ public class ChatActivity extends AppCompatActivity {
             String text = editor.toFormatString();
             context.client().sendInput(buffer.getInfo(), text);
             chatline.setText("");
+        } else {
+            Snackbar.make(messages, "No buffer opened", Snackbar.LENGTH_LONG).show();
         }
     }
 
