@@ -55,13 +55,13 @@ public abstract class AIrcChannel<T extends AIrcChannel<T>> extends SyncableObje
     @Override
     public void joinIrcUser(QIrcUser ircuser) {
         _joinIrcUser(ircuser);
-        syncVar("joinIrcUser", ircuser);
+        syncVar("joinIrcUser", ircuser.nick());
     }
 
     @Override
     public void part(QIrcUser ircuser) {
         _part(ircuser);
-        syncVar("part", ircuser);
+        syncVar("part", ircuser.nick());
     }
 
     @Override
@@ -73,7 +73,7 @@ public abstract class AIrcChannel<T extends AIrcChannel<T>> extends SyncableObje
     @Override
     public void setUserModes(QIrcUser ircuser, String modes) {
         _setUserModes(ircuser, modes);
-        syncVar("setUserModes", ircuser, modes);
+        syncVar("setUserModes", ircuser.nick(), modes);
     }
 
     @Override
@@ -85,7 +85,7 @@ public abstract class AIrcChannel<T extends AIrcChannel<T>> extends SyncableObje
     @Override
     public void addUserMode(QIrcUser ircuser, String mode) {
         _addUserMode(ircuser, mode);
-        syncVar("addUserMode", ircuser, mode);
+        syncVar("addUserMode", ircuser.nick(), mode);
     }
 
     @Override
@@ -97,7 +97,7 @@ public abstract class AIrcChannel<T extends AIrcChannel<T>> extends SyncableObje
     @Override
     public void removeUserMode(QIrcUser ircuser, String mode) {
         _removeUserMode(ircuser, mode);
-        syncVar("removeUserMode", ircuser, mode);
+        syncVar("removeUserMode", ircuser.nick(), mode);
     }
 
     @Override

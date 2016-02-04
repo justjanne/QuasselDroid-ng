@@ -294,15 +294,15 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     public void _part(@NonNull QIrcUser ircuser) {
         if (isKnownUser(ircuser)) {
             userModes.remove(ircuser);
-            ircuser.partChannel(this);
+            ircuser._partChannel(this);
 
             if (network().isMe(ircuser) || userModes.isEmpty()) {
                 Set<QIrcUser> users = userModes.keySet();
                 userModes.clear();
                 for (QIrcUser user : users) {
-                    user.partChannel(this, true);
+                    user._partChannel(this, true);
                 }
-                network().removeIrcChannel(this);
+                network()._removeIrcChannel(this);
             }
             _update();
         }

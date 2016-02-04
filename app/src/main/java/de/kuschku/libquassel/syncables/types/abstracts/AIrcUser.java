@@ -127,13 +127,13 @@ public abstract class AIrcUser<T extends AIrcUser<T>> extends SyncableObject<T> 
     @Override
     public void joinChannel(QIrcChannel channel) {
         _joinChannel(channel);
-        syncVar("joinChannel", channel);
+        syncVar("joinChannel", channel.name());
     }
 
     @Override
     public void joinChannel(QIrcChannel channel, boolean skip_channel_join) {
         _joinChannel(channel, skip_channel_join);
-        syncVar("joinChannel", channel, skip_channel_join);
+        syncVar("joinChannel", channel.name(), skip_channel_join);
     }
 
     @Override
@@ -145,7 +145,7 @@ public abstract class AIrcUser<T extends AIrcUser<T>> extends SyncableObject<T> 
     @Override
     public void partChannel(QIrcChannel channel) {
         _partChannel(channel);
-        syncVar("partChannel", channel);
+        syncVar("partChannel", channel.name());
     }
 
     @Override
@@ -175,6 +175,6 @@ public abstract class AIrcUser<T extends AIrcUser<T>> extends SyncableObject<T> 
     @Override
     public void partChannel(QIrcChannel channel, boolean skip_channel_part) {
         _partChannel(channel, skip_channel_part);
-        syncVar("partChannel", channel, skip_channel_part);
+        syncVar("partChannel", channel.name(), skip_channel_part);
     }
 }

@@ -66,14 +66,17 @@ public class MemoryBacklogStorage implements BacklogStorage {
     @Override
     public void insertMessages(@IntRange(from = 0) int bufferId, @NonNull Message... messages) {
         ensureExisting(bufferId);
-        for (Message message : messages)
+        for (Message message : messages) {
+            client.unbufferBuffer(message.bufferInfo);
             backlogs.get(bufferId).add(message);
+        }
     }
 
     @Override
     public void insertMessages(@NonNull Message... messages) {
         for (Message message : messages) {
             ensureExisting(message.bufferInfo.id());
+            client.unbufferBuffer(message.bufferInfo);
             backlogs.get(message.bufferInfo.id()).add(message);
         }
     }

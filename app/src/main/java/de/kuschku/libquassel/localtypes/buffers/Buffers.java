@@ -34,6 +34,19 @@ public class Buffers {
 
     }
 
+    public static boolean exists(@NonNull BufferInfo info, @NonNull QNetwork network) {
+        switch (info.type()) {
+            case QUERY:
+                return info.name() != null && network.ircUser(info.name()) != null;
+            case CHANNEL:
+                return info.name() != null && network.ircChannel(info.name()) != null;
+            case STATUS:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     @Nullable
     public static Buffer fromType(@NonNull BufferInfo info, @NonNull QNetwork network) {
         Buffer result;

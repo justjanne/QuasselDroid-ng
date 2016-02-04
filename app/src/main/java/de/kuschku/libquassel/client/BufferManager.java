@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
+import de.kuschku.libquassel.localtypes.buffers.Buffers;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
 import de.kuschku.libquassel.localtypes.buffers.StatusBuffer;
@@ -117,5 +118,17 @@ public class BufferManager {
                 assertNotNull(network);
                 createBuffer(new ChannelBuffer(info, ircChannel));
             }
+    }
+
+    public void createBuffer(BufferInfo info) {
+        QNetwork network = client.networkManager().network(info.networkId());
+        if (network == null) return;
+        Buffer buffer = Buffers.fromType(info, network);
+        if (buffer == null) return;
+        createBuffer(buffer);
+    }
+
+    public boolean exists(BufferInfo info) {
+        return buffers.containsKey(info.id());
     }
 }

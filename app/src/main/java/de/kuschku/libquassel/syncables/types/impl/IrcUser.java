@@ -68,7 +68,7 @@ public class IrcUser extends AIrcUser<IrcUser> {
     private boolean encrypted;
     private QNetwork network;
     private Set<Character> userModes;
-    private Set<QIrcChannel> channels;
+    private Set<QIrcChannel> channels = new HashSet<>();
 
     public IrcUser(String server, String ircOperator, boolean away, int lastAwayMessage, DateTime idleTime, String whoisServiceReply, String suserHost, String nick, String realName, String awayMessage, DateTime loginTime, boolean encrypted, List<String> channels, String host, String userModes, String user) {
         this.server = server;
@@ -367,7 +367,7 @@ public class IrcUser extends AIrcUser<IrcUser> {
         if (!channels.contains(channel)) {
             channels.add(channel);
             if (!skip_channel_join)
-                channel.joinIrcUser(this);
+                channel._joinIrcUser(this);
         }
         _update();
     }
@@ -389,9 +389,9 @@ public class IrcUser extends AIrcUser<IrcUser> {
         if (channels.contains(channel)) {
             channels.remove(channel);
             if (!skip_channel_part)
-                channel.joinIrcUser(this);
+                channel._part(this);
             if (channels.isEmpty() && !network().isMe(this))
-                quit();
+                _quit();
         }
         _update();
     }
@@ -407,9 +407,9 @@ public class IrcUser extends AIrcUser<IrcUser> {
         List<QIrcChannel> channels = new ArrayList<>(this.channels);
         this.channels.clear();
         for (QIrcChannel channel : channels) {
-            channel.part(this);
+            channel._part(this);
         }
-        network().removeIrcUser(this);
+        network()._removeIrcUser(this);
         _update();
     }
 
@@ -436,7 +436,6 @@ public class IrcUser extends AIrcUser<IrcUser> {
         this.network = network;
         this.client = client;
 
-        channels = new HashSet<>();
         if (cachedChannels != null)
         for (String channelName : cachedChannels) {
             channels.add(network().newIrcChannel(channelName));

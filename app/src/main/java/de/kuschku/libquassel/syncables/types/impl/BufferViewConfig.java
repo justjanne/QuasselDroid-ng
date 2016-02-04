@@ -22,6 +22,7 @@
 package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.Collections;
 import java.util.List;
@@ -214,6 +215,11 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
 
     @Override
     public void _addBuffer(int bufferId, int pos) {
+        if (client.bufferManager().buffer(bufferId) == null) {
+            client.bufferBuffer(this, bufferId, pos);
+            return;
+        }
+
         if (buffers.contains(bufferId))
             return;
 
@@ -228,7 +234,7 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
         if (temporarilyRemovedBuffers.contains(bufferId))
             temporarilyRemovedBuffers.remove(bufferId);
 
-        buffers.add(bufferId, pos);
+        buffers.add(pos, bufferId);
     }
 
     @Override
@@ -269,13 +275,19 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
 
     @Override
     public void _removeBuffer(int bufferId) {
-        if (buffers.contains(bufferId))
-            buffers.remove(buffers.indexOf(bufferId));
+        Log.d("after", String.valueOf(buffers));
+
+        int index;
+        if ((index = buffers.indexOf(bufferId)) != -1) {
+            buffers.remove(index);
+        }
 
         if (removedBuffers.contains(bufferId))
             removedBuffers.remove(bufferId);
 
         temporarilyRemovedBuffers.add(bufferId);
+
+        Log.d("after", String.valueOf(buffers));
         _update();
     }
 

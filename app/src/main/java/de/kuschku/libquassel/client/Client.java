@@ -24,6 +24,7 @@ package de.kuschku.libquassel.client;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.util.Pair;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -57,6 +58,7 @@ import de.kuschku.libquassel.syncables.types.impl.NetworkConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QAliasManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferSyncer;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIgnoreListManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
@@ -80,8 +82,9 @@ public class Client extends AClient {
     private final NotificationManager notificationManager;
     private final List<String> initRequests = new LinkedList<>();
     private final List<Integer> backlogRequests = new LinkedList<>();
-    private final Map<String, List<SyncFunction>> bufferedSyncs = new HashMap<>();
     private final QBacklogManager backlogManager;
+    private final Map<String, List<SyncFunction>> bufferedSyncs = new HashMap<>();
+    private final Map<Integer, Pair<QBufferViewConfig, Integer>> bufferedBuffers = new HashMap<>();
     private QBufferViewManager bufferViewManager;
     // local
     private QBufferSyncer bufferSyncer;
@@ -441,5 +444,22 @@ public class Client extends AClient {
         if (!bufferedSyncs.containsKey(key))
             bufferedSyncs.put(key, new LinkedList<>());
         bufferedSyncs.get(key).add(packedFunc);
+    }
+
+    public void bufferBuffer(QBufferViewConfig bufferViewConfig, int bufferId, int pos) {
+        bufferedBuffers.put(bufferId, Pair.create(bufferViewConfig, pos));
+        Log.d("libquassel", "Queueing buffer: " + bufferId);
+    }
+
+    public void unbufferBuffer(BufferInfo info) {
+        if (!bufferManager().exists(info)) {
+            bufferManager().createBuffer(info);
+            Log.d("libquassel", "Creating buffer from message info: " + info.id());
+        }
+        if (bufferedBuffers.containsKey(info.id())) {
+            Pair<QBufferViewConfig, Integer> pair = bufferedBuffers.remove(info.id());
+            pair.first._addBuffer(info.id(), pair.second);
+            Log.d("libquassel", "Un-Queueing buffer: " + info.id());
+        }
     }
 }

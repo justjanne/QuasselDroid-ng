@@ -251,12 +251,12 @@ public abstract class ANetwork<T extends ANetwork<T>> extends SyncableObject<T> 
     @Override
     public void removeIrcChannel(QIrcChannel ircChannel) {
         _removeIrcChannel(ircChannel);
-        syncVar("removeIrcChannel", ircChannel);
+        syncVar("removeIrcChannel", ircChannel.name());
     }
 
     @Override
     public void removeIrcUser(QIrcUser ircuser) {
         _removeIrcUser(ircuser);
-        syncVar("removeIrcUser", ircuser);
+        syncVar("removeIrcUser", ircuser.nick());
     }
 }
