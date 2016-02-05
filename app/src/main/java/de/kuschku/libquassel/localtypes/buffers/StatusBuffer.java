@@ -67,6 +67,16 @@ public class StatusBuffer implements Buffer {
     }
 
     @Override
+    public String objectName() {
+        return objectName(info.name());
+    }
+
+    @Override
+    public String objectName(String name) {
+        return info.networkId() + "/" + name;
+    }
+
+    @Override
     public void renameBuffer(@NonNull String newName) {
         this.info.setName(newName);
     }

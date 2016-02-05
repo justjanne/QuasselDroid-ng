@@ -27,5 +27,5 @@
         android:icon="@android:drawable/ic_menu_sort_by_size"
         android:orderInCategory="100"
         android:title="@string/labelHideEvents"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 </menu>

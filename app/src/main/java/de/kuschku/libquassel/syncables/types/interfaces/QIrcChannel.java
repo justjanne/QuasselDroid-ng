@@ -146,4 +146,6 @@ public interface QIrcChannel {
     void _removeChannelMode(final char mode, final String value);
 
     void init(QNetwork network, Client client);
+
+    String getObjectName();
 }

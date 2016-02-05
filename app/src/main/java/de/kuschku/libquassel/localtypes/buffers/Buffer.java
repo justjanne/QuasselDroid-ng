@@ -39,4 +39,8 @@ public interface Buffer {
     BufferInfo.BufferStatus getStatus();
 
     void renameBuffer(@NonNull String newName);
+
+    String objectName();
+
+    String objectName(String name);
 }

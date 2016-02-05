@@ -83,6 +83,7 @@ import de.kuschku.libquassel.events.UnknownCertificateEvent;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
+import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
@@ -105,7 +106,6 @@ import de.kuschku.util.instancestateutil.Storable;
 import de.kuschku.util.instancestateutil.Store;
 import de.kuschku.util.observables.AutoScroller;
 import de.kuschku.util.observables.lists.ObservableSortedList;
-import de.kuschku.util.ui.SpanFormatter;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -573,6 +573,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void selectBuffer(@IntRange(from = -1) int bufferId) {
+        Log.d("libquassel", context.client().bufferManager().channel(context.client().networkManager().network(4).ircChannel("#quassel")).getChannel().topic());
         if (bufferId == -1) {
             swipeView.setEnabled(false);
 
@@ -594,6 +595,7 @@ public class ChatActivity extends AppCompatActivity {
             toolbar.setTitle(buffer.getName());
             updateNoColor(buffer, formattingMenu.getMenu());
         }
+        updateSubTitle();
     }
 
     private void onConnectionEstablished() {
@@ -758,7 +760,27 @@ public class ChatActivity extends AppCompatActivity {
 
     private void updateSubTitle() {
         if (context.client() != null) {
-            toolbar.setSubtitle(SpanFormatter.format("Lag: %.2f, %s", context.client().latency() / 1000.0F, context.client().connectionStatus()));
+            String subtitle;
+            if (context.client().connectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
+                if (status.bufferId >= 0) {
+                    Buffer buffer = context.client().bufferManager().buffer(status.bufferId);
+                    if (buffer != null) {
+                        if (buffer instanceof QueryBuffer)
+                            subtitle = ((QueryBuffer) buffer).getUser().realName();
+                        else if (buffer instanceof ChannelBuffer)
+                            subtitle = ((ChannelBuffer) buffer).getChannel().topic();
+                        else
+                            subtitle = "";
+                    } else {
+                        subtitle = "";
+                    }
+                } else {
+                    subtitle = "";
+                }
+            } else {
+                subtitle = String.valueOf(context.client().connectionStatus());
+            }
+            toolbar.setSubtitle(subtitle);
         } else {
             toolbar.setSubtitle("");
         }

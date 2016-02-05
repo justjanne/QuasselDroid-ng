@@ -28,7 +28,6 @@ import java.util.Map;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
-import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.BufferSyncerSerializer;
@@ -112,9 +111,7 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
 
     @Override
     public void _renameBuffer(int bufferId, @NonNull String newName) {
-        Buffer buffer = client.bufferManager().buffer(bufferId);
-        if (buffer != null)
-            buffer.renameBuffer(newName);
+        client.bufferManager().renameBuffer(bufferId, newName);
         _update();
     }
 

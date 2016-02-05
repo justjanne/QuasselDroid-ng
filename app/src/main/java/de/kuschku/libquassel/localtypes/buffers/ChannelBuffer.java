@@ -67,6 +67,16 @@ public class ChannelBuffer implements Buffer {
         info.setName(newName);
     }
 
+    @Override
+    public String objectName() {
+        return objectName(info.name());
+    }
+
+    @Override
+    public String objectName(String name) {
+        return info.networkId() + "/" + name;
+    }
+
     @Nullable
     public QIrcChannel getChannel() {
         return client.networkManager().network(info.networkId()).ircChannel(info.name());

@@ -30,7 +30,11 @@ import java.util.Map;
 
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.localtypes.buffers.Buffers;
+import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
+import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
+import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
+import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -39,12 +43,16 @@ public class BufferManager {
     private final Map<Integer, Buffer> buffers = new HashMap<>();
     private final Client client;
 
+    private final Map<String, Integer> buffersByNick = new HashMap<>();
+    private final Map<String, Integer> buffersByChannel = new HashMap<>();
+
     public BufferManager(Client client) {
         this.client = client;
     }
 
     public void createBuffer(@NonNull Buffer buffer) {
         buffers.put(buffer.getInfo().id(), buffer);
+        updateBufferMapEntries(buffer, buffer.getInfo().name());
     }
 
     public void removeBuffer(@IntRange(from = 0) int id) {
@@ -79,5 +87,44 @@ public class BufferManager {
 
     public boolean exists(BufferInfo info) {
         return buffers.containsKey(info.id());
+    }
+
+    public void renameBuffer(int bufferId, String newName) {
+        Buffer buffer = buffer(bufferId);
+        if (buffer != null) {
+            buffer.renameBuffer(newName);
+        }
+    }
+
+    private void updateBufferMapEntries(Buffer buffer, String name) {
+        buffersByNick.remove(buffer.objectName());
+        buffersByChannel.remove(buffer.objectName());
+        if (buffer instanceof ChannelBuffer) {
+            buffersByChannel.put(buffer.objectName(name), buffer.getInfo().id());
+        } else if (buffer instanceof QueryBuffer) {
+            buffersByNick.put(buffer.objectName(name), buffer.getInfo().id());
+        }
+    }
+
+    public ChannelBuffer channel(QIrcChannel channel) {
+        if (channel == null)
+            return null;
+        if (!buffersByChannel.containsKey(channel.getObjectName()))
+            return null;
+        Buffer buffer = buffer(buffersByChannel.get(channel.getObjectName()));
+        if (!(buffer instanceof ChannelBuffer))
+            return null;
+        return (ChannelBuffer) buffer;
+    }
+
+    public QueryBuffer user(QIrcUser user) {
+        if (user == null)
+            return null;
+        if (!buffersByNick.containsKey(user.getObjectName()))
+            return null;
+        Buffer buffer = buffer(buffersByNick.get(user.getObjectName()));
+        if (!(buffer instanceof QueryBuffer))
+            return null;
+        return (QueryBuffer) buffer;
     }
 }

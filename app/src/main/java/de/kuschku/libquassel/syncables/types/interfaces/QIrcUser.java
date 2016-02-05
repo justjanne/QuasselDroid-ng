@@ -204,4 +204,6 @@ public interface QIrcUser {
     void _removeUserModes(final String modes);
 
     void init(QNetwork network, Client client);
+
+    String getObjectName();
 }

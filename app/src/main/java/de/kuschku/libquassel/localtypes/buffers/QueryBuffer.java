@@ -69,6 +69,16 @@ public class QueryBuffer implements Buffer {
         info.setName(newName);
     }
 
+    @Override
+    public String objectName() {
+        return objectName(info.name());
+    }
+
+    @Override
+    public String objectName(String name) {
+        return info.networkId() + "/" + name;
+    }
+
     @Nullable
     public QIrcUser getUser() {
         return client.networkManager().network(info.networkId()).ircUser(info.name());
