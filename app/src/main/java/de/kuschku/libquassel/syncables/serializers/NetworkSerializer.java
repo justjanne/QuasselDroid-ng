@@ -153,7 +153,7 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
     @NonNull
     @Override
     public Network fromLegacy(@NonNull Map<String, QVariant> map) {
-        final Map<String, QVariant<Map<String, QVariant<Map<String, QVariant>>>>> usersAndChannels = ((QVariant<Map<String, QVariant<Map<String, QVariant<Map<String, QVariant>>>>>>) map.get("QIrcUsersAndChannels")).data;
+        final Map<String, QVariant<Map<String, QVariant<Map<String, QVariant>>>>> usersAndChannels = ((QVariant<Map<String, QVariant<Map<String, QVariant<Map<String, QVariant>>>>>>) map.get("IrcUsersAndChannels")).data;
         final Map<String, QVariant<Map<String, QVariant>>> wrappedChannels = usersAndChannels.get("channels").data;
         final Map<String, QVariant<Map<String, QVariant>>> wrappedUsers = usersAndChannels.get("users").data;
         final Map<String, QIrcChannel> channels = new HashMap<>(wrappedChannels.size());

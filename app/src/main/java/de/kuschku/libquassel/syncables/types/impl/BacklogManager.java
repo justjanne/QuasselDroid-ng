@@ -44,6 +44,7 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 public class BacklogManager extends ABacklogManager<BacklogManager> {
     private final Client client;
     private final BacklogStorage storage;
+    private final Set<Integer> initialized = new HashSet<>();
 
     public BacklogManager(Client client, BacklogStorage storage) {
         this.client = client;
@@ -53,7 +54,7 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
     @Override
     public void requestMoreBacklog(int bufferId, int amount) {
         Message last;
-        if (storage.getUnfiltered(bufferId).isEmpty() || null == (last = storage.getUnfiltered(bufferId).last()))
+        if (!initialized.contains(bufferId) || null == (last = storage.getUnfiltered(bufferId).last()))
             requestBacklogInitial(bufferId, amount);
         else {
             requestBacklog(bufferId, -1, last.messageId, amount, 0);
@@ -62,6 +63,10 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
 
     @Override
     public void requestBacklogInitial(int id, int amount) {
+        if (initialized.contains(id))
+            return;
+
+        initialized.add(id);
         requestBacklog(id, -1, -1, amount, 0);
     }
 

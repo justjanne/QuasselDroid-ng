@@ -192,14 +192,12 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     public static boolean isNoColor(Buffer buffer) {
-        assertNotNull(buffer);
-        if (buffer instanceof ChannelBuffer) {
-            QIrcChannel channel = ((ChannelBuffer) buffer).getChannel();
-            assertNotNull(channel);
-            return channel.hasMode('c');
-        } else {
+        if (buffer == null)
             return false;
-        }
+        if (!(buffer instanceof ChannelBuffer))
+            return false;
+        QIrcChannel channel = ((ChannelBuffer) buffer).getChannel();
+        return channel != null && channel.hasMode('c');
     }
 
     @Override
@@ -573,7 +571,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void selectBuffer(@IntRange(from = -1) int bufferId) {
-        Log.d("libquassel", context.client().bufferManager().channel(context.client().networkManager().network(4).ircChannel("#quassel")).getChannel().topic());
         if (bufferId == -1) {
             swipeView.setEnabled(false);
 
@@ -765,10 +762,19 @@ public class ChatActivity extends AppCompatActivity {
                 if (status.bufferId >= 0) {
                     Buffer buffer = context.client().bufferManager().buffer(status.bufferId);
                     if (buffer != null) {
-                        if (buffer instanceof QueryBuffer)
-                            subtitle = ((QueryBuffer) buffer).getUser().realName();
-                        else if (buffer instanceof ChannelBuffer)
-                            subtitle = ((ChannelBuffer) buffer).getChannel().topic();
+                        if (buffer instanceof QueryBuffer) {
+                            QIrcUser user = ((QueryBuffer) buffer).getUser();
+                            if (user != null)
+                                subtitle = user.realName();
+                            else
+                                subtitle = "";
+                        } else if (buffer instanceof ChannelBuffer) {
+                            QIrcChannel channel = ((ChannelBuffer) buffer).getChannel();
+                            if (channel != null)
+                                subtitle = channel.topic();
+                            else
+                                subtitle = "";
+                        }
                         else
                             subtitle = "";
                     } else {
