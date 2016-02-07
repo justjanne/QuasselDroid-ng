@@ -22,7 +22,6 @@
 package de.kuschku.util.observables.lists;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -31,58 +30,69 @@ import java.util.Iterator;
 import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.wrappers.MultiElementCallbackWrapper;
 
+import static de.kuschku.util.AndroidAssert.assertNotNull;
+
 @SuppressWarnings("unchecked")
 public class ObservableSet<T> extends HashSet<T> implements IObservableSet<ElementCallback<T>, T> {
-    @Nullable
+    @NonNull
     private final MultiElementCallbackWrapper<T> callback = MultiElementCallbackWrapper.<T>of();
 
     public ObservableSet(int capacity) {
         super(capacity);
+        assertNotNull(this.callback);
     }
 
     public ObservableSet() {
         super();
+        assertNotNull(this.callback);
     }
 
     public ObservableSet(@NonNull Collection<? extends T> collection) {
-        super(collection);
+        assertNotNull(this.callback);
+
+        assertNotNull(callback);
     }
 
     public void addCallback(@NonNull ElementCallback<T> callback) {
-        if (this.callback != null)
-            this.callback.addCallback(callback);
+        assertNotNull(this.callback);
+
+        this.callback.addCallback(callback);
     }
 
     public void removeCallback(@NonNull ElementCallback<T> callback) {
-        if (this.callback != null)
-            this.callback.removeCallback(callback);
+        assertNotNull(this.callback);
+
+        this.callback.removeCallback(callback);
     }
 
     @Override
     public boolean add(T object) {
+        assertNotNull(this.callback);
+
         boolean result = super.add(object);
-        if (callback != null)
-            callback.notifyItemInserted(object);
+        callback.notifyItemInserted(object);
         return result;
     }
 
     @Override
     public boolean addAll(@NonNull Collection<? extends T> collection) {
+        assertNotNull(this.callback);
+
         boolean result = super.addAll(collection);
         if (result)
             for (T element : collection)
-                if (callback != null)
-                    callback.notifyItemInserted(element);
+                callback.notifyItemInserted(element);
         return result;
     }
 
     @Override
     public boolean remove(Object object) {
+        assertNotNull(this.callback);
+
         boolean contains = contains(object);
         if (contains) {
-            remove(object);
-            if (callback != null)
-                callback.notifyItemRemoved((T) object);
+            super.remove(object);
+            callback.notifyItemRemoved((T) object);
             return true;
         } else {
             return false;
@@ -116,9 +126,10 @@ public class ObservableSet<T> extends HashSet<T> implements IObservableSet<Eleme
 
         @Override
         public void remove() {
+            assertNotNull(callback);
+
             iterator.remove();
-            if (callback != null)
-                callback.notifyItemRemoved((T) current);
+            callback.notifyItemRemoved((T) current);
         }
     }
 }

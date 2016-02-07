@@ -35,6 +35,7 @@ import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
+import de.kuschku.util.observables.lists.ObservableSet;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -45,6 +46,8 @@ public class BufferManager {
 
     private final Map<String, Integer> buffersByNick = new HashMap<>();
     private final Map<String, Integer> buffersByChannel = new HashMap<>();
+    private final Map<Integer, ObservableSet<Integer>> buffersByNetwork = new HashMap<>();
+    private final ObservableSet<Integer> bufferIds = new ObservableSet<>();
 
     public BufferManager(Client client) {
         this.client = client;
@@ -52,11 +55,17 @@ public class BufferManager {
 
     public void createBuffer(@NonNull Buffer buffer) {
         buffers.put(buffer.getInfo().id(), buffer);
+        bufferIds.add(buffer.getInfo().id());
+        byNetwork(buffer.getInfo().networkId()).add(buffer.getInfo().id());
         updateBufferMapEntries(buffer, buffer.getInfo().name());
     }
 
     public void removeBuffer(@IntRange(from = 0) int id) {
+        Buffer buffer = buffers.get(id);
+        if (buffer != null)
+            byNetwork(buffer.getInfo().networkId()).remove(id);
         buffers.remove(id);
+        bufferIds.remove(id);
     }
 
     public Buffer buffer(@IntRange(from = 0) int id) {
@@ -66,6 +75,10 @@ public class BufferManager {
     public void updateBufferInfo(@NonNull BufferInfo bufferInfo) {
         Buffer buffer = buffer(bufferInfo.id());
         if (buffer == null) return;
+        if (buffer.getInfo().networkId() != bufferInfo.networkId()) {
+            buffersByNetwork.get(buffer.getInfo().networkId()).remove(bufferInfo.id());
+            buffersByNetwork.get(buffer.getInfo().networkId()).add(bufferInfo.id());
+        }
         buffer.setInfo(bufferInfo);
     }
 
@@ -126,5 +139,15 @@ public class BufferManager {
         if (!(buffer instanceof QueryBuffer))
             return null;
         return (QueryBuffer) buffer;
+    }
+
+    public ObservableSet<Integer> byNetwork(@IntRange(from = 0) int networkId) {
+        if (!buffersByNetwork.containsKey(networkId))
+            buffersByNetwork.put(networkId, new ObservableSet<>());
+        return buffersByNetwork.get(networkId);
+    }
+
+    public ObservableSet<Integer> bufferIds() {
+        return bufferIds;
     }
 }

@@ -21,6 +21,7 @@
 
 package de.kuschku.libquassel.syncables.types.impl;
 
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -45,6 +46,8 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
     private final Client client;
     private final BacklogStorage storage;
     private final Set<Integer> initialized = new HashSet<>();
+    @IntRange(from = -1)
+    private int openBuffer;
 
     public BacklogManager(Client client, BacklogStorage storage) {
         this.client = client;
@@ -82,6 +85,8 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
         storage.insertMessages(id, messages.toArray(new Message[messages.size()]));
         client.initBacklog(id);
         provider.sendEvent(new BacklogReceivedEvent(id));
+        if (id == openBuffer && openBuffer != -1)
+            client.bufferSyncer().markBufferAsRead(openBuffer);
     }
 
     @Override
@@ -100,6 +105,8 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
         }
         for (int id : buffers) {
             provider.sendEvent(new BacklogReceivedEvent(id));
+            if (id == openBuffer && openBuffer != -1)
+                client.bufferSyncer().markBufferAsRead(openBuffer);
         }
     }
 
@@ -122,12 +129,26 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void open(int bufferId) {
+        openBuffer = bufferId;
+        if (bufferId != -1)
+            client.bufferSyncer().markBufferAsRead(bufferId);
+    }
+
+    @Override
+    public void receiveBacklog(Message msg) {
+        storage.insertMessages(msg);
+        if (msg.bufferInfo.id() == openBuffer && openBuffer != -1)
+            client.bufferSyncer().markBufferAsRead(openBuffer);
+    }
+
+    @Override
+    public void _update(Map<String, QVariant> from) {
 
     }
 
     @Override
-    public void update(BacklogManager from) {
+    public void _update(BacklogManager from) {
 
     }
 

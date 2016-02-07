@@ -26,7 +26,7 @@ import android.support.annotation.NonNull;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.Synced;
 
-public interface QIgnoreListManager {
+public interface QIgnoreListManager extends QObservable {
     @Synced
     void requestRemoveIgnoreListItem(final String ignoreRule);
 

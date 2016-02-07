@@ -27,7 +27,7 @@ import java.util.List;
 
 import de.kuschku.libquassel.syncables.Synced;
 
-public interface QBufferViewManager {
+public interface QBufferViewManager extends QObservable {
     @NonNull
     List<QBufferViewConfig> bufferViewConfigs();
 

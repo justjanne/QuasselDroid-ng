@@ -19,34 +19,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.util.observables.callbacks.wrappers;
+package de.kuschku.util.observables.callbacks;
 
-import android.support.annotation.NonNull;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import de.kuschku.util.observables.IObservable;
-import de.kuschku.util.observables.callbacks.GeneralCallback;
-
-public class GeneralCallbackWrapper implements IObservable<GeneralCallback>, GeneralCallback {
-    @NonNull
-    final Set<GeneralCallback> callbacks = new HashSet<>();
-
-    @Override
-    public void notifyChanged() {
-        for (GeneralCallback callback : callbacks) {
-            callback.notifyChanged();
-        }
-    }
-
-    @Override
-    public void addCallback(GeneralCallback callback) {
-        callbacks.add(callback);
-    }
-
-    @Override
-    public void removeCallback(GeneralCallback callback) {
-        callbacks.remove(callback);
-    }
+public interface DrawerItemCallback {
+    void notifyChanged(IDrawerItem item);
 }

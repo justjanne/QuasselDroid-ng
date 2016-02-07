@@ -19,25 +19,31 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.syncables.types.interfaces;
+package de.kuschku.util.observables.callbacks;
 
-import android.support.annotation.NonNull;
+import java.util.HashSet;
+import java.util.Set;
 
-import java.security.PrivateKey;
-import java.security.cert.Certificate;
+import de.kuschku.libquassel.syncables.types.interfaces.QObservable;
 
-import de.kuschku.libquassel.syncables.Synced;
+public class GeneralObservable implements QObservable, GeneralCallback {
+    Set<GeneralCallback> callbackSet = new HashSet<>();
 
-public interface QCertManager extends QObservable {
-    @NonNull
-    PrivateKey sslKey();
+    @Override
+    public void addObserver(GeneralCallback o) {
+        callbackSet.add(o);
+    }
 
-    @Synced
-    void setSslKey(byte[] encoded);
+    @Override
+    public void deleteObserver(GeneralCallback o) {
+        callbackSet.remove(o);
+    }
 
-    @NonNull
-    Certificate sslCert();
 
-    @Synced
-    void setSslCert(byte[] encoded);
+    @Override
+    public void notifyChanged() {
+        for (GeneralCallback callback : callbackSet) {
+            callback.notifyChanged();
+        }
+    }
 }

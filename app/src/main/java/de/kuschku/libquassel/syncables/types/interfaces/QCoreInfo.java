@@ -26,7 +26,7 @@ import java.util.Map;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.Synced;
 
-public interface QCoreInfo {
+public interface QCoreInfo extends QObservable {
     Map<String, QVariant> coreData();
 
     @Synced

@@ -175,12 +175,12 @@ public class NetworkConfig extends ANetworkConfig<NetworkConfig> {
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void _update(Map<String, QVariant> from) {
 
     }
 
     @Override
-    public void update(NetworkConfig from) {
+    public void _update(NetworkConfig from) {
 
     }
 

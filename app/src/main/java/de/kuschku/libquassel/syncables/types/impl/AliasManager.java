@@ -231,12 +231,12 @@ public class AliasManager extends AAliasManager<AliasManager> {
     }
 
     @Override
-    public void update(@NonNull Map<String, QVariant> from) {
-        update(AliasManagerSerializer.get().fromLegacy(from));
+    public void _update(@NonNull Map<String, QVariant> from) {
+        _update(AliasManagerSerializer.get().fromLegacy(from));
     }
 
     @Override
-    public void update(@NonNull AliasManager from) {
+    public void _update(@NonNull AliasManager from) {
         names = from.names;
         aliases = from.aliases;
         _update();

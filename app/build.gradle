@@ -145,7 +145,7 @@ dependencies {
 
     // UI Libs
     compile(name:'library-release', ext:'aar')
-    compile('com.mikepenz:materialdrawer:5.0.0.b24-SNAPSHOT@aar') { transitive = true }
+    compile('com.mikepenz:materialdrawer:5.0.0.b25-SNAPSHOT@aar') { transitive = true }
     compile('com.github.afollestad.material-dialogs:core:0.8.5.3@aar') { transitive = true }
     compile('com.github.afollestad.material-dialogs:commons:0.8.5.3@aar') { transitive = true }
 

@@ -23,10 +23,12 @@ package de.kuschku.util.observables.lists;
 
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
 import de.kuschku.util.observables.ContentComparable;
 import de.kuschku.util.observables.callbacks.UICallback;
 
-public class ObservableComparableSortedList<T extends ContentComparable<T>> extends ObservableSortedList<T> implements IObservableList<UICallback, T> {
+public class ObservableComparableSortedList<T extends ContentComparable<T>> extends ObservableSortedList<T> implements IObservableList<UICallback, T>, List<T> {
 
 
     public ObservableComparableSortedList(@NonNull Class<T> cl) {

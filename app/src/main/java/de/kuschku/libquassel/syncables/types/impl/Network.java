@@ -740,12 +740,12 @@ public class Network extends ANetwork<Network> implements Observer {
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void _update(Map<String, QVariant> from) {
 
     }
 
     @Override
-    public void update(Network from) {
+    public void _update(Network from) {
 
     }
 
@@ -762,7 +762,6 @@ public class Network extends ANetwork<Network> implements Observer {
         }
     }
 
-    @Override
     public void update(Observable observable, Object data) {
         _update();
     }
@@ -770,5 +769,29 @@ public class Network extends ANetwork<Network> implements Observer {
     @Override
     public List<NetworkServer> serverList() {
         return networkInfo.serverList();
+    }
+
+    @Override
+    public String toString() {
+        return "Network{" +
+                "name='" + networkInfo.networkName() + '\'' +
+                ", id='" + networkInfo.networkId() + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Network network = (Network) o;
+
+        return networkInfo != null ? networkInfo.equals(network.networkInfo) : network.networkInfo == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return networkInfo != null ? networkInfo.hashCode() : 0;
     }
 }

@@ -448,12 +448,12 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     }
 
     @Override
-    public void update(@NonNull Map<String, QVariant> from) {
-        update(IrcChannelSerializer.get().fromDatastream(from));
+    public void _update(@NonNull Map<String, QVariant> from) {
+        _update(IrcChannelSerializer.get().fromDatastream(from));
     }
 
     @Override
-    public void update(IrcChannel from) {
+    public void _update(IrcChannel from) {
 
     }
 

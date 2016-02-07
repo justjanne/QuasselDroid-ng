@@ -23,7 +23,7 @@ package de.kuschku.libquassel.syncables.types.interfaces;
 
 import de.kuschku.libquassel.syncables.Synced;
 
-public interface QNetworkConfig {
+public interface QNetworkConfig extends QObservable {
     boolean pingTimeoutEnabled();
 
     @Synced

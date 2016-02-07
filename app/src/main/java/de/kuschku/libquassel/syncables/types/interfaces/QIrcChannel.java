@@ -28,7 +28,7 @@ import java.util.List;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.syncables.Synced;
 
-public interface QIrcChannel {
+public interface QIrcChannel extends QObservable {
     boolean isKnownUser(QIrcUser ircuser);
 
     boolean isValidChannelUserMode(final String mode);

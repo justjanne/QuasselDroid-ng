@@ -114,12 +114,12 @@ public class BufferViewManager extends ABufferViewManager<BufferViewManager> {
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void _update(Map<String, QVariant> from) {
 
     }
 
     @Override
-    public void update(@NonNull BufferViewManager from) {
+    public void _update(@NonNull BufferViewManager from) {
         this.bufferViewConfigs = from.bufferViewConfigs;
     }
 }

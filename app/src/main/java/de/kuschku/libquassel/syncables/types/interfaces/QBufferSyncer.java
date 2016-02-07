@@ -23,7 +23,7 @@ package de.kuschku.libquassel.syncables.types.interfaces;
 
 import de.kuschku.libquassel.syncables.Synced;
 
-public interface QBufferSyncer {
+public interface QBufferSyncer extends QObservable {
     int lastSeenMsg(int buffer);
 
     int markerLine(int buffer);

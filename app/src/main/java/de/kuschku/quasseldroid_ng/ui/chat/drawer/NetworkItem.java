@@ -22,8 +22,6 @@
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.util.SparseArray;
 
 import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
@@ -32,206 +30,99 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.kuschku.libquassel.localtypes.buffers.Buffer;
-import de.kuschku.libquassel.primitives.types.BufferInfo;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
-import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
+import de.kuschku.util.observables.ContentComparable;
 import de.kuschku.util.observables.IObservable;
-import de.kuschku.util.observables.callbacks.GeneralCallback;
-import de.kuschku.util.observables.callbacks.UICallback;
-import de.kuschku.util.observables.callbacks.wrappers.GeneralCallbackWrapper;
-import de.kuschku.util.observables.lists.ObservableSortedList;
+import de.kuschku.util.observables.callbacks.DrawerItemCallback;
+import de.kuschku.util.observables.callbacks.ElementCallback;
+import de.kuschku.util.observables.callbacks.wrappers.MultiDrawerItemCallback;
 
-import static de.kuschku.libquassel.primitives.types.BufferInfo.Type.CHANNEL;
-import static de.kuschku.libquassel.primitives.types.BufferInfo.Type.GROUP;
-import static de.kuschku.libquassel.primitives.types.BufferInfo.Type.QUERY;
-import static de.kuschku.libquassel.primitives.types.BufferInfo.Type.STATUS;
-
-public class NetworkItem extends PrimaryDrawerItem implements IObservable<GeneralCallback>, GeneralCallback {
-    @NonNull
+public class NetworkItem extends PrimaryDrawerItem implements IObservable<DrawerItemCallback>, ContentComparable<NetworkItem> {
+    private final QBufferViewConfig config;
+    private final Client client;
+    private final BufferItemManager manager;
     private final QNetwork network;
-    @NonNull
-    private final ObservableSortedList<BufferItem> buffers = new ObservableSortedList<>(BufferItem.class, new AlphabeticalComparator());
-    @NonNull
-    private final SparseArray<BufferItem> bufferIds = new SparseArray<>();
-    @NonNull
-    private final GeneralCallbackWrapper callback = new GeneralCallbackWrapper();
+    private final MultiDrawerItemCallback callback = MultiDrawerItemCallback.of();
 
-    public NetworkItem(@NonNull AppContext context, @NonNull QNetwork network, @NonNull QBufferViewConfig config) {
+    public NetworkItem(QBufferViewConfig config, Client client, BufferItemManager manager, QNetwork network) {
+        this.config = config;
+        this.client = client;
+        this.manager = manager;
         this.network = network;
+        ElementCallback<Integer> elemCallback = new ElementCallback<Integer>() {
+            @Override
+            public void notifyItemInserted(Integer element) {
+                callback.notifyChanged(NetworkItem.this);
+            }
 
-        for (Integer bufferId : config.bufferList()) {
-            Buffer buffer = context.client().bufferManager().buffer(bufferId);
-            if (buffer != null && buffer.getInfo().networkId() == network.networkId()) {
-                this.buffers.add(new BufferItem(buffer, context));
+            @Override
+            public void notifyItemRemoved(Integer element) {
+                callback.notifyChanged(NetworkItem.this);
+            }
+
+            @Override
+            public void notifyItemChanged(Integer element) {
+                callback.notifyChanged(manager.get(element));
+            }
+        };
+        config.bufferIds().addCallback(elemCallback);
+        client.bufferManager().byNetwork(network.networkId()).addCallback(elemCallback);
+    }
+
+    @Override
+    public List<IDrawerItem> getSubItems() {
+        List<IDrawerItem> bufferItems = new ArrayList<>();
+        for (int id : config.bufferList()) {
+            if (client.bufferManager().byNetwork(network.networkId()).contains(id)) {
+                bufferItems.add(manager.get(id));
             }
         }
-        config.bufferList().addCallback(new UICallback() {
-            @Override
-            public void notifyItemInserted(int position) {
-                int element = config.bufferList().get(position);
-                Buffer buffer = context.client().bufferManager().buffer(element);
-                if (buffer.getInfo().networkId() == network.networkId()) {
-                    if (bufferIds.get(element) == null) {
-                        BufferItem bufferItem = new BufferItem(buffer, context);
-                        buffers.add(bufferItem);
-                        bufferItem.addCallback(NetworkItem.this);
-                        bufferIds.put(element, bufferItem);
-                        notifyChanged();
-                    }
-                }
-            }
-
-            @Override
-            public void notifyItemChanged(int position) {
-                int element = config.bufferList().get(position);
-                if (bufferIds.get(element) != null) {
-                    notifyChanged();
-                }
-            }
-
-            @Override
-            public void notifyItemRemoved(int position) {
-                int element = config.bufferList().get(position);
-                if (bufferIds.get(element) != null) {
-                    bufferIds.remove(element);
-                    notifyChanged();
-                }
-            }
-
-            @Override
-            public void notifyItemMoved(int from, int to) {
-                notifyItemChanged(from);
-                notifyItemChanged(to);
-            }
-
-            @Override
-            public void notifyItemRangeInserted(int position, int count) {
-                for (int i = position; i < position + count; i++)
-                    notifyItemInserted(i);
-            }
-
-            @Override
-            public void notifyItemRangeChanged(int position, int count) {
-                for (int i = position; i < position + count; i++)
-                    notifyItemChanged(i);
-            }
-
-            @Override
-            public void notifyItemRangeRemoved(int position, int count) {
-                for (int i = position; i < position + count; i++)
-                    notifyItemRemoved(i);
-            }
-        });
+        return bufferItems;
     }
 
-    @NonNull
-    @Override
-    public StringHolder getDescription() {
-        return new StringHolder(String.valueOf(network.latency()));
-    }
-
-    @Nullable
     @Override
     public StringHolder getName() {
         return new StringHolder(network.networkName());
     }
 
-    @NonNull
     @Override
-    public List<IDrawerItem> getSubItems() {
-        ArrayList<IDrawerItem> items = new ArrayList<>();
-        for (IDrawerItem item : buffers) {
-            items.add(item);
-        }
-        return items;
-    }
-
-    @Override
-    public void notifyChanged() {
-        this.callback.notifyChanged();
-    }
-
-    @Override
-    public void addCallback(GeneralCallback callback) {
+    public void addCallback(DrawerItemCallback callback) {
         this.callback.addCallback(callback);
     }
 
     @Override
-    public void removeCallback(GeneralCallback callback) {
+    public void removeCallback(DrawerItemCallback callback) {
         this.callback.removeCallback(callback);
     }
 
-    @NonNull
+    @Override
+    public boolean areItemsTheSame(NetworkItem other) {
+        return network.networkId() == other.network.networkId();
+    }
+
+    @Override
+    public boolean areContentsTheSame(NetworkItem other) {
+        return network.equals(other);
+    }
+
+    @Override
+    public int compareTo(@NonNull NetworkItem another) {
+        return network.networkName().compareTo(another.network.networkName());
+    }
+
     public QNetwork getNetwork() {
         return network;
     }
 
     @Override
+    public String toString() {
+        return String.valueOf(network);
+    }
+
+    @Override
     public long getIdentifier() {
-        return network.networkId();
-    }
-
-    class AlphabeticalComparator implements ObservableSortedList.ItemComparator<BufferItem> {
-        @Override
-        public int compare(@NonNull BufferItem o1, @NonNull BufferItem o2) {
-            BufferInfo.Type type1 = o1.getBuffer().getInfo().type();
-            BufferInfo.Type type2 = o2.getBuffer().getInfo().type();
-            if (type1 == type2) {
-                if (o1.getBuffer().getName() == null)
-                    return -1;
-                else if (o2.getBuffer().getName() == null)
-                    return 1;
-                else
-                    return o1.getBuffer().getName().compareTo(o2.getBuffer().getName());
-            } else {
-                // Type1 is status, Type2 isn’t
-                if (type1 == STATUS) return -1;
-                // Type2 is status, Type1 isn’t
-                if (type2 == STATUS) return 1;
-                // Type1 is channel, Type2 isn’t
-                if (type1 == CHANNEL) return -1;
-                // Type2 is channel, Type1 isn’t
-                if (type2 == CHANNEL) return 1;
-                // Type1 is group, Type2 isn’t
-                if (type1 == GROUP) return -1;
-                // Type2 is group, Type1 isn’t
-                if (type2 == GROUP) return 1;
-                // Type1 is query, Type2 isn’t
-                if (type1 == QUERY) return -1;
-                // Type2 is query, Type1 isn’t
-                if (type2 == QUERY) return 1;
-                // Per default, keep order
-                return -1;
-            }
-        }
-
-        @Override
-        public boolean areContentsTheSame(BufferItem item1, BufferItem item2) {
-            return item1 == item2;
-        }
-
-        @Override
-        public boolean areItemsTheSame(@NonNull BufferItem item1, @NonNull BufferItem item2) {
-            return item1.getBuffer().getInfo().id() == item2.getBuffer().getInfo().id();
-        }
-    }
-
-    class NoneComparator implements ObservableSortedList.ItemComparator<BufferItem> {
-        @Override
-        public int compare(@NonNull BufferItem o1, @NonNull BufferItem o2) {
-            return o1.getBuffer().getInfo().id() - o2.getBuffer().getInfo().id();
-        }
-
-        @Override
-        public boolean areContentsTheSame(BufferItem item1, BufferItem item2) {
-            return item1 == item2;
-        }
-
-        @Override
-        public boolean areItemsTheSame(@NonNull BufferItem item1, @NonNull BufferItem item2) {
-            return item1.getBuffer().getInfo().id() == item2.getBuffer().getInfo().id();
-        }
+        return network.networkId() << 16;
     }
 }

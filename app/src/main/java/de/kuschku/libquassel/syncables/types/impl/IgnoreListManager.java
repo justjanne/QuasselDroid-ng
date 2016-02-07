@@ -134,12 +134,12 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
     }
 
     @Override
-    public void update(@NonNull Map<String, QVariant> from) {
-        update(IgnoreListManagerSerializer.get().fromDatastream(from));
+    public void _update(@NonNull Map<String, QVariant> from) {
+        _update(IgnoreListManagerSerializer.get().fromDatastream(from));
     }
 
     @Override
-    public void update(IgnoreListManager from) {
+    public void _update(IgnoreListManager from) {
 
     }
 

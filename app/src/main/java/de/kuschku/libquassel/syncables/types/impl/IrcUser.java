@@ -452,10 +452,10 @@ public class IrcUser extends AIrcUser<IrcUser> {
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void _update(Map<String, QVariant> from) {
     }
 
     @Override
-    public void update(IrcUser from) {
+    public void _update(IrcUser from) {
     }
 }

@@ -21,34 +21,10 @@
 
 package de.kuschku.libquassel.syncables.types.interfaces;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import de.kuschku.util.observables.callbacks.GeneralCallback;
 
-import java.util.Map;
+public interface QObservable {
+    void addObserver(GeneralCallback o);
 
-import de.kuschku.libquassel.BusProvider;
-import de.kuschku.libquassel.client.Client;
-import de.kuschku.libquassel.primitives.types.QVariant;
-
-public interface QSyncableObject<T extends QSyncableObject> extends QObservable {
-    void syncVar(@NonNull String methodName, @NonNull Object... params);
-
-    void sync(@NonNull String methodName, @NonNull Object[] params);
-
-    void rpcVar(@NonNull String procedureName, @NonNull Object... params);
-
-    void rpc(@NonNull String procedureName, @NonNull Object[] params);
-
-    void _update(Map<String, QVariant> from);
-
-    void _update(T from);
-
-    void renameObject(String newName);
-
-    @Nullable
-    String getObjectName();
-
-    void setObjectName(@Nullable String objectName);
-
-    void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull Client client);
+    void deleteObserver(GeneralCallback o);
 }

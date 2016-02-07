@@ -135,7 +135,7 @@ public class Client extends AClient {
 
     @Override
     public void _displayMsg(Message msg) {
-        backlogStorage.insertMessages(msg);
+        backlogManager.receiveBacklog(msg);
     }
 
     @Override
@@ -358,6 +358,7 @@ public class Client extends AClient {
         if (bufferedSyncs.size() > 0) {
             String key = hashName(className, objectName);
             if (bufferedSyncs.containsKey(key)) {
+                Log.d("libquassel", "Unqueueing syncs: " + className + ":" + objectName);
                 List<SyncFunction> functions = bufferedSyncs.get(key);
                 for (SyncFunction function : functions)
                     provider.handle(function);
@@ -373,7 +374,7 @@ public class Client extends AClient {
 
     public void initBacklog(int id) {
         backlogRequests.remove((Integer) id);
-        if (backlogRequests.isEmpty())
+        if (backlogRequests.isEmpty() && connectionStatus() == ConnectionChangeEvent.Status.LOADING_BACKLOG)
             setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
     }
 
@@ -442,16 +443,19 @@ public class Client extends AClient {
 
     public void bufferSync(@NonNull SyncFunction packedFunc) {
         String key = hashName(packedFunc.className, packedFunc.objectName);
-        if (connectionStatus() == ConnectionChangeEvent.Status.CONNECTED)
+        if (connectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
             Log.d("libquassel", "Queueing sync: " + packedFunc);
+        }
         if (!bufferedSyncs.containsKey(key))
             bufferedSyncs.put(key, new LinkedList<>());
         bufferedSyncs.get(key).add(packedFunc);
+        Log.d("libquassel", "Queued syncs: " + bufferedSyncs.keySet());
     }
 
     public void bufferBuffer(QBufferViewConfig bufferViewConfig, int bufferId, int pos) {
         bufferedBuffers.put(bufferId, Pair.create(bufferViewConfig, pos));
         Log.d("libquassel", "Queueing buffer: " + bufferId);
+        Log.d("libquassel", "Queued buffers: " + bufferedBuffers.keySet());
     }
 
     public void unbufferBuffer(BufferInfo info) {

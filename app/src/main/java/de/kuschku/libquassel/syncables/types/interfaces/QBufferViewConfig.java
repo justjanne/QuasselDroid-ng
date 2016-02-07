@@ -21,12 +21,11 @@
 
 package de.kuschku.libquassel.syncables.types.interfaces;
 
-import java.util.Set;
-
 import de.kuschku.libquassel.syncables.Synced;
 import de.kuschku.util.observables.lists.ObservableList;
+import de.kuschku.util.observables.lists.ObservableSet;
 
-public interface QBufferViewConfig {
+public interface QBufferViewConfig extends QObservable {
 
     int bufferViewId();
 
@@ -100,9 +99,11 @@ public interface QBufferViewConfig {
 
     ObservableList<Integer> bufferList();
 
-    Set<Integer> removedBuffers();
+    ObservableSet<Integer> bufferIds();
 
-    Set<Integer> temporarilyRemovedBuffers();
+    ObservableSet<Integer> removedBuffers();
+
+    ObservableSet<Integer> temporarilyRemovedBuffers();
 
     @Synced
     void addBuffer(final int bufferId, int pos);

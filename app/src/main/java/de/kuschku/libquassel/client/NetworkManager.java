@@ -32,10 +32,12 @@ import java.util.Observable;
 
 import de.kuschku.libquassel.syncables.types.impl.Network;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
+import de.kuschku.util.observables.lists.ObservableSet;
 
 public class NetworkManager extends Observable {
     @NonNull
     private final Map<Integer, QNetwork> networks = new HashMap<>();
+    private final ObservableSet<QNetwork> list = new ObservableSet<>();
     private final Client client;
 
     public NetworkManager(Client client) {
@@ -47,8 +49,9 @@ public class NetworkManager extends Observable {
     }
 
     public void createNetwork(@NonNull QNetwork network) {
+        list.remove(networks.get(network.networkId()));
         networks.put(network.networkId(), network);
-        _update();
+        list.add(network);
     }
 
     public QNetwork network(@IntRange(from = 0) int networkId) {
@@ -56,8 +59,8 @@ public class NetworkManager extends Observable {
     }
 
     public void removeNetwork(@IntRange(from = 0) int network) {
+        list.remove(networks.get(network));
         networks.remove(network);
-        _update();
     }
 
 
@@ -66,16 +69,10 @@ public class NetworkManager extends Observable {
             createNetwork(networkId);
             client.requestInitObject("Network", String.valueOf(networkId));
         }
-        _update();
     }
 
-    private void _update() {
-        setChanged();
-        notifyObservers();
-    }
-
-    public void onDone(Runnable runnable) {
-
+    public ObservableSet<QNetwork> list() {
+        return list;
     }
 
     public List<QNetwork> networks() {

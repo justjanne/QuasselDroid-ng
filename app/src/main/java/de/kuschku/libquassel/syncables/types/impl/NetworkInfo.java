@@ -289,4 +289,67 @@ public class NetworkInfo extends Observable {
         setChanged();
         notifyObservers();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NetworkInfo that = (NetworkInfo) o;
+
+        if (networkId != that.networkId) return false;
+        if (identity != that.identity) return false;
+        if (useRandomServer != that.useRandomServer) return false;
+        if (useAutoIdentify != that.useAutoIdentify) return false;
+        if (useSasl != that.useSasl) return false;
+        if (useAutoReconnect != that.useAutoReconnect) return false;
+        if (autoReconnectInterval != that.autoReconnectInterval) return false;
+        if (autoReconnectRetries != that.autoReconnectRetries) return false;
+        if (unlimitedReconnectRetries != that.unlimitedReconnectRetries) return false;
+        if (rejoinChannels != that.rejoinChannels) return false;
+        if (networkName != null ? !networkName.equals(that.networkName) : that.networkName != null)
+            return false;
+        if (codecForServer != null ? !codecForServer.equals(that.codecForServer) : that.codecForServer != null)
+            return false;
+        if (codecForEncoding != null ? !codecForEncoding.equals(that.codecForEncoding) : that.codecForEncoding != null)
+            return false;
+        if (codecForDecoding != null ? !codecForDecoding.equals(that.codecForDecoding) : that.codecForDecoding != null)
+            return false;
+        if (serverList != null ? !serverList.equals(that.serverList) : that.serverList != null)
+            return false;
+        if (perform != null ? !perform.equals(that.perform) : that.perform != null) return false;
+        if (autoIdentifyService != null ? !autoIdentifyService.equals(that.autoIdentifyService) : that.autoIdentifyService != null)
+            return false;
+        if (autoIdentifyPassword != null ? !autoIdentifyPassword.equals(that.autoIdentifyPassword) : that.autoIdentifyPassword != null)
+            return false;
+        if (saslAccount != null ? !saslAccount.equals(that.saslAccount) : that.saslAccount != null)
+            return false;
+        return saslPassword != null ? saslPassword.equals(that.saslPassword) : that.saslPassword == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = networkId;
+        result = 31 * result + (networkName != null ? networkName.hashCode() : 0);
+        result = 31 * result + identity;
+        result = 31 * result + (codecForServer != null ? codecForServer.hashCode() : 0);
+        result = 31 * result + (codecForEncoding != null ? codecForEncoding.hashCode() : 0);
+        result = 31 * result + (codecForDecoding != null ? codecForDecoding.hashCode() : 0);
+        result = 31 * result + (serverList != null ? serverList.hashCode() : 0);
+        result = 31 * result + (useRandomServer ? 1 : 0);
+        result = 31 * result + (perform != null ? perform.hashCode() : 0);
+        result = 31 * result + (useAutoIdentify ? 1 : 0);
+        result = 31 * result + (autoIdentifyService != null ? autoIdentifyService.hashCode() : 0);
+        result = 31 * result + (autoIdentifyPassword != null ? autoIdentifyPassword.hashCode() : 0);
+        result = 31 * result + (useSasl ? 1 : 0);
+        result = 31 * result + (saslAccount != null ? saslAccount.hashCode() : 0);
+        result = 31 * result + (saslPassword != null ? saslPassword.hashCode() : 0);
+        result = 31 * result + (useAutoReconnect ? 1 : 0);
+        result = 31 * result + autoReconnectInterval;
+        result = 31 * result + (int) autoReconnectRetries;
+        result = 31 * result + (unlimitedReconnectRetries ? 1 : 0);
+        result = 31 * result + (rejoinChannels ? 1 : 0);
+        return result;
+    }
 }

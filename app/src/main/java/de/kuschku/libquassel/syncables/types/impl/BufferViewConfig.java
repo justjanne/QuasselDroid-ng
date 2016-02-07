@@ -26,7 +26,6 @@ import android.support.annotation.NonNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
@@ -50,6 +49,7 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     private boolean hideInactiveBuffers;
     private boolean hideInactiveNetworks;
     private ObservableList<Integer> buffers;
+    private ObservableSet<Integer> buffersIds;
     private ObservableSet<Integer> removedBuffers;
     private ObservableSet<Integer> temporarilyRemovedBuffers;
 
@@ -58,6 +58,7 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
         this.temporarilyRemovedBuffers = new ObservableSet<>(temporarilyRemovedBuffers);
         this.hideInactiveNetworks = hideInactiveNetworks;
         this.buffers = new ObservableList<>(buffers);
+        this.buffersIds = new ObservableSet<>(buffers);
         this.allowedBufferTypes = allowedBufferTypes;
         this.sortAlphabetically = sortAlphabetically;
         this.disableDecoration = disableDecoration;
@@ -203,12 +204,17 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     }
 
     @Override
-    public Set<Integer> removedBuffers() {
+    public ObservableSet<Integer> bufferIds() {
+        return buffersIds;
+    }
+
+    @Override
+    public ObservableSet<Integer> removedBuffers() {
         return removedBuffers;
     }
 
     @Override
-    public Set<Integer> temporarilyRemovedBuffers() {
+    public ObservableSet<Integer> temporarilyRemovedBuffers() {
         return temporarilyRemovedBuffers;
     }
 
@@ -322,12 +328,12 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     }
 
     @Override
-    public void update(@NonNull Map<String, QVariant> from) {
-        update(BufferViewConfigSerializer.get().fromLegacy(from));
+    public void _update(@NonNull Map<String, QVariant> from) {
+        _update(BufferViewConfigSerializer.get().fromLegacy(from));
     }
 
     @Override
-    public void update(@NonNull BufferViewConfig from) {
+    public void _update(@NonNull BufferViewConfig from) {
         this.bufferViewId = from.bufferViewId;
         this.bufferViewName = from.bufferViewName;
         this.networkId = from.networkId;
@@ -338,9 +344,14 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
         this.minimumActivity = from.minimumActivity;
         this.hideInactiveBuffers = from.hideInactiveBuffers;
         this.hideInactiveNetworks = from.hideInactiveNetworks;
-        this.buffers = from.buffers;
-        this.removedBuffers = from.removedBuffers;
-        this.temporarilyRemovedBuffers = from.temporarilyRemovedBuffers;
+        this.buffers.clear();
+        this.buffers.addAll(from.buffers);
+        this.buffersIds.retainAll(from.buffersIds);
+        this.buffersIds.addAll(from.buffersIds);
+        this.removedBuffers.retainAll(from.removedBuffers);
+        this.removedBuffers.addAll(from.removedBuffers);
+        this.temporarilyRemovedBuffers.retainAll(from.temporarilyRemovedBuffers);
+        this.temporarilyRemovedBuffers.addAll(from.temporarilyRemovedBuffers);
         _update();
     }
 }

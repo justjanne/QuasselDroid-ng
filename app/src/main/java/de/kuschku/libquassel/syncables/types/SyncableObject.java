@@ -27,7 +27,6 @@ import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
@@ -36,12 +35,13 @@ import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.interfaces.QSyncableObject;
 import de.kuschku.util.backports.Objects;
+import de.kuschku.util.observables.callbacks.GeneralObservable;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 import static de.kuschku.util.AndroidAssert.assertTrue;
 import static junit.framework.Assert.assertEquals;
 
-public abstract class SyncableObject<T extends SyncableObject<T>> extends Observable implements QSyncableObject<T> {
+public abstract class SyncableObject<T extends SyncableObject<T>> extends GeneralObservable implements QSyncableObject<T> {
     @Nullable
     protected BusProvider provider;
     protected Client client;
@@ -135,9 +135,6 @@ public abstract class SyncableObject<T extends SyncableObject<T>> extends Observ
     }
 
     public void _update() {
-        if (!hasChanged()) {
-            setChanged();
-            notifyObservers();
-        }
+        notifyChanged();
     }
 }

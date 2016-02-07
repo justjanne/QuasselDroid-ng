@@ -124,6 +124,13 @@ public class ObservableList<T> extends ArrayList<T> implements IObservableList<U
         return -1;
     }
 
+    @Override
+    public void clear() {
+        int size = size();
+        super.clear();
+        callback.notifyItemRangeRemoved(0, size);
+    }
+
     @NonNull
     @Override
     public Iterator<T> iterator() {

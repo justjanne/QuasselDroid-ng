@@ -95,7 +95,8 @@ import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
 import de.kuschku.quasseldroid_ng.service.QuasselService;
 import de.kuschku.quasseldroid_ng.ui.chat.chatview.MessageAdapter;
-import de.kuschku.quasseldroid_ng.ui.chat.drawer.BufferViewConfigWrapper;
+import de.kuschku.quasseldroid_ng.ui.chat.drawer.BufferItem;
+import de.kuschku.quasseldroid_ng.ui.chat.drawer.BufferViewConfigItem;
 import de.kuschku.quasseldroid_ng.ui.editor.AdvancedEditor;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.quasseldroid_ng.ui.theme.AppTheme;
@@ -148,7 +149,7 @@ public class ChatActivity extends AppCompatActivity {
     private AccountHeader accountHeader;
     private Drawer drawerLeft;
     private AdvancedEditor editor;
-    private BufferViewConfigWrapper wrapper;
+    private BufferViewConfigItem wrapper;
     @Nullable
     private QuasselService.LocalBinder binder;
     @Nullable
@@ -491,10 +492,11 @@ public class ChatActivity extends AppCompatActivity {
                 if (((IExpandable) drawerItem).getSubItems() != null) {
                     drawerLeft.getAdapter().toggleExpandable(position);
                     return true;
-                } else {
-                    selectBuffer((int) drawerItem.getIdentifier());
+                } else if (drawerItem instanceof BufferItem) {
+                    selectBuffer(((BufferItem) drawerItem).getBuffer().getInfo().id());
                     return false;
                 }
+                return true;
             }
         });
     }
@@ -554,8 +556,6 @@ public class ChatActivity extends AppCompatActivity {
         status.bufferViewConfigId = bufferViewConfigId;
         accountHeader.setActiveProfile(bufferViewConfigId, false);
 
-        if (wrapper != null) wrapper.setDrawer(null);
-        drawerLeft.removeAllItems();
         if (bufferViewConfigId == -1) {
             drawerLeft.removeAllItems();
         } else {
@@ -565,12 +565,12 @@ public class ChatActivity extends AppCompatActivity {
             QBufferViewConfig viewConfig = bufferViewManager.bufferViewConfig(bufferViewConfigId);
             assertNotNull(viewConfig);
 
-            wrapper = new BufferViewConfigWrapper(context, viewConfig, drawerLeft);
-            wrapper.updateDrawerItems();
+            wrapper = new BufferViewConfigItem(drawerLeft, viewConfig, context);
         }
     }
 
     private void selectBuffer(@IntRange(from = -1) int bufferId) {
+        context.client().backlogManager().open(bufferId);
         if (bufferId == -1) {
             swipeView.setEnabled(false);
 
@@ -834,6 +834,9 @@ public class ChatActivity extends AppCompatActivity {
         private void disconnect() {
             if (context.provider() != null) {
                 context.provider().event.unregister(ChatActivity.this);
+            }
+            if (context.client() != null) {
+                context.client().backlogManager().open(-1);
             }
             context.setProvider(null);
             context.setClient(null);

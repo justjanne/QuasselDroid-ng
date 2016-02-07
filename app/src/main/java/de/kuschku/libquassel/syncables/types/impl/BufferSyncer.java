@@ -101,6 +101,7 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
     public void _removeBuffer(int buffer) {
         markerLines.put(buffer, -1);
         lastSeenMsgs.put(buffer, -1);
+        client.bufferManager().removeBuffer(buffer);
         _update();
     }
 
@@ -155,12 +156,12 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
     }
 
     @Override
-    public void update(@NonNull Map<String, QVariant> from) {
-        update(BufferSyncerSerializer.get().fromLegacy(from));
+    public void _update(@NonNull Map<String, QVariant> from) {
+        _update(BufferSyncerSerializer.get().fromLegacy(from));
     }
 
     @Override
-    public void update(@NonNull BufferSyncer from) {
+    public void _update(@NonNull BufferSyncer from) {
         lastSeenMsgs = from.lastSeenMsgs;
         markerLines = from.markerLines;
         _update();

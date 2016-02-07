@@ -31,7 +31,7 @@ import de.kuschku.libquassel.syncables.Synced;
 import de.kuschku.libquassel.syncables.types.impl.IrcChannel;
 import de.kuschku.libquassel.syncables.types.impl.NetworkInfo;
 
-public interface QNetwork {
+public interface QNetwork extends QObservable {
     int networkId();
 
     boolean isMyNick(final String nick);

@@ -91,12 +91,12 @@ public abstract class AClient<T extends AClient<T>> extends SyncableObject<T> im
     }
 
     @Override
-    public void update(T from) {
+    public void _update(T from) {
         fail("This is not a real syncable");
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void _update(Map<String, QVariant> from) {
         fail("This is not a real syncable");
     }
 

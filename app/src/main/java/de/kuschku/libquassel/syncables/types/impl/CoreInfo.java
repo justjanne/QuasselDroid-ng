@@ -45,12 +45,12 @@ public class CoreInfo extends ACoreInfo<CoreInfo> {
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void _update(Map<String, QVariant> from) {
 
     }
 
     @Override
-    public void update(CoreInfo from) {
+    public void _update(CoreInfo from) {
 
     }
 

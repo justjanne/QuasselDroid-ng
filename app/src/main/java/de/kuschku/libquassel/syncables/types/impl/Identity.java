@@ -386,11 +386,11 @@ public class Identity extends AIdentity<Identity> {
     }
 
     @Override
-    public void update(Map<String, QVariant> from) {
+    public void _update(Map<String, QVariant> from) {
     }
 
     @Override
-    public void update(Identity from) {
+    public void _update(Identity from) {
     }
 
     @Override
