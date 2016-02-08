@@ -21,7 +21,7 @@
 
 package de.kuschku.libquassel.syncables.types.interfaces;
 
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 
 import java.util.List;
 
@@ -55,13 +55,13 @@ public interface QBacklogManager<T extends QSyncableObject<T>> extends QSyncable
 
     void _receiveBacklogAll(int first, int last, int limit, int additional, List<Message> messages);
 
-    @Nullable
+    @NonNull
     BacklogFilter filter(int id);
 
-    @Nullable
+    @NonNull
     ObservableComparableSortedList<Message> unfiltered(int id);
 
-    @Nullable
+    @NonNull
     ObservableComparableSortedList<Message> filtered(int id);
 
     void open(int bufferId);

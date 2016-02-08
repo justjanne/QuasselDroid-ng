@@ -22,9 +22,12 @@
 package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.util.SparseIntArray;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
@@ -32,19 +35,24 @@ import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.BufferSyncerSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.ABufferSyncer;
+import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
 
     private SparseIntArray lastSeenMsgs = new SparseIntArray();
     private SparseIntArray markerLines = new SparseIntArray();
+    private SparseIntArray activities = new SparseIntArray();
+    private Set<Integer> bufferIds = new HashSet<>();
 
     public BufferSyncer(@NonNull Map<Integer, Integer> lastSeenMsgs, @NonNull Map<Integer, Integer> markerLines) {
         for (int bufferId : lastSeenMsgs.keySet()) {
             this.lastSeenMsgs.put(bufferId, lastSeenMsgs.get(bufferId));
+            this.bufferIds.add(bufferId);
         }
         for (int bufferId : markerLines.keySet()) {
             this.markerLines.put(bufferId, markerLines.get(bufferId));
+            this.bufferIds.add(bufferId);
         }
     }
 
@@ -66,6 +74,11 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
         int oldLastSeenMsg = lastSeenMsg(buffer);
         if (oldLastSeenMsg < msgId) {
             lastSeenMsgs.put(buffer, msgId);
+        }
+        setActivity(buffer, 0);
+        ObservableComparableSortedList<Message> filtered = client.backlogManager().filtered(buffer);
+        for (Message m : filtered) {
+            addActivity(m);
         }
         _update();
     }
@@ -99,8 +112,9 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
 
     @Override
     public void _removeBuffer(int buffer) {
-        markerLines.put(buffer, -1);
-        lastSeenMsgs.put(buffer, -1);
+        markerLines.removeAt(markerLines.indexOfKey(buffer));
+        lastSeenMsgs.removeAt(lastSeenMsgs.indexOfKey(buffer));
+        bufferIds.remove(buffer);
         client.bufferManager().removeBuffer(buffer);
         _update();
     }
@@ -133,7 +147,11 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
 
     @Override
     public void _requestMarkBufferAsRead(int buffer) {
-        // Do nothing, we’re on the client – the server will receive the sync just as expected
+        int lastMessage = client.backlogStorage().getLatest(buffer);
+        if (lastMessage != -1) {
+            requestSetLastSeenMsg(buffer, lastMessage);
+            requestSetMarkerLine(buffer, lastMessage);
+        }
     }
 
     @Override
@@ -165,5 +183,29 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
         lastSeenMsgs = from.lastSeenMsgs;
         markerLines = from.markerLines;
         _update();
+    }
+
+    public int activity(int bufferid) {
+        return activities.get(bufferid, 0);
+    }
+
+    public void setActivity(int bufferid, int activity) {
+        activities.put(bufferid, activity);
+    }
+
+    public void addActivity(int bufferid, int activity) {
+        activities.put(bufferid, activities.get(bufferid) | activity);
+    }
+
+    public void addActivity(int bufferid, Message.Type type) {
+        addActivity(bufferid, type.value);
+    }
+
+    public void addActivity(Message message) {
+        int lastSeenMsg = lastSeenMsg(message.bufferInfo.id());
+        if (message.messageId > lastSeenMsg) {
+            addActivity(message.bufferInfo.id(), message.type);
+            Log.d("libquassel", "Unread: " + lastSeenMsg + "/" + message);
+        }
     }
 }

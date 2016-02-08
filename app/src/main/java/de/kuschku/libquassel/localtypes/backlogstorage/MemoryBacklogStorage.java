@@ -39,6 +39,8 @@ public class MemoryBacklogStorage implements BacklogStorage {
     private final SparseArray<ObservableComparableSortedList<Message>> filteredBacklogs = new SparseArray<>();
     @NonNull
     private final SparseArray<BacklogFilter> filters = new SparseArray<>();
+    @NonNull
+    private final SparseArray<Integer> latestMessage = new SparseArray<>();
 
     private Client client;
 
@@ -64,11 +66,23 @@ public class MemoryBacklogStorage implements BacklogStorage {
     }
 
     @Override
+    public int getLatest(@IntRange(from = 0) int bufferid) {
+        return latestMessage.get(bufferid, -1);
+    }
+
+    @Override
     public void insertMessages(@IntRange(from = 0) int bufferId, @NonNull Message... messages) {
         ensureExisting(bufferId);
         for (Message message : messages) {
             client.unbufferBuffer(message.bufferInfo);
             backlogs.get(bufferId).add(message);
+            updateLatest(message);
+        }
+    }
+
+    public void updateLatest(Message message) {
+        if (message.messageId > getLatest(message.bufferInfo.id())) {
+            latestMessage.put(message.bufferInfo.id(), message.messageId);
         }
     }
 
@@ -78,6 +92,7 @@ public class MemoryBacklogStorage implements BacklogStorage {
             ensureExisting(message.bufferInfo.id());
             client.unbufferBuffer(message.bufferInfo);
             backlogs.get(message.bufferInfo.id()).add(message);
+            updateLatest(message);
         }
     }
 

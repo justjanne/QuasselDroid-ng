@@ -572,14 +572,16 @@ public class ChatActivity extends AppCompatActivity {
     private void selectBuffer(@IntRange(from = -1) int bufferId) {
         context.client().backlogManager().open(bufferId);
         if (bufferId == -1) {
+            status.bufferId = bufferId;
             swipeView.setEnabled(false);
+            context.client().backlogManager().open(bufferId);
 
             messageAdapter.setMessageList(MessageAdapter.emptyList());
             toolbar.setTitle(getResources().getString(R.string.appName));
         } else {
-            swipeView.setEnabled(true);
-
             status.bufferId = bufferId;
+            swipeView.setEnabled(true);
+            context.client().backlogManager().open(bufferId);
 
             // Make sure we are actually connected
             ObservableSortedList<Message> list = context.client().backlogManager().filtered(bufferId);

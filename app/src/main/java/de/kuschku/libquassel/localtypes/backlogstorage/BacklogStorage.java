@@ -39,6 +39,8 @@ public interface BacklogStorage {
     @NonNull
     BacklogFilter getFilter(@IntRange(from = 0) int bufferid);
 
+    int getLatest(@IntRange(from = 0) int bufferid);
+
     void insertMessages(@IntRange(from = 0) int bufferId, Message... messages);
 
     void insertMessages(Message... messages);

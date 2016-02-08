@@ -25,8 +25,10 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.localtypes.buffers.Buffers;
@@ -48,6 +50,7 @@ public class BufferManager {
     private final Map<String, Integer> buffersByChannel = new HashMap<>();
     private final Map<Integer, ObservableSet<Integer>> buffersByNetwork = new HashMap<>();
     private final ObservableSet<Integer> bufferIds = new ObservableSet<>();
+    private Set<Integer> laterRequests = new HashSet<>();
 
     public BufferManager(Client client) {
         this.client = client;
@@ -85,6 +88,7 @@ public class BufferManager {
     public void init(List<BufferInfo> bufferInfos) {
         for (BufferInfo info : bufferInfos) {
             createBuffer(info);
+            laterRequests.add(info.id());
         }
     }
 
@@ -149,5 +153,12 @@ public class BufferManager {
 
     public ObservableSet<Integer> bufferIds() {
         return bufferIds;
+    }
+
+    public void doBacklogInit(int amount) {
+        for (int id : laterRequests) {
+            client.backlogManager().requestBacklogInitial(id, amount);
+        }
+        laterRequests.clear();
     }
 }

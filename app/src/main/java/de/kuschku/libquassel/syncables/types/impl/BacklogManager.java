@@ -23,7 +23,7 @@ package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.HashSet;
 import java.util.List;
@@ -33,6 +33,7 @@ import java.util.Set;
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.events.BacklogReceivedEvent;
+import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.localtypes.backlogstorage.BacklogStorage;
 import de.kuschku.libquassel.message.Message;
@@ -46,6 +47,7 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
     private final Client client;
     private final BacklogStorage storage;
     private final Set<Integer> initialized = new HashSet<>();
+    private final Set<Integer> waiting = new HashSet<>();
     @IntRange(from = -1)
     private int openBuffer;
 
@@ -66,10 +68,10 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
 
     @Override
     public void requestBacklogInitial(int id, int amount) {
-        if (initialized.contains(id))
+        if (waiting.contains(id) || initialized.contains(id))
             return;
 
-        initialized.add(id);
+        waiting.add(id);
         requestBacklog(id, -1, -1, amount, 0);
     }
 
@@ -83,10 +85,25 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
         assertNotNull(provider);
 
         storage.insertMessages(id, messages.toArray(new Message[messages.size()]));
-        client.initBacklog(id);
+        if (messages.size() > 0 && !client.bufferManager().exists(messages.get(0).bufferInfo))
+            client.bufferManager().createBuffer(messages.get(0).bufferInfo);
         provider.sendEvent(new BacklogReceivedEvent(id));
         if (id == openBuffer && openBuffer != -1)
-            client.bufferSyncer().markBufferAsRead(openBuffer);
+            client.bufferSyncer().requestMarkBufferAsRead(openBuffer);
+        removeWaiting(id);
+    }
+
+    private void removeWaiting(int id) {
+        waiting.remove(id);
+        initialized.add(id);
+        checkWaiting();
+    }
+
+    private void checkWaiting() {
+        Log.d("libquassel", "Backlog Requests: " + waiting.size() + "; " + waiting);
+
+        if (waiting.isEmpty())
+            client.setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
     }
 
     @Override
@@ -106,23 +123,26 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
         for (int id : buffers) {
             provider.sendEvent(new BacklogReceivedEvent(id));
             if (id == openBuffer && openBuffer != -1)
-                client.bufferSyncer().markBufferAsRead(openBuffer);
+                client.bufferSyncer().requestMarkBufferAsRead(openBuffer);
+            waiting.remove(id);
+            initialized.add(id);
         }
+        checkWaiting();
     }
 
-    @Nullable
+    @NonNull
     @Override
     public BacklogFilter filter(int id) {
         return storage.getFilter(id);
     }
 
-    @Nullable
+    @NonNull
     @Override
     public ObservableComparableSortedList<Message> unfiltered(int id) {
         return storage.getUnfiltered(id);
     }
 
-    @Nullable
+    @NonNull
     @Override
     public ObservableComparableSortedList<Message> filtered(int id) {
         return storage.getFiltered(id);
@@ -132,14 +152,14 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
     public void open(int bufferId) {
         openBuffer = bufferId;
         if (bufferId != -1)
-            client.bufferSyncer().markBufferAsRead(bufferId);
+            client.bufferSyncer().requestMarkBufferAsRead(bufferId);
     }
 
     @Override
     public void receiveBacklog(Message msg) {
         storage.insertMessages(msg);
         if (msg.bufferInfo.id() == openBuffer && openBuffer != -1)
-            client.bufferSyncer().markBufferAsRead(openBuffer);
+            client.bufferSyncer().requestMarkBufferAsRead(openBuffer);
     }
 
     @Override

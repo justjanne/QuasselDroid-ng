@@ -36,6 +36,7 @@ import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
 import de.kuschku.libquassel.localtypes.buffers.StatusBuffer;
+import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
@@ -117,6 +118,17 @@ public class BufferItem extends SecondaryDrawerItem {
     @Override
     public ColorHolder getDescriptionTextColor() {
         return ColorHolder.fromColor(context.themeUtil().res.colorForegroundSecondary);
+    }
+
+    @Override
+    public ColorHolder getTextColor() {
+        int type = context.client().bufferSyncer().activity(buffer.getInfo().id());
+        if ((type & Message.Type.Plain.value | type & Message.Type.Notice.value) != 0)
+            return ColorHolder.fromColor(context.themeUtil().res.colorTintMessage);
+        else if ((type & ~Message.Type.DayChange.value) != 0)
+            return ColorHolder.fromColor(context.themeUtil().res.colorTintActivity);
+        else
+            return ColorHolder.fromColor(context.themeUtil().res.colorForeground);
     }
 
     @NonNull

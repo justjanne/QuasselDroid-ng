@@ -300,7 +300,7 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     @Override
     public void _removeBufferPermanently(int bufferId) {
         if (buffers.contains(bufferId))
-            buffers.remove(buffers.indexOf(bufferId));
+            buffers.remove((Integer) bufferId);
 
         if (temporarilyRemovedBuffers.contains(bufferId))
             temporarilyRemovedBuffers.remove(bufferId);

@@ -28,19 +28,19 @@ public abstract class ABufferSyncer<T extends ABufferSyncer<T>> extends Syncable
     @Override
     public void requestSetLastSeenMsg(int buffer, int msgId) {
         _requestSetLastSeenMsg(buffer, msgId);
-        syncVar("requestSetLastSeenMsg", buffer, msgId);
+        sync("requestSetLastSeenMsg", new String[]{"BufferId", "MsgId"}, new Object[]{buffer, msgId});
     }
 
     @Override
     public void requestSetMarkerLine(int buffer, int msgId) {
         _requestSetMarkerLine(buffer, msgId);
-        syncVar("requestSetMarkerLine", buffer, msgId);
+        sync("requestSetMarkerLine", new String[]{"BufferId", "MsgId"}, new Object[]{buffer, msgId});
     }
 
     @Override
     public void requestRemoveBuffer(int buffer) {
         _requestRemoveBuffer(buffer);
-        syncVar("requestRemoveBuffer", buffer);
+        sync("requestRemoveBuffer", new String[]{"BufferId"}, new Object[]{buffer});
     }
 
     @Override
@@ -52,7 +52,7 @@ public abstract class ABufferSyncer<T extends ABufferSyncer<T>> extends Syncable
     @Override
     public void requestRenameBuffer(int buffer, String newName) {
         _requestRenameBuffer(buffer, newName);
-        syncVar("requestRenameBuffer", buffer, newName);
+        sync("requestRenameBuffer", new String[]{"BufferId", "QString"}, new Object[]{buffer, newName});
     }
 
     @Override
@@ -64,7 +64,7 @@ public abstract class ABufferSyncer<T extends ABufferSyncer<T>> extends Syncable
     @Override
     public void requestMergeBuffersPermanently(int buffer1, int buffer2) {
         _requestMergeBuffersPermanently(buffer1, buffer2);
-        syncVar("requestMergeBuffersPermanently", buffer1, buffer2);
+        sync("requestMergeBuffersPermanently", new String[]{"BufferId", "BufferId"}, new Object[]{buffer1, buffer2});
     }
 
     @Override
@@ -82,24 +82,24 @@ public abstract class ABufferSyncer<T extends ABufferSyncer<T>> extends Syncable
     @Override
     public void requestMarkBufferAsRead(int buffer) {
         _requestMarkBufferAsRead(buffer);
-        syncVar("requestMarkBufferAsRead", buffer);
+        sync("requestMarkBufferAsRead", new String[]{"BufferId"}, new Object[]{buffer});
     }
 
     @Override
     public void markBufferAsRead(int buffer) {
         _markBufferAsRead(buffer);
-        syncVar("markBufferAsRead", buffer);
+        sync("markBufferAsRead", new String[]{"BufferId"}, new Object[]{buffer});
     }
 
     @Override
     public void setMarkerLine(int buffer, int msgId) {
         _setMarkerLine(buffer, msgId);
-        syncVar("setMarkerLine", buffer, msgId);
+        sync("setMarkerLine", new String[]{"BufferId", "MsgId"}, new Object[]{buffer, msgId});
     }
 
     @Override
     public void setLastSeenMsg(int buffer, int msgId) {
         _setLastSeenMsg(buffer, msgId);
-        syncVar("setLastSeenMsg", buffer, msgId);
+        sync("setLastSeenMsg", new String[]{"BufferId", "MsgId"}, new Object[]{buffer, msgId});
     }
 }

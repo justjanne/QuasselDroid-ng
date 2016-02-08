@@ -21,8 +21,6 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
-import android.util.Log;
-
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
@@ -87,7 +85,6 @@ public class BufferViewConfigItem implements DrawerItemCallback {
         for (NetworkItem item : networks) {
             if (ids.contains(item.getNetwork().networkId())) {
                 int position = networks.indexOf(item);
-                Log.d("libquassel", item + ":" + position);
                 drawer.addItemAtPosition(item, position);
             }
         }

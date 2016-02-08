@@ -81,8 +81,7 @@ public class Client extends AClient {
     @NonNull
     private final NotificationManager notificationManager;
     private final List<String> initRequests = new LinkedList<>();
-    private final List<Integer> backlogRequests = new LinkedList<>();
-    private final QBacklogManager backlogManager;
+    private final QBacklogManager<? extends QBacklogManager> backlogManager;
     private final Map<String, List<SyncFunction>> bufferedSyncs = new HashMap<>();
     private final Map<Integer, Pair<QBufferViewConfig, Integer>> bufferedBuffers = new HashMap<>();
     private QBufferViewManager bufferViewManager;
@@ -121,7 +120,7 @@ public class Client extends AClient {
         return aliasManager;
     }
 
-    public QBacklogManager backlogManager() {
+    public QBacklogManager<? extends QBacklogManager> backlogManager() {
         return backlogManager;
     }
 
@@ -193,10 +192,9 @@ public class Client extends AClient {
 
         this.connectionStatus = connectionStatus;
         if (connectionStatus == ConnectionChangeEvent.Status.LOADING_BACKLOG) {
-            for (QNetwork network : networkManager().networks()) {
-                Log.d("libquassel", String.valueOf(network.channels()));
-            }
-            setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
+            bufferManager().doBacklogInit(20);
+        } else if (connectionStatus == ConnectionChangeEvent.Status.CONNECTED) {
+            // FIXME: Init buffer activity state and highlightss
         }
         provider.sendEvent(new ConnectionChangeEvent(connectionStatus));
     }
@@ -370,17 +368,6 @@ public class Client extends AClient {
     @NonNull
     private String hashName(String className, String objectName) {
         return className + ":" + objectName;
-    }
-
-    public void initBacklog(int id) {
-        backlogRequests.remove((Integer) id);
-        if (backlogRequests.isEmpty() && connectionStatus() == ConnectionChangeEvent.Status.LOADING_BACKLOG)
-            setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
-    }
-
-    public void requestInitBacklog(int id, int amount) {
-        backlogRequests.add(id);
-        backlogManager.requestBacklogInitial(id, amount);
     }
 
     public void setLatency(long latency) {
