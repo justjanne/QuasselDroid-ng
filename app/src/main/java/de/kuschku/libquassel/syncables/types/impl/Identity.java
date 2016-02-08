@@ -81,12 +81,12 @@ public class Identity extends AIdentity<Identity> {
     }
 
     private String defaultNick() {
-        return CompatibilityUtils.accountNick("quassel").replaceAll("(^[\\d-]+|[^A-Za-z0-9\\x5b-\\x60\\x7b-\\x7d])", "");
+        return "quassel";
     }
 
 
     private String defaultRealName() {
-        return CompatibilityUtils.accountNick("Quassel IRC User");
+        return "Quassel IRC User";
     }
 
     @Override

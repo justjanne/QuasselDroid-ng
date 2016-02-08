@@ -94,19 +94,6 @@ public class CompatibilityUtils {
         return def;
     }
 
-    public static String accountNick(String defaultValue) {
-        Pattern emailPattern = Patterns.EMAIL_ADDRESS;
-        AccountManager accountManager = AccountManager.get(QuasselDroidNG.context());
-        Account[] accounts = accountManager.getAccounts();
-        for (Account account : accounts) {
-            if (emailPattern.matcher(account.name).matches()) {
-                String possibleEmail = account.name;
-                Log.e("DEBUG", account.name + ":" + account.type);
-            }
-        }
-        return defaultValue;
-    }
-
     /**
      * Because Android’s String::split is broken
      * @param str The string to be broken into chars
