@@ -32,6 +32,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ActionMenuView;
@@ -41,7 +42,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -107,6 +110,7 @@ import de.kuschku.util.instancestateutil.Storable;
 import de.kuschku.util.instancestateutil.Store;
 import de.kuschku.util.observables.AutoScroller;
 import de.kuschku.util.observables.lists.ObservableSortedList;
+import de.kuschku.util.ui.MessageUtil;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -148,8 +152,10 @@ public class ChatActivity extends AppCompatActivity {
     private MessageAdapter messageAdapter;
     private AccountHeader accountHeader;
     private Drawer drawerLeft;
+    private Drawer drawerRight;
     private AdvancedEditor editor;
     private BufferViewConfigItem wrapper;
+    private NickListWrapper nicklistwrapper;
     @Nullable
     private QuasselService.LocalBinder binder;
     @Nullable
@@ -499,6 +505,11 @@ public class ChatActivity extends AppCompatActivity {
                 return true;
             }
         });
+        drawerRight = new DrawerBuilder()
+                .withActivity(this)
+                .withSavedInstance(savedInstanceState)
+                .withDrawerGravity(Gravity.RIGHT)
+                .build();
     }
 
     private void setupHeader(@Nullable Bundle savedInstanceState) {
@@ -593,6 +604,12 @@ public class ChatActivity extends AppCompatActivity {
             messageAdapter.setMessageList(list);
             toolbar.setTitle(buffer.getName());
             updateNoColor(buffer, formattingMenu.getMenu());
+
+            if (buffer instanceof ChannelBuffer && ((ChannelBuffer) buffer).getChannel() != null) {
+                nicklistwrapper = new NickListWrapper(drawerRight, ((ChannelBuffer) buffer).getChannel());
+            } else {
+                drawerRight.removeAllItems();
+            }
         }
         updateSubTitle();
     }
@@ -619,6 +636,7 @@ public class ChatActivity extends AppCompatActivity {
         } else {
             Snackbar.make(messages, "No buffer opened", Snackbar.LENGTH_LONG).show();
         }
+        chatline.setVisibility(View.INVISIBLE);
     }
 
     public void onEventMainThread(@NonNull LoginRequireEvent event) {
@@ -759,7 +777,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void updateSubTitle() {
         if (context.client() != null) {
-            String subtitle;
+            CharSequence subtitle;
             if (context.client().connectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
                 if (status.bufferId >= 0) {
                     Buffer buffer = context.client().bufferManager().buffer(status.bufferId);
@@ -773,7 +791,11 @@ public class ChatActivity extends AppCompatActivity {
                         } else if (buffer instanceof ChannelBuffer) {
                             QIrcChannel channel = ((ChannelBuffer) buffer).getChannel();
                             if (channel != null)
-                                subtitle = channel.topic();
+                                subtitle = MessageUtil.parseStyleCodes(
+                                        context.themeUtil(),
+                                        channel.topic(),
+                                        context.settings().mircColors.or(true)
+                                );
                             else
                                 subtitle = "";
                         }

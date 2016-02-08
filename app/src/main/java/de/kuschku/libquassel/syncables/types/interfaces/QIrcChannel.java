@@ -27,6 +27,7 @@ import java.util.List;
 
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.syncables.Synced;
+import de.kuschku.util.observables.lists.ObservableSet;
 
 public interface QIrcChannel extends QObservable {
     boolean isKnownUser(QIrcUser ircuser);
@@ -148,4 +149,6 @@ public interface QIrcChannel extends QObservable {
     void init(QNetwork network, Client client);
 
     String getObjectName();
+
+    ObservableSet<QIrcUser> users();
 }

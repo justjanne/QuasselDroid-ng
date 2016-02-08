@@ -106,4 +106,17 @@ public class CompatibilityUtils {
         }
         return defaultValue;
     }
+
+    /**
+     * Because Android’s String::split is broken
+     * @param str The string to be broken into chars
+     * @return A list with all substrings of length 1 of the first string, in order
+     */
+    public static String[] partStringByChar(String str) {
+        String[] chars = new String[str.length()];
+        for (int i = 0; i < chars.length; i++) {
+            chars[i] = str.substring(i, i+1);
+        }
+        return chars;
+    }
 }

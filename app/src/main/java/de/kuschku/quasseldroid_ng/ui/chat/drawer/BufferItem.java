@@ -123,7 +123,7 @@ public class BufferItem extends SecondaryDrawerItem {
     @Override
     public ColorHolder getTextColor() {
         int type = context.client().bufferSyncer().activity(buffer.getInfo().id());
-        if ((type & Message.Type.Plain.value | type & Message.Type.Notice.value) != 0)
+        if ((type & Message.Type.Plain.value) != 0  || (type & Message.Type.Notice.value) != 0)
             return ColorHolder.fromColor(context.themeUtil().res.colorTintMessage);
         else if ((type & ~Message.Type.DayChange.value) != 0)
             return ColorHolder.fromColor(context.themeUtil().res.colorTintActivity);

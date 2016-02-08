@@ -27,13 +27,15 @@ import android.support.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.kuschku.util.CompatibilityUtils;
+
 public class ModeUtils {
     @NonNull
     public static Set<Character> toModes(@Nullable String modes) {
         Set<Character> modeSet = new HashSet<>();
         if (modes == null)
             return modeSet;
-        for (String mode : modes.split("")) {
+        for (String mode : CompatibilityUtils.partStringByChar(modes)) {
             if (mode.length() == 1)
                 modeSet.add(toMode(mode));
         }

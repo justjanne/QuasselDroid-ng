@@ -55,6 +55,8 @@ public interface QNetwork extends QObservable {
 
     String modeToPrefix(final String mode);
 
+    int modeToIndex(String mode);
+
     ChannelModeType channelModeType(final char mode);
 
     ChannelModeType channelModeType(final String mode);

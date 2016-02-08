@@ -33,7 +33,7 @@ import de.kuschku.util.observables.callbacks.wrappers.MultiElementCallbackWrappe
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 @SuppressWarnings("unchecked")
-public class ObservableSet<T> extends HashSet<T> implements IObservableSet<ElementCallback<T>, T> {
+public class ObservableSet<T> extends HashSet<T> implements IObservableSet<ElementCallback<T>, T>, ElementCallback<T> {
     @NonNull
     private final MultiElementCallbackWrapper<T> callback = MultiElementCallbackWrapper.<T>of();
 
@@ -103,6 +103,21 @@ public class ObservableSet<T> extends HashSet<T> implements IObservableSet<Eleme
     @Override
     public Iterator<T> iterator() {
         return new CallbackedArrayListIterator<>(super.iterator());
+    }
+
+    @Override
+    public void notifyItemInserted(T element) {
+        callback.notifyItemInserted(element);
+    }
+
+    @Override
+    public void notifyItemRemoved(T element) {
+        callback.notifyItemRemoved(element);
+    }
+
+    @Override
+    public void notifyItemChanged(T element) {
+        callback.notifyItemChanged(element);
     }
 
     class CallbackedArrayListIterator<E> implements Iterator<E> {

@@ -41,6 +41,7 @@ import de.kuschku.libquassel.syncables.types.abstracts.ANetwork;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
+import de.kuschku.util.CompatibilityUtils;
 import de.kuschku.util.irc.IrcCaseMapper;
 import de.kuschku.util.irc.IrcUserUtils;
 import de.kuschku.util.irc.ModeUtils;
@@ -176,6 +177,12 @@ public class Network extends ANetwork<Network> implements Observer {
             return prefixes().get(prefixModes().indexOf(mode));
         else
             return "";
+    }
+
+    @Override
+    public int modeToIndex(String mode) {
+        int index = prefixModes().indexOf(mode);
+        return index == -1 ? Integer.MAX_VALUE : index;
     }
 
     @Override
@@ -334,11 +341,12 @@ public class Network extends ANetwork<Network> implements Observer {
         String prefix = support("PREFIX");
 
         if (prefix.startsWith("(") && prefix.contains(")")) {
-            prefixes = Arrays.asList(prefix.split("\\)")[1].split(""));
-            prefixModes = Arrays.asList(prefix.substring(1).split("\\)")[0].split(""));
+            String[] data = prefix.substring(1).split("\\)");
+            prefixes = Arrays.asList(CompatibilityUtils.partStringByChar(data[1]));
+            prefixModes = Arrays.asList(CompatibilityUtils.partStringByChar(data[0]));
         } else {
-            List<String> defaultPrefixes = Arrays.asList("~&@%+".split(""));
-            List<String> defaultPrefixModes = Arrays.asList("qaohv".split(""));
+            List<String> defaultPrefixes = Arrays.asList(CompatibilityUtils.partStringByChar("~&@%+"));
+            List<String> defaultPrefixModes = Arrays.asList(CompatibilityUtils.partStringByChar("qaohv"));
 
             if (prefix.isEmpty()) {
                 prefixes = defaultPrefixes;

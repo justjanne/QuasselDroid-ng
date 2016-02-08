@@ -43,6 +43,7 @@ import de.kuschku.libquassel.syncables.types.abstracts.AIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.irc.ModeUtils;
+import de.kuschku.util.observables.lists.ObservableSet;
 
 import static de.kuschku.util.AndroidAssert.assertEquals;
 
@@ -50,6 +51,7 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     private final String name;
     @NonNull
     private final Map<QIrcUser, Set<Character>> userModes = new HashMap<>();
+    private final ObservableSet<QIrcUser> users = new ObservableSet<>();
     private String topic;
     private String password;
     private boolean encrypted;
@@ -285,6 +287,7 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
             _addUserMode(ircuser, mode);
         } else {
             userModes.put(ircuser, ModeUtils.toModes(mode));
+            users.add(ircuser);
             ircuser._joinChannel(this, true);
             _update();
         }
@@ -294,11 +297,13 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     public void _part(@NonNull QIrcUser ircuser) {
         if (isKnownUser(ircuser)) {
             userModes.remove(ircuser);
+            users.remove(ircuser);
             ircuser._partChannel(this);
 
             if (network().isMe(ircuser) || userModes.isEmpty()) {
                 Set<QIrcUser> users = userModes.keySet();
                 userModes.clear();
+                users.clear();
                 for (QIrcUser user : users) {
                     user._partChannel(this, true);
                 }
@@ -318,6 +323,7 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
         if (isKnownUser(ircuser)) {
 
             userModes.put(ircuser, ModeUtils.toModes(modes));
+            users.add(ircuser);
             _update();
         }
     }
@@ -334,6 +340,7 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
 
         if (!userModes.get(ircuser).contains(ModeUtils.toMode(mode))) {
             userModes.get(ircuser).add(ModeUtils.toMode(mode));
+            users.notifyItemChanged(ircuser);
             _update();
         }
     }
@@ -421,9 +428,14 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
         this.network = network;
 
 
+        /* TODO: Use just the nick in userModes and users instead – that should make sync things a lot easier */
         if (cachedUserModes != null) {
             for (String username : cachedUserModes.keySet()) {
-                userModes.put(network().ircUser(username), ModeUtils.toModes(cachedUserModes.get(username)));
+                QIrcUser ircUser = network().ircUser(username);
+                if (ircUser != null) {
+                    userModes.put(ircUser, ModeUtils.toModes(cachedUserModes.get(username)));
+                    users.add(ircUser);
+                }
             }
         }
         if (cachedChanModes != null) {
@@ -482,5 +494,9 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
         String[] split = objectName.split("/", 2);
         assertEquals(split.length, 2);
         init(client.networkManager().network(Integer.parseInt(split[0])), client);
+    }
+
+    public ObservableSet<QIrcUser> users() {
+        return users;
     }
 }

@@ -109,7 +109,7 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Drawer
 
     @Override
     public int compareTo(@NonNull NetworkItem another) {
-        return network.networkName().compareTo(another.network.networkName());
+        return network.networkName().compareToIgnoreCase(another.network.networkName());
     }
 
     public QNetwork getNetwork() {

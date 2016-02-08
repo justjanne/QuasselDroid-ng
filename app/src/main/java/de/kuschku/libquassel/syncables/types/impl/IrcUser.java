@@ -458,4 +458,9 @@ public class IrcUser extends AIrcUser<IrcUser> {
     @Override
     public void _update(IrcUser from) {
     }
+
+    @Override
+    public String toString() {
+        return "IrcUser{" + hostmask() + '}';
+    }
 }
