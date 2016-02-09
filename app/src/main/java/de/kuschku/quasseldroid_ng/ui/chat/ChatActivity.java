@@ -439,14 +439,13 @@ public class ChatActivity extends AppCompatActivity {
         ThemeUtil themeUtil = context.themeUtil();
         assertNotNull(themeUtil);
 
-        Client client = context.client();
-        assertNotNull(client);
-        QBacklogManager<? extends QBacklogManager> backlogManager = client.backlogManager();
-
 
         swipeView.setEnabled(false);
         swipeView.setColorSchemeColors(themeUtil.res.colorPrimary);
         swipeView.setOnRefreshListener(() -> {
+            Client client = context.client();
+            assertNotNull(client);
+            QBacklogManager<? extends QBacklogManager> backlogManager = client.backlogManager();
             assertNotNull(backlogManager);
             backlogManager.requestMoreBacklog(status.bufferId, 20);
         });
@@ -492,12 +491,9 @@ public class ChatActivity extends AppCompatActivity {
 
     private void setupEditor() {
         assertNotNull(formattingMenu);
-        assertNotNull(editor);
         assertNotNull(slidingLayoutHistory);
         assertNotNull(send);
         assertNotNull(chatline);
-        Client client = context.client();
-        assertNotNull(client);
 
         getMenuInflater().inflate(R.menu.formatting, formattingMenu.getMenu());
         formattingMenu.setOnMenuItemClickListener(item -> {
@@ -697,7 +693,6 @@ public class ChatActivity extends AppCompatActivity {
         } else {
             Snackbar.make(messages, "No buffer opened", Snackbar.LENGTH_LONG).show();
         }
-        chatline.setVisibility(View.INVISIBLE);
     }
 
     public void onEventMainThread(@NonNull LoginRequireEvent event) {
