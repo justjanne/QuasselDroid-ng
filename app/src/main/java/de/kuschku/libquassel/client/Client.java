@@ -192,7 +192,9 @@ public class Client extends AClient {
 
         this.connectionStatus = connectionStatus;
         if (connectionStatus == ConnectionChangeEvent.Status.LOADING_BACKLOG) {
+            Log.e("libquassel", "test1");
             bufferManager().doBacklogInit(20);
+            Log.e("libquassel", "test2");
         } else if (connectionStatus == ConnectionChangeEvent.Status.CONNECTED) {
             // FIXME: Init buffer activity state and highlightss
         }
@@ -455,5 +457,9 @@ public class Client extends AClient {
             pair.first._addBuffer(info.id(), pair.second);
             Log.d("libquassel", "Un-Queueing buffer: " + info.id());
         }
+    }
+
+    public BusProvider provider() {
+        return provider;
     }
 }

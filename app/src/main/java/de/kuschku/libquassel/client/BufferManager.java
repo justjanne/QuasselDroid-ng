@@ -23,6 +23,7 @@ package de.kuschku.libquassel.client;
 
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,11 +31,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.kuschku.libquassel.events.BacklogInitEvent;
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.localtypes.buffers.Buffers;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.util.observables.lists.ObservableSet;
@@ -156,9 +159,17 @@ public class BufferManager {
     }
 
     public void doBacklogInit(int amount) {
+        Set<Integer> visibleBuffers = new HashSet<>();
+        for (QBufferViewConfig bufferConfig : client.bufferViewManager().bufferViewConfigs()) {
+            visibleBuffers.addAll(bufferConfig.bufferIds());
+        }
+        laterRequests.retainAll(visibleBuffers);
         for (int id : laterRequests) {
             client.backlogManager().requestBacklogInitial(id, amount);
         }
         laterRequests.clear();
+        int waitingMax = client.backlogManager().waitingMax();
+        int waitingCurrently = client.backlogManager().waiting().size();
+        client.provider().sendEvent(new BacklogInitEvent(waitingMax-waitingCurrently, waitingMax));
     }
 }

@@ -32,6 +32,7 @@ import java.util.Set;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
+import de.kuschku.libquassel.events.BacklogInitEvent;
 import de.kuschku.libquassel.events.BacklogReceivedEvent;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
@@ -47,7 +48,9 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
     private final Client client;
     private final BacklogStorage storage;
     private final Set<Integer> initialized = new HashSet<>();
+    @NonNull
     private final Set<Integer> waiting = new HashSet<>();
+    private int waitingMax = 0;
     @IntRange(from = -1)
     private int openBuffer;
 
@@ -72,6 +75,7 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
             return;
 
         waiting.add(id);
+        waitingMax++;
         requestBacklog(id, -1, -1, amount, 0);
     }
 
@@ -100,10 +104,14 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
     }
 
     private void checkWaiting() {
-        Log.d("libquassel", "Backlog Requests: " + waiting.size() + "; " + waiting);
+        assertNotNull(provider);
 
-        if (waiting.isEmpty())
-            client.setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
+        if (client.connectionStatus() == ConnectionChangeEvent.Status.LOADING_BACKLOG) {
+            provider.sendEvent(new BacklogInitEvent(waitingMax-waiting.size(), waitingMax));
+            if (waiting.isEmpty()) {
+                client.setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
+            }
+        }
     }
 
     @Override
@@ -160,6 +168,16 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
         storage.insertMessages(msg);
         if (msg.bufferInfo.id() == openBuffer && openBuffer != -1)
             client.bufferSyncer().requestMarkBufferAsRead(openBuffer);
+    }
+
+    @Override
+    public int waitingMax() {
+        return waitingMax;
+    }
+
+    @Override
+    public Set<Integer> waiting() {
+        return waiting;
     }
 
     @Override

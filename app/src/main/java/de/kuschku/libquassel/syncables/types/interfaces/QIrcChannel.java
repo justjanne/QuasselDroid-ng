@@ -45,7 +45,7 @@ public interface QIrcChannel extends QObservable {
     QNetwork network();
 
     @NonNull
-    List<QIrcUser> ircUsers();
+    List<String> ircUsers();
 
     String userModes(QIrcUser ircuser);
 
@@ -150,5 +150,7 @@ public interface QIrcChannel extends QObservable {
 
     String getObjectName();
 
-    ObservableSet<QIrcUser> users();
+    ObservableSet<String> users();
+
+    void _ircUserNickChanged(String oldNick, String newNick);
 }

@@ -58,7 +58,8 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
         this.temporarilyRemovedBuffers = new ObservableSet<>(temporarilyRemovedBuffers);
         this.hideInactiveNetworks = hideInactiveNetworks;
         this.buffers = new ObservableList<>(buffers);
-        this.buffersIds = new ObservableSet<>(buffers);
+        this.buffersIds = new ObservableSet<>();
+        bufferIds().addAll(buffers);
         this.allowedBufferTypes = allowedBufferTypes;
         this.sortAlphabetically = sortAlphabetically;
         this.disableDecoration = disableDecoration;

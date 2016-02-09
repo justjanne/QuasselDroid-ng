@@ -23,7 +23,9 @@ package de.kuschku.libquassel.syncables.types.interfaces;
 
 import android.support.annotation.NonNull;
 
+import java.util.BitSet;
 import java.util.List;
+import java.util.Set;
 
 import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.message.Message;
@@ -67,4 +69,8 @@ public interface QBacklogManager<T extends QSyncableObject<T>> extends QSyncable
     void open(int bufferId);
 
     void receiveBacklog(Message msg);
+
+    int waitingMax();
+
+    Set<Integer> waiting();
 }

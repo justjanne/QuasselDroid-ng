@@ -77,6 +77,7 @@ import aspm.annotations.StringPreference;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.BusProvider;
+import de.kuschku.libquassel.events.BacklogInitEvent;
 import de.kuschku.libquassel.events.BacklogReceivedEvent;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
@@ -174,6 +175,7 @@ public class ChatActivity extends AppCompatActivity {
                     context.setClient(backgroundThread.client().client);
                     context.provider().event.register(ChatActivity.this);
 
+
                     updateSubTitle();
                     if (context.client().connectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
                         updateBufferViewConfigs();
@@ -188,6 +190,27 @@ public class ChatActivity extends AppCompatActivity {
             binder = null;
         }
     };
+
+    private void updateSubTitle() {
+        if (context.client() != null) {
+            if (context.client().connectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
+                if (status.bufferId > 0) {
+                    Buffer buffer = context.client().bufferManager().buffer(status.bufferId);
+                    if (buffer != null && buffer instanceof ChannelBuffer) {
+                        QIrcChannel channel = ((ChannelBuffer) buffer).getChannel();
+                        if (channel != null) {
+                            updateSubTitle(channel.topic());
+                            return;
+                        }
+                    }
+                }
+            } else {
+                updateSubTitle(context.client().connectionStatus().name());
+                return;
+            }
+        }
+        updateSubTitle("");
+    }
 
     private static void updateNoColor(Buffer buffer, @NonNull Menu menu) {
         boolean isNoColor = isNoColor(buffer);
@@ -663,6 +686,10 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+    public void onEventMainThread(@NonNull BacklogInitEvent event) {
+        updateSubTitle(event.toString());
+    }
+
     private void updateBufferViewConfigs() {
         assertNotNull(context.client().bufferViewManager());
         List<QBufferViewConfig> bufferViews = context.client().bufferViewManager().bufferViewConfigs();
@@ -775,42 +802,9 @@ public class ChatActivity extends AppCompatActivity {
         updateSubTitle();
     }
 
-    private void updateSubTitle() {
+    private void updateSubTitle(CharSequence text) {
         if (context.client() != null) {
-            CharSequence subtitle;
-            if (context.client().connectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
-                if (status.bufferId >= 0) {
-                    Buffer buffer = context.client().bufferManager().buffer(status.bufferId);
-                    if (buffer != null) {
-                        if (buffer instanceof QueryBuffer) {
-                            QIrcUser user = ((QueryBuffer) buffer).getUser();
-                            if (user != null)
-                                subtitle = user.realName();
-                            else
-                                subtitle = "";
-                        } else if (buffer instanceof ChannelBuffer) {
-                            QIrcChannel channel = ((ChannelBuffer) buffer).getChannel();
-                            if (channel != null)
-                                subtitle = MessageUtil.parseStyleCodes(
-                                        context.themeUtil(),
-                                        channel.topic(),
-                                        context.settings().mircColors.or(true)
-                                );
-                            else
-                                subtitle = "";
-                        }
-                        else
-                            subtitle = "";
-                    } else {
-                        subtitle = "";
-                    }
-                } else {
-                    subtitle = "";
-                }
-            } else {
-                subtitle = String.valueOf(context.client().connectionStatus());
-            }
-            toolbar.setSubtitle(subtitle);
+            toolbar.setSubtitle(text);
         } else {
             toolbar.setSubtitle("");
         }

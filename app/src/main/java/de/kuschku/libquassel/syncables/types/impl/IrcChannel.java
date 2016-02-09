@@ -50,8 +50,8 @@ import static de.kuschku.util.AndroidAssert.assertEquals;
 public class IrcChannel extends AIrcChannel<IrcChannel> {
     private final String name;
     @NonNull
-    private final Map<QIrcUser, Set<Character>> userModes = new HashMap<>();
-    private final ObservableSet<QIrcUser> users = new ObservableSet<>();
+    private final Map<String, Set<Character>> userModes = new HashMap<>();
+    private final ObservableSet<String> users = new ObservableSet<>();
     private String topic;
     private String password;
     private boolean encrypted;
@@ -131,21 +131,21 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
 
     @NonNull
     @Override
-    public List<QIrcUser> ircUsers() {
+    public List<String> ircUsers() {
         return new ArrayList<>(userModes.keySet());
     }
 
     @Override
-    public String userModes(QIrcUser ircuser) {
-        if (userModes.containsKey(ircuser))
-            return Joiner.on("").join(userModes.get(ircuser));
+    public String userModes(String nick) {
+        if (userModes.containsKey(nick))
+            return Joiner.on("").join(userModes.get(nick));
         else
             return "";
     }
 
     @Override
-    public String userModes(String nick) {
-        return userModes(network().ircUser(nick));
+    public String userModes(QIrcUser ircuser) {
+        return userModes(ircuser.nick());
     }
 
     @Override
@@ -286,8 +286,8 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
         if (ircuser == null || userModes.containsKey(ircuser)) {
             _addUserMode(ircuser, mode);
         } else {
-            userModes.put(ircuser, ModeUtils.toModes(mode));
-            users.add(ircuser);
+            userModes.put(ircuser.nick(), ModeUtils.toModes(mode));
+            users.add(ircuser.nick());
             ircuser._joinChannel(this, true);
             _update();
         }
@@ -296,16 +296,16 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     @Override
     public void _part(@NonNull QIrcUser ircuser) {
         if (isKnownUser(ircuser)) {
-            userModes.remove(ircuser);
-            users.remove(ircuser);
+            userModes.remove(ircuser.nick());
+            users.remove(ircuser.nick());
             ircuser._partChannel(this);
 
             if (network().isMe(ircuser) || userModes.isEmpty()) {
-                Set<QIrcUser> users = userModes.keySet();
+                Set<String> users = userModes.keySet();
                 userModes.clear();
                 users.clear();
-                for (QIrcUser user : users) {
-                    user._partChannel(this, true);
+                for (String user : users) {
+                    network().ircUser(user)._partChannel(this, true);
                 }
                 network()._removeIrcChannel(this);
             }
@@ -322,8 +322,8 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     public void _setUserModes(QIrcUser ircuser, String modes) {
         if (isKnownUser(ircuser)) {
 
-            userModes.put(ircuser, ModeUtils.toModes(modes));
-            users.add(ircuser);
+            userModes.put(ircuser.nick(), ModeUtils.toModes(modes));
+            users.add(ircuser.nick());
             _update();
         }
     }
@@ -338,9 +338,9 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
         if (!isKnownUser(ircuser) || !isValidChannelUserMode(mode))
             return;
 
-        if (!userModes.get(ircuser).contains(ModeUtils.toMode(mode))) {
-            userModes.get(ircuser).add(ModeUtils.toMode(mode));
-            users.notifyItemChanged(ircuser);
+        if (!userModes.get(ircuser.nick()).contains(ModeUtils.toMode(mode))) {
+            userModes.get(ircuser.nick()).add(ModeUtils.toMode(mode));
+            users.notifyItemChanged(ircuser.nick());
             _update();
         }
     }
@@ -433,8 +433,8 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
             for (String username : cachedUserModes.keySet()) {
                 QIrcUser ircUser = network().ircUser(username);
                 if (ircUser != null) {
-                    userModes.put(ircUser, ModeUtils.toModes(cachedUserModes.get(username)));
-                    users.add(ircUser);
+                    userModes.put(ircUser.nick(), ModeUtils.toModes(cachedUserModes.get(username)));
+                    users.add(ircUser.nick());
                 }
             }
         }
@@ -472,8 +472,8 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     @NonNull
     public Map<String, String> userModes() {
         Map<String, String> result = new HashMap<>();
-        for (QIrcUser user : userModes.keySet()) {
-            result.put(user.nick(), userModes(user));
+        for (String nick : userModes.keySet()) {
+            result.put(nick, userModes(nick));
         }
         return result;
     }
@@ -496,7 +496,14 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
         init(client.networkManager().network(Integer.parseInt(split[0])), client);
     }
 
-    public ObservableSet<QIrcUser> users() {
+    public ObservableSet<String> users() {
         return users;
+    }
+
+    @Override
+    public void _ircUserNickChanged(String oldNick, String newNick) {
+        users.remove(oldNick);
+        users.add(newNick);
+        userModes.put(newNick, userModes.get(oldNick));
     }
 }

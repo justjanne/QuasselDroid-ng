@@ -30,6 +30,7 @@ import org.joda.time.DateTimeUtils;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.greenrobot.event.EventBus;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
@@ -52,25 +53,26 @@ public class BacklogFilter implements UICallback {
     @Nullable
     private DateTime earliestMessage;
 
+    private EventBus bus = new EventBus();
+
     public BacklogFilter(@NonNull Client client, int bufferId, @NonNull ObservableComparableSortedList<Message> unfiltered, @NonNull ObservableComparableSortedList<Message> filtered) {
         this.client = client;
         this.bufferId = bufferId;
         this.unfiltered = unfiltered;
         this.filtered = filtered;
+        this.bus.register(this);
     }
 
     @Override
     public void notifyItemInserted(int position) {
         Message message = unfiltered.get(position);
-        if (!filterItem(message)) filtered.add(message);
-        if (message.time.isBefore(earliestMessage)) earliestMessage = message.time;
-        updateDayChangeMessages();
+        bus.post(new MessageFilterEvent(message));
     }
 
     private void updateDayChangeMessages() {
         DateTime now = DateTime.now().withMillisOfDay(0);
         while (now.isAfter(earliestMessage)) {
-            filtered.add(new Message(
+            bus.post(new MessageInsertEvent(new Message(
                     (int) DateTimeUtils.toJulianDay(now.getMillis()),
                     now,
                     Message.Type.DayChange,
@@ -84,7 +86,7 @@ public class BacklogFilter implements UICallback {
                     ),
                     "",
                     ""
-            ));
+            )));
             now = now.minusDays(1);
         }
     }
@@ -96,33 +98,47 @@ public class BacklogFilter implements UICallback {
 
     public void addFilter(Message.Type type) {
         filteredTypes.add(type);
-        updateRemove();
+        bus.post(new UpdateRemoveEvent());
     }
 
     public void removeFilter(Message.Type type) {
         filteredTypes.remove(type);
-        updateAdd();
+        bus.post(new UpdateAddEvent());
     }
 
     public void update() {
-        updateAdd();
-        updateRemove();
+        bus.post(new UpdateAddEvent());
+        bus.post(new UpdateRemoveEvent());
     }
 
-    public void updateRemove() {
-        for (Message message : unfiltered) {
-            if (filterItem(message)) {
-                filtered.remove(message);
-            }
-        }
-    }
-
-    public void updateAdd() {
+    public void onEventAsync(UpdateAddEvent event) {
         for (Message message : unfiltered) {
             if (!filterItem(message)) {
-                filtered.add(message);
+                bus.post(new MessageInsertEvent(message));
             }
         }
+    }
+
+    public void onEventAsync(UpdateRemoveEvent event) {
+        for (Message message : unfiltered) {
+            if (filterItem(message)) {
+                bus.post(new MessageRemoveEvent(message));
+            }
+        }
+    }
+
+    public void onEventAsync(MessageFilterEvent event) {
+        if (!filterItem(event.msg)) bus.post(new MessageInsertEvent(event.msg));
+        if (event.msg.time.isBefore(earliestMessage)) earliestMessage = event.msg.time;
+        updateDayChangeMessages();
+    }
+
+    public void onEventMainThread(MessageInsertEvent event) {
+        filtered.add(event.msg);
+    }
+
+    public void onEventMainThread(MessageRemoveEvent event) {
+        filtered.remove(event.msg);
     }
 
     @Override
@@ -184,5 +200,32 @@ public class BacklogFilter implements UICallback {
                 addFilter(type);
             }
         }
+    }
+
+    private class MessageInsertEvent {
+        public final Message msg;
+        public MessageInsertEvent(Message msg) {
+            this.msg = msg;
+        }
+    }
+
+    private class MessageRemoveEvent {
+        public final Message msg;
+        public MessageRemoveEvent(Message msg) {
+            this.msg = msg;
+        }
+    }
+
+    private class MessageFilterEvent {
+        public final Message msg;
+        public MessageFilterEvent(Message msg) {
+            this.msg = msg;
+        }
+    }
+
+    private class UpdateAddEvent {
+    }
+
+    private class UpdateRemoveEvent {
     }
 }

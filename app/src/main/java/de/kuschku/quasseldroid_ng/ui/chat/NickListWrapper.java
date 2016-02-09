@@ -29,6 +29,9 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.util.backports.Objects;
+import de.kuschku.util.irc.IrcCaseMapper;
+import de.kuschku.util.irc.IrcUserUtils;
+import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
@@ -60,7 +63,35 @@ public class NickListWrapper {
     public NickListWrapper(Drawer drawerRight, QIrcChannel channel) {
         drawerRight.removeAllItems();
         this.channel = channel;
-        this.list.addAll(channel.users());
+        for (String nick : channel.users()) {
+            list.add(channel.network().ircUser(nick));
+        }
+        channel.users().addCallback(new ElementCallback<String>() {
+            @Override
+            public void notifyItemInserted(String element) {
+                list.add(channel.network().ircUser(element));
+            }
+
+            @Override
+            public void notifyItemRemoved(String element) {
+                for (QIrcUser user : list) {
+                    if (IrcCaseMapper.equalsIgnoreCase(user.nick(), element)) {
+                        list.remove(user);
+                        return;
+                    }
+                }
+            }
+
+            @Override
+            public void notifyItemChanged(String element) {
+                for (int i = 0; i < list.size(); i++) {
+                    if (IrcCaseMapper.equalsIgnoreCase(list.get(i).nick(), element)) {
+                        list.notifyItemChanged(i);
+                        return;
+                    }
+                }
+            }
+        });
         this.list.addCallback(new UICallback() {
             @Override
             public void notifyItemInserted(int position) {

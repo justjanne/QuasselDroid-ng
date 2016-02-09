@@ -677,14 +677,17 @@ public class Network extends ANetwork<Network> implements Observer {
     }
 
     @Override
-    public void _ircUserNickChanged(@NonNull String oldNick, @NonNull String newnick) {
-        if (IrcCaseMapper.equalsIgnoreCase(oldNick, newnick)) {
-            nicks.put(newnick, nicks.remove(oldNick));
+    public void _ircUserNickChanged(@NonNull String oldNick, @NonNull String newNick) {
+        if (!IrcCaseMapper.equalsIgnoreCase(oldNick, newNick)) {
+            nicks.put(newNick, nicks.remove(oldNick));
+            for (QIrcChannel channel : channels.values()) {
+                channel._ircUserNickChanged(oldNick, newNick);
+            }
             _update();
         }
 
         if (IrcCaseMapper.equalsIgnoreCase(myNick(), oldNick))
-            _setMyNick(newnick);
+            _setMyNick(newNick);
     }
 
     @Override
@@ -762,11 +765,11 @@ public class Network extends ANetwork<Network> implements Observer {
         super.init(objectName, provider, client);
         networkInfo._setNetworkId(Integer.parseInt(objectName));
         client.networkManager().createNetwork(this);
-        for (QIrcChannel name : ircChannels()) {
-            client.requestInitObject("IrcChannel", networkId() + "/" + name.name());
+        for (QIrcChannel channel : channels.values()) {
+            ((IrcChannel) channel).init(networkId()+"/"+channel.name(), provider, client);
         }
-        for (QIrcUser name : ircUsers()) {
-            client.requestInitObject("IrcUser", networkId() + "/" + name.nick());
+        for (QIrcUser user : nicks.values()) {
+            ((IrcUser) user).init(networkId()+"/"+user.nick(), provider, client);
         }
     }
 
