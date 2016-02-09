@@ -23,6 +23,7 @@ package de.kuschku.libquassel.client;
 
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +48,7 @@ public class IdentityManager {
         identities.remove(id);
     }
 
+    @Nullable
     public QIdentity identity(@IntRange(from = 0) int id) {
         return identities.get(id);
     }

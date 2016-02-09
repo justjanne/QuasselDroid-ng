@@ -40,7 +40,9 @@ public interface Buffer {
 
     void renameBuffer(@NonNull String newName);
 
+    @NonNull
     String objectName();
 
+    @NonNull
     String objectName(String name);
 }

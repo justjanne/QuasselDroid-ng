@@ -21,6 +21,8 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat;
 
+import android.support.annotation.NonNull;
+
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
@@ -30,16 +32,16 @@ import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.util.backports.Objects;
 import de.kuschku.util.irc.IrcCaseMapper;
-import de.kuschku.util.irc.IrcUserUtils;
 import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public class NickListWrapper {
+    @NonNull
     private final QIrcChannel channel;
-    private ObservableSortedList<QIrcUser> list = new ObservableSortedList<>(QIrcUser.class, new ObservableSortedList.ItemComparator<QIrcUser>() {
+    private final ObservableSortedList<QIrcUser> list = new ObservableSortedList<>(QIrcUser.class, new ObservableSortedList.ItemComparator<QIrcUser>() {
         @Override
-        public int compare(QIrcUser o1, QIrcUser o2) {
+        public int compare(@NonNull QIrcUser o1, @NonNull QIrcUser o2) {
             int indexa = channel.network().modeToIndex(channel.userModes(o1));
             int indexb = channel.network().modeToIndex(channel.userModes(o2));
             if (indexa == indexb) {
@@ -55,12 +57,12 @@ public class NickListWrapper {
         }
 
         @Override
-        public boolean areItemsTheSame(QIrcUser item1, QIrcUser item2) {
+        public boolean areItemsTheSame(@NonNull QIrcUser item1, @NonNull QIrcUser item2) {
             return Objects.equals(item1.hostmask(), item2.hostmask());
         }
     });
 
-    public NickListWrapper(Drawer drawerRight, QIrcChannel channel) {
+    public NickListWrapper(@NonNull Drawer drawerRight, @NonNull QIrcChannel channel) {
         drawerRight.removeAllItems();
         this.channel = channel;
         for (String nick : channel.users()) {
@@ -141,7 +143,7 @@ public class NickListWrapper {
         }
     }
 
-    private IDrawerItem fromUser(QIrcUser user) {
+    private IDrawerItem fromUser(@NonNull QIrcUser user) {
         return new PrimaryDrawerItem()
                 .withName(user.nick())
                 .withBadge(channel.network().modeToPrefix(channel.userModes(user)))

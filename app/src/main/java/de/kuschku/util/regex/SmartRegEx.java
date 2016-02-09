@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 public class SmartRegEx {
     @NonNull
     private final Pattern pattern;
+    @NonNull
     private final String rule;
 
     public SmartRegEx(@NonNull String rule, int flags, @NonNull Syntax syntax) {
@@ -37,6 +38,7 @@ public class SmartRegEx {
         this.rule = rule;
     }
 
+    @NonNull
     public String rule() {
         return rule;
     }
@@ -60,7 +62,7 @@ public class SmartRegEx {
         }
     }
 
-    private Pattern transformWildcard(String glob, int flags) {
+    private Pattern transformWildcard(@NonNull String glob, int flags) {
         return Pattern.compile(GlobTransformer.convertGlobToRegex(glob), flags);
     }
 

@@ -22,6 +22,7 @@
 package de.kuschku.util.observables.callbacks.wrappers;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 
 import java.util.Arrays;
@@ -42,7 +43,7 @@ public class MultiElementCallbackWrapper<T> implements ElementCallback<T> {
 
     @SafeVarargs
     @NonNull
-    public static <T> MultiElementCallbackWrapper of(@NonNull ElementCallback<T>... callbacks) {
+    public static <T> MultiElementCallbackWrapper<T> of(@NonNull ElementCallback<T>... callbacks) {
         return new MultiElementCallbackWrapper<>(Arrays.asList(callbacks));
     }
 
@@ -55,21 +56,21 @@ public class MultiElementCallbackWrapper<T> implements ElementCallback<T> {
     }
 
     @Override
-    public void notifyItemInserted(T element) {
+    public void notifyItemInserted(@Nullable T element) {
         for (ElementCallback<T> callback : callbacks) {
             callback.notifyItemInserted(element);
         }
     }
 
     @Override
-    public void notifyItemRemoved(T element) {
+    public void notifyItemRemoved(@Nullable T element) {
         for (ElementCallback<T> callback : callbacks) {
             callback.notifyItemInserted(element);
         }
     }
 
     @Override
-    public void notifyItemChanged(T element) {
+    public void notifyItemChanged(@Nullable T element) {
         for (ElementCallback<T> callback : callbacks) {
             callback.notifyItemInserted(element);
         }

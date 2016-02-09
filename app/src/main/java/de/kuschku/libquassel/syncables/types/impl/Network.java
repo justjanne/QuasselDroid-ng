@@ -124,7 +124,7 @@ public class Network extends ANetwork<Network> implements Observer {
 
     @Override
     public boolean isMyNick(String nick) {
-        return false;
+        return IrcCaseMapper.equalsIgnoreCase(myNick, nick);
     }
 
     @Override
@@ -185,11 +185,13 @@ public class Network extends ANetwork<Network> implements Observer {
         return index == -1 ? Integer.MAX_VALUE : index;
     }
 
+    @NonNull
     @Override
     public ChannelModeType channelModeType(char mode) {
         return channelModeType(ModeUtils.fromMode(mode));
     }
 
+    @NonNull
     @Override
     public ChannelModeType channelModeType(@NonNull String mode) {
         String chanmodes = support("CHANMODES");
@@ -746,7 +748,7 @@ public class Network extends ANetwork<Network> implements Observer {
     }
 
     @Override
-    public void _addIrcChannel(IrcChannel ircChannel) {
+    public void _addIrcChannel(@NonNull IrcChannel ircChannel) {
         channels.put(ircChannel.name(), ircChannel);
     }
 
@@ -766,10 +768,10 @@ public class Network extends ANetwork<Network> implements Observer {
         networkInfo._setNetworkId(Integer.parseInt(objectName));
         client.networkManager().createNetwork(this);
         for (QIrcChannel channel : channels.values()) {
-            ((IrcChannel) channel).init(networkId()+"/"+channel.name(), provider, client);
+            ((IrcChannel) channel).init(networkId() + "/" + channel.name(), provider, client);
         }
         for (QIrcUser user : nicks.values()) {
-            ((IrcUser) user).init(networkId()+"/"+user.nick(), provider, client);
+            ((IrcUser) user).init(networkId() + "/" + user.nick(), provider, client);
         }
     }
 
@@ -782,6 +784,7 @@ public class Network extends ANetwork<Network> implements Observer {
         return networkInfo.serverList();
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Network{" +
@@ -791,7 +794,7 @@ public class Network extends ANetwork<Network> implements Observer {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 

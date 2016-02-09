@@ -21,6 +21,8 @@
 
 package de.kuschku.libquassel.syncables.types.interfaces;
 
+import android.support.annotation.NonNull;
+
 import de.kuschku.libquassel.syncables.Synced;
 import de.kuschku.util.observables.lists.ObservableList;
 import de.kuschku.util.observables.lists.ObservableSet;
@@ -97,12 +99,16 @@ public interface QBufferViewConfig extends QObservable {
 
     void _requestSetBufferViewName(final String bufferViewName);
 
+    @NonNull
     ObservableList<Integer> bufferList();
 
+    @NonNull
     ObservableSet<Integer> bufferIds();
 
+    @NonNull
     ObservableSet<Integer> removedBuffers();
 
+    @NonNull
     ObservableSet<Integer> temporarilyRemovedBuffers();
 
     @Synced

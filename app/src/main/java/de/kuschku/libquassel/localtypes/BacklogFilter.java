@@ -49,11 +49,9 @@ public class BacklogFilter implements UICallback {
 
     @NonNull
     private final Set<Message.Type> filteredTypes = new HashSet<>();
-
+    private final EventBus bus = new EventBus();
     @Nullable
     private DateTime earliestMessage;
-
-    private EventBus bus = new EventBus();
 
     public BacklogFilter(@NonNull Client client, int bufferId, @NonNull ObservableComparableSortedList<Message> unfiltered, @NonNull ObservableComparableSortedList<Message> filtered) {
         this.client = client;
@@ -127,17 +125,17 @@ public class BacklogFilter implements UICallback {
         }
     }
 
-    public void onEventAsync(MessageFilterEvent event) {
+    public void onEventAsync(@NonNull MessageFilterEvent event) {
         if (!filterItem(event.msg)) bus.post(new MessageInsertEvent(event.msg));
         if (event.msg.time.isBefore(earliestMessage)) earliestMessage = event.msg.time;
         updateDayChangeMessages();
     }
 
-    public void onEventMainThread(MessageInsertEvent event) {
+    public void onEventMainThread(@NonNull MessageInsertEvent event) {
         filtered.add(event.msg);
     }
 
-    public void onEventMainThread(MessageRemoveEvent event) {
+    public void onEventMainThread(@NonNull MessageRemoveEvent event) {
         filtered.remove(event.msg);
     }
 
@@ -204,6 +202,7 @@ public class BacklogFilter implements UICallback {
 
     private class MessageInsertEvent {
         public final Message msg;
+
         public MessageInsertEvent(Message msg) {
             this.msg = msg;
         }
@@ -211,6 +210,7 @@ public class BacklogFilter implements UICallback {
 
     private class MessageRemoveEvent {
         public final Message msg;
+
         public MessageRemoveEvent(Message msg) {
             this.msg = msg;
         }
@@ -218,6 +218,7 @@ public class BacklogFilter implements UICallback {
 
     private class MessageFilterEvent {
         public final Message msg;
+
         public MessageFilterEvent(Message msg) {
             this.msg = msg;
         }

@@ -52,19 +52,4 @@
         android:icon="?attr/iconHistory"
         android:title="@string/labelHistory"
         app:showAsAction="always" />
-
-    <item
-        android:id="@+id/action_debug"
-        android:icon="?attr/iconDebug"
-        android:title="@string/labelDebug"
-        app:showAsAction="always">
-        <menu>
-            <item
-                android:id="@+id/debug_init_channels"
-                android:title="Request Channels" />
-            <item
-                android:id="@+id/debug_init_users"
-                android:title="Request Users" />
-        </menu>
-    </item>
 </menu>

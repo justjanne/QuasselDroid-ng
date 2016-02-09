@@ -23,7 +23,6 @@ package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.HashSet;
 import java.util.List;
@@ -107,7 +106,7 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
         assertNotNull(provider);
 
         if (client.connectionStatus() == ConnectionChangeEvent.Status.LOADING_BACKLOG) {
-            provider.sendEvent(new BacklogInitEvent(waitingMax-waiting.size(), waitingMax));
+            provider.sendEvent(new BacklogInitEvent(waitingMax - waiting.size(), waitingMax));
             if (waiting.isEmpty()) {
                 client.setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
             }
@@ -164,7 +163,7 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
     }
 
     @Override
-    public void receiveBacklog(Message msg) {
+    public void receiveBacklog(@NonNull Message msg) {
         storage.insertMessages(msg);
         if (msg.bufferInfo.id() == openBuffer && openBuffer != -1)
             client.bufferSyncer().requestMarkBufferAsRead(openBuffer);
@@ -175,6 +174,7 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
         return waitingMax;
     }
 
+    @NonNull
     @Override
     public Set<Integer> waiting() {
         return waiting;

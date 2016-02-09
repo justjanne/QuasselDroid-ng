@@ -21,12 +21,16 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
+import android.support.annotation.NonNull;
+
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import de.kuschku.libquassel.client.Client;
+import de.kuschku.libquassel.client.NetworkManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
@@ -34,27 +38,40 @@ import de.kuschku.util.observables.callbacks.DrawerItemCallback;
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
+import static de.kuschku.util.AndroidAssert.assertNotNull;
+
 public class BufferViewConfigItem implements DrawerItemCallback {
+    @NonNull
     private final BufferItemManager manager;
+    @NonNull
     private final ObservableComparableSortedList<NetworkItem> networks = new ObservableComparableSortedList<>(NetworkItem.class);
+    @NonNull
     private final Drawer drawer;
+    @NonNull
     private final QBufferViewConfig config;
+    @NonNull
     private final AppContext context;
 
-    public BufferViewConfigItem(Drawer drawer, QBufferViewConfig config, AppContext context) {
+    public BufferViewConfigItem(@NonNull Drawer drawer, @NonNull QBufferViewConfig config, @NonNull AppContext context) {
         this.drawer = drawer;
         this.config = config;
         this.context = context;
         manager = new BufferItemManager(context);
         config.addObserver(this::rebuildNetworkList);
+        assertNotNull(drawer.getItemAdapter());
         networks.addCallback(new AdapterUICallbackWrapper(drawer.getItemAdapter()));
         rebuildNetworkList();
     }
 
     private void rebuildNetworkList() {
+        Client client = context.client();
+        assertNotNull(client);
+        NetworkManager networkManager = client.networkManager();
+        assertNotNull(networkManager);
+
         // First we build a list of all network ids we want to display
         Set<Integer> ids = new HashSet<>();
-        for (QNetwork network : context.client().networkManager().networks()) {
+        for (QNetwork network : networkManager.networks()) {
             if (config.networkId() <= 0 || network.networkId() == config.networkId()) {
                 ids.add(network.networkId());
             }
@@ -62,7 +79,7 @@ public class BufferViewConfigItem implements DrawerItemCallback {
         // Now we build a list of all items to remove
         Set<NetworkItem> removed = new HashSet<>();
         for (NetworkItem item : networks) {
-            if (ids.contains(item.getNetwork().networkId())) {
+            if (item.getNetwork() != null && ids.contains(item.getNetwork().networkId())) {
                 // And make sure that ids only contains those networks added
                 ids.remove(item.getNetwork().networkId());
             } else {
@@ -78,9 +95,12 @@ public class BufferViewConfigItem implements DrawerItemCallback {
             drawer.removeItem(item.getIdentifier());
         }
         for (int id : ids) {
-            NetworkItem item = new NetworkItem(config, context.client(), manager, context.client().networkManager().network(id));
-            networks.add(item);
-            item.addCallback(this);
+            QNetwork network = networkManager.network(id);
+            if (network != null) {
+                NetworkItem item = new NetworkItem(config, client, manager, network);
+                networks.add(item);
+                item.addCallback(this);
+            }
         }
         for (NetworkItem item : networks) {
             if (ids.contains(item.getNetwork().networkId())) {
@@ -98,7 +118,7 @@ public class BufferViewConfigItem implements DrawerItemCallback {
     }
 
     @Override
-    public void notifyChanged(IDrawerItem item) {
+    public void notifyChanged(@NonNull IDrawerItem item) {
         int position = drawer.getAdapter().getPosition(item);
         if (position != -1) {
             drawer.getAdapter().notifyAdapterItemChanged(position);

@@ -67,11 +67,13 @@ public class ChannelBuffer implements Buffer {
         info.setName(newName);
     }
 
+    @NonNull
     @Override
     public String objectName() {
         return objectName(info.name());
     }
 
+    @NonNull
     @Override
     public String objectName(String name) {
         return info.networkId() + "/" + name;

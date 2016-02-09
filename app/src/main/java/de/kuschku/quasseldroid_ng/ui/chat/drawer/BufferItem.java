@@ -47,6 +47,7 @@ public class BufferItem extends SecondaryDrawerItem {
     private final Buffer buffer;
     @NonNull
     private final AppContext context;
+
     public BufferItem(@NonNull Buffer buffer, @NonNull AppContext context) {
         this.buffer = buffer;
         this.context = context;
@@ -120,10 +121,11 @@ public class BufferItem extends SecondaryDrawerItem {
         return ColorHolder.fromColor(context.themeUtil().res.colorForegroundSecondary);
     }
 
+    @NonNull
     @Override
     public ColorHolder getTextColor() {
         int type = context.client().bufferSyncer().activity(buffer.getInfo().id());
-        if ((type & Message.Type.Plain.value) != 0  || (type & Message.Type.Notice.value) != 0)
+        if ((type & Message.Type.Plain.value) != 0 || (type & Message.Type.Notice.value) != 0)
             return ColorHolder.fromColor(context.themeUtil().res.colorTintMessage);
         else if ((type & ~Message.Type.DayChange.value) != 0)
             return ColorHolder.fromColor(context.themeUtil().res.colorTintActivity);

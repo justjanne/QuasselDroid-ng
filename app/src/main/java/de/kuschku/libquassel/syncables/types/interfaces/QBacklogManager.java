@@ -23,7 +23,6 @@ package de.kuschku.libquassel.syncables.types.interfaces;
 
 import android.support.annotation.NonNull;
 
-import java.util.BitSet;
 import java.util.List;
 import java.util.Set;
 
@@ -72,5 +71,6 @@ public interface QBacklogManager<T extends QSyncableObject<T>> extends QSyncable
 
     int waitingMax();
 
+    @NonNull
     Set<Integer> waiting();
 }

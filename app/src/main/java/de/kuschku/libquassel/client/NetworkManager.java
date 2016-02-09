@@ -37,10 +37,12 @@ import de.kuschku.util.observables.lists.ObservableSet;
 public class NetworkManager extends Observable {
     @NonNull
     private final Map<Integer, QNetwork> networks = new HashMap<>();
+    @NonNull
     private final ObservableSet<QNetwork> list = new ObservableSet<>();
+    @NonNull
     private final Client client;
 
-    public NetworkManager(Client client) {
+    public NetworkManager(@NonNull Client client) {
         this.client = client;
     }
 
@@ -71,10 +73,12 @@ public class NetworkManager extends Observable {
         }
     }
 
+    @NonNull
     public ObservableSet<QNetwork> list() {
         return list;
     }
 
+    @NonNull
     public List<QNetwork> networks() {
         return new ArrayList<>(networks.values());
     }

@@ -21,6 +21,8 @@
 
 package de.kuschku.libquassel.events;
 
+import android.support.annotation.NonNull;
+
 @SuppressWarnings("WeakerAccess")
 public class GeneralErrorEvent {
     public String debugInfo;
@@ -40,6 +42,7 @@ public class GeneralErrorEvent {
     }
 
     @Override
+    @NonNull
     public String toString() {
         if (debugInfo == null)
             return String.format("%s: %s", exception.getClass().getSimpleName(), exception.getLocalizedMessage());

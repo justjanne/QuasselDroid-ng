@@ -22,6 +22,7 @@
 package de.kuschku.util.irc;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.Locale;
 
@@ -44,7 +45,10 @@ public class IrcCaseMapper {
                 .replaceAll("~", "^");
     }
 
-    public static boolean equalsIgnoreCase(@NonNull String a, @NonNull String b) {
-        return toLowerCase(a).equals(toLowerCase(b)) || toUpperCase(a).equals(toUpperCase(b));
+    public static boolean equalsIgnoreCase(@Nullable String a, @Nullable String b) {
+        if (a == null || b == null)
+            return (a == b);
+        else
+            return toLowerCase(a).equals(toLowerCase(b)) || toUpperCase(a).equals(toUpperCase(b));
     }
 }

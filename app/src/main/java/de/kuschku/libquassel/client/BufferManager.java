@@ -23,7 +23,7 @@ package de.kuschku.libquassel.client;
 
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
-import android.util.Log;
+import android.support.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -53,7 +53,7 @@ public class BufferManager {
     private final Map<String, Integer> buffersByChannel = new HashMap<>();
     private final Map<Integer, ObservableSet<Integer>> buffersByNetwork = new HashMap<>();
     private final ObservableSet<Integer> bufferIds = new ObservableSet<>();
-    private Set<Integer> laterRequests = new HashSet<>();
+    private final Set<Integer> laterRequests = new HashSet<>();
 
     public BufferManager(Client client) {
         this.client = client;
@@ -88,35 +88,36 @@ public class BufferManager {
         buffer.setInfo(bufferInfo);
     }
 
-    public void init(List<BufferInfo> bufferInfos) {
+    public void init(@NonNull List<BufferInfo> bufferInfos) {
         for (BufferInfo info : bufferInfos) {
             createBuffer(info);
             laterRequests.add(info.id());
         }
     }
 
+    @NonNull
     public Map<Integer, Buffer> buffers() {
         return buffers;
     }
 
-    public void createBuffer(BufferInfo info) {
+    public void createBuffer(@NonNull BufferInfo info) {
         Buffer buffer = Buffers.fromType(info, client);
         assertNotNull(buffer);
         createBuffer(buffer);
     }
 
-    public boolean exists(BufferInfo info) {
+    public boolean exists(@NonNull BufferInfo info) {
         return buffers.containsKey(info.id());
     }
 
-    public void renameBuffer(int bufferId, String newName) {
+    public void renameBuffer(int bufferId, @NonNull String newName) {
         Buffer buffer = buffer(bufferId);
         if (buffer != null) {
             buffer.renameBuffer(newName);
         }
     }
 
-    private void updateBufferMapEntries(Buffer buffer, String name) {
+    private void updateBufferMapEntries(@NonNull Buffer buffer, String name) {
         buffersByNick.remove(buffer.objectName());
         buffersByChannel.remove(buffer.objectName());
         if (buffer instanceof ChannelBuffer) {
@@ -126,7 +127,8 @@ public class BufferManager {
         }
     }
 
-    public ChannelBuffer channel(QIrcChannel channel) {
+    @Nullable
+    public ChannelBuffer channel(@Nullable QIrcChannel channel) {
         if (channel == null)
             return null;
         if (!buffersByChannel.containsKey(channel.getObjectName()))
@@ -137,7 +139,8 @@ public class BufferManager {
         return (ChannelBuffer) buffer;
     }
 
-    public QueryBuffer user(QIrcUser user) {
+    @Nullable
+    public QueryBuffer user(@Nullable QIrcUser user) {
         if (user == null)
             return null;
         if (!buffersByNick.containsKey(user.getObjectName()))
@@ -154,6 +157,7 @@ public class BufferManager {
         return buffersByNetwork.get(networkId);
     }
 
+    @NonNull
     public ObservableSet<Integer> bufferIds() {
         return bufferIds;
     }
@@ -170,6 +174,6 @@ public class BufferManager {
         laterRequests.clear();
         int waitingMax = client.backlogManager().waitingMax();
         int waitingCurrently = client.backlogManager().waiting().size();
-        client.provider().sendEvent(new BacklogInitEvent(waitingMax-waitingCurrently, waitingMax));
+        client.provider().sendEvent(new BacklogInitEvent(waitingMax - waitingCurrently, waitingMax));
     }
 }

@@ -52,6 +52,7 @@ public class IrcUser extends AIrcUser<IrcUser> {
     @NonNull
     private final SparseArray<DateTime> lastSpokenTo = new SparseArray<>();
     private final List<String> cachedChannels;
+    private final Set<QIrcChannel> channels = new HashSet<>();
     private String user;
     private String host;
     private String nick;
@@ -68,7 +69,6 @@ public class IrcUser extends AIrcUser<IrcUser> {
     private boolean encrypted;
     private QNetwork network;
     private Set<Character> userModes;
-    private Set<QIrcChannel> channels = new HashSet<>();
 
     public IrcUser(String server, String ircOperator, boolean away, int lastAwayMessage, DateTime idleTime, String whoisServiceReply, String suserHost, String nick, String realName, String awayMessage, DateTime loginTime, boolean encrypted, List<String> channels, String host, String userModes, String user) {
         this.server = server;
@@ -437,9 +437,9 @@ public class IrcUser extends AIrcUser<IrcUser> {
         this.client = client;
 
         if (cachedChannels != null)
-        for (String channelName : cachedChannels) {
-            channels.add(network().newIrcChannel(channelName));
-        }
+            for (String channelName : cachedChannels) {
+                channels.add(network().newIrcChannel(channelName));
+            }
         _update();
     }
 
@@ -459,6 +459,7 @@ public class IrcUser extends AIrcUser<IrcUser> {
     public void _update(IrcUser from) {
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "IrcUser{" + hostmask() + '}';

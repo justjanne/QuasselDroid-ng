@@ -35,10 +35,11 @@ public class MultiGeneralCallback implements IObservable<GeneralCallback>, Gener
     @NonNull
     final Set<GeneralCallback> callbacks;
 
-    private MultiGeneralCallback(List<MultiGeneralCallback> multiGeneralCallbacks) {
+    private MultiGeneralCallback(@NonNull List<MultiGeneralCallback> multiGeneralCallbacks) {
         this.callbacks = new HashSet<>(multiGeneralCallbacks);
     }
 
+    @NonNull
     public static MultiGeneralCallback of(MultiGeneralCallback... callbacks) {
         return new MultiGeneralCallback(Arrays.asList(callbacks));
     }

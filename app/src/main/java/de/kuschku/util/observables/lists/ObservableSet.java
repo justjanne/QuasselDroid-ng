@@ -22,6 +22,7 @@
 package de.kuschku.util.observables.lists;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -86,11 +87,11 @@ public class ObservableSet<T> extends HashSet<T> implements IObservableSet<Eleme
     }
 
     @Override
-    public boolean remove(Object object) {
+    public boolean remove(@Nullable Object object) {
         assertNotNull(this.callback);
 
         boolean contains = contains(object);
-        if (contains) {
+        if (contains && object != null) {
             super.remove(object);
             callback.notifyItemRemoved((T) object);
             return true;
@@ -130,11 +131,14 @@ public class ObservableSet<T> extends HashSet<T> implements IObservableSet<Eleme
 
         @Override
         public boolean hasNext() {
+            assertNotNull(iterator);
             return iterator.hasNext();
         }
 
+        @Nullable
         @Override
         public E next() {
+            assertNotNull(iterator);
             current = iterator.next();
             return current;
         }
@@ -142,6 +146,7 @@ public class ObservableSet<T> extends HashSet<T> implements IObservableSet<Eleme
         @Override
         public void remove() {
             assertNotNull(callback);
+            assertNotNull(iterator);
 
             iterator.remove();
             callback.notifyItemRemoved((T) current);

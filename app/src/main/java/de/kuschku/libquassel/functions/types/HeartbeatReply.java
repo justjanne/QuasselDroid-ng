@@ -36,7 +36,7 @@ public class HeartbeatReply {
         this(DateTime.now().toDateTimeISO());
     }
 
-    public HeartbeatReply(Heartbeat heartbeat) {
+    public HeartbeatReply(@NonNull Heartbeat heartbeat) {
         this(heartbeat.dateTime);
     }
 

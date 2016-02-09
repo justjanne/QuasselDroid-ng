@@ -80,7 +80,7 @@ public class MemoryBacklogStorage implements BacklogStorage {
         }
     }
 
-    public void updateLatest(Message message) {
+    public void updateLatest(@NonNull Message message) {
         if (message.messageId > getLatest(message.bufferInfo.id())) {
             latestMessage.put(message.bufferInfo.id(), message.messageId);
         }

@@ -40,13 +40,17 @@ import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.wrappers.MultiDrawerItemCallback;
 
 public class NetworkItem extends PrimaryDrawerItem implements IObservable<DrawerItemCallback>, ContentComparable<NetworkItem> {
+    @NonNull
     private final QBufferViewConfig config;
+    @NonNull
     private final Client client;
+    @NonNull
     private final BufferItemManager manager;
+    @NonNull
     private final QNetwork network;
     private final MultiDrawerItemCallback callback = MultiDrawerItemCallback.of();
 
-    public NetworkItem(QBufferViewConfig config, Client client, BufferItemManager manager, QNetwork network) {
+    public NetworkItem(@NonNull QBufferViewConfig config, @NonNull Client client, @NonNull BufferItemManager manager, @NonNull QNetwork network) {
         this.config = config;
         this.client = client;
         this.manager = manager;
@@ -71,6 +75,7 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Drawer
         client.bufferManager().byNetwork(network.networkId()).addCallback(elemCallback);
     }
 
+    @NonNull
     @Override
     public List<IDrawerItem> getSubItems() {
         List<IDrawerItem> bufferItems = new ArrayList<>();
@@ -82,6 +87,7 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Drawer
         return bufferItems;
     }
 
+    @NonNull
     @Override
     public StringHolder getName() {
         return new StringHolder(network.networkName());
@@ -98,7 +104,7 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Drawer
     }
 
     @Override
-    public boolean areItemsTheSame(NetworkItem other) {
+    public boolean areItemsTheSame(@NonNull NetworkItem other) {
         return network.networkId() == other.network.networkId();
     }
 
@@ -112,6 +118,7 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Drawer
         return network.networkName().compareToIgnoreCase(another.network.networkName());
     }
 
+    @NonNull
     public QNetwork getNetwork() {
         return network;
     }

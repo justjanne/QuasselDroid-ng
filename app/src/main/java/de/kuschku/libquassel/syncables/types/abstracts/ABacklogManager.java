@@ -29,7 +29,7 @@ import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
 
 public abstract class ABacklogManager<T extends ABacklogManager<T>> extends SyncableObject<T> implements QBacklogManager<T> {
-    static String intName = QMetaType.Type.Int.getSerializableName();
+    static final String intName = QMetaType.Type.Int.getSerializableName();
 
     @Override
     public void requestBacklog(int id, int first, int last, int limit, int additional) {

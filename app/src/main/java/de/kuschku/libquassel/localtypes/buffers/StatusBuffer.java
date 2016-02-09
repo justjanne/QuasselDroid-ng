@@ -66,11 +66,13 @@ public class StatusBuffer implements Buffer {
         return getNetwork().isConnected() ? BufferInfo.BufferStatus.ONLINE : BufferInfo.BufferStatus.OFFLINE;
     }
 
+    @NonNull
     @Override
     public String objectName() {
         return objectName(info.name());
     }
 
+    @NonNull
     @Override
     public String objectName(String name) {
         return info.networkId() + "/" + name;

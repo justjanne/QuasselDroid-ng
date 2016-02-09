@@ -21,21 +21,14 @@
 
 package de.kuschku.util;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
-import android.util.Patterns;
 
 import java.io.OutputStream;
 import java.lang.reflect.Field;
-import java.util.regex.Pattern;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
-
-import de.kuschku.quasseldroid_ng.QuasselDroidNG;
 
 public class CompatibilityUtils {
     private CompatibilityUtils() {
@@ -96,13 +89,15 @@ public class CompatibilityUtils {
 
     /**
      * Because Android’s String::split is broken
+     *
      * @param str The string to be broken into chars
      * @return A list with all substrings of length 1 of the first string, in order
      */
-    public static String[] partStringByChar(String str) {
+    @NonNull
+    public static String[] partStringByChar(@NonNull String str) {
         String[] chars = new String[str.length()];
         for (int i = 0; i < chars.length; i++) {
-            chars[i] = str.substring(i, i+1);
+            chars[i] = str.substring(i, i + 1);
         }
         return chars;
     }

@@ -151,10 +151,12 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
 
     public class IgnoreListItem {
         private final IgnoreType type;
+        @NonNull
         private final SmartRegEx ignoreRule;
         private final boolean isRegEx;
         private final StrictnessType strictness;
         private final ScopeType scope;
+        @NonNull
         private final SmartRegEx[] scopeRules;
         private boolean isActive;
 

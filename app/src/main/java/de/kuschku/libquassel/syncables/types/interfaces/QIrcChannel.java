@@ -22,6 +22,7 @@
 package de.kuschku.libquassel.syncables.types.interfaces;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.List;
 
@@ -148,8 +149,10 @@ public interface QIrcChannel extends QObservable {
 
     void init(QNetwork network, Client client);
 
+    @Nullable
     String getObjectName();
 
+    @NonNull
     ObservableSet<String> users();
 
     void _ircUserNickChanged(String oldNick, String newNick);

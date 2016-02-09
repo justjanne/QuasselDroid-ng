@@ -57,8 +57,10 @@ public interface QNetwork extends QObservable {
 
     int modeToIndex(String mode);
 
+    @NonNull
     ChannelModeType channelModeType(final char mode);
 
+    @NonNull
     ChannelModeType channelModeType(final String mode);
 
     String networkName();

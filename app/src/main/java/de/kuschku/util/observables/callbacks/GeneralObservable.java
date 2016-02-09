@@ -27,7 +27,7 @@ import java.util.Set;
 import de.kuschku.libquassel.syncables.types.interfaces.QObservable;
 
 public class GeneralObservable implements QObservable, GeneralCallback {
-    Set<GeneralCallback> callbackSet = new HashSet<>();
+    final Set<GeneralCallback> callbackSet = new HashSet<>();
 
     @Override
     public void addObserver(GeneralCallback o) {

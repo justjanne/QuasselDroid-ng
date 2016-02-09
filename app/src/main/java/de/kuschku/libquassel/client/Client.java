@@ -82,6 +82,7 @@ public class Client extends AClient {
     @NonNull
     private final NotificationManager notificationManager;
     private final List<String> initRequests = new LinkedList<>();
+    @NonNull
     private final QBacklogManager<? extends QBacklogManager> backlogManager;
     private final Map<String, List<SyncFunction>> bufferedSyncs = new HashMap<>();
     private final Map<Integer, Pair<QBufferViewConfig, Integer>> bufferedBuffers = new HashMap<>();
@@ -122,6 +123,7 @@ public class Client extends AClient {
         return aliasManager;
     }
 
+    @NonNull
     public QBacklogManager<? extends QBacklogManager> backlogManager() {
         return backlogManager;
     }
@@ -147,12 +149,12 @@ public class Client extends AClient {
     }
 
     @Override
-    public void _bufferInfoUpdated(BufferInfo bufferInfo) {
+    public void _bufferInfoUpdated(@NonNull BufferInfo bufferInfo) {
         bufferManager.updateBufferInfo(bufferInfo);
     }
 
     @Override
-    public void _identityCreated(Identity identity) {
+    public void _identityCreated(@NonNull Identity identity) {
         identityManager.createIdentity(identity);
     }
 
@@ -194,9 +196,7 @@ public class Client extends AClient {
 
         this.connectionStatus = connectionStatus;
         if (connectionStatus == ConnectionChangeEvent.Status.LOADING_BACKLOG) {
-            Log.e("libquassel", "test1");
             bufferManager().doBacklogInit(20);
-            Log.e("libquassel", "test2");
         } else if (connectionStatus == ConnectionChangeEvent.Status.CONNECTED) {
             // FIXME: Init buffer activity state and highlightss
         }
@@ -452,7 +452,7 @@ public class Client extends AClient {
         Log.d("libquassel", "Queued buffers: " + bufferedBuffers.keySet());
     }
 
-    public void unbufferBuffer(BufferInfo info) {
+    public void unbufferBuffer(@NonNull BufferInfo info) {
         if (!bufferManager().exists(info)) {
             bufferManager().createBuffer(info);
             Log.d("libquassel", "Creating buffer from message info: " + info.id());
@@ -464,6 +464,7 @@ public class Client extends AClient {
         }
     }
 
+    @Nullable
     public BusProvider provider() {
         return provider;
     }

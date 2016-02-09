@@ -22,6 +22,7 @@
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,10 +36,11 @@ public class BufferItemManager implements ElementCallback<Integer>, IObservable<
 
     private final MultiElementCallbackWrapper<BufferItem> callback = MultiElementCallbackWrapper.<BufferItem>of();
 
+    @Nullable
     private final AppContext context;
     private final Map<Integer, BufferItem> items = new HashMap<>();
 
-    public BufferItemManager(AppContext context) {
+    public BufferItemManager(@Nullable AppContext context) {
         this.context = context;
         context.client().bufferManager().bufferIds().addCallback(this);
         for (Integer id : context.client().bufferManager().bufferIds()) {

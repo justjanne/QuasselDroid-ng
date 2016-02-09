@@ -21,6 +21,8 @@
 
 package de.kuschku.libquassel.syncables.types.abstracts;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import de.kuschku.libquassel.objects.types.NetworkServer;
@@ -249,13 +251,13 @@ public abstract class ANetwork<T extends ANetwork<T>> extends SyncableObject<T> 
     }
 
     @Override
-    public void removeIrcChannel(QIrcChannel ircChannel) {
+    public void removeIrcChannel(@NonNull QIrcChannel ircChannel) {
         _removeIrcChannel(ircChannel);
         syncVar("removeIrcChannel", ircChannel.name());
     }
 
     @Override
-    public void removeIrcUser(QIrcUser ircuser) {
+    public void removeIrcUser(@NonNull QIrcUser ircuser) {
         _removeIrcUser(ircuser);
         syncVar("removeIrcUser", ircuser.nick());
     }

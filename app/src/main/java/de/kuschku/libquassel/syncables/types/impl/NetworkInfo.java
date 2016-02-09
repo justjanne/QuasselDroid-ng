@@ -22,6 +22,7 @@
 package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -291,40 +292,33 @@ public class NetworkInfo extends Observable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         NetworkInfo that = (NetworkInfo) o;
 
-        if (networkId != that.networkId) return false;
-        if (identity != that.identity) return false;
-        if (useRandomServer != that.useRandomServer) return false;
-        if (useAutoIdentify != that.useAutoIdentify) return false;
-        if (useSasl != that.useSasl) return false;
-        if (useAutoReconnect != that.useAutoReconnect) return false;
-        if (autoReconnectInterval != that.autoReconnectInterval) return false;
-        if (autoReconnectRetries != that.autoReconnectRetries) return false;
-        if (unlimitedReconnectRetries != that.unlimitedReconnectRetries) return false;
-        if (rejoinChannels != that.rejoinChannels) return false;
-        if (networkName != null ? !networkName.equals(that.networkName) : that.networkName != null)
-            return false;
-        if (codecForServer != null ? !codecForServer.equals(that.codecForServer) : that.codecForServer != null)
-            return false;
-        if (codecForEncoding != null ? !codecForEncoding.equals(that.codecForEncoding) : that.codecForEncoding != null)
-            return false;
-        if (codecForDecoding != null ? !codecForDecoding.equals(that.codecForDecoding) : that.codecForDecoding != null)
-            return false;
-        if (serverList != null ? !serverList.equals(that.serverList) : that.serverList != null)
-            return false;
-        if (perform != null ? !perform.equals(that.perform) : that.perform != null) return false;
-        if (autoIdentifyService != null ? !autoIdentifyService.equals(that.autoIdentifyService) : that.autoIdentifyService != null)
-            return false;
-        if (autoIdentifyPassword != null ? !autoIdentifyPassword.equals(that.autoIdentifyPassword) : that.autoIdentifyPassword != null)
-            return false;
-        if (saslAccount != null ? !saslAccount.equals(that.saslAccount) : that.saslAccount != null)
-            return false;
-        return saslPassword != null ? saslPassword.equals(that.saslPassword) : that.saslPassword == null;
+        return (networkId == that.networkId &&
+                identity == that.identity &&
+                useRandomServer == that.useRandomServer &&
+                useAutoIdentify == that.useAutoIdentify &&
+                useSasl == that.useSasl &&
+                useAutoReconnect == that.useAutoReconnect &&
+                autoReconnectInterval == that.autoReconnectInterval &&
+                autoReconnectRetries == that.autoReconnectRetries &&
+                unlimitedReconnectRetries == that.unlimitedReconnectRetries &&
+                rejoinChannels == that.rejoinChannels &&
+                (networkName != null ? networkName.equals(that.networkName) : that.networkName == null) &&
+                (codecForServer != null ? codecForServer.equals(that.codecForServer) : that.codecForServer == null) &&
+                (codecForEncoding != null ? codecForEncoding.equals(that.codecForEncoding) : that.codecForEncoding == null) &&
+                (codecForDecoding != null ? codecForDecoding.equals(that.codecForDecoding) : that.codecForDecoding == null) &&
+                (serverList != null ? serverList.equals(that.serverList) : that.serverList == null) &&
+                (perform != null ? perform.equals(that.perform) : that.perform == null) &&
+                (autoIdentifyService != null ? autoIdentifyService.equals(that.autoIdentifyService) : that.autoIdentifyService == null) &&
+                (autoIdentifyPassword != null ? autoIdentifyPassword.equals(that.autoIdentifyPassword) : that.autoIdentifyPassword == null) &&
+                (saslAccount != null ? saslAccount.equals(that.saslAccount) : that.saslAccount == null) &&
+                (saslPassword != null ? saslPassword.equals(that.saslPassword) : that.saslPassword == null)
+        );
 
     }
 

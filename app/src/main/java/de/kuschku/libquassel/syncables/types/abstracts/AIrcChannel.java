@@ -21,6 +21,8 @@
 
 package de.kuschku.libquassel.syncables.types.abstracts;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import de.kuschku.libquassel.syncables.types.SyncableObject;
@@ -53,13 +55,13 @@ public abstract class AIrcChannel<T extends AIrcChannel<T>> extends SyncableObje
     }
 
     @Override
-    public void joinIrcUser(QIrcUser ircuser) {
+    public void joinIrcUser(@NonNull QIrcUser ircuser) {
         _joinIrcUser(ircuser);
         syncVar("joinIrcUser", ircuser.nick());
     }
 
     @Override
-    public void part(QIrcUser ircuser) {
+    public void part(@NonNull QIrcUser ircuser) {
         _part(ircuser);
         syncVar("part", ircuser.nick());
     }
@@ -71,7 +73,7 @@ public abstract class AIrcChannel<T extends AIrcChannel<T>> extends SyncableObje
     }
 
     @Override
-    public void setUserModes(QIrcUser ircuser, String modes) {
+    public void setUserModes(@NonNull QIrcUser ircuser, String modes) {
         _setUserModes(ircuser, modes);
         syncVar("setUserModes", ircuser.nick(), modes);
     }
@@ -83,7 +85,7 @@ public abstract class AIrcChannel<T extends AIrcChannel<T>> extends SyncableObje
     }
 
     @Override
-    public void addUserMode(QIrcUser ircuser, String mode) {
+    public void addUserMode(@NonNull QIrcUser ircuser, String mode) {
         _addUserMode(ircuser, mode);
         syncVar("addUserMode", ircuser.nick(), mode);
     }
@@ -95,7 +97,7 @@ public abstract class AIrcChannel<T extends AIrcChannel<T>> extends SyncableObje
     }
 
     @Override
-    public void removeUserMode(QIrcUser ircuser, String mode) {
+    public void removeUserMode(@NonNull QIrcUser ircuser, String mode) {
         _removeUserMode(ircuser, mode);
         syncVar("removeUserMode", ircuser.nick(), mode);
     }

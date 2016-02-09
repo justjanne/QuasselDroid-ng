@@ -38,6 +38,14 @@ import de.kuschku.util.observables.lists.ObservableSet;
 import static de.kuschku.libquassel.primitives.types.BufferInfo.Type;
 
 public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
+    @NonNull
+    private final ObservableList<Integer> buffers;
+    @NonNull
+    private final ObservableSet<Integer> buffersIds;
+    @NonNull
+    private final ObservableSet<Integer> removedBuffers;
+    @NonNull
+    private final ObservableSet<Integer> temporarilyRemovedBuffers;
     private int bufferViewId;
     private String bufferViewName;
     private int networkId;
@@ -48,10 +56,6 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     private int minimumActivity;
     private boolean hideInactiveBuffers;
     private boolean hideInactiveNetworks;
-    private ObservableList<Integer> buffers;
-    private ObservableSet<Integer> buffersIds;
-    private ObservableSet<Integer> removedBuffers;
-    private ObservableSet<Integer> temporarilyRemovedBuffers;
 
     public BufferViewConfig(String bufferViewName, @NonNull List<Integer> temporarilyRemovedBuffers, boolean hideInactiveNetworks, @NonNull List<Integer> buffers, int allowedBufferTypes, boolean sortAlphabetically, boolean disableDecoration, boolean addNewBuffersAutomatically, int networkId, int minimumActivity, boolean hideInactiveBuffers, @NonNull List<Integer> removedBuffers) {
         this.bufferViewName = bufferViewName;
@@ -199,21 +203,25 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
         // Do nothing, we’re on the client – the server will receive the sync just as expected
     }
 
+    @NonNull
     @Override
     public ObservableList<Integer> bufferList() {
         return buffers;
     }
 
+    @NonNull
     @Override
     public ObservableSet<Integer> bufferIds() {
         return buffersIds;
     }
 
+    @NonNull
     @Override
     public ObservableSet<Integer> removedBuffers() {
         return removedBuffers;
     }
 
+    @NonNull
     @Override
     public ObservableSet<Integer> temporarilyRemovedBuffers() {
         return temporarilyRemovedBuffers;

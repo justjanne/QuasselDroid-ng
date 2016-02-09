@@ -37,10 +37,11 @@ public class MultiDrawerItemCallback implements DrawerItemCallback, IObservable<
     @NonNull
     final Set<DrawerItemCallback> callbacks;
 
-    private MultiDrawerItemCallback(List<DrawerItemCallback> multiGeneralCallbacks) {
+    private MultiDrawerItemCallback(@NonNull List<DrawerItemCallback> multiGeneralCallbacks) {
         this.callbacks = new HashSet<>(multiGeneralCallbacks);
     }
 
+    @NonNull
     public static MultiDrawerItemCallback of(DrawerItemCallback... callbacks) {
         return new MultiDrawerItemCallback(Arrays.asList(callbacks));
     }

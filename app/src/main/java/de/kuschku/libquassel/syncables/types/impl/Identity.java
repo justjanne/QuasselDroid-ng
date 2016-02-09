@@ -33,7 +33,6 @@ import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.AIdentity;
 import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
-import de.kuschku.util.CompatibilityUtils;
 
 public class Identity extends AIdentity<Identity> {
     private int id;
@@ -80,20 +79,12 @@ public class Identity extends AIdentity<Identity> {
         this.quitReason = quitReason;
     }
 
-    private String defaultNick() {
-        return "quassel";
-    }
-
-
-    private String defaultRealName() {
-        return "Quassel IRC User";
-    }
 
     @Override
     public void setToDefaults() {
         setIdentityName("");
-        setRealName(defaultRealName());
-        setNicks(Collections.singletonList(defaultNick()));
+        setRealName("Quassel IRC User");
+        setNicks(Collections.singletonList("quassel"));
         setAwayNick("");
         setAwayNickEnabled(false);
         setAwayReason("Gone fishing.");
