@@ -34,6 +34,7 @@ import java.util.Map;
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.CriticalErrorEvent;
+import de.kuschku.libquassel.events.InitEvent;
 import de.kuschku.libquassel.events.LagChangedEvent;
 import de.kuschku.libquassel.events.PasswordChangeEvent;
 import de.kuschku.libquassel.events.StatusMessageEvent;
@@ -84,6 +85,7 @@ public class Client extends AClient {
     private final QBacklogManager<? extends QBacklogManager> backlogManager;
     private final Map<String, List<SyncFunction>> bufferedSyncs = new HashMap<>();
     private final Map<Integer, Pair<QBufferViewConfig, Integer>> bufferedBuffers = new HashMap<>();
+    private int initRequestMax = 0;
     private QBufferViewManager bufferViewManager;
     // local
     private QBufferSyncer bufferSyncer;
@@ -336,8 +338,10 @@ public class Client extends AClient {
     public void requestInitObject(@NonNull String className, String objectName) {
         assertNotNull(provider);
 
-        if (connectionStatus() == ConnectionChangeEvent.Status.INITIALIZING_DATA)
+        if (connectionStatus() == ConnectionChangeEvent.Status.INITIALIZING_DATA) {
             initRequests.add(hashName(className, objectName));
+            initRequestMax++;
+        }
 
         provider.dispatch(new InitRequestFunction(className, objectName));
     }
@@ -347,6 +351,7 @@ public class Client extends AClient {
 
         if (connectionStatus() == ConnectionChangeEvent.Status.INITIALIZING_DATA) {
             initRequests.remove(hashName(className, objectName));
+            provider.sendEvent(new InitEvent(initRequestMax - initRequests.size(), initRequestMax));
             if (initRequests.isEmpty()) {
                 setConnectionStatus(ConnectionChangeEvent.Status.LOADING_BACKLOG);
             }

@@ -23,17 +23,17 @@ package de.kuschku.libquassel.events;
 
 import java.util.Locale;
 
-public class BacklogInitEvent {
+public class InitEvent {
     public final int loaded;
     public final int max;
 
-    public BacklogInitEvent(int loaded, int max) {
+    public InitEvent(int loaded, int max) {
         this.loaded = loaded;
         this.max = max;
     }
 
     @Override
     public String toString() {
-        return String.format(Locale.US, "LOADING_BACKLOG: %d/%d", loaded, max);
+        return String.format(Locale.US, "INITIALIZING_DATA: %d/%d", loaded, max);
     }
 }

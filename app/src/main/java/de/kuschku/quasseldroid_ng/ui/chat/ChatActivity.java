@@ -32,7 +32,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ActionMenuView;
@@ -42,7 +41,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -81,13 +79,13 @@ import de.kuschku.libquassel.events.BacklogInitEvent;
 import de.kuschku.libquassel.events.BacklogReceivedEvent;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
+import de.kuschku.libquassel.events.InitEvent;
 import de.kuschku.libquassel.events.LagChangedEvent;
 import de.kuschku.libquassel.events.LoginRequireEvent;
 import de.kuschku.libquassel.events.UnknownCertificateEvent;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
-import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
@@ -111,7 +109,6 @@ import de.kuschku.util.instancestateutil.Storable;
 import de.kuschku.util.instancestateutil.Store;
 import de.kuschku.util.observables.AutoScroller;
 import de.kuschku.util.observables.lists.ObservableSortedList;
-import de.kuschku.util.ui.MessageUtil;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -191,6 +188,24 @@ public class ChatActivity extends AppCompatActivity {
         }
     };
 
+    private static void updateNoColor(Buffer buffer, @NonNull Menu menu) {
+        boolean isNoColor = isNoColor(buffer);
+        menu.findItem(R.id.format_bold).setEnabled(!isNoColor);
+        menu.findItem(R.id.format_italic).setEnabled(!isNoColor);
+        menu.findItem(R.id.format_underline).setEnabled(!isNoColor);
+        menu.findItem(R.id.format_paint).setEnabled(!isNoColor);
+        menu.findItem(R.id.format_fill).setEnabled(!isNoColor);
+    }
+
+    public static boolean isNoColor(Buffer buffer) {
+        if (buffer == null)
+            return false;
+        if (!(buffer instanceof ChannelBuffer))
+            return false;
+        QIrcChannel channel = ((ChannelBuffer) buffer).getChannel();
+        return channel != null && channel.hasMode('c');
+    }
+
     private void updateSubTitle() {
         if (context.client() != null) {
             if (context.client().connectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
@@ -210,24 +225,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         }
         updateSubTitle("");
-    }
-
-    private static void updateNoColor(Buffer buffer, @NonNull Menu menu) {
-        boolean isNoColor = isNoColor(buffer);
-        menu.findItem(R.id.format_bold).setEnabled(!isNoColor);
-        menu.findItem(R.id.format_italic).setEnabled(!isNoColor);
-        menu.findItem(R.id.format_underline).setEnabled(!isNoColor);
-        menu.findItem(R.id.format_paint).setEnabled(!isNoColor);
-        menu.findItem(R.id.format_fill).setEnabled(!isNoColor);
-    }
-
-    public static boolean isNoColor(Buffer buffer) {
-        if (buffer == null)
-            return false;
-        if (!(buffer instanceof ChannelBuffer))
-            return false;
-        QIrcChannel channel = ((ChannelBuffer) buffer).getChannel();
-        return channel != null && channel.hasMode('c');
     }
 
     @Override
@@ -687,6 +684,10 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     public void onEventMainThread(@NonNull BacklogInitEvent event) {
+        updateSubTitle(event.toString());
+    }
+
+    public void onEventMainThread(@NonNull InitEvent event) {
         updateSubTitle(event.toString());
     }
 
