@@ -163,7 +163,6 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
         int lastMessage = client.backlogStorage().getLatest(buffer);
         if (lastMessage != -1) {
             requestSetLastSeenMsg(buffer, lastMessage);
-            requestSetMarkerLine(buffer, lastMessage);
         }
     }
 
