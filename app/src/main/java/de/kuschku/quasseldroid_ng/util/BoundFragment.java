@@ -37,8 +37,8 @@ import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.quasseldroid_ng.util.accounts.Account;
 
 public abstract class BoundFragment extends Fragment {
+    protected AppContext context = new AppContext();
     private QuasselService.LocalBinder binder;
-
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -55,8 +55,6 @@ public abstract class BoundFragment extends Fragment {
             onConnectToThread(null);
         }
     };
-
-    protected AppContext context = new AppContext();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,5 +98,11 @@ public abstract class BoundFragment extends Fragment {
         if (provider != null)
             provider.event.registerSticky(this);
         context.withProvider(provider);
+    }
+
+    protected void stopConnection() {
+        if (binder != null) {
+            binder.stopBackgroundThread();
+        }
     }
 }

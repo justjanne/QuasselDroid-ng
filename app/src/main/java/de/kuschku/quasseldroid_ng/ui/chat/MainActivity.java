@@ -158,6 +158,7 @@ public class MainActivity extends BoundActivity {
                 return true;
             case R.id.action_reauth:
                 context.settings().lastAccount.set("");
+                stopConnection();
                 finish();
                 return true;
             default:

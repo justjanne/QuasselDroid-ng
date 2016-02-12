@@ -69,7 +69,6 @@ public class QuasselService extends Service {
         public void stopBackgroundThread() {
             if (bgThread != null) bgThread.close();
             bgThread = null;
-            notify(bgThread);
         }
 
         public void addCallback(Consumer<ClientBackgroundThread> consumer) {
