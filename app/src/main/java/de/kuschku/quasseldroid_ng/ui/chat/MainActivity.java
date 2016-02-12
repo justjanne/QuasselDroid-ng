@@ -31,11 +31,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
@@ -43,6 +46,8 @@ import butterknife.ButterKnife;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
+import de.kuschku.libquassel.localtypes.BacklogFilter;
+import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 import de.kuschku.quasseldroid_ng.R;
@@ -155,6 +160,7 @@ public class MainActivity extends BoundActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_hide_events:
+                displayFilterDialog();
                 return true;
             case R.id.action_reauth:
                 context.settings().lastAccount.set("");
@@ -237,5 +243,57 @@ public class MainActivity extends BoundActivity {
         super.onConnectToThread(thread);
         if (thread == null)
             connectToServer(manager.account(context.settings().lastAccount.get()));
+    }
+
+    public void displayFilterDialog() {
+        if (context.client() != null) {
+            List<Integer> filterSettings = Arrays.asList(
+                    Message.Type.Join.value,
+                    Message.Type.Part.value,
+                    Message.Type.Quit.value,
+                    Message.Type.Nick.value,
+                    Message.Type.Mode.value,
+                    Message.Type.Topic.value
+            );
+            int[] filterSettingsInts = new int[filterSettings.size()];
+            for (int i = 0; i < filterSettingsInts.length; i++) {
+                filterSettingsInts[i] = filterSettings.get(i);
+            }
+
+            BacklogFilter backlogFilter = context.client().backlogManager().filter(context.client().backlogManager().open());
+            int oldFilters = backlogFilter.getFilters();
+            List<Integer> oldFiltersList = new ArrayList<>();
+            for (int type : filterSettings) {
+                if ((type & oldFilters) != 0)
+                    oldFiltersList.add(filterSettings.indexOf(type));
+            }
+            Integer[] selectedIndices = oldFiltersList.toArray(new Integer[oldFiltersList.size()]);
+            new MaterialDialog.Builder(this)
+                    .items(
+                            "Joins",
+                            "Parts",
+                            "Quits",
+                            "Nick Changes",
+                            "Mode Changes",
+                            "Topic Changes"
+                    )
+                    .itemsIds(filterSettingsInts)
+                    .itemsCallbackMultiChoice(
+                            selectedIndices,
+                            (dialog, which, text) -> false
+                    )
+                    .positiveText("Select")
+                    .negativeText("Cancel")
+                    .onPositive((dialog, which) -> {
+                        int filters = 0x00000000;
+                        if (dialog.getSelectedIndices() != null)
+                            for (int i : dialog.getSelectedIndices()) {
+                                filters |= filterSettings.get(i);
+                            }
+                        backlogFilter.setFilters(filters);
+                    })
+                    .build()
+                    .show();
+        }
     }
 }
