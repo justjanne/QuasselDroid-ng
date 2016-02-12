@@ -41,36 +41,32 @@ import de.kuschku.libquassel.events.BufferChangeEvent;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.quasseldroid_ng.util.BoundFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.chatview.MessageAdapter;
 import de.kuschku.quasseldroid_ng.ui.chat.util.SlidingPanelHandler;
+import de.kuschku.quasseldroid_ng.util.BoundFragment;
 import de.kuschku.util.observables.AutoScroller;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class ChatFragment extends BoundFragment {
-    private SlidingPanelHandler panelHandler;
-    private MessageAdapter messageAdapter;
-
     /**
      * The list containing the messages to be displayed
      */
     @Bind(R.id.messages)
     RecyclerView messages;
-
     @Bind(R.id.swipe_view)
     SwipeRefreshLayout swipeView;
-
     @Bind(R.id.sliding_layout)
     SlidingUpPanelLayout sliderMain;
+    private MessageAdapter messageAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
-        panelHandler = new SlidingPanelHandler(getActivity(), (SlidingUpPanelLayout) view, context);
         ButterKnife.bind(this, view);
+        new SlidingPanelHandler(getActivity(), sliderMain, context);
 
         assertNotNull(messages);
 
@@ -81,6 +77,13 @@ public class ChatFragment extends BoundFragment {
 
         swipeView.setColorSchemeColors(context.themeUtil().res.colorPrimary);
         swipeView.setEnabled(false);
+        swipeView.setOnRefreshListener(() -> {
+            Client client = context.client();
+            assertNotNull(client);
+            QBacklogManager<? extends QBacklogManager> backlogManager = client.backlogManager();
+            assertNotNull(backlogManager);
+            backlogManager.requestMoreBacklog(client.backlogManager().open(), 20);
+        });
 
         return view;
     }

@@ -29,6 +29,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +43,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.editor.AdvancedEditor;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
@@ -176,6 +178,31 @@ public class SlidingPanelHandler {
             }
         });
         setChatlineExpanded(slidingLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED);
+
+        send.setOnClickListener(v -> sendInput());
+        chatline.setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_DOWN && (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)) {
+                sendInput();
+                return true;
+            } else {
+                return false;
+            }
+        });
+    }
+
+    private void sendInput() {
+        if (context.client() == null) return;
+
+        int bufferId = context.client().backlogManager().open();
+
+        if (bufferId >= 0) {
+            Buffer buffer = context.client().bufferManager().buffer(bufferId);
+            assertNotNull(buffer);
+
+            String text = editor.toFormatString();
+            context.client().sendInput(buffer.getInfo(), text);
+            chatline.setText("");
+        }
     }
 
     private void setupHistoryFakeData() {

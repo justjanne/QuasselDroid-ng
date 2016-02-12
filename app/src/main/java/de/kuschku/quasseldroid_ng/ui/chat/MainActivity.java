@@ -22,6 +22,7 @@
 package de.kuschku.quasseldroid_ng.ui.chat;
 
 import android.os.Bundle;
+import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -33,18 +34,28 @@ import android.widget.FrameLayout;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
+import de.kuschku.quasseldroid_ng.ui.chat.drawer.BufferItem;
+import de.kuschku.quasseldroid_ng.ui.chat.drawer.BufferViewConfigItem;
+import de.kuschku.quasseldroid_ng.ui.chat.drawer.NetworkItem;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.ChatFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.LoadingFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ActivityImplFactory;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ILayoutHelper;
 import de.kuschku.quasseldroid_ng.ui.chat.util.Status;
+import de.kuschku.quasseldroid_ng.ui.theme.AppTheme;
 import de.kuschku.quasseldroid_ng.util.BoundActivity;
 import de.kuschku.quasseldroid_ng.util.accounts.AccountManager;
 
@@ -89,6 +100,8 @@ public class MainActivity extends BoundActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        new Settings(this).theme.set(AppTheme.QUASSEL_LIGHT.name());
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -96,6 +109,17 @@ public class MainActivity extends BoundActivity {
         layoutHelper = ActivityImplFactory.of(getResources().getBoolean(R.bool.isTablet), this);
         accountHeader = buildAccountHeader();
         drawerLeft = layoutHelper.buildDrawer(savedInstanceState, accountHeader, toolbar);
+        drawerLeft.setOnDrawerItemClickListener((view, position, drawerItem) -> {
+            if (drawerItem instanceof NetworkItem) {
+                drawerLeft.getAdapter().toggleExpandable(position);
+                return true;
+            } else if (drawerItem instanceof BufferItem) {
+                int id = ((BufferItem) drawerItem).getBuffer().getInfo().id();
+                context.client().backlogManager().open(id);
+                return false;
+            }
+            return true;
+        });
 
         replaceFragment(new LoadingFragment());
 
@@ -150,23 +174,64 @@ public class MainActivity extends BoundActivity {
                 .withCompactStyle(true)
                 .withHeaderBackground(R.drawable.bg1)
                 .withProfileImagesVisible(false)
+                .withOnAccountHeaderListener((view, profile, current) -> {
+                    selectBufferViewConfig((int) profile.getIdentifier());
+                    return true;
+                })
                 .build();
     }
 
     public void onEventMainThread(ConnectionChangeEvent event) {
-        if (event.status == ConnectionChangeEvent.Status.CONNECTED) {
-            replaceFragment(new ChatFragment());
-        }
+        onConnectionChange(event.status);
     }
 
     public void onConnectionChange(ConnectionChangeEvent.Status status) {
         if (status == ConnectionChangeEvent.Status.CONNECTED) {
             replaceFragment(new ChatFragment());
+            updateBufferViewConfigs();
         }
     }
 
     public void onEventMainThread(GeneralErrorEvent event) {
 
+    }
+
+    private void selectBufferViewConfig(@IntRange(from = -1) int bufferViewConfigId) {
+        assertNotNull(drawerLeft);
+        assertNotNull(accountHeader);
+        Client client = context.client();
+        assertNotNull(client);
+
+        status.bufferViewConfigId = bufferViewConfigId;
+        accountHeader.setActiveProfile(bufferViewConfigId, false);
+
+        if (bufferViewConfigId == -1) {
+            drawerLeft.removeAllItems();
+        } else {
+            drawerLeft.removeAllItems();
+            QBufferViewManager bufferViewManager = client.bufferViewManager();
+            assertNotNull(bufferViewManager);
+            QBufferViewConfig viewConfig = bufferViewManager.bufferViewConfig(bufferViewConfigId);
+            assertNotNull(viewConfig);
+
+            new BufferViewConfigItem(drawerLeft, viewConfig, context);
+        }
+    }
+
+    private void updateBufferViewConfigs() {
+        assertNotNull(context.client().bufferViewManager());
+        List<QBufferViewConfig> bufferViews = context.client().bufferViewManager().bufferViewConfigs();
+        accountHeader.clear();
+        for (QBufferViewConfig viewConfig : bufferViews) {
+            if (viewConfig != null) {
+                accountHeader.addProfiles(
+                        new ProfileDrawerItem()
+                                .withName(viewConfig.bufferViewName())
+                                .withIdentifier(viewConfig.bufferViewId())
+                );
+            }
+        }
+        accountHeader.setActiveProfile(status.bufferViewConfigId, true);
     }
 
     @Override

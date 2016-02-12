@@ -163,7 +163,7 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
         openBuffer = bufferId;
         if (bufferId != -1)
             client.bufferSyncer().requestMarkBufferAsRead(bufferId);
-        provider.sendEvent(new BufferChangeEvent());
+        provider.event.postSticky(new BufferChangeEvent());
     }
 
     @Override
