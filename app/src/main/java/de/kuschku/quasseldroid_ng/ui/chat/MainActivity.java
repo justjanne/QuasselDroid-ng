@@ -34,23 +34,18 @@ import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 
-import aspm.annotations.BooleanPreference;
-import aspm.annotations.IntPreference;
-import aspm.annotations.PreferenceWrapper;
-import aspm.annotations.StringPreference;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
-import de.kuschku.quasseldroid_ng.BuildConfig;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
-import de.kuschku.quasseldroid_ng.util.BoundActivity;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.ChatFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.LoadingFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ActivityImplFactory;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ILayoutHelper;
 import de.kuschku.quasseldroid_ng.ui.chat.util.Status;
+import de.kuschku.quasseldroid_ng.util.BoundActivity;
 import de.kuschku.quasseldroid_ng.util.accounts.AccountManager;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;

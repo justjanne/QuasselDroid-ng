@@ -24,9 +24,9 @@ package de.kuschku.quasseldroid_ng.ui.chat;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import aspm.BooleanPreference;
-import aspm.IntPreference;
-import aspm.StringPreference;
+import de.kuschku.quasseldroid_ng.util.preferences.BooleanPreference;
+import de.kuschku.quasseldroid_ng.util.preferences.IntPreference;
+import de.kuschku.quasseldroid_ng.util.preferences.StringPreference;
 import de.kuschku.util.backports.Objects;
 
 public class Settings {

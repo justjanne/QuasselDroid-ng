@@ -19,41 +19,16 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.util.accounts;
+package de.kuschku.quasseldroid_ng.util.preferences;
 
-import android.content.Context;
+public interface PreferenceElement<T> {
+    void addChangeListener(OnChangeListener<T> listener);
 
-import java.util.Set;
-import java.util.UUID;
+    void removeChangeListener(OnChangeListener<T> listener);
 
-public class AccountManager {
-    AccountManagerHelper helper;
+    T get();
 
-    public AccountManager(Context context) {
-        helper = new AccountManagerHelper(context);
-    }
+    T or(T otherwise);
 
-    public Set<Account> accounts() {
-        return helper.findAllAccounts();
-    }
-
-    public void add(Account account) {
-        helper.addAccount(account);
-    }
-
-    public void remove(String id) {
-        remove(UUID.fromString(id));
-    }
-
-    public void remove(UUID id) {
-        helper.removeAccount(id);
-    }
-
-    public void remove(Account account) {
-        remove(account.id);
-    }
-
-    public Account account(String id) {
-        return helper.account(id);
-    }
+    void set(T value);
 }
