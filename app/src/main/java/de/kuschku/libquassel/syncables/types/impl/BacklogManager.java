@@ -33,6 +33,7 @@ import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.events.BacklogInitEvent;
 import de.kuschku.libquassel.events.BacklogReceivedEvent;
+import de.kuschku.libquassel.events.BufferChangeEvent;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.localtypes.backlogstorage.BacklogStorage;
@@ -106,7 +107,7 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
         assertNotNull(provider);
 
         if (client.connectionStatus() == ConnectionChangeEvent.Status.LOADING_BACKLOG) {
-            provider.sendEvent(new BacklogInitEvent(waitingMax - waiting.size(), waitingMax));
+            provider.event.postSticky(new BacklogInitEvent(waitingMax - waiting.size(), waitingMax));
             if (waiting.isEmpty()) {
                 client.setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
             }
@@ -157,9 +158,17 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
 
     @Override
     public void open(int bufferId) {
+        assertNotNull(provider);
+
         openBuffer = bufferId;
         if (bufferId != -1)
             client.bufferSyncer().requestMarkBufferAsRead(bufferId);
+        provider.sendEvent(new BufferChangeEvent());
+    }
+
+    @Override
+    public int open() {
+        return openBuffer;
     }
 
     @Override

@@ -27,5 +27,5 @@
     <dimen name="message_horizontal">8dp</dimen>
     <dimen name="message_vertical">4dp</dimen>
 
-    <dimen name="message_history_panel_height">0dip</dimen>
+    <dimen name="circular_button_size">56dp</dimen>
 </resources>

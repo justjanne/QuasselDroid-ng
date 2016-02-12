@@ -32,7 +32,7 @@
     android:gravity="bottom"
     sothree:umanoFadeColor="?attr/colorBackgroundCard"
     sothree:umanoOverlay="true"
-    sothree:umanoPanelHeight="@dimen/message_history_panel_height"
+    sothree:umanoPanelHeight="0dip"
     sothree:umanoScrollableView="@+id/msg_history"
     sothree:umanoShadowHeight="0.0dip"
     tools:showIn="@layout/activity_chat">

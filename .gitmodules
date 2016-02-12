@@ -1,6 +1,3 @@
 [submodule "AndroidSlidingUpPanel"]
 	path = AndroidSlidingUpPanel
 	url = https://github.com/justjanne/AndroidSlidingUpPanel
-[submodule "aspm"]
-	path = aspm
-	url = https://github.com/justjanne/aspm

@@ -25,11 +25,11 @@ import android.support.annotation.NonNull;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
-import de.kuschku.quasseldroid_ng.ui.chat.WrappedSettings;
+import de.kuschku.quasseldroid_ng.ui.chat.Settings;
 
 public class AppContext {
     private ThemeUtil themeUtil;
-    private WrappedSettings settings;
+    private Settings settings;
     private Client client;
     private BusProvider provider;
 
@@ -47,16 +47,16 @@ public class AppContext {
         return this;
     }
 
-    public WrappedSettings settings() {
+    public Settings settings() {
         return settings;
     }
 
-    public void setSettings(WrappedSettings settings) {
+    public void setSettings(Settings settings) {
         this.settings = settings;
     }
 
     @NonNull
-    public AppContext withSettings(WrappedSettings settings) {
+    public AppContext withSettings(Settings settings) {
         setSettings(settings);
         return this;
     }

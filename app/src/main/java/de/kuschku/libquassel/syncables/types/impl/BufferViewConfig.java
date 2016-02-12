@@ -41,7 +41,7 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     @NonNull
     private final ObservableList<Integer> buffers;
     @NonNull
-    private final ObservableSet<Integer> buffersIds;
+    private final ObservableSet<Integer> bufferIds;
     @NonNull
     private final ObservableSet<Integer> removedBuffers;
     @NonNull
@@ -62,8 +62,10 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
         this.temporarilyRemovedBuffers = new ObservableSet<>(temporarilyRemovedBuffers);
         this.hideInactiveNetworks = hideInactiveNetworks;
         this.buffers = new ObservableList<>(buffers);
-        this.buffersIds = new ObservableSet<>();
-        bufferIds().addAll(buffers);
+        buffers.removeAll(removedBuffers);
+        buffers.removeAll(temporarilyRemovedBuffers);
+        this.bufferIds = new ObservableSet<>();
+        bufferIds.addAll(buffers);
         this.allowedBufferTypes = allowedBufferTypes;
         this.sortAlphabetically = sortAlphabetically;
         this.disableDecoration = disableDecoration;
@@ -212,7 +214,7 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     @NonNull
     @Override
     public ObservableSet<Integer> bufferIds() {
-        return buffersIds;
+        return bufferIds;
     }
 
     @NonNull
@@ -355,8 +357,8 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
         this.hideInactiveNetworks = from.hideInactiveNetworks;
         this.buffers.clear();
         this.buffers.addAll(from.buffers);
-        this.buffersIds.retainAll(from.buffersIds);
-        this.buffersIds.addAll(from.buffersIds);
+        this.bufferIds.retainAll(from.bufferIds);
+        this.bufferIds.addAll(from.bufferIds);
         this.removedBuffers.retainAll(from.removedBuffers);
         this.removedBuffers.addAll(from.removedBuffers);
         this.temporarilyRemovedBuffers.retainAll(from.temporarilyRemovedBuffers);

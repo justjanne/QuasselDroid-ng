@@ -26,7 +26,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar" />
+    <include layout="@layout/widget_actionbar" />
 
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         android:id="@+id/sliding_layout"
@@ -38,9 +38,9 @@
         app:umanoScrollableView="@+id/chatline_scroller"
         app:umanoShadowHeight="4dp">
 
-        <include layout="@layout/content_main" />
+        <include layout="@layout/fragment_chat" />
 
-        <include layout="@layout/slider_main" />
+        <include layout="@layout/widget_slider" />
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 

@@ -28,6 +28,7 @@ import java.util.UUID;
 
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.NoSubscriberEvent;
+import de.kuschku.libquassel.events.GeneralErrorEvent;
 
 public class BusProvider {
     @NonNull
@@ -81,6 +82,10 @@ public class BusProvider {
 
         public BusHandler(String identifier) {
             this.identifier = identifier;
+        }
+
+        public void onEvent(GeneralErrorEvent event) {
+            Log.e(identifier, event.getClass().getSimpleName(), event.exception);
         }
 
         public void onEvent(NoSubscriberEvent event) {

@@ -23,9 +23,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_reauth"
+        android:title="Reauth"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_hide_events"
-        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:icon="@drawable/ic_filter_dark"
         android:orderInCategory="100"
         android:title="@string/labelHideEvents"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 </menu>

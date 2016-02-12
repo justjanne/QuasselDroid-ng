@@ -31,8 +31,12 @@ import de.kuschku.libquassel.QuasselClient;
 import de.kuschku.libquassel.client.ClientData;
 import de.kuschku.libquassel.client.FeatureFlags;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
+import de.kuschku.libquassel.events.LoginRequireEvent;
 import de.kuschku.libquassel.localtypes.backlogstorage.MemoryBacklogStorage;
 import de.kuschku.libquassel.protocols.RemotePeer;
+import de.kuschku.quasseldroid_ng.ui.chat.Settings;
+import de.kuschku.quasseldroid_ng.util.accounts.Account;
+import de.kuschku.quasseldroid_ng.util.accounts.AccountManager;
 import de.kuschku.util.CompatibilityUtils;
 import de.kuschku.util.ServerAddress;
 import de.kuschku.util.certificates.SQLiteCertificateManager;
@@ -49,6 +53,9 @@ public class ClientBackgroundThread implements Runnable {
     @NonNull
     private final QuasselClient client;
 
+    private final Settings settings;
+    private final AccountManager manager;
+
     public ClientBackgroundThread(@NonNull BusProvider provider, @NonNull ServerAddress address, @NonNull Context context) {
         this.client = new QuasselClient(
                 provider,
@@ -57,6 +64,10 @@ public class ClientBackgroundThread implements Runnable {
                 new MemoryBacklogStorage()
         );
         this.client.connect(address);
+        this.client.provider.event.registerSticky(this);
+
+        settings = new Settings(context);
+        manager = new AccountManager(context);
     }
 
     @NonNull
@@ -75,5 +86,12 @@ public class ClientBackgroundThread implements Runnable {
 
     public void close() {
         client.disconnect();
+    }
+
+    public void onEvent(LoginRequireEvent event) {
+        if (!event.failedLast) {
+            Account account = manager.account(settings.lastAccount.get());
+            client().client.login(account.user, account.pass);
+        }
     }
 }

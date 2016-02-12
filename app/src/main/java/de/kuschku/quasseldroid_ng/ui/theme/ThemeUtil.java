@@ -216,7 +216,7 @@ public class ThemeUtil {
         @ColorInt
         public int colorAccent;
 
-        @AutoColor(R.attr.colorAccentFocus)
+        @AutoColor(R.attr.colorControlHighlight)
         @ColorInt
         public int colorAccentFocus;
 

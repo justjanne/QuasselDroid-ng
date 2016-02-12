@@ -28,8 +28,12 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.util.ServerAddress;
+import de.kuschku.util.backports.Consumer;
 
 public class QuasselService extends Service {
     @NonNull
@@ -37,6 +41,8 @@ public class QuasselService extends Service {
 
     @Nullable
     private ClientBackgroundThread bgThread;
+
+    private Set<Consumer<ClientBackgroundThread>> consumers = new HashSet<>();
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -52,6 +58,7 @@ public class QuasselService extends Service {
         public void startBackgroundThread(@NonNull BusProvider provider, @NonNull ServerAddress address) {
             bgThread = new ClientBackgroundThread(provider, address, QuasselService.this);
             new Thread(bgThread).start();
+            notify(bgThread);
         }
 
         @Nullable
@@ -62,6 +69,19 @@ public class QuasselService extends Service {
         public void stopBackgroundThread() {
             if (bgThread != null) bgThread.close();
             bgThread = null;
+            notify(bgThread);
+        }
+
+        public void addCallback(Consumer<ClientBackgroundThread> consumer) {
+            consumers.add(consumer);
+        }
+        public void removeCallback(Consumer<ClientBackgroundThread> consumer) {
+            consumers.remove(consumer);
+        }
+        private void notify(ClientBackgroundThread thread) {
+            for (Consumer<ClientBackgroundThread> consumer : consumers) {
+                consumer.apply(thread);
+            }
         }
     }
 }

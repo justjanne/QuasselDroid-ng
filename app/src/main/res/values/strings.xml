@@ -28,33 +28,6 @@
     <string name="appLinkCommunityTitle">Community</string>
     <string name="appLinkCommunityUrl" translatable="false">https://plus.google.com/communities/104094956084217666662</string>
 
-    <!-- Message format strings -->
-    <string name="usernameHostmask">%1$s (%2$s)</string>
-
-    <string name="messagePlain">%1$s: %2$s</string>
-
-    <string name="messageJoin">%1$s has joined %2$s</string>
-
-    <string name="messagePart">%1$s has left %2$s</string>
-    <string name="messagePartExtra">"%1$s has left %2$s (%3$s)</string>
-
-    <string name="messageQuit">%1$s has quit</string>
-    <string name="messageQuitExtra">%1$s has quit (%2$s)</string>
-
-    <string name="messageKill">%1$s was killed: %2$s</string>
-
-    <string name="messageKick">%1$s has kicked %2$s from %3$s</string>
-    <string name="messageKickExtra">%1$s has kicked %2$s from %3$s: %4$s</string>
-
-    <string name="messageMode">Mode %1$s by %2$s</string>
-
-    <string name="messageNickSelf">You are now known as %1$s</string>
-    <string name="messageNickOther">%1$s is now known as %2$s</string>
-
-    <string name="messageDayChange">{ Day changed to %1$s }</string>
-
-    <string name="messageAction">* %1$s %2$s</string>
-
     <!-- Editor UI -->
     <string name="placeholder">Write a message…</string>
     <string name="formatBold">Bold</string>
@@ -66,7 +39,7 @@
     <!-- Actions -->
     <string name="labelLogin">Login</string>
     <string name="labelCancel">Cancel</string>
-    <string name="labelConnect">Connect</string>
+    <string name="labelReconnect">Connect</string>
     <string name="labelSettings">Settings</string>
     <string name="labelStatusBuffer">Status Buffer</string>
     <string name="labelAddress">Address</string>
@@ -78,5 +51,18 @@
     <string name="labelHideEvents">Hide events</string>
 
     <string name="warningCertificate">Do you trust this certificate?</string>
-    <string name="labelDebug">Debug</string>
+
+    <string name="labelUserOnHost">%1$s on %2$s</string>
+
+    <string name="slideAccountcoreTitle">The Core</string>
+    <string name="slideAccountcoreDescription">First, please choose which server your core is hosted on – if you don’t know what a core is, click [here]</string>
+
+    <string name="slideAccountuserTitle">Your Account</string>
+    <string name="slideAccountuserDescription">Now, please enter the username and password for your account on the core. If you just created that core, we’ll set up this account for you</string>
+
+    <string name="slideAccountselectTitle">Select Account</string>
+    <string name="slideAccountselectDescription">Please select an account from the list or add one</string>
+
+    <string name="slideAccountnameTitle">Customize Account</string>
+    <string name="slideAccountnameDescription">Give this account a name and icon</string>
 </resources>

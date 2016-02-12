@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.ui.chat;
+package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
 import android.support.annotation.NonNull;
 

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ QuasselDroid - Quassel client for Android
+  ~ Copyright (C) 2016 Janne Koschinski
+  ~ Copyright (C) 2016 Ken Børge Viktil
+  ~ Copyright (C) 2016 Magnus Fjell
+  ~ Copyright (C) 2016 Martin Sandsmark <martin.sandsmark@kde.org>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify it
+  ~ under the terms of the GNU General Public License as published by the Free
+  ~ Software Foundation, either version 3 of the License, or (at your option)
+  ~ any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License along
+  ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <!-- Message format strings -->
+    <string name="usernameHostmask">%1$s (%2$s)</string>
+
+    <string name="messagePlain">%1$s: %2$s</string>
+
+    <string name="messageJoin">%1$s has joined %2$s</string>
+
+    <string name="messagePart">%1$s has left %2$s</string>
+    <string name="messagePartExtra">"%1$s has left %2$s (%3$s)</string>
+
+    <string name="messageQuit">%1$s has quit</string>
+    <string name="messageQuitExtra">%1$s has quit (%2$s)</string>
+
+    <string name="messageKill">%1$s was killed: %2$s</string>
+
+    <string name="messageKick">%1$s has kicked %2$s from %3$s</string>
+    <string name="messageKickExtra">%1$s has kicked %2$s from %3$s: %4$s</string>
+
+    <string name="messageMode">Mode %1$s by %2$s</string>
+
+    <string name="messageNickSelf">You are now known as %1$s</string>
+    <string name="messageNickOther">%1$s is now known as %2$s</string>
+
+    <string name="messageDayChange">{ Day changed to %1$s }</string>
+
+    <string name="messageAction">* %1$s %2$s</string>
+</resources>

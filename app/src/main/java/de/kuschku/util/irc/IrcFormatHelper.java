@@ -22,6 +22,7 @@
 package de.kuschku.util.irc;
 
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;

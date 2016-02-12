@@ -200,7 +200,7 @@ public class Client extends AClient {
         } else if (connectionStatus == ConnectionChangeEvent.Status.CONNECTED) {
             // FIXME: Init buffer activity state and highlightss
         }
-        provider.sendEvent(new ConnectionChangeEvent(connectionStatus));
+        provider.event.postSticky(new ConnectionChangeEvent(connectionStatus));
     }
 
     @Nullable
@@ -318,6 +318,9 @@ public class Client extends AClient {
         requestInitObject("IgnoreListManager", "");
         //sendInitRequest("TransferManager", "");
         // This thing never gets sent...
+
+        assertNotNull(provider);
+        provider.event.postSticky(new InitEvent(initRequestMax - initRequests.size(), initRequestMax));
     }
 
     @NonNull
@@ -349,15 +352,15 @@ public class Client extends AClient {
     public void initObject(String className, @NonNull String objectName, @NonNull SyncableObject object) {
         assertNotNull(provider);
 
+        object.init(objectName, provider, this);
+
         if (connectionStatus() == ConnectionChangeEvent.Status.INITIALIZING_DATA) {
             initRequests.remove(hashName(className, objectName));
-            provider.sendEvent(new InitEvent(initRequestMax - initRequests.size(), initRequestMax));
+            provider.event.postSticky(new InitEvent(initRequestMax - initRequests.size(), initRequestMax));
             if (initRequests.isEmpty()) {
                 setConnectionStatus(ConnectionChangeEvent.Status.LOADING_BACKLOG);
             }
         }
-
-        object.init(objectName, provider, this);
 
         // Execute cached sync requests
         if (bufferedSyncs.size() > 0) {

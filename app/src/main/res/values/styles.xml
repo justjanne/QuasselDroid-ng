@@ -20,17 +20,22 @@
   -->
 
 <resources>
+    <style name="BaseTheme" parent="MaterialDrawerTheme.TranslucentStatus" />
+    <style name="BaseTheme.Light" parent="MaterialDrawerTheme.Light.DarkToolbar.TranslucentStatus" />
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="MaterialDrawerTheme.TranslucentStatus">
+    <style name="AppTheme" parent="BaseTheme">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorAccentFocus">@color/colorAccentFocus</item>
-
         <item name="colorControlHighlight">@color/colorAccentFocus</item>
         <item name="windowActionModeOverlay">true</item>
+
+        <item name="material_drawer_background">?attr/colorBackground</item>
+        <item name="material_drawer_primary_text">?attr/colorForeground</item>
+        <item name="material_drawer_primary_icon">?attr/colorForeground</item>
+        <item name="material_drawer_secondary_text">?attr/colorForegroundSecondary</item>
         
         <item name="iconFormatBold">@drawable/ic_format_bold_dark</item>
         <item name="iconFormatItalic">@drawable/ic_format_italic_dark</item>
@@ -39,19 +44,23 @@
         <item name="iconFormatFill">@drawable/ic_format_fill_dark</item>
         <item name="iconHistory">@drawable/ic_history_dark</item>
         <item name="iconDebug">@drawable/ic_bug_dark</item>
+        <item name="iconFilter">@drawable/ic_filter_dark</item>
 
         <item name="cardStyle">@style/CardView.Dark</item>
     </style>
 
-    <style name="AppTheme.Light" parent="MaterialDrawerTheme.Light.DarkToolbar.TranslucentStatus">
+    <style name="AppTheme.Light" parent="BaseTheme.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorAccentFocus">@color/colorAccentFocus</item>
-
         <item name="colorControlHighlight">@color/colorAccentFocus</item>
         <item name="windowActionModeOverlay">true</item>
+
+        <item name="material_drawer_background">?attr/colorBackground</item>
+        <item name="material_drawer_primary_text">?attr/colorForeground</item>
+        <item name="material_drawer_primary_icon">?attr/colorForeground</item>
+        <item name="material_drawer_secondary_text">?attr/colorForegroundSecondary</item>
 
         <item name="iconFormatBold">@drawable/ic_format_bold_light</item>
         <item name="iconFormatItalic">@drawable/ic_format_italic_light</item>
@@ -60,8 +69,20 @@
         <item name="iconFormatFill">@drawable/ic_format_fill_light</item>
         <item name="iconHistory">@drawable/ic_history_light</item>
         <item name="iconDebug">@drawable/ic_bug_light</item>
+        <item name="iconFilter">@drawable/ic_filter_light</item>
 
         <item name="cardStyle">@style/CardView.Light</item>
+    </style>
+
+    <style name="Base.SetupTheme" parent="Theme.AppCompat.Light.NoActionBar" />
+
+    <style name="SetupTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlHighlight">@color/colorAccentFocus</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

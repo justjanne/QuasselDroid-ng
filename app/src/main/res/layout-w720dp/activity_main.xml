@@ -20,17 +20,31 @@
   ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipe_view"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorBackground"
-    tools:showIn="@layout/activity_chat">
+    tools:context=".ui.chat.MainActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/messages"
+    <FrameLayout
+        android:id="@+id/drawer_host"
+        android:layout_width="300dp"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true" />
-</android.support.v4.widget.SwipeRefreshLayout>
+        android:orientation="vertical">
+
+        <include layout="@layout/widget_actionbar" />
+
+        <FrameLayout
+            android:id="@+id/content_host"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+</LinearLayout>

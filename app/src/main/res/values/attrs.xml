@@ -21,8 +21,6 @@
   -->
 
 <resources>
-    <attr name="colorAccentFocus" />
-
     <!-- sender colors -->
 
     <attr name="senderColor0" format="color" />
@@ -88,6 +86,7 @@
     <attr name="iconFormatFill" format="reference" />
     <attr name="iconHistory" format="reference" />
     <attr name="iconDebug" format="reference" />
+    <attr name="iconFilter" format="reference" />
 
     <attr name="cardStyle" format="reference" />
 </resources>
