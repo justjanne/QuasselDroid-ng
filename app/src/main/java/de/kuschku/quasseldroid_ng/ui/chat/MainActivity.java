@@ -55,7 +55,6 @@ import de.kuschku.quasseldroid_ng.ui.chat.fragment.LoadingFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ActivityImplFactory;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ILayoutHelper;
 import de.kuschku.quasseldroid_ng.ui.chat.util.Status;
-import de.kuschku.quasseldroid_ng.ui.theme.AppTheme;
 import de.kuschku.quasseldroid_ng.util.BoundActivity;
 import de.kuschku.quasseldroid_ng.util.accounts.AccountManager;
 
@@ -100,8 +99,6 @@ public class MainActivity extends BoundActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        new Settings(this).theme.set(AppTheme.QUASSEL_LIGHT.name());
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
