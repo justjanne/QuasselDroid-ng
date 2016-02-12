@@ -99,7 +99,7 @@ public class MainActivity extends BoundActivity {
      * This object encapsulates the current status of the activity – opened bufferview, for example
      */
     Status status = new Status();
-
+    BufferViewConfigItem currentConfig;
     private AccountManager manager;
 
     @Override
@@ -209,16 +209,19 @@ public class MainActivity extends BoundActivity {
         status.bufferViewConfigId = bufferViewConfigId;
         accountHeader.setActiveProfile(bufferViewConfigId, false);
 
-        if (bufferViewConfigId == -1) {
-            drawerLeft.removeAllItems();
-        } else {
-            drawerLeft.removeAllItems();
+
+        drawerLeft.removeAllItems();
+        if (currentConfig != null)
+            currentConfig.remove();
+        currentConfig = null;
+
+        if (bufferViewConfigId != -1) {
             QBufferViewManager bufferViewManager = client.bufferViewManager();
             assertNotNull(bufferViewManager);
             QBufferViewConfig viewConfig = bufferViewManager.bufferViewConfig(bufferViewConfigId);
             assertNotNull(viewConfig);
 
-            new BufferViewConfigItem(drawerLeft, viewConfig, context);
+            currentConfig = new BufferViewConfigItem(drawerLeft, viewConfig, context);
         }
     }
 

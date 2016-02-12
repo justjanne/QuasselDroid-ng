@@ -35,6 +35,7 @@ import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.observables.callbacks.DrawerItemCallback;
+import de.kuschku.util.observables.callbacks.GeneralCallback;
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
@@ -52,14 +53,18 @@ public class BufferViewConfigItem implements DrawerItemCallback {
     @NonNull
     private final AppContext context;
 
+    GeneralCallback rebuildNetworkList = this::rebuildNetworkList;
+    AdapterUICallbackWrapper callbackWrapper;
+
     public BufferViewConfigItem(@NonNull Drawer drawer, @NonNull QBufferViewConfig config, @NonNull AppContext context) {
         this.drawer = drawer;
         this.config = config;
         this.context = context;
         manager = new BufferItemManager(context);
-        config.addObserver(this::rebuildNetworkList);
+        config.addObserver(rebuildNetworkList);
         assertNotNull(drawer.getItemAdapter());
-        networks.addCallback(new AdapterUICallbackWrapper(drawer.getItemAdapter()));
+        callbackWrapper = new AdapterUICallbackWrapper(drawer.getItemAdapter());
+        networks.addCallback(callbackWrapper);
         rebuildNetworkList();
     }
 
@@ -125,5 +130,10 @@ public class BufferViewConfigItem implements DrawerItemCallback {
             if (item instanceof NetworkItem)
                 drawer.getAdapter().notifyAdapterSubItemsChanged(position);
         }
+    }
+
+    public void remove() {
+        config.deleteObserver(rebuildNetworkList);
+        networks.removeCallback(callbackWrapper);
     }
 }
