@@ -20,8 +20,6 @@ environment variable ANDROID_HOME)
 QuasselDroid uses the following libraries (although these are automatically
 downloaded from maven central):
 
-* [**ASPM**](https://github.com/justjanne/aspm)
-  MPL 2.0
 * [**AndroidSlidingUpPanel**](https://github.com/justjanne/AndroidSlidingUpPanel)
   Apache 2.0
 * [**libquassel-java**](https://github.com/justjanne/libquassel-java)
@@ -84,6 +82,14 @@ just yet.
   New deserialization, Current UI version, Annotation Processors, Push Notification frontend
 * **Pierre-Hugues Husson** (phhusson)  
   Push Notification backend
+
+##History
+
+The project was originally started by freqmod in December 2010 as a simple PoC, and then expanded by magnuf, sandsmark and Kenji until late 2014 into a usable Android app. At that time justJanne started a first fork to introduce Holo design, then rebased that fork and turned it into a pull request. Later finding more and more missing features, and more and more bugs, justJanne ended up rewrite large parts of the code, and became the sole maintainer in late 2015.
+
+As it became obvious that it would be increasingly harder to properly maintain the software, justJanne decided to rewrite it around that time, and implement the full protocol (not just a subset) this time around, also focusing on better design this time.
+
+The older implementation is still available at <https://github.com/sandsmark/QuasselDroid>.
 
 ##License
 
