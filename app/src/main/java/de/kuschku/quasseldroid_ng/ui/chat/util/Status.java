@@ -27,4 +27,6 @@ import de.kuschku.util.instancestateutil.Store;
 public class Status extends Storable {
     @Store
     public int bufferViewConfigId = -1;
+    @Store
+    public int bufferId = -1;
 }

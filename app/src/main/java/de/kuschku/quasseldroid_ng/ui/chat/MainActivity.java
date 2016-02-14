@@ -128,6 +128,18 @@ public class MainActivity extends BoundActivity {
         manager = new AccountManager(this);
     }
 
+    @Override
+    protected void onPause() {
+        if (context.client() != null)
+            context.client().backlogManager().open(-1);
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content_host, fragment);
@@ -206,22 +218,21 @@ public class MainActivity extends BoundActivity {
         Client client = context.client();
         assertNotNull(client);
 
+        drawerLeft.removeAllItems();
+
         status.bufferViewConfigId = bufferViewConfigId;
         accountHeader.setActiveProfile(bufferViewConfigId, false);
 
-
-        drawerLeft.removeAllItems();
         if (currentConfig != null)
             currentConfig.remove();
         currentConfig = null;
 
-        if (bufferViewConfigId != -1) {
-            QBufferViewManager bufferViewManager = client.bufferViewManager();
-            assertNotNull(bufferViewManager);
+        QBufferViewManager bufferViewManager = client.bufferViewManager();
+        if (bufferViewConfigId != -1 && bufferViewManager != null) {
             QBufferViewConfig viewConfig = bufferViewManager.bufferViewConfig(bufferViewConfigId);
-            assertNotNull(viewConfig);
-
-            currentConfig = new BufferViewConfigItem(drawerLeft, viewConfig, context);
+            if (viewConfig != null) {
+                currentConfig = new BufferViewConfigItem(drawerLeft, viewConfig, context);
+            }
         }
     }
 
@@ -246,6 +257,12 @@ public class MainActivity extends BoundActivity {
         super.onConnectToThread(thread);
         if (thread == null)
             connectToServer(manager.account(context.settings().lastAccount.get()));
+        else {
+            if (context.client() != null) {
+                context.client().backlogManager().open(status.bufferId);
+                accountHeader.setActiveProfile(status.bufferViewConfigId, true);
+            }
+        }
     }
 
     public void displayFilterDialog() {
