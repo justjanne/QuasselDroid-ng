@@ -26,12 +26,16 @@ import android.support.annotation.NonNull;
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.quasseldroid_ng.ui.chat.Settings;
+import de.kuschku.util.irc.format.IrcFormatDeserializer;
+import de.kuschku.util.irc.format.IrcFormatSerializer;
 
 public class AppContext {
     private ThemeUtil themeUtil;
     private Settings settings;
     private Client client;
     private BusProvider provider;
+    private IrcFormatDeserializer deserializer;
+    private IrcFormatSerializer serializer;
 
     public ThemeUtil themeUtil() {
         return themeUtil;
@@ -39,6 +43,9 @@ public class AppContext {
 
     public void setThemeUtil(ThemeUtil themeUtil) {
         this.themeUtil = themeUtil;
+
+        this.serializer = new IrcFormatSerializer(this);
+        this.deserializer = new IrcFormatDeserializer(this);
     }
 
     @NonNull
@@ -87,5 +94,13 @@ public class AppContext {
     public AppContext withProvider(BusProvider provider) {
         setProvider(provider);
         return this;
+    }
+
+    public IrcFormatDeserializer deserializer() {
+        return deserializer;
+    }
+
+    public IrcFormatSerializer serializer() {
+        return serializer;
     }
 }

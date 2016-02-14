@@ -40,7 +40,6 @@ import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
-import de.kuschku.util.ui.MessageUtil;
 
 public class BufferItem extends SecondaryDrawerItem {
     @NonNull
@@ -144,14 +143,10 @@ public class BufferItem extends SecondaryDrawerItem {
     }
 
     @Override
-    public void onPostBindView(IDrawerItem drawerItem, @NonNull View view) {
+    public void onPostBindView(IDrawerItem drawerItem, View view) {
         super.onPostBindView(drawerItem, view);
 
         if (getDescription() != null && getDescription().getText() != null)
-            ((TextView) view.findViewById(R.id.material_drawer_description)).setText(MessageUtil.parseStyleCodes(
-                    context.themeUtil(),
-                    getDescription().getText(),
-                    context.settings().mircColors.or(true)
-            ));
+            ((TextView) view.findViewById(R.id.material_drawer_description)).setText(context.deserializer().formatString(getDescription().getText()));
     }
 }

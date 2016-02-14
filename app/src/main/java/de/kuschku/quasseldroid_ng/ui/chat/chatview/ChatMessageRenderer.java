@@ -29,8 +29,8 @@ import android.support.annotation.UiThread;
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
-import de.kuschku.util.irc.IrcFormatHelper;
 import de.kuschku.util.irc.IrcUserUtils;
+import de.kuschku.util.irc.format.IrcFormatHelper;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 

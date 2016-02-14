@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.ui.editor;
+package de.kuschku.util.irc.format;
 
 import android.support.annotation.NonNull;
 import android.text.Spanned;
@@ -32,10 +32,10 @@ import java.util.Locale;
 
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 
-public class FormattingHelper {
+public class IrcFormatSerializer {
     private final AppContext context;
 
-    public FormattingHelper(AppContext context) {
+    public IrcFormatSerializer(AppContext context) {
         this.context = context;
     }
 

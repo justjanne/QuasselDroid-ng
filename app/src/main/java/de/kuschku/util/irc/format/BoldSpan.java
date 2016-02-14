@@ -19,13 +19,13 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.ui.editor;
+package de.kuschku.util.irc.format;
 
 import android.graphics.Typeface;
 import android.text.style.StyleSpan;
 
-public class ItalicSpan extends StyleSpan {
-    public ItalicSpan() {
-        super(Typeface.ITALIC);
+public class BoldSpan extends StyleSpan {
+    public BoldSpan() {
+        super(Typeface.BOLD);
     }
 }

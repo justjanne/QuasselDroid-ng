@@ -31,14 +31,15 @@ import android.text.style.UnderlineSpan;
 import android.widget.EditText;
 
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
+import de.kuschku.util.irc.format.BoldSpan;
+import de.kuschku.util.irc.format.ItalicSpan;
 
 public class AdvancedEditor {
+    private final AppContext context;
     private final EditText editText;
-    @NonNull
-    private final FormattingHelper helper;
 
     public AdvancedEditor(AppContext context, EditText editText) {
-        this.helper = new FormattingHelper(context);
+        this.context = context;
         this.editText = editText;
     }
 
@@ -140,6 +141,6 @@ public class AdvancedEditor {
 
     @NonNull
     public String toFormatString() {
-        return helper.toEscapeCodes(editText.getText());
+        return context.serializer().toEscapeCodes(editText.getText());
     }
 }

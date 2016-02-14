@@ -19,10 +19,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.util.irc;
+package de.kuschku.util.irc.format;
 
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -47,7 +46,7 @@ import java.util.regex.Pattern;
 
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
-import de.kuschku.util.ui.MessageUtil;
+import de.kuschku.util.irc.IrcUserUtils;
 
 public class IrcFormatHelper {
     @NonNull
@@ -85,7 +84,7 @@ public class IrcFormatHelper {
     public CharSequence formatIrcMessage(@NonNull String message) {
         List<FutureClickableSpan> spans = new LinkedList<>();
 
-        SpannableString str = new SpannableString(MessageUtil.parseStyleCodes(context.themeUtil(), message, context.settings().mircColors.get()));
+        SpannableString str = new SpannableString(context.deserializer().formatString(message));
         Matcher urlMatcher = urlPattern.matcher(str);
         while (urlMatcher.find()) {
             spans.add(new FutureClickableSpan(new CustomURLSpan(urlMatcher.group()), urlMatcher.start(), urlMatcher.end()));
