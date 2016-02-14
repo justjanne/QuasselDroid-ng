@@ -80,7 +80,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
-        Message msg = messageList.get(position);
+        Message msg = getItem(position);
         assertNotNull(msg);
 
         renderer.onBind(holder, msg);
@@ -89,5 +89,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     @Override
     public int getItemCount() {
         return messageList.size();
+    }
+
+    public Message getItem(int position) {
+        return messageList.get(position);
     }
 }

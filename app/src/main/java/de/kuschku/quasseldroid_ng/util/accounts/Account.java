@@ -48,4 +48,16 @@ public class Account {
     public ServerAddress toAddress() {
         return new ServerAddress(host, port);
     }
+
+    public Account withLoginData(String user, String pass) {
+        return new Account(id, name, host, port, user, pass);
+    }
+
+    public Account withServerData(String host, int port) {
+        return new Account(id, name, host, port, user, pass);
+    }
+
+    public Account withName(String name) {
+        return new Account(id, name, host, port, user, pass);
+    }
 }

@@ -29,9 +29,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -102,6 +100,11 @@ public class AccountManagerHelper extends SQLiteOpenHelper {
         statement.bindString(6, account.pass);
         // executeInsert returns -1 if unsuccessful
         return statement.executeInsert() != -1;
+    }
+
+    public boolean updateAccount(Account account) {
+        removeAccount(account.id);
+        return addAccount(account);
     }
 
     public boolean removeAccount(UUID id) {

@@ -26,10 +26,13 @@ import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -46,6 +49,7 @@ import butterknife.ButterKnife;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
+import de.kuschku.libquassel.events.LoginRequireEvent;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
@@ -61,6 +65,7 @@ import de.kuschku.quasseldroid_ng.ui.chat.util.ActivityImplFactory;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ILayoutHelper;
 import de.kuschku.quasseldroid_ng.ui.chat.util.Status;
 import de.kuschku.quasseldroid_ng.util.BoundActivity;
+import de.kuschku.quasseldroid_ng.util.accounts.Account;
 import de.kuschku.quasseldroid_ng.util.accounts.AccountManager;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -205,11 +210,13 @@ public class MainActivity extends BoundActivity {
         if (status == ConnectionChangeEvent.Status.CONNECTED) {
             replaceFragment(new ChatFragment());
             updateBufferViewConfigs();
+        } else if (status == ConnectionChangeEvent.Status.DISCONNECTED) {
+            finish();
         }
     }
 
     public void onEventMainThread(GeneralErrorEvent event) {
-
+        Toast.makeText(this, event.exception.getClass().getSimpleName() + ": " + event.debugInfo, Toast.LENGTH_LONG).show();
     }
 
     private void selectBufferViewConfig(@IntRange(from = -1) int bufferViewConfigId) {
@@ -314,6 +321,30 @@ public class MainActivity extends BoundActivity {
                     })
                     .build()
                     .show();
+        }
+    }
+
+    public void onEventMainThread(LoginRequireEvent event) {
+        if (event.failedLast) {
+            new MaterialDialog.Builder(this)
+                    .title(R.string.labelLogin)
+                    .customView(R.layout.dialog_login, false)
+                    .onPositive((dialog1, which) -> {
+                        View parent = dialog1.getCustomView();
+                        assertNotNull(parent);
+                        AppCompatEditText usernameField = (AppCompatEditText) parent.findViewById(R.id.username);
+                        AppCompatEditText passwordField = (AppCompatEditText) parent.findViewById(R.id.password);
+                        String username = usernameField.getText().toString();
+                        String password = passwordField.getText().toString();
+
+                        Account account = manager.account(context.settings().lastAccount.get());
+                        manager.update(account.withLoginData(username, password));
+                    })
+                    .cancelListener(dialog1 -> finish())
+                    .negativeColor(context.themeUtil().res.colorForeground)
+                    .positiveText(R.string.labelLogin)
+                    .negativeText(R.string.labelCancel)
+                    .build().show();
         }
     }
 }

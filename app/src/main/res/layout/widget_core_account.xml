@@ -41,10 +41,10 @@
         android:paddingTop="@dimen/material_drawer_item_profile_icon_padding">
 
         <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/account_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:id="@+id/account_select" />
+            android:layout_gravity="center_vertical" />
 
     </LinearLayout>
 
@@ -83,4 +83,11 @@
             android:textSize="@dimen/material_drawer_item_profile_description"
             tools:text="kuschku on kuschku.de" />
     </LinearLayout>
+
+    <!--
+    <ImageButton
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src=""/>
+    -->
 </LinearLayout>

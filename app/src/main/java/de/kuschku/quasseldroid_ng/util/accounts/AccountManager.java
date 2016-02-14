@@ -41,6 +41,10 @@ public class AccountManager {
         helper.addAccount(account);
     }
 
+    public void update(Account account) {
+        helper.updateAccount(account);
+    }
+
     public void remove(String id) {
         remove(UUID.fromString(id));
     }

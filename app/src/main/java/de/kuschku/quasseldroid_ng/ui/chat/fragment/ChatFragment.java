@@ -27,6 +27,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +60,9 @@ public class ChatFragment extends BoundFragment {
     SwipeRefreshLayout swipeView;
     @Bind(R.id.sliding_layout)
     SlidingUpPanelLayout sliderMain;
+
     private MessageAdapter messageAdapter;
+    private LinearLayoutManager layoutManager;
 
     @Nullable
     @Override
@@ -71,7 +74,8 @@ public class ChatFragment extends BoundFragment {
         assertNotNull(messages);
 
         messages.setItemAnimator(new DefaultItemAnimator());
-        messages.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true));
+        layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
+        messages.setLayoutManager(layoutManager);
         messageAdapter = new MessageAdapter(getActivity(), context, new AutoScroller(messages));
         messages.setAdapter(messageAdapter);
 
@@ -89,6 +93,8 @@ public class ChatFragment extends BoundFragment {
     }
 
     public void onEventMainThread(BufferChangeEvent event) {
+        setMarkerline();
+
         Client client = context.client();
         if (client != null) {
             QBacklogManager<? extends QBacklogManager> backlogManager = client.backlogManager();
@@ -96,9 +102,41 @@ public class ChatFragment extends BoundFragment {
             ObservableComparableSortedList<Message> messageList = backlogManager.filtered(id);
             messageAdapter.setMessageList(messageList);
             swipeView.setEnabled(id != -1);
+
+            int markerLine = client.bufferSyncer().markerLine(id);
+            for (int i = 0; i < messageList.size(); i++) {
+                if (messageList.get(i).messageId == markerLine) {
+                    Log.d("DEBUG", "Load: " + markerLine + ":" + i);
+                    messages.scrollToPosition(i);
+                    break;
+                }
+            }
         } else {
             swipeView.setEnabled(false);
         }
+    }
+
+    @Override
+    public void onPause() {
+        setMarkerline();
+        super.onPause();
+    }
+
+    private void setMarkerline() {
+        Client client = context.client();
+        if (client == null) return;
+
+        int buffer = client.backlogManager().open();
+        if (buffer == -1) return;
+
+        int messageposition = layoutManager.findFirstCompletelyVisibleItemPosition();
+        if (messageposition == -1) return;
+
+        Message message = messageAdapter.getItem(messageposition);
+        if (message == null) return;
+
+        client.bufferSyncer().requestSetMarkerLine(buffer, message.messageId);
+        Log.d("DEBUG", "Store: " + message.messageId + ":" + messageposition);
     }
 
     public void onEventMainThread(BacklogReceivedEvent event) {
