@@ -19,45 +19,18 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.util.accounts;
+package de.kuschku.util.accounts;
 
-import java.util.UUID;
-
-import de.kuschku.util.ServerAddress;
-
-public class Account {
-    public final UUID id;
-
-    public final String name;
-
+public class ServerAddress {
     public final String host;
     public final int port;
 
-    public final String user;
-    public final String pass;
-
-    public Account(UUID id, String name, String host, int port, String user, String pass) {
-        this.id = id;
-        this.name = name;
+    public ServerAddress(String host, int port) {
         this.host = host;
         this.port = port;
-        this.user = user;
-        this.pass = pass;
     }
 
-    public ServerAddress toAddress() {
-        return new ServerAddress(host, port);
-    }
-
-    public Account withLoginData(String user, String pass) {
-        return new Account(id, name, host, port, user, pass);
-    }
-
-    public Account withServerData(String host, int port) {
-        return new Account(id, name, host, port, user, pass);
-    }
-
-    public Account withName(String name) {
-        return new Account(id, name, host, port, user, pass);
+    public String print() {
+        return String.format("%s:%s", host, port);
     }
 }

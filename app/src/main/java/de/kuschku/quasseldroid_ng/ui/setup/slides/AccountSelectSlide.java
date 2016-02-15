@@ -43,12 +43,12 @@ import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.setup.AccountItem;
 import de.kuschku.quasseldroid_ng.ui.setup.AccountSetupActivity;
 import de.kuschku.quasseldroid_ng.ui.setup.CreateAccountItem;
-import de.kuschku.quasseldroid_ng.util.accounts.Account;
-import de.kuschku.quasseldroid_ng.util.accounts.AccountManager;
+import de.kuschku.util.accounts.Account;
+import de.kuschku.util.accounts.AccountManager;
 import de.kuschku.util.backports.Optional;
 import de.kuschku.util.backports.Optionals;
 
-public class AccountSelectSlide extends SlideFragment {
+public class AccountSelectSlide extends SlideFragment implements AccountItem.OnDeleteListener {
     private ItemAdapter<IItem> itemAdapter;
     private FastAdapter<IItem> fastAdapter;
     private AccountManager manager;
@@ -85,7 +85,7 @@ public class AccountSelectSlide extends SlideFragment {
         itemAdapter.wrap(fastAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        updateContent(true);
+        updateContent();
         recyclerView.setAdapter(fastAdapter);
 
         fastAdapter.withSelectWithItemUpdate(true);
@@ -117,17 +117,19 @@ public class AccountSelectSlide extends SlideFragment {
 
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            updateContent(false);
+            updateContent();
         } else if (fastAdapter.getItemCount() == 0) {
             getActivity().finish();
         }
     }
 
-    private void updateContent(boolean autoCreate) {
+    private void updateContent() {
         itemAdapter.clear();
         Set<Account> accounts = manager.accounts();
         for (Account account : accounts) {
-            itemAdapter.add(new AccountItem(account));
+            AccountItem accountItem = new AccountItem(account);
+            accountItem.setOnDeleteListener(this);
+            itemAdapter.add(accountItem);
         }
         itemAdapter.add(new CreateAccountItem());
 
@@ -144,5 +146,11 @@ public class AccountSelectSlide extends SlideFragment {
     @Override
     protected int getDescription() {
         return R.string.slideAccountselectDescription;
+    }
+
+    @Override
+    public void onDelete(AccountItem item) {
+        manager.remove(item.account);
+        updateContent();
     }
 }

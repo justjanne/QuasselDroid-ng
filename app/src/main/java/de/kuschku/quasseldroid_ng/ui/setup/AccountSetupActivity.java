@@ -42,43 +42,17 @@ import de.kuschku.quasseldroid_ng.ui.setup.slides.AccountSetupCoreSlide;
 import de.kuschku.quasseldroid_ng.ui.setup.slides.AccountSetupNameSlide;
 import de.kuschku.quasseldroid_ng.ui.setup.slides.AccountSetupUserSlide;
 import de.kuschku.quasseldroid_ng.ui.setup.slides.SlideFragment;
-import de.kuschku.quasseldroid_ng.util.accounts.Account;
-import de.kuschku.quasseldroid_ng.util.accounts.AccountManager;
+import de.kuschku.util.accounts.Account;
+import de.kuschku.util.accounts.AccountManager;
 
 public class AccountSetupActivity extends AppCompatActivity implements ValidUpdateCallback {
 
-    private SlidePagerAdapter slidePagerAdapter;
-
     @Bind(R.id.view_pager)
     ViewPager viewPager;
-
     @Bind(R.id.btn)
     FloatingActionButton btn;
-
+    private SlidePagerAdapter slidePagerAdapter;
     private int lastValidPage = -1;
-
-    private class SlidePagerAdapter extends FragmentPagerAdapter {
-        List<SlideFragment> list = new ArrayList<>();
-
-        public SlidePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public SlideFragment getItem(int position) {
-            return list.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return Math.min(lastValidPage + 2, list.size());
-        }
-
-        public void addFragment(SlideFragment fragment) {
-            list.add(fragment);
-            notifyDataSetChanged();
-        }
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -168,5 +142,28 @@ public class AccountSetupActivity extends AppCompatActivity implements ValidUpda
             lastValidPage = viewPager.getCurrentItem() - 1;
         }
         slidePagerAdapter.notifyDataSetChanged();
+    }
+
+    private class SlidePagerAdapter extends FragmentPagerAdapter {
+        List<SlideFragment> list = new ArrayList<>();
+
+        public SlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public SlideFragment getItem(int position) {
+            return list.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return Math.min(lastValidPage + 2, list.size());
+        }
+
+        public void addFragment(SlideFragment fragment) {
+            list.add(fragment);
+            notifyDataSetChanged();
+        }
     }
 }

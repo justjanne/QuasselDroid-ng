@@ -19,22 +19,16 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.util.preferences;
+package de.kuschku.util.preferences;
 
-import android.content.SharedPreferences;
+public interface PreferenceElement<T> {
+    void addChangeListener(OnChangeListener<T> listener);
 
-public class BooleanPreference extends AbstractPreferenceElement<Boolean> {
-    public BooleanPreference(SharedPreferences pref, String key, Boolean init) {
-        super(pref, key, init);
-    }
+    void removeChangeListener(OnChangeListener<T> listener);
 
-    @Override
-    protected void put(Boolean value) {
-        edit.putBoolean(key, value);
-    }
+    T get();
 
-    @Override
-    public Boolean or(Boolean defValue) {
-        return pref.getBoolean(key, defValue);
-    }
+    T or(T otherwise);
+
+    void set(T value);
 }

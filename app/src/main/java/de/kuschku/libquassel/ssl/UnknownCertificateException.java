@@ -24,7 +24,7 @@ package de.kuschku.libquassel.ssl;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-import de.kuschku.util.ServerAddress;
+import de.kuschku.util.accounts.ServerAddress;
 
 public class UnknownCertificateException extends CertificateException {
     public final X509Certificate certificate;

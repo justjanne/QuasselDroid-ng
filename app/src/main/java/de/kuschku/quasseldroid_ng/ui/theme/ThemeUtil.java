@@ -28,6 +28,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.v7.view.ContextThemeWrapper;
 
+import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.annotationbind.AutoColor;
@@ -61,6 +62,22 @@ public class ThemeUtil {
             AutoBinder.bind(translations, wrapper);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        }
+    }
+
+    public String statusName(ConnectionChangeEvent.Status status) {
+        switch (status) {
+            case HANDSHAKE:
+                return translations.statusHandshake;
+            case INITIALIZING_DATA:
+                return translations.statusInitData;
+            case LOADING_BACKLOG:
+                return translations.statusBacklog;
+            case CONNECTED:
+                return translations.statusWelcome;
+            case DISCONNECTED:
+            default:
+                return translations.statusDisconnected;
         }
     }
 
@@ -112,8 +129,30 @@ public class ThemeUtil {
 
         @AutoString(R.string.labelStatusBuffer)
         public String titleStatusBuffer;
+
         @AutoString(R.string.warningCertificate)
         public String warningCertificate;
+
+        @AutoString(R.string.statusConnecting)
+        public String statusConnecting;
+
+        @AutoString(R.string.statusHandshake)
+        public String statusHandshake;
+
+        @AutoString(R.string.statusInitData)
+        public String statusInitData;
+
+        @AutoString(R.string.statusBacklog)
+        public String statusBacklog;
+
+        @AutoString(R.string.statusConnected)
+        public String statusConnected;
+
+        @AutoString(R.string.statusDisconnected)
+        public String statusDisconnected;
+
+        @AutoString(R.string.statusWelcome)
+        public String statusWelcome;
 
         @NonNull
         public CharSequence formatUsername(@NonNull CharSequence nick, @NonNull CharSequence hostmask) {

@@ -19,22 +19,45 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.util.preferences;
+package de.kuschku.util.accounts;
 
-import android.content.SharedPreferences;
+import android.content.Context;
 
-public class IntPreference extends AbstractPreferenceElement<Integer> {
-    public IntPreference(SharedPreferences pref, String key, Integer defValue) {
-        super(pref, key, defValue);
+import java.util.Set;
+import java.util.UUID;
+
+public class AccountManager {
+    AccountManagerHelper helper;
+
+    public AccountManager(Context context) {
+        helper = new AccountManagerHelper(context);
     }
 
-    @Override
-    protected void put(Integer value) {
-        edit.putInt(key, value);
+    public Set<Account> accounts() {
+        return helper.findAllAccounts();
     }
 
-    @Override
-    public Integer or(Integer defValue) {
-        return pref.getInt(key, defValue);
+    public void add(Account account) {
+        helper.addAccount(account);
+    }
+
+    public void update(Account account) {
+        helper.updateAccount(account);
+    }
+
+    public void remove(String id) {
+        remove(UUID.fromString(id));
+    }
+
+    public void remove(UUID id) {
+        helper.removeAccount(id);
+    }
+
+    public void remove(Account account) {
+        remove(account.id);
+    }
+
+    public Account account(String id) {
+        return helper.account(id);
     }
 }

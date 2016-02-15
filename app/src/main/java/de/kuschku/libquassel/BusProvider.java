@@ -28,7 +28,9 @@ import java.util.UUID;
 
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.NoSubscriberEvent;
+import de.kuschku.libquassel.events.BacklogReceivedEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
+import de.kuschku.libquassel.events.LagChangedEvent;
 
 public class BusProvider {
     @NonNull
@@ -89,7 +91,8 @@ public class BusProvider {
         }
 
         public void onEvent(NoSubscriberEvent event) {
-            Log.e(identifier, String.valueOf(event));
+            if (!(event.originalEvent instanceof LagChangedEvent) && !(event.originalEvent instanceof BacklogReceivedEvent))
+                Log.e(identifier, String.valueOf(event));
         }
     }
 }

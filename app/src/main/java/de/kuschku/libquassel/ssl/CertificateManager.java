@@ -28,7 +28,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import de.kuschku.util.ServerAddress;
+import de.kuschku.util.accounts.ServerAddress;
 
 public interface CertificateManager {
     boolean isTrusted(X509Certificate certificate, ServerAddress core);

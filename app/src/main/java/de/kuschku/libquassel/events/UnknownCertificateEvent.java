@@ -26,7 +26,7 @@ import android.support.annotation.NonNull;
 import java.security.cert.X509Certificate;
 
 import de.kuschku.libquassel.ssl.UnknownCertificateException;
-import de.kuschku.util.ServerAddress;
+import de.kuschku.util.accounts.ServerAddress;
 
 public class UnknownCertificateEvent {
     public final X509Certificate certificate;

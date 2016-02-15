@@ -21,16 +21,22 @@
 
 package de.kuschku.util;
 
-public class ServerAddress {
-    public final String host;
-    public final int port;
+import java.net.ConnectException;
 
-    public ServerAddress(String host, int port) {
-        this.host = host;
-        this.port = port;
+import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
+
+public class MeaningfulConnectionErrorProvider {
+    private final AppContext context;
+
+    public MeaningfulConnectionErrorProvider(AppContext context) {
+        this.context = context;
     }
 
-    public String print() {
-        return String.format("%s:%s", host, port);
+    public String provide(Exception exception) {
+        return null;
+    }
+
+    public String provide(ConnectException exception) {
+        return null;
     }
 }

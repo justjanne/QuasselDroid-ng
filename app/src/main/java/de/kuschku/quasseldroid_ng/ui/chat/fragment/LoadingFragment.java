@@ -23,27 +23,21 @@ package de.kuschku.quasseldroid_ng.ui.chat.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.events.BacklogInitEvent;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.InitEvent;
-import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.quasseldroid_ng.util.BoundFragment;
-
-import static de.kuschku.util.AndroidAssert.assertNotNull;
+import de.kuschku.util.servicebound.BoundFragment;
 
 public class LoadingFragment extends BoundFragment {
     @Bind(R.id.progressBar)
@@ -62,17 +56,21 @@ public class LoadingFragment extends BoundFragment {
         ButterKnife.bind(this, view);
 
 
-        label.setText("Connecting");
-        count.setText("");
+        label.setText(context.themeUtil().translations.statusConnecting);
+        showProgressState(1);
 
         return view;
+    }
+
+    public void showProgressState(int position) {
+        count.setText(String.format(Locale.US, "%d/%d", position, 5));
     }
 
     public void onEventMainThread(ConnectionChangeEvent event) {
         progressBar.setIndeterminate(true);
 
-        label.setText(event.status.name());
-        count.setText("");
+        label.setText(context.themeUtil().statusName(event.status));
+        showProgressState(event.status.ordinal() + 1);
     }
 
     public void onEventMainThread(InitEvent event) {
@@ -81,8 +79,7 @@ public class LoadingFragment extends BoundFragment {
             progressBar.setMax(event.max);
             progressBar.setProgress(event.loaded);
 
-            label.setText(event.getClass().getSimpleName());
-            count.setText(String.format("%d/%d", event.loaded, event.max));
+            label.setText(context.themeUtil().translations.statusInitData);
         }
     }
 
@@ -92,8 +89,7 @@ public class LoadingFragment extends BoundFragment {
             progressBar.setMax(event.max);
             progressBar.setProgress(event.loaded);
 
-            label.setText(event.getClass().getSimpleName());
-            count.setText(String.format("%d/%d", event.loaded, event.max));
+            label.setText(context.themeUtil().translations.statusBacklog);
         }
     }
 }

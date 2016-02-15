@@ -19,16 +19,22 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.util.preferences;
+package de.kuschku.util.preferences;
 
-public interface PreferenceElement<T> {
-    void addChangeListener(OnChangeListener<T> listener);
+import android.content.SharedPreferences;
 
-    void removeChangeListener(OnChangeListener<T> listener);
+public class StringPreference extends AbstractPreferenceElement<String> {
+    public StringPreference(SharedPreferences pref, String key, String init) {
+        super(pref, key, init);
+    }
 
-    T get();
+    @Override
+    protected void put(String value) {
+        edit.putString(key, value);
+    }
 
-    T or(T otherwise);
-
-    void set(T value);
+    @Override
+    public String or(String defValue) {
+        return pref.getString(key, defValue);
+    }
 }

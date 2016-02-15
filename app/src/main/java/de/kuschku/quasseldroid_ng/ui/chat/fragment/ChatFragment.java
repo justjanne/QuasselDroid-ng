@@ -44,9 +44,9 @@ import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.chat.chatview.MessageAdapter;
 import de.kuschku.quasseldroid_ng.ui.chat.util.SlidingPanelHandler;
-import de.kuschku.quasseldroid_ng.util.BoundFragment;
 import de.kuschku.util.observables.AutoScroller;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
+import de.kuschku.util.servicebound.BoundFragment;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -103,12 +103,14 @@ public class ChatFragment extends BoundFragment {
             messageAdapter.setMessageList(messageList);
             swipeView.setEnabled(id != -1);
 
-            int markerLine = client.bufferSyncer().markerLine(id);
-            for (int i = 0; i < messageList.size(); i++) {
-                if (messageList.get(i).messageId == markerLine) {
-                    Log.d("DEBUG", "Load: " + markerLine + ":" + i);
-                    messages.scrollToPosition(i);
-                    break;
+            // Load markerline
+            if (client.bufferSyncer() != null) {
+                int markerLine = client.bufferSyncer().markerLine(id);
+                for (int i = 0; i < messageList.size(); i++) {
+                    if (messageList.get(i).messageId == markerLine) {
+                        messages.scrollToPosition(i);
+                        break;
+                    }
                 }
             }
         } else {

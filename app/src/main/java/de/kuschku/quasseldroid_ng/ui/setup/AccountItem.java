@@ -24,6 +24,7 @@ package de.kuschku.quasseldroid_ng.ui.setup;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.support.annotation.ColorInt;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
@@ -35,10 +36,12 @@ import com.mikepenz.materialdrawer.model.AbstractDrawerItem;
 import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.quasseldroid_ng.util.accounts.Account;
+import de.kuschku.util.accounts.Account;
 
 public class AccountItem extends AbstractDrawerItem<AccountItem, AccountItem.ViewHolder> {
     public final Account account;
+    protected Pair<Integer, ColorStateList> colorStateList;
+    private OnDeleteListener listener;
 
     public AccountItem(Account account) {
         this.account = account;
@@ -84,6 +87,8 @@ public class AccountItem extends AbstractDrawerItem<AccountItem, AccountItem.Vie
 
         viewHolder.description.setTextColor(getTextColorStateList(color, selectedTextColor));
 
+        viewHolder.delete.setOnClickListener(view -> listener.onDelete(this));
+
         //for android API 17 --> Padding not applied via xml
         DrawerUIUtils.setDrawerVerticalPadding(viewHolder.view);
 
@@ -95,28 +100,6 @@ public class AccountItem extends AbstractDrawerItem<AccountItem, AccountItem.Vie
     public ViewHolderFactory getFactory() {
         return new ItemFactory();
     }
-
-    public static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
-    }
-
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
-        private View view;
-        private AppCompatRadioButton select;
-        private TextView name;
-        private TextView description;
-
-        private ViewHolder(View view) {
-            super(view);
-            this.view = view;
-            this.select = (AppCompatRadioButton) view.findViewById(R.id.account_select);
-            this.name = (TextView) view.findViewById(R.id.account_name);
-            this.description = (TextView) view.findViewById(R.id.account_description);
-        }
-    }
-
 
     /**
      * helper method to decide for the correct color
@@ -144,8 +127,6 @@ public class AccountItem extends AbstractDrawerItem<AccountItem, AccountItem.Vie
         return com.mikepenz.materialdrawer.R.color.material_drawer_selected_text;
     }
 
-    protected Pair<Integer, ColorStateList> colorStateList;
-
     /**
      * helper to get the ColorStateList for the text and remembering it so we do not have to recreate it all the time
      *
@@ -159,5 +140,36 @@ public class AccountItem extends AbstractDrawerItem<AccountItem, AccountItem.Vie
         }
 
         return colorStateList.second;
+    }
+
+    public void setOnDeleteListener(OnDeleteListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnDeleteListener {
+        void onDelete(AccountItem item);
+    }
+
+    public static class ItemFactory implements ViewHolderFactory<ViewHolder> {
+        public ViewHolder create(View v) {
+            return new ViewHolder(v);
+        }
+    }
+
+    protected static class ViewHolder extends RecyclerView.ViewHolder {
+        private View view;
+        private AppCompatRadioButton select;
+        private TextView name;
+        private TextView description;
+        private AppCompatImageButton delete;
+
+        private ViewHolder(View view) {
+            super(view);
+            this.view = view;
+            this.select = (AppCompatRadioButton) view.findViewById(R.id.account_select);
+            this.name = (TextView) view.findViewById(R.id.account_name);
+            this.description = (TextView) view.findViewById(R.id.account_description);
+            this.delete = (AppCompatImageButton) view.findViewById(R.id.account_delete);
+        }
     }
 }

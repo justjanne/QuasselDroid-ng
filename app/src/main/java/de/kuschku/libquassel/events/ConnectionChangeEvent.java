@@ -49,10 +49,10 @@ public class ConnectionChangeEvent {
     }
 
     public enum Status {
+        DISCONNECTED,
         HANDSHAKE,
         INITIALIZING_DATA,
         LOADING_BACKLOG,
-        CONNECTED,
-        DISCONNECTED
+        CONNECTED
     }
 }

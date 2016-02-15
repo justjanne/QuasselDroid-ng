@@ -21,42 +21,26 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/material_drawer_item_profile"
-    android:orientation="horizontal"
-    android:paddingEnd="@dimen/material_drawer_vertical_padding"
-    android:paddingLeft="@dimen/material_drawer_vertical_padding"
-    android:paddingRight="@dimen/material_drawer_vertical_padding"
-    android:paddingStart="@dimen/material_drawer_vertical_padding">
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:orientation="horizontal">
 
-    <LinearLayout
+    <android.support.v7.widget.AppCompatRadioButton
+        android:id="@+id/account_select"
         android:layout_width="@dimen/material_drawer_item_profile_icon_width"
-        android:layout_height="@dimen/material_drawer_item_profile"
-        android:paddingBottom="@dimen/material_drawer_item_profile_icon_padding"
-        android:paddingEnd="@dimen/material_drawer_item_profile_icon_padding_right"
-        android:paddingLeft="0dp"
-        android:paddingRight="@dimen/material_drawer_item_profile_icon_padding_right"
-        android:paddingStart="0dp"
-        android:paddingTop="@dimen/material_drawer_item_profile_icon_padding">
-
-        <android.support.v7.widget.AppCompatRadioButton
-            android:id="@+id/account_select"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical" />
-
-    </LinearLayout>
+        android:layout_height="@dimen/material_drawer_item_profile_icon_width"
+        android:layout_gravity="center_vertical"
+        android:background="@android:color/transparent" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dip"
         android:layout_height="match_parent"
+        android:layout_margin="@dimen/material_drawer_item_profile_icon_padding_right"
+        android:layout_weight="1"
         android:gravity="center_vertical|start"
-        android:orientation="vertical"
-        android:paddingEnd="0dp"
-        android:paddingLeft="@dimen/material_drawer_padding"
-        android:paddingRight="0dp"
-        android:paddingStart="@dimen/material_drawer_padding">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/account_name"
@@ -65,11 +49,8 @@
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical|start"
             android:lines="1"
-            android:paddingRight="@dimen/material_drawer_item_primary_icon_padding_right"
             android:singleLine="true"
-            android:textDirection="anyRtl"
-            android:textSize="@dimen/material_drawer_item_profile_text"
-            tools:text="Remote" />
+            android:textSize="@dimen/material_drawer_item_profile_text" />
 
         <TextView
             android:id="@+id/account_description"
@@ -79,15 +60,15 @@
             android:gravity="center_vertical|start"
             android:lines="1"
             android:singleLine="true"
-            android:textDirection="anyRtl"
-            android:textSize="@dimen/material_drawer_item_profile_description"
-            tools:text="kuschku on kuschku.de" />
+            android:textSize="@dimen/material_drawer_item_profile_description" />
     </LinearLayout>
 
-    <!--
-    <ImageButton
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src=""/>
-    -->
+    <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/account_delete"
+        style="?attr/buttonStyleSmall"
+        android:layout_width="@dimen/material_drawer_item_profile_icon_width"
+        android:layout_height="@dimen/material_drawer_item_profile_icon_width"
+        android:layout_gravity="center_vertical"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_delete_light" />
 </LinearLayout>

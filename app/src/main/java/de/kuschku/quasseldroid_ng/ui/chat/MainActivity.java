@@ -23,6 +23,7 @@ package de.kuschku.quasseldroid_ng.ui.chat;
 
 import android.os.Bundle;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -50,6 +51,7 @@ import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.LoginRequireEvent;
+import de.kuschku.libquassel.events.UnknownCertificateEvent;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
@@ -64,9 +66,11 @@ import de.kuschku.quasseldroid_ng.ui.chat.fragment.LoadingFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ActivityImplFactory;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ILayoutHelper;
 import de.kuschku.quasseldroid_ng.ui.chat.util.Status;
-import de.kuschku.quasseldroid_ng.util.BoundActivity;
-import de.kuschku.quasseldroid_ng.util.accounts.Account;
-import de.kuschku.quasseldroid_ng.util.accounts.AccountManager;
+import de.kuschku.util.accounts.Account;
+import de.kuschku.util.accounts.AccountManager;
+import de.kuschku.util.certificates.CertificateUtils;
+import de.kuschku.util.certificates.SQLiteCertificateManager;
+import de.kuschku.util.servicebound.BoundActivity;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -180,13 +184,17 @@ public class MainActivity extends BoundActivity {
                 displayFilterDialog();
                 return true;
             case R.id.action_reauth:
-                context.settings().lastAccount.set("");
-                stopConnection();
-                finish();
+                reauth();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void reauth() {
+        context.settings().lastAccount.set("");
+        stopConnection();
+        finish();
     }
 
     private AccountHeader buildAccountHeader() {
@@ -211,12 +219,13 @@ public class MainActivity extends BoundActivity {
             replaceFragment(new ChatFragment());
             updateBufferViewConfigs();
         } else if (status == ConnectionChangeEvent.Status.DISCONNECTED) {
-            finish();
+            Toast.makeText(getApplication(), context.themeUtil().translations.statusDisconnected, Toast.LENGTH_LONG).show();
+            reauth();
         }
     }
 
     public void onEventMainThread(GeneralErrorEvent event) {
-        Toast.makeText(this, event.exception.getClass().getSimpleName() + ": " + event.debugInfo, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplication(), event.exception.getClass().getSimpleName() + ": " + event.debugInfo, Toast.LENGTH_LONG).show();
     }
 
     private void selectBufferViewConfig(@IntRange(from = -1) int bufferViewConfigId) {
@@ -319,9 +328,24 @@ public class MainActivity extends BoundActivity {
                             }
                         backlogFilter.setFilters(filters);
                     })
+                    .negativeColor(context.themeUtil().res.colorForeground)
                     .build()
                     .show();
         }
+    }
+
+    public void onEventMainThread(@NonNull UnknownCertificateEvent event) {
+        new MaterialDialog.Builder(this)
+                .content(context.themeUtil().translations.warningCertificate + "\n" + CertificateUtils.certificateToFingerprint(event.certificate, ""))
+                .title("Unknown Certificate")
+                .onPositive((dialog, which) -> {
+                    new SQLiteCertificateManager(this).addCertificate(event.certificate, event.address);
+                })
+                .negativeColor(context.themeUtil().res.colorForeground)
+                .positiveText("Yes")
+                .negativeText("No")
+                .build()
+                .show();
     }
 
     public void onEventMainThread(LoginRequireEvent event) {

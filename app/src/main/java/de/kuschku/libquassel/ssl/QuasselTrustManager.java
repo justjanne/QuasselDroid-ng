@@ -33,7 +33,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-import de.kuschku.util.ServerAddress;
+import de.kuschku.util.accounts.ServerAddress;
 import de.kuschku.util.certificates.CertificateUtils;
 
 public class QuasselTrustManager implements X509TrustManager {

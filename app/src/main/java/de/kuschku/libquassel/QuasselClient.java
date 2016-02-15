@@ -27,7 +27,7 @@ import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.client.ClientData;
 import de.kuschku.libquassel.localtypes.backlogstorage.BacklogStorage;
 import de.kuschku.libquassel.ssl.CertificateManager;
-import de.kuschku.util.ServerAddress;
+import de.kuschku.util.accounts.ServerAddress;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 

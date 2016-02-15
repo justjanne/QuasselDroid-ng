@@ -21,9 +21,9 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/material_drawer_item_profile"
+    android:background="?attr/selectableItemBackground"
     android:orientation="horizontal"
     android:paddingEnd="@dimen/material_drawer_vertical_padding"
     android:paddingLeft="@dimen/material_drawer_vertical_padding"
@@ -67,8 +67,8 @@
             android:lines="1"
             android:paddingRight="@dimen/material_drawer_item_primary_icon_padding_right"
             android:singleLine="true"
+            android:text="Add Account"
             android:textDirection="anyRtl"
-            android:textSize="@dimen/material_drawer_item_profile_text"
-            android:text="Add Account" />
+            android:textSize="@dimen/material_drawer_item_profile_text" />
     </LinearLayout>
 </LinearLayout>

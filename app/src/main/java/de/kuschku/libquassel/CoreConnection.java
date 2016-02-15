@@ -54,7 +54,7 @@ import de.kuschku.libquassel.protocols.LegacyPeer;
 import de.kuschku.libquassel.protocols.RemotePeer;
 import de.kuschku.libquassel.ssl.CertificateManager;
 import de.kuschku.libquassel.ssl.UnknownCertificateException;
-import de.kuschku.util.ServerAddress;
+import de.kuschku.util.accounts.ServerAddress;
 import de.kuschku.util.niohelpers.WrappedChannel;
 
 import static de.kuschku.libquassel.primitives.QMetaType.Type.UInt;

@@ -32,7 +32,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.kuschku.libquassel.BusProvider;
-import de.kuschku.util.ServerAddress;
+import de.kuschku.util.accounts.ServerAddress;
 import de.kuschku.util.backports.Consumer;
 
 public class QuasselService extends Service {

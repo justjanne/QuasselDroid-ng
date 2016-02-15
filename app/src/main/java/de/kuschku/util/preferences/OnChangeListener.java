@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.util.preferences;
+package de.kuschku.util.preferences;
 
 public interface OnChangeListener<T> {
     void change(T value);

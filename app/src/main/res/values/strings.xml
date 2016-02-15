@@ -65,4 +65,12 @@
 
     <string name="slideAccountnameTitle">Customize Account</string>
     <string name="slideAccountnameDescription">Give this account a name and icon</string>
+
+    <string name="statusConnecting">Connecting</string>
+    <string name="statusHandshake">Logging in</string>
+    <string name="statusInitData">Loading Networks and Channels</string>
+    <string name="statusBacklog">Loading Chat History</string>
+    <string name="statusConnected">Connected</string>
+    <string name="statusWelcome">Welcome!</string>
+    <string name="statusDisconnected">Connection lost</string>
 </resources>

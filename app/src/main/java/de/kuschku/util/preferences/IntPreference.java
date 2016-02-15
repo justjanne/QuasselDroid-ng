@@ -19,22 +19,22 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.util.preferences;
+package de.kuschku.util.preferences;
 
 import android.content.SharedPreferences;
 
-public class FloatPreference extends AbstractPreferenceElement<Float> {
-    public FloatPreference(SharedPreferences pref, String key, Float init) {
-        super(pref, key, init);
+public class IntPreference extends AbstractPreferenceElement<Integer> {
+    public IntPreference(SharedPreferences pref, String key, Integer defValue) {
+        super(pref, key, defValue);
     }
 
     @Override
-    protected void put(Float value) {
-        edit.putFloat(key, value);
+    protected void put(Integer value) {
+        edit.putInt(key, value);
     }
 
     @Override
-    public Float or(Float defValue) {
-        return pref.getFloat(key, defValue);
+    public Integer or(Integer defValue) {
+        return pref.getInt(key, defValue);
     }
 }

@@ -19,45 +19,22 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.util.accounts;
+package de.kuschku.util.preferences;
 
-import android.content.Context;
+import android.content.SharedPreferences;
 
-import java.util.Set;
-import java.util.UUID;
-
-public class AccountManager {
-    AccountManagerHelper helper;
-
-    public AccountManager(Context context) {
-        helper = new AccountManagerHelper(context);
+public class BooleanPreference extends AbstractPreferenceElement<Boolean> {
+    public BooleanPreference(SharedPreferences pref, String key, Boolean init) {
+        super(pref, key, init);
     }
 
-    public Set<Account> accounts() {
-        return helper.findAllAccounts();
+    @Override
+    protected void put(Boolean value) {
+        edit.putBoolean(key, value);
     }
 
-    public void add(Account account) {
-        helper.addAccount(account);
-    }
-
-    public void update(Account account) {
-        helper.updateAccount(account);
-    }
-
-    public void remove(String id) {
-        remove(UUID.fromString(id));
-    }
-
-    public void remove(UUID id) {
-        helper.removeAccount(id);
-    }
-
-    public void remove(Account account) {
-        remove(account.id);
-    }
-
-    public Account account(String id) {
-        return helper.account(id);
+    @Override
+    public Boolean or(Boolean defValue) {
+        return pref.getBoolean(key, defValue);
     }
 }

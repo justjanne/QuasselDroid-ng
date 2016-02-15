@@ -65,6 +65,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="12dp"
         android:src="@drawable/ic_send"
+        android:theme="@style/RippleOverlay"
         android:tint="?attr/colorAccent" />
 
     <android.support.design.widget.AppBarLayout

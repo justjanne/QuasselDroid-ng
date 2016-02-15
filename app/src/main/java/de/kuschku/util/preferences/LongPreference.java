@@ -19,22 +19,22 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.util.preferences;
+package de.kuschku.util.preferences;
 
 import android.content.SharedPreferences;
 
-public class StringPreference extends AbstractPreferenceElement<String> {
-    public StringPreference(SharedPreferences pref, String key, String init) {
-        super(pref, key, init);
+public class LongPreference extends AbstractPreferenceElement<Long> {
+    public LongPreference(SharedPreferences pref, String key, Long defValue) {
+        super(pref, key, defValue);
     }
 
     @Override
-    protected void put(String value) {
-        edit.putString(key, value);
+    protected void put(Long value) {
+        edit.putLong(key, value);
     }
 
     @Override
-    public String or(String defValue) {
-        return pref.getString(key, defValue);
+    public Long or(Long defValue) {
+        return pref.getLong(key, defValue);
     }
 }

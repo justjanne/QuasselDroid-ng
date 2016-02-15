@@ -47,7 +47,7 @@ import javax.net.ssl.TrustManager;
 import de.kuschku.libquassel.ssl.CertificateManager;
 import de.kuschku.libquassel.ssl.QuasselTrustManager;
 import de.kuschku.util.CompatibilityUtils;
-import de.kuschku.util.ServerAddress;
+import de.kuschku.util.accounts.ServerAddress;
 
 public class WrappedChannel implements Flushable, ByteChannel, InterruptibleChannel {
     @Nullable

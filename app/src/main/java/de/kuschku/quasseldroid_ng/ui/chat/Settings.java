@@ -24,10 +24,10 @@ package de.kuschku.quasseldroid_ng.ui.chat;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import de.kuschku.quasseldroid_ng.util.preferences.BooleanPreference;
-import de.kuschku.quasseldroid_ng.util.preferences.IntPreference;
-import de.kuschku.quasseldroid_ng.util.preferences.StringPreference;
 import de.kuschku.util.backports.Objects;
+import de.kuschku.util.preferences.BooleanPreference;
+import de.kuschku.util.preferences.IntPreference;
+import de.kuschku.util.preferences.StringPreference;
 
 public class Settings {
     public final StringPreference lastAccount;

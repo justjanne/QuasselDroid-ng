@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.util.accounts;
+package de.kuschku.util.accounts;
 
 import android.content.Context;
 import android.database.Cursor;

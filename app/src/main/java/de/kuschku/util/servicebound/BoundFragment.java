@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.util;
+package de.kuschku.util.servicebound;
 
 import android.content.ComponentName;
 import android.content.ServiceConnection;
@@ -34,7 +34,7 @@ import de.kuschku.quasseldroid_ng.service.QuasselService;
 import de.kuschku.quasseldroid_ng.ui.chat.Settings;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ServiceHelper;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
-import de.kuschku.quasseldroid_ng.util.accounts.Account;
+import de.kuschku.util.accounts.Account;
 
 public abstract class BoundFragment extends Fragment {
     protected AppContext context = new AppContext();

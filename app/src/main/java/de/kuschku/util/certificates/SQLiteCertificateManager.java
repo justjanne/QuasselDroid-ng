@@ -31,7 +31,7 @@ import java.util.Map;
 
 import de.kuschku.libquassel.ssl.CertificateManager;
 import de.kuschku.libquassel.ssl.UnknownCertificateException;
-import de.kuschku.util.ServerAddress;
+import de.kuschku.util.accounts.ServerAddress;
 
 public class SQLiteCertificateManager implements CertificateManager {
     @NonNull

@@ -30,15 +30,16 @@ import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.QuasselClient;
 import de.kuschku.libquassel.client.ClientData;
 import de.kuschku.libquassel.client.FeatureFlags;
+import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.LoginRequireEvent;
 import de.kuschku.libquassel.localtypes.backlogstorage.MemoryBacklogStorage;
 import de.kuschku.libquassel.protocols.RemotePeer;
 import de.kuschku.quasseldroid_ng.ui.chat.Settings;
-import de.kuschku.quasseldroid_ng.util.accounts.Account;
-import de.kuschku.quasseldroid_ng.util.accounts.AccountManager;
 import de.kuschku.util.CompatibilityUtils;
-import de.kuschku.util.ServerAddress;
+import de.kuschku.util.accounts.Account;
+import de.kuschku.util.accounts.AccountManager;
+import de.kuschku.util.accounts.ServerAddress;
 import de.kuschku.util.certificates.SQLiteCertificateManager;
 
 public class ClientBackgroundThread implements Runnable {
@@ -81,6 +82,7 @@ public class ClientBackgroundThread implements Runnable {
             client.connection.open(CompatibilityUtils.deviceSupportsKeepAlive());
         } catch (IOException e) {
             client.provider.sendEvent(new GeneralErrorEvent(e));
+            client.client.setConnectionStatus(ConnectionChangeEvent.Status.DISCONNECTED);
         }
     }
 

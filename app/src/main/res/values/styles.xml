@@ -29,7 +29,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorControlHighlight">@color/colorAccentFocus</item>
+        <item name="colorAccentFocus">@color/colorAccentFocus</item>
+
         <item name="windowActionModeOverlay">true</item>
 
         <item name="material_drawer_background">?attr/colorBackground</item>
@@ -45,6 +46,8 @@
         <item name="iconHistory">@drawable/ic_history_dark</item>
         <item name="iconDebug">@drawable/ic_bug_dark</item>
         <item name="iconFilter">@drawable/ic_filter_dark</item>
+        <item name="iconModify">@drawable/ic_pencil_dark</item>
+        <item name="iconDelete">@drawable/ic_delete_dark</item>
 
         <item name="cardStyle">@style/CardView.Dark</item>
     </style>
@@ -54,7 +57,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorControlHighlight">@color/colorAccentFocus</item>
+        <item name="colorAccentFocus">@color/colorAccentFocus</item>
+
         <item name="windowActionModeOverlay">true</item>
 
         <item name="material_drawer_background">?attr/colorBackground</item>
@@ -70,6 +74,8 @@
         <item name="iconHistory">@drawable/ic_history_light</item>
         <item name="iconDebug">@drawable/ic_bug_light</item>
         <item name="iconFilter">@drawable/ic_filter_light</item>
+        <item name="iconModify">@drawable/ic_pencil_light</item>
+        <item name="iconDelete">@drawable/ic_delete_light</item>
 
         <item name="cardStyle">@style/CardView.Light</item>
     </style>
@@ -81,8 +87,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorControlHighlight">@color/colorAccentFocus</item>
         <item name="windowActionModeOverlay">true</item>
+    </style>
+
+    <style name="RippleOverlay" parent="ThemeOverlay.AppCompat">
+        <item name="colorControlHighlight">?attr/colorAccentFocus</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
