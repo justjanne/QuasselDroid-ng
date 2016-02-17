@@ -117,7 +117,7 @@ public class ChatMessageRenderer {
         holder.content.setText(
                 context.themeUtil().translations.formatPlain(
                         formatNick(message.sender, false),
-                        helper.formatIrcMessage(message.content)
+                        helper.formatIrcMessage(context.client(), message)
                 )
         );
     }
@@ -126,7 +126,7 @@ public class ChatMessageRenderer {
         applyStyle(holder, plainStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(context.themeUtil().translations.formatAction(
                 formatNick(message.sender, false),
-                helper.formatIrcMessage(message.content)
+                helper.formatIrcMessage(context.client(), message)
         ));
     }
 
@@ -135,7 +135,7 @@ public class ChatMessageRenderer {
         holder.content.setText(
                 context.themeUtil().translations.formatAction(
                         formatNick(message.sender, false),
-                        helper.formatIrcMessage(message.content)
+                        helper.formatIrcMessage(context.client(), message)
                 )
         );
     }

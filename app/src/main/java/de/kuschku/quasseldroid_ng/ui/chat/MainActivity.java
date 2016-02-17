@@ -339,6 +339,7 @@ public class MainActivity extends BoundActivity {
         }
     }
 
+    // FIXME: Fix this ugly hack
     public void displayFilterDialog() {
         if (context.client() != null) {
             List<Integer> filterSettings = Arrays.asList(
@@ -382,7 +383,12 @@ public class MainActivity extends BoundActivity {
                         int filters = 0x00000000;
                         if (dialog.getSelectedIndices() != null)
                             for (int i : dialog.getSelectedIndices()) {
-                                filters |= filterSettings.get(i);
+                                int settingsid = filterSettings.get(i);
+                                filters |= settingsid;
+                                if (settingsid == Message.Type.Quit.value)
+                                    filters |= Message.Type.NetsplitQuit.value;
+                                else if (settingsid == Message.Type.Join.value)
+                                    filters |= Message.Type.NetsplitJoin.value;
                             }
                         backlogFilter.setFilters(filters);
                     })
