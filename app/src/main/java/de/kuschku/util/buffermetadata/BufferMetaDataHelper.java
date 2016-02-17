@@ -82,11 +82,11 @@ public class BufferMetaDataHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // Why do we use String.format and not prepared statements? Because we can’t bind table or
         // column names in prepared statements
-        String statement = String.format("CREATE TABLE %s (%s, %s, %s, %s, PRIMARY KEY (%s, %s), UNIQUE(%s));",
+        String statement = String.format("CREATE TABLE %s (%s, %s, %s, %s, PRIMARY KEY (%s, %s), UNIQUE(%s, %s));",
                 TABLE_ACCOUNTS,
                 KEY_CORE, KEY_BUFFER, KEY_HIDDEN, KEY_MARKERLINE,
                 KEY_CORE, KEY_BUFFER,
-                KEY_CORE);
+                KEY_CORE, KEY_BUFFER);
         db.execSQL(statement);
     }
 
@@ -159,6 +159,7 @@ public class BufferMetaDataHelper extends SQLiteOpenHelper {
     }
 
     public int hiddenData(String coreid, int bufferid) {
+        ensureExisting(coreid, bufferid);
         Cursor cursor = cursorFindData(coreid);
         if (cursor.moveToFirst()) {
             do {

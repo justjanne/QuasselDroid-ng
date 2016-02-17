@@ -81,7 +81,11 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Drawer
         List<IDrawerItem> bufferItems = new ArrayList<>();
         for (int id : config.bufferList()) {
             if (client.bufferManager().byNetwork(network.networkId()).contains(id)) {
-                bufferItems.add(manager.get(id));
+                if (config.allowedBufferTypes() == 0 ||
+                        config.allowedBufferTypes() == -1 ||
+                        (config.allowedBufferTypes() & client.bufferManager().buffer(id).getInfo().type().id) != 0)
+
+                    bufferItems.add(manager.get(id));
             }
         }
         return bufferItems;

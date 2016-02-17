@@ -139,7 +139,7 @@ public class BufferItem extends SecondaryDrawerItem {
 
     @Override
     public long getIdentifier() {
-        return buffer.getInfo().id() + buffer.getInfo().networkId() << 16;
+        return buffer.getInfo().id();
     }
 
     @Override

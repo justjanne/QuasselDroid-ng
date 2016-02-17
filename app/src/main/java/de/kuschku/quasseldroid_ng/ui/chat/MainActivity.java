@@ -233,13 +233,12 @@ public class MainActivity extends BoundActivity {
 
     public void onConnectionChange(ConnectionChangeEvent.Status status) {
         if (status == ConnectionChangeEvent.Status.CONNECTED) {
-            replaceFragment(new ChatFragment());
             updateBufferViewConfigs();
             context.client().backlogManager().open(this.status.bufferId);
             accountHeader.setActiveProfile(this.status.bufferViewConfigId, true);
+            replaceFragment(new ChatFragment());
         } else if (status == ConnectionChangeEvent.Status.DISCONNECTED) {
             Toast.makeText(getApplication(), context.themeUtil().translations.statusDisconnected, Toast.LENGTH_LONG).show();
-            reauth();
         }
     }
 
@@ -282,6 +281,7 @@ public class MainActivity extends BoundActivity {
                 }
             }
         }
+        drawerLeft.setSelection(id, false);
     }
 
     private void selectBufferViewConfig(@IntRange(from = -1) int bufferViewConfigId) {

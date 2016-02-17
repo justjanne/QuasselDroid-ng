@@ -94,7 +94,8 @@ public class IrcFormatHelper {
         while (channelMatcher.find()) {
             QIrcChannel channel = client.networkManager().network(message.bufferInfo.networkId()).ircChannel(channelMatcher.group());
             Buffer buffer = client.bufferManager().channel(channel);
-            spans.add(new FutureClickableSpan(new ChannelSpan(client, buffer.getInfo().id()), channelMatcher.start(), channelMatcher.end()));
+            if (buffer != null)
+                spans.add(new FutureClickableSpan(new ChannelSpan(client, buffer.getInfo().id()), channelMatcher.start(), channelMatcher.end()));
         }
         for (FutureClickableSpan span : spans) {
             str.setSpan(span.span, span.start, span.end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);

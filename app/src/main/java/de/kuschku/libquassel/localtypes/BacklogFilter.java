@@ -23,6 +23,7 @@ package de.kuschku.libquassel.localtypes;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
@@ -187,6 +188,8 @@ public class BacklogFilter implements UICallback {
     public void setFilters(int filters) {
         setFiltersInternal(filters);
         client.metaDataManager().setHiddendata(client.coreId(), bufferId, filters);
+        int after = client.metaDataManager().hiddendata(client.coreId(), bufferId);
+        Log.e("DEBUG", filters + ":" + after);
     }
 
     private void setFiltersInternal(int filters) {
