@@ -39,7 +39,7 @@ import de.kuschku.quasseldroid_ng.ui.chat.Settings;
 import de.kuschku.util.CompatibilityUtils;
 import de.kuschku.util.accounts.Account;
 import de.kuschku.util.accounts.AccountManager;
-import de.kuschku.util.accounts.ServerAddress;
+import de.kuschku.util.buffermetadata.SQLiteBufferMetaDataManager;
 import de.kuschku.util.certificates.SQLiteCertificateManager;
 
 public class ClientBackgroundThread implements Runnable {
@@ -57,14 +57,16 @@ public class ClientBackgroundThread implements Runnable {
     private final Settings settings;
     private final AccountManager manager;
 
-    public ClientBackgroundThread(@NonNull BusProvider provider, @NonNull ServerAddress address, @NonNull Context context) {
+    public ClientBackgroundThread(@NonNull BusProvider provider, @NonNull Account account, @NonNull Context context) {
         this.client = new QuasselClient(
                 provider,
                 CLIENT_DATA,
                 new SQLiteCertificateManager(context),
-                new MemoryBacklogStorage()
+                new MemoryBacklogStorage(),
+                new SQLiteBufferMetaDataManager(context),
+                account.id.toString()
         );
-        this.client.connect(address);
+        this.client.connect(account.toAddress());
         this.client.provider.event.registerSticky(this);
 
         settings = new Settings(context);

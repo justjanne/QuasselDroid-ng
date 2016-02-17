@@ -59,6 +59,7 @@ public class BacklogFilter implements UICallback {
         this.unfiltered = unfiltered;
         this.filtered = filtered;
         this.bus.register(this);
+        setFiltersInternal(client.metaDataManager().hiddendata(client.coreId(), bufferId));
     }
 
     @Override
@@ -184,6 +185,11 @@ public class BacklogFilter implements UICallback {
     }
 
     public void setFilters(int filters) {
+        setFiltersInternal(filters);
+        client.metaDataManager().setHiddendata(client.coreId(), bufferId, filters);
+    }
+
+    private void setFiltersInternal(int filters) {
         Set<Message.Type> removed = new HashSet<>();
         for (Message.Type type : filteredTypes) {
             if ((filters & type.value) == 0)

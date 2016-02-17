@@ -82,6 +82,9 @@ android {
         versionCode versionBuild
         versionName rawVersionName + " Build #" + versionBuild
     }
+    dataBinding {
+        enabled = true
+    }
     buildTypes {
         release {
             minifyEnabled true

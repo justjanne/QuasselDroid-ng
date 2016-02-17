@@ -27,7 +27,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +41,7 @@ import de.kuschku.libquassel.events.BufferChangeEvent;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
 import de.kuschku.quasseldroid_ng.R;
+import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
 import de.kuschku.quasseldroid_ng.ui.chat.chatview.MessageAdapter;
 import de.kuschku.quasseldroid_ng.ui.chat.util.SlidingPanelHandler;
 import de.kuschku.util.observables.AutoScroller;
@@ -104,15 +104,6 @@ public class ChatFragment extends BoundFragment {
             swipeView.setEnabled(id != -1);
 
             // Load markerline
-            if (client.bufferSyncer() != null) {
-                int markerLine = client.bufferSyncer().markerLine(id);
-                for (int i = 0; i < messageList.size(); i++) {
-                    if (messageList.get(i).messageId == markerLine) {
-                        messages.scrollToPosition(i);
-                        break;
-                    }
-                }
-            }
         } else {
             swipeView.setEnabled(false);
         }
@@ -125,20 +116,12 @@ public class ChatFragment extends BoundFragment {
     }
 
     private void setMarkerline() {
-        Client client = context.client();
-        if (client == null) return;
+    }
 
-        int buffer = client.backlogManager().open();
-        if (buffer == -1) return;
-
-        int messageposition = layoutManager.findFirstCompletelyVisibleItemPosition();
-        if (messageposition == -1) return;
-
-        Message message = messageAdapter.getItem(messageposition);
-        if (message == null) return;
-
-        client.bufferSyncer().requestSetMarkerLine(buffer, message.messageId);
-        Log.d("DEBUG", "Store: " + message.messageId + ":" + messageposition);
+    @Override
+    protected void onConnectToThread(@Nullable ClientBackgroundThread thread) {
+        super.onConnectToThread(thread);
+        onEventMainThread(new BufferChangeEvent());
     }
 
     public void onEventMainThread(BacklogReceivedEvent event) {

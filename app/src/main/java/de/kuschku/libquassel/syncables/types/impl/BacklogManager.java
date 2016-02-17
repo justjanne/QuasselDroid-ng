@@ -52,7 +52,7 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
     private final Set<Integer> waiting = new HashSet<>();
     private int waitingMax = 0;
     @IntRange(from = -1)
-    private int openBuffer;
+    private int openBuffer = -1;
 
     public BacklogManager(Client client, BacklogStorage storage) {
         this.client = client;
@@ -157,13 +157,20 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
     }
 
     @Override
+    public void setOpen(int openBuffer) {
+        assertNotNull(provider);
+
+        this.openBuffer = openBuffer;
+    }
+
+    @Override
     public void open(int bufferId) {
         assertNotNull(provider);
 
-        openBuffer = bufferId;
-        if (bufferId != -1)
+        setOpen(bufferId);
+        if (bufferId != -1 && client.bufferSyncer() != null)
             client.bufferSyncer().requestMarkBufferAsRead(bufferId);
-        provider.event.postSticky(new BufferChangeEvent());
+        provider.sendEvent(new BufferChangeEvent());
     }
 
     @Override

@@ -32,7 +32,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.kuschku.libquassel.BusProvider;
-import de.kuschku.util.accounts.ServerAddress;
+import de.kuschku.util.accounts.Account;
 import de.kuschku.util.backports.Consumer;
 
 public class QuasselService extends Service {
@@ -55,8 +55,8 @@ public class QuasselService extends Service {
     }
 
     public class LocalBinder extends Binder {
-        public void startBackgroundThread(@NonNull BusProvider provider, @NonNull ServerAddress address) {
-            bgThread = new ClientBackgroundThread(provider, address, QuasselService.this);
+        public void startBackgroundThread(@NonNull BusProvider provider, @NonNull Account account) {
+            bgThread = new ClientBackgroundThread(provider, account, QuasselService.this);
             new Thread(bgThread).start();
             notify(bgThread);
         }

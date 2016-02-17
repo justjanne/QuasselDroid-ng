@@ -225,7 +225,7 @@
         <item name="colorPrimary">?attr/colorBackgroundCard</item>
         <item name="colorPrimaryDark">?attr/colorBackground</item>
         <item name="colorAccent">#B58900</item>
-        <item name="colorControlHighlight">#40B58900</item>
+        <item name="colorAccentFocus">#40B58900</item>
 
         <item name="senderColor0">#B58900</item>
         <item name="senderColor1">#CB4B16</item>

@@ -34,7 +34,6 @@ import android.text.style.UnderlineSpan;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Stack;
 
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 
@@ -114,27 +113,58 @@ public class IrcFormatDeserializer {
     @NonNull
     public CharSequence formatString(@NonNull String str) {
         SpannableStringBuilder plainText = new SpannableStringBuilder();
-        Stack<FormatDescription> stack = new Stack<>();
+        FormatDescription bold = null;
+        FormatDescription italic = null;
+        FormatDescription underline = null;
+        FormatDescription color = null;
         boolean colorize = context.settings().mircColors.get();
 
         // Iterating over every character
         for (int i = 0; i < str.length(); i++) {
             char character = str.charAt(i);
             switch (character) {
-                case CODE_BOLD:
-                case CODE_ITALIC:
-                case CODE_UNDERLINE: {
+                case CODE_BOLD: {
                     if (!colorize) continue;
 
                     // If there is an element on stack with the same code, close it
-                    if (!stack.empty() && stack.peek().format.id() == character) {
-                        stack.pop().apply(plainText, plainText.length());
-
+                    if (bold != null) {
+                        bold.apply(plainText, plainText.length());
+                        bold = null;
                         // Otherwise create a new one
                     } else {
                         IrcFormat format = fromId(character);
                         assertNotNull(format);
-                        stack.push(new FormatDescription(plainText.length(), format));
+                        bold = new FormatDescription(plainText.length(), format);
+                    }
+                }
+                break;
+                case CODE_ITALIC: {
+                    if (!colorize) continue;
+
+                    // If there is an element on stack with the same code, close it
+                    if (italic != null) {
+                        italic.apply(plainText, plainText.length());
+                        italic = null;
+                        // Otherwise create a new one
+                    } else {
+                        IrcFormat format = fromId(character);
+                        assertNotNull(format);
+                        italic = new FormatDescription(plainText.length(), format);
+                    }
+                }
+                break;
+                case CODE_UNDERLINE: {
+                    if (!colorize) continue;
+
+                    // If there is an element on stack with the same code, close it
+                    if (underline != null) {
+                        underline.apply(plainText, plainText.length());
+                        underline = null;
+                        // Otherwise create a new one
+                    } else {
+                        IrcFormat format = fromId(character);
+                        assertNotNull(format);
+                        underline = new FormatDescription(plainText.length(), format);
                     }
                 }
                 break;
@@ -155,23 +185,23 @@ public class IrcFormatDeserializer {
                             background = readNumber(str, foregroundEnd + 1, backgroundEnd);
                         }
                         // If previous element was also a color element, try to reuse background
-                        if (!stack.empty() && stack.peek().format.id() == CODE_COLOR) {
+                        if (color != null) {
                             // Apply old format
-                            FormatDescription oldFormat = stack.pop();
-                            oldFormat.apply(plainText, plainText.length());
+                            color.apply(plainText, plainText.length());
                             // Reuse old background, if possible
                             if (background == -1)
-                                background = ((ColorIrcFormat) oldFormat.format).background;
+                                background = ((ColorIrcFormat) color.format).background;
                         }
                         // Add new format
-                        stack.push(new FormatDescription(plainText.length(), new ColorIrcFormat(foreground, background)));
+                        color = new FormatDescription(plainText.length(), new ColorIrcFormat(foreground, background));
 
                         // i points in front of the next character
                         i = ((backgroundEnd == -1) ? foregroundEnd : backgroundEnd) - 1;
 
                         // Otherwise assume this is a closing tag
-                    } else if (!stack.empty() && stack.peek().format.id() == CODE_COLOR) {
-                        stack.pop().apply(plainText, plainText.length());
+                    } else if (color != null) {
+                        color.apply(plainText, plainText.length());
+                        color = null;
                     }
                 }
                 break;
@@ -179,10 +209,9 @@ public class IrcFormatDeserializer {
                     if (!colorize) continue;
 
                     // If we have a color tag before, apply it, and create a new one with swapped colors
-                    if (!stack.empty() && stack.peek().format.id() == CODE_COLOR) {
-                        FormatDescription format = stack.pop();
-                        format.apply(plainText, plainText.length());
-                        stack.push(new FormatDescription(plainText.length(), ((ColorIrcFormat) format.format).copySwapped()));
+                    if (color != null) {
+                        color.apply(plainText, plainText.length());
+                        color = new FormatDescription(plainText.length(), ((ColorIrcFormat) color.format).copySwapped());
                     }
                 }
                 break;
@@ -190,8 +219,21 @@ public class IrcFormatDeserializer {
                     if (!colorize) continue;
 
                     // End all formatting tags
-                    while (!stack.empty()) {
-                        stack.pop().apply(plainText, plainText.length());
+                    if (bold != null) {
+                        bold.apply(plainText, plainText.length());
+                        bold = null;
+                    }
+                    if (italic != null) {
+                        italic.apply(plainText, plainText.length());
+                        italic = null;
+                    }
+                    if (underline != null) {
+                        underline.apply(plainText, plainText.length());
+                        underline = null;
+                    }
+                    if (color != null) {
+                        color.apply(plainText, plainText.length());
+                        color = null;
                     }
                 }
                 break;
@@ -203,8 +245,17 @@ public class IrcFormatDeserializer {
         }
 
         // End all formatting tags
-        while (!stack.empty()) {
-            stack.pop().apply(plainText, plainText.length());
+        if (bold != null) {
+            bold.apply(plainText, plainText.length());
+        }
+        if (italic != null) {
+            italic.apply(plainText, plainText.length());
+        }
+        if (underline != null) {
+            underline.apply(plainText, plainText.length());
+        }
+        if (color != null) {
+            color.apply(plainText, plainText.length());
         }
         return plainText;
     }

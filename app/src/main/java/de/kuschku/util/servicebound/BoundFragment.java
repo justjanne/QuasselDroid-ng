@@ -78,7 +78,7 @@ public abstract class BoundFragment extends Fragment {
 
     protected void connectToServer(Account account) {
         BusProvider provider = new BusProvider();
-        binder.startBackgroundThread(provider, account.toAddress());
+        binder.startBackgroundThread(provider, account);
     }
 
     protected void onConnectToThread(@Nullable ClientBackgroundThread thread) {

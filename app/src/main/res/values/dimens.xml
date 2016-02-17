@@ -28,4 +28,6 @@
     <dimen name="message_vertical">4dp</dimen>
 
     <dimen name="circular_button_size">56dp</dimen>
+
+    <dimen name="action_bar_default_padding_start_material">0dp</dimen>
 </resources>

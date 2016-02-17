@@ -48,14 +48,21 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.client.Client;
+import de.kuschku.libquassel.events.BufferChangeEvent;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.LoginRequireEvent;
 import de.kuschku.libquassel.events.UnknownCertificateEvent;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
+import de.kuschku.libquassel.localtypes.buffers.Buffer;
+import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
+import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
 import de.kuschku.libquassel.message.Message;
+import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
+import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
+import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
 import de.kuschku.quasseldroid_ng.ui.chat.drawer.BufferItem;
@@ -107,15 +114,20 @@ public class MainActivity extends BoundActivity {
     /**
      * This object encapsulates the current status of the activity – opened bufferview, for example
      */
-    Status status = new Status();
-    BufferViewConfigItem currentConfig;
+    private Status status = new Status();
+
+    private BufferViewConfigItem currentConfig;
+
     private AccountManager manager;
+
+    private ToolbarWrapper toolbarWrapper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        toolbarWrapper = new ToolbarWrapper(toolbar);
         setSupportActionBar(toolbar);
         layoutHelper = ActivityImplFactory.of(getResources().getBoolean(R.bool.isTablet), this);
         accountHeader = buildAccountHeader();
@@ -134,19 +146,24 @@ public class MainActivity extends BoundActivity {
 
         replaceFragment(new LoadingFragment());
 
+        if (savedInstanceState != null)
+            status.onRestoreInstanceState(savedInstanceState);
+
         manager = new AccountManager(this);
     }
 
     @Override
     protected void onPause() {
-        if (context.client() != null)
-            context.client().backlogManager().open(-1);
         super.onPause();
+        if (context.client() != null)
+            context.client().backlogManager().setOpen(-1);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        if (context.client() != null)
+            context.client().backlogManager().open(status.bufferId);
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -218,6 +235,8 @@ public class MainActivity extends BoundActivity {
         if (status == ConnectionChangeEvent.Status.CONNECTED) {
             replaceFragment(new ChatFragment());
             updateBufferViewConfigs();
+            context.client().backlogManager().open(this.status.bufferId);
+            accountHeader.setActiveProfile(this.status.bufferViewConfigId, true);
         } else if (status == ConnectionChangeEvent.Status.DISCONNECTED) {
             Toast.makeText(getApplication(), context.themeUtil().translations.statusDisconnected, Toast.LENGTH_LONG).show();
             reauth();
@@ -226,6 +245,43 @@ public class MainActivity extends BoundActivity {
 
     public void onEventMainThread(GeneralErrorEvent event) {
         Toast.makeText(getApplication(), event.exception.getClass().getSimpleName() + ": " + event.debugInfo, Toast.LENGTH_LONG).show();
+    }
+
+    public void onEventMainThread(BufferChangeEvent event) {
+        Client client = context.client();
+        if (client != null) {
+            QBacklogManager<? extends QBacklogManager> backlogManager = client.backlogManager();
+            int id = backlogManager.open();
+            status.bufferId = id;
+            updateBuffer(id);
+        }
+    }
+
+    private void updateBuffer(int id) {
+        Client client = context.client();
+        if (client != null) {
+            Buffer buffer = client.bufferManager().buffer(id);
+            if (buffer != null) {
+                toolbarWrapper.setTitle(buffer.getName());
+                if (buffer instanceof QueryBuffer) {
+                    QIrcUser user = ((QueryBuffer) buffer).getUser();
+                    if (user == null) {
+                        toolbarWrapper.setSubtitle(null);
+                    } else {
+                        toolbarWrapper.setSubtitle(user.hostmask() + " | " + user.realName());
+                    }
+                } else if (buffer instanceof ChannelBuffer) {
+                    QIrcChannel channel = ((ChannelBuffer) buffer).getChannel();
+                    if (channel == null) {
+                        toolbarWrapper.setSubtitle(null);
+                    } else {
+                        toolbarWrapper.setSubtitle(channel.topic());
+                    }
+                } else {
+                    toolbarWrapper.setSubtitle(null);
+                }
+            }
+        }
     }
 
     private void selectBufferViewConfig(@IntRange(from = -1) int bufferViewConfigId) {
@@ -275,7 +331,9 @@ public class MainActivity extends BoundActivity {
             connectToServer(manager.account(context.settings().lastAccount.get()));
         else {
             if (context.client() != null) {
+                context.client().backlogManager().init("", context.provider(), context.client());
                 context.client().backlogManager().open(status.bufferId);
+                updateBuffer(context.client().backlogManager().open());
                 accountHeader.setActiveProfile(status.bufferViewConfigId, true);
             }
         }
@@ -338,9 +396,7 @@ public class MainActivity extends BoundActivity {
         new MaterialDialog.Builder(this)
                 .content(context.themeUtil().translations.warningCertificate + "\n" + CertificateUtils.certificateToFingerprint(event.certificate, ""))
                 .title("Unknown Certificate")
-                .onPositive((dialog, which) -> {
-                    new SQLiteCertificateManager(this).addCertificate(event.certificate, event.address);
-                })
+                .onPositive((dialog, which) -> new SQLiteCertificateManager(this).addCertificate(event.certificate, event.address))
                 .negativeColor(context.themeUtil().res.colorForeground)
                 .positiveText("Yes")
                 .negativeText("No")

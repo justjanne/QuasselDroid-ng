@@ -79,7 +79,7 @@ public abstract class BoundActivity extends AppCompatActivity {
 
     protected void connectToServer(Account account) {
         BusProvider provider = new BusProvider();
-        binder.startBackgroundThread(provider, account.toAddress());
+        binder.startBackgroundThread(provider, account);
     }
 
     protected void onConnectToThread(@Nullable ClientBackgroundThread thread) {

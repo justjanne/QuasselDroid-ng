@@ -28,6 +28,7 @@ import de.kuschku.libquassel.client.ClientData;
 import de.kuschku.libquassel.localtypes.backlogstorage.BacklogStorage;
 import de.kuschku.libquassel.ssl.CertificateManager;
 import de.kuschku.util.accounts.ServerAddress;
+import de.kuschku.util.buffermetadata.BufferMetaDataManager;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -44,7 +45,7 @@ public class QuasselClient {
     private final ClientData data;
     public CoreConnection connection;
 
-    public QuasselClient(@NonNull BusProvider provider, @NonNull ClientData data, @NonNull CertificateManager certificateManager, @NonNull BacklogStorage backlogStorage) {
+    public QuasselClient(@NonNull BusProvider provider, @NonNull ClientData data, @NonNull CertificateManager certificateManager, @NonNull BacklogStorage backlogStorage, @NonNull BufferMetaDataManager metaDataManager, String coreId) {
         assertNotNull(provider);
         assertNotNull(data);
         assertNotNull(certificateManager);
@@ -53,7 +54,7 @@ public class QuasselClient {
         this.provider = provider;
         this.data = data;
         this.certificateManager = certificateManager;
-        this.client = new Client(provider, backlogStorage);
+        this.client = new Client(provider, backlogStorage, metaDataManager, coreId);
         this.handler = new ProtocolHandler(provider, this.client);
     }
 

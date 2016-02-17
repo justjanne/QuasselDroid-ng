@@ -21,7 +21,7 @@
   -->
 
 <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sliding_layout_history"
     android:layout_width="fill_parent"
@@ -30,11 +30,11 @@
     android:clickable="false"
     android:focusable="true"
     android:gravity="bottom"
-    sothree:umanoFadeColor="?attr/colorBackgroundCard"
-    sothree:umanoOverlay="true"
-    sothree:umanoPanelHeight="0dip"
-    sothree:umanoScrollableView="@+id/msg_history"
-    sothree:umanoShadowHeight="0.0dip"
+    app:umanoFadeColor="?attr/colorBackground"
+    app:umanoOverlay="true"
+    app:umanoPanelHeight="0dip"
+    app:umanoScrollableView="@+id/msg_history"
+    app:umanoShadowHeight="0.0dip"
     tools:showIn="@layout/activity_chat">
 
 
@@ -52,7 +52,8 @@
             android:layout_marginBottom="16.0dip"
             android:layout_marginLeft="16.0dip"
             android:layout_marginRight="16.0dip"
-            android:layout_marginTop="16.0dip">
+            android:layout_marginTop="16.0dip"
+            app:cardBackgroundColor="?attr/colorBackgroundCard">
 
             <LinearLayout
                 android:layout_width="fill_parent"

@@ -64,6 +64,7 @@ import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIgnoreListManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetworkConfig;
+import de.kuschku.util.buffermetadata.BufferMetaDataManager;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -97,8 +98,11 @@ public class Client extends AClient {
     private CoreInfo coreInfo;
     private long latency;
     private ConnectionChangeEvent.Status connectionStatus;
+    private BufferMetaDataManager metaDataManager;
+    private String coreId;
 
-    public Client(@NonNull BusProvider provider, @NonNull BacklogStorage backlogStorage) {
+    public Client(@NonNull BusProvider provider, @NonNull BacklogStorage backlogStorage, @NonNull BufferMetaDataManager metaDataManager, String coreId) {
+        this.coreId = coreId;
         this.provider = provider;
         this.networkManager = new NetworkManager(this);
         this.bufferManager = new BufferManager(this);
@@ -109,6 +113,7 @@ public class Client extends AClient {
         this.backlogManager.init("", provider, this);
         this.notificationManager = new NotificationManager(this);
         this.initialized = true;
+        this.metaDataManager = metaDataManager;
     }
 
     public QBufferViewManager bufferViewManager() {
@@ -470,5 +475,13 @@ public class Client extends AClient {
     @Nullable
     public BusProvider provider() {
         return provider;
+    }
+
+    public BufferMetaDataManager metaDataManager() {
+        return metaDataManager;
+    }
+
+    public String coreId() {
+        return coreId;
     }
 }

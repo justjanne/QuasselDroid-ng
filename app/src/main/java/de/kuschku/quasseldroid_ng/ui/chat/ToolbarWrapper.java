@@ -21,6 +21,7 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat;
 
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -43,7 +44,7 @@ public class ToolbarWrapper {
         title.setText(id);
     }
 
-    public void setTitle(CharSequence text) {
+    public void setTitle(@Nullable CharSequence text) {
         title.setText(text);
     }
 
@@ -51,8 +52,9 @@ public class ToolbarWrapper {
         subtitle.setText(id);
     }
 
-    public void setSubtitle(CharSequence text) {
+    public void setSubtitle(@Nullable CharSequence text) {
         subtitle.setText(text);
+        subtitle.setVisibility(text == null ? View.GONE : View.VISIBLE);
     }
 
     public void setOnClickListener(View.OnClickListener listener) {

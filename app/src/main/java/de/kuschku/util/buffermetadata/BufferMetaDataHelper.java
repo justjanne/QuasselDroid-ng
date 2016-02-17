@@ -22,8 +22,10 @@
 package de.kuschku.util.buffermetadata;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.support.annotation.NonNull;
 
 public class BufferMetaDataHelper extends SQLiteOpenHelper {
@@ -48,14 +50,29 @@ public class BufferMetaDataHelper extends SQLiteOpenHelper {
     private static final String STATEMENT_INSERT =
             String.format("INSERT OR IGNORE INTO %s(%s, %s, %s, %s) VALUES (?, ?, ?, ?)",
                     TABLE_ACCOUNTS, KEY_CORE, KEY_BUFFER, KEY_HIDDEN, KEY_MARKERLINE);
+
     @NonNull
-    private static final String STATEMENT_DELETE =
+    private static final String STATEMENT_UPDATE_HIDDEN =
+            String.format("UPDATE %s SET %s=? WHERE %s=? AND %s=?",
+                    TABLE_ACCOUNTS, KEY_HIDDEN, KEY_CORE, KEY_BUFFER);
+
+    @NonNull
+    private static final String STATEMENT_UPDATE_MARKERLINE =
+            String.format("UPDATE %s SET %s=? WHERE %s=? AND %s=?",
+                    TABLE_ACCOUNTS, KEY_MARKERLINE, KEY_CORE, KEY_BUFFER);
+    @NonNull
+    private static final String STATEMENT_DELETE_BUFFER =
             String.format("DELETE FROM %s WHERE %s = ? AND %s = ?",
                     TABLE_ACCOUNTS, KEY_CORE, KEY_BUFFER);
 
     @NonNull
+    private static final String STATEMENT_DELETE_CORE =
+            String.format("DELETE FROM %s WHERE %s = ?",
+                    TABLE_ACCOUNTS, KEY_CORE);
+
+    @NonNull
     private static final String SPECIFIER_FIND =
-            String.format("%s = ? AND %s = ?", KEY_CORE, KEY_BUFFER);
+            String.format("%s = ? ", KEY_CORE);
 
     public BufferMetaDataHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -78,27 +95,95 @@ public class BufferMetaDataHelper extends SQLiteOpenHelper {
 
     }
 
-    public void storeMarkerline(String coreid, int bufferid, int messageid) {
+    public boolean storeMarkerline(String coreid, int bufferid, int messageid) {
+        ensureExisting(coreid, bufferid);
 
+        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteStatement statement = db.compileStatement(STATEMENT_UPDATE_MARKERLINE);
+        statement.bindLong(1, messageid);
+        statement.bindString(2, coreid);
+        statement.bindLong(3, bufferid);
+        return statement.executeUpdateDelete() > 0;
     }
 
-    public void storeHiddenData(String coreid, int bufferid, int hiddendata) {
+    public boolean storeHiddenData(String coreid, int bufferid, int hiddendata) {
+        ensureExisting(coreid, bufferid);
 
+        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteStatement statement = db.compileStatement(STATEMENT_UPDATE_HIDDEN);
+        statement.bindLong(1, hiddendata);
+        statement.bindString(2, coreid);
+        statement.bindLong(3, bufferid);
+        return statement.executeUpdateDelete() > 0;
+    }
+
+    private boolean ensureExisting(String coreid, int bufferid) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteStatement statement = db.compileStatement(STATEMENT_INSERT);
+        statement.bindString(1, coreid);
+        statement.bindLong(2, bufferid);
+        statement.bindLong(3, 0);
+        statement.bindLong(4, -1);
+        // executeInsert returns -1 if unsuccessful
+        return statement.executeInsert() != -1;
+    }
+
+    private Cursor cursorFindData(String coreid) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query(
+                // table name
+                TABLE_ACCOUNTS,
+                // column names
+                new String[]{KEY_CORE, KEY_BUFFER, KEY_HIDDEN, KEY_MARKERLINE},
+                // where clause
+                SPECIFIER_FIND,
+                // binds for where clause
+                new String[]{coreid},
+                null,
+                null,
+                null,
+                null
+        );
     }
 
     public int markerLine(String coreid, int bufferid) {
+        Cursor cursor = cursorFindData(coreid);
+        if (cursor.moveToFirst()) {
+            do {
+                if (cursor.getInt(1) == bufferid) {
+                    return cursor.getInt(3);
+                }
+            } while (cursor.moveToNext());
+        }
         return -1;
     }
 
     public int hiddenData(String coreid, int bufferid) {
-        return -1;
+        Cursor cursor = cursorFindData(coreid);
+        if (cursor.moveToFirst()) {
+            do {
+                if (cursor.getInt(1) == bufferid) {
+                    return cursor.getInt(2);
+                }
+            } while (cursor.moveToNext());
+        }
+        return 0;
     }
 
-    public void deleteCore(String coreid) {
-
+    public boolean deleteCore(String coreid) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteStatement statement = db.compileStatement(STATEMENT_DELETE_CORE);
+        statement.bindString(1, coreid);
+        // executeUpdateDelete returns amount of modified rows
+        return statement.executeUpdateDelete() > 0;
     }
 
-    public void deleteBuffer(String coreid, int bufferid) {
-
+    public boolean deleteBuffer(String coreid, int bufferid) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteStatement statement = db.compileStatement(STATEMENT_DELETE_BUFFER);
+        statement.bindString(1, coreid);
+        statement.bindLong(2, bufferid);
+        // executeUpdateDelete returns amount of modified rows
+        return statement.executeUpdateDelete() > 0;
     }
 }
