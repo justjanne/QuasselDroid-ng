@@ -393,6 +393,8 @@ public class MainActivity extends BoundActivity {
                         backlogFilter.setFilters(filters);
                     })
                     .negativeColor(context.themeUtil().res.colorForeground)
+                    .backgroundColor(context.themeUtil().res.colorBackgroundCard)
+                    .contentColor(context.themeUtil().res.colorForeground)
                     .build()
                     .show();
         }
@@ -406,6 +408,8 @@ public class MainActivity extends BoundActivity {
                 .negativeColor(context.themeUtil().res.colorForeground)
                 .positiveText("Yes")
                 .negativeText("No")
+                .backgroundColor(context.themeUtil().res.colorBackgroundCard)
+                .contentColor(context.themeUtil().res.colorForeground)
                 .build()
                 .show();
     }
@@ -430,6 +434,8 @@ public class MainActivity extends BoundActivity {
                     .negativeColor(context.themeUtil().res.colorForeground)
                     .positiveText(R.string.labelLogin)
                     .negativeText(R.string.labelCancel)
+                    .backgroundColor(context.themeUtil().res.colorBackgroundCard)
+                    .contentColor(context.themeUtil().res.colorForeground)
                     .build().show();
         }
     }
