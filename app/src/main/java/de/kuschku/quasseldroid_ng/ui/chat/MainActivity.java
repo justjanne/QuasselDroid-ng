@@ -21,6 +21,7 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
@@ -128,6 +129,13 @@ public class MainActivity extends BoundActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         toolbarWrapper = new ToolbarWrapper(toolbar);
+        toolbarWrapper.setOnClickListener(v -> {
+            if (context.client() != null) {
+                Intent intent = new Intent(this, ChannelDetailActivity.class);
+                intent.putExtra("buffer", context.client().backlogManager().open());
+                startActivity(intent);
+            }
+        });
         setSupportActionBar(toolbar);
         layoutHelper = ActivityImplFactory.of(getResources().getBoolean(R.bool.isTablet), this);
         accountHeader = buildAccountHeader();
@@ -274,7 +282,7 @@ public class MainActivity extends BoundActivity {
                     if (channel == null) {
                         toolbarWrapper.setSubtitle(null);
                     } else {
-                        toolbarWrapper.setSubtitle(channel.topic());
+                        toolbarWrapper.setSubtitle(context.deserializer().formatString(channel.topic()));
                     }
                 } else {
                     toolbarWrapper.setSubtitle(null);

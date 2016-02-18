@@ -45,6 +45,7 @@ import java.util.regex.Pattern;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.message.Message;
+import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.irc.IrcUserUtils;
@@ -83,19 +84,24 @@ public class IrcFormatHelper {
 
     @NonNull
     public CharSequence formatIrcMessage(@NonNull Client client, @NonNull Message message) {
+        return formatIrcMessage(client, message.content, message.bufferInfo, null);
+    }
+
+    @NonNull
+    public CharSequence formatIrcMessage(@NonNull Client client, @NonNull String text, BufferInfo bufferInfo, View.OnClickListener listener) {
         List<FutureClickableSpan> spans = new LinkedList<>();
 
-        SpannableString str = new SpannableString(context.deserializer().formatString(message.content));
+        SpannableString str = new SpannableString(context.deserializer().formatString(text));
         Matcher urlMatcher = urlPattern.matcher(str);
         while (urlMatcher.find()) {
             spans.add(new FutureClickableSpan(new CustomURLSpan(urlMatcher.group()), urlMatcher.start(), urlMatcher.end()));
         }
         Matcher channelMatcher = channelPattern.matcher(str);
         while (channelMatcher.find()) {
-            QIrcChannel channel = client.networkManager().network(message.bufferInfo.networkId()).ircChannel(channelMatcher.group());
+            QIrcChannel channel = client.networkManager().network(bufferInfo.networkId()).ircChannel(channelMatcher.group());
             Buffer buffer = client.bufferManager().channel(channel);
             if (buffer != null)
-                spans.add(new FutureClickableSpan(new ChannelSpan(client, buffer.getInfo().id()), channelMatcher.start(), channelMatcher.end()));
+                spans.add(new FutureClickableSpan(new ChannelSpan(client, buffer.getInfo().id(), listener), channelMatcher.start(), channelMatcher.end()));
         }
         for (FutureClickableSpan span : spans) {
             str.setSpan(span.span, span.start, span.end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -141,15 +147,19 @@ public class IrcFormatHelper {
         @NonNull
         private final Client client;
         private final int bufferid;
+        private final View.OnClickListener listener;
 
-        public ChannelSpan(@NonNull Client client, int bufferid) {
+        public ChannelSpan(@NonNull Client client, int bufferid, View.OnClickListener listener) {
             this.client = client;
             this.bufferid = bufferid;
+            this.listener = listener;
         }
 
         @Override
         public void onClick(View widget) {
             client.backlogManager().open(bufferid);
+            if (listener != null)
+                listener.onClick(widget);
         }
     }
 }

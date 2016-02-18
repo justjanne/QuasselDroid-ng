@@ -25,8 +25,6 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.google.common.collect.Sets;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -176,6 +174,7 @@ public class BufferManager {
         laterRequests.clear();
         int waitingMax = client.backlogManager().waitingMax();
         int waitingCurrently = client.backlogManager().waiting().size();
+
         client.provider().sendEvent(new BacklogInitEvent(waitingMax - waitingCurrently, waitingMax));
     }
 }

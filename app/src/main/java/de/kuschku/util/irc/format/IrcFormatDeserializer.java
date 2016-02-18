@@ -110,8 +110,10 @@ public class IrcFormatDeserializer {
      * @param str mIRC formatted String
      * @return a CharSequence with Android’s span format representing the input string
      */
-    @NonNull
-    public CharSequence formatString(@NonNull String str) {
+    @Nullable
+    public CharSequence formatString(@Nullable String str) {
+        if (str == null) return null;
+
         SpannableStringBuilder plainText = new SpannableStringBuilder();
         FormatDescription bold = null;
         FormatDescription italic = null;

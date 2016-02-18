@@ -45,6 +45,8 @@ import de.kuschku.util.CompatibilityUtils;
 import de.kuschku.util.irc.IrcCaseMapper;
 import de.kuschku.util.irc.IrcUserUtils;
 import de.kuschku.util.irc.ModeUtils;
+import de.kuschku.util.irc.chanmodes.IrcModeProvider;
+import de.kuschku.util.irc.chanmodes.IrcModeProviderFactory;
 
 public class Network extends ANetwork<Network> implements Observer {
     private final Map<String, QIrcChannel> channels;
@@ -66,6 +68,7 @@ public class Network extends ANetwork<Network> implements Observer {
 
     private List<String> prefixes;
     private List<String> prefixModes;
+    private IrcModeProvider modeProvider;
 
     public Network(Map<String, QIrcChannel> channels,
                    Map<String, QIrcUser> nicks,
@@ -335,6 +338,13 @@ public class Network extends ANetwork<Network> implements Observer {
         if (prefixModes == null)
             determinePrefixes();
         return prefixModes;
+    }
+
+    @Override
+    public IrcModeProvider modeProvider() {
+        if (modeProvider == null)
+            modeProvider = IrcModeProviderFactory.identifyServer(supports.get("CHANMODES"));
+        return modeProvider;
     }
 
     @Override

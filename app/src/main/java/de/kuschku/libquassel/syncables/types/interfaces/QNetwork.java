@@ -30,6 +30,7 @@ import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.syncables.Synced;
 import de.kuschku.libquassel.syncables.types.impl.IrcChannel;
 import de.kuschku.libquassel.syncables.types.impl.NetworkInfo;
+import de.kuschku.util.irc.chanmodes.IrcModeProvider;
 
 public interface QNetwork extends QObservable {
     int networkId();
@@ -114,6 +115,8 @@ public interface QNetwork extends QObservable {
     List<String> prefixes();
 
     List<String> prefixModes();
+
+    IrcModeProvider modeProvider();
 
     void determinePrefixes();
 

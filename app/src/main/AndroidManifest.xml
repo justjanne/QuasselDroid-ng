@@ -54,6 +54,12 @@
             android:theme="@style/AppTheme.Light" />
 
         <activity
+            android:name=".ui.chat.ChannelDetailActivity"
+            android:label="Channel Detail"
+            android:launchMode="singleTask"
+            android:theme="@style/SetupTheme" />
+
+        <activity
             android:name=".ui.setup.AccountSetupActivity"
             android:label="Setup a new Account"
             android:launchMode="singleTask"

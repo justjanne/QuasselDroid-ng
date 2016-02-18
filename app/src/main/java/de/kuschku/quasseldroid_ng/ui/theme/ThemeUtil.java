@@ -34,6 +34,7 @@ import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.annotationbind.AutoColor;
 import de.kuschku.util.annotationbind.AutoDimen;
 import de.kuschku.util.annotationbind.AutoString;
+import de.kuschku.util.irc.chanmodes.ChanMode;
 import de.kuschku.util.ui.DateTimeFormatHelper;
 import de.kuschku.util.ui.SpanFormatter;
 
@@ -154,6 +155,236 @@ public class ThemeUtil {
         @AutoString(R.string.statusWelcome)
         public String statusWelcome;
 
+
+        @AutoString(R.string.chanMode_RESTRICT_TOPIC_NAME)
+        public String chanMode_RESTRICT_TOPIC_NAME;
+
+        @AutoString(R.string.chanMode_RESTRICT_TOPIC_DESCRIPTION)
+        public String chanMode_RESTRICT_TOPIC_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_BLOCK_COLORS_NAME)
+        public String chanMode_BLOCK_COLOR_NAME;
+
+        @AutoString(R.string.chanMode_BLOCK_COLORS_DESCRIPTION)
+        public String chanMode_BLOCK_COLOR_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_STRIP_COLORS_NAME)
+        public String chanMode_STRIP_COLOR_NAME;
+
+        @AutoString(R.string.chanMode_STRIP_COLORS_DESCRIPTION)
+        public String chanMode_STRIP_COLOR_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_ONLY_INVITE_NAME)
+        public String chanMode_ONLY_INVITE_NAME;
+
+        @AutoString(R.string.chanMode_ONLY_INVITE_DESCRIPTION)
+        public String chanMode_ONLY_INVITE_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_ONLY_SSL_NAME)
+        public String chanMode_ONLY_SSL_NAME;
+
+        @AutoString(R.string.chanMode_ONLY_SSL_DESCRIPTION)
+        public String chanMode_ONLY_SSL_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_UNLISTED_NAME)
+        public String chanMode_UNLISTED_NAME;
+
+        @AutoString(R.string.chanMode_UNLISTED_DESCRIPTION)
+        public String chanMode_UNLISTED_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_BLOCK_UNIDENTIFIED_NAME)
+        public String chanMode_BLOCK_UNIDENTIFIED_NAME;
+
+        @AutoString(R.string.chanMode_BLOCK_UNIDENTIFIED_DESCRIPTION)
+        public String chanMode_BLOCK_UNIDENTIFIED_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_PARANOID_NAME)
+        public String chanMode_PARANOID_NAME;
+
+        @AutoString(R.string.chanMode_PARANOID_DESCRIPTION)
+        public String chanMode_PARANOID_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_REGISTERED_NAME)
+        public String chanMode_REGISTERED_NAME;
+
+        @AutoString(R.string.chanMode_REGISTERED_DESCRIPTION)
+        public String chanMode_REGISTERED_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_MODERATED_NAME)
+        public String chanMode_MODERATED_NAME;
+
+        @AutoString(R.string.chanMode_MODERATED_DESCRIPTION)
+        public String chanMode_MODERATED_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_BLOCK_EXTERNAL_NAME)
+        public String chanMode_BLOCK_EXTERNAL_NAME;
+
+        @AutoString(R.string.chanMode_BLOCK_EXTERNAL_DESCRIPTION)
+        public String chanMode_BLOCK_EXTERNAL_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_ANTIFLOOD_NAME)
+        public String chanMode_ANTIFLOOD_NAME;
+
+        @AutoString(R.string.chanMode_ANTIFLOOD_DESCRIPTION)
+        public String chanMode_ANTIFLOOD_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_PASSWORD_NAME)
+        public String chanMode_PASSWORD_NAME;
+
+        @AutoString(R.string.chanMode_PASSWORD_DESCRIPTION)
+        public String chanMode_PASSWORD_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_LIMIT_NAME)
+        public String chanMode_LIMIT_NAME;
+
+        @AutoString(R.string.chanMode_LIMIT_DESCRIPTION)
+        public String chanMode_LIMIT_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_REDUCED_MODERATION_NAME)
+        public String chanMode_REDUCED_MODERATION_NAME;
+
+        @AutoString(R.string.chanMode_REDUCED_MODERATION_DESCRIPTION)
+        public String chanMode_REDUCED_MODERATION_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_BLOCK_NOTICE_NAME)
+        public String chanMode_BLOCK_NOTICE_NAME;
+
+        @AutoString(R.string.chanMode_BLOCK_NOTICE_DESCRIPTION)
+        public String chanMode_BLOCK_NOTICE_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_DISABLE_INVITE_NAME)
+        public String chanMode_DISABLE_INVITE_NAME;
+
+        @AutoString(R.string.chanMode_DISABLE_INVITE_DESCRIPTION)
+        public String chanMode_DISABLE_INVITE_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_AUDITORIUM_NAME)
+        public String chanMode_AUDITORIUM_NAME;
+
+        @AutoString(R.string.chanMode_AUDITORIUM_DESCRIPTION)
+        public String chanMode_AUDITORIUM_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_QUIET_UNIDENTIFIED_NAME)
+        public String chanMode_QUIET_UNIDENTIFIED_NAME;
+
+        @AutoString(R.string.chanMode_QUIET_UNIDENTIFIED_DESCRIPTION)
+        public String chanMode_QUIET_UNIDENTIFIED_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_BLOCK_KICK_NAME)
+        public String chanMode_BLOCK_KICK_NAME;
+
+        @AutoString(R.string.chanMode_BLOCK_KICK_DESCRIPTION)
+        public String chanMode_BLOCK_KICK_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_PERMANENT_NAME)
+        public String chanMode_PERMANENT_NAME;
+
+        @AutoString(R.string.chanMode_PERMANENT_DESCRIPTION)
+        public String chanMode_PERMANENT_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_ONLY_OPER_NAME)
+        public String chanMode_ONLY_OPER_NAME;
+
+        @AutoString(R.string.chanMode_ONLY_OPER_DESCRIPTION)
+        public String chanMode_ONLY_OPER_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_ONLY_HELPOPER_NAME)
+        public String chanMode_ONLY_HELPOPER_NAME;
+
+        @AutoString(R.string.chanMode_ONLY_HELPOPER_DESCRIPTION)
+        public String chanMode_ONLY_HELPOPER_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_BLOCK_NICKCHANGE_NAME)
+        public String chanMode_BLOCK_NICKCHANGE_NAME;
+
+        @AutoString(R.string.chanMode_BLOCK_NICKCHANGE_DESCRIPTION)
+        public String chanMode_BLOCK_NICKCHANGE_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_JOIN_THROTTLE_NAME)
+        public String chanMode_JOIN_THROTTLE_NAME;
+
+        @AutoString(R.string.chanMode_JOIN_THROTTLE_DESCRIPTION)
+        public String chanMode_JOIN_THROTTLE_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_ALLOW_INVITE_NAME)
+        public String chanMode_ALLOW_INVITE_NAME;
+
+        @AutoString(R.string.chanMode_ALLOW_INVITE_DESCRIPTION)
+        public String chanMode_ALLOW_INVITE_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_BLOCK_FORWARDING_NAME)
+        public String chanMode_BLOCK_FORWARDING_NAME;
+
+        @AutoString(R.string.chanMode_BLOCK_FORWARDING_DESCRIPTION)
+        public String chanMode_BLOCK_FORWARDING_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_ALLOW_FORWARD_NAME)
+        public String chanMode_ALLOW_FORWARD_NAME;
+
+        @AutoString(R.string.chanMode_ALLOW_FORWARD_DESCRIPTION)
+        public String chanMode_ALLOW_FORWARD_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_BLOCK_ACTION_NAME)
+        public String chanMode_BLOCK_ACTION_NAME;
+
+        @AutoString(R.string.chanMode_BLOCK_ACTION_DESCRIPTION)
+        public String chanMode_BLOCK_ACTION_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_BLOCK_CAPS_NAME)
+        public String chanMode_BLOCK_CAPS_NAME;
+
+        @AutoString(R.string.chanMode_BLOCK_CAPS_DESCRIPTION)
+        public String chanMode_BLOCK_CAPS_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_BLOCK_KNOCK_NAME)
+        public String chanMode_BLOCK_KNOCK_NAME;
+
+        @AutoString(R.string.chanMode_BLOCK_KNOCK_DESCRIPTION)
+        public String chanMode_BLOCK_KNOCK_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_CENSOR_NAME)
+        public String chanMode_CENSOR_NAME;
+
+        @AutoString(R.string.chanMode_CENSOR_DESCRIPTION)
+        public String chanMode_CENSOR_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_HIDE_JOINS_NAME)
+        public String chanMode_HIDE_JOINS_NAME;
+
+        @AutoString(R.string.chanMode_HIDE_JOINS_DESCRIPTION)
+        public String chanMode_HIDE_JOINS_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_BLOCK_REPEAT_NAME)
+        public String chanMode_BLOCK_REPEAT_NAME;
+
+        @AutoString(R.string.chanMode_BLOCK_REPEAT_DESCRIPTION)
+        public String chanMode_BLOCK_REPEAT_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_BLOCK_AUTOREJOIN_NAME)
+        public String chanMode_BLOCK_AUTOREJOIN_NAME;
+
+        @AutoString(R.string.chanMode_BLOCK_AUTOREJOIN_DESCRIPTION)
+        public String chanMode_BLOCK_AUTOREJOIN_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_IS_SECURE_NAME)
+        public String chanMode_IS_SECURE_NAME;
+
+        @AutoString(R.string.chanMode_IS_SECURE_DESCRIPTION)
+        public String chanMode_IS_SECURE_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_BLOCK_CTCP_NAME)
+        public String chanMode_BLOCK_CTCP_NAME;
+
+        @AutoString(R.string.chanMode_BLOCK_CTCP_DESCRIPTION)
+        public String chanMode_BLOCK_CTCP_DESCRIPTION;
+
+        @AutoString(R.string.chanMode_ONLY_ADMIN_NAME)
+        public String chanMode_ONLY_ADMIN_NAME;
+
+        @AutoString(R.string.chanMode_ONLY_ADMIN_DESCRIPTION)
+        public String chanMode_ONLY_ADMIN_DESCRIPTION;
+
+
         @NonNull
         public CharSequence formatUsername(@NonNull CharSequence nick, @NonNull CharSequence hostmask) {
             return SpanFormatter.format(usernameHostmask, nick, hostmask);
@@ -235,6 +466,174 @@ public class ThemeUtil {
         @NonNull
         public CharSequence formatPlain(@NonNull CharSequence nick, @NonNull CharSequence message) {
             return SpanFormatter.format(messagePlain, nick, message);
+        }
+
+        public String chanModeToDescription(ChanMode mode) {
+            switch (mode) {
+                case RESTRICT_TOPIC:
+                    return chanMode_RESTRICT_TOPIC_DESCRIPTION;
+                case BLOCK_CTCP:
+                    return chanMode_BLOCK_CTCP_DESCRIPTION;
+                case BLOCK_COLOR:
+                    return chanMode_BLOCK_COLOR_DESCRIPTION;
+                case STRIP_COLOR:
+                    return chanMode_STRIP_COLOR_DESCRIPTION;
+                case ONLY_INVITE:
+                    return chanMode_ONLY_INVITE_DESCRIPTION;
+                case ONLY_ADMIN:
+                    return chanMode_ONLY_ADMIN_DESCRIPTION;
+                case ONLY_SSL:
+                    return chanMode_ONLY_SSL_DESCRIPTION;
+                case UNLISTED:
+                    return chanMode_UNLISTED_DESCRIPTION;
+                case BLOCK_UNIDENTIFIED:
+                    return chanMode_BLOCK_UNIDENTIFIED_DESCRIPTION;
+                case PARANOID:
+                    return chanMode_PARANOID_DESCRIPTION;
+                case REGISTERED:
+                    return chanMode_REGISTERED_DESCRIPTION;
+                case MODERATED:
+                    return chanMode_MODERATED_DESCRIPTION;
+                case BLOCK_EXTERNAL:
+                    return chanMode_BLOCK_EXTERNAL_DESCRIPTION;
+                case ANTIFLOOD:
+                    return chanMode_ANTIFLOOD_DESCRIPTION;
+                case PASSWORD:
+                    return chanMode_PASSWORD_DESCRIPTION;
+                case LIMIT:
+                    return chanMode_LIMIT_DESCRIPTION;
+                case REDUCED_MODERATION:
+                    return chanMode_REDUCED_MODERATION_DESCRIPTION;
+                case BLOCK_NOTICE:
+                    return chanMode_BLOCK_NOTICE_DESCRIPTION;
+                case DISABLE_INVITE:
+                    return chanMode_DISABLE_INVITE_DESCRIPTION;
+                case AUDITORIUM:
+                    return chanMode_AUDITORIUM_DESCRIPTION;
+                case QUIET_UNIDENTIFIED:
+                    return chanMode_QUIET_UNIDENTIFIED_DESCRIPTION;
+                case BLOCK_KICK:
+                    return chanMode_BLOCK_KICK_DESCRIPTION;
+                case PERMANENT:
+                    return chanMode_PERMANENT_DESCRIPTION;
+                case ONLY_OPER:
+                    return chanMode_ONLY_OPER_DESCRIPTION;
+                case ONLY_HELPOPER:
+                    return chanMode_ONLY_HELPOPER_DESCRIPTION;
+                case BLOCK_NICKCHANGE:
+                    return chanMode_BLOCK_NICKCHANGE_DESCRIPTION;
+                case JOIN_THROTTLE:
+                    return chanMode_JOIN_THROTTLE_DESCRIPTION;
+                case ALLOW_INVITE:
+                    return chanMode_ALLOW_INVITE_DESCRIPTION;
+                case BLOCK_FORWARDING:
+                    return chanMode_BLOCK_FORWARDING_DESCRIPTION;
+                case ALLOW_FORWARD:
+                    return chanMode_ALLOW_FORWARD_DESCRIPTION;
+                case BLOCK_ACTION:
+                    return chanMode_BLOCK_ACTION_DESCRIPTION;
+                case BLOCK_CAPS:
+                    return chanMode_BLOCK_CAPS_DESCRIPTION;
+                case BLOCK_KNOCK:
+                    return chanMode_BLOCK_KNOCK_DESCRIPTION;
+                case CENSOR:
+                    return chanMode_CENSOR_DESCRIPTION;
+                case HIDE_JOINS:
+                    return chanMode_HIDE_JOINS_DESCRIPTION;
+                case BLOCK_REPEAT:
+                    return chanMode_BLOCK_REPEAT_DESCRIPTION;
+                case BLOCK_AUTOREJOIN:
+                    return chanMode_BLOCK_AUTOREJOIN_DESCRIPTION;
+                case IS_SECURE:
+                    return chanMode_IS_SECURE_DESCRIPTION;
+                case FORWARD:
+                    break;
+            }
+            return null;
+        }
+
+        public String chanModeToName(ChanMode mode) {
+            switch (mode) {
+                case RESTRICT_TOPIC:
+                    return chanMode_RESTRICT_TOPIC_NAME;
+                case BLOCK_CTCP:
+                    return chanMode_BLOCK_CTCP_NAME;
+                case BLOCK_COLOR:
+                    return chanMode_BLOCK_COLOR_NAME;
+                case STRIP_COLOR:
+                    return chanMode_STRIP_COLOR_NAME;
+                case ONLY_INVITE:
+                    return chanMode_ONLY_INVITE_NAME;
+                case ONLY_ADMIN:
+                    return chanMode_ONLY_ADMIN_NAME;
+                case ONLY_SSL:
+                    return chanMode_ONLY_SSL_NAME;
+                case UNLISTED:
+                    return chanMode_UNLISTED_NAME;
+                case BLOCK_UNIDENTIFIED:
+                    return chanMode_BLOCK_UNIDENTIFIED_NAME;
+                case PARANOID:
+                    return chanMode_PARANOID_NAME;
+                case REGISTERED:
+                    return chanMode_REGISTERED_NAME;
+                case MODERATED:
+                    return chanMode_MODERATED_NAME;
+                case BLOCK_EXTERNAL:
+                    return chanMode_BLOCK_EXTERNAL_NAME;
+                case ANTIFLOOD:
+                    return chanMode_ANTIFLOOD_NAME;
+                case PASSWORD:
+                    return chanMode_PASSWORD_NAME;
+                case LIMIT:
+                    return chanMode_LIMIT_NAME;
+                case REDUCED_MODERATION:
+                    return chanMode_REDUCED_MODERATION_NAME;
+                case BLOCK_NOTICE:
+                    return chanMode_BLOCK_NOTICE_NAME;
+                case DISABLE_INVITE:
+                    return chanMode_DISABLE_INVITE_NAME;
+                case AUDITORIUM:
+                    return chanMode_AUDITORIUM_NAME;
+                case QUIET_UNIDENTIFIED:
+                    return chanMode_QUIET_UNIDENTIFIED_NAME;
+                case BLOCK_KICK:
+                    return chanMode_BLOCK_KICK_NAME;
+                case PERMANENT:
+                    return chanMode_PERMANENT_NAME;
+                case ONLY_OPER:
+                    return chanMode_ONLY_OPER_NAME;
+                case ONLY_HELPOPER:
+                    return chanMode_ONLY_HELPOPER_NAME;
+                case BLOCK_NICKCHANGE:
+                    return chanMode_BLOCK_NICKCHANGE_NAME;
+                case JOIN_THROTTLE:
+                    return chanMode_JOIN_THROTTLE_NAME;
+                case ALLOW_INVITE:
+                    return chanMode_ALLOW_INVITE_NAME;
+                case BLOCK_FORWARDING:
+                    return chanMode_BLOCK_FORWARDING_NAME;
+                case ALLOW_FORWARD:
+                    return chanMode_ALLOW_FORWARD_NAME;
+                case BLOCK_ACTION:
+                    return chanMode_BLOCK_ACTION_NAME;
+                case BLOCK_CAPS:
+                    return chanMode_BLOCK_CAPS_NAME;
+                case BLOCK_KNOCK:
+                    return chanMode_BLOCK_KNOCK_NAME;
+                case CENSOR:
+                    return chanMode_CENSOR_NAME;
+                case HIDE_JOINS:
+                    return chanMode_HIDE_JOINS_NAME;
+                case BLOCK_REPEAT:
+                    return chanMode_BLOCK_REPEAT_NAME;
+                case BLOCK_AUTOREJOIN:
+                    return chanMode_BLOCK_AUTOREJOIN_NAME;
+                case IS_SECURE:
+                    return chanMode_IS_SECURE_NAME;
+                case FORWARD:
+                    break;
+            }
+            return null;
         }
     }
 
