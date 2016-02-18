@@ -384,6 +384,12 @@ public class ThemeUtil {
         @AutoString(R.string.chanMode_ONLY_ADMIN_DESCRIPTION)
         public String chanMode_ONLY_ADMIN_DESCRIPTION;
 
+        @AutoString(R.string.chanMode_FORWARD_NAME)
+        public String chanMode_FORWARD_NAME;
+
+        @AutoString(R.string.chanMode_FORWARD_DESCRIPTION)
+        public String chanMode_FORWARD_DESCRIPTION;
+
 
         @NonNull
         public CharSequence formatUsername(@NonNull CharSequence nick, @NonNull CharSequence hostmask) {
@@ -547,7 +553,7 @@ public class ThemeUtil {
                 case IS_SECURE:
                     return chanMode_IS_SECURE_DESCRIPTION;
                 case FORWARD:
-                    break;
+                    return chanMode_FORWARD_DESCRIPTION;
             }
             return null;
         }
@@ -631,7 +637,7 @@ public class ThemeUtil {
                 case IS_SECURE:
                     return chanMode_IS_SECURE_NAME;
                 case FORWARD:
-                    break;
+                    return chanMode_FORWARD_NAME;
             }
             return null;
         }

@@ -29,7 +29,8 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -45,65 +46,73 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="4dp">
-
-            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                app:cardBackgroundColor="?attr/colorBackgroundCard"
-                app:cardUseCompatPadding="true"
-                app:contentPaddingBottom="24dp"
-                app:contentPaddingLeft="16dp"
-                app:contentPaddingRight="16dp"
-                app:contentPaddingTop="24dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Topic"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
-
-                    <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="16dp" />
-
-                    <TextView
-                        android:id="@+id/topic"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="02-18 04:14:03.854 3960-3988/de.kuschku.quasseldroid_ng W/ResourceType: Failure getting entry for 0x0108035f (t=7 e=863) (error -75)"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead" />
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/mode"
-                style="@style/TextAppearance.AppCompat.Title"
+                style="@style/TextAppearance.AppCompat.Button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:textColor="?attr/colorAccent"
+                android:text="Topic"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="fill_vertical" />
+
+            <TextView
+                android:id="@+id/topic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="16dp" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:text="No Topic Set"
+                android:textStyle="italic"
+                android:textColor="?attr/colorForegroundSecondary"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:id="@+id/edit_topic"
+                android:text="Edit Topic"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_gravity="right" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="?attr/material_drawer_divider" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:textColor="?attr/colorAccent"
+                android:text="Channel Modes"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="fill_vertical" />
 
             <LinearLayout
                 android:id="@+id/modes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="8dp" />
 
         </LinearLayout>
 
     </ScrollView>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar2"
+        android:layout_gravity="right" />
 
 </LinearLayout>

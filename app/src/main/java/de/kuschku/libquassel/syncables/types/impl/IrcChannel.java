@@ -23,6 +23,7 @@ package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.common.base.Joiner;
 
@@ -59,13 +60,13 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     private String codecForEncoding;
     private String codecForDecoding;
     @NonNull
-    private Map<Character, List<String>> A_channelModes = new HashMap<>();
+    public Map<Character, List<String>> A_channelModes = new HashMap<>();
     @NonNull
-    private Map<Character, String> B_channelModes = new HashMap<>();
+    public Map<Character, String> B_channelModes = new HashMap<>();
     @NonNull
-    private Map<Character, String> C_channelModes = new HashMap<>();
+    public Map<Character, String> C_channelModes = new HashMap<>();
     @NonNull
-    private Set<Character> D_channelModes = new HashSet<>();
+    public Set<Character> D_channelModes = new HashSet<>();
     // Because we don’t have networks at the beginning yet
     @Nullable
     private Map<String, String> cachedUserModes;
@@ -439,14 +440,21 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
             }
         }
         if (cachedChanModes != null) {
-            if (cachedChanModes.get("A") != null)
-                A_channelModes = (Map<Character, List<String>>) cachedChanModes.get("A");
+            if (cachedChanModes.get("A") != null) {
+                for (Map.Entry<String, QVariant<List<String>>> entry : ((Map<String, QVariant<List<String>>>) cachedChanModes.get("A")).entrySet()) {
+                    A_channelModes.put(entry.getKey().charAt(0), entry.getValue().data);
+                }
+            }
 
             if (cachedChanModes.get("B") != null)
-                B_channelModes = (Map<Character, String>) cachedChanModes.get("B");
+                for (Map.Entry<String, QVariant<String>> entry : ((Map<String, QVariant<String>>) cachedChanModes.get("B")).entrySet()) {
+                    B_channelModes.put(entry.getKey().charAt(0), entry.getValue().data);
+                }
 
             if (cachedChanModes.get("C") != null)
-                C_channelModes = (Map<Character, String>) cachedChanModes.get("C");
+                for (Map.Entry<String, QVariant<String>> entry : ((Map<String, QVariant<String>>) cachedChanModes.get("C")).entrySet()) {
+                    C_channelModes.put(entry.getKey().charAt(0), entry.getValue().data);
+                }
 
             if (cachedChanModes.get("D") != null)
                 D_channelModes = ModeUtils.toModes((String) cachedChanModes.get("D"));
@@ -506,5 +514,14 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
         users.remove(oldNick);
         users.add(newNick);
         userModes.put(newNick, userModes.get(oldNick));
+    }
+
+    @Override
+    public List<Character> modeList() {
+        List<Character> modes = new ArrayList<>();
+        modes.addAll(D_channelModes);
+        modes.addAll(C_channelModes.keySet());
+        modes.addAll(B_channelModes.keySet());
+        return modes;
     }
 }

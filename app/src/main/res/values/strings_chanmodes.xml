@@ -134,4 +134,7 @@
 
     <string name="chanMode_ONLY_ADMIN_NAME">Admin Only</string>
     <string name="chanMode_ONLY_ADMIN_DESCRIPTION">Allow only IRC admins to join the channel.</string>
+
+    <string name="chanMode_FORWARD_NAME">Forward</string>
+    <string name="chanMode_FORWARD_DESCRIPTION">Forward users who can’t join the channel to another channel.</string>
 </resources>

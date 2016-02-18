@@ -23,19 +23,14 @@ package de.kuschku.quasseldroid_ng.ui.chat;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -52,13 +47,16 @@ import de.kuschku.util.servicebound.BoundActivity;
 public class ChannelDetailActivity extends BoundActivity {
     @Bind(R.id.topic)
     TextView topic;
-    @Bind(R.id.mode)
-    TextView mode;
+
     @Bind(R.id.modes)
     LinearLayout modes;
+
+    @Bind(R.id.edit_topic)
+    AppCompatButton edit_topic;
+
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    ModeAdapter modeAdapter;
+
     private int buffer;
 
     @Override
@@ -74,87 +72,64 @@ public class ChannelDetailActivity extends BoundActivity {
         super.onConnectToThread(thread);
 
         ChannelBuffer buffer = (ChannelBuffer) context.client().bufferManager().buffer(this.buffer);
-        QIrcChannel channel = buffer.getChannel();
-        String modeString = channel.channelModeString();
+        if (buffer == null) return;
 
+        QIrcChannel channel = buffer.getChannel();
+        if (channel == null) return;
+
+        if (channel.topic() != null)
         topic.setText(new IrcFormatHelper(context).formatIrcMessage(context.client(), channel.topic(), buffer.getInfo(), v -> finish()));
         topic.setMovementMethod(LinkMovementMethod.getInstance());
-        mode.setText(String.format("Channel Mode %s", modeString));
-
-        if (getResources().getBoolean(R.bool.isTablet)) {
-            findViewById(R.id.appBar).setPadding(0, 0, 0, 0);
-        } else {
-            findViewById(R.id.appBar).setPadding(0, (int) getResources().getDimension(R.dimen.materialize_statusbar), 0, 0);
-        }
 
         toolbar.setTitle(channel.name());
         setSupportActionBar(toolbar);
 
         modes.removeAllViews();
         IrcModeProvider provider = channel.network().modeProvider();
-        for (char c : modeString.toCharArray()) {
+
+        String myModes = channel.userModes(channel.network().me());
+        boolean isOp = false;
+        for (String c : channel.network().prefixModes()) {
+            if (!c.equalsIgnoreCase("v") && myModes.contains(c)) {
+                isOp = true;
+                break;
+            }
+        }
+
+        boolean topicEditable = true;
+        for (char c : channel.modeList()) {
             ChanMode mode = provider.modeFromChar(c);
             if (mode != null) {
                 View v = getLayoutInflater().inflate(R.layout.widget_channel_mode, modes, false);
                 TextView name = (TextView) v.findViewById(R.id.name);
                 TextView description = (TextView) v.findViewById(R.id.description);
+                TextView value = (TextView) v.findViewById(R.id.value);
 
                 String modeName = context.themeUtil().translations.chanModeToName(mode);
                 name.setText(String.format("%s (+%s)", modeName, c));
+
                 String modeDescription = context.themeUtil().translations.chanModeToDescription(mode);
                 description.setText(modeDescription);
+
+                String modeValue = channel.modeValue(c);
+
+                if (modeValue != null && !modeValue.isEmpty()) {
+                    value.setText(modeValue);
+                    value.setVisibility(View.VISIBLE);
+                }
+
                 modes.addView(v);
+
+                if (mode == ChanMode.RESTRICT_TOPIC) topicEditable = isOp;
             }
         }
+
+        edit_topic.setVisibility(topicEditable ? View.VISIBLE : View.GONE);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public void onEventMainThread(GeneralErrorEvent event) {
         Log.e("DEBUG", String.valueOf(event));
-    }
-
-    public class ModeAdapter extends RecyclerView.Adapter<ChannelDetailActivity.ModeViewHolder> {
-        private List<ChanMode> channelModes = new ArrayList<>();
-
-        public void setModes(Collection<ChanMode> chanModes) {
-            channelModes.clear();
-            channelModes.addAll(chanModes);
-            Log.e("DEBUG", String.valueOf(channelModes));
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public ChannelDetailActivity.ModeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            return new ModeViewHolder(inflater.inflate(R.layout.widget_channel_mode, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(ChannelDetailActivity.ModeViewHolder holder, int position) {
-            holder.bind(channelModes.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return channelModes.size();
-        }
-    }
-
-    public class ModeViewHolder extends RecyclerView.ViewHolder {
-
-        @Bind(R.id.name)
-        TextView name;
-
-        @Bind(R.id.description)
-        TextView description;
-
-        public ModeViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-
-        public void bind(ChanMode mode) {
-            name.setText(context.themeUtil().translations.chanModeToName(mode));
-            description.setText(context.themeUtil().translations.chanModeToDescription(mode));
-        }
     }
 }

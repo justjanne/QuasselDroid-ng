@@ -20,8 +20,8 @@
   -->
 
 <resources>
-    <style name="BaseTheme" parent="MaterialDrawerTheme.TranslucentStatus" />
-    <style name="BaseTheme.Light" parent="MaterialDrawerTheme.Light.DarkToolbar.TranslucentStatus" />
+    <style name="BaseTheme" parent="MaterialDrawerTheme" />
+    <style name="BaseTheme.Light" parent="MaterialDrawerTheme.Light.DarkToolbar" />
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="BaseTheme">

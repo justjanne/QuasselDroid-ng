@@ -58,7 +58,7 @@ public class IrcFormatHelper {
     @NonNull
     private static final String urlChars = "(?:[,.;:]*[\\w~@/?&=+$()!%#*-])";
     @NonNull
-    private static final String urlEnd = "(?:>|[,.;:\"]*\\s|\\b|$)";
+    private static final String urlEnd = "((?:>|[,.;:\"]*\\s|\\b|$))";
     @NonNull
     private static final Pattern urlPattern = Pattern.compile(String.format("\\b(%s%s(?:/%s*)?)%s", scheme, authority, urlChars, urlEnd), Pattern.CASE_INSENSITIVE);
     @NonNull
@@ -94,7 +94,7 @@ public class IrcFormatHelper {
         SpannableString str = new SpannableString(context.deserializer().formatString(text));
         Matcher urlMatcher = urlPattern.matcher(str);
         while (urlMatcher.find()) {
-            spans.add(new FutureClickableSpan(new CustomURLSpan(urlMatcher.group()), urlMatcher.start(), urlMatcher.end()));
+            spans.add(new FutureClickableSpan(new CustomURLSpan(urlMatcher.group(1)), urlMatcher.start(), urlMatcher.start()+urlMatcher.group(1).length()));
         }
         Matcher channelMatcher = channelPattern.matcher(str);
         while (channelMatcher.find()) {

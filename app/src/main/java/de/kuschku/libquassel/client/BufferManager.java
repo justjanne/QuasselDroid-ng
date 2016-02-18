@@ -31,7 +31,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.events.BacklogInitEvent;
+import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.localtypes.buffers.Buffers;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
@@ -163,6 +165,9 @@ public class BufferManager {
     }
 
     public void doBacklogInit(int amount) {
+        BusProvider provider = client.provider();
+        assertNotNull(provider);
+
         Set<Integer> visibleBuffers = new HashSet<>();
         for (QBufferViewConfig bufferConfig : client.bufferViewManager().bufferViewConfigs()) {
             visibleBuffers.addAll(bufferConfig.bufferIds());
@@ -175,6 +180,11 @@ public class BufferManager {
         int waitingMax = client.backlogManager().waitingMax();
         int waitingCurrently = client.backlogManager().waiting().size();
 
-        client.provider().sendEvent(new BacklogInitEvent(waitingMax - waitingCurrently, waitingMax));
+        provider.sendEvent(new BacklogInitEvent(waitingMax - waitingCurrently, waitingMax));
+
+        if (waitingMax == 0) {
+            // TODO: Send event to set up chat list
+            client.setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
+        }
     }
 }

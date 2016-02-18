@@ -92,7 +92,7 @@ public class Network extends ANetwork<Network> implements Observer {
     }
 
     public Network(Map<String, QIrcChannel> channels, Map<String, QIrcUser> nicks, List<NetworkServer> serverList, Map<String, String> supports, ConnectionState connectionState, String currentServer, boolean isConnected, int latency, String myNick, NetworkInfo networkInfo) {
-        this.channels = channels;
+        this.channels = new HashMap<>(channels);
         this.nicks = new HashMap<>(nicks);
         this.supports = supports;
         this.connectionState = connectionState;

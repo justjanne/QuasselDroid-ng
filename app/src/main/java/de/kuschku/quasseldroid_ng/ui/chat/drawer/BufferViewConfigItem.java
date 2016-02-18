@@ -110,7 +110,7 @@ public class BufferViewConfigItem implements DrawerItemCallback {
         for (NetworkItem item : networks) {
             if (ids.contains(item.getNetwork().networkId())) {
                 int position = networks.indexOf(item);
-                drawer.addItemAtPosition(item, position);
+                drawer.getItemAdapter().add(position, item);
             }
         }
         for (int i = 0; i < drawer.getAdapter().getItemCount(); i++) {

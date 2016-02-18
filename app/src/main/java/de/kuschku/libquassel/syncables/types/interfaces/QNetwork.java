@@ -385,11 +385,11 @@ public interface QNetwork extends QObservable {
     }
 
     enum ChannelModeType {
-        NOT_A_CHANMODE(0),
-        A_CHANMODE(1),
-        B_CHANMODE(2),
-        C_CHANMODE(3),
-        D_CHANMODE(4);
+        NOT_A_CHANMODE(-1),
+        A_CHANMODE(0),
+        B_CHANMODE(1),
+        C_CHANMODE(2),
+        D_CHANMODE(3);
 
         public final int id;
 
@@ -400,16 +400,16 @@ public interface QNetwork extends QObservable {
         @NonNull
         public static ChannelModeType of(int id) {
             switch (id) {
-                case 1:
+                case 0:
                     return A_CHANMODE;
-                case 2:
+                case 1:
                     return B_CHANMODE;
-                case 3:
+                case 2:
                     return C_CHANMODE;
-                case 4:
+                case 3:
                     return D_CHANMODE;
                 default:
-                case 0:
+                case -1:
                     return NOT_A_CHANMODE;
             }
         }
