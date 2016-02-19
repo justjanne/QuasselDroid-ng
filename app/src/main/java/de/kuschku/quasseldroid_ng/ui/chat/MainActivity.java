@@ -322,6 +322,9 @@ public class MainActivity extends BoundActivity {
         accountHeader.clear();
         for (QBufferViewConfig viewConfig : bufferViews) {
             if (viewConfig != null) {
+                if (status.bufferViewConfigId == -1) {
+                    status.bufferViewConfigId = viewConfig.bufferViewId();
+                }
                 accountHeader.addProfiles(
                         new ProfileDrawerItem()
                                 .withName(viewConfig.bufferViewName())
