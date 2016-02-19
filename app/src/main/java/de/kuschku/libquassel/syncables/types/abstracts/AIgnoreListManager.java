@@ -28,6 +28,8 @@ import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.libquassel.syncables.types.interfaces.QIgnoreListManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 
+import static de.kuschku.util.AndroidAssert.assertNotNull;
+
 public abstract class AIgnoreListManager<T extends AIgnoreListManager<T>> extends SyncableObject<T> implements QIgnoreListManager {
     @Override
     public void requestRemoveIgnoreListItem(String ignoreRule) {
@@ -76,7 +78,8 @@ public abstract class AIgnoreListManager<T extends AIgnoreListManager<T>> extend
     }
 
     @Override
-    public boolean matches(@NonNull Message message, @NonNull QNetwork network) {
+    public boolean matches(Message message, QNetwork network) {
+        assertNotNull(network);
         return match(message.content, message.sender, message.type, network.networkName(), message.bufferInfo.name()) != StrictnessType.UnmatchedStrictness;
     }
 }

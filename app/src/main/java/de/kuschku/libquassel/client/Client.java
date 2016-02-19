@@ -212,34 +212,32 @@ public class Client extends AClient {
     public Object unsafe_getObjectByIdentifier(@NonNull String className, @NonNull String objectName) {
         switch (className) {
             case "AliasManager": {
-                assertNotNull(aliasManager);
                 return aliasManager;
             }
             case "BacklogManager": {
-                assertNotNull(backlogManager);
                 return backlogManager;
             }
             case "BufferSyncer": {
-                assertNotNull(bufferSyncer);
                 return bufferSyncer;
             }
             case "BufferViewConfig": {
-                assertNotNull(bufferViewManager);
+                if (bufferViewManager == null)
+                    return null;
+
                 return bufferViewManager.bufferViewConfig(Integer.parseInt(objectName));
             }
             case "BufferViewManager": {
-                assertNotNull(bufferViewManager);
                 return bufferViewManager;
             }
             case "CoreInfo": {
-                assertNotNull(coreInfo);
                 return coreInfo;
             }
             case "Identity": {
+                if (identityManager == null)
+                    return null;
                 return identityManager.identity(Integer.parseInt(objectName));
             }
             case "IgnoreListManager": {
-                assertNotNull(ignoreListManager);
                 return ignoreListManager;
             }
             case "IrcChannel": {
@@ -272,7 +270,6 @@ public class Client extends AClient {
                 return networkManager.network(Integer.parseInt(objectName));
             }
             case "NetworkConfig": {
-                assertNotNull(globalNetworkConfig);
                 return globalNetworkConfig;
             }
             case "NetworkInfo": {

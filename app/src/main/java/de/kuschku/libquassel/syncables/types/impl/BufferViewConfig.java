@@ -32,6 +32,7 @@ import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.BufferViewConfigSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.ABufferViewConfig;
+import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.observables.lists.ObservableList;
 import de.kuschku.util.observables.lists.ObservableSet;
 
@@ -46,6 +47,7 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     private final ObservableSet<Integer> removedBuffers;
     @NonNull
     private final ObservableSet<Integer> temporarilyRemovedBuffers;
+    private final ObservableSet<QNetwork> networkList = new ObservableSet<>();
     private int bufferViewId;
     private String bufferViewName;
     private int networkId;
@@ -120,7 +122,19 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     @Override
     public void _setNetworkId(int networkId) {
         this.networkId = networkId;
+        updateNetworks();
         _update();
+    }
+
+    @Override
+    public void updateNetworks() {
+        if (this.networkId == 0) {
+            networkList.retainAll(client.networkManager().networks());
+            networkList.addAll(client.networkManager().networks());
+        } else {
+            networkList.retainAll(Collections.singleton(client.networkManager().network(this.networkId)));
+            networkList.add(client.networkManager().network(this.networkId));
+        }
     }
 
     @Override
@@ -330,12 +344,18 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
         bufferViewId = Integer.parseInt(objectName);
         super.init(objectName, provider, client);
         client.bufferViewManager()._addBufferViewConfig(this);
+        updateNetworks();
         _update();
     }
 
     @Override
     public void init(int bufferViewConfigId) {
         bufferViewId = bufferViewConfigId;
+    }
+
+    @Override
+    public ObservableSet<QNetwork> networkList() {
+        return networkList;
     }
 
     @Override

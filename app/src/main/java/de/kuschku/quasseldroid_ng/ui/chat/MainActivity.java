@@ -23,24 +23,26 @@ package de.kuschku.quasseldroid_ng.ui.chat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,19 +62,13 @@ import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
-import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
-import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
-import de.kuschku.quasseldroid_ng.ui.chat.drawer.BufferItem;
-import de.kuschku.quasseldroid_ng.ui.chat.drawer.BufferViewConfigItem;
-import de.kuschku.quasseldroid_ng.ui.chat.drawer.NetworkItem;
+import de.kuschku.quasseldroid_ng.ui.chat.drawer.BufferViewConfigAdapter;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.ChatFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.LoadingFragment;
-import de.kuschku.quasseldroid_ng.ui.chat.util.ActivityImplFactory;
-import de.kuschku.quasseldroid_ng.ui.chat.util.ILayoutHelper;
 import de.kuschku.quasseldroid_ng.ui.chat.util.Status;
 import de.kuschku.util.accounts.Account;
 import de.kuschku.util.accounts.AccountManager;
@@ -83,17 +79,21 @@ import de.kuschku.util.servicebound.BoundActivity;
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class MainActivity extends BoundActivity {
-
-    /**
-     * A helper to handle the different layout implementations
-     */
-    ILayoutHelper layoutHelper;
-
     /**
      * Host layout for content fragment, for example showing a loader or the chat
      */
-    @Bind(R.id.content_host)
-    FrameLayout contentHost;
+    @Bind(R.id.chatList)
+    RecyclerView chatList;
+
+    @Bind(R.id.chatListSpinner)
+    AppCompatSpinner chatListSpinner;
+
+    @Bind(R.id.chatListToolbar)
+    Toolbar chatListToolbar;
+
+    @Nullable
+    @Bind(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
 
     /**
      * Main ActionBar
@@ -102,26 +102,15 @@ public class MainActivity extends BoundActivity {
     Toolbar toolbar;
 
     /**
-     * The left material drawer of this activity, depending on layout either in the layout hierarchy
-     * or at the left as pull-out menu
-     */
-    Drawer drawerLeft;
-
-    /**
-     * AccountHeader field for the bufferviewconfig header
-     */
-    AccountHeader accountHeader;
-
-    /**
      * This object encapsulates the current status of the activity – opened bufferview, for example
      */
     private Status status = new Status();
 
-    private BufferViewConfigItem currentConfig;
-
     private AccountManager manager;
 
     private ToolbarWrapper toolbarWrapper;
+
+    private BufferViewConfigAdapter chatListAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -131,26 +120,33 @@ public class MainActivity extends BoundActivity {
         toolbarWrapper = new ToolbarWrapper(toolbar);
         toolbarWrapper.setOnClickListener(v -> {
             if (context.client() != null) {
-                Intent intent = new Intent(this, ChannelDetailActivity.class);
-                intent.putExtra("buffer", context.client().backlogManager().open());
-                startActivity(intent);
+                int id = context.client().backlogManager().open();
+                Buffer buffer = context.client().bufferManager().buffer(id);
+                if (buffer instanceof ChannelBuffer) {
+                    Intent intent = new Intent(this, ChannelDetailActivity.class);
+                    intent.putExtra("buffer", id);
+                    startActivity(intent);
+                }
             }
         });
         setSupportActionBar(toolbar);
-        layoutHelper = ActivityImplFactory.of(getResources().getBoolean(R.bool.isTablet), this);
-        accountHeader = buildAccountHeader();
-        drawerLeft = layoutHelper.buildDrawer(savedInstanceState, accountHeader, toolbar);
-        drawerLeft.setOnDrawerItemClickListener((view, position, drawerItem) -> {
-            if (drawerItem instanceof NetworkItem) {
-                drawerLeft.getAdapter().toggleExpandable(position);
-                return true;
-            } else if (drawerItem instanceof BufferItem) {
-                int id = ((BufferItem) drawerItem).getBuffer().getInfo().id();
-                context.client().backlogManager().open(id);
-                return false;
+        chatListAdapter = BufferViewConfigAdapter.of(context);
+        chatListAdapter.setBufferClickListener(buffer -> {
+            if (context.client() != null) {
+                context.client().backlogManager().open(buffer.getInfo().id());
+                if (drawerLayout != null)
+                    drawerLayout.closeDrawer(GravityCompat.START);
             }
-            return true;
         });
+        chatList.setItemAnimator(new DefaultItemAnimator());
+        chatList.setLayoutManager(new LinearLayoutManager(this));
+        chatList.setAdapter(chatListAdapter);
+
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawerLayout != null) {
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.material_drawer_open, R.string.material_drawer_close);
+            toggle.syncState();
+        }
 
         replaceFragment(new LoadingFragment());
 
@@ -222,6 +218,8 @@ public class MainActivity extends BoundActivity {
         finish();
     }
 
+    /*
+
     private AccountHeader buildAccountHeader() {
         return new AccountHeaderBuilder()
                 .withActivity(this)
@@ -235,16 +233,16 @@ public class MainActivity extends BoundActivity {
                 .build();
     }
 
+    */
+
     public void onEventMainThread(ConnectionChangeEvent event) {
         onConnectionChange(event.status);
     }
 
     public void onConnectionChange(ConnectionChangeEvent.Status status) {
         if (status == ConnectionChangeEvent.Status.CONNECTED) {
-            updateBufferViewConfigs();
-            context.client().backlogManager().open(this.status.bufferId);
-            accountHeader.setActiveProfile(this.status.bufferViewConfigId, true);
             replaceFragment(new ChatFragment());
+            onConnected();
         } else if (status == ConnectionChangeEvent.Status.DISCONNECTED) {
             Toast.makeText(getApplication(), context.themeUtil().translations.statusDisconnected, Toast.LENGTH_LONG).show();
         }
@@ -289,33 +287,10 @@ public class MainActivity extends BoundActivity {
                 }
             }
         }
-        drawerLeft.setSelection(id, false);
     }
 
-    private void selectBufferViewConfig(@IntRange(from = -1) int bufferViewConfigId) {
-        assertNotNull(drawerLeft);
-        assertNotNull(accountHeader);
-        Client client = context.client();
-        assertNotNull(client);
 
-        drawerLeft.removeAllItems();
-
-        status.bufferViewConfigId = bufferViewConfigId;
-        accountHeader.setActiveProfile(bufferViewConfigId, false);
-
-        if (currentConfig != null)
-            currentConfig.remove();
-        currentConfig = null;
-
-        QBufferViewManager bufferViewManager = client.bufferViewManager();
-        if (bufferViewConfigId != -1 && bufferViewManager != null) {
-            QBufferViewConfig viewConfig = bufferViewManager.bufferViewConfig(bufferViewConfigId);
-            if (viewConfig != null) {
-                currentConfig = new BufferViewConfigItem(drawerLeft, viewConfig, context);
-            }
-        }
-    }
-
+    /*
     private void updateBufferViewConfigs() {
         assertNotNull(context.client().bufferViewManager());
         List<QBufferViewConfig> bufferViews = context.client().bufferViewManager().bufferViewConfigs();
@@ -334,6 +309,7 @@ public class MainActivity extends BoundActivity {
         }
         accountHeader.setActiveProfile(status.bufferViewConfigId, true);
     }
+    */
 
     @Override
     protected void onConnectToThread(@Nullable ClientBackgroundThread thread) {
@@ -342,12 +318,30 @@ public class MainActivity extends BoundActivity {
             connectToServer(manager.account(context.settings().lastAccount.get()));
         else {
             if (context.client() != null) {
-                context.client().backlogManager().init("", context.provider(), context.client());
-                context.client().backlogManager().open(status.bufferId);
-                updateBuffer(context.client().backlogManager().open());
-                accountHeader.setActiveProfile(status.bufferViewConfigId, true);
+                onConnected();
             }
         }
+    }
+
+    private void onConnected() {
+        context.client().backlogManager().init("", context.provider(), context.client());
+        context.client().backlogManager().open(status.bufferId);
+        if (context.client().bufferViewManager() != null) {
+            chatListSpinner.setAdapter(new BufferViewConfigSpinnerAdapter(context, context.client().bufferViewManager()));
+            chatListSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    chatListAdapter.selectConfig((int) id);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    chatListAdapter.selectConfig(-1);
+                }
+            });
+        }
+        updateBuffer(context.client().backlogManager().open());
+        // accountHeader.setActiveProfile(status.bufferViewConfigId, true);
     }
 
     // FIXME: Fix this ugly hack

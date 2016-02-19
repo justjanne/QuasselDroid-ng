@@ -73,4 +73,5 @@
     <string name="statusConnected">Connected</string>
     <string name="statusWelcome">Welcome!</string>
     <string name="statusDisconnected">Connection lost</string>
+    <string name="no_topic_set">No Topic Set</string>
 </resources>

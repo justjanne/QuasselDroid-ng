@@ -21,6 +21,7 @@
 
 package de.kuschku.libquassel.localtypes.buffers;
 
+import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -36,7 +37,7 @@ public interface Buffer {
     String getName();
 
     @NonNull
-    BufferInfo.BufferStatus getStatus();
+    ObservableField<BufferInfo.BufferStatus> getStatus();
 
     void renameBuffer(@NonNull String newName);
 

@@ -19,17 +19,35 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.ui.chat.util;
+package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
-import de.kuschku.quasseldroid_ng.ui.chat.MainActivity;
+import android.support.annotation.LayoutRes;
+import android.view.View;
+import android.widget.TextView;
 
-public class ActivityImplFactory {
-    private ActivityImplFactory() {
+import com.bignerdranch.expandablerecyclerview.ViewHolder.ParentViewHolder;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import de.kuschku.quasseldroid_ng.R;
+import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
+
+public class NetworkViewHolder extends ParentViewHolder {
+
+    @Bind(R.id.material_drawer_name)
+    TextView name;
+
+    public NetworkViewHolder(View itemView) {
+        super(itemView);
+        ButterKnife.bind(this, itemView);
     }
 
+    @LayoutRes
+    public static int layout() {
+        return R.layout.widget_network;
+    }
 
-    public static ILayoutHelper of(boolean tablet, MainActivity activity) {
-        return (tablet) ? new LayoutHelperTabletImpl(activity) : new LayoutHelperPhoneImpl(activity);
+    public void bind(AppContext context, NetworkItem item) {
+        name.setText(item.getNetwork().networkName());
     }
 }

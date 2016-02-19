@@ -68,7 +68,6 @@ public class NetworkManager extends Observable {
 
     public void init(@NonNull List<Integer> networkIds) {
         for (int networkId : networkIds) {
-            createNetwork(networkId);
             client.requestInitObject("Network", String.valueOf(networkId));
         }
     }

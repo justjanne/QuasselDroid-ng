@@ -20,7 +20,6 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorBackground"
@@ -52,11 +51,11 @@
                 style="@style/TextAppearance.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:textColor="?attr/colorAccent"
-                android:text="Topic"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:gravity="fill_vertical" />
+                android:gravity="fill_vertical"
+                android:text="Topic"
+                android:textColor="?attr/colorAccent" />
 
             <TextView
                 android:id="@+id/topic"
@@ -64,20 +63,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:text="No Topic Set"
-                android:textStyle="italic"
-                android:textColor="?attr/colorForegroundSecondary"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead" />
 
             <android.support.v7.widget.AppCompatButton
+                android:id="@+id/edit_topic"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:id="@+id/edit_topic"
-                android:text="Edit Topic"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_gravity="right" />
+                android:text="Edit Topic" />
 
             <View
                 android:layout_width="match_parent"
@@ -89,30 +85,30 @@
                 style="@style/TextAppearance.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:textColor="?attr/colorAccent"
-                android:text="Channel Modes"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:gravity="fill_vertical" />
+                android:gravity="fill_vertical"
+                android:text="Channel Modes"
+                android:textColor="?attr/colorAccent" />
 
             <LinearLayout
                 android:id="@+id/modes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:paddingBottom="8dp"
                 android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingBottom="8dp" />
+                android:paddingRight="8dp" />
 
         </LinearLayout>
 
     </ScrollView>
 
     <ProgressBar
+        android:id="@+id/progressBar2"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar2"
         android:layout_gravity="right" />
 
 </LinearLayout>

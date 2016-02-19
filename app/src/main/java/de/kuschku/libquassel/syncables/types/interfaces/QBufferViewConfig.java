@@ -152,4 +152,8 @@ public interface QBufferViewConfig extends QObservable {
     void _requestRemoveBufferPermanently(final int bufferId);
 
     void init(int bufferViewConfigId);
+
+    ObservableSet<QNetwork> networkList();
+
+    void updateNetworks();
 }

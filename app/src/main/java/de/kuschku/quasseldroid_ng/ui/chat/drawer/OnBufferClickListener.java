@@ -19,15 +19,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.ui.chat.util;
+package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
+import de.kuschku.libquassel.localtypes.buffers.Buffer;
 
-import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.Drawer;
-
-public interface ILayoutHelper {
-    Drawer buildDrawer(@Nullable Bundle savedInstanceState, AccountHeader accountHeader, Toolbar toolbar);
+public interface OnBufferClickListener {
+    void onClick(Buffer buffer);
 }

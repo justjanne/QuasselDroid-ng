@@ -147,6 +147,7 @@ dependencies {
     compile 'org.joda:joda-convert:1.8'
 
     // UI Libs
+    compile 'com.bignerdranch.android:expandablerecyclerview:2.0.4'
     compile(name:'library-release', ext:'aar')
     compile('com.mikepenz:materialdrawer:5.0.0.b27-SNAPSHOT@aar') { transitive = true }
     compile('com.github.afollestad.material-dialogs:core:0.8.5.3@aar') { transitive = true }

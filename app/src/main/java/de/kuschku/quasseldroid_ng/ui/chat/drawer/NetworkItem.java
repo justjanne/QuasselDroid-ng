@@ -21,108 +21,92 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
-import android.support.annotation.NonNull;
+import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 
-import com.mikepenz.materialdrawer.holder.StringHolder;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-
-import java.util.ArrayList;
 import java.util.List;
 
-import de.kuschku.libquassel.client.Client;
+import de.kuschku.libquassel.localtypes.buffers.Buffer;
+import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
-import de.kuschku.util.observables.ContentComparable;
-import de.kuschku.util.observables.IObservable;
-import de.kuschku.util.observables.callbacks.DrawerItemCallback;
+import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
+import de.kuschku.util.irc.IrcCaseMapper;
 import de.kuschku.util.observables.callbacks.ElementCallback;
-import de.kuschku.util.observables.callbacks.wrappers.MultiDrawerItemCallback;
+import de.kuschku.util.observables.lists.ObservableSortedList;
 
-public class NetworkItem extends PrimaryDrawerItem implements IObservable<DrawerItemCallback>, ContentComparable<NetworkItem> {
-    @NonNull
-    private final QBufferViewConfig config;
-    @NonNull
-    private final Client client;
-    @NonNull
-    private final BufferItemManager manager;
-    @NonNull
+public class NetworkItem implements ParentListItem {
     private final QNetwork network;
-    private final MultiDrawerItemCallback callback = MultiDrawerItemCallback.of();
-
-    public NetworkItem(@NonNull QBufferViewConfig config, @NonNull Client client, @NonNull BufferItemManager manager, @NonNull QNetwork network) {
-        this.config = config;
-        this.client = client;
-        this.manager = manager;
-        this.network = network;
-        ElementCallback<Integer> elemCallback = new ElementCallback<Integer>() {
-            @Override
-            public void notifyItemInserted(Integer element) {
-                callback.notifyChanged(NetworkItem.this);
-            }
-
-            @Override
-            public void notifyItemRemoved(Integer element) {
-                callback.notifyChanged(NetworkItem.this);
-            }
-
-            @Override
-            public void notifyItemChanged(Integer element) {
-                callback.notifyChanged(manager.get(element));
-            }
-        };
-        config.bufferIds().addCallback(elemCallback);
-        client.bufferManager().byNetwork(network.networkId()).addCallback(elemCallback);
-    }
-
-    @NonNull
-    @Override
-    public List<IDrawerItem> getSubItems() {
-        List<IDrawerItem> bufferItems = new ArrayList<>();
-        for (int id : config.bufferList()) {
-            if (client.bufferManager().byNetwork(network.networkId()).contains(id)) {
-                if (config.allowedBufferTypes() == 0 ||
-                        config.allowedBufferTypes() == -1 ||
-                        (config.allowedBufferTypes() & client.bufferManager().buffer(id).getInfo().type().id) != 0)
-
-                    bufferItems.add(manager.get(id));
+    private final ObservableSortedList<Buffer> buffers = new ObservableSortedList<>(Buffer.class, new ObservableSortedList.ItemComparator<Buffer>() {
+        @Override
+        public int compare(Buffer o1, Buffer o2) {
+            if (o1.getInfo().type() == o2.getInfo().type()) {
+                return IrcCaseMapper.toLowerCase(o1.getName()).compareTo(IrcCaseMapper.toLowerCase(o2.getName()));
+            } else {
+                if (o1.getInfo().type() == BufferInfo.Type.STATUS)
+                    return -1;
+                else if (o2.getInfo().type() == BufferInfo.Type.STATUS)
+                    return 1;
+                else if (o1.getInfo().type() == BufferInfo.Type.CHANNEL)
+                    return -1;
+                else if (o2.getInfo().type() == BufferInfo.Type.CHANNEL)
+                    return 1;
+                else if (o1.getInfo().type() == BufferInfo.Type.GROUP)
+                    return -1;
+                else if (o2.getInfo().type() == BufferInfo.Type.GROUP)
+                    return 1;
+                else
+                    return -1;
             }
         }
-        return bufferItems;
+
+        @Override
+        public boolean areContentsTheSame(Buffer oldItem, Buffer newItem) {
+            return oldItem == newItem;
+        }
+
+        @Override
+        public boolean areItemsTheSame(Buffer item1, Buffer item2) {
+            return item1.getInfo().id() == item2.getInfo().id();
+        }
+    });
+
+    public NetworkItem(AppContext context, QBufferViewConfig config, QNetwork network) {
+        this.network = network;
+        for (int id : config.bufferList()) {
+            Buffer buffer = context.client().bufferManager().buffer(id);
+            if (buffer != null && buffer.getInfo().networkId() == network.networkId())
+                buffers.add(buffer);
+        }
+        config.bufferIds().addCallback(new ElementCallback<Integer>() {
+            @Override
+            public void notifyItemInserted(Integer id) {
+                Buffer buffer = context.client().bufferManager().buffer(id);
+                if (buffer != null && buffer.getInfo().networkId() == network.networkId())
+                    buffers.add(buffer);
+            }
+
+            @Override
+            public void notifyItemRemoved(Integer id) {
+                buffers.remove(context.client().bufferManager().buffer(id));
+            }
+
+            @Override
+            public void notifyItemChanged(Integer id) {
+                buffers.notifyItemChanged(buffers.indexOf(context.client().bufferManager().buffer(id)));
+            }
+        });
     }
 
-    @NonNull
     @Override
-    public StringHolder getName() {
-        return new StringHolder(network.networkName());
+    public List<?> getChildItemList() {
+        return buffers;
     }
 
     @Override
-    public void addCallback(DrawerItemCallback callback) {
-        this.callback.addCallback(callback);
+    public boolean isInitiallyExpanded() {
+        return network.isConnected();
     }
 
-    @Override
-    public void removeCallback(DrawerItemCallback callback) {
-        this.callback.removeCallback(callback);
-    }
-
-    @Override
-    public boolean areItemsTheSame(@NonNull NetworkItem other) {
-        return network.networkId() == other.network.networkId();
-    }
-
-    @Override
-    public boolean areContentsTheSame(NetworkItem other) {
-        return network.equals(other);
-    }
-
-    @Override
-    public int compareTo(@NonNull NetworkItem another) {
-        return network.networkName().compareToIgnoreCase(another.network.networkName());
-    }
-
-    @NonNull
     public QNetwork getNetwork() {
         return network;
     }
@@ -130,10 +114,5 @@ public class NetworkItem extends PrimaryDrawerItem implements IObservable<Drawer
     @Override
     public String toString() {
         return String.valueOf(network);
-    }
-
-    @Override
-    public long getIdentifier() {
-        return network.networkId() << 16;
     }
 }

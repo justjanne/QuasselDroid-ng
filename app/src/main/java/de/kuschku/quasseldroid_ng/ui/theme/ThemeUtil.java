@@ -22,13 +22,16 @@
 package de.kuschku.quasseldroid_ng.ui.theme;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.view.ContextThemeWrapper;
 
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
+import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.annotationbind.AutoColor;
@@ -45,14 +48,18 @@ public class ThemeUtil {
     public final FormatStrings translations = new FormatStrings();
     @NonNull
     public final DateTimeFormatHelper formatter;
+    @NonNull
+    public final StatusDrawables statusDrawables;
 
     public ThemeUtil(@NonNull Context ctx) {
         initColors(new ContextThemeWrapper(ctx, ctx.getTheme()));
+        statusDrawables = new StatusDrawables(ctx, res);
         formatter = new DateTimeFormatHelper(ctx);
     }
 
     public ThemeUtil(@NonNull Context ctx, @NonNull AppTheme theme) {
         initColors(new ContextThemeWrapper(ctx, theme.themeId));
+        statusDrawables = new StatusDrawables(ctx, res);
         formatter = new DateTimeFormatHelper(ctx);
     }
 
@@ -79,6 +86,42 @@ public class ThemeUtil {
             case DISCONNECTED:
             default:
                 return translations.statusDisconnected;
+        }
+    }
+
+    public static class StatusDrawables {
+        public final Drawable online;
+        public final Drawable away;
+        public final Drawable offline;
+
+        public final Drawable channelOnline;
+        public final Drawable channelOffline;
+
+        public StatusDrawables(Context ctx, Colors colors) {
+            online = ctx.getResources().getDrawable(R.drawable.ic_status);
+            DrawableCompat.setTint(online, colors.colorAccent);
+            away = ctx.getResources().getDrawable(R.drawable.ic_status);
+            offline = ctx.getResources().getDrawable(R.drawable.ic_status_offline);
+
+            channelOnline = ctx.getResources().getDrawable(R.drawable.ic_status_channel);
+            DrawableCompat.setTint(channelOnline, colors.colorAccent);
+            channelOffline = ctx.getResources().getDrawable(R.drawable.ic_status_channel_offline);
+        }
+
+        public Drawable of(BufferInfo.Type type, BufferInfo.BufferStatus status) {
+            if (type == BufferInfo.Type.CHANNEL) {
+                if (status == BufferInfo.BufferStatus.ONLINE)
+                    return channelOnline;
+                else
+                    return channelOffline;
+            } else {
+                if (status == BufferInfo.BufferStatus.ONLINE)
+                    return online;
+                else if (status == BufferInfo.BufferStatus.AWAY)
+                    return away;
+                else
+                    return offline;
+            }
         }
     }
 

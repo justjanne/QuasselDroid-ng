@@ -42,9 +42,9 @@ public interface QBacklogManager<T extends QSyncableObject<T>> extends QSyncable
     void _requestBacklog(int id, int first, int last, int limit, int additional);
 
     @Synced
-    void receiveBacklog(int id, int first, int last, int limit, int additional, List<Message> messages);
+    void receiveBacklog(int id, int first, int last, int limit, int additional, @NonNull List<Message> messages);
 
-    void _receiveBacklog(int id, int first, int last, int limit, int additional, List<Message> messages);
+    void _receiveBacklog(int id, int first, int last, int limit, int additional, @NonNull List<Message> messages);
 
     @Synced
     void requestBacklogAll(int first, int last, int limit, int additional);
@@ -52,9 +52,9 @@ public interface QBacklogManager<T extends QSyncableObject<T>> extends QSyncable
     void _requestBacklogAll(int first, int last, int limit, int additional);
 
     @Synced
-    void receiveBacklogAll(int first, int last, int limit, int additional, List<Message> messages);
+    void receiveBacklogAll(int first, int last, int limit, int additional, @NonNull List<Message> messages);
 
-    void _receiveBacklogAll(int first, int last, int limit, int additional, List<Message> messages);
+    void _receiveBacklogAll(int first, int last, int limit, int additional, @NonNull List<Message> messages);
 
     @NonNull
     BacklogFilter filter(int id);

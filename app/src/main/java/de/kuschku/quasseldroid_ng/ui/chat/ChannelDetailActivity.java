@@ -21,6 +21,7 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
@@ -30,7 +31,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -77,9 +77,16 @@ public class ChannelDetailActivity extends BoundActivity {
         QIrcChannel channel = buffer.getChannel();
         if (channel == null) return;
 
-        if (channel.topic() != null)
-        topic.setText(new IrcFormatHelper(context).formatIrcMessage(context.client(), channel.topic(), buffer.getInfo(), v -> finish()));
-        topic.setMovementMethod(LinkMovementMethod.getInstance());
+        if (channel.topic() == null) {
+            topic.setText(R.string.no_topic_set);
+            topic.setTextColor(context.themeUtil().res.colorForegroundSecondary);
+            topic.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+        } else {
+            topic.setText(new IrcFormatHelper(context).formatIrcMessage(context.client(), channel.topic(), buffer.getInfo(), v -> finish()));
+            topic.setMovementMethod(LinkMovementMethod.getInstance());
+            topic.setTextColor(context.themeUtil().res.colorForeground);
+            topic.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+        }
 
         toolbar.setTitle(channel.name());
         setSupportActionBar(toolbar);

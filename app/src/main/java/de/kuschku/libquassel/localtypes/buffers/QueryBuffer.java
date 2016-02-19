@@ -21,6 +21,7 @@
 
 package de.kuschku.libquassel.localtypes.buffers;
 
+import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -33,6 +34,8 @@ public class QueryBuffer implements Buffer {
     private final Client client;
     @NonNull
     private BufferInfo info;
+
+    private ObservableField<BufferInfo.BufferStatus> status = new ObservableField<>();
 
     public QueryBuffer(@NonNull BufferInfo info, @NonNull Client client) {
         this.info = info;
@@ -58,10 +61,12 @@ public class QueryBuffer implements Buffer {
 
     @NonNull
     @Override
-    public BufferInfo.BufferStatus getStatus() {
-        return (getUser() == null) ? BufferInfo.BufferStatus.OFFLINE :
+    public ObservableField<BufferInfo.BufferStatus> getStatus() {
+        // FIXME: Make this dynamic
+        status.set((getUser() == null) ? BufferInfo.BufferStatus.OFFLINE :
                 (getUser().isAway()) ? BufferInfo.BufferStatus.AWAY :
-                        BufferInfo.BufferStatus.ONLINE;
+                        BufferInfo.BufferStatus.ONLINE);
+        return status;
     }
 
     @Override

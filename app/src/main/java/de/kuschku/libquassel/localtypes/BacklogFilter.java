@@ -39,6 +39,8 @@ import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
+import static de.kuschku.util.AndroidAssert.assertNotNull;
+
 public class BacklogFilter implements UICallback {
     @NonNull
     private final Client client;
@@ -92,7 +94,8 @@ public class BacklogFilter implements UICallback {
     }
 
     private boolean filterItem(@NonNull Message message) {
-        QNetwork network = client.networkManager().network(message.bufferInfo.networkId());
+        QNetwork network = client.networkManager().network(client.bufferManager().buffer(message.bufferInfo.id()).getInfo().networkId());
+        assertNotNull(network);
         return (client.ignoreListManager() != null && client.ignoreListManager().matches(message, network)) || filteredTypes.contains(message.type);
     }
 
