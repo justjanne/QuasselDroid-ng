@@ -32,6 +32,7 @@ public enum AppTheme {
     QUASSEL_DARK(R.style.Quassel_Dark),
     MATERIAL_DARK(R.style.Material_Dark),
     MATERIAL_LIGHT(R.style.Material_Light),
+    SOLARIZED_LIGHT(R.style.Solarized_Light),
     SOLARIZED_DARK(R.style.Solarized_Dark);
 
     public final int themeId;
@@ -54,6 +55,8 @@ public enum AppTheme {
                 return MATERIAL_LIGHT;
             case "QUASSEL_DARK":
                 return QUASSEL_DARK;
+            case "SOLARIZED_LIGHT":
+                return SOLARIZED_LIGHT;
             case "SOLARIZED_DARK":
                 return SOLARIZED_DARK;
 

@@ -31,7 +31,6 @@ import android.support.v4.app.Fragment;
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
 import de.kuschku.quasseldroid_ng.service.QuasselService;
-import de.kuschku.quasseldroid_ng.ui.chat.Settings;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ServiceHelper;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.accounts.Account;
@@ -59,7 +58,6 @@ public abstract class BoundFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         ServiceHelper.initTheme(context, getActivity());
-        context.withSettings(new Settings(getActivity()));
         super.onCreate(savedInstanceState);
         ServiceHelper.startServiceIfNotRunning(getContext());
     }

@@ -119,7 +119,7 @@ public class IrcFormatDeserializer {
         FormatDescription italic = null;
         FormatDescription underline = null;
         FormatDescription color = null;
-        boolean colorize = context.settings().mircColors.get();
+        boolean colorize = context.settings().preferenceColors.get();
 
         // Iterating over every character
         for (int i = 0; i < str.length(); i++) {

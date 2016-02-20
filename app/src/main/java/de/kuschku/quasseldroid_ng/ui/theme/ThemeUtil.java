@@ -44,10 +44,16 @@ import de.kuschku.util.ui.SpanFormatter;
 public class ThemeUtil {
     @NonNull
     public final Colors res = new Colors();
+
     @NonNull
     public final FormatStrings translations = new FormatStrings();
+
+    @NonNull
+    public final ChanModeStrings chanModes = new ChanModeStrings();
+
     @NonNull
     public final DateTimeFormatHelper formatter;
+
     @NonNull
     public final StatusDrawables statusDrawables;
 
@@ -68,6 +74,7 @@ public class ThemeUtil {
         try {
             AutoBinder.bind(res, wrapper);
             AutoBinder.bind(translations, wrapper);
+            AutoBinder.bind(chanModes, wrapper);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -125,79 +132,7 @@ public class ThemeUtil {
         }
     }
 
-    public static class FormatStrings {
-        @AutoString(R.string.usernameHostmask)
-        public String usernameHostmask;
-
-        @AutoString(R.string.messagePlain)
-        public String messagePlain;
-
-        @AutoString(R.string.messageJoin)
-        public String messageJoin;
-
-        @AutoString(R.string.messagePart)
-        public String messagePart;
-
-        @AutoString(R.string.messagePartExtra)
-        public String messagePartExtra;
-
-        @AutoString(R.string.messageQuit)
-        public String messageQuit;
-
-        @AutoString(R.string.messageQuitExtra)
-        public String messageQuitExtra;
-
-        @AutoString(R.string.messageKill)
-        public String messageKill;
-
-        @AutoString(R.string.messageKick)
-        public String messageKick;
-
-        @AutoString(R.string.messageKickExtra)
-        public String messageKickExtra;
-
-        @AutoString(R.string.messageMode)
-        public String messageMode;
-
-        @AutoString(R.string.messageNickSelf)
-        public String messageNickSelf;
-
-        @AutoString(R.string.messageNickOther)
-        public String messageNickOther;
-
-        @AutoString(R.string.messageDayChange)
-        public String messageDaychange;
-
-        @AutoString(R.string.messageAction)
-        public String messageAction;
-
-        @AutoString(R.string.labelStatusBuffer)
-        public String titleStatusBuffer;
-
-        @AutoString(R.string.warningCertificate)
-        public String warningCertificate;
-
-        @AutoString(R.string.statusConnecting)
-        public String statusConnecting;
-
-        @AutoString(R.string.statusHandshake)
-        public String statusHandshake;
-
-        @AutoString(R.string.statusInitData)
-        public String statusInitData;
-
-        @AutoString(R.string.statusBacklog)
-        public String statusBacklog;
-
-        @AutoString(R.string.statusConnected)
-        public String statusConnected;
-
-        @AutoString(R.string.statusDisconnected)
-        public String statusDisconnected;
-
-        @AutoString(R.string.statusWelcome)
-        public String statusWelcome;
-
+    public static class ChanModeStrings {
 
         @AutoString(R.string.chanMode_RESTRICT_TOPIC_NAME)
         public String chanMode_RESTRICT_TOPIC_NAME;
@@ -434,88 +369,6 @@ public class ThemeUtil {
         public String chanMode_FORWARD_DESCRIPTION;
 
 
-        @NonNull
-        public CharSequence formatUsername(@NonNull CharSequence nick, @NonNull CharSequence hostmask) {
-            return SpanFormatter.format(usernameHostmask, nick, hostmask);
-        }
-
-        @NonNull
-        public CharSequence formatJoin(@NonNull CharSequence user, @NonNull CharSequence channel) {
-            return SpanFormatter.format(messageJoin, user, channel);
-        }
-
-        @NonNull
-        public CharSequence formatPart(@NonNull CharSequence user, @NonNull CharSequence channel) {
-            return SpanFormatter.format(messagePart, user, channel);
-        }
-
-        @NonNull
-        public CharSequence formatPart(@NonNull CharSequence user, @NonNull CharSequence channel, @Nullable CharSequence reason) {
-            if (reason == null || reason.length() == 0) return formatPart(user, channel);
-
-            return SpanFormatter.format(messagePartExtra, user, channel, reason);
-        }
-
-        @NonNull
-        public CharSequence formatQuit(@NonNull CharSequence user) {
-            return SpanFormatter.format(messageQuit, user);
-        }
-
-        @NonNull
-        public CharSequence formatQuit(@NonNull CharSequence user, @Nullable CharSequence reason) {
-            if (reason == null || reason.length() == 0) return formatQuit(user);
-
-            return SpanFormatter.format(messageQuitExtra, user, reason);
-        }
-
-        @NonNull
-        public CharSequence formatKill(@NonNull CharSequence user, @NonNull CharSequence channel) {
-            return SpanFormatter.format(messageKill, user, channel);
-        }
-
-        @NonNull
-        public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked) {
-            return SpanFormatter.format(messageKick, user, kicked);
-        }
-
-        @NonNull
-        public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked, @Nullable CharSequence reason) {
-            if (reason == null || reason.length() == 0) return formatKick(user, kicked);
-
-            return SpanFormatter.format(messageKickExtra, user, kicked, reason);
-        }
-
-        @NonNull
-        public CharSequence formatMode(@NonNull CharSequence mode, @NonNull CharSequence user) {
-            return SpanFormatter.format(messageMode, mode, user);
-        }
-
-        @NonNull
-        public CharSequence formatNick(@NonNull CharSequence newNick) {
-            return SpanFormatter.format(messageNickSelf, newNick);
-        }
-
-        @NonNull
-        public CharSequence formatNick(@NonNull CharSequence oldNick, @Nullable CharSequence newNick) {
-            if (newNick == null || newNick.length() == 0) return formatNick(oldNick);
-
-            return SpanFormatter.format(messageNickOther, oldNick, newNick);
-        }
-
-        @NonNull
-        public CharSequence formatDayChange(@NonNull CharSequence day) {
-            return SpanFormatter.format(messageDaychange, day);
-        }
-
-        @NonNull
-        public CharSequence formatAction(@NonNull CharSequence user, @NonNull CharSequence channel) {
-            return SpanFormatter.format(messageAction, user, channel);
-        }
-
-        @NonNull
-        public CharSequence formatPlain(@NonNull CharSequence nick, @NonNull CharSequence message) {
-            return SpanFormatter.format(messagePlain, nick, message);
-        }
 
         public String chanModeToDescription(ChanMode mode) {
             switch (mode) {
@@ -686,6 +539,163 @@ public class ThemeUtil {
         }
     }
 
+    public static class FormatStrings {
+        @AutoString(R.string.usernameHostmask)
+        public String usernameHostmask;
+
+        @AutoString(R.string.messagePlain)
+        public String messagePlain;
+
+        @AutoString(R.string.messageJoin)
+        public String messageJoin;
+
+        @AutoString(R.string.messagePart)
+        public String messagePart;
+
+        @AutoString(R.string.messagePartExtra)
+        public String messagePartExtra;
+
+        @AutoString(R.string.messageQuit)
+        public String messageQuit;
+
+        @AutoString(R.string.messageQuitExtra)
+        public String messageQuitExtra;
+
+        @AutoString(R.string.messageKill)
+        public String messageKill;
+
+        @AutoString(R.string.messageKick)
+        public String messageKick;
+
+        @AutoString(R.string.messageKickExtra)
+        public String messageKickExtra;
+
+        @AutoString(R.string.messageMode)
+        public String messageMode;
+
+        @AutoString(R.string.messageNickSelf)
+        public String messageNickSelf;
+
+        @AutoString(R.string.messageNickOther)
+        public String messageNickOther;
+
+        @AutoString(R.string.messageDayChange)
+        public String messageDaychange;
+
+        @AutoString(R.string.messageAction)
+        public String messageAction;
+
+        @AutoString(R.string.labelStatusBuffer)
+        public String titleStatusBuffer;
+
+        @AutoString(R.string.warningCertificate)
+        public String warningCertificate;
+
+        @AutoString(R.string.statusConnecting)
+        public String statusConnecting;
+
+        @AutoString(R.string.statusHandshake)
+        public String statusHandshake;
+
+        @AutoString(R.string.statusInitData)
+        public String statusInitData;
+
+        @AutoString(R.string.statusBacklog)
+        public String statusBacklog;
+
+        @AutoString(R.string.statusConnected)
+        public String statusConnected;
+
+        @AutoString(R.string.statusDisconnected)
+        public String statusDisconnected;
+
+        @AutoString(R.string.statusWelcome)
+        public String statusWelcome;
+
+        @NonNull
+        public CharSequence formatUsername(@NonNull CharSequence nick, @NonNull CharSequence hostmask) {
+            return SpanFormatter.format(usernameHostmask, nick, hostmask);
+        }
+
+        @NonNull
+        public CharSequence formatJoin(@NonNull CharSequence user, @NonNull CharSequence channel) {
+            return SpanFormatter.format(messageJoin, user, channel);
+        }
+
+        @NonNull
+        public CharSequence formatPart(@NonNull CharSequence user, @NonNull CharSequence channel) {
+            return SpanFormatter.format(messagePart, user, channel);
+        }
+
+        @NonNull
+        public CharSequence formatPart(@NonNull CharSequence user, @NonNull CharSequence channel, @Nullable CharSequence reason) {
+            if (reason == null || reason.length() == 0) return formatPart(user, channel);
+
+            return SpanFormatter.format(messagePartExtra, user, channel, reason);
+        }
+
+        @NonNull
+        public CharSequence formatQuit(@NonNull CharSequence user) {
+            return SpanFormatter.format(messageQuit, user);
+        }
+
+        @NonNull
+        public CharSequence formatQuit(@NonNull CharSequence user, @Nullable CharSequence reason) {
+            if (reason == null || reason.length() == 0) return formatQuit(user);
+
+            return SpanFormatter.format(messageQuitExtra, user, reason);
+        }
+
+        @NonNull
+        public CharSequence formatKill(@NonNull CharSequence user, @NonNull CharSequence channel) {
+            return SpanFormatter.format(messageKill, user, channel);
+        }
+
+        @NonNull
+        public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked) {
+            return SpanFormatter.format(messageKick, user, kicked);
+        }
+
+        @NonNull
+        public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked, @Nullable CharSequence reason) {
+            if (reason == null || reason.length() == 0) return formatKick(user, kicked);
+
+            return SpanFormatter.format(messageKickExtra, user, kicked, reason);
+        }
+
+        @NonNull
+        public CharSequence formatMode(@NonNull CharSequence mode, @NonNull CharSequence user) {
+            return SpanFormatter.format(messageMode, mode, user);
+        }
+
+        @NonNull
+        public CharSequence formatNick(@NonNull CharSequence newNick) {
+            return SpanFormatter.format(messageNickSelf, newNick);
+        }
+
+        @NonNull
+        public CharSequence formatNick(@NonNull CharSequence oldNick, @Nullable CharSequence newNick) {
+            if (newNick == null || newNick.length() == 0) return formatNick(oldNick);
+
+            return SpanFormatter.format(messageNickOther, oldNick, newNick);
+        }
+
+        @NonNull
+        public CharSequence formatDayChange(@NonNull CharSequence day) {
+            return SpanFormatter.format(messageDaychange, day);
+        }
+
+        @NonNull
+        public CharSequence formatAction(@NonNull CharSequence user, @NonNull CharSequence channel) {
+            return SpanFormatter.format(messageAction, user, channel);
+        }
+
+        @NonNull
+        public CharSequence formatPlain(@NonNull CharSequence nick, @NonNull CharSequence message) {
+            return SpanFormatter.format(messagePlain, nick, message);
+        }
+    }
+
     public static class Colors {
         @AutoColor(android.R.color.transparent)
         @ColorInt
@@ -764,6 +774,10 @@ public class ThemeUtil {
         @AutoColor(R.attr.colorTintHighlight)
         @ColorInt
         public int colorTintHighlight;
+
+        @AutoColor(R.attr.material_drawer_selected)
+        @ColorInt
+        public int colorSelected;
 
         @AutoDimen(R.attr.actionBarSize)
         @ColorInt

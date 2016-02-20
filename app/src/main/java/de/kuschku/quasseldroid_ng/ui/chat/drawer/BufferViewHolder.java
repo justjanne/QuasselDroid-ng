@@ -23,6 +23,7 @@ package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
 import android.databinding.Observable;
 import android.databinding.ObservableField;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -74,7 +75,7 @@ public class BufferViewHolder extends ChildViewHolder {
         context.provider().event.registerSticky(this);
 
         background = new StateListDrawable();
-        background.addState(new int[]{android.R.attr.state_selected}, itemView.getResources().getDrawable(com.mikepenz.materialdrawer.R.color.material_drawer_selected));
+        background.addState(new int[]{android.R.attr.state_selected}, new ColorDrawable(context.themeUtil().res.colorSelected));
         background.addState(new int[0], UIUtils.getSelectableBackground(itemView.getContext()));
     }
 

@@ -70,6 +70,7 @@ import de.kuschku.quasseldroid_ng.ui.chat.drawer.BufferViewConfigAdapter;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.ChatFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.LoadingFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.util.Status;
+import de.kuschku.quasseldroid_ng.ui.settings.SettingsActivity;
 import de.kuschku.util.accounts.Account;
 import de.kuschku.util.accounts.AccountManager;
 import de.kuschku.util.certificates.CertificateUtils;
@@ -210,13 +211,16 @@ public class MainActivity extends BoundActivity {
             case R.id.action_reauth:
                 reauth();
                 return true;
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     private void reauth() {
-        context.settings().lastAccount.set("");
+        context.settings().preferenceLastAccount.set("");
         stopConnection();
         finish();
     }
@@ -318,7 +322,7 @@ public class MainActivity extends BoundActivity {
     protected void onConnectToThread(@Nullable ClientBackgroundThread thread) {
         super.onConnectToThread(thread);
         if (thread == null)
-            connectToServer(manager.account(context.settings().lastAccount.get()));
+            connectToServer(manager.account(context.settings().preferenceLastAccount.get()));
         else {
             if (context.client() != null && context.client().connectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
                 onConnected();
@@ -434,7 +438,7 @@ public class MainActivity extends BoundActivity {
                         String username = usernameField.getText().toString();
                         String password = passwordField.getText().toString();
 
-                        Account account = manager.account(context.settings().lastAccount.get());
+                        Account account = manager.account(context.settings().preferenceLastAccount.get());
                         manager.update(account.withLoginData(username, password));
                     })
                     .cancelListener(dialog1 -> finish())

@@ -30,13 +30,16 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorAccentFocus">@color/colorAccentFocus</item>
+        <item name="actionBarTheme">@style/AppTheme.AppBarOverlay</item>
 
         <item name="windowActionModeOverlay">true</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
         <item name="material_drawer_background">?attr/colorBackground</item>
         <item name="material_drawer_primary_text">?attr/colorForeground</item>
         <item name="material_drawer_primary_icon">?attr/colorForeground</item>
         <item name="material_drawer_secondary_text">?attr/colorForegroundSecondary</item>
+        <item name="material_drawer_selected">#26ffffff</item>
         
         <item name="iconFormatBold">@drawable/ic_format_bold_dark</item>
         <item name="iconFormatItalic">@drawable/ic_format_italic_dark</item>
@@ -59,13 +62,16 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorAccentFocus">@color/colorAccentFocus</item>
+        <item name="actionBarTheme">@style/AppTheme.AppBarOverlay</item>
 
         <item name="windowActionModeOverlay">true</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
         <item name="material_drawer_background">?attr/colorBackground</item>
         <item name="material_drawer_primary_text">?attr/colorForeground</item>
         <item name="material_drawer_primary_icon">?attr/colorForeground</item>
         <item name="material_drawer_secondary_text">?attr/colorForegroundSecondary</item>
+        <item name="material_drawer_selected">#26000000</item>
 
         <item name="iconFormatBold">@drawable/ic_format_bold_light</item>
         <item name="iconFormatItalic">@drawable/ic_format_italic_light</item>
@@ -90,6 +96,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorAccentFocus">@color/colorAccentFocus</item>
+        <item name="actionBarTheme">@style/AppTheme.AppBarOverlay</item>
+
         <item name="windowActionModeOverlay">true</item>
     </style>
 
@@ -97,7 +105,49 @@
         <item name="colorControlHighlight">?attr/colorAccentFocus</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorControlNormal">#ffffff</item>
+        <item name="android:textColorPrimary">#ffffff</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowToggle</item>
+
+        <item name="iconFormatBold">@drawable/ic_format_bold_dark</item>
+        <item name="iconFormatItalic">@drawable/ic_format_italic_dark</item>
+        <item name="iconFormatUnderline">@drawable/ic_format_underline_dark</item>
+        <item name="iconFormatPaint">@drawable/ic_format_paint_dark</item>
+        <item name="iconFormatFill">@drawable/ic_format_fill_dark</item>
+        <item name="iconHistory">@drawable/ic_history_dark</item>
+        <item name="iconDebug">@drawable/ic_bug_dark</item>
+        <item name="iconFilter">@drawable/ic_filter_dark</item>
+        <item name="iconModify">@drawable/ic_pencil_dark</item>
+        <item name="iconDelete">@drawable/ic_delete_dark</item>
+        <item name="iconAdd">@drawable/ic_plus_dark</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay.Light" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">#727272</item>
+        <item name="android:textColorPrimary">#727272</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowToggle.Light</item>
+
+        <item name="iconFormatBold">@drawable/ic_format_bold_light</item>
+        <item name="iconFormatItalic">@drawable/ic_format_italic_light</item>
+        <item name="iconFormatUnderline">@drawable/ic_format_underline_light</item>
+        <item name="iconFormatPaint">@drawable/ic_format_paint_light</item>
+        <item name="iconFormatFill">@drawable/ic_format_fill_light</item>
+        <item name="iconHistory">@drawable/ic_history_light</item>
+        <item name="iconDebug">@drawable/ic_bug_light</item>
+        <item name="iconFilter">@drawable/ic_filter_light</item>
+        <item name="iconModify">@drawable/ic_pencil_light</item>
+        <item name="iconDelete">@drawable/ic_delete_light</item>
+        <item name="iconAdd">@drawable/ic_plus_light</item>
+    </style>
+
+    <style name="DrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">?attr/colorControlNormal</item>
+    </style>
+
+    <style name="DrawerArrowToggle.Light" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">?attr/colorControlNormal</item>
+    </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

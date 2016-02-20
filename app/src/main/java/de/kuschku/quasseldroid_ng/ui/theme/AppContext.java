@@ -25,7 +25,7 @@ import android.support.annotation.NonNull;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
-import de.kuschku.quasseldroid_ng.ui.chat.Settings;
+import de.kuschku.quasseldroid_ng.ui.settings.Settings;
 import de.kuschku.util.irc.format.IrcFormatDeserializer;
 import de.kuschku.util.irc.format.IrcFormatSerializer;
 

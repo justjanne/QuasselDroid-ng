@@ -99,7 +99,7 @@ public class ChatMessageRenderer {
 
     @NonNull
     private CharSequence formatNick(@NonNull String hostmask) {
-        return formatNick(hostmask, context.settings().fullHostmask.or(false));
+        return formatNick(hostmask, context.settings().preferenceHostmask.or(false));
     }
 
     @NonNull

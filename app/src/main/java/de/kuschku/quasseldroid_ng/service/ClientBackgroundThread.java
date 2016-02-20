@@ -35,7 +35,7 @@ import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.LoginRequireEvent;
 import de.kuschku.libquassel.localtypes.backlogstorage.MemoryBacklogStorage;
 import de.kuschku.libquassel.protocols.RemotePeer;
-import de.kuschku.quasseldroid_ng.ui.chat.Settings;
+import de.kuschku.quasseldroid_ng.ui.settings.Settings;
 import de.kuschku.util.CompatibilityUtils;
 import de.kuschku.util.accounts.Account;
 import de.kuschku.util.accounts.AccountManager;
@@ -94,7 +94,7 @@ public class ClientBackgroundThread implements Runnable {
 
     public void onEvent(LoginRequireEvent event) {
         if (!event.failedLast) {
-            Account account = manager.account(settings.lastAccount.get());
+            Account account = manager.account(settings.preferenceLastAccount.get());
             client().client.login(account.user, account.pass);
         }
     }

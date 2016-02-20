@@ -27,8 +27,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import de.kuschku.quasseldroid_ng.ui.chat.MainActivity;
-import de.kuschku.quasseldroid_ng.ui.chat.Settings;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ServiceHelper;
+import de.kuschku.quasseldroid_ng.ui.settings.Settings;
 import de.kuschku.quasseldroid_ng.ui.setup.AccountSelectActivity;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 
@@ -57,16 +57,16 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            context.settings().lastAccount.set(data.getBundleExtra("extra").getString("account"));
+            context.settings().preferenceLastAccount.set(data.getBundleExtra("extra").getString("account"));
             checkReady();
             firstStart = true;
-        } else if (context.settings().lastAccount.get().isEmpty()) {
+        } else if (context.settings().preferenceLastAccount.get().isEmpty()) {
             finish();
         }
     }
 
     private boolean checkReady() {
-        if (context.settings().lastAccount.get().isEmpty()) {
+        if (context.settings().preferenceLastAccount.get().isEmpty()) {
             Intent intent = new Intent(this, AccountSelectActivity.class);
             startActivityForResult(intent, 0);
             firstStart = true;

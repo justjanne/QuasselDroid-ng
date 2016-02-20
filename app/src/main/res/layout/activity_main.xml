@@ -58,21 +58,21 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/AppTheme.AppBarOverlay">
+                android:theme="?attr/actionBarTheme">
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/chatListToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="?attr/colorPrimary"
-                    android:theme="@style/AppTheme.AppBarOverlay"
+                    android:theme="?attr/actionBarTheme"
                     app:popupTheme="@style/AppTheme.PopupOverlay">
 
                     <android.support.v7.widget.AppCompatSpinner
                         android:id="@+id/chatListSpinner"
                         android:layout_width="fill_parent"
                         android:layout_height="match_parent"
-                        android:theme="@style/AppTheme.AppBarOverlay"
+                        android:theme="?attr/actionBarTheme"
                         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
                 </android.support.v7.widget.Toolbar>

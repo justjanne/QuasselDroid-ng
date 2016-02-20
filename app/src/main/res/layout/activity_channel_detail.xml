@@ -29,7 +29,7 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="?attr/actionBarTheme">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -63,7 +63,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:textColor="?attr/colorForeground" />
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/edit_topic"
@@ -103,12 +104,5 @@
         </LinearLayout>
 
     </ScrollView>
-
-    <ProgressBar
-        android:id="@+id/progressBar2"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right" />
 
 </LinearLayout>

@@ -26,18 +26,21 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.annotation.StyleRes;
 import android.support.v7.app.AppCompatActivity;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
 import de.kuschku.quasseldroid_ng.service.QuasselService;
-import de.kuschku.quasseldroid_ng.ui.chat.Settings;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ServiceHelper;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
+import de.kuschku.quasseldroid_ng.ui.theme.AppTheme;
 import de.kuschku.util.accounts.Account;
 
 public abstract class BoundActivity extends AppCompatActivity {
     protected AppContext context = new AppContext();
+    @StyleRes
+    private int themeId;
     private QuasselService.LocalBinder binder;
     private ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -58,17 +61,21 @@ public abstract class BoundActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        ServiceHelper.initTheme(context, this);
-        context.withSettings(new Settings(this));
-        context.settings().theme.addChangeListener(s -> recreate());
+        themeId = ServiceHelper.initTheme(context, this);
         super.onCreate(savedInstanceState);
+        context.settings().preferenceTheme.addChangeListener(s -> recreate());
         ServiceHelper.startServiceIfNotRunning(this);
+        ServiceHelper.connectToService(this, connection);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         ServiceHelper.connectToService(this, connection);
+        if (themeId != AppTheme.themeFromString(context.settings().preferenceTheme.get()).themeId) {
+            finish();
+            startActivity(getIntent());
+        }
     }
 
     @Override

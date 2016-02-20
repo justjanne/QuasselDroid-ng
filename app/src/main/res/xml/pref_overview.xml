@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ QuasselDroid - Quassel client for Android
   ~ Copyright (C) 2016 Janne Koschinski
   ~ Copyright (C) 2016 Ken Børge Viktil
@@ -20,19 +19,14 @@
   ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_hide_events"
-        android:icon="?attr/iconFilter"
-        android:title="@string/labelHideEvents"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_settings"
-        android:title="Settings"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_reauth"
-        android:title="Disconnect"
-        app:showAsAction="never" />
-</menu>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceScreen android:title="About">
+
+        <Preference
+            android:summary="@string/appDescriptionLong"
+            android:title="@string/app_name" />
+
+    </PreferenceScreen>
+
+</PreferenceScreen>

@@ -27,7 +27,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 
 import de.kuschku.quasseldroid_ng.service.QuasselService;
-import de.kuschku.quasseldroid_ng.ui.chat.Settings;
+import de.kuschku.quasseldroid_ng.ui.settings.Settings;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.quasseldroid_ng.ui.theme.AppTheme;
 import de.kuschku.quasseldroid_ng.ui.theme.ThemeUtil;
@@ -64,13 +64,14 @@ public class ServiceHelper {
         context.startService(intent);
     }
 
-    public static void initTheme(AppContext context, Activity activity) {
+    public static int initTheme(AppContext context, Activity activity) {
         // Init SharedPreferences
         Settings settings = new Settings(activity);
         context.setSettings(settings);
         // Load Theme from Preferences
-        AppTheme theme = AppTheme.themeFromString(settings.theme.get());
+        AppTheme theme = AppTheme.themeFromString(settings.preferenceTheme.get());
         activity.setTheme(theme.themeId);
         context.setThemeUtil(new ThemeUtil(activity, theme));
+        return theme.themeId;
     }
 }

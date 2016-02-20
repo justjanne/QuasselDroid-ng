@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
@@ -71,7 +72,10 @@ public class ChannelDetailActivity extends BoundActivity {
     protected void onConnectToThread(@Nullable ClientBackgroundThread thread) {
         super.onConnectToThread(thread);
 
-        ChannelBuffer buffer = (ChannelBuffer) context.client().bufferManager().buffer(this.buffer);
+        Client client = context.client();
+        if (client == null) return;
+
+        ChannelBuffer buffer = (ChannelBuffer) client.bufferManager().buffer(this.buffer);
         if (buffer == null) return;
 
         QIrcChannel channel = buffer.getChannel();
@@ -112,10 +116,10 @@ public class ChannelDetailActivity extends BoundActivity {
                 TextView description = (TextView) v.findViewById(R.id.description);
                 TextView value = (TextView) v.findViewById(R.id.value);
 
-                String modeName = context.themeUtil().translations.chanModeToName(mode);
+                String modeName = context.themeUtil().chanModes.chanModeToName(mode);
                 name.setText(String.format("%s (+%s)", modeName, c));
 
-                String modeDescription = context.themeUtil().translations.chanModeToDescription(mode);
+                String modeDescription = context.themeUtil().chanModes.chanModeToDescription(mode);
                 description.setText(modeDescription);
 
                 String modeValue = channel.modeValue(c);
