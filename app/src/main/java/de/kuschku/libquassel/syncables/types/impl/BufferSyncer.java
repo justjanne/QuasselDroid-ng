@@ -21,8 +21,10 @@
 
 package de.kuschku.libquassel.syncables.types.impl;
 
+import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.util.SparseArray;
 import android.util.SparseIntArray;
 
 import java.util.Map;
@@ -42,7 +44,7 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
 
     @NonNull
-    private final SparseIntArray activities = new SparseIntArray();
+    private final SparseArray<ObservableInt> activities = new SparseArray<>();
     @NonNull
     private SparseIntArray lastSeenMsgs = new SparseIntArray();
     @NonNull
@@ -199,25 +201,34 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
         _update();
     }
 
-    public int activity(int bufferid) {
+    public ObservableInt activity(int bufferid) {
         assertNotNull(activities);
+        ensureExistingActivity(bufferid);
 
-        return activities.get(bufferid, 0);
+        return activities.get(bufferid);
     }
 
     public void setActivity(int bufferid, int activity) {
         assertNotNull(activities);
+        ensureExistingActivity(bufferid);
 
-        activities.put(bufferid, activity);
+        activities.get(bufferid).set(activity);
+    }
+
+    private void ensureExistingActivity(int bufferid) {
+        if (activities.get(bufferid) == null)
+            activities.put(bufferid, new ObservableInt());
     }
 
     public void addActivity(int bufferid, int activity) {
         assertNotNull(activities);
+        ensureExistingActivity(bufferid);
 
-        activities.put(bufferid, activities.get(bufferid) | activity);
+        activities.get(bufferid).set(activities.get(bufferid).get() | activity);
     }
 
     public void addActivity(int bufferid, @NonNull Message.Type type) {
+        ensureExistingActivity(bufferid);
         addActivity(bufferid, type.value);
     }
 

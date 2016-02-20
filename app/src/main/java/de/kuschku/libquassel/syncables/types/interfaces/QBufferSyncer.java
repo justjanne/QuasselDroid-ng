@@ -21,6 +21,8 @@
 
 package de.kuschku.libquassel.syncables.types.interfaces;
 
+import android.databinding.ObservableInt;
+
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.Synced;
 
@@ -95,7 +97,7 @@ public interface QBufferSyncer extends QObservable {
     void _markBufferAsRead(int buffer);
 
 
-    int activity(int bufferid);
+    ObservableInt activity(int bufferid);
 
     void setActivity(int bufferid, int activity);
 

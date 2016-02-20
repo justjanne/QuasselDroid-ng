@@ -138,6 +138,7 @@ public class BacklogFilter implements UICallback {
 
     public void onEventMainThread(@NonNull MessageInsertEvent event) {
         filtered.add(event.msg);
+        client.bufferSyncer().addActivity(event.msg);
     }
 
     public void onEventMainThread(@NonNull MessageRemoveEvent event) {

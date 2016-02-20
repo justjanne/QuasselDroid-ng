@@ -26,6 +26,7 @@ import android.databinding.ObservableField;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bignerdranch.expandablerecyclerview.ViewHolder.ChildViewHolder;
+import com.google.common.base.Function;
 import com.mikepenz.materialize.util.UIUtils;
 
 import java.util.Locale;
@@ -43,10 +45,12 @@ import de.kuschku.libquassel.events.BufferChangeEvent;
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
+import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.quasseldroid_ng.R;
+import de.kuschku.quasseldroid_ng.ui.ViewIntBinder;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 
 public class BufferViewHolder extends ChildViewHolder {
@@ -65,6 +69,7 @@ public class BufferViewHolder extends ChildViewHolder {
     private ObservableField<BufferInfo.BufferStatus> status;
     private Observable.OnPropertyChangedCallback callback;
     private AppContext context;
+    private ViewIntBinder viewIntBinder;
 
     private StateListDrawable background;
 
@@ -89,6 +94,9 @@ public class BufferViewHolder extends ChildViewHolder {
             status.removeOnPropertyChangedCallback(callback);
         status = buffer.getStatus();
         name.setText(buffer.getName());
+        if (viewIntBinder != null) viewIntBinder.unbind();
+        viewIntBinder = new ViewIntBinder(context.client().bufferSyncer().activity(buffer.getInfo().id()));
+        viewIntBinder.bindTextColor(name, colorFromActivityStatus(buffer));
         setDescription(context.deserializer().formatString(getDescription(buffer)));
         setBadge(0);
         itemView.setOnClickListener(v -> listener.onClick(buffer));
@@ -108,6 +116,20 @@ public class BufferViewHolder extends ChildViewHolder {
         status.addOnPropertyChangedCallback(callback);
 
         setSelected();
+    }
+
+    @NonNull
+    private Function<Integer, Integer> colorFromActivityStatus(Buffer buffer) {
+        return activities -> {
+            int filters = context.client().backlogManager().filter(buffer.getInfo().id()).getFilters();
+            activities = activities & ~filters;
+            if (0 != ((activities & Message.Type.Plain.value) | (activities & Message.Type.Notice.value) | (activities & Message.Type.Action.value)))
+                return context.themeUtil().res.colorTintMessage;
+            if (0 != activities)
+                return context.themeUtil().res.colorTintActivity;
+            else
+                return context.themeUtil().res.colorForeground;
+        };
     }
 
     private void setSelected() {
