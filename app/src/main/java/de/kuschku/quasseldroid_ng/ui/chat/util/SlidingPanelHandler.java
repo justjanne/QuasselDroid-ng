@@ -219,7 +219,7 @@ public class SlidingPanelHandler {
             }
 
             // Always return false to make sure we don’t lose focus
-            return false;
+            return true;
         });
     }
 
