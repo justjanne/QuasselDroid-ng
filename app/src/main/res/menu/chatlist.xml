@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ QuasselDroid - Quassel client for Android
   ~ Copyright (C) 2016 Janne Koschinski
   ~ Copyright (C) 2016 Ken Børge Viktil
@@ -23,16 +22,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_hide_events"
-        android:icon="@drawable/ic_filter_dark"
-        android:title="@string/labelHideEvents"
+        android:icon="@drawable/ic_plus_dark"
+        android:title="Join Channel"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_settings"
-        android:title="Settings"
+        android:title="Show/Hide Hidden"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_reauth"
-        android:title="Disconnect"
+        android:title="Manage Chat Lists"
         app:showAsAction="never" />
 </menu>

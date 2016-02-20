@@ -91,6 +91,7 @@
     <attr name="iconFilter" format="reference" />
     <attr name="iconDelete" format="reference" />
     <attr name="iconModify" format="reference" />
+    <attr name="iconAdd" format="reference" />
 
     <attr name="cardStyle" format="reference" />
 </resources>

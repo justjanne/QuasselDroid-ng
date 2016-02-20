@@ -21,6 +21,8 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -180,14 +182,7 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
 
     public void selectConfig(int id) {
         QBufferViewConfig newconfig = context.client().bufferViewManager().bufferViewConfig(id);
-        int firstVisible = -1;
-        if (newconfig == config) {
-            RecyclerView list = recyclerView.get();
-            if (list != null) {
-                LinearLayoutManager layoutManager = (LinearLayoutManager) list.getLayoutManager();
-                firstVisible = layoutManager.findFirstVisibleItemPosition();
-            }
-        }
+        Parcelable state = (newconfig == config) ? saveState() : null;
 
         if (config != null)
             config.networkList().removeCallback(callback);
@@ -201,12 +196,28 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
             items.add(networkItem);
         }
         config.networkList().addCallback(callback);
-        if (firstVisible != -1) {
+
+        loadState(state);
+    }
+
+    private void loadState(@Nullable Parcelable state) {
+        if (state != null) {
             RecyclerView list = recyclerView.get();
             if (list != null) {
                 LinearLayoutManager layoutManager = (LinearLayoutManager) list.getLayoutManager();
-                layoutManager.scrollToPosition(firstVisible);
+                layoutManager.onRestoreInstanceState(state);
             }
+        }
+    }
+
+    @Nullable
+    private Parcelable saveState() {
+        RecyclerView list = recyclerView.get();
+        if (list != null) {
+            LinearLayoutManager layoutManager = (LinearLayoutManager) list.getLayoutManager();
+            return layoutManager.onSaveInstanceState();
+        } else {
+            return null;
         }
     }
 

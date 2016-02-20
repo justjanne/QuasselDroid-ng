@@ -138,9 +138,12 @@ public class MainActivity extends BoundActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
+        chatListAdapter.setRecyclerView(chatList);
         chatList.setItemAnimator(new DefaultItemAnimator());
         chatList.setLayoutManager(new LinearLayoutManager(this));
         chatList.setAdapter(chatListAdapter);
+
+        chatListToolbar.inflateMenu(R.menu.chatlist);
 
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawerLayout != null) {
@@ -317,14 +320,13 @@ public class MainActivity extends BoundActivity {
         if (thread == null)
             connectToServer(manager.account(context.settings().lastAccount.get()));
         else {
-            if (context.client() != null) {
+            if (context.client() != null && context.client().connectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
                 onConnected();
             }
         }
     }
 
     private void onConnected() {
-        context.client().backlogManager().init("", context.provider(), context.client());
         context.client().backlogManager().open(status.bufferId);
         if (context.client().bufferViewManager() != null) {
             chatListSpinner.setAdapter(new BufferViewConfigSpinnerAdapter(context, context.client().bufferViewManager()));

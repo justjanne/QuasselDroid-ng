@@ -36,6 +36,7 @@ import java.util.Set;
 
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
+import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 
 public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter {
@@ -65,7 +66,7 @@ public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter {
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(new ContextThemeWrapper(parent.getContext(), theme));
-        TextView view = (TextView) inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+        TextView view = (TextView) inflater.inflate(R.layout.widget_md_spinner_item, parent, false);
         view.setText(((QBufferViewConfig) getItem(position)).bufferViewName());
         return view;
     }
@@ -102,8 +103,8 @@ public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(new ContextThemeWrapper(parent.getContext(), theme));
-        TextView view = (TextView) inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        TextView view = (TextView) inflater.inflate(R.layout.widget_md_spinner_item, parent, false);
         view.setText(((QBufferViewConfig) getItem(position)).bufferViewName());
         return view;
     }

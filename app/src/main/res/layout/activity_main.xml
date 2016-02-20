@@ -71,7 +71,9 @@
                     <android.support.v7.widget.AppCompatSpinner
                         android:id="@+id/chatListSpinner"
                         android:layout_width="fill_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        android:theme="@style/AppTheme.AppBarOverlay"
+                        app:popupTheme="@style/AppTheme.PopupOverlay" />
 
                 </android.support.v7.widget.Toolbar>
 
