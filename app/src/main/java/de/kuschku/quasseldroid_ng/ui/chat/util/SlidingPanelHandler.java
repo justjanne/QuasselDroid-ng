@@ -235,6 +235,7 @@ public class SlidingPanelHandler {
             String text = editor.toFormatString();
             context.client().sendInput(buffer.getInfo(), text);
             chatline.setText("");
+            chatline.requestFocus();
         }
     }
 
