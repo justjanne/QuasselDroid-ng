@@ -216,10 +216,11 @@ public class SlidingPanelHandler {
         chatline.setOnKeyListener((v, keyCode, event) -> {
             if (event.getAction() == KeyEvent.ACTION_DOWN && (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)) {
                 sendInput();
+                return true;
             }
 
             // Always return false to make sure we don’t lose focus
-            return true;
+            return false;
         });
     }
 
