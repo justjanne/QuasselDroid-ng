@@ -126,11 +126,9 @@ public class IrcFormatDeserializer {
             char character = str.charAt(i);
             switch (character) {
                 case CODE_BOLD: {
-                    if (!colorize) continue;
-
                     // If there is an element on stack with the same code, close it
                     if (bold != null) {
-                        bold.apply(plainText, plainText.length());
+                        if (colorize) bold.apply(plainText, plainText.length());
                         bold = null;
                         // Otherwise create a new one
                     } else {
@@ -141,11 +139,9 @@ public class IrcFormatDeserializer {
                 }
                 break;
                 case CODE_ITALIC: {
-                    if (!colorize) continue;
-
                     // If there is an element on stack with the same code, close it
                     if (italic != null) {
-                        italic.apply(plainText, plainText.length());
+                        if (colorize) italic.apply(plainText, plainText.length());
                         italic = null;
                         // Otherwise create a new one
                     } else {
@@ -156,11 +152,9 @@ public class IrcFormatDeserializer {
                 }
                 break;
                 case CODE_UNDERLINE: {
-                    if (!colorize) continue;
-
                     // If there is an element on stack with the same code, close it
                     if (underline != null) {
-                        underline.apply(plainText, plainText.length());
+                        if (colorize) underline.apply(plainText, plainText.length());
                         underline = null;
                         // Otherwise create a new one
                     } else {
@@ -171,8 +165,6 @@ public class IrcFormatDeserializer {
                 }
                 break;
                 case CODE_COLOR: {
-                    if (!colorize) continue;
-
                     int foregroundStart = i + 1;
                     int foregroundEnd = findEndOfNumber(str, foregroundStart);
                     // If we have a foreground element
@@ -189,7 +181,7 @@ public class IrcFormatDeserializer {
                         // If previous element was also a color element, try to reuse background
                         if (color != null) {
                             // Apply old format
-                            color.apply(plainText, plainText.length());
+                            if (colorize) color.apply(plainText, plainText.length());
                             // Reuse old background, if possible
                             if (background == -1)
                                 background = ((ColorIrcFormat) color.format).background;
@@ -202,39 +194,35 @@ public class IrcFormatDeserializer {
 
                         // Otherwise assume this is a closing tag
                     } else if (color != null) {
-                        color.apply(plainText, plainText.length());
+                        if (colorize) color.apply(plainText, plainText.length());
                         color = null;
                     }
                 }
                 break;
                 case CODE_SWAP: {
-                    if (!colorize) continue;
-
                     // If we have a color tag before, apply it, and create a new one with swapped colors
                     if (color != null) {
-                        color.apply(plainText, plainText.length());
+                        if (colorize) color.apply(plainText, plainText.length());
                         color = new FormatDescription(plainText.length(), ((ColorIrcFormat) color.format).copySwapped());
                     }
                 }
                 break;
                 case CODE_RESET: {
-                    if (!colorize) continue;
-
                     // End all formatting tags
                     if (bold != null) {
-                        bold.apply(plainText, plainText.length());
+                        if (colorize) bold.apply(plainText, plainText.length());
                         bold = null;
                     }
                     if (italic != null) {
-                        italic.apply(plainText, plainText.length());
+                        if (colorize) italic.apply(plainText, plainText.length());
                         italic = null;
                     }
                     if (underline != null) {
-                        underline.apply(plainText, plainText.length());
+                        if (colorize) underline.apply(plainText, plainText.length());
                         underline = null;
                     }
                     if (color != null) {
-                        color.apply(plainText, plainText.length());
+                        if (colorize) color.apply(plainText, plainText.length());
                         color = null;
                     }
                 }
@@ -248,16 +236,16 @@ public class IrcFormatDeserializer {
 
         // End all formatting tags
         if (bold != null) {
-            bold.apply(plainText, plainText.length());
+            if (colorize) bold.apply(plainText, plainText.length());
         }
         if (italic != null) {
-            italic.apply(plainText, plainText.length());
+            if (colorize) italic.apply(plainText, plainText.length());
         }
         if (underline != null) {
-            underline.apply(plainText, plainText.length());
+            if (colorize) underline.apply(plainText, plainText.length());
         }
         if (color != null) {
-            color.apply(plainText, plainText.length());
+            if (colorize) color.apply(plainText, plainText.length());
         }
         return plainText;
     }
