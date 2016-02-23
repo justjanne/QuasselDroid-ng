@@ -338,6 +338,7 @@ public class MainActivity extends BoundActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     chatListAdapter.selectConfig((int) id);
+                    status.bufferViewConfigId = (int) id;
                 }
 
                 @Override
@@ -347,7 +348,7 @@ public class MainActivity extends BoundActivity {
             });
         }
         updateBuffer(context.client().backlogManager().open());
-        // accountHeader.setActiveProfile(status.bufferViewConfigId, true);
+        chatListSpinner.setSelection(chatListAdapter.indexOf(status.bufferViewConfigId));
     }
 
     // FIXME: Fix this ugly hack

@@ -234,4 +234,12 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
         else bufferViewHolderMap.remove(id);
         open = id;
     }
+
+    public int indexOf(int bufferViewConfigId) {
+        for (int i = 0; i < context.client().bufferViewManager().bufferViewConfigs().size(); i++) {
+            if (context.client().bufferViewManager().bufferViewConfigs().get(i).bufferViewId() == bufferViewConfigId)
+                return i;
+        }
+        return -1;
+    }
 }

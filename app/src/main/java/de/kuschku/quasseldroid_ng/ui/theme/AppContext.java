@@ -23,15 +23,13 @@ package de.kuschku.quasseldroid_ng.ui.theme;
 
 import android.support.annotation.NonNull;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.quasseldroid_ng.ui.settings.Settings;
 import de.kuschku.util.irc.format.IrcFormatDeserializer;
 import de.kuschku.util.irc.format.IrcFormatSerializer;
+import de.kuschku.util.observables.lists.ObservableSet;
 
 public class AppContext {
     private ThemeUtil themeUtil;
@@ -40,8 +38,7 @@ public class AppContext {
     private BusProvider provider;
     private IrcFormatDeserializer deserializer;
     private IrcFormatSerializer serializer;
-    private QBufferViewConfig.DisplayType bufferDisplayType;
-    private Set<QBufferViewConfig.DisplayType> bufferDisplayTypes = new HashSet<>();
+    private ObservableSet<QBufferViewConfig.DisplayType> bufferDisplayTypes = new ObservableSet<>();
 
     public ThemeUtil themeUtil() {
         return themeUtil;
@@ -110,7 +107,7 @@ public class AppContext {
         return serializer;
     }
 
-    public Set<QBufferViewConfig.DisplayType> bufferDisplayTypes() {
+    public ObservableSet<QBufferViewConfig.DisplayType> bufferDisplayTypes() {
         return bufferDisplayTypes;
     }
 }
