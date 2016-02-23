@@ -42,13 +42,13 @@ public class Message implements ContentComparable<Message> {
     public final Flags flags;
     @NonNull
     public final BufferInfo bufferInfo;
-    @NonNull
+    @Nullable
     public final String sender;
-    @NonNull
+    @Nullable
     public final String content;
 
-    public Message(int messageId, @NonNull DateTime time, @NonNull Type type, @NonNull Flags flags, @NonNull BufferInfo bufferInfo, @NonNull String sender,
-                   @NonNull String content) {
+    public Message(int messageId, @NonNull DateTime time, @NonNull Type type, @NonNull Flags flags, @NonNull BufferInfo bufferInfo, @Nullable String sender,
+                   @Nullable String content) {
         this.messageId = messageId;
         this.time = time;
         this.type = type;
@@ -73,7 +73,7 @@ public class Message implements ContentComparable<Message> {
     }
 
     @Override
-    public boolean areContentsTheSame(@NonNull Message message) {
+    public boolean areContentsTheSame(@Nullable Message message) {
         return this == message;
     }
 

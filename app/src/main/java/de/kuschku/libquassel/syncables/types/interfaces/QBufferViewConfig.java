@@ -23,6 +23,7 @@ package de.kuschku.libquassel.syncables.types.interfaces;
 
 import android.support.annotation.NonNull;
 
+import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.syncables.Synced;
 import de.kuschku.util.observables.lists.ObservableList;
 import de.kuschku.util.observables.lists.ObservableSet;
@@ -156,4 +157,13 @@ public interface QBufferViewConfig extends QObservable {
     ObservableSet<QNetwork> networkList();
 
     void updateNetworks();
+
+    DisplayType mayDisplay(Buffer buffer);
+
+    enum DisplayType {
+        NONE,
+        ALWAYS,
+        TEMP_HIDDEN,
+        PERM_HIDDEN
+    }
 }

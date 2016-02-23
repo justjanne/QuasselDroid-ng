@@ -28,7 +28,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import de.kuschku.quasseldroid_ng.ui.chat.MainActivity;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ServiceHelper;
-import de.kuschku.quasseldroid_ng.ui.settings.Settings;
 import de.kuschku.quasseldroid_ng.ui.setup.AccountSelectActivity;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 
@@ -41,8 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ServiceHelper.initTheme(context, this);
-        context.withSettings(new Settings(this));
+        ServiceHelper.initContext(context, this);
     }
 
     @Override

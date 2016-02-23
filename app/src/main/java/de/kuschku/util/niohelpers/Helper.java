@@ -24,31 +24,34 @@ package de.kuschku.util.niohelpers;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Helper {
     // Making default constructor invisible
     private Helper() {
 
     }
 
-    public static void printHexDump(@NonNull byte[] data) {
-        Log.e("HexDump", "Hexdump following: ");
+    public static void printHexDump(String prefix, @NonNull byte[] data) {
+        List<String> strs = new LinkedList<>();
+        Log.e("HexDump" + prefix, "========");
         String bytes = "";
-        String text = "";
         int i;
         for (i = 0; i < data.length; i++) {
             bytes += String.format("%02x ", data[i]);
-            text += encodeChar(data[1]);
-            if (i > 0 && (i + 1) % 8 == 0) {
-                Log.e("HexDump", String.format("%08x ", i - 7) + bytes + text);
+            if (i > 0 && (i + 1) % 32 == 0) {
+                strs.add(bytes);
                 bytes = "";
-                text = "";
             }
         }
-        Log.e("HexDump", String.format("%08x ", i - 7) + bytes + text);
+        strs.add(bytes);
+        for (int j = 0; j < strs.size(); j++) {
+            Log.e("HexDump" + prefix + ":" + j, strs.get(j));
+        }
     }
 
-    private static char encodeChar(byte data) {
-        if (data < 127 && data > 32) return (char) data;
-        else return '.';
+    public static void printHexDump(@NonNull byte[] data) {
+        printHexDump("", data);
     }
 }

@@ -21,8 +21,10 @@
 
 package de.kuschku.util.observables;
 
-public interface ContentComparable<T extends ContentComparable<T>> extends Comparable<T> {
-    boolean areItemsTheSame(T other);
+import android.support.annotation.NonNull;
 
-    boolean areContentsTheSame(T other);
+public interface ContentComparable<T extends ContentComparable<T>> extends Comparable<T> {
+    boolean areItemsTheSame(@NonNull T other);
+
+    boolean areContentsTheSame(@NonNull T other);
 }

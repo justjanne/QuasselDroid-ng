@@ -132,7 +132,7 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
             provider.sendEvent(new BacklogReceivedEvent(id));
             if (id == openBuffer && openBuffer != -1)
                 client.bufferSyncer().requestMarkBufferAsRead(openBuffer);
-            waiting.remove(id);
+            removeWaiting(id);
             initialized.add(id);
         }
         checkWaiting();

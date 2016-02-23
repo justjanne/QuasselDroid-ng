@@ -23,7 +23,6 @@ package de.kuschku.libquassel.syncables.types.impl;
 
 import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
@@ -236,7 +235,6 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
         int lastSeenMsg = lastSeenMsg(message.bufferInfo.id());
         if (message.messageId > lastSeenMsg) {
             addActivity(message.bufferInfo.id(), message.type);
-            Log.d("libquassel", "Unread: " + lastSeenMsg + "/" + message);
         }
     }
 }

@@ -33,8 +33,6 @@ import java.nio.channels.ByteChannel;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 
-import static de.kuschku.util.AndroidAssert.assertNotNull;
-
 public class MessageSerializer implements PrimitiveSerializer<Message> {
     @NonNull
     private static final MessageSerializer serializer = new MessageSerializer();
@@ -69,8 +67,6 @@ public class MessageSerializer implements PrimitiveSerializer<Message> {
         String sender = ByteArraySerializer.get().deserialize(buffer);
         String message = ByteArraySerializer.get().deserialize(buffer);
 
-        assertNotNull(sender);
-        assertNotNull(message);
         return new Message(
                 messageId,
                 time,

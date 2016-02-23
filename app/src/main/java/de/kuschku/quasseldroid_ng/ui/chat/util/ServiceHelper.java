@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.quasseldroid_ng.service.QuasselService;
 import de.kuschku.quasseldroid_ng.ui.settings.Settings;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
@@ -64,12 +65,15 @@ public class ServiceHelper {
         context.startService(intent);
     }
 
+    public static int initContext(AppContext context, Activity activity) {
+        context.setSettings(new Settings(activity));
+        context.bufferDisplayTypes().add(QBufferViewConfig.DisplayType.ALWAYS);
+        return initTheme(context, activity);
+    }
+
     public static int initTheme(AppContext context, Activity activity) {
-        // Init SharedPreferences
-        Settings settings = new Settings(activity);
-        context.setSettings(settings);
         // Load Theme from Preferences
-        AppTheme theme = AppTheme.themeFromString(settings.preferenceTheme.get());
+        AppTheme theme = AppTheme.themeFromString(context.settings().preferenceTheme.get());
         activity.setTheme(theme.themeId);
         context.setThemeUtil(new ThemeUtil(activity, theme));
         return theme.themeId;

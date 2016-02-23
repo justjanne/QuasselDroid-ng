@@ -61,7 +61,7 @@ public abstract class BoundActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        themeId = ServiceHelper.initTheme(context, this);
+        themeId = ServiceHelper.initContext(context, this);
         super.onCreate(savedInstanceState);
         context.settings().preferenceTheme.addChangeListener(s -> recreate());
         ServiceHelper.startServiceIfNotRunning(this);

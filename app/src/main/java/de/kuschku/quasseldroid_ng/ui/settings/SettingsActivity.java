@@ -45,7 +45,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        themeid = ServiceHelper.initTheme(context, this);
+        themeid = ServiceHelper.initContext(context, this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
@@ -87,7 +87,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
-            ServiceHelper.initTheme(context, getActivity());
+            ServiceHelper.initContext(context, getActivity());
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_appearance);
         }

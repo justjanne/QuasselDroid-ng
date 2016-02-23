@@ -20,11 +20,8 @@
   -->
 
 <resources>
-    <style name="BaseTheme" parent="MaterialDrawerTheme" />
-    <style name="BaseTheme.Light" parent="MaterialDrawerTheme.Light.DarkToolbar" />
-
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="BaseTheme">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -36,10 +33,13 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
+        <!--
         <item name="material_drawer_background">?attr/colorBackground</item>
         <item name="material_drawer_primary_text">?attr/colorForeground</item>
         <item name="material_drawer_primary_icon">?attr/colorForeground</item>
         <item name="material_drawer_secondary_text">?attr/colorForegroundSecondary</item>
+        <item name="material_drawer_selected">#26ffffff</item>
+        -->
 
         <item name="iconFormatBold">@drawable/ic_format_bold_dark</item>
         <item name="iconFormatItalic">@drawable/ic_format_italic_dark</item>
@@ -47,12 +47,11 @@
         <item name="iconFormatPaint">@drawable/ic_format_paint_dark</item>
         <item name="iconFormatFill">@drawable/ic_format_fill_dark</item>
         <item name="iconHistory">@drawable/ic_history_dark</item>
-        <item name="material_drawer_selected">#26ffffff</item>
 
         <item name="cardStyle">@style/CardView.Dark</item>
     </style>
 
-    <style name="AppTheme.Light" parent="BaseTheme.Light">
+    <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -64,11 +63,13 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
+        <!--
         <item name="material_drawer_background">?attr/colorBackground</item>
         <item name="material_drawer_primary_text">?attr/colorForeground</item>
         <item name="material_drawer_primary_icon">?attr/colorForeground</item>
         <item name="material_drawer_secondary_text">?attr/colorForegroundSecondary</item>
         <item name="material_drawer_selected">#26000000</item>
+        -->
 
         <item name="iconFormatBold">@drawable/ic_format_bold_light</item>
         <item name="iconFormatItalic">@drawable/ic_format_italic_light</item>
@@ -79,8 +80,6 @@
 
         <item name="cardStyle">@style/CardView.Light</item>
     </style>
-
-    <style name="Base.SetupTheme" parent="Theme.AppCompat.Light.NoActionBar" />
 
     <style name="SetupTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->

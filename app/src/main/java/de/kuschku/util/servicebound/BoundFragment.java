@@ -57,7 +57,7 @@ public abstract class BoundFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        ServiceHelper.initTheme(context, getActivity());
+        ServiceHelper.initContext(context, getActivity());
         super.onCreate(savedInstanceState);
         ServiceHelper.startServiceIfNotRunning(getContext());
     }

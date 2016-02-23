@@ -29,6 +29,7 @@ import java.util.Map;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
+import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.BufferViewConfigSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.ABufferViewConfig;
@@ -134,6 +135,24 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
         } else {
             networkList.retainAll(Collections.singleton(client.networkManager().network(this.networkId)));
             networkList.add(client.networkManager().network(this.networkId));
+        }
+    }
+
+    @Override
+    public DisplayType mayDisplay(Buffer buffer) {
+        if (buffer != null &&
+                (allowedBufferTypes == 0 || (0 != (buffer.getInfo().type().id & allowedBufferTypes()))) &&
+                (networkId == 0 || (networkId == buffer.getInfo().networkId()))
+                ) {
+            int bufferid = buffer.getInfo().id();
+            if (bufferIds.contains(bufferid) && !temporarilyRemovedBuffers.contains(bufferid) && !removedBuffers.contains(bufferid))
+                return DisplayType.ALWAYS;
+            else if (temporarilyRemovedBuffers.contains(bufferid) && !removedBuffers.contains(bufferid))
+                return DisplayType.TEMP_HIDDEN;
+            else
+                return DisplayType.PERM_HIDDEN;
+        } else {
+            return DisplayType.NONE;
         }
     }
 

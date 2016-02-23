@@ -74,14 +74,14 @@ public class NetworkItem implements ParentListItem {
         this.network = network;
         for (int id : config.bufferList()) {
             Buffer buffer = context.client().bufferManager().buffer(id);
-            if (buffer != null && buffer.getInfo().networkId() == network.networkId())
+            if (context.bufferDisplayTypes().contains(config.mayDisplay(buffer)) && buffer.getInfo().networkId() == network.networkId())
                 buffers.add(buffer);
         }
         config.bufferIds().addCallback(new ElementCallback<Integer>() {
             @Override
             public void notifyItemInserted(Integer id) {
                 Buffer buffer = context.client().bufferManager().buffer(id);
-                if (buffer != null && buffer.getInfo().networkId() == network.networkId())
+                if (context.bufferDisplayTypes().contains(config.mayDisplay(buffer)) && buffer.getInfo().networkId() == network.networkId())
                     buffers.add(buffer);
             }
 
