@@ -21,15 +21,44 @@
 
 package de.kuschku.util.irc.chanmodes.impl;
 
-import de.kuschku.util.irc.chanmodes.AbstractIrcModeProvider;
-import de.kuschku.util.irc.chanmodes.ChanMode;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import static de.kuschku.util.irc.chanmodes.ChanMode.*;
+import de.kuschku.util.irc.chanmodes.AbstractIrcModeProvider;
+import de.kuschku.util.irc.chanmodes.ChanMode;
+
+import static de.kuschku.util.irc.chanmodes.ChanMode.ALLOW_FORWARD;
+import static de.kuschku.util.irc.chanmodes.ChanMode.ALLOW_INVITE;
+import static de.kuschku.util.irc.chanmodes.ChanMode.BAN;
+import static de.kuschku.util.irc.chanmodes.ChanMode.BAN_EXCEPTION;
+import static de.kuschku.util.irc.chanmodes.ChanMode.BLOCK_ACTION;
+import static de.kuschku.util.irc.chanmodes.ChanMode.BLOCK_AUTOREJOIN;
+import static de.kuschku.util.irc.chanmodes.ChanMode.BLOCK_CAPS;
+import static de.kuschku.util.irc.chanmodes.ChanMode.BLOCK_CTCP;
+import static de.kuschku.util.irc.chanmodes.ChanMode.BLOCK_EXTERNAL;
+import static de.kuschku.util.irc.chanmodes.ChanMode.BLOCK_FORWARDING;
+import static de.kuschku.util.irc.chanmodes.ChanMode.BLOCK_KICK;
+import static de.kuschku.util.irc.chanmodes.ChanMode.BLOCK_NICKCHANGE;
+import static de.kuschku.util.irc.chanmodes.ChanMode.BLOCK_NOTICE;
+import static de.kuschku.util.irc.chanmodes.ChanMode.BLOCK_REPEAT;
+import static de.kuschku.util.irc.chanmodes.ChanMode.BLOCK_UNIDENTIFIED;
+import static de.kuschku.util.irc.chanmodes.ChanMode.INVITE_EXCEPTION;
+import static de.kuschku.util.irc.chanmodes.ChanMode.JOIN_THROTTLE;
+import static de.kuschku.util.irc.chanmodes.ChanMode.LIMIT;
+import static de.kuschku.util.irc.chanmodes.ChanMode.MODERATED;
+import static de.kuschku.util.irc.chanmodes.ChanMode.ONLY_ADMIN;
+import static de.kuschku.util.irc.chanmodes.ChanMode.ONLY_INVITE;
+import static de.kuschku.util.irc.chanmodes.ChanMode.ONLY_OPER;
+import static de.kuschku.util.irc.chanmodes.ChanMode.ONLY_SSL;
+import static de.kuschku.util.irc.chanmodes.ChanMode.PARANOID;
+import static de.kuschku.util.irc.chanmodes.ChanMode.PASSWORD;
+import static de.kuschku.util.irc.chanmodes.ChanMode.PERMANENT;
+import static de.kuschku.util.irc.chanmodes.ChanMode.REDUCED_MODERATION;
+import static de.kuschku.util.irc.chanmodes.ChanMode.RESTRICT_TOPIC;
+import static de.kuschku.util.irc.chanmodes.ChanMode.STRIP_COLOR;
+import static de.kuschku.util.irc.chanmodes.ChanMode.UNLISTED;
 
 public class ShadowIrcModeProvider extends AbstractIrcModeProvider {
 
@@ -67,6 +96,13 @@ public class ShadowIrcModeProvider extends AbstractIrcModeProvider {
             case 's': return UNLISTED;
             case 't': return RESTRICT_TOPIC;
             case 'z': return REDUCED_MODERATION;
+
+            case 'b':
+                return BAN;
+            case 'e':
+                return BAN_EXCEPTION;
+            case 'I':
+                return INVITE_EXCEPTION;
         }
         return null;
     }
@@ -101,6 +137,13 @@ public class ShadowIrcModeProvider extends AbstractIrcModeProvider {
             case UNLISTED: return 's';
             case RESTRICT_TOPIC: return 't';
             case REDUCED_MODERATION: return 'z';
+
+            case BAN:
+                return 'b';
+            case BAN_EXCEPTION:
+                return 'e';
+            case INVITE_EXCEPTION:
+                return 'I';
         }
         return ' ';
     }

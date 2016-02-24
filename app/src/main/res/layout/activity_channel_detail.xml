@@ -46,7 +46,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
             <TextView
                 style="@style/TextAppearance.AppCompat.Button"
                 android:layout_width="match_parent"
@@ -71,7 +70,7 @@
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:text="Edit Topic" />
@@ -80,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp"
-                android:background="?attr/material_drawer_divider" />
+                android:background="?attr/colorDivider" />
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Button"

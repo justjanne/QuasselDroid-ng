@@ -60,5 +60,9 @@ public enum ChanMode {
     RESTRICT_TOPIC,
     STRIP_COLOR,
     UNLISTED,
-    FORWARD
+    FORWARD,
+    BAN,
+    BAN_EXCEPTION,
+    INVITE_EXCEPTION,
+    MUTE
 }

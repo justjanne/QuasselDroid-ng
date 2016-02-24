@@ -23,7 +23,6 @@ package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.google.common.base.Joiner;
 
@@ -53,12 +52,6 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     @NonNull
     private final Map<String, Set<Character>> userModes = new HashMap<>();
     private final ObservableSet<String> users = new ObservableSet<>();
-    private String topic;
-    private String password;
-    private boolean encrypted;
-    private QNetwork network;
-    private String codecForEncoding;
-    private String codecForDecoding;
     @NonNull
     public Map<Character, List<String>> A_channelModes = new HashMap<>();
     @NonNull
@@ -67,6 +60,12 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     public Map<Character, String> C_channelModes = new HashMap<>();
     @NonNull
     public Set<Character> D_channelModes = new HashSet<>();
+    private String topic;
+    private String password;
+    private boolean encrypted;
+    private QNetwork network;
+    private String codecForEncoding;
+    private String codecForDecoding;
     // Because we don’t have networks at the beginning yet
     @Nullable
     private Map<String, String> cachedUserModes;
@@ -522,6 +521,7 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
         modes.addAll(D_channelModes);
         modes.addAll(C_channelModes.keySet());
         modes.addAll(B_channelModes.keySet());
+        modes.addAll(A_channelModes.keySet());
         return modes;
     }
 }

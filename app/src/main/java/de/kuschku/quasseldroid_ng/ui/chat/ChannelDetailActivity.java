@@ -38,6 +38,7 @@ import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
+import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
 import de.kuschku.util.irc.chanmodes.ChanMode;
@@ -110,28 +111,36 @@ public class ChannelDetailActivity extends BoundActivity {
         boolean topicEditable = true;
         for (char c : channel.modeList()) {
             ChanMode mode = provider.modeFromChar(c);
+            QNetwork.ChannelModeType type = channel.network().channelModeType(c);
             if (mode != null) {
-                View v = getLayoutInflater().inflate(R.layout.widget_channel_mode, modes, false);
-                TextView name = (TextView) v.findViewById(R.id.name);
-                TextView description = (TextView) v.findViewById(R.id.description);
-                TextView value = (TextView) v.findViewById(R.id.value);
+                if (type == QNetwork.ChannelModeType.A_CHANMODE) {
+                    // TODO: Implement a proper display for these
+                    // Log.e("DEBUG", String.valueOf(c) + ": " + String.valueOf(channel.modeValueList(c)));
+                } else if (type == QNetwork.ChannelModeType.B_CHANMODE || type == QNetwork.ChannelModeType.C_CHANMODE || type == QNetwork.ChannelModeType.D_CHANMODE) {
+                    View v = getLayoutInflater().inflate(R.layout.widget_channel_mode, modes, false);
+                    TextView name = (TextView) v.findViewById(R.id.name);
+                    TextView description = (TextView) v.findViewById(R.id.description);
+                    TextView value = (TextView) v.findViewById(R.id.value);
 
-                String modeName = context.themeUtil().chanModes.chanModeToName(mode);
-                name.setText(String.format("%s (+%s)", modeName, c));
+                    String modeName = context.themeUtil().chanModes.chanModeToName(mode);
+                    name.setText(String.format("%s (+%s)", modeName, c));
 
-                String modeDescription = context.themeUtil().chanModes.chanModeToDescription(mode);
-                description.setText(modeDescription);
+                    String modeDescription = context.themeUtil().chanModes.chanModeToDescription(mode);
+                    description.setText(modeDescription);
 
-                String modeValue = channel.modeValue(c);
+                    String modeValue = channel.modeValue(c);
 
-                if (modeValue != null && !modeValue.isEmpty()) {
-                    value.setText(modeValue);
-                    value.setVisibility(View.VISIBLE);
+                    if (modeValue != null && !modeValue.isEmpty()) {
+                        value.setText(modeValue);
+                        value.setVisibility(View.VISIBLE);
+                    }
+
+                    modes.addView(v);
+
+                    if (mode == ChanMode.RESTRICT_TOPIC) topicEditable = isOp;
                 }
-
-                modes.addView(v);
-
-                if (mode == ChanMode.RESTRICT_TOPIC) topicEditable = isOp;
+            } else {
+                Log.d("libquassel", "Couldn’t find mode " + c + " for IRCd" + provider.getClass().getSimpleName());
             }
         }
 

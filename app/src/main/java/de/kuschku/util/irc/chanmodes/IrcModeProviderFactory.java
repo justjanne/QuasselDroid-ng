@@ -21,12 +21,22 @@
 
 package de.kuschku.util.irc.chanmodes;
 
-import de.kuschku.util.irc.chanmodes.impl.*;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import de.kuschku.util.irc.chanmodes.impl.CharybdisIrcModeProvider;
+import de.kuschku.util.irc.chanmodes.impl.DalIrcModeProvider;
+import de.kuschku.util.irc.chanmodes.impl.DancerIrcModeProvider;
+import de.kuschku.util.irc.chanmodes.impl.FqIrcModeProvider;
+import de.kuschku.util.irc.chanmodes.impl.HybridIrcModeProvider;
+import de.kuschku.util.irc.chanmodes.impl.HyperionIrcModeProvider;
+import de.kuschku.util.irc.chanmodes.impl.InspireIrcModeProvider;
+import de.kuschku.util.irc.chanmodes.impl.NeoIrcModeProvider;
+import de.kuschku.util.irc.chanmodes.impl.ShadowIrcModeProvider;
+import de.kuschku.util.irc.chanmodes.impl.SolidIrcModeProvider;
+import de.kuschku.util.irc.chanmodes.impl.UnrealIrcModeProvider;
 
 public class IrcModeProviderFactory {
     private static List<IrcModeProvider> servers = Arrays.asList(
@@ -44,6 +54,7 @@ public class IrcModeProviderFactory {
     );
 
     private static Set<Character> toModeSet(String chanModes) {
+        if (chanModes == null) chanModes = "";
         String replaced = chanModes.replaceAll(",","");
         Set<Character> modeSet = new HashSet<>();
         for (char c : replaced.toCharArray()) {

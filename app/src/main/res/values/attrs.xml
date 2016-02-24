@@ -21,9 +21,6 @@
   -->
 
 <resources>
-    <attr name="colorAccentFocus" format="color" />
-    <attr name="formatBarTheme" format="reference" />
-
     <!-- sender colors -->
 
     <attr name="senderColor0" format="color" />
@@ -69,6 +66,9 @@
     <attr name="colorForegroundSecondary" format="color" />
     <attr name="colorForegroundAction" />
 
+    <attr name="colorAccentFocus" format="color" />
+    <attr name="colorDivider" format="color" />
+
     <attr name="colorBackground" format="color" />
     <attr name="colorBackgroundHighlight" format="color" />
     <attr name="colorBackgroundSecondary" format="color" />
@@ -93,6 +93,6 @@
     <attr name="iconDelete" format="reference" />
     <attr name="iconModify" format="reference" />
     <attr name="iconAdd" format="reference" />
-
+    <attr name="formatBarTheme" format="reference" />
     <attr name="cardStyle" format="reference" />
 </resources>

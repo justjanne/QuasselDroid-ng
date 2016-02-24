@@ -21,15 +21,25 @@
 
 package de.kuschku.util.irc.chanmodes.impl;
 
-import de.kuschku.util.irc.chanmodes.AbstractIrcModeProvider;
-import de.kuschku.util.irc.chanmodes.ChanMode;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import static de.kuschku.util.irc.chanmodes.ChanMode.*;
+import de.kuschku.util.irc.chanmodes.AbstractIrcModeProvider;
+import de.kuschku.util.irc.chanmodes.ChanMode;
+
+import static de.kuschku.util.irc.chanmodes.ChanMode.BAN;
+import static de.kuschku.util.irc.chanmodes.ChanMode.BAN_EXCEPTION;
+import static de.kuschku.util.irc.chanmodes.ChanMode.BLOCK_EXTERNAL;
+import static de.kuschku.util.irc.chanmodes.ChanMode.INVITE_EXCEPTION;
+import static de.kuschku.util.irc.chanmodes.ChanMode.LIMIT;
+import static de.kuschku.util.irc.chanmodes.ChanMode.MODERATED;
+import static de.kuschku.util.irc.chanmodes.ChanMode.ONLY_INVITE;
+import static de.kuschku.util.irc.chanmodes.ChanMode.PARANOID;
+import static de.kuschku.util.irc.chanmodes.ChanMode.PASSWORD;
+import static de.kuschku.util.irc.chanmodes.ChanMode.RESTRICT_TOPIC;
+import static de.kuschku.util.irc.chanmodes.ChanMode.UNLISTED;
 
 public class RfcIrcModeProvider extends AbstractIrcModeProvider {
 
@@ -48,6 +58,13 @@ public class RfcIrcModeProvider extends AbstractIrcModeProvider {
             case 'm': return MODERATED;
             case 'l': return LIMIT;
             case 'k': return PASSWORD;
+
+            case 'b':
+                return BAN;
+            case 'e':
+                return BAN_EXCEPTION;
+            case 'I':
+                return INVITE_EXCEPTION;
         }
         return null;
     }
@@ -63,6 +80,13 @@ public class RfcIrcModeProvider extends AbstractIrcModeProvider {
             case MODERATED: return 'm';
             case LIMIT: return 'l';
             case PASSWORD: return 'k';
+
+            case BAN:
+                return 'b';
+            case BAN_EXCEPTION:
+                return 'e';
+            case INVITE_EXCEPTION:
+                return 'I';
         }
         return ' ';
     }
