@@ -26,6 +26,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.raizlabs.android.dbflow.config.FlowManager;
+
+import de.kuschku.libquassel.localtypes.orm.ConnectedDatabase;
 import de.kuschku.quasseldroid_ng.ui.chat.MainActivity;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ServiceHelper;
 import de.kuschku.quasseldroid_ng.ui.setup.AccountSelectActivity;
@@ -55,6 +58,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            // If we select a different core than we used last time, clear the database
+            if (!context.settings().preferenceLastAccount.get().equals(data.getBundleExtra("extra").getString("account")))
+                deleteDatabase(ConnectedDatabase.NAME);
+
             context.settings().preferenceLastAccount.set(data.getBundleExtra("extra").getString("account"));
             checkReady();
             firstStart = true;
