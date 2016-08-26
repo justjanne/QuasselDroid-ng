@@ -25,14 +25,23 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
+import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
+import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
+
+import java.util.List;
+
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
+import de.kuschku.libquassel.localtypes.orm.ConnectedDatabase;
 import de.kuschku.libquassel.message.Message;
+import de.kuschku.libquassel.message.Message_Table;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
-public class MemoryBacklogStorage implements BacklogStorage {
+public class HybridBacklogStorage implements BacklogStorage {
     @NonNull
     private final SparseArray<ObservableComparableSortedList<Message>> backlogs = new SparseArray<>();
     @NonNull
@@ -73,11 +82,21 @@ public class MemoryBacklogStorage implements BacklogStorage {
     @Override
     public void insertMessages(@IntRange(from = 0) int bufferId, @NonNull Message... messages) {
         ensureExisting(bufferId);
-        for (Message message : messages) {
-            client.unbufferBuffer(message.bufferInfo);
-            backlogs.get(bufferId).add(message);
-            updateLatest(message);
-        }
+        FlowManager.getDatabase(ConnectedDatabase.class).executeTransaction(new ITransaction() {
+            @Override
+            public void execute(DatabaseWrapper databaseWrapper) {
+                for (Message message : messages) {
+                    client.unbufferBuffer(message.bufferInfo);
+                    synchronized (backlogs) {
+                        if (backlogs.get(bufferId) != null)
+                            backlogs.get(bufferId).add(message);
+                        message.save();
+                        message.bufferInfo.save();
+                    }
+                    updateLatest(message);
+                }
+            }
+        });
     }
 
     public void updateLatest(@NonNull Message message) {
@@ -89,9 +108,11 @@ public class MemoryBacklogStorage implements BacklogStorage {
     @Override
     public void insertMessages(@NonNull Message... messages) {
         for (Message message : messages) {
-            ensureExisting(message.bufferInfo.id);
             client.unbufferBuffer(message.bufferInfo);
-            backlogs.get(message.bufferInfo.id).add(message);
+            synchronized (backlogs) {
+                if (backlogs.get(message.bufferInfo.id) != null)
+                    backlogs.get(message.bufferInfo.id).add(message);
+            }
             updateLatest(message);
         }
     }
@@ -102,13 +123,18 @@ public class MemoryBacklogStorage implements BacklogStorage {
 
     @Override
     public void markBufferUnused(@IntRange(from = 0) int bufferid) {
-        // Does nothing in memory backlog storage
+        synchronized (backlogs) {
+            if (backlogs.get(bufferid) != null && filters.get(bufferid) != null)
+                backlogs.get(bufferid).removeCallback(filters.get(bufferid));
+            backlogs.remove(bufferid);
+            filteredBacklogs.remove(bufferid);
+            filters.remove(bufferid);
+        }
     }
 
     @Override
     public void clear(@IntRange(from = 0) int bufferid) {
-        ensureExisting(bufferid);
-        backlogs.get(bufferid).clear();
+        SQLite.delete().from(Message.class).where(Message_Table.bufferInfo_id.eq(bufferid));
     }
 
     private void ensureExisting(@IntRange(from = -1) int bufferId) {
@@ -118,7 +144,11 @@ public class MemoryBacklogStorage implements BacklogStorage {
             ObservableComparableSortedList<Message> filteredMessages = new ObservableComparableSortedList<>(Message.class, true);
             BacklogFilter backlogFilter = new BacklogFilter(client, bufferId, messages, filteredMessages);
             messages.addCallback(backlogFilter);
-            backlogs.put(bufferId, messages);
+            synchronized (backlogs) {
+                List<Message> messageList = SQLite.select().from(Message.class).where(Message_Table.bufferInfo_id.eq(bufferId)).queryList();
+                messages.addAll(messageList);
+                backlogs.put(bufferId, messages);
+            }
             filteredBacklogs.put(bufferId, filteredMessages);
             filters.put(bufferId, backlogFilter);
         }

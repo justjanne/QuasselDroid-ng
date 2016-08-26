@@ -134,7 +134,7 @@ public class MainActivity extends BoundActivity {
         chatListAdapter = BufferViewConfigAdapter.of(context);
         chatListAdapter.setBufferClickListener(buffer -> {
             if (context.client() != null) {
-                context.client().backlogManager().open(buffer.getInfo().id());
+                context.client().backlogManager().open(buffer.getInfo().id);
                 if (drawerLayout != null)
                     drawerLayout.closeDrawer(GravityCompat.START);
             }
@@ -150,6 +150,7 @@ public class MainActivity extends BoundActivity {
         if (drawerLayout != null) {
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.material_drawer_open, R.string.material_drawer_close);
             toggle.syncState();
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
 
         replaceFragment(new LoadingFragment());
@@ -161,15 +162,16 @@ public class MainActivity extends BoundActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         if (context.client() != null)
             context.client().backlogManager().setOpen(-1);
+        context.client().backlogStorage().markBufferUnused(context.client().backlogManager().open());
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         if (context.client() != null)
             context.client().backlogManager().open(status.bufferId);
     }
@@ -266,6 +268,7 @@ public class MainActivity extends BoundActivity {
             int id = backlogManager.open();
             status.bufferId = id;
             updateBuffer(id);
+            chatListAdapter.setOpen(id);
         }
     }
 
@@ -331,6 +334,9 @@ public class MainActivity extends BoundActivity {
     }
 
     private void onConnected() {
+        if (drawerLayout != null)
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
         context.client().backlogManager().open(status.bufferId);
         if (context.client().bufferViewManager() != null) {
             chatListSpinner.setAdapter(new BufferViewConfigSpinnerAdapter(context, context.client().bufferViewManager()));

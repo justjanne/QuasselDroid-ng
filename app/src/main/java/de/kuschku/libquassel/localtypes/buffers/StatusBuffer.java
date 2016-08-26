@@ -53,7 +53,7 @@ public class StatusBuffer implements Buffer {
     }
 
     public QNetwork getNetwork() {
-        return client.networkManager().network(info.networkId());
+        return client.networkManager().network(info.networkId);
     }
 
     @Nullable
@@ -73,18 +73,18 @@ public class StatusBuffer implements Buffer {
     @NonNull
     @Override
     public String objectName() {
-        return objectName(info.name());
+        return objectName(info.name);
     }
 
     @NonNull
     @Override
     public String objectName(String name) {
-        return info.networkId() + "/" + name;
+        return info.networkId + "/" + name;
     }
 
     @Override
     public void renameBuffer(@NonNull String newName) {
-        this.info.setName(newName);
+        this.info.name = newName;
     }
 
     @NonNull

@@ -43,17 +43,17 @@ public class BufferInfoSerializer implements PrimitiveSerializer<BufferInfo> {
 
     @Override
     public void serialize(@NonNull ByteChannel channel, @NonNull BufferInfo data) throws IOException {
-        IntSerializer.get().serialize(channel, data.id());
-        IntSerializer.get().serialize(channel, data.networkId());
-        ShortSerializer.get().serialize(channel, data.type().id);
-        IntSerializer.get().serialize(channel, data.groupId());
-        ByteArraySerializer.get().serialize(channel, data.name());
+        IntSerializer.get().serialize(channel, data.id);
+        IntSerializer.get().serialize(channel, data.networkId);
+        ShortSerializer.get().serialize(channel, data.type.id);
+        IntSerializer.get().serialize(channel, data.groupId);
+        ByteArraySerializer.get().serialize(channel, data.name);
     }
 
     @NonNull
     @Override
     public BufferInfo deserialize(@NonNull final ByteBuffer buffer) throws IOException {
-        return new BufferInfo(
+        return BufferInfo.create(
                 IntSerializer.get().deserialize(buffer),
                 IntSerializer.get().deserialize(buffer),
                 BufferInfo.Type.fromId(ShortSerializer.get().deserialize(buffer)),

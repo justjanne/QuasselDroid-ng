@@ -42,6 +42,8 @@ public interface QIrcUser extends QObservable {
 
     String hostmask();
 
+    String account();
+
     boolean isAway();
 
     @Synced
@@ -100,6 +102,11 @@ public interface QIrcUser extends QObservable {
     void setRealName(final String realName);
 
     void _setRealName(final String realName);
+
+    @Synced
+    void setAccount(final String account);
+
+    void _setAccount(final String account);
 
     void _setAway(final boolean away);
 

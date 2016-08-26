@@ -80,6 +80,6 @@ public abstract class AIgnoreListManager<T extends AIgnoreListManager<T>> extend
     @Override
     public boolean matches(Message message, QNetwork network) {
         assertNotNull(network);
-        return match(message.content, message.sender, message.type, network.networkName(), message.bufferInfo.name()) != StrictnessType.UnmatchedStrictness;
+        return match(message.content, message.sender, message.type, network.networkName(), message.bufferInfo.name) != StrictnessType.UnmatchedStrictness;
     }
 }

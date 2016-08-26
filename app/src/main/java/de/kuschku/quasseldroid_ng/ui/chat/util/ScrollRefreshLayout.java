@@ -19,29 +19,18 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng;
+package de.kuschku.quasseldroid_ng.ui.chat.util;
 
-import android.app.Application;
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.AttributeSet;
 
-import com.raizlabs.android.dbflow.config.FlowConfig;
-import com.raizlabs.android.dbflow.config.FlowManager;
-
-import de.kuschku.libquassel.localtypes.orm.ConnectedDatabase;
-
-public class QuasselDroidNG extends Application {
-
-    private static Context applicationContext;
-
-    public static Context context() {
-        return applicationContext;
+public class ScrollRefreshLayout extends SwipeRefreshLayout {
+    public ScrollRefreshLayout(Context context) {
+        super(context);
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        applicationContext = getApplicationContext();
-        FlowManager.init(new FlowConfig.Builder(this).build());
-        FlowManager.getDatabase(ConnectedDatabase.class).getWritableDatabase();
+    public ScrollRefreshLayout(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 }

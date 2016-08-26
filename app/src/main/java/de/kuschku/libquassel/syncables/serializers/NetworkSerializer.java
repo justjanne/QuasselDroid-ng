@@ -115,6 +115,7 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
                         (String) users.get("suserHost").data.get(i),
                         (String) users.get("nick").data.get(i),
                         (String) users.get("realName").data.get(i),
+                        (String) users.get("account").data.get(i),
                         (String) users.get("awayMessage").data.get(i),
                         (DateTime) users.get("loginTime").data.get(i),
                         (boolean) users.get("encrypted").data.get(i),

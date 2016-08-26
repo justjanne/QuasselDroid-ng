@@ -74,12 +74,12 @@ public class BacklogFilter implements UICallback {
     private void updateDayChangeMessages() {
         DateTime now = DateTime.now().withMillisOfDay(0);
         while (now.isAfter(earliestMessage)) {
-            bus.post(new MessageInsertEvent(new Message(
+            bus.post(new MessageInsertEvent(Message.create(
                     (int) DateTimeUtils.toJulianDay(now.getMillis()),
                     now,
                     Message.Type.DayChange,
                     new Message.Flags(false, false, false, false, false),
-                    new BufferInfo(
+                    BufferInfo.create(
                             bufferId,
                             -1,
                             BufferInfo.Type.INVALID,
@@ -94,7 +94,7 @@ public class BacklogFilter implements UICallback {
     }
 
     private boolean filterItem(@NonNull Message message) {
-        QNetwork network = client.networkManager().network(client.bufferManager().buffer(message.bufferInfo.id()).getInfo().networkId());
+        QNetwork network = client.networkManager().network(client.bufferManager().buffer(message.bufferInfo.id).getInfo().networkId);
         assertNotNull(network);
         return (client.ignoreListManager() != null && client.ignoreListManager().matches(message, network)) || filteredTypes.contains(message.type);
     }

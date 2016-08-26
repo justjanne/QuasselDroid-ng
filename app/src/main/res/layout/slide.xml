@@ -23,7 +23,8 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/md_light_cards" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,8 +61,7 @@
         <FrameLayout
             android:id="@+id/content_host"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/md_light_cards" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

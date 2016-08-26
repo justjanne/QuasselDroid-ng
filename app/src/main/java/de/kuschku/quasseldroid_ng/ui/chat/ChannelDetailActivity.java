@@ -83,7 +83,7 @@ public class ChannelDetailActivity extends BoundActivity {
         if (channel == null) return;
 
         if (channel.topic() == null) {
-            topic.setText(R.string.no_topic_set);
+            topic.setText(R.string.labelNoTopic);
             topic.setTextColor(context.themeUtil().res.colorForegroundSecondary);
             topic.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
         } else {

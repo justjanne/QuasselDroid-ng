@@ -95,7 +95,7 @@ public class BufferViewHolder extends ChildViewHolder {
         status = buffer.getStatus();
         name.setText(buffer.getName());
         if (viewIntBinder != null) viewIntBinder.unbind();
-        viewIntBinder = new ViewIntBinder(context.client().bufferSyncer().activity(buffer.getInfo().id()));
+        viewIntBinder = new ViewIntBinder(context.client().bufferSyncer().activity(buffer.getInfo().id));
         viewIntBinder.bindTextColor(name, colorFromActivityStatus(buffer));
         setDescription(context.deserializer().formatString(getDescription(buffer)));
         setBadge(0);
@@ -103,9 +103,9 @@ public class BufferViewHolder extends ChildViewHolder {
 
         itemView.setBackground(background);
 
-        id = buffer.getInfo().id();
+        id = buffer.getInfo().id;
 
-        BufferInfo.Type type = buffer.getInfo().type();
+        BufferInfo.Type type = buffer.getInfo().type;
         setIcon(context, type, status);
         callback = new Observable.OnPropertyChangedCallback() {
             @Override
@@ -121,7 +121,7 @@ public class BufferViewHolder extends ChildViewHolder {
     @NonNull
     private Function<Integer, Integer> colorFromActivityStatus(Buffer buffer) {
         return activities -> {
-            int filters = context.client().backlogManager().filter(buffer.getInfo().id()).getFilters();
+            int filters = context.client().backlogManager().filter(buffer.getInfo().id).getFilters();
             activities = activities & ~filters;
             if (0 != ((activities & Message.Type.Plain.value) | (activities & Message.Type.Notice.value) | (activities & Message.Type.Action.value)))
                 return context.themeUtil().res.colorTintMessage;

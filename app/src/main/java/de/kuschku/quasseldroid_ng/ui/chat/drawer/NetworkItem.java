@@ -39,20 +39,20 @@ public class NetworkItem implements ParentListItem {
     private final ObservableSortedList<Buffer> buffers = new ObservableSortedList<>(Buffer.class, new ObservableSortedList.ItemComparator<Buffer>() {
         @Override
         public int compare(Buffer o1, Buffer o2) {
-            if (o1.getInfo().type() == o2.getInfo().type()) {
+            if (o1.getInfo().type == o2.getInfo().type) {
                 return IrcCaseMapper.toLowerCase(o1.getName()).compareTo(IrcCaseMapper.toLowerCase(o2.getName()));
             } else {
-                if (o1.getInfo().type() == BufferInfo.Type.STATUS)
+                if (o1.getInfo().type == BufferInfo.Type.STATUS)
                     return -1;
-                else if (o2.getInfo().type() == BufferInfo.Type.STATUS)
+                else if (o2.getInfo().type == BufferInfo.Type.STATUS)
                     return 1;
-                else if (o1.getInfo().type() == BufferInfo.Type.CHANNEL)
+                else if (o1.getInfo().type == BufferInfo.Type.CHANNEL)
                     return -1;
-                else if (o2.getInfo().type() == BufferInfo.Type.CHANNEL)
+                else if (o2.getInfo().type == BufferInfo.Type.CHANNEL)
                     return 1;
-                else if (o1.getInfo().type() == BufferInfo.Type.GROUP)
+                else if (o1.getInfo().type == BufferInfo.Type.GROUP)
                     return -1;
-                else if (o2.getInfo().type() == BufferInfo.Type.GROUP)
+                else if (o2.getInfo().type == BufferInfo.Type.GROUP)
                     return 1;
                 else
                     return -1;
@@ -66,7 +66,7 @@ public class NetworkItem implements ParentListItem {
 
         @Override
         public boolean areItemsTheSame(Buffer item1, Buffer item2) {
-            return item1.getInfo().id() == item2.getInfo().id();
+            return item1.getInfo().id == item2.getInfo().id;
         }
     });
 
@@ -74,14 +74,14 @@ public class NetworkItem implements ParentListItem {
         this.network = network;
         for (int id : config.bufferList()) {
             Buffer buffer = context.client().bufferManager().buffer(id);
-            if (context.bufferDisplayTypes().contains(config.mayDisplay(buffer)) && buffer.getInfo().networkId() == network.networkId())
+            if (context.bufferDisplayTypes().contains(config.mayDisplay(buffer)) && buffer.getInfo().networkId == network.networkId())
                 buffers.add(buffer);
         }
         config.bufferIds().addCallback(new ElementCallback<Integer>() {
             @Override
             public void notifyItemInserted(Integer id) {
                 Buffer buffer = context.client().bufferManager().buffer(id);
-                if (context.bufferDisplayTypes().contains(config.mayDisplay(buffer)) && buffer.getInfo().networkId() == network.networkId())
+                if (context.bufferDisplayTypes().contains(config.mayDisplay(buffer)) && buffer.getInfo().networkId == network.networkId())
                     buffers.add(buffer);
             }
 

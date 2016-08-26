@@ -23,6 +23,9 @@ package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.util.Log;
+
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.HashSet;
 import java.util.List;
@@ -38,6 +41,7 @@ import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.localtypes.backlogstorage.BacklogStorage;
 import de.kuschku.libquassel.message.Message;
+import de.kuschku.libquassel.message.Message_Table;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.ABacklogManager;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
@@ -65,7 +69,7 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
         if (!initialized.contains(bufferId) || null == (last = storage.getUnfiltered(bufferId).last()))
             requestBacklogInitial(bufferId, amount);
         else {
-            requestBacklog(bufferId, -1, last.messageId, amount, 0);
+            requestBacklog(bufferId, -1, last.id, amount, 0);
         }
     }
 
@@ -76,7 +80,11 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
 
         waiting.add(id);
         waitingMax++;
-        requestBacklog(id, -1, -1, amount, 0);
+        Message lastMessageForBuffer = SQLite.select().from(Message.class).where(Message_Table.bufferInfo_id.eq(id)).orderBy(Message_Table.id, false).limit(1).querySingle();
+        if (lastMessageForBuffer != null)
+            requestBacklog(id, lastMessageForBuffer.id, -1, amount, 1);
+        else
+            requestBacklog(id, -1, -1, amount, 1);
     }
 
     @Override
@@ -88,6 +96,11 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
     public void _receiveBacklog(int id, int first, int last, int limit, int additional, @NonNull List<Message> messages) {
         assertNotNull(provider);
 
+        Log.d("DEBUG", "Received " + messages.size() + " messages out of a max of " + limit);
+
+        Message lastMessageForBuffer = SQLite.select().from(Message.class).where(Message_Table.bufferInfo_id.eq(id)).orderBy(Message_Table.id, false).limit(1).querySingle();
+        if (lastMessageForBuffer != null && messages.get(0).id > lastMessageForBuffer.id)
+            storage.clear(id);
         storage.insertMessages(id, messages.toArray(new Message[messages.size()]));
         if (messages.size() > 0 && !client.bufferManager().exists(messages.get(0).bufferInfo))
             client.bufferManager().createBuffer(messages.get(0).bufferInfo);
@@ -125,8 +138,8 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
 
         Set<Integer> buffers = new HashSet<>();
         for (Message message : messages) {
-            storage.insertMessages(message.bufferInfo.id(), message);
-            buffers.add(message.bufferInfo.id());
+            storage.insertMessages(message.bufferInfo.id, message);
+            buffers.add(message.bufferInfo.id);
         }
         for (int id : buffers) {
             provider.sendEvent(new BacklogReceivedEvent(id));
@@ -167,10 +180,13 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
     public void open(int bufferId) {
         assertNotNull(provider);
 
+        int oldBuffer = open();
         setOpen(bufferId);
         if (bufferId != -1 && client.bufferSyncer() != null)
             client.bufferSyncer().requestMarkBufferAsRead(bufferId);
         provider.sendEvent(new BufferChangeEvent());
+        if (oldBuffer != bufferId)
+            client.backlogStorage().markBufferUnused(oldBuffer);
     }
 
     @Override
@@ -181,7 +197,7 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
     @Override
     public void receiveBacklog(@NonNull Message msg) {
         storage.insertMessages(msg);
-        if (msg.bufferInfo.id() == openBuffer && openBuffer != -1)
+        if (msg.bufferInfo.id == openBuffer && openBuffer != -1)
             client.bufferSyncer().requestMarkBufferAsRead(openBuffer);
     }
 

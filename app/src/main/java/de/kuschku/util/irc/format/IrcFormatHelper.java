@@ -98,10 +98,10 @@ public class IrcFormatHelper {
         }
         Matcher channelMatcher = channelPattern.matcher(str);
         while (channelMatcher.find()) {
-            QIrcChannel channel = client.networkManager().network(bufferInfo.networkId()).ircChannel(channelMatcher.group());
+            QIrcChannel channel = client.networkManager().network(bufferInfo.networkId).ircChannel(channelMatcher.group());
             Buffer buffer = client.bufferManager().channel(channel);
             if (buffer != null)
-                spans.add(new FutureClickableSpan(new ChannelSpan(client, buffer.getInfo().id(), listener), channelMatcher.start(), channelMatcher.end()));
+                spans.add(new FutureClickableSpan(new ChannelSpan(client, buffer.getInfo().id, listener), channelMatcher.start(), channelMatcher.end()));
         }
         for (FutureClickableSpan span : spans) {
             str.setSpan(span.span, span.start, span.end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);

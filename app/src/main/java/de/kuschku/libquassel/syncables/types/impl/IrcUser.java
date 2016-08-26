@@ -23,6 +23,7 @@ package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.SparseArray;
 
 import org.joda.time.DateTime;
@@ -57,6 +58,7 @@ public class IrcUser extends AIrcUser<IrcUser> {
     private String host;
     private String nick;
     private String realName;
+    private String account;
     private boolean away;
     private String awayMessage;
     private DateTime idleTime;
@@ -70,7 +72,7 @@ public class IrcUser extends AIrcUser<IrcUser> {
     private QNetwork network;
     private Set<Character> userModes;
 
-    public IrcUser(String server, String ircOperator, boolean away, int lastAwayMessage, DateTime idleTime, String whoisServiceReply, String suserHost, String nick, String realName, String awayMessage, DateTime loginTime, boolean encrypted, List<String> channels, String host, String userModes, String user) {
+    public IrcUser(String server, String ircOperator, boolean away, int lastAwayMessage, DateTime idleTime, String whoisServiceReply, String suserHost, String nick, String realName, String account, String awayMessage, DateTime loginTime, boolean encrypted, List<String> channels, String host, String userModes, String user) {
         this.server = server;
         this.ircOperator = ircOperator;
         this.away = away;
@@ -80,6 +82,7 @@ public class IrcUser extends AIrcUser<IrcUser> {
         this.suserHost = suserHost;
         this.nick = nick;
         this.realName = realName;
+        this.account = account;
         this.awayMessage = awayMessage;
         this.loginTime = loginTime;
         this.encrypted = encrypted;
@@ -118,6 +121,7 @@ public class IrcUser extends AIrcUser<IrcUser> {
                 null,
                 null,
                 null,
+                null,
                 false,
                 null,
                 host,
@@ -144,6 +148,11 @@ public class IrcUser extends AIrcUser<IrcUser> {
     @Override
     public String realName() {
         return realName;
+    }
+
+    @Override
+    public String account() {
+        return account;
     }
 
     @Override
@@ -277,6 +286,12 @@ public class IrcUser extends AIrcUser<IrcUser> {
     @Override
     public void _setRealName(String realName) {
         this.realName = realName;
+        _update();
+    }
+
+    @Override
+    public void _setAccount(String account) {
+        this.account = account;
         _update();
     }
 

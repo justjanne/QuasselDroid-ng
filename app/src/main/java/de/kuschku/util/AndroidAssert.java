@@ -43,7 +43,7 @@ public class AndroidAssert extends Assert {
         }
     }
 
-    public static void assertTrue(String message, boolean condition) {
+    public static void assertTrue(@Nullable String message, boolean condition) {
         if (BuildConfig.DEBUG) {
             if (!condition) fail(message);
         }
@@ -79,7 +79,7 @@ public class AndroidAssert extends Assert {
         }
     }
 
-    public static void fail(String message) {
+    public static void fail(@Nullable String message) {
         if (BuildConfig.DEBUG) {
             throw new AssertionError(message);
         }

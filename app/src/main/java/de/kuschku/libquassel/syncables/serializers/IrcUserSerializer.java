@@ -66,6 +66,7 @@ public class IrcUserSerializer implements ObjectSerializer<IrcUser> {
         map.data.put("suserHost", new QVariant<>(data.suserHost()));
         map.data.put("nick", new QVariant<>(data.nick()));
         map.data.put("realName", new QVariant<>(data.realName()));
+        map.data.put("account", new QVariant<>(data.account()));
         map.data.put("awayMessage", new QVariant<>(data.awayMessage()));
         map.data.put("loginTime", new QVariant<>(data.loginTime()));
         map.data.put("encrypted", new QVariant<>(data.encrypted()));
@@ -95,6 +96,7 @@ public class IrcUserSerializer implements ObjectSerializer<IrcUser> {
                 (String) map.get("suserHost").data,
                 (String) map.get("nick").data,
                 (String) map.get("realName").data,
+                (String) map.get("account").data,
                 (String) map.get("awayMessage").data,
                 (DateTime) map.get("loginTime").data,
                 (boolean) map.get("encrypted").data,

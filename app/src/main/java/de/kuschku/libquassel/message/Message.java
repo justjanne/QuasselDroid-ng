@@ -24,45 +24,49 @@ package de.kuschku.libquassel.message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
 import java.util.Comparator;
 
+import de.kuschku.libquassel.localtypes.orm.ConnectedDatabase;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.util.observables.ContentComparable;
 
-public class Message implements ContentComparable<Message> {
-    public final int messageId;
-    @NonNull
-    public final DateTime time;
-    @NonNull
-    public final Type type;
-    @NonNull
-    public final Flags flags;
-    @NonNull
-    public final BufferInfo bufferInfo;
-    @Nullable
-    public final String sender;
-    @Nullable
-    public final String content;
+@Table(database = ConnectedDatabase.class)
+public class Message extends BaseModel implements ContentComparable<Message> {
+    @PrimaryKey
+    public int id;
 
-    public Message(int messageId, @NonNull DateTime time, @NonNull Type type, @NonNull Flags flags, @NonNull BufferInfo bufferInfo, @Nullable String sender,
-                   @Nullable String content) {
-        this.messageId = messageId;
-        this.time = time;
-        this.type = type;
-        this.flags = flags;
-        this.bufferInfo = bufferInfo;
-        this.sender = sender;
-        this.content = content;
-    }
+    @Column
+    public DateTime time;
+
+    @Column
+    public Type type;
+
+    @Column
+    public Flags flags;
+
+    @ForeignKey
+    public BufferInfo bufferInfo;
+
+    @Column
+    public String sender;
+
+    @Column
+    public String content;
 
     @NonNull
     @Override
     public String toString() {
         return "Message{" +
-                "messageId=" + messageId +
+                "id=" + id +
                 ", time=" + time +
                 ", type=" + type +
                 ", flags=" + flags +
@@ -79,20 +83,32 @@ public class Message implements ContentComparable<Message> {
 
     @Override
     public boolean areItemsTheSame(@NonNull Message other) {
-        return this.messageId == other.messageId;
+        return this.id == other.id;
     }
 
     @Override
     public int hashCode() {
-        return messageId;
+        return id;
     }
 
     @Override
     public int compareTo(@NonNull Message another) {
         if (this.type != Type.DayChange && another.type != Type.DayChange)
-            return this.messageId - another.messageId;
+            return this.id - another.id;
         else
             return this.time.compareTo(another.time);
+    }
+
+    public static Message create(int id, DateTime time, Type type, Flags flags, BufferInfo bufferInfo, String sender, String content) {
+        Message message = new Message();
+        message.id = id;
+        message.time = time;
+        message.type = type;
+        message.flags = flags;
+        message.bufferInfo = bufferInfo;
+        message.sender = sender;
+        message.content = content;
+        return message;
     }
 
     public enum Type {
@@ -164,6 +180,7 @@ public class Message implements ContentComparable<Message> {
                     return Error;
             }
         }
+
     }
 
     public static class Flags {
@@ -212,12 +229,13 @@ public class Message implements ContentComparable<Message> {
             output.append("]");
             return output.toString();
         }
+
     }
 
     public static class MessageComparator implements Comparator<Message>, Serializable {
         @Override
         public int compare(@NonNull Message o1, @NonNull Message o2) {
-            return o1.messageId - o2.messageId;
+            return o1.id - o2.id;
         }
 
         @Override
@@ -225,4 +243,5 @@ public class Message implements ContentComparable<Message> {
             return obj == this;
         }
     }
+
 }

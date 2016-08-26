@@ -58,7 +58,7 @@ public class NotificationManager {
 
     public void receiveMessage(@NonNull Message message) {
         if (checkMessage(message)) {
-            getNotifications(message.bufferInfo.id()).add(message);
+            getNotifications(message.bufferInfo.id).add(message);
         }
     }
 

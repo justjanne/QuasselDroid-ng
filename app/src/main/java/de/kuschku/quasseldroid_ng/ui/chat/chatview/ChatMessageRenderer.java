@@ -105,7 +105,7 @@ public class ChatMessageRenderer {
     @NonNull
     private CharSequence getBufferName(@NonNull Message message) {
         assertNotNull(context.client());
-        Buffer buffer = context.client().bufferManager().buffer(message.bufferInfo.id());
+        Buffer buffer = context.client().bufferManager().buffer(message.bufferInfo.id);
         assertNotNull(buffer);
         String name = buffer.getName();
         assertNotNull(name);

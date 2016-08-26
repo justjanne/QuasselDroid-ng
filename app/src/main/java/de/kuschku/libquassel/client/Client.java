@@ -460,12 +460,12 @@ public class Client extends AClient {
     public void unbufferBuffer(@NonNull BufferInfo info) {
         if (!bufferManager().exists(info)) {
             bufferManager().createBuffer(info);
-            Log.d("libquassel", "Creating buffer from message info: " + info.id());
+            Log.d("libquassel", "Creating buffer from message info: " + info.id);
         }
-        if (bufferedBuffers.containsKey(info.id())) {
-            Pair<QBufferViewConfig, Integer> pair = bufferedBuffers.get(info.id());
-            pair.first._addBuffer(info.id(), pair.second);
-            Log.d("libquassel", "Un-Queueing buffer: " + info.id());
+        if (bufferedBuffers.containsKey(info.id)) {
+            Pair<QBufferViewConfig, Integer> pair = bufferedBuffers.get(info.id);
+            pair.first._addBuffer(info.id, pair.second);
+            Log.d("libquassel", "Un-Queueing buffer: " + info.id);
         }
     }
 

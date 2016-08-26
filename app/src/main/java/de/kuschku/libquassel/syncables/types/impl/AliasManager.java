@@ -109,8 +109,8 @@ public class AliasManager extends AAliasManager<AliasManager> {
                 command = command.replaceAll(String.format(Locale.US, "$%d", j), params.get(j - 1));
             }
             command = command.replaceAll("\\$0", args);
-            command = command.replaceAll("\\$channelname", info.name() != null ? info.name() : "");
-            command = command.replaceAll("\\$channel", info.name() != null ? info.name() : "");
+            command = command.replaceAll("\\$channelname", info.name != null ? info.name : "");
+            command = command.replaceAll("\\$channel", info.name != null ? info.name : "");
             command = command.replaceAll("\\$currentnick", network.myNick());
             command = command.replaceAll("\\$nick", network.myNick());
             command = command.replaceAll("\\$network", network.networkName());
@@ -204,7 +204,7 @@ public class AliasManager extends AAliasManager<AliasManager> {
                 args = message.substring(space + 1);
             }
             int index = indexOfIgnoreCase(command);
-            QNetwork network = client.networkManager().network(info.networkId());
+            QNetwork network = client.networkManager().network(info.networkId);
             if (index != -1 && network != null) {
                 Alias alias = aliases.get(index);
                 list.addAll(expand(alias.expansion, info, network, args));

@@ -62,16 +62,16 @@ public class BufferManager {
     }
 
     public void createBuffer(@NonNull Buffer buffer) {
-        buffers.put(buffer.getInfo().id(), buffer);
-        bufferIds.add(buffer.getInfo().id());
-        byNetwork(buffer.getInfo().networkId()).add(buffer.getInfo().id());
-        updateBufferMapEntries(buffer, buffer.getInfo().name());
+        buffers.put(buffer.getInfo().id, buffer);
+        bufferIds.add(buffer.getInfo().id);
+        byNetwork(buffer.getInfo().networkId).add(buffer.getInfo().id);
+        updateBufferMapEntries(buffer, buffer.getInfo().name);
     }
 
     public void removeBuffer(@IntRange(from = 0) int id) {
         Buffer buffer = buffers.get(id);
         if (buffer != null)
-            byNetwork(buffer.getInfo().networkId()).remove(id);
+            byNetwork(buffer.getInfo().networkId).remove(id);
         buffers.remove(id);
         bufferIds.remove(id);
     }
@@ -81,11 +81,11 @@ public class BufferManager {
     }
 
     public void updateBufferInfo(@NonNull BufferInfo bufferInfo) {
-        Buffer buffer = buffer(bufferInfo.id());
+        Buffer buffer = buffer(bufferInfo.id);
         if (buffer == null) return;
-        if (buffer.getInfo().networkId() != bufferInfo.networkId()) {
-            buffersByNetwork.get(buffer.getInfo().networkId()).remove(bufferInfo.id());
-            buffersByNetwork.get(buffer.getInfo().networkId()).add(bufferInfo.id());
+        if (buffer.getInfo().networkId != bufferInfo.networkId) {
+            buffersByNetwork.get(buffer.getInfo().networkId).remove(bufferInfo.id);
+            buffersByNetwork.get(buffer.getInfo().networkId).add(bufferInfo.id);
         }
         buffer.setInfo(bufferInfo);
     }
@@ -93,7 +93,7 @@ public class BufferManager {
     public void init(@NonNull List<BufferInfo> bufferInfos) {
         for (BufferInfo info : bufferInfos) {
             createBuffer(info);
-            laterRequests.add(info.id());
+            laterRequests.add(info.id);
         }
     }
 
@@ -109,7 +109,7 @@ public class BufferManager {
     }
 
     public boolean exists(@NonNull BufferInfo info) {
-        return buffers.containsKey(info.id());
+        return buffers.containsKey(info.id);
     }
 
     public void renameBuffer(int bufferId, @NonNull String newName) {
@@ -123,9 +123,9 @@ public class BufferManager {
         buffersByNick.remove(buffer.objectName());
         buffersByChannel.remove(buffer.objectName());
         if (buffer instanceof ChannelBuffer) {
-            buffersByChannel.put(buffer.objectName(name), buffer.getInfo().id());
+            buffersByChannel.put(buffer.objectName(name), buffer.getInfo().id);
         } else if (buffer instanceof QueryBuffer) {
-            buffersByNick.put(buffer.objectName(name), buffer.getInfo().id());
+            buffersByNick.put(buffer.objectName(name), buffer.getInfo().id);
         }
     }
 

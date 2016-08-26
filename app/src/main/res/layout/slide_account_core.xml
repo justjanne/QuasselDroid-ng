@@ -30,7 +30,7 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Hostname">
+        android:hint="@string/labelHostname">
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/host"
             android:layout_width="match_parent"
@@ -41,12 +41,13 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Port">
+        android:hint="@string/labelPort">
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/port"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number" />
+            android:inputType="number"
+            android:text="@string/defaultPort"/>
     </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

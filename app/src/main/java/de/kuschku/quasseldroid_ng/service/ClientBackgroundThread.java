@@ -33,7 +33,7 @@ import de.kuschku.libquassel.client.FeatureFlags;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.LoginRequireEvent;
-import de.kuschku.libquassel.localtypes.backlogstorage.MemoryBacklogStorage;
+import de.kuschku.libquassel.localtypes.backlogstorage.HybridBacklogStorage;
 import de.kuschku.libquassel.protocols.RemotePeer;
 import de.kuschku.quasseldroid_ng.ui.settings.Settings;
 import de.kuschku.util.CompatibilityUtils;
@@ -62,7 +62,7 @@ public class ClientBackgroundThread implements Runnable {
                 provider,
                 CLIENT_DATA,
                 new SQLiteCertificateManager(context),
-                new MemoryBacklogStorage(),
+                new HybridBacklogStorage(),
                 new SQLiteBufferMetaDataManager(context),
                 account.id.toString()
         );

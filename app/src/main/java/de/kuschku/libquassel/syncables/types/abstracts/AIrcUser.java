@@ -55,6 +55,12 @@ public abstract class AIrcUser<T extends AIrcUser<T>> extends SyncableObject<T> 
     }
 
     @Override
+    public void setAccount(String account) {
+        _setAccount(account);
+        syncVar("setAccount", account);
+    }
+
+    @Override
     public void setAway(boolean away) {
         _setAway(away);
         syncVar("setAway", away);

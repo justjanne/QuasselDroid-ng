@@ -56,7 +56,7 @@ public class QueryBuffer implements Buffer {
     @Nullable
     @Override
     public String getName() {
-        return getInfo().name();
+        return getInfo().name;
     }
 
     @NonNull
@@ -71,24 +71,24 @@ public class QueryBuffer implements Buffer {
 
     @Override
     public void renameBuffer(@NonNull String newName) {
-        info.setName(newName);
+        info.name = newName;
     }
 
     @NonNull
     @Override
     public String objectName() {
-        return objectName(info.name());
+        return objectName(info.name);
     }
 
     @NonNull
     @Override
     public String objectName(String name) {
-        return info.networkId() + "/" + name;
+        return info.networkId + "/" + name;
     }
 
     @Nullable
     public QIrcUser getUser() {
-        return client.networkManager().network(info.networkId()).ircUser(info.name());
+        return client.networkManager().network(info.networkId).ircUser(info.name);
     }
 
     @NonNull

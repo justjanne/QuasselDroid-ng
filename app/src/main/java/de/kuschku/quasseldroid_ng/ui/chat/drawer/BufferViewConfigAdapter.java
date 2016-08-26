@@ -35,6 +35,7 @@ import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import de.kuschku.libquassel.events.BufferChangeEvent;
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;

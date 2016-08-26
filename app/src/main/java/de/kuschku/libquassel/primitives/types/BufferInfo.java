@@ -24,64 +24,30 @@ package de.kuschku.libquassel.primitives.types;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-public class BufferInfo {
-    private int id;
-    private int networkId;
-    @NonNull
-    private Type type;
-    private int groupId;
-    @Nullable
-    private String name;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.converter.TypeConverter;
+import com.raizlabs.android.dbflow.structure.BaseModel;
 
-    public BufferInfo(int id, int networkId, @NonNull Type type, int groupId, @Nullable String name) {
-        this.id = id;
-        this.networkId = networkId;
-        this.type = type;
-        this.groupId = groupId;
-        this.name = name;
-    }
+import de.kuschku.libquassel.localtypes.orm.ConnectedDatabase;
 
-    public int id() {
-        return id;
-    }
+@Table(database = ConnectedDatabase.class)
+public class BufferInfo extends BaseModel {
+    @PrimaryKey
+    public int id;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    @Column
+    public int networkId;
 
-    public int networkId() {
-        return networkId;
-    }
+    @Column
+    public Type type;
 
-    public void setNetworkId(int networkId) {
-        this.networkId = networkId;
-    }
+    @Column
+    public int groupId;
 
-    @NonNull
-    public Type type() {
-        return type;
-    }
-
-    public void setType(@NonNull Type type) {
-        this.type = type;
-    }
-
-    public int groupId() {
-        return groupId;
-    }
-
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
-    }
-
-    @Nullable
-    public String name() {
-        return name;
-    }
-
-    public void setName(@Nullable String name) {
-        this.name = name;
-    }
+    @Column
+    public String name;
 
     @NonNull
     @Override
@@ -93,6 +59,16 @@ public class BufferInfo {
                 ", groupId=" + groupId +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public static BufferInfo create(int id, int networkId, Type type, int groupId, String name) {
+        BufferInfo info = new BufferInfo();
+        info.id = id;
+        info.networkId = networkId;
+        info.type = type;
+        info.groupId = groupId;
+        info.name = name;
+        return info;
     }
 
     public enum Type {
@@ -127,6 +103,7 @@ public class BufferInfo {
                     return INVALID;
             }
         }
+
     }
 
     public enum BufferStatus {
@@ -141,4 +118,5 @@ public class BufferInfo {
         MESSAGES,
         HIGHLIGHTS
     }
+
 }

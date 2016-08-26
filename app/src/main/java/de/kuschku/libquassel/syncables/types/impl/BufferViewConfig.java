@@ -141,10 +141,10 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     @Override
     public DisplayType mayDisplay(Buffer buffer) {
         if (buffer != null &&
-                (allowedBufferTypes == 0 || (0 != (buffer.getInfo().type().id & allowedBufferTypes()))) &&
-                (networkId == 0 || (networkId == buffer.getInfo().networkId()))
+                (allowedBufferTypes == 0 || (0 != (buffer.getInfo().type.id & allowedBufferTypes()))) &&
+                (networkId == 0 || (networkId == buffer.getInfo().networkId))
                 ) {
-            int bufferid = buffer.getInfo().id();
+            int bufferid = buffer.getInfo().id;
             if (bufferIds.contains(bufferid) && !temporarilyRemovedBuffers.contains(bufferid) && !removedBuffers.contains(bufferid))
                 return DisplayType.ALWAYS;
             else if (temporarilyRemovedBuffers.contains(bufferid) && !removedBuffers.contains(bufferid))

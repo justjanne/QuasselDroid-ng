@@ -34,7 +34,7 @@ public class Buffers {
 
     @Nullable
     public static Buffer fromType(@NonNull BufferInfo info, @NonNull Client client) {
-        switch (info.type()) {
+        switch (info.type) {
             case QUERY:
                 return new QueryBuffer(info, client);
             case CHANNEL:

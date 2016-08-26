@@ -69,8 +69,8 @@ public abstract class BoundActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         ServiceHelper.connectToService(this, connection);
         if (themeId != AppTheme.themeFromString(context.settings().preferenceTheme.get()).themeId) {
             finish();
@@ -79,8 +79,8 @@ public abstract class BoundActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         ServiceHelper.disconnect(this, connection);
     }
 

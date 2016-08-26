@@ -47,7 +47,7 @@ public class MessageSerializer implements PrimitiveSerializer<Message> {
 
     @Override
     public void serialize(@NonNull ByteChannel channel, @NonNull Message data) throws IOException {
-        IntSerializer.get().serialize(channel, data.messageId);
+        IntSerializer.get().serialize(channel, data.id);
         IntSerializer.get().serialize(channel, (int) (data.time.getMillis() / 1000));
         IntSerializer.get().serialize(channel, data.type.value);
         ByteSerializer.get().serialize(channel, data.flags.flags);
@@ -67,7 +67,7 @@ public class MessageSerializer implements PrimitiveSerializer<Message> {
         String sender = ByteArraySerializer.get().deserialize(buffer);
         String message = ByteArraySerializer.get().deserialize(buffer);
 
-        return new Message(
+        return Message.create(
                 messageId,
                 time,
                 type,

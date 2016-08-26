@@ -30,13 +30,14 @@
 
     <!-- Editor UI -->
     <string name="placeholder">Write a message…</string>
+
     <string name="formatBold">Bold</string>
     <string name="formatItalic">Italic</string>
     <string name="formatUnderline">Underline</string>
     <string name="formatColor">Text Color</string>
     <string name="formatFill">Background Color</string>
 
-    <!-- Actions -->
+    <!-- Actions, Labels and Messages -->
     <string name="labelLogin">Login</string>
     <string name="labelCancel">Cancel</string>
     <string name="labelReconnect">Connect</string>
@@ -49,10 +50,14 @@
     <string name="labelPassword">Password</string>
     <string name="labelUsername">Username</string>
     <string name="labelHideEvents">Hide events</string>
-
+    <string name="labelNoTopic">No Topic Set</string>
+    <string name="labelUserOnHost">%1$s on %2$s</string>
     <string name="warningCertificate">Do you trust this certificate?</string>
 
-    <string name="labelUserOnHost">%1$s on %2$s</string>
+    <!-- Defaults -->
+    <string name="defaultPort" translatable="false">4242</string>
+
+    <!-- Slides -->
 
     <string name="slideAccountcoreTitle">The Core</string>
     <string name="slideAccountcoreDescription">First, please choose which server your core is hosted on – if you don’t know what a core is, click [here]</string>
@@ -66,6 +71,8 @@
     <string name="slideAccountnameTitle">Customize Account</string>
     <string name="slideAccountnameDescription">Give this account a name and icon</string>
 
+    <!-- Status -->
+
     <string name="statusConnecting">Connecting</string>
     <string name="statusHandshake">Logging in</string>
     <string name="statusInitData">Loading Networks and Channels</string>
@@ -73,5 +80,4 @@
     <string name="statusConnected">Connected</string>
     <string name="statusWelcome">Welcome!</string>
     <string name="statusDisconnected">Connection lost</string>
-    <string name="no_topic_set">No Topic Set</string>
 </resources>

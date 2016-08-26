@@ -46,4 +46,8 @@ public interface BacklogStorage {
     void insertMessages(Message... messages);
 
     void setClient(Client client);
+
+    void markBufferUnused(@IntRange(from = 0) int bufferid);
+
+    void clear(@IntRange(from = 0) int bufferid);
 }

@@ -34,7 +34,7 @@
     app:umanoShadowHeight="4dp"
     tools:showIn="@layout/activity_chat">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <de.kuschku.quasseldroid_ng.ui.chat.util.ScrollRefreshLayout
         android:id="@+id/swipe_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </de.kuschku.quasseldroid_ng.ui.chat.util.ScrollRefreshLayout>
 
     <include layout="@layout/widget_slider" />
 

@@ -177,8 +177,8 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
             _setLastSeenMsg(buffer, -1);
             _setMarkerLine(buffer, -1);
         } else {
-            _setLastSeenMsg(buffer, lastMessage.messageId);
-            _setMarkerLine(buffer, lastMessage.messageId);
+            _setLastSeenMsg(buffer, lastMessage.id);
+            _setMarkerLine(buffer, lastMessage.id);
         }
     }
 
@@ -232,9 +232,9 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
     }
 
     public void addActivity(@NonNull Message message) {
-        int lastSeenMsg = lastSeenMsg(message.bufferInfo.id());
-        if (message.messageId > lastSeenMsg) {
-            addActivity(message.bufferInfo.id(), message.type);
+        int lastSeenMsg = lastSeenMsg(message.bufferInfo.id);
+        if (message.id > lastSeenMsg) {
+            addActivity(message.bufferInfo.id, message.type);
         }
     }
 }
