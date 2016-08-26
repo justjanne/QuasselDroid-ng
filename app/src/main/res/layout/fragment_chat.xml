@@ -34,17 +34,11 @@
     app:umanoShadowHeight="4dp"
     tools:showIn="@layout/activity_chat">
 
-    <de.kuschku.quasseldroid_ng.ui.chat.util.ScrollRefreshLayout
-        android:id="@+id/swipe_view"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/messages"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/messages"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true" />
-    </de.kuschku.quasseldroid_ng.ui.chat.util.ScrollRefreshLayout>
+        android:layout_height="match_parent"
+        android:clickable="true" />
 
     <include layout="@layout/widget_slider" />
 

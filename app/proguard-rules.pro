@@ -18,14 +18,12 @@
 
 -dontobfuscate
 
--dontwarn javax.annotation.**
--dontwarn javax.lang.model.**
--dontwarn javax.tools.**
--dontwarn com.google.j2objc.annotations.**
--dontwarn java.lang.ClassValue
--dontwarn sun.misc.Unsafe
+-dontwarn javax.**
+-dontwarn com.google.**
+-dontwarn sndroid.**
+-dontwarn java.**
+-dontwarn sun.**
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
--dontwarn javax.annotation.processing.ProcessingEnvironment
 -dontwarn com.nineoldandroids.view.animation.AnimatorProxy
 
 -keepclasseswithmembernames class de.kuschku.** {
@@ -34,6 +32,11 @@
 }
 
 -keepclassmembers class de.kuschku.** {
+    <methods>;
+    <fields>;
+}
+
+-keepclasses class de.kuschku.** {
     <methods>;
     <fields>;
 }
@@ -70,3 +73,9 @@
 ## RetroLambda                         ##
 #########################################
 -dontwarn java.lang.invoke.*
+
+
+#########################################
+## DBFlow                              ##
+#########################################
+-keep class * extends com.raizlabs.android.dbflow.config.DatabaseHolder { *; }

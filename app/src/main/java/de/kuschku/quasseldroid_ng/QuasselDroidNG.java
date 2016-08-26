@@ -27,10 +27,30 @@ import android.content.Context;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
+import org.acra.ACRA;
+import org.acra.ReportField;
+import org.acra.ReportingInteractionMode;
+import org.acra.annotation.ReportsCrashes;
+
 import de.kuschku.libquassel.localtypes.orm.ConnectedDatabase;
 
+@ReportsCrashes(
+        formUri = "https://reports.kuschku.de/report/2/",
+        reportType = org.acra.sender.HttpSender.Type.JSON,
+        httpMethod = org.acra.sender.HttpSender.Method.POST,
+        customReportContent = {
+                ReportField.APP_VERSION_CODE,
+                ReportField.APP_VERSION_NAME,
+                ReportField.ANDROID_VERSION,
+                ReportField.PACKAGE_NAME,
+                ReportField.REPORT_ID,
+                ReportField.BUILD,
+                ReportField.STACK_TRACE
+        },
+        mode = ReportingInteractionMode.TOAST,
+        resToastText = R.string.notification_report_crash
+)
 public class QuasselDroidNG extends Application {
-
     private static Context applicationContext;
 
     public static Context context() {
@@ -40,7 +60,11 @@ public class QuasselDroidNG extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        ACRA.init(this);
+
         applicationContext = getApplicationContext();
+
         FlowManager.init(new FlowConfig.Builder(this).build());
         FlowManager.getDatabase(ConnectedDatabase.class).getWritableDatabase();
     }

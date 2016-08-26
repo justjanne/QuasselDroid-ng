@@ -80,4 +80,5 @@
     <string name="statusConnected">Connected</string>
     <string name="statusWelcome">Welcome!</string>
     <string name="statusDisconnected">Connection lost</string>
+    <string name="notification_report_crash">Reporting Crashes</string>
 </resources>

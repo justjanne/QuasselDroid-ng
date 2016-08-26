@@ -30,6 +30,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -56,13 +57,13 @@ public class ChatFragment extends BoundFragment {
      */
     @Bind(R.id.messages)
     RecyclerView messages;
-    @Bind(R.id.swipe_view)
-    SwipeRefreshLayout swipeView;
+
     @Bind(R.id.sliding_layout)
     SlidingUpPanelLayout sliderMain;
 
     private MessageAdapter messageAdapter;
     private LinearLayoutManager layoutManager;
+    private boolean loading = false;
 
     @Nullable
     @Override
@@ -79,14 +80,18 @@ public class ChatFragment extends BoundFragment {
         messageAdapter = new MessageAdapter(getActivity(), context, new AutoScroller(messages));
         messages.setAdapter(messageAdapter);
 
-        swipeView.setColorSchemeColors(context.themeUtil().res.colorPrimary);
-        swipeView.setEnabled(false);
-        swipeView.setOnRefreshListener(() -> {
-            Client client = context.client();
-            assertNotNull(client);
-            QBacklogManager<? extends QBacklogManager> backlogManager = client.backlogManager();
-            assertNotNull(backlogManager);
-            backlogManager.requestMoreBacklog(client.backlogManager().open(), 20);
+        messages.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (!loading && !recyclerView.canScrollVertically(-1)) {
+                    Client client = context.client();
+                    assertNotNull(client);
+                    QBacklogManager<? extends QBacklogManager> backlogManager = client.backlogManager();
+                    assertNotNull(backlogManager);
+                    backlogManager.requestMoreBacklog(client.backlogManager().open(), 20);
+                    loading = true;
+                }
+            }
         });
 
         return view;
@@ -101,11 +106,7 @@ public class ChatFragment extends BoundFragment {
             int id = backlogManager.open();
             ObservableComparableSortedList<Message> messageList = backlogManager.filtered(id);
             messageAdapter.setMessageList(messageList);
-            swipeView.setEnabled(id != -1);
-
             // Load markerline
-        } else {
-            swipeView.setEnabled(false);
         }
     }
 
@@ -127,7 +128,7 @@ public class ChatFragment extends BoundFragment {
     public void onEventMainThread(BacklogReceivedEvent event) {
         Client client = context.client();
         if (client != null && client.backlogManager().open() == event.bufferId) {
-            swipeView.setRefreshing(false);
+            loading = false;
         }
     }
 }
