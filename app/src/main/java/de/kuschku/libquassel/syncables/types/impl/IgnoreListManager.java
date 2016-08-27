@@ -23,14 +23,17 @@ package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
+import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.IgnoreListManagerSerializer;
@@ -112,22 +115,21 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
 
     @Override
     public StrictnessType match(String msgContents, String msgSender, Message.Type msgType, @NonNull String network, @NonNull String bufferName) {
-        if (msgType != Message.Type.Plain && msgType != Message.Type.Notice && msgType != Message.Type.Action)
-            return StrictnessType.UnmatchedStrictness;
+        if (msgType == Message.Type.Plain || msgType == Message.Type.Notice || msgType == Message.Type.Action) {
+            for (IgnoreListItem item : ignoreList) {
+                if (!item.isActive || item.type == IgnoreType.CtcpIgnore)
+                    continue;
 
-        for (IgnoreListItem item : ignoreList) {
-            if (!item.isActive || item.type == IgnoreType.CtcpIgnore)
-                continue;
+                if (item.scopeMatch(network, bufferName)) {
+                    String str;
+                    if (item.type == IgnoreType.MessageIgnore)
+                        str = msgContents;
+                    else
+                        str = msgSender;
 
-            if (item.scopeMatch(network, bufferName)) {
-                String str;
-                if (item.type == IgnoreType.MessageIgnore)
-                    str = msgContents;
-                else
-                    str = msgSender;
-
-                if (item.matches(str))
-                    return item.strictness;
+                    if (item.matches(str))
+                        return item.strictness;
+                }
             }
         }
         return StrictnessType.UnmatchedStrictness;
@@ -140,7 +142,19 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
 
     @Override
     public void _update(IgnoreListManager from) {
+        this.ignoreList.clear();
+        this.ignoreList.addAll(from.ignoreList);
+        this._update();
+    }
 
+    @Override
+    public void _update() {
+        super._update();
+        synchronized (client.backlogStorage().getFilters()) {
+            for (BacklogFilter filter : client.backlogStorage().getFilters()) {
+                filter.update();
+            }
+        }
     }
 
     @Override
@@ -207,5 +221,23 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
             }
             return false;
         }
+
+        @Override
+        public String toString() {
+            return "IgnoreListItem{" +
+                    "type=" + type +
+                    ", ignoreRule=" + ignoreRule +
+                    ", isRegEx=" + isRegEx +
+                    ", strictness=" + strictness +
+                    ", scope=" + scope +
+                    ", scopeRules=" + Arrays.toString(scopeRules) +
+                    ", isActive=" + isActive +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(ignoreList);
     }
 }

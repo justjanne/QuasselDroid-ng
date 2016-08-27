@@ -150,6 +150,6 @@ public class ChannelDetailActivity extends BoundActivity {
     }
 
     public void onEventMainThread(GeneralErrorEvent event) {
-        Log.e("DEBUG", String.valueOf(event));
+        Log.e("ChannelDetailActivity", String.valueOf(event));
     }
 }

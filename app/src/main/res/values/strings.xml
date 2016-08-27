@@ -85,6 +85,6 @@
     <string name="label_search">Find in Buffer</string>
     <string name="label_disconnect">Disconnect</string>
     <string name="action_manage_chat_lists">Manage Chat Lists</string>
-    <string name="action_show_hide_hidden">Show/Hide Hidden</string>
+    <string name="action_show_hidden">Show Hidden</string>
     <string name="action_join_channel">Join Channel</string>
 </resources>

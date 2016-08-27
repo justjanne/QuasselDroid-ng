@@ -68,6 +68,8 @@ public class ChatFragment extends BoundFragment {
     private LinearLayoutManager layoutManager;
     private boolean loading = false;
 
+    private int recyclerViewMeasuredHeight = 0;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -83,7 +85,6 @@ public class ChatFragment extends BoundFragment {
         messageAdapter = new MessageAdapter(getActivity(), context, new AutoScroller(messages));
         messages.setAdapter(messageAdapter);
 
-        final int measuredHeight = messages.getMeasuredHeight();
         messages.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -95,10 +96,12 @@ public class ChatFragment extends BoundFragment {
                     backlogManager.requestMoreBacklog(client.backlogManager().open(), 20);
                     loading = true;
                 }
+                if (recyclerViewMeasuredHeight == 0)
+                    recyclerViewMeasuredHeight = recyclerView.getMeasuredHeight();
                 boolean canScrollDown = recyclerView.canScrollVertically(1);
                 boolean isScrollingDown = dy > 0;
-                int scrollOffsetFromBottom = recyclerView.computeVerticalScrollRange() - recyclerView.computeVerticalScrollOffset() - measuredHeight;
-                boolean isMoreThanOneScreenFromBottom = scrollOffsetFromBottom > measuredHeight;
+                int scrollOffsetFromBottom = recyclerView.computeVerticalScrollRange() - recyclerView.computeVerticalScrollOffset() - recyclerViewMeasuredHeight;
+                boolean isMoreThanOneScreenFromBottom = scrollOffsetFromBottom > recyclerViewMeasuredHeight;
                 boolean smartVisibility = scrollDown.getVisibility() == View.VISIBLE || isMoreThanOneScreenFromBottom;
                 scrollDown.setVisibility((canScrollDown && isScrollingDown &&  smartVisibility) ? View.VISIBLE : View.GONE);
             }

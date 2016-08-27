@@ -41,6 +41,10 @@ public class StatusBuffer implements Buffer {
         this.client = client;
     }
 
+    public void updateStatus() {
+        status.set(getNetwork() != null && getNetwork().isConnected() ? BufferInfo.BufferStatus.ONLINE : BufferInfo.BufferStatus.OFFLINE);
+    }
+
     @NonNull
     @Override
     public BufferInfo getInfo() {
@@ -65,8 +69,7 @@ public class StatusBuffer implements Buffer {
     @NonNull
     @Override
     public ObservableField<BufferInfo.BufferStatus> getStatus() {
-        // FIXME: Make this dynamic
-        status.set(getNetwork().isConnected() ? BufferInfo.BufferStatus.ONLINE : BufferInfo.BufferStatus.OFFLINE);
+        updateStatus();
         return status;
     }
 

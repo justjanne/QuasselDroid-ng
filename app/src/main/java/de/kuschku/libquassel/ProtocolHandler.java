@@ -96,7 +96,7 @@ public class ProtocolHandler implements IProtocolHandler {
             final Object syncable = client.unsafe_getObjectByIdentifier(packedFunc.className, packedFunc.objectName);
 
             if (syncable == null) {
-                Log.d("ProtocolHandler", String.format("Sync Failed: %s::%s(%s, %s)", packedFunc.className, packedFunc.methodName, packedFunc.objectName, packedFunc.params));
+                Log.w("ProtocolHandler", String.format("Sync Failed: %s::%s(%s, %s)", packedFunc.className, packedFunc.methodName, packedFunc.objectName, packedFunc.params));
                 if (client.connectionStatus() == ConnectionChangeEvent.Status.INITIALIZING_DATA)
                     client.bufferSync(packedFunc);
             } else {

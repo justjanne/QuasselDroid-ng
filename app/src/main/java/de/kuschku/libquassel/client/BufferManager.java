@@ -24,6 +24,7 @@ package de.kuschku.libquassel.client;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,7 +39,9 @@ import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.localtypes.buffers.Buffers;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
+import de.kuschku.libquassel.localtypes.buffers.StatusBuffer;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
+import de.kuschku.libquassel.syncables.types.impl.Network;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
@@ -53,6 +56,7 @@ public class BufferManager {
 
     private final Map<String, Integer> buffersByNick = new HashMap<>();
     private final Map<String, Integer> buffersByChannel = new HashMap<>();
+    private final Map<Integer, Integer> statusBuffers = new HashMap<>();
     private final Map<Integer, ObservableSet<Integer>> buffersByNetwork = new HashMap<>();
     private final ObservableSet<Integer> bufferIds = new ObservableSet<>();
     private final Set<Integer> laterRequests = new HashSet<>();
@@ -120,12 +124,15 @@ public class BufferManager {
     }
 
     private void updateBufferMapEntries(@NonNull Buffer buffer, String name) {
-        buffersByNick.remove(buffer.objectName());
-        buffersByChannel.remove(buffer.objectName());
         if (buffer instanceof ChannelBuffer) {
+            buffersByChannel.remove(buffer.objectName());
             buffersByChannel.put(buffer.objectName(name), buffer.getInfo().id);
         } else if (buffer instanceof QueryBuffer) {
+            buffersByNick.remove(buffer.objectName());
             buffersByNick.put(buffer.objectName(name), buffer.getInfo().id);
+        } else if (buffer instanceof StatusBuffer) {
+            statusBuffers.remove(buffer.getInfo().networkId);
+            statusBuffers.put(buffer.getInfo().networkId, buffer.getInfo().id);
         }
     }
 
@@ -186,5 +193,9 @@ public class BufferManager {
             // TODO: Send event to set up chat list
             client.setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
         }
+    }
+
+    public StatusBuffer network(int networkId) {
+        return (StatusBuffer) buffers.get(statusBuffers.get(networkId));
     }
 }

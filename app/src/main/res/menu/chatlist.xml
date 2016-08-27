@@ -28,8 +28,9 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_show_all"
-        android:title="@string/action_show_hide_hidden"
-        app:showAsAction="never" />
+        android:title="@string/action_show_hidden"
+        app:showAsAction="never"
+        android:checkable="true" />
     <item
         android:id="@+id/action_manage_chat_lists"
         android:title="@string/action_manage_chat_lists"

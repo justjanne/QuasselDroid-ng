@@ -159,9 +159,10 @@ public class MainActivity extends BoundActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_show_all: {
-                        Log.d("QD-NG", "Toggling Show/Hide All");
-                        chatListAdapter.toggleShowAll();
+                        item.setChecked(chatListAdapter.toggleShowAll());
                     } break;
+                    case R.id.action_manage_chat_lists: {
+                    }
                 }
                 return false;
             }

@@ -94,11 +94,19 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
             @Override
             public void notifyItemInserted(int position) {
                 notifyParentItemInserted(position);
+                if (items.get(position).isInitiallyExpanded())
+                    expandParent(position);
+                else
+                    collapseParent(position);
             }
 
             @Override
             public void notifyItemChanged(int position) {
                 notifyParentItemChanged(position);
+                if (items.get(position).isInitiallyExpanded())
+                    expandParent(position);
+                else
+                    collapseParent(position);
             }
 
             @Override
@@ -114,20 +122,22 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
 
             @Override
             public void notifyItemRangeInserted(int position, int count) {
-                notifyParentItemRangeInserted(position, count);
+                for (int i = position; i < position + count; i++) {
+                    this.notifyItemInserted(i);
+                }
             }
 
             @Override
             public void notifyItemRangeChanged(int position, int count) {
                 for (int i = position; i < position + count; i++) {
-                    notifyParentItemChanged(i);
+                    this.notifyItemChanged(i);
                 }
             }
 
             @Override
             public void notifyItemRangeRemoved(int position, int count) {
                 for (int i = position; i < position + count; i++) {
-                    notifyParentItemRemoved(position);
+                    this.notifyItemRemoved(position);
                 }
             }
         });
@@ -259,7 +269,9 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
         return showAll;
     }
 
-    public void toggleShowAll() {
-        showAll.set(!showAll.get());
+    public boolean toggleShowAll() {
+        boolean before = showAll.get();
+        showAll.set(!before);
+        return !before;
     }
 }

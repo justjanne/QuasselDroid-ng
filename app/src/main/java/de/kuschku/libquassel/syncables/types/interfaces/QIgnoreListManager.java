@@ -106,12 +106,12 @@ public interface QIgnoreListManager extends QObservable {
         @NonNull
         public static StrictnessType of(int id) {
             switch (id) {
-                case 1:
-                    return UnmatchedStrictness;
-                case 2:
-                    return SoftStrictness;
                 default:
                 case 0:
+                    return UnmatchedStrictness;
+                case 1:
+                    return SoftStrictness;
+                case 2:
                     return HardStrictness;
             }
         }

@@ -25,6 +25,7 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 
 import java.util.List;
+import java.util.Set;
 
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
@@ -56,4 +57,6 @@ public interface BacklogStorage {
     void markBufferUnused(@IntRange(from = 0) int bufferid);
 
     void clear(@IntRange(from = 0) int bufferid);
+
+    Set<BacklogFilter> getFilters();
 }

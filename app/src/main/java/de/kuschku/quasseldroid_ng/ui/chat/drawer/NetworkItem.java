@@ -97,7 +97,7 @@ public class NetworkItem implements ParentListItem {
         @Override
         public void notifyItemChanged(Integer element) {
             Buffer buffer = context.client().bufferManager().buffer(element);
-            if (buffer != null && buffer.getInfo().networkId == network.networkId()) {
+            if (buffer != null && buffer.getInfo().networkId == network.networkId() && buffers.contains(buffer)) {
                 buffers.notifyItemChanged(buffers.indexOf(buffer));
             }
         }

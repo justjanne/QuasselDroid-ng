@@ -31,7 +31,9 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
@@ -51,6 +53,8 @@ public class HybridBacklogStorage implements BacklogStorage {
     private final SparseArray<BacklogFilter> filters = new SparseArray<>();
     @NonNull
     private final SparseArray<Integer> latestMessage = new SparseArray<>();
+    @NonNull
+    private final Set<BacklogFilter> filterSet = new HashSet<>();
 
     private Client client;
 
@@ -175,7 +179,10 @@ public class HybridBacklogStorage implements BacklogStorage {
                 backlogs.get(bufferid).removeCallback(filters.get(bufferid));
             backlogs.remove(bufferid);
             filteredBacklogs.remove(bufferid);
-            filters.remove(bufferid);
+            synchronized (filterSet) {
+                filterSet.remove(filters.get(bufferid));
+                filters.remove(bufferid);
+            }
         }
     }
 
@@ -185,6 +192,12 @@ public class HybridBacklogStorage implements BacklogStorage {
             Log.w("libquassel", String.format("Backlog gap detected, clearing backlog for buffer %d", bufferid));
             SQLite.delete().from(Message.class).where(Message_Table.bufferInfo_id.eq(bufferid)).execute();
         }
+    }
+
+    @NonNull
+    @Override
+    public Set<BacklogFilter> getFilters() {
+        return filterSet;
     }
 
     private void ensureExisting(@IntRange(from = -1) int bufferId) {
@@ -200,7 +213,10 @@ public class HybridBacklogStorage implements BacklogStorage {
                 backlogs.put(bufferId, messages);
             }
             filteredBacklogs.put(bufferId, filteredMessages);
-            filters.put(bufferId, backlogFilter);
+            synchronized (filterSet) {
+                filters.put(bufferId, backlogFilter);
+                filterSet.add(backlogFilter);
+            }
         }
     }
 }

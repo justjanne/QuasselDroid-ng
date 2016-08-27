@@ -204,7 +204,6 @@ public class BacklogFilter implements UICallback {
         setFiltersInternal(filters);
         client.metaDataManager().setHiddendata(client.coreId(), bufferId, filters);
         int after = client.metaDataManager().hiddendata(client.coreId(), bufferId);
-        Log.e("DEBUG", filters + ":" + after);
     }
 
     private void setFiltersInternal(int filters) {

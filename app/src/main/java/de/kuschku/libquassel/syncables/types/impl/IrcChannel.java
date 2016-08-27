@@ -37,6 +37,7 @@ import java.util.Set;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
+import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
@@ -532,10 +533,12 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     @Override
     public void _update() {
         super._update();
-        ChannelBuffer buffer = client.bufferManager().channel(this);
-        if (buffer != null) {
-            for (QBufferViewConfig qBufferViewConfig : client.bufferViewManager().bufferViewConfigs()) {
-                qBufferViewConfig.bufferIds().notifyItemChanged(buffer.getInfo().id);
+        if (client.connectionStatus() != ConnectionChangeEvent.Status.INITIALIZING_DATA) {
+            ChannelBuffer buffer = client.bufferManager().channel(this);
+            if (buffer != null) {
+                for (QBufferViewConfig qBufferViewConfig : client.bufferViewManager().bufferViewConfigs()) {
+                    qBufferViewConfig.bufferIds().notifyItemChanged(buffer.getInfo().id);
+                }
             }
         }
     }

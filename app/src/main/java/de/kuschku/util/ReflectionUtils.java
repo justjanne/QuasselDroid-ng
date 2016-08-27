@@ -65,7 +65,6 @@ public class ReflectionUtils {
         try {
             m.invoke(o, argv);
         } catch (Exception e) {
-            Log.e("DEBUG", m.toString());
             throw new SyncInvocationException(e, String.format("Error invoking %s::%s with arguments %s and classes %s", o.getClass().getSimpleName(), name, Arrays.toString(argv), Arrays.toString(classes)));
         }
     }

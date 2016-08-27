@@ -23,6 +23,7 @@ package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,9 +36,13 @@ import java.util.Observer;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
+import de.kuschku.libquassel.events.ConnectionChangeEvent;
+import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
+import de.kuschku.libquassel.localtypes.buffers.StatusBuffer;
 import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.ANetwork;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
@@ -770,6 +775,27 @@ public class Network extends ANetwork<Network> implements Observer {
     @Override
     public void _update(Network from) {
 
+    }
+
+
+
+    @Override
+    public void _update() {
+        super._update();
+        if (client != null && client.connectionStatus() != ConnectionChangeEvent.Status.INITIALIZING_DATA) {
+            StatusBuffer buffer = client.bufferManager().network(networkInfo.networkId());
+            if (buffer != null) {
+                buffer.updateStatus();
+                for (QBufferViewConfig qBufferViewConfig : client.bufferViewManager().bufferViewConfigs()) {
+                    qBufferViewConfig.bufferIds().notifyItemChanged(buffer.getInfo().id);
+                    qBufferViewConfig.networkList().notifyItemChanged(this);
+                }
+            } else {
+                for (QBufferViewConfig qBufferViewConfig : client.bufferViewManager().bufferViewConfigs()) {
+                    qBufferViewConfig.networkList().notifyItemChanged(this);
+                }
+            }
+        }
     }
 
     @Override

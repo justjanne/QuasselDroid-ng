@@ -94,7 +94,7 @@ public class DatastreamPeer implements RemotePeer {
         this.connection = connection;
         this.busProvider = busProvider;
         this.busProvider.dispatch.register(this);
-        this.parseExecutor = Executors.newCachedThreadPool();
+        this.parseExecutor = Executors.newSingleThreadExecutor();
     }
 
     @NonNull

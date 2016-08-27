@@ -405,8 +405,10 @@ public class IrcUser extends AIrcUser<IrcUser> {
             channels.remove(channel);
             if (!skip_channel_part)
                 channel._part(this);
+            /*
             if (channels.isEmpty() && !network().isMe(this))
                 _quit();
+            */
         }
         _update();
     }

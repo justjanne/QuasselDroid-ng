@@ -70,4 +70,9 @@ public class SmartRegEx {
         WILDCARD,
         REGEX
     }
+
+    @Override
+    public String toString() {
+        return rule;
+    }
 }
