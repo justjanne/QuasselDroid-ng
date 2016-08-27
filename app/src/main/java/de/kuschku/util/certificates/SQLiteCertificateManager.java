@@ -44,7 +44,6 @@ public class SQLiteCertificateManager implements CertificateManager {
     @Override
     public boolean isTrusted(@NonNull X509Certificate certificate, @NonNull ServerAddress core) {
         try {
-            certificate.checkValidity();
             return handler.findCertificates(core.host).contains(CertificateUtils.certificateToFingerprint(certificate));
         } catch (Exception e) {
             return false;
