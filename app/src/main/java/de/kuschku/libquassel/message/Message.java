@@ -32,6 +32,7 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -63,6 +64,14 @@ public class Message extends BaseModel implements ContentComparable<Message> {
     @Column
     public String content;
 
+    public LocalDate date;
+
+    public LocalDate getLocalDate() {
+        if (date == null)
+            date = time.toLocalDate();
+        return date;
+    }
+
     public static Message create(int id, DateTime time, Type type, Flags flags, BufferInfo bufferInfo, String sender, String content) {
         Message message = new Message();
         message.id = id;
@@ -91,12 +100,19 @@ public class Message extends BaseModel implements ContentComparable<Message> {
 
     @Override
     public boolean areContentsTheSame(@Nullable Message message) {
-        return this == message;
+        return message != null && this.id == message.id && this.sender.equals(message.sender) && this.type == message.type && this.time.equals(message.time) && this.content.equals(message.content) && this.flags == message.flags;
     }
 
     @Override
     public boolean areItemsTheSame(@NonNull Message other) {
-        return this.id == other.id;
+        if (this.type == Type.DayChange && other.type == Type.DayChange)
+            return this.bufferInfo.id == other.bufferInfo.id && this.time.equals(other.time);
+        else if (this.type == Type.DayChange)
+            return false;
+        else if (other.type == Type.DayChange)
+            return false;
+        else
+            return this.id == other.id;
     }
 
     @Override

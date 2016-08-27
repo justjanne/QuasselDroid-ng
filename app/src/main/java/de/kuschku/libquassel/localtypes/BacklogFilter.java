@@ -23,11 +23,16 @@ package de.kuschku.libquassel.localtypes;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.format.DateUtils;
+import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
+import org.joda.time.LocalDate;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import de.greenrobot.event.EventBus;
@@ -35,6 +40,7 @@ import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
+import de.kuschku.util.backports.Objects;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
@@ -54,8 +60,6 @@ public class BacklogFilter implements UICallback {
     private final EventBus bus = new EventBus();
     @Nullable
     private CharSequence searchQuery;
-    @Nullable
-    private DateTime earliestMessage;
 
     public BacklogFilter(@NonNull Client client, int bufferId, @NonNull ObservableComparableSortedList<Message> unfiltered, @NonNull ObservableComparableSortedList<Message> filtered) {
         this.client = client;
@@ -64,6 +68,7 @@ public class BacklogFilter implements UICallback {
         this.filtered = filtered;
         this.bus.register(this);
         setFiltersInternal(client.metaDataManager().hiddendata(client.coreId(), bufferId));
+        updateDayChangeMessages();
     }
 
     @Override
@@ -73,11 +78,26 @@ public class BacklogFilter implements UICallback {
     }
 
     private void updateDayChangeMessages() {
-        DateTime now = DateTime.now().withMillisOfDay(0);
-        while (now.isAfter(earliestMessage)) {
+        LocalDate date = null;
+        Message lastMessage = null;
+        for (Message message : filtered) {
+            if (Objects.equals(date, message.getLocalDate()))
+                continue;
+            date = message.getLocalDate();
+            if (message.type == Message.Type.DayChange) {
+                if (lastMessage != null && lastMessage.type == Message.Type.DayChange) {
+                    bus.post(new MessageRemoveEvent(lastMessage));
+                }
+                lastMessage = message;
+                continue;
+            }
+
+            lastMessage = message;
+            date = message.getLocalDate();
+            DateTime time = message.time.withMillisOfDay(0);
             bus.post(new MessageInsertEvent(Message.create(
-                    (int) DateTimeUtils.toJulianDay(now.getMillis()),
-                    now,
+                    (int) DateTimeUtils.toJulianDay(time.getMillis()),
+                    time,
                     Message.Type.DayChange,
                     new Message.Flags(false, false, false, false, false),
                     BufferInfo.create(
@@ -90,7 +110,25 @@ public class BacklogFilter implements UICallback {
                     "",
                     ""
             )));
-            now = now.minusDays(1);
+        }
+        DateTime time = DateTime.now();
+        if (!Objects.equals(date, time.toLocalDate())) {
+            time = time.withMillisOfDay(0);
+            bus.post(new MessageInsertEvent(Message.create(
+                    (int) DateTimeUtils.toJulianDay(time.getMillis()),
+                    time,
+                    Message.Type.DayChange,
+                    new Message.Flags(false, false, false, false, false),
+                    BufferInfo.create(
+                            bufferId,
+                            -1,
+                            BufferInfo.Type.INVALID,
+                            -1,
+                            null
+                    ),
+                    "",
+                    ""
+            )));
         }
     }
 
@@ -141,17 +179,19 @@ public class BacklogFilter implements UICallback {
 
     public void onEventAsync(@NonNull MessageFilterEvent event) {
         if (!filterItem(event.msg)) bus.post(new MessageInsertEvent(event.msg));
-        if (event.msg.time.isBefore(earliestMessage)) earliestMessage = event.msg.time;
-        updateDayChangeMessages();
     }
 
     public void onEventMainThread(@NonNull MessageInsertEvent event) {
         filtered.add(event.msg);
         client.bufferSyncer().addActivity(event.msg);
+        if (event.msg.type != Message.Type.DayChange)
+            updateDayChangeMessages();
     }
 
     public void onEventMainThread(@NonNull MessageRemoveEvent event) {
         filtered.remove(event.msg);
+        if (event.msg.type != Message.Type.DayChange)
+            updateDayChangeMessages();
     }
 
     @Override
