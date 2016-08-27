@@ -81,4 +81,7 @@
     <string name="statusWelcome">Welcome!</string>
     <string name="statusDisconnected">Connection lost</string>
     <string name="notification_report_crash">Reporting Crashes</string>
+    <string name="label_settings">Settings</string>
+    <string name="label_search">Find in Buffer</string>
+    <string name="label_disconnect">Disconnect</string>
 </resources>

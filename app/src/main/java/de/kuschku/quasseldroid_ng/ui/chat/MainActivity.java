@@ -21,6 +21,7 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,6 +29,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.AppCompatEditText;
@@ -35,6 +37,7 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,10 +46,12 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -76,6 +81,8 @@ import de.kuschku.util.accounts.AccountManager;
 import de.kuschku.util.certificates.CertificateUtils;
 import de.kuschku.util.certificates.SQLiteCertificateManager;
 import de.kuschku.util.servicebound.BoundActivity;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -112,6 +119,7 @@ public class MainActivity extends BoundActivity {
     private ToolbarWrapper toolbarWrapper;
 
     private BufferViewConfigAdapter chatListAdapter;
+    private Fragment currentFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -178,6 +186,7 @@ public class MainActivity extends BoundActivity {
 
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        this.currentFragment = fragment;
         transaction.replace(R.id.content_host, fragment);
         transaction.commit();
     }
@@ -201,6 +210,16 @@ public class MainActivity extends BoundActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.chat, menu);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        RxSearchView.queryTextChanges(searchView)
+                .debounce(400, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(charSequence -> {
+                    if (context.client() != null)
+                        context.client().backlogStorage().getFilter(context.client().backlogManager().open()).setQuery(charSequence);
+                });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -299,7 +318,6 @@ public class MainActivity extends BoundActivity {
         }
     }
 
-
     /*
     private void updateBufferViewConfigs() {
         assertNotNull(context.client().bufferViewManager());
@@ -320,6 +338,13 @@ public class MainActivity extends BoundActivity {
         accountHeader.setActiveProfile(status.bufferViewConfigId, true);
     }
     */
+
+    @Override
+    public void onBackPressed() {
+        if (!(currentFragment instanceof ChatFragment) || ((ChatFragment) currentFragment).onBackPressed()) {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     protected void onConnectToThread(@Nullable ClientBackgroundThread thread) {

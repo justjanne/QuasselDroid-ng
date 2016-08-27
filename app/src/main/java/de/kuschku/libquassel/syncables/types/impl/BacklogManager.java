@@ -96,12 +96,10 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
     public void _receiveBacklog(int id, int first, int last, int limit, int additional, @NonNull List<Message> messages) {
         assertNotNull(provider);
 
-        Log.d("DEBUG", "Received " + messages.size() + " messages out of a max of " + limit);
-
         Message lastMessageForBuffer = SQLite.select().from(Message.class).where(Message_Table.bufferInfo_id.eq(id)).orderBy(Message_Table.id, false).limit(1).querySingle();
-        if (lastMessageForBuffer != null && messages.get(0).id > lastMessageForBuffer.id)
+        if (lastMessageForBuffer != null && messages.size() > 0 && messages.get(0).id > lastMessageForBuffer.id)
             storage.clear(id);
-        storage.insertMessages(id, messages.toArray(new Message[messages.size()]));
+        storage.insertMessages(id, messages);
         if (messages.size() > 0 && !client.bufferManager().exists(messages.get(0).bufferInfo))
             client.bufferManager().createBuffer(messages.get(0).bufferInfo);
         provider.sendEvent(new BacklogReceivedEvent(id));

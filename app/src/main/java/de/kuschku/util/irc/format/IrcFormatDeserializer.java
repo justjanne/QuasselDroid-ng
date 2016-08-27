@@ -122,10 +122,14 @@ public class IrcFormatDeserializer {
         boolean colorize = context.settings().preferenceColors.get();
 
         // Iterating over every character
+        int normalCount = 0;
         for (int i = 0; i < str.length(); i++) {
             char character = str.charAt(i);
             switch (character) {
                 case CODE_BOLD: {
+                    plainText.append(str.substring(i - normalCount, i));
+                    normalCount = 0;
+
                     // If there is an element on stack with the same code, close it
                     if (bold != null) {
                         if (colorize) bold.apply(plainText, plainText.length());
@@ -139,6 +143,9 @@ public class IrcFormatDeserializer {
                 }
                 break;
                 case CODE_ITALIC: {
+                    plainText.append(str.substring(i - normalCount, i));
+                    normalCount = 0;
+
                     // If there is an element on stack with the same code, close it
                     if (italic != null) {
                         if (colorize) italic.apply(plainText, plainText.length());
@@ -152,6 +159,9 @@ public class IrcFormatDeserializer {
                 }
                 break;
                 case CODE_UNDERLINE: {
+                    plainText.append(str.substring(i - normalCount, i));
+                    normalCount = 0;
+
                     // If there is an element on stack with the same code, close it
                     if (underline != null) {
                         if (colorize) underline.apply(plainText, plainText.length());
@@ -165,6 +175,9 @@ public class IrcFormatDeserializer {
                 }
                 break;
                 case CODE_COLOR: {
+                    plainText.append(str.substring(i - normalCount, i));
+                    normalCount = 0;
+
                     int foregroundStart = i + 1;
                     int foregroundEnd = findEndOfNumber(str, foregroundStart);
                     // If we have a foreground element
@@ -200,6 +213,9 @@ public class IrcFormatDeserializer {
                 }
                 break;
                 case CODE_SWAP: {
+                    plainText.append(str.substring(i - normalCount, i));
+                    normalCount = 0;
+
                     // If we have a color tag before, apply it, and create a new one with swapped colors
                     if (color != null) {
                         if (colorize) color.apply(plainText, plainText.length());
@@ -208,6 +224,9 @@ public class IrcFormatDeserializer {
                 }
                 break;
                 case CODE_RESET: {
+                    plainText.append(str.substring(i - normalCount, i));
+                    normalCount = 0;
+
                     // End all formatting tags
                     if (bold != null) {
                         if (colorize) bold.apply(plainText, plainText.length());
@@ -229,7 +248,7 @@ public class IrcFormatDeserializer {
                 break;
                 default: {
                     // Just append it, if it’s not special
-                    plainText.append(character);
+                    normalCount++;
                 }
             }
         }
@@ -247,6 +266,7 @@ public class IrcFormatDeserializer {
         if (color != null) {
             if (colorize) color.apply(plainText, plainText.length());
         }
+        plainText.append(str.substring(str.length() - normalCount, str.length()));
         return plainText;
     }
 

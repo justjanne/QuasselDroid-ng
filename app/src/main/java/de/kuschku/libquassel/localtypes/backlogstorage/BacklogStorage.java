@@ -24,6 +24,8 @@ package de.kuschku.libquassel.localtypes.backlogstorage;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.message.Message;
@@ -43,7 +45,11 @@ public interface BacklogStorage {
 
     void insertMessages(@IntRange(from = 0) int bufferId, Message... messages);
 
+    void insertMessages(@IntRange(from = 0) int bufferId, List<Message> messages);
+
     void insertMessages(Message... messages);
+
+    void insertMessages(List<Message> messages);
 
     void setClient(Client client);
 

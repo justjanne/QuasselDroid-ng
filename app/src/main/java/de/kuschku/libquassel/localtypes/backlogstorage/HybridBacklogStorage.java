@@ -23,6 +23,7 @@ package de.kuschku.libquassel.localtypes.backlogstorage;
 
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.raizlabs.android.dbflow.config.FlowManager;
@@ -99,6 +100,26 @@ public class HybridBacklogStorage implements BacklogStorage {
         });
     }
 
+    @Override
+    public void insertMessages(@IntRange(from = 0) int bufferId, List<Message> messages) {
+        ensureExisting(bufferId);
+        FlowManager.getDatabase(ConnectedDatabase.class).executeTransaction(new ITransaction() {
+            @Override
+            public void execute(DatabaseWrapper databaseWrapper) {
+                for (Message message : messages) {
+                    client.unbufferBuffer(message.bufferInfo);
+                    synchronized (backlogs) {
+                        if (backlogs.get(bufferId) != null)
+                            backlogs.get(bufferId).add(message);
+                        message.save();
+                        message.bufferInfo.save();
+                    }
+                    updateLatest(message);
+                }
+            }
+        });
+    }
+
     public void updateLatest(@NonNull Message message) {
         if (message.id > getLatest(message.bufferInfo.id)) {
             latestMessage.put(message.bufferInfo.id, message.id);
@@ -107,6 +128,18 @@ public class HybridBacklogStorage implements BacklogStorage {
 
     @Override
     public void insertMessages(@NonNull Message... messages) {
+        for (Message message : messages) {
+            client.unbufferBuffer(message.bufferInfo);
+            synchronized (backlogs) {
+                if (backlogs.get(message.bufferInfo.id) != null)
+                    backlogs.get(message.bufferInfo.id).add(message);
+            }
+            updateLatest(message);
+        }
+    }
+
+    @Override
+    public void insertMessages(List<Message> messages) {
         for (Message message : messages) {
             client.unbufferBuffer(message.bufferInfo);
             synchronized (backlogs) {
@@ -134,7 +167,8 @@ public class HybridBacklogStorage implements BacklogStorage {
 
     @Override
     public void clear(@IntRange(from = 0) int bufferid) {
-        SQLite.delete().from(Message.class).where(Message_Table.bufferInfo_id.eq(bufferid));
+        Log.w("libquassel", String.format("Backlog gap detected, clearing backlog for buffer %d", bufferid));
+        SQLite.delete().from(Message.class).where(Message_Table.bufferInfo_id.eq(bufferid)).execute();
     }
 
     private void ensureExisting(@IntRange(from = -1) int bufferId) {

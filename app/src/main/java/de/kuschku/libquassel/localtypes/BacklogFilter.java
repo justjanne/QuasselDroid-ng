@@ -36,6 +36,7 @@ import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
+import de.kuschku.util.irc.IrcUserUtils;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
@@ -52,6 +53,8 @@ public class BacklogFilter implements UICallback {
 
     @NonNull
     private final Set<Message.Type> filteredTypes = new HashSet<>();
+    @Nullable
+    private CharSequence searchQuery;
     private final EventBus bus = new EventBus();
     @Nullable
     private DateTime earliestMessage;
@@ -96,7 +99,10 @@ public class BacklogFilter implements UICallback {
     private boolean filterItem(@NonNull Message message) {
         QNetwork network = client.networkManager().network(client.bufferManager().buffer(message.bufferInfo.id).getInfo().networkId);
         assertNotNull(network);
-        return (client.ignoreListManager() != null && client.ignoreListManager().matches(message, network)) || filteredTypes.contains(message.type);
+        boolean ignored = client.ignoreListManager() != null && client.ignoreListManager().matches(message, network);
+        boolean filtered = filteredTypes.contains(message.type);
+        boolean isSearching = searchQuery != null && searchQuery.length() != 0;
+        return ignored || filtered || (isSearching && !message.content.contains(searchQuery));
     }
 
     public void addFilter(Message.Type type) {
@@ -112,6 +118,11 @@ public class BacklogFilter implements UICallback {
     public void update() {
         bus.post(new UpdateAddEvent());
         bus.post(new UpdateRemoveEvent());
+    }
+
+    public void setQuery(CharSequence query) {
+        searchQuery = query;
+        update();
     }
 
     public void onEventAsync(UpdateAddEvent event) {

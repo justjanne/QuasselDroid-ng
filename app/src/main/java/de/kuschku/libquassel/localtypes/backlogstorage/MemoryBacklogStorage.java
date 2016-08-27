@@ -25,6 +25,8 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
+import java.util.List;
+
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.message.Message;
@@ -80,6 +82,16 @@ public class MemoryBacklogStorage implements BacklogStorage {
         }
     }
 
+    @Override
+    public void insertMessages(@IntRange(from = 0) int bufferId, List<Message> messages) {
+        ensureExisting(bufferId);
+        for (Message message : messages) {
+            client.unbufferBuffer(message.bufferInfo);
+            backlogs.get(bufferId).add(message);
+            updateLatest(message);
+        }
+    }
+
     public void updateLatest(@NonNull Message message) {
         if (message.id > getLatest(message.bufferInfo.id)) {
             latestMessage.put(message.bufferInfo.id, message.id);
@@ -88,6 +100,16 @@ public class MemoryBacklogStorage implements BacklogStorage {
 
     @Override
     public void insertMessages(@NonNull Message... messages) {
+        for (Message message : messages) {
+            ensureExisting(message.bufferInfo.id);
+            client.unbufferBuffer(message.bufferInfo);
+            backlogs.get(message.bufferInfo.id).add(message);
+            updateLatest(message);
+        }
+    }
+
+    @Override
+    public void insertMessages(List<Message> messages) {
         for (Message message : messages) {
             ensureExisting(message.bufferInfo.id);
             client.unbufferBuffer(message.bufferInfo);

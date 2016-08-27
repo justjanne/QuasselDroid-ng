@@ -24,14 +24,13 @@ package de.kuschku.quasseldroid_ng.ui.chat.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -84,6 +83,7 @@ public class ChatFragment extends BoundFragment {
         messageAdapter = new MessageAdapter(getActivity(), context, new AutoScroller(messages));
         messages.setAdapter(messageAdapter);
 
+        final int measuredHeight = messages.getMeasuredHeight();
         messages.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -95,7 +95,12 @@ public class ChatFragment extends BoundFragment {
                     backlogManager.requestMoreBacklog(client.backlogManager().open(), 20);
                     loading = true;
                 }
-                scrollDown.setVisibility(recyclerView.canScrollVertically(1) ? View.VISIBLE : View.GONE);
+                boolean canScrollDown = recyclerView.canScrollVertically(1);
+                boolean isScrollingDown = dy > 0;
+                int scrollOffsetFromBottom = recyclerView.computeVerticalScrollRange() - recyclerView.computeVerticalScrollOffset() - measuredHeight;
+                boolean isMoreThanOneScreenFromBottom = scrollOffsetFromBottom > measuredHeight;
+                boolean smartVisibility = scrollDown.getVisibility() == View.VISIBLE || isMoreThanOneScreenFromBottom;
+                scrollDown.setVisibility((canScrollDown && isScrollingDown &&  smartVisibility) ? View.VISIBLE : View.GONE);
             }
         });
 
@@ -141,6 +146,15 @@ public class ChatFragment extends BoundFragment {
         Client client = context.client();
         if (client != null && client.backlogManager().open() == event.bufferId) {
             loading = false;
+        }
+    }
+
+    public boolean onBackPressed() {
+        if (sliderMain.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+            sliderMain.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            return false;
+        } else {
+            return true;
         }
     }
 }

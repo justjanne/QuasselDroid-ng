@@ -26,13 +26,18 @@
         android:id="@+id/action_hide_events"
         android:icon="?attr/iconFilter"
         android:title="@string/labelHideEvents"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_search"
+        android:title="@string/label_search"
+        app:showAsAction="never|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
     <item
         android:id="@+id/action_settings"
-        android:title="Settings"
+        android:title="@string/label_settings"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_reauth"
-        android:title="Disconnect"
+        android:title="@string/label_disconnect"
         app:showAsAction="never" />
 </menu>

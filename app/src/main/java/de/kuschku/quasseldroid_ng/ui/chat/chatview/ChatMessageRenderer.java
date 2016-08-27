@@ -188,7 +188,7 @@ public class ChatMessageRenderer {
 
     private void onBindQuit(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        if (message.content.isEmpty())
+        if (message.content == null || message.content.isEmpty())
             holder.content.setText(context.themeUtil().translations.formatQuit(
                     formatNick(message.sender)
             ));
@@ -205,12 +205,14 @@ public class ChatMessageRenderer {
             holder.content.setText(context.themeUtil().translations.formatKick(
                     formatNick(message.sender),
                     message.content.substring(0, message.content.indexOf(" ")),
+                    getBufferName(message),
                     message.content.substring(message.content.indexOf(" ") + 1)
             ));
         else
             holder.content.setText(context.themeUtil().translations.formatKick(
                     formatNick(message.sender),
-                    message.content
+                    message.content,
+                    getBufferName(message)
             ));
     }
 

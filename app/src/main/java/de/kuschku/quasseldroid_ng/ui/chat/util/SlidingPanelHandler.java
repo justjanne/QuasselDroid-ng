@@ -22,9 +22,6 @@
 package de.kuschku.quasseldroid_ng.ui.chat.util;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.support.annotation.ColorInt;
-import android.support.annotation.FloatRange;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageButton;
@@ -79,6 +76,7 @@ public class SlidingPanelHandler {
     AppCompatEditText chatline;
     @Bind(R.id.send)
     AppCompatImageButton send;
+    private ItemAdapter<IItem> previousMessages;
 
     public SlidingPanelHandler(Activity activity, SlidingUpPanelLayout slidingLayout, AppContext context) {
         this.slidingLayout = slidingLayout;
@@ -152,42 +150,12 @@ public class SlidingPanelHandler {
         chatline.setSelection(selectionStart, selectionEnd);
     }
 
-    private int combineColors(@ColorInt int colora, @ColorInt int colorb, @FloatRange(from = 0.0, to = 1.0) float offset) {
-        float invOffset = 1 - offset;
-
-        double alphaA = Math.pow(Color.alpha(colora), 2);
-        double alphaB = Math.pow(Color.alpha(colorb), 2);
-
-        double redA = Math.pow(Color.red(colora), 2);
-        double redB = Math.pow(Color.red(colorb), 2);
-
-        double greenA = Math.pow(Color.green(colora), 2);
-        double greenB = Math.pow(Color.green(colorb), 2);
-
-        double blueA = Math.pow(Color.blue(colora), 2);
-        double blueB = Math.pow(Color.blue(colorb), 2);
-
-        return Color.argb(
-                (int) Math.sqrt(alphaA * invOffset + alphaB * offset),
-                (int) Math.sqrt(redA * invOffset + redB * offset),
-                (int) Math.sqrt(greenA * invOffset + greenB * offset),
-                (int) Math.sqrt(blueA * invOffset + blueB * offset)
-        );
-    }
-
     private void bindListener() {
         slidingLayout.setAntiDragView(R.id.card_panel);
         slidingLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
 
-                /*
-                slidingLayoutHistory.setBackgroundColor(combineColors(
-                        context.themeUtil().res.colorBackgroundCard,
-                        context.themeUtil().res.colorBackground,
-                        slideOffset
-                ));
-                */
             }
 
             @Override
@@ -237,31 +205,14 @@ public class SlidingPanelHandler {
             context.client().sendInput(buffer.getInfo(), text);
             chatline.setText("");
             chatline.requestFocus();
+            previousMessages.add(new PrimaryDrawerItem().withName(text));
         }
     }
 
     private void setupHistoryFakeData() {
         FastAdapter<IItem> fastAdapter = new FastAdapter<>();
-        ItemAdapter<IItem> itemAdapter = new ItemAdapter<>();
-        itemAdapter.wrap(fastAdapter);
-        itemAdapter.add(
-                new PrimaryDrawerItem().withName("Entry #1"),
-                new PrimaryDrawerItem().withName("Entry #2"),
-                new PrimaryDrawerItem().withName("Entry #3"),
-                new PrimaryDrawerItem().withName("Entry #4"),
-                new PrimaryDrawerItem().withName("Entry #5"),
-                new PrimaryDrawerItem().withName("Entry #6"),
-                new PrimaryDrawerItem().withName("Entry #7"),
-                new PrimaryDrawerItem().withName("Entry #8"),
-                new PrimaryDrawerItem().withName("Entry #9"),
-                new PrimaryDrawerItem().withName("Entry #10"),
-                new PrimaryDrawerItem().withName("Entry #11"),
-                new PrimaryDrawerItem().withName("Entry #12"),
-                new PrimaryDrawerItem().withName("Entry #13"),
-                new PrimaryDrawerItem().withName("Entry #14"),
-                new PrimaryDrawerItem().withName("Entry #15"),
-                new PrimaryDrawerItem().withName("Entry #16")
-        );
+        previousMessages = new ItemAdapter<>();
+        previousMessages.wrap(fastAdapter);
         msgHistory.setAdapter(fastAdapter);
         msgHistory.setLayoutManager(new LinearLayoutManager(activity));
         msgHistory.setItemAnimator(new DefaultItemAnimator());

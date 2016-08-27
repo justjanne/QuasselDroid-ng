@@ -663,15 +663,15 @@ public class ThemeUtil {
         }
 
         @NonNull
-        public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked) {
-            return SpanFormatter.format(messageKick, user, kicked);
+        public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked, @NonNull CharSequence channel) {
+            return SpanFormatter.format(messageKick, user, kicked, channel);
         }
 
         @NonNull
-        public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked, @Nullable CharSequence reason) {
-            if (reason == null || reason.length() == 0) return formatKick(user, kicked);
+        public CharSequence formatKick(@NonNull CharSequence user, @NonNull CharSequence kicked, @Nullable CharSequence reason, @NonNull CharSequence channel) {
+            if (reason == null || reason.length() == 0) return formatKick(user, kicked, channel);
 
-            return SpanFormatter.format(messageKickExtra, user, kicked, reason);
+            return SpanFormatter.format(messageKickExtra, user, kicked, reason, channel);
         }
 
         @NonNull
