@@ -41,7 +41,6 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.kuschku.libquassel.events.BufferChangeEvent;
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
@@ -73,14 +72,18 @@ public class BufferViewHolder extends ChildViewHolder {
 
     private StateListDrawable background;
 
+    private boolean selected = false;
+    private boolean checked = false;
+
     public BufferViewHolder(AppContext context, View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.context = context;
-        context.provider().event.registerSticky(this);
 
         background = new StateListDrawable();
         background.addState(new int[]{android.R.attr.state_selected}, new ColorDrawable(context.themeUtil().res.colorSelected));
+        background.addState(new int[]{android.R.attr.state_checked}, new ColorDrawable(context.themeUtil().res.colorSelected));
+        background.addState(new int[]{android.R.attr.state_checked, android.R.attr.state_selected}, new ColorDrawable(context.themeUtil().res.colorSelected));
         background.addState(new int[0], UIUtils.getSelectableBackground(itemView.getContext()));
     }
 
@@ -89,7 +92,7 @@ public class BufferViewHolder extends ChildViewHolder {
         return R.layout.widget_buffer;
     }
 
-    public void bind(OnBufferClickListener listener, Buffer buffer) {
+    public void bind(OnBufferClickListener listener, OnBufferLongClickListener longClickListener, Buffer buffer) {
         if (status != null)
             status.removeOnPropertyChangedCallback(callback);
         status = buffer.getStatus();
@@ -99,7 +102,9 @@ public class BufferViewHolder extends ChildViewHolder {
         viewIntBinder.bindTextColor(name, colorFromActivityStatus(buffer));
         setDescription(context.deserializer().formatString(getDescription(buffer)));
         setBadge(0);
+
         itemView.setOnClickListener(v -> listener.onClick(buffer));
+        itemView.setOnLongClickListener(v -> longClickListener.onLongClick(buffer));
 
         itemView.setBackground(background);
 
@@ -114,8 +119,6 @@ public class BufferViewHolder extends ChildViewHolder {
             }
         };
         status.addOnPropertyChangedCallback(callback);
-
-        setSelected();
     }
 
     @NonNull
@@ -132,12 +135,26 @@ public class BufferViewHolder extends ChildViewHolder {
         };
     }
 
-    private void setSelected() {
-        setSelected(context.client().backlogManager().open() == id);
+    public boolean isSelected() {
+        return selected;
     }
 
     public void setSelected(boolean selected) {
-        itemView.setSelected(selected);
+        this.selected = selected;
+        updateSelectionState();
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+        updateSelectionState();
+    }
+
+    private void updateSelectionState() {
+        itemView.setSelected(selected || checked);
     }
 
     private void setIcon(AppContext context, BufferInfo.Type type, ObservableField<BufferInfo.BufferStatus> status) {
@@ -180,9 +197,5 @@ public class BufferViewHolder extends ChildViewHolder {
             }
         }
         return null;
-    }
-
-    public void onEventMainThread(BufferChangeEvent event) {
-        setSelected();
     }
 }

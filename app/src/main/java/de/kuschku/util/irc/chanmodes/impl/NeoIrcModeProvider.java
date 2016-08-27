@@ -58,22 +58,38 @@ public class NeoIrcModeProvider extends AbstractIrcModeProvider {
     @Override
     public ChanMode modeFromChar(char mode) {
         switch (mode) {
-            case 'M': return QUIET_UNIDENTIFIED;
-            case 'N': return BLOCK_NICKCHANGE;
-            case 'O': return ONLY_OPER;
-            case 'P': return PERMANENT;
-            case 'Q': return BLOCK_KICK;
-            case 'R': return BLOCK_UNIDENTIFIED;
-            case 'V': return DISABLE_INVITE;
-            case 'i': return ONLY_INVITE;
-            case 'k': return PASSWORD;
-            case 'l': return LIMIT;
-            case 'm': return MODERATED;
-            case 'n': return BLOCK_EXTERNAL;
-            case 'r': return REGISTERED;
-            case 's': return UNLISTED;
-            case 't': return RESTRICT_TOPIC;
-            case 'z': return ONLY_SSL;
+            case 'M':
+                return QUIET_UNIDENTIFIED;
+            case 'N':
+                return BLOCK_NICKCHANGE;
+            case 'O':
+                return ONLY_OPER;
+            case 'P':
+                return PERMANENT;
+            case 'Q':
+                return BLOCK_KICK;
+            case 'R':
+                return BLOCK_UNIDENTIFIED;
+            case 'V':
+                return DISABLE_INVITE;
+            case 'i':
+                return ONLY_INVITE;
+            case 'k':
+                return PASSWORD;
+            case 'l':
+                return LIMIT;
+            case 'm':
+                return MODERATED;
+            case 'n':
+                return BLOCK_EXTERNAL;
+            case 'r':
+                return REGISTERED;
+            case 's':
+                return UNLISTED;
+            case 't':
+                return RESTRICT_TOPIC;
+            case 'z':
+                return ONLY_SSL;
 
             case 'b':
                 return BAN;
@@ -88,22 +104,38 @@ public class NeoIrcModeProvider extends AbstractIrcModeProvider {
     @Override
     public char charFromMode(ChanMode mode) {
         switch (mode) {
-            case QUIET_UNIDENTIFIED: return 'M';
-            case BLOCK_NICKCHANGE: return 'N';
-            case ONLY_OPER: return 'O';
-            case PERMANENT: return 'P';
-            case BLOCK_KICK: return 'Q';
-            case BLOCK_UNIDENTIFIED: return 'R';
-            case DISABLE_INVITE: return 'V';
-            case ONLY_INVITE: return 'i';
-            case PASSWORD: return 'k';
-            case LIMIT: return 'l';
-            case MODERATED: return 'm';
-            case BLOCK_EXTERNAL: return 'n';
-            case REGISTERED: return 'r';
-            case UNLISTED: return 's';
-            case RESTRICT_TOPIC: return 't';
-            case ONLY_SSL: return 'z';
+            case QUIET_UNIDENTIFIED:
+                return 'M';
+            case BLOCK_NICKCHANGE:
+                return 'N';
+            case ONLY_OPER:
+                return 'O';
+            case PERMANENT:
+                return 'P';
+            case BLOCK_KICK:
+                return 'Q';
+            case BLOCK_UNIDENTIFIED:
+                return 'R';
+            case DISABLE_INVITE:
+                return 'V';
+            case ONLY_INVITE:
+                return 'i';
+            case PASSWORD:
+                return 'k';
+            case LIMIT:
+                return 'l';
+            case MODERATED:
+                return 'm';
+            case BLOCK_EXTERNAL:
+                return 'n';
+            case REGISTERED:
+                return 'r';
+            case UNLISTED:
+                return 's';
+            case RESTRICT_TOPIC:
+                return 't';
+            case ONLY_SSL:
+                return 'z';
 
             case BAN:
                 return 'b';

@@ -369,7 +369,6 @@ public class ThemeUtil {
         public String chanMode_FORWARD_DESCRIPTION;
 
 
-
         public String chanModeToDescription(ChanMode mode) {
             switch (mode) {
                 case RESTRICT_TOPIC:
@@ -705,11 +704,6 @@ public class ThemeUtil {
         public CharSequence formatPlain(@NonNull CharSequence nick, @NonNull CharSequence message) {
             return SpanFormatter.format(messagePlain, nick, message);
         }
-
-        @NonNull
-        public CharSequence formatTopic(@NonNull CharSequence nick, @NonNull CharSequence channel, @NonNull CharSequence message) {
-            return SpanFormatter.format(messageTopic, nick, channel, message);
-        }
     }
 
     public static class Colors {
@@ -795,7 +789,7 @@ public class ThemeUtil {
         @ColorInt
         public int colorTintHighlight;
 
-        @AutoColor(R.attr.material_drawer_selected)
+        @AutoColor(R.attr.colorControlHighlight)
         @ColorInt
         public int colorSelected;
 

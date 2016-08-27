@@ -23,7 +23,6 @@ package de.kuschku.libquassel.localtypes;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
@@ -36,7 +35,6 @@ import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
-import de.kuschku.util.irc.IrcUserUtils;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
@@ -53,9 +51,9 @@ public class BacklogFilter implements UICallback {
 
     @NonNull
     private final Set<Message.Type> filteredTypes = new HashSet<>();
+    private final EventBus bus = new EventBus();
     @Nullable
     private CharSequence searchQuery;
-    private final EventBus bus = new EventBus();
     @Nullable
     private DateTime earliestMessage;
 

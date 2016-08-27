@@ -39,9 +39,9 @@ import de.kuschku.util.accounts.Account;
 
 public abstract class BoundActivity extends AppCompatActivity {
     protected AppContext context = new AppContext();
+    protected QuasselService.LocalBinder binder;
     @StyleRes
     private int themeId;
-    protected QuasselService.LocalBinder binder;
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {

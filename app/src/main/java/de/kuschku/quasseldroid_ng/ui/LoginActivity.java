@@ -26,8 +26,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.raizlabs.android.dbflow.config.FlowManager;
-
 import de.kuschku.libquassel.localtypes.orm.ConnectedDatabase;
 import de.kuschku.quasseldroid_ng.ui.chat.MainActivity;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ServiceHelper;

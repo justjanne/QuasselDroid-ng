@@ -65,28 +65,50 @@ public class CharybdisIrcModeProvider extends AbstractIrcModeProvider {
     @Override
     public ChanMode modeFromChar(char mode) {
         switch (mode) {
-            case 'A': return ONLY_ADMIN;
-            case 'C': return BLOCK_CTCP;
-            case 'F': return ALLOW_FORWARD;
-            case 'O': return ONLY_OPER;
-            case 'P': return PERMANENT;
-            case 'Q': return BLOCK_FORWARDING;
-            case 'S': return ONLY_SSL;
-            case 'T': return BLOCK_NOTICE;
-            case 'c': return BLOCK_COLOR;
-            case 'f': return FORWARD;
-            case 'g': return ALLOW_INVITE;
-            case 'i': return ONLY_INVITE;
-            case 'j': return JOIN_THROTTLE;
-            case 'k': return PASSWORD;
-            case 'l': return LIMIT;
-            case 'm': return MODERATED;
-            case 'n': return BLOCK_EXTERNAL;
-            case 'p': return PARANOID;
-            case 'r': return BLOCK_UNIDENTIFIED;
-            case 's': return UNLISTED;
-            case 't': return RESTRICT_TOPIC;
-            case 'z': return REDUCED_MODERATION;
+            case 'A':
+                return ONLY_ADMIN;
+            case 'C':
+                return BLOCK_CTCP;
+            case 'F':
+                return ALLOW_FORWARD;
+            case 'O':
+                return ONLY_OPER;
+            case 'P':
+                return PERMANENT;
+            case 'Q':
+                return BLOCK_FORWARDING;
+            case 'S':
+                return ONLY_SSL;
+            case 'T':
+                return BLOCK_NOTICE;
+            case 'c':
+                return BLOCK_COLOR;
+            case 'f':
+                return FORWARD;
+            case 'g':
+                return ALLOW_INVITE;
+            case 'i':
+                return ONLY_INVITE;
+            case 'j':
+                return JOIN_THROTTLE;
+            case 'k':
+                return PASSWORD;
+            case 'l':
+                return LIMIT;
+            case 'm':
+                return MODERATED;
+            case 'n':
+                return BLOCK_EXTERNAL;
+            case 'p':
+                return PARANOID;
+            case 'r':
+                return BLOCK_UNIDENTIFIED;
+            case 's':
+                return UNLISTED;
+            case 't':
+                return RESTRICT_TOPIC;
+            case 'z':
+                return REDUCED_MODERATION;
 
             case 'b':
                 return BAN;
@@ -103,28 +125,50 @@ public class CharybdisIrcModeProvider extends AbstractIrcModeProvider {
     @Override
     public char charFromMode(ChanMode mode) {
         switch (mode) {
-            case ONLY_ADMIN: return 'A';
-            case BLOCK_CTCP: return 'C';
-            case ALLOW_FORWARD: return 'F';
-            case ONLY_OPER: return 'O';
-            case PERMANENT: return 'P';
-            case BLOCK_FORWARDING: return 'Q';
-            case ONLY_SSL: return 'S';
-            case BLOCK_NOTICE: return 'T';
-            case BLOCK_COLOR: return 'c';
-            case FORWARD: return 'f';
-            case ALLOW_INVITE: return 'g';
-            case ONLY_INVITE: return 'i';
-            case JOIN_THROTTLE: return 'j';
-            case PASSWORD: return 'k';
-            case LIMIT: return 'l';
-            case MODERATED: return 'm';
-            case BLOCK_EXTERNAL: return 'n';
-            case PARANOID: return 'p';
-            case BLOCK_UNIDENTIFIED: return 'r';
-            case UNLISTED: return 's';
-            case RESTRICT_TOPIC: return 't';
-            case REDUCED_MODERATION: return 'z';
+            case ONLY_ADMIN:
+                return 'A';
+            case BLOCK_CTCP:
+                return 'C';
+            case ALLOW_FORWARD:
+                return 'F';
+            case ONLY_OPER:
+                return 'O';
+            case PERMANENT:
+                return 'P';
+            case BLOCK_FORWARDING:
+                return 'Q';
+            case ONLY_SSL:
+                return 'S';
+            case BLOCK_NOTICE:
+                return 'T';
+            case BLOCK_COLOR:
+                return 'c';
+            case FORWARD:
+                return 'f';
+            case ALLOW_INVITE:
+                return 'g';
+            case ONLY_INVITE:
+                return 'i';
+            case JOIN_THROTTLE:
+                return 'j';
+            case PASSWORD:
+                return 'k';
+            case LIMIT:
+                return 'l';
+            case MODERATED:
+                return 'm';
+            case BLOCK_EXTERNAL:
+                return 'n';
+            case PARANOID:
+                return 'p';
+            case BLOCK_UNIDENTIFIED:
+                return 'r';
+            case UNLISTED:
+                return 's';
+            case RESTRICT_TOPIC:
+                return 't';
+            case REDUCED_MODERATION:
+                return 'z';
 
             case BAN:
                 return 'b';

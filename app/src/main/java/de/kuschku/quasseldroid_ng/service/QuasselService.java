@@ -74,9 +74,11 @@ public class QuasselService extends Service {
         public void addCallback(Consumer<ClientBackgroundThread> consumer) {
             consumers.add(consumer);
         }
+
         public void removeCallback(Consumer<ClientBackgroundThread> consumer) {
             consumers.remove(consumer);
         }
+
         private void notify(ClientBackgroundThread thread) {
             for (Consumer<ClientBackgroundThread> consumer : consumers) {
                 consumer.apply(thread);

@@ -100,6 +100,7 @@ public class Client extends AClient {
     private ConnectionChangeEvent.Status connectionStatus;
     private BufferMetaDataManager metaDataManager;
     private String coreId;
+    private int r = 1;
 
     public Client(@NonNull BusProvider provider, @NonNull BacklogStorage backlogStorage, @NonNull BufferMetaDataManager metaDataManager, String coreId) {
         this.coreId = coreId;
@@ -439,7 +440,6 @@ public class Client extends AClient {
         this.globalNetworkConfig = globalNetworkConfig;
     }
 
-
     @NonNull
     public BacklogStorage backlogStorage() {
         return backlogStorage;
@@ -492,6 +492,4 @@ public class Client extends AClient {
     public String coreId() {
         return coreId;
     }
-
-    private int r = 1;
 }

@@ -39,7 +39,6 @@ import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
-import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.IrcChannelSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.AIrcChannel;

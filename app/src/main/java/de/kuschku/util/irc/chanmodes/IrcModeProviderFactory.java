@@ -55,7 +55,7 @@ public class IrcModeProviderFactory {
 
     private static Set<Character> toModeSet(String chanModes) {
         if (chanModes == null) chanModes = "";
-        String replaced = chanModes.replaceAll(",","");
+        String replaced = chanModes.replaceAll(",", "");
         Set<Character> modeSet = new HashSet<>();
         for (char c : replaced.toCharArray()) {
             modeSet.add(c);

@@ -87,4 +87,18 @@
     <string name="action_manage_chat_lists">Manage Chat Lists</string>
     <string name="action_show_hidden">Show Hidden</string>
     <string name="action_join_channel">Join Channel</string>
+
+    <string name="action_connect">Connect</string>
+    <string name="action_disconnect">Disconnect</string>
+
+    <string name="action_join">Join</string>
+    <string name="action_part">Part</string>
+    <string name="action_delete">Delete</string>
+
+    <string name="action_hidden_display">Show hidden Buffers</string>
+    <string name="action_hidden_hide">Hide hidden Buffers</string>
+
+    <string name="action_unhide">Make Visible</string>
+    <string name="action_hide_temp">Hide Temporarily</string>
+    <string name="action_hide_perm">Hide Permanently</string>
 </resources>

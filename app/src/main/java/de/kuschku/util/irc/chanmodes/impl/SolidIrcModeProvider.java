@@ -66,30 +66,54 @@ public class SolidIrcModeProvider extends AbstractIrcModeProvider {
     @Override
     public ChanMode modeFromChar(char mode) {
         switch (mode) {
-            case 'B': return BLOCK_CAPS;
-            case 'C': return BLOCK_CTCP;
-            case 'G': return CENSOR;
-            case 'K': return BLOCK_KNOCK;
-            case 'M': return QUIET_UNIDENTIFIED;
-            case 'N': return BLOCK_NICKCHANGE;
-            case 'P': return PERMANENT;
-            case 'Q': return BLOCK_KICK;
-            case 'R': return BLOCK_UNIDENTIFIED;
-            case 'S': return STRIP_COLOR;
-            case 'T': return BLOCK_NOTICE;
-            case 'V': return DISABLE_INVITE;
-            case 'c': return BLOCK_COLOR;
-            case 'f': return ANTIFLOOD;
-            case 'i': return ONLY_INVITE;
-            case 'k': return PASSWORD;
-            case 'l': return LIMIT;
-            case 'm': return MODERATED;
-            case 'n': return BLOCK_EXTERNAL;
-            case 'p': return PARANOID;
-            case 's': return UNLISTED;
-            case 't': return RESTRICT_TOPIC;
-            case 'u': return AUDITORIUM;
-            case 'z': return ONLY_SSL;
+            case 'B':
+                return BLOCK_CAPS;
+            case 'C':
+                return BLOCK_CTCP;
+            case 'G':
+                return CENSOR;
+            case 'K':
+                return BLOCK_KNOCK;
+            case 'M':
+                return QUIET_UNIDENTIFIED;
+            case 'N':
+                return BLOCK_NICKCHANGE;
+            case 'P':
+                return PERMANENT;
+            case 'Q':
+                return BLOCK_KICK;
+            case 'R':
+                return BLOCK_UNIDENTIFIED;
+            case 'S':
+                return STRIP_COLOR;
+            case 'T':
+                return BLOCK_NOTICE;
+            case 'V':
+                return DISABLE_INVITE;
+            case 'c':
+                return BLOCK_COLOR;
+            case 'f':
+                return ANTIFLOOD;
+            case 'i':
+                return ONLY_INVITE;
+            case 'k':
+                return PASSWORD;
+            case 'l':
+                return LIMIT;
+            case 'm':
+                return MODERATED;
+            case 'n':
+                return BLOCK_EXTERNAL;
+            case 'p':
+                return PARANOID;
+            case 's':
+                return UNLISTED;
+            case 't':
+                return RESTRICT_TOPIC;
+            case 'u':
+                return AUDITORIUM;
+            case 'z':
+                return ONLY_SSL;
 
             case 'b':
                 return BAN;
@@ -104,30 +128,54 @@ public class SolidIrcModeProvider extends AbstractIrcModeProvider {
     @Override
     public char charFromMode(ChanMode mode) {
         switch (mode) {
-            case BLOCK_CAPS: return 'B';
-            case BLOCK_CTCP: return 'C';
-            case CENSOR: return 'G';
-            case BLOCK_KNOCK: return 'K';
-            case QUIET_UNIDENTIFIED: return 'M';
-            case BLOCK_NICKCHANGE: return 'N';
-            case PERMANENT: return 'P';
-            case BLOCK_KICK: return 'Q';
-            case BLOCK_UNIDENTIFIED: return 'R';
-            case STRIP_COLOR: return 'S';
-            case BLOCK_NOTICE: return 'T';
-            case DISABLE_INVITE: return 'V';
-            case BLOCK_COLOR: return 'c';
-            case ANTIFLOOD: return 'f';
-            case ONLY_INVITE: return 'i';
-            case PASSWORD: return 'k';
-            case LIMIT: return 'l';
-            case MODERATED: return 'm';
-            case BLOCK_EXTERNAL: return 'n';
-            case PARANOID: return 'p';
-            case UNLISTED: return 's';
-            case RESTRICT_TOPIC: return 't';
-            case AUDITORIUM: return 'u';
-            case ONLY_SSL: return 'z';
+            case BLOCK_CAPS:
+                return 'B';
+            case BLOCK_CTCP:
+                return 'C';
+            case CENSOR:
+                return 'G';
+            case BLOCK_KNOCK:
+                return 'K';
+            case QUIET_UNIDENTIFIED:
+                return 'M';
+            case BLOCK_NICKCHANGE:
+                return 'N';
+            case PERMANENT:
+                return 'P';
+            case BLOCK_KICK:
+                return 'Q';
+            case BLOCK_UNIDENTIFIED:
+                return 'R';
+            case STRIP_COLOR:
+                return 'S';
+            case BLOCK_NOTICE:
+                return 'T';
+            case DISABLE_INVITE:
+                return 'V';
+            case BLOCK_COLOR:
+                return 'c';
+            case ANTIFLOOD:
+                return 'f';
+            case ONLY_INVITE:
+                return 'i';
+            case PASSWORD:
+                return 'k';
+            case LIMIT:
+                return 'l';
+            case MODERATED:
+                return 'm';
+            case BLOCK_EXTERNAL:
+                return 'n';
+            case PARANOID:
+                return 'p';
+            case UNLISTED:
+                return 's';
+            case RESTRICT_TOPIC:
+                return 't';
+            case AUDITORIUM:
+                return 'u';
+            case ONLY_SSL:
+                return 'z';
 
             case BAN:
                 return 'b';

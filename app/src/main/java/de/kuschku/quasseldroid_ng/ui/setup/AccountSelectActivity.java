@@ -38,31 +38,11 @@ import de.kuschku.quasseldroid_ng.ui.setup.slides.AccountSelectSlide;
 import de.kuschku.quasseldroid_ng.ui.setup.slides.SlideFragment;
 
 public class AccountSelectActivity extends AppCompatActivity {
-    private SlidePagerAdapter slidePagerAdapter;
-
     @Bind(R.id.view_pager)
     ViewPager viewPager;
-
     @Bind(R.id.btn)
     FloatingActionButton btn;
-
-    private class SlidePagerAdapter extends FragmentPagerAdapter {
-        private SlideFragment item = new AccountSelectSlide();
-
-        public SlidePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public SlideFragment getItem(int position) {
-            return item;
-        }
-
-        @Override
-        public int getCount() {
-            return 1;
-        }
-    }
+    private SlidePagerAdapter slidePagerAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,5 +70,23 @@ public class AccountSelectActivity extends AppCompatActivity {
     public void updateValidity(boolean validity) {
         btn.setVisibility(validity ? View.VISIBLE : View.GONE);
         slidePagerAdapter.notifyDataSetChanged();
+    }
+
+    private class SlidePagerAdapter extends FragmentPagerAdapter {
+        private SlideFragment item = new AccountSelectSlide();
+
+        public SlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public SlideFragment getItem(int position) {
+            return item;
+        }
+
+        @Override
+        public int getCount() {
+            return 1;
+        }
     }
 }

@@ -23,7 +23,6 @@ package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -163,6 +162,11 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
         client.setIgnoreListManager(this);
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(ignoreList);
+    }
+
     public class IgnoreListItem {
         private final IgnoreType type;
         @NonNull
@@ -234,10 +238,5 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
                     ", isActive=" + isActive +
                     '}';
         }
-    }
-
-    @Override
-    public String toString() {
-        return String.valueOf(ignoreList);
     }
 }

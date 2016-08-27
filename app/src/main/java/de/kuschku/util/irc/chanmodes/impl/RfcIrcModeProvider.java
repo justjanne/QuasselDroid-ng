@@ -50,14 +50,22 @@ public class RfcIrcModeProvider extends AbstractIrcModeProvider {
     @Override
     public ChanMode modeFromChar(char mode) {
         switch (mode) {
-            case 'p': return PARANOID;
-            case 's': return UNLISTED;
-            case 'i': return ONLY_INVITE;
-            case 't': return RESTRICT_TOPIC;
-            case 'n': return BLOCK_EXTERNAL;
-            case 'm': return MODERATED;
-            case 'l': return LIMIT;
-            case 'k': return PASSWORD;
+            case 'p':
+                return PARANOID;
+            case 's':
+                return UNLISTED;
+            case 'i':
+                return ONLY_INVITE;
+            case 't':
+                return RESTRICT_TOPIC;
+            case 'n':
+                return BLOCK_EXTERNAL;
+            case 'm':
+                return MODERATED;
+            case 'l':
+                return LIMIT;
+            case 'k':
+                return PASSWORD;
 
             case 'b':
                 return BAN;
@@ -72,14 +80,22 @@ public class RfcIrcModeProvider extends AbstractIrcModeProvider {
     @Override
     public char charFromMode(ChanMode mode) {
         switch (mode) {
-            case PARANOID: return 'p';
-            case UNLISTED: return 's';
-            case ONLY_INVITE: return 'i';
-            case RESTRICT_TOPIC: return 't';
-            case BLOCK_EXTERNAL: return 'n';
-            case MODERATED: return 'm';
-            case LIMIT: return 'l';
-            case PASSWORD: return 'k';
+            case PARANOID:
+                return 'p';
+            case UNLISTED:
+                return 's';
+            case ONLY_INVITE:
+                return 'i';
+            case RESTRICT_TOPIC:
+                return 't';
+            case BLOCK_EXTERNAL:
+                return 'n';
+            case MODERATED:
+                return 'm';
+            case LIMIT:
+                return 'l';
+            case PASSWORD:
+                return 'k';
 
             case BAN:
                 return 'b';

@@ -23,7 +23,6 @@ package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +36,6 @@ import java.util.Observer;
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
-import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.localtypes.buffers.StatusBuffer;
 import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.primitives.types.QVariant;
@@ -776,7 +774,6 @@ public class Network extends ANetwork<Network> implements Observer {
     public void _update(Network from) {
 
     }
-
 
 
     @Override

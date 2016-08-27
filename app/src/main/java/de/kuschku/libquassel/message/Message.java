@@ -23,6 +23,7 @@ package de.kuschku.libquassel.message;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ForeignKey;
@@ -62,6 +63,18 @@ public class Message extends BaseModel implements ContentComparable<Message> {
     @Column
     public String content;
 
+    public static Message create(int id, DateTime time, Type type, Flags flags, BufferInfo bufferInfo, String sender, String content) {
+        Message message = new Message();
+        message.id = id;
+        message.time = time;
+        message.type = type;
+        message.flags = flags;
+        message.bufferInfo = bufferInfo;
+        message.sender = sender;
+        message.content = content;
+        return message;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -97,18 +110,6 @@ public class Message extends BaseModel implements ContentComparable<Message> {
             return this.id - another.id;
         else
             return this.time.compareTo(another.time);
-    }
-
-    public static Message create(int id, DateTime time, Type type, Flags flags, BufferInfo bufferInfo, String sender, String content) {
-        Message message = new Message();
-        message.id = id;
-        message.time = time;
-        message.type = type;
-        message.flags = flags;
-        message.bufferInfo = bufferInfo;
-        message.sender = sender;
-        message.content = content;
-        return message;
     }
 
     public enum Type {
@@ -227,6 +228,7 @@ public class Message extends BaseModel implements ContentComparable<Message> {
             output.deleteCharAt(output.length() - 1);
             output.deleteCharAt(output.length() - 1);
             output.append("]");
+            output.append(flags);
             return output.toString();
         }
 

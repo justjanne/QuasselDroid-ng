@@ -156,6 +156,7 @@ dependencies {
     compile('com.mikepenz:materialdrawer:5.0.3@aar') { transitive = true }
     compile('com.github.afollestad.material-dialogs:core:0.8.5.3@aar') { transitive = true }
     compile('com.github.afollestad.material-dialogs:commons:0.8.5.3@aar') { transitive = true }
+    compile 'com.afollestad:material-cab:0.1.12'
 
     // ORM
     apt "com.github.Raizlabs.DBFlow:dbflow-processor:3.1.1"

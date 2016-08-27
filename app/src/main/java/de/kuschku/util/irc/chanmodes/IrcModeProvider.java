@@ -25,7 +25,10 @@ import java.util.Set;
 
 public interface IrcModeProvider {
     ChanMode modeFromChar(char mode);
+
     char charFromMode(ChanMode mode);
+
     int matchQuality(Set<Character> modes);
+
     Set<ChanMode> modesFromString(String chanModes);
 }

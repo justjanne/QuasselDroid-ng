@@ -57,16 +57,26 @@ public class BewareIrcModeProvider extends AbstractIrcModeProvider {
     @Override
     public ChanMode modeFromChar(char mode) {
         switch (mode) {
-            case 'C': return BLOCK_CTCP;
-            case 'c': return BLOCK_COLOR;
-            case 'i': return ONLY_INVITE;
-            case 'k': return PASSWORD;
-            case 'l': return LIMIT;
-            case 'm': return MODERATED;
-            case 'n': return BLOCK_EXTERNAL;
-            case 'p': return PARANOID;
-            case 's': return UNLISTED;
-            case 't': return RESTRICT_TOPIC;
+            case 'C':
+                return BLOCK_CTCP;
+            case 'c':
+                return BLOCK_COLOR;
+            case 'i':
+                return ONLY_INVITE;
+            case 'k':
+                return PASSWORD;
+            case 'l':
+                return LIMIT;
+            case 'm':
+                return MODERATED;
+            case 'n':
+                return BLOCK_EXTERNAL;
+            case 'p':
+                return PARANOID;
+            case 's':
+                return UNLISTED;
+            case 't':
+                return RESTRICT_TOPIC;
 
             case 'b':
                 return BAN;
@@ -81,16 +91,26 @@ public class BewareIrcModeProvider extends AbstractIrcModeProvider {
     @Override
     public char charFromMode(ChanMode mode) {
         switch (mode) {
-            case BLOCK_CTCP: return 'C';
-            case BLOCK_COLOR: return 'c';
-            case ONLY_INVITE: return 'i';
-            case PASSWORD: return 'k';
-            case LIMIT: return 'l';
-            case MODERATED: return 'm';
-            case BLOCK_EXTERNAL: return 'n';
-            case PARANOID: return 'p';
-            case UNLISTED: return 's';
-            case RESTRICT_TOPIC: return 't';
+            case BLOCK_CTCP:
+                return 'C';
+            case BLOCK_COLOR:
+                return 'c';
+            case ONLY_INVITE:
+                return 'i';
+            case PASSWORD:
+                return 'k';
+            case LIMIT:
+                return 'l';
+            case MODERATED:
+                return 'm';
+            case BLOCK_EXTERNAL:
+                return 'n';
+            case PARANOID:
+                return 'p';
+            case UNLISTED:
+                return 's';
+            case RESTRICT_TOPIC:
+                return 't';
 
             case BAN:
                 return 'b';

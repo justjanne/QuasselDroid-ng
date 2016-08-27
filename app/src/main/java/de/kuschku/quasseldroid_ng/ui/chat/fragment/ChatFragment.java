@@ -27,7 +27,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,7 +102,7 @@ public class ChatFragment extends BoundFragment {
                 int scrollOffsetFromBottom = recyclerView.computeVerticalScrollRange() - recyclerView.computeVerticalScrollOffset() - recyclerViewMeasuredHeight;
                 boolean isMoreThanOneScreenFromBottom = scrollOffsetFromBottom > recyclerViewMeasuredHeight;
                 boolean smartVisibility = scrollDown.getVisibility() == View.VISIBLE || isMoreThanOneScreenFromBottom;
-                scrollDown.setVisibility((canScrollDown && isScrollingDown &&  smartVisibility) ? View.VISIBLE : View.GONE);
+                scrollDown.setVisibility((canScrollDown && isScrollingDown && smartVisibility) ? View.VISIBLE : View.GONE);
             }
         });
 

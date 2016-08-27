@@ -66,7 +66,9 @@ public interface QBacklogManager<T extends QSyncableObject<T>> extends QSyncable
     ObservableComparableSortedList<Message> filtered(int id);
 
     void setOpen(int bufferId);
+
     void open(int bufferId);
+
     int open();
 
     void receiveBacklog(Message msg);

@@ -66,13 +66,13 @@ public class SmartRegEx {
         return Pattern.compile(GlobTransformer.convertGlobToRegex(glob), flags);
     }
 
-    public enum Syntax {
-        WILDCARD,
-        REGEX
-    }
-
     @Override
     public String toString() {
         return rule;
+    }
+
+    public enum Syntax {
+        WILDCARD,
+        REGEX
     }
 }

@@ -39,7 +39,8 @@ public class ServiceHelper {
 
     /**
      * Connects to an already running QuasselService
-     * @param context The context in which the service is running
+     *
+     * @param context    The context in which the service is running
      * @param connection The connection to which it should be bound
      */
     public static void connectToService(Context context, ServiceConnection connection) {
@@ -49,7 +50,8 @@ public class ServiceHelper {
 
     /**
      * Connects to an already running QuasselService
-     * @param context The context in which the service is running
+     *
+     * @param context    The context in which the service is running
      * @param connection The connection which should be disconnected
      */
     public static void disconnect(Context context, ServiceConnection connection) {
@@ -58,6 +60,7 @@ public class ServiceHelper {
 
     /**
      * Starts a new QuasselService, if not yet running.
+     *
      * @param context The context in which it should run
      */
     public static void startServiceIfNotRunning(Context context) {

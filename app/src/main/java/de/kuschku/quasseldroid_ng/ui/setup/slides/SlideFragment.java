@@ -43,15 +43,19 @@ public abstract class SlideFragment extends Fragment {
 
 
     public abstract boolean isValid();
+
     public void addChangeListener(ValidUpdateCallback callback) {
         callbacks.add(callback);
     }
+
     public void removeChangeListener(ValidUpdateCallback callback) {
         callbacks.remove(callback);
     }
+
     protected void updateValidity() {
         updateValidity(isValid());
     }
+
     protected void updateValidity(boolean validity) {
         for (ValidUpdateCallback callback : callbacks) {
             callback.updateValidity(validity);
@@ -70,6 +74,7 @@ public abstract class SlideFragment extends Fragment {
 
         return view;
     }
+
     protected abstract View onCreateContent(LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState);
 
     @StringRes

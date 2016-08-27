@@ -56,20 +56,34 @@ public class DancerIrcModeProvider extends AbstractIrcModeProvider {
     @Override
     public ChanMode modeFromChar(char mode) {
         switch (mode) {
-            case 'J': return JOIN_THROTTLE;
-            case 'P': return PERMANENT;
-            case 'Q': return BLOCK_FORWARDING;
-            case 'R': return QUIET_UNIDENTIFIED;
-            case 'c': return BLOCK_COLOR;
-            case 'g': return ALLOW_INVITE;
-            case 'i': return ONLY_INVITE;
-            case 'k': return PASSWORD;
-            case 'l': return LIMIT;
-            case 'm': return MODERATED;
-            case 'n': return BLOCK_EXTERNAL;
-            case 'r': return BLOCK_UNIDENTIFIED;
-            case 's': return UNLISTED;
-            case 'z': return REDUCED_MODERATION;
+            case 'J':
+                return JOIN_THROTTLE;
+            case 'P':
+                return PERMANENT;
+            case 'Q':
+                return BLOCK_FORWARDING;
+            case 'R':
+                return QUIET_UNIDENTIFIED;
+            case 'c':
+                return BLOCK_COLOR;
+            case 'g':
+                return ALLOW_INVITE;
+            case 'i':
+                return ONLY_INVITE;
+            case 'k':
+                return PASSWORD;
+            case 'l':
+                return LIMIT;
+            case 'm':
+                return MODERATED;
+            case 'n':
+                return BLOCK_EXTERNAL;
+            case 'r':
+                return BLOCK_UNIDENTIFIED;
+            case 's':
+                return UNLISTED;
+            case 'z':
+                return REDUCED_MODERATION;
 
             case 'b':
                 return BAN;
@@ -84,20 +98,34 @@ public class DancerIrcModeProvider extends AbstractIrcModeProvider {
     @Override
     public char charFromMode(ChanMode mode) {
         switch (mode) {
-            case JOIN_THROTTLE: return 'J';
-            case PERMANENT: return 'P';
-            case BLOCK_FORWARDING: return 'Q';
-            case QUIET_UNIDENTIFIED: return 'R';
-            case BLOCK_COLOR: return 'c';
-            case ALLOW_INVITE: return 'g';
-            case ONLY_INVITE: return 'i';
-            case PASSWORD: return 'k';
-            case LIMIT: return 'l';
-            case MODERATED: return 'm';
-            case BLOCK_EXTERNAL: return 'n';
-            case BLOCK_UNIDENTIFIED: return 'r';
-            case UNLISTED: return 's';
-            case REDUCED_MODERATION: return 'z';
+            case JOIN_THROTTLE:
+                return 'J';
+            case PERMANENT:
+                return 'P';
+            case BLOCK_FORWARDING:
+                return 'Q';
+            case QUIET_UNIDENTIFIED:
+                return 'R';
+            case BLOCK_COLOR:
+                return 'c';
+            case ALLOW_INVITE:
+                return 'g';
+            case ONLY_INVITE:
+                return 'i';
+            case PASSWORD:
+                return 'k';
+            case LIMIT:
+                return 'l';
+            case MODERATED:
+                return 'm';
+            case BLOCK_EXTERNAL:
+                return 'n';
+            case BLOCK_UNIDENTIFIED:
+                return 'r';
+            case UNLISTED:
+                return 's';
+            case REDUCED_MODERATION:
+                return 'z';
 
             case BAN:
                 return 'b';

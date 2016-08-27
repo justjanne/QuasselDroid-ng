@@ -44,7 +44,7 @@ import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
-public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkViewHolder, BufferViewHolder> implements OnBufferClickListener {
+public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkViewHolder, BufferViewHolder> implements OnBufferClickListener, OnBufferLongClickListener {
     private final AppContext context;
     private final ObservableSortedList<NetworkItem> items;
     private final Map<QNetwork, NetworkItem> itemMap = new WeakHashMap<>();
@@ -74,17 +74,7 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
         }
     };
 
-    public void notifyChildItemInserted(NetworkItem parentItem, int childPosition) {
-        super.notifyChildItemInserted(items.indexOf(parentItem), childPosition);
-    }
-
-    public void notifyChildItemRemoved(NetworkItem parentItem, int childPosition) {
-        super.notifyChildItemRemoved(items.indexOf(parentItem), childPosition);
-    }
-
-    public void notifyChildItemChanged(NetworkItem parentItem, int childPosition) {
-        super.notifyChildItemChanged(items.indexOf(parentItem), childPosition);
-    }
+    private ActionModeHandler actionModeHandler;
 
     private BufferViewConfigAdapter(AppContext context, ObservableSortedList<NetworkItem> items) {
         super(items);
@@ -163,6 +153,18 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
         return new BufferViewConfigAdapter(context, networkItems);
     }
 
+    public void notifyChildItemInserted(NetworkItem parentItem, int childPosition) {
+        super.notifyChildItemInserted(items.indexOf(parentItem), childPosition);
+    }
+
+    public void notifyChildItemRemoved(NetworkItem parentItem, int childPosition) {
+        super.notifyChildItemRemoved(items.indexOf(parentItem), childPosition);
+    }
+
+    public void notifyChildItemChanged(NetworkItem parentItem, int childPosition) {
+        super.notifyChildItemChanged(items.indexOf(parentItem), childPosition);
+    }
+
     @Override
     public NetworkViewHolder onCreateParentViewHolder(ViewGroup parentViewGroup) {
         LayoutInflater inflater = LayoutInflater.from(parentViewGroup.getContext());
@@ -183,14 +185,22 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
     @Override
     public void onBindChildViewHolder(BufferViewHolder childViewHolder, int position, Object childListItem) {
         bufferViewHolderMap.remove(childViewHolder.id);
-        childViewHolder.bind(this, (Buffer) childListItem);
+        Buffer buffer = (Buffer) childListItem;
+        childViewHolder.bind(this, this, buffer);
         bufferViewHolderMap.put(childViewHolder.id, childViewHolder);
+        childViewHolder.setSelected(context.client().backlogManager().open() == childViewHolder.id);
+        childViewHolder.setChecked(actionModeHandler.isChecked(buffer));
     }
 
     @Override
     public void onClick(Buffer buffer) {
-        if (bufferClickListener != null) {
-            bufferClickListener.onClick(buffer);
+        if (actionModeHandler.isActive()) {
+            actionModeHandler.toggle(buffer);
+            bufferViewHolderMap.get(buffer.getInfo().id).setChecked(actionModeHandler.isChecked(buffer));
+        } else {
+            if (bufferClickListener != null) {
+                bufferClickListener.onClick(buffer);
+            }
         }
     }
 
@@ -243,10 +253,6 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
         }
     }
 
-    public void setSelection(int from, int to) {
-
-    }
-
     public void setOpen(int id) {
         BufferViewHolder old = bufferViewHolderMap.get(open);
         if (old != null) old.setSelected(false);
@@ -273,5 +279,19 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
         boolean before = showAll.get();
         showAll.set(!before);
         return !before;
+    }
+
+    @Override
+    public boolean onLongClick(Buffer buffer) {
+        if (!actionModeHandler.isActive())
+            actionModeHandler.start();
+
+        actionModeHandler.toggle(buffer);
+        bufferViewHolderMap.get(buffer.getInfo().id).setChecked(actionModeHandler.isChecked(buffer));
+        return false;
+    }
+
+    public void setActionModeHandler(ActionModeHandler actionModeHandler) {
+        this.actionModeHandler = actionModeHandler;
     }
 }

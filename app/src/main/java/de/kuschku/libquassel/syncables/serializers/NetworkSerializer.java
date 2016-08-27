@@ -47,9 +47,9 @@ import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class NetworkSerializer implements ObjectSerializer<Network> {
+    public static final DateTime UNIX_EPOCH = new DateTime(0L);
     @NonNull
     private static final NetworkSerializer serializer = new NetworkSerializer();
-    public static final DateTime UNIX_EPOCH = new DateTime(0L);
 
     private NetworkSerializer() {
     }

@@ -36,16 +36,29 @@ import butterknife.ButterKnife;
 import de.kuschku.quasseldroid_ng.R;
 
 public class AccountSetupCoreSlide extends SlideFragment {
+    @Bind(R.id.host)
+    AppCompatEditText hostField;
+    @Bind(R.id.port)
+    AppCompatEditText portField;
+    TextWatcher watcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            updateValidity();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+    };
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
-    @Bind(R.id.host)
-    AppCompatEditText hostField;
-
-    @Bind(R.id.port)
-    AppCompatEditText portField;
 
     @Override
     protected View onCreateContent(LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -100,19 +113,4 @@ public class AccountSetupCoreSlide extends SlideFragment {
         String hostText = hostField.getText().toString();
         return !hostText.isEmpty();
     }
-
-    TextWatcher watcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            updateValidity();
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-        }
-    };
 }

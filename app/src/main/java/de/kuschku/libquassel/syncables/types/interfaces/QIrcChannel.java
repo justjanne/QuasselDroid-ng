@@ -25,7 +25,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
-import java.util.Set;
 
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.syncables.Synced;

@@ -19,21 +19,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.localtypes.orm.converters;
+package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
-import com.raizlabs.android.dbflow.converter.TypeConverter;
+import de.kuschku.libquassel.localtypes.buffers.Buffer;
 
-import org.joda.time.DateTime;
-
-@com.raizlabs.android.dbflow.annotation.TypeConverter
-public class DateTimeConverter extends TypeConverter<Long, DateTime> {
-    @Override
-    public Long getDBValue(DateTime model) {
-        return model.getMillis();
-    }
-
-    @Override
-    public DateTime getModelValue(Long data) {
-        return new DateTime(data.longValue());
-    }
+public interface OnBufferLongClickListener {
+    boolean onLongClick(Buffer buffer);
 }

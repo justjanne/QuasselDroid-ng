@@ -39,7 +39,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,6 +72,7 @@ import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
+import de.kuschku.quasseldroid_ng.ui.chat.drawer.ActionModeHandler;
 import de.kuschku.quasseldroid_ng.ui.chat.drawer.BufferViewConfigAdapter;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.ChatFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.LoadingFragment;
@@ -83,7 +84,6 @@ import de.kuschku.util.certificates.CertificateUtils;
 import de.kuschku.util.certificates.SQLiteCertificateManager;
 import de.kuschku.util.servicebound.BoundActivity;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -148,6 +148,7 @@ public class MainActivity extends BoundActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
+        chatListAdapter.setActionModeHandler(new ActionModeHandler(this, R.id.cab_stub));
         chatListAdapter.setRecyclerView(chatList);
         chatList.setItemAnimator(new DefaultItemAnimator());
         chatList.setLayoutManager(new LinearLayoutManager(this));
@@ -160,8 +161,30 @@ public class MainActivity extends BoundActivity {
                 switch (item.getItemId()) {
                     case R.id.action_show_all: {
                         item.setChecked(chatListAdapter.toggleShowAll());
-                    } break;
+                    }
+                    break;
                     case R.id.action_manage_chat_lists: {
+                        chatListToolbar.startActionMode(new ActionMode.Callback() {
+                            @Override
+                            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                                return false;
+                            }
+
+                            @Override
+                            public void onDestroyActionMode(ActionMode actionMode) {
+
+                            }
+                        });
                     }
                 }
                 return false;

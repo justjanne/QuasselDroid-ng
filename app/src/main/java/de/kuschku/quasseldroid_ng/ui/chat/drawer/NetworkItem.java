@@ -22,7 +22,6 @@
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
 import android.databinding.Observable;
-import android.util.Log;
 
 import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 

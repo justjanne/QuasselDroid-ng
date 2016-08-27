@@ -58,22 +58,38 @@ public class DalIrcModeProvider extends AbstractIrcModeProvider {
     @Override
     public ChanMode modeFromChar(char mode) {
         switch (mode) {
-            case 'A': return AUDITORIUM;
-            case 'M': return QUIET_UNIDENTIFIED;
-            case 'O': return ONLY_OPER;
-            case 'R': return BLOCK_UNIDENTIFIED;
-            case 'S': return ONLY_SSL;
-            case 'c': return BLOCK_COLOR;
-            case 'i': return ONLY_INVITE;
-            case 'j': return JOIN_THROTTLE;
-            case 'k': return PASSWORD;
-            case 'l': return LIMIT;
-            case 'm': return MODERATED;
-            case 'n': return BLOCK_EXTERNAL;
-            case 'p': return PARANOID;
-            case 'r': return REGISTERED;
-            case 's': return UNLISTED;
-            case 't': return RESTRICT_TOPIC;
+            case 'A':
+                return AUDITORIUM;
+            case 'M':
+                return QUIET_UNIDENTIFIED;
+            case 'O':
+                return ONLY_OPER;
+            case 'R':
+                return BLOCK_UNIDENTIFIED;
+            case 'S':
+                return ONLY_SSL;
+            case 'c':
+                return BLOCK_COLOR;
+            case 'i':
+                return ONLY_INVITE;
+            case 'j':
+                return JOIN_THROTTLE;
+            case 'k':
+                return PASSWORD;
+            case 'l':
+                return LIMIT;
+            case 'm':
+                return MODERATED;
+            case 'n':
+                return BLOCK_EXTERNAL;
+            case 'p':
+                return PARANOID;
+            case 'r':
+                return REGISTERED;
+            case 's':
+                return UNLISTED;
+            case 't':
+                return RESTRICT_TOPIC;
 
             case 'b':
                 return BAN;
@@ -88,22 +104,38 @@ public class DalIrcModeProvider extends AbstractIrcModeProvider {
     @Override
     public char charFromMode(ChanMode mode) {
         switch (mode) {
-            case AUDITORIUM: return 'A';
-            case QUIET_UNIDENTIFIED: return 'M';
-            case ONLY_OPER: return 'O';
-            case BLOCK_UNIDENTIFIED: return 'R';
-            case ONLY_SSL: return 'S';
-            case BLOCK_COLOR: return 'c';
-            case ONLY_INVITE: return 'i';
-            case JOIN_THROTTLE: return 'j';
-            case PASSWORD: return 'k';
-            case LIMIT: return 'l';
-            case MODERATED: return 'm';
-            case BLOCK_EXTERNAL: return 'n';
-            case PARANOID: return 'p';
-            case REGISTERED: return 'r';
-            case UNLISTED: return 's';
-            case RESTRICT_TOPIC: return 't';
+            case AUDITORIUM:
+                return 'A';
+            case QUIET_UNIDENTIFIED:
+                return 'M';
+            case ONLY_OPER:
+                return 'O';
+            case BLOCK_UNIDENTIFIED:
+                return 'R';
+            case ONLY_SSL:
+                return 'S';
+            case BLOCK_COLOR:
+                return 'c';
+            case ONLY_INVITE:
+                return 'i';
+            case JOIN_THROTTLE:
+                return 'j';
+            case PASSWORD:
+                return 'k';
+            case LIMIT:
+                return 'l';
+            case MODERATED:
+                return 'm';
+            case BLOCK_EXTERNAL:
+                return 'n';
+            case PARANOID:
+                return 'p';
+            case REGISTERED:
+                return 'r';
+            case UNLISTED:
+                return 's';
+            case RESTRICT_TOPIC:
+                return 't';
 
             case BAN:
                 return 'b';

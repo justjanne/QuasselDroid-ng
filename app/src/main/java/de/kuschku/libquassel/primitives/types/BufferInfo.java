@@ -22,12 +22,10 @@
 package de.kuschku.libquassel.primitives.types;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.converter.TypeConverter;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import de.kuschku.libquassel.localtypes.orm.ConnectedDatabase;
@@ -49,6 +47,16 @@ public class BufferInfo extends BaseModel {
     @Column
     public String name;
 
+    public static BufferInfo create(int id, int networkId, Type type, int groupId, String name) {
+        BufferInfo info = new BufferInfo();
+        info.id = id;
+        info.networkId = networkId;
+        info.type = type;
+        info.groupId = groupId;
+        info.name = name;
+        return info;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -59,16 +67,6 @@ public class BufferInfo extends BaseModel {
                 ", groupId=" + groupId +
                 ", name='" + name + '\'' +
                 '}';
-    }
-
-    public static BufferInfo create(int id, int networkId, Type type, int groupId, String name) {
-        BufferInfo info = new BufferInfo();
-        info.id = id;
-        info.networkId = networkId;
-        info.type = type;
-        info.groupId = groupId;
-        info.name = name;
-        return info;
     }
 
     public enum Type {

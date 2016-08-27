@@ -55,7 +55,7 @@ public class AccountSelectSlide extends SlideFragment implements AccountItem.OnD
 
     @Override
     public Bundle getData(Bundle in) {
-        AccountItem item =  (AccountItem) findAny(fastAdapter.getSelectedItems()).get();
+        AccountItem item = (AccountItem) findAny(fastAdapter.getSelectedItems()).get();
         in.putString("account", item.account.id.toString());
         return in;
     }
