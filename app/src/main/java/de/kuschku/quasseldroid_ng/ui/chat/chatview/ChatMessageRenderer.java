@@ -42,6 +42,7 @@ public class ChatMessageRenderer {
     private IrcFormatHelper helper;
     private MessageStyleContainer highlightStyle;
     private MessageStyleContainer serverStyle;
+    private MessageStyleContainer errorStyle;
     private MessageStyleContainer actionStyle;
     private MessageStyleContainer plainStyle;
 
@@ -61,6 +62,12 @@ public class ChatMessageRenderer {
         );
         this.serverStyle = new MessageStyleContainer(
                 context.themeUtil().res.colorForegroundSecondary,
+                Typeface.ITALIC,
+                context.themeUtil().res.colorForegroundSecondary,
+                context.themeUtil().res.colorBackgroundSecondary
+        );
+        this.errorStyle = new MessageStyleContainer(
+                context.themeUtil().res.colorForegroundError,
                 Typeface.ITALIC,
                 context.themeUtil().res.colorForegroundSecondary,
                 context.themeUtil().res.colorBackgroundSecondary
@@ -123,7 +130,7 @@ public class ChatMessageRenderer {
     }
 
     private void onBindNotice(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, plainStyle, highlightStyle, message.flags.Highlight);
+        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(context.themeUtil().translations.formatAction(
                 formatNick(message.sender, false),
                 helper.formatIrcMessage(context.client(), message)
@@ -153,9 +160,13 @@ public class ChatMessageRenderer {
             ));
     }
 
+    // TODO: Replace this with better display of mode changes
     private void onBindMode(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(message.toString());
+        holder.content.setText(context.themeUtil().translations.formatMode(
+                message.content,
+                formatNick(message.sender, false)
+        ));
     }
 
     private void onBindJoin(@NonNull MessageViewHolder holder, @NonNull Message message) {
@@ -177,35 +188,60 @@ public class ChatMessageRenderer {
 
     private void onBindQuit(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(context.themeUtil().translations.formatQuit(
-                formatNick(message.sender),
-                message.content
-        ));
+        if (message.content.isEmpty())
+            holder.content.setText(context.themeUtil().translations.formatQuit(
+                    formatNick(message.sender)
+            ));
+        else
+            holder.content.setText(context.themeUtil().translations.formatQuit(
+                    formatNick(message.sender),
+                    message.content
+            ));
     }
 
     private void onBindKick(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(message.toString());
+        if (message.content.contains(" "))
+            holder.content.setText(context.themeUtil().translations.formatKick(
+                    formatNick(message.sender),
+                    message.content.substring(0, message.content.indexOf(" ")),
+                    message.content.substring(message.content.indexOf(" ") + 1)
+            ));
+        else
+            holder.content.setText(context.themeUtil().translations.formatKick(
+                    formatNick(message.sender),
+                    message.content
+            ));
     }
 
     private void onBindKill(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(message.toString());
+        if (message.content.contains(" "))
+            holder.content.setText(context.themeUtil().translations.formatKill(
+                    formatNick(message.sender),
+                    message.content.substring(0, message.content.indexOf(" ")),
+                    message.content.substring(message.content.indexOf(" ") + 1)
+            ));
+        else
+            holder.content.setText(context.themeUtil().translations.formatKill(
+                    formatNick(message.sender),
+                    message.content
+            ));
     }
 
     private void onBindServer(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(message.toString());
+        holder.content.setText(message.content);
     }
 
     private void onBindInfo(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(message.toString());
+        holder.content.setText(message.content);
     }
 
     private void onBindError(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(message.toString());
+        applyStyle(holder, errorStyle, highlightStyle, message.flags.Highlight);
+        holder.content.setText(message.content);
     }
 
     private void onBindDayChange(@NonNull MessageViewHolder holder, @NonNull Message message) {
@@ -216,8 +252,9 @@ public class ChatMessageRenderer {
     }
 
     private void onBindTopic(@NonNull MessageViewHolder holder, @NonNull Message message) {
+        System.out.println(message);
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        holder.content.setText(message.toString());
+        holder.content.setText(message.content);
     }
 
     private void onBindNetsplitJoin(@NonNull MessageViewHolder holder, @NonNull Message message) {

@@ -64,7 +64,8 @@
     <attr name="colorForeground" format="color" />
     <attr name="colorForegroundHighlight" format="color" />
     <attr name="colorForegroundSecondary" format="color" />
-    <attr name="colorForegroundAction" />
+    <attr name="colorForegroundAction" format="color" />
+    <attr name="colorForegroundError" format="color" />
 
     <attr name="colorAccentFocus" format="color" />
     <attr name="colorDivider" format="color" />

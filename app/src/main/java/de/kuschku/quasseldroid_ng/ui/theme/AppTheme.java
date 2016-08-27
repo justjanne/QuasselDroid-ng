@@ -30,8 +30,6 @@ import de.kuschku.quasseldroid_ng.R;
 public enum AppTheme {
     QUASSEL_LIGHT(R.style.Quassel_Light),
     QUASSEL_DARK(R.style.Quassel_Dark),
-    MATERIAL_DARK(R.style.Material_Dark),
-    MATERIAL_LIGHT(R.style.Material_Light),
     SOLARIZED_LIGHT(R.style.Solarized_Light),
     SOLARIZED_DARK(R.style.Solarized_Dark);
 
@@ -49,10 +47,6 @@ public enum AppTheme {
     public static AppTheme themeFromString(@Nullable String s) {
         if (s == null) s = "";
         switch (s) {
-            case "MATERIAL_DARK":
-                return MATERIAL_DARK;
-            case "MATERIAL_LIGHT":
-                return MATERIAL_LIGHT;
             case "QUASSEL_DARK":
                 return QUASSEL_DARK;
             case "SOLARIZED_LIGHT":

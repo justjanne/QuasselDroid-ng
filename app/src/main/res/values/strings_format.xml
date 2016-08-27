@@ -34,7 +34,8 @@
     <string name="messageQuit">%1$s has quit</string>
     <string name="messageQuitExtra">%1$s has quit (%2$s)</string>
 
-    <string name="messageKill">%1$s was killed: %2$s</string>
+    <string name="messageKill">%1$s has killed %2$s</string>
+    <string name="messageKillExtra">%1$s has killed %2$s: %3$s</string>
 
     <string name="messageKick">%1$s has kicked %2$s from %3$s</string>
     <string name="messageKickExtra">%1$s has kicked %2$s from %3$s: %4$s</string>
@@ -47,4 +48,6 @@
     <string name="messageDayChange">{ Day changed to %1$s }</string>
 
     <string name="messageAction">* %1$s %2$s</string>
+
+    <string name="messageTopic">%1$s has changed topic for %2$s to: "%3$s"</string>
 </resources>

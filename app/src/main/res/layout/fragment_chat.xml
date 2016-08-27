@@ -34,11 +34,32 @@
     app:umanoShadowHeight="4dp"
     tools:showIn="@layout/activity_chat">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/messages"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/messages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/scroll_down"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_scroll_down_dark"
+            app:fabSize="mini"
+            android:layout_marginRight="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
+            app:backgroundTint="#8A808080"
+            app:elevation="0dip"
+            app:pressedTranslationZ="0dip"
+            android:layout_gravity="end|bottom" />
+
+    </FrameLayout>
 
     <include layout="@layout/widget_slider" />
 

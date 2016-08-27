@@ -23,6 +23,7 @@ package de.kuschku.quasseldroid_ng.ui.chat.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -61,6 +62,9 @@ public class ChatFragment extends BoundFragment {
     @Bind(R.id.sliding_layout)
     SlidingUpPanelLayout sliderMain;
 
+    @Bind(R.id.scroll_down)
+    FloatingActionButton scrollDown;
+
     private MessageAdapter messageAdapter;
     private LinearLayoutManager layoutManager;
     private boolean loading = false;
@@ -91,6 +95,14 @@ public class ChatFragment extends BoundFragment {
                     backlogManager.requestMoreBacklog(client.backlogManager().open(), 20);
                     loading = true;
                 }
+                scrollDown.setVisibility(recyclerView.canScrollVertically(1) ? View.VISIBLE : View.GONE);
+            }
+        });
+
+        scrollDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                messages.smoothScrollToPosition(0);
             }
         });
 

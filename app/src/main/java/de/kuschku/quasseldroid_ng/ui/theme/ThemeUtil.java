@@ -564,6 +564,9 @@ public class ThemeUtil {
         @AutoString(R.string.messageKill)
         public String messageKill;
 
+        @AutoString(R.string.messageKillExtra)
+        public String messageKillExtra;
+
         @AutoString(R.string.messageKick)
         public String messageKick;
 
@@ -584,6 +587,9 @@ public class ThemeUtil {
 
         @AutoString(R.string.messageAction)
         public String messageAction;
+
+        @AutoString(R.string.messageTopic)
+        public String messageTopic;
 
         @AutoString(R.string.labelStatusBuffer)
         public String titleStatusBuffer;
@@ -647,8 +653,13 @@ public class ThemeUtil {
         }
 
         @NonNull
-        public CharSequence formatKill(@NonNull CharSequence user, @NonNull CharSequence channel) {
-            return SpanFormatter.format(messageKill, user, channel);
+        public CharSequence formatKill(@NonNull CharSequence user, @NonNull CharSequence subject) {
+            return SpanFormatter.format(messageKill, user, subject);
+        }
+
+        @NonNull
+        public CharSequence formatKill(@NonNull CharSequence user, @NonNull CharSequence subject, @Nullable CharSequence reason) {
+            return SpanFormatter.format(messageKillExtra, user, subject, reason);
         }
 
         @NonNull
@@ -693,6 +704,11 @@ public class ThemeUtil {
         @NonNull
         public CharSequence formatPlain(@NonNull CharSequence nick, @NonNull CharSequence message) {
             return SpanFormatter.format(messagePlain, nick, message);
+        }
+
+        @NonNull
+        public CharSequence formatTopic(@NonNull CharSequence nick, @NonNull CharSequence channel, @NonNull CharSequence message) {
+            return SpanFormatter.format(messageTopic, nick, channel, message);
         }
     }
 
@@ -746,6 +762,10 @@ public class ThemeUtil {
         @AutoColor(R.attr.colorForegroundAction)
         @ColorInt
         public int colorForegroundAction;
+
+        @AutoColor(R.attr.colorForegroundError)
+        @ColorInt
+        public int colorForegroundError;
 
         @AutoColor(R.attr.colorBackground)
         @ColorInt
