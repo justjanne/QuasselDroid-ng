@@ -96,7 +96,7 @@ public class IrcUserSerializer implements ObjectSerializer<IrcUser> {
                 (String) map.get("suserHost").data,
                 (String) map.get("nick").data,
                 (String) map.get("realName").data,
-                (String) map.get("account").data,
+                (map.get("account") == null) ? "": (String) map.get("account").data,
                 (String) map.get("awayMessage").data,
                 (DateTime) map.get("loginTime").data,
                 (boolean) map.get("encrypted").data,

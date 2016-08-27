@@ -364,16 +364,21 @@ public class Client extends AClient {
             }
         }
 
-        // Execute cached sync requests
-        if (bufferedSyncs.size() > 0) {
-            String key = hashName(className, objectName);
-            if (bufferedSyncs.containsKey(key)) {
-                Log.d("libquassel", "Unqueueing syncs: " + className + ":" + objectName);
-                List<SyncFunction> functions = bufferedSyncs.get(key);
-                for (SyncFunction function : functions)
-                    provider.handle(function);
-                bufferedSyncs.remove(key);
+        synchronized (bufferedSyncs) {
+            if (r > 0) r--;
+            else throw new RuntimeException();
+            // Execute cached sync requests
+            if (bufferedSyncs.size() > 0) {
+                String key = hashName(className, objectName);
+                if (bufferedSyncs.containsKey(key)) {
+                    Log.d("libquassel", "Unqueueing syncs: " + className + ":" + objectName);
+                    List<SyncFunction> functions = bufferedSyncs.get(key);
+                    for (SyncFunction function : functions)
+                        provider.handle(function);
+                    bufferedSyncs.remove(key);
+                }
             }
+            r++;
         }
     }
 
@@ -445,10 +450,16 @@ public class Client extends AClient {
         if (connectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
             Log.d("libquassel", "Queueing sync: " + packedFunc);
         }
-        if (!bufferedSyncs.containsKey(key))
-            bufferedSyncs.put(key, new LinkedList<>());
-        bufferedSyncs.get(key).add(packedFunc);
-        Log.d("libquassel", "Queued syncs: " + bufferedSyncs.keySet());
+
+        synchronized (bufferedSyncs) {
+            if (r > 0) r--;
+            else throw new RuntimeException();
+            if (!bufferedSyncs.containsKey(key))
+                bufferedSyncs.put(key, new LinkedList<>());
+            bufferedSyncs.get(key).add(packedFunc);
+            Log.d("libquassel", "Queued syncs: " + bufferedSyncs.keySet());
+            r++;
+        }
     }
 
     public void bufferBuffer(QBufferViewConfig bufferViewConfig, int bufferId, int pos) {
@@ -481,4 +492,6 @@ public class Client extends AClient {
     public String coreId() {
         return coreId;
     }
+
+    private int r = 1;
 }

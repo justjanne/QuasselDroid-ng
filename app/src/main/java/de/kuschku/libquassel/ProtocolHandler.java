@@ -22,6 +22,7 @@
 package de.kuschku.libquassel;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
@@ -95,7 +96,9 @@ public class ProtocolHandler implements IProtocolHandler {
             final Object syncable = client.unsafe_getObjectByIdentifier(packedFunc.className, packedFunc.objectName);
 
             if (syncable == null) {
-                client.bufferSync(packedFunc);
+                Log.d("ProtocolHandler", String.format("Sync Failed: %s::%s(%s, %s)", packedFunc.className, packedFunc.methodName, packedFunc.objectName, packedFunc.params));
+                if (client.connectionStatus() == ConnectionChangeEvent.Status.INITIALIZING_DATA)
+                    client.bufferSync(packedFunc);
             } else {
                 if (syncable instanceof SyncableObject && !((SyncableObject) syncable).initialized()) {
                     client.initObject(packedFunc.className, packedFunc.objectName, (SyncableObject) syncable);

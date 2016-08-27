@@ -254,7 +254,6 @@ public class ChatMessageRenderer {
     }
 
     private void onBindTopic(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        System.out.println(message);
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.content);
     }

@@ -21,6 +21,7 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
+import android.databinding.ObservableField;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,7 +36,6 @@ import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import de.kuschku.libquassel.events.BufferChangeEvent;
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
@@ -51,15 +51,14 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
     private final Map<Integer, BufferViewHolder> bufferViewHolderMap = new WeakHashMap<>();
     private QBufferViewConfig config;
     private WeakReference<RecyclerView> recyclerView = new WeakReference<>(null);
-    private int selectedFrom;
-    private int selectedTo;
     private int open;
     private OnBufferClickListener bufferClickListener;
+    private ObservableField<Boolean> showAll = new ObservableField<>(false);
 
     private ElementCallback<QNetwork> callback = new ElementCallback<QNetwork>() {
         @Override
         public void notifyItemInserted(QNetwork network) {
-            NetworkItem networkItem = new NetworkItem(context, config, network);
+            NetworkItem networkItem = new NetworkItem(context, config, network, BufferViewConfigAdapter.this);
             itemMap.put(network, networkItem);
             items.add(networkItem);
         }
@@ -74,6 +73,18 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
             items.notifyItemChanged(items.indexOf(itemMap.get(network)));
         }
     };
+
+    public void notifyChildItemInserted(NetworkItem parentItem, int childPosition) {
+        super.notifyChildItemInserted(items.indexOf(parentItem), childPosition);
+    }
+
+    public void notifyChildItemRemoved(NetworkItem parentItem, int childPosition) {
+        super.notifyChildItemRemoved(items.indexOf(parentItem), childPosition);
+    }
+
+    public void notifyChildItemChanged(NetworkItem parentItem, int childPosition) {
+        super.notifyChildItemChanged(items.indexOf(parentItem), childPosition);
+    }
 
     private BufferViewConfigAdapter(AppContext context, ObservableSortedList<NetworkItem> items) {
         super(items);
@@ -192,7 +203,7 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
         items.clear();
         itemMap.clear();
         for (QNetwork network : config.networkList()) {
-            NetworkItem networkItem = new NetworkItem(context, config, network);
+            NetworkItem networkItem = new NetworkItem(context, config, network, this);
             itemMap.put(network, networkItem);
             items.add(networkItem);
         }
@@ -242,5 +253,13 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
                 return i;
         }
         return -1;
+    }
+
+    public ObservableField<Boolean> showAll() {
+        return showAll;
+    }
+
+    public void toggleShowAll() {
+        showAll.set(!showAll.get());
     }
 }

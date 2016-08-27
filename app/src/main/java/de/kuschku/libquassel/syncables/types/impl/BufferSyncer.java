@@ -35,6 +35,7 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.BufferSyncerSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.ABufferSyncer;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
@@ -123,6 +124,9 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
     public void _removeBuffer(int buffer) {
         assertNotNull(client);
 
+        for (QBufferViewConfig config : client.bufferViewManager().bufferViewConfigs()) {
+            config.deleteBuffer(buffer);
+        }
         markerLines.removeAt(markerLines.indexOfKey(buffer));
         lastSeenMsgs.removeAt(lastSeenMsgs.indexOfKey(buffer));
         client.bufferManager().removeBuffer(buffer);

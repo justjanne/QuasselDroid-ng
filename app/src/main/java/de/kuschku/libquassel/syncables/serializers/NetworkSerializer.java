@@ -27,6 +27,7 @@ import android.support.annotation.Nullable;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,7 @@ import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 public class NetworkSerializer implements ObjectSerializer<Network> {
     @NonNull
     private static final NetworkSerializer serializer = new NetworkSerializer();
+    public static final DateTime UNIX_EPOCH = new DateTime(0L);
 
     private NetworkSerializer() {
     }
@@ -106,27 +108,34 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
             ircUsers = new ArrayList<>(max);
             for (int i = 0; i < max; i++) {
                 ircUsers.add(new IrcUser(
-                        (String) users.get("server").data.get(i),
-                        (String) users.get("ircOperator").data.get(i),
-                        (boolean) users.get("away").data.get(i),
-                        (int) users.get("lastAwayMessage").data.get(i),
-                        (DateTime) users.get("idleTime").data.get(i),
-                        (String) users.get("whoisServiceReply").data.get(i),
-                        (String) users.get("suserHost").data.get(i),
-                        (String) users.get("nick").data.get(i),
-                        (String) users.get("realName").data.get(i),
-                        (String) users.get("account").data.get(i),
-                        (String) users.get("awayMessage").data.get(i),
-                        (DateTime) users.get("loginTime").data.get(i),
-                        (boolean) users.get("encrypted").data.get(i),
-                        (List<String>) users.get("channels").data.get(i),
-                        (String) users.get("host").data.get(i),
-                        (String) users.get("userModes").data.get(i),
-                        (String) users.get("user").data.get(i)
+                        getAtPosition(users, "server", i, ""),
+                        getAtPosition(users, "ircOperator", i, ""),
+                        getAtPosition(users, "away", i, false),
+                        getAtPosition(users, "lastAwayMessage", i, 0),
+                        getAtPosition(users, "idleTime", i, UNIX_EPOCH),
+                        getAtPosition(users, "whoisServiceReply", i, ""),
+                        getAtPosition(users, "suserHost", i, ""),
+                        getAtPosition(users, "nick", i, ""),
+                        getAtPosition(users, "realName", i, ""),
+                        getAtPosition(users, "account", i, ""),
+                        getAtPosition(users, "awayMessage", i, ""),
+                        getAtPosition(users, "loginTime", i, UNIX_EPOCH),
+                        getAtPosition(users, "encrypted", i, false),
+                        getAtPosition(users, "channels", i, Collections.emptyList()),
+                        getAtPosition(users, "host", i, ""),
+                        getAtPosition(users, "userModes", i, ""),
+                        getAtPosition(users, "user", i, "")
                 ));
             }
         }
         return ircUsers;
+    }
+
+    private <T> T getAtPosition(@NonNull Map<String, QVariant<List>> users, String field, int index, T or) {
+        if (users.containsKey(field) && users.get(field) != null && users.get(field).data != null && users.get(field).data.size() > index)
+            return (T) users.get(field).data.get(index);
+        else
+            return or;
     }
 
     @NonNull

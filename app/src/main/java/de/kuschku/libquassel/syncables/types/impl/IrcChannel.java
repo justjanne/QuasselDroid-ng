@@ -37,9 +37,12 @@ import java.util.Set;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
+import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
+import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.IrcChannelSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.AIrcChannel;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.irc.ModeUtils;
@@ -257,6 +260,7 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     @Override
     public void _setTopic(String topic) {
         this.topic = topic;
+        _update();
     }
 
     @Override
@@ -523,5 +527,16 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
         modes.addAll(B_channelModes.keySet());
         modes.addAll(A_channelModes.keySet());
         return modes;
+    }
+
+    @Override
+    public void _update() {
+        super._update();
+        ChannelBuffer buffer = client.bufferManager().channel(this);
+        if (buffer != null) {
+            for (QBufferViewConfig qBufferViewConfig : client.bufferViewManager().bufferViewConfigs()) {
+                qBufferViewConfig.bufferIds().notifyItemChanged(buffer.getInfo().id);
+            }
+        }
     }
 }

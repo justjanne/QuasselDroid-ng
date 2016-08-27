@@ -22,6 +22,7 @@
 package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +44,9 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     @NonNull
     private final ObservableList<Integer> buffers;
     @NonNull
-    private final ObservableSet<Integer> bufferIds;
+    private final ObservableSet<Integer> visibleBufferIds;
+    @NonNull
+    private final ObservableSet<Integer> allBufferIds;
     @NonNull
     private final ObservableSet<Integer> removedBuffers;
     @NonNull
@@ -67,8 +70,12 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
         this.buffers = new ObservableList<>(buffers);
         buffers.removeAll(removedBuffers);
         buffers.removeAll(temporarilyRemovedBuffers);
-        this.bufferIds = new ObservableSet<>();
-        bufferIds.addAll(buffers);
+        this.visibleBufferIds = new ObservableSet<>();
+        visibleBufferIds.addAll(buffers);
+        this.allBufferIds = new ObservableSet<>();
+        allBufferIds.addAll(buffers);
+        allBufferIds.addAll(removedBuffers);
+        allBufferIds.addAll(temporarilyRemovedBuffers);
         this.allowedBufferTypes = allowedBufferTypes;
         this.sortAlphabetically = sortAlphabetically;
         this.disableDecoration = disableDecoration;
@@ -145,7 +152,7 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
                 (networkId == 0 || (networkId == buffer.getInfo().networkId))
                 ) {
             int bufferid = buffer.getInfo().id;
-            if (bufferIds.contains(bufferid) && !temporarilyRemovedBuffers.contains(bufferid) && !removedBuffers.contains(bufferid))
+            if (visibleBufferIds.contains(bufferid) && !temporarilyRemovedBuffers.contains(bufferid) && !removedBuffers.contains(bufferid))
                 return DisplayType.ALWAYS;
             else if (temporarilyRemovedBuffers.contains(bufferid) && !removedBuffers.contains(bufferid))
                 return DisplayType.TEMP_HIDDEN;
@@ -247,7 +254,13 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     @NonNull
     @Override
     public ObservableSet<Integer> bufferIds() {
-        return bufferIds;
+        return visibleBufferIds;
+    }
+
+    @NonNull
+    @Override
+    public ObservableSet<Integer> allBufferIds() {
+        return allBufferIds;
     }
 
     @NonNull
@@ -284,6 +297,8 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
             temporarilyRemovedBuffers.remove(bufferId);
 
         buffers.add(pos, bufferId);
+        visibleBufferIds.add(bufferId);
+        allBufferIds.add(bufferId);
     }
 
     @Override
@@ -324,10 +339,9 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
 
     @Override
     public void _removeBuffer(int bufferId) {
-        int index;
-        if ((index = buffers.indexOf(bufferId)) != -1) {
-            buffers.remove(index);
-        }
+        visibleBufferIds.remove(bufferId);
+        if (buffers.contains(bufferId))
+            buffers.remove((Integer) bufferId);
 
         if (removedBuffers.contains(bufferId))
             removedBuffers.remove(bufferId);
@@ -343,6 +357,7 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
 
     @Override
     public void _removeBufferPermanently(int bufferId) {
+        visibleBufferIds.remove(bufferId);
         if (buffers.contains(bufferId))
             buffers.remove((Integer) bufferId);
 
@@ -378,6 +393,15 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     }
 
     @Override
+    public void deleteBuffer(int bufferId) {
+        visibleBufferIds.remove(bufferId);
+        allBufferIds.remove(bufferId);
+        buffers.remove(buffers.indexOf(bufferId));
+        temporarilyRemovedBuffers.remove(bufferId);
+        removedBuffers.remove(bufferId);
+    }
+
+    @Override
     public void _update(@NonNull Map<String, QVariant> from) {
         _update(BufferViewConfigSerializer.get().fromLegacy(from));
     }
@@ -396,8 +420,8 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
         this.hideInactiveNetworks = from.hideInactiveNetworks;
         this.buffers.clear();
         this.buffers.addAll(from.buffers);
-        this.bufferIds.retainAll(from.bufferIds);
-        this.bufferIds.addAll(from.bufferIds);
+        this.visibleBufferIds.retainAll(from.visibleBufferIds);
+        this.visibleBufferIds.addAll(from.visibleBufferIds);
         this.removedBuffers.retainAll(from.removedBuffers);
         this.removedBuffers.addAll(from.removedBuffers);
         this.temporarilyRemovedBuffers.retainAll(from.temporarilyRemovedBuffers);

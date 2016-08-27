@@ -21,6 +21,9 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
+import android.databinding.Observable;
+import android.util.Log;
+
 import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 
 import java.util.List;
@@ -32,10 +35,15 @@ import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.irc.IrcCaseMapper;
 import de.kuschku.util.observables.callbacks.ElementCallback;
+import de.kuschku.util.observables.callbacks.UICallback;
+import de.kuschku.util.observables.lists.ObservableSet;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public class NetworkItem implements ParentListItem {
+    private final AppContext context;
+    private final QBufferViewConfig config;
     private final QNetwork network;
+    private final BufferViewConfigAdapter bufferViewConfigAdapter;
     private final ObservableSortedList<Buffer> buffers = new ObservableSortedList<>(Buffer.class, new ObservableSortedList.ItemComparator<Buffer>() {
         @Override
         public int compare(Buffer o1, Buffer o2) {
@@ -69,32 +77,106 @@ public class NetworkItem implements ParentListItem {
             return item1.getInfo().id == item2.getInfo().id;
         }
     });
-
-    public NetworkItem(AppContext context, QBufferViewConfig config, QNetwork network) {
-        this.network = network;
-        for (int id : config.bufferList()) {
-            Buffer buffer = context.client().bufferManager().buffer(id);
-            if (context.bufferDisplayTypes().contains(config.mayDisplay(buffer)) && buffer.getInfo().networkId == network.networkId())
+    private ElementCallback<Integer> callback = new ElementCallback<Integer>() {
+        @Override
+        public void notifyItemInserted(Integer element) {
+            Buffer buffer = context.client().bufferManager().buffer(element);
+            if (buffer != null && buffer.getInfo().networkId == network.networkId()) {
                 buffers.add(buffer);
+            }
         }
-        config.bufferIds().addCallback(new ElementCallback<Integer>() {
-            @Override
-            public void notifyItemInserted(Integer id) {
-                Buffer buffer = context.client().bufferManager().buffer(id);
-                if (context.bufferDisplayTypes().contains(config.mayDisplay(buffer)) && buffer.getInfo().networkId == network.networkId())
-                    buffers.add(buffer);
-            }
 
-            @Override
-            public void notifyItemRemoved(Integer id) {
-                buffers.remove(context.client().bufferManager().buffer(id));
+        @Override
+        public void notifyItemRemoved(Integer element) {
+            Buffer buffer = context.client().bufferManager().buffer(element);
+            if (buffer != null && buffer.getInfo().networkId == network.networkId()) {
+                buffers.remove(buffer);
             }
+        }
 
+        @Override
+        public void notifyItemChanged(Integer element) {
+            Buffer buffer = context.client().bufferManager().buffer(element);
+            if (buffer != null && buffer.getInfo().networkId == network.networkId()) {
+                buffers.notifyItemChanged(buffers.indexOf(buffer));
+            }
+        }
+    };
+    private ObservableSet<Integer> backingSet;
+
+    public NetworkItem(AppContext context, QBufferViewConfig config, QNetwork network, BufferViewConfigAdapter bufferViewConfigAdapter) {
+        this.context = context;
+        this.config = config;
+        this.network = network;
+        this.bufferViewConfigAdapter = bufferViewConfigAdapter;
+        bufferViewConfigAdapter.showAll().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
-            public void notifyItemChanged(Integer id) {
-                buffers.notifyItemChanged(buffers.indexOf(context.client().bufferManager().buffer(id)));
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                setShowAll(bufferViewConfigAdapter.showAll().get());
             }
         });
+        setShowAll(bufferViewConfigAdapter.showAll().get());
+        this.buffers.addCallback(new UICallback() {
+            @Override
+            public void notifyItemInserted(int position) {
+                bufferViewConfigAdapter.notifyChildItemInserted(NetworkItem.this, position);
+            }
+
+            @Override
+            public void notifyItemChanged(int position) {
+                bufferViewConfigAdapter.notifyChildItemChanged(NetworkItem.this, position);
+            }
+
+            @Override
+            public void notifyItemRemoved(int position) {
+                bufferViewConfigAdapter.notifyChildItemRemoved(NetworkItem.this, position);
+            }
+
+            @Override
+            public void notifyItemMoved(int from, int to) {
+                this.notifyItemRemoved(from);
+                this.notifyItemInserted(to);
+            }
+
+            @Override
+            public void notifyItemRangeInserted(int position, int count) {
+                for (int i = position; i < position + count; i++) {
+                    this.notifyItemInserted(i);
+                }
+            }
+
+            @Override
+            public void notifyItemRangeChanged(int position, int count) {
+                for (int i = position; i < position + count; i++) {
+                    this.notifyItemChanged(i);
+                }
+            }
+
+            @Override
+            public void notifyItemRangeRemoved(int position, int count) {
+                for (int i = position; i < position + count; i++) {
+                    this.notifyItemRemoved(position);
+                }
+            }
+        });
+    }
+
+    public void populateList(ObservableSet<Integer> backingSet) {
+        if (this.backingSet != null)
+            this.backingSet.removeCallback(callback);
+        buffers.clear();
+
+        backingSet.addCallback(callback);
+        for (int id : backingSet) {
+            Buffer buffer = context.client().bufferManager().buffer(id);
+            if (buffer != null && buffer.getInfo().networkId == network.networkId())
+                buffers.add(buffer);
+        }
+        this.backingSet = backingSet;
+    }
+
+    public void setShowAll(boolean showAll) {
+        populateList(showAll ? config.allBufferIds() : config.bufferIds());
     }
 
     @Override

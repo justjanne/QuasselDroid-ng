@@ -156,9 +156,14 @@ public interface QBufferViewConfig extends QObservable {
 
     ObservableSet<QNetwork> networkList();
 
+    void deleteBuffer(int bufferId);
+
     void updateNetworks();
 
     DisplayType mayDisplay(Buffer buffer);
+
+    @NonNull
+    ObservableSet<Integer> allBufferIds();
 
     enum DisplayType {
         NONE,

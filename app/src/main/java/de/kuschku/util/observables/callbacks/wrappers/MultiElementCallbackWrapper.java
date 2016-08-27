@@ -65,14 +65,14 @@ public class MultiElementCallbackWrapper<T> implements ElementCallback<T> {
     @Override
     public void notifyItemRemoved(@Nullable T element) {
         for (ElementCallback<T> callback : callbacks) {
-            callback.notifyItemInserted(element);
+            callback.notifyItemRemoved(element);
         }
     }
 
     @Override
     public void notifyItemChanged(@Nullable T element) {
         for (ElementCallback<T> callback : callbacks) {
-            callback.notifyItemInserted(element);
+            callback.notifyItemChanged(element);
         }
     }
 }

@@ -154,6 +154,18 @@ public class MainActivity extends BoundActivity {
         chatList.setAdapter(chatListAdapter);
 
         chatListToolbar.inflateMenu(R.menu.chatlist);
+        chatListToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_show_all: {
+                        Log.d("QD-NG", "Toggling Show/Hide All");
+                        chatListAdapter.toggleShowAll();
+                    } break;
+                }
+                return false;
+            }
+        });
 
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawerLayout != null) {
@@ -347,6 +359,11 @@ public class MainActivity extends BoundActivity {
         }
     }
 
+    protected void reconnect() {
+        binder.stopBackgroundThread();
+        connectToServer(manager.account(context.settings().preferenceLastAccount.get()));
+    }
+
     @Override
     protected void onConnectToThread(@Nullable ClientBackgroundThread thread) {
         super.onConnectToThread(thread);
@@ -448,7 +465,10 @@ public class MainActivity extends BoundActivity {
         new MaterialDialog.Builder(this)
                 .content(context.themeUtil().translations.warningCertificate + "\n" + CertificateUtils.certificateToFingerprint(event.certificate, ""))
                 .title("Unknown Certificate")
-                .onPositive((dialog, which) -> new SQLiteCertificateManager(this).addCertificate(event.certificate, event.address))
+                .onPositive((dialog, which) -> {
+                    new SQLiteCertificateManager(this).addCertificate(event.certificate, event.address);
+                    reconnect();
+                })
                 .negativeColor(context.themeUtil().res.colorForeground)
                 .positiveText("Yes")
                 .negativeText("No")
