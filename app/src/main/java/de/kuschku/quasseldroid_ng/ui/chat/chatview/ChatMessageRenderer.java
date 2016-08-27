@@ -149,7 +149,9 @@ public class ChatMessageRenderer {
 
     private void onBindNick(@NonNull MessageViewHolder holder, @NonNull Message message) {
         applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
-        if (message.flags.Self)
+        // FIXME: Ugly hack to get around the issue that quasselcore doesn’t set the Self flag
+        boolean self = message.flags.Self || message.sender.equals(message.content);
+        if (self)
             holder.content.setText(context.themeUtil().translations.formatNick(
                     formatNick(message.sender, false)
             ));
