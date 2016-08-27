@@ -79,3 +79,8 @@
 ## DBFlow                              ##
 #########################################
 -keep class * extends com.raizlabs.android.dbflow.config.DatabaseHolder { *; }
+
+#########################################
+## AppCompat SearchView                ##
+#########################################
+-keep class android.support.v7.widget.SearchView { *; }

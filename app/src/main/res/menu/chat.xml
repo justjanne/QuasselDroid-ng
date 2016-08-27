@@ -23,15 +23,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_hide_events"
-        android:icon="?attr/iconFilter"
-        android:title="@string/labelHideEvents"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_search"
         android:title="@string/label_search"
         app:showAsAction="never|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView" />
+    <item
+        android:id="@+id/action_hide_events"
+        android:icon="?attr/iconFilter"
+        android:title="@string/labelHideEvents"
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_settings"
         android:title="@string/label_settings"

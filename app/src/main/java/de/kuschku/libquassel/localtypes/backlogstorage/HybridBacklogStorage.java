@@ -128,26 +128,40 @@ public class HybridBacklogStorage implements BacklogStorage {
 
     @Override
     public void insertMessages(@NonNull Message... messages) {
-        for (Message message : messages) {
-            client.unbufferBuffer(message.bufferInfo);
-            synchronized (backlogs) {
-                if (backlogs.get(message.bufferInfo.id) != null)
-                    backlogs.get(message.bufferInfo.id).add(message);
+        FlowManager.getDatabase(ConnectedDatabase.class).executeTransaction(new ITransaction() {
+            @Override
+            public void execute(DatabaseWrapper databaseWrapper) {
+                for (Message message : messages) {
+                    client.unbufferBuffer(message.bufferInfo);
+                    synchronized (backlogs) {
+                        if (backlogs.get(message.bufferInfo.id) != null)
+                            backlogs.get(message.bufferInfo.id).add(message);
+                        message.save();
+                        message.bufferInfo.save();
+                    }
+                    updateLatest(message);
+                }
             }
-            updateLatest(message);
-        }
+        });
     }
 
     @Override
     public void insertMessages(List<Message> messages) {
-        for (Message message : messages) {
-            client.unbufferBuffer(message.bufferInfo);
-            synchronized (backlogs) {
-                if (backlogs.get(message.bufferInfo.id) != null)
-                    backlogs.get(message.bufferInfo.id).add(message);
+        FlowManager.getDatabase(ConnectedDatabase.class).executeTransaction(new ITransaction() {
+            @Override
+            public void execute(DatabaseWrapper databaseWrapper) {
+                for (Message message : messages) {
+                    client.unbufferBuffer(message.bufferInfo);
+                    synchronized (backlogs) {
+                        if (backlogs.get(message.bufferInfo.id) != null)
+                            backlogs.get(message.bufferInfo.id).add(message);
+                        message.save();
+                        message.bufferInfo.save();
+                    }
+                    updateLatest(message);
+                }
             }
-            updateLatest(message);
-        }
+        });
     }
 
     public void setClient(Client client) {
@@ -167,8 +181,10 @@ public class HybridBacklogStorage implements BacklogStorage {
 
     @Override
     public void clear(@IntRange(from = 0) int bufferid) {
-        Log.w("libquassel", String.format("Backlog gap detected, clearing backlog for buffer %d", bufferid));
-        SQLite.delete().from(Message.class).where(Message_Table.bufferInfo_id.eq(bufferid)).execute();
+        synchronized (backlogs) {
+            Log.w("libquassel", String.format("Backlog gap detected, clearing backlog for buffer %d", bufferid));
+            SQLite.delete().from(Message.class).where(Message_Table.bufferInfo_id.eq(bufferid)).execute();
+        }
     }
 
     private void ensureExisting(@IntRange(from = -1) int bufferId) {
