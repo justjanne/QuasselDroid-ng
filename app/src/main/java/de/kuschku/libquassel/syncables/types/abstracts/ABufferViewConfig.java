@@ -21,10 +21,13 @@
 
 package de.kuschku.libquassel.syncables.types.abstracts;
 
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 
 public abstract class ABufferViewConfig<T extends ABufferViewConfig<T>> extends SyncableObject<T> implements QBufferViewConfig {
+    static final String intName = QMetaType.Type.Int.getSerializableName();
+
     @Override
     public void setNetworkId(int networkId) {
         _setNetworkId(networkId);
@@ -95,7 +98,7 @@ public abstract class ABufferViewConfig<T extends ABufferViewConfig<T>> extends 
     @Override
     public void requestAddBuffer(int bufferId, int pos) {
         _requestAddBuffer(bufferId, pos);
-        syncVar("requestAddBuffer", bufferId, pos);
+        sync("requestAddBuffer", new String[] { "BufferId", intName }, new Object[] { bufferId, pos });
     }
 
     @Override
@@ -107,7 +110,7 @@ public abstract class ABufferViewConfig<T extends ABufferViewConfig<T>> extends 
     @Override
     public void requestMoveBuffer(int bufferId, int pos) {
         _requestMoveBuffer(bufferId, pos);
-        syncVar("requestMoveBuffer", bufferId, pos);
+        sync("requestMoveBuffer", new String[] { "BufferId", intName }, new Object[] { bufferId, pos });
     }
 
     @Override
@@ -119,18 +122,18 @@ public abstract class ABufferViewConfig<T extends ABufferViewConfig<T>> extends 
     @Override
     public void requestRemoveBuffer(int bufferId) {
         _requestRemoveBuffer(bufferId);
-        syncVar("requestRemoveBuffer", bufferId);
+        sync("requestRemoveBuffer", new String[] { "BufferId" }, new Object[] { bufferId });
     }
 
     @Override
     public void removeBufferPermanently(int bufferId) {
         _removeBufferPermanently(bufferId);
-        syncVar("removeBufferPermanently", bufferId);
+        sync("removeBufferPermanently", new String[] { "BufferId" }, new Object[] { bufferId });
     }
 
     @Override
     public void requestRemoveBufferPermanently(int bufferId) {
         _requestRemoveBufferPermanently(bufferId);
-        syncVar("requestRemoveBufferPermanently", bufferId);
+        sync("requestRemoveBufferPermanently", new String[] { "BufferId" }, new Object[] { bufferId });
     }
 }

@@ -22,7 +22,9 @@
 package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +32,7 @@ import java.util.Map;
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
+import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.BufferViewConfigSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.ABufferViewConfig;
@@ -141,6 +144,41 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
         } else {
             networkList.retainAll(Collections.singleton(client.networkManager().network(this.networkId)));
             networkList.add(client.networkManager().network(this.networkId));
+        }
+    }
+
+    @Override
+    public void checkAddBuffer(int id) {
+        if (!allBufferIds.contains(id)) {
+            Log.w("DEBUG", "buffer " + id + " needs to be added to config " + bufferViewName);
+            Buffer buffer1 = client.bufferManager().buffer(id);
+            if (addNewBuffersAutomatically && buffer1 != null) {
+                BufferInfo info = buffer1.getInfo();
+                int pos;
+                if (!sortAlphabetically) {
+                    pos = visibleBufferIds.size();
+                } else {
+                    List<String> infos = new ArrayList<>();
+                    for (int bufferId : bufferList()) {
+                        Buffer buffer = client.bufferManager().buffer(bufferId);
+                        if (buffer == null)
+                            Log.e("DEBUG", "Buffer is null: " + bufferId + " while adding buffer " + info);
+                        BufferInfo info1 = buffer.getInfo();
+                        if (info1.networkId == info.networkId)
+                            infos.add(info1.name);
+                    }
+                    infos.add(info.name);
+                    Collections.sort(infos);
+                    pos = infos.indexOf(info.name);
+                }
+                requestAddBuffer(info.id, pos);
+                Log.w("DEBUG", "adding buffer: " + id);
+            } else {
+                requestRemoveBufferPermanently(id);
+                Log.w("DEBUG", "removing buffer permanently: " + id);
+            }
+        }  else {
+            Log.w("DEBUG", "Buffer already exists: " + id);
         }
     }
 
@@ -262,6 +300,13 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
         return allBufferIds;
     }
 
+    @Override
+    public void checkAddBuffers() {
+        for (int bufferId : client.bufferManager().bufferIds()) {
+            checkAddBuffer(bufferId);
+        }
+    }
+
     @NonNull
     @Override
     public ObservableSet<Integer> removedBuffers() {
@@ -378,6 +423,7 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
         super.init(objectName, provider, client);
         client.bufferViewManager()._addBufferViewConfig(this);
         updateNetworks();
+        checkAddBuffers();
         _update();
     }
 

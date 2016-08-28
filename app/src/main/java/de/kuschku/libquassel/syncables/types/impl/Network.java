@@ -779,7 +779,7 @@ public class Network extends ANetwork<Network> implements Observer {
     @Override
     public void _update() {
         super._update();
-        if (client != null && client.connectionStatus() != ConnectionChangeEvent.Status.INITIALIZING_DATA) {
+        if (client != null && client.connectionStatus() != ConnectionChangeEvent.Status.INITIALIZING_DATA && client.bufferViewManager() != null) {
             StatusBuffer buffer = client.bufferManager().network(networkInfo.networkId());
             if (buffer != null) {
                 buffer.updateStatus();

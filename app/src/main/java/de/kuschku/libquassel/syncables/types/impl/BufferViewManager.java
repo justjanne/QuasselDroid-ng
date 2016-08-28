@@ -22,6 +22,7 @@
 package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ import java.util.Set;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
+import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.ABufferViewManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
@@ -102,6 +104,14 @@ public class BufferViewManager extends ABufferViewManager<BufferViewManager> {
     @Override
     public void _requestDeleteBufferViews(List<Integer> bufferViews) {
         // Do nothing, we’re on the client – the server will receive the sync just as expected
+    }
+
+    @Override
+    public void checkForNewBuffers(int bufferId) {
+        Log.w("DEBUG", "Checking if buffer needs to be added somewhere: " + bufferId + ": " + client.bufferManager().buffer(bufferId));
+        for (QBufferViewConfig config : bufferViewConfigs()) {
+            config.checkAddBuffer(bufferId);
+        }
     }
 
     @Override

@@ -78,6 +78,7 @@ public class BacklogFilter implements UICallback {
     }
 
     private void updateDayChangeMessages() {
+        /*
         LocalDate date = null;
         Message lastMessage = null;
         for (Message message : filtered) {
@@ -130,6 +131,7 @@ public class BacklogFilter implements UICallback {
                     ""
             )));
         }
+        */
     }
 
     private boolean filterItem(@NonNull Message message) {

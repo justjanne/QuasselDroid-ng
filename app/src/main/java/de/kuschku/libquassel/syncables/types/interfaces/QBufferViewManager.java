@@ -25,6 +25,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.Synced;
 
 public interface QBufferViewManager extends QObservable {
@@ -71,4 +72,6 @@ public interface QBufferViewManager extends QObservable {
     void requestDeleteBufferViews(final List<Integer> bufferViews);
 
     void _requestDeleteBufferViews(final List<Integer> bufferViews);
+
+    void checkForNewBuffers(int bufferId);
 }

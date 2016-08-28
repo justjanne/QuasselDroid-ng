@@ -40,6 +40,7 @@ import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
 import de.kuschku.libquassel.localtypes.buffers.StatusBuffer;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
+import de.kuschku.libquassel.syncables.types.impl.BufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
@@ -108,6 +109,9 @@ public class BufferManager {
         Buffer buffer = Buffers.fromType(info, client);
         assertNotNull(buffer);
         createBuffer(buffer);
+        if (client.connectionStatus() != ConnectionChangeEvent.Status.INITIALIZING_DATA) {
+            client.bufferViewManager().checkForNewBuffers(info.id);
+        }
     }
 
     public boolean exists(@NonNull BufferInfo info) {
