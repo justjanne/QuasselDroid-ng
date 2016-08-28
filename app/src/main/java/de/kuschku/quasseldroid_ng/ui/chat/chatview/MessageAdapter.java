@@ -53,8 +53,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     private final UICallback callback;
     @NonNull
     private IObservableList<UICallback, Message> messageList = emptyList();
+    @NonNull
+    private AppContext context;
 
     public MessageAdapter(@NonNull Context ctx, @NonNull AppContext context, @Nullable AutoScroller scroller) {
+        this.context = context;
         this.inflater = LayoutInflater.from(ctx);
         this.renderer = new ChatMessageRenderer(context);
         this.callback = new AdapterUICallbackWrapper(this, scroller);
@@ -75,7 +78,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     @NonNull
     @Override
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MessageViewHolder(inflater.inflate(R.layout.widget_chatmessage, parent, false));
+        boolean highlightFlag = viewType % 2 == 1;
+        Message.Type actualType = Message.Type.fromId(viewType >> 1);
+        return new MessageViewHolder(context, inflater.inflate(renderer.getLayoutRes(actualType), parent, false), highlightFlag);
     }
 
     @Override
@@ -84,6 +89,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         assertNotNull(msg);
 
         renderer.onBind(holder, msg);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        Message message = getItem(position);
+        Message.Type type = message.type;
+        int highlightFlag = message.flags.Highlight ? 1 : 0;
+        return type.value << 1 | highlightFlag;
     }
 
     @Override

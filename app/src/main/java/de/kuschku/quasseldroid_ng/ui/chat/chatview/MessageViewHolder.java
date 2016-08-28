@@ -31,6 +31,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.quasseldroid_ng.R;
+import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 
 @UiThread
 public class MessageViewHolder extends RecyclerView.ViewHolder {
@@ -44,9 +45,15 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.content)
     TextView content;
 
-    public MessageViewHolder(@NonNull View itemView) {
+    public MessageViewHolder(@NonNull AppContext context, @NonNull View itemView, boolean highlightFlag) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         content.setMovementMethod(LinkMovementMethod.getInstance());
+
+        if (highlightFlag) {
+            itemView.setBackgroundColor(context.themeUtil().res.colorBackgroundHighlight);
+            content.setTextColor(context.themeUtil().res.colorForegroundHighlight);
+            time.setTextColor(context.themeUtil().res.colorForegroundHighlight);
+        }
     }
 }

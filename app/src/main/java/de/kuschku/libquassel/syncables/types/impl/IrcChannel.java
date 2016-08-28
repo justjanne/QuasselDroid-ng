@@ -261,6 +261,7 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     public void _setTopic(String topic) {
         this.topic = topic;
         _update();
+        updateDisplay();
     }
 
     @Override
@@ -532,6 +533,9 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     @Override
     public void _update() {
         super._update();
+    }
+
+    private void updateDisplay() {
         if (client.connectionStatus() != ConnectionChangeEvent.Status.INITIALIZING_DATA) {
             ChannelBuffer buffer = client.bufferManager().channel(this);
             if (buffer != null) {

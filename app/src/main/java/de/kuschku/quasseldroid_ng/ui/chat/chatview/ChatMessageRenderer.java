@@ -21,13 +21,14 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat.chatview;
 
-import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.message.Message;
+import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.irc.IrcUserUtils;
 import de.kuschku.util.irc.format.IrcFormatHelper;
@@ -40,11 +41,6 @@ public class ChatMessageRenderer {
     @NonNull
     private final AppContext context;
     private IrcFormatHelper helper;
-    private MessageStyleContainer highlightStyle;
-    private MessageStyleContainer serverStyle;
-    private MessageStyleContainer errorStyle;
-    private MessageStyleContainer actionStyle;
-    private MessageStyleContainer plainStyle;
 
     public ChatMessageRenderer(@NonNull AppContext context) {
         this.context = context;
@@ -53,45 +49,6 @@ public class ChatMessageRenderer {
 
     public void setTheme(@NonNull AppContext context) {
         this.helper = new IrcFormatHelper(context);
-
-        this.highlightStyle = new MessageStyleContainer(
-                context.themeUtil().res.colorForegroundHighlight,
-                Typeface.NORMAL,
-                context.themeUtil().res.colorForegroundHighlight,
-                context.themeUtil().res.colorBackgroundHighlight
-        );
-        this.serverStyle = new MessageStyleContainer(
-                context.themeUtil().res.colorForegroundSecondary,
-                Typeface.ITALIC,
-                context.themeUtil().res.colorForegroundSecondary,
-                context.themeUtil().res.colorBackgroundSecondary
-        );
-        this.errorStyle = new MessageStyleContainer(
-                context.themeUtil().res.colorForegroundError,
-                Typeface.ITALIC,
-                context.themeUtil().res.colorForegroundSecondary,
-                context.themeUtil().res.colorBackgroundSecondary
-        );
-        this.plainStyle = new MessageStyleContainer(
-                context.themeUtil().res.colorForeground,
-                Typeface.NORMAL,
-                context.themeUtil().res.colorForegroundSecondary,
-                context.themeUtil().res.transparent
-        );
-        this.actionStyle = new MessageStyleContainer(
-                context.themeUtil().res.colorForegroundAction,
-                Typeface.ITALIC,
-                context.themeUtil().res.colorForegroundSecondary,
-                context.themeUtil().res.transparent
-        );
-    }
-
-    private void applyStyle(@NonNull MessageViewHolder holder, @NonNull MessageStyleContainer style, @NonNull MessageStyleContainer highlightStyle, boolean highlight) {
-        MessageStyleContainer container = highlight ? highlightStyle : style;
-        holder.content.setTextColor(container.textColor);
-        holder.content.setTypeface(null, container.fontstyle);
-        holder.time.setTextColor(container.timeColor);
-        holder.itemView.setBackgroundColor(container.bgColor);
     }
 
     @NonNull
@@ -120,7 +77,6 @@ public class ChatMessageRenderer {
     }
 
     private void onBindPlain(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, plainStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(
                 context.themeUtil().translations.formatPlain(
                         formatNick(message.sender, false),
@@ -130,7 +86,6 @@ public class ChatMessageRenderer {
     }
 
     private void onBindNotice(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(context.themeUtil().translations.formatAction(
                 formatNick(message.sender, false),
                 helper.formatIrcMessage(context.client(), message)
@@ -138,7 +93,6 @@ public class ChatMessageRenderer {
     }
 
     private void onBindAction(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, actionStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(
                 context.themeUtil().translations.formatAction(
                         formatNick(message.sender, false),
@@ -148,7 +102,6 @@ public class ChatMessageRenderer {
     }
 
     private void onBindNick(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         // FIXME: Ugly hack to get around the issue that quasselcore doesn’t set the Self flag
         boolean self = message.flags.Self || message.sender.equals(message.content);
         if (self)
@@ -164,7 +117,6 @@ public class ChatMessageRenderer {
 
     // TODO: Replace this with better display of mode changes
     private void onBindMode(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(context.themeUtil().translations.formatMode(
                 message.content,
                 formatNick(message.sender, false)
@@ -172,7 +124,6 @@ public class ChatMessageRenderer {
     }
 
     private void onBindJoin(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(context.themeUtil().translations.formatJoin(
                 formatNick(message.sender),
                 getBufferName(message)
@@ -180,7 +131,6 @@ public class ChatMessageRenderer {
     }
 
     private void onBindPart(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(context.themeUtil().translations.formatPart(
                 formatNick(message.sender),
                 getBufferName(message),
@@ -189,7 +139,6 @@ public class ChatMessageRenderer {
     }
 
     private void onBindQuit(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         if (message.content == null || message.content.isEmpty())
             holder.content.setText(context.themeUtil().translations.formatQuit(
                     formatNick(message.sender)
@@ -202,7 +151,6 @@ public class ChatMessageRenderer {
     }
 
     private void onBindKick(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         if (message.content.contains(" "))
             holder.content.setText(context.themeUtil().translations.formatKick(
                     formatNick(message.sender),
@@ -219,7 +167,6 @@ public class ChatMessageRenderer {
     }
 
     private void onBindKill(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         if (message.content.contains(" "))
             holder.content.setText(context.themeUtil().translations.formatKill(
                     formatNick(message.sender),
@@ -234,44 +181,36 @@ public class ChatMessageRenderer {
     }
 
     private void onBindServer(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.content);
     }
 
     private void onBindInfo(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.content);
     }
 
     private void onBindError(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, errorStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.content);
     }
 
     private void onBindDayChange(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(context.themeUtil().translations.formatDayChange(
                 context.themeUtil().formatter.getLongDateFormatter().print(message.time)
         ));
     }
 
     private void onBindTopic(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.content);
     }
 
     private void onBindNetsplitJoin(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.toString());
     }
 
     private void onBindNetsplitQuit(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.toString());
     }
 
     private void onBindInvite(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        applyStyle(holder, serverStyle, highlightStyle, message.flags.Highlight);
         holder.content.setText(message.toString());
     }
 
@@ -352,6 +291,34 @@ public class ChatMessageRenderer {
             this.fontstyle = fontstyle;
             this.timeColor = timeColor;
             this.bgColor = bgColor;
+        }
+    }
+
+    public @LayoutRes int getLayoutRes(Message.Type type) {
+        switch (type) {
+            default:
+            case Plain:
+                return R.layout.widget_chatmessage_plain;
+            case Action:
+                return R.layout.widget_chatmessage_action;
+            case Nick:
+            case Notice:
+            case Mode:
+            case Join:
+            case Part:
+            case Quit:
+            case Kick:
+            case Kill:
+            case Server:
+            case Info:
+            case DayChange:
+            case Topic:
+            case NetsplitJoin:
+            case NetsplitQuit:
+            case Invite:
+                return R.layout.widget_chatmessage_server;
+            case Error:
+                return R.layout.widget_chatmessage_error;
         }
     }
 }

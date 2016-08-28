@@ -529,6 +529,7 @@ public class Network extends ANetwork<Network> implements Observer {
     public void _setConnected(boolean isConnected) {
         this.isConnected = isConnected;
         _update();
+        updateDisplay();
     }
 
     @Override
@@ -723,6 +724,7 @@ public class Network extends ANetwork<Network> implements Observer {
         if (this.networkInfo != null)
             this.networkInfo.addObserver(this);
         _update();
+        updateDisplay();
     }
 
     @Override
@@ -779,6 +781,9 @@ public class Network extends ANetwork<Network> implements Observer {
     @Override
     public void _update() {
         super._update();
+    }
+
+    private void updateDisplay() {
         if (client != null && client.connectionStatus() != ConnectionChangeEvent.Status.INITIALIZING_DATA && client.bufferViewManager() != null) {
             StatusBuffer buffer = client.bufferManager().network(networkInfo.networkId());
             if (buffer != null) {

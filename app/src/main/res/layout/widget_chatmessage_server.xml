@@ -20,9 +20,11 @@
   ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/colorBackgroundSecondary"
     android:clickable="true"
     android:gravity="top"
     android:orientation="horizontal"
@@ -40,12 +42,15 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/message_horizontal"
         android:layout_marginRight="@dimen/message_horizontal"
-        android:typeface="monospace" />
+        android:textColor="?attr/colorForegroundSecondary"
+        android:typeface="monospace"/>
 
     <TextView
         android:id="@+id/content"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:clickable="true" />
+        android:clickable="true"
+        android:textColor="?attr/colorForegroundSecondary"
+        android:textStyle="italic"/>
 </LinearLayout>
