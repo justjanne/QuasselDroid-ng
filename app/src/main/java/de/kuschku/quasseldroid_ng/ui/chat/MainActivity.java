@@ -49,6 +49,9 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 
+import org.acra.ACRA;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -164,27 +167,6 @@ public class MainActivity extends BoundActivity {
                     }
                     break;
                     case R.id.action_manage_chat_lists: {
-                        chatListToolbar.startActionMode(new ActionMode.Callback() {
-                            @Override
-                            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-                                return false;
-                            }
-
-                            @Override
-                            public void onDestroyActionMode(ActionMode actionMode) {
-
-                            }
-                        });
                     }
                 }
                 return false;
@@ -209,9 +191,10 @@ public class MainActivity extends BoundActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (context.client() != null)
+        if (context.client() != null) {
             context.client().backlogManager().setOpen(-1);
-        context.client().backlogStorage().markBufferUnused(context.client().backlogManager().open());
+            context.client().backlogStorage().markBufferUnused(context.client().backlogManager().open());
+        }
     }
 
     @Override
@@ -315,6 +298,8 @@ public class MainActivity extends BoundActivity {
 
     public void onEventMainThread(GeneralErrorEvent event) {
         Toast.makeText(getApplication(), event.exception.getClass().getSimpleName() + ": " + event.debugInfo, Toast.LENGTH_LONG).show();
+        if (!(event.exception instanceof IOException))
+            ACRA.getErrorReporter().handleSilentException(event.exception);
     }
 
     public void onEventMainThread(BufferChangeEvent event) {

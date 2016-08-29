@@ -39,6 +39,7 @@ import java.util.Comparator;
 
 import de.kuschku.libquassel.localtypes.orm.ConnectedDatabase;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
+import de.kuschku.util.backports.Objects;
 import de.kuschku.util.observables.ContentComparable;
 
 @Table(database = ConnectedDatabase.class)
@@ -100,7 +101,7 @@ public class Message extends BaseModel implements ContentComparable<Message> {
 
     @Override
     public boolean areContentsTheSame(@Nullable Message message) {
-        return message != null && this.id == message.id && this.sender.equals(message.sender) && this.type == message.type && this.time.equals(message.time) && this.content.equals(message.content) && this.flags == message.flags;
+        return message != null && this.id == message.id && Objects.equals(this.sender, message.sender) && this.type == message.type && Objects.equals(this.time, message.time) && Objects.equals(this.content, message.content) && this.flags == message.flags;
     }
 
     @Override

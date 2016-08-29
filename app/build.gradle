@@ -46,8 +46,8 @@ if (project.hasProperty("storeFile")) {
             release {
                 signingConfig signingConfigs.release
             }
-            debug {
-                applicationIdSuffix ".debug"
+            beta {
+                signingConfig signingConfigs.release
             }
         }
     }
@@ -61,7 +61,8 @@ if (versionPropsFile.exists() && versionPropsFile.canRead()) {
     versionProps.load(new FileInputStream(versionPropsFile))
     def runTasks = gradle.startParameter.taskNames
     versionBuild = Integer.valueOf(versionProps['VERSION_BUILD'].toString())
-    if ('assemble' in runTasks || 'assembleRelease' in runTasks || 'aR' in runTasks) {
+    if (!(':app:assembleDebug' in runTasks) && !('assembleDebug' in runTasks) && !('installDebug' in runTasks)) {
+        println "Increasing version number"
         versionBuild = versionBuild + 1
     }
     versionProps['VERSION_BUILD'] = versionBuild.toString()
@@ -93,6 +94,26 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    if (output.zipAlign) {
+                        def fileName = output.outputFile.name
+                                .replace(".apk", String.format("-%s-build%d.apk", rawVersionName, versionBuild))
+                                .replace("app-", "QuasselDroidNG-")
+                        output.outputFile = new File(output.outputFile.parent, fileName)
+                    }
+                }
+            }
+        }
+
+        beta {
+            initWith release
+            applicationIdSuffix ".beta"
+        }
+
+        debug {
+            applicationIdSuffix ".debug"
         }
     }
     compileOptions {
@@ -113,28 +134,6 @@ android {
     }
     lintOptions {
         abortOnError false
-    }
-}
-
-def runTasks = gradle.startParameter.taskNames
-if ('assemble' in runTasks || 'assembleRelease' in runTasks || 'aR' in runTasks) {
-    android {
-        buildTypes {
-            release {
-                //minifyEnabled true
-                //shrinkResources true
-                //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-                applicationVariants.all { variant ->
-                    variant.outputs.each { output ->
-                        def fileName = output.outputFile.name
-                                .replace(".apk", String.format("-%s-build%d.apk", rawVersionName, versionBuild))
-                                .replace("app-", "QuasselDroidNG-")
-                        output.outputFile = new File(output.outputFile.parent, fileName)
-                    }
-                }
-            }
-        }
     }
 }
 
