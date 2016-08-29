@@ -298,8 +298,6 @@ public class MainActivity extends BoundActivity {
 
     public void onEventMainThread(GeneralErrorEvent event) {
         Toast.makeText(getApplication(), event.exception.getClass().getSimpleName() + ": " + event.debugInfo, Toast.LENGTH_LONG).show();
-        if (!(event.exception instanceof IOException))
-            ACRA.getErrorReporter().handleSilentException(event.exception);
     }
 
     public void onEventMainThread(BufferChangeEvent event) {

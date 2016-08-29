@@ -24,7 +24,10 @@ package de.kuschku.quasseldroid_ng.service;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import org.acra.ACRA;
+
 import java.io.IOException;
+import java.net.ConnectException;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.QuasselClient;
@@ -97,5 +100,10 @@ public class ClientBackgroundThread implements Runnable {
             Account account = manager.account(settings.preferenceLastAccount.get());
             client().client.login(account.user, account.pass);
         }
+    }
+
+    public void onEvent(GeneralErrorEvent event) {
+        if (!(event.exception instanceof ConnectException))
+            ACRA.getErrorReporter().handleSilentException(event.exception);
     }
 }
