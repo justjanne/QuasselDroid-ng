@@ -29,6 +29,9 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.Locale;
 
 import butterknife.Bind;
@@ -66,6 +69,7 @@ public class LoadingFragment extends BoundFragment {
         count.setText(String.format(Locale.US, "%d/%d", position, 5));
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEventMainThread(ConnectionChangeEvent event) {
         progressBar.setIndeterminate(true);
 
@@ -73,6 +77,7 @@ public class LoadingFragment extends BoundFragment {
         showProgressState(event.status.ordinal() + 1);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEventMainThread(InitEvent event) {
         if (context.client().connectionStatus() == ConnectionChangeEvent.Status.INITIALIZING_DATA) {
             progressBar.setIndeterminate(false);
@@ -83,6 +88,7 @@ public class LoadingFragment extends BoundFragment {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEventMainThread(BacklogInitEvent event) {
         if (context.client().connectionStatus() == ConnectionChangeEvent.Status.LOADING_BACKLOG) {
             progressBar.setIndeterminate(false);

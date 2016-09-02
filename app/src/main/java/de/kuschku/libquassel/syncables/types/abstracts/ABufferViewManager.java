@@ -27,53 +27,30 @@ import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 
-public abstract class ABufferViewManager<T extends ABufferViewManager<T>> extends SyncableObject<T> implements QBufferViewManager {
+public abstract class ABufferViewManager<T extends ABufferViewManager<T>> extends SyncableObject<T> implements QBufferViewManager<T> {
     @Override
-    public void addBufferViewConfig(QBufferViewConfig config) {
-        _addBufferViewConfig(config);
-        requestCreateBufferView(config);
-
-    }
-
-    @Override
-    public void addBufferViewConfig(int bufferViewConfigId) {
-        _addBufferViewConfig(bufferViewConfigId);
-        syncVar("addBufferViewConfig", bufferViewConfigId);
-
-    }
-
-    @Override
-    public void newBufferViewConfig(int bufferViewConfigId) {
-        _newBufferViewConfig(bufferViewConfigId);
-        syncVar("newBufferViewConfig", bufferViewConfigId);
-
-    }
-
-    @Override
-    public void deleteBufferViewConfig(int bufferViewConfigId) {
-        _deleteBufferViewConfig(bufferViewConfigId);
-        requestDeleteBufferView(bufferViewConfigId);
-
-    }
-
-    @Override
-    public void requestCreateBufferView(QBufferViewConfig bufferView) {
-        _requestCreateBufferView(bufferView);
+    public void createBufferView(QBufferViewConfig bufferView) {
+        //_addBufferViewConfig(bufferView);
         syncVar("requestCreateBufferView", bufferView);
-
     }
 
     @Override
-    public void requestDeleteBufferView(int bufferViewId) {
-        _requestDeleteBufferView(bufferViewId);
+    public void createBufferViews(List<QBufferViewConfig> bufferViews) {
+        //for (QBufferViewConfig config : bufferViews)
+//            _addBufferViewConfig(config);
+        syncVar("requestCreateBufferViews", bufferViews);
+    }
+
+    @Override
+    public void deleteBufferView(int bufferViewId) {
+//        _deleteBufferViewConfig(bufferViewId);
         syncVar("requestDeleteBufferView", bufferViewId);
-
     }
 
     @Override
-    public void requestDeleteBufferViews(List<Integer> bufferViews) {
-        _requestDeleteBufferViews(bufferViews);
+    public void deleteBufferViews(List<Integer> bufferViews) {
+//        for (int config : bufferViews)
+//            _deleteBufferViewConfig(config);
         syncVar("requestDeleteBufferViews", bufferViews);
-
     }
 }

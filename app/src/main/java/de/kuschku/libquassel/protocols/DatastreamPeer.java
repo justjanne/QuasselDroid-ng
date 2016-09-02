@@ -23,9 +23,13 @@ package de.kuschku.libquassel.protocols;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -34,6 +38,7 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -137,6 +142,7 @@ public class DatastreamPeer implements RemotePeer {
         });
     }
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull SyncFunction func) {
         assertNotNull(connection.getOutputExecutor());
         assertFalse(connection.getOutputExecutor().isShutdown());
@@ -146,6 +152,7 @@ public class DatastreamPeer implements RemotePeer {
         ));
     }
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull RpcCallFunction func) {
         assertNotNull(connection.getOutputExecutor());
         assertFalse(connection.getOutputExecutor().isShutdown());
@@ -155,6 +162,7 @@ public class DatastreamPeer implements RemotePeer {
         ));
     }
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull InitRequestFunction func) {
         assertNotNull(connection.getOutputExecutor());
         assertFalse(connection.getOutputExecutor().isShutdown());
@@ -164,6 +172,7 @@ public class DatastreamPeer implements RemotePeer {
         ));
     }
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull InitDataFunction func) {
         assertNotNull(connection.getOutputExecutor());
         assertFalse(connection.getOutputExecutor().isShutdown());
@@ -173,6 +182,7 @@ public class DatastreamPeer implements RemotePeer {
         ));
     }
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull Heartbeat func) {
         assertNotNull(connection.getOutputExecutor());
         assertFalse(connection.getOutputExecutor().isShutdown());
@@ -182,6 +192,7 @@ public class DatastreamPeer implements RemotePeer {
         ));
     }
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull HeartbeatReply func) {
         assertNotNull(connection.getOutputExecutor());
         assertFalse(connection.getOutputExecutor().isShutdown());
@@ -191,6 +202,7 @@ public class DatastreamPeer implements RemotePeer {
         ));
     }
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull HandshakeFunction func) {
         assertNotNull(connection.getOutputExecutor());
         assertFalse(connection.getOutputExecutor().isShutdown());
@@ -292,8 +304,8 @@ public class DatastreamPeer implements RemotePeer {
                 connection.getChannel().flush();
                 // Close the buffer
                 fakeChannel.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                busProvider.sendEvent(new GeneralErrorEvent(e));
             }
         }
     }

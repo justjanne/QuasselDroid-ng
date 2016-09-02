@@ -23,37 +23,22 @@ package de.kuschku.libquassel.syncables.types.interfaces;
 
 import android.support.annotation.NonNull;
 
+import java.util.Map;
+
 import de.kuschku.libquassel.message.Message;
+import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.Synced;
 
 public interface QIgnoreListManager extends QObservable {
-    @Synced
-    void requestRemoveIgnoreListItem(final String ignoreRule);
-
-    void _requestRemoveIgnoreListItem(final String ignoreRule);
-
     @Synced
     void removeIgnoreListItem(final String ignoreRule);
 
     void _removeIgnoreListItem(final String ignoreRule);
 
     @Synced
-    void requestToggleIgnoreRule(final String ignoreRule);
-
-    void _requestToggleIgnoreRule(final String ignoreRule);
-
-    @Synced
     void toggleIgnoreRule(final String ignoreRule);
 
     void _toggleIgnoreRule(final String ignoreRule);
-
-    @Synced
-    void requestAddIgnoreListItem(IgnoreType type, final String ignoreRule, boolean isRegEx, StrictnessType strictness, ScopeType scope, final String scopeRule, boolean isActive);
-
-    @Synced
-    void requestAddIgnoreListItem(int type, final String ignoreRule, boolean isRegEx, int strictness, int scope, final String scopeRule, boolean isActive);
-
-    void _requestAddIgnoreListItem(int type, final String ignoreRule, boolean isRegEx, int strictness, int scope, final String scopeRule, boolean isActive);
 
     @Synced
     void addIgnoreListItem(IgnoreType type, final String ignoreRule, boolean isRegEx, StrictnessType strictness, ScopeType scope, final String scopeRule, boolean isActive);
@@ -66,6 +51,10 @@ public interface QIgnoreListManager extends QObservable {
     StrictnessType match(String msgContents, String msgSender, Message.Type msgType, String network, String bufferName);
 
     boolean matches(Message message, QNetwork network);
+
+    void requestUpdate(Map<String, QVariant<Object>> variantMap);
+
+    void requestUpdate();
 
     enum IgnoreType {
         SenderIgnore(0),

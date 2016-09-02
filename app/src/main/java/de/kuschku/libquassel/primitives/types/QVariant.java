@@ -24,8 +24,13 @@ package de.kuschku.libquassel.primitives.types;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.QMetaTypeRegistry;
+import de.kuschku.libquassel.syncables.SyncableRegistry;
+import de.kuschku.libquassel.syncables.types.interfaces.QSyncableObject;
 
 public class QVariant<T> {
     @Nullable
@@ -34,8 +39,16 @@ public class QVariant<T> {
     public final QMetaType<T> type;
 
     public QVariant(@NonNull T data) {
-        this.type = QMetaTypeRegistry.getTypeByObject(data);
-        this.data = data;
+        if (data instanceof QSyncableObject) {
+            this.data = (T) SyncableRegistry.toVariantMap((QSyncableObject) data);
+            this.type = QMetaTypeRegistry.getTypeByObject(this.data);
+        } else if (data instanceof Set) {
+            this.data = (T) new ArrayList((Set) data);
+            this.type = QMetaTypeRegistry.getTypeByObject(this.data);
+        } else {
+            this.data = data;
+            this.type = QMetaTypeRegistry.getTypeByObject(this.data);
+        }
     }
 
     public QVariant(@NonNull QMetaType<T> type, @Nullable T data) {

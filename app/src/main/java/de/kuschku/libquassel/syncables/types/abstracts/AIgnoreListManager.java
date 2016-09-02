@@ -23,8 +23,13 @@ package de.kuschku.libquassel.syncables.types.abstracts;
 
 import android.support.annotation.NonNull;
 
+import java.util.Map;
+
 import de.kuschku.libquassel.message.Message;
+import de.kuschku.libquassel.primitives.types.QVariant;
+import de.kuschku.libquassel.syncables.serializers.IgnoreListManagerSerializer;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
+import de.kuschku.libquassel.syncables.types.impl.IgnoreListManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIgnoreListManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 
@@ -32,44 +37,21 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public abstract class AIgnoreListManager<T extends AIgnoreListManager<T>> extends SyncableObject<T> implements QIgnoreListManager {
     @Override
-    public void requestRemoveIgnoreListItem(String ignoreRule) {
-        _requestRemoveIgnoreListItem(ignoreRule);
-        syncVar("requestRemoveIgnoreListItem", ignoreRule);
-    }
-
-    @Override
     public void removeIgnoreListItem(String ignoreRule) {
         _removeIgnoreListItem(ignoreRule);
-        syncVar("removeIgnoreListItem", ignoreRule);
-    }
-
-    @Override
-    public void requestToggleIgnoreRule(String ignoreRule) {
-        _requestToggleIgnoreRule(ignoreRule);
-        syncVar("requestToggleIgnoreRule", ignoreRule);
+        syncVar("requestRemoveIgnoreListItem", ignoreRule);
     }
 
     @Override
     public void toggleIgnoreRule(String ignoreRule) {
         _toggleIgnoreRule(ignoreRule);
-        syncVar("toggleIgnoreRule", ignoreRule);
+        syncVar("requestToggleIgnoreRule", ignoreRule);
     }
 
     @Override
     public void addIgnoreListItem(int type, String ignoreRule, boolean isRegEx, int strictness, int scope, String scopeRule, boolean isActive) {
         _addIgnoreListItem(type, ignoreRule, isRegEx, strictness, scope, scopeRule, isActive);
-        requestAddIgnoreListItem(type, ignoreRule, isRegEx, strictness, scope, scopeRule, isActive);
-    }
-
-    @Override
-    public void requestAddIgnoreListItem(int type, String ignoreRule, boolean isRegEx, int strictness, int scope, String scopeRule, boolean isActive) {
-        _requestAddIgnoreListItem(type, ignoreRule, isRegEx, strictness, scope, scopeRule, isActive);
         syncVar("requestAddIgnoreListItem", type, ignoreRule, isRegEx, strictness, scope, scopeRule, isActive);
-    }
-
-    @Override
-    public void requestAddIgnoreListItem(@NonNull IgnoreType type, String ignoreRule, boolean isRegEx, @NonNull StrictnessType strictness, @NonNull ScopeType scope, String scopeRule, boolean isActive) {
-        requestAddIgnoreListItem(type.value, ignoreRule, isRegEx, strictness.value, scope.value, scopeRule, isActive);
     }
 
     @Override
@@ -81,5 +63,10 @@ public abstract class AIgnoreListManager<T extends AIgnoreListManager<T>> extend
     public boolean matches(Message message, QNetwork network) {
         assertNotNull(network);
         return match(message.content, message.sender, message.type, network.networkName(), message.bufferInfo.name) != StrictnessType.UnmatchedStrictness;
+    }
+
+    @Override
+    public void requestUpdate(Map<String, QVariant<Object>> variantMap) {
+        syncVar("requestUpdate", variantMap);
     }
 }

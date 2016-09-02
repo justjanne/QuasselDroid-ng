@@ -138,7 +138,7 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
 
     @Override
     public void updateNetworks() {
-        if (this.networkId == 0) {
+        if (this.networkId == 0 || this.networkId == -1) {
             networkList.retainAll(client.networkManager().networks());
             networkList.addAll(client.networkManager().networks());
         } else {
@@ -472,5 +472,13 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
         this.temporarilyRemovedBuffers.retainAll(from.temporarilyRemovedBuffers);
         this.temporarilyRemovedBuffers.addAll(from.temporarilyRemovedBuffers);
         _update();
+    }
+
+    @Override
+    public String toString() {
+        return "BufferViewConfig{" +
+                "bufferViewId=" + bufferViewId +
+                ", bufferViewName='" + bufferViewName + '\'' +
+                '}';
     }
 }

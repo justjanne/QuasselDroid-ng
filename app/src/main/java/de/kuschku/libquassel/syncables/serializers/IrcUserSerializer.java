@@ -53,27 +53,26 @@ public class IrcUserSerializer implements ObjectSerializer<IrcUser> {
 
     @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull IrcUser data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        assertNotNull(map.data);
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull IrcUser data) {
+        final Map<String, QVariant<Object>> map = new HashMap<>();
 
-        map.data.put("server", new QVariant<>(data.server()));
-        map.data.put("ircOperator", new QVariant<>(data.ircOperator()));
-        map.data.put("away", new QVariant<>(data.isAway()));
-        map.data.put("lastAwayMessage", new QVariant<>(data.lastAwayMessage()));
-        map.data.put("idleTime", new QVariant<>(data.idleTime()));
-        map.data.put("whoisServiceReply", new QVariant<>(data.whoisServiceReply()));
-        map.data.put("suserHost", new QVariant<>(data.suserHost()));
-        map.data.put("nick", new QVariant<>(data.nick()));
-        map.data.put("realName", new QVariant<>(data.realName()));
-        map.data.put("account", new QVariant<>(data.account()));
-        map.data.put("awayMessage", new QVariant<>(data.awayMessage()));
-        map.data.put("loginTime", new QVariant<>(data.loginTime()));
-        map.data.put("encrypted", new QVariant<>(data.encrypted()));
-        map.data.put("channels", new QVariant<>(data.channels()));
-        map.data.put("host", new QVariant<>(data.host()));
-        map.data.put("userModes", new QVariant<>(data.userModes()));
-        map.data.put("user", new QVariant<>(data.user()));
+        map.put("server", new QVariant<>(data.server()));
+        map.put("ircOperator", new QVariant<>(data.ircOperator()));
+        map.put("away", new QVariant<>(data.isAway()));
+        map.put("lastAwayMessage", new QVariant<>(data.lastAwayMessage()));
+        map.put("idleTime", new QVariant<>(data.idleTime()));
+        map.put("whoisServiceReply", new QVariant<>(data.whoisServiceReply()));
+        map.put("suserHost", new QVariant<>(data.suserHost()));
+        map.put("nick", new QVariant<>(data.nick()));
+        map.put("realName", new QVariant<>(data.realName()));
+        map.put("account", new QVariant<>(data.account()));
+        map.put("awayMessage", new QVariant<>(data.awayMessage()));
+        map.put("loginTime", new QVariant<>(data.loginTime()));
+        map.put("encrypted", new QVariant<>(data.encrypted()));
+        map.put("channels", new QVariant<>(data.channels()));
+        map.put("host", new QVariant<>(data.host()));
+        map.put("userModes", new QVariant<>(data.userModes()));
+        map.put("user", new QVariant<>(data.user()));
         return map;
     }
 

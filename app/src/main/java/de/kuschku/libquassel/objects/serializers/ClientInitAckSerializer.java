@@ -51,19 +51,19 @@ public class ClientInitAckSerializer implements ObjectSerializer<ClientInitAck> 
 
     @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull final ClientInitAck data) {
-        final List<Map<String, QVariant>> storageBackends = new ArrayList<>();
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull final ClientInitAck data) {
+        final List<Map<String, QVariant<Object>>> storageBackends = new ArrayList<>();
         final StorageBackendSerializer storageBackendSerializer = StorageBackendSerializer.get();
         if (data.StorageBackends != null)
             for (StorageBackend backend : data.StorageBackends) {
-                storageBackends.add((Map<String, QVariant>) storageBackendSerializer.toVariantMap(backend));
+                storageBackends.add(storageBackendSerializer.toVariantMap(backend));
             }
 
-        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        map.data.put("Configured", new QVariant<>(data.Configured));
-        map.data.put("LoginEnabled", new QVariant<>(data.LoginEnabled));
-        map.data.put("StorageBackends", new QVariant<>(storageBackends));
-        map.data.put("CoreFeatures", new QVariant<>(data.CoreFeatures));
+        final Map<String, QVariant<Object>> map = new HashMap<>();
+        map.put("Configured", new QVariant<>(data.Configured));
+        map.put("LoginEnabled", new QVariant<>(data.LoginEnabled));
+        map.put("StorageBackends", new QVariant<>(storageBackends));
+        map.put("CoreFeatures", new QVariant<>(data.CoreFeatures));
         return map;
     }
 

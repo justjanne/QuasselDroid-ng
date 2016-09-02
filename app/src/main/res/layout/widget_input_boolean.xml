@@ -20,22 +20,8 @@
   ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout
+<android.support.v7.widget.AppCompatCheckBox
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:id="@+id/checkBox"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="32dp">
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Account Name">
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailSubject" />
-    </android.support.design.widget.TextInputLayout>
-
-</LinearLayout>
+    android:layout_height="wrap_content"/>

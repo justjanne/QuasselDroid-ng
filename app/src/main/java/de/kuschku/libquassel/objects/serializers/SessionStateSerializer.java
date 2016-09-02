@@ -51,7 +51,7 @@ public class SessionStateSerializer implements ObjectSerializer<SessionState> {
 
     @Nullable
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull final SessionState data) {
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull final SessionState data) {
         return null;
     }
 

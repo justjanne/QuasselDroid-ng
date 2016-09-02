@@ -49,11 +49,9 @@ public class CoreSetupRejectSerializer implements ObjectSerializer<CoreSetupReje
 
     @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull final CoreSetupReject data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        assertNotNull(map.data);
-
-        map.data.put("Error", new QVariant<>(data.Error));
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull final CoreSetupReject data) {
+        final Map<String, QVariant<Object>> map = new HashMap<>();
+        map.put("Error", new QVariant<>(data.Error));
         return map;
     }
 

@@ -49,12 +49,11 @@ public class ClientLoginSerializer implements ObjectSerializer<ClientLogin> {
 
     @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull final ClientLogin data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        assertNotNull(map.data);
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull final ClientLogin data) {
+        final Map<String, QVariant<Object>> map = new HashMap<>();
 
-        map.data.put("User", new QVariant<>(data.User));
-        map.data.put("Password", new QVariant<>(data.Password));
+        map.put("User", new QVariant<>(data.User));
+        map.put("Password", new QVariant<>(data.Password));
         return map;
     }
 

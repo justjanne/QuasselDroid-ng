@@ -24,6 +24,7 @@ package de.kuschku.quasseldroid_ng.ui.setup.slides;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,9 +38,9 @@ import de.kuschku.quasseldroid_ng.R;
 
 public class AccountSetupUserSlide extends SlideFragment {
     @Bind(R.id.user)
-    AppCompatEditText userField;
+    TextInputEditText userField;
     @Bind(R.id.pass)
-    AppCompatEditText passField;
+    TextInputEditText passField;
     TextWatcher watcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {

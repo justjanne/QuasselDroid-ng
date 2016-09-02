@@ -30,6 +30,7 @@ import java.util.Map;
 import de.kuschku.libquassel.exceptions.UnknownTypeException;
 import de.kuschku.libquassel.functions.types.InitDataFunction;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
+import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.AliasManagerSerializer;
 import de.kuschku.libquassel.syncables.serializers.BufferSyncerSerializer;
 import de.kuschku.libquassel.syncables.serializers.BufferViewConfigSerializer;
@@ -41,6 +42,7 @@ import de.kuschku.libquassel.syncables.serializers.IrcUserSerializer;
 import de.kuschku.libquassel.syncables.serializers.NetworkConfigSerializer;
 import de.kuschku.libquassel.syncables.serializers.NetworkSerializer;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
+import de.kuschku.libquassel.syncables.types.interfaces.QSyncableObject;
 
 public class SyncableRegistry {
     @NonNull
@@ -66,8 +68,18 @@ public class SyncableRegistry {
     @SuppressWarnings("unchecked")
     @Nullable
     public static SyncableObject from(@NonNull InitDataFunction function) throws UnknownTypeException {
-        ObjectSerializer<? extends SyncableObject> serializer = map.get(function.className);
-        if (serializer == null) throw new UnknownTypeException(function.className, function);
+        String className = function.className;
+        ObjectSerializer<? extends SyncableObject> serializer = map.get(className);
+        if (serializer == null) throw new UnknownTypeException(className, function);
         return serializer.from(function);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Nullable
+    public static Map<String, QVariant<Object>> toVariantMap(QSyncableObject data) {
+        String className = data.getClass().getSimpleName();
+        ObjectSerializer<QSyncableObject> serializer = map.get(className);
+        if (serializer == null) throw new UnknownTypeException(className);
+        return serializer.toVariantMap(data);
     }
 }

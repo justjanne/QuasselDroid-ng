@@ -25,7 +25,7 @@ import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 
-public abstract class ABufferViewConfig<T extends ABufferViewConfig<T>> extends SyncableObject<T> implements QBufferViewConfig {
+public abstract class ABufferViewConfig<T extends ABufferViewConfig<T>> extends SyncableObject<T> implements QBufferViewConfig<T> {
     static final String intName = QMetaType.Type.Int.getSerializableName();
 
     @Override

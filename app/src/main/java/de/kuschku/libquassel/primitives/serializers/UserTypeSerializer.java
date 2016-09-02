@@ -44,10 +44,10 @@ public class UserTypeSerializer<T> implements PrimitiveSerializer<T> {
 
     @Override
     public void serialize(@NonNull ByteChannel channel, @NonNull T data) throws IOException {
-        QVariant<Map<String, QVariant>> variantMap = objectSerializer.toVariantMap(data);
+        QVariant<Map<String, QVariant<Object>>> variantMap = new QVariant<>(objectSerializer.toVariantMap(data));
         assertNotNull(variantMap);
 
-        VariantSerializer.<Map<String, QVariant>>get().serialize(channel, variantMap);
+        VariantSerializer.<Map<String, QVariant<Object>>>get().serialize(channel, variantMap);
     }
 
     @SuppressWarnings("RedundantCast")

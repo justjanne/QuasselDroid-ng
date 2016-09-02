@@ -50,7 +50,7 @@ public class BufferSyncerSerializer implements ObjectSerializer<BufferSyncer> {
 
     @Nullable
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull BufferSyncer data) {
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull BufferSyncer data) {
         // FIXME: IMPLEMENT
         throw new IllegalArgumentException();
     }

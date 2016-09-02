@@ -25,6 +25,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import org.acra.ACRA;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -70,7 +71,7 @@ public class ClientBackgroundThread implements Runnable {
                 account.id.toString()
         );
         this.client.connect(account.toAddress());
-        this.client.provider.event.registerSticky(this);
+        this.client.provider.event.register(this);
 
         settings = new Settings(context);
         manager = new AccountManager(context);
@@ -95,6 +96,7 @@ public class ClientBackgroundThread implements Runnable {
         client.disconnect();
     }
 
+    @Subscribe(sticky = true)
     public void onEvent(LoginRequireEvent event) {
         if (!event.failedLast) {
             Account account = manager.account(settings.preferenceLastAccount.get());
@@ -102,6 +104,7 @@ public class ClientBackgroundThread implements Runnable {
         }
     }
 
+    @Subscribe(sticky = true)
     public void onEvent(GeneralErrorEvent event) {
         if (!(event.exception instanceof ConnectException))
             ACRA.getErrorReporter().handleSilentException(event.exception);

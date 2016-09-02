@@ -46,8 +46,8 @@ public class CoreSetupAckSerializer implements ObjectSerializer<CoreSetupAck> {
 
     @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull final CoreSetupAck data) {
-        return new QVariant<>(new HashMap<>());
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull final CoreSetupAck data) {
+        return new HashMap<>();
     }
 
     @NonNull

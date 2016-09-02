@@ -64,11 +64,6 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
     }
 
     @Override
-    public void _requestRemoveIgnoreListItem(String ignoreRule) {
-        // Do nothing, we’re on the client – the server will receive the sync just as expected
-    }
-
-    @Override
     public void _removeIgnoreListItem(String ignoreRule) {
         ignoreList.remove(indexOf(ignoreRule));
         _update();
@@ -83,20 +78,10 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
     }
 
     @Override
-    public void _requestToggleIgnoreRule(String ignoreRule) {
-        // Do nothing, we’re on the client – the server will receive the sync just as expected
-    }
-
-    @Override
     public void _toggleIgnoreRule(String ignoreRule) {
         IgnoreListItem item = ignoreList.get(indexOf(ignoreRule));
         item.isActive = !item.isActive;
         _update();
-    }
-
-    @Override
-    public void _requestAddIgnoreListItem(int type, String ignoreRule, boolean isRegEx, int strictness, int scope, String scopeRule, boolean isActive) {
-        // Do nothing, we’re on the client – the server will receive the sync just as expected
     }
 
     @Override
@@ -167,6 +152,10 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
         return String.valueOf(ignoreList);
     }
 
+    public List<IgnoreListItem> ignoreRules() {
+        return ignoreList;
+    }
+
     public class IgnoreListItem {
         private final IgnoreType type;
         @NonNull
@@ -176,10 +165,41 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
         private final ScopeType scope;
         @NonNull
         private final SmartRegEx[] scopeRules;
+        private final String scopeRule;
         private boolean isActive;
 
         public IgnoreListItem(int type, @Nullable String ignoreRule, boolean isRegEx, int strictness, int scope, @Nullable String scopeRule, boolean isActive) {
             this(IgnoreType.of(type), ignoreRule, isRegEx, StrictnessType.of(strictness), ScopeType.of(scope), scopeRule, isActive);
+        }
+
+        public IgnoreType getType() {
+            return type;
+        }
+
+        @NonNull
+        public SmartRegEx getIgnoreRule() {
+            return ignoreRule;
+        }
+
+        public boolean isRegEx() {
+            return isRegEx;
+        }
+
+        public StrictnessType getStrictness() {
+            return strictness;
+        }
+
+        public ScopeType getScope() {
+            return scope;
+        }
+
+        @NonNull
+        public String getScopeRule() {
+            return scopeRule;
+        }
+
+        public boolean isActive() {
+            return isActive;
         }
 
         public IgnoreListItem(IgnoreType type, @Nullable String ignoreRule, boolean isRegEx, StrictnessType strictness, ScopeType scope, @Nullable String scopeRule, boolean isActive) {
@@ -196,6 +216,7 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
             this.isActive = isActive;
 
             String[] scopeRules = scopeRule.split(";");
+            this.scopeRule = scopeRule;
             this.scopeRules = new SmartRegEx[scopeRules.length];
             for (int i = 0; i < scopeRules.length; i++) {
                 this.scopeRules[i] = new SmartRegEx(scopeRules[i].trim(), Pattern.CASE_INSENSITIVE, SmartRegEx.Syntax.WILDCARD);
@@ -238,5 +259,10 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
                     ", isActive=" + isActive +
                     '}';
         }
+    }
+
+    @Override
+    public void requestUpdate() {
+        requestUpdate(IgnoreListManagerSerializer.get().toVariantMap(this));
     }
 }

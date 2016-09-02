@@ -104,7 +104,7 @@ public abstract class BoundActivity extends AppCompatActivity {
         if (oldProvider != null)
             oldProvider.event.unregister(this);
         if (provider != null)
-            provider.event.registerSticky(this);
+            provider.event.register(this);
         context.withProvider(provider);
     }
 

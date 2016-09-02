@@ -29,7 +29,7 @@ import de.kuschku.libquassel.syncables.Synced;
 import de.kuschku.util.observables.lists.ObservableList;
 import de.kuschku.util.observables.lists.ObservableSet;
 
-public interface QBufferViewConfig extends QObservable {
+public interface QBufferViewConfig<T extends QBufferViewConfig> extends QSyncableObject<T> {
 
     int bufferViewId();
 

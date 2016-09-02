@@ -82,4 +82,8 @@ public abstract class SlideFragment extends Fragment {
 
     @StringRes
     protected abstract int getDescription();
+
+    public void setData(Bundle in) {
+
+    }
 }

@@ -31,7 +31,7 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 
 public interface ObjectSerializer<T> {
     @Nullable
-    QVariant<Map<String, QVariant>> toVariantMap(@NonNull T data);
+    Map<String, QVariant<Object>> toVariantMap(@NonNull T data);
 
     @NonNull
     T fromDatastream(@NonNull Map<String, QVariant> map);

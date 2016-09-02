@@ -48,6 +48,6 @@ public class NetworkViewHolder extends ParentViewHolder {
     }
 
     public void bind(AppContext context, NetworkItem item) {
-        name.setText(item.getNetwork().networkName());
+        name.setText(item.getNetwork() == null ? "" : item.getNetwork().networkName());
     }
 }

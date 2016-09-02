@@ -49,11 +49,9 @@ public class CoreSetupDataSerializer implements ObjectSerializer<CoreSetupData> 
 
     @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull final CoreSetupData data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        assertNotNull(map.data);
-
-        map.data.put("SetupData", SetupDataInitializer.get().toVariantMap(data.SetupData));
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull final CoreSetupData data) {
+        final Map<String, QVariant<Object>> map = new HashMap<>();
+        map.put("SetupData", new QVariant<>(SetupDataInitializer.get().toVariantMap(data.SetupData)));
         return map;
     }
 

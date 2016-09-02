@@ -23,6 +23,9 @@ package de.kuschku.libquassel;
 
 import android.support.annotation.NonNull;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.functions.types.Heartbeat;
 import de.kuschku.libquassel.functions.types.HeartbeatReply;
@@ -37,26 +40,37 @@ import de.kuschku.libquassel.objects.types.ClientLoginReject;
 import de.kuschku.libquassel.objects.types.SessionInit;
 
 public interface IProtocolHandler {
+    @Subscribe(threadMode = ThreadMode.MAIN)
     void onEventMainThread(InitDataFunction packedFunc);
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     void onEventMainThread(InitRequestFunction packedFunc);
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     void onEventMainThread(RpcCallFunction packedFunc);
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     void onEventMainThread(SyncFunction packedFunc);
 
+    @Subscribe
     void onEvent(ClientInitReject message);
 
+    @Subscribe
     void onEvent(ClientInitAck message);
 
+    @Subscribe
     void onEvent(ClientLoginAck message);
 
+    @Subscribe
     void onEvent(ClientLoginReject message);
 
+    @Subscribe
     void onEvent(SessionInit message);
 
+    @Subscribe
     void onEvent(Heartbeat message);
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     void onEventMainThread(HeartbeatReply message);
 
     @NonNull

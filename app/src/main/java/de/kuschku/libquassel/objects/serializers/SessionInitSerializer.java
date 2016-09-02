@@ -47,9 +47,9 @@ public class SessionInitSerializer implements ObjectSerializer<SessionInit> {
 
     @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull final SessionInit data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        map.data.put("SessionState", SessionStateSerializer.get().toVariantMap(data.SessionState));
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull final SessionInit data) {
+        final Map<String, QVariant<Object>> map = new HashMap<>();
+        map.put("SessionState", new QVariant<>(SessionStateSerializer.get().toVariantMap(data.SessionState)));
         return map;
     }
 

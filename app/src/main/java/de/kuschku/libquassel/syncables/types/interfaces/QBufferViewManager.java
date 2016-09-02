@@ -28,50 +28,29 @@ import java.util.List;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.Synced;
 
-public interface QBufferViewManager extends QObservable {
+public interface QBufferViewManager<T extends QBufferViewManager<T>> extends QSyncableObject<T> {
     @NonNull
     List<QBufferViewConfig> bufferViewConfigs();
 
     QBufferViewConfig bufferViewConfig(int bufferViewId);
 
-    @Synced
-    void addBufferViewConfig(QBufferViewConfig config);
-
-    void _addBufferViewConfig(QBufferViewConfig config);
-
-    @Synced
-    void addBufferViewConfig(int bufferViewConfigId);
-
     void _addBufferViewConfig(int bufferViewConfigId);
 
-    @Synced
-    void newBufferViewConfig(int bufferViewConfigId);
-
-    void _newBufferViewConfig(int bufferViewConfigId);
+    void _addBufferViewConfig(final QBufferViewConfig bufferViewConfig);
 
     @Synced
-    void deleteBufferViewConfig(int bufferViewConfigId);
+    void createBufferView(final QBufferViewConfig bufferView);
+
+    @Synced
+    void createBufferViews(final List<QBufferViewConfig> bufferViewConfigs);
+
+    @Synced
+    void deleteBufferView(int bufferViewId);
+
+    @Synced
+    void deleteBufferViews(final List<Integer> bufferViews);
 
     void _deleteBufferViewConfig(int bufferViewConfigId);
-
-    //QVariant(QVariantMap, QMap(("BufferList", QVariant(QVariantList, () ) ) ( "RemovedBuffers" ,  QVariant(QVariantList, () ) ) ( "TemporarilyRemovedBuffers" ,  QVariant(QVariantList, () ) ) ( "addNewBuffersAutomatically" ,  QVariant(bool, true) ) ( "allowedBufferTypes" ,  QVariant(int, 15) ) ( "bufferViewName" ,  QVariant(QString, "All Chats") ) ( "disableDecoration" ,  QVariant(bool, false) ) ( "hideInactiveBuffers" ,  QVariant(bool, false) ) ( "hideInactiveNetworks" ,  QVariant(bool, false) ) ( "minimumActivity" ,  QVariant(int, 0) ) ( "networkId" ,  QVariant(NetworkId, ) ) ( "sortAlphabetically" ,  QVariant(bool, true) ) )
-    @Synced
-    void requestCreateBufferView(final QBufferViewConfig bufferView);
-
-    void _requestCreateBufferView(final QBufferViewConfig bufferView);
-
-    //@Synced void requestCreateBufferView(final Map<String, QVariant> properties);
-    //@Synced void requestCreateBufferViews(final List<QVariant> properties);
-
-    @Synced
-    void requestDeleteBufferView(int bufferViewId);
-
-    void _requestDeleteBufferView(int bufferViewId);
-
-    @Synced
-    void requestDeleteBufferViews(final List<Integer> bufferViews);
-
-    void _requestDeleteBufferViews(final List<Integer> bufferViews);
 
     void checkForNewBuffers(int bufferId);
 }

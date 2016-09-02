@@ -33,6 +33,9 @@ import android.view.ViewGroup;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.client.Client;
@@ -116,6 +119,7 @@ public class ChatFragment extends BoundFragment {
         return view;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEventMainThread(BufferChangeEvent event) {
         setMarkerline();
 
@@ -144,6 +148,7 @@ public class ChatFragment extends BoundFragment {
         onEventMainThread(new BufferChangeEvent());
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(BacklogReceivedEvent event) {
         Client client = context.client();
         if (client != null && client.backlogManager().open() == event.bufferId) {

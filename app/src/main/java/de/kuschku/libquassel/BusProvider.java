@@ -24,10 +24,13 @@ package de.kuschku.libquassel;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.NoSubscriberEvent;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.UUID;
 
-import de.greenrobot.event.EventBus;
-import de.greenrobot.event.NoSubscriberEvent;
 import de.kuschku.libquassel.events.BacklogReceivedEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.LagChangedEvent;
@@ -86,10 +89,7 @@ public class BusProvider {
             this.identifier = identifier;
         }
 
-        public void onEvent(GeneralErrorEvent event) {
-            Log.e(identifier, event.getClass().getSimpleName(), event.exception);
-        }
-
+        @Subscribe(threadMode = ThreadMode.MAIN)
         public void onEvent(NoSubscriberEvent event) {
             if (!(event.originalEvent instanceof LagChangedEvent) && !(event.originalEvent instanceof BacklogReceivedEvent))
                 Log.e(identifier, String.valueOf(event));

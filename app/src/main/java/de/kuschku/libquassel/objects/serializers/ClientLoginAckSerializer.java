@@ -46,8 +46,8 @@ public class ClientLoginAckSerializer implements ObjectSerializer<ClientLoginAck
 
     @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull final ClientLoginAck data) {
-        return new QVariant<>(new HashMap<>());
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull final ClientLoginAck data) {
+        return new HashMap<>();
     }
 
     @NonNull

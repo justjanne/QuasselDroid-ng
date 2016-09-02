@@ -23,6 +23,9 @@ package de.kuschku.libquassel.protocols;
 
 import android.support.annotation.NonNull;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
@@ -39,18 +42,25 @@ public interface RemotePeer {
     byte LEGACY = 0x01;
     int PROTOCOL_VERSION_LEGACY = 10;
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     void onEventBackgroundThread(@NonNull SyncFunction func);
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     void onEventBackgroundThread(@NonNull RpcCallFunction func);
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     void onEventBackgroundThread(@NonNull InitRequestFunction func);
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     void onEventBackgroundThread(@NonNull InitDataFunction func);
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     void onEventBackgroundThread(@NonNull HandshakeFunction func);
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     void onEventBackgroundThread(@NonNull Heartbeat func);
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     void onEventBackgroundThread(@NonNull HeartbeatReply func);
 
     void processMessage() throws IOException;

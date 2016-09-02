@@ -23,24 +23,17 @@ package de.kuschku.libquassel.localtypes;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.format.DateUtils;
-import android.util.Log;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeUtils;
-import org.joda.time.LocalDate;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
-import de.greenrobot.event.EventBus;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.message.Message;
-import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
-import de.kuschku.util.backports.Objects;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
@@ -163,6 +156,7 @@ public class BacklogFilter implements UICallback {
         update();
     }
 
+    @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onEventAsync(UpdateAddEvent event) {
         for (Message message : unfiltered) {
             if (!filterItem(message)) {
@@ -171,6 +165,7 @@ public class BacklogFilter implements UICallback {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onEventAsync(UpdateRemoveEvent event) {
         for (Message message : unfiltered) {
             if (filterItem(message)) {
@@ -179,10 +174,12 @@ public class BacklogFilter implements UICallback {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onEventAsync(@NonNull MessageFilterEvent event) {
         if (!filterItem(event.msg)) bus.post(new MessageInsertEvent(event.msg));
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(@NonNull MessageInsertEvent event) {
         filtered.add(event.msg);
         client.bufferSyncer().addActivity(event.msg);
@@ -190,6 +187,7 @@ public class BacklogFilter implements UICallback {
             updateDayChangeMessages();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(@NonNull MessageRemoveEvent event) {
         filtered.remove(event.msg);
         if (event.msg.type != Message.Type.DayChange)

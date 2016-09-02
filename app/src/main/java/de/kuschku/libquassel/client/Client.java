@@ -117,7 +117,7 @@ public class Client extends AClient {
         this.metaDataManager = metaDataManager;
     }
 
-    public QBufferViewManager bufferViewManager() {
+    public QBufferViewManager<?> bufferViewManager() {
         return bufferViewManager;
     }
 

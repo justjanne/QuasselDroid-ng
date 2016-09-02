@@ -32,6 +32,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.client.Client;
@@ -147,9 +150,5 @@ public class ChannelDetailActivity extends BoundActivity {
         edit_topic.setVisibility(topicEditable ? View.VISIBLE : View.GONE);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    public void onEventMainThread(GeneralErrorEvent event) {
-        Log.e("ChannelDetailActivity", String.valueOf(event));
     }
 }

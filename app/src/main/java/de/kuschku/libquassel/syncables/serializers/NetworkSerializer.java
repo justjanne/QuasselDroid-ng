@@ -61,7 +61,7 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
 
     @Nullable
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull Network data) {
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull Network data) {
         // FIXME: IMPLEMENT
         throw new IllegalArgumentException();
     }

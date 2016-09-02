@@ -22,7 +22,6 @@
 package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,7 +32,6 @@ import java.util.Set;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
-import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.ABufferViewManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
@@ -59,13 +57,12 @@ public class BufferViewManager extends ABufferViewManager<BufferViewManager> {
         return bufferViewConfigs.get(bufferViewId);
     }
 
-    @Override
     public void _addBufferViewConfig(@NonNull QBufferViewConfig config) {
-        if (bufferViewConfigs.containsValue(config))
-            return;
+        if (!bufferViewConfigs.containsValue(config)) {
 
-        bufferViewConfigs.put(config.bufferViewId(), config);
-        _update();
+            bufferViewConfigs.put(config.bufferViewId(), config);
+            _update();
+        }
     }
 
     @Override
@@ -73,18 +70,15 @@ public class BufferViewManager extends ABufferViewManager<BufferViewManager> {
         if (bufferViewConfigs.containsKey(bufferViewConfigId))
             return;
 
-        _addBufferViewConfig(BufferViewConfig.create(bufferViewConfigId));
+        BufferViewConfig config = BufferViewConfig.create(bufferViewConfigId);
+        _addBufferViewConfig(config);
+        client.requestInitObject("BufferViewConfig", String.valueOf(bufferViewConfigId));
         _update();
     }
 
     @Override
-    public void _newBufferViewConfig(int bufferViewConfigId) {
-        _addBufferViewConfig(bufferViewConfigId);
-    }
-
-    @Override
     public void _deleteBufferViewConfig(int bufferViewConfigId) {
-        if (bufferViewConfigs.containsKey(bufferViewConfigId))
+        if (!bufferViewConfigs.containsKey(bufferViewConfigId))
             return;
 
         bufferViewConfigs.remove(bufferViewConfigId);
@@ -92,23 +86,7 @@ public class BufferViewManager extends ABufferViewManager<BufferViewManager> {
     }
 
     @Override
-    public void _requestCreateBufferView(QBufferViewConfig bufferView) {
-        // Do nothing, we’re on the client – the server will receive the sync just as expected
-    }
-
-    @Override
-    public void _requestDeleteBufferView(int bufferViewId) {
-        // Do nothing, we’re on the client – the server will receive the sync just as expected
-    }
-
-    @Override
-    public void _requestDeleteBufferViews(List<Integer> bufferViews) {
-        // Do nothing, we’re on the client – the server will receive the sync just as expected
-    }
-
-    @Override
     public void checkForNewBuffers(int bufferId) {
-        Log.w("DEBUG", "Checking if buffer needs to be added somewhere: " + bufferId + ": " + client.bufferManager().buffer(bufferId));
         for (QBufferViewConfig config : bufferViewConfigs()) {
             config.checkAddBuffer(bufferId);
         }

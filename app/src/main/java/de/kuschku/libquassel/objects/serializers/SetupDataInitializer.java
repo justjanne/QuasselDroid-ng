@@ -49,14 +49,13 @@ public class SetupDataInitializer implements ObjectSerializer<SetupData> {
 
     @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull final SetupData data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        assertNotNull(map.data);
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull final SetupData data) {
+        final Map<String, QVariant<Object>> map = new HashMap<>();
 
-        map.data.put("AdminPasswd", new QVariant<>(data.AdminPasswd));
-        map.data.put("AdminUser", new QVariant<>(data.AdminUser));
-        map.data.put("Backend", new QVariant<>(data.Backend));
-        map.data.put("ConnectionProperties", new QVariant<>(data.ConnectionProperties));
+        map.put("AdminPasswd", new QVariant<>(data.AdminPasswd));
+        map.put("AdminUser", new QVariant<>(data.AdminUser));
+        map.put("Backend", new QVariant<>(data.Backend));
+        map.put("ConnectionProperties", new QVariant<>(data.ConnectionProperties));
         return map;
     }
 

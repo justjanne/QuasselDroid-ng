@@ -48,12 +48,11 @@ public class StringObjectMapSerializer<T> implements ObjectSerializer<Map<String
 
     @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull Map<String, T> data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        assertNotNull(map.data);
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull Map<String, T> data) {
+        final Map<String, QVariant<Object>> map = new HashMap<>();
 
         for (Map.Entry<String, T> entry : data.entrySet()) {
-            map.data.put(entry.getKey(), new QVariant<>(entry.getValue()));
+            map.put(entry.getKey(), new QVariant<>(entry.getValue()));
         }
         return map;
     }

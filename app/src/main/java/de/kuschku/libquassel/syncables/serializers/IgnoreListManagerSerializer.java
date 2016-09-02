@@ -24,6 +24,8 @@ package de.kuschku.libquassel.syncables.serializers;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +35,7 @@ import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.impl.IgnoreListManager;
+import de.kuschku.libquassel.syncables.types.interfaces.QIgnoreListManager;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -52,9 +55,33 @@ public class IgnoreListManagerSerializer implements ObjectSerializer<IgnoreListM
 
     @Nullable
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull IgnoreListManager data) {
-        // FIXME: IMPLEMENT
-        throw new IllegalArgumentException();
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull IgnoreListManager data) {
+        HashMap<String, QVariant<Object>> map = new HashMap<>();
+        List<Integer> scope = new ArrayList<>(data.ignoreRules().size());
+        List<Integer> ignoreType = new ArrayList<>(data.ignoreRules().size());
+        List<Boolean> isActive = new ArrayList<>(data.ignoreRules().size());
+        List<String> scopeRule = new ArrayList<>(data.ignoreRules().size());
+        List<Boolean> isRegEx = new ArrayList<>(data.ignoreRules().size());
+        List<Integer> strictness = new ArrayList<>(data.ignoreRules().size());
+        List<String> ignoreRule = new ArrayList<>(data.ignoreRules().size());
+        for (IgnoreListManager.IgnoreListItem item : data.ignoreRules()) {
+            scope.add(item.getScope().value);
+            ignoreType.add(item.getType().value);
+            isActive.add(item.isActive());
+            scopeRule.add(item.getScopeRule());
+            isRegEx.add(item.isRegEx());
+            strictness.add(item.getStrictness().value);
+            ignoreRule.add(item.getIgnoreRule().rule());
+        }
+
+        map.put("scope", new QVariant(scope));
+        map.put("ignoreType", new QVariant(ignoreType));
+        map.put("isActive", new QVariant(isActive));
+        map.put("scopeRule", new QVariant(scopeRule));
+        map.put("isRegEx", new QVariant(isRegEx));
+        map.put("strictness", new QVariant(strictness));
+        map.put("ignoreRule", new QVariant(ignoreRule));
+        return map;
     }
 
     @NonNull

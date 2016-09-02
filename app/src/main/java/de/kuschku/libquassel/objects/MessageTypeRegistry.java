@@ -77,7 +77,7 @@ public class MessageTypeRegistry {
     public static <T> QVariant<Map<String, QVariant>> toVariantMap(@NonNull final T data) {
         assertTrue(serializerMap.containsKey(data.getClass().getSimpleName()));
 
-        final QVariant<Map<String, QVariant>> map = (QVariant<Map<String, QVariant>>) serializerMap.get(data.getClass().getSimpleName()).toVariantMap(data);
+        final QVariant<Map<String, QVariant>> map = new QVariant<>(serializerMap.get(data.getClass().getSimpleName()).toVariantMap(data));
         map.data.put("MsgType", new QVariant(data.getClass().getSimpleName()));
         return map;
     }

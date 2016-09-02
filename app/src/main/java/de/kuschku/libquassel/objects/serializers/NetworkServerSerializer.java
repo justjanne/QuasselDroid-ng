@@ -49,21 +49,20 @@ public class NetworkServerSerializer implements ObjectSerializer<NetworkServer> 
 
     @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull NetworkServer data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        assertNotNull(map.data);
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull NetworkServer data) {
+        final Map<String, QVariant<Object>> map = new HashMap<>();
 
-        map.data.put("UseSSL", new QVariant<>(data.UseSSL));
-        map.data.put("sslVersion", new QVariant<>(data.sslVersion));
-        map.data.put("Host", new QVariant<>(data.Host));
-        map.data.put("Port", new QVariant<>(data.Port));
-        map.data.put("Password", new QVariant<>(data.Password));
-        map.data.put("UseProxy", new QVariant<>(data.UseProxy));
-        map.data.put("ProxyType", new QVariant<>(data.ProxyType));
-        map.data.put("ProxyHost", new QVariant<>(data.ProxyHost));
-        map.data.put("ProxyPort", new QVariant<>(data.ProxyPort));
-        map.data.put("ProxyUser", new QVariant<>(data.ProxyUser));
-        map.data.put("ProxyPass", new QVariant<>(data.ProxyPass));
+        map.put("UseSSL", new QVariant<>(data.UseSSL));
+        map.put("sslVersion", new QVariant<>(data.sslVersion));
+        map.put("Host", new QVariant<>(data.Host));
+        map.put("Port", new QVariant<>(data.Port));
+        map.put("Password", new QVariant<>(data.Password));
+        map.put("UseProxy", new QVariant<>(data.UseProxy));
+        map.put("ProxyType", new QVariant<>(data.ProxyType));
+        map.put("ProxyHost", new QVariant<>(data.ProxyHost));
+        map.put("ProxyPort", new QVariant<>(data.ProxyPort));
+        map.put("ProxyUser", new QVariant<>(data.ProxyUser));
+        map.put("ProxyPass", new QVariant<>(data.ProxyPass));
         return map;
     }
 

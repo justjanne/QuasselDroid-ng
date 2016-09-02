@@ -23,6 +23,9 @@ package de.kuschku.libquassel.protocols;
 
 import android.support.annotation.NonNull;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -87,6 +90,7 @@ public class LegacyPeer implements RemotePeer {
         this.parseExecutor = Executors.newCachedThreadPool();
     }
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public final void onEventBackgroundThread(@NonNull SyncFunction func) {
         assertNotNull(connection.getOutputExecutor());
         final List serialize = UnpackedSyncFunctionSerializer.get().serialize(func);
@@ -95,42 +99,49 @@ public class LegacyPeer implements RemotePeer {
                         serialize)));
     }
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull RpcCallFunction func) {
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
                 new QVariant<>(UnpackedRpcCallFunctionSerializer.get().serialize(func))));
     }
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull InitRequestFunction func) {
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
                 new QVariant<>(InitRequestFunctionSerializer.get().serialize(func))));
     }
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull InitDataFunction func) {
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
                 new QVariant<>(InitDataFunctionSerializer.get().serialize(func))));
     }
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull Heartbeat func) {
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
                 new QVariant<>(HeartbeatSerializer.get().serialize(func))));
     }
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull HeartbeatReply func) {
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
                 new QVariant<>(HeartbeatReplySerializer.get().serialize(func))));
     }
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull HandshakeFunction func) {
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(
                 VariantSerializer.get(), MessageTypeRegistry.toVariantMap(func.data)));
     }
 
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void processMessage() throws IOException {
         buffer = ByteBuffer.allocate(4);
         connection.getChannel().read(buffer);

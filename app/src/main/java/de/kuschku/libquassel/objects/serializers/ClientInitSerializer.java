@@ -47,13 +47,13 @@ public class ClientInitSerializer implements ObjectSerializer<ClientInit> {
 
     @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull final ClientInit data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        map.data.put("ClientDate", new QVariant<>(data.ClientDate));
-        map.data.put("UseSsl", new QVariant<>(data.UseSsl));
-        map.data.put("ClientVersion", new QVariant<>(data.ClientVersion));
-        map.data.put("UseCompression", new QVariant<>(data.UseCompression));
-        map.data.put("ProtocolVersion", new QVariant<>(data.ProtocolVersion));
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull final ClientInit data) {
+        final Map<String, QVariant<Object>> map = new HashMap<>();
+        map.put("ClientDate", new QVariant<>(data.ClientDate));
+        map.put("UseSsl", new QVariant<>(data.UseSsl));
+        map.put("ClientVersion", new QVariant<>(data.ClientVersion));
+        map.put("UseCompression", new QVariant<>(data.UseCompression));
+        map.put("ProtocolVersion", new QVariant<>(data.ProtocolVersion));
         return map;
     }
 

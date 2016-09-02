@@ -75,6 +75,13 @@
             android:theme="@style/SetupTheme" />
 
         <activity
+            android:name=".ui.setup.CoreSetupActivity"
+            android:label="Core Setup"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.chat.MainActivity"
+            android:theme="@style/SetupTheme" />
+
+        <activity
             android:name=".ui.settings.SettingsActivity"
             android:label="Settings"
             android:launchMode="singleTask"

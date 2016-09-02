@@ -25,4 +25,5 @@
     <item name="custom_channel_span" type="id" />
     <item name="item_create_account" type="id" />
     <item name="item_account" type="id" />
+    <item name="item_backend" type="id"/>
 </resources>

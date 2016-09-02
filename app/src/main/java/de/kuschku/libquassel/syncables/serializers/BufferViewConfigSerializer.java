@@ -49,20 +49,20 @@ public class BufferViewConfigSerializer implements ObjectSerializer<BufferViewCo
 
     @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull BufferViewConfig data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        map.data.put("bufferViewName", new QVariant<>(data.bufferViewName()));
-        map.data.put("TemporarilyRemovedBuffers", new QVariant<>(data.temporarilyRemovedBuffers()));
-        map.data.put("hideInactiveNetworks", new QVariant<>(data.hideInactiveBuffers()));
-        map.data.put("BufferList", new QVariant<>(data.bufferList()));
-        map.data.put("allowedBufferTypes", new QVariant<>(data.allowedBufferTypes()));
-        map.data.put("sortAlphabetically", new QVariant<>(data.sortAlphabetically()));
-        map.data.put("disableDecoration", new QVariant<>(data.disableDecoration()));
-        map.data.put("addNewBuffersAutomatically", new QVariant<>(data.addNewBuffersAutomatically()));
-        map.data.put("networkId", new QVariant<>(data.networkId()));
-        map.data.put("minimumActivity", new QVariant<>(data.minimumActivity()));
-        map.data.put("hideInactiveBuffers", new QVariant<>(data.hideInactiveBuffers()));
-        map.data.put("RemovedBuffers", new QVariant<>(data.removedBuffers()));
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull BufferViewConfig data) {
+        final Map<String, QVariant<Object>> map = new HashMap<>();
+        map.put("bufferViewName", new QVariant<>(data.bufferViewName()));
+        map.put("TemporarilyRemovedBuffers", new QVariant<>(data.temporarilyRemovedBuffers()));
+        map.put("hideInactiveNetworks", new QVariant<>(data.hideInactiveBuffers()));
+        map.put("BufferList", new QVariant<>(data.bufferList()));
+        map.put("allowedBufferTypes", new QVariant<>(data.allowedBufferTypes()));
+        map.put("sortAlphabetically", new QVariant<>(data.sortAlphabetically()));
+        map.put("disableDecoration", new QVariant<>(data.disableDecoration()));
+        map.put("addNewBuffersAutomatically", new QVariant<>(data.addNewBuffersAutomatically()));
+        map.put("networkId", new QVariant<>("NetworkId", data.networkId()));
+        map.put("minimumActivity", new QVariant<>(data.minimumActivity()));
+        map.put("hideInactiveBuffers", new QVariant<>(data.hideInactiveBuffers()));
+        map.put("RemovedBuffers", new QVariant<>(data.removedBuffers()));
         return map;
     }
 

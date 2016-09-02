@@ -94,7 +94,7 @@ public abstract class BoundFragment extends Fragment {
         if (oldProvider != null)
             oldProvider.event.unregister(this);
         if (provider != null)
-            provider.event.registerSticky(this);
+            provider.event.register(this);
         context.withProvider(provider);
     }
 

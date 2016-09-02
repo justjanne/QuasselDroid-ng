@@ -26,6 +26,7 @@ import android.database.DataSetObserver;
 import android.support.annotation.Nullable;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.ThemedSpinnerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +39,9 @@ import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
+import de.kuschku.util.observables.callbacks.GeneralCallback;
 
-public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter {
+public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter, GeneralCallback {
     private final AppContext context;
     private final QBufferViewManager bufferViewManager;
     @Nullable
@@ -50,6 +52,7 @@ public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter {
     public BufferViewConfigSpinnerAdapter(AppContext context, QBufferViewManager bufferViewManager) {
         this.context = context;
         this.bufferViewManager = bufferViewManager;
+        this.bufferViewManager.addObserver(this);
     }
 
     @Nullable
@@ -67,7 +70,8 @@ public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter {
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(new ContextThemeWrapper(parent.getContext(), theme));
         TextView view = (TextView) inflater.inflate(R.layout.widget_md_spinner_item, parent, false);
-        view.setText(((QBufferViewConfig) getItem(position)).bufferViewName());
+        QBufferViewConfig config = (QBufferViewConfig) getItem(position);
+        view.setText(config == null ? "" : config.bufferViewName());
         return view;
     }
 
@@ -88,12 +92,19 @@ public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter {
 
     @Override
     public Object getItem(int position) {
-        return bufferViewManager.bufferViewConfigs().get(position);
+        if (position >= 0 && position < bufferViewManager.bufferViewConfigs().size())
+            return bufferViewManager.bufferViewConfigs().get(position);
+        else
+            return null;
     }
 
     @Override
     public long getItemId(int position) {
-        return ((QBufferViewConfig) getItem(position)).bufferViewId();
+        QBufferViewConfig bufferViewConfig = (QBufferViewConfig) getItem(position);
+        if (bufferViewConfig != null)
+            return bufferViewConfig.bufferViewId();
+        else
+            return -1;
     }
 
     @Override
@@ -105,7 +116,11 @@ public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         TextView view = (TextView) inflater.inflate(R.layout.widget_md_spinner_item, parent, false);
-        view.setText(((QBufferViewConfig) getItem(position)).bufferViewName());
+        QBufferViewConfig viewConfig = (QBufferViewConfig) getItem(position);
+        view.setText(viewConfig == null ? "" : viewConfig.bufferViewName());
+        if (viewConfig == null) {
+            Log.d("DEBUG", String.valueOf(bufferViewManager.bufferViewConfigs()));
+        }
         return view;
     }
 
@@ -122,5 +137,12 @@ public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter {
     @Override
     public boolean isEmpty() {
         return getCount() == 0;
+    }
+
+    @Override
+    public void notifyChanged() {
+        for (DataSetObserver observer : observers) {
+            observer.onChanged();
+        }
     }
 }

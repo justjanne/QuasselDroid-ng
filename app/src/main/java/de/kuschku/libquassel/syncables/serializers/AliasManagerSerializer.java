@@ -24,6 +24,8 @@ package de.kuschku.libquassel.syncables.serializers;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +35,7 @@ import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.impl.AliasManager;
+import de.kuschku.libquassel.syncables.types.interfaces.QAliasManager;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -52,8 +55,20 @@ public class AliasManagerSerializer implements ObjectSerializer<AliasManager> {
 
     @Nullable
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull AliasManager data) {
-        throw new IllegalArgumentException();
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull AliasManager data) {
+        HashMap<String, QVariant<Object>> aliases = new HashMap<>();
+        List<String> names = new ArrayList<>(data.aliases().size());
+        List<String> expansions = new ArrayList<>(data.aliases().size());
+        for (QAliasManager.Alias alias : data.aliases()) {
+            names.add(alias.name);
+            expansions.add(alias.expansion);
+        }
+        aliases.put("names", new QVariant(names));
+        aliases.put("expansions", new QVariant(expansions));
+
+        HashMap<String, QVariant<Object>> map = new HashMap<>();
+        map.put("Aliases", new QVariant(aliases));
+        return map;
     }
 
     @NonNull

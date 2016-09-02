@@ -26,6 +26,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -211,10 +214,12 @@ public class CoreConnection {
         inputThread.start();
     }
 
+    @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onEventAsync(HandshakeFailedEvent event) {
         this.close();
     }
 
+    @Subscribe
     public void onEvent(@NonNull ConnectionChangeEvent event) {
         this.status = event.status;
         if (event.status == ConnectionChangeEvent.Status.INITIALIZING_DATA && heartbeatThread != null)

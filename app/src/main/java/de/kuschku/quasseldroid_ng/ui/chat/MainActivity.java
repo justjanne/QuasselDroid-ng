@@ -39,7 +39,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.ActionMode;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,12 +49,15 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 
-import org.acra.ACRA;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
@@ -62,15 +65,24 @@ import butterknife.ButterKnife;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.events.BufferChangeEvent;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
+import de.kuschku.libquassel.events.CoreSetupRequiredEvent;
 import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.LoginRequireEvent;
 import de.kuschku.libquassel.events.UnknownCertificateEvent;
+import de.kuschku.libquassel.functions.types.HandshakeFunction;
+import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
 import de.kuschku.libquassel.message.Message;
+import de.kuschku.libquassel.objects.types.CoreSetupData;
+import de.kuschku.libquassel.objects.types.SetupData;
+import de.kuschku.libquassel.primitives.types.BufferInfo;
+import de.kuschku.libquassel.primitives.types.QVariant;
+import de.kuschku.libquassel.syncables.types.impl.BufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.quasseldroid_ng.R;
@@ -81,6 +93,7 @@ import de.kuschku.quasseldroid_ng.ui.chat.fragment.ChatFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.LoadingFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.util.Status;
 import de.kuschku.quasseldroid_ng.ui.settings.SettingsActivity;
+import de.kuschku.quasseldroid_ng.ui.setup.CoreSetupActivity;
 import de.kuschku.util.accounts.Account;
 import de.kuschku.util.accounts.AccountManager;
 import de.kuschku.util.certificates.CertificateUtils;
@@ -91,6 +104,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class MainActivity extends BoundActivity {
+    public static final int REQUEST_CODE_CORESETUP = 1;
     /**
      * Host layout for content fragment, for example showing a loader or the chat
      */
@@ -158,19 +172,16 @@ public class MainActivity extends BoundActivity {
         chatList.setAdapter(chatListAdapter);
 
         chatListToolbar.inflateMenu(R.menu.chatlist);
-        chatListToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_show_all: {
-                        item.setChecked(chatListAdapter.toggleShowAll());
-                    }
-                    break;
-                    case R.id.action_manage_chat_lists: {
-                    }
+        chatListToolbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.action_show_all: {
+                    item.setChecked(chatListAdapter.toggleShowAll());
                 }
-                return false;
+                break;
+                case R.id.action_manage_chat_lists: {
+                }
             }
+            return false;
         });
 
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -283,6 +294,7 @@ public class MainActivity extends BoundActivity {
 
     */
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEventMainThread(ConnectionChangeEvent event) {
         onConnectionChange(event.status);
     }
@@ -296,10 +308,12 @@ public class MainActivity extends BoundActivity {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(GeneralErrorEvent event) {
         Toast.makeText(getApplication(), event.exception.getClass().getSimpleName() + ": " + event.debugInfo, Toast.LENGTH_LONG).show();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEventMainThread(BufferChangeEvent event) {
         Client client = context.client();
         if (client != null) {
@@ -468,6 +482,33 @@ public class MainActivity extends BoundActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE_CORESETUP: {
+                if (resultCode == RESULT_OK) {
+                    context.provider().event.removeStickyEvent(CoreSetupRequiredEvent.class);
+
+                    Log.d("DEBUG", "Received result: " + data.getExtras());
+
+                    Account account = manager.account(context.settings().preferenceLastAccount.get());
+                    Bundle config = data.getParcelableExtra("config");
+                    Map<String, QVariant> configData = new HashMap<>();
+                    for (String key : config.keySet()) {
+                        configData.put(key, new QVariant<>(config.get(key)));
+                    }
+                    context.provider().dispatch(new HandshakeFunction(new CoreSetupData(new SetupData(
+                            account.user,
+                            account.pass,
+                            data.getStringExtra("selectedBackend"),
+                            configData
+                    ))));
+                }
+            } break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEventMainThread(@NonNull UnknownCertificateEvent event) {
         new MaterialDialog.Builder(this)
                 .content(context.themeUtil().translations.warningCertificate + "\n" + CertificateUtils.certificateToFingerprint(event.certificate, ""))
@@ -485,6 +526,16 @@ public class MainActivity extends BoundActivity {
                 .show();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onEventMainThread(CoreSetupRequiredEvent event) {
+        Log.d("DEBUG", String.valueOf(context.client().core().StorageBackends));
+
+        Intent intent = new Intent(getApplicationContext(), CoreSetupActivity.class);
+        intent.putExtra("storageBackends", context.client().core().getStorageBackendsAsBundle());
+        startActivityForResult(intent, REQUEST_CODE_CORESETUP);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEventMainThread(LoginRequireEvent event) {
         if (event.failedLast) {
             new MaterialDialog.Builder(this)

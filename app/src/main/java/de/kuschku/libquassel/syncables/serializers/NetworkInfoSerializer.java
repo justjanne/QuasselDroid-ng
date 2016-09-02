@@ -52,33 +52,33 @@ public class NetworkInfoSerializer implements ObjectSerializer<NetworkInfo> {
 
     @Nullable
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull NetworkInfo data) {
-        QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        map.data.put("networkName", new QVariant<>(data.networkName()));
-        map.data.put("identity", new QVariant<>(data.identity()));
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull NetworkInfo data) {
+        Map<String, QVariant<Object>> map = new HashMap<>();
+        map.put("networkName", new QVariant<>(data.networkName()));
+        map.put("identity", new QVariant<>(data.identity()));
 
-        map.data.put("codecForServer", new QVariant<>(data.codecForServer()));
-        map.data.put("codecForEncoding", new QVariant<>(data.codecForEncoding()));
-        map.data.put("codecForDecoding", new QVariant<>(data.codecForDecoding()));
+        map.put("codecForServer", new QVariant<>(data.codecForServer()));
+        map.put("codecForEncoding", new QVariant<>(data.codecForEncoding()));
+        map.put("codecForDecoding", new QVariant<>(data.codecForDecoding()));
 
-        map.data.put("ServerList", new QVariant<>(data.serverList()));
-        map.data.put("useRandomServer", new QVariant<>(data.useRandomServer()));
+        map.put("ServerList", new QVariant<>(data.serverList()));
+        map.put("useRandomServer", new QVariant<>(data.useRandomServer()));
 
-        map.data.put("perform", new QVariant<>(data.perform()));
+        map.put("perform", new QVariant<>(data.perform()));
 
-        map.data.put("useAutoIdentify", new QVariant<>(data.useAutoIdentify()));
-        map.data.put("autoIdentifyService", new QVariant<>(data.autoIdentifyService()));
-        map.data.put("autoIdentifyPassword", new QVariant<>(data.autoIdentifyPassword()));
+        map.put("useAutoIdentify", new QVariant<>(data.useAutoIdentify()));
+        map.put("autoIdentifyService", new QVariant<>(data.autoIdentifyService()));
+        map.put("autoIdentifyPassword", new QVariant<>(data.autoIdentifyPassword()));
 
-        map.data.put("useSasl", new QVariant<>(data.useSasl()));
-        map.data.put("saslAccount", new QVariant<>(data.saslAccount()));
-        map.data.put("saslPassword", new QVariant<>(data.saslPassword()));
+        map.put("useSasl", new QVariant<>(data.useSasl()));
+        map.put("saslAccount", new QVariant<>(data.saslAccount()));
+        map.put("saslPassword", new QVariant<>(data.saslPassword()));
 
-        map.data.put("useAutoReconnect", new QVariant<>(data.useAutoReconnect()));
-        map.data.put("autoReconnectInterval", new QVariant<>(data.autoReconnectInterval()));
-        map.data.put("autoReconnectRetries", new QVariant<>(data.autoReconnectRetries()));
-        map.data.put("unlimitedReconnectRetries", new QVariant<>(data.unlimitedReconnectRetries()));
-        map.data.put("rejoinChannels", new QVariant<>(data.rejoinChannels()));
+        map.put("useAutoReconnect", new QVariant<>(data.useAutoReconnect()));
+        map.put("autoReconnectInterval", new QVariant<>(data.autoReconnectInterval()));
+        map.put("autoReconnectRetries", new QVariant<>(data.autoReconnectRetries()));
+        map.put("unlimitedReconnectRetries", new QVariant<>(data.unlimitedReconnectRetries()));
+        map.put("rejoinChannels", new QVariant<>(data.rejoinChannels()));
         return map;
     }
 

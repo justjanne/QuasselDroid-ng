@@ -20,22 +20,13 @@
   ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout
+<android.support.design.widget.TextInputLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:id="@+id/inputLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="32dp">
-
-    <android.support.design.widget.TextInputLayout
+    android:layout_height="wrap_content">
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/editText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Account Name">
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailSubject" />
-    </android.support.design.widget.TextInputLayout>
-
-</LinearLayout>
+        android:layout_height="wrap_content"/>
+</android.support.design.widget.TextInputLayout>

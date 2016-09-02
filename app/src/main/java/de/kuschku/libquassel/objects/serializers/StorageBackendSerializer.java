@@ -50,14 +50,13 @@ public class StorageBackendSerializer implements ObjectSerializer<StorageBackend
 
     @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull final StorageBackend data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        assertNotNull(map.data);
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull final StorageBackend data) {
+        final Map<String, QVariant<Object>> map = new HashMap<>();
 
-        map.data.put("DisplayName", new QVariant<>(data.DisplayName));
-        map.data.put("SetupDefaults", new QVariant<>(data.SetupDefaults));
-        map.data.put("Description", new QVariant<>(data.Description));
-        map.data.put("SetupKeys", new QVariant<>(data.SetupKeys));
+        map.put("DisplayName", new QVariant<>(data.DisplayName));
+        map.put("SetupDefaults", new QVariant<>(data.SetupDefaults));
+        map.put("Description", new QVariant<>(data.Description));
+        map.put("SetupKeys", new QVariant<>(data.SetupKeys));
         return map;
     }
 

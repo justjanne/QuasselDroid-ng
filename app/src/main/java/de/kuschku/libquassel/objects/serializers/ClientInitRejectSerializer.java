@@ -47,9 +47,9 @@ public class ClientInitRejectSerializer implements ObjectSerializer<ClientInitRe
 
     @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull final ClientInitReject data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        map.data.put("Error", new QVariant<>(data.Error));
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull final ClientInitReject data) {
+        final Map<String, QVariant<Object>> map = new HashMap<>();
+        map.put("Error", new QVariant<>(data.Error));
         return map;
     }
 

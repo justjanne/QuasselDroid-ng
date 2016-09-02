@@ -24,8 +24,12 @@ package de.kuschku.libquassel;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+
+import java.util.logging.Logger;
 
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
@@ -43,6 +47,7 @@ import de.kuschku.libquassel.objects.types.ClientInitAck;
 import de.kuschku.libquassel.objects.types.ClientInitReject;
 import de.kuschku.libquassel.objects.types.ClientLoginAck;
 import de.kuschku.libquassel.objects.types.ClientLoginReject;
+import de.kuschku.libquassel.objects.types.CoreSetupAck;
 import de.kuschku.libquassel.objects.types.SessionInit;
 import de.kuschku.libquassel.syncables.SyncableRegistry;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
@@ -63,6 +68,7 @@ public class ProtocolHandler implements IProtocolHandler {
         this.client = client;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(@NonNull InitDataFunction packedFunc) {
         try {
             SyncableObject object = SyncableRegistry.from(packedFunc);
@@ -74,9 +80,11 @@ public class ProtocolHandler implements IProtocolHandler {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(@NonNull InitRequestFunction packedFunc) {
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(@NonNull RpcCallFunction packedFunc) {
         try {
             if (packedFunc.functionName.substring(0, 1).equals("2")) {
@@ -91,7 +99,10 @@ public class ProtocolHandler implements IProtocolHandler {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(@NonNull SyncFunction packedFunc) {
+//        Log.d("ProtocolHandler", String.format("Sync Call: %s::%s(%s, %s)", packedFunc.className, packedFunc.methodName, packedFunc.objectName, packedFunc.params));
+
         try {
             final Object syncable = client.unsafe_getObjectByIdentifier(packedFunc.className, packedFunc.objectName);
 
@@ -113,39 +124,51 @@ public class ProtocolHandler implements IProtocolHandler {
         }
     }
 
+    @Subscribe
     public void onEvent(@NonNull ClientInitReject message) {
         busProvider.sendEvent(new HandshakeFailedEvent(message.Error));
     }
 
+    @Subscribe
     public void onEvent(ClientInitAck message) {
         client.setCore(message);
 
         if (client.core().Configured) {
             // Send an event to notify that login is necessary
-            busProvider.sendEvent(new LoginRequireEvent(false));
+            busProvider.event.postSticky(new LoginRequireEvent(false));
         } else {
             // Send an event to notify that the core is not yet set up
-            busProvider.sendEvent(new CoreSetupRequiredEvent());
+            busProvider.event.postSticky(new CoreSetupRequiredEvent());
         }
     }
 
+    @Subscribe
+    public void onEvent(CoreSetupAck message) {
+        busProvider.event.postSticky(new LoginRequireEvent(false));
+    }
+
+    @Subscribe
     public void onEvent(ClientLoginAck message) {
     }
 
+    @Subscribe
     public void onEvent(@NonNull ClientLoginReject message) {
         busProvider.sendEvent(new LoginRequireEvent(true));
     }
 
+    @Subscribe
     public void onEvent(@NonNull SessionInit message) {
         client.setConnectionStatus(ConnectionChangeEvent.Status.INITIALIZING_DATA);
 
         client.init(message.SessionState);
     }
 
+    @Subscribe
     public void onEvent(@NonNull Heartbeat heartbeat) {
         busProvider.dispatch(new HeartbeatReply(heartbeat));
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(@NonNull HeartbeatReply heartbeat) {
         DateTime dateTime = DateTime.now().toDateTimeISO();
         Interval interval = new Interval(heartbeat.dateTime, dateTime);
@@ -155,6 +178,7 @@ public class ProtocolHandler implements IProtocolHandler {
         client.setLatency(lag);
     }
 
+    @Subscribe
     public void onEvent(@NonNull ConnectionChangeEvent event) {
     }
 

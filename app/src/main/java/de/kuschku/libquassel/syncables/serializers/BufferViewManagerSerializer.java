@@ -24,6 +24,8 @@ package de.kuschku.libquassel.syncables.serializers;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +35,7 @@ import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.impl.BufferViewManager;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
@@ -50,9 +53,18 @@ public class BufferViewManagerSerializer implements ObjectSerializer<QBufferView
 
     @Nullable
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull QBufferViewManager data) {
-        // FIXME: IMPLEMENT
-        throw new IllegalArgumentException();
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull QBufferViewManager data) {
+        HashMap<String, QVariant<Object>> map = new HashMap<>();
+        map.put("BufferViewIds", new QVariant(getBufferViewIds(data)));
+        return map;
+    }
+
+    @NonNull
+    private List<Integer> getBufferViewIds(@NonNull QBufferViewManager<?> data) {
+        List<Integer> bufferViewIds = new ArrayList<>(data.bufferViewConfigs().size());
+        for (QBufferViewConfig config : data.bufferViewConfigs())
+        bufferViewIds.add(config.bufferViewId());
+        return bufferViewIds;
     }
 
     @NonNull

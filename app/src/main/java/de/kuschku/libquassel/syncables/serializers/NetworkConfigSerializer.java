@@ -24,6 +24,7 @@ package de.kuschku.libquassel.syncables.serializers;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import de.kuschku.libquassel.functions.types.PackedFunction;
@@ -49,9 +50,17 @@ public class NetworkConfigSerializer implements ObjectSerializer<QNetworkConfig>
 
     @Nullable
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull QNetworkConfig data) {
-        // FIXME: IMPLEMENT
-        throw new IllegalArgumentException();
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull QNetworkConfig data) {
+        HashMap<String, QVariant<Object>> map = new HashMap<>();
+        map.put("standardCtcp", new QVariant<>(data.standardCtcp()));
+        map.put("autoWhoEnabled", new QVariant<>(data.autoWhoEnabled()));
+        map.put("autoWhoDelay", new QVariant<>(data.autoWhoDelay()));
+        map.put("autoWhoNickLimit", new QVariant<>(data.autoWhoNickLimit()));
+        map.put("autoWhoInterval", new QVariant<>(data.autoWhoInterval()));
+        map.put("pingTimeoutEnabled", new QVariant<>(data.pingTimeoutEnabled()));
+        map.put("pingInterval", new QVariant<>(data.pingInterval()));
+        map.put("maxPingCount", new QVariant<>(data.maxPingCount()));
+        return map;
     }
 
     @NonNull

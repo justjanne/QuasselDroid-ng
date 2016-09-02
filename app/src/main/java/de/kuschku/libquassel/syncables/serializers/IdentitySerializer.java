@@ -49,27 +49,27 @@ public class IdentitySerializer implements ObjectSerializer<Identity> {
 
     @NonNull
     @Override
-    public QVariant<Map<String, QVariant>> toVariantMap(@NonNull Identity data) {
-        final QVariant<Map<String, QVariant>> map = new QVariant<>(new HashMap<>());
-        map.data.put("identityName", new QVariant(data.identityName()));
-        map.data.put("nicks", new QVariant(data.nicks()));
-        map.data.put("ident", new QVariant(data.ident()));
-        map.data.put("realName", new QVariant(data.realName()));
-        map.data.put("identityId", new QVariant(data.id()));
-        map.data.put("autoAwayEnabled", new QVariant(data.autoAwayEnabled()));
-        map.data.put("autoAwayReasonEnabled", new QVariant(data.autoAwayReasonEnabled()));
-        map.data.put("autoAwayTime", new QVariant(data.autoAwayTime()));
-        map.data.put("awayNickEnabled", new QVariant(data.awayNickEnabled()));
-        map.data.put("awayReasonEnabled", new QVariant(data.awayReasonEnabled()));
-        map.data.put("detachAwayEnabled", new QVariant(data.detachAwayEnabled()));
-        map.data.put("detachAwayReasonEnabled", new QVariant(data.detachAwayReasonEnabled()));
-        map.data.put("awayReason", new QVariant(data.awayReason()));
-        map.data.put("autoAwayReason", new QVariant(data.autoAwayReason()));
-        map.data.put("detachAwayReason", new QVariant(data.detachAwayReason()));
-        map.data.put("partReason", new QVariant(data.partReason()));
-        map.data.put("quitReason", new QVariant(data.quitReason()));
-        map.data.put("awayNick", new QVariant(data.awayNick()));
-        map.data.put("kickReason", new QVariant(data.kickReason()));
+    public Map<String, QVariant<Object>> toVariantMap(@NonNull Identity data) {
+        final Map<String, QVariant<Object>> map = new HashMap<>();
+        map.put("identityName", new QVariant(data.identityName()));
+        map.put("nicks", new QVariant(data.nicks()));
+        map.put("ident", new QVariant(data.ident()));
+        map.put("realName", new QVariant(data.realName()));
+        map.put("identityId", new QVariant(data.id()));
+        map.put("autoAwayEnabled", new QVariant(data.autoAwayEnabled()));
+        map.put("autoAwayReasonEnabled", new QVariant(data.autoAwayReasonEnabled()));
+        map.put("autoAwayTime", new QVariant(data.autoAwayTime()));
+        map.put("awayNickEnabled", new QVariant(data.awayNickEnabled()));
+        map.put("awayReasonEnabled", new QVariant(data.awayReasonEnabled()));
+        map.put("detachAwayEnabled", new QVariant(data.detachAwayEnabled()));
+        map.put("detachAwayReasonEnabled", new QVariant(data.detachAwayReasonEnabled()));
+        map.put("awayReason", new QVariant(data.awayReason()));
+        map.put("autoAwayReason", new QVariant(data.autoAwayReason()));
+        map.put("detachAwayReason", new QVariant(data.detachAwayReason()));
+        map.put("partReason", new QVariant(data.partReason()));
+        map.put("quitReason", new QVariant(data.quitReason()));
+        map.put("awayNick", new QVariant(data.awayNick()));
+        map.put("kickReason", new QVariant(data.kickReason()));
         return map;
     }
 
