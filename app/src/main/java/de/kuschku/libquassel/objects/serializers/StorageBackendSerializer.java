@@ -34,8 +34,6 @@ import de.kuschku.libquassel.objects.types.StorageBackend;
 import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
-import static de.kuschku.util.AndroidAssert.assertNotNull;
-
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class StorageBackendSerializer implements ObjectSerializer<StorageBackend> {
     @NonNull

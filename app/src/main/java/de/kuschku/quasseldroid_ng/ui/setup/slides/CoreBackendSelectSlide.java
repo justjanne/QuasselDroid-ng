@@ -33,18 +33,11 @@ import android.view.ViewGroup;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.quasseldroid_ng.ui.setup.AccountItem;
 import de.kuschku.quasseldroid_ng.ui.setup.StorageBackendItem;
-import de.kuschku.util.accounts.AccountManager;
-import de.kuschku.util.backports.Optional;
-import de.kuschku.util.backports.Optionals;
 
 public class CoreBackendSelectSlide extends SlideFragment {
     private FastAdapter<IItem> fastAdapter;

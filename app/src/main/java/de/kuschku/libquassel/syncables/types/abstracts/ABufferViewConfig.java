@@ -98,7 +98,7 @@ public abstract class ABufferViewConfig extends SyncableObject<QBufferViewConfig
     @Override
     public void requestAddBuffer(int bufferId, int pos) {
         _requestAddBuffer(bufferId, pos);
-        sync("requestAddBuffer", new String[] { "BufferId", intName }, new Object[] { bufferId, pos });
+        sync("requestAddBuffer", new String[]{"BufferId", intName}, new Object[]{bufferId, pos});
     }
 
     @Override
@@ -110,7 +110,7 @@ public abstract class ABufferViewConfig extends SyncableObject<QBufferViewConfig
     @Override
     public void requestMoveBuffer(int bufferId, int pos) {
         _requestMoveBuffer(bufferId, pos);
-        sync("requestMoveBuffer", new String[] { "BufferId", intName }, new Object[] { bufferId, pos });
+        sync("requestMoveBuffer", new String[]{"BufferId", intName}, new Object[]{bufferId, pos});
     }
 
     @Override
@@ -122,18 +122,18 @@ public abstract class ABufferViewConfig extends SyncableObject<QBufferViewConfig
     @Override
     public void requestRemoveBuffer(int bufferId) {
         _requestRemoveBuffer(bufferId);
-        sync("requestRemoveBuffer", new String[] { "BufferId" }, new Object[] { bufferId });
+        sync("requestRemoveBuffer", new String[]{"BufferId"}, new Object[]{bufferId});
     }
 
     @Override
     public void removeBufferPermanently(int bufferId) {
         _removeBufferPermanently(bufferId);
-        sync("removeBufferPermanently", new String[] { "BufferId" }, new Object[] { bufferId });
+        sync("removeBufferPermanently", new String[]{"BufferId"}, new Object[]{bufferId});
     }
 
     @Override
     public void requestRemoveBufferPermanently(int bufferId) {
         _requestRemoveBufferPermanently(bufferId);
-        sync("requestRemoveBufferPermanently", new String[] { "BufferId" }, new Object[] { bufferId });
+        sync("requestRemoveBufferPermanently", new String[]{"BufferId"}, new Object[]{bufferId});
     }
 }

@@ -22,7 +22,6 @@
 package de.kuschku.libquassel.syncables.types.abstracts;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.List;
 

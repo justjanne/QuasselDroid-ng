@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.ui.chat;
+package de.kuschku.quasseldroid_ng.ui.coresettings.identity;
 
 import android.content.res.Resources;
 import android.database.DataSetObserver;
@@ -34,24 +34,59 @@ import android.widget.TextView;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
-import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
+import de.kuschku.libquassel.client.IdentityManager;
+import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.observables.callbacks.GeneralCallback;
+import de.kuschku.util.observables.callbacks.UICallback;
+import de.kuschku.util.observables.lists.ObservableSortedList;
 
-public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter, GeneralCallback {
-    private final AppContext context;
-    private final QBufferViewManager bufferViewManager;
+public class IdentitySpinnerAdapter implements ThemedSpinnerAdapter, GeneralCallback {
+    private ObservableSortedList<QIdentity> identities;
     @Nullable
     private Resources.Theme theme;
 
     private Set<DataSetObserver> observers = new HashSet<>();
 
-    public BufferViewConfigSpinnerAdapter(AppContext context, QBufferViewManager bufferViewManager) {
-        this.context = context;
-        this.bufferViewManager = bufferViewManager;
-        this.bufferViewManager.addObserver(this);
+    public void setIdentityManager(IdentityManager identityManager) {
+        this.identities = identityManager.identities();
+        this.identities.addCallback(new UICallback() {
+            @Override
+            public void notifyItemInserted(int position) {
+                notifyChanged(null);
+            }
+
+            @Override
+            public void notifyItemChanged(int position) {
+                notifyChanged(null);
+            }
+
+            @Override
+            public void notifyItemRemoved(int position) {
+                notifyChanged(null);
+            }
+
+            @Override
+            public void notifyItemMoved(int from, int to) {
+                notifyChanged(null);
+            }
+
+            @Override
+            public void notifyItemRangeInserted(int position, int count) {
+                notifyChanged(null);
+            }
+
+            @Override
+            public void notifyItemRangeChanged(int position, int count) {
+                notifyChanged(null);
+            }
+
+            @Override
+            public void notifyItemRangeRemoved(int position, int count) {
+                notifyChanged(null);
+            }
+        });
+        notifyChanged(null);
     }
 
     @Nullable
@@ -69,8 +104,8 @@ public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter, Gen
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(new ContextThemeWrapper(parent.getContext(), theme));
         TextView view = (TextView) inflater.inflate(R.layout.widget_spinner_item_toolbar, parent, false);
-        QBufferViewConfig config = (QBufferViewConfig) getItem(position);
-        view.setText(config == null ? "" : config.bufferViewName());
+        QIdentity config = getItem(position);
+        view.setText(config == null ? "" : config.identityName());
         return view;
     }
 
@@ -86,22 +121,22 @@ public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter, Gen
 
     @Override
     public int getCount() {
-        return bufferViewManager.bufferViewConfigs().size();
+        return identities == null ? 0 : identities.size();
     }
 
     @Override
-    public Object getItem(int position) {
-        if (position >= 0 && position < bufferViewManager.bufferViewConfigs().size())
-            return bufferViewManager.bufferViewConfigs().get(position);
+    public QIdentity getItem(int position) {
+        if (position >= 0 && identities != null && position < identities.size())
+            return identities.get(position);
         else
             return null;
     }
 
     @Override
     public long getItemId(int position) {
-        QBufferViewConfig bufferViewConfig = (QBufferViewConfig) getItem(position);
-        if (bufferViewConfig != null)
-            return bufferViewConfig.bufferViewId();
+        QIdentity identity = getItem(position);
+        if (identity != null)
+            return identity.id();
         else
             return -1;
     }
@@ -114,9 +149,9 @@ public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter, Gen
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        TextView view = (TextView) inflater.inflate(R.layout.widget_spinner_item_toolbar, parent, false);
-        QBufferViewConfig viewConfig = (QBufferViewConfig) getItem(position);
-        view.setText(viewConfig == null ? "" : viewConfig.bufferViewName());
+        TextView view = (TextView) inflater.inflate(R.layout.widget_spinner_item_inline, parent, false);
+        QIdentity identity = getItem(position);
+        view.setText(identity == null ? "" : identity.identityName());
         return view;
     }
 

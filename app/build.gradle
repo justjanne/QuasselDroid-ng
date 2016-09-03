@@ -61,7 +61,7 @@ if (versionPropsFile.exists() && versionPropsFile.canRead()) {
     versionProps.load(new FileInputStream(versionPropsFile))
     def runTasks = gradle.startParameter.taskNames
     versionBuild = Integer.valueOf(versionProps['VERSION_BUILD'].toString())
-    if (!(runTasks.intersect([':app:assembleBeta', 'assembleBeta', ':app:assembleRelease', 'assembleRelease']).empty)) {
+    if (':app:assembleBeta' in runTasks || 'assembleBeta' in runTasks || ':app:assembleRelease' in runTasks || 'assembleRelease' in runTasks || ':app:assemblebeta' in runTasks || 'assemblebeta' in runTasks || ':app:assemblerelease' in runTasks || 'assemblerelease' in runTasks) {
         println "Increasing version number"
         versionBuild = versionBuild + 1
     }

@@ -19,8 +19,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.ui.chat;
+package de.kuschku.quasseldroid_ng.ui.coresettings.network;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.database.DataSetObserver;
 import android.support.annotation.Nullable;
@@ -31,27 +32,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
-import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
+import de.kuschku.libquassel.client.NetworkManager;
+import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
-import de.kuschku.util.observables.callbacks.GeneralCallback;
 
-public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter, GeneralCallback {
-    private final AppContext context;
-    private final QBufferViewManager bufferViewManager;
+public class NetworkSpinnerAdapter implements ThemedSpinnerAdapter {
     @Nullable
     private Resources.Theme theme;
+    private FakeNetworksWrapper wrapper;
 
-    private Set<DataSetObserver> observers = new HashSet<>();
+    public NetworkSpinnerAdapter(Context context) {
+        wrapper = new FakeNetworksWrapper(context);
+    }
 
-    public BufferViewConfigSpinnerAdapter(AppContext context, QBufferViewManager bufferViewManager) {
-        this.context = context;
-        this.bufferViewManager = bufferViewManager;
-        this.bufferViewManager.addObserver(this);
+
+    public void setNetworkManager(NetworkManager networkManager) {
+        wrapper.setBase(networkManager.networks());
     }
 
     @Nullable
@@ -69,39 +65,36 @@ public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter, Gen
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(new ContextThemeWrapper(parent.getContext(), theme));
         TextView view = (TextView) inflater.inflate(R.layout.widget_spinner_item_toolbar, parent, false);
-        QBufferViewConfig config = (QBufferViewConfig) getItem(position);
-        view.setText(config == null ? "" : config.bufferViewName());
+        QNetwork networks = getItem(position);
+        view.setText(networks == null ? "" : networks.networkName());
         return view;
     }
 
     @Override
     public void registerDataSetObserver(DataSetObserver observer) {
-        observers.add(observer);
+        wrapper.addObserver(observer);
     }
 
     @Override
     public void unregisterDataSetObserver(DataSetObserver observer) {
-        observers.remove(observer);
+        wrapper.removeObserver(observer);
     }
 
     @Override
     public int getCount() {
-        return bufferViewManager.bufferViewConfigs().size();
+        return wrapper.getCount();
     }
 
     @Override
-    public Object getItem(int position) {
-        if (position >= 0 && position < bufferViewManager.bufferViewConfigs().size())
-            return bufferViewManager.bufferViewConfigs().get(position);
-        else
-            return null;
+    public QNetwork getItem(int position) {
+        return wrapper.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        QBufferViewConfig bufferViewConfig = (QBufferViewConfig) getItem(position);
-        if (bufferViewConfig != null)
-            return bufferViewConfig.bufferViewId();
+        QNetwork network = getItem(position);
+        if (network != null)
+            return network.networkId();
         else
             return -1;
     }
@@ -114,9 +107,9 @@ public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter, Gen
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        TextView view = (TextView) inflater.inflate(R.layout.widget_spinner_item_toolbar, parent, false);
-        QBufferViewConfig viewConfig = (QBufferViewConfig) getItem(position);
-        view.setText(viewConfig == null ? "" : viewConfig.bufferViewName());
+        TextView view = (TextView) inflater.inflate(R.layout.widget_spinner_item_inline, parent, false);
+        QNetwork networks = getItem(position);
+        view.setText(networks == null ? "" : networks.networkName());
         return view;
     }
 
@@ -133,12 +126,5 @@ public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter, Gen
     @Override
     public boolean isEmpty() {
         return getCount() == 0;
-    }
-
-    @Override
-    public void notifyChanged(Object o) {
-        for (DataSetObserver observer : observers) {
-            observer.onChanged();
-        }
     }
 }

@@ -38,11 +38,8 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.client.NetworkManager;
-import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
-import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.servicebound.BoundActivity;
 
@@ -60,6 +57,18 @@ public class NetworkListActivity extends BoundActivity {
     Toolbar toolbar;
 
     ChatListAdapter adapter;
+    OnQNetworkClickListener clickListener = network -> {
+        if (network != null) {
+            Intent intent = new Intent(this, NetworkEditActivity.class);
+            intent.putExtra("id", network.networkId());
+            startActivity(intent);
+        }
+    };
+    OnQNetworkDeleteListener deleteListener = network -> {
+        if (manager != null && network != null) {
+            context.client().removeNetwork(network.networkId());
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,6 +99,14 @@ public class NetworkListActivity extends BoundActivity {
     protected void onDisconnected() {
         manager = null;
         adapter.setManager(null);
+    }
+
+    interface OnQNetworkClickListener {
+        void onClick(QNetwork network);
+    }
+
+    interface OnQNetworkDeleteListener {
+        void onDelete(QNetwork network);
     }
 
     private class ChatListAdapter extends RecyclerView.Adapter<NetworkViewHolder> {
@@ -123,28 +140,6 @@ public class NetworkListActivity extends BoundActivity {
             return manager == null ? 0 : manager.networks().size();
         }
     }
-
-    interface OnQNetworkClickListener {
-        void onClick(QNetwork network);
-    }
-
-    interface OnQNetworkDeleteListener {
-        void onDelete(QNetwork network);
-    }
-
-    OnQNetworkClickListener clickListener = network -> {
-        if (network != null) {
-            Intent intent = new Intent(this, NetworkEditActivity.class);
-            intent.putExtra("id", network.networkId());
-            startActivity(intent);
-        }
-    };
-
-    OnQNetworkDeleteListener deleteListener = network -> {
-        if (manager != null && network != null) {
-            context.client().removeNetwork(network.networkId());
-        }
-    };
 
     class NetworkViewHolder extends RecyclerView.ViewHolder {
 

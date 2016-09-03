@@ -33,8 +33,6 @@ import de.kuschku.libquassel.objects.types.SetupData;
 import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
-import static de.kuschku.util.AndroidAssert.assertNotNull;
-
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class SetupDataInitializer implements ObjectSerializer<SetupData> {
     @NonNull

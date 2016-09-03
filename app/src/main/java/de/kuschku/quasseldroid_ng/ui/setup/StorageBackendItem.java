@@ -23,9 +23,7 @@ package de.kuschku.quasseldroid_ng.ui.setup;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.os.Bundle;
 import android.support.annotation.ColorInt;
-import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
@@ -37,7 +35,6 @@ import com.mikepenz.materialdrawer.model.AbstractDrawerItem;
 import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.util.accounts.Account;
 
 public class StorageBackendItem extends AbstractDrawerItem<StorageBackendItem, StorageBackendItem.ViewHolder> {
     private final String displayName;

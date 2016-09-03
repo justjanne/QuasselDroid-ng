@@ -63,7 +63,7 @@ public class BufferViewManagerSerializer implements ObjectSerializer<QBufferView
     private List<Integer> getBufferViewIds(@NonNull QBufferViewManager data) {
         List<Integer> bufferViewIds = new ArrayList<>(data.bufferViewConfigs().size());
         for (QBufferViewConfig config : data.bufferViewConfigs())
-        bufferViewIds.add(config.bufferViewId());
+            bufferViewIds.add(config.bufferViewId());
         return bufferViewIds;
     }
 

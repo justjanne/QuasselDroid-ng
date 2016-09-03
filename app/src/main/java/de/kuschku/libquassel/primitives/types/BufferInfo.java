@@ -28,8 +28,6 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
-import java.util.List;
-
 import de.kuschku.libquassel.localtypes.orm.ConnectedDatabase;
 
 @Table(database = ConnectedDatabase.class)
@@ -78,7 +76,7 @@ public class BufferInfo extends BaseModel {
         QUERY(0x04),
         GROUP(0x08);
 
-        public static final int ALL = STATUS.id | CHANNEL.id| QUERY.id | GROUP.id;
+        public static final int ALL = STATUS.id | CHANNEL.id | QUERY.id | GROUP.id;
 
         public final short id;
 

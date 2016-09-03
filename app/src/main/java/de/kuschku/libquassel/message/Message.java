@@ -23,7 +23,6 @@ package de.kuschku.libquassel.message;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ForeignKey;
@@ -67,12 +66,6 @@ public class Message extends BaseModel implements ContentComparable<Message> {
 
     public LocalDate date;
 
-    public LocalDate getLocalDate() {
-        if (date == null)
-            date = time.toLocalDate();
-        return date;
-    }
-
     public static Message create(int id, DateTime time, Type type, Flags flags, BufferInfo bufferInfo, String sender, String content) {
         Message message = new Message();
         message.id = id;
@@ -83,6 +76,12 @@ public class Message extends BaseModel implements ContentComparable<Message> {
         message.sender = sender;
         message.content = content;
         return message;
+    }
+
+    public LocalDate getLocalDate() {
+        if (date == null)
+            date = time.toLocalDate();
+        return date;
     }
 
     @NonNull

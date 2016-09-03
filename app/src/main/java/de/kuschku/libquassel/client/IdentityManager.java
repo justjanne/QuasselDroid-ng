@@ -30,10 +30,27 @@ import java.util.List;
 import java.util.Map;
 
 import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
+import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public class IdentityManager {
     @NonNull
     private final Map<Integer, QIdentity> identities = new HashMap<>();
+    private final ObservableSortedList<QIdentity> identityList = new ObservableSortedList<>(QIdentity.class, new ObservableSortedList.ItemComparator<QIdentity>() {
+        @Override
+        public int compare(QIdentity o1, QIdentity o2) {
+            return o1.id() - o2.id();
+        }
+
+        @Override
+        public boolean areContentsTheSame(QIdentity oldItem, QIdentity newItem) {
+            return oldItem.equals(newItem);
+        }
+
+        @Override
+        public boolean areItemsTheSame(QIdentity item1, QIdentity item2) {
+            return item1.id() == item2.id();
+        }
+    });
     private final Client client;
 
     public IdentityManager(Client client) {
@@ -42,6 +59,7 @@ public class IdentityManager {
 
     public void createIdentity(@NonNull QIdentity identity) {
         identities.put(identity.id(), identity);
+        identityList.add(identity);
     }
 
     public void removeIdentity(@IntRange(from = 0) int id) {
@@ -57,5 +75,9 @@ public class IdentityManager {
         for (QIdentity identity : identities) {
             createIdentity(identity);
         }
+    }
+
+    public ObservableSortedList<QIdentity> identities() {
+        return identityList;
     }
 }

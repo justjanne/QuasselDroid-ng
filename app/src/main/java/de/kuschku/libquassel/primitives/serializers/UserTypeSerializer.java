@@ -29,7 +29,6 @@ import java.nio.channels.ByteChannel;
 import java.util.Map;
 
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
-import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;

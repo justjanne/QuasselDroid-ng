@@ -26,7 +26,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +41,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.syncables.types.impl.NetworkInfo;
 import de.kuschku.quasseldroid_ng.R;
+import de.kuschku.quasseldroid_ng.ui.coresettings.identity.IdentitySpinnerAdapter;
 import de.kuschku.util.servicebound.BoundActivity;
 
 public class NetworkCreateActivity extends BoundActivity {
@@ -100,6 +100,7 @@ public class NetworkCreateActivity extends BoundActivity {
     CheckBox unlimitedAutoReconnectRetries;
 
     int id;
+    IdentitySpinnerAdapter spinnerAdapter = new IdentitySpinnerAdapter();
     private NetworkInfo networkInfo;
 
     public static void expand(final ViewGroup v) {
@@ -109,13 +110,12 @@ public class NetworkCreateActivity extends BoundActivity {
         // Older versions of android (pre API 21) cancel animations for views with a height of 0.
         v.getLayoutParams().height = 1;
         v.setVisibility(View.VISIBLE);
-        Animation a = new Animation()
-        {
+        Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 v.getLayoutParams().height = interpolatedTime == 1
                         ? ViewGroup.LayoutParams.WRAP_CONTENT
-                        : (int)(targetHeight * interpolatedTime);
+                        : (int) (targetHeight * interpolatedTime);
                 v.setAlpha(interpolatedTime);
                 v.requestLayout();
             }
@@ -127,21 +127,20 @@ public class NetworkCreateActivity extends BoundActivity {
         };
 
         // 1dp/ms
-        a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density));
+        a.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
     }
 
     public static void collapse(final ViewGroup v) {
         final int initialHeight = v.getMeasuredHeight();
 
-        Animation a = new Animation()
-        {
+        Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if(interpolatedTime == 1){
+                if (interpolatedTime == 1) {
                     v.setVisibility(View.GONE);
-                }else{
-                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                } else {
+                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
                     v.setAlpha(1 - interpolatedTime);
                     v.requestLayout();
                 }
@@ -153,7 +152,7 @@ public class NetworkCreateActivity extends BoundActivity {
             }
         };
 
-        a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+        a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
     }
 
@@ -174,6 +173,8 @@ public class NetworkCreateActivity extends BoundActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        identity.setAdapter(spinnerAdapter);
 
         useCustomCodecs.setOnCheckedChangeListener(this::updateCustomCodecsVisible);
         updateCustomCodecsVisible(null, useCustomCodecs.isChecked());
@@ -225,13 +226,12 @@ public class NetworkCreateActivity extends BoundActivity {
 
             group.getLayoutParams().height = 1;
             group.setVisibility(View.VISIBLE);
-            Animation a = new Animation()
-            {
+            Animation a = new Animation() {
                 @Override
                 protected void applyTransformation(float interpolatedTime, Transformation t) {
                     group.getLayoutParams().height = interpolatedTime == 1
                             ? ViewGroup.LayoutParams.WRAP_CONTENT
-                            : (int)(targetHeight * interpolatedTime);
+                            : (int) (targetHeight * interpolatedTime);
                     group.requestLayout();
                 }
 
@@ -241,19 +241,18 @@ public class NetworkCreateActivity extends BoundActivity {
                 }
             };
 
-            a.setDuration((int)(targetHeight / group.getContext().getResources().getDisplayMetrics().density));
+            a.setDuration((int) (targetHeight / group.getContext().getResources().getDisplayMetrics().density));
             group.startAnimation(a);
         } else {
             final int initialHeight = group.getMeasuredHeight();
 
-            Animation a = new Animation()
-            {
+            Animation a = new Animation() {
                 @Override
                 protected void applyTransformation(float interpolatedTime, Transformation t) {
-                    if(interpolatedTime == 1){
+                    if (interpolatedTime == 1) {
                         group.setVisibility(View.GONE);
-                    }else{
-                        group.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                    } else {
+                        group.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
                         group.requestLayout();
                     }
                 }
@@ -264,7 +263,7 @@ public class NetworkCreateActivity extends BoundActivity {
                 }
             };
 
-            a.setDuration((int)(initialHeight / group.getContext().getResources().getDisplayMetrics().density));
+            a.setDuration((int) (initialHeight / group.getContext().getResources().getDisplayMetrics().density));
             group.startAnimation(a);
         }
     }
@@ -307,7 +306,8 @@ public class NetworkCreateActivity extends BoundActivity {
 
                     finish();
                 }
-            } return true;
+            }
+            return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -315,11 +315,11 @@ public class NetworkCreateActivity extends BoundActivity {
 
     @Override
     protected void onConnected() {
-
+        spinnerAdapter.setIdentityManager(context.client().identityManager());
     }
 
     @Override
     protected void onDisconnected() {
-
+        spinnerAdapter.setIdentityManager(null);
     }
 }

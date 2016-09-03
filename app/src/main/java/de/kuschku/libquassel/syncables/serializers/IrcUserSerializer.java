@@ -36,8 +36,6 @@ import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.impl.IrcUser;
 
-import static de.kuschku.util.AndroidAssert.assertNotNull;
-
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class IrcUserSerializer implements ObjectSerializer<IrcUser> {
     @NonNull

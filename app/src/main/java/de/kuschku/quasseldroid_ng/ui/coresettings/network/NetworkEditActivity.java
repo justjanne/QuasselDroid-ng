@@ -26,7 +26,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,8 +40,10 @@ import android.widget.Spinner;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.syncables.types.impl.NetworkInfo;
+import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.R;
+import de.kuschku.quasseldroid_ng.ui.coresettings.identity.IdentitySpinnerAdapter;
 import de.kuschku.util.backports.Objects;
 import de.kuschku.util.servicebound.BoundActivity;
 
@@ -65,43 +66,44 @@ public class NetworkEditActivity extends BoundActivity {
     SwitchCompat useCustomCodecs;
     @Bind(R.id.groupCustomCodecs)
     ViewGroup groupCustomCodecs;
-        @Bind(R.id.codecForServer)
-        EditText codecForServer;
-        @Bind(R.id.codecForEncoding)
-        EditText codecForEncoding;
-        @Bind(R.id.codecForDecoding)
-        EditText codecForDecoding;
+    @Bind(R.id.codecForServer)
+    EditText codecForServer;
+    @Bind(R.id.codecForEncoding)
+    EditText codecForEncoding;
+    @Bind(R.id.codecForDecoding)
+    EditText codecForDecoding;
 
     @Bind(R.id.useAutoIdentify)
     SwitchCompat useAutoIdentify;
     @Bind(R.id.groupAutoIdentify)
     ViewGroup groupAutoIdentify;
-        @Bind(R.id.autoIdentifyService)
-        EditText autoIdentifyService;
-        @Bind(R.id.autoIdentifyPassword)
-        EditText autoIdentifyPassword;
+    @Bind(R.id.autoIdentifyService)
+    EditText autoIdentifyService;
+    @Bind(R.id.autoIdentifyPassword)
+    EditText autoIdentifyPassword;
 
     @Bind(R.id.useSasl)
     SwitchCompat useSasl;
     @Bind(R.id.groupSasl)
     ViewGroup groupSasl;
-        @Bind(R.id.saslAccount)
-        EditText saslAccount;
-        @Bind(R.id.saslPassword)
-        EditText saslPassword;
+    @Bind(R.id.saslAccount)
+    EditText saslAccount;
+    @Bind(R.id.saslPassword)
+    EditText saslPassword;
 
     @Bind(R.id.useAutoReconnect)
     SwitchCompat useAutoReconnect;
     @Bind(R.id.groupAutoReconnect)
     ViewGroup groupAutoReconnect;
-        @Bind(R.id.autoReconnectInterval)
-        EditText autoReconnectInterval;
-        @Bind(R.id.autoReconnectRetries)
-        EditText autoReconnectRetries;
-        @Bind(R.id.unlimitedAutoReconnectRetries)
-        CheckBox unlimitedAutoReconnectRetries;
+    @Bind(R.id.autoReconnectInterval)
+    EditText autoReconnectInterval;
+    @Bind(R.id.autoReconnectRetries)
+    EditText autoReconnectRetries;
+    @Bind(R.id.unlimitedAutoReconnectRetries)
+    CheckBox unlimitedAutoReconnectRetries;
 
     int id;
+    IdentitySpinnerAdapter spinnerAdapter = new IdentitySpinnerAdapter();
     private QNetwork network;
 
     public static void expand(final ViewGroup v) {
@@ -111,13 +113,12 @@ public class NetworkEditActivity extends BoundActivity {
         // Older versions of android (pre API 21) cancel animations for views with a height of 0.
         v.getLayoutParams().height = 1;
         v.setVisibility(View.VISIBLE);
-        Animation a = new Animation()
-        {
+        Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 v.getLayoutParams().height = interpolatedTime == 1
                         ? ViewGroup.LayoutParams.WRAP_CONTENT
-                        : (int)(targetHeight * interpolatedTime);
+                        : (int) (targetHeight * interpolatedTime);
                 v.setAlpha(interpolatedTime);
                 v.requestLayout();
             }
@@ -129,21 +130,20 @@ public class NetworkEditActivity extends BoundActivity {
         };
 
         // 1dp/ms
-        a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density));
+        a.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
     }
 
     public static void collapse(final ViewGroup v) {
         final int initialHeight = v.getMeasuredHeight();
 
-        Animation a = new Animation()
-        {
+        Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if(interpolatedTime == 1){
+                if (interpolatedTime == 1) {
                     v.setVisibility(View.GONE);
-                }else{
-                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                } else {
+                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
                     v.setAlpha(1 - interpolatedTime);
                     v.requestLayout();
                 }
@@ -155,7 +155,7 @@ public class NetworkEditActivity extends BoundActivity {
             }
         };
 
-        a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+        a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
     }
 
@@ -176,6 +176,8 @@ public class NetworkEditActivity extends BoundActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        identity.setAdapter(spinnerAdapter);
 
         useCustomCodecs.setOnCheckedChangeListener(this::updateCustomCodecsVisible);
         updateCustomCodecsVisible(null, useCustomCodecs.isChecked());
@@ -271,7 +273,8 @@ public class NetworkEditActivity extends BoundActivity {
 
                     finish();
                 }
-            } return true;
+            }
+            return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -280,6 +283,7 @@ public class NetworkEditActivity extends BoundActivity {
     @Override
     protected void onConnected() {
         setNetwork(context.client().networkManager().network(id));
+        spinnerAdapter.setIdentityManager(context.client().identityManager());
     }
 
     private void setNetwork(QNetwork network) {
@@ -288,6 +292,7 @@ public class NetworkEditActivity extends BoundActivity {
         NetworkInfo networkInfo = this.network.networkInfo();
         if (networkInfo != null) {
             networkName.setText(networkInfo.networkName());
+            identity.setSelection(getIdentityPosition(networkInfo));
             useCustomCodecs.setChecked(networkInfo.codecForServer() != null || networkInfo.codecForEncoding() != null || networkInfo.codecForDecoding() != null);
             codecForServer.setText(networkInfo.codecForServer());
             codecForEncoding.setText(networkInfo.codecForEncoding());
@@ -311,8 +316,14 @@ public class NetworkEditActivity extends BoundActivity {
         }
     }
 
+    private int getIdentityPosition(NetworkInfo networkInfo) {
+        QIdentity identity = context.client().identityManager().identity(networkInfo.identity());
+        return context.client().identityManager().identities().indexOf(identity);
+    }
+
     @Override
     protected void onDisconnected() {
         setNetwork(null);
+        spinnerAdapter.setIdentityManager(null);
     }
 }

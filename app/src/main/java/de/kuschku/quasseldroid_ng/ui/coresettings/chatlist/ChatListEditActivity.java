@@ -35,7 +35,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
+import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.R;
+import de.kuschku.quasseldroid_ng.ui.coresettings.network.NetworkSpinnerAdapter;
 import de.kuschku.util.backports.Objects;
 import de.kuschku.util.servicebound.BoundActivity;
 
@@ -73,6 +75,7 @@ public class ChatListEditActivity extends BoundActivity {
 
     int id;
     private QBufferViewConfig config;
+    private NetworkSpinnerAdapter networkSpinnerAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,6 +91,9 @@ public class ChatListEditActivity extends BoundActivity {
 
         setContentView(R.layout.activity_chatlist_edit);
         ButterKnife.bind(this);
+
+        networkSpinnerAdapter = new NetworkSpinnerAdapter(this);
+        network.setAdapter(networkSpinnerAdapter);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -107,6 +113,9 @@ public class ChatListEditActivity extends BoundActivity {
                     String name = this.name.getText().toString();
                     if (!Objects.equals(name, config.bufferViewName()))
                         config.setBufferViewName(name);
+
+                    if (config.networkId() != (int) network.getSelectedItemId())
+                        config.setNetworkId((int) network.getSelectedItemId());
 
                     int allowedBufferTypes = config.allowedBufferTypes();
                     config.setBufferTypeAllowed(BufferInfo.Type.CHANNEL, this.showChannels.isChecked());
@@ -132,7 +141,8 @@ public class ChatListEditActivity extends BoundActivity {
 
                     finish();
                 }
-            } return true;
+            }
+            return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -140,6 +150,7 @@ public class ChatListEditActivity extends BoundActivity {
 
     @Override
     protected void onConnected() {
+        networkSpinnerAdapter.setNetworkManager(context.client().networkManager());
         setConfig(context.client().bufferViewManager().bufferViewConfig(id));
     }
 
@@ -148,7 +159,7 @@ public class ChatListEditActivity extends BoundActivity {
 
         if (config != null) {
             name.setText(config.bufferViewName());
-            //network
+            network.setSelection(getSelectedNetworkIndex(config));
             showChannels.setChecked(config.isBufferTypeAllowed(BufferInfo.Type.CHANNEL));
             showQueries.setChecked(config.isBufferTypeAllowed(BufferInfo.Type.QUERY));
             hideInactiveChats.setChecked(config.hideInactiveBuffers());
@@ -159,8 +170,20 @@ public class ChatListEditActivity extends BoundActivity {
         }
     }
 
+    private int getSelectedNetworkIndex(QBufferViewConfig config) {
+        QNetwork network;
+        if (context.client() == null) {
+            return 0;
+        } else if ((network = context.client().networkManager().network(config.networkId())) == null) {
+            return 0;
+        } else {
+            return context.client().networkManager().networks().indexOf(network) + 1;
+        }
+    }
+
     @Override
     protected void onDisconnected() {
+        networkSpinnerAdapter.setNetworkManager(null);
         setConfig(null);
     }
 }

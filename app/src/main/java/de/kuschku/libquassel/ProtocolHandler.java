@@ -29,8 +29,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
-import java.util.logging.Logger;
-
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.events.CoreSetupRequiredEvent;

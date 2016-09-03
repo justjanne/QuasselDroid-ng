@@ -274,27 +274,9 @@ public class ChatMessageRenderer {
         }
     }
 
-    private static class MessageStyleContainer {
-        public final
-        @ColorInt
-        int textColor;
-        public final int fontstyle;
-        public final
-        @ColorInt
-        int timeColor;
-        public final
-        @ColorInt
-        int bgColor;
-
-        public MessageStyleContainer(int textColor, int fontstyle, int timeColor, int bgColor) {
-            this.textColor = textColor;
-            this.fontstyle = fontstyle;
-            this.timeColor = timeColor;
-            this.bgColor = bgColor;
-        }
-    }
-
-    public @LayoutRes int getLayoutRes(Message.Type type) {
+    public
+    @LayoutRes
+    int getLayoutRes(Message.Type type) {
         switch (type) {
             default:
             case Plain:
@@ -319,6 +301,26 @@ public class ChatMessageRenderer {
                 return R.layout.widget_chatmessage_server;
             case Error:
                 return R.layout.widget_chatmessage_error;
+        }
+    }
+
+    private static class MessageStyleContainer {
+        public final
+        @ColorInt
+        int textColor;
+        public final int fontstyle;
+        public final
+        @ColorInt
+        int timeColor;
+        public final
+        @ColorInt
+        int bgColor;
+
+        public MessageStyleContainer(int textColor, int fontstyle, int timeColor, int bgColor) {
+            this.textColor = textColor;
+            this.fontstyle = fontstyle;
+            this.timeColor = timeColor;
+            this.bgColor = bgColor;
         }
     }
 }

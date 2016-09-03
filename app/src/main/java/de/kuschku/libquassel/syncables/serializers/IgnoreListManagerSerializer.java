@@ -35,7 +35,6 @@ import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.impl.IgnoreListManager;
-import de.kuschku.libquassel.syncables.types.interfaces.QIgnoreListManager;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 

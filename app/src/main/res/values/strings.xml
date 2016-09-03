@@ -101,4 +101,6 @@
     <string name="action_unhide">Make Visible</string>
     <string name="action_hide_temp">Hide Temporarily</string>
     <string name="action_hide_perm">Hide Permanently</string>
+
+    <string name="all_networks">All Networks</string>
 </resources>

@@ -57,6 +57,18 @@ public class ChatListListActivity extends BoundActivity {
     Toolbar toolbar;
 
     ChatListAdapter adapter;
+    OnQBufferViewConfigClickListener clickListener = config -> {
+        if (config != null) {
+            Intent intent = new Intent(this, ChatListEditActivity.class);
+            intent.putExtra("id", config.bufferViewId());
+            startActivity(intent);
+        }
+    };
+    OnQBufferViewConfigDeleteListener deleteListener = config -> {
+        if (manager != null && config != null) {
+            manager.deleteBufferView(config.bufferViewId());
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,6 +99,14 @@ public class ChatListListActivity extends BoundActivity {
     protected void onDisconnected() {
         manager = null;
         adapter.setManager(null);
+    }
+
+    interface OnQBufferViewConfigClickListener {
+        void onClick(QBufferViewConfig config);
+    }
+
+    interface OnQBufferViewConfigDeleteListener {
+        void onDelete(QBufferViewConfig config);
     }
 
     private class ChatListAdapter extends RecyclerView.Adapter<ChatListViewHolder> {
@@ -120,28 +140,6 @@ public class ChatListListActivity extends BoundActivity {
             return manager == null ? 0 : manager.bufferViewConfigs().size();
         }
     }
-
-    interface OnQBufferViewConfigClickListener {
-        void onClick(QBufferViewConfig config);
-    }
-
-    interface OnQBufferViewConfigDeleteListener {
-        void onDelete(QBufferViewConfig config);
-    }
-
-    OnQBufferViewConfigClickListener clickListener = config -> {
-        if (config != null) {
-            Intent intent = new Intent(this, ChatListEditActivity.class);
-            intent.putExtra("id", config.bufferViewId());
-            startActivity(intent);
-        }
-    };
-
-    OnQBufferViewConfigDeleteListener deleteListener = config -> {
-        if (manager != null && config != null) {
-            manager.deleteBufferView(config.bufferViewId());
-        }
-    };
 
     class ChatListViewHolder extends RecyclerView.ViewHolder {
 

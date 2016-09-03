@@ -44,6 +44,8 @@ import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
+import static de.kuschku.util.AndroidAssert.assertNotNull;
+
 public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkViewHolder, BufferViewHolder> implements OnBufferClickListener, OnBufferLongClickListener {
     private final AppContext context;
     private final ObservableSortedList<NetworkItem> items;
@@ -138,7 +140,32 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
         final ObservableSortedList<NetworkItem> networkItems = new ObservableSortedList<>(NetworkItem.class, new ObservableSortedList.ItemComparator<NetworkItem>() {
             @Override
             public int compare(NetworkItem o1, NetworkItem o2) {
-                return o1 == null && o2 == null ? 0 : o1 == null ? 1 : o2 == null ? -1 : o1.getNetwork().networkName().compareTo(o2.getNetwork().networkName());
+                assertNotNull(o1);
+                assertNotNull(o2);
+
+                QNetwork network1 = o1.getNetwork();
+                QNetwork network2 = o2.getNetwork();
+
+                if (network1 == null && network2 == null) {
+                    return 0;
+                } else if (network1 == null) {
+                    return 1;
+                } else if (network2 == null) {
+                    return -1;
+                } else {
+                    String name1 = network1.networkName();
+                    String name2 = network2.networkName();
+
+                    if (name1 == null && name2 == null) {
+                        return 0;
+                    } else if (name1 == null) {
+                        return 1;
+                    } else if (name2 == null) {
+                        return -1;
+                    } else {
+                        return name1.compareTo(name2);
+                    }
+                }
             }
 
             @Override

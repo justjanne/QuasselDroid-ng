@@ -157,6 +157,16 @@ public class IgnoreListManager extends AIgnoreListManager {
         return ignoreList;
     }
 
+    @Override
+    public void requestUpdate() {
+        requestUpdate(IgnoreListManagerSerializer.get().toVariantMap(this));
+    }
+
+    @Override
+    public List<? extends IgnoreListItem> ignoreList() {
+        return ignoreList;
+    }
+
     public class IgnoreListItem {
         private final IgnoreType type;
         @NonNull
@@ -171,6 +181,27 @@ public class IgnoreListManager extends AIgnoreListManager {
 
         public IgnoreListItem(int type, @Nullable String ignoreRule, boolean isRegEx, int strictness, int scope, @Nullable String scopeRule, boolean isActive) {
             this(IgnoreType.of(type), ignoreRule, isRegEx, StrictnessType.of(strictness), ScopeType.of(scope), scopeRule, isActive);
+        }
+
+        public IgnoreListItem(IgnoreType type, @Nullable String ignoreRule, boolean isRegEx, StrictnessType strictness, ScopeType scope, @Nullable String scopeRule, boolean isActive) {
+            if (scopeRule == null)
+                scopeRule = "";
+            if (ignoreRule == null)
+                ignoreRule = "";
+
+            this.type = type;
+            this.ignoreRule = new SmartRegEx(ignoreRule, Pattern.CASE_INSENSITIVE, SmartRegEx.Syntax.WILDCARD);
+            this.isRegEx = isRegEx;
+            this.strictness = strictness;
+            this.scope = scope;
+            this.isActive = isActive;
+
+            String[] scopeRules = scopeRule.split(";");
+            this.scopeRule = scopeRule;
+            this.scopeRules = new SmartRegEx[scopeRules.length];
+            for (int i = 0; i < scopeRules.length; i++) {
+                this.scopeRules[i] = new SmartRegEx(scopeRules[i].trim(), Pattern.CASE_INSENSITIVE, SmartRegEx.Syntax.WILDCARD);
+            }
         }
 
         public IgnoreType getType() {
@@ -201,27 +232,6 @@ public class IgnoreListManager extends AIgnoreListManager {
 
         public boolean isActive() {
             return isActive;
-        }
-
-        public IgnoreListItem(IgnoreType type, @Nullable String ignoreRule, boolean isRegEx, StrictnessType strictness, ScopeType scope, @Nullable String scopeRule, boolean isActive) {
-            if (scopeRule == null)
-                scopeRule = "";
-            if (ignoreRule == null)
-                ignoreRule = "";
-
-            this.type = type;
-            this.ignoreRule = new SmartRegEx(ignoreRule, Pattern.CASE_INSENSITIVE, SmartRegEx.Syntax.WILDCARD);
-            this.isRegEx = isRegEx;
-            this.strictness = strictness;
-            this.scope = scope;
-            this.isActive = isActive;
-
-            String[] scopeRules = scopeRule.split(";");
-            this.scopeRule = scopeRule;
-            this.scopeRules = new SmartRegEx[scopeRules.length];
-            for (int i = 0; i < scopeRules.length; i++) {
-                this.scopeRules[i] = new SmartRegEx(scopeRules[i].trim(), Pattern.CASE_INSENSITIVE, SmartRegEx.Syntax.WILDCARD);
-            }
         }
 
         public boolean matches(@NonNull String text) {
@@ -260,15 +270,5 @@ public class IgnoreListManager extends AIgnoreListManager {
                     ", isActive=" + isActive +
                     '}';
         }
-    }
-
-    @Override
-    public void requestUpdate() {
-        requestUpdate(IgnoreListManagerSerializer.get().toVariantMap(this));
-    }
-
-    @Override
-    public List<? extends IgnoreListItem> ignoreList() {
-        return ignoreList;
     }
 }

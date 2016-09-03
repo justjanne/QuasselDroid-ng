@@ -71,6 +71,7 @@ public interface QBufferViewConfig extends QSyncableObject<QBufferViewConfig> {
     int allowedBufferTypes();
 
     boolean isBufferTypeAllowed(BufferInfo.Type type);
+
     void setBufferTypeAllowed(BufferInfo.Type type, boolean allowed);
 
     @Synced

@@ -76,36 +76,44 @@ public class CoreStatus {
                         case UInt: {
                             defaults.putInt(key, (int) value.data);
                             types.putString(key, "int");
-                        } break;
+                        }
+                        break;
                         case Short:
                         case UShort: {
                             defaults.putShort(key, (short) value.data);
                             types.putString(key, "short");
-                        } break;
+                        }
+                        break;
                         case Long:
                         case ULong: {
                             defaults.putLong(key, (long) value.data);
                             types.putString(key, "long");
-                        } break;
+                        }
+                        break;
                         case Bool: {
                             defaults.putBoolean(key, (boolean) value.data);
                             types.putString(key, "boolean");
-                        } break;
+                        }
+                        break;
                         case Double: {
                             bundle.putDouble(key, (double) value.data);
                             types.putString(key, "double");
-                        } break;
+                        }
+                        break;
                         case Float: {
                             defaults.putDouble(key, (float) value.data);
                             types.putString(key, "float");
-                        } break;
+                        }
+                        break;
                         case QString: {
                             defaults.putString(key, (String) value.data);
                             types.putString(key, "string");
-                        } break;
+                        }
+                        break;
                         default: {
                             Log.w("CoreSetup", "Found configuration element with incompatible type: " + key + " : " + value.type.type);
-                        } break;
+                        }
+                        break;
                     }
                 } else {
                     defaults.putString(key, "");

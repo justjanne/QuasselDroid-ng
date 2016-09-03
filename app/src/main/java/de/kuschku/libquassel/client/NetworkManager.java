@@ -24,26 +24,39 @@ package de.kuschku.libquassel.client;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
 import de.kuschku.libquassel.syncables.types.impl.Network;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
-import de.kuschku.util.observables.lists.ObservableSet;
 import de.kuschku.util.observables.lists.ObservableSortedList;
+
+import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class NetworkManager extends Observable {
     @NonNull
     private final Map<Integer, QNetwork> networks = new HashMap<>();
     @NonNull
-    private final ObservableSortedList<QNetwork> list = new ObservableSortedList<>(QNetwork.class, new ObservableSortedList.ItemComparator<QNetwork>() {
+    private final ObservableSortedList<QNetwork> list = new ObservableSortedList<QNetwork>(QNetwork.class, new ObservableSortedList.ItemComparator<QNetwork>() {
         @Override
         public int compare(QNetwork o1, QNetwork o2) {
-            return o1 == null && o2 == null ? 0 : o1 == null ? 1 : o2 == null ? -1 : o1.networkName().compareTo(o2.networkName());
+            assertNotNull(o1);
+            assertNotNull(o2);
+
+            String name1 = o1.networkName();
+            String name2 = o2.networkName();
+
+            if (name1 == null && name2 == null) {
+                return 0;
+            } else if (name1 == null) {
+                return 1;
+            } else if (name2 == null) {
+                return -1;
+            } else {
+                return name1.compareTo(name2);
+            }
         }
 
         @Override
@@ -55,7 +68,21 @@ public class NetworkManager extends Observable {
         public boolean areItemsTheSame(QNetwork item1, QNetwork item2) {
             return item1.networkId() == item2.networkId();
         }
-    });
+    }) {
+        @Override
+        public boolean add(QNetwork object) {
+            if (object == null)
+                throw new Error();
+            return super.add(object);
+        }
+
+        @Override
+        public void add(int location, QNetwork object) {
+            if (object == null)
+                throw new Error();
+            super.add(location, object);
+        }
+    };
     @NonNull
     private final Client client;
 
@@ -69,7 +96,7 @@ public class NetworkManager extends Observable {
 
     public void createNetwork(@NonNull QNetwork network) {
         QNetwork qNetwork = networks.get(network.networkId());
-        if (list.contains(qNetwork))
+        if (qNetwork != null && list.contains(qNetwork))
             list.remove(qNetwork);
         networks.put(network.networkId(), network);
         list.add(network);
@@ -80,7 +107,9 @@ public class NetworkManager extends Observable {
     }
 
     public void removeNetwork(@IntRange(from = 0) int network) {
-        list.remove(networks.get(network));
+        QNetwork qNetwork = networks.get(network);
+        if (qNetwork != null)
+            list.remove(qNetwork);
         networks.remove(network);
     }
 

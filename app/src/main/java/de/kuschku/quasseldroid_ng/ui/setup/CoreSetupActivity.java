@@ -33,19 +33,13 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.quasseldroid_ng.ui.setup.slides.AccountSetupCoreSlide;
-import de.kuschku.quasseldroid_ng.ui.setup.slides.AccountSetupNameSlide;
-import de.kuschku.quasseldroid_ng.ui.setup.slides.AccountSetupUserSlide;
 import de.kuschku.quasseldroid_ng.ui.setup.slides.CoreBackendSelectSlide;
 import de.kuschku.quasseldroid_ng.ui.setup.slides.CoreBackendSetupSlide;
 import de.kuschku.quasseldroid_ng.ui.setup.slides.SlideFragment;
-import de.kuschku.util.accounts.Account;
-import de.kuschku.util.accounts.AccountManager;
 
 public class CoreSetupActivity extends AppCompatActivity implements ValidUpdateCallback {
 

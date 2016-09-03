@@ -32,7 +32,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.UUID;
 
 import de.kuschku.libquassel.events.BacklogReceivedEvent;
-import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.LagChangedEvent;
 
 public class BusProvider {

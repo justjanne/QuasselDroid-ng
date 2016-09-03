@@ -23,21 +23,17 @@ package de.kuschku.quasseldroid_ng.ui.setup.slides;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -49,14 +45,9 @@ import butterknife.ButterKnife;
 import de.kuschku.quasseldroid_ng.R;
 
 public class CoreBackendSetupSlide extends SlideFragment {
-    private Map<String, InputItemWrapper> items = new HashMap<>();
-
     @Bind(R.id.container)
     LinearLayout container;
-
-    private Map<String, Bundle> storageBackends = new HashMap<>();
     Bundle storageBackend;
-
     TextWatcher watcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -71,6 +62,8 @@ public class CoreBackendSetupSlide extends SlideFragment {
         public void afterTextChanged(Editable s) {
         }
     };
+    private Map<String, InputItemWrapper> items = new HashMap<>();
+    private Map<String, Bundle> storageBackends = new HashMap<>();
 
     @Override
     public void setArguments(Bundle args) {
@@ -162,44 +155,50 @@ public class CoreBackendSetupSlide extends SlideFragment {
         return R.string.slideAccountcoreDescription;
     }
 
-    private interface InputItemWrapper<T> {
-        String key();
-        T getValue();
-        boolean isValid();
-        View getView(Context context, ViewGroup parent);
-        void onDestroy();
-        void putValue(Bundle in);
-    }
-
     private <T> InputItemWrapper<T> getInputItemWrapper(String key, String type, T defValue) {
         InputItemWrapper result;
         switch (type) {
             case "boolean": {
                 result = new BooleanInputItem(key, (Boolean) defValue);
-            } break;
+            }
+            break;
             case "short":
             case "int":
             case "long":
             case "float":
             case "double": {
                 result = new NumberInputItem(key, (Number) defValue, type);
-            } break;
+            }
+            break;
             default:
             case "string": {
                 result = new StringInputItem(key, (String) defValue);
-            } break;
+            }
+            break;
         }
         return result;
+    }
+
+    private interface InputItemWrapper<T> {
+        String key();
+
+        T getValue();
+
+        boolean isValid();
+
+        View getView(Context context, ViewGroup parent);
+
+        void onDestroy();
+
+        void putValue(Bundle in);
     }
 
     class BooleanInputItem implements InputItemWrapper<Boolean> {
         private final String key;
         private final Boolean defValue;
-
-        private View view;
-
         @Bind(R.id.checkBox)
         AppCompatCheckBox checkBox;
+        private View view;
 
         public BooleanInputItem(String key, Boolean defValue) {
             this.key = key;
@@ -247,15 +246,12 @@ public class CoreBackendSetupSlide extends SlideFragment {
     class NumberInputItem implements InputItemWrapper<Number> {
         private final String key;
         private final Number defValue;
-        private String type;
-
-        private View view;
-
         @Bind(R.id.inputLayout)
         TextInputLayout inputLayout;
-
         @Bind(R.id.editText)
         TextInputEditText editText;
+        private String type;
+        private View view;
 
         public NumberInputItem(String key, Number defValue, String type) {
             this.key = key;
@@ -330,19 +326,24 @@ public class CoreBackendSetupSlide extends SlideFragment {
             switch (type) {
                 case "short": {
                     in.putShort(key, (short) getValue());
-                } break;
+                }
+                break;
                 case "int": {
                     in.putInt(key, (int) getValue());
-                } break;
+                }
+                break;
                 case "long": {
                     in.putLong(key, (long) getValue());
-                } break;
+                }
+                break;
                 case "float": {
                     in.putFloat(key, (float) getValue());
-                } break;
+                }
+                break;
                 case "double": {
                     in.putDouble(key, (double) getValue());
-                } break;
+                }
+                break;
             }
         }
     }
@@ -350,14 +351,11 @@ public class CoreBackendSetupSlide extends SlideFragment {
     class StringInputItem implements InputItemWrapper<String> {
         private final String key;
         private final String defValue;
-
-        private View view;
-
         @Bind(R.id.inputLayout)
         TextInputLayout inputLayout;
-
         @Bind(R.id.editText)
         TextInputEditText editText;
+        private View view;
 
         public StringInputItem(String key, String defValue) {
             this.key = key;

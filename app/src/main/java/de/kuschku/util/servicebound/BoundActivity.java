@@ -28,7 +28,6 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -40,7 +39,6 @@ import de.kuschku.quasseldroid_ng.service.QuasselService;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ServiceHelper;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.quasseldroid_ng.ui.theme.AppTheme;
-import de.kuschku.util.AndroidAssert;
 import de.kuschku.util.accounts.Account;
 
 public abstract class BoundActivity extends AppCompatActivity {
@@ -115,9 +113,11 @@ public abstract class BoundActivity extends AppCompatActivity {
             provider.event.register(this);
     }
 
-    protected void onConnected() {}
+    protected void onConnected() {
+    }
 
-    protected void onDisconnected() {}
+    protected void onDisconnected() {
+    }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onConnectionStatusChange(ConnectionChangeEvent event) {

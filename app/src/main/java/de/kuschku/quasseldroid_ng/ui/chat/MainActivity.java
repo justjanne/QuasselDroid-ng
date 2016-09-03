@@ -39,7 +39,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,7 +75,6 @@ import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.objects.types.CoreSetupData;
 import de.kuschku.libquassel.objects.types.SetupData;
-import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
@@ -507,7 +505,8 @@ public class MainActivity extends BoundActivity {
                             configData
                     ))));
                 }
-            } break;
+            }
+            break;
         }
     }
 

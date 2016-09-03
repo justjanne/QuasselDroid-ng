@@ -30,7 +30,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import de.kuschku.libquassel.message.Message;
-import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.observables.AutoScroller;
 import de.kuschku.util.observables.callbacks.UICallback;

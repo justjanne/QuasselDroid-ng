@@ -27,9 +27,7 @@ import java.util.Map;
 
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
-import de.kuschku.libquassel.syncables.serializers.IgnoreListManagerSerializer;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
-import de.kuschku.libquassel.syncables.types.impl.IgnoreListManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIgnoreListManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 

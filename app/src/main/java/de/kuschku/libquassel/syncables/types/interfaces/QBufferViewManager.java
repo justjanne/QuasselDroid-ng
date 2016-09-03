@@ -55,5 +55,5 @@ public interface QBufferViewManager extends QSyncableObject<QBufferViewManager> 
 
     void checkForNewBuffers(int bufferId);
 
-    Map<Integer,QBufferViewConfig> bufferViewConfigMap();
+    Map<Integer, QBufferViewConfig> bufferViewConfigMap();
 }
