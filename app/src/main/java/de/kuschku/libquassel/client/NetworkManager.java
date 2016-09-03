@@ -43,7 +43,7 @@ public class NetworkManager extends Observable {
     private final ObservableSortedList<QNetwork> list = new ObservableSortedList<>(QNetwork.class, new ObservableSortedList.ItemComparator<QNetwork>() {
         @Override
         public int compare(QNetwork o1, QNetwork o2) {
-            return o1.networkName().compareTo(o2.networkName());
+            return o1 == null && o2 == null ? 0 : o1 == null ? 1 : o2 == null ? -1 : o1.networkName().compareTo(o2.networkName());
         }
 
         @Override
@@ -68,7 +68,9 @@ public class NetworkManager extends Observable {
     }
 
     public void createNetwork(@NonNull QNetwork network) {
-        list.remove(networks.get(network.networkId()));
+        QNetwork qNetwork = networks.get(network.networkId());
+        if (list.contains(qNetwork))
+            list.remove(qNetwork);
         networks.put(network.networkId(), network);
         list.add(network);
     }
