@@ -31,33 +31,33 @@ import java.util.Set;
 import de.kuschku.util.observables.IObservable;
 import de.kuschku.util.observables.callbacks.GeneralCallback;
 
-public class MultiGeneralCallback implements IObservable<GeneralCallback>, GeneralCallback {
+public class MultiGeneralCallback<T> implements IObservable<GeneralCallback<T>>, GeneralCallback<T> {
     @NonNull
-    final Set<GeneralCallback> callbacks;
+    final Set<GeneralCallback<T>> callbacks;
 
-    private MultiGeneralCallback(@NonNull List<MultiGeneralCallback> multiGeneralCallbacks) {
+    private MultiGeneralCallback(@NonNull List<MultiGeneralCallback<T>> multiGeneralCallbacks) {
         this.callbacks = new HashSet<>(multiGeneralCallbacks);
     }
 
     @NonNull
-    public static MultiGeneralCallback of(MultiGeneralCallback... callbacks) {
-        return new MultiGeneralCallback(Arrays.asList(callbacks));
+    public static <U> MultiGeneralCallback<U> of(MultiGeneralCallback<U>... callbacks) {
+        return new MultiGeneralCallback<>(Arrays.asList(callbacks));
     }
 
     @Override
-    public void notifyChanged() {
-        for (GeneralCallback callback : callbacks) {
-            callback.notifyChanged();
+    public void notifyChanged(T obj) {
+        for (GeneralCallback<T> callback : callbacks) {
+            callback.notifyChanged(obj);
         }
     }
 
     @Override
-    public void addCallback(GeneralCallback callback) {
+    public void addCallback(GeneralCallback<T> callback) {
         callbacks.add(callback);
     }
 
     @Override
-    public void removeCallback(GeneralCallback callback) {
+    public void removeCallback(GeneralCallback<T> callback) {
         callbacks.remove(callback);
     }
 }

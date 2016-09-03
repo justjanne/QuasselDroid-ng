@@ -29,7 +29,7 @@ import de.kuschku.libquassel.syncables.Synced;
 import de.kuschku.util.observables.lists.ObservableList;
 import de.kuschku.util.observables.lists.ObservableSet;
 
-public interface QBufferViewConfig<T extends QBufferViewConfig> extends QSyncableObject<T> {
+public interface QBufferViewConfig extends QSyncableObject<QBufferViewConfig> {
 
     int bufferViewId();
 
@@ -69,6 +69,9 @@ public interface QBufferViewConfig<T extends QBufferViewConfig> extends QSyncabl
     void _setDisableDecoration(boolean disableDecoration);
 
     int allowedBufferTypes();
+
+    boolean isBufferTypeAllowed(BufferInfo.Type type);
+    void setBufferTypeAllowed(BufferInfo.Type type, boolean allowed);
 
     @Synced
     void setAllowedBufferTypes(int bufferTypes);

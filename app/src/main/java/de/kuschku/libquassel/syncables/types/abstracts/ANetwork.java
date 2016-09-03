@@ -32,7 +32,7 @@ import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 
-public abstract class ANetwork<T extends ANetwork<T>> extends SyncableObject<T> implements QNetwork {
+public abstract class ANetwork extends SyncableObject<QNetwork> implements QNetwork {
     @Override
     public void setNetworkName(String networkName) {
         _setNetworkName(networkName);

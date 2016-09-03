@@ -39,6 +39,7 @@ import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.AIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
+import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.backports.Objects;
 import de.kuschku.util.irc.IrcUserUtils;
@@ -46,7 +47,7 @@ import de.kuschku.util.irc.ModeUtils;
 
 import static de.kuschku.util.AndroidAssert.assertEquals;
 
-public class IrcUser extends AIrcUser<IrcUser> {
+public class IrcUser extends AIrcUser {
     @NonNull
     private final SparseArray<DateTime> lastActivity = new SparseArray<>();
     @NonNull
@@ -472,7 +473,7 @@ public class IrcUser extends AIrcUser<IrcUser> {
     }
 
     @Override
-    public void _update(IrcUser from) {
+    public void _update(QIrcUser from) {
     }
 
     @NonNull

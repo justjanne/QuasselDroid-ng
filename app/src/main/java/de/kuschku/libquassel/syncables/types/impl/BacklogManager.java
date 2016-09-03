@@ -44,11 +44,12 @@ import de.kuschku.libquassel.message.Message_Table;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.ABacklogManager;
+import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
-public class BacklogManager extends ABacklogManager<BacklogManager> {
+public class BacklogManager extends ABacklogManager {
     private final Client client;
     private final BacklogStorage storage;
     private final Set<Integer> initialized = new HashSet<>();
@@ -114,7 +115,7 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
         checkWaiting();
     }
 
-    private void checkWaiting() {
+    public void checkWaiting() {
         assertNotNull(provider);
 
         if (client.connectionStatus() == ConnectionChangeEvent.Status.LOADING_BACKLOG) {
@@ -217,7 +218,7 @@ public class BacklogManager extends ABacklogManager<BacklogManager> {
     }
 
     @Override
-    public void _update(BacklogManager from) {
+    public void _update(QBacklogManager from) {
 
     }
 

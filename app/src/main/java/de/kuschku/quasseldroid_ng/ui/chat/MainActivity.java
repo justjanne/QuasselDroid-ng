@@ -54,7 +54,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +69,6 @@ import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.LoginRequireEvent;
 import de.kuschku.libquassel.events.UnknownCertificateEvent;
 import de.kuschku.libquassel.functions.types.HandshakeFunction;
-import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
@@ -78,11 +76,8 @@ import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.objects.types.CoreSetupData;
 import de.kuschku.libquassel.objects.types.SetupData;
-import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
-import de.kuschku.libquassel.syncables.types.impl.BufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
-import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.quasseldroid_ng.R;
@@ -92,6 +87,7 @@ import de.kuschku.quasseldroid_ng.ui.chat.drawer.BufferViewConfigAdapter;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.ChatFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.LoadingFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.util.Status;
+import de.kuschku.quasseldroid_ng.ui.coresettings.ChatListListActivity;
 import de.kuschku.quasseldroid_ng.ui.settings.SettingsActivity;
 import de.kuschku.quasseldroid_ng.ui.setup.CoreSetupActivity;
 import de.kuschku.util.accounts.Account;
@@ -179,6 +175,7 @@ public class MainActivity extends BoundActivity {
                 }
                 break;
                 case R.id.action_manage_chat_lists: {
+                    startActivity(new Intent(this, ChatListListActivity.class));
                 }
             }
             return false;
@@ -216,10 +213,13 @@ public class MainActivity extends BoundActivity {
     }
 
     private void replaceFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        this.currentFragment = fragment;
-        transaction.replace(R.id.content_host, fragment);
-        transaction.commit();
+        try {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            this.currentFragment = fragment;
+            transaction.replace(R.id.content_host, fragment);
+            transaction.commit();
+        } catch (IllegalStateException ignored) {
+        }
     }
 
     @Override
@@ -302,7 +302,7 @@ public class MainActivity extends BoundActivity {
     public void onConnectionChange(ConnectionChangeEvent.Status status) {
         if (status == ConnectionChangeEvent.Status.CONNECTED) {
             replaceFragment(new ChatFragment());
-            onConnected();
+            connected();
         } else if (status == ConnectionChangeEvent.Status.DISCONNECTED) {
             Toast.makeText(getApplication(), context.themeUtil().translations.statusDisconnected, Toast.LENGTH_LONG).show();
         }
@@ -317,7 +317,7 @@ public class MainActivity extends BoundActivity {
     public void onEventMainThread(BufferChangeEvent event) {
         Client client = context.client();
         if (client != null) {
-            QBacklogManager<? extends QBacklogManager> backlogManager = client.backlogManager();
+            QBacklogManager backlogManager = client.backlogManager();
             int id = backlogManager.open();
             status.bufferId = id;
             updateBuffer(id);
@@ -392,12 +392,12 @@ public class MainActivity extends BoundActivity {
             connectToServer(manager.account(context.settings().preferenceLastAccount.get()));
         else {
             if (context.client() != null && context.client().connectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
-                onConnected();
+                connected();
             }
         }
     }
 
-    private void onConnected() {
+    private void connected() {
         if (drawerLayout != null)
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 

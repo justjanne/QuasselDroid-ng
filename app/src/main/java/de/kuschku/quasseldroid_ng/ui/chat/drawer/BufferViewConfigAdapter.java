@@ -49,7 +49,7 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
     private final ObservableSortedList<NetworkItem> items;
     private final Map<QNetwork, NetworkItem> itemMap = new WeakHashMap<>();
     private final Map<Integer, BufferViewHolder> bufferViewHolderMap = new WeakHashMap<>();
-    private QBufferViewConfig<?> config;
+    private QBufferViewConfig config;
     private WeakReference<RecyclerView> recyclerView = new WeakReference<>(null);
     private int open;
     private OnBufferClickListener bufferClickListener;
@@ -213,7 +213,7 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
     }
 
     public void selectConfig(int id) {
-        QBufferViewConfig<?> newconfig = context.client().bufferViewManager().bufferViewConfig(id);
+        QBufferViewConfig newconfig = context.client().bufferViewManager().bufferViewConfig(id);
         Parcelable state = (newconfig == config) ? saveState() : null;
 
         if (config != null)

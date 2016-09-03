@@ -41,7 +41,7 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 import static de.kuschku.util.AndroidAssert.assertTrue;
 import static junit.framework.Assert.assertEquals;
 
-public abstract class SyncableObject<T extends SyncableObject<T>> extends GeneralObservable implements QSyncableObject<T> {
+public abstract class SyncableObject<T> extends GeneralObservable<T> implements QSyncableObject<T> {
     @Nullable
     protected BusProvider provider;
     protected Client client;
@@ -135,6 +135,6 @@ public abstract class SyncableObject<T extends SyncableObject<T>> extends Genera
     }
 
     public void _update() {
-        notifyChanged();
+        notifyChanged((T) this);
     }
 }

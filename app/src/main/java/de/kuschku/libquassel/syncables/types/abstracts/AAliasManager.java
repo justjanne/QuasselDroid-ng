@@ -24,7 +24,7 @@ package de.kuschku.libquassel.syncables.types.abstracts;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.libquassel.syncables.types.interfaces.QAliasManager;
 
-public abstract class AAliasManager<T extends AAliasManager<T>> extends SyncableObject<T> implements QAliasManager {
+public abstract class AAliasManager extends SyncableObject<QAliasManager> implements QAliasManager {
     @Override
     public void addAlias(String name, String expansion) {
         _addAlias(name, expansion);

@@ -37,11 +37,12 @@ import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.IgnoreListManagerSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.AIgnoreListManager;
+import de.kuschku.libquassel.syncables.types.interfaces.QIgnoreListManager;
 import de.kuschku.util.regex.SmartRegEx;
 
 import static de.kuschku.util.AndroidAssert.assertEquals;
 
-public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
+public class IgnoreListManager extends AIgnoreListManager {
     @NonNull
     private final List<IgnoreListItem> ignoreList = new ArrayList<>();
 
@@ -125,9 +126,9 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
     }
 
     @Override
-    public void _update(IgnoreListManager from) {
+    public void _update(QIgnoreListManager from) {
         this.ignoreList.clear();
-        this.ignoreList.addAll(from.ignoreList);
+        this.ignoreList.addAll(from.ignoreList());
         this._update();
     }
 
@@ -264,5 +265,10 @@ public class IgnoreListManager extends AIgnoreListManager<IgnoreListManager> {
     @Override
     public void requestUpdate() {
         requestUpdate(IgnoreListManagerSerializer.get().toVariantMap(this));
+    }
+
+    @Override
+    public List<? extends IgnoreListItem> ignoreList() {
+        return ignoreList;
     }
 }

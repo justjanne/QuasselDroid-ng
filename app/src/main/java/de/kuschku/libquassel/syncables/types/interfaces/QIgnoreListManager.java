@@ -23,13 +23,16 @@ package de.kuschku.libquassel.syncables.types.interfaces;
 
 import android.support.annotation.NonNull;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.Synced;
+import de.kuschku.libquassel.syncables.types.impl.IgnoreListManager;
 
-public interface QIgnoreListManager extends QObservable {
+public interface QIgnoreListManager extends QObservable<QIgnoreListManager> {
     @Synced
     void removeIgnoreListItem(final String ignoreRule);
 
@@ -55,6 +58,8 @@ public interface QIgnoreListManager extends QObservable {
     void requestUpdate(Map<String, QVariant<Object>> variantMap);
 
     void requestUpdate();
+
+    List<? extends IgnoreListManager.IgnoreListItem> ignoreList();
 
     enum IgnoreType {
         SenderIgnore(0),

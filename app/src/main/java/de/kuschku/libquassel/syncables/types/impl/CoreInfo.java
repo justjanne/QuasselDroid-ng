@@ -29,8 +29,9 @@ import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.ACoreInfo;
+import de.kuschku.libquassel.syncables.types.interfaces.QCoreInfo;
 
-public class CoreInfo extends ACoreInfo<CoreInfo> {
+public class CoreInfo extends ACoreInfo {
     private Map<String, QVariant> coreData;
 
     @Override
@@ -50,7 +51,7 @@ public class CoreInfo extends ACoreInfo<CoreInfo> {
     }
 
     @Override
-    public void _update(CoreInfo from) {
+    public void _update(QCoreInfo from) {
 
     }
 

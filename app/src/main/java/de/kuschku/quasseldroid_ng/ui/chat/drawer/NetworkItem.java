@@ -40,7 +40,7 @@ import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public class NetworkItem implements ParentListItem {
     private final AppContext context;
-    private final QBufferViewConfig<?> config;
+    private final QBufferViewConfig config;
     private final QNetwork network;
     private final BufferViewConfigAdapter bufferViewConfigAdapter;
     private final ObservableSortedList<Buffer> buffers = new ObservableSortedList<>(Buffer.class, new ObservableSortedList.ItemComparator<Buffer>() {
@@ -103,7 +103,7 @@ public class NetworkItem implements ParentListItem {
     };
     private ObservableSet<Integer> backingSet;
 
-    public NetworkItem(AppContext context, QBufferViewConfig<?> config, QNetwork network, BufferViewConfigAdapter bufferViewConfigAdapter) {
+    public NetworkItem(AppContext context, QBufferViewConfig config, QNetwork network, BufferViewConfigAdapter bufferViewConfigAdapter) {
         this.context = context;
         this.config = config;
         this.network = network;

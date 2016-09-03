@@ -27,7 +27,7 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.libquassel.syncables.types.interfaces.QCoreInfo;
 
-public abstract class ACoreInfo<T extends ACoreInfo<T>> extends SyncableObject<T> implements QCoreInfo {
+public abstract class ACoreInfo extends SyncableObject<QCoreInfo> implements QCoreInfo {
     @Override
     public void setCoreData(Map<String, QVariant> coreData) {
         _setCoreData(coreData);

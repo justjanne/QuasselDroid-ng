@@ -30,7 +30,7 @@ import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.syncables.Synced;
 import de.kuschku.util.observables.lists.ObservableSet;
 
-public interface QIrcChannel extends QObservable {
+public interface QIrcChannel extends QObservable<QIrcChannel> {
     boolean isKnownUser(QIrcUser ircuser);
 
     boolean isValidChannelUserMode(final String mode);

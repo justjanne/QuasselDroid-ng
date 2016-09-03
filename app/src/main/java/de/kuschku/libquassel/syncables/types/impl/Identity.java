@@ -34,7 +34,7 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.AIdentity;
 import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
 
-public class Identity extends AIdentity<Identity> {
+public class Identity extends AIdentity {
     private int id;
     private String name;
     private String realName;
@@ -381,7 +381,7 @@ public class Identity extends AIdentity<Identity> {
     }
 
     @Override
-    public void _update(Identity from) {
+    public void _update(QIdentity from) {
     }
 
     @Override

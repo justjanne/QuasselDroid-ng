@@ -29,7 +29,7 @@ import de.kuschku.libquassel.objects.types.Command;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.Synced;
 
-public interface QAliasManager extends QObservable {
+public interface QAliasManager extends QObservable<QAliasManager> {
     int indexOf(final String name);
 
     boolean contains(final String name);

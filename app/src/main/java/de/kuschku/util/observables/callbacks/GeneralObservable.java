@@ -26,24 +26,24 @@ import java.util.Set;
 
 import de.kuschku.libquassel.syncables.types.interfaces.QObservable;
 
-public class GeneralObservable implements QObservable, GeneralCallback {
-    final Set<GeneralCallback> callbackSet = new HashSet<>();
+public class GeneralObservable<T> implements QObservable<T>, GeneralCallback<T> {
+    final Set<GeneralCallback<T>> callbackSet = new HashSet<>();
 
     @Override
-    public void addObserver(GeneralCallback o) {
+    public void addObserver(GeneralCallback<T> o) {
         callbackSet.add(o);
     }
 
     @Override
-    public void deleteObserver(GeneralCallback o) {
+    public void deleteObserver(GeneralCallback<T> o) {
         callbackSet.remove(o);
     }
 
 
     @Override
-    public void notifyChanged() {
-        for (GeneralCallback callback : callbackSet) {
-            callback.notifyChanged();
+    public void notifyChanged(T object) {
+        for (GeneralCallback<T> callback : callbackSet) {
+            callback.notifyChanged(object);
         }
     }
 }

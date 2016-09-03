@@ -24,13 +24,14 @@ package de.kuschku.libquassel.syncables.types.interfaces;
 import android.support.annotation.NonNull;
 
 import java.util.List;
+import java.util.Map;
 
-import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.Synced;
+import de.kuschku.util.observables.lists.ObservableSortedList;
 
-public interface QBufferViewManager<T extends QBufferViewManager<T>> extends QSyncableObject<T> {
+public interface QBufferViewManager extends QSyncableObject<QBufferViewManager> {
     @NonNull
-    List<QBufferViewConfig> bufferViewConfigs();
+    ObservableSortedList<QBufferViewConfig> bufferViewConfigs();
 
     QBufferViewConfig bufferViewConfig(int bufferViewId);
 
@@ -53,4 +54,6 @@ public interface QBufferViewManager<T extends QBufferViewManager<T>> extends QSy
     void _deleteBufferViewConfig(int bufferViewConfigId);
 
     void checkForNewBuffers(int bufferId);
+
+    Map<Integer,QBufferViewConfig> bufferViewConfigMap();
 }

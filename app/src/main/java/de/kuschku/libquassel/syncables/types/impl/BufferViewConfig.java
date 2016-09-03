@@ -36,13 +36,14 @@ import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.BufferViewConfigSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.ABufferViewConfig;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.observables.lists.ObservableList;
 import de.kuschku.util.observables.lists.ObservableSet;
 
 import static de.kuschku.libquassel.primitives.types.BufferInfo.Type;
 
-public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
+public class BufferViewConfig extends ABufferViewConfig {
     @NonNull
     private final ObservableList<Integer> buffers;
     @NonNull
@@ -150,7 +151,6 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     @Override
     public void checkAddBuffer(int id) {
         if (!allBufferIds.contains(id)) {
-            Log.w("DEBUG", "buffer " + id + " needs to be added to config " + bufferViewName);
             Buffer buffer1 = client.bufferManager().buffer(id);
             if (addNewBuffersAutomatically && buffer1 != null) {
                 BufferInfo info = buffer1.getInfo();
@@ -172,13 +172,9 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
                     pos = infos.indexOf(info.name);
                 }
                 requestAddBuffer(info.id, pos);
-                Log.w("DEBUG", "adding buffer: " + id);
             } else {
                 requestRemoveBufferPermanently(id);
-                Log.w("DEBUG", "removing buffer permanently: " + id);
             }
-        }  else {
-            Log.w("DEBUG", "Buffer already exists: " + id);
         }
     }
 
@@ -236,6 +232,17 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     @Override
     public int allowedBufferTypes() {
         return allowedBufferTypes;
+    }
+
+    @Override
+    public boolean isBufferTypeAllowed(Type type) {
+        return (allowedBufferTypes & type.id) != 0;
+    }
+
+    @Override
+    public void setBufferTypeAllowed(Type type, boolean allowed) {
+        int masked = allowedBufferTypes & ~type.id;
+        _setAllowedBufferTypes(masked | (allowed ? type.id : 0));
     }
 
     @Override
@@ -452,25 +459,25 @@ public class BufferViewConfig extends ABufferViewConfig<BufferViewConfig> {
     }
 
     @Override
-    public void _update(@NonNull BufferViewConfig from) {
-        this.bufferViewId = from.bufferViewId;
-        this.bufferViewName = from.bufferViewName;
-        this.networkId = from.networkId;
-        this.addNewBuffersAutomatically = from.addNewBuffersAutomatically;
-        this.sortAlphabetically = from.sortAlphabetically;
-        this.disableDecoration = from.disableDecoration;
-        this.allowedBufferTypes = from.allowedBufferTypes;
-        this.minimumActivity = from.minimumActivity;
-        this.hideInactiveBuffers = from.hideInactiveBuffers;
-        this.hideInactiveNetworks = from.hideInactiveNetworks;
+    public void _update(@NonNull QBufferViewConfig from) {
+        this.bufferViewId = from.bufferViewId();
+        this.bufferViewName = from.bufferViewName();
+        this.networkId = from.networkId();
+        this.addNewBuffersAutomatically = from.addNewBuffersAutomatically();
+        this.sortAlphabetically = from.sortAlphabetically();
+        this.disableDecoration = from.disableDecoration();
+        this.allowedBufferTypes = from.allowedBufferTypes();
+        this.minimumActivity = from.minimumActivity();
+        this.hideInactiveBuffers = from.hideInactiveBuffers();
+        this.hideInactiveNetworks = from.hideInactiveNetworks();
         this.buffers.clear();
-        this.buffers.addAll(from.buffers);
-        this.visibleBufferIds.retainAll(from.visibleBufferIds);
-        this.visibleBufferIds.addAll(from.visibleBufferIds);
-        this.removedBuffers.retainAll(from.removedBuffers);
-        this.removedBuffers.addAll(from.removedBuffers);
-        this.temporarilyRemovedBuffers.retainAll(from.temporarilyRemovedBuffers);
-        this.temporarilyRemovedBuffers.addAll(from.temporarilyRemovedBuffers);
+        this.buffers.addAll(from.bufferList());
+        this.visibleBufferIds.retainAll(from.bufferIds());
+        this.visibleBufferIds.addAll(from.bufferIds());
+        this.removedBuffers.retainAll(from.removedBuffers());
+        this.removedBuffers.addAll(from.removedBuffers());
+        this.temporarilyRemovedBuffers.retainAll(from.temporarilyRemovedBuffers());
+        this.temporarilyRemovedBuffers.addAll(from.temporarilyRemovedBuffers());
         _update();
     }
 

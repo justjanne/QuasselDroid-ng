@@ -30,7 +30,7 @@ import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
-public interface QSyncableObject<T extends QSyncableObject> extends QObservable {
+public interface QSyncableObject<T> extends QObservable<T> {
     void syncVar(@NonNull String methodName, @NonNull Object... params);
 
     void sync(@NonNull String methodName, @NonNull Object[] params);

@@ -41,10 +41,11 @@ import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.AliasManagerSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.AAliasManager;
+import de.kuschku.libquassel.syncables.types.interfaces.QAliasManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 
-public class AliasManager extends AAliasManager<AliasManager> {
+public class AliasManager extends AAliasManager {
     @NonNull
     private static final Alias[] DEFAULTS = new Alias[]{
             new Alias("j", "/join $0"),
@@ -236,9 +237,13 @@ public class AliasManager extends AAliasManager<AliasManager> {
     }
 
     @Override
-    public void _update(@NonNull AliasManager from) {
-        names = from.names;
-        aliases = from.aliases;
+    public void _update(@NonNull QAliasManager from) {
+        List<String> names = new ArrayList<>(from.aliases().size());
+        for (Alias alias : from.aliases()) {
+            names.add(alias.name);
+        }
+        this.names = names;
+        aliases = from.aliases();
         _update();
     }
 }

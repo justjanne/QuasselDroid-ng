@@ -31,7 +31,7 @@ import java.util.List;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.syncables.Synced;
 
-public interface QIrcUser extends QObservable {
+public interface QIrcUser extends QObservable<QIrcUser> {
     String user();
 
     String host();

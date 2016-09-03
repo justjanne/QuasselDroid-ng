@@ -29,7 +29,7 @@ import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 
-public abstract class AIrcUser<T extends AIrcUser<T>> extends SyncableObject<T> implements QIrcUser {
+public abstract class AIrcUser extends SyncableObject<QIrcUser> implements QIrcUser {
     @Override
     public void setUser(String user) {
         _setUser(user);

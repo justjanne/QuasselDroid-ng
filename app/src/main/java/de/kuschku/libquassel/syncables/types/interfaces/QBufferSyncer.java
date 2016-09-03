@@ -22,11 +22,12 @@
 package de.kuschku.libquassel.syncables.types.interfaces;
 
 import android.databinding.ObservableInt;
+import android.util.SparseIntArray;
 
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.Synced;
 
-public interface QBufferSyncer extends QObservable {
+public interface QBufferSyncer extends QObservable<QBufferSyncer> {
     int lastSeenMsg(int buffer);
 
     int markerLine(int buffer);
@@ -106,4 +107,8 @@ public interface QBufferSyncer extends QObservable {
     void addActivity(int bufferid, Message.Type type);
 
     void addActivity(Message message);
+
+    SparseIntArray lastSeenMsgs();
+
+    SparseIntArray markerLines();
 }

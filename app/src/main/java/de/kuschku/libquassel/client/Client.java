@@ -69,9 +69,6 @@ import de.kuschku.util.buffermetadata.BufferMetaDataManager;
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class Client extends AClient {
-
-// synced
-
     @NonNull
     private final NetworkManager networkManager;
     @NonNull
@@ -84,7 +81,7 @@ public class Client extends AClient {
     private final NotificationManager notificationManager;
     private final List<String> initRequests = new LinkedList<>();
     @NonNull
-    private final QBacklogManager<? extends QBacklogManager> backlogManager;
+    private final QBacklogManager backlogManager;
     private final Map<String, List<SyncFunction>> bufferedSyncs = new HashMap<>();
     private final Map<Integer, Pair<QBufferViewConfig, Integer>> bufferedBuffers = new HashMap<>();
     private int initRequestMax = 0;
@@ -117,7 +114,7 @@ public class Client extends AClient {
         this.metaDataManager = metaDataManager;
     }
 
-    public QBufferViewManager<?> bufferViewManager() {
+    public QBufferViewManager bufferViewManager() {
         return bufferViewManager;
     }
 
@@ -130,7 +127,7 @@ public class Client extends AClient {
     }
 
     @NonNull
-    public QBacklogManager<? extends QBacklogManager> backlogManager() {
+    public QBacklogManager backlogManager() {
         return backlogManager;
     }
 
@@ -193,20 +190,21 @@ public class Client extends AClient {
 
     }
 
-    public ConnectionChangeEvent.Status connectionStatus() {
+    public synchronized ConnectionChangeEvent.Status connectionStatus() {
         return connectionStatus;
     }
 
-    public void setConnectionStatus(@NonNull ConnectionChangeEvent.Status connectionStatus) {
+    public synchronized void setConnectionStatus(@NonNull ConnectionChangeEvent.Status connectionStatus) {
         assertNotNull(provider);
 
         this.connectionStatus = connectionStatus;
+        provider.event.postSticky(new ConnectionChangeEvent(connectionStatus));
+
         if (connectionStatus == ConnectionChangeEvent.Status.LOADING_BACKLOG) {
             bufferManager().doBacklogInit(20);
         } else if (connectionStatus == ConnectionChangeEvent.Status.CONNECTED) {
             // FIXME: Init buffer activity state and highlightss
         }
-        provider.event.postSticky(new ConnectionChangeEvent(connectionStatus));
     }
 
     @Nullable
@@ -420,23 +418,23 @@ public class Client extends AClient {
         return notificationManager;
     }
 
-    public void setBufferSyncer(BufferSyncer bufferSyncer) {
+    public void setBufferSyncer(QBufferSyncer bufferSyncer) {
         this.bufferSyncer = bufferSyncer;
     }
 
-    public void setBufferViewManager(BufferViewManager bufferViewManager) {
+    public void setBufferViewManager(QBufferViewManager bufferViewManager) {
         this.bufferViewManager = bufferViewManager;
     }
 
-    public void setAliasManager(AliasManager aliasManager) {
+    public void setAliasManager(QAliasManager aliasManager) {
         this.aliasManager = aliasManager;
     }
 
-    public void setIgnoreListManager(IgnoreListManager ignoreListManager) {
+    public void setIgnoreListManager(QIgnoreListManager ignoreListManager) {
         this.ignoreListManager = ignoreListManager;
     }
 
-    public void setGlobalNetworkConfig(NetworkConfig globalNetworkConfig) {
+    public void setGlobalNetworkConfig(QNetworkConfig globalNetworkConfig) {
         this.globalNetworkConfig = globalNetworkConfig;
     }
 

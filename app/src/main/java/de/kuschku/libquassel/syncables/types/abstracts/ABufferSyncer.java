@@ -24,7 +24,7 @@ package de.kuschku.libquassel.syncables.types.abstracts;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferSyncer;
 
-public abstract class ABufferSyncer<T extends ABufferSyncer<T>> extends SyncableObject<T> implements QBufferSyncer {
+public abstract class ABufferSyncer extends SyncableObject<QBufferSyncer> implements QBufferSyncer {
     @Override
     public void requestSetLastSeenMsg(int buffer, int msgId) {
         _requestSetLastSeenMsg(buffer, msgId);

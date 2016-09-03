@@ -21,6 +21,6 @@
 
 package de.kuschku.util.observables.callbacks;
 
-public interface GeneralCallback {
-    void notifyChanged();
+public interface GeneralCallback<T> {
+    void notifyChanged(T object);
 }

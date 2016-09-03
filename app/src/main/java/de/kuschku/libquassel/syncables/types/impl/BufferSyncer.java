@@ -35,13 +35,14 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.BufferSyncerSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.ABufferSyncer;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferSyncer;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
-public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
+public class BufferSyncer extends ABufferSyncer {
 
     @NonNull
     private final SparseArray<ObservableInt> activities = new SparseArray<>();
@@ -75,7 +76,7 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
     @Override
     public void _setLastSeenMsg(int buffer, int msgId) {
         assertNotNull(client);
-        QBacklogManager<? extends QBacklogManager> backlogManager = client.backlogManager();
+        QBacklogManager backlogManager = client.backlogManager();
         assertNotNull(backlogManager);
 
         if (msgId < 0)
@@ -198,9 +199,9 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
     }
 
     @Override
-    public void _update(@NonNull BufferSyncer from) {
-        lastSeenMsgs = from.lastSeenMsgs;
-        markerLines = from.markerLines;
+    public void _update(@NonNull QBufferSyncer from) {
+        lastSeenMsgs = from.lastSeenMsgs();
+        markerLines = from.markerLines();
         _update();
     }
 
@@ -240,5 +241,15 @@ public class BufferSyncer extends ABufferSyncer<BufferSyncer> {
         if (message.id > lastSeenMsg) {
             addActivity(message.bufferInfo.id, message.type);
         }
+    }
+
+    @Override
+    public SparseIntArray lastSeenMsgs() {
+        return lastSeenMsgs;
+    }
+
+    @Override
+    public SparseIntArray markerLines() {
+        return markerLines;
     }
 }

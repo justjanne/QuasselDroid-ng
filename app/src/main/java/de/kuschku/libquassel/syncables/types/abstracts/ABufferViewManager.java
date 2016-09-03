@@ -27,7 +27,7 @@ import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 
-public abstract class ABufferViewManager<T extends ABufferViewManager<T>> extends SyncableObject<T> implements QBufferViewManager<T> {
+public abstract class ABufferViewManager extends SyncableObject<QBufferViewManager> implements QBufferViewManager {
     @Override
     public void createBufferView(QBufferViewConfig bufferView) {
         //_addBufferViewConfig(bufferView);

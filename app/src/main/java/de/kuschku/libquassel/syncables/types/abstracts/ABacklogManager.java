@@ -28,7 +28,7 @@ import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
 
-public abstract class ABacklogManager<T extends ABacklogManager<T>> extends SyncableObject<T> implements QBacklogManager<T> {
+public abstract class ABacklogManager extends SyncableObject<QBacklogManager> implements QBacklogManager {
     static final String intName = QMetaType.Type.Int.getSerializableName();
 
     @Override

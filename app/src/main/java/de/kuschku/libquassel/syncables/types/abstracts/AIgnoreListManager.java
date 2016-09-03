@@ -35,7 +35,7 @@ import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
-public abstract class AIgnoreListManager<T extends AIgnoreListManager<T>> extends SyncableObject<T> implements QIgnoreListManager {
+public abstract class AIgnoreListManager extends SyncableObject<QIgnoreListManager> implements QIgnoreListManager {
     @Override
     public void removeIgnoreListItem(String ignoreRule) {
         _removeIgnoreListItem(ignoreRule);

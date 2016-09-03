@@ -24,7 +24,7 @@ package de.kuschku.libquassel.syncables.types.abstracts;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetworkConfig;
 
-public abstract class ANetworkConfig<T extends ANetworkConfig<T>> extends SyncableObject<T> implements QNetworkConfig {
+public abstract class ANetworkConfig extends SyncableObject<QNetworkConfig> implements QNetworkConfig {
     @Override
     public void setPingTimeoutEnabled(boolean pingTimeoutEnabled) {
         _setPingTimeoutEnabled(pingTimeoutEnabled);

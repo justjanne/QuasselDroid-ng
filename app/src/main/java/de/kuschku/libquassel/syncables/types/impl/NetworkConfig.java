@@ -29,8 +29,9 @@ import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.ANetworkConfig;
+import de.kuschku.libquassel.syncables.types.interfaces.QNetworkConfig;
 
-public class NetworkConfig extends ANetworkConfig<NetworkConfig> {
+public class NetworkConfig extends ANetworkConfig {
     private boolean standardCtcp;
 
     private boolean autoWhoEnabled;
@@ -180,7 +181,7 @@ public class NetworkConfig extends ANetworkConfig<NetworkConfig> {
     }
 
     @Override
-    public void _update(NetworkConfig from) {
+    public void _update(QNetworkConfig from) {
 
     }
 

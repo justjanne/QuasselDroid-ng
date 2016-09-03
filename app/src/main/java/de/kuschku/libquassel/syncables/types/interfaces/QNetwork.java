@@ -32,7 +32,7 @@ import de.kuschku.libquassel.syncables.types.impl.IrcChannel;
 import de.kuschku.libquassel.syncables.types.impl.NetworkInfo;
 import de.kuschku.util.irc.chanmodes.IrcModeProvider;
 
-public interface QNetwork extends QObservable {
+public interface QNetwork extends QObservable<QNetwork> {
     int networkId();
 
     boolean isMyNick(final String nick);

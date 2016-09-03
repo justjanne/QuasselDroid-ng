@@ -26,7 +26,7 @@ import java.util.List;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
 import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
 
-public abstract class AIdentity<T extends AIdentity<T>> extends SyncableObject<T> implements QIdentity {
+public abstract class AIdentity extends SyncableObject<QIdentity> implements QIdentity {
     @Override
     public void setId(int id) {
         _setId(id);

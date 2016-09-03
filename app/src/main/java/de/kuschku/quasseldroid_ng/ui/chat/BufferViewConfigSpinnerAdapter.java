@@ -140,7 +140,7 @@ public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter, Gen
     }
 
     @Override
-    public void notifyChanged() {
+    public void notifyChanged(Object o) {
         for (DataSetObserver observer : observers) {
             observer.onChanged();
         }

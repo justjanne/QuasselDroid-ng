@@ -31,7 +31,7 @@ import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.Synced;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
-public interface QBacklogManager<T extends QSyncableObject<T>> extends QSyncableObject<T> {
+public interface QBacklogManager extends QSyncableObject<QBacklogManager> {
     void requestMoreBacklog(int bufferId, int amount);
 
     void requestBacklogInitial(int id, int amount);
@@ -77,4 +77,6 @@ public interface QBacklogManager<T extends QSyncableObject<T>> extends QSyncable
 
     @NonNull
     Set<Integer> waiting();
+
+    void checkWaiting();
 }

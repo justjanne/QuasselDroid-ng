@@ -61,6 +61,27 @@
             android:theme="@style/AppTheme.Light" />
 
         <activity
+            android:name=".ui.coresettings.ChatListListActivity"
+            android:label="Edit Chat Lists"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.chat.MainActivity"
+            android:theme="@style/AppTheme.Light" />
+
+        <activity
+            android:name=".ui.coresettings.ChatListEditActivity"
+            android:label="Edit Chat List"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.coresettings.ChatListListActivity"
+            android:theme="@style/AppTheme.Light" />
+
+        <activity
+            android:name=".ui.coresettings.ChatListCreateActivity"
+            android:label="Create Chat List"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.coresettings.ChatListListActivity"
+            android:theme="@style/AppTheme.Light" />
+
+        <activity
             android:name=".ui.setup.AccountSetupActivity"
             android:label="Account Setup"
             android:launchMode="singleTask"

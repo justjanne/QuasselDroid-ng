@@ -51,7 +51,7 @@ import de.kuschku.util.irc.ModeUtils;
 import de.kuschku.util.irc.chanmodes.IrcModeProvider;
 import de.kuschku.util.irc.chanmodes.IrcModeProviderFactory;
 
-public class Network extends ANetwork<Network> implements Observer {
+public class Network extends ANetwork implements Observer {
     private final Map<String, QIrcChannel> channels;
     @NonNull
     private final Map<String, QIrcUser> nicks;
@@ -773,7 +773,7 @@ public class Network extends ANetwork<Network> implements Observer {
     }
 
     @Override
-    public void _update(Network from) {
+    public void _update(QNetwork from) {
 
     }
 

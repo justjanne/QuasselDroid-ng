@@ -32,13 +32,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.client.Client;
-import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
@@ -118,7 +114,6 @@ public class ChannelDetailActivity extends BoundActivity {
             if (mode != null) {
                 if (type == QNetwork.ChannelModeType.A_CHANMODE) {
                     // TODO: Implement a proper display for these
-                    // Log.e("DEBUG", String.valueOf(c) + ": " + String.valueOf(channel.modeValueList(c)));
                 } else if (type == QNetwork.ChannelModeType.B_CHANMODE || type == QNetwork.ChannelModeType.C_CHANMODE || type == QNetwork.ChannelModeType.D_CHANMODE) {
                     View v = getLayoutInflater().inflate(R.layout.widget_channel_mode, modes, false);
                     TextView name = (TextView) v.findViewById(R.id.name);

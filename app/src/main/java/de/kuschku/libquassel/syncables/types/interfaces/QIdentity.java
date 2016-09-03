@@ -27,7 +27,7 @@ import java.util.List;
 
 import de.kuschku.libquassel.syncables.Synced;
 
-public interface QIdentity extends QObservable {
+public interface QIdentity extends QObservable<QIdentity> {
     void setToDefaults();
 
     boolean isValid();

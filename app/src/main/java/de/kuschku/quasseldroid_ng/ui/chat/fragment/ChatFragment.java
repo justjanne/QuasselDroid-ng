@@ -93,7 +93,7 @@ public class ChatFragment extends BoundFragment {
                 if (!loading && !recyclerView.canScrollVertically(-1)) {
                     Client client = context.client();
                     assertNotNull(client);
-                    QBacklogManager<? extends QBacklogManager> backlogManager = client.backlogManager();
+                    QBacklogManager backlogManager = client.backlogManager();
                     assertNotNull(backlogManager);
                     backlogManager.requestMoreBacklog(client.backlogManager().open(), 20);
                     loading = true;
@@ -125,7 +125,7 @@ public class ChatFragment extends BoundFragment {
 
         Client client = context.client();
         if (client != null) {
-            QBacklogManager<? extends QBacklogManager> backlogManager = client.backlogManager();
+            QBacklogManager backlogManager = client.backlogManager();
             int id = backlogManager.open();
             ObservableComparableSortedList<Message> messageList = backlogManager.filtered(id);
             messageAdapter.setMessageList(messageList);

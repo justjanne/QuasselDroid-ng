@@ -191,10 +191,7 @@ public class BufferManager {
 
         provider.sendEvent(new BacklogInitEvent(waitingMax - waitingCurrently, waitingMax));
 
-        if (waitingMax == 0) {
-            // TODO: Send event to set up chat list
-            client.setConnectionStatus(ConnectionChangeEvent.Status.CONNECTED);
-        }
+        client.backlogManager().checkWaiting();
     }
 
     public StatusBuffer network(int networkId) {

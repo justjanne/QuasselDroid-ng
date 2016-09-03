@@ -23,8 +23,8 @@ package de.kuschku.libquassel.syncables.types.interfaces;
 
 import de.kuschku.util.observables.callbacks.GeneralCallback;
 
-public interface QObservable {
-    void addObserver(GeneralCallback o);
+public interface QObservable<T> {
+    void addObserver(GeneralCallback<T> o);
 
-    void deleteObserver(GeneralCallback o);
+    void deleteObserver(GeneralCallback<T> o);
 }

@@ -23,7 +23,6 @@ package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,12 +34,35 @@ import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.ABufferViewManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
+import de.kuschku.util.observables.callbacks.GeneralCallback;
+import de.kuschku.util.observables.lists.ObservableSortedList;
 
-public class BufferViewManager extends ABufferViewManager<BufferViewManager> {
+public class BufferViewManager extends ABufferViewManager {
     @NonNull
     final
     Set<Integer> cachedIds = new HashSet<>();
     Map<Integer, QBufferViewConfig> bufferViewConfigs = new HashMap<>();
+    ObservableSortedList<QBufferViewConfig> list = new ObservableSortedList<>(QBufferViewConfig.class, new ObservableSortedList.ItemComparator<QBufferViewConfig>() {
+        @Override
+        public int compare(QBufferViewConfig o1, QBufferViewConfig o2) {
+            return o1.bufferViewName().compareTo(o2.bufferViewName());
+        }
+
+        @Override
+        public boolean areContentsTheSame(QBufferViewConfig oldItem, QBufferViewConfig newItem) {
+            return oldItem.bufferViewName().equals(newItem.bufferViewName());
+        }
+
+        @Override
+        public boolean areItemsTheSame(QBufferViewConfig item1, QBufferViewConfig item2) {
+            return item1.bufferViewId() == item2.bufferViewId();
+        }
+    });
+
+    private GeneralCallback<QBufferViewConfig> observer = config -> {
+        list.notifyItemChanged(list.indexOf(config));
+    };
 
     public BufferViewManager(@NonNull List<Integer> bufferViewIds) {
         cachedIds.addAll(bufferViewIds);
@@ -48,8 +70,8 @@ public class BufferViewManager extends ABufferViewManager<BufferViewManager> {
 
     @NonNull
     @Override
-    public List<QBufferViewConfig> bufferViewConfigs() {
-        return new ArrayList<>(bufferViewConfigs.values());
+    public ObservableSortedList<QBufferViewConfig> bufferViewConfigs() {
+        return list;
     }
 
     @Override
@@ -59,8 +81,13 @@ public class BufferViewManager extends ABufferViewManager<BufferViewManager> {
 
     public void _addBufferViewConfig(@NonNull QBufferViewConfig config) {
         if (!bufferViewConfigs.containsValue(config)) {
+            QBufferViewConfig before = bufferViewConfigs.get(config.bufferViewId());
+            if (before != null)
+                list.remove(before);
 
             bufferViewConfigs.put(config.bufferViewId(), config);
+            list.add(config);
+            config.addObserver(observer);
             _update();
         }
     }
@@ -81,7 +108,9 @@ public class BufferViewManager extends ABufferViewManager<BufferViewManager> {
         if (!bufferViewConfigs.containsKey(bufferViewConfigId))
             return;
 
-        bufferViewConfigs.remove(bufferViewConfigId);
+        QBufferViewConfig config = bufferViewConfigs.remove(bufferViewConfigId);
+        config.deleteObserver(observer);
+        list.remove(config);
         _update();
     }
 
@@ -90,6 +119,11 @@ public class BufferViewManager extends ABufferViewManager<BufferViewManager> {
         for (QBufferViewConfig config : bufferViewConfigs()) {
             config.checkAddBuffer(bufferId);
         }
+    }
+
+    @Override
+    public Map<Integer, QBufferViewConfig> bufferViewConfigMap() {
+        return bufferViewConfigs;
     }
 
     @Override
@@ -107,7 +141,9 @@ public class BufferViewManager extends ABufferViewManager<BufferViewManager> {
     }
 
     @Override
-    public void _update(@NonNull BufferViewManager from) {
-        this.bufferViewConfigs = from.bufferViewConfigs;
+    public void _update(@NonNull QBufferViewManager from) {
+        this.bufferViewConfigs = from.bufferViewConfigMap();
+        this.list.retainAll(from.bufferViewConfigs());
+        this.list.addAll(from.bufferViewConfigs());
     }
 }

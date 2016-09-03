@@ -43,6 +43,7 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.IrcChannelSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.AIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
+import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.irc.ModeUtils;
@@ -50,7 +51,7 @@ import de.kuschku.util.observables.lists.ObservableSet;
 
 import static de.kuschku.util.AndroidAssert.assertEquals;
 
-public class IrcChannel extends AIrcChannel<IrcChannel> {
+public class IrcChannel extends AIrcChannel {
     private final String name;
     @NonNull
     private final Map<String, Set<Character>> userModes = new HashMap<>();
@@ -477,7 +478,7 @@ public class IrcChannel extends AIrcChannel<IrcChannel> {
     }
 
     @Override
-    public void _update(IrcChannel from) {
+    public void _update(QIrcChannel from) {
 
     }
 
