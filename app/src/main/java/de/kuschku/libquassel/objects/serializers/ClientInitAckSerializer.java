@@ -34,6 +34,7 @@ import de.kuschku.libquassel.functions.types.SerializedFunction;
 import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.types.ClientInitAck;
 import de.kuschku.libquassel.objects.types.StorageBackend;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
@@ -60,10 +61,10 @@ public class ClientInitAckSerializer implements ObjectSerializer<ClientInitAck> 
             }
 
         final Map<String, QVariant<Object>> map = new HashMap<>();
-        map.put("Configured", new QVariant<>(data.Configured));
-        map.put("LoginEnabled", new QVariant<>(data.LoginEnabled));
-        map.put("StorageBackends", new QVariant<>(storageBackends));
-        map.put("CoreFeatures", new QVariant<>(data.CoreFeatures));
+        map.put("Configured", new QVariant<>(QMetaType.Type.Bool, data.Configured));
+        map.put("LoginEnabled", new QVariant<>(QMetaType.Type.Bool, data.LoginEnabled));
+        map.put("StorageBackends", new QVariant<>(QMetaType.Type.QVariantList, storageBackends));
+        map.put("CoreFeatures", new QVariant<>(QMetaType.Type.Int, data.CoreFeatures));
         return map;
     }
 

@@ -22,6 +22,7 @@
 package de.kuschku.libquassel.syncables.types.abstracts;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.List;
 
@@ -227,8 +228,7 @@ public abstract class ANetwork extends SyncableObject<QNetwork> implements QNetw
 
     @Override
     public void setNetworkInfo(NetworkInfo info) {
-        _setNetworkInfo(info);
-        syncVar("setNetworkInfo", info);
+        syncVar("requestSetNetworkInfo", info);
     }
 
     @Override

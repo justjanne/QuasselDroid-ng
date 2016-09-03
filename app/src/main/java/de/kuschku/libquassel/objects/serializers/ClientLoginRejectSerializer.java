@@ -30,6 +30,7 @@ import de.kuschku.libquassel.functions.types.PackedFunction;
 import de.kuschku.libquassel.functions.types.SerializedFunction;
 import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.types.ClientLoginReject;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -53,7 +54,7 @@ public class ClientLoginRejectSerializer implements ObjectSerializer<ClientLogin
         final Map<String, QVariant<Object>> map = new HashMap<>();
         assertNotNull(map);
 
-        map.put("Error", new QVariant<>(data.Error));
+        map.put("Error", new QVariant<>(QMetaType.Type.QString, data.Error));
         return map;
     }
 

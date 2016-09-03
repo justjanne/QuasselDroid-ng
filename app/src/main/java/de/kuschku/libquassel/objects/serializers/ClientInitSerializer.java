@@ -30,6 +30,7 @@ import de.kuschku.libquassel.functions.types.PackedFunction;
 import de.kuschku.libquassel.functions.types.SerializedFunction;
 import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.types.ClientInit;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
@@ -49,11 +50,11 @@ public class ClientInitSerializer implements ObjectSerializer<ClientInit> {
     @Override
     public Map<String, QVariant<Object>> toVariantMap(@NonNull final ClientInit data) {
         final Map<String, QVariant<Object>> map = new HashMap<>();
-        map.put("ClientDate", new QVariant<>(data.ClientDate));
-        map.put("UseSsl", new QVariant<>(data.UseSsl));
-        map.put("ClientVersion", new QVariant<>(data.ClientVersion));
-        map.put("UseCompression", new QVariant<>(data.UseCompression));
-        map.put("ProtocolVersion", new QVariant<>(data.ProtocolVersion));
+        map.put("ClientDate", new QVariant<>(QMetaType.Type.QString, data.ClientDate));
+        map.put("UseSsl", new QVariant<>(QMetaType.Type.Bool, data.UseSsl));
+        map.put("ClientVersion", new QVariant<>(QMetaType.Type.QString, data.ClientVersion));
+        map.put("UseCompression", new QVariant<>(QMetaType.Type.Bool, data.UseCompression));
+        map.put("ProtocolVersion", new QVariant<>(QMetaType.Type.Int, data.ProtocolVersion));
         return map;
     }
 

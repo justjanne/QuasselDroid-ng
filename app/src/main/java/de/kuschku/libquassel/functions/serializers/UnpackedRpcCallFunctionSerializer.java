@@ -50,7 +50,7 @@ public class UnpackedRpcCallFunctionSerializer implements FunctionSerializer<Rpc
     @Override
     public List serialize(@NonNull final RpcCallFunction data) {
         final List func = new ArrayList<>();
-        func.add(new QVariant<>(FunctionType.RPCCALL.id));
+        func.add(new QVariant<>(QMetaType.Type.Int, FunctionType.RPCCALL.id));
         func.add(new QVariant<>(QMetaType.Type.QByteArray, data.functionName));
         func.addAll(data.params);
         return func;

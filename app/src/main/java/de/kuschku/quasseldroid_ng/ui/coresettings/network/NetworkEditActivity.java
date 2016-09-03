@@ -41,7 +41,9 @@ import android.widget.Spinner;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.syncables.types.impl.NetworkInfo;
+import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.R;
+import de.kuschku.util.backports.Objects;
 import de.kuschku.util.servicebound.BoundActivity;
 
 public class NetworkEditActivity extends BoundActivity {
@@ -100,7 +102,7 @@ public class NetworkEditActivity extends BoundActivity {
         CheckBox unlimitedAutoReconnectRetries;
 
     int id;
-    private NetworkInfo networkInfo;
+    private QNetwork network;
 
     public static void expand(final ViewGroup v) {
         v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -236,6 +238,7 @@ public class NetworkEditActivity extends BoundActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_confirm: {
+                NetworkInfo networkInfo = this.network.networkInfo();
                 if (networkInfo != null) {
                     NetworkInfo after = new NetworkInfo(
                             networkInfo.networkId(),
@@ -263,9 +266,8 @@ public class NetworkEditActivity extends BoundActivity {
                             rejoinChannels.isChecked()
                     );
 
-                    Log.d("DEBUG", "Before: " + networkInfo);
-                    Log.d("DEBUG", "After: " + after);
-                    Log.d("DEBUG", "Eq: " + networkInfo.equals(after));
+                    if (!Objects.equals(networkInfo, after))
+                        network.setNetworkInfo(after);
 
                     finish();
                 }
@@ -277,13 +279,14 @@ public class NetworkEditActivity extends BoundActivity {
 
     @Override
     protected void onConnected() {
-        setNetwork(context.client().networkManager().network(id).networkInfo());
+        setNetwork(context.client().networkManager().network(id));
     }
 
-    private void setNetwork(NetworkInfo networkInfo) {
-        this.networkInfo = networkInfo;
+    private void setNetwork(QNetwork network) {
+        this.network = network;
 
-        if (this.networkInfo != null) {
+        NetworkInfo networkInfo = this.network.networkInfo();
+        if (networkInfo != null) {
             networkName.setText(networkInfo.networkName());
             useCustomCodecs.setChecked(networkInfo.codecForServer() != null || networkInfo.codecForEncoding() != null || networkInfo.codecForDecoding() != null);
             codecForServer.setText(networkInfo.codecForServer());

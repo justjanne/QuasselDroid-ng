@@ -30,6 +30,7 @@ import de.kuschku.libquassel.functions.types.PackedFunction;
 import de.kuschku.libquassel.functions.types.SerializedFunction;
 import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.types.SetupData;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -52,10 +53,10 @@ public class SetupDataInitializer implements ObjectSerializer<SetupData> {
     public Map<String, QVariant<Object>> toVariantMap(@NonNull final SetupData data) {
         final Map<String, QVariant<Object>> map = new HashMap<>();
 
-        map.put("AdminPasswd", new QVariant<>(data.AdminPasswd));
-        map.put("AdminUser", new QVariant<>(data.AdminUser));
-        map.put("Backend", new QVariant<>(data.Backend));
-        map.put("ConnectionProperties", new QVariant<>(data.ConnectionProperties));
+        map.put("AdminPasswd", new QVariant<>(QMetaType.Type.QString, data.AdminPasswd));
+        map.put("AdminUser", new QVariant<>(QMetaType.Type.QString, data.AdminUser));
+        map.put("Backend", new QVariant<>(QMetaType.Type.QString, data.Backend));
+        map.put("ConnectionProperties", new QVariant<>(QMetaType.Type.QVariantMap, data.ConnectionProperties));
         return map;
     }
 

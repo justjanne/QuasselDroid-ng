@@ -31,6 +31,7 @@ import de.kuschku.libquassel.functions.types.PackedFunction;
 import de.kuschku.libquassel.functions.types.SerializedFunction;
 import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.types.StorageBackend;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -53,10 +54,10 @@ public class StorageBackendSerializer implements ObjectSerializer<StorageBackend
     public Map<String, QVariant<Object>> toVariantMap(@NonNull final StorageBackend data) {
         final Map<String, QVariant<Object>> map = new HashMap<>();
 
-        map.put("DisplayName", new QVariant<>(data.DisplayName));
-        map.put("SetupDefaults", new QVariant<>(data.SetupDefaults));
-        map.put("Description", new QVariant<>(data.Description));
-        map.put("SetupKeys", new QVariant<>(data.SetupKeys));
+        map.put("DisplayName", new QVariant<>(QMetaType.Type.QString, data.DisplayName));
+        map.put("SetupDefaults", new QVariant<>(QMetaType.Type.QVariantMap, data.SetupDefaults));
+        map.put("Description", new QVariant<>(QMetaType.Type.QString, data.Description));
+        map.put("SetupKeys", new QVariant<>(QMetaType.Type.QStringList, data.SetupKeys));
         return map;
     }
 

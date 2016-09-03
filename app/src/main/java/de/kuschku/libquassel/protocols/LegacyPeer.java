@@ -103,35 +103,35 @@ public class LegacyPeer implements RemotePeer {
     public void onEventBackgroundThread(@NonNull RpcCallFunction func) {
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
-                new QVariant<>(UnpackedRpcCallFunctionSerializer.get().serialize(func))));
+                new QVariant<>(QVariantList, UnpackedRpcCallFunctionSerializer.get().serialize(func))));
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull InitRequestFunction func) {
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
-                new QVariant<>(InitRequestFunctionSerializer.get().serialize(func))));
+                new QVariant<>(QVariantList, InitRequestFunctionSerializer.get().serialize(func))));
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull InitDataFunction func) {
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
-                new QVariant<>(InitDataFunctionSerializer.get().serialize(func))));
+                new QVariant<>(QVariantList, InitDataFunctionSerializer.get().serialize(func))));
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull Heartbeat func) {
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
-                new QVariant<>(HeartbeatSerializer.get().serialize(func))));
+                new QVariant<>(QVariantList, HeartbeatSerializer.get().serialize(func))));
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(@NonNull HeartbeatReply func) {
         assertNotNull(connection.getOutputExecutor());
         connection.getOutputExecutor().submit(new OutputRunnable<>(VariantSerializer.get(),
-                new QVariant<>(HeartbeatReplySerializer.get().serialize(func))));
+                new QVariant<>(QVariantList, HeartbeatReplySerializer.get().serialize(func))));
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)

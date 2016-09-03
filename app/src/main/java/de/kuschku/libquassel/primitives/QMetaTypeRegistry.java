@@ -60,6 +60,8 @@ import de.kuschku.libquassel.primitives.serializers.VoidSerializer;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.IdentitySerializer;
+import de.kuschku.libquassel.syncables.serializers.NetworkInfoSerializer;
+import de.kuschku.libquassel.syncables.types.impl.NetworkInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -82,8 +84,9 @@ public class QMetaTypeRegistry {
         addType(long.class, QMetaType.Type.UserType, "PeerPtr", LongSerializer.get());
         addType(BufferInfo.class, QMetaType.Type.UserType, "BufferInfo", BufferInfoSerializer.get());
         addType(Message.class, QMetaType.Type.UserType, "Message", MessageSerializer.get());
-        addType(QIdentity.class, QMetaType.Type.UserType, "Identity", new UserTypeSerializer<>(IdentitySerializer.get()));
-        addType(NetworkServer.class, QMetaType.Type.UserType, "Network::Server", new UserTypeSerializer<>(NetworkServerSerializer.get()));
+        addType(QIdentity.class, QMetaType.Type.UserType, "Identity", new UserTypeSerializer<>(IdentitySerializer.get(), "Identity"));
+        addType(NetworkServer.class, QMetaType.Type.UserType, "Network::Server", new UserTypeSerializer<>(NetworkServerSerializer.get(), "Network::Server"));
+        addType(NetworkInfo.class, QMetaType.Type.UserType, "NetworkInfo", new UserTypeSerializer<>(NetworkInfoSerializer.get(), "NetworkInfo"));
         addType(int.class, QMetaType.Type.UInt, IntSerializer.get());
         addType(short.class, QMetaType.Type.UShort, ShortSerializer.get());
 
@@ -285,6 +288,8 @@ public class QMetaTypeRegistry {
             return getMetaTypeByType(QMetaType.Type.QVariant);
         else if (type instanceof Message) return stringSerializerMap.get("Message");
         else if (type instanceof BufferInfo) return stringSerializerMap.get("BufferInfo");
+        else if (type instanceof NetworkInfo) return stringSerializerMap.get("NetworkInfo");
+        else if (type instanceof NetworkServer) return stringSerializerMap.get("Network::Server");
         else
             throw new AssertionError("Unsupported data type: " + type.getClass().getSimpleName());
     }

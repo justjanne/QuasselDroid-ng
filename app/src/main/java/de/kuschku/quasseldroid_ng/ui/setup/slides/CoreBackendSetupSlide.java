@@ -98,8 +98,6 @@ public class CoreBackendSetupSlide extends SlideFragment {
     }
 
     private void updateContent() {
-        Log.d("DEBUG", "Backend is: " + storageBackend);
-
         container.removeAllViews();
 
         for (InputItemWrapper wrapper : items.values()) {
@@ -122,7 +120,6 @@ public class CoreBackendSetupSlide extends SlideFragment {
             InputItemWrapper wrapper = getInputItemWrapper(key, type, defValue);
             items.put(key, wrapper);
             container.addView(wrapper.getView(container.getContext(), container));
-            Log.d("DEBUG", "Adding config: " + type + " " + key + " = " + defValue + ";");
         }
     }
 

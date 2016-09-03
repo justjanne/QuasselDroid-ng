@@ -37,6 +37,7 @@ import de.kuschku.libquassel.objects.serializers.CoreSetupDataSerializer;
 import de.kuschku.libquassel.objects.serializers.CoreSetupRejectSerializer;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.objects.serializers.SessionInitSerializer;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 import static de.kuschku.util.AndroidAssert.assertTrue;
@@ -78,7 +79,7 @@ public class MessageTypeRegistry {
         assertTrue(serializerMap.containsKey(data.getClass().getSimpleName()));
 
         final QVariant<Map<String, QVariant>> map = new QVariant<>(serializerMap.get(data.getClass().getSimpleName()).toVariantMap(data));
-        map.data.put("MsgType", new QVariant(data.getClass().getSimpleName()));
+        map.data.put("MsgType", new QVariant(QMetaType.Type.QString, data.getClass().getSimpleName()));
         return map;
     }
 }

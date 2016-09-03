@@ -29,6 +29,7 @@ import java.nio.channels.ByteChannel;
 import java.util.Map;
 
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -37,17 +38,18 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 public class UserTypeSerializer<T> implements PrimitiveSerializer<T> {
     @NonNull
     private final ObjectSerializer<T> objectSerializer;
+    private final String type;
 
-    public UserTypeSerializer(@NonNull ObjectSerializer<T> objectSerializer) {
+    public UserTypeSerializer(@NonNull ObjectSerializer<T> objectSerializer, String type) {
         this.objectSerializer = objectSerializer;
+        this.type = type;
     }
 
     @Override
     public void serialize(@NonNull ByteChannel channel, @NonNull T data) throws IOException {
-        QVariant<Map<String, QVariant<Object>>> variantMap = new QVariant<>(objectSerializer.toVariantMap(data));
+        Map<String, QVariant<Object>> variantMap = objectSerializer.toVariantMap(data);
         assertNotNull(variantMap);
-
-        VariantSerializer.<Map<String, QVariant<Object>>>get().serialize(channel, variantMap);
+        VariantMapSerializer.get().serialize(channel, variantMap);
     }
 
     @SuppressWarnings("RedundantCast")

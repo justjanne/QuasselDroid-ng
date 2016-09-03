@@ -23,6 +23,7 @@ package de.kuschku.libquassel.syncables.serializers;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,7 @@ import de.kuschku.libquassel.functions.types.SerializedFunction;
 import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.objects.types.NetworkServer;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.impl.NetworkInfo;
 
@@ -54,31 +56,32 @@ public class NetworkInfoSerializer implements ObjectSerializer<NetworkInfo> {
     @Override
     public Map<String, QVariant<Object>> toVariantMap(@NonNull NetworkInfo data) {
         Map<String, QVariant<Object>> map = new HashMap<>();
-        map.put("networkName", new QVariant<>(data.networkName()));
-        map.put("identity", new QVariant<>(data.identity()));
+        map.put("NetworkId", new QVariant<>("NetworkId", data.networkId()));
+        map.put("NetworkName", new QVariant<>(QMetaType.Type.QString, data.networkName()));
+        map.put("Identity", new QVariant<>("IdentityId", data.identity()));
 
-        map.put("codecForServer", new QVariant<>(data.codecForServer()));
-        map.put("codecForEncoding", new QVariant<>(data.codecForEncoding()));
-        map.put("codecForDecoding", new QVariant<>(data.codecForDecoding()));
+        map.put("CodecForServer", new QVariant<>(QMetaType.Type.QByteArray, data.codecForServer()));
+        map.put("CodecForEncoding", new QVariant<>(QMetaType.Type.QByteArray, data.codecForEncoding()));
+        map.put("CodecForDecoding", new QVariant<>(QMetaType.Type.QByteArray, data.codecForDecoding()));
 
-        map.put("ServerList", new QVariant<>(data.serverList()));
-        map.put("useRandomServer", new QVariant<>(data.useRandomServer()));
+        map.put("ServerList", new QVariant<>(QMetaType.Type.QVariantList, data.serverList()));
+        map.put("UseRandomServer", new QVariant<>(QMetaType.Type.Bool, data.useRandomServer()));
 
-        map.put("perform", new QVariant<>(data.perform()));
+        map.put("Perform", new QVariant<>(QMetaType.Type.QStringList, data.perform()));
 
-        map.put("useAutoIdentify", new QVariant<>(data.useAutoIdentify()));
-        map.put("autoIdentifyService", new QVariant<>(data.autoIdentifyService()));
-        map.put("autoIdentifyPassword", new QVariant<>(data.autoIdentifyPassword()));
+        map.put("UseAutoIdentify", new QVariant<>(QMetaType.Type.Bool, data.useAutoIdentify()));
+        map.put("AutoIdentifyService", new QVariant<>(QMetaType.Type.QString, data.autoIdentifyService()));
+        map.put("AutoIdentifyPassword", new QVariant<>(QMetaType.Type.QString, data.autoIdentifyPassword()));
 
-        map.put("useSasl", new QVariant<>(data.useSasl()));
-        map.put("saslAccount", new QVariant<>(data.saslAccount()));
-        map.put("saslPassword", new QVariant<>(data.saslPassword()));
+        map.put("UseSasl", new QVariant<>(QMetaType.Type.Bool, data.useSasl()));
+        map.put("SaslAccount", new QVariant<>(QMetaType.Type.QString, data.saslAccount()));
+        map.put("SaslPassword", new QVariant<>(QMetaType.Type.QString, data.saslPassword()));
 
-        map.put("useAutoReconnect", new QVariant<>(data.useAutoReconnect()));
-        map.put("autoReconnectInterval", new QVariant<>(data.autoReconnectInterval()));
-        map.put("autoReconnectRetries", new QVariant<>(data.autoReconnectRetries()));
-        map.put("unlimitedReconnectRetries", new QVariant<>(data.unlimitedReconnectRetries()));
-        map.put("rejoinChannels", new QVariant<>(data.rejoinChannels()));
+        map.put("UseAutoReconnect", new QVariant<>(QMetaType.Type.Bool, data.useAutoReconnect()));
+        map.put("AutoReconnectInterval", new QVariant<>(QMetaType.Type.UInt, data.autoReconnectInterval()));
+        map.put("AutoReconnectRetries", new QVariant<>(QMetaType.Type.UShort, data.autoReconnectRetries()));
+        map.put("UnlimitedReconnectRetries", new QVariant<>(QMetaType.Type.Bool, data.unlimitedReconnectRetries()));
+        map.put("RejoinChannels", new QVariant<>(QMetaType.Type.Bool, data.rejoinChannels()));
         return map;
     }
 

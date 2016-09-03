@@ -162,7 +162,7 @@ public class BufferViewConfig extends ABufferViewConfig {
                     for (int bufferId : bufferList()) {
                         Buffer buffer = client.bufferManager().buffer(bufferId);
                         if (buffer == null)
-                            Log.e("DEBUG", "Buffer is null: " + bufferId + " while adding buffer " + info);
+                            Log.w("libquassel", "Buffer is null: " + bufferId + " while adding buffer " + info);
                         BufferInfo info1 = buffer.getInfo();
                         if (info1.networkId == info.networkId)
                             infos.add(info1.name);

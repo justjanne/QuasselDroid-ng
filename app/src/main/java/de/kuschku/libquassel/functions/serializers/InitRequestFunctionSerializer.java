@@ -31,6 +31,7 @@ import de.kuschku.libquassel.functions.FunctionType;
 import de.kuschku.libquassel.functions.types.InitRequestFunction;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
+import static de.kuschku.libquassel.primitives.QMetaType.Type.Int;
 import static de.kuschku.libquassel.primitives.QMetaType.Type.QByteArray;
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 import static de.kuschku.util.AndroidAssert.assertTrue;
@@ -62,7 +63,7 @@ public class InitRequestFunctionSerializer implements FunctionSerializer<InitReq
     @NonNull
     public List serializePacked(@NonNull final InitRequestFunction data) {
         return Lists.newArrayList(
-                new QVariant<>(FunctionType.INITREQUEST.id),
+                new QVariant<>(Int, FunctionType.INITREQUEST.id),
                 new QVariant<>(QByteArray, data.className),
                 new QVariant<>(QByteArray, data.objectName)
         );

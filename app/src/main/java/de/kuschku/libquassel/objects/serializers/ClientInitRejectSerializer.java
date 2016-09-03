@@ -30,6 +30,7 @@ import de.kuschku.libquassel.functions.types.PackedFunction;
 import de.kuschku.libquassel.functions.types.SerializedFunction;
 import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.types.ClientInitReject;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
@@ -49,7 +50,7 @@ public class ClientInitRejectSerializer implements ObjectSerializer<ClientInitRe
     @Override
     public Map<String, QVariant<Object>> toVariantMap(@NonNull final ClientInitReject data) {
         final Map<String, QVariant<Object>> map = new HashMap<>();
-        map.put("Error", new QVariant<>(data.Error));
+        map.put("Error", new QVariant<>(QMetaType.Type.QString, data.Error));
         return map;
     }
 

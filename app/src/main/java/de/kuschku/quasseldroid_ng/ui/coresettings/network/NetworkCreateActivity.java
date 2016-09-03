@@ -302,8 +302,8 @@ public class NetworkCreateActivity extends BoundActivity {
                             unlimitedAutoReconnectRetries.isChecked(),
                             rejoinChannels.isChecked()
                     );
-
-                    Log.d("DEBUG", "After: " + after);
+                    if (context.client() != null)
+                        context.client().createNetwork(after);
 
                     finish();
                 }

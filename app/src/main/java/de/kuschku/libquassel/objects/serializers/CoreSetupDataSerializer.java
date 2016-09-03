@@ -30,6 +30,7 @@ import de.kuschku.libquassel.functions.types.PackedFunction;
 import de.kuschku.libquassel.functions.types.SerializedFunction;
 import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.types.CoreSetupData;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -51,7 +52,7 @@ public class CoreSetupDataSerializer implements ObjectSerializer<CoreSetupData> 
     @Override
     public Map<String, QVariant<Object>> toVariantMap(@NonNull final CoreSetupData data) {
         final Map<String, QVariant<Object>> map = new HashMap<>();
-        map.put("SetupData", new QVariant<>(SetupDataInitializer.get().toVariantMap(data.SetupData)));
+        map.put("SetupData", new QVariant<>(QMetaType.Type.QVariantMap, SetupDataInitializer.get().toVariantMap(data.SetupData)));
         return map;
     }
 

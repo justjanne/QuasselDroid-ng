@@ -108,5 +108,7 @@ public class ClientBackgroundThread implements Runnable {
     public void onEvent(GeneralErrorEvent event) {
         if (!(event.exception instanceof ConnectException))
             ACRA.getErrorReporter().handleSilentException(event.exception);
+
+        event.exception.printStackTrace();
     }
 }

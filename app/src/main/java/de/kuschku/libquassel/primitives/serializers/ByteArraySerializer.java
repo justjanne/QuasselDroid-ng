@@ -23,6 +23,7 @@ package de.kuschku.libquassel.primitives.serializers;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.common.base.Charsets;
 
@@ -55,7 +56,7 @@ public class ByteArraySerializer implements PrimitiveSerializer<String> {
     @Override
     public void serialize(@NonNull final ByteChannel channel, @Nullable final String data) throws IOException {
         if (data == null) {
-            IntSerializer.get().serialize(channel, 0xffffffff);
+            IntSerializer.get().serialize(channel, -1);
         } else {
             final ByteBuffer contentBuffer = Charsets.ISO_8859_1.encode(data);
             IntSerializer.get().serialize(channel, contentBuffer.limit() + (trimLastByte ? 1 : 0));
@@ -68,7 +69,7 @@ public class ByteArraySerializer implements PrimitiveSerializer<String> {
     @Override
     public String deserialize(@NonNull final ByteBuffer buffer) throws IOException {
         final int len = IntSerializer.get().deserialize(buffer);
-        if (len == 0xffffffff)
+        if (len == -1)
             return null;
         else if (len == 0)
             return "";

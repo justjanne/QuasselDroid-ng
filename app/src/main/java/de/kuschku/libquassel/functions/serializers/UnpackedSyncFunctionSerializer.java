@@ -50,7 +50,7 @@ public class UnpackedSyncFunctionSerializer<T> implements FunctionSerializer<Syn
     @Override
     public List serialize(@NonNull final SyncFunction data) {
         final List func = new ArrayList<>();
-        func.add(new QVariant<>(FunctionType.SYNC.id));
+        func.add(new QVariant<>(QMetaType.Type.Int, FunctionType.SYNC.id));
         func.add(new QVariant<>(QMetaType.Type.QByteArray, data.className));
         func.add(new QVariant<>(QMetaType.Type.QByteArray, data.objectName));
         func.add(new QVariant<>(QMetaType.Type.QByteArray, data.methodName));

@@ -781,6 +781,8 @@ public class Network extends ANetwork implements Observer {
     @Override
     public void _update() {
         super._update();
+        if (client != null)
+            client.networkManager().networks().notifyItemChanged(client.networkManager().networks().indexOf(this));
     }
 
     private void updateDisplay() {

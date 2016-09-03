@@ -118,9 +118,6 @@ public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter, Gen
         TextView view = (TextView) inflater.inflate(R.layout.widget_md_spinner_item, parent, false);
         QBufferViewConfig viewConfig = (QBufferViewConfig) getItem(position);
         view.setText(viewConfig == null ? "" : viewConfig.bufferViewName());
-        if (viewConfig == null) {
-            Log.d("DEBUG", String.valueOf(bufferViewManager.bufferViewConfigs()));
-        }
         return view;
     }
 

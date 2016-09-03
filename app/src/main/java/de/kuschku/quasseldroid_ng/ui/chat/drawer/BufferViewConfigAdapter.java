@@ -70,7 +70,8 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
 
         @Override
         public void notifyItemChanged(QNetwork network) {
-            items.notifyItemChanged(items.indexOf(itemMap.get(network)));
+            if (items.contains(itemMap.get(network)))
+                items.notifyItemChanged(items.indexOf(itemMap.get(network)));
         }
     };
 
@@ -137,7 +138,7 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
         final ObservableSortedList<NetworkItem> networkItems = new ObservableSortedList<>(NetworkItem.class, new ObservableSortedList.ItemComparator<NetworkItem>() {
             @Override
             public int compare(NetworkItem o1, NetworkItem o2) {
-                return o1.getNetwork().networkName().compareTo(o2.getNetwork().networkName());
+                return o1 == null && o2 == null ? 0 : o1 == null ? 1 : o2 == null ? -1 : o1.getNetwork().networkName().compareTo(o2.getNetwork().networkName());
             }
 
             @Override

@@ -101,8 +101,6 @@ public class ProtocolHandler implements IProtocolHandler {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(@NonNull SyncFunction packedFunc) {
-        Log.d("ProtocolHandler", String.format("Sync Call: %s::%s(%s, %s)", packedFunc.className, packedFunc.methodName, packedFunc.objectName, packedFunc.params));
-
         try {
             final Object syncable = client.unsafe_getObjectByIdentifier(packedFunc.className, packedFunc.objectName);
 

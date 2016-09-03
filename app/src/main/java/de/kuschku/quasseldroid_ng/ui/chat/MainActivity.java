@@ -76,6 +76,7 @@ import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.objects.types.CoreSetupData;
 import de.kuschku.libquassel.objects.types.SetupData;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
@@ -493,8 +494,6 @@ public class MainActivity extends BoundActivity {
                 if (resultCode == RESULT_OK) {
                     context.provider().event.removeStickyEvent(CoreSetupRequiredEvent.class);
 
-                    Log.d("DEBUG", "Received result: " + data.getExtras());
-
                     Account account = manager.account(context.settings().preferenceLastAccount.get());
                     Bundle config = data.getParcelableExtra("config");
                     Map<String, QVariant> configData = new HashMap<>();
@@ -532,8 +531,6 @@ public class MainActivity extends BoundActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEventMainThread(CoreSetupRequiredEvent event) {
-        Log.d("DEBUG", String.valueOf(context.client().core().StorageBackends));
-
         Intent intent = new Intent(getApplicationContext(), CoreSetupActivity.class);
         intent.putExtra("storageBackends", context.client().core().getStorageBackendsAsBundle());
         startActivityForResult(intent, REQUEST_CODE_CORESETUP);

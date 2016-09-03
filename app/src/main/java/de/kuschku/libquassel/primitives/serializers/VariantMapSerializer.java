@@ -22,6 +22,7 @@
 package de.kuschku.libquassel.primitives.serializers;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

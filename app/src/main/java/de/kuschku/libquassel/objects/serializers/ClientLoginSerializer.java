@@ -30,6 +30,7 @@ import de.kuschku.libquassel.functions.types.PackedFunction;
 import de.kuschku.libquassel.functions.types.SerializedFunction;
 import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.types.ClientLogin;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -52,8 +53,8 @@ public class ClientLoginSerializer implements ObjectSerializer<ClientLogin> {
     public Map<String, QVariant<Object>> toVariantMap(@NonNull final ClientLogin data) {
         final Map<String, QVariant<Object>> map = new HashMap<>();
 
-        map.put("User", new QVariant<>(data.User));
-        map.put("Password", new QVariant<>(data.Password));
+        map.put("User", new QVariant<>(QMetaType.Type.QString, data.User));
+        map.put("Password", new QVariant<>(QMetaType.Type.QString, data.Password));
         return map;
     }
 

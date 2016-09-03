@@ -33,6 +33,7 @@ import de.kuschku.libquassel.functions.types.PackedFunction;
 import de.kuschku.libquassel.functions.types.SerializedFunction;
 import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.impl.AliasManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QAliasManager;
@@ -63,11 +64,11 @@ public class AliasManagerSerializer implements ObjectSerializer<AliasManager> {
             names.add(alias.name);
             expansions.add(alias.expansion);
         }
-        aliases.put("names", new QVariant(names));
-        aliases.put("expansions", new QVariant(expansions));
+        aliases.put("names", new QVariant(QMetaType.Type.QStringList, names));
+        aliases.put("expansions", new QVariant(QMetaType.Type.QStringList, expansions));
 
         HashMap<String, QVariant<Object>> map = new HashMap<>();
-        map.put("Aliases", new QVariant(aliases));
+        map.put("Aliases", new QVariant(QMetaType.Type.QVariantMap, aliases));
         return map;
     }
 

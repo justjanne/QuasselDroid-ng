@@ -100,7 +100,6 @@ public class ChatListCreateActivity extends BoundActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_confirm: {
-                Log.d("DEBUG", "Manager: " + bufferViewManager);
                 if (bufferViewManager != null) {
                     QBufferViewConfig config = new BufferViewConfig(
                             "",
@@ -125,8 +124,6 @@ public class ChatListCreateActivity extends BoundActivity {
                     config._setAddNewBuffersAutomatically(this.addAutomatically.isChecked());
                     config._setSortAlphabetically(this.sortAlphabetically.isChecked());
 
-                    Log.d("DEBUG", "Config: " + config);
-
                     bufferViewManager.createBufferView(config);
                 }
                 finish();
@@ -138,13 +135,11 @@ public class ChatListCreateActivity extends BoundActivity {
 
     @Override
     protected void onConnected() {
-        Log.d("ChatListCreateActivity", "Connected: " + context.client().bufferViewManager());
         bufferViewManager = context.client().bufferViewManager();
     }
 
     @Override
     protected void onDisconnected() {
-        Log.d("ChatListCreateActivity", "Disconnected");
         bufferViewManager = null;
     }
 }
