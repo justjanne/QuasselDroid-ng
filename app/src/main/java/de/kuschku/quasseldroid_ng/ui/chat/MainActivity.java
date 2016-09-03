@@ -87,7 +87,8 @@ import de.kuschku.quasseldroid_ng.ui.chat.drawer.BufferViewConfigAdapter;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.ChatFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.LoadingFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.util.Status;
-import de.kuschku.quasseldroid_ng.ui.coresettings.ChatListListActivity;
+import de.kuschku.quasseldroid_ng.ui.coresettings.chatlist.ChatListListActivity;
+import de.kuschku.quasseldroid_ng.ui.coresettings.network.NetworkListActivity;
 import de.kuschku.quasseldroid_ng.ui.settings.SettingsActivity;
 import de.kuschku.quasseldroid_ng.ui.setup.CoreSetupActivity;
 import de.kuschku.util.accounts.Account;
@@ -265,6 +266,9 @@ public class MainActivity extends BoundActivity {
                 return true;
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            case R.id.action_networks:
+                startActivity(new Intent(this, NetworkListActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

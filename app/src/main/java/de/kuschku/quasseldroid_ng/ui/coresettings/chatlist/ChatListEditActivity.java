@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.ui.coresettings;
+package de.kuschku.quasseldroid_ng.ui.coresettings.chatlist;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,7 +27,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -87,7 +86,7 @@ public class ChatListEditActivity extends BoundActivity {
 
         id = intent.getIntExtra("id", -1);
 
-        setContentView(R.layout.activity_chat_list_edit);
+        setContentView(R.layout.activity_chatlist_edit);
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);

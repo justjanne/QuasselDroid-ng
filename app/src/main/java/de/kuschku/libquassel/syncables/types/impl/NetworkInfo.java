@@ -346,4 +346,30 @@ public class NetworkInfo extends Observable {
         result = 31 * result + (rejoinChannels ? 1 : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "NetworkInfo{" +
+                "networkId=" + networkId +
+                ", networkName='" + networkName + '\'' +
+                ", identity=" + identity +
+                ", codecForServer='" + codecForServer + '\'' +
+                ", codecForEncoding='" + codecForEncoding + '\'' +
+                ", codecForDecoding='" + codecForDecoding + '\'' +
+                ", serverList=" + serverList +
+                ", useRandomServer=" + useRandomServer +
+                ", perform=" + perform +
+                ", useAutoIdentify=" + useAutoIdentify +
+                ", autoIdentifyService='" + autoIdentifyService + '\'' +
+                ", autoIdentifyPassword='" + autoIdentifyPassword + '\'' +
+                ", useSasl=" + useSasl +
+                ", saslAccount='" + saslAccount + '\'' +
+                ", saslPassword='" + saslPassword + '\'' +
+                ", useAutoReconnect=" + useAutoReconnect +
+                ", autoReconnectInterval=" + autoReconnectInterval +
+                ", autoReconnectRetries=" + autoReconnectRetries +
+                ", unlimitedReconnectRetries=" + unlimitedReconnectRetries +
+                ", rejoinChannels=" + rejoinChannels +
+                '}';
+    }
 }

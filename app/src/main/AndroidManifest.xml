@@ -61,24 +61,45 @@
             android:theme="@style/AppTheme.Light" />
 
         <activity
-            android:name=".ui.coresettings.ChatListListActivity"
+            android:name=".ui.coresettings.chatlist.ChatListListActivity"
             android:label="Edit Chat Lists"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.chat.MainActivity"
             android:theme="@style/AppTheme.Light" />
 
         <activity
-            android:name=".ui.coresettings.ChatListEditActivity"
+            android:name=".ui.coresettings.chatlist.ChatListEditActivity"
             android:label="Edit Chat List"
             android:launchMode="singleTask"
-            android:parentActivityName=".ui.coresettings.ChatListListActivity"
+            android:parentActivityName=".ui.coresettings.chatlist.ChatListListActivity"
             android:theme="@style/AppTheme.Light" />
 
         <activity
-            android:name=".ui.coresettings.ChatListCreateActivity"
+            android:name=".ui.coresettings.chatlist.ChatListCreateActivity"
             android:label="Create Chat List"
             android:launchMode="singleTask"
-            android:parentActivityName=".ui.coresettings.ChatListListActivity"
+            android:parentActivityName=".ui.coresettings.chatlist.ChatListListActivity"
+            android:theme="@style/AppTheme.Light" />
+
+        <activity
+            android:name=".ui.coresettings.network.NetworkListActivity"
+            android:label="Edit Networks"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.chat.MainActivity"
+            android:theme="@style/AppTheme.Light" />
+
+        <activity
+            android:name=".ui.coresettings.network.NetworkEditActivity"
+            android:label="Edit Network"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.coresettings.network.NetworkListActivity"
+            android:theme="@style/AppTheme.Light" />
+
+        <activity
+            android:name=".ui.coresettings.network.NetworkCreateActivity"
+            android:label="Create Network"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.coresettings.network.NetworkListActivity"
             android:theme="@style/AppTheme.Light" />
 
         <activity

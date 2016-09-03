@@ -19,19 +19,17 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.ui.coresettings;
+package de.kuschku.quasseldroid_ng.ui.coresettings.network;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,15 +37,17 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.kuschku.libquassel.client.NetworkManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
+import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.servicebound.BoundActivity;
 
-public class ChatListListActivity extends BoundActivity {
+public class NetworkListActivity extends BoundActivity {
 
-    QBufferViewManager manager;
+    NetworkManager manager;
 
     @Bind(R.id.list)
     RecyclerView list;
@@ -63,7 +63,7 @@ public class ChatListListActivity extends BoundActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat_list_list);
+        setContentView(R.layout.activity_network_list);
         ButterKnife.bind(this);
 
         list.setLayoutManager(new LinearLayoutManager(this));
@@ -72,7 +72,7 @@ public class ChatListListActivity extends BoundActivity {
         list.setAdapter(adapter);
 
         add.setOnClickListener(view -> {
-            startActivity(new Intent(this, ChatListCreateActivity.class));
+            startActivity(new Intent(this, NetworkCreateActivity.class));
         });
 
         setSupportActionBar(toolbar);
@@ -81,7 +81,7 @@ public class ChatListListActivity extends BoundActivity {
 
     @Override
     protected void onConnected() {
-        manager = context.client().bufferViewManager();
+        manager = context.client().networkManager();
         adapter.setManager(manager);
     }
 
@@ -91,80 +91,80 @@ public class ChatListListActivity extends BoundActivity {
         adapter.setManager(null);
     }
 
-    private class ChatListAdapter extends RecyclerView.Adapter<ChatListViewHolder> {
-        QBufferViewManager manager;
+    private class ChatListAdapter extends RecyclerView.Adapter<NetworkViewHolder> {
+        NetworkManager manager;
         AdapterUICallbackWrapper wrapper = new AdapterUICallbackWrapper(this);
 
-        public void setManager(QBufferViewManager manager) {
+        public void setManager(NetworkManager manager) {
             if (this.manager != null)
-                this.manager.bufferViewConfigs().removeCallback(wrapper);
+                this.manager.networks().addCallback(wrapper);
 
             this.manager = manager;
 
             if (this.manager != null)
-                this.manager.bufferViewConfigs().addCallback(wrapper);
+                this.manager.networks().addCallback(wrapper);
         }
 
         @Override
-        public ChatListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public NetworkViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            View view = inflater.inflate(R.layout.widget_chatlist, parent, false);
-            return new ChatListViewHolder(view);
+            View view = inflater.inflate(R.layout.widget_settings_network, parent, false);
+            return new NetworkViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(ChatListViewHolder holder, int position) {
-            holder.bind(manager != null ? manager.bufferViewConfigs().get(position) : null);
+        public void onBindViewHolder(NetworkViewHolder holder, int position) {
+            holder.bind(manager != null ? manager.networks().get(position) : null);
         }
 
         @Override
         public int getItemCount() {
-            return manager == null ? 0 : manager.bufferViewConfigs().size();
+            return manager == null ? 0 : manager.networks().size();
         }
     }
 
-    interface OnQBufferViewConfigClickListener {
-        void onClick(QBufferViewConfig config);
+    interface OnQNetworkClickListener {
+        void onClick(QNetwork network);
     }
 
-    interface OnQBufferViewConfigDeleteListener {
-        void onDelete(QBufferViewConfig config);
+    interface OnQNetworkDeleteListener {
+        void onDelete(QNetwork network);
     }
 
-    OnQBufferViewConfigClickListener clickListener = config -> {
-        if (config != null) {
-            Intent intent = new Intent(this, ChatListEditActivity.class);
-            intent.putExtra("id", config.bufferViewId());
+    OnQNetworkClickListener clickListener = network -> {
+        if (network != null) {
+            Intent intent = new Intent(this, NetworkEditActivity.class);
+            intent.putExtra("id", network.networkId());
             startActivity(intent);
         }
     };
 
-    OnQBufferViewConfigDeleteListener deleteListener = config -> {
-        if (manager != null && config != null) {
-            manager.deleteBufferView(config.bufferViewId());
+    OnQNetworkDeleteListener deleteListener = network -> {
+        if (manager != null && network != null) {
+            context.client().removeNetwork(network.networkId());
         }
     };
 
-    class ChatListViewHolder extends RecyclerView.ViewHolder {
+    class NetworkViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.chatlist_name)
+        @Bind(R.id.network_name)
         TextView name;
 
-        @Bind(R.id.chatlist_delete)
+        @Bind(R.id.network_delete)
         AppCompatImageButton delete;
 
-        private QBufferViewConfig config;
+        private QNetwork network;
 
-        public ChatListViewHolder(View itemView) {
+        public NetworkViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(view -> clickListener.onClick(config));
-            delete.setOnClickListener(view -> deleteListener.onDelete(config));
+            itemView.setOnClickListener(view -> clickListener.onClick(network));
+            delete.setOnClickListener(view -> deleteListener.onDelete(network));
         }
 
-        public void bind(QBufferViewConfig config) {
-            this.config = config;
-            name.setText(config == null ? "" : config.bufferViewName());
+        public void bind(QNetwork network) {
+            this.network = network;
+            name.setText(network == null ? "" : network.networkName());
         }
     }
 }

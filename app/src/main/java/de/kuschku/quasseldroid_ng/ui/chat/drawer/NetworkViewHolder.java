@@ -44,7 +44,7 @@ public class NetworkViewHolder extends ParentViewHolder {
 
     @LayoutRes
     public static int layout() {
-        return R.layout.widget_network;
+        return R.layout.widget_drawer_network;
     }
 
     public void bind(AppContext context, NetworkItem item) {

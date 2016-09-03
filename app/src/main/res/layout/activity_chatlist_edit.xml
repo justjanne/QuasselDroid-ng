@@ -25,7 +25,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="?attr/colorBackground">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
@@ -66,8 +67,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:orientation="vertical"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
                 android:paddingTop="16dp">
 
                 <TextView
@@ -76,8 +75,8 @@
                     android:layout_gravity="center_vertical"
                     android:textSize="12sp"
                     android:paddingBottom="8dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="2dp"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
                     android:text="Network"/>
 
                 <android.support.v7.widget.AppCompatSpinner
@@ -130,8 +129,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:orientation="vertical"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
                 android:paddingTop="16dp">
 
                 <TextView
@@ -140,8 +137,8 @@
                     android:layout_gravity="center_vertical"
                     android:textSize="12sp"
                     android:paddingBottom="8dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="2dp"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
                     android:text="Minimum Activity"/>
 
                 <android.support.v7.widget.AppCompatSpinner

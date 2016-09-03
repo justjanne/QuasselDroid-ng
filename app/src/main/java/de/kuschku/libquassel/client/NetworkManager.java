@@ -26,6 +26,7 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -33,12 +34,28 @@ import java.util.Observable;
 import de.kuschku.libquassel.syncables.types.impl.Network;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.observables.lists.ObservableSet;
+import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public class NetworkManager extends Observable {
     @NonNull
     private final Map<Integer, QNetwork> networks = new HashMap<>();
     @NonNull
-    private final ObservableSet<QNetwork> list = new ObservableSet<>();
+    private final ObservableSortedList<QNetwork> list = new ObservableSortedList<>(QNetwork.class, new ObservableSortedList.ItemComparator<QNetwork>() {
+        @Override
+        public int compare(QNetwork o1, QNetwork o2) {
+            return o1.networkName().compareTo(o2.networkName());
+        }
+
+        @Override
+        public boolean areContentsTheSame(QNetwork oldItem, QNetwork newItem) {
+            return oldItem == newItem;
+        }
+
+        @Override
+        public boolean areItemsTheSame(QNetwork item1, QNetwork item2) {
+            return item1.networkId() == item2.networkId();
+        }
+    });
     @NonNull
     private final Client client;
 
@@ -73,12 +90,7 @@ public class NetworkManager extends Observable {
     }
 
     @NonNull
-    public ObservableSet<QNetwork> list() {
+    public ObservableSortedList<QNetwork> networks() {
         return list;
-    }
-
-    @NonNull
-    public List<QNetwork> networks() {
-        return new ArrayList<>(networks.values());
     }
 }

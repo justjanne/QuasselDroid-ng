@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.ui.coresettings;
+package de.kuschku.quasseldroid_ng.ui.coresettings.chatlist;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -80,7 +80,7 @@ public class ChatListCreateActivity extends BoundActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_chat_list_edit);
+        setContentView(R.layout.activity_chatlist_edit);
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
