@@ -25,55 +25,79 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 public class NetworkServer {
-    public final boolean UseSSL;
+    public final boolean useSSL;
     public final int sslVersion;
 
     @NonNull
-    public final String Host;
-    public final int Port;
+    public final String host;
+    public final int port;
     @Nullable
-    public final String Password;
+    public final String password;
 
-    public final boolean UseProxy;
-    public final int ProxyType;
+    public final boolean useProxy;
+    public final ProxyType proxyType;
     @Nullable
-    public final String ProxyHost;
-    public final int ProxyPort;
+    public final String proxyHost;
+    public final int proxyPort;
     @Nullable
-    public final String ProxyUser;
+    public final String proxyUser;
     @Nullable
-    public final String ProxyPass;
+    public final String proxyPass;
 
     public NetworkServer(boolean useSSL, int sslVersion, @NonNull String host, int port, @Nullable String password, boolean useProxy,
-                         int proxyType, @Nullable String proxyHost, int proxyPort, @Nullable String proxyUser, @Nullable String proxyPass) {
-        this.UseSSL = useSSL;
+                         ProxyType proxyType, @Nullable String proxyHost, int proxyPort, @Nullable String proxyUser, @Nullable String proxyPass) {
+        this.useSSL = useSSL;
         this.sslVersion = sslVersion;
-        this.Host = host;
-        this.Port = port;
-        this.Password = password;
-        this.UseProxy = useProxy;
-        this.ProxyType = proxyType;
-        this.ProxyHost = proxyHost;
-        this.ProxyPort = proxyPort;
-        this.ProxyUser = proxyUser;
-        this.ProxyPass = proxyPass;
+        this.host = host;
+        this.port = port;
+        this.password = password;
+        this.useProxy = useProxy;
+        this.proxyType = proxyType;
+        this.proxyHost = proxyHost;
+        this.proxyPort = proxyPort;
+        this.proxyUser = proxyUser;
+        this.proxyPass = proxyPass;
     }
 
     @NonNull
     @Override
     public String toString() {
         return "NetworkServer{" +
-                "UseSSL=" + UseSSL +
+                "UseSSL=" + useSSL +
                 ", sslVersion=" + sslVersion +
-                ", Host='" + Host + '\'' +
-                ", Port=" + Port +
-                ", Password='" + Password + '\'' +
-                ", UseProxy=" + UseProxy +
-                ", ProxyType=" + ProxyType +
-                ", ProxyHost='" + ProxyHost + '\'' +
-                ", ProxyPort=" + ProxyPort +
-                ", ProxyUser='" + ProxyUser + '\'' +
-                ", ProxyPass='" + ProxyPass + '\'' +
+                ", Host='" + host + '\'' +
+                ", Port=" + port +
+                ", Password='" + password + '\'' +
+                ", UseProxy=" + useProxy +
+                ", ProxyType=" + proxyType +
+                ", ProxyHost='" + proxyHost + '\'' +
+                ", ProxyPort=" + proxyPort +
+                ", ProxyUser='" + proxyUser + '\'' +
+                ", ProxyPass='" + proxyPass + '\'' +
                 '}';
+    }
+
+    public enum ProxyType {
+        DefaultProxy(0),
+        Socks5Proxy(1),
+        HttpProxy(3);
+
+        public final int id;
+
+        ProxyType(int id) {
+            this.id = id;
+        }
+
+        public static ProxyType fromId(int id) {
+            switch (id) {
+                default:
+                case 0:
+                    return DefaultProxy;
+                case 1:
+                    return Socks5Proxy;
+                case 3:
+                    return HttpProxy;
+            }
+        }
     }
 }

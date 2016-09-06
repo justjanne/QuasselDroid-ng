@@ -38,6 +38,12 @@ public class IdentityManager {
     private final ObservableSortedList<QIdentity> identityList = new ObservableSortedList<>(QIdentity.class, new ObservableSortedList.ItemComparator<QIdentity>() {
         @Override
         public int compare(QIdentity o1, QIdentity o2) {
+            if (o1 == null && o2 == null)
+                return 0;
+            if (o1 == null)
+                return 1;
+            if (o2 == null)
+                return -1;
             return o1.id() - o2.id();
         }
 

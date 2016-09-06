@@ -67,6 +67,8 @@
     <attr name="colorForegroundAction" format="color" />
     <attr name="colorForegroundError" format="color" />
 
+    <attr name="colorForegroundMirc" format="integer"/>
+
     <attr name="colorAccentFocus" format="color" />
     <attr name="colorDivider" format="color" />
 
@@ -82,18 +84,11 @@
     <attr name="colorTintHighlight" format="color" />
     <attr name="chatlineExpandedSize" />
 
-    <!-- Format icons -->
-    <attr name="iconFormatBold" format="reference" />
-    <attr name="iconFormatItalic" format="reference" />
-    <attr name="iconFormatUnderline" format="reference" />
-    <attr name="iconFormatPaint" format="reference" />
-    <attr name="iconFormatFill" format="reference" />
-    <attr name="iconHistory" format="reference" />
-    <attr name="iconDebug" format="reference" />
-    <attr name="iconFilter" format="reference" />
-    <attr name="iconDelete" format="reference" />
-    <attr name="iconModify" format="reference" />
-    <attr name="iconAdd" format="reference" />
+    <!-- Icons -->
+    <attr name="colorOffline" format="color"/>
+    <attr name="colorAway" format="color"/>
+    <attr name="colorFill" format="color"/>
+
     <attr name="formatBarTheme" format="reference" />
     <attr name="cardStyle" format="reference" />
 </resources>

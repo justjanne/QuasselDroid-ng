@@ -29,6 +29,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 
 import butterknife.Bind;
@@ -38,6 +39,9 @@ import de.kuschku.quasseldroid_ng.ui.setup.slides.AccountSelectSlide;
 import de.kuschku.quasseldroid_ng.ui.setup.slides.SlideFragment;
 
 public class AccountSelectActivity extends AppCompatActivity {
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
     @Bind(R.id.view_pager)
     ViewPager viewPager;
     @Bind(R.id.btn)
@@ -54,7 +58,7 @@ public class AccountSelectActivity extends AppCompatActivity {
         viewPager.setAdapter(slidePagerAdapter);
         slidePagerAdapter.notifyDataSetChanged();
         updateValidity(slidePagerAdapter.item.isValid());
-        btn.setImageResource(R.drawable.ic_check_dark);
+        btn.setImageResource(R.drawable.ic_check);
         slidePagerAdapter.item.addChangeListener(this::updateValidity);
         btn.setOnClickListener(v -> {
             Bundle bundle = new Bundle();

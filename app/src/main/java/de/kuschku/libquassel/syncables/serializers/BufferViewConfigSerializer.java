@@ -33,6 +33,7 @@ import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.impl.BufferViewConfig;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class BufferViewConfigSerializer implements ObjectSerializer<BufferViewConfig> {
@@ -60,7 +61,7 @@ public class BufferViewConfigSerializer implements ObjectSerializer<BufferViewCo
         map.put("disableDecoration", new QVariant<>(data.disableDecoration()));
         map.put("addNewBuffersAutomatically", new QVariant<>(data.addNewBuffersAutomatically()));
         map.put("networkId", new QVariant<>("NetworkId", data.networkId()));
-        map.put("minimumActivity", new QVariant<>(data.minimumActivity()));
+        map.put("minimumActivity", new QVariant<>(data.minimumActivity().id));
         map.put("hideInactiveBuffers", new QVariant<>(data.hideInactiveBuffers()));
         map.put("RemovedBuffers", new QVariant<>(data.removedBuffers()));
         return map;
@@ -85,7 +86,7 @@ public class BufferViewConfigSerializer implements ObjectSerializer<BufferViewCo
                 (boolean) map.get("disableDecoration").data,
                 (boolean) map.get("addNewBuffersAutomatically").data,
                 (int) map.get("networkId").data,
-                (int) map.get("minimumActivity").data,
+                QBufferViewConfig.MinimumActivity.fromId((int) map.get("minimumActivity").data),
                 (boolean) map.get("hideInactiveBuffers").data,
                 (List<Integer>) map.get("RemovedBuffers").data
         );

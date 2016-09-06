@@ -103,6 +103,20 @@
             android:theme="@style/AppTheme.Light" />
 
         <activity
+            android:name=".ui.coresettings.network.server.NetworkServerListActivity"
+            android:label="Edit NetworkServers"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.coresettings.network.NetworkEditActivity"
+            android:theme="@style/AppTheme.Light"/>
+
+        <activity
+            android:name=".ui.coresettings.network.server.NetworkServerEditActivity"
+            android:label="Edit NetworkServer"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.coresettings.network.server.NetworkServerListActivity"
+            android:theme="@style/AppTheme.Light"/>
+
+        <activity
             android:name=".ui.setup.AccountSetupActivity"
             android:label="Account Setup"
             android:launchMode="singleTask"

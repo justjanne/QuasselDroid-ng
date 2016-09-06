@@ -68,6 +68,7 @@ public class ChatFragment extends BoundFragment {
 
     private MessageAdapter messageAdapter;
     private LinearLayoutManager layoutManager;
+    private SlidingPanelHandler slidingPanelHandler;
     private boolean loading = false;
 
     private int recyclerViewMeasuredHeight = 0;
@@ -77,7 +78,7 @@ public class ChatFragment extends BoundFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
         ButterKnife.bind(this, view);
-        new SlidingPanelHandler(getActivity(), sliderMain, context);
+        slidingPanelHandler = new SlidingPanelHandler(getActivity(), sliderMain, context);
 
         assertNotNull(messages);
 
@@ -109,12 +110,7 @@ public class ChatFragment extends BoundFragment {
             }
         });
 
-        scrollDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                messages.smoothScrollToPosition(0);
-            }
-        });
+        scrollDown.setOnClickListener(view1 -> messages.smoothScrollToPosition(0));
 
         return view;
     }
@@ -158,10 +154,14 @@ public class ChatFragment extends BoundFragment {
 
     public boolean onBackPressed() {
         if (sliderMain.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-            sliderMain.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-            return false;
+            if (slidingPanelHandler.onBackPressed()) {
+                return true;
+            } else {
+                sliderMain.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                return true;
+            }
         } else {
-            return true;
+            return false;
         }
     }
 }

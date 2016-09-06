@@ -92,9 +92,11 @@ import de.kuschku.quasseldroid_ng.ui.settings.SettingsActivity;
 import de.kuschku.quasseldroid_ng.ui.setup.CoreSetupActivity;
 import de.kuschku.util.accounts.Account;
 import de.kuschku.util.accounts.AccountManager;
+import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.certificates.CertificateUtils;
 import de.kuschku.util.certificates.SQLiteCertificateManager;
 import de.kuschku.util.servicebound.BoundActivity;
+import de.kuschku.util.ui.MenuTint;
 import rx.android.schedulers.AndroidSchedulers;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -168,6 +170,7 @@ public class MainActivity extends BoundActivity {
         chatList.setAdapter(chatListAdapter);
 
         chatListToolbar.inflateMenu(R.menu.chatlist);
+        MenuTint.colorIcons(chatListToolbar.getMenu(), AutoBinder.obtainColor(R.attr.colorFill, chatListToolbar.getContext().getTheme()));
         chatListToolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.action_show_all: {
@@ -378,9 +381,10 @@ public class MainActivity extends BoundActivity {
 
     @Override
     public void onBackPressed() {
-        if (!(currentFragment instanceof ChatFragment) || ((ChatFragment) currentFragment).onBackPressed()) {
-            super.onBackPressed();
+        if ((currentFragment instanceof ChatFragment && ((ChatFragment) currentFragment).onBackPressed())) {
+            return;
         }
+        super.onBackPressed();
     }
 
     protected void reconnect() {

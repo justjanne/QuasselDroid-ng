@@ -51,17 +51,17 @@ public class NetworkServerSerializer implements ObjectSerializer<NetworkServer> 
     public Map<String, QVariant<Object>> toVariantMap(@NonNull NetworkServer data) {
         final Map<String, QVariant<Object>> map = new HashMap<>();
 
-        map.put("UseSSL", new QVariant<>(QMetaType.Type.Bool, data.UseSSL));
+        map.put("UseSSL", new QVariant<>(QMetaType.Type.Bool, data.useSSL));
         map.put("sslVersion", new QVariant<>(QMetaType.Type.Int, data.sslVersion));
-        map.put("Host", new QVariant<>(QMetaType.Type.QString, data.Host));
-        map.put("Port", new QVariant<>(QMetaType.Type.Int, data.Port));
-        map.put("Password", new QVariant<>(QMetaType.Type.QString, data.Password));
-        map.put("UseProxy", new QVariant<>(QMetaType.Type.Bool, data.UseProxy));
-        map.put("ProxyType", new QVariant<>(QMetaType.Type.Int, data.ProxyType));
-        map.put("ProxyHost", new QVariant<>(QMetaType.Type.QString, data.ProxyHost));
-        map.put("ProxyPort", new QVariant<>(QMetaType.Type.Int, data.ProxyPort));
-        map.put("ProxyUser", new QVariant<>(QMetaType.Type.QString, data.ProxyUser));
-        map.put("ProxyPass", new QVariant<>(QMetaType.Type.QString, data.ProxyPass));
+        map.put("Host", new QVariant<>(QMetaType.Type.QString, data.host));
+        map.put("Port", new QVariant<>(QMetaType.Type.Int, data.port));
+        map.put("Password", new QVariant<>(QMetaType.Type.QString, data.password));
+        map.put("UseProxy", new QVariant<>(QMetaType.Type.Bool, data.useProxy));
+        map.put("ProxyType", new QVariant<>(QMetaType.Type.Int, data.proxyType.id));
+        map.put("ProxyHost", new QVariant<>(QMetaType.Type.QString, data.proxyHost));
+        map.put("ProxyPort", new QVariant<>(QMetaType.Type.Int, data.proxyPort));
+        map.put("ProxyUser", new QVariant<>(QMetaType.Type.QString, data.proxyUser));
+        map.put("ProxyPass", new QVariant<>(QMetaType.Type.QString, data.proxyPass));
         return map;
     }
 
@@ -81,7 +81,7 @@ public class NetworkServerSerializer implements ObjectSerializer<NetworkServer> 
                 (int) map.get("Port").data,
                 (String) map.get("Password").data,
                 (boolean) map.get("UseProxy").data,
-                (int) map.get("ProxyType").data,
+                NetworkServer.ProxyType.fromId((int) map.get("ProxyType").data),
                 (String) map.get("ProxyHost").data,
                 (int) map.get("ProxyPort").data,
                 (String) map.get("ProxyUser").data,

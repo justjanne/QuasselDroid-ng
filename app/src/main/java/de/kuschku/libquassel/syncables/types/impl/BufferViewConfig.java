@@ -62,11 +62,11 @@ public class BufferViewConfig extends ABufferViewConfig {
     private boolean sortAlphabetically;
     private boolean disableDecoration;
     private int allowedBufferTypes;
-    private int minimumActivity;
+    private MinimumActivity minimumActivity;
     private boolean hideInactiveBuffers;
     private boolean hideInactiveNetworks;
 
-    public BufferViewConfig(String bufferViewName, @NonNull List<Integer> temporarilyRemovedBuffers, boolean hideInactiveNetworks, @NonNull List<Integer> buffers, int allowedBufferTypes, boolean sortAlphabetically, boolean disableDecoration, boolean addNewBuffersAutomatically, int networkId, int minimumActivity, boolean hideInactiveBuffers, @NonNull List<Integer> removedBuffers) {
+    public BufferViewConfig(String bufferViewName, @NonNull List<Integer> temporarilyRemovedBuffers, boolean hideInactiveNetworks, @NonNull List<Integer> buffers, int allowedBufferTypes, boolean sortAlphabetically, boolean disableDecoration, boolean addNewBuffersAutomatically, int networkId, MinimumActivity minimumActivity, boolean hideInactiveBuffers, @NonNull List<Integer> removedBuffers) {
         this.bufferViewName = bufferViewName;
         this.temporarilyRemovedBuffers = new ObservableSet<>(temporarilyRemovedBuffers);
         this.hideInactiveNetworks = hideInactiveNetworks;
@@ -101,7 +101,7 @@ public class BufferViewConfig extends ABufferViewConfig {
                 false,
                 true,
                 -1,
-                0,
+                MinimumActivity.NONE,
                 false,
                 Collections.emptyList()
         );
@@ -252,12 +252,12 @@ public class BufferViewConfig extends ABufferViewConfig {
     }
 
     @Override
-    public int minimumActivity() {
+    public MinimumActivity minimumActivity() {
         return minimumActivity;
     }
 
     @Override
-    public void _setMinimumActivity(int activity) {
+    public void _setMinimumActivity(MinimumActivity activity) {
         this.minimumActivity = activity;
         _update();
     }

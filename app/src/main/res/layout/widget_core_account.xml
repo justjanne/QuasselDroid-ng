@@ -70,5 +70,6 @@
         android:layout_height="@dimen/material_drawer_item_profile_icon_width"
         android:layout_gravity="center_vertical"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_delete_light" />
+        android:src="@drawable/ic_delete"
+        android:tint="?attr/colorFill"/>
 </LinearLayout>

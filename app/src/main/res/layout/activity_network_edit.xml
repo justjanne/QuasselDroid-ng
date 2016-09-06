@@ -97,6 +97,18 @@
                 android:layout_height="wrap_content"
                 android:text="rejoinChannels"/>
 
+            <android.support.v7.widget.ButtonBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/servers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Edit Servers"/>
+
+            </android.support.v7.widget.ButtonBarLayout>
+
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/useCustomCodecs"
                 style="?attr/switchPreferenceStyle"

@@ -23,28 +23,40 @@ package de.kuschku.quasseldroid_ng.ui.coresettings.network;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.syncables.types.impl.NetworkInfo;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.coresettings.identity.IdentitySpinnerAdapter;
+import de.kuschku.quasseldroid_ng.ui.coresettings.network.server.NetworkServerListActivity;
+import de.kuschku.quasseldroid_ng.ui.coresettings.network.server.helper.NetworkServerSerializeHelper;
+import de.kuschku.util.backports.NumberHelper;
 import de.kuschku.util.servicebound.BoundActivity;
+import de.kuschku.util.ui.AnimationHelper;
 
 public class NetworkCreateActivity extends BoundActivity {
+
+    private static final int REQUEST_SERVER_LIST = 1;
+    private static final int REQUEST_PERFORM = 2;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -58,6 +70,9 @@ public class NetworkCreateActivity extends BoundActivity {
 
     @Bind(R.id.rejoinChannels)
     CheckBox rejoinChannels;
+
+    @Bind(R.id.servers)
+    Button servers;
 
     @Bind(R.id.useCustomCodecs)
     SwitchCompat useCustomCodecs;
@@ -101,60 +116,8 @@ public class NetworkCreateActivity extends BoundActivity {
 
     int id;
     IdentitySpinnerAdapter spinnerAdapter = new IdentitySpinnerAdapter();
-    private NetworkInfo networkInfo;
 
-    public static void expand(final ViewGroup v) {
-        v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        final int targetHeight = v.getMeasuredHeight();
-
-        // Older versions of android (pre API 21) cancel animations for views with a height of 0.
-        v.getLayoutParams().height = 1;
-        v.setVisibility(View.VISIBLE);
-        Animation a = new Animation() {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                v.getLayoutParams().height = interpolatedTime == 1
-                        ? ViewGroup.LayoutParams.WRAP_CONTENT
-                        : (int) (targetHeight * interpolatedTime);
-                v.setAlpha(interpolatedTime);
-                v.requestLayout();
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-        // 1dp/ms
-        a.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density));
-        v.startAnimation(a);
-    }
-
-    public static void collapse(final ViewGroup v) {
-        final int initialHeight = v.getMeasuredHeight();
-
-        Animation a = new Animation() {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if (interpolatedTime == 1) {
-                    v.setVisibility(View.GONE);
-                } else {
-                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
-                    v.setAlpha(1 - interpolatedTime);
-                    v.requestLayout();
-                }
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-        a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
-        v.startAnimation(a);
-    }
+    private List<NetworkServer> serverList = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -187,7 +150,45 @@ public class NetworkCreateActivity extends BoundActivity {
 
         useAutoReconnect.setOnCheckedChangeListener(this::updateAutoReconnectVisible);
         updateAutoReconnectVisible(null, useAutoReconnect.isChecked());
+
+        unlimitedAutoReconnectRetries.setOnCheckedChangeListener(this::updateAutoReconnectRetriesUnlimited);
+        updateAutoReconnectRetriesUnlimited(null, unlimitedAutoReconnectRetries.isChecked());
+
+        servers.setOnClickListener(v -> {
+            Intent intent1 = new Intent(NetworkCreateActivity.this, NetworkServerListActivity.class);
+            if (serverList != null)
+                intent1.putExtra("servers", NetworkServerSerializeHelper.serialize(serverList));
+            startActivityForResult(intent1, REQUEST_SERVER_LIST, null);
+        });
+
+        initializeWithDefaults();
     }
+
+    public void initializeWithDefaults() {
+        useAutoReconnect.setChecked(true);
+        autoReconnectRetries.setText("20");
+        autoReconnectInterval.setText("60");
+        rejoinChannels.setChecked(true);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_PERFORM: {
+
+                } break;
+                case REQUEST_SERVER_LIST: {
+                    Parcelable[] servers = data.getParcelableArrayExtra("servers");
+                    Log.d("DEBUG", Arrays.toString(servers));
+                    if (servers != null) {
+                        serverList = NetworkServerSerializeHelper.deserialize(servers);
+                    }
+                } break;
+            }
+        }
+    }
+
 
     private void updateCustomCodecsVisible(CompoundButton button, boolean visible) {
         codecForServer.setEnabled(visible);
@@ -219,52 +220,15 @@ public class NetworkCreateActivity extends BoundActivity {
         updateViewGroupStatus(this.groupAutoReconnect, visible);
     }
 
-    private void updateViewGroupStatus(final ViewGroup group, boolean visible) {
+    private void updateAutoReconnectRetriesUnlimited(CompoundButton button, boolean visible) {
+        autoReconnectRetries.setEnabled(!visible);
+    }
+
+    private void updateViewGroupStatus(ViewGroup group, boolean visible) {
         if (visible) {
-            group.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            final int targetHeight = group.getMeasuredHeight();
-
-            group.getLayoutParams().height = 1;
-            group.setVisibility(View.VISIBLE);
-            Animation a = new Animation() {
-                @Override
-                protected void applyTransformation(float interpolatedTime, Transformation t) {
-                    group.getLayoutParams().height = interpolatedTime == 1
-                            ? ViewGroup.LayoutParams.WRAP_CONTENT
-                            : (int) (targetHeight * interpolatedTime);
-                    group.requestLayout();
-                }
-
-                @Override
-                public boolean willChangeBounds() {
-                    return true;
-                }
-            };
-
-            a.setDuration((int) (targetHeight / group.getContext().getResources().getDisplayMetrics().density));
-            group.startAnimation(a);
+            AnimationHelper.expand(group);
         } else {
-            final int initialHeight = group.getMeasuredHeight();
-
-            Animation a = new Animation() {
-                @Override
-                protected void applyTransformation(float interpolatedTime, Transformation t) {
-                    if (interpolatedTime == 1) {
-                        group.setVisibility(View.GONE);
-                    } else {
-                        group.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
-                        group.requestLayout();
-                    }
-                }
-
-                @Override
-                public boolean willChangeBounds() {
-                    return true;
-                }
-            };
-
-            a.setDuration((int) (initialHeight / group.getContext().getResources().getDisplayMetrics().density));
-            group.startAnimation(a);
+            AnimationHelper.collapse(group);
         }
     }
 
@@ -278,34 +242,32 @@ public class NetworkCreateActivity extends BoundActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_confirm: {
-                if (networkInfo != null) {
-                    NetworkInfo after = new NetworkInfo(
-                            0,
-                            networkName.getText().toString(),
-                            0,
-                            useCustomCodecs.isChecked() ? this.codecForServer.getText().toString() : null,
-                            useCustomCodecs.isChecked() ? this.codecForEncoding.getText().toString() : null,
-                            useCustomCodecs.isChecked() ? this.codecForDecoding.getText().toString() : null,
-                            null,
-                            true,
-                            null,
-                            useAutoIdentify.isChecked(),
-                            autoIdentifyService.getText().toString(),
-                            autoIdentifyPassword.getText().toString(),
-                            useSasl.isChecked(),
-                            saslAccount.getText().toString(),
-                            saslPassword.getText().toString(),
-                            useAutoReconnect.isChecked(),
-                            Integer.parseInt(autoReconnectInterval.getText().toString()),
-                            Short.parseShort(autoReconnectRetries.getText().toString()),
-                            unlimitedAutoReconnectRetries.isChecked(),
-                            rejoinChannels.isChecked()
-                    );
-                    if (context.client() != null)
-                        context.client().createNetwork(after);
+                NetworkInfo after = new NetworkInfo(
+                        0,
+                        networkName.getText().toString(),
+                        0,
+                        useCustomCodecs.isChecked() ? this.codecForServer.getText().toString() : null,
+                        useCustomCodecs.isChecked() ? this.codecForEncoding.getText().toString() : null,
+                        useCustomCodecs.isChecked() ? this.codecForDecoding.getText().toString() : null,
+                        serverList == null ? Collections.emptyList() : serverList,
+                        true,
+                        null,
+                        useAutoIdentify.isChecked(),
+                        autoIdentifyService.getText().toString(),
+                        autoIdentifyPassword.getText().toString(),
+                        useSasl.isChecked(),
+                        saslAccount.getText().toString(),
+                        saslPassword.getText().toString(),
+                        useAutoReconnect.isChecked(),
+                        NumberHelper.parseInt(autoReconnectInterval.getText().toString(), 0),
+                        NumberHelper.parseShort(autoReconnectRetries.getText().toString(), (short) 0),
+                        unlimitedAutoReconnectRetries.isChecked(),
+                        rejoinChannels.isChecked()
+                );
+                if (context.client() != null)
+                    context.client().createNetwork(after);
 
-                    finish();
-                }
+                finish();
             }
             return true;
             default:

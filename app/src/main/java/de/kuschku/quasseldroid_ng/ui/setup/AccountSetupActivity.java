@@ -29,6 +29,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -46,6 +47,9 @@ import de.kuschku.util.accounts.Account;
 import de.kuschku.util.accounts.AccountManager;
 
 public class AccountSetupActivity extends AppCompatActivity implements ValidUpdateCallback {
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     @Bind(R.id.view_pager)
     ViewPager viewPager;
@@ -95,9 +99,9 @@ public class AccountSetupActivity extends AppCompatActivity implements ValidUpda
                 slideFragment.addChangeListener(AccountSetupActivity.this);
                 updateValidity(slideFragment.isValid());
                 if (viewPager.getCurrentItem() == slidePagerAdapter.list.size() - 1) {
-                    btn.setImageResource(R.drawable.ic_check_dark);
+                    btn.setImageResource(R.drawable.ic_check);
                 } else {
-                    btn.setImageResource(R.drawable.ic_arrow_right_dark);
+                    btn.setImageResource(R.drawable.ic_arrow_right);
                 }
             }
 

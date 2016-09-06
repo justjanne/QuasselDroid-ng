@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -64,11 +63,6 @@ public class NetworkListActivity extends BoundActivity {
             startActivity(intent);
         }
     };
-    OnQNetworkDeleteListener deleteListener = network -> {
-        if (manager != null && network != null) {
-            context.client().removeNetwork(network.networkId());
-        }
-    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,10 +97,6 @@ public class NetworkListActivity extends BoundActivity {
 
     interface OnQNetworkClickListener {
         void onClick(QNetwork network);
-    }
-
-    interface OnQNetworkDeleteListener {
-        void onDelete(QNetwork network);
     }
 
     private class ChatListAdapter extends RecyclerView.Adapter<NetworkViewHolder> {
@@ -146,16 +136,12 @@ public class NetworkListActivity extends BoundActivity {
         @Bind(R.id.network_name)
         TextView name;
 
-        @Bind(R.id.network_delete)
-        AppCompatImageButton delete;
-
         private QNetwork network;
 
         public NetworkViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(view -> clickListener.onClick(network));
-            delete.setOnClickListener(view -> deleteListener.onDelete(network));
         }
 
         public void bind(QNetwork network) {

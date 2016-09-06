@@ -22,6 +22,7 @@
 package de.kuschku.libquassel.primitives.serializers;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -42,10 +43,14 @@ public class StringListSerializer implements PrimitiveSerializer<List<String>> {
     }
 
     @Override
-    public void serialize(@NonNull final ByteChannel channel, @NonNull final List<String> data) throws IOException {
-        IntSerializer.get().serialize(channel, data.size());
-        for (String element : data) {
-            StringSerializer.get().serialize(channel, element);
+    public void serialize(@NonNull final ByteChannel channel, @Nullable final List<String> data) throws IOException {
+        if (data == null) {
+            IntSerializer.get().serialize(channel, 0);
+        } else {
+            IntSerializer.get().serialize(channel, data.size());
+            for (String element : data) {
+                StringSerializer.get().serialize(channel, element);
+            }
         }
     }
 

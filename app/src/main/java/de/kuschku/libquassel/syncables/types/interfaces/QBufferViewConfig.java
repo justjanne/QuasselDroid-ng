@@ -79,12 +79,12 @@ public interface QBufferViewConfig extends QSyncableObject<QBufferViewConfig> {
 
     void _setAllowedBufferTypes(int bufferTypes);
 
-    int minimumActivity();
+    MinimumActivity minimumActivity();
 
     @Synced
-    void setMinimumActivity(int activity);
+    void setMinimumActivity(MinimumActivity activity);
 
-    void _setMinimumActivity(int activity);
+    void _setMinimumActivity(MinimumActivity activity);
 
     boolean hideInactiveBuffers();
 
@@ -179,5 +179,32 @@ public interface QBufferViewConfig extends QSyncableObject<QBufferViewConfig> {
         ALWAYS,
         TEMP_HIDDEN,
         PERM_HIDDEN
+    }
+
+    enum MinimumActivity {
+        NONE(0),
+        OTHER(1),
+        MESSAGE(2),
+        HIGHLIGHT(4);
+
+        public final int id;
+
+        MinimumActivity(int id) {
+            this.id = id;
+        }
+
+        public static MinimumActivity fromId(int id) {
+            switch (id) {
+                default:
+                case 0:
+                    return NONE;
+                case 1:
+                    return OTHER;
+                case 2:
+                    return MESSAGE;
+                case 4:
+                    return HIGHLIGHT;
+            }
+        }
     }
 }

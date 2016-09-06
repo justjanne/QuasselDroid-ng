@@ -75,8 +75,25 @@ public class AutoBinder {
                     f.set(o, dimens[0]);
                 else
                     throw new IllegalAccessException("Field length does not correspond to argument length");
+            } else if (f.isAnnotationPresent(AutoInt.class)) {
+                int[] ints = obtainInts(f.getAnnotation(AutoInt.class).value(), theme);
+                if (f.getType().isArray())
+                    f.set(o, ints);
+                else if (ints.length == 1)
+                    f.set(o, ints[0]);
+                else
+                    throw new IllegalAccessException("Field length does not correspond to argument length");
             }
         }
+    }
+
+    @ColorInt
+    public static int obtainColor(int res, @NonNull Resources.Theme theme) {
+        int result;
+        TypedArray t = theme.obtainStyledAttributes(new int[]{res});
+        result = t.getColor(0, 0x00000000);
+        t.recycle();
+        return result;
     }
 
     @NonNull
@@ -106,6 +123,17 @@ public class AutoBinder {
         TypedArray t = theme.obtainStyledAttributes(res);
         for (int i = 0; i < res.length; i++) {
             result[i] = (int) t.getDimension(i, 0x00000000);
+        }
+        t.recycle();
+        return result;
+    }
+
+    @NonNull
+    private static int[] obtainInts(@NonNull int[] res, @NonNull Resources.Theme theme) {
+        int[] result = new int[res.length];
+        TypedArray t = theme.obtainStyledAttributes(res);
+        for (int i = 0; i < res.length; i++) {
+            result[i] = t.getInt(i, 0x00000000);
         }
         t.recycle();
         return result;

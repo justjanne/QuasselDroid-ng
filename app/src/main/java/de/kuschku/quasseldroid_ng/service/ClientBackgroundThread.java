@@ -29,6 +29,9 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.SocketException;
+
+import javax.net.ssl.SSLException;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.QuasselClient;
@@ -106,7 +109,7 @@ public class ClientBackgroundThread implements Runnable {
 
     @Subscribe(sticky = true)
     public void onEvent(GeneralErrorEvent event) {
-        if (!(event.exception instanceof ConnectException))
+        if (!(event.exception instanceof ConnectException) && !(event.exception instanceof SSLException) && !(event.exception instanceof SocketException))
             ACRA.getErrorReporter().handleSilentException(event.exception);
 
         event.exception.printStackTrace();

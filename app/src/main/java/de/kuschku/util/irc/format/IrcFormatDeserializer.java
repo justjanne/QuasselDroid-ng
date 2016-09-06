@@ -22,13 +22,10 @@
 package de.kuschku.util.irc.format;
 
 
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 
 import java.util.Arrays;
@@ -36,6 +33,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
+import de.kuschku.util.irc.format.spans.IrcBackgroundColorSpan;
+import de.kuschku.util.irc.format.spans.IrcBoldSpan;
+import de.kuschku.util.irc.format.spans.IrcForegroundColorSpan;
+import de.kuschku.util.irc.format.spans.IrcItalicSpan;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -276,11 +277,6 @@ public class IrcFormatDeserializer {
         byte id();
     }
 
-    public interface ColorSupplier {
-        @ColorInt
-        int ircColor(byte color);
-    }
-
     private static class FormatDescription {
         public final int start;
         @NonNull
@@ -299,7 +295,7 @@ public class IrcFormatDeserializer {
     private static class ItalicIrcFormat implements IrcFormat {
         @Override
         public void applyTo(@NonNull SpannableStringBuilder editable, int from, int to) {
-            editable.setSpan(new ItalicSpan(), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            editable.setSpan(new IrcItalicSpan(), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }
 
         @Override
@@ -323,7 +319,7 @@ public class IrcFormatDeserializer {
     private static class BoldIrcFormat implements IrcFormat {
         @Override
         public void applyTo(@NonNull SpannableStringBuilder editable, int from, int to) {
-            editable.setSpan(new BoldSpan(), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            editable.setSpan(new IrcBoldSpan(), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }
 
         @Override
@@ -344,11 +340,11 @@ public class IrcFormatDeserializer {
         @Override
         public void applyTo(@NonNull SpannableStringBuilder editable, int from, int to) {
             int[] mircColors = context.themeUtil().res.mircColors;
-            if (foreground != -1) {
-                editable.setSpan(new ForegroundColorSpan(mircColors[foreground % 16]), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            if (foreground != -1 && foreground != 99) {
+                editable.setSpan(new IrcForegroundColorSpan(foreground, mircColors[foreground % 16]), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
             }
-            if (background != -1) {
-                editable.setSpan(new BackgroundColorSpan(mircColors[background % 16]), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            if (background != -1 && background != 99) {
+                editable.setSpan(new IrcBackgroundColorSpan(background, mircColors[background % 16]), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
             }
         }
 

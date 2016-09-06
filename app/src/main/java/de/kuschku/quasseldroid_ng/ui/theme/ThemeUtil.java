@@ -22,6 +22,7 @@
 package de.kuschku.quasseldroid_ng.ui.theme;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -29,17 +30,23 @@ import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.view.ContextThemeWrapper;
+import android.util.SparseIntArray;
 
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
+import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.annotationbind.AutoColor;
 import de.kuschku.util.annotationbind.AutoDimen;
+import de.kuschku.util.annotationbind.AutoInt;
 import de.kuschku.util.annotationbind.AutoString;
 import de.kuschku.util.irc.chanmodes.ChanMode;
 import de.kuschku.util.ui.DateTimeFormatHelper;
 import de.kuschku.util.ui.SpanFormatter;
+
+import static android.support.v4.content.res.ResourcesCompat.getDrawable;
 
 public class ThemeUtil {
     @NonNull
@@ -58,20 +65,23 @@ public class ThemeUtil {
     public final StatusDrawables statusDrawables;
 
     public ThemeUtil(@NonNull Context ctx) {
-        initColors(new ContextThemeWrapper(ctx, ctx.getTheme()));
-        statusDrawables = new StatusDrawables(ctx, res);
+        ContextThemeWrapper themeWrapper = new ContextThemeWrapper(ctx, ctx.getTheme());
+        initColors(themeWrapper);
+        statusDrawables = new StatusDrawables(ctx, res, themeWrapper.getTheme());
         formatter = new DateTimeFormatHelper(ctx);
     }
 
     public ThemeUtil(@NonNull Context ctx, @NonNull AppTheme theme) {
-        initColors(new ContextThemeWrapper(ctx, theme.themeId));
-        statusDrawables = new StatusDrawables(ctx, res);
+        ContextThemeWrapper themeWrapper = new ContextThemeWrapper(ctx, theme.themeId);
+        initColors(themeWrapper);
+        statusDrawables = new StatusDrawables(ctx, res, themeWrapper.getTheme());
         formatter = new DateTimeFormatHelper(ctx);
     }
 
     @UiThread
     public void initColors(@NonNull ContextThemeWrapper wrapper) {
         try {
+            res.colors = null;
             AutoBinder.bind(res, wrapper);
             AutoBinder.bind(translations, wrapper);
             AutoBinder.bind(chanModes, wrapper);
@@ -104,15 +114,19 @@ public class ThemeUtil {
         public final Drawable channelOnline;
         public final Drawable channelOffline;
 
-        public StatusDrawables(Context ctx, Colors colors) {
-            online = ctx.getResources().getDrawable(R.drawable.ic_status);
+        public StatusDrawables(Context ctx, Colors colors, Resources.Theme theme) {
+            Resources resources = ctx.getResources();
+            online = getDrawable(resources, R.drawable.ic_status, theme);
             DrawableCompat.setTint(online, colors.colorAccent);
-            away = ctx.getResources().getDrawable(R.drawable.ic_status);
-            offline = ctx.getResources().getDrawable(R.drawable.ic_status_offline);
+            away = getDrawable(resources, R.drawable.ic_status, theme);
+            DrawableCompat.setTint(away, colors.colorAway);
+            offline = getDrawable(resources, R.drawable.ic_status_offline, theme);
+            DrawableCompat.setTint(offline, colors.colorOffline);
 
-            channelOnline = ctx.getResources().getDrawable(R.drawable.ic_status_channel);
+            channelOnline = getDrawable(resources, R.drawable.ic_status_channel, theme);
             DrawableCompat.setTint(channelOnline, colors.colorAccent);
-            channelOffline = ctx.getResources().getDrawable(R.drawable.ic_status_channel_offline);
+            channelOffline = getDrawable(resources, R.drawable.ic_status_channel_offline, theme);
+            DrawableCompat.setTint(channelOffline, colors.colorOffline);
         }
 
         public Drawable of(BufferInfo.Type type, BufferInfo.BufferStatus status) {
@@ -704,6 +718,32 @@ public class ThemeUtil {
         public CharSequence formatPlain(@NonNull CharSequence nick, @NonNull CharSequence message) {
             return SpanFormatter.format(messagePlain, nick, message);
         }
+
+        public String proxyType(NetworkServer.ProxyType type) {
+            switch (type) {
+                default:
+                case DefaultProxy:
+                    return "No Proxy";
+                case Socks5Proxy:
+                    return "Socks5";
+                case HttpProxy:
+                    return "Http";
+            }
+        }
+
+        public String minimumActivity(QBufferViewConfig.MinimumActivity minimumActivity) {
+            switch (minimumActivity) {
+                default:
+                case NONE:
+                    return "No Activity";
+                case OTHER:
+                    return "Other Activity";
+                case MESSAGE:
+                    return "Message";
+                case HIGHLIGHT:
+                    return "Highlight";
+            }
+        }
     }
 
     public static class Colors {
@@ -726,6 +766,21 @@ public class ThemeUtil {
         @AutoColor(R.attr.colorControlHighlight)
         @ColorInt
         public int colorAccentFocus;
+
+        @AutoColor(R.attr.colorFill)
+        @ColorInt
+        public int colorFill;
+
+        @AutoColor(R.attr.colorOffline)
+        @ColorInt
+        public int colorOffline;
+
+        @AutoColor(R.attr.colorAway)
+        @ColorInt
+        public int colorAway;
+
+        @AutoInt(R.attr.colorForegroundMirc)
+        public int colorForegroundMirc;
 
         @AutoColor({R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
                 R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
@@ -796,5 +851,18 @@ public class ThemeUtil {
         @AutoDimen(R.attr.actionBarSize)
         @ColorInt
         public int actionBarSize;
+
+        private SparseIntArray colors;
+
+        public int colorToId(int foregroundColor) {
+            if (colors == null) {
+                colors = new SparseIntArray(16);
+                for (int i = 0; i < mircColors.length; i++) {
+                    colors.put(mircColors[i], i);
+                }
+            }
+
+            return colors.get(foregroundColor, -1);
+        }
     }
 }

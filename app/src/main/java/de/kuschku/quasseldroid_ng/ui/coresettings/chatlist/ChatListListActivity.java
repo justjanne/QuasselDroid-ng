@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -64,11 +63,6 @@ public class ChatListListActivity extends BoundActivity {
             startActivity(intent);
         }
     };
-    OnQBufferViewConfigDeleteListener deleteListener = config -> {
-        if (manager != null && config != null) {
-            manager.deleteBufferView(config.bufferViewId());
-        }
-    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,10 +97,6 @@ public class ChatListListActivity extends BoundActivity {
 
     interface OnQBufferViewConfigClickListener {
         void onClick(QBufferViewConfig config);
-    }
-
-    interface OnQBufferViewConfigDeleteListener {
-        void onDelete(QBufferViewConfig config);
     }
 
     private class ChatListAdapter extends RecyclerView.Adapter<ChatListViewHolder> {
@@ -146,16 +136,12 @@ public class ChatListListActivity extends BoundActivity {
         @Bind(R.id.chatlist_name)
         TextView name;
 
-        @Bind(R.id.chatlist_delete)
-        AppCompatImageButton delete;
-
         private QBufferViewConfig config;
 
         public ChatListViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(view -> clickListener.onClick(config));
-            delete.setOnClickListener(view -> deleteListener.onDelete(config));
         }
 
         public void bind(QBufferViewConfig config) {

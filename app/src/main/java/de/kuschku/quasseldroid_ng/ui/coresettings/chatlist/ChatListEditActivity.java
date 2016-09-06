@@ -73,9 +73,10 @@ public class ChatListEditActivity extends BoundActivity {
     @Bind(R.id.minimumActivity)
     Spinner minimumActivity;
 
-    int id;
+    private int id;
     private QBufferViewConfig config;
     private NetworkSpinnerAdapter networkSpinnerAdapter;
+    private MinimumActivityAdapter minimumActivityAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,6 +95,9 @@ public class ChatListEditActivity extends BoundActivity {
 
         networkSpinnerAdapter = new NetworkSpinnerAdapter(this);
         network.setAdapter(networkSpinnerAdapter);
+
+        minimumActivityAdapter = new MinimumActivityAdapter(context);
+        minimumActivity.setAdapter(minimumActivityAdapter);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -116,6 +120,9 @@ public class ChatListEditActivity extends BoundActivity {
 
                     if (config.networkId() != (int) network.getSelectedItemId())
                         config.setNetworkId((int) network.getSelectedItemId());
+
+                    if (config.minimumActivity() != QBufferViewConfig.MinimumActivity.fromId((int) minimumActivity.getSelectedItemId()))
+                        config.setMinimumActivity(QBufferViewConfig.MinimumActivity.fromId((int) minimumActivity.getSelectedItemId()));
 
                     int allowedBufferTypes = config.allowedBufferTypes();
                     config.setBufferTypeAllowed(BufferInfo.Type.CHANNEL, this.showChannels.isChecked());
@@ -166,7 +173,7 @@ public class ChatListEditActivity extends BoundActivity {
             hideInactiveNetworks.setChecked(config.hideInactiveNetworks());
             addAutomatically.setChecked(config.addNewBuffersAutomatically());
             sortAlphabetically.setChecked(config.sortAlphabetically());
-            //minimumActivity
+            minimumActivity.setSelection(minimumActivityAdapter.indexOf(config.minimumActivity()));
         }
     }
 

@@ -21,35 +21,175 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/format_bold"
-        android:icon="?attr/iconFormatBold"
+        android:icon="@drawable/ic_format_bold"
         android:title="@string/formatBold"
-        app:showAsAction="always" />
+        app:showAsAction="always"/>
     <item
         android:id="@+id/format_italic"
-        android:icon="?attr/iconFormatItalic"
+        android:icon="@drawable/ic_format_italic"
         android:title="@string/formatItalic"
-        app:showAsAction="always" />
+        app:showAsAction="always"/>
     <item
         android:id="@+id/format_underline"
-        android:icon="?attr/iconFormatUnderline"
+        android:icon="@drawable/ic_format_underline"
         android:title="@string/formatUnderline"
-        app:showAsAction="always" />
+        app:showAsAction="always"/>
     <item
         android:id="@+id/format_paint"
-        android:icon="?attr/iconFormatPaint"
+        android:icon="@drawable/ic_format_paint"
         android:title="@string/formatColor"
-        app:showAsAction="always" />
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/paint_clear"
+                android:title="@string/colorname_clear"/>
+            <item
+                android:id="@+id/paint_mircColor0"
+                android:icon="?attr/mircColor0"
+                android:title="@string/colorname_mircColor0"/>
+            <item
+                android:id="@+id/paint_mircColor1"
+                android:icon="?attr/mircColor1"
+                android:title="@string/colorname_mircColor1"/>
+            <item
+                android:id="@+id/paint_mircColor2"
+                android:icon="?attr/mircColor2"
+                android:title="@string/colorname_mircColor2"/>
+            <item
+                android:id="@+id/paint_mircColor3"
+                android:icon="?attr/mircColor3"
+                android:title="@string/colorname_mircColor3"/>
+            <item
+                android:id="@+id/paint_mircColor4"
+                android:icon="?attr/mircColor4"
+                android:title="@string/colorname_mircColor4"/>
+            <item
+                android:id="@+id/paint_mircColor5"
+                android:icon="?attr/mircColor5"
+                android:title="@string/colorname_mircColor5"/>
+            <item
+                android:id="@+id/paint_mircColor6"
+                android:icon="?attr/mircColor6"
+                android:title="@string/colorname_mircColor6"/>
+            <item
+                android:id="@+id/paint_mircColor7"
+                android:icon="?attr/mircColor7"
+                android:title="@string/colorname_mircColor7"/>
+            <item
+                android:id="@+id/paint_mircColor8"
+                android:icon="?attr/mircColor8"
+                android:title="@string/colorname_mircColor8"/>
+            <item
+                android:id="@+id/paint_mircColor9"
+                android:icon="?attr/mircColor9"
+                android:title="@string/colorname_mircColor9"/>
+            <item
+                android:id="@+id/paint_mircColorA"
+                android:icon="?attr/mircColorA"
+                android:title="@string/colorname_mircColorA"/>
+            <item
+                android:id="@+id/paint_mircColorB"
+                android:icon="?attr/mircColorB"
+                android:title="@string/colorname_mircColorB"/>
+            <item
+                android:id="@+id/paint_mircColorC"
+                android:icon="?attr/mircColorC"
+                android:title="@string/colorname_mircColorC"/>
+            <item
+                android:id="@+id/paint_mircColorD"
+                android:icon="?attr/mircColorD"
+                android:title="@string/colorname_mircColorD"/>
+            <item
+                android:id="@+id/paint_mircColorE"
+                android:icon="?attr/mircColorE"
+                android:title="@string/colorname_mircColorE"/>
+            <item
+                android:id="@+id/paint_mircColorF"
+                android:icon="?attr/mircColorF"
+                android:title="@string/colorname_mircColorF"/>
+        </menu>
+    </item>
     <item
         android:id="@+id/format_fill"
-        android:icon="?attr/iconFormatFill"
+        android:icon="@drawable/ic_format_fill"
         android:title="@string/formatFill"
-        app:showAsAction="always" />
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/fill_clear"
+                android:title="@string/colorname_clear"/>
+            <item
+                android:id="@+id/fill_mircColor0"
+                android:icon="?attr/mircColor0"
+                android:title="@string/colorname_mircColor0"/>
+            <item
+                android:id="@+id/fill_mircColor1"
+                android:icon="?attr/mircColor1"
+                android:title="@string/colorname_mircColor1"/>
+            <item
+                android:id="@+id/fill_mircColor2"
+                android:icon="?attr/mircColor2"
+                android:title="@string/colorname_mircColor2"/>
+            <item
+                android:id="@+id/fill_mircColor3"
+                android:icon="?attr/mircColor3"
+                android:title="@string/colorname_mircColor3"/>
+            <item
+                android:id="@+id/fill_mircColor4"
+                android:icon="?attr/mircColor4"
+                android:title="@string/colorname_mircColor4"/>
+            <item
+                android:id="@+id/fill_mircColor5"
+                android:icon="?attr/mircColor5"
+                android:title="@string/colorname_mircColor5"/>
+            <item
+                android:id="@+id/fill_mircColor6"
+                android:icon="?attr/mircColor6"
+                android:title="@string/colorname_mircColor6"/>
+            <item
+                android:id="@+id/fill_mircColor7"
+                android:icon="?attr/mircColor7"
+                android:title="@string/colorname_mircColor7"/>
+            <item
+                android:id="@+id/fill_mircColor8"
+                android:icon="?attr/mircColor8"
+                android:title="@string/colorname_mircColor8"/>
+            <item
+                android:id="@+id/fill_mircColor9"
+                android:icon="?attr/mircColor9"
+                android:title="@string/colorname_mircColor9"/>
+            <item
+                android:id="@+id/fill_mircColorA"
+                android:icon="?attr/mircColorA"
+                android:title="@string/colorname_mircColorA"/>
+            <item
+                android:id="@+id/fill_mircColorB"
+                android:icon="?attr/mircColorB"
+                android:title="@string/colorname_mircColorB"/>
+            <item
+                android:id="@+id/fill_mircColorC"
+                android:icon="?attr/mircColorC"
+                android:title="@string/colorname_mircColorC"/>
+            <item
+                android:id="@+id/fill_mircColorD"
+                android:icon="?attr/mircColorD"
+                android:title="@string/colorname_mircColorD"/>
+            <item
+                android:id="@+id/fill_mircColorE"
+                android:icon="?attr/mircColorE"
+                android:title="@string/colorname_mircColorE"/>
+            <item
+                android:id="@+id/fill_mircColorF"
+                android:icon="?attr/mircColorF"
+                android:title="@string/colorname_mircColorF"/>
+        </menu>
+    </item>
     <item
         android:id="@+id/action_history"
-        android:icon="?attr/iconHistory"
+        android:icon="@drawable/ic_history"
         android:title="@string/labelHistory"
-        app:showAsAction="always" />
+        app:showAsAction="always"/>
 </menu>

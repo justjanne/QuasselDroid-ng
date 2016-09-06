@@ -50,4 +50,22 @@
     <string name="messageAction">* %1$s %2$s</string>
 
     <string name="messageTopic">%1$s has changed topic for %2$s to: "%3$s"</string>
+
+    <string name="colorname_clear">clear</string>
+    <string name="colorname_mircColor0">mircColor0</string>
+    <string name="colorname_mircColor1">mircColor1</string>
+    <string name="colorname_mircColor2">mircColor2</string>
+    <string name="colorname_mircColor3">mircColor3</string>
+    <string name="colorname_mircColor4">mircColor4</string>
+    <string name="colorname_mircColor5">mircColor5</string>
+    <string name="colorname_mircColor6">mircColor6</string>
+    <string name="colorname_mircColor7">mircColor7</string>
+    <string name="colorname_mircColor8">mircColor8</string>
+    <string name="colorname_mircColor9">mircColor9</string>
+    <string name="colorname_mircColorA">mircColorA</string>
+    <string name="colorname_mircColorB">mircColorB</string>
+    <string name="colorname_mircColorC">mircColorC</string>
+    <string name="colorname_mircColorD">mircColorD</string>
+    <string name="colorname_mircColorE">mircColorE</string>
+    <string name="colorname_mircColorF">mircColorF</string>
 </resources>

@@ -25,11 +25,10 @@
     <item
         android:id="@+id/action_search"
         android:title="@string/label_search"
-        app:showAsAction="never|collapseActionView"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="never|collapseActionView"/>
     <item
         android:id="@+id/action_hide_events"
-        android:icon="?attr/iconFilter"
         android:title="@string/labelHideEvents"
         app:showAsAction="never" />
     <item

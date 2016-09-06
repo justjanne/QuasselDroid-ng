@@ -62,6 +62,8 @@
         <item name="colorForegroundAction">#1a237e</item>
         <item name="colorForegroundError">#800000</item>
 
+        <item name="colorForegroundMirc">0x1</item>
+
         <item name="colorBackground">@color/md_light_background</item>
         <item name="colorBackgroundHighlight">#ff8811</item>
         <item name="colorBackgroundSecondary">@android:color/transparent</item>
@@ -112,6 +114,8 @@
         <item name="colorForegroundSecondary">@color/md_dark_secondary</item>
         <item name="colorForegroundAction">#7986cb</item>
         <item name="colorForegroundError">#800000</item>
+
+        <item name="colorForegroundMirc">0x0</item>
 
         <item name="colorBackground">@color/md_dark_background</item>
         <item name="colorBackgroundHighlight">#ff8811</item>
@@ -170,6 +174,8 @@
         <item name="colorForegroundAction">#268BD2</item>
         <item name="colorForegroundError">#B00000</item>
 
+        <item name="colorForegroundMirc">0xF</item>
+
         <item name="colorBackground">#FDF6E3</item>
         <item name="colorBackgroundHighlight">#268bd2</item>
         <item name="colorBackgroundSecondary">#FDF6E3</item>
@@ -225,6 +231,8 @@
         <item name="colorForegroundSecondary">#576A66</item>
         <item name="colorForegroundAction">#268BD2</item>
         <item name="colorForegroundError">#B00000</item>
+
+        <item name="colorForegroundMirc">0xF</item>
 
         <item name="colorBackground">#002B36</item>
         <item name="colorBackgroundHighlight">#268bd2</item>

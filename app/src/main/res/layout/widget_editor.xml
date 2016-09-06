@@ -21,10 +21,11 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:showIn="@layout/widget_slider">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:showIn="@layout/widget_slider">
 
     <ScrollView
         android:id="@+id/chatline_scroller"
@@ -65,9 +66,10 @@
         android:layout_gravity="top"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="12dp"
-        android:src="@drawable/ic_send"
+        android:scaleType="fitXY"
         android:theme="@style/RippleOverlay"
-        android:tint="?attr/colorAccent" />
+        android:tint="?attr/colorAccent"
+        app:srcCompat="@drawable/ic_send"/>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/formatting_toolbar_container"

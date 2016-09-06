@@ -59,9 +59,9 @@ public abstract class ABufferViewConfig extends SyncableObject<QBufferViewConfig
     }
 
     @Override
-    public void setMinimumActivity(int activity) {
+    public void setMinimumActivity(MinimumActivity activity) {
         _setMinimumActivity(activity);
-        syncVar("setMinimumActivity", activity);
+        syncVar("setMinimumActivity", activity.id);
     }
 
     @Override

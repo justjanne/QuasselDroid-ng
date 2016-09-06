@@ -24,12 +24,14 @@ package de.kuschku.libquassel.client;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import de.kuschku.libquassel.functions.types.HandshakeFunction;
 import de.kuschku.libquassel.objects.types.ClientLogin;
 import de.kuschku.libquassel.objects.types.Command;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
@@ -72,7 +74,7 @@ public abstract class AClient<T extends AClient<T>> extends SyncableObject<T> im
 
     @Override
     public void createNetwork(NetworkInfo info, List<String> persistentChannels) {
-        smartRpc("createNetwork(NetworkInfo,QStringList)", info, persistentChannels);
+        rpc("2createNetwork(NetworkInfo,QStringList)", Arrays.asList(new QVariant<>(info), new QVariant<>(QMetaType.Type.QStringList, persistentChannels)));
     }
 
     @Override

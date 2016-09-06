@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 
 import de.kuschku.libquassel.localtypes.orm.ConnectedDatabase;
 import de.kuschku.quasseldroid_ng.ui.chat.MainActivity;
@@ -33,6 +34,10 @@ import de.kuschku.quasseldroid_ng.ui.setup.AccountSelectActivity;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 
 public class LoginActivity extends AppCompatActivity {
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
     private AppContext context = new AppContext();
 
     private boolean firstStart = true;

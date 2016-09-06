@@ -25,4 +25,13 @@
     <color name="colorPrimaryDark">#02588c</color>
     <color name="colorAccent">#afb42b</color>
     <color name="colorAccentFocus">#40afb42b</color>
+
+    <color name="colorFillLight">#757575</color>
+    <color name="colorFillDark">#ffffff</color>
+
+    <color name="colorOfflineLight">#757575</color>
+    <color name="colorOfflineDark">#B3B3B3</color>
+
+    <color name="colorAwayLight">#959595</color>
+    <color name="colorAwayDark">#939393</color>
 </resources>

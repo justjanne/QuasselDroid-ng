@@ -318,7 +318,9 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
             actionModeHandler.start();
 
         actionModeHandler.toggle(buffer);
-        bufferViewHolderMap.get(buffer.getInfo().id).setChecked(actionModeHandler.isChecked(buffer));
+        BufferViewHolder bufferViewHolder = bufferViewHolderMap.get(buffer.getInfo().id);
+        if (bufferViewHolder != null)
+            bufferViewHolder.setChecked(actionModeHandler.isChecked(buffer));
         return false;
     }
 

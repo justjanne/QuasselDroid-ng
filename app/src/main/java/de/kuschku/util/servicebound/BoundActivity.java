@@ -28,20 +28,29 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
+import android.view.Menu;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
+import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
 import de.kuschku.quasseldroid_ng.service.QuasselService;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ServiceHelper;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.quasseldroid_ng.ui.theme.AppTheme;
 import de.kuschku.util.accounts.Account;
+import de.kuschku.util.annotationbind.AutoBinder;
+import de.kuschku.util.ui.MenuTint;
 
 public abstract class BoundActivity extends AppCompatActivity {
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
     protected AppContext context = new AppContext();
     protected QuasselService.LocalBinder binder;
     @StyleRes
@@ -125,6 +134,13 @@ public abstract class BoundActivity extends AppCompatActivity {
             onConnected();
         if (event.status == ConnectionChangeEvent.Status.DISCONNECTED)
             onDisconnected();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean value = super.onCreateOptionsMenu(menu);
+        MenuTint.colorIcons(this, menu, AutoBinder.obtainColor(R.attr.colorFill, getSupportActionBar().getThemedContext().getTheme()));
+        return value;
     }
 
     protected void stopConnection() {

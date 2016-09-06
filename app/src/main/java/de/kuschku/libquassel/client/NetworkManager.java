@@ -92,6 +92,7 @@ public class NetworkManager extends Observable {
 
     public void createNetwork(@IntRange(from = 0) int networkId) {
         createNetwork(Network.create(networkId));
+        client.requestInitObject("Network", String.valueOf(networkId));
     }
 
     public void createNetwork(@NonNull QNetwork network) {

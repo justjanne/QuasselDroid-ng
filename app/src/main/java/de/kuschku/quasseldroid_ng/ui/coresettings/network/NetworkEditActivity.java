@@ -23,31 +23,42 @@ package de.kuschku.quasseldroid_ng.ui.coresettings.network;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.util.Arrays;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.syncables.types.impl.NetworkInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.coresettings.identity.IdentitySpinnerAdapter;
+import de.kuschku.quasseldroid_ng.ui.coresettings.network.server.NetworkServerListActivity;
+import de.kuschku.quasseldroid_ng.ui.coresettings.network.server.helper.NetworkServerSerializeHelper;
+import de.kuschku.util.backports.NumberHelper;
 import de.kuschku.util.backports.Objects;
 import de.kuschku.util.servicebound.BoundActivity;
+import de.kuschku.util.ui.AnimationHelper;
 
 public class NetworkEditActivity extends BoundActivity {
+
+    private static final int REQUEST_SERVER_LIST = 1;
+    private static final int REQUEST_PERFORM = 2;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -61,6 +72,9 @@ public class NetworkEditActivity extends BoundActivity {
 
     @Bind(R.id.rejoinChannels)
     CheckBox rejoinChannels;
+
+    @Bind(R.id.servers)
+    Button servers;
 
     @Bind(R.id.useCustomCodecs)
     SwitchCompat useCustomCodecs;
@@ -106,58 +120,7 @@ public class NetworkEditActivity extends BoundActivity {
     IdentitySpinnerAdapter spinnerAdapter = new IdentitySpinnerAdapter();
     private QNetwork network;
 
-    public static void expand(final ViewGroup v) {
-        v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        final int targetHeight = v.getMeasuredHeight();
-
-        // Older versions of android (pre API 21) cancel animations for views with a height of 0.
-        v.getLayoutParams().height = 1;
-        v.setVisibility(View.VISIBLE);
-        Animation a = new Animation() {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                v.getLayoutParams().height = interpolatedTime == 1
-                        ? ViewGroup.LayoutParams.WRAP_CONTENT
-                        : (int) (targetHeight * interpolatedTime);
-                v.setAlpha(interpolatedTime);
-                v.requestLayout();
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-        // 1dp/ms
-        a.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density));
-        v.startAnimation(a);
-    }
-
-    public static void collapse(final ViewGroup v) {
-        final int initialHeight = v.getMeasuredHeight();
-
-        Animation a = new Animation() {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if (interpolatedTime == 1) {
-                    v.setVisibility(View.GONE);
-                } else {
-                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
-                    v.setAlpha(1 - interpolatedTime);
-                    v.requestLayout();
-                }
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-        a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
-        v.startAnimation(a);
-    }
+    private List<NetworkServer> serverList = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -190,6 +153,31 @@ public class NetworkEditActivity extends BoundActivity {
 
         useAutoReconnect.setOnCheckedChangeListener(this::updateAutoReconnectVisible);
         updateAutoReconnectVisible(null, useAutoReconnect.isChecked());
+
+        unlimitedAutoReconnectRetries.setOnCheckedChangeListener(this::updateAutoReconnectRetriesUnlimited);
+        updateAutoReconnectRetriesUnlimited(null, unlimitedAutoReconnectRetries.isChecked());
+
+        servers.setOnClickListener(v -> {
+            Intent intent1 = new Intent(NetworkEditActivity.this, NetworkServerListActivity.class);
+            intent1.putExtra("servers", NetworkServerSerializeHelper.serialize(network.serverList()));
+            startActivityForResult(intent1, REQUEST_SERVER_LIST, null);
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_PERFORM: {
+
+            } break;
+            case REQUEST_SERVER_LIST: {
+                Parcelable[] servers = data.getParcelableArrayExtra("servers");
+                Log.d("DEBUG", Arrays.toString(servers));
+                if (servers != null) {
+                    serverList = NetworkServerSerializeHelper.deserialize(servers);
+                }
+            } break;
+        }
     }
 
     private void updateCustomCodecsVisible(CompoundButton button, boolean visible) {
@@ -214,6 +202,10 @@ public class NetworkEditActivity extends BoundActivity {
         updateViewGroupStatus(groupSasl, visible);
     }
 
+    private void updateAutoReconnectRetriesUnlimited(CompoundButton button, boolean visible) {
+        autoReconnectRetries.setEnabled(!visible);
+    }
+
     private void updateAutoReconnectVisible(CompoundButton button, boolean visible) {
         autoReconnectInterval.setEnabled(visible);
         autoReconnectRetries.setEnabled(visible);
@@ -224,9 +216,9 @@ public class NetworkEditActivity extends BoundActivity {
 
     private void updateViewGroupStatus(ViewGroup group, boolean visible) {
         if (visible) {
-            expand(group);
+            AnimationHelper.expand(group);
         } else {
-            collapse(group);
+            AnimationHelper.collapse(group);
         }
     }
 
@@ -245,13 +237,11 @@ public class NetworkEditActivity extends BoundActivity {
                     NetworkInfo after = new NetworkInfo(
                             networkInfo.networkId(),
                             networkName.getText().toString(),
-                            //FIXME: IMPLEMENT
-                            networkInfo.identity(),
+                            (int) identity.getSelectedItemId(),
                             useCustomCodecs.isChecked() ? this.codecForServer.getText().toString() : null,
                             useCustomCodecs.isChecked() ? this.codecForEncoding.getText().toString() : null,
                             useCustomCodecs.isChecked() ? this.codecForDecoding.getText().toString() : null,
-                            //FIXME: IMPLEMENT
-                            networkInfo.serverList(),
+                            serverList == null ? networkInfo.serverList() : serverList,
                             networkInfo.useRandomServer(),
                             //FIXME: IMPLEMENT
                             networkInfo.perform(),
@@ -262,8 +252,8 @@ public class NetworkEditActivity extends BoundActivity {
                             saslAccount.getText().toString(),
                             saslPassword.getText().toString(),
                             useAutoReconnect.isChecked(),
-                            Integer.parseInt(autoReconnectInterval.getText().toString()),
-                            Short.parseShort(autoReconnectRetries.getText().toString()),
+                            NumberHelper.parseInt(autoReconnectInterval.getText().toString(), 0),
+                            NumberHelper.parseShort(autoReconnectRetries.getText().toString(), (short) 0),
                             unlimitedAutoReconnectRetries.isChecked(),
                             rejoinChannels.isChecked()
                     );
@@ -273,8 +263,7 @@ public class NetworkEditActivity extends BoundActivity {
 
                     finish();
                 }
-            }
-            return true;
+            } return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

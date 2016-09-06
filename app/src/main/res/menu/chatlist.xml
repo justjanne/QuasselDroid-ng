@@ -23,14 +23,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_join_channel"
-        android:icon="?attr/iconAdd"
+        android:icon="@drawable/ic_add"
         android:title="@string/action_join_channel"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_show_all"
+        android:checkable="true"
         android:title="@string/action_show_hidden"
-        app:showAsAction="never"
-        android:checkable="true" />
+        app:showAsAction="never"/>
     <item
         android:id="@+id/action_manage_chat_lists"
         android:title="@string/action_manage_chat_lists"

@@ -21,18 +21,26 @@
 
 package de.kuschku.quasseldroid_ng.ui.editor;
 
+import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.widget.EditText;
 
+import com.google.common.base.Function;
+
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
-import de.kuschku.util.irc.format.BoldSpan;
-import de.kuschku.util.irc.format.ItalicSpan;
+import de.kuschku.util.irc.format.spans.Copyable;
+import de.kuschku.util.irc.format.spans.IrcBackgroundColorSpan;
+import de.kuschku.util.irc.format.spans.IrcBoldSpan;
+import de.kuschku.util.irc.format.spans.IrcForegroundColorSpan;
+import de.kuschku.util.irc.format.spans.IrcItalicSpan;
+import de.kuschku.util.irc.format.spans.IrcUnderlineSpan;
 
 public class AdvancedEditor {
     private final AppContext context;
@@ -48,17 +56,18 @@ public class AdvancedEditor {
     }
 
     public void toggleUnderline(int start, int end) {
-        boolean isUnderline = false;
-        for (UnderlineSpan span : editText.getText().getSpans(start, end, UnderlineSpan.class)) {
-            if ((editText.getText().getSpanFlags(span) & Spanned.SPAN_COMPOSING) != 0) continue;
+        if (start == end)
+            return;
 
-            isUnderline = (editText.getText().getSpanStart(span) == start && editText.getText().getSpanEnd(span) == end);
-            editText.getText().removeSpan(span);
-
-            if (isUnderline) break;
-        }
+        boolean isUnderline = removeSpans(start, end, UnderlineSpan.class, styleSpan -> {
+            if (styleSpan instanceof IrcUnderlineSpan) {
+                return (IrcUnderlineSpan) styleSpan;
+            } else {
+                return new IrcUnderlineSpan();
+            }
+        }, false);
         if (!isUnderline) {
-            editText.getText().setSpan(new UnderlineSpan(), start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            editText.getText().setSpan(new IrcUnderlineSpan(), start, end, Spanned.SPAN_MARK_MARK);
         }
     }
 
@@ -68,17 +77,18 @@ public class AdvancedEditor {
     }
 
     public void toggleBold(int start, int end) {
-        boolean isBold = false;
-        for (BoldSpan span : editText.getText().getSpans(start, end, BoldSpan.class)) {
-            if ((editText.getText().getSpanFlags(span) & Spanned.SPAN_COMPOSING) != 0) continue;
+        if (start == end)
+            return;
 
-            isBold = (editText.getText().getSpanStart(span) == start && editText.getText().getSpanEnd(span) == end);
-            editText.getText().removeSpan(span);
-
-            if (isBold) break;
-        }
+        boolean isBold = removeSpans(start, end, StyleSpan.class, styleSpan -> {
+            if (styleSpan instanceof IrcBoldSpan) {
+                return (IrcBoldSpan) styleSpan;
+            } else {
+                return styleSpan.getStyle() == Typeface.BOLD ? new IrcBoldSpan() : null;
+            }
+        }, false);
         if (!isBold) {
-            editText.getText().setSpan(new BoldSpan(), start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            editText.getText().setSpan(new IrcBoldSpan(), start, end, Spanned.SPAN_MARK_MARK);
         }
     }
 
@@ -87,55 +97,113 @@ public class AdvancedEditor {
     }
 
     public void toggleItalic(int start, int end) {
-        boolean isItalic = false;
-        for (ItalicSpan span : editText.getText().getSpans(start, end, ItalicSpan.class)) {
-            if ((editText.getText().getSpanFlags(span) & Spanned.SPAN_COMPOSING) != 0) continue;
+        if (start == end)
+            return;
 
-            isItalic = (editText.getText().getSpanStart(span) == start && editText.getText().getSpanEnd(span) == end);
-            editText.getText().removeSpan(span);
-
-            if (isItalic) break;
-        }
+        boolean isItalic = removeSpans(start, end, StyleSpan.class, styleSpan -> {
+            if (styleSpan instanceof IrcItalicSpan) {
+                return (IrcItalicSpan) styleSpan;
+            } else {
+                return styleSpan.getStyle() == Typeface.ITALIC ? new IrcItalicSpan() : null;
+            }
+        }, false);
         if (!isItalic) {
-            editText.getText().setSpan(new ItalicSpan(), start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            editText.getText().setSpan(new IrcItalicSpan(), start, end, Spanned.SPAN_MARK_MARK);
         }
     }
 
-    public void toggleForeground(@IntRange(from = 0, to = 15) int color) {
+    public void toggleForeground(@IntRange(from = -1, to = 15) int color) {
         toggleForeground(editText.getSelectionStart(), editText.getSelectionEnd(), color);
     }
 
-    public void toggleForeground(int start, int end, @ColorInt int color) {
-        boolean isColored = false;
-        for (ForegroundColorSpan span : editText.getText().getSpans(start, end, ForegroundColorSpan.class)) {
-            if ((editText.getText().getSpanFlags(span) & Spanned.SPAN_COMPOSING) != 0) continue;
+    public void toggleForeground(int start, int end, int color) {
+        removeSpans(start, end, ForegroundColorSpan.class, foregroundColorSpan -> {
+            if ((foregroundColorSpan instanceof IrcForegroundColorSpan)) {
+                return (IrcForegroundColorSpan) foregroundColorSpan;
+            } else {
+                int id = context.themeUtil().res.colorToId(foregroundColorSpan.getForegroundColor());
+                if (id != -1) {
+                    return new IrcForegroundColorSpan(id, context.themeUtil().res.mircColors[id]);
+                } else {
+                    return null;
+                }
+            }
+        }, true);
 
-            isColored = span.getForegroundColor() == color && (editText.getText().getSpanStart(span) == start && editText.getText().getSpanEnd(span) == end);
-            editText.getText().removeSpan(span);
-
-            if (isColored) break;
-        }
-        if (!isColored) {
-            editText.getText().setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        if (color != -1) {
+            editText.getText().setSpan(new IrcForegroundColorSpan(color, context.themeUtil().res.mircColors[color]), start, end, Spanned.SPAN_MARK_MARK);
         }
     }
 
-    public void toggleBackground(@IntRange(from = 0, to = 15) int color) {
+    private <T extends Copyable<T>, U> boolean removeSpans(int start, int end, Class<U> group, Function<U, T> transformer, boolean removeInvalid) {
+        if (start == end)
+            return false;
+
+        boolean removedAny = false;
+
+        for (U raw : editText.getText().getSpans(start, end, group)) {
+            int spanFlags = editText.getText().getSpanFlags(raw);
+            if ((spanFlags & Spanned.SPAN_COMPOSING) != 0) continue;
+
+            int spanEnd = editText.getText().getSpanEnd(raw);
+            int spanStart = editText.getText().getSpanStart(raw);
+
+            T span = transformer.apply(raw);
+            if (span != raw) {
+                if (span == null) {
+                    if (removeInvalid)
+                        editText.getText().removeSpan(raw);
+                    continue;
+                } else {
+                    editText.getText().removeSpan(raw);
+                    editText.getText().setSpan(span, spanStart, spanEnd, spanFlags);
+                }
+            }
+
+            boolean endIsIn = (spanEnd <= end && spanEnd >= start);
+            boolean endIsAfter = (spanEnd >= end);
+
+            boolean startIsIn = (spanStart <= end && spanStart >= start);
+            boolean startIsBefore = (spanStart < start);
+
+            if (endIsIn && startIsIn) {
+                editText.getText().removeSpan(span);
+                removedAny = true;
+            } else if (endIsIn) {
+                editText.getText().setSpan(span, spanStart, start, spanFlags);
+                removedAny = true;
+            } else if (startIsIn) {
+                editText.getText().setSpan(span, end, spanEnd, spanFlags);
+                removedAny = true;
+            } else if (startIsBefore && endIsAfter) {
+                editText.getText().setSpan(span, spanStart, start, spanFlags);
+                editText.getText().setSpan(span.copy(), end, spanEnd, spanFlags);
+                removedAny = true;
+            }
+        }
+        return removedAny;
+    }
+
+    public void toggleBackground(@IntRange(from = -1, to = 15) int color) {
         toggleBackground(editText.getSelectionStart(), editText.getSelectionEnd(), color);
     }
 
     public void toggleBackground(int start, int end, @ColorInt int color) {
-        boolean isColored = false;
-        for (BackgroundColorSpan span : editText.getText().getSpans(start, end, BackgroundColorSpan.class)) {
-            if ((editText.getText().getSpanFlags(span) & Spanned.SPAN_COMPOSING) != 0) continue;
+        removeSpans(start, end, BackgroundColorSpan.class, backgroundColorSpan -> {
+            if ((backgroundColorSpan instanceof IrcBackgroundColorSpan)) {
+                return (IrcBackgroundColorSpan) backgroundColorSpan;
+            } else {
+                int id = context.themeUtil().res.colorToId(backgroundColorSpan.getBackgroundColor());
+                if (id != -1) {
+                    return new IrcBackgroundColorSpan(id, context.themeUtil().res.mircColors[id]);
+                } else {
+                    return null;
+                }
+            }
+        }, true);
 
-            isColored = span.getBackgroundColor() == color && (editText.getText().getSpanStart(span) == start && editText.getText().getSpanEnd(span) == end);
-            editText.getText().removeSpan(span);
-
-            if (isColored) break;
-        }
-        if (!isColored) {
-            editText.getText().setSpan(new BackgroundColorSpan(color), start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        if (color != -1) {
+            editText.getText().setSpan(new IrcBackgroundColorSpan(color, context.themeUtil().res.mircColors[color]), start, end, Spanned.SPAN_MARK_MARK);
         }
     }
 

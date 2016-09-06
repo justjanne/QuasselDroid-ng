@@ -39,6 +39,7 @@ import de.kuschku.libquassel.syncables.types.impl.BufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 import de.kuschku.quasseldroid_ng.R;
+import de.kuschku.quasseldroid_ng.ui.coresettings.network.NetworkSpinnerAdapter;
 import de.kuschku.util.servicebound.BoundActivity;
 
 public class ChatListCreateActivity extends BoundActivity {
@@ -73,7 +74,8 @@ public class ChatListCreateActivity extends BoundActivity {
     @Bind(R.id.minimumActivity)
     Spinner minimumActivity;
 
-    QBufferViewManager bufferViewManager;
+    private QBufferViewManager bufferViewManager;
+    private NetworkSpinnerAdapter networkSpinnerAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,11 +84,19 @@ public class ChatListCreateActivity extends BoundActivity {
         setContentView(R.layout.activity_chatlist_edit);
         ButterKnife.bind(this);
 
+        networkSpinnerAdapter = new NetworkSpinnerAdapter(this);
+        network.setAdapter(networkSpinnerAdapter);
+
+        minimumActivity.setAdapter(new MinimumActivityAdapter(context));
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //network
-        //minimumActivity
+        initializeDefaults();
+    }
+
+    private void initializeDefaults() {
+
     }
 
     @Override
@@ -110,7 +120,7 @@ public class ChatListCreateActivity extends BoundActivity {
                             false,
                             true,
                             0,
-                            0,
+                            QBufferViewConfig.MinimumActivity.NONE,
                             false,
                             Collections.<Integer>emptyList()
                     );
@@ -122,6 +132,8 @@ public class ChatListCreateActivity extends BoundActivity {
                     config._setHideInactiveNetworks(this.hideInactiveNetworks.isChecked());
                     config._setAddNewBuffersAutomatically(this.addAutomatically.isChecked());
                     config._setSortAlphabetically(this.sortAlphabetically.isChecked());
+                    config._setNetworkId((int) network.getSelectedItemId());
+                    config._setMinimumActivity(QBufferViewConfig.MinimumActivity.fromId((int) minimumActivity.getSelectedItemId()));
 
                     bufferViewManager.createBufferView(config);
                 }
