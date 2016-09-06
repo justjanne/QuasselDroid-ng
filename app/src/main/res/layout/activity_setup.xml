@@ -40,7 +40,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:tint="?attr/colorFill"
+        android:tint="@color/colorFillLight"
         app:backgroundTint="#8A000000"
         app:elevation="0dip"
         app:fabSize="normal"
