@@ -23,8 +23,7 @@ package de.kuschku.libquassel.client;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -53,43 +52,43 @@ public abstract class AClient<T extends AClient<T>> extends SyncableObject<T> im
     }
 
     @Override
-    public void createIdentity(QIdentity identity) {
-        smartRpc("createIdentity(Identity,QVariantMap)", identity);
+    public void createIdentity(QIdentity identity, Map<String, QVariant> certs) {
+        smartRpcTyped("createIdentity(Identity,QVariantMap)", new QVariant<>(identity), new QVariant<>(certs));
     }
 
     @Override
     public void updateIdentity(int id, Map<String, QVariant> serialized) {
-        smartRpc("updateIdenity(IdentityId,QVariantMap)", id, serialized);
+        smartRpcTyped("updateIdenity(IdentityId,QVariantMap)", new QVariant<>("IdentityId", id), new QVariant<>(serialized));
     }
 
     @Override
     public void removeIdentity(int id) {
-        smartRpc("removeIdentity(IdentityId)", id);
+        smartRpcTyped("removeIdentity(IdentityId)", new QVariant<>("IdentityId", id));
     }
 
     @Override
     public void createNetwork(NetworkInfo info) {
-        createNetwork(info, new ArrayList<>(0));
+        createNetwork(info, Collections.emptyList());
     }
 
     @Override
     public void createNetwork(NetworkInfo info, List<String> persistentChannels) {
-        rpc("2createNetwork(NetworkInfo,QStringList)", Arrays.asList(new QVariant<>(info), new QVariant<>(QMetaType.Type.QStringList, persistentChannels)));
+        smartRpcTyped("createNetwork(NetworkInfo,QStringList)", new QVariant<>(info), new QVariant<>(QMetaType.Type.QStringList, persistentChannels));
     }
 
     @Override
     public void updateNetwork(NetworkInfo info) {
-        smartRpc("updateNetwork(NetworkInfo)", info);
+        smartRpc("updateNetwork(NetworkInfo)", new QVariant<>(info));
     }
 
     @Override
     public void removeNetwork(int id) {
-        smartRpc("removeNetwork(NetworkId)", id);
+        smartRpcTyped("removeNetwork(NetworkId)", new QVariant<>("NetworkId", id));
     }
 
     @Override
     public void changePassword(String username, String oldPassword, String newPassword) {
-        smartRpc("changePassword(PeerPtr,QString,QString,QString)", 0x0000000000000000L, username, oldPassword, newPassword);
+        smartRpc("changePassword(PeerPtr,QString,QString,QString)", new QVariant<>("PeerPtr", 0x0000000000000000L), new QVariant<>(username), new QVariant<>(oldPassword), new QVariant<>(newPassword));
     }
 
     @Override

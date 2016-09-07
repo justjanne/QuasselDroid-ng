@@ -26,6 +26,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import de.kuschku.libquassel.BusProvider;
@@ -39,6 +40,7 @@ import de.kuschku.util.observables.callbacks.GeneralObservable;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 public abstract class SyncableObject<T> extends GeneralObservable<T> implements QSyncableObject<T> {
     @Nullable
@@ -53,12 +55,14 @@ public abstract class SyncableObject<T> extends GeneralObservable<T> implements 
     }
 
     public void sync(@NonNull String methodName, @NonNull Object[] params) {
+        assertTrue(initialized);
         assertNotNull(provider);
 
         provider.dispatch(new SyncFunction<>(getClassName(), getObjectName(), methodName, toVariantList(params)));
     }
 
     public void sync(@NonNull String methodName, @NonNull String[] strings, @NonNull Object[] objects) {
+        assertTrue(initialized);
         assertNotNull(provider);
         assertEquals(strings.length, objects.length);
 
@@ -93,6 +97,10 @@ public abstract class SyncableObject<T> extends GeneralObservable<T> implements 
             setObjectName(objectName);
     }
 
+    public void smartRpcTyped(@NonNull String procedureName, @NonNull QVariant... params) {
+        rpcTyped("2" + procedureName, Arrays.asList(params));
+    }
+
     public void smartRpc(@NonNull String procedureName, @NonNull Object... params) {
         rpc("2" + procedureName, params);
     }
@@ -101,7 +109,8 @@ public abstract class SyncableObject<T> extends GeneralObservable<T> implements 
         rpc(procedureName, params);
     }
 
-    public void rpc(@NonNull String procedureName, @NonNull List<QVariant> params) {
+    public void rpcTyped(@NonNull String procedureName, @NonNull List<QVariant> params) {
+        assertTrue(initialized);
         assertNotNull(provider);
 
         RpcCallFunction function = new RpcCallFunction(procedureName, params);
@@ -109,7 +118,7 @@ public abstract class SyncableObject<T> extends GeneralObservable<T> implements 
     }
 
     public void rpc(@NonNull String procedureName, @NonNull Object[] params) {
-        rpc(procedureName, toVariantList(params));
+        rpcTyped(procedureName, toVariantList(params));
     }
 
     @NonNull

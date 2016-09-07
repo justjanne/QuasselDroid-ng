@@ -97,7 +97,6 @@ public class ObservableList<T> extends ArrayList<T> implements IObservableList<U
             return false;
         } else {
             remove(position);
-            callback.notifyItemRemoved(position);
             return true;
         }
     }
@@ -129,6 +128,13 @@ public class ObservableList<T> extends ArrayList<T> implements IObservableList<U
         int size = size();
         super.clear();
         callback.notifyItemRangeRemoved(0, size);
+    }
+
+    @Override
+    public T set(int index, T element) {
+        T set = super.set(index, element);
+        callback.notifyItemChanged(index);
+        return set;
     }
 
     @NonNull

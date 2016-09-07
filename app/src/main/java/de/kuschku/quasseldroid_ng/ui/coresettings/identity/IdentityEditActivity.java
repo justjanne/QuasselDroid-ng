@@ -176,7 +176,7 @@ public class IdentityEditActivity extends BoundActivity {
                         newIdentity._setAwayReason(awayReason.getText().toString());
 
                     if (!identity.detachAwayEnabled() == useAwayOnDetach.isChecked())
-                        newIdentity.setDetachAwayEnabled(useAwayOnDetach.isChecked());
+                        newIdentity._setDetachAwayEnabled(useAwayOnDetach.isChecked());
 
                     if (!identity.detachAwayReason().equals(awayOnDetachReason.getText().toString()))
                         newIdentity._setDetachAwayReason(awayOnDetachReason.getText().toString());
@@ -201,35 +201,38 @@ public class IdentityEditActivity extends BoundActivity {
         QIdentity oldIdentity = this.identity;
         this.identity = identity;
 
-        if (oldIdentity == null || identityName.getText().toString().equals(oldIdentity.identityName()))
-            this.identityName.setText(identity.identityName());
+        if (identity != null) {
 
-        if (oldIdentity == null || realName.getText().toString().equals(oldIdentity.realName()))
-            this.realName.setText(identity.realName());
+            if (oldIdentity == null || identityName.getText().toString().equals(oldIdentity.identityName()))
+                this.identityName.setText(identity.identityName());
 
-        if (oldIdentity == null || ident.getText().toString().equals(oldIdentity.ident()))
-            this.ident.setText(identity.ident());
+            if (oldIdentity == null || realName.getText().toString().equals(oldIdentity.realName()))
+                this.realName.setText(identity.realName());
 
-        if (oldIdentity == null || nickList.equals(new ArrayList<>(oldIdentity.nicks())))
-            this.nickList = new ArrayList<>(identity.nicks());
+            if (oldIdentity == null || ident.getText().toString().equals(oldIdentity.ident()))
+                this.ident.setText(identity.ident());
 
-        if (oldIdentity == null || kickReason.getText().toString().equals(oldIdentity.kickReason()))
-            this.kickReason.setText(identity.kickReason());
+            if (oldIdentity == null || nickList.equals(new ArrayList<>(oldIdentity.nicks())))
+                this.nickList = new ArrayList<>(identity.nicks());
 
-        if (oldIdentity == null || partReason.getText().toString().equals(oldIdentity.partReason()))
-            this.partReason.setText(identity.partReason());
+            if (oldIdentity == null || kickReason.getText().toString().equals(oldIdentity.kickReason()))
+                this.kickReason.setText(identity.kickReason());
 
-        if (oldIdentity == null || quitReason.getText().toString().equals(oldIdentity.quitReason()))
-            this.quitReason.setText(identity.quitReason());
+            if (oldIdentity == null || partReason.getText().toString().equals(oldIdentity.partReason()))
+                this.partReason.setText(identity.partReason());
 
-        if (oldIdentity == null || awayReason.getText().toString().equals(oldIdentity.awayReason()))
-            this.awayReason.setText(identity.awayReason());
+            if (oldIdentity == null || quitReason.getText().toString().equals(oldIdentity.quitReason()))
+                this.quitReason.setText(identity.quitReason());
 
-        if (oldIdentity == null || useAwayOnDetach.isChecked() == oldIdentity.detachAwayEnabled())
-            this.useAwayOnDetach.setChecked(identity.detachAwayEnabled());
+            if (oldIdentity == null || awayReason.getText().toString().equals(oldIdentity.awayReason()))
+                this.awayReason.setText(identity.awayReason());
 
-        if (oldIdentity == null || awayOnDetachReason.getText().toString().equals(oldIdentity.identityName()))
-            this.awayOnDetachReason.setText(identity.detachAwayReason());
+            if (oldIdentity == null || useAwayOnDetach.isChecked() == oldIdentity.detachAwayEnabled())
+                this.useAwayOnDetach.setChecked(identity.detachAwayEnabled());
+
+            if (oldIdentity == null || awayOnDetachReason.getText().toString().equals(oldIdentity.identityName()))
+                this.awayOnDetachReason.setText(identity.detachAwayReason());
+        }
     }
 
     @Override

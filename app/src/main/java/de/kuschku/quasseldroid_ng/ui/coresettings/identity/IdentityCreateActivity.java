@@ -34,13 +34,14 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.syncables.types.impl.Identity;
 import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.quasseldroid_ng.ui.coresettings.network.server.NetworkServerListActivity;
+import de.kuschku.quasseldroid_ng.ui.coresettings.identity.nick.IdentityNickListActivity;
 import de.kuschku.util.servicebound.BoundActivity;
 import de.kuschku.util.ui.AnimationHelper;
 
@@ -99,7 +100,7 @@ public class IdentityCreateActivity extends BoundActivity {
         updateAwayOnDetachReasonVisible(null, useAwayOnDetach.isChecked());
 
         nicks.setOnClickListener(v -> {
-            Intent intent1 = new Intent(IdentityCreateActivity.this, NetworkServerListActivity.class);
+            Intent intent1 = new Intent(IdentityCreateActivity.this, IdentityNickListActivity.class);
             intent1.putStringArrayListExtra("nicks", nickList);
             startActivityForResult(intent1, 0, null);
         });
@@ -109,9 +110,11 @@ public class IdentityCreateActivity extends BoundActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        ArrayList<String> nickList = data.getStringArrayListExtra("nicks");
-        if (nickList != null)
-            this.nickList = nickList;
+        if (data != null) {
+            ArrayList<String> nickList = data.getStringArrayListExtra("nicks");
+            if (nickList != null)
+                this.nickList = nickList;
+        }
     }
 
     private void updateAwayOnDetachReasonVisible(CompoundButton button, boolean visible) {
@@ -167,12 +170,12 @@ public class IdentityCreateActivity extends BoundActivity {
                         newIdentity._setAwayReason(awayReason.getText().toString());
 
                     if (!identity.detachAwayEnabled() == useAwayOnDetach.isChecked())
-                        newIdentity.setDetachAwayEnabled(useAwayOnDetach.isChecked());
+                        newIdentity._setDetachAwayEnabled(useAwayOnDetach.isChecked());
 
                     if (!identity.detachAwayReason().equals(awayOnDetachReason.getText().toString()))
                         newIdentity._setDetachAwayReason(awayOnDetachReason.getText().toString());
 
-                    context.client().createIdentity(newIdentity);
+                    context.client().createIdentity(newIdentity, Collections.emptyMap());
 
                     finish();
                 }

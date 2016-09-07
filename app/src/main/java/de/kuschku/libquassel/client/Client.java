@@ -154,6 +154,7 @@ public class Client extends AClient {
     @Override
     public void _identityCreated(@NonNull Identity identity) {
         identityManager.createIdentity(identity);
+        identity.init(String.valueOf(identity.id()), provider, this);
     }
 
     @Override

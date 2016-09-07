@@ -22,6 +22,7 @@
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
 import android.databinding.Observable;
+import android.util.Log;
 
 import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 
@@ -118,6 +119,9 @@ public class NetworkItem implements ParentListItem {
         this.buffers.addCallback(new UICallback() {
             @Override
             public void notifyItemInserted(int position) {
+                Log.d("DEBUG", "Added item at " + position);
+                Log.d("DEBUG", String.valueOf(getChildItemList()));
+
                 bufferViewConfigAdapter.notifyChildItemInserted(NetworkItem.this, position);
             }
 

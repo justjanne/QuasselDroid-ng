@@ -196,7 +196,7 @@ public class WrappedChannel implements Flushable, ByteChannel, InterruptibleChan
      */
     @Override
     public boolean isOpen() {
-        return true;
+        return in != null || out != null;
     }
 
     /**
@@ -219,7 +219,9 @@ public class WrappedChannel implements Flushable, ByteChannel, InterruptibleChan
     @Override
     public void close() throws IOException {
         if (rawIn != null) rawIn.close();
+        in = null;
         if (rawOut != null) rawOut.close();
+        out = null;
     }
 
     /**

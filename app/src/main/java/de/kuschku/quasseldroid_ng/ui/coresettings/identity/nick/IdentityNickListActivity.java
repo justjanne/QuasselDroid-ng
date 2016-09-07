@@ -66,12 +66,15 @@ public class IdentityNickListActivity extends BoundActivity implements OnStartDr
                 })
                 .positiveText("Save")
                 .negativeText("Cancel")
+                .neutralText("Delete")
                 .positiveColor(context.themeUtil().res.colorAccent)
                 .negativeColor(context.themeUtil().res.colorForeground)
+                .neutralColor(context.themeUtil().res.colorForeground)
                 .onPositive((dialog1, which) -> {
                     String text = dialog1.getInputEditText().getText().toString().trim();
                     nicks.set(nicks.indexOf(nick), text);
                 })
+                .onNeutral((dialog1, which) -> nicks.remove(nick))
                 .build();
         dialog.show();
     };

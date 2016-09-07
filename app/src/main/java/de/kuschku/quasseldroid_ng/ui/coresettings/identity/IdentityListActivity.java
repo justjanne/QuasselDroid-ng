@@ -39,7 +39,6 @@ import butterknife.ButterKnife;
 import de.kuschku.libquassel.client.IdentityManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.quasseldroid_ng.ui.coresettings.network.NetworkCreateActivity;
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.servicebound.BoundActivity;
 
@@ -77,7 +76,7 @@ public class IdentityListActivity extends BoundActivity {
         list.setAdapter(adapter);
 
         add.setOnClickListener(view -> {
-            startActivity(new Intent(this, NetworkCreateActivity.class));
+            startActivity(new Intent(this, IdentityCreateActivity.class));
         });
 
         setSupportActionBar(toolbar);

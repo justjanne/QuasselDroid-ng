@@ -41,7 +41,7 @@ public interface QClient {
     void sendInput(Command command);
 
     @Synced
-    void createIdentity(QIdentity identity);
+    void createIdentity(QIdentity identity, Map<String, QVariant> certs);
 
     @Synced
     void updateIdentity(int id, final Map<String, QVariant> serialized);

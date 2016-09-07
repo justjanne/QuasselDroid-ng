@@ -111,7 +111,7 @@
 
         <activity
             android:name=".ui.coresettings.identity.IdentityListActivity"
-            android:label="Edit Networks"
+            android:label="Edit Identities"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.chat.MainActivity"
             android:theme="@style/AppTheme.Light"/>

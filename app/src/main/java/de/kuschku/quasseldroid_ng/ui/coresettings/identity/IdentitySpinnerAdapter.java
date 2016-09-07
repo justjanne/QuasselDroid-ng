@@ -49,43 +49,47 @@ public class IdentitySpinnerAdapter implements ThemedSpinnerAdapter, GeneralCall
     private Set<DataSetObserver> observers = new HashSet<>();
 
     public void setIdentityManager(IdentityManager identityManager) {
-        this.identities = identityManager.identities();
-        this.identities.addCallback(new UICallback() {
-            @Override
-            public void notifyItemInserted(int position) {
-                notifyChanged(null);
-            }
+        if (identityManager != null) {
+            this.identities = identityManager.identities();
+            this.identities.addCallback(new UICallback() {
+                @Override
+                public void notifyItemInserted(int position) {
+                    notifyChanged(null);
+                }
 
-            @Override
-            public void notifyItemChanged(int position) {
-                notifyChanged(null);
-            }
+                @Override
+                public void notifyItemChanged(int position) {
+                    notifyChanged(null);
+                }
 
-            @Override
-            public void notifyItemRemoved(int position) {
-                notifyChanged(null);
-            }
+                @Override
+                public void notifyItemRemoved(int position) {
+                    notifyChanged(null);
+                }
 
-            @Override
-            public void notifyItemMoved(int from, int to) {
-                notifyChanged(null);
-            }
+                @Override
+                public void notifyItemMoved(int from, int to) {
+                    notifyChanged(null);
+                }
 
-            @Override
-            public void notifyItemRangeInserted(int position, int count) {
-                notifyChanged(null);
-            }
+                @Override
+                public void notifyItemRangeInserted(int position, int count) {
+                    notifyChanged(null);
+                }
 
-            @Override
-            public void notifyItemRangeChanged(int position, int count) {
-                notifyChanged(null);
-            }
+                @Override
+                public void notifyItemRangeChanged(int position, int count) {
+                    notifyChanged(null);
+                }
 
-            @Override
-            public void notifyItemRangeRemoved(int position, int count) {
-                notifyChanged(null);
-            }
-        });
+                @Override
+                public void notifyItemRangeRemoved(int position, int count) {
+                    notifyChanged(null);
+                }
+            });
+        } else {
+            this.identities = null;
+        }
         notifyChanged(null);
     }
 

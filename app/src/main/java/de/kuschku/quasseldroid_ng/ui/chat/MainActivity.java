@@ -138,6 +138,9 @@ public class MainActivity extends BoundActivity {
     private BufferViewConfigAdapter chatListAdapter;
     private Fragment currentFragment;
 
+    private Bundle coreSetupResult;
+    private boolean coreSetupCancelled;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -498,20 +501,9 @@ public class MainActivity extends BoundActivity {
         switch (requestCode) {
             case REQUEST_CODE_CORESETUP: {
                 if (resultCode == RESULT_OK) {
-                    context.provider().event.removeStickyEvent(CoreSetupRequiredEvent.class);
-
-                    Account account = manager.account(context.settings().preferenceLastAccount.get());
-                    Bundle config = data.getParcelableExtra("config");
-                    Map<String, QVariant> configData = new HashMap<>();
-                    for (String key : config.keySet()) {
-                        configData.put(key, new QVariant<>(config.get(key)));
-                    }
-                    context.provider().dispatch(new HandshakeFunction(new CoreSetupData(new SetupData(
-                            account.user,
-                            account.pass,
-                            data.getStringExtra("selectedBackend"),
-                            configData
-                    ))));
+                    coreSetupResult = data.getExtras();
+                } else {
+                    coreSetupCancelled = true;
                 }
             }
             break;
@@ -538,9 +530,28 @@ public class MainActivity extends BoundActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEventMainThread(CoreSetupRequiredEvent event) {
-        Intent intent = new Intent(getApplicationContext(), CoreSetupActivity.class);
-        intent.putExtra("storageBackends", context.client().core().getStorageBackendsAsBundle());
-        startActivityForResult(intent, REQUEST_CODE_CORESETUP);
+        if (coreSetupCancelled) {
+            finish();
+        } else if (coreSetupResult != null) {
+            context.provider().event.removeStickyEvent(CoreSetupRequiredEvent.class);
+
+            Account account = manager.account(context.settings().preferenceLastAccount.get());
+            Bundle config = coreSetupResult.getBundle("config");
+            Map<String, QVariant> configData = new HashMap<>();
+            for (String key : config.keySet()) {
+                configData.put(key, new QVariant<>(config.get(key)));
+            }
+            context.provider().dispatch(new HandshakeFunction(new CoreSetupData(new SetupData(
+                    account.user,
+                    account.pass,
+                    coreSetupResult.getString("selectedBackend"),
+                    configData
+            ))));
+        } else {
+            Intent intent = new Intent(getApplicationContext(), CoreSetupActivity.class);
+            intent.putExtra("storageBackends", context.client().core().getStorageBackendsAsBundle());
+            startActivityForResult(intent, REQUEST_CODE_CORESETUP);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)

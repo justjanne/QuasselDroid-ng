@@ -289,8 +289,9 @@ public class QMetaTypeRegistry {
         else if (type instanceof Message) return stringSerializerMap.get("Message");
         else if (type instanceof BufferInfo) return stringSerializerMap.get("BufferInfo");
         else if (type instanceof NetworkInfo) return stringSerializerMap.get("NetworkInfo");
+        else if (type instanceof QIdentity) return stringSerializerMap.get("Identity");
         else if (type instanceof NetworkServer) return stringSerializerMap.get("Network::Server");
         else
-            throw new AssertionError("Unsupported data type: " + type.getClass().getSimpleName());
+            return null;
     }
 }

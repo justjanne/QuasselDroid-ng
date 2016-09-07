@@ -39,16 +39,19 @@ public class QVariant<T> {
     public final QMetaType<T> type;
 
     public QVariant(@NonNull T data) {
-        if (data instanceof QSyncableObject) {
-            this.data = (T) SyncableRegistry.toVariantMap((QSyncableObject) data);
-            this.type = QMetaTypeRegistry.getTypeByObject(this.data);
-        } else if (data instanceof Set) {
+        if (data instanceof Set) {
             this.data = (T) new ArrayList((Set) data);
-            this.type = QMetaTypeRegistry.getTypeByObject(this.data);
         } else {
-            this.data = data;
-            this.type = QMetaTypeRegistry.getTypeByObject(this.data);
+            if (QMetaTypeRegistry.getTypeByObject(data) != null) {
+                this.data = data;
+            } else if (data instanceof QSyncableObject) {
+                this.data = (T) SyncableRegistry.toVariantMap((QSyncableObject) data);
+            } else {
+                throw new IllegalArgumentException();
+            }
         }
+
+        this.type = QMetaTypeRegistry.getTypeByObject(this.data);
     }
 
     public QVariant(@NonNull QMetaType<T> type, @Nullable T data) {

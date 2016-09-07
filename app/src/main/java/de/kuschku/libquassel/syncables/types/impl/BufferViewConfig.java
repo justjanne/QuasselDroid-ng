@@ -133,7 +133,8 @@ public class BufferViewConfig extends ABufferViewConfig {
     @Override
     public void _setNetworkId(int networkId) {
         this.networkId = networkId;
-        updateNetworks();
+        if (initialized)
+            updateNetworks();
         _update();
     }
 

@@ -83,7 +83,7 @@ public class Identity extends AIdentity {
     public static Identity createDefault() {
         return new Identity(
                 -1,
-                "",
+                "Standardidentity",
                 "Quassel IRC User",
                 Collections.singletonList("quassel"),
                 "",

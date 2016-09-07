@@ -283,58 +283,60 @@ public class NetworkEditActivity extends BoundActivity {
         NetworkInfo oldInfo = this.network == null ? null : this.network.networkInfo();
         this.network = network;
 
-        NetworkInfo networkInfo = this.network.networkInfo();
-        if (networkInfo != null) {
-            if (oldInfo == null || oldInfo.networkName().equals(networkName.getText().toString()))
-                networkName.setText(networkInfo.networkName());
+        if (network != null) {
+            NetworkInfo networkInfo = this.network.networkInfo();
+            if (networkInfo != null) {
+                if (oldInfo == null || oldInfo.networkName().equals(networkName.getText().toString()))
+                    networkName.setText(networkInfo.networkName());
 
-            if (oldInfo == null || getIdentityPosition(oldInfo) == identity.getSelectedItemPosition())
-                identity.setSelection(getIdentityPosition(networkInfo));
+                if (oldInfo == null || getIdentityPosition(oldInfo) == identity.getSelectedItemPosition())
+                    identity.setSelection(getIdentityPosition(networkInfo));
 
-            if (oldInfo == null || (oldInfo.codecForServer() != null || oldInfo.codecForEncoding() != null || oldInfo.codecForDecoding() != null) == useCustomCodecs.isChecked())
-                useCustomCodecs.setChecked(networkInfo.codecForServer() != null || networkInfo.codecForEncoding() != null || networkInfo.codecForDecoding() != null);
+                if (oldInfo == null || (oldInfo.codecForServer() != null || oldInfo.codecForEncoding() != null || oldInfo.codecForDecoding() != null) == useCustomCodecs.isChecked())
+                    useCustomCodecs.setChecked(networkInfo.codecForServer() != null || networkInfo.codecForEncoding() != null || networkInfo.codecForDecoding() != null);
 
-            if (oldInfo == null || oldInfo.codecForServer().equals(codecForServer.getText().toString()))
-                codecForServer.setText(networkInfo.codecForServer());
+                if (oldInfo == null || oldInfo.codecForServer().equals(codecForServer.getText().toString()))
+                    codecForServer.setText(networkInfo.codecForServer());
 
-            if (oldInfo == null || oldInfo.codecForEncoding().equals(codecForEncoding.getText().toString()))
-                codecForEncoding.setText(networkInfo.codecForEncoding());
+                if (oldInfo == null || oldInfo.codecForEncoding().equals(codecForEncoding.getText().toString()))
+                    codecForEncoding.setText(networkInfo.codecForEncoding());
 
-            if (oldInfo == null || oldInfo.codecForDecoding().equals(codecForDecoding.getText().toString()))
-                codecForDecoding.setText(networkInfo.codecForDecoding());
+                if (oldInfo == null || oldInfo.codecForDecoding().equals(codecForDecoding.getText().toString()))
+                    codecForDecoding.setText(networkInfo.codecForDecoding());
 
-            if (oldInfo == null || oldInfo.useAutoIdentify() == useAutoIdentify.isChecked())
-                useAutoIdentify.setChecked(networkInfo.useAutoIdentify());
+                if (oldInfo == null || oldInfo.useAutoIdentify() == useAutoIdentify.isChecked())
+                    useAutoIdentify.setChecked(networkInfo.useAutoIdentify());
 
-            if (oldInfo == null || oldInfo.autoIdentifyService().equals(autoIdentifyService.getText().toString()))
-                autoIdentifyService.setText(networkInfo.autoIdentifyService());
+                if (oldInfo == null || oldInfo.autoIdentifyService().equals(autoIdentifyService.getText().toString()))
+                    autoIdentifyService.setText(networkInfo.autoIdentifyService());
 
-            if (oldInfo == null || oldInfo.autoIdentifyPassword().equals(autoIdentifyPassword.getText().toString()))
-                autoIdentifyPassword.setText(networkInfo.autoIdentifyPassword());
+                if (oldInfo == null || oldInfo.autoIdentifyPassword().equals(autoIdentifyPassword.getText().toString()))
+                    autoIdentifyPassword.setText(networkInfo.autoIdentifyPassword());
 
-            if (oldInfo == null || oldInfo.useSasl() == useSasl.isChecked())
-                useSasl.setChecked(networkInfo.useSasl());
+                if (oldInfo == null || oldInfo.useSasl() == useSasl.isChecked())
+                    useSasl.setChecked(networkInfo.useSasl());
 
-            if (oldInfo == null || oldInfo.saslAccount().equals(saslAccount.getText().toString()))
-                saslAccount.setText(networkInfo.saslAccount());
+                if (oldInfo == null || oldInfo.saslAccount().equals(saslAccount.getText().toString()))
+                    saslAccount.setText(networkInfo.saslAccount());
 
-            if (oldInfo == null || oldInfo.saslPassword().equals(saslPassword.getText().toString()))
-                saslPassword.setText(networkInfo.saslPassword());
+                if (oldInfo == null || oldInfo.saslPassword().equals(saslPassword.getText().toString()))
+                    saslPassword.setText(networkInfo.saslPassword());
 
-            if (oldInfo == null || oldInfo.useAutoReconnect() == useAutoReconnect.isChecked())
-                useAutoReconnect.setChecked(networkInfo.useAutoReconnect());
+                if (oldInfo == null || oldInfo.useAutoReconnect() == useAutoReconnect.isChecked())
+                    useAutoReconnect.setChecked(networkInfo.useAutoReconnect());
 
-            if (oldInfo == null || oldInfo.autoReconnectInterval() == NumberHelper.parseInt(autoReconnectInterval.getText().toString(), 0))
-                autoReconnectInterval.setText(String.valueOf(networkInfo.autoReconnectInterval()));
+                if (oldInfo == null || oldInfo.autoReconnectInterval() == NumberHelper.parseInt(autoReconnectInterval.getText().toString(), 0))
+                    autoReconnectInterval.setText(String.valueOf(networkInfo.autoReconnectInterval()));
 
-            if (oldInfo == null || oldInfo.autoReconnectRetries() == NumberHelper.parseInt(autoReconnectRetries.getText().toString(), 0))
-                autoReconnectRetries.setText(String.valueOf(networkInfo.autoReconnectRetries()));
+                if (oldInfo == null || oldInfo.autoReconnectRetries() == NumberHelper.parseInt(autoReconnectRetries.getText().toString(), 0))
+                    autoReconnectRetries.setText(String.valueOf(networkInfo.autoReconnectRetries()));
 
-            if (oldInfo == null || oldInfo.unlimitedReconnectRetries() == unlimitedAutoReconnectRetries.isChecked())
-                unlimitedAutoReconnectRetries.setChecked(networkInfo.unlimitedReconnectRetries());
+                if (oldInfo == null || oldInfo.unlimitedReconnectRetries() == unlimitedAutoReconnectRetries.isChecked())
+                    unlimitedAutoReconnectRetries.setChecked(networkInfo.unlimitedReconnectRetries());
 
-            if (oldInfo == null || oldInfo.rejoinChannels() == rejoinChannels.isChecked())
-                rejoinChannels.setChecked(networkInfo.rejoinChannels());
+                if (oldInfo == null || oldInfo.rejoinChannels() == rejoinChannels.isChecked())
+                    rejoinChannels.setChecked(networkInfo.rejoinChannels());
+            }
         }
     }
 
