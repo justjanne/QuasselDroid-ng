@@ -26,6 +26,7 @@ import android.support.annotation.Nullable;
 import java.util.List;
 
 import de.kuschku.libquassel.syncables.Synced;
+import de.kuschku.libquassel.syncables.types.impl.Identity;
 
 public interface QIdentity extends QObservable<QIdentity> {
     void setToDefaults();
@@ -189,4 +190,7 @@ public interface QIdentity extends QObservable<QIdentity> {
     void setSslCert(final String encoded);
 
     void _setSslCert(final String encoded);
+
+    @Synced
+    void update(Identity identity);
 }

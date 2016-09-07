@@ -110,6 +110,34 @@
             android:theme="@style/AppTheme.Light"/>
 
         <activity
+            android:name=".ui.coresettings.identity.IdentityListActivity"
+            android:label="Edit Networks"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.chat.MainActivity"
+            android:theme="@style/AppTheme.Light"/>
+
+        <activity
+            android:name=".ui.coresettings.identity.IdentityEditActivity"
+            android:label="Edit Identity"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.coresettings.identity.IdentityListActivity"
+            android:theme="@style/AppTheme.Light"/>
+
+        <activity
+            android:name=".ui.coresettings.identity.IdentityCreateActivity"
+            android:label="Create Identity"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.coresettings.identity.IdentityListActivity"
+            android:theme="@style/AppTheme.Light"/>
+
+        <activity
+            android:name=".ui.coresettings.identity.nick.IdentityNickListActivity"
+            android:label="Edit Nicks"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.coresettings.identity.IdentityEditActivity"
+            android:theme="@style/AppTheme.Light"/>
+
+        <activity
             android:name=".ui.coresettings.network.server.NetworkServerEditActivity"
             android:label="Edit NetworkServer"
             android:launchMode="singleTask"

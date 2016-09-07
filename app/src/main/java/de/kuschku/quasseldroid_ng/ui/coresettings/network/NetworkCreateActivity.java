@@ -45,6 +45,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.syncables.types.impl.NetworkInfo;
+import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.coresettings.identity.IdentitySpinnerAdapter;
 import de.kuschku.quasseldroid_ng.ui.coresettings.network.server.NetworkServerListActivity;
@@ -173,7 +174,7 @@ public class NetworkCreateActivity extends BoundActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
+        if (data != null) {
             switch (requestCode) {
                 case REQUEST_PERFORM: {
 
@@ -277,7 +278,13 @@ public class NetworkCreateActivity extends BoundActivity {
 
     @Override
     protected void onConnected() {
+        QIdentity identity = (QIdentity) this.identity.getSelectedItem();
         spinnerAdapter.setIdentityManager(context.client().identityManager());
+        this.identity.setSelection(getIdentityPosition(identity));
+    }
+
+    private int getIdentityPosition(QIdentity identity) {
+        return context.client().identityManager().identities().indexOf(identity);
     }
 
     @Override

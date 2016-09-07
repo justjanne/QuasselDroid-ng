@@ -30,12 +30,12 @@
               android:paddingRight="?listPreferredItemPaddingRight">
 
     <ImageView
-        android:id="@+id/lock"
+        android:id="@+id/drag_handle"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_lock"
-        android:tint="?colorFill"/>
+        android:src="@drawable/ic_reorder"
+        android:tint="?attr/colorFill"/>
 
     <TextView
         android:id="@+id/text"
@@ -48,13 +48,5 @@
         android:lines="1"
         android:singleLine="true"
         android:textSize="16sp"/>
-
-    <ImageView
-        android:id="@+id/drag_handle"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_reorder"
-        android:tint="?attr/colorFill"/>
 
 </LinearLayout>

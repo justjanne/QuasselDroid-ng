@@ -19,33 +19,33 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.ui.coresettings.network.server;
+package de.kuschku.quasseldroid_ng.ui.coresettings.identity.nick;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import java.util.ArrayList;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.quasseldroid_ng.ui.coresettings.network.server.helper.NetworkServerSerializeHelper;
 import de.kuschku.quasseldroid_ng.ui.coresettings.network.server.helper.OnStartDragListener;
 import de.kuschku.quasseldroid_ng.ui.coresettings.network.server.helper.SimpleItemTouchHelperCallback;
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.observables.lists.ObservableList;
 import de.kuschku.util.servicebound.BoundActivity;
 
-public class NetworkServerListActivity extends BoundActivity implements OnStartDragListener {
+public class IdentityNickListActivity extends BoundActivity implements OnStartDragListener {
 
     @Bind(R.id.list)
     RecyclerView list;
@@ -56,16 +56,24 @@ public class NetworkServerListActivity extends BoundActivity implements OnStartD
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
-    NetworkServerAdapter adapter;
+    IdentityNickAdapter adapter;
     ItemTouchHelper itemTouchHelper;
-    ObservableList<NetworkServer> servers;
-    OnNetworkServerClickListener clickListener = server -> {
-        if (server != null) {
-            Intent intent1 = new Intent(this, NetworkServerEditActivity.class);
-            intent1.putExtra("server", NetworkServerSerializeHelper.serialize(server));
-            intent1.putExtra("id", servers.indexOf(server));
-            startActivityForResult(intent1, 0, null);
-        }
+    ObservableList<String> nicks;
+    OnIdentityNickClickListener clickListener = nick -> {
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .input("", nick, false, (dialog1, input) -> {
+
+                })
+                .positiveText("Save")
+                .negativeText("Cancel")
+                .positiveColor(context.themeUtil().res.colorAccent)
+                .negativeColor(context.themeUtil().res.colorForeground)
+                .onPositive((dialog1, which) -> {
+                    String text = dialog1.getInputEditText().getText().toString().trim();
+                    nicks.set(nicks.indexOf(nick), text);
+                })
+                .build();
+        dialog.show();
     };
 
     @Override
@@ -75,14 +83,15 @@ public class NetworkServerListActivity extends BoundActivity implements OnStartD
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        Parcelable[] serverList;
-        if (intent != null && (serverList = intent.getParcelableArrayExtra("servers")) != null) {
-            servers = new ObservableList<>(NetworkServerSerializeHelper.deserialize(serverList));
+        ArrayList<String> nickList;
+        if (intent != null && (nickList = intent.getStringArrayListExtra("nicks")) != null) {
+            nicks = new ObservableList<>(nickList);
         } else {
-            servers = new ObservableList<>();
+            nicks = new ObservableList<>();
         }
-        adapter = new NetworkServerAdapter(servers, this);
-        servers.addCallback(new AdapterUICallbackWrapper(adapter));
+
+        adapter = new IdentityNickAdapter(nicks, this);
+        nicks.addCallback(new AdapterUICallbackWrapper(adapter));
 
         list.setAdapter(adapter);
         list.setHasFixedSize(true);
@@ -94,8 +103,21 @@ public class NetworkServerListActivity extends BoundActivity implements OnStartD
         itemTouchHelper.attachToRecyclerView(list);
 
         add.setOnClickListener(v -> {
-            Intent intent1 = new Intent(NetworkServerListActivity.this, NetworkServerEditActivity.class);
-            startActivityForResult(intent1, 0, null);
+            MaterialDialog dialog = new MaterialDialog.Builder(this)
+                    .input("", "", false, (dialog1, input) -> {
+
+                    })
+                    .positiveText("Save")
+                    .negativeText("Cancel")
+                    .positiveColor(context.themeUtil().res.colorAccent)
+                    .negativeColor(context.themeUtil().res.colorForeground)
+                    .onPositive((dialog1, which) -> {
+                        String nick = dialog1.getInputEditText().getText().toString().trim();
+                        if (!nicks.contains(nick))
+                            nicks.add(nick);
+                    })
+                    .build();
+            dialog.show();
         });
 
         setSupportActionBar(toolbar);
@@ -113,30 +135,13 @@ public class NetworkServerListActivity extends BoundActivity implements OnStartD
         switch (item.getItemId()) {
             case R.id.action_confirm: {
                 Intent intent = new Intent();
-                intent.putExtra("servers", NetworkServerSerializeHelper.serialize(servers));
+                intent.putStringArrayListExtra("nicks", nicks);
                 setResult(RESULT_OK, intent);
                 finish();
             } return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Bundle bundle;
-        if (resultCode == RESULT_OK && data != null && (bundle = data.getBundleExtra("server")) != null) {
-            NetworkServer server = NetworkServerSerializeHelper.deserialize(bundle);
-            Log.d("DEBUG", server.toString());
-            int id = data.getIntExtra("id", -1);
-            Log.d("DEBUG", String.valueOf(id));
-            if (id == -1) {
-                servers.add(server);
-            } else {
-                servers.set(id, server);
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -149,7 +154,7 @@ public class NetworkServerListActivity extends BoundActivity implements OnStartD
         itemTouchHelper.startDrag(viewHolder);
     }
 
-    interface OnNetworkServerClickListener {
-        void onClick(NetworkServer network);
+    interface OnIdentityNickClickListener {
+        void onClick(String nick);
     }
 }

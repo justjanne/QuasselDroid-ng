@@ -23,7 +23,10 @@ package de.kuschku.libquassel.syncables.types.abstracts;
 
 import java.util.List;
 
+import de.kuschku.libquassel.primitives.types.QVariant;
+import de.kuschku.libquassel.syncables.serializers.IdentitySerializer;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
+import de.kuschku.libquassel.syncables.types.impl.Identity;
 import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
 
 public abstract class AIdentity extends SyncableObject<QIdentity> implements QIdentity {
@@ -159,5 +162,11 @@ public abstract class AIdentity extends SyncableObject<QIdentity> implements QId
     public void setSslCert(String encoded) {
         _setSslCert(encoded);
         syncVar("setSslCert", encoded);
+    }
+
+    @Override
+    public void update(Identity identity) {
+        _copyFrom(identity);
+        syncVar("update", new QVariant<>("Identity", IdentitySerializer.get().toVariantMap(identity)));
     }
 }

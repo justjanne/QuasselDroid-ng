@@ -31,6 +31,7 @@ import java.util.Map;
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.QVariant;
+import de.kuschku.libquassel.syncables.serializers.IdentitySerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.AIdentity;
 import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
 
@@ -79,6 +80,29 @@ public class Identity extends AIdentity {
         this.quitReason = quitReason;
     }
 
+    public static Identity createDefault() {
+        return new Identity(
+                -1,
+                "",
+                "Quassel IRC User",
+                Collections.singletonList("quassel"),
+                "",
+                false,
+                "Gone fishing.",
+                true,
+                false,
+                10,
+                "Not here. No, really. not here!",
+                false,
+                false,
+                "All Quassel clients vanished from the face of the earth...",
+                false,
+                "quassel",
+                "Kindergarten is elsewhere!",
+                "http://quassel-irc.org - Chat comfortably. Anywhere.",
+                "http://quassel-irc.org - Chat comfortably. Anywhere."
+        );
+    }
 
     @Override
     public void setToDefaults() {
@@ -378,10 +402,12 @@ public class Identity extends AIdentity {
 
     @Override
     public void _update(Map<String, QVariant> from) {
+        _copyFrom(IdentitySerializer.get().fromDatastream(from));
     }
 
     @Override
     public void _update(QIdentity from) {
+        _copyFrom(from);
     }
 
     @Override

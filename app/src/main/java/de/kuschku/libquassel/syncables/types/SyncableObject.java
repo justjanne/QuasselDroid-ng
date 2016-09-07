@@ -38,7 +38,6 @@ import de.kuschku.util.backports.Objects;
 import de.kuschku.util.observables.callbacks.GeneralObservable;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
-import static de.kuschku.util.AndroidAssert.assertTrue;
 import static junit.framework.Assert.assertEquals;
 
 public abstract class SyncableObject<T> extends GeneralObservable<T> implements QSyncableObject<T> {
@@ -54,14 +53,12 @@ public abstract class SyncableObject<T> extends GeneralObservable<T> implements 
     }
 
     public void sync(@NonNull String methodName, @NonNull Object[] params) {
-        assertTrue(initialized);
         assertNotNull(provider);
 
         provider.dispatch(new SyncFunction<>(getClassName(), getObjectName(), methodName, toVariantList(params)));
     }
 
     public void sync(@NonNull String methodName, @NonNull String[] strings, @NonNull Object[] objects) {
-        assertTrue(initialized);
         assertNotNull(provider);
         assertEquals(strings.length, objects.length);
 
@@ -105,7 +102,6 @@ public abstract class SyncableObject<T> extends GeneralObservable<T> implements 
     }
 
     public void rpc(@NonNull String procedureName, @NonNull List<QVariant> params) {
-        assertTrue(initialized);
         assertNotNull(provider);
 
         RpcCallFunction function = new RpcCallFunction(procedureName, params);
