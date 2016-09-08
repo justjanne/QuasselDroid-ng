@@ -147,7 +147,8 @@ public class ChatListEditActivity extends BoundActivity {
                         })
                         .build()
                         .show();
-            } return true;
+            }
+            return true;
             case R.id.action_confirm: {
                 save();
                 finish();

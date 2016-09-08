@@ -51,7 +51,7 @@
             android:paddingRight="20dp"
             android:paddingTop="17dp"
             android:textColor="?attr/colorForeground"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
     </ScrollView>
 

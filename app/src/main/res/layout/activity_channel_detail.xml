@@ -20,9 +20,9 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
@@ -33,7 +33,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+            android:layout_height="?attr/actionBarSize"/>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -45,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 style="@style/TextAppearance.AppCompat.Button"
                 android:layout_width="match_parent"
@@ -53,7 +54,7 @@
                 android:layout_marginRight="16dp"
                 android:gravity="fill_vertical"
                 android:text="@string/topic"
-                android:textColor="?attr/colorAccent" />
+                android:textColor="?attr/colorAccent"/>
 
             <TextView
                 android:id="@+id/topic"
@@ -62,7 +63,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                android:textColor="?attr/colorForeground" />
+                android:textColor="?attr/colorForeground"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/edit_topic"
@@ -78,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp"
-                android:background="?attr/colorDivider" />
+                android:background="?attr/colorDivider"/>
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Button"
@@ -88,7 +89,7 @@
                 android:layout_marginRight="16dp"
                 android:gravity="fill_vertical"
                 android:text="@string/channel_modes"
-                android:textColor="?attr/colorAccent" />
+                android:textColor="?attr/colorAccent"/>
 
             <LinearLayout
                 android:id="@+id/modes"
@@ -97,7 +98,7 @@
                 android:orientation="vertical"
                 android:paddingBottom="8dp"
                 android:paddingLeft="8dp"
-                android:paddingRight="8dp" />
+                android:paddingRight="8dp"/>
 
         </LinearLayout>
 

@@ -167,7 +167,8 @@ public class IdentityCreateActivity extends BoundActivity {
 
                     finish();
                 }
-            } return true;
+            }
+            return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

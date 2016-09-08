@@ -24,7 +24,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/md_light_cards" >
+    android:background="@color/md_light_cards">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,29 +39,29 @@
             android:padding="32dp">
 
             <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                android:text="@string/slideAccountcoreTitle"
-                android:textColor="@android:color/white"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                      android:id="@+id/title"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="32dp"
+                      android:text="@string/slideAccountcoreTitle"
+                      android:textColor="@android:color/white"
+                      android:textSize="28sp"
+                      android:textStyle="bold"/>
 
             <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/slideAccountcoreDescription"
-                android:textColor="@android:color/white"
-                android:textSize="16sp" />
+                      android:id="@+id/description"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:text="@string/slideAccountcoreDescription"
+                      android:textColor="@android:color/white"
+                      android:textSize="16sp"/>
 
         </LinearLayout>
 
         <FrameLayout
             android:id="@+id/content_host"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

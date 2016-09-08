@@ -42,6 +42,7 @@ public class AccountSelectActivity extends AppCompatActivity {
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
+
     @Bind(R.id.view_pager)
     ViewPager viewPager;
     @Bind(R.id.btn)

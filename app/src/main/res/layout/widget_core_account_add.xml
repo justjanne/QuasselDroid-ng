@@ -71,6 +71,6 @@
             android:paddingRight="@dimen/material_drawer_item_primary_icon_padding_right"
             android:singleLine="true"
             android:text="@string/add_account"
-            android:textSize="@dimen/material_drawer_item_profile_text" />
+            android:textSize="@dimen/material_drawer_item_profile_text"/>
     </LinearLayout>
 </LinearLayout>

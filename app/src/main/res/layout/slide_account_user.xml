@@ -31,22 +31,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/username">
+
         <android.support.design.widget.TextInputEditText
             android:id="@+id/user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textVisiblePassword" />
+            android:inputType="textVisiblePassword"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/password">
+
         <android.support.design.widget.TextInputEditText
             android:id="@+id/pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"/>
     </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

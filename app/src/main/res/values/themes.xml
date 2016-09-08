@@ -21,6 +21,7 @@
   -->
 
 <resources>
+
     <style name="Quassel_Light" parent="AppTheme.Light">
         <item name="senderColor0">#e90d7f</item>
         <item name="senderColor1">#8e55e9</item>

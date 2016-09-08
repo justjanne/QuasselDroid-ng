@@ -143,7 +143,8 @@ public class IdentityNickListActivity extends BoundActivity implements OnStartDr
                 intent.putStringArrayListExtra("nicks", nicks);
                 setResult(RESULT_OK, intent);
                 finish();
-            } return true;
+            }
+            return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

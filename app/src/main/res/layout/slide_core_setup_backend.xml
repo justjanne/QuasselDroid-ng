@@ -25,9 +25,10 @@
     android:layout_width="match_parent"
     android:layout_height="400dp"
     android:padding="32dp">
+
     <LinearLayout
         android:id="@+id/container"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
 </ScrollView>

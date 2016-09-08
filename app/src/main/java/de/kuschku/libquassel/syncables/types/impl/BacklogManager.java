@@ -179,12 +179,13 @@ public class BacklogManager extends ABacklogManager {
         assertNotNull(provider);
 
         int oldBuffer = open();
-        setOpen(bufferId);
-        if (bufferId != -1 && client.bufferSyncer() != null)
-            client.bufferSyncer().requestMarkBufferAsRead(bufferId);
-        provider.sendEvent(new BufferChangeEvent());
-        if (oldBuffer != bufferId)
+        if (oldBuffer != bufferId) {
+            setOpen(bufferId);
+            if (bufferId != -1 && client.bufferSyncer() != null)
+                client.bufferSyncer().requestMarkBufferAsRead(bufferId);
+            provider.sendEvent(new BufferChangeEvent());
             client.backlogStorage().markBufferUnused(oldBuffer);
+        }
     }
 
     @Override

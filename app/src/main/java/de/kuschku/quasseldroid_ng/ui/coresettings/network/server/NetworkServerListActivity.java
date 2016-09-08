@@ -117,7 +117,8 @@ public class NetworkServerListActivity extends BoundActivity implements OnStartD
                 intent.putExtra("servers", NetworkServerSerializeHelper.serialize(servers));
                 setResult(RESULT_OK, intent);
                 finish();
-            } return true;
+            }
+            return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

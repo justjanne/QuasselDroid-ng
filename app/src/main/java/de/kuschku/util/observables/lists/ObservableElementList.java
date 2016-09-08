@@ -55,6 +55,11 @@ public class ObservableElementList<T> extends ArrayList<T> implements IObservabl
         this.callback.removeCallback(callback);
     }
 
+    @Override
+    public void removeCallbacks() {
+        callback.removeCallbacks();
+    }
+
     private int getPosition() {
         return isEmpty() ? 0 : size() - 1;
     }

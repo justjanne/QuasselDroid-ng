@@ -38,7 +38,7 @@
                                                  tools:showIn="@layout/activity_main">
 
 
-    <include layout="@layout/widget_editor" />
+    <include layout="@layout/widget_editor"/>
 
     <FrameLayout
         android:id="@+id/card_panel"
@@ -68,12 +68,12 @@
                     android:paddingRight="16.0dip"
                     android:text="@string/labelHistory"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textColor="?attr/colorForegroundSecondary" />
+                    android:textColor="?attr/colorForegroundSecondary"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/msg_history"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" />
+                    android:layout_height="fill_parent"/>
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </FrameLayout>

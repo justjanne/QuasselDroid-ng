@@ -21,9 +21,9 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.kuschku.quasseldroid_ng">
+          package="de.kuschku.quasseldroid_ng">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name=".QuasselDroidNG"
@@ -32,7 +32,7 @@
         android:label="@string/appName"
         android:supportsRtl="true">
 
-        <service android:name=".service.QuasselService" />
+        <service android:name=".service.QuasselService"/>
 
         <activity
             android:name=".ui.LoginActivity"
@@ -40,9 +40,9 @@
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.Light">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
@@ -51,56 +51,56 @@
             android:label="@string/appName"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.LoginActivity"
-            android:theme="@style/AppTheme.Light" />
+            android:theme="@style/AppTheme.Light"/>
 
         <activity
             android:name=".ui.chat.ChannelDetailActivity"
             android:label="@string/channeldetails"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.chat.MainActivity"
-            android:theme="@style/AppTheme.Light" />
+            android:theme="@style/AppTheme.Light"/>
 
         <activity
             android:name=".ui.coresettings.chatlist.ChatListListActivity"
             android:label="@string/editchatlists"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.chat.MainActivity"
-            android:theme="@style/AppTheme.Light" />
+            android:theme="@style/AppTheme.Light"/>
 
         <activity
             android:name=".ui.coresettings.chatlist.ChatListEditActivity"
             android:label="@string/editchatlist"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.coresettings.chatlist.ChatListListActivity"
-            android:theme="@style/AppTheme.Light" />
+            android:theme="@style/AppTheme.Light"/>
 
         <activity
             android:name=".ui.coresettings.chatlist.ChatListCreateActivity"
             android:label="@string/createchatlist"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.coresettings.chatlist.ChatListListActivity"
-            android:theme="@style/AppTheme.Light" />
+            android:theme="@style/AppTheme.Light"/>
 
         <activity
             android:name=".ui.coresettings.network.NetworkListActivity"
             android:label="@string/editnetworks"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.chat.MainActivity"
-            android:theme="@style/AppTheme.Light" />
+            android:theme="@style/AppTheme.Light"/>
 
         <activity
             android:name=".ui.coresettings.network.NetworkEditActivity"
             android:label="@string/editnetwork"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.coresettings.network.NetworkListActivity"
-            android:theme="@style/AppTheme.Light" />
+            android:theme="@style/AppTheme.Light"/>
 
         <activity
             android:name=".ui.coresettings.network.NetworkCreateActivity"
             android:label="@string/createnetwork"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.coresettings.network.NetworkListActivity"
-            android:theme="@style/AppTheme.Light" />
+            android:theme="@style/AppTheme.Light"/>
 
         <activity
             android:name=".ui.coresettings.network.server.NetworkServerListActivity"
@@ -149,28 +149,28 @@
             android:label="@string/accountsetup"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.setup.AccountSelectActivity"
-            android:theme="@style/SetupTheme" />
+            android:theme="@style/SetupTheme"/>
 
         <activity
             android:name=".ui.setup.AccountSelectActivity"
             android:label="@string/accountselection"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.LoginActivity"
-            android:theme="@style/SetupTheme" />
+            android:theme="@style/SetupTheme"/>
 
         <activity
             android:name=".ui.setup.CoreSetupActivity"
             android:label="@string/coresetup"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.chat.MainActivity"
-            android:theme="@style/SetupTheme" />
+            android:theme="@style/SetupTheme"/>
 
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:label="@string/settings"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.chat.MainActivity"
-            android:theme="@style/AppTheme.Light" />
+            android:theme="@style/AppTheme.Light"/>
 
     </application>
 

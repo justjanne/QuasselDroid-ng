@@ -75,4 +75,8 @@ public class MultiElementCallbackWrapper<T> implements ElementCallback<T> {
             callback.notifyItemChanged(element);
         }
     }
+
+    public void removeCallbacks() {
+        callbacks.clear();
+    }
 }

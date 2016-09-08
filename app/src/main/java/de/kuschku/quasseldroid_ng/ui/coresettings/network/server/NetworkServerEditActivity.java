@@ -183,7 +183,8 @@ public class NetworkServerEditActivity extends BoundActivity {
                 intent.putExtra("id", id);
                 setResult(RESULT_OK, intent);
                 finish();
-            } return true;
+            }
+            return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

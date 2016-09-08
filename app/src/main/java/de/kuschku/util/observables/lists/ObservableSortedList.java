@@ -71,6 +71,11 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
         this.callback.removeCallback(callback);
     }
 
+    @Override
+    public void removeCallbacks() {
+        callback.removeCallbacks();
+    }
+
     public void setComparator(@NonNull ItemComparator<T> comparator) {
         this.comparator = comparator;
     }

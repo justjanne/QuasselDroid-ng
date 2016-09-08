@@ -61,4 +61,9 @@ public class MultiGeneralCallback<T> implements IObservable<GeneralCallback<T>>,
     public void removeCallback(GeneralCallback<T> callback) {
         callbacks.remove(callback);
     }
+
+    @Override
+    public void removeCallbacks() {
+        callbacks.clear();
+    }
 }

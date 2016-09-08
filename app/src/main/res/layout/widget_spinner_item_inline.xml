@@ -25,4 +25,4 @@
           android:layout_height="wrap_content"
           android:gravity="center_vertical"
           android:minHeight="48dp"
-          android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+          android:textAppearance="?android:attr/textAppearanceListItemSmall"/>

@@ -164,13 +164,15 @@ public class NetworkCreateActivity extends BoundActivity {
             switch (requestCode) {
                 case REQUEST_PERFORM: {
 
-                } break;
+                }
+                break;
                 case REQUEST_SERVER_LIST: {
                     Parcelable[] servers = data.getParcelableArrayExtra("servers");
                     if (servers != null) {
                         serverList = NetworkServerSerializeHelper.deserialize(servers);
                     }
-                } break;
+                }
+                break;
             }
         }
     }

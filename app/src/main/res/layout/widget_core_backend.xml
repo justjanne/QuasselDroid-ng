@@ -21,28 +21,28 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:orientation="horizontal">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="?attr/selectableItemBackground"
+              android:clickable="true"
+              android:orientation="horizontal">
 
     <android.support.v7.widget.AppCompatRadioButton
         android:id="@+id/backend_select"
         android:layout_width="@dimen/material_drawer_item_profile_icon_width"
         android:layout_height="@dimen/material_drawer_item_profile_icon_width"
         android:layout_gravity="top"
-        android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
-        android:background="@android:color/transparent" />
+        android:layout_marginTop="12dp"
+        android:background="@android:color/transparent"/>
 
     <LinearLayout
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/material_drawer_item_profile_icon_padding_right"
         android:layout_weight="1"
-        android:minHeight="56dp"
         android:gravity="center_vertical|start"
+        android:minHeight="56dp"
         android:orientation="vertical">
 
         <TextView
@@ -53,7 +53,7 @@
             android:gravity="center_vertical|start"
             android:lines="1"
             android:singleLine="true"
-            android:textSize="@dimen/material_drawer_item_profile_text" />
+            android:textSize="@dimen/material_drawer_item_profile_text"/>
 
         <TextView
             android:id="@+id/backend_description"
@@ -61,6 +61,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:gravity="center_vertical|start"
-            android:textSize="@dimen/material_drawer_item_profile_description" />
+            android:textSize="@dimen/material_drawer_item_profile_description"/>
     </LinearLayout>
 </LinearLayout>

@@ -67,6 +67,11 @@ public class ObservableSet<T> extends HashSet<T> implements IObservableSet<Eleme
     }
 
     @Override
+    public void removeCallbacks() {
+        callback.removeCallbacks();
+    }
+
+    @Override
     public boolean add(T object) {
         assertNotNull(this.callback);
 

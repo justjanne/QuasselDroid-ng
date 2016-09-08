@@ -21,18 +21,18 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/material_drawer_item_profile"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:orientation="horizontal">
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/material_drawer_item_profile"
+              android:background="?attr/selectableItemBackground"
+              android:clickable="true"
+              android:orientation="horizontal">
 
     <android.support.v7.widget.AppCompatRadioButton
         android:id="@+id/account_select"
         android:layout_width="@dimen/material_drawer_item_profile_icon_width"
         android:layout_height="@dimen/material_drawer_item_profile_icon_width"
         android:layout_gravity="center_vertical"
-        android:background="@android:color/transparent" />
+        android:background="@android:color/transparent"/>
 
     <LinearLayout
         android:layout_width="0dip"
@@ -50,7 +50,7 @@
             android:gravity="center_vertical|start"
             android:lines="1"
             android:singleLine="true"
-            android:textSize="@dimen/material_drawer_item_profile_text" />
+            android:textSize="@dimen/material_drawer_item_profile_text"/>
 
         <TextView
             android:id="@+id/account_description"
@@ -60,7 +60,7 @@
             android:gravity="center_vertical|start"
             android:lines="1"
             android:singleLine="true"
-            android:textSize="@dimen/material_drawer_item_profile_description" />
+            android:textSize="@dimen/material_drawer_item_profile_description"/>
     </LinearLayout>
 
     <android.support.v7.widget.AppCompatImageButton

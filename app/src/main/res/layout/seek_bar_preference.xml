@@ -20,11 +20,11 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@android:id/widget_frame"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:padding="4dp">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@android:id/widget_frame"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp">
 
     <android.support.v7.widget.AppCompatSeekBar
         android:id="@+id/seekBarPrefSeekBar"
@@ -35,7 +35,7 @@
         android:layout_centerVertical="true"
         android:layout_margin="4dp"
         android:layout_toEndOf="@+id/seekBarPrefValue"
-        android:layout_toRightOf="@+id/seekBarPrefValue" />
+        android:layout_toRightOf="@+id/seekBarPrefValue"/>
 
     <TextView
         android:id="@+id/seekBarPrefValue"
@@ -46,6 +46,6 @@
         android:layout_centerVertical="true"
         android:layout_margin="4dp"
         android:gravity="end"
-        tools:text="16" />
+        tools:text="16"/>
 
 </RelativeLayout>

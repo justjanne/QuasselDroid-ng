@@ -21,7 +21,7 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_search"
         android:title="@string/label_search"
@@ -30,21 +30,21 @@
     <item
         android:id="@+id/action_hide_events"
         android:title="@string/labelHideEvents"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
     <item
         android:id="@+id/action_settings"
         android:title="@string/label_settings"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
     <item
         android:id="@+id/action_networks"
         android:title="@string/networks"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
     <item
         android:id="@+id/action_identities"
         android:title="@string/identities"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
     <item
         android:id="@+id/action_reauth"
         android:title="@string/label_disconnect"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 </menu>

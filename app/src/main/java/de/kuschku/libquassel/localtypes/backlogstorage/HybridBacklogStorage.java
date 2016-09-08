@@ -29,6 +29,7 @@ import android.util.SparseArray;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -88,13 +89,16 @@ public class HybridBacklogStorage implements BacklogStorage {
             for (Message message : messages) {
                 client.unbufferBuffer(message.bufferInfo);
                 synchronized (backlogs) {
-                    if (backlogs.get(bufferId) != null)
-                        backlogs.get(bufferId).add(message);
                     client.bufferSyncer().addActivity(message);
                     message.save();
                     message.bufferInfo.save();
                 }
                 updateLatest(message);
+            }
+
+            synchronized (backlogs) {
+                if (backlogs.get(bufferId) != null)
+                    backlogs.get(bufferId).addAll(Arrays.asList(messages));
             }
         });
     }
@@ -113,6 +117,11 @@ public class HybridBacklogStorage implements BacklogStorage {
                 }
                 updateLatest(message);
             }
+
+            synchronized (backlogs) {
+                if (backlogs.get(bufferId) != null)
+                    backlogs.get(bufferId).addAll(messages);
+            }
         });
     }
 
@@ -130,7 +139,8 @@ public class HybridBacklogStorage implements BacklogStorage {
                 synchronized (backlogs) {
                     if (backlogs.get(message.bufferInfo.id) != null)
                         backlogs.get(message.bufferInfo.id).add(message);
-                    client.bufferSyncer().addActivity(message);
+                    if (client.bufferSyncer() != null)
+                        client.bufferSyncer().addActivity(message);
                     message.save();
                     message.bufferInfo.save();
                 }
@@ -163,13 +173,18 @@ public class HybridBacklogStorage implements BacklogStorage {
     @Override
     public void markBufferUnused(@IntRange(from = 0) int bufferid) {
         synchronized (backlogs) {
-            if (backlogs.get(bufferid) != null && filters.get(bufferid) != null)
-                backlogs.get(bufferid).removeCallback(filters.get(bufferid));
+            BacklogFilter filter = filters.get(bufferid);
+            if (backlogs.get(bufferid) != null && filter != null)
+                backlogs.get(bufferid).removeCallbacks();
             backlogs.remove(bufferid);
-            filteredBacklogs.remove(bufferid);
+            if (filter != null)
+                filter.onDestroy();
+            if (filteredBacklogs.get(bufferid) != null)
+                filteredBacklogs.get(bufferid).removeCallbacks();
+            filteredBacklogs.delete(bufferid);
             synchronized (filterSet) {
-                filterSet.remove(filters.get(bufferid));
-                filters.remove(bufferid);
+                filterSet.remove(filter);
+                filters.delete(bufferid);
             }
         }
     }

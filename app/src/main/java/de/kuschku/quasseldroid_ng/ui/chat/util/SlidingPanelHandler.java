@@ -115,42 +115,106 @@ public class SlidingPanelHandler {
                 case R.id.fill_clear:
                     editor.toggleBackground(-1);
                     return true;
-                case R.id.fill_mircColor0: editor.toggleBackground(0x0); return true;
-                case R.id.fill_mircColor1: editor.toggleBackground(0x1); return true;
-                case R.id.fill_mircColor2: editor.toggleBackground(0x2); return true;
-                case R.id.fill_mircColor3: editor.toggleBackground(0x3); return true;
-                case R.id.fill_mircColor4: editor.toggleBackground(0x4); return true;
-                case R.id.fill_mircColor5: editor.toggleBackground(0x5); return true;
-                case R.id.fill_mircColor6: editor.toggleBackground(0x6); return true;
-                case R.id.fill_mircColor7: editor.toggleBackground(0x7); return true;
-                case R.id.fill_mircColor8: editor.toggleBackground(0x8); return true;
-                case R.id.fill_mircColor9: editor.toggleBackground(0x9); return true;
-                case R.id.fill_mircColorA: editor.toggleBackground(0xA); return true;
-                case R.id.fill_mircColorB: editor.toggleBackground(0xB); return true;
-                case R.id.fill_mircColorC: editor.toggleBackground(0xC); return true;
-                case R.id.fill_mircColorD: editor.toggleBackground(0xD); return true;
-                case R.id.fill_mircColorE: editor.toggleBackground(0xE); return true;
-                case R.id.fill_mircColorF: editor.toggleBackground(0xF); return true;
+                case R.id.fill_mircColor0:
+                    editor.toggleBackground(0x0);
+                    return true;
+                case R.id.fill_mircColor1:
+                    editor.toggleBackground(0x1);
+                    return true;
+                case R.id.fill_mircColor2:
+                    editor.toggleBackground(0x2);
+                    return true;
+                case R.id.fill_mircColor3:
+                    editor.toggleBackground(0x3);
+                    return true;
+                case R.id.fill_mircColor4:
+                    editor.toggleBackground(0x4);
+                    return true;
+                case R.id.fill_mircColor5:
+                    editor.toggleBackground(0x5);
+                    return true;
+                case R.id.fill_mircColor6:
+                    editor.toggleBackground(0x6);
+                    return true;
+                case R.id.fill_mircColor7:
+                    editor.toggleBackground(0x7);
+                    return true;
+                case R.id.fill_mircColor8:
+                    editor.toggleBackground(0x8);
+                    return true;
+                case R.id.fill_mircColor9:
+                    editor.toggleBackground(0x9);
+                    return true;
+                case R.id.fill_mircColorA:
+                    editor.toggleBackground(0xA);
+                    return true;
+                case R.id.fill_mircColorB:
+                    editor.toggleBackground(0xB);
+                    return true;
+                case R.id.fill_mircColorC:
+                    editor.toggleBackground(0xC);
+                    return true;
+                case R.id.fill_mircColorD:
+                    editor.toggleBackground(0xD);
+                    return true;
+                case R.id.fill_mircColorE:
+                    editor.toggleBackground(0xE);
+                    return true;
+                case R.id.fill_mircColorF:
+                    editor.toggleBackground(0xF);
+                    return true;
 
                 case R.id.paint_clear:
                     editor.toggleForeground(-1);
                     return true;
-                case R.id.paint_mircColor0: editor.toggleForeground(0x0); return true;
-                case R.id.paint_mircColor1: editor.toggleForeground(0x1); return true;
-                case R.id.paint_mircColor2: editor.toggleForeground(0x2); return true;
-                case R.id.paint_mircColor3: editor.toggleForeground(0x3); return true;
-                case R.id.paint_mircColor4: editor.toggleForeground(0x4); return true;
-                case R.id.paint_mircColor5: editor.toggleForeground(0x5); return true;
-                case R.id.paint_mircColor6: editor.toggleForeground(0x6); return true;
-                case R.id.paint_mircColor7: editor.toggleForeground(0x7); return true;
-                case R.id.paint_mircColor8: editor.toggleForeground(0x8); return true;
-                case R.id.paint_mircColor9: editor.toggleForeground(0x9); return true;
-                case R.id.paint_mircColorA: editor.toggleForeground(0xA); return true;
-                case R.id.paint_mircColorB: editor.toggleForeground(0xB); return true;
-                case R.id.paint_mircColorC: editor.toggleForeground(0xC); return true;
-                case R.id.paint_mircColorD: editor.toggleForeground(0xD); return true;
-                case R.id.paint_mircColorE: editor.toggleForeground(0xE); return true;
-                case R.id.paint_mircColorF: editor.toggleForeground(0xF); return true;
+                case R.id.paint_mircColor0:
+                    editor.toggleForeground(0x0);
+                    return true;
+                case R.id.paint_mircColor1:
+                    editor.toggleForeground(0x1);
+                    return true;
+                case R.id.paint_mircColor2:
+                    editor.toggleForeground(0x2);
+                    return true;
+                case R.id.paint_mircColor3:
+                    editor.toggleForeground(0x3);
+                    return true;
+                case R.id.paint_mircColor4:
+                    editor.toggleForeground(0x4);
+                    return true;
+                case R.id.paint_mircColor5:
+                    editor.toggleForeground(0x5);
+                    return true;
+                case R.id.paint_mircColor6:
+                    editor.toggleForeground(0x6);
+                    return true;
+                case R.id.paint_mircColor7:
+                    editor.toggleForeground(0x7);
+                    return true;
+                case R.id.paint_mircColor8:
+                    editor.toggleForeground(0x8);
+                    return true;
+                case R.id.paint_mircColor9:
+                    editor.toggleForeground(0x9);
+                    return true;
+                case R.id.paint_mircColorA:
+                    editor.toggleForeground(0xA);
+                    return true;
+                case R.id.paint_mircColorB:
+                    editor.toggleForeground(0xB);
+                    return true;
+                case R.id.paint_mircColorC:
+                    editor.toggleForeground(0xC);
+                    return true;
+                case R.id.paint_mircColorD:
+                    editor.toggleForeground(0xD);
+                    return true;
+                case R.id.paint_mircColorE:
+                    editor.toggleForeground(0xE);
+                    return true;
+                case R.id.paint_mircColorF:
+                    editor.toggleForeground(0xF);
+                    return true;
 
                 default:
                     return false;

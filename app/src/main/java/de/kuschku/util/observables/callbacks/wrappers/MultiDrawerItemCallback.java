@@ -62,4 +62,9 @@ public class MultiDrawerItemCallback implements DrawerItemCallback, IObservable<
     public void removeCallback(DrawerItemCallback callback) {
         callbacks.remove(callback);
     }
+
+    @Override
+    public void removeCallbacks() {
+        callbacks.clear();
+    }
 }

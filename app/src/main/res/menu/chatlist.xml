@@ -20,12 +20,12 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_join_channel"
         android:icon="@drawable/ic_add"
         android:title="@string/action_join_channel"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_show_all"
         android:checkable="true"
@@ -34,5 +34,5 @@
     <item
         android:id="@+id/action_manage_chat_lists"
         android:title="@string/action_manage_chat_lists"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 </menu>

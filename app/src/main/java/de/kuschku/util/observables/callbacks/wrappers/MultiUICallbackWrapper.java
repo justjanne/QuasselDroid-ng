@@ -101,4 +101,8 @@ public class MultiUICallbackWrapper implements UICallback {
             callback.notifyItemRangeRemoved(position, count);
         }
     }
+
+    public void removeCallbacks() {
+        callbacks.clear();
+    }
 }

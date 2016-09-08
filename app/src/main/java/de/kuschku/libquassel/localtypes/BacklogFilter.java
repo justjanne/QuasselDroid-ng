@@ -28,6 +28,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
@@ -48,9 +52,24 @@ public class BacklogFilter implements UICallback {
     private final ObservableComparableSortedList<Message> filtered;
 
     private final EventBus bus = new EventBus();
+    ElementCallback<Message.Type> typeCallback = new ElementCallback<Message.Type>() {
+        @Override
+        public void notifyItemInserted(Message.Type element) {
+            bus.post(new UpdateRemoveEvent());
+        }
+
+        @Override
+        public void notifyItemRemoved(Message.Type element) {
+            bus.post(new UpdateAddEvent());
+        }
+
+        @Override
+        public void notifyItemChanged(Message.Type element) {
+
+        }
+    };
     @Nullable
     private CharSequence searchQuery;
-
     private Message markerlineMessage;
 
     public BacklogFilter(@NonNull Client client, int bufferId, @NonNull ObservableComparableSortedList<Message> unfiltered, @NonNull ObservableComparableSortedList<Message> filtered) {
@@ -59,22 +78,7 @@ public class BacklogFilter implements UICallback {
         this.unfiltered = unfiltered;
         this.filtered = filtered;
         this.bus.register(this);
-        client.bufferSyncer().getFilteredTypes(bufferId).addCallback(new ElementCallback<Message.Type>() {
-            @Override
-            public void notifyItemInserted(Message.Type element) {
-                bus.post(new UpdateRemoveEvent());
-            }
-
-            @Override
-            public void notifyItemRemoved(Message.Type element) {
-                bus.post(new UpdateAddEvent());
-            }
-
-            @Override
-            public void notifyItemChanged(Message.Type element) {
-
-            }
-        });
+        client.bufferSyncer().getFilteredTypes(bufferId).addCallback(typeCallback);
         updateDayChangeMessages();
     }
 
@@ -207,12 +211,18 @@ public class BacklogFilter implements UICallback {
 
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onEventAsync(@NonNull MessageFilterEvent event) {
-        if (!filterItem(event.msg)) bus.post(new MessageInsertEvent(event.msg));
+        List<Message> filteredMessages = new ArrayList<>();
+        for (Message message : event.msgs) {
+            if (!filterItem(message))
+                filteredMessages.add(message);
+        }
+
+        bus.post(new MessageInsertEvent(filteredMessages));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(@NonNull MessageInsertEvent event) {
-        filtered.add(event.msg);
+        filtered.addAll(event.msgs);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -222,12 +232,14 @@ public class BacklogFilter implements UICallback {
 
     @Override
     public void notifyItemChanged(int position) {
-        filtered.notifyItemChanged(position);
+        int position1 = filtered.indexOf(unfiltered.get(position));
+        if (position1 != -1)
+            filtered.notifyItemChanged(position1);
     }
 
     @Override
     public void notifyItemRemoved(int position) {
-        filtered.remove(position);
+        bus.post(new MessageRemoveEvent(unfiltered.get(position)));
     }
 
     @Override
@@ -237,9 +249,8 @@ public class BacklogFilter implements UICallback {
 
     @Override
     public void notifyItemRangeInserted(int position, int count) {
-        for (int i = position; i < position + count; i++) {
-            notifyItemInserted(i);
-        }
+        List<Message> message = unfiltered.subList(position, position + count);
+        bus.post(new MessageFilterEvent(message));
     }
 
     @Override
@@ -256,11 +267,21 @@ public class BacklogFilter implements UICallback {
         }
     }
 
+    public void onDestroy() {
+        bus.unregister(this);
+        client.bufferSyncer().getFilteredTypes(bufferId).removeCallback(typeCallback);
+        typeCallback = null;
+    }
+
     private class MessageInsertEvent {
-        public final Message msg;
+        public final List<Message> msgs;
 
         public MessageInsertEvent(Message msg) {
-            this.msg = msg;
+            this.msgs = Collections.singletonList(msg);
+        }
+
+        public MessageInsertEvent(List<Message> msgs) {
+            this.msgs = msgs;
         }
     }
 
@@ -273,10 +294,14 @@ public class BacklogFilter implements UICallback {
     }
 
     private class MessageFilterEvent {
-        public final Message msg;
+        public final List<Message> msgs;
 
         public MessageFilterEvent(Message msg) {
-            this.msg = msg;
+            this.msgs = Collections.singletonList(msg);
+        }
+
+        public MessageFilterEvent(List<Message> msgs) {
+            this.msgs = msgs;
         }
     }
 

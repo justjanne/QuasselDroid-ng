@@ -181,11 +181,13 @@ public class IdentityEditActivity extends BoundActivity {
                         })
                         .build()
                         .show();
-            } return true;
+            }
+            return true;
             case R.id.action_confirm: {
                 save();
                 finish();
-            } return true;
+            }
+            return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
