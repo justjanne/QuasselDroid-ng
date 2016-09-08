@@ -33,6 +33,8 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import java.util.ArrayList;
 
 import butterknife.Bind;
@@ -139,56 +141,104 @@ public class IdentityEditActivity extends BoundActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.editor, menu);
+        getMenuInflater().inflate(R.menu.confirm_delete, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (hasChanged(build())) {
+            new MaterialDialog.Builder(this)
+                    .content("You have made changes, do you wish to save them?")
+                    .positiveText("Yes")
+                    .negativeText("No")
+                    .positiveColor(context.themeUtil().res.colorAccent)
+                    .negativeColor(context.themeUtil().res.colorForeground)
+                    .onPositive((dialog, which) -> {
+                        save();
+                        super.onBackPressed();
+                    })
+                    .onNegative((dialog, which) -> super.onBackPressed())
+                    .show();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_delete: {
+                new MaterialDialog.Builder(this)
+                        .content(String.format("Are you sure you want to delete \"%s\"?", identity.identityName()))
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .positiveColor(context.themeUtil().res.colorAccent)
+                        .negativeColor(context.themeUtil().res.colorForeground)
+                        .onPositive((dialog, which) -> {
+                            finish();
+                            context.client().removeIdentity(identity.id());
+                        })
+                        .build()
+                        .show();
+            } return true;
             case R.id.action_confirm: {
-                if (identity != null) {
-                    Identity newIdentity = Identity.createDefault();
-                    newIdentity._copyFrom(identity);
-
-                    if (!identity.identityName().equals(identityName.getText().toString()))
-                        newIdentity._setIdentityName(identityName.getText().toString());
-
-                    if (!identity.realName().equals(realName.getText().toString()))
-                        newIdentity._setRealName(realName.getText().toString());
-
-                    if (!identity.ident().equals(ident.getText().toString()))
-                        newIdentity._setIdent(ident.getText().toString());
-
-                    if (!identity.nicks().equals(nickList))
-                        newIdentity._setNicks(nickList);
-
-                    if (!identity.kickReason().equals(kickReason.getText().toString()))
-                        newIdentity._setKickReason(kickReason.getText().toString());
-
-                    if (!identity.partReason().equals(partReason.getText().toString()))
-                        newIdentity._setPartReason(partReason.getText().toString());
-
-                    if (!identity.quitReason().equals(quitReason.getText().toString()))
-                        newIdentity._setQuitReason(quitReason.getText().toString());
-
-                    if (!identity.awayReason().equals(awayReason.getText().toString()))
-                        newIdentity._setAwayReason(awayReason.getText().toString());
-
-                    if (!identity.detachAwayEnabled() == useAwayOnDetach.isChecked())
-                        newIdentity._setDetachAwayEnabled(useAwayOnDetach.isChecked());
-
-                    if (!identity.detachAwayReason().equals(awayOnDetachReason.getText().toString()))
-                        newIdentity._setDetachAwayReason(awayOnDetachReason.getText().toString());
-
-                    if (!newIdentity.equals(identity))
-                        identity.update(newIdentity);
-
-                    finish();
-                }
+                save();
+                finish();
             } return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void save() {
+        Identity after = build();
+        if (hasChanged(after))
+            identity.update(after);
+    }
+
+    private boolean hasChanged(Identity identity) {
+        return this.identity != null && identity != null && !this.identity.equals(identity);
+    }
+
+    private Identity build() {
+        if (identity == null) {
+            return null;
+        } else {
+            Identity newIdentity = Identity.createDefault();
+            newIdentity._copyFrom(identity);
+
+            if (!identity.identityName().equals(identityName.getText().toString()))
+                newIdentity._setIdentityName(identityName.getText().toString());
+
+            if (!identity.realName().equals(realName.getText().toString()))
+                newIdentity._setRealName(realName.getText().toString());
+
+            if (!identity.ident().equals(ident.getText().toString()))
+                newIdentity._setIdent(ident.getText().toString());
+
+            if (!identity.nicks().equals(nickList))
+                newIdentity._setNicks(nickList);
+
+            if (!identity.kickReason().equals(kickReason.getText().toString()))
+                newIdentity._setKickReason(kickReason.getText().toString());
+
+            if (!identity.partReason().equals(partReason.getText().toString()))
+                newIdentity._setPartReason(partReason.getText().toString());
+
+            if (!identity.quitReason().equals(quitReason.getText().toString()))
+                newIdentity._setQuitReason(quitReason.getText().toString());
+
+            if (!identity.awayReason().equals(awayReason.getText().toString()))
+                newIdentity._setAwayReason(awayReason.getText().toString());
+
+            if (!identity.detachAwayEnabled() == useAwayOnDetach.isChecked())
+                newIdentity._setDetachAwayEnabled(useAwayOnDetach.isChecked());
+
+            if (!identity.detachAwayReason().equals(awayOnDetachReason.getText().toString()))
+                newIdentity._setDetachAwayReason(awayOnDetachReason.getText().toString());
+
+            return newIdentity;
         }
     }
 

@@ -37,6 +37,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -228,48 +230,94 @@ public class NetworkEditActivity extends BoundActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.editor, menu);
+        getMenuInflater().inflate(R.menu.confirm_delete, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (hasChanged(build())) {
+            new MaterialDialog.Builder(this)
+                    .content("You have made changes, do you wish to save them?")
+                    .positiveText("Yes")
+                    .negativeText("No")
+                    .positiveColor(context.themeUtil().res.colorAccent)
+                    .negativeColor(context.themeUtil().res.colorForeground)
+                    .onPositive((dialog, which) -> {
+                        save();
+                        super.onBackPressed();
+                    })
+                    .onNegative((dialog, which) -> super.onBackPressed())
+                    .show();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_delete: {
+                new MaterialDialog.Builder(this)
+                        .content(String.format("Are you sure you want to delete \"%s\"?", network.networkName()))
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .positiveColor(context.themeUtil().res.colorAccent)
+                        .negativeColor(context.themeUtil().res.colorForeground)
+                        .onPositive((dialog, which) -> {
+                            finish();
+                            context.client().removeNetwork(network.networkId());
+                        })
+                        .build()
+                        .show();
+            } return true;
             case R.id.action_confirm: {
-                NetworkInfo networkInfo = this.network.networkInfo();
-                if (networkInfo != null) {
-                    NetworkInfo after = new NetworkInfo(
-                            networkInfo.networkId(),
-                            networkName.getText().toString(),
-                            (int) identity.getSelectedItemId(),
-                            useCustomCodecs.isChecked() ? this.codecForServer.getText().toString() : null,
-                            useCustomCodecs.isChecked() ? this.codecForEncoding.getText().toString() : null,
-                            useCustomCodecs.isChecked() ? this.codecForDecoding.getText().toString() : null,
-                            serverList == null ? networkInfo.serverList() : serverList,
-                            networkInfo.useRandomServer(),
-                            //FIXME: IMPLEMENT
-                            networkInfo.perform(),
-                            useAutoIdentify.isChecked(),
-                            autoIdentifyService.getText().toString(),
-                            autoIdentifyPassword.getText().toString(),
-                            useSasl.isChecked(),
-                            saslAccount.getText().toString(),
-                            saslPassword.getText().toString(),
-                            useAutoReconnect.isChecked(),
-                            NumberHelper.parseInt(autoReconnectInterval.getText().toString(), 0),
-                            NumberHelper.parseShort(autoReconnectRetries.getText().toString(), (short) 0),
-                            unlimitedAutoReconnectRetries.isChecked(),
-                            rejoinChannels.isChecked()
-                    );
-
-                    if (!Objects.equals(networkInfo, after))
-                        network.setNetworkInfo(after);
-
-                    finish();
-                }
+                save();
+                finish();
             } return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void save() {
+        NetworkInfo info = build();
+        if (hasChanged(info))
+            network.setNetworkInfo(info);
+    }
+
+    private boolean hasChanged(NetworkInfo info) {
+        return network != null && network.networkInfo() != null && info != null && !Objects.equals(network.networkInfo(), info);
+    }
+
+    private NetworkInfo build() {
+        NetworkInfo networkInfo = this.network.networkInfo();
+        if (networkInfo == null) {
+            return null;
+        } else {
+            return new NetworkInfo(
+                    networkInfo.networkId(),
+                    networkName.getText().toString(),
+                    (int) identity.getSelectedItemId(),
+                    useCustomCodecs.isChecked() ? this.codecForServer.getText().toString() : null,
+                    useCustomCodecs.isChecked() ? this.codecForEncoding.getText().toString() : null,
+                    useCustomCodecs.isChecked() ? this.codecForDecoding.getText().toString() : null,
+                    serverList == null ? networkInfo.serverList() : serverList,
+                    networkInfo.useRandomServer(),
+                    //FIXME: IMPLEMENT
+                    networkInfo.perform(),
+                    useAutoIdentify.isChecked(),
+                    autoIdentifyService.getText().toString(),
+                    autoIdentifyPassword.getText().toString(),
+                    useSasl.isChecked(),
+                    saslAccount.getText().toString(),
+                    saslPassword.getText().toString(),
+                    useAutoReconnect.isChecked(),
+                    NumberHelper.parseInt(autoReconnectInterval.getText().toString(), 0),
+                    NumberHelper.parseShort(autoReconnectRetries.getText().toString(), (short) 0),
+                    unlimitedAutoReconnectRetries.isChecked(),
+                    rejoinChannels.isChecked()
+            );
         }
     }
 

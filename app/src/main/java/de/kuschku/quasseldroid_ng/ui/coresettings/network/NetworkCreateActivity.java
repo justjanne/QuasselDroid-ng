@@ -235,7 +235,7 @@ public class NetworkCreateActivity extends BoundActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.editor, menu);
+        getMenuInflater().inflate(R.menu.confirm, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

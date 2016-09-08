@@ -69,7 +69,7 @@ public class IdentityManager {
     }
 
     public void removeIdentity(@IntRange(from = 0) int id) {
-        identities.remove(id);
+        identityList.remove(identities.remove(id));
     }
 
     @Nullable

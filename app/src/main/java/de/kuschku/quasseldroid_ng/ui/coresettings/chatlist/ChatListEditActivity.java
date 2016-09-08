@@ -31,6 +31,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
@@ -105,54 +107,103 @@ public class ChatListEditActivity extends BoundActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.editor, menu);
+        getMenuInflater().inflate(R.menu.confirm_delete, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (hasChanged()) {
+            new MaterialDialog.Builder(this)
+                    .content("You have made changes, do you wish to save them?")
+                    .positiveText("Yes")
+                    .negativeText("No")
+                    .positiveColor(context.themeUtil().res.colorAccent)
+                    .negativeColor(context.themeUtil().res.colorForeground)
+                    .onPositive((dialog, which) -> {
+                        save();
+                        super.onBackPressed();
+                    })
+                    .onNegative((dialog, which) -> super.onBackPressed())
+                    .show();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_delete: {
+                new MaterialDialog.Builder(this)
+                        .content(String.format("Are you sure you want to delete \"%s\"?", config.bufferViewName()))
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .positiveColor(context.themeUtil().res.colorAccent)
+                        .negativeColor(context.themeUtil().res.colorForeground)
+                        .onPositive((dialog, which) -> {
+                            finish();
+                            context.client().bufferViewManager().deleteBufferView(config.bufferViewId());
+                        })
+                        .build()
+                        .show();
+            } return true;
             case R.id.action_confirm: {
-                if (config != null) {
-                    String name = this.name.getText().toString();
-                    if (!Objects.equals(name, config.bufferViewName()))
-                        config.setBufferViewName(name);
-
-                    if (config.networkId() != (int) network.getSelectedItemId())
-                        config.setNetworkId((int) network.getSelectedItemId());
-
-                    if (config.minimumActivity() != QBufferViewConfig.MinimumActivity.fromId((int) minimumActivity.getSelectedItemId()))
-                        config.setMinimumActivity(QBufferViewConfig.MinimumActivity.fromId((int) minimumActivity.getSelectedItemId()));
-
-                    int allowedBufferTypes = config.allowedBufferTypes();
-                    config.setBufferTypeAllowed(BufferInfo.Type.CHANNEL, this.showChannels.isChecked());
-                    config.setBufferTypeAllowed(BufferInfo.Type.QUERY, this.showQueries.isChecked());
-                    if (config.allowedBufferTypes() != allowedBufferTypes)
-                        config.setAllowedBufferTypes(allowedBufferTypes);
-
-                    boolean hideInactiveChats = this.hideInactiveChats.isChecked();
-                    if (hideInactiveChats != config.hideInactiveBuffers())
-                        config.setHideInactiveBuffers(hideInactiveChats);
-
-                    boolean hideInactiveNetworks = this.hideInactiveNetworks.isChecked();
-                    if (hideInactiveNetworks != config.hideInactiveNetworks())
-                        config.setHideInactiveNetworks(hideInactiveNetworks);
-
-                    boolean addAutomatically = this.addAutomatically.isChecked();
-                    if (addAutomatically != config.addNewBuffersAutomatically())
-                        config.setAddNewBuffersAutomatically(addAutomatically);
-
-                    boolean sortAlphabetically = this.sortAlphabetically.isChecked();
-                    if (sortAlphabetically != config.sortAlphabetically())
-                        config.setSortAlphabetically(sortAlphabetically);
-
-                    finish();
-                }
+                save();
+                finish();
             }
             return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void save() {
+        if (config != null) {
+            String name = this.name.getText().toString();
+            if (!Objects.equals(name, config.bufferViewName()))
+                config.setBufferViewName(name);
+
+            if (config.networkId() != (int) network.getSelectedItemId())
+                config.setNetworkId((int) network.getSelectedItemId());
+
+            if (config.minimumActivity() != QBufferViewConfig.MinimumActivity.fromId((int) minimumActivity.getSelectedItemId()))
+                config.setMinimumActivity(QBufferViewConfig.MinimumActivity.fromId((int) minimumActivity.getSelectedItemId()));
+
+            int allowedBufferTypes = config.allowedBufferTypes();
+            config.setBufferTypeAllowed(BufferInfo.Type.CHANNEL, this.showChannels.isChecked());
+            config.setBufferTypeAllowed(BufferInfo.Type.QUERY, this.showQueries.isChecked());
+            if (config.allowedBufferTypes() != allowedBufferTypes)
+                config.setAllowedBufferTypes(allowedBufferTypes);
+
+            boolean hideInactiveChats = this.hideInactiveChats.isChecked();
+            if (hideInactiveChats != config.hideInactiveBuffers())
+                config.setHideInactiveBuffers(hideInactiveChats);
+
+            boolean hideInactiveNetworks = this.hideInactiveNetworks.isChecked();
+            if (hideInactiveNetworks != config.hideInactiveNetworks())
+                config.setHideInactiveNetworks(hideInactiveNetworks);
+
+            boolean addAutomatically = this.addAutomatically.isChecked();
+            if (addAutomatically != config.addNewBuffersAutomatically())
+                config.setAddNewBuffersAutomatically(addAutomatically);
+
+            boolean sortAlphabetically = this.sortAlphabetically.isChecked();
+            if (sortAlphabetically != config.sortAlphabetically())
+                config.setSortAlphabetically(sortAlphabetically);
+        }
+    }
+
+    private boolean hasChanged() {
+        return !Objects.equals(name.getText().toString(), config.bufferViewName()) ||
+                config.networkId() != (int) network.getSelectedItemId() ||
+                config.minimumActivity() != QBufferViewConfig.MinimumActivity.fromId((int) minimumActivity.getSelectedItemId()) ||
+                config.isBufferTypeAllowed(BufferInfo.Type.CHANNEL) != this.showChannels.isChecked() ||
+                config.isBufferTypeAllowed(BufferInfo.Type.QUERY) != this.showQueries.isChecked() ||
+                this.hideInactiveChats.isChecked() != config.hideInactiveBuffers() ||
+                this.hideInactiveNetworks.isChecked() != config.hideInactiveNetworks() ||
+                this.addAutomatically.isChecked() != config.addNewBuffersAutomatically() ||
+                this.sortAlphabetically.isChecked() != config.sortAlphabetically();
     }
 
     @Override

@@ -55,7 +55,7 @@ public class IdentityListActivity extends BoundActivity {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
-    ChatListAdapter adapter;
+    IdentityAdapter adapter;
     OnQIdentityClickListener clickListener = identity -> {
         if (identity != null) {
             Intent intent = new Intent(this, IdentityEditActivity.class);
@@ -72,7 +72,7 @@ public class IdentityListActivity extends BoundActivity {
 
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setItemAnimator(new DefaultItemAnimator());
-        adapter = new ChatListAdapter();
+        adapter = new IdentityAdapter();
         list.setAdapter(adapter);
 
         add.setOnClickListener(view -> {
@@ -99,7 +99,7 @@ public class IdentityListActivity extends BoundActivity {
         void onClick(QIdentity network);
     }
 
-    private class ChatListAdapter extends RecyclerView.Adapter<IdentityViewHolder> {
+    private class IdentityAdapter extends RecyclerView.Adapter<IdentityViewHolder> {
         IdentityManager manager;
         AdapterUICallbackWrapper wrapper = new AdapterUICallbackWrapper(this);
 

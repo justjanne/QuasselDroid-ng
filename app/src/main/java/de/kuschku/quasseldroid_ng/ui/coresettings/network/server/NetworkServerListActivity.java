@@ -104,7 +104,7 @@ public class NetworkServerListActivity extends BoundActivity implements OnStartD
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.editor, menu);
+        getMenuInflater().inflate(R.menu.confirm, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

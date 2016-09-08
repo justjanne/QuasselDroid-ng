@@ -415,4 +415,70 @@ public class Identity extends AIdentity {
         super.init(objectName, provider, client);
         client.identityManager().createIdentity(this);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Identity)) return false;
+
+        Identity identity = (Identity) o;
+
+        if (id != identity.id) return false;
+        if (awayNickEnabled != identity.awayNickEnabled) return false;
+        if (awayReasonEnabled != identity.awayReasonEnabled) return false;
+        if (autoAwayEnabled != identity.autoAwayEnabled) return false;
+        if (autoAwayTime != identity.autoAwayTime) return false;
+        if (autoAwayReasonEnabled != identity.autoAwayReasonEnabled) return false;
+        if (detachAwayEnabled != identity.detachAwayEnabled) return false;
+        if (detachAwayReasonEnabled != identity.detachAwayReasonEnabled) return false;
+        if (name != null ? !name.equals(identity.name) : identity.name != null) return false;
+        if (realName != null ? !realName.equals(identity.realName) : identity.realName != null)
+            return false;
+        if (nicks != null ? !nicks.equals(identity.nicks) : identity.nicks != null) return false;
+        if (awayNick != null ? !awayNick.equals(identity.awayNick) : identity.awayNick != null)
+            return false;
+        if (awayReason != null ? !awayReason.equals(identity.awayReason) : identity.awayReason != null)
+            return false;
+        if (autoAwayReason != null ? !autoAwayReason.equals(identity.autoAwayReason) : identity.autoAwayReason != null)
+            return false;
+        if (detachAwayReason != null ? !detachAwayReason.equals(identity.detachAwayReason) : identity.detachAwayReason != null)
+            return false;
+        if (ident != null ? !ident.equals(identity.ident) : identity.ident != null) return false;
+        if (kickReason != null ? !kickReason.equals(identity.kickReason) : identity.kickReason != null)
+            return false;
+        if (partReason != null ? !partReason.equals(identity.partReason) : identity.partReason != null)
+            return false;
+        if (quitReason != null ? !quitReason.equals(identity.quitReason) : identity.quitReason != null)
+            return false;
+        if (sslKey != null ? !sslKey.equals(identity.sslKey) : identity.sslKey != null)
+            return false;
+        return sslCert != null ? sslCert.equals(identity.sslCert) : identity.sslCert == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (realName != null ? realName.hashCode() : 0);
+        result = 31 * result + (nicks != null ? nicks.hashCode() : 0);
+        result = 31 * result + (awayNick != null ? awayNick.hashCode() : 0);
+        result = 31 * result + (awayNickEnabled ? 1 : 0);
+        result = 31 * result + (awayReason != null ? awayReason.hashCode() : 0);
+        result = 31 * result + (awayReasonEnabled ? 1 : 0);
+        result = 31 * result + (autoAwayEnabled ? 1 : 0);
+        result = 31 * result + autoAwayTime;
+        result = 31 * result + (autoAwayReason != null ? autoAwayReason.hashCode() : 0);
+        result = 31 * result + (autoAwayReasonEnabled ? 1 : 0);
+        result = 31 * result + (detachAwayEnabled ? 1 : 0);
+        result = 31 * result + (detachAwayReason != null ? detachAwayReason.hashCode() : 0);
+        result = 31 * result + (detachAwayReasonEnabled ? 1 : 0);
+        result = 31 * result + (ident != null ? ident.hashCode() : 0);
+        result = 31 * result + (kickReason != null ? kickReason.hashCode() : 0);
+        result = 31 * result + (partReason != null ? partReason.hashCode() : 0);
+        result = 31 * result + (quitReason != null ? quitReason.hashCode() : 0);
+        result = 31 * result + (sslKey != null ? sslKey.hashCode() : 0);
+        result = 31 * result + (sslCert != null ? sslCert.hashCode() : 0);
+        return result;
+    }
 }

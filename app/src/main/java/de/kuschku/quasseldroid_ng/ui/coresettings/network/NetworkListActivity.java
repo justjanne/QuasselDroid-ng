@@ -55,7 +55,7 @@ public class NetworkListActivity extends BoundActivity {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
-    ChatListAdapter adapter;
+    NetworkAdapter adapter;
     OnQNetworkClickListener clickListener = network -> {
         if (network != null) {
             Intent intent = new Intent(this, NetworkEditActivity.class);
@@ -72,7 +72,7 @@ public class NetworkListActivity extends BoundActivity {
 
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setItemAnimator(new DefaultItemAnimator());
-        adapter = new ChatListAdapter();
+        adapter = new NetworkAdapter();
         list.setAdapter(adapter);
 
         add.setOnClickListener(view -> {
@@ -99,7 +99,7 @@ public class NetworkListActivity extends BoundActivity {
         void onClick(QNetwork network);
     }
 
-    private class ChatListAdapter extends RecyclerView.Adapter<NetworkViewHolder> {
+    private class NetworkAdapter extends RecyclerView.Adapter<NetworkViewHolder> {
         NetworkManager manager;
         AdapterUICallbackWrapper wrapper = new AdapterUICallbackWrapper(this);
 
