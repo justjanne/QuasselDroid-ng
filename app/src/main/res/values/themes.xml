@@ -65,9 +65,11 @@
         <item name="colorForegroundMirc">0x1</item>
 
         <item name="colorBackground">@color/md_light_background</item>
+        <item name="android:windowBackground">@color/md_light_background</item>
         <item name="colorBackgroundHighlight">#ff8811</item>
-        <item name="colorBackgroundSecondary">@android:color/transparent</item>
+        <item name="colorBackgroundSecondary">@null</item>
         <item name="colorBackgroundCard">@color/md_light_cards</item>
+        <item name="colorBackgroundDialog">@color/md_light_background</item>
 
         <item name="colorTintActivity">#88cc33</item>
         <item name="colorTintMessage">#2277dd</item>
@@ -118,9 +120,11 @@
         <item name="colorForegroundMirc">0x0</item>
 
         <item name="colorBackground">@color/md_dark_background</item>
+        <item name="android:windowBackground">@color/md_dark_background</item>
         <item name="colorBackgroundHighlight">#ff8811</item>
-        <item name="colorBackgroundSecondary">@android:color/transparent</item>
+        <item name="colorBackgroundSecondary">@null</item>
         <item name="colorBackgroundCard">@color/md_dark_cards</item>
+        <item name="colorBackgroundDialog">@color/md_dark_background</item>
 
         <item name="colorTintActivity">#88cc33</item>
         <item name="colorTintMessage">#2277dd</item>
@@ -177,9 +181,11 @@
         <item name="colorForegroundMirc">0xF</item>
 
         <item name="colorBackground">#FDF6E3</item>
+        <item name="android:windowBackground">@color/solarizedLight_background</item>
         <item name="colorBackgroundHighlight">#268bd2</item>
-        <item name="colorBackgroundSecondary">#FDF6E3</item>
+        <item name="colorBackgroundSecondary">@null</item>
         <item name="colorBackgroundCard">#EEE8D5</item>
+        <item name="colorBackgroundDialog">#FDF6E3</item>
 
         <item name="colorTintActivity">#88cc33</item>
         <item name="colorTintMessage">#2277dd</item>
@@ -235,9 +241,11 @@
         <item name="colorForegroundMirc">0xF</item>
 
         <item name="colorBackground">#002B36</item>
+        <item name="android:windowBackground">@color/solarizedDark_background</item>
         <item name="colorBackgroundHighlight">#268bd2</item>
-        <item name="colorBackgroundSecondary">#002B36</item>
+        <item name="colorBackgroundSecondary">@null</item>
         <item name="colorBackgroundCard">#073642</item>
+        <item name="colorBackgroundDialog">#002B36</item>
 
         <item name="colorTintActivity">#88cc33</item>
         <item name="colorTintMessage">#2277dd</item>

@@ -40,6 +40,9 @@ public class Settings {
     public final BooleanPreference preferenceLag;
     public final IntPreference preferenceFontSize;
 
+
+    private final SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
+
     public Settings(PreferenceStrings prefs, SharedPreferences pref) {
         this.preferenceLastAccount = new StringPreference(pref, prefs.preferenceLastAccount, "");
 
@@ -50,7 +53,7 @@ public class Settings {
         this.preferenceLag = new BooleanPreference(pref, prefs.preferenceLag, false);
         this.preferenceFontSize = new IntPreference(pref, prefs.preferenceFontSize, 14);
 
-        pref.registerOnSharedPreferenceChangeListener((preferences, key) -> {
+        onSharedPreferenceChangeListener = (preferences, key) -> {
             if (prefs.preferenceLastAccount.equals(key)) preferenceLastAccount.change();
 
             if (prefs.preferenceTheme.equals(key)) preferenceTheme.change();
@@ -59,7 +62,9 @@ public class Settings {
             if (prefs.preferenceHostmask.equals(key)) preferenceHostmask.change();
             if (prefs.preferenceLag.equals(key)) preferenceLag.change();
             if (prefs.preferenceFontSize.equals(key)) preferenceFontSize.change();
-        });
+        };
+
+        pref.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
     }
 
     public Settings(Context ctx) {

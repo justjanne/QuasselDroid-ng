@@ -21,7 +21,7 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <de.kuschku.util.ui.preferences.MaterialListPreference
+    <de.kuschku.util.ui.preferences.MaterialListSummaryPreference
         android:defaultValue="QUASSEL_LIGHT"
         android:entries="@array/preference_theme_entries"
         android:entryValues="@array/preference_theme_values"

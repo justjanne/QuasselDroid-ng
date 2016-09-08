@@ -34,4 +34,7 @@
 
     <color name="colorAwayLight">#959595</color>
     <color name="colorAwayDark">#939393</color>
+
+    <color name="solarizedLight_background">#FDF6E3</color>
+    <color name="solarizedDark_background">#002B36</color>
 </resources>
