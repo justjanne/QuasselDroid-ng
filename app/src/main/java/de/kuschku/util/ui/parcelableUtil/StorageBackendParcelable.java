@@ -67,7 +67,7 @@ public class StorageBackendParcelable extends StorageBackend implements Parcelab
                         default:
                             throw new IllegalArgumentException("Can’t serialize type " + type.name());
                     }
-                } catch (IOException e) {
+                } catch (IOException ignored) {
                 }
             }
 

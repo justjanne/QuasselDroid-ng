@@ -63,7 +63,7 @@ public class CreateAccountItem extends AbstractDrawerItem<CreateAccountItem, Cre
     }
 
     @Override
-    public ViewHolderFactory getFactory() {
+    public ViewHolderFactory<ViewHolder> getFactory() {
         return new ItemFactory();
     }
 
@@ -115,7 +115,7 @@ public class CreateAccountItem extends AbstractDrawerItem<CreateAccountItem, Cre
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        private View view;
+        private final View view;
 
         private ViewHolder(View view) {
             super(view);

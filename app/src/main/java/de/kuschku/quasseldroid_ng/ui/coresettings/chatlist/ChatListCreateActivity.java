@@ -75,7 +75,6 @@ public class ChatListCreateActivity extends BoundActivity {
     Spinner minimumActivity;
 
     private QBufferViewManager bufferViewManager;
-    private NetworkSpinnerAdapter networkSpinnerAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,8 +83,7 @@ public class ChatListCreateActivity extends BoundActivity {
         setContentView(R.layout.activity_chatlist_edit);
         ButterKnife.bind(this);
 
-        networkSpinnerAdapter = new NetworkSpinnerAdapter(this);
-        network.setAdapter(networkSpinnerAdapter);
+        network.setAdapter(new NetworkSpinnerAdapter(this));
 
         minimumActivity.setAdapter(new MinimumActivityAdapter(context));
 

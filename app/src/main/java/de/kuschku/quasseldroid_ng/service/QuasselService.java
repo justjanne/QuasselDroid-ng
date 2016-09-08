@@ -38,11 +38,9 @@ import de.kuschku.util.backports.Consumer;
 public class QuasselService extends Service {
     @NonNull
     private final IBinder binder = new LocalBinder();
-
+    private final Set<Consumer<ClientBackgroundThread>> consumers = new HashSet<>();
     @Nullable
     private ClientBackgroundThread bgThread;
-
-    private Set<Consumer<ClientBackgroundThread>> consumers = new HashSet<>();
 
     @Override
     public IBinder onBind(Intent intent) {

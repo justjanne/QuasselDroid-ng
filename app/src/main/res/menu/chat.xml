@@ -37,11 +37,11 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/action_networks"
-        android:title="Networks"
+        android:title="@string/networks"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_identities"
-        android:title="Identities"
+        android:title="@string/identities"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_reauth"

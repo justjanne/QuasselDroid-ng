@@ -32,13 +32,13 @@ import de.kuschku.util.irc.format.IrcFormatSerializer;
 import de.kuschku.util.observables.lists.ObservableSet;
 
 public class AppContext {
+    private final ObservableSet<QBufferViewConfig.DisplayType> bufferDisplayTypes = new ObservableSet<>();
     private ThemeUtil themeUtil;
     private Settings settings;
     private Client client;
     private BusProvider provider;
     private IrcFormatDeserializer deserializer;
     private IrcFormatSerializer serializer;
-    private ObservableSet<QBufferViewConfig.DisplayType> bufferDisplayTypes = new ObservableSet<>();
 
     public ThemeUtil themeUtil() {
         return themeUtil;

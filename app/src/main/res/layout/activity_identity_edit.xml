@@ -58,7 +58,7 @@
                     android:id="@+id/identityName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="identityName"/>
+                    android:hint="@string/identityname"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -70,7 +70,7 @@
                     android:id="@+id/realName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="realName"/>
+                    android:hint="@string/realname"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -82,7 +82,7 @@
                     android:id="@+id/ident"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="ident"/>
+                    android:hint="@string/ident"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -94,7 +94,7 @@
                     android:id="@+id/nicks"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Edit Nicks"/>
+                    android:text="@string/edit_nicks"/>
 
             </android.support.v7.widget.ButtonBarLayout>
 
@@ -102,7 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
-                android:text="Messages"
+                android:text="@string/messages"
                 android:textColor="?attr/colorAccent"
                 android:textSize="14sp"/>
 
@@ -114,7 +114,7 @@
                     android:id="@+id/kickReason"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="kickReason"/>
+                    android:hint="@string/kickreason"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -126,7 +126,7 @@
                     android:id="@+id/partReason"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="partReason"/>
+                    android:hint="@string/partreason"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -138,7 +138,7 @@
                     android:id="@+id/quitReason"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="quitReason"/>
+                    android:hint="@string/quitreason"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -146,7 +146,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
-                android:text="Away"
+                android:text="@string/away"
                 android:textColor="?attr/colorAccent"
                 android:textSize="14sp"/>
 
@@ -158,7 +158,7 @@
                     android:id="@+id/awayReason"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="awayReason"/>
+                    android:hint="@string/awayreason"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -168,7 +168,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
-                android:text="Away on Detach"
+                android:text="@string/away_on_detach"
                 android:textColor="?attr/colorAccent"
                 android:textSize="14sp"/>
 
@@ -186,7 +186,7 @@
                         android:id="@+id/awayOnDetachReason"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="awayOnDetachReason"/>
+                        android:hint="@string/awayondetachreason"/>
 
                 </android.support.design.widget.TextInputLayout>
 

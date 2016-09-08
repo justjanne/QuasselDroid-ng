@@ -68,7 +68,6 @@ import de.kuschku.libquassel.events.GeneralErrorEvent;
 import de.kuschku.libquassel.events.LoginRequireEvent;
 import de.kuschku.libquassel.events.UnknownCertificateEvent;
 import de.kuschku.libquassel.functions.types.HandshakeFunction;
-import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
 import de.kuschku.libquassel.localtypes.buffers.ChannelBuffer;
 import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
@@ -105,32 +104,26 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 public class MainActivity extends BoundActivity {
     public static final int REQUEST_CODE_CORESETUP = 1;
     /**
+     * This object encapsulates the current status of the activity – opened bufferview, for example
+     */
+    private final Status status = new Status();
+    /**
      * Host layout for content fragment, for example showing a loader or the chat
      */
     @Bind(R.id.chatList)
     RecyclerView chatList;
-
     @Bind(R.id.chatListSpinner)
     AppCompatSpinner chatListSpinner;
-
     @Bind(R.id.chatListToolbar)
     Toolbar chatListToolbar;
-
     @Nullable
     @Bind(R.id.drawer_layout)
     DrawerLayout drawerLayout;
-
     /**
      * Main ActionBar
      */
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-
-    /**
-     * This object encapsulates the current status of the activity – opened bufferview, for example
-     */
-    private Status status = new Status();
-
     private AccountManager manager;
 
     private ToolbarWrapper toolbarWrapper;
@@ -255,10 +248,20 @@ public class MainActivity extends BoundActivity {
                 .debounce(400, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(charSequence -> {
-                    if (context.client() != null)
+                    if (context.client() != null && context.client().connectionStatus() == ConnectionChangeEvent.Status.CONNECTED)
                         context.client().backlogStorage().getFilter(context.client().backlogManager().open()).setQuery(charSequence);
                 });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onDestroy() {
+        chatListAdapter.selectConfig(-1);
+        toolbarWrapper.setOnClickListener(null);
+        chatListAdapter.setBufferClickListener(null);
+        chatListSpinner.setOnItemSelectedListener(null);
+        chatListToolbar.setOnMenuItemClickListener(null);
+        super.onDestroy();
     }
 
     @Override
@@ -417,7 +420,7 @@ public class MainActivity extends BoundActivity {
 
         context.client().backlogManager().open(status.bufferId);
         if (context.client().bufferViewManager() != null) {
-            chatListSpinner.setAdapter(new BufferViewConfigSpinnerAdapter(context, context.client().bufferViewManager()));
+            chatListSpinner.setAdapter(new BufferViewConfigSpinnerAdapter(context.client().bufferViewManager()));
             chatListSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -451,8 +454,8 @@ public class MainActivity extends BoundActivity {
                 filterSettingsInts[i] = filterSettings.get(i);
             }
 
-            BacklogFilter backlogFilter = context.client().backlogManager().filter(context.client().backlogManager().open());
-            int oldFilters = backlogFilter.getFilters();
+            int bufferId = context.client().backlogManager().open();
+            int oldFilters = context.client().bufferSyncer().getFilters(bufferId);
             List<Integer> oldFiltersList = new ArrayList<>();
             for (int type : filterSettings) {
                 if ((type & oldFilters) != 0)
@@ -486,7 +489,7 @@ public class MainActivity extends BoundActivity {
                                 else if (settingsid == Message.Type.Join.value)
                                     filters |= Message.Type.NetsplitJoin.value;
                             }
-                        backlogFilter.setFilters(filters);
+                        context.client().bufferSyncer().setFilters(bufferId, filters);
                     })
                     .negativeColor(context.themeUtil().res.colorForeground)
                     .backgroundColor(context.themeUtil().res.colorBackgroundCard)

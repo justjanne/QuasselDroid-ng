@@ -32,7 +32,7 @@
     app:umanoPanelHeight="?attr/actionBarSize"
     app:umanoScrollableView="@+id/chatline_scroller"
     app:umanoShadowHeight="4dp"
-    tools:showIn="@layout/activity_chat">
+    tools:showIn="@layout/activity_main">
 
     <FrameLayout
         android:layout_width="match_parent"

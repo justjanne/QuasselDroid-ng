@@ -41,28 +41,25 @@ import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.servicebound.BoundActivity;
+import de.kuschku.util.ui.DividerItemDecoration;
 
 public class NetworkListActivity extends BoundActivity {
 
-    NetworkManager manager;
-
-    @Bind(R.id.list)
-    RecyclerView list;
-
-    @Bind(R.id.add)
-    FloatingActionButton add;
-
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
-
-    NetworkAdapter adapter;
-    OnQNetworkClickListener clickListener = network -> {
+    final OnQNetworkClickListener clickListener = network -> {
         if (network != null) {
             Intent intent = new Intent(this, NetworkEditActivity.class);
             intent.putExtra("id", network.networkId());
             startActivity(intent);
         }
     };
+    NetworkManager manager;
+    @Bind(R.id.list)
+    RecyclerView list;
+    @Bind(R.id.add)
+    FloatingActionButton add;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    NetworkAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,10 +71,9 @@ public class NetworkListActivity extends BoundActivity {
         list.setItemAnimator(new DefaultItemAnimator());
         adapter = new NetworkAdapter();
         list.setAdapter(adapter);
+        list.addItemDecoration(new DividerItemDecoration(this));
 
-        add.setOnClickListener(view -> {
-            startActivity(new Intent(this, NetworkCreateActivity.class));
-        });
+        add.setOnClickListener(view -> startActivity(new Intent(this, NetworkCreateActivity.class)));
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -100,8 +96,8 @@ public class NetworkListActivity extends BoundActivity {
     }
 
     private class NetworkAdapter extends RecyclerView.Adapter<NetworkViewHolder> {
+        final AdapterUICallbackWrapper wrapper = new AdapterUICallbackWrapper(this);
         NetworkManager manager;
-        AdapterUICallbackWrapper wrapper = new AdapterUICallbackWrapper(this);
 
         public void setManager(NetworkManager manager) {
             if (this.manager != null)

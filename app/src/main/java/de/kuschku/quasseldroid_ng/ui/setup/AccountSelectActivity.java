@@ -77,7 +77,7 @@ public class AccountSelectActivity extends AppCompatActivity {
     }
 
     private class SlidePagerAdapter extends FragmentPagerAdapter {
-        private SlideFragment item = new AccountSelectSlide();
+        private final SlideFragment item = new AccountSelectSlide();
 
         public SlidePagerAdapter(FragmentManager fm) {
             super(fm);

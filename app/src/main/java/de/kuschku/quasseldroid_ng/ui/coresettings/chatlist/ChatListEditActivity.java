@@ -115,9 +115,9 @@ public class ChatListEditActivity extends BoundActivity {
     public void onBackPressed() {
         if (hasChanged()) {
             new MaterialDialog.Builder(this)
-                    .content("You have made changes, do you wish to save them?")
-                    .positiveText("Yes")
-                    .negativeText("No")
+                    .content(R.string.youhavemadechangesdoyouwishtosavethem)
+                    .positiveText(R.string.yes)
+                    .negativeText(R.string.no)
                     .positiveColor(context.themeUtil().res.colorAccent)
                     .negativeColor(context.themeUtil().res.colorForeground)
                     .onPositive((dialog, which) -> {
@@ -136,9 +136,9 @@ public class ChatListEditActivity extends BoundActivity {
         switch (item.getItemId()) {
             case R.id.action_delete: {
                 new MaterialDialog.Builder(this)
-                        .content(String.format("Are you sure you want to delete \"%s\"?", config.bufferViewName()))
-                        .positiveText("Yes")
-                        .negativeText("No")
+                        .content(getString(R.string.areyousureyouwanttodelete, config.bufferViewName()))
+                        .positiveText(R.string.yes)
+                        .negativeText(R.string.no)
                         .positiveColor(context.themeUtil().res.colorAccent)
                         .negativeColor(context.themeUtil().res.colorForeground)
                         .onPositive((dialog, which) -> {

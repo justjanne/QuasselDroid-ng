@@ -42,8 +42,7 @@ public class BufferViewManager extends ABufferViewManager {
     @NonNull
     final
     Set<Integer> cachedIds = new HashSet<>();
-    Map<Integer, QBufferViewConfig> bufferViewConfigs = new HashMap<>();
-    ObservableSortedList<QBufferViewConfig> list = new ObservableSortedList<>(QBufferViewConfig.class, new ObservableSortedList.ItemComparator<QBufferViewConfig>() {
+    final ObservableSortedList<QBufferViewConfig> list = new ObservableSortedList<>(QBufferViewConfig.class, new ObservableSortedList.ItemComparator<QBufferViewConfig>() {
         @Override
         public int compare(QBufferViewConfig o1, QBufferViewConfig o2) {
             return o1.bufferViewName().compareTo(o2.bufferViewName());
@@ -59,10 +58,8 @@ public class BufferViewManager extends ABufferViewManager {
             return item1.bufferViewId() == item2.bufferViewId();
         }
     });
-
-    private GeneralCallback<QBufferViewConfig> observer = config -> {
-        list.notifyItemChanged(list.indexOf(config));
-    };
+    private final GeneralCallback<QBufferViewConfig> observer = config -> list.notifyItemChanged(list.indexOf(config));
+    Map<Integer, QBufferViewConfig> bufferViewConfigs = new HashMap<>();
 
     public BufferViewManager(@NonNull List<Integer> bufferViewIds) {
         cachedIds.addAll(bufferViewIds);
@@ -86,6 +83,7 @@ public class BufferViewManager extends ABufferViewManager {
                 list.remove(before);
 
             bufferViewConfigs.put(config.bufferViewId(), config);
+            config.init(String.valueOf(config.bufferViewId()), provider, client);
             list.add(config);
             config.addObserver(observer);
             _update();

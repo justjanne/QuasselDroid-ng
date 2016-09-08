@@ -64,7 +64,7 @@ import static de.kuschku.util.irc.chanmodes.ChanMode.UNLISTED;
 
 public class InspireIrcModeProvider extends AbstractIrcModeProvider {
 
-    protected Set<Character> supportedModes = new HashSet<>(Arrays.asList(
+    protected final Set<Character> supportedModes = new HashSet<>(Arrays.asList(
             'A', 'B', 'C', 'D', 'G', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'c', 'f', 'i', 'j', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'u', 'z'
     ));
 

@@ -215,7 +215,7 @@ public class MaterialListPreference extends ListPreference {
         public SavedState(Parcel source) {
             super(source);
             isDialogShowing = source.readInt() == 1;
-            dialogBundle = source.readBundle();
+            dialogBundle = source.readBundle(getClass().getClassLoader());
         }
 
         public SavedState(Parcelable superState) {

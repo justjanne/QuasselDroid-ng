@@ -61,7 +61,7 @@ import static de.kuschku.util.irc.chanmodes.ChanMode.UNLISTED;
 
 public class UnrealIrcModeProvider extends AbstractIrcModeProvider {
 
-    protected Set<Character> supportedModes = new HashSet<>(Arrays.asList(
+    protected final Set<Character> supportedModes = new HashSet<>(Arrays.asList(
             'C', 'F', 'G', 'K', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'V', 'Z', 'c', 'f', 'i', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'z'
     ));
 

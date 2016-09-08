@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class AccountManager {
-    AccountManagerHelper helper;
+    final AccountManagerHelper helper;
 
     public AccountManager(Context context) {
         helper = new AccountManagerHelper(context);

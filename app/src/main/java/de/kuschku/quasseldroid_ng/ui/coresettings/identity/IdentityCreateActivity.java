@@ -47,44 +47,32 @@ import de.kuschku.util.ui.AnimationHelper;
 
 public class IdentityCreateActivity extends BoundActivity {
 
+    private final QIdentity identity = Identity.createDefault();
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-
     @Bind(R.id.identityName)
     EditText identityName;
-
     @Bind(R.id.realName)
     EditText realName;
-
     @Bind(R.id.ident)
     EditText ident;
-
     @Bind(R.id.nicks)
     Button nicks;
-
     @Bind(R.id.kickReason)
     EditText kickReason;
-
     @Bind(R.id.partReason)
     EditText partReason;
-
     @Bind(R.id.quitReason)
     EditText quitReason;
-
     @Bind(R.id.awayReason)
     EditText awayReason;
-
     @Bind(R.id.useAwayOnDetach)
     SwitchCompat useAwayOnDetach;
-
     @Bind(R.id.groupAwayOnDetach)
     ViewGroup groupAwayOnDetach;
-
     @Bind(R.id.awayOnDetachReason)
     EditText awayOnDetachReason;
-
     private ArrayList<String> nickList;
-    private QIdentity identity = Identity.createDefault();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

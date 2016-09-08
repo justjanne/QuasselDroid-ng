@@ -40,7 +40,6 @@ import de.kuschku.libquassel.events.PasswordChangeEvent;
 import de.kuschku.libquassel.events.StatusMessageEvent;
 import de.kuschku.libquassel.functions.types.InitRequestFunction;
 import de.kuschku.libquassel.functions.types.SyncFunction;
-import de.kuschku.libquassel.localtypes.NotificationManager;
 import de.kuschku.libquassel.localtypes.backlogstorage.BacklogStorage;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.objects.types.CoreStatus;
@@ -72,13 +71,13 @@ public class Client extends AClient {
     private final IdentityManager identityManager;
     @NonNull
     private final BacklogStorage backlogStorage;
-    @NonNull
-    private final NotificationManager notificationManager;
     private final List<String> initRequests = new LinkedList<>();
     @NonNull
     private final QBacklogManager backlogManager;
     private final Map<String, List<SyncFunction>> bufferedSyncs = new HashMap<>();
     private final Map<Integer, Pair<QBufferViewConfig, Integer>> bufferedBuffers = new HashMap<>();
+    private final BufferMetaDataManager metaDataManager;
+    private final String coreId;
     private int initRequestMax = 0;
     private QBufferViewManager bufferViewManager;
     // local
@@ -90,8 +89,6 @@ public class Client extends AClient {
     private CoreInfo coreInfo;
     private long latency;
     private ConnectionChangeEvent.Status connectionStatus;
-    private BufferMetaDataManager metaDataManager;
-    private String coreId;
     private int r = 1;
 
     public Client(@NonNull BusProvider provider, @NonNull BacklogStorage backlogStorage, @NonNull BufferMetaDataManager metaDataManager, String coreId) {
@@ -99,12 +96,11 @@ public class Client extends AClient {
         this.provider = provider;
         this.networkManager = new NetworkManager(this);
         this.bufferManager = new BufferManager(this);
-        this.identityManager = new IdentityManager(this);
+        this.identityManager = new IdentityManager();
         this.backlogStorage = backlogStorage;
         backlogStorage.setClient(this);
         this.backlogManager = new BacklogManager(this, backlogStorage);
         this.backlogManager.init("", provider, this);
-        this.notificationManager = new NotificationManager(this);
         this.initialized = true;
         this.metaDataManager = metaDataManager;
     }
@@ -199,7 +195,10 @@ public class Client extends AClient {
         if (connectionStatus == ConnectionChangeEvent.Status.LOADING_BACKLOG) {
             bufferManager().doBacklogInit(20);
         } else if (connectionStatus == ConnectionChangeEvent.Status.CONNECTED) {
-            // FIXME: Init buffer activity state and highlightss
+            for (int bufferId : bufferManager().bufferIds()) {
+                metaDataManager().hiddendata(coreId(), bufferId);
+            }
+            // FIXME: Init buffer activity state and highlights
         }
     }
 
@@ -407,11 +406,6 @@ public class Client extends AClient {
 
     public long latency() {
         return latency;
-    }
-
-    @NonNull
-    public NotificationManager notificationManager() {
-        return notificationManager;
     }
 
     public void setBufferSyncer(QBufferSyncer bufferSyncer) {

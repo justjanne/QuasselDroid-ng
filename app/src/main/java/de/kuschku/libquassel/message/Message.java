@@ -122,10 +122,18 @@ public class Message extends BaseModel implements ContentComparable<Message> {
 
     @Override
     public int compareTo(@NonNull Message another) {
-        if (this.type != Type.DayChange && another.type != Type.DayChange)
-            return this.id - another.id;
-        else
+        if (this.type == Type.DayChange || another.type == Type.DayChange) {
             return this.time.compareTo(another.time);
+        } else if (this.id == another.id) {
+            if (this.type == Type.Markerline)
+                return 1;
+            else if (another.type == Type.Markerline)
+                return -1;
+            else
+                return 0;
+        } else {
+            return this.id - another.id;
+        }
     }
 
     public enum Type {
@@ -146,7 +154,8 @@ public class Message extends BaseModel implements ContentComparable<Message> {
         Topic(0x04000),
         NetsplitJoin(0x08000),
         NetsplitQuit(0x10000),
-        Invite(0x20000);
+        Invite(0x20000),
+        Markerline(0x40000);
 
         public final int value;
 

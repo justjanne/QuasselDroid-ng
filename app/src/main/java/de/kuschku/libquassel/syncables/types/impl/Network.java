@@ -80,7 +80,7 @@ public class Network extends ANetwork implements Observer {
                    String myNick, NetworkInfo networkInfo) {
         this.channels = new HashMap<>(channels);
         this.nicks = new HashMap<>(nicks);
-        this.supports = supports;
+        this.supports = new HashMap<>(supports);
         this.connectionState = ConnectionState.of(connectionState);
         this.currentServer = currentServer;
         this.isConnected = isConnected;

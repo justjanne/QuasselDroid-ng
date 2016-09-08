@@ -41,6 +41,7 @@ import butterknife.ButterKnife;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.events.BacklogReceivedEvent;
 import de.kuschku.libquassel.events.BufferChangeEvent;
+import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
 import de.kuschku.quasseldroid_ng.R;
@@ -67,11 +68,11 @@ public class ChatFragment extends BoundFragment {
     FloatingActionButton scrollDown;
 
     private MessageAdapter messageAdapter;
-    private LinearLayoutManager layoutManager;
     private SlidingPanelHandler slidingPanelHandler;
     private boolean loading = false;
 
     private int recyclerViewMeasuredHeight = 0;
+    private RecyclerView.OnScrollListener listener;
 
     @Nullable
     @Override
@@ -83,12 +84,11 @@ public class ChatFragment extends BoundFragment {
         assertNotNull(messages);
 
         messages.setItemAnimator(new DefaultItemAnimator());
-        layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
-        messages.setLayoutManager(layoutManager);
+        messages.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true));
         messageAdapter = new MessageAdapter(getActivity(), context, new AutoScroller(messages));
         messages.setAdapter(messageAdapter);
 
-        messages.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        listener = new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (!loading && !recyclerView.canScrollVertically(-1)) {
@@ -108,7 +108,8 @@ public class ChatFragment extends BoundFragment {
                 boolean smartVisibility = scrollDown.getVisibility() == View.VISIBLE || isMoreThanOneScreenFromBottom;
                 scrollDown.setVisibility((canScrollDown && isScrollingDown && smartVisibility) ? View.VISIBLE : View.GONE);
             }
-        });
+        };
+        messages.addOnScrollListener(listener);
 
         scrollDown.setOnClickListener(view1 -> messages.smoothScrollToPosition(0));
 
@@ -120,12 +121,11 @@ public class ChatFragment extends BoundFragment {
         setMarkerline();
 
         Client client = context.client();
-        if (client != null) {
+        if (client != null && client.connectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
             QBacklogManager backlogManager = client.backlogManager();
             int id = backlogManager.open();
             ObservableComparableSortedList<Message> messageList = backlogManager.filtered(id);
             messageAdapter.setMessageList(messageList);
-            // Load markerline
         }
     }
 
@@ -135,7 +135,18 @@ public class ChatFragment extends BoundFragment {
         super.onPause();
     }
 
+    @Override
+    public void onDestroy() {
+        messageAdapter.setMessageList(null);
+        messages.removeOnScrollListener(listener);
+        scrollDown.setOnClickListener(null);
+        slidingPanelHandler.onDestroy();
+        super.onDestroy();
+    }
+
     private void setMarkerline() {
+        //int lastVisibleMessageId;
+        //context.client().bufferSyncer().setMarkerLine(context.client().backlogManager().open(), lastVisibleMessageId);
     }
 
     @Override

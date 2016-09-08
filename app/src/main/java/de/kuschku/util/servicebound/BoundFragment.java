@@ -34,16 +34,19 @@ import de.kuschku.quasseldroid_ng.service.QuasselService;
 import de.kuschku.quasseldroid_ng.ui.chat.util.ServiceHelper;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.accounts.Account;
+import de.kuschku.util.backports.Consumer;
 
 public abstract class BoundFragment extends Fragment {
-    protected AppContext context = new AppContext();
+    protected final AppContext context = new AppContext();
     private QuasselService.LocalBinder binder;
-    private ServiceConnection connection = new ServiceConnection() {
+    private Consumer<ClientBackgroundThread> consumer;
+    private final ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             if (service instanceof QuasselService.LocalBinder) {
                 binder = (QuasselService.LocalBinder) service;
-                binder.addCallback(BoundFragment.this::onConnectToThread);
+                consumer = BoundFragment.this::onConnectToThread;
+                binder.addCallback(consumer);
                 onConnectToThread(binder.getBackgroundThread());
             }
         }
@@ -63,20 +66,21 @@ public abstract class BoundFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         ServiceHelper.connectToService(getContext(), connection);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        ServiceHelper.disconnect(getContext(), connection);
     }
 
     protected void connectToServer(Account account) {
         BusProvider provider = new BusProvider();
         binder.startBackgroundThread(provider, account);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        binder.removeCallback(consumer);
+        ServiceHelper.disconnect(getContext(), connection);
     }
 
     protected void onConnectToThread(@Nullable ClientBackgroundThread thread) {

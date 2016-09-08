@@ -54,6 +54,8 @@ import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 
 public class BufferViewHolder extends ChildViewHolder {
 
+    private final AppContext context;
+    private final StateListDrawable background;
     public int id;
     @Bind(R.id.material_drawer_icon)
     ImageView icon;
@@ -67,11 +69,7 @@ public class BufferViewHolder extends ChildViewHolder {
     TextView description;
     private ObservableField<BufferInfo.BufferStatus> status;
     private Observable.OnPropertyChangedCallback callback;
-    private AppContext context;
     private ViewIntBinder viewIntBinder;
-
-    private StateListDrawable background;
-
     private boolean selected = false;
     private boolean checked = false;
 
@@ -124,7 +122,7 @@ public class BufferViewHolder extends ChildViewHolder {
     @NonNull
     private Function<Integer, Integer> colorFromActivityStatus(Buffer buffer) {
         return activities -> {
-            int filters = context.client().backlogManager().filter(buffer.getInfo().id).getFilters();
+            int filters = context.client().bufferSyncer().getFilters(buffer.getInfo().id);
             activities = activities & ~filters;
             if (0 != ((activities & Message.Type.Plain.value) | (activities & Message.Type.Notice.value) | (activities & Message.Type.Action.value)))
                 return context.themeUtil().res.colorTintMessage;

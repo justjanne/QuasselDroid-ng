@@ -51,7 +51,7 @@ import static de.kuschku.util.irc.chanmodes.ChanMode.UNLISTED;
 
 public class NeoIrcModeProvider extends AbstractIrcModeProvider {
 
-    protected Set<Character> supportedModes = new HashSet<>(Arrays.asList(
+    protected final Set<Character> supportedModes = new HashSet<>(Arrays.asList(
             'M', 'N', 'O', 'P', 'Q', 'R', 'V', 'i', 'k', 'l', 'm', 'n', 'r', 's', 't', 'z'
     ));
 

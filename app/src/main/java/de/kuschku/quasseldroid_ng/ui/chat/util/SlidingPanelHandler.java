@@ -54,13 +54,11 @@ import de.kuschku.util.ui.MenuTint;
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class SlidingPanelHandler {
+    // Main Sliding Layout
+    final SlidingUpPanelLayout slidingLayout;
     private final Activity activity;
     private final AppContext context;
     private final AdvancedEditor editor;
-
-    // Main Sliding Layout
-    SlidingUpPanelLayout slidingLayout;
-
     // Input History
     @Bind(R.id.sliding_layout_history)
     SlidingUpPanelLayout slidingLayoutHistory;
@@ -275,5 +273,12 @@ public class SlidingPanelHandler {
         } else {
             return false;
         }
+    }
+
+    public void onDestroy() {
+        chatline.setOnKeyListener(null);
+        send.setOnClickListener(null);
+        slidingLayout.setPanelSlideListener(null);
+        formattingMenu.setOnMenuItemClickListener(null);
     }
 }

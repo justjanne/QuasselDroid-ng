@@ -59,7 +59,7 @@ import static de.kuschku.util.irc.chanmodes.ChanMode.UNLISTED;
 
 public class SolidIrcModeProvider extends AbstractIrcModeProvider {
 
-    protected Set<Character> supportedModes = new HashSet<>(Arrays.asList(
+    protected final Set<Character> supportedModes = new HashSet<>(Arrays.asList(
             'B', 'C', 'G', 'K', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'c', 'f', 'i', 'k', 'l', 'm', 'n', 'p', 's', 't', 'u', 'z'
     ));
 

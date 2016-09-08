@@ -24,7 +24,7 @@ package de.kuschku.util.buffermetadata;
 import android.content.Context;
 
 public class SQLiteBufferMetaDataManager implements BufferMetaDataManager {
-    private BufferMetaDataHelper helper;
+    private final BufferMetaDataHelper helper;
 
     public SQLiteBufferMetaDataManager(Context context) {
         helper = new BufferMetaDataHelper(context);

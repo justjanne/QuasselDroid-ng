@@ -32,10 +32,9 @@ import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public class FakeNetworksWrapper {
-    private ObservableSortedList<QNetwork> base;
-    private QNetwork fakeNetwork;
-    private Set<DataSetObserver> observers = new HashSet<>();
-    private UICallback callback = new UICallback() {
+    private final QNetwork fakeNetwork;
+    private final Set<DataSetObserver> observers = new HashSet<>();
+    private final UICallback callback = new UICallback() {
         @Override
         public void notifyItemInserted(int position) {
             notifyChanged();
@@ -71,6 +70,7 @@ public class FakeNetworksWrapper {
             notifyChanged();
         }
     };
+    private ObservableSortedList<QNetwork> base;
 
     public FakeNetworksWrapper(Context context) {
         this.fakeNetwork = new AllNetworksItem(context);

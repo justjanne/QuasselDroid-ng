@@ -46,8 +46,6 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
     private int mMinValue = 0;
     private int mInterval = 1;
     private int mCurrentValue;
-    private String mUnitsLeft = "";
-    private String mUnitsRight = "";
     private AppCompatSeekBar mSeekBar;
 
     private TextView mStatusText;
@@ -75,10 +73,6 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
         mMaxValue = attrs.getAttributeIntValue(ANDROIDNS, "max", 100);
         mMinValue = attrs.getAttributeIntValue(APPLICATIONNS, "min", 0);
 
-        mUnitsLeft = getAttributeStringValue(attrs, APPLICATIONNS, "unitsLeft", "");
-        String units = getAttributeStringValue(attrs, APPLICATIONNS, "units", "");
-        mUnitsRight = getAttributeStringValue(attrs, APPLICATIONNS, "unitsRight", units);
-
         try {
             String newInterval = attrs.getAttributeValue(APPLICATIONNS, "interval");
             if (newInterval != null)
@@ -87,14 +81,6 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
             Log.e(TAG, "Invalid interval value", e);
         }
 
-    }
-
-    private String getAttributeStringValue(AttributeSet attrs, String namespace, String name, String defaultValue) {
-        String value = attrs.getAttributeValue(namespace, name);
-        if (value == null)
-            value = defaultValue;
-
-        return value;
     }
 
     @Override
@@ -178,9 +164,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 
     @Override
     protected Object onGetDefaultValue(TypedArray ta, int index) {
-
-        int defaultValue = ta.getInt(index, DEFAULT_VALUE);
-        return defaultValue;
+        return ta.getInt(index, DEFAULT_VALUE);
 
     }
 

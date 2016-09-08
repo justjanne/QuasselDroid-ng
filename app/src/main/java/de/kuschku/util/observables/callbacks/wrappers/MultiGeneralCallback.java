@@ -39,6 +39,7 @@ public class MultiGeneralCallback<T> implements IObservable<GeneralCallback<T>>,
         this.callbacks = new HashSet<>(multiGeneralCallbacks);
     }
 
+    @SafeVarargs
     @NonNull
     public static <U> MultiGeneralCallback<U> of(MultiGeneralCallback<U>... callbacks) {
         return new MultiGeneralCallback<>(Arrays.asList(callbacks));

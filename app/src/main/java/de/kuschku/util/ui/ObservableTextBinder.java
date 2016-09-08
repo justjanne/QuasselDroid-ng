@@ -26,7 +26,7 @@ import android.databinding.ObservableField;
 import android.widget.TextView;
 
 public class ObservableTextBinder {
-    private ObservableField<CharSequence> text;
+    private final ObservableField<CharSequence> text;
     private TextView view;
 
     public ObservableTextBinder(ObservableField<CharSequence> text) {

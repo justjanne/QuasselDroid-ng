@@ -299,26 +299,22 @@ public class MenuTint {
         }
 
         // We must wait for the view to be created to set a color filter on the drawables.
-        actionBarView.post(new Runnable() {
-
-            @Override
-            public void run() {
-                for (int i = 0, size = menu.size(); i < size; i++) {
-                    MenuItem menuItem = menu.getItem(i);
-                    if (isInOverflow(menuItem)) {
-                        colorMenuItem(menuItem, subMenuIconColor, subMenuIconAlpha);
-                    }
-                    if (menuItem.hasSubMenu()) {
-                        SubMenu subMenu = menuItem.getSubMenu();
-                        for (int j = 0; j < subMenu.size(); j++) {
-                            colorMenuItem(subMenu.getItem(j), subMenuIconColor, subMenuIconAlpha);
-                        }
+        actionBarView.post(() -> {
+            for (int i = 0, size = menu.size(); i < size; i++) {
+                MenuItem menuItem = menu.getItem(i);
+                if (isInOverflow(menuItem)) {
+                    colorMenuItem(menuItem, subMenuIconColor, subMenuIconAlpha);
+                }
+                if (menuItem.hasSubMenu()) {
+                    SubMenu subMenu = menuItem.getSubMenu();
+                    for (int j = 0; j < subMenu.size(); j++) {
+                        colorMenuItem(subMenu.getItem(j), subMenuIconColor, subMenuIconAlpha);
                     }
                 }
-                if (menuItemIconColor != null || menuItemIconAlpha != null) {
-                    overflowButton = findOverflowMenuButton(activity, actionBarView);
-                    colorOverflowMenuItem(overflowButton);
-                }
+            }
+            if (menuItemIconColor != null || menuItemIconAlpha != null) {
+                overflowButton = findOverflowMenuButton(activity, actionBarView);
+                colorOverflowMenuItem(overflowButton);
             }
         });
     }
@@ -343,29 +339,24 @@ public class MenuTint {
             return;
         }
 
-        actionBarView.post(new Runnable() {
-
-            @Override
-            public void run() {
-                for (int i = 0, size = menu.size(); i < size; i++) {
-                    MenuItem menuItem = menu.getItem(i);
-                    if (isInOverflow(menuItem)) {
-                        colorMenuItem(menuItem, subMenuIconColor, subMenuIconAlpha);
-                    } else {
-                        colorMenuItem(menu.getItem(i), menuItemIconColor, menuItemIconAlpha);
-                    }
-                    if (menuItem.hasSubMenu()) {
-                        SubMenu subMenu = menuItem.getSubMenu();
-                        for (int j = 0; j < subMenu.size(); j++) {
-                            colorMenuItem(subMenu.getItem(j), subMenuIconColor, subMenuIconAlpha);
-                        }
-                    }
+        actionBarView.post(() -> {
+            for (int i = 0, size = menu.size(); i < size; i++) {
+                MenuItem menuItem = menu.getItem(i);
+                if (isInOverflow(menuItem)) {
+                    colorMenuItem(menuItem, subMenuIconColor, subMenuIconAlpha);
+                } else {
+                    colorMenuItem(menu.getItem(i), menuItemIconColor, menuItemIconAlpha);
                 }
-                if (menuItemIconColor != null || menuItemIconAlpha != null) {
-                    colorOverflowMenuItem(overflowButton);
+                if (menuItem.hasSubMenu()) {
+                    SubMenu subMenu = menuItem.getSubMenu();
+                    for (int j = 0; j < subMenu.size(); j++) {
+                        colorMenuItem(subMenu.getItem(j), subMenuIconColor, subMenuIconAlpha);
+                    }
                 }
             }
-
+            if (menuItemIconColor != null || menuItemIconAlpha != null) {
+                colorOverflowMenuItem(overflowButton);
+            }
         });
     }
 
@@ -381,6 +372,7 @@ public class MenuTint {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     overflow.setImageAlpha(menuItemIconAlpha);
                 } else {
+                    //noinspection deprecation
                     overflow.setAlpha(menuItemIconAlpha);
                 }
             }

@@ -41,6 +41,8 @@ public class Settings {
     public final IntPreference preferenceFontSize;
 
 
+    @SuppressWarnings("FieldCanBeLocal")
+    // THIS FIELD CAN NOT BE LOCAL, OR IT WILL NOT WORK
     private final SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
 
     public Settings(PreferenceStrings prefs, SharedPreferences pref) {

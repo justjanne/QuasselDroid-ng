@@ -27,7 +27,6 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -39,7 +38,6 @@ import android.widget.Spinner;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
@@ -61,23 +59,17 @@ public class NetworkEditActivity extends BoundActivity {
 
     private static final int REQUEST_SERVER_LIST = 1;
     private static final int REQUEST_PERFORM = 2;
-
+    final IdentitySpinnerAdapter spinnerAdapter = new IdentitySpinnerAdapter();
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-
-
     @Bind(R.id.networkName)
     EditText networkName;
-
     @Bind(R.id.identity)
     Spinner identity;
-
     @Bind(R.id.rejoinChannels)
     CheckBox rejoinChannels;
-
     @Bind(R.id.servers)
     Button servers;
-
     @Bind(R.id.useCustomCodecs)
     SwitchCompat useCustomCodecs;
     @Bind(R.id.groupCustomCodecs)
@@ -88,7 +80,6 @@ public class NetworkEditActivity extends BoundActivity {
     EditText codecForEncoding;
     @Bind(R.id.codecForDecoding)
     EditText codecForDecoding;
-
     @Bind(R.id.useAutoIdentify)
     SwitchCompat useAutoIdentify;
     @Bind(R.id.groupAutoIdentify)
@@ -97,7 +88,6 @@ public class NetworkEditActivity extends BoundActivity {
     EditText autoIdentifyService;
     @Bind(R.id.autoIdentifyPassword)
     EditText autoIdentifyPassword;
-
     @Bind(R.id.useSasl)
     SwitchCompat useSasl;
     @Bind(R.id.groupSasl)
@@ -106,7 +96,6 @@ public class NetworkEditActivity extends BoundActivity {
     EditText saslAccount;
     @Bind(R.id.saslPassword)
     EditText saslPassword;
-
     @Bind(R.id.useAutoReconnect)
     SwitchCompat useAutoReconnect;
     @Bind(R.id.groupAutoReconnect)
@@ -117,9 +106,7 @@ public class NetworkEditActivity extends BoundActivity {
     EditText autoReconnectRetries;
     @Bind(R.id.unlimitedAutoReconnectRetries)
     CheckBox unlimitedAutoReconnectRetries;
-
     int id;
-    IdentitySpinnerAdapter spinnerAdapter = new IdentitySpinnerAdapter();
     private QNetwork network;
 
     private List<NetworkServer> serverList = null;
@@ -176,7 +163,6 @@ public class NetworkEditActivity extends BoundActivity {
                 break;
                 case REQUEST_SERVER_LIST: {
                     Parcelable[] servers = data.getParcelableArrayExtra("servers");
-                    Log.d("DEBUG", Arrays.toString(servers));
                     if (servers != null) {
                         serverList = NetworkServerSerializeHelper.deserialize(servers);
                     }
@@ -238,9 +224,9 @@ public class NetworkEditActivity extends BoundActivity {
     public void onBackPressed() {
         if (hasChanged(build())) {
             new MaterialDialog.Builder(this)
-                    .content("You have made changes, do you wish to save them?")
-                    .positiveText("Yes")
-                    .negativeText("No")
+                    .content(R.string.youhavemadechangesdoyouwishtosavethem)
+                    .positiveText(R.string.yes)
+                    .negativeText(R.string.no)
                     .positiveColor(context.themeUtil().res.colorAccent)
                     .negativeColor(context.themeUtil().res.colorForeground)
                     .onPositive((dialog, which) -> {
@@ -259,9 +245,9 @@ public class NetworkEditActivity extends BoundActivity {
         switch (item.getItemId()) {
             case R.id.action_delete: {
                 new MaterialDialog.Builder(this)
-                        .content(String.format("Are you sure you want to delete \"%s\"?", network.networkName()))
-                        .positiveText("Yes")
-                        .negativeText("No")
+                        .content(getString(R.string.areyousureyouwanttodelete, network.networkName()))
+                        .positiveText(R.string.yes)
+                        .negativeText(R.string.no)
                         .positiveColor(context.themeUtil().res.colorAccent)
                         .negativeColor(context.themeUtil().res.colorForeground)
                         .onPositive((dialog, which) -> {

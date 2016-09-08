@@ -37,9 +37,9 @@ import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.R;
 
 public class NetworkSpinnerAdapter implements ThemedSpinnerAdapter {
+    private final FakeNetworksWrapper wrapper;
     @Nullable
     private Resources.Theme theme;
-    private FakeNetworksWrapper wrapper;
 
     public NetworkSpinnerAdapter(Context context) {
         wrapper = new FakeNetworksWrapper(context);

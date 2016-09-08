@@ -41,7 +41,6 @@ import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.localtypes.backlogstorage.BacklogStorage;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.message.Message_Table;
-import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.ABacklogManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
@@ -136,10 +135,9 @@ public class BacklogManager extends ABacklogManager {
         assertNotNull(provider);
 
         Set<Integer> buffers = new HashSet<>();
+        storage.insertMessages(messages);
         for (Message message : messages) {
-            BufferInfo bufferInfo = message.bufferInfo;
-            storage.insertMessages(bufferInfo.id, message);
-            buffers.add(bufferInfo.id);
+            buffers.add(message.bufferInfo.id);
         }
         for (int id : buffers) {
             provider.sendEvent(new BacklogReceivedEvent(id));

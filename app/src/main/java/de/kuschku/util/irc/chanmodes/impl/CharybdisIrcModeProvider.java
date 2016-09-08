@@ -58,7 +58,7 @@ import static de.kuschku.util.irc.chanmodes.ChanMode.UNLISTED;
 
 public class CharybdisIrcModeProvider extends AbstractIrcModeProvider {
 
-    protected Set<Character> supportedModes = new HashSet<>(Arrays.asList(
+    protected final Set<Character> supportedModes = new HashSet<>(Arrays.asList(
             'A', 'C', 'F', 'O', 'P', 'Q', 'S', 'T', 'c', 'f', 'g', 'i', 'j', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'z'
     ));
 

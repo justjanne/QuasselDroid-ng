@@ -44,6 +44,7 @@ import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.quasseldroid_ng.ui.theme.AppTheme;
 import de.kuschku.util.accounts.Account;
 import de.kuschku.util.annotationbind.AutoBinder;
+import de.kuschku.util.backports.Consumer;
 import de.kuschku.util.ui.MenuTint;
 
 public abstract class BoundActivity extends AppCompatActivity {
@@ -51,16 +52,15 @@ public abstract class BoundActivity extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
-    protected AppContext context = new AppContext();
+    protected final AppContext context = new AppContext();
     protected QuasselService.LocalBinder binder;
-    @StyleRes
-    private int themeId;
-    private ServiceConnection connection = new ServiceConnection() {
+    private Consumer<ClientBackgroundThread> consumer = BoundActivity.this::onConnectToThread;
+    private final ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             if (service instanceof QuasselService.LocalBinder) {
                 binder = (QuasselService.LocalBinder) service;
-                binder.addCallback(BoundActivity.this::onConnectToThread);
+                binder.addCallback(consumer);
                 onConnectToThread(binder.getBackgroundThread());
             }
         }
@@ -71,6 +71,8 @@ public abstract class BoundActivity extends AppCompatActivity {
             onConnectToThread(null);
         }
     };
+    @StyleRes
+    private int themeId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,6 +96,7 @@ public abstract class BoundActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        binder.removeCallback(consumer);
         setProvider(null);
         ServiceHelper.disconnect(this, connection);
     }

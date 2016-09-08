@@ -29,7 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
+import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.syncables.types.impl.Network;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
@@ -101,6 +103,11 @@ public class NetworkManager extends Observable {
             list.remove(qNetwork);
         networks.put(network.networkId(), network);
         list.add(network);
+
+        if (client.connectionStatus() == ConnectionChangeEvent.Status.CONNECTED)
+            for (QBufferViewConfig config : client.bufferViewManager().bufferViewConfigs()) {
+                config.updateNetworks();
+            }
     }
 
     public QNetwork network(@IntRange(from = 0) int networkId) {
@@ -112,6 +119,9 @@ public class NetworkManager extends Observable {
         if (qNetwork != null)
             list.remove(qNetwork);
         networks.remove(network);
+        for (QBufferViewConfig config : client.bufferViewManager().bufferViewConfigs()) {
+            config.updateNetworks();
+        }
     }
 
 

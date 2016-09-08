@@ -37,11 +37,9 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 public class UserTypeSerializer<T> implements PrimitiveSerializer<T> {
     @NonNull
     private final ObjectSerializer<T> objectSerializer;
-    private final String type;
 
     public UserTypeSerializer(@NonNull ObjectSerializer<T> objectSerializer, String type) {
         this.objectSerializer = objectSerializer;
-        this.type = type;
     }
 
     @Override

@@ -26,6 +26,7 @@ import android.support.annotation.Nullable;
 
 import com.google.common.base.Joiner;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -52,22 +53,22 @@ import de.kuschku.util.observables.lists.ObservableSet;
 import static de.kuschku.util.AndroidAssert.assertEquals;
 
 public class IrcChannel extends AIrcChannel {
+    @NonNull
+    public final Map<Character, List<String>> A_channelModes = new HashMap<>();
+    @NonNull
+    public final Map<Character, String> B_channelModes = new HashMap<>();
+    @NonNull
+    public final Map<Character, String> C_channelModes = new HashMap<>();
     private final String name;
     @NonNull
     private final Map<String, Set<Character>> userModes = new HashMap<>();
     private final ObservableSet<String> users = new ObservableSet<>();
     @NonNull
-    public Map<Character, List<String>> A_channelModes = new HashMap<>();
-    @NonNull
-    public Map<Character, String> B_channelModes = new HashMap<>();
-    @NonNull
-    public Map<Character, String> C_channelModes = new HashMap<>();
-    @NonNull
     public Set<Character> D_channelModes = new HashSet<>();
     private String topic;
     private String password;
     private boolean encrypted;
-    private QNetwork network;
+    private WeakReference<QNetwork> network = new WeakReference<>(null);
     private String codecForEncoding;
     private String codecForDecoding;
     // Because we don’t have networks at the beginning yet
@@ -130,7 +131,7 @@ public class IrcChannel extends AIrcChannel {
 
     @Override
     public QNetwork network() {
-        return network;
+        return network.get();
     }
 
     @NonNull
@@ -431,7 +432,7 @@ public class IrcChannel extends AIrcChannel {
     @Override
     public void init(QNetwork network, Client client) {
         this.client = client;
-        this.network = network;
+        this.network = new WeakReference<>(network);
 
 
         /* TODO: Use just the nick in userModes and users instead – that should make sync things a lot easier */
@@ -468,7 +469,10 @@ public class IrcChannel extends AIrcChannel {
         cachedUserModes = null;
         cachedChanModes = null;
 
-        this.network._addIrcChannel(this);
+
+        QNetwork qNetwork = this.network.get();
+        if (qNetwork != null)
+            qNetwork._addIrcChannel(this);
         _update();
     }
 

@@ -339,13 +339,14 @@ public class CoreConnection {
 
                     Thread.sleep(30 * 1000);
                 }
-            } catch (InterruptedException e) {
+            } catch (InterruptedException ignored) {
             }
         }
 
         @Override
         public void end() {
             running = false;
+            this.interrupt();
         }
     }
 

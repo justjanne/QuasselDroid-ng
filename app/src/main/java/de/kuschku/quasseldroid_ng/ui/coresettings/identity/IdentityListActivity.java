@@ -41,28 +41,25 @@ import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.servicebound.BoundActivity;
+import de.kuschku.util.ui.DividerItemDecoration;
 
 public class IdentityListActivity extends BoundActivity {
 
-    IdentityManager manager;
-
-    @Bind(R.id.list)
-    RecyclerView list;
-
-    @Bind(R.id.add)
-    FloatingActionButton add;
-
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
-
-    IdentityAdapter adapter;
-    OnQIdentityClickListener clickListener = identity -> {
+    final OnQIdentityClickListener clickListener = identity -> {
         if (identity != null) {
             Intent intent = new Intent(this, IdentityEditActivity.class);
             intent.putExtra("id", identity.id());
             startActivity(intent);
         }
     };
+    IdentityManager manager;
+    @Bind(R.id.list)
+    RecyclerView list;
+    @Bind(R.id.add)
+    FloatingActionButton add;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    IdentityAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,12 +69,11 @@ public class IdentityListActivity extends BoundActivity {
 
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setItemAnimator(new DefaultItemAnimator());
+        list.addItemDecoration(new DividerItemDecoration(this));
         adapter = new IdentityAdapter();
         list.setAdapter(adapter);
 
-        add.setOnClickListener(view -> {
-            startActivity(new Intent(this, IdentityCreateActivity.class));
-        });
+        add.setOnClickListener(view -> startActivity(new Intent(this, IdentityCreateActivity.class)));
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -100,8 +96,8 @@ public class IdentityListActivity extends BoundActivity {
     }
 
     private class IdentityAdapter extends RecyclerView.Adapter<IdentityViewHolder> {
+        final AdapterUICallbackWrapper wrapper = new AdapterUICallbackWrapper(this);
         IdentityManager manager;
-        AdapterUICallbackWrapper wrapper = new AdapterUICallbackWrapper(this);
 
         public void setManager(IdentityManager manager) {
             if (this.manager != null)

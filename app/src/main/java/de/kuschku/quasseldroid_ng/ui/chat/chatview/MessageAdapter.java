@@ -35,7 +35,6 @@ import de.kuschku.util.observables.AutoScroller;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.observables.lists.IObservableList;
-import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -43,17 +42,15 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 @UiThread
 public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     @NonNull
-    private static final ObservableSortedList<Message> emptyList = new ObservableComparableSortedList<>(Message.class);
-    @NonNull
     private final ChatMessageRenderer renderer;
     @NonNull
     private final LayoutInflater inflater;
     @NonNull
     private final UICallback callback;
     @NonNull
-    private IObservableList<UICallback, Message> messageList = emptyList();
-    @NonNull
-    private AppContext context;
+    private final AppContext context;
+    @Nullable
+    private IObservableList<UICallback, Message> messageList = null;
 
     public MessageAdapter(@NonNull Context ctx, @NonNull AppContext context, @Nullable AutoScroller scroller) {
         this.context = context;
@@ -62,15 +59,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         this.callback = new AdapterUICallbackWrapper(this, scroller);
     }
 
-    @NonNull
-    public static ObservableSortedList<Message> emptyList() {
-        return emptyList;
-    }
-
-    public void setMessageList(@NonNull ObservableSortedList<Message> messageList) {
-        this.messageList.removeCallback(callback);
+    public void setMessageList(@Nullable ObservableSortedList<Message> messageList) {
+        if (this.messageList != null)
+            this.messageList.removeCallback(callback);
         this.messageList = messageList;
-        this.messageList.addCallback(callback);
+        if (this.messageList != null)
+            this.messageList.addCallback(callback);
         notifyDataSetChanged();
     }
 
@@ -100,10 +94,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     @Override
     public int getItemCount() {
-        return messageList.size();
+        return messageList != null ? messageList.size() : 0;
     }
 
     public Message getItem(int position) {
-        return messageList.get(position);
+        return messageList != null ? messageList.get(position) : null;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return getItem(position).id;
     }
 }

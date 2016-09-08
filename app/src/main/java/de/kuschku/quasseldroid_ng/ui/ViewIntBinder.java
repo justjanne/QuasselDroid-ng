@@ -33,7 +33,7 @@ import java.util.Set;
 
 public class ViewIntBinder {
     private final ObservableInt field;
-    private Set<Observable.OnPropertyChangedCallback> callbacks = new HashSet<>();
+    private final Set<Observable.OnPropertyChangedCallback> callbacks = new HashSet<>();
 
     public ViewIntBinder(ObservableInt field) {
         this.field = field;

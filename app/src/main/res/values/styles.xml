@@ -76,6 +76,8 @@
         <item name="colorFill">@color/colorFillLight</item>
         <item name="colorOffline">@color/colorOfflineLight</item>
         <item name="colorAway">@color/colorAwayLight</item>
+
+        <item name="android:windowBackground">@color/colorPrimary</item>
     </style>
 
     <style name="RippleOverlay" parent="ThemeOverlay.AppCompat">

@@ -37,7 +37,7 @@ import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.setup.ValidUpdateCallback;
 
 public abstract class SlideFragment extends Fragment {
-    private Set<ValidUpdateCallback> callbacks = new HashSet<>();
+    private final Set<ValidUpdateCallback> callbacks = new HashSet<>();
 
     public abstract Bundle getData(Bundle in);
 

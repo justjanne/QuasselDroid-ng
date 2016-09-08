@@ -42,11 +42,10 @@ import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public class IdentitySpinnerAdapter implements ThemedSpinnerAdapter, GeneralCallback {
+    private final Set<DataSetObserver> observers = new HashSet<>();
     private ObservableSortedList<QIdentity> identities;
     @Nullable
     private Resources.Theme theme;
-
-    private Set<DataSetObserver> observers = new HashSet<>();
 
     public void setIdentityManager(IdentityManager identityManager) {
         if (identityManager != null) {

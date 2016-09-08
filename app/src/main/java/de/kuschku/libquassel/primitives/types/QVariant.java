@@ -35,9 +35,10 @@ import de.kuschku.libquassel.syncables.types.interfaces.QSyncableObject;
 public class QVariant<T> {
     @Nullable
     public final T data;
-    @NonNull
+    @Nullable
     public final QMetaType<T> type;
 
+    @SuppressWarnings("unchecked")
     public QVariant(@NonNull T data) {
         if (data instanceof Set) {
             this.data = (T) new ArrayList((Set) data);

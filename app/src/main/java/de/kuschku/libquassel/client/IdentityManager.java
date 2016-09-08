@@ -57,11 +57,6 @@ public class IdentityManager {
             return item1.id() == item2.id();
         }
     });
-    private final Client client;
-
-    public IdentityManager(Client client) {
-        this.client = client;
-    }
 
     public void createIdentity(@NonNull QIdentity identity) {
         identities.put(identity.id(), identity);

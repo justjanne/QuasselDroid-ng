@@ -97,7 +97,7 @@ public class AccountItem extends AbstractDrawerItem<AccountItem, AccountItem.Vie
     }
 
     @Override
-    public ViewHolderFactory getFactory() {
+    public ViewHolderFactory<ViewHolder> getFactory() {
         return new ItemFactory();
     }
 
@@ -157,11 +157,11 @@ public class AccountItem extends AbstractDrawerItem<AccountItem, AccountItem.Vie
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        private View view;
-        private AppCompatRadioButton select;
-        private TextView name;
-        private TextView description;
-        private AppCompatImageButton delete;
+        private final View view;
+        private final AppCompatRadioButton select;
+        private final TextView name;
+        private final TextView description;
+        private final AppCompatImageButton delete;
 
         private ViewHolder(View view) {
             super(view);

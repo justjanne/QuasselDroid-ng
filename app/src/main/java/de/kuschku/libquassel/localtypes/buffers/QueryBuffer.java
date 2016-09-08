@@ -32,10 +32,9 @@ import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 public class QueryBuffer implements Buffer {
     @NonNull
     private final Client client;
+    private final ObservableField<BufferInfo.BufferStatus> status = new ObservableField<>();
     @NonNull
     private BufferInfo info;
-
-    private ObservableField<BufferInfo.BufferStatus> status = new ObservableField<>();
 
     public QueryBuffer(@NonNull BufferInfo info, @NonNull Client client) {
         this.info = info;

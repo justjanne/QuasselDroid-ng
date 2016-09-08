@@ -41,28 +41,25 @@ import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.servicebound.BoundActivity;
+import de.kuschku.util.ui.DividerItemDecoration;
 
 public class ChatListListActivity extends BoundActivity {
 
-    QBufferViewManager manager;
-
-    @Bind(R.id.list)
-    RecyclerView list;
-
-    @Bind(R.id.add)
-    FloatingActionButton add;
-
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
-
-    ChatListAdapter adapter;
-    OnQBufferViewConfigClickListener clickListener = config -> {
+    final OnQBufferViewConfigClickListener clickListener = config -> {
         if (config != null) {
             Intent intent = new Intent(this, ChatListEditActivity.class);
             intent.putExtra("id", config.bufferViewId());
             startActivity(intent);
         }
     };
+    QBufferViewManager manager;
+    @Bind(R.id.list)
+    RecyclerView list;
+    @Bind(R.id.add)
+    FloatingActionButton add;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    ChatListAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,10 +71,9 @@ public class ChatListListActivity extends BoundActivity {
         list.setItemAnimator(new DefaultItemAnimator());
         adapter = new ChatListAdapter();
         list.setAdapter(adapter);
+        list.addItemDecoration(new DividerItemDecoration(this));
 
-        add.setOnClickListener(view -> {
-            startActivity(new Intent(this, ChatListCreateActivity.class));
-        });
+        add.setOnClickListener(view -> startActivity(new Intent(this, ChatListCreateActivity.class)));
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -100,8 +96,8 @@ public class ChatListListActivity extends BoundActivity {
     }
 
     private class ChatListAdapter extends RecyclerView.Adapter<ChatListViewHolder> {
+        final AdapterUICallbackWrapper wrapper = new AdapterUICallbackWrapper(this);
         QBufferViewManager manager;
-        AdapterUICallbackWrapper wrapper = new AdapterUICallbackWrapper(this);
 
         public void setManager(QBufferViewManager manager) {
             if (this.manager != null)

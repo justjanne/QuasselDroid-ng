@@ -27,11 +27,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public abstract class AbstractPreferenceElement<T> implements PreferenceElement<T>, OnChangeListener<T> {
+    protected final SharedPreferences pref;
+    protected final String key;
+    protected final T defValue;
     private final Set<OnChangeListener<T>> listeners = new HashSet<>();
-    protected SharedPreferences pref;
     protected SharedPreferences.Editor edit;
-    protected String key;
-    protected T defValue;
 
     public AbstractPreferenceElement(SharedPreferences pref, String key, T defValue) {
         this.pref = pref;

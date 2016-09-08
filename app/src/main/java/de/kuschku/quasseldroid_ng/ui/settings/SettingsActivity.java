@@ -36,7 +36,7 @@ import de.kuschku.quasseldroid_ng.ui.theme.AppTheme;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    AppContext context = new AppContext();
+    final AppContext context = new AppContext();
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -83,7 +83,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public static class AppearanceFragment extends PreferenceFragment {
-        AppContext context = new AppContext();
+        final AppContext context = new AppContext();
 
         @Override
         public void onCreate(Bundle savedInstanceState) {

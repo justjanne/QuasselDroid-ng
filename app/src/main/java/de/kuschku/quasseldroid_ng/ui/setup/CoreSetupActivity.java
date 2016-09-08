@@ -145,7 +145,7 @@ public class CoreSetupActivity extends AppCompatActivity implements ValidUpdateC
     }
 
     private class SlidePagerAdapter extends FragmentPagerAdapter {
-        List<SlideFragment> list = new ArrayList<>();
+        final List<SlideFragment> list = new ArrayList<>();
 
         public SlidePagerAdapter(FragmentManager fm) {
             super(fm);

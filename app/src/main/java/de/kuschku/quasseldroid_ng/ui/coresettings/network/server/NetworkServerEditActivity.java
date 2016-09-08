@@ -190,7 +190,7 @@ public class NetworkServerEditActivity extends BoundActivity {
     }
 
     private class ProxyTypeAdapter implements SpinnerAdapter {
-        List<NetworkServer.ProxyType> list = Arrays.asList(
+        final List<NetworkServer.ProxyType> list = Arrays.asList(
                 NetworkServer.ProxyType.Socks5Proxy,
                 NetworkServer.ProxyType.HttpProxy
         );

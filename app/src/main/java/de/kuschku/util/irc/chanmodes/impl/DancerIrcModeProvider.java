@@ -49,7 +49,7 @@ import static de.kuschku.util.irc.chanmodes.ChanMode.UNLISTED;
 
 public class DancerIrcModeProvider extends AbstractIrcModeProvider {
 
-    protected Set<Character> supportedModes = new HashSet<>(Arrays.asList(
+    protected final Set<Character> supportedModes = new HashSet<>(Arrays.asList(
             'J', 'P', 'Q', 'R', 'c', 'g', 'i', 'k', 'l', 'm', 'n', 'r', 's', 'z'
     ));
 

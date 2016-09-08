@@ -28,8 +28,6 @@ import android.util.SparseArray;
 
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
-import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
-import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 
 import java.util.HashSet;
 import java.util.List;
@@ -86,40 +84,34 @@ public class HybridBacklogStorage implements BacklogStorage {
 
     @Override
     public void insertMessages(@IntRange(from = 0) int bufferId, @NonNull Message... messages) {
-        ensureExisting(bufferId);
-        FlowManager.getDatabase(ConnectedDatabase.class).executeTransaction(new ITransaction() {
-            @Override
-            public void execute(DatabaseWrapper databaseWrapper) {
-                for (Message message : messages) {
-                    client.unbufferBuffer(message.bufferInfo);
-                    synchronized (backlogs) {
-                        if (backlogs.get(bufferId) != null)
-                            backlogs.get(bufferId).add(message);
-                        message.save();
-                        message.bufferInfo.save();
-                    }
-                    updateLatest(message);
+        FlowManager.getDatabase(ConnectedDatabase.class).executeTransaction(databaseWrapper -> {
+            for (Message message : messages) {
+                client.unbufferBuffer(message.bufferInfo);
+                synchronized (backlogs) {
+                    if (backlogs.get(bufferId) != null)
+                        backlogs.get(bufferId).add(message);
+                    client.bufferSyncer().addActivity(message);
+                    message.save();
+                    message.bufferInfo.save();
                 }
+                updateLatest(message);
             }
         });
     }
 
     @Override
     public void insertMessages(@IntRange(from = 0) int bufferId, List<Message> messages) {
-        ensureExisting(bufferId);
-        FlowManager.getDatabase(ConnectedDatabase.class).executeTransaction(new ITransaction() {
-            @Override
-            public void execute(DatabaseWrapper databaseWrapper) {
-                for (Message message : messages) {
-                    client.unbufferBuffer(message.bufferInfo);
-                    synchronized (backlogs) {
-                        if (backlogs.get(bufferId) != null)
-                            backlogs.get(bufferId).add(message);
-                        message.save();
-                        message.bufferInfo.save();
-                    }
-                    updateLatest(message);
+        FlowManager.getDatabase(ConnectedDatabase.class).executeTransaction(databaseWrapper -> {
+            for (Message message : messages) {
+                client.unbufferBuffer(message.bufferInfo);
+                synchronized (backlogs) {
+                    if (backlogs.get(bufferId) != null)
+                        backlogs.get(bufferId).add(message);
+                    client.bufferSyncer().addActivity(message);
+                    message.save();
+                    message.bufferInfo.save();
                 }
+                updateLatest(message);
             }
         });
     }
@@ -132,38 +124,34 @@ public class HybridBacklogStorage implements BacklogStorage {
 
     @Override
     public void insertMessages(@NonNull Message... messages) {
-        FlowManager.getDatabase(ConnectedDatabase.class).executeTransaction(new ITransaction() {
-            @Override
-            public void execute(DatabaseWrapper databaseWrapper) {
-                for (Message message : messages) {
-                    client.unbufferBuffer(message.bufferInfo);
-                    synchronized (backlogs) {
-                        if (backlogs.get(message.bufferInfo.id) != null)
-                            backlogs.get(message.bufferInfo.id).add(message);
-                        message.save();
-                        message.bufferInfo.save();
-                    }
-                    updateLatest(message);
+        FlowManager.getDatabase(ConnectedDatabase.class).executeTransaction(databaseWrapper -> {
+            for (Message message : messages) {
+                client.unbufferBuffer(message.bufferInfo);
+                synchronized (backlogs) {
+                    if (backlogs.get(message.bufferInfo.id) != null)
+                        backlogs.get(message.bufferInfo.id).add(message);
+                    client.bufferSyncer().addActivity(message);
+                    message.save();
+                    message.bufferInfo.save();
                 }
+                updateLatest(message);
             }
         });
     }
 
     @Override
     public void insertMessages(List<Message> messages) {
-        FlowManager.getDatabase(ConnectedDatabase.class).executeTransaction(new ITransaction() {
-            @Override
-            public void execute(DatabaseWrapper databaseWrapper) {
-                for (Message message : messages) {
-                    client.unbufferBuffer(message.bufferInfo);
-                    synchronized (backlogs) {
-                        if (backlogs.get(message.bufferInfo.id) != null)
-                            backlogs.get(message.bufferInfo.id).add(message);
-                        message.save();
-                        message.bufferInfo.save();
-                    }
-                    updateLatest(message);
+        FlowManager.getDatabase(ConnectedDatabase.class).executeTransaction(databaseWrapper -> {
+            for (Message message : messages) {
+                client.unbufferBuffer(message.bufferInfo);
+                synchronized (backlogs) {
+                    if (backlogs.get(message.bufferInfo.id) != null)
+                        backlogs.get(message.bufferInfo.id).add(message);
+                    client.bufferSyncer().addActivity(message);
+                    message.save();
+                    message.bufferInfo.save();
                 }
+                updateLatest(message);
             }
         });
     }
@@ -200,12 +188,29 @@ public class HybridBacklogStorage implements BacklogStorage {
         return filterSet;
     }
 
+    @Override
+    public void setMarkerLine(@IntRange(from = 0) int buffer, int msgId) {
+        BacklogFilter filter = filters.get(buffer);
+        if (filter != null) {
+            Log.w("DEBUG", "Setting markerline for open buffer");
+            filter.setMarkerlineMessage(msgId);
+        } else {
+            Log.w("DEBUG", "Buffer not open");
+        }
+    }
+
     private void ensureExisting(@IntRange(from = -1) int bufferId) {
         assertNotNull(client);
         if (backlogs.get(bufferId) == null) {
             ObservableComparableSortedList<Message> messages = new ObservableComparableSortedList<>(Message.class, true);
             ObservableComparableSortedList<Message> filteredMessages = new ObservableComparableSortedList<>(Message.class, true);
             BacklogFilter backlogFilter = new BacklogFilter(client, bufferId, messages, filteredMessages);
+            if (client.bufferSyncer() != null) {
+                backlogFilter.setMarkerlineMessage(client.bufferSyncer().markerLine(bufferId));
+                Log.w("DEBUG", "Setting markerline for newly opened buffer");
+            } else {
+                Log.w("DEBUG", "BufferSyncer is null!");
+            }
             messages.addCallback(backlogFilter);
             synchronized (backlogs) {
                 List<Message> messageList = SQLite.select().from(Message.class).where(Message_Table.bufferInfo_id.eq(bufferId)).queryList();

@@ -55,119 +55,119 @@
 
         <activity
             android:name=".ui.chat.ChannelDetailActivity"
-            android:label="Channel Details"
+            android:label="@string/channeldetails"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.chat.MainActivity"
             android:theme="@style/AppTheme.Light" />
 
         <activity
             android:name=".ui.coresettings.chatlist.ChatListListActivity"
-            android:label="Edit Chat Lists"
+            android:label="@string/editchatlists"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.chat.MainActivity"
             android:theme="@style/AppTheme.Light" />
 
         <activity
             android:name=".ui.coresettings.chatlist.ChatListEditActivity"
-            android:label="Edit Chat List"
+            android:label="@string/editchatlist"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.coresettings.chatlist.ChatListListActivity"
             android:theme="@style/AppTheme.Light" />
 
         <activity
             android:name=".ui.coresettings.chatlist.ChatListCreateActivity"
-            android:label="Create Chat List"
+            android:label="@string/createchatlist"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.coresettings.chatlist.ChatListListActivity"
             android:theme="@style/AppTheme.Light" />
 
         <activity
             android:name=".ui.coresettings.network.NetworkListActivity"
-            android:label="Edit Networks"
+            android:label="@string/editnetworks"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.chat.MainActivity"
             android:theme="@style/AppTheme.Light" />
 
         <activity
             android:name=".ui.coresettings.network.NetworkEditActivity"
-            android:label="Edit Network"
+            android:label="@string/editnetwork"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.coresettings.network.NetworkListActivity"
             android:theme="@style/AppTheme.Light" />
 
         <activity
             android:name=".ui.coresettings.network.NetworkCreateActivity"
-            android:label="Create Network"
+            android:label="@string/createnetwork"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.coresettings.network.NetworkListActivity"
             android:theme="@style/AppTheme.Light" />
 
         <activity
             android:name=".ui.coresettings.network.server.NetworkServerListActivity"
-            android:label="Edit NetworkServers"
+            android:label="@string/editnetworkservers"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.coresettings.network.NetworkEditActivity"
             android:theme="@style/AppTheme.Light"/>
 
         <activity
             android:name=".ui.coresettings.identity.IdentityListActivity"
-            android:label="Edit Identities"
+            android:label="@string/editidentities"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.chat.MainActivity"
             android:theme="@style/AppTheme.Light"/>
 
         <activity
             android:name=".ui.coresettings.identity.IdentityEditActivity"
-            android:label="Edit Identity"
+            android:label="@string/editidentity"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.coresettings.identity.IdentityListActivity"
             android:theme="@style/AppTheme.Light"/>
 
         <activity
             android:name=".ui.coresettings.identity.IdentityCreateActivity"
-            android:label="Create Identity"
+            android:label="@string/createidentity"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.coresettings.identity.IdentityListActivity"
             android:theme="@style/AppTheme.Light"/>
 
         <activity
             android:name=".ui.coresettings.identity.nick.IdentityNickListActivity"
-            android:label="Edit Nicks"
+            android:label="@string/editnicks"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.coresettings.identity.IdentityEditActivity"
             android:theme="@style/AppTheme.Light"/>
 
         <activity
             android:name=".ui.coresettings.network.server.NetworkServerEditActivity"
-            android:label="Edit NetworkServer"
+            android:label="@string/editnetworkserver"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.coresettings.network.server.NetworkServerListActivity"
             android:theme="@style/AppTheme.Light"/>
 
         <activity
             android:name=".ui.setup.AccountSetupActivity"
-            android:label="Account Setup"
+            android:label="@string/accountsetup"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.setup.AccountSelectActivity"
             android:theme="@style/SetupTheme" />
 
         <activity
             android:name=".ui.setup.AccountSelectActivity"
-            android:label="Account Selection"
+            android:label="@string/accountselection"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.LoginActivity"
             android:theme="@style/SetupTheme" />
 
         <activity
             android:name=".ui.setup.CoreSetupActivity"
-            android:label="Core Setup"
+            android:label="@string/coresetup"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.chat.MainActivity"
             android:theme="@style/SetupTheme" />
 
         <activity
             android:name=".ui.settings.SettingsActivity"
-            android:label="Settings"
+            android:label="@string/settings"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.chat.MainActivity"
             android:theme="@style/AppTheme.Light" />

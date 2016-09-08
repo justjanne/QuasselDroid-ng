@@ -36,28 +36,24 @@ import de.kuschku.libquassel.events.LagChangedEvent;
 
 public class BusProvider {
     @NonNull
-    public final EventBus handle;
-    @NonNull
-    public final EventBus dispatch;
-    @NonNull
-    public final EventBus event;
-    @NonNull
     private final String id;
-
     @NonNull
-    private final BusHandler handleHandler = new BusHandler("QHANDLE");
+    public EventBus handle;
     @NonNull
-    private final BusHandler dispatchHandler = new BusHandler("QDISPATCH");
+    public EventBus dispatch;
     @NonNull
-    private final BusHandler eventHandler = new BusHandler("QEVENT");
+    public EventBus event;
 
     public BusProvider() {
         this.id = UUID.randomUUID().toString();
         this.handle = new EventBus();
+        BusHandler handleHandler = new BusHandler("QHANDLE");
         this.handle.register(handleHandler);
         this.dispatch = new EventBus();
+        BusHandler dispatchHandler = new BusHandler("QDISPATCH");
         this.dispatch.register(dispatchHandler);
         this.event = new EventBus();
+        BusHandler eventHandler = new BusHandler("QEVENT");
         this.event.register(eventHandler);
     }
 

@@ -28,12 +28,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.message.Message;
+import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
+import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
 
@@ -48,11 +47,11 @@ public class BacklogFilter implements UICallback {
     @NonNull
     private final ObservableComparableSortedList<Message> filtered;
 
-    @NonNull
-    private final Set<Message.Type> filteredTypes = new HashSet<>();
     private final EventBus bus = new EventBus();
     @Nullable
     private CharSequence searchQuery;
+
+    private Message markerlineMessage;
 
     public BacklogFilter(@NonNull Client client, int bufferId, @NonNull ObservableComparableSortedList<Message> unfiltered, @NonNull ObservableComparableSortedList<Message> filtered) {
         this.client = client;
@@ -60,8 +59,50 @@ public class BacklogFilter implements UICallback {
         this.unfiltered = unfiltered;
         this.filtered = filtered;
         this.bus.register(this);
-        setFiltersInternal(client.metaDataManager().hiddendata(client.coreId(), bufferId));
+        client.bufferSyncer().getFilteredTypes(bufferId).addCallback(new ElementCallback<Message.Type>() {
+            @Override
+            public void notifyItemInserted(Message.Type element) {
+                bus.post(new UpdateRemoveEvent());
+            }
+
+            @Override
+            public void notifyItemRemoved(Message.Type element) {
+                bus.post(new UpdateAddEvent());
+            }
+
+            @Override
+            public void notifyItemChanged(Message.Type element) {
+
+            }
+        });
         updateDayChangeMessages();
+    }
+
+    private Message createMarkerlineMessage(int id) {
+        return Message.create(
+                id,
+                null,
+                Message.Type.Markerline,
+                new Message.Flags((byte) 0x00),
+                BufferInfo.create(
+                        bufferId,
+                        -1,
+                        BufferInfo.Type.INVALID,
+                        -1,
+                        null
+                ),
+                null,
+                null
+        );
+    }
+
+    public void setMarkerlineMessage(int id) {
+        /*
+        Message markerlineMessage = this.markerlineMessage;
+        bus.post(new MessageRemoveEvent(markerlineMessage));
+        this.markerlineMessage = createMarkerlineMessage(id);
+        bus.post(new MessageInsertEvent(this.markerlineMessage));
+        */
     }
 
     @Override
@@ -131,19 +172,9 @@ public class BacklogFilter implements UICallback {
         QNetwork network = client.networkManager().network(client.bufferManager().buffer(message.bufferInfo.id).getInfo().networkId);
         assertNotNull(network);
         boolean ignored = client.ignoreListManager() != null && client.ignoreListManager().matches(message, network);
-        boolean filtered = filteredTypes.contains(message.type);
+        boolean filtered = client.bufferSyncer().getFilteredTypes(bufferId).contains(message.type);
         boolean isSearching = searchQuery != null && searchQuery.length() != 0;
         return ignored || filtered || (isSearching && !message.content.contains(searchQuery));
-    }
-
-    public void addFilter(Message.Type type) {
-        filteredTypes.add(type);
-        bus.post(new UpdateRemoveEvent());
-    }
-
-    public void removeFilter(Message.Type type) {
-        filteredTypes.remove(type);
-        bus.post(new UpdateAddEvent());
     }
 
     public void update() {
@@ -182,16 +213,11 @@ public class BacklogFilter implements UICallback {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(@NonNull MessageInsertEvent event) {
         filtered.add(event.msg);
-        client.bufferSyncer().addActivity(event.msg);
-        if (event.msg.type != Message.Type.DayChange)
-            updateDayChangeMessages();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(@NonNull MessageRemoveEvent event) {
         filtered.remove(event.msg);
-        if (event.msg.type != Message.Type.DayChange)
-            updateDayChangeMessages();
     }
 
     @Override
@@ -227,37 +253,6 @@ public class BacklogFilter implements UICallback {
     public void notifyItemRangeRemoved(int position, int count) {
         for (int i = position; i < position + count; i++) {
             notifyItemRemoved(i);
-        }
-    }
-
-    public int getFilters() {
-        int filters = 0x00000000;
-        for (Message.Type type : filteredTypes) {
-            filters |= type.value;
-        }
-        return filters;
-    }
-
-    public void setFilters(int filters) {
-        setFiltersInternal(filters);
-        client.metaDataManager().setHiddendata(client.coreId(), bufferId, filters);
-        int after = client.metaDataManager().hiddendata(client.coreId(), bufferId);
-    }
-
-    private void setFiltersInternal(int filters) {
-        Set<Message.Type> removed = new HashSet<>();
-        for (Message.Type type : filteredTypes) {
-            if ((filters & type.value) == 0)
-                removed.add(type);
-        }
-        for (Message.Type type : removed) {
-            removeFilter(type);
-        }
-
-        for (Message.Type type : Message.Type.values()) {
-            if ((filters & type.value) != 0) {
-                addFilter(type);
-            }
         }
     }
 

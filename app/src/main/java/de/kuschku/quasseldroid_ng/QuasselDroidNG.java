@@ -27,6 +27,8 @@ import android.content.Context;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import org.acra.ACRA;
 import org.acra.ReportField;
 import org.acra.ReportingInteractionMode;
@@ -63,9 +65,11 @@ public class QuasselDroidNG extends Application {
 
         ACRA.init(this);
 
-        applicationContext = getApplicationContext();
-
         FlowManager.init(new FlowConfig.Builder(this).build());
         FlowManager.getDatabase(ConnectedDatabase.class).getWritableDatabase();
+
+        JodaTimeAndroid.init(this);
+
+        applicationContext = getApplicationContext();
     }
 }

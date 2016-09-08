@@ -27,7 +27,6 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -37,7 +36,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -58,23 +56,17 @@ public class NetworkCreateActivity extends BoundActivity {
 
     private static final int REQUEST_SERVER_LIST = 1;
     private static final int REQUEST_PERFORM = 2;
-
+    final IdentitySpinnerAdapter spinnerAdapter = new IdentitySpinnerAdapter();
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-
-
     @Bind(R.id.networkName)
     EditText networkName;
-
     @Bind(R.id.identity)
     Spinner identity;
-
     @Bind(R.id.rejoinChannels)
     CheckBox rejoinChannels;
-
     @Bind(R.id.servers)
     Button servers;
-
     @Bind(R.id.useCustomCodecs)
     SwitchCompat useCustomCodecs;
     @Bind(R.id.groupCustomCodecs)
@@ -85,7 +77,6 @@ public class NetworkCreateActivity extends BoundActivity {
     EditText codecForEncoding;
     @Bind(R.id.codecForDecoding)
     EditText codecForDecoding;
-
     @Bind(R.id.useAutoIdentify)
     SwitchCompat useAutoIdentify;
     @Bind(R.id.groupAutoIdentify)
@@ -94,7 +85,6 @@ public class NetworkCreateActivity extends BoundActivity {
     EditText autoIdentifyService;
     @Bind(R.id.autoIdentifyPassword)
     EditText autoIdentifyPassword;
-
     @Bind(R.id.useSasl)
     SwitchCompat useSasl;
     @Bind(R.id.groupSasl)
@@ -103,7 +93,6 @@ public class NetworkCreateActivity extends BoundActivity {
     EditText saslAccount;
     @Bind(R.id.saslPassword)
     EditText saslPassword;
-
     @Bind(R.id.useAutoReconnect)
     SwitchCompat useAutoReconnect;
     @Bind(R.id.groupAutoReconnect)
@@ -114,10 +103,7 @@ public class NetworkCreateActivity extends BoundActivity {
     EditText autoReconnectRetries;
     @Bind(R.id.unlimitedAutoReconnectRetries)
     CheckBox unlimitedAutoReconnectRetries;
-
     int id;
-    IdentitySpinnerAdapter spinnerAdapter = new IdentitySpinnerAdapter();
-
     private List<NetworkServer> serverList = null;
 
     @Override
@@ -181,7 +167,6 @@ public class NetworkCreateActivity extends BoundActivity {
                 } break;
                 case REQUEST_SERVER_LIST: {
                     Parcelable[] servers = data.getParcelableArrayExtra("servers");
-                    Log.d("DEBUG", Arrays.toString(servers));
                     if (servers != null) {
                         serverList = NetworkServerSerializeHelper.deserialize(servers);
                     }

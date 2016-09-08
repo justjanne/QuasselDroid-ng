@@ -59,4 +59,6 @@ public interface BacklogStorage {
     void clear(@IntRange(from = 0) int bufferid);
 
     Set<BacklogFilter> getFilters();
+
+    void setMarkerLine(@IntRange(from = 0) int buffer, int msgId);
 }

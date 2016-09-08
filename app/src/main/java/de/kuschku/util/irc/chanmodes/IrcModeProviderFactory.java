@@ -39,7 +39,7 @@ import de.kuschku.util.irc.chanmodes.impl.SolidIrcModeProvider;
 import de.kuschku.util.irc.chanmodes.impl.UnrealIrcModeProvider;
 
 public class IrcModeProviderFactory {
-    private static List<IrcModeProvider> servers = Arrays.asList(
+    private static final List<IrcModeProvider> servers = Arrays.asList(
             new CharybdisIrcModeProvider(),
             new DalIrcModeProvider(),
             new DancerIrcModeProvider(),

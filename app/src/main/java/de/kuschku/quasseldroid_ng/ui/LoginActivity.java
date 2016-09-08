@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
-    private AppContext context = new AppContext();
+    private final AppContext context = new AppContext();
 
     private boolean firstStart = true;
 

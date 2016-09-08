@@ -26,6 +26,7 @@ import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import de.kuschku.libquassel.BusProvider;
@@ -38,6 +39,7 @@ import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferSyncer;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
+import de.kuschku.util.observables.lists.ObservableSet;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -50,6 +52,8 @@ public class BufferSyncer extends ABufferSyncer {
     private SparseIntArray lastSeenMsgs = new SparseIntArray();
     @NonNull
     private SparseIntArray markerLines = new SparseIntArray();
+    @NonNull
+    private Map<Integer, ObservableSet<Message.Type>> filters = new HashMap<>();
 
     public BufferSyncer(@NonNull Map<Integer, Integer> lastSeenMsgs, @NonNull Map<Integer, Integer> markerLines) {
         assertNotNull(lastSeenMsgs);
@@ -99,9 +103,10 @@ public class BufferSyncer extends ABufferSyncer {
         if (msgId < 0)
             return;
 
-        int oldLastSeenMsg = markerLine(buffer);
-        if (oldLastSeenMsg < msgId) {
+        int oldMarkerline = markerLine(buffer);
+        if (oldMarkerline < msgId) {
             markerLines.put(buffer, msgId);
+            client.backlogStorage().setMarkerLine(buffer, msgId);
         }
         _update();
     }
@@ -128,8 +133,9 @@ public class BufferSyncer extends ABufferSyncer {
         for (QBufferViewConfig config : client.bufferViewManager().bufferViewConfigs()) {
             config.deleteBuffer(buffer);
         }
-        markerLines.removeAt(markerLines.indexOfKey(buffer));
-        lastSeenMsgs.removeAt(lastSeenMsgs.indexOfKey(buffer));
+        this.filters.remove(buffer);
+        markerLines.delete(buffer);
+        lastSeenMsgs.delete(buffer);
         client.bufferManager().removeBuffer(buffer);
         _update();
     }
@@ -237,9 +243,11 @@ public class BufferSyncer extends ABufferSyncer {
     }
 
     public void addActivity(@NonNull Message message) {
-        int lastSeenMsg = lastSeenMsg(message.bufferInfo.id);
-        if (message.id > lastSeenMsg) {
-            addActivity(message.bufferInfo.id, message.type);
+        int bufferId = message.bufferInfo.id;
+        int lastSeenMsg = lastSeenMsg(bufferId);
+        boolean filtered = getFilteredTypes(bufferId).contains(message.type);
+        if (!filtered && message.id > lastSeenMsg) {
+            addActivity(bufferId, message.type);
         }
     }
 
@@ -251,5 +259,35 @@ public class BufferSyncer extends ABufferSyncer {
     @Override
     public SparseIntArray markerLines() {
         return markerLines;
+    }
+
+    @Override
+    public ObservableSet<Message.Type> getFilteredTypes(int bufferId) {
+        if (!this.filters.containsKey(bufferId)) {
+            this.filters.put(bufferId, new ObservableSet<>());
+            setFilters(bufferId, client.metaDataManager().hiddendata(client.coreId(), bufferId));
+        }
+        return this.filters.get(bufferId);
+    }
+
+    @Override
+    public int getFilters(int bufferId) {
+        int filters = 0x00000000;
+        for (Message.Type type : getFilteredTypes(bufferId)) {
+            filters |= type.value;
+        }
+        return filters;
+    }
+
+    @Override
+    public void setFilters(int bufferId, int filters) {
+        client.metaDataManager().setHiddendata(client.coreId(), bufferId, filters);
+        for (Message.Type type : Message.Type.values()) {
+            if ((filters & type.value) != 0) {
+                getFilteredTypes(bufferId).add(type);
+            } else {
+                getFilteredTypes(bufferId).remove(type);
+            }
+        }
     }
 }

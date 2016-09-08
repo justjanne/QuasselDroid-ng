@@ -21,6 +21,8 @@
 
 package de.kuschku.libquassel.syncables.types.abstracts;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import de.kuschku.libquassel.message.Message;
@@ -38,7 +40,7 @@ public abstract class ABacklogManager extends SyncableObject<QBacklogManager> im
     }
 
     @Override
-    public void receiveBacklog(int id, int first, int last, int limit, int additional, List<Message> messages) {
+    public void receiveBacklog(int id, int first, int last, int limit, int additional, @NonNull List<Message> messages) {
         _receiveBacklog(id, first, last, limit, additional, messages);
         sync("receiveBacklog", new String[]{"BufferId", "MsgId", "MsgId", intName, intName}, new Object[]{id, first, last, limit, additional, messages});
     }
@@ -50,7 +52,7 @@ public abstract class ABacklogManager extends SyncableObject<QBacklogManager> im
     }
 
     @Override
-    public void receiveBacklogAll(int first, int last, int limit, int additional, List<Message> messages) {
+    public void receiveBacklogAll(int first, int last, int limit, int additional, @NonNull List<Message> messages) {
         _receiveBacklogAll(first, last, limit, additional, messages);
         sync("receiveBacklogAll", new String[]{"MsgId", "MsgId", intName, intName}, new Object[]{first, last, limit, additional, messages});
     }

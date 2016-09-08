@@ -27,6 +27,7 @@ import android.util.SparseArray;
 
 import org.joda.time.DateTime;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -53,7 +54,7 @@ public class IrcUser extends AIrcUser {
     @NonNull
     private final SparseArray<DateTime> lastSpokenTo = new SparseArray<>();
     private final List<String> cachedChannels;
-    private final Set<QIrcChannel> channels = new HashSet<>();
+    private final Set<String> channels = new HashSet<>();
     private String user;
     private String host;
     private String nick;
@@ -69,7 +70,7 @@ public class IrcUser extends AIrcUser {
     private String whoisServiceReply;
     private String suserHost;
     private boolean encrypted;
-    private QNetwork network;
+    private WeakReference<QNetwork> network = new WeakReference<>(null);
     private Set<Character> userModes;
 
     public IrcUser(String server, String ircOperator, boolean away, int lastAwayMessage, DateTime idleTime, String whoisServiceReply, String suserHost, String nick, String realName, String account, String awayMessage, DateTime loginTime, boolean encrypted, List<String> channels, String host, String userModes, String user) {
@@ -212,7 +213,7 @@ public class IrcUser extends AIrcUser {
 
     @Override
     public QNetwork network() {
-        return network;
+        return network.get();
     }
 
     @NonNull
@@ -225,8 +226,8 @@ public class IrcUser extends AIrcUser {
     @Override
     public List<String> channels() {
         List<String> chanList = new ArrayList<>(channels.size());
-        for (QIrcChannel channel : channels) {
-            chanList.add(channel.name());
+        for (String channel : channels) {
+            chanList.add(channel);
         }
         return chanList;
     }
@@ -379,8 +380,8 @@ public class IrcUser extends AIrcUser {
 
     @Override
     public void _joinChannel(@NonNull QIrcChannel channel, boolean skip_channel_join) {
-        if (!channels.contains(channel)) {
-            channels.add(channel);
+        if (!channels.contains(channel.name())) {
+            channels.add(channel.name());
             if (!skip_channel_join)
                 channel._joinIrcUser(this);
         }
@@ -421,12 +422,15 @@ public class IrcUser extends AIrcUser {
 
     @Override
     public void _quit() {
-        List<QIrcChannel> channels = new ArrayList<>(this.channels);
+        List<String> channels = new ArrayList<>(this.channels);
         this.channels.clear();
-        for (QIrcChannel channel : channels) {
-            channel._part(this);
+        QNetwork network = network();
+        if (network != null) {
+            for (String channel : channels) {
+                network.ircChannel(channel)._part(this);
+            }
+            network._removeIrcUser(this);
         }
-        network()._removeIrcUser(this);
         _update();
     }
 
@@ -450,12 +454,13 @@ public class IrcUser extends AIrcUser {
 
     @Override
     public void init(QNetwork network, Client client) {
-        this.network = network;
+        this.network = new WeakReference<>(network);
         this.client = client;
 
         if (cachedChannels != null)
             for (String channelName : cachedChannels) {
-                channels.add(network().newIrcChannel(channelName));
+                network().newIrcChannel(channelName);
+                channels.add(channelName);
             }
         _update();
     }

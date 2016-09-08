@@ -37,19 +37,15 @@ import java.util.Set;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 import de.kuschku.quasseldroid_ng.R;
-import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.observables.callbacks.GeneralCallback;
 
-public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter, GeneralCallback {
-    private final AppContext context;
+public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter, GeneralCallback<QBufferViewManager> {
     private final QBufferViewManager bufferViewManager;
+    private final Set<DataSetObserver> observers = new HashSet<>();
     @Nullable
     private Resources.Theme theme;
 
-    private Set<DataSetObserver> observers = new HashSet<>();
-
-    public BufferViewConfigSpinnerAdapter(AppContext context, QBufferViewManager bufferViewManager) {
-        this.context = context;
+    public BufferViewConfigSpinnerAdapter(QBufferViewManager bufferViewManager) {
         this.bufferViewManager = bufferViewManager;
         this.bufferViewManager.addObserver(this);
     }
@@ -136,7 +132,7 @@ public class BufferViewConfigSpinnerAdapter implements ThemedSpinnerAdapter, Gen
     }
 
     @Override
-    public void notifyChanged(Object o) {
+    public void notifyChanged(QBufferViewManager o) {
         for (DataSetObserver observer : observers) {
             observer.onChanged();
         }

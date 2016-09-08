@@ -59,7 +59,7 @@
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Name"/>
+                    android:hint="@string/name"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -76,7 +76,7 @@
                     android:paddingBottom="8dp"
                     android:paddingLeft="3dp"
                     android:paddingRight="3dp"
-                    android:text="Network"
+                    android:text="@string/network"
                     android:textSize="12sp"/>
 
                 <android.support.v7.widget.AppCompatSpinner
@@ -94,37 +94,37 @@
                 android:id="@+id/showChannels"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Show channels"/>
+                android:text="@string/show_channels"/>
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/showQueries"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Show Queries"/>
+                android:text="@string/show_queries"/>
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/hideInactiveChats"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hide inactive chats"/>
+                android:text="@string/hide_inactive_chats"/>
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/hideInactiveNetworks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hide inactive networks"/>
+                android:text="@string/hide_inactive_networks"/>
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/addAutomatically"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add new chats automatically"/>
+                android:text="@string/add_new_chats_automatically"/>
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/sortAlphabetically"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sort alphabetically"/>
+                android:text="@string/sort_alphabetically"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -139,7 +139,7 @@
                     android:paddingBottom="8dp"
                     android:paddingLeft="3dp"
                     android:paddingRight="3dp"
-                    android:text="Minimum Activity"
+                    android:text="@string/minimum_activity"
                     android:textSize="12sp"/>
 
                 <android.support.v7.widget.AppCompatSpinner

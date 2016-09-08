@@ -27,6 +27,7 @@ import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.client.ClientData;
 import de.kuschku.libquassel.localtypes.backlogstorage.BacklogStorage;
 import de.kuschku.libquassel.ssl.CertificateManager;
+import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.util.accounts.ServerAddress;
 import de.kuschku.util.buffermetadata.BufferMetaDataManager;
 
@@ -65,5 +66,16 @@ public class QuasselClient {
 
     public void disconnect() {
         this.connection.close();
+        this.client.networkManager().networks().clear();
+        for (int bufferId : this.client.bufferManager().bufferIds()) {
+            this.client.backlogStorage().markBufferUnused(bufferId);
+        }
+        this.client.bufferManager().bufferIds().clear();
+        this.client.bufferManager().buffers().clear();
+        for (QBufferViewConfig config : client.bufferViewManager().bufferViewConfigs()) {
+            config.networkList().clear();
+        }
+        client.bufferViewManager().bufferViewConfigs().clear();
+        client.bufferViewManager().bufferViewConfigMap().clear();
     }
 }

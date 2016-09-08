@@ -37,8 +37,8 @@ import de.kuschku.quasseldroid_ng.R;
 public class ActionModeHandler implements MaterialCab.Callback {
     private final AppCompatActivity activity;
     private final MaterialCab cab;
-    private Set<Buffer> selectedChildren = new HashSet<>();
-    private Set<NetworkItem> selectedParents = new HashSet<>();
+    private final Set<Buffer> selectedChildren = new HashSet<>();
+    private final Set<NetworkItem> selectedParents = new HashSet<>();
     private Menu actionModeMenu;
 
     public ActionModeHandler(AppCompatActivity activity, @IdRes int stub) {

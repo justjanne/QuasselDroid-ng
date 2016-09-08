@@ -256,9 +256,11 @@ public class QMetaTypeRegistry {
         return result;
     }
 
-    @NonNull
-    public static <T> QMetaType<T> getTypeByObject(@NonNull T type) {
-        if (type instanceof Void) return getMetaTypeByType(QMetaType.Type.Void);
+    @Nullable
+    public static <T> QMetaType<T> getTypeByObject(@Nullable T type) {
+        if (type == null)
+            return null;
+        else if (type instanceof Void) return getMetaTypeByType(QMetaType.Type.Void);
         else if (type instanceof Boolean)
             return getMetaTypeByType(QMetaType.Type.Bool);
         else if (type instanceof Integer)

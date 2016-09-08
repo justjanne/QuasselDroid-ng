@@ -59,7 +59,7 @@
                     android:id="@+id/host"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="host"/>
+                    android:hint="@string/host"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -71,7 +71,7 @@
                     android:id="@+id/port"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="port"
+                    android:hint="@string/port"
                     android:inputType="number"
                     android:maxLength="5"/>
 
@@ -81,7 +81,7 @@
                 android:id="@+id/useSSL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="useSSL"/>
+                android:text="@string/usessl"/>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="password"/>
+                    android:hint="@string/password"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -101,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
-                android:text="Proxy"
+                android:text="@string/proxy"
                 android:textColor="?attr/colorAccent"
                 android:textSize="14sp"/>
 
@@ -120,7 +120,7 @@
                         android:id="@+id/proxyHost"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="proxyHost"/>
+                        android:hint="@string/proxyhost"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -132,7 +132,7 @@
                         android:id="@+id/proxyPort"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="proxyPort"
+                        android:hint="@string/proxyport"
                         android:inputType="number"
                         android:maxLength="5"/>
 
@@ -151,7 +151,7 @@
                         android:layout_marginBottom="8dp"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="proxyType"
+                        android:text="@string/proxytype"
                         android:textSize="12sp"/>
 
                     <android.support.v7.widget.AppCompatSpinner
@@ -173,7 +173,7 @@
                         android:id="@+id/proxyUser"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="proxyUser"/>
+                        android:hint="@string/proxyuser"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -185,7 +185,7 @@
                         android:id="@+id/proxyPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="proxyPassword"/>
+                        android:hint="@string/proxypassword"/>
 
                 </android.support.design.widget.TextInputLayout>
 

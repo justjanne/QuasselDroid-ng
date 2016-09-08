@@ -20,60 +20,55 @@
   ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<FrameLayout
+
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom">
 
-    <ScrollView
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="400dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layout_marginTop="64dp"
+            android:orientation="vertical"
+            android:padding="32dp">
 
-            <LinearLayout
+            <TextView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="64dp"
-                android:orientation="vertical"
-                android:padding="32dp">
+                android:layout_marginBottom="32dp"
+                android:text="@string/slideAccountcoreTitle"
+                android:textColor="@android:color/white"
+                android:textSize="28sp"
+                android:textStyle="bold"/>
 
-                <TextView
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="32dp"
-                    android:text="@string/slideAccountcoreTitle"
-                    android:textColor="@android:color/white"
-                    android:textSize="28sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/slideAccountcoreDescription"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/content_host"
+            <TextView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/md_light_cards"
-                android:minHeight="400dp" />
+                android:text="@string/slideAccountcoreDescription"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"/>
 
         </LinearLayout>
 
-    </ScrollView>
+        <android.support.v7.widget.CardView
+            android:id="@+id/content_host"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/md_light_cards"
+            android:minHeight="400dp"/>
 
-</FrameLayout>
+    </LinearLayout>
+
+</ScrollView>

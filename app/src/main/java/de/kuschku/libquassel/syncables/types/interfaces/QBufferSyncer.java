@@ -26,6 +26,7 @@ import android.util.SparseIntArray;
 
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.Synced;
+import de.kuschku.util.observables.lists.ObservableSet;
 
 public interface QBufferSyncer extends QObservable<QBufferSyncer> {
     int lastSeenMsg(int buffer);
@@ -111,4 +112,10 @@ public interface QBufferSyncer extends QObservable<QBufferSyncer> {
     SparseIntArray lastSeenMsgs();
 
     SparseIntArray markerLines();
+
+    ObservableSet<Message.Type> getFilteredTypes(int bufferId);
+
+    void setFilters(int bufferId, int filters);
+
+    int getFilters(int bufferId);
 }

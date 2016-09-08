@@ -139,6 +139,7 @@ public abstract class SyncableObject<T> extends GeneralObservable<T> implements 
         this.initialized = true;
     }
 
+    @SuppressWarnings("unchecked")
     public void _update() {
         notifyChanged((T) this);
     }

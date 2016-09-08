@@ -21,7 +21,6 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat.chatview;
 
-import android.support.annotation.ColorInt;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
@@ -215,61 +214,81 @@ public class ChatMessageRenderer {
     }
 
     public void onBind(@NonNull MessageViewHolder holder, @NonNull Message message) {
-        holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
         switch (message.type) {
             case Plain:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindPlain(holder, message);
                 break;
             case Notice:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindNotice(holder, message);
                 break;
             case Action:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindAction(holder, message);
                 break;
             case Nick:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindNick(holder, message);
                 break;
             case Mode:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindMode(holder, message);
                 break;
             case Join:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindJoin(holder, message);
                 break;
             case Part:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindPart(holder, message);
                 break;
             case Quit:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindQuit(holder, message);
                 break;
             case Kick:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindKick(holder, message);
                 break;
             case Kill:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindKill(holder, message);
                 break;
             case Server:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindServer(holder, message);
                 break;
             case Info:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindInfo(holder, message);
                 break;
             case Error:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindError(holder, message);
                 break;
             case DayChange:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindDayChange(holder, message);
                 break;
             case Topic:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindTopic(holder, message);
                 break;
             case NetsplitJoin:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindNetsplitJoin(holder, message);
                 break;
             case NetsplitQuit:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindNetsplitQuit(holder, message);
                 break;
             case Invite:
+                holder.time.setText(context.themeUtil().formatter.getTimeFormatter().print(message.time));
                 onBindInvite(holder, message);
+                break;
+            case Markerline:
+                holder.itemView.setBackgroundResource(R.color.md_red_700);
                 break;
         }
     }
@@ -299,28 +318,10 @@ public class ChatMessageRenderer {
             case NetsplitQuit:
             case Invite:
                 return R.layout.widget_chatmessage_server;
+            case Markerline:
+                return R.layout.widget_chatmessage_markerline;
             case Error:
                 return R.layout.widget_chatmessage_error;
-        }
-    }
-
-    private static class MessageStyleContainer {
-        public final
-        @ColorInt
-        int textColor;
-        public final int fontstyle;
-        public final
-        @ColorInt
-        int timeColor;
-        public final
-        @ColorInt
-        int bgColor;
-
-        public MessageStyleContainer(int textColor, int fontstyle, int timeColor, int bgColor) {
-            this.textColor = textColor;
-            this.fontstyle = fontstyle;
-            this.timeColor = timeColor;
-            this.bgColor = bgColor;
         }
     }
 }

@@ -44,6 +44,7 @@ import de.kuschku.quasseldroid_ng.ui.coresettings.network.server.helper.SimpleIt
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.observables.lists.ObservableList;
 import de.kuschku.util.servicebound.BoundActivity;
+import de.kuschku.util.ui.DividerItemDecoration;
 
 public class IdentityNickListActivity extends BoundActivity implements OnStartDragListener {
 
@@ -59,7 +60,7 @@ public class IdentityNickListActivity extends BoundActivity implements OnStartDr
     IdentityNickAdapter adapter;
     ItemTouchHelper itemTouchHelper;
     ObservableList<String> nicks;
-    OnIdentityNickClickListener clickListener = nick -> {
+    final OnIdentityNickClickListener clickListener = nick -> {
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .input("", nick, false, (dialog1, input) -> {
 
@@ -99,6 +100,7 @@ public class IdentityNickListActivity extends BoundActivity implements OnStartDr
         list.setAdapter(adapter);
         list.setHasFixedSize(true);
         list.setLayoutManager(new LinearLayoutManager(this));
+        list.addItemDecoration(new DividerItemDecoration(this));
         adapter.setOnItemClickListener(clickListener);
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);

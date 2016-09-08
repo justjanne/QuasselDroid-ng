@@ -59,7 +59,7 @@
                     android:id="@+id/networkName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="networkName"/>
+                    android:hint="@string/networkname"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -76,7 +76,7 @@
                     android:layout_marginBottom="8dp"
                     android:paddingLeft="3dp"
                     android:paddingRight="3dp"
-                    android:text="identity"
+                    android:text="@string/identity"
                     android:textSize="12sp"/>
 
                 <android.support.v7.widget.AppCompatSpinner
@@ -94,7 +94,7 @@
                 android:id="@+id/rejoinChannels"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="rejoinChannels"/>
+                android:text="@string/rejoinchannels"/>
 
             <android.support.v7.widget.ButtonBarLayout
                 android:layout_width="match_parent"
@@ -104,7 +104,7 @@
                     android:id="@+id/servers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Edit Servers"/>
+                    android:text="@string/edit_servers"/>
 
             </android.support.v7.widget.ButtonBarLayout>
 
@@ -114,7 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
-                android:text="Custom Codecs"
+                android:text="@string/custom_codecs"
                 android:textColor="?attr/colorAccent"
                 android:textSize="14sp"/>
 
@@ -133,7 +133,7 @@
                         android:id="@+id/codecForServer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="codecForServer"/>
+                        android:hint="@string/codecforserver"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -145,7 +145,7 @@
                         android:id="@+id/codecForEncoding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="codecForEncoding"/>
+                        android:hint="@string/codecforencoding"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -157,7 +157,7 @@
                         android:id="@+id/codecForDecoding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="codecForDecoding"/>
+                        android:hint="@string/codecfordecoding"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -169,7 +169,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
-                android:text="Auto Identify"
+                android:text="@string/auto_identify"
                 android:textColor="?attr/colorAccent"
                 android:textSize="14sp"/>
 
@@ -188,7 +188,7 @@
                         android:id="@+id/autoIdentifyService"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="autoIdentifyService"/>
+                        android:hint="@string/autoidentifyservice"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -200,7 +200,7 @@
                         android:id="@+id/autoIdentifyPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="autoIdentifyPassword"/>
+                        android:hint="@string/autoidentifypassword"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -212,7 +212,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
-                android:text="SASL"
+                android:text="@string/sasl"
                 android:textColor="?attr/colorAccent"
                 android:textSize="14sp"/>
 
@@ -230,7 +230,7 @@
                         android:id="@+id/saslAccount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="saslAccount"/>
+                        android:hint="@string/saslaccount"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -242,7 +242,7 @@
                         android:id="@+id/saslPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="saslPassword"/>
+                        android:hint="@string/saslpassword"/>
 
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
@@ -253,7 +253,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
-                android:text="Auto Reconnect"
+                android:text="@string/auto_reconnect"
                 android:textColor="?attr/colorAccent"
                 android:textSize="14sp"/>
 
@@ -271,7 +271,7 @@
                         android:id="@+id/autoReconnectInterval"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="autoReconnectInterval"
+                        android:hint="@string/autoreconnectinterval"
                         android:inputType="number"/>
 
                 </android.support.design.widget.TextInputLayout>
@@ -280,7 +280,7 @@
                     android:id="@+id/unlimitedAutoReconnectRetries"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="unlimitedAutoReconnectRetries"/>
+                    android:text="@string/unlimitedautoreconnectretries"/>
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -290,7 +290,7 @@
                         android:id="@+id/autoReconnectRetries"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="autoReconnectRetries"
+                        android:hint="@string/autoreconnectretries"
                         android:inputType="number"/>
 
                 </android.support.design.widget.TextInputLayout>

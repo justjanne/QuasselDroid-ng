@@ -30,7 +30,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -44,6 +43,7 @@ import de.kuschku.quasseldroid_ng.ui.coresettings.network.server.helper.SimpleIt
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.observables.lists.ObservableList;
 import de.kuschku.util.servicebound.BoundActivity;
+import de.kuschku.util.ui.DividerItemDecoration;
 
 public class NetworkServerListActivity extends BoundActivity implements OnStartDragListener {
 
@@ -59,7 +59,7 @@ public class NetworkServerListActivity extends BoundActivity implements OnStartD
     NetworkServerAdapter adapter;
     ItemTouchHelper itemTouchHelper;
     ObservableList<NetworkServer> servers;
-    OnNetworkServerClickListener clickListener = server -> {
+    final OnNetworkServerClickListener clickListener = server -> {
         if (server != null) {
             Intent intent1 = new Intent(this, NetworkServerEditActivity.class);
             intent1.putExtra("server", NetworkServerSerializeHelper.serialize(server));
@@ -87,6 +87,7 @@ public class NetworkServerListActivity extends BoundActivity implements OnStartD
         list.setAdapter(adapter);
         list.setHasFixedSize(true);
         list.setLayoutManager(new LinearLayoutManager(this));
+        list.addItemDecoration(new DividerItemDecoration(this));
         adapter.setOnItemClickListener(clickListener);
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
@@ -127,9 +128,7 @@ public class NetworkServerListActivity extends BoundActivity implements OnStartD
         Bundle bundle;
         if (resultCode == RESULT_OK && data != null && (bundle = data.getBundleExtra("server")) != null) {
             NetworkServer server = NetworkServerSerializeHelper.deserialize(bundle);
-            Log.d("DEBUG", server.toString());
             int id = data.getIntExtra("id", -1);
-            Log.d("DEBUG", String.valueOf(id));
             if (id == -1) {
                 servers.add(server);
             } else {

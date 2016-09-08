@@ -94,7 +94,7 @@ public class StorageBackendItem extends AbstractDrawerItem<StorageBackendItem, S
     }
 
     @Override
-    public ViewHolderFactory getFactory() {
+    public ViewHolderFactory<ViewHolder> getFactory() {
         return new ItemFactory();
     }
 
@@ -150,10 +150,10 @@ public class StorageBackendItem extends AbstractDrawerItem<StorageBackendItem, S
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        private View view;
-        private AppCompatRadioButton select;
-        private TextView name;
-        private TextView description;
+        private final View view;
+        private final AppCompatRadioButton select;
+        private final TextView name;
+        private final TextView description;
 
         private ViewHolder(View view) {
             super(view);

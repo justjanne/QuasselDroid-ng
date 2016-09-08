@@ -22,7 +22,6 @@
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
 import android.databinding.Observable;
-import android.util.Log;
 
 import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 
@@ -43,7 +42,6 @@ public class NetworkItem implements ParentListItem {
     private final AppContext context;
     private final QBufferViewConfig config;
     private final QNetwork network;
-    private final BufferViewConfigAdapter bufferViewConfigAdapter;
     private final ObservableSortedList<Buffer> buffers = new ObservableSortedList<>(Buffer.class, new ObservableSortedList.ItemComparator<Buffer>() {
         @Override
         public int compare(Buffer o1, Buffer o2) {
@@ -77,7 +75,7 @@ public class NetworkItem implements ParentListItem {
             return item1.getInfo().id == item2.getInfo().id;
         }
     });
-    private ElementCallback<Integer> callback = new ElementCallback<Integer>() {
+    private final ElementCallback<Integer> callback = new ElementCallback<Integer>() {
         @Override
         public void notifyItemInserted(Integer element) {
             Buffer buffer = context.client().bufferManager().buffer(element);
@@ -108,7 +106,6 @@ public class NetworkItem implements ParentListItem {
         this.context = context;
         this.config = config;
         this.network = network;
-        this.bufferViewConfigAdapter = bufferViewConfigAdapter;
         bufferViewConfigAdapter.showAll().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
@@ -119,9 +116,6 @@ public class NetworkItem implements ParentListItem {
         this.buffers.addCallback(new UICallback() {
             @Override
             public void notifyItemInserted(int position) {
-                Log.d("DEBUG", "Added item at " + position);
-                Log.d("DEBUG", String.valueOf(getChildItemList()));
-
                 bufferViewConfigAdapter.notifyChildItemInserted(NetworkItem.this, position);
             }
 

@@ -449,7 +449,7 @@ public class BufferViewConfig extends ABufferViewConfig {
     public void deleteBuffer(int bufferId) {
         visibleBufferIds.remove(bufferId);
         allBufferIds.remove(bufferId);
-        buffers.remove(buffers.indexOf(bufferId));
+        buffers.remove((Integer) bufferId);
         temporarilyRemovedBuffers.remove(bufferId);
         removedBuffers.remove(bufferId);
     }

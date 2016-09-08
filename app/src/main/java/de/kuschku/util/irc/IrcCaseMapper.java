@@ -26,6 +26,8 @@ import android.support.annotation.Nullable;
 
 import java.util.Locale;
 
+import de.kuschku.util.backports.Objects;
+
 public class IrcCaseMapper {
     private IrcCaseMapper() {
 
@@ -47,7 +49,7 @@ public class IrcCaseMapper {
 
     public static boolean equalsIgnoreCase(@Nullable String a, @Nullable String b) {
         if (a == null || b == null)
-            return (a == b);
+            return (Objects.equals(a, b));
         else
             return toLowerCase(a).equals(toLowerCase(b)) || toUpperCase(a).equals(toUpperCase(b));
     }

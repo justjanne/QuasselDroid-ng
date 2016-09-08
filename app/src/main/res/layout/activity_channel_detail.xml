@@ -52,7 +52,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:gravity="fill_vertical"
-                android:text="Topic"
+                android:text="@string/topic"
                 android:textColor="?attr/colorAccent" />
 
             <TextView
@@ -72,7 +72,7 @@
                 android:layout_gravity="end"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:text="Edit Topic" />
+                android:text="@string/edit_topic"/>
 
             <View
                 android:layout_width="match_parent"
@@ -87,7 +87,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:gravity="fill_vertical"
-                android:text="Channel Modes"
+                android:text="@string/channel_modes"
                 android:textColor="?attr/colorAccent" />
 
             <LinearLayout

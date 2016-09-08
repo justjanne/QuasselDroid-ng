@@ -36,13 +36,13 @@ import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 
 class MinimumActivityAdapter implements SpinnerAdapter {
-    List<QBufferViewConfig.MinimumActivity> list = Arrays.asList(
+    final List<QBufferViewConfig.MinimumActivity> list = Arrays.asList(
             QBufferViewConfig.MinimumActivity.NONE,
             QBufferViewConfig.MinimumActivity.OTHER,
             QBufferViewConfig.MinimumActivity.MESSAGE,
             QBufferViewConfig.MinimumActivity.HIGHLIGHT
     );
-    private AppContext context;
+    private final AppContext context;
 
     public MinimumActivityAdapter(AppContext context) {
         this.context = context;

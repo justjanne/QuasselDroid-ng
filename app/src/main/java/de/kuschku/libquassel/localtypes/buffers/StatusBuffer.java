@@ -32,9 +32,9 @@ import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 public class StatusBuffer implements Buffer {
     @NonNull
     private final Client client;
+    private final ObservableField<BufferInfo.BufferStatus> status = new ObservableField<>();
     @NonNull
     private BufferInfo info;
-    private ObservableField<BufferInfo.BufferStatus> status = new ObservableField<>();
 
     public StatusBuffer(@NonNull BufferInfo info, @NonNull Client client) {
         this.info = info;

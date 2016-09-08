@@ -45,10 +45,7 @@ import butterknife.ButterKnife;
 import de.kuschku.quasseldroid_ng.R;
 
 public class CoreBackendSetupSlide extends SlideFragment {
-    @Bind(R.id.container)
-    LinearLayout container;
-    Bundle storageBackend;
-    TextWatcher watcher = new TextWatcher() {
+    final TextWatcher watcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
@@ -62,8 +59,11 @@ public class CoreBackendSetupSlide extends SlideFragment {
         public void afterTextChanged(Editable s) {
         }
     };
-    private Map<String, InputItemWrapper> items = new HashMap<>();
-    private Map<String, Bundle> storageBackends = new HashMap<>();
+    private final Map<String, InputItemWrapper> items = new HashMap<>();
+    private final Map<String, Bundle> storageBackends = new HashMap<>();
+    @Bind(R.id.container)
+    LinearLayout container;
+    Bundle storageBackend;
 
     @Override
     public void setArguments(Bundle args) {
@@ -155,6 +155,7 @@ public class CoreBackendSetupSlide extends SlideFragment {
         return R.string.slideAccountcoreDescription;
     }
 
+    @SuppressWarnings("unchecked")
     private <T> InputItemWrapper<T> getInputItemWrapper(String key, String type, T defValue) {
         InputItemWrapper result;
         switch (type) {
@@ -246,11 +247,11 @@ public class CoreBackendSetupSlide extends SlideFragment {
     class NumberInputItem implements InputItemWrapper<Number> {
         private final String key;
         private final Number defValue;
+        private final String type;
         @Bind(R.id.inputLayout)
         TextInputLayout inputLayout;
         @Bind(R.id.editText)
         TextInputEditText editText;
-        private String type;
         private View view;
 
         public NumberInputItem(String key, Number defValue, String type) {

@@ -36,11 +36,7 @@ import butterknife.ButterKnife;
 import de.kuschku.quasseldroid_ng.R;
 
 public class AccountSetupUserSlide extends SlideFragment {
-    @Bind(R.id.user)
-    TextInputEditText userField;
-    @Bind(R.id.pass)
-    TextInputEditText passField;
-    TextWatcher watcher = new TextWatcher() {
+    final TextWatcher watcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
@@ -54,6 +50,10 @@ public class AccountSetupUserSlide extends SlideFragment {
             updateValidity();
         }
     };
+    @Bind(R.id.user)
+    TextInputEditText userField;
+    @Bind(R.id.pass)
+    TextInputEditText passField;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

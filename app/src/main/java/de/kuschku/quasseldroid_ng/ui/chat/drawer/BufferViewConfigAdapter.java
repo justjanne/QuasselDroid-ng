@@ -51,13 +51,9 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
     private final ObservableSortedList<NetworkItem> items;
     private final Map<QNetwork, NetworkItem> itemMap = new WeakHashMap<>();
     private final Map<Integer, BufferViewHolder> bufferViewHolderMap = new WeakHashMap<>();
+    private final ObservableField<Boolean> showAll = new ObservableField<>(false);
     private QBufferViewConfig config;
-    private WeakReference<RecyclerView> recyclerView = new WeakReference<>(null);
-    private int open;
-    private OnBufferClickListener bufferClickListener;
-    private ObservableField<Boolean> showAll = new ObservableField<>(false);
-
-    private ElementCallback<QNetwork> callback = new ElementCallback<QNetwork>() {
+    private final ElementCallback<QNetwork> callback = new ElementCallback<QNetwork>() {
         @Override
         public void notifyItemInserted(QNetwork network) {
             NetworkItem networkItem = new NetworkItem(context, config, network, BufferViewConfigAdapter.this);
@@ -76,7 +72,9 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
                 items.notifyItemChanged(items.indexOf(itemMap.get(network)));
         }
     };
-
+    private WeakReference<RecyclerView> recyclerView = new WeakReference<>(null);
+    private int open;
+    private OnBufferClickListener bufferClickListener;
     private ActionModeHandler actionModeHandler;
 
     private BufferViewConfigAdapter(AppContext context, ObservableSortedList<NetworkItem> items) {
@@ -247,8 +245,6 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
         if (config != null)
             config.networkList().removeCallback(callback);
         config = newconfig;
-        if (config != null)
-            config.updateNetworks();
         items.clear();
         itemMap.clear();
         if (config != null) {
