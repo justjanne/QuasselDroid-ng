@@ -50,7 +50,7 @@ import de.kuschku.libquassel.localtypes.orm.ConnectedDatabase;
                 ReportField.STACK_TRACE
         },
         mode = ReportingInteractionMode.TOAST,
-        resToastText = R.string.notification_report_crash
+        resToastText = R.string.notificationReportCrash
 )
 public class QuasselDroidNG extends Application {
     private static Context applicationContext;

@@ -561,7 +561,7 @@ public class MainActivity extends BoundActivity {
     public void onEventMainThread(LoginRequireEvent event) {
         if (event.failedLast) {
             new MaterialDialog.Builder(this)
-                    .title(R.string.labelLogin)
+                    .title(R.string.titleLogin)
                     .customView(R.layout.dialog_login, false)
                     .onPositive((dialog1, which) -> {
                         View parent = dialog1.getCustomView();
@@ -576,8 +576,8 @@ public class MainActivity extends BoundActivity {
                     })
                     .cancelListener(dialog1 -> finish())
                     .negativeColor(context.themeUtil().res.colorForeground)
-                    .positiveText(R.string.labelLogin)
-                    .negativeText(R.string.labelCancel)
+                    .positiveText(R.string.actionLogin)
+                    .negativeText(R.string.actionCancel)
                     .backgroundColor(context.themeUtil().res.colorBackgroundCard)
                     .contentColor(context.themeUtil().res.colorForeground)
                     .build().show();

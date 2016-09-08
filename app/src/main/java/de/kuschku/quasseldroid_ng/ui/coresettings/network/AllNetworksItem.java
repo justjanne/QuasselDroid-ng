@@ -118,7 +118,7 @@ class AllNetworksItem implements QNetwork {
 
     @Override
     public String networkName() {
-        return context.getString(R.string.all_networks);
+        return context.getString(R.string.labelAllNetworks);
     }
 
     @Override

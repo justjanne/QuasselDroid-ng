@@ -58,7 +58,7 @@
                     android:id="@+id/identityName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/identityname"/>
+                    android:hint="@string/labelIdentityName"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -70,7 +70,7 @@
                     android:id="@+id/realName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/realname"/>
+                    android:hint="@string/labelIdentityRealName"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -82,7 +82,7 @@
                     android:id="@+id/ident"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/ident"/>
+                    android:hint="@string/labelIdentityIdent"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -92,9 +92,13 @@
 
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/nicks"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/edit_nicks"/>
+                    android:layout_gravity="end"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:text="@string/actionEditNicks"/>
 
             </android.support.v7.widget.ButtonBarLayout>
 
@@ -102,7 +106,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
-                android:text="@string/messages"
+                android:text="@string/labelIdentityMessages"
                 android:textColor="?attr/colorAccent"
                 android:textSize="14sp"/>
 
@@ -114,7 +118,7 @@
                     android:id="@+id/kickReason"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/kickreason"/>
+                    android:hint="@string/labelIdentityKickReason"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -126,7 +130,7 @@
                     android:id="@+id/partReason"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/partreason"/>
+                    android:hint="@string/labelIdentityPartReason"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -138,7 +142,7 @@
                     android:id="@+id/quitReason"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/quitreason"/>
+                    android:hint="@string/labelIdentityQuitReason"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -146,7 +150,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
-                android:text="@string/away"
+                android:text="@string/labelIdentityAway"
                 android:textColor="?attr/colorAccent"
                 android:textSize="14sp"/>
 
@@ -158,7 +162,7 @@
                     android:id="@+id/awayReason"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/awayreason"/>
+                    android:hint="@string/labelIdentityAwayReason"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -168,7 +172,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
-                android:text="@string/away_on_detach"
+                android:text="@string/labelIdentityDetachAway"
                 android:textColor="?attr/colorAccent"
                 android:textSize="14sp"/>
 
@@ -186,7 +190,7 @@
                         android:id="@+id/awayOnDetachReason"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/awayondetachreason"/>
+                        android:hint="@string/labelIdentityDetachAwayReason"/>
 
                 </android.support.design.widget.TextInputLayout>
 

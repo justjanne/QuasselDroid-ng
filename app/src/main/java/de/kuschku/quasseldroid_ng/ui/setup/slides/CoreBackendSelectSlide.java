@@ -92,12 +92,12 @@ public class CoreBackendSelectSlide extends SlideFragment {
 
     @Override
     protected int getTitle() {
-        return R.string.slideAccountselectTitle;
+        return R.string.slideCoreBackendSelectTitle;
     }
 
     @Override
     protected int getDescription() {
-        return R.string.slideAccountselectDescription;
+        return R.string.slideCoreBackendSelectDescription;
     }
 
 }

@@ -604,10 +604,7 @@ public class ThemeUtil {
         @AutoString(R.string.messageTopic)
         public String messageTopic;
 
-        @AutoString(R.string.labelStatusBuffer)
-        public String titleStatusBuffer;
-
-        @AutoString(R.string.warningCertificate)
+        @AutoString(R.string.confirmationCertficate)
         public String warningCertificate;
 
         @AutoString(R.string.statusConnecting)

@@ -30,7 +30,7 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/username">
+        android:hint="@string/labelAccountUsername">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/user"
@@ -42,7 +42,7 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/password">
+        android:hint="@string/labelAccountPassword">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/pass"

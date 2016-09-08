@@ -35,7 +35,7 @@
               android:gravity="end"
               android:paddingEnd="64dp"
               android:paddingRight="64dp"
-              android:text="@string/slideAccountcoreTitle"
+              android:text="@string/slideAccountCoreTitle"
               android:textColor="@android:color/white"
               android:textSize="28sp"
               android:textStyle="bold"/>
@@ -58,7 +58,7 @@
               android:gravity="end"
               android:paddingEnd="64dp"
               android:paddingRight="64dp"
-              android:text="@string/slideAccountcoreDescription"
+              android:text="@string/slideAccountCoreDescription"
               android:textColor="@android:color/white"
               android:textSize="16sp"/>
 

@@ -30,23 +30,23 @@
 
     <string name="preference_colors" translatable="false">preference_colors</string>
     <string name="preference_colors_title">Use mIRC Colors</string>
-    <string name="preference_colors_summary_on">preference_colors_summary_on</string>
-    <string name="preference_colors_summary_off">preference_colors_summary_off</string>
+    <string name="preference_colors_summary_on">Strip mIRC colors from messages</string>
+    <string name="preference_colors_summary_off">Show mIRC colors in messages</string>
 
     <string name="preference_hostmask" translatable="false">preference_hostname</string>
     <string name="preference_hostmask_title">Show Hostmask in Messages</string>
-    <string name="preference_hostmask_summary_on">preference_hostmask_summary_on</string>
-    <string name="preference_hostmask_summary_off">preference_hostmask_summary_off</string>
+    <string name="preference_hostmask_summary_on">Show the full hostmask in server actions (Join, Part, Quit, etc)</string>
+    <string name="preference_hostmask_summary_off">Show only the username in server actions (Join, Part, Quit, etc)</string>
 
     <string name="preference_lag" translatable="false">preference_lag</string>
     <string name="preference_lag_title">Show Connection Lag</string>
-    <string name="preference_lag_summary_on">preference_lag_summary_on</string>
-    <string name="preference_lag_summary_off">preference_lag_summary_off</string>
+    <string name="preference_lag_summary_on">Show the latency between core and client in the action bar</string>
+    <string name="preference_lag_summary_off">Don’t show the latency between core and client</string>
 
     <string name="preference_brackets" translatable="false">preference_brackets</string>
     <string name="preference_brackets_title">Classical Nick Style</string>
-    <string name="preference_brackets_summary_on">preference_brackets_summary_on</string>
-    <string name="preference_brackets_summary_off">preference_brackets_summary_off</string>
+    <string name="preference_brackets_summary_on">Show nicks between brackes in chat</string>
+    <string name="preference_brackets_summary_off">Show plain nicks in chat</string>
 
     <string-array name="preference_theme_entries">
         <item>Quassel™ (Light)</item>

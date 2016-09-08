@@ -38,7 +38,7 @@
             android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/labelUsername"
+            android:hint="@string/labelLoginUsername"
             android:inputType="text"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -50,7 +50,7 @@
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/labelPassword"
+            android:hint="@string/labelLoginPassword"
             android:inputType="textPassword"/>
     </android.support.design.widget.TextInputLayout>
 </LinearLayout>

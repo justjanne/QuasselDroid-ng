@@ -25,30 +25,30 @@
         android:id="@+id/context_group_network">
         <item
             android:id="@+id/context_menu_connect"
-            android:title="@string/action_connect"/>
+            android:title="@string/actionConnect"/>
         <item
             android:id="@+id/context_menu_disconnect"
-            android:title="@string/action_disconnect"/>
+            android:title="@string/actionDisconnect"/>
     </group>
     <group
         android:id="@+id/context_group_buffer">
         <item
             android:id="@+id/context_menu_join"
-            android:title="@string/action_join"/>
+            android:title="@string/actionJoin"/>
         <item
             android:id="@+id/context_menu_part"
-            android:title="@string/action_part"/>
+            android:title="@string/actionPart"/>
         <item
             android:id="@+id/context_menu_delete"
-            android:title="@string/action_delete"/>
+            android:title="@string/actionDelete"/>
         <item
             android:id="@+id/context_menu_unhide"
-            android:title="@string/action_unhide"/>
+            android:title="@string/actionUnhide"/>
         <item
             android:id="@+id/context_menu_hide_temp"
-            android:title="@string/action_hide_temp"/>
+            android:title="@string/actionHideTemp"/>
         <item
             android:id="@+id/context_menu_hide_perm"
-            android:title="@string/action_hide_perm"/>
+            android:title="@string/actionHidePerm"/>
     </group>
 </menu>

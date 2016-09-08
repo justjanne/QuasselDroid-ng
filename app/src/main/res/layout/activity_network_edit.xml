@@ -59,7 +59,7 @@
                     android:id="@+id/networkName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/networkname"/>
+                    android:hint="@string/labelNetworkName"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -76,7 +76,7 @@
                     android:layout_marginBottom="8dp"
                     android:paddingLeft="3dp"
                     android:paddingRight="3dp"
-                    android:text="@string/identity"
+                    android:text="@string/labelNetworkIdentity"
                     android:textSize="12sp"/>
 
                 <android.support.v7.widget.AppCompatSpinner
@@ -94,7 +94,7 @@
                 android:id="@+id/rejoinChannels"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/rejoinchannels"/>
+                android:text="@string/labelNetworkRejoinChannels"/>
 
             <android.support.v7.widget.ButtonBarLayout
                 android:layout_width="match_parent"
@@ -102,9 +102,13 @@
 
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/servers"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/edit_servers"/>
+                    android:layout_gravity="end"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:text="@string/actionEditServers"/>
 
             </android.support.v7.widget.ButtonBarLayout>
 
@@ -114,7 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
-                android:text="@string/custom_codecs"
+                android:text="@string/labelNetworkCustomCodecs"
                 android:textColor="?attr/colorAccent"
                 android:textSize="14sp"/>
 
@@ -133,7 +137,7 @@
                         android:id="@+id/codecForServer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/codecforserver"/>
+                        android:hint="@string/labelNetworkCodecForServer"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -145,7 +149,7 @@
                         android:id="@+id/codecForEncoding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/codecforencoding"/>
+                        android:hint="@string/labelNetworkCodecForEncoding"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -157,7 +161,7 @@
                         android:id="@+id/codecForDecoding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/codecfordecoding"/>
+                        android:hint="@string/labelNetworkCodecForDecoding"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -169,7 +173,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
-                android:text="@string/auto_identify"
+                android:text="@string/labelNetworkAutoIdentify"
                 android:textColor="?attr/colorAccent"
                 android:textSize="14sp"/>
 
@@ -188,7 +192,7 @@
                         android:id="@+id/autoIdentifyService"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/autoidentifyservice"/>
+                        android:hint="@string/labelNetworkAutoIdentifyService"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -200,7 +204,7 @@
                         android:id="@+id/autoIdentifyPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/autoidentifypassword"/>
+                        android:hint="@string/labelNetworkAutoIdentifyPassword"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -212,7 +216,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
-                android:text="@string/sasl"
+                android:text="@string/labelNetworkSasl"
                 android:textColor="?attr/colorAccent"
                 android:textSize="14sp"/>
 
@@ -230,7 +234,7 @@
                         android:id="@+id/saslAccount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/saslaccount"/>
+                        android:hint="@string/labelNetworkSaslAccount"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -242,7 +246,7 @@
                         android:id="@+id/saslPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/saslpassword"/>
+                        android:hint="@string/labelNetworkSaslPassword"/>
 
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
@@ -253,7 +257,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
-                android:text="@string/auto_reconnect"
+                android:text="@string/labelNetworkAutoReconnect"
                 android:textColor="?attr/colorAccent"
                 android:textSize="14sp"/>
 
@@ -271,7 +275,7 @@
                         android:id="@+id/autoReconnectInterval"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/autoreconnectinterval"
+                        android:hint="@string/labelNetworkAutoReconnectInterval"
                         android:inputType="number"/>
 
                 </android.support.design.widget.TextInputLayout>
@@ -280,7 +284,7 @@
                     android:id="@+id/unlimitedAutoReconnectRetries"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/unlimitedautoreconnectretries"/>
+                    android:text="@string/labelNetworkAutoReconnectRetriesUnlimited"/>
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -290,7 +294,7 @@
                         android:id="@+id/autoReconnectRetries"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/autoreconnectretries"
+                        android:hint="@string/labelNetworkAutoReconnectRetries"
                         android:inputType="number"/>
 
                 </android.support.design.widget.TextInputLayout>

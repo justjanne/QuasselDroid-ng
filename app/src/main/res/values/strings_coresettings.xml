@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ QuasselDroid - Quassel client for Android
+  ~ Copyright (C) 2016 Janne Koschinski
+  ~ Copyright (C) 2016 Ken Børge Viktil
+  ~ Copyright (C) 2016 Magnus Fjell
+  ~ Copyright (C) 2016 Martin Sandsmark <martin.sandsmark@kde.org>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify it
+  ~ under the terms of the GNU General Public License as published by the Free
+  ~ Software Foundation, either version 3 of the License, or (at your option)
+  ~ any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License along
+  ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <string name="labelChatlistAddNewChatsAutomatically">Add new chats automatically</string>
+    <string name="labelChatlistHideInactiveChats">Hide inactive chats</string>
+    <string name="labelChatlistHideInactiveNetworks">Hide inactive networks</string>
+    <string name="labelChatlistMinimumActivity">Minimum Activity</string>
+    <string name="labelChatlistName">Name</string>
+    <string name="labelChatlistNetwork">Network</string>
+    <string name="labelChatlistShowChannels">Show channels</string>
+    <string name="labelChatlistShowQueries">Show queries</string>
+    <string name="labelChatlistSortAlphabetically">Sort alphabetically</string>
+
+    <string name="labelIdentityAway">Away</string>
+    <string name="labelIdentityAwayReason">Reason</string>
+    <string name="labelIdentityDetachAway">Away on Detach</string>
+    <string name="labelIdentityDetachAwayReason">Reason</string>
+    <string name="labelIdentityIdent">Ident</string>
+    <string name="labelIdentityKickReason">Kick Reason</string>
+    <string name="labelIdentityMessages">Messages</string>
+    <string name="labelIdentityName">Identity Name</string>
+    <string name="labelIdentityPartReason">Part Reason</string>
+    <string name="labelIdentityQuitReason">Quit Reason</string>
+    <string name="labelIdentityRealName">Real Name</string>
+
+    <string name="labelNetworkAutoIdentify">Auto Identify</string>
+    <string name="labelNetworkAutoIdentifyPassword">Password</string>
+    <string name="labelNetworkAutoIdentifyService">Service</string>
+    <string name="labelNetworkAutoReconnect">Auto Reconnect</string>
+    <string name="labelNetworkAutoReconnectInterval">Interval</string>
+    <string name="labelNetworkAutoReconnectRetries">Retries</string>
+    <string name="labelNetworkAutoReconnectRetriesUnlimited">Unlimited Retries</string>
+    <string name="labelNetworkCodecForDecoding">Decoding</string>
+    <string name="labelNetworkCodecForEncoding">Encoding</string>
+    <string name="labelNetworkCodecForServer">Server</string>
+    <string name="labelNetworkCustomCodecs">Custom Codecs</string>
+    <string name="labelNetworkIdentity">Identity</string>
+    <string name="labelNetworkName">Network Name</string>
+    <string name="labelNetworkRejoinChannels">Rejoin Channels</string>
+    <string name="labelNetworkSasl">SASL</string>
+    <string name="labelNetworkSaslAccount">Account</string>
+    <string name="labelNetworkSaslPassword">Password</string>
+
+    <string name="labelNetworkServerHost">Host</string>
+    <string name="labelNetworkServerPassword">Password</string>
+    <string name="labelNetworkServerPort">Port</string>
+    <string name="labelNetworkServerProxy">Proxy</string>
+    <string name="labelNetworkServerProxyHost">Host</string>
+    <string name="labelNetworkServerProxyPassword">Password</string>
+    <string name="labelNetworkServerProxyPort">Port</string>
+    <string name="labelNetworkServerProxyType">Type</string>
+    <string name="labelNetworkServerProxyUser">User</string>
+    <string name="labelNetworkServerUseSSL">SSL</string>
+</resources>

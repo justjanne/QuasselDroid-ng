@@ -80,13 +80,13 @@ public class AccountSetupNameSlide extends SlideFragment {
     @Override
     @StringRes
     public int getTitle() {
-        return R.string.slideAccountnameTitle;
+        return R.string.slideAccountNameTitle;
     }
 
     @Override
     @StringRes
     public int getDescription() {
-        return R.string.slideAccountnameDescription;
+        return R.string.slideAccountNameDescription;
     }
 
     private boolean validName() {

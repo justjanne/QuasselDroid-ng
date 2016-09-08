@@ -84,13 +84,13 @@ public class AccountSetupUserSlide extends SlideFragment {
     @Override
     @StringRes
     public int getTitle() {
-        return R.string.slideAccountuserTitle;
+        return R.string.slideAccountUserTitle;
     }
 
     @Override
     @StringRes
     public int getDescription() {
-        return R.string.slideAccountuserDescription;
+        return R.string.slideAccountUserDescription;
     }
 
     private boolean validUser() {

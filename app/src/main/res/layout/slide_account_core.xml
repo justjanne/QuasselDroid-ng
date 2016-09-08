@@ -30,7 +30,7 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/labelHostname">
+        android:hint="@string/labelCoreHostname">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/host"
@@ -42,7 +42,7 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/labelPort">
+        android:hint="@string/labelCorePort">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/port"

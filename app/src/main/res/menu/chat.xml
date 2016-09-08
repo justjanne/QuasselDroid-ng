@@ -24,27 +24,31 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_search"
-        android:title="@string/label_search"
+        android:title="@string/actionSearch"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="never|collapseActionView"/>
     <item
         android:id="@+id/action_hide_events"
-        android:title="@string/labelHideEvents"
+        android:title="@string/actionHideEvents"
         app:showAsAction="never"/>
     <item
         android:id="@+id/action_settings"
-        android:title="@string/label_settings"
+        android:title="@string/actionSettings"
         app:showAsAction="never"/>
     <item
         android:id="@+id/action_networks"
-        android:title="@string/networks"
+        android:title="@string/actionNetworks"
         app:showAsAction="never"/>
     <item
         android:id="@+id/action_identities"
-        android:title="@string/identities"
+        android:title="@string/actionIdentities"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_ignorelist"
+        android:title="@string/actionIgnore"
         app:showAsAction="never"/>
     <item
         android:id="@+id/action_reauth"
-        android:title="@string/label_disconnect"
+        android:title="@string/actionDisconnect"
         app:showAsAction="never"/>
 </menu>

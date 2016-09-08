@@ -140,12 +140,12 @@ public class AccountSelectSlide extends SlideFragment implements AccountItem.OnD
 
     @Override
     protected int getTitle() {
-        return R.string.slideAccountselectTitle;
+        return R.string.slideAccountSelectTitle;
     }
 
     @Override
     protected int getDescription() {
-        return R.string.slideAccountselectDescription;
+        return R.string.slideAccountSelectDescription;
     }
 
     @Override

@@ -224,9 +224,9 @@ public class NetworkEditActivity extends BoundActivity {
     public void onBackPressed() {
         if (hasChanged(build())) {
             new MaterialDialog.Builder(this)
-                    .content(R.string.youhavemadechangesdoyouwishtosavethem)
-                    .positiveText(R.string.yes)
-                    .negativeText(R.string.no)
+                    .content(R.string.confirmationUnsavedChanges)
+                    .positiveText(R.string.actionYes)
+                    .negativeText(R.string.actionNo)
                     .positiveColor(context.themeUtil().res.colorAccent)
                     .negativeColor(context.themeUtil().res.colorForeground)
                     .onPositive((dialog, which) -> {
@@ -245,9 +245,9 @@ public class NetworkEditActivity extends BoundActivity {
         switch (item.getItemId()) {
             case R.id.action_delete: {
                 new MaterialDialog.Builder(this)
-                        .content(getString(R.string.areyousureyouwanttodelete, network.networkName()))
-                        .positiveText(R.string.yes)
-                        .negativeText(R.string.no)
+                        .content(getString(R.string.confirmationDelete, network.networkName()))
+                        .positiveText(R.string.actionYes)
+                        .negativeText(R.string.actionNo)
                         .positiveColor(context.themeUtil().res.colorAccent)
                         .negativeColor(context.themeUtil().res.colorForeground)
                         .onPositive((dialog, which) -> {

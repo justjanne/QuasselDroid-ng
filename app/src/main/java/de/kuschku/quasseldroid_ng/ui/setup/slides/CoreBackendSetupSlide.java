@@ -146,13 +146,13 @@ public class CoreBackendSetupSlide extends SlideFragment {
     @Override
     @StringRes
     public int getTitle() {
-        return R.string.slideAccountcoreTitle;
+        return R.string.slideCoreBackendSetupTitle;
     }
 
     @Override
     @StringRes
     public int getDescription() {
-        return R.string.slideAccountcoreDescription;
+        return R.string.slideCoreBackendSetupDescription;
     }
 
     @SuppressWarnings("unchecked")

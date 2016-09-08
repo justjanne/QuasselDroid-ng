@@ -84,13 +84,13 @@ public class AccountSetupCoreSlide extends SlideFragment {
     @Override
     @StringRes
     public int getTitle() {
-        return R.string.slideAccountcoreTitle;
+        return R.string.slideAccountCoreTitle;
     }
 
     @Override
     @StringRes
     public int getDescription() {
-        return R.string.slideAccountcoreDescription;
+        return R.string.slideAccountCoreDescription;
     }
 
     private boolean validPort() {
