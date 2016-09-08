@@ -79,7 +79,8 @@ public abstract class BoundFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        binder.removeCallback(consumer);
+        if (binder != null)
+            binder.removeCallback(consumer);
         ServiceHelper.disconnect(getContext(), connection);
     }
 
