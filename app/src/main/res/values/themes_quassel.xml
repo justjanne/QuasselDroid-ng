@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ QuasselDroid - Quassel client for Android
+  ~ Copyright (C) 2016 Janne Koschinski
+  ~ Copyright (C) 2016 Ken Børge Viktil
+  ~ Copyright (C) 2016 Magnus Fjell
+  ~ Copyright (C) 2016 Martin Sandsmark <martin.sandsmark@kde.org>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify it
+  ~ under the terms of the GNU General Public License as published by the Free
+  ~ Software Foundation, either version 3 of the License, or (at your option)
+  ~ any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License along
+  ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <style name="Quassel_Light" parent="AppTheme.Light">
+        <item name="senderColor0">#e90d7f</item>
+        <item name="senderColor1">#8e55e9</item>
+        <item name="senderColor2">#b30e0e</item>
+        <item name="senderColor3">#17b339</item>
+        <item name="senderColor4">#58afb3</item>
+        <item name="senderColor5">#9d54b3</item>
+        <item name="senderColor6">#b39775</item>
+        <item name="senderColor7">#3176b3</item>
+        <item name="senderColor8">#e90d7f</item>
+        <item name="senderColor9">#8e55e9</item>
+        <item name="senderColorA">#b30e0e</item>
+        <item name="senderColorB">#17b339</item>
+        <item name="senderColorC">#58afb3</item>
+        <item name="senderColorD">#9d54b3</item>
+        <item name="senderColorE">#b39775</item>
+        <item name="senderColorF">#3176b3</item>
+
+        <item name="colorForeground">#DE000000</item>
+        <item name="colorForegroundHighlight">#DE000000</item>
+        <item name="colorForegroundSecondary">#8A000000</item>
+        <item name="colorForegroundAction">#1a237e</item>
+        <item name="colorForegroundError">#800000</item>
+
+        <item name="colorForegroundMirc">0x1</item>
+
+        <item name="colorBackground">#FAFAFA</item>
+        <item name="android:windowBackground">@color/quasselLight_background</item>
+        <item name="colorBackgroundHighlight">#ff8811</item>
+        <item name="colorBackgroundSecondary">@null</item>
+        <item name="colorBackgroundCard">#FFFFFF</item>
+
+        <item name="colorTintActivity">#88cc33</item>
+        <item name="colorTintMessage">#2277dd</item>
+        <item name="colorTintHighlight">#ff8811</item>
+    </style>
+
+    <color name="quasselLight_background">#FAFAFA</color>
+
+    <style name="Quassel_Dark" parent="AppTheme">
+        <item name="senderColor0">#e90d7f</item>
+        <item name="senderColor1">#8e55e9</item>
+        <item name="senderColor2">#b30e0e</item>
+        <item name="senderColor3">#17b339</item>
+        <item name="senderColor4">#58afb3</item>
+        <item name="senderColor5">#9d54b3</item>
+        <item name="senderColor6">#b39775</item>
+        <item name="senderColor7">#3176b3</item>
+        <item name="senderColor8">#e90d7f</item>
+        <item name="senderColor9">#8e55e9</item>
+        <item name="senderColorA">#b30e0e</item>
+        <item name="senderColorB">#17b339</item>
+        <item name="senderColorC">#58afb3</item>
+        <item name="senderColorD">#9d54b3</item>
+        <item name="senderColorE">#b39775</item>
+        <item name="senderColorF">#3176b3</item>
+
+        <item name="colorForeground">#FFFFFF</item>
+        <item name="colorForegroundHighlight">#FFFFFF</item>
+        <item name="colorForegroundSecondary">#B3FFFFFF</item>
+        <item name="colorForegroundAction">#7986cb</item>
+        <item name="colorForegroundError">#800000</item>
+
+        <item name="colorForegroundMirc">0x0</item>
+
+        <item name="colorBackground">#303030</item>
+        <item name="android:windowBackground">@color/quasselDark_background</item>
+        <item name="colorBackgroundHighlight">#ff8811</item>
+        <item name="colorBackgroundSecondary">@null</item>
+        <item name="colorBackgroundCard">#424242</item>
+
+        <item name="colorTintActivity">#88cc33</item>
+        <item name="colorTintMessage">#2277dd</item>
+        <item name="colorTintHighlight">#ff8811</item>
+    </style>
+
+    <color name="quasselDark_background">#303030</color>
+</resources>

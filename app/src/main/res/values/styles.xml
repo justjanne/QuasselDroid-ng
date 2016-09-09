@@ -40,6 +40,23 @@
         <item name="colorAway">@color/colorAwayDark</item>
 
         <item name="cardStyle">@style/CardView.Dark</item>
+
+        <item name="mircColor0">#ffffff</item>
+        <item name="mircColor1">#000000</item>
+        <item name="mircColor2">#000080</item>
+        <item name="mircColor3">#008000</item>
+        <item name="mircColor4">#ff0000</item>
+        <item name="mircColor5">#800000</item>
+        <item name="mircColor6">#800080</item>
+        <item name="mircColor7">#ffa500</item>
+        <item name="mircColor8">#ffff00</item>
+        <item name="mircColor9">#00ff00</item>
+        <item name="mircColorA">#008080</item>
+        <item name="mircColorB">#00ffff</item>
+        <item name="mircColorC">#4169e1</item>
+        <item name="mircColorD">#ff00ff</item>
+        <item name="mircColorE">#808080</item>
+        <item name="mircColorF">#c0c0c0</item>
     </style>
 
     <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
@@ -61,6 +78,23 @@
         <item name="colorAway">@color/colorAwayLight</item>
 
         <item name="cardStyle">@style/CardView.Light</item>
+
+        <item name="mircColor0">#ffffff</item>
+        <item name="mircColor1">#000000</item>
+        <item name="mircColor2">#000080</item>
+        <item name="mircColor3">#008000</item>
+        <item name="mircColor4">#ff0000</item>
+        <item name="mircColor5">#800000</item>
+        <item name="mircColor6">#800080</item>
+        <item name="mircColor7">#ffa500</item>
+        <item name="mircColor8">#ffff00</item>
+        <item name="mircColor9">#00ff00</item>
+        <item name="mircColorA">#008080</item>
+        <item name="mircColorB">#00ffff</item>
+        <item name="mircColorC">#4169e1</item>
+        <item name="mircColorD">#ff00ff</item>
+        <item name="mircColorE">#808080</item>
+        <item name="mircColorF">#c0c0c0</item>
     </style>
 
     <style name="SetupTheme" parent="Theme.AppCompat.Light.NoActionBar">
