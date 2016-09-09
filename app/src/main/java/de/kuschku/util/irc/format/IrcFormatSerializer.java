@@ -29,7 +29,6 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 
-import java.util.Arrays;
 import java.util.Locale;
 
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
@@ -74,10 +73,6 @@ public class IrcFormatSerializer {
             next = text.nextSpanTransition(i, end, CharacterStyle.class);
             CharacterStyle[] style = text.getSpans(i, next, CharacterStyle.class);
 
-            Log.d("IrcFormat", "i is " + i);
-            Log.d("IrcFormat", "Next is " + next);
-            Log.d("IrcFormat", "Spans inbetween: " + Arrays.toString(style));
-
             int afterForeground = -1;
             int afterBackground = -1;
             boolean afterBold = false;
@@ -106,48 +101,41 @@ public class IrcFormatSerializer {
             }
 
             if (afterBold != bold) {
-                Log.d("IrcFormat", "Changing bold from " + bold + " to " + afterBold);
                 out.append(CODE_BOLD);
             }
 
             if (afterUnderline != underline) {
-                Log.d("IrcFormat", "Changing underline from " + underline + " to " + afterUnderline);
                 out.append(CODE_UNDERLINE);
             }
 
             if (afterItalic != italic) {
-                Log.d("IrcFormat", "Changing italic from " + italic + " to " + afterItalic);
                 out.append(CODE_ITALIC);
             }
 
             if (afterForeground != foreground || afterBackground != background) {
-                Log.d("IrcFormat", "Changing foreground from " + foreground + " to " + afterForeground);
-                Log.d("IrcFormat", "Changing background from " + background + " to " + afterBackground);
                 if (afterForeground == background && afterBackground == foreground) {
                     out.append(CODE_SWAP);
                 } else {
                     out.append(CODE_COLOR);
-                    if (background == afterBackground) {
-                        if (afterForeground != -1) {
-                            out.append(String.format(Locale.US, "%02d", afterForeground));
+                    if (afterBackground == -1) {
+                        if (afterForeground == -1) {
+                            // Foreground changed from a value to null, we don’t set any new foreground
+                            // Background changed from a value to null, we don’t set any new background
                         } else {
+                            out.append(CODE_COLOR);
+                            out.append(String.format(Locale.US, "%02d", afterForeground));
+                        }
+                    } else if (background == afterBackground) {
+                        if (afterForeground == -1) {
                             out.append(String.format(Locale.US, "%02d", context.themeUtil().res.colorForegroundMirc));
+                        } else {
+                            out.append(String.format(Locale.US, "%02d", afterForeground));
                         }
                     } else {
-                        if (afterBackground == -1) {
-                            if (afterForeground != -1) {
-                                out.append(CODE_COLOR);
-                                out.append(String.format(Locale.US, "%02d", afterForeground));
-                            } else {
-                                // Foreground changed from a value to null, we don’t set any new foreground
-                                // Background changed from a value to null, we don’t set any new background
-                            }
+                        if (afterForeground == -1) {
+                            out.append(String.format(Locale.US, "%02d,%02d", context.themeUtil().res.colorForegroundMirc, afterBackground));
                         } else {
-                            if (afterForeground != -1) {
-                                out.append(String.format(Locale.US, "%02d,%02d", afterForeground, afterBackground));
-                            } else {
-                                out.append(String.format(Locale.US, "%02d,%02d", context.themeUtil().res.colorForegroundMirc, afterBackground));
-                            }
+                            out.append(String.format(Locale.US, "%02d,%02d", afterForeground, afterBackground));
                         }
                     }
                 }

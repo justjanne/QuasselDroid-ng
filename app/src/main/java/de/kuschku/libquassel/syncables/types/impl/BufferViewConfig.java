@@ -162,11 +162,13 @@ public class BufferViewConfig extends ABufferViewConfig {
                     List<String> infos = new ArrayList<>();
                     for (int bufferId : bufferList()) {
                         Buffer buffer = client.bufferManager().buffer(bufferId);
-                        if (buffer == null)
+                        if (buffer == null) {
                             Log.w("libquassel", "Buffer is null: " + bufferId + " while adding buffer " + info);
-                        BufferInfo info1 = buffer.getInfo();
-                        if (info1.networkId == info.networkId)
-                            infos.add(info1.name);
+                        } else {
+                            BufferInfo info1 = buffer.getInfo();
+                            if (info1.networkId == info.networkId)
+                                infos.add(info1.name);
+                        }
                     }
                     infos.add(info.name);
                     Collections.sort(infos);
