@@ -51,7 +51,7 @@
 
     <string name="messageTopic">%1$s has changed topic for %2$s to: "%3$s"</string>
 
-    <string name="colornameClear">Zurücksetzen</string>
+    <string name="colornameClear">Remove Styling</string>
     <string name="colornameMircColor0">White</string>
     <string name="colornameMircColor1">Black</string>
     <string name="colornameMircColor2">Blue</string>
