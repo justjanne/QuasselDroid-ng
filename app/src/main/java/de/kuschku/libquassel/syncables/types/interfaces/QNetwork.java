@@ -30,6 +30,7 @@ import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.syncables.Synced;
 import de.kuschku.libquassel.syncables.types.impl.IrcChannel;
 import de.kuschku.libquassel.syncables.types.impl.NetworkInfo;
+import de.kuschku.util.irc.IrcCaseMappers;
 import de.kuschku.util.irc.chanmodes.IrcModeProvider;
 
 public interface QNetwork extends QObservable<QNetwork> {
@@ -231,6 +232,7 @@ public interface QNetwork extends QObservable<QNetwork> {
     @Synced
     void setUseSasl(boolean useSasl);
 
+    void setSaslPassword(final String saslPassword);
     void _setUseSasl(boolean useSasl);
 
     @Synced
@@ -239,7 +241,6 @@ public interface QNetwork extends QObservable<QNetwork> {
     void _setSaslAccount(final String saslAccount);
 
     @Synced
-    void setSaslPassword(final String saslPassword);
 
     void _setSaslPassword(final String saslPassword);
 
@@ -349,6 +350,8 @@ public interface QNetwork extends QObservable<QNetwork> {
     void _removeChansAndUsers();
 
     void _addIrcChannel(IrcChannel ircChannel);
+
+    IrcCaseMappers.IrcCaseMapper caseMapper();
 
     enum ConnectionState {
         Disconnected(0),

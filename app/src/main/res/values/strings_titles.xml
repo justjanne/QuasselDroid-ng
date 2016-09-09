@@ -33,6 +33,8 @@
     <string name="titleEditChatLists">Edit Chat Lists</string>
     <string name="titleEditIdentities">Edit Identities</string>
     <string name="titleEditIdentity">Edit Identity</string>
+    <string name="titleEditIgnoreRule">Edit Ignore Rule</string>
+    <string name="titleEditIgnoreList">Edit Ignore List</string>
     <string name="titleEditNetwork">Edit Network</string>
     <string name="titleEditNetworkServer">Edit NetworkServer</string>
     <string name="titleEditNetworkServers">Edit NetworkServers</string>

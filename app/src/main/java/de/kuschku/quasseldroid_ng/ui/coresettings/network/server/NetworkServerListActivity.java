@@ -135,6 +135,11 @@ public class NetworkServerListActivity extends BoundActivity implements OnStartD
             } else {
                 servers.set(id, server);
             }
+        } else if (resultCode == NetworkServerEditActivity.RESULT_DELETE && data != null) {
+            int id = data.getIntExtra("id", -1);
+            if (id != -1) {
+                servers.remove(id);
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

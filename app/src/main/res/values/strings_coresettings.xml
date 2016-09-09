@@ -32,6 +32,11 @@
     <string name="labelChatlistShowQueries">Show queries</string>
     <string name="labelChatlistSortAlphabetically">Sort alphabetically</string>
 
+    <string name="labelChatlistMinimumActivityNone">labelChatlistMinimumActivityNone</string>
+    <string name="labelChatlistMinimumActivityOther">labelChatlistMinimumActivityOther</string>
+    <string name="labelChatlistMinimumActivityMessage">labelChatlistMinimumActivityMessage</string>
+    <string name="labelChatlistMinimumActivityHighlight">labelChatlistMinimumActivityHighlight</string>
+
     <string name="labelIdentityAway">Away</string>
     <string name="labelIdentityAwayReason">Reason</string>
     <string name="labelIdentityDetachAway">Away on Detach</string>
@@ -43,6 +48,24 @@
     <string name="labelIdentityPartReason">Part Reason</string>
     <string name="labelIdentityQuitReason">Quit Reason</string>
     <string name="labelIdentityRealName">Real Name</string>
+
+    <string name="labelIgnoreRule">Ignore Rule</string>
+    <string name="labelIgnoreRuleIsRegEx">Regular Expression</string>
+    <string name="labelIgnoreRuleScope">Scope</string>
+    <string name="labelIgnoreRuleStrictness">Strictness</string>
+    <string name="labelIgnoreRuleType">Rule Type</string>
+
+    <string name="labelIgnoreStrictnessUnmatched">Unmatched</string>
+    <string name="labelIgnoreStrictnessSoft">Dynamic</string>
+    <string name="labelIgnoreStrictnessHard">Permanent</string>
+
+    <string name="labelIgnoreRuleSender">Sender</string>
+    <string name="labelIgnoreRuleMessage">Message</string>
+    <string name="labelIgnoreRuleCtcp">CTCP</string>
+
+    <string name="labelIgnoreScopeGlobal">Global</string>
+    <string name="labelIgnoreScopeNetwork">Network</string>
+    <string name="labelIgnoreScopeChannel">Channel</string>
 
     <string name="labelNetworkAutoIdentify">Auto Identify</string>
     <string name="labelNetworkAutoIdentifyPassword">Password</string>
@@ -72,4 +95,8 @@
     <string name="labelNetworkServerProxyType">Type</string>
     <string name="labelNetworkServerProxyUser">User</string>
     <string name="labelNetworkServerUseSSL">SSL</string>
+
+    <string name="labelNetworkServerProxyDefault">Default Proxy</string>
+    <string name="labelNetworkServerProxySocks5">Socks5</string>
+    <string name="labelNetworkServerProxyHttp">Http</string>
 </resources>

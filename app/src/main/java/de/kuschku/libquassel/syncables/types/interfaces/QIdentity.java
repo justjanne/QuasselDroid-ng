@@ -24,7 +24,9 @@ package de.kuschku.libquassel.syncables.types.interfaces;
 import android.support.annotation.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
+import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.Synced;
 import de.kuschku.libquassel.syncables.types.impl.Identity;
 
@@ -193,4 +195,8 @@ public interface QIdentity extends QObservable<QIdentity> {
 
     @Synced
     void update(Identity identity);
+
+    void _update(QIdentity identity);
+
+    void _update(Map<String, QVariant> identity);
 }

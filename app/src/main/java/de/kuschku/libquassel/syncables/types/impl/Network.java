@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -45,7 +46,7 @@ import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.CompatibilityUtils;
-import de.kuschku.util.irc.IrcCaseMapper;
+import de.kuschku.util.irc.IrcCaseMappers;
 import de.kuschku.util.irc.IrcUserUtils;
 import de.kuschku.util.irc.ModeUtils;
 import de.kuschku.util.irc.chanmodes.IrcModeProvider;
@@ -72,6 +73,7 @@ public class Network extends ANetwork implements Observer {
     private List<String> prefixes;
     private List<String> prefixModes;
     private IrcModeProvider modeProvider;
+    private IrcCaseMappers.IrcCaseMapper caseMapper;
 
     public Network(Map<String, QIrcChannel> channels,
                    Map<String, QIrcUser> nicks,
@@ -88,6 +90,8 @@ public class Network extends ANetwork implements Observer {
         this.myNick = myNick;
         _setNetworkInfo(networkInfo);
         this.networkInfo._setServerList(serverList);
+
+        updateCaseMapper();
     }
 
     public Network(Map<String, QIrcChannel> channels, Map<String, QIrcUser> users, Map<String, String> supports, int connectionState, String currentServer, boolean isConnected, int latency, String myNick, NetworkInfo networkInfo) {
@@ -97,7 +101,7 @@ public class Network extends ANetwork implements Observer {
     public Network(Map<String, QIrcChannel> channels, Map<String, QIrcUser> nicks, List<NetworkServer> serverList, Map<String, String> supports, ConnectionState connectionState, String currentServer, boolean isConnected, int latency, String myNick, NetworkInfo networkInfo) {
         this.channels = new HashMap<>(channels);
         this.nicks = new HashMap<>(nicks);
-        this.supports = supports;
+        this.supports = new HashMap<>(supports);
         this.connectionState = connectionState;
         this.currentServer = currentServer;
         this.isConnected = isConnected;
@@ -105,6 +109,8 @@ public class Network extends ANetwork implements Observer {
         this.myNick = myNick;
         _setNetworkInfo(networkInfo);
         this.networkInfo._setServerList(serverList);
+
+        updateCaseMapper();
     }
 
     @NonNull
@@ -130,12 +136,12 @@ public class Network extends ANetwork implements Observer {
 
     @Override
     public boolean isMyNick(String nick) {
-        return IrcCaseMapper.equalsIgnoreCase(myNick, nick);
+        return caseMapper.equalsIgnoreCase(myNick, nick);
     }
 
     @Override
     public boolean isMe(@NonNull QIrcUser ircuser) {
-        return IrcCaseMapper.equalsIgnoreCase(ircuser.nick(), myNick());
+        return caseMapper.equalsIgnoreCase(ircuser.nick(), myNick());
     }
 
     @Override
@@ -403,7 +409,7 @@ public class Network extends ANetwork implements Observer {
 
     @Override
     public String support(@NonNull String param) {
-        String key = IrcCaseMapper.toUpperCase(param);
+        String key = param.toUpperCase(Locale.US);
         if (supports.containsKey(key))
             return supports.get(key);
         else
@@ -428,18 +434,18 @@ public class Network extends ANetwork implements Observer {
 
     @Override
     public QIrcChannel newIrcChannel(@NonNull String channelname) {
-        if (!channels.containsKey(IrcCaseMapper.toLowerCase(channelname))) {
+        if (!channels.containsKey(caseMapper.toLowerCase(channelname))) {
             QIrcChannel channel = IrcChannel.create(channelname);
-            channels.put(IrcCaseMapper.toLowerCase(channelname), channel);
+            channels.put(caseMapper.toLowerCase(channelname), channel);
             channel.init(this, client);
         }
-        return channels.get(IrcCaseMapper.toLowerCase(channelname));
+        return channels.get(caseMapper.toLowerCase(channelname));
     }
 
     @Nullable
     @Override
     public QIrcChannel ircChannel(String channelname) {
-        channelname = IrcCaseMapper.toLowerCase(channelname);
+        channelname = caseMapper.toLowerCase(channelname);
         if (channels.containsKey(channelname)) {
             return channels.get(channelname);
         } else {
@@ -649,12 +655,35 @@ public class Network extends ANetwork implements Observer {
     public void _addSupport(String param, String value) {
         supports.put(param, value);
         _update();
+        updateCaseMapper();
+    }
+
+    @Override
+    public IrcCaseMappers.IrcCaseMapper caseMapper() {
+        return caseMapper;
+    }
+
+    private void updateCaseMapper() {
+        String mapping = support("CASEMAPPING");
+        if (mapping == null) {
+            caseMapper = IrcCaseMappers.unicode;
+        } else {
+            switch (mapping.toLowerCase(Locale.US)) {
+                case "rfc1459":
+                case "strict-rfc1459":
+                    caseMapper = IrcCaseMappers.irc;
+                case "ascii":
+                default:
+                    caseMapper = IrcCaseMappers.unicode;
+            }
+        }
     }
 
     @Override
     public void _removeSupport(String param) {
         supports.remove(param);
         _update();
+        updateCaseMapper();
     }
 
     @Override
@@ -669,7 +698,7 @@ public class Network extends ANetwork implements Observer {
 
     @Override
     public QIrcUser _updateNickFromMask(@NonNull String mask) {
-        String nick = IrcCaseMapper.toLowerCase(IrcUserUtils.getNick(mask));
+        String nick = caseMapper.toLowerCase(IrcUserUtils.getNick(mask));
         QIrcUser user;
 
         if (nicks.containsKey(nick)) {
@@ -694,7 +723,7 @@ public class Network extends ANetwork implements Observer {
 
     @Override
     public void _ircUserNickChanged(@NonNull String oldNick, @NonNull String newNick) {
-        if (!IrcCaseMapper.equalsIgnoreCase(oldNick, newNick)) {
+        if (!caseMapper.equalsIgnoreCase(oldNick, newNick)) {
             nicks.put(newNick, nicks.remove(oldNick));
             for (QIrcChannel channel : channels.values()) {
                 channel._ircUserNickChanged(oldNick, newNick);
@@ -702,7 +731,7 @@ public class Network extends ANetwork implements Observer {
             _update();
         }
 
-        if (IrcCaseMapper.equalsIgnoreCase(myNick(), oldNick))
+        if (caseMapper.equalsIgnoreCase(myNick(), oldNick))
             _setMyNick(newNick);
     }
 

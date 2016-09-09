@@ -25,6 +25,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ import de.kuschku.libquassel.functions.types.PackedFunction;
 import de.kuschku.libquassel.functions.types.SerializedFunction;
 import de.kuschku.libquassel.functions.types.UnpackedFunction;
 import de.kuschku.libquassel.objects.serializers.ObjectSerializer;
+import de.kuschku.libquassel.primitives.QMetaType;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.impl.IgnoreListManager;
 
@@ -56,14 +58,14 @@ public class IgnoreListManagerSerializer implements ObjectSerializer<IgnoreListM
     @Override
     public Map<String, QVariant<Object>> toVariantMap(@NonNull IgnoreListManager data) {
         HashMap<String, QVariant<Object>> map = new HashMap<>();
-        List<Integer> scope = new ArrayList<>(data.ignoreRules().size());
-        List<Integer> ignoreType = new ArrayList<>(data.ignoreRules().size());
-        List<Boolean> isActive = new ArrayList<>(data.ignoreRules().size());
-        List<String> scopeRule = new ArrayList<>(data.ignoreRules().size());
-        List<Boolean> isRegEx = new ArrayList<>(data.ignoreRules().size());
-        List<Integer> strictness = new ArrayList<>(data.ignoreRules().size());
-        List<String> ignoreRule = new ArrayList<>(data.ignoreRules().size());
-        for (IgnoreListManager.IgnoreListItem item : data.ignoreRules()) {
+        List<Integer> scope = new ArrayList<>(data.ignoreList().size());
+        List<Integer> ignoreType = new ArrayList<>(data.ignoreList().size());
+        List<Boolean> isActive = new ArrayList<>(data.ignoreList().size());
+        List<String> scopeRule = new ArrayList<>(data.ignoreList().size());
+        List<Boolean> isRegEx = new ArrayList<>(data.ignoreList().size());
+        List<Integer> strictness = new ArrayList<>(data.ignoreList().size());
+        List<String> ignoreRule = new ArrayList<>(data.ignoreList().size());
+        for (IgnoreListManager.IgnoreListItem item : data.ignoreList()) {
             scope.add(item.getScope().value);
             ignoreType.add(item.getType().value);
             isActive.add(item.isActive());
@@ -80,7 +82,9 @@ public class IgnoreListManagerSerializer implements ObjectSerializer<IgnoreListM
         map.put("isRegEx", new QVariant(isRegEx));
         map.put("strictness", new QVariant(strictness));
         map.put("ignoreRule", new QVariant(ignoreRule));
-        return map;
+
+
+        return Collections.singletonMap("IgnoreList", new QVariant<>(QMetaType.Type.QVariantMap, map));
     }
 
     @NonNull
@@ -92,16 +96,17 @@ public class IgnoreListManagerSerializer implements ObjectSerializer<IgnoreListM
     @NonNull
     @Override
     public IgnoreListManager fromLegacy(@NonNull Map<String, QVariant> map) {
-        Map<String, QVariant> internalMap = (Map<String, QVariant>) map.get("IgnoreList").data;
-        assertNotNull(internalMap);
+        if (map.containsKey("IgnoreList"))
+            map = (Map<String, QVariant>) map.get("IgnoreList").data;
+        assertNotNull(map);
         return new IgnoreListManager(
-                (List<Integer>) internalMap.get("scope").data,
-                (List<Integer>) internalMap.get("ignoreType").data,
-                (List<Boolean>) internalMap.get("isActive").data,
-                (List<String>) internalMap.get("scopeRule").data,
-                (List<Boolean>) internalMap.get("isRegEx").data,
-                (List<Integer>) internalMap.get("strictness").data,
-                (List<String>) internalMap.get("ignoreRule").data
+                (List<Integer>) map.get("scope").data,
+                (List<Integer>) map.get("ignoreType").data,
+                (List<Boolean>) map.get("isActive").data,
+                (List<String>) map.get("scopeRule").data,
+                (List<Boolean>) map.get("isRegEx").data,
+                (List<Integer>) map.get("strictness").data,
+                (List<String>) map.get("ignoreRule").data
         );
     }
 

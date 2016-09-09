@@ -19,38 +19,37 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.util.irc;
+package de.kuschku.libquassel.syncables.types.invokers;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import java.util.Locale;
+import java.util.Map;
 
-import de.kuschku.util.backports.Objects;
+import de.kuschku.libquassel.functions.types.SyncFunction;
+import de.kuschku.libquassel.primitives.types.QVariant;
+import de.kuschku.libquassel.syncables.types.interfaces.QCoreInfo;
 
-public class IrcCaseMapper {
-    private IrcCaseMapper() {
+public class ICoreInfo implements Invoker<QCoreInfo> {
+    @NonNull
+    private static final ICoreInfo invoker = new ICoreInfo();
 
+    private ICoreInfo() {
     }
 
-    public static String toLowerCase(@NonNull String s) {
-        return s.toLowerCase(Locale.US)
-                .replaceAll("\\[", "{")
-                .replaceAll("\\]", "}")
-                .replaceAll("\\^", "~");
+    @NonNull
+    public static ICoreInfo get() {
+        return invoker;
     }
 
-    public static String toUpperCase(@NonNull String s) {
-        return s.toUpperCase(Locale.US)
-                .replaceAll("\\{", "[")
-                .replaceAll("\\}", "]")
-                .replaceAll("~", "^");
-    }
-
-    public static boolean equalsIgnoreCase(@Nullable String a, @Nullable String b) {
-        if (a == null || b == null)
-            return (Objects.equals(a, b));
-        else
-            return toLowerCase(a).equals(toLowerCase(b)) || toUpperCase(a).equals(toUpperCase(b));
+    @Override
+    public void invoke(SyncFunction function, QCoreInfo obj) {
+        switch (function.methodName) {
+            case "setCoreData": {
+                obj._setCoreData((Map<String, QVariant>) function.params.get(0));
+            } break;
+            case "update": {
+                InvokerHelper.update(obj, function.params.get(0));
+            } break;
+        }
     }
 }

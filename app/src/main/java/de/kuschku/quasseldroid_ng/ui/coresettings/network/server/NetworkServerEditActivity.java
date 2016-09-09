@@ -53,6 +53,8 @@ import de.kuschku.util.ui.AnimationHelper;
 
 public class NetworkServerEditActivity extends BoundActivity {
 
+    public static final int RESULT_DELETE = -2;
+
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
@@ -158,13 +160,23 @@ public class NetworkServerEditActivity extends BoundActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.confirm, menu);
+        if (id == -1)
+            getMenuInflater().inflate(R.menu.confirm, menu);
+        else
+            getMenuInflater().inflate(R.menu.confirm_delete, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_delete: {
+                Intent intent = new Intent();
+                intent.putExtra("id", id);
+                setResult(RESULT_DELETE, intent);
+                finish();
+            }
+            return true;
             case R.id.action_confirm: {
                 Intent intent = new Intent();
                 intent.putExtra("server", NetworkServerSerializeHelper.serialize(new NetworkServer(

@@ -86,6 +86,8 @@ public interface QBufferViewConfig extends QSyncableObject<QBufferViewConfig> {
 
     void _setMinimumActivity(MinimumActivity activity);
 
+    void _setMinimumActivity(int activity);
+
     boolean hideInactiveBuffers();
 
     @Synced

@@ -49,6 +49,7 @@ import de.kuschku.libquassel.objects.types.CoreSetupAck;
 import de.kuschku.libquassel.objects.types.SessionInit;
 import de.kuschku.libquassel.syncables.SyncableRegistry;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
+import de.kuschku.libquassel.syncables.types.invokers.InvokerRegistry;
 import de.kuschku.util.ReflectionUtils;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -110,7 +111,8 @@ public class ProtocolHandler implements IProtocolHandler {
                 if (syncable instanceof SyncableObject && !((SyncableObject) syncable).initialized()) {
                     client.initObject(packedFunc.className, packedFunc.objectName, (SyncableObject) syncable);
                 } else {
-                    ReflectionUtils.invokeMethod(syncable, "_" + packedFunc.methodName, packedFunc.params);
+                    //ReflectionUtils.invokeMethod(syncable, "_" + packedFunc.methodName, packedFunc.params);
+                    InvokerRegistry.invoke(packedFunc, syncable);
                 }
             }
         } catch (Exception e) {

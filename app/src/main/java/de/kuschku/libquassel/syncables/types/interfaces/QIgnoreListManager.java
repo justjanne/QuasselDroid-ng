@@ -23,13 +23,13 @@ package de.kuschku.libquassel.syncables.types.interfaces;
 
 import android.support.annotation.NonNull;
 
-import java.util.List;
 import java.util.Map;
 
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.Synced;
 import de.kuschku.libquassel.syncables.types.impl.IgnoreListManager;
+import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public interface QIgnoreListManager extends QObservable<QIgnoreListManager> {
     @Synced
@@ -50,15 +50,23 @@ public interface QIgnoreListManager extends QObservable<QIgnoreListManager> {
 
     void _addIgnoreListItem(int type, final String ignoreRule, boolean isRegEx, int strictness, int scope, final String scopeRule, boolean isActive);
 
+    void _addIgnoreListItem(IgnoreListManager.IgnoreListItem item);
+
     StrictnessType match(String msgContents, String msgSender, Message.Type msgType, String network, String bufferName);
 
     boolean matches(Message message, QNetwork network);
+
+    void _update(Map<String, QVariant> from);
+
+    void _update(QIgnoreListManager from);
 
     void requestUpdate(Map<String, QVariant<Object>> variantMap);
 
     void requestUpdate();
 
-    List<? extends IgnoreListManager.IgnoreListItem> ignoreList();
+    ObservableSortedList<? extends IgnoreListManager.IgnoreListItem> ignoreList();
+
+    void _toggleIgnoreRule(IgnoreListManager.IgnoreListItem ignoreRule, boolean active);
 
     enum IgnoreType {
         SenderIgnore(0),

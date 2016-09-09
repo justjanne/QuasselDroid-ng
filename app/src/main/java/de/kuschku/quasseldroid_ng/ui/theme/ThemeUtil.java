@@ -36,6 +36,7 @@ import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.objects.types.NetworkServer;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
+import de.kuschku.libquassel.syncables.types.interfaces.QIgnoreListManager;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.annotationbind.AutoColor;
@@ -628,6 +629,54 @@ public class ThemeUtil {
         @AutoString(R.string.statusWelcome)
         public String statusWelcome;
 
+        @AutoString(R.string.labelNetworkServerProxyDefault)
+        public String labelNetworkServerProxyDefault;
+
+        @AutoString(R.string.labelNetworkServerProxySocks5)
+        public String labelNetworkServerProxySocks5;
+
+        @AutoString(R.string.labelNetworkServerProxyHttp)
+        public String labelNetworkServerProxyHttp;
+
+        @AutoString(R.string.labelChatlistMinimumActivityNone)
+        public String labelChatlistMinimumActivityNone;
+
+        @AutoString(R.string.labelChatlistMinimumActivityOther)
+        public String labelChatlistMinimumActivityOther;
+
+        @AutoString(R.string.labelChatlistMinimumActivityMessage)
+        public String labelChatlistMinimumActivityMessage;
+
+        @AutoString(R.string.labelChatlistMinimumActivityHighlight)
+        public String labelChatlistMinimumActivityHighlight;
+
+        @AutoString(R.string.labelIgnoreStrictnessUnmatched)
+        public String labelIgnoreStrictnessUnmatched;
+
+        @AutoString(R.string.labelIgnoreStrictnessSoft)
+        public String labelIgnoreStrictnessSoft;
+
+        @AutoString(R.string.labelIgnoreStrictnessHard)
+        public String labelIgnoreStrictnessHard;
+
+        @AutoString(R.string.labelIgnoreRuleSender)
+        public String labelIgnoreRuleSender;
+
+        @AutoString(R.string.labelIgnoreRuleMessage)
+        public String labelIgnoreRuleMessage;
+
+        @AutoString(R.string.labelIgnoreRuleCtcp)
+        public String labelIgnoreRuleCtcp;
+
+        @AutoString(R.string.labelIgnoreScopeGlobal)
+        public String labelIgnoreScopeGlobal;
+
+        @AutoString(R.string.labelIgnoreScopeNetwork)
+        public String labelIgnoreScopeNetwork;
+
+        @AutoString(R.string.labelIgnoreScopeChannel)
+        public String labelIgnoreScopeChannel;
+
         @NonNull
         public CharSequence formatUsername(@NonNull CharSequence nick, @NonNull CharSequence hostmask) {
             return SpanFormatter.format(usernameHostmask, nick, hostmask);
@@ -720,11 +769,11 @@ public class ThemeUtil {
             switch (type) {
                 default:
                 case DefaultProxy:
-                    return "No Proxy";
+                    return labelNetworkServerProxyDefault;
                 case Socks5Proxy:
-                    return "Socks5";
+                    return labelNetworkServerProxySocks5;
                 case HttpProxy:
-                    return "Http";
+                    return labelNetworkServerProxyHttp;
             }
         }
 
@@ -732,13 +781,49 @@ public class ThemeUtil {
             switch (minimumActivity) {
                 default:
                 case NONE:
-                    return "No Activity";
+                    return labelChatlistMinimumActivityNone;
                 case OTHER:
-                    return "Other Activity";
+                    return labelChatlistMinimumActivityOther;
                 case MESSAGE:
-                    return "Message";
+                    return labelChatlistMinimumActivityMessage;
                 case HIGHLIGHT:
-                    return "Highlight";
+                    return labelChatlistMinimumActivityHighlight;
+            }
+        }
+
+        public String strictnessType(QIgnoreListManager.StrictnessType strictnessType) {
+            switch (strictnessType) {
+                default:
+                case UnmatchedStrictness:
+                    return labelIgnoreStrictnessUnmatched;
+                case SoftStrictness:
+                    return labelIgnoreStrictnessSoft;
+                case HardStrictness:
+                    return labelIgnoreStrictnessHard;
+            }
+        }
+
+        public String ignoreType(QIgnoreListManager.IgnoreType ignoreType) {
+            switch (ignoreType) {
+                default:
+                case SenderIgnore:
+                    return labelIgnoreRuleSender;
+                case MessageIgnore:
+                    return labelIgnoreRuleMessage;
+                case CtcpIgnore:
+                    return labelIgnoreRuleCtcp;
+            }
+        }
+
+        public String scopeType(QIgnoreListManager.ScopeType scopeType) {
+            switch (scopeType) {
+                default:
+                case GlobalScope:
+                    return labelIgnoreScopeGlobal;
+                case NetworkScope:
+                    return labelIgnoreScopeNetwork;
+                case ChannelScope:
+                    return labelIgnoreScopeChannel;
             }
         }
     }

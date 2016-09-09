@@ -25,8 +25,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.util.SortedList;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -232,8 +230,19 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
 
     @NonNull
     @Override
-    public <T1> T1[] toArray(@NonNull T1[] array) {
-        throw new MaterialDialog.NotImplementedException("Not implemented");
+    public <T1> T1[] toArray(@NonNull T1[] a) {
+        try {
+            Object[] elements = toArray();
+            if (a.length < elements.length)
+                // Make a new array of a's runtime type, but my contents:
+                return (T1[]) Arrays.copyOf(elements, elements.length, a.getClass());
+            System.arraycopy(elements, 0, a, 0, elements.length);
+            if (a.length > elements.length)
+                a[elements.length] = null;
+            return a;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void notifyItemChanged(int position) {

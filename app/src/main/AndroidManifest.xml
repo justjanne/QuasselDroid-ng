@@ -145,6 +145,20 @@
             android:theme="@style/AppTheme.Light"/>
 
         <activity
+            android:name=".ui.coresettings.ignore.IgnoreListActivity"
+            android:label="@string/titleEditIgnoreList"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.chat.MainActivity"
+            android:theme="@style/AppTheme.Light"/>
+
+        <activity
+            android:name=".ui.coresettings.ignore.IgnoreRuleEditActivity"
+            android:label="@string/titleEditIgnoreRule"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.coresettings.ignore.IgnoreListActivity"
+            android:theme="@style/AppTheme.Light"/>
+
+        <activity
             android:name=".ui.setup.AccountSetupActivity"
             android:label="@string/titleAccountSetup"
             android:launchMode="singleTask"

@@ -32,7 +32,6 @@ import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
-import de.kuschku.util.irc.IrcCaseMapper;
 import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableSet;
@@ -46,7 +45,7 @@ public class NetworkItem implements ParentListItem {
         @Override
         public int compare(Buffer o1, Buffer o2) {
             if (o1.getInfo().type == o2.getInfo().type) {
-                return IrcCaseMapper.toLowerCase(o1.getName()).compareTo(IrcCaseMapper.toLowerCase(o2.getName()));
+                return network.caseMapper().toLowerCase(o1.getName()).compareTo(network.caseMapper().toLowerCase(o2.getName()));
             } else {
                 if (o1.getInfo().type == BufferInfo.Type.STATUS)
                     return -1;

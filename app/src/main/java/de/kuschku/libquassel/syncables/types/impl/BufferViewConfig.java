@@ -264,6 +264,11 @@ public class BufferViewConfig extends ABufferViewConfig {
     }
 
     @Override
+    public void _setMinimumActivity(int activity) {
+        _setMinimumActivity(MinimumActivity.fromId(activity));
+    }
+
+    @Override
     public boolean hideInactiveBuffers() {
         return hideInactiveBuffers;
     }

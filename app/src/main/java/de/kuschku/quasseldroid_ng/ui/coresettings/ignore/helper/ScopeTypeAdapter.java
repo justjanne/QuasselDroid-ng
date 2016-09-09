@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.ui.coresettings.chatlist;
+package de.kuschku.quasseldroid_ng.ui.coresettings.ignore.helper;
 
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
@@ -31,15 +31,15 @@ import android.widget.TextView;
 import java.util.Arrays;
 import java.util.List;
 
-import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
+import de.kuschku.libquassel.syncables.types.interfaces.QIgnoreListManager;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 
-class MinimumActivityAdapter implements SpinnerAdapter {
-    final List<QBufferViewConfig.MinimumActivity> list = Arrays.asList(QBufferViewConfig.MinimumActivity.values());
+public class ScopeTypeAdapter implements SpinnerAdapter {
+    final List<QIgnoreListManager.ScopeType> list = Arrays.asList(QIgnoreListManager.ScopeType.values());
     private final AppContext context;
 
-    public MinimumActivityAdapter(AppContext context) {
+    public ScopeTypeAdapter(AppContext context) {
         this.context = context;
     }
 
@@ -47,8 +47,8 @@ class MinimumActivityAdapter implements SpinnerAdapter {
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         TextView view = (TextView) inflater.inflate(R.layout.widget_spinner_item_toolbar, parent, false);
-        QBufferViewConfig.MinimumActivity minimumActivity = getItem(position);
-        view.setText(minimumActivity == null ? "" : context.themeUtil().translations.minimumActivity(minimumActivity));
+        QIgnoreListManager.ScopeType minimumActivity = getItem(position);
+        view.setText(minimumActivity == null ? "" : context.themeUtil().translations.scopeType(minimumActivity));
         return view;
     }
 
@@ -68,13 +68,13 @@ class MinimumActivityAdapter implements SpinnerAdapter {
     }
 
     @Override
-    public QBufferViewConfig.MinimumActivity getItem(int position) {
+    public QIgnoreListManager.ScopeType getItem(int position) {
         return list.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return getItem(position).id;
+        return getItem(position).value;
     }
 
     @Override
@@ -86,8 +86,8 @@ class MinimumActivityAdapter implements SpinnerAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         TextView view = (TextView) inflater.inflate(R.layout.widget_spinner_item_inline, parent, false);
-        QBufferViewConfig.MinimumActivity minimumActivity = getItem(position);
-        view.setText(minimumActivity == null ? "" : context.themeUtil().translations.minimumActivity(minimumActivity));
+        QIgnoreListManager.ScopeType scopeType = getItem(position);
+        view.setText(scopeType == null ? "" : context.themeUtil().translations.scopeType(scopeType));
         return view;
     }
 
@@ -106,7 +106,7 @@ class MinimumActivityAdapter implements SpinnerAdapter {
         return list.isEmpty();
     }
 
-    public int indexOf(QBufferViewConfig.MinimumActivity minimumActivity) {
-        return list.indexOf(minimumActivity);
+    public int indexOf(QIgnoreListManager.ScopeType scopeType) {
+        return list.indexOf(scopeType);
     }
 }

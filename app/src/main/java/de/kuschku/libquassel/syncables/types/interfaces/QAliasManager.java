@@ -24,9 +24,11 @@ package de.kuschku.libquassel.syncables.types.interfaces;
 import android.support.annotation.NonNull;
 
 import java.util.List;
+import java.util.Map;
 
 import de.kuschku.libquassel.objects.types.Command;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
+import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.Synced;
 
 public interface QAliasManager extends QObservable<QAliasManager> {
@@ -47,6 +49,10 @@ public interface QAliasManager extends QObservable<QAliasManager> {
     // TODO: specify later on
     @NonNull
     List<Command> processInput(final BufferInfo info, final String message);
+
+    void _update(Map<String, QVariant> from);
+
+    void _update(QAliasManager from);
 
     @Synced
     void addAlias(final String name, final String expansion);

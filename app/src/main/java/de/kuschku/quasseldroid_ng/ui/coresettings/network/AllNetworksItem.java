@@ -34,6 +34,7 @@ import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.R;
+import de.kuschku.util.irc.IrcCaseMappers;
 import de.kuschku.util.irc.chanmodes.IrcModeProvider;
 import de.kuschku.util.observables.callbacks.GeneralCallback;
 
@@ -729,6 +730,11 @@ class AllNetworksItem implements QNetwork {
     @Override
     public void _addIrcChannel(IrcChannel ircChannel) {
 
+    }
+
+    @Override
+    public IrcCaseMappers.IrcCaseMapper caseMapper() {
+        return null;
     }
 
     @Override

@@ -24,7 +24,6 @@ package de.kuschku.libquassel.syncables.types.impl;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -38,13 +37,30 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.IgnoreListManagerSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.AIgnoreListManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIgnoreListManager;
+import de.kuschku.util.observables.lists.ObservableSortedList;
 import de.kuschku.util.regex.SmartRegEx;
 
 import static de.kuschku.util.AndroidAssert.assertEquals;
 
 public class IgnoreListManager extends AIgnoreListManager {
     @NonNull
-    private final List<IgnoreListItem> ignoreList = new ArrayList<>();
+    private final ObservableSortedList<IgnoreListItem> ignoreList = new ObservableSortedList<>(IgnoreListItem.class, new ObservableSortedList.ItemComparator<IgnoreListItem>() {
+        @Override
+        public int compare(IgnoreListItem o1, IgnoreListItem o2) {
+            return o1.ignoreRule.rule().compareTo(o2.ignoreRule.rule());
+        }
+
+        @Override
+        public boolean areContentsTheSame(IgnoreListItem oldItem, IgnoreListItem newItem) {
+            return oldItem.equals(newItem);
+        }
+
+        @Override
+        public boolean areItemsTheSame(IgnoreListItem item1, IgnoreListItem item2) {
+            return item1.ignoreRule.rule().equals(item2.ignoreRule.rule());
+        }
+    });
+
 
     public IgnoreListManager(@NonNull List<Integer> scope, @NonNull List<Integer> ignoreType,
                              @NonNull List<Boolean> isActive, @NonNull List<String> scopeRule, @NonNull List<Boolean> isRegEx,
@@ -94,6 +110,15 @@ public class IgnoreListManager extends AIgnoreListManager {
         _update();
     }
 
+    @Override
+    public void _addIgnoreListItem(IgnoreListItem item) {
+        if (contains(item.ignoreRule.rule()))
+            return;
+
+        ignoreList.add(item);
+        _update();
+    }
+
     private boolean contains(String ignoreRule) {
         return indexOf(ignoreRule) != -1;
     }
@@ -127,7 +152,7 @@ public class IgnoreListManager extends AIgnoreListManager {
 
     @Override
     public void _update(QIgnoreListManager from) {
-        this.ignoreList.clear();
+        this.ignoreList.retainAll(from.ignoreList());
         this.ignoreList.addAll(from.ignoreList());
         this._update();
     }
@@ -153,21 +178,22 @@ public class IgnoreListManager extends AIgnoreListManager {
         return String.valueOf(ignoreList);
     }
 
-    public List<IgnoreListItem> ignoreRules() {
-        return ignoreList;
-    }
-
     @Override
     public void requestUpdate() {
         requestUpdate(IgnoreListManagerSerializer.get().toVariantMap(this));
     }
 
     @Override
-    public List<? extends IgnoreListItem> ignoreList() {
+    public ObservableSortedList<? extends IgnoreListItem> ignoreList() {
         return ignoreList;
     }
 
-    public class IgnoreListItem {
+    @Override
+    public void _toggleIgnoreRule(IgnoreListItem ignoreRule, boolean active) {
+        ignoreRule.isActive = active;
+    }
+
+    public static class IgnoreListItem {
         private final IgnoreType type;
         @NonNull
         private final SmartRegEx ignoreRule;
@@ -269,6 +295,38 @@ public class IgnoreListManager extends AIgnoreListManager {
                     ", scopeRules=" + Arrays.toString(scopeRules) +
                     ", isActive=" + isActive +
                     '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof IgnoreListItem)) return false;
+
+            IgnoreListItem item = (IgnoreListItem) o;
+
+            if (isRegEx() != item.isRegEx()) return false;
+            if (isActive() != item.isActive()) return false;
+            if (getType() != item.getType()) return false;
+            if (!getIgnoreRule().equals(item.getIgnoreRule())) return false;
+            if (getStrictness() != item.getStrictness()) return false;
+            if (getScope() != item.getScope()) return false;
+            // Probably incorrect - comparing Object[] arrays with Arrays.equals
+            if (!Arrays.equals(scopeRules, item.scopeRules)) return false;
+            return getScopeRule() != null ? getScopeRule().equals(item.getScopeRule()) : item.getScopeRule() == null;
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = getType() != null ? getType().hashCode() : 0;
+            result = 31 * result + getIgnoreRule().hashCode();
+            result = 31 * result + (isRegEx() ? 1 : 0);
+            result = 31 * result + (getStrictness() != null ? getStrictness().hashCode() : 0);
+            result = 31 * result + (getScope() != null ? getScope().hashCode() : 0);
+            result = 31 * result + Arrays.hashCode(scopeRules);
+            result = 31 * result + (getScopeRule() != null ? getScopeRule().hashCode() : 0);
+            result = 31 * result + (isActive() ? 1 : 0);
+            return result;
         }
     }
 }

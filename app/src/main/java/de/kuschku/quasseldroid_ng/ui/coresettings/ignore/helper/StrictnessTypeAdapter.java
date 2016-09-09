@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid_ng.ui.coresettings.chatlist;
+package de.kuschku.quasseldroid_ng.ui.coresettings.ignore.helper;
 
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
@@ -31,15 +31,18 @@ import android.widget.TextView;
 import java.util.Arrays;
 import java.util.List;
 
-import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
+import de.kuschku.libquassel.syncables.types.interfaces.QIgnoreListManager;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 
-class MinimumActivityAdapter implements SpinnerAdapter {
-    final List<QBufferViewConfig.MinimumActivity> list = Arrays.asList(QBufferViewConfig.MinimumActivity.values());
+public class StrictnessTypeAdapter implements SpinnerAdapter {
+    final List<QIgnoreListManager.StrictnessType> list = Arrays.asList(
+            QIgnoreListManager.StrictnessType.SoftStrictness,
+            QIgnoreListManager.StrictnessType.HardStrictness
+    );
     private final AppContext context;
 
-    public MinimumActivityAdapter(AppContext context) {
+    public StrictnessTypeAdapter(AppContext context) {
         this.context = context;
     }
 
@@ -47,8 +50,8 @@ class MinimumActivityAdapter implements SpinnerAdapter {
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         TextView view = (TextView) inflater.inflate(R.layout.widget_spinner_item_toolbar, parent, false);
-        QBufferViewConfig.MinimumActivity minimumActivity = getItem(position);
-        view.setText(minimumActivity == null ? "" : context.themeUtil().translations.minimumActivity(minimumActivity));
+        QIgnoreListManager.StrictnessType minimumActivity = getItem(position);
+        view.setText(minimumActivity == null ? "" : context.themeUtil().translations.strictnessType(minimumActivity));
         return view;
     }
 
@@ -68,13 +71,13 @@ class MinimumActivityAdapter implements SpinnerAdapter {
     }
 
     @Override
-    public QBufferViewConfig.MinimumActivity getItem(int position) {
+    public QIgnoreListManager.StrictnessType getItem(int position) {
         return list.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return getItem(position).id;
+        return getItem(position).value;
     }
 
     @Override
@@ -86,8 +89,8 @@ class MinimumActivityAdapter implements SpinnerAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         TextView view = (TextView) inflater.inflate(R.layout.widget_spinner_item_inline, parent, false);
-        QBufferViewConfig.MinimumActivity minimumActivity = getItem(position);
-        view.setText(minimumActivity == null ? "" : context.themeUtil().translations.minimumActivity(minimumActivity));
+        QIgnoreListManager.StrictnessType strictnessType = getItem(position);
+        view.setText(strictnessType == null ? "" : context.themeUtil().translations.strictnessType(strictnessType));
         return view;
     }
 
@@ -106,7 +109,7 @@ class MinimumActivityAdapter implements SpinnerAdapter {
         return list.isEmpty();
     }
 
-    public int indexOf(QBufferViewConfig.MinimumActivity minimumActivity) {
-        return list.indexOf(minimumActivity);
+    public int indexOf(QIgnoreListManager.StrictnessType strictnessType) {
+        return list.indexOf(strictnessType);
     }
 }
