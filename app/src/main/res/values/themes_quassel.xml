@@ -21,6 +21,8 @@
   -->
 
 <resources>
+    <string name="themeQuasselLightName">Quassel™ (Light)</string>
+    <string name="themeQuasselLightId">QUASSEL_LIGHT</string>
 
     <style name="Quassel_Light" parent="AppTheme.Light">
         <item name="senderColor0">#e90d7f</item>
@@ -60,6 +62,9 @@
     </style>
 
     <color name="quasselLight_background">#FAFAFA</color>
+
+    <string name="themeQuasselDarkName">Quassel™ (Dark)</string>
+    <string name="themeQuasselDarkId">QUASSEL_DARK</string>
 
     <style name="Quassel_Dark" parent="AppTheme">
         <item name="senderColor0">#e90d7f</item>

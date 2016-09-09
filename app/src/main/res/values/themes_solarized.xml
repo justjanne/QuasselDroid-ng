@@ -21,6 +21,8 @@
   -->
 
 <resources>
+    <string name="themeSolarizedLightName">Solarized (Light)</string>
+    <string name="themeSolarizedLightId">SOLARIZED_LIGHT</string>
 
     <style name="Solarized_Light" parent="AppTheme.Light">
         <item name="colorPrimary">?attr/colorBackgroundCard</item>
@@ -66,6 +68,9 @@
     </style>
 
     <color name="solarizedLight_background">#FDF6E3</color>
+
+    <string name="themeSolarizedDarkName">Solarized (Dark)</string>
+    <string name="themeSolarizedDarkId">SOLARIZED_DARK</string>
 
     <style name="Solarized_Dark" parent="AppTheme">
         <item name="colorPrimary">?attr/colorBackgroundCard</item>

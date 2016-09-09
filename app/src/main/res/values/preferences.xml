@@ -49,15 +49,15 @@
     <string name="preference_brackets_summary_off">Show plain nicks in chat</string>
 
     <string-array name="preference_theme_entries">
-        <item>Quassel™ (Light)</item>
-        <item>Quassel™ (Dark)</item>
-        <item>Solarized (Light)</item>
-        <item>Solarized (Dark)</item>
+        <item>@string/themeQuasselLightName</item>
+        <item>@string/themeQuasselDarkName</item>
+        <item>@string/themeSolarizedLightName</item>
+        <item>@string/themeSolarizedDarkName</item>
     </string-array>
     <string-array name="preference_theme_values">
-        <item>QUASSEL_LIGHT</item>
-        <item>QUASSEL_DARK</item>
-        <item>SOLARIZED_LIGHT</item>
-        <item>SOLARIZED_DARK</item>
+        <item>@string/themeQuasselLightId</item>
+        <item>@string/themeQuasselDarkId</item>
+        <item>@string/themeSolarizedLightId</item>
+        <item>@string/themeSolarizedDarkId</item>
     </string-array>
 </resources>
