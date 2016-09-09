@@ -229,6 +229,7 @@ public class NetworkEditActivity extends BoundActivity {
                     .negativeText(R.string.actionNo)
                     .positiveColor(context.themeUtil().res.colorAccent)
                     .negativeColor(context.themeUtil().res.colorForeground)
+                    .backgroundColorAttr(R.attr.colorBackgroundDialog)
                     .onPositive((dialog, which) -> {
                         save();
                         super.onBackPressed();
@@ -243,6 +244,9 @@ public class NetworkEditActivity extends BoundActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             case R.id.action_delete: {
                 new MaterialDialog.Builder(this)
                         .content(getString(R.string.confirmationDelete, network.networkName()))
@@ -250,6 +254,7 @@ public class NetworkEditActivity extends BoundActivity {
                         .negativeText(R.string.actionNo)
                         .positiveColor(context.themeUtil().res.colorAccent)
                         .negativeColor(context.themeUtil().res.colorForeground)
+                        .backgroundColorAttr(R.attr.colorBackgroundDialog)
                         .onPositive((dialog, which) -> {
                             finish();
                             context.client().removeNetwork(network.networkId());

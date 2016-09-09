@@ -71,6 +71,7 @@ public class IdentityNickListActivity extends BoundActivity implements OnStartDr
                 .positiveColor(context.themeUtil().res.colorAccent)
                 .negativeColor(context.themeUtil().res.colorForeground)
                 .neutralColor(context.themeUtil().res.colorForeground)
+                .backgroundColorAttr(R.attr.colorBackgroundDialog)
                 .onPositive((dialog1, which) -> {
                     String text = dialog1.getInputEditText().getText().toString().trim();
                     nicks.set(nicks.indexOf(nick), text);
@@ -116,6 +117,7 @@ public class IdentityNickListActivity extends BoundActivity implements OnStartDr
                     .negativeText("Cancel")
                     .positiveColor(context.themeUtil().res.colorAccent)
                     .negativeColor(context.themeUtil().res.colorForeground)
+                    .backgroundColorAttr(R.attr.colorBackgroundDialog)
                     .onPositive((dialog1, which) -> {
                         String nick = dialog1.getInputEditText().getText().toString().trim();
                         if (!nicks.contains(nick))
@@ -138,6 +140,9 @@ public class IdentityNickListActivity extends BoundActivity implements OnStartDr
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             case R.id.action_confirm: {
                 Intent intent = new Intent();
                 intent.putStringArrayListExtra("nicks", nicks);

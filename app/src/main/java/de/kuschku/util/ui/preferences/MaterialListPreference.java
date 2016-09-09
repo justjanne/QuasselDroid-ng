@@ -39,7 +39,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.lang.reflect.Field;
 
-import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.util.annotationbind.AutoBinder;
 
 /**
@@ -121,7 +120,7 @@ public class MaterialListPreference extends ListPreference {
                             break;
                     }
                 })
-                .backgroundColor(AutoBinder.obtainColor(R.attr.colorBackground, context.getTheme()))
+                .backgroundColor(AutoBinder.obtainColor(de.kuschku.quasseldroid_ng.R.attr.colorBackgroundDialog, context.getTheme()))
                 .negativeText(getNegativeButtonText())
                 .items(getEntries())
                 .autoDismiss(true) // immediately close the dialog after selection

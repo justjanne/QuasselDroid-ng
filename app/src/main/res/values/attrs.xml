@@ -76,6 +76,7 @@
     <attr name="colorBackgroundHighlight" format="color"/>
     <attr name="colorBackgroundSecondary" format="color"/>
     <attr name="colorBackgroundCard" format="color"/>
+    <attr name="colorBackgroundDialog" format="color"/>
 
     <!-- Tint colors for drawer -->
 
