@@ -19,7 +19,6 @@
   ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<!-- drawable/lock_open_outline.xml -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
         android:width="24dp"
         android:height="24dp"
