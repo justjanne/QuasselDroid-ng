@@ -48,6 +48,10 @@
         android:title="@string/actionIgnore"
         app:showAsAction="never"/>
     <item
+        android:id="@+id/action_aliaslist"
+        android:title="@string/actionAlias"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/action_reauth"
         android:title="@string/actionDisconnect"
         app:showAsAction="never"/>

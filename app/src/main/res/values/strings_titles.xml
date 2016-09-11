@@ -23,6 +23,8 @@
 <resources>
     <string name="titleAccountSelection">Account Selection</string>
     <string name="titleAccountSetup">Account Setup</string>
+    <string name="titleEditAlias">Edit Alias</string>
+    <string name="titleEditAliases">Edit Aliases</string>
     <string name="titleChannelDetails">Channel Details</string>
     <string name="titleChannelModes">Channel Modes</string>
     <string name="titleCoreSetup">Core Setup</string>

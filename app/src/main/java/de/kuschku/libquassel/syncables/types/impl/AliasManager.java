@@ -27,6 +27,7 @@ import com.google.common.base.Joiner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -44,6 +45,8 @@ import de.kuschku.libquassel.syncables.types.abstracts.AAliasManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QAliasManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
+import de.kuschku.util.backports.Objects;
+import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public class AliasManager extends AAliasManager {
     @NonNull
@@ -59,8 +62,23 @@ public class AliasManager extends AAliasManager {
             new Alias("back", "/quote away")
     };
 
-    private List<String> names = new ArrayList<>();
-    private List<Alias> aliases = new ArrayList<>();
+    private Map<String, Alias> map = new HashMap<>();
+    private ObservableSortedList<Alias> aliases = new ObservableSortedList<>(Alias.class, new ObservableSortedList.ItemComparator<Alias>() {
+        @Override
+        public int compare(Alias o1, Alias o2) {
+            return o1.name.compareTo(o2.name);
+        }
+
+        @Override
+        public boolean areContentsTheSame(Alias oldItem, Alias newItem) {
+            return Objects.equals(oldItem.name, newItem.name);
+        }
+
+        @Override
+        public boolean areItemsTheSame(Alias item1, Alias item2) {
+            return Objects.equals(item1.expansion, item2.expansion);
+        }
+    });
 
     private Client client;
 
@@ -70,7 +88,6 @@ public class AliasManager extends AAliasManager {
         }
     }
 
-    //TODO: TEST
     @NonNull
     private static List<Command> expand(@NonNull String expansion, @NonNull BufferInfo info, @NonNull QNetwork network, @NonNull String args) {
         List<Command> results = new LinkedList<>();
@@ -109,12 +126,12 @@ public class AliasManager extends AAliasManager {
                 command = command.replaceAll(String.format(Locale.US, "$%d:hostname", j), host);
                 command = command.replaceAll(String.format(Locale.US, "$%d", j), params.get(j - 1));
             }
-            command = command.replaceAll("\\$0", args);
-            command = command.replaceAll("\\$channelname", info.name != null ? info.name : "");
-            command = command.replaceAll("\\$channel", info.name != null ? info.name : "");
-            command = command.replaceAll("\\$currentnick", network.myNick());
-            command = command.replaceAll("\\$nick", network.myNick());
-            command = command.replaceAll("\\$network", network.networkName());
+            command = command.replace("$0", args);
+            command = command.replace("$channelname", info.name != null ? info.name : "");
+            command = command.replace("$channel", info.name != null ? info.name : "");
+            command = command.replace("$currentnick", network.myNick());
+            command = command.replace("$nick", network.myNick());
+            command = command.replace("$network", network.networkName());
             expandedCommands.add(command);
         }
         while (!expandedCommands.isEmpty()) {
@@ -131,47 +148,29 @@ public class AliasManager extends AAliasManager {
     }
 
     @Override
-    public int indexOf(String name) {
-        return names.indexOf(name);
-    }
-
-    public int indexOfIgnoreCase(String name) {
-        for (int i = 0; i < names.size(); i++) {
-            if (names.get(i).equalsIgnoreCase(name))
-                return i;
-        }
-        return -1;
-    }
-
-    @Override
     public boolean contains(String name) {
-        return names.contains(name);
+        return map.containsKey(name.toLowerCase(Locale.US));
     }
 
     @Override
     public boolean isEmpty() {
-        return names.isEmpty();
+        return aliases.isEmpty();
     }
 
     @Override
     public int count() {
-        return names.size();
+        return aliases.size();
     }
 
     @Override
-    public void removeAt(int index) {
-        names.remove(index);
-        aliases.remove(index);
-    }
-
-    @Override
-    public List<Alias> aliases() {
+    public ObservableSortedList<Alias> aliases() {
         return aliases;
     }
 
     @Override
-    public List<Alias> defaults() {
-        names.clear();
+    public ObservableSortedList<Alias> defaults() {
+        map.clear();
+        aliases.clear();
         for (Alias alias : DEFAULTS) {
             _addAlias(alias.name, alias.expansion);
         }
@@ -204,10 +203,9 @@ public class AliasManager extends AAliasManager {
                 command = message.substring(1, space);
                 args = message.substring(space + 1);
             }
-            int index = indexOfIgnoreCase(command);
+            Alias alias = map.get(command.toLowerCase(Locale.US));
             QNetwork network = client.networkManager().network(info.networkId);
-            if (index != -1 && network != null) {
-                Alias alias = aliases.get(index);
+            if (alias != null && network != null) {
                 list.addAll(expand(alias.expansion, info, network, args));
             } else {
                 list.add(new Command(info, message));
@@ -218,8 +216,8 @@ public class AliasManager extends AAliasManager {
 
     @Override
     public void _addAlias(String name, String expansion) {
-        names.add(name);
-        aliases.add(new Alias(name, expansion));
+        Alias alias = new Alias(name, expansion);
+        _addAlias(alias);
         _update();
     }
 
@@ -238,12 +236,42 @@ public class AliasManager extends AAliasManager {
 
     @Override
     public void _update(@NonNull QAliasManager from) {
-        List<String> names = new ArrayList<>(from.aliases().size());
-        for (Alias alias : from.aliases()) {
-            names.add(alias.name);
+        List<Alias> toRemove = new ArrayList<>();
+        for (Alias alias : aliases) {
+            if (!from.aliases().contains(alias))
+                toRemove.add(alias);
         }
-        this.names = names;
-        aliases = from.aliases();
+        for (Alias alias : toRemove) {
+            _removeAlias(alias);
+        }
+        for (Alias alias : from.aliases()) {
+            if (!aliases.contains(alias)) {
+                _addAlias(alias);
+            }
+        }
         _update();
+    }
+
+    @Override
+    public void _removeAlias(Alias alias) {
+        aliases.remove(alias);
+        map.remove(alias.name);
+    }
+
+    @Override
+    public Alias alias(String name) {
+        return map.get(name);
+    }
+
+
+    @Override
+    public void requestUpdate() {
+        requestUpdate(AliasManagerSerializer.get().toVariantMap(this));
+    }
+
+    @Override
+    public void _addAlias(Alias alias) {
+        aliases.add(alias);
+        map.put(alias.name, alias);
     }
 }

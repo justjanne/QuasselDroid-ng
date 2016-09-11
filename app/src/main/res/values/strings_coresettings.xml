@@ -22,6 +22,9 @@
 
 <resources>
 
+    <string name="labelAliasExpansion">Expansion</string>
+    <string name="labelAliasName">Alias</string>
+
     <string name="labelChatlistAddNewChatsAutomatically">Add new chats automatically</string>
     <string name="labelChatlistHideInactiveChats">Hide inactive chats</string>
     <string name="labelChatlistHideInactiveNetworks">Hide inactive networks</string>

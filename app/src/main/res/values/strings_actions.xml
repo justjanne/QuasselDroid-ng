@@ -21,7 +21,9 @@
   -->
 
 <resources>
+
     <string name="actionAddAccount">Add Account</string>
+    <string name="actionAlias">Aliases</string>
     <string name="actionCancel">Cancel</string>
     <string name="actionConnect">Connect</string>
     <string name="actionDelete">Delete</string>
@@ -34,7 +36,7 @@
     <string name="actionHideTemp">Hide Temporarily</string>
     <string name="actionHistory">Input History</string>
     <string name="actionIdentities">Identities</string>
-    <string name="actionIgnore">Ignore</string>
+    <string name="actionIgnore">Ignore List</string>
     <string name="actionJoin">Join</string>
     <string name="actionJoinChannel">Join Channel</string>
     <string name="actionLogin">Login</string>

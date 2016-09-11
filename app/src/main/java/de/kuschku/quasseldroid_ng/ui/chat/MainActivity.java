@@ -85,6 +85,7 @@ import de.kuschku.quasseldroid_ng.ui.chat.drawer.BufferViewConfigAdapter;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.ChatFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.LoadingFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.util.Status;
+import de.kuschku.quasseldroid_ng.ui.coresettings.aliases.AliasListActivity;
 import de.kuschku.quasseldroid_ng.ui.coresettings.chatlist.ChatListListActivity;
 import de.kuschku.quasseldroid_ng.ui.coresettings.identity.IdentityListActivity;
 import de.kuschku.quasseldroid_ng.ui.coresettings.ignore.IgnoreListActivity;
@@ -285,6 +286,9 @@ public class MainActivity extends BoundActivity {
                 return true;
             case R.id.action_ignorelist:
                 startActivity(new Intent(this, IgnoreListActivity.class));
+                return true;
+            case R.id.action_aliaslist:
+                startActivity(new Intent(this, AliasListActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

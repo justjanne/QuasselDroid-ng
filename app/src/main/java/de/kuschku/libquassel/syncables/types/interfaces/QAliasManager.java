@@ -30,21 +30,18 @@ import de.kuschku.libquassel.objects.types.Command;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.Synced;
+import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public interface QAliasManager extends QObservable<QAliasManager> {
-    int indexOf(final String name);
-
     boolean contains(final String name);
 
     boolean isEmpty();
 
     int count();
 
-    void removeAt(int index);
+    ObservableSortedList<Alias> aliases();
 
-    List<Alias> aliases();
-
-    List<Alias> defaults();
+    ObservableSortedList<Alias> defaults();
 
     // TODO: specify later on
     @NonNull
@@ -58,6 +55,16 @@ public interface QAliasManager extends QObservable<QAliasManager> {
     void addAlias(final String name, final String expansion);
 
     void _addAlias(final String name, final String expansion);
+
+    void _addAlias(Alias alias);
+
+    void _removeAlias(Alias alias);
+
+    Alias alias(String name);
+
+    void requestUpdate(Map<String, QVariant<Object>> variantMap);
+
+    void requestUpdate();
 
     class Alias {
         public final String name;

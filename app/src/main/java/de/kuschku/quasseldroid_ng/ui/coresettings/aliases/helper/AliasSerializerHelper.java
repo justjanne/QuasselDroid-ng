@@ -19,23 +19,27 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.syncables.types.abstracts;
+package de.kuschku.quasseldroid_ng.ui.coresettings.aliases.helper;
 
-import java.util.Map;
+import android.os.Bundle;
 
-import de.kuschku.libquassel.primitives.types.QVariant;
-import de.kuschku.libquassel.syncables.types.SyncableObject;
-import de.kuschku.libquassel.syncables.types.interfaces.QAliasManager;
+import de.kuschku.libquassel.syncables.types.impl.AliasManager;
 
-public abstract class AAliasManager extends SyncableObject<QAliasManager> implements QAliasManager {
-    @Override
-    public void addAlias(String name, String expansion) {
-        _addAlias(name, expansion);
-        syncVar("addAlias", name, expansion);
+public class AliasSerializerHelper {
+    private AliasSerializerHelper() {
     }
 
-    @Override
-    public void requestUpdate(Map<String, QVariant<Object>> variantMap) {
-        syncVar("requestUpdate", variantMap);
+    public static Bundle serialize(AliasManager.Alias alias) {
+        Bundle bundle = new Bundle();
+        bundle.putString("name", alias.name);
+        bundle.putString("expansion", alias.expansion);
+        return bundle;
+    }
+
+    public static AliasManager.Alias deserialize(Bundle bundle) {
+        return new AliasManager.Alias(
+                bundle.getString("name"),
+                bundle.getString("expansion")
+        );
     }
 }

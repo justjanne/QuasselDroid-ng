@@ -159,6 +159,20 @@
             android:theme="@style/AppTheme.Light"/>
 
         <activity
+            android:name=".ui.coresettings.aliases.AliasListActivity"
+            android:label="@string/titleEditAliases"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.chat.MainActivity"
+            android:theme="@style/AppTheme.Light"/>
+
+        <activity
+            android:name=".ui.coresettings.aliases.AliasEditActivity"
+            android:label="@string/titleEditAlias"
+            android:launchMode="singleTask"
+            android:parentActivityName=".ui.coresettings.aliases.AliasListActivity"
+            android:theme="@style/AppTheme.Light"/>
+
+        <activity
             android:name=".ui.setup.AccountSetupActivity"
             android:label="@string/titleAccountSetup"
             android:launchMode="singleTask"

@@ -27,7 +27,6 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 
 import java.util.Locale;
 
@@ -66,8 +65,6 @@ public class IrcFormatSerializer {
         boolean bold = false;
         boolean underline = false;
         boolean italic = false;
-
-        testLog(text);
 
         for (int i = start; i < end; i = next) {
             next = text.nextSpanTransition(i, end, CharacterStyle.class);
@@ -152,25 +149,5 @@ public class IrcFormatSerializer {
 
         if (bold || italic || underline || background != -1 || foreground != -1)
             out.append(CODE_RESET);
-    }
-
-    private void testLog(Spanned text) {
-        StringBuilder out = new StringBuilder();
-        int next;
-        for (int i = 0; i < text.length(); i = next) {
-            next = text.nextSpanTransition(i, text.length(), CharacterStyle.class);
-            CharacterStyle[] styles = text.getSpans(i, next, CharacterStyle.class);
-
-            for (CharacterStyle style : styles) {
-                out.append("<").append(style.getClass().getSimpleName()).append(">");
-            }
-
-            out.append(text.subSequence(i, next));
-
-            for (int i1 = styles.length - 1; i1 >= 0; i1--) {
-                out.append("</").append(styles[i1].getClass().getSimpleName()).append(">");
-            }
-        }
-        Log.e("IrcFormat", String.valueOf(out));
     }
 }
