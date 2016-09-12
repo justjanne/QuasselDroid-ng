@@ -52,7 +52,7 @@ public class InvokerRegistry {
                 return (Invoker<T>) IIgnoreListManager.get();
             case "IrcUser":
                 return (Invoker<T>) IIrcUser.get();
-            case "INetworkConfig":
+            case "NetworkConfig":
                 return (Invoker<T>) INetworkConfig.get();
             default:
                 return null;

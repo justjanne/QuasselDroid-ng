@@ -49,8 +49,8 @@ import de.kuschku.libquassel.objects.types.CoreSetupAck;
 import de.kuschku.libquassel.objects.types.SessionInit;
 import de.kuschku.libquassel.syncables.SyncableRegistry;
 import de.kuschku.libquassel.syncables.types.SyncableObject;
+import de.kuschku.libquassel.syncables.types.invokers.IClient;
 import de.kuschku.libquassel.syncables.types.invokers.InvokerRegistry;
-import de.kuschku.util.ReflectionUtils;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -86,13 +86,7 @@ public class ProtocolHandler implements IProtocolHandler {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(@NonNull RpcCallFunction packedFunc) {
         try {
-            if (packedFunc.functionName.substring(0, 1).equals("2")) {
-                ReflectionUtils.invokeMethod(client, "_" + packedFunc.functionName.substring(1), packedFunc.params);
-            } else if (packedFunc.functionName.equals("__objectRenamed__")) {
-                ReflectionUtils.invokeMethod(client, "_" + packedFunc.functionName, packedFunc.params);
-            } else {
-                throw new IllegalArgumentException("Unknown type: " + packedFunc.functionName);
-            }
+            IClient.get().invoke(packedFunc, client);
         } catch (Exception e) {
             busProvider.sendEvent(new GeneralErrorEvent(e));
         }
@@ -111,14 +105,11 @@ public class ProtocolHandler implements IProtocolHandler {
                 if (syncable instanceof SyncableObject && !((SyncableObject) syncable).initialized()) {
                     client.initObject(packedFunc.className, packedFunc.objectName, (SyncableObject) syncable);
                 } else {
-                    //ReflectionUtils.invokeMethod(syncable, "_" + packedFunc.methodName, packedFunc.params);
                     InvokerRegistry.invoke(packedFunc, syncable);
                 }
             }
         } catch (Exception e) {
             busProvider.sendEvent(new GeneralErrorEvent(e, packedFunc.toString()));
-        } catch (Error e) {
-            e.printStackTrace();
         }
     }
 
