@@ -28,7 +28,6 @@ import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,22 +70,9 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
     public Network fromDatastream(@NonNull Map<String, QVariant> map) {
         final Map<String, QVariant<Map<String, QVariant<List>>>> usersAndChannels = ((Map<String, QVariant<Map<String, QVariant<List>>>>) map.get("IrcUsersAndChannels").data);
 
-        final List<QIrcChannel> channels = extractChannels(QVariant.orNull(usersAndChannels.get("Channels")));
-        final List<QIrcUser> users = extractUsers(QVariant.orNull(usersAndChannels.get("Users")));
-
-        final Map<String, QIrcChannel> channelMap = new HashMap<>(channels.size());
-        for (QIrcChannel channel : channels) {
-            channelMap.put(channel.name(), channel);
-        }
-
-        final Map<String, QIrcUser> userMap = new HashMap<>(users.size());
-        for (QIrcUser user : users) {
-            userMap.put(user.nick(), user);
-        }
-
         return new Network(
-                channelMap,
-                userMap,
+                extractChannels(QVariant.orNull(usersAndChannels.get("Channels"))),
+                extractUsers(QVariant.orNull(usersAndChannels.get("Users"))),
                 (List<NetworkServer>) map.get("ServerList").data,
                 StringObjectMapSerializer.<String>get().fromLegacy((Map<String, QVariant>) map.get("Supports").data),
                 (int) map.get("connectionState").data,
@@ -166,15 +152,15 @@ public class NetworkSerializer implements ObjectSerializer<Network> {
         final Map<String, QVariant<Map<String, QVariant<Map<String, QVariant>>>>> usersAndChannels = ((QVariant<Map<String, QVariant<Map<String, QVariant<Map<String, QVariant>>>>>>) map.get("IrcUsersAndChannels")).data;
         final Map<String, QVariant<Map<String, QVariant>>> wrappedChannels = usersAndChannels.get("channels").data;
         final Map<String, QVariant<Map<String, QVariant>>> wrappedUsers = usersAndChannels.get("users").data;
-        final Map<String, QIrcChannel> channels = new HashMap<>(wrappedChannels.size());
+        final List<QIrcChannel> channels = new ArrayList<>(wrappedChannels.size());
         for (Map.Entry<String, QVariant<Map<String, QVariant>>> entry : wrappedChannels.entrySet()) {
             final QIrcChannel ircChannel = IrcChannelSerializer.get().fromLegacy(entry.getValue().data);
-            channels.put(ircChannel.name(), ircChannel);
+            channels.add(ircChannel);
         }
-        final Map<String, QIrcUser> users = new HashMap<>(wrappedUsers.size());
+        final List<QIrcUser> users = new ArrayList<>(wrappedUsers.size());
         for (Map.Entry<String, QVariant<Map<String, QVariant>>> entry : wrappedUsers.entrySet()) {
             final QIrcUser ircUser = IrcUserSerializer.get().fromLegacy(entry.getValue().data);
-            users.put(ircUser.nick(), ircUser);
+            users.add(ircUser);
         }
         final Map<String, String> supports = StringObjectMapSerializer.<String>get().fromLegacy((Map<String, QVariant>) map.get("Supports").data);
         return new Network(

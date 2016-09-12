@@ -34,6 +34,7 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import de.kuschku.util.accounts.ServerAddress;
+import de.kuschku.util.backports.Consumer;
 import de.kuschku.util.certificates.CertificateUtils;
 
 public class QuasselTrustManager implements X509TrustManager {
@@ -43,29 +44,31 @@ public class QuasselTrustManager implements X509TrustManager {
     private final CertificateManager certificateManager;
     @NonNull
     private final ServerAddress address;
+    private final Consumer<X509Certificate[]> callback;
 
-    public QuasselTrustManager(@NonNull X509TrustManager wrapped, @NonNull CertificateManager certificateManager, @NonNull ServerAddress address) {
+    public QuasselTrustManager(@NonNull X509TrustManager wrapped, @NonNull CertificateManager certificateManager, @NonNull ServerAddress address, Consumer<X509Certificate[]> callback) {
         this.wrapped = wrapped;
         this.certificateManager = certificateManager;
         this.address = address;
+        this.callback = callback;
     }
 
     @NonNull
-    public static QuasselTrustManager fromFactory(@NonNull TrustManagerFactory factory, @NonNull CertificateManager certificateManager, @NonNull ServerAddress address) throws GeneralSecurityException {
+    public static QuasselTrustManager fromFactory(@NonNull TrustManagerFactory factory, @NonNull CertificateManager certificateManager, @NonNull ServerAddress address, Consumer<X509Certificate[]> callback) throws GeneralSecurityException {
         TrustManager[] managers = factory.getTrustManagers();
         for (TrustManager manager : managers) {
             if (manager instanceof X509TrustManager) {
-                return new QuasselTrustManager((X509TrustManager) manager, certificateManager, address);
+                return new QuasselTrustManager((X509TrustManager) manager, certificateManager, address, callback);
             }
         }
         throw new GeneralSecurityException("Couldn’t find trustmanager provided by factory");
     }
 
     @NonNull
-    public static QuasselTrustManager fromDefault(@NonNull CertificateManager certificateManager, @NonNull ServerAddress address) throws GeneralSecurityException {
+    public static QuasselTrustManager fromDefault(@NonNull CertificateManager certificateManager, @NonNull ServerAddress address, Consumer<X509Certificate[]> callback) throws GeneralSecurityException {
         TrustManagerFactory factory = TrustManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         factory.init((KeyStore) null);
-        return fromFactory(factory, certificateManager, address);
+        return fromFactory(factory, certificateManager, address, callback);
     }
 
     @Override
@@ -83,6 +86,7 @@ public class QuasselTrustManager implements X509TrustManager {
         } catch (CertificateException e) {
             certificateManager.checkTrusted(chain[0], address);
         }
+        callback.apply(chain);
     }
 
     @Override

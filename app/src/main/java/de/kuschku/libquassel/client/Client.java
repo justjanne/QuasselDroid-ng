@@ -26,6 +26,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.Pair;
 
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,6 +59,7 @@ import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIgnoreListManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetworkConfig;
+import de.kuschku.libquassel.syncables.types.interfaces.QSyncableObject;
 import de.kuschku.util.buffermetadata.BufferMetaDataManager;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -90,6 +92,7 @@ public class Client extends AClient {
     private long latency;
     private ConnectionChangeEvent.Status connectionStatus;
     private int r = 1;
+    private X509Certificate[] certificateChain;
 
     public Client(@NonNull BusProvider provider, @NonNull BacklogStorage backlogStorage, @NonNull BufferMetaDataManager metaDataManager, String coreId) {
         this.coreId = coreId;
@@ -178,8 +181,8 @@ public class Client extends AClient {
     }
 
     @Override
-    public void ___objectRenamed__(String type, String oldName, String newName) {
-
+    public void ___objectRenamed__(String type, String newName, String oldName) {
+        ((QSyncableObject) unsafe_getObjectByIdentifier(type, oldName)).setObjectName(newName);
     }
 
     public synchronized ConnectionChangeEvent.Status connectionStatus() {
@@ -312,6 +315,7 @@ public class Client extends AClient {
         requestInitObject("AliasManager", "");
         requestInitObject("NetworkConfig", "GlobalNetworkConfig");
         requestInitObject("IgnoreListManager", "");
+        requestInitObject("CoreInfo", "");
         //sendInitRequest("TransferManager", "");
         // This thing never gets sent...
 
@@ -479,5 +483,13 @@ public class Client extends AClient {
 
     public String coreId() {
         return coreId;
+    }
+
+    public X509Certificate[] certificateChain() {
+        return certificateChain;
+    }
+
+    public void setCertificateChain(X509Certificate[] certificateChain) {
+        this.certificateChain = certificateChain;
     }
 }

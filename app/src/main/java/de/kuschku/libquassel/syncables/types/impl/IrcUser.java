@@ -269,12 +269,6 @@ public class IrcUser extends AIrcUser {
     @Override
     public void _setNick(String nick) {
         this.nick = nick;
-        updateObjectName();
-        _update();
-    }
-
-    private void updateObjectName() {
-        setObjectName(getObjectName());
         _update();
     }
 
@@ -285,9 +279,24 @@ public class IrcUser extends AIrcUser {
     }
 
     @Override
+    public void setObjectName(@Nullable String objectName) {
+        network().ircUserNickChanged(nick, objectName.split("/")[1]);
+        super.setObjectName(objectName);
+    }
+
+    @Override
     public void _setRealName(String realName) {
         this.realName = realName;
         _update();
+        for (String channel : this.channels) {
+            QNetwork network = this.network();
+            if (network != null) {
+                QIrcChannel channel1 = network.ircChannel(channel);
+                if (channel1 != null) {
+                    channel1.users().notifyItemChanged(nick);
+                }
+            }
+        }
     }
 
     @Override
@@ -479,6 +488,11 @@ public class IrcUser extends AIrcUser {
 
     @Override
     public void _update(QIrcUser from) {
+    }
+
+    @Override
+    public void _update() {
+        super._update();
     }
 
     @NonNull

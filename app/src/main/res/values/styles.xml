@@ -128,6 +128,27 @@
         <item name="colorAway">@color/colorAwayDark</item>
     </style>
 
+    <style name="AppTheme.Light.Dialog" parent="MaterialBaseTheme.Light.AlertDialog">
+        <item name="colorForeground">#DE000000</item>
+        <item name="colorForegroundHighlight">#DE000000</item>
+        <item name="colorForegroundSecondary">#8A000000</item>
+        <item name="colorForegroundAction">#1a237e</item>
+        <item name="colorForegroundError">#800000</item>
+
+        <item name="colorForegroundMirc">0x1</item>
+
+        <item name="colorBackground">#FAFAFA</item>
+        <item name="android:windowBackground">@color/quasselLight_background</item>
+        <item name="colorBackgroundHighlight">#ff8811</item>
+        <item name="colorBackgroundSecondary">@null</item>
+        <item name="colorBackgroundCard">#FFFFFF</item>
+        <item name="colorBackgroundDialog">#FAFAFA</item>
+
+        <item name="colorTintActivity">#88cc33</item>
+        <item name="colorTintMessage">#2277dd</item>
+        <item name="colorTintHighlight">#ff8811</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay.Light" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="colorControlNormal">@color/colorFillLight</item>
         <item name="android:textColorPrimary">@color/colorFillLight</item>

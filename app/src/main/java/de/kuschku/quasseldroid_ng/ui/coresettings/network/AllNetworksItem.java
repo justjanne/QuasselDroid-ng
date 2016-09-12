@@ -105,6 +105,11 @@ class AllNetworksItem implements QNetwork {
         return 0;
     }
 
+    @Override
+    public int lowestModeIndex(String mode) {
+        return 0;
+    }
+
     @NonNull
     @Override
     public ChannelModeType channelModeType(char mode) {
@@ -659,11 +664,6 @@ class AllNetworksItem implements QNetwork {
 
     @Override
     public void ircUserNickChanged(String oldNick, String newnick) {
-
-    }
-
-    @Override
-    public void _ircUserNickChanged(String oldNick, String newnick) {
 
     }
 

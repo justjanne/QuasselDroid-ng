@@ -59,6 +59,8 @@ public interface QNetwork extends QObservable<QNetwork> {
 
     int modeToIndex(String mode);
 
+    int lowestModeIndex(String mode);
+
     @NonNull
     ChannelModeType channelModeType(final char mode);
 
@@ -314,10 +316,7 @@ public interface QNetwork extends QObservable<QNetwork> {
 
     QIrcUser _updateNickFromMask(final String mask);
 
-    @Synced
     void ircUserNickChanged(String oldNick, String newnick);
-
-    void _ircUserNickChanged(String oldNick, String newnick);
 
     @Synced
     void connect();

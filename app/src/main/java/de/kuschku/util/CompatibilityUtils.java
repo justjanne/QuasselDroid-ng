@@ -96,8 +96,9 @@ public class CompatibilityUtils {
     @NonNull
     public static String[] partStringByChar(@NonNull String str) {
         String[] chars = new String[str.length()];
+        char[] charArray = str.toCharArray();
         for (int i = 0; i < chars.length; i++) {
-            chars[i] = str.substring(i, i + 1);
+            chars[i] = new String(charArray, i, 1);
         }
         return chars;
     }

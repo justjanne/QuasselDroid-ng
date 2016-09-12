@@ -45,7 +45,7 @@ public class BufferViewManager extends ABufferViewManager {
     final ObservableSortedList<QBufferViewConfig> list = new ObservableSortedList<>(QBufferViewConfig.class, new ObservableSortedList.ItemComparator<QBufferViewConfig>() {
         @Override
         public int compare(QBufferViewConfig o1, QBufferViewConfig o2) {
-            return o1.bufferViewName().compareTo(o2.bufferViewName());
+            return o1.bufferViewName().compareToIgnoreCase(o2.bufferViewName());
         }
 
         @Override

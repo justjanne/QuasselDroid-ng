@@ -25,6 +25,8 @@
     <string name="actionAddAccount">Add Account</string>
     <string name="actionAlias">Aliases</string>
     <string name="actionCancel">Cancel</string>
+    <string name="actionClose">Close</string>
+    <string name="actionCore">About Core…</string>
     <string name="actionConnect">Connect</string>
     <string name="actionDelete">Delete</string>
     <string name="actionDisconnect">Disconnect</string>

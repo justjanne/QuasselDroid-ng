@@ -26,6 +26,7 @@ import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -75,13 +76,11 @@ public class Network extends ANetwork implements Observer {
     private IrcModeProvider modeProvider;
     private IrcCaseMappers.IrcCaseMapper caseMapper;
 
-    public Network(Map<String, QIrcChannel> channels,
-                   Map<String, QIrcUser> nicks,
+    public Network(Collection<QIrcChannel> channels,
+                   Collection<QIrcUser> nicks,
                    List<NetworkServer> serverList, Map<String, String> supports,
                    int connectionState, String currentServer, boolean isConnected, int latency,
                    String myNick, NetworkInfo networkInfo) {
-        this.channels = new HashMap<>(channels);
-        this.nicks = new HashMap<>(nicks);
         this.supports = new HashMap<>(supports);
         this.connectionState = ConnectionState.of(connectionState);
         this.currentServer = currentServer;
@@ -92,15 +91,22 @@ public class Network extends ANetwork implements Observer {
         this.networkInfo._setServerList(serverList);
 
         updateCaseMapper();
+
+        this.channels = new HashMap<>();
+        for (QIrcChannel qIrcChannel : channels) {
+            this.channels.put(caseMapper.toLowerCase(qIrcChannel.name()), qIrcChannel);
+        }
+        this.nicks = new HashMap<>();
+        for (QIrcUser qIrcUser : nicks) {
+            this.nicks.put(caseMapper.toLowerCase(qIrcUser.nick()), qIrcUser);
+        }
     }
 
-    public Network(Map<String, QIrcChannel> channels, Map<String, QIrcUser> users, Map<String, String> supports, int connectionState, String currentServer, boolean isConnected, int latency, String myNick, NetworkInfo networkInfo) {
+    public Network(Collection<QIrcChannel> channels, Collection<QIrcUser> users, Map<String, String> supports, int connectionState, String currentServer, boolean isConnected, int latency, String myNick, NetworkInfo networkInfo) {
         this(channels, users, Collections.emptyList(), supports, connectionState, currentServer, isConnected, latency, myNick, networkInfo);
     }
 
-    public Network(Map<String, QIrcChannel> channels, Map<String, QIrcUser> nicks, List<NetworkServer> serverList, Map<String, String> supports, ConnectionState connectionState, String currentServer, boolean isConnected, int latency, String myNick, NetworkInfo networkInfo) {
-        this.channels = new HashMap<>(channels);
-        this.nicks = new HashMap<>(nicks);
+    public Network(Collection<QIrcChannel> channels, Collection<QIrcUser> nicks, List<NetworkServer> serverList, Map<String, String> supports, ConnectionState connectionState, String currentServer, boolean isConnected, int latency, String myNick, NetworkInfo networkInfo) {
         this.supports = new HashMap<>(supports);
         this.connectionState = connectionState;
         this.currentServer = currentServer;
@@ -111,13 +117,22 @@ public class Network extends ANetwork implements Observer {
         this.networkInfo._setServerList(serverList);
 
         updateCaseMapper();
+
+        this.channels = new HashMap<>();
+        for (QIrcChannel qIrcChannel : channels) {
+            this.channels.put(caseMapper.toLowerCase(qIrcChannel.name()), qIrcChannel);
+        }
+        this.nicks = new HashMap<>();
+        for (QIrcUser qIrcUser : nicks) {
+            this.nicks.put(caseMapper.toLowerCase(qIrcUser.nick()), qIrcUser);
+        }
     }
 
     @NonNull
     public static QNetwork create(int network) {
         return new Network(
-                Collections.emptyMap(),
-                Collections.emptyMap(),
+                Collections.emptyList(),
+                Collections.emptyList(),
                 Collections.emptyList(),
                 Collections.emptyMap(),
                 ConnectionState.Disconnected,
@@ -195,6 +210,17 @@ public class Network extends ANetwork implements Observer {
     public int modeToIndex(String mode) {
         int index = prefixModes().indexOf(mode);
         return index == -1 ? Integer.MAX_VALUE : index;
+    }
+
+    @Override
+    public int lowestModeIndex(String mode) {
+        int lowestIndex = Integer.MAX_VALUE;
+        for (String m : CompatibilityUtils.partStringByChar(mode)) {
+            int index = modeToIndex(m);
+            if (index < lowestIndex)
+                lowestIndex = index;
+        }
+        return lowestIndex;
     }
 
     @NonNull
@@ -418,7 +444,7 @@ public class Network extends ANetwork implements Observer {
 
     @Override
     public QIrcUser ircUser(String nickname) {
-        return nicks.get(nickname);
+        return nicks.get(caseMapper.toLowerCase(nickname));
     }
 
     @NonNull
@@ -716,15 +742,15 @@ public class Network extends ANetwork implements Observer {
         IrcUser user = IrcUser.create(mask);
         user.init(this, client);
         client.requestInitObject("IrcUser", user.getObjectName());
-        nicks.put(user.nick(), user);
+        nicks.put(caseMapper.toLowerCase(user.nick()), user);
         _update();
         return user;
     }
 
     @Override
-    public void _ircUserNickChanged(@NonNull String oldNick, @NonNull String newNick) {
+    public void ircUserNickChanged(@NonNull String oldNick, @NonNull String newNick) {
         if (!caseMapper.equalsIgnoreCase(oldNick, newNick)) {
-            nicks.put(newNick, nicks.remove(oldNick));
+            nicks.put(caseMapper.toLowerCase(newNick), nicks.remove(caseMapper.toLowerCase(oldNick)));
             for (QIrcChannel channel : channels.values()) {
                 channel._ircUserNickChanged(oldNick, newNick);
             }
@@ -793,7 +819,7 @@ public class Network extends ANetwork implements Observer {
 
     @Override
     public void _addIrcChannel(@NonNull IrcChannel ircChannel) {
-        channels.put(ircChannel.name(), ircChannel);
+        channels.put(caseMapper.toLowerCase(ircChannel.name()), ircChannel);
     }
 
     @Override
@@ -810,8 +836,11 @@ public class Network extends ANetwork implements Observer {
     @Override
     public void _update() {
         super._update();
-        if (client != null)
-            client.networkManager().networks().notifyItemChanged(client.networkManager().networks().indexOf(this));
+        if (client != null) {
+            int position = client.networkManager().networks().indexOf(this);
+            if (position != -1)
+                client.networkManager().networks().notifyItemChanged(position);
+        }
     }
 
     private void updateDisplay() {

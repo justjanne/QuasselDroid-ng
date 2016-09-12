@@ -46,6 +46,18 @@
     <android.support.design.widget.NavigationView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="end">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/nickList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </android.support.design.widget.NavigationView>
+
+    <android.support.design.widget.NavigationView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="start">
 
         <LinearLayout

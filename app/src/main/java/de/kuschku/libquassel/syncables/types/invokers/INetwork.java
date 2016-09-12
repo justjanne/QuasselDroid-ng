@@ -141,9 +141,6 @@ public class INetwork implements Invoker<QNetwork> {
             case "setNetworkInfo": {
                 obj._setNetworkInfo((NetworkInfo) function.params.get(0));
             } break;
-            case "ircUserNickChanged": {
-                obj._ircUserNickChanged((String) function.params.get(0), (String) function.params.get(1));
-            } break;
             case "connect": {
                 obj._connect();
             } break;

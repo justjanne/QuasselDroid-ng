@@ -28,8 +28,10 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.view.ContextThemeWrapper;
+import android.util.SparseArray;
 import android.util.SparseIntArray;
 
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
@@ -84,6 +86,7 @@ public class ThemeUtil {
         try {
             res.colors = null;
             AutoBinder.bind(res, wrapper);
+            res.bind(wrapper);
             AutoBinder.bind(translations, wrapper);
             AutoBinder.bind(chanModes, wrapper);
         } catch (IllegalAccessException e) {
@@ -935,16 +938,32 @@ public class ThemeUtil {
         public int actionBarSize;
 
         private SparseIntArray colors;
+        private SparseArray<Drawable> badges;
 
         public int colorToId(int foregroundColor) {
+            return colors.get(foregroundColor, -1);
+        }
+
+        public Drawable badge(int sendercolor) {
+            return badges.get(sendercolor, null);
+        }
+
+        public void bind(ContextThemeWrapper wrapper) {
+            if (badges == null) {
+                badges = new SparseArray<>(16);
+                for (int i = 0; i < senderColors.length; i++) {
+                    Drawable drawable = ResourcesCompat.getDrawable(wrapper.getResources(), R.drawable.badge, wrapper.getTheme());
+                    DrawableCompat.setTint(drawable, senderColors[i]);
+                    badges.put(i, drawable);
+                }
+            }
+
             if (colors == null) {
                 colors = new SparseIntArray(16);
                 for (int i = 0; i < mircColors.length; i++) {
                     colors.put(mircColors[i], i);
                 }
             }
-
-            return colors.get(foregroundColor, -1);
         }
     }
 }

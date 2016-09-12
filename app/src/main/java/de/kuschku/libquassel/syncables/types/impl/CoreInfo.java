@@ -23,6 +23,8 @@ package de.kuschku.libquassel.syncables.types.impl;
 
 import android.support.annotation.NonNull;
 
+import org.joda.time.DateTime;
+
 import java.util.Map;
 
 import de.kuschku.libquassel.BusProvider;
@@ -34,6 +36,18 @@ import de.kuschku.libquassel.syncables.types.interfaces.QCoreInfo;
 public class CoreInfo extends ACoreInfo {
     private Map<String, QVariant> coreData;
 
+    private int sessionConnectedClients;
+
+    private String quasselVersion;
+
+    private String quasselBuildDate;
+
+    private DateTime startTime;
+
+    public CoreInfo(Map<String, QVariant> coreData) {
+        _setCoreData(coreData);
+    }
+
     @Override
     public Map<String, QVariant> coreData() {
         return coreData;
@@ -42,6 +56,19 @@ public class CoreInfo extends ACoreInfo {
     @Override
     public void _setCoreData(Map<String, QVariant> coreData) {
         this.coreData = coreData;
+
+        QVariant sessionConnectedClients1 = coreData.remove("sessionConnectedClients");
+        this.sessionConnectedClients = sessionConnectedClients1 != null ? (int) sessionConnectedClients1.data : -1;
+
+        QVariant quasselVersion1 = coreData.remove("quasselVersion");
+        this.quasselVersion = quasselVersion1 != null ? (String) quasselVersion1.data : null;
+
+        QVariant quasselBuildDate1 = coreData.remove("quasselBuildDate");
+        this.quasselBuildDate = quasselBuildDate1 != null ? (String) quasselBuildDate1.data : null;
+
+        QVariant startTime1 = coreData.remove("startTime");
+        this.startTime = startTime1 != null ? (DateTime) startTime1.data : null;
+
         _update();
     }
 
@@ -59,5 +86,32 @@ public class CoreInfo extends ACoreInfo {
     public void init(@NonNull String objectName, @NonNull BusProvider provider, @NonNull Client client) {
         super.init(objectName, provider, client);
         client.setCoreInfo(this);
+    }
+
+    public int sessionConnectedClients() {
+        return sessionConnectedClients;
+    }
+
+    public String quasselVersion() {
+        return quasselVersion;
+    }
+
+    public String quasselBuildDate() {
+        return quasselBuildDate;
+    }
+
+    public DateTime startTime() {
+        return startTime;
+    }
+
+    @Override
+    public String toString() {
+        return "CoreInfo{" +
+                "sessionConnectedClients=" + sessionConnectedClients +
+                ", quasselVersion='" + quasselVersion + '\'' +
+                ", quasselBuildDate='" + quasselBuildDate + '\'' +
+                ", startTime=" + startTime +
+                ", coreData=" + coreData +
+                '}';
     }
 }

@@ -36,6 +36,7 @@ import java.nio.channels.ByteChannel;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.InterruptibleChannel;
 import java.security.GeneralSecurityException;
+import java.security.cert.X509Certificate;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
@@ -48,6 +49,7 @@ import de.kuschku.libquassel.ssl.CertificateManager;
 import de.kuschku.libquassel.ssl.QuasselTrustManager;
 import de.kuschku.util.CompatibilityUtils;
 import de.kuschku.util.accounts.ServerAddress;
+import de.kuschku.util.backports.Consumer;
 
 public class WrappedChannel implements Flushable, ByteChannel, InterruptibleChannel {
     @Nullable
@@ -95,9 +97,10 @@ public class WrappedChannel implements Flushable, ByteChannel, InterruptibleChan
 
     public static WrappedChannel withSSL(@NonNull WrappedChannel channel,
                                          @NonNull CertificateManager certificateManager,
-                                         @NonNull ServerAddress address) throws GeneralSecurityException, IOException {
+                                         @NonNull ServerAddress address,
+                                         @NonNull Consumer<X509Certificate[]> callback) throws GeneralSecurityException, IOException {
         SSLContext context = SSLContext.getInstance("TLSv1.2");
-        TrustManager[] managers = new TrustManager[]{QuasselTrustManager.fromDefault(certificateManager, address)};
+        TrustManager[] managers = new TrustManager[]{QuasselTrustManager.fromDefault(certificateManager, address, callback)};
         context.init(null, managers, null);
         SSLSocketFactory factory = context.getSocketFactory();
         SSLSocket socket = (SSLSocket) factory.createSocket(channel.socket, address.host, address.port, true);

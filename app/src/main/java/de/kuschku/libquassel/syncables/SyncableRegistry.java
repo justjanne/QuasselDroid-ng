@@ -35,6 +35,7 @@ import de.kuschku.libquassel.syncables.serializers.AliasManagerSerializer;
 import de.kuschku.libquassel.syncables.serializers.BufferSyncerSerializer;
 import de.kuschku.libquassel.syncables.serializers.BufferViewConfigSerializer;
 import de.kuschku.libquassel.syncables.serializers.BufferViewManagerSerializer;
+import de.kuschku.libquassel.syncables.serializers.CoreInfoSerializer;
 import de.kuschku.libquassel.syncables.serializers.IdentitySerializer;
 import de.kuschku.libquassel.syncables.serializers.IgnoreListManagerSerializer;
 import de.kuschku.libquassel.syncables.serializers.IrcChannelSerializer;
@@ -59,6 +60,7 @@ public class SyncableRegistry {
         map.put("Network", NetworkSerializer.get());
         map.put("NetworkConfig", NetworkConfigSerializer.get());
         map.put("AliasManager", AliasManagerSerializer.get());
+        map.put("CoreInfo", CoreInfoSerializer.get());
     }
 
     private SyncableRegistry() {

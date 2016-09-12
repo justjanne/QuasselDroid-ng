@@ -246,7 +246,9 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
     }
 
     public void notifyItemChanged(int position) {
-        callback.notifyItemChanged(position);
+        T obj = get(position);
+        list.recalculatePositionOfItemAt(position);
+        callback.notifyItemChanged(indexOf(obj));
     }
 
     @NonNull

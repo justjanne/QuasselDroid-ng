@@ -208,12 +208,6 @@ public abstract class ANetwork extends SyncableObject<QNetwork> implements QNetw
     }
 
     @Override
-    public void ircUserNickChanged(String oldnick, String newnick) {
-        _ircUserNickChanged(oldnick, newnick);
-        syncVar("ircUserNickChanged", newnick);
-    }
-
-    @Override
     public void connect() {
         _connect();
         syncVar("connect");

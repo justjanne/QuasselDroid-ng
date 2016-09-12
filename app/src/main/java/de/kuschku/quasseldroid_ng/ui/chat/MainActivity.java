@@ -80,10 +80,12 @@ import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
+import de.kuschku.quasseldroid_ng.ui.chat.dialogs.CoreInfoDialogBuilder;
 import de.kuschku.quasseldroid_ng.ui.chat.drawer.ActionModeHandler;
 import de.kuschku.quasseldroid_ng.ui.chat.drawer.BufferViewConfigAdapter;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.ChatFragment;
 import de.kuschku.quasseldroid_ng.ui.chat.fragment.LoadingFragment;
+import de.kuschku.quasseldroid_ng.ui.chat.nicklist.NickListAdapter;
 import de.kuschku.quasseldroid_ng.ui.chat.util.Status;
 import de.kuschku.quasseldroid_ng.ui.coresettings.aliases.AliasListActivity;
 import de.kuschku.quasseldroid_ng.ui.coresettings.chatlist.ChatListListActivity;
@@ -98,6 +100,7 @@ import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.certificates.CertificateUtils;
 import de.kuschku.util.certificates.SQLiteCertificateManager;
 import de.kuschku.util.servicebound.BoundActivity;
+import de.kuschku.util.ui.DividerItemDecoration;
 import de.kuschku.util.ui.MenuTint;
 import rx.android.schedulers.AndroidSchedulers;
 
@@ -109,23 +112,32 @@ public class MainActivity extends BoundActivity {
      * This object encapsulates the current status of the activity – opened bufferview, for example
      */
     private final Status status = new Status();
+
     /**
      * Host layout for content fragment, for example showing a loader or the chat
      */
     @Bind(R.id.chatList)
     RecyclerView chatList;
+
+    @Bind(R.id.nickList)
+    RecyclerView nickList;
+
     @Bind(R.id.chatListSpinner)
     AppCompatSpinner chatListSpinner;
+
     @Bind(R.id.chatListToolbar)
     Toolbar chatListToolbar;
+
     @Nullable
     @Bind(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+
     /**
      * Main ActionBar
      */
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+
     private AccountManager manager;
 
     private ToolbarWrapper toolbarWrapper;
@@ -135,6 +147,8 @@ public class MainActivity extends BoundActivity {
 
     private Bundle coreSetupResult;
     private boolean coreSetupCancelled;
+    private CoreInfoDialogBuilder coreInfoDialogBuilder;
+    private NickListAdapter nickListAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -168,6 +182,8 @@ public class MainActivity extends BoundActivity {
         chatList.setLayoutManager(new LinearLayoutManager(this));
         chatList.setAdapter(chatListAdapter);
 
+        coreInfoDialogBuilder = new CoreInfoDialogBuilder(this);
+
         chatListToolbar.inflateMenu(R.menu.chatlist);
         MenuTint.colorIcons(chatListToolbar.getMenu(), AutoBinder.obtainColor(R.attr.colorFill, chatListToolbar.getContext().getTheme()));
         chatListToolbar.setOnMenuItemClickListener(item -> {
@@ -196,6 +212,12 @@ public class MainActivity extends BoundActivity {
             status.onRestoreInstanceState(savedInstanceState);
 
         manager = new AccountManager(this);
+
+        nickListAdapter = new NickListAdapter(context);
+        nickList.setAdapter(nickListAdapter);
+        nickList.setLayoutManager(new LinearLayoutManager(this));
+        nickList.setItemAnimator(new DefaultItemAnimator());
+        nickList.addItemDecoration(new DividerItemDecoration(this));
     }
 
     @Override
@@ -290,6 +312,10 @@ public class MainActivity extends BoundActivity {
             case R.id.action_aliaslist:
                 startActivity(new Intent(this, AliasListActivity.class));
                 return true;
+            case R.id.action_coreinfo:
+                if (context.client() != null && context.client().coreInfo() != null)
+                    coreInfoDialogBuilder.build(manager.account(context.settings().preferenceLastAccount.get()), context.client().coreInfo(), context.client().certificateChain()).show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -300,23 +326,6 @@ public class MainActivity extends BoundActivity {
         stopConnection();
         finish();
     }
-
-    /*
-
-    private AccountHeader buildAccountHeader() {
-        return new AccountHeaderBuilder()
-                .withActivity(this)
-                .withCompactStyle(true)
-                .withHeaderBackground(R.drawable.bg1)
-                .withProfileImagesVisible(false)
-                .withOnAccountHeaderListener((view, profile, current) -> {
-                    selectBufferViewConfig((int) profile.getIdentifier());
-                    return true;
-                })
-                .build();
-    }
-
-    */
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEventMainThread(ConnectionChangeEvent event) {
@@ -350,6 +359,7 @@ public class MainActivity extends BoundActivity {
     }
 
     private void updateBuffer(int id) {
+        nickListAdapter.setChannel(null);
         Client client = context.client();
         if (client != null) {
             Buffer buffer = client.bufferManager().buffer(id);
@@ -364,6 +374,7 @@ public class MainActivity extends BoundActivity {
                     }
                 } else if (buffer instanceof ChannelBuffer) {
                     QIrcChannel channel = ((ChannelBuffer) buffer).getChannel();
+                    nickListAdapter.setChannel(channel);
                     if (channel == null) {
                         toolbarWrapper.setSubtitle(null);
                     } else {

@@ -40,6 +40,8 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.security.cert.X509Certificate;
+
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.client.ClientData;
 import de.kuschku.libquassel.events.ConnectionChangeEvent;
@@ -95,6 +97,7 @@ public class CoreConnection {
     private Socket socket;
     @NonNull
     private ConnectionChangeEvent.Status status = ConnectionChangeEvent.Status.DISCONNECTED;
+    private X509Certificate[] peerCertificateChain;
 
     public CoreConnection(@NonNull final ServerAddress address,
                           @NonNull final ClientData clientData,
@@ -234,7 +237,7 @@ public class CoreConnection {
     private void setSSL(boolean supportsSSL) {
         if (supportsSSL) {
             try {
-                channel = WrappedChannel.withSSL(getChannel(), certificateManager, address);
+                channel = WrappedChannel.withSSL(getChannel(), certificateManager, address, client::setCertificateChain);
             } catch (Exception e) {
                 if (e.getCause() instanceof UnknownCertificateException) {
                     busProvider.sendEvent(new UnknownCertificateEvent((UnknownCertificateException) e.getCause()));

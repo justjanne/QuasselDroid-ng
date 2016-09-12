@@ -142,7 +142,7 @@ public class IrcChannel extends AIrcChannel {
 
     @Override
     public String userModes(String nick) {
-        if (userModes.containsKey(nick))
+        if (userModes.get(nick) != null)
             return Joiner.on("").join(userModes.get(nick));
         else
             return "";
@@ -327,12 +327,14 @@ public class IrcChannel extends AIrcChannel {
 
     @Override
     public void _setUserModes(@NonNull QIrcUser ircuser, String modes) {
-        if (isKnownUser(ircuser)) {
+        if (!isKnownUser(ircuser))
+            return;
 
-            userModes.put(ircuser.nick(), ModeUtils.toModes(modes));
-            users.add(ircuser.nick());
-            _update();
-        }
+        String nick = ircuser.nick();
+        userModes.put(nick, ModeUtils.toModes(modes));
+        users.add(nick);
+        users.notifyItemChanged(nick);
+        _update();
     }
 
     @Override
@@ -345,9 +347,10 @@ public class IrcChannel extends AIrcChannel {
         if (!isKnownUser(ircuser) || !isValidChannelUserMode(mode))
             return;
 
-        if (!userModes.get(ircuser.nick()).contains(ModeUtils.toMode(mode))) {
-            userModes.get(ircuser.nick()).add(ModeUtils.toMode(mode));
-            users.notifyItemChanged(ircuser.nick());
+        String nick = ircuser.nick();
+        if (!userModes.get(nick).contains(ModeUtils.toMode(mode))) {
+            userModes.get(nick).add(ModeUtils.toMode(mode));
+            users.notifyItemChanged(nick);
             _update();
         }
     }
@@ -362,8 +365,10 @@ public class IrcChannel extends AIrcChannel {
         if (!isKnownUser(ircuser) || !isValidChannelUserMode(mode))
             return;
 
-        if (userModes.get(ircuser.nick()).contains(ModeUtils.toMode(mode))) {
-            userModes.get(ircuser.nick()).remove(ModeUtils.toMode(mode));
+        String nick = ircuser.nick();
+        if (userModes.get(nick).contains(ModeUtils.toMode(mode))) {
+            userModes.get(nick).remove(ModeUtils.toMode(mode));
+            users.notifyItemChanged(nick);
             _update();
         }
     }
@@ -438,11 +443,8 @@ public class IrcChannel extends AIrcChannel {
         /* TODO: Use just the nick in userModes and users instead – that should make sync things a lot easier */
         if (cachedUserModes != null) {
             for (String username : cachedUserModes.keySet()) {
-                QIrcUser ircUser = network().ircUser(username);
-                if (ircUser != null) {
-                    userModes.put(ircUser.nick(), ModeUtils.toModes(cachedUserModes.get(username)));
-                    users.add(ircUser.nick());
-                }
+                userModes.put(username, ModeUtils.toModes(cachedUserModes.get(username)));
+                users.add(username);
             }
         }
         if (cachedChanModes != null) {

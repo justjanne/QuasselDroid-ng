@@ -102,4 +102,13 @@
     <string name="labelNetworkServerProxyDefault">Default Proxy</string>
     <string name="labelNetworkServerProxySocks5">Socks5</string>
     <string name="labelNetworkServerProxyHttp">Http</string>
+
+    <string name="labelCoreUptimeValue">This core has been online since %1$s</string>
+    <string name="labelCoreUptime">Uptime</string>
+    <string name="labelCoreConnectedClients">Connected Clients</string>
+    <string name="labelCoreConnectedCientsValue">At the moment, %1d clients are logged in as you.</string>
+    <string name="labelCoreVersion">Core Version</string>
+    <string name="labelCoreCertificate">Certificate</string>
+    <string name="labelCoreAddress">Address</string>
+    <string name="labelCoreVerifier">The connection is verified by %1$s</string>
 </resources>

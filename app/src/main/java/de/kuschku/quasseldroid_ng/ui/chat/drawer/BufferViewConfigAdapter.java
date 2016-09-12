@@ -161,7 +161,7 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
                     } else if (name2 == null) {
                         return -1;
                     } else {
-                        return name1.compareTo(name2);
+                        return name1.compareToIgnoreCase(name2);
                     }
                 }
             }
