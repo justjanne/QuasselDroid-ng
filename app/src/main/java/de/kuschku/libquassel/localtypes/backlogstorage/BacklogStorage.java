@@ -61,4 +61,6 @@ public interface BacklogStorage {
     Set<BacklogFilter> getFilters();
 
     void setMarkerLine(@IntRange(from = 0) int buffer, int msgId);
+
+    void merge(@IntRange(from = 0) int buffer1, @IntRange(from = 0) int buffer2);
 }

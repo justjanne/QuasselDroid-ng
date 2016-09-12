@@ -23,6 +23,7 @@ package de.kuschku.libquassel.syncables.types.invokers;
 
 import android.support.annotation.NonNull;
 
+import de.kuschku.libquassel.exceptions.SyncInvocationException;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.syncables.types.interfaces.QCertManager;
 
@@ -39,14 +40,19 @@ public class ICertManager implements Invoker<QCertManager> {
     }
 
     @Override
-    public void invoke(SyncFunction function, QCertManager obj) {
+    public void invoke(SyncFunction function, QCertManager obj) throws SyncInvocationException {
         switch (function.methodName) {
             case "": {
 
-            } break;
+            }
+            break;
             case "update": {
                 InvokerHelper.update(obj, function.params.get(0));
-            } break;
+            }
+            break;
+            default: {
+                throw new SyncInvocationException(function.className + "::" + function.methodName);
+            }
         }
     }
 }

@@ -235,6 +235,7 @@ public interface QNetwork extends QObservable<QNetwork> {
     void setUseSasl(boolean useSasl);
 
     void setSaslPassword(final String saslPassword);
+
     void _setUseSasl(boolean useSasl);
 
     @Synced
@@ -243,7 +244,6 @@ public interface QNetwork extends QObservable<QNetwork> {
     void _setSaslAccount(final String saslAccount);
 
     @Synced
-
     void _setSaslPassword(final String saslPassword);
 
     @Synced

@@ -25,6 +25,7 @@ import android.support.annotation.NonNull;
 
 import org.joda.time.DateTime;
 
+import de.kuschku.libquassel.exceptions.SyncInvocationException;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 
@@ -41,77 +42,103 @@ public class IIrcUser implements Invoker<QIrcUser> {
     }
 
     @Override
-    public void invoke(SyncFunction function, QIrcUser obj) {
+    public void invoke(SyncFunction function, QIrcUser obj) throws SyncInvocationException {
         switch (function.methodName) {
             case "setAway": {
                 obj._setAway((boolean) function.params.get(0));
-            } break;
+            }
+            break;
             case "setUser": {
                 obj._setUser((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "setHost": {
                 obj._setHost((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "setNick": {
                 obj._setNick((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "setRealName": {
                 obj._setRealName((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "setAccount": {
                 obj._setAccount((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "setAwayMessage": {
                 obj._setAwayMessage((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "setIdleTime": {
                 obj._setIdleTime((DateTime) function.params.get(0));
-            } break;
+            }
+            break;
             case "setLoginTime": {
                 obj._setLoginTime((DateTime) function.params.get(0));
-            } break;
+            }
+            break;
             case "setServer": {
                 obj._setServer((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "setIrcOperator": {
                 obj._setIrcOperator((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "setLastAwayMessage": {
                 obj._setLastAwayMessage((int) function.params.get(0));
-            } break;
+            }
+            break;
             case "setWhoisServiceReply": {
                 obj._setWhoisServiceReply((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "setSuserHost": {
                 obj._setSuserHost((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "setEncrypted": {
                 obj._setEncrypted((boolean) function.params.get(0));
-            } break;
+            }
+            break;
             case "updateHostmask": {
                 obj._updateHostmask((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "setUserModes": {
                 obj._setUserModes((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "joinChannel": {
                 obj._joinChannel((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "partChannel": {
                 obj._partChannel((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "addUserModes": {
                 obj._addUserModes((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "removeUserModes": {
                 obj._removeUserModes((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "quit": {
                 obj._quit();
-            } break;
+            }
+            break;
             case "update": {
                 InvokerHelper.update(obj, function.params.get(0));
-            } break;
+            }
+            break;
+            default: {
+                throw new SyncInvocationException(function.className + "::" + function.methodName);
+            }
         }
     }
 }

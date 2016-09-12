@@ -23,6 +23,7 @@ package de.kuschku.libquassel.syncables.types.invokers;
 
 import android.support.annotation.NonNull;
 
+import de.kuschku.libquassel.exceptions.SyncInvocationException;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 
@@ -39,50 +40,67 @@ public class IBufferViewConfig implements Invoker<QBufferViewConfig> {
     }
 
     @Override
-    public void invoke(SyncFunction function, QBufferViewConfig obj) {
+    public void invoke(SyncFunction function, QBufferViewConfig obj) throws SyncInvocationException {
         switch (function.methodName) {
             case "setBufferViewName": {
                 obj._setBufferViewName((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "setNetworkId": {
                 obj._setNetworkId((int) function.params.get(0));
-            } break;
+            }
+            break;
             case "setAddNewBuffersAutomatically": {
                 obj._setAddNewBuffersAutomatically((boolean) function.params.get(0));
-            } break;
+            }
+            break;
             case "setSortAlphabetically": {
                 obj._setSortAlphabetically((boolean) function.params.get(0));
-            } break;
+            }
+            break;
             case "setDisableDecoration": {
                 obj._setDisableDecoration((boolean) function.params.get(0));
-            } break;
+            }
+            break;
             case "setAllowedBufferTypes": {
                 obj._setAllowedBufferTypes((int) function.params.get(0));
-            } break;
+            }
+            break;
             case "setMinimumActivity": {
                 obj._setMinimumActivity((int) function.params.get(0));
-            } break;
+            }
+            break;
             case "setHideInactiveBuffers": {
                 obj._setHideInactiveBuffers((boolean) function.params.get(0));
-            } break;
+            }
+            break;
             case "setHideInactiveNetworks": {
                 obj._setHideInactiveNetworks((boolean) function.params.get(0));
-            } break;
+            }
+            break;
             case "addBuffer": {
                 obj._addBuffer((int) function.params.get(0), (int) function.params.get(1));
-            } break;
+            }
+            break;
             case "moveBuffer": {
                 obj._moveBuffer((int) function.params.get(0), (int) function.params.get(1));
-            } break;
+            }
+            break;
             case "removeBuffer": {
                 obj._removeBuffer((int) function.params.get(0));
-            } break;
+            }
+            break;
             case "removeBufferPermanently": {
                 obj._removeBufferPermanently((int) function.params.get(0));
-            } break;
+            }
+            break;
             case "update": {
                 InvokerHelper.update(obj, function.params.get(0));
-            } break;
+            }
+            break;
+            default: {
+                throw new SyncInvocationException(function.className + "::" + function.methodName);
+            }
         }
     }
 }

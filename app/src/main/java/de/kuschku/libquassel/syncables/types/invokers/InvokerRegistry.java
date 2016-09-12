@@ -21,6 +21,7 @@
 
 package de.kuschku.libquassel.syncables.types.invokers;
 
+import de.kuschku.libquassel.exceptions.SyncInvocationException;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 
 public class InvokerRegistry {
@@ -59,7 +60,7 @@ public class InvokerRegistry {
         }
     }
 
-    public static void invoke(SyncFunction function, Object obj) {
+    public static void invoke(SyncFunction function, Object obj) throws SyncInvocationException {
         Invoker invoker = getInvoker(function);
         if (invoker != null)
             invoker.invoke(function, obj);

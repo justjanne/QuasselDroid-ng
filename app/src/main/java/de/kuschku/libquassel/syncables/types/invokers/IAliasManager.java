@@ -23,6 +23,7 @@ package de.kuschku.libquassel.syncables.types.invokers;
 
 import android.support.annotation.NonNull;
 
+import de.kuschku.libquassel.exceptions.SyncInvocationException;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.syncables.types.interfaces.QAliasManager;
 
@@ -39,14 +40,19 @@ public class IAliasManager implements Invoker<QAliasManager> {
     }
 
     @Override
-    public void invoke(SyncFunction function, QAliasManager obj) {
+    public void invoke(SyncFunction function, QAliasManager obj) throws SyncInvocationException {
         switch (function.methodName) {
             case "addAlias": {
                 obj._addAlias((String) function.params.get(0), (String) function.params.get(1));
-            } break;
+            }
+            break;
             case "update": {
                 InvokerHelper.update(obj, function.params.get(0));
-            } break;
+            }
+            break;
+            default: {
+                throw new SyncInvocationException(function.className + "::" + function.methodName);
+            }
         }
     }
 }

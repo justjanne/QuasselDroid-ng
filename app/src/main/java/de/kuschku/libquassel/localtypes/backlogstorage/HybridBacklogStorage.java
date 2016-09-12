@@ -214,6 +214,11 @@ public class HybridBacklogStorage implements BacklogStorage {
         }
     }
 
+    @Override
+    public void merge(@IntRange(from = 0) int buffer1, @IntRange(from = 0) int buffer2) {
+        SQLite.update(Message.class).set(Message_Table.bufferInfo_id.eq(buffer1)).where(Message_Table.bufferInfo_id.eq(buffer2)).execute();
+    }
+
     private void ensureExisting(@IntRange(from = -1) int bufferId) {
         assertNotNull(client);
         if (backlogs.get(bufferId) == null) {

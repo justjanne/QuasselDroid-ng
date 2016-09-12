@@ -25,6 +25,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import de.kuschku.libquassel.exceptions.SyncInvocationException;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
@@ -42,17 +43,23 @@ public class IBacklogManager implements Invoker<QBacklogManager> {
     }
 
     @Override
-    public void invoke(SyncFunction function, QBacklogManager obj) {
+    public void invoke(SyncFunction function, QBacklogManager obj) throws SyncInvocationException {
         switch (function.methodName) {
             case "receiveBacklog": {
                 obj._receiveBacklog((int) function.params.get(0), (int) function.params.get(1), (int) function.params.get(2), (int) function.params.get(3), (int) function.params.get(4), (List<Message>) function.params.get(5));
-            } break;
+            }
+            break;
             case "receiveBacklogAll": {
                 obj._receiveBacklogAll((int) function.params.get(0), (int) function.params.get(1), (int) function.params.get(2), (int) function.params.get(3), (List<Message>) function.params.get(4));
-            } break;
+            }
+            break;
             case "update": {
                 InvokerHelper.update(obj, function.params.get(0));
-            } break;
+            }
+            break;
+            default: {
+                throw new SyncInvocationException(function.className + "::" + function.methodName);
+            }
         }
     }
 }

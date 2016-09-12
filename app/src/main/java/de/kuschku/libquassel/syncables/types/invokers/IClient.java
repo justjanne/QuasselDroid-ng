@@ -24,6 +24,7 @@ package de.kuschku.libquassel.syncables.types.invokers;
 import android.support.annotation.NonNull;
 
 import de.kuschku.libquassel.client.QClient;
+import de.kuschku.libquassel.exceptions.SyncInvocationException;
 import de.kuschku.libquassel.functions.types.RpcCallFunction;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
@@ -41,35 +42,47 @@ public class IClient {
         return invoker;
     }
 
-    public void invoke(RpcCallFunction function, QClient obj) {
+    public void invoke(RpcCallFunction function, QClient obj) throws SyncInvocationException {
         switch (function.functionName) {
-            case "2displayMsg": {
+            case "2displayMsg(Message)": {
                 obj._displayMsg((Message) function.params.get(0));
-            } break;
-            case "2bufferInfoUpdated": {
+            }
+            break;
+            case "2bufferInfoUpdated(BufferInfo)": {
                 obj._bufferInfoUpdated((BufferInfo) function.params.get(0));
-            } break;
-            case "2identityCreated": {
+            }
+            break;
+            case "2identityCreated(Identity)": {
                 obj._identityCreated((Identity) function.params.get(0));
-            } break;
-            case "2identityRemoved": {
+            }
+            break;
+            case "2identityRemoved(IdentityId)": {
                 obj._identityRemoved((int) function.params.get(0));
-            } break;
-            case "2networkCreated": {
+            }
+            break;
+            case "2networkCreated(NetworkId)": {
                 obj._networkCreated((int) function.params.get(0));
-            } break;
-            case "2networkRemoved": {
+            }
+            break;
+            case "2networkRemoved(NetworkId)": {
                 obj._networkRemoved((int) function.params.get(0));
-            } break;
-            case "2passwordChanged": {
+            }
+            break;
+            case "2passwordChanged(PeerPtr,bool)": {
                 obj._passwordChanged((long) function.params.get(0), (boolean) function.params.get(1));
-            } break;
-            case "2displayStatusMsg": {
+            }
+            break;
+            case "2displayStatusMsg(QString,QString)": {
                 obj._displayStatusMsg((String) function.params.get(0), (String) function.params.get(1));
-            } break;
+            }
+            break;
             case "__objectRenamed__": {
                 obj.___objectRenamed__((String) function.params.get(0), (String) function.params.get(1), (String) function.params.get(2));
-            } break;
+            }
+            break;
+            default: {
+                throw new SyncInvocationException("Client::" + function.functionName);
+            }
         }
     }
 }

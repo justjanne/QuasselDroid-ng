@@ -23,6 +23,7 @@ package de.kuschku.libquassel.syncables.types.invokers;
 
 import android.support.annotation.NonNull;
 
+import de.kuschku.libquassel.exceptions.SyncInvocationException;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetworkConfig;
 
@@ -39,35 +40,47 @@ public class INetworkConfig implements Invoker<QNetworkConfig> {
     }
 
     @Override
-    public void invoke(SyncFunction function, QNetworkConfig obj) {
+    public void invoke(SyncFunction function, QNetworkConfig obj) throws SyncInvocationException {
         switch (function.methodName) {
             case "setPingTimeoutEnabled": {
                 obj._setPingTimeoutEnabled((boolean) function.params.get(0));
-            } break;
+            }
+            break;
             case "setPingInterval": {
                 obj._setPingInterval((int) function.params.get(0));
-            } break;
+            }
+            break;
             case "setMaxPingCount": {
                 obj._setMaxPingCount((int) function.params.get(0));
-            } break;
+            }
+            break;
             case "setAutoWhoEnabled": {
                 obj._setAutoWhoEnabled((boolean) function.params.get(0));
-            } break;
+            }
+            break;
             case "setAutoWhoInterval": {
                 obj._setAutoWhoInterval((int) function.params.get(0));
-            } break;
+            }
+            break;
             case "setAutoWhoNickLimit": {
                 obj._setAutoWhoNickLimit((int) function.params.get(0));
-            } break;
+            }
+            break;
             case "setAutoWhoDelay": {
                 obj._setAutoWhoDelay((int) function.params.get(0));
-            } break;
+            }
+            break;
             case "setStandardCtcp": {
                 obj._setStandardCtcp((boolean) function.params.get(0));
-            } break;
+            }
+            break;
             case "update": {
                 InvokerHelper.update(obj, function.params.get(0));
-            } break;
+            }
+            break;
+            default: {
+                throw new SyncInvocationException(function.className + "::" + function.methodName);
+            }
         }
     }
 }

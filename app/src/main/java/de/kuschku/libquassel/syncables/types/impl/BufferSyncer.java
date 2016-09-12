@@ -160,6 +160,7 @@ public class BufferSyncer extends ABufferSyncer {
 
     @Override
     public void _mergeBuffersPermanently(int buffer1, int buffer2) {
+        client.backlogStorage().merge(buffer1, buffer2);
         _removeBuffer(buffer2);
     }
 

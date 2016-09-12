@@ -25,6 +25,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import de.kuschku.libquassel.exceptions.SyncInvocationException;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 
@@ -41,44 +42,59 @@ public class IIrcChannel implements Invoker<QIrcChannel> {
     }
 
     @Override
-    public void invoke(SyncFunction function, QIrcChannel obj) {
+    public void invoke(SyncFunction function, QIrcChannel obj) throws SyncInvocationException {
         switch (function.methodName) {
             case "setTopic": {
                 obj._setTopic((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "setPassword": {
                 obj._setPassword((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "setEncrypted": {
                 obj._setEncrypted((boolean) function.params.get(0));
-            } break;
+            }
+            break;
             case "joinIrcUsers": {
                 obj._joinIrcUsers((List<String>) function.params.get(0), (List<String>) function.params.get(1));
-            } break;
+            }
+            break;
             case "part": {
                 obj._part((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "setUserModes": {
                 obj._setUserModes((String) function.params.get(0), (String) function.params.get(1));
-            } break;
+            }
+            break;
             case "addUserMode": {
                 obj._addUserMode((String) function.params.get(0), (String) function.params.get(1));
-            } break;
+            }
+            break;
             case "removeUserMode": {
                 obj._removeUserMode((String) function.params.get(0), (String) function.params.get(1));
-            } break;
+            }
+            break;
             case "addChannelMode": {
                 obj._addChannelMode((char) function.params.get(0), (String) function.params.get(1));
-            } break;
+            }
+            break;
             case "removeChannelMode": {
                 obj._removeChannelMode((char) function.params.get(0), (String) function.params.get(1));
-            } break;
+            }
+            break;
             case "ircUserNickChanged": {
                 obj._ircUserNickChanged((String) function.params.get(0), (String) function.params.get(1));
-            } break;
+            }
+            break;
             case "update": {
                 InvokerHelper.update(obj, function.params.get(0));
-            } break;
+            }
+            break;
+            default: {
+                throw new SyncInvocationException(function.className + "::" + function.methodName);
+            }
         }
     }
 }

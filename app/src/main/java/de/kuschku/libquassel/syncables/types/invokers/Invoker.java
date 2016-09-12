@@ -21,8 +21,9 @@
 
 package de.kuschku.libquassel.syncables.types.invokers;
 
+import de.kuschku.libquassel.exceptions.SyncInvocationException;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 
 public interface Invoker<T> {
-    void invoke(SyncFunction function, T obj);
+    void invoke(SyncFunction function, T obj) throws SyncInvocationException;
 }

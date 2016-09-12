@@ -23,6 +23,7 @@ package de.kuschku.libquassel.syncables.types.invokers;
 
 import android.support.annotation.NonNull;
 
+import de.kuschku.libquassel.exceptions.SyncInvocationException;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 
@@ -39,17 +40,23 @@ public class IBufferViewManager implements Invoker<QBufferViewManager> {
     }
 
     @Override
-    public void invoke(SyncFunction function, QBufferViewManager obj) {
+    public void invoke(SyncFunction function, QBufferViewManager obj) throws SyncInvocationException {
         switch (function.methodName) {
             case "addBufferViewConfig": {
                 obj._addBufferViewConfig((int) function.params.get(0));
-            } break;
+            }
+            break;
             case "deleteBufferViewConfig": {
                 obj._deleteBufferViewConfig((int) function.params.get(0));
-            } break;
+            }
+            break;
             case "update": {
                 InvokerHelper.update(obj, function.params.get(0));
-            } break;
+            }
+            break;
+            default: {
+                throw new SyncInvocationException(function.className + "::" + function.methodName);
+            }
         }
     }
 }

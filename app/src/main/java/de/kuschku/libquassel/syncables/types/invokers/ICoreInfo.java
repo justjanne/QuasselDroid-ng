@@ -25,6 +25,7 @@ import android.support.annotation.NonNull;
 
 import java.util.Map;
 
+import de.kuschku.libquassel.exceptions.SyncInvocationException;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.interfaces.QCoreInfo;
@@ -42,14 +43,19 @@ public class ICoreInfo implements Invoker<QCoreInfo> {
     }
 
     @Override
-    public void invoke(SyncFunction function, QCoreInfo obj) {
+    public void invoke(SyncFunction function, QCoreInfo obj) throws SyncInvocationException {
         switch (function.methodName) {
             case "setCoreData": {
                 obj._setCoreData((Map<String, QVariant>) function.params.get(0));
-            } break;
+            }
+            break;
             case "update": {
                 InvokerHelper.update(obj, function.params.get(0));
-            } break;
+            }
+            break;
+            default: {
+                throw new SyncInvocationException(function.className + "::" + function.methodName);
+            }
         }
     }
 }

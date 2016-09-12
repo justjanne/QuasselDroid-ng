@@ -23,6 +23,7 @@ package de.kuschku.libquassel.syncables.types.invokers;
 
 import android.support.annotation.NonNull;
 
+import de.kuschku.libquassel.exceptions.SyncInvocationException;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferSyncer;
 
@@ -39,29 +40,39 @@ public class IBufferSyncer implements Invoker<QBufferSyncer> {
     }
 
     @Override
-    public void invoke(SyncFunction function, QBufferSyncer obj) {
+    public void invoke(SyncFunction function, QBufferSyncer obj) throws SyncInvocationException {
         switch (function.methodName) {
             case "setLastSeenMsg": {
                 obj._setLastSeenMsg((int) function.params.get(0), (int) function.params.get(1));
-            } break;
+            }
+            break;
             case "setMarkerLine": {
                 obj._setMarkerLine((int) function.params.get(0), (int) function.params.get(1));
-            } break;
+            }
+            break;
             case "removeBuffer": {
                 obj._removeBuffer((int) function.params.get(0));
-            } break;
+            }
+            break;
             case "renameBuffer": {
                 obj._renameBuffer((int) function.params.get(0), (String) function.params.get(1));
-            } break;
+            }
+            break;
             case "mergeBuffersPermanently": {
                 obj._mergeBuffersPermanently((int) function.params.get(0), (int) function.params.get(1));
-            } break;
+            }
+            break;
             case "markBufferAsRead": {
                 obj._markBufferAsRead((int) function.params.get(0));
-            } break;
+            }
+            break;
             case "update": {
                 InvokerHelper.update(obj, function.params.get(0));
-            } break;
+            }
+            break;
+            default: {
+                throw new SyncInvocationException(function.className + "::" + function.methodName);
+            }
         }
     }
 }

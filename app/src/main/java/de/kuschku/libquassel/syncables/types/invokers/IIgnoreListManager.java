@@ -23,6 +23,7 @@ package de.kuschku.libquassel.syncables.types.invokers;
 
 import android.support.annotation.NonNull;
 
+import de.kuschku.libquassel.exceptions.SyncInvocationException;
 import de.kuschku.libquassel.functions.types.SyncFunction;
 import de.kuschku.libquassel.syncables.types.interfaces.QIgnoreListManager;
 
@@ -38,20 +39,27 @@ public class IIgnoreListManager implements Invoker<QIgnoreListManager> {
         return invoker;
     }
 
-    public void invoke(SyncFunction function, QIgnoreListManager object) {
+    public void invoke(SyncFunction function, QIgnoreListManager object) throws SyncInvocationException {
         switch (function.methodName) {
             case "removeIgnoreListItem": {
                 object._removeIgnoreListItem((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "toggleIgnoreRule": {
                 object._toggleIgnoreRule((String) function.params.get(0));
-            } break;
+            }
+            break;
             case "addIgnoreListItem": {
                 object._addIgnoreListItem((int) function.params.get(0), (String) function.params.get(1), (boolean) function.params.get(2), (int) function.params.get(3), (int) function.params.get(4), (String) function.params.get(5), (boolean) function.params.get(6));
-            } break;
+            }
+            break;
             case "update": {
                 InvokerHelper.update(object, function.params.get(0));
-            } break;
+            }
+            break;
+            default: {
+                throw new SyncInvocationException(function.className + "::" + function.methodName);
+            }
         }
     }
 }
