@@ -32,11 +32,15 @@
 
     <TextView
         android:id="@+id/mode"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/badge"
+        android:fontFamily="monospace"
         android:gravity="center"
+        android:minWidth="40dp"
         android:textColor="?colorBackground"
         tools:text="\@"/>
 
