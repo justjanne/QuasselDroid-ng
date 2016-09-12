@@ -21,18 +21,18 @@
 
 package de.kuschku.libquassel.localtypes.buffers;
 
-import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
+import de.kuschku.util.observables.lists.ObservableElement;
 
 public class StatusBuffer implements Buffer {
     @NonNull
     private final Client client;
-    private final ObservableField<BufferInfo.BufferStatus> status = new ObservableField<>();
+    private final ObservableElement<BufferInfo.BufferStatus> status = new ObservableElement<>();
     @NonNull
     private BufferInfo info;
 
@@ -68,7 +68,7 @@ public class StatusBuffer implements Buffer {
 
     @NonNull
     @Override
-    public ObservableField<BufferInfo.BufferStatus> getStatus() {
+    public ObservableElement<BufferInfo.BufferStatus> getStatus() {
         updateStatus();
         return status;
     }

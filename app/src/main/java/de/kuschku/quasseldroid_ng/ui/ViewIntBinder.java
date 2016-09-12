@@ -21,8 +21,6 @@
 
 package de.kuschku.quasseldroid_ng.ui;
 
-import android.databinding.Observable;
-import android.databinding.ObservableInt;
 import android.view.View;
 import android.widget.TextView;
 
@@ -31,41 +29,32 @@ import com.google.common.base.Function;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ViewIntBinder {
-    private final ObservableInt field;
-    private final Set<Observable.OnPropertyChangedCallback> callbacks = new HashSet<>();
+import de.kuschku.util.observables.callbacks.GeneralCallback;
+import de.kuschku.util.observables.lists.ObservableElement;
 
-    public ViewIntBinder(ObservableInt field) {
+public class ViewIntBinder {
+    private final ObservableElement<Integer> field;
+    private final Set<GeneralCallback<Integer>> callbacks = new HashSet<>();
+
+    public ViewIntBinder(ObservableElement<Integer> field) {
         this.field = field;
     }
 
     public void bindBackgroundColor(View v, Function<Integer, Integer> mapper) {
         v.setBackgroundColor(mapper.apply(field.get()));
-        Observable.OnPropertyChangedCallback callback = new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable sender, int propertyId) {
-                v.setBackgroundColor(mapper.apply(field.get()));
-            }
-        };
+        GeneralCallback<Integer> callback = object -> v.setBackgroundColor(mapper.apply(object));
         callbacks.add(callback);
-        field.addOnPropertyChangedCallback(callback);
+        field.addCallback(callback);
     }
 
     public void bindTextColor(TextView v, Function<Integer, Integer> mapper) {
         v.setTextColor(mapper.apply(field.get()));
-        Observable.OnPropertyChangedCallback callback = new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable sender, int propertyId) {
-                v.setTextColor(mapper.apply(field.get()));
-            }
-        };
+        GeneralCallback<Integer> callback = object -> v.setTextColor(mapper.apply(object));
         callbacks.add(callback);
-        field.addOnPropertyChangedCallback(callback);
+        field.addCallback(callback);
     }
 
     public void unbind() {
-        for (Observable.OnPropertyChangedCallback callback : callbacks) {
-            field.removeOnPropertyChangedCallback(callback);
-        }
+        field.removeCallbacks();
     }
 }

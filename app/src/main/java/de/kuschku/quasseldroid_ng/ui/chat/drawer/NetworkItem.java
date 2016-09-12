@@ -21,8 +21,6 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
-import android.databinding.Observable;
-
 import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 
 import java.util.List;
@@ -105,12 +103,7 @@ public class NetworkItem implements ParentListItem {
         this.context = context;
         this.config = config;
         this.network = network;
-        bufferViewConfigAdapter.showAll().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable sender, int propertyId) {
-                setShowAll(bufferViewConfigAdapter.showAll().get());
-            }
-        });
+        bufferViewConfigAdapter.showAll().addCallback(object -> setShowAll(object));
         setShowAll(bufferViewConfigAdapter.showAll().get());
         this.buffers.addCallback(new UICallback() {
             @Override

@@ -21,7 +21,6 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
-import android.databinding.ObservableField;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,6 +41,7 @@ import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.UICallback;
+import de.kuschku.util.observables.lists.ObservableElement;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -51,7 +51,7 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
     private final ObservableSortedList<NetworkItem> items;
     private final Map<QNetwork, NetworkItem> itemMap = new WeakHashMap<>();
     private final Map<Integer, BufferViewHolder> bufferViewHolderMap = new WeakHashMap<>();
-    private final ObservableField<Boolean> showAll = new ObservableField<>(false);
+    private final ObservableElement<Boolean> showAll = new ObservableElement<>(false);
     private QBufferViewConfig config;
     private final ElementCallback<QNetwork> callback = new ElementCallback<QNetwork>() {
         @Override
@@ -298,7 +298,7 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
         return -1;
     }
 
-    public ObservableField<Boolean> showAll() {
+    public ObservableElement<Boolean> showAll() {
         return showAll;
     }
 

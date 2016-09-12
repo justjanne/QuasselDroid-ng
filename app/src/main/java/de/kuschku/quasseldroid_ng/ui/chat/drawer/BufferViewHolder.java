@@ -21,8 +21,6 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
-import android.databinding.Observable;
-import android.databinding.ObservableField;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.LayoutRes;
@@ -51,6 +49,8 @@ import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.ViewIntBinder;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
+import de.kuschku.util.observables.callbacks.GeneralCallback;
+import de.kuschku.util.observables.lists.ObservableElement;
 
 public class BufferViewHolder extends ChildViewHolder {
 
@@ -67,8 +67,8 @@ public class BufferViewHolder extends ChildViewHolder {
     TextView name;
     @Bind(R.id.material_drawer_description)
     TextView description;
-    private ObservableField<BufferInfo.BufferStatus> status;
-    private Observable.OnPropertyChangedCallback callback;
+    private ObservableElement<BufferInfo.BufferStatus> status;
+    private GeneralCallback<BufferInfo.BufferStatus> callback;
     private ViewIntBinder viewIntBinder;
     private boolean selected = false;
     private boolean checked = false;
@@ -92,7 +92,7 @@ public class BufferViewHolder extends ChildViewHolder {
 
     public void bind(OnBufferClickListener listener, OnBufferLongClickListener longClickListener, Buffer buffer) {
         if (status != null)
-            status.removeOnPropertyChangedCallback(callback);
+            status.removeCallback(callback);
         status = buffer.getStatus();
         name.setText(buffer.getName());
         if (viewIntBinder != null) viewIntBinder.unbind();
@@ -110,13 +110,8 @@ public class BufferViewHolder extends ChildViewHolder {
 
         BufferInfo.Type type = buffer.getInfo().type;
         setIcon(context, type, status);
-        callback = new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable sender, int propertyId) {
-                setIcon(context, type, status);
-            }
-        };
-        status.addOnPropertyChangedCallback(callback);
+        callback = object -> setIcon(context, type, status);
+        status.addCallback(callback);
     }
 
     @NonNull
@@ -155,7 +150,7 @@ public class BufferViewHolder extends ChildViewHolder {
         itemView.setSelected(selected || checked);
     }
 
-    private void setIcon(AppContext context, BufferInfo.Type type, ObservableField<BufferInfo.BufferStatus> status) {
+    private void setIcon(AppContext context, BufferInfo.Type type, ObservableElement<BufferInfo.BufferStatus> status) {
         icon.setImageDrawable(context.themeUtil().statusDrawables.of(type, status.get()));
     }
 

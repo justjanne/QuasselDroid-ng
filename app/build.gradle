@@ -94,10 +94,7 @@ android {
         targetSdkVersion 24
         versionCode versionBuild
         versionName rawVersionName + " Build #" + versionBuild
-        buildConfigField "String", "GitHash", "\"${getGitHash()}\""
-    }
-    dataBinding {
-        enabled = true
+        buildConfigField "String", "VERSION_HASH", "\"${getGitHash()}\""
     }
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
@@ -132,6 +129,11 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    applicationVariants.all { variant ->
+        variant.resValue "string", "versionName", variant.versionName
+        variant.resValue "string", "versionCode", String.valueOf(versionBuild)
+        variant.resValue "string", "versionHash", getGitHash()
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

@@ -21,22 +21,17 @@
 
 package de.kuschku.util.ui;
 
-import android.databinding.Observable;
-import android.databinding.ObservableField;
 import android.widget.TextView;
 
+import de.kuschku.util.observables.lists.ObservableElement;
+
 public class ObservableTextBinder {
-    private final ObservableField<CharSequence> text;
+    private final ObservableElement<CharSequence> text;
     private TextView view;
 
-    public ObservableTextBinder(ObservableField<CharSequence> text) {
+    public ObservableTextBinder(ObservableElement<CharSequence> text) {
         this.text = text;
-        this.text.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable sender, int propertyId) {
-                updateView();
-            }
-        });
+        this.text.addCallback(object -> updateView());
     }
 
     private void updateView() {

@@ -21,11 +21,11 @@
 
 package de.kuschku.libquassel.syncables.types.interfaces;
 
-import android.databinding.ObservableInt;
 import android.util.SparseIntArray;
 
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.Synced;
+import de.kuschku.util.observables.lists.ObservableElement;
 import de.kuschku.util.observables.lists.ObservableSet;
 
 public interface QBufferSyncer extends QObservable<QBufferSyncer> {
@@ -99,7 +99,7 @@ public interface QBufferSyncer extends QObservable<QBufferSyncer> {
     void _markBufferAsRead(int buffer);
 
 
-    ObservableInt activity(int bufferid);
+    ObservableElement<Integer> activity(int bufferid);
 
     void setActivity(int bufferid, int activity);
 

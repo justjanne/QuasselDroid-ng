@@ -21,7 +21,6 @@
 
 package de.kuschku.libquassel.syncables.types.impl;
 
-import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -39,6 +38,7 @@ import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferSyncer;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.util.observables.lists.ObservableComparableSortedList;
+import de.kuschku.util.observables.lists.ObservableElement;
 import de.kuschku.util.observables.lists.ObservableSet;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
@@ -47,7 +47,7 @@ import static de.kuschku.util.AndroidAssert.assertNotNull;
 public class BufferSyncer extends ABufferSyncer {
 
     @NonNull
-    private final SparseArray<ObservableInt> activities = new SparseArray<>();
+    private final SparseArray<ObservableElement<Integer>> activities = new SparseArray<>();
     @NonNull
     private SparseIntArray lastSeenMsgs = new SparseIntArray();
     @NonNull
@@ -211,7 +211,7 @@ public class BufferSyncer extends ABufferSyncer {
         _update();
     }
 
-    public ObservableInt activity(int bufferid) {
+    public ObservableElement<Integer> activity(int bufferid) {
         assertNotNull(activities);
         ensureExistingActivity(bufferid);
 
@@ -227,7 +227,7 @@ public class BufferSyncer extends ABufferSyncer {
 
     private void ensureExistingActivity(int bufferid) {
         if (activities.get(bufferid) == null)
-            activities.put(bufferid, new ObservableInt());
+            activities.put(bufferid, new ObservableElement<>(0));
     }
 
     public void addActivity(int bufferid, int activity) {
