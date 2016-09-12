@@ -53,6 +53,15 @@ if (project.hasProperty("storeFile")) {
     }
 }
 
+def getGitHash = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
+
 def versionPropsFile = file('version.properties')
 def versionBuild = 0
 if (versionPropsFile.exists() && versionPropsFile.canRead()) {
@@ -85,6 +94,7 @@ android {
         targetSdkVersion 24
         versionCode versionBuild
         versionName rawVersionName + " Build #" + versionBuild
+        buildConfigField "String", "GitHash", "\"${getGitHash()}\""
     }
     dataBinding {
         enabled = true

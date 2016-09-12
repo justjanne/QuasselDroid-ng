@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Observable;
 
 import de.kuschku.libquassel.objects.types.NetworkServer;
+import de.kuschku.util.backports.Objects;
 
 public class NetworkInfo extends Observable {
     private int networkId;
@@ -308,16 +309,16 @@ public class NetworkInfo extends Observable {
                 autoReconnectRetries == that.autoReconnectRetries &&
                 unlimitedReconnectRetries == that.unlimitedReconnectRetries &&
                 rejoinChannels == that.rejoinChannels &&
-                (networkName != null ? networkName.equals(that.networkName) : that.networkName == null) &&
-                (codecForServer != null ? codecForServer.equals(that.codecForServer) : that.codecForServer == null) &&
-                (codecForEncoding != null ? codecForEncoding.equals(that.codecForEncoding) : that.codecForEncoding == null) &&
-                (codecForDecoding != null ? codecForDecoding.equals(that.codecForDecoding) : that.codecForDecoding == null) &&
-                (serverList != null ? serverList.equals(that.serverList) : that.serverList == null) &&
-                (perform != null ? perform.equals(that.perform) : that.perform == null) &&
-                (autoIdentifyService != null ? autoIdentifyService.equals(that.autoIdentifyService) : that.autoIdentifyService == null) &&
-                (autoIdentifyPassword != null ? autoIdentifyPassword.equals(that.autoIdentifyPassword) : that.autoIdentifyPassword == null) &&
-                (saslAccount != null ? saslAccount.equals(that.saslAccount) : that.saslAccount == null) &&
-                (saslPassword != null ? saslPassword.equals(that.saslPassword) : that.saslPassword == null)
+                Objects.equals(networkName, that.networkName) &&
+                Objects.equals(codecForServer, that.codecForServer) &&
+                Objects.equals(codecForEncoding, that.codecForEncoding) &&
+                Objects.equals(codecForDecoding, that.codecForDecoding) &&
+                Objects.equals(serverList, that.serverList) &&
+                Objects.equals(perform, that.perform) &&
+                Objects.equals(autoIdentifyService, that.autoIdentifyService) &&
+                Objects.equals(autoIdentifyPassword, that.autoIdentifyPassword) &&
+                Objects.equals(saslAccount, that.saslAccount) &&
+                Objects.equals(saslPassword, that.saslPassword)
         );
 
     }
