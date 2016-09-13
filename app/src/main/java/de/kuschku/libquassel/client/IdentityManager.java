@@ -30,12 +30,12 @@ import java.util.List;
 import java.util.Map;
 
 import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
-import de.kuschku.util.observables.lists.ObservableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableSortedList;
 
 public class IdentityManager {
     @NonNull
     private final Map<Integer, QIdentity> identities = new HashMap<>();
-    private final ObservableSortedList<QIdentity> identityList = new ObservableSortedList<>(QIdentity.class, new ObservableSortedList.ItemComparator<QIdentity>() {
+    private final AndroidObservableSortedList<QIdentity> identityList = new AndroidObservableSortedList<>(QIdentity.class, new AndroidObservableSortedList.ItemComparator<QIdentity>() {
         @Override
         public int compare(QIdentity o1, QIdentity o2) {
             if (o1 == null && o2 == null)
@@ -78,7 +78,7 @@ public class IdentityManager {
         }
     }
 
-    public ObservableSortedList<QIdentity> identities() {
+    public AndroidObservableSortedList<QIdentity> identities() {
         return identityList;
     }
 }

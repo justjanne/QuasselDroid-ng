@@ -36,13 +36,13 @@ import de.kuschku.libquassel.syncables.types.abstracts.ABufferViewManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewManager;
 import de.kuschku.util.observables.callbacks.GeneralCallback;
-import de.kuschku.util.observables.lists.ObservableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableSortedList;
 
 public class BufferViewManager extends ABufferViewManager {
     @NonNull
     final
     Set<Integer> cachedIds = new HashSet<>();
-    final ObservableSortedList<QBufferViewConfig> list = new ObservableSortedList<>(QBufferViewConfig.class, new ObservableSortedList.ItemComparator<QBufferViewConfig>() {
+    final AndroidObservableSortedList<QBufferViewConfig> list = new AndroidObservableSortedList<>(QBufferViewConfig.class, new AndroidObservableSortedList.ItemComparator<QBufferViewConfig>() {
         @Override
         public int compare(QBufferViewConfig o1, QBufferViewConfig o2) {
             return o1.bufferViewName().compareToIgnoreCase(o2.bufferViewName());
@@ -67,7 +67,7 @@ public class BufferViewManager extends ABufferViewManager {
 
     @NonNull
     @Override
-    public ObservableSortedList<QBufferViewConfig> bufferViewConfigs() {
+    public AndroidObservableSortedList<QBufferViewConfig> bufferViewConfigs() {
         return list;
     }
 

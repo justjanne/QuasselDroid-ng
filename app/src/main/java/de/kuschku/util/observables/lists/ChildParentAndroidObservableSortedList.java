@@ -30,16 +30,16 @@ import de.kuschku.util.observables.callbacks.UIParentCallback;
 import de.kuschku.util.observables.callbacks.wrappers.MultiUIChildParentCallback;
 import de.kuschku.util.observables.callbacks.wrappers.ParentUICallbackWrapper;
 
-public class ChildParentObservableSortedList<T extends IObservable<UIChildCallback>> extends ObservableSortedList<T> {
+public class ChildParentAndroidObservableSortedList<T extends IObservable<UIChildCallback>> extends AndroidObservableSortedList<T> {
     @NonNull
     private final MultiUIChildParentCallback callback = MultiUIChildParentCallback.of();
 
-    public ChildParentObservableSortedList(@NonNull Class<T> cl, @NonNull ItemComparator<T> comparator) {
+    public ChildParentAndroidObservableSortedList(@NonNull Class<T> cl, @NonNull ItemComparator<T> comparator) {
         super(cl, comparator);
         registerCallbacks();
     }
 
-    public ChildParentObservableSortedList(@NonNull Class<T> cl, @NonNull ItemComparator<T> comparator, boolean reverse) {
+    public ChildParentAndroidObservableSortedList(@NonNull Class<T> cl, @NonNull ItemComparator<T> comparator, boolean reverse) {
         super(cl, comparator, reverse);
         registerCallbacks();
     }

@@ -29,7 +29,7 @@ import java.util.Set;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.syncables.Synced;
-import de.kuschku.util.observables.lists.ObservableComparableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableComparableSortedList;
 
 public interface QBacklogManager extends QSyncableObject<QBacklogManager> {
     void requestMoreBacklog(int bufferId, int amount);
@@ -60,10 +60,10 @@ public interface QBacklogManager extends QSyncableObject<QBacklogManager> {
     BacklogFilter filter(int id);
 
     @NonNull
-    ObservableComparableSortedList<Message> unfiltered(int id);
+    AndroidObservableComparableSortedList<Message> unfiltered(int id);
 
     @NonNull
-    ObservableComparableSortedList<Message> filtered(int id);
+    AndroidObservableComparableSortedList<Message> filtered(int id);
 
     void setOpen(int bufferId);
 

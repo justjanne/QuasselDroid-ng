@@ -22,49 +22,40 @@
 package de.kuschku.util.observables.lists;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.util.SortedList;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
-import de.kuschku.util.backports.Stream;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.callbacks.wrappers.MultiUICallbackWrapper;
 
-import static de.kuschku.util.AndroidAssert.assertTrue;
-
-@SuppressWarnings("unchecked")
-public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
-    @NonNull
-    private final SortedList<T> list;
-    private final boolean reverse;
-
+public class ObservableSortedList<T> extends ArrayList<T> implements IObservableList<UICallback, T> {
     @NonNull
     private final MultiUICallbackWrapper callback = MultiUICallbackWrapper.of();
-    @NonNull
-    private ItemComparator<T> comparator;
 
-    public ObservableSortedList(@NonNull Class<T> cl, @NonNull ItemComparator<T> comparator) {
-        this(cl, comparator, false);
-    }
+    private final Comparator<T> comparator;
 
-    public ObservableSortedList(@NonNull Class<T> cl, @NonNull ItemComparator<T> comparator, boolean reverse) {
-        this.list = new SortedList<>(cl, new Callback());
+    public ObservableSortedList(Comparator<T> comparator) {
+        super();
         this.comparator = comparator;
-        this.reverse = reverse;
     }
 
-    @Override
+    public ObservableSortedList(Comparator<T> comparator, int capacity) {
+        super(capacity);
+        this.comparator = comparator;
+    }
+
+    public ObservableSortedList(AndroidObservableSortedList.ItemComparator<T> itemComparator) {
+        this.comparator = new ObservableComparableSortedList.ItemComparatorWrapper<>(itemComparator);
+    }
+
     public void addCallback(@NonNull UICallback callback) {
         this.callback.addCallback(callback);
     }
 
-    @Override
     public void removeCallback(@NonNull UICallback callback) {
         this.callback.removeCallback(callback);
     }
@@ -74,299 +65,148 @@ public class ObservableSortedList<T> implements IObservableList<UICallback, T> {
         callback.removeCallbacks();
     }
 
-    public void setComparator(@NonNull ItemComparator<T> comparator) {
-        this.comparator = comparator;
-    }
+    private int getPosition(T key) {
+        int low = 0;
+        int high = size() - 1;
 
-    @Nullable
-    public T last() {
-        if (list.size() == 0) return null;
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            T midVal = get(mid);
+            int cmp = comparator.compare(midVal, key);
 
-        return list.get(list.size() - 1);
-    }
-
-    @Override
-    public void add(int location, T object) {
-        list.add(object);
+            if (cmp < 0)
+                low = mid + 1;
+            else if (cmp > 0)
+                high = mid - 1;
+            else
+                return -1; // key found
+        }
+        return low;  // key not found
     }
 
     @Override
     public boolean add(T object) {
-        list.add(object);
-        return true;
+        int position = addInternal(object);
+        callback.notifyItemInserted(position);
+        return position != -1;
+    }
+
+    public int addInternal(T object) {
+        int position = getPosition(object);
+        if (position != -1) super.add(position, object);
+        return position;
     }
 
     @Override
-    public boolean addAll(int location, @NonNull Collection<? extends T> collection) {
-        list.addAll((Collection<T>) collection);
-        return true;
+    public void add(int index, T object) {
+        add(object);
     }
 
     @Override
     public boolean addAll(@NonNull Collection<? extends T> collection) {
-        list.addAll((Collection<T>) collection);
-        return false;
+        boolean addedAny = false;
+        for (T t : collection) {
+            addedAny |= add(t);
+        }
+        return addedAny;
     }
 
     @Override
-    public void clear() {
-        list.clear();
+    public boolean addAll(int index, @NonNull Collection<? extends T> collection) {
+        return addAll(collection);
     }
 
     @Override
-    public boolean contains(Object object) {
-        return indexOf(object) != SortedList.INVALID_POSITION;
+    public T remove(int index) {
+        T result = super.remove(index);
+        callback.notifyItemRemoved(index);
+        return result;
     }
 
     @Override
-    public boolean containsAll(@NonNull Collection<?> collection) {
-        return new Stream<>(collection).allMatch(this::contains);
+    public boolean remove(Object object) {
+        int position = indexOf(object);
+        if (position == -1) {
+            return false;
+        } else {
+            remove(position);
+            return true;
+        }
     }
 
     @Override
-    public T get(int location) {
-        return list.get(location);
+    protected void removeRange(int fromIndex, int toIndex) {
+        super.removeRange(fromIndex, toIndex);
+        callback.notifyItemRangeRemoved(fromIndex, toIndex - fromIndex);
     }
 
     @Override
     public int indexOf(Object object) {
-        return list.indexOf((T) object);
+        return Collections.binarySearch(this, (T) object, comparator);
     }
 
     @Override
-    public boolean isEmpty() {
-        return list.size() == 0;
+    public int lastIndexOf(Object object) {
+        return Collections.binarySearch(this, (T) object, comparator);
+    }
+
+    @Override
+    public void clear() {
+        int size = size();
+        super.clear();
+        callback.notifyItemRangeRemoved(0, size);
+    }
+
+    @Override
+    public T set(int index, T element) {
+        T set = super.set(index, element);
+        notifyItemChanged(element);
+        callback.notifyItemChanged(index);
+        return set;
+    }
+
+    public void notifyItemChanged(T element) {
+        int index = super.indexOf(element);
+        super.remove(index);
+        int position = getPosition(element);
+        if (position != index) {
+            callback.notifyItemRemoved(index);
+            add(position, element);
+        } else {
+            super.add(index, element);
+            callback.notifyItemChanged(index);
+        }
     }
 
     @NonNull
     @Override
     public Iterator<T> iterator() {
-        return new CallbackedSortedListIterator();
+        return new CallbackedArrayListIterator<>(super.iterator());
     }
 
-    @Override
-    public int lastIndexOf(Object object) {
-        return indexOf(object);
-    }
+    class CallbackedArrayListIterator<E> implements Iterator<E> {
+        final Iterator<E> iterator;
+        int position = 0;
 
-    @NonNull
-    @Override
-    public ListIterator<T> listIterator() {
-        return new CallbackedSortedListIterator();
-    }
-
-    @NonNull
-    @Override
-    public ListIterator<T> listIterator(int location) {
-        return new CallbackedSortedListIterator(location);
-    }
-
-    @Nullable
-    @Override
-    public T remove(int location) {
-        T item = list.get(location);
-        list.remove(item);
-        return item;
-    }
-
-    @Override
-    public boolean remove(Object object) {
-        try {
-            list.remove((T) object);
-            return true;
-        } catch (ClassCastException e) {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean removeAll(@NonNull Collection<?> collection) {
-        boolean result = true;
-        for (Object o : collection) {
-            result &= remove(o);
-        }
-        return result;
-    }
-
-    @Override
-    public boolean retainAll(@NonNull Collection<?> collection) {
-        return false;
-    }
-
-    @Nullable
-    @Override
-    public T set(int location, T object) {
-        return null;
-    }
-
-    @Override
-    public int size() {
-        return list.size();
-    }
-
-    @NonNull
-    @Override
-    public List<T> subList(int start, int end) {
-        assertTrue(start <= end);
-        assertTrue(start >= 0);
-        assertTrue(end <= list.size());
-
-        List<T> subList = new ArrayList<>(end - start);
-        for (int i = start; i < end; i++) {
-            subList.add(list.get(i));
-        }
-        return subList;
-    }
-
-    @NonNull
-    @Override
-    public Object[] toArray() {
-        Object[] array = new Object[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            array[i] = list.get(i);
-        }
-        return array;
-    }
-
-    @NonNull
-    @Override
-    public <T1> T1[] toArray(@NonNull T1[] a) {
-        try {
-            Object[] elements = toArray();
-            if (a.length < elements.length)
-                // Make a new array of a's runtime type, but my contents:
-                return (T1[]) Arrays.copyOf(elements, elements.length, a.getClass());
-            System.arraycopy(elements, 0, a, 0, elements.length);
-            if (a.length > elements.length)
-                a[elements.length] = null;
-            return a;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void notifyItemChanged(int position) {
-        T obj = get(position);
-        list.recalculatePositionOfItemAt(position);
-        callback.notifyItemChanged(indexOf(obj));
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return Arrays.toString(toArray());
-    }
-
-    public interface ItemComparator<T> {
-        int compare(T o1, T o2);
-
-        boolean areContentsTheSame(T oldItem, T newItem);
-
-        boolean areItemsTheSame(T item1, T item2);
-    }
-
-    class Callback extends SortedList.Callback<T> {
-        @Override
-        public int compare(T o1, T o2) {
-            return (reverse) ? comparator.compare(o2, o1) : comparator.compare(o1, o2);
-        }
-
-        @Override
-        public void onInserted(int position, int count) {
-            if (count == 1)
-                callback.notifyItemInserted(position);
-            else
-                callback.notifyItemRangeInserted(position, count);
-        }
-
-        @Override
-        public void onRemoved(int position, int count) {
-            if (count == 1)
-                callback.notifyItemRemoved(position);
-            else
-                callback.notifyItemRangeRemoved(position, count);
-        }
-
-        @Override
-        public void onMoved(int fromPosition, int toPosition) {
-            callback.notifyItemMoved(fromPosition, toPosition);
-        }
-
-        @Override
-        public void onChanged(int position, int count) {
-            if (count == 1)
-                callback.notifyItemChanged(position);
-            else
-                callback.notifyItemRangeChanged(position, count);
-        }
-
-        @Override
-        public boolean areContentsTheSame(T oldItem, T newItem) {
-            return comparator.areContentsTheSame(oldItem, newItem);
-        }
-
-        @Override
-        public boolean areItemsTheSame(T item1, T item2) {
-            return comparator.areItemsTheSame(item1, item2);
-        }
-    }
-
-    class CallbackedSortedListIterator implements Iterator<T>, ListIterator<T> {
-        int position;
-
-        public CallbackedSortedListIterator() {
-            this(0);
-        }
-
-        public CallbackedSortedListIterator(int position) {
-            this.position = position;
-        }
-
-        @Override
-        public void add(T object) {
-            list.add(object);
+        public CallbackedArrayListIterator(Iterator<E> iterator) {
+            this.iterator = iterator;
         }
 
         @Override
         public boolean hasNext() {
-            return position < list.size();
+            return iterator.hasNext();
         }
 
         @Override
-        public boolean hasPrevious() {
-            return position >= 0;
-        }
-
-        @Override
-        public T next() {
-            return list.get(position++);
-        }
-
-        @Override
-        public int nextIndex() {
-            return position + 1;
-        }
-
-        @Override
-        public T previous() {
-            return list.get(position--);
-        }
-
-        @Override
-        public int previousIndex() {
-            return position - 1;
+        public E next() {
+            position++;
+            return iterator.next();
         }
 
         @Override
         public void remove() {
-            list.remove(list.get(position));
+            iterator.remove();
             callback.notifyItemRemoved(position);
-        }
-
-        @Override
-        public void set(T object) {
-            list.remove(list.get(position));
-            list.add(object);
         }
     }
 }

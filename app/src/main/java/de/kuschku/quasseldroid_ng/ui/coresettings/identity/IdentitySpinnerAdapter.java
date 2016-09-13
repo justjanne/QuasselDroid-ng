@@ -39,11 +39,11 @@ import de.kuschku.libquassel.syncables.types.interfaces.QIdentity;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.util.observables.callbacks.GeneralCallback;
 import de.kuschku.util.observables.callbacks.UICallback;
-import de.kuschku.util.observables.lists.ObservableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableSortedList;
 
 public class IdentitySpinnerAdapter implements ThemedSpinnerAdapter, GeneralCallback {
     private final Set<DataSetObserver> observers = new HashSet<>();
-    private ObservableSortedList<QIdentity> identities;
+    private AndroidObservableSortedList<QIdentity> identities;
     @Nullable
     private Resources.Theme theme;
 

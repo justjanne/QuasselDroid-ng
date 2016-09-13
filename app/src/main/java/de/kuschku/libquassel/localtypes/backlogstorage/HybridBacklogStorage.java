@@ -39,15 +39,15 @@ import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.localtypes.orm.ConnectedDatabase;
 import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.message.Message_Table;
-import de.kuschku.util.observables.lists.ObservableComparableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableComparableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class HybridBacklogStorage implements BacklogStorage {
     @NonNull
-    private final SparseArray<ObservableComparableSortedList<Message>> backlogs = new SparseArray<>();
+    private final SparseArray<AndroidObservableComparableSortedList<Message>> backlogs = new SparseArray<>();
     @NonNull
-    private final SparseArray<ObservableComparableSortedList<Message>> filteredBacklogs = new SparseArray<>();
+    private final SparseArray<AndroidObservableComparableSortedList<Message>> filteredBacklogs = new SparseArray<>();
     @NonNull
     private final SparseArray<BacklogFilter> filters = new SparseArray<>();
     @NonNull
@@ -59,14 +59,14 @@ public class HybridBacklogStorage implements BacklogStorage {
 
     @NonNull
     @Override
-    public ObservableComparableSortedList<Message> getUnfiltered(@IntRange(from = -1) int bufferid) {
+    public AndroidObservableComparableSortedList<Message> getUnfiltered(@IntRange(from = -1) int bufferid) {
         ensureExisting(bufferid);
         return backlogs.get(bufferid);
     }
 
     @NonNull
     @Override
-    public ObservableComparableSortedList<Message> getFiltered(@IntRange(from = -1) int bufferid) {
+    public AndroidObservableComparableSortedList<Message> getFiltered(@IntRange(from = -1) int bufferid) {
         ensureExisting(bufferid);
         return filteredBacklogs.get(bufferid);
     }
@@ -222,8 +222,8 @@ public class HybridBacklogStorage implements BacklogStorage {
     private void ensureExisting(@IntRange(from = -1) int bufferId) {
         assertNotNull(client);
         if (backlogs.get(bufferId) == null) {
-            ObservableComparableSortedList<Message> messages = new ObservableComparableSortedList<>(Message.class, true);
-            ObservableComparableSortedList<Message> filteredMessages = new ObservableComparableSortedList<>(Message.class, true);
+            AndroidObservableComparableSortedList<Message> messages = new AndroidObservableComparableSortedList<>(Message.class, true);
+            AndroidObservableComparableSortedList<Message> filteredMessages = new AndroidObservableComparableSortedList<>(Message.class, true);
             BacklogFilter backlogFilter = new BacklogFilter(client, bufferId, messages, filteredMessages);
             if (client.bufferSyncer() != null) {
                 backlogFilter.setMarkerlineMessage(client.bufferSyncer().markerLine(bufferId));

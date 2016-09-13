@@ -28,8 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -38,7 +37,6 @@ import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.CompatibilityUtils;
-import de.kuschku.util.backports.Objects;
 import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.observables.lists.ObservableSortedList;
@@ -49,8 +47,7 @@ public class NickListAdapter extends RecyclerView.Adapter<NickListAdapter.NickVi
     private final AppContext context;
     QIrcChannel channel;
 
-    List<QIrcUser> list = new ArrayList<>();
-    ObservableSortedList<QIrcUser> users = new ObservableSortedList<>(QIrcUser.class, new ObservableSortedList.ItemComparator<QIrcUser>() {
+    ObservableSortedList<QIrcUser> users = new ObservableSortedList<>(new Comparator<QIrcUser>() {
         @Override
         public int compare(QIrcUser o1, QIrcUser o2) {
             if (channel.userModes(o1).equals(channel.userModes(o2))) {
@@ -59,23 +56,12 @@ public class NickListAdapter extends RecyclerView.Adapter<NickListAdapter.NickVi
                 return channel.network().lowestModeIndex(channel.userModes(o1)) - channel.network().lowestModeIndex(channel.userModes(o2));
             }
         }
-
-        @Override
-        public boolean areContentsTheSame(QIrcUser oldItem, QIrcUser newItem) {
-            return Objects.equals(oldItem.userModes(), newItem.userModes()) && Objects.equals(oldItem.realName(), newItem.realName());
-        }
-
-        @Override
-        public boolean areItemsTheSame(QIrcUser item1, QIrcUser item2) {
-            return Objects.equals(item1.nick(), item2.nick());
-        }
     });
     private ElementCallback<String> callback = new ElementCallback<String>() {
         @Override
         public void notifyItemInserted(String element) {
             QIrcUser qIrcUser = channel.network().ircUser(element);
             users.add(qIrcUser);
-            list.add(users.indexOf(qIrcUser), qIrcUser);
         }
 
         @Override
@@ -84,18 +70,15 @@ public class NickListAdapter extends RecyclerView.Adapter<NickListAdapter.NickVi
                 QIrcUser user = users.get(i);
                 if (user.nick().equals(element)) {
                     users.remove(i);
-                    list.remove(user);
                 }
             }
         }
 
         @Override
         public void notifyItemChanged(String element) {
-            QIrcUser object = channel.network().ircUser(element);
-            if (object != null) {
-                users.notifyItemChanged(list.indexOf(object));
-                list.remove(object);
-                list.add(users.indexOf(object), object);
+            QIrcUser user = channel.network().ircUser(element);
+            if (user != null) {
+                users.notifyItemChanged(user);
             }
         }
     };
@@ -110,13 +93,11 @@ public class NickListAdapter extends RecyclerView.Adapter<NickListAdapter.NickVi
             this.channel.users().removeCallback(callback);
         this.channel = channel;
         this.users.clear();
-        this.list.clear();
         if (this.channel != null) {
             for (String nick : channel.users()) {
                 QIrcUser ircUser = channel.network().ircUser(nick);
                 if (ircUser != null) {
                     users.add(ircUser);
-                    list.add(users.indexOf(ircUser), ircUser);
                 }
             }
             this.channel.users().addCallback(callback);

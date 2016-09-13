@@ -23,7 +23,7 @@ package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
 import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
@@ -31,6 +31,7 @@ import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
+import de.kuschku.util.irc.IrcCaseMappers;
 import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableSet;
@@ -40,12 +41,12 @@ public class NetworkItem implements ParentListItem {
     private final AppContext context;
     private final QBufferViewConfig config;
     private final QNetwork network;
-    private final List<Buffer> bufferList = new ArrayList<>();
-    private final ObservableSortedList<Buffer> buffers = new ObservableSortedList<>(Buffer.class, new ObservableSortedList.ItemComparator<Buffer>() {
+    private final ObservableSortedList<Buffer> buffers = new ObservableSortedList<>(new Comparator<Buffer>() {
         @Override
         public int compare(Buffer o1, Buffer o2) {
             if (o1.getInfo().type == o2.getInfo().type) {
-                return network.caseMapper().toLowerCase(o1.getName()).compareTo(network.caseMapper().toLowerCase(o2.getName()));
+                IrcCaseMappers.IrcCaseMapper ircCaseMapper = network.caseMapper();
+                return ircCaseMapper.toLowerCase(o1.getName()).compareTo(ircCaseMapper.toLowerCase(o2.getName()));
             } else {
                 if (o1.getInfo().type == BufferInfo.Type.STATUS)
                     return -1;
@@ -63,16 +64,6 @@ public class NetworkItem implements ParentListItem {
                     return -1;
             }
         }
-
-        @Override
-        public boolean areContentsTheSame(Buffer oldItem, Buffer newItem) {
-            return oldItem == newItem;
-        }
-
-        @Override
-        public boolean areItemsTheSame(Buffer item1, Buffer item2) {
-            return item1.getInfo().id == item2.getInfo().id;
-        }
     });
     private final ElementCallback<Integer> callback = new ElementCallback<Integer>() {
         @Override
@@ -80,7 +71,6 @@ public class NetworkItem implements ParentListItem {
             Buffer buffer = context.client().bufferManager().buffer(element);
             if (buffer != null && buffer.getInfo().networkId == network.networkId()) {
                 buffers.add(buffer);
-                bufferList.add(buffers.indexOf(buffer), buffer);
             }
         }
 
@@ -88,8 +78,7 @@ public class NetworkItem implements ParentListItem {
         public void notifyItemRemoved(Integer element) {
             Buffer buffer = context.client().bufferManager().buffer(element);
             if (buffer != null && buffer.getInfo().networkId == network.networkId()) {
-                buffers.remove(bufferList.indexOf(buffer));
-                bufferList.remove(buffer);
+                buffers.remove(buffer);
             }
         }
 
@@ -160,16 +149,8 @@ public class NetworkItem implements ParentListItem {
             @Override
             public void notifyItemChanged(Integer element) {
                 Buffer buffer = NetworkItem.this.context.client().bufferManager().buffer(element);
-                if (buffer != null && buffer.getInfo().networkId == NetworkItem.this.network.networkId() && bufferList.contains(buffer)) {
-                    int position = buffers.indexOf(buffer);
-                    if (position == -1) {
-                        buffers.remove(bufferList.indexOf(buffer));
-                        bufferList.remove(buffer);
-                        buffers.add(buffer);
-                        bufferList.add(buffers.indexOf(buffer), buffer);
-                    } else {
-                        buffers.notifyItemChanged(position);
-                    }
+                if (buffer != null && buffer.getInfo().networkId == NetworkItem.this.network.networkId() && buffers.contains(buffer)) {
+                    buffers.notifyItemChanged(buffer);
                 }
             }
         });
@@ -179,14 +160,12 @@ public class NetworkItem implements ParentListItem {
         if (this.backingSet != null)
             this.backingSet.removeCallback(callback);
         buffers.clear();
-        bufferList.clear();
 
         backingSet.addCallback(callback);
         for (int id : backingSet) {
             Buffer buffer = context.client().bufferManager().buffer(id);
             if (buffer != null && buffer.getInfo().networkId == network.networkId()) {
                 buffers.add(buffer);
-                bufferList.add(buffers.indexOf(buffer), buffer);
             }
         }
         this.backingSet = backingSet;

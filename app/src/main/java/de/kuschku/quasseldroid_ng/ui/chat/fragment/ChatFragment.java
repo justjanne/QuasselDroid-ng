@@ -49,7 +49,7 @@ import de.kuschku.quasseldroid_ng.service.ClientBackgroundThread;
 import de.kuschku.quasseldroid_ng.ui.chat.chatview.MessageAdapter;
 import de.kuschku.quasseldroid_ng.ui.chat.util.SlidingPanelHandler;
 import de.kuschku.util.observables.AutoScroller;
-import de.kuschku.util.observables.lists.ObservableComparableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableComparableSortedList;
 import de.kuschku.util.servicebound.BoundFragment;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
@@ -124,7 +124,7 @@ public class ChatFragment extends BoundFragment {
         if (client != null && client.connectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
             QBacklogManager backlogManager = client.backlogManager();
             int id = backlogManager.open();
-            ObservableComparableSortedList<Message> messageList = backlogManager.filtered(id);
+            AndroidObservableComparableSortedList<Message> messageList = backlogManager.filtered(id);
             messageAdapter.setMessageList(messageList);
         }
     }

@@ -29,7 +29,7 @@ import java.util.Set;
 
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.observables.callbacks.UICallback;
-import de.kuschku.util.observables.lists.ObservableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableSortedList;
 
 public class FakeNetworksWrapper {
     private final QNetwork fakeNetwork;
@@ -70,13 +70,13 @@ public class FakeNetworksWrapper {
             notifyChanged();
         }
     };
-    private ObservableSortedList<QNetwork> base;
+    private AndroidObservableSortedList<QNetwork> base;
 
     public FakeNetworksWrapper(Context context) {
         this.fakeNetwork = new AllNetworksItem(context);
     }
 
-    public void setBase(ObservableSortedList<QNetwork> base) {
+    public void setBase(AndroidObservableSortedList<QNetwork> base) {
         if (this.base != null)
             this.base.removeCallback(callback);
         this.base = base;

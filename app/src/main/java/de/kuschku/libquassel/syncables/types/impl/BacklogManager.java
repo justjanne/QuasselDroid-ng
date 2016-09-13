@@ -44,7 +44,7 @@ import de.kuschku.libquassel.message.Message_Table;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.ABacklogManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
-import de.kuschku.util.observables.lists.ObservableComparableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableComparableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -157,13 +157,13 @@ public class BacklogManager extends ABacklogManager {
 
     @NonNull
     @Override
-    public ObservableComparableSortedList<Message> unfiltered(int id) {
+    public AndroidObservableComparableSortedList<Message> unfiltered(int id) {
         return storage.getUnfiltered(id);
     }
 
     @NonNull
     @Override
-    public ObservableComparableSortedList<Message> filtered(int id) {
+    public AndroidObservableComparableSortedList<Message> filtered(int id) {
         return storage.getFiltered(id);
     }
 

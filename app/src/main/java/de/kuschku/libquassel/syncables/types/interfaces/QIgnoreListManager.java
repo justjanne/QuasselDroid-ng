@@ -29,7 +29,7 @@ import de.kuschku.libquassel.message.Message;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.Synced;
 import de.kuschku.libquassel.syncables.types.impl.IgnoreListManager;
-import de.kuschku.util.observables.lists.ObservableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableSortedList;
 
 public interface QIgnoreListManager extends QObservable<QIgnoreListManager> {
     @Synced
@@ -64,7 +64,7 @@ public interface QIgnoreListManager extends QObservable<QIgnoreListManager> {
 
     void requestUpdate();
 
-    ObservableSortedList<? extends IgnoreListManager.IgnoreListItem> ignoreList();
+    AndroidObservableSortedList<? extends IgnoreListManager.IgnoreListItem> ignoreList();
 
     void _toggleIgnoreRule(IgnoreListManager.IgnoreListItem ignoreRule, boolean active);
 

@@ -37,14 +37,14 @@ import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.serializers.IgnoreListManagerSerializer;
 import de.kuschku.libquassel.syncables.types.abstracts.AIgnoreListManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIgnoreListManager;
-import de.kuschku.util.observables.lists.ObservableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableSortedList;
 import de.kuschku.util.regex.SmartRegEx;
 
 import static de.kuschku.util.AndroidAssert.assertEquals;
 
 public class IgnoreListManager extends AIgnoreListManager {
     @NonNull
-    private final ObservableSortedList<IgnoreListItem> ignoreList = new ObservableSortedList<>(IgnoreListItem.class, new ObservableSortedList.ItemComparator<IgnoreListItem>() {
+    private final AndroidObservableSortedList<IgnoreListItem> ignoreList = new AndroidObservableSortedList<>(IgnoreListItem.class, new AndroidObservableSortedList.ItemComparator<IgnoreListItem>() {
         @Override
         public int compare(IgnoreListItem o1, IgnoreListItem o2) {
             return o1.ignoreRule.rule().compareTo(o2.ignoreRule.rule());
@@ -184,7 +184,7 @@ public class IgnoreListManager extends AIgnoreListManager {
     }
 
     @Override
-    public ObservableSortedList<? extends IgnoreListItem> ignoreList() {
+    public AndroidObservableSortedList<? extends IgnoreListItem> ignoreList() {
         return ignoreList;
     }
 

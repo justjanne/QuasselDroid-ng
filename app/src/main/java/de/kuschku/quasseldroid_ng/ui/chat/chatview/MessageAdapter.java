@@ -34,8 +34,8 @@ import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.observables.AutoScroller;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
+import de.kuschku.util.observables.lists.AndroidObservableSortedList;
 import de.kuschku.util.observables.lists.IObservableList;
-import de.kuschku.util.observables.lists.ObservableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -59,7 +59,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         this.callback = new AdapterUICallbackWrapper(this, scroller);
     }
 
-    public void setMessageList(@Nullable ObservableSortedList<Message> messageList) {
+    public void setMessageList(@Nullable AndroidObservableSortedList<Message> messageList) {
         if (this.messageList != null)
             this.messageList.removeCallback(callback);
         this.messageList = messageList;

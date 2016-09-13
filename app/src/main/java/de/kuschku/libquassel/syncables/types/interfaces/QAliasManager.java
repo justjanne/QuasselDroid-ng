@@ -30,7 +30,7 @@ import de.kuschku.libquassel.objects.types.Command;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.Synced;
-import de.kuschku.util.observables.lists.ObservableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableSortedList;
 
 public interface QAliasManager extends QObservable<QAliasManager> {
     boolean contains(final String name);
@@ -39,9 +39,9 @@ public interface QAliasManager extends QObservable<QAliasManager> {
 
     int count();
 
-    ObservableSortedList<Alias> aliases();
+    AndroidObservableSortedList<Alias> aliases();
 
-    ObservableSortedList<Alias> defaults();
+    AndroidObservableSortedList<Alias> defaults();
 
     // TODO: specify later on
     @NonNull

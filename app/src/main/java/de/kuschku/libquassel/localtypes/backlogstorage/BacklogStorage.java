@@ -30,14 +30,14 @@ import java.util.Set;
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
 import de.kuschku.libquassel.message.Message;
-import de.kuschku.util.observables.lists.ObservableComparableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableComparableSortedList;
 
 public interface BacklogStorage {
     @NonNull
-    ObservableComparableSortedList<Message> getUnfiltered(@IntRange(from = 0) int bufferid);
+    AndroidObservableComparableSortedList<Message> getUnfiltered(@IntRange(from = 0) int bufferid);
 
     @NonNull
-    ObservableComparableSortedList<Message> getFiltered(@IntRange(from = 0) int bufferid);
+    AndroidObservableComparableSortedList<Message> getFiltered(@IntRange(from = 0) int bufferid);
 
     @NonNull
     BacklogFilter getFilter(@IntRange(from = 0) int bufferid);

@@ -27,11 +27,11 @@ import java.util.List;
 import java.util.Map;
 
 import de.kuschku.libquassel.syncables.Synced;
-import de.kuschku.util.observables.lists.ObservableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableSortedList;
 
 public interface QBufferViewManager extends QSyncableObject<QBufferViewManager> {
     @NonNull
-    ObservableSortedList<QBufferViewConfig> bufferViewConfigs();
+    AndroidObservableSortedList<QBufferViewConfig> bufferViewConfigs();
 
     QBufferViewConfig bufferViewConfig(int bufferViewId);
 

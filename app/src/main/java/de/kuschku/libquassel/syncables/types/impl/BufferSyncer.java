@@ -37,10 +37,10 @@ import de.kuschku.libquassel.syncables.types.abstracts.ABufferSyncer;
 import de.kuschku.libquassel.syncables.types.interfaces.QBacklogManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferSyncer;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
-import de.kuschku.util.observables.lists.ObservableComparableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableComparableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableSortedList;
 import de.kuschku.util.observables.lists.ObservableElement;
 import de.kuschku.util.observables.lists.ObservableSet;
-import de.kuschku.util.observables.lists.ObservableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -91,7 +91,7 @@ public class BufferSyncer extends ABufferSyncer {
             lastSeenMsgs.put(buffer, msgId);
         }
         setActivity(buffer, 0);
-        ObservableComparableSortedList<Message> filtered = backlogManager.filtered(buffer);
+        AndroidObservableComparableSortedList<Message> filtered = backlogManager.filtered(buffer);
         for (Message m : filtered) {
             addActivity(m);
         }
@@ -185,7 +185,7 @@ public class BufferSyncer extends ABufferSyncer {
     public void _markBufferAsRead(int buffer) {
         assertNotNull(client);
 
-        ObservableSortedList<Message> messages = client.backlogStorage().getUnfiltered(buffer);
+        AndroidObservableSortedList<Message> messages = client.backlogStorage().getUnfiltered(buffer);
         Message lastMessage = messages.last();
         if (messages.isEmpty() || lastMessage == null) {
             _setLastSeenMsg(buffer, -1);

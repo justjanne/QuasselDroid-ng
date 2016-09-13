@@ -38,7 +38,7 @@ import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.UICallback;
-import de.kuschku.util.observables.lists.ObservableComparableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableComparableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -47,9 +47,9 @@ public class BacklogFilter implements UICallback {
     private final Client client;
     private final int bufferId;
     @NonNull
-    private final ObservableComparableSortedList<Message> unfiltered;
+    private final AndroidObservableComparableSortedList<Message> unfiltered;
     @NonNull
-    private final ObservableComparableSortedList<Message> filtered;
+    private final AndroidObservableComparableSortedList<Message> filtered;
 
     private final EventBus bus = new EventBus();
     ElementCallback<Message.Type> typeCallback = new ElementCallback<Message.Type>() {
@@ -72,7 +72,7 @@ public class BacklogFilter implements UICallback {
     private CharSequence searchQuery;
     private Message markerlineMessage;
 
-    public BacklogFilter(@NonNull Client client, int bufferId, @NonNull ObservableComparableSortedList<Message> unfiltered, @NonNull ObservableComparableSortedList<Message> filtered) {
+    public BacklogFilter(@NonNull Client client, int bufferId, @NonNull AndroidObservableComparableSortedList<Message> unfiltered, @NonNull AndroidObservableComparableSortedList<Message> filtered) {
         this.client = client;
         this.bufferId = bufferId;
         this.unfiltered = unfiltered;

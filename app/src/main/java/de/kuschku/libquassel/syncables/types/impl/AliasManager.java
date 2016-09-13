@@ -46,7 +46,7 @@ import de.kuschku.libquassel.syncables.types.interfaces.QAliasManager;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.backports.Objects;
-import de.kuschku.util.observables.lists.ObservableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableSortedList;
 
 public class AliasManager extends AAliasManager {
     @NonNull
@@ -63,7 +63,7 @@ public class AliasManager extends AAliasManager {
     };
 
     private Map<String, Alias> map = new HashMap<>();
-    private ObservableSortedList<Alias> aliases = new ObservableSortedList<>(Alias.class, new ObservableSortedList.ItemComparator<Alias>() {
+    private AndroidObservableSortedList<Alias> aliases = new AndroidObservableSortedList<>(Alias.class, new AndroidObservableSortedList.ItemComparator<Alias>() {
         @Override
         public int compare(Alias o1, Alias o2) {
             return o1.name.compareTo(o2.name);
@@ -163,12 +163,12 @@ public class AliasManager extends AAliasManager {
     }
 
     @Override
-    public ObservableSortedList<Alias> aliases() {
+    public AndroidObservableSortedList<Alias> aliases() {
         return aliases;
     }
 
     @Override
-    public ObservableSortedList<Alias> defaults() {
+    public AndroidObservableSortedList<Alias> defaults() {
         map.clear();
         aliases.clear();
         for (Alias alias : DEFAULTS) {

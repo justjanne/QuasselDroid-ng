@@ -33,7 +33,7 @@ import de.kuschku.libquassel.events.ConnectionChangeEvent;
 import de.kuschku.libquassel.syncables.types.impl.Network;
 import de.kuschku.libquassel.syncables.types.interfaces.QBufferViewConfig;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
-import de.kuschku.util.observables.lists.ObservableSortedList;
+import de.kuschku.util.observables.lists.AndroidObservableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
@@ -41,7 +41,7 @@ public class NetworkManager extends Observable {
     @NonNull
     private final Map<Integer, QNetwork> networks = new HashMap<>();
     @NonNull
-    private final ObservableSortedList<QNetwork> list = new ObservableSortedList<QNetwork>(QNetwork.class, new ObservableSortedList.ItemComparator<QNetwork>() {
+    private final AndroidObservableSortedList<QNetwork> list = new AndroidObservableSortedList<QNetwork>(QNetwork.class, new AndroidObservableSortedList.ItemComparator<QNetwork>() {
         @Override
         public int compare(QNetwork o1, QNetwork o2) {
             assertNotNull(o1);
@@ -132,7 +132,7 @@ public class NetworkManager extends Observable {
     }
 
     @NonNull
-    public ObservableSortedList<QNetwork> networks() {
+    public AndroidObservableSortedList<QNetwork> networks() {
         return list;
     }
 }

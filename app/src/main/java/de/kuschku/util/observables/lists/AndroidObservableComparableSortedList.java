@@ -21,36 +21,38 @@
 
 package de.kuschku.util.observables.lists;
 
-import java.util.Comparator;
+import android.support.annotation.NonNull;
 
+import java.util.List;
+
+import de.kuschku.util.observables.ContentComparable;
 import de.kuschku.util.observables.callbacks.UICallback;
 
-public class ObservableComparableSortedList<T extends Comparable<? super T>> extends ObservableSortedList<T> implements IObservableList<UICallback, T> {
-    public ObservableComparableSortedList() {
-        super(new ComparableComparator<>());
+public class AndroidObservableComparableSortedList<T extends ContentComparable<T>> extends AndroidObservableSortedList<T> implements IObservableList<UICallback, T>, List<T> {
+
+
+    public AndroidObservableComparableSortedList(@NonNull Class<T> cl) {
+        super(cl, new SimpleItemComparator<>());
     }
 
-    public ObservableComparableSortedList(int capacity) {
-        super(new ComparableComparator<>(), capacity);
+    public AndroidObservableComparableSortedList(@NonNull Class<T> cl, boolean reverse) {
+        super(cl, new SimpleItemComparator<>(), reverse);
     }
 
-    public static class ComparableComparator<T extends Comparable<? super T>> implements Comparator<T> {
+    public static class SimpleItemComparator<T extends ContentComparable<T>> implements ItemComparator<T> {
         @Override
-        public int compare(T o1, T o2) {
+        public int compare(@NonNull T o1, @NonNull T o2) {
             return o1.compareTo(o2);
         }
-    }
 
-    public static class ItemComparatorWrapper<T> implements Comparator<T> {
-        private final AndroidObservableSortedList.ItemComparator<T> itemComparator;
-
-        public ItemComparatorWrapper(AndroidObservableSortedList.ItemComparator<T> itemComparator) {
-            this.itemComparator = itemComparator;
+        @Override
+        public boolean areContentsTheSame(@NonNull T oldItem, @NonNull T newItem) {
+            return oldItem.areContentsTheSame(newItem);
         }
 
         @Override
-        public int compare(T o1, T o2) {
-            return itemComparator.compare(o1, o2);
+        public boolean areItemsTheSame(@NonNull T item1, @NonNull T item2) {
+            return item1.areItemsTheSame(item2);
         }
     }
 }
