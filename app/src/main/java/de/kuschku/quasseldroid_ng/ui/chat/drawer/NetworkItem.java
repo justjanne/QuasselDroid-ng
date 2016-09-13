@@ -161,10 +161,15 @@ public class NetworkItem implements ParentListItem {
             public void notifyItemChanged(Integer element) {
                 Buffer buffer = NetworkItem.this.context.client().bufferManager().buffer(element);
                 if (buffer != null && buffer.getInfo().networkId == NetworkItem.this.network.networkId() && bufferList.contains(buffer)) {
-                    buffers.remove(bufferList.indexOf(buffer));
-                    bufferList.remove(buffer);
-                    buffers.add(buffer);
-                    bufferList.add(buffers.indexOf(buffer), buffer);
+                    int position = buffers.indexOf(buffer);
+                    if (position == -1) {
+                        buffers.remove(bufferList.indexOf(buffer));
+                        bufferList.remove(buffer);
+                        buffers.add(buffer);
+                        bufferList.add(buffers.indexOf(buffer), buffer);
+                    } else {
+                        buffers.notifyItemChanged(position);
+                    }
                 }
             }
         });
