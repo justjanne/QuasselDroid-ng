@@ -23,6 +23,7 @@ package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
 import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.kuschku.libquassel.localtypes.buffers.Buffer;
@@ -39,6 +40,7 @@ public class NetworkItem implements ParentListItem {
     private final AppContext context;
     private final QBufferViewConfig config;
     private final QNetwork network;
+    private final List<Buffer> bufferList = new ArrayList<>();
     private final ObservableSortedList<Buffer> buffers = new ObservableSortedList<>(Buffer.class, new ObservableSortedList.ItemComparator<Buffer>() {
         @Override
         public int compare(Buffer o1, Buffer o2) {
@@ -78,6 +80,7 @@ public class NetworkItem implements ParentListItem {
             Buffer buffer = context.client().bufferManager().buffer(element);
             if (buffer != null && buffer.getInfo().networkId == network.networkId()) {
                 buffers.add(buffer);
+                bufferList.add(buffers.indexOf(buffer), buffer);
             }
         }
 
@@ -85,16 +88,13 @@ public class NetworkItem implements ParentListItem {
         public void notifyItemRemoved(Integer element) {
             Buffer buffer = context.client().bufferManager().buffer(element);
             if (buffer != null && buffer.getInfo().networkId == network.networkId()) {
-                buffers.remove(buffer);
+                buffers.remove(bufferList.indexOf(buffer));
+                bufferList.remove(buffer);
             }
         }
 
         @Override
         public void notifyItemChanged(Integer element) {
-            Buffer buffer = context.client().bufferManager().buffer(element);
-            if (buffer != null && buffer.getInfo().networkId == network.networkId() && buffers.contains(buffer)) {
-                buffers.notifyItemChanged(buffers.indexOf(buffer));
-            }
         }
     };
     private ObservableSet<Integer> backingSet;
@@ -148,18 +148,41 @@ public class NetworkItem implements ParentListItem {
                 }
             }
         });
+        context.client().bufferManager().bufferIds().addCallback(new ElementCallback<Integer>() {
+            @Override
+            public void notifyItemInserted(Integer element) {
+            }
+
+            @Override
+            public void notifyItemRemoved(Integer element) {
+            }
+
+            @Override
+            public void notifyItemChanged(Integer element) {
+                Buffer buffer = NetworkItem.this.context.client().bufferManager().buffer(element);
+                if (buffer != null && buffer.getInfo().networkId == NetworkItem.this.network.networkId() && bufferList.contains(buffer)) {
+                    buffers.remove(bufferList.indexOf(buffer));
+                    bufferList.remove(buffer);
+                    buffers.add(buffer);
+                    bufferList.add(buffers.indexOf(buffer), buffer);
+                }
+            }
+        });
     }
 
     public void populateList(ObservableSet<Integer> backingSet) {
         if (this.backingSet != null)
             this.backingSet.removeCallback(callback);
         buffers.clear();
+        bufferList.clear();
 
         backingSet.addCallback(callback);
         for (int id : backingSet) {
             Buffer buffer = context.client().bufferManager().buffer(id);
-            if (buffer != null && buffer.getInfo().networkId == network.networkId())
+            if (buffer != null && buffer.getInfo().networkId == network.networkId()) {
                 buffers.add(buffer);
+                bufferList.add(buffers.indexOf(buffer), buffer);
+            }
         }
         this.backingSet = backingSet;
     }

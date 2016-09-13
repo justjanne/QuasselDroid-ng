@@ -95,6 +95,7 @@ public class BufferSyncer extends ABufferSyncer {
         for (Message m : filtered) {
             addActivity(m);
         }
+        client.bufferManager().bufferIds().notifyItemChanged(buffer);
         _update();
     }
 
@@ -108,6 +109,7 @@ public class BufferSyncer extends ABufferSyncer {
             markerLines.put(buffer, msgId);
             client.backlogStorage().setMarkerLine(buffer, msgId);
         }
+        client.bufferManager().bufferIds().notifyItemChanged(buffer);
         _update();
     }
 

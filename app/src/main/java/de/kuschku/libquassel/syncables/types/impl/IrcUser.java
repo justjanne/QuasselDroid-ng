@@ -37,6 +37,7 @@ import java.util.Set;
 
 import de.kuschku.libquassel.BusProvider;
 import de.kuschku.libquassel.client.Client;
+import de.kuschku.libquassel.localtypes.buffers.QueryBuffer;
 import de.kuschku.libquassel.primitives.types.QVariant;
 import de.kuschku.libquassel.syncables.types.abstracts.AIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
@@ -288,15 +289,6 @@ public class IrcUser extends AIrcUser {
     public void _setRealName(String realName) {
         this.realName = realName;
         _update();
-        for (String channel : this.channels) {
-            QNetwork network = this.network();
-            if (network != null) {
-                QIrcChannel channel1 = network.ircChannel(channel);
-                if (channel1 != null) {
-                    channel1.users().notifyItemChanged(nick);
-                }
-            }
-        }
     }
 
     @Override
@@ -493,6 +485,18 @@ public class IrcUser extends AIrcUser {
     @Override
     public void _update() {
         super._update();
+        for (String channel : this.channels) {
+            QNetwork network = this.network();
+            if (network != null) {
+                QIrcChannel channel1 = network.ircChannel(channel);
+                if (channel1 != null) {
+                    channel1.users().notifyItemChanged(nick);
+                }
+            }
+        }
+        QueryBuffer user = client.bufferManager().user(this);
+        if (user != null)
+            client.bufferManager().bufferIds().notifyItemChanged(user.getInfo().id);
     }
 
     @NonNull

@@ -104,6 +104,7 @@ import de.kuschku.util.accounts.AccountManager;
 import de.kuschku.util.annotationbind.AutoBinder;
 import de.kuschku.util.certificates.CertificateUtils;
 import de.kuschku.util.certificates.SQLiteCertificateManager;
+import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.servicebound.BoundActivity;
 import de.kuschku.util.ui.DividerItemDecoration;
 import de.kuschku.util.ui.MenuTint;
@@ -383,6 +384,10 @@ public class MainActivity extends BoundActivity {
 
     private void updateBuffer(int id) {
         nickListAdapter.setChannel(null);
+        updateTitleAndSubtitle(id);
+    }
+
+    private void updateTitleAndSubtitle(int id) {
         Client client = context.client();
         if (client != null) {
             Buffer buffer = client.bufferManager().buffer(id);
@@ -393,7 +398,7 @@ public class MainActivity extends BoundActivity {
                     if (user == null) {
                         toolbarWrapper.setSubtitle(null);
                     } else {
-                        toolbarWrapper.setSubtitle(user.hostmask() + " | " + user.realName());
+                        toolbarWrapper.setSubtitle(user.realName());
                     }
                 } else if (buffer instanceof ChannelBuffer) {
                     QIrcChannel channel = ((ChannelBuffer) buffer).getChannel();
@@ -460,6 +465,23 @@ public class MainActivity extends BoundActivity {
         if (drawerLayout != null)
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
+        context.client().bufferManager().bufferIds().addCallback(new ElementCallback<Integer>() {
+            @Override
+            public void notifyItemInserted(Integer element) {
+
+            }
+
+            @Override
+            public void notifyItemRemoved(Integer element) {
+
+            }
+
+            @Override
+            public void notifyItemChanged(Integer element) {
+                if (element == context.client().backlogManager().open())
+                    updateTitleAndSubtitle(element);
+            }
+        });
         context.client().backlogManager().open(status.bufferId);
         if (context.client().bufferViewManager() != null) {
             chatListSpinner.setAdapter(new BufferViewConfigSpinnerAdapter(context.client().bufferViewManager()));

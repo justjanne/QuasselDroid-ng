@@ -121,6 +121,7 @@ public class BufferManager {
         Buffer buffer = buffer(bufferId);
         if (buffer != null) {
             buffer.renameBuffer(newName);
+            bufferIds().notifyItemChanged(bufferId);
         }
     }
 

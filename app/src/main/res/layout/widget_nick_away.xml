@@ -64,7 +64,9 @@
             android:gravity="center_vertical|start"
             android:lines="1"
             android:singleLine="true"
+            android:textColor="?colorForegroundSecondary"
             android:textSize="@dimen/material_drawer_item_primary_text"
+            android:textStyle="italic"
             tools:text="justJanne"/>
 
         <TextView
@@ -75,7 +77,9 @@
             android:gravity="center_vertical|start"
             android:lines="1"
             android:singleLine="true"
+            android:textColor="?colorForegroundSecondary"
             android:textSize="@dimen/material_drawer_item_primary_description"
+            android:textStyle="italic"
             tools:text="Janne Koschinski: https://kuschku.de/"/>
     </LinearLayout>
 </LinearLayout>

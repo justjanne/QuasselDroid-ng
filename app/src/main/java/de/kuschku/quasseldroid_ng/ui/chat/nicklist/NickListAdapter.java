@@ -44,6 +44,8 @@ import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
 import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public class NickListAdapter extends RecyclerView.Adapter<NickListAdapter.NickViewHolder> {
+    public static final int TYPE_NORMAL = 0;
+    public static final int TYPE_AWAY = 1;
     private final AppContext context;
     QIrcChannel channel;
 
@@ -125,8 +127,18 @@ public class NickListAdapter extends RecyclerView.Adapter<NickListAdapter.NickVi
     @Override
     public NickViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.widget_nick, parent, false);
+        View view = inflater.inflate(getLayoutResource(viewType), parent, false);
         return new NickViewHolder(view);
+    }
+
+    public int getLayoutResource(int viewType) {
+        switch (viewType) {
+            default:
+            case TYPE_NORMAL:
+                return R.layout.widget_nick;
+            case TYPE_AWAY:
+                return R.layout.widget_nick_away;
+        }
     }
 
     @Override
@@ -146,6 +158,11 @@ public class NickListAdapter extends RecyclerView.Adapter<NickListAdapter.NickVi
             builder.append(channel.network().modeToPrefix(s));
         }
         return builder.toString();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return users.get(position).isAway() ? TYPE_AWAY : TYPE_NORMAL;
     }
 
     class NickViewHolder extends RecyclerView.ViewHolder {
