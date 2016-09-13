@@ -34,6 +34,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IItem;
@@ -76,7 +77,11 @@ public class SlidingPanelHandler {
     AppCompatEditText chatline;
     @Bind(R.id.send)
     AppCompatImageButton send;
+    @Bind(R.id.chatline_scroller)
+    ScrollView chatlineScroller;
     private ItemAdapter<IItem> previousMessages;
+
+    private boolean expanded;
 
     public SlidingPanelHandler(Activity activity, SlidingUpPanelLayout slidingLayout, AppContext context) {
         this.slidingLayout = slidingLayout;
@@ -90,6 +95,11 @@ public class SlidingPanelHandler {
         setupHistoryFakeData();
 
         bindListener();
+
+        chatlineScroller.setOnTouchListener((v, event) -> {
+            chatlineScroller.requestDisallowInterceptTouchEvent(expanded);
+            return true;
+        });
     }
 
     private void setupFormattingMenu(Activity activity) {
@@ -254,6 +264,8 @@ public class SlidingPanelHandler {
             chatline.getLayoutParams().height = themeUtil.res.actionBarSize;
         }
         chatline.setSingleLine(!expanded);
+        this.expanded = expanded;
+        chatlineScroller.setSmoothScrollingEnabled(false);
 
         chatline.setSelection(selectionStart, selectionEnd);
     }

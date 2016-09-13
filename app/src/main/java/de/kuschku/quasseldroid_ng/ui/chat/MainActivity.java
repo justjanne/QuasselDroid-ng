@@ -23,6 +23,7 @@ package de.kuschku.quasseldroid_ng.ui.chat;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,6 +43,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
@@ -94,6 +98,7 @@ import de.kuschku.quasseldroid_ng.ui.coresettings.ignore.IgnoreListActivity;
 import de.kuschku.quasseldroid_ng.ui.coresettings.network.NetworkListActivity;
 import de.kuschku.quasseldroid_ng.ui.settings.SettingsActivity;
 import de.kuschku.quasseldroid_ng.ui.setup.CoreSetupActivity;
+import de.kuschku.util.CompatibilityUtils;
 import de.kuschku.util.accounts.Account;
 import de.kuschku.util.accounts.AccountManager;
 import de.kuschku.util.annotationbind.AutoBinder;
@@ -218,6 +223,24 @@ public class MainActivity extends BoundActivity {
         nickList.setLayoutManager(new LinearLayoutManager(this));
         nickList.setItemAnimator(new DefaultItemAnimator());
         nickList.addItemDecoration(new DividerItemDecoration(this));
+
+        setStatusBar();
+    }
+
+    private void setStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(android.R.color.transparent));
+
+            nickList.setPadding(0, CompatibilityUtils.getStatusBarHeight(this), 0, 0);
+
+            View viewById = findViewById(R.id.statusBarBackground);
+            ViewGroup.LayoutParams layoutParams = viewById.getLayoutParams();
+            layoutParams.height = CompatibilityUtils.getStatusBarHeight(this);
+            viewById.setLayoutParams(layoutParams);
+        }
     }
 
     @Override

@@ -20,12 +20,13 @@
   ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:showIn="@layout/widget_slider">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:showIn="@layout/widget_slider">
 
     <ScrollView
         android:id="@+id/chatline_scroller"
@@ -46,10 +47,10 @@
             android:gravity="top"
             android:hint="@string/labelPlaceholder"
             android:inputType="textCapSentences|textShortMessage|textAutoCorrect"
-            android:paddingBottom="17dp"
+            android:paddingBottom="@dimen/chatlinePaddingVertical"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:paddingTop="17dp"
+            android:paddingTop="@dimen/chatlinePaddingVertical"
             android:textColor="?attr/colorForeground"
             android:textSize="16sp"/>
 
@@ -58,7 +59,7 @@
     <android.support.v7.widget.AppCompatImageButton
         android:id="@+id/send"
         style="?attr/buttonStyleSmall"
-        android:layout_width="56dp"
+        android:layout_width="?attr/actionBarSize"
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
@@ -67,9 +68,9 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="12dp"
         android:scaleType="fitXY"
-        android:theme="@style/RippleOverlay"
         android:tint="?attr/colorAccent"
-        app:srcCompat="@drawable/ic_send"/>
+        app:srcCompat="@drawable/ic_send"
+        app:theme="@style/RippleOverlay"/>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/formatting_toolbar_container"

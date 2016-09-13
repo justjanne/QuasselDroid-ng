@@ -34,6 +34,8 @@ import de.kuschku.quasseldroid_ng.ui.setup.AccountSelectActivity;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 
 public class LoginActivity extends AppCompatActivity {
+    public static final int REQUEST_CODE_SELECT = 8;
+
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
@@ -60,23 +62,25 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            // If we select a different core than we used last time, clear the database
-            if (!context.settings().preferenceLastAccount.get().equals(data.getBundleExtra("extra").getString("account")))
-                deleteDatabase(ConnectedDatabase.NAME);
+        if (requestCode == REQUEST_CODE_SELECT) {
+            if (resultCode == RESULT_OK) {
+                // If we select a different core than we used last time, clear the database
+                if (!context.settings().preferenceLastAccount.get().equals(data.getBundleExtra("extra").getString("account")))
+                    deleteDatabase(ConnectedDatabase.NAME);
 
-            context.settings().preferenceLastAccount.set(data.getBundleExtra("extra").getString("account"));
-            checkReady();
-            firstStart = true;
-        } else if (context.settings().preferenceLastAccount.get().isEmpty()) {
-            finish();
+                context.settings().preferenceLastAccount.set(data.getBundleExtra("extra").getString("account"));
+                checkReady();
+                firstStart = true;
+            } else {
+                finish();
+            }
         }
     }
 
     private boolean checkReady() {
         if (context.settings().preferenceLastAccount.get().isEmpty()) {
             Intent intent = new Intent(this, AccountSelectActivity.class);
-            startActivityForResult(intent, 0);
+            startActivityForResult(intent, REQUEST_CODE_SELECT);
             firstStart = true;
             return true;
         } else if (firstStart) {

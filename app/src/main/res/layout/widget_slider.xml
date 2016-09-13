@@ -20,22 +20,23 @@
   ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 xmlns:tools="http://schemas.android.com/tools"
-                                                 android:id="@+id/sliding_layout_history"
-                                                 android:layout_width="fill_parent"
-                                                 android:layout_height="fill_parent"
-                                                 android:background="?attr/colorBackgroundCard"
-                                                 android:clickable="false"
-                                                 android:focusable="true"
-                                                 android:gravity="bottom"
-                                                 app:umanoFadeColor="?attr/colorBackground"
-                                                 app:umanoOverlay="true"
-                                                 app:umanoPanelHeight="0dip"
-                                                 app:umanoScrollableView="@+id/msg_history"
-                                                 app:umanoShadowHeight="0.0dip"
-                                                 tools:showIn="@layout/activity_main">
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sliding_layout_history"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="?attr/colorBackgroundCard"
+    android:clickable="false"
+    android:focusable="true"
+    android:gravity="bottom"
+    app:umanoFadeColor="?attr/colorBackground"
+    app:umanoOverlay="true"
+    app:umanoPanelHeight="0dip"
+    app:umanoScrollableView="@+id/msg_history"
+    app:umanoShadowHeight="0.0dip"
+    tools:showIn="@layout/activity_main">
 
 
     <include layout="@layout/widget_editor"/>
@@ -74,7 +75,11 @@
                     android:id="@+id/msg_history"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"/>
+
             </LinearLayout>
+
         </android.support.v7.widget.CardView>
+
     </FrameLayout>
+
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

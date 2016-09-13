@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ QuasselDroid - Quassel client for Android
   ~ Copyright (C) 2016 Janne Koschinski
@@ -20,13 +21,5 @@
   -->
 
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-
-    <dimen name="message_horizontal">8dp</dimen>
-    <dimen name="message_vertical">2dp</dimen>
-
-    <dimen name="action_bar_default_padding_start_material">0dp</dimen>
-    <dimen name="chatlinePaddingVertical">17dp</dimen>
+    <dimen name="chatlinePaddingVertical">13dp</dimen>
 </resources>

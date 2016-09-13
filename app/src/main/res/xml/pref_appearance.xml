@@ -28,25 +28,25 @@
         android:key="@string/preference_theme"
         android:title="@string/preference_theme_title"/>
 
-    <SwitchPreference
+    <com.jenzz.materialpreference.CheckBoxPreference
         android:key="@string/preference_colors"
         android:summaryOff="@string/preference_colors_summary_off"
         android:summaryOn="@string/preference_colors_summary_on"
         android:title="@string/preference_colors_title"/>
 
-    <SwitchPreference
+    <com.jenzz.materialpreference.CheckBoxPreference
         android:key="@string/preference_hostmask"
         android:summaryOff="@string/preference_hostmask_summary_off"
         android:summaryOn="@string/preference_hostmask_summary_on"
         android:title="@string/preference_hostmask_title"/>
 
-    <SwitchPreference
+    <com.jenzz.materialpreference.CheckBoxPreference
         android:key="@string/preference_lag"
         android:summaryOff="@string/preference_lag_summary_off"
         android:summaryOn="@string/preference_lag_summary_on"
         android:title="@string/preference_lag_title"/>
 
-    <SwitchPreference
+    <com.jenzz.materialpreference.CheckBoxPreference
         android:key="@string/preference_brackets"
         android:summaryOff="@string/preference_brackets_summary_off"
         android:summaryOn="@string/preference_brackets_summary_on"

@@ -21,8 +21,6 @@
 
 package de.kuschku.quasseldroid_ng.ui.chat.drawer;
 
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -33,7 +31,6 @@ import android.widget.TextView;
 
 import com.bignerdranch.expandablerecyclerview.ViewHolder.ChildViewHolder;
 import com.google.common.base.Function;
-import com.mikepenz.materialize.util.UIUtils;
 
 import java.util.Locale;
 
@@ -55,7 +52,6 @@ import de.kuschku.util.observables.lists.ObservableElement;
 public class BufferViewHolder extends ChildViewHolder {
 
     private final AppContext context;
-    private final StateListDrawable background;
     public int id;
     @Bind(R.id.material_drawer_icon)
     ImageView icon;
@@ -77,12 +73,6 @@ public class BufferViewHolder extends ChildViewHolder {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.context = context;
-
-        background = new StateListDrawable();
-        background.addState(new int[]{android.R.attr.state_selected}, new ColorDrawable(context.themeUtil().res.colorSelected));
-        background.addState(new int[]{android.R.attr.state_checked}, new ColorDrawable(context.themeUtil().res.colorSelected));
-        background.addState(new int[]{android.R.attr.state_checked, android.R.attr.state_selected}, new ColorDrawable(context.themeUtil().res.colorSelected));
-        background.addState(new int[0], UIUtils.getSelectableBackground(itemView.getContext()));
     }
 
     @LayoutRes
@@ -103,8 +93,6 @@ public class BufferViewHolder extends ChildViewHolder {
 
         itemView.setOnClickListener(v -> listener.onClick(buffer));
         itemView.setOnLongClickListener(v -> longClickListener.onLongClick(buffer));
-
-        itemView.setBackground(background);
 
         id = buffer.getInfo().id;
 

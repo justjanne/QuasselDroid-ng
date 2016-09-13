@@ -20,16 +20,17 @@
   ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="@dimen/material_drawer_item_profile"
-              android:background="?attr/selectableItemBackground"
-              android:orientation="horizontal"
-              android:paddingEnd="@dimen/material_drawer_vertical_padding"
-              android:paddingLeft="@dimen/material_drawer_vertical_padding"
-              android:paddingRight="@dimen/material_drawer_vertical_padding"
-              android:paddingStart="@dimen/material_drawer_vertical_padding">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/material_drawer_item_profile"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="horizontal"
+    android:paddingEnd="@dimen/material_drawer_vertical_padding"
+    android:paddingLeft="@dimen/material_drawer_vertical_padding"
+    android:paddingRight="@dimen/material_drawer_vertical_padding"
+    android:paddingStart="@dimen/material_drawer_vertical_padding">
 
     <LinearLayout
         android:layout_width="@dimen/material_drawer_item_profile_icon_width"

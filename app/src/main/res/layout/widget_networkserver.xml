@@ -20,22 +20,24 @@
   ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="56dp"
-              android:background="?selectableItemBackground"
-              android:clickable="true"
-              android:orientation="horizontal"
-              android:paddingLeft="?listPreferredItemPaddingLeft"
-              android:paddingRight="?listPreferredItemPaddingRight">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="?selectableItemBackground"
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:paddingLeft="?listPreferredItemPaddingLeft"
+    android:paddingRight="?listPreferredItemPaddingRight">
 
     <ImageView
         android:id="@+id/lock"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_lock"
-        android:tint="?colorFill"/>
+        android:tint="?colorFill"
+        app:srcCompat="@drawable/ic_lock"/>
 
     <TextView
         android:id="@+id/text"
