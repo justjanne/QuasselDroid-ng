@@ -32,6 +32,7 @@ import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter
 import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 
 import java.lang.ref.WeakReference;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -41,14 +42,14 @@ import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.UICallback;
-import de.kuschku.util.observables.lists.AndroidObservableSortedList;
 import de.kuschku.util.observables.lists.ObservableElement;
+import de.kuschku.util.observables.lists.ObservableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertNotNull;
 
 public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkViewHolder, BufferViewHolder> implements OnBufferClickListener, OnBufferLongClickListener {
     private final AppContext context;
-    private final AndroidObservableSortedList<NetworkItem> items;
+    private final ObservableSortedList<NetworkItem> items;
     private final Map<QNetwork, NetworkItem> itemMap = new WeakHashMap<>();
     private final Map<Integer, BufferViewHolder> bufferViewHolderMap = new WeakHashMap<>();
     private final ObservableElement<Boolean> showAll = new ObservableElement<>(false);
@@ -69,7 +70,7 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
         @Override
         public void notifyItemChanged(QNetwork network) {
             if (items.contains(itemMap.get(network)))
-                items.notifyItemChanged(items.indexOf(itemMap.get(network)));
+                items.notifyItemChanged(itemMap.get(network));
         }
     };
     private WeakReference<RecyclerView> recyclerView = new WeakReference<>(null);
@@ -77,7 +78,7 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
     private OnBufferClickListener bufferClickListener;
     private ActionModeHandler actionModeHandler;
 
-    private BufferViewConfigAdapter(AppContext context, AndroidObservableSortedList<NetworkItem> items) {
+    private BufferViewConfigAdapter(AppContext context, ObservableSortedList<NetworkItem> items) {
         super(items);
         this.context = context;
         this.items = items;
@@ -135,45 +136,32 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
     }
 
     public static BufferViewConfigAdapter of(AppContext context) {
-        final AndroidObservableSortedList<NetworkItem> networkItems = new AndroidObservableSortedList<>(NetworkItem.class, new AndroidObservableSortedList.ItemComparator<NetworkItem>() {
-            @Override
-            public int compare(NetworkItem o1, NetworkItem o2) {
-                assertNotNull(o1);
-                assertNotNull(o2);
+        final ObservableSortedList<NetworkItem> networkItems = new ObservableSortedList<>((Comparator<NetworkItem>) (o1, o2) -> {
+            assertNotNull(o1);
+            assertNotNull(o2);
 
-                QNetwork network1 = o1.getNetwork();
-                QNetwork network2 = o2.getNetwork();
+            QNetwork network1 = o1.getNetwork();
+            QNetwork network2 = o2.getNetwork();
 
-                if (network1 == null && network2 == null) {
+            if (network1 == null && network2 == null) {
+                return 0;
+            } else if (network1 == null) {
+                return 1;
+            } else if (network2 == null) {
+                return -1;
+            } else {
+                String name1 = network1.networkName();
+                String name2 = network2.networkName();
+
+                if (name1 == null && name2 == null) {
                     return 0;
-                } else if (network1 == null) {
+                } else if (name1 == null) {
                     return 1;
-                } else if (network2 == null) {
+                } else if (name2 == null) {
                     return -1;
                 } else {
-                    String name1 = network1.networkName();
-                    String name2 = network2.networkName();
-
-                    if (name1 == null && name2 == null) {
-                        return 0;
-                    } else if (name1 == null) {
-                        return 1;
-                    } else if (name2 == null) {
-                        return -1;
-                    } else {
-                        return name1.compareToIgnoreCase(name2);
-                    }
+                    return name1.compareToIgnoreCase(name2);
                 }
-            }
-
-            @Override
-            public boolean areContentsTheSame(NetworkItem oldItem, NetworkItem newItem) {
-                return oldItem == newItem;
-            }
-
-            @Override
-            public boolean areItemsTheSame(NetworkItem item1, NetworkItem item2) {
-                return item1.getNetwork().networkId() == item2.getNetwork().networkId();
             }
         });
         return new BufferViewConfigAdapter(context, networkItems);
