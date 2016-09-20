@@ -227,6 +227,9 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
     }
 
     public void selectConfig(int id) {
+        if (context.client() == null || context.client().bufferViewManager() == null)
+            return;
+
         QBufferViewConfig newconfig = context.client().bufferViewManager().bufferViewConfig(id);
         Parcelable state = (newconfig == config) ? saveState() : null;
 
