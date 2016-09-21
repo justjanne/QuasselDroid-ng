@@ -72,10 +72,12 @@ public class QuasselClient {
         }
         this.client.bufferManager().bufferIds().clear();
         this.client.bufferManager().buffers().clear();
-        for (QBufferViewConfig config : client.bufferViewManager().bufferViewConfigs()) {
-            config.networkList().clear();
+        if (client.bufferViewManager() != null) {
+            for (QBufferViewConfig config : client.bufferViewManager().bufferViewConfigs()) {
+                config.networkList().clear();
+            }
+            client.bufferViewManager().bufferViewConfigs().clear();
+            client.bufferViewManager().bufferViewConfigMap().clear();
         }
-        client.bufferViewManager().bufferViewConfigs().clear();
-        client.bufferViewManager().bufferViewConfigMap().clear();
     }
 }

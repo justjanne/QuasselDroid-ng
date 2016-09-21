@@ -48,7 +48,7 @@ import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.irc.ModeUtils;
-import de.kuschku.util.observables.lists.ObservableSet;
+import de.kuschku.util.observables.lists.ObservableSortedList;
 
 import static de.kuschku.util.AndroidAssert.assertEquals;
 
@@ -62,13 +62,19 @@ public class IrcChannel extends AIrcChannel {
     private final String name;
     @NonNull
     private final Map<String, Set<Character>> userModes = new HashMap<>();
-    private final ObservableSet<String> users = new ObservableSet<>();
     @NonNull
     public Set<Character> D_channelModes = new HashSet<>();
     private String topic;
     private String password;
     private boolean encrypted;
     private WeakReference<QNetwork> network = new WeakReference<>(null);
+    private final ObservableSortedList<String> users = new ObservableSortedList<>((o1, o2) -> {
+        if (userModes(o1).equals(userModes(o2))) {
+            return o1.compareToIgnoreCase(o2);
+        } else {
+            return network().lowestModeIndex(userModes(o1)) - network().lowestModeIndex(userModes(o2));
+        }
+    });
     private String codecForEncoding;
     private String codecForDecoding;
     // Because we don’t have networks at the beginning yet
@@ -516,7 +522,7 @@ public class IrcChannel extends AIrcChannel {
     }
 
     @NonNull
-    public ObservableSet<String> users() {
+    public ObservableSortedList<String> users() {
         return users;
     }
 

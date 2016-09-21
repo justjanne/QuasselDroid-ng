@@ -28,8 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Comparator;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.kuschku.libquassel.syncables.types.interfaces.QIrcChannel;
@@ -37,71 +35,26 @@ import de.kuschku.libquassel.syncables.types.interfaces.QIrcUser;
 import de.kuschku.quasseldroid_ng.R;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.CompatibilityUtils;
-import de.kuschku.util.observables.callbacks.ElementCallback;
 import de.kuschku.util.observables.callbacks.wrappers.AdapterUICallbackWrapper;
-import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public class NickListAdapter extends RecyclerView.Adapter<NickListAdapter.NickViewHolder> {
     public static final int TYPE_NORMAL = 0;
     public static final int TYPE_AWAY = 1;
     private final AppContext context;
+    private final AdapterUICallbackWrapper callback;
     QIrcChannel channel;
-
-    ObservableSortedList<QIrcUser> users = new ObservableSortedList<>(new Comparator<QIrcUser>() {
-        @Override
-        public int compare(QIrcUser o1, QIrcUser o2) {
-            if (channel.userModes(o1).equals(channel.userModes(o2))) {
-                return o1.nick().compareToIgnoreCase(o2.nick());
-            } else {
-                return channel.network().lowestModeIndex(channel.userModes(o1)) - channel.network().lowestModeIndex(channel.userModes(o2));
-            }
-        }
-    });
-    private ElementCallback<String> callback = new ElementCallback<String>() {
-        @Override
-        public void notifyItemInserted(String element) {
-            QIrcUser qIrcUser = channel.network().ircUser(element);
-            users.add(qIrcUser);
-        }
-
-        @Override
-        public void notifyItemRemoved(String element) {
-            for (int i = 0; i < users.size(); i++) {
-                QIrcUser user = users.get(i);
-                if (user.nick().equals(element)) {
-                    users.remove(i);
-                }
-            }
-        }
-
-        @Override
-        public void notifyItemChanged(String element) {
-            QIrcUser user = channel.network().ircUser(element);
-            if (user != null) {
-                users.notifyItemChanged(user);
-            }
-        }
-    };
 
     public NickListAdapter(AppContext context) {
         this.context = context;
-        users.addCallback(new AdapterUICallbackWrapper(this));
+        callback = new AdapterUICallbackWrapper(this);
     }
 
     public void setChannel(QIrcChannel channel) {
         if (this.channel != null)
             this.channel.users().removeCallback(callback);
         this.channel = channel;
-        this.users.clear();
-        if (this.channel != null) {
-            for (String nick : channel.users()) {
-                QIrcUser ircUser = channel.network().ircUser(nick);
-                if (ircUser != null) {
-                    users.add(ircUser);
-                }
-            }
+        if (this.channel != null)
             this.channel.users().addCallback(callback);
-        }
         notifyDataSetChanged();
     }
 
@@ -124,12 +77,16 @@ public class NickListAdapter extends RecyclerView.Adapter<NickListAdapter.NickVi
 
     @Override
     public void onBindViewHolder(NickViewHolder holder, int position) {
-        holder.bind(users.get(position));
+        holder.bind(getItem(position));
     }
 
     @Override
     public int getItemCount() {
-        return users.size();
+        return this.channel != null ? this.channel.users().size() : 0;
+    }
+
+    public QIrcUser getItem(int position) {
+        return this.channel != null ? this.channel.network().ircUser(this.channel.users().get(position)) : null;
     }
 
     @NonNull
@@ -143,7 +100,7 @@ public class NickListAdapter extends RecyclerView.Adapter<NickListAdapter.NickVi
 
     @Override
     public int getItemViewType(int position) {
-        return users.get(position).isAway() ? TYPE_AWAY : TYPE_NORMAL;
+        return getItem(position).isAway() ? TYPE_AWAY : TYPE_NORMAL;
     }
 
     class NickViewHolder extends RecyclerView.ViewHolder {

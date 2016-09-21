@@ -111,7 +111,7 @@ public class ChatFragment extends BoundFragment {
         };
         messages.addOnScrollListener(listener);
 
-        scrollDown.setOnClickListener(view1 -> messages.smoothScrollToPosition(0));
+        scrollDown.setOnClickListener(view1 -> messages.scrollToPosition(0));
 
         return view;
     }

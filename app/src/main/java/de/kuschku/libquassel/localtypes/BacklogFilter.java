@@ -24,6 +24,8 @@ package de.kuschku.libquassel.localtypes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.raizlabs.android.dbflow.sql.language.SQLite;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -34,6 +36,7 @@ import java.util.List;
 
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.message.Message;
+import de.kuschku.libquassel.message.Message_Table;
 import de.kuschku.libquassel.primitives.types.BufferInfo;
 import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.util.observables.callbacks.ElementCallback;
@@ -80,6 +83,10 @@ public class BacklogFilter implements UICallback {
         this.bus.register(this);
         client.bufferSyncer().getFilteredTypes(bufferId).addCallback(typeCallback);
         updateDayChangeMessages();
+    }
+
+    public void loadBackload() {
+        bus.post(new LoadBacklogEvent());
     }
 
     private Message createMarkerlineMessage(int id) {
@@ -193,20 +200,24 @@ public class BacklogFilter implements UICallback {
 
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onEventAsync(UpdateAddEvent event) {
+        List<Message> filteredMessages = new ArrayList<>();
         for (Message message : unfiltered) {
-            if (!filterItem(message)) {
-                bus.post(new MessageInsertEvent(message));
-            }
+            if (!filterItem(message))
+                filteredMessages.add(message);
         }
+
+        bus.post(new MessageInsertEvent(filteredMessages));
     }
 
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onEventAsync(UpdateRemoveEvent event) {
+        List<Message> removedMessages = new ArrayList<>();
         for (Message message : unfiltered) {
-            if (filterItem(message)) {
-                bus.post(new MessageRemoveEvent(message));
-            }
+            if (filterItem(message))
+                removedMessages.add(message);
         }
+
+        bus.post(new MessageRemoveEvent(removedMessages));
     }
 
     @Subscribe(threadMode = ThreadMode.ASYNC)
@@ -227,7 +238,18 @@ public class BacklogFilter implements UICallback {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(@NonNull MessageRemoveEvent event) {
-        filtered.remove(event.msg);
+        filtered.removeAll(event.msgs);
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onEventAsync(@NonNull LoadBacklogEvent event) {
+        List<Message> messageList = SQLite.select().from(Message.class).where(Message_Table.bufferInfo_id.eq(bufferId)).queryList();
+        bus.post(new BacklogLoadedEvent(messageList));
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(@NonNull BacklogLoadedEvent event) {
+        unfiltered.addAll(event.messageList);
     }
 
     @Override
@@ -249,8 +271,8 @@ public class BacklogFilter implements UICallback {
 
     @Override
     public void notifyItemRangeInserted(int position, int count) {
-        List<Message> message = unfiltered.subList(position, position + count);
-        bus.post(new MessageFilterEvent(message));
+        List<Message> messages = unfiltered.subList(position, position + count);
+        bus.post(new MessageFilterEvent(messages));
     }
 
     @Override
@@ -262,9 +284,8 @@ public class BacklogFilter implements UICallback {
 
     @Override
     public void notifyItemRangeRemoved(int position, int count) {
-        for (int i = position; i < position + count; i++) {
-            notifyItemRemoved(i);
-        }
+        List<Message> messages = unfiltered.subList(position, position + count);
+        bus.post(new MessageRemoveEvent(messages));
     }
 
     public void onDestroy() {
@@ -286,10 +307,14 @@ public class BacklogFilter implements UICallback {
     }
 
     private class MessageRemoveEvent {
-        public final Message msg;
+        public final List<Message> msgs;
 
         public MessageRemoveEvent(Message msg) {
-            this.msg = msg;
+            this.msgs = Collections.singletonList(msg);
+        }
+
+        public MessageRemoveEvent(List<Message> msgs) {
+            this.msgs = msgs;
         }
     }
 
@@ -309,5 +334,16 @@ public class BacklogFilter implements UICallback {
     }
 
     private class UpdateRemoveEvent {
+    }
+
+    private class LoadBacklogEvent {
+    }
+
+    private class BacklogLoadedEvent {
+        private final List<Message> messageList;
+
+        public BacklogLoadedEvent(List<Message> messageList) {
+            this.messageList = messageList;
+        }
     }
 }

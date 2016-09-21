@@ -33,6 +33,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.localtypes.BacklogFilter;
@@ -54,6 +56,8 @@ public class HybridBacklogStorage implements BacklogStorage {
     private final SparseArray<Integer> latestMessage = new SparseArray<>();
     @NonNull
     private final Set<BacklogFilter> filterSet = new HashSet<>();
+
+    private ExecutorService executor = Executors.newCachedThreadPool();
 
     private Client client;
 
@@ -233,10 +237,12 @@ public class HybridBacklogStorage implements BacklogStorage {
             }
             messages.addCallback(backlogFilter);
             synchronized (backlogs) {
-                List<Message> messageList = SQLite.select().from(Message.class).where(Message_Table.bufferInfo_id.eq(bufferId)).queryList();
-                messages.addAll(messageList);
                 backlogs.put(bufferId, messages);
             }
+            executor.submit((Runnable) () -> {
+                List<Message> messageList = SQLite.select().from(Message.class).where(Message_Table.bufferInfo_id.eq(bufferId)).queryList();
+                messages.addAll(messageList);
+            });
             filteredBacklogs.put(bufferId, filteredMessages);
             synchronized (filterSet) {
                 filters.put(bufferId, backlogFilter);

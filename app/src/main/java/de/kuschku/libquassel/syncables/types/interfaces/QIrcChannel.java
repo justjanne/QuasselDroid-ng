@@ -28,7 +28,7 @@ import java.util.List;
 
 import de.kuschku.libquassel.client.Client;
 import de.kuschku.libquassel.syncables.Synced;
-import de.kuschku.util.observables.lists.ObservableSet;
+import de.kuschku.util.observables.lists.ObservableSortedList;
 
 public interface QIrcChannel extends QObservable<QIrcChannel> {
     boolean isKnownUser(QIrcUser ircuser);
@@ -153,7 +153,7 @@ public interface QIrcChannel extends QObservable<QIrcChannel> {
     String getObjectName();
 
     @NonNull
-    ObservableSet<String> users();
+    ObservableSortedList<String> users();
 
     void _ircUserNickChanged(String oldNick, String newNick);
 
