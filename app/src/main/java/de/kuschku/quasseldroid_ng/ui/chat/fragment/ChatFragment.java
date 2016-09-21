@@ -88,6 +88,8 @@ public class ChatFragment extends BoundFragment {
         messageAdapter = new MessageAdapter(getActivity(), context, new AutoScroller(messages));
         messages.setAdapter(messageAdapter);
 
+        scrollDown.hide();
+
         listener = new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -106,12 +108,19 @@ public class ChatFragment extends BoundFragment {
                 int scrollOffsetFromBottom = recyclerView.computeVerticalScrollRange() - recyclerView.computeVerticalScrollOffset() - recyclerViewMeasuredHeight;
                 boolean isMoreThanOneScreenFromBottom = scrollOffsetFromBottom > recyclerViewMeasuredHeight;
                 boolean smartVisibility = scrollDown.getVisibility() == View.VISIBLE || isMoreThanOneScreenFromBottom;
-                scrollDown.setVisibility((canScrollDown && isScrollingDown && smartVisibility) ? View.VISIBLE : View.GONE);
+                setScrollDownVisibility(canScrollDown && isScrollingDown && smartVisibility);
+            }
+
+            private void setScrollDownVisibility(boolean visible) {
+                if (visible)
+                    scrollDown.show();
+                else
+                    scrollDown.hide();
             }
         };
         messages.addOnScrollListener(listener);
 
-        scrollDown.setOnClickListener(view1 -> messages.scrollToPosition(0));
+        scrollDown.setOnClickListener(view1 -> messages.smoothScrollToPosition(0));
 
         return view;
     }
