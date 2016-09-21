@@ -33,6 +33,7 @@ import de.kuschku.libquassel.syncables.types.interfaces.QNetwork;
 import de.kuschku.quasseldroid_ng.ui.theme.AppContext;
 import de.kuschku.util.irc.IrcCaseMappers;
 import de.kuschku.util.observables.callbacks.ElementCallback;
+import de.kuschku.util.observables.callbacks.GeneralCallback;
 import de.kuschku.util.observables.callbacks.UICallback;
 import de.kuschku.util.observables.lists.ObservableSet;
 import de.kuschku.util.observables.lists.ObservableSortedList;
@@ -41,6 +42,7 @@ public class NetworkItem implements ParentListItem {
     private final AppContext context;
     private final QBufferViewConfig config;
     private final QNetwork network;
+    private final BufferViewConfigAdapter bufferViewConfigAdapter;
     private final ObservableSortedList<Buffer> buffers = new ObservableSortedList<>(new Comparator<Buffer>() {
         @Override
         public int compare(Buffer o1, Buffer o2) {
@@ -86,15 +88,20 @@ public class NetworkItem implements ParentListItem {
         public void notifyItemChanged(Integer element) {
         }
     };
+    private final UICallback callback1;
+    private final ElementCallback<Integer> callback2;
+    private final GeneralCallback<Boolean> booleanGeneralCallback;
     private ObservableSet<Integer> backingSet;
 
     public NetworkItem(AppContext context, QBufferViewConfig config, QNetwork network, BufferViewConfigAdapter bufferViewConfigAdapter) {
         this.context = context;
         this.config = config;
         this.network = network;
-        bufferViewConfigAdapter.showAll().addCallback(object -> setShowAll(object));
+        this.bufferViewConfigAdapter = bufferViewConfigAdapter;
+        booleanGeneralCallback = object -> setShowAll(object);
+        bufferViewConfigAdapter.showAll().addCallback(booleanGeneralCallback);
         setShowAll(bufferViewConfigAdapter.showAll().get());
-        this.buffers.addCallback(new UICallback() {
+        callback1 = new UICallback() {
             @Override
             public void notifyItemInserted(int position) {
                 bufferViewConfigAdapter.notifyChildItemInserted(NetworkItem.this, position);
@@ -136,8 +143,9 @@ public class NetworkItem implements ParentListItem {
                     this.notifyItemRemoved(position);
                 }
             }
-        });
-        context.client().bufferManager().bufferIds().addCallback(new ElementCallback<Integer>() {
+        };
+        this.buffers.addCallback(callback1);
+        callback2 = new ElementCallback<Integer>() {
             @Override
             public void notifyItemInserted(Integer element) {
             }
@@ -153,7 +161,8 @@ public class NetworkItem implements ParentListItem {
                     buffers.notifyItemChanged(buffer);
                 }
             }
-        });
+        };
+        context.client().bufferManager().bufferIds().addCallback(callback2);
     }
 
     public void populateList(ObservableSet<Integer> backingSet) {
@@ -192,5 +201,12 @@ public class NetworkItem implements ParentListItem {
     @Override
     public String toString() {
         return String.valueOf(network);
+    }
+
+    public void onDestroy() {
+        this.backingSet.removeCallback(callback);
+        bufferViewConfigAdapter.showAll().removeCallback(booleanGeneralCallback);
+        this.buffers.removeCallback(callback1);
+        context.client().bufferManager().bufferIds().removeCallback(callback2);
     }
 }

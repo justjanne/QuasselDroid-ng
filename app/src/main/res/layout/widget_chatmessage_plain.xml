@@ -50,5 +50,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:clickable="true"
-        android:textColor="?attr/colorForeground"/>
+        android:textColor="?attr/colorForeground"
+        android:textIsSelectable="true"/>
 </LinearLayout>

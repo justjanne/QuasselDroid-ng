@@ -87,7 +87,7 @@ public class ObservableSortedList<T> extends ArrayList<T> implements IObservable
     @Override
     public boolean add(T object) {
         int position = addInternal(object);
-        callback.notifyItemInserted(position);
+        callback.notifyItemInserted(indexOf(object));
         return position != -1;
     }
 
@@ -125,7 +125,7 @@ public class ObservableSortedList<T> extends ArrayList<T> implements IObservable
 
     @Override
     public boolean remove(Object object) {
-        int position = indexOf(object);
+        int position = super.indexOf(object);
         if (position == -1) {
             return false;
         } else {

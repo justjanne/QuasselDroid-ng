@@ -183,12 +183,12 @@ public class NetworkServerEditActivity extends BoundActivity {
                         useSSL.isChecked(),
                         0,
                         host.getText().toString(),
-                        NumberHelper.parseInt(port.getText().toString(), -1),
+                        NumberHelper.parseInt(port.getText().toString(), 0),
                         password.getText().toString(),
                         useProxy.isChecked(),
                         NetworkServer.ProxyType.fromId((int) proxyType.getSelectedItemId()),
                         proxyHost.getText().toString(),
-                        NumberHelper.parseInt(proxyPort.getText().toString(), -1),
+                        NumberHelper.parseInt(proxyPort.getText().toString(), 0),
                         proxyUser.getText().toString(),
                         proxyPassword.getText().toString()
                 )));

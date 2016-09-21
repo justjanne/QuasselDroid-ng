@@ -52,5 +52,6 @@
         android:layout_weight="1"
         android:clickable="true"
         android:textColor="?attr/colorForegroundError"
+        android:textIsSelectable="true"
         android:textStyle="italic"/>
 </LinearLayout>

@@ -236,6 +236,7 @@ public class BufferViewConfigAdapter extends ExpandableRecyclerAdapter<NetworkVi
         if (config != null)
             config.networkList().removeCallback(callback);
         config = newconfig;
+        for (NetworkItem item : items) item.onDestroy();
         items.clear();
         itemMap.clear();
         if (config != null) {

@@ -452,8 +452,15 @@ public class MainActivity extends BoundActivity {
     @Override
     protected void onConnectToThread(@Nullable ClientBackgroundThread thread) {
         super.onConnectToThread(thread);
-        if (thread == null)
-            connectToServer(manager.account(context.settings().preferenceLastAccount.get()));
+        if (thread == null) {
+            Account account = manager.account(context.settings().preferenceLastAccount.get());
+            if (account != null) {
+                connectToServer(account);
+            } else {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        }
         else {
             if (context.client() != null && context.client().connectionStatus() == ConnectionChangeEvent.Status.CONNECTED) {
                 connected();
