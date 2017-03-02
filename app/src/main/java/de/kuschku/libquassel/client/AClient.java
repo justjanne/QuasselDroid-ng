@@ -58,7 +58,7 @@ public abstract class AClient<T extends AClient<T>> extends SyncableObject<T> im
 
     @Override
     public void updateIdentity(int id, Map<String, QVariant> serialized) {
-        smartRpcTyped("updateIdenity(IdentityId,QVariantMap)", new QVariant<>("IdentityId", id), new QVariant<>(serialized));
+        smartRpcTyped("updateIdentity(IdentityId,QVariantMap)", new QVariant<>("IdentityId", id), new QVariant<>(serialized));
     }
 
     @Override
