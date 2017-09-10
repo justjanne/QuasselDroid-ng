@@ -1,183 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ QuasselDroid - Quassel client for Android
-  ~ Copyright (C) 2016 Janne Koschinski
-  ~ Copyright (C) 2016 Ken Børge Viktil
-  ~ Copyright (C) 2016 Magnus Fjell
-  ~ Copyright (C) 2016 Martin Sandsmark <martin.sandsmark@kde.org>
-  ~
-  ~ This program is free software: you can redistribute it and/or modify it
-  ~ under the terms of the GNU General Public License as published by the Free
-  ~ Software Foundation, either version 3 of the License, or (at your option)
-  ~ any later version.
-  ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License along
-  ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="de.kuschku.quasseldroid_ng">
+  package="de.kuschku.quasseldroid_ng">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.READ_LOGS" />
 
-    <application
-        android:name=".QuasselDroidNG"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/appName"
-        android:supportsRtl="true">
-
-        <service android:name=".service.QuasselService"/>
-
-        <activity
-            android:name=".ui.LoginActivity"
-            android:label="@string/appName"
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme.Light">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ui.chat.MainActivity"
-            android:label="@string/appName"
-            android:parentActivityName=".ui.LoginActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.chat.ChannelDetailActivity"
-            android:label="@string/titleChannelDetails"
-            android:parentActivityName=".ui.chat.MainActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.coresettings.chatlist.ChatListListActivity"
-            android:label="@string/titleEditChatLists"
-            android:parentActivityName=".ui.chat.MainActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.coresettings.chatlist.ChatListEditActivity"
-            android:label="@string/titleEditChatList"
-            android:parentActivityName=".ui.coresettings.chatlist.ChatListListActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.coresettings.chatlist.ChatListCreateActivity"
-            android:label="@string/titleCreateChatList"
-            android:parentActivityName=".ui.coresettings.chatlist.ChatListListActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.coresettings.network.NetworkListActivity"
-            android:label="@string/titleEditNetworks"
-            android:parentActivityName=".ui.chat.MainActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.coresettings.network.NetworkEditActivity"
-            android:label="@string/titleEditNetwork"
-            android:parentActivityName=".ui.coresettings.network.NetworkListActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.coresettings.network.NetworkCreateActivity"
-            android:label="@string/titleCreateNetwork"
-            android:parentActivityName=".ui.coresettings.network.NetworkListActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.coresettings.network.server.NetworkServerListActivity"
-            android:label="@string/titleEditNetworkServers"
-            android:parentActivityName=".ui.coresettings.network.NetworkEditActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.coresettings.identity.IdentityListActivity"
-            android:label="@string/titleEditIdentities"
-            android:parentActivityName=".ui.chat.MainActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.coresettings.identity.IdentityEditActivity"
-            android:label="@string/titleEditIdentity"
-            android:parentActivityName=".ui.coresettings.identity.IdentityListActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.coresettings.identity.IdentityCreateActivity"
-            android:label="@string/titleCreateIdentity"
-            android:parentActivityName=".ui.coresettings.identity.IdentityListActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.coresettings.identity.nick.IdentityNickListActivity"
-            android:label="@string/titleEditNicks"
-            android:parentActivityName=".ui.coresettings.identity.IdentityEditActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.coresettings.network.server.NetworkServerEditActivity"
-            android:label="@string/titleEditNetworkServer"
-            android:parentActivityName=".ui.coresettings.network.server.NetworkServerListActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.coresettings.ignore.IgnoreListActivity"
-            android:label="@string/titleEditIgnoreList"
-            android:parentActivityName=".ui.chat.MainActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.coresettings.ignore.IgnoreRuleEditActivity"
-            android:label="@string/titleEditIgnoreRule"
-            android:parentActivityName=".ui.coresettings.ignore.IgnoreListActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.coresettings.aliases.AliasListActivity"
-            android:label="@string/titleEditAliases"
-            android:parentActivityName=".ui.chat.MainActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.coresettings.aliases.AliasEditActivity"
-            android:label="@string/titleEditAlias"
-            android:parentActivityName=".ui.coresettings.aliases.AliasListActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-        <activity
-            android:name=".ui.setup.AccountSetupActivity"
-            android:label="@string/titleAccountSetup"
-            android:parentActivityName=".ui.setup.AccountSelectActivity"
-            android:theme="@style/SetupTheme"/>
-
-        <activity
-            android:name=".ui.setup.AccountSelectActivity"
-            android:label="@string/titleAccountSelection"
-            android:parentActivityName=".ui.LoginActivity"
-            android:theme="@style/SetupTheme"/>
-
-        <activity
-            android:name=".ui.setup.CoreSetupActivity"
-            android:label="@string/titleCoreSetup"
-            android:parentActivityName=".ui.chat.MainActivity"
-            android:theme="@style/SetupTheme"/>
-
-        <activity
-            android:name=".ui.settings.SettingsActivity"
-            android:label="@string/titleSettings"
-            android:parentActivityName=".ui.chat.MainActivity"
-            android:theme="@style/AppTheme.Light"/>
-
-    </application>
+  <application
+    android:name=".QuasseldroidNG"
+    android:label="@string/app_name"
+    android:icon="@mipmap/ic_launcher"
+    android:theme="@style/AppTheme"
+    android:allowBackup="true"
+    android:supportsRtl="true">
+    <activity
+      android:name=".ui.MainActivity"
+      android:exported="true"
+      android:label="@string/app_name"
+      android:theme="@style/SplashTheme">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+    <service
+      android:name=".service.QuasselService"
+      android:label="@string/connection_service"
+      android:description="@string/connection_service_description"
+      android:exported="false" />
+  </application>
 
 </manifest>

@@ -1,37 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ QuasselDroid - Quassel client for Android
-  ~ Copyright (C) 2016 Janne Koschinski
-  ~ Copyright (C) 2016 Ken Børge Viktil
-  ~ Copyright (C) 2016 Magnus Fjell
-  ~ Copyright (C) 2016 Martin Sandsmark <martin.sandsmark@kde.org>
-  ~
-  ~ This program is free software: you can redistribute it and/or modify it
-  ~ under the terms of the GNU General Public License as published by the Free
-  ~ Software Foundation, either version 3 of the License, or (at your option)
-  ~ any later version.
-  ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License along
-  ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-
 <resources>
-    <color name="colorPrimary">#0271B3</color>
-    <color name="colorPrimaryDark">#02588c</color>
-    <color name="colorAccent">#afb42b</color>
-    <color name="colorAccentFocus">#40afb42b</color>
-
-    <color name="colorFillLight">#757575</color>
-    <color name="colorFillDark">#ffffff</color>
-
-    <color name="colorOfflineLight">#757575</color>
-    <color name="colorOfflineDark">#B3B3B3</color>
-
-    <color name="colorAwayLight">#959595</color>
-    <color name="colorAwayDark">#939393</color>
+  <color name="colorPrimary">#0a70c0</color>
+  <color name="colorPrimaryDark">#105a94</color>
+  <color name="colorAccent">#afb42b</color>
 </resources>
