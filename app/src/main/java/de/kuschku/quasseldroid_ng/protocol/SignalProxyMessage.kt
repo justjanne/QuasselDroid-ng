@@ -25,7 +25,7 @@ sealed class SignalProxyMessage {
   class SyncMessage(val className: String, val objectName: String, val slotName: String,
                     val params: QVariantList) : SignalProxyMessage() {
     override fun toString(): String {
-      return "SyncMessage::$className:$objectName/$slotName"
+      return "SyncMessage::$className:${objectName.hashCode()}/$slotName"
     }
   }
 
@@ -37,14 +37,14 @@ sealed class SignalProxyMessage {
 
   class InitRequest(val className: String, val objectName: String) : SignalProxyMessage() {
     override fun toString(): String {
-      return "InitRequest::$className:$objectName"
+      return "InitRequest::$className:${objectName.hashCode()}"
     }
   }
 
   class InitData(val className: String, val objectName: String, val initData: QVariantMap) :
     SignalProxyMessage() {
     override fun toString(): String {
-      return "InitData::$className:$objectName"
+      return "InitData::$className:${objectName.hashCode()}"
     }
   }
 
