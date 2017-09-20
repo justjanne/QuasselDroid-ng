@@ -219,6 +219,7 @@ class CoreConnection(
       }
     } catch (e: Throwable) {
       Logger.warn("CoreConnection", "", e)
+      state = ConnectionState.DISCONNECTED
     }
   }
 }
