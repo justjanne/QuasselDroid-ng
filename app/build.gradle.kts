@@ -113,7 +113,7 @@ dependencies {
   }
   kapt("com.jakewharton:butterknife-compiler:8.7.0")
 
-  implementation("ch.acra:acra:4.9.2") {
+  implementation("com.faendir:acra:4.10.0") {
     exclude(group = "com.android.support", module = "support-media-compat")
   }
 
