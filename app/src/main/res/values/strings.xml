@@ -1,6 +1,8 @@
 <resources>
-  <string name="app_name">QuasselDroidNG Test</string>
+  <string name="app_name">QuasselDroid</string>
+
   <string name="connection_service">Connection Service</string>
   <string name="connection_service_description">Keeps a connection to your core to allow for notifications, and to transmit messages.</string>
-  <string name="crash_text">\"QD-NG has crashed\"</string>
+
+  <string name="crash_text">QD-NG has crashed</string>
 </resources>
