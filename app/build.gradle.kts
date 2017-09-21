@@ -101,7 +101,7 @@ dependencies {
   kapt(appArch("persistence.room", "compiler"))
 
   implementation(appArch("paging", "runtime", version = "1.0.0-alpha1")) {
-    exclude(group = "junit", module = "junit")
+    exclude(group = "com.android.support", module = "support-media-compat")
   }
 
   implementation("org.threeten:threetenbp:1.3.6") {
@@ -117,28 +117,16 @@ dependencies {
     exclude(group = "com.android.support", module = "support-media-compat")
   }
 
+  implementation(project(":lib"))
+
   implementation(project(":invokerannotations"))
   kapt(project(":invokergenerator"))
 
-  testImplementation("android.arch.persistence.room:testing:1.0.0-alpha9") {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
-  testImplementation("junit:junit:4.12") {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
+  testImplementation("android.arch.persistence.room:testing:1.0.0-alpha9")
+  testImplementation("junit:junit:4.12")
 
-  androidTestImplementation("com.android.support.test:runner:0.5") {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
-  androidTestImplementation("com.android.support.test:rules:0.5") {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
-}
-
-kapt {
-  arguments(delegateClosureOf<KaptAnnotationProcessorOptions> {
-    arg("eventBusIndex", "de.kuschku.quasseldroid_ng.EventBusIndex")
-  })
+  androidTestImplementation("com.android.support.test:runner:0.5")
+  androidTestImplementation("com.android.support.test:rules:0.5")
 }
 
 fun cmd(vararg command: String) = try {

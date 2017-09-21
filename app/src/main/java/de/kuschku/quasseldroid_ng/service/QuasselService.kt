@@ -8,8 +8,9 @@ import android.os.Binder
 import de.kuschku.quasseldroid_ng.BuildConfig
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
-import de.kuschku.quasseldroid_ng.protocol.*
-import de.kuschku.quasseldroid_ng.session.*
+import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.session.*
+import de.kuschku.quasseldroid_ng.util.AndroidHandlerService
 import org.threeten.bp.Instant
 import java.security.cert.X509Certificate
 import javax.net.ssl.X509TrustManager
@@ -22,15 +23,15 @@ class QuasselService : LifecycleService() {
 
     override fun connect(address: SocketAddress, user: String, pass: String) {
       disconnect()
-      session.coreConnection = CoreConnection(session, address)
+      val handlerService = AndroidHandlerService()
+      session.coreConnection = CoreConnection(session, address, handlerService)
       session.coreConnection?.start()
       session.userData = user to pass
       connection.postValue(session.coreConnection)
     }
 
     override fun disconnect() {
-      session.coreConnection?.close()
-      session.coreConnection = null
+      session.cleanUp()
       connection.postValue(null)
       ABSENT.postValue(ConnectionState.DISCONNECTED)
     }
@@ -38,9 +39,6 @@ class QuasselService : LifecycleService() {
     private val connection = MutableLiveData<CoreConnection>()
 
     val ABSENT = MutableLiveData<ConnectionState>()
-    override val status = Transformations.switchMap(connection) { input: CoreConnection? ->
-      input?.liveState ?: ABSENT
-    }
   }
 
   private lateinit var database: QuasselDatabase

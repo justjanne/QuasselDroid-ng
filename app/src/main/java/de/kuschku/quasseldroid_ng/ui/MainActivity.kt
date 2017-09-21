@@ -1,10 +1,8 @@
 package de.kuschku.quasseldroid_ng.ui
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -12,17 +10,17 @@ import android.widget.EditText
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.session.Backend
+import de.kuschku.libquassel.session.Session
+import de.kuschku.libquassel.session.SocketAddress
 import de.kuschku.quasseldroid_ng.R
-import de.kuschku.quasseldroid_ng.session.Backend
-import de.kuschku.quasseldroid_ng.session.ConnectionState
-import de.kuschku.quasseldroid_ng.session.Session
-import de.kuschku.quasseldroid_ng.session.SocketAddress
-import de.kuschku.quasseldroid_ng.util.helpers.Logger
-import de.kuschku.quasseldroid_ng.util.helpers.stickyMapNotNull
-import de.kuschku.quasseldroid_ng.util.helpers.stickySwitchMapNotNull
+import de.kuschku.quasseldroid_ng.util.helper.stickyMapNotNull
+import org.threeten.bp.Instant
 import org.threeten.bp.ZoneOffset
-import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import java.util.logging.Handler
+import java.util.logging.LogManager
+import java.util.logging.LogRecord
 
 class MainActivity : ServiceBoundActivity() {
   @BindView(R.id.host)
@@ -49,25 +47,36 @@ class MainActivity : ServiceBoundActivity() {
   @BindView(R.id.errorList)
   lateinit var errorList: TextView
 
+  /*
   private val status: LiveData<ConnectionState>
-    = stickySwitchMapNotNull(backend, Backend::status, ConnectionState.DISCONNECTED)
+    = stickySwitchMapNotNull(backend, Backend::status,
+                                                                    ConnectionState.DISCONNECTED)
+                                                                    */
   private val session: LiveData<Session?>
     = stickyMapNotNull(backend, Backend::session, null)
 
   private var snackbar: Snackbar? = null
 
-  private val handler = { tag: String, message: String?, throwable: Throwable? ->
-    runOnUiThread {
-      errorList.append(DateTimeFormatter.ISO_TIME.format(ZonedDateTime.now(ZoneOffset.UTC)))
-      errorList.append(" ")
-      errorList.append(tag)
-      errorList.append(": ")
-      errorList.append(message)
-      errorList.append("\n")
-      if (throwable != null) {
-        errorList.append(Log.getStackTraceString(throwable))
-        errorList.append("\n")
+  private val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ISO_TIME
+  private val handler = object : Handler() {
+    override fun publish(p0: LogRecord?) {
+      if (p0 != null) {
+        runOnUiThread {
+          errorList.append(
+            dateTimeFormatter.format(Instant.ofEpochMilli(p0.millis).atZone(ZoneOffset.UTC)))
+          errorList.append(" ")
+          errorList.append(p0.loggerName)
+          errorList.append(": ")
+          errorList.append(p0.message)
+          errorList.append("\n")
+        }
       }
+    }
+
+    override fun flush() {
+    }
+
+    override fun close() {
     }
   }
 
@@ -93,6 +102,7 @@ class MainActivity : ServiceBoundActivity() {
       errorList.text = ""
     }
 
+    /*
     status.observe(this, Observer {
       val disconnected = it == ConnectionState.DISCONNECTED
       disconnect.isEnabled = !disconnected
@@ -102,6 +112,7 @@ class MainActivity : ServiceBoundActivity() {
       snackbar = Snackbar.make(errorList, it!!.name, Snackbar.LENGTH_SHORT)
       snackbar?.show()
     })
+    */
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -115,11 +126,11 @@ class MainActivity : ServiceBoundActivity() {
 
   override fun onStart() {
     super.onStart()
-    Logger.handler = handler
+    LogManager.getLogManager().getLogger("").addHandler(handler)
   }
 
   override fun onStop() {
-    Logger.handler = null
+    LogManager.getLogManager().getLogger("").removeHandler(handler)
     super.onStop()
   }
 }

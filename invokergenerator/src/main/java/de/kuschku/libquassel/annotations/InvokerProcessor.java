@@ -121,8 +121,8 @@ public class InvokerProcessor extends AbstractProcessor {
         String invokerName = element.annotation.name() + "Invoker";
 
         ClassName type = ClassName.get(packageName, invokerName);
-        ClassName wrongObjectTypeException = ClassName.get("de.kuschku.quasseldroid_ng", "WrongObjectTypeException");
-        ClassName unknownMethodException = ClassName.get("de.kuschku.quasseldroid_ng", "UnknownMethodException");
+        ClassName wrongObjectTypeException = ClassName.get("de.kuschku.libquassel.quassel.exceptions", "WrongObjectTypeException");
+        ClassName unknownMethodException = ClassName.get("de.kuschku.libquassel.quassel.exceptions", "UnknownMethodException");
         ClassName nonNullAnnotation = ClassName.get("android.support.annotation", "NonNull");
 
         MethodSpec methodSpecConstructor = MethodSpec
@@ -164,7 +164,7 @@ public class InvokerProcessor extends AbstractProcessor {
                         ParameterizedTypeName.get(
                                 ClassName.get(List.class),
                                 ParameterizedTypeName.get(
-                                        ClassName.get("de.kuschku.quasseldroid_ng.protocol", "QVariant"),
+                                        ClassName.get("de.kuschku.libquassel.protocol", "QVariant"),
                                         TypeName.get(Object.class)
                                 )
                         ),

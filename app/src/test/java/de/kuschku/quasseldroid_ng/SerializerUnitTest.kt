@@ -1,9 +1,9 @@
 package de.kuschku.quasseldroid_ng
 
-import de.kuschku.quasseldroid_ng.protocol.Quassel_Feature
-import de.kuschku.quasseldroid_ng.protocol.Quassel_Features
-import de.kuschku.quasseldroid_ng.protocol.primitive.serializer.*
-import de.kuschku.quasseldroid_ng.util.nio.ChainedByteBuffer
+import de.kuschku.libquassel.protocol.Quassel_Feature
+import de.kuschku.libquassel.protocol.Quassel_Features
+import de.kuschku.libquassel.protocol.primitive.serializer.*
+import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Test

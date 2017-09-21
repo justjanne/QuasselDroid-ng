@@ -1,1 +1,1 @@
-include ':invokerannotations', ':invokergenerator', ':app'
+include ':invokerannotations', ':invokergenerator', ':lib', ':app'
