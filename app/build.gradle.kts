@@ -68,55 +68,30 @@ val appArchVersion = "1.0.0-alpha9-1"
 dependencies {
   implementation(kotlin("stdlib"))
 
-  implementation(appCompat("support-v4")) {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
-  implementation(appCompat("appcompat-v7")) {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
   implementation(appCompat("design")) {
     exclude(group = "com.android.support", module = "support-media-compat")
   }
-  implementation(appCompat("customtabs")) {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
-  implementation(appCompat("cardview-v7")) {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
-  implementation(appCompat("recyclerview-v7")) {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
+  implementation(appCompat("customtabs"))
+  implementation(appCompat("cardview-v7"))
+  implementation(appCompat("recyclerview-v7"))
 
-  implementation(appArch("lifecycle", "runtime", version = "1.0.0")) {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
-  implementation(appArch("lifecycle", "extensions")) {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
+  implementation(appArch("lifecycle", "runtime", version = "1.0.0"))
+  implementation(appArch("lifecycle", "extensions"))
   kapt(appArch("lifecycle", "compiler"))
 
-  implementation(appArch("persistence.room", "runtime")) {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
+  implementation(appArch("persistence.room", "runtime"))
   kapt(appArch("persistence.room", "compiler"))
 
-  implementation(appArch("paging", "runtime", version = "1.0.0-alpha1")) {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
+  implementation(appArch("paging", "runtime", version = "1.0.0-alpha1"))
 
-  implementation("org.threeten:threetenbp:1.3.6") {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
+  implementation("org.threeten:threetenbp:1.3.6")
 
-  implementation("com.jakewharton:butterknife:8.7.0") {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
+  implementation("com.jakewharton:butterknife:8.7.0")
   kapt("com.jakewharton:butterknife-compiler:8.7.0")
 
   implementation("com.faendir:acra:4.10.0") {
     exclude(group = "com.android.support", module = "support-media-compat")
   }
-
   implementation(project(":lib"))
 
   implementation(project(":invokerannotations"))
