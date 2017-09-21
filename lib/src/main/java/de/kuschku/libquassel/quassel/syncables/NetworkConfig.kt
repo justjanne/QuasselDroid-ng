@@ -3,7 +3,7 @@ package de.kuschku.libquassel.quassel.syncables
 import de.kuschku.libquassel.protocol.QVariantMap
 import de.kuschku.libquassel.protocol.QVariant_
 import de.kuschku.libquassel.protocol.Type
-import de.kuschku.libquassel.protocol.value
+import de.kuschku.libquassel.protocol.valueOr
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetworkConfig
 import de.kuschku.libquassel.session.SignalProxy
 
@@ -32,14 +32,14 @@ class NetworkConfig constructor(
   )
 
   override fun initSetProperties(properties: QVariantMap) {
-    setPingTimeoutEnabled(properties["pingTimeoutEnabled"].value(pingTimeoutEnabled()))
-    setPingInterval(properties["pingInterval"].value(pingInterval()))
-    setMaxPingCount(properties["maxPingCount"].value(maxPingCount()))
-    setAutoWhoEnabled(properties["autoWhoEnabled"].value(autoWhoEnabled()))
-    setAutoWhoInterval(properties["autoWhoInterval"].value(autoWhoInterval()))
-    setAutoWhoNickLimit(properties["autoWhoNickLimit"].value(autoWhoNickLimit()))
-    setAutoWhoDelay(properties["autoWhoDelay"].value(autoWhoDelay()))
-    setStandardCtcp(properties["standardCtcp"].value(standardCtcp()))
+    setPingTimeoutEnabled(properties["pingTimeoutEnabled"].valueOr(this::pingTimeoutEnabled))
+    setPingInterval(properties["pingInterval"].valueOr(this::pingInterval))
+    setMaxPingCount(properties["maxPingCount"].valueOr(this::maxPingCount))
+    setAutoWhoEnabled(properties["autoWhoEnabled"].valueOr(this::autoWhoEnabled))
+    setAutoWhoInterval(properties["autoWhoInterval"].valueOr(this::autoWhoInterval))
+    setAutoWhoNickLimit(properties["autoWhoNickLimit"].valueOr(this::autoWhoNickLimit))
+    setAutoWhoDelay(properties["autoWhoDelay"].valueOr(this::autoWhoDelay))
+    setStandardCtcp(properties["standardCtcp"].valueOr(this::standardCtcp))
   }
 
   fun pingTimeoutEnabled() = _pingTimeoutEnabled

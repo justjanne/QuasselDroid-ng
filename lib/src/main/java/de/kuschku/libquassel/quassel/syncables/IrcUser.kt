@@ -43,23 +43,23 @@ class IrcUser(
   )
 
   override fun initSetProperties(properties: QVariantMap) {
-    setUser(properties["user"].value(user()))
-    setHost(properties["host"].value(host()))
-    setNick(properties["nick"].value(nick()))
-    setRealName(properties["realName"].value(realName()))
-    setAccount(properties["account"].value(account()))
-    setAway(properties["away"].value(isAway()))
-    setAwayMessage(properties["awayMessage"].value(awayMessage()))
-    setIdleTime(properties["idleTime"].value(idleTime()))
-    setLoginTime(properties["loginTime"].value(loginTime()))
-    setServer(properties["server"].value(server()))
-    setIrcOperator(properties["ircOperator"].value(ircOperator()))
-    setLastAwayMessage(properties["lastAwayMessage"].value(lastAwayMessage()))
-    setWhoisServiceReply(properties["whoisServiceReply"].value(whoisServiceReply()))
-    setSuserHost(properties["suserHost"].value(suserHost()))
-    setEncrypted(properties["encrypted"].value(encrypted()))
+    setUser(properties["user"].valueOr(this::user))
+    setHost(properties["host"].valueOr(this::host))
+    setNick(properties["nick"].valueOr(this::nick))
+    setRealName(properties["realName"].valueOr(this::realName))
+    setAccount(properties["account"].valueOr(this::account))
+    setAway(properties["away"].valueOr(this::isAway))
+    setAwayMessage(properties["awayMessage"].valueOr(this::awayMessage))
+    setIdleTime(properties["idleTime"].valueOr(this::idleTime))
+    setLoginTime(properties["loginTime"].valueOr(this::loginTime))
+    setServer(properties["server"].valueOr(this::server))
+    setIrcOperator(properties["ircOperator"].valueOr(this::ircOperator))
+    setLastAwayMessage(properties["lastAwayMessage"].valueOr(this::lastAwayMessage))
+    setWhoisServiceReply(properties["whoisServiceReply"].valueOr(this::whoisServiceReply))
+    setSuserHost(properties["suserHost"].valueOr(this::suserHost))
+    setEncrypted(properties["encrypted"].valueOr(this::encrypted))
 
-    setUserModes(properties["userModes"].value(userModes()))
+    setUserModes(properties["userModes"].valueOr(this::userModes))
   }
 
   fun user() = _user
@@ -113,7 +113,7 @@ class IrcUser(
   }
 
   override fun setNick(nick: String) {
-    if (nick.isNotBlank() && _nick != nick) {
+    if (nick.isNotEmpty() && _nick != nick) {
       _nick = nick
       updateObjectName()
       super.setNick(nick)

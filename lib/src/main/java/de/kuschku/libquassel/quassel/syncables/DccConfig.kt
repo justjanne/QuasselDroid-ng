@@ -44,25 +44,25 @@ class DccConfig constructor(
 
   override fun initSetProperties(properties: QVariantMap) {
     /// Whether DCC is enabled
-    setDccEnabled(properties["dccEnabled"].value(isDccEnabled()))
+    setDccEnabled(properties["dccEnabled"].valueOr(this::isDccEnabled))
     /// The IP to use for outgoing traffic
-    setOutgoingIp(properties["outgoingIp"].value(outgoingIp()))
+    setOutgoingIp(properties["outgoingIp"].valueOr(this::outgoingIp))
     /// The IP detection mode
-    setIpDetectionMode(properties["ipDetectionMode"].value(ipDetectionMode()))
+    setIpDetectionMode(properties["ipDetectionMode"].valueOr(this::ipDetectionMode))
     /// The port range selection mode
-    setPortSelectionMode(properties["portSelectionMode"].value(portSelectionMode()))
+    setPortSelectionMode(properties["portSelectionMode"].valueOr(this::portSelectionMode))
     /// Minimum port to use for incoming connections
-    setMinPort(properties["minPort"].value(minPort()))
+    setMinPort(properties["minPort"].valueOr(this::minPort))
     /// Maximum port to use for incoming connections
-    setMaxPort(properties["maxPort"].value(maxPort()))
+    setMaxPort(properties["maxPort"].valueOr(this::maxPort))
     /// The chunk size to be used
-    setChunkSize(properties["chunkSize"].value(chunkSize()))
+    setChunkSize(properties["chunkSize"].valueOr(this::chunkSize))
     /// The timeout for DCC transfers
-    setSendTimeout(properties["sendTimeout"].value(sendTimeout()))
+    setSendTimeout(properties["sendTimeout"].valueOr(this::sendTimeout))
     /// Whether passive (reverse) DCC should be used
-    setUsePassiveDcc(properties["usePassiveDcc"].value(usePassiveDcc()))
+    setUsePassiveDcc(properties["usePassiveDcc"].valueOr(this::usePassiveDcc))
     /// Whether fast sending should be used
-    setUseFastSend(properties["useFastSend"].value(useFastSend()))
+    setUseFastSend(properties["useFastSend"].valueOr(this::useFastSend))
   }
 
   override fun setDccEnabled(enabled: Boolean) {

@@ -40,7 +40,7 @@ interface SignalProxy {
 
   fun renameObject(syncableObject: ISyncableObject, newName: String, oldName: String)
   fun renameObject(className: String, newName: String, oldName: String)
-  fun synchronize(syncableObject: ISyncableObject, baseInit: Boolean)
-  fun synchronize(syncableObject: ISyncableObject) = synchronize(syncableObject, false)
-  fun stopSynchronize(syncableObject: ISyncableObject)
+  fun synchronize(syncableObject: ISyncableObject?, baseInit: Boolean)
+  fun synchronize(syncableObject: ISyncableObject?) = synchronize(syncableObject, false)
+  fun stopSynchronize(syncableObject: ISyncableObject?)
 }

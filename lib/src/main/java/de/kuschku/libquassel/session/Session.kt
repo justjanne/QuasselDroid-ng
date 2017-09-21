@@ -22,18 +22,18 @@ class Session(
 
   var userData: Pair<String, String>? = null
 
-  private val aliasManager = AliasManager(this)
-  private val backlogManager = BacklogManager(this)
-  private val bufferSyncer = BufferSyncer(this)
-  private val bufferViewManager = BufferViewManager(this)
-  private val certManagers = mutableMapOf<IdentityId, CertManager>()
-  private val coreInfo = CoreInfo(this)
-  private val dccConfig = DccConfig(this)
-  private val identities = mutableMapOf<IdentityId, Identity>()
-  private val ignoreListManager = IgnoreListManager(this)
-  private val ircListHelper = IrcListHelper(this)
-  private val networks = mutableMapOf<NetworkId, Network>()
-  private val networkConfig = NetworkConfig(this)
+  private var aliasManager: AliasManager? = null
+  private var backlogManager: BacklogManager? = null
+  private var bufferSyncer: BufferSyncer? = null
+  private var bufferViewManager: BufferViewManager? = null
+  private var certManagers = mutableMapOf<IdentityId, CertManager>()
+  private var coreInfo: CoreInfo? = null
+  private var dccConfig: DccConfig? = null
+  private var identities = mutableMapOf<IdentityId, Identity>()
+  private var ignoreListManager: IgnoreListManager? = null
+  private var ircListHelper: IrcListHelper? = null
+  private var networks = mutableMapOf<NetworkId, Network>()
+  private var networkConfig: NetworkConfig? = null
 
   val connection = BehaviorSubject.createDefault(ICoreConnection.NULL)
 
@@ -54,7 +54,7 @@ class Session(
   }
 
   override fun handle(f: HandshakeMessage.SessionInit): Boolean {
-    connection.value.state.onNext(ConnectionState.INIT)
+    connection.value.setState(ConnectionState.INIT)
 
     f.networkIds?.forEach {
       val network = Network(it.value(-1), this)
@@ -74,14 +74,32 @@ class Session(
     isInitializing = true
     networks.values.forEach { syncableObject -> this.synchronize(syncableObject, true) }
     certManagers.values.forEach { syncableObject -> this.synchronize(syncableObject, true) }
+
+    aliasManager = AliasManager(this)
     synchronize(aliasManager, true)
+
+    backlogManager = BacklogManager(this)
+
+    bufferSyncer = BufferSyncer(this)
     synchronize(bufferSyncer, true)
+
+    bufferViewManager = BufferViewManager(this)
     synchronize(bufferViewManager, true)
+
+    coreInfo = CoreInfo(this)
     synchronize(coreInfo, true)
+
+    dccConfig = DccConfig(this)
     if (coreFeatures.hasFlag(QuasselFeature.DccFileTransfer))
       synchronize(dccConfig, true)
+
+    ignoreListManager = IgnoreListManager(this)
     synchronize(ignoreListManager, true)
+
+    ircListHelper = IrcListHelper(this)
     synchronize(ircListHelper, true)
+
+    networkConfig = NetworkConfig(this)
     synchronize(networkConfig, true)
 
     return true
@@ -115,6 +133,20 @@ class Session(
   override fun cleanUp() {
     connection.value.close()
     connection.onNext(ICoreConnection.NULL)
+
+    aliasManager = null
+    backlogManager = null
+    bufferSyncer = null
+    bufferViewManager = null
+    certManagers.clear()
+    coreInfo = null
+    dccConfig = null
+    identities.clear()
+    ignoreListManager = null
+    ircListHelper = null
+    networks.clear()
+    networkConfig = null
+
     super.cleanUp()
   }
 }

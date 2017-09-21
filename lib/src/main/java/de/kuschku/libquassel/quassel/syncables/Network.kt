@@ -688,9 +688,12 @@ class Network constructor(
     "currentServer" to QVariant_(currentServer(), Type.QString),
     "myNick" to QVariant_(myNick(), Type.QString),
     "latency" to QVariant_(latency(), Type.Int),
-    "codecForServer" to QVariant_(codecForServer().serializeString(StringSerializer.UTF8), Type.QByteArray),
-    "codecForEncoding" to QVariant_(codecForEncoding().serializeString(StringSerializer.UTF8), Type.QByteArray),
-    "codecForDecoding" to QVariant_(codecForDecoding().serializeString(StringSerializer.UTF8), Type.QByteArray),
+    "codecForServer" to QVariant_(codecForServer().serializeString(StringSerializer.UTF8),
+                                  Type.QByteArray),
+    "codecForEncoding" to QVariant_(codecForEncoding().serializeString(StringSerializer.UTF8),
+                                    Type.QByteArray),
+    "codecForDecoding" to QVariant_(codecForDecoding().serializeString(StringSerializer.UTF8),
+                                    Type.QByteArray),
     "identityId" to QVariant_(identity(), QType.IdentityId),
     "isConnected" to QVariant_(isConnected(), Type.Bool),
     "connectionState" to QVariant_(connectionState(), Type.Int),
@@ -759,34 +762,38 @@ class Network constructor(
   }
 
   override fun initSetProperties(properties: QVariantMap) {
-    setNetworkName(properties["networkName"].value(networkName()))
-    setCurrentServer(properties["currentServer"].value(currentServer()))
-    setMyNick(properties["myNick"].value(myNick()))
-    setLatency(properties["latency"].value(latency()))
-    setCodecForServer(properties["codecForServer"].value(codecForServer().serializeString(StringSerializer.UTF8)))
-    setCodecForEncoding(properties["codecForEncoding"].value(codecForEncoding().serializeString(StringSerializer.UTF8)))
-    setCodecForDecoding(properties["codecForDecoding"].value(codecForDecoding().serializeString(StringSerializer.UTF8)))
-    setIdentity(properties["identityId"].value(identity()))
-    setConnected(properties["isConnected"].value(isConnected()))
+    setNetworkName(properties["networkName"].valueOr(this::networkName))
+    setCurrentServer(properties["currentServer"].valueOr(this::currentServer))
+    setMyNick(properties["myNick"].valueOr(this::myNick))
+    setLatency(properties["latency"].valueOr(this::latency))
+    setCodecForServer(
+      properties["codecForServer"].value(codecForServer().serializeString(StringSerializer.UTF8)))
+    setCodecForEncoding(properties["codecForEncoding"].value(
+      codecForEncoding().serializeString(StringSerializer.UTF8)))
+    setCodecForDecoding(properties["codecForDecoding"].value(
+      codecForDecoding().serializeString(StringSerializer.UTF8)))
+    setIdentity(properties["identityId"].valueOr(this::identity))
+    setConnected(properties["isConnected"].valueOr(this::isConnected))
     setConnectionState(properties["connectionState"].value(connectionState().value))
-    setUseRandomServer(properties["useRandomServer"].value(useRandomServer()))
-    setPerform(properties["perform"].value(perform()))
-    setUseAutoIdentify(properties["useAutoIdentify"].value(useAutoIdentify()))
-    setAutoIdentifyService(properties["autoIdentifyService"].value(autoIdentifyService()))
-    setAutoIdentifyPassword(properties["autoIdentifyPassword"].value(autoIdentifyPassword()))
-    setUseSasl(properties["useSasl"].value(useSasl()))
-    setSaslAccount(properties["saslAccount"].value(saslAccount()))
-    setSaslPassword(properties["saslPassword"].value(saslPassword()))
-    setUseAutoReconnect(properties["useAutoReconnect"].value(useAutoReconnect()))
-    setAutoReconnectInterval(properties["autoReconnectInterval"].value(autoReconnectInterval()))
-    setAutoReconnectRetries(properties["autoReconnectRetries"].value(autoReconnectRetries()))
+    setUseRandomServer(properties["useRandomServer"].valueOr(this::useRandomServer))
+    setPerform(properties["perform"].valueOr(this::perform))
+    setUseAutoIdentify(properties["useAutoIdentify"].valueOr(this::useAutoIdentify))
+    setAutoIdentifyService(properties["autoIdentifyService"].valueOr(this::autoIdentifyService))
+    setAutoIdentifyPassword(properties["autoIdentifyPassword"].valueOr(this::autoIdentifyPassword))
+    setUseSasl(properties["useSasl"].valueOr(this::useSasl))
+    setSaslAccount(properties["saslAccount"].valueOr(this::saslAccount))
+    setSaslPassword(properties["saslPassword"].valueOr(this::saslPassword))
+    setUseAutoReconnect(properties["useAutoReconnect"].valueOr(this::useAutoReconnect))
+    setAutoReconnectInterval(
+      properties["autoReconnectInterval"].valueOr(this::autoReconnectInterval))
+    setAutoReconnectRetries(properties["autoReconnectRetries"].valueOr(this::autoReconnectRetries))
     setUnlimitedReconnectRetries(
-      properties["unlimitedReconnectRetries"].value(unlimitedReconnectRetries()))
-    setRejoinChannels(properties["rejoinChannels"].value(rejoinChannels()))
-    setUseCustomMessageRate(properties["useCustomMessageRate"].value(useCustomMessageRate()))
-    setMessageRateBurstSize(properties["msgRateBurstSize"].value(messageRateBurstSize()))
-    setMessageRateDelay(properties["msgRateMessageDelay"].value(messageRateDelay()))
-    setUnlimitedMessageRate(properties["unlimitedMessageRate"].value(unlimitedMessageRate()))
+      properties["unlimitedReconnectRetries"].valueOr(this::unlimitedReconnectRetries))
+    setRejoinChannels(properties["rejoinChannels"].valueOr(this::rejoinChannels))
+    setUseCustomMessageRate(properties["useCustomMessageRate"].valueOr(this::useCustomMessageRate))
+    setMessageRateBurstSize(properties["msgRateBurstSize"].valueOr(this::messageRateBurstSize))
+    setMessageRateDelay(properties["msgRateMessageDelay"].valueOr(this::messageRateDelay))
+    setUnlimitedMessageRate(properties["unlimitedMessageRate"].valueOr(this::unlimitedMessageRate))
   }
 
   fun updateNickFromMask(mask: String): IrcUser {

@@ -142,7 +142,10 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler {
     objectStorage.rename(className, newName, oldName)
   }
 
-  override fun synchronize(syncableObject: ISyncableObject, baseInit: Boolean) {
+  override fun synchronize(syncableObject: ISyncableObject?, baseInit: Boolean) {
+    if (syncableObject == null)
+      return
+
     if (!syncableObject.initialized)
       syncableObject.init()
 
@@ -152,12 +155,14 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler {
       if (baseInit) {
         toInit.put(syncableObject, mutableListOf())
       }
-      dispatch(
-        SignalProxyMessage.InitRequest(syncableObject.className, syncableObject.objectName))
+      dispatch(SignalProxyMessage.InitRequest(syncableObject.className, syncableObject.objectName))
     }
   }
 
-  override fun stopSynchronize(syncableObject: ISyncableObject) {
+  override fun stopSynchronize(syncableObject: ISyncableObject?) {
+    if (syncableObject == null)
+      return
+
     objectStorage.remove(syncableObject)
     toInit.remove(syncableObject)
   }

@@ -73,9 +73,9 @@ class IrcChannel(
   }
 
   override fun initSetProperties(properties: QVariantMap) {
-    setTopic(properties["topic"].value(topic()))
-    setPassword(properties["password"].value(password()))
-    setEncrypted(properties["encrypted"].value(encrypted()))
+    setTopic(properties["topic"].valueOr(this::topic))
+    setPassword(properties["password"].valueOr(this::password))
+    setEncrypted(properties["encrypted"].valueOr(this::encrypted))
   }
 
   fun isKnownUser(ircUser: IrcUser): Boolean {

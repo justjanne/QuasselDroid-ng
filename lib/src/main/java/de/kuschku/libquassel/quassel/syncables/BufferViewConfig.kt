@@ -65,17 +65,17 @@ class BufferViewConfig constructor(
   }
 
   override fun initSetProperties(properties: QVariantMap) {
-    setBufferViewName(properties["bufferViewName"].value(bufferViewName()))
-    setNetworkId(properties["networkId"].value(networkId()))
+    setBufferViewName(properties["bufferViewName"].valueOr(this::bufferViewName))
+    setNetworkId(properties["networkId"].valueOr(this::networkId))
     setAddNewBuffersAutomatically(
-      properties["addNewBuffersAutomatically"].value(addNewBuffersAutomatically()))
-    setSortAlphabetically(properties["sortAlphabetically"].value(sortAlphabetically()))
-    setHideInactiveBuffers(properties["hideInactiveBuffers"].value(hideInactiveBuffers()))
-    setHideInactiveNetworks(properties["hideInactiveNetworks"].value(hideInactiveNetworks()))
-    setDisableDecoration(properties["disableDecoration"].value(disableDecoration()))
-    setAllowedBufferTypes(properties["allowedBufferTypes"].value(allowedBufferTypes().toInt()))
-    setMinimumActivity(properties["minimumActivity"].value(minimumActivity().toInt()))
-    setShowSearch(properties["showSearch"].value(showSearch()))
+      properties["addNewBuffersAutomatically"].valueOr(this::addNewBuffersAutomatically))
+    setSortAlphabetically(properties["sortAlphabetically"].valueOr(this::sortAlphabetically))
+    setHideInactiveBuffers(properties["hideInactiveBuffers"].valueOr(this::hideInactiveBuffers))
+    setHideInactiveNetworks(properties["hideInactiveNetworks"].valueOr(this::hideInactiveNetworks))
+    setDisableDecoration(properties["disableDecoration"].valueOr(this::disableDecoration))
+    setAllowedBufferTypes(properties["allowedBufferTypes"].valueOr { allowedBufferTypes().toInt() })
+    setMinimumActivity(properties["minimumActivity"].valueOr { minimumActivity().toInt() })
+    setShowSearch(properties["showSearch"].valueOr(this::showSearch))
   }
 
   override fun addBuffer(bufferId: BufferId, pos: Int) {
