@@ -3,6 +3,7 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.plugin.KaptExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 apply {
   plugin("kotlin")
@@ -21,6 +22,15 @@ dependencies {
   kapt(project(":invokergenerator"))
 
   testImplementation("junit:junit:4.12")
+}
+
+tasks.withType(KotlinCompile::class.java) {
+  kotlinOptions {
+    freeCompilerArgs = listOf(
+      "-Xno-param-assertions",
+      "-Xno-call-assertions"
+    )
+  }
 }
 
 /**

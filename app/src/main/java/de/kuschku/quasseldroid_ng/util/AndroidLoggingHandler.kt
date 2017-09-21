@@ -1,59 +1,32 @@
 package de.kuschku.quasseldroid_ng.util
 
 import android.util.Log
-import java.util.logging.Handler
-import java.util.logging.Level
-import java.util.logging.LogManager
-import java.util.logging.LogRecord
+import de.kuschku.libquassel.util.LoggingHandler
 
-/**
- * Make JUL work on Android.
- */
-class AndroidLoggingHandler : Handler() {
-  override fun close() {}
-  override fun flush() {}
-  override fun publish(record: LogRecord) {
-    if (!super.isLoggable(record))
-      return
-
-    val name = record.loggerName
-    val maxLength = 30
-    val tag = if (name.length > maxLength) name.substring(name.length - maxLength) else name
-
-    try {
-      val level = getAndroidLevel(record.level)
-      Log.println(level, tag, record.message)
-      if (record.thrown != null) {
-        Log.println(level, tag, Log.getStackTraceString(record.thrown))
-      }
-    } catch (e: RuntimeException) {
-      Log.e("AndroidLoggingHandler", "Error logging message.", e)
-    }
-
+object AndroidLoggingHandler : LoggingHandler() {
+  override fun isLoggable(logLevel: LogLevel, tag: String): Boolean {
+    return Log.isLoggable(tag, priority(logLevel))
   }
 
-  companion object {
-    fun reset(rootHandler: Handler) {
-      val rootLogger = LogManager.getLogManager().getLogger("")
-      val handlers = rootLogger.handlers
-      for (handler in handlers) {
-        rootLogger.removeHandler(handler)
-      }
-      rootLogger.addHandler(rootHandler)
-    }
+  override fun log(logLevel: LogLevel, tag: String, message: String?, throwable: Throwable?) {
+    val priority = priority(logLevel)
+    if (message != null)
+      Log.println(priority, tag, message)
+    if (throwable != null)
+      Log.println(priority, tag, Log.getStackTraceString(throwable))
+  }
 
-    fun init() {
-      reset(AndroidLoggingHandler())
-    }
+  private fun priority(logLevel: LogLevel): Int = when (logLevel) {
+    LogLevel.VERBOSE -> Log.VERBOSE
+    LogLevel.DEBUG   -> Log.DEBUG
+    LogLevel.INFO    -> Log.INFO
+    LogLevel.WARN    -> Log.WARN
+    LogLevel.ERROR   -> Log.ERROR
+    LogLevel.ASSERT  -> Log.ASSERT
+  }
 
-    private fun getAndroidLevel(level: Level): Int {
-      val value = level.intValue()
-      return when {
-        value >= 1000 -> Log.ERROR
-        value >= 900  -> Log.WARN
-        value >= 800  -> Log.INFO
-        else          -> Log.DEBUG
-      }
-    }
+  fun init() {
+    LoggingHandler.loggingHandlers.clear()
+    LoggingHandler.loggingHandlers.add(this)
   }
 }

@@ -56,4 +56,10 @@ class Message(
       override fun of(vararg flags: MessageFlag) = Flags.of(*flags)
     }
   }
+
+  override fun toString(): String {
+    return "Message(messageId=$messageId, time=$time, type=$type, flag=$flag, bufferInfo=$bufferInfo, sender='$sender', senderPrefixes='$senderPrefixes', content='$content')"
+  }
+
+
 }

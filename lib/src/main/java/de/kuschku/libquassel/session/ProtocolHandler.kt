@@ -1,23 +1,20 @@
 package de.kuschku.libquassel.session
 
-import de.kuschku.libquassel.protocol.HandshakeMessage
 import de.kuschku.libquassel.protocol.QVariant_
-import de.kuschku.libquassel.protocol.SignalProxyMessage
+import de.kuschku.libquassel.protocol.message.HandshakeMessage
+import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.quassel.exceptions.ObjectNotFoundException
 import de.kuschku.libquassel.quassel.syncables.RpcHandler
 import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
 import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
+import de.kuschku.libquassel.util.LoggingHandler.LogLevel.DEBUG
+import de.kuschku.libquassel.util.LoggingHandler.LogLevel.WARN
+import de.kuschku.libquassel.util.log
 import org.threeten.bp.Instant
-import java.util.logging.Level
-import java.util.logging.Logger
 
 abstract class ProtocolHandler : SignalProxy, AuthHandler {
-  companion object {
-    private val logger = Logger.getLogger("ProtocolHandler")
-  }
-
   private val objectStorage: ObjectStorage = ObjectStorage(this)
-  protected val rpcHandler: RpcHandler = RpcHandler(this)
+  private val rpcHandler: RpcHandler = RpcHandler(this)
 
   private val toInit = mutableMapOf<ISyncableObject, MutableList<SignalProxyMessage.SyncMessage>>()
   private val syncQueue = mutableListOf<SignalProxyMessage.SyncMessage>()
@@ -30,24 +27,30 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler {
 
   abstract fun onInitDone()
 
-  override fun handle(f: SignalProxyMessage) {
+  override fun handle(f: SignalProxyMessage): Boolean {
     try {
-      super<SignalProxy>.handle(f)
+      if (!super<SignalProxy>.handle(f)) {
+        log(DEBUG, "No receiver registered for $f")
+      }
     } catch (e: Throwable) {
-      logger.log(Level.SEVERE, "Error Handling SignalProxyMessage", e)
+      log(WARN, "ProtocolHandler", "Error Handling SignalProxyMessage", e)
     }
+    return true
   }
 
-  override fun handle(function: HandshakeMessage) {
+  override fun handle(f: HandshakeMessage): Boolean {
     try {
-      super<AuthHandler>.handle(function)
+      if (!super<AuthHandler>.handle(f)) {
+        log(DEBUG, "No receiver registered for $f")
+      }
     } catch (e: Throwable) {
-      logger.log(Level.SEVERE, "Error Handling HandshakeMessage", e)
+      log(WARN, "ProtocolHandler", "Error Handling HandshakeMessage", e)
     }
+    return true
   }
 
-  override fun handle(f: SignalProxyMessage.InitData) {
-    logger.log(Level.FINEST, "< $f")
+  override fun handle(f: SignalProxyMessage.InitData): Boolean {
+    log(DEBUG, "ProtocolHandler", "< $f")
     val obj: ISyncableObject = objectStorage.get(f.className, f.objectName)
       ?: throw ObjectNotFoundException(f.className, f.objectName)
 
@@ -55,39 +58,43 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler {
     obj.initialized = true
     synchronize(obj)
     checkForInitDone()
-    toInit.remove(obj)?.forEach(this::handle)
+    toInit.remove(obj)?.map(this::handle)
+    return true
   }
 
   private fun checkForInitDone() {
     if (isInitializing && toInit.isEmpty()) {
       isInitializing = false
-      syncQueue.forEach(this::handle)
       onInitDone()
+      syncQueue.map {
+        try {
+          this.handle(it)
+        } catch (e: Throwable) {
+          log(WARN, "ProtocolHandler", e)
+        }
+      }
     }
   }
 
-  override fun handle(f: SignalProxyMessage.SyncMessage) {
-    val obj = objectStorage.get(f.className, f.objectName)
-    if (obj == null) {
-      if (isInitializing) {
-        syncQueue.add(f)
-        return
-      } else {
-        logger.log(Level.FINEST, "< $f")
-        throw ObjectNotFoundException(f.className, f.objectName)
-      }
+  override fun handle(f: SignalProxyMessage.SyncMessage): Boolean {
+    val obj = objectStorage.get(f.className, f.objectName) ?: if (isInitializing) {
+      syncQueue.add(f)
+      return true
+    } else {
+      log(DEBUG, "ProtocolHandler", "< $f")
+      throw ObjectNotFoundException(f.className, f.objectName)
     }
 
     val initQueue = toInit[obj]
     if (initQueue != null) {
       initQueue.add(f)
-      return
+      return true
     }
 
-    logger.log(Level.FINEST, f.toString())
+    log(DEBUG, "ProtocolHandler", f.toString())
 
-    val invoker = Invokers.get(f.className) ?: throw IllegalArgumentException(
-      "Invalid classname: ${f.className}")
+    val invoker = Invokers.get(f.className)
+      ?: throw IllegalArgumentException("Invalid classname: ${f.className}")
     currentCallClass = f.className
     currentCallInstance = f.objectName
     currentCallSlot = f.slotName
@@ -95,33 +102,36 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler {
     currentCallClass = ""
     currentCallInstance = ""
     currentCallSlot = ""
+    return true
   }
 
-  override fun handle(f: SignalProxyMessage.RpcCall) {
-    logger.log(Level.FINEST, "< $f")
+  override fun handle(f: SignalProxyMessage.RpcCall): Boolean {
+    log(DEBUG, "ProtocolHandler", "< $f")
 
     currentCallSlot = f.slotName
     Invokers.RPC?.invoke(rpcHandler, f.slotName, f.params)
     currentCallSlot = ""
+    return true
   }
 
-  override fun handle(f: SignalProxyMessage.HeartBeat) {
+  override fun handle(f: SignalProxyMessage.HeartBeat): Boolean {
     dispatch(SignalProxyMessage.HeartBeatReply(f.timestamp))
     dispatch(SignalProxyMessage.HeartBeat(Instant.now()))
+    return true
   }
+
+  override fun shouldSync(type: String, instance: String, slot: String): Boolean
+    = type != currentCallClass || slot != currentCallSlot || instance != currentCallInstance
 
   override fun callSync(type: String, instance: String, slot: String, params: List<QVariant_>) {
-    // Don’t transmit calls back that we just got from the network
-    if (type != currentCallClass || slot != currentCallSlot || instance != currentCallInstance) {
-      dispatch(SignalProxyMessage.SyncMessage(type, instance, slot, params))
-    }
+    dispatch(SignalProxyMessage.SyncMessage(type, instance, slot, params))
   }
 
+  override fun shouldRpc(slot: String): Boolean
+    = slot != currentCallSlot
+
   override fun callRpc(slot: String, params: List<QVariant_>) {
-    // Don’t transmit calls back that we just got from the network
-    if (slot != currentCallSlot) {
-      dispatch(SignalProxyMessage.RpcCall(slot, params))
-    }
+    dispatch(SignalProxyMessage.RpcCall(slot, params))
   }
 
   override fun renameObject(syncableObject: ISyncableObject, newName: String, oldName: String) {
@@ -142,7 +152,8 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler {
       if (baseInit) {
         toInit.put(syncableObject, mutableListOf())
       }
-      dispatch(SignalProxyMessage.InitRequest(syncableObject.className, syncableObject.objectName))
+      dispatch(
+        SignalProxyMessage.InitRequest(syncableObject.className, syncableObject.objectName))
     }
   }
 

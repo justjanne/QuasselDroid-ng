@@ -18,9 +18,9 @@ class AndroidHandlerService : HandlerService {
     backendHandler.post(f)
   }
 
-  private val parseThread = HandlerThread("parse", Process.THREAD_PRIORITY_BACKGROUND)
+  private val parseThread = HandlerThread("parse", Process.THREAD_PRIORITY_DISPLAY)
   private val writeThread = HandlerThread("write", Process.THREAD_PRIORITY_BACKGROUND)
-  private val backendThread = HandlerThread("backend", Process.THREAD_PRIORITY_BACKGROUND)
+  private val backendThread = HandlerThread("backend", Process.THREAD_PRIORITY_DISPLAY)
 
   private val parseHandler: Handler
   private val writeHandler: Handler

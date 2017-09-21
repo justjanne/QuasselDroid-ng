@@ -1,9 +1,9 @@
 package de.kuschku.libquassel.session
 
-import de.kuschku.libquassel.protocol.HandshakeMessage
 import de.kuschku.libquassel.protocol.Quassel_Feature
 import de.kuschku.libquassel.protocol.Quassel_Features
-import de.kuschku.libquassel.protocol.SignalProxyMessage
+import de.kuschku.libquassel.protocol.message.HandshakeMessage
+import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.protocol.primitive.serializer.HandshakeVariantMapSerializer
 import de.kuschku.libquassel.protocol.primitive.serializer.IntSerializer
 import de.kuschku.libquassel.protocol.primitive.serializer.ProtocolSerializer
@@ -11,43 +11,42 @@ import de.kuschku.libquassel.protocol.primitive.serializer.VariantListSerializer
 import de.kuschku.libquassel.quassel.ProtocolFeature
 import de.kuschku.libquassel.util.CompatibilityUtils
 import de.kuschku.libquassel.util.HandlerService
+import de.kuschku.libquassel.util.LoggingHandler.LogLevel.*
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.libquassel.util.helpers.write
+import de.kuschku.libquassel.util.log
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import de.kuschku.libquassel.util.nio.WrappedChannel
+import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.format.DateTimeFormatter
 import java.lang.Thread.UncaughtExceptionHandler
 import java.net.Socket
 import java.net.SocketException
 import java.nio.ByteBuffer
-import java.util.logging.Level
-import java.util.logging.Logger
 
 class CoreConnection(
   private val session: Session,
   private val address: SocketAddress,
   private val handlerService: HandlerService
-) : Thread() {
-  private val logger = Logger.getLogger("CoreConnection")
+) : Thread(), ICoreConnection {
+  companion object {
+    private const val TAG = "CoreConnection"
+  }
 
   private val exceptionHandler = UncaughtExceptionHandler { thread, throwable ->
-    logger.log(Level.WARNING, thread.name, throwable)
+    log(WARN, TAG, thread.name, throwable)
   }
 
   private val sizeBuffer = ByteBuffer.allocateDirect(4)
   private val chainedBuffer = ChainedByteBuffer(direct = true)
 
-  var state = ConnectionState.DISCONNECTED
-    set(value) {
-      field = value
-      logger.log(Level.FINEST, "Connection state changed to $state")
-    }
+  override val state = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
 
   private var channel: WrappedChannel? = null
 
   private fun connect() {
-    state = ConnectionState.CONNECTING
+    setState(ConnectionState.CONNECTING)
     val socket = Socket()
     if (CompatibilityUtils.supportsKeepAlive)
       socket.keepAlive = true
@@ -56,8 +55,14 @@ class CoreConnection(
     channel = WrappedChannel.ofSocket(socket)
   }
 
+  override fun setState(value: ConnectionState) {
+    log(INFO, "CoreConnection", value.name)
+    state.onNext(value)
+  }
+
   private fun sendHandshake() {
-    state = ConnectionState.HANDSHAKE
+    setState(ConnectionState.HANDSHAKE)
+
     IntSerializer.serialize(chainedBuffer,
                             0x42b33f00 or session.clientData.protocolFeatures.toInt(),
                             session.coreFeatures)
@@ -75,7 +80,7 @@ class CoreConnection(
     sizeBuffer.flip()
     val protocol = ProtocolSerializer.deserialize(sizeBuffer, session.coreFeatures)
 
-    println(protocol)
+    log(DEBUG, "Protocol negotiated $protocol")
 
     // Wrap socket in SSL context if ssl is enabled
     if (protocol.flags.hasFlag(ProtocolFeature.TLS)) {
@@ -104,21 +109,21 @@ class CoreConnection(
     }
   }
 
-  fun close() {
+  override fun close() {
     interrupt()
     handlerService.quit()
     val thread = Thread {
       try {
         channel?.close()
       } catch (e: Throwable) {
-        logger.log(Level.WARNING, "Error encountered while closing connection", e)
+        log(WARN, TAG, "Error encountered while closing connection", e)
       }
     }
     thread.start()
     thread.join()
   }
 
-  fun dispatch(message: HandshakeMessage) {
+  override fun dispatch(message: HandshakeMessage) {
     handlerService.parse {
       try {
         val data = HandshakeMessage.serialize(message)
@@ -127,12 +132,12 @@ class CoreConnection(
                           session.coreFeatures)
         )
       } catch (e: Throwable) {
-        logger.log(Level.WARNING, "Error encountered while serializing handshake message", e)
+        log(WARN, TAG, "Error encountered while serializing handshake message", e)
       }
     }
   }
 
-  fun dispatch(message: SignalProxyMessage) {
+  override fun dispatch(message: SignalProxyMessage) {
     handlerService.parse {
       try {
         val data = SignalProxyMessage.serialize(message)
@@ -140,7 +145,7 @@ class CoreConnection(
           MessageRunnable(data, VariantListSerializer, chainedBuffer, channel, session.coreFeatures)
         )
       } catch (e: Throwable) {
-        logger.log(Level.WARNING, "Error encountered while serializing sigproxy message", e)
+        log(WARN, TAG, "Error encountered while serializing sigproxy message", e)
       }
     }
   }
@@ -163,43 +168,47 @@ class CoreConnection(
         }
         dataBuffer.flip()
         handlerService.parse {
-          when (state) {
-            ConnectionState.HANDSHAKE -> {
-              try {
-                val msg = HandshakeMessage.deserialize(
-                  HandshakeVariantMapSerializer.deserialize(dataBuffer, session.coreFeatures)
-                )
-                try {
-                  session.handle(msg)
-                } catch (e: Throwable) {
-                  logger.log(Level.WARNING, "Error encountered while handling handshake message", e)
-                }
-              } catch (e: Throwable) {
-                logger.log(Level.WARNING, "Error encountered while parsing handshake message", e)
-              }
-            }
-            else                      ->
-              try {
-                val msg = SignalProxyMessage.deserialize(
-                  VariantListSerializer.deserialize(dataBuffer, session.coreFeatures)
-                )
-                handlerService.handle {
-                  try {
-                    session.handle(msg)
-                  } catch (e: Throwable) {
-                    logger.log(Level.WARNING, "Error encountered while handling sigproxy message",
-                               e)
-                  }
-                }
-              } catch (e: Throwable) {
-                logger.log(Level.WARNING, "Error encountered while parsing sigproxy message", e)
-              }
+          when (state.value) {
+            ConnectionState.HANDSHAKE -> processHandshake(dataBuffer)
+            else                      -> processSigProxy(dataBuffer)
           }
         }
       }
     } catch (e: Throwable) {
-      logger.log(Level.WARNING, "Error encountered in connection", e)
-      state = ConnectionState.DISCONNECTED
+      log(WARN, TAG, "Error encountered in connection", e)
+      setState(ConnectionState.DISCONNECTED)
+    }
+  }
+
+  private fun processSigProxy(dataBuffer: ByteBuffer) {
+    try {
+      val msg = SignalProxyMessage.deserialize(
+        VariantListSerializer.deserialize(dataBuffer, session.coreFeatures)
+      )
+      handlerService.handle {
+        try {
+          session.handle(msg)
+        } catch (e: Throwable) {
+          log(WARN, TAG, "Error encountered while handling sigproxy message", e)
+        }
+      }
+    } catch (e: Throwable) {
+      log(WARN, TAG, "Error encountered while parsing sigproxy message", e)
+    }
+  }
+
+  private fun processHandshake(dataBuffer: ByteBuffer) {
+    try {
+      val msg = HandshakeMessage.deserialize(
+        HandshakeVariantMapSerializer.deserialize(dataBuffer, session.coreFeatures)
+      )
+      try {
+        session.handle(msg)
+      } catch (e: Throwable) {
+        log(WARN, TAG, "Error encountered while handling handshake message", e)
+      }
+    } catch (e: Throwable) {
+      log(WARN, TAG, "Error encountered while parsing handshake message", e)
     }
   }
 }

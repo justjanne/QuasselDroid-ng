@@ -25,37 +25,38 @@ interface INetwork : ISyncableObject {
 
   @Slot
   fun acknowledgeCap(capability: String) {
-    SYNC(SLOT, ARG(capability, Type.QString))
+    SYNC("acknowledgeCap", ARG(capability, Type.QString))
   }
 
   @Slot
   fun addCap(capability: String, value: String = "") {
-    SYNC(SLOT, ARG(capability, Type.QString), ARG(value, Type.QString))
+    SYNC("addCap", ARG(capability, Type.QString), ARG(value, Type.QString))
   }
 
   @Slot
   fun addIrcChannel(channel: String) {
-    SYNC(SLOT, ARG(channel, Type.QString))
+    SYNC("addIrcChannel", ARG(channel, Type.QString))
   }
 
   @Slot
   fun addIrcUser(hostmask: String) {
-    SYNC(SLOT, ARG(hostmask, Type.QString))
+    SYNC("addIrcUser", ARG(hostmask, Type.QString))
   }
 
   @Slot
   fun addSupport(param: String, value: String = String()) {
-    SYNC(SLOT, ARG(param, Type.QString), ARG(value, Type.QString))
+    SYNC("addSupport(param: String, value: String = String", ARG(param, Type.QString),
+         ARG(value, Type.QString))
   }
 
   @Slot
   fun clearCaps() {
-    SYNC(SLOT)
+    SYNC("clearCaps")
   }
 
   @Slot
   fun emitConnectionError(error: String) {
-    SYNC(SLOT, ARG(error, Type.QString))
+    SYNC("emitConnectionError", ARG(error, Type.QString))
   }
 
   @Slot
@@ -63,167 +64,167 @@ interface INetwork : ISyncableObject {
 
   @Slot
   fun removeCap(capability: String) {
-    SYNC(SLOT, ARG(capability, Type.QString))
+    SYNC("removeCap", ARG(capability, Type.QString))
   }
 
   @Slot
   fun removeSupport(param: String) {
-    SYNC(SLOT, ARG(param, Type.QString))
+    SYNC("removeSupport", ARG(param, Type.QString))
   }
 
   @Slot
   fun requestConnect() {
-    REQUEST(SLOT)
+    REQUEST("requestConnect")
   }
 
   @Slot
   fun requestDisconnect() {
-    REQUEST(SLOT)
+    REQUEST("requestDisconnect")
   }
 
   @Slot
   fun requestSetNetworkInfo(info: NetworkInfo) {
-    REQUEST(SLOT, ARG(info, QType.NetworkInfo))
+    REQUEST("requestSetNetworkInfo", ARG(info, QType.NetworkInfo))
   }
 
   @Slot
   fun setAutoIdentifyPassword(password: String) {
-    SYNC(SLOT, ARG(password, Type.QString))
+    SYNC("setAutoIdentifyPassword", ARG(password, Type.QString))
   }
 
   @Slot
   fun setAutoIdentifyService(service: String) {
-    SYNC(SLOT, ARG(service, Type.QString))
+    SYNC("setAutoIdentifyService", ARG(service, Type.QString))
   }
 
   @Slot
   fun setAutoReconnectInterval(interval: UInt) {
-    SYNC(SLOT, ARG(interval, Type.UInt))
+    SYNC("setAutoReconnectInterval", ARG(interval, Type.UInt))
   }
 
   @Slot
   fun setAutoReconnectRetries(retries: UShort) {
-    SYNC(SLOT, ARG(retries, Type.UShort))
+    SYNC("setAutoReconnectRetries", ARG(retries, Type.UShort))
   }
 
   @Slot
   fun setCodecForDecoding(codecName: ByteBuffer?) {
-    SYNC(SLOT, ARG(codecName, Type.QByteArray))
+    SYNC("setCodecForDecoding", ARG(codecName, Type.QByteArray))
   }
 
   @Slot
   fun setCodecForEncoding(codecName: ByteBuffer?) {
-    SYNC(SLOT, ARG(codecName, Type.QByteArray))
+    SYNC("setCodecForEncoding", ARG(codecName, Type.QByteArray))
   }
 
   @Slot
   fun setCodecForServer(codecName: ByteBuffer?) {
-    SYNC(SLOT, ARG(codecName, Type.QByteArray))
+    SYNC("setCodecForServer", ARG(codecName, Type.QByteArray))
   }
 
   @Slot
   fun setConnected(isConnected: Boolean) {
-    SYNC(SLOT, ARG(isConnected, Type.Bool))
+    SYNC("setConnected", ARG(isConnected, Type.Bool))
   }
 
   @Slot
   fun setConnectionState(state: Int) {
-    SYNC(SLOT, ARG(state, Type.Int))
+    SYNC("setConnectionState", ARG(state, Type.Int))
   }
 
   @Slot
   fun setCurrentServer(currentServer: String) {
-    SYNC(SLOT, ARG(currentServer, Type.QString))
+    SYNC("setCurrentServer", ARG(currentServer, Type.QString))
   }
 
   @Slot
   fun setIdentity(identity: IdentityId) {
-    SYNC(SLOT, ARG(identity, QType.IdentityId))
+    SYNC("setIdentity", ARG(identity, QType.IdentityId))
   }
 
   @Slot
   fun setLatency(latency: Int) {
-    SYNC(SLOT, ARG(latency, Type.Int))
+    SYNC("setLatency", ARG(latency, Type.Int))
   }
 
   @Slot
   fun setMessageRateBurstSize(burstSize: UInt) {
-    SYNC(SLOT, ARG(burstSize, Type.UInt))
+    SYNC("setMessageRateBurstSize", ARG(burstSize, Type.UInt))
   }
 
   @Slot
   fun setMessageRateDelay(messageDelay: UInt) {
-    SYNC(SLOT, ARG(messageDelay, Type.UInt))
+    SYNC("setMessageRateDelay", ARG(messageDelay, Type.UInt))
   }
 
   @Slot
   fun setMyNick(mynick: String) {
-    SYNC(SLOT, ARG(mynick, Type.QString))
+    SYNC("setMyNick", ARG(mynick, Type.QString))
   }
 
   @Slot
   fun setNetworkName(networkName: String) {
-    SYNC(SLOT, ARG(networkName, Type.QString))
+    SYNC("setNetworkName", ARG(networkName, Type.QString))
   }
 
   @Slot
   fun setPerform(perform: QStringList) {
-    SYNC(SLOT, ARG(perform, Type.QStringList))
+    SYNC("setPerform", ARG(perform, Type.QStringList))
   }
 
   @Slot
   fun setRejoinChannels(rejoinChannels: Boolean) {
-    SYNC(SLOT, ARG(rejoinChannels, Type.Bool))
+    SYNC("setRejoinChannels", ARG(rejoinChannels, Type.Bool))
   }
 
   @Slot
   fun setSaslAccount(account: String) {
-    SYNC(SLOT, ARG(account, Type.QString))
+    SYNC("setSaslAccount", ARG(account, Type.QString))
   }
 
   @Slot
   fun setSaslPassword(password: String) {
-    SYNC(SLOT, ARG(password, Type.QString))
+    SYNC("setSaslPassword", ARG(password, Type.QString))
   }
 
   @Slot
   fun setServerList(serverList: QVariantList) {
-    SYNC(SLOT, ARG(serverList, Type.QVariantList))
+    SYNC("setServerList", ARG(serverList, Type.QVariantList))
   }
 
   @Slot
   fun setUnlimitedMessageRate(unlimitedRate: Boolean) {
-    SYNC(SLOT, ARG(unlimitedRate, Type.Bool))
+    SYNC("setUnlimitedMessageRate", ARG(unlimitedRate, Type.Bool))
   }
 
   @Slot
   fun setUnlimitedReconnectRetries(unlimitedRetries: Boolean) {
-    SYNC(SLOT, ARG(unlimitedRetries, Type.Bool))
+    SYNC("setUnlimitedReconnectRetries", ARG(unlimitedRetries, Type.Bool))
   }
 
   @Slot
   fun setUseAutoIdentify(autoIdentify: Boolean) {
-    SYNC(SLOT, ARG(autoIdentify, Type.Bool))
+    SYNC("setUseAutoIdentify", ARG(autoIdentify, Type.Bool))
   }
 
   @Slot
   fun setUseAutoReconnect(autoReconnect: Boolean) {
-    SYNC(SLOT, ARG(autoReconnect, Type.Bool))
+    SYNC("setUseAutoReconnect", ARG(autoReconnect, Type.Bool))
   }
 
   @Slot
   fun setUseCustomMessageRate(useCustomRate: Boolean) {
-    SYNC(SLOT, ARG(useCustomRate, Type.Bool))
+    SYNC("setUseCustomMessageRate", ARG(useCustomRate, Type.Bool))
   }
 
   @Slot
   fun setUseRandomServer(randomServer: Boolean) {
-    SYNC(SLOT, ARG(randomServer, Type.Bool))
+    SYNC("setUseRandomServer", ARG(randomServer, Type.Bool))
   }
 
   @Slot
   fun setUseSasl(sasl: Boolean) {
-    SYNC(SLOT, ARG(sasl, Type.Bool))
+    SYNC("setUseSasl", ARG(sasl, Type.Bool))
   }
 
   @Slot

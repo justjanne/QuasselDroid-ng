@@ -1,23 +1,23 @@
 package de.kuschku.libquassel.session
 
 import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.protocol.message.HandshakeMessage
+import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.quassel.QuasselFeature
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
+import de.kuschku.libquassel.util.LoggingHandler.LogLevel.DEBUG
+import de.kuschku.libquassel.util.LoggingHandler.LogLevel.INFO
 import de.kuschku.libquassel.util.hasFlag
+import de.kuschku.libquassel.util.log
+import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
-import java.util.logging.Level
-import java.util.logging.Logger
 import javax.net.ssl.X509TrustManager
 
 class Session(
   val clientData: ClientData,
-  val trustManager: X509TrustManager,
-  var coreConnection: CoreConnection? = null
+  val trustManager: X509TrustManager
 ) : ProtocolHandler() {
-  companion object {
-    private val logger = Logger.getLogger("Session")
-  }
   var coreFeatures: Quassel_Features = Quassel_Feature.NONE
 
   var userData: Pair<String, String>? = null
@@ -35,34 +35,33 @@ class Session(
   private val networks = mutableMapOf<NetworkId, Network>()
   private val networkConfig = NetworkConfig(this)
 
+  val connection = BehaviorSubject.createDefault(ICoreConnection.NULL)
+
   init {
-    logger.log(Level.FINEST, "Session created")
+    log(INFO, "Session", "Session created")
 
     // This should preload them
     Invokers
   }
 
-  override fun handle(function: HandshakeMessage.ClientInitAck) {
-    coreFeatures = function.coreFeatures ?: Quassel_Feature.NONE
+  override fun handle(f: HandshakeMessage.ClientInitAck): Boolean {
+    coreFeatures = f.coreFeatures ?: Quassel_Feature.NONE
     dispatch(HandshakeMessage.ClientLogin(
       user = userData?.first,
       password = userData?.second
     ))
+    return true
   }
 
-  override fun handle(function: HandshakeMessage.ClientLoginReject) {
+  override fun handle(f: HandshakeMessage.SessionInit): Boolean {
+    connection.value.state.onNext(ConnectionState.INIT)
 
-  }
-
-  override fun handle(function: HandshakeMessage.SessionInit) {
-    coreConnection?.state = ConnectionState.INIT
-
-    function.networkIds?.forEach {
+    f.networkIds?.forEach {
       val network = Network(it.value(-1), this)
       networks.put(network.networkId(), network)
     }
 
-    function.identities?.forEach {
+    f.identities?.forEach {
       val identity = Identity(this)
       identity.fromVariantMap(it.valueOr(::emptyMap))
       identity.initialized = true
@@ -84,35 +83,38 @@ class Session(
     synchronize(ignoreListManager, true)
     synchronize(ircListHelper, true)
     synchronize(networkConfig, true)
+
+    return true
   }
 
   override fun onInitDone() {
-    coreConnection?.state = ConnectionState.CONNECTED
-    logger.log(Level.FINEST, "Initialization finished")
+    connection.value.setState(ConnectionState.CONNECTED)
+    log(INFO, "Session", "Initialization finished")
   }
 
-  override fun handle(f: SignalProxyMessage.HeartBeatReply) {
+  override fun handle(f: SignalProxyMessage.HeartBeatReply): Boolean {
     val now = Instant.now()
     val latency = now.toEpochMilli() - f.timestamp.toEpochMilli()
-    logger.log(Level.FINEST, "Latency of $latency ms")
+    log(INFO, "Session", "Latency of $latency ms")
+    return true
   }
 
   override fun dispatch(message: SignalProxyMessage) {
-    logger.log(Level.FINEST, "< $message")
-    coreConnection?.dispatch(message)
+    log(DEBUG, "Session", "> $message")
+    connection.value.dispatch(message)
   }
 
   override fun dispatch(message: HandshakeMessage) {
-    logger.log(Level.FINEST, "< $message")
-    coreConnection?.dispatch(message)
+    log(DEBUG, "Session", "> $message")
+    connection.value.dispatch(message)
   }
 
   override fun network(id: NetworkId): Network? = networks[id]
   override fun identity(id: IdentityId): Identity? = identities[id]
 
   override fun cleanUp() {
-    coreConnection?.close()
-    coreConnection = null
+    connection.value.close()
+    connection.onNext(ICoreConnection.NULL)
     super.cleanUp()
   }
 }

@@ -6,9 +6,11 @@
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_marginTop="8dp"
     android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp">
 
     <android.support.design.widget.TextInputLayout
       android:layout_width="match_parent"
@@ -19,8 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Host"
-        android:singleLine="true"
-        android:maxLines="1" />
+        android:maxLines="1"
+        android:singleLine="true" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -33,9 +35,9 @@
         android:layout_height="wrap_content"
         android:hint="Port"
         android:inputType="number"
-        android:text="4242"
+        android:maxLines="1"
         android:singleLine="true"
-        android:maxLines="1" />
+        android:text="4242" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -47,8 +49,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Username"
-        android:singleLine="true"
-        android:maxLines="1" />
+        android:maxLines="1"
+        android:singleLine="true" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -61,8 +63,8 @@
         android:layout_height="wrap_content"
         android:hint="Password"
         android:inputType="textPassword"
-        android:singleLine="true"
-        android:maxLines="1" />
+        android:maxLines="1"
+        android:singleLine="true" />
     </android.support.design.widget.TextInputLayout>
 
     <LinearLayout

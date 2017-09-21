@@ -4,7 +4,6 @@ import de.kuschku.libquassel.annotations.Slot
 import de.kuschku.libquassel.annotations.Syncable
 import de.kuschku.libquassel.protocol.ARG
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.SLOT
 import de.kuschku.libquassel.protocol.Type
 
 @Syncable(name = "NetworkConfig")
@@ -15,82 +14,82 @@ interface INetworkConfig : ISyncableObject {
 
   @Slot
   fun requestSetAutoWhoDelay(i: Int) {
-    REQUEST(SLOT, ARG(i, Type.Int))
+    REQUEST("requestSetAutoWhoDelay", ARG(i, Type.Int))
   }
 
   @Slot
   fun requestSetAutoWhoEnabled(b: Boolean) {
-    REQUEST(SLOT, ARG(b, Type.Bool))
+    REQUEST("requestSetAutoWhoEnabled", ARG(b, Type.Bool))
   }
 
   @Slot
   fun requestSetAutoWhoInterval(i: Int) {
-    REQUEST(SLOT, ARG(i, Type.Int))
+    REQUEST("requestSetAutoWhoInterval", ARG(i, Type.Int))
   }
 
   @Slot
   fun requestSetAutoWhoNickLimit(i: Int) {
-    REQUEST(SLOT, ARG(i, Type.Int))
+    REQUEST("requestSetAutoWhoNickLimit", ARG(i, Type.Int))
   }
 
   @Slot
   fun requestSetMaxPingCount(i: Int) {
-    REQUEST(SLOT, ARG(i, Type.Int))
+    REQUEST("requestSetMaxPingCount", ARG(i, Type.Int))
   }
 
   @Slot
   fun requestSetPingInterval(i: Int) {
-    REQUEST(SLOT, ARG(i, Type.Int))
+    REQUEST("requestSetPingInterval", ARG(i, Type.Int))
   }
 
   @Slot
   fun requestSetPingTimeoutEnabled(b: Boolean) {
-    REQUEST(SLOT, ARG(b, Type.Bool))
+    REQUEST("requestSetPingTimeoutEnabled", ARG(b, Type.Bool))
   }
 
   @Slot
   fun requestSetStandardCtcp(b: Boolean) {
-    REQUEST(SLOT, ARG(b, Type.Bool))
+    REQUEST("requestSetStandardCtcp", ARG(b, Type.Bool))
   }
 
   @Slot
   fun setAutoWhoDelay(delay: Int) {
-    SYNC(SLOT, ARG(delay, Type.Int))
+    SYNC("setAutoWhoDelay", ARG(delay, Type.Int))
   }
 
   @Slot
   fun setAutoWhoEnabled(enabled: Boolean) {
-    SYNC(SLOT, ARG(enabled, Type.Bool))
+    SYNC("setAutoWhoEnabled", ARG(enabled, Type.Bool))
   }
 
   @Slot
   fun setAutoWhoInterval(interval: Int) {
-    SYNC(SLOT, ARG(interval, Type.Int))
+    SYNC("setAutoWhoInterval", ARG(interval, Type.Int))
   }
 
   @Slot
   fun setAutoWhoNickLimit(limit: Int) {
-    SYNC(SLOT, ARG(limit, Type.Int))
+    SYNC("setAutoWhoNickLimit", ARG(limit, Type.Int))
   }
 
   @Slot
   fun setMaxPingCount(count: Int) {
-    SYNC(SLOT, ARG(count, Type.Int))
+    SYNC("setMaxPingCount", ARG(count, Type.Int))
   }
 
   @Slot
   fun setPingInterval(interval: Int) {
-    SYNC(SLOT, ARG(interval, Type.Int))
+    SYNC("setPingInterval", ARG(interval, Type.Int))
   }
 
   @Slot
   fun setPingTimeoutEnabled(enabled: Boolean) {
-    SYNC(SLOT, ARG(enabled, Type.Bool))
+    SYNC("setPingTimeoutEnabled", ARG(enabled, Type.Bool))
   }
 
   @Slot
   fun setStandardCtcp(standardCtcp: Boolean) {
-    SYNC(SLOT, ARG(standardCtcp, Type.Bool))
+    SYNC("setStandardCtcp", ARG(standardCtcp, Type.Bool))
   }
 
   @Slot

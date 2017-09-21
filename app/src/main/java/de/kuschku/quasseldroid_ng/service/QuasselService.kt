@@ -1,15 +1,16 @@
 package de.kuschku.quasseldroid_ng.service
 
 import android.arch.lifecycle.LifecycleService
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
 import android.content.Intent
 import android.os.Binder
+import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.session.Backend
+import de.kuschku.libquassel.session.CoreConnection
+import de.kuschku.libquassel.session.Session
+import de.kuschku.libquassel.session.SocketAddress
 import de.kuschku.quasseldroid_ng.BuildConfig
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
-import de.kuschku.libquassel.protocol.*
-import de.kuschku.libquassel.session.*
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerService
 import org.threeten.bp.Instant
 import java.security.cert.X509Certificate
@@ -24,21 +25,14 @@ class QuasselService : LifecycleService() {
     override fun connect(address: SocketAddress, user: String, pass: String) {
       disconnect()
       val handlerService = AndroidHandlerService()
-      session.coreConnection = CoreConnection(session, address, handlerService)
-      session.coreConnection?.start()
+      session.connection.onNext(CoreConnection(session, address, handlerService))
+      session.connection.value.start()
       session.userData = user to pass
-      connection.postValue(session.coreConnection)
     }
 
     override fun disconnect() {
       session.cleanUp()
-      connection.postValue(null)
-      ABSENT.postValue(ConnectionState.DISCONNECTED)
     }
-
-    private val connection = MutableLiveData<CoreConnection>()
-
-    val ABSENT = MutableLiveData<ConnectionState>()
   }
 
   private lateinit var database: QuasselDatabase

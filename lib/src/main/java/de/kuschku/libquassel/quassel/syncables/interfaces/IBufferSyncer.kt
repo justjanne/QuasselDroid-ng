@@ -16,7 +16,7 @@ interface IBufferSyncer : ISyncableObject {
 
   @Slot
   fun markBufferAsRead(buffer: BufferId) {
-    SYNC(SLOT, ARG(buffer, QType.BufferId))
+    SYNC("markBufferAsRead", ARG(buffer, QType.BufferId))
   }
 
   @Slot
@@ -30,52 +30,53 @@ interface IBufferSyncer : ISyncableObject {
 
   @Slot
   fun requestMarkBufferAsRead(buffer: BufferId) {
-    REQUEST(SLOT, ARG(buffer, QType.BufferId))
+    REQUEST("requestMarkBufferAsRead", ARG(buffer, QType.BufferId))
   }
 
   @Slot
   fun requestMergeBuffersPermanently(buffer1: BufferId, buffer2: BufferId) {
-    REQUEST(SLOT, ARG(buffer1, QType.BufferId), ARG(buffer2, QType.BufferId))
+    REQUEST("requestMergeBuffersPermanently", ARG(buffer1, QType.BufferId),
+            ARG(buffer2, QType.BufferId))
   }
 
   @Slot
   fun requestPurgeBufferIds() {
-    REQUEST(SLOT)
+    REQUEST("requestPurgeBufferIds")
   }
 
   @Slot
   fun requestRemoveBuffer(buffer: BufferId) {
-    REQUEST(SLOT, ARG(buffer, QType.BufferId))
+    REQUEST("requestRemoveBuffer", ARG(buffer, QType.BufferId))
   }
 
   @Slot
   fun requestRenameBuffer(buffer: BufferId, newName: String) {
-    REQUEST(SLOT, ARG(buffer, QType.BufferId), ARG(newName, Type.QString))
+    REQUEST("requestRenameBuffer", ARG(buffer, QType.BufferId), ARG(newName, Type.QString))
   }
 
   @Slot
   fun requestSetLastSeenMsg(buffer: BufferId, msgId: MsgId) {
-    REQUEST(SLOT, ARG(buffer, QType.BufferId), ARG(msgId, QType.MsgId))
+    REQUEST("requestSetLastSeenMsg", ARG(buffer, QType.BufferId), ARG(msgId, QType.MsgId))
   }
 
   @Slot
   fun requestSetMarkerLine(buffer: BufferId, msgId: MsgId) {
-    REQUEST(SLOT, ARG(buffer, QType.BufferId), ARG(msgId, QType.MsgId))
+    REQUEST("requestSetMarkerLine", ARG(buffer, QType.BufferId), ARG(msgId, QType.MsgId))
   }
 
   @Slot
   fun setBufferActivity(buffer: BufferId, activity: Int) {
-    SYNC(SLOT, ARG(buffer, QType.BufferId), ARG(activity, Type.Int))
+    SYNC("setBufferActivity", ARG(buffer, QType.BufferId), ARG(activity, Type.Int))
   }
 
   @Slot
   fun setLastSeenMsg(buffer: BufferId, msgId: MsgId) {
-    SYNC(SLOT, ARG(buffer, QType.BufferId), ARG(msgId, QType.MsgId))
+    SYNC("setLastSeenMsg", ARG(buffer, QType.BufferId), ARG(msgId, QType.MsgId))
   }
 
   @Slot
   fun setMarkerLine(buffer: BufferId, msgId: MsgId) {
-    SYNC(SLOT, ARG(buffer, QType.BufferId), ARG(msgId, QType.MsgId))
+    SYNC("setMarkerLine", ARG(buffer, QType.BufferId), ARG(msgId, QType.MsgId))
   }
 
   @Slot

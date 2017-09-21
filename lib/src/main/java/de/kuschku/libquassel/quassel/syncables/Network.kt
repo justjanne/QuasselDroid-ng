@@ -733,20 +733,29 @@ class Network constructor(
   override fun initSetIrcUsersAndChannels(usersAndChannels: QVariantMap) {
     if (initialized)
       throw IllegalArgumentException("Received init data for network ${networkId()} after init")
-    usersAndChannels["Users"]
-      ?.valueOr<Map<String, QVariant_>>(::emptyMap)
-      ?.entries?.map { (key, value) -> key to value.valueOr<List<QVariant_>>(::emptyList) }?.toMap()
-      ?.transpose()
-      ?.forEach {
-        newIrcUser(it["nick"].value(""), it)
+    val users: Map<String, QVariant_> = usersAndChannels["Users"].valueOr(::emptyMap)
+    val userKeys = users.keys
+    users["nick"].valueOr<QVariantList>(::emptyList).forEachIndexed { index, nick ->
+      val data = mutableMapOf<String, QVariant_>()
+      for (it in userKeys) {
+        val value = users[it].value<QVariantList>()?.get(index)
+        if (value != null)
+          data[it] = value
       }
-    usersAndChannels["Channels"]
-      ?.valueOr<Map<String, QVariant_>>(::emptyMap)
-      ?.entries?.map { (key, value) -> key to value.valueOr<List<QVariant_>>(::emptyList) }?.toMap()
-      ?.transpose()
-      ?.forEach {
-        newIrcChannel(it["name"].value(""), it)
+      newIrcUser(nick.value(""), data)
+    }
+
+    val channels: Map<String, QVariant_> = usersAndChannels["Channels"].valueOr(::emptyMap)
+    val channelKeys = channels.keys
+    channels["name"].valueOr<QVariantList>(::emptyList).forEachIndexed { index, nick ->
+      val data = mutableMapOf<String, QVariant_>()
+      for (it in channelKeys) {
+        val value = channels[it].value<QVariantList>()?.get(index)
+        if (value != null)
+          data[it] = value
       }
+      newIrcChannel(nick.value(""), data)
+    }
   }
 
   override fun initSetProperties(properties: QVariantMap) {

@@ -57,16 +57,14 @@ object DateTimeSerializer : Serializer<Temporal> {
       return Instant.EPOCH
     return when (timeSpec) {
       TimeSpec.LocalTime ->
-        LocalDateTime.now()
+        Instant.EPOCH.atZone(ZoneOffset.systemDefault())
           .with(JulianFields.JULIAN_DAY, julianDay)
           .with(ChronoField.MILLI_OF_DAY, milliOfDay)
-          .atZone(ZoneOffset.systemDefault())
           .toInstant()
       else               ->
-        OffsetDateTime.now()
+        Instant.EPOCH.atOffset(ZoneOffset.UTC)
           .with(JulianFields.JULIAN_DAY, julianDay)
           .with(ChronoField.MILLI_OF_DAY, milliOfDay)
-          .withOffsetSameLocal(ZoneOffset.UTC)
           .toInstant()
     }
   }

@@ -1,8 +1,10 @@
 package de.kuschku.quasseldroid_ng.ui
 
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -11,16 +13,16 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.session.Backend
+import de.kuschku.libquassel.session.ConnectionState
 import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.session.SocketAddress
+import de.kuschku.libquassel.util.LoggingHandler
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.util.helper.stickyMapNotNull
-import org.threeten.bp.Instant
+import io.reactivex.disposables.Disposable
 import org.threeten.bp.ZoneOffset
+import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
-import java.util.logging.Handler
-import java.util.logging.LogManager
-import java.util.logging.LogRecord
 
 class MainActivity : ServiceBoundActivity() {
   @BindView(R.id.host)
@@ -47,37 +49,33 @@ class MainActivity : ServiceBoundActivity() {
   @BindView(R.id.errorList)
   lateinit var errorList: TextView
 
-  /*
-  private val status: LiveData<ConnectionState>
-    = stickySwitchMapNotNull(backend, Backend::status,
-                                                                    ConnectionState.DISCONNECTED)
-                                                                    */
   private val session: LiveData<Session?>
     = stickyMapNotNull(backend, Backend::session, null)
+  private var subscription: Disposable? = null
+  private val state = MutableLiveData<ConnectionState>()
 
   private var snackbar: Snackbar? = null
 
   private val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ISO_TIME
-  private val handler = object : Handler() {
-    override fun publish(p0: LogRecord?) {
-      if (p0 != null) {
-        runOnUiThread {
-          errorList.append(
-            dateTimeFormatter.format(Instant.ofEpochMilli(p0.millis).atZone(ZoneOffset.UTC)))
-          errorList.append(" ")
-          errorList.append(p0.loggerName)
-          errorList.append(": ")
-          errorList.append(p0.message)
-          errorList.append("\n")
+  private val handler = object : LoggingHandler() {
+    override fun log(logLevel: LogLevel, tag: String, message: String?, throwable: Throwable?) {
+      if (logLevel.ordinal < LogLevel.INFO.ordinal)
+        return
+      val time = dateTimeFormatter.format(ZonedDateTime.now(ZoneOffset.UTC))
+      runOnUiThread {
+        errorList.append("$time $tag: ")
+        if (message != null) {
+          errorList.append(message)
         }
+        if (throwable != null) {
+          errorList.append("\n")
+          errorList.append(Log.getStackTraceString(throwable))
+        }
+        errorList.append("\n")
       }
     }
 
-    override fun flush() {
-    }
-
-    override fun close() {
-    }
+    override fun isLoggable(logLevel: LogLevel, tag: String) = true
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,11 +124,11 @@ class MainActivity : ServiceBoundActivity() {
 
   override fun onStart() {
     super.onStart()
-    LogManager.getLogManager().getLogger("").addHandler(handler)
+    LoggingHandler.loggingHandlers.add(handler)
   }
 
   override fun onStop() {
-    LogManager.getLogManager().getLogger("").removeHandler(handler)
+    LoggingHandler.loggingHandlers.remove(handler)
     super.onStop()
   }
 }

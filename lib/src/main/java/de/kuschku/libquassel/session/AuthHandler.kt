@@ -1,29 +1,29 @@
 package de.kuschku.libquassel.session
 
-import de.kuschku.libquassel.protocol.HandshakeMessage
+import de.kuschku.libquassel.protocol.message.HandshakeMessage
 
 interface AuthHandler {
-  fun handle(function: HandshakeMessage.ClientInit) {}
-  fun handle(function: HandshakeMessage.ClientInitReject) {}
-  fun handle(function: HandshakeMessage.ClientInitAck) {}
-  fun handle(function: HandshakeMessage.CoreSetupData) {}
-  fun handle(function: HandshakeMessage.CoreSetupReject) {}
-  fun handle(function: HandshakeMessage.CoreSetupAck) {}
-  fun handle(function: HandshakeMessage.ClientLogin) {}
-  fun handle(function: HandshakeMessage.ClientLoginReject) {}
-  fun handle(function: HandshakeMessage.ClientLoginAck) {}
-  fun handle(function: HandshakeMessage.SessionInit) {}
+  fun handle(f: HandshakeMessage.ClientInit) = false
+  fun handle(f: HandshakeMessage.ClientInitReject) = false
+  fun handle(f: HandshakeMessage.ClientInitAck) = false
+  fun handle(f: HandshakeMessage.CoreSetupData) = false
+  fun handle(f: HandshakeMessage.CoreSetupReject) = false
+  fun handle(f: HandshakeMessage.CoreSetupAck) = false
+  fun handle(f: HandshakeMessage.ClientLogin) = false
+  fun handle(f: HandshakeMessage.ClientLoginReject) = false
+  fun handle(f: HandshakeMessage.ClientLoginAck) = false
+  fun handle(f: HandshakeMessage.SessionInit) = false
 
-  fun handle(function: HandshakeMessage) = when (function) {
-    is HandshakeMessage.ClientInit        -> handle(function)
-    is HandshakeMessage.ClientInitReject  -> handle(function)
-    is HandshakeMessage.ClientInitAck     -> handle(function)
-    is HandshakeMessage.CoreSetupData     -> handle(function)
-    is HandshakeMessage.CoreSetupReject   -> handle(function)
-    is HandshakeMessage.CoreSetupAck      -> handle(function)
-    is HandshakeMessage.ClientLogin       -> handle(function)
-    is HandshakeMessage.ClientLoginReject -> handle(function)
-    is HandshakeMessage.ClientLoginAck    -> handle(function)
-    is HandshakeMessage.SessionInit       -> handle(function)
+  fun handle(f: HandshakeMessage): Boolean = when (f) {
+    is HandshakeMessage.ClientInit        -> handle(f)
+    is HandshakeMessage.ClientInitReject  -> handle(f)
+    is HandshakeMessage.ClientInitAck     -> handle(f)
+    is HandshakeMessage.CoreSetupData     -> handle(f)
+    is HandshakeMessage.CoreSetupReject   -> handle(f)
+    is HandshakeMessage.CoreSetupAck      -> handle(f)
+    is HandshakeMessage.ClientLogin       -> handle(f)
+    is HandshakeMessage.ClientLoginReject -> handle(f)
+    is HandshakeMessage.ClientLoginAck    -> handle(f)
+    is HandshakeMessage.SessionInit       -> handle(f)
   }
 }

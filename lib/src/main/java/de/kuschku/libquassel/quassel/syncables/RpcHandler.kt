@@ -65,4 +65,10 @@ class RpcHandler(override val proxy: SignalProxy) : IRpcHandler {
     RPC("2sendInput(BufferInfo,QString)", ARG(bufferInfo, QType.BufferInfo),
         ARG(message, Type.QString))
   }
+
+  inline fun RPC(function: String, vararg arg: QVariant_) {
+    // Don’t transmit calls back that we just got from the network
+    if (proxy.shouldRpc(function))
+      proxy.callRpc(function, arg.toList())
+  }
 }

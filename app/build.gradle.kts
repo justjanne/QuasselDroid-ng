@@ -3,6 +3,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.plugin.KaptAnnotationProcessorOptions
 import org.jetbrains.kotlin.gradle.plugin.KaptExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.ByteArrayOutputStream
 import java.util.*
 
@@ -75,8 +76,11 @@ dependencies {
   implementation(appCompat("cardview-v7"))
   implementation(appCompat("recyclerview-v7"))
 
+  implementation("io.reactivex.rxjava2:rxjava:2.1.3")
+
   implementation(appArch("lifecycle", "runtime", version = "1.0.0"))
   implementation(appArch("lifecycle", "extensions"))
+  implementation(appArch("lifecycle", "reactivestreams"))
   kapt(appArch("lifecycle", "compiler"))
 
   implementation(appArch("persistence.room", "runtime"))
@@ -102,6 +106,15 @@ dependencies {
 
   androidTestImplementation("com.android.support.test:runner:0.5")
   androidTestImplementation("com.android.support.test:rules:0.5")
+}
+
+tasks.withType(KotlinCompile::class.java) {
+  kotlinOptions {
+    freeCompilerArgs = listOf(
+      "-Xno-param-assertions",
+      "-Xno-call-assertions"
+    )
+  }
 }
 
 fun cmd(vararg command: String) = try {

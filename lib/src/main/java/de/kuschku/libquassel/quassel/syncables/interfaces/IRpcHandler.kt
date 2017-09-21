@@ -2,7 +2,10 @@ package de.kuschku.libquassel.quassel.syncables.interfaces
 
 import de.kuschku.libquassel.annotations.Slot
 import de.kuschku.libquassel.annotations.Syncable
-import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.protocol.IdentityId
+import de.kuschku.libquassel.protocol.Message
+import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.protocol.QVariantMap
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.session.SignalProxy
 import java.nio.ByteBuffer
@@ -10,7 +13,6 @@ import java.nio.ByteBuffer
 @Syncable(name = "RpcHandler")
 interface IRpcHandler {
   val proxy: SignalProxy
-  fun RPC(function: String, vararg arg: QVariant_) = proxy.callRpc(function, arg.toList())
 
   @Slot("__objectRenamed__")
   fun objectRenamed(classname: ByteBuffer, newname: String, oldname: String)

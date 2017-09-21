@@ -2,7 +2,6 @@ package de.kuschku.libquassel.protocol.primitive.serializer
 
 import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.Quassel_Features
-import de.kuschku.libquassel.util.helpers.copyTo
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import java.nio.ByteBuffer
 import java.nio.CharBuffer
@@ -26,15 +25,29 @@ abstract class StringSerializer(
     }
   )
 
+  private val charBuffer = ThreadLocal<CharBuffer>()
+
   object UTF16 : StringSerializer(Charsets.UTF_16BE)
   object UTF8 : StringSerializer(Charsets.UTF_8)
   object C : StringSerializer(Charsets.ISO_8859_1, trailingNullByte = true)
+
+  private inline fun charBuffer(len: Int): CharBuffer {
+    if (charBuffer.get() == null)
+      charBuffer.set(CharBuffer.allocate(1024))
+    val buf = if (len >= 1024)
+      CharBuffer.allocate(len)
+    else
+      charBuffer.get()
+    buf.clear()
+    buf.limit(len)
+    return buf
+  }
 
   override fun serialize(buffer: ChainedByteBuffer, data: String?, features: Quassel_Features) {
     if (data == null) {
       IntSerializer.serialize(buffer, -1, features)
     } else {
-      val charBuffer = CharBuffer.allocate(data.length)
+      val charBuffer = charBuffer(data.length)
       charBuffer.put(data)
       charBuffer.flip()
       val byteBuffer = encoder.encode(charBuffer)
@@ -48,7 +61,7 @@ abstract class StringSerializer(
   fun serialize(data: String?): ByteBuffer = if (data == null) {
     ByteBuffer.allocate(0)
   } else {
-    val charBuffer = CharBuffer.allocate(data.length)
+    val charBuffer = charBuffer(data.length)
     charBuffer.put(data)
     charBuffer.flip()
     encoder.encode(charBuffer)
@@ -59,11 +72,15 @@ abstract class StringSerializer(
     return if (len == -1) {
       null
     } else {
-      val byteBuffer = ByteBuffer.allocate(len)
-      buffer.copyTo(byteBuffer)
-      byteBuffer.clear()
-      byteBuffer.limit(byteBuffer.limit() - trailingNullBytes)
-      decoder.decode(byteBuffer).toString()
+      val limit = buffer.limit()
+      buffer.limit(buffer.position() + len - trailingNullBytes)
+      val charBuffer = charBuffer(len)
+      decoder.reset()
+      decoder.decode(buffer, charBuffer, true)
+      buffer.limit(limit)
+      buffer.position(buffer.position() + trailingNullBytes)
+      charBuffer.flip()
+      charBuffer.toString()
     }
   }
 
@@ -72,11 +89,15 @@ abstract class StringSerializer(
     return if (len == -1) {
       null
     } else {
-      val byteBuffer = ByteBuffer.allocate(len)
-      buffer.copyTo(byteBuffer)
-      byteBuffer.clear()
-      byteBuffer.limit(byteBuffer.limit() - trailingNullBytes)
-      decoder.decode(byteBuffer).toString()
+      val limit = buffer.limit()
+      buffer.limit(buffer.position() + len - trailingNullBytes)
+      val charBuffer = charBuffer(len)
+      decoder.reset()
+      decoder.decode(buffer, charBuffer, true)
+      buffer.limit(limit)
+      buffer.position(buffer.position() + trailingNullBytes)
+      charBuffer.flip()
+      charBuffer.toString()
     }
   }
 }

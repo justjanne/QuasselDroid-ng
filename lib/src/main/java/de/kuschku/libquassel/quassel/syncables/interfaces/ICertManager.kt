@@ -4,7 +4,6 @@ import de.kuschku.libquassel.annotations.Slot
 import de.kuschku.libquassel.annotations.Syncable
 import de.kuschku.libquassel.protocol.ARG
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.SLOT
 import de.kuschku.libquassel.protocol.Type
 import java.nio.ByteBuffer
 
@@ -16,12 +15,12 @@ interface ICertManager : ISyncableObject {
 
   @Slot
   fun setSslCert(encoded: ByteBuffer?) {
-    SYNC(SLOT, ARG(encoded, Type.QByteArray))
+    SYNC("setSslCert", ARG(encoded, Type.QByteArray))
   }
 
   @Slot
   fun setSslKey(encoded: ByteBuffer?) {
-    SYNC(SLOT, ARG(encoded, Type.QByteArray))
+    SYNC("setSslKey", ARG(encoded, Type.QByteArray))
   }
 
   @Slot

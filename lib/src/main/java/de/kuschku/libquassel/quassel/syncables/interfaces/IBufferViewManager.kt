@@ -2,7 +2,10 @@ package de.kuschku.libquassel.quassel.syncables.interfaces
 
 import de.kuschku.libquassel.annotations.Slot
 import de.kuschku.libquassel.annotations.Syncable
-import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.protocol.ARG
+import de.kuschku.libquassel.protocol.QVariantList
+import de.kuschku.libquassel.protocol.QVariantMap
+import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 
 @Syncable(name = "BufferViewManager")
@@ -25,22 +28,22 @@ interface IBufferViewManager : ISyncableObject {
 
   @Slot
   fun requestCreateBufferView(properties: QVariantMap) {
-    REQUEST(SLOT, ARG(properties, Type.QVariantMap))
+    REQUEST("requestCreateBufferView", ARG(properties, Type.QVariantMap))
   }
 
   @Slot
   fun requestCreateBufferViews(properties: QVariantList) {
-    REQUEST(SLOT, ARG(properties, Type.QVariantList))
+    REQUEST("requestCreateBufferViews", ARG(properties, Type.QVariantList))
   }
 
   @Slot
   fun requestDeleteBufferView(bufferViewId: Int) {
-    REQUEST(SLOT, ARG(bufferViewId, Type.Int))
+    REQUEST("requestDeleteBufferView", ARG(bufferViewId, Type.Int))
   }
 
   @Slot
   fun requestDeleteBufferViews(bufferViews: QVariantList) {
-    REQUEST(SLOT, ARG(bufferViews, Type.QVariantList))
+    REQUEST("requestDeleteBufferViews", ARG(bufferViews, Type.QVariantList))
   }
 
   @Slot

@@ -15,9 +15,11 @@ object StringListSerializer : Serializer<QStringList?> {
   }
 
   override fun deserialize(buffer: ByteBuffer, features: Quassel_Features): QStringList {
-    return (0 until IntSerializer.deserialize(buffer, features)).map {
-      StringSerializer.UTF16.deserialize(buffer, features)
-    }.toMutableList()
+    val size = IntSerializer.deserialize(buffer, features)
+    val res = ArrayList<String?>(size)
+    for (i in 0 until size) {
+      res.add(StringSerializer.UTF16.deserialize(buffer, features))
+    }
+    return res
   }
-
 }

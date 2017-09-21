@@ -5,8 +5,8 @@ import java.util.zip.Deflater
 import java.util.zip.DeflaterOutputStream
 
 object CompatibilityUtils {
-  var supportsKeepAlive = false
-  var supportsCompression = false
+  var supportsKeepAlive = true
+  var supportsCompression = true
 
   /**
    * Creates a SyncFlush output stream, even if the current device does not support doing so

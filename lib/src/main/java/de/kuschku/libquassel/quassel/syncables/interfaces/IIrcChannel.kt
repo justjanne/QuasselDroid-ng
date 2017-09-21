@@ -17,7 +17,7 @@ interface IIrcChannel : ISyncableObject {
 
   @Slot
   fun addChannelMode(mode: Char, value: String) {
-    SYNC(SLOT, ARG(mode, Type.QChar), ARG(value, Type.QString))
+    SYNC("addChannelMode", ARG(mode, Type.QChar), ARG(value, Type.QString))
   }
 
   fun addUserMode(ircuser: IrcUser?, mode: String) {
@@ -25,17 +25,17 @@ interface IIrcChannel : ISyncableObject {
 
   @Slot
   fun addUserMode(nick: String, mode: String) {
-    SYNC(SLOT, ARG(nick, Type.QString), ARG(mode, Type.QString))
+    SYNC("addUserMode", ARG(nick, Type.QString), ARG(mode, Type.QString))
   }
 
   @Slot
   fun joinIrcUser(ircuser: IrcUser) {
-    SYNC(SLOT, ARG(ircuser.toVariantMap(), QType.IrcUser))
+    SYNC("joinIrcUser", ARG(ircuser.toVariantMap(), QType.IrcUser))
   }
 
   @Slot
   fun joinIrcUsers(nicks: QStringList, modes: QStringList) {
-    SYNC(SLOT, ARG(nicks, Type.QStringList), ARG(modes, Type.QStringList))
+    SYNC("joinIrcUsers", ARG(nicks, Type.QStringList), ARG(modes, Type.QStringList))
   }
 
   fun part(ircuser: IrcUser?) {
@@ -43,12 +43,12 @@ interface IIrcChannel : ISyncableObject {
 
   @Slot
   fun part(nick: String) {
-    SYNC(SLOT, ARG(nick, Type.QString))
+    SYNC("part", ARG(nick, Type.QString))
   }
 
   @Slot
   fun removeChannelMode(mode: Char, value: String) {
-    SYNC(SLOT, ARG(mode, Type.QChar), ARG(value, Type.QString))
+    SYNC("removeChannelMode", ARG(mode, Type.QChar), ARG(value, Type.QString))
   }
 
   fun removeUserMode(ircuser: IrcUser?, mode: String) {
@@ -56,31 +56,31 @@ interface IIrcChannel : ISyncableObject {
 
   @Slot
   fun removeUserMode(nick: String, mode: String) {
-    SYNC(SLOT, ARG(nick, Type.QString), ARG(mode, Type.QString))
+    SYNC("removeUserMode", ARG(nick, Type.QString), ARG(mode, Type.QString))
   }
 
   @Slot
   fun setEncrypted(encrypted: Boolean) {
-    SYNC(SLOT, ARG(encrypted, Type.Bool))
+    SYNC("setEncrypted", ARG(encrypted, Type.Bool))
   }
 
   @Slot
   fun setPassword(password: String) {
-    SYNC(SLOT, ARG(password, Type.QString))
+    SYNC("setPassword", ARG(password, Type.QString))
   }
 
   @Slot
   fun setTopic(topic: String) {
-    SYNC(SLOT, ARG(topic, Type.QString))
+    SYNC("setTopic", ARG(topic, Type.QString))
   }
 
   fun setUserModes(ircuser: IrcUser?, modes: String) {
-    SYNC(SLOT, ARG(ircuser, QType.IrcUser), ARG(modes, Type.QString))
+    SYNC("setUserModes", ARG(ircuser, QType.IrcUser), ARG(modes, Type.QString))
   }
 
   @Slot
   fun setUserModes(nick: String, modes: String) {
-    SYNC(SLOT, ARG(nick, Type.QString), ARG(modes, Type.QString))
+    SYNC("setUserModes", ARG(nick, Type.QString), ARG(modes, Type.QString))
   }
 
   @Slot

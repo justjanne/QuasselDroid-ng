@@ -2,9 +2,7 @@ package de.kuschku.libquassel.quassel.syncables.interfaces
 
 import de.kuschku.libquassel.annotations.Slot
 import de.kuschku.libquassel.annotations.Syncable
-import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.UByte
-import de.kuschku.libquassel.protocol.UShort
+import de.kuschku.libquassel.protocol.*
 import java.net.InetAddress
 
 @Syncable(name = "DccConfig")
@@ -14,34 +12,54 @@ interface IDccConfig : ISyncableObject {
   fun initSetProperties(properties: QVariantMap)
 
   @Slot
-  fun setDccEnabled(enabled: Boolean)
+  fun setDccEnabled(enabled: Boolean) {
+    SYNC("setDccEnabled", ARG(enabled, Type.Bool))
+  }
 
   @Slot
-  fun setOutgoingIp(outgoingIp: InetAddress)
+  fun setOutgoingIp(outgoingIp: InetAddress) {
+    SYNC("setOutgoingIp", ARG(outgoingIp, QType.QHostAddress))
+  }
 
   @Slot
-  fun setIpDetectionMode(ipDetectionMode: IpDetectionMode)
+  fun setIpDetectionMode(ipDetectionMode: IpDetectionMode) {
+    SYNC("setIpDetectionMode", ARG(ipDetectionMode, QType.DccConfig_IpDetectionMode))
+  }
 
   @Slot
-  fun setPortSelectionMode(portSelectionMode: PortSelectionMode)
+  fun setPortSelectionMode(portSelectionMode: PortSelectionMode) {
+    SYNC("setPortSelectionMode", ARG(portSelectionMode, QType.DccConfig_PortSelectionMode))
+  }
 
   @Slot
-  fun setMinPort(port: UShort)
+  fun setMinPort(port: UShort) {
+    SYNC("setMinPort", ARG(port, Type.UShort))
+  }
 
   @Slot
-  fun setMaxPort(port: UShort)
+  fun setMaxPort(port: UShort) {
+    SYNC("setMaxPort", ARG(port, Type.UShort))
+  }
 
   @Slot
-  fun setChunkSize(chunkSize: Int)
+  fun setChunkSize(chunkSize: Int) {
+    SYNC("setChunkSize", ARG(chunkSize, Type.Int))
+  }
 
   @Slot
-  fun setSendTimeout(timeout: Int)
+  fun setSendTimeout(timeout: Int) {
+    SYNC("setSendTimeout", ARG(timeout, Type.Int))
+  }
 
   @Slot
-  fun setUsePassiveDcc(use: Boolean)
+  fun setUsePassiveDcc(use: Boolean) {
+    SYNC("setUsePassiveDcc", ARG(use, Type.Bool))
+  }
 
   @Slot
-  fun setUseFastSend(use: Boolean)
+  fun setUseFastSend(use: Boolean) {
+    SYNC("setUseFastSend", ARG(use, Type.Bool))
+  }
 
   @Slot
   override fun update(properties: QVariantMap) {

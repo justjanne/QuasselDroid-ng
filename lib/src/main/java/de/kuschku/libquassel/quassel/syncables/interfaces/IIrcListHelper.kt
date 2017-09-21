@@ -9,7 +9,8 @@ import de.kuschku.libquassel.protocol.Type
 interface IIrcListHelper : ISyncableObject {
   @Slot
   fun requestChannelList(netId: NetworkId, channelFilters: QStringList): QVariantList {
-    REQUEST(SLOT, ARG(netId, QType.NetworkId), ARG(channelFilters, Type.QStringList))
+    REQUEST("requestChannelList", ARG(netId, QType.NetworkId),
+            ARG(channelFilters, Type.QStringList))
     return emptyList()
   }
 
@@ -18,12 +19,12 @@ interface IIrcListHelper : ISyncableObject {
 
   @Slot
   fun reportError(error: String) {
-    SYNC(SLOT, ARG(error, Type.QString))
+    SYNC("reportError", ARG(error, Type.QString))
   }
 
   @Slot
   fun reportFinishedList(netId: NetworkId) {
-    SYNC(SLOT, ARG(netId, QType.NetworkId))
+    SYNC("reportFinishedList", ARG(netId, QType.NetworkId))
   }
 
   @Slot

@@ -31,77 +31,77 @@ interface IBufferViewConfig : ISyncableObject {
 
   @Slot
   fun requestAddBuffer(bufferId: BufferId, pos: Int) {
-    REQUEST(SLOT, ARG(bufferId, QType.BufferId), ARG(pos, Type.Int))
+    REQUEST("requestAddBuffer", ARG(bufferId, QType.BufferId), ARG(pos, Type.Int))
   }
 
   @Slot
   fun requestMoveBuffer(bufferId: BufferId, pos: Int) {
-    REQUEST(SLOT, ARG(bufferId, QType.BufferId), ARG(pos, Type.Int))
+    REQUEST("requestMoveBuffer", ARG(bufferId, QType.BufferId), ARG(pos, Type.Int))
   }
 
   @Slot
   fun requestRemoveBuffer(bufferId: BufferId) {
-    REQUEST(SLOT, ARG(bufferId, QType.BufferId))
+    REQUEST("requestRemoveBuffer", ARG(bufferId, QType.BufferId))
   }
 
   @Slot
   fun requestRemoveBufferPermanently(bufferId: BufferId) {
-    REQUEST(SLOT, ARG(bufferId, QType.BufferId))
+    REQUEST("requestRemoveBufferPermanently", ARG(bufferId, QType.BufferId))
   }
 
   @Slot
   fun requestSetBufferViewName(bufferViewName: String) {
-    REQUEST(SLOT, ARG(bufferViewName, Type.QString))
+    REQUEST("requestSetBufferViewName", ARG(bufferViewName, Type.QString))
   }
 
   @Slot
   fun setAddNewBuffersAutomatically(addNewBuffersAutomatically: Boolean) {
-    SYNC(SLOT, ARG(addNewBuffersAutomatically, Type.Bool))
+    SYNC("setAddNewBuffersAutomatically", ARG(addNewBuffersAutomatically, Type.Bool))
   }
 
   @Slot
   fun setAllowedBufferTypes(bufferTypes: Int) {
-    SYNC(SLOT, ARG(bufferTypes, Type.Int))
+    SYNC("setAllowedBufferTypes", ARG(bufferTypes, Type.Int))
   }
 
   @Slot
   fun setBufferViewName(bufferViewName: String) {
-    SYNC(SLOT, ARG(bufferViewName, Type.QString))
+    SYNC("setBufferViewName", ARG(bufferViewName, Type.QString))
   }
 
   @Slot
   fun setDisableDecoration(disableDecoration: Boolean) {
-    SYNC(SLOT, ARG(disableDecoration, Type.Bool))
+    SYNC("setDisableDecoration", ARG(disableDecoration, Type.Bool))
   }
 
   @Slot
   fun setHideInactiveBuffers(hideInactiveBuffers: Boolean) {
-    SYNC(SLOT, ARG(hideInactiveBuffers, Type.Bool))
+    SYNC("setHideInactiveBuffers", ARG(hideInactiveBuffers, Type.Bool))
   }
 
   @Slot
   fun setHideInactiveNetworks(hideInactiveNetworks: Boolean) {
-    SYNC(SLOT, ARG(hideInactiveNetworks, Type.Bool))
+    SYNC("setHideInactiveNetworks", ARG(hideInactiveNetworks, Type.Bool))
   }
 
   @Slot
   fun setMinimumActivity(activity: Int) {
-    SYNC(SLOT, ARG(activity, Type.Int))
+    SYNC("setMinimumActivity", ARG(activity, Type.Int))
   }
 
   @Slot
   fun setNetworkId(networkId: NetworkId) {
-    SYNC(SLOT, ARG(networkId, QType.NetworkId))
+    SYNC("setNetworkId", ARG(networkId, QType.NetworkId))
   }
 
   @Slot
   fun setShowSearch(showSearch: Boolean) {
-    SYNC(SLOT, ARG(showSearch, Type.Bool))
+    SYNC("setShowSearch", ARG(showSearch, Type.Bool))
   }
 
   @Slot
   fun setSortAlphabetically(sortAlphabetically: Boolean) {
-    SYNC(SLOT, ARG(sortAlphabetically, Type.Bool))
+    SYNC("setSortAlphabetically", ARG(sortAlphabetically, Type.Bool))
   }
 
   @Slot

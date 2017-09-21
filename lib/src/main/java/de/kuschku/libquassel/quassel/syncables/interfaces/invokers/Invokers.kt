@@ -2,12 +2,11 @@ package de.kuschku.libquassel.quassel.syncables.interfaces.invokers
 
 import de.kuschku.libquassel.annotations.Syncable
 import de.kuschku.libquassel.quassel.syncables.interfaces.*
-import java.util.logging.Level
-import java.util.logging.Logger
+import de.kuschku.libquassel.util.LoggingHandler.LogLevel.DEBUG
+import de.kuschku.libquassel.util.LoggingHandler.LogLevel.WARN
+import de.kuschku.libquassel.util.log
 
 object Invokers {
-  private val logger = Logger.getLogger("Invokers")
-
   private val registry = mutableMapOf<String, Invoker<*>>()
   fun get(name: String) = registry[name]
 
@@ -37,7 +36,7 @@ object Invokers {
 
     RPC = invoker()
 
-    logger.log(Level.FINEST, "$size invokers registered")
+    log(DEBUG, "Invokers", "$size invokers registered")
   }
 
   private inline fun <reified T> invoker(): Invoker<T>? = getInvoker(T::class.java)
@@ -45,7 +44,7 @@ object Invokers {
   private fun <T> getInvoker(type: Class<T>): Invoker<T>? {
     val syncable: Syncable? = type.getAnnotation(Syncable::class.java)
     if (syncable == null) {
-      logger.log(Level.WARNING, "Invoker not annotated: ${type.canonicalName}")
+      log(WARN, "Invokers", "Invoker not annotated: ${type.canonicalName}")
       return null
     }
 
@@ -54,8 +53,8 @@ object Invokers {
     val klass = Class.forName("$packageName.$className")
     val invoker = klass.getDeclaredField("INSTANCE").get(null)
     if (invoker !is Invoker<*>) {
-      logger.log(Level.WARNING,
-                 "Invoker not of proper type: ${type.canonicalName} != ${invoker.javaClass.canonicalName}")
+      log(WARN, "Invokers",
+          "Invoker not of proper type: ${type.canonicalName} != ${invoker.javaClass.canonicalName}")
       return null
     }
 

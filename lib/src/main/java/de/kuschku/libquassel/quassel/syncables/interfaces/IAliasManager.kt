@@ -4,7 +4,6 @@ import de.kuschku.libquassel.annotations.Slot
 import de.kuschku.libquassel.annotations.Syncable
 import de.kuschku.libquassel.protocol.ARG
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.SLOT
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.quassel.BufferInfo
 
@@ -14,7 +13,7 @@ interface IAliasManager : ISyncableObject {
   fun initSetAliases(aliases: QVariantMap)
   @Slot
   fun addAlias(name: String, expansion: String) {
-    SYNC(SLOT, ARG(name, Type.QString), ARG(expansion, Type.QString))
+    SYNC("addAlias", ARG(name, Type.QString), ARG(expansion, Type.QString))
   }
 
   @Slot

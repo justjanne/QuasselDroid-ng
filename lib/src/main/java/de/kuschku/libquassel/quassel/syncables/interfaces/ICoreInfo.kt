@@ -4,7 +4,6 @@ import de.kuschku.libquassel.annotations.Slot
 import de.kuschku.libquassel.annotations.Syncable
 import de.kuschku.libquassel.protocol.ARG
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.SLOT
 import de.kuschku.libquassel.protocol.Type
 
 @Syncable(name = "CoreInfo")
@@ -15,7 +14,7 @@ interface ICoreInfo : ISyncableObject {
 
   @Slot
   fun setCoreData(data: QVariantMap) {
-    SYNC(SLOT, ARG(data, Type.QVariantMap))
+    SYNC("setCoreData", ARG(data, Type.QVariantMap))
   }
 
   @Slot

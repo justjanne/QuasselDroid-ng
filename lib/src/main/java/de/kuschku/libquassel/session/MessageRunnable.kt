@@ -2,12 +2,12 @@ package de.kuschku.libquassel.session
 
 import de.kuschku.libquassel.protocol.Quassel_Features
 import de.kuschku.libquassel.protocol.primitive.serializer.Serializer
+import de.kuschku.libquassel.util.LoggingHandler.LogLevel.WARN
 import de.kuschku.libquassel.util.helpers.write
+import de.kuschku.libquassel.util.log
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import de.kuschku.libquassel.util.nio.WrappedChannel
 import java.nio.ByteBuffer
-import java.util.logging.Level
-import java.util.logging.Logger
 
 class MessageRunnable<T>(
   private val data: T,
@@ -26,7 +26,7 @@ class MessageRunnable<T>(
       channel?.write(chainedBuffer)
       channel?.flush()
     } catch (e: Throwable) {
-      Logger.getLogger("MessageDispatching").log(Level.WARNING, "", e)
+      log(WARN, "MessageDispatching", e)
     }
   }
 }
