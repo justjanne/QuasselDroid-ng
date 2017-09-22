@@ -33,7 +33,7 @@ class BufferViewManager constructor(
     if (_bufferViewConfigs.contains(config.bufferViewId()))
       return
 
-    proxy.synchronize(config)
+    proxy.synchronize(config, !initialized)
     _bufferViewConfigs[config.bufferViewId()] = config
   }
 

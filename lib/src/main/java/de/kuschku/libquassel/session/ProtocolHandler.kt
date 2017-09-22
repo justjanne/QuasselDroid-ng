@@ -57,8 +57,9 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler {
     obj.fromVariantMap(f.initData)
     obj.initialized = true
     synchronize(obj)
+    val list = toInit.remove(obj)
     checkForInitDone()
-    toInit.remove(obj)?.map(this::handle)
+    list?.map(this::handle)
     return true
   }
 
