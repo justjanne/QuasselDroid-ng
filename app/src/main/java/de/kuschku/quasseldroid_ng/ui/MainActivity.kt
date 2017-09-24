@@ -1,7 +1,7 @@
 package de.kuschku.quasseldroid_ng.ui
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.LiveDataReactiveStreams
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.util.Log
@@ -14,12 +14,12 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.ConnectionState
-import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.session.SocketAddress
 import de.kuschku.libquassel.util.LoggingHandler
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.util.helper.stickyMapNotNull
-import io.reactivex.disposables.Disposable
+import de.kuschku.quasseldroid_ng.util.helper.stickySwitchMapNotNull
+import de.kuschku.quasseldroid_ng.util.helper.switchMapNullable
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -49,10 +49,13 @@ class MainActivity : ServiceBoundActivity() {
   @BindView(R.id.errorList)
   lateinit var errorList: TextView
 
-  private val session: LiveData<Session?>
-    = stickyMapNotNull(backend, Backend::session, null)
-  private var subscription: Disposable? = null
-  private val state = MutableLiveData<ConnectionState>()
+  private val state = backend.stickyMapNotNull(null, Backend::session)
+    .switchMapNullable(null) { session ->
+      LiveDataReactiveStreams.fromPublisher(session.connectionPublisher)
+    }
+    .stickySwitchMapNotNull(ConnectionState.DISCONNECTED) { connection ->
+      LiveDataReactiveStreams.fromPublisher(connection.state)
+    }
 
   private var snackbar: Snackbar? = null
 
@@ -100,8 +103,7 @@ class MainActivity : ServiceBoundActivity() {
       errorList.text = ""
     }
 
-    /*
-    status.observe(this, Observer {
+    state.observe(this, Observer {
       val disconnected = it == ConnectionState.DISCONNECTED
       disconnect.isEnabled = !disconnected
       connect.isEnabled = disconnected
@@ -110,7 +112,6 @@ class MainActivity : ServiceBoundActivity() {
       snackbar = Snackbar.make(errorList, it!!.name, Snackbar.LENGTH_SHORT)
       snackbar?.show()
     })
-    */
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {

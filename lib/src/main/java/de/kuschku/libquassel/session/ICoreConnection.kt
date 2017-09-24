@@ -2,10 +2,12 @@ package de.kuschku.libquassel.session
 
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
+import io.reactivex.BackpressureStrategy
 import io.reactivex.subjects.BehaviorSubject
+import org.reactivestreams.Publisher
 
 interface ICoreConnection {
-  val state: BehaviorSubject<ConnectionState>
+  val state: Publisher<ConnectionState>
   fun close()
   fun dispatch(message: HandshakeMessage)
   fun dispatch(message: SignalProxyMessage)
@@ -21,8 +23,9 @@ interface ICoreConnection {
       override fun close() = Unit
       override fun dispatch(message: HandshakeMessage) = Unit
       override fun dispatch(message: SignalProxyMessage) = Unit
-      override val state: BehaviorSubject<ConnectionState>
+      override val state: Publisher<ConnectionState>
         get() = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
+          .toFlowable(BackpressureStrategy.LATEST)
     }
   }
 }

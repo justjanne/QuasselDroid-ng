@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Binder
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.session.Backend
-import de.kuschku.libquassel.session.CoreConnection
 import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.session.SocketAddress
 import de.kuschku.quasseldroid_ng.BuildConfig
@@ -25,8 +24,7 @@ class QuasselService : LifecycleService() {
     override fun connect(address: SocketAddress, user: String, pass: String) {
       disconnect()
       val handlerService = AndroidHandlerService()
-      session.connection.onNext(CoreConnection(session, address, handlerService))
-      session.connection.value.start()
+      session.connect(address, handlerService)
       session.userData = user to pass
     }
 

@@ -17,6 +17,7 @@ import de.kuschku.libquassel.util.helpers.write
 import de.kuschku.libquassel.util.log
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import de.kuschku.libquassel.util.nio.WrappedChannel
+import io.reactivex.BackpressureStrategy
 import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.format.DateTimeFormatter
@@ -41,7 +42,8 @@ class CoreConnection(
   private val sizeBuffer = ByteBuffer.allocateDirect(4)
   private val chainedBuffer = ChainedByteBuffer(direct = true)
 
-  override val state = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
+  private val internalState = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
+  override val state = internalState.toFlowable(BackpressureStrategy.LATEST)
 
   private var channel: WrappedChannel? = null
 
@@ -57,7 +59,7 @@ class CoreConnection(
 
   override fun setState(value: ConnectionState) {
     log(INFO, "CoreConnection", value.name)
-    state.onNext(value)
+    internalState.onNext(value)
   }
 
   private fun sendHandshake() {
@@ -168,7 +170,7 @@ class CoreConnection(
         }
         dataBuffer.flip()
         handlerService.parse {
-          when (state.value) {
+          when (internalState.value) {
             ConnectionState.HANDSHAKE -> processHandshake(dataBuffer)
             else                      -> processSigProxy(dataBuffer)
           }

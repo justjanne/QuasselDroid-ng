@@ -6,10 +6,13 @@ import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.quassel.QuasselFeature
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
+import de.kuschku.libquassel.util.HandlerService
 import de.kuschku.libquassel.util.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.LoggingHandler.LogLevel.INFO
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.libquassel.util.log
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
 import javax.net.ssl.X509TrustManager
@@ -35,13 +38,21 @@ class Session(
   private var networks = mutableMapOf<NetworkId, Network>()
   private var networkConfig: NetworkConfig? = null
 
-  val connection = BehaviorSubject.createDefault(ICoreConnection.NULL)
+  private val connection = BehaviorSubject.createDefault(ICoreConnection.NULL)
+  val connectionPublisher: Flowable<ICoreConnection> = connection.toFlowable(
+    BackpressureStrategy.LATEST)
 
   init {
     log(INFO, "Session", "Session created")
 
     // This should preload them
     Invokers
+  }
+
+  fun connect(address: SocketAddress, handlerService: HandlerService) {
+    val coreConnection = CoreConnection(this, address, handlerService)
+    connection.onNext(coreConnection)
+    coreConnection.start()
   }
 
   override fun handle(f: HandshakeMessage.ClientInitAck): Boolean {
