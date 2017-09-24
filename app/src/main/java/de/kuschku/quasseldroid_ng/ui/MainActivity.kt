@@ -104,12 +104,14 @@ class MainActivity : ServiceBoundActivity() {
     }
 
     state.observe(this, Observer {
-      val disconnected = it == ConnectionState.DISCONNECTED
+      val status = it ?: ConnectionState.DISCONNECTED
+      val disconnected = status == ConnectionState.DISCONNECTED
+
       disconnect.isEnabled = !disconnected
       connect.isEnabled = disconnected
 
       snackbar?.dismiss()
-      snackbar = Snackbar.make(errorList, it!!.name, Snackbar.LENGTH_SHORT)
+      snackbar = Snackbar.make(errorList, status.name, Snackbar.LENGTH_SHORT)
       snackbar?.show()
     })
   }
