@@ -112,17 +112,13 @@ class CoreConnection(
   }
 
   override fun close() {
-    interrupt()
-    handlerService.quit()
-    val thread = Thread {
-      try {
-        channel?.close()
-      } catch (e: Throwable) {
-        log(WARN, TAG, "Error encountered while closing connection", e)
-      }
+    try {
+      channel?.close()
+      interrupt()
+      handlerService.quit()
+    } catch (e: Throwable) {
+      log(WARN, TAG, "Error encountered while closing connection", e)
     }
-    thread.start()
-    thread.join()
   }
 
   override fun dispatch(message: HandshakeMessage) {
@@ -166,15 +162,17 @@ class CoreConnection(
         if (size > 64 * 1024 * 1024)
           throw SocketException("Too large frame received: $size")
         val dataBuffer = ByteBuffer.allocateDirect(size)
-        while (dataBuffer.position() < dataBuffer.limit() && channel?.read(dataBuffer) ?: -1 > 0) {
+        while (!isInterrupted && dataBuffer.position() < dataBuffer.limit() && channel?.read(
+          dataBuffer) ?: -1 > 0) {
         }
         dataBuffer.flip()
-        handlerService.parse {
-          when (internalState.value) {
-            ConnectionState.HANDSHAKE -> processHandshake(dataBuffer)
-            else                      -> processSigProxy(dataBuffer)
+        if (!isInterrupted)
+          handlerService.parse {
+            when (internalState.value) {
+              ConnectionState.HANDSHAKE -> processHandshake(dataBuffer)
+              else                      -> processSigProxy(dataBuffer)
+            }
           }
-        }
       }
     } catch (e: Throwable) {
       log(WARN, TAG, "Error encountered in connection", e)

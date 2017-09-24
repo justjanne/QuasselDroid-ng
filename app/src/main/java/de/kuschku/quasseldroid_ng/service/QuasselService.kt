@@ -3,6 +3,8 @@ package de.kuschku.quasseldroid_ng.service
 import android.arch.lifecycle.LifecycleService
 import android.content.Intent
 import android.os.Binder
+import android.os.Handler
+import android.os.HandlerThread
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.Session
@@ -18,7 +20,7 @@ import javax.net.ssl.X509TrustManager
 class QuasselService : LifecycleService() {
   private lateinit var session: Session
 
-  private val backend = object : Backend {
+  private val backendImplementation = object : Backend {
     override fun session() = session
 
     override fun connect(address: SocketAddress, user: String, pass: String) {
@@ -31,6 +33,30 @@ class QuasselService : LifecycleService() {
     override fun disconnect() {
       session.cleanUp()
     }
+  }
+
+  private val asyncBackend = object : Backend {
+    private val thread = HandlerThread("BackendHandler")
+    private val handler: Handler
+
+    init {
+      thread.start()
+      handler = Handler(thread.looper)
+    }
+
+    override fun connect(address: SocketAddress, user: String, pass: String) {
+      handler.post {
+        backendImplementation.connect(address, user, pass)
+      }
+    }
+
+    override fun disconnect() {
+      handler.post {
+        backendImplementation.disconnect()
+      }
+    }
+
+    override fun session() = backendImplementation.session()
   }
 
   private lateinit var database: QuasselDatabase
@@ -63,7 +89,7 @@ class QuasselService : LifecycleService() {
 
   override fun onBind(intent: Intent?): QuasselBinder {
     super.onBind(intent)
-    return QuasselBinder(backend)
+    return QuasselBinder(asyncBackend)
   }
 
   class QuasselBinder(val backend: Backend) : Binder()

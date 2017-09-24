@@ -149,14 +149,15 @@ class Session(
     backlogManager = null
     bufferSyncer = null
     bufferViewManager = null
-    certManagers.clear()
     coreInfo = null
     dccConfig = null
-    identities.clear()
     ignoreListManager = null
     ircListHelper = null
-    networks.clear()
     networkConfig = null
+
+    certManagers.clear()
+    identities.clear()
+    networks.clear()
 
     super.cleanUp()
   }

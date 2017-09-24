@@ -176,17 +176,3 @@ class WrappedChannel(
     flusher?.invoke()
   }
 }
-
-fun ByteArray.toHexDump(): String {
-  val buf = StringBuffer()
-  var i = 0
-  buf.append("HexDump ========================================================================\n")
-  while (i < this.size) {
-    buf.append(String.format("%02x ", this[i]))
-    if (i > 0 && (i + 1) % 32 == 0) {
-      buf.append("\n")
-    }
-    i++
-  }
-  return buf.toString()
-}
