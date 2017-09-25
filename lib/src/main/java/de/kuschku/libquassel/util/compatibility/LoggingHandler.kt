@@ -1,5 +1,7 @@
 package de.kuschku.libquassel.util.compatibility
 
+import de.kuschku.libquassel.util.compatibility.reference.JavaLoggingHandler
+
 abstract class LoggingHandler {
   abstract fun log(logLevel: LogLevel, tag: String, message: String? = null,
                    throwable: Throwable? = null)
@@ -29,7 +31,7 @@ abstract class LoggingHandler {
   }
 
   companion object {
-    val loggingHandlers: MutableSet<LoggingHandler> = mutableSetOf()
+    val loggingHandlers: MutableSet<LoggingHandler> = mutableSetOf(JavaLoggingHandler)
   }
 }
 
