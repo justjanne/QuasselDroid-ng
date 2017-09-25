@@ -1,4 +1,4 @@
-package de.kuschku.libquassel.util
+package de.kuschku.libquassel.util.compatibility
 
 interface HandlerService {
   fun parse(f: () -> Unit)

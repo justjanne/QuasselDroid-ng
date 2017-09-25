@@ -2,9 +2,9 @@ package de.kuschku.libquassel.quassel.syncables.interfaces.invokers
 
 import de.kuschku.libquassel.annotations.Syncable
 import de.kuschku.libquassel.quassel.syncables.interfaces.*
-import de.kuschku.libquassel.util.LoggingHandler.LogLevel.DEBUG
-import de.kuschku.libquassel.util.LoggingHandler.LogLevel.WARN
-import de.kuschku.libquassel.util.log
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
+import de.kuschku.libquassel.util.compatibility.log
 
 object Invokers {
   private val registry = mutableMapOf<String, Invoker<*>>()
@@ -44,7 +44,8 @@ object Invokers {
   private fun <T> getInvoker(type: Class<T>): Invoker<T>? {
     val syncable: Syncable? = type.getAnnotation(Syncable::class.java)
     if (syncable == null) {
-      log(WARN, "Invokers", "Invoker not annotated: ${type.canonicalName}")
+      log(WARN, "Invokers",
+          "Invoker not annotated: ${type.canonicalName}")
       return null
     }
 

@@ -9,12 +9,12 @@ import de.kuschku.libquassel.protocol.primitive.serializer.IntSerializer
 import de.kuschku.libquassel.protocol.primitive.serializer.ProtocolSerializer
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantListSerializer
 import de.kuschku.libquassel.quassel.ProtocolFeature
-import de.kuschku.libquassel.util.CompatibilityUtils
-import de.kuschku.libquassel.util.HandlerService
-import de.kuschku.libquassel.util.LoggingHandler.LogLevel.*
+import de.kuschku.libquassel.util.compatibility.CompatibilityUtils
+import de.kuschku.libquassel.util.compatibility.HandlerService
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.*
+import de.kuschku.libquassel.util.compatibility.log
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.libquassel.util.helpers.write
-import de.kuschku.libquassel.util.log
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import de.kuschku.libquassel.util.nio.WrappedChannel
 import io.reactivex.BackpressureStrategy
@@ -116,6 +116,7 @@ class CoreConnection(
       channel?.close()
       interrupt()
       handlerService.quit()
+      setState(ConnectionState.DISCONNECTED)
     } catch (e: Throwable) {
       log(WARN, TAG, "Error encountered while closing connection", e)
     }
@@ -155,24 +156,23 @@ class CoreConnection(
       readHandshake()
       while (!isInterrupted) {
         sizeBuffer.clear()
-        channel?.read(sizeBuffer)
+        if (channel?.read(sizeBuffer) == -1)
+          break
         sizeBuffer.flip()
 
         val size = IntSerializer.deserialize(sizeBuffer, session.coreFeatures)
         if (size > 64 * 1024 * 1024)
           throw SocketException("Too large frame received: $size")
         val dataBuffer = ByteBuffer.allocateDirect(size)
-        while (!isInterrupted && dataBuffer.position() < dataBuffer.limit() && channel?.read(
-          dataBuffer) ?: -1 > 0) {
+        while (dataBuffer.position() < dataBuffer.limit() && channel?.read(dataBuffer) ?: -1 > 0) {
         }
         dataBuffer.flip()
-        if (!isInterrupted)
-          handlerService.parse {
-            when (internalState.value) {
-              ConnectionState.HANDSHAKE -> processHandshake(dataBuffer)
-              else                      -> processSigProxy(dataBuffer)
-            }
+        handlerService.parse {
+          when (internalState.value) {
+            ConnectionState.HANDSHAKE -> processHandshake(dataBuffer)
+            else                      -> processSigProxy(dataBuffer)
           }
+        }
       }
     } catch (e: Throwable) {
       log(WARN, TAG, "Error encountered in connection", e)

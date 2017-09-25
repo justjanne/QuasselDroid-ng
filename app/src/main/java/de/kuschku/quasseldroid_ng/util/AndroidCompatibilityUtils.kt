@@ -1,11 +1,11 @@
 package de.kuschku.quasseldroid_ng.util
 
 import android.os.Build
-import de.kuschku.libquassel.util.CompatibilityUtils
+import de.kuschku.libquassel.util.compatibility.CompatibilityUtils
 import java.util.*
 
 object AndroidCompatibilityUtils {
-  fun init() {
+  fun inject() {
     /**
      * This is used to check if the current device supports Sockets with the KeepAlive flag.
      * As that feature is only missing on Chromium devices, we just check for that

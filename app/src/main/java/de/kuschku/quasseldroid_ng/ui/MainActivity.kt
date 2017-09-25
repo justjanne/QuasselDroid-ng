@@ -15,7 +15,7 @@ import butterknife.ButterKnife
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.ConnectionState
 import de.kuschku.libquassel.session.SocketAddress
-import de.kuschku.libquassel.util.LoggingHandler
+import de.kuschku.libquassel.util.compatibility.LoggingHandler
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.util.helper.stickyMapNotNull
 import de.kuschku.quasseldroid_ng.util.helper.stickySwitchMapNotNull

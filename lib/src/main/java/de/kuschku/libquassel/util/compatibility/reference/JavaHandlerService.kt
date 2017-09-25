@@ -1,5 +1,6 @@
-package de.kuschku.libquassel.util
+package de.kuschku.libquassel.util.compatibility.reference
 
+import de.kuschku.libquassel.util.compatibility.HandlerService
 import java.util.concurrent.Executors
 
 class JavaHandlerService : HandlerService {

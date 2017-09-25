@@ -1,7 +1,7 @@
 package de.kuschku.quasseldroid_ng.util
 
 import android.util.Log
-import de.kuschku.libquassel.util.LoggingHandler
+import de.kuschku.libquassel.util.compatibility.LoggingHandler
 
 object AndroidLoggingHandler : LoggingHandler() {
   override fun isLoggable(logLevel: LogLevel, tag: String): Boolean {
@@ -25,7 +25,7 @@ object AndroidLoggingHandler : LoggingHandler() {
     LogLevel.ASSERT  -> Log.ASSERT
   }
 
-  fun init() {
+  fun inject() {
     LoggingHandler.loggingHandlers.clear()
     LoggingHandler.loggingHandlers.add(this)
   }

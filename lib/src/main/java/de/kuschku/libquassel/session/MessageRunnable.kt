@@ -2,9 +2,9 @@ package de.kuschku.libquassel.session
 
 import de.kuschku.libquassel.protocol.Quassel_Features
 import de.kuschku.libquassel.protocol.primitive.serializer.Serializer
-import de.kuschku.libquassel.util.LoggingHandler.LogLevel.WARN
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
+import de.kuschku.libquassel.util.compatibility.log
 import de.kuschku.libquassel.util.helpers.write
-import de.kuschku.libquassel.util.log
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import de.kuschku.libquassel.util.nio.WrappedChannel
 import java.nio.ByteBuffer

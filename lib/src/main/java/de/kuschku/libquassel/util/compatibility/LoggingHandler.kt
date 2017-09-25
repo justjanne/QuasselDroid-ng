@@ -1,4 +1,4 @@
-package de.kuschku.libquassel.util
+package de.kuschku.libquassel.util.compatibility
 
 abstract class LoggingHandler {
   abstract fun log(logLevel: LogLevel, tag: String, message: String? = null,

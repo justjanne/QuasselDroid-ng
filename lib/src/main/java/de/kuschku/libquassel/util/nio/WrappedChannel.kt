@@ -1,7 +1,8 @@
 package de.kuschku.libquassel.util.nio
 
 import de.kuschku.libquassel.session.SocketAddress
-import de.kuschku.libquassel.util.CompatibilityUtils
+import de.kuschku.libquassel.util.compatibility.CompatibilityUtils
+import de.kuschku.libquassel.util.compatibility.StreamChannelFactory
 import java.io.Flushable
 import java.io.IOException
 import java.io.InputStream
@@ -9,7 +10,10 @@ import java.io.OutputStream
 import java.net.Socket
 import java.net.SocketException
 import java.nio.ByteBuffer
-import java.nio.channels.*
+import java.nio.channels.ByteChannel
+import java.nio.channels.InterruptibleChannel
+import java.nio.channels.ReadableByteChannel
+import java.nio.channels.WritableByteChannel
 import java.security.GeneralSecurityException
 import java.util.zip.InflaterInputStream
 import javax.net.ssl.SSLContext
@@ -19,16 +23,21 @@ import javax.net.ssl.X509TrustManager
 
 class WrappedChannel(
   private val socket: Socket,
-  private val rawInStream: InputStream? = null,
-  private val rawOutStream: OutputStream? = null,
+  private var rawInStream: InputStream? = null,
+  private var rawOutStream: OutputStream? = null,
   private var flusher: (() -> Unit)? = null
 ) : Flushable, ByteChannel, InterruptibleChannel {
   private var rawIn: ReadableByteChannel? = null
   private var rawOut: WritableByteChannel? = null
 
   init {
-    this.rawIn = Channels.newChannel(rawInStream)
-    this.rawOut = Channels.newChannel(rawOutStream)
+    val rawInStream = this.rawInStream
+    if (rawInStream != null)
+      this.rawIn = StreamChannelFactory.create(rawInStream)
+
+    val rawOutStream = this.rawOutStream
+    if (rawOutStream != null)
+      this.rawOut = StreamChannelFactory.create(rawOutStream)
   }
 
   companion object {

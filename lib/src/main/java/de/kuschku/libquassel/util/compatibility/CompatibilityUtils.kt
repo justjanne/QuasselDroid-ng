@@ -1,4 +1,4 @@
-package de.kuschku.libquassel.util
+package de.kuschku.libquassel.util.compatibility
 
 import java.io.OutputStream
 import java.util.zip.Deflater

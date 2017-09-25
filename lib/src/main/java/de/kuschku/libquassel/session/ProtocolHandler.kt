@@ -7,9 +7,9 @@ import de.kuschku.libquassel.quassel.exceptions.ObjectNotFoundException
 import de.kuschku.libquassel.quassel.syncables.RpcHandler
 import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
 import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
-import de.kuschku.libquassel.util.LoggingHandler.LogLevel.DEBUG
-import de.kuschku.libquassel.util.LoggingHandler.LogLevel.WARN
-import de.kuschku.libquassel.util.log
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
+import de.kuschku.libquassel.util.compatibility.log
 import org.threeten.bp.Instant
 
 abstract class ProtocolHandler : SignalProxy, AuthHandler {
@@ -33,7 +33,8 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler {
         log(DEBUG, "No receiver registered for $f")
       }
     } catch (e: Throwable) {
-      log(WARN, "ProtocolHandler", "Error Handling SignalProxyMessage", e)
+      log(WARN, "ProtocolHandler",
+          "Error Handling SignalProxyMessage", e)
     }
     return true
   }
@@ -44,7 +45,8 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler {
         log(DEBUG, "No receiver registered for $f")
       }
     } catch (e: Throwable) {
-      log(WARN, "ProtocolHandler", "Error Handling HandshakeMessage", e)
+      log(WARN, "ProtocolHandler",
+          "Error Handling HandshakeMessage", e)
     }
     return true
   }
@@ -170,5 +172,6 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler {
 
   open fun cleanUp() {
     objectStorage.clear()
+    toInit.clear()
   }
 }

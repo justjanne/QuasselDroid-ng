@@ -3,7 +3,7 @@ package de.kuschku.quasseldroid_ng.util
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Process
-import de.kuschku.libquassel.util.HandlerService
+import de.kuschku.libquassel.util.compatibility.HandlerService
 
 class AndroidHandlerService : HandlerService {
   override fun parse(f: () -> Unit) {

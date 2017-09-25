@@ -10,6 +10,7 @@ import android.os.Build
 import de.kuschku.quasseldroid_ng.service.QuasselService
 import de.kuschku.quasseldroid_ng.util.AndroidCompatibilityUtils
 import de.kuschku.quasseldroid_ng.util.AndroidLoggingHandler
+import de.kuschku.quasseldroid_ng.util.AndroidStreamChannelFactory
 import de.kuschku.quasseldroid_ng.util.helper.systemService
 import org.acra.ACRA
 import org.acra.ReportingInteractionMode
@@ -33,8 +34,9 @@ class QuasseldroidNG : Application() {
 
     if (!ACRA.isACRASenderServiceProcess()) {
       // Init compatibility utils
-      AndroidCompatibilityUtils.init()
-      AndroidLoggingHandler.init()
+      AndroidCompatibilityUtils.inject()
+      AndroidLoggingHandler.inject()
+      AndroidStreamChannelFactory.inject()
 
       startService(Intent(this, QuasselService::class.java))
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

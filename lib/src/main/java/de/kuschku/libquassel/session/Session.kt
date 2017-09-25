@@ -6,11 +6,11 @@ import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.quassel.QuasselFeature
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
-import de.kuschku.libquassel.util.HandlerService
-import de.kuschku.libquassel.util.LoggingHandler.LogLevel.DEBUG
-import de.kuschku.libquassel.util.LoggingHandler.LogLevel.INFO
+import de.kuschku.libquassel.util.compatibility.HandlerService
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
+import de.kuschku.libquassel.util.compatibility.log
 import de.kuschku.libquassel.util.hasFlag
-import de.kuschku.libquassel.util.log
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.BehaviorSubject
