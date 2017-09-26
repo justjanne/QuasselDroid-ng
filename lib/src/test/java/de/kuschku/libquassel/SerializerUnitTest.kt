@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng
+package de.kuschku.libquassel
 
 import de.kuschku.libquassel.protocol.Quassel_Feature
 import de.kuschku.libquassel.protocol.Quassel_Features
