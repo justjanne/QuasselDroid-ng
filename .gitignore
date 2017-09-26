@@ -8,3 +8,4 @@
 .externalNativeBuild
 build/
 /*/schemas/
+/deploy.sh
