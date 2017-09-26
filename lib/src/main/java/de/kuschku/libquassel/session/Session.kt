@@ -161,4 +161,7 @@ class Session(
 
     super.cleanUp()
   }
+
+  fun connection(): ICoreConnection?
+    = connection.value
 }

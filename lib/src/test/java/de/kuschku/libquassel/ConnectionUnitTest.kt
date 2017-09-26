@@ -6,11 +6,9 @@ import de.kuschku.libquassel.protocol.Quassel_Feature
 import de.kuschku.libquassel.protocol.UShort
 import de.kuschku.libquassel.quassel.ProtocolFeature
 import de.kuschku.libquassel.quassel.QuasselFeature
-import de.kuschku.libquassel.session.CoreConnection
 import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.session.SocketAddress
 import de.kuschku.libquassel.util.compatibility.reference.JavaHandlerService
-import de.kuschku.libquassel.util.compatibility.reference.JavaLoggingHandler
 import org.junit.BeforeClass
 import org.junit.Test
 import org.threeten.bp.Instant
@@ -23,9 +21,8 @@ class ConnectionUnitTest {
     @JvmStatic
     @BeforeClass
     fun before() {
-      JavaLoggingHandler.init()
-      LogManager.getLogManager().readConfiguration(
-        this::class.java.getResourceAsStream("/logging.properties"))
+      LogManager.getLogManager()
+        .readConfiguration(this::class.java.getResourceAsStream("/logging.properties"))
     }
   }
 
@@ -52,10 +49,7 @@ class ConnectionUnitTest {
     })
     session.userData = user to pass
 
-    session.connection.onNext(
-      CoreConnection(session, SocketAddress(host, port),
-                     JavaHandlerService()))
-    session.connection.value.start()
-    session.connection.value.join()
+    session.connect(SocketAddress(host, port), JavaHandlerService())
+    session.connection()?.join()
   }
 }
