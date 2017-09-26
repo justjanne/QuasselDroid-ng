@@ -3,5 +3,5 @@ package de.kuschku.libquassel.session
 interface Backend {
   fun connect(address: SocketAddress, user: String, pass: String)
   fun disconnect()
-  fun session(): Session
+  fun sessionManager(): SessionManager
 }

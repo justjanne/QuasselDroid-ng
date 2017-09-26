@@ -19,7 +19,6 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.util.helper.stickyMapNotNull
 import de.kuschku.quasseldroid_ng.util.helper.stickySwitchMapNotNull
-import de.kuschku.quasseldroid_ng.util.helper.switchMapNullable
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -49,12 +48,9 @@ class MainActivity : ServiceBoundActivity() {
   @BindView(R.id.errorList)
   lateinit var errorList: TextView
 
-  private val state = backend.stickyMapNotNull(null, Backend::session)
-    .switchMapNullable(null) { session ->
-      LiveDataReactiveStreams.fromPublisher(session.connectionPublisher)
-    }
-    .stickySwitchMapNotNull(ConnectionState.DISCONNECTED) { connection ->
-      LiveDataReactiveStreams.fromPublisher(connection.state)
+  private val state = backend.stickyMapNotNull(null, Backend::sessionManager)
+    .stickySwitchMapNotNull(ConnectionState.DISCONNECTED) { session ->
+      LiveDataReactiveStreams.fromPublisher(session.state)
     }
 
   private var snackbar: Snackbar? = null

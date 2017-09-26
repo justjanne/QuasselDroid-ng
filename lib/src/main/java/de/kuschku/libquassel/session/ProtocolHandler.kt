@@ -11,8 +11,9 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
 import de.kuschku.libquassel.util.compatibility.log
 import org.threeten.bp.Instant
+import java.io.Closeable
 
-abstract class ProtocolHandler : SignalProxy, AuthHandler {
+abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
   private val objectStorage: ObjectStorage = ObjectStorage(this)
   private val rpcHandler: RpcHandler = RpcHandler(this)
 
@@ -170,7 +171,7 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler {
     toInit.remove(syncableObject)
   }
 
-  open fun cleanUp() {
+  override fun close() {
     objectStorage.clear()
     toInit.clear()
   }

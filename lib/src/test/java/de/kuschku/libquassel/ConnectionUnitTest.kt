@@ -46,10 +46,7 @@ class ConnectionUnitTest {
       }
 
       override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
-    })
-    session.userData = user to pass
-
-    session.connect(SocketAddress(host, port), JavaHandlerService())
-    session.connection()?.join()
+    }, SocketAddress(host, port), JavaHandlerService(), user to pass)
+    session.join()
   }
 }

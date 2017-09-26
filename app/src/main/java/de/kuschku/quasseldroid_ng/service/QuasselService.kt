@@ -7,7 +7,8 @@ import android.os.Handler
 import android.os.HandlerThread
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.session.Backend
-import de.kuschku.libquassel.session.Session
+import de.kuschku.libquassel.session.ISession
+import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.session.SocketAddress
 import de.kuschku.quasseldroid_ng.BuildConfig
 import de.kuschku.quasseldroid_ng.R
@@ -18,20 +19,31 @@ import java.security.cert.X509Certificate
 import javax.net.ssl.X509TrustManager
 
 class QuasselService : LifecycleService() {
-  private lateinit var session: Session
+  private lateinit var sessionManager: SessionManager
+
+  private lateinit var clientData: ClientData
+
+  private val trustManager = object : X509TrustManager {
+    override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) {
+    }
+
+    override fun checkServerTrusted(p0: Array<out X509Certificate>?, p1: String?) {
+    }
+
+    override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
+  }
 
   private val backendImplementation = object : Backend {
-    override fun session() = session
+    override fun sessionManager() = sessionManager
 
     override fun connect(address: SocketAddress, user: String, pass: String) {
       disconnect()
       val handlerService = AndroidHandlerService()
-      session.connect(address, handlerService)
-      session.userData = user to pass
+      sessionManager.connect(clientData, trustManager, address, handlerService, user to pass)
     }
 
     override fun disconnect() {
-      session.cleanUp()
+      sessionManager.disconnect()
     }
   }
 
@@ -56,7 +68,7 @@ class QuasselService : LifecycleService() {
       }
     }
 
-    override fun session() = backendImplementation.session()
+    override fun sessionManager() = backendImplementation.sessionManager()
   }
 
   private lateinit var database: QuasselDatabase
@@ -64,26 +76,16 @@ class QuasselService : LifecycleService() {
   override fun onCreate() {
     super.onCreate()
     database = QuasselDatabase.Creator.init(application)
-    session = Session(
-      clientData = ClientData(
-        identifier = "${resources.getString(R.string.app_name)} ${BuildConfig.VERSION_NAME}",
-        buildDate = Instant.ofEpochSecond(BuildConfig.GIT_COMMIT_DATE),
-        clientFeatures = Quassel_Features.of(*Quassel_Feature.values()),
-        protocolFeatures = Protocol_Features.of(
-          Protocol_Feature.Compression,
-          Protocol_Feature.TLS
-        ),
-        supportedProtocols = byteArrayOf(0x02)
+    sessionManager = SessionManager(ISession.NULL)
+    clientData = ClientData(
+      identifier = "${resources.getString(R.string.app_name)} ${BuildConfig.VERSION_NAME}",
+      buildDate = Instant.ofEpochSecond(BuildConfig.GIT_COMMIT_DATE),
+      clientFeatures = Quassel_Features.of(*Quassel_Feature.values()),
+      protocolFeatures = Protocol_Features.of(
+        Protocol_Feature.Compression,
+        Protocol_Feature.TLS
       ),
-      trustManager = object : X509TrustManager {
-        override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) {
-        }
-
-        override fun checkServerTrusted(p0: Array<out X509Certificate>?, p1: String?) {
-        }
-
-        override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
-      }
+      supportedProtocols = byteArrayOf(0x02)
     )
   }
 

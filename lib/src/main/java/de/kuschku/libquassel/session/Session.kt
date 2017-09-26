@@ -5,25 +5,26 @@ import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.quassel.QuasselFeature
 import de.kuschku.libquassel.quassel.syncables.*
-import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import de.kuschku.libquassel.util.compatibility.log
 import de.kuschku.libquassel.util.hasFlag
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
 import javax.net.ssl.X509TrustManager
 
 class Session(
   val clientData: ClientData,
-  val trustManager: X509TrustManager
-) : ProtocolHandler() {
+  val trustManager: X509TrustManager,
+  address: SocketAddress,
+  handlerService: HandlerService,
+  private val userData: Pair<String, String>
+) : ProtocolHandler(), ISession {
   var coreFeatures: Quassel_Features = Quassel_Feature.NONE
 
-  var userData: Pair<String, String>? = null
+  private val coreConnection = CoreConnection(this, address, handlerService)
+  override val state: Flowable<ConnectionState> = coreConnection.state
 
   private var aliasManager: AliasManager? = null
   private var backlogManager: BacklogManager? = null
@@ -38,34 +39,21 @@ class Session(
   private var networks = mutableMapOf<NetworkId, Network>()
   private var networkConfig: NetworkConfig? = null
 
-  private val connection = BehaviorSubject.createDefault(ICoreConnection.NULL)
-  val connectionPublisher: Flowable<ICoreConnection> = connection.toFlowable(
-    BackpressureStrategy.LATEST)
-
   init {
-    log(INFO, "Session", "Session created")
-
-    // This should preload them
-    Invokers
-  }
-
-  fun connect(address: SocketAddress, handlerService: HandlerService) {
-    val coreConnection = CoreConnection(this, address, handlerService)
-    connection.onNext(coreConnection)
     coreConnection.start()
   }
 
   override fun handle(f: HandshakeMessage.ClientInitAck): Boolean {
     coreFeatures = f.coreFeatures ?: Quassel_Feature.NONE
     dispatch(HandshakeMessage.ClientLogin(
-      user = userData?.first,
-      password = userData?.second
+      user = userData.first,
+      password = userData.second
     ))
     return true
   }
 
   override fun handle(f: HandshakeMessage.SessionInit): Boolean {
-    connection.value.setState(ConnectionState.INIT)
+    coreConnection.setState(ConnectionState.INIT)
 
     f.networkIds?.forEach {
       val network = Network(it.value(-1), this)
@@ -117,7 +105,7 @@ class Session(
   }
 
   override fun onInitDone() {
-    connection.value.setState(ConnectionState.CONNECTED)
+    coreConnection.setState(ConnectionState.CONNECTED)
     log(INFO, "Session", "Initialization finished")
   }
 
@@ -130,20 +118,19 @@ class Session(
 
   override fun dispatch(message: SignalProxyMessage) {
     log(DEBUG, "Session", "> $message")
-    connection.value.dispatch(message)
+    coreConnection.dispatch(message)
   }
 
   override fun dispatch(message: HandshakeMessage) {
     log(DEBUG, "Session", "> $message")
-    connection.value.dispatch(message)
+    coreConnection.dispatch(message)
   }
 
   override fun network(id: NetworkId): Network? = networks[id]
   override fun identity(id: IdentityId): Identity? = identities[id]
 
-  override fun cleanUp() {
-    connection.value.close()
-    connection.onNext(ICoreConnection.NULL)
+  override fun close() {
+    coreConnection.close()
 
     aliasManager = null
     backlogManager = null
@@ -159,9 +146,10 @@ class Session(
     identities.clear()
     networks.clear()
 
-    super.cleanUp()
+    super.close()
   }
 
-  fun connection(): ICoreConnection?
-    = connection.value
+  fun join() {
+    coreConnection.join()
+  }
 }

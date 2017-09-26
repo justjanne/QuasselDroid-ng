@@ -21,6 +21,7 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.format.DateTimeFormatter
+import java.io.Closeable
 import java.lang.Thread.UncaughtExceptionHandler
 import java.net.Socket
 import java.net.SocketException
@@ -30,7 +31,7 @@ class CoreConnection(
   private val session: Session,
   private val address: SocketAddress,
   private val handlerService: HandlerService
-) : Thread(), ICoreConnection {
+) : Thread(), Closeable {
   companion object {
     private const val TAG = "CoreConnection"
   }
@@ -43,7 +44,7 @@ class CoreConnection(
   private val chainedBuffer = ChainedByteBuffer(direct = true)
 
   private val internalState = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
-  override val state = internalState.toFlowable(BackpressureStrategy.LATEST)
+  val state = internalState.toFlowable(BackpressureStrategy.LATEST)
 
   private var channel: WrappedChannel? = null
 
@@ -57,7 +58,7 @@ class CoreConnection(
     channel = WrappedChannel.ofSocket(socket)
   }
 
-  override fun setState(value: ConnectionState) {
+  fun setState(value: ConnectionState) {
     log(INFO, "CoreConnection", value.name)
     internalState.onNext(value)
   }
@@ -122,7 +123,7 @@ class CoreConnection(
     }
   }
 
-  override fun dispatch(message: HandshakeMessage) {
+  fun dispatch(message: HandshakeMessage) {
     handlerService.parse {
       try {
         val data = HandshakeMessage.serialize(message)
@@ -136,7 +137,7 @@ class CoreConnection(
     }
   }
 
-  override fun dispatch(message: SignalProxyMessage) {
+  fun dispatch(message: SignalProxyMessage) {
     handlerService.parse {
       try {
         val data = SignalProxyMessage.serialize(message)
