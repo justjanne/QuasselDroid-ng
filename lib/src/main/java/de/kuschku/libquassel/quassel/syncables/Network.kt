@@ -3,11 +3,12 @@ package de.kuschku.libquassel.quassel.syncables
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
-import de.kuschku.libquassel.protocol.primitive.serializer.serializeString
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.*
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.helpers.getOr
+import de.kuschku.libquassel.util.helpers.serializeString
+import de.kuschku.libquassel.util.irc.HostmaskHelper
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.util.*
@@ -313,7 +314,7 @@ class Network constructor(
   }
 
   fun newIrcUser(hostMask: String, initData: QVariantMap = emptyMap()): IrcUser {
-    val nick = nickFromMask(hostMask).toLowerCase(Locale.ENGLISH)
+    val nick = HostmaskHelper.nick(hostMask).toLowerCase(Locale.ENGLISH)
     val user = ircUser(nick)
     return if (user == null) {
       val ircUser = IrcUser(hostMask, this, proxy)
@@ -767,11 +768,14 @@ class Network constructor(
     setMyNick(properties["myNick"].valueOr(this::myNick))
     setLatency(properties["latency"].valueOr(this::latency))
     setCodecForServer(
-      properties["codecForServer"].value(codecForServer().serializeString(StringSerializer.UTF8)))
+      properties["codecForServer"].value(codecForServer().serializeString(StringSerializer.UTF8))
+    )
     setCodecForEncoding(properties["codecForEncoding"].value(
-      codecForEncoding().serializeString(StringSerializer.UTF8)))
+      codecForEncoding().serializeString(StringSerializer.UTF8))
+    )
     setCodecForDecoding(properties["codecForDecoding"].value(
-      codecForDecoding().serializeString(StringSerializer.UTF8)))
+      codecForDecoding().serializeString(StringSerializer.UTF8))
+    )
     setIdentity(properties["identityId"].valueOr(this::identity))
     setConnected(properties["isConnected"].valueOr(this::isConnected))
     setConnectionState(properties["connectionState"].value(connectionState().value))
@@ -785,10 +789,12 @@ class Network constructor(
     setSaslPassword(properties["saslPassword"].valueOr(this::saslPassword))
     setUseAutoReconnect(properties["useAutoReconnect"].valueOr(this::useAutoReconnect))
     setAutoReconnectInterval(
-      properties["autoReconnectInterval"].valueOr(this::autoReconnectInterval))
+      properties["autoReconnectInterval"].valueOr(this::autoReconnectInterval)
+    )
     setAutoReconnectRetries(properties["autoReconnectRetries"].valueOr(this::autoReconnectRetries))
     setUnlimitedReconnectRetries(
-      properties["unlimitedReconnectRetries"].valueOr(this::unlimitedReconnectRetries))
+      properties["unlimitedReconnectRetries"].valueOr(this::unlimitedReconnectRetries)
+    )
     setRejoinChannels(properties["rejoinChannels"].valueOr(this::rejoinChannels))
     setUseCustomMessageRate(properties["useCustomMessageRate"].valueOr(this::useCustomMessageRate))
     setMessageRateBurstSize(properties["msgRateBurstSize"].valueOr(this::messageRateBurstSize))
@@ -797,7 +803,7 @@ class Network constructor(
   }
 
   fun updateNickFromMask(mask: String): IrcUser {
-    val nick = nickFromMask(mask).toLowerCase(Locale.ENGLISH)
+    val nick = HostmaskHelper.nick(mask).toLowerCase(Locale.ENGLISH)
     val user = _ircUsers[nick]
     return if (user != null) {
       user.updateHostmask(mask)

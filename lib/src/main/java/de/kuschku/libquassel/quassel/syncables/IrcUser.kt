@@ -1,8 +1,12 @@
 package de.kuschku.libquassel.quassel.syncables
 
-import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.protocol.QVariantMap
+import de.kuschku.libquassel.protocol.QVariant_
+import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.valueOr
 import de.kuschku.libquassel.quassel.syncables.interfaces.IIrcUser
 import de.kuschku.libquassel.session.SignalProxy
+import de.kuschku.libquassel.util.irc.HostmaskHelper
 import org.threeten.bp.Instant
 import java.nio.charset.Charset
 
@@ -200,7 +204,7 @@ class IrcUser(
 
   override fun updateHostmask(mask: String) {
     if (hostMask() != mask) {
-      val (user, host, _) = splitHostMask(mask)
+      val (user, host, _) = HostmaskHelper.split(mask)
       setUser(user)
       setHost(host)
     }
@@ -263,9 +267,9 @@ class IrcUser(
     renameObject("${network().networkId()}/$_nick")
   }
 
-  private var _nick: String = nickFromMask(hostmask)
-  private var _user: String = userFromMask(hostmask)
-  private var _host: String = hostFromMask(hostmask)
+  private var _nick: String = HostmaskHelper.nick(hostmask)
+  private var _user: String = HostmaskHelper.user(hostmask)
+  private var _host: String = HostmaskHelper.host(hostmask)
   private var _realName: String = ""
   private var _account: String = ""
   private var _awayMessage: String = ""

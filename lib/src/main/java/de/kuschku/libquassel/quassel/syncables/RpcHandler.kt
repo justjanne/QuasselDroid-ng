@@ -2,11 +2,11 @@ package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
-import de.kuschku.libquassel.protocol.primitive.serializer.deserializeString
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.quassel.syncables.interfaces.IRpcHandler
 import de.kuschku.libquassel.session.SignalProxy
+import de.kuschku.libquassel.util.helpers.deserializeString
 import java.nio.ByteBuffer
 
 class RpcHandler(override val proxy: SignalProxy) : IRpcHandler {

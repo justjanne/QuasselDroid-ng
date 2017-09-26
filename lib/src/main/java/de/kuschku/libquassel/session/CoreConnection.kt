@@ -6,7 +6,7 @@ import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.protocol.primitive.serializer.HandshakeVariantMapSerializer
 import de.kuschku.libquassel.protocol.primitive.serializer.IntSerializer
-import de.kuschku.libquassel.protocol.primitive.serializer.ProtocolSerializer
+import de.kuschku.libquassel.protocol.primitive.serializer.ProtocolInfoSerializer
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantListSerializer
 import de.kuschku.libquassel.quassel.ProtocolFeature
 import de.kuschku.libquassel.util.compatibility.CompatibilityUtils
@@ -81,7 +81,7 @@ class CoreConnection(
     sizeBuffer.clear()
     channel?.read(sizeBuffer)
     sizeBuffer.flip()
-    val protocol = ProtocolSerializer.deserialize(sizeBuffer, session.coreFeatures)
+    val protocol = ProtocolInfoSerializer.deserialize(sizeBuffer, session.coreFeatures)
 
     log(DEBUG, "Protocol negotiated $protocol")
 

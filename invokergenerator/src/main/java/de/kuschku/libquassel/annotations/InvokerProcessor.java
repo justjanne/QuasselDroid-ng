@@ -47,38 +47,6 @@ public class InvokerProcessor extends AbstractProcessor {
         messager = processingEnv.getMessager();
     }
 
-    private class SlotElement {
-        final ExecutableElement element;
-        final ExecutableType type;
-
-        final String slotName;
-
-        final Slot slot;
-
-        public SlotElement(ExecutableElement element, ExecutableType type, String slotName, Slot slot) {
-            this.element = element;
-            this.type = type;
-            this.slotName = slotName;
-            this.slot = slot;
-        }
-    }
-
-    private class SyncableElement {
-        PackageElement packageElement;
-        TypeElement typeElement;
-
-        Syncable annotation;
-
-        List<SlotElement> slots;
-
-        public SyncableElement(PackageElement packageElement, TypeElement typeElement, Syncable annotation, List<SlotElement> slots) {
-            this.packageElement = packageElement;
-            this.typeElement = typeElement;
-            this.annotation = annotation;
-            this.slots = slots;
-        }
-    }
-
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         List<SyncableElement> syncableElements = new ArrayList<>();
@@ -237,5 +205,37 @@ public class InvokerProcessor extends AbstractProcessor {
                 .build();
 
         javaFile.writeTo(filer);
+    }
+
+    private class SlotElement {
+        final ExecutableElement element;
+        final ExecutableType type;
+
+        final String slotName;
+
+        final Slot slot;
+
+        public SlotElement(ExecutableElement element, ExecutableType type, String slotName, Slot slot) {
+            this.element = element;
+            this.type = type;
+            this.slotName = slotName;
+            this.slot = slot;
+        }
+    }
+
+    private class SyncableElement {
+        PackageElement packageElement;
+        TypeElement typeElement;
+
+        Syncable annotation;
+
+        List<SlotElement> slots;
+
+        public SyncableElement(PackageElement packageElement, TypeElement typeElement, Syncable annotation, List<SlotElement> slots) {
+            this.packageElement = packageElement;
+            this.typeElement = typeElement;
+            this.annotation = annotation;
+            this.slots = slots;
+        }
     }
 }

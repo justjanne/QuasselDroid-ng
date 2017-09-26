@@ -4,9 +4,9 @@ import de.kuschku.libquassel.protocol.QVariantList
 import de.kuschku.libquassel.protocol.QVariant_
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
-import de.kuschku.libquassel.protocol.primitive.serializer.deserializeString
-import de.kuschku.libquassel.protocol.primitive.serializer.serializeString
 import de.kuschku.libquassel.protocol.value
+import de.kuschku.libquassel.util.helpers.deserializeString
+import de.kuschku.libquassel.util.helpers.serializeString
 import java.nio.ByteBuffer
 
 object RpcCallSerializer : SignalProxyMessageSerializer<SignalProxyMessage.RpcCall> {

@@ -7,5 +7,5 @@ data class ClientData(
   val buildDate: Instant,
   val clientFeatures: Quassel_Features,
   val protocolFeatures: Protocol_Features,
-  val supportedProtocols: ByteArray
+  val supportedProtocols: List<Protocol>
 )

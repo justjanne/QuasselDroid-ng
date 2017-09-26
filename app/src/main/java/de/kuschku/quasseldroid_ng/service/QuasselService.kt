@@ -85,7 +85,7 @@ class QuasselService : LifecycleService() {
         Protocol_Feature.Compression,
         Protocol_Feature.TLS
       ),
-      supportedProtocols = byteArrayOf(0x02)
+      supportedProtocols = listOf(Protocol.Datastream)
     )
   }
 

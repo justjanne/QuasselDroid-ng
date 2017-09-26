@@ -6,8 +6,8 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import android.support.v7.app.AppCompatActivity
-import de.kuschku.quasseldroid_ng.service.QuasselService
 import de.kuschku.libquassel.session.Backend
+import de.kuschku.quasseldroid_ng.service.QuasselService
 
 abstract class ServiceBoundActivity : AppCompatActivity() {
   protected val backend = MutableLiveData<Backend?>()

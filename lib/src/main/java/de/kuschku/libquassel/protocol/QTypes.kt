@@ -1,14 +1,13 @@
 package de.kuschku.libquassel.protocol
 
 import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
-import de.kuschku.libquassel.protocol.primitive.serializer.deserializeString
-import de.kuschku.libquassel.protocol.primitive.serializer.serializeString
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.ProtocolFeature
 import de.kuschku.libquassel.quassel.QuasselFeature
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.Flags
 import de.kuschku.libquassel.util.ShortFlags
+import de.kuschku.libquassel.util.helpers.deserializeString
 import java.nio.ByteBuffer
 
 typealias QStringList = List<String?>
@@ -48,23 +47,19 @@ typealias UShort = Short
 typealias UInt = Int
 typealias ULong = Long
 
-inline val SLOT
-  get() = Throwable().stackTrace.first().methodName
-
 typealias ARG = QVariant_
 
-fun QVariantMap.toVariantList(): QVariantList =
-  entries.flatMap { (key, value) ->
-    listOf(QVariant_(key.serializeString(StringSerializer.UTF8), Type.QByteArray), value)
+fun QVariantList.toVariantMap(): QVariantMap {
+  val map = HashMap<String, QVariant_>()
+  var i = 0
+  while (i < size) {
+    val key = get(i).value<ByteBuffer?>().deserializeString(StringSerializer.UTF8) ?: ""
+    val value = get(i + 1)
+    map.put(key, value)
+    i += 2
   }
-
-fun QVariantList.toVariantMap(): QVariantMap =
-  (0 until size step 2).map {
-    Pair(
-      get(it).value<ByteBuffer?>().deserializeString(StringSerializer.UTF8) ?: "",
-      get(it + 1)
-    )
-  }.toMap()
+  return map
+}
 
 fun <K, V> List<Map<K, V>>.transpose(): Map<K, List<V>> {
   val result = mutableMapOf<K, MutableList<V>>()
@@ -74,42 +69,4 @@ fun <K, V> List<Map<K, V>>.transpose(): Map<K, List<V>> {
     }
   }
   return result
-}
-
-
-fun <K, V> Map<K, List<V>>.transpose(): List<Map<K, V>> {
-  val result = MutableList(values.map(List<*>::size).max() ?: 0) { mutableMapOf<K, V>() }
-  this.entries.forEach { (key, values) ->
-    values.forEachIndexed { index, value ->
-      result[index][key] = value
-    }
-  }
-  return result
-}
-
-fun nickFromMask(mask: String): String {
-  val (nick, _, _) = splitHostMask(mask)
-  return nick
-}
-
-fun userFromMask(mask: String): String {
-  val (_, user, _) = splitHostMask(mask)
-  return user
-}
-
-fun hostFromMask(mask: String): String {
-  val (_, _, host) = splitHostMask(mask)
-  return host
-}
-
-fun splitHostMask(mask: String): Triple<String, String, String> {
-  if (!mask.contains("@"))
-    return Triple(mask, "", "")
-
-  val (userPart, host) = mask.split("@", limit = 2)
-  if (!userPart.contains("!"))
-    return Triple(mask, "", host)
-
-  val (nick, user) = userPart.split('!', limit = 2)
-  return Triple(nick, user, host)
 }

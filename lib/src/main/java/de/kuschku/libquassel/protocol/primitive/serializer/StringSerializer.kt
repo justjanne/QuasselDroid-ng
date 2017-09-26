@@ -1,6 +1,5 @@
 package de.kuschku.libquassel.protocol.primitive.serializer
 
-import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.Quassel_Features
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import java.nio.ByteBuffer
@@ -100,23 +99,4 @@ abstract class StringSerializer(
       charBuffer.toString()
     }
   }
-}
-
-fun QVariant<ByteBuffer>?.deserializeString(
-  serializer: StringSerializer) = if (this?.data == null) {
-  null
-} else {
-  serializer.deserializeAll(data)
-}
-
-fun ByteBuffer?.deserializeString(serializer: StringSerializer) = if (this == null) {
-  null
-} else {
-  serializer.deserializeAll(this)
-}
-
-fun String?.serializeString(serializer: StringSerializer) = if (this == null) {
-  null
-} else {
-  serializer.serialize(this)
 }
