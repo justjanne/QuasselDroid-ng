@@ -58,8 +58,6 @@ class MainActivity : ServiceBoundActivity() {
   private val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ISO_TIME
   private val handler = object : LoggingHandler() {
     override fun log(logLevel: LogLevel, tag: String, message: String?, throwable: Throwable?) {
-      if (logLevel.ordinal < LogLevel.INFO.ordinal)
-        return
       val time = dateTimeFormatter.format(ZonedDateTime.now(ZoneOffset.UTC))
       runOnUiThread {
         errorList.append("$time $tag: ")
@@ -74,7 +72,8 @@ class MainActivity : ServiceBoundActivity() {
       }
     }
 
-    override fun isLoggable(logLevel: LogLevel, tag: String) = true
+    override fun isLoggable(logLevel: LogLevel, tag: String)
+      = (logLevel.ordinal >= LogLevel.INFO.ordinal)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {

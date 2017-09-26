@@ -37,9 +37,9 @@ abstract class LoggingHandler {
 
 inline fun log(logLevel: LoggingHandler.LogLevel, tag: String, message: String? = null,
                throwable: Throwable? = null) {
-  for (it in LoggingHandler.loggingHandlers) {
-    it.log(logLevel, tag, message, throwable)
-  }
+  LoggingHandler.loggingHandlers
+    .filter { it.isLoggable(logLevel, tag) }
+    .forEach { it.log(logLevel, tag, message, throwable) }
 }
 
 inline fun log(logLevel: LoggingHandler.LogLevel, tag: String, throwable: Throwable? = null)
