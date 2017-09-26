@@ -86,7 +86,9 @@ dependencies {
   implementation(appArch("persistence.room", "runtime"))
   kapt(appArch("persistence.room", "compiler"))
 
-  implementation(appArch("paging", "runtime", version = "1.0.0-alpha1"))
+  implementation(appArch("paging", "runtime", version = "1.0.0-alpha1")) {
+    exclude(group = "junit", module = "junit")
+  }
 
   implementation("org.threeten:threetenbp:1.3.6")
 

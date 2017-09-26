@@ -2,10 +2,7 @@ package de.kuschku.libquassel.protocol.primitive.serializer
 
 import de.kuschku.libquassel.protocol.Quassel_Features
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
-import org.threeten.bp.Instant
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.OffsetDateTime
-import org.threeten.bp.ZoneOffset
+import org.threeten.bp.*
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.temporal.JulianFields
 import org.threeten.bp.temporal.Temporal
@@ -37,6 +34,12 @@ object DateTimeSerializer : Serializer<Temporal> {
         ByteSerializer.serialize(buffer, TimeSpec.OffsetFromUTC.value, features)
         IntSerializer.serialize(buffer, data.offset.totalSeconds, features)
       }
+      is ZonedDateTime  -> {
+        IntSerializer.serialize(buffer, data.getLong(JulianFields.JULIAN_DAY).toInt(), features)
+        IntSerializer.serialize(buffer, data.getLong(ChronoField.MILLI_OF_DAY).toInt(), features)
+        ByteSerializer.serialize(buffer, TimeSpec.OffsetFromUTC.value, features)
+        IntSerializer.serialize(buffer, data.offset.totalSeconds, features)
+      }
       is Instant        -> {
         val time = data.atOffset(ZoneOffset.UTC)
         IntSerializer.serialize(buffer, time.getLong(JulianFields.JULIAN_DAY).toInt(), features)
@@ -56,12 +59,18 @@ object DateTimeSerializer : Serializer<Temporal> {
     if (milliOfDay == -1L || julianDay == -1L)
       return Instant.EPOCH
     return when (timeSpec) {
-      TimeSpec.LocalTime ->
+      TimeSpec.LocalTime     ->
         Instant.EPOCH.atZone(ZoneOffset.systemDefault())
           .with(JulianFields.JULIAN_DAY, julianDay)
           .with(ChronoField.MILLI_OF_DAY, milliOfDay)
           .toInstant()
-      else               ->
+      TimeSpec.OffsetFromUTC ->
+        Instant.EPOCH.atOffset(
+          ZoneOffset.ofTotalSeconds(IntSerializer.deserialize(buffer, features)))
+          .with(JulianFields.JULIAN_DAY, julianDay)
+          .with(ChronoField.MILLI_OF_DAY, milliOfDay)
+          .toInstant()
+      else                   ->
         Instant.EPOCH.atOffset(ZoneOffset.UTC)
           .with(JulianFields.JULIAN_DAY, julianDay)
           .with(ChronoField.MILLI_OF_DAY, milliOfDay)
