@@ -64,12 +64,6 @@ object DateTimeSerializer : Serializer<Temporal> {
           .with(JulianFields.JULIAN_DAY, julianDay)
           .with(ChronoField.MILLI_OF_DAY, milliOfDay)
           .toInstant()
-      TimeSpec.OffsetFromUTC ->
-        Instant.EPOCH.atOffset(
-          ZoneOffset.ofTotalSeconds(IntSerializer.deserialize(buffer, features)))
-          .with(JulianFields.JULIAN_DAY, julianDay)
-          .with(ChronoField.MILLI_OF_DAY, milliOfDay)
-          .toInstant()
       else                   ->
         Instant.EPOCH.atOffset(ZoneOffset.UTC)
           .with(JulianFields.JULIAN_DAY, julianDay)

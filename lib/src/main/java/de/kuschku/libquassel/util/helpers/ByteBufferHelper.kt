@@ -15,3 +15,10 @@ fun ByteBuffer?.deserializeString(serializer: StringSerializer) = if (this == nu
 } else {
   serializer.deserializeAll(this)
 }
+
+fun ByteBuffer.hexDump() {
+  val target = ByteBuffer.allocate(this.capacity())
+  this.clear()
+  this.copyTo(target)
+  target.array().hexDump()
+}

@@ -89,7 +89,7 @@ abstract class StringSerializer(
       null
     } else {
       val limit = buffer.limit()
-      buffer.limit(buffer.position() + len - trailingNullBytes)
+      buffer.limit(buffer.position() + Math.max(0, len - trailingNullBytes))
       val charBuffer = charBuffer(len)
       decoder.reset()
       decoder.decode(buffer, charBuffer, true)

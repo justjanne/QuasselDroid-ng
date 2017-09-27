@@ -14,6 +14,7 @@ import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.*
 import de.kuschku.libquassel.util.compatibility.log
 import de.kuschku.libquassel.util.hasFlag
+import de.kuschku.libquassel.util.helpers.hexDump
 import de.kuschku.libquassel.util.helpers.write
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import de.kuschku.libquassel.util.nio.WrappedChannel
@@ -191,10 +192,12 @@ class CoreConnection(
           session.handle(msg)
         } catch (e: Throwable) {
           log(WARN, TAG, "Error encountered while handling sigproxy message", e)
+          log(WARN, TAG, msg.toString())
         }
       }
     } catch (e: Throwable) {
       log(WARN, TAG, "Error encountered while parsing sigproxy message", e)
+      dataBuffer.hexDump()
     }
   }
 
@@ -207,9 +210,11 @@ class CoreConnection(
         session.handle(msg)
       } catch (e: Throwable) {
         log(WARN, TAG, "Error encountered while handling handshake message", e)
+        log(WARN, TAG, msg.toString())
       }
     } catch (e: Throwable) {
       log(WARN, TAG, "Error encountered while parsing handshake message", e)
+      dataBuffer.hexDump()
     }
   }
 }
