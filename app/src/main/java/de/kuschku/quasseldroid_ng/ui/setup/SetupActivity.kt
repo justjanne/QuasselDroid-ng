@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid_ng.R
-import de.kuschku.quasseldroid_ng.ui.setup.slides.SlideFragment
 import de.kuschku.quasseldroid_ng.util.helper.stickySwitchMapNotNull
 
 abstract class SetupActivity : AppCompatActivity() {
@@ -86,87 +85,100 @@ abstract class SetupActivity : AppCompatActivity() {
     onDone(adapter.result)
   }
 
+  fun setInitData(data: Bundle?) {
+    adapter.result.putAll(data)
+  }
+
   abstract fun onDone(data: Bundle)
 
   override fun onSaveInstanceState(outState: Bundle) {
-    outState.putInt("currentItem", viewPager.currentItem)
-    outState.putInt("lastValidItem", adapter.lastValidItem)
-    outState.putBundle("result", adapter.result)
+    outState.putInt(currentItemKey, viewPager.currentItem)
+    outState.putInt(lastValidItemKey, adapter.lastValidItem)
+    outState.putBundle(resultKey, adapter.result)
     super.onSaveInstanceState(outState)
   }
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
     super.onRestoreInstanceState(savedInstanceState)
     if (savedInstanceState != null) {
-      if (savedInstanceState.containsKey("result"))
-        adapter.result.putAll(savedInstanceState.getBundle("result"))
-      if (savedInstanceState.containsKey("lastValidItem"))
-        adapter.lastValidItem = savedInstanceState.getInt("lastValidItem")
-      if (savedInstanceState.containsKey("currentItem"))
-        viewPager.currentItem = savedInstanceState.getInt("currentItem")
+      if (savedInstanceState.containsKey(resultKey))
+        adapter.result.putAll(savedInstanceState.getBundle(resultKey))
+      if (savedInstanceState.containsKey(lastValidItemKey))
+        adapter.lastValidItem = savedInstanceState.getInt(lastValidItemKey)
+      if (savedInstanceState.containsKey(currentItemKey))
+        viewPager.currentItem = savedInstanceState.getInt(currentItemKey)
       currentPage.value = adapter.getItem(viewPager.currentItem)
     }
     pageChanged()
   }
 
-  companion object {
-    private class SlidePagerAdapter(private val fragmentManager: FragmentManager) :
-      FragmentStatePagerAdapter(fragmentManager) {
-      private val retainedFragments = SparseArray<SlideFragment>()
+  private class SlidePagerAdapter(private val fragmentManager: FragmentManager) :
+    FragmentStatePagerAdapter(fragmentManager) {
+    private val retainedFragments = SparseArray<SlideFragment>()
 
-      val result = Bundle()
-        get() {
-          (0 until retainedFragments.size()).map(retainedFragments::valueAt).forEach {
-            it.getData(field)
-          }
-          return field
+    val result = Bundle()
+      get() {
+        (0 until retainedFragments.size()).map(retainedFragments::valueAt).forEach {
+          it.getData(field)
         }
-
-      var lastValidItem = -1
-        set(value) {
-          field = value
-          notifyDataSetChanged()
-        }
-      private val list = mutableListOf<SlideFragment>()
-
-      override fun getItem(position: Int): SlideFragment {
-        return retainedFragments.get(position) ?: list[position]
+        return field
       }
 
-      override fun getCount() = Math.min(list.size, lastValidItem + 2)
-      val totalCount get() = list.size
-      fun addFragment(fragment: SlideFragment) {
-        list.add(fragment)
+    var lastValidItem = -1
+      set(value) {
+        field = value
+        notifyDataSetChanged()
       }
+    private val list = mutableListOf<SlideFragment>()
 
-      override fun instantiateItem(container: ViewGroup?, position: Int): Any {
-        val fragment = super.instantiateItem(container, position)
-        retainedFragments.put(position, fragment as SlideFragment)
-        return fragment
-      }
+    override fun getItem(position: Int): SlideFragment {
+      return retainedFragments.get(position) ?: list[position]
+    }
 
-      override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
-        retainedFragments.get(position)?.getData(result)
-        retainedFragments.remove(position)
-        super.destroyItem(container, position, `object`)
-      }
+    override fun getCount() = Math.min(list.size, lastValidItem + 2)
+    val totalCount get() = list.size
+    fun addFragment(fragment: SlideFragment) {
+      list.add(fragment)
+    }
 
-      override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
-        super.restoreState(state, loader)
-        if (state != null) {
-          val bundle = state as Bundle
-          val keys = bundle.keySet()
-          for (key in keys) {
-            if (key.startsWith("f")) {
-              val index = Integer.parseInt(key.substring(1))
-              val f = fragmentManager.getFragment(bundle, key)
-              if (f != null && f is SlideFragment) {
-                retainedFragments.put(index, f)
-              }
+    override fun instantiateItem(container: ViewGroup?, position: Int): Any {
+      val fragment = super.instantiateItem(container, position)
+      storeNewFragment(position, fragment as SlideFragment)
+      return fragment
+    }
+
+    override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
+      retainedFragments.get(position)?.getData(result)
+      retainedFragments.remove(position)
+      super.destroyItem(container, position, `object`)
+    }
+
+    override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
+      super.restoreState(state, loader)
+      if (state != null) {
+        val bundle = state as Bundle
+        val keys = bundle.keySet()
+        for (key in keys) {
+          if (key.startsWith("f")) {
+            val index = Integer.parseInt(key.substring(1))
+            val f = fragmentManager.getFragment(bundle, key)
+            if (f != null && f is SlideFragment) {
+              storeNewFragment(index, f)
             }
           }
         }
       }
     }
+
+    private fun storeNewFragment(index: Int, fragment: SlideFragment) {
+      fragment.initData = result
+      retainedFragments.put(index, fragment)
+    }
+  }
+
+  companion object {
+    private const val currentItemKey = ":setupActivity:currentItem"
+    private const val lastValidItemKey = ":setupActivity:lastValidItem"
+    private const val resultKey = ":setupActivity:result"
   }
 }

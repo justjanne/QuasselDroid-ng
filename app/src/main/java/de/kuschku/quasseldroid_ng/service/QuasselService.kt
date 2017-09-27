@@ -47,15 +47,10 @@ class QuasselService : LifecycleService() {
     }
   }
 
+  private val thread = HandlerThread("BackendHandler")
+  private lateinit var handler: Handler
+
   private val asyncBackend = object : Backend {
-    private val thread = HandlerThread("BackendHandler")
-    private val handler: Handler
-
-    init {
-      thread.start()
-      handler = Handler(thread.looper)
-    }
-
     override fun connect(address: SocketAddress, user: String, pass: String) {
       handler.post {
         backendImplementation.connect(address, user, pass)
@@ -71,9 +66,16 @@ class QuasselService : LifecycleService() {
     override fun sessionManager() = backendImplementation.sessionManager()
   }
 
+  override fun onDestroy() {
+    handler.post { thread.quit() }
+    super.onDestroy()
+  }
+
   private lateinit var database: QuasselDatabase
 
   override fun onCreate() {
+    thread.start()
+    handler = Handler(thread.looper)
     super.onCreate()
     database = QuasselDatabase.Creator.init(application)
     sessionManager = SessionManager(ISession.NULL)

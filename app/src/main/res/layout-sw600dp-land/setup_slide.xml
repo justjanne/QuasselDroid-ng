@@ -61,7 +61,7 @@
     android:theme="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse"
     tools:text="First, please choose which server your core is hosted on." />
 
-  <ScrollView
+  <android.support.v4.widget.NestedScrollView
     android:id="@+id/scrollView"
     android:layout_width="400dp"
     android:layout_height="wrap_content"
@@ -79,6 +79,6 @@
       android:minHeight="400dp"
       app:cardElevation="4dp" />
 
-  </ScrollView>
+  </android.support.v4.widget.NestedScrollView>
 
 </RelativeLayout>

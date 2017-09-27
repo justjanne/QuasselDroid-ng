@@ -1,0 +1,67 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="72dp"
+  android:background="?attr/selectableItemBackground"
+  android:clickable="true"
+  android:focusable="true"
+  android:focusableInTouchMode="false"
+  android:orientation="horizontal"
+  android:paddingLeft="16dp"
+  android:paddingRight="16dp">
+
+  <LinearLayout
+    android:layout_width="48dp"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.AppCompatRadioButton
+      android:id="@+id/account_select"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:layout_gravity="center_vertical"
+      android:clickable="false" />
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="0dip"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    android:layout_weight="1"
+    android:gravity="center_vertical|start"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/account_name"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:fontFamily="sans-serif-medium"
+      android:gravity="center_vertical|start"
+      android:lines="1"
+      android:singleLine="true"
+      android:textSize="14sp"
+      tools:text="Remote" />
+
+    <TextView
+      android:id="@+id/account_description"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:fontFamily="sans-serif"
+      android:gravity="center_vertical|start"
+      android:lines="1"
+      android:singleLine="true"
+      android:textSize="14sp"
+      tools:text="testUser on localhost" />
+  </LinearLayout>
+
+  <android.support.v7.widget.AppCompatImageButton
+    android:id="@+id/account_edit"
+    style="?attr/buttonStyleSmall"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:layout_gravity="center_vertical"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:tint="#757575"
+    app:srcCompat="@drawable/ic_pencil" />
+</LinearLayout>

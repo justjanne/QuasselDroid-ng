@@ -1,0 +1,194 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <android.support.v4.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+      <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <FrameLayout
+          android:layout_width="56dp"
+          android:layout_height="match_parent">
+
+          <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:tint="#757575"
+            app:srcCompat="@drawable/ic_pencil" />
+        </FrameLayout>
+
+        <android.support.design.widget.TextInputLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/labelAccountName"
+          app:errorEnabled="true">
+
+          <android.support.design.widget.TextInputEditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
+      </LinearLayout>
+
+      <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <FrameLayout
+          android:layout_width="56dp"
+          android:layout_height="match_parent">
+
+          <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:tint="#757575"
+            app:srcCompat="@drawable/ic_server_network" />
+        </FrameLayout>
+
+        <android.support.design.widget.TextInputLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/labelConnectionHostname"
+          app:errorEnabled="true">
+
+          <android.support.design.widget.TextInputEditText
+            android:id="@+id/host"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textUri" />
+        </android.support.design.widget.TextInputLayout>
+      </LinearLayout>
+
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <android.support.v4.widget.Space
+          android:layout_width="56dp"
+          android:layout_height="match_parent" />
+
+        <android.support.design.widget.TextInputLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/labelConnectionPort"
+          app:errorEnabled="true">
+
+          <android.support.design.widget.TextInputEditText
+            android:id="@+id/port"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:numeric="integer"
+            android:text="@string/defaultConnectionPort" />
+        </android.support.design.widget.TextInputLayout>
+      </LinearLayout>
+
+      <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <FrameLayout
+          android:layout_width="56dp"
+          android:layout_height="match_parent">
+
+          <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:tint="#757575"
+            app:srcCompat="@drawable/ic_account" />
+        </FrameLayout>
+
+        <android.support.design.widget.TextInputLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/labelAccountUsername">
+
+          <android.support.design.widget.TextInputEditText
+            android:id="@+id/user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textVisiblePassword|textNoSuggestions"
+            app:errorEnabled="true" />
+        </android.support.design.widget.TextInputLayout>
+      </LinearLayout>
+
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <android.support.v4.widget.Space
+          android:layout_width="56dp"
+          android:layout_height="match_parent" />
+
+        <android.support.design.widget.TextInputLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/labelAccountPassword">
+
+          <android.support.design.widget.TextInputEditText
+            android:id="@+id/pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:password="true"
+            app:errorEnabled="true" />
+        </android.support.design.widget.TextInputLayout>
+      </LinearLayout>
+
+      <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+    </LinearLayout>
+  </android.support.v4.widget.NestedScrollView>
+
+  <android.support.design.widget.FloatingActionButton
+    android:id="@+id/save_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="end|bottom"
+    android:layout_marginBottom="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginRight="16dp"
+    android:tint="#ffffff"
+    app:fabSize="normal"
+    app:srcCompat="@drawable/ic_save" />
+</FrameLayout>

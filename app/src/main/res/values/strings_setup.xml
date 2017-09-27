@@ -1,4 +1,9 @@
 <resources>
+  <!-- Account Selection -->
+  <string name="slideAccountSelectTitle">Select Account</string>
+  <string name="slideAccountSelectDescription">Please select an account from the list or add one</string>
+  <string name="userOnHost">%1$s on %2$s:%3$d</string>
+
   <!-- Account Connection -->
   <string name="slideAccountConnectionTitle">Connection</string>
   <string name="slideAccountConnectionDescription">First, please choose which server your core is hosted on.</string>

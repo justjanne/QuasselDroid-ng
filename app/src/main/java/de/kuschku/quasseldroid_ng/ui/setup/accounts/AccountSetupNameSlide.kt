@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng.ui.setup.slides
+package de.kuschku.quasseldroid_ng.ui.setup.accounts
 
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid_ng.R
+import de.kuschku.quasseldroid_ng.ui.setup.SlideFragment
 
 class AccountSetupNameSlide : SlideFragment() {
   @BindView(R.id.name)
@@ -26,7 +27,7 @@ class AccountSetupNameSlide : SlideFragment() {
   }
 
   override val title = R.string.slideAccountNameTitle
-  override val descripion = R.string.slideAccountNameDescription
+  override val description = R.string.slideAccountNameDescription
 
   override fun setData(data: Bundle) {
     if (data.containsKey("name"))

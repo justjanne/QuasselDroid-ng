@@ -2,12 +2,10 @@ package de.kuschku.quasseldroid_ng
 
 import android.app.Application
 import android.content.Context
-import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
-import de.kuschku.quasseldroid_ng.service.QuasselService
 import de.kuschku.quasseldroid_ng.util.AndroidCompatibilityUtils
 import de.kuschku.quasseldroid_ng.util.AndroidLoggingHandler
 import de.kuschku.quasseldroid_ng.util.AndroidStreamChannelFactory
@@ -26,7 +24,7 @@ class QuasseldroidNG : Application() {
       .setResDialogText(R.string.crash_text)
       .build()
 
-    ACRA.init(this, config)
+    //ACRA.init(this, config)
   }
 
   override fun onCreate() {
@@ -38,7 +36,6 @@ class QuasseldroidNG : Application() {
       AndroidLoggingHandler.inject()
       AndroidStreamChannelFactory.inject()
 
-      startService(Intent(this, QuasselService::class.java))
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         systemService<ShortcutManager>().dynamicShortcuts = listOf(
           ShortcutInfo.Builder(this, "id1")

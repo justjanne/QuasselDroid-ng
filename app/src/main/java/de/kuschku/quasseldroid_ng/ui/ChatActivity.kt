@@ -2,6 +2,7 @@ package de.kuschku.quasseldroid_ng.ui
 
 import android.arch.lifecycle.LiveDataReactiveStreams
 import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.util.Log
@@ -17,13 +18,14 @@ import de.kuschku.libquassel.session.ConnectionState
 import de.kuschku.libquassel.session.SocketAddress
 import de.kuschku.libquassel.util.compatibility.LoggingHandler
 import de.kuschku.quasseldroid_ng.R
+import de.kuschku.quasseldroid_ng.service.QuasselService
 import de.kuschku.quasseldroid_ng.util.helper.stickyMapNotNull
 import de.kuschku.quasseldroid_ng.util.helper.stickySwitchMapNotNull
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
-class MainActivity : ServiceBoundActivity() {
+class ChatActivity : ServiceBoundActivity() {
   @BindView(R.id.host)
   lateinit var host: EditText
 
@@ -77,6 +79,7 @@ class MainActivity : ServiceBoundActivity() {
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    startService(Intent(this, QuasselService::class.java))
     setTheme(R.style.AppTheme)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)

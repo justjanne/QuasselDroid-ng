@@ -133,7 +133,6 @@ abstract class QuasselDatabase : RoomDatabase() {
           if (database == null) {
             database = Room.databaseBuilder(context.applicationContext,
                                             QuasselDatabase::class.java, DATABASE_NAME)
-              .fallbackToDestructiveMigration()
               .build()
           }
         }

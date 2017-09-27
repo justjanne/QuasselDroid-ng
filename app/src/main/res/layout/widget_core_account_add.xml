@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="72dp"
+  android:background="?attr/selectableItemBackground"
+  android:clickable="true"
+  android:focusable="true"
+  android:focusableInTouchMode="false"
+  android:orientation="horizontal"
+  android:paddingLeft="16dp"
+  android:paddingRight="16dp">
+
+  <LinearLayout
+    android:layout_width="48dp"
+    android:layout_height="match_parent">
+
+    <ImageView
+      android:layout_width="32dp"
+      android:layout_height="32dp"
+      android:layout_gravity="center_vertical"
+      android:tint="#727272"
+      app:srcCompat="@drawable/ic_add" />
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="0dip"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    android:layout_weight="1"
+    android:gravity="center_vertical|start"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/account_name"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:fontFamily="sans-serif-medium"
+      android:gravity="center_vertical|start"
+      android:lines="1"
+      android:singleLine="true"
+      android:text="New Account"
+      android:textSize="14sp" />
+  </LinearLayout>
+</LinearLayout>
