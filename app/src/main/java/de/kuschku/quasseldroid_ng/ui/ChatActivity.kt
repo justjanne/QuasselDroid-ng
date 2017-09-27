@@ -74,6 +74,16 @@ class ChatActivity : ServiceBoundActivity() {
       = (logLevel.ordinal >= LogLevel.INFO.ordinal)
   }
 
+  override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+    super.onRestoreInstanceState(savedInstanceState)
+    errorList.text = savedInstanceState?.getString("log", "") ?: ""
+  }
+
+  override fun onSaveInstanceState(outState: Bundle?) {
+    outState?.putString("log", errorList.text.toString())
+    super.onSaveInstanceState(outState)
+  }
+
   var account: AccountDatabase.Account? = null
   override fun onCreate(savedInstanceState: Bundle?) {
     thread.start()
