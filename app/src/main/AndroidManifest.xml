@@ -14,26 +14,26 @@
     android:theme="@style/AppTheme">
     <activity
       android:name=".ui.ChatActivity"
-      android:exported="true"
+      android:exported="false"
       android:label="@string/app_name"
       android:theme="@style/SplashTheme"
       android:windowSoftInputMode="adjustResize" />
     <activity
       android:name=".ui.setup.accounts.AccountSetupActivity"
       android:exported="false"
-      android:label="AccountSetup"
+      android:label="@string/app_name"
       android:theme="@style/SplashTheme"
       android:windowSoftInputMode="adjustResize" />
     <activity
       android:name=".ui.setup.accounts.AccountEditActivity"
-      android:exported="true"
-      android:label="AccountEdit"
+      android:exported="false"
+      android:label="@string/app_name"
       android:theme="@style/SplashTheme"
       android:windowSoftInputMode="adjustResize" />
     <activity
       android:name=".ui.setup.accounts.AccountSelectionActivity"
       android:exported="true"
-      android:label="AccountSelection"
+      android:label="@string/app_name"
       android:theme="@style/SplashTheme"
       android:windowSoftInputMode="adjustResize">
       <intent-filter>
