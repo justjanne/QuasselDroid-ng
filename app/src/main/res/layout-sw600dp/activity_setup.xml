@@ -19,7 +19,6 @@
       android:layout_height="wrap_content"
       android:layout_gravity="right|bottom"
       android:layout_marginBottom="16dp"
-      android:layout_marginEnd="16dp"
       android:layout_marginRight="16dp"
       android:tint="#ffffff"
       app:backgroundTint="#8A000000"
