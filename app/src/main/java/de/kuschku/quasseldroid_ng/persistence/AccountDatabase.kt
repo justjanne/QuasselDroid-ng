@@ -29,7 +29,7 @@ abstract class AccountDatabase : RoomDatabase() {
     fun create(vararg entities: AccountDatabase.Account): Array<Long>
 
     @Query("SELECT * FROM account WHERE id = :id")
-    fun findById(id: Long): AccountDatabase.Account
+    fun findById(id: Long): AccountDatabase.Account?
 
     @Query("SELECT * FROM account ORDER BY lastUsed DESC")
     fun all(): LivePagedListProvider<Int, Account>
