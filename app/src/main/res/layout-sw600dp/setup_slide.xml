@@ -1,4 +1,5 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
@@ -7,14 +8,16 @@
     android:layout_width="400dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal|bottom"
+    android:layout_marginLeft="?attr/actionBarSize"
+    android:layout_marginRight="?attr/actionBarSize"
     android:orientation="vertical">
 
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="64dp"
+      android:layout_marginTop="?attr/actionBarSize"
       android:orientation="vertical"
-      android:padding="32dp">
+      android:paddingBottom="32dp">
 
       <TextView
         android:id="@+id/title"
@@ -39,7 +42,8 @@
       android:id="@+id/content_host"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:minHeight="400dp" />
+      android:minHeight="400dp"
+      app:cardElevation="4dp" />
 
   </LinearLayout>
 
