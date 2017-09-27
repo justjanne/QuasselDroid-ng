@@ -1,0 +1,25 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <android.support.v4.view.ViewPager
+    android:id="@+id/view_pager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+
+  <android.support.design.widget.FloatingActionButton
+    android:id="@+id/next_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="end|bottom"
+    android:layout_marginBottom="16dp"
+    android:layout_marginEnd="80dp"
+    android:layout_marginRight="80dp"
+    android:tint="#ffffff"
+    app:backgroundTint="#8A000000"
+    app:elevation="0dip"
+    app:fabSize="normal"
+    app:pressedTranslationZ="0dip" />
+
+</merge>

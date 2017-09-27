@@ -6,6 +6,14 @@
     <item name="colorAccent">@color/colorAccent</item>
   </style>
 
+  <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+  </style>
+
+  <style name="SetupTheme" parent="AppTheme.NoActionBar" />
+
   <style name="RaisedButton" parent="AppTheme">
     <item name="colorButtonNormal">?attr/background</item>
   </style>
@@ -14,11 +22,7 @@
     <item name="colorButtonNormal">@color/colorAccent</item>
   </style>
 
-  <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-    <item name="colorPrimary">@color/colorPrimaryDark</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    <item name="colorAccent">@color/colorAccent</item>
-
+  <style name="SplashTheme" parent="AppTheme.NoActionBar">
     <item name="android:windowBackground">@drawable/bg_splash</item>
   </style>
 </resources>

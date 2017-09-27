@@ -1,0 +1,33 @@
+<resources>
+  <!-- Account Connection -->
+  <string name="slideAccountConnectionTitle">Connection</string>
+  <string name="slideAccountConnectionDescription">First, please choose which server your core is hosted on.</string>
+
+  <string name="labelConnectionHostname">Host</string>
+  <string name="labelConnectionPort">Port</string>
+
+  <!-- Account User -->
+  <string name="slideAccountUserTitle">Your Account</string>
+  <string name="slideAccountUserDescription">Now, please enter the username and password for your account on the core. If you just created that core, we’ll set up this account for you</string>
+
+  <string name="labelAccountUsername">Username</string>
+  <string name="labelAccountPassword">Password</string>
+
+  <!-- Account Name -->
+  <string name="slideAccountNameTitle">Customize Account</string>
+  <string name="slideAccountNameDescription">Give this account a name and icon</string>
+
+  <string name="labelAccountName">Account name</string>
+
+  <!-- Core Authenticator Select -->
+  <string name="slideCoreAuthenticatorSelectTitle">Select Authentication Backend</string>
+  <string name="slideCoreAuthenticatorSelectDescription">Please select an authentication backend for the Quassel Core to use for authenticating users.</string>
+
+  <!-- Core Backend Select -->
+  <string name="slideCoreBackendSelectTitle">Select Storage Backend</string>
+  <string name="slideCoreBackendSelectDescription">Please select a database backend for the Quassel Core storage to store the backlog and other data in.</string>
+
+  <!-- Core Backend Config -->
+  <string name="slideCoreBackendSetupTitle">Configure Storage Backend</string>
+  <string name="slideCoreBackendSetupDescription">Please configure the selected database backend.</string>
+</resources>

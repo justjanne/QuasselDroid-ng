@@ -51,6 +51,8 @@ android {
         )
       }
     }
+
+    vectorDrawables.useSupportLibrary = true
   }
 
   buildTypes {
@@ -75,6 +77,9 @@ dependencies {
   implementation(appCompat("customtabs"))
   implementation(appCompat("cardview-v7"))
   implementation(appCompat("recyclerview-v7"))
+  implementation("com.android.support.constraint:constraint-layout:1.0.2")
+
+  implementation("com.github.apl-devs:appintro:v4.2.2")
 
   implementation("io.reactivex.rxjava2:rxjava:2.1.3")
 

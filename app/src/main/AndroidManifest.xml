@@ -19,9 +19,17 @@
       android:theme="@style/SplashTheme">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
+        <action android:name="android.intent.action.VIEW" />
+
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
+    <activity
+      android:name=".ui.setup.AccountSetupActivity"
+      android:exported="true"
+      android:label="AccountSetup"
+      android:theme="@style/SplashTheme" />
+
     <service
       android:name=".service.QuasselService"
       android:description="@string/connection_service_description"
