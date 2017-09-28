@@ -31,11 +31,10 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
   override fun handle(f: SignalProxyMessage): Boolean {
     try {
       if (!super<SignalProxy>.handle(f)) {
-        log(DEBUG, "No receiver registered for $f")
+        log(DEBUG, "ProtocolHandler", "No receiver registered for $f")
       }
     } catch (e: Throwable) {
-      log(WARN, "ProtocolHandler",
-          "Error Handling SignalProxyMessage", e)
+      log(WARN, "ProtocolHandler", "Error Handling SignalProxyMessage", e)
     }
     return true
   }
@@ -43,11 +42,10 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
   override fun handle(f: HandshakeMessage): Boolean {
     try {
       if (!super<AuthHandler>.handle(f)) {
-        log(DEBUG, "No receiver registered for $f")
+        log(DEBUG, "ProtocolHandler", "No receiver registered for $f")
       }
     } catch (e: Throwable) {
-      log(WARN, "ProtocolHandler",
-          "Error Handling HandshakeMessage", e)
+      log(WARN, "ProtocolHandler", "Error Handling HandshakeMessage", e)
     }
     return true
   }

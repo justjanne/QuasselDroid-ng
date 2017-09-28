@@ -60,7 +60,7 @@ class CoreConnection(
   }
 
   fun setState(value: ConnectionState) {
-    log(INFO, "CoreConnection", value.name)
+    log(INFO, TAG, value.name)
     internalState.onNext(value)
   }
 
@@ -84,7 +84,7 @@ class CoreConnection(
     sizeBuffer.flip()
     val protocol = ProtocolInfoSerializer.deserialize(sizeBuffer, session.coreFeatures)
 
-    log(DEBUG, "Protocol negotiated $protocol")
+    log(DEBUG, TAG, "Protocol negotiated $protocol")
 
     // Wrap socket in SSL context if ssl is enabled
     if (protocol.flags.hasFlag(ProtocolFeature.TLS)) {
