@@ -30,7 +30,7 @@ android {
   }
 
   defaultConfig {
-    minSdkVersion(15)
+    minSdkVersion(16)
     targetSdkVersion(26)
 
     applicationId = "de.kuschku.quasseldroid_ng.test"
