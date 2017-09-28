@@ -1,50 +1,63 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/drawer_layout"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  android:fitsSystemWindows="true"
+  tools:openDrawer="start">
 
-  <LinearLayout
+  <include layout="@layout/content_main" />
+
+  <de.kuschku.quasseldroid_ng.util.ui.DrawerRecyclerView
+    android:id="@+id/nickList"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    android:layout_marginTop="8dp"
-    android:orientation="vertical"
-    android:paddingLeft="24dp"
-    android:paddingRight="24dp">
+    android:layout_height="match_parent"
+    android:layout_gravity="end"
+    android:background="?android:attr/windowBackground"
+    android:clipToPadding="false"
+    android:fitsSystemWindows="true" />
+
+  <de.kuschku.quasseldroid_ng.util.ui.NavigationDrawerLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="?android:attr/windowBackground"
+    android:fitsSystemWindows="true"
+    app:insetForeground="?attr/colorPrimaryDark">
 
     <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="match_parent"
+      android:orientation="vertical">
 
-      <Button
-        android:id="@+id/connect"
-        android:layout_width="wrap_content"
+      <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minWidth="88dp"
-        android:text="Connect"
-        android:theme="@style/AppTheme.Button.Colored" />
+        android:theme="?attr/actionBarTheme">
 
-      <Button
-        android:id="@+id/disconnect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="88dp"
-        android:text="Disconnect"
-        android:theme="@style/AppTheme.Button" />
+        <android.support.v7.widget.Toolbar
+          android:id="@+id/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          android:background="?attr/colorPrimary"
+          app:contentInsetStartWithNavigation="0dp">
 
-      <Button
-        android:id="@+id/clear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="88dp"
-        android:text="Clear"
-        android:theme="@style/AppTheme.Button" />
+          <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/chatListSpinner"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:theme="?attr/actionBarTheme" />
+
+        </android.support.v7.widget.Toolbar>
+
+      </android.support.design.widget.AppBarLayout>
+
+
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/chatList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
     </LinearLayout>
-
-    <TextView
-      android:id="@+id/errorList"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:textIsSelectable="true" />
-  </LinearLayout>
-</ScrollView>
+  </de.kuschku.quasseldroid_ng.util.ui.NavigationDrawerLayout>
+</android.support.v4.widget.DrawerLayout>

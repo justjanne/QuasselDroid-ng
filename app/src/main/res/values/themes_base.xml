@@ -1,0 +1,100 @@
+<resources>
+
+  <style name="Theme.AppTheme" parent="Theme.AppCompat">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+  </style>
+
+  <style name="Theme.AppTheme.Light" parent="Theme.AppCompat.Light.DarkActionBar">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+  </style>
+
+  <style name="Theme.AppTheme.Light.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+  </style>
+
+  <style name="Theme.AppTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+  </style>
+
+  <style name="Theme.Base.ChatTheme" parent="Theme.AppTheme.NoActionBar" />
+
+  <style name="Theme.Base.ChatTheme.Light" parent="Theme.AppTheme.Light.NoActionBar" />
+
+  <style name="Theme.SetupTheme" parent="Theme.AppTheme.Light.NoActionBar" />
+
+  <style name="Theme.SplashTheme" parent="Theme.AppTheme.Light.NoActionBar">
+    <item name="android:windowBackground">@drawable/bg_splash</item>
+  </style>
+
+  <style name="Theme.ChatTheme" parent="Base.ChatTheme">
+    <item name="actionBarTheme">@style/Widget.AppBarOverlay</item>
+    <item name="formatBarTheme">@style/Widget.AppBarOverlay</item>
+
+    <item name="windowActionModeOverlay">true</item>
+
+    <item name="colorDivider">#1FFFFFFF</item>
+
+    <item name="colorFill">@color/colorFillDark</item>
+    <item name="colorOffline">@color/colorOfflineDark</item>
+    <item name="colorAway">@color/colorAwayDark</item>
+
+    <item name="cardStyle">@style/CardView.Dark</item>
+
+    <item name="mircColor0">#ffffff</item>
+    <item name="mircColor1">#000000</item>
+    <item name="mircColor2">#000080</item>
+    <item name="mircColor3">#008000</item>
+    <item name="mircColor4">#ff0000</item>
+    <item name="mircColor5">#800000</item>
+    <item name="mircColor6">#800080</item>
+    <item name="mircColor7">#ffa500</item>
+    <item name="mircColor8">#ffff00</item>
+    <item name="mircColor9">#00ff00</item>
+    <item name="mircColorA">#008080</item>
+    <item name="mircColorB">#00ffff</item>
+    <item name="mircColorC">#4169e1</item>
+    <item name="mircColorD">#ff00ff</item>
+    <item name="mircColorE">#808080</item>
+    <item name="mircColorF">#c0c0c0</item>
+  </style>
+
+  <style name="Theme.ChatTheme.Light" parent="Base.ChatTheme.Light">
+    <item name="actionBarTheme">@style/Widget.AppBarOverlay</item>
+    <item name="formatBarTheme">@style/Widget.AppBarOverlay.Light</item>
+
+    <item name="windowActionModeOverlay">true</item>
+
+    <item name="colorDivider">#1F000000</item>>
+
+    <item name="colorFill">@color/colorFillLight</item>
+    <item name="colorOffline">@color/colorOfflineLight</item>
+    <item name="colorAway">@color/colorAwayLight</item>
+
+    <item name="cardStyle">@style/CardView.Light</item>
+
+    <item name="mircColor0">#ffffff</item>
+    <item name="mircColor1">#000000</item>
+    <item name="mircColor2">#000080</item>
+    <item name="mircColor3">#008000</item>
+    <item name="mircColor4">#ff0000</item>
+    <item name="mircColor5">#800000</item>
+    <item name="mircColor6">#800080</item>
+    <item name="mircColor7">#ffa500</item>
+    <item name="mircColor8">#ffff00</item>
+    <item name="mircColor9">#00ff00</item>
+    <item name="mircColorA">#008080</item>
+    <item name="mircColorB">#00ffff</item>
+    <item name="mircColorC">#4169e1</item>
+    <item name="mircColorD">#ff00ff</item>
+    <item name="mircColorE">#808080</item>
+    <item name="mircColorF">#c0c0c0</item>
+  </style>
+</resources>

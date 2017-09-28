@@ -124,7 +124,7 @@ class BufferViewConfig constructor(
       _buffers.remove(bufferId)
 
     if (_temporarilyRemovedBuffers.contains(bufferId))
-      _temporarilyRemovedBuffers.remove(bufferId);
+      _temporarilyRemovedBuffers.remove(bufferId)
 
     _removedBuffers.add(bufferId)
   }
@@ -192,18 +192,18 @@ class BufferViewConfig constructor(
     super.setSortAlphabetically(sortAlphabetically)
   }
 
-  val _bufferViewId: Int = bufferViewId
-  var _bufferViewName: String = ""
-  var _networkId: NetworkId = 0
-  var _addNewBuffersAutomatically: Boolean = true
-  var _sortAlphabetically: Boolean = true
-  var _hideInactiveBuffers: Boolean = false
-  var _hideInactiveNetworks: Boolean = false
-  var _disableDecoration: Boolean = false
-  var _allowedBufferTypes: Buffer_Types = Buffer_Type.of(*Buffer_Type.validValues)
-  var _minimumActivity: Buffer_Activities = Buffer_Activities.of(0)
-  var _showSearch: Boolean = false
-  var _buffers: MutableList<BufferId> = mutableListOf()
-  var _removedBuffers: MutableSet<BufferId> = mutableSetOf()
-  var _temporarilyRemovedBuffers: MutableSet<BufferId> = mutableSetOf()
+  private val _bufferViewId: Int = bufferViewId
+  private var _bufferViewName: String = ""
+  private var _networkId: NetworkId = 0
+  private var _addNewBuffersAutomatically: Boolean = true
+  private var _sortAlphabetically: Boolean = true
+  private var _hideInactiveBuffers: Boolean = false
+  private var _hideInactiveNetworks: Boolean = false
+  private var _disableDecoration: Boolean = false
+  private var _allowedBufferTypes: Buffer_Types = Buffer_Type.of(*Buffer_Type.validValues)
+  private var _minimumActivity: Buffer_Activities = Buffer_Activities.of(0)
+  private var _showSearch: Boolean = false
+  private var _buffers: MutableList<BufferId> = mutableListOf()
+  private var _removedBuffers: MutableSet<BufferId> = mutableSetOf()
+  private var _temporarilyRemovedBuffers: MutableSet<BufferId> = mutableSetOf()
 }

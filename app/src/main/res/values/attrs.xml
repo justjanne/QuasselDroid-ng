@@ -1,0 +1,70 @@
+<resources>
+  <!-- sender colors -->
+  <attr name="senderColor0" format="color" />
+  <attr name="senderColor1" format="color" />
+  <attr name="senderColor2" format="color" />
+  <attr name="senderColor3" format="color" />
+  <attr name="senderColor4" format="color" />
+  <attr name="senderColor5" format="color" />
+  <attr name="senderColor6" format="color" />
+  <attr name="senderColor7" format="color" />
+  <attr name="senderColor8" format="color" />
+  <attr name="senderColor9" format="color" />
+  <attr name="senderColorA" format="color" />
+  <attr name="senderColorB" format="color" />
+  <attr name="senderColorC" format="color" />
+  <attr name="senderColorD" format="color" />
+  <attr name="senderColorE" format="color" />
+  <attr name="senderColorF" format="color" />
+
+  <!-- mirc colors -->
+  <attr name="mircColor0" format="color" />
+  <attr name="mircColor1" format="color" />
+  <attr name="mircColor2" format="color" />
+  <attr name="mircColor3" format="color" />
+  <attr name="mircColor4" format="color" />
+  <attr name="mircColor5" format="color" />
+  <attr name="mircColor6" format="color" />
+  <attr name="mircColor7" format="color" />
+  <attr name="mircColor8" format="color" />
+  <attr name="mircColor9" format="color" />
+  <attr name="mircColorA" format="color" />
+  <attr name="mircColorB" format="color" />
+  <attr name="mircColorC" format="color" />
+  <attr name="mircColorD" format="color" />
+  <attr name="mircColorE" format="color" />
+  <attr name="mircColorF" format="color" />
+
+  <!-- Background and foreground colors for UI -->
+  <attr name="colorForeground" format="color" />
+  <attr name="colorForegroundHighlight" format="color" />
+  <attr name="colorForegroundSecondary" format="color" />
+  <attr name="colorForegroundAction" format="color" />
+  <attr name="colorForegroundError" format="color" />
+
+  <attr name="colorForegroundMirc" format="integer" />
+
+  <attr name="colorDivider" format="color" />
+
+  <attr name="colorBackground" format="color" />
+  <attr name="colorBackgroundHighlight" format="color" />
+  <attr name="colorBackgroundSecondary" format="color" />
+  <attr name="colorBackgroundCard" format="color" />
+  <attr name="colorBackgroundDialog" format="color" />
+
+  <!-- Tint colors for drawer -->
+  <attr name="colorTintActivity" format="color" />
+  <attr name="colorTintMessage" format="color" />
+  <attr name="colorTintHighlight" format="color" />
+  <attr name="chatlineExpandedSize" />
+
+  <!-- Icons -->
+  <attr name="colorOffline" format="color" />
+  <attr name="colorAway" format="color" />
+  <attr name="colorFill" format="color" />
+
+  <attr name="formatBarTheme" format="reference" />
+  <attr name="buttonTheme" format="reference" />
+  <attr name="buttonThemeColored" format="reference" />
+  <attr name="cardStyle" format="reference" />
+</resources>

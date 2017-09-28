@@ -10,7 +10,6 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import de.kuschku.libquassel.util.compatibility.log
 import de.kuschku.libquassel.util.hasFlag
-import io.reactivex.Flowable
 import org.threeten.bp.Instant
 import javax.net.ssl.X509TrustManager
 
@@ -24,20 +23,20 @@ class Session(
   var coreFeatures: Quassel_Features = Quassel_Feature.NONE
 
   private val coreConnection = CoreConnection(this, address, handlerService)
-  override val state: Flowable<ConnectionState> = coreConnection.state
+  override val state = coreConnection.state
 
-  private var aliasManager: AliasManager? = null
-  private var backlogManager: BacklogManager? = null
-  private var bufferSyncer: BufferSyncer? = null
-  private var bufferViewManager: BufferViewManager? = null
-  private var certManagers = mutableMapOf<IdentityId, CertManager>()
-  private var coreInfo: CoreInfo? = null
-  private var dccConfig: DccConfig? = null
-  private var identities = mutableMapOf<IdentityId, Identity>()
-  private var ignoreListManager: IgnoreListManager? = null
-  private var ircListHelper: IrcListHelper? = null
-  private var networks = mutableMapOf<NetworkId, Network>()
-  private var networkConfig: NetworkConfig? = null
+  override val aliasManager = AliasManager(this)
+  override val backlogManager = BacklogManager(this)
+  override val bufferSyncer = BufferSyncer(this)
+  override val bufferViewManager = BufferViewManager(this)
+  override val certManagers = mutableMapOf<IdentityId, CertManager>()
+  override val coreInfo = CoreInfo(this)
+  override val dccConfig = DccConfig(this)
+  override val identities = mutableMapOf<IdentityId, Identity>()
+  override val ignoreListManager = IgnoreListManager(this)
+  override val ircListHelper = IrcListHelper(this)
+  override val networks = mutableMapOf<NetworkId, Network>()
+  override val networkConfig = NetworkConfig(this)
 
   init {
     coreConnection.start()
@@ -74,31 +73,14 @@ class Session(
     networks.values.forEach { syncableObject -> this.synchronize(syncableObject, true) }
     certManagers.values.forEach { syncableObject -> this.synchronize(syncableObject, true) }
 
-    aliasManager = AliasManager(this)
     synchronize(aliasManager, true)
-
-    backlogManager = BacklogManager(this)
-
-    bufferSyncer = BufferSyncer(this)
     synchronize(bufferSyncer, true)
-
-    bufferViewManager = BufferViewManager(this)
     synchronize(bufferViewManager, true)
-
-    coreInfo = CoreInfo(this)
     synchronize(coreInfo, true)
-
-    dccConfig = DccConfig(this)
     if (coreFeatures.hasFlag(QuasselFeature.DccFileTransfer))
       synchronize(dccConfig, true)
-
-    ignoreListManager = IgnoreListManager(this)
     synchronize(ignoreListManager, true)
-
-    ircListHelper = IrcListHelper(this)
     synchronize(ircListHelper, true)
-
-    networkConfig = NetworkConfig(this)
     synchronize(networkConfig, true)
 
     return true
@@ -131,16 +113,6 @@ class Session(
 
   override fun close() {
     coreConnection.close()
-
-    aliasManager = null
-    backlogManager = null
-    bufferSyncer = null
-    bufferViewManager = null
-    coreInfo = null
-    dccConfig = null
-    ignoreListManager = null
-    ircListHelper = null
-    networkConfig = null
 
     certManagers.clear()
     identities.clear()

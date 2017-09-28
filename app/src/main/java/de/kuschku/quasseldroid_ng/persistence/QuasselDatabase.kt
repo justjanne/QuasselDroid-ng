@@ -57,6 +57,12 @@ abstract class QuasselDatabase : RoomDatabase() {
     var networkName: String
   )
 
+  @Entity
+  class BufferViewConfig(
+    @PrimaryKey var id: Int,
+    var name: String
+  )
+
   @Dao
   interface NetworkDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)

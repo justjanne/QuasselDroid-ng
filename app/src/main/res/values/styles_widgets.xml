@@ -1,0 +1,38 @@
+<resources>
+
+  <style name="Widget" />
+
+  <style name="Widget.Button" parent="Widget.AppCompat.Button">
+    <item name="backgroundTint">?attr/colorBackgroundCard</item>
+  </style>
+
+  <style name="Widget.Button.Colored" parent="Widget.AppCompat.Button.Colored" />
+
+  <style name="Widget.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <item name="colorControlNormal">@color/colorFillDark</item>
+    <item name="android:textColorPrimary">@color/colorFillDark</item>
+    <item name="drawerArrowStyle">@style/Widget.DrawerArrowToggle</item>
+
+    <item name="colorFill">@color/colorFillDark</item>
+    <item name="colorOffline">@color/colorOfflineDark</item>
+    <item name="colorAway">@color/colorAwayDark</item>
+  </style>
+
+  <style name="Widget.AppBarOverlay.Light" parent="ThemeOverlay.AppCompat.ActionBar">
+    <item name="colorControlNormal">@color/colorFillLight</item>
+    <item name="android:textColorPrimary">@color/colorFillLight</item>
+    <item name="drawerArrowStyle">@style/Widget.DrawerArrowToggle.Light</item>
+
+    <item name="colorFill">@color/colorFillLight</item>
+    <item name="colorOffline">@color/colorOfflineLight</item>
+    <item name="colorAway">@color/colorAwayLight</item>
+  </style>
+
+  <style name="Widget.DrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">
+    <item name="color">?attr/colorControlNormal</item>
+  </style>
+
+  <style name="Widget.DrawerArrowToggle.Light" parent="Widget.AppCompat.DrawerArrowToggle">
+    <item name="color">?attr/colorControlNormal</item>
+  </style>
+</resources>

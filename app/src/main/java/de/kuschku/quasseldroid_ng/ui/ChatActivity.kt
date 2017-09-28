@@ -1,14 +1,13 @@
 package de.kuschku.quasseldroid_ng.ui
 
 import android.app.Activity
-import android.arch.lifecycle.LiveDataReactiveStreams
 import android.arch.lifecycle.Observer
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.support.design.widget.Snackbar
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -16,17 +15,16 @@ import android.widget.Button
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import de.kuschku.libquassel.session.Backend
-import de.kuschku.libquassel.session.ConnectionState
-import de.kuschku.libquassel.session.SocketAddress
+import de.kuschku.libquassel.session.*
 import de.kuschku.libquassel.util.compatibility.LoggingHandler
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.ERROR
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
+import de.kuschku.libquassel.util.compatibility.log
 import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
-import de.kuschku.quasseldroid_ng.service.QuasselService
-import de.kuschku.quasseldroid_ng.util.helper.editApply
-import de.kuschku.quasseldroid_ng.util.helper.stickyMapNotNull
-import de.kuschku.quasseldroid_ng.util.helper.stickySwitchMapNotNull
+import de.kuschku.quasseldroid_ng.util.helper.*
+import de.kuschku.quasseldroid_ng.util.service.ServiceBoundActivity
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -44,19 +42,35 @@ class ChatActivity : ServiceBoundActivity() {
   @BindView(R.id.errorList)
   lateinit var errorList: TextView
 
+  @BindView(R.id.toolbar)
+  lateinit var toolbar: Toolbar
+
   private val thread = HandlerThread("Chat")
   private lateinit var handler: Handler
 
-  private val state = backend.stickyMapNotNull(null, Backend::sessionManager)
-    .stickySwitchMapNotNull(ConnectionState.DISCONNECTED) { session ->
-      LiveDataReactiveStreams.fromPublisher(session.state)
+  private val sessionManager = backend.map(Backend::sessionManager)
+  private val state
+    = sessionManager.switchMapRx(SessionManager::state)
+
+  private val bufferViewManager
+    = sessionManager.switchMapRx(SessionManager::session).map(ISession::bufferViewManager)
+  private val bufferViewConfigs = bufferViewManager.switchMapRx { manager ->
+    manager.bufferViewConfigIds.map { ids ->
+      ids.map { id ->
+        manager.bufferViewConfig(id)
+      }.sortedBy { it?.bufferViewName() }
     }
+  }
 
-  private var snackbar: Snackbar? = null
+  private
+  var snackbar: Snackbar? = null
 
-  private val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ISO_TIME
-  private val logHandler = object : LoggingHandler() {
-    override fun log(logLevel: LogLevel, tag: String, message: String?, throwable: Throwable?) {
+  private
+  val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ISO_TIME
+  private
+  val logHandler = object : LoggingHandler() {
+    override fun log(logLevel: LogLevel, tag: String, message: String?,
+                     throwable: Throwable?) {
       val time = dateTimeFormatter.format(ZonedDateTime.now(ZoneOffset.UTC))
       runOnUiThread {
         errorList.append("$time $tag: ")
@@ -72,7 +86,7 @@ class ChatActivity : ServiceBoundActivity() {
     }
 
     override fun isLoggable(logLevel: LogLevel, tag: String)
-      = (logLevel.ordinal >= LogLevel.INFO.ordinal)
+      = (logLevel.ordinal >= INFO.ordinal)
   }
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
@@ -86,15 +100,15 @@ class ChatActivity : ServiceBoundActivity() {
   }
 
   var account: AccountDatabase.Account? = null
+
   override fun onCreate(savedInstanceState: Bundle?) {
     thread.start()
     handler = Handler(thread.looper)
 
-    startService(Intent(this, QuasselService::class.java))
-    setTheme(R.style.AppTheme)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     ButterKnife.bind(this)
+    setSupportActionBar(toolbar)
 
     val database = AccountDatabase.Creator.init(this)
     handler.post {
@@ -130,7 +144,7 @@ class ChatActivity : ServiceBoundActivity() {
       errorList.text = ""
     }
 
-    state.observe(this, Observer {
+    state.observeSticky(this, Observer {
       val status = it ?: ConnectionState.DISCONNECTED
       val disconnected = status == ConnectionState.DISCONNECTED
 
@@ -140,6 +154,13 @@ class ChatActivity : ServiceBoundActivity() {
       snackbar?.dismiss()
       snackbar = Snackbar.make(errorList, status.name, Snackbar.LENGTH_SHORT)
       snackbar?.show()
+    })
+
+    bufferViewManager.observeSticky(this, Observer {
+      log(ERROR, "bufferViewManager", it.toString())
+    })
+    bufferViewConfigs.or(emptyList()).observeSticky(this, Observer {
+      log(ERROR, "bufferViewConfigs", it.toString())
     })
   }
 

@@ -14,7 +14,9 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid_ng.R
-import de.kuschku.quasseldroid_ng.util.helper.stickySwitchMapNotNull
+import de.kuschku.quasseldroid_ng.util.helper.observeSticky
+import de.kuschku.quasseldroid_ng.util.helper.or
+import de.kuschku.quasseldroid_ng.util.helper.switchMap
 
 abstract class SetupActivity : AppCompatActivity() {
   @BindView(R.id.view_pager)
@@ -28,7 +30,7 @@ abstract class SetupActivity : AppCompatActivity() {
   protected abstract val fragments: List<SlideFragment>
 
   private val currentPage = MutableLiveData<SlideFragment?>()
-  private val isValid = currentPage.stickySwitchMapNotNull(false, SlideFragment::valid)
+  private val isValid = currentPage.switchMap(SlideFragment::valid).or(false)
 
   private val pageChangeListener = object : ViewPager.OnPageChangeListener {
     override fun onPageScrollStateChanged(state: Int) {
@@ -53,7 +55,7 @@ abstract class SetupActivity : AppCompatActivity() {
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    setTheme(R.style.SetupTheme)
+    setTheme(R.style.Theme_SetupTheme)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_setup)
     ButterKnife.bind(this)
@@ -68,7 +70,7 @@ abstract class SetupActivity : AppCompatActivity() {
       else
         viewPager.setCurrentItem(viewPager.currentItem + 1, true)
     }
-    isValid.observe(this, Observer {
+    isValid.observeSticky(this, Observer {
       if (it == true) {
         button.show()
         adapter.lastValidItem = viewPager.currentItem

@@ -3,6 +3,7 @@ package de.kuschku.libquassel.quassel.syncables
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferViewManager
 import de.kuschku.libquassel.session.SignalProxy
+import io.reactivex.subjects.BehaviorSubject
 
 class BufferViewManager constructor(
   proxy: SignalProxy
@@ -35,6 +36,7 @@ class BufferViewManager constructor(
 
     proxy.synchronize(config, !initialized)
     _bufferViewConfigs[config.bufferViewId()] = config
+    bufferViewConfigIds.onNext(_bufferViewConfigs.keys)
   }
 
   override fun addBufferViewConfig(bufferViewConfigId: Int) {
@@ -49,7 +51,12 @@ class BufferViewManager constructor(
       return
 
     _bufferViewConfigs.remove(bufferViewConfigId)
+    bufferViewConfigIds.onNext(_bufferViewConfigs.keys)
   }
 
-  private val _bufferViewConfigs: MutableMap<BufferId, BufferViewConfig> = mutableMapOf()
+  private val _bufferViewConfigs: MutableMap<Int, BufferViewConfig>
+    = mutableMapOf()
+
+  val bufferViewConfigIds: BehaviorSubject<Set<Int>>
+    = BehaviorSubject.createDefault<Set<Int>>(emptySet())
 }

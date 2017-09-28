@@ -58,7 +58,7 @@ class AccountEditActivity : AppCompatActivity() {
     thread.start()
     handler = Handler(thread.looper)
 
-    setTheme(R.style.AppTheme)
+    setTheme(R.style.Theme_AppTheme_Light)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.setup_account_edit)
     ButterKnife.bind(this)

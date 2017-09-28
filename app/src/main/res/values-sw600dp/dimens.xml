@@ -1,0 +1,3 @@
+<resources>
+  <dimen name="navigation_drawer_max_width">400dp</dimen>
+</resources>

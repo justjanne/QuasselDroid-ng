@@ -1,0 +1,26 @@
+<resources>
+
+  <style name="Theme.AppTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
+  </style>
+
+  <style name="Theme.AppTheme.Light.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
+  </style>
+
+  <style name="Base.ChatTheme" parent="Theme.AppTheme.NoActionBar">
+    <item name="android:statusBarColor">#0000</item>
+  </style>
+
+  <style name="Base.ChatTheme.Light" parent="Theme.AppTheme.Light.NoActionBar">
+    <item name="android:statusBarColor">#0000</item>
+  </style>
+</resources>

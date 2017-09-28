@@ -59,12 +59,12 @@ object DateTimeSerializer : Serializer<Temporal> {
     if (milliOfDay == -1L || julianDay == -1L)
       return Instant.EPOCH
     return when (timeSpec) {
-      TimeSpec.LocalTime     ->
+      TimeSpec.LocalTime ->
         Instant.EPOCH.atZone(ZoneOffset.systemDefault())
           .with(JulianFields.JULIAN_DAY, julianDay)
           .with(ChronoField.MILLI_OF_DAY, milliOfDay)
           .toInstant()
-      else                   ->
+      else               ->
         Instant.EPOCH.atOffset(ZoneOffset.UTC)
           .with(JulianFields.JULIAN_DAY, julianDay)
           .with(ChronoField.MILLI_OF_DAY, milliOfDay)

@@ -7,11 +7,11 @@ import android.os.Handler
 import android.os.HandlerThread
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.session.Backend
-import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.session.SocketAddress
 import de.kuschku.quasseldroid_ng.BuildConfig
 import de.kuschku.quasseldroid_ng.R
+import de.kuschku.quasseldroid_ng.persistence.PersistentSession
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.util.compatibility.AndroidHandlerService
 import org.threeten.bp.Instant
@@ -78,7 +78,7 @@ class QuasselService : LifecycleService() {
     handler = Handler(thread.looper)
     super.onCreate()
     database = QuasselDatabase.Creator.init(application)
-    sessionManager = SessionManager(ISession.NULL)
+    sessionManager = SessionManager(PersistentSession())
     clientData = ClientData(
       identifier = "${resources.getString(R.string.app_name)} ${BuildConfig.VERSION_NAME}",
       buildDate = Instant.ofEpochSecond(BuildConfig.GIT_COMMIT_DATE),
