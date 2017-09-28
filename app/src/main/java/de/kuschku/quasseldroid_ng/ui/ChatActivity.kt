@@ -153,6 +153,7 @@ class ChatActivity : ServiceBoundActivity() {
       getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editApply {
         putBoolean(Keys.Status.reconnect, false)
       }
+      setResult(Activity.RESULT_OK)
       finish()
       true
     }
