@@ -20,6 +20,7 @@ import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.ConnectionState
 import de.kuschku.libquassel.session.SocketAddress
 import de.kuschku.libquassel.util.compatibility.LoggingHandler
+import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
 import de.kuschku.quasseldroid_ng.service.QuasselService
@@ -97,15 +98,15 @@ class ChatActivity : ServiceBoundActivity() {
 
     val database = AccountDatabase.Creator.init(this)
     handler.post {
-      val accountId = getSharedPreferences("status", Context.MODE_PRIVATE)
-        ?.getLong(selectedAccountKey, -1) ?: -1
+      val accountId = getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
+        ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
       if (accountId == -1L) {
-        setResult(Activity.RESULT_CANCELED)
+        setResult(Activity.RESULT_OK)
         finish()
       }
       val it = database.accounts().findById(accountId)
       if (it == null) {
-        setResult(Activity.RESULT_CANCELED)
+        setResult(Activity.RESULT_OK)
         finish()
       }
       account = it
@@ -149,8 +150,8 @@ class ChatActivity : ServiceBoundActivity() {
 
   override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
     R.id.disconnect -> {
-      getSharedPreferences("status", Context.MODE_PRIVATE).editApply {
-        putBoolean("reconnect", false)
+      getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editApply {
+        putBoolean(Keys.Status.reconnect, false)
       }
       finish()
       true
@@ -166,9 +167,5 @@ class ChatActivity : ServiceBoundActivity() {
   override fun onStop() {
     LoggingHandler.loggingHandlers.remove(logHandler)
     super.onStop()
-  }
-
-  companion object {
-    private const val selectedAccountKey = "selectedAccount"
   }
 }

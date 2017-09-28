@@ -2,8 +2,8 @@ package de.kuschku.quasseldroid_ng.ui.setup.accounts
 
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
+import android.support.design.widget.TextInputLayout
 import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,19 +11,16 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.ui.setup.SlideFragment
+import de.kuschku.quasseldroid_ng.util.TextValidator
 
 class AccountSetupNameSlide : SlideFragment() {
+  @BindView(R.id.nameWrapper)
+  lateinit var nameWrapper: TextInputLayout
   @BindView(R.id.name)
   lateinit var nameField: TextInputEditText
 
-  private val textWatcher = object : TextWatcher {
-    override fun afterTextChanged(p0: Editable?) = updateValidity()
-    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
-    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
-  }
-
   override fun isValid(): Boolean {
-    return validName()
+    return nameValidator.isValid
   }
 
   override val title = R.string.slideAccountNameTitle
@@ -43,14 +40,18 @@ class AccountSetupNameSlide : SlideFragment() {
                                savedInstanceState: Bundle?): View {
     val view = inflater.inflate(R.layout.setup_account_name, container, false)
     ButterKnife.bind(this, view)
-    nameField.addTextChangedListener(textWatcher)
+    nameValidator = object : TextValidator(
+      nameWrapper::setError, resources.getString(R.string.hintInvalidName)
+    ) {
+      override fun validate(text: Editable)
+        = text.isNotBlank()
+
+      override fun onChanged() = updateValidity()
+    }
+    nameField.addTextChangedListener(nameValidator)
+    nameValidator.afterTextChanged(nameField.text)
     return view
   }
 
-  override fun onDestroyView() {
-    nameField.removeTextChangedListener(textWatcher)
-    super.onDestroyView()
-  }
-
-  private fun validName() = nameField.text.isNotEmpty()
+  private lateinit var nameValidator: TextValidator
 }

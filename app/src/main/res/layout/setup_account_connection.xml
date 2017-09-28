@@ -27,9 +27,10 @@
   android:padding="32dp">
 
   <android.support.design.widget.TextInputLayout
+    android:id="@+id/hostWrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:hint="@string/labelConnectionHostname"
+    android:hint="@string/labelConnectionHost"
     app:errorEnabled="true">
 
     <android.support.design.widget.TextInputEditText
@@ -40,6 +41,7 @@
   </android.support.design.widget.TextInputLayout>
 
   <android.support.design.widget.TextInputLayout
+    android:id="@+id/portWrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:hint="@string/labelConnectionPort"

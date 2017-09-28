@@ -2,8 +2,8 @@ package de.kuschku.quasseldroid_ng.ui.setup.accounts
 
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
+import android.support.design.widget.TextInputLayout
 import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,22 +11,21 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.ui.setup.SlideFragment
+import de.kuschku.quasseldroid_ng.util.TextValidator
 
 class AccountSetupUserSlide : SlideFragment() {
+  @BindView(R.id.userWrapper)
+  lateinit var userWrapper: TextInputLayout
   @BindView(R.id.user)
   lateinit var userField: TextInputEditText
 
+  @BindView(R.id.passWrapper)
+  lateinit var passWrapper: TextInputLayout
   @BindView(R.id.pass)
   lateinit var passField: TextInputEditText
 
-  private val textWatcher = object : TextWatcher {
-    override fun afterTextChanged(p0: Editable?) = updateValidity()
-    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
-    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
-  }
-
   override fun isValid(): Boolean {
-    return validUser() && validPass()
+    return true
   }
 
   override val title = R.string.slideAccountUserTitle
@@ -48,17 +47,18 @@ class AccountSetupUserSlide : SlideFragment() {
                                savedInstanceState: Bundle?): View {
     val view = inflater.inflate(R.layout.setup_account_user, container, false)
     ButterKnife.bind(this, view)
-    userField.addTextChangedListener(textWatcher)
-    passField.addTextChangedListener(textWatcher)
+    userValidator = object : TextValidator(
+      userWrapper::setError, resources.getString(R.string.hintInvalidUser)
+    ) {
+      override fun validate(text: Editable)
+        = text.isNotBlank()
+
+      override fun onChanged() = updateValidity()
+    }
+    userField.addTextChangedListener(userValidator)
+    userValidator.afterTextChanged(userField.text)
     return view
   }
 
-  override fun onDestroyView() {
-    userField.removeTextChangedListener(textWatcher)
-    passField.removeTextChangedListener(textWatcher)
-    super.onDestroyView()
-  }
-
-  private fun validUser() = userField.text.isNotEmpty()
-  private fun validPass() = passField.text.isNotEmpty()
+  private lateinit var userValidator: TextValidator
 }

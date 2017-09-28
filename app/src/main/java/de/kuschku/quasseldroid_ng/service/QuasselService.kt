@@ -13,7 +13,7 @@ import de.kuschku.libquassel.session.SocketAddress
 import de.kuschku.quasseldroid_ng.BuildConfig
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
-import de.kuschku.quasseldroid_ng.util.AndroidHandlerService
+import de.kuschku.quasseldroid_ng.util.compatibility.AndroidHandlerService
 import org.threeten.bp.Instant
 import java.security.cert.X509Certificate
 import javax.net.ssl.X509TrustManager

@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng.util
+package de.kuschku.quasseldroid_ng.util.compatibility
 
 import android.os.Handler
 import android.os.HandlerThread

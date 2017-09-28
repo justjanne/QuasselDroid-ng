@@ -1,41 +1,52 @@
 package de.kuschku.quasseldroid_ng.ui.setup.accounts
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.ui.ChatActivity
 import de.kuschku.quasseldroid_ng.ui.setup.SetupActivity
 import de.kuschku.quasseldroid_ng.util.helper.editCommit
 
 class AccountSelectionActivity : SetupActivity() {
+  companion object {
+    const val REQUEST_CHAT = 0
+    const val REQUEST_CREATE_FIRST = 1
+    const val REQUEST_CREATE_NEW = 2
+  }
+
   override val fragments = listOf(
     AccountSelectionSlide()
   )
 
-  lateinit var statusPreferences: SharedPreferences
+  private lateinit var statusPreferences: SharedPreferences
   override fun onDone(data: Bundle) {
     statusPreferences.editCommit {
-      putLong(selectedAccountKey, data.getLong(selectedAccountKey, -1))
-      putBoolean("reconnect", true)
+      putLong(Keys.Status.selectedAccount, data.getLong(Keys.Status.selectedAccount, -1))
+      putBoolean(Keys.Status.reconnect, true)
     }
     startActivity(Intent(this, ChatActivity::class.java))
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    statusPreferences = this.getSharedPreferences("status", Context.MODE_PRIVATE)
+    statusPreferences = this.getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
     val data = Bundle()
-    val selectedAccount = statusPreferences.getLong(selectedAccountKey, -1)
-    data.putLong(selectedAccountKey, selectedAccount)
+    val selectedAccount = statusPreferences.getLong(Keys.Status.selectedAccount, -1)
+    data.putLong(Keys.Status.selectedAccount, selectedAccount)
     setInitData(data)
 
-    if (statusPreferences.getBoolean("reconnect", false) && selectedAccount != -1L) {
-      startActivity(Intent(this, ChatActivity::class.java))
+    if (statusPreferences.getBoolean(Keys.Status.reconnect, false) && selectedAccount != -1L) {
+      startActivityForResult(Intent(this, ChatActivity::class.java), REQUEST_CHAT)
     }
   }
 
-  companion object {
-    private const val selectedAccountKey = "selectedAccount"
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    if (requestCode == REQUEST_CHAT && resultCode == Activity.RESULT_CANCELED) {
+      finish()
+    }
   }
 }

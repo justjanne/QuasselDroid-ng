@@ -6,9 +6,9 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
-import de.kuschku.quasseldroid_ng.util.AndroidCompatibilityUtils
-import de.kuschku.quasseldroid_ng.util.AndroidLoggingHandler
-import de.kuschku.quasseldroid_ng.util.AndroidStreamChannelFactory
+import de.kuschku.quasseldroid_ng.util.compatibility.AndroidCompatibilityUtils
+import de.kuschku.quasseldroid_ng.util.compatibility.AndroidLoggingHandler
+import de.kuschku.quasseldroid_ng.util.compatibility.AndroidStreamChannelFactory
 import de.kuschku.quasseldroid_ng.util.helper.systemService
 import org.acra.ACRA
 import org.acra.ReportingInteractionMode

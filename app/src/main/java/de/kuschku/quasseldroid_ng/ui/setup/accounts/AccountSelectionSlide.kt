@@ -1,5 +1,6 @@
 package de.kuschku.quasseldroid_ng.ui.setup.accounts
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.PagedList
@@ -16,12 +17,14 @@ import butterknife.ButterKnife
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
 import de.kuschku.quasseldroid_ng.ui.setup.SlideFragment
+import de.kuschku.quasseldroid_ng.ui.setup.accounts.AccountSelectionActivity.Companion.REQUEST_CREATE_FIRST
+import de.kuschku.quasseldroid_ng.ui.setup.accounts.AccountSelectionActivity.Companion.REQUEST_CREATE_NEW
 
 class AccountSelectionSlide : SlideFragment() {
   @BindView(R.id.account_list)
   lateinit var accountList: RecyclerView
 
-  override fun isValid() = adapter.selectedPos.value ?: -1 != -1
+  override fun isValid() = adapter.selectedItemId != -1L
 
   override val title = R.string.slideAccountSelectTitle
   override val description = R.string.slideAccountSelectDescription
@@ -45,7 +48,8 @@ class AccountSelectionSlide : SlideFragment() {
     val firstObserver = object : Observer<PagedList<AccountDatabase.Account>?> {
       override fun onChanged(t: PagedList<AccountDatabase.Account>?) {
         if (t?.isEmpty() != false)
-          startActivityForResult(Intent(context, AccountSetupActivity::class.java), -1)
+          startActivityForResult(Intent(context, AccountSetupActivity::class.java),
+                                 REQUEST_CREATE_FIRST)
         accountViewmodel.accounts.removeObserver(this)
       }
     }
@@ -54,19 +58,25 @@ class AccountSelectionSlide : SlideFragment() {
     accountList.layoutManager = LinearLayoutManager(context)
     accountList.itemAnimator = DefaultItemAnimator()
     accountList.adapter = adapter
-    adapter.selectedPos.observe(this, Observer {
-      updateValidity()
-    })
     adapter.addAddListener {
       startActivityForResult(Intent(context, AccountSetupActivity::class.java), -1)
     }
     adapter.addEditListener { id ->
       val intent = Intent(context, AccountEditActivity::class.java)
       intent.putExtra("account", id)
-      startActivityForResult(intent, -1)
+      startActivityForResult(intent, REQUEST_CREATE_NEW)
+    }
+    adapter.addSelectionListener {
+      updateValidity()
     }
 
     return view
   }
 
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    if (requestCode == REQUEST_CREATE_FIRST && resultCode == Activity.RESULT_CANCELED) {
+      activity.finish()
+    }
+  }
 }

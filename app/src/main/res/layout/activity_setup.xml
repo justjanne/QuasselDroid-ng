@@ -16,9 +16,6 @@
     android:layout_marginBottom="16dp"
     android:layout_marginRight="16dp"
     android:tint="#ffffff"
-    app:backgroundTint="#8A808080"
-    app:elevation="0dip"
-    app:fabSize="normal"
-    app:pressedTranslationZ="0dip" />
+    app:fabSize="normal" />
 
 </merge>

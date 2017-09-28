@@ -1,15 +1,18 @@
-package de.kuschku.quasseldroid_ng.util
+package de.kuschku.quasseldroid_ng.util.compatibility
 
 import android.util.Log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler
 
 object AndroidLoggingHandler : LoggingHandler() {
   override fun isLoggable(logLevel: LogLevel, tag: String): Boolean {
-    return Log.isLoggable(tag, priority(logLevel))
+    return Log.isLoggable(tag,
+                          priority(
+                            logLevel))
   }
 
   override fun log(logLevel: LogLevel, tag: String, message: String?, throwable: Throwable?) {
-    val priority = priority(logLevel)
+    val priority = priority(
+      logLevel)
     if (message != null)
       Log.println(priority, tag, message)
     if (throwable != null)

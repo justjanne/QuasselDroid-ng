@@ -6,9 +6,10 @@
   android:padding="32dp">
 
   <android.support.design.widget.TextInputLayout
+    android:id="@+id/userWrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:hint="@string/labelAccountUsername">
+    android:hint="@string/labelAccountUser">
 
     <android.support.design.widget.TextInputEditText
       android:id="@+id/user"
@@ -19,9 +20,10 @@
   </android.support.design.widget.TextInputLayout>
 
   <android.support.design.widget.TextInputLayout
+    android:id="@+id/passWrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:hint="@string/labelAccountPassword">
+    android:hint="@string/labelAccountPass">
 
     <android.support.design.widget.TextInputEditText
       android:id="@+id/pass"

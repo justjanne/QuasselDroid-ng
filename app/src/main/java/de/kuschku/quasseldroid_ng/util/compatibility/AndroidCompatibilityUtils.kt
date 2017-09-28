@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng.util
+package de.kuschku.quasseldroid_ng.util.compatibility
 
 import android.os.Build
 import de.kuschku.libquassel.util.compatibility.CompatibilityUtils

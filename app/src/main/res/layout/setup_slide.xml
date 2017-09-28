@@ -58,9 +58,14 @@
     </android.support.design.widget.CollapsingToolbarLayout>
   </android.support.design.widget.AppBarLayout>
 
-  <FrameLayout
-    android:id="@+id/content_host"
+  <android.support.v4.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <FrameLayout
+      android:id="@+id/content_host"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+  </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

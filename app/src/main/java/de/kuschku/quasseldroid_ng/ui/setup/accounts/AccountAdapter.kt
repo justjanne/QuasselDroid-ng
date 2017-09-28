@@ -1,6 +1,5 @@
 package de.kuschku.quasseldroid_ng.ui.setup.accounts
 
-import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.PagedListAdapter
 import android.support.v7.recyclerview.extensions.DiffCallback
 import android.support.v7.widget.AppCompatImageButton
@@ -19,18 +18,12 @@ class AccountAdapter :
   PagedListAdapter<AccountDatabase.Account, AccountAdapter.AccountViewHolder>(DIFF_CALLBACK) {
   private val actionListeners = mutableSetOf<(Long) -> Unit>()
   private val addListeners = mutableSetOf<() -> Unit>()
-  val selectedItemId: Long
-    get() {
-      val position = selectedPos.value
-      return if (position != null && position > -1 && position < super.getItemCount())
-        getItem(position)?.id ?: -1
-      else
-        -1
-    }
+  private val selectionListeners = mutableSetOf<(Long) -> Unit>()
 
   private val clickListener = object : ItemListener {
     override fun onAction(id: Long, pos: Int) {
-      changeSelection(id, pos)
+      notifySelectionChanged(selectedItemView, pos)
+      selectionListener.invoke(id)
     }
   }
 
@@ -41,6 +34,17 @@ class AccountAdapter :
       }
     }
   }
+
+  private val selectionListener = { id: Long ->
+    selectedItemId = id
+    for (selectionListener in selectionListeners) {
+      selectionListener.invoke(id)
+    }
+  }
+
+  private var selectedItemView = -1
+  var selectedItemId = -1L
+    private set
 
   private val addListener = {
     for (addListener in addListeners) {
@@ -64,6 +68,14 @@ class AccountAdapter :
     addListeners.remove(f)
   }
 
+  fun addSelectionListener(f: (Long) -> Unit) {
+    selectionListeners.add(f)
+  }
+
+  fun removeSelectionListener(f: (Long) -> Unit) {
+    selectionListeners.remove(f)
+  }
+
   override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
     when (holder) {
       is AccountViewHolder.Item -> {
@@ -71,12 +83,11 @@ class AccountAdapter :
         if (account == null) {
           holder.clear()
         } else {
-          val selected = selectedId == account.id
-          holder.bind(account, position, selected)
-          if (selected && position != selectedPos.value)
-            holder.itemView.post {
-              changeSelection(account.id, position)
-            }
+          val selected = account.id == selectedItemId
+          if (selected) {
+            selectedItemView = position
+          }
+          holder.bind(account, selected)
         }
       }
       is AccountViewHolder.Add  -> {
@@ -123,37 +134,23 @@ class AccountAdapter :
     }
   }
 
-  private fun notifySelectionChanged(from: Int?, to: Int?) {
-    if (from != null && from != -1)
-      notifyItemChanged(from)
-
-    val real_to = to ?: -1
-    selectedPos.value = real_to
-
-    if (to != null && to != -1)
-      notifyItemChanged(to)
-  }
-
-  fun changeSelection(id: Long, position: Int) {
-    notifySelectionChanged(selectedPos.value, position)
-    selectedId = id
-  }
-
-  private fun indexOf(id: Long) = (0 until itemCount).lastOrNull {
-    getItemViewType(it) == TYPE_ACCOUNT && getItem(it)?.id == id
-  } ?: -1
-
   fun selectAccount(id: Long) {
-    val index = indexOf(id)
-    if (index != -1) {
-      changeSelection(id, index)
-    } else {
-      selectedId = id
-    }
+    selectedItemView = -1
+    selectionListener(id)
   }
 
-  private var selectedId = -1L
-  var selectedPos = MutableLiveData<Int>()
+  fun notifySelectionChanged(from: Int?, to: Int?) {
+    val _from = from ?: -1
+    val _to = to ?: -1
+
+    if (_from != -1)
+      notifyItemChanged(_from)
+
+    selectedItemView = _to
+
+    if (_to != -1)
+      notifyItemChanged(_to)
+  }
 
   interface ItemListener {
     fun onAction(id: Long, pos: Int)
@@ -175,20 +172,18 @@ class AccountAdapter :
       lateinit var accountEdit: AppCompatImageButton
 
       private var id = -1L
-      private var index = -1
 
       init {
         ButterKnife.bind(this, itemView)
         accountEdit.setOnClickListener {
-          actionListener.onAction(id, index)
+          actionListener.onAction(id, adapterPosition)
         }
         itemView.setOnClickListener {
-          clickListener.onAction(id, index)
+          clickListener.onAction(id, adapterPosition)
         }
       }
 
-      fun bind(account: AccountDatabase.Account, position: Int, selected: Boolean) {
-        index = position
+      fun bind(account: AccountDatabase.Account, selected: Boolean) {
         id = account.id
         accountName.text = account.name
         accountDescription.text = itemView.context.resources.getString(
@@ -198,7 +193,6 @@ class AccountAdapter :
       }
 
       fun clear() {
-        index = -1
         id = -1L
         accountName.text = ""
         accountDescription.text = ""

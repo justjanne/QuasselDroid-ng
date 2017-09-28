@@ -8,21 +8,28 @@
   <string name="slideAccountConnectionTitle">Connection</string>
   <string name="slideAccountConnectionDescription">First, please choose which server your core is hosted on.</string>
 
-  <string name="labelConnectionHostname">Host</string>
+  <string name="labelConnectionHost">Host</string>
   <string name="labelConnectionPort">Port</string>
+
+  <string name="hintInvalidHost">Not a valid hostname</string>
+  <string name="hintInvalidPort">Not a valid port</string>
 
   <!-- Account User -->
   <string name="slideAccountUserTitle">Your Account</string>
   <string name="slideAccountUserDescription">Now, please enter the username and password for your account on the core. If you just created that core, we’ll set up this account for you</string>
 
-  <string name="labelAccountUsername">Username</string>
-  <string name="labelAccountPassword">Password</string>
+  <string name="labelAccountUser">Username</string>
+  <string name="labelAccountPass">Password</string>
+
+  <string name="hintInvalidUser">Username can not be empty</string>
 
   <!-- Account Name -->
   <string name="slideAccountNameTitle">Customize Account</string>
   <string name="slideAccountNameDescription">Give this account a name and icon</string>
 
   <string name="labelAccountName">Account name</string>
+
+  <string name="hintInvalidName">Name can not be empty</string>
 
   <!-- Core Authenticator Select -->
   <string name="slideCoreAuthenticatorSelectTitle">Select Authentication Backend</string>

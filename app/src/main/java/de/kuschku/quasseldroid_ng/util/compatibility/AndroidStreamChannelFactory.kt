@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng.util
+package de.kuschku.quasseldroid_ng.util.compatibility
 
 import de.kuschku.libquassel.util.compatibility.StreamChannelFactory
 import de.kuschku.quasseldroid_ng.util.backport.ReadableStreamChannel

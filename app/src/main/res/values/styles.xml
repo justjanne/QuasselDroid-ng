@@ -14,11 +14,12 @@
 
   <style name="SetupTheme" parent="AppTheme.NoActionBar" />
 
-  <style name="RaisedButton" parent="AppTheme">
-    <item name="colorButtonNormal">?attr/background</item>
+  <style name="AppTheme.Button" parent="AppTheme">
+    <item name="colorButtonNormal">@android:color/background_light</item>
   </style>
 
-  <style name="RaisedThemedButton" parent="RaisedButton">
+  <style name="AppTheme.Button.Colored" parent="AppTheme.Button">
+    <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
     <item name="colorButtonNormal">@color/colorAccent</item>
   </style>
 

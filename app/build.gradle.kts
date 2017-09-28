@@ -79,6 +79,8 @@ dependencies {
   implementation(appCompat("recyclerview-v7"))
   implementation("com.android.support.constraint:constraint-layout:1.0.2")
 
+  implementation("com.github.StephenVinouze.AdvancedRecyclerView:core:1.1.6")
+
   implementation("io.reactivex.rxjava2:rxjava:2.1.3")
 
   implementation(appArch("lifecycle", "runtime", version = "1.0.0"))

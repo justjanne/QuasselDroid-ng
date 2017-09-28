@@ -176,6 +176,13 @@ abstract class SetupActivity : AppCompatActivity() {
     }
   }
 
+  override fun onBackPressed() {
+    if (viewPager.currentItem == 0)
+      super.onBackPressed()
+    else
+      viewPager.currentItem -= 1
+  }
+
   companion object {
     private const val currentItemKey = ":setupActivity:currentItem"
     private const val lastValidItemKey = ":setupActivity:lastValidItem"
