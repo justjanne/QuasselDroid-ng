@@ -1,30 +1,16 @@
-<!--
-  ~ QuasselDroid - Quassel client for Android
-  ~ Copyright (C) 2016 Janne Koschinski
-  ~ Copyright (C) 2016 Ken Børge Viktil
-  ~ Copyright (C) 2016 Magnus Fjell
-  ~ Copyright (C) 2016 Martin Sandsmark <martin.sandsmark@kde.org>
-  ~
-  ~ This program is free software: you can redistribute it and/or modify it
-  ~ under the terms of the GNU General Public License as published by the Free
-  ~ Software Foundation, either version 3 of the License, or (at your option)
-  ~ any later version.
-  ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License along
-  ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
   android:width="24dp"
   android:height="24dp"
-  android:viewportHeight="24.0"
-  android:viewportWidth="24.0">
+  android:viewportHeight="24"
+  android:viewportWidth="24">
   <path
-    android:fillColor="#FF000000"
-    android:pathData="m10.66,7.04a0.625,0.625 0,0 0,-0.634 0.548l-0.295,2.13 -1.7,0.009a0.625,0.625 0,1 0,0.006 1.25l1.52,-0.008 -0.331,2.388 -1.598,0.008a0.625,0.625 0,1 0,0.006 1.25l1.418,-0.007 -0.277,1.998a0.625,0.625 0,1 0,1.238 0.172l0.302,-2.176 2.78,-0.015 -0.28,2.019a0.625,0.625 0,1 0,1.238 0.172l0.305,-2.197 1.892,-0.01a0.625,0.625 0,1 0,-0.007 -1.25l-1.712,0.009 0.331,-2.388 1.789,-0.009a0.625,0.625 0,1 0,-0.006 -1.25l-1.609,0.008 0.268,-1.932a0.625,0.625 0,0 0,-0.604 -0.719,0.625 0.625,0 0,0 -0.635,0.548l-0.292,2.109 -2.78,0.015 0.271,-1.953a0.625,0.625 0,0 0,-0.604 -0.719zM13.6,10.948 L13.269,13.336 10.489,13.35 10.82,10.963 13.6,10.948zM12,1.998c-5.514,0 -10,4.486 -10,10s4.486,10 10,10 10,-4.486 10,-10 -4.486,-10 -10,-10zM12,3.498c4.703,0 8.5,3.796 8.5,8.5s-3.797,8.5 -8.5,8.5 -8.5,-3.797 -8.5,-8.5 3.797,-8.5 8.5,-8.5z" />
+    android:fillColor="#000"
+    android:pathData="M2,12a10,10 0 1,0 20,0 10,10 0 1,0-20,0
+    m1.5,0a8.5,8.5 0 0,1 17,0a8.5,8.5 0 0,1-17,0
+    M9.7,9.7l0.295,-2.13a0.625,0.625 0 0 1 1.238,0.17l-0.27,1.953 2.779,-0.015 0.293,-2.109a
+    0.625,0.625 0 0 1 1.239,0.171l-0.268,1.932 1.609,0a0.625,0.625 0 1 1 0,1.25l-1.789,0-0.331,2.388
+    1.712,0a0.625,0.625 0 0 1 0,1.249l-1.892,0.01-0.305,2.196a0.625,0.625 0 0 1-1.238,-0.172l0.28,
+    -2.018-2.78,0.015-0.302,2.175a0.625,0.625 0 0 1-1.238,-0.172l0.277,-1.997-1.418,0a0.625,0.625 0
+    0 1 0,-1.249l1.598,0 0.504,-3.638-0.173,1.25-1.521,0a0.625,0.625 0 0 1 0,-1.25z
+    M9.7,9.7m1.089,1.25-0.331,2.388 2.779,-0.015 0.331,-2.387z" />
 </vector>

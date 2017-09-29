@@ -1,30 +1,10 @@
-<!--
-  ~ QuasselDroid - Quassel client for Android
-  ~ Copyright (C) 2016 Janne Koschinski
-  ~ Copyright (C) 2016 Ken Børge Viktil
-  ~ Copyright (C) 2016 Magnus Fjell
-  ~ Copyright (C) 2016 Martin Sandsmark <martin.sandsmark@kde.org>
-  ~
-  ~ This program is free software: you can redistribute it and/or modify it
-  ~ under the terms of the GNU General Public License as published by the Free
-  ~ Software Foundation, either version 3 of the License, or (at your option)
-  ~ any later version.
-  ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License along
-  ~ with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
   android:width="24dp"
   android:height="24dp"
-  android:viewportHeight="24.0"
-  android:viewportWidth="24.000002">
+  android:viewportHeight="24"
+  android:viewportWidth="24">
   <path
-    android:fillColor="#FF000000"
-    android:pathData="m12,2c-5.514,0 -10,4.486 -10,10 0,5.514 4.486,10 10,10s10,-4.486 10,-10 -4.486,-10 -10,-10zM12,3.5c4.703,0 8.5,3.796 8.5,8.5 -0,4.703 -3.797,8.5 -8.5,8.5s-8.5,-3.797 -8.5,-8.5 3.797,-8.5 8.5,-8.5z" />
+    android:fillColor="#000"
+    android:pathData="M2,12a10,10 0 1,0 20,0 10,10 0 1,0-20,0
+    m1.5,0a8.5,8.5 0 0,1 17,0a8.5,8.5 0 0,1-17,0" />
 </vector>
