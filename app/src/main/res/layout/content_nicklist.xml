@@ -1,8 +1,10 @@
 <de.kuschku.quasseldroid_ng.util.ui.DrawerRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/nickList"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:layout_gravity="end"
   android:background="?android:attr/windowBackground"
   android:clipToPadding="false"
-  android:fitsSystemWindows="true" />
+  android:fitsSystemWindows="true"
+  tools:showIn="@layout/activity_main" />
