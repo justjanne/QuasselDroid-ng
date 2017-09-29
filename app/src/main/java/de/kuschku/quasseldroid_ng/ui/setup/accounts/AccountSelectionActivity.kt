@@ -6,7 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import de.kuschku.quasseldroid_ng.Keys
-import de.kuschku.quasseldroid_ng.ui.ChatActivity
+import de.kuschku.quasseldroid_ng.ui.chat.ChatActivity
 import de.kuschku.quasseldroid_ng.ui.setup.SetupActivity
 import de.kuschku.quasseldroid_ng.util.helper.editCommit
 
@@ -27,7 +27,7 @@ class AccountSelectionActivity : SetupActivity() {
       putLong(Keys.Status.selectedAccount, data.getLong(Keys.Status.selectedAccount, -1))
       putBoolean(Keys.Status.reconnect, true)
     }
-    startActivity(Intent(this, ChatActivity::class.java))
+    startActivityForResult(Intent(this, ChatActivity::class.java), REQUEST_CHAT)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {

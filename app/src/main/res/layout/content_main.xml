@@ -1,128 +1,33 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:fitsSystemWindows="true"
-  android:orientation="vertical">
+  android:layout_height="match_parent">
 
-  <android.support.design.widget.AppBarLayout
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="?attr/actionBarTheme">
-
-    <android.support.v7.widget.Toolbar
-      android:id="@+id/toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:background="?attr/colorPrimary"
-      app:contentInsetStartWithNavigation="0dp">
-
-      <LinearLayout
-        android:id="@+id/toolbar_action_area"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:focusable="true"
-        android:focusableInTouchMode="false"
-        android:gravity="center_vertical|start"
-        android:minHeight="?attr/actionBarSize"
-        android:orientation="vertical">
-
-        <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
-          android:layout_marginTop="-2dp"
-          android:baselineAligned="false"
-          android:gravity="center_vertical">
-
-          <TextView
-            android:id="@+id/key"
-            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginEnd="2dp"
-            android:layout_marginRight="2dp"
-            android:layout_marginTop="2dp"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:visibility="gone" />
-
-          <TextView
-            android:id="@+id/toolbar_title"
-            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:singleLine="true"
-            android:text="@string/app_name" />
-
-        </LinearLayout>
-
-        <TextView
-          android:id="@+id/toolbar_subtitle"
-          style="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="-3dp"
-          android:ellipsize="end"
-          android:singleLine="true"
-          android:visibility="gone" />
-      </LinearLayout>
-
-    </android.support.v7.widget.Toolbar>
-
-  </android.support.design.widget.AppBarLayout>
-
-  <ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_marginBottom="8dp"
+    android:layout_marginTop="8dp"
+    android:orientation="vertical"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp">
 
     <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="8dp"
-      android:layout_marginTop="8dp"
-      android:orientation="vertical"
-      android:paddingLeft="24dp"
-      android:paddingRight="24dp">
+      android:layout_height="wrap_content">
 
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-          android:id="@+id/connect"
-          style="@style/Widget.Button.Colored"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:minWidth="88dp"
-          android:text="Connect" />
-
-        <Button
-          android:id="@+id/disconnect"
-          style="@style/Widget.Button"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:minWidth="88dp"
-          android:text="Disconnect" />
-
-        <Button
-          android:id="@+id/clear"
-          style="@style/Widget.Button"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:minWidth="88dp"
-          android:text="Clear" />
-      </LinearLayout>
-
-      <TextView
-        android:id="@+id/errorList"
-        android:layout_width="match_parent"
+      <Button
+        android:id="@+id/clear"
+        style="@style/Widget.Button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textIsSelectable="true" />
+        android:minWidth="88dp"
+        android:text="Clear" />
     </LinearLayout>
-  </ScrollView>
-</LinearLayout>
+
+    <TextView
+      android:id="@+id/errorList"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textIsSelectable="true" />
+  </LinearLayout>
+</ScrollView>

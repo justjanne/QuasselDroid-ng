@@ -2,15 +2,13 @@ package de.kuschku.quasseldroid_ng.ui.setup.accounts
 
 import android.app.Activity
 import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
 import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
 import de.kuschku.quasseldroid_ng.ui.setup.SetupActivity
+import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import org.threeten.bp.Instant
 
 class AccountSetupActivity : SetupActivity() {
-  private val thread = HandlerThread("Setup")
-  private lateinit var handler: Handler
+  private val handler = AndroidHandlerThread("Setup")
 
   override fun onDone(data: Bundle) {
     val account = AccountDatabase.Account(
@@ -23,7 +21,7 @@ class AccountSetupActivity : SetupActivity() {
       lastUsed = Instant.now().epochSecond
     )
     handler.post {
-      val (id) = AccountDatabase.Creator.init(this).accounts().create(account)
+      AccountDatabase.Creator.init(this).accounts().create(account)
       runOnUiThread {
         setResult(Activity.RESULT_OK)
         finish()
@@ -32,13 +30,12 @@ class AccountSetupActivity : SetupActivity() {
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    thread.start()
-    handler = Handler(thread.looper)
+    handler.onCreate()
     super.onCreate(savedInstanceState)
   }
 
   override fun onDestroy() {
-    handler.post { thread.quit() }
+    handler.onDestroy()
     super.onDestroy()
   }
 

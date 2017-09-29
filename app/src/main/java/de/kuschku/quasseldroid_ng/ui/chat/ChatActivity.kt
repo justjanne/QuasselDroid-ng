@@ -1,11 +1,9 @@
-package de.kuschku.quasseldroid_ng.ui
+package de.kuschku.quasseldroid_ng.ui.chat
 
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.Toolbar
 import android.util.Log
@@ -17,25 +15,21 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.session.*
 import de.kuschku.libquassel.util.compatibility.LoggingHandler
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.ERROR
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
-import de.kuschku.libquassel.util.compatibility.log
 import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
-import de.kuschku.quasseldroid_ng.util.helper.*
+import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
+import de.kuschku.quasseldroid_ng.util.helper.editApply
+import de.kuschku.quasseldroid_ng.util.helper.map
+import de.kuschku.quasseldroid_ng.util.helper.observeSticky
+import de.kuschku.quasseldroid_ng.util.helper.switchMapRx
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundActivity
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
 class ChatActivity : ServiceBoundActivity() {
-  @BindView(R.id.connect)
-  lateinit var connect: Button
-
-  @BindView(R.id.disconnect)
-  lateinit var disconnect: Button
-
   @BindView(R.id.clear)
   lateinit var clear: Button
 
@@ -45,12 +39,10 @@ class ChatActivity : ServiceBoundActivity() {
   @BindView(R.id.toolbar)
   lateinit var toolbar: Toolbar
 
-  private val thread = HandlerThread("Chat")
-  private lateinit var handler: Handler
+  private val handler = AndroidHandlerThread("Chat")
 
   private val sessionManager = backend.map(Backend::sessionManager)
-  private val state
-    = sessionManager.switchMapRx(SessionManager::state)
+  private val state = sessionManager.switchMapRx(SessionManager::state)
 
   private val bufferViewManager
     = sessionManager.switchMapRx(SessionManager::session).map(ISession::bufferViewManager)
@@ -62,13 +54,10 @@ class ChatActivity : ServiceBoundActivity() {
     }
   }
 
-  private
-  var snackbar: Snackbar? = null
+  private var snackbar: Snackbar? = null
 
-  private
-  val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ISO_TIME
-  private
-  val logHandler = object : LoggingHandler() {
+  private val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ISO_TIME
+  private val logHandler = object : LoggingHandler() {
     override fun log(logLevel: LogLevel, tag: String, message: String?,
                      throwable: Throwable?) {
       val time = dateTimeFormatter.format(ZonedDateTime.now(ZoneOffset.UTC))
@@ -99,46 +88,37 @@ class ChatActivity : ServiceBoundActivity() {
     super.onSaveInstanceState(outState)
   }
 
-  var account: AccountDatabase.Account? = null
-
   override fun onCreate(savedInstanceState: Bundle?) {
-    thread.start()
-    handler = Handler(thread.looper)
-
+    handler.onCreate()
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     ButterKnife.bind(this)
     setSupportActionBar(toolbar)
 
-    val database = AccountDatabase.Creator.init(this)
-    handler.post {
-      val accountId = getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
-        ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
-      if (accountId == -1L) {
-        setResult(Activity.RESULT_OK)
-        finish()
+    backend.observeSticky(this, Observer { backendValue ->
+      if (backendValue != null) {
+        val database = AccountDatabase.Creator.init(this)
+        handler.post {
+          val accountId = getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
+            ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
+          if (accountId == -1L) {
+            setResult(Activity.RESULT_OK)
+            finish()
+          }
+          val account = database.accounts().findById(accountId)
+          if (account == null) {
+            setResult(Activity.RESULT_OK)
+            finish()
+          } else {
+            backendValue.connectUnlessConnected(
+              SocketAddress(account.host, account.port.toShort()),
+              account.user,
+              account.pass
+            )
+          }
+        }
       }
-      val it = database.accounts().findById(accountId)
-      if (it == null) {
-        setResult(Activity.RESULT_OK)
-        finish()
-      }
-      account = it
-    }
-
-    connect.setOnClickListener {
-      val account = account
-      if (account != null)
-        backend.value?.connect(
-          SocketAddress(account.host, account.port.toShort()),
-          account.user,
-          account.pass
-        )
-    }
-
-    disconnect.setOnClickListener {
-      backend.value?.disconnect()
-    }
+    })
 
     clear.setOnClickListener {
       errorList.text = ""
@@ -146,21 +126,10 @@ class ChatActivity : ServiceBoundActivity() {
 
     state.observeSticky(this, Observer {
       val status = it ?: ConnectionState.DISCONNECTED
-      val disconnected = status == ConnectionState.DISCONNECTED
-
-      disconnect.isEnabled = !disconnected
-      connect.isEnabled = disconnected
 
       snackbar?.dismiss()
       snackbar = Snackbar.make(errorList, status.name, Snackbar.LENGTH_SHORT)
       snackbar?.show()
-    })
-
-    bufferViewManager.observeSticky(this, Observer {
-      log(ERROR, "bufferViewManager", it.toString())
-    })
-    bufferViewConfigs.or(emptyList()).observeSticky(this, Observer {
-      log(ERROR, "bufferViewConfigs", it.toString())
     })
   }
 
@@ -171,11 +140,14 @@ class ChatActivity : ServiceBoundActivity() {
 
   override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
     R.id.disconnect -> {
-      getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editApply {
-        putBoolean(Keys.Status.reconnect, false)
+      handler.post {
+        getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editApply {
+          putBoolean(Keys.Status.reconnect, false)
+        }
+        backend.value?.disconnect()
+        setResult(Activity.RESULT_OK)
+        finish()
       }
-      setResult(Activity.RESULT_OK)
-      finish()
       true
     }
     else            -> super.onOptionsItemSelected(item)
@@ -184,6 +156,11 @@ class ChatActivity : ServiceBoundActivity() {
   override fun onStart() {
     super.onStart()
     LoggingHandler.loggingHandlers.add(logHandler)
+  }
+
+  override fun onDestroy() {
+    handler.onDestroy()
+    super.onDestroy()
   }
 
   override fun onStop() {

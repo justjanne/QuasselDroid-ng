@@ -7,57 +7,89 @@
   android:fitsSystemWindows="true"
   tools:openDrawer="start">
 
-  <include layout="@layout/content_main" />
-
-  <de.kuschku.quasseldroid_ng.util.ui.DrawerRecyclerView
-    android:id="@+id/nickList"
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="end"
-    android:background="?android:attr/windowBackground"
-    android:clipToPadding="false"
-    android:fitsSystemWindows="true" />
-
-  <de.kuschku.quasseldroid_ng.util.ui.NavigationDrawerLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="start"
-    android:background="?android:attr/windowBackground"
     android:fitsSystemWindows="true"
-    app:insetForeground="?attr/colorPrimaryDark">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:orientation="vertical">
+      android:layout_height="wrap_content"
+      android:theme="?attr/actionBarTheme">
 
-      <android.support.design.widget.AppBarLayout
+      <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="?attr/actionBarTheme">
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:contentInsetStartWithNavigation="0dp">
 
-        <android.support.v7.widget.Toolbar
-          android:id="@+id/toolbar"
-          android:layout_width="match_parent"
-          android:layout_height="?attr/actionBarSize"
-          android:background="?attr/colorPrimary"
-          app:contentInsetStartWithNavigation="0dp">
+        <LinearLayout
+          android:id="@+id/toolbar_action_area"
+          android:layout_width="fill_parent"
+          android:layout_height="fill_parent"
+          android:background="?attr/selectableItemBackgroundBorderless"
+          android:clickable="true"
+          android:focusable="true"
+          android:focusableInTouchMode="false"
+          android:gravity="center_vertical|start"
+          android:minHeight="?attr/actionBarSize"
+          android:orientation="vertical">
 
-          <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/chatListSpinner"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:theme="?attr/actionBarTheme" />
+          <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="-2dp"
+            android:baselineAligned="false"
+            android:gravity="center_vertical">
 
-        </android.support.v7.widget.Toolbar>
+            <TextView
+              android:id="@+id/key"
+              style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+              android:layout_width="16dp"
+              android:layout_height="16dp"
+              android:layout_marginEnd="2dp"
+              android:layout_marginRight="2dp"
+              android:layout_marginTop="2dp"
+              android:gravity="center"
+              android:textSize="16sp"
+              android:visibility="gone" />
 
-      </android.support.design.widget.AppBarLayout>
+            <TextView
+              android:id="@+id/toolbar_title"
+              style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:ellipsize="end"
+              android:gravity="center_vertical"
+              android:singleLine="true"
+              android:text="@string/app_name" />
 
+          </LinearLayout>
 
-      <android.support.v7.widget.RecyclerView
-        android:id="@+id/chatList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    </LinearLayout>
-  </de.kuschku.quasseldroid_ng.util.ui.NavigationDrawerLayout>
+          <TextView
+            android:id="@+id/toolbar_subtitle"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-3dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:visibility="gone" />
+        </LinearLayout>
+
+      </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_main" />
+
+  </LinearLayout>
+
+  <include layout="@layout/content_nicklist" />
+
+  <include layout="@layout/content_chatlist" />
 </android.support.v4.widget.DrawerLayout>

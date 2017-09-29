@@ -3,8 +3,6 @@ package de.kuschku.quasseldroid_ng.ui.setup.accounts
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
 import android.support.v7.app.AlertDialog
@@ -17,6 +15,7 @@ import butterknife.ButterKnife
 import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
+import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.Patterns
 import de.kuschku.quasseldroid_ng.util.TextValidator
 import de.kuschku.quasseldroid_ng.util.helper.editCommit
@@ -51,13 +50,10 @@ class AccountEditActivity : AppCompatActivity() {
   private var account: AccountDatabase.Account? = null
   lateinit var database: AccountDatabase
 
-  private val thread = HandlerThread("AccountEdit")
-  private lateinit var handler: Handler
+  private val handler = AndroidHandlerThread("AccountEdit")
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    thread.start()
-    handler = Handler(thread.looper)
-
+    handler.onCreate()
     setTheme(R.style.Theme_AppTheme_Light)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.setup_account_edit)
@@ -136,7 +132,7 @@ class AccountEditActivity : AppCompatActivity() {
   }
 
   override fun onDestroy() {
-    handler.post { thread.quit() }
+    handler.onDestroy()
     super.onDestroy()
   }
 

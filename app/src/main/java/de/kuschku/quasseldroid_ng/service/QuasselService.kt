@@ -3,8 +3,6 @@ package de.kuschku.quasseldroid_ng.service
 import android.arch.lifecycle.LifecycleService
 import android.content.Intent
 import android.os.Binder
-import android.os.Handler
-import android.os.HandlerThread
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.SessionManager
@@ -13,6 +11,7 @@ import de.kuschku.quasseldroid_ng.BuildConfig
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.PersistentSession
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
+import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.compatibility.AndroidHandlerService
 import org.threeten.bp.Instant
 import java.security.cert.X509Certificate
@@ -36,6 +35,12 @@ class QuasselService : LifecycleService() {
   private val backendImplementation = object : Backend {
     override fun sessionManager() = sessionManager
 
+    override fun connectUnlessConnected(address: SocketAddress, user: String, pass: String) {
+      sessionManager.ifDisconnected {
+        this.connect(address, user, pass)
+      }
+    }
+
     override fun connect(address: SocketAddress, user: String, pass: String) {
       disconnect()
       val handlerService = AndroidHandlerService()
@@ -47,10 +52,15 @@ class QuasselService : LifecycleService() {
     }
   }
 
-  private val thread = HandlerThread("BackendHandler")
-  private lateinit var handler: Handler
+  private val handler = AndroidHandlerThread("Backend")
 
   private val asyncBackend = object : Backend {
+    override fun connectUnlessConnected(address: SocketAddress, user: String, pass: String) {
+      handler.post {
+        backendImplementation.connectUnlessConnected(address, user, pass)
+      }
+    }
+
     override fun connect(address: SocketAddress, user: String, pass: String) {
       handler.post {
         backendImplementation.connect(address, user, pass)
@@ -67,15 +77,14 @@ class QuasselService : LifecycleService() {
   }
 
   override fun onDestroy() {
-    handler.post { thread.quit() }
+    handler.onDestroy()
     super.onDestroy()
   }
 
   private lateinit var database: QuasselDatabase
 
   override fun onCreate() {
-    thread.start()
-    handler = Handler(thread.looper)
+    handler.onCreate()
     super.onCreate()
     database = QuasselDatabase.Creator.init(application)
     sessionManager = SessionManager(PersistentSession())

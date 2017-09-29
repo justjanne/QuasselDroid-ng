@@ -49,6 +49,12 @@ class SessionManager(
     Invokers
   }
 
+  fun ifDisconnected(closure: () -> Unit) {
+    if (state.or(ConnectionState.DISCONNECTED) == ConnectionState.DISCONNECTED) {
+      closure()
+    }
+  }
+
   fun connect(
     clientData: ClientData,
     trustManager: X509TrustManager,
@@ -61,6 +67,7 @@ class SessionManager(
   }
 
   fun disconnect() {
+    inProgressSession.value
     inProgressSession.value.close()
     inProgressSession.onNext(offlineSession)
   }
