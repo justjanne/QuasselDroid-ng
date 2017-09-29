@@ -1,9 +1,6 @@
 package de.kuschku.libquassel
 
-import de.kuschku.libquassel.protocol.ClientData
-import de.kuschku.libquassel.protocol.Protocol_Feature
-import de.kuschku.libquassel.protocol.Quassel_Feature
-import de.kuschku.libquassel.protocol.UShort
+import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.ProtocolFeature
 import de.kuschku.libquassel.quassel.QuasselFeature
 import de.kuschku.libquassel.session.Session
@@ -37,7 +34,7 @@ class ConnectionUnitTest {
       buildDate = Instant.EPOCH,
       clientFeatures = Quassel_Feature.of(*QuasselFeature.validValues),
       protocolFeatures = Protocol_Feature.of(ProtocolFeature.TLS, ProtocolFeature.Compression),
-      supportedProtocols = byteArrayOf(0x02)
+      supportedProtocols = listOf(Protocol.Datastream)
     ), object : X509TrustManager {
       override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) {
       }

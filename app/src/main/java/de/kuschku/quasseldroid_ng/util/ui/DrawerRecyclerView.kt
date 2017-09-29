@@ -5,7 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.support.v4.view.ViewCompat
-import android.support.v4.view.WindowInsetsCompat
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import de.kuschku.quasseldroid_ng.R
@@ -28,7 +27,7 @@ class DrawerRecyclerView @JvmOverloads constructor(
     a.recycle()
     setWillNotDraw(true) // No need to draw until the insets are adjusted
     ViewCompat.setOnApplyWindowInsetsListener(this
-    ) { v, insets ->
+    ) { _, insets ->
       if (null == mInsets) {
         mInsets = Rect()
       }
@@ -40,7 +39,6 @@ class DrawerRecyclerView @JvmOverloads constructor(
                  insets.systemWindowInsetTop,
                  insets.systemWindowInsetRight,
                  insets.systemWindowInsetBottom)
-      onInsetsChanged(insets)
       setWillNotDraw(!insets.hasSystemWindowInsets() || mInsetForeground == null)
       ViewCompat.postInvalidateOnAnimation(this@DrawerRecyclerView)
       insets.consumeSystemWindowInsets()
@@ -99,6 +97,4 @@ class DrawerRecyclerView @JvmOverloads constructor(
       mInsetForeground!!.callback = null
     }
   }
-
-  protected open fun onInsetsChanged(insets: WindowInsetsCompat) {}
 }

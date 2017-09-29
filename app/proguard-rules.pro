@@ -26,3 +26,7 @@
 
 # The project is GPL anyway, obfuscation is useless.
 -dontobfuscate
+
+-keep class * implements de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invoker {
+    static ** INSTANCE;
+}

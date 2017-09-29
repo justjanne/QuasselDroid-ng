@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+  tools:discard=""
+  tools:keep="@mipmap/ic_launcher,@drawable/ic_shortcut_channel,@drawable/ic_shortcut_query" />

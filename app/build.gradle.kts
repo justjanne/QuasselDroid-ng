@@ -1,7 +1,6 @@
 import com.android.build.gradle.AppExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
-import org.jetbrains.kotlin.gradle.plugin.KaptAnnotationProcessorOptions
 import org.jetbrains.kotlin.gradle.plugin.KaptExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.ByteArrayOutputStream
@@ -15,12 +14,12 @@ apply {
 
 android {
   compileSdkVersion(26)
-  buildToolsVersion("26.0.0")
+  buildToolsVersion("26.0.1")
 
   signingConfigs {
     val signing = project.rootProject.properties("signing.properties")
     if (signing != null) {
-      create("release") {
+      create("default") {
         storeFile = file(signing.getProperty("storeFile"))
         storePassword = signing.getProperty("storePassword")
         keyAlias = signing.getProperty("keyAlias")
@@ -40,7 +39,7 @@ android {
     buildConfigField("String", "GIT_HEAD", "\"${cmd("git", "rev-parse", "HEAD") ?: ""}\"")
     buildConfigField("long", "GIT_COMMIT_DATE", "${cmd("git", "show", "-s", "--format=%ct") ?: 0}L")
 
-    signingConfig = signingConfigs.getByName("release")
+    signingConfig = signingConfigs.getByName("default")
 
     setProperty("archivesBaseName", "QuasselDroidNG-$versionName")
 
@@ -53,15 +52,33 @@ android {
     }
 
     vectorDrawables.useSupportLibrary = true
+
+    resConfigs("en")
   }
 
   buildTypes {
     getByName("release") {
-      //proguardFiles("proguard-rules.pro")
+      isZipAlignEnabled = true
+      isMinifyEnabled = true
+      isShrinkResources = true
+
+      proguardFiles(
+        getDefaultProguardFile("proguard-android.txt"),
+        "proguard-rules.pro"
+      )
     }
 
     getByName("debug") {
       applicationIdSuffix = "debug"
+
+      isZipAlignEnabled = true
+      isMinifyEnabled = true
+      isShrinkResources = true
+
+      proguardFiles(
+        getDefaultProguardFile("proguard-android.txt"),
+        "proguard-rules.pro"
+      )
     }
   }
 }
@@ -71,9 +88,7 @@ val appArchVersion = "1.0.0-alpha9-1"
 dependencies {
   implementation(kotlin("stdlib"))
 
-  implementation(appCompat("design")) {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
+  implementation(appCompat("design"))
   implementation(appCompat("customtabs"))
   implementation(appCompat("cardview-v7"))
   implementation(appCompat("recyclerview-v7"))
@@ -100,9 +115,6 @@ dependencies {
   implementation("com.jakewharton:butterknife:8.7.0")
   kapt("com.jakewharton:butterknife-compiler:8.7.0")
 
-  implementation("com.faendir:acra:4.10.0") {
-    exclude(group = "com.android.support", module = "support-media-compat")
-  }
   implementation(project(":lib"))
 
   implementation(project(":invokerannotations"))

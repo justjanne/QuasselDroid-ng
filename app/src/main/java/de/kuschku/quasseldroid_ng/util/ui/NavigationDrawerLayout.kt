@@ -20,7 +20,6 @@ import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.support.v4.view.ViewCompat
-import android.support.v4.view.WindowInsetsCompat
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import de.kuschku.quasseldroid_ng.R
@@ -43,7 +42,7 @@ class NavigationDrawerLayout @JvmOverloads constructor(
     a.recycle()
     setWillNotDraw(true) // No need to draw until the insets are adjusted
     ViewCompat.setOnApplyWindowInsetsListener(this
-    ) { v, insets ->
+    ) { _, insets ->
       if (null == mInsets) {
         mInsets = Rect()
       }
@@ -55,7 +54,6 @@ class NavigationDrawerLayout @JvmOverloads constructor(
                  insets.systemWindowInsetTop,
                  insets.systemWindowInsetRight,
                  insets.systemWindowInsetBottom)
-      onInsetsChanged(insets)
       setWillNotDraw(!insets.hasSystemWindowInsets() || mInsetForeground == null)
       ViewCompat.postInvalidateOnAnimation(this@NavigationDrawerLayout)
       insets.consumeSystemWindowInsets()
@@ -114,6 +112,4 @@ class NavigationDrawerLayout @JvmOverloads constructor(
       mInsetForeground!!.callback = null
     }
   }
-
-  protected open fun onInsetsChanged(insets: WindowInsetsCompat) {}
 }
