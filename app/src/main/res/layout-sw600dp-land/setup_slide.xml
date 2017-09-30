@@ -56,8 +56,7 @@
       android:id="@+id/content_host"
       android:layout_width="400dp"
       android:layout_height="wrap_content"
-      android:layout_gravity="bottom|start"
-      android:layout_marginTop="?attr/actionBarSize"
+      android:layout_gravity="center_vertical|start"
       android:minHeight="400dp"
       app:cardElevation="4dp" />
 
