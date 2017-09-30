@@ -44,8 +44,8 @@
           android:layout_marginRight="48dp"
           android:layout_marginStart="32dp"
           android:layout_marginTop="8dp"
+          android:textColor="?android:attr/textColorSecondaryInverse"
           android:textSize="16sp"
-          android:theme="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse"
           tools:text="First, please choose which server your core is hosted on." />
       </LinearLayout>
 

@@ -24,16 +24,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="28sp"
-        android:theme="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
         tools:text="Connection" />
 
       <TextView
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="?android:attr/textColorSecondaryInverse"
         android:textSize="16sp"
-        android:theme="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse"
         tools:text="First, please choose which server your core is hosted on." />
 
     </LinearLayout>

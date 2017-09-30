@@ -21,8 +21,8 @@
       android:layout_height="wrap_content"
       android:layout_gravity="end"
       android:gravity="end"
+      android:textColor="?android:attr/textColorPrimaryInverse"
       android:textSize="28sp"
-      android:theme="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
       tools:text="Connection" />
 
     <android.support.v4.widget.Space
@@ -36,8 +36,8 @@
       android:layout_height="wrap_content"
       android:layout_gravity="end"
       android:gravity="end"
+      android:textColor="?android:attr/textColorSecondaryInverse"
       android:textSize="16sp"
-      android:theme="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse"
       tools:text="First, please choose which server your core is hosted on." />
 
   </LinearLayout>

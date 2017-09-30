@@ -9,25 +9,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
 
-  <FrameLayout
-    android:layout_width="400dp"
+  <android.support.design.widget.FloatingActionButton
+    android:id="@+id/next_button"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="bottom|center">
-
-    <android.support.design.widget.FloatingActionButton
-      android:id="@+id/next_button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="right|bottom"
-      android:layout_marginBottom="16dp"
-      android:layout_marginRight="16dp"
-      android:tint="#ffffff"
-      app:backgroundTint="#8A000000"
-      app:elevation="0dip"
-      app:fabSize="normal"
-      app:pressedTranslationZ="0dip"
-      tools:ignore="RtlHardcoded" />
-
-  </FrameLayout>
+    android:layout_gravity="right|bottom"
+    android:layout_marginBottom="24dp"
+    android:layout_marginRight="24dp"
+    android:tint="#ffffff"
+    app:backgroundTint="#8A000000"
+    app:elevation="0dip"
+    app:fabSize="normal"
+    app:pressedTranslationZ="0dip"
+    tools:ignore="RtlHardcoded" />
 
 </merge>
