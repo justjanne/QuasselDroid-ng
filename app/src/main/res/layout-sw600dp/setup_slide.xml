@@ -24,9 +24,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Connection"
         android:textSize="28sp"
-        android:theme="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse" />
+        android:theme="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
+        tools:text="Connection" />
 
       <TextView
         android:id="@+id/description"

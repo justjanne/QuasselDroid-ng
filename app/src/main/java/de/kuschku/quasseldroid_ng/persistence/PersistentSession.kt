@@ -22,5 +22,6 @@ class PersistentSession : ISession {
   override val networkConfig: NetworkConfig? = null
 
   override fun close() = Unit
-  override val state = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
+  override val state: BehaviorSubject<ConnectionState>
+    = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
 }

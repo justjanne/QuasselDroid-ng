@@ -17,7 +17,6 @@ import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
-import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
@@ -33,18 +32,17 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ExecutableType;
 import javax.lang.model.type.TypeMirror;
 
+@SuppressWarnings("WeakerAccess")
 @AutoService(Processor.class)
 @SupportedAnnotationTypes("de.kuschku.libquassel.annotations.Syncable")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class InvokerProcessor extends AbstractProcessor {
 
     private Filer filer;
-    private Messager messager;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         filer = processingEnv.getFiler();
-        messager = processingEnv.getMessager();
     }
 
     @Override
@@ -224,12 +222,12 @@ public class InvokerProcessor extends AbstractProcessor {
     }
 
     private class SyncableElement {
-        PackageElement packageElement;
-        TypeElement typeElement;
+        final PackageElement packageElement;
+        final TypeElement typeElement;
 
-        Syncable annotation;
+        final Syncable annotation;
 
-        List<SlotElement> slots;
+        final List<SlotElement> slots;
 
         public SyncableElement(PackageElement packageElement, TypeElement typeElement, Syncable annotation, List<SlotElement> slots) {
             this.packageElement = packageElement;

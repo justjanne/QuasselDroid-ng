@@ -36,10 +36,10 @@ fun <U> QVariant_?.value(): U?
   = this?._value<U?>(null)
 
 fun <U> QVariant_?.value(defValue: U): U
-  = this?._value<U>(defValue) ?: defValue
+  = this?._value(defValue) ?: defValue
 
 fun <U> QVariant_?.valueOr(f: () -> U): U
-  = this?._valueOr<U>(f) ?: f()
+  = this?._valueOr(f) ?: f()
 
 fun <U> QVariant_?.valueOrThrow(e: Throwable = NullPointerException()): U
   = this?._valueOrThrow<U>(e) ?: throw e

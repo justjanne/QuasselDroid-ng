@@ -73,8 +73,8 @@ class SessionManager(
   }
 
   private var inProgressSession = BehaviorSubject.createDefault(offlineSession)
-  override val state = inProgressSession.switchMap { it.state }
-  val session = state.map { connectionState ->
+  override val state: Observable<ConnectionState> = inProgressSession.switchMap { it.state }
+  val session: Observable<ISession> = state.map { connectionState ->
     if (connectionState == ConnectionState.CONNECTED)
       inProgressSession.value
     else

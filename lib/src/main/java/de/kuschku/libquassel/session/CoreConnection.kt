@@ -43,7 +43,8 @@ class CoreConnection(
   private val sizeBuffer = ByteBuffer.allocateDirect(4)
   private val chainedBuffer = ChainedByteBuffer(direct = true)
 
-  val state = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
+  val state: BehaviorSubject<ConnectionState> = BehaviorSubject.createDefault(
+    ConnectionState.DISCONNECTED)
 
   private var channel: WrappedChannel? = null
 

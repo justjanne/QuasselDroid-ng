@@ -43,18 +43,18 @@ class AccountSelectionSlide : SlideFragment() {
                                savedInstanceState: Bundle?): View {
     val view = inflater.inflate(R.layout.setup_select_account, container, false)
     ButterKnife.bind(this, view)
-    val accountViewmodel = ViewModelProviders.of(this).get(
+    val accountViewModel = ViewModelProviders.of(this).get(
       AccountViewModel::class.java)
     val firstObserver = object : Observer<PagedList<AccountDatabase.Account>?> {
       override fun onChanged(t: PagedList<AccountDatabase.Account>?) {
         if (t?.isEmpty() != false)
           startActivityForResult(Intent(context, AccountSetupActivity::class.java),
                                  REQUEST_CREATE_FIRST)
-        accountViewmodel.accounts.removeObserver(this)
+        accountViewModel.accounts.removeObserver(this)
       }
     }
-    accountViewmodel.accounts.observe(this, firstObserver)
-    accountViewmodel.accounts.observe(this, Observer(adapter::setList))
+    accountViewModel.accounts.observe(this, firstObserver)
+    accountViewModel.accounts.observe(this, Observer(adapter::setList))
     accountList.layoutManager = LinearLayoutManager(context)
     accountList.itemAnimator = DefaultItemAnimator()
     accountList.adapter = adapter

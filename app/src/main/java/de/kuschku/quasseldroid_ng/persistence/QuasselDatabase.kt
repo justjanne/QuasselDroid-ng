@@ -38,7 +38,7 @@ abstract class QuasselDatabase : RoomDatabase() {
   ) {
     class MessageTypeConverters {
       @TypeConverter
-      fun convertInstant(value: Long) = Instant.ofEpochMilli(value)
+      fun convertInstant(value: Long): Instant = Instant.ofEpochMilli(value)
 
       @TypeConverter
       fun convertInstant(value: Instant) = value.toEpochMilli()

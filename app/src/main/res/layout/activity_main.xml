@@ -87,7 +87,7 @@
 
   </LinearLayout>
 
-  <include layout="@layout/content_nicklist" />
+  <include layout="@layout/content_nick_list" />
 
-  <include layout="@layout/content_chatlist" />
+  <include layout="@layout/content_chat_list" />
 </android.support.v4.widget.DrawerLayout>

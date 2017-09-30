@@ -117,9 +117,6 @@ dependencies {
 
   implementation(project(":lib"))
 
-  implementation(project(":invokerannotations"))
-  kapt(project(":invokergenerator"))
-
   testImplementation("android.arch.persistence.room:testing:1.0.0-alpha9")
   testImplementation("junit:junit:4.12")
 

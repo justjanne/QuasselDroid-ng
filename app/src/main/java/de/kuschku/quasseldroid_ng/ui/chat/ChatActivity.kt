@@ -1,6 +1,7 @@
 package de.kuschku.quasseldroid_ng.ui.chat
 
 import android.app.Activity
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.widget.Button
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.quassel.syncables.BufferViewManager
 import de.kuschku.libquassel.session.*
 import de.kuschku.libquassel.util.compatibility.LoggingHandler
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
@@ -41,10 +43,10 @@ class ChatActivity : ServiceBoundActivity() {
 
   private val handler = AndroidHandlerThread("Chat")
 
-  private val sessionManager = backend.map(Backend::sessionManager)
+  private val sessionManager: LiveData<SessionManager?> = backend.map(Backend::sessionManager)
   private val state = sessionManager.switchMapRx(SessionManager::state)
 
-  private val bufferViewManager
+  private val bufferViewManager: LiveData<BufferViewManager?>
     = sessionManager.switchMapRx(SessionManager::session).map(ISession::bufferViewManager)
   private val bufferViewConfigs = bufferViewManager.switchMapRx { manager ->
     manager.bufferViewConfigIds.map { ids ->

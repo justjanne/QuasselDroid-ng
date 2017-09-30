@@ -2,7 +2,6 @@ package de.kuschku.quasseldroid_ng.util.helper
 
 import android.arch.lifecycle.*
 import android.support.annotation.MainThread
-import de.kuschku.libquassel.util.helpers.toLiveData
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 
@@ -37,7 +36,7 @@ inline fun <X, Y> LiveData<X?>.switchMap(
 inline fun <X, Y> LiveData<X?>.switchMapRx(
   strategy: BackpressureStrategy,
   noinline func: (X) -> Observable<Y>?
-): LiveData<Y> {
+): LiveData<Y?> {
   val result = MediatorLiveData<Y>()
   result.addSource(this, object : Observer<X?> {
     internal var mSource: LiveData<Y>? = null
@@ -64,7 +63,7 @@ inline fun <X, Y> LiveData<X?>.switchMapRx(
 @MainThread
 inline fun <X, Y> LiveData<X?>.switchMapRx(
   noinline func: (X) -> Observable<Y>?
-): LiveData<Y> = switchMapRx(BackpressureStrategy.LATEST, func)
+): LiveData<Y?> = switchMapRx(BackpressureStrategy.LATEST, func)
 
 @MainThread
 inline fun <X, Y> LiveData<X?>.map(
@@ -113,5 +112,5 @@ inline fun <T> LiveData<T>.observeForeverSticky(observer: Observer<T>) {
   observer.onChanged(value)
 }
 
-inline fun <T> LiveData<T>.toObservable(lifecycleOwner: LifecycleOwner)
+inline fun <T> LiveData<T>.toObservable(lifecycleOwner: LifecycleOwner): Observable<T>
   = Observable.fromPublisher(LiveDataReactiveStreams.toPublisher(lifecycleOwner, this))

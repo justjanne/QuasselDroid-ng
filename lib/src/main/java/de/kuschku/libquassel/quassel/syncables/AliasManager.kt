@@ -54,7 +54,7 @@ class AliasManager constructor(
 
   fun contains(name: String) = _aliases.map(Alias::name).contains(name)
 
-  fun defaults() = listOf<Alias>(
+  fun defaults() = listOf(
     Alias("j", "/join $0"),
     Alias("ns", "/msg nickserv $0"),
     Alias("nickserv", "/msg nickserv $0"),

@@ -1,5 +1,6 @@
 package de.kuschku.quasseldroid_ng.util.helper
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 
 fun SharedPreferences.editApply(f: SharedPreferences.Editor.() -> Unit) {
@@ -8,6 +9,7 @@ fun SharedPreferences.editApply(f: SharedPreferences.Editor.() -> Unit) {
   editor.apply()
 }
 
+@SuppressLint("ApplySharedPref")
 fun SharedPreferences.editCommit(f: SharedPreferences.Editor.() -> Unit) {
   val editor = this.edit()
   editor.f()

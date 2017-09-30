@@ -1,5 +1,6 @@
 package de.kuschku.quasseldroid_ng.ui.setup.accounts
 
+import android.annotation.SuppressLint
 import android.arch.paging.PagedListAdapter
 import android.support.v7.recyclerview.extensions.DiffCallback
 import android.support.v7.widget.AppCompatImageButton
@@ -76,7 +77,8 @@ class AccountAdapter :
     selectionListeners.remove(f)
   }
 
-  override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
+  override fun onBindViewHolder(holder: AccountViewHolder, @SuppressLint(
+    "RecyclerView") position: Int) {
     when (holder) {
       is AccountViewHolder.Item -> {
         val account = getItem(position)

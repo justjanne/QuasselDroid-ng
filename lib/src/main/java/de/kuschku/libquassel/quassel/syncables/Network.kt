@@ -68,13 +68,13 @@ class Network constructor(
     = prefixModes().elementAtOrNull(prefixes().indexOf(prefix))
 
   fun prefixesToModes(prefixes: String): String
-    = prefixes.toCharArray().map(this::prefixToMode).filterNotNull().joinToString()
+    = prefixes.mapNotNull(this::prefixToMode).joinToString()
 
   fun modeToPrefix(mode: Char): Char?
     = prefixes().elementAtOrNull(prefixModes().indexOf(mode))
 
   fun modesToPrefixes(modes: String): String
-    = modes.toCharArray().map(this::modeToPrefix).filterNotNull().joinToString()
+    = modes.mapNotNull(this::modeToPrefix).joinToString()
 
   fun channelModeType(mode: Char): ChannelModeType {
     if (_channelModes == null)
@@ -357,9 +357,9 @@ class Network constructor(
   fun ircChannel(channelName: String) = _ircChannels[channelName]
   fun ircChannels() = _ircChannels.values.toList()
   fun ircChanenlCount(): UInt = _ircChannels.size
-  fun codecForServer() = _codecForServer.name()
-  fun codecForEncoding() = _codecForEncoding.name()
-  fun codecForDecoding() = _codecForDecoding.name()
+  fun codecForServer(): String = _codecForServer.name()
+  fun codecForEncoding(): String = _codecForEncoding.name()
+  fun codecForDecoding(): String = _codecForDecoding.name()
   fun setCodecForDecoding(codec: Charset) {
     _codecForDecoding = codec
     super.setCodecForDecoding(Charsets.ISO_8859_1.encode(codecForDecoding()))
