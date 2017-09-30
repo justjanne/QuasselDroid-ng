@@ -11,25 +11,25 @@ import android.view.ViewGroup
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.quassel.BufferInfo
 
 class BufferListAdapter(
   lifecycleOwner: LifecycleOwner,
-  liveData: LiveData<List<BufferId>?>,
+  liveData: LiveData<List<BufferInfo>?>,
   runInBackground: (() -> Unit) -> Any,
   runOnUiThread: (Runnable) -> Any
 ) : RecyclerView.Adapter<BufferListAdapter.BufferViewHolder>() {
-  var data = mutableListOf<BufferId>()
+  var data = mutableListOf<BufferInfo>()
 
   init {
-    liveData.observe(lifecycleOwner, Observer { list: List<BufferId>? ->
+    liveData.observe(lifecycleOwner, Observer { list: List<BufferInfo>? ->
       runInBackground {
         val old = data
         val new = list ?: emptyList()
         val result = DiffUtil.calculateDiff(
           object : DiffUtil.Callback() {
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int)
-              = old[oldItemPosition] == new[newItemPosition]
+              = old[oldItemPosition].bufferId == new[newItemPosition].bufferId
 
             override fun getOldListSize() = old.size
             override fun getNewListSize() = new.size
@@ -64,8 +64,8 @@ class BufferListAdapter(
       ButterKnife.bind(this, itemView)
     }
 
-    fun bind(bufferId: BufferId) {
-      text.text = "$bufferId"
+    fun bind(info: BufferInfo) {
+      text.text = "${info.networkId}/${info.bufferName}"
     }
   }
 }

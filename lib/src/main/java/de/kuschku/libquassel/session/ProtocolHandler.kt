@@ -16,7 +16,8 @@ import java.io.Closeable
 @Suppress("LeakingThis")
 abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
   private val objectStorage: ObjectStorage = ObjectStorage(this)
-  private val rpcHandler: RpcHandler = RpcHandler(this)
+
+  protected open var rpcHandler: RpcHandler? = null
 
   private val toInit = mutableMapOf<ISyncableObject, MutableList<SignalProxyMessage.SyncMessage>>()
   private val syncQueue = mutableListOf<SignalProxyMessage.SyncMessage>()

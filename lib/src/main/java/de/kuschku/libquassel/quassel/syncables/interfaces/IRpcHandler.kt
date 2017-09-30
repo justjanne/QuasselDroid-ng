@@ -7,12 +7,14 @@ import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.QVariantMap
 import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.session.ISession
+import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.session.SignalProxy
 import java.nio.ByteBuffer
 
 @Syncable(name = "RpcHandler")
 interface IRpcHandler {
-  val proxy: SignalProxy
+  val session: Session
 
   @Slot("__objectRenamed__")
   fun objectRenamed(classname: ByteBuffer, newname: String, oldname: String)

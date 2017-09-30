@@ -5,6 +5,7 @@ import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.quassel.QuasselFeature
 import de.kuschku.libquassel.quassel.syncables.*
+import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
@@ -38,6 +39,8 @@ class Session(
   override val networks = mutableMapOf<NetworkId, Network>()
   override val networkConfig = NetworkConfig(this)
 
+  override var rpcHandler: RpcHandler? = RpcHandler(this)
+
   init {
     coreConnection.start()
   }
@@ -53,6 +56,8 @@ class Session(
 
   override fun handle(f: HandshakeMessage.SessionInit): Boolean {
     coreConnection.setState(ConnectionState.INIT)
+
+    bufferSyncer.initSetBufferInfos(f.bufferInfos)
 
     f.networkIds?.forEach {
       val network = Network(it.value(-1), this)

@@ -8,6 +8,7 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler
 import de.kuschku.libquassel.util.compatibility.log
+import de.kuschku.libquassel.util.helpers.or
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import javax.net.ssl.X509TrustManager
@@ -81,6 +82,3 @@ class SessionManager(
       offlineSession
   }
 }
-
-fun <T> Observable<T>.or(default: T): T
-  = this.blockingLatest().firstOrNull() ?: default

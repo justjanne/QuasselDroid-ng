@@ -28,10 +28,6 @@ class AccountAdapter :
     }
   }
 
-  init {
-    setHasStableIds(true)
-  }
-
   private val actionListener = object : ItemListener {
     override fun onAction(id: Long, pos: Int) {
       for (actionListener in actionListeners) {

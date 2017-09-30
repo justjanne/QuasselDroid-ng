@@ -10,8 +10,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.BufferViewManager
+import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SessionManager
@@ -19,10 +21,11 @@ import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.map
 import de.kuschku.quasseldroid_ng.util.helper.or
+import de.kuschku.quasseldroid_ng.util.helper.switchMap
 import de.kuschku.quasseldroid_ng.util.helper.switchMapRx
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundFragment
 
-class ChatListFragment : ServiceBoundFragment() {
+class BufferViewConfigFragment : ServiceBoundFragment() {
   private val handlerThread = AndroidHandlerThread("ChatList")
 
   @BindView(R.id.chatListToolbar)
@@ -38,6 +41,8 @@ class ChatListFragment : ServiceBoundFragment() {
     = backend.map(Backend::sessionManager)
   private val bufferViewManager: LiveData<BufferViewManager?>
     = sessionManager.switchMapRx(SessionManager::session).map(ISession::bufferViewManager)
+  private val networks: LiveData<Map<NetworkId, Network>?>
+    = sessionManager.switchMapRx(SessionManager::session).map(ISession::networks)
   private val bufferViewConfigs = bufferViewManager.switchMapRx { manager ->
     manager.live_bufferViewConfigs.map { ids ->
       ids.mapNotNull { id ->
@@ -62,7 +67,15 @@ class ChatListFragment : ServiceBoundFragment() {
 
   private val adapter = BufferViewConfigAdapter(this, bufferViewConfigs)
 
-  private val bufferList = selectedBufferViewConfig.switchMapRx(BufferViewConfig::live_buffers)
+  private val bufferIdList = selectedBufferViewConfig.switchMapRx(BufferViewConfig::live_buffers)
+
+  private val bufferList = sessionManager.switchMap { manager ->
+    bufferIdList.map { ids ->
+      ids.mapNotNull {
+        manager.bufferSyncer?.bufferInfo(it)
+      }
+    }
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     handlerThread.onCreate()

@@ -2,6 +2,7 @@ package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferSyncer
 import de.kuschku.libquassel.session.SignalProxy
 
@@ -75,6 +76,11 @@ class BufferSyncer constructor(
     }
   }
 
+  fun initSetBufferInfos(infos: QVariantList?) {
+    _bufferInfos.clear()
+    infos?.mapNotNull { it.value<BufferInfo>() }?.forEach { _bufferInfos[it.bufferId] = it }
+  }
+
   override fun mergeBuffersPermanently(buffer1: BufferId, buffer2: BufferId) {
     _lastSeenMsg.remove(buffer2)
     _markerLines.remove(buffer2)
@@ -85,9 +91,15 @@ class BufferSyncer constructor(
     _lastSeenMsg.remove(buffer)
     _markerLines.remove(buffer)
     _bufferActivities.remove(buffer)
+    _bufferInfos.remove(buffer)
   }
 
   override fun renameBuffer(buffer: BufferId, newName: String) {
+  }
+
+  fun bufferInfo(bufferId: BufferId) = _bufferInfos[bufferId]
+  fun bufferInfoUpdated(info: BufferInfo) {
+    _bufferInfos[info.bufferId] = info
   }
 
   override fun setLastSeenMsg(buffer: BufferId, msgId: MsgId) {
@@ -118,4 +130,5 @@ class BufferSyncer constructor(
   private val _lastSeenMsg: MutableMap<BufferId, MsgId> = mutableMapOf()
   private val _markerLines: MutableMap<BufferId, MsgId> = mutableMapOf()
   private val _bufferActivities: MutableMap<BufferId, Message_Types> = mutableMapOf()
+  private val _bufferInfos = mutableMapOf<BufferId, BufferInfo>()
 }
