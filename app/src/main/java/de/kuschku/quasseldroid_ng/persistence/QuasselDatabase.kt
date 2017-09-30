@@ -7,23 +7,10 @@ import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
 import org.threeten.bp.Instant
 
-@Database(entities = arrayOf(QuasselDatabase.Buffer::class, QuasselDatabase.Network::class,
-                             QuasselDatabase.DatabaseMessage::class),
-          version = 2)
+@Database(entities = arrayOf(QuasselDatabase.DatabaseMessage::class), version = 2)
 @TypeConverters(QuasselDatabase.DatabaseMessage.MessageTypeConverters::class)
 abstract class QuasselDatabase : RoomDatabase() {
-  abstract fun networks(): NetworkDao
-  abstract fun buffers(): BufferDao
   abstract fun message(): MessageDao
-
-  @Entity(indices = arrayOf(Index("networkId")))
-  class Buffer(
-    @PrimaryKey var bufferId: Int,
-    var networkId: Int,
-    var type: Int,
-    var groupId: Int,
-    var bufferName: String
-  )
 
   @Entity(tableName = "message")
   open class DatabaseMessage(
@@ -49,60 +36,6 @@ abstract class QuasselDatabase : RoomDatabase() {
         type)}, flag=${Message_Flag.of(
         flag)}, bufferId=$bufferId, sender='$sender', senderPrefixes='$senderPrefixes', content='$content')"
     }
-  }
-
-  @Entity
-  class Network(
-    @PrimaryKey var networkId: Int,
-    var networkName: String
-  )
-
-  @Entity
-  class BufferViewConfig(
-    @PrimaryKey var id: Int,
-    var name: String
-  )
-
-  @Dao
-  interface NetworkDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(vararg entities: QuasselDatabase.Network)
-
-    @Query("SELECT * FROM network WHERE networkId = :networkId")
-    fun findById(networkId: Int): QuasselDatabase.Network
-
-    @Query("SELECT * FROM network")
-    fun all(): List<QuasselDatabase.Network>
-
-    @Delete
-    fun delete(Network: QuasselDatabase.Network)
-
-    @Query("DELETE FROM network")
-    fun clear()
-  }
-
-  @Dao
-  interface BufferDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(vararg entities: QuasselDatabase.Buffer)
-
-    @Query("SELECT * FROM buffer WHERE networkId = :bufferId")
-    fun findById(bufferId: Int): QuasselDatabase.Buffer
-
-    @Query("SELECT * FROM buffer WHERE networkId = :networkId")
-    fun findByNetwork(networkId: Int): List<QuasselDatabase.Buffer>
-
-    @Query("DELETE FROM buffer WHERE networkId = :networkId")
-    fun deleteByNetwork(networkId: Int)
-
-    @Query("SELECT * FROM buffer")
-    fun all(): List<QuasselDatabase.Buffer>
-
-    @Delete
-    fun delete(buffer: QuasselDatabase.Buffer)
-
-    @Query("DELETE FROM buffer")
-    fun clear()
   }
 
   @Dao

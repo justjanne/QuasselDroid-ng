@@ -1,20 +1,23 @@
 package de.kuschku.quasseldroid_ng.service
 
 import android.arch.lifecycle.LifecycleService
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Binder
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.session.Backend
+import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.session.SocketAddress
 import de.kuschku.quasseldroid_ng.BuildConfig
 import de.kuschku.quasseldroid_ng.R
-import de.kuschku.quasseldroid_ng.persistence.PersistentSession
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.compatibility.AndroidHandlerService
+import de.kuschku.quasseldroid_ng.util.helper.toLiveData
 import org.threeten.bp.Instant
 import java.security.cert.X509Certificate
+import java.util.concurrent.TimeUnit
 import javax.net.ssl.X509TrustManager
 
 class QuasselService : LifecycleService() {
@@ -35,16 +38,21 @@ class QuasselService : LifecycleService() {
   private val backendImplementation = object : Backend {
     override fun sessionManager() = sessionManager
 
-    override fun connectUnlessConnected(address: SocketAddress, user: String, pass: String) {
+    override fun connectUnlessConnected(address: SocketAddress, user: String, pass: String,
+                                        reconnect: Boolean) {
       sessionManager.ifDisconnected {
-        this.connect(address, user, pass)
+        this.connect(address, user, pass, reconnect)
       }
     }
 
-    override fun connect(address: SocketAddress, user: String, pass: String) {
+    override fun connect(address: SocketAddress, user: String, pass: String, reconnect: Boolean) {
       disconnect()
-      val handlerService = AndroidHandlerService()
-      sessionManager.connect(clientData, trustManager, address, handlerService, user to pass)
+      sessionManager.connect(clientData, trustManager, address, ::AndroidHandlerService,
+                             user to pass, reconnect)
+    }
+
+    override fun reconnect() {
+      sessionManager.reconnect()
     }
 
     override fun disconnect() {
@@ -55,15 +63,22 @@ class QuasselService : LifecycleService() {
   private val handler = AndroidHandlerThread("Backend")
 
   private val asyncBackend = object : Backend {
-    override fun connectUnlessConnected(address: SocketAddress, user: String, pass: String) {
+    override fun connectUnlessConnected(address: SocketAddress, user: String, pass: String,
+                                        reconnect: Boolean) {
       handler.post {
-        backendImplementation.connectUnlessConnected(address, user, pass)
+        backendImplementation.connectUnlessConnected(address, user, pass, reconnect)
       }
     }
 
-    override fun connect(address: SocketAddress, user: String, pass: String) {
+    override fun connect(address: SocketAddress, user: String, pass: String, reconnect: Boolean) {
       handler.post {
-        backendImplementation.connect(address, user, pass)
+        backendImplementation.connect(address, user, pass, reconnect)
+      }
+    }
+
+    override fun reconnect() {
+      handler.post {
+        backendImplementation.reconnect()
       }
     }
 
@@ -87,7 +102,7 @@ class QuasselService : LifecycleService() {
     handler.onCreate()
     super.onCreate()
     database = QuasselDatabase.Creator.init(application)
-    sessionManager = SessionManager(PersistentSession())
+    sessionManager = SessionManager(ISession.NULL)
     clientData = ClientData(
       identifier = "${resources.getString(R.string.app_name)} ${BuildConfig.VERSION_NAME}",
       buildDate = Instant.ofEpochSecond(BuildConfig.GIT_COMMIT_DATE),
@@ -98,6 +113,13 @@ class QuasselService : LifecycleService() {
       ),
       supportedProtocols = listOf(Protocol.Datastream)
     )
+    sessionManager.state
+      .distinctUntilChanged()
+      .debounce(50, TimeUnit.MILLISECONDS)
+      .toLiveData()
+      .observe(this, Observer {
+        sessionManager.reconnect()
+      })
   }
 
   override fun onBind(intent: Intent?): QuasselBinder {
