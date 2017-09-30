@@ -14,8 +14,10 @@ import android.widget.Button
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import de.kuschku.libquassel.quassel.syncables.BufferViewManager
-import de.kuschku.libquassel.session.*
+import de.kuschku.libquassel.session.Backend
+import de.kuschku.libquassel.session.ConnectionState
+import de.kuschku.libquassel.session.SessionManager
+import de.kuschku.libquassel.session.SocketAddress
 import de.kuschku.libquassel.util.compatibility.LoggingHandler
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import de.kuschku.quasseldroid_ng.Keys
@@ -45,16 +47,6 @@ class ChatActivity : ServiceBoundActivity() {
 
   private val sessionManager: LiveData<SessionManager?> = backend.map(Backend::sessionManager)
   private val state = sessionManager.switchMapRx(SessionManager::state)
-
-  private val bufferViewManager: LiveData<BufferViewManager?>
-    = sessionManager.switchMapRx(SessionManager::session).map(ISession::bufferViewManager)
-  private val bufferViewConfigs = bufferViewManager.switchMapRx { manager ->
-    manager.bufferViewConfigIds.map { ids ->
-      ids.map { id ->
-        manager.bufferViewConfig(id)
-      }.sortedBy { it?.bufferViewName() }
-    }
-  }
 
   private var snackbar: Snackbar? = null
 

@@ -36,7 +36,7 @@ class BufferViewManager constructor(
 
     proxy.synchronize(config, !initialized)
     _bufferViewConfigs[config.bufferViewId()] = config
-    bufferViewConfigIds.onNext(_bufferViewConfigs.keys)
+    live_bufferViewConfigs.onNext(_bufferViewConfigs.keys)
   }
 
   override fun addBufferViewConfig(bufferViewConfigId: Int) {
@@ -51,12 +51,12 @@ class BufferViewManager constructor(
       return
 
     _bufferViewConfigs.remove(bufferViewConfigId)
-    bufferViewConfigIds.onNext(_bufferViewConfigs.keys)
+    live_bufferViewConfigs.onNext(_bufferViewConfigs.keys)
   }
 
   private val _bufferViewConfigs: MutableMap<Int, BufferViewConfig>
     = mutableMapOf()
 
-  val bufferViewConfigIds: BehaviorSubject<Set<Int>>
+  val live_bufferViewConfigs: BehaviorSubject<Set<Int>>
     = BehaviorSubject.createDefault<Set<Int>>(emptySet())
 }

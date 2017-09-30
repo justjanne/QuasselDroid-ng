@@ -28,6 +28,10 @@ class AccountAdapter :
     }
   }
 
+  init {
+    setHasStableIds(true)
+  }
+
   private val actionListener = object : ItemListener {
     override fun onAction(id: Long, pos: Int) {
       for (actionListener in actionListeners) {
@@ -77,8 +81,8 @@ class AccountAdapter :
     selectionListeners.remove(f)
   }
 
-  override fun onBindViewHolder(holder: AccountViewHolder, @SuppressLint(
-    "RecyclerView") position: Int) {
+  override fun onBindViewHolder(holder: AccountViewHolder,
+                                @SuppressLint("RecyclerView") position: Int) {
     when (holder) {
       is AccountViewHolder.Item -> {
         val account = getItem(position)

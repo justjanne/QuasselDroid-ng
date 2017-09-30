@@ -1,45 +1,37 @@
-<de.kuschku.quasseldroid_ng.util.ui.NavigationDrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:layout_gravity="start"
-  android:background="?android:attr/windowBackground"
-  android:fitsSystemWindows="true"
-  app:insetForeground="?attr/colorPrimaryDark"
-  tools:showIn="@layout/activity_main">
+  android:orientation="vertical">
 
-  <LinearLayout
+  <android.support.design.widget.AppBarLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:theme="?attr/actionBarTheme">
 
-    <android.support.design.widget.AppBarLayout
+    <android.support.v7.widget.Toolbar
+      android:id="@+id/chatListToolbar"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:theme="?attr/actionBarTheme">
+      android:layout_height="?attr/actionBarSize"
+      android:background="?attr/colorPrimary"
+      android:theme="?attr/actionBarTheme"
+      app:contentInsetStartWithNavigation="0dp"
+      app:popupTheme="@style/Widget.PopupOverlay">
 
-      <android.support.v7.widget.Toolbar
-        android:id="@+id/chatListToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:contentInsetStartWithNavigation="0dp">
+      <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/chatListSpinner"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:theme="?attr/actionBarTheme"
+        app:popupTheme="@style/Widget.PopupOverlay" />
 
-        <android.support.v7.widget.AppCompatSpinner
-          android:id="@+id/chatListSpinner"
-          android:layout_width="fill_parent"
-          android:layout_height="match_parent"
-          android:theme="?attr/actionBarTheme" />
+    </android.support.v7.widget.Toolbar>
 
-      </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
+  </android.support.design.widget.AppBarLayout>
 
 
-    <android.support.v7.widget.RecyclerView
-      android:id="@+id/chatList"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent" />
-  </LinearLayout>
-</de.kuschku.quasseldroid_ng.util.ui.NavigationDrawerLayout>
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/chatList"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+</LinearLayout>

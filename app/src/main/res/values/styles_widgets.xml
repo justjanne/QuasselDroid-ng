@@ -35,4 +35,6 @@
   <style name="Widget.DrawerArrowToggle.Light" parent="Widget.AppCompat.DrawerArrowToggle">
     <item name="color">?attr/colorControlNormal</item>
   </style>
+
+  <style name="Widget.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

@@ -22,7 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:contentInsetStartWithNavigation="0dp">
+        app:contentInsetStartWithNavigation="0dp"
+        app:popupTheme="@style/Widget.PopupOverlay">
 
         <LinearLayout
           android:id="@+id/toolbar_action_area"
@@ -89,5 +90,18 @@
 
   <include layout="@layout/content_nick_list" />
 
-  <include layout="@layout/content_chat_list" />
+  <de.kuschku.quasseldroid_ng.util.ui.NavigationDrawerLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="?android:attr/windowBackground"
+    android:fitsSystemWindows="true"
+    app:insetForeground="?attr/colorPrimaryDark">
+
+    <fragment
+      android:id="@+id/chatListFragment"
+      android:name="de.kuschku.quasseldroid_ng.ui.chat.ChatListFragment"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+  </de.kuschku.quasseldroid_ng.util.ui.NavigationDrawerLayout>
 </android.support.v4.widget.DrawerLayout>

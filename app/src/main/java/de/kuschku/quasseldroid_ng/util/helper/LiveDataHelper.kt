@@ -90,7 +90,7 @@ inline fun <X> LiveData<X>.orElse(
 }
 
 @MainThread
-inline fun <X> LiveData<X>.or(
+inline fun <X> LiveData<X?>.or(
   default: X
 ): LiveData<X> {
   val result = object : MediatorLiveData<X>() {

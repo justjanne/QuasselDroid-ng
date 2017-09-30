@@ -5,6 +5,7 @@ import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferViewConfig
 import de.kuschku.libquassel.session.SignalProxy
+import io.reactivex.subjects.BehaviorSubject
 
 class BufferViewConfig constructor(
   bufferViewId: Int,
@@ -54,14 +55,17 @@ class BufferViewConfig constructor(
 
   override fun initSetBufferList(buffers: QVariantList) {
     _buffers = buffers.mapNotNull { it.value<BufferId?>() }.toMutableList()
+    live_buffers.onNext(_buffers)
   }
 
   override fun initSetRemovedBuffers(buffers: QVariantList) {
     _removedBuffers = buffers.mapNotNull { it.value<BufferId?>() }.toMutableSet()
+    live_removedBuffers.onNext(_removedBuffers)
   }
 
   override fun initSetTemporarilyRemovedBuffers(buffers: QVariantList) {
     _temporarilyRemovedBuffers = buffers.mapNotNull { it.value<BufferId?>() }.toMutableSet()
+    live_temporarilyRemovedBuffers.onNext(_temporarilyRemovedBuffers)
   }
 
   override fun initSetProperties(properties: QVariantMap) {
@@ -82,13 +86,18 @@ class BufferViewConfig constructor(
     if (_buffers.contains(bufferId))
       return
 
-    if (_removedBuffers.contains(bufferId))
+    if (_removedBuffers.contains(bufferId)) {
       _removedBuffers.remove(bufferId)
+      live_removedBuffers.onNext(_removedBuffers)
+    }
 
-    if (_temporarilyRemovedBuffers.contains(bufferId))
+    if (_temporarilyRemovedBuffers.contains(bufferId)) {
       _temporarilyRemovedBuffers.remove(bufferId)
+      live_temporarilyRemovedBuffers.onNext(_temporarilyRemovedBuffers)
+    }
 
     _buffers.add(minOf(maxOf(pos, 0), _buffers.size), bufferId)
+    live_buffers.onNext(_buffers)
   }
 
   override fun moveBuffer(bufferId: BufferId, pos: Int) {
@@ -107,26 +116,38 @@ class BufferViewConfig constructor(
       _buffers.removeAt(currentPos)
       _buffers.add(bufferId, targetPos - 1)
     }
+
+    live_buffers.onNext(_buffers)
   }
 
   override fun removeBuffer(bufferId: BufferId) {
-    if (_buffers.contains(bufferId))
+    if (_buffers.contains(bufferId)) {
       _buffers.remove(bufferId)
+      live_buffers.onNext(_buffers)
+    }
 
-    if (_removedBuffers.contains(bufferId))
+    if (_removedBuffers.contains(bufferId)) {
       _removedBuffers.remove(bufferId)
+      live_removedBuffers.onNext(_removedBuffers)
+    }
 
     _temporarilyRemovedBuffers.add(bufferId)
+    live_temporarilyRemovedBuffers.onNext(_temporarilyRemovedBuffers)
   }
 
   override fun removeBufferPermanently(bufferId: BufferId) {
-    if (_buffers.contains(bufferId))
+    if (_buffers.contains(bufferId)) {
       _buffers.remove(bufferId)
+      live_buffers.onNext(_buffers)
+    }
 
-    if (_temporarilyRemovedBuffers.contains(bufferId))
+    if (_temporarilyRemovedBuffers.contains(bufferId)) {
       _temporarilyRemovedBuffers.remove(bufferId)
+      live_temporarilyRemovedBuffers.onNext(_temporarilyRemovedBuffers)
+    }
 
     _removedBuffers.add(bufferId)
+    live_removedBuffers.onNext(_removedBuffers)
   }
 
   fun bufferViewId() = _bufferViewId
@@ -206,4 +227,13 @@ class BufferViewConfig constructor(
   private var _buffers: MutableList<BufferId> = mutableListOf()
   private var _removedBuffers: MutableSet<BufferId> = mutableSetOf()
   private var _temporarilyRemovedBuffers: MutableSet<BufferId> = mutableSetOf()
+
+  val live_buffers: BehaviorSubject<List<BufferId>>
+    = BehaviorSubject.createDefault<List<BufferId>>(emptyList())
+
+  val live_removedBuffers: BehaviorSubject<Set<BufferId>>
+    = BehaviorSubject.createDefault<Set<BufferId>>(emptySet())
+
+  val live_temporarilyRemovedBuffers: BehaviorSubject<Set<BufferId>>
+    = BehaviorSubject.createDefault<Set<BufferId>>(emptySet())
 }
