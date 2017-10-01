@@ -5,7 +5,6 @@ data class ExceptionInfo(
   val message: String?,
   val localizedMessage: String?,
   val stackTrace: List<TraceElement>?,
-  val suppressed: List<ExceptionInfo>?,
   val cause: ExceptionInfo?
 ) {
   constructor(throwable: Throwable) : this(
@@ -13,7 +12,6 @@ data class ExceptionInfo(
     message = throwable.message,
     localizedMessage = throwable.localizedMessage,
     stackTrace = throwable.stackTrace?.map(::TraceElement),
-    suppressed = throwable.suppressed?.map(::ExceptionInfo),
     cause = throwable.cause?.let(::ExceptionInfo)
   )
 }

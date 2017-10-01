@@ -4,6 +4,7 @@ data class CrashInfo(
   val cause: ExceptionInfo?,
   val exception: String?,
   val activeThread: ThreadInfo?,
-  val startTime: Long?,
-  val crashTime: Long?
+  val startTime: String?,
+  val crashTime: String?,
+  val configuration: Map<String, Any?>?
 )
