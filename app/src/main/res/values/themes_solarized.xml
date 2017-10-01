@@ -37,7 +37,6 @@
     <item name="colorForegroundMirc">0xF</item>
 
     <item name="colorBackground">#FDF6E3</item>
-    <item name="android:windowBackground">@color/solarizedLight_background</item>
     <item name="colorBackgroundHighlight">#268bd2</item>
     <item name="colorBackgroundSecondary">@null</item>
     <item name="colorBackgroundCard">#EEE8D5</item>
@@ -47,8 +46,6 @@
     <item name="colorTintMessage">#2277dd</item>
     <item name="colorTintHighlight">#ff8811</item>
   </style>
-
-  <color name="solarizedLight_background">#FDF6E3</color>
 
   <string name="themeSolarizedDarkName">Solarized (Dark)</string>
   <string name="themeSolarizedDarkId">SOLARIZED_DARK</string>
@@ -84,7 +81,6 @@
     <item name="colorForegroundMirc">0xF</item>
 
     <item name="colorBackground">#002B36</item>
-    <item name="android:windowBackground">@color/solarizedDark_background</item>
     <item name="colorBackgroundHighlight">#268bd2</item>
     <item name="colorBackgroundSecondary">@null</item>
     <item name="colorBackgroundCard">#073642</item>
@@ -94,6 +90,4 @@
     <item name="colorTintMessage">#2277dd</item>
     <item name="colorTintHighlight">#ff8811</item>
   </style>
-
-  <color name="solarizedDark_background">#002B36</color>
 </resources>

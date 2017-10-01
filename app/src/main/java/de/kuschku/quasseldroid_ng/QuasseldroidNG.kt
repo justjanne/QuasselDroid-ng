@@ -6,6 +6,7 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
+import de.kuschku.malheur.CrashHandler
 import de.kuschku.quasseldroid_ng.util.compatibility.AndroidCompatibilityUtils
 import de.kuschku.quasseldroid_ng.util.compatibility.AndroidLoggingHandler
 import de.kuschku.quasseldroid_ng.util.compatibility.AndroidStreamChannelFactory
@@ -17,6 +18,7 @@ class QuasseldroidNG : Application() {
   }
 
   override fun onCreate() {
+    CrashHandler.init(this, buildConfig = BuildConfig::class.java)
     super.onCreate()
 
     // Init compatibility utils

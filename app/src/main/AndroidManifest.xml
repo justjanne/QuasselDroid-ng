@@ -3,7 +3,6 @@
   package="de.kuschku.quasseldroid_ng">
 
   <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.READ_LOGS" />
 
   <application
     android:name=".QuasseldroidNG"

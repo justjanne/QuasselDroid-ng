@@ -31,7 +31,6 @@
     <item name="colorForegroundMirc">0x1</item>
 
     <item name="colorBackground">#FAFAFA</item>
-    <item name="android:windowBackground">@color/quasselLight_background</item>
     <item name="colorBackgroundHighlight">#ff8811</item>
     <item name="colorBackgroundSecondary">@null</item>
     <item name="colorBackgroundCard">#FFFFFF</item>
@@ -41,8 +40,6 @@
     <item name="colorTintMessage">#2277dd</item>
     <item name="colorTintHighlight">#ff8811</item>
   </style>
-
-  <color name="quasselLight_background">#FAFAFA</color>
 
   <string name="themeQuasselDarkName">Quassel™ (Dark)</string>
   <string name="themeQuasselDarkId">QUASSEL_DARK</string>
@@ -74,7 +71,6 @@
     <item name="colorForegroundMirc">0x0</item>
 
     <item name="colorBackground">#303030</item>
-    <item name="android:windowBackground">@color/quasselDark_background</item>
     <item name="colorBackgroundHighlight">#ff8811</item>
     <item name="colorBackgroundSecondary">@null</item>
     <item name="colorBackgroundCard">#424242</item>
@@ -84,6 +80,4 @@
     <item name="colorTintMessage">#2277dd</item>
     <item name="colorTintHighlight">#ff8811</item>
   </style>
-
-  <color name="quasselDark_background">#303030</color>
 </resources>

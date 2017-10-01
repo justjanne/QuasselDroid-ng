@@ -21,7 +21,6 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
         app:contentInsetStartWithNavigation="0dp"
         app:popupTheme="@style/Widget.PopupOverlay">
 
@@ -94,7 +93,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:background="?android:attr/windowBackground"
+    android:background="?attr/colorBackground"
     android:fitsSystemWindows="true"
     app:insetForeground="?attr/colorPrimaryDark">
 

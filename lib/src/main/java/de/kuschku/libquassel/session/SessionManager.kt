@@ -13,35 +13,33 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import javax.net.ssl.X509TrustManager
 
-class SessionManager(
-  private val offlineSession: ISession
-) : ISession {
+class SessionManager(offlineSession: ISession) : ISession {
   override val aliasManager: AliasManager?
-    get() = session.or(offlineSession).aliasManager
+    get() = session.or(lastSession).aliasManager
   override val backlogManager: BacklogManager?
-    get() = session.or(offlineSession).backlogManager
+    get() = session.or(lastSession).backlogManager
   override val bufferSyncer: BufferSyncer?
-    get() = session.or(offlineSession).bufferSyncer
+    get() = session.or(lastSession).bufferSyncer
   override val bufferViewManager: BufferViewManager?
-    get() = session.or(offlineSession).bufferViewManager
+    get() = session.or(lastSession).bufferViewManager
   override val certManagers: Map<IdentityId, CertManager>
-    get() = session.or(offlineSession).certManagers
+    get() = session.or(lastSession).certManagers
   override val coreInfo: CoreInfo?
-    get() = session.or(offlineSession).coreInfo
+    get() = session.or(lastSession).coreInfo
   override val dccConfig: DccConfig?
-    get() = session.or(offlineSession).dccConfig
+    get() = session.or(lastSession).dccConfig
   override val identities: Map<IdentityId, Identity>
-    get() = session.or(offlineSession).identities
+    get() = session.or(lastSession).identities
   override val ignoreListManager: IgnoreListManager?
-    get() = session.or(offlineSession).ignoreListManager
+    get() = session.or(lastSession).ignoreListManager
   override val ircListHelper: IrcListHelper?
-    get() = session.or(offlineSession).ircListHelper
+    get() = session.or(lastSession).ircListHelper
   override val networks: Map<NetworkId, Network>
-    get() = session.or(offlineSession).networks
+    get() = session.or(lastSession).networks
   override val networkConfig: NetworkConfig?
-    get() = session.or(offlineSession).networkConfig
+    get() = session.or(lastSession).networkConfig
 
-  override fun close() = session.or(offlineSession).close()
+  override fun close() = session.or(lastSession).close()
 
   init {
     log(LoggingHandler.LogLevel.INFO, "Session", "Session created")
@@ -60,25 +58,56 @@ class SessionManager(
     clientData: ClientData,
     trustManager: X509TrustManager,
     address: SocketAddress,
-    handlerService: HandlerService,
-    userData: Pair<String, String>
+    handlerService: () -> HandlerService,
+    userData: Pair<String, String>,
+    shouldReconnect: Boolean = false
   ) {
     inProgressSession.value.close()
-    inProgressSession.onNext(Session(clientData, trustManager, address, handlerService, userData))
+    lastClientData = clientData
+    lastTrustManager = trustManager
+    lastAddress = address
+    lastHandlerService = handlerService
+    lastUserData = userData
+    lastShouldReconnect = shouldReconnect
+    inProgressSession.onNext(Session(clientData, trustManager, address, handlerService(), userData))
+  }
+
+  private var lastClientData: ClientData? = null
+  private var lastTrustManager: X509TrustManager? = null
+  private var lastAddress: SocketAddress? = null
+  private var lastHandlerService: (() -> HandlerService)? = null
+  private var lastUserData: Pair<String, String>? = null
+  private var lastShouldReconnect = false
+
+  fun reconnect() {
+    if (lastShouldReconnect) {
+      val clientData = lastClientData
+      val trustManager = lastTrustManager
+      val address = lastAddress
+      val handlerService = lastHandlerService
+      val userData = lastUserData
+
+      if (clientData != null && trustManager != null && address != null && handlerService != null && userData != null) {
+        ifDisconnected {
+          connect(clientData, trustManager, address, handlerService, userData)
+        }
+      }
+    }
   }
 
   fun disconnect() {
     inProgressSession.value
     inProgressSession.value.close()
-    inProgressSession.onNext(offlineSession)
+    inProgressSession.onNext(ISession.NULL)
   }
 
-  private var inProgressSession = BehaviorSubject.createDefault(offlineSession)
+  private var inProgressSession = BehaviorSubject.createDefault(ISession.NULL)
+  private var lastSession: ISession = offlineSession
   override val state: Observable<ConnectionState> = inProgressSession.switchMap { it.state }
   val session: Observable<ISession> = state.map { connectionState ->
     if (connectionState == ConnectionState.CONNECTED)
       inProgressSession.value
     else
-      offlineSession
+      lastSession
   }
 }

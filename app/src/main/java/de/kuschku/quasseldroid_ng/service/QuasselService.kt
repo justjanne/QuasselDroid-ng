@@ -5,10 +5,7 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Binder
 import de.kuschku.libquassel.protocol.*
-import de.kuschku.libquassel.session.Backend
-import de.kuschku.libquassel.session.ISession
-import de.kuschku.libquassel.session.SessionManager
-import de.kuschku.libquassel.session.SocketAddress
+import de.kuschku.libquassel.session.*
 import de.kuschku.quasseldroid_ng.BuildConfig
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
@@ -114,8 +111,9 @@ class QuasselService : LifecycleService() {
       supportedProtocols = listOf(Protocol.Datastream)
     )
     sessionManager.state
-      .distinctUntilChanged()
-      .debounce(50, TimeUnit.MILLISECONDS)
+      .filter { it == ConnectionState.DISCONNECTED }
+      .delay(200, TimeUnit.MILLISECONDS)
+      .throttleFirst(1, TimeUnit.SECONDS)
       .toLiveData()
       .observe(this, Observer {
         sessionManager.reconnect()
