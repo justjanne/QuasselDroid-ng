@@ -20,6 +20,8 @@ object CrashHandler {
 
     val reportCollector = ReportCollector(application)
     myHandler = Thread.UncaughtExceptionHandler { activeThread, throwable ->
+      val crashTime = Date()
+      val stackTraces = Thread.getAllStackTraces()
       Thread {
         try {
           val json = gson.toJson(reportCollector.collect(CrashContext(
@@ -28,16 +30,22 @@ object CrashHandler {
             crashingThread = activeThread,
             throwable = throwable,
             startTime = startTime,
-            crashTime = Date(),
-            buildConfig = buildConfig
+            crashTime = crashTime,
+            buildConfig = buildConfig,
+            stackTraces = stackTraces
           ), config))
           println(json)
         } catch (e: Throwable) {
+          e.printStackTrace()
           originalHandler?.uncaughtException(activeThread, throwable)
         }
       }.start()
     }
     Thread.setDefaultUncaughtExceptionHandler(myHandler)
+  }
+
+  fun handle(throwable: Throwable) {
+    myHandler?.uncaughtException(Thread.currentThread(), throwable)
   }
 
   var myHandler: Thread.UncaughtExceptionHandler? = null

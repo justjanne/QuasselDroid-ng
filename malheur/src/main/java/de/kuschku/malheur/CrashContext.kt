@@ -11,5 +11,6 @@ data class CrashContext(
   val throwable: Throwable,
   val startTime: Date,
   val crashTime: Date,
-  val buildConfig: Class<*>?
+  val buildConfig: Class<*>?,
+  val stackTraces: Map<Thread, Array<StackTraceElement>>?
 )

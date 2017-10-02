@@ -12,12 +12,6 @@ class ConfigurationCollector(private val application: Application) :
 
   private val configurationFields = listOf(
     FieldDefinition(
-      fieldName = "mcc"
-    ),
-    FieldDefinition(
-      fieldName = "mnc"
-    ),
-    FieldDefinition(
       fieldName = "screenHeightDp"
     ),
     FieldDefinition(

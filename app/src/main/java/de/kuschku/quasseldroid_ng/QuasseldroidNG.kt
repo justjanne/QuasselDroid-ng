@@ -18,7 +18,10 @@ class QuasseldroidNG : Application() {
   }
 
   override fun onCreate() {
-    CrashHandler.init(this, buildConfig = BuildConfig::class.java)
+    CrashHandler.init(
+      application = this,
+      buildConfig = BuildConfig::class.java
+    )
     super.onCreate()
 
     // Init compatibility utils

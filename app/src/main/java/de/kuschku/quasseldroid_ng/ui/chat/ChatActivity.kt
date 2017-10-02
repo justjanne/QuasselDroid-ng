@@ -20,6 +20,7 @@ import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.session.SocketAddress
 import de.kuschku.libquassel.util.compatibility.LoggingHandler
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
+import de.kuschku.malheur.CrashHandler
 import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
@@ -111,6 +112,17 @@ class ChatActivity : ServiceBoundActivity() {
               true
             )
           }
+          CrashHandler.handle(
+            IllegalArgumentException(
+              "WRONG!",
+              RuntimeException(
+                "WRONG!",
+                NullPointerException(
+                  "Super wrong!"
+                )
+              )
+            )
+          )
         }
       }
     })

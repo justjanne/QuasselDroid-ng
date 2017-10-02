@@ -5,5 +5,6 @@ data class DeviceConfig(
   val version: Boolean = true,
   val installationId: Boolean = true,
   val processor: Boolean = true,
-  val runtime: Boolean = true
+  val runtime: Boolean = true,
+  val display: Boolean = true
 )

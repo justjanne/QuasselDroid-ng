@@ -1,0 +1,61 @@
+package de.kuschku.malheur.collectors
+
+import android.app.Application
+import android.content.Context
+import android.os.Build
+import android.util.SparseArray
+import android.view.Display
+import android.view.WindowManager
+import de.kuschku.malheur.CrashContext
+import de.kuschku.malheur.data.DisplayInfo
+import de.kuschku.malheur.data.MetricsInfo
+import de.kuschku.malheur.util.getMetrics
+import java.lang.reflect.Modifier
+
+class DisplayCollector(application: Application) :
+  Collector<DisplayInfo, Boolean> {
+  private val windowManager = application.getSystemService(
+    Context.WINDOW_SERVICE) as WindowManager
+
+  @Suppress("DEPRECATION")
+  override fun collect(context: CrashContext, config: Boolean): DisplayInfo? {
+    val display = windowManager.defaultDisplay
+    val hdrCapabilities = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+      val capabilitiesEnum = getHdrCapabilitiesEnum()
+      display.hdrCapabilities.supportedHdrTypes.map(capabilitiesEnum::get)
+    } else {
+      null
+    }
+    return DisplayInfo(
+      width = display.width,
+      height = display.height,
+      pixelFormat = display.pixelFormat,
+      refreshRate = display.refreshRate,
+      hdr = hdrCapabilities,
+      isWideGamut = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        display.isWideColorGamut
+      } else {
+        null
+      },
+      metrics = MetricsInfo(display.getMetrics())
+    )
+  }
+
+  private fun getHdrCapabilitiesEnum(): SparseArray<String> {
+    val hdrCapabilityEnums = SparseArray<String>()
+    Display.HdrCapabilities::class.java.declaredFields.filter {
+      Modifier.isStatic(it.modifiers)
+    }.filter {
+      it.name.startsWith("HDR_TYPE_")
+    }.filter {
+      it.type == Int::class.java
+    }.forEach {
+      try {
+        val value = it.getInt(null)
+        hdrCapabilityEnums.put(value, it.name.substring("HDR_TYPE_".length))
+      } catch (e: IllegalAccessException) {
+      }
+    }
+    return hdrCapabilityEnums
+  }
+}
