@@ -14,6 +14,22 @@ import android.support.annotation.StringRes
  * Modifies the display of an {@see Activity} in the Android Recents menu if the current version
  * of Android supports doing so.
  *
+ * @param label The text shown as label
+ * @param icon The icon displayed in recents - passed as Android Drawable Resource
+ * @param colorPrimary The color used as background for the header of the recents card - passed as Android
+ * Color Resource
+ */
+fun Activity.updateRecentsHeaderIfExisting(
+  label: String, @DrawableRes icon: Int, @ColorRes colorPrimary: Int) {
+  val iconRaw = BitmapFactory.decodeResource(resources, icon)
+  val colorPrimaryRaw = resources.getColorBackport(colorPrimary, theme)
+  updateRecentsHeaderIfExisting(label, iconRaw, colorPrimaryRaw)
+}
+
+/**
+ * Modifies the display of an {@see Activity} in the Android Recents menu if the current version
+ * of Android supports doing so.
+ *
  * @param label The text shown as label - passed as Android String Resource
  * @param icon The icon displayed in recents - passed as Android Drawable Resource
  * @param colorPrimary The color used as background for the header of the recents card - passed as Android
@@ -51,6 +67,5 @@ fun Activity.updateRecentsHeaderIfExisting(label: String, icon: Bitmap, colorPri
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 private fun Activity.updateRecentsHeader(label: String, icon: Bitmap,
                                          colorPrimary: Int) {
-  setTaskDescription(ActivityManager.TaskDescription(label,
-                                                     icon, colorPrimary))
+  setTaskDescription(ActivityManager.TaskDescription(label, icon, colorPrimary))
 }

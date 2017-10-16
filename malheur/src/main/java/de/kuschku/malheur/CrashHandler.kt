@@ -34,7 +34,7 @@ object CrashHandler {
             buildConfig = buildConfig,
             stackTraces = stackTraces
           ), config))
-          println(json)
+          // FIXME STOPSHIP Implement crash handling
         } catch (e: Throwable) {
           e.printStackTrace()
           originalHandler?.uncaughtException(activeThread, throwable)
@@ -48,5 +48,5 @@ object CrashHandler {
     myHandler?.uncaughtException(Thread.currentThread(), throwable)
   }
 
-  var myHandler: Thread.UncaughtExceptionHandler? = null
+  private var myHandler: Thread.UncaughtExceptionHandler? = null
 }

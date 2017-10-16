@@ -4,6 +4,8 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.os.Parcelable
+import android.support.annotation.ColorRes
+import android.support.annotation.DrawableRes
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
@@ -17,6 +19,7 @@ import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.util.helper.observeSticky
 import de.kuschku.quasseldroid_ng.util.helper.or
 import de.kuschku.quasseldroid_ng.util.helper.switchMap
+import de.kuschku.quasseldroid_ng.util.helper.updateRecentsHeaderIfExisting
 
 abstract class SetupActivity : AppCompatActivity() {
   @BindView(R.id.view_pager)
@@ -31,6 +34,11 @@ abstract class SetupActivity : AppCompatActivity() {
 
   private val currentPage = MutableLiveData<SlideFragment?>()
   private val isValid = currentPage.switchMap(SlideFragment::valid).or(false)
+
+  @DrawableRes
+  protected val icon: Int = R.mipmap.ic_launcher
+  @ColorRes
+  protected val recentsHeaderColor: Int = R.color.colorPrimaryDark
 
   private val pageChangeListener = object : ViewPager.OnPageChangeListener {
     override fun onPageScrollStateChanged(state: Int) {
@@ -52,6 +60,14 @@ abstract class SetupActivity : AppCompatActivity() {
     else
       R.drawable.ic_arrow_right
     button.setImageResource(drawable)
+  }
+
+  fun updateRecentsHeader()
+    = updateRecentsHeaderIfExisting(title.toString(), icon, recentsHeaderColor)
+
+  override fun setTitle(title: CharSequence?) {
+    super.setTitle(title)
+    updateRecentsHeader()
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,6 +97,7 @@ abstract class SetupActivity : AppCompatActivity() {
     })
     viewPager.addOnPageChangeListener(pageChangeListener)
     pageChanged()
+    updateRecentsHeader()
   }
 
   private fun onDoneInternal() {
