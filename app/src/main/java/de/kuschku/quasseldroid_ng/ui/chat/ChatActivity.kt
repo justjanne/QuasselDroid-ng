@@ -106,7 +106,7 @@ class ChatActivity : ServiceBoundActivity() {
             finish()
           } else {
             backendValue.connectUnlessConnected(
-              SocketAddress(account.host, account.port.toShort()),
+              SocketAddress(account.host, account.port),
               account.user,
               account.pass,
               true
