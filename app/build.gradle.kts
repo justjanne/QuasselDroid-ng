@@ -43,19 +43,22 @@ android {
 
     signingConfig = signingConfigs.getByName("default")
 
+    resConfigs("en")
+
+    vectorDrawables.useSupportLibrary = true
+
     setProperty("archivesBaseName", "QuasselDroidNG-$versionName")
 
     javaCompileOptions {
       annotationProcessorOptions {
-        arguments = mapOf(
-          "room.schemaLocation" to "$projectDir/schemas"
-        )
+        arguments = mapOf("room.schemaLocation" to "$projectDir/schemas")
       }
     }
 
-    vectorDrawables.useSupportLibrary = true
-
-    resConfigs("en")
+    // Disable test runner analytics
+    testInstrumentationRunnerArguments = mapOf(
+      "disableAnalytics" to "true"
+    )
   }
 
   buildTypes {
@@ -86,9 +89,9 @@ android {
 }
 
 val appCompatVersion = "26.1.0"
-val appArchVersion = "1.0.0-alpha9-1"
+val appArchVersion = "1.0.0-rc1"
 dependencies {
-  implementation(kotlin("stdlib"))
+  implementation(kotlin("stdlib", "1.1.51"))
 
   implementation(appCompat("design"))
   implementation(appCompat("customtabs"))
@@ -100,7 +103,6 @@ dependencies {
 
   implementation("io.reactivex.rxjava2:rxjava:2.1.3")
 
-  implementation(appArch("lifecycle", "runtime", version = "1.0.0"))
   implementation(appArch("lifecycle", "extensions"))
   implementation(appArch("lifecycle", "reactivestreams"))
   kapt(appArch("lifecycle", "compiler"))
@@ -108,23 +110,25 @@ dependencies {
   implementation(appArch("persistence.room", "runtime"))
   kapt(appArch("persistence.room", "compiler"))
 
-  implementation(appArch("paging", "runtime", version = "1.0.0-alpha1")) {
+  implementation(appArch("paging", "runtime", version = "1.0.0-alpha3")) {
     exclude(group = "junit", module = "junit")
   }
 
   implementation("org.threeten:threetenbp:1.3.6")
 
-  implementation("com.jakewharton:butterknife:8.7.0")
-  kapt("com.jakewharton:butterknife-compiler:8.7.0")
+  implementation("com.jakewharton:butterknife:8.8.1")
+  kapt("com.jakewharton:butterknife-compiler:8.8.1")
 
   implementation(project(":lib"))
   implementation(project(":malheur"))
 
-  testImplementation("android.arch.persistence.room:testing:1.0.0-alpha9")
+  testImplementation(appArch("persistence.room", "testing"))
   testImplementation("junit:junit:4.12")
 
-  androidTestImplementation("com.android.support.test:runner:0.5")
-  androidTestImplementation("com.android.support.test:rules:0.5")
+  androidTestImplementation("com.android.support.test:runner:1.0.1")
+  androidTestImplementation("com.android.support.test:rules:1.0.1")
+
+  androidTestImplementation("com.android.support.test.espresso:espresso-core:3.0.1")
 }
 
 tasks.withType(KotlinCompile::class.java) {

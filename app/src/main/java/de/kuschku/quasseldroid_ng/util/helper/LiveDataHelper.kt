@@ -18,12 +18,10 @@ inline fun <X, Y> LiveData<X?>.switchMap(
       if (mSource === newLiveData) {
         return
       }
-      if (mSource != null) {
-        result.removeSource(mSource)
-      }
+      mSource?.let(result::removeSource)
       mSource = newLiveData
-      if (mSource != null) {
-        result.addSource(mSource) { y -> result.value = y }
+      if (newLiveData != null) {
+        result.addSource(newLiveData) { y -> result.value = y }
       } else {
         result.value = null
       }
@@ -46,12 +44,10 @@ inline fun <X, Y> LiveData<X?>.switchMapRx(
       if (mSource === newLiveData) {
         return
       }
-      if (mSource != null) {
-        result.removeSource(mSource)
-      }
+      mSource?.let(result::removeSource)
       mSource = newLiveData
-      if (mSource != null) {
-        result.addSource(mSource) { y -> result.value = y }
+      if (newLiveData != null) {
+        result.addSource(newLiveData) { y -> result.value = y }
       } else {
         result.value = null
       }

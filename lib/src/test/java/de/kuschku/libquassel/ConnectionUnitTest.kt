@@ -1,6 +1,9 @@
 package de.kuschku.libquassel
 
-import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.protocol.ClientData
+import de.kuschku.libquassel.protocol.Protocol
+import de.kuschku.libquassel.protocol.Protocol_Feature
+import de.kuschku.libquassel.protocol.Quassel_Feature
 import de.kuschku.libquassel.quassel.ProtocolFeature
 import de.kuschku.libquassel.quassel.QuasselFeature
 import de.kuschku.libquassel.session.Session
@@ -28,7 +31,7 @@ class ConnectionUnitTest {
     runTest("localhost", 4242, "user", "pass")
   }
 
-  private fun runTest(host: String, port: UShort, user: String, pass: String) {
+  private fun runTest(host: String, port: Int, user: String, pass: String) {
     val session = Session(ClientData(
       identifier = "libquassel test",
       buildDate = Instant.EPOCH,

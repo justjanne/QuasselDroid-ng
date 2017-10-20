@@ -22,14 +22,14 @@ abstract class SlideFragment : Fragment() {
   protected abstract fun isValid(): Boolean
 
   val valid = object : MutableLiveData<Boolean>() {
-    override fun observe(owner: LifecycleOwner?, observer: Observer<Boolean>?) {
+    override fun observe(owner: LifecycleOwner, observer: Observer<Boolean>) {
       super.observe(owner, observer)
-      observer?.onChanged(value)
+      observer.onChanged(value)
     }
 
-    override fun observeForever(observer: Observer<Boolean>?) {
+    override fun observeForever(observer: Observer<Boolean>) {
       super.observeForever(observer)
-      observer?.onChanged(value)
+      observer.onChanged(value)
     }
   }
 
@@ -44,15 +44,12 @@ abstract class SlideFragment : Fragment() {
     viewGroup.addView(onCreateContent(inflater, viewGroup, savedInstanceState))
 
     view.findViewById<TextView>(R.id.title)?.setText(title)
-    view.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbar)?.title = resources.getString(
-      title)
+    view.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbar)?.title =
+      resources.getString(title)
     view.findViewById<TextView>(R.id.description).setText(description)
 
-    val data = initData
-    if (data != null)
-      setData(data)
-    if (savedInstanceState != null)
-      setData(savedInstanceState)
+    initData?.let(this::setData)
+    savedInstanceState?.let(this::setData)
     updateValidity()
 
     return view
