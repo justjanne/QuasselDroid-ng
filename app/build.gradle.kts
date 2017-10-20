@@ -93,6 +93,7 @@ val appArchVersion = "1.0.0-rc1"
 dependencies {
   implementation(kotlin("stdlib", "1.1.51"))
 
+  implementation(appCompat("appcompat-v7"))
   implementation(appCompat("design"))
   implementation(appCompat("customtabs"))
   implementation(appCompat("cardview-v7"))
