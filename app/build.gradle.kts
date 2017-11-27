@@ -91,7 +91,7 @@ android {
 val appCompatVersion = "26.1.0"
 val appArchVersion = "1.0.0-rc1"
 dependencies {
-  implementation(kotlin("stdlib", "1.1.51"))
+  implementation(kotlin("stdlib", "1.1.61"))
 
   implementation(appCompat("appcompat-v7"))
   implementation(appCompat("design"))
