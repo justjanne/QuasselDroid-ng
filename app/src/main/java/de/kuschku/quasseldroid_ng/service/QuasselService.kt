@@ -8,6 +8,7 @@ import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.session.*
 import de.kuschku.quasseldroid_ng.BuildConfig
 import de.kuschku.quasseldroid_ng.R
+import de.kuschku.quasseldroid_ng.persistence.QuasselBacklogStorage
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.compatibility.AndroidHandlerService
@@ -99,7 +100,7 @@ class QuasselService : LifecycleService() {
     handler.onCreate()
     super.onCreate()
     database = QuasselDatabase.Creator.init(application)
-    sessionManager = SessionManager(ISession.NULL)
+    sessionManager = SessionManager(ISession.NULL, QuasselBacklogStorage(database))
     clientData = ClientData(
       identifier = "${resources.getString(R.string.app_name)} ${BuildConfig.VERSION_NAME}",
       buildDate = Instant.ofEpochSecond(BuildConfig.GIT_COMMIT_DATE),

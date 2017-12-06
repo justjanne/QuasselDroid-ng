@@ -5,12 +5,15 @@ import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.quassel.syncables.interfaces.IRpcHandler
+import de.kuschku.libquassel.session.BacklogStorage
 import de.kuschku.libquassel.session.Session
-import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.helpers.deserializeString
 import java.nio.ByteBuffer
 
-class RpcHandler(override val session: Session) : IRpcHandler {
+class RpcHandler(
+  override val session: Session,
+  private val backlogStorage: BacklogStorage
+) : IRpcHandler {
   override fun displayStatusMsg(net: String, msg: String) {
   }
 
@@ -42,7 +45,7 @@ class RpcHandler(override val session: Session) : IRpcHandler {
   }
 
   override fun displayMsg(message: Message) {
-    println(message)
+    backlogStorage.storeMessages(message)
   }
 
   override fun requestCreateIdentity(identity: QVariantMap, additional: QVariantMap) {

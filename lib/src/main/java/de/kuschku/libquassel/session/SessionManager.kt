@@ -13,7 +13,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import javax.net.ssl.X509TrustManager
 
-class SessionManager(offlineSession: ISession) : ISession {
+class SessionManager(offlineSession: ISession, private val backlogStorage: BacklogStorage) : ISession {
   override val aliasManager: AliasManager?
     get() = session.or(lastSession).aliasManager
   override val backlogManager: BacklogManager?
@@ -69,7 +69,7 @@ class SessionManager(offlineSession: ISession) : ISession {
     lastHandlerService = handlerService
     lastUserData = userData
     lastShouldReconnect = shouldReconnect
-    inProgressSession.onNext(Session(clientData, trustManager, address, handlerService(), userData))
+    inProgressSession.onNext(Session(clientData, trustManager, address, handlerService(), backlogStorage, userData))
   }
 
   private var lastClientData: ClientData? = null

@@ -5,26 +5,8 @@ class QVariant<T>(val data: T?, val type: MetaType<T>) {
   constructor(data: T?, type: QType) : this(data, type.typeName)
   constructor(data: T?, type: String) : this(data, MetaType.Companion.get(type))
 
-  private fun <U> coerce(): QVariant<U> {
-    return this as QVariant<U>
-  }
-
   fun or(defValue: T): T {
     return data ?: defValue
-  }
-
-  fun <U> _value(defValue: U): U {
-    return this.coerce<U>().data ?: defValue
-  }
-
-  fun <U> _valueOr(f: () -> U): U {
-    return this.coerce<U>().data ?: f()
-  }
-
-  fun <U> _valueOrThrow(): U = this._valueOrThrow(NullPointerException())
-
-  fun <U> _valueOrThrow(e: Throwable): U {
-    return this.coerce<U>().data ?: throw e
   }
 
   override fun toString(): String {
@@ -32,14 +14,26 @@ class QVariant<T>(val data: T?, val type: MetaType<T>) {
   }
 }
 
-fun <U> QVariant_?.value(): U?
-  = this?._value<U?>(null)
+@PublishedApi
+internal inline fun <reified U> QVariant_?.coerce(): QVariant<U>? {
+  return if (this?.data is U) {
+    this as QVariant<U>
+  } else {
+    null
+  }
+}
 
-fun <U> QVariant_?.value(defValue: U): U
-  = this?._value(defValue) ?: defValue
+inline fun <reified U> QVariant_?.value(): U?
+  = this?.value<U?>(null)
 
-fun <U> QVariant_?.valueOr(f: () -> U): U
-  = this?._valueOr(f) ?: f()
+inline fun <reified U> QVariant_?.value(defValue: U): U
+  = this.coerce<U>()?.data ?: defValue
 
-fun <U> QVariant_?.valueOrThrow(e: Throwable = NullPointerException()): U
-  = this?._valueOrThrow<U>(e) ?: throw e
+inline fun <reified U> QVariant_?.valueOr(f: () -> U): U
+  = this.coerce<U>()?.data ?: f()
+
+inline fun <reified U> QVariant_?.valueOrThrow(e: Throwable = NullPointerException()): U
+  = this.coerce<U>()?.data ?: throw e
+
+inline fun <reified U> QVariant_?.valueOrThrow(e: () -> Throwable): U
+  = this.coerce<U>()?.data ?: throw e()

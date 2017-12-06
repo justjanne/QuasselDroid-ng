@@ -12,6 +12,7 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.util.hasFlag
 
 class BufferListAdapter(
   lifecycleOwner: LifecycleOwner,
@@ -25,7 +26,7 @@ class BufferListAdapter(
     liveData.observe(lifecycleOwner, Observer { list: List<BufferInfo>? ->
       runInBackground {
         val old = data
-        val new = list ?: emptyList()
+        val new = list?.sortedBy(BufferInfo::networkId) ?: emptyList()
         val result = DiffUtil.calculateDiff(
           object : DiffUtil.Callback() {
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int)
@@ -65,7 +66,10 @@ class BufferListAdapter(
     }
 
     fun bind(info: BufferInfo) {
-      text.text = "${info.networkId}/${info.bufferName}"
+      text.text = when {
+        info.type.hasFlag(BufferInfo.Type.StatusBuffer) -> "Network ${info.networkId}"
+        else -> "${info.networkId}/${info.bufferName}"
+      }
     }
   }
 }

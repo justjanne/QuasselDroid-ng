@@ -5,7 +5,6 @@ import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.quassel.QuasselFeature
 import de.kuschku.libquassel.quassel.syncables.*
-import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
@@ -19,6 +18,7 @@ class Session(
   val trustManager: X509TrustManager,
   address: SocketAddress,
   handlerService: HandlerService,
+  backlogStorage: BacklogStorage,
   private val userData: Pair<String, String>
 ) : ProtocolHandler(), ISession {
   var coreFeatures: Quassel_Features = Quassel_Feature.NONE
@@ -27,7 +27,7 @@ class Session(
   override val state = coreConnection.state
 
   override val aliasManager = AliasManager(this)
-  override val backlogManager = BacklogManager(this)
+  override val backlogManager = BacklogManager(this, backlogStorage)
   override val bufferSyncer = BufferSyncer(this)
   override val bufferViewManager = BufferViewManager(this)
   override val certManagers = mutableMapOf<IdentityId, CertManager>()
@@ -39,7 +39,7 @@ class Session(
   override val networks = mutableMapOf<NetworkId, Network>()
   override val networkConfig = NetworkConfig(this)
 
-  override var rpcHandler: RpcHandler? = RpcHandler(this)
+  override var rpcHandler: RpcHandler? = RpcHandler(this, backlogStorage)
 
   init {
     coreConnection.start()

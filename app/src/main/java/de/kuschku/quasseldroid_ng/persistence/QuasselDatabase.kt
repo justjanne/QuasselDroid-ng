@@ -49,19 +49,24 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId DESC LIMIT 1")
     fun findLastByBufferId(bufferId: Int): DatabaseMessage
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun save(entity: DatabaseMessage)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun save(vararg entities: DatabaseMessage)
 
     @Query("UPDATE message SET bufferId = :bufferId1 WHERE bufferId = :bufferId2")
     fun merge(@IntRange(from = 0) bufferId1: Int, @IntRange(from = 0) bufferId2: Int)
 
+    @Query("DELETE FROM message")
+    fun clearMessages()
+
     @Query("DELETE FROM message WHERE bufferId = :bufferId")
-    fun clearBuffer(@IntRange(from = 0) bufferId: Int)
+    fun clearMessages(@IntRange(from = 0) bufferId: Int)
+
+    @Query("DELETE FROM message WHERE bufferId = :bufferId AND messageId >= :first AND messageId <= :last")
+    fun clearMessages(@IntRange(from = 0) bufferId: Int, first: Int, last: Int)
   }
 
   object Creator {
     private var database: QuasselDatabase? = null
-      private set
 
     // For Singleton instantiation
     private val LOCK = Any()
@@ -71,7 +76,7 @@ abstract class QuasselDatabase : RoomDatabase() {
         synchronized(LOCK) {
           if (database == null) {
             database = Room.databaseBuilder(context.applicationContext,
-                                            QuasselDatabase::class.java, DATABASE_NAME)
+              QuasselDatabase::class.java, DATABASE_NAME)
               .build()
           }
         }
@@ -83,4 +88,8 @@ abstract class QuasselDatabase : RoomDatabase() {
   companion object {
     const val DATABASE_NAME = "persistence-clientData"
   }
+}
+
+fun QuasselDatabase.MessageDao.clearMessages(@IntRange(from = 0) bufferId: Int, idRange: kotlin.ranges.IntRange) {
+  this.clearMessages(bufferId, idRange.first, idRange.last)
 }

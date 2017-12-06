@@ -114,7 +114,6 @@ class CoreConnection(
 
   override fun close() {
     try {
-      channel?.close()
       interrupt()
       handlerService.quit()
       setState(ConnectionState.DISCONNECTED)
