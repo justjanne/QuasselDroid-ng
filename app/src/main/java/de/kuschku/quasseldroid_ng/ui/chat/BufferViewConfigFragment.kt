@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.BufferViewManager
@@ -36,6 +37,8 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
   @BindView(R.id.chatList)
   lateinit var chatList: RecyclerView
+
+  var currentBuffer: MutableLiveData<BufferId>? = null
 
   private val sessionManager: LiveData<SessionManager?>
     = backend.map(Backend::sessionManager)
