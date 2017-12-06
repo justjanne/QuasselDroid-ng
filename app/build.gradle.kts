@@ -34,7 +34,7 @@ android {
     minSdkVersion(16)
     targetSdkVersion(26)
 
-    applicationId = "de.kuschku.quasseldroid_ng.test"
+    applicationId = "de.kuschku.quasseldroid_ng"
     versionCode = 1
     versionName = cmd("git", "describe", "--tags", "HEAD") ?: "1.0.0"
 

@@ -22,9 +22,11 @@ interface ISession : Closeable {
   val ircListHelper: IrcListHelper?
   val networks: Map<NetworkId, Network>
   val networkConfig: NetworkConfig?
+  val rpcHandler: RpcHandler?
 
   companion object {
     val NULL = object : ISession {
+      override val rpcHandler: RpcHandler? = null
       override val aliasManager: AliasManager? = null
       override val backlogManager: BacklogManager? = null
       override val bufferSyncer: BufferSyncer? = null

@@ -42,16 +42,19 @@ abstract class QuasselDatabase : RoomDatabase() {
   @Dao
   interface MessageDao {
     @Query("SELECT * FROM message WHERE messageId = :messageId")
-    fun find(messageId: Int): DatabaseMessage
+    fun find(messageId: Int): DatabaseMessage?
 
-    @Query("SELECT * FROM message WHERE bufferId = :bufferId")
+    @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC")
     fun findByBufferId(bufferId: Int): List<DatabaseMessage>
 
-    @Query("SELECT * FROM message WHERE bufferId = :bufferId AND messageId < :messageId")
+    @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC")
     fun findByBufferIdPaged(bufferId: Int): LivePagedListProvider<Int, DatabaseMessage>
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId DESC LIMIT 1")
-    fun findLastByBufferId(bufferId: Int): DatabaseMessage
+    fun findLastByBufferId(bufferId: Int): DatabaseMessage?
+
+    @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC LIMIT 1")
+    fun findFirstByBufferId(bufferId: Int): DatabaseMessage?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun save(vararg entities: DatabaseMessage)

@@ -88,6 +88,8 @@ class Session(
     synchronize(ircListHelper, true)
     synchronize(networkConfig, true)
 
+    synchronize(backlogManager)
+
     return true
   }
 

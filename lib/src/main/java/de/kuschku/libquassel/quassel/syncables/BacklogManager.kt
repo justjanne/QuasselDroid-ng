@@ -11,6 +11,10 @@ class BacklogManager(
   proxy: SignalProxy,
   private val backlogStorage: BacklogStorage
 ) : SyncableObject(proxy, "BacklogManager"), IBacklogManager {
+  init {
+    initialized = true
+  }
+
   override fun receiveBacklog(bufferId: BufferId, first: MsgId, last: MsgId, limit: Int,
                               additional: Int, messages: QVariantList) {
     for (message: Message in messages.mapNotNull<QVariant_, Message>(QVariant_::value)) {

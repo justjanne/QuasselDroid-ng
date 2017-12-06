@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid_ng
 
 import android.app.Application
-import android.content.Context
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
@@ -13,11 +12,9 @@ import de.kuschku.quasseldroid_ng.util.compatibility.AndroidStreamChannelFactory
 import de.kuschku.quasseldroid_ng.util.helper.systemService
 
 class QuasseldroidNG : Application() {
-  override fun attachBaseContext(base: Context?) {
-    super.attachBaseContext(base)
-  }
-
   override fun onCreate() {
+    println("QuasseldroidNG::onCreate")
+
     CrashHandler.init(
       application = this,
       buildConfig = BuildConfig::class.java

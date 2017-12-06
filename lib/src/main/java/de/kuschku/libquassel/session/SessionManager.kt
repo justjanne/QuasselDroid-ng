@@ -13,7 +13,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import javax.net.ssl.X509TrustManager
 
-class SessionManager(offlineSession: ISession, private val backlogStorage: BacklogStorage) : ISession {
+class SessionManager(offlineSession: ISession, val backlogStorage: BacklogStorage) : ISession {
   override val aliasManager: AliasManager?
     get() = session.or(lastSession).aliasManager
   override val backlogManager: BacklogManager?
@@ -38,6 +38,8 @@ class SessionManager(offlineSession: ISession, private val backlogStorage: Backl
     get() = session.or(lastSession).networks
   override val networkConfig: NetworkConfig?
     get() = session.or(lastSession).networkConfig
+  override val rpcHandler: RpcHandler?
+    get() = session.or(lastSession).rpcHandler
 
   override fun close() = session.or(lastSession).close()
 
@@ -95,8 +97,9 @@ class SessionManager(offlineSession: ISession, private val backlogStorage: Backl
     }
   }
 
-  fun disconnect() {
-    inProgressSession.value
+  fun disconnect(forever: Boolean) {
+    if (forever)
+      backlogStorage.clearMessages()
     inProgressSession.value.close()
     inProgressSession.onNext(ISession.NULL)
   }

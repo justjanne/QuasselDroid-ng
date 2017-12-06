@@ -5,4 +5,6 @@
   <string name="connection_service_description">Keeps a connection to your core to allow for notifications, and to transmit messages.</string>
 
   <string name="crash_text">QD-NG has crashed</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
 </resources>

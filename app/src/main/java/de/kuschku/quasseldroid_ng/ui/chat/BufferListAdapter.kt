@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.hasFlag
 
@@ -18,7 +19,8 @@ class BufferListAdapter(
   lifecycleOwner: LifecycleOwner,
   liveData: LiveData<List<BufferInfo>?>,
   runInBackground: (() -> Unit) -> Any,
-  runOnUiThread: (Runnable) -> Any
+  runOnUiThread: (Runnable) -> Any,
+  private val clickListener: ((BufferId) -> Unit)? = null
 ) : RecyclerView.Adapter<BufferListAdapter.BufferViewHolder>() {
   var data = mutableListOf<BufferInfo>()
 
@@ -48,8 +50,8 @@ class BufferListAdapter(
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = BufferViewHolder(
-    LayoutInflater.from(parent.context)
-      .inflate(android.R.layout.simple_list_item_1, parent, false)
+    LayoutInflater.from(parent.context).inflate(android.R.layout.simple_list_item_1, parent, false),
+    clickListener = clickListener
   )
 
   override fun onBindViewHolder(holder: BufferViewHolder, position: Int)
@@ -57,12 +59,22 @@ class BufferListAdapter(
 
   override fun getItemCount() = data.size
 
-  class BufferViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+  class BufferViewHolder(
+    itemView: View,
+    private val clickListener: ((BufferId) -> Unit)? = null
+  ) : RecyclerView.ViewHolder(itemView) {
     @BindView(android.R.id.text1)
     lateinit var text: TextView
 
+    var bufferId: BufferId? = null
+
     init {
       ButterKnife.bind(this, itemView)
+      itemView.setOnClickListener {
+        val buffer = bufferId
+        if (buffer != null)
+          clickListener?.invoke(buffer)
+      }
     }
 
     fun bind(info: BufferInfo) {
@@ -70,6 +82,7 @@ class BufferListAdapter(
         info.type.hasFlag(BufferInfo.Type.StatusBuffer) -> "Network ${info.networkId}"
         else -> "${info.networkId}/${info.bufferName}"
       }
+      bufferId = info.bufferId
     }
   }
 }

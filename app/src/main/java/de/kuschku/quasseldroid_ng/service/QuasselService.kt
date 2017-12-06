@@ -53,8 +53,8 @@ class QuasselService : LifecycleService() {
       sessionManager.reconnect()
     }
 
-    override fun disconnect() {
-      sessionManager.disconnect()
+    override fun disconnect(forever: Boolean) {
+      sessionManager.disconnect(forever)
     }
   }
 
@@ -80,9 +80,9 @@ class QuasselService : LifecycleService() {
       }
     }
 
-    override fun disconnect() {
+    override fun disconnect(forever: Boolean) {
       handler.post {
-        backendImplementation.disconnect()
+        backendImplementation.disconnect(forever)
       }
     }
 

@@ -2,46 +2,53 @@ package de.kuschku.quasseldroid_ng.ui.chat
 
 import android.app.Activity
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
-import android.widget.TextView
+import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.ConnectionState
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.session.SocketAddress
-import de.kuschku.libquassel.util.compatibility.LoggingHandler
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
+import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.editApply
 import de.kuschku.quasseldroid_ng.util.helper.map
 import de.kuschku.quasseldroid_ng.util.helper.observeSticky
 import de.kuschku.quasseldroid_ng.util.helper.switchMapRx
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundActivity
-import org.threeten.bp.ZoneOffset
-import org.threeten.bp.ZonedDateTime
-import org.threeten.bp.format.DateTimeFormatter
 
 class ChatActivity : ServiceBoundActivity() {
-  @BindView(R.id.clear)
-  lateinit var clear: Button
+  var contentMessages: MessageListFragment? = null
+  var chatListFragment: BufferViewConfigFragment? = null
 
-  @BindView(R.id.errorList)
-  lateinit var errorList: TextView
+  @BindView(R.id.drawerLayout)
+  lateinit var drawerLayout: DrawerLayout
 
   @BindView(R.id.toolbar)
   lateinit var toolbar: Toolbar
+
+  @BindView(R.id.buttonSend)
+  lateinit var buttonSend: Button
+
+  @BindView(R.id.input)
+  lateinit var input: EditText
+
+  private lateinit var drawerToggle: ActionBarDrawerToggle
 
   private val handler = AndroidHandlerThread("Chat")
 
@@ -50,44 +57,35 @@ class ChatActivity : ServiceBoundActivity() {
 
   private var snackbar: Snackbar? = null
 
-  private val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ISO_TIME
-  private val logHandler = object : LoggingHandler() {
-    override fun log(logLevel: LogLevel, tag: String, message: String?,
-                     throwable: Throwable?) {
-      val time = dateTimeFormatter.format(ZonedDateTime.now(ZoneOffset.UTC))
-      runOnUiThread {
-        errorList.append("$time $tag: ")
-        if (message != null) {
-          errorList.append(message)
-        }
-        if (throwable != null) {
-          errorList.append("\n")
-          errorList.append(Log.getStackTraceString(throwable))
-        }
-        errorList.append("\n")
-      }
-    }
+  private val currentBuffer = MutableLiveData<BufferId>()
 
-    override fun isLoggable(logLevel: LogLevel, tag: String)
-      = (logLevel.ordinal >= INFO.ordinal)
-  }
-
-  override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-    super.onRestoreInstanceState(savedInstanceState)
-    errorList.text = savedInstanceState?.getString("log", "") ?: ""
-  }
-
-  override fun onSaveInstanceState(outState: Bundle?) {
-    outState?.putString("log", errorList.text.toString())
-    super.onSaveInstanceState(outState)
-  }
+  private lateinit var database: QuasselDatabase
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    println("ChatActivity::onCreate")
     handler.onCreate()
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     ButterKnife.bind(this)
+
+    database = QuasselDatabase.Creator.init(application)
+
+    contentMessages = supportFragmentManager.findFragmentById(R.id.contentMessages) as? MessageListFragment
+    chatListFragment = supportFragmentManager.findFragmentById(R.id.chatListFragment) as? BufferViewConfigFragment
+
     setSupportActionBar(toolbar)
+
+    chatListFragment?.currentBuffer?.value = currentBuffer
+    contentMessages?.currentBuffer?.value = currentBuffer
+
+    chatListFragment?.clickListeners?.add {
+      currentBuffer.value = it
+      println("Changed buffer to $it")
+    }
+
+    //drawerToggle = ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close)
+    //actionBar.setDisplayHomeAsUpEnabled(true)
+    //actionBar.setHomeButtonEnabled(true)
 
     backend.observeSticky(this, Observer { backendValue ->
       if (backendValue != null) {
@@ -115,15 +113,22 @@ class ChatActivity : ServiceBoundActivity() {
       }
     })
 
-    clear.setOnClickListener {
-      errorList.text = ""
+    buttonSend.setOnClickListener {
+      sessionManager.value?.also { sessionManager ->
+        currentBuffer.value?.also { bufferId ->
+          sessionManager.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
+            sessionManager.rpcHandler?.sendInput(bufferInfo, input.text.toString())
+          }
+        }
+      }
+      input.text.clear()
     }
 
     state.observe(this, Observer {
       val status = it ?: ConnectionState.DISCONNECTED
 
       snackbar?.dismiss()
-      snackbar = Snackbar.make(errorList, status.name, Snackbar.LENGTH_SHORT)
+      snackbar = Snackbar.make(window.decorView.rootView, status.name, Snackbar.LENGTH_SHORT)
       snackbar?.show()
     })
   }
@@ -139,27 +144,35 @@ class ChatActivity : ServiceBoundActivity() {
         getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editApply {
           putBoolean(Keys.Status.reconnect, false)
         }
-        backend.value?.disconnect()
+        backend.value?.disconnect(true)
         setResult(Activity.RESULT_OK)
         finish()
       }
       true
     }
+    R.id.loadMore -> handler.post {
+      currentBuffer.value?.also { bufferId ->
+        sessionManager.value?.apply {
+          backlogManager?.requestBacklog(
+            bufferId = bufferId,
+            last = database.message().findFirstByBufferId(bufferId)?.messageId ?: -1,
+            limit = 20
+          )
+        }
+      }
+    }
+    R.id.clear -> handler.post {
+      currentBuffer.value?.also { bufferId ->
+        sessionManager.value?.apply {
+          backlogStorage.clearMessages(bufferId)
+        }
+      }
+    }
     else            -> super.onOptionsItemSelected(item)
-  }
-
-  override fun onStart() {
-    super.onStart()
-    LoggingHandler.loggingHandlers.add(logHandler)
   }
 
   override fun onDestroy() {
     handler.onDestroy()
     super.onDestroy()
-  }
-
-  override fun onStop() {
-    LoggingHandler.loggingHandlers.remove(logHandler)
-    super.onStop()
   }
 }

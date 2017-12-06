@@ -38,7 +38,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   @BindView(R.id.chatList)
   lateinit var chatList: RecyclerView
 
-  var currentBuffer: MutableLiveData<BufferId>? = null
+  val currentBuffer: MutableLiveData<LiveData<BufferId?>?> = MutableLiveData()
 
   private val sessionManager: LiveData<SessionManager?>
     = backend.map(Backend::sessionManager)
@@ -92,8 +92,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     chatListSpinner.adapter = adapter
     chatListSpinner.onItemSelectedListener = itemSelectedListener
 
-    chatList.adapter = BufferListAdapter(this, bufferList, handlerThread::post,
-                                         activity::runOnUiThread)
+    chatList.adapter = BufferListAdapter(this, bufferList, handlerThread::post, activity::runOnUiThread, clickListener)
     chatList.layoutManager = LinearLayoutManager(context)
     chatList.itemAnimator = DefaultItemAnimator()
     return view
@@ -102,5 +101,13 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   override fun onDestroy() {
     handlerThread.onDestroy()
     super.onDestroy()
+  }
+
+  val clickListeners = mutableListOf<(BufferId) -> Unit>()
+
+  private val clickListener: ((BufferId) -> Unit)? = {
+    for (clickListener in clickListeners) {
+      clickListener.invoke(it)
+    }
   }
 }

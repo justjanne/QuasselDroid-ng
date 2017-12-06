@@ -11,7 +11,7 @@ abstract class LoggingHandler {
     if (isLoggable(logLevel, tag)) {
       object : LogContext {
         override fun log(message: String?, throwable: Throwable?) {
-          log(logLevel, tag, message, throwable)
+          this@LoggingHandler.log(logLevel, tag, message, throwable)
         }
       }.f()
     }
