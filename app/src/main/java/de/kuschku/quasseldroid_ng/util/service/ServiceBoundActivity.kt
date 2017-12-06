@@ -64,4 +64,9 @@ abstract class ServiceBoundActivity : AppCompatActivity() {
     super.onStop()
     unbindService(connection)
   }
+
+  protected fun stopService() {
+    unbindService(connection)
+    stopService(Intent(this, QuasselService::class.java))
+  }
 }
