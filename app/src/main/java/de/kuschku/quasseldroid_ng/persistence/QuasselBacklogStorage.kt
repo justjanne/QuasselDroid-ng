@@ -5,7 +5,21 @@ import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.session.BacklogStorage
 
 class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
-  override fun storeMessages(vararg messages: Message) {
+  override fun storeMessages(vararg messages: Message, initialLoad: Boolean)
+    = storeMessages(messages.asIterable(), initialLoad)
+
+  override fun storeMessages(messages: Iterable<Message>, initialLoad: Boolean) {
+    if (initialLoad)
+      for ((bufferId, bufferMessages) in messages.sortedBy { it.messageId }.groupBy { it.bufferInfo.bufferId }) {
+        val lastMessageId = db.message().findLastByBufferId(bufferId)?.messageId
+        val firstMessage = bufferMessages.firstOrNull()
+        if (lastMessageId != null && firstMessage != null) {
+          if (lastMessageId < firstMessage.messageId) {
+            db.message().clearMessages(bufferId)
+          }
+        }
+      }
+
     for (message in messages) {
       db.message().save(QuasselDatabase.DatabaseMessage(
         messageId = message.messageId,

@@ -10,6 +10,7 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import de.kuschku.libquassel.util.compatibility.log
 import de.kuschku.libquassel.util.hasFlag
+import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
 import javax.net.ssl.X509TrustManager
 
@@ -40,6 +41,8 @@ class Session(
   override val networkConfig = NetworkConfig(this)
 
   override var rpcHandler: RpcHandler? = RpcHandler(this, backlogStorage)
+
+  override val initStatus = BehaviorSubject.createDefault(0 to 0)
 
   init {
     coreConnection.start()
@@ -91,6 +94,10 @@ class Session(
     synchronize(backlogManager)
 
     return true
+  }
+
+  override fun onInitStatusChanged(progress: Int, total: Int) {
+    initStatus.onNext(progress to total)
   }
 
   override fun onInitDone() {

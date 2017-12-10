@@ -5,9 +5,7 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler
 
 object AndroidLoggingHandler : LoggingHandler() {
   override fun isLoggable(logLevel: LogLevel, tag: String): Boolean {
-    return Log.isLoggable(tag,
-                          priority(
-                            logLevel))
+    return true || Log.isLoggable(tag, priority(logLevel))
   }
 
   override fun log(logLevel: LogLevel, tag: String, message: String?, throwable: Throwable?) {

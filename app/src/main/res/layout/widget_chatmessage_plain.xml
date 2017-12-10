@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
@@ -21,7 +22,8 @@
         android:layout_marginEnd="@dimen/message_horizontal"
         android:layout_marginRight="@dimen/message_horizontal"
         android:textColor="?attr/colorForegroundSecondary"
-        android:typeface="monospace" />
+        android:typeface="monospace"
+        tools:text="[15:55]" />
 
     <TextView
         android:id="@+id/content"
@@ -29,5 +31,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textColor="?attr/colorForeground"
-        android:textIsSelectable="true" />
+        android:textIsSelectable="true"
+        tools:text="justJanne: hiii" />
 </LinearLayout>

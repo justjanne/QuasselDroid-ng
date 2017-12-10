@@ -87,7 +87,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-    val view = inflater.inflate(R.layout.content_chat_list, container, false)
+    val view = inflater.inflate(R.layout.fragment_chat_list, container, false)
     ButterKnife.bind(this, view)
     chatListSpinner.adapter = adapter
     chatListSpinner.onItemSelectedListener = itemSelectedListener

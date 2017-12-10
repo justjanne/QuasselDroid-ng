@@ -110,3 +110,8 @@ inline fun <T> LiveData<T>.observeForeverSticky(observer: Observer<T>) {
 
 inline fun <T> LiveData<T>.toObservable(lifecycleOwner: LifecycleOwner): Observable<T>
   = Observable.fromPublisher(LiveDataReactiveStreams.toPublisher(lifecycleOwner, this))
+
+
+inline operator fun <T> LiveData<T>.invoke() = value
+
+inline operator fun <T, U> LiveData<T?>.invoke(f: (T) -> U?) = value?.let(f)

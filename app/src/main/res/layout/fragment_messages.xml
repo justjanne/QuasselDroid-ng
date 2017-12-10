@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorBackground">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/messages"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:stackFromEnd="true"
+        tools:listitem="@layout/widget_chatmessage_plain" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/scrollDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:tint="@color/colorFillDark"
+        app:backgroundTint="#8A808080"
+        app:elevation="0dip"
+        app:fabSize="mini"
+        app:pressedTranslationZ="0dip"
+        app:srcCompat="@drawable/ic_scroll_down" />
+
+</FrameLayout>

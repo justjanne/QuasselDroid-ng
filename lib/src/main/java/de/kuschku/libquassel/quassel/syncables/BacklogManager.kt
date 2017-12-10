@@ -4,8 +4,7 @@ import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBacklogManager
 import de.kuschku.libquassel.session.BacklogStorage
 import de.kuschku.libquassel.session.SignalProxy
-import de.kuschku.libquassel.util.compatibility.LoggingHandler
-import de.kuschku.libquassel.util.compatibility.log
+import java.util.concurrent.atomic.AtomicInteger
 
 class BacklogManager(
   proxy: SignalProxy,
@@ -15,21 +14,26 @@ class BacklogManager(
     initialized = true
   }
 
+  private var loading = AtomicInteger(-1)
+
+  override fun requestBacklog(bufferId: BufferId, first: MsgId, last: MsgId, limit: Int, additional: Int) {
+    if (loading.getAndSet(bufferId) != bufferId) {
+      super.requestBacklog(bufferId, first, last, limit, additional)
+    }
+  }
+
+  override fun requestBacklogAll(first: MsgId, last: MsgId, limit: Int, additional: Int) {
+    super.requestBacklogAll(first, last, limit, additional)
+  }
+
   override fun receiveBacklog(bufferId: BufferId, first: MsgId, last: MsgId, limit: Int,
                               additional: Int, messages: QVariantList) {
-    for (message: Message in messages.mapNotNull<QVariant_, Message>(QVariant_::value)) {
-      if (message.bufferInfo.bufferId != bufferId) {
-        // Check if it works here
-        log(LoggingHandler.LogLevel.ERROR, "message has inconsistent bufferid: $bufferId != ${message.bufferInfo.bufferId}")
-      }
-      backlogStorage.storeMessages(message)
-    }
+    loading.compareAndSet(bufferId, -1)
+    backlogStorage.storeMessages(messages.mapNotNull(QVariant_::value), initialLoad = true)
   }
 
   override fun receiveBacklogAll(first: MsgId, last: MsgId, limit: Int, additional: Int,
                                  messages: QVariantList) {
-    for (message: Message in messages.mapNotNull<QVariant_, Message>(QVariant_::value)) {
-      backlogStorage.storeMessages(message)
-    }
+    backlogStorage.storeMessages(messages.mapNotNull(QVariant_::value), initialLoad = true)
   }
 }

@@ -115,6 +115,8 @@ dependencies {
     exclude(group = "junit", module = "junit")
   }
 
+  implementation("me.zhanghai.android.materialprogressbar", "library", "1.4.2")
+
   implementation("org.threeten", "threetenbp", "1.3.6", classifier = "no-tzdb")
 
   implementation("com.jakewharton", "butterknife", "8.8.1")

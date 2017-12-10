@@ -107,6 +107,7 @@ class SessionManager(offlineSession: ISession, val backlogStorage: BacklogStorag
   private var inProgressSession = BehaviorSubject.createDefault(ISession.NULL)
   private var lastSession: ISession = offlineSession
   override val state: Observable<ConnectionState> = inProgressSession.switchMap { it.state }
+  override val initStatus: Observable<Pair<Int, Int>> = inProgressSession.switchMap { it.initStatus }
   val session: Observable<ISession> = state.map { connectionState ->
     if (connectionState == ConnectionState.CONNECTED)
       inProgressSession.value

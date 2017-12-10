@@ -1,13 +1,20 @@
 package de.kuschku.quasseldroid_ng.ui.chat
 
 import android.support.annotation.LayoutRes
-import de.kuschku.libquassel.protocol.Message_Flags
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 
 interface MessageRenderer {
   @LayoutRes
-  fun layout(type: Message_Type?, flags: Message_Flags): Int
+  fun layout(type: Message_Type?, hasHighlight: Boolean): Int
 
-  fun bind(holder: QuasselMessageViewHolder, message: QuasselDatabase.DatabaseMessage)
+  fun bind(holder: QuasselMessageViewHolder, message: FormattedMessage)
+  fun render(message: QuasselDatabase.DatabaseMessage): FormattedMessage
+  fun init(viewHolder: QuasselMessageViewHolder, messageType: Message_Type?, hasHighlight: Boolean) {}
 }
+
+class FormattedMessage(
+  val id: Int,
+  val time: CharSequence,
+  val content: CharSequence
+)

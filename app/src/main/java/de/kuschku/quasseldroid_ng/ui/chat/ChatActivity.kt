@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -26,11 +27,9 @@ import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
-import de.kuschku.quasseldroid_ng.util.helper.editApply
-import de.kuschku.quasseldroid_ng.util.helper.map
-import de.kuschku.quasseldroid_ng.util.helper.observeSticky
-import de.kuschku.quasseldroid_ng.util.helper.switchMapRx
+import de.kuschku.quasseldroid_ng.util.helper.*
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundActivity
+import de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
 
 class ChatActivity : ServiceBoundActivity() {
   var contentMessages: MessageListFragment? = null
@@ -41,6 +40,9 @@ class ChatActivity : ServiceBoundActivity() {
 
   @BindView(R.id.toolbar)
   lateinit var toolbar: Toolbar
+
+  @BindView(R.id.progressBar)
+  lateinit var progressBar: MaterialContentLoadingProgressBar
 
   @BindView(R.id.buttonSend)
   lateinit var buttonSend: Button
@@ -54,6 +56,7 @@ class ChatActivity : ServiceBoundActivity() {
 
   private val sessionManager: LiveData<SessionManager?> = backend.map(Backend::sessionManager)
   private val state = sessionManager.switchMapRx(SessionManager::state)
+  private val initStatus = sessionManager.switchMapRx(SessionManager::initStatus)
 
   private var snackbar: Snackbar? = null
 
@@ -82,9 +85,14 @@ class ChatActivity : ServiceBoundActivity() {
       println("Changed buffer to $it")
     }
 
-    //drawerToggle = ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close)
-    //actionBar.setDisplayHomeAsUpEnabled(true)
-    //actionBar.setHomeButtonEnabled(true)
+    currentBuffer.observe(this, Observer {
+      if (it != null) {
+        drawerLayout.closeDrawer(Gravity.START, true)
+      }
+    })
+
+    drawerToggle = ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close)
+    drawerToggle.syncState()
 
     backend.observeSticky(this, Observer { backendValue ->
       if (backendValue != null) {
@@ -113,8 +121,8 @@ class ChatActivity : ServiceBoundActivity() {
     })
 
     buttonSend.setOnClickListener {
-      sessionManager.value?.also { sessionManager ->
-        currentBuffer.value?.also { bufferId ->
+      sessionManager { sessionManager ->
+        currentBuffer { bufferId ->
           sessionManager.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
             sessionManager.rpcHandler?.sendInput(bufferInfo, input.text.toString())
           }
@@ -126,14 +134,30 @@ class ChatActivity : ServiceBoundActivity() {
     state.observe(this, Observer {
       val status = it ?: ConnectionState.DISCONNECTED
 
+      if (status == ConnectionState.CONNECTED) {
+        progressBar.progress = 1
+        progressBar.max = 1
+      } else {
+        progressBar.isIndeterminate = status != ConnectionState.INIT
+      }
+
+      progressBar.toggle(status != ConnectionState.CONNECTED && status != ConnectionState.DISCONNECTED)
+
       snackbar?.dismiss()
       snackbar = Snackbar.make(findViewById(R.id.contentMessages), status.name, Snackbar.LENGTH_SHORT)
       snackbar?.show()
     })
+
+    initStatus.observe(this, Observer {
+      val (progress, max) = it ?: 0 to 0
+
+      progressBar.max = max
+      progressBar.progress = progress
+    })
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-    menuInflater.inflate(R.menu.main, menu)
+    menuInflater.inflate(R.menu.activity_main, menu)
     return super.onCreateOptionsMenu(menu)
   }
 
@@ -143,31 +167,13 @@ class ChatActivity : ServiceBoundActivity() {
         getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editApply {
           putBoolean(Keys.Status.reconnect, false)
         }
-        backend.value?.disconnect(true)
+        backend()?.disconnect(true)
         setResult(Activity.RESULT_OK)
         finish()
       }
       true
     }
-    R.id.loadMore -> handler.post {
-      currentBuffer.value?.also { bufferId ->
-        sessionManager.value?.apply {
-          backlogManager?.requestBacklog(
-            bufferId = bufferId,
-            last = database.message().findFirstByBufferId(bufferId)?.messageId ?: -1,
-            limit = 20
-          )
-        }
-      }
-    }
-    R.id.clear -> handler.post {
-      currentBuffer.value?.also { bufferId ->
-        sessionManager.value?.apply {
-          backlogStorage.clearMessages(bufferId)
-        }
-      }
-    }
-    else            -> super.onOptionsItemSelected(item)
+    else -> super.onOptionsItemSelected(item)
   }
 
   override fun onDestroy() {

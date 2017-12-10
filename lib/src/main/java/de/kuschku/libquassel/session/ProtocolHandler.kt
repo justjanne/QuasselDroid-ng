@@ -30,6 +30,8 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
 
   abstract fun onInitDone()
 
+  private var totalInitCount = 0
+
   override fun handle(f: SignalProxyMessage): Boolean {
     try {
       if (!super<SignalProxy>.handle(f)) {
@@ -67,6 +69,7 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
   }
 
   private fun checkForInitDone() {
+    onInitStatusChanged(totalInitCount - toInit.size, totalInitCount)
     if (isInitializing && toInit.isEmpty()) {
       isInitializing = false
       onInitDone()
@@ -79,6 +82,8 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
       }
     }
   }
+
+  open fun onInitStatusChanged(progress: Int, total: Int) {}
 
   override fun handle(f: SignalProxyMessage.SyncMessage): Boolean {
     val obj = objectStorage.get(f.className, f.objectName) ?: if (isInitializing) {
@@ -158,6 +163,7 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
     if (!syncableObject.initialized) {
       if (baseInit) {
         toInit.put(syncableObject, mutableListOf())
+        totalInitCount++
       }
       dispatch(SignalProxyMessage.InitRequest(syncableObject.className, syncableObject.objectName))
     }

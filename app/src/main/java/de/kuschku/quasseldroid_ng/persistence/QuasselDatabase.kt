@@ -71,6 +71,9 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Query("UPDATE message SET bufferId = :bufferId1 WHERE bufferId = :bufferId2")
     fun merge(@IntRange(from = 0) bufferId1: Int, @IntRange(from = 0) bufferId2: Int)
 
+    @Query("SELECT count(*) FROM message WHERE bufferId = :bufferId")
+    fun bufferSize(@IntRange(from = 0) bufferId: Int): Int
+
     @Query("DELETE FROM message")
     fun clearMessages()
 
