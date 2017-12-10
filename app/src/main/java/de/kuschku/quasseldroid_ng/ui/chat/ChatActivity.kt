@@ -144,7 +144,6 @@ class ChatActivity : ServiceBoundActivity() {
           putBoolean(Keys.Status.reconnect, false)
         }
         backend.value?.disconnect(true)
-        stopService()
         setResult(Activity.RESULT_OK)
         finish()
       }

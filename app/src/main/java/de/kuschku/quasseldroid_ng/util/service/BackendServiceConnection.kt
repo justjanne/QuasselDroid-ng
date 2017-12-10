@@ -10,13 +10,11 @@ import de.kuschku.libquassel.session.Backend
 import de.kuschku.quasseldroid_ng.service.QuasselService
 
 class BackendServiceConnection : ServiceConnection {
-  var bound = false
   val backend = MutableLiveData<Backend?>()
 
   var context: Context? = null
 
   override fun onServiceDisconnected(component: ComponentName?) {
-    bound = false
     when (component) {
       ComponentName(context, QuasselService::class.java) -> {
         backend.value = null
@@ -25,7 +23,6 @@ class BackendServiceConnection : ServiceConnection {
   }
 
   override fun onServiceConnected(component: ComponentName?, binder: IBinder?) {
-    bound = true
     when (component) {
       ComponentName(context, QuasselService::class.java) ->
         if (binder is QuasselService.QuasselBinder) {
@@ -47,6 +44,6 @@ class BackendServiceConnection : ServiceConnection {
   }
 
   fun unbind() {
-    if (bound) context?.unbindService(this)
+    context?.unbindService(this)
   }
 }

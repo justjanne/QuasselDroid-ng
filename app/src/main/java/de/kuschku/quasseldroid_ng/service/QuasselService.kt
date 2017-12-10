@@ -83,6 +83,8 @@ class QuasselService : LifecycleService() {
     override fun disconnect(forever: Boolean) {
       handler.post {
         backendImplementation.disconnect(forever)
+        if (forever)
+          stopSelf()
       }
     }
 
