@@ -76,7 +76,7 @@ class AccountSelectionSlide : SlideFragment() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == REQUEST_CREATE_FIRST && resultCode == Activity.RESULT_CANCELED) {
-      activity.finish()
+      activity?.finish()
     }
   }
 }

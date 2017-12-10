@@ -160,13 +160,13 @@ abstract class SetupActivity : AppCompatActivity() {
       list.add(fragment)
     }
 
-    override fun instantiateItem(container: ViewGroup?, position: Int): Any {
+    override fun instantiateItem(container: ViewGroup, position: Int): Any {
       val fragment = super.instantiateItem(container, position)
       storeNewFragment(position, fragment as SlideFragment)
       return fragment
     }
 
-    override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
+    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
       retainedFragments.get(position)?.getData(result)
       retainedFragments.remove(position)
       super.destroyItem(container, position, `object`)

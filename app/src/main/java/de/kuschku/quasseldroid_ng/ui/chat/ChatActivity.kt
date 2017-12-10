@@ -62,7 +62,6 @@ class ChatActivity : ServiceBoundActivity() {
   private lateinit var database: QuasselDatabase
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    println("ChatActivity::onCreate")
     handler.onCreate()
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
@@ -128,7 +127,7 @@ class ChatActivity : ServiceBoundActivity() {
       val status = it ?: ConnectionState.DISCONNECTED
 
       snackbar?.dismiss()
-      snackbar = Snackbar.make(window.decorView.rootView, status.name, Snackbar.LENGTH_SHORT)
+      snackbar = Snackbar.make(findViewById(R.id.contentMessages), status.name, Snackbar.LENGTH_SHORT)
       snackbar?.show()
     })
   }

@@ -4,6 +4,7 @@ import android.arch.paging.LivePagedListProvider
 import android.arch.persistence.room.*
 import android.content.Context
 import android.support.annotation.IntRange
+import android.support.v7.recyclerview.extensions.DiffCallback
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
 import org.threeten.bp.Instant
@@ -36,6 +37,14 @@ abstract class QuasselDatabase : RoomDatabase() {
       return "Message(messageId=$messageId, time=$time, type=${Message_Type.of(
         type)}, flag=${Message_Flag.of(
         flag)}, bufferId=$bufferId, sender='$sender', senderPrefixes='$senderPrefixes', content='$content')"
+    }
+
+    object MessageDiffCallback : DiffCallback<DatabaseMessage>() {
+      override fun areContentsTheSame(oldItem: QuasselDatabase.DatabaseMessage, newItem: QuasselDatabase.DatabaseMessage)
+        = oldItem == newItem
+
+      override fun areItemsTheSame(oldItem: QuasselDatabase.DatabaseMessage, newItem: QuasselDatabase.DatabaseMessage)
+        = oldItem.messageId == newItem.messageId
     }
   }
 

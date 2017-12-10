@@ -8,7 +8,7 @@ import android.os.Bundle
 import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.ui.chat.ChatActivity
 import de.kuschku.quasseldroid_ng.ui.setup.SetupActivity
-import de.kuschku.quasseldroid_ng.util.helper.editCommit
+import de.kuschku.quasseldroid_ng.util.helper.editApply
 
 class AccountSelectionActivity : SetupActivity() {
   companion object {
@@ -23,7 +23,7 @@ class AccountSelectionActivity : SetupActivity() {
 
   private lateinit var statusPreferences: SharedPreferences
   override fun onDone(data: Bundle) {
-    statusPreferences.editCommit {
+    statusPreferences.editApply {
       putLong(Keys.Status.selectedAccount, data.getLong(Keys.Status.selectedAccount, -1))
       putBoolean(Keys.Status.reconnect, true)
     }

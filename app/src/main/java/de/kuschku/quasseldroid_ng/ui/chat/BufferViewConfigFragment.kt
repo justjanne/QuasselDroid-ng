@@ -92,7 +92,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     chatListSpinner.adapter = adapter
     chatListSpinner.onItemSelectedListener = itemSelectedListener
 
-    chatList.adapter = BufferListAdapter(this, bufferList, handlerThread::post, activity::runOnUiThread, clickListener)
+    chatList.adapter = BufferListAdapter(this, bufferList, handlerThread::post, activity!!::runOnUiThread, clickListener)
     chatList.layoutManager = LinearLayoutManager(context)
     chatList.itemAnimator = DefaultItemAnimator()
     return view

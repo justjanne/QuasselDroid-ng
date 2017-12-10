@@ -16,7 +16,7 @@ plugins {
 
 android {
   compileSdkVersion(26)
-  buildToolsVersion("26.0.2")
+  buildToolsVersion("27.0.2")
 
   signingConfigs {
     val signing = project.rootProject.properties("signing.properties")
@@ -88,21 +88,21 @@ android {
   }
 }
 
-val appCompatVersion = "26.1.0"
-val appArchVersion = "1.0.0-rc1"
+val appCompatVersion = "27.0.2"
+val appArchVersion = "1.0.0"
 dependencies {
-  implementation(kotlin("stdlib", "1.1.61"))
+  implementation(kotlin("stdlib", "1.2.0"))
 
   implementation(appCompat("appcompat-v7"))
   implementation(appCompat("design"))
   implementation(appCompat("customtabs"))
   implementation(appCompat("cardview-v7"))
   implementation(appCompat("recyclerview-v7"))
-  implementation("com.android.support.constraint:constraint-layout:1.0.2")
+  implementation(appCompat("constraint", "constraint-layout", version = "1.0.2"))
 
-  implementation("com.github.StephenVinouze.AdvancedRecyclerView:core:1.1.6")
+  implementation("com.github.StephenVinouze.AdvancedRecyclerView", "core", "1.1.6")
 
-  implementation("io.reactivex.rxjava2:rxjava:2.1.3")
+  implementation("io.reactivex.rxjava2", "rxjava", "2.1.3")
 
   implementation(appArch("lifecycle", "extensions"))
   implementation(appArch("lifecycle", "reactivestreams"))
@@ -115,21 +115,25 @@ dependencies {
     exclude(group = "junit", module = "junit")
   }
 
-  implementation("org.threeten:threetenbp:1.3.6")
+  implementation("org.threeten", "threetenbp", "1.3.6", classifier = "no-tzdb")
 
-  implementation("com.jakewharton:butterknife:8.8.1")
-  kapt("com.jakewharton:butterknife-compiler:8.8.1")
+  implementation("com.jakewharton", "butterknife", "8.8.1")
+  kapt("com.jakewharton", "butterknife-compiler", "8.8.1")
 
-  implementation(project(":lib"))
+  implementation(project(":lib")) {
+    exclude(group = "org.threeten", module = "threetenbp")
+  }
   implementation(project(":malheur"))
 
+  debugImplementation("com.squareup.leakcanary", "leakcanary-android", "1.5.1")
+
   testImplementation(appArch("persistence.room", "testing"))
-  testImplementation("junit:junit:4.12")
+  testImplementation("junit", "junit", "4.12")
 
-  androidTestImplementation("com.android.support.test:runner:1.0.1")
-  androidTestImplementation("com.android.support.test:rules:1.0.1")
+  androidTestImplementation("com.android.support.test", "runner", "1.0.1")
+  androidTestImplementation("com.android.support.test", "rules", "1.0.1")
 
-  androidTestImplementation("com.android.support.test.espresso:espresso-core:3.0.1")
+  androidTestImplementation("com.android.support.test.espresso", "espresso-core", "3.0.1")
 }
 
 tasks.withType(KotlinCompile::class.java) {
@@ -168,8 +172,12 @@ fun Project.properties(fileName: String): Properties? {
  * @param module simple name of the AppCompat module, for example "cardview-v7".
  * @param version optional desired version, null implies [appCompatVersion].
  */
-fun appCompat(module: String, version: String? = null)
-  = "com.android.support:$module:${version ?: appCompatVersion}"
+fun appCompat(module: String, submodule: String? = null, version: String? = null)
+  = if (submodule != null) {
+  "com.android.support.$module:$submodule:${version ?: appCompatVersion}"
+} else {
+  "com.android.support:$module:${version ?: appCompatVersion}"
+}
 
 /**
  * Builds the dependency notation for the named AppArch [module] at the given [version].

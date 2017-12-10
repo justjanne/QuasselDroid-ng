@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorBackgroundSecondary"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="top"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/message_vertical"
+    android:paddingEnd="@dimen/message_horizontal"
+    android:paddingLeft="@dimen/message_horizontal"
+    android:paddingRight="@dimen/message_horizontal"
+    android:paddingStart="@dimen/message_horizontal"
+    android:paddingTop="@dimen/message_vertical"
+    android:textAppearance="?android:attr/textAppearanceListItemSmall">
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/message_horizontal"
+        android:layout_marginRight="@dimen/message_horizontal"
+        android:textColor="?attr/colorForegroundSecondary"
+        android:typeface="monospace" />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="?attr/colorForegroundSecondary"
+        android:textIsSelectable="true"
+        android:textStyle="italic" />
+</LinearLayout>

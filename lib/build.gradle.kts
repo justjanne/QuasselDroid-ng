@@ -11,10 +11,10 @@ plugins {
 
 val appCompatVersion = "26.1.0"
 dependencies {
-  implementation(kotlin("stdlib", "1.1.61"))
+  implementation(kotlin("stdlib", "1.2.0"))
 
   implementation(appCompat("support-annotations"))
-  implementation("org.threeten:threetenbp:1.3.6")
+  implementation("org.threeten", "threetenbp", "1.3.6")
   implementation("io.reactivex.rxjava2:rxjava:2.1.3")
 
   implementation(project(":invokerannotations"))
