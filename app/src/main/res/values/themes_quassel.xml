@@ -1,83 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-  <string name="themeQuasselLightName">Quassel™ (Light)</string>
-  <string name="themeQuasselLightId">QUASSEL_LIGHT</string>
+    <string name="themeQuasselLightName">Quassel™ (Light)</string>
+    <string name="themeQuasselLightId">QUASSEL_LIGHT</string>
 
-  <style name="Theme.ChatTheme.Quassel_Light" parent="Theme.ChatTheme.Light">
-    <item name="senderColor0">#e90d7f</item>
-    <item name="senderColor1">#8e55e9</item>
-    <item name="senderColor2">#b30e0e</item>
-    <item name="senderColor3">#17b339</item>
-    <item name="senderColor4">#58afb3</item>
-    <item name="senderColor5">#9d54b3</item>
-    <item name="senderColor6">#b39775</item>
-    <item name="senderColor7">#3176b3</item>
-    <item name="senderColor8">#e90d7f</item>
-    <item name="senderColor9">#8e55e9</item>
-    <item name="senderColorA">#b30e0e</item>
-    <item name="senderColorB">#17b339</item>
-    <item name="senderColorC">#58afb3</item>
-    <item name="senderColorD">#9d54b3</item>
-    <item name="senderColorE">#b39775</item>
-    <item name="senderColorF">#3176b3</item>
+    <style name="Theme.ChatTheme.Quassel_Light" parent="Theme.ChatTheme.Light">
+        <item name="senderColor0">#cc0000</item>
+        <item name="senderColor1">#006cad</item>
+        <item name="senderColor2">#4d9900</item>
+        <item name="senderColor3">#6600cc</item>
+        <item name="senderColor4">#a67d00</item>
+        <item name="senderColor5">#009927</item>
+        <item name="senderColor6">#0030c0</item>
+        <item name="senderColor7">#cc009a</item>
+        <item name="senderColor8">#b94600</item>
+        <item name="senderColor9">#869900</item>
+        <item name="senderColorA">#149900</item>
+        <item name="senderColorB">#009960</item>
+        <item name="senderColorC">#006cad</item>
+        <item name="senderColorD">#0099cc</item>
+        <item name="senderColorE">#b300cc</item>
+        <item name="senderColorF">#cc004d</item>
 
-    <item name="colorForeground">#DE000000</item>
-    <item name="colorForegroundHighlight">#DE000000</item>
-    <item name="colorForegroundSecondary">#8A000000</item>
-    <item name="colorForegroundAction">#1a237e</item>
-    <item name="colorForegroundError">#800000</item>
+        <item name="colorForeground">#DE000000</item>
+        <item name="colorForegroundHighlight">#DE000000</item>
+        <item name="colorForegroundSecondary">#8A000000</item>
+        <item name="colorForegroundAction">#1a237e</item>
+        <item name="colorForegroundError">#800000</item>
 
-    <item name="colorForegroundMirc">0x1</item>
+        <item name="colorForegroundMirc">0x1</item>
 
-    <item name="colorBackground">#FAFAFA</item>
-    <item name="colorBackgroundHighlight">#ff8811</item>
-    <item name="colorBackgroundSecondary">@null</item>
-    <item name="colorBackgroundCard">#FFFFFF</item>
-    <item name="colorBackgroundDialog">#FAFAFA</item>
+        <item name="colorBackground">#FAFAFA</item>
+        <item name="colorBackgroundHighlight">#ff8811</item>
+        <item name="colorBackgroundSecondary">@null</item>
+        <item name="colorBackgroundCard">#FFFFFF</item>
+        <item name="colorBackgroundDialog">#FAFAFA</item>
 
-    <item name="colorTintActivity">#88cc33</item>
-    <item name="colorTintMessage">#2277dd</item>
-    <item name="colorTintHighlight">#ff8811</item>
-  </style>
+        <item name="colorTintActivity">#88cc33</item>
+        <item name="colorTintMessage">#2277dd</item>
+        <item name="colorTintHighlight">#ff8811</item>
+    </style>
 
-  <string name="themeQuasselDarkName">Quassel™ (Dark)</string>
-  <string name="themeQuasselDarkId">QUASSEL_DARK</string>
+    <string name="themeQuasselDarkName">Quassel™ (Dark)</string>
+    <string name="themeQuasselDarkId">QUASSEL_DARK</string>
 
-  <style name="Theme.ChatTheme.Quassel_Dark" parent="Theme.ChatTheme">
-    <item name="senderColor0">#e90d7f</item>
-    <item name="senderColor1">#8e55e9</item>
-    <item name="senderColor2">#b30e0e</item>
-    <item name="senderColor3">#17b339</item>
-    <item name="senderColor4">#58afb3</item>
-    <item name="senderColor5">#9d54b3</item>
-    <item name="senderColor6">#b39775</item>
-    <item name="senderColor7">#3176b3</item>
-    <item name="senderColor8">#e90d7f</item>
-    <item name="senderColor9">#8e55e9</item>
-    <item name="senderColorA">#b30e0e</item>
-    <item name="senderColorB">#17b339</item>
-    <item name="senderColorC">#58afb3</item>
-    <item name="senderColorD">#9d54b3</item>
-    <item name="senderColorE">#b39775</item>
-    <item name="senderColorF">#3176b3</item>
+    <style name="Theme.ChatTheme.Quassel_Dark" parent="Theme.ChatTheme">
+        <item name="senderColor0">#cc0000</item>
+        <item name="senderColor1">#006cad</item>
+        <item name="senderColor2">#4d9900</item>
+        <item name="senderColor3">#6600cc</item>
+        <item name="senderColor4">#a67d00</item>
+        <item name="senderColor5">#009927</item>
+        <item name="senderColor6">#0030c0</item>
+        <item name="senderColor7">#cc009a</item>
+        <item name="senderColor8">#b94600</item>
+        <item name="senderColor9">#869900</item>
+        <item name="senderColorA">#149900</item>
+        <item name="senderColorB">#009960</item>
+        <item name="senderColorC">#006cad</item>
+        <item name="senderColorD">#0099cc</item>
+        <item name="senderColorE">#b300cc</item>
+        <item name="senderColorF">#cc004d</item>
 
-    <item name="colorForeground">#FFFFFF</item>
-    <item name="colorForegroundHighlight">#FFFFFF</item>
-    <item name="colorForegroundSecondary">#B3FFFFFF</item>
-    <item name="colorForegroundAction">#7986cb</item>
-    <item name="colorForegroundError">#800000</item>
+        <item name="colorForeground">#FFFFFF</item>
+        <item name="colorForegroundHighlight">#FFFFFF</item>
+        <item name="colorForegroundSecondary">#B3FFFFFF</item>
+        <item name="colorForegroundAction">#7986cb</item>
+        <item name="colorForegroundError">#800000</item>
 
-    <item name="colorForegroundMirc">0x0</item>
+        <item name="colorForegroundMirc">0x0</item>
 
-    <item name="colorBackground">#303030</item>
-    <item name="colorBackgroundHighlight">#ff8811</item>
-    <item name="colorBackgroundSecondary">@null</item>
-    <item name="colorBackgroundCard">#424242</item>
-    <item name="colorBackgroundDialog">#303030</item>
+        <item name="colorBackground">#303030</item>
+        <item name="colorBackgroundHighlight">#ff8811</item>
+        <item name="colorBackgroundSecondary">@null</item>
+        <item name="colorBackgroundCard">#424242</item>
+        <item name="colorBackgroundDialog">#303030</item>
 
-    <item name="colorTintActivity">#88cc33</item>
-    <item name="colorTintMessage">#2277dd</item>
-    <item name="colorTintHighlight">#ff8811</item>
-  </style>
+        <item name="colorTintActivity">#88cc33</item>
+        <item name="colorTintMessage">#2277dd</item>
+        <item name="colorTintHighlight">#ff8811</item>
+    </style>
 </resources>
