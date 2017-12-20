@@ -32,8 +32,10 @@ enum class QuasselFeature(override val bit: Int) : Flag<QuasselFeature> {
   Authenticators(0x0400),
   /** Sync buffer activity status */
   BufferActivitySync(0x0800),
+  /** Core-Side highlight configuration and matching */
+  CoreSideHighlights(0x1000),
   /** Show prefixes for senders in backlog */
-  SenderPrefixes(0x1000);
+  SenderPrefixes(0x2000);
 
   companion object : Flags.Factory<QuasselFeature> {
     override val NONE: Flags<QuasselFeature> = QuasselFeature.of()
