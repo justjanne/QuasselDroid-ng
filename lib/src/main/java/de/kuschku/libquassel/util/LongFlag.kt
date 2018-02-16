@@ -2,6 +2,13 @@ package de.kuschku.libquassel.util
 
 interface LongFlag<T> where T : Enum<T>, T : LongFlag<T> {
   val bit: Long
+  fun toByte() = bit.toByte()
+  fun toChar() = bit.toChar()
+  fun toDouble() = bit.toDouble()
+  fun toFloat() = bit.toFloat()
+  fun toInt() = bit.toInt()
+  fun toLong() = bit
+  fun toShort() = bit.toShort()
 }
 
 data class LongFlags<E>(

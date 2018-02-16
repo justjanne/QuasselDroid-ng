@@ -4,7 +4,8 @@
   android:id="@+id/drawerLayout"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:fitsSystemWindows="true">
+  android:fitsSystemWindows="true"
+  tools:theme="@style/Theme.ChatTheme.Quassel_Light">
 
   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"

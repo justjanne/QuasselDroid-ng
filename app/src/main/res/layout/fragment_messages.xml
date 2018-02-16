@@ -4,7 +4,9 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="?attr/colorBackground">
+  android:background="?attr/colorBackground"
+  tools:background="@android:color/background_light"
+  tools:theme="@style/Theme.ChatTheme.Quassel_Light">
 
   <android.support.v7.widget.RecyclerView
     android:id="@+id/messages"

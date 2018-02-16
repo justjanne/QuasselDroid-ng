@@ -13,7 +13,9 @@
   android:paddingRight="@dimen/message_horizontal"
   android:paddingStart="@dimen/message_horizontal"
   android:paddingTop="@dimen/message_vertical"
-  android:textAppearance="?android:attr/textAppearanceListItemSmall">
+  android:textAppearance="?android:attr/textAppearanceListItemSmall"
+  tools:background="@android:color/background_light"
+  tools:theme="@style/Theme.ChatTheme.Quassel_Light">
 
   <TextView
     android:id="@+id/time"

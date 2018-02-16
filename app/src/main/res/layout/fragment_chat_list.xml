@@ -1,8 +1,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical">
+  android:orientation="vertical"
+  tools:background="@android:color/background_light"
+  tools:theme="@style/Theme.ChatTheme.Quassel_Light">
 
   <android.support.design.widget.AppBarLayout
     android:layout_width="match_parent"
@@ -30,5 +33,6 @@
   <android.support.v7.widget.RecyclerView
     android:id="@+id/chatList"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    tools:listitem="@layout/widget_buffer" />
 </LinearLayout>

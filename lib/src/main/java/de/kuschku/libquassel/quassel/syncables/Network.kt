@@ -9,6 +9,7 @@ import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.helpers.getOr
 import de.kuschku.libquassel.util.helpers.serializeString
 import de.kuschku.libquassel.util.irc.HostmaskHelper
+import io.reactivex.subjects.BehaviorSubject
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.util.*
@@ -327,13 +328,15 @@ class Network constructor(
       _ircUsers[nick] = ircUser
       val mask = ircUser.hostMask()
       super.addIrcUser(mask)
+      live_ircUsers.onNext(_ircUsers)
       ircUser
     } else {
       user
     }
   }
 
-  fun ircUser(nickName: String?) = _ircUsers[nickName]
+  fun ircUser(nickName: String?) = _ircUsers[nickName?.toLowerCase(Locale.ENGLISH)]
+  fun liveIrcUser(nickName: String?) = live_ircUsers.map { ircUser(nickName) ?: IrcUser.NULL }
   fun ircUsers() = _ircUsers.values.toList()
   fun ircUserCount(): UInt = _ircUsers.size
   fun newIrcChannel(channelName: String, initData: QVariantMap = emptyMap()): IrcChannel {
@@ -347,6 +350,7 @@ class Network constructor(
       }
       proxy.synchronize(ircChannel)
       _ircChannels[channelName.toLowerCase(Locale.ENGLISH)] = ircChannel
+      live_ircChannels.onNext(_ircChannels)
       super.addIrcChannel(channelName)
       return ircChannel
     } else {
@@ -354,9 +358,15 @@ class Network constructor(
     }
   }
 
-  fun ircChannel(channelName: String) = _ircChannels[channelName]
+  fun ircChannel(channelName: String?) = _ircChannels[channelName?.toLowerCase(Locale.ENGLISH)]
+  fun liveIrcChannel(channelName: String?) = live_ircChannels.map {
+    ircChannel(
+      channelName
+    ) ?: IrcChannel.NULL
+  }
+
   fun ircChannels() = _ircChannels.values.toList()
-  fun ircChanenlCount(): UInt = _ircChannels.size
+  fun ircChannelCount(): UInt = _ircChannels.size
   fun codecForServer(): String = _codecForServer.name()
   fun codecForEncoding(): String = _codecForEncoding.name()
   fun codecForDecoding(): String = _codecForDecoding.name()
@@ -838,14 +848,18 @@ class Network constructor(
   fun removeChansAndUsers() {
     _ircUsers.clear()
     _ircChannels.clear()
+    live_ircChannels.onNext(_ircChannels)
+    live_ircUsers.onNext(_ircUsers)
   }
 
   fun removeIrcUser(user: IrcUser) {
     _ircUsers.remove(user.nick())
+    live_ircUsers.onNext(_ircUsers)
   }
 
   fun removeIrcChannel(channel: IrcChannel) {
     _ircChannels.remove(channel.name())
+    live_ircChannels.onNext(_ircChannels)
   }
 
   private var _networkId: NetworkId = networkId
@@ -856,13 +870,16 @@ class Network constructor(
   private var _currentServer: String = ""
   private var _connected: Boolean = false
   private var _connectionState: ConnectionState = ConnectionState.Disconnected
+  val liveConnectionState = BehaviorSubject.createDefault(ConnectionState.Disconnected)
   private var _prefixes: Set<Char>? = null
   private var _prefixModes: Set<Char>? = null
   private var _channelModes: Map<ChannelModeType, Set<Char>>? = null
   // stores all known nicks for the server
   private var _ircUsers: MutableMap<String, IrcUser> = mutableMapOf()
+  private val live_ircUsers = BehaviorSubject.createDefault(emptyMap<String, IrcUser>())
   // stores all known channels
   private var _ircChannels: MutableMap<String, IrcChannel> = mutableMapOf()
+  private val live_ircChannels = BehaviorSubject.createDefault(emptyMap<String, IrcChannel>())
   // stores results from RPL_ISUPPORT
   private var _supports: MutableMap<String, String> = mutableMapOf()
   /**
@@ -905,4 +922,8 @@ class Network constructor(
   private var _codecForDecoding: Charset = Charsets.UTF_8
   /** when this is active handle305 and handle306 don't trigger any output */
   private var _autoAwayActive: Boolean = false
+
+  companion object {
+    val NULL = Network(-1, SignalProxy.NULL)
+  }
 }

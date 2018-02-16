@@ -30,6 +30,7 @@ class QuasselService : LifecycleService() {
 
     @SuppressLint("TrustAllX509TrustManager")
     override fun checkServerTrusted(p0: Array<out X509Certificate>?, p1: String?) = Unit
+
     override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
   }
 

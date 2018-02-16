@@ -6,6 +6,7 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.IIrcChannel
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.helpers.getOr
+import io.reactivex.subjects.BehaviorSubject
 import java.nio.charset.Charset
 
 class IrcChannel(
@@ -165,6 +166,7 @@ class IrcChannel(
     if (_topic == topic)
       return
     _topic = topic
+    live_topic.onNext(topic)
     super.setTopic(topic)
   }
 
@@ -312,6 +314,7 @@ class IrcChannel(
 
   private var _name: String = name
   private var _topic: String = ""
+  val live_topic = BehaviorSubject.createDefault("")
   private var _password: String = ""
   private var _encrypted: Boolean = false
   private var _userModes: MutableMap<IrcUser, String> = mutableMapOf()
@@ -322,4 +325,8 @@ class IrcChannel(
   private var _B_channelModes: MutableMap<Char, String> = mutableMapOf()
   private var _C_channelModes: MutableMap<Char, String> = mutableMapOf()
   private var _D_channelModes: MutableSet<Char> = mutableSetOf()
+
+  companion object {
+    val NULL = IrcChannel("", Network.NULL, SignalProxy.NULL)
+  }
 }

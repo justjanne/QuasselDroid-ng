@@ -2,6 +2,13 @@ package de.kuschku.libquassel.util
 
 interface Flag<T> where T : Enum<T>, T : Flag<T> {
   val bit: Int
+  fun toByte() = bit.toByte()
+  fun toChar() = bit.toChar()
+  fun toDouble() = bit.toDouble()
+  fun toFloat() = bit.toFloat()
+  fun toInt() = bit
+  fun toLong() = bit.toLong()
+  fun toShort() = bit.toShort()
 }
 
 data class Flags<E>(

@@ -12,9 +12,8 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.NetworkId
-import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
-import de.kuschku.libquassel.quassel.syncables.BufferViewManager
-import de.kuschku.libquassel.quassel.syncables.Network
+import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SessionManager
@@ -25,6 +24,7 @@ import de.kuschku.quasseldroid_ng.util.helper.or
 import de.kuschku.quasseldroid_ng.util.helper.switchMap
 import de.kuschku.quasseldroid_ng.util.helper.switchMapRx
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundFragment
+import io.reactivex.Observable
 
 class BufferViewConfigFragment : ServiceBoundFragment() {
   private val handlerThread = AndroidHandlerThread("ChatList")
@@ -74,11 +74,78 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
   private val bufferIdList = selectedBufferViewConfig.switchMapRx(BufferViewConfig::live_buffers)
 
-  private val bufferList = sessionManager.switchMap { manager ->
-    bufferIdList.map { ids ->
-      ids.mapNotNull {
-        manager.bufferSyncer?.bufferInfo(it)
-      }
+  private val bufferList: LiveData<List<BufferListAdapter.BufferProps>?> = sessionManager.switchMap { manager ->
+    bufferIdList.switchMapRx { ids ->
+      Observable.combineLatest(
+        ids.mapNotNull { id ->
+          manager.bufferSyncer?.bufferInfo(
+            id
+          )
+        }.mapNotNull {
+          val network = manager.networks[it.networkId]
+          if (network == null) {
+            null
+          } else {
+            it to network
+          }
+        }.map { (info, network) ->
+          when (info.type.toInt()) {
+            BufferInfo.Type.QueryBuffer.toInt()   -> {
+              network.liveIrcUser(info.bufferName).distinctUntilChanged().switchMap { user ->
+                user.live_away.switchMap { away ->
+                  user.live_realName.map { realName ->
+                    BufferListAdapter.BufferProps(
+                      info = info,
+                      network = network.networkInfo(),
+                      bufferStatus = when {
+                        user == IrcUser.NULL -> BufferListAdapter.BufferStatus.OFFLINE
+                        away                 -> BufferListAdapter.BufferStatus.AWAY
+                        else                 -> BufferListAdapter.BufferStatus.ONLINE
+                      },
+                      description = realName
+                    )
+                  }
+                }
+              }
+            }
+            BufferInfo.Type.ChannelBuffer.toInt() -> {
+              network.liveIrcChannel(info.bufferName).distinctUntilChanged().switchMap { channel ->
+                channel.live_topic.map { topic ->
+                  BufferListAdapter.BufferProps(
+                    info = info,
+                    network = network.networkInfo(),
+                    bufferStatus = when (channel) {
+                      IrcChannel.NULL -> BufferListAdapter.BufferStatus.OFFLINE
+                      else            -> BufferListAdapter.BufferStatus.ONLINE
+                    },
+                    description = topic
+                  )
+                }
+              }
+            }
+            BufferInfo.Type.StatusBuffer.toInt()  -> {
+              network.liveConnectionState.map {
+                BufferListAdapter.BufferProps(
+                  info = info,
+                  network = network.networkInfo(),
+                  bufferStatus = BufferListAdapter.BufferStatus.OFFLINE,
+                  description = ""
+                )
+              }
+            }
+            else                                  -> Observable.just(
+              BufferListAdapter.BufferProps(
+                info = info,
+                network = network.networkInfo(),
+                bufferStatus = BufferListAdapter.BufferStatus.OFFLINE,
+                description = ""
+              )
+            )
+          }
+        }, { array: Array<Any> ->
+          array.toList() as List<BufferListAdapter.BufferProps>
+        }
+      )
     }
   }
 

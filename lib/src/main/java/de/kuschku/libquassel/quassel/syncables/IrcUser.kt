@@ -7,6 +7,7 @@ import de.kuschku.libquassel.protocol.valueOr
 import de.kuschku.libquassel.quassel.syncables.interfaces.IIrcUser
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.irc.HostmaskHelper
+import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
 import java.nio.charset.Charset
 
@@ -127,6 +128,7 @@ class IrcUser(
   override fun setRealName(realName: String) {
     if (_realName != realName) {
       _realName = realName
+      live_realName.onNext(realName)
       super.setRealName(realName)
     }
   }
@@ -141,6 +143,7 @@ class IrcUser(
   override fun setAway(away: Boolean) {
     if (_away != away) {
       _away = away
+      live_away.onNext(away)
       super.setAway(away)
     }
   }
@@ -272,9 +275,11 @@ class IrcUser(
   private var _user: String = HostmaskHelper.user(hostmask)
   private var _host: String = HostmaskHelper.host(hostmask)
   private var _realName: String = ""
+  val live_realName = BehaviorSubject.createDefault("")
   private var _account: String = ""
   private var _awayMessage: String = ""
   private var _away: Boolean = false
+  val live_away = BehaviorSubject.createDefault(false)
   private var _server: String = ""
   private var _idleTime: Instant = Instant.EPOCH
   private var _idleTimeSet: Instant = Instant.EPOCH
@@ -289,4 +294,8 @@ class IrcUser(
   private var _network: Network = network
   private var _codecForEncoding: Charset? = null
   private var _codecForDecoding: Charset? = null
+
+  companion object {
+    val NULL = IrcUser("", Network.NULL, SignalProxy.NULL)
+  }
 }

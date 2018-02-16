@@ -6,6 +6,13 @@ import kotlin.experimental.xor
 
 interface ShortFlag<T> where T : Enum<T>, T : ShortFlag<T> {
   val bit: Short
+  fun toByte() = bit.toByte()
+  fun toChar() = bit.toChar()
+  fun toDouble() = bit.toDouble()
+  fun toFloat() = bit.toFloat()
+  fun toInt() = bit.toInt()
+  fun toLong() = bit.toLong()
+  fun toShort() = bit
 }
 
 data class ShortFlags<E>(

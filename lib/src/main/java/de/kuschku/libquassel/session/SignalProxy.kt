@@ -43,4 +43,25 @@ interface SignalProxy {
   fun synchronize(syncableObject: ISyncableObject?, baseInit: Boolean)
   fun synchronize(syncableObject: ISyncableObject?) = synchronize(syncableObject, false)
   fun stopSynchronize(syncableObject: ISyncableObject?)
+
+  companion object {
+    val NULL = object : SignalProxy {
+      override fun dispatch(message: SignalProxyMessage) = Unit
+      override fun dispatch(message: HandshakeMessage) = Unit
+      override fun callSync(type: String, instance: String, slot: String,
+                            params: List<QVariant_>) = Unit
+
+      override fun callRpc(slot: String, params: List<QVariant_>) = Unit
+      override fun shouldSync(type: String, instance: String, slot: String) = false
+      override fun shouldRpc(slot: String) = false
+      override fun network(id: NetworkId) = null
+      override fun identity(id: IdentityId) = null
+      override fun renameObject(syncableObject: ISyncableObject, newName: String,
+                                oldName: String) = Unit
+
+      override fun renameObject(className: String, newName: String, oldName: String) = Unit
+      override fun synchronize(syncableObject: ISyncableObject?, baseInit: Boolean) = Unit
+      override fun stopSynchronize(syncableObject: ISyncableObject?) = Unit
+    }
+  }
 }

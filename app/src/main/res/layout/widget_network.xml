@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:minHeight="48dp"
+  tools:background="@android:color/background_light"
+  tools:theme="@style/Theme.ChatTheme.Quassel_Light">
+
+  <TextView
+    android:id="@+id/name"
+    android:layout_width="0dip"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginBottom="8dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_weight="1"
+    android:singleLine="true"
+    android:textColor="?attr/colorForeground"
+    android:textSize="14sp"
+    android:textStyle="bold"
+    tools:text="Freenode" />
+
+  <android.support.v7.widget.AppCompatImageButton
+    android:id="@+id/status"
+    style="?attr/buttonStyleSmall"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@null"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
+    android:minWidth="72dp"
+    android:paddingBottom="12dp"
+    android:paddingEnd="16dp"
+    android:paddingStart="16dp"
+    android:paddingTop="12dp"
+    android:scaleType="fitEnd"
+    android:tint="?attr/colorForegroundSecondary"
+    app:srcCompat="@drawable/ic_chevron_down" />
+</LinearLayout>
