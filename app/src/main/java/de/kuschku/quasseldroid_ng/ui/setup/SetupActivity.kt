@@ -36,9 +36,9 @@ abstract class SetupActivity : AppCompatActivity() {
   private val isValid = currentPage.switchMap(SlideFragment::valid).or(false)
 
   @DrawableRes
-  protected val icon: Int = R.mipmap.ic_launcher
+  protected val icon: Int = R.mipmap.ic_launcher_recents
   @ColorRes
-  protected val recentsHeaderColor: Int = R.color.colorPrimaryDark
+  protected val recentsHeaderColor: Int = R.color.colorPrimary
 
   private val pageChangeListener = object : ViewPager.OnPageChangeListener {
     override fun onPageScrollStateChanged(state: Int) {
