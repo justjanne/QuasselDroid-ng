@@ -15,8 +15,8 @@ plugins {
 }
 
 android {
-  compileSdkVersion(26)
-  buildToolsVersion("27.0.2")
+  compileSdkVersion(27)
+  buildToolsVersion("27.0.3")
 
   signingConfigs {
     val signing = project.rootProject.properties("signing.properties")
@@ -32,7 +32,7 @@ android {
 
   defaultConfig {
     minSdkVersion(16)
-    targetSdkVersion(26)
+    targetSdkVersion(27)
 
     applicationId = "de.kuschku.quasseldroid_ng"
     versionCode = 1
