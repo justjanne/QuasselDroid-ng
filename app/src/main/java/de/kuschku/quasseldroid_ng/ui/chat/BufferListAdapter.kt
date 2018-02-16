@@ -7,7 +7,6 @@ import android.arch.lifecycle.Observer
 import android.graphics.drawable.Drawable
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.util.DiffUtil
-import android.support.v7.widget.AppCompatImageButton
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +16,7 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
@@ -138,7 +138,9 @@ class BufferListAdapter(
     val info: BufferInfo,
     val network: INetwork.NetworkInfo,
     val bufferStatus: BufferStatus,
-    val description: String
+    val description: String,
+    val activity: Buffer_Activity,
+    val highlights: Int = 0
   )
 
   data class BufferState(
@@ -160,7 +162,7 @@ class BufferListAdapter(
       private val expansionListener: ((NetworkId) -> Unit)? = null
     ) : BufferViewHolder(itemView) {
       @BindView(R.id.status)
-      lateinit var status: AppCompatImageButton
+      lateinit var status: ImageView
 
       @BindView(R.id.name)
       lateinit var name: TextView
@@ -214,6 +216,11 @@ class BufferListAdapter(
       private val online: Drawable
       private val offline: Drawable
 
+      private var none: Int = 0
+      private var activity: Int = 0
+      private var message: Int = 0
+      private var highlight: Int = 0
+
       init {
         ButterKnife.bind(this, itemView)
         itemView.setOnClickListener {
@@ -225,9 +232,18 @@ class BufferListAdapter(
         online = itemView.context.getCompatDrawable(R.drawable.ic_status)
         offline = itemView.context.getCompatDrawable(R.drawable.ic_status_offline)
 
-        itemView.context.theme.styledAttributes(R.attr.colorAccent, R.attr.colorAway) {
+        itemView.context.theme.styledAttributes(
+          R.attr.colorAccent, R.attr.colorAway,
+          R.attr.colorForeground, R.attr.colorTintActivity, R.attr.colorTintMessage,
+          R.attr.colorTintHighlight
+        ) {
           DrawableCompat.setTint(online, getColor(0, 0))
           DrawableCompat.setTint(offline, getColor(1, 0))
+
+          none = getColor(2, 0)
+          activity = getColor(3, 0)
+          message = getColor(4, 0)
+          highlight = getColor(5, 0)
         }
       }
 
@@ -236,6 +252,15 @@ class BufferListAdapter(
 
         name.text = props.info.bufferName
         description.text = props.description
+
+        name.setTextColor(
+          when (props.activity) {
+            Buffer_Activity.NoActivity    -> none
+            Buffer_Activity.OtherActivity -> activity
+            Buffer_Activity.NewMessage    -> message
+            Buffer_Activity.Highlight     -> highlight
+          }
+        )
 
         description.visibility = if (props.description == "") {
           View.GONE
@@ -270,6 +295,11 @@ class BufferListAdapter(
       private val online: Drawable
       private val offline: Drawable
 
+      private var none: Int = 0
+      private var activity: Int = 0
+      private var message: Int = 0
+      private var highlight: Int = 0
+
       init {
         ButterKnife.bind(this, itemView)
         itemView.setOnClickListener {
@@ -281,9 +311,18 @@ class BufferListAdapter(
         online = itemView.context.getCompatDrawable(R.drawable.ic_status_channel)
         offline = itemView.context.getCompatDrawable(R.drawable.ic_status_channel_offline)
 
-        itemView.context.theme.styledAttributes(R.attr.colorAccent, R.attr.colorAway) {
+        itemView.context.theme.styledAttributes(
+          R.attr.colorAccent, R.attr.colorAway,
+          R.attr.colorForeground, R.attr.colorTintActivity, R.attr.colorTintMessage,
+          R.attr.colorTintHighlight
+        ) {
           DrawableCompat.setTint(online, getColor(0, 0))
           DrawableCompat.setTint(offline, getColor(1, 0))
+
+          none = getColor(2, 0)
+          activity = getColor(3, 0)
+          message = getColor(4, 0)
+          highlight = getColor(5, 0)
         }
       }
 
@@ -292,6 +331,15 @@ class BufferListAdapter(
 
         name.text = props.info.bufferName
         description.text = props.description
+
+        name.setTextColor(
+          when (props.activity) {
+            Buffer_Activity.NoActivity    -> none
+            Buffer_Activity.OtherActivity -> activity
+            Buffer_Activity.NewMessage    -> message
+            Buffer_Activity.Highlight     -> highlight
+          }
+        )
 
         description.visibility = if (props.description == "") {
           View.GONE
@@ -327,6 +375,11 @@ class BufferListAdapter(
       private val away: Drawable
       private val offline: Drawable
 
+      private var none: Int = 0
+      private var activity: Int = 0
+      private var message: Int = 0
+      private var highlight: Int = 0
+
       init {
         ButterKnife.bind(this, itemView)
         itemView.setOnClickListener {
@@ -339,10 +392,19 @@ class BufferListAdapter(
         away = itemView.context.getCompatDrawable(R.drawable.ic_status)
         offline = itemView.context.getCompatDrawable(R.drawable.ic_status_offline)
 
-        itemView.context.theme.styledAttributes(R.attr.colorAccent, R.attr.colorAway) {
+        itemView.context.theme.styledAttributes(
+          R.attr.colorAccent, R.attr.colorAway,
+          R.attr.colorForeground, R.attr.colorTintActivity, R.attr.colorTintMessage,
+          R.attr.colorTintHighlight
+        ) {
           DrawableCompat.setTint(online, getColor(0, 0))
           DrawableCompat.setTint(away, getColor(1, 0))
           DrawableCompat.setTint(offline, getColor(1, 0))
+
+          none = getColor(2, 0)
+          activity = getColor(3, 0)
+          message = getColor(4, 0)
+          highlight = getColor(5, 0)
         }
       }
 
@@ -351,6 +413,15 @@ class BufferListAdapter(
 
         name.text = props.info.bufferName
         description.text = props.description
+
+        name.setTextColor(
+          when (props.activity) {
+            Buffer_Activity.NoActivity    -> none
+            Buffer_Activity.OtherActivity -> activity
+            Buffer_Activity.NewMessage    -> message
+            Buffer_Activity.Highlight     -> highlight
+          }
+        )
 
         description.visibility = if (props.description == "") {
           View.GONE

@@ -336,7 +336,12 @@ class Network constructor(
   }
 
   fun ircUser(nickName: String?) = _ircUsers[nickName?.toLowerCase(Locale.ENGLISH)]
-  fun liveIrcUser(nickName: String?) = live_ircUsers.map { ircUser(nickName) ?: IrcUser.NULL }
+  fun liveIrcUser(nickName: String?) = live_ircUsers.map {
+    ircUser(
+      nickName
+    ) ?: IrcUser.NULL
+  }.distinctUntilChanged()
+
   fun ircUsers() = _ircUsers.values.toList()
   fun ircUserCount(): UInt = _ircUsers.size
   fun newIrcChannel(channelName: String, initData: QVariantMap = emptyMap()): IrcChannel {
@@ -363,7 +368,7 @@ class Network constructor(
     ircChannel(
       channelName
     ) ?: IrcChannel.NULL
-  }
+  }.distinctUntilChanged()
 
   fun ircChannels() = _ircChannels.values.toList()
   fun ircChannelCount(): UInt = _ircChannels.size

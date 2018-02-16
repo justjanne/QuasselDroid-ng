@@ -5,6 +5,8 @@ import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferSyncer
 import de.kuschku.libquassel.session.SignalProxy
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 
 class BufferSyncer constructor(
   proxy: SignalProxy
@@ -12,6 +14,8 @@ class BufferSyncer constructor(
   fun lastSeenMsg(buffer: BufferId): MsgId = _lastSeenMsg[buffer] ?: 0
   fun markerLine(buffer: BufferId): MsgId = _markerLines[buffer] ?: 0
   fun activity(buffer: BufferId): Message_Types = _bufferActivities[buffer] ?: Message_Types.of()
+  fun liveActivity(buffer: BufferId): Observable<Message_Types>
+    = live_bufferActivities.map { activity(buffer) }.distinctUntilChanged()
 
   override fun toVariantMap(): QVariantMap = mapOf(
     "Activities" to QVariant_(initActivities(), Type.QVariantList),
@@ -125,10 +129,14 @@ class BufferSyncer constructor(
     val flags = Message_Types.of<Message_Type>(activity)
     super.setBufferActivity(buffer, activity)
     _bufferActivities[buffer] = flags
+    live_bufferActivities.onNext(_bufferActivities)
   }
 
   private val _lastSeenMsg: MutableMap<BufferId, MsgId> = mutableMapOf()
   private val _markerLines: MutableMap<BufferId, MsgId> = mutableMapOf()
   private val _bufferActivities: MutableMap<BufferId, Message_Types> = mutableMapOf()
+  private val live_bufferActivities = BehaviorSubject.createDefault(
+    mutableMapOf<BufferId, Message_Types>()
+  )
   private val _bufferInfos = mutableMapOf<BufferId, BufferInfo>()
 }

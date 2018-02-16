@@ -36,6 +36,9 @@ data class Flags<E>(
 
   fun enabledValues() = values?.filter { hasFlag(it) }?.toSet() ?: emptySet()
 
+  fun empty() = value == 0
+  fun nonEmpty() = !empty()
+
   override fun toString() = if (values != null) {
     enabledValues().joinToString("|", "[", "]")
   } else {
