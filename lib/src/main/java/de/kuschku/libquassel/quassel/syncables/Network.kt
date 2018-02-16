@@ -80,9 +80,9 @@ class Network constructor(
     if (_channelModes == null)
       determineChannelModeTypes()
     return _channelModes?.entries
-      ?.filter { (_, chars) -> chars.contains(mode) }
-      ?.map(Map.Entry<ChannelModeType, Set<Char>>::key)
-      ?.firstOrNull() ?: ChannelModeType.NOT_A_CHANMODE
+             ?.filter { (_, chars) -> chars.contains(mode) }
+             ?.map(Map.Entry<ChannelModeType, Set<Char>>::key)
+             ?.firstOrNull() ?: ChannelModeType.NOT_A_CHANMODE
   }
 
   private fun determineChannelModeTypes() {
@@ -675,12 +675,16 @@ class Network constructor(
 
   override fun initIrcUsersAndChannels(): QVariantMap {
     return mapOf(
-      "Users" to QVariant_(_ircUsers.values.map { it.toVariantMap() }.transpose().map {
-        QVariant_(it, Type.QVariantList)
-      }, Type.QVariantMap),
-      "Channels" to QVariant_(_ircChannels.values.map { it.toVariantMap() }.transpose().map {
-        QVariant_(it, Type.QVariantList)
-      }, Type.QVariantMap)
+      "Users" to QVariant_(
+        _ircUsers.values.map { it.toVariantMap() }.transpose().map {
+          QVariant_(it, Type.QVariantList)
+        }, Type.QVariantMap
+      ),
+      "Channels" to QVariant_(
+        _ircChannels.values.map { it.toVariantMap() }.transpose().map {
+          QVariant_(it, Type.QVariantList)
+        }, Type.QVariantMap
+      )
     )
   }
 
@@ -689,12 +693,18 @@ class Network constructor(
     "currentServer" to QVariant_(currentServer(), Type.QString),
     "myNick" to QVariant_(myNick(), Type.QString),
     "latency" to QVariant_(latency(), Type.Int),
-    "codecForServer" to QVariant_(codecForServer().serializeString(StringSerializer.UTF8),
-                                  Type.QByteArray),
-    "codecForEncoding" to QVariant_(codecForEncoding().serializeString(StringSerializer.UTF8),
-                                    Type.QByteArray),
-    "codecForDecoding" to QVariant_(codecForDecoding().serializeString(StringSerializer.UTF8),
-                                    Type.QByteArray),
+    "codecForServer" to QVariant_(
+      codecForServer().serializeString(StringSerializer.UTF8),
+      Type.QByteArray
+    ),
+    "codecForEncoding" to QVariant_(
+      codecForEncoding().serializeString(StringSerializer.UTF8),
+      Type.QByteArray
+    ),
+    "codecForDecoding" to QVariant_(
+      codecForDecoding().serializeString(StringSerializer.UTF8),
+      Type.QByteArray
+    ),
     "identityId" to QVariant_(identity(), QType.IdentityId),
     "isConnected" to QVariant_(isConnected(), Type.Bool),
     "connectionState" to QVariant_(connectionState(), Type.Int),
@@ -731,7 +741,8 @@ class Network constructor(
 
   override fun initSetServerList(serverList: QVariantList) {
     _serverList = serverList.mapNotNull { it.value<QVariantMap?>() }.map(
-      Server.Companion::fromVariantMap).toMutableList()
+      Server.Companion::fromVariantMap
+    ).toMutableList()
   }
 
   override fun initSetIrcUsersAndChannels(usersAndChannels: QVariantMap) {
@@ -770,11 +781,15 @@ class Network constructor(
     setCodecForServer(
       properties["codecForServer"].value(codecForServer().serializeString(StringSerializer.UTF8))
     )
-    setCodecForEncoding(properties["codecForEncoding"].value(
-      codecForEncoding().serializeString(StringSerializer.UTF8))
+    setCodecForEncoding(
+      properties["codecForEncoding"].value(
+        codecForEncoding().serializeString(StringSerializer.UTF8)
+      )
     )
-    setCodecForDecoding(properties["codecForDecoding"].value(
-      codecForDecoding().serializeString(StringSerializer.UTF8))
+    setCodecForDecoding(
+      properties["codecForDecoding"].value(
+        codecForDecoding().serializeString(StringSerializer.UTF8)
+      )
     )
     setIdentity(properties["identityId"].valueOr(this::identity))
     setConnected(properties["isConnected"].valueOr(this::isConnected))

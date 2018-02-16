@@ -27,7 +27,9 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar
  * a minimum amount of time to avoid "flashes" in the UI when an event could take
  * a largely variable time to complete (from none, to a user perceivable amount)
  */
-class MaterialContentLoadingProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : MaterialProgressBar(context, attrs, 0) {
+class MaterialContentLoadingProgressBar @JvmOverloads constructor(context: Context,
+                                                                  attrs: AttributeSet? = null) :
+  MaterialProgressBar(context, attrs, 0) {
   private var mStartTime: Long = -1
   private var mPostedHide = false
   private var mPostedShow = false

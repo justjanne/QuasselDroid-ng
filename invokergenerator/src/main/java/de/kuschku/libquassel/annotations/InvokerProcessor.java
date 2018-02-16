@@ -38,202 +38,202 @@ import javax.lang.model.type.TypeMirror;
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class InvokerProcessor extends AbstractProcessor {
 
-    private Filer filer;
+  private Filer filer;
 
-    @Override
-    public synchronized void init(ProcessingEnvironment processingEnv) {
-        filer = processingEnv.getFiler();
-    }
+  @Override
+  public synchronized void init(ProcessingEnvironment processingEnv) {
+    filer = processingEnv.getFiler();
+  }
 
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        List<SyncableElement> syncableElements = new ArrayList<>();
-        for (Element element : roundEnv.getElementsAnnotatedWith(Syncable.class)) {
-            if (element.getKind() == ElementKind.INTERFACE) {
-                List<SlotElement> slotElements = new ArrayList<>();
-                for (Element element1 : element.getEnclosedElements()) {
-                    if (element1.getKind() == ElementKind.METHOD) {
-                        ExecutableElement it = (ExecutableElement) element1;
-                        ExecutableType methodType = (ExecutableType) it.asType();
+  @Override
+  public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+    List<SyncableElement> syncableElements = new ArrayList<>();
+    for (Element element : roundEnv.getElementsAnnotatedWith(Syncable.class)) {
+      if (element.getKind() == ElementKind.INTERFACE) {
+        List<SlotElement> slotElements = new ArrayList<>();
+        for (Element element1 : element.getEnclosedElements()) {
+          if (element1.getKind() == ElementKind.METHOD) {
+            ExecutableElement it = (ExecutableElement) element1;
+            ExecutableType methodType = (ExecutableType) it.asType();
 
-                        Slot slotAnnotation = element1.getAnnotation(Slot.class);
-                        if (slotAnnotation != null) {
-                            String slotName = slotAnnotation.value().isEmpty() ? it.getSimpleName().toString() : slotAnnotation.value();
-                            slotElements.add(new SlotElement(it, methodType, slotName, slotAnnotation));
-                        }
-                    }
-                }
-
-                PackageElement packageElement = (PackageElement) element.getEnclosingElement();
-                TypeElement typeElement = (TypeElement) element;
-                Syncable annotation = typeElement.getAnnotation(Syncable.class);
-
-                syncableElements.add(new SyncableElement(packageElement, typeElement, annotation, slotElements));
+            Slot slotAnnotation = element1.getAnnotation(Slot.class);
+            if (slotAnnotation != null) {
+              String slotName = slotAnnotation.value().isEmpty() ? it.getSimpleName().toString() : slotAnnotation.value();
+              slotElements.add(new SlotElement(it, methodType, slotName, slotAnnotation));
             }
+          }
         }
 
-        try {
-            for (SyncableElement syncableElement : syncableElements) {
-                generateInvoker(syncableElement);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return true;
+        PackageElement packageElement = (PackageElement) element.getEnclosingElement();
+        TypeElement typeElement = (TypeElement) element;
+        Syncable annotation = typeElement.getAnnotation(Syncable.class);
+
+        syncableElements.add(new SyncableElement(packageElement, typeElement, annotation, slotElements));
+      }
     }
 
-    private void generateInvoker(SyncableElement element) throws IOException {
-        String packageName = element.packageElement.getQualifiedName().toString() + ".invokers";
-        String invokerName = element.annotation.name() + "Invoker";
+    try {
+      for (SyncableElement syncableElement : syncableElements) {
+        generateInvoker(syncableElement);
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return true;
+  }
 
-        ClassName type = ClassName.get(packageName, invokerName);
-        ClassName wrongObjectTypeException = ClassName.get("de.kuschku.libquassel.quassel.exceptions", "WrongObjectTypeException");
-        ClassName unknownMethodException = ClassName.get("de.kuschku.libquassel.quassel.exceptions", "UnknownMethodException");
-        ClassName nonNullAnnotation = ClassName.get("android.support.annotation", "NonNull");
+  private void generateInvoker(SyncableElement element) throws IOException {
+    String packageName = element.packageElement.getQualifiedName().toString() + ".invokers";
+    String invokerName = element.annotation.name() + "Invoker";
 
-        MethodSpec methodSpecConstructor = MethodSpec
-                .constructorBuilder()
-                .addModifiers(Modifier.PRIVATE)
-                .build();
+    ClassName type = ClassName.get(packageName, invokerName);
+    ClassName wrongObjectTypeException = ClassName.get("de.kuschku.libquassel.quassel.exceptions", "WrongObjectTypeException");
+    ClassName unknownMethodException = ClassName.get("de.kuschku.libquassel.quassel.exceptions", "UnknownMethodException");
+    ClassName nonNullAnnotation = ClassName.get("android.support.annotation", "NonNull");
 
-        FieldSpec fieldSpecInstance = FieldSpec
-                .builder(type, "INSTANCE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                .initializer("new $T()", type)
-                .build();
+    MethodSpec methodSpecConstructor = MethodSpec
+      .constructorBuilder()
+      .addModifiers(Modifier.PRIVATE)
+      .build();
 
-        MethodSpec methodSpecClassName = MethodSpec
-                .methodBuilder("getClassName")
-                .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(nonNullAnnotation)
-                .addAnnotation(Override.class)
-                .returns(String.class)
-                .addStatement("return $S", element.annotation.name())
-                .build();
+    FieldSpec fieldSpecInstance = FieldSpec
+      .builder(type, "INSTANCE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+      .initializer("new $T()", type)
+      .build();
 
-        ParameterSpec parameterSpecOn = ParameterSpec
-                .builder(
-                        Object.class,
-                        "on"
-                )
-                .addAnnotation(nonNullAnnotation)
-                .build();
+    MethodSpec methodSpecClassName = MethodSpec
+      .methodBuilder("getClassName")
+      .addModifiers(Modifier.PUBLIC)
+      .addAnnotation(nonNullAnnotation)
+      .addAnnotation(Override.class)
+      .returns(String.class)
+      .addStatement("return $S", element.annotation.name())
+      .build();
 
-        ParameterSpec parameterSpecMethod = ParameterSpec
-                .builder(
-                        String.class,
-                        "method"
-                )
-                .addAnnotation(nonNullAnnotation).build();
+    ParameterSpec parameterSpecOn = ParameterSpec
+      .builder(
+        Object.class,
+        "on"
+      )
+      .addAnnotation(nonNullAnnotation)
+      .build();
 
-        ParameterSpec parameterSpecParams = ParameterSpec
-                .builder(
-                        ParameterizedTypeName.get(
-                                ClassName.get(List.class),
-                                ParameterizedTypeName.get(
-                                        ClassName.get("de.kuschku.libquassel.protocol", "QVariant"),
-                                        TypeName.get(Object.class)
-                                )
-                        ),
-                        "params"
-                )
-                .addAnnotation(nonNullAnnotation)
-                .build();
+    ParameterSpec parameterSpecMethod = ParameterSpec
+      .builder(
+        String.class,
+        "method"
+      )
+      .addAnnotation(nonNullAnnotation).build();
 
-        MethodSpec.Builder invokeSpec = MethodSpec
-                .methodBuilder("invoke")
-                .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(Override.class)
-                .addException(wrongObjectTypeException)
-                .addException(unknownMethodException)
-                .addParameter(parameterSpecOn)
-                .addParameter(parameterSpecMethod)
-                .addParameter(parameterSpecParams)
-                .beginControlFlow("if (on instanceof $T)", element.typeElement)
-                .addStatement("$T it = ($T) $N", element.typeElement, element.typeElement, parameterSpecOn)
-                .beginControlFlow("switch ($N)", parameterSpecMethod);
+    ParameterSpec parameterSpecParams = ParameterSpec
+      .builder(
+        ParameterizedTypeName.get(
+          ClassName.get(List.class),
+          ParameterizedTypeName.get(
+            ClassName.get("de.kuschku.libquassel.protocol", "QVariant"),
+            TypeName.get(Object.class)
+          )
+        ),
+        "params"
+      )
+      .addAnnotation(nonNullAnnotation)
+      .build();
 
-        for (SlotElement slot : element.slots) {
-            invokeSpec = invokeSpec.beginControlFlow("case $S:", slot.slotName);
-            invokeSpec = invokeSpec.addCode("it.$N(\n$>", slot.element.getSimpleName());
-            for (int i = 0; i < slot.type.getParameterTypes().size(); i++) {
-                TypeMirror parameterType = slot.type.getParameterTypes().get(i);
-                boolean isLast = i + 1 == slot.type.getParameterTypes().size();
+    MethodSpec.Builder invokeSpec = MethodSpec
+      .methodBuilder("invoke")
+      .addModifiers(Modifier.PUBLIC)
+      .addAnnotation(Override.class)
+      .addException(wrongObjectTypeException)
+      .addException(unknownMethodException)
+      .addParameter(parameterSpecOn)
+      .addParameter(parameterSpecMethod)
+      .addParameter(parameterSpecParams)
+      .beginControlFlow("if (on instanceof $T)", element.typeElement)
+      .addStatement("$T it = ($T) $N", element.typeElement, element.typeElement, parameterSpecOn)
+      .beginControlFlow("switch ($N)", parameterSpecMethod);
 
-                invokeSpec = invokeSpec.addCode("($T) $N.get($L).getData()", parameterType, parameterSpecParams, i);
-                if (!isLast)
-                    invokeSpec = invokeSpec.addCode(",");
-                invokeSpec = invokeSpec.addCode("\n");
-            }
-            invokeSpec = invokeSpec.addCode("$<);\n");
-            invokeSpec = invokeSpec.endControlFlow("return");
-        }
+    for (SlotElement slot : element.slots) {
+      invokeSpec = invokeSpec.beginControlFlow("case $S:", slot.slotName);
+      invokeSpec = invokeSpec.addCode("it.$N(\n$>", slot.element.getSimpleName());
+      for (int i = 0; i < slot.type.getParameterTypes().size(); i++) {
+        TypeMirror parameterType = slot.type.getParameterTypes().get(i);
+        boolean isLast = i + 1 == slot.type.getParameterTypes().size();
 
-        invokeSpec = invokeSpec
-                .beginControlFlow("default:")
-                .addStatement("throw new $T($N(), $N)",
-                        unknownMethodException,
-                        methodSpecClassName,
-                        parameterSpecMethod
-                )
-                .endControlFlow()
-                .endControlFlow()
-                .addCode("$<} else{\n$>")
-                .addStatement("throw new $T($N, $N())",
-                        wrongObjectTypeException,
-                        parameterSpecOn,
-                        methodSpecClassName
-                )
-                .endControlFlow();
-
-        TypeSpec typeSpec = TypeSpec
-                .classBuilder(type)
-                .addSuperinterface(ParameterizedTypeName.get(
-                        ClassName.get(packageName, "Invoker"),
-                        TypeName.get(element.typeElement.asType())
-                ))
-                .addModifiers(Modifier.PUBLIC)
-                .addField(fieldSpecInstance)
-                .addMethod(methodSpecConstructor)
-                .addMethod(methodSpecClassName)
-                .addMethod(invokeSpec.build())
-                .build();
-
-        JavaFile javaFile = JavaFile
-                .builder(packageName, typeSpec)
-                .build();
-
-        javaFile.writeTo(filer);
+        invokeSpec = invokeSpec.addCode("($T) $N.get($L).getData()", parameterType, parameterSpecParams, i);
+        if (!isLast)
+          invokeSpec = invokeSpec.addCode(",");
+        invokeSpec = invokeSpec.addCode("\n");
+      }
+      invokeSpec = invokeSpec.addCode("$<);\n");
+      invokeSpec = invokeSpec.endControlFlow("return");
     }
 
-    private class SlotElement {
-        final ExecutableElement element;
-        final ExecutableType type;
+    invokeSpec = invokeSpec
+      .beginControlFlow("default:")
+      .addStatement("throw new $T($N(), $N)",
+        unknownMethodException,
+        methodSpecClassName,
+        parameterSpecMethod
+      )
+      .endControlFlow()
+      .endControlFlow()
+      .addCode("$<} else{\n$>")
+      .addStatement("throw new $T($N, $N())",
+        wrongObjectTypeException,
+        parameterSpecOn,
+        methodSpecClassName
+      )
+      .endControlFlow();
 
-        final String slotName;
+    TypeSpec typeSpec = TypeSpec
+      .classBuilder(type)
+      .addSuperinterface(ParameterizedTypeName.get(
+        ClassName.get(packageName, "Invoker"),
+        TypeName.get(element.typeElement.asType())
+      ))
+      .addModifiers(Modifier.PUBLIC)
+      .addField(fieldSpecInstance)
+      .addMethod(methodSpecConstructor)
+      .addMethod(methodSpecClassName)
+      .addMethod(invokeSpec.build())
+      .build();
 
-        final Slot slot;
+    JavaFile javaFile = JavaFile
+      .builder(packageName, typeSpec)
+      .build();
 
-        public SlotElement(ExecutableElement element, ExecutableType type, String slotName, Slot slot) {
-            this.element = element;
-            this.type = type;
-            this.slotName = slotName;
-            this.slot = slot;
-        }
+    javaFile.writeTo(filer);
+  }
+
+  private class SlotElement {
+    final ExecutableElement element;
+    final ExecutableType type;
+
+    final String slotName;
+
+    final Slot slot;
+
+    public SlotElement(ExecutableElement element, ExecutableType type, String slotName, Slot slot) {
+      this.element = element;
+      this.type = type;
+      this.slotName = slotName;
+      this.slot = slot;
     }
+  }
 
-    private class SyncableElement {
-        final PackageElement packageElement;
-        final TypeElement typeElement;
+  private class SyncableElement {
+    final PackageElement packageElement;
+    final TypeElement typeElement;
 
-        final Syncable annotation;
+    final Syncable annotation;
 
-        final List<SlotElement> slots;
+    final List<SlotElement> slots;
 
-        public SyncableElement(PackageElement packageElement, TypeElement typeElement, Syncable annotation, List<SlotElement> slots) {
-            this.packageElement = packageElement;
-            this.typeElement = typeElement;
-            this.annotation = annotation;
-            this.slots = slots;
-        }
+    public SyncableElement(PackageElement packageElement, TypeElement typeElement, Syncable annotation, List<SlotElement> slots) {
+      this.packageElement = packageElement;
+      this.typeElement = typeElement;
+      this.annotation = annotation;
+      this.slots = slots;
     }
+  }
 }

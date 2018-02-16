@@ -58,7 +58,8 @@ infix fun <T> Flags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : Flag<T>
 }
 
 infix fun <T> Flags<T>.or(other: Flag<T>): Flags<T> where T : kotlin.Enum<T>, T : Flag<T> = Flags(
-  value or other.bit)
+  value or other.bit
+)
 
 operator infix fun <T> Flags<T>.plus(
   other: Flags<T>): Flags<T>  where T : Enum<T>, T : Flag<T> = Flags(value or other.value)
@@ -67,4 +68,5 @@ operator infix fun <T> Flags<T>.plus(
   other: Flag<T>): Flags<T>  where T : Enum<T>, T : Flag<T> = Flags(value or other.bit)
 
 infix fun <T> Flags<T>.unset(which: T): Flags<T>  where T : Enum<T>, T : Flag<T> = Flags(
-  value xor which.bit)
+  value xor which.bit
+)

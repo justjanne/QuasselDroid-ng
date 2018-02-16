@@ -51,11 +51,13 @@ class Identity constructor(
     setAutoAwayTime(properties["autoAwayTime"].valueOr(this::autoAwayTime))
     setAutoAwayReason(properties["autoAwayReason"].valueOr(this::autoAwayReason))
     setAutoAwayReasonEnabled(
-      properties["autoAwayReasonEnabled"].valueOr(this::autoAwayReasonEnabled))
+      properties["autoAwayReasonEnabled"].valueOr(this::autoAwayReasonEnabled)
+    )
     setDetachAwayEnabled(properties["detachAwayEnabled"].valueOr(this::detachAwayEnabled))
     setDetachAwayReason(properties["detachAwayReason"].valueOr(this::detachAwayReason))
     setDetachAwayReasonEnabled(
-      properties["detachAwayReasonEnabled"].valueOr(this::detachAwayReasonEnabled))
+      properties["detachAwayReasonEnabled"].valueOr(this::detachAwayReasonEnabled)
+    )
     setIdent(properties["ident"].valueOr(this::ident))
     setKickReason(properties["kickReason"].valueOr(this::kickReason))
     setPartReason(properties["partReason"].valueOr(this::partReason))

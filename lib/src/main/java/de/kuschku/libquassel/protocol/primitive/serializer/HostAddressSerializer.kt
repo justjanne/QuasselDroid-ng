@@ -20,8 +20,10 @@ object HostAddressSerializer : Serializer<InetAddress> {
         buffer.put(data.address)
       }
       else            -> {
-        ByteSerializer.serialize(buffer, NetworkLayerProtocol.UnknownNetworkLayerProtocol.value,
-                                 features)
+        ByteSerializer.serialize(
+          buffer, NetworkLayerProtocol.UnknownNetworkLayerProtocol.value,
+          features
+        )
         throw IllegalArgumentException("Invalid network protocol ${data.javaClass.canonicalName}")
       }
     }

@@ -44,8 +44,10 @@ object Invokers {
   private fun <T> getInvoker(type: Class<T>): Invoker<T>? {
     val syncable: Syncable? = type.getAnnotation(Syncable::class.java)
     if (syncable == null) {
-      log(WARN, "Invokers",
-          "Invoker not annotated: ${type.canonicalName}")
+      log(
+        WARN, "Invokers",
+        "Invoker not annotated: ${type.canonicalName}"
+      )
       return null
     }
 
@@ -54,8 +56,10 @@ object Invokers {
     val klass = Class.forName("$packageName.$className")
     val invoker = klass.getDeclaredField("INSTANCE").get(null)
     if (invoker !is Invoker<*>) {
-      log(WARN, "Invokers",
-          "Invoker not of proper type: ${type.canonicalName} != ${invoker.javaClass.canonicalName}")
+      log(
+        WARN, "Invokers",
+        "Invoker not of proper type: ${type.canonicalName} != ${invoker.javaClass.canonicalName}"
+      )
       return null
     }
 

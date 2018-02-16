@@ -35,8 +35,10 @@ interface IBufferSyncer : ISyncableObject {
 
   @Slot
   fun requestMergeBuffersPermanently(buffer1: BufferId, buffer2: BufferId) {
-    REQUEST("requestMergeBuffersPermanently", ARG(buffer1, QType.BufferId),
-            ARG(buffer2, QType.BufferId))
+    REQUEST(
+      "requestMergeBuffersPermanently", ARG(buffer1, QType.BufferId),
+      ARG(buffer2, QType.BufferId)
+    )
   }
 
   @Slot

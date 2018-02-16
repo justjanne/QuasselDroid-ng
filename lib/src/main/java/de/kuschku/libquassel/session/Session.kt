@@ -50,10 +50,12 @@ class Session(
 
   override fun handle(f: HandshakeMessage.ClientInitAck): Boolean {
     coreFeatures = f.coreFeatures ?: Quassel_Feature.NONE
-    dispatch(HandshakeMessage.ClientLogin(
-      user = userData.first,
-      password = userData.second
-    ))
+    dispatch(
+      HandshakeMessage.ClientLogin(
+        user = userData.first,
+        password = userData.second
+      )
+    )
     return true
   }
 

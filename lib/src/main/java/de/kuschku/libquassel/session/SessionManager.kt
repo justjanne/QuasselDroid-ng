@@ -71,7 +71,16 @@ class SessionManager(offlineSession: ISession, val backlogStorage: BacklogStorag
     lastHandlerService = handlerService
     lastUserData = userData
     lastShouldReconnect = shouldReconnect
-    inProgressSession.onNext(Session(clientData, trustManager, address, handlerService(), backlogStorage, userData))
+    inProgressSession.onNext(
+      Session(
+        clientData,
+        trustManager,
+        address,
+        handlerService(),
+        backlogStorage,
+        userData
+      )
+    )
   }
 
   private var lastClientData: ClientData? = null

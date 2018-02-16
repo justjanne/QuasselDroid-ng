@@ -4,7 +4,7 @@ import android.arch.paging.LivePagedListProvider
 import android.arch.persistence.room.*
 import android.content.Context
 
-@Database(entities = arrayOf(AccountDatabase.Account::class), version = 1)
+@Database(entities = [(AccountDatabase.Account::class)], version = 1)
 abstract class AccountDatabase : RoomDatabase() {
   abstract fun accounts(): AccountDao
 
@@ -52,8 +52,10 @@ abstract class AccountDatabase : RoomDatabase() {
       if (database == null) {
         synchronized(LOCK) {
           if (database == null) {
-            database = Room.databaseBuilder(context.applicationContext,
-                                            AccountDatabase::class.java, DATABASE_NAME)
+            database = Room.databaseBuilder(
+              context.applicationContext,
+              AccountDatabase::class.java, DATABASE_NAME
+            )
               .build()
           }
         }

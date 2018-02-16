@@ -10,11 +10,9 @@ interface MessageRenderer {
 
   fun bind(holder: QuasselMessageViewHolder, message: FormattedMessage)
   fun render(message: QuasselDatabase.DatabaseMessage): FormattedMessage
-  fun init(viewHolder: QuasselMessageViewHolder, messageType: Message_Type?, hasHighlight: Boolean) {}
+  fun init(viewHolder: QuasselMessageViewHolder,
+           messageType: Message_Type?,
+           hasHighlight: Boolean) {
+  }
 }
 
-class FormattedMessage(
-  val id: Int,
-  val time: CharSequence,
-  val content: CharSequence
-)

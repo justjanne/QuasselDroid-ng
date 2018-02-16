@@ -8,7 +8,8 @@ import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
 
 class AccountViewModel(application: Application) : AndroidViewModel(application) {
   private val database: AccountDatabase = AccountDatabase.Creator.init(
-    getApplication())
+    getApplication()
+  )
   val accounts: LiveData<PagedList<AccountDatabase.Account>> = database.accounts().all().create(
     0,
     PagedList.Config.Builder()

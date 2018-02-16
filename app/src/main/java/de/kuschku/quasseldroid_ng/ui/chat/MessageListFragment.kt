@@ -47,13 +47,16 @@ class MessageListFragment : ServiceBoundFragment() {
     setHasOptionsMenu(true)
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+  override fun onCreateView(inflater: LayoutInflater,
+                            container: ViewGroup?,
+                            savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.fragment_messages, container, false)
     ButterKnife.bind(this, view)
 
     database = QuasselDatabase.Creator.init(context!!.applicationContext)
     val data = buffer.switchMap {
-      database.message().findByBufferIdPaged(it).create(Int.MAX_VALUE,
+      database.message().findByBufferIdPaged(it).create(
+        Int.MAX_VALUE,
         PagedList.Config.Builder()
           .setPageSize(50)
           .setEnablePlaceholders(false)
@@ -64,18 +67,22 @@ class MessageListFragment : ServiceBoundFragment() {
 
     val adapter = MessageAdapter(context!!)
 
-    data.observe(this, Observer { list ->
+    data.observe(
+      this, Observer { list ->
       adapter.setList(list)
-    })
+    }
+    )
 
-    buffer.observe(this, Observer {
+    buffer.observe(
+      this, Observer {
       handler.post {
         // Try loading messages when switching to empty buffer
         if (it != null && database.message().bufferSize(it) == 0) {
           loadMore()
         }
       }
-    })
+    }
+    )
 
     var recyclerViewMeasuredHeight = 0
     val scrollDownListener = object : RecyclerView.OnScrollListener() {

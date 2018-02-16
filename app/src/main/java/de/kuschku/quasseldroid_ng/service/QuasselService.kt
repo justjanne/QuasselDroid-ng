@@ -1,5 +1,6 @@
 package de.kuschku.quasseldroid_ng.service
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.LifecycleService
 import android.arch.lifecycle.Observer
 import android.content.Intent
@@ -24,12 +25,11 @@ class QuasselService : LifecycleService() {
   private lateinit var clientData: ClientData
 
   private val trustManager = object : X509TrustManager {
-    override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) {
-    }
+    @SuppressLint("TrustAllX509TrustManager")
+    override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) = Unit
 
-    override fun checkServerTrusted(p0: Array<out X509Certificate>?, p1: String?) {
-    }
-
+    @SuppressLint("TrustAllX509TrustManager")
+    override fun checkServerTrusted(p0: Array<out X509Certificate>?, p1: String?) = Unit
     override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
   }
 
@@ -45,8 +45,10 @@ class QuasselService : LifecycleService() {
 
     override fun connect(address: SocketAddress, user: String, pass: String, reconnect: Boolean) {
       disconnect()
-      sessionManager.connect(clientData, trustManager, address, ::AndroidHandlerService,
-                             user to pass, reconnect)
+      sessionManager.connect(
+        clientData, trustManager, address, ::AndroidHandlerService,
+        user to pass, reconnect
+      )
     }
 
     override fun reconnect() {
@@ -118,9 +120,11 @@ class QuasselService : LifecycleService() {
       .delay(200, TimeUnit.MILLISECONDS)
       .throttleFirst(1, TimeUnit.SECONDS)
       .toLiveData()
-      .observe(this, Observer {
+      .observe(
+        this, Observer {
         sessionManager.reconnect()
-      })
+      }
+      )
   }
 
   override fun onBind(intent: Intent?): QuasselBinder {

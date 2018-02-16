@@ -48,11 +48,15 @@ class SerializerUnitTest {
     assertEquals(now, roundTrip(DateTimeSerializer, now))
 
     val value1 = Instant.EPOCH.atOffset(ZoneOffset.ofTotalSeconds(1234))
-    assertEquals(value1.atZoneSimilarLocal(ZoneOffset.UTC).toInstant(),
-                 roundTrip(DateTimeSerializer, value1))
+    assertEquals(
+      value1.atZoneSimilarLocal(ZoneOffset.UTC).toInstant(),
+      roundTrip(DateTimeSerializer, value1)
+    )
     val value2 = Instant.now().atOffset(ZoneOffset.ofTotalSeconds(1234))
-    assertEquals(value2.atZoneSimilarLocal(ZoneOffset.UTC).toInstant(),
-                 roundTrip(DateTimeSerializer, value2))
+    assertEquals(
+      value2.atZoneSimilarLocal(ZoneOffset.UTC).toInstant(),
+      roundTrip(DateTimeSerializer, value2)
+    )
 
     val value3 = LocalDateTime.of(1970, 1, 1, 0, 0)
       .atZone(ZoneOffset.systemDefault()).toInstant()
@@ -97,7 +101,8 @@ class SerializerUnitTest {
     fun <T> roundTrip(serializer: Serializer<T>, value: T,
                       features: Quassel_Features = Quassel_Feature.NONE): T {
       val chainedBuffer = ChainedByteBuffer(
-        direct = false)
+        direct = false
+      )
       serializer.serialize(chainedBuffer, value, features)
       val buffer = chainedBuffer.toBuffer()
       return serializer.deserialize(buffer, features)

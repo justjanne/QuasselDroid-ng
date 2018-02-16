@@ -24,16 +24,20 @@ object CrashHandler {
       val stackTraces = Thread.getAllStackTraces()
       Thread {
         try {
-          val json = gson.toJson(reportCollector.collect(CrashContext(
-            application = application,
-            config = config,
-            crashingThread = activeThread,
-            throwable = throwable,
-            startTime = startTime,
-            crashTime = crashTime,
-            buildConfig = buildConfig,
-            stackTraces = stackTraces
-          ), config))
+          val json = gson.toJson(
+            reportCollector.collect(
+              CrashContext(
+                application = application,
+                config = config,
+                crashingThread = activeThread,
+                throwable = throwable,
+                startTime = startTime,
+                crashTime = crashTime,
+                buildConfig = buildConfig,
+                stackTraces = stackTraces
+              ), config
+            )
+          )
           // FIXME STOPSHIP Implement crash handling
         } catch (e: Throwable) {
           e.printStackTrace()

@@ -53,8 +53,10 @@ data class MetaType<T>(val klass: Class<T>, val type: Type, val serializer: Seri
       addType(Type.UserType, QType.BufferId, IntSerializer)
       addType(Type.UserType, QType.BufferInfo, BufferInfoSerializer)
       addType(Type.UserType, QType.DccConfig_IpDetectionMode, DccConfig_IpDetectionModeSerializer)
-      addType(Type.UserType, QType.DccConfig_PortSelectionMode,
-              DccConfig_PortSelectionModeSerializer)
+      addType(
+        Type.UserType, QType.DccConfig_PortSelectionMode,
+        DccConfig_PortSelectionModeSerializer
+      )
       addType(Type.UserType, QType.IrcUser, VariantMapSerializer)
       addType(Type.UserType, QType.IrcChannel, VariantMapSerializer)
       addType(Type.UserType, QType.Identity, VariantMapSerializer)

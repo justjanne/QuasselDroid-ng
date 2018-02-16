@@ -72,7 +72,8 @@ class BufferViewConfig constructor(
     setBufferViewName(properties["bufferViewName"].valueOr(this::bufferViewName))
     setNetworkId(properties["networkId"].valueOr(this::networkId))
     setAddNewBuffersAutomatically(
-      properties["addNewBuffersAutomatically"].valueOr(this::addNewBuffersAutomatically))
+      properties["addNewBuffersAutomatically"].valueOr(this::addNewBuffersAutomatically)
+    )
     setSortAlphabetically(properties["sortAlphabetically"].valueOr(this::sortAlphabetically))
     setHideInactiveBuffers(properties["hideInactiveBuffers"].valueOr(this::hideInactiveBuffers))
     setHideInactiveNetworks(properties["hideInactiveNetworks"].valueOr(this::hideInactiveNetworks))

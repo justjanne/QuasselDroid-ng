@@ -20,10 +20,12 @@ interface IIgnoreListManager : ISyncableObject {
   @Slot
   fun requestAddIgnoreListItem(type: Int, ignoreRule: String, isRegEx: Boolean, strictness: Int,
                                scope: Int, scopeRule: String, isActive: Boolean) {
-    REQUEST("requestAddIgnoreListItem", ARG(type, Type.Int), ARG(ignoreRule, Type.QString),
-            ARG(isRegEx, Type.Bool),
-            ARG(strictness, Type.Int), ARG(scope, Type.Int), ARG(scopeRule, Type.QString),
-            ARG(isActive, Type.Bool))
+    REQUEST(
+      "requestAddIgnoreListItem", ARG(type, Type.Int), ARG(ignoreRule, Type.QString),
+      ARG(isRegEx, Type.Bool),
+      ARG(strictness, Type.Int), ARG(scope, Type.Int), ARG(scopeRule, Type.QString),
+      ARG(isActive, Type.Bool)
+    )
   }
 
   @Slot

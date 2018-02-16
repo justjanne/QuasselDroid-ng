@@ -21,16 +21,18 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
       }
 
     for (message in messages) {
-      db.message().save(QuasselDatabase.DatabaseMessage(
-        messageId = message.messageId,
-        time = message.time,
-        type = message.type.value,
-        flag = message.flag.value,
-        bufferId = message.bufferInfo.bufferId,
-        sender = message.sender,
-        senderPrefixes = message.senderPrefixes,
-        content = message.content
-      ))
+      db.message().save(
+        QuasselDatabase.DatabaseMessage(
+          messageId = message.messageId,
+          time = message.time,
+          type = message.type.value,
+          flag = message.flag.value,
+          bufferId = message.bufferInfo.bufferId,
+          sender = message.sender,
+          senderPrefixes = message.senderPrefixes,
+          content = message.content
+        )
+      )
     }
   }
 

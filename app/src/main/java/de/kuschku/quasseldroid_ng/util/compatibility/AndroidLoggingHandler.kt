@@ -10,7 +10,8 @@ object AndroidLoggingHandler : LoggingHandler() {
 
   override fun log(logLevel: LogLevel, tag: String, message: String?, throwable: Throwable?) {
     val priority = priority(
-      logLevel)
+      logLevel
+    )
     if (message != null)
       Log.println(priority, tag, message)
     if (throwable != null)

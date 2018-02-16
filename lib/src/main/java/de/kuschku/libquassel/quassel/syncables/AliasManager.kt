@@ -34,7 +34,8 @@ class AliasManager constructor(
 
     if (names.size != expansions.size)
       throw IllegalArgumentException(
-        "Sizes do not match: names=${names.size}, expansions=${expansions.size}")
+        "Sizes do not match: names=${names.size}, expansions=${expansions.size}"
+      )
 
     _aliases.clear()
     _aliases.addAll(names.zip(expansions, ::Alias))
@@ -79,7 +80,7 @@ class AliasManager constructor(
     val secondSlashPos = msg.indexOf('/', 1)
     val firstSpacePos = msg.indexOf(' ')
     if (!msg.startsWith('/') || firstSpacePos == 1 ||
-      (secondSlashPos != -1 && (secondSlashPos < firstSpacePos || firstSpacePos == -1))) {
+        (secondSlashPos != -1 && (secondSlashPos < firstSpacePos || firstSpacePos == -1))) {
       if (msg.startsWith("//"))
         msg = msg.substring(1)  // "//asdf" is transformed to "/asdf"
       else if (msg.startsWith("/ "))
@@ -89,9 +90,9 @@ class AliasManager constructor(
       // check for aliases
       val split = msg.split(' ', ignoreCase = true, limit = 2)
       val search: String = split.firstOrNull()
-        ?: return
+                           ?: return
       val found = _aliases.firstOrNull { it.name.equals(search, true) }
-        ?: return
+                  ?: return
       expand(found.expansion, info, split.getOrNull(1) ?: "", previousCommands)
     }
 
@@ -104,9 +105,11 @@ class AliasManager constructor(
 
     val paramRange = Pattern.compile("""\$(\d+)\.\.(\d*)""")
     val commands = Arrays.asList(
-      *expansion.split("; ?").dropLastWhile { it.isEmpty() }.toTypedArray())
+      *expansion.split("; ?").dropLastWhile { it.isEmpty() }.toTypedArray()
+    )
     val params = Arrays.asList<String>(
-      *msg.split(' ').dropLastWhile({ it.isEmpty() }).toTypedArray())
+      *msg.split(' ').dropLastWhile({ it.isEmpty() }).toTypedArray()
+    )
     val expandedCommands = LinkedList<String>()
 
     for (i in commands.indices) {

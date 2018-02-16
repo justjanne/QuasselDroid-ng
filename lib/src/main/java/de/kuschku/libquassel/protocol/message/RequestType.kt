@@ -11,7 +11,8 @@ enum class RequestType(val value: Int) {
 
   companion object {
     private val byId = enumValues<RequestType>().associateBy(
-      RequestType::value)
+      RequestType::value
+    )
 
     fun of(value: Int) = byId[value] ?: Invalid
   }

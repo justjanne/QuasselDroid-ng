@@ -29,15 +29,21 @@ class IrcChannel(
   }
 
   override fun initChanModes(): QVariantMap = mapOf(
-    "A" to QVariant_(_A_channelModes.entries.map { (key, value) ->
-      key to QVariant_(value.toList(), Type.QStringList)
-    }, Type.QVariantMap),
-    "B" to QVariant_(_B_channelModes.entries.map { (key, value) ->
-      key to QVariant_(value, Type.QString)
-    }, Type.QVariantMap),
-    "C" to QVariant_(_C_channelModes.entries.map { (key, value) ->
-      key to QVariant_(value, Type.QString)
-    }, Type.QVariantMap),
+    "A" to QVariant_(
+      _A_channelModes.entries.map { (key, value) ->
+        key to QVariant_(value.toList(), Type.QStringList)
+      }, Type.QVariantMap
+    ),
+    "B" to QVariant_(
+      _B_channelModes.entries.map { (key, value) ->
+        key to QVariant_(value, Type.QString)
+      }, Type.QVariantMap
+    ),
+    "C" to QVariant_(
+      _C_channelModes.entries.map { (key, value) ->
+        key to QVariant_(value, Type.QString)
+      }, Type.QVariantMap
+    ),
     "D" to QVariant_(_D_channelModes.joinToString(), Type.QString)
   )
 
@@ -67,9 +73,11 @@ class IrcChannel(
   }
 
   override fun initSetUserModes(usermodes: QVariantMap) {
-    _userModes.putAll(usermodes.entries.map { (key, value) ->
-      network().newIrcUser(key) to value.value("")
-    }.toMap())
+    _userModes.putAll(
+      usermodes.entries.map { (key, value) ->
+        network().newIrcUser(key) to value.value("")
+      }.toMap()
+    )
   }
 
   override fun initSetProperties(properties: QVariantMap) {

@@ -57,7 +57,7 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
   override fun handle(f: SignalProxyMessage.InitData): Boolean {
     log(DEBUG, "ProtocolHandler", "< $f")
     val obj: ISyncableObject = objectStorage.get(f.className, f.objectName)
-      ?: throw ObjectNotFoundException(f.className, f.objectName)
+                               ?: throw ObjectNotFoundException(f.className, f.objectName)
 
     obj.fromVariantMap(f.initData)
     obj.initialized = true
@@ -103,7 +103,7 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
     log(DEBUG, "ProtocolHandler", f.toString())
 
     val invoker = Invokers.get(f.className)
-      ?: throw IllegalArgumentException("Invalid classname: ${f.className}")
+                  ?: throw IllegalArgumentException("Invalid classname: ${f.className}")
     currentCallClass = f.className
     currentCallInstance = f.objectName
     currentCallSlot = f.slotName

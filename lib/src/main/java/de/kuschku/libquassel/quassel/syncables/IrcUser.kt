@@ -240,8 +240,9 @@ class IrcUser(
   }
 
   override fun partChannel(channelname: String) {
-    val channel = network().ircChannel(channelname)
-      ?: throw IllegalArgumentException("Received part for unknown channel : $channelname")
+    val channel = network().ircChannel(channelname) ?: throw IllegalArgumentException(
+      "Received part for unknown channel : $channelname"
+    )
     partChannel(channel)
   }
 

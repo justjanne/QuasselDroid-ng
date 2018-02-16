@@ -29,7 +29,8 @@ object MessageSerializer : Serializer<Message> {
       time = Instant.ofEpochSecond(IntSerializer.deserialize(buffer, features).toLong()),
       type = Message.MessageType.of(IntSerializer.deserialize(buffer, features)),
       flag = Message.MessageFlag.of(
-        ByteSerializer.deserialize(buffer, features).toInt()),
+        ByteSerializer.deserialize(buffer, features).toInt()
+      ),
       bufferInfo = BufferInfoSerializer.deserialize(buffer, features),
       sender = StringSerializer.UTF8.deserialize(buffer, features) ?: "",
       senderPrefixes = if (features.hasFlag(QuasselFeature.SenderPrefixes))

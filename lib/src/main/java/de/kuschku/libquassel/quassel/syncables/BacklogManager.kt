@@ -16,14 +16,11 @@ class BacklogManager(
 
   private var loading = AtomicInteger(-1)
 
-  override fun requestBacklog(bufferId: BufferId, first: MsgId, last: MsgId, limit: Int, additional: Int) {
+  override fun requestBacklog(bufferId: BufferId, first: MsgId, last: MsgId, limit: Int,
+                              additional: Int) {
     if (loading.getAndSet(bufferId) != bufferId) {
       super.requestBacklog(bufferId, first, last, limit, additional)
     }
-  }
-
-  override fun requestBacklogAll(first: MsgId, last: MsgId, limit: Int, additional: Int) {
-    super.requestBacklogAll(first, last, limit, additional)
   }
 
   override fun receiveBacklog(bufferId: BufferId, first: MsgId, last: MsgId, limit: Int,

@@ -7,8 +7,8 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import android.support.annotation.StyleRes
-import android.support.v7.appcompat.R
 import android.view.LayoutInflater
+import de.kuschku.quasseldroid_ng.R
 
 /**
  * A ContextWrapper that allows you to modify the theme from what is in the
@@ -88,7 +88,8 @@ class ContextThemeWrapper : ContextWrapper {
   fun applyOverrideConfiguration(overrideConfiguration: Configuration) {
     if (mResources != null) {
       throw IllegalStateException(
-        "getResources() or getAssets() has already been called")
+        "getResources() or getAssets() has already been called"
+      )
     }
     if (this.overrideConfiguration != null) {
       throw IllegalStateException("Override configuration has already been set")

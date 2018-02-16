@@ -17,18 +17,22 @@ import org.threeten.bp.format.DateTimeFormatter
 import java.text.SimpleDateFormat
 
 class QuasselMessageRenderer(context: Context) : MessageRenderer {
-  private val timeFormatter = DateTimeFormatter.ofPattern((DateFormat.getTimeFormat(context) as SimpleDateFormat).toLocalizedPattern())
+  private val timeFormatter = DateTimeFormatter.ofPattern(
+    (DateFormat.getTimeFormat(context) as SimpleDateFormat).toLocalizedPattern()
+  )
   private val senderColors: IntArray
 
   private val zoneId = ZoneId.systemDefault()
 
   init {
-    val typedArray = context.obtainStyledAttributes(intArrayOf(
-      R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
-      R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
-      R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
-      R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF
-    ))
+    val typedArray = context.obtainStyledAttributes(
+      intArrayOf(
+        R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
+        R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
+        R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
+        R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF
+      )
+    )
     senderColors = IntArray(16) {
       typedArray.getColor(it, 0)
     }
@@ -39,13 +43,15 @@ class QuasselMessageRenderer(context: Context) : MessageRenderer {
     = when (type) {
     Nick, Notice, Mode, Join, Part, Quit, Kick, Kill, Server, Info, DayChange, Topic, NetsplitJoin,
     NetsplitQuit, Invite -> R.layout.widget_chatmessage_server
-    Error -> R.layout.widget_chatmessage_error
-    Action -> R.layout.widget_chatmessage_action
-    Plain -> R.layout.widget_chatmessage_plain
-    else -> R.layout.widget_chatmessage_plain
+    Error                -> R.layout.widget_chatmessage_error
+    Action               -> R.layout.widget_chatmessage_action
+    Plain                -> R.layout.widget_chatmessage_plain
+    else                 -> R.layout.widget_chatmessage_plain
   }
 
-  override fun init(viewHolder: QuasselMessageViewHolder, messageType: Message_Type?, hasHighlight: Boolean) {
+  override fun init(viewHolder: QuasselMessageViewHolder,
+                    messageType: Message_Type?,
+                    hasHighlight: Boolean) {
     if (hasHighlight) {
       val attrs = intArrayOf(R.attr.colorBackgroundHighlight)
       val colors = viewHolder.itemView.context.obtainStyledAttributes(attrs)

@@ -44,7 +44,8 @@ class CoreConnection(
   private val chainedBuffer = ChainedByteBuffer(direct = true)
 
   val state: BehaviorSubject<ConnectionState> = BehaviorSubject.createDefault(
-    ConnectionState.DISCONNECTED)
+    ConnectionState.DISCONNECTED
+  )
 
   private var channel: WrappedChannel? = null
 
@@ -66,9 +67,11 @@ class CoreConnection(
   private fun sendHandshake() {
     setState(ConnectionState.HANDSHAKE)
 
-    IntSerializer.serialize(chainedBuffer,
-                            0x42b33f00 or session.clientData.protocolFeatures.toInt(),
-                            session.coreFeatures)
+    IntSerializer.serialize(
+      chainedBuffer,
+      0x42b33f00 or session.clientData.protocolFeatures.toInt(),
+      session.coreFeatures
+    )
     for (supportedProtocol in session.clientData.supportedProtocols) {
       IntSerializer.serialize(chainedBuffer, supportedProtocol.toInt(), session.coreFeatures)
     }
@@ -99,12 +102,14 @@ class CoreConnection(
     when (protocol.version.toInt()) {
       0x02 -> {
         // Send client clientData to core
-        dispatch(HandshakeMessage.ClientInit(
-          clientVersion = session.clientData.identifier,
-          buildDate = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm:ss")
-            .format(session.clientData.buildDate.atOffset(ZoneOffset.UTC)),
-          clientFeatures = Quassel_Features.of(*Quassel_Feature.values())
-        ))
+        dispatch(
+          HandshakeMessage.ClientInit(
+            clientVersion = session.clientData.identifier,
+            buildDate = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm:ss")
+              .format(session.clientData.buildDate.atOffset(ZoneOffset.UTC)),
+            clientFeatures = Quassel_Features.of(*Quassel_Feature.values())
+          )
+        )
       }
       else -> {
         throw IllegalArgumentException("Invalid Protocol Version: $protocol")
@@ -127,8 +132,10 @@ class CoreConnection(
       try {
         val data = HandshakeMessage.serialize(message)
         handlerService.write(
-          MessageRunnable(data, HandshakeVariantMapSerializer, chainedBuffer, channel,
-                          session.coreFeatures)
+          MessageRunnable(
+            data, HandshakeVariantMapSerializer, chainedBuffer, channel,
+            session.coreFeatures
+          )
         )
       } catch (e: Throwable) {
         log(WARN, TAG, "Error encountered while serializing handshake message", e)

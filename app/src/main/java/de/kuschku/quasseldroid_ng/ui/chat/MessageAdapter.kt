@@ -13,7 +13,10 @@ import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.util.helper.getOrPut
 
-class MessageAdapter(context: Context) : PagedListAdapter<QuasselDatabase.DatabaseMessage, QuasselMessageViewHolder>(QuasselDatabase.DatabaseMessage.MessageDiffCallback) {
+class MessageAdapter(context: Context) :
+  PagedListAdapter<QuasselDatabase.DatabaseMessage, QuasselMessageViewHolder>(
+    QuasselDatabase.DatabaseMessage.MessageDiffCallback
+  ) {
   private val messageRenderer: MessageRenderer = QuasselMessageRenderer(context)
 
   private val messageCache = LruCache<Int, FormattedMessage>(512)
@@ -23,7 +26,14 @@ class MessageAdapter(context: Context) : PagedListAdapter<QuasselDatabase.Databa
   }
 
   override fun onBindViewHolder(holder: QuasselMessageViewHolder, position: Int) {
-    getItem(position)?.let { messageRenderer.bind(holder, messageCache.getOrPut(it.messageId) { messageRenderer.render(it) }) }
+    getItem(position)?.let {
+      messageRenderer.bind(
+        holder,
+        messageCache.getOrPut(it.messageId) {
+          messageRenderer.render(it)
+        }
+      )
+    }
   }
 
   override fun getItemViewType(position: Int): Int {
@@ -52,11 +62,13 @@ class MessageAdapter(context: Context) : PagedListAdapter<QuasselDatabase.Databa
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuasselMessageViewHolder {
     val messageType = messageType(viewType)
     val hasHighlight = hasHiglight(viewType)
-    val viewHolder = QuasselMessageViewHolder(LayoutInflater.from(parent.context).inflate(
-      messageRenderer.layout(messageType, hasHighlight),
-      parent,
-      false
-    ))
+    val viewHolder = QuasselMessageViewHolder(
+      LayoutInflater.from(parent.context).inflate(
+        messageRenderer.layout(messageType, hasHighlight),
+        parent,
+        false
+      )
+    )
     messageRenderer.init(viewHolder, messageType, hasHighlight)
     return viewHolder
   }

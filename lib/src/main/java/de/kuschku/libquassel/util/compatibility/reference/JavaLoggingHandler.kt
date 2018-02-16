@@ -7,12 +7,14 @@ import java.util.logging.Logger
 object JavaLoggingHandler : LoggingHandler() {
   override fun isLoggable(logLevel: LogLevel, tag: String): Boolean {
     return Logger.getLogger(tag).isLoggable(
-      priority(logLevel))
+      priority(logLevel)
+    )
   }
 
   override fun log(logLevel: LogLevel, tag: String, message: String?, throwable: Throwable?) {
     val priority = priority(
-      logLevel)
+      logLevel
+    )
     val logger = Logger.getLogger(tag)
     if (message != null)
       logger.log(priority, message)

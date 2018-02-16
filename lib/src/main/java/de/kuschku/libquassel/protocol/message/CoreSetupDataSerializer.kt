@@ -8,14 +8,16 @@ import de.kuschku.libquassel.protocol.value
 object CoreSetupDataSerializer : HandshakeMessageSerializer<HandshakeMessage.CoreSetupData> {
   override fun serialize(data: HandshakeMessage.CoreSetupData) = mapOf(
     "MsgType" to QVariant_("CoreSetupData", Type.QString),
-    "SetupData" to QVariant_(mapOf(
-      "AdminUser" to QVariant_(data.adminUser, Type.QString),
-      "AdminPasswd" to QVariant_(data.adminPassword, Type.QString),
-      "Backend" to QVariant_(data.backend, Type.QString),
-      "ConnectionProperties" to QVariant_(data.setupData, Type.QVariantMap),
-      "Authenticator" to QVariant_(data.authenticator, Type.QString),
-      "AuthProperties" to QVariant_(data.authSetupData, Type.QVariantMap)
-    ), Type.QVariantMap)
+    "SetupData" to QVariant_(
+      mapOf(
+        "AdminUser" to QVariant_(data.adminUser, Type.QString),
+        "AdminPasswd" to QVariant_(data.adminPassword, Type.QString),
+        "Backend" to QVariant_(data.backend, Type.QString),
+        "ConnectionProperties" to QVariant_(data.setupData, Type.QVariantMap),
+        "Authenticator" to QVariant_(data.authenticator, Type.QString),
+        "AuthProperties" to QVariant_(data.authSetupData, Type.QVariantMap)
+      ), Type.QVariantMap
+    )
   )
 
   override fun deserialize(data: QVariantMap): HandshakeMessage.CoreSetupData {

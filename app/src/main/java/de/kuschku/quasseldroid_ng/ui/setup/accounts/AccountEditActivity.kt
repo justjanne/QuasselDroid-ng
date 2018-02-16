@@ -124,7 +124,7 @@ class AccountEditActivity : AppCompatActivity() {
 
   private val isValid
     get() = nameValidator.isValid && hostValidator.isValid && portValidator.isValid
-      && userValidator.isValid
+            && userValidator.isValid
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     menuInflater.inflate(R.menu.setup_edit_account, menu)

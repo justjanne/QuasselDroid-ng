@@ -25,7 +25,8 @@ class BufferListAdapter(
   var data = mutableListOf<BufferInfo>()
 
   init {
-    liveData.observe(lifecycleOwner, Observer { list: List<BufferInfo>? ->
+    liveData.observe(
+      lifecycleOwner, Observer { list: List<BufferInfo>? ->
       runInBackground {
         val old = data
         val new = list?.sortedBy(BufferInfo::networkId) ?: emptyList()
@@ -39,14 +40,18 @@ class BufferListAdapter(
 
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int)
               = old[oldItemPosition] == new[newItemPosition]
-          }, true)
-        runOnUiThread(Runnable {
-          data.clear()
-          data.addAll(new)
-          result.dispatchUpdatesTo(this@BufferListAdapter)
-        })
+          }, true
+        )
+        runOnUiThread(
+          Runnable {
+            data.clear()
+            data.addAll(new)
+            result.dispatchUpdatesTo(this@BufferListAdapter)
+          }
+        )
       }
-    })
+    }
+    )
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = BufferViewHolder(
@@ -80,7 +85,7 @@ class BufferListAdapter(
     fun bind(info: BufferInfo) {
       text.text = when {
         info.type.hasFlag(BufferInfo.Type.StatusBuffer) -> "Network ${info.networkId}"
-        else -> "${info.networkId}/${info.bufferName}"
+        else                                            -> "${info.networkId}/${info.bufferName}"
       }
       bufferId = info.bufferId
     }

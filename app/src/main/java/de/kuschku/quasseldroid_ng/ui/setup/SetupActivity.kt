@@ -86,7 +86,8 @@ abstract class SetupActivity : AppCompatActivity() {
       else
         viewPager.setCurrentItem(viewPager.currentItem + 1, true)
     }
-    isValid.observeSticky(this, Observer {
+    isValid.observeSticky(
+      this, Observer {
       if (it == true) {
         button.show()
         adapter.lastValidItem = viewPager.currentItem
@@ -94,7 +95,8 @@ abstract class SetupActivity : AppCompatActivity() {
         button.hide()
         adapter.lastValidItem = viewPager.currentItem - 1
       }
-    })
+    }
+    )
     viewPager.addOnPageChangeListener(pageChangeListener)
     pageChanged()
     updateRecentsHeader()

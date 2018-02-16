@@ -20,25 +20,32 @@ class DrawerRecyclerView @JvmOverloads constructor(
   private val maxWidth: Int
 
   init {
-    val a = context.obtainStyledAttributes(attrs,
-                                           R.styleable.ScrimInsetsFrameLayout, defStyleAttr,
-                                           R.style.Widget_Design_ScrimInsetsFrameLayout)
+    val a = context.obtainStyledAttributes(
+      attrs,
+      R.styleable.ScrimInsetsFrameLayout, defStyleAttr,
+      R.style.Widget_Design_ScrimInsetsFrameLayout
+    )
     mInsetForeground = a.getDrawable(R.styleable.ScrimInsetsFrameLayout_insetForeground)
     a.recycle()
     setWillNotDraw(true) // No need to draw until the insets are adjusted
-    ViewCompat.setOnApplyWindowInsetsListener(this
+    ViewCompat.setOnApplyWindowInsetsListener(
+      this
     ) { _, insets ->
       if (null == mInsets) {
         mInsets = Rect()
       }
-      mInsets!!.set(insets.systemWindowInsetLeft,
-                    insets.systemWindowInsetTop,
-                    insets.systemWindowInsetRight,
-                    insets.systemWindowInsetBottom)
-      setPadding(insets.systemWindowInsetLeft,
-                 insets.systemWindowInsetTop,
-                 insets.systemWindowInsetRight,
-                 insets.systemWindowInsetBottom)
+      mInsets!!.set(
+        insets.systemWindowInsetLeft,
+        insets.systemWindowInsetTop,
+        insets.systemWindowInsetRight,
+        insets.systemWindowInsetBottom
+      )
+      setPadding(
+        insets.systemWindowInsetLeft,
+        insets.systemWindowInsetTop,
+        insets.systemWindowInsetRight,
+        insets.systemWindowInsetBottom
+      )
       setWillNotDraw(!insets.hasSystemWindowInsets() || mInsetForeground == null)
       ViewCompat.postInvalidateOnAnimation(this@DrawerRecyclerView)
       insets.consumeSystemWindowInsets()

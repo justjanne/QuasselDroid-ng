@@ -68,8 +68,10 @@ class RpcHandler(
   }
 
   override fun sendInput(bufferInfo: BufferInfo, message: String) {
-    RPC("2sendInput(BufferInfo,QString)", ARG(bufferInfo, QType.BufferInfo),
-        ARG(message, Type.QString))
+    RPC(
+      "2sendInput(BufferInfo,QString)", ARG(bufferInfo, QType.BufferInfo),
+      ARG(message, Type.QString)
+    )
   }
 
   inline fun RPC(function: String, vararg arg: QVariant_) {

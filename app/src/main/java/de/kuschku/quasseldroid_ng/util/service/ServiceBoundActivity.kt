@@ -11,9 +11,9 @@ import de.kuschku.quasseldroid_ng.util.helper.updateRecentsHeaderIfExisting
 
 abstract class ServiceBoundActivity : AppCompatActivity() {
   @DrawableRes
-  protected val icon: Int = R.mipmap.ic_launcher
+  protected val icon: Int = R.mipmap.ic_launcher_recents
   @ColorRes
-  protected val recentsHeaderColor: Int = R.color.colorPrimaryDark
+  protected val recentsHeaderColor: Int = R.color.colorPrimary
 
   private val connection = BackendServiceConnection()
 

@@ -15,12 +15,14 @@ object VariantMapSerializer : Serializer<QVariantMap> {
   }
 
   override fun deserialize(buffer: ByteBuffer, features: Quassel_Features): QVariantMap {
-    return mutableMapOf(*(0 until IntSerializer.deserialize(buffer, features)).map {
-      Pair(
-        StringSerializer.UTF16.deserialize(buffer, features) ?: "",
-        VariantSerializer.deserialize(buffer, features)
-      )
-    }.toTypedArray())
+    return mutableMapOf(
+      *(0 until IntSerializer.deserialize(buffer, features)).map {
+        Pair(
+          StringSerializer.UTF16.deserialize(buffer, features) ?: "",
+          VariantSerializer.deserialize(buffer, features)
+        )
+      }.toTypedArray()
+    )
   }
 
 }

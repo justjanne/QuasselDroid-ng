@@ -35,7 +35,9 @@ object IrcUserUtils {
     )
   }
 
-  private fun String.firstIndex(char: Char, startIndex: Int? = null, ignoreCase: Boolean = false): Int? {
+  private fun String.firstIndex(char: Char,
+                                startIndex: Int? = null,
+                                ignoreCase: Boolean = false): Int? {
     val lastIndex = indexOf(char, startIndex ?: 0, ignoreCase)
     if (lastIndex < 0)
       return null
@@ -43,7 +45,9 @@ object IrcUserUtils {
       return lastIndex
   }
 
-  private fun String.lastIndex(char: Char, startIndex: Int? = null, ignoreCase: Boolean = false): Int? {
+  private fun String.lastIndex(char: Char,
+                               startIndex: Int? = null,
+                               ignoreCase: Boolean = false): Int? {
     val lastIndex = lastIndexOf(char, startIndex ?: lastIndex, ignoreCase)
     if (lastIndex < 0)
       return null

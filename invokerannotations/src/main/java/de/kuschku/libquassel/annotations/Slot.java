@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 @Target(value = ElementType.METHOD)
 public @interface Slot {
-    String value() default "";
+  String value() default "";
 }

@@ -48,7 +48,8 @@ object DateTimeSerializer : Serializer<Temporal> {
       }
       else              ->
         throw IllegalArgumentException(
-          "Unsupported Format: ${data::class.java.canonicalName}")
+          "Unsupported Format: ${data::class.java.canonicalName}"
+        )
     }
   }
 

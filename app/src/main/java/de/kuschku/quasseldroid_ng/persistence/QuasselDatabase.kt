@@ -9,7 +9,7 @@ import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
 import org.threeten.bp.Instant
 
-@Database(entities = arrayOf(QuasselDatabase.DatabaseMessage::class), version = 2)
+@Database(entities = [(QuasselDatabase.DatabaseMessage::class)], version = 2)
 @TypeConverters(QuasselDatabase.DatabaseMessage.MessageTypeConverters::class)
 abstract class QuasselDatabase : RoomDatabase() {
   abstract fun message(): MessageDao
@@ -35,15 +35,19 @@ abstract class QuasselDatabase : RoomDatabase() {
 
     override fun toString(): String {
       return "Message(messageId=$messageId, time=$time, type=${Message_Type.of(
-        type)}, flag=${Message_Flag.of(
-        flag)}, bufferId=$bufferId, sender='$sender', senderPrefixes='$senderPrefixes', content='$content')"
+        type
+      )}, flag=${Message_Flag.of(
+        flag
+      )}, bufferId=$bufferId, sender='$sender', senderPrefixes='$senderPrefixes', content='$content')"
     }
 
     object MessageDiffCallback : DiffCallback<DatabaseMessage>() {
-      override fun areContentsTheSame(oldItem: QuasselDatabase.DatabaseMessage, newItem: QuasselDatabase.DatabaseMessage)
+      override fun areContentsTheSame(oldItem: QuasselDatabase.DatabaseMessage,
+                                      newItem: QuasselDatabase.DatabaseMessage)
         = oldItem == newItem
 
-      override fun areItemsTheSame(oldItem: QuasselDatabase.DatabaseMessage, newItem: QuasselDatabase.DatabaseMessage)
+      override fun areItemsTheSame(oldItem: QuasselDatabase.DatabaseMessage,
+                                   newItem: QuasselDatabase.DatabaseMessage)
         = oldItem.messageId == newItem.messageId
     }
   }
@@ -80,7 +84,9 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Query("DELETE FROM message WHERE bufferId = :bufferId")
     fun clearMessages(@IntRange(from = 0) bufferId: Int)
 
-    @Query("DELETE FROM message WHERE bufferId = :bufferId AND messageId >= :first AND messageId <= :last")
+    @Query(
+      "DELETE FROM message WHERE bufferId = :bufferId AND messageId >= :first AND messageId <= :last"
+    )
     fun clearMessages(@IntRange(from = 0) bufferId: Int, first: Int, last: Int)
   }
 
@@ -94,8 +100,10 @@ abstract class QuasselDatabase : RoomDatabase() {
       if (database == null) {
         synchronized(LOCK) {
           if (database == null) {
-            database = Room.databaseBuilder(context.applicationContext,
-              QuasselDatabase::class.java, DATABASE_NAME)
+            database = Room.databaseBuilder(
+              context.applicationContext,
+              QuasselDatabase::class.java, DATABASE_NAME
+            )
               .build()
           }
         }
@@ -109,6 +117,7 @@ abstract class QuasselDatabase : RoomDatabase() {
   }
 }
 
-fun QuasselDatabase.MessageDao.clearMessages(@IntRange(from = 0) bufferId: Int, idRange: kotlin.ranges.IntRange) {
+fun QuasselDatabase.MessageDao.clearMessages(@IntRange(from = 0)
+                                             bufferId: Int, idRange: kotlin.ranges.IntRange) {
   this.clearMessages(bufferId, idRange.first, idRange.last)
 }

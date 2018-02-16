@@ -108,7 +108,8 @@ class AccountAdapter :
       when (viewType) {
         TYPE_ADD -> R.layout.widget_core_account_add
         else     -> R.layout.widget_core_account
-      }, parent, false)
+      }, parent, false
+    )
     return when (viewType) {
       TYPE_ADD -> AccountViewHolder.Add(view, addListener)
       else     -> AccountViewHolder.Item(view, actionListener, clickListener)

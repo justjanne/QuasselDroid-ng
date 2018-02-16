@@ -42,15 +42,18 @@ class WrappedChannel(
 
   companion object {
     fun ofSocket(s: Socket): WrappedChannel {
-      return WrappedChannel(s, s.getInputStream(),
-                            s.getOutputStream())
+      return WrappedChannel(
+        s, s.getInputStream(),
+        s.getOutputStream()
+      )
     }
   }
 
   fun withCompression(): WrappedChannel {
     val deflaterOutputStream = CompatibilityUtils.createDeflaterOutputStream(rawOutStream)
-    return WrappedChannel(socket, InflaterInputStream(rawInStream), deflaterOutputStream,
-                          deflaterOutputStream::flush
+    return WrappedChannel(
+      socket, InflaterInputStream(rawInStream), deflaterOutputStream,
+      deflaterOutputStream::flush
     )
   }
 

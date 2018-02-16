@@ -35,7 +35,8 @@ fun Activity.updateRecentsHeaderIfExisting(
  * @param colorPrimary The color used as background for the header of the recents card - passed as Android
  * Color Resource
  */
-fun Activity.updateRecentsHeaderIfExisting(@StringRes label: Int, @DrawableRes icon: Int, @ColorRes colorPrimary: Int) {
+fun Activity.updateRecentsHeaderIfExisting(@StringRes label: Int, @DrawableRes icon: Int, @ColorRes
+colorPrimary: Int) {
   val labelRaw = resources.getString(label)
   val iconRaw = BitmapFactory.decodeResource(resources, icon)
   val colorPrimaryRaw = resources.getColorBackport(colorPrimary, theme)

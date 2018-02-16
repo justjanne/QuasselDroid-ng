@@ -15,7 +15,8 @@ import java.lang.reflect.Modifier
 class DisplayCollector(application: Application) :
   Collector<DisplayInfo, Boolean> {
   private val windowManager = application.getSystemService(
-    Context.WINDOW_SERVICE) as WindowManager
+    Context.WINDOW_SERVICE
+  ) as WindowManager
 
   @Suppress("DEPRECATION")
   override fun collect(context: CrashContext, config: Boolean): DisplayInfo? {

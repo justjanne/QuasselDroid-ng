@@ -10,15 +10,19 @@ interface IBacklogManager : ISyncableObject {
   @Slot
   fun requestBacklog(bufferId: BufferId, first: MsgId = -1, last: MsgId = -1, limit: Int = -1,
                      additional: Int = 0) {
-    REQUEST("requestBacklog", ARG(bufferId, QType.BufferId), ARG(first, QType.MsgId),
-            ARG(last, QType.MsgId), ARG(limit, Type.Int), ARG(additional, Type.Int))
+    REQUEST(
+      "requestBacklog", ARG(bufferId, QType.BufferId), ARG(first, QType.MsgId),
+      ARG(last, QType.MsgId), ARG(limit, Type.Int), ARG(additional, Type.Int)
+    )
   }
 
   @Slot
   fun requestBacklogAll(first: MsgId = -1, last: MsgId = -1, limit: Int = -1,
                         additional: Int = 0) {
-    REQUEST("requestBacklogAll", ARG(first, QType.MsgId), ARG(last, QType.MsgId),
-            ARG(limit, Type.Int), ARG(additional, Type.Int))
+    REQUEST(
+      "requestBacklogAll", ARG(first, QType.MsgId), ARG(last, QType.MsgId),
+      ARG(limit, Type.Int), ARG(additional, Type.Int)
+    )
   }
 
   @Slot

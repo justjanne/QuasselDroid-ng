@@ -23,8 +23,8 @@ object AndroidCompatibilityUtils {
 
   private fun isChromeBook(): Boolean {
     return Build.MANUFACTURER.toLowerCase(Locale.ENGLISH).contains("chromium") ||
-      Build.MANUFACTURER.toLowerCase(Locale.ENGLISH).contains("chrome") ||
-      Build.BRAND.toLowerCase(Locale.ENGLISH).contains("chromium") ||
-      Build.BRAND.toLowerCase(Locale.ENGLISH).contains("chrome")
+           Build.MANUFACTURER.toLowerCase(Locale.ENGLISH).contains("chrome") ||
+           Build.BRAND.toLowerCase(Locale.ENGLISH).contains("chromium") ||
+           Build.BRAND.toLowerCase(Locale.ENGLISH).contains("chrome")
   }
 }

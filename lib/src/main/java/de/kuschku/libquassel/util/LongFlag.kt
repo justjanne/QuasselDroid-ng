@@ -59,16 +59,20 @@ infix fun <T> LongFlags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : Lon
 
 infix fun <T> LongFlags<T>.or(
   other: LongFlag<T>): LongFlags<T> where T : kotlin.Enum<T>, T : LongFlag<T> = LongFlags(
-  value or other.bit)
+  value or other.bit
+)
 
 operator infix fun <T> LongFlags<T>.plus(
   other: LongFlags<T>): LongFlags<T>  where T : Enum<T>, T : LongFlag<T> = LongFlags(
-  value or other.value)
+  value or other.value
+)
 
 operator infix fun <T> LongFlags<T>.plus(
   other: LongFlag<T>): LongFlags<T>  where T : Enum<T>, T : LongFlag<T> = LongFlags(
-  value or other.bit)
+  value or other.bit
+)
 
 infix fun <T> LongFlags<T>.unset(
   which: T): LongFlags<T>  where T : Enum<T>, T : LongFlag<T> = LongFlags(
-  value xor which.bit)
+  value xor which.bit
+)

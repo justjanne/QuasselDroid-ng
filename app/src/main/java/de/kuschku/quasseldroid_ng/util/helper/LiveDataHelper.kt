@@ -10,7 +10,8 @@ inline fun <X, Y> LiveData<X?>.switchMap(
   noinline func: (X) -> LiveData<Y>?
 ): LiveData<Y> {
   val result = MediatorLiveData<Y>()
-  result.addSource(this, object : Observer<X?> {
+  result.addSource(
+    this, object : Observer<X?> {
     internal var mSource: LiveData<Y>? = null
 
     override fun onChanged(x: X?) {
@@ -26,7 +27,8 @@ inline fun <X, Y> LiveData<X?>.switchMap(
         result.value = null
       }
     }
-  })
+  }
+  )
   return result
 }
 
@@ -36,7 +38,8 @@ inline fun <X, Y> LiveData<X?>.switchMapRx(
   noinline func: (X) -> Observable<Y>?
 ): LiveData<Y?> {
   val result = MediatorLiveData<Y>()
-  result.addSource(this, object : Observer<X?> {
+  result.addSource(
+    this, object : Observer<X?> {
     internal var mSource: LiveData<Y>? = null
 
     override fun onChanged(x: X?) {
@@ -52,7 +55,8 @@ inline fun <X, Y> LiveData<X?>.switchMapRx(
         result.value = null
       }
     }
-  })
+  }
+  )
   return result
 }
 

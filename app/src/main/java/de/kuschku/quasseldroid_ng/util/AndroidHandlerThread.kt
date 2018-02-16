@@ -94,11 +94,13 @@ class AndroidHandlerThread(name: String) : HandlerThread(name) {
 
   fun sendEmptyMessageDelayed(what: Int, delayMillis: Long): Boolean
     = handler?.sendEmptyMessageDelayed(what, delayMillis) ?: throw RuntimeException(
-    "Thread not started")
+    "Thread not started"
+  )
 
   fun sendEmptyMessageAtTime(what: Int, uptimeMillis: Long): Boolean
     = handler?.sendEmptyMessageAtTime(what, uptimeMillis) ?: throw RuntimeException(
-    "Thread not started")
+    "Thread not started"
+  )
 
   fun sendMessageDelayed(msg: Message, delayMillis: Long): Boolean
     = handler?.sendMessageDelayed(msg, delayMillis) ?: throw RuntimeException("Thread not started")

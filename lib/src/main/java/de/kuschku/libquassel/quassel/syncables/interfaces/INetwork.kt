@@ -45,8 +45,10 @@ interface INetwork : ISyncableObject {
 
   @Slot
   fun addSupport(param: String, value: String = String()) {
-    SYNC("addSupport(param: String, value: String = String", ARG(param, Type.QString),
-         ARG(value, Type.QString))
+    SYNC(
+      "addSupport(param: String, value: String = String", ARG(param, Type.QString),
+      ARG(value, Type.QString)
+    )
   }
 
   @Slot
@@ -242,7 +244,8 @@ interface INetwork : ISyncableObject {
 
     companion object {
       private val byId = enumValues<ConnectionState>().associateBy(
-        ConnectionState::value)
+        ConnectionState::value
+      )
 
       fun of(value: Int) = byId[value] ?: Disconnected
     }
@@ -336,7 +339,8 @@ interface INetwork : ISyncableObject {
 
     companion object {
       private val byId = enumValues<ProxyType>().associateBy(
-        ProxyType::value)
+        ProxyType::value
+      )
 
       fun of(value: Int) = byId[value] ?: DefaultProxy
     }

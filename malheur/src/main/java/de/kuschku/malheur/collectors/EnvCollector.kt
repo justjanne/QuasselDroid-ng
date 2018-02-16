@@ -16,7 +16,8 @@ class EnvCollector(application: Application) : Collector<EnvInfo, EnvConfig> {
   override fun collect(context: CrashContext, config: EnvConfig) = EnvInfo(
     paths = collectIf(config.paths) {
       reflectionCollectGetters(
-        Environment::class.java)?.map { (key, value) ->
+        Environment::class.java
+      )?.map { (key, value) ->
         key to if (value is File) {
           value.canonicalPath
         } else {

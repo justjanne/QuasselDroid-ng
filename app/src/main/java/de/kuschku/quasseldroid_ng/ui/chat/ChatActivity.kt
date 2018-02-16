@@ -32,8 +32,8 @@ import de.kuschku.quasseldroid_ng.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
 
 class ChatActivity : ServiceBoundActivity() {
-  var contentMessages: MessageListFragment? = null
-  var chatListFragment: BufferViewConfigFragment? = null
+  private var contentMessages: MessageListFragment? = null
+  private var chatListFragment: BufferViewConfigFragment? = null
 
   @BindView(R.id.drawerLayout)
   lateinit var drawerLayout: DrawerLayout
@@ -72,8 +72,12 @@ class ChatActivity : ServiceBoundActivity() {
 
     database = QuasselDatabase.Creator.init(application)
 
-    contentMessages = supportFragmentManager.findFragmentById(R.id.contentMessages) as? MessageListFragment
-    chatListFragment = supportFragmentManager.findFragmentById(R.id.chatListFragment) as? BufferViewConfigFragment
+    contentMessages = supportFragmentManager.findFragmentById(
+      R.id.contentMessages
+    ) as? MessageListFragment
+    chatListFragment = supportFragmentManager.findFragmentById(
+      R.id.chatListFragment
+    ) as? BufferViewConfigFragment
 
     setSupportActionBar(toolbar)
 
@@ -85,21 +89,29 @@ class ChatActivity : ServiceBoundActivity() {
       println("Changed buffer to $it")
     }
 
-    currentBuffer.observe(this, Observer {
+    currentBuffer.observe(
+      this, Observer {
       if (it != null) {
         drawerLayout.closeDrawer(Gravity.START, true)
       }
-    })
+    }
+    )
 
-    drawerToggle = ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close)
+    drawerToggle = ActionBarDrawerToggle(
+      this,
+      drawerLayout,
+      R.string.drawer_open,
+      R.string.drawer_close
+    )
     drawerToggle.syncState()
 
-    backend.observeSticky(this, Observer { backendValue ->
+    backend.observeSticky(
+      this, Observer { backendValue ->
       if (backendValue != null) {
         val database = AccountDatabase.Creator.init(this)
         handler.post {
           val accountId = getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
-            ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
+                            ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
           if (accountId == -1L) {
             setResult(Activity.RESULT_OK)
             finish()
@@ -118,7 +130,8 @@ class ChatActivity : ServiceBoundActivity() {
           }
         }
       }
-    })
+    }
+    )
 
     buttonSend.setOnClickListener {
       sessionManager { sessionManager ->
@@ -131,7 +144,8 @@ class ChatActivity : ServiceBoundActivity() {
       input.text.clear()
     }
 
-    state.observe(this, Observer {
+    state.observe(
+      this, Observer {
       val status = it ?: ConnectionState.DISCONNECTED
 
       if (status == ConnectionState.CONNECTED) {
@@ -141,19 +155,28 @@ class ChatActivity : ServiceBoundActivity() {
         progressBar.isIndeterminate = status != ConnectionState.INIT
       }
 
-      progressBar.toggle(status != ConnectionState.CONNECTED && status != ConnectionState.DISCONNECTED)
+      progressBar.toggle(
+        status != ConnectionState.CONNECTED && status != ConnectionState.DISCONNECTED
+      )
 
       snackbar?.dismiss()
-      snackbar = Snackbar.make(findViewById(R.id.contentMessages), status.name, Snackbar.LENGTH_SHORT)
+      snackbar = Snackbar.make(
+        findViewById(R.id.contentMessages),
+        status.name,
+        Snackbar.LENGTH_SHORT
+      )
       snackbar?.show()
-    })
+    }
+    )
 
-    initStatus.observe(this, Observer {
+    initStatus.observe(
+      this, Observer {
       val (progress, max) = it ?: 0 to 0
 
       progressBar.max = max
       progressBar.progress = progress
-    })
+    }
+    )
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -173,7 +196,7 @@ class ChatActivity : ServiceBoundActivity() {
       }
       true
     }
-    else -> super.onOptionsItemSelected(item)
+    else            -> super.onOptionsItemSelected(item)
   }
 
   override fun onDestroy() {

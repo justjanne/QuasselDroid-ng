@@ -127,8 +127,6 @@ dependencies {
   }
   implementation(project(":malheur"))
 
-  debugImplementation("com.squareup.leakcanary", "leakcanary-android", "1.5.1")
-
   testImplementation(appArch("persistence.room", "testing"))
   testImplementation("junit", "junit", "4.12")
 

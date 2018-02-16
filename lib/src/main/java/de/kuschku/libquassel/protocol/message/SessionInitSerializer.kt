@@ -8,11 +8,13 @@ import de.kuschku.libquassel.protocol.value
 object SessionInitSerializer : HandshakeMessageSerializer<HandshakeMessage.SessionInit> {
   override fun serialize(data: HandshakeMessage.SessionInit) = mapOf(
     "MsgType" to QVariant_("SessionInit", Type.QString),
-    "SessionState" to QVariant_(mapOf(
-      "BufferInfos" to QVariant_(data.bufferInfos, Type.QVariantList),
-      "NetworkIds" to QVariant_(data.networkIds, Type.QVariantList),
-      "Identities" to QVariant_(data.identities, Type.QVariantList)
-    ), Type.QVariantMap)
+    "SessionState" to QVariant_(
+      mapOf(
+        "BufferInfos" to QVariant_(data.bufferInfos, Type.QVariantList),
+        "NetworkIds" to QVariant_(data.networkIds, Type.QVariantList),
+        "Identities" to QVariant_(data.identities, Type.QVariantList)
+      ), Type.QVariantMap
+    )
   )
 
   override fun deserialize(data: QVariantMap): HandshakeMessage.SessionInit {

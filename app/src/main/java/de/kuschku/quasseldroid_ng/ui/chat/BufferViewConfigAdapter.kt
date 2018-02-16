@@ -24,13 +24,15 @@ class BufferViewConfigAdapter(
   val data = mutableListOf<BufferViewConfig>()
 
   init {
-    liveData.observe(lifecycleOwner, Observer { list: List<BufferViewConfig>? ->
+    liveData.observe(
+      lifecycleOwner, Observer { list: List<BufferViewConfig>? ->
       data.clear()
       if (list != null) {
         data.addAll(list)
       }
       notifyDataSetChanged()
-    })
+    }
+    )
   }
 
   override fun isEmpty() = data.isEmpty()

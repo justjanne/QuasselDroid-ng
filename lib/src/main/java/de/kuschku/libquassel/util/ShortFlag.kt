@@ -63,16 +63,20 @@ infix fun <T> ShortFlags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : Sh
 
 infix fun <T> ShortFlags<T>.or(
   other: ShortFlag<T>): ShortFlags<T> where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value or other.bit)
+  value or other.bit
+)
 
 operator infix fun <T> ShortFlags<T>.plus(
   other: ShortFlags<T>): ShortFlags<T>  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value or other.value)
+  value or other.value
+)
 
 operator infix fun <T> ShortFlags<T>.plus(
   other: ShortFlag<T>): ShortFlags<T>  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value or other.bit)
+  value or other.bit
+)
 
 infix fun <T> ShortFlags<T>.unset(
   which: T): ShortFlags<T>  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value xor which.bit)
+  value xor which.bit
+)

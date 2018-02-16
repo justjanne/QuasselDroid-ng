@@ -50,9 +50,11 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     manager.live_bufferViewConfigs.map { ids ->
       ids.mapNotNull { id ->
         manager.bufferViewConfig(id)
-      }.sortedWith(Comparator { a, b ->
-        (a?.bufferViewName() ?: "").compareTo((b?.bufferViewName() ?: ""), true)
-      })
+      }.sortedWith(
+        Comparator { a, b ->
+          (a?.bufferViewName() ?: "").compareTo((b?.bufferViewName() ?: ""), true)
+        }
+      )
     }
   }.or(emptyList())
 
@@ -92,7 +94,13 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     chatListSpinner.adapter = adapter
     chatListSpinner.onItemSelectedListener = itemSelectedListener
 
-    chatList.adapter = BufferListAdapter(this, bufferList, handlerThread::post, activity!!::runOnUiThread, clickListener)
+    chatList.adapter = BufferListAdapter(
+      this,
+      bufferList,
+      handlerThread::post,
+      activity!!::runOnUiThread,
+      clickListener
+    )
     chatList.layoutManager = LinearLayoutManager(context)
     chatList.itemAnimator = DefaultItemAnimator()
     return view
