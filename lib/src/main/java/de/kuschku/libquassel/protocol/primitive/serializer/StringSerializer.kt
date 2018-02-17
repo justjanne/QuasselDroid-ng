@@ -1,6 +1,7 @@
 package de.kuschku.libquassel.protocol.primitive.serializer
 
 import de.kuschku.libquassel.protocol.Quassel_Features
+import de.kuschku.libquassel.util.helpers.hexDump
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import java.nio.ByteBuffer
 import java.nio.CharBuffer
@@ -46,58 +47,78 @@ abstract class StringSerializer(
   }
 
   override fun serialize(buffer: ChainedByteBuffer, data: String?, features: Quassel_Features) {
-    if (data == null) {
-      IntSerializer.serialize(buffer, -1, features)
-    } else {
-      val charBuffer = charBuffer(data.length)
-      charBuffer.put(data)
-      charBuffer.flip()
-      val byteBuffer = encoder.encode(charBuffer)
-      IntSerializer.serialize(buffer, byteBuffer.remaining() + trailingNullBytes, features)
-      buffer.put(byteBuffer)
-      for (i in 0 until trailingNullBytes)
-        buffer.put(0)
+    try {
+      if (data == null) {
+        IntSerializer.serialize(buffer, -1, features)
+      } else {
+        val charBuffer = charBuffer(data.length)
+        charBuffer.put(data)
+        charBuffer.flip()
+        val byteBuffer = encoder.encode(charBuffer)
+        IntSerializer.serialize(buffer, byteBuffer.remaining() + trailingNullBytes, features)
+        buffer.put(byteBuffer)
+        for (i in 0 until trailingNullBytes)
+          buffer.put(0)
+      }
+    } catch (e: Throwable) {
+      throw RuntimeException(data, e)
     }
   }
 
-  fun serialize(data: String?): ByteBuffer = if (data == null) {
-    ByteBuffer.allocate(0)
-  } else {
-    val charBuffer = charBuffer(data.length)
-    charBuffer.put(data)
-    charBuffer.flip()
-    encoder.encode(charBuffer)
+  fun serialize(data: String?): ByteBuffer {
+    try {
+      if (data == null) {
+        return ByteBuffer.allocate(0)
+      } else {
+        val charBuffer = charBuffer(data.length)
+        charBuffer.put(data)
+        charBuffer.flip()
+        return encoder.encode(charBuffer)
+      }
+    } catch (e: Throwable) {
+      throw RuntimeException(data, e)
+    }
   }
 
   fun deserializeAll(buffer: ByteBuffer): String? {
-    val len = buffer.remaining()
-    return if (len == -1) {
-      null
-    } else {
-      val limit = buffer.limit()
-      buffer.limit(buffer.position() + len - trailingNullBytes)
-      val charBuffer = charBuffer(len)
-      decoder.decode(buffer, charBuffer, true)
-      buffer.limit(limit)
-      buffer.position(buffer.position() + trailingNullBytes)
-      charBuffer.flip()
-      charBuffer.toString()
+    try {
+      val len = buffer.remaining()
+      return if (len == -1) {
+        null
+      } else {
+        val limit = buffer.limit()
+        buffer.limit(buffer.position() + len - trailingNullBytes)
+        val charBuffer = charBuffer(len)
+        decoder.decode(buffer, charBuffer, true)
+        buffer.limit(limit)
+        buffer.position(buffer.position() + trailingNullBytes)
+        charBuffer.flip()
+        charBuffer.toString()
+      }
+    } catch (e: Throwable) {
+      buffer.hexDump()
+      throw RuntimeException(e)
     }
   }
 
   override fun deserialize(buffer: ByteBuffer, features: Quassel_Features): String? {
-    val len = IntSerializer.deserialize(buffer, features)
-    return if (len == -1) {
-      null
-    } else {
-      val limit = buffer.limit()
-      buffer.limit(buffer.position() + Math.max(0, len - trailingNullBytes))
-      val charBuffer = charBuffer(len)
-      decoder.decode(buffer, charBuffer, true)
-      buffer.limit(limit)
-      buffer.position(buffer.position() + trailingNullBytes)
-      charBuffer.flip()
-      charBuffer.toString()
+    try {
+      val len = IntSerializer.deserialize(buffer, features)
+      return if (len == -1) {
+        null
+      } else {
+        val limit = buffer.limit()
+        buffer.limit(buffer.position() + Math.max(0, len - trailingNullBytes))
+        val charBuffer = charBuffer(len)
+        decoder.decode(buffer, charBuffer, true)
+        buffer.limit(limit)
+        buffer.position(buffer.position() + trailingNullBytes)
+        charBuffer.flip()
+        charBuffer.toString()
+      }
+    } catch (e: Throwable) {
+      buffer.hexDump()
+      throw RuntimeException(e)
     }
   }
 }

@@ -13,10 +13,8 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
       for ((bufferId, bufferMessages) in messages.sortedBy { it.messageId }.groupBy { it.bufferInfo.bufferId }) {
         val lastMessageId = db.message().findLastByBufferId(bufferId)?.messageId
         val firstMessage = bufferMessages.firstOrNull()
-        if (lastMessageId != null && firstMessage != null) {
-          if (lastMessageId < firstMessage.messageId) {
-            db.message().clearMessages(bufferId)
-          }
+        if (lastMessageId == null || firstMessage == null || lastMessageId < firstMessage.messageId) {
+          db.message().clearMessages(bufferId)
         }
       }
 

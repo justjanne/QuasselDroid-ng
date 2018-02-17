@@ -211,6 +211,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     )
     chatList.layoutManager = LinearLayoutManager(context)
     chatList.itemAnimator = DefaultItemAnimator()
+    chatList.setItemViewCacheSize(10)
     return view
   }
 

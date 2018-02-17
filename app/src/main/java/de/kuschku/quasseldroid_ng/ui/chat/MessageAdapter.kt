@@ -68,5 +68,9 @@ class MessageAdapter(context: Context) :
     messageRenderer.init(viewHolder, messageType, hasHighlight)
     return viewHolder
   }
+
+  operator fun get(position: Int): QuasselDatabase.DatabaseMessage? {
+    return getItem(position)
+  }
 }
 

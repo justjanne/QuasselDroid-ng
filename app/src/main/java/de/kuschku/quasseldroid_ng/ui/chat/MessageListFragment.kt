@@ -15,17 +15,19 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.session.Backend
+import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
-import de.kuschku.quasseldroid_ng.util.helper.invoke
-import de.kuschku.quasseldroid_ng.util.helper.switchMap
-import de.kuschku.quasseldroid_ng.util.helper.toggle
+import de.kuschku.quasseldroid_ng.util.helper.*
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundFragment
 
 class MessageListFragment : ServiceBoundFragment() {
   val currentBuffer: MutableLiveData<LiveData<BufferId?>?> = MutableLiveData()
   private val buffer = currentBuffer.switchMap { it }
+
+  private val sessionManager: LiveData<SessionManager?> = backend.map(Backend::sessionManager)
 
   private val handler = AndroidHandlerThread("Chat")
 
@@ -64,6 +66,7 @@ class MessageListFragment : ServiceBoundFragment() {
     val linearLayoutManager = LinearLayoutManager(context)
     linearLayoutManager.reverseLayout = true
     messageList.layoutManager = linearLayoutManager
+    messageList.setItemViewCacheSize(20)
 
     messageList.addOnScrollListener(
       object : RecyclerView.OnScrollListener() {
@@ -84,6 +87,20 @@ class MessageListFragment : ServiceBoundFragment() {
         .setInitialLoadKey(null)
         .build()
     }
+
+    sessionManager.zip(buffer).zip(data).observe(
+      this, Observer {
+      handler.post {
+        val session = it?.first?.first
+        val buffer = it?.first?.second
+        val bufferSyncer = session?.bufferSyncer
+
+        if (buffer != null && bufferSyncer != null) {
+          bufferSyncer.requestMarkBufferAsRead(buffer)
+        }
+      }
+    }
+    )
 
     data.observe(
       this, Observer { list ->
