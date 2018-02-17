@@ -170,6 +170,11 @@ class BufferListAdapter(
       var bufferId: BufferId? = null
       var networkId: NetworkId? = null
 
+      private var none: Int = 0
+      private var activity: Int = 0
+      private var message: Int = 0
+      private var highlight: Int = 0
+
       init {
         ButterKnife.bind(this, itemView)
         itemView.setOnClickListener {
@@ -183,12 +188,31 @@ class BufferListAdapter(
           if (network != null)
             expansionListener?.invoke(network)
         }
+
+        itemView.context.theme.styledAttributes(
+          R.attr.colorTextSecondary, R.attr.colorTintActivity, R.attr.colorTintMessage,
+          R.attr.colorTintHighlight
+        ) {
+          none = getColor(0, 0)
+          activity = getColor(1, 0)
+          message = getColor(2, 0)
+          highlight = getColor(3, 0)
+        }
       }
 
       override fun bind(props: BufferProps, state: BufferState) {
         name.text = props.network.networkName
         bufferId = props.info.bufferId
         networkId = props.info.networkId
+
+        name.setTextColor(
+          when (props.activity) {
+            Buffer_Activity.NoActivity    -> none
+            Buffer_Activity.OtherActivity -> activity
+            Buffer_Activity.NewMessage    -> message
+            Buffer_Activity.Highlight     -> highlight
+          }
+        )
 
         if (state.networkExpanded) {
           status.setImageDrawable(itemView.context.getCompatDrawable(R.drawable.ic_chevron_up))
@@ -234,7 +258,7 @@ class BufferListAdapter(
 
         itemView.context.theme.styledAttributes(
           R.attr.colorAccent, R.attr.colorAway,
-          R.attr.colorForeground, R.attr.colorTintActivity, R.attr.colorTintMessage,
+          R.attr.colorTextPrimary, R.attr.colorTintActivity, R.attr.colorTintMessage,
           R.attr.colorTintHighlight
         ) {
           DrawableCompat.setTint(online, getColor(0, 0))
@@ -313,7 +337,7 @@ class BufferListAdapter(
 
         itemView.context.theme.styledAttributes(
           R.attr.colorAccent, R.attr.colorAway,
-          R.attr.colorForeground, R.attr.colorTintActivity, R.attr.colorTintMessage,
+          R.attr.colorTextPrimary, R.attr.colorTintActivity, R.attr.colorTintMessage,
           R.attr.colorTintHighlight
         ) {
           DrawableCompat.setTint(online, getColor(0, 0))
@@ -394,7 +418,7 @@ class BufferListAdapter(
 
         itemView.context.theme.styledAttributes(
           R.attr.colorAccent, R.attr.colorAway,
-          R.attr.colorForeground, R.attr.colorTintActivity, R.attr.colorTintMessage,
+          R.attr.colorTextPrimary, R.attr.colorTintActivity, R.attr.colorTintMessage,
           R.attr.colorTintHighlight
         ) {
           DrawableCompat.setTint(online, getColor(0, 0))

@@ -44,6 +44,8 @@
 
   <attr name="colorForegroundMirc" format="integer" />
 
+  <attr name="colorTextPrimary" format="color" />
+  <attr name="colorTextSecondary" format="color" />
   <attr name="colorDivider" format="color" />
 
   <attr name="colorBackground" format="color" />

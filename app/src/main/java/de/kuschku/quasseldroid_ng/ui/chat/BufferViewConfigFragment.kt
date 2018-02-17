@@ -81,68 +81,77 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     bufferIdList.switchMapRx { ids ->
       val bufferSyncer = manager.bufferSyncer
       if (bufferSyncer != null) {
-        Observable.combineLatest(
-          ids.mapNotNull { id ->
-            manager.bufferSyncer?.bufferInfo(
-              id
-            )
-          }.mapNotNull {
-            val network = manager.networks[it.networkId]
-            if (network == null) {
-              null
-            } else {
-              it to network
-            }
-          }.map { (info, network) ->
-            bufferSyncer.liveActivity(info.bufferId).map { activity ->
-              when {
-                activity.hasFlag(Message.MessageType.Plain) ||
-                activity.hasFlag(Message.MessageType.Notice) ||
-                activity.hasFlag(Message.MessageType.Action) -> Buffer_Activity.NewMessage
-                activity.nonEmpty()                          -> Buffer_Activity.OtherActivity
-                else                                         -> Buffer_Activity.NoActivity
+        bufferSyncer.live_bufferInfos.switchMap {
+          Observable.combineLatest(
+            ids.mapNotNull { id ->
+              bufferSyncer.bufferInfo(id)
+            }.mapNotNull {
+              val network = manager.networks[it.networkId]
+              if (network == null) {
+                null
+              } else {
+                it to network
               }
-            }.switchMap { activity ->
-              when (info.type.toInt()) {
-                BufferInfo.Type.QueryBuffer.toInt()   -> {
-                  network.liveIrcUser(info.bufferName).switchMap { user ->
-                    user.live_away.switchMap { away ->
-                      user.live_realName.map { realName ->
+            }.map { (info, network) ->
+              bufferSyncer.liveActivity(info.bufferId).map { activity ->
+                when {
+                  activity.hasFlag(Message.MessageType.Plain) ||
+                  activity.hasFlag(Message.MessageType.Notice) ||
+                  activity.hasFlag(Message.MessageType.Action) -> Buffer_Activity.NewMessage
+                  activity.nonEmpty()                          -> Buffer_Activity.OtherActivity
+                  else                                         -> Buffer_Activity.NoActivity
+                }
+              }.switchMap { activity ->
+                when (info.type.toInt()) {
+                  BufferInfo.Type.QueryBuffer.toInt()   -> {
+                    network.liveIrcUser(info.bufferName).switchMap { user ->
+                      user.live_away.switchMap { away ->
+                        user.live_realName.map { realName ->
+                          BufferListAdapter.BufferProps(
+                            info = info,
+                            network = network.networkInfo(),
+                            bufferStatus = when {
+                              user == IrcUser.NULL -> BufferListAdapter.BufferStatus.OFFLINE
+                              away                 -> BufferListAdapter.BufferStatus.AWAY
+                              else                 -> BufferListAdapter.BufferStatus.ONLINE
+                            },
+                            description = realName,
+                            activity = activity
+                          )
+                        }
+                      }
+                    }
+                  }
+                  BufferInfo.Type.ChannelBuffer.toInt() -> {
+                    network.liveIrcChannel(
+                      info.bufferName
+                    ).switchMap { channel ->
+                      channel.live_topic.map { topic ->
                         BufferListAdapter.BufferProps(
                           info = info,
                           network = network.networkInfo(),
-                          bufferStatus = when {
-                            user == IrcUser.NULL -> BufferListAdapter.BufferStatus.OFFLINE
-                            away                 -> BufferListAdapter.BufferStatus.AWAY
-                            else                 -> BufferListAdapter.BufferStatus.ONLINE
+                          bufferStatus = when (channel) {
+                            IrcChannel.NULL -> BufferListAdapter.BufferStatus.OFFLINE
+                            else            -> BufferListAdapter.BufferStatus.ONLINE
                           },
-                          description = realName,
+                          description = topic,
                           activity = activity
                         )
                       }
                     }
                   }
-                }
-                BufferInfo.Type.ChannelBuffer.toInt() -> {
-                  network.liveIrcChannel(
-                    info.bufferName
-                  ).switchMap { channel ->
-                    channel.live_topic.map { topic ->
+                  BufferInfo.Type.StatusBuffer.toInt()  -> {
+                    network.liveConnectionState.map {
                       BufferListAdapter.BufferProps(
                         info = info,
                         network = network.networkInfo(),
-                        bufferStatus = when (channel) {
-                          IrcChannel.NULL -> BufferListAdapter.BufferStatus.OFFLINE
-                          else            -> BufferListAdapter.BufferStatus.ONLINE
-                        },
-                        description = topic,
+                        bufferStatus = BufferListAdapter.BufferStatus.OFFLINE,
+                        description = "",
                         activity = activity
                       )
                     }
                   }
-                }
-                BufferInfo.Type.StatusBuffer.toInt()  -> {
-                  network.liveConnectionState.map {
+                  else                                  -> Observable.just(
                     BufferListAdapter.BufferProps(
                       info = info,
                       network = network.networkInfo(),
@@ -150,23 +159,14 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                       description = "",
                       activity = activity
                     )
-                  }
-                }
-                else                                  -> Observable.just(
-                  BufferListAdapter.BufferProps(
-                    info = info,
-                    network = network.networkInfo(),
-                    bufferStatus = BufferListAdapter.BufferStatus.OFFLINE,
-                    description = "",
-                    activity = activity
                   )
-                )
+                }
               }
+            }, { array: Array<Any> ->
+              array.toList() as List<BufferListAdapter.BufferProps>
             }
-          }, { array: Array<Any> ->
-            array.toList() as List<BufferListAdapter.BufferProps>
-          }
-        )
+          )
+        }
       } else {
         Observable.empty()
       }

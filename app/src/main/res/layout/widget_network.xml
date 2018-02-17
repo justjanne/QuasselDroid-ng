@@ -4,37 +4,52 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:foreground="?attr/selectableItemBackgroundBorderless"
-  android:minHeight="48dp"
+  android:background="?attr/selectableItemBackground"
+  android:orientation="vertical"
   tools:background="@android:color/background_light"
   tools:theme="@style/Theme.ChatTheme.Quassel_Light">
 
-  <TextView
-    android:id="@+id/name"
-    android:layout_width="0dip"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:layout_marginBottom="8dp"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_marginTop="8dp"
-    android:layout_weight="1"
-    android:singleLine="true"
-    android:textColor="?attr/colorForeground"
-    android:textSize="14sp"
-    android:textStyle="bold"
-    tools:text="Freenode" />
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="?attr/colorDivider" />
 
-  <ImageView
-    android:id="@+id/status"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:minWidth="72dp"
-    android:paddingBottom="12dp"
-    android:paddingEnd="16dp"
-    android:paddingStart="16dp"
-    android:paddingTop="12dp"
-    android:scaleType="fitEnd"
-    android:tint="?attr/colorForegroundSecondary"
-    app:srcCompat="@drawable/ic_chevron_down" />
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="48dp">
+
+    <TextView
+      android:id="@+id/name"
+      android:layout_width="0dip"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:layout_marginBottom="8dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_marginTop="8dp"
+      android:layout_weight="1"
+      android:singleLine="true"
+      android:textColor="?attr/colorTextSecondary"
+      android:textSize="14sp"
+      android:textStyle="bold"
+      tools:text="Freenode" />
+
+    <ImageView
+      android:id="@+id/status"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:background="?attr/selectableItemBackgroundBorderless"
+      android:clickable="true"
+      android:contentDescription="Expand"
+      android:focusable="true"
+      android:minWidth="72dp"
+      android:paddingBottom="12dp"
+      android:paddingEnd="16dp"
+      android:paddingStart="16dp"
+      android:paddingTop="12dp"
+      android:scaleType="fitEnd"
+      android:tint="?attr/colorTextSecondary"
+      app:srcCompat="@drawable/ic_chevron_down" />
+  </LinearLayout>
 </LinearLayout>

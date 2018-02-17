@@ -89,9 +89,9 @@ android {
 }
 
 val appCompatVersion = "27.0.2"
-val appArchVersion = "1.0.0"
+val appArchVersion = "1.1.0"
 dependencies {
-  implementation(kotlin("stdlib", "1.2.0"))
+  implementation(kotlin("stdlib", "1.2.21"))
 
   implementation(appCompat("appcompat-v7"))
   implementation(appCompat("design"))
@@ -100,18 +100,17 @@ dependencies {
   implementation(appCompat("recyclerview-v7"))
   implementation(appCompat("constraint", "constraint-layout", version = "1.0.2"))
 
-  implementation("com.github.StephenVinouze.AdvancedRecyclerView", "core", "1.1.6")
-
-  implementation("io.reactivex.rxjava2", "rxjava", "2.1.3")
+  implementation("io.reactivex.rxjava2", "rxjava", "2.1.9")
 
   implementation(appArch("lifecycle", "extensions"))
   implementation(appArch("lifecycle", "reactivestreams"))
   kapt(appArch("lifecycle", "compiler"))
 
-  implementation(appArch("persistence.room", "runtime"))
-  kapt(appArch("persistence.room", "compiler"))
+  implementation(appArch("persistence.room", "runtime", "1.0.0"))
+  implementation(appArch("persistence.room", "rxjava2", "1.0.0"))
+  kapt(appArch("persistence.room", "compiler", "1.0.0"))
 
-  implementation(appArch("paging", "runtime", version = "1.0.0-alpha3")) {
+  implementation(appArch("paging", "runtime", version = "1.0.0-alpha5")) {
     exclude(group = "junit", module = "junit")
   }
 
@@ -127,7 +126,7 @@ dependencies {
   }
   implementation(project(":malheur"))
 
-  testImplementation(appArch("persistence.room", "testing"))
+  testImplementation(appArch("persistence.room", "testing", "1.0.0"))
   testImplementation("junit", "junit", "4.12")
 
   androidTestImplementation("com.android.support.test", "runner", "1.0.1")
