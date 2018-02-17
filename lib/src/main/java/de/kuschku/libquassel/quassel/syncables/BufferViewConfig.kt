@@ -167,51 +167,61 @@ class BufferViewConfig constructor(
   override fun setAddNewBuffersAutomatically(addNewBuffersAutomatically: Boolean) {
     _addNewBuffersAutomatically = addNewBuffersAutomatically
     super.setAddNewBuffersAutomatically(addNewBuffersAutomatically)
+    live_config.onNext(this)
   }
 
   override fun setAllowedBufferTypes(bufferTypes: Int) {
     _allowedBufferTypes = Buffer_Type.of(bufferTypes.toShort())
     super.setAllowedBufferTypes(bufferTypes)
+    live_config.onNext(this)
   }
 
   override fun setBufferViewName(bufferViewName: String) {
     _bufferViewName = bufferViewName
     super.setBufferViewName(bufferViewName)
+    live_config.onNext(this)
   }
 
   override fun setDisableDecoration(disableDecoration: Boolean) {
     _disableDecoration = disableDecoration
     super.setDisableDecoration(disableDecoration)
+    live_config.onNext(this)
   }
 
   override fun setHideInactiveBuffers(hideInactiveBuffers: Boolean) {
     _hideInactiveBuffers = hideInactiveBuffers
     super.setHideInactiveBuffers(hideInactiveBuffers)
+    live_config.onNext(this)
   }
 
   override fun setHideInactiveNetworks(hideInactiveNetworks: Boolean) {
     _hideInactiveNetworks = hideInactiveNetworks
     super.setHideInactiveNetworks(hideInactiveNetworks)
+    live_config.onNext(this)
   }
 
   override fun setMinimumActivity(activity: Int) {
     _minimumActivity = Buffer_Activity.of(activity)
     super.setMinimumActivity(activity)
+    live_config.onNext(this)
   }
 
   override fun setNetworkId(networkId: NetworkId) {
     _networkId = networkId
     super.setNetworkId(networkId)
+    live_config.onNext(this)
   }
 
   override fun setShowSearch(showSearch: Boolean) {
     _showSearch = showSearch
     super.setShowSearch(showSearch)
+    live_config.onNext(this)
   }
 
   override fun setSortAlphabetically(sortAlphabetically: Boolean) {
     _sortAlphabetically = sortAlphabetically
     super.setSortAlphabetically(sortAlphabetically)
+    live_config.onNext(this)
   }
 
   private val _bufferViewId: Int = bufferViewId
@@ -228,6 +238,7 @@ class BufferViewConfig constructor(
   private var _buffers: MutableList<BufferId> = mutableListOf()
   private var _removedBuffers: MutableSet<BufferId> = mutableSetOf()
   private var _temporarilyRemovedBuffers: MutableSet<BufferId> = mutableSetOf()
+  val live_config = BehaviorSubject.createDefault(this)
 
   val live_buffers: BehaviorSubject<List<BufferId>>
     = BehaviorSubject.createDefault<List<BufferId>>(emptyList())

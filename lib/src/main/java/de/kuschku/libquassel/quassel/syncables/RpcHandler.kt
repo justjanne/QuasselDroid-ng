@@ -45,6 +45,7 @@ class RpcHandler(
   }
 
   override fun displayMsg(message: Message) {
+    session.bufferSyncer.bufferInfoUpdated(message.bufferInfo)
     backlogStorage.storeMessages(message)
   }
 

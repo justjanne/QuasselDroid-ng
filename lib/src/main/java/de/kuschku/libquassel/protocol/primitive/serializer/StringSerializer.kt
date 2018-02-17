@@ -49,6 +49,7 @@ abstract class StringSerializer(
       val charBuffer = charBuffer(data.length)
       charBuffer.put(data)
       charBuffer.flip()
+      encoder.reset()
       val byteBuffer = encoder.encode(charBuffer)
       IntSerializer.serialize(buffer, byteBuffer.remaining() + trailingNullBytes, features)
       buffer.put(byteBuffer)
@@ -63,6 +64,7 @@ abstract class StringSerializer(
     val charBuffer = charBuffer(data.length)
     charBuffer.put(data)
     charBuffer.flip()
+    encoder.reset()
     encoder.encode(charBuffer)
   }
 

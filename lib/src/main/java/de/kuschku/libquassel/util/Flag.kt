@@ -36,8 +36,8 @@ data class Flags<E>(
 
   fun enabledValues() = values?.filter { hasFlag(it) }?.toSet() ?: emptySet()
 
-  fun empty() = value == 0
-  fun nonEmpty() = !empty()
+  fun isEmpty() = value == 0
+  fun isNotEmpty() = !isEmpty()
 
   override fun toString() = if (values != null) {
     enabledValues().joinToString("|", "[", "]")
@@ -69,6 +69,18 @@ infix fun <T> Flags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : Flag<T>
 
 infix fun <T> Flags<T>.or(other: Flag<T>): Flags<T> where T : kotlin.Enum<T>, T : Flag<T> = Flags(
   value or other.bit
+)
+
+infix fun <T> Flags<T>.or(other: Flags<T>): Flags<T> where T : kotlin.Enum<T>, T : Flag<T> = Flags(
+  value or other.value
+)
+
+infix fun <T> Flags<T>.and(other: Flag<T>): Flags<T> where T : kotlin.Enum<T>, T : Flag<T> = Flags(
+  value and other.bit
+)
+
+infix fun <T> Flags<T>.and(other: Flags<T>): Flags<T> where T : kotlin.Enum<T>, T : Flag<T> = Flags(
+  value and other.value
 )
 
 operator infix fun <T> Flags<T>.plus(

@@ -36,6 +36,9 @@ data class LongFlags<E>(
 
   fun enabledValues() = values?.filter { hasFlag(it) }?.toSet() ?: emptySet()
 
+  fun isEmpty() = value == 0L
+  fun isNotEmpty() = !isEmpty()
+
   override fun toString() = if (values != null) {
     enabledValues().joinToString("|", "[", "]")
   } else {
@@ -67,6 +70,21 @@ infix fun <T> LongFlags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : Lon
 infix fun <T> LongFlags<T>.or(
   other: LongFlag<T>): LongFlags<T> where T : kotlin.Enum<T>, T : LongFlag<T> = LongFlags(
   value or other.bit
+)
+
+infix fun <T> LongFlags<T>.or(
+  other: LongFlags<T>): LongFlags<T> where T : kotlin.Enum<T>, T : LongFlag<T> = LongFlags(
+  value or other.value
+)
+
+infix fun <T> LongFlags<T>.and(
+  other: LongFlag<T>): LongFlags<T> where T : kotlin.Enum<T>, T : LongFlag<T> = LongFlags(
+  value and other.bit
+)
+
+infix fun <T> LongFlags<T>.and(
+  other: LongFlags<T>): LongFlags<T> where T : kotlin.Enum<T>, T : LongFlag<T> = LongFlags(
+  value and other.value
 )
 
 operator infix fun <T> LongFlags<T>.plus(

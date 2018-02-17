@@ -17,7 +17,7 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.2.0"))
+  implementation(kotlin("stdlib", "1.2.21"))
 
-  implementation("com.google.code.gson", "gson", "2.8.0")
+  implementation("com.google.code.gson", "gson", "2.8.2")
 }

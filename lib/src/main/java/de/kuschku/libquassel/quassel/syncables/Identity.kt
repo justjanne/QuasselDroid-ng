@@ -180,7 +180,7 @@ class Identity constructor(
   }
 
   private var _identityId: IdentityId = -1
-  private var _identityName: String = "<empty>"
+  private var _identityName: String = "<isEmpty>"
   private var _realName: String = ""
   private var _nicks: MutableList<String> = mutableListOf("quassel")
   private var _awayNick: String = ""

@@ -9,13 +9,13 @@ plugins {
   kotlin("kapt")
 }
 
-val appCompatVersion = "26.1.0"
+val appCompatVersion = "27.0.2"
 dependencies {
-  implementation(kotlin("stdlib", "1.2.0"))
+  implementation(kotlin("stdlib", "1.2.21"))
 
   implementation(appCompat("support-annotations"))
   implementation("org.threeten", "threetenbp", "1.3.6")
-  implementation("io.reactivex.rxjava2:rxjava:2.1.3")
+  implementation("io.reactivex.rxjava2:rxjava:2.1.9")
 
   implementation(project(":invokerannotations"))
   kapt(project(":invokergenerator"))

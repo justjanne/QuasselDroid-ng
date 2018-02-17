@@ -76,7 +76,7 @@ class MessageListFragment : ServiceBoundFragment() {
     buffer.observe(
       this, Observer {
       handler.post {
-        // Try loading messages when switching to empty buffer
+        // Try loading messages when switching to isEmpty buffer
         if (it != null && database.message().bufferSize(it) == 0) {
           loadMore()
         }

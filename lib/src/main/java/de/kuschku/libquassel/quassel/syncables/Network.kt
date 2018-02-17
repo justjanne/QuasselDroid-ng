@@ -282,7 +282,7 @@ class Network constructor(
    * Gets the value of an available capability, e.g. for SASL, "EXTERNAL,PLAIN".
    *
    * @param capability Name of capability
-   * @return Value of capability if one was specified, otherwise empty string
+   * @return Value of capability if one was specified, otherwise isEmpty string
    */
   fun capValue(capability: String)
     = _caps.getOr(capability.toLowerCase(Locale.ENGLISH), "")

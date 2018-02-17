@@ -83,12 +83,14 @@ class BufferSyncer constructor(
   fun initSetBufferInfos(infos: QVariantList?) {
     _bufferInfos.clear()
     infos?.mapNotNull { it.value<BufferInfo>() }?.forEach { _bufferInfos[it.bufferId] = it }
+    live_bufferInfos.onNext(_bufferInfos)
   }
 
   override fun mergeBuffersPermanently(buffer1: BufferId, buffer2: BufferId) {
     _lastSeenMsg.remove(buffer2)
     _markerLines.remove(buffer2)
     _bufferActivities.remove(buffer2)
+    live_bufferInfos.onNext(_bufferInfos)
   }
 
   override fun removeBuffer(buffer: BufferId) {
@@ -96,14 +98,27 @@ class BufferSyncer constructor(
     _markerLines.remove(buffer)
     _bufferActivities.remove(buffer)
     _bufferInfos.remove(buffer)
+    live_bufferInfos.onNext(_bufferInfos)
   }
 
   override fun renameBuffer(buffer: BufferId, newName: String) {
+    val bufferInfo = _bufferInfos[buffer]
+    if (bufferInfo != null) {
+      _bufferInfos[buffer] = bufferInfo.copy(bufferName = newName)
+      live_bufferInfos.onNext(_bufferInfos)
+    }
   }
 
   fun bufferInfo(bufferId: BufferId) = _bufferInfos[bufferId]
+  fun liveBufferInfo(bufferId: BufferId) = live_bufferInfos.distinctUntilChanged().map {
+    bufferInfo(bufferId)
+  }
+
   fun bufferInfoUpdated(info: BufferInfo) {
-    _bufferInfos[info.bufferId] = info
+    if (info != _bufferInfos[info.bufferId]) {
+      _bufferInfos[info.bufferId] = info
+      live_bufferInfos.onNext(_bufferInfos)
+    }
   }
 
   override fun setLastSeenMsg(buffer: BufferId, msgId: MsgId) {
@@ -139,4 +154,5 @@ class BufferSyncer constructor(
     mutableMapOf<BufferId, Message_Types>()
   )
   private val _bufferInfos = mutableMapOf<BufferId, BufferInfo>()
+  val live_bufferInfos = BehaviorSubject.createDefault(mutableMapOf<BufferId, BufferInfo>())
 }

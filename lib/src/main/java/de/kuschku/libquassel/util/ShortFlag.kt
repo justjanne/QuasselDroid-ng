@@ -40,6 +40,9 @@ data class ShortFlags<E>(
 
   fun enabledValues() = values?.filter { hasFlag(it) }?.toSet() ?: emptySet()
 
+  fun isEmpty() = value == 0.toShort()
+  fun isNotEmpty() = !isEmpty()
+
   override fun toString() = if (values != null) {
     enabledValues().joinToString("|", "[", "]")
   } else {
@@ -71,6 +74,21 @@ infix fun <T> ShortFlags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : Sh
 infix fun <T> ShortFlags<T>.or(
   other: ShortFlag<T>): ShortFlags<T> where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(
   value or other.bit
+)
+
+infix fun <T> ShortFlags<T>.or(
+  other: ShortFlags<T>): ShortFlags<T> where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(
+  value or other.value
+)
+
+infix fun <T> ShortFlags<T>.and(
+  other: ShortFlag<T>): ShortFlags<T> where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(
+  value and other.bit
+)
+
+infix fun <T> ShortFlags<T>.and(
+  other: ShortFlags<T>): ShortFlags<T> where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(
+  value and other.value
 )
 
 operator infix fun <T> ShortFlags<T>.plus(

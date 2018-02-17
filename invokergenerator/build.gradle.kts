@@ -8,6 +8,6 @@ plugins {
 
 dependencies {
   implementation(project(":invokerannotations"))
-  implementation("com.google.auto.service:auto-service:1.0-rc3")
-  implementation("com.squareup:javapoet:1.9.0")
+  implementation("com.google.auto.service:auto-service:1.0-rc4")
+  implementation("com.squareup:javapoet:1.10.0")
 }
