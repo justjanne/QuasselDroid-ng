@@ -251,8 +251,8 @@ class BufferListAdapter(
             clickListener?.invoke(buffer)
         }
 
-        online = itemView.context.getCompatDrawable(R.drawable.ic_status)
-        offline = itemView.context.getCompatDrawable(R.drawable.ic_status_offline)
+        online = itemView.context.getCompatDrawable(R.drawable.ic_status).mutate()
+        offline = itemView.context.getCompatDrawable(R.drawable.ic_status_offline).mutate()
 
         itemView.context.theme.styledAttributes(
           R.attr.colorAccent, R.attr.colorAway,
@@ -326,8 +326,8 @@ class BufferListAdapter(
             clickListener?.invoke(buffer)
         }
 
-        online = itemView.context.getCompatDrawable(R.drawable.ic_status_channel)
-        offline = itemView.context.getCompatDrawable(R.drawable.ic_status_channel_offline)
+        online = itemView.context.getCompatDrawable(R.drawable.ic_status_channel).mutate()
+        offline = itemView.context.getCompatDrawable(R.drawable.ic_status_channel_offline).mutate()
 
         itemView.context.theme.styledAttributes(
           R.attr.colorAccent, R.attr.colorAway,
@@ -402,9 +402,9 @@ class BufferListAdapter(
             clickListener?.invoke(buffer)
         }
 
-        online = itemView.context.getCompatDrawable(R.drawable.ic_status)
-        away = itemView.context.getCompatDrawable(R.drawable.ic_status)
-        offline = itemView.context.getCompatDrawable(R.drawable.ic_status_offline)
+        online = itemView.context.getCompatDrawable(R.drawable.ic_status).mutate()
+        away = itemView.context.getCompatDrawable(R.drawable.ic_status).mutate()
+        offline = itemView.context.getCompatDrawable(R.drawable.ic_status_offline).mutate()
 
         itemView.context.theme.styledAttributes(
           R.attr.colorAccent, R.attr.colorAway,
