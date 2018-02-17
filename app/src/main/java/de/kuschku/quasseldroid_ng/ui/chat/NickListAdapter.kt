@@ -29,7 +29,9 @@ class NickListAdapter(
       runInBackground {
         val list = it ?: emptyList()
         val old: List<IrcUserItem> = data
-        val new: List<IrcUserItem> = list.sortedBy { it.lowestMode }
+        val new: List<IrcUserItem> = list
+          .sortedBy { it.nick.toLowerCase() }
+          .sortedBy { it.lowestMode }
         val result = DiffUtil.calculateDiff(
           object : DiffUtil.Callback() {
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int)
@@ -86,6 +88,9 @@ class NickListAdapter(
     itemView: View,
     private val clickListener: ((String) -> Unit)? = null
   ) : RecyclerView.ViewHolder(itemView) {
+    @BindView(R.id.modesContainer)
+    lateinit var modesContainer: View
+
     @BindView(R.id.modes)
     lateinit var modes: TextView
 
