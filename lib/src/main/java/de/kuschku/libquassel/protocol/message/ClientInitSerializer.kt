@@ -11,12 +11,12 @@ object ClientInitSerializer : HandshakeMessageSerializer<HandshakeMessage.Client
     "MsgType" to QVariant_("ClientInit", Type.QString),
     "ClientVersion" to QVariant_(data.clientVersion, Type.QString),
     "ClientDate" to QVariant_(data.buildDate, Type.QString),
-    "ClientFeatures" to QVariant_(data.clientFeatures?.toInt(), Type.UInt)
+    "Features" to QVariant_(data.clientFeatures?.toInt(), Type.UInt)
   )
 
   override fun deserialize(data: QVariantMap) = HandshakeMessage.ClientInit(
     clientVersion = data["ClientVersion"].value(),
     buildDate = data["ClientDate"].value(),
-    clientFeatures = Flags.Companion.of(data["ClientFeatures"].value(0))
+    clientFeatures = Flags.Companion.of(data["Features"].value(0))
   )
 }
