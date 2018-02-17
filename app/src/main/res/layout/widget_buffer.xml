@@ -34,10 +34,10 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
+      android:fontFamily="sans-serif-medium"
       android:singleLine="true"
       android:textColor="?attr/colorTextPrimary"
       android:textSize="13sp"
-      android:textStyle="bold"
       tools:text="#quasseldroid" />
 
     <TextView

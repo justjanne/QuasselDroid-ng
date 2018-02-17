@@ -137,7 +137,13 @@
 
   </LinearLayout>
 
-  <include layout="@layout/fragment_nick_list" />
+  <fragment
+    android:id="@+id/nickListFragment"
+    android:name="de.kuschku.quasseldroid_ng.ui.chat.NickListFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="end"
+    tools:layout="@layout/fragment_nick_list" />
 
   <de.kuschku.quasseldroid_ng.util.ui.NavigationDrawerLayout
     android:layout_width="match_parent"

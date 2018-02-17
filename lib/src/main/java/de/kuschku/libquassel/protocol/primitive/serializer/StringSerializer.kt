@@ -42,6 +42,7 @@ abstract class StringSerializer(
     return buf
   }
 
+  @Synchronized
   override fun serialize(buffer: ChainedByteBuffer, data: String?, features: Quassel_Features) {
     if (data == null) {
       IntSerializer.serialize(buffer, -1, features)
@@ -58,6 +59,7 @@ abstract class StringSerializer(
     }
   }
 
+  @Synchronized
   fun serialize(data: String?): ByteBuffer = if (data == null) {
     ByteBuffer.allocate(0)
   } else {
@@ -68,6 +70,7 @@ abstract class StringSerializer(
     encoder.encode(charBuffer)
   }
 
+  @Synchronized
   fun deserializeAll(buffer: ByteBuffer): String? {
     val len = buffer.remaining()
     return if (len == -1) {
@@ -85,6 +88,7 @@ abstract class StringSerializer(
     }
   }
 
+  @Synchronized
   override fun deserialize(buffer: ByteBuffer, features: Quassel_Features): String? {
     val len = IntSerializer.deserialize(buffer, features)
     return if (len == -1) {

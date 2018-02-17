@@ -69,13 +69,21 @@ class Network constructor(
     = prefixModes().elementAtOrNull(prefixes().indexOf(prefix))
 
   fun prefixesToModes(prefixes: String): String
-    = prefixes.mapNotNull(this::prefixToMode).joinToString()
+    = prefixes.mapNotNull {
+    prefixes().indexOf(it)
+  }.sorted().mapNotNull {
+    prefixModes().elementAtOrNull(it)
+  }.joinToString("")
 
   fun modeToPrefix(mode: Char): Char?
     = prefixes().elementAtOrNull(prefixModes().indexOf(mode))
 
   fun modesToPrefixes(modes: String): String
-    = modes.mapNotNull(this::modeToPrefix).joinToString()
+    = modes.mapNotNull {
+    prefixModes().indexOf(it)
+  }.sorted().mapNotNull {
+    prefixes().elementAtOrNull(it)
+  }.joinToString("")
 
   fun channelModeType(mode: Char): ChannelModeType {
     if (_channelModes == null)
@@ -204,31 +212,31 @@ class Network constructor(
       setUnlimitedMessageRate(info.unlimitedMessageRate)
   }
 
-  fun prefixes(): Set<Char> {
+  fun prefixes(): List<Char> {
     if (_prefixes == null)
       determinePrefixes()
-    return _prefixes!!
+    return _prefixes ?: emptyList()
   }
 
-  fun prefixModes(): Set<Char> {
+  fun prefixModes(): List<Char> {
     if (_prefixModes == null)
       determinePrefixes()
-    return _prefixModes!!
+    return _prefixModes ?: emptyList()
   }
 
   private fun determinePrefixes() {
     // seems like we have to construct them first
     val prefix = support("PREFIX")
     if (prefix.startsWith("(") && prefix.contains(")")) {
-      val (prefixes, prefixModes) = prefix.substring(1)
+      val (prefixModes, prefixes) = prefix.substring(1)
         .split(')', limit = 2)
         .map(String::toCharArray)
-        .map(CharArray::toSet)
+        .map(CharArray::toList)
       _prefixes = prefixes
       _prefixModes = prefixModes
     } else {
-      val defaultPrefixes = setOf('~', '&', '@', '%', '+')
-      val defaultPrefixModes = setOf('q', 'a', 'o', 'h', 'v')
+      val defaultPrefixes = listOf('~', '&', '@', '%', '+')
+      val defaultPrefixModes = listOf('q', 'a', 'o', 'h', 'v')
       if (prefix.isBlank()) {
         _prefixes = defaultPrefixes
         _prefixModes = defaultPrefixModes
@@ -238,8 +246,8 @@ class Network constructor(
       val (prefixes, prefixModes) = defaultPrefixes.zip(defaultPrefixModes)
         .filter { prefix.contains(it.second) }
         .unzip()
-      _prefixes = prefixes.toSet()
-      _prefixModes = prefixModes.toSet()
+      _prefixes = prefixes
+      _prefixModes = prefixModes
       // check for success
       if (prefixes.isNotEmpty())
         return
@@ -248,8 +256,8 @@ class Network constructor(
       val (prefixes2, prefixModes2) = defaultPrefixes.zip(defaultPrefixModes)
         .filter { prefix.contains(it.first) }
         .unzip()
-      _prefixes = prefixes2.toSet()
-      _prefixModes = prefixModes2.toSet()
+      _prefixes = prefixes2
+      _prefixModes = prefixModes2
       // now we've done all we've could...
     }
   }
@@ -876,8 +884,8 @@ class Network constructor(
   private var _connected: Boolean = false
   private var _connectionState: ConnectionState = ConnectionState.Disconnected
   val liveConnectionState = BehaviorSubject.createDefault(ConnectionState.Disconnected)
-  private var _prefixes: Set<Char>? = null
-  private var _prefixModes: Set<Char>? = null
+  private var _prefixes: List<Char>? = null
+  private var _prefixModes: List<Char>? = null
   private var _channelModes: Map<ChannelModeType, Set<Char>>? = null
   // stores all known nicks for the server
   private var _ircUsers: MutableMap<String, IrcUser> = mutableMapOf()

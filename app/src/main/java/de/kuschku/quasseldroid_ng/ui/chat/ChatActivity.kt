@@ -34,6 +34,7 @@ import de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
 class ChatActivity : ServiceBoundActivity() {
   private var contentMessages: MessageListFragment? = null
   private var chatListFragment: BufferViewConfigFragment? = null
+  private var nickListFragment: NickListFragment? = null
 
   @BindView(R.id.drawerLayout)
   lateinit var drawerLayout: DrawerLayout
@@ -78,10 +79,14 @@ class ChatActivity : ServiceBoundActivity() {
     chatListFragment = supportFragmentManager.findFragmentById(
       R.id.chatListFragment
     ) as? BufferViewConfigFragment
+    nickListFragment = supportFragmentManager.findFragmentById(
+      R.id.nickListFragment
+    ) as? NickListFragment
 
     setSupportActionBar(toolbar)
 
     chatListFragment?.currentBuffer?.value = currentBuffer
+    nickListFragment?.currentBuffer?.value = currentBuffer
     contentMessages?.currentBuffer?.value = currentBuffer
 
     chatListFragment?.clickListeners?.add {
@@ -97,6 +102,7 @@ class ChatActivity : ServiceBoundActivity() {
     }
     )
 
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
     drawerToggle = ActionBarDrawerToggle(
       this,
       drawerLayout,
@@ -185,7 +191,10 @@ class ChatActivity : ServiceBoundActivity() {
   }
 
   override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
-    R.id.disconnect -> {
+    android.R.id.home -> {
+      drawerToggle.onOptionsItemSelected(item)
+    }
+    R.id.disconnect   -> {
       handler.post {
         getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editApply {
           putBoolean(Keys.Status.reconnect, false)
@@ -196,7 +205,7 @@ class ChatActivity : ServiceBoundActivity() {
       }
       true
     }
-    else            -> super.onOptionsItemSelected(item)
+    else              -> super.onOptionsItemSelected(item)
   }
 
   override fun onDestroy() {

@@ -17,6 +17,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Activity
+import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
@@ -24,6 +25,7 @@ import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.util.helper.getCompatDrawable
 import de.kuschku.quasseldroid_ng.util.helper.styledAttributes
+import de.kuschku.quasseldroid_ng.util.helper.visibleIf
 import de.kuschku.quasseldroid_ng.util.helper.zip
 
 class BufferListAdapter(
@@ -55,6 +57,8 @@ class BufferListAdapter(
 
         val old: List<BufferListItem> = data
         val new: List<BufferListItem> = list.sortedBy { props ->
+          !props.info.type.hasFlag(Buffer_Type.StatusBuffer)
+        }.sortedBy { props ->
           props.network.networkName
         }.map { props ->
           BufferListItem(
@@ -149,12 +153,6 @@ class BufferListAdapter(
 
   abstract class BufferViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     abstract fun bind(props: BufferProps, state: BufferState)
-
-    fun <T> status(target: T, actual: T) = if (target == actual) {
-      View.VISIBLE
-    } else {
-      View.GONE
-    }
 
     class StatusBuffer(
       itemView: View,
@@ -286,11 +284,7 @@ class BufferListAdapter(
           }
         )
 
-        description.visibility = if (props.description == "") {
-          View.GONE
-        } else {
-          View.VISIBLE
-        }
+        description.visibleIf(props.description.isNotBlank())
 
         status.setImageDrawable(
           when (props.bufferStatus) {
@@ -365,11 +359,7 @@ class BufferListAdapter(
           }
         )
 
-        description.visibility = if (props.description == "") {
-          View.GONE
-        } else {
-          View.VISIBLE
-        }
+        description.visibleIf(props.description.isNotBlank())
 
         status.setImageDrawable(
           when (props.bufferStatus) {
@@ -447,11 +437,7 @@ class BufferListAdapter(
           }
         )
 
-        description.visibility = if (props.description == "") {
-          View.GONE
-        } else {
-          View.VISIBLE
-        }
+        description.visibleIf(props.description.isNotBlank())
 
         status.setImageDrawable(
           when (props.bufferStatus) {

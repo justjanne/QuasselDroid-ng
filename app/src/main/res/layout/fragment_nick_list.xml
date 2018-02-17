@@ -3,7 +3,6 @@
   android:id="@+id/nickList"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:layout_gravity="end"
   android:background="?attr/colorBackground"
   android:clipToPadding="false"
   android:fitsSystemWindows="true"
