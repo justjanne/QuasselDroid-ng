@@ -21,10 +21,6 @@ class MessageAdapter(context: Context) :
 
   private val messageCache = LruCache<Int, FormattedMessage>(512)
 
-  init {
-    setHasStableIds(true)
-  }
-
   override fun onBindViewHolder(holder: QuasselMessageViewHolder, position: Int) {
     getItem(position)?.let {
       messageRenderer.bind(

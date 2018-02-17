@@ -106,9 +106,9 @@ dependencies {
   implementation(appArch("lifecycle", "reactivestreams"))
   kapt(appArch("lifecycle", "compiler"))
 
-  implementation(appArch("persistence.room", "runtime", "1.0.0"))
-  implementation(appArch("persistence.room", "rxjava2", "1.0.0"))
-  kapt(appArch("persistence.room", "compiler", "1.0.0"))
+  implementation(appArch("persistence.room", "runtime", "1.1.0-alpha2"))
+  implementation(appArch("persistence.room", "rxjava2", "1.1.0-alpha2"))
+  kapt(appArch("persistence.room", "compiler", "1.1.0-alpha2"))
 
   implementation(appArch("paging", "runtime", version = "1.0.0-alpha5")) {
     exclude(group = "junit", module = "junit")

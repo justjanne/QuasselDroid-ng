@@ -1,6 +1,6 @@
 package de.kuschku.quasseldroid_ng.persistence
 
-import android.arch.paging.LivePagedListProvider
+import android.arch.paging.DataSource
 import android.arch.persistence.room.*
 import android.content.Context
 
@@ -32,7 +32,7 @@ abstract class AccountDatabase : RoomDatabase() {
     fun findById(id: Long): AccountDatabase.Account?
 
     @Query("SELECT * FROM account ORDER BY lastUsed DESC")
-    fun all(): LivePagedListProvider<Int, Account>
+    fun all(): DataSource.Factory<Int, Account>
 
     @Delete
     fun delete(account: AccountDatabase.Account)

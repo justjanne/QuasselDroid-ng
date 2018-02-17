@@ -1,6 +1,6 @@
 package de.kuschku.quasseldroid_ng.persistence
 
-import android.arch.paging.LivePagedListProvider
+import android.arch.paging.DataSource
 import android.arch.persistence.room.*
 import android.content.Context
 import android.support.annotation.IntRange
@@ -60,8 +60,8 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC")
     fun findByBufferId(bufferId: Int): List<DatabaseMessage>
 
-    @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC")
-    fun findByBufferIdPaged(bufferId: Int): LivePagedListProvider<Int, DatabaseMessage>
+    @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId DESC")
+    fun findByBufferIdPaged(bufferId: Int): DataSource.Factory<Int, DatabaseMessage>
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId DESC LIMIT 1")
     fun findLastByBufferId(bufferId: Int): DatabaseMessage?
