@@ -70,17 +70,18 @@ class QuasselMessageRenderer(context: Context) : MessageRenderer {
       message.messageId,
       timeFormatter.format(message.time.atZone(zoneId)),
       SpanFormatter.format(
-        "%s: %s",
-        formatNick(message.sender, message.senderPrefixes),
+        "%s%s: %s",
+        message.senderPrefixes,
+        formatNick(message.sender),
         message.content
       )
     )
   }
 
-  private fun formatNick(sender: String, prefixes: String): CharSequence {
+  private fun formatNick(sender: String): CharSequence {
     val nick = IrcUserUtils.nick(sender)
     val senderColor = IrcUserUtils.senderColor(nick)
-    val spannableString = SpannableString(prefixes + nick)
+    val spannableString = SpannableString(nick)
     spannableString.setSpan(
       ForegroundColorSpan(senderColors[senderColor % senderColors.size]),
       0,
