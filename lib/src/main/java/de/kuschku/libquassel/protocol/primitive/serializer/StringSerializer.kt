@@ -24,13 +24,14 @@ abstract class StringSerializer(
     }
   )
 
-  private val charBuffer = ThreadLocal<CharBuffer>()
+  //private val charBuffer = ThreadLocal<CharBuffer>()
 
   object UTF16 : StringSerializer(Charsets.UTF_16BE)
   object UTF8 : StringSerializer(Charsets.UTF_8)
   object C : StringSerializer(Charsets.ISO_8859_1, trailingNullByte = true)
 
   private inline fun charBuffer(len: Int): CharBuffer {
+    /*
     if (charBuffer.get() == null)
       charBuffer.set(CharBuffer.allocate(1024))
     val buf = if (len >= 1024)
@@ -40,9 +41,10 @@ abstract class StringSerializer(
     buf.clear()
     buf.limit(len)
     return buf
+    */
+    return CharBuffer.allocate(len)
   }
 
-  @Synchronized
   override fun serialize(buffer: ChainedByteBuffer, data: String?, features: Quassel_Features) {
     if (data == null) {
       IntSerializer.serialize(buffer, -1, features)
@@ -50,7 +52,6 @@ abstract class StringSerializer(
       val charBuffer = charBuffer(data.length)
       charBuffer.put(data)
       charBuffer.flip()
-      encoder.reset()
       val byteBuffer = encoder.encode(charBuffer)
       IntSerializer.serialize(buffer, byteBuffer.remaining() + trailingNullBytes, features)
       buffer.put(byteBuffer)
@@ -59,18 +60,15 @@ abstract class StringSerializer(
     }
   }
 
-  @Synchronized
   fun serialize(data: String?): ByteBuffer = if (data == null) {
     ByteBuffer.allocate(0)
   } else {
     val charBuffer = charBuffer(data.length)
     charBuffer.put(data)
     charBuffer.flip()
-    encoder.reset()
     encoder.encode(charBuffer)
   }
 
-  @Synchronized
   fun deserializeAll(buffer: ByteBuffer): String? {
     val len = buffer.remaining()
     return if (len == -1) {
@@ -79,7 +77,6 @@ abstract class StringSerializer(
       val limit = buffer.limit()
       buffer.limit(buffer.position() + len - trailingNullBytes)
       val charBuffer = charBuffer(len)
-      decoder.reset()
       decoder.decode(buffer, charBuffer, true)
       buffer.limit(limit)
       buffer.position(buffer.position() + trailingNullBytes)
@@ -88,7 +85,6 @@ abstract class StringSerializer(
     }
   }
 
-  @Synchronized
   override fun deserialize(buffer: ByteBuffer, features: Quassel_Features): String? {
     val len = IntSerializer.deserialize(buffer, features)
     return if (len == -1) {
@@ -97,7 +93,6 @@ abstract class StringSerializer(
       val limit = buffer.limit()
       buffer.limit(buffer.position() + Math.max(0, len - trailingNullBytes))
       val charBuffer = charBuffer(len)
-      decoder.reset()
       decoder.decode(buffer, charBuffer, true)
       buffer.limit(limit)
       buffer.position(buffer.position() + trailingNullBytes)
