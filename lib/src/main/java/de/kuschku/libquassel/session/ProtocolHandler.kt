@@ -86,11 +86,12 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
   open fun onInitStatusChanged(progress: Int, total: Int) {}
 
   override fun handle(f: SignalProxyMessage.SyncMessage): Boolean {
+    log(DEBUG, "ProtocolHandler", "< $f")
+
     val obj = objectStorage.get(f.className, f.objectName) ?: if (isInitializing) {
       syncQueue.add(f)
       return true
     } else {
-      log(DEBUG, "ProtocolHandler", "< $f")
       throw ObjectNotFoundException(f.className, f.objectName)
     }
 
@@ -99,8 +100,6 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
       initQueue.add(f)
       return true
     }
-
-    log(DEBUG, "ProtocolHandler", f.toString())
 
     val invoker = Invokers.get(f.className)
                   ?: throw IllegalArgumentException("Invalid classname: ${f.className}")

@@ -5,6 +5,7 @@ import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.quassel.QuasselFeature
 import de.kuschku.libquassel.quassel.syncables.*
+import de.kuschku.libquassel.util.and
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
@@ -23,6 +24,8 @@ class Session(
   private val userData: Pair<String, String>
 ) : ProtocolHandler(), ISession {
   var coreFeatures: Quassel_Features = Quassel_Feature.NONE
+  val negotiatedFeatures
+    get() = coreFeatures and clientData.clientFeatures
 
   private val coreConnection = CoreConnection(this, address, handlerService)
   override val state = coreConnection.state
@@ -87,7 +90,7 @@ class Session(
     synchronize(bufferSyncer, true)
     synchronize(bufferViewManager, true)
     synchronize(coreInfo, true)
-    if (coreFeatures.hasFlag(QuasselFeature.DccFileTransfer))
+    if (negotiatedFeatures.hasFlag(QuasselFeature.DccFileTransfer))
       synchronize(dccConfig, true)
     synchronize(ignoreListManager, true)
     synchronize(ircListHelper, true)

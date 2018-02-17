@@ -1,7 +1,5 @@
 package de.kuschku.libquassel.session
 
-import de.kuschku.libquassel.protocol.Quassel_Feature
-import de.kuschku.libquassel.protocol.Quassel_Features
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.protocol.primitive.serializer.HandshakeVariantMapSerializer
@@ -70,12 +68,12 @@ class CoreConnection(
     IntSerializer.serialize(
       chainedBuffer,
       0x42b33f00 or session.clientData.protocolFeatures.toInt(),
-      session.coreFeatures
+      session.negotiatedFeatures
     )
     for (supportedProtocol in session.clientData.supportedProtocols) {
-      IntSerializer.serialize(chainedBuffer, supportedProtocol.toInt(), session.coreFeatures)
+      IntSerializer.serialize(chainedBuffer, supportedProtocol.toInt(), session.negotiatedFeatures)
     }
-    IntSerializer.serialize(chainedBuffer, 1 shl 31, session.coreFeatures)
+    IntSerializer.serialize(chainedBuffer, 1 shl 31, session.negotiatedFeatures)
     channel?.write(chainedBuffer)
     channel?.flush()
   }
@@ -84,7 +82,7 @@ class CoreConnection(
     sizeBuffer.clear()
     channel?.read(sizeBuffer)
     sizeBuffer.flip()
-    val protocol = ProtocolInfoSerializer.deserialize(sizeBuffer, session.coreFeatures)
+    val protocol = ProtocolInfoSerializer.deserialize(sizeBuffer, session.negotiatedFeatures)
 
     log(DEBUG, TAG, "Protocol negotiated $protocol")
 
@@ -107,7 +105,7 @@ class CoreConnection(
             clientVersion = session.clientData.identifier,
             buildDate = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm:ss")
               .format(session.clientData.buildDate.atOffset(ZoneOffset.UTC)),
-            clientFeatures = Quassel_Features.of(*Quassel_Feature.values())
+            clientFeatures = session.clientData.clientFeatures
           )
         )
       }
@@ -134,7 +132,7 @@ class CoreConnection(
         handlerService.write(
           MessageRunnable(
             data, HandshakeVariantMapSerializer, chainedBuffer, channel,
-            session.coreFeatures
+            session.negotiatedFeatures
           )
         )
       } catch (e: Throwable) {
@@ -148,7 +146,10 @@ class CoreConnection(
       try {
         val data = SignalProxyMessage.serialize(message)
         handlerService.write(
-          MessageRunnable(data, VariantListSerializer, chainedBuffer, channel, session.coreFeatures)
+          MessageRunnable(
+            data, VariantListSerializer, chainedBuffer, channel,
+            session.negotiatedFeatures
+          )
         )
       } catch (e: Throwable) {
         log(WARN, TAG, "Error encountered while serializing sigproxy message", e)
@@ -167,7 +168,7 @@ class CoreConnection(
           break
         sizeBuffer.flip()
 
-        val size = IntSerializer.deserialize(sizeBuffer, session.coreFeatures)
+        val size = IntSerializer.deserialize(sizeBuffer, session.negotiatedFeatures)
         if (size > 64 * 1024 * 1024)
           throw SocketException("Too large frame received: $size")
         val dataBuffer = ByteBuffer.allocateDirect(size)
@@ -190,7 +191,7 @@ class CoreConnection(
   private fun processSigProxy(dataBuffer: ByteBuffer) {
     try {
       val msg = SignalProxyMessage.deserialize(
-        VariantListSerializer.deserialize(dataBuffer, session.coreFeatures)
+        VariantListSerializer.deserialize(dataBuffer, session.negotiatedFeatures)
       )
       handlerService.handle {
         try {
@@ -209,7 +210,7 @@ class CoreConnection(
   private fun processHandshake(dataBuffer: ByteBuffer) {
     try {
       val msg = HandshakeMessage.deserialize(
-        HandshakeVariantMapSerializer.deserialize(dataBuffer, session.coreFeatures)
+        HandshakeVariantMapSerializer.deserialize(dataBuffer, session.negotiatedFeatures)
       )
       try {
         session.handle(msg)

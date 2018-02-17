@@ -109,7 +109,7 @@ class QuasselService : LifecycleService() {
     clientData = ClientData(
       identifier = "${resources.getString(R.string.app_name)} ${BuildConfig.VERSION_NAME}",
       buildDate = Instant.ofEpochSecond(BuildConfig.GIT_COMMIT_DATE),
-      clientFeatures = Quassel_Features.of(*Quassel_Feature.values()),
+      clientFeatures = Quassel_Features.of(*Quassel_Feature.validValues),
       protocolFeatures = Protocol_Features.of(
         Protocol_Feature.Compression,
         Protocol_Feature.TLS
