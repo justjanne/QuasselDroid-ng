@@ -35,6 +35,7 @@ class ChatActivity : ServiceBoundActivity() {
   private var contentMessages: MessageListFragment? = null
   private var chatListFragment: BufferViewConfigFragment? = null
   private var nickListFragment: NickListFragment? = null
+  private var toolbarFragment: ToolbarFragment? = null
 
   @BindView(R.id.drawerLayout)
   lateinit var drawerLayout: DrawerLayout
@@ -82,12 +83,16 @@ class ChatActivity : ServiceBoundActivity() {
     nickListFragment = supportFragmentManager.findFragmentById(
       R.id.nickListFragment
     ) as? NickListFragment
+    toolbarFragment = supportFragmentManager.findFragmentById(
+      R.id.toolbarFragment
+    ) as? ToolbarFragment
 
     setSupportActionBar(toolbar)
 
     chatListFragment?.currentBuffer?.value = currentBuffer
     nickListFragment?.currentBuffer?.value = currentBuffer
     contentMessages?.currentBuffer?.value = currentBuffer
+    toolbarFragment?.currentBuffer?.value = currentBuffer
 
     chatListFragment?.clickListeners?.add {
       currentBuffer.value = it
