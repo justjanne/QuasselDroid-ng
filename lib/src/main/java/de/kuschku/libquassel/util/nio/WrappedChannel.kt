@@ -63,7 +63,7 @@ class WrappedChannel(
     val managers = arrayOf(certificateManager)
     context.init(null, managers, null)
     val factory = context.socketFactory
-    val socket = factory.createSocket(socket, address.host, address.port.toInt(), true) as SSLSocket
+    val socket = factory.createSocket(socket, address.host, address.port, true) as SSLSocket
     socket.useClientMode = true
     socket.startHandshake()
     return WrappedChannel.ofSocket(socket)
@@ -187,4 +187,7 @@ class WrappedChannel(
   override fun flush() {
     flusher?.invoke()
   }
+
+  val sslSession
+    get() = (socket as? SSLSocket)?.session
 }

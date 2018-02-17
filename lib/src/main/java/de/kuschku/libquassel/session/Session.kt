@@ -23,9 +23,12 @@ class Session(
   backlogStorage: BacklogStorage,
   private val userData: Pair<String, String>
 ) : ProtocolHandler(), ISession {
-  var coreFeatures: Quassel_Features = Quassel_Feature.NONE
-  val negotiatedFeatures
+  override var coreFeatures: Quassel_Features = Quassel_Feature.NONE
+  override val negotiatedFeatures
     get() = coreFeatures and clientData.clientFeatures
+
+  override val sslSession
+    get() = coreConnection.sslSession
 
   private val coreConnection = CoreConnection(this, address, handlerService)
   override val state = coreConnection.state

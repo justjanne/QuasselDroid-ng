@@ -10,6 +10,7 @@ import de.kuschku.libquassel.protocol.Message.MessageType.*
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
+import de.kuschku.quasseldroid_ng.util.helper.styledAttributes
 import de.kuschku.quasseldroid_ng.util.quassel.IrcUserUtils
 import de.kuschku.quasseldroid_ng.util.ui.SpanFormatter
 import org.threeten.bp.ZoneId
@@ -20,23 +21,21 @@ class QuasselMessageRenderer(context: Context) : MessageRenderer {
   private val timeFormatter = DateTimeFormatter.ofPattern(
     (DateFormat.getTimeFormat(context) as SimpleDateFormat).toLocalizedPattern()
   )
-  private val senderColors: IntArray
+  private lateinit var senderColors: IntArray
 
   private val zoneId = ZoneId.systemDefault()
 
   init {
-    val typedArray = context.obtainStyledAttributes(
-      intArrayOf(
-        R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
+    context.theme.styledAttributes(
+      R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
         R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
         R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
         R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF
-      )
-    )
-    senderColors = IntArray(16) {
-      typedArray.getColor(it, 0)
+    ) {
+      senderColors = IntArray(16) {
+        getColor(it, 0)
+      }
     }
-    typedArray.recycle()
   }
 
   override fun layout(type: Message_Type?, hasHighlight: Boolean)
@@ -66,16 +65,18 @@ class QuasselMessageRenderer(context: Context) : MessageRenderer {
   }
 
   override fun render(message: QuasselDatabase.DatabaseMessage): FormattedMessage {
-    return FormattedMessage(
-      message.messageId,
-      timeFormatter.format(message.time.atZone(zoneId)),
-      SpanFormatter.format(
-        "%s%s: %s",
-        message.senderPrefixes,
-        formatNick(message.sender),
-        message.content
+    when (message.type) {
+      else -> return FormattedMessage(
+        message.messageId,
+        timeFormatter.format(message.time.atZone(zoneId)),
+        SpanFormatter.format(
+          "%s%s: %s",
+          message.senderPrefixes,
+          formatNick(message.sender),
+          message.content
+        )
       )
-    )
+    }
   }
 
   private fun formatNick(sender: String): CharSequence {

@@ -3,6 +3,7 @@ package de.kuschku.libquassel.session
 import de.kuschku.libquassel.protocol.ClientData
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.protocol.Quassel_Features
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
 import de.kuschku.libquassel.util.compatibility.HandlerService
@@ -11,9 +12,16 @@ import de.kuschku.libquassel.util.compatibility.log
 import de.kuschku.libquassel.util.helpers.or
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import javax.net.ssl.SSLSession
 import javax.net.ssl.X509TrustManager
 
 class SessionManager(offlineSession: ISession, val backlogStorage: BacklogStorage) : ISession {
+  override val coreFeatures: Quassel_Features
+    get() = session.or(lastSession).coreFeatures
+  override val negotiatedFeatures: Quassel_Features
+    get() = session.or(lastSession).negotiatedFeatures
+  override val sslSession: SSLSession?
+    get() = session.or(lastSession).sslSession
   override val aliasManager: AliasManager?
     get() = session.or(lastSession).aliasManager
   override val backlogManager: BacklogManager?

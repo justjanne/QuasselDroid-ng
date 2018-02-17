@@ -44,7 +44,8 @@
     android:layout_marginEnd="@dimen/message_horizontal"
     android:layout_marginRight="@dimen/message_horizontal"
     android:textColor="?attr/colorForegroundSecondary"
-    android:typeface="monospace" />
+    android:typeface="monospace"
+    tools:text="[15:55]" />
 
   <TextView
     android:id="@+id/content"
@@ -53,5 +54,6 @@
     android:layout_weight="1"
     android:textColor="?attr/colorForegroundAction"
     android:textIsSelectable="true"
-    android:textStyle="italic" />
+    android:textStyle="italic"
+    tools:text="-*- justJanne loves the new version" />
 </LinearLayout>

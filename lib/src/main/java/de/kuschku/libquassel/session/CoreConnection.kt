@@ -223,4 +223,7 @@ class CoreConnection(
       dataBuffer.hexDump()
     }
   }
+
+  val sslSession
+    get() = channel?.sslSession
 }

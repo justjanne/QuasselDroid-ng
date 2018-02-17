@@ -15,10 +15,7 @@ import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.quasseldroid_ng.R
-import de.kuschku.quasseldroid_ng.util.helper.map
-import de.kuschku.quasseldroid_ng.util.helper.switchMap
-import de.kuschku.quasseldroid_ng.util.helper.switchMapRx
-import de.kuschku.quasseldroid_ng.util.helper.visibleIf
+import de.kuschku.quasseldroid_ng.util.helper.*
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundFragment
 
 class ToolbarFragment : ServiceBoundFragment() {
@@ -41,6 +38,14 @@ class ToolbarFragment : ServiceBoundFragment() {
     }
   }
 
+  private val isSecure: LiveData<Boolean?> = sessionManager.switchMapRx(
+    SessionManager::session
+  ).switchMapRx { session ->
+    session.state.map { state ->
+      session.sslSession != null
+    }
+  }
+
   var title: CharSequence
     get() = toolbarTitle.text
     set(value) {
@@ -60,11 +65,14 @@ class ToolbarFragment : ServiceBoundFragment() {
     val view = inflater.inflate(R.layout.fragment_toolbar, container, false)
     ButterKnife.bind(this, view)
 
-    currentBufferInfo.observe(
+    currentBufferInfo.zip(isSecure).observe(
       this, Observer {
-      title = it?.bufferName ?: resources.getString(
-        R.string.app_name
-      )
+      if (it != null) {
+        val (info, isSecure) = it
+        this.title = info?.bufferName ?: resources.getString(
+          R.string.app_name
+        )
+      }
     }
     )
 

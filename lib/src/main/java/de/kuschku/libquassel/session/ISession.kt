@@ -2,13 +2,18 @@ package de.kuschku.libquassel.session
 
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.protocol.Quassel_Features
 import de.kuschku.libquassel.quassel.syncables.*
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.io.Closeable
+import javax.net.ssl.SSLSession
 
 interface ISession : Closeable {
   val state: Observable<ConnectionState>
+  val coreFeatures: Quassel_Features
+  val negotiatedFeatures: Quassel_Features
+  val sslSession: SSLSession?
 
   val aliasManager: AliasManager?
   val backlogManager: BacklogManager?
@@ -27,6 +32,11 @@ interface ISession : Closeable {
 
   companion object {
     val NULL = object : ISession {
+      override val state = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
+      override val coreFeatures: Quassel_Features = Quassel_Features.of()
+      override val negotiatedFeatures: Quassel_Features = Quassel_Features.of()
+      override val sslSession: SSLSession? = null
+
       override val rpcHandler: RpcHandler? = null
       override val aliasManager: AliasManager? = null
       override val backlogManager: BacklogManager? = null
@@ -43,7 +53,6 @@ interface ISession : Closeable {
       override val initStatus: Observable<Pair<Int, Int>> = Observable.just(0 to 0)
 
       override fun close() = Unit
-      override val state = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
     }
   }
 }
