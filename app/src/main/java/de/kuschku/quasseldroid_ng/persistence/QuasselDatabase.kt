@@ -103,8 +103,7 @@ abstract class QuasselDatabase : RoomDatabase() {
             database = Room.databaseBuilder(
               context.applicationContext,
               QuasselDatabase::class.java, DATABASE_NAME
-            )
-              .build()
+            ).build()
           }
         }
       }
