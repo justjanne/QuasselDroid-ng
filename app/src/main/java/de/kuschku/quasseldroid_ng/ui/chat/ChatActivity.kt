@@ -190,6 +190,16 @@ class ChatActivity : ServiceBoundActivity() {
     )
   }
 
+  override fun onSaveInstanceState(outState: Bundle?) {
+    super.onSaveInstanceState(outState)
+    outState?.putInt("OPEN_BUFFER", currentBuffer.value ?: -1)
+  }
+
+  override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+    super.onRestoreInstanceState(savedInstanceState)
+    currentBuffer.value = savedInstanceState?.getInt("OPEN_BUFFER", -1)
+  }
+
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     menuInflater.inflate(R.menu.activity_main, menu)
     return super.onCreateOptionsMenu(menu)
