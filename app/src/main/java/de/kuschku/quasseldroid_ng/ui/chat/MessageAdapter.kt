@@ -23,6 +23,7 @@ class MessageAdapter(context: Context) :
     RenderingSettings(
       showPrefix = RenderingSettings.ShowPrefixMode.FIRST,
       colorizeNicknames = RenderingSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
+      colorizeMirc = true,
       timeFormat = ""
     )
   )

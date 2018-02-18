@@ -3,9 +3,11 @@ package de.kuschku.quasseldroid_ng.ui.chat
 import android.content.Context
 import android.graphics.Typeface
 import android.text.SpannableString
+import android.text.Spanned
 import android.text.format.DateFormat
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.text.style.URLSpan
 import de.kuschku.libquassel.protocol.Message.MessageType.*
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
@@ -16,6 +18,7 @@ import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings
 import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings.ColorizeNicknamesMode
 import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings.ShowPrefixMode
 import de.kuschku.quasseldroid_ng.util.helper.styledAttributes
+import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid_ng.util.quassel.IrcUserUtils
 import de.kuschku.quasseldroid_ng.util.ui.SpanFormatter
 import org.threeten.bp.ZoneId
@@ -36,6 +39,8 @@ class QuasselMessageRenderer(
   private lateinit var senderColors: IntArray
 
   private val zoneId = ZoneId.systemDefault()
+
+  private val ircFormatDeserializer = IrcFormatDeserializer(context)
 
   init {
     context.theme.styledAttributes(
@@ -86,7 +91,7 @@ class QuasselMessageRenderer(
           context.getString(R.string.message_format_plain),
           formatPrefix(message.senderPrefixes),
           formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
-          message.content
+          formatContent(message.content)
         )
       )
       Message_Type.Action -> FormattedMessage(
@@ -96,7 +101,7 @@ class QuasselMessageRenderer(
           context.getString(R.string.message_format_action),
           formatPrefix(message.senderPrefixes),
           formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
-          message.content
+          formatContent(message.content)
         )
       )
       Message_Type.Notice -> FormattedMessage(
@@ -106,7 +111,7 @@ class QuasselMessageRenderer(
           context.getString(R.string.message_format_notice),
           formatPrefix(message.senderPrefixes),
           formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
-          message.content
+          formatContent(message.content)
         )
       )
       Message_Type.Nick   -> FormattedMessage(
@@ -209,7 +214,7 @@ class QuasselMessageRenderer(
       Message_Type.Topic -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
-        message.content
+        formatContent(message.content)
       )
       else -> FormattedMessage(
         message.messageId,
@@ -223,6 +228,37 @@ class QuasselMessageRenderer(
         )
       )
     }
+  }
+
+  private val scheme = "(?:(?:mailto:|(?:[+.-]?\\w)+://)|www(?=\\.\\S+\\.))"
+  private val authority = "(?:(?:[,.;@:]?[-\\w]+)+\\.?|\\[[0-9a-f:.]+\\])(?::\\d+)?"
+  private val urlChars = "(?:[,.;:]*[\\w~@/?&=+$()!%#*-])"
+  private val urlEnd = "((?:>|[,.;:\"]*\\s|\\b|$))"
+  private val urlPattern = Regex(
+    String.format("\\b(%s%s(?:/%s*)?)%s", scheme, authority, urlChars, urlEnd),
+    RegexOption.IGNORE_CASE
+  )
+  private val channelPattern = Regex(
+    "((?:#|![A-Z0-9]{5})[^,:\\s]+(?::[^,:\\s]+)?)\\b",
+    RegexOption.IGNORE_CASE
+  )
+
+  private fun formatContent(content: String): CharSequence {
+    val text = SpannableString(
+      ircFormatDeserializer.formatString(content, renderingSettings.colorizeMirc)
+    )
+    for (result in urlPattern.findAll(content)) {
+      text.setSpan(
+        URLSpan(result.value), result.range.start, result.range.start + result.value.length,
+        Spanned.SPAN_INCLUSIVE_INCLUSIVE
+      )
+    }
+    /*
+    for (result in channelPattern.findAll(content)) {
+      text.setSpan(URLSpan(result.value), result.range.start, result.range.endInclusive, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+    }
+    */
+    return text
   }
 
   private fun formatNickImpl(sender: String, colorize: Boolean): CharSequence {

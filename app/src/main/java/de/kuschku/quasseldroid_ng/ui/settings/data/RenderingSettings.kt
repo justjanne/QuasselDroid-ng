@@ -3,6 +3,7 @@ package de.kuschku.quasseldroid_ng.ui.settings.data
 data class RenderingSettings(
   val showPrefix: ShowPrefixMode = ShowPrefixMode.FIRST,
   val colorizeNicknames: ColorizeNicknamesMode = ColorizeNicknamesMode.ALL_BUT_MINE,
+  val colorizeMirc: Boolean = true,
   val timeFormat: String = ""
 ) {
   enum class ColorizeNicknamesMode(val value: Int) {
