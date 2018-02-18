@@ -99,13 +99,16 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                     it to network
                   }
                 }.map { (info, network) ->
-                  bufferSyncer.liveActivity(info.bufferId).map { activity ->
-                    when {
-                      activity.hasFlag(Message.MessageType.Plain) ||
-                      activity.hasFlag(Message.MessageType.Notice) ||
-                      activity.hasFlag(Message.MessageType.Action) -> Buffer_Activity.NewMessage
-                      activity.isNotEmpty()                        -> Buffer_Activity.OtherActivity
-                      else                                         -> Buffer_Activity.NoActivity
+                  bufferSyncer.liveActivity(info.bufferId).switchMap { activity ->
+                    bufferSyncer.liveHighlightCount(info.bufferId).map { highlights ->
+                      when {
+                        highlights > 0                               -> Buffer_Activity.Highlight
+                        activity.hasFlag(Message.MessageType.Plain) ||
+                        activity.hasFlag(Message.MessageType.Notice) ||
+                        activity.hasFlag(Message.MessageType.Action) -> Buffer_Activity.NewMessage
+                        activity.isNotEmpty()                        -> Buffer_Activity.OtherActivity
+                        else                                         -> Buffer_Activity.NoActivity
+                      }
                     }
                   }.switchMap { activity ->
                     when (info.type.toInt()) {

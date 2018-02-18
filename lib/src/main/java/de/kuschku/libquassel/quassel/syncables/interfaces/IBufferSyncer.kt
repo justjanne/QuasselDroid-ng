@@ -8,9 +8,11 @@ import de.kuschku.libquassel.protocol.Type
 @Syncable(name = "BufferSyncer")
 interface IBufferSyncer : ISyncableObject {
   fun initActivities(): QVariantList
+  fun initHighlightCounts(): QVariantList
   fun initLastSeenMsg(): QVariantList
   fun initMarkerLines(): QVariantList
   fun initSetActivities(data: QVariantList)
+  fun initSetHighlightCounts(data: QVariantList)
   fun initSetLastSeenMsg(data: QVariantList)
   fun initSetMarkerLines(data: QVariantList)
 
@@ -69,6 +71,11 @@ interface IBufferSyncer : ISyncableObject {
   @Slot
   fun setBufferActivity(buffer: BufferId, activity: Int) {
     SYNC("setBufferActivity", ARG(buffer, QType.BufferId), ARG(activity, Type.Int))
+  }
+
+  @Slot
+  fun setHighlightCount(buffer: BufferId, count: Int) {
+    SYNC("setHighlightCount", ARG(buffer, QType.BufferId), ARG(count, Type.Int))
   }
 
   @Slot

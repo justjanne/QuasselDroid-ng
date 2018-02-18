@@ -17,14 +17,20 @@ class BufferSyncer constructor(
   fun liveActivity(buffer: BufferId): Observable<Message_Types>
     = live_bufferActivities.map { activity(buffer) }.distinctUntilChanged()
 
+  fun highlightCount(buffer: BufferId): Int = _highlightCounts[buffer] ?: 0
+  fun liveHighlightCount(buffer: BufferId): Observable<Int>
+    = live_highlightCounts.map { highlightCount(buffer) }.distinctUntilChanged()
+
   override fun toVariantMap(): QVariantMap = mapOf(
     "Activities" to QVariant_(initActivities(), Type.QVariantList),
+    "HighlightCounts" to QVariant_(initHighlightCounts(), Type.QVariantList),
     "LastSeenMsg" to QVariant_(initLastSeenMsg(), Type.QVariantList),
     "MarkerLines" to QVariant_(initMarkerLines(), Type.QVariantList)
   )
 
   override fun fromVariantMap(properties: QVariantMap) {
     initSetActivities(properties["Activities"].valueOr(::emptyList))
+    initSetHighlightCounts(properties["HighlightCounts"].valueOr(::emptyList))
     initSetLastSeenMsg(properties["LastSeenMsg"].valueOr(::emptyList))
     initSetMarkerLines(properties["MarkerLines"].valueOr(::emptyList))
   }
@@ -32,6 +38,15 @@ class BufferSyncer constructor(
   override fun initActivities(): QVariantList {
     val list: MutableList<QVariant_> = mutableListOf()
     for ((key, value) in _bufferActivities) {
+      list.add(QVariant_(key, QType.BufferId))
+      list.add(QVariant_(value, Type.Int))
+    }
+    return list
+  }
+
+  override fun initHighlightCounts(): QVariantList {
+    val list: MutableList<QVariant_> = mutableListOf()
+    for ((key, value) in _highlightCounts) {
       list.add(QVariant_(key, QType.BufferId))
       list.add(QVariant_(value, Type.Int))
     }
@@ -64,6 +79,14 @@ class BufferSyncer constructor(
     }
   }
 
+  override fun initSetHighlightCounts(data: QVariantList) {
+    (0 until data.size step 2).map {
+      data[it].value(0) to data[it + 1].value(0)
+    }.forEach { (buffer, count) ->
+      setHighlightCount(buffer, count)
+    }
+  }
+
   override fun initSetLastSeenMsg(data: QVariantList) {
     (0 until data.size step 2).map {
       data[it].value(0) to data[it + 1].value(0)
@@ -90,6 +113,7 @@ class BufferSyncer constructor(
     _lastSeenMsg.remove(buffer2)
     _markerLines.remove(buffer2)
     _bufferActivities.remove(buffer2)
+    _highlightCounts.remove(buffer2)
     live_bufferInfos.onNext(_bufferInfos)
   }
 
@@ -97,6 +121,7 @@ class BufferSyncer constructor(
     _lastSeenMsg.remove(buffer)
     _markerLines.remove(buffer)
     _bufferActivities.remove(buffer)
+    _highlightCounts.remove(buffer)
     _bufferInfos.remove(buffer)
     live_bufferInfos.onNext(_bufferInfos)
   }
@@ -147,11 +172,21 @@ class BufferSyncer constructor(
     live_bufferActivities.onNext(_bufferActivities)
   }
 
+  override fun setHighlightCount(buffer: BufferId, count: Int) {
+    super.setHighlightCount(buffer, count)
+    _highlightCounts[buffer] = count
+    live_highlightCounts.onNext(_highlightCounts)
+  }
+
   private val _lastSeenMsg: MutableMap<BufferId, MsgId> = mutableMapOf()
   private val _markerLines: MutableMap<BufferId, MsgId> = mutableMapOf()
   private val _bufferActivities: MutableMap<BufferId, Message_Types> = mutableMapOf()
   private val live_bufferActivities = BehaviorSubject.createDefault(
     mutableMapOf<BufferId, Message_Types>()
+  )
+  private val _highlightCounts: MutableMap<BufferId, Int> = mutableMapOf()
+  private val live_highlightCounts = BehaviorSubject.createDefault(
+    mutableMapOf<BufferId, Int>()
   )
   private val _bufferInfos = mutableMapOf<BufferId, BufferInfo>()
   val live_bufferInfos = BehaviorSubject.createDefault(mutableMapOf<BufferId, BufferInfo>())
