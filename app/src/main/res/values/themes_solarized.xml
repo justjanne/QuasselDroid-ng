@@ -32,6 +32,7 @@
     <item name="colorForegroundHighlight">#839495</item>
     <item name="colorForegroundSecondary">#576A66</item>
     <item name="colorForegroundAction">#268BD2</item>
+    <item name="colorForegroundNotice">#B58900</item>
     <item name="colorForegroundError">#B00000</item>
 
     <item name="colorForegroundMirc">0xF</item>
@@ -76,6 +77,7 @@
     <item name="colorForegroundHighlight">#839495</item>
     <item name="colorForegroundSecondary">#576A66</item>
     <item name="colorForegroundAction">#268BD2</item>
+    <item name="colorForegroundNotice">#B58900</item>
     <item name="colorForegroundError">#B00000</item>
 
     <item name="colorForegroundMirc">0xF</item>

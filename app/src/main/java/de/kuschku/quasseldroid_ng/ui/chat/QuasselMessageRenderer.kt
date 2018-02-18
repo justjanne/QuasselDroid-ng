@@ -28,9 +28,9 @@ class QuasselMessageRenderer(context: Context) : MessageRenderer {
   init {
     context.theme.styledAttributes(
       R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
-        R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
-        R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
-        R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF
+      R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
+      R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
+      R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF
     ) {
       senderColors = IntArray(16) {
         getColor(it, 0)
@@ -40,8 +40,10 @@ class QuasselMessageRenderer(context: Context) : MessageRenderer {
 
   override fun layout(type: Message_Type?, hasHighlight: Boolean)
     = when (type) {
-    Nick, Notice, Mode, Join, Part, Quit, Kick, Kill, Server, Info, DayChange, Topic, NetsplitJoin,
-    NetsplitQuit, Invite -> R.layout.widget_chatmessage_server
+    Nick, Mode, Join, Part, Quit, Kick, Kill, Info, DayChange, Topic, NetsplitJoin,
+    NetsplitQuit, Invite -> R.layout.widget_chatmessage_info
+    Notice               -> R.layout.widget_chatmessage_notice
+    Server               -> R.layout.widget_chatmessage_server
     Error                -> R.layout.widget_chatmessage_error
     Action               -> R.layout.widget_chatmessage_action
     Plain                -> R.layout.widget_chatmessage_plain
@@ -65,12 +67,101 @@ class QuasselMessageRenderer(context: Context) : MessageRenderer {
   }
 
   override fun render(message: QuasselDatabase.DatabaseMessage): FormattedMessage {
-    when (message.type) {
-      else -> return FormattedMessage(
+    return when (message.type) {
+      Message_Type.Plain.bit  -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
         SpanFormatter.format(
           "%s%s: %s",
+          message.senderPrefixes,
+          formatNick(message.sender),
+          message.content
+        )
+      )
+      Message_Type.Action.bit -> FormattedMessage(
+        message.messageId,
+        timeFormatter.format(message.time.atZone(zoneId)),
+        SpanFormatter.format(
+          "* %s%s %s",
+          message.senderPrefixes,
+          formatNick(message.sender),
+          message.content
+        )
+      )
+      Message_Type.Notice.bit -> FormattedMessage(
+        message.messageId,
+        timeFormatter.format(message.time.atZone(zoneId)),
+        SpanFormatter.format(
+          "[%s%s] %s",
+          message.senderPrefixes,
+          formatNick(message.sender),
+          message.content
+        )
+      )
+      Message_Type.Nick.bit   -> FormattedMessage(
+        message.messageId,
+        timeFormatter.format(message.time.atZone(zoneId)),
+        SpanFormatter.format(
+          "%s%s is now known as %s%s",
+          message.senderPrefixes,
+          formatNick(message.sender),
+          message.senderPrefixes,
+          formatNick(message.content)
+        )
+      )
+      Message_Type.Join.bit   -> FormattedMessage(
+        message.messageId,
+        timeFormatter.format(message.time.atZone(zoneId)),
+        SpanFormatter.format(
+          "%s%s joined",
+          message.senderPrefixes,
+          formatNick(message.sender)
+        )
+      )
+      Message_Type.Part.bit   -> FormattedMessage(
+        message.messageId,
+        timeFormatter.format(message.time.atZone(zoneId)),
+        SpanFormatter.format(
+          "%s%s left: %s",
+          message.senderPrefixes,
+          formatNick(message.sender),
+          message.content
+        )
+      )
+      Message_Type.Quit.bit   -> FormattedMessage(
+        message.messageId,
+        timeFormatter.format(message.time.atZone(zoneId)),
+        SpanFormatter.format(
+          "%s%s quit: %s",
+          message.senderPrefixes,
+          formatNick(message.sender),
+          message.content
+        )
+      )
+      Message_Type.Server.bit,
+      Message_Type.Info.bit,
+      Message_Type.Error.bit  -> FormattedMessage(
+        message.messageId,
+        timeFormatter.format(message.time.atZone(zoneId)),
+        SpanFormatter.format(
+          "%s",
+          message.content
+        )
+      )
+      Message_Type.Topic.bit  -> FormattedMessage(
+        message.messageId,
+        timeFormatter.format(message.time.atZone(zoneId)),
+        SpanFormatter.format(
+          "%s",
+          message.content
+        )
+      )
+      else                    -> FormattedMessage(
+        message.messageId,
+        timeFormatter.format(message.time.atZone(zoneId)),
+        SpanFormatter.format(
+          "[%d] %s%s: %s",
+          message.type,
           message.senderPrefixes,
           formatNick(message.sender),
           message.content

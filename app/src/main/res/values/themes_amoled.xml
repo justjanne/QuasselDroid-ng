@@ -30,6 +30,7 @@
     <item name="colorForegroundHighlight">#FFFFFF</item>
     <item name="colorForegroundSecondary">#B3FFFFFF</item>
     <item name="colorForegroundAction">#7986cb</item>
+    <item name="colorForegroundNotice">#916409</item>
     <item name="colorForegroundError">#800000</item>
 
     <item name="colorForegroundMirc">0x0</item>
