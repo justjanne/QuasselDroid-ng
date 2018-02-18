@@ -13,6 +13,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.util.helper.visibleIf
+import de.kuschku.quasseldroid_ng.util.irc.IrcCaseMappers
 
 class NickListAdapter(
   lifecycleOwner: LifecycleOwner,
@@ -30,7 +31,7 @@ class NickListAdapter(
         val list = it ?: emptyList()
         val old: List<IrcUserItem> = data
         val new: List<IrcUserItem> = list
-          .sortedBy { it.nick.toLowerCase() }
+          .sortedBy { IrcCaseMappers[it.networkCasemapping].toLowerCase(it.nick) }
           .sortedBy { it.lowestMode }
         val result = DiffUtil.calculateDiff(
           object : DiffUtil.Callback() {
@@ -81,7 +82,8 @@ class NickListAdapter(
     val modes: String,
     val lowestMode: Int,
     val realname: String,
-    val away: Boolean
+    val away: Boolean,
+    val networkCasemapping: String
   )
 
   class NickViewHolder(

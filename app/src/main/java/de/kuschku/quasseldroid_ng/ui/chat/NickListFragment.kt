@@ -65,7 +65,8 @@ class NickListFragment : ServiceBoundFragment() {
                   network.modesToPrefixes(userModes),
                   lowestMode,
                   realName,
-                  away
+                  away,
+                  network.support("CASEMAPPING")
                 )
               }
             }, { array: Array<Any> ->
