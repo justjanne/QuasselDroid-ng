@@ -251,10 +251,10 @@ class QuasselMessageRenderer(
   )
 
   private fun formatContent(content: String): CharSequence {
-    val text = SpannableString(
-      ircFormatDeserializer.formatString(content, renderingSettings.colorizeMirc)
-    )
-    for (result in urlPattern.findAll(content)) {
+    val formattedText = ircFormatDeserializer.formatString(content, renderingSettings.colorizeMirc)
+    val text = SpannableString(formattedText)
+
+    for (result in urlPattern.findAll(formattedText)) {
       val group = result.groups[1]
       if (group != null) {
         text.setSpan(
