@@ -157,7 +157,7 @@ class QuasselMessageRenderer(
           )
         }
       )
-      Message_Type.Quit   -> FormattedMessage(
+      Message_Type.Quit -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
         if (message.content.isBlank()) {
@@ -175,19 +175,43 @@ class QuasselMessageRenderer(
           )
         }
       )
+      Message_Type.NetsplitJoin -> {
+        val split = message.content.split("#:#")
+        val (server1, server2) = split.last().split(' ')
+        val usersAffected = split.size - 1
+        FormattedMessage(
+          message.messageId,
+          timeFormatter.format(message.time.atZone(zoneId)),
+          context.resources.getQuantityString(
+            R.plurals.message_netsplit_join, usersAffected, server1, server2, usersAffected
+          )
+        )
+      }
+      Message_Type.NetsplitQuit -> {
+        val split = message.content.split("#:#")
+        val (server1, server2) = split.last().split(' ')
+        val usersAffected = split.size - 1
+        FormattedMessage(
+          message.messageId,
+          timeFormatter.format(message.time.atZone(zoneId)),
+          context.resources.getQuantityString(
+            R.plurals.message_netsplit_quit, usersAffected, server1, server2, usersAffected
+          )
+        )
+      }
       Message_Type.Server,
       Message_Type.Info,
-      Message_Type.Error  -> FormattedMessage(
+      Message_Type.Error -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
         message.content
       )
-      Message_Type.Topic  -> FormattedMessage(
+      Message_Type.Topic -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
         message.content
       )
-      else                -> FormattedMessage(
+      else -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
         SpanFormatter.format(

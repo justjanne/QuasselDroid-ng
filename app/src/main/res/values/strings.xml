@@ -18,4 +18,12 @@
   <string name="message_format_part_2">%1$s%2$s left: %3$s</string>
   <string name="message_format_quit_1">%1$s%2$s quit</string>
   <string name="message_format_quit_2">%1$s%2$s quit (%3$s)</string>
+  <plurals name="message_netsplit_join">
+    <item quantity="one">Netsplit between %1$s and %2$s ended: %3$d user joined</item>
+    <item quantity="other">Netsplit between %1$s and %2$s ended: %3$d users joined</item>
+  </plurals>
+  <plurals name="message_netsplit_quit">
+    <item quantity="one">Netsplit between %1$s and %2$s: %3$d user quit</item>
+    <item quantity="other">Netsplit between %1$s and %2$s: %3$d users quit</item>
+  </plurals>
 </resources>
