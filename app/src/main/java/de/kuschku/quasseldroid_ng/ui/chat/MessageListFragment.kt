@@ -82,25 +82,40 @@ class MessageListFragment : ServiceBoundFragment() {
 
     database = QuasselDatabase.Creator.init(context!!.applicationContext)
     val data = buffer.switchMap {
-      LivePagedListBuilder(database.message().findByBufferIdPaged(it), 20)
+      LivePagedListBuilder(
+        database.message().findByBufferIdPaged(it),
+        PagedList.Config.Builder()
+          .setPageSize(20)
+          .setPrefetchDistance(20)
+          .setInitialLoadSizeHint(20)
+          .setEnablePlaceholders(true)
+          .build()
+      )
         .setBoundaryCallback(boundaryCallback)
-        .setInitialLoadKey(null)
         .build()
     }
 
-    sessionManager.zip(buffer).zip(data).observe(
-      this, Observer {
-      handler.post {
-        val session = it?.first?.first
-        val buffer = it?.first?.second
-        val bufferSyncer = session?.bufferSyncer
+    handler.post {
+      val database = QuasselDatabase.Creator.init(this.context!!)
+      sessionManager.zip(buffer).zip(data).observe(
+        this, Observer {
+        handler.post {
+          val session = it?.first?.first
+          val buffer = it?.first?.second
+          val bufferSyncer = session?.bufferSyncer
 
-        if (buffer != null && bufferSyncer != null) {
-          bufferSyncer.requestMarkBufferAsRead(buffer)
+          if (buffer != null && bufferSyncer != null) {
+            val lastMessage = database.message().findLastByBufferId(buffer)
+
+            if (lastMessage != null) {
+              bufferSyncer.requestMarkBufferAsRead(buffer)
+              bufferSyncer.requestSetLastSeenMsg(buffer, lastMessage.messageId)
+            }
+          }
         }
       }
+      )
     }
-    )
 
     data.observe(
       this, Observer { list ->
