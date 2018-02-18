@@ -35,6 +35,5 @@
     android:layout_weight="1"
     android:textColor="?attr/colorForegroundError"
     android:textIsSelectable="true"
-    android:textStyle="italic"
     tools:text="everyone: deserves a chance to fly. No such channel" />
 </LinearLayout>

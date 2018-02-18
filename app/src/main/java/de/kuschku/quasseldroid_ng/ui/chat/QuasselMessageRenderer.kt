@@ -7,9 +7,14 @@ import android.text.format.DateFormat
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import de.kuschku.libquassel.protocol.Message.MessageType.*
+import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
+import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
+import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings
+import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings.ColorizeNicknamesMode
+import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings.ShowPrefixMode
 import de.kuschku.quasseldroid_ng.util.helper.styledAttributes
 import de.kuschku.quasseldroid_ng.util.quassel.IrcUserUtils
 import de.kuschku.quasseldroid_ng.util.ui.SpanFormatter
@@ -17,9 +22,16 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import java.text.SimpleDateFormat
 
-class QuasselMessageRenderer(context: Context) : MessageRenderer {
+class QuasselMessageRenderer(
+  private val context: Context,
+  private val renderingSettings: RenderingSettings
+) : MessageRenderer {
   private val timeFormatter = DateTimeFormatter.ofPattern(
-    (DateFormat.getTimeFormat(context) as SimpleDateFormat).toLocalizedPattern()
+    if (renderingSettings.timeFormat.isNotBlank()) {
+      renderingSettings.timeFormat
+    } else {
+      (DateFormat.getTimeFormat(context) as SimpleDateFormat).toLocalizedPattern()
+    }
   )
   private lateinit var senderColors: IntArray
 
@@ -38,16 +50,15 @@ class QuasselMessageRenderer(context: Context) : MessageRenderer {
     }
   }
 
-  override fun layout(type: Message_Type?, hasHighlight: Boolean)
-    = when (type) {
-    Nick, Mode, Join, Part, Quit, Kick, Kill, Info, DayChange, Topic, NetsplitJoin,
-    NetsplitQuit, Invite -> R.layout.widget_chatmessage_info
-    Notice               -> R.layout.widget_chatmessage_notice
-    Server               -> R.layout.widget_chatmessage_server
-    Error                -> R.layout.widget_chatmessage_error
-    Action               -> R.layout.widget_chatmessage_action
-    Plain                -> R.layout.widget_chatmessage_plain
-    else                 -> R.layout.widget_chatmessage_plain
+  override fun layout(type: Message_Type?, hasHighlight: Boolean) = when (type) {
+    Notice -> R.layout.widget_chatmessage_notice
+    Server -> R.layout.widget_chatmessage_server
+    Error  -> R.layout.widget_chatmessage_error
+    Action -> R.layout.widget_chatmessage_action
+    Plain  -> R.layout.widget_chatmessage_plain
+    Nick, Mode, Join, Part, Quit, Kick, Kill, Info, DayChange, Topic, NetsplitJoin, NetsplitQuit,
+    Invite -> R.layout.widget_chatmessage_info
+    else   -> R.layout.widget_chatmessage_placeholder
   }
 
   override fun init(viewHolder: QuasselMessageViewHolder,
@@ -67,119 +78,141 @@ class QuasselMessageRenderer(context: Context) : MessageRenderer {
   }
 
   override fun render(message: QuasselDatabase.DatabaseMessage): FormattedMessage {
-    return when (message.type) {
-      Message_Type.Plain.bit  -> FormattedMessage(
+    return when (Message_Type.of(message.type).enabledValues().firstOrNull()) {
+      Message_Type.Plain  -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
         SpanFormatter.format(
-          "%s%s: %s",
-          message.senderPrefixes,
-          formatNick(message.sender),
+          context.getString(R.string.message_format_plain),
+          formatPrefix(message.senderPrefixes),
+          formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
           message.content
         )
       )
-      Message_Type.Action.bit -> FormattedMessage(
+      Message_Type.Action -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
         SpanFormatter.format(
-          "* %s%s %s",
-          message.senderPrefixes,
-          formatNick(message.sender),
+          context.getString(R.string.message_format_action),
+          formatPrefix(message.senderPrefixes),
+          formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
           message.content
         )
       )
-      Message_Type.Notice.bit -> FormattedMessage(
+      Message_Type.Notice -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
         SpanFormatter.format(
-          "[%s%s] %s",
-          message.senderPrefixes,
-          formatNick(message.sender),
+          context.getString(R.string.message_format_notice),
+          formatPrefix(message.senderPrefixes),
+          formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
           message.content
         )
       )
-      Message_Type.Nick.bit   -> FormattedMessage(
+      Message_Type.Nick   -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
         SpanFormatter.format(
-          "%s%s is now known as %s%s",
-          message.senderPrefixes,
-          formatNick(message.sender),
-          message.senderPrefixes,
-          formatNick(message.content)
+          context.getString(R.string.message_format_nick),
+          formatPrefix(message.senderPrefixes),
+          formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
+          formatPrefix(message.senderPrefixes),
+          formatNick(message.content, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self))
         )
       )
-      Message_Type.Join.bit   -> FormattedMessage(
+      Message_Type.Mode   -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
         SpanFormatter.format(
-          "%s%s joined",
-          message.senderPrefixes,
-          formatNick(message.sender)
+          context.getString(R.string.message_format_mode),
+          message.content,
+          formatPrefix(message.senderPrefixes),
+          formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self))
         )
       )
-      Message_Type.Part.bit   -> FormattedMessage(
+      Message_Type.Join   -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
         SpanFormatter.format(
-          "%s%s left: %s",
-          message.senderPrefixes,
-          formatNick(message.sender),
-          message.content
+          context.getString(R.string.message_format_join),
+          formatPrefix(message.senderPrefixes),
+          formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self))
         )
       )
-      Message_Type.Quit.bit   -> FormattedMessage(
+      Message_Type.Part   -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
-        SpanFormatter.format(
-          "%s%s quit: %s",
-          message.senderPrefixes,
-          formatNick(message.sender),
-          message.content
-        )
+        if (message.content.isBlank()) {
+          SpanFormatter.format(
+            context.getString(R.string.message_format_part_1),
+            formatPrefix(message.senderPrefixes),
+            formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self))
+          )
+        } else {
+          SpanFormatter.format(
+            context.getString(R.string.message_format_part_2),
+            formatPrefix(message.senderPrefixes),
+            formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
+            message.content
+          )
+        }
       )
-      Message_Type.Server.bit,
-      Message_Type.Info.bit,
-      Message_Type.Error.bit  -> FormattedMessage(
+      Message_Type.Quit   -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
-        SpanFormatter.format(
-          "%s",
-          message.content
-        )
+        if (message.content.isBlank()) {
+          SpanFormatter.format(
+            context.getString(R.string.message_format_quit_1),
+            formatPrefix(message.senderPrefixes),
+            formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self))
+          )
+        } else {
+          SpanFormatter.format(
+            context.getString(R.string.message_format_quit_2),
+            formatPrefix(message.senderPrefixes),
+            formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
+            message.content
+          )
+        }
       )
-      Message_Type.Topic.bit  -> FormattedMessage(
+      Message_Type.Server,
+      Message_Type.Info,
+      Message_Type.Error  -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
-        SpanFormatter.format(
-          "%s",
-          message.content
-        )
+        message.content
       )
-      else                    -> FormattedMessage(
+      Message_Type.Topic  -> FormattedMessage(
+        message.messageId,
+        timeFormatter.format(message.time.atZone(zoneId)),
+        message.content
+      )
+      else                -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
         SpanFormatter.format(
           "[%d] %s%s: %s",
           message.type,
-          message.senderPrefixes,
-          formatNick(message.sender),
+          formatPrefix(message.senderPrefixes),
+          formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
           message.content
         )
       )
     }
   }
 
-  private fun formatNick(sender: String): CharSequence {
+  private fun formatNickImpl(sender: String, colorize: Boolean): CharSequence {
     val nick = IrcUserUtils.nick(sender)
-    val senderColor = IrcUserUtils.senderColor(nick)
     val spannableString = SpannableString(nick)
-    spannableString.setSpan(
-      ForegroundColorSpan(senderColors[senderColor % senderColors.size]),
-      0,
-      nick.length,
-      SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
-    )
+    if (colorize) {
+      val senderColor = IrcUserUtils.senderColor(nick)
+      spannableString.setSpan(
+        ForegroundColorSpan(senderColors[senderColor % senderColors.size]),
+        0,
+        nick.length,
+        SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+      )
+    }
     spannableString.setSpan(
       StyleSpan(Typeface.BOLD),
       0,
@@ -187,5 +220,19 @@ class QuasselMessageRenderer(context: Context) : MessageRenderer {
       SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
     )
     return spannableString
+  }
+
+  private fun formatNick(sender: String, self: Boolean)
+    = when (renderingSettings.colorizeNicknames) {
+    ColorizeNicknamesMode.ALL          -> formatNickImpl(sender, true)
+    ColorizeNicknamesMode.ALL_BUT_MINE -> formatNickImpl(sender, !self)
+    ColorizeNicknamesMode.NONE         -> formatNickImpl(sender, false)
+  }
+
+  private fun formatPrefix(prefix: String)
+    = when (renderingSettings.showPrefix) {
+    ShowPrefixMode.ALL   -> prefix
+    ShowPrefixMode.FIRST -> prefix.substring(0, Math.min(prefix.length, 1))
+    ShowPrefixMode.NONE  -> ""
   }
 }

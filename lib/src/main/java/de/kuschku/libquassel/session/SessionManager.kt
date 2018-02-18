@@ -48,6 +48,8 @@ class SessionManager(offlineSession: ISession, val backlogStorage: BacklogStorag
     get() = session.or(lastSession).networkConfig
   override val rpcHandler: RpcHandler?
     get() = session.or(lastSession).rpcHandler
+  override val lag: Observable<Long>
+    get() = session.or(lastSession).lag
 
   override fun close() = session.or(lastSession).close()
 

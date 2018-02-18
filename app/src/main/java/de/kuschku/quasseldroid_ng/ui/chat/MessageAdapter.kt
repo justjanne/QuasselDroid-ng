@@ -11,13 +11,21 @@ import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.Message_Types
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
+import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings
 import de.kuschku.quasseldroid_ng.util.helper.getOrPut
 
 class MessageAdapter(context: Context) :
   PagedListAdapter<QuasselDatabase.DatabaseMessage, QuasselMessageViewHolder>(
     QuasselDatabase.DatabaseMessage.MessageDiffCallback
   ) {
-  private val messageRenderer: MessageRenderer = QuasselMessageRenderer(context)
+  private val messageRenderer: MessageRenderer = QuasselMessageRenderer(
+    context,
+    RenderingSettings(
+      showPrefix = RenderingSettings.ShowPrefixMode.FIRST,
+      colorizeNicknames = RenderingSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
+      timeFormat = ""
+    )
+  )
 
   private val messageCache = LruCache<Int, FormattedMessage>(512)
 
@@ -42,7 +50,11 @@ class MessageAdapter(context: Context) :
   }
 
   private fun viewType(type: Message_Types, flags: Message_Flags): Int {
-    return (if (flags.hasFlag(Message_Flag.Highlight)) 0x8000 else 0x0000) or (type.value and 0x7FF)
+    if (flags.hasFlag(Message_Flag.Highlight)) {
+      return -type.value
+    } else {
+      return type.value
+    }
   }
 
   override fun getItemId(position: Int): Long {
@@ -50,10 +62,10 @@ class MessageAdapter(context: Context) :
   }
 
   private fun messageType(viewType: Int): Message_Type?
-    = Message_Type.of(viewType and 0x7FF).enabledValues().firstOrNull()
+    = Message_Type.of(Math.abs(viewType)).enabledValues().firstOrNull()
 
   private fun hasHiglight(viewType: Int)
-    = viewType and 0x8000 != 0
+    = viewType < 0
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuasselMessageViewHolder {
     val messageType = messageType(viewType)

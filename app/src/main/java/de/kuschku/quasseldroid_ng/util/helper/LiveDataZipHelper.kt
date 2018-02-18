@@ -57,6 +57,36 @@ fun <A, B> zipLiveData(a: LiveData<A>, b: LiveData<B>): LiveData<Pair<A, B>> {
   }
 }
 
+fun <A, B, C> zipLiveData(a: LiveData<A>, b: LiveData<B>,
+                          c: LiveData<C>): LiveData<Triple<A, B, C>> {
+  return MediatorLiveData<Triple<A, B, C>>().apply {
+    var lastA: A? = null
+    var lastB: B? = null
+    var lastC: C? = null
+
+    fun update() {
+      val localLastA = lastA
+      val localLastB = lastB
+      val localLastC = lastC
+      if (localLastA != null && localLastB != null && localLastC != null)
+        this.value = Triple(localLastA, localLastB, localLastC)
+    }
+
+    addSource(a) {
+      lastA = it
+      update()
+    }
+    addSource(b) {
+      lastB = it
+      update()
+    }
+    addSource(c) {
+      lastC = it
+      update()
+    }
+  }
+}
+
 /**
  * This is merely an extension function for [zipLiveData].
  *
@@ -64,3 +94,12 @@ fun <A, B> zipLiveData(a: LiveData<A>, b: LiveData<B>): LiveData<Pair<A, B>> {
  * @author Mitchell Skaggs
  */
 fun <A, B> LiveData<A>.zip(b: LiveData<B>): LiveData<Pair<A, B>> = zipLiveData(this, b)
+
+/**
+ * This is merely an extension function for [zipLiveData].
+ *
+ * @see zipLiveData
+ * @author Mitchell Skaggs
+ */
+fun <A, B, C> LiveData<A>.zip(b: LiveData<B>,
+                              c: LiveData<C>): LiveData<Triple<A, B, C>> = zipLiveData(this, b, c)

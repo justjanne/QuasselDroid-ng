@@ -50,6 +50,8 @@ class Session(
 
   override val initStatus = BehaviorSubject.createDefault(0 to 0)
 
+  override val lag = BehaviorSubject.createDefault(0L)
+
   init {
     coreConnection.start()
   }
@@ -62,6 +64,8 @@ class Session(
         password = userData.second
       )
     )
+
+    dispatch(SignalProxyMessage.HeartBeat(Instant.now()))
     return true
   }
 
@@ -101,6 +105,8 @@ class Session(
 
     synchronize(backlogManager)
 
+    dispatch(SignalProxyMessage.HeartBeat(Instant.now()))
+
     return true
   }
 
@@ -111,12 +117,15 @@ class Session(
   override fun onInitDone() {
     coreConnection.setState(ConnectionState.CONNECTED)
     log(INFO, "Session", "Initialization finished")
+
+    dispatch(SignalProxyMessage.HeartBeat(Instant.now()))
   }
 
   override fun handle(f: SignalProxyMessage.HeartBeatReply): Boolean {
     val now = Instant.now()
     val latency = now.toEpochMilli() - f.timestamp.toEpochMilli()
     log(INFO, "Session", "Latency of $latency ms")
+    lag.onNext(latency)
     return true
   }
 

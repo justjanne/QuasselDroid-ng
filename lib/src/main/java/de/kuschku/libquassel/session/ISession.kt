@@ -30,6 +30,8 @@ interface ISession : Closeable {
   val rpcHandler: RpcHandler?
   val initStatus: Observable<Pair<Int, Int>>
 
+  val lag: Observable<Long>
+
   companion object {
     val NULL = object : ISession {
       override val state = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
@@ -51,6 +53,7 @@ interface ISession : Closeable {
       override val networks: Map<NetworkId, Network> = emptyMap()
       override val networkConfig: NetworkConfig? = null
       override val initStatus: Observable<Pair<Int, Int>> = Observable.just(0 to 0)
+      override val lag: Observable<Long> = Observable.just(0L)
 
       override fun close() = Unit
     }
