@@ -21,6 +21,7 @@ import de.kuschku.quasseldroid_ng.util.helper.styledAttributes
 import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid_ng.util.quassel.IrcUserUtils
 import de.kuschku.quasseldroid_ng.util.ui.SpanFormatter
+import org.intellij.lang.annotations.Language
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import java.text.SimpleDateFormat
@@ -230,14 +231,20 @@ class QuasselMessageRenderer(
     }
   }
 
+  @Language("RegExp")
   private val scheme = "(?:(?:mailto:|(?:[+.-]?\\w)+://)|www(?=\\.\\S+\\.))"
-  private val authority = "(?:(?:[,.;@:]?[-\\w]+)+\\.?|\\[[0-9a-f:.]+\\])(?::\\d+)?"
+  @Language("RegExp")
+  private val authority = "(?:(?:[,.;@:]?[-\\w]+)+\\.?|\\[[0-9a-f:.]+])(?::\\d+)?"
+  @Language("RegExp")
   private val urlChars = "(?:[,.;:]*[\\w~@/?&=+$()!%#*-])"
+  @Language("RegExp")
   private val urlEnd = "((?:>|[,.;:\"]*\\s|\\b|$))"
+
   private val urlPattern = Regex(
-    String.format("\\b(%s%s(?:/%s*)?)%s", scheme, authority, urlChars, urlEnd),
+    "\\b($scheme$authority(?:/$urlChars*)?)$urlEnd",
     RegexOption.IGNORE_CASE
   )
+
   private val channelPattern = Regex(
     "((?:#|![A-Z0-9]{5})[^,:\\s]+(?::[^,:\\s]+)?)\\b",
     RegexOption.IGNORE_CASE
@@ -248,10 +255,13 @@ class QuasselMessageRenderer(
       ircFormatDeserializer.formatString(content, renderingSettings.colorizeMirc)
     )
     for (result in urlPattern.findAll(content)) {
-      text.setSpan(
-        URLSpan(result.value), result.range.start, result.range.start + result.value.length,
-        Spanned.SPAN_INCLUSIVE_INCLUSIVE
-      )
+      val group = result.groups[1]
+      if (group != null) {
+        text.setSpan(
+          URLSpan(group.value), group.range.start, group.range.start + group.value.length,
+          Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
+      }
     }
     /*
     for (result in channelPattern.findAll(content)) {

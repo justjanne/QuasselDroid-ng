@@ -126,6 +126,8 @@ dependencies {
   }
   implementation(project(":malheur"))
 
+  implementation("org.jetbrains", "annotations", "15.0")
+
   testImplementation(appArch("persistence.room", "testing", "1.0.0"))
   testImplementation("junit", "junit", "4.12")
 
