@@ -19,7 +19,9 @@ import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.ui.settings.data.DisplaySettings
+import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings
 import de.kuschku.quasseldroid_ng.util.helper.*
+import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundFragment
 import io.reactivex.Observable
 
@@ -41,6 +43,14 @@ class ToolbarFragment : ServiceBoundFragment() {
 
   private val displaySettings = DisplaySettings(
     showLag = true
+  )
+
+  val ircFormatDeserializer = IrcFormatDeserializer(context!!)
+  val renderingSettings = RenderingSettings(
+    showPrefix = RenderingSettings.ShowPrefixMode.FIRST,
+    colorizeNicknames = RenderingSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
+    colorizeMirc = true,
+    timeFormat = ""
   )
 
   private val bufferData: LiveData<BufferData?> = sessionManager.switchMap { manager ->
@@ -71,7 +81,9 @@ class ToolbarFragment : ServiceBoundFragment() {
                       BufferData(
                         info = info,
                         network = network.networkInfo(),
-                        description = realName
+                        description = ircFormatDeserializer.formatString(
+                          realName, renderingSettings.colorizeMirc
+                        )
                       )
                     }
                   }
@@ -84,7 +96,9 @@ class ToolbarFragment : ServiceBoundFragment() {
                       BufferData(
                         info = info,
                         network = network.networkInfo(),
-                        description = topic
+                        description = ircFormatDeserializer.formatString(
+                          topic, renderingSettings.colorizeMirc
+                        )
                       )
                     }
                   }
@@ -163,7 +177,7 @@ class ToolbarFragment : ServiceBoundFragment() {
           if (description.isNullOrBlank()) {
             this.subtitle = "Lag: ${lag}ms"
           } else {
-            this.subtitle = "Lag: ${lag}ms ${description}"
+            this.subtitle = "Lag: ${lag}ms | $description"
           }
         }
       }
@@ -176,7 +190,7 @@ class ToolbarFragment : ServiceBoundFragment() {
   data class BufferData(
     val info: BufferInfo? = null,
     val network: INetwork.NetworkInfo? = null,
-    val description: String? = null
+    val description: CharSequence? = null
   )
 
 }

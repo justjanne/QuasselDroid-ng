@@ -19,11 +19,13 @@ import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.and
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.R
+import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.map
 import de.kuschku.quasseldroid_ng.util.helper.or
 import de.kuschku.quasseldroid_ng.util.helper.switchMap
 import de.kuschku.quasseldroid_ng.util.helper.switchMapRx
+import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundFragment
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
@@ -71,6 +73,14 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       selectedBufferViewConfig.value = adapter.getItem(p2)
     }
   }
+
+  val ircFormatDeserializer = IrcFormatDeserializer(context!!)
+  val renderingSettings = RenderingSettings(
+    showPrefix = RenderingSettings.ShowPrefixMode.FIRST,
+    colorizeNicknames = RenderingSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
+    colorizeMirc = true,
+    timeFormat = ""
+  )
 
   private val adapter = BufferViewConfigAdapter(this, bufferViewConfigs)
 
@@ -124,7 +134,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                                   away                 -> BufferListAdapter.BufferStatus.AWAY
                                   else                 -> BufferListAdapter.BufferStatus.ONLINE
                                 },
-                                description = realName,
+                                description = ircFormatDeserializer.formatString(
+                                  realName, renderingSettings.colorizeMirc
+                                ),
                                 activity = activity
                               )
                             }
@@ -143,7 +155,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                                 IrcChannel.NULL -> BufferListAdapter.BufferStatus.OFFLINE
                                 else            -> BufferListAdapter.BufferStatus.ONLINE
                               },
-                              description = topic,
+                              description = ircFormatDeserializer.formatString(
+                                topic, renderingSettings.colorizeMirc
+                              ),
                               activity = activity
                             )
                           }

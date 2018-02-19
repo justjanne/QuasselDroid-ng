@@ -142,7 +142,7 @@ class BufferListAdapter(
     val info: BufferInfo,
     val network: INetwork.NetworkInfo,
     val bufferStatus: BufferStatus,
-    val description: String,
+    val description: CharSequence,
     val activity: Buffer_Activity,
     val highlights: Int = 0
   )

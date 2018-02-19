@@ -17,10 +17,12 @@ import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.R
+import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.map
 import de.kuschku.quasseldroid_ng.util.helper.switchMap
 import de.kuschku.quasseldroid_ng.util.helper.switchMapRx
+import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundFragment
 import io.reactivex.Observable
 import io.reactivex.Observable.zip
@@ -31,6 +33,14 @@ class NickListFragment : ServiceBoundFragment() {
 
   @BindView(R.id.nickList)
   lateinit var nickList: RecyclerView
+
+  val ircFormatDeserializer = IrcFormatDeserializer(context!!)
+  val renderingSettings = RenderingSettings(
+    showPrefix = RenderingSettings.ShowPrefixMode.FIRST,
+    colorizeNicknames = RenderingSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
+    colorizeMirc = true,
+    timeFormat = ""
+  )
 
   val currentBuffer: MutableLiveData<LiveData<BufferId?>?> = MutableLiveData()
   val buffer = currentBuffer.switchMap { it }
@@ -64,7 +74,7 @@ class NickListFragment : ServiceBoundFragment() {
                   user.nick(),
                   network.modesToPrefixes(userModes),
                   lowestMode,
-                  realName,
+                  ircFormatDeserializer.formatString(realName, renderingSettings.colorizeMirc),
                   away,
                   network.support("CASEMAPPING")
                 )

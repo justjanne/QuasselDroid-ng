@@ -81,7 +81,7 @@ class NickListAdapter(
     val nick: String,
     val modes: String,
     val lowestMode: Int,
-    val realname: String,
+    val realname: CharSequence,
     val away: Boolean,
     val networkCasemapping: String
   )
