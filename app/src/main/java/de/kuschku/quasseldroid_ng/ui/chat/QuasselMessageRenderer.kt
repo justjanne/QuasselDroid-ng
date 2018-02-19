@@ -210,7 +210,7 @@ class QuasselMessageRenderer(
       Message_Type.Error -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
-        message.content
+        formatContent(message.content)
       )
       Message_Type.Topic -> FormattedMessage(
         message.messageId,

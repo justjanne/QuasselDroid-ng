@@ -34,8 +34,8 @@ class NickListFragment : ServiceBoundFragment() {
   @BindView(R.id.nickList)
   lateinit var nickList: RecyclerView
 
-  val ircFormatDeserializer = IrcFormatDeserializer(context!!)
-  val renderingSettings = RenderingSettings(
+  private var ircFormatDeserializer: IrcFormatDeserializer? = null
+  private val renderingSettings = RenderingSettings(
     showPrefix = RenderingSettings.ShowPrefixMode.FIRST,
     colorizeNicknames = RenderingSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
     colorizeMirc = true,
@@ -74,7 +74,9 @@ class NickListFragment : ServiceBoundFragment() {
                   user.nick(),
                   network.modesToPrefixes(userModes),
                   lowestMode,
-                  ircFormatDeserializer.formatString(realName, renderingSettings.colorizeMirc),
+                  ircFormatDeserializer?.formatString(
+                    realName, renderingSettings.colorizeMirc
+                  ) ?: realName,
                   away,
                   network.support("CASEMAPPING")
                 )
@@ -97,6 +99,10 @@ class NickListFragment : ServiceBoundFragment() {
   override fun onCreate(savedInstanceState: Bundle?) {
     handlerThread.onCreate()
     super.onCreate(savedInstanceState)
+
+    if (ircFormatDeserializer == null) {
+      ircFormatDeserializer = IrcFormatDeserializer(context!!)
+    }
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

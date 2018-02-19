@@ -74,8 +74,8 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     }
   }
 
-  val ircFormatDeserializer = IrcFormatDeserializer(context!!)
-  val renderingSettings = RenderingSettings(
+  private var ircFormatDeserializer: IrcFormatDeserializer? = null
+  private val renderingSettings = RenderingSettings(
     showPrefix = RenderingSettings.ShowPrefixMode.FIRST,
     colorizeNicknames = RenderingSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
     colorizeMirc = true,
@@ -134,9 +134,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                                   away                 -> BufferListAdapter.BufferStatus.AWAY
                                   else                 -> BufferListAdapter.BufferStatus.ONLINE
                                 },
-                                description = ircFormatDeserializer.formatString(
+                                description = ircFormatDeserializer?.formatString(
                                   realName, renderingSettings.colorizeMirc
-                                ),
+                                ) ?: realName,
                                 activity = activity
                               )
                             }
@@ -155,9 +155,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                                 IrcChannel.NULL -> BufferListAdapter.BufferStatus.OFFLINE
                                 else            -> BufferListAdapter.BufferStatus.ONLINE
                               },
-                              description = ircFormatDeserializer.formatString(
+                              description = ircFormatDeserializer?.formatString(
                                 topic, renderingSettings.colorizeMirc
-                              ),
+                              ) ?: topic,
                               activity = activity
                             )
                           }
@@ -210,6 +210,10 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   override fun onCreate(savedInstanceState: Bundle?) {
     handlerThread.onCreate()
     super.onCreate(savedInstanceState)
+
+    if (ircFormatDeserializer == null) {
+      ircFormatDeserializer = IrcFormatDeserializer(context!!)
+    }
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

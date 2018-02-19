@@ -23,6 +23,7 @@ import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings
 import de.kuschku.quasseldroid_ng.util.helper.*
 import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundFragment
+import de.kuschku.quasseldroid_ng.util.ui.SpanFormatter
 import io.reactivex.Observable
 
 class ToolbarFragment : ServiceBoundFragment() {
@@ -45,8 +46,8 @@ class ToolbarFragment : ServiceBoundFragment() {
     showLag = true
   )
 
-  val ircFormatDeserializer = IrcFormatDeserializer(context!!)
-  val renderingSettings = RenderingSettings(
+  private var ircFormatDeserializer: IrcFormatDeserializer? = null
+  private val renderingSettings = RenderingSettings(
     showPrefix = RenderingSettings.ShowPrefixMode.FIRST,
     colorizeNicknames = RenderingSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
     colorizeMirc = true,
@@ -81,9 +82,9 @@ class ToolbarFragment : ServiceBoundFragment() {
                       BufferData(
                         info = info,
                         network = network.networkInfo(),
-                        description = ircFormatDeserializer.formatString(
+                        description = ircFormatDeserializer?.formatString(
                           realName, renderingSettings.colorizeMirc
-                        )
+                        ) ?: realName
                       )
                     }
                   }
@@ -96,9 +97,9 @@ class ToolbarFragment : ServiceBoundFragment() {
                       BufferData(
                         info = info,
                         network = network.networkInfo(),
-                        description = ircFormatDeserializer.formatString(
+                        description = ircFormatDeserializer?.formatString(
                           topic, renderingSettings.colorizeMirc
-                        )
+                        ) ?: topic
                       )
                     }
                   }
@@ -154,6 +155,13 @@ class ToolbarFragment : ServiceBoundFragment() {
       toolbarSubtitle.visibleIf(value?.isNotEmpty() == true)
     }
 
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    if (ircFormatDeserializer == null) {
+      ircFormatDeserializer = IrcFormatDeserializer(context!!)
+    }
+  }
+
   override fun onCreateView(inflater: LayoutInflater,
                             container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
@@ -177,7 +185,7 @@ class ToolbarFragment : ServiceBoundFragment() {
           if (description.isNullOrBlank()) {
             this.subtitle = "Lag: ${lag}ms"
           } else {
-            this.subtitle = "Lag: ${lag}ms | $description"
+            this.subtitle = SpanFormatter.format("Lag: %dms | %s", lag, description)
           }
         }
       }
