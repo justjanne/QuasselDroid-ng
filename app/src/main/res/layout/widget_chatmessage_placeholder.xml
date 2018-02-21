@@ -3,8 +3,6 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="48dp"
-  android:gravity="top"
-  android:orientation="horizontal"
   tools:background="@android:color/background_light"
   tools:theme="@style/Theme.ChatTheme.Quassel_Light">
 
@@ -16,6 +14,12 @@
 
   <TextView
     android:id="@+id/content"
+    android:layout_width="0dip"
+    android:layout_height="0dip"
+    android:visibility="gone" />
+
+  <View
+    android:id="@+id/markerline"
     android:layout_width="0dip"
     android:layout_height="0dip"
     android:visibility="gone" />

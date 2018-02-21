@@ -11,6 +11,7 @@ import android.text.style.URLSpan
 import de.kuschku.libquassel.protocol.Message.MessageType.*
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
+import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
@@ -18,6 +19,7 @@ import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings
 import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings.ColorizeNicknamesMode
 import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings.ShowPrefixMode
 import de.kuschku.quasseldroid_ng.util.helper.styledAttributes
+import de.kuschku.quasseldroid_ng.util.helper.visibleIf
 import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid_ng.util.quassel.IrcUserUtils
 import de.kuschku.quasseldroid_ng.util.ui.SpanFormatter
@@ -81,9 +83,11 @@ class QuasselMessageRenderer(
   override fun bind(holder: QuasselMessageViewHolder, message: FormattedMessage) {
     holder.time.text = message.time
     holder.content.text = message.content
+    holder.markerline.visibleIf(message.markerline)
   }
 
-  override fun render(message: QuasselDatabase.DatabaseMessage): FormattedMessage {
+  override fun render(message: QuasselDatabase.DatabaseMessage,
+                      markerLine: MsgId): FormattedMessage {
     return when (Message_Type.of(message.type).enabledValues().firstOrNull()) {
       Message_Type.Plain  -> FormattedMessage(
         message.messageId,
@@ -93,7 +97,8 @@ class QuasselMessageRenderer(
           formatPrefix(message.senderPrefixes),
           formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
           formatContent(message.content)
-        )
+        ),
+        message.messageId == markerLine
       )
       Message_Type.Action -> FormattedMessage(
         message.messageId,
@@ -103,7 +108,8 @@ class QuasselMessageRenderer(
           formatPrefix(message.senderPrefixes),
           formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
           formatContent(message.content)
-        )
+        ),
+        message.messageId == markerLine
       )
       Message_Type.Notice -> FormattedMessage(
         message.messageId,
@@ -113,7 +119,8 @@ class QuasselMessageRenderer(
           formatPrefix(message.senderPrefixes),
           formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
           formatContent(message.content)
-        )
+        ),
+        message.messageId == markerLine
       )
       Message_Type.Nick   -> FormattedMessage(
         message.messageId,
@@ -124,7 +131,8 @@ class QuasselMessageRenderer(
           formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
           formatPrefix(message.senderPrefixes),
           formatNick(message.content, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self))
-        )
+        ),
+        message.messageId == markerLine
       )
       Message_Type.Mode   -> FormattedMessage(
         message.messageId,
@@ -134,7 +142,8 @@ class QuasselMessageRenderer(
           message.content,
           formatPrefix(message.senderPrefixes),
           formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self))
-        )
+        ),
+        message.messageId == markerLine
       )
       Message_Type.Join   -> FormattedMessage(
         message.messageId,
@@ -143,7 +152,8 @@ class QuasselMessageRenderer(
           context.getString(R.string.message_format_join),
           formatPrefix(message.senderPrefixes),
           formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self))
-        )
+        ),
+        message.messageId == markerLine
       )
       Message_Type.Part   -> FormattedMessage(
         message.messageId,
@@ -161,7 +171,8 @@ class QuasselMessageRenderer(
             formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
             message.content
           )
-        }
+        },
+        message.messageId == markerLine
       )
       Message_Type.Quit -> FormattedMessage(
         message.messageId,
@@ -179,7 +190,8 @@ class QuasselMessageRenderer(
             formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
             message.content
           )
-        }
+        },
+        message.messageId == markerLine
       )
       Message_Type.NetsplitJoin -> {
         val split = message.content.split("#:#")
@@ -190,7 +202,8 @@ class QuasselMessageRenderer(
           timeFormatter.format(message.time.atZone(zoneId)),
           context.resources.getQuantityString(
             R.plurals.message_netsplit_join, usersAffected, server1, server2, usersAffected
-          )
+          ),
+          message.messageId == markerLine
         )
       }
       Message_Type.NetsplitQuit -> {
@@ -202,7 +215,8 @@ class QuasselMessageRenderer(
           timeFormatter.format(message.time.atZone(zoneId)),
           context.resources.getQuantityString(
             R.plurals.message_netsplit_quit, usersAffected, server1, server2, usersAffected
-          )
+          ),
+          message.messageId == markerLine
         )
       }
       Message_Type.Server,
@@ -210,12 +224,14 @@ class QuasselMessageRenderer(
       Message_Type.Error -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
-        formatContent(message.content)
+        formatContent(message.content),
+        message.messageId == markerLine
       )
       Message_Type.Topic -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
-        formatContent(message.content)
+        formatContent(message.content),
+        message.messageId == markerLine
       )
       else -> FormattedMessage(
         message.messageId,
@@ -226,7 +242,8 @@ class QuasselMessageRenderer(
           formatPrefix(message.senderPrefixes),
           formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
           message.content
-        )
+        ),
+        message.messageId == markerLine
       )
     }
   }

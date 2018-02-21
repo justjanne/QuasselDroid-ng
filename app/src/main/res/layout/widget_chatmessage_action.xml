@@ -25,35 +25,47 @@
   android:layout_height="wrap_content"
   android:clickable="true"
   android:focusable="true"
-  android:gravity="top"
-  android:orientation="horizontal"
-  android:paddingBottom="@dimen/message_vertical"
-  android:paddingEnd="@dimen/message_horizontal"
-  android:paddingLeft="@dimen/message_horizontal"
-  android:paddingRight="@dimen/message_horizontal"
-  android:paddingStart="@dimen/message_horizontal"
-  android:paddingTop="@dimen/message_vertical"
+  android:orientation="vertical"
   android:textAppearance="?android:attr/textAppearanceListItemSmall"
   tools:background="@android:color/background_light"
   tools:theme="@style/Theme.ChatTheme.Quassel_Light">
 
-  <TextView
-    android:id="@+id/time"
-    android:layout_width="wrap_content"
+  <LinearLayout
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/message_horizontal"
-    android:layout_marginRight="@dimen/message_horizontal"
-    android:textColor="?attr/colorForegroundSecondary"
-    android:typeface="monospace"
-    tools:text="[15:55]" />
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/message_vertical"
+    android:paddingEnd="@dimen/message_horizontal"
+    android:paddingLeft="@dimen/message_horizontal"
+    android:paddingRight="@dimen/message_horizontal"
+    android:paddingStart="@dimen/message_horizontal"
+    android:paddingTop="@dimen/message_vertical">
 
-  <TextView
-    android:id="@+id/content"
-    android:layout_width="0dip"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"
-    android:textColor="?attr/colorForegroundAction"
-    android:textIsSelectable="true"
-    android:textStyle="italic"
-    tools:text="-*- justJanne loves the new version" />
+    <TextView
+      android:id="@+id/time"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="@dimen/message_horizontal"
+      android:layout_marginRight="@dimen/message_horizontal"
+      android:textColor="?attr/colorForegroundSecondary"
+      android:typeface="monospace"
+      tools:text="[15:55]" />
+
+    <TextView
+      android:id="@+id/content"
+      android:layout_width="0dip"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:textColor="?attr/colorForegroundAction"
+      android:textIsSelectable="true"
+      android:textStyle="italic"
+      tools:text="-*- justJanne loves the new version" />
+  </LinearLayout>
+
+  <View
+    android:id="@+id/markerline"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="?colorMarkerLine"
+    android:visibility="gone" />
 </LinearLayout>

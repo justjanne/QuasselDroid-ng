@@ -55,11 +55,12 @@
   <attr name="colorBackgroundCard" format="color" />
   <attr name="colorBackgroundDialog" format="color" />
 
+  <attr name="colorMarkerLine" format="color" />
+
   <!-- Tint colors for drawer -->
   <attr name="colorTintActivity" format="color" />
   <attr name="colorTintMessage" format="color" />
   <attr name="colorTintHighlight" format="color" />
-  <attr name="chatlineExpandedSize" />
 
   <!-- Icons -->
   <attr name="colorOffline" format="color" />

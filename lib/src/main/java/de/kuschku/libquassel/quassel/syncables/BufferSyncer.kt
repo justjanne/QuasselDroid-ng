@@ -12,14 +12,34 @@ class BufferSyncer constructor(
   proxy: SignalProxy
 ) : SyncableObject(proxy, "BufferSyncer"), IBufferSyncer {
   fun lastSeenMsg(buffer: BufferId): MsgId = _lastSeenMsg[buffer] ?: 0
+  fun liveLastSeenMsg(buffer: BufferId): Observable<MsgId>
+    = live_lastSeenMsg.map { markerLine(buffer) }.distinctUntilChanged()
+
+  fun liveLastSeenMsgs(): Observable<Map<BufferId, MsgId>> = live_lastSeenMsg
+
   fun markerLine(buffer: BufferId): MsgId = _markerLines[buffer] ?: 0
+  fun liveMarkerLine(buffer: BufferId): Observable<MsgId>
+    = live_markerLines.map { markerLine(buffer) }.distinctUntilChanged()
+
+  fun liveMarkerLines(): Observable<Map<BufferId, MsgId>> = live_markerLines
+
   fun activity(buffer: BufferId): Message_Types = _bufferActivities[buffer] ?: Message_Types.of()
   fun liveActivity(buffer: BufferId): Observable<Message_Types>
     = live_bufferActivities.map { activity(buffer) }.distinctUntilChanged()
 
+  fun liveActivities(): Observable<Map<BufferId, Message_Types>> = live_bufferActivities
+
   fun highlightCount(buffer: BufferId): Int = _highlightCounts[buffer] ?: 0
   fun liveHighlightCount(buffer: BufferId): Observable<Int>
     = live_highlightCounts.map { highlightCount(buffer) }.distinctUntilChanged()
+
+  fun liveHighlightCounts(): Observable<Map<BufferId, Int>> = live_highlightCounts
+
+  fun bufferInfo(bufferId: BufferId) = _bufferInfos[bufferId]
+  fun liveBufferInfo(bufferId: BufferId)
+    = live_bufferInfos.map { bufferInfo(bufferId) }.distinctUntilChanged()
+
+  fun liveBufferInfos(): Observable<Map<BufferId, BufferInfo>> = live_bufferInfos
 
   override fun toVariantMap(): QVariantMap = mapOf(
     "Activities" to QVariant_(initActivities(), Type.QVariantList),
@@ -77,6 +97,7 @@ class BufferSyncer constructor(
     }.forEach { (buffer, activity) ->
       setBufferActivity(buffer, activity)
     }
+    live_bufferActivities.onNext(_bufferActivities)
   }
 
   override fun initSetHighlightCounts(data: QVariantList) {
@@ -85,6 +106,7 @@ class BufferSyncer constructor(
     }.forEach { (buffer, count) ->
       setHighlightCount(buffer, count)
     }
+    live_highlightCounts.onNext(_highlightCounts)
   }
 
   override fun initSetLastSeenMsg(data: QVariantList) {
@@ -93,6 +115,7 @@ class BufferSyncer constructor(
     }.forEach { (buffer, msgId) ->
       setLastSeenMsg(buffer, msgId)
     }
+    live_lastSeenMsg.onNext(_lastSeenMsg)
   }
 
   override fun initSetMarkerLines(data: QVariantList) {
@@ -101,6 +124,7 @@ class BufferSyncer constructor(
     }.forEach { (buffer, msgId) ->
       setMarkerLine(buffer, msgId)
     }
+    live_markerLines.onNext(_markerLines)
   }
 
   fun initSetBufferInfos(infos: QVariantList?) {
@@ -110,20 +134,19 @@ class BufferSyncer constructor(
   }
 
   override fun mergeBuffersPermanently(buffer1: BufferId, buffer2: BufferId) {
-    _lastSeenMsg.remove(buffer2)
-    _markerLines.remove(buffer2)
-    _bufferActivities.remove(buffer2)
-    _highlightCounts.remove(buffer2)
-    live_bufferInfos.onNext(_bufferInfos)
+    _lastSeenMsg.remove(buffer2);live_lastSeenMsg.onNext(_lastSeenMsg)
+    _markerLines.remove(buffer2);live_markerLines.onNext(_markerLines)
+    _bufferActivities.remove(buffer2);live_bufferActivities.onNext(_bufferActivities)
+    _highlightCounts.remove(buffer2);live_highlightCounts.onNext(_highlightCounts)
+    _bufferInfos.remove(buffer2);live_bufferInfos.onNext(_bufferInfos)
   }
 
   override fun removeBuffer(buffer: BufferId) {
-    _lastSeenMsg.remove(buffer)
-    _markerLines.remove(buffer)
-    _bufferActivities.remove(buffer)
-    _highlightCounts.remove(buffer)
-    _bufferInfos.remove(buffer)
-    live_bufferInfos.onNext(_bufferInfos)
+    _lastSeenMsg.remove(buffer);live_lastSeenMsg.onNext(_lastSeenMsg)
+    _markerLines.remove(buffer);live_markerLines.onNext(_markerLines)
+    _bufferActivities.remove(buffer);live_bufferActivities.onNext(_bufferActivities)
+    _highlightCounts.remove(buffer);live_highlightCounts.onNext(_highlightCounts)
+    _bufferInfos.remove(buffer);live_bufferInfos.onNext(_bufferInfos)
   }
 
   override fun renameBuffer(buffer: BufferId, newName: String) {
@@ -132,11 +155,6 @@ class BufferSyncer constructor(
       _bufferInfos[buffer] = bufferInfo.copy(bufferName = newName)
       live_bufferInfos.onNext(_bufferInfos)
     }
-  }
-
-  fun bufferInfo(bufferId: BufferId) = _bufferInfos[bufferId]
-  fun liveBufferInfo(bufferId: BufferId) = live_bufferInfos.distinctUntilChanged().map {
-    bufferInfo(bufferId)
   }
 
   fun bufferInfoUpdated(info: BufferInfo) {
@@ -153,6 +171,7 @@ class BufferSyncer constructor(
     val oldLastSeenMsg = lastSeenMsg(buffer)
     if (oldLastSeenMsg < msgId) {
       _lastSeenMsg[buffer] = msgId
+      live_lastSeenMsg.onNext(_lastSeenMsg)
       super.setLastSeenMsg(buffer, msgId)
     }
   }
@@ -162,6 +181,7 @@ class BufferSyncer constructor(
       return
 
     _markerLines[buffer] = msgId
+    live_markerLines.onNext(_markerLines)
     super.setMarkerLine(buffer, msgId)
   }
 
@@ -179,15 +199,22 @@ class BufferSyncer constructor(
   }
 
   private val _lastSeenMsg: MutableMap<BufferId, MsgId> = mutableMapOf()
+  private val live_lastSeenMsg
+    = BehaviorSubject.createDefault(mapOf<BufferId, MsgId>())
+
   private val _markerLines: MutableMap<BufferId, MsgId> = mutableMapOf()
+  private val live_markerLines
+    = BehaviorSubject.createDefault(mapOf<BufferId, MsgId>())
+
   private val _bufferActivities: MutableMap<BufferId, Message_Types> = mutableMapOf()
-  private val live_bufferActivities = BehaviorSubject.createDefault(
-    mutableMapOf<BufferId, Message_Types>()
-  )
+  private val live_bufferActivities
+    = BehaviorSubject.createDefault(mapOf<BufferId, Message_Types>())
+
   private val _highlightCounts: MutableMap<BufferId, Int> = mutableMapOf()
-  private val live_highlightCounts = BehaviorSubject.createDefault(
-    mutableMapOf<BufferId, Int>()
-  )
+  private val live_highlightCounts
+    = BehaviorSubject.createDefault(mapOf<BufferId, Int>())
+
   private val _bufferInfos = mutableMapOf<BufferId, BufferInfo>()
-  val live_bufferInfos = BehaviorSubject.createDefault(mutableMapOf<BufferId, BufferInfo>())
+  private val live_bufferInfos
+    = BehaviorSubject.createDefault(mapOf<BufferId, BufferInfo>())
 }

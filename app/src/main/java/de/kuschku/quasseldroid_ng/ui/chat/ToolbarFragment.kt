@@ -59,7 +59,7 @@ class ToolbarFragment : ServiceBoundFragment() {
       manager.session.switchMap {
         val bufferSyncer = it.bufferSyncer
         if (bufferSyncer != null) {
-          bufferSyncer.live_bufferInfos.switchMap {
+          bufferSyncer.liveBufferInfos().switchMap {
             val info = bufferSyncer.bufferInfo(id)
             val network = manager.networks[info?.networkId]
             if (info == null) {

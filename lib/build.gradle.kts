@@ -23,6 +23,7 @@ dependencies {
   testImplementation("junit:junit:4.12")
 }
 
+/*
 tasks.withType(KotlinCompile::class.java) {
   kotlinOptions {
     freeCompilerArgs = listOf(
@@ -31,6 +32,7 @@ tasks.withType(KotlinCompile::class.java) {
     )
   }
 }
+*/
 
 /**
  * Builds the dependency notation for the named AppCompat [module] at the given [version].

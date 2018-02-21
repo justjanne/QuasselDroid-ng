@@ -7,7 +7,7 @@ import io.reactivex.Observable
 
 @MainThread
 inline fun <X, Y> LiveData<X?>.switchMap(
-  noinline func: (X) -> LiveData<Y>?
+  crossinline func: (X) -> LiveData<Y>?
 ): LiveData<Y> {
   val result = MediatorLiveData<Y>()
   result.addSource(
@@ -35,7 +35,7 @@ inline fun <X, Y> LiveData<X?>.switchMap(
 @MainThread
 inline fun <X, Y> LiveData<X?>.switchMapRx(
   strategy: BackpressureStrategy,
-  noinline func: (X) -> Observable<Y>?
+  crossinline func: (X) -> Observable<Y>?
 ): LiveData<Y?> {
   val result = MediatorLiveData<Y>()
   result.addSource(
@@ -61,13 +61,13 @@ inline fun <X, Y> LiveData<X?>.switchMapRx(
 }
 
 @MainThread
-inline fun <X, Y> LiveData<X?>.switchMapRx(
-  noinline func: (X) -> Observable<Y>?
+inline fun <X, Y> LiveData<out X?>.switchMapRx(
+  crossinline func: (X) -> Observable<Y>?
 ): LiveData<Y?> = switchMapRx(BackpressureStrategy.LATEST, func)
 
 @MainThread
 inline fun <X, Y> LiveData<X?>.map(
-  noinline func: (X) -> Y?
+  crossinline func: (X) -> Y?
 ): LiveData<Y?> {
   val result = MediatorLiveData<Y?>()
   result.addSource(this) { x ->
@@ -78,7 +78,7 @@ inline fun <X, Y> LiveData<X?>.map(
 
 @MainThread
 inline fun <X> LiveData<X>.orElse(
-  noinline func: () -> X
+  crossinline func: () -> X
 ): LiveData<X> {
   val result = object : MediatorLiveData<X>() {
     override fun getValue() = super.getValue() ?: func()

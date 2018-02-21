@@ -3,20 +3,23 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:background="?attr/colorBackgroundSecondary"
   android:clickable="true"
   android:focusable="true"
-  android:gravity="top"
-  android:orientation="horizontal"
-  android:paddingBottom="@dimen/message_vertical"
-  android:paddingEnd="@dimen/message_horizontal"
-  android:paddingLeft="@dimen/message_horizontal"
-  android:paddingRight="@dimen/message_horizontal"
-  android:paddingStart="@dimen/message_horizontal"
-  android:paddingTop="@dimen/message_vertical"
+  android:orientation="vertical"
   android:textAppearance="?android:attr/textAppearanceListItemSmall"
   tools:background="@android:color/background_light"
   tools:theme="@style/Theme.ChatTheme.Quassel_Light">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/message_vertical"
+    android:paddingEnd="@dimen/message_horizontal"
+    android:paddingLeft="@dimen/message_horizontal"
+    android:paddingRight="@dimen/message_horizontal"
+    android:paddingStart="@dimen/message_horizontal"
+    android:paddingTop="@dimen/message_vertical">
 
   <TextView
     android:id="@+id/time"
@@ -37,4 +40,12 @@
     android:textIsSelectable="true"
     android:typeface="monospace"
     tools:text="Connecting to irc.freenode.net:6667..." />
+  </LinearLayout>
+
+  <View
+    android:id="@+id/markerline"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="?colorMarkerLine"
+    android:visibility="gone" />
 </LinearLayout>

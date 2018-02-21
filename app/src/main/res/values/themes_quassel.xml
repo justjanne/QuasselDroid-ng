@@ -37,6 +37,8 @@
     <item name="colorBackgroundCard">#FFFFFF</item>
     <item name="colorBackgroundDialog">#FAFAFA</item>
 
+    <item name="colorMarkerLine">#ff0000</item>
+
     <item name="colorTintActivity">#88cc33</item>
     <item name="colorTintMessage">#2277dd</item>
     <item name="colorTintHighlight">#ff8811</item>

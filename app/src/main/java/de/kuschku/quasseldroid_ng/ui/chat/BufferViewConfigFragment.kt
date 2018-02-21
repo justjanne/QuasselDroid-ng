@@ -92,7 +92,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
         config.live_buffers.switchMap { ids ->
           val bufferSyncer = manager.bufferSyncer
           if (bufferSyncer != null) {
-            bufferSyncer.live_bufferInfos.switchMap {
+            bufferSyncer.liveBufferInfos().switchMap {
               Observable.combineLatest(
                 ids.mapNotNull { id ->
                   bufferSyncer.bufferInfo(id)

@@ -137,6 +137,7 @@ dependencies {
   androidTestImplementation("com.android.support.test.espresso", "espresso-core", "3.0.1")
 }
 
+/*
 tasks.withType(KotlinCompile::class.java) {
   kotlinOptions {
     freeCompilerArgs = listOf(
@@ -145,6 +146,7 @@ tasks.withType(KotlinCompile::class.java) {
     )
   }
 }
+*/
 
 fun cmd(vararg command: String) = try {
   val stdOut = ByteArrayOutputStream()

@@ -15,6 +15,9 @@ class QuasselMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
   @BindView(R.id.content)
   lateinit var content: TextView
 
+  @BindView(R.id.markerline)
+  lateinit var markerline: View
+
   init {
     ButterKnife.bind(this, itemView)
     content.movementMethod = LinkMovementMethod.getInstance()

@@ -1,23 +1,35 @@
 package de.kuschku.quasseldroid_ng.ui.chat
 
+import android.arch.lifecycle.LiveData
 import android.arch.paging.PagedListAdapter
 import android.content.Context
+import android.support.v7.recyclerview.extensions.DiffCallback
 import android.util.LruCache
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import de.kuschku.libquassel.protocol.Message_Flag
-import de.kuschku.libquassel.protocol.Message_Flags
-import de.kuschku.libquassel.protocol.Message_Type
-import de.kuschku.libquassel.protocol.Message_Types
+import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
+import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase.DatabaseMessage
 import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings
 import de.kuschku.quasseldroid_ng.util.helper.getOrPut
 
-class MessageAdapter(context: Context) :
-  PagedListAdapter<QuasselDatabase.DatabaseMessage, QuasselMessageViewHolder>(
-    QuasselDatabase.DatabaseMessage.MessageDiffCallback
-  ) {
+class MessageAdapter(
+  context: Context,
+  private val markerLine: LiveData<Pair<MsgId, MsgId>?>
+) : PagedListAdapter<QuasselDatabase.DatabaseMessage, QuasselMessageViewHolder>(
+  object : DiffCallback<QuasselDatabase.DatabaseMessage>() {
+    override fun areItemsTheSame(oldItem: QuasselDatabase.DatabaseMessage,
+                                 newItem: QuasselDatabase.DatabaseMessage)
+      = DatabaseMessage.MessageDiffCallback.areItemsTheSame(oldItem, newItem)
+
+    override fun areContentsTheSame(oldItem: QuasselDatabase.DatabaseMessage,
+                                    newItem: QuasselDatabase.DatabaseMessage)
+      = DatabaseMessage.MessageDiffCallback.areContentsTheSame(oldItem, newItem) &&
+        oldItem.messageId != markerLine.value?.first &&
+        oldItem.messageId != markerLine.value?.second
+  }
+) {
   private val messageRenderer: MessageRenderer = QuasselMessageRenderer(
     context,
     RenderingSettings(
@@ -34,8 +46,14 @@ class MessageAdapter(context: Context) :
     getItem(position)?.let {
       messageRenderer.bind(
         holder,
-        messageCache.getOrPut(it.messageId) {
-          messageRenderer.render(it)
+        if (it.messageId == markerLine.value?.second || it.messageId == markerLine.value?.first) {
+          val value = messageRenderer.render(it, markerLine.value?.second ?: -1)
+          messageCache.put(it.messageId, value)
+          value
+        } else {
+          messageCache.getOrPut(it.messageId) {
+            messageRenderer.render(it, markerLine.value?.second ?: -1)
+          }
         }
       )
     }

@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.quasseldroid_ng.R
@@ -22,12 +23,27 @@ import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.*
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundFragment
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 
 class MessageListFragment : ServiceBoundFragment() {
   val currentBuffer: MutableLiveData<LiveData<BufferId?>?> = MutableLiveData()
   private val buffer = currentBuffer.switchMap { it }
 
   private val sessionManager: LiveData<SessionManager?> = backend.map(Backend::sessionManager)
+
+  val markerLine = buffer.switchMap { buffer ->
+    sessionManager.switchMapRx { manager ->
+      manager.session.switchMap { session ->
+        val raw = session.bufferSyncer?.liveMarkerLine(buffer)
+        Observable.zip(
+          Observable.just(-1).concatWith(raw),
+          raw,
+          BiFunction<MsgId, MsgId, Pair<MsgId, MsgId>> { a, b -> a to b }
+        )
+      }
+    }
+  }
 
   private val handler = AndroidHandlerThread("Chat")
 
@@ -60,12 +76,13 @@ class MessageListFragment : ServiceBoundFragment() {
     val view = inflater.inflate(R.layout.fragment_messages, container, false)
     ButterKnife.bind(this, view)
 
-    val adapter = MessageAdapter(context!!)
+    val adapter = MessageAdapter(context!!, markerLine)
 
     messageList.adapter = adapter
     val linearLayoutManager = LinearLayoutManager(context)
     linearLayoutManager.reverseLayout = true
     messageList.layoutManager = linearLayoutManager
+    messageList.itemAnimator = null
     messageList.setItemViewCacheSize(20)
 
     messageList.addOnScrollListener(
@@ -116,6 +133,8 @@ class MessageListFragment : ServiceBoundFragment() {
       }
       )
     }
+
+    markerLine.observe(this, Observer { adapter.notifyDataSetChanged() })
 
     data.observe(
       this, Observer { list ->
