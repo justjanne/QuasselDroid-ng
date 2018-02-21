@@ -17,8 +17,6 @@ import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.SessionManager
-import de.kuschku.libquassel.util.compatibility.LoggingHandler
-import de.kuschku.libquassel.util.compatibility.log
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
@@ -69,7 +67,7 @@ class MessageListFragment : ServiceBoundFragment() {
     val view = inflater.inflate(R.layout.fragment_messages, container, false)
     ButterKnife.bind(this, view)
 
-    adapter = MessageAdapter(context!!, viewModel.markerLine)
+    adapter = MessageAdapter(context!!)
     messageList.adapter = adapter
     linearLayoutManager = LinearLayoutManager(context)
     linearLayoutManager.reverseLayout = true
@@ -106,11 +104,11 @@ class MessageListFragment : ServiceBoundFragment() {
 
     handler.post {
       val database = QuasselDatabase.Creator.init(this.context!!)
-      sessionManager.zip(viewModel.getBuffer()).zip(data).observe(
+      sessionManager.zip(viewModel.getBuffer(), data).observe(
         this, Observer {
         handler.post {
-          val session = it?.first?.first
-          val buffer = it?.first?.second
+          val session = it?.first
+          val buffer = it?.second
           val bufferSyncer = session?.bufferSyncer
 
           if (buffer != null && bufferSyncer != null) {
@@ -128,7 +126,6 @@ class MessageListFragment : ServiceBoundFragment() {
 
     viewModel.markerLine.observe(
       this, Observer {
-      log(LoggingHandler.LogLevel.ERROR, "DEBUG", "$it")
       adapter.markerLinePosition = it
       adapter.notifyDataSetChanged()
     }
@@ -140,12 +137,12 @@ class MessageListFragment : ServiceBoundFragment() {
       adapter.setList(list)
       if (firstVisibleItemPosition < 2) {
         activity?.runOnUiThread {
-          messageList.smoothScrollToPosition(0)
+          messageList.scrollToPosition(0)
         }
         handler.postDelayed(
           {
             activity?.runOnUiThread {
-              messageList.smoothScrollToPosition(0)
+              messageList.scrollToPosition(0)
             }
           }, 16
         )

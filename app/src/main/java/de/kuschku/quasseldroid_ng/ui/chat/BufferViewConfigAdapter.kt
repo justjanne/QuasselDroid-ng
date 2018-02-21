@@ -18,7 +18,7 @@ import de.kuschku.quasseldroid_ng.util.ui.RecyclerSpinnerAdapter
 
 class BufferViewConfigAdapter(
   lifecycleOwner: LifecycleOwner,
-  liveData: LiveData<List<BufferViewConfig>>
+  liveData: LiveData<List<BufferViewConfig>?>
 ) : RecyclerSpinnerAdapter<BufferViewConfigAdapter.BufferViewConfigViewHolder>(),
     ThemedSpinnerAdapter {
   val data = mutableListOf<BufferViewConfig>()

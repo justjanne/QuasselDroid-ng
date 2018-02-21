@@ -27,6 +27,16 @@
 # The project is GPL anyway, obfuscation is useless.
 -dontobfuscate
 
+# Keep our invokers
 -keep class * implements de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invoker {
     static ** INSTANCE;
 }
+
+# remove unnecessary warnings
+# Android HTTP Libs
+-dontnote android.net.http.**
+-dontnote org.apache.http.**
+# Kotlin stuff
+-dontnote kotlin.**
+# Gson
+-dontnote com.google.gson.**

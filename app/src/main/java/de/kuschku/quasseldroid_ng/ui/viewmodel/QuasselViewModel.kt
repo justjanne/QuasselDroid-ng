@@ -19,9 +19,13 @@ import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.ui.chat.BufferListAdapter
 import de.kuschku.quasseldroid_ng.ui.chat.NickListAdapter
 import de.kuschku.quasseldroid_ng.ui.chat.ToolbarFragment
-import de.kuschku.quasseldroid_ng.util.helper.*
+import de.kuschku.quasseldroid_ng.util.helper.map
+import de.kuschku.quasseldroid_ng.util.helper.switchMap
+import de.kuschku.quasseldroid_ng.util.helper.switchMapRx
+import de.kuschku.quasseldroid_ng.util.helper.zip
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function
 import java.util.concurrent.TimeUnit
 
 class QuasselViewModel : ViewModel() {
@@ -200,13 +204,9 @@ class QuasselViewModel : ViewModel() {
     manager.liveBufferViewConfigs().map { ids ->
       ids.mapNotNull { id ->
         manager.bufferViewConfig(id)
-      }.sortedWith(
-        Comparator { a, b ->
-          (a?.bufferViewName() ?: "").compareTo((b?.bufferViewName() ?: ""), true)
-        }
-      )
+      }.sortedWith(BufferViewConfig.NameComparator)
     }
-  }.or(emptyList())
+  }
 
   val bufferList = session.zip(bufferViewConfig).switchMapRx { (session, config) ->
     val bufferSyncer = session?.bufferSyncer
@@ -302,9 +302,11 @@ class QuasselViewModel : ViewModel() {
                     )
                   }
                 }
-              }, { array: Array<Any> ->
-                array.toList() as List<BufferListAdapter.BufferProps>
+              }, object : Function<Array<Any>, List<BufferListAdapter.BufferProps>> {
+              override fun apply(objects: Array<Any>): List<BufferListAdapter.BufferProps> {
+                return objects.toList() as List<BufferListAdapter.BufferProps>
               }
+            }
             ).map { list ->
               list.filter {
                 config.minimumActivity().value <= it.activity.bit ||

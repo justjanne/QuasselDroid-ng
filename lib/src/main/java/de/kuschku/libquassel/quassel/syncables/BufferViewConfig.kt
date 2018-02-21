@@ -248,4 +248,9 @@ class BufferViewConfig constructor(
 
   val live_temporarilyRemovedBuffers: BehaviorSubject<Set<BufferId>>
     = BehaviorSubject.createDefault<Set<BufferId>>(emptySet())
+
+  object NameComparator : Comparator<BufferViewConfig> {
+    override fun compare(a: BufferViewConfig?, b: BufferViewConfig?)
+      = (a?.bufferViewName() ?: "").compareTo((b?.bufferViewName() ?: ""), true)
+  }
 }

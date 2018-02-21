@@ -1,6 +1,5 @@
 package de.kuschku.quasseldroid_ng.ui.chat
 
-import android.arch.lifecycle.LiveData
 import android.arch.paging.PagedListAdapter
 import android.content.Context
 import android.support.v7.recyclerview.extensions.DiffCallback
@@ -16,7 +15,6 @@ import de.kuschku.quasseldroid_ng.util.helper.getOrPut
 
 class MessageAdapter(
   context: Context,
-  private val markerLine: LiveData<Pair<MsgId, MsgId>?>,
   var markerLinePosition: Pair<MsgId, MsgId>? = null
 ) : PagedListAdapter<QuasselDatabase.DatabaseMessage, QuasselMessageViewHolder>(
   object : DiffCallback<QuasselDatabase.DatabaseMessage>() {
@@ -51,13 +49,13 @@ class MessageAdapter(
     getItem(position)?.let {
       messageRenderer.bind(
         holder,
-        if (it.messageId == markerLine.value?.second || it.messageId == markerLine.value?.first) {
-          val value = messageRenderer.render(it, markerLine.value?.second ?: -1)
+        if (it.messageId == markerLinePosition?.second || it.messageId == markerLinePosition?.first) {
+          val value = messageRenderer.render(it, markerLinePosition?.second ?: -1)
           messageCache.put(it.messageId, value)
           value
         } else {
           messageCache.getOrPut(it.messageId) {
-            messageRenderer.render(it, markerLine.value?.second ?: -1)
+            messageRenderer.render(it, markerLinePosition?.second ?: -1)
           }
         }
       )
