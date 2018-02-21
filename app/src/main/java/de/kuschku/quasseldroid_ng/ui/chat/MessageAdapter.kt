@@ -16,7 +16,8 @@ import de.kuschku.quasseldroid_ng.util.helper.getOrPut
 
 class MessageAdapter(
   context: Context,
-  private val markerLine: LiveData<Pair<MsgId, MsgId>?>
+  private val markerLine: LiveData<Pair<MsgId, MsgId>?>,
+  var markerLinePosition: Pair<MsgId, MsgId>? = null
 ) : PagedListAdapter<QuasselDatabase.DatabaseMessage, QuasselMessageViewHolder>(
   object : DiffCallback<QuasselDatabase.DatabaseMessage>() {
     override fun areItemsTheSame(oldItem: QuasselDatabase.DatabaseMessage,
@@ -26,8 +27,8 @@ class MessageAdapter(
     override fun areContentsTheSame(oldItem: QuasselDatabase.DatabaseMessage,
                                     newItem: QuasselDatabase.DatabaseMessage)
       = DatabaseMessage.MessageDiffCallback.areContentsTheSame(oldItem, newItem) &&
-        oldItem.messageId != markerLine.value?.first &&
-        oldItem.messageId != markerLine.value?.second
+        oldItem.messageId != markerLinePosition?.first &&
+        oldItem.messageId != markerLinePosition?.second
   }
 ) {
   private val messageRenderer: MessageRenderer = QuasselMessageRenderer(
@@ -41,6 +42,10 @@ class MessageAdapter(
   )
 
   private val messageCache = LruCache<Int, FormattedMessage>(512)
+
+  fun clearCache() {
+    messageCache.evictAll()
+  }
 
   override fun onBindViewHolder(holder: QuasselMessageViewHolder, position: Int) {
     getItem(position)?.let {
@@ -100,8 +105,10 @@ class MessageAdapter(
     return viewHolder
   }
 
-  operator fun get(position: Int): QuasselDatabase.DatabaseMessage? {
-    return getItem(position)
+  operator fun get(position: Int) = if (position in 0 until itemCount) {
+    getItem(position)
+  } else {
+    null
   }
 }
 

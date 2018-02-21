@@ -33,6 +33,33 @@ inline fun <X, Y> LiveData<X?>.switchMap(
 }
 
 @MainThread
+inline fun <X, Y> LiveData<X>.switchMapNotNull(
+  crossinline func: (X) -> LiveData<Y>?
+): LiveData<Y> {
+  val result = MediatorLiveData<Y>()
+  result.addSource(
+    this, object : Observer<X> {
+    internal var mSource: LiveData<Y>? = null
+
+    override fun onChanged(x: X?) {
+      val newLiveData = if (x == null) null else func(x)
+      if (mSource === newLiveData) {
+        return
+      }
+      mSource?.let(result::removeSource)
+      mSource = newLiveData
+      if (newLiveData != null) {
+        result.addSource(newLiveData) { y -> result.value = y }
+      } else {
+        result.value = null
+      }
+    }
+  }
+  )
+  return result
+}
+
+@MainThread
 inline fun <X, Y> LiveData<X?>.switchMapRx(
   strategy: BackpressureStrategy,
   crossinline func: (X) -> Observable<Y>?
@@ -66,7 +93,7 @@ inline fun <X, Y> LiveData<out X?>.switchMapRx(
 ): LiveData<Y?> = switchMapRx(BackpressureStrategy.LATEST, func)
 
 @MainThread
-inline fun <X, Y> LiveData<X?>.map(
+inline fun <X, Y> LiveData<out X?>.map(
   crossinline func: (X) -> Y?
 ): LiveData<Y?> {
   val result = MediatorLiveData<Y?>()
@@ -119,3 +146,5 @@ inline fun <T> LiveData<T>.toObservable(lifecycleOwner: LifecycleOwner): Observa
 inline operator fun <T> LiveData<T>.invoke() = value
 
 inline operator fun <T, U> LiveData<T?>.invoke(f: (T) -> U?) = value?.let(f)
+
+inline fun <T, U> LiveData<T>.let(f: (T) -> U?) = value?.let(f)

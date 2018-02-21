@@ -285,6 +285,7 @@ class QuasselMessageRenderer(
       text.setSpan(URLSpan(result.value), result.range.start, result.range.endInclusive, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
     }
     */
+
     return text
   }
 

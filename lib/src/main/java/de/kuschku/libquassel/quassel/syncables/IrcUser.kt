@@ -250,7 +250,7 @@ class IrcUser(
   }
 
   override fun quit() {
-    for (channel in _channels) {
+    for (channel in _channels.toList()) {
       channel.part(this)
     }
     _channels.clear()

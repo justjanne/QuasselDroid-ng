@@ -3,6 +3,7 @@ package de.kuschku.libquassel.quassel.syncables
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferViewManager
 import de.kuschku.libquassel.session.SignalProxy
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
 class BufferViewManager constructor(
@@ -23,6 +24,8 @@ class BufferViewManager constructor(
   fun bufferViewConfig(bufferViewId: Int) = _bufferViewConfigs[bufferViewId]
 
   fun bufferViewConfigs() = _bufferViewConfigs.values
+
+  fun liveBufferViewConfigs(): Observable<Set<Int>> = live_bufferViewConfigs
 
   override fun initSetBufferViewIds(bufferViewIds: QVariantList) {
     bufferViewIds
@@ -57,6 +60,6 @@ class BufferViewManager constructor(
   private val _bufferViewConfigs: MutableMap<Int, BufferViewConfig>
     = mutableMapOf()
 
-  val live_bufferViewConfigs: BehaviorSubject<Set<Int>>
+  private val live_bufferViewConfigs: BehaviorSubject<Set<Int>>
     = BehaviorSubject.createDefault<Set<Int>>(emptySet())
 }

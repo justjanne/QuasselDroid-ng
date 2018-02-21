@@ -1,8 +1,8 @@
 package de.kuschku.quasseldroid_ng.ui.chat
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import android.os.Bundle
@@ -15,39 +15,30 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
-import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.SessionManager
+import de.kuschku.libquassel.util.compatibility.LoggingHandler
+import de.kuschku.libquassel.util.compatibility.log
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
+import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.*
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundFragment
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 
 class MessageListFragment : ServiceBoundFragment() {
-  val currentBuffer: MutableLiveData<LiveData<BufferId?>?> = MutableLiveData()
-  private val buffer = currentBuffer.switchMap { it }
+  private lateinit var viewModel: QuasselViewModel
 
   private val sessionManager: LiveData<SessionManager?> = backend.map(Backend::sessionManager)
 
-  val markerLine = buffer.switchMap { buffer ->
-    sessionManager.switchMapRx { manager ->
-      manager.session.switchMap { session ->
-        val raw = session.bufferSyncer?.liveMarkerLine(buffer)
-        Observable.zip(
-          Observable.just(-1).concatWith(raw),
-          raw,
-          BiFunction<MsgId, MsgId, Pair<MsgId, MsgId>> { a, b -> a to b }
-        )
-      }
-    }
-  }
+  private var lastBuffer: BufferId? = null
 
   private val handler = AndroidHandlerThread("Chat")
 
   private lateinit var database: QuasselDatabase
+
+  private lateinit var linearLayoutManager: LinearLayoutManager
+  private lateinit var adapter: MessageAdapter
 
   @BindView(R.id.messages)
   lateinit var messageList: RecyclerView
@@ -58,6 +49,8 @@ class MessageListFragment : ServiceBoundFragment() {
   override fun onCreate(savedInstanceState: Bundle?) {
     handler.onCreate()
     super.onCreate(savedInstanceState)
+
+    viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
     setHasOptionsMenu(true)
   }
 
@@ -76,10 +69,9 @@ class MessageListFragment : ServiceBoundFragment() {
     val view = inflater.inflate(R.layout.fragment_messages, container, false)
     ButterKnife.bind(this, view)
 
-    val adapter = MessageAdapter(context!!, markerLine)
-
+    adapter = MessageAdapter(context!!, viewModel.markerLine)
     messageList.adapter = adapter
-    val linearLayoutManager = LinearLayoutManager(context)
+    linearLayoutManager = LinearLayoutManager(context)
     linearLayoutManager.reverseLayout = true
     messageList.layoutManager = linearLayoutManager
     messageList.itemAnimator = null
@@ -98,7 +90,7 @@ class MessageListFragment : ServiceBoundFragment() {
     )
 
     database = QuasselDatabase.Creator.init(context!!.applicationContext)
-    val data = buffer.switchMap {
+    val data = viewModel.getBuffer().switchMapNotNull {
       LivePagedListBuilder(
         database.message().findByBufferIdPaged(it),
         PagedList.Config.Builder()
@@ -114,7 +106,7 @@ class MessageListFragment : ServiceBoundFragment() {
 
     handler.post {
       val database = QuasselDatabase.Creator.init(this.context!!)
-      sessionManager.zip(buffer).zip(data).observe(
+      sessionManager.zip(viewModel.getBuffer()).zip(data).observe(
         this, Observer {
         handler.post {
           val session = it?.first?.first
@@ -134,13 +126,19 @@ class MessageListFragment : ServiceBoundFragment() {
       )
     }
 
-    markerLine.observe(this, Observer { adapter.notifyDataSetChanged() })
+    viewModel.markerLine.observe(
+      this, Observer {
+      log(LoggingHandler.LogLevel.ERROR, "DEBUG", "$it")
+      adapter.markerLinePosition = it
+      adapter.notifyDataSetChanged()
+    }
+    )
 
     data.observe(
       this, Observer { list ->
-      val findFirstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
+      val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
       adapter.setList(list)
-      if (findFirstVisibleItemPosition < 2) {
+      if (firstVisibleItemPosition < 2) {
         activity?.runOnUiThread {
           messageList.smoothScrollToPosition(0)
         }
@@ -155,9 +153,17 @@ class MessageListFragment : ServiceBoundFragment() {
     }
     )
 
-    buffer.observe(
+    viewModel.getBuffer().observe(
       this, Observer {
+      val previous = lastBuffer
+      val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
+      val messageId = adapter[firstVisibleItemPosition]?.messageId
+
       handler.post {
+        val bufferSyncer = sessionManager.value?.bufferSyncer
+        if (previous != null && messageId != null)
+          bufferSyncer?.requestSetMarkerLine(previous, messageId)
+
         // Try loading messages when switching to isEmpty buffer
         if (it != null) {
           if (database.message().bufferSize(it) == 0) {
@@ -166,6 +172,8 @@ class MessageListFragment : ServiceBoundFragment() {
           activity?.runOnUiThread {
             messageList.scrollToPosition(0)
           }
+
+          lastBuffer = it
         }
       }
     }
@@ -179,9 +187,20 @@ class MessageListFragment : ServiceBoundFragment() {
     return view
   }
 
+  override fun onPause() {
+    val previous = lastBuffer
+    val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
+    val messageId = adapter[firstVisibleItemPosition]?.messageId
+    val bufferSyncer = sessionManager.value?.bufferSyncer
+    if (previous != null && messageId != null)
+      bufferSyncer?.requestSetMarkerLine(previous, messageId)
+
+    super.onPause()
+  }
+
   private fun loadMore() {
     handler.post {
-      buffer { bufferId ->
+      viewModel.getBuffer().let { bufferId ->
         backend()?.sessionManager()?.backlogManager?.requestBacklog(
           bufferId = bufferId,
           last = database.message().findFirstByBufferId(bufferId)?.messageId ?: -1,

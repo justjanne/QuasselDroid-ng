@@ -1,9 +1,8 @@
 package de.kuschku.quasseldroid_ng.ui.chat
 
 import android.app.Activity
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -17,26 +16,19 @@ import android.widget.Button
 import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
-import de.kuschku.libquassel.protocol.BufferId
-import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.ConnectionState
-import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.session.SocketAddress
 import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
+import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.*
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
 
 class ChatActivity : ServiceBoundActivity() {
-  private var contentMessages: MessageListFragment? = null
-  private var chatListFragment: BufferViewConfigFragment? = null
-  private var nickListFragment: NickListFragment? = null
-  private var toolbarFragment: ToolbarFragment? = null
-
   @BindView(R.id.drawerLayout)
   lateinit var drawerLayout: DrawerLayout
 
@@ -56,13 +48,9 @@ class ChatActivity : ServiceBoundActivity() {
 
   private val handler = AndroidHandlerThread("Chat")
 
-  private val sessionManager: LiveData<SessionManager?> = backend.map(Backend::sessionManager)
-  private val state = sessionManager.switchMapRx(SessionManager::state)
-  private val initStatus = sessionManager.switchMapRx(SessionManager::initStatus)
+  private lateinit var viewModel: QuasselViewModel
 
   private var snackbar: Snackbar? = null
-
-  private val currentBuffer = MutableLiveData<BufferId>()
 
   private lateinit var database: QuasselDatabase
 
@@ -72,34 +60,14 @@ class ChatActivity : ServiceBoundActivity() {
     setContentView(R.layout.activity_main)
     ButterKnife.bind(this)
 
-    database = QuasselDatabase.Creator.init(application)
+    viewModel = ViewModelProviders.of(this)[QuasselViewModel::class.java]
+    viewModel.setBackend(this.backend)
 
-    contentMessages = supportFragmentManager.findFragmentById(
-      R.id.contentMessages
-    ) as? MessageListFragment
-    chatListFragment = supportFragmentManager.findFragmentById(
-      R.id.chatListFragment
-    ) as? BufferViewConfigFragment
-    nickListFragment = supportFragmentManager.findFragmentById(
-      R.id.nickListFragment
-    ) as? NickListFragment
-    toolbarFragment = supportFragmentManager.findFragmentById(
-      R.id.toolbarFragment
-    ) as? ToolbarFragment
+    database = QuasselDatabase.Creator.init(application)
 
     setSupportActionBar(toolbar)
 
-    chatListFragment?.currentBuffer?.value = currentBuffer
-    nickListFragment?.currentBuffer?.value = currentBuffer
-    contentMessages?.currentBuffer?.value = currentBuffer
-    toolbarFragment?.currentBuffer?.value = currentBuffer
-
-    chatListFragment?.clickListeners?.add {
-      currentBuffer.value = it
-      println("Changed buffer to $it")
-    }
-
-    currentBuffer.observe(
+    viewModel.getBuffer().observe(
       this, Observer {
       if (it != null) {
         drawerLayout.closeDrawer(Gravity.START, true)
@@ -145,17 +113,17 @@ class ChatActivity : ServiceBoundActivity() {
     )
 
     buttonSend.setOnClickListener {
-      sessionManager { sessionManager ->
-        currentBuffer { bufferId ->
-          sessionManager.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
-            sessionManager.rpcHandler?.sendInput(bufferInfo, input.text.toString())
+      viewModel.session { session ->
+        viewModel.getBuffer().let { bufferId ->
+          session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
+            session.rpcHandler?.sendInput(bufferInfo, input.text.toString())
           }
         }
       }
       input.text.clear()
     }
 
-    state.observe(
+    viewModel.connectionState.observe(
       this, Observer {
       val status = it ?: ConnectionState.DISCONNECTED
 
@@ -180,7 +148,7 @@ class ChatActivity : ServiceBoundActivity() {
     }
     )
 
-    initStatus.observe(
+    viewModel.initState.observe(
       this, Observer {
       val (progress, max) = it ?: 0 to 0
 
@@ -192,12 +160,12 @@ class ChatActivity : ServiceBoundActivity() {
 
   override fun onSaveInstanceState(outState: Bundle?) {
     super.onSaveInstanceState(outState)
-    outState?.putInt("OPEN_BUFFER", currentBuffer.value ?: -1)
+    outState?.putInt("OPEN_BUFFER", viewModel.getBuffer().value ?: -1)
   }
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
     super.onRestoreInstanceState(savedInstanceState)
-    currentBuffer.value = savedInstanceState?.getInt("OPEN_BUFFER", -1)
+    viewModel.setBuffer(savedInstanceState?.getInt("OPEN_BUFFER", -1) ?: -1)
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
