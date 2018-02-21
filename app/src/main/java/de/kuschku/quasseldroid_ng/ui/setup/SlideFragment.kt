@@ -69,6 +69,10 @@ abstract class SlideFragment : Fragment() {
   abstract fun getData(data: Bundle)
   var initData: Bundle? = null
 
+  fun requestFocus() {
+    this.view?.requestFocus()
+  }
+
   protected abstract fun onCreateContent(inflater: LayoutInflater, container: ViewGroup?,
                                          savedInstanceState: Bundle?): View
 }

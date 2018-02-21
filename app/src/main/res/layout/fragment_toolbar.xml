@@ -12,8 +12,7 @@
   android:minHeight="?attr/actionBarSize"
   android:orientation="vertical"
   android:theme="?attr/actionBarTheme"
-  tools:showIn="@layout/activity_main"
-  tools:theme="@style/Widget.AppBarOverlay">
+  tools:showIn="@layout/activity_main">
 
   <LinearLayout
     android:layout_width="wrap_content"

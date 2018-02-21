@@ -35,8 +35,7 @@
   <style name="Theme.ChatTheme" parent="Base.ChatTheme">
     <item name="actionBarTheme">@style/Widget.AppBarOverlay</item>
     <item name="formatBarTheme">@style/Widget.AppBarOverlay</item>
-
-    <item name="android:windowBackground">@null</item>
+    <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
     <item name="windowActionModeOverlay">true</item>
 
@@ -71,8 +70,7 @@
   <style name="Theme.ChatTheme.Light" parent="Base.ChatTheme.Light">
     <item name="actionBarTheme">@style/Widget.AppBarOverlay</item>
     <item name="formatBarTheme">@style/Widget.AppBarOverlay.Light</item>
-
-    <item name="android:windowBackground">@null</item>
+    <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
     <item name="windowActionModeOverlay">true</item>
 

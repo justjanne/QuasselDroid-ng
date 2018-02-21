@@ -5,8 +5,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="?attr/colorBackground"
-  tools:background="@android:color/background_light"
-  tools:theme="@style/Theme.ChatTheme.Quassel_Light">
+  tools:showIn="@layout/activity_main">
 
   <android.support.v7.widget.RecyclerView
     android:id="@+id/messages"

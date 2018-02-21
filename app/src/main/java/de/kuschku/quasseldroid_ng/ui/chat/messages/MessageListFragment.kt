@@ -18,6 +18,8 @@ import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.quassel.syncables.BufferSyncer
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
+import de.kuschku.quasseldroid_ng.ui.settings.Settings
+import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
 import de.kuschku.quasseldroid_ng.ui.settings.data.BacklogSettings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
@@ -32,6 +34,7 @@ class MessageListFragment : ServiceBoundFragment() {
   lateinit var scrollDown: FloatingActionButton
 
   private lateinit var viewModel: QuasselViewModel
+  private lateinit var appearanceSettings: AppearanceSettings
 
   private val handler = AndroidHandlerThread("Chat")
 
@@ -48,6 +51,7 @@ class MessageListFragment : ServiceBoundFragment() {
     handler.onCreate()
     super.onCreate(savedInstanceState)
     viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
+    appearanceSettings = Settings.appearance(activity!!)
     setHasOptionsMenu(true)
   }
 
@@ -65,7 +69,7 @@ class MessageListFragment : ServiceBoundFragment() {
     linearLayoutManager = LinearLayoutManager(context)
     linearLayoutManager.reverseLayout = true
 
-    adapter = MessageAdapter(context!!)
+    adapter = MessageAdapter(context!!, appearanceSettings)
     messageList.adapter = adapter
     messageList.layoutManager = linearLayoutManager
     messageList.itemAnimator = null

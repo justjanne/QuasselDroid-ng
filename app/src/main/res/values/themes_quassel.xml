@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-  <string name="themeQuasselLightName">Quassel™ (Light)</string>
-  <string name="themeQuasselLightId">QUASSEL_LIGHT</string>
-
+  <color name="quassel_light_background">#fafafa</color>
   <style name="Theme.ChatTheme.Quassel_Light" parent="Theme.ChatTheme.Light">
     <item name="senderColor0">#cc0000</item>
     <item name="senderColor1">#006cad</item>
@@ -31,6 +29,7 @@
 
     <item name="colorForegroundMirc">0x1</item>
 
+    <item name="android:windowBackground">@color/quassel_light_background</item>
     <item name="colorBackground">#FAFAFA</item>
     <item name="colorBackgroundHighlight">#FFA726</item>
     <item name="colorBackgroundSecondary">@null</item>
@@ -44,9 +43,7 @@
     <item name="colorTintHighlight">#ff8811</item>
   </style>
 
-  <string name="themeQuasselDarkName">Quassel™ (Dark)</string>
-  <string name="themeQuasselDarkId">QUASSEL_DARK</string>
-
+  <color name="quassel_dark_background">#303030</color>
   <style name="Theme.ChatTheme.Quassel_Dark" parent="Theme.ChatTheme">
     <item name="senderColor0">#cc0000</item>
     <item name="senderColor1">#006cad</item>
@@ -74,6 +71,7 @@
 
     <item name="colorForegroundMirc">0x0</item>
 
+    <item name="android:windowBackground">@color/quassel_dark_background</item>
     <item name="colorBackground">#303030</item>
     <item name="colorBackgroundHighlight">#FFA726</item>
     <item name="colorBackgroundSecondary">@null</item>

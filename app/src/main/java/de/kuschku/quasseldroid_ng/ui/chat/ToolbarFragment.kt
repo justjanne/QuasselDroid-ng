@@ -14,6 +14,7 @@ import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.R
+import de.kuschku.quasseldroid_ng.ui.settings.Settings
 import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.helper.visibleIf
@@ -32,12 +33,7 @@ class ToolbarFragment : ServiceBoundFragment() {
   private lateinit var viewModel: QuasselViewModel
 
   private var ircFormatDeserializer: IrcFormatDeserializer? = null
-  private val appearanceSettings = AppearanceSettings(
-    showPrefix = AppearanceSettings.ShowPrefixMode.FIRST,
-    colorizeNicknames = AppearanceSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
-    colorizeMirc = true,
-    timeFormat = ""
-  )
+  private lateinit var appearanceSettings: AppearanceSettings
 
   var title: CharSequence?
     get() = toolbarTitle.text
@@ -59,6 +55,7 @@ class ToolbarFragment : ServiceBoundFragment() {
     super.onCreate(savedInstanceState)
 
     viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
+    appearanceSettings = Settings.appearance(activity!!)
 
     if (ircFormatDeserializer == null) {
       ircFormatDeserializer = IrcFormatDeserializer(context!!)

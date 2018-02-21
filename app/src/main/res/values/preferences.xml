@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="preference_appearance_title">Appearance</string>
+
+  <string name="preference_theme_key" translatable="false">theme</string>
+  <string name="preference_theme_title">Theme</string>
+  <string name="preference_theme_entry_quassel_light">Quassel (Light)</string>
+  <string name="preference_theme_entry_quassel_dark">Quassel (Dark)</string>
+  <string name="preference_theme_entry_amoled">AMOLED</string>
+  <string name="preference_theme_entry_solarized_light">Solarized (Light)</string>
+  <string name="preference_theme_entry_solarized_dark">Solarized (Dark)</string>
+  <string-array name="preference_theme_entries">
+    <item>@string/preference_theme_entry_quassel_light</item>
+    <item>@string/preference_theme_entry_quassel_dark</item>
+    <item>@string/preference_theme_entry_amoled</item>
+    <item>@string/preference_theme_entry_solarized_light</item>
+    <item>@string/preference_theme_entry_solarized_dark</item>
+  </string-array>
+  <string-array name="preference_theme_entryvalues">
+    <item>QUASSEL_LIGHT</item>
+    <item>QUASSEL_DARK</item>
+    <item>AMOLED</item>
+    <item>SOLARIZED_LIGHT</item>
+    <item>SOLARIZED_DARK</item>
+  </string-array>
+
+  <string name="preference_colorize_mirc_key" translatable="false">colorize_mirc</string>
+  <string name="preference_colorize_mirc_title">Use mIRC Colors</string>
+  <string name="preference_colorize_mirc_summaryon">Show mIRC colors in messages</string>
+  <string name="preference_colorize_mirc_summaryoff">Strip mIRC colors from messages</string>
+
+  <string name="preference_colorize_nicknames_key" translatable="false">colorize_nicknames</string>
+  <string name="preference_colorize_nicknames_title">Colorize nicknames</string>
+  <string name="preference_colorize_nicknames_entry_all">All nicks</string>
+  <string name="preference_colorize_nicknames_entry_all_but_mine">All but own nick</string>
+  <string name="preference_colorize_nicknames_entry_none">No nicks</string>
+  <string-array name="preference_colorize_nicknames_entries">
+    <item>@string/preference_colorize_nicknames_entry_all</item>
+    <item>@string/preference_colorize_nicknames_entry_all_but_mine</item>
+    <item>@string/preference_colorize_nicknames_entry_none</item>
+  </string-array>
+  <string-array name="preference_colorize_nicknames_entryvalues">
+    <item>ALL</item>
+    <item>ALL_BUT_MINE</item>
+    <item>NONE</item>
+  </string-array>
+
+  <string name="preference_show_prefix_key" translatable="false">show_prefix</string>
+  <string name="preference_show_prefix_title">Show sendermodes</string>
+  <string name="preference_show_prefix_entry_all">Allv modes</string>
+  <string name="preference_show_prefix_entry_highest">Highest mode</string>
+  <string name="preference_show_prefix_entry_none">No modes</string>
+  <string-array name="preference_show_prefix_entries">
+    <item>@string/preference_show_prefix_entry_all</item>
+    <item>@string/preference_show_prefix_entry_highest</item>
+    <item>@string/preference_show_prefix_entry_none</item>
+  </string-array>
+  <string-array name="preference_show_prefix_entryvalues">
+    <item>ALL</item>
+    <item>HIGHEST</item>
+    <item>NONE</item>
+  </string-array>
+
+  <string name="preference_show_seconds_key" translatable="false">show_seconds</string>
+  <string name="preference_show_seconds_title">Show Seconds</string>
+
+  <string name="preference_use_24h_clock_key" translatable="false">use_24h_clock</string>
+  <string name="preference_use_24h_clock_title">Use 24h Clock</string>
+
+  <string name="preference_show_lag_key" translatable="false">show_lag</string>
+  <string name="preference_show_lag_title">Show lag</string>
+  <string name="preference_show_lag_summary">Displays the lag between client and core in the action bar</string>
+
+
+  <string name="preference_backlog_title">Backlog</string>
+
+  <string name="preference_dynamic_fetch_key" translatable="false">dynamic_fetch</string>
+  <string name="preference_dynamic_fetch_title">Dynamic Fetch Amount</string>
+  <string name="preference_dynamic_fetch_summary">The number of backlog messages to fetch each time</string>
+</resources>

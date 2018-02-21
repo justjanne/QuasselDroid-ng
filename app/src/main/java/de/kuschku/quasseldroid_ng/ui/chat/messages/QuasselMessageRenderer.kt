@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.Spanned
-import android.text.format.DateFormat
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.URLSpan
@@ -26,19 +25,24 @@ import de.kuschku.quasseldroid_ng.util.ui.SpanFormatter
 import org.intellij.lang.annotations.Language
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
-import java.text.SimpleDateFormat
 
 class QuasselMessageRenderer(
   private val context: Context,
   private val appearanceSettings: AppearanceSettings
 ) : MessageRenderer {
   private val timeFormatter = DateTimeFormatter.ofPattern(
-    if (appearanceSettings.timeFormat.isNotBlank()) {
-      appearanceSettings.timeFormat
-    } else {
-      (DateFormat.getTimeFormat(context) as SimpleDateFormat).toLocalizedPattern()
-    }
+    timePattern(appearanceSettings.showSeconds, appearanceSettings.use24hClock)
   )
+
+  private fun timePattern(showSeconds: Boolean,
+                          use24hClock: Boolean) = when (use24hClock to showSeconds) {
+    false to true  -> "hh:mm:ss a"
+    false to false -> "hh:mm a"
+
+    true to true   -> "HH:mm:ss"
+    else           -> "HH:mm"
+  }
+
   private lateinit var senderColors: IntArray
 
   private val zoneId = ZoneId.systemDefault()
@@ -324,8 +328,8 @@ class QuasselMessageRenderer(
 
   private fun formatPrefix(prefix: String,
                            highlight: Boolean) = when (appearanceSettings.showPrefix) {
-    ShowPrefixMode.ALL   -> prefix
-    ShowPrefixMode.FIRST -> prefix.substring(0, Math.min(prefix.length, 1))
-    ShowPrefixMode.NONE  -> ""
+    ShowPrefixMode.ALL     -> prefix
+    ShowPrefixMode.HIGHEST -> prefix.substring(0, Math.min(prefix.length, 1))
+    ShowPrefixMode.NONE    -> ""
   }
 }

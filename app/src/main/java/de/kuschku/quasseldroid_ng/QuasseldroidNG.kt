@@ -27,6 +27,9 @@ class QuasseldroidNG : Application() {
 
     AndroidThreeTenBackport.init(this)
 
+    // Initialize preferences unless already set
+    android.support.v7.preference.PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       systemService<ShortcutManager>().dynamicShortcuts = listOf(
         ShortcutInfo.Builder(this, "id1")

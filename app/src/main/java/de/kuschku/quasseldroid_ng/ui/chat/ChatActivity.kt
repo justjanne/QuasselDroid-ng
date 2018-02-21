@@ -4,6 +4,7 @@ import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.widget.DrawerLayout
@@ -22,6 +23,7 @@ import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
+import de.kuschku.quasseldroid_ng.ui.settings.SettingsActivity
 import de.kuschku.quasseldroid_ng.ui.settings.data.BacklogSettings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
@@ -193,6 +195,10 @@ class ChatActivity : ServiceBoundActivity() {
           }
         }
       }
+      true
+    }
+    R.id.settings     -> {
+      startActivity(Intent(applicationContext, SettingsActivity::class.java))
       true
     }
     R.id.disconnect   -> {

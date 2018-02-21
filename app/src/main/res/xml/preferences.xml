@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory android:title="@string/preference_appearance_title">
+    <ListPreference
+      android:defaultValue="QUASSEL_LIGHT"
+      android:entries="@array/preference_theme_entries"
+      android:entryValues="@array/preference_theme_entryvalues"
+      android:key="@string/preference_theme_key"
+      android:title="@string/preference_theme_title" />
+
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="@string/preference_colorize_mirc_key"
+      android:summaryOff="@string/preference_colorize_mirc_summaryoff"
+      android:summaryOn="@string/preference_colorize_mirc_summaryon"
+      android:title="@string/preference_colorize_mirc_title" />
+
+    <DropDownPreference
+      android:defaultValue="ALL_BUT_MINE"
+      android:entries="@array/preference_colorize_nicknames_entries"
+      android:entryValues="@array/preference_colorize_nicknames_entryvalues"
+      android:key="@string/preference_colorize_nicknames_key"
+      android:title="@string/preference_colorize_nicknames_title" />
+
+    <DropDownPreference
+      android:defaultValue="HIGHEST"
+      android:entries="@array/preference_show_prefix_entries"
+      android:entryValues="@array/preference_show_prefix_entryvalues"
+      android:key="@string/preference_show_prefix_key"
+      android:title="@string/preference_show_prefix_title" />
+
+    <SwitchPreference
+      android:defaultValue="false"
+      android:key="@string/preference_show_seconds_key"
+      android:title="@string/preference_show_seconds_title" />
+
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="@string/preference_use_24h_clock_key"
+      android:title="@string/preference_use_24h_clock_title" />
+
+    <SwitchPreference
+      android:defaultValue="false"
+      android:key="@string/preference_show_lag_key"
+      android:summary="@string/preference_show_lag_summary"
+      android:title="@string/preference_show_lag_title" />
+  </PreferenceCategory>
+
+  <PreferenceCategory android:title="@string/preference_backlog_title">
+    <EditTextPreference
+      android:defaultValue="20"
+      android:inputType="number"
+      android:key="@string/preference_dynamic_fetch_key"
+      android:summary="@string/preference_dynamic_fetch_summary"
+      android:title="@string/preference_dynamic_fetch_title" />
+  </PreferenceCategory>
+</PreferenceScreen>

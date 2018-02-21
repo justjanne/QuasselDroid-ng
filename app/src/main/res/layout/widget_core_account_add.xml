@@ -9,8 +9,7 @@
   android:focusableInTouchMode="false"
   android:orientation="horizontal"
   android:paddingLeft="16dp"
-  android:paddingRight="16dp"
-  tools:theme="@style/Theme.ChatTheme.Quassel_Light">
+  android:paddingRight="16dp">
 
   <ImageView
     android:layout_width="32dp"

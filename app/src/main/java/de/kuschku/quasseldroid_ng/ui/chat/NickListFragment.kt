@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid_ng.R
+import de.kuschku.quasseldroid_ng.ui.settings.Settings
 import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
@@ -27,18 +28,14 @@ class NickListFragment : ServiceBoundFragment() {
   lateinit var nickList: RecyclerView
 
   private var ircFormatDeserializer: IrcFormatDeserializer? = null
-  private val renderingSettings = AppearanceSettings(
-    showPrefix = AppearanceSettings.ShowPrefixMode.FIRST,
-    colorizeNicknames = AppearanceSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
-    colorizeMirc = true,
-    timeFormat = ""
-  )
+  private lateinit var appearanceSettings: AppearanceSettings
 
   override fun onCreate(savedInstanceState: Bundle?) {
     handlerThread.onCreate()
     super.onCreate(savedInstanceState)
 
     viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
+    appearanceSettings = Settings.appearance(activity!!)
 
     if (ircFormatDeserializer == null) {
       ircFormatDeserializer = IrcFormatDeserializer(context!!)
@@ -56,7 +53,7 @@ class NickListFragment : ServiceBoundFragment() {
         it.map {
           it.copy(
             realname = ircFormatDeserializer?.formatString(
-              it.realname.toString(), renderingSettings.colorizeMirc
+              it.realname.toString(), appearanceSettings.colorizeMirc
             ) ?: it.realname
           )
         }

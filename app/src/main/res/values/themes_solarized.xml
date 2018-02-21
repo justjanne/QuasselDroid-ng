@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-  <string name="themeSolarizedLightName">Solarized (Light)</string>
-  <string name="themeSolarizedLightId">SOLARIZED_LIGHT</string>
-
+  <color name="solarized_light_background">#FDF6E3</color>
   <style name="Theme.ChatTheme.Solarized_Light" parent="Theme.ChatTheme.Light">
     <item name="colorPrimary">?attr/colorBackgroundCard</item>
     <item name="colorPrimaryDark">#b0ac9e</item>
@@ -35,8 +33,9 @@
     <item name="colorForegroundNotice">#B58900</item>
     <item name="colorForegroundError">#B00000</item>
 
-    <item name="colorForegroundMirc">0xF</item>
+    <item name="colorForegroundMirc">0x1</item>
 
+    <item name="android:windowBackground">@color/solarized_light_background</item>
     <item name="colorBackground">#FDF6E3</item>
     <item name="colorBackgroundHighlight">#D5A920</item>
     <item name="colorBackgroundSecondary">@null</item>
@@ -50,9 +49,7 @@
     <item name="colorTintHighlight">#EB6B36</item>
   </style>
 
-  <string name="themeSolarizedDarkName">Solarized (Dark)</string>
-  <string name="themeSolarizedDarkId">SOLARIZED_DARK</string>
-
+  <color name="solarized_dark_background">#002B36</color>
   <style name="Theme.ChatTheme.Solarized_Dark" parent="Theme.ChatTheme">
     <item name="colorPrimary">?attr/colorBackgroundCard</item>
     <item name="colorPrimaryDark">?attr/colorBackground</item>
@@ -82,8 +79,9 @@
     <item name="colorForegroundNotice">#B58900</item>
     <item name="colorForegroundError">#B00000</item>
 
-    <item name="colorForegroundMirc">0xF</item>
+    <item name="colorForegroundMirc">0x0</item>
 
+    <item name="android:windowBackground">@color/solarized_dark_background</item>
     <item name="colorBackground">#002B36</item>
     <item name="colorBackgroundHighlight">#D5A920</item>
     <item name="colorBackgroundSecondary">@null</item>

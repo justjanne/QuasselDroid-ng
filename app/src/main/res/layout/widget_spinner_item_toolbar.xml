@@ -8,5 +8,4 @@
   android:paddingLeft="16dp"
   android:paddingRight="16dp"
   android:textAppearance="?android:attr/textAppearanceListItemSmall"
-  tools:text="All Chats"
-  tools:theme="@style/Theme.ChatTheme.Quassel_Light" />
+  tools:text="All Chats" />

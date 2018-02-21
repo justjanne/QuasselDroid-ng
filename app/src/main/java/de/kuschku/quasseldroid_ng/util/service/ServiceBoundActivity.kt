@@ -24,6 +24,7 @@ abstract class ServiceBoundActivity : AppCompatActivity() {
   protected lateinit var appearanceSettings: AppearanceSettings
 
   override fun onCreate(savedInstanceState: Bundle?) {
+
     connection.context = this
     appearanceSettings = Settings.appearance(this)
     setTheme(appearanceSettings.theme.style)
@@ -41,6 +42,9 @@ abstract class ServiceBoundActivity : AppCompatActivity() {
   }
 
   override fun onStart() {
+    if (Settings.appearance(this) != appearanceSettings) {
+      recreate()
+    }
     connection.bind()
     super.onStart()
   }

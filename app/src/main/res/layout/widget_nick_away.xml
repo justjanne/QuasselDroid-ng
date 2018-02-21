@@ -10,9 +10,7 @@
   android:paddingEnd="?listPreferredItemPaddingRight"
   android:paddingLeft="?listPreferredItemPaddingLeft"
   android:paddingRight="?listPreferredItemPaddingRight"
-  android:paddingStart="?listPreferredItemPaddingLeft"
-  tools:background="@android:color/background_light"
-  tools:theme="@style/Theme.ChatTheme.Quassel_Light">
+  android:paddingStart="?listPreferredItemPaddingLeft">
 
   <FrameLayout
     android:id="@+id/modesContainer"

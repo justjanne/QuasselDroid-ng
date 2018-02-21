@@ -26,9 +26,7 @@
   android:clickable="true"
   android:focusable="true"
   android:orientation="vertical"
-  android:textAppearance="?android:attr/textAppearanceListItemSmall"
-  tools:background="@android:color/background_light"
-  tools:theme="@style/Theme.ChatTheme.Quassel_Light">
+  android:textAppearance="?android:attr/textAppearanceListItemSmall">
 
   <LinearLayout
     android:layout_width="match_parent"

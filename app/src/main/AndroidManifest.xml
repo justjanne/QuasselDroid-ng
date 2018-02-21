@@ -29,6 +29,12 @@
       android:parentActivityName=".ui.setup.accounts.AccountSelectionActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
+      android:name=".ui.settings.SettingsActivity"
+      android:exported="false"
+      android:label="@string/app_name"
+      android:parentActivityName=".ui.chat.ChatActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
       android:name=".ui.setup.accounts.AccountSelectionActivity"
       android:exported="true"
       android:label="@string/app_name"

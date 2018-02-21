@@ -16,7 +16,7 @@ class ReportCollector(application: Application) : Collector<Report, ReportConfig
   override fun collect(context: CrashContext, config: ReportConfig) = Report(
     crash = crashCollector.collectIf(context, config.crash),
     threads = threadCollector.collectIf(context, config.threads),
-    logcat = logcatCollector.collectIf(context, config.logcat),
+    /*logcat = logcatCollector.collectIf(context, config.logcat),*/
     application = applicationCollector.collectIf(context, config.application),
     device = deviceCollector.collectIf(context, config.device),
     environment = environmentCollector.collectIf(context, config.environment)

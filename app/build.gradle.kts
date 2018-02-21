@@ -98,6 +98,8 @@ dependencies {
     implementation("com.android.support", "customtabs", version)
     implementation("com.android.support", "cardview-v7", version)
     implementation("com.android.support", "recyclerview-v7", version)
+    implementation("com.android.support", "preference-v7", version)
+    implementation("com.android.support", "preference-v14", version)
   }
   implementation("com.android.support.constraint", "constraint-layout", "1.0.2")
 

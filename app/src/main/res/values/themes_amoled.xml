@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-  <string name="themeAmoledkName">AMOLED (Black)</string>
-  <string name="themeAmoledId">AMOLED</string>
-
+  <color name="amoled_background">#000000</color>
   <style name="Theme.ChatTheme.Amoled" parent="Theme.ChatTheme">
     <item name="colorPrimary">#000</item>
     <item name="colorPrimaryDark">#000</item>
@@ -48,6 +46,4 @@
     <item name="colorTintMessage">#2277dd</item>
     <item name="colorTintHighlight">#ff8811</item>
   </style>
-
-  <color name="amoled_background">#000000</color>
 </resources>

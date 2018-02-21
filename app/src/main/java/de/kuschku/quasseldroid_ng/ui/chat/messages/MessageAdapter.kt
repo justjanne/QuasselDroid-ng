@@ -15,6 +15,7 @@ import de.kuschku.quasseldroid_ng.util.helper.getOrPut
 
 class MessageAdapter(
   context: Context,
+  appearanceSettings: AppearanceSettings,
   var markerLinePosition: Pair<MsgId, MsgId>? = null
 ) : PagedListAdapter<QuasselDatabase.DatabaseMessage, QuasselMessageViewHolder>(
   object : DiffCallback<QuasselDatabase.DatabaseMessage>() {
@@ -31,12 +32,7 @@ class MessageAdapter(
 ) {
   private val messageRenderer: MessageRenderer = QuasselMessageRenderer(
     context,
-    AppearanceSettings(
-      showPrefix = AppearanceSettings.ShowPrefixMode.FIRST,
-      colorizeNicknames = AppearanceSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
-      colorizeMirc = true,
-      timeFormat = ""
-    )
+    appearanceSettings
   )
 
   private val messageCache = LruCache<Int, FormattedMessage>(512)

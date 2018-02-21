@@ -3,9 +3,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical"
-  tools:background="@android:color/background_light"
-  tools:theme="@style/Theme.ChatTheme.Quassel_Light">
+  android:orientation="vertical">
 
   <android.support.design.widget.AppBarLayout
     android:layout_width="match_parent"

@@ -60,6 +60,7 @@ abstract class SetupActivity : AppCompatActivity() {
     else
       R.drawable.ic_arrow_right
     button.setImageResource(drawable)
+    currentPage.value?.requestFocus()
   }
 
   fun updateRecentsHeader()
