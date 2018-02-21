@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng.ui.chat
+package de.kuschku.quasseldroid_ng.ui.chat.buffers
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
@@ -61,12 +61,12 @@ class BufferListAdapter(
         }.sortedBy { props ->
           props.network.networkName
         }.map { props ->
-          BufferListItem(
-            props,
-            BufferState(
-              networkExpanded = !collapsedNetworks.contains(props.network.networkId)
+            BufferListItem(
+              props,
+              BufferState(
+                networkExpanded = !collapsedNetworks.contains(props.network.networkId)
+              )
             )
-          )
         }.filter { (props, state) ->
           props.info.type.hasFlag(BufferInfo.Type.StatusBuffer) || state.networkExpanded
         }

@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng.ui.chat
+package de.kuschku.quasseldroid_ng.ui.chat.messages
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders

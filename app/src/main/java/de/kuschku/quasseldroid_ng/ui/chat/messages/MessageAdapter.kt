@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng.ui.chat
+package de.kuschku.quasseldroid_ng.ui.chat.messages
 
 import android.arch.paging.PagedListAdapter
 import android.content.Context
@@ -10,7 +10,7 @@ import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase.DatabaseMessage
-import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings
+import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
 import de.kuschku.quasseldroid_ng.util.helper.getOrPut
 
 class MessageAdapter(
@@ -31,9 +31,9 @@ class MessageAdapter(
 ) {
   private val messageRenderer: MessageRenderer = QuasselMessageRenderer(
     context,
-    RenderingSettings(
-      showPrefix = RenderingSettings.ShowPrefixMode.FIRST,
-      colorizeNicknames = RenderingSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
+    AppearanceSettings(
+      showPrefix = AppearanceSettings.ShowPrefixMode.FIRST,
+      colorizeNicknames = AppearanceSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
       colorizeMirc = true,
       timeFormat = ""
     )

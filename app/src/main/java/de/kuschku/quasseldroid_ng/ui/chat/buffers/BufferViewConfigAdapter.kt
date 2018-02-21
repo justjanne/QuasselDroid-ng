@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng.ui.chat
+package de.kuschku.quasseldroid_ng.ui.chat.buffers
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
@@ -49,7 +49,9 @@ class BufferViewConfigAdapter(
         parent.context
     )
     val view = inflater.inflate(R.layout.widget_spinner_item_toolbar, parent, false)
-    return BufferViewConfigViewHolder(view)
+    return BufferViewConfigViewHolder(
+      view
+    )
   }
 
   override fun getItem(position: Int): BufferViewConfig? = when (position) {

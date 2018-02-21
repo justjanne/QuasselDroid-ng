@@ -14,8 +14,7 @@ import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.R
-import de.kuschku.quasseldroid_ng.ui.settings.data.DisplaySettings
-import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings
+import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.helper.visibleIf
 import de.kuschku.quasseldroid_ng.util.helper.zip
@@ -32,14 +31,10 @@ class ToolbarFragment : ServiceBoundFragment() {
 
   private lateinit var viewModel: QuasselViewModel
 
-  private val displaySettings = DisplaySettings(
-    showLag = true
-  )
-
   private var ircFormatDeserializer: IrcFormatDeserializer? = null
-  private val renderingSettings = RenderingSettings(
-    showPrefix = RenderingSettings.ShowPrefixMode.FIRST,
-    colorizeNicknames = RenderingSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
+  private val appearanceSettings = AppearanceSettings(
+    showPrefix = AppearanceSettings.ShowPrefixMode.FIRST,
+    colorizeNicknames = AppearanceSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
     colorizeMirc = true,
     timeFormat = ""
   )
@@ -86,7 +81,7 @@ class ToolbarFragment : ServiceBoundFragment() {
           this.title = data?.info?.bufferName
         }
 
-        if (lag == 0L || !displaySettings.showLag) {
+        if (lag == 0L || !appearanceSettings.showLag) {
           this.subtitle = colorizeDescription(data?.description)
         } else {
           val description = colorizeDescription(data?.description)
@@ -107,9 +102,10 @@ class ToolbarFragment : ServiceBoundFragment() {
     return view
   }
 
-  private fun colorizeDescription(description: String?)
-    = ircFormatDeserializer?.formatString(description, renderingSettings.colorizeMirc)
-      ?: description
+  private fun colorizeDescription(description: String?) = ircFormatDeserializer?.formatString(
+    description, appearanceSettings.colorizeMirc
+  )
+                                                          ?: description
 
   data class BufferData(
     val info: BufferInfo? = null,

@@ -7,6 +7,8 @@ import android.support.annotation.DrawableRes
 import android.support.v7.app.AppCompatActivity
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.quasseldroid_ng.R
+import de.kuschku.quasseldroid_ng.ui.settings.Settings
+import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
 import de.kuschku.quasseldroid_ng.util.helper.updateRecentsHeaderIfExisting
 
 abstract class ServiceBoundActivity : AppCompatActivity() {
@@ -16,13 +18,15 @@ abstract class ServiceBoundActivity : AppCompatActivity() {
   protected val recentsHeaderColor: Int = R.color.colorPrimary
 
   private val connection = BackendServiceConnection()
-
   val backend: LiveData<Backend?>
     get() = connection.backend
 
+  protected lateinit var appearanceSettings: AppearanceSettings
+
   override fun onCreate(savedInstanceState: Bundle?) {
     connection.context = this
-    setTheme(R.style.Theme_ChatTheme_Quassel_Light)
+    appearanceSettings = Settings.appearance(this)
+    setTheme(appearanceSettings.theme.style)
     super.onCreate(savedInstanceState)
     connection.start()
     updateRecentsHeader()

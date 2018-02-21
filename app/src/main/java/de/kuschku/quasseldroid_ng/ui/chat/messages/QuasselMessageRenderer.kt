@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng.ui.chat
+package de.kuschku.quasseldroid_ng.ui.chat.messages
 
 import android.content.Context
 import android.graphics.Typeface
@@ -15,9 +15,9 @@ import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
-import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings
-import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings.ColorizeNicknamesMode
-import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings.ShowPrefixMode
+import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
+import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings.ColorizeNicknamesMode
+import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings.ShowPrefixMode
 import de.kuschku.quasseldroid_ng.util.helper.styledAttributes
 import de.kuschku.quasseldroid_ng.util.helper.visibleIf
 import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatDeserializer
@@ -30,11 +30,11 @@ import java.text.SimpleDateFormat
 
 class QuasselMessageRenderer(
   private val context: Context,
-  private val renderingSettings: RenderingSettings
+  private val appearanceSettings: AppearanceSettings
 ) : MessageRenderer {
   private val timeFormatter = DateTimeFormatter.ofPattern(
-    if (renderingSettings.timeFormat.isNotBlank()) {
-      renderingSettings.timeFormat
+    if (appearanceSettings.timeFormat.isNotBlank()) {
+      appearanceSettings.timeFormat
     } else {
       (DateFormat.getTimeFormat(context) as SimpleDateFormat).toLocalizedPattern()
     }
@@ -73,10 +73,13 @@ class QuasselMessageRenderer(
                     messageType: Message_Type?,
                     hasHighlight: Boolean) {
     if (hasHighlight) {
-      val attrs = intArrayOf(R.attr.colorBackgroundHighlight)
-      val colors = viewHolder.itemView.context.obtainStyledAttributes(attrs)
-      viewHolder.itemView.setBackgroundColor(colors.getColor(0, 0))
-      colors.recycle()
+      viewHolder.itemView.context.theme.styledAttributes(
+        R.attr.colorForegroundHighlight, R.attr.colorBackgroundHighlight
+      ) {
+        viewHolder.time.setTextColor(getColor(0, 0))
+        viewHolder.content.setTextColor(getColor(0, 0))
+        viewHolder.itemView.setBackgroundColor(getColor(1, 0))
+      }
     }
   }
 
@@ -88,14 +91,16 @@ class QuasselMessageRenderer(
 
   override fun render(message: QuasselDatabase.DatabaseMessage,
                       markerLine: MsgId): FormattedMessage {
+    val self = Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)
+    val highlight = Message_Flag.of(message.flag).hasFlag(Message_Flag.Highlight)
     return when (Message_Type.of(message.type).enabledValues().firstOrNull()) {
       Message_Type.Plain  -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
         SpanFormatter.format(
           context.getString(R.string.message_format_plain),
-          formatPrefix(message.senderPrefixes),
-          formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
+          formatPrefix(message.senderPrefixes, highlight),
+          formatNick(message.sender, self, highlight),
           formatContent(message.content)
         ),
         message.messageId == markerLine
@@ -105,8 +110,8 @@ class QuasselMessageRenderer(
         timeFormatter.format(message.time.atZone(zoneId)),
         SpanFormatter.format(
           context.getString(R.string.message_format_action),
-          formatPrefix(message.senderPrefixes),
-          formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
+          formatPrefix(message.senderPrefixes, highlight),
+          formatNick(message.sender, self, highlight),
           formatContent(message.content)
         ),
         message.messageId == markerLine
@@ -116,8 +121,8 @@ class QuasselMessageRenderer(
         timeFormatter.format(message.time.atZone(zoneId)),
         SpanFormatter.format(
           context.getString(R.string.message_format_notice),
-          formatPrefix(message.senderPrefixes),
-          formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
+          formatPrefix(message.senderPrefixes, highlight),
+          formatNick(message.sender, self, highlight),
           formatContent(message.content)
         ),
         message.messageId == markerLine
@@ -127,10 +132,10 @@ class QuasselMessageRenderer(
         timeFormatter.format(message.time.atZone(zoneId)),
         SpanFormatter.format(
           context.getString(R.string.message_format_nick),
-          formatPrefix(message.senderPrefixes),
-          formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
-          formatPrefix(message.senderPrefixes),
-          formatNick(message.content, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self))
+          formatPrefix(message.senderPrefixes, highlight),
+          formatNick(message.sender, self, highlight),
+          formatPrefix(message.senderPrefixes, highlight),
+          formatNick(message.content, self, highlight)
         ),
         message.messageId == markerLine
       )
@@ -140,8 +145,8 @@ class QuasselMessageRenderer(
         SpanFormatter.format(
           context.getString(R.string.message_format_mode),
           message.content,
-          formatPrefix(message.senderPrefixes),
-          formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self))
+          formatPrefix(message.senderPrefixes, highlight),
+          formatNick(message.sender, self, highlight)
         ),
         message.messageId == markerLine
       )
@@ -150,8 +155,8 @@ class QuasselMessageRenderer(
         timeFormatter.format(message.time.atZone(zoneId)),
         SpanFormatter.format(
           context.getString(R.string.message_format_join),
-          formatPrefix(message.senderPrefixes),
-          formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self))
+          formatPrefix(message.senderPrefixes, highlight),
+          formatNick(message.sender, self, highlight)
         ),
         message.messageId == markerLine
       )
@@ -161,14 +166,14 @@ class QuasselMessageRenderer(
         if (message.content.isBlank()) {
           SpanFormatter.format(
             context.getString(R.string.message_format_part_1),
-            formatPrefix(message.senderPrefixes),
-            formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self))
+            formatPrefix(message.senderPrefixes, highlight),
+            formatNick(message.sender, self, highlight)
           )
         } else {
           SpanFormatter.format(
             context.getString(R.string.message_format_part_2),
-            formatPrefix(message.senderPrefixes),
-            formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
+            formatPrefix(message.senderPrefixes, highlight),
+            formatNick(message.sender, self, highlight),
             message.content
           )
         },
@@ -180,14 +185,14 @@ class QuasselMessageRenderer(
         if (message.content.isBlank()) {
           SpanFormatter.format(
             context.getString(R.string.message_format_quit_1),
-            formatPrefix(message.senderPrefixes),
-            formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self))
+            formatPrefix(message.senderPrefixes, highlight),
+            formatNick(message.sender, self, highlight)
           )
         } else {
           SpanFormatter.format(
             context.getString(R.string.message_format_quit_2),
-            formatPrefix(message.senderPrefixes),
-            formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
+            formatPrefix(message.senderPrefixes, highlight),
+            formatNick(message.sender, self, highlight),
             message.content
           )
         },
@@ -239,8 +244,8 @@ class QuasselMessageRenderer(
         SpanFormatter.format(
           "[%d] %s%s: %s",
           message.type,
-          formatPrefix(message.senderPrefixes),
-          formatNick(message.sender, Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)),
+          formatPrefix(message.senderPrefixes, highlight),
+          formatNick(message.sender, self, highlight),
           message.content
         ),
         message.messageId == markerLine
@@ -268,7 +273,7 @@ class QuasselMessageRenderer(
   )
 
   private fun formatContent(content: String): CharSequence {
-    val formattedText = ircFormatDeserializer.formatString(content, renderingSettings.colorizeMirc)
+    val formattedText = ircFormatDeserializer.formatString(content, appearanceSettings.colorizeMirc)
     val text = SpannableString(formattedText)
 
     for (result in urlPattern.findAll(formattedText)) {
@@ -310,15 +315,15 @@ class QuasselMessageRenderer(
     return spannableString
   }
 
-  private fun formatNick(sender: String, self: Boolean)
-    = when (renderingSettings.colorizeNicknames) {
-    ColorizeNicknamesMode.ALL          -> formatNickImpl(sender, true)
-    ColorizeNicknamesMode.ALL_BUT_MINE -> formatNickImpl(sender, !self)
+  private fun formatNick(sender: String, self: Boolean,
+                         highlight: Boolean) = when (appearanceSettings.colorizeNicknames) {
+    ColorizeNicknamesMode.ALL          -> formatNickImpl(sender, !highlight)
+    ColorizeNicknamesMode.ALL_BUT_MINE -> formatNickImpl(sender, !self && !highlight)
     ColorizeNicknamesMode.NONE         -> formatNickImpl(sender, false)
   }
 
-  private fun formatPrefix(prefix: String)
-    = when (renderingSettings.showPrefix) {
+  private fun formatPrefix(prefix: String,
+                           highlight: Boolean) = when (appearanceSettings.showPrefix) {
     ShowPrefixMode.ALL   -> prefix
     ShowPrefixMode.FIRST -> prefix.substring(0, Math.min(prefix.length, 1))
     ShowPrefixMode.NONE  -> ""

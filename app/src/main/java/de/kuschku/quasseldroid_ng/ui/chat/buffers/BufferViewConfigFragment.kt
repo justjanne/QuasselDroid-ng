@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng.ui.chat
+package de.kuschku.quasseldroid_ng.ui.chat.buffers
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -11,7 +11,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.quasseldroid_ng.R
-import de.kuschku.quasseldroid_ng.ui.settings.data.RenderingSettings
+import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.map
@@ -33,9 +33,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   private lateinit var viewModel: QuasselViewModel
 
   private var ircFormatDeserializer: IrcFormatDeserializer? = null
-  private val renderingSettings = RenderingSettings(
-    showPrefix = RenderingSettings.ShowPrefixMode.FIRST,
-    colorizeNicknames = RenderingSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
+  private val renderingSettings = AppearanceSettings(
+    showPrefix = AppearanceSettings.ShowPrefixMode.FIRST,
+    colorizeNicknames = AppearanceSettings.ColorizeNicknamesMode.ALL_BUT_MINE,
     colorizeMirc = true,
     timeFormat = ""
   )
@@ -56,7 +56,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     val view = inflater.inflate(R.layout.fragment_chat_list, container, false)
     ButterKnife.bind(this, view)
 
-    val adapter = BufferViewConfigAdapter(this, viewModel.bufferViewConfigs)
+    val adapter = BufferViewConfigAdapter(
+      this, viewModel.bufferViewConfigs
+    )
 
     chatListSpinner.adapter = adapter
     chatListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

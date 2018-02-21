@@ -16,9 +16,9 @@ import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.and
 import de.kuschku.libquassel.util.hasFlag
-import de.kuschku.quasseldroid_ng.ui.chat.BufferListAdapter
 import de.kuschku.quasseldroid_ng.ui.chat.NickListAdapter
 import de.kuschku.quasseldroid_ng.ui.chat.ToolbarFragment
+import de.kuschku.quasseldroid_ng.ui.chat.buffers.BufferListAdapter
 import de.kuschku.quasseldroid_ng.util.helper.map
 import de.kuschku.quasseldroid_ng.util.helper.switchMap
 import de.kuschku.quasseldroid_ng.util.helper.switchMapRx

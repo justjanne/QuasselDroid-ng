@@ -55,7 +55,7 @@
 
     <fragment
       android:id="@+id/contentMessages"
-      android:name="de.kuschku.quasseldroid_ng.ui.chat.MessageListFragment"
+      android:name="de.kuschku.quasseldroid_ng.ui.chat.messages.MessageListFragment"
       android:layout_width="match_parent"
       android:layout_height="0dip"
       android:layout_weight="1"
@@ -107,7 +107,7 @@
 
     <fragment
       android:id="@+id/chatListFragment"
-      android:name="de.kuschku.quasseldroid_ng.ui.chat.BufferViewConfigFragment"
+      android:name="de.kuschku.quasseldroid_ng.ui.chat.buffers.BufferViewConfigFragment"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       tools:layout="@layout/fragment_chat_list" />

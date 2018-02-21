@@ -125,13 +125,6 @@ dependencies {
   implementation("io.reactivex.rxjava2", "rxjava", "2.1.9")
   implementation("org.threeten", "threetenbp", "1.3.6", classifier = "no-tzdb")
   implementation("org.jetbrains", "annotations", "15.0")
-  withVersion("2.14.1") {
-    implementation("com.google.dagger", "dagger-android", version)
-    implementation("com.google.dagger", "dagger-android-support", version)
-
-    kapt("com.google.dagger", "dagger-android-processor", version)
-    kapt("com.google.dagger", "dagger-compiler", version)
-  }
   withVersion("8.8.1") {
     implementation("com.jakewharton", "butterknife", version)
     kapt("com.jakewharton", "butterknife-compiler", version)

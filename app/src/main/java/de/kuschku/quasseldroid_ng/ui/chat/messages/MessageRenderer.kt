@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng.ui.chat
+package de.kuschku.quasseldroid_ng.ui.chat.messages
 
 import android.support.annotation.LayoutRes
 import de.kuschku.libquassel.protocol.Message_Type

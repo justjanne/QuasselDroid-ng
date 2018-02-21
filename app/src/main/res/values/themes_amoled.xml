@@ -37,10 +37,12 @@
 
     <item name="colorBackground">#000000</item>
     <item name="android:windowBackground">@color/amoled_background</item>
-    <item name="colorBackgroundHighlight">#ff8811</item>
+    <item name="colorBackgroundHighlight">#FFA726</item>
     <item name="colorBackgroundSecondary">@null</item>
     <item name="colorBackgroundCard">#303030</item>
     <item name="colorBackgroundDialog">#000000</item>
+
+    <item name="colorMarkerLine">#800000</item>
 
     <item name="colorTintActivity">#88cc33</item>
     <item name="colorTintMessage">#2277dd</item>
