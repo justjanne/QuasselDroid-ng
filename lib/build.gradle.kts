@@ -13,14 +13,14 @@ val appCompatVersion = "27.0.2"
 dependencies {
   implementation(kotlin("stdlib", "1.2.21"))
 
-  implementation(appCompat("support-annotations"))
+  implementation("com.android.support", "support-annotations", "27.0.2")
   implementation("org.threeten", "threetenbp", "1.3.6")
   implementation("io.reactivex.rxjava2:rxjava:2.1.9")
 
   implementation(project(":invokerannotations"))
   kapt(project(":invokergenerator"))
 
-  testImplementation("junit:junit:4.12")
+  testImplementation("junit", "junit", "4.12")
 }
 
 /*
@@ -33,12 +33,3 @@ tasks.withType(KotlinCompile::class.java) {
   }
 }
 */
-
-/**
- * Builds the dependency notation for the named AppCompat [module] at the given [version].
- *
- * @param module simple name of the AppCompat module, for example "cardview-v7".
- * @param version optional desired version, null implies [appCompatVersion].
- */
-fun appCompat(module: String, version: String? = null)
-  = "com.android.support:$module:${version ?: appCompatVersion}"

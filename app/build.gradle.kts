@@ -88,52 +88,71 @@ android {
   }
 }
 
-val appCompatVersion = "27.0.2"
-val appArchVersion = "1.1.0"
 dependencies {
   implementation(kotlin("stdlib", "1.2.21"))
 
-  implementation(appCompat("appcompat-v7"))
-  implementation(appCompat("design"))
-  implementation(appCompat("customtabs"))
-  implementation(appCompat("cardview-v7"))
-  implementation(appCompat("recyclerview-v7"))
-  implementation(appCompat("constraint", "constraint-layout", version = "1.0.2"))
+  // App Compat
+  withVersion("27.0.2") {
+    implementation("com.android.support", "appcompat-v7", version)
+    implementation("com.android.support", "design", version)
+    implementation("com.android.support", "customtabs", version)
+    implementation("com.android.support", "cardview-v7", version)
+    implementation("com.android.support", "recyclerview-v7", version)
+  }
+  implementation("com.android.support.constraint", "constraint-layout", "1.0.2")
 
-  implementation("io.reactivex.rxjava2", "rxjava", "2.1.9")
+  // App Arch Lifecycle
+  withVersion("1.1.0") {
+    implementation("android.arch.lifecycle", "extensions", version)
+    implementation("android.arch.lifecycle", "reactivestreams", version)
+    kapt("android.arch.lifecycle", "compiler", version)
+  }
 
-  implementation(appArch("lifecycle", "extensions"))
-  implementation(appArch("lifecycle", "reactivestreams"))
-  kapt(appArch("lifecycle", "compiler"))
+  // App Arch Persistence
+  withVersion("1.1.0-alpha2") {
+    implementation("android.arch.persistence.room", "runtime", version)
+    implementation("android.arch.persistence.room", "rxjava2", version)
+    kapt("android.arch.persistence.room", "compiler", version)
+    testImplementation("android.arch.persistence.room", "testing", version)
+  }
 
-  implementation(appArch("persistence.room", "runtime", "1.1.0-alpha2"))
-  implementation(appArch("persistence.room", "rxjava2", "1.1.0-alpha2"))
-  kapt(appArch("persistence.room", "compiler", "1.1.0-alpha2"))
-
-  implementation(appArch("paging", "runtime", version = "1.0.0-alpha5")) {
+  // App Arch Paging
+  implementation("android.arch.paging", "runtime", "1.0.0-alpha5") {
     exclude(group = "junit", module = "junit")
   }
 
-  implementation("me.zhanghai.android.materialprogressbar", "library", "1.4.2")
-
+  // Utility
+  implementation("io.reactivex.rxjava2", "rxjava", "2.1.9")
   implementation("org.threeten", "threetenbp", "1.3.6", classifier = "no-tzdb")
+  implementation("org.jetbrains", "annotations", "15.0")
+  withVersion("2.14.1") {
+    implementation("com.google.dagger", "dagger-android", version)
+    implementation("com.google.dagger", "dagger-android-support", version)
 
-  implementation("com.jakewharton", "butterknife", "8.8.1")
-  kapt("com.jakewharton", "butterknife-compiler", "8.8.1")
+    kapt("com.google.dagger", "dagger-android-processor", version)
+    kapt("com.google.dagger", "dagger-compiler", version)
+  }
+  withVersion("8.8.1") {
+    implementation("com.jakewharton", "butterknife", version)
+    kapt("com.jakewharton", "butterknife-compiler", version)
+  }
 
+  // Quassel
   implementation(project(":lib")) {
     exclude(group = "org.threeten", module = "threetenbp")
   }
+
+  // UI
+  implementation("me.zhanghai.android.materialprogressbar", "library", "1.4.2")
+
+  // Quality Assurance
   implementation(project(":malheur"))
 
-  implementation("org.jetbrains", "annotations", "15.0")
-
-  testImplementation(appArch("persistence.room", "testing", "1.0.0"))
   testImplementation("junit", "junit", "4.12")
-
-  androidTestImplementation("com.android.support.test", "runner", "1.0.1")
-  androidTestImplementation("com.android.support.test", "rules", "1.0.1")
-
+  withVersion("1.0.1") {
+    androidTestImplementation("com.android.support.test", "runner", version)
+    androidTestImplementation("com.android.support.test", "rules", version)
+  }
   androidTestImplementation("com.android.support.test.espresso", "espresso-core", "3.0.1")
 }
 
@@ -168,26 +187,3 @@ fun Project.properties(fileName: String): Properties? {
   props.load(file.inputStream())
   return props
 }
-
-/**
- * Builds the dependency notation for the named AppCompat [module] at the given [version].
- *
- * @param module simple name of the AppCompat module, for example "cardview-v7".
- * @param version optional desired version, null implies [appCompatVersion].
- */
-fun appCompat(module: String, submodule: String? = null, version: String? = null)
-  = if (submodule != null) {
-  "com.android.support.$module:$submodule:${version ?: appCompatVersion}"
-} else {
-  "com.android.support:$module:${version ?: appCompatVersion}"
-}
-
-/**
- * Builds the dependency notation for the named AppArch [module] at the given [version].
- *
- * @param module simple name of the AppArch module, for example "persistence.room".
- * @param submodule simple name of the AppArch submodule, for example "runtime".
- * @param version optional desired version, null implies [appCompatVersion].
- */
-fun appArch(module: String, submodule: String, version: String? = null)
-  = "android.arch.$module:$submodule:${version ?: appArchVersion}"

@@ -40,3 +40,5 @@
 -dontnote kotlin.**
 # Gson
 -dontnote com.google.gson.**
+# Dagger
+-dontwarn com.google.errorprone.annotations.*

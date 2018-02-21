@@ -18,6 +18,7 @@ import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.quassel.syncables.BufferSyncer
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
+import de.kuschku.quasseldroid_ng.ui.settings.data.BacklogSettings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.*
@@ -40,6 +41,8 @@ class MessageListFragment : ServiceBoundFragment() {
   private lateinit var adapter: MessageAdapter
 
   private var lastBuffer: BufferId? = null
+
+  private var backlogSettings = BacklogSettings()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     handler.onCreate()
@@ -84,9 +87,9 @@ class MessageListFragment : ServiceBoundFragment() {
       LivePagedListBuilder(
         database.message().findByBufferIdPaged(it),
         PagedList.Config.Builder()
-          .setPageSize(20)
-          .setPrefetchDistance(20)
-          .setInitialLoadSizeHint(20)
+          .setPageSize(backlogSettings.dynamicAmount)
+          .setPrefetchDistance(backlogSettings.dynamicAmount)
+          .setInitialLoadSizeHint(backlogSettings.dynamicAmount)
           .setEnablePlaceholders(true)
           .build()
       ).setBoundaryCallback(boundaryCallback).build()
@@ -174,7 +177,7 @@ class MessageListFragment : ServiceBoundFragment() {
           last = database.message().findFirstByBufferId(
             bufferId
           )?.messageId ?: -1,
-          limit = 20
+          limit = backlogSettings.dynamicAmount
         )
       }
     }

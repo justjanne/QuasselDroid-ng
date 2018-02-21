@@ -22,6 +22,7 @@ import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
+import de.kuschku.quasseldroid_ng.ui.settings.data.BacklogSettings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.*
@@ -53,6 +54,8 @@ class ChatActivity : ServiceBoundActivity() {
   private var snackbar: Snackbar? = null
 
   private lateinit var database: QuasselDatabase
+
+  private var backlogSettings = BacklogSettings()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     handler.onCreate()
@@ -176,6 +179,21 @@ class ChatActivity : ServiceBoundActivity() {
   override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
     android.R.id.home -> {
       drawerToggle.onOptionsItemSelected(item)
+    }
+    R.id.clear        -> {
+      handler.post {
+        viewModel.sessionManager { manager ->
+          viewModel.getBuffer().let { buffer ->
+            manager.backlogStorage.clearMessages(buffer)
+            manager.backlogManager?.requestBacklog(
+              bufferId = buffer,
+              last = -1,
+              limit = backlogSettings.dynamicAmount
+            )
+          }
+        }
+      }
+      true
     }
     R.id.disconnect   -> {
       handler.post {
