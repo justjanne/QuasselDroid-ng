@@ -131,18 +131,29 @@ class QuasselMessageRenderer(
         ),
         message.messageId == markerLine
       )
-      Message_Type.Nick   -> FormattedMessage(
-        message.messageId,
-        timeFormatter.format(message.time.atZone(zoneId)),
-        SpanFormatter.format(
-          context.getString(R.string.message_format_nick),
-          formatPrefix(message.senderPrefixes, highlight),
-          formatNick(message.sender, self, highlight),
-          formatPrefix(message.senderPrefixes, highlight),
-          formatNick(message.content, self, highlight)
-        ),
-        message.messageId == markerLine
-      )
+      Message_Type.Nick   -> {
+        val nickSelf = message.sender == message.content || self
+        FormattedMessage(
+          message.messageId,
+          timeFormatter.format(message.time.atZone(zoneId)),
+          if (nickSelf) {
+            SpanFormatter.format(
+              context.getString(R.string.message_format_nick_self),
+              formatPrefix(message.senderPrefixes, highlight),
+              formatNick(message.sender, nickSelf, highlight)
+            )
+          } else {
+            SpanFormatter.format(
+              context.getString(R.string.message_format_nick),
+              formatPrefix(message.senderPrefixes, highlight),
+              formatNick(message.sender, nickSelf, highlight),
+              formatPrefix(message.senderPrefixes, highlight),
+              formatNick(message.content, nickSelf, highlight)
+            )
+          },
+          message.messageId == markerLine
+        )
+      }
       Message_Type.Mode   -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
