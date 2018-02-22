@@ -30,7 +30,9 @@ data class AppearanceSettings(
     QUASSEL_DARK(R.style.Theme_ChatTheme_Quassel_Dark),
     AMOLED(R.style.Theme_ChatTheme_Amoled),
     SOLARIZED_LIGHT(R.style.Theme_ChatTheme_Solarized_Light),
-    SOLARIZED_DARK(R.style.Theme_ChatTheme_Solarized_Dark)
+    SOLARIZED_DARK(R.style.Theme_ChatTheme_Solarized_Dark),
+    GRUVBOX_LIGHT(R.style.Theme_ChatTheme_Gruvbox_Light),
+    GRUVBOX_DARK(R.style.Theme_ChatTheme_Gruvbox_Dark)
   }
 
   companion object {

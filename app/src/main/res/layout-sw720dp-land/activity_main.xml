@@ -17,10 +17,30 @@
       android:layout_height="match_parent"
       tools:layout="@layout/fragment_chat_list" />
 
-    <View
+    <LinearLayout
       android:layout_width="1dp"
       android:layout_height="match_parent"
-      android:background="?colorDivider" />
+      android:orientation="vertical">
+
+      <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="?attr/actionBarTheme">
+
+        <android.support.v7.widget.Toolbar
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          app:contentInsetStartWithNavigation="0dp"
+          app:popupTheme="@style/Widget.PopupOverlay" />
+
+      </android.support.design.widget.AppBarLayout>
+
+      <View
+        android:layout_width="1dp"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:background="?colorDivider" />
+    </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"

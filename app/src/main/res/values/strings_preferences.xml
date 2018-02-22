@@ -9,12 +9,16 @@
   <string name="preference_theme_entry_amoled">AMOLED</string>
   <string name="preference_theme_entry_solarized_light">Solarized (Light)</string>
   <string name="preference_theme_entry_solarized_dark">Solarized (Dark)</string>
+  <string name="preference_theme_entry_gruvbox_light">Gruvbox (Light)</string>
+  <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Dark)</string>
   <string-array name="preference_theme_entries">
     <item>@string/preference_theme_entry_quassel_light</item>
     <item>@string/preference_theme_entry_quassel_dark</item>
     <item>@string/preference_theme_entry_amoled</item>
     <item>@string/preference_theme_entry_solarized_light</item>
     <item>@string/preference_theme_entry_solarized_dark</item>
+    <item>@string/preference_theme_entry_gruvbox_light</item>
+    <item>@string/preference_theme_entry_gruvbox_dark</item>
   </string-array>
   <string-array name="preference_theme_entryvalues">
     <item>QUASSEL_LIGHT</item>
@@ -22,6 +26,8 @@
     <item>AMOLED</item>
     <item>SOLARIZED_LIGHT</item>
     <item>SOLARIZED_DARK</item>
+    <item>GRUVBOX_LIGHT</item>
+    <item>GRUVBOX_DARK</item>
   </string-array>
 
   <string name="preference_colorize_mirc_key" translatable="false">colorize_mirc</string>

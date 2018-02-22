@@ -12,20 +12,12 @@
     <item name="colorControlNormal">@color/colorFillDark</item>
     <item name="android:textColorPrimary">@color/colorFillDark</item>
     <item name="drawerArrowStyle">@style/Widget.DrawerArrowToggle</item>
-
-    <item name="colorFill">@color/colorFillDark</item>
-    <item name="colorOffline">@color/colorOfflineDark</item>
-    <item name="colorAway">@color/colorAwayDark</item>
   </style>
 
   <style name="Widget.AppBarOverlay.Light" parent="ThemeOverlay.AppCompat.ActionBar">
     <item name="colorControlNormal">@color/colorFillLight</item>
     <item name="android:textColorPrimary">@color/colorFillLight</item>
     <item name="drawerArrowStyle">@style/Widget.DrawerArrowToggle.Light</item>
-
-    <item name="colorFill">@color/colorFillLight</item>
-    <item name="colorOffline">@color/colorOfflineLight</item>
-    <item name="colorAway">@color/colorAwayLight</item>
   </style>
 
   <style name="Widget.DrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">

@@ -76,7 +76,7 @@
 
     <item name="colorTextPrimary">#212121</item>
     <item name="colorTextSecondary">#757575</item>
-    <item name="colorDivider">#1F000000</item>>
+    <item name="colorDivider">#1F000000</item>
 
     <item name="colorFill">@color/colorFillLight</item>
     <item name="colorOffline">@color/colorOfflineLight</item>

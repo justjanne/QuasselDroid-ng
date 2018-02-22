@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+  <color name="gruvbox_light_background">#fbf1c7</color>
+
+  <style name="Widget.AppBarOverlay.Gruvbox_Light" parent="Widget.AppBarOverlay.Light">
+    <item name="colorControlNormal">#3c3836</item>
+    <item name="android:textColorPrimary">#3c3836</item>
+    <item name="android:textColorSecondary">#665c54</item>
+  </style>
+
+  <style name="Theme.ChatTheme.Gruvbox_Light" parent="Theme.ChatTheme.Light">
+    <item name="colorPrimary">?attr/colorBackgroundCard</item>
+    <item name="colorPrimaryDark">#b6ae91</item>
+    <item name="colorAccent">#d65d0e</item>
+
+    <item name="actionBarTheme">@style/Widget.AppBarOverlay.Gruvbox_Light</item>
+
+    <item name="senderColor0">#d65d0e</item>
+    <item name="senderColor1">#cc241d</item>
+    <item name="senderColor2">#98971a</item>
+    <item name="senderColor3">#d79921</item>
+    <item name="senderColor4">#458588</item>
+    <item name="senderColor5">#b16286</item>
+    <item name="senderColor6">#689d6a</item>
+    <item name="senderColor7">#7c6f64</item>
+    <item name="senderColor8">#928374</item>
+    <item name="senderColor9">#9d0006</item>
+    <item name="senderColorA">#79740e</item>
+    <item name="senderColorB">#b57614</item>
+    <item name="senderColorC">#076678</item>
+    <item name="senderColorD">#8f3f71</item>
+    <item name="senderColorE">#427b58</item>
+    <item name="senderColorF">#af3a03</item>
+
+    <item name="colorForeground">#3c3836</item>
+    <item name="colorForegroundHighlight">#282828</item>
+    <item name="colorForegroundSecondary">#665c54</item>
+    <item name="colorForegroundAction">#076678</item>
+    <item name="colorForegroundNotice">#b57614</item>
+    <item name="colorForegroundError">#9d0006</item>
+
+    <item name="colorTextPrimary">#3c3836</item>
+    <item name="colorTextSecondary">#665c54</item>
+    <item name="colorDivider">#2d928374</item>
+
+    <item name="colorForegroundMirc">0x1</item>
+
+    <item name="android:windowBackground">@color/gruvbox_light_background</item>
+    <item name="colorBackground">#fbf1c7</item>
+    <item name="colorBackgroundHighlight">#d79921</item>
+    <item name="colorBackgroundSecondary">@null</item>
+    <item name="colorBackgroundCard">#ebdbb2</item>
+    <item name="colorBackgroundDialog">#f2d5bc</item>
+
+    <item name="colorOffline">#665c54</item>
+    <item name="colorAway">#665c54</item>
+
+    <item name="colorMarkerLine">#9d0006</item>
+
+    <item name="colorTintActivity">#98971a</item>
+    <item name="colorTintMessage">#458588</item>
+    <item name="colorTintHighlight">#d65d0e</item>
+  </style>
+
+  <color name="gruvbox_dark_background">#282828</color>
+
+  <style name="Widget.AppBarOverlay.Gruvbox_Dark" parent="Widget.AppBarOverlay.Light">
+    <item name="colorControlNormal">#dbdbb2</item>
+    <item name="android:textColorPrimary">#dbdbb2</item>
+    <item name="android:textColorSecondary">#bdae93</item>
+  </style>
+
+  <style name="Theme.ChatTheme.Gruvbox_Dark" parent="Theme.ChatTheme">
+    <item name="colorPrimary">?attr/colorBackgroundCard</item>
+    <item name="colorPrimaryDark">#3c3734</item>
+    <item name="colorAccent">#d65d0e</item>
+
+    <item name="actionBarTheme">@style/Widget.AppBarOverlay.Gruvbox_Dark</item>
+
+    <item name="senderColor0">#d65d0e</item>
+    <item name="senderColor1">#cc241d</item>
+    <item name="senderColor2">#98971a</item>
+    <item name="senderColor3">#d79921</item>
+    <item name="senderColor4">#458588</item>
+    <item name="senderColor5">#b16286</item>
+    <item name="senderColor6">#689d6a</item>
+    <item name="senderColor7">#a89984</item>
+    <item name="senderColor8">#928374</item>
+    <item name="senderColor9">#fb4934</item>
+    <item name="senderColorA">#b8bb26</item>
+    <item name="senderColorB">#fabd2f</item>
+    <item name="senderColorC">#83a598</item>
+    <item name="senderColorD">#d3869b</item>
+    <item name="senderColorE">#8ec07c</item>
+    <item name="senderColorF">#fe8019</item>
+
+    <item name="colorForeground">#dbdbb2</item>
+    <item name="colorForegroundHighlight">#282828</item>
+    <item name="colorForegroundSecondary">#bdae93</item>
+    <item name="colorForegroundAction">#458588</item>
+    <item name="colorForegroundNotice">#d79921</item>
+    <item name="colorForegroundError">#cc241d</item>
+
+    <item name="colorTextPrimary">#dbdbb2</item>
+    <item name="colorTextSecondary">#bdae93</item>
+    <item name="colorDivider">#33928374</item>
+
+    <item name="colorForegroundMirc">0x0</item>
+
+    <item name="android:windowBackground">@color/gruvbox_dark_background</item>
+    <item name="colorBackground">#282828</item>
+    <item name="colorBackgroundHighlight">#d79921</item>
+    <item name="colorBackgroundSecondary">@null</item>
+    <item name="colorBackgroundCard">#504945</item>
+    <item name="colorBackgroundDialog">#3c3836</item>
+
+    <item name="colorOffline">#bdae93</item>
+    <item name="colorAway">#bdae93</item>
+
+    <item name="colorMarkerLine">#cc241d</item>
+
+    <item name="colorTintActivity">#98971a</item>
+    <item name="colorTintMessage">#458588</item>
+    <item name="colorTintHighlight">#d65d0e</item>
+  </style>
+</resources>

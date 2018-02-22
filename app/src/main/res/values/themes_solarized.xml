@@ -2,12 +2,18 @@
 
 <resources>
   <color name="solarized_light_background">#FDF6E3</color>
+
+  <style name="Widget.AppBarOverlay.Solarized_Light" parent="Widget.AppBarOverlay.Light">
+    <item name="colorControlNormal">#586e75</item>
+    <item name="android:textColorPrimary">#586e75</item>
+    <item name="android:textColorSecondary">#657b83</item>
+  </style>
   <style name="Theme.ChatTheme.Solarized_Light" parent="Theme.ChatTheme.Light">
     <item name="colorPrimary">?attr/colorBackgroundCard</item>
     <item name="colorPrimaryDark">#b0ac9e</item>
     <item name="colorAccent">#B58900</item>
 
-    <item name="actionBarTheme">@style/Widget.AppBarOverlay.Light</item>
+    <item name="actionBarTheme">@style/Widget.AppBarOverlay.Solarized_Light</item>
 
     <item name="senderColor0">#B58900</item>
     <item name="senderColor1">#CB4B16</item>
@@ -33,6 +39,10 @@
     <item name="colorForegroundNotice">#B58900</item>
     <item name="colorForegroundError">#B00000</item>
 
+    <item name="colorTextPrimary">#586e75</item>
+    <item name="colorTextSecondary">#657b83</item>
+    <item name="colorDivider">#19586e75</item>
+
     <item name="colorForegroundMirc">0x1</item>
 
     <item name="android:windowBackground">@color/solarized_light_background</item>
@@ -42,6 +52,9 @@
     <item name="colorBackgroundCard">#EEE8D5</item>
     <item name="colorBackgroundDialog">#FDF6E3</item>
 
+    <item name="colorOffline">#657b83</item>
+    <item name="colorAway">#657b83</item>
+
     <item name="colorMarkerLine">#CB4B16</item>
 
     <item name="colorTintActivity">#859900</item>
@@ -50,10 +63,18 @@
   </style>
 
   <color name="solarized_dark_background">#002B36</color>
+
+  <style name="Widget.AppBarOverlay.Solarized_Dark" parent="Widget.AppBarOverlay.Light">
+    <item name="colorControlNormal">#93a1a1</item>
+    <item name="android:textColorPrimary">#93a1a1</item>
+    <item name="android:textColorSecondary">#839496</item>
+  </style>
   <style name="Theme.ChatTheme.Solarized_Dark" parent="Theme.ChatTheme">
     <item name="colorPrimary">?attr/colorBackgroundCard</item>
     <item name="colorPrimaryDark">?attr/colorBackground</item>
     <item name="colorAccent">#B58900</item>
+
+    <item name="actionBarTheme">@style/Widget.AppBarOverlay.Solarized_Dark</item>
 
     <item name="senderColor0">#B58900</item>
     <item name="senderColor1">#CB4B16</item>
@@ -79,6 +100,10 @@
     <item name="colorForegroundNotice">#B58900</item>
     <item name="colorForegroundError">#B00000</item>
 
+    <item name="colorTextPrimary">#93a1a1</item>
+    <item name="colorTextSecondary">#839496</item>
+    <item name="colorDivider">#1993a1a1</item>
+
     <item name="colorForegroundMirc">0x0</item>
 
     <item name="android:windowBackground">@color/solarized_dark_background</item>
@@ -87,6 +112,9 @@
     <item name="colorBackgroundSecondary">@null</item>
     <item name="colorBackgroundCard">#073642</item>
     <item name="colorBackgroundDialog">#002B36</item>
+
+    <item name="colorOffline">#839496</item>
+    <item name="colorAway">#839496</item>
 
     <item name="colorMarkerLine">#CB4B16</item>
 
