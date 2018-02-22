@@ -14,8 +14,8 @@ import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.R
-import de.kuschku.quasseldroid_ng.ui.settings.Settings
 import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
+import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.helper.visibleIf
 import de.kuschku.quasseldroid_ng.util.helper.zip

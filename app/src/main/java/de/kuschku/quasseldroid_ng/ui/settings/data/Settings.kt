@@ -1,12 +1,10 @@
-package de.kuschku.quasseldroid_ng.ui.settings
+package de.kuschku.quasseldroid_ng.ui.settings.data
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import de.kuschku.quasseldroid_ng.R
-import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
 import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings.*
-import de.kuschku.quasseldroid_ng.ui.settings.data.BacklogSettings
 
 object Settings {
   private fun <T> settings(context: Context,
@@ -14,7 +12,9 @@ object Settings {
     context
   ).f()
 
-  fun appearance(context: Context) = settings(context) {
+  fun appearance(context: Context) = settings(
+    context
+  ) {
     AppearanceSettings(
       theme = Theme.valueOf(
         getString(
@@ -38,6 +38,10 @@ object Settings {
         context.getString(R.string.preference_colorize_mirc_key),
         AppearanceSettings.DEFAULT.colorizeMirc
       ),
+      useMonospace = getBoolean(
+        context.getString(R.string.preference_monospace_key),
+        AppearanceSettings.DEFAULT.useMonospace
+      ),
       showSeconds = getBoolean(
         context.getString(R.string.preference_show_seconds_key),
         AppearanceSettings.DEFAULT.showSeconds
@@ -53,9 +57,14 @@ object Settings {
     )
   }
 
-  fun backlog(context: Context) = settings(context) {
+  fun backlog(context: Context) = settings(
+    context
+  ) {
     BacklogSettings(
-
+      dynamicAmount = getString(
+        context.getString(R.string.preference_dynamic_fetch_key),
+        BacklogSettings.DEFAULT.dynamicAmount.toString()
+      ).toIntOrNull() ?: BacklogSettings.DEFAULT.dynamicAmount
     )
   }
 }

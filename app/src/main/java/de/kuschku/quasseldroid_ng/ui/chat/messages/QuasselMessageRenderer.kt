@@ -86,6 +86,9 @@ class QuasselMessageRenderer(
         viewHolder.itemView.setBackgroundColor(getColor(1, 0))
       }
     }
+    if (appearanceSettings.useMonospace) {
+      viewHolder.content.typeface = Typeface.MONOSPACE
+    }
   }
 
   override fun bind(holder: QuasselMessageViewHolder, message: FormattedMessage) {

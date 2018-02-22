@@ -8,6 +8,7 @@ import android.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.PreferenceGroup
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
+import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
 
 class SettingsFragment : PreferenceFragmentCompat(),
                          SharedPreferences.OnSharedPreferenceChangeListener {

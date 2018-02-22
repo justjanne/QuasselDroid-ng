@@ -7,6 +7,7 @@ data class AppearanceSettings(
   val showPrefix: ShowPrefixMode = ShowPrefixMode.HIGHEST,
   val colorizeNicknames: ColorizeNicknamesMode = ColorizeNicknamesMode.ALL_BUT_MINE,
   val colorizeMirc: Boolean = true,
+  val useMonospace: Boolean = false,
   val showSeconds: Boolean = false,
   val use24hClock: Boolean = true,
   val showLag: Boolean = true,

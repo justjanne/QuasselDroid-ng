@@ -28,6 +28,7 @@ import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.ui.settings.SettingsActivity
 import de.kuschku.quasseldroid_ng.ui.settings.data.BacklogSettings
+import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.*
@@ -54,7 +55,7 @@ class ChatActivity : ServiceBoundActivity() {
 
   private lateinit var database: QuasselDatabase
 
-  private var backlogSettings = BacklogSettings()
+  private lateinit var backlogSettings: BacklogSettings
 
   override fun onCreate(savedInstanceState: Bundle?) {
     handler.onCreate()
@@ -64,6 +65,7 @@ class ChatActivity : ServiceBoundActivity() {
 
     viewModel = ViewModelProviders.of(this)[QuasselViewModel::class.java]
     viewModel.setBackend(this.backend)
+    backlogSettings = Settings.backlog(this)
 
     database = QuasselDatabase.Creator.init(application)
 

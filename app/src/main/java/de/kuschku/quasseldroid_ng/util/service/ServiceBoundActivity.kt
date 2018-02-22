@@ -9,8 +9,8 @@ import android.support.v7.app.AppCompatActivity
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
-import de.kuschku.quasseldroid_ng.ui.settings.Settings
 import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
+import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
 import de.kuschku.quasseldroid_ng.util.helper.updateRecentsHeaderIfExisting
 
 abstract class ServiceBoundActivity : AppCompatActivity() {

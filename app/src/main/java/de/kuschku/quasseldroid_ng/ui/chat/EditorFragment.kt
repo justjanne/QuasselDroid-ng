@@ -11,8 +11,8 @@ import android.widget.ImageButton
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid_ng.R
-import de.kuschku.quasseldroid_ng.ui.settings.Settings
 import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
+import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.helper.invoke
 import de.kuschku.quasseldroid_ng.util.helper.let

@@ -18,9 +18,9 @@ import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.quassel.syncables.BufferSyncer
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
-import de.kuschku.quasseldroid_ng.ui.settings.Settings
 import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
 import de.kuschku.quasseldroid_ng.ui.settings.data.BacklogSettings
+import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.*
@@ -45,13 +45,14 @@ class MessageListFragment : ServiceBoundFragment() {
 
   private var lastBuffer: BufferId? = null
 
-  private var backlogSettings = BacklogSettings()
+  private lateinit var backlogSettings: BacklogSettings
 
   override fun onCreate(savedInstanceState: Bundle?) {
     handler.onCreate()
     super.onCreate(savedInstanceState)
     viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
     appearanceSettings = Settings.appearance(activity!!)
+    backlogSettings = Settings.backlog(activity!!)
   }
 
   private val boundaryCallback = object :
