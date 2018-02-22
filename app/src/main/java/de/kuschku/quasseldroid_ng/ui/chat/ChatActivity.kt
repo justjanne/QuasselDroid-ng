@@ -13,8 +13,6 @@ import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
@@ -45,12 +43,6 @@ class ChatActivity : ServiceBoundActivity() {
 
   @BindView(R.id.progressBar)
   lateinit var progressBar: MaterialContentLoadingProgressBar
-
-  @BindView(R.id.buttonSend)
-  lateinit var buttonSend: Button
-
-  @BindView(R.id.input)
-  lateinit var input: EditText
 
   private lateinit var drawerToggle: ActionBarDrawerToggle
 
@@ -120,17 +112,6 @@ class ChatActivity : ServiceBoundActivity() {
     }
     )
 
-    buttonSend.setOnClickListener {
-      viewModel.session { session ->
-        viewModel.getBuffer().let { bufferId ->
-          session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
-            session.rpcHandler?.sendInput(bufferInfo, input.text.toString())
-          }
-        }
-      }
-      input.text.clear()
-    }
-
     viewModel.connectionState.observe(
       this, Observer {
       val status = it ?: ConnectionState.DISCONNECTED
@@ -148,7 +129,7 @@ class ChatActivity : ServiceBoundActivity() {
 
       snackbar?.dismiss()
       snackbar = Snackbar.make(
-        findViewById(R.id.contentMessages),
+        findViewById(R.id.toolbar),
         status.name,
         Snackbar.LENGTH_SHORT
       )

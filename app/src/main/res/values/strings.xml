@@ -11,6 +11,7 @@
   <string name="label_drawer_close">Close</string>
   <string name="label_drawer_open">Open</string>
   <string name="label_filter_messages">Filter Messages</string>
+  <string name="label_placeholder">Write a message…</string>
   <string name="label_save">Save</string>
   <string name="label_select_multiple">Select</string>
   <string name="label_settings">Settings</string>

@@ -30,7 +30,7 @@
           app:popupTheme="@style/Widget.PopupOverlay">
 
           <fragment
-            android:id="@+id/toolbarFragment"
+            android:id="@+id/fragment_toolbar"
             android:name="de.kuschku.quasseldroid_ng.ui.chat.ToolbarFragment"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -53,43 +53,24 @@
     </android.support.design.widget.AppBarLayout>
 
     <fragment
-      android:id="@+id/contentMessages"
+      android:id="@+id/fragment_messages"
       android:name="de.kuschku.quasseldroid_ng.ui.chat.messages.MessageListFragment"
       android:layout_width="match_parent"
       android:layout_height="0dip"
       android:layout_weight="1"
       tools:layout="@layout/fragment_messages" />
 
-    <android.support.v7.widget.CardView
+    <fragment
+      android:id="@+id/fragment_editor"
+      android:name="de.kuschku.quasseldroid_ng.ui.chat.EditorFragment"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="?colorBackgroundCard"
-      app:cardElevation="4dp">
-
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize">
-
-        <EditText
-          android:id="@+id/input"
-          android:layout_width="0dip"
-          android:layout_height="match_parent"
-          android:layout_weight="1" />
-
-        <Button
-          android:id="@+id/buttonSend"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
-          android:text="Send" />
-      </LinearLayout>
-
-    </android.support.v7.widget.CardView>
+      tools:layout="@layout/fragment_editor" />
 
   </LinearLayout>
 
   <fragment
-    android:id="@+id/nickListFragment"
+    android:id="@+id/fragment_nick_list"
     android:name="de.kuschku.quasseldroid_ng.ui.chat.NickListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -105,7 +86,7 @@
     app:insetForeground="?attr/colorPrimaryDark">
 
     <fragment
-      android:id="@+id/chatListFragment"
+      android:id="@+id/fragment_chat_list"
       android:name="de.kuschku.quasseldroid_ng.ui.chat.buffers.BufferViewConfigFragment"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
