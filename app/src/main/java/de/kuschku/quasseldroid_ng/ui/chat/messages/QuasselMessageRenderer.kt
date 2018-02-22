@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.TextPaint
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.URLSpan
@@ -105,7 +106,7 @@ class QuasselMessageRenderer(
           context.getString(R.string.message_format_plain),
           formatPrefix(message.senderPrefixes, highlight),
           formatNick(message.sender, self, highlight),
-          formatContent(message.content)
+          formatContent(message.content, highlight)
         ),
         message.messageId == markerLine
       )
@@ -116,7 +117,7 @@ class QuasselMessageRenderer(
           context.getString(R.string.message_format_action),
           formatPrefix(message.senderPrefixes, highlight),
           formatNick(message.sender, self, highlight),
-          formatContent(message.content)
+          formatContent(message.content, highlight)
         ),
         message.messageId == markerLine
       )
@@ -127,7 +128,7 @@ class QuasselMessageRenderer(
           context.getString(R.string.message_format_notice),
           formatPrefix(message.senderPrefixes, highlight),
           formatNick(message.sender, self, highlight),
-          formatContent(message.content)
+          formatContent(message.content, highlight)
         ),
         message.messageId == markerLine
       )
@@ -244,13 +245,13 @@ class QuasselMessageRenderer(
       Message_Type.Error -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
-        formatContent(message.content),
+        formatContent(message.content, highlight),
         message.messageId == markerLine
       )
       Message_Type.Topic -> FormattedMessage(
         message.messageId,
         timeFormatter.format(message.time.atZone(zoneId)),
-        formatContent(message.content),
+        formatContent(message.content, highlight),
         message.messageId == markerLine
       )
       else -> FormattedMessage(
@@ -287,7 +288,7 @@ class QuasselMessageRenderer(
     RegexOption.IGNORE_CASE
   )
 
-  private fun formatContent(content: String): CharSequence {
+  private fun formatContent(content: String, highlight: Boolean): CharSequence {
     val formattedText = ircFormatDeserializer.formatString(content, appearanceSettings.colorizeMirc)
     val text = SpannableString(formattedText)
 
@@ -295,7 +296,8 @@ class QuasselMessageRenderer(
       val group = result.groups[1]
       if (group != null) {
         text.setSpan(
-          URLSpan(group.value), group.range.start, group.range.start + group.value.length,
+          QuasselURLSpan(group.value, highlight), group.range.start,
+          group.range.start + group.value.length,
           Spanned.SPAN_INCLUSIVE_EXCLUSIVE
         )
       }
@@ -307,6 +309,16 @@ class QuasselMessageRenderer(
     */
 
     return text
+  }
+
+  class QuasselURLSpan(text: String, private val highlight: Boolean) : URLSpan(text) {
+    override fun updateDrawState(ds: TextPaint?) {
+      if (ds != null) {
+        if (!highlight)
+          ds.color = ds.linkColor
+        ds.isUnderlineText = true
+      }
+    }
   }
 
   private fun formatNickImpl(sender: String, colorize: Boolean): CharSequence {
