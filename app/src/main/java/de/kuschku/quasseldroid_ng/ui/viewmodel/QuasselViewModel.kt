@@ -4,9 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import de.kuschku.libquassel.protocol.BufferId
-import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.Buffer_Type
-import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
@@ -232,16 +230,9 @@ class QuasselViewModel : ViewModel() {
               }.map { (info, network) ->
                 bufferSyncer.liveActivity(info.bufferId).switchMap { activity ->
                   bufferSyncer.liveHighlightCount(info.bufferId).map { highlights ->
-                    when {
-                      highlights > 0                               -> Buffer_Activity.Highlight
-                      activity.hasFlag(Message.MessageType.Plain) ||
-                      activity.hasFlag(Message.MessageType.Notice) ||
-                      activity.hasFlag(Message.MessageType.Action) -> Buffer_Activity.NewMessage
-                      activity.isNotEmpty()                        -> Buffer_Activity.OtherActivity
-                      else                                         -> Buffer_Activity.NoActivity
-                    }
+                    activity to highlights
                   }
-                }.switchMap { activity ->
+                }.switchMap { (activity, highlights) ->
                   when (info.type.toInt()) {
                     BufferInfo.Type.QueryBuffer.toInt()   -> {
                       network.liveIrcUser(info.bufferName).switchMap { user ->
@@ -256,7 +247,9 @@ class QuasselViewModel : ViewModel() {
                                 else                 -> BufferListAdapter.BufferStatus.ONLINE
                               },
                               description = realName,
-                              activity = activity
+                              activity = activity,
+                              highlights = highlights,
+                              bufferActivity = config.minimumActivity()
                             )
                           }
                         }
@@ -275,7 +268,9 @@ class QuasselViewModel : ViewModel() {
                               else            -> BufferListAdapter.BufferStatus.ONLINE
                             },
                             description = topic,
-                            activity = activity
+                            activity = activity,
+                            highlights = highlights,
+                            bufferActivity = config.minimumActivity()
                           )
                         }
                       }
@@ -287,7 +282,9 @@ class QuasselViewModel : ViewModel() {
                           network = network.networkInfo(),
                           bufferStatus = BufferListAdapter.BufferStatus.OFFLINE,
                           description = "",
-                          activity = activity
+                          activity = activity,
+                          highlights = highlights,
+                          bufferActivity = config.minimumActivity()
                         )
                       }
                     }
@@ -297,7 +294,9 @@ class QuasselViewModel : ViewModel() {
                         network = network.networkInfo(),
                         bufferStatus = BufferListAdapter.BufferStatus.OFFLINE,
                         description = "",
-                        activity = activity
+                        activity = activity,
+                        highlights = highlights,
+                        bufferActivity = config.minimumActivity()
                       )
                     )
                   }
@@ -309,9 +308,6 @@ class QuasselViewModel : ViewModel() {
             }
             ).map { list ->
               list.filter {
-                config.minimumActivity().value <= it.activity.bit ||
-                it.info.type.hasFlag(Buffer_Type.StatusBuffer)
-              }.filter {
                 (!config.hideInactiveBuffers()) ||
                 it.bufferStatus != BufferListAdapter.BufferStatus.OFFLINE ||
                 it.info.type.hasFlag(Buffer_Type.StatusBuffer)

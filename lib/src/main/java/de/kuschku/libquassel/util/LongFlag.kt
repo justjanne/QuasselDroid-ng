@@ -46,12 +46,13 @@ data class LongFlags<E>(
   }
 
   companion object {
-    inline fun <reified T> of(int: Long): LongFlags<T> where T : LongFlag<T>, T : Enum<T>
-      = LongFlags(int, enumValues())
+    inline fun <reified T> of(
+      int: Long): LongFlags<T> where T : LongFlag<T>, T : Enum<T> = LongFlags(int, enumValues())
 
     inline fun <reified T> of(
-      vararg flags: LongFlag<T>): LongFlags<T> where T : LongFlag<T>, T : Enum<T>
-      = LongFlags(flags.map(LongFlag<T>::bit).distinct().sum(), enumValues())
+      vararg flags: LongFlag<T>): LongFlags<T> where T : LongFlag<T>, T : Enum<T> = LongFlags(
+      flags.map(LongFlag<T>::bit).distinct().sum(), enumValues()
+    )
   }
 
   interface Factory<E> where E : LongFlag<E>, E : Enum<E> {
@@ -67,37 +68,41 @@ infix fun <T> LongFlags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : Lon
   return value and which.bit == which.bit
 }
 
-infix fun <T> LongFlags<T>.or(
-  other: LongFlag<T>): LongFlags<T> where T : kotlin.Enum<T>, T : LongFlag<T> = LongFlags(
-  value or other.bit
-)
+infix fun <T> LongFlags<T>.or(other: Long): LongFlags<T>
+  where T : kotlin.Enum<T>, T : LongFlag<T> = LongFlags(value or other)
 
-infix fun <T> LongFlags<T>.or(
-  other: LongFlags<T>): LongFlags<T> where T : kotlin.Enum<T>, T : LongFlag<T> = LongFlags(
-  value or other.value
-)
+infix fun <T> LongFlags<T>.or(other: LongFlag<T>): LongFlags<T>
+  where T : kotlin.Enum<T>, T : LongFlag<T> = LongFlags(value or other.bit)
 
-infix fun <T> LongFlags<T>.and(
-  other: LongFlag<T>): LongFlags<T> where T : kotlin.Enum<T>, T : LongFlag<T> = LongFlags(
-  value and other.bit
-)
+infix fun <T> LongFlags<T>.or(other: LongFlags<T>): LongFlags<T>
+  where T : kotlin.Enum<T>, T : LongFlag<T> = LongFlags(value or other.value)
 
-infix fun <T> LongFlags<T>.and(
-  other: LongFlags<T>): LongFlags<T> where T : kotlin.Enum<T>, T : LongFlag<T> = LongFlags(
-  value and other.value
-)
+infix fun <T> LongFlags<T>.and(other: Long): LongFlags<T>
+  where T : kotlin.Enum<T>, T : LongFlag<T> = LongFlags(value and other)
 
-operator infix fun <T> LongFlags<T>.plus(
-  other: LongFlags<T>): LongFlags<T>  where T : Enum<T>, T : LongFlag<T> = LongFlags(
-  value or other.value
-)
+infix fun <T> LongFlags<T>.and(other: LongFlag<T>): LongFlags<T>
+  where T : kotlin.Enum<T>, T : LongFlag<T> = LongFlags(value and other.bit)
 
-operator infix fun <T> LongFlags<T>.plus(
-  other: LongFlag<T>): LongFlags<T>  where T : Enum<T>, T : LongFlag<T> = LongFlags(
-  value or other.bit
-)
+infix fun <T> LongFlags<T>.and(other: LongFlags<T>): LongFlags<T>
+  where T : kotlin.Enum<T>, T : LongFlag<T> = LongFlags(value and other.value)
 
-infix fun <T> LongFlags<T>.unset(
-  which: T): LongFlags<T>  where T : Enum<T>, T : LongFlag<T> = LongFlags(
-  value xor which.bit
-)
+infix operator fun <T> LongFlags<T>.plus(other: Long): LongFlags<T>
+  where T : Enum<T>, T : LongFlag<T> = LongFlags(value or other)
+
+infix operator fun <T> LongFlags<T>.plus(other: LongFlag<T>): LongFlags<T>
+  where T : Enum<T>, T : LongFlag<T> = LongFlags(value or other.bit)
+
+infix operator fun <T> LongFlags<T>.plus(other: LongFlags<T>): LongFlags<T>
+  where T : Enum<T>, T : LongFlag<T> = LongFlags(value or other.value)
+
+infix operator fun <T> LongFlags<T>.minus(other: Long): LongFlags<T>
+  where T : Enum<T>, T : LongFlag<T> = LongFlags(value and other.inv())
+
+infix operator fun <T> LongFlags<T>.minus(other: LongFlag<T>): LongFlags<T>
+  where T : Enum<T>, T : LongFlag<T> = LongFlags(value and other.bit.inv())
+
+infix operator fun <T> LongFlags<T>.minus(other: LongFlags<T>): LongFlags<T>
+  where T : Enum<T>, T : LongFlag<T> = LongFlags(value and other.value.inv())
+
+infix fun <T> LongFlags<T>.unset(which: T): LongFlags<T>
+  where T : Enum<T>, T : LongFlag<T> = LongFlags(value xor which.bit)

@@ -15,10 +15,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import de.kuschku.libquassel.protocol.BufferId
-import de.kuschku.libquassel.protocol.Buffer_Activity
-import de.kuschku.libquassel.protocol.Buffer_Type
-import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.hasFlag
@@ -143,8 +140,9 @@ class BufferListAdapter(
     val network: INetwork.NetworkInfo,
     val bufferStatus: BufferStatus,
     val description: CharSequence,
-    val activity: Buffer_Activity,
-    val highlights: Int = 0
+    val activity: Message_Types,
+    val highlights: Int = 0,
+    val bufferActivity: Buffer_Activities = Buffer_Activity.of(Buffer_Activity.NoActivity)
   )
 
   data class BufferState(
@@ -204,11 +202,11 @@ class BufferListAdapter(
         networkId = props.info.networkId
 
         name.setTextColor(
-          when (props.activity) {
-            Buffer_Activity.NoActivity    -> none
-            Buffer_Activity.OtherActivity -> activity
-            Buffer_Activity.NewMessage    -> message
-            Buffer_Activity.Highlight     -> highlight
+          when {
+            props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
+            props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
+            props.bufferActivity.hasFlag(Buffer_Activity.OtherActivity) -> activity
+            else                                                        -> none
           }
         )
 
@@ -276,11 +274,11 @@ class BufferListAdapter(
         description.text = props.description
 
         name.setTextColor(
-          when (props.activity) {
-            Buffer_Activity.NoActivity    -> none
-            Buffer_Activity.OtherActivity -> activity
-            Buffer_Activity.NewMessage    -> message
-            Buffer_Activity.Highlight     -> highlight
+          when {
+            props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
+            props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
+            props.bufferActivity.hasFlag(Buffer_Activity.OtherActivity) -> activity
+            else                                                        -> none
           }
         )
 
@@ -351,11 +349,11 @@ class BufferListAdapter(
         description.text = props.description
 
         name.setTextColor(
-          when (props.activity) {
-            Buffer_Activity.NoActivity    -> none
-            Buffer_Activity.OtherActivity -> activity
-            Buffer_Activity.NewMessage    -> message
-            Buffer_Activity.Highlight     -> highlight
+          when {
+            props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
+            props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
+            props.bufferActivity.hasFlag(Buffer_Activity.OtherActivity) -> activity
+            else                                                        -> none
           }
         )
 
@@ -429,11 +427,11 @@ class BufferListAdapter(
         description.text = props.description
 
         name.setTextColor(
-          when (props.activity) {
-            Buffer_Activity.NoActivity    -> none
-            Buffer_Activity.OtherActivity -> activity
-            Buffer_Activity.NewMessage    -> message
-            Buffer_Activity.Highlight     -> highlight
+          when {
+            props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
+            props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
+            props.bufferActivity.hasFlag(Buffer_Activity.OtherActivity) -> activity
+            else                                                        -> none
           }
         )
 

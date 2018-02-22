@@ -1,11 +1,13 @@
 package de.kuschku.quasseldroid_ng.util.service
 
 import android.arch.lifecycle.LiveData
+import android.content.Context
 import android.os.Bundle
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.v7.app.AppCompatActivity
 import de.kuschku.libquassel.session.Backend
+import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.ui.settings.Settings
 import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
@@ -18,15 +20,19 @@ abstract class ServiceBoundActivity : AppCompatActivity() {
   protected val recentsHeaderColor: Int = R.color.colorPrimary
 
   private val connection = BackendServiceConnection()
-  val backend: LiveData<Backend?>
+  protected val backend: LiveData<Backend?>
     get() = connection.backend
 
   protected lateinit var appearanceSettings: AppearanceSettings
+  protected var accountId: Long = -1
 
   override fun onCreate(savedInstanceState: Bundle?) {
-
     connection.context = this
+
     appearanceSettings = Settings.appearance(this)
+    accountId = getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
+      ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
+
     setTheme(appearanceSettings.theme.style)
     super.onCreate(savedInstanceState)
     connection.start()

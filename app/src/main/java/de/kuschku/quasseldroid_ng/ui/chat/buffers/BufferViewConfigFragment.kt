@@ -10,12 +10,19 @@ import android.widget.AdapterView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.protocol.Buffer_Activity
+import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.protocol.Message_Type
+import de.kuschku.libquassel.util.hasFlag
+import de.kuschku.libquassel.util.minus
 import de.kuschku.quasseldroid_ng.R
+import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.ui.settings.Settings
 import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.map
+import de.kuschku.quasseldroid_ng.util.helper.zip
 import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundFragment
 
@@ -32,6 +39,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   lateinit var chatList: RecyclerView
 
   private lateinit var viewModel: QuasselViewModel
+  private lateinit var database: QuasselDatabase
 
   private var ircFormatDeserializer: IrcFormatDeserializer? = null
   private lateinit var appearanceSettings: AppearanceSettings
@@ -41,6 +49,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     super.onCreate(savedInstanceState)
 
     viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
+    database = QuasselDatabase.Creator.init(activity!!)
     appearanceSettings = Settings.appearance(activity!!)
 
     if (ircFormatDeserializer == null) {
@@ -53,9 +62,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     val view = inflater.inflate(R.layout.fragment_chat_list, container, false)
     ButterKnife.bind(this, view)
 
-    val adapter = BufferViewConfigAdapter(
-      this, viewModel.bufferViewConfigs
-    )
+    val adapter = BufferViewConfigAdapter(this, viewModel.bufferViewConfigs)
 
     chatListSpinner.adapter = adapter
     chatListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -70,14 +77,34 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
     chatList.adapter = BufferListAdapter(
       this,
-      viewModel.bufferList.map {
-        it.map {
-          it.copy(
-            description = ircFormatDeserializer?.formatString(
-              it.description.toString(), appearanceSettings.colorizeMirc
-            ) ?: it.description
-          )
-        }
+      viewModel.bufferList.zip(database.filtered().listen(accountId)).map {
+        val (list, activityList) = it
+        val activities = activityList.map { it.bufferId to it.filtered }.toMap()
+        list
+          ?.map {
+            val activity = it.activity - (activities[it.info.bufferId] ?: 0)
+            it.bufferActivity to it.copy(
+              description = ircFormatDeserializer?.formatString(
+                it.description.toString(), appearanceSettings.colorizeMirc
+              ) ?: it.description,
+              activity = activity,
+              bufferActivity = Buffer_Activity.of(
+                when {
+                  it.highlights > 0                     -> Buffer_Activity.Highlight
+                  activity.hasFlag(Message_Type.Plain) ||
+                  activity.hasFlag(Message_Type.Notice) ||
+                  activity.hasFlag(Message_Type.Action) -> Buffer_Activity.NewMessage
+                  activity.isNotEmpty()                 -> Buffer_Activity.OtherActivity
+                  else                                  -> Buffer_Activity.NoActivity
+                }
+              )
+            )
+          }?.filter { (minimumActivity, props) ->
+            minimumActivity.toInt() <= props.bufferActivity.toInt() ||
+            props.info.type.hasFlag(Buffer_Type.StatusBuffer)
+          }?.map { (_, props) ->
+            props
+          }
       },
       handlerThread::post,
       activity!!::runOnUiThread,

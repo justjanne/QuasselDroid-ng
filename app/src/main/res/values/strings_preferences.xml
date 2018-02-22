@@ -47,7 +47,7 @@
 
   <string name="preference_show_prefix_key" translatable="false">show_prefix</string>
   <string name="preference_show_prefix_title">Show sendermodes</string>
-  <string name="preference_show_prefix_entry_all">Allv modes</string>
+  <string name="preference_show_prefix_entry_all">All modes</string>
   <string name="preference_show_prefix_entry_highest">Highest mode</string>
   <string name="preference_show_prefix_entry_none">No modes</string>
   <string-array name="preference_show_prefix_entries">

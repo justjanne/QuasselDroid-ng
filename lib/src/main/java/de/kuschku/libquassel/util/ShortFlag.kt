@@ -1,6 +1,7 @@
 package de.kuschku.libquassel.util
 
 import kotlin.experimental.and
+import kotlin.experimental.inv
 import kotlin.experimental.or
 import kotlin.experimental.xor
 
@@ -71,37 +72,41 @@ infix fun <T> ShortFlags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : Sh
   return value and which.bit == which.bit
 }
 
-infix fun <T> ShortFlags<T>.or(
-  other: ShortFlag<T>): ShortFlags<T> where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value or other.bit
-)
+infix fun <T> ShortFlags<T>.or(other: Short): ShortFlags<T>
+  where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(value or other)
 
-infix fun <T> ShortFlags<T>.or(
-  other: ShortFlags<T>): ShortFlags<T> where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value or other.value
-)
+infix fun <T> ShortFlags<T>.or(other: ShortFlag<T>): ShortFlags<T>
+  where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(value or other.bit)
 
-infix fun <T> ShortFlags<T>.and(
-  other: ShortFlag<T>): ShortFlags<T> where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value and other.bit
-)
+infix fun <T> ShortFlags<T>.or(other: ShortFlags<T>): ShortFlags<T>
+  where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(value or other.value)
 
-infix fun <T> ShortFlags<T>.and(
-  other: ShortFlags<T>): ShortFlags<T> where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value and other.value
-)
+infix fun <T> ShortFlags<T>.and(other: Short): ShortFlags<T>
+  where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(value and other)
 
-operator infix fun <T> ShortFlags<T>.plus(
-  other: ShortFlags<T>): ShortFlags<T>  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value or other.value
-)
+infix fun <T> ShortFlags<T>.and(other: ShortFlag<T>): ShortFlags<T>
+  where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(value and other.bit)
 
-operator infix fun <T> ShortFlags<T>.plus(
-  other: ShortFlag<T>): ShortFlags<T>  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value or other.bit
-)
+infix fun <T> ShortFlags<T>.and(other: ShortFlags<T>): ShortFlags<T>
+  where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(value and other.value)
 
-infix fun <T> ShortFlags<T>.unset(
-  which: T): ShortFlags<T>  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value xor which.bit
-)
+infix operator fun <T> ShortFlags<T>.plus(other: Short): ShortFlags<T>
+  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(value or other)
+
+infix operator fun <T> ShortFlags<T>.plus(other: ShortFlag<T>): ShortFlags<T>
+  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(value or other.bit)
+
+infix operator fun <T> ShortFlags<T>.plus(other: ShortFlags<T>): ShortFlags<T>
+  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(value or other.value)
+
+infix operator fun <T> ShortFlags<T>.minus(other: Short): ShortFlags<T>
+  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(value and other.inv())
+
+infix operator fun <T> ShortFlags<T>.minus(other: ShortFlag<T>): ShortFlags<T>
+  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(value and other.bit.inv())
+
+infix operator fun <T> ShortFlags<T>.minus(other: ShortFlags<T>): ShortFlags<T>
+  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(value and other.value.inv())
+
+infix fun <T> ShortFlags<T>.unset(which: T): ShortFlags<T>
+  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(value xor which.bit)

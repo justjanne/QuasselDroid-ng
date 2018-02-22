@@ -43,7 +43,6 @@ abstract class AccountDatabase : RoomDatabase() {
 
   object Creator {
     private var database: AccountDatabase? = null
-      private set
 
     // For Singleton instantiation
     private val LOCK = Any()

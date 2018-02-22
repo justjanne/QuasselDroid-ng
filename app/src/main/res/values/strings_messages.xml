@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="message_type_join">Join</string>
+  <string name="message_type_part">Part</string>
+  <string name="message_type_quit">Quit</string>
+  <string name="message_type_nick">Nick</string>
+  <string name="message_type_mode">Mode</string>
+  <string name="message_type_topic">Topic</string>
+  <string-array name="message_filter_types">
+    <item>@string/message_type_join</item>
+    <item>@string/message_type_part</item>
+    <item>@string/message_type_quit</item>
+    <item>@string/message_type_nick</item>
+    <item>@string/message_type_mode</item>
+    <item>@string/message_type_topic</item>
+  </string-array>
+
+  <string name="message_format_plain">%1$s%2$s: %3$s</string>
+  <string name="message_format_action">* %1$s%2$s %3$s</string>
+  <string name="message_format_notice">[%1$s%2$s] %3$s</string>
+  <string name="message_format_nick">%1$s%2$s is now known as %3$s%4$s</string>
+  <string name="message_format_mode">%1$s by %2$s%3$s</string>
+  <string name="message_format_join">%1$s%2$s joined</string>
+  <string name="message_format_part_1">%1$s%2$s left</string>
+  <string name="message_format_part_2">%1$s%2$s left: %3$s</string>
+  <string name="message_format_quit_1">%1$s%2$s quit</string>
+  <string name="message_format_quit_2">%1$s%2$s quit (%3$s)</string>
+  <plurals name="message_netsplit_join">
+    <item quantity="one">Netsplit between %1$s and %2$s ended: %3$d user joined</item>
+    <item quantity="other">Netsplit between %1$s and %2$s ended: %3$d users joined</item>
+  </plurals>
+  <plurals name="message_netsplit_quit">
+    <item quantity="one">Netsplit between %1$s and %2$s: %3$d user quit</item>
+    <item quantity="other">Netsplit between %1$s and %2$s: %3$d users quit</item>
+  </plurals>
+</resources>

@@ -1,18 +1,24 @@
 package de.kuschku.quasseldroid_ng.persistence
 
+import android.arch.lifecycle.LiveData
 import android.arch.paging.DataSource
+import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.*
+import android.arch.persistence.room.migration.Migration
 import android.content.Context
 import android.support.annotation.IntRange
 import android.support.v7.recyclerview.extensions.DiffCallback
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
+import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase.DatabaseMessage
+import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase.Filtered
 import org.threeten.bp.Instant
 
-@Database(entities = [(QuasselDatabase.DatabaseMessage::class)], version = 2)
-@TypeConverters(QuasselDatabase.DatabaseMessage.MessageTypeConverters::class)
+@Database(entities = [DatabaseMessage::class, Filtered::class], version = 3)
+@TypeConverters(DatabaseMessage.MessageTypeConverters::class)
 abstract class QuasselDatabase : RoomDatabase() {
   abstract fun message(): MessageDao
+  abstract fun filtered(): FilteredDao
 
   @Entity(tableName = "message")
   data class DatabaseMessage(
@@ -43,12 +49,10 @@ abstract class QuasselDatabase : RoomDatabase() {
 
     object MessageDiffCallback : DiffCallback<DatabaseMessage>() {
       override fun areContentsTheSame(oldItem: QuasselDatabase.DatabaseMessage,
-                                      newItem: QuasselDatabase.DatabaseMessage)
-        = oldItem == newItem
+                                      newItem: QuasselDatabase.DatabaseMessage) = oldItem == newItem
 
       override fun areItemsTheSame(oldItem: QuasselDatabase.DatabaseMessage,
-                                   newItem: QuasselDatabase.DatabaseMessage)
-        = oldItem.messageId == newItem.messageId
+                                   newItem: QuasselDatabase.DatabaseMessage) = oldItem.messageId == newItem.messageId
     }
   }
 
@@ -60,8 +64,10 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC")
     fun findByBufferId(bufferId: Int): List<DatabaseMessage>
 
-    @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId DESC")
-    fun findByBufferIdPaged(bufferId: Int): DataSource.Factory<Int, DatabaseMessage>
+    @Query(
+      "SELECT * FROM message WHERE bufferId = :bufferId AND type & ~ :type > 0 ORDER BY messageId DESC"
+    )
+    fun findByBufferIdPaged(bufferId: Int, type: Int): DataSource.Factory<Int, DatabaseMessage>
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId DESC LIMIT 1")
     fun findLastByBufferId(bufferId: Int): DatabaseMessage?
@@ -90,6 +96,41 @@ abstract class QuasselDatabase : RoomDatabase() {
     fun clearMessages(@IntRange(from = 0) bufferId: Int, first: Int, last: Int)
   }
 
+  @Entity(tableName = "filtered", primaryKeys = ["accountId", "bufferId"])
+  data class Filtered(
+    var accountId: Long,
+    var bufferId: Int,
+    var filtered: Int
+  )
+
+  @Dao
+  interface FilteredDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun replace(vararg entities: Filtered)
+
+    @Query(
+      "SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT 0 as filtered ORDER BY filtered DESC LIMIT 1"
+    )
+    fun get(accountId: Long, bufferId: Int): Int?
+
+    @Query(
+      "SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT 0 as filtered ORDER BY filtered DESC LIMIT 1"
+    )
+    fun listen(accountId: Long, bufferId: Int): LiveData<Int>
+
+    @Query("SELECT * FROM filtered WHERE accountId = :accountId")
+    fun listen(accountId: Long): LiveData<List<Filtered>>
+
+    @Query("DELETE FROM filtered")
+    fun clear()
+
+    @Query("DELETE FROM filtered WHERE accountId = :accountId")
+    fun clear(accountId: Long)
+
+    @Query("DELETE FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId")
+    fun clear(accountId: Long, bufferId: Int)
+  }
+
   object Creator {
     private var database: QuasselDatabase? = null
 
@@ -103,6 +144,14 @@ abstract class QuasselDatabase : RoomDatabase() {
             database = Room.databaseBuilder(
               context.applicationContext,
               QuasselDatabase::class.java, DATABASE_NAME
+            ).addMigrations(
+              object : Migration(2, 3) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL(
+                    "CREATE TABLE filtered(bufferId INTEGER, accountId INTEGER, filtered INTEGER, PRIMARY KEY(accountId, bufferId));"
+                  )
+                }
+              }
             ).build()
           }
         }
@@ -116,7 +165,9 @@ abstract class QuasselDatabase : RoomDatabase() {
   }
 }
 
-fun QuasselDatabase.MessageDao.clearMessages(@IntRange(from = 0)
-                                             bufferId: Int, idRange: kotlin.ranges.IntRange) {
+fun QuasselDatabase.MessageDao.clearMessages(
+  @IntRange(from = 0) bufferId: Int,
+  idRange: kotlin.ranges.IntRange
+) {
   this.clearMessages(bufferId, idRange.first, idRange.last)
 }

@@ -17,8 +17,13 @@ import android.widget.Button
 import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.afollestad.materialdialogs.MaterialDialog
+import de.kuschku.libquassel.protocol.Message
+import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.session.ConnectionState
 import de.kuschku.libquassel.session.SocketAddress
+import de.kuschku.libquassel.util.and
+import de.kuschku.libquassel.util.or
 import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
@@ -84,8 +89,8 @@ class ChatActivity : ServiceBoundActivity() {
     drawerToggle = ActionBarDrawerToggle(
       this,
       drawerLayout,
-      R.string.drawer_open,
-      R.string.drawer_close
+      R.string.label_drawer_open,
+      R.string.label_drawer_close
     )
     drawerToggle.syncState()
 
@@ -94,8 +99,6 @@ class ChatActivity : ServiceBoundActivity() {
       if (backendValue != null) {
         val database = AccountDatabase.Creator.init(this)
         handler.post {
-          val accountId = getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
-                            ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
           if (accountId == -1L) {
             setResult(Activity.RESULT_OK)
             finish()
@@ -179,10 +182,61 @@ class ChatActivity : ServiceBoundActivity() {
   }
 
   override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
-    android.R.id.home -> {
+    android.R.id.home    -> {
       drawerToggle.onOptionsItemSelected(item)
     }
-    R.id.clear        -> {
+
+    R.id.filter_messages -> {
+      handler.post {
+        val buffer = viewModel.getBuffer().value
+        if (buffer != null) {
+          val filtered = Message_Type.of(database.filtered().get(accountId, buffer) ?: 0)
+          val flags = intArrayOf(
+            Message.MessageType.Join.bit or Message.MessageType.NetsplitJoin.bit,
+            Message.MessageType.Part.bit,
+            Message.MessageType.Quit.bit or Message.MessageType.NetsplitQuit.bit,
+            Message.MessageType.Nick.bit,
+            Message.MessageType.Mode.bit,
+            Message.MessageType.Topic.bit
+          )
+          val selectedIndices = flags.withIndex().mapNotNull { (index, flag) ->
+            if ((filtered and flag).isNotEmpty()) {
+              index
+            } else {
+              null
+            }
+          }.toTypedArray()
+
+          runOnUiThread {
+            MaterialDialog.Builder(this)
+              .title(R.string.label_filter_messages)
+              .items(R.array.message_filter_types)
+              .itemsIds(flags)
+              .itemsCallbackMultiChoice(selectedIndices, { _, _, _ -> false })
+              .positiveText(R.string.label_select_multiple)
+              .negativeText(R.string.label_cancel)
+              .onPositive { dialog, _ ->
+                val selected = dialog.selectedIndices ?: emptyArray()
+                handler.post {
+                  val newlyFiltered = selected
+                    .map { flags[it] }
+                    .fold(Message_Type.of()) { acc, i -> acc or i }
+
+                  database.filtered().replace(
+                    QuasselDatabase.Filtered(accountId, buffer, newlyFiltered.value)
+                  )
+                }
+              }.negativeColorAttr(R.attr.colorTextPrimary)
+              .backgroundColorAttr(R.attr.colorBackgroundCard)
+              .contentColorAttr(R.attr.colorTextPrimary)
+              .build()
+              .show()
+          }
+        }
+      }
+      true
+    }
+    R.id.clear           -> {
       handler.post {
         viewModel.sessionManager { manager ->
           viewModel.getBuffer().let { buffer ->
@@ -197,7 +251,7 @@ class ChatActivity : ServiceBoundActivity() {
       }
       true
     }
-    R.id.settings     -> {
+    R.id.settings        -> {
       startActivity(Intent(applicationContext, SettingsActivity::class.java))
       true
     }

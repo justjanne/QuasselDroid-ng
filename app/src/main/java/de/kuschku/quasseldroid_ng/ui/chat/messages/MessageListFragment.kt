@@ -52,7 +52,6 @@ class MessageListFragment : ServiceBoundFragment() {
     super.onCreate(savedInstanceState)
     viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
     appearanceSettings = Settings.appearance(activity!!)
-    setHasOptionsMenu(true)
   }
 
   private val boundaryCallback = object :
@@ -87,16 +86,18 @@ class MessageListFragment : ServiceBoundFragment() {
     )
 
     database = QuasselDatabase.Creator.init(context!!.applicationContext)
-    val data = viewModel.getBuffer().switchMapNotNull {
-      LivePagedListBuilder(
-        database.message().findByBufferIdPaged(it),
-        PagedList.Config.Builder()
-          .setPageSize(backlogSettings.dynamicAmount)
-          .setPrefetchDistance(backlogSettings.dynamicAmount)
-          .setInitialLoadSizeHint(backlogSettings.dynamicAmount)
-          .setEnablePlaceholders(true)
-          .build()
-      ).setBoundaryCallback(boundaryCallback).build()
+    val data = viewModel.getBuffer().switchMapNotNull { buffer ->
+      database.filtered().listen(accountId, buffer).switchMapNotNull { filtered ->
+        LivePagedListBuilder(
+          database.message().findByBufferIdPaged(buffer, filtered),
+          PagedList.Config.Builder()
+            .setPageSize(backlogSettings.dynamicAmount)
+            .setPrefetchDistance(backlogSettings.dynamicAmount)
+            .setInitialLoadSizeHint(backlogSettings.dynamicAmount)
+            .setEnablePlaceholders(true)
+            .build()
+        ).setBoundaryCallback(boundaryCallback).build()
+      }
     }
 
     handler.post {

@@ -5,8 +5,9 @@ import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.session.BacklogStorage
 
 class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
-  override fun storeMessages(vararg messages: Message, initialLoad: Boolean)
-    = storeMessages(messages.asIterable(), initialLoad)
+  override fun storeMessages(vararg messages: Message, initialLoad: Boolean) = storeMessages(
+    messages.asIterable(), initialLoad
+  )
 
   override fun storeMessages(messages: Iterable<Message>, initialLoad: Boolean) {
     if (initialLoad)

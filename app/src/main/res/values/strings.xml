@@ -1,29 +1,17 @@
 <resources>
   <string name="app_name">QuasselDroid</string>
 
-  <string name="connection_service">Connection Service</string>
+  <string name="connection_service_title">Connection Service</string>
   <string name="connection_service_description">Keeps a connection to your core to allow for notifications, and to transmit messages.</string>
 
-  <string name="crash_text">QD-NG has crashed</string>
-  <string name="drawer_open">Open</string>
-  <string name="drawer_close">Close</string>
-
-  <string name="message_format_plain">%1$s%2$s: %3$s</string>
-  <string name="message_format_action">* %1$s%2$s %3$s</string>
-  <string name="message_format_notice">[%1$s%2$s] %3$s</string>
-  <string name="message_format_nick">%1$s%2$s is now known as %3$s%4$s</string>
-  <string name="message_format_mode">%1$s by %2$s%3$s</string>
-  <string name="message_format_join">%1$s%2$s joined</string>
-  <string name="message_format_part_1">%1$s%2$s left</string>
-  <string name="message_format_part_2">%1$s%2$s left: %3$s</string>
-  <string name="message_format_quit_1">%1$s%2$s quit</string>
-  <string name="message_format_quit_2">%1$s%2$s quit (%3$s)</string>
-  <plurals name="message_netsplit_join">
-    <item quantity="one">Netsplit between %1$s and %2$s ended: %3$d user joined</item>
-    <item quantity="other">Netsplit between %1$s and %2$s ended: %3$d users joined</item>
-  </plurals>
-  <plurals name="message_netsplit_quit">
-    <item quantity="one">Netsplit between %1$s and %2$s: %3$d user quit</item>
-    <item quantity="other">Netsplit between %1$s and %2$s: %3$d users quit</item>
-  </plurals>
+  <string name="label_cancel">Cancel</string>
+  <string name="label_clear_backlog">Clear Backlog</string>
+  <string name="label_delete">Delete</string>
+  <string name="label_disconnect">Disconnect</string>
+  <string name="label_drawer_close">Close</string>
+  <string name="label_drawer_open">Open</string>
+  <string name="label_filter_messages">Filter Messages</string>
+  <string name="label_save">Save</string>
+  <string name="label_select_multiple">Select</string>
+  <string name="label_settings">Settings</string>
 </resources>

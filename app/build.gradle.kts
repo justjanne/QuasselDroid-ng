@@ -139,6 +139,7 @@ dependencies {
 
   // UI
   implementation("me.zhanghai.android.materialprogressbar", "library", "1.4.2")
+  implementation("com.afollestad.material-dialogs", "core", "0.9.6.0")
 
   // Quality Assurance
   implementation(project(":malheur"))
