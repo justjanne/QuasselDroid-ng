@@ -35,7 +35,7 @@
 
     <item name="colorBackground">#000000</item>
     <item name="android:windowBackground">@color/amoled_background</item>
-    <item name="colorBackgroundHighlight">#FFCA28</item>
+    <item name="colorBackgroundHighlight">#ffaf3b</item>
     <item name="colorBackgroundSecondary">@null</item>
     <item name="colorBackgroundCard">#000000</item>
     <item name="colorBackgroundDialog">#000000</item>

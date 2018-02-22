@@ -64,7 +64,6 @@
   </style>
 
   <color name="gruvbox_dark_background">#282828</color>
-
   <style name="Widget.AppBarOverlay.Gruvbox_Dark" parent="Widget.AppBarOverlay.Light">
     <item name="colorControlNormal">#dbdbb2</item>
     <item name="android:textColorPrimary">#dbdbb2</item>

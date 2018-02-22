@@ -63,7 +63,6 @@
   </style>
 
   <color name="solarized_dark_background">#002B36</color>
-
   <style name="Widget.AppBarOverlay.Solarized_Dark" parent="Widget.AppBarOverlay.Light">
     <item name="colorControlNormal">#93a1a1</item>
     <item name="android:textColorPrimary">#93a1a1</item>
@@ -108,7 +107,7 @@
 
     <item name="android:windowBackground">@color/solarized_dark_background</item>
     <item name="colorBackground">#002B36</item>
-    <item name="colorBackgroundHighlight">#D5A920</item>
+    <item name="colorBackgroundHighlight">#B58900</item>
     <item name="colorBackgroundSecondary">@null</item>
     <item name="colorBackgroundCard">#073642</item>
     <item name="colorBackgroundDialog">#002B36</item>
