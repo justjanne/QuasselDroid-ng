@@ -15,13 +15,13 @@
       android:layout_width="match_parent"
       android:layout_height="?attr/actionBarSize"
       app:contentInsetStartWithNavigation="0dp"
-      app:popupTheme="@style/Widget.PopupOverlay">
+      app:popupTheme="?attr/actionBarPopupTheme">
 
       <android.support.v7.widget.AppCompatSpinner
         android:id="@+id/chatListSpinner"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        app:popupTheme="@style/Widget.PopupOverlay" />
+        app:popupTheme="?attr/actionBarPopupTheme" />
 
     </android.support.v7.widget.Toolbar>
 

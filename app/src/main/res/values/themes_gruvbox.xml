@@ -2,19 +2,10 @@
 
 <resources>
   <color name="gruvbox_light_background">#fbf1c7</color>
-
-  <style name="Widget.AppBarOverlay.Gruvbox_Light" parent="Widget.AppBarOverlay.Light">
-    <item name="colorControlNormal">#3c3836</item>
-    <item name="android:textColorPrimary">#3c3836</item>
-    <item name="android:textColorSecondary">#665c54</item>
-  </style>
-
   <style name="Theme.ChatTheme.Gruvbox_Light" parent="Theme.ChatTheme.Light">
     <item name="colorPrimary">?attr/colorBackgroundCard</item>
     <item name="colorPrimaryDark">#b6ae91</item>
     <item name="colorAccent">#d65d0e</item>
-
-    <item name="actionBarTheme">@style/Widget.AppBarOverlay.Gruvbox_Light</item>
 
     <item name="senderColor0">#d65d0e</item>
     <item name="senderColor1">#cc241d</item>
@@ -64,18 +55,10 @@
   </style>
 
   <color name="gruvbox_dark_background">#282828</color>
-  <style name="Widget.AppBarOverlay.Gruvbox_Dark" parent="Widget.AppBarOverlay.Light">
-    <item name="colorControlNormal">#dbdbb2</item>
-    <item name="android:textColorPrimary">#dbdbb2</item>
-    <item name="android:textColorSecondary">#bdae93</item>
-  </style>
-
   <style name="Theme.ChatTheme.Gruvbox_Dark" parent="Theme.ChatTheme">
     <item name="colorPrimary">?attr/colorBackgroundCard</item>
     <item name="colorPrimaryDark">#3c3734</item>
     <item name="colorAccent">#d65d0e</item>
-
-    <item name="actionBarTheme">@style/Widget.AppBarOverlay.Gruvbox_Dark</item>
 
     <item name="senderColor0">#d65d0e</item>
     <item name="senderColor1">#cc241d</item>

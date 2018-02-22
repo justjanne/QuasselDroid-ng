@@ -27,7 +27,7 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           app:contentInsetStartWithNavigation="0dp"
-          app:popupTheme="@style/Widget.PopupOverlay">
+          app:popupTheme="?attr/actionBarPopupTheme">
 
           <fragment
             android:id="@+id/fragment_toolbar"

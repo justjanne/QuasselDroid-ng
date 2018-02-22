@@ -36,16 +36,21 @@
     <item name="actionBarTheme">@style/Widget.AppBarOverlay</item>
     <item name="formatBarTheme">@style/Widget.AppBarOverlay</item>
     <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    <item name="actionBarPopupTheme">@style/Widget.PopupOverlay</item>
 
     <item name="windowActionModeOverlay">true</item>
 
-    <item name="colorTextPrimary">#8a8a8a</item>
-    <item name="colorTextSecondary">#dedede</item>
+    <item name="colorTextPrimary">#dedede</item>
+    <item name="colorTextSecondary">#8a8a8a</item>
     <item name="colorDivider">#1FFFFFFF</item>
 
     <item name="colorFill">@color/colorFillDark</item>
     <item name="colorOffline">@color/colorOfflineDark</item>
     <item name="colorAway">@color/colorAwayDark</item>
+
+    <item name="android:textColor">?colorTextPrimary</item>
+    <item name="android:textColorSecondary">?colorTextSecondary</item>
+    <item name="colorControlNormal">?colorTextPrimary</item>
 
     <item name="cardStyle">@style/CardView.Dark</item>
 
@@ -71,6 +76,7 @@
     <item name="actionBarTheme">@style/Widget.AppBarOverlay</item>
     <item name="formatBarTheme">@style/Widget.AppBarOverlay.Light</item>
     <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    <item name="actionBarPopupTheme">@style/Widget.PopupOverlay.Light</item>
 
     <item name="windowActionModeOverlay">true</item>
 
@@ -81,6 +87,10 @@
     <item name="colorFill">@color/colorFillLight</item>
     <item name="colorOffline">@color/colorOfflineLight</item>
     <item name="colorAway">@color/colorAwayLight</item>
+
+    <item name="android:textColor">?colorTextPrimary</item>
+    <item name="android:textColorSecondary">?colorTextSecondary</item>
+    <item name="colorControlNormal">?colorTextPrimary</item>
 
     <item name="cardStyle">@style/CardView.Light</item>
 

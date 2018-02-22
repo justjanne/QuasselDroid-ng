@@ -9,15 +9,17 @@
   <style name="Widget.Button.Colored" parent="Widget.AppCompat.Button.Colored" />
 
   <style name="Widget.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-    <item name="colorControlNormal">@color/colorFillDark</item>
-    <item name="android:textColorPrimary">@color/colorFillDark</item>
     <item name="drawerArrowStyle">@style/Widget.DrawerArrowToggle</item>
+    <item name="colorControlNormal">?colorTextPrimary</item>
+    <item name="android:textColorPrimary">?colorTextPrimary</item>
+    <item name="android:textColorSecondary">?colorTextSecondary</item>
   </style>
 
   <style name="Widget.AppBarOverlay.Light" parent="ThemeOverlay.AppCompat.ActionBar">
-    <item name="colorControlNormal">@color/colorFillLight</item>
-    <item name="android:textColorPrimary">@color/colorFillLight</item>
     <item name="drawerArrowStyle">@style/Widget.DrawerArrowToggle.Light</item>
+    <item name="colorControlNormal">?colorTextPrimary</item>
+    <item name="android:textColorPrimary">?colorTextPrimary</item>
+    <item name="android:textColorSecondary">?colorTextSecondary</item>
   </style>
 
   <style name="Widget.DrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">
@@ -28,5 +30,15 @@
     <item name="color">?attr/colorControlNormal</item>
   </style>
 
-  <style name="Widget.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+  <style name="Widget.PopupOverlay" parent="ThemeOverlay.AppCompat">
+    <item name="android:colorBackground">?colorBackgroundCard</item>
+  </style>
+
+  <style name="Widget.PopupOverlay.Light" parent="ThemeOverlay.AppCompat.Light">
+    <item name="android:colorBackground">?colorBackgroundCard</item>
+  </style>
+
+  <style name="Widget.DialogTheme" parent="Theme.AppCompat.Dialog.Alert" />
+
+  <style name="Widget.DialogTheme.Light" parent="Theme.AppCompat.Light.Dialog.Alert" />
 </resources>
