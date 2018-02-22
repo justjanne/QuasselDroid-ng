@@ -71,7 +71,7 @@ class ChatActivity : ServiceBoundActivity() {
 
     viewModel.getBuffer().observe(
       this, Observer {
-      if (it != null) {
+      if (it != null && drawerLayout.isDrawerOpen(Gravity.START)) {
         drawerLayout.closeDrawer(Gravity.START, true)
       }
     }
