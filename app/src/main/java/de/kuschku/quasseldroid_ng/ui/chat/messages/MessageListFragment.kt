@@ -110,8 +110,11 @@ class MessageListFragment : ServiceBoundFragment() {
           val session = it?.first
           val buffer = it?.second
           val bufferSyncer = session?.bufferSyncer
-          if (buffer != null && bufferSyncer != null && buffer != previous) {
-            onBufferChange(previous, buffer, messageId, bufferSyncer)
+          if (buffer != null && bufferSyncer != null) {
+            markAsRead(bufferSyncer, buffer, messageId)
+            if (buffer != previous) {
+              onBufferChange(previous, buffer, messageId, bufferSyncer)
+            }
             lastBuffer = buffer
           }
         }
@@ -147,14 +150,16 @@ class MessageListFragment : ServiceBoundFragment() {
     return view
   }
 
+  private fun markAsRead(bufferSyncer: BufferSyncer, buffer: BufferId, lastMessageId: MsgId?) {
+    bufferSyncer.requestMarkBufferAsRead(buffer)
+    if (lastMessageId != null)
+      bufferSyncer.requestSetLastSeenMsg(buffer, lastMessageId)
+  }
+
   private fun onBufferChange(previous: BufferId?, current: BufferId, lastMessageId: MsgId?,
                              bufferSyncer: BufferSyncer) {
-    if (lastMessageId != null) {
-      bufferSyncer.requestMarkBufferAsRead(current)
-      bufferSyncer.requestSetLastSeenMsg(current, lastMessageId)
-      if (previous != null) {
-        bufferSyncer.requestSetMarkerLine(previous, lastMessageId)
-      }
+    if (previous != null && lastMessageId != null) {
+      bufferSyncer.requestSetMarkerLine(previous, lastMessageId)
     }
     // Try loading messages when switching to isEmpty buffer
     if (database.message().bufferSize(current) == 0) {

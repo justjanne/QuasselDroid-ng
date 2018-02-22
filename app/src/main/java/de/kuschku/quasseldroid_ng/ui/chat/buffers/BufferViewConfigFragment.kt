@@ -78,32 +78,31 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     chatList.adapter = BufferListAdapter(
       this,
       viewModel.bufferList.zip(database.filtered().listen(accountId)).map {
-        val (list, activityList) = it
+        val (data, activityList) = it
+        val (config, list) = data ?: Pair(null, emptyList())
+        val minimumActivity = config?.minimumActivity() ?: Buffer_Activity.NONE
         val activities = activityList.map { it.bufferId to it.filtered }.toMap()
-        list
-          ?.map {
-            val activity = it.activity - (activities[it.info.bufferId] ?: 0)
-            it.bufferActivity to it.copy(
-              description = ircFormatDeserializer?.formatString(
-                it.description.toString(), appearanceSettings.colorizeMirc
-              ) ?: it.description,
-              activity = activity,
-              bufferActivity = Buffer_Activity.of(
-                when {
-                  it.highlights > 0                     -> Buffer_Activity.Highlight
-                  activity.hasFlag(Message_Type.Plain) ||
-                  activity.hasFlag(Message_Type.Notice) ||
-                  activity.hasFlag(Message_Type.Action) -> Buffer_Activity.NewMessage
-                  activity.isNotEmpty()                 -> Buffer_Activity.OtherActivity
-                  else                                  -> Buffer_Activity.NoActivity
-                }
-              )
+        list.map {
+          val activity = it.activity - (activities[it.info.bufferId] ?: 0)
+          it.copy(
+            description = ircFormatDeserializer?.formatString(
+              it.description.toString(), appearanceSettings.colorizeMirc
+            ) ?: it.description,
+            activity = activity,
+            bufferActivity = Buffer_Activity.of(
+              when {
+                it.highlights > 0                     -> Buffer_Activity.Highlight
+                activity.hasFlag(Message_Type.Plain) ||
+                activity.hasFlag(Message_Type.Notice) ||
+                activity.hasFlag(Message_Type.Action) -> Buffer_Activity.NewMessage
+                activity.isNotEmpty()                 -> Buffer_Activity.OtherActivity
+                else                                  -> Buffer_Activity.NoActivity
+              }
             )
-          }?.filter { (minimumActivity, props) ->
+          )
+        }.filter { props ->
             minimumActivity.toInt() <= props.bufferActivity.toInt() ||
             props.info.type.hasFlag(Buffer_Type.StatusBuffer)
-          }?.map { (_, props) ->
-            props
           }
       },
       handlerThread::post,
