@@ -2,7 +2,8 @@
 
 <resources>
   <color name="solarized_light_background">#FDF6E3</color>
-  <style name="Theme.ChatTheme.Solarized_Light" parent="Theme.ChatTheme.Light">
+
+  <style name="Theme.ChatTheme.Solarized_Light" parent="Theme.ChatTheme.Light.Auto">
     <item name="colorPrimary">?attr/colorBackgroundCard</item>
     <item name="colorPrimaryDark">#b0ac9e</item>
     <item name="colorAccent">#B58900</item>
@@ -55,7 +56,8 @@
   </style>
 
   <color name="solarized_dark_background">#002B36</color>
-  <style name="Theme.ChatTheme.Solarized_Dark" parent="Theme.ChatTheme">
+
+  <style name="Theme.ChatTheme.Solarized_Dark" parent="Theme.ChatTheme.Auto">
     <item name="colorPrimary">?attr/colorBackgroundCard</item>
     <item name="colorPrimaryDark">?attr/colorBackground</item>
     <item name="colorAccent">#B58900</item>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:fitsSystemWindows="true"
+  android:orientation="vertical">
+
+  <include layout="@layout/layout_toolbar" />
+
+  <com.sothree.slidinguppanel.SlidingUpPanelLayout
+    android:id="@+id/editor_panel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    app:umanoAntiDragView="@id/card_panel"
+    app:umanoPanelHeight="?actionBarSize"
+    app:umanoScrollableView="@id/chatline_scroller"
+    app:umanoShadowHeight="4dp">
+
+    <fragment
+      android:id="@+id/fragment_messages"
+      android:name="de.kuschku.quasseldroid_ng.ui.chat.messages.MessageListFragment"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      tools:layout="@layout/fragment_messages" />
+
+    <include layout="@layout/layout_slider" />
+
+  </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+</LinearLayout>

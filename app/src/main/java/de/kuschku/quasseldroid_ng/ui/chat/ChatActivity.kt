@@ -10,12 +10,14 @@ import android.support.design.widget.Snackbar
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
-import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
+import android.text.InputType
+import android.view.*
+import android.widget.EditText
+import android.widget.ImageButton
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.session.ConnectionState
@@ -45,6 +47,15 @@ class ChatActivity : ServiceBoundActivity() {
   @BindView(R.id.progressBar)
   lateinit var progressBar: MaterialContentLoadingProgressBar
 
+  @BindView(R.id.editor_panel)
+  lateinit var editorPanel: SlidingUpPanelLayout
+
+  @BindView(R.id.send)
+  lateinit var send: ImageButton
+
+  @BindView(R.id.chatline)
+  lateinit var chatline: EditText
+
   private lateinit var drawerToggle: ActionBarDrawerToggle
 
   private val handler = AndroidHandlerThread("Chat")
@@ -56,6 +67,27 @@ class ChatActivity : ServiceBoundActivity() {
   private lateinit var database: QuasselDatabase
 
   private lateinit var backlogSettings: BacklogSettings
+
+  private val panelSlideListener: SlidingUpPanelLayout.PanelSlideListener = object :
+    SlidingUpPanelLayout.PanelSlideListener {
+    override fun onPanelSlide(panel: View?, slideOffset: Float) = Unit
+
+    override fun onPanelStateChanged(panel: View?,
+                                     previousState: SlidingUpPanelLayout.PanelState?,
+                                     newState: SlidingUpPanelLayout.PanelState?) {
+      val selectionStart = chatline.selectionStart
+      val selectionEnd = chatline.selectionEnd
+
+      when (newState) {
+        SlidingUpPanelLayout.PanelState.COLLAPSED ->
+          chatline.inputType = chatline.inputType and InputType.TYPE_TEXT_FLAG_MULTI_LINE.inv()
+        else                                      ->
+          chatline.inputType = chatline.inputType or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+      }
+
+      chatline.setSelection(selectionStart, selectionEnd)
+    }
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     handler.onCreate()
@@ -70,6 +102,17 @@ class ChatActivity : ServiceBoundActivity() {
     database = QuasselDatabase.Creator.init(application)
 
     setSupportActionBar(toolbar)
+
+    send.setOnClickListener {
+      send()
+    }
+
+    chatline.setOnKeyListener { _, keyCode, event ->
+      if (event.hasNoModifiers() && (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)) {
+        send()
+      }
+      false
+    }
 
     viewModel.getBuffer().observe(
       this, Observer {
@@ -139,6 +182,20 @@ class ChatActivity : ServiceBoundActivity() {
       progressBar.progress = progress
     }
     )
+
+    editorPanel.addPanelSlideListener(panelSlideListener)
+    editorPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+  }
+
+  fun send() {
+    viewModel.session { session ->
+      viewModel.getBuffer().let { bufferId ->
+        session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
+          session.rpcHandler?.sendInput(bufferInfo, chatline.text.toString())
+        }
+      }
+    }
+    chatline.text.clear()
   }
 
   override fun onSaveInstanceState(outState: Bundle?) {
@@ -230,7 +287,7 @@ class ChatActivity : ServiceBoundActivity() {
       startActivity(Intent(applicationContext, SettingsActivity::class.java))
       true
     }
-    R.id.disconnect   -> {
+    R.id.disconnect      -> {
       handler.post {
         getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editApply {
           putBoolean(Keys.Status.reconnect, false)
@@ -241,7 +298,7 @@ class ChatActivity : ServiceBoundActivity() {
       }
       true
     }
-    else              -> super.onOptionsItemSelected(item)
+    else                 -> super.onOptionsItemSelected(item)
   }
 
   override fun onDestroy() {

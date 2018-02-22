@@ -10,6 +10,10 @@
 
   <style name="Widget.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
     <item name="drawerArrowStyle">@style/Widget.DrawerArrowToggle</item>
+  </style>
+
+  <style name="Widget.AppBarOverlay.Auto" parent="Widget.AppBarOverlay">
+    <item name="drawerArrowStyle">@style/Widget.DrawerArrowToggle</item>
     <item name="colorControlNormal">?colorTextPrimary</item>
     <item name="android:textColorPrimary">?colorTextPrimary</item>
     <item name="android:textColorSecondary">?colorTextSecondary</item>
@@ -17,6 +21,9 @@
 
   <style name="Widget.AppBarOverlay.Light" parent="ThemeOverlay.AppCompat.ActionBar">
     <item name="drawerArrowStyle">@style/Widget.DrawerArrowToggle.Light</item>
+  </style>
+
+  <style name="Widget.AppBarOverlay.Light.Auto" parent="Widget.AppBarOverlay.Light">
     <item name="colorControlNormal">?colorTextPrimary</item>
     <item name="android:textColorPrimary">?colorTextPrimary</item>
     <item name="android:textColorSecondary">?colorTextSecondary</item>
@@ -30,11 +37,15 @@
     <item name="color">?attr/colorControlNormal</item>
   </style>
 
-  <style name="Widget.PopupOverlay" parent="ThemeOverlay.AppCompat">
+  <style name="Widget.PopupOverlay" parent="ThemeOverlay.AppCompat" />
+
+  <style name="Widget.PopupOverlay.Auto" parent="Widget.PopupOverlay">
     <item name="android:colorBackground">?colorBackgroundCard</item>
   </style>
 
-  <style name="Widget.PopupOverlay.Light" parent="ThemeOverlay.AppCompat.Light">
+  <style name="Widget.PopupOverlay.Light" parent="ThemeOverlay.AppCompat.Light" />
+
+  <style name="Widget.PopupOverlay.Light.Auto" parent="Widget.PopupOverlay.Light">
     <item name="android:colorBackground">?colorBackgroundCard</item>
   </style>
 

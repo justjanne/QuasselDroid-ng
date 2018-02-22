@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <ScrollView
+    android:id="@+id/chatline_scroller"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_marginBottom="8dp"
+    app:layout_constraintBottom_toTopOf="@+id/formatting_toolbar_container"
+    app:layout_constraintEnd_toStartOf="@+id/send"
+    app:layout_constraintHorizontal_bias="1.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.0">
+
+    <android.support.v7.widget.AppCompatEditText
+      android:id="@+id/chatline"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@android:color/transparent"
+      android:gravity="top"
+      android:hint="@string/label_placeholder"
+      android:imeOptions="actionSend|flagNoEnterAction"
+      android:inputType="textCapSentences|textAutoCorrect|textShortMessage"
+      android:paddingBottom="17dp"
+      android:paddingLeft="20dp"
+      android:paddingRight="20dp"
+      android:paddingTop="17dp"
+      android:textColor="?attr/colorForeground"
+      android:textSize="16sp" />
+
+  </ScrollView>
+
+  <android.support.v7.widget.AppCompatImageButton
+    android:id="@+id/send"
+    style="?attr/buttonStyleSmall"
+    android:layout_width="?attr/actionBarSize"
+    android:layout_height="?attr/actionBarSize"
+    android:layout_gravity="top"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:padding="12dp"
+    android:scaleType="fitXY"
+    android:tint="?attr/colorAccent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:srcCompat="@drawable/ic_send" />
+
+  <android.support.design.widget.AppBarLayout
+    android:id="@+id/formatting_toolbar_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorBackgroundCard"
+    app:layout_constraintBottom_toBottomOf="parent">
+
+    <android.support.v7.widget.Toolbar
+      android:id="@+id/formatting_toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize">
+
+      <android.support.v7.widget.ActionMenuView
+        android:id="@+id/formatting_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize" />
+
+    </android.support.v7.widget.Toolbar>
+
+  </android.support.design.widget.AppBarLayout>
+</android.support.constraint.ConstraintLayout>

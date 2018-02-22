@@ -2,14 +2,7 @@
 
 <resources>
   <color name="quassel_light_background">#fafafa</color>
-
-  <style name="Widget.AppBarOverlay.Quassel_Light" parent="Widget.AppBarOverlay.Light">
-    <item name="colorControlNormal">@color/colorFillDark</item>
-    <item name="android:textColorPrimary">@color/colorFillDark</item>
-  </style>
   <style name="Theme.ChatTheme.Quassel_Light" parent="Theme.ChatTheme.Light">
-    <item name="actionBarTheme">@style/Widget.AppBarOverlay.Quassel_Light</item>
-
     <item name="senderColor0">#cc0000</item>
     <item name="senderColor1">#006cad</item>
     <item name="senderColor2">#4d9900</item>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:theme="?attr/actionBarTheme">
+
+  <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize">
+
+    <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:contentInsetStartWithNavigation="0dp"
+      app:popupTheme="?attr/actionBarPopupTheme">
+
+      <fragment
+        android:id="@+id/fragment_toolbar"
+        android:name="de.kuschku.quasseldroid_ng.ui.chat.ToolbarFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        tools:layout="@layout/fragment_toolbar" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
+      android:id="@+id/progressBar"
+      style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal.NoPadding"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      app:mpb_progressStyle="horizontal"
+      app:mpb_setBothDrawables="true"
+      app:mpb_useIntrinsicPadding="false"
+      tools:indeterminate="true" />
+  </FrameLayout>
+
+</android.support.design.widget.AppBarLayout>

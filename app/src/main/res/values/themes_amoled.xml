@@ -2,7 +2,8 @@
 
 <resources>
   <color name="amoled_background">#000000</color>
-  <style name="Theme.ChatTheme.Amoled" parent="Theme.ChatTheme">
+
+  <style name="Theme.ChatTheme.Amoled" parent="Theme.ChatTheme.Auto">
     <item name="colorPrimary">#000</item>
     <item name="colorPrimaryDark">#000</item>
     <item name="colorAccent">@color/colorAccent</item>

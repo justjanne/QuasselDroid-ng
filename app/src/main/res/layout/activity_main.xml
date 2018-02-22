@@ -6,68 +6,7 @@
   android:layout_height="match_parent"
   android:fitsSystemWindows="true">
 
-  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
-
-    <android.support.design.widget.AppBarLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:theme="?attr/actionBarTheme">
-
-      <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
-
-        <android.support.v7.widget.Toolbar
-          android:id="@+id/toolbar"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          app:contentInsetStartWithNavigation="0dp"
-          app:popupTheme="?attr/actionBarPopupTheme">
-
-          <fragment
-            android:id="@+id/fragment_toolbar"
-            android:name="de.kuschku.quasseldroid_ng.ui.chat.ToolbarFragment"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            tools:layout="@layout/fragment_toolbar" />
-
-        </android.support.v7.widget.Toolbar>
-
-        <de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
-          android:id="@+id/progressBar"
-          style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal.NoPadding"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_gravity="bottom"
-          app:mpb_progressStyle="horizontal"
-          app:mpb_setBothDrawables="true"
-          app:mpb_useIntrinsicPadding="false"
-          tools:indeterminate="true" />
-      </FrameLayout>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <fragment
-      android:id="@+id/fragment_messages"
-      android:name="de.kuschku.quasseldroid_ng.ui.chat.messages.MessageListFragment"
-      android:layout_width="match_parent"
-      android:layout_height="0dip"
-      android:layout_weight="1"
-      tools:layout="@layout/fragment_messages" />
-
-    <fragment
-      android:id="@+id/fragment_editor"
-      android:name="de.kuschku.quasseldroid_ng.ui.chat.EditorFragment"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      tools:layout="@layout/fragment_editor" />
-
-  </LinearLayout>
+  <include layout="@layout/layout_main" />
 
   <fragment
     android:id="@+id/fragment_nick_list"

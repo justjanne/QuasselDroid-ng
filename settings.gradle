@@ -1,3 +1,3 @@
-include ':invokerannotations', ':invokergenerator', ':lib', ':malheur', ':app'
+include ':invokerannotations', ':invokergenerator', ':lib', ':malheur', ':app', ":slidingpanel"
 
 rootProject.buildFileName = 'build.gradle.kts'
