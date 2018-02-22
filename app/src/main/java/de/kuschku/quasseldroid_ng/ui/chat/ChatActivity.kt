@@ -126,14 +126,6 @@ class ChatActivity : ServiceBoundActivity() {
       progressBar.toggle(
         status != ConnectionState.CONNECTED && status != ConnectionState.DISCONNECTED
       )
-
-      snackbar?.dismiss()
-      snackbar = Snackbar.make(
-        findViewById(R.id.toolbar),
-        status.name,
-        Snackbar.LENGTH_SHORT
-      )
-      snackbar?.show()
     }
     )
 

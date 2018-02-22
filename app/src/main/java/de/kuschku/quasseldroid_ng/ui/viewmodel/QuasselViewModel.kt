@@ -94,18 +94,8 @@ class QuasselViewModel : ViewModel() {
       bufferSyncer.liveBufferInfos().switchMap {
         val info = bufferSyncer.bufferInfo(id)
         val network = session.networks[info?.networkId]
-        if (info == null) {
-          Observable.just(
-            ToolbarFragment.BufferData(
-              description = "Info was null"
-            )
-          )
-        } else if (network == null) {
-          Observable.just(
-            ToolbarFragment.BufferData(
-              description = "Network was null"
-            )
-          )
+        if (info == null || network == null) {
+          Observable.just(ToolbarFragment.BufferData())
         } else {
           when (info.type.toInt()) {
             BufferInfo.Type.QueryBuffer.toInt()   -> {
@@ -149,11 +139,7 @@ class QuasselViewModel : ViewModel() {
         }
       }
     } else {
-      Observable.just(
-        ToolbarFragment.BufferData(
-          description = "buffersyncer was null"
-        )
-      )
+      Observable.just(ToolbarFragment.BufferData())
     }
   }
 
