@@ -25,7 +25,7 @@
     <item name="senderColorF">#3176b3</item>
 
     <item name="colorForeground">#FFFFFF</item>
-    <item name="colorForegroundHighlight">#FFFFFF</item>
+    <item name="colorForegroundHighlight">#DE000000</item>
     <item name="colorForegroundSecondary">#B3FFFFFF</item>
     <item name="colorForegroundAction">#7986cb</item>
     <item name="colorForegroundNotice">#916409</item>
@@ -35,7 +35,7 @@
 
     <item name="colorBackground">#000000</item>
     <item name="android:windowBackground">@color/amoled_background</item>
-    <item name="colorBackgroundHighlight">#FFA726</item>
+    <item name="colorBackgroundHighlight">#FFCA28</item>
     <item name="colorBackgroundSecondary">@null</item>
     <item name="colorBackgroundCard">#000000</item>
     <item name="colorBackgroundDialog">#000000</item>
