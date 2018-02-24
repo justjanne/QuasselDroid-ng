@@ -35,8 +35,8 @@ class Session(
 
   override val aliasManager = AliasManager(this)
   override val backlogManager = BacklogManager(this, backlogStorage)
-  override val bufferSyncer = BufferSyncer(this)
-  override val bufferViewManager = BufferViewManager(this)
+  override val bufferViewManager = BufferViewManager(this, this)
+  override val bufferSyncer = BufferSyncer(this, this)
   override val certManagers = mutableMapOf<IdentityId, CertManager>()
   override val coreInfo = CoreInfo(this)
   override val dccConfig = DccConfig(this)
@@ -76,17 +76,17 @@ class Session(
 
     f.networkIds?.forEach {
       val network = Network(it.value(-1), this)
-      networks.put(network.networkId(), network)
+      networks[network.networkId()] = network
     }
 
     f.identities?.forEach {
       val identity = Identity(this)
       identity.fromVariantMap(it.valueOr(::emptyMap))
       identity.initialized = true
-      identities.put(identity.id(), identity)
+      identities[identity.id()] = identity
 
       val certManager = CertManager(identity.id(), this)
-      certManagers.put(identity.id(), certManager)
+      certManagers[identity.id()] = certManager
     }
 
     isInitializing = true

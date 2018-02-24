@@ -1,13 +1,16 @@
 package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferViewManager
+import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SignalProxy
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
 class BufferViewManager constructor(
-  proxy: SignalProxy
+  proxy: SignalProxy,
+  private val session: ISession
 ) : SyncableObject(proxy, "BufferViewManager"), IBufferViewManager {
   override fun toVariantMap(): QVariantMap = mapOf(
     "BufferViewIds" to QVariant_(initBufferViewIds(), Type.QVariantList)
@@ -46,7 +49,7 @@ class BufferViewManager constructor(
     if (_bufferViewConfigs.contains(bufferViewConfigId))
       return
 
-    addBufferViewConfig(BufferViewConfig(bufferViewConfigId, proxy))
+    addBufferViewConfig(BufferViewConfig(bufferViewConfigId, proxy, session))
   }
 
   override fun deleteBufferViewConfig(bufferViewConfigId: Int) {
@@ -62,4 +65,10 @@ class BufferViewManager constructor(
 
   private val live_bufferViewConfigs: BehaviorSubject<Set<Int>>
     = BehaviorSubject.createDefault<Set<Int>>(emptySet())
+
+  fun handleBuffer(info: BufferInfo, bufferSyncer: BufferSyncer) {
+    for (bufferViewConfig in bufferViewConfigs()) {
+      bufferViewConfig.handleBuffer(info, bufferSyncer)
+    }
+  }
 }

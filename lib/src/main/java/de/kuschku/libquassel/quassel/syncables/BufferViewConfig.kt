@@ -3,13 +3,16 @@ package de.kuschku.libquassel.quassel.syncables
 import clamp
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferViewConfig
+import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SignalProxy
 import io.reactivex.subjects.BehaviorSubject
 
 class BufferViewConfig constructor(
   bufferViewId: Int,
-  proxy: SignalProxy
+  proxy: SignalProxy,
+  private val session: ISession
 ) : SyncableObject(proxy, "BufferViewConfig"), IBufferViewConfig {
   override fun init() {
     renameObject("$_bufferViewId")
@@ -26,6 +29,13 @@ class BufferViewConfig constructor(
     initSetRemovedBuffers(properties["RemovedBuffers"].valueOr(::emptyList))
     initSetTemporarilyRemovedBuffers(properties["TemporarilyRemovedBuffers"].valueOr(::emptyList))
     initSetProperties(properties)
+
+    val bufferSyncer = session.bufferSyncer
+    if (bufferSyncer != null) {
+      for (info in bufferSyncer.bufferInfos()) {
+        handleBuffer(info, bufferSyncer)
+      }
+    }
   }
 
   override fun initBufferList(): QVariantList = _buffers.map {
@@ -252,5 +262,20 @@ class BufferViewConfig constructor(
   object NameComparator : Comparator<BufferViewConfig> {
     override fun compare(a: BufferViewConfig?, b: BufferViewConfig?)
       = (a?.bufferViewName() ?: "").compareTo((b?.bufferViewName() ?: ""), true)
+  }
+
+  fun handleBuffer(info: BufferInfo, bufferSyncer: BufferSyncer) {
+    if (_addNewBuffersAutomatically &&
+        !_buffers.contains(info.bufferId) &&
+        !_temporarilyRemovedBuffers.contains(info.bufferId) &&
+        !_removedBuffers.contains(info.bufferId)) {
+      val position = if (_sortAlphabetically) {
+        val sortedBuffers = _buffers.mapNotNull { bufferSyncer.bufferInfo(it)?.bufferName }
+        -sortedBuffers.binarySearch(info.bufferName)
+      } else {
+        _buffers.size
+      }
+      requestAddBuffer(info.bufferId, position)
+    }
   }
 }

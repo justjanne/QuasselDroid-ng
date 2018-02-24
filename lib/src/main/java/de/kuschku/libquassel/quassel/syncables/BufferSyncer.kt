@@ -4,12 +4,14 @@ import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferSyncer
+import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SignalProxy
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
 class BufferSyncer constructor(
-  proxy: SignalProxy
+  proxy: SignalProxy,
+  private val session: ISession
 ) : SyncableObject(proxy, "BufferSyncer"), IBufferSyncer {
   fun lastSeenMsg(buffer: BufferId): MsgId = _lastSeenMsg[buffer] ?: 0
   fun liveLastSeenMsg(buffer: BufferId): Observable<MsgId>
@@ -39,6 +41,7 @@ class BufferSyncer constructor(
   fun liveBufferInfo(bufferId: BufferId)
     = live_bufferInfos.map { bufferInfo(bufferId) }.distinctUntilChanged()
 
+  fun bufferInfos(): Collection<BufferInfo> = _bufferInfos.values
   fun liveBufferInfos(): Observable<Map<BufferId, BufferInfo>> = live_bufferInfos
 
   override fun toVariantMap(): QVariantMap = mapOf(
@@ -158,9 +161,14 @@ class BufferSyncer constructor(
   }
 
   fun bufferInfoUpdated(info: BufferInfo) {
-    if (info != _bufferInfos[info.bufferId]) {
+    val oldInfo = _bufferInfos[info.bufferId]
+    if (info != oldInfo) {
       _bufferInfos[info.bufferId] = info
       live_bufferInfos.onNext(_bufferInfos)
+
+      if (oldInfo == null) {
+        session.bufferViewManager?.handleBuffer(info, this)
+      }
     }
   }
 
