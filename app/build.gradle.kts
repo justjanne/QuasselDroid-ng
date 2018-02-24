@@ -144,6 +144,12 @@ dependencies {
 
   // Quality Assurance
   implementation(project(":malheur"))
+  withVersion("1.5.4") {
+    debugImplementation("com.squareup.leakcanary", "leakcanary-android", version)
+    releaseImplementation("com.squareup.leakcanary", "leakcanary-android-no-op", version)
+    testImplementation("com.squareup.leakcanary", "leakcanary-android-no-op", version)
+    androidTestImplementation("com.squareup.leakcanary", "leakcanary-android-no-op", version)
+  }
 
   testImplementation("junit", "junit", "4.12")
   withVersion("1.0.1") {

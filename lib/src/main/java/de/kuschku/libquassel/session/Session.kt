@@ -124,7 +124,6 @@ class Session(
   override fun handle(f: SignalProxyMessage.HeartBeatReply): Boolean {
     val now = Instant.now()
     val latency = now.toEpochMilli() - f.timestamp.toEpochMilli()
-    log(INFO, "Session", "Latency of $latency ms")
     lag.onNext(latency)
     return true
   }
