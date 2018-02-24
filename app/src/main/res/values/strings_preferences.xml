@@ -30,6 +30,15 @@
     <item>GRUVBOX_DARK</item>
   </string-array>
 
+  <string name="preference_monospace_key" translatable="false">monospace</string>
+  <string name="preference_monospace_title">Use Monospace Font</string>
+
+  <string name="preference_show_seconds_key" translatable="false">show_seconds</string>
+  <string name="preference_show_seconds_title">Show Seconds</string>
+
+  <string name="preference_use_24h_clock_key" translatable="false">use_24h_clock</string>
+  <string name="preference_use_24h_clock_title">Use 24h Clock</string>
+
   <string name="preference_colorize_mirc_key" translatable="false">colorize_mirc</string>
   <string name="preference_colorize_mirc_title">Use mIRC Colors</string>
   <string name="preference_colorize_mirc_summaryon">Show mIRC colors in messages</string>
@@ -67,14 +76,9 @@
     <item>NONE</item>
   </string-array>
 
-  <string name="preference_monospace_key" translatable="false">monospace</string>
-  <string name="preference_monospace_title">Use Monospace Font</string>
-
-  <string name="preference_show_seconds_key" translatable="false">show_seconds</string>
-  <string name="preference_show_seconds_title">Show Seconds</string>
-
-  <string name="preference_use_24h_clock_key" translatable="false">use_24h_clock</string>
-  <string name="preference_use_24h_clock_title">Use 24h Clock</string>
+  <string name="preference_hostmask_key" translatable="false">hostmask</string>
+  <string name="preference_hostmask_title">Show Hostmask</string>
+  <string name="preference_hostmask_summary">Display the full nick!ident@host in messages</string>
 
   <string name="preference_show_lag_key" translatable="false">show_lag</string>
   <string name="preference_show_lag_title">Show lag</string>

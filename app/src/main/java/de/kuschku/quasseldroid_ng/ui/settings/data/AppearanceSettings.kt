@@ -10,6 +10,7 @@ data class AppearanceSettings(
   val useMonospace: Boolean = false,
   val showSeconds: Boolean = false,
   val use24hClock: Boolean = true,
+  val showHostmask: Boolean = false,
   val showLag: Boolean = true,
   val theme: Theme = Theme.QUASSEL_LIGHT
 ) {

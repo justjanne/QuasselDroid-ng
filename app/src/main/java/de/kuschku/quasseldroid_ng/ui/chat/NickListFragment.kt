@@ -52,6 +52,14 @@ class NickListFragment : ServiceBoundFragment() {
       viewModel.nickData.map {
         it.map {
           it.copy(
+            modes = when (appearanceSettings.showPrefix) {
+              AppearanceSettings.ShowPrefixMode.ALL -> it.modes
+              else                                  -> it.modes.substring(
+                0, Math.min(
+                it.modes.length, 1
+              )
+              )
+            },
             realname = ircFormatDeserializer?.formatString(
               it.realname.toString(), appearanceSettings.colorizeMirc
             ) ?: it.realname

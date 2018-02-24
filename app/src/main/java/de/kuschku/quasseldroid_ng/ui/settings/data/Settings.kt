@@ -14,6 +14,18 @@ object Settings {
           AppearanceSettings.DEFAULT.theme.name
         )
       ),
+      useMonospace = getBoolean(
+        context.getString(R.string.preference_monospace_key),
+        AppearanceSettings.DEFAULT.useMonospace
+      ),
+      showSeconds = getBoolean(
+        context.getString(R.string.preference_show_seconds_key),
+        AppearanceSettings.DEFAULT.showSeconds
+      ),
+      use24hClock = getBoolean(
+        context.getString(R.string.preference_use_24h_clock_key),
+        AppearanceSettings.DEFAULT.use24hClock
+      ),
       showPrefix = ShowPrefixMode.valueOf(
         getString(
           context.getString(R.string.preference_show_prefix_key),
@@ -30,17 +42,9 @@ object Settings {
         context.getString(R.string.preference_colorize_mirc_key),
         AppearanceSettings.DEFAULT.colorizeMirc
       ),
-      useMonospace = getBoolean(
-        context.getString(R.string.preference_monospace_key),
-        AppearanceSettings.DEFAULT.useMonospace
-      ),
-      showSeconds = getBoolean(
-        context.getString(R.string.preference_show_seconds_key),
-        AppearanceSettings.DEFAULT.showSeconds
-      ),
-      use24hClock = getBoolean(
-        context.getString(R.string.preference_use_24h_clock_key),
-        AppearanceSettings.DEFAULT.use24hClock
+      showHostmask = getBoolean(
+        context.getString(R.string.preference_hostmask_key),
+        AppearanceSettings.DEFAULT.showHostmask
       ),
       showLag = getBoolean(
         context.getString(R.string.preference_show_lag_key),
