@@ -86,4 +86,13 @@
   <string name="preference_dynamic_fetch_key" translatable="false">dynamic_fetch</string>
   <string name="preference_dynamic_fetch_title">Dynamic Fetch Amount</string>
   <string name="preference_dynamic_fetch_summary">The number of backlog messages to fetch each time</string>
+
+
+  <string name="preference_connection_title">Connection</string>
+
+  <string name="preference_show_notification_key" translatable="false">show_notification</string>
+  <string name="preference_show_notification_title">Show notification</string>
+  <string name="preference_show_notification_summary">Keeps QuasselDroid always connected by showing a persistent notification</string>
+
+  <string name="preference_notification_id_key" translatable="false">notification_id</string>
 </resources>

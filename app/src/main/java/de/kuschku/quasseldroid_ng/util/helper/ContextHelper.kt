@@ -1,8 +1,10 @@
 package de.kuschku.quasseldroid_ng.util.helper
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.preference.PreferenceManager
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
@@ -38,3 +40,7 @@ fun Context.getCompatColor(@ColorRes id: Int): Int {
     this.resources.getColor(id)
   }
 }
+
+
+fun <T> Context.sharedPreferences(f: SharedPreferences.() -> T) =
+  PreferenceManager.getDefaultSharedPreferences(this).f()

@@ -1,20 +1,12 @@
 package de.kuschku.quasseldroid_ng.ui.settings.data
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.preference.PreferenceManager
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings.*
+import de.kuschku.quasseldroid_ng.util.helper.sharedPreferences
 
 object Settings {
-  private fun <T> settings(context: Context,
-                           f: SharedPreferences.() -> T) = PreferenceManager.getDefaultSharedPreferences(
-    context
-  ).f()
-
-  fun appearance(context: Context) = settings(
-    context
-  ) {
+  fun appearance(context: Context) = context.sharedPreferences {
     AppearanceSettings(
       theme = Theme.valueOf(
         getString(
@@ -57,14 +49,21 @@ object Settings {
     )
   }
 
-  fun backlog(context: Context) = settings(
-    context
-  ) {
+  fun backlog(context: Context) = context.sharedPreferences {
     BacklogSettings(
       dynamicAmount = getString(
         context.getString(R.string.preference_dynamic_fetch_key),
         BacklogSettings.DEFAULT.dynamicAmount.toString()
       ).toIntOrNull() ?: BacklogSettings.DEFAULT.dynamicAmount
+    )
+  }
+
+  fun connection(context: Context) = context.sharedPreferences {
+    ConnectionSettings(
+      showNotification = getBoolean(
+        context.getString(R.string.preference_show_notification_key),
+        ConnectionSettings.DEFAULT.showNotification
+      )
     )
   }
 }

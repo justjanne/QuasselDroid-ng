@@ -4,13 +4,17 @@ import android.annotation.SuppressLint
 import android.arch.lifecycle.LifecycleService
 import android.arch.lifecycle.Observer
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Binder
+import android.support.v7.preference.PreferenceManager
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.session.*
 import de.kuschku.quasseldroid_ng.BuildConfig
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselBacklogStorage
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
+import de.kuschku.quasseldroid_ng.ui.settings.data.ConnectionSettings
+import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.compatibility.AndroidHandlerService
 import de.kuschku.quasseldroid_ng.util.helper.toLiveData
@@ -19,10 +23,32 @@ import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.X509TrustManager
 
-class QuasselService : LifecycleService() {
+class QuasselService : LifecycleService(), SharedPreferences.OnSharedPreferenceChangeListener {
+  override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+    val connectionSettings = Settings.connection(this)
+    if (this.connectionSettings.showNotification != connectionSettings.showNotification) {
+      this.connectionSettings = connectionSettings
+
+      updateNotification(connectionSettings.showNotification)
+    }
+  }
+
+  private lateinit var notificationManager: de.kuschku.quasseldroid_ng.util.NotificationManager
+
+  private fun updateNotification(showNotification: Boolean) {
+    if (showNotification) {
+      val (id, notification) = notificationManager.notificationBackground()
+      startForeground(id, notification)
+    } else {
+      stopForeground(true)
+    }
+  }
+
   private lateinit var sessionManager: SessionManager
 
   private lateinit var clientData: ClientData
+
+  private lateinit var connectionSettings: ConnectionSettings
 
   private val trustManager = object : X509TrustManager {
     @SuppressLint("TrustAllX509TrustManager")
@@ -126,6 +152,15 @@ class QuasselService : LifecycleService() {
         sessionManager.reconnect()
       }
       )
+
+    connectionSettings = Settings.connection(this)
+
+    PreferenceManager.getDefaultSharedPreferences(this)
+      .registerOnSharedPreferenceChangeListener(this)
+
+    notificationManager = de.kuschku.quasseldroid_ng.util.NotificationManager(this)
+    notificationManager.init()
+    updateNotification(connectionSettings.showNotification)
   }
 
   override fun onBind(intent: Intent?): QuasselBinder {
