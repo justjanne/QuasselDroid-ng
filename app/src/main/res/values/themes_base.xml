@@ -43,6 +43,7 @@
     <item name="colorTextPrimary">#dedede</item>
     <item name="colorTextSecondary">#8a8a8a</item>
     <item name="colorDivider">#1FFFFFFF</item>
+    <item name="android:textColorHint">?colorTextSecondary</item>
 
     <item name="colorFill">@color/colorFillDark</item>
     <item name="colorOffline">@color/colorOfflineDark</item>
@@ -89,6 +90,7 @@
     <item name="colorTextPrimary">#212121</item>
     <item name="colorTextSecondary">#757575</item>
     <item name="colorDivider">#1F000000</item>
+    <item name="android:textColorHint">?colorTextSecondary</item>
 
     <item name="colorFill">@color/colorFillLight</item>
     <item name="colorOffline">@color/colorOfflineLight</item>

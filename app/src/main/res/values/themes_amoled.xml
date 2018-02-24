@@ -34,6 +34,8 @@
 
     <item name="colorForegroundMirc">0x0</item>
 
+    <item name="colorDivider">#1FFFFFFF</item>
+
     <item name="colorBackground">#000000</item>
     <item name="android:windowBackground">@color/amoled_background</item>
     <item name="colorBackgroundHighlight">#ffaf3b</item>
