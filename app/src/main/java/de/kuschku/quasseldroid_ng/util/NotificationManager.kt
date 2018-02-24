@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid_ng.util
 
 import android.annotation.TargetApi
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.support.v4.app.NotificationCompat
+import android.support.v4.app.NotificationManagerCompat
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.ui.setup.accounts.AccountSelectionActivity
 import de.kuschku.quasseldroid_ng.util.helper.editApply
@@ -49,7 +49,7 @@ class NotificationManager(private val context: Context) {
     id
   }
 
-  fun notificationBackground(): Pair<Int, Notification> {
+  fun notificationBackground(): Handle {
     val notification = NotificationCompat.Builder(
       context.applicationContext,
       context.getString(R.string.notification_channel_background)
@@ -60,15 +60,21 @@ class NotificationManager(private val context: Context) {
           Intent(context.applicationContext, AccountSelectionActivity::class.java), 0
         )
       )
-      .setContentText(context.getString(R.string.label_running_in_background))
       .setSmallIcon(R.mipmap.ic_launcher_recents)
       .setPriority(NotificationCompat.PRIORITY_MIN)
-      .build()
+    return Handle(BACKGROUND_NOTIFICATION_ID, notification)
+  }
 
-    return BACKGROUND_NOTIFICATION_ID to notification
+  fun notify(handle: Handle) {
+    NotificationManagerCompat.from(context).notify(handle.id, handle.builder.build())
   }
 
   companion object {
     val BACKGROUND_NOTIFICATION_ID = Int.MAX_VALUE
   }
+
+  data class Handle(
+    val id: Int,
+    val builder: NotificationCompat.Builder
+  )
 }

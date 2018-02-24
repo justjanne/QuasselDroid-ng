@@ -42,5 +42,10 @@ fun Context.getCompatColor(@ColorRes id: Int): Int {
 }
 
 
-fun <T> Context.sharedPreferences(f: SharedPreferences.() -> T) =
-  PreferenceManager.getDefaultSharedPreferences(this).f()
+fun <T> Context.sharedPreferences(name: String? = null, mode: Int = 0,
+                                  f: SharedPreferences.() -> T) =
+  if (name == null) {
+    PreferenceManager.getDefaultSharedPreferences(this).f()
+  } else {
+    getSharedPreferences(name, mode).f()
+  }

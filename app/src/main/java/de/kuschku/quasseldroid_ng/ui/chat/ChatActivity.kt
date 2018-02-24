@@ -21,19 +21,20 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.session.ConnectionState
-import de.kuschku.libquassel.session.SocketAddress
 import de.kuschku.libquassel.util.and
 import de.kuschku.libquassel.util.or
 import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
-import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.ui.settings.SettingsActivity
 import de.kuschku.quasseldroid_ng.ui.settings.data.BacklogSettings
 import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
-import de.kuschku.quasseldroid_ng.util.helper.*
+import de.kuschku.quasseldroid_ng.util.helper.editApply
+import de.kuschku.quasseldroid_ng.util.helper.invoke
+import de.kuschku.quasseldroid_ng.util.helper.let
+import de.kuschku.quasseldroid_ng.util.helper.sharedPreferences
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
 
@@ -133,57 +134,22 @@ class ChatActivity : ServiceBoundActivity() {
     )
     drawerToggle.syncState()
 
-    backend.observeSticky(
-      this, Observer { backendValue ->
-      if (backendValue != null) {
-        val database = AccountDatabase.Creator.init(this)
-        handler.post {
-          if (accountId == -1L) {
-            setResult(Activity.RESULT_OK)
-            finish()
-          }
-          val account = database.accounts().findById(accountId)
-          if (account == null) {
-            setResult(Activity.RESULT_OK)
-            finish()
-          } else {
-            backendValue.connectUnlessConnected(
-              SocketAddress(account.host, account.port),
-              account.user,
-              account.pass,
-              true
-            )
-          }
+    viewModel.connectionProgress.observe(this, Observer { it ->
+      val (state, progress, max) = it ?: Triple(ConnectionState.DISCONNECTED, 0, 0)
+      when (state) {
+        ConnectionState.CONNECTED, ConnectionState.DISCONNECTED -> {
+          progressBar.hide()
+        }
+        ConnectionState.INIT                                    -> {
+          progressBar.isIndeterminate = true
+        }
+        else                                                    -> {
+          progressBar.isIndeterminate = false
+          progressBar.progress = progress
+          progressBar.max = max
         }
       }
-    }
-    )
-
-    viewModel.connectionState.observe(
-      this, Observer {
-      val status = it ?: ConnectionState.DISCONNECTED
-
-      if (status == ConnectionState.CONNECTED) {
-        progressBar.progress = 1
-        progressBar.max = 1
-      } else {
-        progressBar.isIndeterminate = status != ConnectionState.INIT
-      }
-
-      progressBar.toggle(
-        status != ConnectionState.CONNECTED && status != ConnectionState.DISCONNECTED
-      )
-    }
-    )
-
-    viewModel.initState.observe(
-      this, Observer {
-      val (progress, max) = it ?: 0 to 0
-
-      progressBar.max = max
-      progressBar.progress = progress
-    }
-    )
+    })
 
     editorPanel.addPanelSlideListener(panelSlideListener)
     editorPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
@@ -291,10 +257,11 @@ class ChatActivity : ServiceBoundActivity() {
     }
     R.id.disconnect      -> {
       handler.post {
-        getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editApply {
-          putBoolean(Keys.Status.reconnect, false)
+        sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
+          editApply {
+            putBoolean(Keys.Status.reconnect, false)
+          }
         }
-        backend()?.disconnect(true)
         setResult(Activity.RESULT_OK)
         finish()
       }

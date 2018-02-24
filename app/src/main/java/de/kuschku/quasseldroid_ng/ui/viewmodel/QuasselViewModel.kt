@@ -48,8 +48,7 @@ class QuasselViewModel : ViewModel() {
   val sessionManager = backend.map { it.sessionManager() }
   val session = sessionManager.switchMapRx { it.session }
 
-  val connectionState = sessionManager.switchMapRx { it.state }
-  val initState = sessionManager.switchMapRx { it.initStatus }
+  val connectionProgress = sessionManager.switchMapRx { it.connectionProgress }
 
   private val bufferViewManager = session.map(ISession::bufferViewManager)
 
