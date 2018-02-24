@@ -3,9 +3,7 @@ package de.kuschku.quasseldroid_ng.ui.chat.buffers
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.*
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -44,6 +42,30 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   private var ircFormatDeserializer: IrcFormatDeserializer? = null
   private lateinit var appearanceSettings: AppearanceSettings
 
+  private var isInActionMode = false
+
+  private val actionModeCallback = object : ActionMode.Callback {
+    override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+      return true
+    }
+
+    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+      isInActionMode = true
+      return true
+    }
+
+    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+      return false
+    }
+
+    override fun onDestroyActionMode(mode: ActionMode?) {
+      isInActionMode = false
+      listAdapter.unselectAll()
+    }
+  }
+
+  private lateinit var listAdapter: BufferListAdapter
+
   override fun onCreate(savedInstanceState: Bundle?) {
     handlerThread.onCreate()
     super.onCreate(savedInstanceState)
@@ -75,7 +97,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       }
     }
 
-    chatList.adapter = BufferListAdapter(
+    listAdapter = BufferListAdapter(
       this,
       viewModel.bufferList.zip(database.filtered().listen(accountId)).map {
         val (data, activityList) = it
@@ -107,8 +129,12 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       },
       handlerThread::post,
       activity!!::runOnUiThread,
-      clickListener
+      clickListener,
+      longClickListener
     )
+    chatList.adapter = listAdapter
+
+    chatListToolbar.startActionMode(actionModeCallback)
     chatList.layoutManager = LinearLayoutManager(context)
     chatList.itemAnimator = DefaultItemAnimator()
     chatList.setItemViewCacheSize(10)
@@ -121,6 +147,17 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   }
 
   private val clickListener: ((BufferId) -> Unit)? = {
-    viewModel.setBuffer(it)
+    if (isInActionMode) {
+      longClickListener?.invoke(it)
+    } else {
+      viewModel.setBuffer(it)
+    }
+  }
+
+  private val longClickListener: ((BufferId) -> Unit)? = {
+    if (!isInActionMode) {
+      chatListToolbar.startActionMode(actionModeCallback)
+    }
+    listAdapter.toggleSelection(it)
   }
 }

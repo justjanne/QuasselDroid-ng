@@ -30,11 +30,14 @@ class BufferListAdapter(
   liveData: LiveData<List<BufferProps>?>,
   runInBackground: (() -> Unit) -> Any,
   runOnUiThread: (Runnable) -> Any,
-  private val clickListener: ((BufferId) -> Unit)? = null
+  private val clickListener: ((BufferId) -> Unit)? = null,
+  private val longClickListener: ((BufferId) -> Unit)? = null
 ) : RecyclerView.Adapter<BufferListAdapter.BufferViewHolder>() {
   var data = mutableListOf<BufferListItem>()
 
-  var collapsedNetworks = MutableLiveData<Set<NetworkId>>()
+  private val collapsedNetworks = MutableLiveData<Set<NetworkId>>()
+
+  val selectedBuffers = MutableLiveData<Set<BufferId>>()
 
   fun expandListener(networkId: NetworkId) {
     if (collapsedNetworks.value.orEmpty().contains(networkId))
@@ -43,14 +46,29 @@ class BufferListAdapter(
       collapsedNetworks.postValue(collapsedNetworks.value.orEmpty() + networkId)
   }
 
+  fun toggleSelection(buffer: BufferId) {
+    val value = selectedBuffers.value.orEmpty()
+    if (value.contains(buffer)) {
+      selectedBuffers.value = value - buffer
+    } else {
+      selectedBuffers.value = value + buffer
+    }
+  }
+
+  fun unselectAll() {
+    selectedBuffers.value = emptySet()
+  }
+
   init {
     collapsedNetworks.value = emptySet()
+    selectedBuffers.value = emptySet()
 
-    liveData.zip(collapsedNetworks).observe(
-      lifecycleOwner, Observer { it: Pair<List<BufferProps>?, Set<NetworkId>>? ->
+    liveData.zip(collapsedNetworks, selectedBuffers).observe(
+      lifecycleOwner, Observer { it: Triple<List<BufferProps>?, Set<NetworkId>, Set<BufferId>>? ->
       runInBackground {
         val list = it?.first ?: emptyList()
         val collapsedNetworks = it?.second ?: emptySet()
+        val selected = it?.third ?: emptySet()
 
         val old: List<BufferListItem> = data
         val new: List<BufferListItem> = list.sortedBy { props ->
@@ -61,7 +79,8 @@ class BufferListAdapter(
             BufferListItem(
               props,
               BufferState(
-                networkExpanded = !collapsedNetworks.contains(props.network.networkId)
+                networkExpanded = !collapsedNetworks.contains(props.network.networkId),
+                selected = selected.contains(props.info.bufferId)
               )
             )
         }.filter { (props, state) ->
@@ -97,25 +116,29 @@ class BufferListAdapter(
       LayoutInflater.from(parent.context).inflate(
         R.layout.widget_buffer, parent, false
       ),
-      clickListener = clickListener
+      clickListener = clickListener,
+      longClickListener = longClickListener
     )
     BufferInfo.Type.QueryBuffer.toInt()   -> BufferViewHolder.QueryBuffer(
       LayoutInflater.from(parent.context).inflate(
         R.layout.widget_buffer, parent, false
       ),
-      clickListener = clickListener
+      clickListener = clickListener,
+      longClickListener = longClickListener
     )
     BufferInfo.Type.GroupBuffer.toInt()   -> BufferViewHolder.GroupBuffer(
       LayoutInflater.from(parent.context).inflate(
         R.layout.widget_buffer, parent, false
       ),
-      clickListener = clickListener
+      clickListener = clickListener,
+      longClickListener = longClickListener
     )
     BufferInfo.Type.StatusBuffer.toInt()  -> BufferViewHolder.StatusBuffer(
       LayoutInflater.from(parent.context).inflate(
         R.layout.widget_network, parent, false
       ),
       clickListener = clickListener,
+      longClickListener = longClickListener,
       expansionListener = ::expandListener
     )
     else                                  -> throw IllegalArgumentException(
@@ -146,7 +169,8 @@ class BufferListAdapter(
   )
 
   data class BufferState(
-    val networkExpanded: Boolean
+    val networkExpanded: Boolean,
+    val selected: Boolean
   )
 
   abstract class BufferViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -155,6 +179,7 @@ class BufferListAdapter(
     class StatusBuffer(
       itemView: View,
       private val clickListener: ((BufferId) -> Unit)? = null,
+      private val longClickListener: ((BufferId) -> Unit)? = null,
       private val expansionListener: ((NetworkId) -> Unit)? = null
     ) : BufferViewHolder(itemView) {
       @BindView(R.id.status)
@@ -177,6 +202,16 @@ class BufferListAdapter(
           val buffer = bufferId
           if (buffer != null)
             clickListener?.invoke(buffer)
+        }
+
+        itemView.setOnLongClickListener {
+          val buffer = bufferId
+          if (buffer != null) {
+            longClickListener?.invoke(buffer)
+            true
+          } else {
+            false
+          }
         }
 
         status.setOnClickListener {
@@ -210,6 +245,8 @@ class BufferListAdapter(
           }
         )
 
+        itemView.isSelected = state.selected
+
         if (state.networkExpanded) {
           status.setImageDrawable(itemView.context.getCompatDrawable(R.drawable.ic_chevron_up))
         } else {
@@ -220,7 +257,8 @@ class BufferListAdapter(
 
     class GroupBuffer(
       itemView: View,
-      private val clickListener: ((BufferId) -> Unit)? = null
+      private val clickListener: ((BufferId) -> Unit)? = null,
+      private val longClickListener: ((BufferId) -> Unit)? = null
     ) : BufferViewHolder(itemView) {
       @BindView(R.id.status)
       lateinit var status: ImageView
@@ -247,6 +285,16 @@ class BufferListAdapter(
           val buffer = bufferId
           if (buffer != null)
             clickListener?.invoke(buffer)
+        }
+
+        itemView.setOnLongClickListener {
+          val buffer = bufferId
+          if (buffer != null) {
+            longClickListener?.invoke(buffer)
+            true
+          } else {
+            false
+          }
         }
 
         online = itemView.context.getCompatDrawable(R.drawable.ic_status).mutate()
@@ -282,6 +330,8 @@ class BufferListAdapter(
           }
         )
 
+        itemView.isSelected = state.selected
+
         description.visibleIf(props.description.isNotBlank())
 
         status.setImageDrawable(
@@ -295,7 +345,8 @@ class BufferListAdapter(
 
     class ChannelBuffer(
       itemView: View,
-      private val clickListener: ((BufferId) -> Unit)? = null
+      private val clickListener: ((BufferId) -> Unit)? = null,
+      private val longClickListener: ((BufferId) -> Unit)? = null
     ) : BufferViewHolder(itemView) {
       @BindView(R.id.status)
       lateinit var status: ImageView
@@ -322,6 +373,16 @@ class BufferListAdapter(
           val buffer = bufferId
           if (buffer != null)
             clickListener?.invoke(buffer)
+        }
+
+        itemView.setOnLongClickListener {
+          val buffer = bufferId
+          if (buffer != null) {
+            longClickListener?.invoke(buffer)
+            true
+          } else {
+            false
+          }
         }
 
         online = itemView.context.getCompatDrawable(R.drawable.ic_status_channel).mutate()
@@ -357,6 +418,8 @@ class BufferListAdapter(
           }
         )
 
+        itemView.isSelected = state.selected
+
         description.visibleIf(props.description.isNotBlank())
 
         status.setImageDrawable(
@@ -370,7 +433,8 @@ class BufferListAdapter(
 
     class QueryBuffer(
       itemView: View,
-      private val clickListener: ((BufferId) -> Unit)? = null
+      private val clickListener: ((BufferId) -> Unit)? = null,
+      private val longClickListener: ((BufferId) -> Unit)? = null
     ) : BufferViewHolder(itemView) {
       @BindView(R.id.status)
       lateinit var status: ImageView
@@ -398,6 +462,16 @@ class BufferListAdapter(
           val buffer = bufferId
           if (buffer != null)
             clickListener?.invoke(buffer)
+        }
+
+        itemView.setOnLongClickListener {
+          val buffer = bufferId
+          if (buffer != null) {
+            longClickListener?.invoke(buffer)
+            true
+          } else {
+            false
+          }
         }
 
         online = itemView.context.getCompatDrawable(R.drawable.ic_status).mutate()
@@ -434,6 +508,8 @@ class BufferListAdapter(
             else                                                        -> none
           }
         )
+
+        itemView.isSelected = state.selected
 
         description.visibleIf(props.description.isNotBlank())
 

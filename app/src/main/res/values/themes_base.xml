@@ -4,22 +4,30 @@
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
+
+    <item name="backgroundMenuItem">@drawable/bg_menuitem_dark</item>
   </style>
 
   <style name="Theme.AppTheme.Light" parent="Theme.AppCompat.Light.DarkActionBar">
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
+
+    <item name="backgroundMenuItem">@drawable/bg_menuitem_light</item>
   </style>
 
   <style name="Theme.AppTheme.NoActionBar" parent="Theme.AppTheme">
     <item name="windowActionBar">false</item>
     <item name="windowNoTitle">true</item>
+
+    <item name="backgroundMenuItem">@drawable/bg_menuitem_dark</item>
   </style>
 
   <style name="Theme.AppTheme.Light.NoActionBar" parent="Theme.AppTheme.Light">
     <item name="windowActionBar">false</item>
     <item name="windowNoTitle">true</item>
+
+    <item name="backgroundMenuItem">@drawable/bg_menuitem_light</item>
   </style>
 
   <style name="Theme.Base.ChatTheme" parent="Theme.AppTheme.NoActionBar" />
@@ -37,6 +45,8 @@
     <item name="formatBarTheme">@style/Widget.AppBarOverlay</item>
     <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     <item name="actionBarPopupTheme">@style/Widget.PopupOverlay</item>
+
+    <item name="backgroundMenuItem">@drawable/bg_menuitem_dark</item>
 
     <item name="windowActionModeOverlay">true</item>
 
@@ -84,6 +94,8 @@
     <item name="formatBarTheme">@style/Widget.AppBarOverlay.Light</item>
     <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     <item name="actionBarPopupTheme">@style/Widget.PopupOverlay.Light</item>
+
+    <item name="backgroundMenuItem">@drawable/bg_menuitem_light</item>
 
     <item name="windowActionModeOverlay">true</item>
 

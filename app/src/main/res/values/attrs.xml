@@ -71,4 +71,7 @@
   <attr name="buttonTheme" format="reference" />
   <attr name="buttonThemeColored" format="reference" />
   <attr name="cardStyle" format="reference" />
+
+  <!-- Menu Items -->
+  <attr name="backgroundMenuItem" format="reference" />
 </resources>
