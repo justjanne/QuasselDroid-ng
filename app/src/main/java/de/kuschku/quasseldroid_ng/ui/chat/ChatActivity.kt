@@ -5,7 +5,10 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.design.widget.Snackbar
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -38,7 +41,7 @@ import de.kuschku.quasseldroid_ng.util.helper.sharedPreferences
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
 
-class ChatActivity : ServiceBoundActivity() {
+class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
   @BindView(R.id.drawerLayout)
   lateinit var drawerLayout: DrawerLayout
 
@@ -129,8 +132,8 @@ class ChatActivity : ServiceBoundActivity() {
     drawerToggle = ActionBarDrawerToggle(
       this,
       drawerLayout,
-      R.string.label_drawer_open,
-      R.string.label_drawer_close
+      R.string.label_open,
+      R.string.label_close
     )
     drawerToggle.syncState()
 
@@ -171,9 +174,25 @@ class ChatActivity : ServiceBoundActivity() {
     outState?.putInt("OPEN_BUFFER", viewModel.getBuffer().value ?: -1)
   }
 
+  override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+    super.onSaveInstanceState(outState, outPersistentState)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      outPersistentState?.putInt("OPEN_BUFFER", viewModel.getBuffer().value ?: -1)
+    }
+  }
+
   override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
     super.onRestoreInstanceState(savedInstanceState)
     viewModel.setBuffer(savedInstanceState?.getInt("OPEN_BUFFER", -1) ?: -1)
+  }
+
+  override fun onRestoreInstanceState(savedInstanceState: Bundle?,
+                                      persistentState: PersistableBundle?) {
+    super.onRestoreInstanceState(savedInstanceState, persistentState)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      val fallback = persistentState?.getInt("OPEN_BUFFER", -1) ?: -1
+      viewModel.setBuffer(savedInstanceState?.getInt("OPEN_BUFFER", fallback) ?: fallback)
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {

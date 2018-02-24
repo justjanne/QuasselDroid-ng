@@ -17,8 +17,9 @@ import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.ui.settings.data.ConnectionSettings
 import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
-import de.kuschku.quasseldroid_ng.util.NotificationManager
+import de.kuschku.quasseldroid_ng.util.QuasseldroidNotificationManager
 import de.kuschku.quasseldroid_ng.util.compatibility.AndroidHandlerService
+import de.kuschku.quasseldroid_ng.util.helper.editApply
 import de.kuschku.quasseldroid_ng.util.helper.sharedPreferences
 import de.kuschku.quasseldroid_ng.util.helper.toLiveData
 import io.reactivex.Observable
@@ -60,8 +61,8 @@ class QuasselService : LifecycleService(),
   private var accountId: Long = -1
   private var reconnect: Boolean = false
 
-  private lateinit var notificationManager: NotificationManager
-  private var notificationHandle: NotificationManager.Handle? = null
+  private lateinit var notificationManager: QuasseldroidNotificationManager
+  private var notificationHandle: QuasseldroidNotificationManager.Handle? = null
   private var progress = Triple(ConnectionState.DISCONNECTED, 0, 0)
 
   private fun updateNotificationStatus() {
@@ -75,7 +76,23 @@ class QuasselService : LifecycleService(),
     }
   }
 
-  private fun updateNotification(handle: NotificationManager.Handle) {
+  override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    val result = super.onStartCommand(intent, flags, startId)
+    handleIntent(intent)
+    return result
+  }
+
+  private fun handleIntent(intent: Intent?) {
+    if (intent?.getBooleanExtra("disconnect", false) == true) {
+      sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
+        editApply {
+          putBoolean(Keys.Status.reconnect, false)
+        }
+      }
+    }
+  }
+
+  private fun updateNotification(handle: QuasseldroidNotificationManager.Handle) {
     val (state, progress, max) = this.progress
     when (state) {
       ConnectionState.DISCONNECTED -> {
@@ -103,10 +120,10 @@ class QuasselService : LifecycleService(),
 
   private fun updateConnection(accountId: Long, reconnect: Boolean) {
     handler.post {
-      val account = if (accountId == -1L || !reconnect) {
-        null
-      } else {
+      val account = if (accountId != -1L && reconnect) {
         AccountDatabase.Creator.init(this).accounts().findById(accountId)
+      } else {
+        null
       }
 
       if (account == null) {
@@ -192,17 +209,13 @@ class QuasselService : LifecycleService(),
     override fun disconnect(forever: Boolean) {
       handler.post {
         backendImplementation.disconnect(forever)
-        if (forever)
+        if (forever) {
           stopSelf()
+        }
       }
     }
 
     override fun sessionManager() = backendImplementation.sessionManager()
-  }
-
-  override fun onDestroy() {
-    handler.onDestroy()
-    super.onDestroy()
   }
 
   private lateinit var database: QuasselDatabase
@@ -263,10 +276,26 @@ class QuasselService : LifecycleService(),
 
     registerReceiver(receiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
 
-    notificationManager = NotificationManager(this)
+    notificationManager = QuasseldroidNotificationManager(this)
     notificationManager.init()
 
     update()
+  }
+
+  override fun onDestroy() {
+    sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
+      unregisterOnSharedPreferenceChangeListener(this@QuasselService)
+    }
+    sharedPreferences {
+      unregisterOnSharedPreferenceChangeListener(this@QuasselService)
+    }
+
+    unregisterReceiver(receiver)
+
+    notificationHandle?.let { notificationManager.remove(it) }
+
+    handler.onDestroy()
+    super.onDestroy()
   }
 
   override fun onBind(intent: Intent?): QuasselBinder {

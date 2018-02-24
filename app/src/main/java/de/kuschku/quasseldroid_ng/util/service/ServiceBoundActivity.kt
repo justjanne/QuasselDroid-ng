@@ -1,7 +1,9 @@
 package de.kuschku.quasseldroid_ng.util.service
 
+import android.app.Activity
 import android.arch.lifecycle.LiveData
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
@@ -12,9 +14,11 @@ import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
 import de.kuschku.quasseldroid_ng.ui.settings.data.ConnectionSettings
 import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
+import de.kuschku.quasseldroid_ng.util.helper.sharedPreferences
 import de.kuschku.quasseldroid_ng.util.helper.updateRecentsHeaderIfExisting
 
-abstract class ServiceBoundActivity : AppCompatActivity() {
+abstract class ServiceBoundActivity : AppCompatActivity(),
+                                      SharedPreferences.OnSharedPreferenceChangeListener {
   @DrawableRes
   protected val icon: Int = R.mipmap.ic_launcher_recents
   @ColorRes
@@ -54,13 +58,33 @@ abstract class ServiceBoundActivity : AppCompatActivity() {
     if (Settings.appearance(this) != appearanceSettings) {
       recreate()
     }
+    sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
+      registerOnSharedPreferenceChangeListener(this@ServiceBoundActivity)
+    }
     connection.bind()
+    checkConnection()
     super.onStart()
   }
 
   override fun onStop() {
     super.onStop()
     connection.unbind()
+    sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
+      unregisterOnSharedPreferenceChangeListener(this@ServiceBoundActivity)
+    }
+  }
+
+  override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+    checkConnection()
+  }
+
+  private fun checkConnection() {
+    if (!sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
+        getBoolean(Keys.Status.reconnect, false)
+      }) {
+      setResult(Activity.RESULT_OK)
+      finish()
+    }
   }
 
   protected fun stopService() {

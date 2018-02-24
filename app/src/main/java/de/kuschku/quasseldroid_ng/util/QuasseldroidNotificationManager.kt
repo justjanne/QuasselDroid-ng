@@ -10,12 +10,13 @@ import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 import de.kuschku.quasseldroid_ng.R
-import de.kuschku.quasseldroid_ng.ui.setup.accounts.AccountSelectionActivity
+import de.kuschku.quasseldroid_ng.service.QuasselService
+import de.kuschku.quasseldroid_ng.ui.chat.ChatActivity
 import de.kuschku.quasseldroid_ng.util.helper.editApply
 import de.kuschku.quasseldroid_ng.util.helper.sharedPreferences
 import de.kuschku.quasseldroid_ng.util.helper.systemService
 
-class NotificationManager(private val context: Context) {
+class QuasseldroidNotificationManager(private val context: Context) {
   fun init() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
       prepareChannels()
@@ -50,16 +51,23 @@ class NotificationManager(private val context: Context) {
   }
 
   fun notificationBackground(): Handle {
+    val intentOpen = Intent(context.applicationContext, ChatActivity::class.java)
+    intentOpen.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+    val pendingIntentOpen = PendingIntent.getActivity(context.applicationContext, 0, intentOpen, 0)
+
+    val intentDisconnect = Intent(context, QuasselService::class.java)
+    intentDisconnect.putExtra("disconnect", true)
+    val pendingIntentDisconnect = PendingIntent.getService(
+      context, 0, intentDisconnect, PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
     val notification = NotificationCompat.Builder(
       context.applicationContext,
       context.getString(R.string.notification_channel_background)
     )
-      .setContentIntent(
-        PendingIntent.getActivity(
-          context.applicationContext, 0,
-          Intent(context.applicationContext, AccountSelectionActivity::class.java), 0
-        )
-      )
+      .setContentIntent(pendingIntentOpen)
+      .addAction(0, context.getString(R.string.label_open), pendingIntentOpen)
+      .addAction(0, context.getString(R.string.label_disconnect), pendingIntentDisconnect)
       .setSmallIcon(R.mipmap.ic_launcher_recents)
       .setPriority(NotificationCompat.PRIORITY_MIN)
     return Handle(BACKGROUND_NOTIFICATION_ID, notification)
@@ -67,6 +75,10 @@ class NotificationManager(private val context: Context) {
 
   fun notify(handle: Handle) {
     NotificationManagerCompat.from(context).notify(handle.id, handle.builder.build())
+  }
+
+  fun remove(handle: Handle) {
+    NotificationManagerCompat.from(context).cancel(handle.id)
   }
 
   companion object {

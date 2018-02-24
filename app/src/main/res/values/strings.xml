@@ -8,8 +8,8 @@
   <string name="label_clear_backlog">Clear Backlog</string>
   <string name="label_delete">Delete</string>
   <string name="label_disconnect">Disconnect</string>
-  <string name="label_drawer_close">Close</string>
-  <string name="label_drawer_open">Open</string>
+  <string name="label_close">Close</string>
+  <string name="label_open">Open</string>
   <string name="label_filter_messages">Filter Messages</string>
   <string name="label_input_history">Input History</string>
   <string name="label_placeholder">Write a message…</string>
