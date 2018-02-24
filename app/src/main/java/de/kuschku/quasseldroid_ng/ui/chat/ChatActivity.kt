@@ -110,8 +110,10 @@ class ChatActivity : ServiceBoundActivity() {
     chatline.setOnKeyListener { _, keyCode, event ->
       if (event.hasNoModifiers() && (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)) {
         send()
+        true
+      } else {
+        false
       }
-      false
     }
 
     viewModel.getBuffer().observe(
@@ -187,7 +189,7 @@ class ChatActivity : ServiceBoundActivity() {
     editorPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
   }
 
-  fun send() {
+  private fun send() {
     viewModel.session { session ->
       viewModel.getBuffer().let { bufferId ->
         session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
