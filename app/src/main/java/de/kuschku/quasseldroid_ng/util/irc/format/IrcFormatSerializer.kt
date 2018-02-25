@@ -100,7 +100,7 @@ class IrcFormatSerializer internal constructor(private val context: Context) {
     fun writeHexColor(foreground: Int?) {
       out.append(CODE_HEXCOLOR)
       if (foreground != null) {
-        out.append(String.format(Locale.US, "%06x", foreground))
+        out.append(String.format(Locale.US, "%06x", foreground and 0x00FFFFFF))
       }
     }
 
