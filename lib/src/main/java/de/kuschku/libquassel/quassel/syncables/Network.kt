@@ -434,6 +434,7 @@ class Network constructor(
     if (_connectionState == actualConnectionState)
       return
     _connectionState = actualConnectionState
+    liveConnectionState.onNext(_connectionState)
     super.setConnectionState(state)
   }
 

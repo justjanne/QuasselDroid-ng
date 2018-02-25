@@ -17,6 +17,7 @@ import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.ui.chat.NickListAdapter
 import de.kuschku.quasseldroid_ng.ui.chat.ToolbarFragment
 import de.kuschku.quasseldroid_ng.ui.chat.buffers.BufferListAdapter
+import de.kuschku.quasseldroid_ng.ui.chat.buffers.BufferViewConfigFragment
 import de.kuschku.quasseldroid_ng.util.helper.map
 import de.kuschku.quasseldroid_ng.util.helper.switchMap
 import de.kuschku.quasseldroid_ng.util.helper.switchMapRx
@@ -191,6 +192,40 @@ class QuasselViewModel : ViewModel() {
     }
   }
 
+  val selectedBufferId = MutableLiveData<BufferId>()
+  val selectedBuffer = session.zip(selectedBufferId).switchMapRx { (session, buffer) ->
+    val bufferSyncer = session?.bufferSyncer
+    if (bufferSyncer != null) {
+      val info = bufferSyncer.bufferInfo(buffer)
+      if (info != null) {
+        val network = session.networks[info.networkId]
+        when (info.type.enabledValues().firstOrNull()) {
+          Buffer_Type.StatusBuffer  -> {
+            network?.liveConnectionState?.map {
+              BufferViewConfigFragment.SelectedItem(
+                info,
+                connectionState = it
+              )
+            }
+          }
+          Buffer_Type.ChannelBuffer -> {
+            network?.liveIrcChannel(info.bufferName)?.map {
+              BufferViewConfigFragment.SelectedItem(
+                info,
+                joined = it != IrcChannel.NULL
+              )
+            }
+          }
+          else                      -> Observable.just(BufferViewConfigFragment.SelectedItem(info))
+        }
+      } else {
+        Observable.just(BufferViewConfigFragment.SelectedItem(info))
+      }
+    } else {
+      Observable.just(BufferViewConfigFragment.SelectedItem())
+    }
+  }
+
   val bufferList: LiveData<Pair<BufferViewConfig?, List<BufferListAdapter.BufferProps>>?> = session.zip(
     bufferViewConfig
   ).switchMapRx { (session, config) ->
@@ -221,7 +256,7 @@ class QuasselViewModel : ViewModel() {
                     }
                   }.switchMap { (activity, highlights) ->
                       when (info.type.toInt()) {
-                        BufferInfo.Type.QueryBuffer.toInt() -> {
+                        BufferInfo.Type.QueryBuffer.toInt()   -> {
                           network.liveIrcUser(info.bufferName).switchMap { user ->
                             user.live_away.switchMap { away ->
                               user.live_realName.map { realName ->
@@ -260,7 +295,7 @@ class QuasselViewModel : ViewModel() {
                             }
                           }
                         }
-                        BufferInfo.Type.StatusBuffer.toInt() -> {
+                        BufferInfo.Type.StatusBuffer.toInt()  -> {
                           network.liveConnectionState.map {
                             BufferListAdapter.BufferProps(
                               info = info,
@@ -272,7 +307,7 @@ class QuasselViewModel : ViewModel() {
                             )
                           }
                         }
-                        else -> Observable.just(
+                        else                                  -> Observable.just(
                           BufferListAdapter.BufferProps(
                             info = info,
                             network = network.networkInfo(),

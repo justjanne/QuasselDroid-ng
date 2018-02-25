@@ -6,12 +6,15 @@
 
   <string name="label_cancel">Cancel</string>
   <string name="label_clear_backlog">Clear Backlog</string>
+  <string name="label_close">Close</string>
+  <string name="label_connect">Connect</string>
   <string name="label_delete">Delete</string>
   <string name="label_disconnect">Disconnect</string>
-  <string name="label_close">Close</string>
-  <string name="label_open">Open</string>
   <string name="label_filter_messages">Filter Messages</string>
   <string name="label_input_history">Input History</string>
+  <string name="label_join">Join</string>
+  <string name="label_open">Open</string>
+  <string name="label_part">Part</string>
   <string name="label_placeholder">Write a message…</string>
   <string name="label_save">Save</string>
   <string name="label_select_multiple">Select</string>
@@ -27,4 +30,8 @@
   <string name="notification_channel_background_title">Background</string>
   <string name="notification_channel_highlight" translatable="false">highlight</string>
   <string name="notification_channel_highlight_title">Highlight</string>
+
+  <string name="buffer_delete_confirmation">Do you want to delete this buffer permanently?</string>
+  <string name="label_yes">Yes</string>
+  <string name="label_no">No</string>
 </resources>

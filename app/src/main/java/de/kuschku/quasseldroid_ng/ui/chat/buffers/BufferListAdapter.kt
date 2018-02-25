@@ -28,6 +28,7 @@ import de.kuschku.quasseldroid_ng.util.helper.zip
 class BufferListAdapter(
   lifecycleOwner: LifecycleOwner,
   liveData: LiveData<List<BufferProps>?>,
+  private val selectedBuffer: MutableLiveData<BufferId>,
   runInBackground: (() -> Unit) -> Any,
   runOnUiThread: (Runnable) -> Any,
   private val clickListener: ((BufferId) -> Unit)? = null,
@@ -37,8 +38,6 @@ class BufferListAdapter(
 
   private val collapsedNetworks = MutableLiveData<Set<NetworkId>>()
 
-  val selectedBuffers = MutableLiveData<Set<BufferId>>()
-
   fun expandListener(networkId: NetworkId) {
     if (collapsedNetworks.value.orEmpty().contains(networkId))
       collapsedNetworks.postValue(collapsedNetworks.value.orEmpty() - networkId)
@@ -47,28 +46,27 @@ class BufferListAdapter(
   }
 
   fun toggleSelection(buffer: BufferId) {
-    val value = selectedBuffers.value.orEmpty()
-    if (value.contains(buffer)) {
-      selectedBuffers.value = value - buffer
+    if (selectedBuffer.value == buffer) {
+      selectedBuffer.value = -1
     } else {
-      selectedBuffers.value = value + buffer
+      selectedBuffer.value = buffer
     }
   }
 
   fun unselectAll() {
-    selectedBuffers.value = emptySet()
+    selectedBuffer.value = -1
   }
 
   init {
     collapsedNetworks.value = emptySet()
-    selectedBuffers.value = emptySet()
+    selectedBuffer.value = -1
 
-    liveData.zip(collapsedNetworks, selectedBuffers).observe(
-      lifecycleOwner, Observer { it: Triple<List<BufferProps>?, Set<NetworkId>, Set<BufferId>>? ->
+    liveData.zip(collapsedNetworks, selectedBuffer).observe(
+      lifecycleOwner, Observer { it: Triple<List<BufferProps>?, Set<NetworkId>, BufferId>? ->
       runInBackground {
         val list = it?.first ?: emptyList()
         val collapsedNetworks = it?.second ?: emptySet()
-        val selected = it?.third ?: emptySet()
+        val selected = it?.third ?: -1
 
         val old: List<BufferListItem> = data
         val new: List<BufferListItem> = list.sortedBy { props ->
@@ -80,7 +78,7 @@ class BufferListAdapter(
               props,
               BufferState(
                 networkExpanded = !collapsedNetworks.contains(props.network.networkId),
-                selected = selected.contains(props.info.bufferId)
+                selected = selected == props.info.bufferId
               )
             )
         }.filter { (props, state) ->

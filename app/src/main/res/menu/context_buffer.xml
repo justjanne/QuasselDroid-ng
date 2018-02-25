@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+    android:id="@+id/action_connect"
+    android:title="@string/label_connect" />
+  <item
+    android:id="@+id/action_disconnect"
+    android:title="@string/label_disconnect" />
+  <item
+    android:id="@+id/action_join"
+    android:title="@string/label_join" />
+  <item
+    android:id="@+id/action_part"
+    android:title="@string/label_part" />
+  <item
+    android:id="@+id/action_delete"
+    android:title="@string/label_delete" />
+  <!--<item android:title="Merge" />-->
+</menu>

@@ -1,5 +1,6 @@
 package de.kuschku.quasseldroid_ng.ui.chat.buffers
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.*
@@ -7,10 +8,13 @@ import android.view.*
 import android.widget.AdapterView
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.afollestad.materialdialogs.MaterialDialog
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message_Type
+import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.libquassel.util.minus
 import de.kuschku.quasseldroid_ng.R
@@ -42,15 +46,63 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   private var ircFormatDeserializer: IrcFormatDeserializer? = null
   private lateinit var appearanceSettings: AppearanceSettings
 
-  private var isInActionMode = false
+  private var actionMode: ActionMode? = null
 
   private val actionModeCallback = object : ActionMode.Callback {
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-      return true
+      val selected = viewModel.selectedBuffer.value
+      val info = selected?.info
+      val session = viewModel.session.value
+      val network = session?.networks?.get(selected?.info?.networkId)
+
+      return if (info != null && session != null) {
+        when (item?.itemId) {
+          R.id.action_connect    -> {
+            network?.requestConnect()
+            actionMode?.finish()
+            true
+          }
+          R.id.action_disconnect -> {
+            network?.requestDisconnect()
+            actionMode?.finish()
+            true
+          }
+          R.id.action_join       -> {
+            session.rpcHandler?.sendInput(info, "/join ${info.bufferName}")
+            actionMode?.finish()
+            true
+          }
+          R.id.action_part       -> {
+            session.rpcHandler?.sendInput(info, "/part ${info.bufferName}")
+            actionMode?.finish()
+            true
+          }
+          R.id.action_delete     -> {
+            MaterialDialog.Builder(activity!!)
+              .content(R.string.buffer_delete_confirmation)
+              .positiveText(R.string.label_yes)
+              .negativeText(R.string.label_no)
+              .negativeColorAttr(R.attr.colorTextPrimary)
+              .backgroundColorAttr(R.attr.colorBackgroundCard)
+              .contentColorAttr(R.attr.colorTextPrimary)
+              .onPositive { _, _ ->
+                session.bufferSyncer?.requestRemoveBuffer(selected.info.bufferId)
+              }
+              .build()
+              .show()
+            actionMode?.finish()
+            true
+          }
+          else                   -> false
+        }
+      } else {
+        false
+      }
     }
 
     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-      isInActionMode = true
+      actionMode = mode
+      mode?.menuInflater?.inflate(R.menu.context_buffer, menu)
       return true
     }
 
@@ -59,7 +111,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     }
 
     override fun onDestroyActionMode(mode: ActionMode?) {
-      isInActionMode = false
+      actionMode = null
       listAdapter.unselectAll()
     }
   }
@@ -127,12 +179,62 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
             props.info.type.hasFlag(Buffer_Type.StatusBuffer)
           }
       },
+      viewModel.selectedBufferId,
       handlerThread::post,
       activity!!::runOnUiThread,
       clickListener,
       longClickListener
     )
     chatList.adapter = listAdapter
+
+    viewModel.selectedBuffer.observe(this, Observer { buffer ->
+      if (buffer != null) {
+        val menu = actionMode?.menu
+        if (menu != null) {
+          val allActions = setOf(
+            R.id.action_connect,
+            R.id.action_disconnect,
+            R.id.action_join,
+            R.id.action_part,
+            R.id.action_delete
+          )
+
+          val availableActions = when (buffer.info?.type?.enabledValues()?.firstOrNull()) {
+            Buffer_Type.StatusBuffer  -> {
+              when (buffer.connectionState) {
+                INetwork.ConnectionState.Disconnected -> setOf(R.id.action_connect)
+                INetwork.ConnectionState.Initialized  -> setOf(R.id.action_disconnect)
+                else                                  -> setOf(
+                  R.id.action_connect, R.id.action_disconnect
+                )
+              }
+            }
+            Buffer_Type.ChannelBuffer -> {
+              if (buffer.joined) {
+                setOf(R.id.action_part)
+              } else {
+                setOf(R.id.action_join, R.id.action_delete)
+              }
+            }
+            Buffer_Type.QueryBuffer   -> {
+              setOf(R.id.action_delete)
+            }
+            else                      -> emptySet()
+          }
+
+          val unavailableActions = allActions - availableActions
+
+          for (action in availableActions) {
+            menu.findItem(action)?.isVisible = true
+          }
+          for (action in unavailableActions) {
+            menu.findItem(action)?.isVisible = false
+          }
+        }
+      } else {
+        actionMode?.finish()
+      }
+    })
 
     chatListToolbar.startActionMode(actionModeCallback)
     chatList.layoutManager = LinearLayoutManager(context)
@@ -147,7 +249,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   }
 
   private val clickListener: ((BufferId) -> Unit)? = {
-    if (isInActionMode) {
+    if (actionMode != null) {
       longClickListener?.invoke(it)
     } else {
       viewModel.setBuffer(it)
@@ -155,9 +257,15 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   }
 
   private val longClickListener: ((BufferId) -> Unit)? = {
-    if (!isInActionMode) {
+    if (actionMode == null) {
       chatListToolbar.startActionMode(actionModeCallback)
     }
     listAdapter.toggleSelection(it)
   }
+
+  data class SelectedItem(
+    val info: BufferInfo? = null,
+    val connectionState: INetwork.ConnectionState = INetwork.ConnectionState.Disconnected,
+    val joined: Boolean = false
+  )
 }
