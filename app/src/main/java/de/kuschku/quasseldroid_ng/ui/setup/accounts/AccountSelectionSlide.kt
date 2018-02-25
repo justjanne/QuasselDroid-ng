@@ -3,7 +3,6 @@ package de.kuschku.quasseldroid_ng.ui.setup.accounts
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.arch.paging.PagedList
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
@@ -24,21 +23,21 @@ class AccountSelectionSlide : SlideFragment() {
   @BindView(R.id.account_list)
   lateinit var accountList: RecyclerView
 
-  override fun isValid() = adapter.selectedItemId != -1L
+  override fun isValid() = adapter?.selectedItemId ?: -1L != -1L
 
   override val title = R.string.slideAccountSelectTitle
   override val description = R.string.slideAccountSelectDescription
 
   override fun setData(data: Bundle) {
     if (data.containsKey("selectedAccount"))
-      adapter.selectAccount(data.getLong("selectedAccount"))
+      adapter?.selectAccount(data.getLong("selectedAccount"))
   }
 
   override fun getData(data: Bundle) {
-    data.putLong("selectedAccount", adapter.selectedItemId)
+    data.putLong("selectedAccount", adapter?.selectedItemId ?: -1L)
   }
 
-  private val adapter = AccountAdapter()
+  private var adapter: AccountAdapter? = null
   override fun onCreateContent(inflater: LayoutInflater, container: ViewGroup?,
                                savedInstanceState: Bundle?): View {
     val view = inflater.inflate(R.layout.setup_select_account, container, false)
@@ -46,8 +45,8 @@ class AccountSelectionSlide : SlideFragment() {
     val accountViewModel = ViewModelProviders.of(this).get(
       AccountViewModel::class.java
     )
-    val firstObserver = object : Observer<PagedList<AccountDatabase.Account>?> {
-      override fun onChanged(t: PagedList<AccountDatabase.Account>?) {
+    val firstObserver = object : Observer<List<AccountDatabase.Account>?> {
+      override fun onChanged(t: List<AccountDatabase.Account>?) {
         if (t?.isEmpty() != false)
           startActivityForResult(
             Intent(context, AccountSetupActivity::class.java),
@@ -57,10 +56,12 @@ class AccountSelectionSlide : SlideFragment() {
       }
     }
     accountViewModel.accounts.observe(this, firstObserver)
-    accountViewModel.accounts.observe(this, Observer(adapter::setList))
     accountList.layoutManager = LinearLayoutManager(context)
     accountList.itemAnimator = DefaultItemAnimator()
+    val adapter = AccountAdapter(this, accountViewModel.accounts, accountViewModel.selectedItem)
+    this.adapter = adapter
     accountList.adapter = adapter
+
     adapter.addAddListener {
       startActivityForResult(Intent(context, AccountSetupActivity::class.java), -1)
     }

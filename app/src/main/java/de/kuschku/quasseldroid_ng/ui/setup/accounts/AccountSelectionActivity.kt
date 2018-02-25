@@ -27,7 +27,9 @@ class AccountSelectionActivity : SetupActivity() {
       putLong(Keys.Status.selectedAccount, data.getLong(Keys.Status.selectedAccount, -1))
       putBoolean(Keys.Status.reconnect, true)
     }
-    startActivityForResult(Intent(this, ChatActivity::class.java), REQUEST_CHAT)
+    val intent = Intent(this, ChatActivity::class.java)
+    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+    startActivityForResult(intent, REQUEST_CHAT)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +41,9 @@ class AccountSelectionActivity : SetupActivity() {
     setInitData(data)
 
     if (statusPreferences.getBoolean(Keys.Status.reconnect, false) && selectedAccount != -1L) {
-      startActivityForResult(Intent(this, ChatActivity::class.java), REQUEST_CHAT)
+      val intent = Intent(this, ChatActivity::class.java)
+      intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+      startActivityForResult(intent, REQUEST_CHAT)
     }
   }
 

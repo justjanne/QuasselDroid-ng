@@ -1,8 +1,11 @@
 package de.kuschku.quasseldroid_ng.ui.setup.accounts
 
 import android.annotation.SuppressLint
-import android.arch.paging.PagedListAdapter
-import android.support.v7.recyclerview.extensions.DiffCallback
+import android.arch.lifecycle.LifecycleOwner
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.AppCompatImageButton
 import android.support.v7.widget.AppCompatRadioButton
 import android.support.v7.widget.RecyclerView
@@ -14,16 +17,19 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
+import de.kuschku.quasseldroid_ng.util.helper.zip
 
-class AccountAdapter :
-  PagedListAdapter<AccountDatabase.Account, AccountAdapter.AccountViewHolder>(DIFF_CALLBACK) {
+class AccountAdapter(
+  owner: LifecycleOwner,
+  val liveData: LiveData<List<AccountDatabase.Account>>,
+  val selectedItem: MutableLiveData<Pair<Long, Long>>
+) : RecyclerView.Adapter<AccountAdapter.AccountViewHolder>() {
   private val actionListeners = mutableSetOf<(Long) -> Unit>()
   private val addListeners = mutableSetOf<() -> Unit>()
   private val selectionListeners = mutableSetOf<(Long) -> Unit>()
 
   private val clickListener = object : ItemListener {
     override fun onAction(id: Long, pos: Int) {
-      notifySelectionChanged(selectedItemView, pos)
       selectionListener.invoke(id)
     }
   }
@@ -36,16 +42,65 @@ class AccountAdapter :
     }
   }
 
+  private fun updateSelection(id: Long) {
+    selectedItem.value = Pair(selectedItem.value?.second ?: -1, id)
+  }
+
   private val selectionListener = { id: Long ->
-    selectedItemId = id
+    updateSelection(id)
     for (selectionListener in selectionListeners) {
       selectionListener.invoke(id)
     }
   }
 
-  private var selectedItemView = -1
-  var selectedItemId = -1L
-    private set
+  val selectedItemId
+    get() = selectedItem.value?.second
+
+  private var list: List<Pair<Boolean, AccountDatabase.Account>> = emptyList()
+
+  init {
+    selectedItem.value = Pair(-1, -1)
+
+    liveData.zip(selectedItem).observe(owner, Observer { it ->
+      val list = it?.first
+      val oldSelected = it?.second?.first ?: -1
+      val selected = it?.second?.second ?: -1
+
+      val oldList = this.list
+      val newList: List<Pair<Boolean, AccountDatabase.Account>> = list.orEmpty().map {
+        Pair(selected == it.id, it)
+      }
+      this.list = newList
+
+      DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+          val oldItem = oldList[oldItemPosition].second
+          val newItem = newList[newItemPosition].second
+
+          return oldItem.id == newItem.id
+        }
+
+        override fun getOldListSize(): Int {
+          return oldList.size
+        }
+
+        override fun getNewListSize(): Int {
+          return newList.size
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+          val oldItem = oldList[oldItemPosition].second
+          val newItem = newList[newItemPosition].second
+
+          return oldItem == newItem &&
+                 oldItem.id != selected &&
+                 newItem.id != selected &&
+                 oldItem.id != oldSelected &&
+                 newItem.id != oldSelected
+        }
+      }).dispatchUpdatesTo(this)
+    })
+  }
 
   private val addListener = {
     for (addListener in addListeners) {
@@ -81,16 +136,8 @@ class AccountAdapter :
                                 @SuppressLint("RecyclerView") position: Int) {
     when (holder) {
       is AccountViewHolder.Item -> {
-        val account = getItem(position)
-        if (account == null) {
-          holder.clear()
-        } else {
-          val selected = account.id == selectedItemId
-          if (selected) {
-            selectedItemView = position
-          }
-          holder.bind(account, selected)
-        }
+        val item = list[position]
+        holder.bind(item.second, item.first)
       }
       is AccountViewHolder.Add  -> {
       }
@@ -98,8 +145,8 @@ class AccountAdapter :
   }
 
   override fun getItemViewType(position: Int) = when (position) {
-    super.getItemCount() -> TYPE_ADD
-    else                 -> TYPE_ACCOUNT
+    list.size -> TYPE_ADD
+    else      -> TYPE_ACCOUNT
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
@@ -117,42 +164,16 @@ class AccountAdapter :
   }
 
   override fun getItemCount(): Int {
-    return super.getItemCount() + 1
+    return list.size + 1
   }
 
   companion object {
     private const val TYPE_ACCOUNT = 0
     private const val TYPE_ADD = 1
-
-    private val DIFF_CALLBACK = object : DiffCallback<AccountDatabase.Account>() {
-      override fun areContentsTheSame(oldItem: AccountDatabase.Account,
-                                      newItem: AccountDatabase.Account): Boolean {
-        return oldItem == newItem
-      }
-
-      override fun areItemsTheSame(oldItem: AccountDatabase.Account,
-                                   newItem: AccountDatabase.Account): Boolean {
-        return oldItem.id == newItem.id
-      }
-    }
   }
 
   fun selectAccount(id: Long) {
-    selectedItemView = -1
     selectionListener(id)
-  }
-
-  fun notifySelectionChanged(from: Int?, to: Int?) {
-    val _from = from ?: -1
-    val _to = to ?: -1
-
-    if (_from != -1)
-      notifyItemChanged(_from)
-
-    selectedItemView = _to
-
-    if (_to != -1)
-      notifyItemChanged(_to)
   }
 
   interface ItemListener {
