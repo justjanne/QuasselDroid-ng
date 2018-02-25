@@ -104,6 +104,10 @@ class IrcFormatSerializer internal constructor(private val context: Context) {
       }
     }
 
+    fun writeReset() {
+      out.append(CODE_RESET)
+    }
+
     var next: Int
     var foreground: Int? = null
     var background: Int? = null
@@ -195,8 +199,8 @@ class IrcFormatSerializer internal constructor(private val context: Context) {
       i = next
     }
 
-    if (bold || italic || underline || background != -1 || foreground != -1)
-      out.append(CODE_RESET)
+    if (bold || italic || underline || background != null || foreground != null)
+      writeReset()
   }
 
   companion object {

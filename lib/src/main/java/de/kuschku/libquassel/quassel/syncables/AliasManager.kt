@@ -89,11 +89,12 @@ class AliasManager constructor(
     } else {
       // check for aliases
       val split = msg.split(' ', ignoreCase = true, limit = 2)
-      val search: String = split.firstOrNull()
-                           ?: return
-      val found = _aliases.firstOrNull { it.name.equals(search, true) }
-                  ?: return
-      expand(found.expansion, info, split.getOrNull(1) ?: "", previousCommands)
+      val search: String? = split.firstOrNull()
+      if (search != null) {
+        val found = _aliases.firstOrNull { it.name.equals(search, true) }
+        if (found != null)
+          expand(found.expansion, info, split.getOrNull(1) ?: "", previousCommands)
+      }
     }
 
     previousCommands.add(IAliasManager.Command(info, msg))

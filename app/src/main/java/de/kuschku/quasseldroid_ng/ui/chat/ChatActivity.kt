@@ -24,6 +24,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.Message_Type
+import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.session.ConnectionState
 import de.kuschku.libquassel.util.and
 import de.kuschku.libquassel.util.or
@@ -169,9 +170,13 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       viewModel.session { session ->
         viewModel.getBuffer().let { bufferId ->
           session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
-            session.rpcHandler?.sendInput(
-              bufferInfo, ircFormatSerializer.toEscapeCodes(text)
+            val output = mutableListOf<IAliasManager.Command>()
+            session.aliasManager?.processInput(
+              bufferInfo, ircFormatSerializer.toEscapeCodes(text), output
             )
+            for (command in output) {
+              session.rpcHandler?.sendInput(command.buffer, command.message)
+            }
           }
         }
       }
