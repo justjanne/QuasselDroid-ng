@@ -173,6 +173,9 @@ class BufferViewConfig constructor(
   fun minimumActivity() = _minimumActivity
   fun showSearch() = _showSearch
 
+  fun buffers(): List<BufferId> = _buffers
+  fun removedBuffers(): Set<BufferId> = _removedBuffers
+  fun temporarilyRemovedBuffers(): Set<BufferId> = _temporarilyRemovedBuffers
 
   override fun setAddNewBuffersAutomatically(addNewBuffersAutomatically: Boolean) {
     _addNewBuffersAutomatically = addNewBuffersAutomatically
@@ -250,25 +253,25 @@ class BufferViewConfig constructor(
   private var _temporarilyRemovedBuffers: MutableSet<BufferId> = mutableSetOf()
   val live_config = BehaviorSubject.createDefault(this)
 
-  val live_buffers: BehaviorSubject<List<BufferId>>
-    = BehaviorSubject.createDefault<List<BufferId>>(emptyList())
+  val live_buffers: BehaviorSubject<List<BufferId>> = BehaviorSubject.createDefault<List<BufferId>>(
+    emptyList()
+  )
 
-  val live_removedBuffers: BehaviorSubject<Set<BufferId>>
-    = BehaviorSubject.createDefault<Set<BufferId>>(emptySet())
+  val live_removedBuffers: BehaviorSubject<Set<BufferId>> = BehaviorSubject.createDefault<Set<BufferId>>(
+    emptySet()
+  )
 
-  val live_temporarilyRemovedBuffers: BehaviorSubject<Set<BufferId>>
-    = BehaviorSubject.createDefault<Set<BufferId>>(emptySet())
+  val live_temporarilyRemovedBuffers: BehaviorSubject<Set<BufferId>> = BehaviorSubject.createDefault<Set<BufferId>>(
+    emptySet()
+  )
 
   object NameComparator : Comparator<BufferViewConfig> {
-    override fun compare(a: BufferViewConfig?, b: BufferViewConfig?)
-      = (a?.bufferViewName() ?: "").compareTo((b?.bufferViewName() ?: ""), true)
+    override fun compare(a: BufferViewConfig?, b: BufferViewConfig?) =
+      (a?.bufferViewName() ?: "").compareTo((b?.bufferViewName() ?: ""), true)
   }
 
-  fun handleBuffer(info: BufferInfo, bufferSyncer: BufferSyncer) {
-    if (_addNewBuffersAutomatically &&
-        !_buffers.contains(info.bufferId) &&
-        !_temporarilyRemovedBuffers.contains(info.bufferId) &&
-        !_removedBuffers.contains(info.bufferId)) {
+  fun requestAddBuffer(info: BufferInfo, bufferSyncer: BufferSyncer) {
+    if (!_buffers.contains(info.bufferId)) {
       val position = if (_sortAlphabetically) {
         val sortedBuffers = _buffers.mapNotNull { bufferSyncer.bufferInfo(it)?.bufferName }
         -sortedBuffers.binarySearch(info.bufferName)
@@ -276,6 +279,15 @@ class BufferViewConfig constructor(
         _buffers.size
       }
       requestAddBuffer(info.bufferId, position)
+    }
+  }
+
+  fun handleBuffer(info: BufferInfo, bufferSyncer: BufferSyncer) {
+    if (_addNewBuffersAutomatically &&
+        !_buffers.contains(info.bufferId) &&
+        !_temporarilyRemovedBuffers.contains(info.bufferId) &&
+        !_removedBuffers.contains(info.bufferId)) {
+      requestAddBuffer(info, bufferSyncer)
     }
   }
 }
