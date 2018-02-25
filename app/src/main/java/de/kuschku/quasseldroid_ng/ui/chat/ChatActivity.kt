@@ -1,5 +1,6 @@
 package de.kuschku.quasseldroid_ng.ui.chat
 
+import android.annotation.TargetApi
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -38,6 +39,7 @@ import de.kuschku.quasseldroid_ng.util.helper.editApply
 import de.kuschku.quasseldroid_ng.util.helper.invoke
 import de.kuschku.quasseldroid_ng.util.helper.let
 import de.kuschku.quasseldroid_ng.util.helper.sharedPreferences
+import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
 
@@ -72,6 +74,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   private lateinit var backlogSettings: BacklogSettings
 
+  private lateinit var ircFormatSerializer: IrcFormatSerializer
+
   private val panelSlideListener: SlidingUpPanelLayout.PanelSlideListener = object :
     SlidingUpPanelLayout.PanelSlideListener {
     override fun onPanelSlide(panel: View?, slideOffset: Float) = Unit
@@ -102,6 +106,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     viewModel = ViewModelProviders.of(this)[QuasselViewModel::class.java]
     viewModel.setBackend(this.backend)
     backlogSettings = Settings.backlog(this)
+    ircFormatSerializer = IrcFormatSerializer(this)
 
     database = QuasselDatabase.Creator.init(application)
 
@@ -162,7 +167,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     viewModel.session { session ->
       viewModel.getBuffer().let { bufferId ->
         session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
-          session.rpcHandler?.sendInput(bufferInfo, chatline.text.toString())
+          session.rpcHandler?.sendInput(
+            bufferInfo, ircFormatSerializer.toEscapeCodes(chatline.text)
+          )
         }
       }
     }
@@ -186,6 +193,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     viewModel.setBuffer(savedInstanceState?.getInt("OPEN_BUFFER", -1) ?: -1)
   }
 
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   override fun onRestoreInstanceState(savedInstanceState: Bundle?,
                                       persistentState: PersistableBundle?) {
     super.onRestoreInstanceState(savedInstanceState, persistentState)
