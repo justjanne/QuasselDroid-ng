@@ -344,7 +344,7 @@ class IrcFormatDeserializer(private val context: Context) {
 
     override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
       editable.setSpan(
-        IrcHexColorSpan(color), from, to,
+        IrcHexColorSpan(color or 0xFFFFFF.inv()), from, to,
         Spanned.SPAN_INCLUSIVE_EXCLUSIVE
       )
     }
