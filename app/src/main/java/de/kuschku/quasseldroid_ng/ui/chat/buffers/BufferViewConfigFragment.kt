@@ -53,7 +53,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       val selected = viewModel.selectedBuffer.value
       val info = selected?.info
       val session = viewModel.session.value
+      val bufferSyncer = session?.bufferSyncer
       val network = session?.networks?.get(selected?.info?.networkId)
+      val bufferViewConfig = viewModel.getBufferViewConfig().value
 
       return if (info != null && session != null) {
         when (item?.itemId) {
@@ -91,6 +93,20 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
               .build()
               .show()
             actionMode?.finish()
+            true
+          }
+          R.id.action_unhide     -> {
+            bufferSyncer?.let {
+              bufferViewConfig?.requestAddBuffer(info, bufferSyncer)
+            }
+            true
+          }
+          R.id.action_hide_temp  -> {
+            bufferViewConfig?.requestRemoveBuffer(info.bufferId)
+            true
+          }
+          R.id.action_hide_perm  -> {
+            bufferViewConfig?.requestRemoveBufferPermanently(info.bufferId)
             true
           }
           else                   -> false
@@ -180,6 +196,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
           }
       },
       viewModel.selectedBufferId,
+      viewModel.collapsedNetworks,
       handlerThread::post,
       activity!!::runOnUiThread,
       clickListener,
@@ -196,8 +213,26 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
             R.id.action_disconnect,
             R.id.action_join,
             R.id.action_part,
-            R.id.action_delete
+            R.id.action_delete,
+            R.id.action_unhide,
+            R.id.action_hide_temp,
+            R.id.action_hide_perm
           )
+
+          val visibilityActions = when (buffer.hiddenState) {
+            BufferListAdapter.HiddenState.VISIBLE          -> setOf(
+              R.id.action_hide_temp,
+              R.id.action_hide_perm
+            )
+            BufferListAdapter.HiddenState.HIDDEN_TEMPORARY -> setOf(
+              R.id.action_unhide,
+              R.id.action_hide_perm
+            )
+            BufferListAdapter.HiddenState.HIDDEN_PERMANENT -> setOf(
+              R.id.action_unhide,
+              R.id.action_hide_temp
+            )
+          }
 
           val availableActions = when (buffer.info?.type?.enabledValues()?.firstOrNull()) {
             Buffer_Type.StatusBuffer  -> {
@@ -214,12 +249,12 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                 setOf(R.id.action_part)
               } else {
                 setOf(R.id.action_join, R.id.action_delete)
-              }
+              } + visibilityActions
             }
             Buffer_Type.QueryBuffer   -> {
-              setOf(R.id.action_delete)
+              setOf(R.id.action_delete) + visibilityActions
             }
-            else                      -> emptySet()
+            else                      -> visibilityActions
           }
 
           val unavailableActions = allActions - availableActions
@@ -236,7 +271,17 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       }
     })
 
-    chatListToolbar.startActionMode(actionModeCallback)
+    chatListToolbar.inflateMenu(R.menu.context_bufferlist)
+    chatListToolbar.setOnMenuItemClickListener { item ->
+      when (item.itemId) {
+        R.id.action_show_hidden -> {
+          item.isChecked = !item.isChecked
+          viewModel.showHidden.value = item.isChecked
+          true
+        }
+        else                    -> false
+      }
+    }
     chatList.layoutManager = LinearLayoutManager(context)
     chatList.itemAnimator = DefaultItemAnimator()
     chatList.setItemViewCacheSize(10)
@@ -266,6 +311,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   data class SelectedItem(
     val info: BufferInfo? = null,
     val connectionState: INetwork.ConnectionState = INetwork.ConnectionState.Disconnected,
-    val joined: Boolean = false
+    val joined: Boolean = false,
+    val hiddenState: BufferListAdapter.HiddenState = BufferListAdapter.HiddenState.VISIBLE
   )
 }

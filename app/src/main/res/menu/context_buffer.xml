@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
   <item
     android:id="@+id/action_connect"
     android:title="@string/label_connect" />
@@ -15,5 +16,16 @@
   <item
     android:id="@+id/action_delete"
     android:title="@string/label_delete" />
-  <!--<item android:title="Merge" />-->
+  <item
+    android:id="@+id/action_unhide"
+    android:title="@string/label_unhide"
+    app:showAsAction="never" />
+  <item
+    android:id="@+id/action_hide_temp"
+    android:title="@string/label_hide_temp"
+    app:showAsAction="never" />
+  <item
+    android:id="@+id/action_hide_perm"
+    android:title="@string/label_hide_perm"
+    app:showAsAction="never" />
 </menu>

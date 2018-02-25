@@ -29,14 +29,13 @@ class BufferListAdapter(
   lifecycleOwner: LifecycleOwner,
   liveData: LiveData<List<BufferProps>?>,
   private val selectedBuffer: MutableLiveData<BufferId>,
+  private val collapsedNetworks: MutableLiveData<Set<NetworkId>>,
   runInBackground: (() -> Unit) -> Any,
   runOnUiThread: (Runnable) -> Any,
   private val clickListener: ((BufferId) -> Unit)? = null,
   private val longClickListener: ((BufferId) -> Unit)? = null
 ) : RecyclerView.Adapter<BufferListAdapter.BufferViewHolder>() {
   var data = mutableListOf<BufferListItem>()
-
-  private val collapsedNetworks = MutableLiveData<Set<NetworkId>>()
 
   fun expandListener(networkId: NetworkId) {
     if (collapsedNetworks.value.orEmpty().contains(networkId))
@@ -58,9 +57,6 @@ class BufferListAdapter(
   }
 
   init {
-    collapsedNetworks.value = emptySet()
-    selectedBuffer.value = -1
-
     liveData.zip(collapsedNetworks, selectedBuffer).observe(
       lifecycleOwner, Observer { it: Triple<List<BufferProps>?, Set<NetworkId>, BufferId>? ->
       runInBackground {
@@ -163,8 +159,15 @@ class BufferListAdapter(
     val description: CharSequence,
     val activity: Message_Types,
     val highlights: Int = 0,
-    val bufferActivity: Buffer_Activities = Buffer_Activity.of(Buffer_Activity.NoActivity)
+    val bufferActivity: Buffer_Activities = Buffer_Activity.of(Buffer_Activity.NoActivity),
+    val hiddenState: HiddenState
   )
+
+  enum class HiddenState {
+    VISIBLE,
+    HIDDEN_TEMPORARY,
+    HIDDEN_PERMANENT
+  }
 
   data class BufferState(
     val networkExpanded: Boolean,
