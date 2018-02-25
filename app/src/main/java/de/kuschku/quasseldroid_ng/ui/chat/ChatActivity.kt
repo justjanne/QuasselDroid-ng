@@ -164,12 +164,15 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   }
 
   private fun send() {
-    viewModel.session { session ->
-      viewModel.getBuffer().let { bufferId ->
-        session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
-          session.rpcHandler?.sendInput(
-            bufferInfo, ircFormatSerializer.toEscapeCodes(chatline.text)
-          )
+    val text = chatline.text
+    if (text.isNotBlank()) {
+      viewModel.session { session ->
+        viewModel.getBuffer().let { bufferId ->
+          session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
+            session.rpcHandler?.sendInput(
+              bufferInfo, ircFormatSerializer.toEscapeCodes(text)
+            )
+          }
         }
       }
     }
