@@ -173,7 +173,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         }
       }
     }
-    chatline.text.clear()
+    chatline.setText("")
   }
 
   override fun onSaveInstanceState(outState: Bundle?) {

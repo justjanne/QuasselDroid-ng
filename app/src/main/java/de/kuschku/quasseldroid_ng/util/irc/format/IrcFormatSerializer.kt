@@ -1,11 +1,11 @@
 package de.kuschku.quasseldroid_ng.util.irc.format
 
 import android.content.Context
+import android.graphics.Typeface
 import android.text.Spanned
 import android.text.style.*
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.util.helper.styledAttributes
-import de.kuschku.quasseldroid_ng.util.irc.format.spans.*
 import java.util.*
 
 class IrcFormatSerializer internal constructor(private val context: Context) {
@@ -41,6 +41,10 @@ class IrcFormatSerializer internal constructor(private val context: Context) {
     }
   }
 
+  val mircColorMap = mircColors.take(16).mapIndexed { index: Int, color: Int ->
+    color to index
+  }.toMap()
+
   fun toEscapeCodes(text: Spanned): String {
     val out = StringBuilder()
     withinParagraph(out, text, 0, text.length)
@@ -49,9 +53,60 @@ class IrcFormatSerializer internal constructor(private val context: Context) {
 
   private fun withinParagraph(out: StringBuilder, text: Spanned,
                               start: Int, end: Int) {
+    fun writeBold() {
+      out.append(CODE_BOLD)
+    }
+
+    fun writeItalic() {
+      out.append(CODE_ITALIC)
+    }
+
+    fun writeUnderline() {
+      out.append(CODE_UNDERLINE)
+    }
+
+    fun writeStrikethrough() {
+      out.append(CODE_STRIKETHROUGH)
+    }
+
+    fun writeMonospace() {
+      out.append(CODE_MONOSPACE)
+    }
+
+    fun writeColor(foreground: Int?, background: Int?) {
+      out.append(CODE_COLOR)
+      if (foreground == null && background != null) {
+        out.append(
+          String.format(
+            Locale.US, "%02d,%02d",
+            context.theme.styledAttributes(R.attr.colorForegroundMirc) {
+              getColor(0, 0)
+            }, background
+          )
+        )
+      } else if (background == null && foreground != null) {
+        out.append(String.format(Locale.US, "%02d", foreground))
+      } else if (background != null && foreground != null) {
+        out.append(String.format(Locale.US, "%02d,%02d", foreground, background))
+      }
+    }
+
+    fun writeSwap(foreground: Int?, background: Int?) {
+      // Nothing supports this. Nothing. So we fall back to writing the colors manually
+      // out.append(CODE_SWAP)
+      writeColor(foreground, background)
+    }
+
+    fun writeHexColor(foreground: Int?) {
+      out.append(CODE_HEXCOLOR)
+      if (foreground != null) {
+        out.append(String.format(Locale.US, "%06x", foreground))
+      }
+    }
+
     var next: Int
-    var foreground = -1
-    var background = -1
+    var foreground: Int? = null
+    var background: Int? = null
     var bold = false
     var underline = false
     var italic = false
@@ -63,8 +118,8 @@ class IrcFormatSerializer internal constructor(private val context: Context) {
       next = text.nextSpanTransition(i, end, CharacterStyle::class.java)
       val style = text.getSpans(i, next, CharacterStyle::class.java)
 
-      var afterForeground = -1
-      var afterBackground = -1
+      var afterForeground: Int? = null
+      var afterBackground: Int? = null
       var afterBold = false
       var afterUnderline = false
       var afterItalic = false
@@ -75,88 +130,56 @@ class IrcFormatSerializer internal constructor(private val context: Context) {
         if (text.getSpanFlags(aStyle) and Spanned.SPAN_COMPOSING != 0)
           continue
 
-        if (aStyle is IrcBoldSpan) {
-          afterBold = true
-        } else if (aStyle is IrcItalicSpan) {
-          afterItalic = true
+        if (aStyle is StyleSpan) {
+          afterBold = (aStyle.style and Typeface.BOLD != 0)
+          afterItalic = (aStyle.style and Typeface.ITALIC != 0)
         } else if (aStyle is UnderlineSpan) {
           afterUnderline = true
         } else if (aStyle is StrikethroughSpan) {
           afterStrikethrough = true
-        } else if (aStyle is IrcMonospaceSpan) {
-          afterMonospace = true
-        } else if (aStyle is IrcForegroundColorSpan) {
-          afterForeground = aStyle.mircColor
-        } else if (aStyle is IrcBackgroundColorSpan) {
-          afterBackground = aStyle.mircColor
+        } else if (aStyle is TypefaceSpan) {
+          afterMonospace = aStyle.family == "monospace"
         } else if (aStyle is ForegroundColorSpan) {
-          afterForeground = -1
+          afterForeground = aStyle.foregroundColor
         } else if (aStyle is BackgroundColorSpan) {
-          afterBackground = -1
+          afterBackground = aStyle.backgroundColor
         }
       }
 
       if (afterBold != bold) {
-        out.append(CODE_BOLD)
+        writeBold()
       }
 
       if (afterUnderline != underline) {
-        out.append(CODE_UNDERLINE)
+        writeUnderline()
       }
 
       if (afterItalic != italic) {
-        out.append(CODE_ITALIC)
+        writeItalic()
       }
 
       if (afterStrikethrough != strikethrough) {
-        out.append(CODE_STRIKETHROUGH)
+        writeStrikethrough()
       }
 
       if (afterMonospace != monospace) {
-        out.append(CODE_MONOSPACE)
+        writeMonospace()
       }
 
       if (afterForeground != foreground || afterBackground != background) {
-        if (afterForeground == background && afterBackground == foreground) {
-          out.append(CODE_SWAP)
-        } else {
-          out.append(CODE_COLOR)
-          if (afterBackground == -1) {
-            if (afterForeground == -1) {
-              // Foreground changed from a value to null, we don’t set any new foreground
-              // Background changed from a value to null, we don’t set any new background
-            } else {
-              out.append(CODE_COLOR)
-              out.append(String.format(Locale.US, "%02d", afterForeground))
-            }
-          } else if (background == afterBackground) {
-            if (afterForeground == -1) {
-              out.append(
-                String.format(
-                  Locale.US, "%02d",
-                  context.theme.styledAttributes(R.attr.colorForegroundMirc) {
-                    getColor(0, 0)
-                  }
-                )
-              )
-            } else {
-              out.append(String.format(Locale.US, "%02d", afterForeground))
-            }
+        val foregroundCode = mircColorMap[foreground]
+        val backgroundCode = mircColorMap[background]
+        val afterForegroundCode = mircColorMap[afterForeground]
+        val afterBackgroundCode = mircColorMap[afterBackground]
+
+        if (afterForegroundCode != null || afterBackgroundCode != null) {
+          if (afterForegroundCode == backgroundCode && afterBackgroundCode == foregroundCode) {
+            writeSwap(afterForegroundCode, afterBackgroundCode)
           } else {
-            if (afterForeground == -1) {
-              out.append(
-                String.format(
-                  Locale.US, "%02d,%02d",
-                  context.theme.styledAttributes(R.attr.colorForegroundMirc) {
-                    getColor(0, 0)
-                  },
-                  afterBackground
-                )
-              )
-            } else {
-              out.append(String.format(Locale.US, "%02d,%02d", afterForeground, afterBackground))
-            }
+            writeColor(afterForegroundCode, afterBackgroundCode)
           }
+        } else {
+          writeHexColor(afterForeground)
         }
       }
 
@@ -179,6 +202,7 @@ class IrcFormatSerializer internal constructor(private val context: Context) {
   companion object {
     val CODE_BOLD: Char = 0x02.toChar()
     val CODE_COLOR: Char = 0x03.toChar()
+    val CODE_HEXCOLOR = 0x04.toChar()
     val CODE_ITALIC: Char = 0x1D.toChar()
     val CODE_UNDERLINE: Char = 0x1F.toChar()
     val CODE_STRIKETHROUGH = 0x1E.toChar()
