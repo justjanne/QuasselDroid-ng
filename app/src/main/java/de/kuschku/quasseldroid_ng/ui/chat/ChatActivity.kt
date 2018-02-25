@@ -150,12 +150,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           progressBar.hide()
         }
         ConnectionState.INIT                                    -> {
-          progressBar.isIndeterminate = true
-        }
-        else                                                    -> {
           progressBar.isIndeterminate = false
           progressBar.progress = progress
           progressBar.max = max
+        }
+        else                                                    -> {
+          progressBar.isIndeterminate = true
         }
       }
     })

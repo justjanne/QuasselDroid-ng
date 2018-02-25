@@ -72,6 +72,7 @@ class QuasselService : LifecycleService(),
       updateNotification(notificationHandle)
       startForeground(notificationHandle.id, notificationHandle.builder.build())
     } else {
+      this.notificationHandle = null
       stopForeground(true)
     }
   }
