@@ -11,7 +11,7 @@ object Settings {
       theme = Theme.of(
         getString(
           context.getString(R.string.preference_theme_key),
-          null
+          ""
         )
       ) ?: AppearanceSettings.DEFAULT.theme,
       useMonospace = getBoolean(
@@ -29,19 +29,19 @@ object Settings {
       showPrefix = ShowPrefixMode.of(
         getString(
           context.getString(R.string.preference_show_prefix_key),
-          null
+          ""
         )
       ) ?: AppearanceSettings.DEFAULT.showPrefix,
       colorizeNicknames = ColorizeNicknamesMode.of(
         getString(
           context.getString(R.string.preference_colorize_nicknames_key),
-          null
+          ""
         )
       ) ?: AppearanceSettings.DEFAULT.colorizeNicknames,
       inputEnter = InputEnterMode.of(
         getString(
           context.getString(R.string.preference_input_enter_key),
-          null
+          ""
         )
       ) ?: AppearanceSettings.DEFAULT.inputEnter,
       colorizeMirc = getBoolean(
