@@ -251,6 +251,10 @@ class IrcFormatDeserializer(private val context: Context) {
             if (colorize) color.apply(plainText, plainText.length)
             color = null
           }
+          if (hexColor != null) {
+            if (colorize) hexColor.apply(plainText, plainText.length)
+            hexColor = null
+          }
         }
         else           -> {
           // Just append it, if it’s not special

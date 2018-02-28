@@ -8,12 +8,12 @@ import de.kuschku.quasseldroid_ng.util.helper.sharedPreferences
 object Settings {
   fun appearance(context: Context) = context.sharedPreferences {
     AppearanceSettings(
-      theme = Theme.valueOf(
+      theme = Theme.of(
         getString(
           context.getString(R.string.preference_theme_key),
-          AppearanceSettings.DEFAULT.theme.name
+          null
         )
-      ),
+      ) ?: AppearanceSettings.DEFAULT.theme,
       useMonospace = getBoolean(
         context.getString(R.string.preference_monospace_key),
         AppearanceSettings.DEFAULT.useMonospace
@@ -26,18 +26,24 @@ object Settings {
         context.getString(R.string.preference_use_24h_clock_key),
         AppearanceSettings.DEFAULT.use24hClock
       ),
-      showPrefix = ShowPrefixMode.valueOf(
+      showPrefix = ShowPrefixMode.of(
         getString(
           context.getString(R.string.preference_show_prefix_key),
-          AppearanceSettings.DEFAULT.showPrefix.name
+          null
         )
-      ),
-      colorizeNicknames = ColorizeNicknamesMode.valueOf(
+      ) ?: AppearanceSettings.DEFAULT.showPrefix,
+      colorizeNicknames = ColorizeNicknamesMode.of(
         getString(
           context.getString(R.string.preference_colorize_nicknames_key),
-          AppearanceSettings.DEFAULT.colorizeNicknames.name
+          null
         )
-      ),
+      ) ?: AppearanceSettings.DEFAULT.colorizeNicknames,
+      inputEnter = InputEnterMode.of(
+        getString(
+          context.getString(R.string.preference_input_enter_key),
+          null
+        )
+      ) ?: AppearanceSettings.DEFAULT.inputEnter,
       colorizeMirc = getBoolean(
         context.getString(R.string.preference_colorize_mirc_key),
         AppearanceSettings.DEFAULT.colorizeMirc

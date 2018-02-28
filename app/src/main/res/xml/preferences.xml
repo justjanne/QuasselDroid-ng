@@ -38,6 +38,13 @@
       android:title="@string/preference_colorize_nicknames_title" />
 
     <DropDownPreference
+      android:defaultValue="EMOJI"
+      android:entries="@array/preference_input_enter_entries"
+      android:entryValues="@array/preference_input_enter_entryvalues"
+      android:key="@string/preference_input_enter_key"
+      android:title="@string/preference_input_enter_title" />
+
+    <DropDownPreference
       android:defaultValue="HIGHEST"
       android:entries="@array/preference_show_prefix_entries"
       android:entryValues="@array/preference_show_prefix_entryvalues"

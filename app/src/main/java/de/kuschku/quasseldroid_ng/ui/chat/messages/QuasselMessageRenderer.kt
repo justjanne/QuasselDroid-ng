@@ -324,26 +324,36 @@ class QuasselMessageRenderer(
     }
   }
 
-  private fun formatNickImpl(sender: String, colorize: Boolean, hostmask: Boolean): CharSequence {
-    val nick = IrcUserUtils.nick(sender)
-    val content = if (hostmask) sender else nick
-    val spannableString = SpannableString(content)
+  private fun formatNickNickImpl(nick: String, colorize: Boolean): CharSequence {
+    val spannableString = SpannableString(nick)
     if (colorize) {
       val senderColor = IrcUserUtils.senderColor(nick)
       spannableString.setSpan(
         ForegroundColorSpan(senderColors[senderColor % senderColors.size]),
         0,
-        content.length,
+        nick.length,
         SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
       )
     }
     spannableString.setSpan(
       StyleSpan(Typeface.BOLD),
       0,
-      content.length,
+      nick.length,
       SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
     )
     return spannableString
+  }
+
+  private fun formatNickImpl(sender: String, colorize: Boolean, hostmask: Boolean): CharSequence {
+    val nick = IrcUserUtils.nick(sender)
+    val mask = IrcUserUtils.mask(sender)
+    val formattedNick = formatNickNickImpl(nick, colorize)
+
+    return if (hostmask) {
+      SpanFormatter.format("%s (%s)", formattedNick, mask)
+    } else {
+      formattedNick
+    }
   }
 
   private fun formatNick(sender: String, self: Boolean,

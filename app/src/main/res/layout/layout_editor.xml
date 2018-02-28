@@ -23,7 +23,7 @@
       android:background="@android:color/transparent"
       android:gravity="center_vertical"
       android:hint="@string/label_placeholder"
-      android:imeOptions="actionSend|flagNoEnterAction|flagNoExtractUi"
+      android:imeOptions="flagNoExtractUi"
       android:inputType="textCapSentences|textAutoCorrect|textShortMessage"
       android:minHeight="?actionBarSize"
       android:paddingBottom="8dp"

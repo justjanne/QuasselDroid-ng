@@ -18,20 +18,20 @@ object IrcUserUtils {
 
   fun user(hostmask: String): String {
     return hostmask.substring(
-      hostmask.lastIndex('!', hostmask.lastIndex('@')) ?: 0,
+      (hostmask.lastIndex('!', hostmask.lastIndex('@')) ?: -1) + 1,
       hostmask.lastIndex('@') ?: hostmask.length
     )
   }
 
   fun host(hostmask: String): String {
     return hostmask.substring(
-      hostmask.lastIndex('@') ?: 0
+      (hostmask.lastIndex('@') ?: -1) + 1
     )
   }
 
   fun mask(hostmask: String): String {
     return hostmask.substring(
-      hostmask.lastIndex('!', hostmask.lastIndex('@')) ?: 0
+      (hostmask.lastIndex('!', hostmask.lastIndex('@')) ?: -1) + 1
     )
   }
 

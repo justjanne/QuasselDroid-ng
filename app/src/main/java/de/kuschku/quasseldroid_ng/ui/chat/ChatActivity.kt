@@ -15,7 +15,9 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.text.InputType
+import android.text.Spanned
 import android.view.*
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import butterknife.BindView
@@ -32,14 +34,12 @@ import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.ui.settings.SettingsActivity
+import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
 import de.kuschku.quasseldroid_ng.ui.settings.data.BacklogSettings
 import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
-import de.kuschku.quasseldroid_ng.util.helper.editApply
-import de.kuschku.quasseldroid_ng.util.helper.invoke
-import de.kuschku.quasseldroid_ng.util.helper.let
-import de.kuschku.quasseldroid_ng.util.helper.sharedPreferences
+import de.kuschku.quasseldroid_ng.util.helper.*
 import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
@@ -117,6 +117,17 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       send()
     }
 
+    chatline.imeOptions = when (appearanceSettings.inputEnter) {
+      AppearanceSettings.InputEnterMode.EMOJI -> listOf(
+        EditorInfo.IME_ACTION_NONE,
+        EditorInfo.IME_FLAG_NO_EXTRACT_UI
+      )
+      AppearanceSettings.InputEnterMode.SEND  -> listOf(
+        EditorInfo.IME_ACTION_SEND,
+        EditorInfo.IME_FLAG_NO_EXTRACT_UI
+      )
+    }.fold(0, Int::or)
+
     chatline.setOnKeyListener { _, keyCode, event ->
       if (event.hasNoModifiers() && (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)) {
         send()
@@ -171,9 +182,13 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         viewModel.getBuffer().let { bufferId ->
           session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
             val output = mutableListOf<IAliasManager.Command>()
-            session.aliasManager?.processInput(
-              bufferInfo, ircFormatSerializer.toEscapeCodes(text), output
-            )
+            for (line in text.lineSequence()) {
+              session.aliasManager?.processInput(
+                bufferInfo,
+                if (line is Spanned) ircFormatSerializer.toEscapeCodes(line) else line.toString(),
+                output
+              )
+            }
             for (command in output) {
               session.rpcHandler?.sendInput(command.buffer, command.message)
             }

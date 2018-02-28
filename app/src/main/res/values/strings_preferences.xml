@@ -76,6 +76,19 @@
     <item>NONE</item>
   </string-array>
 
+  <string name="preference_input_enter_key" translatable="false">input_enter</string>
+  <string name="preference_input_enter_title">Enter key on keyboard</string>
+  <string name="preference_input_enter_entry_emoji">Emoji</string>
+  <string name="preference_input_enter_entry_send">Send</string>
+  <string-array name="preference_input_enter_entries">
+    <item>@string/preference_input_enter_entry_emoji</item>
+    <item>@string/preference_input_enter_entry_send</item>
+  </string-array>
+  <string-array name="preference_input_enter_entryvalues">
+    <item>EMOJI</item>
+    <item>SEND</item>
+  </string-array>
+
   <string name="preference_hostmask_key" translatable="false">hostmask</string>
   <string name="preference_hostmask_title">Show Hostmask</string>
   <string name="preference_hostmask_summary">Display the full nick!ident@host in messages</string>
