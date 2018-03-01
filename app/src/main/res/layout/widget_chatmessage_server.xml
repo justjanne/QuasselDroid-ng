@@ -36,7 +36,6 @@
     android:layout_weight="1"
     android:textColor="?attr/colorForegroundSecondary"
     android:textIsSelectable="true"
-    android:typeface="monospace"
     tools:text="Connecting to irc.freenode.net:6667..." />
   </LinearLayout>
 

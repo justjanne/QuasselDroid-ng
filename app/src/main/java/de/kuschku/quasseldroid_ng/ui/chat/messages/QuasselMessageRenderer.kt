@@ -165,7 +165,7 @@ class QuasselMessageRenderer(
           context.getString(R.string.message_format_mode),
           message.content,
           formatPrefix(message.senderPrefixes, highlight),
-          formatNick(message.sender, self, highlight, true)
+          formatNick(message.sender, self, highlight, false)
         ),
         message.messageId == markerLine
       )
