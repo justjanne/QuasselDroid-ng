@@ -134,19 +134,19 @@ class IrcFormatSerializer internal constructor(private val context: Context) {
         if (text.getSpanFlags(aStyle) and Spanned.SPAN_COMPOSING != 0)
           continue
 
-        if (aStyle is StyleSpan) {
-          afterBold = (aStyle.style and Typeface.BOLD != 0)
-          afterItalic = (aStyle.style and Typeface.ITALIC != 0)
-        } else if (aStyle is UnderlineSpan) {
-          afterUnderline = true
-        } else if (aStyle is StrikethroughSpan) {
-          afterStrikethrough = true
-        } else if (aStyle is TypefaceSpan) {
-          afterMonospace = aStyle.family == "monospace"
-        } else if (aStyle is ForegroundColorSpan) {
-          afterForeground = aStyle.foregroundColor
-        } else if (aStyle is BackgroundColorSpan) {
-          afterBackground = aStyle.backgroundColor
+        if (text.getSpanEnd(aStyle) <= i)
+          continue
+
+        when (aStyle) {
+          is StyleSpan           -> {
+            afterBold = (aStyle.style and Typeface.BOLD != 0)
+            afterItalic = (aStyle.style and Typeface.ITALIC != 0)
+          }
+          is UnderlineSpan       -> afterUnderline = true
+          is StrikethroughSpan   -> afterStrikethrough = true
+          is TypefaceSpan        -> afterMonospace = aStyle.family == "monospace"
+          is ForegroundColorSpan -> afterForeground = aStyle.foregroundColor
+          is BackgroundColorSpan -> afterBackground = aStyle.backgroundColor
         }
       }
 
