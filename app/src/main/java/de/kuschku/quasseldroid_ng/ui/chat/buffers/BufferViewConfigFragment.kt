@@ -79,7 +79,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
             actionMode?.finish()
             true
           }
-          R.id.action_delete     -> {
+          R.id.action_delete    -> {
             MaterialDialog.Builder(activity!!)
               .content(R.string.buffer_delete_confirmation)
               .positiveText(R.string.label_yes)
@@ -95,21 +95,40 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
             actionMode?.finish()
             true
           }
-          R.id.action_unhide     -> {
+          R.id.action_rename    -> {
+            MaterialDialog.Builder(activity!!)
+              .input(
+                getString(R.string.label_buffer_name),
+                info.bufferName,
+                false
+              ) { _, input ->
+                session.bufferSyncer?.requestRenameBuffer(selected.info.bufferId, input.toString())
+              }
+              .positiveText(R.string.label_save)
+              .negativeText(R.string.label_cancel)
+              .negativeColorAttr(R.attr.colorTextPrimary)
+              .backgroundColorAttr(R.attr.colorBackgroundCard)
+              .contentColorAttr(R.attr.colorTextPrimary)
+              .build()
+              .show()
+            actionMode?.finish()
+            true
+          }
+          R.id.action_unhide    -> {
             bufferSyncer?.let {
               bufferViewConfig?.requestAddBuffer(info, bufferSyncer)
             }
             true
           }
-          R.id.action_hide_temp  -> {
+          R.id.action_hide_temp -> {
             bufferViewConfig?.requestRemoveBuffer(info.bufferId)
             true
           }
-          R.id.action_hide_perm  -> {
+          R.id.action_hide_perm -> {
             bufferViewConfig?.requestRemoveBufferPermanently(info.bufferId)
             true
           }
-          else                   -> false
+          else                  -> false
         }
       } else {
         false
@@ -214,6 +233,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
             R.id.action_join,
             R.id.action_part,
             R.id.action_delete,
+            R.id.action_rename,
             R.id.action_unhide,
             R.id.action_hide_temp,
             R.id.action_hide_perm
@@ -252,7 +272,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
               } + visibilityActions
             }
             Buffer_Type.QueryBuffer   -> {
-              setOf(R.id.action_delete) + visibilityActions
+              setOf(R.id.action_delete, R.id.action_rename) + visibilityActions
             }
             else                      -> visibilityActions
           }

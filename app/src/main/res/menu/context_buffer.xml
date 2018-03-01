@@ -17,6 +17,9 @@
     android:id="@+id/action_delete"
     android:title="@string/label_delete" />
   <item
+    android:id="@+id/action_rename"
+    android:title="@string/label_rename" />
+  <item
     android:id="@+id/action_unhide"
     android:title="@string/label_unhide"
     app:showAsAction="never" />
