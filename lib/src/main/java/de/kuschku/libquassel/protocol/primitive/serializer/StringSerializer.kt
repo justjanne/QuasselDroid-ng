@@ -25,14 +25,13 @@ abstract class StringSerializer(
     }
   )
 
-  //private val charBuffer = ThreadLocal<CharBuffer>()
+  private val charBuffer = ThreadLocal<CharBuffer>()
 
   object UTF16 : StringSerializer(Charsets.UTF_16BE)
   object UTF8 : StringSerializer(Charsets.UTF_8)
   object C : StringSerializer(Charsets.ISO_8859_1, trailingNullByte = true)
 
   private inline fun charBuffer(len: Int): CharBuffer {
-    /*
     if (charBuffer.get() == null)
       charBuffer.set(CharBuffer.allocate(1024))
     val buf = if (len >= 1024)
@@ -42,8 +41,6 @@ abstract class StringSerializer(
     buf.clear()
     buf.limit(len)
     return buf
-    */
-    return CharBuffer.allocate(len)
   }
 
   override fun serialize(buffer: ChainedByteBuffer, data: String?, features: Quassel_Features) {
