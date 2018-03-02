@@ -11,7 +11,7 @@ plugins {
 
 val appCompatVersion = "27.0.2"
 dependencies {
-  implementation(kotlin("stdlib", "1.2.21"))
+  implementation(kotlin("stdlib", "1.2.30"))
 
   implementation("com.android.support", "support-annotations", "27.0.2")
   implementation("org.threeten", "threetenbp", "1.3.6")
