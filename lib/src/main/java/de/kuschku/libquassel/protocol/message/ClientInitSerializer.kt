@@ -17,6 +17,6 @@ object ClientInitSerializer : HandshakeMessageSerializer<HandshakeMessage.Client
   override fun deserialize(data: QVariantMap) = HandshakeMessage.ClientInit(
     clientVersion = data["ClientVersion"].value(),
     buildDate = data["ClientDate"].value(),
-    clientFeatures = Flags.Companion.of(data["Features"].value(0))
+    clientFeatures = Flags.of(data["Features"].value(0))
   )
 }

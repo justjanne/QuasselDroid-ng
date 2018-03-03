@@ -361,13 +361,13 @@ class IrcFormatDeserializer(private val context: Context) {
   private inner class ColorIrcFormat(val foreground: Byte, val background: Byte) : IrcFormat {
 
     override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
-      if (foreground.toInt() > 0 && foreground.toInt() < mircColors.size) {
+      if (foreground.toInt() >= 0 && foreground.toInt() < mircColors.size) {
         editable.setSpan(
           IrcForegroundColorSpan(foreground.toInt(), mircColors[foreground.toInt()]), from, to,
           Spanned.SPAN_INCLUSIVE_EXCLUSIVE
         )
       }
-      if (background.toInt() > 0 && background.toInt() < mircColors.size) {
+      if (background.toInt() >= 0 && background.toInt() < mircColors.size) {
         editable.setSpan(
           IrcBackgroundColorSpan(background.toInt(), mircColors[background.toInt()]), from, to,
           Spanned.SPAN_INCLUSIVE_EXCLUSIVE
