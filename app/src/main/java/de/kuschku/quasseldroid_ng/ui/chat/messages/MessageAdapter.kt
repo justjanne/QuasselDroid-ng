@@ -2,7 +2,7 @@ package de.kuschku.quasseldroid_ng.ui.chat.messages
 
 import android.arch.paging.PagedListAdapter
 import android.content.Context
-import android.support.v7.recyclerview.extensions.DiffCallback
+import android.support.v7.util.DiffUtil
 import android.util.LruCache
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -18,16 +18,16 @@ class MessageAdapter(
   appearanceSettings: AppearanceSettings,
   var markerLinePosition: Pair<MsgId, MsgId>? = null
 ) : PagedListAdapter<QuasselDatabase.DatabaseMessage, QuasselMessageViewHolder>(
-  object : DiffCallback<QuasselDatabase.DatabaseMessage>() {
+  object : DiffUtil.ItemCallback<QuasselDatabase.DatabaseMessage>() {
     override fun areItemsTheSame(oldItem: QuasselDatabase.DatabaseMessage,
-                                 newItem: QuasselDatabase.DatabaseMessage)
-      = DatabaseMessage.MessageDiffCallback.areItemsTheSame(oldItem, newItem)
+                                 newItem: QuasselDatabase.DatabaseMessage) =
+      DatabaseMessage.MessageDiffCallback.areItemsTheSame(oldItem, newItem)
 
     override fun areContentsTheSame(oldItem: QuasselDatabase.DatabaseMessage,
-                                    newItem: QuasselDatabase.DatabaseMessage)
-      = DatabaseMessage.MessageDiffCallback.areContentsTheSame(oldItem, newItem) &&
-        oldItem.messageId != markerLinePosition?.first &&
-        oldItem.messageId != markerLinePosition?.second
+                                    newItem: QuasselDatabase.DatabaseMessage) =
+      DatabaseMessage.MessageDiffCallback.areContentsTheSame(oldItem, newItem) &&
+      oldItem.messageId != markerLinePosition?.first &&
+      oldItem.messageId != markerLinePosition?.second
   }
 ) {
   private val messageRenderer: MessageRenderer = QuasselMessageRenderer(
@@ -79,11 +79,10 @@ class MessageAdapter(
     return getItem(position)?.messageId?.toLong() ?: 0L
   }
 
-  private fun messageType(viewType: Int): Message_Type?
-    = Message_Type.of(Math.abs(viewType)).enabledValues().firstOrNull()
+  private fun messageType(viewType: Int): Message_Type? =
+    Message_Type.of(Math.abs(viewType)).enabledValues().firstOrNull()
 
-  private fun hasHiglight(viewType: Int)
-    = viewType < 0
+  private fun hasHiglight(viewType: Int) = viewType < 0
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuasselMessageViewHolder {
     val messageType = messageType(viewType)

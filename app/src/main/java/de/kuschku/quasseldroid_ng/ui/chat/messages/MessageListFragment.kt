@@ -139,7 +139,7 @@ class MessageListFragment : ServiceBoundFragment() {
         lastBuffer = buffer
         adapter.clearCache()
       }
-      adapter.setList(list)
+      adapter.submitList(list)
       if (firstVisibleItemPosition < 2) {
         activity?.runOnUiThread { messageList.scrollToPosition(0) }
         handler.postDelayed({ activity?.runOnUiThread { messageList.scrollToPosition(0) } }, 16)
