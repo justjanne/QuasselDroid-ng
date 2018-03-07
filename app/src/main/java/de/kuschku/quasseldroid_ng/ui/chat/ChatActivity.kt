@@ -11,11 +11,12 @@ import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.design.widget.Snackbar
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.widget.ActionMenuView
 import android.support.v7.widget.Toolbar
 import android.text.InputType
-import android.text.Spanned
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -40,22 +41,28 @@ import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.*
-import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
 
-class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
-  @BindView(R.id.drawerLayout)
+class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
+                     ActionMenuView.OnMenuItemClickListener {
+  @BindView(R.id.drawer_layout)
   lateinit var drawerLayout: DrawerLayout
 
   @BindView(R.id.toolbar)
   lateinit var toolbar: Toolbar
 
-  @BindView(R.id.progressBar)
+  @BindView(R.id.formatting_menu)
+  lateinit var formattingMenu: ActionMenuView
+
+  @BindView(R.id.progress_bar)
   lateinit var progressBar: MaterialContentLoadingProgressBar
 
   @BindView(R.id.editor_panel)
   lateinit var editorPanel: SlidingUpPanelLayout
+
+  @BindView(R.id.history_panel)
+  lateinit var historyPanel: SlidingUpPanelLayout
 
   @BindView(R.id.send)
   lateinit var send: ImageButton
@@ -75,7 +82,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   private lateinit var backlogSettings: BacklogSettings
 
-  private lateinit var ircFormatSerializer: IrcFormatSerializer
+  private lateinit var inputEditor: InputEditor
 
   private val panelSlideListener: SlidingUpPanelLayout.PanelSlideListener = object :
     SlidingUpPanelLayout.PanelSlideListener {
@@ -107,7 +114,21 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     viewModel = ViewModelProviders.of(this)[QuasselViewModel::class.java]
     viewModel.setBackend(this.backend)
     backlogSettings = Settings.backlog(this)
-    ircFormatSerializer = IrcFormatSerializer(this)
+
+    inputEditor = InputEditor(chatline)
+    menuInflater.inflate(inputEditor.menu, formattingMenu.menu)
+    menuInflater.inflate(R.menu.input_panel, formattingMenu.menu)
+    formattingMenu.setOnMenuItemClickListener(this)
+
+    formattingMenu.context.theme.styledAttributes(R.attr.colorControlNormal) {
+      val color = getColor(0, 0)
+
+      for (item in (0 until formattingMenu.menu.size()).map { formattingMenu.menu.getItem(it) }) {
+        val drawable = item.icon.mutate()
+        DrawableCompat.setTint(drawable, color)
+        item.icon = drawable
+      }
+    }
 
     database = QuasselDatabase.Creator.init(application)
 
@@ -185,7 +206,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             for (line in text.lineSequence()) {
               session.aliasManager?.processInput(
                 bufferInfo,
-                if (line is Spanned) ircFormatSerializer.toEscapeCodes(line) else line.toString(),
+                inputEditor.formattedString,
                 output
               )
             }
@@ -318,6 +339,14 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       true
     }
     else                 -> super.onOptionsItemSelected(item)
+  }
+
+  override fun onMenuItemClick(item: MenuItem?) = when (item?.itemId) {
+    R.id.input_history -> {
+      historyPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+      true
+    }
+    else               -> inputEditor.onMenuItemClick(item)
   }
 
   override fun onDestroy() {

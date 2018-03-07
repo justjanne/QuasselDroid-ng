@@ -27,7 +27,7 @@
     </android.support.v7.widget.Toolbar>
 
     <de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
-      android:id="@+id/progressBar"
+      android:id="@+id/progress_bar"
       style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal.NoPadding"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

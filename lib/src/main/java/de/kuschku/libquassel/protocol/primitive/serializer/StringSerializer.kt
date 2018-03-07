@@ -10,7 +10,7 @@ import java.nio.charset.CharsetDecoder
 import java.nio.charset.CharsetEncoder
 
 abstract class StringSerializer(
-  private val encoder: CharsetEncoder,
+  private var encoder: CharsetEncoder,
   private val decoder: CharsetDecoder,
   private val trailingNullBytes: Int
 ) : Serializer<String?> {
@@ -51,6 +51,7 @@ abstract class StringSerializer(
         val charBuffer = charBuffer(data.length)
         charBuffer.put(data)
         charBuffer.flip()
+        encoder = encoder.charset().newEncoder()
         val byteBuffer = encoder.encode(charBuffer)
         IntSerializer.serialize(buffer, byteBuffer.remaining() + trailingNullBytes, features)
         buffer.put(byteBuffer)
@@ -70,6 +71,7 @@ abstract class StringSerializer(
         val charBuffer = charBuffer(data.length)
         charBuffer.put(data)
         charBuffer.flip()
+        encoder = encoder.charset().newEncoder()
         return encoder.encode(charBuffer)
       }
     } catch (e: Throwable) {

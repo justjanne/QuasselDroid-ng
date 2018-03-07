@@ -105,6 +105,7 @@ class IrcFormatSerializer internal constructor(private val context: Context) {
     }
 
     fun writeReset() {
+      println("reset")
       out.append(CODE_RESET)
     }
 
@@ -139,8 +140,8 @@ class IrcFormatSerializer internal constructor(private val context: Context) {
 
         when (aStyle) {
           is StyleSpan           -> {
-            afterBold = (aStyle.style and Typeface.BOLD != 0)
-            afterItalic = (aStyle.style and Typeface.ITALIC != 0)
+            afterBold = afterBold || aStyle.style and Typeface.BOLD != 0
+            afterItalic = afterItalic || aStyle.style and Typeface.ITALIC != 0
           }
           is UnderlineSpan       -> afterUnderline = true
           is StrikethroughSpan   -> afterStrikethrough = true
@@ -199,7 +200,7 @@ class IrcFormatSerializer internal constructor(private val context: Context) {
       i = next
     }
 
-    if (bold || italic || underline || background != null || foreground != null)
+    if (bold || italic || underline || strikethrough || monospace || background != null || foreground != null)
       writeReset()
   }
 

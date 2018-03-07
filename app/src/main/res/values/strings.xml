@@ -40,4 +40,12 @@
   <string name="notification_channel_highlight_title">Highlight</string>
 
   <string name="buffer_delete_confirmation">Do you want to delete this buffer permanently?</string>
+  <string name="label_bold">Bold</string>
+  <string name="label_italic">Italic</string>
+  <string name="label_strikethrough">Strikethrough</string>
+  <string name="label_underline">Underline</string>
+  <string name="label_monospace">Monospace</string>
+  <string name="label_foreground">Foreground</string>
+  <string name="label_background">Background</string>
+  <string name="label_clear_formatting">Clear Formatting</string>
 </resources>

@@ -76,13 +76,13 @@ class IrcFormatDeserializer(private val context: Context) {
     if (str == null) return ""
 
     val plainText = SpannableStringBuilder()
-    var bold: FormatDescription? = null
-    var italic: FormatDescription? = null
-    var underline: FormatDescription? = null
-    var strikethrough: FormatDescription? = null
-    var monospace: FormatDescription? = null
-    var color: FormatDescription? = null
-    var hexColor: FormatDescription? = null
+    var bold: FormatDescription<BoldIrcFormat>? = null
+    var italic: FormatDescription<ItalicIrcFormat>? = null
+    var underline: FormatDescription<UnderlineIrcFormat>? = null
+    var strikethrough: FormatDescription<StrikethroughIrcFormat>? = null
+    var monospace: FormatDescription<MonospaceIrcFormat>? = null
+    var color: FormatDescription<ColorIrcFormat>? = null
+    var hexColor: FormatDescription<HexIrcFormat>? = null
 
     // Iterating over every character
     var normalCount = 0
@@ -100,8 +100,7 @@ class IrcFormatDeserializer(private val context: Context) {
             bold = null
             // Otherwise create a new one
           } else {
-            val format = fromId(character)
-            bold = FormatDescription(plainText.length, format!!)
+            bold = FormatDescription(plainText.length, BoldIrcFormat())
           }
         }
         CODE_ITALIC    -> {
@@ -114,8 +113,7 @@ class IrcFormatDeserializer(private val context: Context) {
             italic = null
             // Otherwise create a new one
           } else {
-            val format = fromId(character)
-            italic = FormatDescription(plainText.length, format!!)
+            italic = FormatDescription(plainText.length, ItalicIrcFormat())
           }
         }
         CODE_UNDERLINE     -> {
@@ -128,8 +126,7 @@ class IrcFormatDeserializer(private val context: Context) {
             underline = null
             // Otherwise create a new one
           } else {
-            val format = fromId(character)
-            underline = FormatDescription(plainText.length, format!!)
+            underline = FormatDescription(plainText.length, UnderlineIrcFormat())
           }
         }
         CODE_STRIKETHROUGH -> {
@@ -142,8 +139,7 @@ class IrcFormatDeserializer(private val context: Context) {
             strikethrough = null
             // Otherwise create a new one
           } else {
-            val format = fromId(character)
-            strikethrough = FormatDescription(plainText.length, format!!)
+            strikethrough = FormatDescription(plainText.length, StrikethroughIrcFormat())
           }
         }
         CODE_MONOSPACE     -> {
@@ -156,8 +152,7 @@ class IrcFormatDeserializer(private val context: Context) {
             monospace = null
             // Otherwise create a new one
           } else {
-            val format = fromId(character)
-            monospace = FormatDescription(plainText.length, format!!)
+            monospace = FormatDescription(plainText.length, MonospaceIrcFormat())
           }
         }
         CODE_COLOR         -> {
@@ -183,7 +178,7 @@ class IrcFormatDeserializer(private val context: Context) {
               if (colorize) color.apply(plainText, plainText.length)
               // Reuse old background, if possible
               if (background.toInt() == -1)
-                background = (color.format as ColorIrcFormat).background
+                background = color.format.background
             }
             // Add new format
             color = FormatDescription(plainText.length, ColorIrcFormat(foreground, background))
@@ -207,7 +202,7 @@ class IrcFormatDeserializer(private val context: Context) {
           if (colorEnd > colorStart) {
             val foreground = readHexNumber(str, colorStart, colorEnd)
             // Add new format
-            hexColor = FormatDescription(plainText.length, ColorHexFormat(foreground))
+            hexColor = FormatDescription(plainText.length, HexIrcFormat(foreground))
 
             // i points in front of the next character
             i = colorEnd - 1
@@ -226,7 +221,7 @@ class IrcFormatDeserializer(private val context: Context) {
           if (color != null) {
             if (colorize) color.apply(plainText, plainText.length)
             color = FormatDescription(
-              plainText.length, (color.format as ColorIrcFormat).copySwapped()
+              plainText.length, color.format.copySwapped()
             )
           }
         }
@@ -274,8 +269,17 @@ class IrcFormatDeserializer(private val context: Context) {
     if (underline != null) {
       if (colorize) underline.apply(plainText, plainText.length)
     }
+    if (strikethrough != null) {
+      if (colorize) strikethrough.apply(plainText, plainText.length)
+    }
+    if (monospace != null) {
+      if (colorize) monospace.apply(plainText, plainText.length)
+    }
     if (color != null) {
       if (colorize) color.apply(plainText, plainText.length)
+    }
+    if (hexColor != null) {
+      if (colorize) hexColor.apply(plainText, plainText.length)
     }
     plainText.append(str.substring(str.length - normalCount, str.length))
     return plainText
@@ -283,11 +287,9 @@ class IrcFormatDeserializer(private val context: Context) {
 
   private interface IrcFormat {
     fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int)
-
-    fun id(): Byte
   }
 
-  private class FormatDescription(val start: Int, val format: IrcFormat) {
+  private class FormatDescription<U : IrcFormat>(val start: Int, val format: U) {
 
     fun apply(editable: SpannableStringBuilder, end: Int) {
       format.applyTo(editable, start, end)
@@ -298,19 +300,11 @@ class IrcFormatDeserializer(private val context: Context) {
     override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
       editable.setSpan(IrcItalicSpan(), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
     }
-
-    override fun id(): Byte {
-      return CODE_ITALIC.toByte()
-    }
   }
 
   private class UnderlineIrcFormat : IrcFormat {
     override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
       editable.setSpan(IrcUnderlineSpan(), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-    }
-
-    override fun id(): Byte {
-      return CODE_UNDERLINE.toByte()
     }
   }
 
@@ -318,19 +312,11 @@ class IrcFormatDeserializer(private val context: Context) {
     override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
       editable.setSpan(IrcStrikethroughSpan(), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
     }
-
-    override fun id(): Byte {
-      return CODE_STRIKETHROUGH.toByte()
-    }
   }
 
   private class MonospaceIrcFormat : IrcFormat {
     override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
       editable.setSpan(IrcMonospaceSpan(), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-    }
-
-    override fun id(): Byte {
-      return CODE_MONOSPACE.toByte()
     }
   }
 
@@ -338,23 +324,15 @@ class IrcFormatDeserializer(private val context: Context) {
     override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
       editable.setSpan(IrcBoldSpan(), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
     }
-
-    override fun id(): Byte {
-      return CODE_BOLD.toByte()
-    }
   }
 
-  private inner class ColorHexFormat(val color: Int) : IrcFormat {
+  private inner class HexIrcFormat(val color: Int) : IrcFormat {
 
     override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
       editable.setSpan(
         IrcHexColorSpan(color or 0xFFFFFF.inv()), from, to,
         Spanned.SPAN_INCLUSIVE_EXCLUSIVE
       )
-    }
-
-    override fun id(): Byte {
-      return CODE_HEXCOLOR.toByte()
     }
   }
 
@@ -377,10 +355,6 @@ class IrcFormatDeserializer(private val context: Context) {
 
     fun copySwapped(): ColorIrcFormat {
       return ColorIrcFormat(background, foreground)
-    }
-
-    override fun id(): Byte {
-      return CODE_COLOR.toByte()
     }
   }
 
@@ -464,15 +438,6 @@ class IrcFormatDeserializer(private val context: Context) {
         i++
       }
       return start + i
-    }
-
-    private fun fromId(id: Char) = when (id) {
-      CODE_BOLD          -> BoldIrcFormat()
-      CODE_ITALIC        -> ItalicIrcFormat()
-      CODE_UNDERLINE     -> UnderlineIrcFormat()
-      CODE_STRIKETHROUGH -> StrikethroughIrcFormat()
-      CODE_MONOSPACE     -> MonospaceIrcFormat()
-      else               -> null
     }
   }
 }
