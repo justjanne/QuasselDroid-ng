@@ -97,10 +97,14 @@ class IrcFormatSerializer internal constructor(private val context: Context) {
       writeColor(foreground, background)
     }
 
-    fun writeHexColor(foreground: Int?) {
+    fun writeHexColor(foreground: Int?, background: Int?) {
       out.append(CODE_HEXCOLOR)
       if (foreground != null) {
         out.append(String.format(Locale.US, "%06x", foreground and 0x00FFFFFF))
+        if (background != null) {
+          out.append(',')
+          out.append(String.format(Locale.US, "%06x", background and 0x00FFFFFF))
+        }
       }
     }
 
@@ -184,7 +188,7 @@ class IrcFormatSerializer internal constructor(private val context: Context) {
             writeColor(afterForegroundCode, afterBackgroundCode)
           }
         } else {
-          writeHexColor(afterForeground)
+          writeHexColor(afterForeground, afterBackground)
         }
       }
 
