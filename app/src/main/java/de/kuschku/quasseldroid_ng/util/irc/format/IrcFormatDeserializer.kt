@@ -196,16 +196,32 @@ class IrcFormatDeserializer(private val context: Context) {
           plainText.append(str.substring(i - normalCount, i))
           normalCount = 0
 
-          val colorStart = i + 1
-          val colorEnd = findEndOfHexNumber(str, colorStart)
+          val foregroundStart = i + 1
+          val foregroundEnd = findEndOfHexNumber(str, foregroundStart)
           // If we have a foreground element
-          if (colorEnd > colorStart) {
-            val foreground = readHexNumber(str, colorStart, colorEnd)
+          if (foregroundEnd > foregroundStart) {
+            val foreground = readHexNumber(str, foregroundStart, foregroundEnd)
+
+            var background: Int = -1
+            var backgroundEnd = -1
+            // If we have a background code, read it
+            if (str.length > foregroundEnd && str[foregroundEnd] == ',') {
+              backgroundEnd = findEndOfHexNumber(str, foregroundEnd + 1)
+              background = readHexNumber(str, foregroundEnd + 1, backgroundEnd)
+            }
+            // If previous element was also a color element, try to reuse background
+            if (hexColor != null) {
+              // Apply old format
+              if (colorize) hexColor.apply(plainText, plainText.length)
+              // Reuse old background, if possible
+              if (background == -1)
+                background = hexColor.format.background
+            }
             // Add new format
-            hexColor = FormatDescription(plainText.length, HexIrcFormat(foreground))
+            hexColor = FormatDescription(plainText.length, HexIrcFormat(foreground, background))
 
             // i points in front of the next character
-            i = colorEnd - 1
+            i = (if (backgroundEnd == -1) foregroundEnd else backgroundEnd) - 1
 
             // Otherwise assume this is a closing tag
           } else if (hexColor != null) {
@@ -326,13 +342,21 @@ class IrcFormatDeserializer(private val context: Context) {
     }
   }
 
-  private inner class HexIrcFormat(val color: Int) : IrcFormat {
+  private inner class HexIrcFormat(val foreground: Int, val background: Int) : IrcFormat {
 
     override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
-      editable.setSpan(
-        IrcHexColorSpan(color or 0xFFFFFF.inv()), from, to,
-        Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-      )
+      if (foreground >= 0) {
+        editable.setSpan(
+          IrcHexForegroundColorSpan(foreground or 0xFFFFFF.inv()), from, to,
+          Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
+      }
+      if (background >= 0) {
+        editable.setSpan(
+          IrcHexBackgroundColorSpan(background or 0xFFFFFF.inv()), from, to,
+          Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
+      }
     }
   }
 
