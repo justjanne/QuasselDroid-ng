@@ -14,7 +14,7 @@ android {
 
 dependencies {
   // App Compat
-  withVersion("27.0.2") {
+  withVersion("27.1.0") {
     implementation("com.android.support", "support-v4", version)
     implementation("com.android.support", "support-annotations", version)
     implementation("com.android.support", "recyclerview-v7", version)

@@ -92,7 +92,7 @@ dependencies {
   implementation(kotlin("stdlib", "1.2.30"))
 
   // App Compat
-  withVersion("27.0.2") {
+  withVersion("27.1.0") {
     implementation("com.android.support", "appcompat-v7", version)
     implementation("com.android.support", "design", version)
     implementation("com.android.support", "customtabs", version)
@@ -111,7 +111,7 @@ dependencies {
   }
 
   // App Arch Persistence
-  withVersion("1.1.0-alpha2") {
+  withVersion("1.1.0-alpha3") {
     implementation("android.arch.persistence.room", "runtime", version)
     implementation("android.arch.persistence.room", "rxjava2", version)
     kapt("android.arch.persistence.room", "compiler", version)
@@ -119,7 +119,7 @@ dependencies {
   }
 
   // App Arch Paging
-  implementation("android.arch.paging", "runtime", "1.0.0-alpha5") {
+  implementation("android.arch.paging", "runtime", "1.0.0-alpha6") {
     exclude(group = "junit", module = "junit")
   }
 
@@ -157,36 +157,4 @@ dependencies {
     androidTestImplementation("com.android.support.test", "rules", version)
   }
   androidTestImplementation("com.android.support.test.espresso", "espresso-core", "3.0.1")
-}
-
-/*
-tasks.withType(KotlinCompile::class.java) {
-  kotlinOptions {
-    freeCompilerArgs = listOf(
-      "-Xno-param-assertions",
-      "-Xno-call-assertions"
-    )
-  }
-}
-*/
-
-fun cmd(vararg command: String) = try {
-  val stdOut = ByteArrayOutputStream()
-  exec {
-    commandLine(*command)
-    standardOutput = stdOut
-  }
-  stdOut.toString(Charsets.UTF_8.name()).trim()
-} catch (e: Throwable) {
-  e.printStackTrace()
-  null
-}
-
-fun Project.properties(fileName: String): Properties? {
-  val file = file(fileName)
-  if (!file.exists())
-    return null
-  val props = Properties()
-  props.load(file.inputStream())
-  return props
 }

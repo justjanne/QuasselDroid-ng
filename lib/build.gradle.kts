@@ -9,11 +9,13 @@ plugins {
   kotlin("kapt")
 }
 
-val appCompatVersion = "27.0.2"
 dependencies {
   implementation(kotlin("stdlib", "1.2.30"))
 
-  implementation("com.android.support", "support-annotations", "27.0.2")
+  withVersion("27.1.0") {
+    implementation("com.android.support", "support-annotations", version)
+  }
+
   implementation("org.threeten", "threetenbp", "1.3.6")
   implementation("io.reactivex.rxjava2:rxjava:2.1.9")
 
@@ -22,14 +24,3 @@ dependencies {
 
   testImplementation("junit", "junit", "4.12")
 }
-
-/*
-tasks.withType(KotlinCompile::class.java) {
-  kotlinOptions {
-    freeCompilerArgs = listOf(
-      "-Xno-param-assertions",
-      "-Xno-call-assertions"
-    )
-  }
-}
-*/
