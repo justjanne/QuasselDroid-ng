@@ -10,7 +10,7 @@ import java.nio.charset.CharsetDecoder
 import java.nio.charset.CharsetEncoder
 
 abstract class StringSerializer(
-  private var encoder: CharsetEncoder,
+  private val encoder: CharsetEncoder,
   private val decoder: CharsetDecoder,
   private val trailingNullBytes: Int
 ) : Serializer<String?> {
@@ -51,7 +51,7 @@ abstract class StringSerializer(
         val charBuffer = charBuffer(data.length)
         charBuffer.put(data)
         charBuffer.flip()
-        encoder = encoder.charset().newEncoder()
+        encoder.reset()
         val byteBuffer = encoder.encode(charBuffer)
         IntSerializer.serialize(buffer, byteBuffer.remaining() + trailingNullBytes, features)
         buffer.put(byteBuffer)
@@ -71,7 +71,7 @@ abstract class StringSerializer(
         val charBuffer = charBuffer(data.length)
         charBuffer.put(data)
         charBuffer.flip()
-        encoder = encoder.charset().newEncoder()
+        encoder.reset()
         return encoder.encode(charBuffer)
       }
     } catch (e: Throwable) {
@@ -88,6 +88,7 @@ abstract class StringSerializer(
         val limit = buffer.limit()
         buffer.limit(buffer.position() + len - trailingNullBytes)
         val charBuffer = charBuffer(len)
+        decoder.reset()
         decoder.decode(buffer, charBuffer, true)
         buffer.limit(limit)
         buffer.position(buffer.position() + trailingNullBytes)
@@ -109,6 +110,7 @@ abstract class StringSerializer(
         val limit = buffer.limit()
         buffer.limit(buffer.position() + Math.max(0, len - trailingNullBytes))
         val charBuffer = charBuffer(len)
+        decoder.reset()
         decoder.decode(buffer, charBuffer, true)
         buffer.limit(limit)
         buffer.position(buffer.position() + trailingNullBytes)
