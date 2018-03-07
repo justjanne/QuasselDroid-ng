@@ -3,13 +3,13 @@ package de.kuschku.quasseldroid_ng.ui.setup.accounts
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid_ng.Keys
@@ -24,27 +24,27 @@ class AccountEditActivity : AppCompatActivity() {
   @BindView(R.id.nameWrapper)
   lateinit var nameWrapper: TextInputLayout
   @BindView(R.id.name)
-  lateinit var name: TextInputEditText
+  lateinit var name: EditText
 
   @BindView(R.id.hostWrapper)
   lateinit var hostWrapper: TextInputLayout
   @BindView(R.id.host)
-  lateinit var host: TextInputEditText
+  lateinit var host: EditText
 
   @BindView(R.id.portWrapper)
   lateinit var portWrapper: TextInputLayout
   @BindView(R.id.port)
-  lateinit var port: TextInputEditText
+  lateinit var port: EditText
 
   @BindView(R.id.userWrapper)
   lateinit var userWrapper: TextInputLayout
   @BindView(R.id.user)
-  lateinit var user: TextInputEditText
+  lateinit var user: EditText
 
   @BindView(R.id.passWrapper)
   lateinit var passWrapper: TextInputLayout
   @BindView(R.id.pass)
-  lateinit var pass: TextInputEditText
+  lateinit var pass: EditText
 
   private var accountId: Long = -1
   private var account: AccountDatabase.Account? = null

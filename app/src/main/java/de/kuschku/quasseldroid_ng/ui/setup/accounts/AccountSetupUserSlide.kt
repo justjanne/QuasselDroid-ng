@@ -1,12 +1,12 @@
 package de.kuschku.quasseldroid_ng.ui.setup.accounts
 
 import android.os.Bundle
-import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid_ng.R
@@ -17,12 +17,12 @@ class AccountSetupUserSlide : SlideFragment() {
   @BindView(R.id.userWrapper)
   lateinit var userWrapper: TextInputLayout
   @BindView(R.id.user)
-  lateinit var userField: TextInputEditText
+  lateinit var userField: EditText
 
   @BindView(R.id.passWrapper)
   lateinit var passWrapper: TextInputLayout
   @BindView(R.id.pass)
-  lateinit var passField: TextInputEditText
+  lateinit var passField: EditText
 
   override fun isValid(): Boolean {
     return true

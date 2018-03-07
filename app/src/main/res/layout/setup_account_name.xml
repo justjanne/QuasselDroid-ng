@@ -12,7 +12,7 @@
     android:hint="@string/labelAccountName"
     app:errorEnabled="true">
 
-    <android.support.design.widget.TextInputEditText
+    <EditText
       android:id="@+id/name"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
