@@ -35,7 +35,7 @@ android {
     targetSdkVersion(27)
 
     applicationId = "de.kuschku.quasseldroid_ng"
-    versionCode = 1
+    versionCode = cmd("git", "rev-list", "--count", "HEAD")?.toIntOrNull() ?: 1
     versionName = cmd("git", "describe", "--tags", "HEAD") ?: "1.0.0"
 
     buildConfigField("String", "GIT_HEAD", "\"${cmd("git", "rev-parse", "HEAD") ?: ""}\"")
