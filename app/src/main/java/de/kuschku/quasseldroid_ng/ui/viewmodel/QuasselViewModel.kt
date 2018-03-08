@@ -16,6 +16,7 @@ import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.and
 import de.kuschku.libquassel.util.hasFlag
+import de.kuschku.quasseldroid_ng.ui.chat.AutoCompleteAdapter
 import de.kuschku.quasseldroid_ng.ui.chat.NickListAdapter
 import de.kuschku.quasseldroid_ng.ui.chat.ToolbarFragment
 import de.kuschku.quasseldroid_ng.ui.chat.buffers.BufferListAdapter
@@ -190,6 +191,119 @@ class QuasselViewModel : ViewModel() {
     } else {
       Observable.just(emptyList())
     }
+  }
+
+  val lastWord = MutableLiveData<Observable<String>>()
+
+  val autoCompleteData: LiveData<List<AutoCompleteAdapter.AutoCompleteItem>?> = session.zip(
+    buffer, lastWord
+  ).switchMapRx { (session, id, lastWordWrapper) ->
+    lastWordWrapper
+      .distinctUntilChanged()
+      .debounce(300, TimeUnit.MILLISECONDS)
+      .switchMap { lastWord ->
+        val bufferSyncer = session?.bufferSyncer
+        val bufferInfo = bufferSyncer?.bufferInfo(id)
+        if (bufferSyncer != null && lastWord.length >= 3) {
+          bufferSyncer.liveBufferInfos().switchMap { infos ->
+            if (bufferInfo?.type?.hasFlag(
+                Buffer_Type.ChannelBuffer
+              ) == true) {
+              val network = session.networks[bufferInfo.networkId]
+              val ircChannel = network?.ircChannel(
+                bufferInfo.bufferName
+              )
+              if (ircChannel != null) {
+                ircChannel.liveIrcUsers().switchMap { users ->
+                  val buffers: List<Observable<AutoCompleteAdapter.AutoCompleteItem.ChannelItem>?> = infos.values
+                    .filter {
+                      it.type.toInt() == Buffer_Type.ChannelBuffer.toInt()
+                    }.mapNotNull { info ->
+                      session.networks[info.networkId]?.let { info to it }
+                    }.map<Pair<BufferInfo, Network>, Observable<AutoCompleteAdapter.AutoCompleteItem.ChannelItem>?> { (info, network) ->
+                      network.liveIrcChannel(
+                        info.bufferName
+                      ).switchMap { channel ->
+                        channel.liveTopic().map { topic ->
+                          AutoCompleteAdapter.AutoCompleteItem.ChannelItem(
+                            info = info,
+                            network = network.networkInfo(),
+                            bufferStatus = when (channel) {
+                              IrcChannel.NULL -> BufferListAdapter.BufferStatus.OFFLINE
+                              else            -> BufferListAdapter.BufferStatus.ONLINE
+                            },
+                            description = topic
+                          )
+                        }
+                      }
+                    }
+                  val nicks = users.map<IrcUser, Observable<AutoCompleteAdapter.AutoCompleteItem.UserItem>?> { user ->
+                    user.liveNick().switchMap { nick ->
+                      user.liveRealName().switchMap { realName ->
+                        user.liveIsAway().map { away ->
+                          val userModes = ircChannel.userModes(
+                            user
+                          )
+                          val prefixModes = network.prefixModes()
+
+                          val lowestMode = userModes.mapNotNull {
+                            prefixModes.indexOf(
+                              it
+                            )
+                          }.min() ?: prefixModes.size
+
+                          AutoCompleteAdapter.AutoCompleteItem.UserItem(
+                            nick,
+                            network.modesToPrefixes(
+                              userModes
+                            ),
+                            lowestMode,
+                            realName,
+                            away,
+                            network.support(
+                              "CASEMAPPING"
+                            )
+                          )
+                        }
+                      }
+                    }
+                  }
+
+                  Observable.combineLatest(
+                    nicks + buffers,
+                    object :
+                      Function<Array<Any>, List<AutoCompleteAdapter.AutoCompleteItem>> {
+                      override fun apply(
+                        objects: Array<Any>): List<AutoCompleteAdapter.AutoCompleteItem> {
+                        return objects.toList() as List<AutoCompleteAdapter.AutoCompleteItem>
+                      }
+                    }).map { list ->
+                    list
+                      .filter {
+                        it.name.contains(
+                          lastWord,
+                          ignoreCase = true
+                        )
+                      }.sorted()
+                  }
+                }
+              } else {
+                Observable.just(
+                  emptyList()
+                )
+              }
+            } else {
+              Observable.just(
+                emptyList()
+              )
+            }
+          }
+        } else {
+          Observable.just(
+            emptyList()
+          )
+        }
+      }
   }
 
   val bufferViewConfigs = bufferViewManager.switchMapRx { manager ->

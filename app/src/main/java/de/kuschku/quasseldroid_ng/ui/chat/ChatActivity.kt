@@ -45,7 +45,6 @@ import de.kuschku.quasseldroid_ng.util.helper.*
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
 import io.reactivex.subjects.BehaviorSubject
-import java.util.concurrent.TimeUnit
 
 class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
                      ActionMenuView.OnMenuItemClickListener {
@@ -116,8 +115,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   private val lastWord = BehaviorSubject.createDefault("")
   private val textWatcher = object : TextWatcher {
-    override fun afterTextChanged(s: Editable?) =
+    override fun afterTextChanged(s: Editable?) {
       lastWord.onNext(s?.lastWord(chatline.selectionStart, onlyBeforeCursor = true).toString())
+    }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
@@ -142,6 +142,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     viewModel = ViewModelProviders.of(this)[QuasselViewModel::class.java]
     viewModel.setBackend(this.backend)
+    viewModel.lastWord.value = lastWord
     backlogSettings = Settings.backlog(this)
 
     inputEditor = InputEditor(chatline)
@@ -223,21 +224,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     val autocompleteAdapter = AutoCompleteAdapter(
       this,
-      viewModel.nickData.switchMapRx { nicks ->
-        lastWord
-          .map { if (it.length >= 3) it else "" }
-          .distinctUntilChanged()
-          .debounce(300, TimeUnit.MILLISECONDS)
-          .map { input ->
-            if (input.isEmpty()) {
-              emptyList()
-            } else {
-              nicks.filter {
-                it.nick.contains(input, ignoreCase = true)
-              }.sortedBy(NickListAdapter.IrcUserItem::nick)
-            }
-          }
-      },
+      viewModel.autoCompleteData,
       handler::post,
       ::runOnUiThread,
       inputEditor::autoComplete
