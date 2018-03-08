@@ -214,9 +214,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       this,
       viewModel.nickData.switchMapRx { nicks ->
         lastWord
-          .filter { it.length >= 3 || it.isEmpty() }
+          .map { if (it.length >= 3) it else "" }
           .distinctUntilChanged()
-          .debounce(100, TimeUnit.MILLISECONDS)
+          .debounce(300, TimeUnit.MILLISECONDS)
           .map { input ->
             if (input.isEmpty()) {
               emptyList()
