@@ -244,17 +244,16 @@ class IrcChannel(
     if (!isKnownUser(ircuser))
       return
     _userModes.remove(ircuser)
-    live_userModes.onNext(_userModes)
     ircuser.partChannel(this)
     if (network().isMe(ircuser) || _userModes.isEmpty()) {
       for (user in _userModes.keys) {
         user.partChannel(this)
       }
       _userModes.clear()
-      live_userModes.onNext(_userModes)
       network().removeIrcChannel(this)
       proxy.stopSynchronize(this)
     }
+    live_userModes.onNext(_userModes)
     super.part(ircuser)
   }
 

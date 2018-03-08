@@ -9,7 +9,6 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.support.design.widget.Snackbar
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -83,8 +82,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   private val handler = AndroidHandlerThread("Chat")
 
   private lateinit var viewModel: QuasselViewModel
-
-  private var snackbar: Snackbar? = null
 
   private lateinit var database: QuasselDatabase
 
