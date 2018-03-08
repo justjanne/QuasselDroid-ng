@@ -161,7 +161,7 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
 
     if (!syncableObject.initialized) {
       if (baseInit) {
-        toInit.put(syncableObject, mutableListOf())
+        toInit[syncableObject] = mutableListOf()
         totalInitCount++
       }
       dispatch(SignalProxyMessage.InitRequest(syncableObject.className, syncableObject.objectName))

@@ -262,7 +262,7 @@ class Network constructor(
     }
   }
 
-  fun supports(param: String) = _supports.contains(param.toUpperCase(Locale.ENGLISH))
+  fun supports(param: String) = _supports.contains(param.toUpperCase(Locale.US))
   fun support(param: String) = _supports.getOr(param, "")
   /**
    * Checks if a given capability is advertised by the server.
@@ -274,8 +274,7 @@ class Network constructor(
    * @param capability Name of capability
    * @return True if connected and advertised by the server, otherwise false
    */
-  fun capAvailable(capability: String)
-    = _caps.contains(capability.toLowerCase(Locale.ENGLISH))
+  fun capAvailable(capability: String) = _caps.contains(capability.toLowerCase(Locale.US))
 
   /**
    * Checks if a given capability is acknowledged and active.
@@ -283,8 +282,7 @@ class Network constructor(
    * @param capability Name of capability
    * @return True if acknowledged (active), otherwise false
    */
-  fun capEnabled(capability: String)
-    = _capsEnabled.contains(capability.toLowerCase(Locale.ENGLISH))
+  fun capEnabled(capability: String) = _capsEnabled.contains(capability.toLowerCase(Locale.US))
 
   /**
    * Gets the value of an available capability, e.g. for SASL, "EXTERNAL,PLAIN".
@@ -292,8 +290,7 @@ class Network constructor(
    * @param capability Name of capability
    * @return Value of capability if one was specified, otherwise isEmpty string
    */
-  fun capValue(capability: String)
-    = _caps.getOr(capability.toLowerCase(Locale.ENGLISH), "")
+  fun capValue(capability: String) = _caps.getOr(capability.toLowerCase(Locale.US), "")
 
   /**
    * Check if the given authentication mechanism is likely to be supported.
@@ -323,7 +320,7 @@ class Network constructor(
   }
 
   fun newIrcUser(hostMask: String, initData: QVariantMap = emptyMap()): IrcUser {
-    val nick = HostmaskHelper.nick(hostMask).toLowerCase(Locale.ENGLISH)
+    val nick = HostmaskHelper.nick(hostMask).toLowerCase(Locale.US)
     val user = ircUser(nick)
     return if (user == null) {
       val ircUser = IrcUser(hostMask, this, proxy)
@@ -343,7 +340,7 @@ class Network constructor(
     }
   }
 
-  fun ircUser(nickName: String?) = _ircUsers[nickName?.toLowerCase(Locale.ENGLISH)]
+  fun ircUser(nickName: String?) = _ircUsers[nickName?.toLowerCase(Locale.US)]
   fun liveIrcUser(nickName: String?) = live_ircUsers.map {
     ircUser(
       nickName
@@ -362,7 +359,7 @@ class Network constructor(
         ircChannel.initialized = true
       }
       proxy.synchronize(ircChannel)
-      _ircChannels[channelName.toLowerCase(Locale.ENGLISH)] = ircChannel
+      _ircChannels[channelName.toLowerCase(Locale.US)] = ircChannel
       live_ircChannels.onNext(_ircChannels)
       super.addIrcChannel(channelName)
       return ircChannel
@@ -371,7 +368,7 @@ class Network constructor(
     }
   }
 
-  fun ircChannel(channelName: String?) = _ircChannels[channelName?.toLowerCase(Locale.ENGLISH)]
+  fun ircChannel(channelName: String?) = _ircChannels[channelName?.toLowerCase(Locale.US)]
   fun liveIrcChannel(channelName: String?) = live_ircChannels.map {
     ircChannel(
       channelName
@@ -644,12 +641,12 @@ class Network constructor(
   }
 
   override fun addCap(capability: String, value: String) {
-    _caps[capability.toLowerCase(Locale.ENGLISH)] = value
+    _caps[capability.toLowerCase(Locale.US)] = value
     super.addCap(capability, value)
   }
 
   override fun acknowledgeCap(capability: String) {
-    val lowerCase = capability.toLowerCase(Locale.ENGLISH)
+    val lowerCase = capability.toLowerCase(Locale.US)
     if (!_capsEnabled.contains(lowerCase))
       return
     _capsEnabled.add(lowerCase)
@@ -657,7 +654,7 @@ class Network constructor(
   }
 
   override fun removeCap(capability: String) {
-    val lowerCase = capability.toLowerCase(Locale.ENGLISH)
+    val lowerCase = capability.toLowerCase(Locale.US)
     if (!_caps.contains(lowerCase))
       return
     _caps.remove(lowerCase)
@@ -842,7 +839,7 @@ class Network constructor(
   }
 
   fun updateNickFromMask(mask: String): IrcUser {
-    val nick = HostmaskHelper.nick(mask).toLowerCase(Locale.ENGLISH)
+    val nick = HostmaskHelper.nick(mask).toLowerCase(Locale.US)
     val user = _ircUsers[nick]
     return if (user != null) {
       user.updateHostmask(mask)
@@ -852,8 +849,11 @@ class Network constructor(
     }
   }
 
-  override fun ircUserNickChanged(newnick: String) {
-    throw RuntimeException("Look at this: $newnick")
+  override fun ircUserNickChanged(old: String, new: String) {
+    val value = _ircUsers.remove(old.toLowerCase(Locale.US))
+    if (value != null) {
+      _ircUsers[new.toLowerCase(Locale.US)] = value
+    }
   }
 
   override fun emitConnectionError(error: String) {

@@ -2,10 +2,11 @@ package de.kuschku.quasseldroid_ng.util.compatibility
 
 import android.util.Log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler
+import de.kuschku.quasseldroid_ng.BuildConfig
 
 object AndroidLoggingHandler : LoggingHandler() {
   override fun isLoggable(logLevel: LogLevel, tag: String): Boolean {
-    return Log.isLoggable(tag, priority(logLevel))
+    return BuildConfig.DEBUG || Log.isLoggable(tag, priority(logLevel))
   }
 
   override fun log(logLevel: LogLevel, tag: String, message: String?, throwable: Throwable?) {

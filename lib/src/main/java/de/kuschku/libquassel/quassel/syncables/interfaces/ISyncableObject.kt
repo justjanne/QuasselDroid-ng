@@ -8,7 +8,7 @@ import de.kuschku.libquassel.session.SignalProxy
 
 interface ISyncableObject {
   val objectName: String
-  var identifier: String
+  var identifier: Pair<String, String>
   val className: String
   var initialized: Boolean
   val proxy: SignalProxy

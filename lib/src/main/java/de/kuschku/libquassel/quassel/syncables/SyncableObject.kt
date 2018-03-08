@@ -9,20 +9,20 @@ abstract class SyncableObject(
 ) : ISyncableObject {
   final override var objectName: String = ""
     private set
-  override var identifier: String = "$className:"
+  override var identifier = Pair(className, objectName)
   override var initialized: Boolean = false
 
   protected fun renameObject(newName: String) {
     val oldName = objectName
     if (!initialized) {
       objectName = newName
-      identifier = "$className:$objectName"
+      identifier = Pair(className, objectName)
     } else if (oldName != newName) {
       objectName = newName
-      identifier = "$className:$objectName"
+      identifier = Pair(className, objectName)
       proxy.renameObject(this, newName, oldName)
     }
   }
 
-  override fun toString() = identifier
+  override fun toString() = "${identifier.first}:${identifier.second}"
 }

@@ -7,6 +7,7 @@ import de.kuschku.libquassel.protocol.valueOr
 import de.kuschku.libquassel.quassel.syncables.interfaces.IIrcUser
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.irc.HostmaskHelper
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
 import java.nio.charset.Charset
@@ -67,29 +68,70 @@ class IrcUser(
     setUserModes(properties["userModes"].valueOr(this::userModes))
   }
 
-  fun user() = _user
-  fun host() = _host
   fun nick() = _nick
+  fun liveNick(): Observable<String> = live_nick
+
+  fun user() = _user
+  fun liveUser(): Observable<String> = live_user
+
+  fun host() = _host
+  fun liveHost(): Observable<String> = live_host
+
   fun realName() = _realName
+  fun liveRealName(): Observable<String> = live_realName
+
   fun account() = _account
+  fun liveAccount(): Observable<String> = live_account
+
   fun hostMask() = "${nick()}!${user()}@${host()}"
+  fun liveHostMask() = liveNick().switchMap { nick ->
+    liveUser().switchMap { user ->
+      liveHost().map { host ->
+        "$nick!$user@$host"
+      }
+    }
+  }
+
   fun isAway() = _away
+  fun liveIsAway(): Observable<Boolean> = live_away
+
   fun awayMessage() = _awayMessage
+  fun liveAwayMessage(): Observable<String> = live_awayMessage
+
+  fun server() = _server
+  fun liveServer(): Observable<String> = live_server
+
   fun idleTime(): Instant {
     if (Instant.now().epochSecond - _idleTimeSet.epochSecond > 1200)
       _idleTime = Instant.EPOCH
     return _idleTime
   }
 
+  fun liveIdleTime(): Observable<Instant> = live_idleTime
+
   fun loginTime() = _loginTime
-  fun server() = _server
+  fun liveLoginTime(): Observable<Instant> = live_loginTime
+
   fun ircOperator() = _ircOperator
+  fun liveIrcOperator(): Observable<String> = live_ircOperator
+
   fun lastAwayMessage() = _lastAwayMessage
+  fun liveLastAwayMessage(): Observable<Int> = live_lastAwayMessage
+
   fun whoisServiceReply() = _whoisServiceReply
+  fun liveWhoisServiceReply(): Observable<String> = live_whoisServiceReply
+
   fun suserHost() = _suserHost
+  fun liveSuserHost(): Observable<String> = live_suserHost
+
   fun encrypted() = _encrypted
+  fun liveEncrypted(): Observable<Boolean> = live_encrypted
+
   fun network() = _network
+
   fun userModes() = _userModes
+  fun liveUserModes(): Observable<String> = live_userModes
+
   fun channels() = _channels.map(IrcChannel::name)
   fun codecForEncoding() = _codecForEncoding
   fun codecForDecoding() = _codecForDecoding
@@ -119,6 +161,7 @@ class IrcUser(
 
   override fun setNick(nick: String) {
     if (nick.isNotEmpty() && _nick != nick) {
+      network().ircUserNickChanged(_nick, nick)
       _nick = nick
       updateObjectName()
       super.setNick(nick)
@@ -128,7 +171,6 @@ class IrcUser(
   override fun setRealName(realName: String) {
     if (_realName != realName) {
       _realName = realName
-      live_realName.onNext(realName)
       super.setRealName(realName)
     }
   }
@@ -143,7 +185,6 @@ class IrcUser(
   override fun setAway(away: Boolean) {
     if (_away != away) {
       _away = away
-      live_away.onNext(away)
       super.setAway(away)
     }
   }
@@ -268,29 +309,97 @@ class IrcUser(
   }
 
   fun updateObjectName() {
-    renameObject("${network().networkId()}/$_nick")
+    val identifier = "${network().networkId()}/${nick()}"
+    renameObject(identifier)
   }
 
-  private var _nick: String = HostmaskHelper.nick(hostmask)
-  private var _user: String = HostmaskHelper.user(hostmask)
-  private var _host: String = HostmaskHelper.host(hostmask)
-  private var _realName: String = ""
-  val live_realName = BehaviorSubject.createDefault("")
-  private var _account: String = ""
-  private var _awayMessage: String = ""
-  private var _away: Boolean = false
-  val live_away = BehaviorSubject.createDefault(false)
-  private var _server: String = ""
-  private var _idleTime: Instant = Instant.EPOCH
-  private var _idleTimeSet: Instant = Instant.EPOCH
-  private var _loginTime: Instant = Instant.EPOCH
-  private var _ircOperator: String = ""
-  private var _lastAwayMessage: Int = 0
-  private var _whoisServiceReply: String = ""
-  private var _suserHost: String = ""
-  private var _encrypted: Boolean = false
+  private val live_nick = BehaviorSubject.createDefault(HostmaskHelper.nick(hostmask))
+  private var _nick: String
+    get() = live_nick.value
+    set(value) = live_nick.onNext(value)
+
+  private val live_user = BehaviorSubject.createDefault(HostmaskHelper.user(hostmask))
+  private var _user: String
+    get() = live_user.value
+    set(value) = live_user.onNext(value)
+
+  private val live_host = BehaviorSubject.createDefault(HostmaskHelper.host(hostmask))
+  private var _host: String
+    get() = live_host.value
+    set(value) = live_host.onNext(value)
+
+  private val live_realName = BehaviorSubject.createDefault("")
+  private var _realName: String
+    get() = live_realName.value
+    set(value) = live_realName.onNext(value)
+
+  private val live_account = BehaviorSubject.createDefault("")
+  private var _account: String
+    get() = live_account.value
+    set(value) = live_account.onNext(value)
+
+  private val live_awayMessage = BehaviorSubject.createDefault("")
+  private var _awayMessage: String
+    get() = live_awayMessage.value
+    set(value) = live_awayMessage.onNext(value)
+
+  private val live_away = BehaviorSubject.createDefault(false)
+  private var _away: Boolean
+    get() = live_away.value
+    set(value) = live_away.onNext(value)
+
+  private val live_server = BehaviorSubject.createDefault("")
+  private var _server: String
+    get() = live_server.value
+    set(value) = live_server.onNext(value)
+
+  private val live_idleTime = BehaviorSubject.createDefault(Instant.EPOCH)
+  private var _idleTime: Instant
+    get() = live_idleTime.value
+    set(value) = live_idleTime.onNext(value)
+
+  private val live_idleTimeSet = BehaviorSubject.createDefault(Instant.EPOCH)
+  private var _idleTimeSet: Instant
+    get() = live_idleTimeSet.value
+    set(value) = live_idleTimeSet.onNext(value)
+
+  private val live_loginTime = BehaviorSubject.createDefault(Instant.EPOCH)
+  private var _loginTime: Instant
+    get() = live_loginTime.value
+    set(value) = live_loginTime.onNext(value)
+
+  private val live_ircOperator = BehaviorSubject.createDefault("")
+  private var _ircOperator: String
+    get() = live_ircOperator.value
+    set(value) = live_ircOperator.onNext(value)
+
+  private val live_lastAwayMessage = BehaviorSubject.createDefault(0)
+  private var _lastAwayMessage: Int
+    get() = live_lastAwayMessage.value
+    set(value) = live_lastAwayMessage.onNext(value)
+
+  private val live_whoisServiceReply = BehaviorSubject.createDefault("")
+  private var _whoisServiceReply: String
+    get() = live_whoisServiceReply.value
+    set(value) = live_whoisServiceReply.onNext(value)
+
+  private val live_suserHost = BehaviorSubject.createDefault("")
+  private var _suserHost: String
+    get() = live_suserHost.value
+    set(value) = live_suserHost.onNext(value)
+
+  private val live_encrypted = BehaviorSubject.createDefault(false)
+  private var _encrypted: Boolean
+    get() = live_encrypted.value
+    set(value) = live_encrypted.onNext(value)
+
   private var _channels: MutableSet<IrcChannel> = mutableSetOf()
-  private var _userModes: String = ""
+
+  private val live_userModes = BehaviorSubject.createDefault("")
+  private var _userModes: String
+    get() = live_userModes.value
+    set(value) = live_userModes.onNext(value)
+
   private var _network: Network = network
   private var _codecForEncoding: Charset? = null
   private var _codecForDecoding: Charset? = null

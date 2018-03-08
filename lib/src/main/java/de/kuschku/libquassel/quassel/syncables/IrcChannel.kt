@@ -6,6 +6,7 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.IIrcChannel
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.helpers.getOr
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.nio.charset.Charset
 
@@ -15,6 +16,9 @@ class IrcChannel(
   proxy: SignalProxy
 ) : SyncableObject(proxy, "IrcChannel"), IIrcChannel {
   override fun init() {
+    if (name().isEmpty()) {
+      println("Error: channelName is empty")
+    }
     renameObject("${network().networkId()}/${name()}")
   }
 
@@ -79,6 +83,7 @@ class IrcChannel(
         network().newIrcUser(key) to value.value("")
       }.toMap()
     )
+    live_userModes.onNext(_userModes)
   }
 
   override fun initSetProperties(properties: QVariantMap) {
@@ -96,13 +101,30 @@ class IrcChannel(
   }
 
   fun name() = _name
+  fun liveName(): Observable<String> = live_name
+
   fun topic() = _topic
+  fun liveTopic(): Observable<String> = live_topic
+
   fun password() = _password
+  fun livePassword(): Observable<String> = live_password
+
   fun encrypted() = _encrypted
+  fun liveEncrypted(): Observable<Boolean> = live_encrypted
+
   fun network() = _network
+
   fun ircUsers() = _userModes.keys
+  fun liveIrcUsers(): Observable<MutableSet<IrcUser>> =
+    live_userModes.map(MutableMap<IrcUser, String>::keys)
+
   fun userModes(ircUser: IrcUser) = _userModes.getOr(ircUser, "")
+  fun liveUserModes(ircUser: IrcUser) = live_userModes.map {
+    _userModes.getOr(ircUser, "")
+  }
   fun userModes(nick: String) = network().ircUser(nick)?.let { userModes(it) } ?: ""
+  fun liveUserModes(nick: String) = network().ircUser(nick)?.let { userModes(it) } ?: ""
+
   fun hasMode(mode: Char) = when (network().channelModeType(mode)) {
     INetwork.ChannelModeType.A_CHANMODE ->
       _A_channelModes.contains(mode)
@@ -166,7 +188,6 @@ class IrcChannel(
     if (_topic == topic)
       return
     _topic = topic
-    live_topic.onNext(topic)
     super.setTopic(topic)
   }
 
@@ -205,6 +226,7 @@ class IrcChannel(
       _userModes[user] = modes
       user.joinChannel(this, true)
     }
+    live_userModes.onNext(_userModes)
     if (newNicks.isNotEmpty())
       super.joinIrcUsers(
         newNicks.map(Pair<IrcUser, String>::first).map(IrcUser::nick),
@@ -222,12 +244,14 @@ class IrcChannel(
     if (!isKnownUser(ircuser))
       return
     _userModes.remove(ircuser)
+    live_userModes.onNext(_userModes)
     ircuser.partChannel(this)
     if (network().isMe(ircuser) || _userModes.isEmpty()) {
       for (user in _userModes.keys) {
         user.partChannel(this)
       }
       _userModes.clear()
+      live_userModes.onNext(_userModes)
       network().removeIrcChannel(this)
       proxy.stopSynchronize(this)
     }
@@ -242,6 +266,7 @@ class IrcChannel(
     if (ircuser == null || !isKnownUser(ircuser))
       return
     _userModes[ircuser] = modes
+    live_userModes.onNext(_userModes)
     super.setUserModes(ircuser.nick(), modes)
   }
 
@@ -259,6 +284,7 @@ class IrcChannel(
     if (_userModes.getOr(ircuser, "").contains(mode, ignoreCase = true))
       return
     _userModes[ircuser] = _userModes.getOr(ircuser, "") + mode
+    live_userModes.onNext(_userModes)
     super.addUserMode(ircuser.nick(), mode)
   }
 
@@ -273,6 +299,7 @@ class IrcChannel(
       return
     _userModes[ircuser] = _userModes.getOr(ircuser, "")
       .replace(mode, "", ignoreCase = true)
+    live_userModes.onNext(_userModes)
     super.addUserMode(ircuser.nick(), mode)
   }
 
@@ -312,15 +339,36 @@ class IrcChannel(
     super.removeChannelMode(mode, value)
   }
 
-  private var _name: String = name
-  private var _topic: String = ""
-  val live_topic = BehaviorSubject.createDefault("")
-  private var _password: String = ""
-  private var _encrypted: Boolean = false
-  private var _userModes: MutableMap<IrcUser, String> = mutableMapOf()
+  private val live_name = BehaviorSubject.createDefault(name)
+  private var _name: String
+    get() = live_name.value
+    set(value) = live_name.onNext(value)
+
+  private val live_topic = BehaviorSubject.createDefault("")
+  private var _topic: String
+    get() = live_topic.value
+    set(value) = live_topic.onNext(value)
+
+  private val live_password = BehaviorSubject.createDefault("")
+  private var _password: String
+    get() = live_password.value
+    set(value) = live_password.onNext(value)
+
+  private val live_encrypted = BehaviorSubject.createDefault(false)
+  private var _encrypted: Boolean
+    get() = live_encrypted.value
+    set(value) = live_encrypted.onNext(value)
+
+  private val live_userModes = BehaviorSubject.createDefault(mutableMapOf<IrcUser, String>())
+  private var _userModes: MutableMap<IrcUser, String>
+    get() = live_userModes.value
+    set(value) = live_userModes.onNext(value)
+
   private var _network: Network = network
+
   private var _codecForEncoding: Charset? = null
   private var _codecForDecoding: Charset? = null
+
   private var _A_channelModes: MutableMap<Char, MutableSet<String>> = mutableMapOf()
   private var _B_channelModes: MutableMap<Char, String> = mutableMapOf()
   private var _C_channelModes: MutableMap<Char, String> = mutableMapOf()

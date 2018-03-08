@@ -87,12 +87,13 @@ abstract class StringSerializer(
       } else {
         val limit = buffer.limit()
         buffer.limit(buffer.position() + len - trailingNullBytes)
-        val charBuffer = charBuffer(len)
-        decoder.reset()
-        decoder.decode(buffer, charBuffer, true)
+        //val charBuffer = charBuffer(len)
+        //decoder.reset()
+        val charBuffer = decoder.charset().decode(buffer)
+        //decoder.decode(buffer, charBuffer, true)
         buffer.limit(limit)
         buffer.position(buffer.position() + trailingNullBytes)
-        charBuffer.flip()
+        //charBuffer.flip()
         charBuffer.toString()
       }
     } catch (e: Throwable) {
@@ -109,12 +110,12 @@ abstract class StringSerializer(
       } else {
         val limit = buffer.limit()
         buffer.limit(buffer.position() + Math.max(0, len - trailingNullBytes))
-        val charBuffer = charBuffer(len)
-        decoder.reset()
-        decoder.decode(buffer, charBuffer, true)
+        //val charBuffer = charBuffer(len)
+        val charBuffer = decoder.charset().decode(buffer)
+        //decoder.decode(buffer, charBuffer, true)
         buffer.limit(limit)
         buffer.position(buffer.position() + trailingNullBytes)
-        charBuffer.flip()
+        //charBuffer.flip()
         charBuffer.toString()
       }
     } catch (e: Throwable) {

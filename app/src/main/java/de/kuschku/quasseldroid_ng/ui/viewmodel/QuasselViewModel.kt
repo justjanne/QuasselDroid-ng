@@ -25,7 +25,6 @@ import de.kuschku.quasseldroid_ng.util.helper.switchMap
 import de.kuschku.quasseldroid_ng.util.helper.switchMapRx
 import de.kuschku.quasseldroid_ng.util.helper.zip
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function
 import java.util.concurrent.TimeUnit
 
@@ -102,7 +101,7 @@ class QuasselViewModel : ViewModel() {
           when (info.type.toInt()) {
             BufferInfo.Type.QueryBuffer.toInt()   -> {
               network.liveIrcUser(info.bufferName).switchMap { user ->
-                user.live_realName.map { realName ->
+                user.liveRealName().map { realName ->
                   ToolbarFragment.BufferData(
                     info = info,
                     network = network.networkInfo(),
@@ -115,7 +114,7 @@ class QuasselViewModel : ViewModel() {
               network.liveIrcChannel(
                 info.bufferName
               ).switchMap { channel ->
-                channel.live_topic.map { topic ->
+                channel.liveTopic().map { topic ->
                   ToolbarFragment.BufferData(
                     info = info,
                     network = network.networkInfo(),
@@ -145,39 +144,46 @@ class QuasselViewModel : ViewModel() {
     }
   }
 
-  val nickData = session.zip(buffer).switchMapRx { (session, buffer) ->
+  val nickData: LiveData<List<NickListAdapter.IrcUserItem>?> = session.zip(
+    buffer
+  ).switchMapRx { (session, buffer) ->
     val bufferSyncer = session?.bufferSyncer
     val bufferInfo = bufferSyncer?.bufferInfo(buffer)
     if (bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
       val network = session.networks[bufferInfo.networkId]
       val ircChannel = network?.ircChannel(bufferInfo.bufferName)
       if (ircChannel != null) {
-        Observable.combineLatest(
-          ircChannel.ircUsers().map { user ->
-            Observable.zip(
-              user.live_realName, user.live_away,
-              BiFunction<String, Boolean, Pair<String, Boolean>> { a, b -> Pair(a, b) }
-            ).map { (realName, away) ->
-              val userModes = ircChannel.userModes(user)
-              val prefixModes = network.prefixModes()
+        ircChannel.liveIrcUsers().switchMap { users ->
+          Observable.combineLatest(
+            users.map<IrcUser, Observable<NickListAdapter.IrcUserItem>?> { user ->
+              user.liveNick().switchMap { nick ->
+                user.liveRealName().switchMap { realName ->
+                  user.liveIsAway().map { away ->
+                    val userModes = ircChannel.userModes(user)
+                    val prefixModes = network.prefixModes()
 
-              val lowestMode = userModes.mapNotNull {
-                prefixModes.indexOf(it)
-              }.min() ?: prefixModes.size
+                    val lowestMode = userModes.mapNotNull {
+                      prefixModes.indexOf(it)
+                    }.min() ?: prefixModes.size
 
-              NickListAdapter.IrcUserItem(
-                user.nick(),
-                network.modesToPrefixes(userModes),
-                lowestMode,
-                realName,
-                away,
-                network.support("CASEMAPPING")
-              )
+                    NickListAdapter.IrcUserItem(
+                      nick,
+                      network.modesToPrefixes(userModes),
+                      lowestMode,
+                      realName,
+                      away,
+                      network.support("CASEMAPPING")
+                    )
+                  }
+                }
+              }
+            },
+            object : Function<Array<Any>, List<NickListAdapter.IrcUserItem>> {
+              override fun apply(array: Array<Any>) =
+                array.toList() as List<NickListAdapter.IrcUserItem>
             }
-          }, { array: Array<Any> ->
-            array.toList() as List<NickListAdapter.IrcUserItem>
-          }
-        )
+          )
+        }
       } else {
         Observable.just(emptyList())
       }
@@ -287,8 +293,8 @@ class QuasselViewModel : ViewModel() {
                     when (info.type.toInt()) {
                       BufferInfo.Type.QueryBuffer.toInt()   -> {
                         network.liveIrcUser(info.bufferName).switchMap { user ->
-                          user.live_away.switchMap { away ->
-                            user.live_realName.map { realName ->
+                          user.liveIsAway().switchMap { away ->
+                            user.liveRealName().map { realName ->
                               BufferListAdapter.BufferProps(
                                 info = info,
                                 network = network.networkInfo(),
@@ -310,7 +316,7 @@ class QuasselViewModel : ViewModel() {
                         network.liveIrcChannel(
                           info.bufferName
                         ).switchMap { channel ->
-                          channel.live_topic.map { topic ->
+                          channel.liveTopic().map { topic ->
                             BufferListAdapter.BufferProps(
                               info = info,
                               network = network.networkInfo(),

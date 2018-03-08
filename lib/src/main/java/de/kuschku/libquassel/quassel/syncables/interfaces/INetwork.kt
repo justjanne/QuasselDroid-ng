@@ -62,7 +62,7 @@ interface INetwork : ISyncableObject {
   }
 
   @Slot
-  fun ircUserNickChanged(newnick: String)
+  fun ircUserNickChanged(old: String, new: String)
 
   @Slot
   fun removeCap(capability: String) {
