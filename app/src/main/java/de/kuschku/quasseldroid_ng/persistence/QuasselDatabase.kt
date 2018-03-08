@@ -72,6 +72,9 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId DESC LIMIT 1")
     fun findLastByBufferId(bufferId: Int): DatabaseMessage?
 
+    @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId DESC LIMIT 1")
+    fun lastMsgId(bufferId: Int): LiveData<DatabaseMessage>
+
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC LIMIT 1")
     fun findFirstByBufferId(bufferId: Int): DatabaseMessage?
 

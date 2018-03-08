@@ -102,21 +102,27 @@ class MessageListFragment : ServiceBoundFragment() {
     }
 
     handler.post {
-      viewModel.sessionManager.zip(viewModel.getBuffer(), data).observe(
+      val lastMessageId = viewModel.getBuffer().switchMapNotNull {
+        database.message().lastMsgId(it)
+      }
+
+      var previousMessageId = -1
+      viewModel.sessionManager.zip(lastMessageId).observe(
         this, Observer {
         val previous = lastBuffer ?: -1
         val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
-        val messageId = adapter[firstVisibleItemPosition]?.messageId
+        val firstVisibleMessageId = adapter[firstVisibleItemPosition]?.messageId
         handler.post {
           val session = it?.first
-          val buffer = it?.second
+          val message = it?.second
           val bufferSyncer = session?.bufferSyncer
-          if (buffer != null && bufferSyncer != null) {
-            markAsRead(bufferSyncer, buffer, messageId)
-            if (buffer != previous) {
-              onBufferChange(previous, buffer, messageId, bufferSyncer)
+          if (message != null && bufferSyncer != null && previousMessageId != message.messageId) {
+            markAsRead(bufferSyncer, message.bufferId, message.messageId)
+            if (message.bufferId != previous) {
+              onBufferChange(previous, message.bufferId, firstVisibleMessageId, bufferSyncer)
             }
-            lastBuffer = buffer
+            lastBuffer = message.bufferId
+            previousMessageId = message.messageId
           }
         }
       }
