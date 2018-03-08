@@ -193,7 +193,7 @@ class QuasselMessageRenderer(
             context.getString(R.string.message_format_part_2),
             formatPrefix(message.senderPrefixes, highlight),
             formatNick(message.sender, self, highlight, true),
-            message.content
+            formatContent(message.content, highlight)
           )
         },
         message.messageId == markerLine
@@ -212,9 +212,31 @@ class QuasselMessageRenderer(
             context.getString(R.string.message_format_quit_2),
             formatPrefix(message.senderPrefixes, highlight),
             formatNick(message.sender, self, highlight, true),
-            message.content
+            formatContent(message.content, highlight)
           )
         },
+        message.messageId == markerLine
+      )
+      Message_Type.Kick         -> FormattedMessage(
+        message.messageId,
+        timeFormatter.format(message.time.atZone(zoneId)),
+        SpanFormatter.format(
+          context.getString(R.string.message_format_kick),
+          formatContent(message.content, highlight),
+          formatPrefix(message.senderPrefixes, highlight),
+          formatNick(message.sender, self, highlight, true)
+        ),
+        message.messageId == markerLine
+      )
+      Message_Type.Kill         -> FormattedMessage(
+        message.messageId,
+        timeFormatter.format(message.time.atZone(zoneId)),
+        SpanFormatter.format(
+          context.getString(R.string.message_format_kill),
+          formatContent(message.content, highlight),
+          formatPrefix(message.senderPrefixes, highlight),
+          formatNick(message.sender, self, highlight, true)
+        ),
         message.messageId == markerLine
       )
       Message_Type.NetsplitJoin -> {
@@ -273,7 +295,7 @@ class QuasselMessageRenderer(
   }
 
   @Language("RegExp")
-  private val scheme = "(?:(?:mailto:|(?:[+.-]?\\w)+://)|www(?=\\.\\S+\\.))"
+  private val scheme = "(?:(?:mailto:|magnet:|(?:[+.-]?\\w)+://)|www(?=\\.\\S+\\.))"
   @Language("RegExp")
   private val authority = "(?:(?:[,.;@:]?[-\\w]+)+\\.?|\\[[0-9a-f:.]+])(?::\\d+)?"
   @Language("RegExp")
@@ -365,7 +387,7 @@ class QuasselMessageRenderer(
         formatNickImpl(sender, !self && !highlight, appearanceSettings.showHostmask && showHostmask)
       ColorizeNicknamesMode.NONE         ->
         formatNickImpl(sender, false, appearanceSettings.showHostmask && showHostmask)
-  }
+    }
 
   private fun formatPrefix(prefix: String,
                            highlight: Boolean) = when (appearanceSettings.showPrefix) {
