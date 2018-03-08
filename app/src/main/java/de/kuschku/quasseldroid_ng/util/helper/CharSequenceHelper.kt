@@ -24,7 +24,7 @@ fun CharSequence.lastWordIndices(cursor: Int = this.length,
   }
 
   return if (end - start > 0 && start >= 0 && end <= length) {
-    start..end
+    start until end
   } else {
     null
   }
