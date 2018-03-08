@@ -44,6 +44,7 @@ class MessageListFragment : ServiceBoundFragment() {
   private lateinit var adapter: MessageAdapter
 
   private var lastBuffer: BufferId? = null
+  private var previousMessageId: MsgId? = null
 
   private lateinit var backlogSettings: BacklogSettings
 
@@ -106,23 +107,33 @@ class MessageListFragment : ServiceBoundFragment() {
         database.message().lastMsgId(it)
       }
 
-      var previousMessageId = -1
       viewModel.sessionManager.zip(lastMessageId).observe(
         this, Observer {
-        val previous = lastBuffer ?: -1
-        val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
-        val firstVisibleMessageId = adapter[firstVisibleItemPosition]?.messageId
         handler.post {
           val session = it?.first
           val message = it?.second
           val bufferSyncer = session?.bufferSyncer
           if (message != null && bufferSyncer != null && previousMessageId != message.messageId) {
             markAsRead(bufferSyncer, message.bufferId, message.messageId)
-            if (message.bufferId != previous) {
-              onBufferChange(previous, message.bufferId, firstVisibleMessageId, bufferSyncer)
-            }
-            lastBuffer = message.bufferId
             previousMessageId = message.messageId
+          }
+        }
+      })
+
+      viewModel.sessionManager.zip(viewModel.getBuffer()).observe(
+        this, Observer {
+        val previous = lastBuffer ?: -1
+        val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
+        val firstVisibleMessageId = adapter[firstVisibleItemPosition]?.messageId
+        handler.post {
+          val session = it?.first
+          val buffer = it?.second
+          val bufferSyncer = session?.bufferSyncer
+          if (buffer != null && bufferSyncer != null) {
+            if (buffer != previous) {
+              onBufferChange(previous, buffer, firstVisibleMessageId, bufferSyncer)
+            }
+            lastBuffer = buffer
           }
         }
       }
