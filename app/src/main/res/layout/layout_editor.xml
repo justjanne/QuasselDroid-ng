@@ -46,11 +46,10 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:srcCompat="@drawable/ic_send" />
 
-  <android.support.v7.widget.RecyclerView
+  <de.kuschku.quasseldroid_ng.util.ui.AutoCompleteRecyclerView
     android:id="@+id/autocomplete_list2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:maxHeight="144dp"
     app:layout_constraintBottom_toTopOf="@+id/formatting_toolbar_container" />
 
   <android.support.design.widget.AppBarLayout

@@ -3,4 +3,6 @@
 
   <dimen name="message_horizontal">8dp</dimen>
   <dimen name="message_vertical">2dp</dimen>
+
+  <dimen name="autocomplete_max_height">96dp</dimen>
 </resources>

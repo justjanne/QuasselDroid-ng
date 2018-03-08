@@ -32,12 +32,10 @@
         android:layout_weight="1"
         tools:layout="@layout/fragment_messages" />
 
-      <android.support.v7.widget.RecyclerView
+      <de.kuschku.quasseldroid_ng.util.ui.AutoCompleteRecyclerView
         android:id="@+id/autocomplete_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxHeight="144dp" />
-
+        android:layout_height="wrap_content" />
     </LinearLayout>
 
     <include layout="@layout/layout_slider" />
