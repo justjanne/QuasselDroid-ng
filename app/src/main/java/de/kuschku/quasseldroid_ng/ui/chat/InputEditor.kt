@@ -222,4 +222,9 @@ class InputEditor(private val editText: EditText) {
       editText.setSelection(editText.text.length)
     }
   }
+
+  fun share(text: CharSequence?) {
+    editText.setText(text)
+    editText.setSelection(editText.text.length)
+  }
 }

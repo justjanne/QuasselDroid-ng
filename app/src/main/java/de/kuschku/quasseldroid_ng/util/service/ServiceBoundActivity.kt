@@ -3,6 +3,7 @@ package de.kuschku.quasseldroid_ng.util.service
 import android.app.Activity
 import android.arch.lifecycle.LiveData
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.annotation.ColorRes
@@ -14,6 +15,7 @@ import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.settings.AppearanceSettings
 import de.kuschku.quasseldroid_ng.settings.ConnectionSettings
 import de.kuschku.quasseldroid_ng.settings.Settings
+import de.kuschku.quasseldroid_ng.ui.setup.accounts.AccountSelectionActivity
 import de.kuschku.quasseldroid_ng.util.helper.sharedPreferences
 import de.kuschku.quasseldroid_ng.util.helper.updateRecentsHeaderIfExisting
 
@@ -32,17 +34,18 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
   protected lateinit var connectionSettings: ConnectionSettings
   protected var accountId: Long = -1
 
+  private var startedSelection = false
+
   override fun onCreate(savedInstanceState: Bundle?) {
     connection.context = this
 
     appearanceSettings = Settings.appearance(this)
     connectionSettings = Settings.connection(this)
-    accountId = getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
-      ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
+
+    checkConnection()
 
     setTheme(appearanceSettings.theme.style)
     super.onCreate(savedInstanceState)
-    connection.start()
     updateRecentsHeader()
   }
 
@@ -79,16 +82,41 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
   }
 
   private fun checkConnection() {
+    accountId = getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
+      ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
+
     if (!sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
         getBoolean(Keys.Status.reconnect, false)
-      }) {
-      setResult(Activity.RESULT_OK)
-      finish()
+      } || accountId == -1L) {
+
+      if (!startedSelection) {
+        startActivityForResult(
+          Intent(this, AccountSelectionActivity::class.java), REQUEST_SELECT_ACCOUNT
+        )
+        startedSelection = true
+      }
+    } else {
+      connection.start()
+    }
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    if (requestCode == REQUEST_SELECT_ACCOUNT) {
+      startedSelection = false
+
+      if (resultCode == Activity.RESULT_CANCELED) {
+        finish()
+      }
     }
   }
 
   protected fun stopService() {
     connection.unbind()
     connection.stop()
+  }
+
+  companion object {
+    const val REQUEST_SELECT_ACCOUNT = 0
   }
 }

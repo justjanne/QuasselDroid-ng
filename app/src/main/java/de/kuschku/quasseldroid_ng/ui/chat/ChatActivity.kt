@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid_ng.ui.chat
 
 import android.annotation.TargetApi
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -39,6 +38,7 @@ import de.kuschku.quasseldroid_ng.settings.AppearanceSettings
 import de.kuschku.quasseldroid_ng.settings.BacklogSettings
 import de.kuschku.quasseldroid_ng.settings.Settings
 import de.kuschku.quasseldroid_ng.ui.settings.SettingsActivity
+import de.kuschku.quasseldroid_ng.ui.setup.accounts.AccountSelectionActivity
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.*
@@ -121,6 +121,17 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+  }
+
+  override fun onNewIntent(intent: Intent?) {
+    super.onNewIntent(intent)
+    if (intent != null) {
+      when {
+        intent.type == "text/plain" -> {
+          inputEditor.share(intent.getStringExtra(Intent.EXTRA_TEXT))
+        }
+      }
+    }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -385,8 +396,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             putBoolean(Keys.Status.reconnect, false)
           }
         }
-        setResult(Activity.RESULT_OK)
-        finish()
+
+        val intent = Intent(this, AccountSelectionActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivityForResult(intent, REQUEST_SELECT_ACCOUNT)
       }
       true
     }
