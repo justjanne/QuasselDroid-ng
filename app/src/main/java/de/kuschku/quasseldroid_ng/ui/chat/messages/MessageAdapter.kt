@@ -10,7 +10,7 @@ import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase.DatabaseMessage
-import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
+import de.kuschku.quasseldroid_ng.settings.AppearanceSettings
 import de.kuschku.quasseldroid_ng.util.helper.getOrPut
 
 class MessageAdapter(

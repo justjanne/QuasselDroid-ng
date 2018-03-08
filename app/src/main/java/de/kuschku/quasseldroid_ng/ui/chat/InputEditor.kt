@@ -204,4 +204,19 @@ class InputEditor(private val editText: EditText) {
 
     return removedAny
   }
+
+  fun autoComplete(text: CharSequence) {
+    val beginningOfWord = editText.text.lastIndexOf(' ', editText.selectionStart)
+    val endOfWord = editText.text.indexOf(' ', editText.selectionEnd)
+    val start = beginningOfWord + 1
+    val end = if (endOfWord != -1) {
+      endOfWord
+    } else {
+      editText.text.length
+    }
+
+    val replacement = "$text: "
+    editText.text.replace(start, end, replacement)
+    editText.setSelection(start + replacement.length)
+  }
 }

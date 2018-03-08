@@ -14,8 +14,8 @@ import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.AccountDatabase
 import de.kuschku.quasseldroid_ng.persistence.QuasselBacklogStorage
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
-import de.kuschku.quasseldroid_ng.ui.settings.data.ConnectionSettings
-import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
+import de.kuschku.quasseldroid_ng.settings.ConnectionSettings
+import de.kuschku.quasseldroid_ng.settings.Settings
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.QuasseldroidNotificationManager
 import de.kuschku.quasseldroid_ng.util.compatibility.AndroidHandlerService

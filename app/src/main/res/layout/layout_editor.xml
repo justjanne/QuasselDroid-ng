@@ -8,13 +8,11 @@
     android:id="@+id/chatline_scroller"
     android:layout_width="0dp"
     android:layout_height="0dp"
-    android:layout_marginBottom="8dp"
-    app:layout_constraintBottom_toTopOf="@+id/formatting_toolbar_container"
+    app:layout_constraintBottom_toTopOf="@+id/autocomplete_list2"
     app:layout_constraintEnd_toStartOf="@+id/send"
     app:layout_constraintHorizontal_bias="1.0"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.0">
+    app:layout_constraintTop_toTopOf="parent">
 
     <android.support.v7.widget.AppCompatEditText
       android:id="@+id/chatline"
@@ -47,6 +45,13 @@
     android:tint="?attr/colorAccent"
     app:layout_constraintEnd_toEndOf="parent"
     app:srcCompat="@drawable/ic_send" />
+
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/autocomplete_list2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:maxHeight="144dp"
+    app:layout_constraintBottom_toTopOf="@+id/formatting_toolbar_container" />
 
   <android.support.design.widget.AppBarLayout
     android:id="@+id/formatting_toolbar_container"

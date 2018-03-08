@@ -18,9 +18,9 @@ import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.quassel.syncables.BufferSyncer
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
-import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
-import de.kuschku.quasseldroid_ng.ui.settings.data.BacklogSettings
-import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
+import de.kuschku.quasseldroid_ng.settings.AppearanceSettings
+import de.kuschku.quasseldroid_ng.settings.BacklogSettings
+import de.kuschku.quasseldroid_ng.settings.Settings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.*

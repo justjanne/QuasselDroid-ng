@@ -19,8 +19,8 @@ import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.libquassel.util.minus
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
-import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
-import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
+import de.kuschku.quasseldroid_ng.settings.AppearanceSettings
+import de.kuschku.quasseldroid_ng.settings.Settings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.map

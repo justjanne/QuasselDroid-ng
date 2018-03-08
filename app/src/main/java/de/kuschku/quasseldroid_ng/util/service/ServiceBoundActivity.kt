@@ -11,9 +11,9 @@ import android.support.v7.app.AppCompatActivity
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
-import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
-import de.kuschku.quasseldroid_ng.ui.settings.data.ConnectionSettings
-import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
+import de.kuschku.quasseldroid_ng.settings.AppearanceSettings
+import de.kuschku.quasseldroid_ng.settings.ConnectionSettings
+import de.kuschku.quasseldroid_ng.settings.Settings
 import de.kuschku.quasseldroid_ng.util.helper.sharedPreferences
 import de.kuschku.quasseldroid_ng.util.helper.updateRecentsHeaderIfExisting
 

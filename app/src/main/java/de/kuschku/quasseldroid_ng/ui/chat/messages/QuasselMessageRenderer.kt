@@ -15,9 +15,9 @@ import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
-import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
-import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings.ColorizeNicknamesMode
-import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings.ShowPrefixMode
+import de.kuschku.quasseldroid_ng.settings.AppearanceSettings
+import de.kuschku.quasseldroid_ng.settings.AppearanceSettings.ColorizeNicknamesMode
+import de.kuschku.quasseldroid_ng.settings.AppearanceSettings.ShowPrefixMode
 import de.kuschku.quasseldroid_ng.util.helper.styledAttributes
 import de.kuschku.quasseldroid_ng.util.helper.visibleIf
 import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatDeserializer

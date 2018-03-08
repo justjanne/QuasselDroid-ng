@@ -89,6 +89,9 @@
     <item>SEND</item>
   </string-array>
 
+  <string name="preference_autocomplete_key" translatable="false">autocomplete</string>
+  <string name="preference_autocomplete_title">Show AutoComplete UI</string>
+
   <string name="preference_hostmask_key" translatable="false">hostmask</string>
   <string name="preference_hostmask_title">Show Hostmask</string>
   <string name="preference_hostmask_summary">Display the full nick!ident@host in messages</string>

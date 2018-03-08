@@ -14,9 +14,10 @@ import android.support.design.widget.Snackbar
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.widget.ActionMenuView
-import android.support.v7.widget.Toolbar
+import android.support.v7.widget.*
+import android.text.Editable
 import android.text.InputType
+import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -34,15 +35,17 @@ import de.kuschku.libquassel.util.or
 import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
+import de.kuschku.quasseldroid_ng.settings.AppearanceSettings
+import de.kuschku.quasseldroid_ng.settings.BacklogSettings
+import de.kuschku.quasseldroid_ng.settings.Settings
 import de.kuschku.quasseldroid_ng.ui.settings.SettingsActivity
-import de.kuschku.quasseldroid_ng.ui.settings.data.AppearanceSettings
-import de.kuschku.quasseldroid_ng.ui.settings.data.BacklogSettings
-import de.kuschku.quasseldroid_ng.ui.settings.data.Settings
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.*
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
+import io.reactivex.subjects.BehaviorSubject
+import java.util.concurrent.TimeUnit
 
 class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
                      ActionMenuView.OnMenuItemClickListener {
@@ -69,6 +72,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   @BindView(R.id.chatline)
   lateinit var chatline: EditText
+
+  @BindView(R.id.autocomplete_list)
+  lateinit var autocompleteList: RecyclerView
+
+  @BindView(R.id.autocomplete_list2)
+  lateinit var autocompleteList2: RecyclerView
 
   private lateinit var drawerToggle: ActionBarDrawerToggle
 
@@ -103,6 +112,15 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
       chatline.setSelection(selectionStart, selectionEnd)
     }
+  }
+
+  private val lastWord = BehaviorSubject.createDefault("")
+  private val textWatcher = object : TextWatcher {
+    override fun afterTextChanged(s: Editable?) =
+      lastWord.onNext(s?.lastWord(chatline.selectionStart, onlyBeforeCursor = true).toString())
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -191,6 +209,40 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         }
       }
     })
+
+    val autocompleteAdapter = AutoCompleteAdapter(
+      this,
+      viewModel.nickData.switchMapRx { nicks ->
+        lastWord
+          .filter { it.length >= 3 || it.isEmpty() }
+          .distinctUntilChanged()
+          .debounce(100, TimeUnit.MILLISECONDS)
+          .map { input ->
+            if (input.isEmpty()) {
+              emptyList()
+            } else {
+              nicks.filter {
+                it.nick.contains(input, ignoreCase = true)
+              }.sortedBy(NickListAdapter.IrcUserItem::nick)
+            }
+          }
+      },
+      handler::post,
+      ::runOnUiThread,
+      inputEditor::autoComplete
+    )
+
+    if (appearanceSettings.showAutocomplete) {
+      autocompleteList.layoutManager = LinearLayoutManager(this)
+      autocompleteList.itemAnimator = DefaultItemAnimator()
+      autocompleteList.adapter = autocompleteAdapter
+
+      autocompleteList2.layoutManager = LinearLayoutManager(this)
+      autocompleteList2.itemAnimator = DefaultItemAnimator()
+      autocompleteList2.adapter = autocompleteAdapter
+    }
+
+    chatline.addTextChangedListener(textWatcher)
 
     editorPanel.addPanelSlideListener(panelSlideListener)
     editorPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED

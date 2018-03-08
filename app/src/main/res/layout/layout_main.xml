@@ -19,12 +19,26 @@
     app:umanoScrollableView="@id/chatline_scroller"
     app:umanoShadowHeight="4dp">
 
-    <fragment
-      android:id="@+id/fragment_messages"
-      android:name="de.kuschku.quasseldroid_ng.ui.chat.messages.MessageListFragment"
+    <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      tools:layout="@layout/fragment_messages" />
+      android:orientation="vertical">
+
+      <fragment
+        android:id="@+id/fragment_messages"
+        android:name="de.kuschku.quasseldroid_ng.ui.chat.messages.MessageListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        tools:layout="@layout/fragment_messages" />
+
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/autocomplete_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="144dp" />
+
+    </LinearLayout>
 
     <include layout="@layout/layout_slider" />
 
