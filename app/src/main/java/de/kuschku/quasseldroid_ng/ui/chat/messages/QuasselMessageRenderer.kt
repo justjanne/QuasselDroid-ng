@@ -297,14 +297,14 @@ class QuasselMessageRenderer(
   @Language("RegExp")
   private val scheme = "(?:(?:mailto:|magnet:|(?:[+.-]?\\w)+://)|www(?=\\.\\S+\\.))"
   @Language("RegExp")
-  private val authority = "(?:(?:[,.;@:]?[-\\w]+)+\\.?|\\[[0-9a-f:.]+])(?::\\d+)?"
+  private val authority = "(?:(?:[,.;@:]?[-\\w]+)+\\.?|\\[[0-9a-f:.]+])?(?::\\d+)?"
   @Language("RegExp")
   private val urlChars = "(?:[,.;:]*[\\w~@/?&=+$()!%#*-])"
   @Language("RegExp")
   private val urlEnd = "((?:>|[,.;:\"]*\\s|\\b|$))"
 
   private val urlPattern = Regex(
-    "\\b($scheme$authority(?:/$urlChars*)?)$urlEnd",
+    "\\b($scheme$authority(?:$urlChars*)?)$urlEnd",
     RegexOption.IGNORE_CASE
   )
 

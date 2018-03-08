@@ -5,6 +5,7 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
+import android.os.StrictMode
 import android.support.v7.preference.PreferenceManager
 import com.squareup.leakcanary.LeakCanary
 import de.kuschku.malheur.CrashHandler
@@ -61,6 +62,53 @@ class QuasseldroidNG : Application() {
           .setShortLabel("justJanne")
           .setIcon(Icon.createWithResource(this, R.drawable.ic_shortcut_query))
           .setIntent(packageManager.getLaunchIntentForPackage(BuildConfig.APPLICATION_ID))
+          .build()
+      )
+    }
+
+    if (BuildConfig.DEBUG) {
+      StrictMode.setThreadPolicy(
+        StrictMode.ThreadPolicy.Builder()
+          .detectNetwork()
+          .detectCustomSlowCalls()
+          .let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+              it.detectResourceMismatches()
+            } else {
+              it
+            }
+          }
+          .let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+              it.detectUnbufferedIo()
+            } else {
+              it
+            }
+          }
+          .penaltyLog()
+          .build()
+      )
+      StrictMode.setVmPolicy(
+        StrictMode.VmPolicy.Builder()
+          .detectLeakedSqlLiteObjects()
+          .detectActivityLeaks()
+          .detectLeakedClosableObjects()
+          .detectLeakedRegistrationObjects()
+          .let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+              it.detectFileUriExposure()
+            } else {
+              it
+            }
+          }
+          .let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+              it.detectContentUriWithoutPermission()
+            } else {
+              it
+            }
+          }
+          .penaltyLog()
           .build()
       )
     }
