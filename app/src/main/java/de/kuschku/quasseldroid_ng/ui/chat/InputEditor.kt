@@ -11,6 +11,7 @@ import android.text.style.UnderlineSpan
 import android.view.MenuItem
 import android.widget.EditText
 import de.kuschku.quasseldroid_ng.R
+import de.kuschku.quasseldroid_ng.util.helper.lastWordIndices
 import de.kuschku.quasseldroid_ng.util.helper.selection
 import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid_ng.util.irc.format.spans.*
@@ -206,17 +207,19 @@ class InputEditor(private val editText: EditText) {
   }
 
   fun autoComplete(text: CharSequence) {
-    val beginningOfWord = editText.text.lastIndexOf(' ', editText.selectionStart)
-    val endOfWord = editText.text.indexOf(' ', editText.selectionEnd)
-    val start = beginningOfWord + 1
-    val end = if (endOfWord != -1) {
-      endOfWord
+    val range = editText.text.lastWordIndices(editText.selectionStart, true)
+    val replacement = if (range?.start == 0) {
+      "$text: "
     } else {
-      editText.text.length
+      "$text "
     }
 
-    val replacement = "$text: "
-    editText.text.replace(start, end, replacement)
-    editText.setSelection(start + replacement.length)
+    if (range != null) {
+      editText.text.replace(range.start, range.endInclusive + 1, replacement)
+      editText.setSelection(range.start + replacement.length)
+    } else {
+      editText.text.append(replacement)
+      editText.setSelection(editText.text.length)
+    }
   }
 }
