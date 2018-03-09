@@ -78,12 +78,13 @@ class IrcChannel(
   }
 
   override fun initSetUserModes(usermodes: QVariantMap) {
-    _userModes.putAll(
-      usermodes.entries.map { (key, value) ->
-        network().newIrcUser(key) to value.value("")
-      }.toMap()
-    )
-    live_userModes.onNext(_userModes)
+    val users = usermodes.map { (key, _) ->
+      network().newIrcUser(key)
+    }
+    val modes = usermodes.map { (_, value) ->
+      value.value("")
+    }
+    joinIrcUsersInternal(users, modes)
   }
 
   override fun initSetProperties(properties: QVariantMap) {

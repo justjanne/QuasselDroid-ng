@@ -9,6 +9,7 @@ import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.helpers.getOr
 import de.kuschku.libquassel.util.helpers.serializeString
 import de.kuschku.libquassel.util.irc.HostmaskHelper
+import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import io.reactivex.subjects.BehaviorSubject
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
@@ -46,6 +47,9 @@ class Network constructor(
     supports("CHANTYPES") -> support("CHANTYPES").contains(channelName[0])
     else                  -> "#&!+".contains(channelName[0])
   }
+
+  val caseMapper: IrcCaseMappers.IrcCaseMapper
+    get() = IrcCaseMappers[support("CASEMAPPING")]
 
   /**
    * Checks if the target counts as a STATUSMSG
@@ -320,7 +324,7 @@ class Network constructor(
   }
 
   fun newIrcUser(hostMask: String, initData: QVariantMap = emptyMap()): IrcUser {
-    val nick = HostmaskHelper.nick(hostMask).toLowerCase(Locale.US)
+    val nick = caseMapper.toLowerCase(HostmaskHelper.nick(hostMask))
     val user = ircUser(nick)
     return if (user == null) {
       val ircUser = IrcUser(hostMask, this, proxy)
@@ -340,7 +344,7 @@ class Network constructor(
     }
   }
 
-  fun ircUser(nickName: String?) = _ircUsers[nickName?.toLowerCase(Locale.US)]
+  fun ircUser(nickName: String?) = _ircUsers[nickName?.let(caseMapper::toLowerCase)]
   fun liveIrcUser(nickName: String?) = live_ircUsers.map {
     ircUser(
       nickName
@@ -359,7 +363,7 @@ class Network constructor(
         ircChannel.initialized = true
       }
       proxy.synchronize(ircChannel)
-      _ircChannels[channelName.toLowerCase(Locale.US)] = ircChannel
+      _ircChannels[caseMapper.toLowerCase(channelName)] = ircChannel
       live_ircChannels.onNext(_ircChannels)
       super.addIrcChannel(channelName)
       return ircChannel
@@ -368,7 +372,7 @@ class Network constructor(
     }
   }
 
-  fun ircChannel(channelName: String?) = _ircChannels[channelName?.toLowerCase(Locale.US)]
+  fun ircChannel(channelName: String?) = _ircChannels[channelName?.let(caseMapper::toLowerCase)]
   fun liveIrcChannel(channelName: String?) = live_ircChannels.map {
     ircChannel(
       channelName
@@ -839,7 +843,7 @@ class Network constructor(
   }
 
   fun updateNickFromMask(mask: String): IrcUser {
-    val nick = HostmaskHelper.nick(mask).toLowerCase(Locale.US)
+    val nick = caseMapper.toLowerCase(HostmaskHelper.nick(mask))
     val user = _ircUsers[nick]
     return if (user != null) {
       user.updateHostmask(mask)
@@ -850,9 +854,9 @@ class Network constructor(
   }
 
   override fun ircUserNickChanged(old: String, new: String) {
-    val value = _ircUsers.remove(old.toLowerCase(Locale.US))
+    val value = _ircUsers.remove(caseMapper.toLowerCase(old))
     if (value != null) {
-      _ircUsers[new.toLowerCase(Locale.US)] = value
+      _ircUsers[caseMapper.toLowerCase(new)] = value
     }
   }
 
@@ -867,12 +871,12 @@ class Network constructor(
   }
 
   fun removeIrcUser(user: IrcUser) {
-    _ircUsers.remove(user.nick())
+    _ircUsers.remove(caseMapper.toLowerCase(user.nick()))
     live_ircUsers.onNext(_ircUsers)
   }
 
   fun removeIrcChannel(channel: IrcChannel) {
-    _ircChannels.remove(channel.name())
+    _ircChannels.remove(caseMapper.toLowerCase(channel.name()))
     live_ircChannels.onNext(_ircChannels)
   }
 
