@@ -11,9 +11,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.util.helper.visibleIf
-import de.kuschku.quasseldroid_ng.util.irc.IrcCaseMappers
 
 class NickListAdapter(
   lifecycleOwner: LifecycleOwner,
