@@ -110,10 +110,31 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     }
   }
 
-  private val lastWord = BehaviorSubject.createDefault("")
+  private val lastWord = BehaviorSubject.createDefault(Pair("", IntRange.EMPTY))
   private val textWatcher = object : TextWatcher {
     override fun afterTextChanged(s: Editable?) {
-      lastWord.onNext(s?.lastWord(chatline.selectionStart, onlyBeforeCursor = true).toString())
+      val previous = autocompletionState
+      val next = if (previous != null && s != null) {
+        val suffix = if (previous.range.start == 0) ": " else " "
+        val end = Math.min(
+          s.length, previous.range.start + previous.completion.name.length + suffix.length
+        )
+        val sequence = s.subSequence(previous.range.start, end)
+        if (sequence == previous.completion.name + suffix) {
+          previous.originalWord to (previous.range.start until end)
+        } else {
+          autocompletionState = null
+          s.lastWordIndices(chatline.selectionStart, onlyBeforeCursor = true)?.let { indices ->
+            s.substring(indices) to indices
+          }
+        }
+      } else {
+        s?.lastWordIndices(chatline.selectionStart, onlyBeforeCursor = true)?.let { indices ->
+          s.substring(indices) to indices
+        }
+      }
+
+      if (next != null) lastWord.onNext(next)
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
@@ -177,11 +198,19 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     }.fold(0, Int::or)
 
     chatline.setOnKeyListener { _, keyCode, event ->
-      if (event.hasNoModifiers() && (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)) {
-        send()
-        true
-      } else {
-        false
+      when (keyCode) {
+        KeyEvent.KEYCODE_ENTER,
+        KeyEvent.KEYCODE_NUMPAD_ENTER -> if (event.hasNoModifiers()) {
+          send()
+          true
+        } else {
+          false
+        }
+        KeyEvent.KEYCODE_TAB          -> {
+          autoComplete(event.isShiftPressed)
+          true
+        }
+        else                          -> false
       }
     }
 
@@ -243,6 +272,60 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     editorPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
   }
 
+  data class AutoCompletionState(
+    val originalWord: String,
+    val range: IntRange,
+    val lastCompletion: AutoCompleteAdapter.AutoCompleteItem? = null,
+    val completion: AutoCompleteAdapter.AutoCompleteItem
+  )
+
+  private var autocompletionState: AutoCompletionState? = null
+  private fun autoComplete(reverse: Boolean = false) {
+    val originalWord = lastWord.value
+
+    val previous = autocompletionState
+    if (!originalWord.second.isEmpty()) {
+      val autoCompletedWords = viewModel.autoCompleteData.value.orEmpty()
+      if (previous != null && lastWord.value == previous.originalWord to previous.range) {
+        val previousIndex = autoCompletedWords.indexOf(previous.completion)
+        val autoCompletedWord = if (previousIndex != -1) {
+          val change = if (reverse) -1 else +1
+          val newIndex = (previousIndex + change + autoCompletedWords.size) % autoCompletedWords.size
+
+          autoCompletedWords[newIndex]
+        } else {
+          autoCompletedWords.firstOrNull()
+        }
+        if (autoCompletedWord != null) {
+          val newState = AutoCompletionState(
+            previous.originalWord,
+            originalWord.second,
+            previous.completion,
+            autoCompletedWord
+          )
+          inputEditor.autoComplete(newState)
+          autocompletionState = newState
+        } else {
+          autocompletionState = null
+        }
+      } else {
+        val autoCompletedWord = autoCompletedWords.firstOrNull()
+        if (autoCompletedWord != null) {
+          val newState = AutoCompletionState(
+            originalWord.first,
+            originalWord.second,
+            null,
+            autoCompletedWord
+          )
+          inputEditor.autoComplete(newState)
+          autocompletionState = newState
+        } else {
+          autocompletionState = null
+        }
+      }
+    }
+  }
+
   private fun send() {
     val text = chatline.text
     if (text.isNotBlank()) {
@@ -300,7 +383,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   }
 
   override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
-    android.R.id.home    -> {
+    android.R.id.home -> {
       drawerToggle.onOptionsItemSelected(item)
     }
 
@@ -354,7 +437,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
       true
     }
-    R.id.clear           -> {
+    R.id.clear -> {
       handler.post {
         viewModel.sessionManager { manager ->
           viewModel.getBuffer().let { buffer ->
@@ -369,11 +452,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
       true
     }
-    R.id.settings        -> {
+    R.id.settings -> {
       startActivity(Intent(applicationContext, SettingsActivity::class.java))
       true
     }
-    R.id.disconnect      -> {
+    R.id.disconnect -> {
       handler.post {
         sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
           editApply {
@@ -387,7 +470,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
       true
     }
-    else                 -> super.onOptionsItemSelected(item)
+    else -> super.onOptionsItemSelected(item)
   }
 
   override fun onMenuItemClick(item: MenuItem?) = when (item?.itemId) {

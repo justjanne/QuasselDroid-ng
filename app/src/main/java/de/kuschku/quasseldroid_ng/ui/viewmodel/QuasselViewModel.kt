@@ -185,18 +185,18 @@ class QuasselViewModel : ViewModel() {
     }
   }
 
-  val lastWord = MutableLiveData<Observable<String>>()
+  val lastWord = MutableLiveData<Observable<Pair<String, IntRange>>>()
 
   val autoCompleteData: LiveData<List<AutoCompleteAdapter.AutoCompleteItem>?> = session.zip(
     buffer, lastWord
   ).switchMapRx { (session, id, lastWordWrapper) ->
     lastWordWrapper
       .distinctUntilChanged()
-      .debounce(300, TimeUnit.MILLISECONDS)
+      .debounce(16, TimeUnit.MILLISECONDS)
       .switchMap { lastWord ->
         val bufferSyncer = session?.bufferSyncer
         val bufferInfo = bufferSyncer?.bufferInfo(id)
-        if (bufferSyncer != null && lastWord.length >= 3) {
+        if (bufferSyncer != null && lastWord.second.length >= 3) {
           bufferSyncer.liveBufferInfos().switchMap { infos ->
             if (bufferInfo?.type?.hasFlag(
                 Buffer_Type.ChannelBuffer
@@ -270,7 +270,7 @@ class QuasselViewModel : ViewModel() {
                         .filter {
                           it.name.trimStart(*ignoredStartingCharacters)
                             .startsWith(
-                              lastWord.trimStart(*ignoredStartingCharacters),
+                              lastWord.first.trimStart(*ignoredStartingCharacters),
                               ignoreCase = true
                             )
                         }.sorted()

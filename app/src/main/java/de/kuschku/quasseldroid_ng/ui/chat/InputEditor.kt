@@ -223,6 +223,26 @@ class InputEditor(private val editText: EditText) {
     }
   }
 
+  fun autoComplete(item: ChatActivity.AutoCompletionState) {
+    val suffix = if (item.range.start == 0) ": " else " "
+    val replacement = "${item.completion.name}$suffix"
+    val previousReplacement = item.lastCompletion?.let { "${item.lastCompletion.name}$suffix" }
+
+    if (previousReplacement != null &&
+        editText.text.length >= item.range.start + previousReplacement.length &&
+        editText.text.substring(
+          item.range.start, item.range.start + previousReplacement.length
+        ) == previousReplacement) {
+      editText.text.replace(
+        item.range.start, item.range.start + previousReplacement.length, replacement
+      )
+      editText.setSelection(item.range.start + replacement.length)
+    } else {
+      editText.text.replace(item.range.start, item.range.endInclusive + 1, replacement)
+      editText.setSelection(item.range.start + replacement.length)
+    }
+  }
+
   fun share(text: CharSequence?) {
     editText.setText(text)
     editText.setSelection(editText.text.length)
