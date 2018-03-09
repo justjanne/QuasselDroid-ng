@@ -119,7 +119,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         val end = Math.min(
           s.length, previous.range.start + previous.completion.name.length + suffix.length
         )
-        val sequence = s.subSequence(previous.range.start, end)
+        val sequence = s.substring(previous.range.start, end)
         if (sequence == previous.completion.name + suffix) {
           previous.originalWord to (previous.range.start until end)
         } else {
@@ -134,6 +134,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         }
       }
 
+      println(next ?: Pair("", IntRange.EMPTY))
       lastWord.onNext(next ?: Pair("", IntRange.EMPTY))
     }
 
@@ -253,6 +254,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       viewModel.autoCompleteData,
       handler::post,
       ::runOnUiThread,
+      // This is still broken when mixing tab complete and UI auto complete
       inputEditor::autoComplete
     )
 
@@ -286,7 +288,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     val previous = autocompletionState
     if (!originalWord.second.isEmpty()) {
       val autoCompletedWords = viewModel.autoCompleteData.value.orEmpty()
-      if (previous != null && lastWord.value == previous.originalWord to previous.range) {
+      if (previous != null && lastWord.value.first == previous.originalWord && lastWord.value.second.start == previous.range.start) {
         val previousIndex = autoCompletedWords.indexOf(previous.completion)
         val autoCompletedWord = if (previousIndex != -1) {
           val change = if (reverse) -1 else +1
@@ -303,8 +305,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             previous.completion,
             autoCompletedWord
           )
-          inputEditor.autoComplete(newState)
           autocompletionState = newState
+          inputEditor.autoComplete(newState)
         } else {
           autocompletionState = null
         }
@@ -317,8 +319,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             null,
             autoCompletedWord
           )
-          inputEditor.autoComplete(newState)
           autocompletionState = newState
+          inputEditor.autoComplete(newState)
         } else {
           autocompletionState = null
         }
