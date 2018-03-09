@@ -134,7 +134,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         }
       }
 
-      if (next != null) lastWord.onNext(next)
+      lastWord.onNext(next ?: Pair("", IntRange.EMPTY))
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
