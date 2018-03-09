@@ -21,12 +21,8 @@ import de.kuschku.quasseldroid_ng.ui.chat.NickListAdapter
 import de.kuschku.quasseldroid_ng.ui.chat.ToolbarFragment
 import de.kuschku.quasseldroid_ng.ui.chat.buffers.BufferListAdapter
 import de.kuschku.quasseldroid_ng.ui.chat.buffers.BufferViewConfigFragment
-import de.kuschku.quasseldroid_ng.util.helper.map
-import de.kuschku.quasseldroid_ng.util.helper.switchMap
-import de.kuschku.quasseldroid_ng.util.helper.switchMapRx
-import de.kuschku.quasseldroid_ng.util.helper.zip
+import de.kuschku.quasseldroid_ng.util.helper.*
 import io.reactivex.Observable
-import io.reactivex.functions.Function
 import java.util.concurrent.TimeUnit
 
 class QuasselViewModel : ViewModel() {
@@ -155,7 +151,7 @@ class QuasselViewModel : ViewModel() {
       val ircChannel = network?.ircChannel(bufferInfo.bufferName)
       if (ircChannel != null) {
         ircChannel.liveIrcUsers().switchMap { users ->
-          Observable.combineLatest(
+          combineLatest<NickListAdapter.IrcUserItem>(
             users.map<IrcUser, Observable<NickListAdapter.IrcUserItem>?> { user ->
               user.liveNick().switchMap { nick ->
                 user.liveRealName().switchMap { realName ->
@@ -178,10 +174,6 @@ class QuasselViewModel : ViewModel() {
                   }
                 }
               }
-            },
-            object : Function<Array<Any>, List<NickListAdapter.IrcUserItem>> {
-              override fun apply(array: Array<Any>) =
-                array.toList() as List<NickListAdapter.IrcUserItem>
             }
           )
         }
@@ -269,23 +261,20 @@ class QuasselViewModel : ViewModel() {
                     }
                   }
 
-                  Observable.combineLatest(
-                    nicks + buffers,
-                    object :
-                      Function<Array<Any>, List<AutoCompleteAdapter.AutoCompleteItem>> {
-                      override fun apply(
-                        objects: Array<Any>): List<AutoCompleteAdapter.AutoCompleteItem> {
-                        return objects.toList() as List<AutoCompleteAdapter.AutoCompleteItem>
-                      }
-                    }).map { list ->
-                    list
-                      .filter {
-                        it.name.contains(
-                          lastWord,
-                          ignoreCase = true
-                        )
-                      }.sorted()
-                  }
+                  combineLatest<AutoCompleteAdapter.AutoCompleteItem>(nicks + buffers)
+                    .map { list ->
+                      val ignoredStartingCharacters = charArrayOf(
+                        '-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\'
+                      )
+                      list
+                        .filter {
+                          it.name.trimStart(*ignoredStartingCharacters)
+                            .startsWith(
+                              lastWord.trimStart(*ignoredStartingCharacters),
+                              ignoreCase = true
+                            )
+                        }.sorted()
+                    }
                 }
               } else {
                 Observable.just(
@@ -371,17 +360,12 @@ class QuasselViewModel : ViewModel() {
     val showHidden = showHiddenRaw ?: false
     if (bufferSyncer != null && config != null) {
       config.live_config.debounce(16, TimeUnit.MILLISECONDS).switchMap { currentConfig ->
-        Observable.combineLatest(
+        combineLatest<Collection<BufferId>>(
           listOf(
             config.live_buffers,
             config.live_temporarilyRemovedBuffers,
             config.live_removedBuffers
-          ),
-          object : Function<Array<Any>, List<Collection<BufferId>>> {
-            override fun apply(objects: Array<Any>): List<Collection<BufferId>> {
-              return objects.toList() as List<Collection<BufferId>>
-            }
-          }
+          )
         ).switchMap { (ids, temp, perm) ->
           fun transformIds(ids: Collection<BufferId>, state: BufferListAdapter.HiddenState) =
             ids.mapNotNull { id ->
@@ -483,14 +467,7 @@ class QuasselViewModel : ViewModel() {
               transformIds(ids, BufferListAdapter.HiddenState.VISIBLE)
             }
 
-            Observable.combineLatest(
-              buffers,
-              object : Function<Array<Any>, List<BufferListAdapter.BufferProps>> {
-                override fun apply(objects: Array<Any>): List<BufferListAdapter.BufferProps> {
-                  return objects.toList() as List<BufferListAdapter.BufferProps>
-                }
-              }
-            ).map { list ->
+            combineLatest<BufferListAdapter.BufferProps>(buffers).map { list ->
               Pair<BufferViewConfig?, List<BufferListAdapter.BufferProps>>(
                 config,
                 list.filter {
