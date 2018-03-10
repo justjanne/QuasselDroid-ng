@@ -307,14 +307,14 @@ class IrcChannel(
     removeUserMode(network().ircUser(nick), mode)
   }
 
-  override fun addChannelMode(mode: Char, value: String) {
+  override fun addChannelMode(mode: Char, value: String?) {
     when (network().channelModeType(mode)) {
       INetwork.ChannelModeType.A_CHANMODE     ->
-        _A_channelModes.getOrPut(mode, ::mutableSetOf).add(value)
+        _A_channelModes.getOrPut(mode, ::mutableSetOf).add(value!!)
       INetwork.ChannelModeType.B_CHANMODE     ->
-        _B_channelModes[mode] = value
+        _B_channelModes[mode] = value!!
       INetwork.ChannelModeType.C_CHANMODE     ->
-        _C_channelModes[mode] = value
+        _C_channelModes[mode] = value!!
       INetwork.ChannelModeType.D_CHANMODE     ->
         _D_channelModes.add(mode)
       INetwork.ChannelModeType.NOT_A_CHANMODE ->
@@ -323,7 +323,7 @@ class IrcChannel(
     super.addChannelMode(mode, value)
   }
 
-  override fun removeChannelMode(mode: Char, value: String) {
+  override fun removeChannelMode(mode: Char, value: String?) {
     when (network().channelModeType(mode)) {
       INetwork.ChannelModeType.A_CHANMODE     ->
         _A_channelModes.getOrPut(mode, ::mutableSetOf).remove(value)
