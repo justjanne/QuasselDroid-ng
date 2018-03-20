@@ -18,6 +18,10 @@ object Settings {
         context.getString(R.string.preference_monospace_key),
         AppearanceSettings.DEFAULT.useMonospace
       ),
+      textSize = getInt(
+        context.getString(R.string.preference_textsize_key),
+        AppearanceSettings.DEFAULT.textSize
+      ),
       showSeconds = getBoolean(
         context.getString(R.string.preference_show_seconds_key),
         AppearanceSettings.DEFAULT.showSeconds

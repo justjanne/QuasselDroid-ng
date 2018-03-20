@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:robobunny="http://robobunny.com">
   <PreferenceCategory android:title="@string/preference_appearance_title">
     <ListPreference
       android:defaultValue="QUASSEL_LIGHT"
@@ -12,6 +13,13 @@
       android:defaultValue="false"
       android:key="@string/preference_monospace_key"
       android:title="@string/preference_monospace_title" />
+
+    <com.robobunny.SeekBarPreference
+      android:defaultValue="14"
+      android:key="@string/preference_textsize_key"
+      android:max="24"
+      android:title="@string/preference_textsize_title"
+      robobunny:min="12" />
 
     <SwitchPreference
       android:defaultValue="false"

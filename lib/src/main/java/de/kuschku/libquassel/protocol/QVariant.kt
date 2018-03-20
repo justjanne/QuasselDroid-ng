@@ -14,26 +14,15 @@ class QVariant<T>(val data: T?, val type: MetaType<T>) {
   }
 }
 
-@PublishedApi
-internal inline fun <reified U> QVariant_?.coerce(): QVariant<U>? {
-  return if (this?.data is U) {
-    this as QVariant<U>
-  } else {
-    null
-  }
-}
-
 inline fun <reified U> QVariant_?.value(): U?
   = this?.value<U?>(null)
 
-inline fun <reified U> QVariant_?.value(defValue: U): U
-  = this.coerce<U>()?.data ?: defValue
+inline fun <reified U> QVariant_?.value(defValue: U): U = this?.data as? U ?: defValue
 
-inline fun <reified U> QVariant_?.valueOr(f: () -> U): U
-  = this.coerce<U>()?.data ?: f()
+inline fun <reified U> QVariant_?.valueOr(f: () -> U): U = this?.data as? U ?: f()
 
-inline fun <reified U> QVariant_?.valueOrThrow(e: Throwable = NullPointerException()): U
-  = this.coerce<U>()?.data ?: throw e
+inline fun <reified U> QVariant_?.valueOrThrow(e: Throwable = NullPointerException()): U =
+  this?.data as? U ?: throw e
 
-inline fun <reified U> QVariant_?.valueOrThrow(e: () -> Throwable): U
-  = this.coerce<U>()?.data ?: throw e()
+inline fun <reified U> QVariant_?.valueOrThrow(e: () -> Throwable): U =
+  this?.data as? U ?: throw e()

@@ -8,6 +8,7 @@ import android.text.TextPaint
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.URLSpan
+import android.util.TypedValue
 import de.kuschku.libquassel.protocol.Message.MessageType.*
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
@@ -89,6 +90,9 @@ class QuasselMessageRenderer(
     if (appearanceSettings.useMonospace) {
       viewHolder.content.typeface = Typeface.MONOSPACE
     }
+    val textSize = appearanceSettings.textSize.toFloat()
+    viewHolder.time.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
+    viewHolder.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
   }
 
   override fun bind(holder: QuasselMessageViewHolder, message: FormattedMessage) {

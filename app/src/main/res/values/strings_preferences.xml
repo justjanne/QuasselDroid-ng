@@ -33,6 +33,9 @@
   <string name="preference_monospace_key" translatable="false">monospace</string>
   <string name="preference_monospace_title">Use Monospace Font</string>
 
+  <string name="preference_textsize_key" translatable="false">fontsize</string>
+  <string name="preference_textsize_title">Text Size</string>
+
   <string name="preference_show_seconds_key" translatable="false">show_seconds</string>
   <string name="preference_show_seconds_title">Show Seconds</string>
 

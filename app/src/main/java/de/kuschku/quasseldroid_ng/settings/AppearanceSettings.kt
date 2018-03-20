@@ -9,6 +9,7 @@ data class AppearanceSettings(
   val inputEnter: InputEnterMode = InputEnterMode.EMOJI,
   val colorizeMirc: Boolean = true,
   val useMonospace: Boolean = false,
+  val textSize: Int = 14,
   val showSeconds: Boolean = false,
   val use24hClock: Boolean = true,
   val showAutocomplete: Boolean = true,
