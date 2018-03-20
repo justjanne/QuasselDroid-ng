@@ -49,7 +49,7 @@ class QuasselViewModel : ViewModel() {
     recentlySentMessages.value =
       listOf(message) +
       recentlySentMessages.value.orEmpty()
-        .filter { it == message }
+        .filter { it != message }
         .take(MAX_RECENT_MESSAGES - 1)
   }
 
