@@ -304,7 +304,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     val previous = autocompletionState
     if (!originalWord.second.isEmpty()) {
-      val autoCompletedWords = viewModel.autoCompleteData.value.orEmpty()
+      val autoCompletedWords = viewModel.autoCompleteData.value?.second.orEmpty()
       if (previous != null && lastWord.value.first == previous.originalWord && lastWord.value.second.start == previous.range.start) {
         val previousIndex = autoCompletedWords.indexOf(previous.completion)
         val autoCompletedWord = if (previousIndex != -1) {

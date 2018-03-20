@@ -25,7 +25,7 @@ import de.kuschku.quasseldroid_ng.util.helper.visibleIf
 
 class AutoCompleteAdapter(
   lifecycleOwner: LifecycleOwner,
-  liveData: LiveData<List<AutoCompleteItem>?>,
+  liveData: LiveData<Pair<String, List<AutoCompleteItem>>?>,
   runInBackground: (() -> Unit) -> Any,
   runOnUiThread: (Runnable) -> Any,
   private val clickListener: ((String) -> Unit)? = null
@@ -34,10 +34,11 @@ class AutoCompleteAdapter(
 
   init {
     liveData.observe(
-      lifecycleOwner, Observer { it: List<AutoCompleteItem>? ->
+      lifecycleOwner, Observer { it: Pair<String, List<AutoCompleteItem>>? ->
       runInBackground {
-        val list = it ?: emptyList()
-        val old: List<AutoCompleteItem> = data
+        val word = it?.first ?: ""
+        val list = it?.second ?: emptyList()
+        val old: List<AutoCompleteItem> = if (word.length >= 3) list else emptyList()
         val new: List<AutoCompleteItem> = list
         val result = DiffUtil.calculateDiff(
           object : DiffUtil.Callback() {
@@ -50,16 +51,13 @@ class AutoCompleteAdapter(
               old[oldItemPosition] == new[newItemPosition]
           }, true
         )
-        runOnUiThread(
-          Runnable {
-            data.clear()
-            data.addAll(new)
-            result.dispatchUpdatesTo(this@AutoCompleteAdapter)
-          }
-        )
+        runOnUiThread(Runnable {
+          data.clear()
+          data.addAll(new)
+          result.dispatchUpdatesTo(this@AutoCompleteAdapter)
+        })
       }
-    }
-    )
+    })
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
