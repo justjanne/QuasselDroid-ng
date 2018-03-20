@@ -77,6 +77,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   @BindView(R.id.autocomplete_list2)
   lateinit var autocompleteList2: RecyclerView
 
+  @BindView(R.id.msg_history)
+  lateinit var msgHistory: RecyclerView
+
   private lateinit var drawerToggle: ActionBarDrawerToggle
 
   private val handler = AndroidHandlerThread("Chat")
@@ -178,6 +181,20 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         item.icon = drawable
       }
     }
+
+    msgHistory.itemAnimator = DefaultItemAnimator()
+    msgHistory.layoutManager = LinearLayoutManager(this)
+    msgHistory.adapter = MessageHistoryAdapter(
+      this,
+      viewModel.recentlySentMessages,
+      handler::post,
+      ::runOnUiThread,
+      { text ->
+        chatline.setText(text)
+        chatline.setSelection(chatline.length())
+        historyPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+      }
+    )
 
     database = QuasselDatabase.Creator.init(application)
 
@@ -336,6 +353,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
             val output = mutableListOf<IAliasManager.Command>()
             for (line in text.lineSequence()) {
+              viewModel.addRecentlySentMessage(line)
               session.aliasManager?.processInput(
                 bufferInfo,
                 inputEditor.formattedString,
