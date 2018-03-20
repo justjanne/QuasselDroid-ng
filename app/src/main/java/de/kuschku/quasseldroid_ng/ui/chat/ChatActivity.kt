@@ -137,7 +137,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         }
       }
 
-      println(next ?: Pair("", IntRange.EMPTY))
       lastWord.onNext(next ?: Pair("", IntRange.EMPTY))
     }
 

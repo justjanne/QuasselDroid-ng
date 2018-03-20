@@ -109,7 +109,6 @@ class IrcFormatSerializer internal constructor(private val context: Context) {
     }
 
     fun writeReset() {
-      println("reset")
       out.append(CODE_RESET)
     }
 

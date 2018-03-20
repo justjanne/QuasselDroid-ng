@@ -38,8 +38,8 @@ class AutoCompleteAdapter(
       runInBackground {
         val word = it?.first ?: ""
         val list = it?.second ?: emptyList()
-        val old: List<AutoCompleteItem> = if (word.length >= 3) list else emptyList()
-        val new: List<AutoCompleteItem> = list
+        val old: List<AutoCompleteItem> = data
+        val new: List<AutoCompleteItem> = if (word.length >= 3) list else emptyList()
         val result = DiffUtil.calculateDiff(
           object : DiffUtil.Callback() {
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
