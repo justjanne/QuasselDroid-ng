@@ -93,7 +93,8 @@ fun <A, B, C> zipLiveData(a: LiveData<A>, b: LiveData<B>,
  * @see zipLiveData
  * @author Mitchell Skaggs
  */
-fun <A, B> LiveData<A>.zip(b: LiveData<B>): LiveData<Pair<A, B>> = zipLiveData(this, b)
+fun <A, B> LiveData<A>.zip(b: LiveData<B>): LiveData<Pair<A, B>> =
+  zipLiveData(this, b)
 
 /**
  * This is merely an extension function for [zipLiveData].
@@ -102,4 +103,5 @@ fun <A, B> LiveData<A>.zip(b: LiveData<B>): LiveData<Pair<A, B>> = zipLiveData(t
  * @author Mitchell Skaggs
  */
 fun <A, B, C> LiveData<A>.zip(b: LiveData<B>,
-                              c: LiveData<C>): LiveData<Triple<A, B, C>> = zipLiveData(this, b, c)
+                              c: LiveData<C>): LiveData<Triple<A, B, C>> =
+  zipLiveData(this, b, c)

@@ -133,6 +133,7 @@ dependencies {
   }
 
   // Quassel
+  implementation(project(":viewmodel"))
   implementation(project(":lib")) {
     exclude(group = "org.threeten", module = "threetenbp")
   }

@@ -32,15 +32,15 @@ abstract class LoggingHandler {
 
   companion object {
     val loggingHandlers: MutableSet<LoggingHandler> = mutableSetOf(JavaLoggingHandler)
+
+    inline fun log(logLevel: LoggingHandler.LogLevel, tag: String, message: String? = null,
+                   throwable: Throwable? = null) {
+      LoggingHandler.loggingHandlers
+        .filter { it.isLoggable(logLevel, tag) }
+        .forEach { it.log(logLevel, tag, message, throwable) }
+    }
+
+    inline fun log(logLevel: LoggingHandler.LogLevel, tag: String, throwable: Throwable? = null) =
+      log(logLevel, tag, null, throwable)
   }
 }
-
-inline fun log(logLevel: LoggingHandler.LogLevel, tag: String, message: String? = null,
-               throwable: Throwable? = null) {
-  LoggingHandler.loggingHandlers
-    .filter { it.isLoggable(logLevel, tag) }
-    .forEach { it.log(logLevel, tag, message, throwable) }
-}
-
-inline fun log(logLevel: LoggingHandler.LogLevel, tag: String, throwable: Throwable? = null)
-  = log(logLevel, tag, null, throwable)

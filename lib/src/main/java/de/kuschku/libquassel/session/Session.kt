@@ -5,32 +5,31 @@ import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.quassel.QuasselFeature
 import de.kuschku.libquassel.quassel.syncables.*
-import de.kuschku.libquassel.util.and
 import de.kuschku.libquassel.util.compatibility.HandlerService
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
-import de.kuschku.libquassel.util.compatibility.log
 import de.kuschku.libquassel.util.hasFlag
 import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
 import javax.net.ssl.X509TrustManager
 
 class Session(
-  val clientData: ClientData,
-  val trustManager: X509TrustManager,
+  clientData: ClientData,
+  trustManager: X509TrustManager,
   address: SocketAddress,
   handlerService: HandlerService,
   backlogStorage: BacklogStorage,
   private val userData: Pair<String, String>
 ) : ProtocolHandler(), ISession {
-  override var coreFeatures: Quassel_Features = Quassel_Feature.NONE
-  override val negotiatedFeatures
-    get() = coreFeatures and clientData.clientFeatures
+  override val features = Features(clientData.clientFeatures, Quassel_Features.of())
 
   override val sslSession
     get() = coreConnection.sslSession
 
-  private val coreConnection = CoreConnection(this, address, handlerService)
+  private val coreConnection = CoreConnection(
+    this, clientData, features, trustManager, address, handlerService
+  )
   override val state = coreConnection.state
 
   override val aliasManager = AliasManager(this)
@@ -57,7 +56,7 @@ class Session(
   }
 
   override fun handle(f: HandshakeMessage.ClientInitAck): Boolean {
-    coreFeatures = f.coreFeatures ?: Quassel_Feature.NONE
+    features.core = f.coreFeatures ?: Quassel_Feature.NONE
     dispatch(
       HandshakeMessage.ClientLogin(
         user = userData.first,
@@ -97,7 +96,7 @@ class Session(
     synchronize(bufferSyncer, true)
     synchronize(bufferViewManager, true)
     synchronize(coreInfo, true)
-    if (negotiatedFeatures.hasFlag(QuasselFeature.DccFileTransfer))
+    if (features.negotiated.hasFlag(QuasselFeature.DccFileTransfer))
       synchronize(dccConfig, true)
     synchronize(ignoreListManager, true)
     synchronize(ircListHelper, true)

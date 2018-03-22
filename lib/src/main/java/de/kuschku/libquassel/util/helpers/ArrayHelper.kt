@@ -1,7 +1,7 @@
 package de.kuschku.libquassel.util.helpers
 
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
-import de.kuschku.libquassel.util.compatibility.log
 
 fun ByteArray.hexDump() {
   for (i in 0 until this.size step 33) {

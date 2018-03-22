@@ -18,6 +18,7 @@ import de.kuschku.quasseldroid_ng.ui.chat.ChatActivity
 import de.kuschku.quasseldroid_ng.util.helper.lastWordIndices
 import de.kuschku.quasseldroid_ng.util.helper.lineSequence
 import de.kuschku.quasseldroid_ng.util.helper.retint
+import de.kuschku.quasseldroid_ng.viewmodel.data.AutoCompleteItem
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -25,7 +26,7 @@ class Editor(
   // Contexts
   activity: AppCompatActivity,
   // LiveData
-  private val autoCompleteData: LiveData<Pair<String, List<AutoCompleteAdapter.AutoCompleteItem>>?>,
+  private val autoCompleteData: LiveData<Pair<String, List<AutoCompleteItem>>?>,
   lastWordContainer: MutableLiveData<Observable<Pair<String, IntRange>>>,
   // Views
   val chatline: AppCompatEditText,

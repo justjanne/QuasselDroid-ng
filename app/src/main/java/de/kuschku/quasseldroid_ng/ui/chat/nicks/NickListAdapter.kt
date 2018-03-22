@@ -11,10 +11,11 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.util.helper.visibleIf
+import de.kuschku.quasseldroid_ng.viewmodel.data.IrcUserItem
 
 class NickListAdapter(
   private val clickListener: ((String) -> Unit)? = null
-) : ListAdapter<NickListAdapter.IrcUserItem, NickListAdapter.NickViewHolder>(
+) : ListAdapter<IrcUserItem, NickListAdapter.NickViewHolder>(
   object : DiffUtil.ItemCallback<IrcUserItem>() {
     override fun areItemsTheSame(oldItem: IrcUserItem, newItem: IrcUserItem) =
       oldItem.nick == newItem.nick
@@ -41,15 +42,6 @@ class NickListAdapter(
   } else {
     VIEWTYPE_ACTIVE
   }
-
-  data class IrcUserItem(
-    val nick: String,
-    val modes: String,
-    val lowestMode: Int,
-    val realname: CharSequence,
-    val away: Boolean,
-    val networkCasemapping: String
-  )
 
   class NickViewHolder(
     itemView: View,

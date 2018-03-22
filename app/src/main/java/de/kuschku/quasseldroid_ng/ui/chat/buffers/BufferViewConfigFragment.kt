@@ -13,7 +13,6 @@ import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message_Type
-import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.libquassel.util.minus
@@ -21,12 +20,13 @@ import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.settings.AppearanceSettings
 import de.kuschku.quasseldroid_ng.settings.Settings
-import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.map
 import de.kuschku.quasseldroid_ng.util.helper.zip
 import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundFragment
+import de.kuschku.quasseldroid_ng.viewmodel.QuasselViewModel
+import de.kuschku.quasseldroid_ng.viewmodel.data.BufferHiddenState
 
 class BufferViewConfigFragment : ServiceBoundFragment() {
   private val handlerThread = AndroidHandlerThread("ChatList")
@@ -55,7 +55,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       val session = viewModel.session.value
       val bufferSyncer = session?.bufferSyncer
       val network = session?.networks?.get(selected?.info?.networkId)
-      val bufferViewConfig = viewModel.getBufferViewConfig().value
+      val bufferViewConfig = viewModel.bufferViewConfig.value
 
       return if (info != null && session != null) {
         when (item?.itemId) {
@@ -88,7 +88,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
               .backgroundColorAttr(R.attr.colorBackgroundCard)
               .contentColorAttr(R.attr.colorTextPrimary)
               .onPositive { _, _ ->
-                session.bufferSyncer?.requestRemoveBuffer(selected.info.bufferId)
+                selected.info?.let {
+                  session.bufferSyncer?.requestRemoveBuffer(info.bufferId)
+                }
               }
               .build()
               .show()
@@ -102,7 +104,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                 info.bufferName,
                 false
               ) { _, input ->
-                session.bufferSyncer?.requestRenameBuffer(selected.info.bufferId, input.toString())
+                selected.info?.let {
+                  session.bufferSyncer?.requestRenameBuffer(info.bufferId, input.toString())
+                }
               }
               .positiveText(R.string.label_save)
               .negativeText(R.string.label_cancel)
@@ -176,11 +180,11 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     chatListSpinner.adapter = adapter
     chatListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
       override fun onNothingSelected(p0: AdapterView<*>?) {
-        viewModel.setBufferViewConfig(null)
+        viewModel.setBufferViewConfigId(null)
       }
 
       override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        viewModel.setBufferViewConfig(adapter.getItem(p2))
+        viewModel.setBufferViewConfigId(adapter.getItem(p2)?.bufferViewId())
       }
     }
 
@@ -240,15 +244,15 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
           )
 
           val visibilityActions = when (buffer.hiddenState) {
-            BufferListAdapter.HiddenState.VISIBLE          -> setOf(
+            BufferHiddenState.VISIBLE          -> setOf(
               R.id.action_hide_temp,
               R.id.action_hide_perm
             )
-            BufferListAdapter.HiddenState.HIDDEN_TEMPORARY -> setOf(
+            BufferHiddenState.HIDDEN_TEMPORARY -> setOf(
               R.id.action_unhide,
               R.id.action_hide_perm
             )
-            BufferListAdapter.HiddenState.HIDDEN_PERMANENT -> setOf(
+            BufferHiddenState.HIDDEN_PERMANENT -> setOf(
               R.id.action_unhide,
               R.id.action_hide_temp
             )
@@ -327,11 +331,4 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     }
     listAdapter.toggleSelection(it)
   }
-
-  data class SelectedItem(
-    val info: BufferInfo? = null,
-    val connectionState: INetwork.ConnectionState = INetwork.ConnectionState.Disconnected,
-    val joined: Boolean = false,
-    val hiddenState: BufferListAdapter.HiddenState = BufferListAdapter.HiddenState.VISIBLE
-  )
 }

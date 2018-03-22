@@ -1,5 +1,6 @@
 package de.kuschku.libquassel.session
 
+import de.kuschku.libquassel.protocol.ClientData
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.protocol.primitive.serializer.HandshakeVariantMapSerializer
@@ -9,8 +10,8 @@ import de.kuschku.libquassel.protocol.primitive.serializer.VariantListSerializer
 import de.kuschku.libquassel.quassel.ProtocolFeature
 import de.kuschku.libquassel.util.compatibility.CompatibilityUtils
 import de.kuschku.libquassel.util.compatibility.HandlerService
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.*
-import de.kuschku.libquassel.util.compatibility.log
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.libquassel.util.helpers.hexDump
 import de.kuschku.libquassel.util.helpers.write
@@ -24,9 +25,13 @@ import java.lang.Thread.UncaughtExceptionHandler
 import java.net.Socket
 import java.net.SocketException
 import java.nio.ByteBuffer
+import javax.net.ssl.X509TrustManager
 
 class CoreConnection(
-  private val session: Session,
+  private val handler: ProtocolHandler,
+  private val clientData: ClientData,
+  private val features: Features,
+  private val trustManager: X509TrustManager,
   private val address: SocketAddress,
   private val handlerService: HandlerService
 ) : Thread(), Closeable {
@@ -67,13 +72,13 @@ class CoreConnection(
 
     IntSerializer.serialize(
       chainedBuffer,
-      0x42b33f00 or session.clientData.protocolFeatures.toInt(),
-      session.negotiatedFeatures
+      0x42b33f00 or clientData.protocolFeatures.toInt(),
+      features.negotiated
     )
-    for (supportedProtocol in session.clientData.supportedProtocols) {
-      IntSerializer.serialize(chainedBuffer, supportedProtocol.toInt(), session.negotiatedFeatures)
+    for (supportedProtocol in clientData.supportedProtocols) {
+      IntSerializer.serialize(chainedBuffer, supportedProtocol.toInt(), features.negotiated)
     }
-    IntSerializer.serialize(chainedBuffer, 1 shl 31, session.negotiatedFeatures)
+    IntSerializer.serialize(chainedBuffer, 1 shl 31, features.negotiated)
     channel?.write(chainedBuffer)
     channel?.flush()
   }
@@ -82,13 +87,13 @@ class CoreConnection(
     sizeBuffer.clear()
     channel?.read(sizeBuffer)
     sizeBuffer.flip()
-    val protocol = ProtocolInfoSerializer.deserialize(sizeBuffer, session.negotiatedFeatures)
+    val protocol = ProtocolInfoSerializer.deserialize(sizeBuffer, features.negotiated)
 
     log(DEBUG, TAG, "Protocol negotiated $protocol")
 
     // Wrap socket in SSL context if ssl is enabled
     if (protocol.flags.hasFlag(ProtocolFeature.TLS)) {
-      channel = channel?.withSSL(session.trustManager, address)
+      channel = channel?.withSSL(trustManager, address)
     }
 
     // Wrap socket in deflater if compression is enabled
@@ -102,10 +107,10 @@ class CoreConnection(
         // Send client clientData to core
         dispatch(
           HandshakeMessage.ClientInit(
-            clientVersion = session.clientData.identifier,
+            clientVersion = clientData.identifier,
             buildDate = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm:ss")
-              .format(session.clientData.buildDate.atOffset(ZoneOffset.UTC)),
-            clientFeatures = session.clientData.clientFeatures
+              .format(clientData.buildDate.atOffset(ZoneOffset.UTC)),
+            clientFeatures = clientData.clientFeatures
           )
         )
       }
@@ -132,7 +137,7 @@ class CoreConnection(
         handlerService.write(
           MessageRunnable(
             data, HandshakeVariantMapSerializer, chainedBuffer, channel,
-            session.negotiatedFeatures
+            features.negotiated
           )
         )
       } catch (e: Throwable) {
@@ -148,7 +153,7 @@ class CoreConnection(
         handlerService.write(
           MessageRunnable(
             data, VariantListSerializer, chainedBuffer, channel,
-            session.negotiatedFeatures
+            features.negotiated
           )
         )
       } catch (e: Throwable) {
@@ -168,7 +173,7 @@ class CoreConnection(
           break
         sizeBuffer.flip()
 
-        val size = IntSerializer.deserialize(sizeBuffer, session.negotiatedFeatures)
+        val size = IntSerializer.deserialize(sizeBuffer, features.negotiated)
         if (size > 64 * 1024 * 1024)
           throw SocketException("Too large frame received: $size")
         val dataBuffer = ByteBuffer.allocateDirect(size)
@@ -191,11 +196,11 @@ class CoreConnection(
   private fun processSigProxy(dataBuffer: ByteBuffer) {
     try {
       val msg = SignalProxyMessage.deserialize(
-        VariantListSerializer.deserialize(dataBuffer, session.negotiatedFeatures)
+        VariantListSerializer.deserialize(dataBuffer, features.negotiated)
       )
       handlerService.handle {
         try {
-          session.handle(msg)
+          handler.handle(msg)
         } catch (e: Throwable) {
           log(WARN, TAG, "Error encountered while handling sigproxy message", e)
           log(WARN, TAG, msg.toString())
@@ -210,10 +215,10 @@ class CoreConnection(
   private fun processHandshake(dataBuffer: ByteBuffer) {
     try {
       val msg = HandshakeMessage.deserialize(
-        HandshakeVariantMapSerializer.deserialize(dataBuffer, session.negotiatedFeatures)
+        HandshakeVariantMapSerializer.deserialize(dataBuffer, features.negotiated)
       )
       try {
-        session.handle(msg)
+        handler.handle(msg)
       } catch (e: Throwable) {
         log(WARN, TAG, "Error encountered while handling handshake message", e)
         log(WARN, TAG, msg.toString())

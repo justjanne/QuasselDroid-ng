@@ -15,15 +15,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.protocol.Buffer_Activity
+import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
-import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.util.helper.getCompatDrawable
 import de.kuschku.quasseldroid_ng.util.helper.styledAttributes
 import de.kuschku.quasseldroid_ng.util.helper.visibleIf
 import de.kuschku.quasseldroid_ng.util.helper.zip
+import de.kuschku.quasseldroid_ng.viewmodel.data.BufferListItem
+import de.kuschku.quasseldroid_ng.viewmodel.data.BufferProps
+import de.kuschku.quasseldroid_ng.viewmodel.data.BufferState
+import de.kuschku.quasseldroid_ng.viewmodel.data.BufferStatus
 
 class BufferListAdapter(
   lifecycleOwner: LifecycleOwner,
@@ -144,33 +150,6 @@ class BufferListAdapter(
   override fun getItemCount() = data.size
 
   override fun getItemViewType(position: Int) = data[position].props.info.type.toInt()
-
-  data class BufferListItem(
-    val props: BufferProps,
-    val state: BufferState
-  )
-
-  data class BufferProps(
-    val info: BufferInfo,
-    val network: INetwork.NetworkInfo,
-    val bufferStatus: BufferStatus,
-    val description: CharSequence,
-    val activity: Message_Types,
-    val highlights: Int = 0,
-    val bufferActivity: Buffer_Activities = Buffer_Activity.of(Buffer_Activity.NoActivity),
-    val hiddenState: HiddenState
-  )
-
-  enum class HiddenState {
-    VISIBLE,
-    HIDDEN_TEMPORARY,
-    HIDDEN_PERMANENT
-  }
-
-  data class BufferState(
-    val networkExpanded: Boolean,
-    val selected: Boolean
-  )
 
   abstract class BufferViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     abstract fun bind(props: BufferProps, state: BufferState)
@@ -521,11 +500,5 @@ class BufferListAdapter(
         )
       }
     }
-  }
-
-  enum class BufferStatus {
-    ONLINE,
-    AWAY,
-    OFFLINE
   }
 }

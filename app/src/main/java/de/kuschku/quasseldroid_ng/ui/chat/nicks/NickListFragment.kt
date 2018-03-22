@@ -15,11 +15,11 @@ import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.settings.AppearanceSettings
 import de.kuschku.quasseldroid_ng.settings.Settings
-import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.map
 import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundFragment
+import de.kuschku.quasseldroid_ng.viewmodel.QuasselViewModel
 
 class NickListFragment : ServiceBoundFragment() {
   private lateinit var viewModel: QuasselViewModel

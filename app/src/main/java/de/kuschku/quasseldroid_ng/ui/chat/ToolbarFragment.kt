@@ -10,18 +10,16 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.Buffer_Type
-import de.kuschku.libquassel.quassel.BufferInfo
-import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.settings.AppearanceSettings
 import de.kuschku.quasseldroid_ng.settings.Settings
-import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.helper.visibleIf
 import de.kuschku.quasseldroid_ng.util.helper.zip
 import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid_ng.util.ui.SpanFormatter
+import de.kuschku.quasseldroid_ng.viewmodel.QuasselViewModel
 
 class ToolbarFragment : ServiceBoundFragment() {
   @BindView(R.id.toolbar_title)
@@ -102,10 +100,4 @@ class ToolbarFragment : ServiceBoundFragment() {
     description, appearanceSettings.colorizeMirc
   )
                                                           ?: description
-
-  data class BufferData(
-    val info: BufferInfo? = null,
-    val network: INetwork.NetworkInfo? = null,
-    val description: String? = null
-  )
 }

@@ -21,10 +21,10 @@ import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.settings.AppearanceSettings
 import de.kuschku.quasseldroid_ng.settings.BacklogSettings
 import de.kuschku.quasseldroid_ng.settings.Settings
-import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.*
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundFragment
+import de.kuschku.quasseldroid_ng.viewmodel.QuasselViewModel
 
 class MessageListFragment : ServiceBoundFragment() {
   @BindView(R.id.messages)

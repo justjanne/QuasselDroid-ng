@@ -7,9 +7,9 @@ import de.kuschku.libquassel.quassel.exceptions.ObjectNotFoundException
 import de.kuschku.libquassel.quassel.syncables.RpcHandler
 import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
 import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
-import de.kuschku.libquassel.util.compatibility.log
 import org.threeten.bp.Instant
 import java.io.Closeable
 

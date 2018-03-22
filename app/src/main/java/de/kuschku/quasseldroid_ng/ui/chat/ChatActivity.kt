@@ -34,19 +34,18 @@ import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.settings.BacklogSettings
 import de.kuschku.quasseldroid_ng.settings.Settings
-import de.kuschku.quasseldroid_ng.ui.chat.input.AutoCompleteAdapter
 import de.kuschku.quasseldroid_ng.ui.chat.input.Editor
 import de.kuschku.quasseldroid_ng.ui.chat.input.MessageHistoryAdapter
 import de.kuschku.quasseldroid_ng.ui.settings.SettingsActivity
 import de.kuschku.quasseldroid_ng.ui.setup.accounts.AccountSelectionActivity
-import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
 import de.kuschku.quasseldroid_ng.util.helper.editApply
 import de.kuschku.quasseldroid_ng.util.helper.invoke
-import de.kuschku.quasseldroid_ng.util.helper.let
 import de.kuschku.quasseldroid_ng.util.helper.sharedPreferences
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
+import de.kuschku.quasseldroid_ng.viewmodel.QuasselViewModel
+import de.kuschku.quasseldroid_ng.viewmodel.data.AutoCompleteItem
 
 class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
   @BindView(R.id.drawer_layout)
@@ -125,7 +124,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       findViewById(R.id.formatting_toolbar),
       { lines ->
         viewModel.session { session ->
-          viewModel.getBuffer().let { bufferId ->
+          viewModel.getBuffer().value?.let { bufferId ->
             session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
               val output = mutableListOf<IAliasManager.Command>()
               for ((stripped, formatted) in lines) {
@@ -204,8 +203,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   data class AutoCompletionState(
     val originalWord: String,
     val range: IntRange,
-    val lastCompletion: AutoCompleteAdapter.AutoCompleteItem? = null,
-    val completion: AutoCompleteAdapter.AutoCompleteItem
+    val lastCompletion: AutoCompleteItem? = null,
+    val completion: AutoCompleteItem
   )
 
   override fun onSaveInstanceState(outState: Bundle?) {
@@ -298,7 +297,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     R.id.clear -> {
       handler.post {
         viewModel.sessionManager { manager ->
-          viewModel.getBuffer().let { buffer ->
+          viewModel.getBuffer().value?.let { buffer ->
             manager.backlogStorage.clearMessages(buffer)
             manager.backlogManager?.requestBacklog(
               bufferId = buffer,

@@ -11,8 +11,7 @@ import javax.net.ssl.SSLSession
 
 interface ISession : Closeable {
   val state: Observable<ConnectionState>
-  val coreFeatures: Quassel_Features
-  val negotiatedFeatures: Quassel_Features
+  val features: Features
   val sslSession: SSLSession?
 
   val aliasManager: AliasManager?
@@ -35,8 +34,7 @@ interface ISession : Closeable {
   companion object {
     val NULL = object : ISession {
       override val state = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
-      override val coreFeatures: Quassel_Features = Quassel_Features.of()
-      override val negotiatedFeatures: Quassel_Features = Quassel_Features.of()
+      override val features: Features = Features(Quassel_Features.of(), Quassel_Features.of())
       override val sslSession: SSLSession? = null
 
       override val rpcHandler: RpcHandler? = null

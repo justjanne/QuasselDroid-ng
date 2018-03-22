@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid_ng.ui.viewmodel
+package de.kuschku.quasseldroid_ng.viewmodel
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
@@ -13,15 +13,10 @@ import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.ISession
-import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.and
 import de.kuschku.libquassel.util.hasFlag
-import de.kuschku.quasseldroid_ng.ui.chat.ToolbarFragment
-import de.kuschku.quasseldroid_ng.ui.chat.buffers.BufferListAdapter
-import de.kuschku.quasseldroid_ng.ui.chat.buffers.BufferViewConfigFragment
-import de.kuschku.quasseldroid_ng.ui.chat.input.AutoCompleteAdapter
-import de.kuschku.quasseldroid_ng.ui.chat.nicks.NickListAdapter
 import de.kuschku.quasseldroid_ng.util.helper.*
+import de.kuschku.quasseldroid_ng.viewmodel.data.*
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
@@ -37,10 +32,10 @@ class QuasselViewModel : ViewModel() {
     this.buffer.value = buffer
   }
 
-  private val bufferViewConfig = MutableLiveData<BufferViewConfig?>()
-  fun getBufferViewConfig(): LiveData<BufferViewConfig?> = bufferViewConfig
-  fun setBufferViewConfig(bufferViewConfig: BufferViewConfig?) {
-    this.bufferViewConfig.value = bufferViewConfig
+  private val bufferViewConfigId = MutableLiveData<Int?>()
+  fun getBufferViewConfigId(): LiveData<Int?> = bufferViewConfigId
+  fun setBufferViewConfigId(bufferViewConfig: Int?) {
+    this.bufferViewConfigId.value = bufferViewConfig
   }
 
   val MAX_RECENT_MESSAGES = 20
@@ -60,6 +55,12 @@ class QuasselViewModel : ViewModel() {
   val connectionProgress = sessionManager.switchMapRx { it.connectionProgress }
 
   private val bufferViewManager = session.map(ISession::bufferViewManager)
+
+  val bufferViewConfig = bufferViewManager.switchMap { manager ->
+    bufferViewConfigId.map { id ->
+      manager.bufferViewConfig(id)
+    }
+  }
 
   private var lastMarkerLine = -1
   /**
@@ -87,10 +88,9 @@ class QuasselViewModel : ViewModel() {
     }
   }
 
-  val lag: LiveData<Long?> = sessionManager.switchMapRx { it.session.switchMap { it.lag } }
+  val lag: LiveData<Long?> = session.switchMapRx(ISession::lag)
 
-  val isSecure: LiveData<Boolean?> = sessionManager.switchMapRx(SessionManager::session)
-    .switchMapRx { session ->
+  val isSecure: LiveData<Boolean?> = session.switchMapRx { session ->
       session.state.map { _ ->
         session.sslSession != null
       }
@@ -103,13 +103,13 @@ class QuasselViewModel : ViewModel() {
         val info = bufferSyncer.bufferInfo(id)
         val network = session.networks[info?.networkId]
         if (info == null || network == null) {
-          Observable.just(ToolbarFragment.BufferData())
+          Observable.just(BufferData())
         } else {
           when (info.type.toInt()) {
             BufferInfo.Type.QueryBuffer.toInt()   -> {
               network.liveIrcUser(info.bufferName).switchMap { user ->
                 user.liveRealName().map { realName ->
-                  ToolbarFragment.BufferData(
+                  BufferData(
                     info = info,
                     network = network.networkInfo(),
                     description = realName
@@ -122,7 +122,7 @@ class QuasselViewModel : ViewModel() {
                 info.bufferName
               ).switchMap { channel ->
                 channel.liveTopic().map { topic ->
-                  ToolbarFragment.BufferData(
+                  BufferData(
                     info = info,
                     network = network.networkInfo(),
                     description = topic
@@ -132,14 +132,14 @@ class QuasselViewModel : ViewModel() {
             }
             BufferInfo.Type.StatusBuffer.toInt()  -> {
               network.liveConnectionState.map {
-                ToolbarFragment.BufferData(
+                BufferData(
                   info = info,
                   network = network.networkInfo()
                 )
               }
             }
             else                                  -> Observable.just(
-              ToolbarFragment.BufferData(
+              BufferData(
                 description = "type is unknown: ${info.type.toInt()}"
               )
             )
@@ -147,11 +147,11 @@ class QuasselViewModel : ViewModel() {
         }
       }
     } else {
-      Observable.just(ToolbarFragment.BufferData())
+      Observable.just(BufferData())
     }
   }
 
-  val nickData: LiveData<List<NickListAdapter.IrcUserItem>?> = session.zip(
+  val nickData: LiveData<List<IrcUserItem>?> = session.zip(
     buffer
   ).switchMapRx { (session, buffer) ->
     val bufferSyncer = session?.bufferSyncer
@@ -161,8 +161,8 @@ class QuasselViewModel : ViewModel() {
       val ircChannel = network?.ircChannel(bufferInfo.bufferName)
       if (ircChannel != null) {
         ircChannel.liveIrcUsers().switchMap { users ->
-          combineLatest<NickListAdapter.IrcUserItem>(
-            users.map<IrcUser, Observable<NickListAdapter.IrcUserItem>?> { user ->
+          combineLatest<IrcUserItem>(
+            users.map<IrcUser, Observable<IrcUserItem>?> { user ->
               user.liveNick().switchMap { nick ->
                 user.liveRealName().switchMap { realName ->
                   user.liveIsAway().map { away ->
@@ -173,7 +173,7 @@ class QuasselViewModel : ViewModel() {
                       prefixModes.indexOf(it)
                     }.min() ?: prefixModes.size
 
-                    NickListAdapter.IrcUserItem(
+                    IrcUserItem(
                       nick,
                       network.modesToPrefixes(userModes),
                       lowestMode,
@@ -196,7 +196,7 @@ class QuasselViewModel : ViewModel() {
 
   val lastWord = MutableLiveData<Observable<Pair<String, IntRange>>>()
 
-  val autoCompleteData: LiveData<Pair<String, List<AutoCompleteAdapter.AutoCompleteItem>>?> = session.zip(
+  val autoCompleteData: LiveData<Pair<String, List<AutoCompleteItem>>?> = session.zip(
     buffer, lastWord
   ).switchMapRx { (session, id, lastWordWrapper) ->
     lastWordWrapper
@@ -216,29 +216,29 @@ class QuasselViewModel : ViewModel() {
               )
               if (ircChannel != null) {
                 ircChannel.liveIrcUsers().switchMap { users ->
-                  val buffers: List<Observable<AutoCompleteAdapter.AutoCompleteItem.ChannelItem>?> = infos.values
+                  val buffers: List<Observable<AutoCompleteItem.ChannelItem>?> = infos.values
                     .filter {
                       it.type.toInt() == Buffer_Type.ChannelBuffer.toInt()
                     }.mapNotNull { info ->
                       session.networks[info.networkId]?.let { info to it }
-                    }.map<Pair<BufferInfo, Network>, Observable<AutoCompleteAdapter.AutoCompleteItem.ChannelItem>?> { (info, network) ->
+                    }.map<Pair<BufferInfo, Network>, Observable<AutoCompleteItem.ChannelItem>?> { (info, network) ->
                       network.liveIrcChannel(
                         info.bufferName
                       ).switchMap { channel ->
                         channel.liveTopic().map { topic ->
-                          AutoCompleteAdapter.AutoCompleteItem.ChannelItem(
+                          AutoCompleteItem.ChannelItem(
                             info = info,
                             network = network.networkInfo(),
                             bufferStatus = when (channel) {
-                              IrcChannel.NULL -> BufferListAdapter.BufferStatus.OFFLINE
-                              else            -> BufferListAdapter.BufferStatus.ONLINE
+                              IrcChannel.NULL -> BufferStatus.OFFLINE
+                              else            -> BufferStatus.ONLINE
                             },
                             description = topic
                           )
                         }
                       }
                     }
-                  val nicks = users.map<IrcUser, Observable<AutoCompleteAdapter.AutoCompleteItem.UserItem>?> { user ->
+                  val nicks = users.map<IrcUser, Observable<AutoCompleteItem.UserItem>?> { user ->
                     user.liveNick().switchMap { nick ->
                       user.liveRealName().switchMap { realName ->
                         user.liveIsAway().map { away ->
@@ -253,7 +253,7 @@ class QuasselViewModel : ViewModel() {
                             )
                           }.min() ?: prefixModes.size
 
-                          AutoCompleteAdapter.AutoCompleteItem.UserItem(
+                          AutoCompleteItem.UserItem(
                             nick,
                             network.modesToPrefixes(
                               userModes
@@ -270,7 +270,7 @@ class QuasselViewModel : ViewModel() {
                     }
                   }
 
-                  combineLatest<AutoCompleteAdapter.AutoCompleteItem>(nicks + buffers)
+                  combineLatest<AutoCompleteItem>(nicks + buffers)
                     .map { list ->
                       val ignoredStartingCharacters = charArrayOf(
                         '-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\'
@@ -324,11 +324,11 @@ class QuasselViewModel : ViewModel() {
     if (bufferSyncer != null && bufferViewConfig != null) {
       val hiddenState = when {
         bufferViewConfig.removedBuffers().contains(buffer)            ->
-          BufferListAdapter.HiddenState.HIDDEN_PERMANENT
+          BufferHiddenState.HIDDEN_PERMANENT
         bufferViewConfig.temporarilyRemovedBuffers().contains(buffer) ->
-          BufferListAdapter.HiddenState.HIDDEN_TEMPORARY
+          BufferHiddenState.HIDDEN_TEMPORARY
         else                                                          ->
-          BufferListAdapter.HiddenState.VISIBLE
+          BufferHiddenState.VISIBLE
       }
 
       val info = bufferSyncer.bufferInfo(buffer)
@@ -337,7 +337,7 @@ class QuasselViewModel : ViewModel() {
         when (info.type.enabledValues().firstOrNull()) {
           Buffer_Type.StatusBuffer  -> {
             network?.liveConnectionState?.map {
-              BufferViewConfigFragment.SelectedItem(
+              SelectedBufferItem(
                 info,
                 connectionState = it,
                 hiddenState = hiddenState
@@ -346,7 +346,7 @@ class QuasselViewModel : ViewModel() {
           }
           Buffer_Type.ChannelBuffer -> {
             network?.liveIrcChannel(info.bufferName)?.map {
-              BufferViewConfigFragment.SelectedItem(
+              SelectedBufferItem(
                 info,
                 joined = it != IrcChannel.NULL,
                 hiddenState = hiddenState
@@ -354,17 +354,17 @@ class QuasselViewModel : ViewModel() {
             }
           }
           else                      ->
-            Observable.just(BufferViewConfigFragment.SelectedItem(info, hiddenState = hiddenState))
+            Observable.just(SelectedBufferItem(info, hiddenState = hiddenState))
         }
       } else {
-        Observable.just(BufferViewConfigFragment.SelectedItem(info, hiddenState = hiddenState))
+        Observable.just(SelectedBufferItem(info, hiddenState = hiddenState))
       }
     } else {
-      Observable.just(BufferViewConfigFragment.SelectedItem())
+      Observable.just(SelectedBufferItem())
     }
   }
 
-  val bufferList: LiveData<Pair<BufferViewConfig?, List<BufferListAdapter.BufferProps>>?> = session.zip(
+  val bufferList: LiveData<Pair<BufferViewConfig?, List<BufferProps>>?> = session.zip(
     bufferViewConfig, showHidden
   ).switchMapRx { (session, config, showHiddenRaw) ->
     val bufferSyncer = session?.bufferSyncer
@@ -378,7 +378,7 @@ class QuasselViewModel : ViewModel() {
             config.live_removedBuffers
           )
         ).switchMap { (ids, temp, perm) ->
-          fun transformIds(ids: Collection<BufferId>, state: BufferListAdapter.HiddenState) =
+          fun transformIds(ids: Collection<BufferId>, state: BufferHiddenState) =
             ids.mapNotNull { id ->
               bufferSyncer.bufferInfo(id)
             }.filter {
@@ -393,7 +393,7 @@ class QuasselViewModel : ViewModel() {
               } else {
                 it to network
               }
-            }.map<Pair<BufferInfo, Network>, Observable<BufferListAdapter.BufferProps>?> { (info, network) ->
+            }.map<Pair<BufferInfo, Network>, Observable<BufferProps>?> { (info, network) ->
               bufferSyncer.liveActivity(info.bufferId).switchMap { activity ->
                 bufferSyncer.liveHighlightCount(info.bufferId).map { highlights ->
                   activity to highlights
@@ -404,13 +404,13 @@ class QuasselViewModel : ViewModel() {
                     network.liveIrcUser(info.bufferName).switchMap { user ->
                       user.liveIsAway().switchMap { away ->
                         user.liveRealName().map { realName ->
-                          BufferListAdapter.BufferProps(
+                          BufferProps(
                             info = info,
                             network = network.networkInfo(),
                             bufferStatus = when {
-                              user == IrcUser.NULL -> BufferListAdapter.BufferStatus.OFFLINE
-                              away                 -> BufferListAdapter.BufferStatus.AWAY
-                              else                 -> BufferListAdapter.BufferStatus.ONLINE
+                              user == IrcUser.NULL -> BufferStatus.OFFLINE
+                              away                 -> BufferStatus.AWAY
+                              else                 -> BufferStatus.ONLINE
                             },
                             description = realName,
                             activity = activity,
@@ -426,12 +426,12 @@ class QuasselViewModel : ViewModel() {
                       info.bufferName
                     ).switchMap { channel ->
                       channel.liveTopic().map { topic ->
-                        BufferListAdapter.BufferProps(
+                        BufferProps(
                           info = info,
                           network = network.networkInfo(),
                           bufferStatus = when (channel) {
-                            IrcChannel.NULL -> BufferListAdapter.BufferStatus.OFFLINE
-                            else            -> BufferListAdapter.BufferStatus.ONLINE
+                            IrcChannel.NULL -> BufferStatus.OFFLINE
+                            else            -> BufferStatus.ONLINE
                           },
                           description = topic,
                           activity = activity,
@@ -443,10 +443,10 @@ class QuasselViewModel : ViewModel() {
                   }
                   BufferInfo.Type.StatusBuffer.toInt()  -> {
                     network.liveConnectionState.map {
-                      BufferListAdapter.BufferProps(
+                      BufferProps(
                         info = info,
                         network = network.networkInfo(),
-                        bufferStatus = BufferListAdapter.BufferStatus.OFFLINE,
+                        bufferStatus = BufferStatus.OFFLINE,
                         description = "",
                         activity = activity,
                         highlights = highlights,
@@ -455,10 +455,10 @@ class QuasselViewModel : ViewModel() {
                     }
                   }
                   else                                  -> Observable.just(
-                    BufferListAdapter.BufferProps(
+                    BufferProps(
                       info = info,
                       network = network.networkInfo(),
-                      bufferStatus = BufferListAdapter.BufferStatus.OFFLINE,
+                      bufferStatus = BufferStatus.OFFLINE,
                       description = "",
                       activity = activity,
                       highlights = highlights,
@@ -471,19 +471,19 @@ class QuasselViewModel : ViewModel() {
 
           bufferSyncer.liveBufferInfos().switchMap {
             val buffers = if (showHidden) {
-              transformIds(ids, BufferListAdapter.HiddenState.VISIBLE) +
-              transformIds(temp, BufferListAdapter.HiddenState.HIDDEN_TEMPORARY) +
-              transformIds(perm, BufferListAdapter.HiddenState.HIDDEN_PERMANENT)
+              transformIds(ids, BufferHiddenState.VISIBLE) +
+              transformIds(temp, BufferHiddenState.HIDDEN_TEMPORARY) +
+              transformIds(perm, BufferHiddenState.HIDDEN_PERMANENT)
             } else {
-              transformIds(ids, BufferListAdapter.HiddenState.VISIBLE)
+              transformIds(ids, BufferHiddenState.VISIBLE)
             }
 
-            combineLatest<BufferListAdapter.BufferProps>(buffers).map { list ->
-              Pair<BufferViewConfig?, List<BufferListAdapter.BufferProps>>(
+            combineLatest<BufferProps>(buffers).map { list ->
+              Pair<BufferViewConfig?, List<BufferProps>>(
                 config,
                 list.filter {
                   (!config.hideInactiveBuffers()) ||
-                  it.bufferStatus != BufferListAdapter.BufferStatus.OFFLINE ||
+                  it.bufferStatus != BufferStatus.OFFLINE ||
                   it.info.type.hasFlag(Buffer_Type.StatusBuffer)
                 })
             }
@@ -492,7 +492,7 @@ class QuasselViewModel : ViewModel() {
       }
     } else {
       Observable.just(
-        Pair<BufferViewConfig?, List<BufferListAdapter.BufferProps>>(null, emptyList())
+        Pair<BufferViewConfig?, List<BufferProps>>(null, emptyList())
       )
     }
   }

@@ -12,18 +12,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import de.kuschku.libquassel.quassel.BufferInfo
-import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.quasseldroid_ng.R
-import de.kuschku.quasseldroid_ng.ui.chat.buffers.BufferListAdapter
 import de.kuschku.quasseldroid_ng.ui.chat.nicks.NickListAdapter.Companion.VIEWTYPE_AWAY
 import de.kuschku.quasseldroid_ng.util.helper.getCompatDrawable
 import de.kuschku.quasseldroid_ng.util.helper.styledAttributes
 import de.kuschku.quasseldroid_ng.util.helper.visibleIf
+import de.kuschku.quasseldroid_ng.viewmodel.data.AutoCompleteItem
+import de.kuschku.quasseldroid_ng.viewmodel.data.BufferStatus
 
 class AutoCompleteAdapter(
   private val clickListener: ((String) -> Unit)? = null
-) : ListAdapter<AutoCompleteAdapter.AutoCompleteItem, AutoCompleteAdapter.AutoCompleteViewHolder>(
+) : ListAdapter<AutoCompleteItem, AutoCompleteAdapter.AutoCompleteViewHolder>(
   object : DiffUtil.ItemCallback<AutoCompleteItem>() {
     override fun areItemsTheSame(oldItem: AutoCompleteItem, newItem: AutoCompleteItem) =
       oldItem.name == newItem.name
@@ -61,34 +60,6 @@ class AutoCompleteAdapter(
       it is AutoCompleteItem.UserItem && it.away -> VIEWTYPE_NICK_AWAY
       else                                       -> VIEWTYPE_NICK_ACTIVE
     }
-  }
-
-  sealed class AutoCompleteItem(open val name: String) : Comparable<AutoCompleteItem> {
-    override fun compareTo(other: AutoCompleteItem): Int {
-      return when {
-        this is UserItem &&
-        other is ChannelItem -> -1
-        this is ChannelItem &&
-        other is UserItem    -> 1
-        else                 -> this.name.compareTo(other.name)
-      }
-    }
-
-    data class UserItem(
-      val nick: String,
-      val modes: String,
-      val lowestMode: Int,
-      val realname: CharSequence,
-      val away: Boolean,
-      val networkCasemapping: String
-    ) : AutoCompleteItem(nick)
-
-    data class ChannelItem(
-      val info: BufferInfo,
-      val network: INetwork.NetworkInfo,
-      val bufferStatus: BufferListAdapter.BufferStatus,
-      val description: CharSequence
-    ) : AutoCompleteItem(info.bufferName ?: "")
   }
 
   sealed class AutoCompleteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -185,8 +156,8 @@ class AutoCompleteAdapter(
 
         status.setImageDrawable(
           when (data.bufferStatus) {
-            BufferListAdapter.BufferStatus.ONLINE -> online
-            else                                  -> offline
+            BufferStatus.ONLINE -> online
+            else                -> offline
           }
         )
       }

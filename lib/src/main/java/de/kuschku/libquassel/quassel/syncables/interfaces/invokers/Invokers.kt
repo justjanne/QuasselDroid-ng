@@ -2,9 +2,9 @@ package de.kuschku.libquassel.quassel.syncables.interfaces.invokers
 
 import de.kuschku.libquassel.annotations.Syncable
 import de.kuschku.libquassel.quassel.syncables.interfaces.*
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
-import de.kuschku.libquassel.util.compatibility.log
 
 object Invokers {
   private val registry = mutableMapOf<String, Invoker<*>>()
