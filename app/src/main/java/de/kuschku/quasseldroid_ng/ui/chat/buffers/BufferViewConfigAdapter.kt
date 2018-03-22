@@ -31,14 +31,13 @@ class BufferViewConfigAdapter(
         data.addAll(list)
       }
       notifyDataSetChanged()
-    }
-    )
+    })
   }
 
   override fun isEmpty() = data.isEmpty()
 
-  override fun onBindViewHolder(holder: BufferViewConfigViewHolder, position: Int)
-    = holder.bind(getItem(position))
+  override fun onBindViewHolder(holder: BufferViewConfigViewHolder, position: Int) =
+    holder.bind(getItem(position))
 
   override fun onCreateViewHolder(parent: ViewGroup, dropDown: Boolean)
     : BufferViewConfigViewHolder {

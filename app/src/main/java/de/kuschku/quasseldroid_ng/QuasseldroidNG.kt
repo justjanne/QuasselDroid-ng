@@ -77,8 +77,7 @@ class QuasseldroidNG : Application() {
             } else {
               it
             }
-          }
-          .let {
+          }.let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
               it.detectUnbufferedIo()
             } else {
@@ -100,8 +99,7 @@ class QuasseldroidNG : Application() {
             } else {
               it
             }
-          }
-          .let {
+          }.let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
               it.detectContentUriWithoutPermission()
             } else {

@@ -1,5 +1,6 @@
-package de.kuschku.quasseldroid_ng.ui.chat
+package de.kuschku.quasseldroid_ng.ui.chat.nicks
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.settings.AppearanceSettings
 import de.kuschku.quasseldroid_ng.settings.Settings
@@ -47,32 +49,29 @@ class NickListFragment : ServiceBoundFragment() {
     val view = inflater.inflate(R.layout.fragment_nick_list, container, false)
     ButterKnife.bind(this, view)
 
-    nickList.adapter = NickListAdapter(
-      this,
-      viewModel.nickData.map {
-        it.map {
-          it.copy(
-            modes = when (appearanceSettings.showPrefix) {
-              AppearanceSettings.ShowPrefixMode.ALL -> it.modes
-              else                                  -> it.modes.substring(
-                0, Math.min(
-                it.modes.length, 1
-              )
-              )
-            },
-            realname = ircFormatDeserializer?.formatString(
-              it.realname.toString(), appearanceSettings.colorizeMirc
-            ) ?: it.realname
-          )
-        }
-      },
-      handlerThread::post,
-      activity!!::runOnUiThread,
-      clickListener
-    )
-
+    val nickListAdapter = NickListAdapter(clickListener)
+    nickList.adapter = nickListAdapter
     nickList.layoutManager = LinearLayoutManager(context)
     nickList.itemAnimator = DefaultItemAnimator()
+    viewModel.nickData.map {
+      it.map {
+        it.copy(
+          modes = when (appearanceSettings.showPrefix) {
+            AppearanceSettings.ShowPrefixMode.ALL ->
+              it.modes
+            else                                  ->
+              it.modes.substring(0, Math.min(it.modes.length, 1))
+          },
+          realname = ircFormatDeserializer?.formatString(
+            it.realname.toString(), appearanceSettings.colorizeMirc
+          ) ?: it.realname
+        )
+      }.sortedBy {
+        IrcCaseMappers[it.networkCasemapping].toLowerCase(it.nick)
+      }.sortedBy {
+        it.lowestMode
+      }
+    }.observe(this, Observer(nickListAdapter::submitList))
 
     return view
   }

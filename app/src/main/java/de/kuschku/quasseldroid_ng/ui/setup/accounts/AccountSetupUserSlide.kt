@@ -50,8 +50,7 @@ class AccountSetupUserSlide : SlideFragment() {
     userValidator = object : TextValidator(
       userWrapper::setError, resources.getString(R.string.hintInvalidUser)
     ) {
-      override fun validate(text: Editable)
-        = text.isNotBlank()
+      override fun validate(text: Editable) = text.isNotBlank()
 
       override fun onChanged() = updateValidity()
     }

@@ -90,7 +90,7 @@ class IrcFormatDeserializer(private val context: Context) {
     while (i < str.length) {
       val character = str[i]
       when (character) {
-        CODE_BOLD          -> {
+        CODE_BOLD      -> {
           plainText.append(str.substring(i - normalCount, i))
           normalCount = 0
 
@@ -116,7 +116,7 @@ class IrcFormatDeserializer(private val context: Context) {
             italic = FormatDescription(plainText.length, ItalicIrcFormat())
           }
         }
-        CODE_UNDERLINE     -> {
+        CODE_UNDERLINE -> {
           plainText.append(str.substring(i - normalCount, i))
           normalCount = 0
 
@@ -241,7 +241,7 @@ class IrcFormatDeserializer(private val context: Context) {
             )
           }
         }
-        CODE_RESET         -> {
+        CODE_RESET     -> {
           plainText.append(str.substring(i - normalCount, i))
           normalCount = 0
 

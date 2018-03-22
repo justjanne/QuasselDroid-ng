@@ -43,8 +43,7 @@ class AccountSetupNameSlide : SlideFragment() {
     nameValidator = object : TextValidator(
       nameWrapper::setError, resources.getString(R.string.hintInvalidName)
     ) {
-      override fun validate(text: Editable)
-        = text.isNotBlank()
+      override fun validate(text: Editable) = text.isNotBlank()
 
       override fun onChanged() = updateValidity()
     }

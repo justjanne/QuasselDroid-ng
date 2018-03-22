@@ -26,7 +26,6 @@
     android:icon="@drawable/ic_format_monospace"
     android:title="@string/label_monospace"
     app:showAsAction="always" />
-  <!--
   <item
     android:id="@+id/format_foreground"
     android:icon="@drawable/ic_format_foreground"
@@ -37,7 +36,6 @@
     android:icon="@drawable/ic_format_background"
     android:title="@string/label_background"
     app:showAsAction="always" />
-  -->
   <item
     android:id="@+id/format_clear"
     android:icon="@drawable/ic_format_clear"

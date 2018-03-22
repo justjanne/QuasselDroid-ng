@@ -84,8 +84,7 @@ class MessageListFragment : ServiceBoundFragment() {
           scrollDown.visibility = View.VISIBLE
           scrollDown.toggle(canScrollDown && isScrollingDown)
         }
-      }
-    )
+      })
 
     database = QuasselDatabase.Creator.init(context!!.applicationContext)
     val data = viewModel.getBuffer().switchMapNotNull { buffer ->
@@ -136,16 +135,14 @@ class MessageListFragment : ServiceBoundFragment() {
             lastBuffer = buffer
           }
         }
-      }
-      )
+      })
     }
 
     viewModel.markerLine.observe(
       this, Observer {
       adapter.markerLinePosition = it
       adapter.notifyDataSetChanged()
-    }
-    )
+    })
 
     var lastBuffer = -1
     data.observe(
@@ -161,8 +158,7 @@ class MessageListFragment : ServiceBoundFragment() {
         activity?.runOnUiThread { messageList.scrollToPosition(0) }
         handler.postDelayed({ activity?.runOnUiThread { messageList.scrollToPosition(0) } }, 16)
       }
-    }
-    )
+    })
     scrollDown.hide()
     scrollDown.setOnClickListener { messageList.scrollToPosition(0) }
     return view

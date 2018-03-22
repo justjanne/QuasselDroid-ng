@@ -70,27 +70,27 @@ class BufferListAdapter(
         }.sortedBy { props ->
           props.network.networkName
         }.map { props ->
-            BufferListItem(
-              props,
-              BufferState(
-                networkExpanded = !collapsedNetworks.contains(props.network.networkId),
-                selected = selected == props.info.bufferId
-              )
+          BufferListItem(
+            props,
+            BufferState(
+              networkExpanded = !collapsedNetworks.contains(props.network.networkId),
+              selected = selected == props.info.bufferId
             )
+          )
         }.filter { (props, state) ->
           props.info.type.hasFlag(BufferInfo.Type.StatusBuffer) || state.networkExpanded
         }
 
         val result = DiffUtil.calculateDiff(
           object : DiffUtil.Callback() {
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int)
-              = old[oldItemPosition].props.info.bufferId == new[newItemPosition].props.info.bufferId
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+              old[oldItemPosition].props.info.bufferId == new[newItemPosition].props.info.bufferId
 
             override fun getOldListSize() = old.size
             override fun getNewListSize() = new.size
 
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int)
-              = old[oldItemPosition] == new[newItemPosition]
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+              old[oldItemPosition] == new[newItemPosition]
           }, true
         )
         runOnUiThread(
@@ -98,11 +98,9 @@ class BufferListAdapter(
             data.clear()
             data.addAll(new)
             result.dispatchUpdatesTo(this@BufferListAdapter)
-          }
-        )
+          })
       }
-    }
-    )
+    })
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
@@ -140,8 +138,8 @@ class BufferListAdapter(
     )
   }
 
-  override fun onBindViewHolder(holder: BufferViewHolder, position: Int)
-    = holder.bind(data[position].props, data[position].state)
+  override fun onBindViewHolder(holder: BufferViewHolder, position: Int) =
+    holder.bind(data[position].props, data[position].state)
 
   override fun getItemCount() = data.size
 

@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.util.hasFlag
-import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase.DatabaseMessage
 import de.kuschku.quasseldroid_ng.settings.AppearanceSettings
 import de.kuschku.quasseldroid_ng.util.helper.getOrPut
@@ -17,19 +16,16 @@ class MessageAdapter(
   context: Context,
   appearanceSettings: AppearanceSettings,
   var markerLinePosition: Pair<MsgId, MsgId>? = null
-) : PagedListAdapter<QuasselDatabase.DatabaseMessage, QuasselMessageViewHolder>(
-  object : DiffUtil.ItemCallback<QuasselDatabase.DatabaseMessage>() {
-    override fun areItemsTheSame(oldItem: QuasselDatabase.DatabaseMessage,
-                                 newItem: QuasselDatabase.DatabaseMessage) =
-      DatabaseMessage.MessageDiffCallback.areItemsTheSame(oldItem, newItem)
+) : PagedListAdapter<DatabaseMessage, QuasselMessageViewHolder>(
+  object : DiffUtil.ItemCallback<DatabaseMessage>() {
+    override fun areItemsTheSame(oldItem: DatabaseMessage, newItem: DatabaseMessage) =
+      oldItem.messageId == newItem.messageId
 
-    override fun areContentsTheSame(oldItem: QuasselDatabase.DatabaseMessage,
-                                    newItem: QuasselDatabase.DatabaseMessage) =
-      DatabaseMessage.MessageDiffCallback.areContentsTheSame(oldItem, newItem) &&
+    override fun areContentsTheSame(oldItem: DatabaseMessage, newItem: DatabaseMessage) =
+      oldItem == newItem &&
       oldItem.messageId != markerLinePosition?.first &&
       oldItem.messageId != markerLinePosition?.second
-  }
-) {
+  }) {
   private val messageRenderer: MessageRenderer = QuasselMessageRenderer(
     context,
     appearanceSettings
@@ -53,8 +49,7 @@ class MessageAdapter(
           messageCache.getOrPut(it.messageId) {
             messageRenderer.render(it, markerLinePosition?.second ?: -1)
           }
-        }
-      )
+        })
     }
   }
 
@@ -67,13 +62,12 @@ class MessageAdapter(
     }
   }
 
-  private fun viewType(type: Message_Types, flags: Message_Flags): Int {
+  private fun viewType(type: Message_Types, flags: Message_Flags) =
     if (flags.hasFlag(Message_Flag.Highlight)) {
-      return -type.value
+      -type.value
     } else {
-      return type.value
+      type.value
     }
-  }
 
   override fun getItemId(position: Int): Long {
     return getItem(position)?.messageId?.toLong() ?: 0L

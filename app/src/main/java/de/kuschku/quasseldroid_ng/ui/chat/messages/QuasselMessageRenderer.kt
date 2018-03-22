@@ -333,8 +333,7 @@ class QuasselMessageRenderer(
     }
     /*
     for (result in channelPattern.findAll(content)) {
-      text.setSpan(URLSpan(result.value), result.range.start, result.range.endInclusive, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
-    }
+      text.setSpan(URLSpan(result.value), result.range.start, result.range.endInclusive, Spanned.SPAN_INCLUSIVE_INCLUSIVE)}
     */
 
     return text

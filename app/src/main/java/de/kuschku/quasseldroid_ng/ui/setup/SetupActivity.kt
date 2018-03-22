@@ -63,8 +63,8 @@ abstract class SetupActivity : AppCompatActivity() {
     currentPage.value?.requestFocus()
   }
 
-  fun updateRecentsHeader()
-    = updateRecentsHeaderIfExisting(title.toString(), icon, recentsHeaderColor)
+  fun updateRecentsHeader() =
+    updateRecentsHeaderIfExisting(title.toString(), icon, recentsHeaderColor)
 
   override fun setTitle(title: CharSequence?) {
     super.setTitle(title)
@@ -96,8 +96,7 @@ abstract class SetupActivity : AppCompatActivity() {
         button.hide()
         adapter.lastValidItem = viewPager.currentItem - 1
       }
-    }
-    )
+    })
     viewPager.addOnPageChangeListener(pageChangeListener)
     pageChanged()
     updateRecentsHeader()

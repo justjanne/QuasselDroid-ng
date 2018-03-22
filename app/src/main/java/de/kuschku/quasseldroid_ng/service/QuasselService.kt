@@ -110,7 +110,8 @@ class QuasselService : LifecycleService(),
       }
       ConnectionState.INIT         -> {
         handle.builder.setContentTitle(getString(R.string.label_status_init))
-        handle.builder.setProgress(max, progress, false)
+        // Show indeterminate when no progress has been made yet
+        handle.builder.setProgress(max, progress, progress == 0 || max == 0)
       }
       ConnectionState.CONNECTED    -> {
         handle.builder.setContentTitle(getString(R.string.label_status_connected))
@@ -265,8 +266,7 @@ class QuasselService : LifecycleService(),
       .observe(
         this, Observer {
         sessionManager.reconnect(true)
-      }
-      )
+      })
 
     sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
       registerOnSharedPreferenceChangeListener(this@QuasselService)

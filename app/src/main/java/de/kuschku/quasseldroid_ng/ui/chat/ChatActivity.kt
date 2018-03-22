@@ -9,17 +9,16 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.widget.*
-import android.text.Editable
-import android.text.InputType
-import android.text.TextWatcher
-import android.view.*
-import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.ImageButton
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
+import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
@@ -33,28 +32,28 @@ import de.kuschku.libquassel.util.or
 import de.kuschku.quasseldroid_ng.Keys
 import de.kuschku.quasseldroid_ng.R
 import de.kuschku.quasseldroid_ng.persistence.QuasselDatabase
-import de.kuschku.quasseldroid_ng.settings.AppearanceSettings
 import de.kuschku.quasseldroid_ng.settings.BacklogSettings
 import de.kuschku.quasseldroid_ng.settings.Settings
+import de.kuschku.quasseldroid_ng.ui.chat.input.AutoCompleteAdapter
+import de.kuschku.quasseldroid_ng.ui.chat.input.Editor
+import de.kuschku.quasseldroid_ng.ui.chat.input.MessageHistoryAdapter
 import de.kuschku.quasseldroid_ng.ui.settings.SettingsActivity
 import de.kuschku.quasseldroid_ng.ui.setup.accounts.AccountSelectionActivity
 import de.kuschku.quasseldroid_ng.ui.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid_ng.util.AndroidHandlerThread
-import de.kuschku.quasseldroid_ng.util.helper.*
+import de.kuschku.quasseldroid_ng.util.helper.editApply
+import de.kuschku.quasseldroid_ng.util.helper.invoke
+import de.kuschku.quasseldroid_ng.util.helper.let
+import de.kuschku.quasseldroid_ng.util.helper.sharedPreferences
 import de.kuschku.quasseldroid_ng.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
-import io.reactivex.subjects.BehaviorSubject
 
-class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
-                     ActionMenuView.OnMenuItemClickListener {
+class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
   @BindView(R.id.drawer_layout)
   lateinit var drawerLayout: DrawerLayout
 
   @BindView(R.id.toolbar)
   lateinit var toolbar: Toolbar
-
-  @BindView(R.id.formatting_menu)
-  lateinit var formattingMenu: ActionMenuView
 
   @BindView(R.id.progress_bar)
   lateinit var progressBar: MaterialContentLoadingProgressBar
@@ -64,18 +63,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   @BindView(R.id.history_panel)
   lateinit var historyPanel: SlidingUpPanelLayout
-
-  @BindView(R.id.send)
-  lateinit var send: ImageButton
-
-  @BindView(R.id.chatline)
-  lateinit var chatline: EditText
-
-  @BindView(R.id.autocomplete_list)
-  lateinit var autocompleteList: RecyclerView
-
-  @BindView(R.id.autocomplete_list2)
-  lateinit var autocompleteList2: RecyclerView
 
   @BindView(R.id.msg_history)
   lateinit var msgHistory: RecyclerView
@@ -90,7 +77,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   private lateinit var backlogSettings: BacklogSettings
 
-  private lateinit var inputEditor: InputEditor
+  private lateinit var editor: Editor
 
   private val panelSlideListener: SlidingUpPanelLayout.PanelSlideListener = object :
     SlidingUpPanelLayout.PanelSlideListener {
@@ -99,49 +86,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     override fun onPanelStateChanged(panel: View?,
                                      previousState: SlidingUpPanelLayout.PanelState?,
                                      newState: SlidingUpPanelLayout.PanelState?) {
-      val selectionStart = chatline.selectionStart
-      val selectionEnd = chatline.selectionEnd
-
-      when (newState) {
-        SlidingUpPanelLayout.PanelState.COLLAPSED ->
-          chatline.inputType = chatline.inputType and InputType.TYPE_TEXT_FLAG_MULTI_LINE.inv()
-        else                                      ->
-          chatline.inputType = chatline.inputType or InputType.TYPE_TEXT_FLAG_MULTI_LINE
-      }
-
-      chatline.setSelection(selectionStart, selectionEnd)
+      editor.setMultiLine(newState == SlidingUpPanelLayout.PanelState.COLLAPSED)
     }
-  }
-
-  private val lastWord = BehaviorSubject.createDefault(Pair("", IntRange.EMPTY))
-  private val textWatcher = object : TextWatcher {
-    override fun afterTextChanged(s: Editable?) {
-      val previous = autocompletionState
-      val next = if (previous != null && s != null) {
-        val suffix = if (previous.range.start == 0) ": " else " "
-        val end = Math.min(
-          s.length, previous.range.start + previous.completion.name.length + suffix.length
-        )
-        val sequence = s.substring(previous.range.start, end)
-        if (sequence == previous.completion.name + suffix) {
-          previous.originalWord to (previous.range.start until end)
-        } else {
-          autocompletionState = null
-          s.lastWordIndices(chatline.selectionStart, onlyBeforeCursor = true)?.let { indices ->
-            s.substring(indices) to indices
-          }
-        }
-      } else {
-        s?.lastWordIndices(chatline.selectionStart, onlyBeforeCursor = true)?.let { indices ->
-          s.substring(indices) to indices
-        }
-      }
-
-      lastWord.onNext(next ?: Pair("", IntRange.EMPTY))
-    }
-
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
   }
 
   override fun onNewIntent(intent: Intent?) {
@@ -149,7 +95,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     if (intent != null) {
       when {
         intent.type == "text/plain" -> {
-          inputEditor.share(intent.getStringExtra(Intent.EXTRA_TEXT))
+          editor.formatHandler.replace(intent.getStringExtra(Intent.EXTRA_TEXT))
         }
       }
     }
@@ -163,90 +109,75 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     viewModel = ViewModelProviders.of(this)[QuasselViewModel::class.java]
     viewModel.setBackend(this.backend)
-    viewModel.lastWord.value = lastWord
     backlogSettings = Settings.backlog(this)
 
-    inputEditor = InputEditor(chatline)
-    menuInflater.inflate(inputEditor.menu, formattingMenu.menu)
-    menuInflater.inflate(R.menu.input_panel, formattingMenu.menu)
-    formattingMenu.setOnMenuItemClickListener(this)
-
-    formattingMenu.context.theme.styledAttributes(R.attr.colorControlNormal) {
-      val color = getColor(0, 0)
-
-      for (item in (0 until formattingMenu.menu.size()).map { formattingMenu.menu.getItem(it) }) {
-        val drawable = item.icon.mutate()
-        DrawableCompat.setTint(drawable, color)
-        item.icon = drawable
+    editor = Editor(
+      this,
+      viewModel.autoCompleteData,
+      viewModel.lastWord,
+      findViewById(R.id.chatline),
+      findViewById(R.id.send),
+      listOf(
+        findViewById(R.id.autocomplete_list),
+        findViewById(R.id.autocomplete_list_expanded)
+      ),
+      findViewById(R.id.formatting_menu),
+      findViewById(R.id.formatting_toolbar),
+      { lines ->
+        viewModel.session { session ->
+          viewModel.getBuffer().let { bufferId ->
+            session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
+              val output = mutableListOf<IAliasManager.Command>()
+              for ((stripped, formatted) in lines) {
+                viewModel.addRecentlySentMessage(stripped)
+                session.aliasManager?.processInput(bufferInfo, formatted, output)
+              }
+              for (command in output) {
+                session.rpcHandler?.sendInput(command.buffer, command.message)
+              }
+            }
+          }
+        }
+      },
+      { expanded ->
+        historyPanel.panelState = if (expanded)
+          SlidingUpPanelLayout.PanelState.EXPANDED
+        else
+          SlidingUpPanelLayout.PanelState.COLLAPSED
       }
-    }
+    )
 
     msgHistory.itemAnimator = DefaultItemAnimator()
     msgHistory.layoutManager = LinearLayoutManager(this)
-    msgHistory.adapter = MessageHistoryAdapter(
-      this,
-      viewModel.recentlySentMessages,
-      handler::post,
-      ::runOnUiThread,
-      { text ->
-        chatline.setText(text)
-        chatline.setSelection(chatline.length())
-        historyPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-      }
-    )
+    val messageHistoryAdapter = MessageHistoryAdapter { text ->
+      editor.formatHandler.replace(text)
+      historyPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+    }
+    msgHistory.adapter = messageHistoryAdapter
+    viewModel.recentlySentMessages.observe(this, Observer(messageHistoryAdapter::submitList))
 
     database = QuasselDatabase.Creator.init(application)
 
     setSupportActionBar(toolbar)
-
-    send.setOnClickListener {
-      send()
-    }
-
-    chatline.imeOptions = when (appearanceSettings.inputEnter) {
-      AppearanceSettings.InputEnterMode.EMOJI -> listOf(
-        EditorInfo.IME_ACTION_NONE,
-        EditorInfo.IME_FLAG_NO_EXTRACT_UI
-      )
-      AppearanceSettings.InputEnterMode.SEND  -> listOf(
-        EditorInfo.IME_ACTION_SEND,
-        EditorInfo.IME_FLAG_NO_EXTRACT_UI
-      )
-    }.fold(0, Int::or)
-
-    chatline.setOnKeyListener { _, keyCode, event ->
-      when (keyCode) {
-        KeyEvent.KEYCODE_ENTER,
-        KeyEvent.KEYCODE_NUMPAD_ENTER -> if (event.hasNoModifiers()) {
-          send()
-          true
-        } else {
-          false
-        }
-        KeyEvent.KEYCODE_TAB          -> {
-          autoComplete(event.isShiftPressed)
-          true
-        }
-        else                          -> false
-      }
-    }
 
     viewModel.getBuffer().observe(
       this, Observer {
       if (it != null && drawerLayout.isDrawerOpen(Gravity.START)) {
         drawerLayout.closeDrawer(Gravity.START, true)
       }
-    }
-    )
+    })
 
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    drawerToggle = ActionBarDrawerToggle(
-      this,
-      drawerLayout,
-      R.string.label_open,
-      R.string.label_close
-    )
-    drawerToggle.syncState()
+    // Don’t show a drawer toggle if in tablet landscape mode
+    if (resources.getBoolean(R.bool.buffer_drawer_exists)) {
+      supportActionBar?.setDisplayHomeAsUpEnabled(true)
+      drawerToggle = ActionBarDrawerToggle(
+        this,
+        drawerLayout,
+        R.string.label_open,
+        R.string.label_close
+      )
+      drawerToggle.syncState()
+    }
 
     viewModel.connectionProgress.observe(this, Observer { it ->
       val (state, progress, max) = it ?: Triple(ConnectionState.DISCONNECTED, 0, 0)
@@ -255,7 +186,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           progressBar.hide()
         }
         ConnectionState.INIT                                    -> {
-          progressBar.isIndeterminate = false
+          // Show indeterminate when no progress has been made yet
+          progressBar.isIndeterminate = progress == 0 || max == 0
           progressBar.progress = progress
           progressBar.max = max
         }
@@ -264,27 +196,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         }
       }
     })
-
-    val autocompleteAdapter = AutoCompleteAdapter(
-      this,
-      viewModel.autoCompleteData,
-      handler::post,
-      ::runOnUiThread,
-      // This is still broken when mixing tab complete and UI auto complete
-      inputEditor::autoComplete
-    )
-
-    if (appearanceSettings.showAutocomplete) {
-      autocompleteList.layoutManager = LinearLayoutManager(this)
-      autocompleteList.itemAnimator = DefaultItemAnimator()
-      autocompleteList.adapter = autocompleteAdapter
-
-      autocompleteList2.layoutManager = LinearLayoutManager(this)
-      autocompleteList2.itemAnimator = DefaultItemAnimator()
-      autocompleteList2.adapter = autocompleteAdapter
-    }
-
-    chatline.addTextChangedListener(textWatcher)
 
     editorPanel.addPanelSlideListener(panelSlideListener)
     editorPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
@@ -296,78 +207,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     val lastCompletion: AutoCompleteAdapter.AutoCompleteItem? = null,
     val completion: AutoCompleteAdapter.AutoCompleteItem
   )
-
-  private var autocompletionState: AutoCompletionState? = null
-  private fun autoComplete(reverse: Boolean = false) {
-    val originalWord = lastWord.value
-
-    val previous = autocompletionState
-    if (!originalWord.second.isEmpty()) {
-      val autoCompletedWords = viewModel.autoCompleteData.value?.second.orEmpty()
-      if (previous != null && lastWord.value.first == previous.originalWord && lastWord.value.second.start == previous.range.start) {
-        val previousIndex = autoCompletedWords.indexOf(previous.completion)
-        val autoCompletedWord = if (previousIndex != -1) {
-          val change = if (reverse) -1 else +1
-          val newIndex = (previousIndex + change + autoCompletedWords.size) % autoCompletedWords.size
-
-          autoCompletedWords[newIndex]
-        } else {
-          autoCompletedWords.firstOrNull()
-        }
-        if (autoCompletedWord != null) {
-          val newState = AutoCompletionState(
-            previous.originalWord,
-            originalWord.second,
-            previous.completion,
-            autoCompletedWord
-          )
-          autocompletionState = newState
-          inputEditor.autoComplete(newState)
-        } else {
-          autocompletionState = null
-        }
-      } else {
-        val autoCompletedWord = autoCompletedWords.firstOrNull()
-        if (autoCompletedWord != null) {
-          val newState = AutoCompletionState(
-            originalWord.first,
-            originalWord.second,
-            null,
-            autoCompletedWord
-          )
-          autocompletionState = newState
-          inputEditor.autoComplete(newState)
-        } else {
-          autocompletionState = null
-        }
-      }
-    }
-  }
-
-  private fun send() {
-    val text = chatline.text
-    if (text.isNotBlank()) {
-      viewModel.session { session ->
-        viewModel.getBuffer().let { bufferId ->
-          session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
-            val output = mutableListOf<IAliasManager.Command>()
-            for (line in text.lineSequence()) {
-              viewModel.addRecentlySentMessage(line)
-              session.aliasManager?.processInput(
-                bufferInfo,
-                inputEditor.formattedString,
-                output
-              )
-            }
-            for (command in output) {
-              session.rpcHandler?.sendInput(command.buffer, command.message)
-            }
-          }
-        }
-      }
-    }
-    chatline.setText("")
-  }
 
   override fun onSaveInstanceState(outState: Bundle?) {
     super.onSaveInstanceState(outState)
@@ -490,14 +329,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       true
     }
     else -> super.onOptionsItemSelected(item)
-  }
-
-  override fun onMenuItemClick(item: MenuItem?) = when (item?.itemId) {
-    R.id.input_history -> {
-      historyPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
-      true
-    }
-    else               -> inputEditor.onMenuItemClick(item)
   }
 
   override fun onDestroy() {

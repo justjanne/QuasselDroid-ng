@@ -70,7 +70,7 @@ object Settings {
   fun backlog(context: Context) = context.sharedPreferences {
     BacklogSettings(
       dynamicAmount = getString(
-        context.getString(R.string.preference_dynamic_fetch_key),
+        context.getString(R.string.preference_page_size_key),
         BacklogSettings.DEFAULT.dynamicAmount.toString()
       ).toIntOrNull() ?: BacklogSettings.DEFAULT.dynamicAmount
     )

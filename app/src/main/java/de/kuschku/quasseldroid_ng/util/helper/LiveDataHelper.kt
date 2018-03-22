@@ -27,8 +27,7 @@ inline fun <X, Y> LiveData<X?>.switchMap(
         result.value = null
       }
     }
-  }
-  )
+  })
   return result
 }
 
@@ -54,8 +53,7 @@ inline fun <X, Y> LiveData<X>.switchMapNotNull(
         result.value = null
       }
     }
-  }
-  )
+  })
   return result
 }
 
@@ -82,8 +80,7 @@ inline fun <X, Y> LiveData<X?>.switchMapRx(
         result.value = null
       }
     }
-  }
-  )
+  })
   return result
 }
 
@@ -139,8 +136,8 @@ inline fun <T> LiveData<T>.observeForeverSticky(observer: Observer<T>) {
   observer.onChanged(value)
 }
 
-inline fun <T> LiveData<T>.toObservable(lifecycleOwner: LifecycleOwner): Observable<T>
-  = Observable.fromPublisher(LiveDataReactiveStreams.toPublisher(lifecycleOwner, this))
+inline fun <T> LiveData<T>.toObservable(lifecycleOwner: LifecycleOwner): Observable<T> =
+  Observable.fromPublisher(LiveDataReactiveStreams.toPublisher(lifecycleOwner, this))
 
 
 inline operator fun <T> LiveData<T>.invoke() = value

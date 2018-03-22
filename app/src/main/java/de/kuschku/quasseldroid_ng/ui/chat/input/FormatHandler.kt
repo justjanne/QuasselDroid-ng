@@ -1,8 +1,9 @@
-package de.kuschku.quasseldroid_ng.ui.chat
+package de.kuschku.quasseldroid_ng.ui.chat.input
 
 import android.graphics.Typeface
 import android.support.annotation.MenuRes
 import android.text.Editable
+import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
@@ -11,15 +12,33 @@ import android.text.style.UnderlineSpan
 import android.view.MenuItem
 import android.widget.EditText
 import de.kuschku.quasseldroid_ng.R
+import de.kuschku.quasseldroid_ng.ui.chat.ChatActivity
 import de.kuschku.quasseldroid_ng.util.helper.lastWordIndices
+import de.kuschku.quasseldroid_ng.util.helper.lineSequence
 import de.kuschku.quasseldroid_ng.util.helper.selection
 import de.kuschku.quasseldroid_ng.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid_ng.util.irc.format.spans.*
 
-class InputEditor(private val editText: EditText) {
+class FormatHandler(private val editText: EditText) {
   private val serializer = IrcFormatSerializer(editText.context)
-  val formattedString: String
-    get() = serializer.toEscapeCodes(editText.text)
+  val formattedText: Sequence<String>
+    get() = editText.text.lineSequence().map { serializer.toEscapeCodes(SpannableString(it)) }
+  val rawText: CharSequence
+    get() = editText.text
+  val strippedText: CharSequence
+    get() = editText.text.let {
+      val text = SpannableString(it)
+      val toRemove = mutableListOf<Any>()
+      for (span in text.getSpans(0, text.length, Any::class.java)) {
+        if ((text.getSpanFlags(span) and Spanned.SPAN_COMPOSING) != 0) {
+          toRemove.add(span)
+        }
+      }
+      for (span in toRemove) {
+        text.removeSpan(span)
+      }
+      text
+    }
 
   @MenuRes
   val menu: Int = R.menu.editor
@@ -243,7 +262,7 @@ class InputEditor(private val editText: EditText) {
     }
   }
 
-  fun share(text: CharSequence?) {
+  fun replace(text: CharSequence?) {
     editText.setText(text)
     editText.setSelection(editText.text.length)
   }

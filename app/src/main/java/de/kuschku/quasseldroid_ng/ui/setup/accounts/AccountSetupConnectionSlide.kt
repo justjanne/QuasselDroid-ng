@@ -53,16 +53,15 @@ class AccountSetupConnectionSlide : SlideFragment() {
     hostValidator = object : TextValidator(
       hostWrapper::setError, resources.getString(R.string.hintInvalidHost)
     ) {
-      override fun validate(text: Editable)
-        = text.toString().matches(Patterns.DOMAIN_NAME.toRegex())
+      override fun validate(text: Editable) =
+        text.toString().matches(Patterns.DOMAIN_NAME.toRegex())
 
       override fun onChanged() = updateValidity()
     }
     portValidator = object : TextValidator(
       portWrapper::setError, resources.getString(R.string.hintInvalidPort)
     ) {
-      override fun validate(text: Editable)
-        = text.toString().toIntOrNull() in (0 until 65536)
+      override fun validate(text: Editable) = text.toString().toIntOrNull() in (0 until 65536)
 
       override fun onChanged() = updateValidity()
     }

@@ -16,11 +16,11 @@ import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.and
 import de.kuschku.libquassel.util.hasFlag
-import de.kuschku.quasseldroid_ng.ui.chat.AutoCompleteAdapter
-import de.kuschku.quasseldroid_ng.ui.chat.NickListAdapter
 import de.kuschku.quasseldroid_ng.ui.chat.ToolbarFragment
 import de.kuschku.quasseldroid_ng.ui.chat.buffers.BufferListAdapter
 import de.kuschku.quasseldroid_ng.ui.chat.buffers.BufferViewConfigFragment
+import de.kuschku.quasseldroid_ng.ui.chat.input.AutoCompleteAdapter
+import de.kuschku.quasseldroid_ng.ui.chat.nicks.NickListAdapter
 import de.kuschku.quasseldroid_ng.util.helper.*
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
@@ -184,8 +184,7 @@ class QuasselViewModel : ViewModel() {
                   }
                 }
               }
-            }
-          )
+            })
         }
       } else {
         Observable.just(emptyList())

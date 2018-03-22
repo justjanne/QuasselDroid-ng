@@ -49,8 +49,8 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
     updateRecentsHeader()
   }
 
-  fun updateRecentsHeader()
-    = updateRecentsHeaderIfExisting(title.toString(), icon, recentsHeaderColor)
+  fun updateRecentsHeader() =
+    updateRecentsHeaderIfExisting(title.toString(), icon, recentsHeaderColor)
 
   override fun setTitle(title: CharSequence?) {
     super.setTitle(title)

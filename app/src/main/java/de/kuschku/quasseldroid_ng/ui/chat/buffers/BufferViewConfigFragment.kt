@@ -79,7 +79,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
             actionMode?.finish()
             true
           }
-          R.id.action_delete    -> {
+          R.id.action_delete     -> {
             MaterialDialog.Builder(activity!!)
               .content(R.string.buffer_delete_confirmation)
               .positiveText(R.string.label_yes)
@@ -95,7 +95,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
             actionMode?.finish()
             true
           }
-          R.id.action_rename    -> {
+          R.id.action_rename     -> {
             MaterialDialog.Builder(activity!!)
               .input(
                 getString(R.string.label_buffer_name),
@@ -114,21 +114,21 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
             actionMode?.finish()
             true
           }
-          R.id.action_unhide    -> {
+          R.id.action_unhide     -> {
             bufferSyncer?.let {
               bufferViewConfig?.requestAddBuffer(info, bufferSyncer)
             }
             true
           }
-          R.id.action_hide_temp -> {
+          R.id.action_hide_temp  -> {
             bufferViewConfig?.requestRemoveBuffer(info.bufferId)
             true
           }
-          R.id.action_hide_perm -> {
+          R.id.action_hide_perm  -> {
             bufferViewConfig?.requestRemoveBufferPermanently(info.bufferId)
             true
           }
-          else                  -> false
+          else                   -> false
         }
       } else {
         false
@@ -210,9 +210,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
             )
           )
         }.filter { props ->
-            minimumActivity.toInt() <= props.bufferActivity.toInt() ||
-            props.info.type.hasFlag(Buffer_Type.StatusBuffer)
-          }
+          minimumActivity.toInt() <= props.bufferActivity.toInt() ||
+          props.info.type.hasFlag(Buffer_Type.StatusBuffer)
+        }
       },
       viewModel.selectedBufferId,
       viewModel.collapsedNetworks,

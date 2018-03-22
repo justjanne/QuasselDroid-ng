@@ -18,11 +18,12 @@ fun Context.getStatusBarHeight(): Int {
   return result
 }
 
-inline fun <reified T> Context.systemService(): T = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-  getSystemService(T::class.java)
-} else {
-  getSystemService(T::class.java.simpleName) as T
-}
+inline fun <reified T> Context.systemService(): T =
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    getSystemService(T::class.java)
+  } else {
+    getSystemService(T::class.java.simpleName) as T
+  }
 
 fun Context.getCompatDrawable(@DrawableRes id: Int): Drawable {
   return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

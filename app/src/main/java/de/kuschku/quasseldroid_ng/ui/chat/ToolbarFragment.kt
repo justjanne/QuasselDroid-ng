@@ -93,8 +93,7 @@ class ToolbarFragment : ServiceBoundFragment() {
           }
         }
       }
-    }
-    )
+    })
 
     return view
   }
@@ -109,5 +108,4 @@ class ToolbarFragment : ServiceBoundFragment() {
     val network: INetwork.NetworkInfo? = null,
     val description: String? = null
   )
-
 }

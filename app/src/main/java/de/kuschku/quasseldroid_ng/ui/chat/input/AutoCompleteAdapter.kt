@@ -1,10 +1,8 @@
-package de.kuschku.quasseldroid_ng.ui.chat
+package de.kuschku.quasseldroid_ng.ui.chat.input
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
 import android.graphics.drawable.Drawable
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -17,48 +15,22 @@ import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.quasseldroid_ng.R
-import de.kuschku.quasseldroid_ng.ui.chat.NickListAdapter.Companion.VIEWTYPE_AWAY
 import de.kuschku.quasseldroid_ng.ui.chat.buffers.BufferListAdapter
+import de.kuschku.quasseldroid_ng.ui.chat.nicks.NickListAdapter.Companion.VIEWTYPE_AWAY
 import de.kuschku.quasseldroid_ng.util.helper.getCompatDrawable
 import de.kuschku.quasseldroid_ng.util.helper.styledAttributes
 import de.kuschku.quasseldroid_ng.util.helper.visibleIf
 
 class AutoCompleteAdapter(
-  lifecycleOwner: LifecycleOwner,
-  liveData: LiveData<Pair<String, List<AutoCompleteItem>>?>,
-  runInBackground: (() -> Unit) -> Any,
-  runOnUiThread: (Runnable) -> Any,
   private val clickListener: ((String) -> Unit)? = null
-) : RecyclerView.Adapter<AutoCompleteAdapter.AutoCompleteViewHolder>() {
-  var data = mutableListOf<AutoCompleteItem>()
+) : ListAdapter<AutoCompleteAdapter.AutoCompleteItem, AutoCompleteAdapter.AutoCompleteViewHolder>(
+  object : DiffUtil.ItemCallback<AutoCompleteItem>() {
+    override fun areItemsTheSame(oldItem: AutoCompleteItem, newItem: AutoCompleteItem) =
+      oldItem.name == newItem.name
 
-  init {
-    liveData.observe(
-      lifecycleOwner, Observer { it: Pair<String, List<AutoCompleteItem>>? ->
-      runInBackground {
-        val word = it?.first ?: ""
-        val list = it?.second ?: emptyList()
-        val old: List<AutoCompleteItem> = data
-        val new: List<AutoCompleteItem> = if (word.length >= 3) list else emptyList()
-        val result = DiffUtil.calculateDiff(
-          object : DiffUtil.Callback() {
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-              old[oldItemPosition].name == new[newItemPosition].name
-
-            override fun getOldListSize() = old.size
-            override fun getNewListSize() = new.size
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-              old[oldItemPosition] == new[newItemPosition]
-          }, true
-        )
-        runOnUiThread(Runnable {
-          data.clear()
-          data.addAll(new)
-          result.dispatchUpdatesTo(this@AutoCompleteAdapter)
-        })
-      }
-    })
-  }
+    override fun areContentsTheSame(oldItem: AutoCompleteItem, newItem: AutoCompleteItem) =
+      oldItem == newItem
+  }) {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
     VIEWTYPE_CHANNEL                         -> AutoCompleteViewHolder.ChannelViewHolder(
@@ -81,11 +53,9 @@ class AutoCompleteAdapter(
   }
 
   override fun onBindViewHolder(holder: AutoCompleteViewHolder, position: Int) =
-    holder.bind(data[position])
+    holder.bind(getItem(position))
 
-  override fun getItemCount() = data.size
-
-  override fun getItemViewType(position: Int) = data[position].let { it ->
+  override fun getItemViewType(position: Int) = getItem(position).let {
     when {
       it is AutoCompleteItem.ChannelItem         -> VIEWTYPE_CHANNEL
       it is AutoCompleteItem.UserItem && it.away -> VIEWTYPE_NICK_AWAY
@@ -96,11 +66,11 @@ class AutoCompleteAdapter(
   sealed class AutoCompleteItem(open val name: String) : Comparable<AutoCompleteItem> {
     override fun compareTo(other: AutoCompleteItem): Int {
       return when {
-        this is AutoCompleteItem.UserItem &&
-        other is AutoCompleteItem.ChannelItem -> -1
-        this is AutoCompleteItem.ChannelItem &&
-        other is AutoCompleteItem.UserItem    -> 1
-        else                                  -> this.name.compareTo(other.name)
+        this is UserItem &&
+        other is ChannelItem -> -1
+        this is ChannelItem &&
+        other is UserItem    -> 1
+        else                 -> this.name.compareTo(other.name)
       }
     }
 
@@ -224,8 +194,8 @@ class AutoCompleteAdapter(
   }
 
   companion object {
-    val VIEWTYPE_CHANNEL = 0
-    val VIEWTYPE_NICK_ACTIVE = 1
-    val VIEWTYPE_NICK_AWAY = 2
+    const val VIEWTYPE_CHANNEL = 0
+    const val VIEWTYPE_NICK_ACTIVE = 1
+    const val VIEWTYPE_NICK_AWAY = 2
   }
 }
