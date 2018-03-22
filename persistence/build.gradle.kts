@@ -30,13 +30,6 @@ dependencies {
     implementation("com.android.support", "appcompat-v7", version)
   }
 
-  // App Arch Lifecycle
-  withVersion("1.1.0") {
-    implementation("android.arch.lifecycle", "extensions", version)
-    implementation("android.arch.lifecycle", "reactivestreams", version)
-    kapt("android.arch.lifecycle", "compiler", version)
-  }
-
   // App Arch Persistence
   withVersion("1.1.0-beta1") {
     implementation("android.arch.persistence.room", "runtime", version)
@@ -51,7 +44,6 @@ dependencies {
   }
 
   // Utility
-  implementation("io.reactivex.rxjava2", "rxjava", "2.1.9")
   implementation("org.threeten", "threetenbp", "1.3.6", classifier = "no-tzdb")
   implementation("org.jetbrains", "annotations", "15.0")
 
