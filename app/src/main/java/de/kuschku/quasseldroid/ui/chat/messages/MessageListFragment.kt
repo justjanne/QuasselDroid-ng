@@ -21,8 +21,10 @@ import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.BacklogSettings
 import de.kuschku.quasseldroid.settings.Settings
-import de.kuschku.quasseldroid.util.AndroidHandlerThread
-import de.kuschku.quasseldroid.util.helper.*
+import de.kuschku.quasseldroid.util.helper.invoke
+import de.kuschku.quasseldroid.util.helper.switchMapNotNull
+import de.kuschku.quasseldroid.util.helper.toggle
+import de.kuschku.quasseldroid.util.helper.zip
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 
@@ -36,8 +38,6 @@ class MessageListFragment : ServiceBoundFragment() {
   private lateinit var viewModel: QuasselViewModel
   private lateinit var appearanceSettings: AppearanceSettings
 
-  private val handler = AndroidHandlerThread("Chat")
-
   private lateinit var database: QuasselDatabase
 
   private lateinit var linearLayoutManager: LinearLayoutManager
@@ -49,7 +49,6 @@ class MessageListFragment : ServiceBoundFragment() {
   private lateinit var backlogSettings: BacklogSettings
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    handler.onCreate()
     super.onCreate(savedInstanceState)
     viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
     appearanceSettings = Settings.appearance(activity!!)
@@ -87,7 +86,7 @@ class MessageListFragment : ServiceBoundFragment() {
       })
 
     database = QuasselDatabase.Creator.init(context!!.applicationContext)
-    val data = viewModel.getBuffer().switchMapNotNull { buffer ->
+    val data = viewModel.buffer.switchMapNotNull { buffer ->
       database.filtered().listen(accountId, buffer).switchMapNotNull { filtered ->
         LivePagedListBuilder(
           database.message().findByBufferIdPaged(buffer, filtered),
@@ -101,62 +100,50 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     }
 
-    handler.post {
-      val lastMessageId = viewModel.getBuffer().switchMapNotNull {
-        database.message().lastMsgId(it)
-      }
-
-      viewModel.sessionManager.zip(lastMessageId).observe(
-        this, Observer {
-        handler.post {
-          val session = it?.first
-          val message = it?.second
-          val bufferSyncer = session?.bufferSyncer
-          if (message != null && bufferSyncer != null && previousMessageId != message.messageId) {
-            markAsRead(bufferSyncer, message.bufferId, message.messageId)
-            previousMessageId = message.messageId
-          }
-        }
-      })
-
-      viewModel.sessionManager.zip(viewModel.getBuffer()).observe(
-        this, Observer {
-        val previous = lastBuffer ?: -1
-        val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
-        val firstVisibleMessageId = adapter[firstVisibleItemPosition]?.messageId
-        handler.post {
-          val session = it?.first
-          val buffer = it?.second
-          val bufferSyncer = session?.bufferSyncer
-          if (buffer != null && bufferSyncer != null) {
-            if (buffer != previous) {
-              onBufferChange(previous, buffer, firstVisibleMessageId, bufferSyncer)
-            }
-            lastBuffer = buffer
-          }
-        }
-      })
+    val lastMessageId = viewModel.buffer.switchMapNotNull {
+      database.message().lastMsgId(it)
     }
 
-    viewModel.markerLine.observe(
+    viewModel.sessionManager.zip(lastMessageId).observe(
       this, Observer {
+      runInBackground {
+        val session = it?.first
+        val message = it?.second
+        val bufferSyncer = session?.bufferSyncer
+        if (message != null && bufferSyncer != null && previousMessageId != message.messageId) {
+          markAsRead(bufferSyncer, message.bufferId, message.messageId)
+          previousMessageId = message.messageId
+        }
+      }
+    })
+
+    viewModel.markerLine.observe(this, Observer {
       adapter.markerLinePosition = it
       adapter.notifyDataSetChanged()
     })
 
     var lastBuffer = -1
-    data.observe(
-      this, Observer { list ->
+    data.observe(this, Observer { list ->
       val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
-      val buffer = viewModel.getBuffer().value ?: -1
-      if (buffer != lastBuffer) {
-        lastBuffer = buffer
-        adapter.clearCache()
-      }
-      adapter.submitList(list)
-      if (firstVisibleItemPosition < 2) {
-        activity?.runOnUiThread { messageList.scrollToPosition(0) }
-        handler.postDelayed({ activity?.runOnUiThread { messageList.scrollToPosition(0) } }, 16)
+      val firstVisibleMessageId = adapter[firstVisibleItemPosition]?.messageId
+      runInBackground {
+        val buffer = viewModel.buffer.value ?: -1
+        if (buffer != lastBuffer) {
+          backend.value?.sessionManager()?.bufferSyncer?.let { bufferSyncer ->
+            onBufferChange(lastBuffer, buffer, firstVisibleMessageId, bufferSyncer)
+          }
+          lastBuffer = buffer
+          adapter.clearCache()
+        }
+        adapter.submitList(list)
+        if (firstVisibleItemPosition < 2) {
+          activity?.runOnUiThread { messageList.scrollToPosition(0) }
+          runInBackgroundDelayed(16) {
+            activity?.runOnUiThread {
+              messageList.scrollToPosition(0)
+            }
+          }
+        }
       }
     })
     scrollDown.hide()
@@ -194,8 +181,8 @@ class MessageListFragment : ServiceBoundFragment() {
   }
 
   private fun loadMore() {
-    handler.post {
-      viewModel.getBuffer().let { bufferId ->
+    runInBackground {
+      viewModel.buffer { bufferId ->
         viewModel.sessionManager()?.backlogManager?.requestBacklog(
           bufferId = bufferId,
           last = database.message().findFirstByBufferId(
@@ -205,10 +192,5 @@ class MessageListFragment : ServiceBoundFragment() {
         )
       }
     }
-  }
-
-  override fun onDestroy() {
-    handler.onDestroy()
-    super.onDestroy()
   }
 }

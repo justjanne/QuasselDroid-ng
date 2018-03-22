@@ -15,6 +15,7 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.text.Html
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
@@ -25,6 +26,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.Message_Type
+import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.session.ConnectionState
 import de.kuschku.libquassel.util.and
@@ -37,11 +39,7 @@ import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.chat.input.Editor
 import de.kuschku.quasseldroid.ui.chat.input.MessageHistoryAdapter
 import de.kuschku.quasseldroid.ui.settings.SettingsActivity
-import de.kuschku.quasseldroid.ui.setup.accounts.AccountSelectionActivity
-import de.kuschku.quasseldroid.util.AndroidHandlerThread
-import de.kuschku.quasseldroid.util.helper.editApply
 import de.kuschku.quasseldroid.util.helper.invoke
-import de.kuschku.quasseldroid.util.helper.sharedPreferences
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
@@ -67,8 +65,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   lateinit var msgHistory: RecyclerView
 
   private lateinit var drawerToggle: ActionBarDrawerToggle
-
-  private val handler = AndroidHandlerThread("Chat")
 
   private lateinit var viewModel: QuasselViewModel
 
@@ -101,7 +97,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    handler.onCreate()
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     ButterKnife.bind(this)
@@ -124,7 +119,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       findViewById(R.id.formatting_toolbar),
       { lines ->
         viewModel.session { session ->
-          viewModel.getBuffer().value?.let { bufferId ->
+          viewModel.buffer { bufferId ->
             session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
               val output = mutableListOf<IAliasManager.Command>()
               for ((stripped, formatted) in lines) {
@@ -159,8 +154,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     setSupportActionBar(toolbar)
 
-    viewModel.getBuffer().observe(
-      this, Observer {
+    viewModel.buffer.observe(this, Observer {
       if (it != null && drawerLayout.isDrawerOpen(Gravity.START)) {
         drawerLayout.closeDrawer(Gravity.START, true)
       }
@@ -178,19 +172,47 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       drawerToggle.syncState()
     }
 
+    viewModel.errors.observe(this, Observer {
+      when (it) {
+        is HandshakeMessage.ClientInitReject  ->
+          MaterialDialog.Builder(this)
+            .title(R.string.label_error_init)
+            .content(Html.fromHtml(it.errorString))
+            .neutralText(R.string.label_close)
+            .build()
+            .show()
+        is HandshakeMessage.CoreSetupReject   ->
+          MaterialDialog.Builder(this)
+            .title(R.string.label_error_setup)
+            .content(Html.fromHtml(it.errorString))
+            .neutralText(R.string.label_close)
+            .build()
+            .show()
+        is HandshakeMessage.ClientLoginReject ->
+          MaterialDialog.Builder(this)
+            .title(R.string.label_error_login)
+            .content(Html.fromHtml(it.errorString))
+            .neutralText(R.string.label_close)
+            .build()
+            .show()
+      }
+    })
+
     viewModel.connectionProgress.observe(this, Observer { it ->
       val (state, progress, max) = it ?: Triple(ConnectionState.DISCONNECTED, 0, 0)
       when (state) {
-        ConnectionState.CONNECTED, ConnectionState.DISCONNECTED -> {
+        ConnectionState.CONNECTED,
+        ConnectionState.DISCONNECTED,
+        ConnectionState.CLOSED -> {
           progressBar.hide()
         }
-        ConnectionState.INIT                                    -> {
+        ConnectionState.INIT   -> {
           // Show indeterminate when no progress has been made yet
           progressBar.isIndeterminate = progress == 0 || max == 0
           progressBar.progress = progress
           progressBar.max = max
         }
-        else                                                    -> {
+        else                   -> {
           progressBar.isIndeterminate = true
         }
       }
@@ -209,19 +231,19 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onSaveInstanceState(outState: Bundle?) {
     super.onSaveInstanceState(outState)
-    outState?.putInt("OPEN_BUFFER", viewModel.getBuffer().value ?: -1)
+    outState?.putInt("OPEN_BUFFER", viewModel.buffer.value ?: -1)
   }
 
   override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
     super.onSaveInstanceState(outState, outPersistentState)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      outPersistentState?.putInt("OPEN_BUFFER", viewModel.getBuffer().value ?: -1)
+      outPersistentState?.putInt("OPEN_BUFFER", viewModel.buffer.value ?: -1)
     }
   }
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
     super.onRestoreInstanceState(savedInstanceState)
-    viewModel.setBuffer(savedInstanceState?.getInt("OPEN_BUFFER", -1) ?: -1)
+    viewModel.buffer.value = savedInstanceState?.getInt("OPEN_BUFFER", -1) ?: -1
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -230,7 +252,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     super.onRestoreInstanceState(savedInstanceState, persistentState)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       val fallback = persistentState?.getInt("OPEN_BUFFER", -1) ?: -1
-      viewModel.setBuffer(savedInstanceState?.getInt("OPEN_BUFFER", fallback) ?: fallback)
+      viewModel.buffer.value = savedInstanceState?.getInt("OPEN_BUFFER", fallback) ?: fallback
     }
   }
 
@@ -240,83 +262,65 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   }
 
   override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
-    android.R.id.home -> {
+    android.R.id.home    -> {
       drawerToggle.onOptionsItemSelected(item)
     }
 
     R.id.filter_messages -> {
-      handler.post {
-        val buffer = viewModel.getBuffer().value
-        if (buffer != null) {
-          val filtered = Message_Type.of(database.filtered().get(accountId, buffer) ?: 0)
-          val flags = intArrayOf(
-            Message.MessageType.Join.bit or Message.MessageType.NetsplitJoin.bit,
-            Message.MessageType.Part.bit,
-            Message.MessageType.Quit.bit or Message.MessageType.NetsplitQuit.bit,
-            Message.MessageType.Nick.bit,
-            Message.MessageType.Mode.bit,
-            Message.MessageType.Topic.bit
-          )
-          val selectedIndices = flags.withIndex().mapNotNull { (index, flag) ->
-            if ((filtered and flag).isNotEmpty()) {
-              index
-            } else {
-              null
-            }
-          }.toTypedArray()
-
-          runOnUiThread {
-            MaterialDialog.Builder(this)
-              .title(R.string.label_filter_messages)
-              .items(R.array.message_filter_types)
-              .itemsIds(flags)
-              .itemsCallbackMultiChoice(selectedIndices, { _, _, _ -> false })
-              .positiveText(R.string.label_select_multiple)
-              .negativeText(R.string.label_cancel)
-              .onPositive { dialog, _ ->
-                val selected = dialog.selectedIndices ?: emptyArray()
-                handler.post {
-                  val newlyFiltered = selected
-                    .map { flags[it] }
-                    .fold(Message_Type.of()) { acc, i -> acc or i }
-
-                  database.filtered().replace(
-                    QuasselDatabase.Filtered(accountId, buffer, newlyFiltered.value)
-                  )
-                }
-              }.negativeColorAttr(R.attr.colorTextPrimary)
-              .backgroundColorAttr(R.attr.colorBackgroundCard)
-              .contentColorAttr(R.attr.colorTextPrimary)
-              .build()
-              .show()
+      viewModel.buffer { buffer ->
+        val filtered = Message_Type.of(database.filtered().get(accountId, buffer) ?: 0)
+        val flags = intArrayOf(
+          Message.MessageType.Join.bit or Message.MessageType.NetsplitJoin.bit,
+          Message.MessageType.Part.bit,
+          Message.MessageType.Quit.bit or Message.MessageType.NetsplitQuit.bit,
+          Message.MessageType.Nick.bit,
+          Message.MessageType.Mode.bit,
+          Message.MessageType.Topic.bit
+        )
+        val selectedIndices = flags.withIndex().mapNotNull { (index, flag) ->
+          if ((filtered and flag).isNotEmpty()) {
+            index
+          } else {
+            null
           }
-        }
+        }.toTypedArray()
+
+        MaterialDialog.Builder(this)
+          .title(R.string.label_filter_messages)
+          .items(R.array.message_filter_types)
+          .itemsIds(flags)
+          .itemsCallbackMultiChoice(selectedIndices, { _, _, _ -> false })
+          .positiveText(R.string.label_select_multiple)
+          .negativeText(R.string.label_cancel)
+          .onPositive { dialog, _ ->
+            val selected = dialog.selectedIndices ?: emptyArray()
+            runInBackground {
+              val newlyFiltered = selected
+                .map { flags[it] }
+                .fold(Message_Type.of()) { acc, i -> acc or i }
+
+              database.filtered().replace(
+                QuasselDatabase.Filtered(accountId, buffer, newlyFiltered.value)
+              )
+            }
+          }.negativeColorAttr(R.attr.colorTextPrimary)
+          .backgroundColorAttr(R.attr.colorBackgroundCard)
+          .contentColorAttr(R.attr.colorTextPrimary)
+          .build()
+          .show()
       }
       true
     }
-    R.id.settings -> {
+    R.id.settings        -> {
       startActivity(Intent(applicationContext, SettingsActivity::class.java))
       true
     }
-    R.id.disconnect -> {
-      handler.post {
-        sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
-          editApply {
-            putBoolean(Keys.Status.reconnect, false)
-          }
-        }
-
-        val intent = Intent(this, AccountSelectionActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        startActivityForResult(intent, REQUEST_SELECT_ACCOUNT)
-      }
+    R.id.disconnect      -> {
+      val editor1 = getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).edit()
+      editor1.putBoolean(Keys.Status.reconnect, false)
+      editor1.commit()
       true
     }
-    else -> super.onOptionsItemSelected(item)
-  }
-
-  override fun onDestroy() {
-    handler.onDestroy()
-    super.onDestroy()
+    else                 -> super.onOptionsItemSelected(item)
   }
 }

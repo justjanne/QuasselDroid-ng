@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="label_error_login">Login Error</string>
+  <string name="label_error_setup">Setup Error</string>
+  <string name="label_error_init">Connection Error</string>
+</resources>

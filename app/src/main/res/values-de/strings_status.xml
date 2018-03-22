@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="label_status_disconnected">Nicht verbunden</string>
+  <string name="label_status_connecting">Verbindung wird hergestellt</string>
+  <string name="label_status_handshake">Protokoll wird ausgehandelt</string>
+  <string name="label_status_init">Initialisiere Daten</string>
+  <string name="label_status_connected">Verbunden</string>
+  <string name="label_status_closed">Verbindung getrennt</string>
+</resources>

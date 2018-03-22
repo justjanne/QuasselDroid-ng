@@ -10,12 +10,15 @@ import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.v7.app.AppCompatActivity
 import de.kuschku.libquassel.session.Backend
+import de.kuschku.libquassel.util.compatibility.LoggingHandler
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.ConnectionSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.setup.accounts.AccountSelectionActivity
+import de.kuschku.quasseldroid.util.helper.invoke
 import de.kuschku.quasseldroid.util.helper.sharedPreferences
 import de.kuschku.quasseldroid.util.helper.updateRecentsHeaderIfExisting
 
@@ -29,6 +32,18 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
   private val connection = BackendServiceConnection()
   protected val backend: LiveData<Backend?>
     get() = connection.backend
+
+  protected fun runInBackground(f: () -> Unit) {
+    connection.backend {
+      it.sessionManager().handlerService.backend(f)
+    }
+  }
+
+  protected fun runInBackgroundDelayed(delayMillis: Long, f: () -> Unit) {
+    connection.backend {
+      it.sessionManager().handlerService.backendDelayed(delayMillis, f)
+    }
+  }
 
   protected lateinit var appearanceSettings: AppearanceSettings
   protected lateinit var connectionSettings: ConnectionSettings
@@ -85,11 +100,20 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
     accountId = getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
       ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
 
-    if (!sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
-        getBoolean(Keys.Status.reconnect, false)
-      } || accountId == -1L) {
+    val reconnect = sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
+      getBoolean(Keys.Status.reconnect, false)
+    }
+    val accountIdValid = accountId != -1L
+
+    log(
+      LoggingHandler.LogLevel.ERROR, "DEBUG",
+      "reconnect: $reconnect, accountIdValid: $accountIdValid"
+    )
+
+    if (!reconnect || !accountIdValid) {
 
       if (!startedSelection) {
+        log(LoggingHandler.LogLevel.ERROR, "DEBUG", "started: $REQUEST_SELECT_ACCOUNT")
         startActivityForResult(
           Intent(this, AccountSelectionActivity::class.java), REQUEST_SELECT_ACCOUNT
         )
@@ -102,6 +126,12 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
+
+    log(
+      LoggingHandler.LogLevel.ERROR, "DEBUG",
+      "request: $requestCode result: $resultCode, data: $data"
+    )
+
     if (requestCode == REQUEST_SELECT_ACCOUNT) {
       startedSelection = false
 
@@ -117,6 +147,6 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
   }
 
   companion object {
-    const val REQUEST_SELECT_ACCOUNT = 0
+    const val REQUEST_SELECT_ACCOUNT = 1
   }
 }

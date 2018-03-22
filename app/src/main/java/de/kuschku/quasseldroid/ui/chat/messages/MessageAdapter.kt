@@ -53,14 +53,9 @@ class MessageAdapter(
     }
   }
 
-  override fun getItemViewType(position: Int): Int {
-    val item = getItem(position)
-    if (item != null) {
-      return viewType(Message_Flags.of(item.type), Message_Flags.of(item.flag))
-    } else {
-      return 0
-    }
-  }
+  override fun getItemViewType(position: Int) = getItem(position)?.let {
+    viewType(Message_Flags.of(it.type), Message_Flags.of(it.flag))
+  } ?: 0
 
   private fun viewType(type: Message_Types, flags: Message_Flags) =
     if (flags.hasFlag(Message_Flag.Highlight)) {

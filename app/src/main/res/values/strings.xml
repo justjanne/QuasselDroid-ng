@@ -27,12 +27,6 @@
   <string name="label_unhide">Make Visible</string>
   <string name="label_yes">Yes</string>
 
-  <string name="label_status_disconnected">Disconnected</string>
-  <string name="label_status_connecting">Connecting</string>
-  <string name="label_status_handshake">Handshake</string>
-  <string name="label_status_init">Init</string>
-  <string name="label_status_connected">Connected</string>
-
   <string name="notification_channel_background" translatable="false">background</string>
   <string name="notification_channel_connection_title">Connection</string>
   <string name="notification_channel_highlight" translatable="false">highlight</string>

@@ -15,7 +15,6 @@ import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.Settings
-import de.kuschku.quasseldroid.util.AndroidHandlerThread
 import de.kuschku.quasseldroid.util.helper.map
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
@@ -24,8 +23,6 @@ import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 class NickListFragment : ServiceBoundFragment() {
   private lateinit var viewModel: QuasselViewModel
 
-  private val handlerThread = AndroidHandlerThread("NickList")
-
   @BindView(R.id.nickList)
   lateinit var nickList: RecyclerView
 
@@ -33,7 +30,6 @@ class NickListFragment : ServiceBoundFragment() {
   private lateinit var appearanceSettings: AppearanceSettings
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    handlerThread.onCreate()
     super.onCreate(savedInstanceState)
 
     viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
@@ -74,11 +70,6 @@ class NickListFragment : ServiceBoundFragment() {
     }.observe(this, Observer(nickListAdapter::submitList))
 
     return view
-  }
-
-  override fun onDestroy() {
-    handlerThread.onDestroy()
-    super.onDestroy()
   }
 
   private val clickListener: ((String) -> Unit)? = {

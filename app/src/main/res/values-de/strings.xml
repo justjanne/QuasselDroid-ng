@@ -28,12 +28,6 @@
   <string name="label_unhide">Nicht mehr ausblenden</string>
   <string name="label_yes">Ja</string>
 
-  <string name="label_status_disconnected">Nicht verbunden</string>
-  <string name="label_status_connecting">Verbindung wird hergestellt</string>
-  <string name="label_status_handshake">Handshake</string>
-  <string name="label_status_init">Initialisieren</string>
-  <string name="label_status_connected">Verbunden</string>
-
   <string name="notification_channel_connection_title">Verbindung</string>
   <string name="notification_channel_highlight_title">Erwähnungen</string>
 

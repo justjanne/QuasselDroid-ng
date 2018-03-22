@@ -20,7 +20,6 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.Settings
-import de.kuschku.quasseldroid.util.AndroidHandlerThread
 import de.kuschku.quasseldroid.util.helper.map
 import de.kuschku.quasseldroid.util.helper.zip
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
@@ -29,8 +28,6 @@ import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid.viewmodel.data.BufferHiddenState
 
 class BufferViewConfigFragment : ServiceBoundFragment() {
-  private val handlerThread = AndroidHandlerThread("ChatList")
-
   @BindView(R.id.chatListToolbar)
   lateinit var chatListToolbar: Toolbar
 
@@ -158,7 +155,6 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   private lateinit var listAdapter: BufferListAdapter
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    handlerThread.onCreate()
     super.onCreate(savedInstanceState)
 
     viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
@@ -220,7 +216,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       },
       viewModel.selectedBufferId,
       viewModel.collapsedNetworks,
-      handlerThread::post,
+      ::runInBackground,
       activity!!::runOnUiThread,
       clickListener,
       longClickListener
@@ -312,16 +308,11 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     return view
   }
 
-  override fun onDestroy() {
-    handlerThread.onDestroy()
-    super.onDestroy()
-  }
-
   private val clickListener: ((BufferId) -> Unit)? = {
     if (actionMode != null) {
       longClickListener?.invoke(it)
     } else {
-      viewModel.setBuffer(it)
+      viewModel.buffer.value = it
     }
   }
 

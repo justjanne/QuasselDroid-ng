@@ -16,7 +16,6 @@ import de.kuschku.quasseldroid.persistence.QuasselBacklogStorage
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.ConnectionSettings
 import de.kuschku.quasseldroid.settings.Settings
-import de.kuschku.quasseldroid.util.AndroidHandlerThread
 import de.kuschku.quasseldroid.util.QuasseldroidNotificationManager
 import de.kuschku.quasseldroid.util.compatibility.AndroidHandlerService
 import de.kuschku.quasseldroid.util.helper.editApply
@@ -98,7 +97,7 @@ class QuasselService : LifecycleService(),
     when (state) {
       ConnectionState.DISCONNECTED -> {
         handle.builder.setContentTitle(getString(R.string.label_status_disconnected))
-        handle.builder.setProgress(0, 0, false)
+        handle.builder.setProgress(0, 0, true)
       }
       ConnectionState.CONNECTING   -> {
         handle.builder.setContentTitle(getString(R.string.label_status_connecting))
@@ -117,11 +116,15 @@ class QuasselService : LifecycleService(),
         handle.builder.setContentTitle(getString(R.string.label_status_connected))
         handle.builder.setProgress(0, 0, false)
       }
+      ConnectionState.CLOSED       -> {
+        handle.builder.setContentTitle(getString(R.string.label_status_closed))
+        handle.builder.setProgress(0, 0, false)
+      }
     }
   }
 
   private fun updateConnection(accountId: Long, reconnect: Boolean) {
-    handler.post {
+    handlerService.backend {
       val account = if (accountId != -1L && reconnect) {
         AccountDatabase.Creator.init(this).accounts().findById(accountId)
       } else {
@@ -172,8 +175,7 @@ class QuasselService : LifecycleService(),
     override fun connect(address: SocketAddress, user: String, pass: String, reconnect: Boolean) {
       disconnect()
       sessionManager.connect(
-        clientData, trustManager, address, ::AndroidHandlerService,
-        user to pass, reconnect
+        clientData, trustManager, address, user to pass, reconnect
       )
     }
 
@@ -186,30 +188,30 @@ class QuasselService : LifecycleService(),
     }
   }
 
-  private val handler = AndroidHandlerThread("Backend")
+  private val handlerService = AndroidHandlerService()
 
   private val asyncBackend = object : Backend {
     override fun connectUnlessConnected(address: SocketAddress, user: String, pass: String,
                                         reconnect: Boolean) {
-      handler.post {
+      handlerService.backend {
         backendImplementation.connectUnlessConnected(address, user, pass, reconnect)
       }
     }
 
     override fun connect(address: SocketAddress, user: String, pass: String, reconnect: Boolean) {
-      handler.post {
+      handlerService.backend {
         backendImplementation.connect(address, user, pass, reconnect)
       }
     }
 
     override fun reconnect() {
-      handler.post {
+      handlerService.backend {
         backendImplementation.reconnect()
       }
     }
 
     override fun disconnect(forever: Boolean) {
-      handler.post {
+      handlerService.backend {
         backendImplementation.disconnect(forever)
         if (forever) {
           stopSelf()
@@ -232,10 +234,9 @@ class QuasselService : LifecycleService(),
   private val connectivity = BehaviorSubject.createDefault(Unit)
 
   override fun onCreate() {
-    handler.onCreate()
     super.onCreate()
     database = QuasselDatabase.Creator.init(application)
-    sessionManager = SessionManager(ISession.NULL, QuasselBacklogStorage(database))
+    sessionManager = SessionManager(ISession.NULL, QuasselBacklogStorage(database), handlerService)
     clientData = ClientData(
       identifier = "${resources.getString(R.string.app_name)} ${BuildConfig.VERSION_NAME}",
       buildDate = Instant.ofEpochSecond(BuildConfig.GIT_COMMIT_DATE),
@@ -249,7 +250,7 @@ class QuasselService : LifecycleService(),
 
     sessionManager.connectionProgress.toLiveData().observe(this, Observer {
       if (this.progress.first != it?.first && it?.first == ConnectionState.CONNECTED) {
-        handler.post {
+        handlerService.backend {
           database.message().clearMessages()
         }
       }
@@ -262,7 +263,7 @@ class QuasselService : LifecycleService(),
     })
 
     Observable.combineLatest(
-      sessionManager.state.filter { it == ConnectionState.DISCONNECTED },
+      sessionManager.state.filter { it == ConnectionState.DISCONNECTED || it == ConnectionState.CLOSED },
       connectivity,
       BiFunction { a: ConnectionState, b: Unit -> a to b })
       .delay(200, TimeUnit.MILLISECONDS)
@@ -299,8 +300,6 @@ class QuasselService : LifecycleService(),
     unregisterReceiver(receiver)
 
     notificationHandle?.let { notificationManager.remove(it) }
-
-    handler.onDestroy()
     super.onDestroy()
   }
 
