@@ -101,7 +101,7 @@ dependencies {
     implementation("com.android.support", "preference-v7", version)
     implementation("com.android.support", "preference-v14", version)
   }
-  implementation("com.android.support.constraint", "constraint-layout", "1.0.2")
+  implementation("com.android.support.constraint", "constraint-layout", "1.1.0-beta6")
 
   // App Arch Lifecycle
   withVersion("1.1.0") {

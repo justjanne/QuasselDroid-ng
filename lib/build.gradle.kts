@@ -19,12 +19,6 @@ dependencies {
   implementation("org.threeten", "threetenbp", "1.3.6")
   implementation("io.reactivex.rxjava2:rxjava:2.1.9")
 
-
-  withVersion("2.15") {
-    implementation("com.google.dagger", "dagger", version)
-    kapt("com.google.dagger", "dagger-compiler", version)
-  }
-
   implementation(project(":invokerannotations"))
   kapt(project(":invokergenerator"))
 

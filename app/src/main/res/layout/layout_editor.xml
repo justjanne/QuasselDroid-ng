@@ -62,7 +62,8 @@
     <android.support.v7.widget.Toolbar
       android:id="@+id/formatting_toolbar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize">
+      android:layout_height="?attr/actionBarSize"
+      app:contentInsetStart="0dip">
 
       <HorizontalScrollView
         android:layout_width="match_parent"
