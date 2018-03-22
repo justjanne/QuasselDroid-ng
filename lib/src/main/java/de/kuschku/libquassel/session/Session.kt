@@ -18,7 +18,7 @@ class Session(
   clientData: ClientData,
   trustManager: X509TrustManager,
   address: SocketAddress,
-  handlerService: HandlerService,
+  private val handlerService: HandlerService,
   backlogStorage: BacklogStorage,
   private val userData: Pair<String, String>
 ) : ProtocolHandler(), ISession {
@@ -31,6 +31,8 @@ class Session(
     this, clientData, features, trustManager, address, handlerService
   )
   override val state = coreConnection.state
+
+  override val error = BehaviorSubject.create<HandshakeMessage>()
 
   override val aliasManager = AliasManager(this)
   override val backlogManager = BacklogManager(this, backlogStorage)
@@ -57,54 +59,83 @@ class Session(
 
   override fun handle(f: HandshakeMessage.ClientInitAck): Boolean {
     features.core = f.coreFeatures ?: Quassel_Feature.NONE
+
+    if (f.coreConfigured == true) {
+      login()
+    } else {
+      error.onNext(f)
+    }
+    return true
+  }
+
+  private fun login() {
     dispatch(
       HandshakeMessage.ClientLogin(
         user = userData.first,
         password = userData.second
       )
     )
+  }
 
-    dispatch(SignalProxyMessage.HeartBeat(Instant.now()))
+  override fun handle(f: HandshakeMessage.CoreSetupAck): Boolean {
+    login()
+    return true
+  }
+
+  override fun handle(f: HandshakeMessage.ClientInitReject): Boolean {
+    error.onNext(f)
+    return true
+  }
+
+  override fun handle(f: HandshakeMessage.CoreSetupReject): Boolean {
+    error.onNext(f)
+    return true
+  }
+
+  override fun handle(f: HandshakeMessage.ClientLoginReject): Boolean {
+    error.onNext(f)
     return true
   }
 
   override fun handle(f: HandshakeMessage.SessionInit): Boolean {
     coreConnection.setState(ConnectionState.INIT)
 
-    bufferSyncer.initSetBufferInfos(f.bufferInfos)
+    handlerService.backend {
+      bufferSyncer.initSetBufferInfos(f.bufferInfos)
 
-    f.networkIds?.forEach {
-      val network = Network(it.value(-1), this)
-      networks[network.networkId()] = network
+      f.networkIds?.forEach {
+        val network = Network(it.value(-1), this)
+        networks[network.networkId()] = network
+      }
+
+      f.identities?.forEach {
+        val identity = Identity(this)
+        identity.fromVariantMap(it.valueOr(::emptyMap))
+        identity.initialized = true
+        identities[identity.id()] = identity
+
+        val certManager = CertManager(identity.id(), this)
+        certManagers[identity.id()] = certManager
+      }
+
+      isInitializing = true
+      networks.values.forEach { syncableObject -> this.synchronize(syncableObject, true) }
+      certManagers.values.forEach { syncableObject -> this.synchronize(syncableObject, true) }
+
+      synchronize(aliasManager, true)
+      synchronize(bufferSyncer, true)
+      synchronize(bufferViewManager, true)
+      synchronize(coreInfo, true)
+      if (features.negotiated.hasFlag(QuasselFeature.DccFileTransfer))
+        synchronize(dccConfig, true)
+      synchronize(ignoreListManager, true)
+      synchronize(ircListHelper, true)
+      synchronize(networkConfig, true)
+
+      synchronize(backlogManager)
+
+      dispatch(SignalProxyMessage.HeartBeat(Instant.now()))
     }
-
-    f.identities?.forEach {
-      val identity = Identity(this)
-      identity.fromVariantMap(it.valueOr(::emptyMap))
-      identity.initialized = true
-      identities[identity.id()] = identity
-
-      val certManager = CertManager(identity.id(), this)
-      certManagers[identity.id()] = certManager
-    }
-
-    isInitializing = true
-    networks.values.forEach { syncableObject -> this.synchronize(syncableObject, true) }
-    certManagers.values.forEach { syncableObject -> this.synchronize(syncableObject, true) }
-
-    synchronize(aliasManager, true)
-    synchronize(bufferSyncer, true)
-    synchronize(bufferViewManager, true)
-    synchronize(coreInfo, true)
-    if (features.negotiated.hasFlag(QuasselFeature.DccFileTransfer))
-      synchronize(dccConfig, true)
-    synchronize(ignoreListManager, true)
-    synchronize(ircListHelper, true)
-    synchronize(networkConfig, true)
-
-    synchronize(backlogManager)
-
-    dispatch(SignalProxyMessage.HeartBeat(Instant.now()))
 
     return true
   }

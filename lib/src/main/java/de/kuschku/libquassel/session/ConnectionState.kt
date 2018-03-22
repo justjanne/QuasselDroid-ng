@@ -5,5 +5,6 @@ enum class ConnectionState {
   CONNECTING,
   HANDSHAKE,
   INIT,
-  CONNECTED
+  CONNECTED,
+  CLOSED
 }

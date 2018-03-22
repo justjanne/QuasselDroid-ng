@@ -3,6 +3,7 @@ package de.kuschku.libquassel.session
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.Quassel_Features
+import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.quassel.syncables.*
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -29,10 +30,13 @@ interface ISession : Closeable {
   val rpcHandler: RpcHandler?
   val initStatus: Observable<Pair<Int, Int>>
 
+  val error: Observable<HandshakeMessage>
+
   val lag: Observable<Long>
 
   companion object {
     val NULL = object : ISession {
+      override val error = BehaviorSubject.create<HandshakeMessage>()
       override val state = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
       override val features: Features = Features(Quassel_Features.of(), Quassel_Features.of())
       override val sslSession: SSLSession? = null

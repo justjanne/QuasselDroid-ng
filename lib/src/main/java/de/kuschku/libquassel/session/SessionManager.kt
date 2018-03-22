@@ -3,6 +3,7 @@ package de.kuschku.libquassel.session
 import de.kuschku.libquassel.protocol.ClientData
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
 import de.kuschku.libquassel.util.compatibility.HandlerService
@@ -15,7 +16,11 @@ import io.reactivex.subjects.BehaviorSubject
 import javax.net.ssl.SSLSession
 import javax.net.ssl.X509TrustManager
 
-class SessionManager(offlineSession: ISession, val backlogStorage: BacklogStorage) : ISession {
+class SessionManager(offlineSession: ISession,
+                     val backlogStorage: BacklogStorage,
+                     val handlerService: HandlerService) : ISession {
+  override val error: Observable<HandshakeMessage>
+    get() = session.or(lastSession).error
   override val features: Features
     get() = session.or(lastSession).features
   override val sslSession: SSLSession?
@@ -54,7 +59,6 @@ class SessionManager(offlineSession: ISession, val backlogStorage: BacklogStorag
   private var lastClientData: ClientData? = null
   private var lastTrustManager: X509TrustManager? = null
   private var lastAddress: SocketAddress? = null
-  private var lastHandlerService: (() -> HandlerService)? = null
   private var lastUserData: Pair<String, String>? = null
   private var lastShouldReconnect = false
 
@@ -90,8 +94,10 @@ class SessionManager(offlineSession: ISession, val backlogStorage: BacklogStorag
   }
 
   fun ifDisconnected(closure: () -> Unit) {
-    if (state.or(ConnectionState.DISCONNECTED) == ConnectionState.DISCONNECTED) {
-      closure()
+    state.or(ConnectionState.DISCONNECTED).let {
+      if (it == ConnectionState.DISCONNECTED || it == ConnectionState.CLOSED) {
+        closure()
+      }
     }
   }
 
@@ -99,7 +105,6 @@ class SessionManager(offlineSession: ISession, val backlogStorage: BacklogStorag
     clientData: ClientData,
     trustManager: X509TrustManager,
     address: SocketAddress,
-    handlerService: () -> HandlerService,
     userData: Pair<String, String>,
     shouldReconnect: Boolean = false
   ) {
@@ -107,7 +112,6 @@ class SessionManager(offlineSession: ISession, val backlogStorage: BacklogStorag
     lastClientData = clientData
     lastTrustManager = trustManager
     lastAddress = address
-    lastHandlerService = handlerService
     lastUserData = userData
     lastShouldReconnect = shouldReconnect
     inProgressSession.onNext(
@@ -115,7 +119,7 @@ class SessionManager(offlineSession: ISession, val backlogStorage: BacklogStorag
         clientData,
         trustManager,
         address,
-        handlerService(),
+        handlerService,
         backlogStorage,
         userData
       )
@@ -127,14 +131,13 @@ class SessionManager(offlineSession: ISession, val backlogStorage: BacklogStorag
       val clientData = lastClientData
       val trustManager = lastTrustManager
       val address = lastAddress
-      val handlerService = lastHandlerService
       val userData = lastUserData
 
-      if (clientData != null && trustManager != null && address != null && handlerService != null && userData != null) {
-        if (state.or(
-            ConnectionState.DISCONNECTED
-          ) == ConnectionState.DISCONNECTED || forceReconnect) {
-          connect(clientData, trustManager, address, handlerService, userData, forceReconnect)
+      if (clientData != null && trustManager != null && address != null && userData != null) {
+        state.or(ConnectionState.DISCONNECTED).let {
+          if (it == ConnectionState.DISCONNECTED || it == ConnectionState.CLOSED || forceReconnect) {
+            connect(clientData, trustManager, address, userData, forceReconnect)
+          }
         }
       }
     }

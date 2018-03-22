@@ -4,12 +4,25 @@ import de.kuschku.libquassel.util.compatibility.HandlerService
 import java.util.concurrent.Executors
 
 class JavaHandlerService : HandlerService {
-  private val parseExecutor = Executors.newSingleThreadExecutor()
+  override fun backendDelayed(delayMillis: Long, f: () -> Unit) = backend(f)
+
+  private val serializeExecutor = Executors.newSingleThreadExecutor()
+  private val deserializeExecutor = Executors.newSingleThreadExecutor()
   private val writeExecutor = Executors.newSingleThreadExecutor()
   private val backendExecutor = Executors.newSingleThreadExecutor()
 
-  override fun parse(f: () -> Unit) {
-    parseExecutor.submit {
+  override fun serialize(f: () -> Unit) {
+    serializeExecutor.submit {
+      try {
+        f()
+      } catch (e: Throwable) {
+        exceptionHandler?.uncaughtException(Thread.currentThread(), e)
+      }
+    }
+  }
+
+  override fun deserialize(f: () -> Unit) {
+    deserializeExecutor.submit {
       try {
         f()
       } catch (e: Throwable) {
@@ -28,7 +41,7 @@ class JavaHandlerService : HandlerService {
     }
   }
 
-  override fun handle(f: () -> Unit) {
+  override fun backend(f: () -> Unit) {
     backendExecutor.submit {
       try {
         f()
@@ -39,7 +52,7 @@ class JavaHandlerService : HandlerService {
   }
 
   override fun quit() {
-    parseExecutor.shutdownNow()
+    serializeExecutor.shutdownNow()
     writeExecutor.shutdownNow()
     backendExecutor.shutdownNow()
   }

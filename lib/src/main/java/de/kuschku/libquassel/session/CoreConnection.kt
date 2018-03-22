@@ -11,7 +11,8 @@ import de.kuschku.libquassel.quassel.ProtocolFeature
 import de.kuschku.libquassel.util.compatibility.CompatibilityUtils
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.*
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.libquassel.util.helpers.hexDump
 import de.kuschku.libquassel.util.helpers.write
@@ -63,13 +64,12 @@ class CoreConnection(
   }
 
   fun setState(value: ConnectionState) {
-    log(INFO, TAG, value.name)
+    log(DEBUG, TAG, value.name)
     state.onNext(value)
   }
 
   private fun sendHandshake() {
     setState(ConnectionState.HANDSHAKE)
-
     IntSerializer.serialize(
       chainedBuffer,
       0x42b33f00 or clientData.protocolFeatures.toInt(),
@@ -122,16 +122,14 @@ class CoreConnection(
 
   override fun close() {
     try {
-      interrupt()
-      handlerService.quit()
-      setState(ConnectionState.DISCONNECTED)
+      setState(ConnectionState.CLOSED)
     } catch (e: Throwable) {
       log(WARN, TAG, "Error encountered while closing connection", e)
     }
   }
 
   fun dispatch(message: HandshakeMessage) {
-    handlerService.parse {
+    handlerService.serialize {
       try {
         val data = HandshakeMessage.serialize(message)
         handlerService.write(
@@ -147,7 +145,7 @@ class CoreConnection(
   }
 
   fun dispatch(message: SignalProxyMessage) {
-    handlerService.parse {
+    handlerService.serialize {
       try {
         val data = SignalProxyMessage.serialize(message)
         handlerService.write(
@@ -167,7 +165,7 @@ class CoreConnection(
       connect()
       sendHandshake()
       readHandshake()
-      while (!isInterrupted) {
+      while (!isInterrupted && state != ConnectionState.CLOSED) {
         sizeBuffer.clear()
         if (channel?.read(sizeBuffer) == -1)
           break
@@ -180,25 +178,32 @@ class CoreConnection(
         while (dataBuffer.position() < dataBuffer.limit() && channel?.read(dataBuffer) ?: -1 > 0) {
         }
         dataBuffer.flip()
-        handlerService.parse {
+
+        handlerService.serialize {
           when (state.value) {
-            ConnectionState.HANDSHAKE -> processHandshake(dataBuffer)
-            else                      -> processSigProxy(dataBuffer)
+            ConnectionState.CLOSED    ->
+              // Connection closed, do nothing
+              Unit
+            ConnectionState.CONNECTING,
+            ConnectionState.HANDSHAKE ->
+              processHandshake(dataBuffer)
+            else                      ->
+              processSigProxy(dataBuffer)
           }
         }
       }
     } catch (e: Throwable) {
       log(WARN, TAG, "Error encountered in connection", e)
-      setState(ConnectionState.DISCONNECTED)
+      close()
     }
   }
 
-  private fun processSigProxy(dataBuffer: ByteBuffer) {
+  private fun processSigProxy(dataBuffer: ByteBuffer) = handlerService.deserialize {
     try {
       val msg = SignalProxyMessage.deserialize(
         VariantListSerializer.deserialize(dataBuffer, features.negotiated)
       )
-      handlerService.handle {
+      handlerService.backend {
         try {
           handler.handle(msg)
         } catch (e: Throwable) {
@@ -206,27 +211,27 @@ class CoreConnection(
           log(WARN, TAG, msg.toString())
         }
       }
+
     } catch (e: Throwable) {
       log(WARN, TAG, "Error encountered while parsing sigproxy message", e)
       dataBuffer.hexDump()
     }
   }
 
-  private fun processHandshake(dataBuffer: ByteBuffer) {
+  private fun processHandshake(dataBuffer: ByteBuffer) = try {
+    val msg = HandshakeMessage.deserialize(
+      HandshakeVariantMapSerializer.deserialize(dataBuffer, features.negotiated)
+    )
     try {
-      val msg = HandshakeMessage.deserialize(
-        HandshakeVariantMapSerializer.deserialize(dataBuffer, features.negotiated)
-      )
-      try {
-        handler.handle(msg)
-      } catch (e: Throwable) {
-        log(WARN, TAG, "Error encountered while handling handshake message", e)
-        log(WARN, TAG, msg.toString())
-      }
+      handler.handle(msg)
     } catch (e: Throwable) {
-      log(WARN, TAG, "Error encountered while parsing handshake message", e)
-      dataBuffer.hexDump()
+      log(WARN, TAG, "Error encountered while handling handshake message", e)
+      log(WARN, TAG, msg.toString())
     }
+  } catch (e: Throwable) {
+    log(
+      WARN, TAG, "Error encountered while parsing handshake message", e
+    )
   }
 
   val sslSession

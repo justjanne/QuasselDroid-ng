@@ -13,6 +13,7 @@ import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.ISession
+import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.and
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid.util.helper.*
@@ -26,11 +27,7 @@ class QuasselViewModel : ViewModel() {
     this.backendWrapper.value = backendWrapper
   }
 
-  private val buffer = MutableLiveData<BufferId>()
-  fun getBuffer(): LiveData<BufferId> = buffer
-  fun setBuffer(buffer: BufferId) {
-    this.buffer.value = buffer
-  }
+  val buffer = MutableLiveData<BufferId>()
 
   private val bufferViewConfigId = MutableLiveData<Int?>()
   fun getBufferViewConfigId(): LiveData<Int?> = bufferViewConfigId
@@ -49,10 +46,10 @@ class QuasselViewModel : ViewModel() {
   }
 
   val backend = backendWrapper.switchMap { it }
-  val sessionManager = backend.map { it.sessionManager() }
-  val session = sessionManager.switchMapRx { it.session }
+  val sessionManager = backend.map(Backend::sessionManager)
+  val session = sessionManager.switchMapRx(SessionManager::session)
 
-  val connectionProgress = sessionManager.switchMapRx { it.connectionProgress }
+  val connectionProgress = sessionManager.switchMapRx(SessionManager::connectionProgress)
 
   private val bufferViewManager = session.map(ISession::bufferViewManager)
 
@@ -61,6 +58,8 @@ class QuasselViewModel : ViewModel() {
       manager.bufferViewConfig(id)
     }
   }
+
+  val errors = session.switchMapRx(ISession::error)
 
   private var lastMarkerLine = -1
   /**
