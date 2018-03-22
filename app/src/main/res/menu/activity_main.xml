@@ -4,9 +4,6 @@
     android:id="@+id/filter_messages"
     android:title="@string/label_filter_messages" />
   <item
-    android:id="@+id/clear"
-    android:title="@string/label_clear_backlog" />
-  <item
     android:id="@+id/settings"
     android:title="@string/label_settings" />
   <item

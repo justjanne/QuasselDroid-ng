@@ -294,21 +294,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
       true
     }
-    R.id.clear -> {
-      handler.post {
-        viewModel.sessionManager { manager ->
-          viewModel.getBuffer().value?.let { buffer ->
-            manager.backlogStorage.clearMessages(buffer)
-            manager.backlogManager?.requestBacklog(
-              bufferId = buffer,
-              last = -1,
-              limit = backlogSettings.dynamicAmount
-            )
-          }
-        }
-      }
-      true
-    }
     R.id.settings -> {
       startActivity(Intent(applicationContext, SettingsActivity::class.java))
       true

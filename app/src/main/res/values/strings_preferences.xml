@@ -108,7 +108,7 @@
 
   <string name="preference_page_size_key" translatable="false">page_size</string>
   <string name="preference_page_size_title">Page Size</string>
-  <string name="preference_page_size_summary">The number of messages loaded at a time</string>
+  <string name="preference_page_size_summary">The number of messages loaded and kept in memory at a time</string>
 
 
   <string name="preference_connection_title">Connection</string>

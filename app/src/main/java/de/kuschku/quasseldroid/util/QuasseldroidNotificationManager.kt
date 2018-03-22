@@ -29,7 +29,7 @@ class QuasseldroidNotificationManager(private val context: Context) {
       listOf(
         NotificationChannel(
           context.getString(R.string.notification_channel_background),
-          context.getString(R.string.notification_channel_background_title),
+          context.getString(R.string.notification_channel_connection_title),
           NotificationManager.IMPORTANCE_MIN
         ),
         NotificationChannel(

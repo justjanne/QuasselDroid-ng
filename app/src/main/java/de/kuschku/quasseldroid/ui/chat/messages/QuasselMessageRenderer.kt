@@ -179,7 +179,8 @@ class QuasselMessageRenderer(
         SpanFormatter.format(
           context.getString(R.string.message_format_join),
           formatPrefix(message.senderPrefixes, highlight),
-          formatNick(message.sender, self, highlight, true)
+          formatNick(message.sender, self, highlight, true),
+          message.content
         ),
         message.messageId == markerLine
       )
@@ -221,28 +222,54 @@ class QuasselMessageRenderer(
         },
         message.messageId == markerLine
       )
-      Message_Type.Kick         -> FormattedMessage(
-        message.messageId,
-        timeFormatter.format(message.time.atZone(zoneId)),
-        SpanFormatter.format(
-          context.getString(R.string.message_format_kick),
-          formatContent(message.content, highlight),
-          formatPrefix(message.senderPrefixes, highlight),
-          formatNick(message.sender, self, highlight, true)
-        ),
-        message.messageId == markerLine
-      )
-      Message_Type.Kill         -> FormattedMessage(
-        message.messageId,
-        timeFormatter.format(message.time.atZone(zoneId)),
-        SpanFormatter.format(
-          context.getString(R.string.message_format_kill),
-          formatContent(message.content, highlight),
-          formatPrefix(message.senderPrefixes, highlight),
-          formatNick(message.sender, self, highlight, true)
-        ),
-        message.messageId == markerLine
-      )
+      Message_Type.Kick         -> {
+        val (user, reason) = message.content.split(' ', limit = 2) + listOf("", "")
+        FormattedMessage(
+          message.messageId,
+          timeFormatter.format(message.time.atZone(zoneId)),
+          if (reason.isBlank()) {
+            SpanFormatter.format(
+              context.getString(R.string.message_format_kick_1),
+              formatNick(user, false, highlight, false),
+              formatPrefix(message.senderPrefixes, highlight),
+              formatNick(message.sender, self, highlight, true)
+            )
+          } else {
+            SpanFormatter.format(
+              context.getString(R.string.message_format_kick_2),
+              formatNick(user, false, highlight, false),
+              formatPrefix(message.senderPrefixes, highlight),
+              formatNick(message.sender, self, highlight, true),
+              formatContent(reason, highlight)
+            )
+          },
+          message.messageId == markerLine
+        )
+      }
+      Message_Type.Kill         -> {
+        val (user, reason) = message.content.split(' ', limit = 2) + listOf("", "")
+        FormattedMessage(
+          message.messageId,
+          timeFormatter.format(message.time.atZone(zoneId)),
+          if (reason.isBlank()) {
+            SpanFormatter.format(
+              context.getString(R.string.message_format_kill_1),
+              formatNick(user, false, highlight, false),
+              formatPrefix(message.senderPrefixes, highlight),
+              formatNick(message.sender, self, highlight, true)
+            )
+          } else {
+            SpanFormatter.format(
+              context.getString(R.string.message_format_kill_2),
+              formatNick(user, false, highlight, false),
+              formatPrefix(message.senderPrefixes, highlight),
+              formatNick(message.sender, self, highlight, true),
+              formatContent(reason, highlight)
+            )
+          },
+          message.messageId == markerLine
+        )
+      }
       Message_Type.NetsplitJoin -> {
         val split = message.content.split("#:#")
         val (server1, server2) = split.last().split(' ')

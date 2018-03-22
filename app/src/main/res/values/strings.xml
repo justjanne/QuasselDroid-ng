@@ -6,7 +6,6 @@
 
   <string name="label_buffer_name">Buffer Name</string>
   <string name="label_cancel">Cancel</string>
-  <string name="label_clear_backlog">Clear Backlog</string>
   <string name="label_close">Close</string>
   <string name="label_connect">Connect</string>
   <string name="label_delete">Delete</string>
@@ -35,7 +34,7 @@
   <string name="label_status_connected">Connected</string>
 
   <string name="notification_channel_background" translatable="false">background</string>
-  <string name="notification_channel_background_title">Background</string>
+  <string name="notification_channel_connection_title">Connection</string>
   <string name="notification_channel_highlight" translatable="false">highlight</string>
   <string name="notification_channel_highlight_title">Highlight</string>
 
@@ -45,7 +44,7 @@
   <string name="label_strikethrough">Strikethrough</string>
   <string name="label_underline">Underline</string>
   <string name="label_monospace">Monospace</string>
-  <string name="label_foreground">Foreground</string>
-  <string name="label_background">Background</string>
+  <string name="label_foreground">Foreground Color</string>
+  <string name="label_background">Background Color</string>
   <string name="label_clear_formatting">Clear Formatting</string>
 </resources>

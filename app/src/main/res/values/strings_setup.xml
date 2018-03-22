@@ -25,7 +25,7 @@
 
   <!-- Account Name -->
   <string name="slideAccountNameTitle">Customize Account</string>
-  <string name="slideAccountNameDescription">Give this account a name and icon</string>
+  <string name="slideAccountNameDescription">Give this account a name</string>
 
   <string name="labelAccountName">Account name</string>
 
