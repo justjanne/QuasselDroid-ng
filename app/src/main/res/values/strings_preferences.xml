@@ -20,7 +20,7 @@
     <item>@string/preference_theme_entry_gruvbox_light</item>
     <item>@string/preference_theme_entry_gruvbox_dark</item>
   </string-array>
-  <string-array name="preference_theme_entryvalues">
+  <string-array name="preference_theme_entryvalues" translatable="false">
     <item>QUASSEL_LIGHT</item>
     <item>QUASSEL_DARK</item>
     <item>AMOLED</item>
@@ -57,7 +57,7 @@
     <item>@string/preference_colorize_nicknames_entry_all_but_mine</item>
     <item>@string/preference_colorize_nicknames_entry_none</item>
   </string-array>
-  <string-array name="preference_colorize_nicknames_entryvalues">
+  <string-array name="preference_colorize_nicknames_entryvalues" translatable="false">
     <item>ALL</item>
     <item>ALL_BUT_MINE</item>
     <item>NONE</item>
@@ -73,7 +73,7 @@
     <item>@string/preference_show_prefix_entry_highest</item>
     <item>@string/preference_show_prefix_entry_none</item>
   </string-array>
-  <string-array name="preference_show_prefix_entryvalues">
+  <string-array name="preference_show_prefix_entryvalues" translatable="false">
     <item>ALL</item>
     <item>HIGHEST</item>
     <item>NONE</item>
@@ -87,7 +87,7 @@
     <item>@string/preference_input_enter_entry_emoji</item>
     <item>@string/preference_input_enter_entry_send</item>
   </string-array>
-  <string-array name="preference_input_enter_entryvalues">
+  <string-array name="preference_input_enter_entryvalues" translatable="false">
     <item>EMOJI</item>
     <item>SEND</item>
   </string-array>
