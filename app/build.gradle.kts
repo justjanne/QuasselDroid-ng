@@ -152,6 +152,15 @@ dependencies {
     androidTestImplementation("com.squareup.leakcanary", "leakcanary-android-no-op", version)
   }
 
+  // Dependency Injection
+  withVersion("2.15") {
+    implementation("com.google.dagger", "dagger", version)
+    kapt("com.google.dagger", "dagger-compiler", version)
+    kapt("com.google.dagger", "dagger-android-processor", version)
+    implementation("com.google.dagger", "dagger-android", version)
+    implementation("com.google.dagger", "dagger-android-support", version)
+  }
+
   testImplementation("junit", "junit", "4.12")
   withVersion("1.0.1") {
     androidTestImplementation("com.android.support.test", "runner", version)

@@ -1,17 +1,23 @@
 package de.kuschku.quasseldroid
 
-import android.app.Application
 import android.os.Build
 import android.os.StrictMode
 import android.support.v7.preference.PreferenceManager
 import com.squareup.leakcanary.LeakCanary
+import dagger.android.AndroidInjector
+import dagger.android.support.DaggerApplication
 import de.kuschku.malheur.CrashHandler
+import de.kuschku.quasseldroid.dagger.DaggerAppComponent
 import de.kuschku.quasseldroid.util.backport.AndroidThreeTenBackport
 import de.kuschku.quasseldroid.util.compatibility.AndroidCompatibilityUtils
 import de.kuschku.quasseldroid.util.compatibility.AndroidLoggingHandler
 import de.kuschku.quasseldroid.util.compatibility.AndroidStreamChannelFactory
 
-class QuasseldroidNG : Application() {
+
+class QuasselDroid : DaggerApplication() {
+  override fun applicationInjector(): AndroidInjector<out QuasselDroid> =
+    DaggerAppComponent.builder().create(this)
+
   override fun onCreate() {
     super.onCreate()
     if (LeakCanary.isInAnalyzerProcess(this)) {

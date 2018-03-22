@@ -13,7 +13,6 @@ import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
-import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.util.helper.lastWordIndices
 import de.kuschku.quasseldroid.util.helper.lineSequence
@@ -34,6 +33,8 @@ class Editor(
   autoCompleteLists: List<RecyclerView>,
   formattingMenu: ActionMenuView,
   formattingToolbar: Toolbar,
+  // Settings
+  private val appearanceSettings: AppearanceSettings,
   // Listeners
   private val sendCallback: (Sequence<Pair<CharSequence, String>>) -> Unit,
   private val panelStateCallback: (Boolean) -> Unit
@@ -45,8 +46,6 @@ class Editor(
     }
     else               -> formatHandler.onMenuItemClick(item)
   }
-
-  private val appearanceSettings = Settings.appearance(activity)
 
   private val lastWord = BehaviorSubject.createDefault(Pair("", IntRange.EMPTY))
   private val textWatcher = object : TextWatcher {

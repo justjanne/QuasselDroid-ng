@@ -3,12 +3,12 @@ package de.kuschku.quasseldroid.util.service
 import android.arch.lifecycle.LiveData
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import dagger.android.support.DaggerFragment
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.util.helper.invoke
 
-abstract class ServiceBoundFragment : Fragment() {
+abstract class ServiceBoundFragment : DaggerFragment() {
   private var connection = BackendServiceConnection()
 
   protected val backend: LiveData<Backend?>

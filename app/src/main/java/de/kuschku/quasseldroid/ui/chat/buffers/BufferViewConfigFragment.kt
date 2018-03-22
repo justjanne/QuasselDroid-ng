@@ -2,8 +2,12 @@ package de.kuschku.quasseldroid.ui.chat.buffers
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
-import android.support.v7.widget.*
+import android.support.v7.widget.AppCompatSpinner
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.AdapterView
 import butterknife.BindView
@@ -19,13 +23,13 @@ import de.kuschku.libquassel.util.minus
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
-import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.util.helper.map
 import de.kuschku.quasseldroid.util.helper.zip
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid.viewmodel.data.BufferHiddenState
+import javax.inject.Inject
 
 class BufferViewConfigFragment : ServiceBoundFragment() {
   @BindView(R.id.chatListToolbar)
@@ -37,11 +41,16 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   @BindView(R.id.chatList)
   lateinit var chatList: RecyclerView
 
-  private lateinit var viewModel: QuasselViewModel
-  private lateinit var database: QuasselDatabase
+  @Inject
+  lateinit var appearanceSettings: AppearanceSettings
 
-  private var ircFormatDeserializer: IrcFormatDeserializer? = null
-  private lateinit var appearanceSettings: AppearanceSettings
+  @Inject
+  lateinit var database: QuasselDatabase
+
+  @Inject
+  lateinit var ircFormatDeserializer: IrcFormatDeserializer
+
+  private lateinit var viewModel: QuasselViewModel
 
   private var actionMode: ActionMode? = null
 
@@ -154,16 +163,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
   private lateinit var listAdapter: BufferListAdapter
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-
+  override fun onAttach(context: Context?) {
+    super.onAttach(context)
     viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
-    database = QuasselDatabase.Creator.init(activity!!)
-    appearanceSettings = Settings.appearance(activity!!)
-
-    if (ircFormatDeserializer == null) {
-      ircFormatDeserializer = IrcFormatDeserializer(context!!)
-    }
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -194,9 +196,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
         list.map {
           val activity = it.activity - (activities[it.info.bufferId] ?: 0)
           it.copy(
-            description = ircFormatDeserializer?.formatString(
-              it.description.toString(), appearanceSettings.colorizeMirc
-            ) ?: it.description,
+            description = ircFormatDeserializer.formatString(
+              requireContext(), it.description.toString(), appearanceSettings.colorizeMirc
+            ),
             activity = activity,
             bufferActivity = Buffer_Activity.of(
               when {
@@ -303,7 +305,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       }
     }
     chatList.layoutManager = LinearLayoutManager(context)
-    chatList.itemAnimator = DefaultItemAnimator()
+    //chatList.itemAnimator = DefaultItemAnimator()
     chatList.setItemViewCacheSize(10)
     return view
   }

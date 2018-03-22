@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid.ui.setup.accounts
+package de.kuschku.quasseldroid.ui.setup.accounts.setup
 
 import android.app.Activity
 import android.os.Bundle
@@ -6,9 +6,13 @@ import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.ui.setup.SetupActivity
 import de.kuschku.quasseldroid.util.AndroidHandlerThread
 import org.threeten.bp.Instant
+import javax.inject.Inject
 
 class AccountSetupActivity : SetupActivity() {
   private val handler = AndroidHandlerThread("Setup")
+
+  @Inject
+  lateinit var database: AccountDatabase
 
   override fun onDone(data: Bundle) {
     val account = AccountDatabase.Account(
@@ -21,7 +25,7 @@ class AccountSetupActivity : SetupActivity() {
       lastUsed = Instant.now().epochSecond
     )
     handler.post {
-      AccountDatabase.Creator.init(this).accounts().create(account)
+      database.accounts().create(account)
       runOnUiThread {
         setResult(Activity.RESULT_OK)
         finish()

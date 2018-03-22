@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid.ui.setup.accounts
+package de.kuschku.quasseldroid.ui.setup.accounts.selection
 
 import android.app.Activity
 import android.arch.lifecycle.Observer
@@ -16,8 +16,10 @@ import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.ui.setup.SlideFragment
-import de.kuschku.quasseldroid.ui.setup.accounts.AccountSelectionActivity.Companion.REQUEST_CREATE_FIRST
-import de.kuschku.quasseldroid.ui.setup.accounts.AccountSelectionActivity.Companion.REQUEST_CREATE_NEW
+import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditActivity
+import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity.Companion.REQUEST_CREATE_FIRST
+import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity.Companion.REQUEST_CREATE_NEW
+import de.kuschku.quasseldroid.ui.setup.accounts.setup.AccountSetupActivity
 
 class AccountSelectionSlide : SlideFragment() {
   @BindView(R.id.account_list)
@@ -58,7 +60,9 @@ class AccountSelectionSlide : SlideFragment() {
     accountViewModel.accounts.observe(this, firstObserver)
     accountList.layoutManager = LinearLayoutManager(context)
     accountList.itemAnimator = DefaultItemAnimator()
-    val adapter = AccountAdapter(this, accountViewModel.accounts, accountViewModel.selectedItem)
+    val adapter = AccountAdapter(
+      this, accountViewModel.accounts, accountViewModel.selectedItem
+    )
     this.adapter = adapter
     accountList.adapter = adapter
 

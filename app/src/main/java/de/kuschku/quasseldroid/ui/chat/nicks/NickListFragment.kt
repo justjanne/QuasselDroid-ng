@@ -14,11 +14,11 @@ import butterknife.ButterKnife
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
-import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.util.helper.map
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
+import javax.inject.Inject
 
 class NickListFragment : ServiceBoundFragment() {
   private lateinit var viewModel: QuasselViewModel
@@ -26,18 +26,16 @@ class NickListFragment : ServiceBoundFragment() {
   @BindView(R.id.nickList)
   lateinit var nickList: RecyclerView
 
-  private var ircFormatDeserializer: IrcFormatDeserializer? = null
-  private lateinit var appearanceSettings: AppearanceSettings
+  @Inject
+  lateinit var appearanceSettings: AppearanceSettings
+
+  @Inject
+  lateinit var ircFormatDeserializer: IrcFormatDeserializer
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
     viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
-    appearanceSettings = Settings.appearance(activity!!)
-
-    if (ircFormatDeserializer == null) {
-      ircFormatDeserializer = IrcFormatDeserializer(context!!)
-    }
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -58,9 +56,9 @@ class NickListFragment : ServiceBoundFragment() {
             else                                  ->
               it.modes.substring(0, Math.min(it.modes.length, 1))
           },
-          realname = ircFormatDeserializer?.formatString(
-            it.realname.toString(), appearanceSettings.colorizeMirc
-          ) ?: it.realname
+          realname = ircFormatDeserializer.formatString(
+            requireContext(), it.realname.toString(), appearanceSettings.colorizeMirc
+          )
         )
       }.sortedBy {
         IrcCaseMappers[it.networkCasemapping].toLowerCase(it.nick)

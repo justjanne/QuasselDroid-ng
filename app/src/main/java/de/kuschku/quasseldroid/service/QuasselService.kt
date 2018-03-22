@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid.service
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.LifecycleService
 import android.arch.lifecycle.Observer
 import android.content.*
 import android.net.ConnectivityManager
@@ -17,6 +16,7 @@ import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.ConnectionSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.util.QuasseldroidNotificationManager
+import de.kuschku.quasseldroid.util.backport.DaggerLifecycleService
 import de.kuschku.quasseldroid.util.compatibility.AndroidHandlerService
 import de.kuschku.quasseldroid.util.helper.editApply
 import de.kuschku.quasseldroid.util.helper.sharedPreferences
@@ -27,17 +27,21 @@ import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
 import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import javax.net.ssl.X509TrustManager
 
-class QuasselService : LifecycleService(),
+class QuasselService : DaggerLifecycleService(),
                        SharedPreferences.OnSharedPreferenceChangeListener {
+  @Inject
+  lateinit var connectionSettings: ConnectionSettings
+
   override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
     update()
   }
 
   private fun update() {
     val connectionSettings = Settings.connection(this)
-    if (this.connectionSettings?.showNotification != connectionSettings.showNotification) {
+    if (this.connectionSettings.showNotification != connectionSettings.showNotification) {
       this.connectionSettings = connectionSettings
 
       updateNotificationStatus()
@@ -149,8 +153,6 @@ class QuasselService : LifecycleService(),
   private lateinit var sessionManager: SessionManager
 
   private lateinit var clientData: ClientData
-
-  private var connectionSettings: ConnectionSettings? = null
 
   private val trustManager = object : X509TrustManager {
     @SuppressLint("TrustAllX509TrustManager")

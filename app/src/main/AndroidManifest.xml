@@ -8,7 +8,7 @@
   <!--<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />-->
 
   <application
-    android:name="de.kuschku.quasseldroid.QuasseldroidNG"
+    android:name="de.kuschku.quasseldroid.QuasselDroid"
     android:allowBackup="true"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
@@ -34,25 +34,25 @@
     </activity>
 
     <activity
-      android:name="de.kuschku.quasseldroid.ui.setup.accounts.AccountSetupActivity"
+      android:name="de.kuschku.quasseldroid.ui.setup.accounts.setup.AccountSetupActivity"
       android:exported="false"
       android:label="@string/app_name"
-      android:parentActivityName="de.kuschku.quasseldroid.ui.setup.accounts.AccountSelectionActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name="de.kuschku.quasseldroid.ui.setup.accounts.AccountEditActivity"
+      android:name="de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditActivity"
       android:exported="false"
       android:label="@string/app_name"
-      android:parentActivityName="de.kuschku.quasseldroid.ui.setup.accounts.AccountSelectionActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
       android:name="de.kuschku.quasseldroid.ui.settings.SettingsActivity"
       android:exported="false"
       android:label="@string/label_settings"
-      android:parentActivityName="de.kuschku.quasseldroid.ui.setup.accounts.AccountSelectionActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name="de.kuschku.quasseldroid.ui.setup.accounts.AccountSelectionActivity"
+      android:name="de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity"
       android:exported="false"
       android:label="@string/app_name"
       android:windowSoftInputMode="adjustResize" />

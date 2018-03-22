@@ -25,7 +25,7 @@
 
   <string name="preference_colorize_nicknames_title">Benutzernamen farblich hervorheben</string>
   <string name="preference_colorize_nicknames_entry_all">Alle Benutzernamen</string>
-  <string name="preference_colorize_nicknames_entry_all_but_mine">Alle Benutzernamen außer dem eigenen</string>
+  <string name="preference_colorize_nicknames_entry_all_but_mine">Alle außer Eigenem</string>
   <string name="preference_colorize_nicknames_entry_none">Keine</string>
 
   <string name="preference_show_prefix_title">Sendermodi anzeigen</string>

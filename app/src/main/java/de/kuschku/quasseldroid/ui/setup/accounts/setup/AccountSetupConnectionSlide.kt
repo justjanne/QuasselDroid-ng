@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid.ui.setup.accounts
+package de.kuschku.quasseldroid.ui.setup.accounts.setup
 
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout

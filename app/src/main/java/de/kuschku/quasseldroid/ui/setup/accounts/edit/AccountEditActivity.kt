@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid.ui.setup.accounts
+package de.kuschku.quasseldroid.ui.setup.accounts.edit
 
 import android.app.Activity
 import android.content.Context
@@ -19,6 +19,7 @@ import de.kuschku.quasseldroid.util.AndroidHandlerThread
 import de.kuschku.quasseldroid.util.Patterns
 import de.kuschku.quasseldroid.util.TextValidator
 import de.kuschku.quasseldroid.util.helper.editCommit
+import javax.inject.Inject
 
 class AccountEditActivity : AppCompatActivity() {
   @BindView(R.id.nameWrapper)
@@ -46,9 +47,11 @@ class AccountEditActivity : AppCompatActivity() {
   @BindView(R.id.pass)
   lateinit var pass: EditText
 
+  @Inject
+  lateinit var database: AccountDatabase
+
   private var accountId: Long = -1
   private var account: AccountDatabase.Account? = null
-  lateinit var database: AccountDatabase
 
   private val handler = AndroidHandlerThread("AccountEdit")
 
@@ -59,7 +62,6 @@ class AccountEditActivity : AppCompatActivity() {
     setContentView(R.layout.setup_account_edit)
     ButterKnife.bind(this)
 
-    database = AccountDatabase.Creator.init(this)
     handler.post {
       accountId = intent.getLongExtra("account", -1)
       if (accountId == -1L) {

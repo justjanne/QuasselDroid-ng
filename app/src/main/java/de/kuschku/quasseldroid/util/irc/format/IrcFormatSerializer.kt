@@ -7,8 +7,9 @@ import android.text.style.*
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import java.util.*
+import javax.inject.Inject
 
-class IrcFormatSerializer internal constructor(private val context: Context) {
+class IrcFormatSerializer @Inject constructor(private val context: Context) {
   val mircColors = context.theme.styledAttributes(
     R.attr.mircColor00, R.attr.mircColor01, R.attr.mircColor02, R.attr.mircColor03,
     R.attr.mircColor04, R.attr.mircColor05, R.attr.mircColor06, R.attr.mircColor07,

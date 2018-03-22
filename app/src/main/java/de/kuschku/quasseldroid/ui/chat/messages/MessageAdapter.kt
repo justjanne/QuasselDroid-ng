@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid.ui.chat.messages
 
 import android.arch.paging.PagedListAdapter
-import android.content.Context
 import android.support.v7.util.DiffUtil
 import android.util.LruCache
 import android.view.LayoutInflater
@@ -9,12 +8,10 @@ import android.view.ViewGroup
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid.persistence.QuasselDatabase.DatabaseMessage
-import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.util.helper.getOrPut
 
 class MessageAdapter(
-  context: Context,
-  appearanceSettings: AppearanceSettings,
+  private val messageRenderer: MessageRenderer,
   var markerLinePosition: Pair<MsgId, MsgId>? = null
 ) : PagedListAdapter<DatabaseMessage, QuasselMessageViewHolder>(
   object : DiffUtil.ItemCallback<DatabaseMessage>() {
@@ -26,10 +23,6 @@ class MessageAdapter(
       oldItem.messageId != markerLinePosition?.first &&
       oldItem.messageId != markerLinePosition?.second
   }) {
-  private val messageRenderer: MessageRenderer = QuasselMessageRenderer(
-    context,
-    appearanceSettings
-  )
 
   private val messageCache = LruCache<Int, FormattedMessage>(512)
 
@@ -42,12 +35,16 @@ class MessageAdapter(
       messageRenderer.bind(
         holder,
         if (it.messageId == markerLinePosition?.second || it.messageId == markerLinePosition?.first) {
-          val value = messageRenderer.render(it, markerLinePosition?.second ?: -1)
+          val value = messageRenderer.render(
+            holder.itemView.context, it, markerLinePosition?.second ?: -1
+          )
           messageCache.put(it.messageId, value)
           value
         } else {
           messageCache.getOrPut(it.messageId) {
-            messageRenderer.render(it, markerLinePosition?.second ?: -1)
+            messageRenderer.render(
+              holder.itemView.context, it, markerLinePosition?.second ?: -1
+            )
           }
         })
     }

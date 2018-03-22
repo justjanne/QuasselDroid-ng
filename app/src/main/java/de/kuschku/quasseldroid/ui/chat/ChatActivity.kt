@@ -34,8 +34,6 @@ import de.kuschku.libquassel.util.or
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
-import de.kuschku.quasseldroid.settings.BacklogSettings
-import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.chat.input.Editor
 import de.kuschku.quasseldroid.ui.chat.input.MessageHistoryAdapter
 import de.kuschku.quasseldroid.ui.settings.SettingsActivity
@@ -44,6 +42,7 @@ import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
+import javax.inject.Inject
 
 class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
   @BindView(R.id.drawer_layout)
@@ -68,9 +67,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   private lateinit var viewModel: QuasselViewModel
 
-  private lateinit var database: QuasselDatabase
-
-  private lateinit var backlogSettings: BacklogSettings
+  @Inject
+  lateinit var database: QuasselDatabase
 
   private lateinit var editor: Editor
 
@@ -103,7 +101,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     viewModel = ViewModelProviders.of(this)[QuasselViewModel::class.java]
     viewModel.setBackend(this.backend)
-    backlogSettings = Settings.backlog(this)
 
     editor = Editor(
       this,
@@ -117,6 +114,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       ),
       findViewById(R.id.formatting_menu),
       findViewById(R.id.formatting_toolbar),
+      appearanceSettings,
       { lines ->
         viewModel.session { session ->
           viewModel.buffer { bufferId ->
@@ -149,8 +147,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     }
     msgHistory.adapter = messageHistoryAdapter
     viewModel.recentlySentMessages.observe(this, Observer(messageHistoryAdapter::submitList))
-
-    database = QuasselDatabase.Creator.init(application)
 
     setSupportActionBar(toolbar)
 

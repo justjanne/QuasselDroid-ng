@@ -2,6 +2,7 @@ package de.kuschku.quasseldroid.ui.chat
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,13 +14,13 @@ import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
-import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.helper.zip
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
+import javax.inject.Inject
 
 class ToolbarFragment : ServiceBoundFragment() {
   @BindView(R.id.toolbar_title)
@@ -28,10 +29,13 @@ class ToolbarFragment : ServiceBoundFragment() {
   @BindView(R.id.toolbar_subtitle)
   lateinit var toolbarSubtitle: TextView
 
-  private lateinit var viewModel: QuasselViewModel
+  @Inject
+  lateinit var ircFormatDeserializer: IrcFormatDeserializer
 
-  private var ircFormatDeserializer: IrcFormatDeserializer? = null
-  private lateinit var appearanceSettings: AppearanceSettings
+  @Inject
+  lateinit var appearanceSettings: AppearanceSettings
+
+  private lateinit var viewModel: QuasselViewModel
 
   var title: CharSequence?
     get() = toolbarTitle.text
@@ -49,15 +53,9 @@ class ToolbarFragment : ServiceBoundFragment() {
       toolbarSubtitle.visibleIf(value?.isNotEmpty() == true)
     }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-
+  override fun onAttach(context: Context?) {
+    super.onAttach(context)
     viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
-    appearanceSettings = Settings.appearance(activity!!)
-
-    if (ircFormatDeserializer == null) {
-      ircFormatDeserializer = IrcFormatDeserializer(context!!)
-    }
   }
 
   override fun onCreateView(inflater: LayoutInflater,
@@ -96,8 +94,8 @@ class ToolbarFragment : ServiceBoundFragment() {
     return view
   }
 
-  private fun colorizeDescription(description: String?) = ircFormatDeserializer?.formatString(
-    description, appearanceSettings.colorizeMirc
+  private fun colorizeDescription(description: String?) = ircFormatDeserializer.formatString(
+    requireContext(), description, appearanceSettings.colorizeMirc
   )
                                                           ?: description
 }

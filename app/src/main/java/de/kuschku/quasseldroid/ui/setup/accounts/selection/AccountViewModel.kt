@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid.ui.setup.accounts
+package de.kuschku.quasseldroid.ui.setup.accounts.selection
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel

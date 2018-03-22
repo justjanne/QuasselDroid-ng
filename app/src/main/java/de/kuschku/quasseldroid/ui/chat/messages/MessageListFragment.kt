@@ -20,13 +20,13 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.BacklogSettings
-import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.util.helper.invoke
 import de.kuschku.quasseldroid.util.helper.switchMapNotNull
 import de.kuschku.quasseldroid.util.helper.toggle
 import de.kuschku.quasseldroid.util.helper.zip
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
+import javax.inject.Inject
 
 class MessageListFragment : ServiceBoundFragment() {
   @BindView(R.id.messages)
@@ -35,10 +35,19 @@ class MessageListFragment : ServiceBoundFragment() {
   @BindView(R.id.scrollDown)
   lateinit var scrollDown: FloatingActionButton
 
-  private lateinit var viewModel: QuasselViewModel
-  private lateinit var appearanceSettings: AppearanceSettings
+  @Inject
+  lateinit var appearanceSettings: AppearanceSettings
 
-  private lateinit var database: QuasselDatabase
+  @Inject
+  lateinit var backlogSettings: BacklogSettings
+
+  @Inject
+  lateinit var database: QuasselDatabase
+
+  @Inject
+  lateinit var messageRenderer: QuasselMessageRenderer
+
+  private lateinit var viewModel: QuasselViewModel
 
   private lateinit var linearLayoutManager: LinearLayoutManager
   private lateinit var adapter: MessageAdapter
@@ -46,13 +55,9 @@ class MessageListFragment : ServiceBoundFragment() {
   private var lastBuffer: BufferId? = null
   private var previousMessageId: MsgId? = null
 
-  private lateinit var backlogSettings: BacklogSettings
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
-    appearanceSettings = Settings.appearance(activity!!)
-    backlogSettings = Settings.backlog(activity!!)
   }
 
   private val boundaryCallback = object :
@@ -69,7 +74,7 @@ class MessageListFragment : ServiceBoundFragment() {
     linearLayoutManager = LinearLayoutManager(context)
     linearLayoutManager.reverseLayout = true
 
-    adapter = MessageAdapter(context!!, appearanceSettings)
+    adapter = MessageAdapter(messageRenderer)
     messageList.adapter = adapter
     messageList.layoutManager = linearLayoutManager
     messageList.itemAnimator = null
@@ -85,7 +90,6 @@ class MessageListFragment : ServiceBoundFragment() {
         }
       })
 
-    database = QuasselDatabase.Creator.init(context!!.applicationContext)
     val data = viewModel.buffer.switchMapNotNull { buffer ->
       database.filtered().listen(accountId, buffer).switchMapNotNull { filtered ->
         LivePagedListBuilder(

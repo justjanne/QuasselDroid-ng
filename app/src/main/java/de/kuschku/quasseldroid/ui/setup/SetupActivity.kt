@@ -10,18 +10,18 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
 import android.util.SparseArray
 import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
+import dagger.android.support.DaggerAppCompatActivity
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.observeSticky
 import de.kuschku.quasseldroid.util.helper.or
 import de.kuschku.quasseldroid.util.helper.switchMap
 import de.kuschku.quasseldroid.util.helper.updateRecentsHeaderIfExisting
 
-abstract class SetupActivity : AppCompatActivity() {
+abstract class SetupActivity : DaggerAppCompatActivity() {
   @BindView(R.id.view_pager)
   lateinit var viewPager: ViewPager
 
@@ -40,10 +40,11 @@ abstract class SetupActivity : AppCompatActivity() {
   @ColorRes
   protected val recentsHeaderColor: Int = R.color.colorPrimary
 
-  private val pageChangeListener = object : ViewPager.OnPageChangeListener {
+  class SetupActivityViewPagerPageChangeListener(private val activity: SetupActivity) :
+    ViewPager.OnPageChangeListener {
     override fun onPageScrollStateChanged(state: Int) {
       when (state) {
-        ViewPager.SCROLL_STATE_SETTLING -> pageChanged()
+        ViewPager.SCROLL_STATE_SETTLING -> activity.pageChanged()
       }
     }
 
@@ -52,6 +53,8 @@ abstract class SetupActivity : AppCompatActivity() {
 
     override fun onPageSelected(position: Int) = Unit
   }
+
+  private val pageChangeListener = SetupActivityViewPagerPageChangeListener(this)
 
   private fun pageChanged() {
     currentPage.value = adapter.getItem(viewPager.currentItem)

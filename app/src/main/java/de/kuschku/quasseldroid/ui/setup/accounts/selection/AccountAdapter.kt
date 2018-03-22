@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid.ui.setup.accounts
+package de.kuschku.quasseldroid.ui.setup.accounts.selection
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.LifecycleOwner
@@ -28,13 +28,15 @@ class AccountAdapter(
   private val addListeners = mutableSetOf<() -> Unit>()
   private val selectionListeners = mutableSetOf<(Long) -> Unit>()
 
-  private val clickListener = object : ItemListener {
+  private val clickListener = object :
+    ItemListener {
     override fun onAction(id: Long, pos: Int) {
       selectionListener.invoke(id)
     }
   }
 
-  private val actionListener = object : ItemListener {
+  private val actionListener = object :
+    ItemListener {
     override fun onAction(id: Long, pos: Int) {
       for (actionListener in actionListeners) {
         actionListener.invoke(id)
@@ -158,8 +160,12 @@ class AccountAdapter(
       }, parent, false
     )
     return when (viewType) {
-      TYPE_ADD -> AccountViewHolder.Add(view, addListener)
-      else     -> AccountViewHolder.Item(view, actionListener, clickListener)
+      TYPE_ADD -> AccountViewHolder.Add(
+        view, addListener
+      )
+      else     -> AccountViewHolder.Item(
+        view, actionListener, clickListener
+      )
     }
   }
 
