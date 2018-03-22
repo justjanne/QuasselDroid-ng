@@ -29,7 +29,7 @@
 
     <fragment
       android:id="@+id/settingsFragment"
-      android:name="de.kuschku.quasseldroid_ng.ui.settings.SettingsFragment"
+      android:name="de.kuschku.quasseldroid.ui.settings.SettingsFragment"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
       tools:layout="@xml/preferences" />

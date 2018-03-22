@@ -11,7 +11,7 @@ import android.widget.SeekBar
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import de.kuschku.quasseldroid_ng.R
+import de.kuschku.quasseldroid.R
 
 /*
  * Copyright (c) 2015 IRCCloud, Ltd.

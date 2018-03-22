@@ -45,7 +45,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:srcCompat="@drawable/ic_send" />
 
-  <de.kuschku.quasseldroid_ng.util.ui.AutoCompleteRecyclerView
+  <de.kuschku.quasseldroid.util.ui.AutoCompleteRecyclerView
     android:id="@+id/autocomplete_list_expanded"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

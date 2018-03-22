@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="de.kuschku.quasseldroid_ng">
+  package="de.kuschku.quasseldroid">
 
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -8,14 +8,14 @@
   <!--<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />-->
 
   <application
-    android:name=".QuasseldroidNG"
+    android:name="de.kuschku.quasseldroid.QuasseldroidNG"
     android:allowBackup="true"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
     android:supportsRtl="true"
     android:theme="@style/Theme.SplashTheme">
     <activity
-      android:name=".ui.chat.ChatActivity"
+      android:name="de.kuschku.quasseldroid.ui.chat.ChatActivity"
       android:exported="true"
       android:label="@string/app_name"
       android:launchMode="singleTask"
@@ -34,31 +34,31 @@
     </activity>
 
     <activity
-      android:name=".ui.setup.accounts.AccountSetupActivity"
+      android:name="de.kuschku.quasseldroid.ui.setup.accounts.AccountSetupActivity"
       android:exported="false"
       android:label="@string/app_name"
-      android:parentActivityName=".ui.setup.accounts.AccountSelectionActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.setup.accounts.AccountSelectionActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.setup.accounts.AccountEditActivity"
+      android:name="de.kuschku.quasseldroid.ui.setup.accounts.AccountEditActivity"
       android:exported="false"
       android:label="@string/app_name"
-      android:parentActivityName=".ui.setup.accounts.AccountSelectionActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.setup.accounts.AccountSelectionActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.settings.SettingsActivity"
+      android:name="de.kuschku.quasseldroid.ui.settings.SettingsActivity"
       android:exported="false"
       android:label="@string/label_settings"
-      android:parentActivityName=".ui.setup.accounts.AccountSelectionActivity"
+      android:parentActivityName="de.kuschku.quasseldroid.ui.setup.accounts.AccountSelectionActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.setup.accounts.AccountSelectionActivity"
+      android:name="de.kuschku.quasseldroid.ui.setup.accounts.AccountSelectionActivity"
       android:exported="false"
       android:label="@string/app_name"
       android:windowSoftInputMode="adjustResize" />
 
     <service
-      android:name=".service.QuasselService"
+      android:name="de.kuschku.quasseldroid.service.QuasselService"
       android:description="@string/connection_service_description"
       android:exported="false"
       android:label="@string/connection_service_title" />

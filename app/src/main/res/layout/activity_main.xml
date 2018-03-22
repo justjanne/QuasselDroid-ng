@@ -10,13 +10,13 @@
 
   <fragment
     android:id="@+id/fragment_nick_list"
-    android:name="de.kuschku.quasseldroid_ng.ui.chat.nicks.NickListFragment"
+    android:name="de.kuschku.quasseldroid.ui.chat.nicks.NickListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="end"
     tools:layout="@layout/fragment_nick_list" />
 
-  <de.kuschku.quasseldroid_ng.util.ui.NavigationDrawerLayout
+  <de.kuschku.quasseldroid.util.ui.NavigationDrawerLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="start"
@@ -26,9 +26,9 @@
 
     <fragment
       android:id="@+id/fragment_chat_list"
-      android:name="de.kuschku.quasseldroid_ng.ui.chat.buffers.BufferViewConfigFragment"
+      android:name="de.kuschku.quasseldroid.ui.chat.buffers.BufferViewConfigFragment"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       tools:layout="@layout/fragment_chat_list" />
-  </de.kuschku.quasseldroid_ng.util.ui.NavigationDrawerLayout>
+  </de.kuschku.quasseldroid.util.ui.NavigationDrawerLayout>
 </android.support.v4.widget.DrawerLayout>

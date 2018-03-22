@@ -19,14 +19,14 @@
 
       <fragment
         android:id="@+id/fragment_toolbar"
-        android:name="de.kuschku.quasseldroid_ng.ui.chat.ToolbarFragment"
+        android:name="de.kuschku.quasseldroid.ui.chat.ToolbarFragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         tools:layout="@layout/fragment_toolbar" />
 
     </android.support.v7.widget.Toolbar>
 
-    <de.kuschku.quasseldroid_ng.util.ui.MaterialContentLoadingProgressBar
+    <de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
       android:id="@+id/progress_bar"
       style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal.NoPadding"
       android:layout_width="match_parent"
