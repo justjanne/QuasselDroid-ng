@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="preference_appearance_title">Aussehen</string>
+
+  <string name="preference_theme_title">Farbschema</string>
+  <string name="preference_theme_entry_quassel_light">Quassel (Hell)</string>
+  <string name="preference_theme_entry_quassel_dark">Quassel (Dunkel)</string>
+  <string name="preference_theme_entry_amoled">AMOLED</string>
+  <string name="preference_theme_entry_solarized_light">Solarized (Hell)</string>
+  <string name="preference_theme_entry_solarized_dark">Solarized (Dunkel)</string>
+  <string name="preference_theme_entry_gruvbox_light">Gruvbox (Hell)</string>
+  <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Dunkel)</string>
+
+  <string name="preference_monospace_title">Monospace-Schrift verwenden</string>
+
+  <string name="preference_textsize_title">Schriftgröße</string>
+
+  <string name="preference_show_seconds_title">Sekunden anzeigen</string>
+
+  <string name="preference_use_24h_clock_title">24h-Format verwenden</string>
+
+  <string name="preference_colorize_mirc_title">mIRC-Farben verwenden</string>
+  <string name="preference_colorize_mirc_summaryon">Zeigt Farben und Formatierungen in Nachrichten an</string>
+  <string name="preference_colorize_mirc_summaryoff">Farben und Formatierungen werden aus Nachrichten entfernt</string>
+
+  <string name="preference_colorize_nicknames_title">Benutzernamen farblich hervorheben</string>
+  <string name="preference_colorize_nicknames_entry_all">Alle Benutzernamen</string>
+  <string name="preference_colorize_nicknames_entry_all_but_mine">Alle Benutzernamen außer dem eigenen</string>
+  <string name="preference_colorize_nicknames_entry_none">Keine</string>
+
+  <string name="preference_show_prefix_title">Sendermodi anzeigen</string>
+  <string name="preference_show_prefix_entry_all">Alle Modi</string>
+  <string name="preference_show_prefix_entry_highest">Höchsten Modus</string>
+  <string name="preference_show_prefix_entry_none">Keine</string>
+
+  <string name="preference_input_enter_title">Eingabetaste auf Tastatur</string>
+  <string name="preference_input_enter_entry_emoji">Emoji-Auswahl</string>
+  <string name="preference_input_enter_entry_send">Senden</string>
+
+  <string name="preference_autocomplete_title">Autovervollständigung</string>
+
+  <string name="preference_hostmask_title">Hostmaske</string>
+  <string name="preference_hostmask_summary">Zeigt die gesame Spitzname!Ident@Host Information an</string>
+
+  <string name="preference_show_lag_title">Latenz anzeigen</string>
+  <string name="preference_show_lag_summary">Zeigt die Gerät-Core-Latenz in der Statusleiste</string>
+
+
+  <string name="preference_backlog_title">Verlauf</string>
+
+  <string name="preference_page_size_title">Seitengröße</string>
+  <string name="preference_page_size_summary">Anzahl an Nachrichten die pro Mal geladen und im Speicher gehalten werden</string>
+
+
+  <string name="preference_connection_title">Verbindung</string>
+
+  <string name="preference_show_notification_title">Benachrichtigung anzeigen</string>
+  <string name="preference_show_notification_summary">Zeigt eine permanente Benachrichtigung an, damit QuasselDroid durchgehend verbunden bleiben kann</string>
+</resources>

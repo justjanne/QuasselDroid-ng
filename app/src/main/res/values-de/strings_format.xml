@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="label_bold">Fettgedruckt</string>
+  <string name="label_italic">Kursiv</string>
+  <string name="label_strikethrough">Durchgestrichen</string>
+  <string name="label_underline">Unterstrichen</string>
+  <string name="label_monospace">Monospace</string>
+  <string name="label_foreground">Vordergrundfarbe</string>
+  <string name="label_background">Hintergrundfarbe</string>
+  <string name="label_clear_formatting">Formatierung entfernen</string>
+</resources>

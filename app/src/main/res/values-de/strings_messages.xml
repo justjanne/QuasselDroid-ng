@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="message_type_join">Join-Meldungen</string>
+  <string name="message_type_part">Part-Meldungen</string>
+  <string name="message_type_quit">Quit-Meldungen</string>
+  <string name="message_type_nick">Benutzernamensänderungen</string>
+  <string name="message_type_mode">Modiänderungen</string>
+  <string name="message_type_topic">Themenänderungen</string>
+  <string name="message_format_plain">%1$s%2$s: %3$s</string>
+  <string name="message_format_action">* %1$s%2$s %3$s</string>
+  <string name="message_format_notice">[%1$s%2$s] %3$s</string>
+  <string name="message_format_nick">%1$s%2$s heißt jetzt %3$s%4$s</string>
+  <string name="message_format_nick_self">Du heißt jetzt justJanne</string>
+  <string name="message_format_mode">Modus %1$s durch %2$s%3$s</string>
+  <string name="message_format_join">%1$s%2$s hat %3$s betreten</string>
+  <string name="message_format_part_1">%1$s%2$s hat den Kanal verlassen</string>
+  <string name="message_format_part_2">%1$s%2$s hat den Kanal verlassen (%3$s)</string>
+  <string name="message_format_quit_1">%1$s%2$s hat das Netzwerk verlassen</string>
+  <string name="message_format_quit_2">%1$s%2$s hat das Netzwerk verlassen (%3$s)</string>
+  <string name="message_format_kick_1">%1$s wurde von %2$s%3$s aus dem Chat geworfen</string>
+  <string name="message_format_kill_1">%1$s wurde von %2$s%3$s vom Server geworfen</string>
+  <string name="message_format_kill_2">%1$s wurde von %2$s%3$s aus dem Chat geworfen (%4$s)</string>
+  <string name="message_format_kick_2">%1$s wurde von %2$s%3$s vom Server geworfen (%4$s)</string>
+  <plurals name="message_netsplit_join">
+    <item quantity="one">Netsplit zwischen %1$s und %2$s beendet: %3$d Nutzer war betroffen</item>
+    <item quantity="other">Netsplit between %1$s and %2$s ended: %3$d Nutzer waren betroffen</item>
+  </plurals>
+  <plurals name="message_netsplit_quit">
+    <item quantity="one">Netsplit zwischen %1$s und %2$s: %3$d Nutzer ist betroffen</item>
+    <item quantity="other">Netsplit zwischen %1$s und %2$s: %3$d Nutzer sind betroffen</item>
+  </plurals>
+</resources>

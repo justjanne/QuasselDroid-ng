@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="label_bold">Bold</string>
+  <string name="label_italic">Italic</string>
+  <string name="label_strikethrough">Strikethrough</string>
+  <string name="label_underline">Underline</string>
+  <string name="label_monospace">Monospace</string>
+  <string name="label_foreground">Foreground Color</string>
+  <string name="label_background">Background Color</string>
+  <string name="label_clear_formatting">Clear Formatting</string>
+</resources>

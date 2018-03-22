@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Account Selection -->
+  <string name="slideAccountSelectTitle">Account Auswählen</string>
+  <string name="slideAccountSelectDescription">Wähle einen Account aus oder erstelle einen neuen</string>
+  <string name="userOnHost">%1$s @ %2$s:%3$s</string>
+
+  <!-- Account Connection -->
+  <string name="slideAccountConnectionTitle">Verbindung</string>
+  <string name="slideAccountConnectionDescription">Bitte gebe an die Addresse des Servers an, auf dem dein Core läuft</string>
+
+  <string name="labelConnectionHost">Hostname</string>
+  <string name="labelConnectionPort">Port</string>
+
+  <string name="hintInvalidHost">Ungültiger Hostname</string>
+  <string name="hintInvalidPort">Ungültiger Port</string>
+
+  <!-- Account User -->
+  <string name="slideAccountUserTitle">Dein Account</string>
+  <string name="slideAccountUserDescription">Bitte gib Benutzernamen und Passwort für deinen Account ein. Falls du noch keinen hast, wird dieser für dich erstellt.</string>
+
+  <string name="labelAccountUser">Benutzername</string>
+  <string name="labelAccountPass">Passwort</string>
+
+  <string name="hintInvalidUser">Benutzername darf nicht leer sein</string>
+
+  <!-- Account Name -->
+  <string name="slideAccountNameTitle">Account Anpassen</string>
+  <string name="slideAccountNameDescription">Benenne diesen Account</string>
+
+  <string name="labelAccountName">Accountname</string>
+
+  <string name="hintInvalidName">Accountname darf nicht leer sein</string>
+
+  <!-- Core Authenticator Select -->
+  <string name="slideCoreAuthenticatorSelectTitle">Authentifizierungsbackend auswählen</string>
+  <string name="slideCoreAuthenticatorSelectDescription">Bitte wähle aus, welches Authentifizierungsbackend der Quassel Core verwenden soll</string>
+
+  <!-- Core Backend Select -->
+  <string name="slideCoreBackendSelectTitle">Datenbank auswählen</string>
+  <string name="slideCoreBackendSelectDescription">Bitte wähle aus, in welchem Datenbankbackend der Quassel Core Nachrichten und andere Daten speichern soll</string>
+
+  <!-- Core Backend Config -->
+  <string name="slideCoreBackendSetupTitle">Datenbank konfigurieren</string>
+  <string name="slideCoreBackendSetupDescription">Bitte konfiguriere das ausgewählte Datenbankbackend</string>
+</resources>
