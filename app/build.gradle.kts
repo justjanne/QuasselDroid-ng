@@ -49,12 +49,6 @@ android {
 
     setProperty("archivesBaseName", "QuasselDroidNG-$versionName")
 
-    javaCompileOptions {
-      annotationProcessorOptions {
-        arguments = mapOf("room.schemaLocation" to "$projectDir/schemas")
-      }
-    }
-
     // Disable test runner analytics
     testInstrumentationRunnerArguments = mapOf(
       "disableAnalytics" to "true"
@@ -134,6 +128,7 @@ dependencies {
 
   // Quassel
   implementation(project(":viewmodel"))
+  implementation(project(":persistence"))
   implementation(project(":lib")) {
     exclude(group = "org.threeten", module = "threetenbp")
   }
