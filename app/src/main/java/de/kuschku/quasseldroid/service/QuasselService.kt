@@ -248,6 +248,9 @@ class QuasselService : LifecycleService(),
     )
 
     sessionManager.connectionProgress.toLiveData().observe(this, Observer {
+      if (this.progress.first != it?.first && it?.first == ConnectionState.CONNECTED) {
+        database.message().clearMessages()
+      }
       this.progress = it ?: Triple(ConnectionState.DISCONNECTED, 0, 0)
       val handle = this.notificationHandle
       if (handle != null) {
