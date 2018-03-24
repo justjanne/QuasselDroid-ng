@@ -51,6 +51,9 @@
   <string name="preference_page_size_title">Seitengröße</string>
   <string name="preference_page_size_summary">Anzahl an Nachrichten die pro Mal geladen und im Speicher gehalten werden</string>
 
+  <string name="preference_initial_amount_title">Anfängliche Verlaufsgröße</string>
+  <string name="preference_initial_amount_summary">Anzahl an Nachrichten die beim ersten Öffnen eines Chats geladen werden</string>
+
 
   <string name="preference_connection_title">Verbindung</string>
 
