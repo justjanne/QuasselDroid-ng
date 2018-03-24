@@ -16,8 +16,6 @@ import dagger.android.HasFragmentInjector
 import dagger.android.support.HasSupportFragmentInjector
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.util.Optional
-import de.kuschku.libquassel.util.compatibility.LoggingHandler
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
@@ -147,11 +145,6 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
-
-    log(
-      LoggingHandler.LogLevel.ERROR, "DEBUG",
-      "request: $requestCode result: $resultCode, data: $data"
-    )
 
     if (requestCode == REQUEST_SELECT_ACCOUNT) {
       startedSelection = false
