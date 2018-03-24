@@ -4,10 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.widget.AppCompatSpinner
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
+import android.support.v7.widget.*
 import android.view.*
 import android.widget.AdapterView
 import butterknife.BindView
@@ -308,8 +305,10 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
         else                    -> false
       }
     }
-    chatList.layoutManager = LinearLayoutManager(context)
-    //chatList.itemAnimator = DefaultItemAnimator()
+    chatList.layoutManager = object : LinearLayoutManager(context) {
+      override fun supportsPredictiveItemAnimations() = false
+    }
+    chatList.itemAnimator = DefaultItemAnimator()
     chatList.setItemViewCacheSize(10)
     return view
   }
