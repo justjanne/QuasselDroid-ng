@@ -38,7 +38,7 @@ class BufferListAdapter(
   private val clickListener: ((BufferId) -> Unit)? = null,
   private val longClickListener: ((BufferId) -> Unit)? = null
 ) : RecyclerView.Adapter<BufferListAdapter.BufferViewHolder>() {
-  var data = mutableListOf<BufferListItem>()
+  var data = emptyList<BufferListItem>()
 
   fun expandListener(networkId: NetworkId) {
     if (collapsedNetworks.value.orEmpty().contains(networkId))
@@ -62,7 +62,7 @@ class BufferListAdapter(
   init {
     liveData.zip(collapsedNetworks.toLiveData(), selectedBuffer.toLiveData()).observe(
       lifecycleOwner, Observer { it: Triple<List<BufferProps>?, Set<NetworkId>, BufferId>? ->
-      val old: List<BufferListItem> = ArrayList(data)
+      val old: List<BufferListItem> = data
       runInBackground {
         val list = it?.first ?: emptyList()
         val collapsedNetworks = it?.second ?: emptySet()
@@ -98,8 +98,7 @@ class BufferListAdapter(
         )
         runOnUiThread(
           Runnable {
-            data.clear()
-            data.addAll(new)
+            data = new
             result.dispatchUpdatesTo(this@BufferListAdapter)
           })
       }
