@@ -34,6 +34,8 @@ interface ISession : Closeable {
 
   val lag: Observable<Long>
 
+  fun login(user: String, pass: String)
+
   companion object {
     val NULL = object : ISession {
       override val error = BehaviorSubject.create<HandshakeMessage>()
@@ -56,6 +58,8 @@ interface ISession : Closeable {
       override val networkConfig: NetworkConfig? = null
       override val initStatus: Observable<Pair<Int, Int>> = Observable.just(0 to 0)
       override val lag: Observable<Long> = Observable.just(0L)
+
+      override fun login(user: String, pass: String) = Unit
 
       override fun close() = Unit
     }

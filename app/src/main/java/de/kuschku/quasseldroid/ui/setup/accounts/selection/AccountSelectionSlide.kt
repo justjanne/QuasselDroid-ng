@@ -27,8 +27,8 @@ class AccountSelectionSlide : SlideFragment() {
 
   override fun isValid() = adapter?.selectedItemId ?: -1L != -1L
 
-  override val title = R.string.slideAccountSelectTitle
-  override val description = R.string.slideAccountSelectDescription
+  override val title = R.string.slide_account_select_title
+  override val description = R.string.slide_account_select_description
 
   override fun setData(data: Bundle) {
     if (data.containsKey("selectedAccount"))

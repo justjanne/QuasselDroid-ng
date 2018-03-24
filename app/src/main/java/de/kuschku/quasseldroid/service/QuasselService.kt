@@ -130,7 +130,7 @@ class QuasselService : DaggerLifecycleService(),
   private fun updateConnection(accountId: Long, reconnect: Boolean) {
     handlerService.backend {
       val account = if (accountId != -1L && reconnect) {
-        AccountDatabase.Creator.init(this).accounts().findById(accountId)
+        accountDatabase.accounts().findById(accountId)
       } else {
         null
       }
@@ -165,6 +165,13 @@ class QuasselService : DaggerLifecycleService(),
   }
 
   private val backendImplementation = object : Backend {
+    override fun updateUserDataAndLogin(user: String, pass: String) {
+      accountDatabase.accounts().findById(accountId)?.let { old ->
+        accountDatabase.accounts().save(old.copy(user = user, pass = pass))
+        sessionManager.login(user, pass)
+      }
+    }
+
     override fun sessionManager() = sessionManager
 
     override fun connectUnlessConnected(address: SocketAddress, user: String, pass: String,
@@ -193,6 +200,12 @@ class QuasselService : DaggerLifecycleService(),
   private val handlerService = AndroidHandlerService()
 
   private val asyncBackend = object : Backend {
+    override fun updateUserDataAndLogin(user: String, pass: String) {
+      handlerService.backend {
+        backendImplementation.updateUserDataAndLogin(user, pass)
+      }
+    }
+
     override fun connectUnlessConnected(address: SocketAddress, user: String, pass: String,
                                         reconnect: Boolean) {
       handlerService.backend {
@@ -224,7 +237,11 @@ class QuasselService : DaggerLifecycleService(),
     override fun sessionManager() = backendImplementation.sessionManager()
   }
 
-  private lateinit var database: QuasselDatabase
+  @Inject
+  lateinit var database: QuasselDatabase
+
+  @Inject
+  lateinit var accountDatabase: AccountDatabase
 
   private val receiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -237,7 +254,6 @@ class QuasselService : DaggerLifecycleService(),
 
   override fun onCreate() {
     super.onCreate()
-    database = QuasselDatabase.Creator.init(application)
     sessionManager = SessionManager(ISession.NULL, QuasselBacklogStorage(database), handlerService)
     clientData = ClientData(
       identifier = "${resources.getString(R.string.app_name)} ${BuildConfig.VERSION_NAME}",

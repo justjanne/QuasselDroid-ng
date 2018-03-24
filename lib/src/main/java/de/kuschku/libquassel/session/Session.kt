@@ -20,7 +20,7 @@ class Session(
   address: SocketAddress,
   private val handlerService: HandlerService,
   backlogStorage: BacklogStorage,
-  private val userData: Pair<String, String>
+  private var userData: Pair<String, String>
 ) : ProtocolHandler(), ISession {
   override val features = Features(clientData.clientFeatures, Quassel_Features.of())
 
@@ -75,6 +75,11 @@ class Session(
         password = userData.second
       )
     )
+  }
+
+  override fun login(user: String, pass: String) {
+    userData = Pair(user, pass)
+    login()
   }
 
   override fun handle(f: HandshakeMessage.CoreSetupAck): Boolean {

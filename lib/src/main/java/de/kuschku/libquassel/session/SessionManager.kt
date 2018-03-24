@@ -19,8 +19,6 @@ import javax.net.ssl.X509TrustManager
 class SessionManager(offlineSession: ISession,
                      val backlogStorage: BacklogStorage,
                      val handlerService: HandlerService) : ISession {
-  override val error: Observable<HandshakeMessage>
-    get() = session.or(lastSession).error
   override val features: Features
     get() = session.or(lastSession).features
   override val sslSession: SSLSession?
@@ -64,15 +62,17 @@ class SessionManager(offlineSession: ISession,
 
   private var inProgressSession = BehaviorSubject.createDefault(ISession.NULL)
   private var lastSession: ISession = offlineSession
-  override val state: Observable<ConnectionState> = inProgressSession.switchMap { it.state }
+  override val state: Observable<ConnectionState> = inProgressSession.switchMap(ISession::state)
 
-  override val initStatus: Observable<Pair<Int, Int>> = inProgressSession.switchMap { it.initStatus }
+  override val initStatus: Observable<Pair<Int, Int>> = inProgressSession.switchMap(ISession::initStatus)
   val session: Observable<ISession> = state.map { connectionState ->
     if (connectionState == ConnectionState.CONNECTED)
       inProgressSession.value
     else
       lastSession
   }
+  override val error: Observable<HandshakeMessage>
+    get() = inProgressSession.switchMap(ISession::error)
 
   val connectionProgress: Observable<Triple<ConnectionState, Int, Int>> = Observable.combineLatest(
     state, initStatus,
@@ -148,5 +148,9 @@ class SessionManager(offlineSession: ISession,
       backlogStorage.clearMessages()
     inProgressSession.value.close()
     inProgressSession.onNext(ISession.NULL)
+  }
+
+  override fun login(user: String, pass: String) {
+    inProgressSession.value.login(user, pass)
   }
 }

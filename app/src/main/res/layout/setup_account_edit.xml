@@ -36,7 +36,7 @@
         android:id="@+id/nameWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/labelAccountName"
+        android:hint="@string/label_account_name"
         app:errorEnabled="true">
 
         <EditText
@@ -79,7 +79,7 @@
           android:id="@+id/hostWrapper"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/labelConnectionHost"
+          android:hint="@string/label_connection_host"
           app:errorEnabled="true">
 
           <EditText
@@ -143,7 +143,7 @@
           android:id="@+id/userWrapper"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/labelAccountUser">
+          android:hint="@string/label_account_user">
 
           <EditText
             android:id="@+id/user"
@@ -157,7 +157,7 @@
           android:id="@+id/passWrapper"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/labelAccountPass"
+          android:hint="@string/label_account_pass"
           app:passwordToggleEnabled="true">
 
           <EditText

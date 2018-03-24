@@ -6,4 +6,5 @@ interface Backend {
   fun reconnect()
   fun disconnect(forever: Boolean = false)
   fun sessionManager(): SessionManager
+  fun updateUserDataAndLogin(user: String, pass: String)
 }

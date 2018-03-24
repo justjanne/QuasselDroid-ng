@@ -11,7 +11,7 @@
     android:id="@+id/hostWrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:hint="@string/labelConnectionHost"
+    android:hint="@string/label_connection_host"
     app:errorEnabled="true">
 
     <EditText

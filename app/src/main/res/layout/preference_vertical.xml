@@ -64,6 +64,7 @@
       android:layout_height="wrap_content"
       android:ellipsize="marquee"
       android:singleLine="true"
+      android:textColor="?android:attr/textColorPrimary"
       android:textSize="16sp"
       tools:text="Font Size" />
 
@@ -78,6 +79,7 @@
     <LinearLayout
       android:id="@android:id/widget_frame"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
+      android:layout_height="wrap_content"
+      android:orientation="vertical" />
   </LinearLayout>
 </LinearLayout>

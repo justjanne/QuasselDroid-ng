@@ -30,7 +30,7 @@ class AccountSetupConnectionSlide : SlideFragment() {
     return hostValidator.isValid && portValidator.isValid
   }
 
-  override val title = R.string.slideAccountConnectionTitle
+  override val title = R.string.slide_account_connection_title
   override val description = R.string.slideAccountConnectionDescription
 
   override fun setData(data: Bundle) {
@@ -51,7 +51,7 @@ class AccountSetupConnectionSlide : SlideFragment() {
     val view = inflater.inflate(R.layout.setup_account_connection, container, false)
     ButterKnife.bind(this, view)
     hostValidator = object : TextValidator(
-      hostWrapper::setError, resources.getString(R.string.hintInvalidHost)
+      hostWrapper::setError, resources.getString(R.string.hint_invalid_host)
     ) {
       override fun validate(text: Editable) =
         text.toString().matches(Patterns.DOMAIN_NAME.toRegex())
@@ -59,7 +59,7 @@ class AccountSetupConnectionSlide : SlideFragment() {
       override fun onChanged() = updateValidity()
     }
     portValidator = object : TextValidator(
-      portWrapper::setError, resources.getString(R.string.hintInvalidPort)
+      portWrapper::setError, resources.getString(R.string.hint_invalid_port)
     ) {
       override fun validate(text: Editable) = text.toString().toIntOrNull() in (0 until 65536)
 

@@ -217,7 +217,7 @@ class AccountAdapter(
         id = account.id
         accountName.text = account.name
         accountDescription.text = itemView.context.resources.getString(
-          R.string.userOnHost, account.user, account.host, account.port
+          R.string.label_user_on_host, account.user, account.host, account.port
         )
         accountSelect.isChecked = selected
       }

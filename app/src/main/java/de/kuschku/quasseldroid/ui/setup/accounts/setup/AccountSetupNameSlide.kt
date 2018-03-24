@@ -23,8 +23,8 @@ class AccountSetupNameSlide : SlideFragment() {
     return nameValidator.isValid
   }
 
-  override val title = R.string.slideAccountNameTitle
-  override val description = R.string.slideAccountNameDescription
+  override val title = R.string.slide_account_name_title
+  override val description = R.string.slide_account_name_description
 
   override fun setData(data: Bundle) {
     if (data.containsKey("name"))
@@ -41,7 +41,7 @@ class AccountSetupNameSlide : SlideFragment() {
     val view = inflater.inflate(R.layout.setup_account_name, container, false)
     ButterKnife.bind(this, view)
     nameValidator = object : TextValidator(
-      nameWrapper::setError, resources.getString(R.string.hintInvalidName)
+      nameWrapper::setError, resources.getString(R.string.hint_invalid_name)
     ) {
       override fun validate(text: Editable) = text.isNotBlank()
 

@@ -82,26 +82,26 @@ class AccountEditActivity : AppCompatActivity() {
     }
 
     nameValidator = object : TextValidator(
-      nameWrapper::setError, resources.getString(R.string.hintInvalidName)
+      nameWrapper::setError, resources.getString(R.string.hint_invalid_name)
     ) {
       override fun validate(text: Editable) = text.isNotBlank()
     }
 
     hostValidator = object : TextValidator(
-      hostWrapper::setError, resources.getString(R.string.hintInvalidHost)
+      hostWrapper::setError, resources.getString(R.string.hint_invalid_host)
     ) {
       override fun validate(text: Editable) =
         text.toString().matches(Patterns.DOMAIN_NAME.toRegex())
     }
 
     portValidator = object : TextValidator(
-      portWrapper::setError, resources.getString(R.string.hintInvalidPort)
+      portWrapper::setError, resources.getString(R.string.hint_invalid_port)
     ) {
       override fun validate(text: Editable) = text.toString().toIntOrNull() in (0 until 65536)
     }
 
     userValidator = object : TextValidator(
-      userWrapper::setError, resources.getString(R.string.hintInvalidUser)
+      userWrapper::setError, resources.getString(R.string.hint_invalid_user)
     ) {
       override fun validate(text: Editable) = text.isNotBlank()
     }

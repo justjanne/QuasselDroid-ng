@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <!-- Account Selection -->
-  <string name="slideAccountSelectTitle">Account Auswählen</string>
-  <string name="slideAccountSelectDescription">Wähle einen Account aus oder erstelle einen neuen</string>
-  <string name="userOnHost">%1$s @ %2$s:%3$s</string>
+  <string name="slide_account_select_title">Account Auswählen</string>
+  <string name="slide_account_select_description">Wähle einen Account aus oder erstelle einen neuen</string>
+  <string name="label_user_on_host">%1$s @ %2$s:%3$s</string>
 
   <!-- Account Connection -->
-  <string name="slideAccountConnectionTitle">Verbindung</string>
+  <string name="slide_account_connection_title">Verbindung</string>
   <string name="slideAccountConnectionDescription">Bitte gebe an die Addresse des Servers an, auf dem dein Core läuft</string>
 
-  <string name="labelConnectionHost">Hostname</string>
+  <string name="label_connection_host">Hostname</string>
   <string name="labelConnectionPort">Port</string>
 
-  <string name="hintInvalidHost">Ungültiger Hostname</string>
-  <string name="hintInvalidPort">Ungültiger Port</string>
+  <string name="hint_invalid_host">Ungültiger Hostname</string>
+  <string name="hint_invalid_port">Ungültiger Port</string>
 
   <!-- Account User -->
-  <string name="slideAccountUserTitle">Dein Account</string>
-  <string name="slideAccountUserDescription">Bitte gib Benutzernamen und Passwort für deinen Account ein. Falls du noch keinen hast, wird dieser für dich erstellt.</string>
+  <string name="slide_account_user_title">Dein Account</string>
+  <string name="slide_account_user_description">Bitte gib Benutzernamen und Passwort für deinen Account ein. Falls du noch keinen hast, wird dieser für dich erstellt.</string>
 
-  <string name="labelAccountUser">Benutzername</string>
-  <string name="labelAccountPass">Passwort</string>
+  <string name="label_account_user">Benutzername</string>
+  <string name="label_account_pass">Passwort</string>
 
-  <string name="hintInvalidUser">Benutzername darf nicht leer sein</string>
+  <string name="hint_invalid_user">Benutzername darf nicht leer sein</string>
 
   <!-- Account Name -->
-  <string name="slideAccountNameTitle">Account Anpassen</string>
-  <string name="slideAccountNameDescription">Benenne diesen Account</string>
+  <string name="slide_account_name_title">Account Anpassen</string>
+  <string name="slide_account_name_description">Benenne diesen Account</string>
 
-  <string name="labelAccountName">Accountname</string>
+  <string name="label_account_name">Accountname</string>
 
-  <string name="hintInvalidName">Accountname darf nicht leer sein</string>
+  <string name="hint_invalid_name">Accountname darf nicht leer sein</string>
 
   <!-- Core Authenticator Select -->
-  <string name="slideCoreAuthenticatorSelectTitle">Authentifizierungsbackend auswählen</string>
-  <string name="slideCoreAuthenticatorSelectDescription">Bitte wähle aus, welches Authentifizierungsbackend der Quassel Core verwenden soll</string>
+  <string name="slide_core_authenticator_select_title">Authentifizierungsbackend auswählen</string>
+  <string name="slide_core_authenticator_select_description">Bitte wähle aus, welches Authentifizierungsbackend der Quassel Core verwenden soll</string>
 
   <!-- Core Backend Select -->
-  <string name="slideCoreBackendSelectTitle">Datenbank auswählen</string>
-  <string name="slideCoreBackendSelectDescription">Bitte wähle aus, in welchem Datenbankbackend der Quassel Core Nachrichten und andere Daten speichern soll</string>
+  <string name="slide_core_backend_select_title">Datenbank auswählen</string>
+  <string name="slide_core_backend_select_description">Bitte wähle aus, in welchem Datenbankbackend der Quassel Core Nachrichten und andere Daten speichern soll</string>
 
   <!-- Core Backend Config -->
-  <string name="slideCoreBackendSetupTitle">Datenbank konfigurieren</string>
-  <string name="slideCoreBackendSetupDescription">Bitte konfiguriere das ausgewählte Datenbankbackend</string>
+  <string name="slide_core_backend_setup_title">Datenbank konfigurieren</string>
+  <string name="slide_core_backend_setup_description">Bitte konfiguriere das ausgewählte Datenbankbackend</string>
 </resources>

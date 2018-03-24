@@ -20,6 +20,7 @@ import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
@@ -37,6 +38,7 @@ import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.ui.chat.input.Editor
 import de.kuschku.quasseldroid.ui.chat.input.MessageHistoryAdapter
 import de.kuschku.quasseldroid.ui.settings.SettingsActivity
+import de.kuschku.quasseldroid.util.helper.editCommit
 import de.kuschku.quasseldroid.util.helper.invoke
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
@@ -171,29 +173,58 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       drawerToggle.syncState()
     }
 
-    viewModel.errors_liveData.observe(this, Observer {
-      when (it) {
-        is HandshakeMessage.ClientInitReject  ->
-          MaterialDialog.Builder(this)
-            .title(R.string.label_error_init)
-            .content(Html.fromHtml(it.errorString))
-            .neutralText(R.string.label_close)
-            .build()
-            .show()
-        is HandshakeMessage.CoreSetupReject   ->
-          MaterialDialog.Builder(this)
-            .title(R.string.label_error_setup)
-            .content(Html.fromHtml(it.errorString))
-            .neutralText(R.string.label_close)
-            .build()
-            .show()
-        is HandshakeMessage.ClientLoginReject ->
-          MaterialDialog.Builder(this)
-            .title(R.string.label_error_login)
-            .content(Html.fromHtml(it.errorString))
-            .neutralText(R.string.label_close)
-            .build()
-            .show()
+    viewModel.errors_liveData.observe(this, Observer { optional ->
+      optional?.orNull().let {
+        when (it) {
+          is HandshakeMessage.ClientInitReject  ->
+            MaterialDialog.Builder(this)
+              .title(R.string.label_error_init)
+              .content(Html.fromHtml(it.errorString))
+              .neutralText(R.string.label_close)
+              .build()
+              .show()
+          is HandshakeMessage.CoreSetupReject   ->
+            MaterialDialog.Builder(this)
+              .title(R.string.label_error_setup)
+              .content(Html.fromHtml(it.errorString))
+              .neutralText(R.string.label_close)
+              .build()
+              .show()
+          is HandshakeMessage.ClientLoginReject ->
+            MaterialDialog.Builder(this)
+              .title(R.string.label_error_login)
+              .content(Html.fromHtml(it.errorString))
+              .negativeText(R.string.label_disconnect)
+              .positiveText("Change User/Password")
+              .onNegative { _, _ ->
+                disconnect()
+              }
+              .onPositive { _, _ ->
+                MaterialDialog.Builder(this)
+                  .title("Login Required")
+                  .customView(R.layout.setup_account_user, false)
+                  .negativeText(R.string.label_disconnect)
+                  .positiveText(R.string.label_save)
+                  .onNegative { _, _ ->
+                    disconnect()
+                  }
+                  .onPositive { dialog, _ ->
+                    dialog.customView?.run {
+                      val userField = findViewById<EditText>(R.id.user)
+                      val passField = findViewById<EditText>(R.id.pass)
+
+                      val user = userField.text.toString()
+                      val pass = passField.text.toString()
+
+                      backend.value.orNull()?.updateUserDataAndLogin(user, pass)
+                    }
+                  }
+                  .build()
+                  .show()
+              }
+              .build()
+              .show()
+        }
       }
     })
 
@@ -319,11 +350,15 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       true
     }
     R.id.disconnect      -> {
-      val editor1 = getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).edit()
-      editor1.putBoolean(Keys.Status.reconnect, false)
-      editor1.commit()
+      disconnect()
       true
     }
     else                 -> super.onOptionsItemSelected(item)
+  }
+
+  private fun disconnect() {
+    getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editCommit {
+      putBoolean(Keys.Status.reconnect, false)
+    }
   }
 }
