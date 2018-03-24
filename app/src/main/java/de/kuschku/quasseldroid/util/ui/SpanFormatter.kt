@@ -36,29 +36,14 @@ object SpanFormatter {
    * Due to the way [Spannable]s work, any argument's spans will can only be included **once** in the result.
    * Any duplicates will appear as text only.
    *
-   * @param format the format string (see [java.util.Formatter.format])
-   * @param args   the list of arguments passed to the formatter. If there are
-   * more arguments than required by `format`,
-   * additional arguments are ignored.
-   * @return the formatted string (with spans).
-   */
-  fun format(format: CharSequence, vararg args: Any): SpannedString {
-    return format(Locale.getDefault(), format, *args)
-  }
-
-  /**
-   * Version of [String.format] that works on [Spanned] strings to preserve rich text formatting.
-   * Both the `format` as well as any `%s args` can be Spanned and will have their formatting preserved.
-   * Due to the way [Spannable]s work, any argument's spans will can only be included **once** in the result.
-   * Any duplicates will appear as text only.
-   *
    * @param locale the locale to apply; `null` value means no localization.
    * @param format the format string (see [java.util.Formatter.format])
    * @param args   the list of arguments passed to the formatter.
    * @return the formatted string (with spans).
    * @see String.format
    */
-  fun format(locale: Locale, format: CharSequence, vararg args: Any): SpannedString {
+  fun format(format: CharSequence, vararg args: Any?,
+             locale: Locale = Locale.getDefault()): SpannedString {
     val out = SpannableStringBuilder(format)
 
     var i = 0
