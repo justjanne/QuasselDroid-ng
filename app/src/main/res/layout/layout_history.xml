@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/card_panel"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+
+  <android.support.v7.widget.CardView
+    style="?attr/cardStyle"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginBottom="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="16dp"
+    app:cardBackgroundColor="?attr/colorBackgroundCard">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal">
+
+        <TextView
+          android:layout_width="0dip"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:gravity="center_vertical|fill_horizontal"
+          android:paddingLeft="16dp"
+          android:paddingRight="16dp"
+          android:text="@string/label_input_history"
+          android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+          android:textColor="?attr/colorForegroundSecondary" />
+
+        <android.support.v7.widget.AppCompatImageView
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_gravity="end|center_vertical"
+          android:layout_marginLeft="16dp"
+          android:layout_marginRight="16dp"
+          app:srcCompat="@drawable/ic_close"
+          app:tint="?attr/colorForegroundSecondary" />
+
+      </LinearLayout>
+
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/msg_history"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        tools:listitem="@layout/widget_history_message" />
+
+    </LinearLayout>
+
+  </android.support.v7.widget.CardView>
+
+</FrameLayout>

@@ -16,4 +16,4 @@
   android:singleLine="true"
   android:textColor="?attr/colorTextPrimary"
   android:textSize="13sp"
-  tools:text="Historical Message" />
+  tools:text="@sample/recent_messages.json/data/message" />
