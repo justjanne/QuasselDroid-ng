@@ -46,12 +46,12 @@ data class LongFlags<E>(
   }
 
   companion object {
-    inline fun <reified T> of(
-      int: Long): LongFlags<T> where T : LongFlag<T>, T : Enum<T> = LongFlags(int, enumValues())
+    inline fun <reified T> of(int: Long): LongFlags<T>
+      where T : LongFlag<T>, T : Enum<T> = LongFlags(int, enumValues())
 
-    inline fun <reified T> of(
-      vararg flags: LongFlag<T>): LongFlags<T> where T : LongFlag<T>, T : Enum<T> = LongFlags(
-      flags.map(LongFlag<T>::bit).distinct().sum(), enumValues()
+    inline fun <reified T> of(vararg flags: LongFlag<T>): LongFlags<T>
+      where T : LongFlag<T>, T : Enum<T> =
+      LongFlags(flags.map(LongFlag<T>::bit).distinct().sum(), enumValues()
     )
   }
 

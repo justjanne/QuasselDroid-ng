@@ -17,25 +17,25 @@
     android:paddingStart="@dimen/message_horizontal"
     android:paddingTop="@dimen/message_vertical">
 
-  <TextView
-    android:id="@+id/time"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/message_horizontal"
-    android:layout_marginRight="@dimen/message_horizontal"
-    android:fontFamily="monospace"
-    android:textColor="?attr/colorForegroundSecondary"
-    tools:text="[15:55]" />
+    <TextView
+      android:id="@+id/time"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="@dimen/message_horizontal"
+      android:layout_marginRight="@dimen/message_horizontal"
+      android:fontFamily="monospace"
+      android:textColor="?attr/colorForegroundSecondary"
+      tools:text="[15:55]" />
 
-  <TextView
-    android:id="@+id/content"
-    android:layout_width="0dip"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"
-    android:textColor="?attr/colorForegroundSecondary"
-    android:textIsSelectable="true"
-    android:textStyle="italic"
-    tools:text="Connecting to irc.freenode.net:6667..." />
+    <TextView
+      android:id="@+id/content"
+      android:layout_width="0dip"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:textColor="?attr/colorForegroundSecondary"
+      android:textIsSelectable="true"
+      android:textStyle="italic"
+      tools:text="Connecting to irc.freenode.net:6667..." />
   </LinearLayout>
 
   <View

@@ -60,11 +60,10 @@ class BufferViewManager constructor(
     live_bufferViewConfigs.onNext(_bufferViewConfigs.keys)
   }
 
-  private val _bufferViewConfigs: MutableMap<Int, BufferViewConfig>
-    = mutableMapOf()
+  private val _bufferViewConfigs: MutableMap<Int, BufferViewConfig> = mutableMapOf()
 
-  private val live_bufferViewConfigs: BehaviorSubject<Set<Int>>
-    = BehaviorSubject.createDefault<Set<Int>>(emptySet())
+  private val live_bufferViewConfigs: BehaviorSubject<Set<Int>> = BehaviorSubject.createDefault<Set<Int>>(
+    emptySet())
 
   fun handleBuffer(info: BufferInfo, bufferSyncer: BufferSyncer) {
     for (bufferViewConfig in bufferViewConfigs()) {

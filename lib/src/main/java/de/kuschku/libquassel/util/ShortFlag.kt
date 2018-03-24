@@ -51,12 +51,12 @@ data class ShortFlags<E>(
   }
 
   companion object {
-    inline fun <reified T> ofBitMask(int: Short): ShortFlags<T> where T : ShortFlag<T>, T : Enum<T>
-      = ShortFlags(int, enumValues())
+    inline fun <reified T> of(int: Short): ShortFlags<T>
+      where T : ShortFlag<T>, T : Enum<T> = ShortFlags(int, enumValues())
 
-    inline fun <reified T> of(
-      vararg flags: ShortFlag<T>): ShortFlags<T> where T : ShortFlag<T>, T : Enum<T>
-      = ShortFlags(flags.map(ShortFlag<T>::bit).distinct().sum().toShort(), enumValues())
+    inline fun <reified T> of(vararg flags: ShortFlag<T>): ShortFlags<T>
+      where T : ShortFlag<T>, T : Enum<T> =
+      ShortFlags(flags.map(ShortFlag<T>::bit).distinct().sum().toShort(), enumValues())
   }
 
   interface Factory<E> where E : ShortFlag<E>, E : Enum<E> {

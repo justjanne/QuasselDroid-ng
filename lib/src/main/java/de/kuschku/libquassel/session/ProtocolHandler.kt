@@ -134,15 +134,14 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
     return true
   }
 
-  override fun shouldSync(type: String, instance: String, slot: String): Boolean
-    = type != currentCallClass || slot != currentCallSlot || instance != currentCallInstance
+  override fun shouldSync(type: String, instance: String,
+                          slot: String): Boolean = type != currentCallClass || slot != currentCallSlot || instance != currentCallInstance
 
   override fun callSync(type: String, instance: String, slot: String, params: List<QVariant_>) {
     dispatch(SignalProxyMessage.SyncMessage(type, instance, slot, params))
   }
 
-  override fun shouldRpc(slot: String): Boolean
-    = slot != currentCallSlot
+  override fun shouldRpc(slot: String): Boolean = slot != currentCallSlot
 
   override fun callRpc(slot: String, params: List<QVariant_>) {
     dispatch(SignalProxyMessage.RpcCall(slot, params))

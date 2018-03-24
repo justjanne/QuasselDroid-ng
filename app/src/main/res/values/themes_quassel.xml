@@ -2,6 +2,7 @@
 
 <resources>
   <color name="quassel_light_background">#fafafa</color>
+
   <style name="Theme.ChatTheme.Quassel_Light" parent="Theme.ChatTheme.Light">
     <item name="senderColor0">#cc0000</item>
     <item name="senderColor1">#006cad</item>
@@ -44,6 +45,7 @@
   </style>
 
   <color name="quassel_dark_background">#303030</color>
+
   <style name="Theme.ChatTheme.Quassel_Dark" parent="Theme.ChatTheme">
     <item name="senderColor0">#cc0000</item>
     <item name="senderColor1">#006cad</item>

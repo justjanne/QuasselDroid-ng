@@ -123,6 +123,7 @@ class IrcChannel(
   fun liveUserModes(ircUser: IrcUser) = live_userModes.map {
     _userModes.getOr(ircUser, "")
   }
+
   fun userModes(nick: String) = network().ircUser(nick)?.let { userModes(it) } ?: ""
   fun liveUserModes(nick: String) = network().ircUser(nick)?.let { userModes(it) } ?: ""
 

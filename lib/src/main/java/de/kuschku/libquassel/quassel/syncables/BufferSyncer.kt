@@ -14,32 +14,33 @@ class BufferSyncer constructor(
   private val session: ISession
 ) : SyncableObject(proxy, "BufferSyncer"), IBufferSyncer {
   fun lastSeenMsg(buffer: BufferId): MsgId = _lastSeenMsg[buffer] ?: 0
-  fun liveLastSeenMsg(buffer: BufferId): Observable<MsgId>
-    = live_lastSeenMsg.map { markerLine(buffer) }.distinctUntilChanged()
+  fun liveLastSeenMsg(buffer: BufferId): Observable<MsgId> = live_lastSeenMsg.map {
+    markerLine(buffer)
+  }.distinctUntilChanged()
 
   fun liveLastSeenMsgs(): Observable<Map<BufferId, MsgId>> = live_lastSeenMsg
 
   fun markerLine(buffer: BufferId): MsgId = _markerLines[buffer] ?: 0
-  fun liveMarkerLine(buffer: BufferId): Observable<MsgId>
-    = live_markerLines.map { markerLine(buffer) }.distinctUntilChanged()
+  fun liveMarkerLine(
+    buffer: BufferId): Observable<MsgId> = live_markerLines.map { markerLine(buffer) }.distinctUntilChanged()
 
   fun liveMarkerLines(): Observable<Map<BufferId, MsgId>> = live_markerLines
 
   fun activity(buffer: BufferId): Message_Types = _bufferActivities[buffer] ?: Message_Types.of()
-  fun liveActivity(buffer: BufferId): Observable<Message_Types>
-    = live_bufferActivities.map { activity(buffer) }.distinctUntilChanged()
+  fun liveActivity(
+    buffer: BufferId): Observable<Message_Types> = live_bufferActivities.map { activity(buffer) }.distinctUntilChanged()
 
   fun liveActivities(): Observable<Map<BufferId, Message_Types>> = live_bufferActivities
 
   fun highlightCount(buffer: BufferId): Int = _highlightCounts[buffer] ?: 0
-  fun liveHighlightCount(buffer: BufferId): Observable<Int>
-    = live_highlightCounts.map { highlightCount(buffer) }.distinctUntilChanged()
+  fun liveHighlightCount(
+    buffer: BufferId): Observable<Int> = live_highlightCounts.map { highlightCount(buffer) }.distinctUntilChanged()
 
   fun liveHighlightCounts(): Observable<Map<BufferId, Int>> = live_highlightCounts
 
   fun bufferInfo(bufferId: BufferId) = _bufferInfos[bufferId]
-  fun liveBufferInfo(bufferId: BufferId)
-    = live_bufferInfos.map { bufferInfo(bufferId) }.distinctUntilChanged()
+  fun liveBufferInfo(
+    bufferId: BufferId) = live_bufferInfos.map { bufferInfo(bufferId) }.distinctUntilChanged()
 
   fun bufferInfos(): Collection<BufferInfo> = _bufferInfos.values
   fun liveBufferInfos(): Observable<Map<BufferId, BufferInfo>> = live_bufferInfos
@@ -207,22 +208,17 @@ class BufferSyncer constructor(
   }
 
   private val _lastSeenMsg: MutableMap<BufferId, MsgId> = mutableMapOf()
-  private val live_lastSeenMsg
-    = BehaviorSubject.createDefault(mapOf<BufferId, MsgId>())
+  private val live_lastSeenMsg = BehaviorSubject.createDefault(mapOf<BufferId, MsgId>())
 
   private val _markerLines: MutableMap<BufferId, MsgId> = mutableMapOf()
-  private val live_markerLines
-    = BehaviorSubject.createDefault(mapOf<BufferId, MsgId>())
+  private val live_markerLines = BehaviorSubject.createDefault(mapOf<BufferId, MsgId>())
 
   private val _bufferActivities: MutableMap<BufferId, Message_Types> = mutableMapOf()
-  private val live_bufferActivities
-    = BehaviorSubject.createDefault(mapOf<BufferId, Message_Types>())
+  private val live_bufferActivities = BehaviorSubject.createDefault(mapOf<BufferId, Message_Types>())
 
   private val _highlightCounts: MutableMap<BufferId, Int> = mutableMapOf()
-  private val live_highlightCounts
-    = BehaviorSubject.createDefault(mapOf<BufferId, Int>())
+  private val live_highlightCounts = BehaviorSubject.createDefault(mapOf<BufferId, Int>())
 
   private val _bufferInfos = mutableMapOf<BufferId, BufferInfo>()
-  private val live_bufferInfos
-    = BehaviorSubject.createDefault(mapOf<BufferId, BufferInfo>())
+  private val live_bufferInfos = BehaviorSubject.createDefault(mapOf<BufferId, BufferInfo>())
 }

@@ -16,13 +16,15 @@ fun <T, U> Observable<Optional<T>>.mapMap(mapper: (T) -> U): Observable<Optional
   it.map(mapper)
 }
 
-fun <T, U> Observable<Optional<T>>.mapMapNullable(mapper: (T) -> U?): Observable<Optional<U>> = map {
+fun <T, U> Observable<Optional<T>>.mapMapNullable(
+  mapper: (T) -> U?): Observable<Optional<U>> = map {
   it.flatMap {
     Optional.ofNullable(mapper(it))
   }
 }
 
-fun <T, U> Observable<Optional<T>>.mapSwitchMap(mapper: (T) -> Observable<U>): Observable<Optional<U>> = switchMap {
+fun <T, U> Observable<Optional<T>>.mapSwitchMap(
+  mapper: (T) -> Observable<U>): Observable<Optional<U>> = switchMap {
   if (it.isPresent()) {
     it.map(mapper).get().map { Optional.of(it) }
   } else {
@@ -30,7 +32,8 @@ fun <T, U> Observable<Optional<T>>.mapSwitchMap(mapper: (T) -> Observable<U>): O
   }
 }
 
-fun <T, U> Observable<Optional<T>>.mapSwitchMapEmpty(mapper: (T) -> Observable<U>): Observable<U> = switchMap {
+fun <T, U> Observable<Optional<T>>.mapSwitchMapEmpty(
+  mapper: (T) -> Observable<U>): Observable<U> = switchMap {
   if (it.isPresent()) {
     it.map(mapper).get()
   } else {
@@ -38,7 +41,8 @@ fun <T, U> Observable<Optional<T>>.mapSwitchMapEmpty(mapper: (T) -> Observable<U
   }
 }
 
-fun <T, U> Observable<Optional<T>>.flatMapSwitchMap(mapper: (T) -> Observable<Optional<U>>): Observable<Optional<U>> = switchMap {
+fun <T, U> Observable<Optional<T>>.flatMapSwitchMap(
+  mapper: (T) -> Observable<Optional<U>>): Observable<Optional<U>> = switchMap {
   it.map(mapper).orElse(Observable.just(Optional.empty()))
 }
 

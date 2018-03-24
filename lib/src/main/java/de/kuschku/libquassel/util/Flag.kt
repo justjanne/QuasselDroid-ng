@@ -46,14 +46,13 @@ data class Flags<E>(
   }
 
   companion object {
-    inline fun <reified T> of(int: Int): Flags<T> where T : Flag<T>, T : Enum<T> = Flags(
-      int, enumValues()
-    )
+    inline fun <reified T> of(int: Int): Flags<T>
+      where T : Flag<T>, T : Enum<T> = Flags(int, enumValues())
 
-    inline fun <reified T> of(
-      vararg flags: Flag<T>): Flags<T> where T : Flag<T>, T : Enum<T> = Flags(
-      flags.map(Flag<T>::bit).distinct().sum(), enumValues()
-    )
+    inline fun <reified T> of(vararg flags: Flag<T>): Flags<T>
+      where T : Flag<T>, T : Enum<T> =
+      Flags(flags.map(Flag<T>::bit).distinct().sum(), enumValues()
+      )
   }
 
   interface Factory<E> where E : Flag<E>, E : Enum<E> {

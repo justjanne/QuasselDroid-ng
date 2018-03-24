@@ -69,21 +69,17 @@ class Network constructor(
 
   fun isConnected() = _connected
   fun connectionState() = _connectionState
-  fun prefixToMode(prefix: Char): Char?
-    = prefixModes().elementAtOrNull(prefixes().indexOf(prefix))
+  fun prefixToMode(prefix: Char): Char? = prefixModes().elementAtOrNull(prefixes().indexOf(prefix))
 
-  fun prefixesToModes(prefixes: String): String
-    = prefixes.mapNotNull {
+  fun prefixesToModes(prefixes: String): String = prefixes.mapNotNull {
     prefixes().indexOf(it)
   }.sorted().mapNotNull {
     prefixModes().elementAtOrNull(it)
   }.joinToString("")
 
-  fun modeToPrefix(mode: Char): Char?
-    = prefixes().elementAtOrNull(prefixModes().indexOf(mode))
+  fun modeToPrefix(mode: Char): Char? = prefixes().elementAtOrNull(prefixModes().indexOf(mode))
 
-  fun modesToPrefixes(modes: String): String
-    = modes.mapNotNull {
+  fun modesToPrefixes(modes: String): String = modes.mapNotNull {
     prefixModes().indexOf(it)
   }.sorted().mapNotNull {
     prefixes().elementAtOrNull(it)

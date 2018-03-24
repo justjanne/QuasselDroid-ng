@@ -112,7 +112,7 @@
 
   <string name="preference_initial_amount_key" translatable="false">initial_amount</string>
   <string name="preference_initial_amount_title">Initial Amount</string>
-    <string name="preference_initial_amount_summary">Number of messages to load when opening a buffer for the first time</string>
+  <string name="preference_initial_amount_summary">Number of messages to load when opening a buffer for the first time</string>
 
 
   <string name="preference_connection_title">Connection</string>

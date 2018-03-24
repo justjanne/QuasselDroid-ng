@@ -14,6 +14,6 @@ object BoolSerializer : Serializer<Boolean> {
     }.toByte()
   )
 
-  override fun deserialize(buffer: ByteBuffer, features: Quassel_Features)
-    = buffer.get() != 0x00.toByte()
+  override fun deserialize(buffer: ByteBuffer,
+                           features: Quassel_Features) = buffer.get() != 0x00.toByte()
 }

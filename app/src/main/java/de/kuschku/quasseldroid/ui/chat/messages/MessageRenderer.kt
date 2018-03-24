@@ -14,6 +14,7 @@ interface MessageRenderer {
   fun render(context: Context,
              message: QuasselDatabase.DatabaseMessage,
              markerLine: MsgId): FormattedMessage
+
   fun init(viewHolder: QuasselMessageViewHolder,
            messageType: Message_Type?,
            hasHighlight: Boolean) {

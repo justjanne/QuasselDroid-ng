@@ -84,6 +84,7 @@ class IrcUser(
       _idleTime = Instant.EPOCH
     return _idleTime
   }
+
   fun loginTime() = _loginTime
   fun ircOperator() = _ircOperator
   fun lastAwayMessage() = _lastAwayMessage

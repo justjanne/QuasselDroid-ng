@@ -14,8 +14,7 @@ class QVariant<T>(val data: T?, val type: MetaType<T>) {
   }
 }
 
-inline fun <reified U> QVariant_?.value(): U?
-  = this?.value<U?>(null)
+inline fun <reified U> QVariant_?.value(): U? = this?.value<U?>(null)
 
 inline fun <reified U> QVariant_?.value(defValue: U): U = this?.data as? U ?: defValue
 
