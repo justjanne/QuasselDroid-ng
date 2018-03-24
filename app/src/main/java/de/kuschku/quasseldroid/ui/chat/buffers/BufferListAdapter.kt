@@ -62,12 +62,12 @@ class BufferListAdapter(
   init {
     liveData.zip(collapsedNetworks.toLiveData(), selectedBuffer.toLiveData()).observe(
       lifecycleOwner, Observer { it: Triple<List<BufferProps>?, Set<NetworkId>, BufferId>? ->
+      val old: List<BufferListItem> = ArrayList(data)
       runInBackground {
         val list = it?.first ?: emptyList()
         val collapsedNetworks = it?.second ?: emptySet()
         val selected = it?.third ?: -1
 
-        val old: List<BufferListItem> = data
         val new: List<BufferListItem> = list.sortedBy { props ->
           !props.info.type.hasFlag(Buffer_Type.StatusBuffer)
         }.sortedBy { props ->
