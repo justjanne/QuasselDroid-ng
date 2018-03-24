@@ -37,16 +37,15 @@
           android:textAppearance="@style/TextAppearance.AppCompat.Body2"
           android:textColor="?attr/colorForegroundSecondary" />
 
-        <android.support.v7.widget.AppCompatImageButton
+        <android.support.v7.widget.AppCompatImageView
           android:id="@+id/send"
-          style="?attr/buttonStyleSmall"
           android:layout_width="48dp"
           android:layout_height="48dp"
           android:layout_gravity="top"
           android:background="?attr/selectableItemBackgroundBorderless"
           android:padding="12dp"
           android:scaleType="fitXY"
-          android:tint="?attr/colorForegroundSecondary"
+          app:tint="?attr/colorForegroundSecondary"
           app:srcCompat="@drawable/ic_close" />
 
       </LinearLayout>

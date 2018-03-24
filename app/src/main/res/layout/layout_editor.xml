@@ -41,7 +41,7 @@
     android:background="?attr/selectableItemBackgroundBorderless"
     android:padding="12dp"
     android:scaleType="fitXY"
-    android:tint="?attr/colorAccent"
+    app:tint="?attr/colorAccent"
     app:layout_constraintEnd_toEndOf="parent"
     app:srcCompat="@drawable/ic_send" />
 
