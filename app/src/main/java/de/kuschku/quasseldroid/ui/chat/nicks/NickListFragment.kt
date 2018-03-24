@@ -45,7 +45,9 @@ class NickListFragment : ServiceBoundFragment() {
 
     val nickListAdapter = NickListAdapter(clickListener)
     nickList.adapter = nickListAdapter
-    nickList.layoutManager = LinearLayoutManager(context)
+    nickList.layoutManager = object : LinearLayoutManager(context) {
+      override fun supportsPredictiveItemAnimations() = false
+    }
     nickList.itemAnimator = DefaultItemAnimator()
     viewModel.nickData.map {
       it.map {
