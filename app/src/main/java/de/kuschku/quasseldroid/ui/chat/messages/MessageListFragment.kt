@@ -136,7 +136,9 @@ class MessageListFragment : ServiceBoundFragment() {
       val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
       val firstVisibleMessageId = adapter[firstVisibleItemPosition]?.messageId
       runInBackground {
-        list?.let(adapter::submitList)
+        activity?.runOnUiThread {
+          list?.let(adapter::submitList)
+        }
 
         if (firstVisibleItemPosition < 2) {
           activity?.runOnUiThread { messageList.scrollToPosition(0) }
