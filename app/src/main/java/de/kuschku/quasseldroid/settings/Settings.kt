@@ -69,10 +69,10 @@ object Settings {
 
   fun backlog(context: Context) = context.sharedPreferences {
     BacklogSettings(
-      dynamicAmount = getString(
+      pageSize = getString(
         context.getString(R.string.preference_page_size_key),
-        BacklogSettings.DEFAULT.dynamicAmount.toString()
-      ).toIntOrNull() ?: BacklogSettings.DEFAULT.dynamicAmount
+        BacklogSettings.DEFAULT.pageSize.toString()
+      ).toIntOrNull() ?: BacklogSettings.DEFAULT.pageSize
     )
   }
 

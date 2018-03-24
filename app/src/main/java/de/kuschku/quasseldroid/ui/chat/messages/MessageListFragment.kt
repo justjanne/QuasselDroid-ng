@@ -98,9 +98,9 @@ class MessageListFragment : ServiceBoundFragment() {
         LivePagedListBuilder(
           database.message().findByBufferIdPaged(buffer, filtered),
           PagedList.Config.Builder()
-            .setPageSize(backlogSettings.dynamicAmount)
-            .setPrefetchDistance(backlogSettings.dynamicAmount)
-            .setInitialLoadSizeHint(backlogSettings.dynamicAmount)
+            .setPageSize(backlogSettings.pageSize)
+            .setPrefetchDistance(backlogSettings.pageSize)
+            .setInitialLoadSizeHint(backlogSettings.pageSize)
             .setEnablePlaceholders(true)
             .build()
         ).setBoundaryCallback(boundaryCallback).build()
@@ -136,7 +136,7 @@ class MessageListFragment : ServiceBoundFragment() {
       val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
       val firstVisibleMessageId = adapter[firstVisibleItemPosition]?.messageId
       runInBackground {
-        adapter.submitList(list)
+        list?.let(adapter::submitList)
 
         if (firstVisibleItemPosition < 2) {
           activity?.runOnUiThread { messageList.scrollToPosition(0) }
@@ -149,11 +149,11 @@ class MessageListFragment : ServiceBoundFragment() {
 
         val buffer = viewModel.buffer.value ?: -1
         if (buffer != lastBuffer) {
-          backend.value.orNull()?.sessionManager()?.bufferSyncer?.let { bufferSyncer ->
+          adapter.clearCache()
+          viewModel.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
             onBufferChange(lastBuffer, buffer, firstVisibleMessageId, bufferSyncer)
           }
           lastBuffer = buffer
-          adapter.clearCache()
         }
       }
     })
@@ -177,7 +177,7 @@ class MessageListFragment : ServiceBoundFragment() {
     }
     // Try loading messages when switching to isEmpty buffer
     if (database.message().bufferSize(current) == 0) {
-      loadMore()
+      loadMore(initial = true)
     }
     activity?.runOnUiThread { messageList.scrollToPosition(0) }
   }
@@ -193,7 +193,7 @@ class MessageListFragment : ServiceBoundFragment() {
     super.onPause()
   }
 
-  private fun loadMore() {
+  private fun loadMore(initial: Boolean = false) {
     runInBackground {
       viewModel.buffer { bufferId ->
         viewModel.session {
@@ -202,7 +202,7 @@ class MessageListFragment : ServiceBoundFragment() {
             last = database.message().findFirstByBufferId(
               bufferId
             )?.messageId ?: -1,
-            limit = backlogSettings.dynamicAmount
+            limit = if (initial) backlogSettings.initialAmount else backlogSettings.pageSize
           )
         }
       }

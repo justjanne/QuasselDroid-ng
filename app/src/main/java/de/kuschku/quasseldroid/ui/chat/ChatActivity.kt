@@ -20,6 +20,7 @@ import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
@@ -203,18 +204,19 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         ConnectionState.CONNECTED,
         ConnectionState.DISCONNECTED,
         ConnectionState.CLOSED -> {
-          progressBar.hide()
+          progressBar.visibility = View.INVISIBLE
         }
         ConnectionState.INIT   -> {
-          progressBar.show()
+          progressBar.visibility = View.VISIBLE
           // Show indeterminate when no progress has been made yet
           progressBar.isIndeterminate = progress == 0 || max == 0
           progressBar.progress = progress
           progressBar.max = max
         }
         else                   -> {
-          progressBar.show()
+          progressBar.visibility = View.VISIBLE
           progressBar.isIndeterminate = true
+          Toast.makeText(this, state.toString(), Toast.LENGTH_SHORT).show()
         }
       }
     })

@@ -76,11 +76,14 @@ class SettingsModule {
   @Provides
   fun provideBacklogSettings(context: Context) = context.sharedPreferences {
     BacklogSettings(
-      dynamicAmount = getString(
+      pageSize = getString(
         context.getString(R.string.preference_page_size_key),
-        BacklogSettings.DEFAULT.dynamicAmount.toString()
-      ).toIntOrNull()
-                      ?: BacklogSettings.DEFAULT.dynamicAmount
+        BacklogSettings.DEFAULT.pageSize.toString()
+      ).toIntOrNull() ?: BacklogSettings.DEFAULT.pageSize,
+      initialAmount = getString(
+        context.getString(R.string.preference_initial_amount_key),
+        BacklogSettings.DEFAULT.initialAmount.toString()
+      ).toIntOrNull() ?: BacklogSettings.DEFAULT.initialAmount
     )
   }
 
