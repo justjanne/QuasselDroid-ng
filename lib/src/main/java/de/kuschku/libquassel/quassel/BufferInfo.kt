@@ -18,7 +18,7 @@ data class BufferInfo(var bufferId: Int, var networkId: Int, var type: Buffer_Ty
 
     companion object : ShortFlags.Factory<Type> {
       val validValues = values().filter { it.bit != 0.toShort() }.toTypedArray()
-      override fun of(bit: Short) = ShortFlags.ofBitMask<Type>(bit)
+      override fun of(bit: Short) = ShortFlags.of<Type>(bit)
       override fun of(vararg flags: Type) = ShortFlags.of(*flags)
     }
   }

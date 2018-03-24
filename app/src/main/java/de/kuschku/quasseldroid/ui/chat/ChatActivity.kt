@@ -20,7 +20,6 @@ import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
@@ -216,7 +215,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         else                   -> {
           progressBar.visibility = View.VISIBLE
           progressBar.isIndeterminate = true
-          Toast.makeText(this, state.toString(), Toast.LENGTH_SHORT).show()
         }
       }
     })
