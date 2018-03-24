@@ -14,7 +14,7 @@ import butterknife.ButterKnife
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
-import de.kuschku.quasseldroid.util.helper.map
+import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
@@ -65,7 +65,7 @@ class NickListFragment : ServiceBoundFragment() {
       }.sortedBy {
         it.lowestMode
       }
-    }.observe(this, Observer(nickListAdapter::submitList))
+    }.toLiveData().observe(this, Observer(nickListAdapter::submitList))
 
     return view
   }

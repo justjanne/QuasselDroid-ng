@@ -15,6 +15,8 @@ import java.io.Closeable
 
 @Suppress("LeakingThis")
 abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
+  protected var closed = false
+
   private val objectStorage: ObjectStorage = ObjectStorage(this)
 
   protected open var rpcHandler: RpcHandler? = null
@@ -33,6 +35,8 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
   private var totalInitCount = 0
 
   override fun handle(f: SignalProxyMessage): Boolean {
+    if (closed) return true
+
     try {
       if (!super<SignalProxy>.handle(f)) {
         log(DEBUG, "ProtocolHandler", "No receiver registered for $f")
@@ -44,6 +48,8 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
   }
 
   override fun handle(f: HandshakeMessage): Boolean {
+    if (closed) return true
+
     try {
       if (!super<AuthHandler>.handle(f)) {
         log(DEBUG, "ProtocolHandler", "No receiver registered for $f")
@@ -177,6 +183,8 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
   }
 
   override fun close() {
+    closed = true
+
     objectStorage.clear()
     toInit.clear()
   }

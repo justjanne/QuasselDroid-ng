@@ -69,7 +69,7 @@ class QuasselService : DaggerLifecycleService(),
   private var progress = Triple(ConnectionState.DISCONNECTED, 0, 0)
 
   private fun updateNotificationStatus() {
-    if (connectionSettings?.showNotification == true) {
+    if (connectionSettings.showNotification) {
       val notificationHandle = notificationManager.notificationBackground()
       this.notificationHandle = notificationHandle
       updateNotification(notificationHandle)
@@ -268,12 +268,15 @@ class QuasselService : DaggerLifecycleService(),
       sessionManager.state.filter { it == ConnectionState.DISCONNECTED || it == ConnectionState.CLOSED },
       connectivity,
       BiFunction { a: ConnectionState, b: Unit -> a to b })
+      .distinctUntilChanged()
       .delay(200, TimeUnit.MILLISECONDS)
-      .throttleFirst(1, TimeUnit.SECONDS)
+      .throttleFirst(5, TimeUnit.SECONDS)
       .toLiveData()
       .observe(
         this, Observer {
-        sessionManager.reconnect(true)
+        sessionManager.ifDisconnected {
+          sessionManager.reconnect(true)
+        }
       })
 
     sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {

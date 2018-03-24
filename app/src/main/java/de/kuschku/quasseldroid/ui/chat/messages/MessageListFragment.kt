@@ -16,6 +16,7 @@ import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.quassel.syncables.BufferSyncer
+import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
@@ -66,8 +67,10 @@ class MessageListFragment : ServiceBoundFragment() {
     override fun onItemAtEndLoaded(itemAtEnd: QuasselDatabase.DatabaseMessage) = loadMore()
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                            savedInstanceState: Bundle?): View? {
+  override fun onCreateView(
+    inflater: LayoutInflater, container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
     val view = inflater.inflate(R.layout.fragment_messages, container, false)
     ButterKnife.bind(this, view)
 
@@ -90,7 +93,7 @@ class MessageListFragment : ServiceBoundFragment() {
         }
       })
 
-    val data = viewModel.buffer.switchMapNotNull { buffer ->
+    val data = viewModel.buffer_liveData.switchMapNotNull { buffer ->
       database.filtered().listen(accountId, buffer).switchMapNotNull { filtered ->
         LivePagedListBuilder(
           database.message().findByBufferIdPaged(buffer, filtered),
@@ -104,11 +107,11 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     }
 
-    val lastMessageId = viewModel.buffer.switchMapNotNull {
+    val lastMessageId = viewModel.buffer_liveData.switchMapNotNull {
       database.message().lastMsgId(it)
     }
 
-    viewModel.sessionManager.zip(lastMessageId).observe(
+    viewModel.sessionManager_liveData.zip(lastMessageId).observe(
       this, Observer {
       runInBackground {
         val session = it?.first
@@ -121,7 +124,7 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     })
 
-    viewModel.markerLine.observe(this, Observer {
+    viewModel.markerLine_liveData.observe(this, Observer {
       adapter.markerLinePosition = it
       adapter.notifyDataSetChanged()
     })
@@ -131,15 +134,8 @@ class MessageListFragment : ServiceBoundFragment() {
       val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
       val firstVisibleMessageId = adapter[firstVisibleItemPosition]?.messageId
       runInBackground {
-        val buffer = viewModel.buffer.value ?: -1
-        if (buffer != lastBuffer) {
-          backend.value?.sessionManager()?.bufferSyncer?.let { bufferSyncer ->
-            onBufferChange(lastBuffer, buffer, firstVisibleMessageId, bufferSyncer)
-          }
-          lastBuffer = buffer
-          adapter.clearCache()
-        }
         adapter.submitList(list)
+
         if (firstVisibleItemPosition < 2) {
           activity?.runOnUiThread { messageList.scrollToPosition(0) }
           runInBackgroundDelayed(16) {
@@ -147,6 +143,15 @@ class MessageListFragment : ServiceBoundFragment() {
               messageList.scrollToPosition(0)
             }
           }
+        }
+
+        val buffer = viewModel.buffer.value ?: -1
+        if (buffer != lastBuffer) {
+          backend.value.orNull()?.sessionManager()?.bufferSyncer?.let { bufferSyncer ->
+            onBufferChange(lastBuffer, buffer, firstVisibleMessageId, bufferSyncer)
+          }
+          lastBuffer = buffer
+          adapter.clearCache()
         }
       }
     })
@@ -161,8 +166,10 @@ class MessageListFragment : ServiceBoundFragment() {
       bufferSyncer.requestSetLastSeenMsg(buffer, lastMessageId)
   }
 
-  private fun onBufferChange(previous: BufferId?, current: BufferId, lastMessageId: MsgId?,
-                             bufferSyncer: BufferSyncer) {
+  private fun onBufferChange(
+    previous: BufferId?, current: BufferId, lastMessageId: MsgId?,
+    bufferSyncer: BufferSyncer
+  ) {
     if (previous != null && lastMessageId != null) {
       bufferSyncer.requestSetMarkerLine(previous, lastMessageId)
     }
@@ -187,13 +194,15 @@ class MessageListFragment : ServiceBoundFragment() {
   private fun loadMore() {
     runInBackground {
       viewModel.buffer { bufferId ->
-        viewModel.sessionManager()?.backlogManager?.requestBacklog(
-          bufferId = bufferId,
-          last = database.message().findFirstByBufferId(
-            bufferId
-          )?.messageId ?: -1,
-          limit = backlogSettings.dynamicAmount
-        )
+        viewModel.sessionManager {
+          it.backlogManager?.requestBacklog(
+            bufferId = bufferId,
+            last = database.message().findFirstByBufferId(
+              bufferId
+            )?.messageId ?: -1,
+            limit = backlogSettings.dynamicAmount
+          )
+        }
       }
     }
   }

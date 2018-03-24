@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid.ui.chat.input
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.*
@@ -25,8 +24,8 @@ class Editor(
   // Contexts
   activity: AppCompatActivity,
   // LiveData
-  private val autoCompleteData: LiveData<Pair<String, List<AutoCompleteItem>>?>,
-  lastWordContainer: MutableLiveData<Observable<Pair<String, IntRange>>>,
+  private val autoCompleteData: LiveData<Pair<String, List<AutoCompleteItem>>>,
+  lastWordContainer: BehaviorSubject<Observable<Pair<String, IntRange>>>,
   // Views
   val chatline: AppCompatEditText,
   send: AppCompatImageButton,
@@ -138,7 +137,7 @@ class Editor(
       }
     }
 
-    lastWordContainer.value = lastWord
+    lastWordContainer.onNext(lastWord)
 
     activity.menuInflater.inflate(formatHandler.menu, formattingMenu.menu)
     formattingMenu.menu.retint(activity)

@@ -38,6 +38,7 @@ import de.kuschku.quasseldroid.ui.chat.input.Editor
 import de.kuschku.quasseldroid.ui.chat.input.MessageHistoryAdapter
 import de.kuschku.quasseldroid.ui.settings.SettingsActivity
 import de.kuschku.quasseldroid.util.helper.invoke
+import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
@@ -100,11 +101,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     ButterKnife.bind(this)
 
     viewModel = ViewModelProviders.of(this)[QuasselViewModel::class.java]
-    viewModel.setBackend(this.backend)
+    viewModel.backendWrapper.onNext(this.backend)
 
     editor = Editor(
       this,
-      viewModel.autoCompleteData,
+      viewModel.autoCompleteData.toLiveData(),
       viewModel.lastWord,
       findViewById(R.id.chatline),
       findViewById(R.id.send),
@@ -146,11 +147,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       historyPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
     }
     msgHistory.adapter = messageHistoryAdapter
-    viewModel.recentlySentMessages.observe(this, Observer(messageHistoryAdapter::submitList))
+    viewModel.recentlySentMessages_liveData.observe(this,
+                                                    Observer(messageHistoryAdapter::submitList))
 
     setSupportActionBar(toolbar)
 
-    viewModel.buffer.observe(this, Observer {
+    viewModel.buffer_liveData.observe(this, Observer {
       if (it != null && drawerLayout.isDrawerOpen(Gravity.START)) {
         drawerLayout.closeDrawer(Gravity.START, true)
       }
@@ -168,7 +170,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       drawerToggle.syncState()
     }
 
-    viewModel.errors.observe(this, Observer {
+    viewModel.errors_liveData.observe(this, Observer {
       when (it) {
         is HandshakeMessage.ClientInitReject  ->
           MaterialDialog.Builder(this)
@@ -194,7 +196,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
     })
 
-    viewModel.connectionProgress.observe(this, Observer { it ->
+    viewModel.connectionProgress_liveData.observe(this, Observer { it ->
       val (state, progress, max) = it ?: Triple(ConnectionState.DISCONNECTED, 0, 0)
       when (state) {
         ConnectionState.CONNECTED,
@@ -239,7 +241,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
     super.onRestoreInstanceState(savedInstanceState)
-    viewModel.buffer.value = savedInstanceState?.getInt("OPEN_BUFFER", -1) ?: -1
+    viewModel.buffer.onNext(savedInstanceState?.getInt("OPEN_BUFFER", -1) ?: -1)
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -248,7 +250,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     super.onRestoreInstanceState(savedInstanceState, persistentState)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       val fallback = persistentState?.getInt("OPEN_BUFFER", -1) ?: -1
-      viewModel.buffer.value = savedInstanceState?.getInt("OPEN_BUFFER", fallback) ?: fallback
+      viewModel.buffer.onNext(savedInstanceState?.getInt("OPEN_BUFFER", fallback) ?: fallback)
     }
   }
 
@@ -263,47 +265,49 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     }
 
     R.id.filter_messages -> {
-      viewModel.buffer { buffer ->
-        val filtered = Message_Type.of(database.filtered().get(accountId, buffer) ?: 0)
-        val flags = intArrayOf(
-          Message.MessageType.Join.bit or Message.MessageType.NetsplitJoin.bit,
-          Message.MessageType.Part.bit,
-          Message.MessageType.Quit.bit or Message.MessageType.NetsplitQuit.bit,
-          Message.MessageType.Nick.bit,
-          Message.MessageType.Mode.bit,
-          Message.MessageType.Topic.bit
-        )
-        val selectedIndices = flags.withIndex().mapNotNull { (index, flag) ->
-          if ((filtered and flag).isNotEmpty()) {
-            index
-          } else {
-            null
-          }
-        }.toTypedArray()
-
-        MaterialDialog.Builder(this)
-          .title(R.string.label_filter_messages)
-          .items(R.array.message_filter_types)
-          .itemsIds(flags)
-          .itemsCallbackMultiChoice(selectedIndices, { _, _, _ -> false })
-          .positiveText(R.string.label_select_multiple)
-          .negativeText(R.string.label_cancel)
-          .onPositive { dialog, _ ->
-            val selected = dialog.selectedIndices ?: emptyArray()
-            runInBackground {
-              val newlyFiltered = selected
-                .map { flags[it] }
-                .fold(Message_Type.of()) { acc, i -> acc or i }
-
-              database.filtered().replace(
-                QuasselDatabase.Filtered(accountId, buffer, newlyFiltered.value)
-              )
+      runInBackground {
+        viewModel.buffer { buffer ->
+          val filtered = Message_Type.of(database.filtered().get(accountId, buffer) ?: 0)
+          val flags = intArrayOf(
+            Message.MessageType.Join.bit or Message.MessageType.NetsplitJoin.bit,
+            Message.MessageType.Part.bit,
+            Message.MessageType.Quit.bit or Message.MessageType.NetsplitQuit.bit,
+            Message.MessageType.Nick.bit,
+            Message.MessageType.Mode.bit,
+            Message.MessageType.Topic.bit
+          )
+          val selectedIndices = flags.withIndex().mapNotNull { (index, flag) ->
+            if ((filtered and flag).isNotEmpty()) {
+              index
+            } else {
+              null
             }
-          }.negativeColorAttr(R.attr.colorTextPrimary)
-          .backgroundColorAttr(R.attr.colorBackgroundCard)
-          .contentColorAttr(R.attr.colorTextPrimary)
-          .build()
-          .show()
+          }.toTypedArray()
+
+          MaterialDialog.Builder(this)
+            .title(R.string.label_filter_messages)
+            .items(R.array.message_filter_types)
+            .itemsIds(flags)
+            .itemsCallbackMultiChoice(selectedIndices, { _, _, _ -> false })
+            .positiveText(R.string.label_select_multiple)
+            .negativeText(R.string.label_cancel)
+            .onPositive { dialog, _ ->
+              val selected = dialog.selectedIndices ?: emptyArray()
+              runInBackground {
+                val newlyFiltered = selected
+                  .map { flags[it] }
+                  .fold(Message_Type.of()) { acc, i -> acc or i }
+
+                database.filtered().replace(
+                  QuasselDatabase.Filtered(accountId, buffer, newlyFiltered.value)
+                )
+              }
+            }.negativeColorAttr(R.attr.colorTextPrimary)
+            .backgroundColorAttr(R.attr.colorBackgroundCard)
+            .contentColorAttr(R.attr.colorTextPrimary)
+            .build()
+            .show()
+        }
       }
       true
     }

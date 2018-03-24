@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid.util.service
 
 import android.app.Activity
-import android.arch.lifecycle.LiveData
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -16,6 +15,7 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasFragmentInjector
 import dagger.android.support.HasSupportFragmentInjector
 import de.kuschku.libquassel.session.Backend
+import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.compatibility.LoggingHandler
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.quasseldroid.Keys
@@ -24,9 +24,9 @@ import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.ConnectionSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity
-import de.kuschku.quasseldroid.util.helper.invoke
 import de.kuschku.quasseldroid.util.helper.sharedPreferences
 import de.kuschku.quasseldroid.util.helper.updateRecentsHeaderIfExisting
+import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 abstract class ServiceBoundActivity : AppCompatActivity(),
@@ -39,7 +39,7 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
   protected val recentsHeaderColor: Int = R.color.colorPrimary
 
   private val connection = BackendServiceConnection()
-  protected val backend: LiveData<Backend?>
+  protected val backend: BehaviorSubject<Optional<Backend>>
     get() = connection.backend
 
 
@@ -58,13 +58,13 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
   }
 
   protected fun runInBackground(f: () -> Unit) {
-    connection.backend {
+    connection.backend.value.ifPresent {
       it.sessionManager().handlerService.backend(f)
     }
   }
 
   protected fun runInBackgroundDelayed(delayMillis: Long, f: () -> Unit) {
-    connection.backend {
+    connection.backend.value.ifPresent {
       it.sessionManager().handlerService.backendDelayed(delayMillis, f)
     }
   }

@@ -1,27 +1,26 @@
 package de.kuschku.quasseldroid.util.service
 
-import android.arch.lifecycle.LiveData
 import android.content.Context
 import android.os.Bundle
 import dagger.android.support.DaggerFragment
 import de.kuschku.libquassel.session.Backend
+import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.Keys
-import de.kuschku.quasseldroid.util.helper.invoke
+import io.reactivex.subjects.BehaviorSubject
 
 abstract class ServiceBoundFragment : DaggerFragment() {
-  private var connection = BackendServiceConnection()
-
-  protected val backend: LiveData<Backend?>
+  private val connection = BackendServiceConnection()
+  protected val backend: BehaviorSubject<Optional<Backend>>
     get() = connection.backend
 
   protected fun runInBackground(f: () -> Unit) {
-    connection.backend {
+    connection.backend.value.ifPresent {
       it.sessionManager().handlerService.backend(f)
     }
   }
 
   protected fun runInBackgroundDelayed(delayMillis: Long, f: () -> Unit) {
-    connection.backend {
+    connection.backend.value.ifPresent {
       it.sessionManager().handlerService.backendDelayed(delayMillis, f)
     }
   }

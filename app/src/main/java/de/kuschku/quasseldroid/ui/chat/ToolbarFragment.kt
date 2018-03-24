@@ -14,8 +14,9 @@ import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
+import de.kuschku.quasseldroid.util.helper.combineLatest
+import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.helper.visibleIf
-import de.kuschku.quasseldroid.util.helper.zip
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
@@ -58,38 +59,41 @@ class ToolbarFragment : ServiceBoundFragment() {
     viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
   }
 
-  override fun onCreateView(inflater: LayoutInflater,
-                            container: ViewGroup?,
-                            savedInstanceState: Bundle?): View? {
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
     val view = inflater.inflate(R.layout.fragment_toolbar, container, false)
     ButterKnife.bind(this, view)
 
-    viewModel.bufferData.zip(viewModel.isSecure, viewModel.lag).observe(
-      this, Observer {
-      if (it != null) {
-        val (data, isSecure, lag) = it
-        if (data?.info?.type?.hasFlag(Buffer_Type.StatusBuffer) == true) {
-          this.title = data.network?.networkName
-        } else {
-          this.title = data?.info?.bufferName
-        }
-
-        if (lag == 0L || !appearanceSettings.showLag) {
-          this.subtitle = colorizeDescription(data?.description)
-        } else {
-          val description = colorizeDescription(data?.description)
-          if (description.isNullOrBlank()) {
-            this.subtitle = "Lag: ${lag}ms"
+    combineLatest(viewModel.bufferData, viewModel.isSecure, viewModel.lag).toLiveData()
+      .observe(this, Observer {
+        if (it != null) {
+          val (data, isSecure, lag) = it
+          if (data?.info?.type?.hasFlag(Buffer_Type.StatusBuffer) == true) {
+            this.title = data.network?.networkName
           } else {
-            this.subtitle = SpanFormatter.format(
-              "Lag: %dms | %s",
-              lag,
-              colorizeDescription(data?.description)
-            )
+            this.title = data?.info?.bufferName
+          }
+
+          if (lag == 0L || !appearanceSettings.showLag) {
+            this.subtitle = colorizeDescription(data?.description)
+          } else {
+            val description = colorizeDescription(data?.description)
+            if (description.isNullOrBlank()) {
+              this.subtitle = "Lag: ${lag}ms"
+            } else {
+              this.subtitle = SpanFormatter.format(
+                "Lag: %dms | %s",
+                lag,
+                colorizeDescription(data?.description)
+              )
+            }
           }
         }
       }
-    })
+      )
 
     return view
   }

@@ -2,7 +2,6 @@ package de.kuschku.quasseldroid.ui.chat.buffers
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.graphics.drawable.Drawable
 import android.support.v4.graphics.drawable.DrawableCompat
@@ -22,20 +21,18 @@ import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.util.helper.getCompatDrawable
-import de.kuschku.quasseldroid.util.helper.styledAttributes
-import de.kuschku.quasseldroid.util.helper.visibleIf
-import de.kuschku.quasseldroid.util.helper.zip
+import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.viewmodel.data.BufferListItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferProps
 import de.kuschku.quasseldroid.viewmodel.data.BufferState
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
+import io.reactivex.subjects.BehaviorSubject
 
 class BufferListAdapter(
   lifecycleOwner: LifecycleOwner,
   liveData: LiveData<List<BufferProps>?>,
-  private val selectedBuffer: MutableLiveData<BufferId>,
-  private val collapsedNetworks: MutableLiveData<Set<NetworkId>>,
+  private val selectedBuffer: BehaviorSubject<BufferId>,
+  private val collapsedNetworks: BehaviorSubject<Set<NetworkId>>,
   runInBackground: (() -> Unit) -> Any,
   runOnUiThread: (Runnable) -> Any,
   private val clickListener: ((BufferId) -> Unit)? = null,
@@ -45,25 +42,25 @@ class BufferListAdapter(
 
   fun expandListener(networkId: NetworkId) {
     if (collapsedNetworks.value.orEmpty().contains(networkId))
-      collapsedNetworks.postValue(collapsedNetworks.value.orEmpty() - networkId)
+      collapsedNetworks.onNext(collapsedNetworks.value.orEmpty() - networkId)
     else
-      collapsedNetworks.postValue(collapsedNetworks.value.orEmpty() + networkId)
+      collapsedNetworks.onNext(collapsedNetworks.value.orEmpty() + networkId)
   }
 
   fun toggleSelection(buffer: BufferId) {
     if (selectedBuffer.value == buffer) {
-      selectedBuffer.value = -1
+      selectedBuffer.onNext(-1)
     } else {
-      selectedBuffer.value = buffer
+      selectedBuffer.onNext(buffer)
     }
   }
 
   fun unselectAll() {
-    selectedBuffer.value = -1
+    selectedBuffer.onNext(-1)
   }
 
   init {
-    liveData.zip(collapsedNetworks, selectedBuffer).observe(
+    liveData.zip(collapsedNetworks.toLiveData(), selectedBuffer.toLiveData()).observe(
       lifecycleOwner, Observer { it: Triple<List<BufferProps>?, Set<NetworkId>, BufferId>? ->
       runInBackground {
         val list = it?.first ?: emptyList()

@@ -68,70 +68,30 @@ class IrcUser(
     setUserModes(properties["userModes"].valueOr(this::userModes))
   }
 
+  fun updates(): Observable<IrcUser> = hasChangedNotification.map { this }
+
   fun nick() = _nick
-  fun liveNick(): Observable<String> = live_nick
-
   fun user() = _user
-  fun liveUser(): Observable<String> = live_user
-
   fun host() = _host
-  fun liveHost(): Observable<String> = live_host
-
   fun realName() = _realName
-  fun liveRealName(): Observable<String> = live_realName
-
   fun account() = _account
-  fun liveAccount(): Observable<String> = live_account
-
   fun hostMask() = "${nick()}!${user()}@${host()}"
-  fun liveHostMask() = liveNick().switchMap { nick ->
-    liveUser().switchMap { user ->
-      liveHost().map { host ->
-        "$nick!$user@$host"
-      }
-    }
-  }
-
   fun isAway() = _away
-  fun liveIsAway(): Observable<Boolean> = live_away
-
   fun awayMessage() = _awayMessage
-  fun liveAwayMessage(): Observable<String> = live_awayMessage
-
   fun server() = _server
-  fun liveServer(): Observable<String> = live_server
-
   fun idleTime(): Instant {
     if (Instant.now().epochSecond - _idleTimeSet.epochSecond > 1200)
       _idleTime = Instant.EPOCH
     return _idleTime
   }
-
-  fun liveIdleTime(): Observable<Instant> = live_idleTime
-
   fun loginTime() = _loginTime
-  fun liveLoginTime(): Observable<Instant> = live_loginTime
-
   fun ircOperator() = _ircOperator
-  fun liveIrcOperator(): Observable<String> = live_ircOperator
-
   fun lastAwayMessage() = _lastAwayMessage
-  fun liveLastAwayMessage(): Observable<Int> = live_lastAwayMessage
-
   fun whoisServiceReply() = _whoisServiceReply
-  fun liveWhoisServiceReply(): Observable<String> = live_whoisServiceReply
-
   fun suserHost() = _suserHost
-  fun liveSuserHost(): Observable<String> = live_suserHost
-
   fun encrypted() = _encrypted
-  fun liveEncrypted(): Observable<Boolean> = live_encrypted
-
   fun network() = _network
-
   fun userModes() = _userModes
-  fun liveUserModes(): Observable<String> = live_userModes
-
   fun channels() = _channels.map(IrcChannel::name)
   fun codecForEncoding() = _codecForEncoding
   fun codecForDecoding() = _codecForDecoding
@@ -313,92 +273,106 @@ class IrcUser(
     renameObject(identifier)
   }
 
-  private val live_nick = BehaviorSubject.createDefault(HostmaskHelper.nick(hostmask))
-  private var _nick: String
-    get() = live_nick.value
-    set(value) = live_nick.onNext(value)
+  private val hasChangedNotification = BehaviorSubject.createDefault(Unit)
+  private var _nick: String = HostmaskHelper.nick(hostMask())
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
 
-  private val live_user = BehaviorSubject.createDefault(HostmaskHelper.user(hostmask))
-  private var _user: String
-    get() = live_user.value
-    set(value) = live_user.onNext(value)
+  private var _user: String = HostmaskHelper.user(hostMask())
 
-  private val live_host = BehaviorSubject.createDefault(HostmaskHelper.host(hostmask))
-  private var _host: String
-    get() = live_host.value
-    set(value) = live_host.onNext(value)
+  private var _host: String = HostmaskHelper.host(hostMask())
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
 
-  private val live_realName = BehaviorSubject.createDefault("")
-  private var _realName: String
-    get() = live_realName.value
-    set(value) = live_realName.onNext(value)
+  private var _realName: String = ""
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
 
-  private val live_account = BehaviorSubject.createDefault("")
-  private var _account: String
-    get() = live_account.value
-    set(value) = live_account.onNext(value)
+  private var _account: String = ""
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
 
-  private val live_awayMessage = BehaviorSubject.createDefault("")
-  private var _awayMessage: String
-    get() = live_awayMessage.value
-    set(value) = live_awayMessage.onNext(value)
+  private var _awayMessage: String = ""
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
 
-  private val live_away = BehaviorSubject.createDefault(false)
-  private var _away: Boolean
-    get() = live_away.value
-    set(value) = live_away.onNext(value)
+  private var _away: Boolean = false
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
 
-  private val live_server = BehaviorSubject.createDefault("")
-  private var _server: String
-    get() = live_server.value
-    set(value) = live_server.onNext(value)
+  private var _server: String = ""
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
 
-  private val live_idleTime = BehaviorSubject.createDefault(Instant.EPOCH)
-  private var _idleTime: Instant
-    get() = live_idleTime.value
-    set(value) = live_idleTime.onNext(value)
+  private var _idleTime: Instant = Instant.EPOCH
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
 
-  private val live_idleTimeSet = BehaviorSubject.createDefault(Instant.EPOCH)
-  private var _idleTimeSet: Instant
-    get() = live_idleTimeSet.value
-    set(value) = live_idleTimeSet.onNext(value)
+  private var _idleTimeSet: Instant = Instant.EPOCH
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
 
-  private val live_loginTime = BehaviorSubject.createDefault(Instant.EPOCH)
-  private var _loginTime: Instant
-    get() = live_loginTime.value
-    set(value) = live_loginTime.onNext(value)
+  private var _loginTime: Instant = Instant.EPOCH
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
 
-  private val live_ircOperator = BehaviorSubject.createDefault("")
-  private var _ircOperator: String
-    get() = live_ircOperator.value
-    set(value) = live_ircOperator.onNext(value)
+  private var _ircOperator: String = ""
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
 
-  private val live_lastAwayMessage = BehaviorSubject.createDefault(0)
-  private var _lastAwayMessage: Int
-    get() = live_lastAwayMessage.value
-    set(value) = live_lastAwayMessage.onNext(value)
+  private var _lastAwayMessage: Int = 0
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
 
-  private val live_whoisServiceReply = BehaviorSubject.createDefault("")
-  private var _whoisServiceReply: String
-    get() = live_whoisServiceReply.value
-    set(value) = live_whoisServiceReply.onNext(value)
+  private var _whoisServiceReply: String = ""
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
 
-  private val live_suserHost = BehaviorSubject.createDefault("")
-  private var _suserHost: String
-    get() = live_suserHost.value
-    set(value) = live_suserHost.onNext(value)
+  private var _suserHost: String = ""
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
 
-  private val live_encrypted = BehaviorSubject.createDefault(false)
-  private var _encrypted: Boolean
-    get() = live_encrypted.value
-    set(value) = live_encrypted.onNext(value)
+  private var _encrypted: Boolean = false
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
 
   private var _channels: MutableSet<IrcChannel> = mutableSetOf()
 
-  private val live_userModes = BehaviorSubject.createDefault("")
-  private var _userModes: String
-    get() = live_userModes.value
-    set(value) = live_userModes.onNext(value)
+  private var _userModes: String = ""
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
 
   private var _network: Network = network
   private var _codecForEncoding: Charset? = null

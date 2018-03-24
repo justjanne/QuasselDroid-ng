@@ -10,7 +10,7 @@ plugins {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.2.30"))
+  implementation(kotlin("stdlib", "1.2.31"))
 
   withVersion("27.1.0") {
     implementation("com.android.support", "support-annotations", version)

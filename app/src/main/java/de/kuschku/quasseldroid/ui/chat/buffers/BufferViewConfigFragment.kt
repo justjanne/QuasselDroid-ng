@@ -19,11 +19,13 @@ import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.hasFlag
+import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.libquassel.util.minus
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.util.helper.map
+import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.helper.zip
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
@@ -126,16 +128,16 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
           }
           R.id.action_unhide     -> {
             bufferSyncer?.let {
-              bufferViewConfig?.requestAddBuffer(info, bufferSyncer)
+              bufferViewConfig?.orNull()?.requestAddBuffer(info, bufferSyncer)
             }
             true
           }
           R.id.action_hide_temp  -> {
-            bufferViewConfig?.requestRemoveBuffer(info.bufferId)
+            bufferViewConfig?.orNull()?.requestRemoveBuffer(info.bufferId)
             true
           }
           R.id.action_hide_perm  -> {
-            bufferViewConfig?.requestRemoveBufferPermanently(info.bufferId)
+            bufferViewConfig?.orNull()?.requestRemoveBufferPermanently(info.bufferId)
             true
           }
           else                   -> false
@@ -168,27 +170,29 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                            savedInstanceState: Bundle?): View? {
+  override fun onCreateView(
+    inflater: LayoutInflater, container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
     val view = inflater.inflate(R.layout.fragment_chat_list, container, false)
     ButterKnife.bind(this, view)
 
-    val adapter = BufferViewConfigAdapter(this, viewModel.bufferViewConfigs)
+    val adapter = BufferViewConfigAdapter(this, viewModel.bufferViewConfigs.toLiveData())
 
     chatListSpinner.adapter = adapter
     chatListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
       override fun onNothingSelected(p0: AdapterView<*>?) {
-        viewModel.setBufferViewConfigId(null)
+        viewModel.bufferViewConfigId.onNext(-1)
       }
 
       override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        viewModel.setBufferViewConfigId(adapter.getItem(p2)?.bufferViewId())
+        viewModel.bufferViewConfigId.onNext(adapter.getItem(p2)?.bufferViewId() ?: -1)
       }
     }
 
     listAdapter = BufferListAdapter(
       this,
-      viewModel.bufferList.zip(database.filtered().listen(accountId)).map {
+      viewModel.bufferList.toLiveData().zip(database.filtered().listen(accountId)).map {
         val (data, activityList) = it
         val (config, list) = data ?: Pair(null, emptyList())
         val minimumActivity = config?.minimumActivity() ?: Buffer_Activity.NONE
@@ -225,7 +229,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     )
     chatList.adapter = listAdapter
 
-    viewModel.selectedBuffer.observe(this, Observer { buffer ->
+    viewModel.selectedBuffer_liveData.observe(this, Observer { buffer ->
       if (buffer != null) {
         val menu = actionMode?.menu
         if (menu != null) {
@@ -298,7 +302,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       when (item.itemId) {
         R.id.action_show_hidden -> {
           item.isChecked = !item.isChecked
-          viewModel.showHidden.value = item.isChecked
+          viewModel.showHidden.onNext(item.isChecked)
           true
         }
         else                    -> false
@@ -314,7 +318,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     if (actionMode != null) {
       longClickListener?.invoke(it)
     } else {
-      viewModel.buffer.value = it
+      viewModel.buffer.onNext(it)
     }
   }
 

@@ -7,8 +7,7 @@ import de.kuschku.libquassel.quassel.QuasselFeature
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.*
 import de.kuschku.libquassel.util.hasFlag
 import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
@@ -54,6 +53,7 @@ class Session(
   override val lag = BehaviorSubject.createDefault(0L)
 
   init {
+    log(ERROR, "DEBUG", "created session:", RuntimeException())
     coreConnection.start()
   }
 
@@ -159,11 +159,15 @@ class Session(
   }
 
   override fun dispatch(message: SignalProxyMessage) {
+    if (closed) return
+
     log(DEBUG, "Session", "> $message")
     coreConnection.dispatch(message)
   }
 
   override fun dispatch(message: HandshakeMessage) {
+    if (closed) return
+
     log(DEBUG, "Session", "> $message")
     coreConnection.dispatch(message)
   }
@@ -172,13 +176,13 @@ class Session(
   override fun identity(id: IdentityId): Identity? = identities[id]
 
   override fun close() {
+    super.close()
+
     coreConnection.close()
 
     certManagers.clear()
     identities.clear()
     networks.clear()
-
-    super.close()
   }
 
   fun join() {

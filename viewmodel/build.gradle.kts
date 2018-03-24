@@ -17,7 +17,7 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.2.30"))
+  implementation(kotlin("stdlib", "1.2.31"))
 
   // App Compat
   withVersion("27.1.0") {

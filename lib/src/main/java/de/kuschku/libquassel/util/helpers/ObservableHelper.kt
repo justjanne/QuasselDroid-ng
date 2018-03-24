@@ -7,3 +7,6 @@ fun <T> Observable<T>.or(default: T): T = try {
 } catch (_: Throwable) {
   default
 }
+
+val <T> Observable<T>.value
+  get() = this.blockingLatest().firstOrNull()

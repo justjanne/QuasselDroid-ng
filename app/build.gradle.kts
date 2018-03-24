@@ -34,7 +34,7 @@ android {
     minSdkVersion(16)
     targetSdkVersion(27)
 
-    applicationId = "de.kuschku.quasseldroid_ng"
+    applicationId = "de.kuschku.quasseldroid"
     versionCode = cmd("git", "rev-list", "--count", "HEAD")?.toIntOrNull() ?: 1
     versionName = cmd("git", "describe", "--always", "--tags", "HEAD") ?: "1.0.0"
 
@@ -83,7 +83,7 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.2.30"))
+  implementation(kotlin("stdlib", "1.2.31"))
 
   // App Compat
   withVersion("27.1.0") {
@@ -136,6 +136,7 @@ dependencies {
   // UI
   implementation("me.zhanghai.android.materialprogressbar", "library", "1.4.2")
   implementation("com.afollestad.material-dialogs", "core", "0.9.6.0")
+  implementation("com.stepstone.stepper", "material-stepper", "4.3.1")
   implementation(project(":slidingpanel"))
 
   // Quality Assurance

@@ -1,23 +1,24 @@
 package de.kuschku.quasseldroid.util.service
 
-import android.arch.lifecycle.MutableLiveData
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import de.kuschku.libquassel.session.Backend
+import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.service.QuasselService
+import io.reactivex.subjects.BehaviorSubject
 
 class BackendServiceConnection : ServiceConnection {
-  val backend = MutableLiveData<Backend?>()
+  val backend = BehaviorSubject.createDefault(Optional.empty<Backend>())
 
   var context: Context? = null
 
   override fun onServiceDisconnected(component: ComponentName?) {
     when (component) {
       ComponentName(context, QuasselService::class.java) -> {
-        backend.value = null
+        backend.onNext(Optional.empty())
       }
     }
   }
@@ -26,7 +27,7 @@ class BackendServiceConnection : ServiceConnection {
     when (component) {
       ComponentName(context, QuasselService::class.java) ->
         if (binder is QuasselService.QuasselBinder) {
-          backend.value = binder.backend
+          backend.onNext(Optional.of(binder.backend))
         }
     }
   }

@@ -84,7 +84,7 @@ class SessionManager(offlineSession: ISession,
     log(LoggingHandler.LogLevel.INFO, "Session", "Session created")
 
     state.subscribe {
-      if (state == ConnectionState.CONNECTED) {
+      if (it == ConnectionState.CONNECTED) {
         lastSession.close()
       }
     }
