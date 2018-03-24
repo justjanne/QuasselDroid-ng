@@ -16,7 +16,6 @@ import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.viewmodel.data.*
 import io.reactivex.Observable
-import io.reactivex.functions.Function
 import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 
@@ -55,9 +54,9 @@ class QuasselViewModel : ViewModel() {
     .map(Optional<BufferViewManager>::get)
 
   val bufferViewConfig = bufferViewManager.switchMap { manager ->
-    bufferViewConfigId.map(Function<Int, Optional<BufferViewConfig>> { id ->
+    bufferViewConfigId.map { id ->
       Optional.ofNullable(manager.bufferViewConfig(id))
-    })
+    }
   }
 
   val errors = session.switchMap(ISession::error)
