@@ -37,7 +37,7 @@
   <string name="preference_input_enter_entry_emoji">Emoji-Auswahl</string>
   <string name="preference_input_enter_entry_send">Senden</string>
 
-  <string name="preference_autocomplete_title">Autovervollständigung</string>
+  <string name="preference_autocomplete_title">Autovervollständigungs-UI</string>
 
   <string name="preference_hostmask_title">Hostmaske</string>
   <string name="preference_hostmask_summary">Zeigt die gesame Spitzname!Ident@Host Information an</string>
