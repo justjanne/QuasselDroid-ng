@@ -82,6 +82,8 @@ class MessageListFragment : ServiceBoundFragment() {
     messageList.layoutManager = linearLayoutManager
     messageList.itemAnimator = null
     messageList.setItemViewCacheSize(20)
+
+    var isScrolling = false
     messageList.addOnScrollListener(
       object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -90,6 +92,14 @@ class MessageListFragment : ServiceBoundFragment() {
 
           scrollDown.visibility = View.VISIBLE
           scrollDown.toggle(canScrollDown && isScrollingDown)
+        }
+
+        override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+          isScrolling = when (newState) {
+            RecyclerView.SCROLL_STATE_DRAGGING -> true
+            RecyclerView.SCROLL_STATE_SETTLING -> true
+            else                               -> false
+          }
         }
       })
 
@@ -113,6 +123,7 @@ class MessageListFragment : ServiceBoundFragment() {
 
     viewModel.sessionManager_liveData.zip(lastMessageId).observe(
       this, Observer {
+      val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
       runInBackground {
         val session = it?.first?.orNull()
         val message = it?.second
@@ -120,6 +131,15 @@ class MessageListFragment : ServiceBoundFragment() {
         if (message != null && bufferSyncer != null && previousMessageId != message.messageId) {
           markAsRead(bufferSyncer, message.bufferId, message.messageId)
           previousMessageId = message.messageId
+
+          if (firstVisibleItemPosition < 2 && !isScrolling) {
+            activity?.runOnUiThread { messageList.scrollToPosition(0) }
+            runInBackgroundDelayed(16) {
+              activity?.runOnUiThread {
+                messageList.scrollToPosition(0)
+              }
+            }
+          }
         }
       }
     })
@@ -138,15 +158,6 @@ class MessageListFragment : ServiceBoundFragment() {
       runInBackground {
         activity?.runOnUiThread {
           list?.let(adapter::submitList)
-        }
-
-        if (firstVisibleItemPosition < 2) {
-          activity?.runOnUiThread { messageList.scrollToPosition(0) }
-          runInBackgroundDelayed(16) {
-            activity?.runOnUiThread {
-              messageList.scrollToPosition(0)
-            }
-          }
         }
 
         val buffer = viewModel.buffer.value ?: -1
