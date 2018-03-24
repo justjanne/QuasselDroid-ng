@@ -117,9 +117,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       findViewById(R.id.formatting_toolbar),
       appearanceSettings,
       { lines ->
-        viewModel.session { session ->
+        viewModel.session { sessionOptional ->
+          val session = sessionOptional.orNull()
           viewModel.buffer { bufferId ->
-            session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
+            session?.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
               val output = mutableListOf<IAliasManager.Command>()
               for ((stripped, formatted) in lines) {
                 viewModel.addRecentlySentMessage(stripped)
@@ -205,12 +206,14 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           progressBar.hide()
         }
         ConnectionState.INIT   -> {
+          progressBar.show()
           // Show indeterminate when no progress has been made yet
           progressBar.isIndeterminate = progress == 0 || max == 0
           progressBar.progress = progress
           progressBar.max = max
         }
         else                   -> {
+          progressBar.show()
           progressBar.isIndeterminate = true
         }
       }

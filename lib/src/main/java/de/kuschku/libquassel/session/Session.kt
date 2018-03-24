@@ -7,7 +7,8 @@ import de.kuschku.libquassel.quassel.QuasselFeature
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.*
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import de.kuschku.libquassel.util.hasFlag
 import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
@@ -53,7 +54,6 @@ class Session(
   override val lag = BehaviorSubject.createDefault(0L)
 
   init {
-    log(ERROR, "DEBUG", "created session:", RuntimeException())
     coreConnection.start()
   }
 

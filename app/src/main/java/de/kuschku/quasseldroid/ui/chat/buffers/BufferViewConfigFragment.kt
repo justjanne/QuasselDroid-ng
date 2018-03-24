@@ -57,7 +57,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
       val selected = viewModel.selectedBuffer.value
       val info = selected?.info
-      val session = viewModel.session.value
+      val session = viewModel.session.value?.orNull()
       val bufferSyncer = session?.bufferSyncer
       val network = session?.networks?.get(selected?.info?.networkId)
       val bufferViewConfig = viewModel.bufferViewConfig.value

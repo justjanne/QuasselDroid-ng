@@ -132,15 +132,9 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
     }
     val accountIdValid = accountId != -1L
 
-    log(
-      LoggingHandler.LogLevel.ERROR, "DEBUG",
-      "reconnect: $reconnect, accountIdValid: $accountIdValid"
-    )
-
     if (!reconnect || !accountIdValid) {
 
       if (!startedSelection) {
-        log(LoggingHandler.LogLevel.ERROR, "DEBUG", "started: $REQUEST_SELECT_ACCOUNT")
         startActivityForResult(
           Intent(this, AccountSelectionActivity::class.java), REQUEST_SELECT_ACCOUNT
         )

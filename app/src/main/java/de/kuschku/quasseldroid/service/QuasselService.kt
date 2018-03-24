@@ -292,6 +292,7 @@ class QuasselService : DaggerLifecycleService(),
     notificationManager.init()
 
     update()
+    updateNotificationStatus()
   }
 
   override fun onDestroy() {

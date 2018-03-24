@@ -114,7 +114,7 @@ class MessageListFragment : ServiceBoundFragment() {
     viewModel.sessionManager_liveData.zip(lastMessageId).observe(
       this, Observer {
       runInBackground {
-        val session = it?.first
+        val session = it?.first?.orNull()
         val message = it?.second
         val bufferSyncer = session?.bufferSyncer
         if (message != null && bufferSyncer != null && previousMessageId != message.messageId) {
@@ -125,8 +125,10 @@ class MessageListFragment : ServiceBoundFragment() {
     })
 
     viewModel.markerLine_liveData.observe(this, Observer {
-      adapter.markerLinePosition = it
-      adapter.notifyDataSetChanged()
+      it?.ifPresent {
+        adapter.markerLinePosition = it
+        adapter.notifyDataSetChanged()
+      }
     })
 
     var lastBuffer = -1
@@ -184,7 +186,7 @@ class MessageListFragment : ServiceBoundFragment() {
     val previous = lastBuffer
     val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
     val messageId = adapter[firstVisibleItemPosition]?.messageId
-    val bufferSyncer = viewModel.sessionManager.value?.bufferSyncer
+    val bufferSyncer = viewModel.session.value?.orNull()?.bufferSyncer
     if (previous != null && messageId != null) {
       bufferSyncer?.requestSetMarkerLine(previous, messageId)
     }
@@ -194,8 +196,8 @@ class MessageListFragment : ServiceBoundFragment() {
   private fun loadMore() {
     runInBackground {
       viewModel.buffer { bufferId ->
-        viewModel.sessionManager {
-          it.backlogManager?.requestBacklog(
+        viewModel.session {
+          it.orNull()?.backlogManager?.requestBacklog(
             bufferId = bufferId,
             last = database.message().findFirstByBufferId(
               bufferId

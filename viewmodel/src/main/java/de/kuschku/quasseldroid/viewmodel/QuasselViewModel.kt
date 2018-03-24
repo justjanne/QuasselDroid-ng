@@ -5,13 +5,18 @@ import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
-import de.kuschku.libquassel.quassel.syncables.*
+import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
+import de.kuschku.libquassel.quassel.syncables.IrcChannel
+import de.kuschku.libquassel.quassel.syncables.IrcUser
+import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.session.Backend
+import de.kuschku.libquassel.session.ConnectionState
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.and
 import de.kuschku.libquassel.util.hasFlag
+import de.kuschku.libquassel.util.helpers.*
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.viewmodel.data.*
@@ -39,33 +44,29 @@ class QuasselViewModel : ViewModel() {
   }
 
   val backend = backendWrapper.switchMap { it }
-  val sessionManager = backend
-    .filter(Optional<Backend>::isPresent)
-    .map(Optional<Backend>::get)
-    .map(Backend::sessionManager)
+  val sessionManager = backend.mapMap(Backend::sessionManager)
   val sessionManager_liveData = sessionManager.toLiveData()
-  val session = sessionManager.switchMap(SessionManager::session)
+  val session = sessionManager.mapSwitchMap(SessionManager::session)
 
-  val connectionProgress = sessionManager.switchMap(SessionManager::connectionProgress)
+  val connectionProgress = sessionManager.mapSwitchMap(SessionManager::connectionProgress)
+    .mapOrElse(Triple(ConnectionState.DISCONNECTED, 0, 0))
   val connectionProgress_liveData = connectionProgress.toLiveData()
 
-  val bufferViewManager = session.map { Optional.ofNullable(it.bufferViewManager) }
-    .filter(Optional<BufferViewManager>::isPresent)
-    .map(Optional<BufferViewManager>::get)
+  val bufferViewManager = session.mapMapNullable(ISession::bufferViewManager)
 
-  val bufferViewConfig = bufferViewManager.switchMap { manager ->
+  val bufferViewConfig = bufferViewManager.flatMapSwitchMap { manager ->
     bufferViewConfigId.map { id ->
       Optional.ofNullable(manager.bufferViewConfig(id))
     }
   }
 
-  val errors = session.switchMap(ISession::error)
+  val errors = session.mapSwitchMapEmpty(ISession::error)
   val errors_liveData = errors.toLiveData()
 
   /**
    * An observable of the changes of the markerline, as pairs of `(old, new)`
    */
-  val markerLine = session.switchMap { currentSession ->
+  val markerLine = session.mapSwitchMap { currentSession ->
     buffer.switchMap { currentBuffer ->
       // Get a stream of the latest marker line
       val raw = currentSession.bufferSyncer?.liveMarkerLine(currentBuffer) ?: Observable.empty()
@@ -74,15 +75,17 @@ class QuasselViewModel : ViewModel() {
   }
   val markerLine_liveData = markerLine.toLiveData()
 
-  val lag: Observable<Long> = session.switchMap(ISession::lag)
+  // Remove orElse
+  val lag: Observable<Long> = session.mapSwitchMap(ISession::lag).mapOrElse(0)
 
-  val isSecure: Observable<Boolean> = session.switchMap { session ->
+  val isSecure: Observable<Boolean> = session.mapSwitchMap { session ->
     session.state.map { _ ->
       session.sslSession != null
     }
-  }
+  }.mapOrElse(false)
 
-  val bufferData = combineLatest(session, buffer).switchMap { (session, id) ->
+  val bufferData = combineLatest(session, buffer).switchMap { (sessionOptional, id) ->
+    val session = sessionOptional.orNull()
     val bufferSyncer = session?.bufferSyncer
     if (bufferSyncer != null) {
       bufferSyncer.liveBufferInfos().switchMap {
@@ -138,7 +141,8 @@ class QuasselViewModel : ViewModel() {
   }
 
   val nickData: Observable<List<IrcUserItem>> = combineLatest(session, buffer)
-    .switchMap { (session, buffer) ->
+    .switchMap { (sessionOptional, buffer) ->
+      val session = sessionOptional.orNull()
       val bufferSyncer = session?.bufferSyncer
       val bufferInfo = bufferSyncer?.bufferInfo(buffer)
       if (bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
@@ -179,11 +183,12 @@ class QuasselViewModel : ViewModel() {
   val lastWord = BehaviorSubject.create<Observable<Pair<String, IntRange>>>()
 
   val autoCompleteData: Observable<Pair<String, List<AutoCompleteItem>>> =
-    combineLatest(session, buffer, lastWord).switchMap { (session, id, lastWordWrapper) ->
+    combineLatest(session, buffer, lastWord).switchMap { (sessionOptional, id, lastWordWrapper) ->
       lastWordWrapper
         .distinctUntilChanged()
         .debounce(300, TimeUnit.MILLISECONDS)
         .switchMap { lastWord ->
+          val session = sessionOptional.orNull()
           val bufferSyncer = session?.bufferSyncer
           val bufferInfo = bufferSyncer?.bufferInfo(id)
           if (bufferSyncer != null) {
@@ -269,20 +274,21 @@ class QuasselViewModel : ViewModel() {
         }
     }
 
-  val bufferViewConfigs = bufferViewManager.switchMap { manager ->
+  val bufferViewConfigs = bufferViewManager.mapSwitchMap { manager ->
     manager.liveBufferViewConfigs().map { ids ->
       ids.mapNotNull { id ->
         manager.bufferViewConfig(id)
       }.sortedWith(BufferViewConfig.NameComparator)
     }
-  }
+  }.mapOrElse(emptyList())
 
   val showHidden = BehaviorSubject.createDefault(false)
   val collapsedNetworks = BehaviorSubject.createDefault(emptySet<NetworkId>())
   val selectedBufferId = BehaviorSubject.createDefault(-1)
   val selectedBuffer = combineLatest(session, selectedBufferId, bufferViewConfig)
-    .switchMap { (session, buffer, bufferViewConfigOptional) ->
-      val bufferSyncer = session.bufferSyncer
+    .switchMap { (sessionOptional, buffer, bufferViewConfigOptional) ->
+      val session = sessionOptional.orNull()
+      val bufferSyncer = session?.bufferSyncer
       val bufferViewConfig = bufferViewConfigOptional.orNull()
       if (bufferSyncer != null && bufferViewConfig != null) {
         val hiddenState = when {
@@ -330,7 +336,8 @@ class QuasselViewModel : ViewModel() {
 
   val bufferList: Observable<Pair<BufferViewConfig?, List<BufferProps>>?> =
     combineLatest(session, bufferViewConfig, showHidden)
-      .switchMap { (session, configOptional, showHiddenRaw) ->
+      .switchMap { (sessionOptional, configOptional, showHiddenRaw) ->
+        val session = sessionOptional.orNull()
         val bufferSyncer = session?.bufferSyncer
         val showHidden = showHiddenRaw ?: false
         val config = configOptional.orNull()
