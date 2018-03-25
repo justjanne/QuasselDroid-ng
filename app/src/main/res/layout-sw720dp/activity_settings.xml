@@ -37,17 +37,11 @@
       android:clipToPadding="false"
       app:cardElevation="4dp">
 
-      <android.support.v4.widget.NestedScrollView
+      <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical">
-
-        <FrameLayout
-          android:id="@+id/fragment_container"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          tools:layout="@layout/fragment_about" />
-      </android.support.v4.widget.NestedScrollView>
+        tools:layout="@layout/fragment_about" />
     </android.support.v7.widget.CardView>
 
   </LinearLayout>
