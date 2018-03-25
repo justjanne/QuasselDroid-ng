@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
-import android.support.v4.view.ViewCompat
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.DividerItemDecoration
@@ -63,7 +62,6 @@ class CrashSettingsFragment : ServiceBoundFragment() {
     list.layoutManager = LinearLayoutManager(context)
     list.adapter = adapter
     list.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
-    ViewCompat.setNestedScrollingEnabled(list, false)
 
     handler.post {
       val crashDir = this.crashDir
