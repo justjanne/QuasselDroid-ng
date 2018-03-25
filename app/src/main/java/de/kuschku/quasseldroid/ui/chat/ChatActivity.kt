@@ -37,7 +37,7 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.ui.chat.input.Editor
 import de.kuschku.quasseldroid.ui.chat.input.MessageHistoryAdapter
-import de.kuschku.quasseldroid.ui.settings.SettingsActivity
+import de.kuschku.quasseldroid.ui.settings.app.AppSettingsActivity
 import de.kuschku.quasseldroid.util.helper.editCommit
 import de.kuschku.quasseldroid.util.helper.invoke
 import de.kuschku.quasseldroid.util.helper.toLiveData
@@ -346,7 +346,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       true
     }
     R.id.settings        -> {
-      startActivity(Intent(applicationContext, SettingsActivity::class.java))
+      startActivity(Intent(applicationContext, AppSettingsActivity::class.java))
       true
     }
     R.id.disconnect      -> {

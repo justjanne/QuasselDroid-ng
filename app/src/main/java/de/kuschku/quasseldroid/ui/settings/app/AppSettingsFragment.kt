@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid.ui.settings
+package de.kuschku.quasseldroid.ui.settings.app
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -11,8 +11,8 @@ import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.util.backport.DaggerPreferenceFragmentCompat
 import javax.inject.Inject
 
-class SettingsFragment : DaggerPreferenceFragmentCompat(),
-                         SharedPreferences.OnSharedPreferenceChangeListener {
+class AppSettingsFragment : DaggerPreferenceFragmentCompat(),
+                            SharedPreferences.OnSharedPreferenceChangeListener {
   @Inject
   lateinit var appearanceSettings: AppearanceSettings
 
