@@ -275,15 +275,15 @@ class IrcUser(
   }
 
   private val hasChangedNotification = BehaviorSubject.createDefault(Unit)
-  private var _nick: String = HostmaskHelper.nick(hostMask())
+  private var _nick: String = HostmaskHelper.nick(hostmask)
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
 
-  private var _user: String = HostmaskHelper.user(hostMask())
+  private var _user: String = HostmaskHelper.user(hostmask)
 
-  private var _host: String = HostmaskHelper.host(hostMask())
+  private var _host: String = HostmaskHelper.host(hostmask)
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
