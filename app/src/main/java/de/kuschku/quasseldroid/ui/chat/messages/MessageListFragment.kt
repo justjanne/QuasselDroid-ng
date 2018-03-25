@@ -83,7 +83,6 @@ class MessageListFragment : ServiceBoundFragment() {
     messageList.itemAnimator = null
     messageList.setItemViewCacheSize(20)
 
-    var isScrolling = false
     messageList.addOnScrollListener(
       object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -94,13 +93,7 @@ class MessageListFragment : ServiceBoundFragment() {
           scrollDown.toggle(canScrollDown && isScrollingDown)
         }
 
-        override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
-          isScrolling = when (newState) {
-            RecyclerView.SCROLL_STATE_DRAGGING -> true
-            RecyclerView.SCROLL_STATE_SETTLING -> true
-            else                               -> false
-          }
-        }
+        override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) = Unit
       })
 
     val data = viewModel.buffer_liveData.switchMapNotNull { buffer ->
@@ -132,7 +125,7 @@ class MessageListFragment : ServiceBoundFragment() {
           markAsRead(bufferSyncer, message.bufferId, message.messageId)
           previousMessageId = message.messageId
 
-          if (firstVisibleItemPosition < 2 && !isScrolling) {
+          if (firstVisibleItemPosition < 2) {
             activity?.runOnUiThread { messageList.scrollToPosition(0) }
             runInBackgroundDelayed(16) {
               activity?.runOnUiThread {
