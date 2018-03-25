@@ -3,6 +3,7 @@ package de.kuschku.quasseldroid.ui.settings.about
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -171,6 +172,7 @@ class AboutSettingsFragment : DaggerFragment() {
       )
     ))
     libraries.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+    ViewCompat.setNestedScrollingEnabled(libraries, false)
 
     contributors.layoutManager = LinearLayoutManager(context)
     contributors.adapter = ContributorAdapter(listOf(
@@ -201,6 +203,7 @@ class AboutSettingsFragment : DaggerFragment() {
       )
     ))
     contributors.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+    ViewCompat.setNestedScrollingEnabled(contributors, false)
 
     return view
   }
