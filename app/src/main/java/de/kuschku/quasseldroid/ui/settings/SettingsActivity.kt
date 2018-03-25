@@ -8,8 +8,8 @@ import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 
-abstract class SettingsActivity : ServiceBoundActivity() {
-  protected abstract val fragment: Fragment
+abstract class SettingsActivity(private val fragment: Fragment? = null) : ServiceBoundActivity() {
+  protected open fun fragment(): Fragment? = null
 
   @BindView(R.id.toolbar)
   lateinit var toolbar: Toolbar
@@ -22,8 +22,12 @@ abstract class SettingsActivity : ServiceBoundActivity() {
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-    val transaction = supportFragmentManager.beginTransaction()
-    transaction.add(R.id.fragment_container, fragment)
-    transaction.commit()
+    val fragment = this.fragment ?: this.fragment()
+
+    if (fragment != null) {
+      val transaction = supportFragmentManager.beginTransaction()
+      transaction.replace(R.id.fragment_container, fragment)
+      transaction.commit()
+    }
   }
 }

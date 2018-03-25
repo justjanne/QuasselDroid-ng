@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <include layout="@layout/layout_about_header" />
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="?listPreferredItemHeight"
+    android:orientation="vertical">
+
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:minHeight="?android:attr/listPreferredItemHeightSmall"
+      android:paddingBottom="8dp"
+      android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+      android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+      android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingTop="8dp"
+      android:text="@string/label_contributors"
+      android:textColor="?colorAccent"
+      android:textSize="16sp"
+      android:textStyle="bold" />
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/contributors"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      tools:itemCount="5"
+      tools:listitem="@layout/widget_contributor" />
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="?listPreferredItemHeight"
+    android:orientation="vertical">
+
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:minHeight="?android:attr/listPreferredItemHeightSmall"
+      android:paddingBottom="8dp"
+      android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+      android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+      android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingTop="8dp"
+      android:text="@string/label_libraries"
+      android:textColor="?colorAccent"
+      android:textSize="16sp"
+      android:textStyle="bold" />
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/libraries"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      tools:listitem="@layout/widget_library" />
+
+  </LinearLayout>
+
+</LinearLayout>

@@ -39,11 +39,11 @@ class Editor(
   private val panelStateCallback: (Boolean) -> Unit
 ) : ActionMenuView.OnMenuItemClickListener, Toolbar.OnMenuItemClickListener {
   override fun onMenuItemClick(item: MenuItem?) = when (item?.itemId) {
-    R.id.input_history -> {
+    R.id.action_input_history -> {
       panelStateCallback(true)
       true
     }
-    else               -> formatHandler.onMenuItemClick(item)
+    else                      -> formatHandler.onMenuItemClick(item)
   }
 
   private val lastWord = BehaviorSubject.createDefault(Pair("", IntRange.EMPTY))
@@ -143,7 +143,7 @@ class Editor(
     formattingMenu.menu.retint(activity)
     formattingMenu.setOnMenuItemClickListener(this)
 
-    activity.menuInflater.inflate(R.menu.input_panel, formattingToolbar.menu)
+    activity.menuInflater.inflate(R.menu.editor, formattingToolbar.menu)
     formattingToolbar.menu.retint(activity)
     formattingToolbar.setOnMenuItemClickListener(this)
   }

@@ -294,11 +294,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   }
 
   override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
-    android.R.id.home    -> {
+    android.R.id.home           -> {
       drawerToggle.onOptionsItemSelected(item)
     }
 
-    R.id.filter_messages -> {
+    R.id.action_filter_messages -> {
       runInBackground {
         viewModel.buffer { buffer ->
           val filtered = Message_Type.of(database.filtered().get(accountId, buffer) ?: 0)
@@ -345,15 +345,15 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
       true
     }
-    R.id.settings        -> {
+    R.id.action_settings        -> {
       startActivity(Intent(applicationContext, AppSettingsActivity::class.java))
       true
     }
-    R.id.disconnect      -> {
+    R.id.action_disconnect      -> {
       disconnect()
       true
     }
-    else                 -> super.onOptionsItemSelected(item)
+    else                        -> super.onOptionsItemSelected(item)
   }
 
   private fun disconnect() {

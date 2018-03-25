@@ -2,43 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
   <item
-    android:id="@+id/format_bold"
-    android:icon="@drawable/ic_format_bold"
-    android:title="@string/label_bold"
-    app:showAsAction="always" />
-  <item
-    android:id="@+id/format_italic"
-    android:icon="@drawable/ic_format_italic"
-    android:title="@string/label_italic"
-    app:showAsAction="always" />
-  <item
-    android:id="@+id/format_underline"
-    android:icon="@drawable/ic_format_underline"
-    android:title="@string/label_underline"
-    app:showAsAction="always" />
-  <item
-    android:id="@+id/format_strikethrough"
-    android:icon="@drawable/ic_format_strikethrough"
-    android:title="@string/label_strikethrough"
-    app:showAsAction="always" />
-  <item
-    android:id="@+id/format_monospace"
-    android:icon="@drawable/ic_format_monospace"
-    android:title="@string/label_monospace"
-    app:showAsAction="always" />
-  <item
-    android:id="@+id/format_foreground"
-    android:icon="@drawable/ic_format_foreground"
-    android:title="@string/label_foreground"
-    app:showAsAction="always" />
-  <item
-    android:id="@+id/format_background"
-    android:icon="@drawable/ic_format_background"
-    android:title="@string/label_background"
-    app:showAsAction="always" />
-  <item
-    android:id="@+id/format_clear"
-    android:icon="@drawable/ic_format_clear"
-    android:title="@string/label_clear_formatting"
+    android:id="@+id/action_input_history"
+    android:icon="@drawable/ic_history"
+    android:title="@string/label_input_history"
     app:showAsAction="always" />
 </menu>

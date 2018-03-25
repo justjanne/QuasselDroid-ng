@@ -41,7 +41,7 @@ class FormatHandler(private val editText: EditText) {
     }
 
   @MenuRes
-  val menu: Int = R.menu.editor
+  val menu: Int = R.menu.formatting
 
   fun toggleBold(range: IntRange, createNew: Boolean = true) {
     if (range.isEmpty())

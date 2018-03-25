@@ -1,0 +1,29 @@
+{
+  "data": [
+    {
+      "name": "Frederik M. J. Vestre",
+      "nickname": "freqmod",
+      "description": "Initial qdatastream deserialization attempts"
+    },
+    {
+      "name": "Martin “Java Sucks” Sandsmark",
+      "nickname": "sandsmark",
+      "description": "Legacy protocol implementation, (de)serializers, project (de)moralizer"
+    },
+    {
+      "name": "Magnus Fjell",
+      "nickname": "magnuf",
+      "description": "Legacy UI"
+    },
+    {
+      "name": "Ken Børge Viktil",
+      "nickname": "Kenji",
+      "description": "Legacy UI"
+    },
+    {
+      "name": "Janne Koschinski",
+      "nickname": "justJanne",
+      "description": "Rewrite, UI, Annotation Processors, Backend"
+    }
+  ]
+}

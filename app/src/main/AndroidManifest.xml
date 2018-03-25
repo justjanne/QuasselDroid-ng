@@ -10,7 +10,7 @@
   <application
     android:name=".QuasselDroid"
     android:allowBackup="true"
-    android:icon="@mipmap/ic_launcher"
+    android:icon="@mipmap/ic_launcher_legacy"
     android:label="@string/app_name"
     android:supportsRtl="true"
     android:theme="@style/Theme.SplashTheme">
@@ -51,6 +51,25 @@
       android:label="@string/label_settings"
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.settings.crash.CrashSettingsActivity"
+      android:exported="false"
+      android:label="@string/label_crashes"
+      android:parentActivityName=".ui.settings.app.AppSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.settings.about.AboutSettingsActivity"
+      android:exported="false"
+      android:label="@string/label_about"
+      android:parentActivityName=".ui.settings.app.AppSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.settings.license.LicenseSettingsActivity"
+      android:exported="false"
+      android:label="@string/label_license"
+      android:parentActivityName=".ui.settings.about.AboutSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+
     <activity
       android:name=".ui.setup.accounts.selection.AccountSelectionActivity"
       android:exported="false"

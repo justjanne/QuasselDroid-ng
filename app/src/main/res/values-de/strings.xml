@@ -5,17 +5,21 @@
   <string name="connection_service_title">Verbindungsdienst</string>
   <string name="connection_service_description">Hält eine Verbindung zum Core, um Benachrichtigungen und die Übertragung von Nachrichten zu ermöglichen</string>
 
+  <string name="label_about">Über</string>
   <string name="label_buffer_name">Chatname</string>
   <string name="label_cancel">Abbrechen</string>
   <string name="label_close">Schließen</string>
   <string name="label_connect">Verbinden</string>
+  <string name="label_crashes">Absturzberichte</string>
   <string name="label_delete">Löschen</string>
+  <string name="label_delete_all">Alle Löschen</string>
   <string name="label_disconnect">Verbindung trennen</string>
   <string name="label_filter_messages">Nachrichten filtern</string>
   <string name="label_hide_perm">Permanent ausblenden</string>
   <string name="label_hide_temp">Temporär ausblenden</string>
   <string name="label_input_history">Eingabeverlauf</string>
   <string name="label_join">Verbinden</string>
+  <string name="label_license">Lizenz</string>
   <string name="label_no">Nein</string>
   <string name="label_open">Öffnen</string>
   <string name="label_part">Verlassen</string>
@@ -24,8 +28,10 @@
   <string name="label_save">Speichern</string>
   <string name="label_select_multiple">Auswählen</string>
   <string name="label_settings">Einstellungen</string>
+  <string name="label_share_crashreport">Absturzbericht Teilen</string>
   <string name="label_show_hidden">Alle anzeigen</string>
   <string name="label_unhide">Nicht mehr ausblenden</string>
+  <string name="label_website">Webseite</string>
   <string name="label_yes">Ja</string>
 
   <string name="notification_channel_connection_title">Verbindung</string>

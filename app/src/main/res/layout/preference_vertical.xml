@@ -64,7 +64,7 @@
       android:layout_height="wrap_content"
       android:ellipsize="marquee"
       android:singleLine="true"
-      android:textColor="?android:attr/textColorPrimary"
+      android:textColor="?colorTextPrimary"
       android:textSize="16sp"
       tools:text="Font Size" />
 
@@ -74,7 +74,7 @@
       android:layout_height="wrap_content"
       android:maxLines="10"
       android:textAppearance="?android:attr/textAppearanceSmall"
-      android:textColor="?android:attr/textColorSecondary" />
+      android:textColor="?colorTextSecondary" />
 
     <LinearLayout
       android:id="@android:id/widget_frame"

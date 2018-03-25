@@ -45,7 +45,7 @@ dependencies {
 
   // Utility
   implementation("org.threeten", "threetenbp", "1.3.6", classifier = "no-tzdb")
-  implementation("org.jetbrains", "annotations", "15.0")
+  implementation("org.jetbrains", "annotations", "16.0.1")
 
   // Quassel
   implementation(project(":lib")) {

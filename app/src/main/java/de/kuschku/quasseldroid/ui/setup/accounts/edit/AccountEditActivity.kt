@@ -136,7 +136,7 @@ class AccountEditActivity : AppCompatActivity() {
   }
 
   override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
-    R.id.delete -> {
+    R.id.action_delete -> {
       AlertDialog.Builder(this)
         .setTitle("Delete?")
         .setMessage("Are you sure?")
@@ -161,7 +161,7 @@ class AccountEditActivity : AppCompatActivity() {
         .show()
       true
     }
-    R.id.save   -> {
+    R.id.action_save   -> {
       if (isValid) {
         val it = account
         if (it != null) {
@@ -179,6 +179,6 @@ class AccountEditActivity : AppCompatActivity() {
       }
       true
     }
-    else        -> super.onOptionsItemSelected(item)
+    else               -> super.onOptionsItemSelected(item)
   }
 }

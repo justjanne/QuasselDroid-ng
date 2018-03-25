@@ -120,7 +120,8 @@ dependencies {
   // Utility
   implementation("io.reactivex.rxjava2", "rxjava", "2.1.9")
   implementation("org.threeten", "threetenbp", "1.3.6", classifier = "no-tzdb")
-  implementation("org.jetbrains", "annotations", "15.0")
+  implementation("org.jetbrains", "annotations", "16.0.1")
+  implementation("com.google.code.gson", "gson", "2.8.2")
   withVersion("8.8.1") {
     implementation("com.jakewharton", "butterknife", version)
     kapt("com.jakewharton", "butterknife-compiler", version)
@@ -136,7 +137,6 @@ dependencies {
   // UI
   implementation("me.zhanghai.android.materialprogressbar", "library", "1.4.2")
   implementation("com.afollestad.material-dialogs", "core", "0.9.6.0")
-  implementation("com.stepstone.stepper", "material-stepper", "4.3.1")
   implementation(project(":slidingpanel"))
 
   // Quality Assurance

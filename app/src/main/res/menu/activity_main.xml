@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
   <item
-    android:id="@+id/filter_messages"
+    android:id="@+id/action_filter_messages"
     android:title="@string/label_filter_messages" />
   <item
-    android:id="@+id/settings"
+    android:id="@+id/action_settings"
     android:title="@string/label_settings" />
   <item
-    android:id="@+id/disconnect"
+    android:id="@+id/action_disconnect"
     android:title="@string/label_disconnect" />
 </menu>

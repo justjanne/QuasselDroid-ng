@@ -1,0 +1,155 @@
+{
+  "data": [
+    {
+      "name": "Android Architecture Components: Lifecycle",
+      "version": "1.1.1",
+      "license": {
+        "shortName": "Apache-2.0",
+        "fullName": "Apache License"
+      },
+      "url": "https://android.googlesource.com/platform/frameworks/support/+/master/lifecycle"
+    },
+    {
+      "name": "Android Architecture Components: Paging",
+      "version": "1.0.0-alpha7",
+      "license": {
+        "shortName": "Apache-2.0",
+        "fullName": "Apache License"
+      },
+      "url": "https://android.googlesource.com/platform/frameworks/support/+/master/paging"
+    },
+    {
+      "name": "Android Architecture Components: Room",
+      "version": "1.1.0-beta1",
+      "license": {
+        "shortName": "Apache-2.0",
+        "fullName": "Apache License"
+      },
+      "url": "https://android.googlesource.com/platform/frameworks/support/+/master/room"
+    },
+    {
+      "name": "Android Sliding Up Panel",
+      "version": "3.5.0",
+      "license": {
+        "shortName": "Apache-2.0",
+        "fullName": "Apache License"
+      }
+    },
+    {
+      "name": "Android Support Library",
+      "version": "27.1.0",
+      "license": {
+        "shortName": "Apache-2.0",
+        "fullName": "Apache License"
+      },
+      "url": "https://android.googlesource.com/platform/frameworks/support/+/master"
+    },
+    {
+      "name": "AutoService",
+      "version": "1.0-rc4",
+      "license": {
+        "shortName": "Apache-2.0",
+        "fullName": "Apache License"
+      },
+      "url": "https://github.com/google/auto/tree/master/service"
+    },
+    {
+      "name": "Butter Knife",
+      "version": "8.8.1",
+      "license": {
+        "shortName": "Apache-2.0",
+        "fullName": "Apache License"
+      },
+      "url": "http://jakewharton.github.io/butterknife/"
+    },
+    {
+      "name": "Dagger 2",
+      "version": "2.15",
+      "license": {
+        "shortName": "Apache-2.0",
+        "fullName": "Apache License"
+      },
+      "url": "https://google.github.io/dagger/"
+    },
+    {
+      "name": "Gson",
+      "version": "2.8.2",
+      "license": {
+        "shortName": "Apache-2.0",
+        "fullName": "Apache License"
+      },
+      "url": "https://github.com/google/gson"
+    },
+    {
+      "name": "JavaPoet",
+      "version": "1.10.0",
+      "license": {
+        "shortName": "Apache-2.0",
+        "fullName": "Apache License"
+      },
+      "url": "https://github.com/square/javapoet"
+    },
+    {
+      "name": "JetBrains Java Annotations",
+      "version": "16.0.1",
+      "license": {
+        "shortName": "Apache-2.0",
+        "fullName": "Apache License"
+      },
+      "url": "https://github.com/JetBrains/java-annotations"
+    },
+    {
+      "name": "Kotlin Standard Library",
+      "version": "1.2.31",
+      "license": {
+        "shortName": "Apache-2.0",
+        "fullName": "Apache License"
+      },
+      "url": "https://kotlinlang.org/"
+    },
+    {
+      "name": "LeakCanary",
+      "version": "1.5.4",
+      "license": {
+        "shortName": "Apache-2.0",
+        "fullName": "Apache License"
+      },
+      "url": "https://github.com/square/leakcanary"
+    },
+    {
+      "name": "Material Dialogs",
+      "version": "0.9.6.0",
+      "license": {
+        "shortName": "MIT",
+        "fullName": "The MIT License (MIT}"
+      },
+      "url": "https://github.com/afollestad/material-dialogs"
+    },
+    {
+      "name": "MaterialProgressBar",
+      "version": "1.4.2",
+      "license": {
+        "shortName": "Apache-2.0",
+        "fullName": "Apache License"
+      },
+      "url": "https://github.com/DreaminginCodeZH/MaterialProgressBar"
+    },
+    {
+      "name": "RxJava",
+      "version": "2.1.9",
+      "license": {
+        "shortName": "Apache-2.0",
+        "fullName": "Apache License"
+      },
+      "url": "https://github.com/ReactiveX/RxJava"
+    },
+    {
+      "name": "ThreeTen backport project",
+      "version": "1.3.6",
+      "license": {
+        "shortName": "BSD 3-clause"
+      },
+      "url": "http://www.threeten.org/threetenbp/"
+    }
+  ]
+}

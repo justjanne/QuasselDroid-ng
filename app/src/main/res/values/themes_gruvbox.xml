@@ -33,6 +33,7 @@
     <item name="colorForegroundError">#9d0006</item>
 
     <item name="colorTextPrimary">#3c3836</item>
+    <item name="colorTextPrimaryInverse">#fbf1c7</item>
     <item name="colorTextSecondary">#665c54</item>
     <item name="colorDivider">#2d928374</item>
 
@@ -87,6 +88,7 @@
     <item name="colorForegroundError">#cc241d</item>
 
     <item name="colorTextPrimary">#dbdbb2</item>
+    <item name="colorTextPrimaryInverse">#282828</item>
     <item name="colorTextSecondary">#bdae93</item>
     <item name="colorDivider">#33928374</item>
 
