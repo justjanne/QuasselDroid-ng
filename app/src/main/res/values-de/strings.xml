@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">QuasselDroid</string>
+  <string name="app_description">Ein Android-Client für das dezentralen Quassel IRC Client.</string>
+  <string name="app_description_long">Quassel ist ein dezentraler IRC client, entwickelt in C++ mit Qt. QuasselDroid ist ein Java-basierter Client für den Quassel Core, der es ermöglicht, Quassel auch auf Android™-Telefonen zu nutzen.</string>
 
   <string name="connection_service_title">Verbindungsdienst</string>
   <string name="connection_service_description">Hält eine Verbindung zum Core, um Benachrichtigungen und die Übertragung von Nachrichten zu ermöglichen</string>
@@ -10,15 +12,18 @@
   <string name="label_cancel">Abbrechen</string>
   <string name="label_close">Schließen</string>
   <string name="label_connect">Verbinden</string>
+  <string name="label_contributors">Mitwirkende</string>
   <string name="label_crashes">Absturzberichte</string>
   <string name="label_delete">Löschen</string>
   <string name="label_delete_all">Alle Löschen</string>
   <string name="label_disconnect">Verbindung trennen</string>
   <string name="label_filter_messages">Nachrichten filtern</string>
+  <string name="label_github">GitHub</string>
   <string name="label_hide_perm">Permanent ausblenden</string>
   <string name="label_hide_temp">Temporär ausblenden</string>
   <string name="label_input_history">Eingabeverlauf</string>
   <string name="label_join">Verbinden</string>
+  <string name="label_libraries">Bibliotheken</string>
   <string name="label_license">Lizenz</string>
   <string name="label_no">Nein</string>
   <string name="label_open">Öffnen</string>
