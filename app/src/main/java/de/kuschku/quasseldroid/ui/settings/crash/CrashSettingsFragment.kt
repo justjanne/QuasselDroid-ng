@@ -70,7 +70,9 @@ class CrashSettingsFragment : ServiceBoundFragment() {
       val gson = this.gson
 
       if (crashDir != null && gson != null) {
+        crashDir.mkdirs()
         val list: List<Pair<Report, String>> = crashDir.listFiles()
+          .orEmpty()
           .map { it.readText() }
           .map { Pair<Report, String>(gson.fromJson(it), it) }
           .sortedByDescending { it.first.environment?.crashTime }
@@ -155,7 +157,8 @@ class CrashSettingsFragment : ServiceBoundFragment() {
   override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
     R.id.action_delete_all -> {
       runInBackground {
-        File(requireContext().cacheDir, "crashes").listFiles().forEach {
+        crashDir?.mkdirs()
+        crashDir?.listFiles()?.forEach {
           it.delete()
         }
         requireActivity().runOnUiThread {
