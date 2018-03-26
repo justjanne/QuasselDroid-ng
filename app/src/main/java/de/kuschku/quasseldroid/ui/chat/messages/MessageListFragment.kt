@@ -21,10 +21,7 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.BacklogSettings
-import de.kuschku.quasseldroid.util.helper.invoke
-import de.kuschku.quasseldroid.util.helper.switchMapNotNull
-import de.kuschku.quasseldroid.util.helper.toggle
-import de.kuschku.quasseldroid.util.helper.zip
+import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import javax.inject.Inject
@@ -62,9 +59,10 @@ class MessageListFragment : ServiceBoundFragment() {
   }
 
   private val boundaryCallback = object :
-    PagedList.BoundaryCallback<QuasselDatabase.DatabaseMessage>() {
-    override fun onItemAtFrontLoaded(itemAtFront: QuasselDatabase.DatabaseMessage) = Unit
-    override fun onItemAtEndLoaded(itemAtEnd: QuasselDatabase.DatabaseMessage) = loadMore()
+    PagedList.BoundaryCallback<DisplayMessage>() {
+    override fun onItemAtFrontLoaded(itemAtFront: DisplayMessage) = Unit
+    override fun onItemAtEndLoaded(itemAtEnd: DisplayMessage) =
+      loadMore(lastMessageId = itemAtEnd.content.messageId)
   }
 
   override fun onCreateView(
@@ -103,19 +101,30 @@ class MessageListFragment : ServiceBoundFragment() {
         }
       })
 
-    val data = viewModel.buffer_liveData.switchMapNotNull { buffer ->
-      database.filtered().listen(accountId, buffer).switchMapNotNull { filtered ->
-        LivePagedListBuilder(
-          database.message().findByBufferIdPaged(buffer, filtered),
-          PagedList.Config.Builder()
-            .setPageSize(backlogSettings.pageSize)
-            .setPrefetchDistance(backlogSettings.pageSize)
-            .setInitialLoadSizeHint(backlogSettings.pageSize)
-            .setEnablePlaceholders(true)
-            .build()
-        ).setBoundaryCallback(boundaryCallback).build()
+    val data = combineLatest(viewModel.buffer,
+                             viewModel.selectedMessages,
+                             viewModel.expandedMessages,
+                             viewModel.markerLine)
+      .toLiveData().switchMapNotNull { (buffer, selected, expanded, markerLine) ->
+        database.filtered().listen(accountId, buffer).switchMapNotNull { filtered ->
+          LivePagedListBuilder(
+            database.message().findByBufferIdPaged(buffer, filtered).map {
+              DisplayMessage(
+                content = it,
+                isSelected = selected.contains(it.messageId),
+                isExpanded = expanded.contains(it.messageId),
+                isMarkerLine = markerLine.orNull() == it.messageId
+              )
+            },
+            PagedList.Config.Builder()
+              .setPageSize(backlogSettings.pageSize)
+              .setPrefetchDistance(backlogSettings.pageSize)
+              .setInitialLoadSizeHint(backlogSettings.pageSize)
+              .setEnablePlaceholders(true)
+              .build()
+          ).setBoundaryCallback(boundaryCallback).build()
+        }
       }
-    }
 
     val lastMessageId = viewModel.buffer_liveData.switchMapNotNull {
       database.message().lastMsgId(it)
@@ -123,7 +132,6 @@ class MessageListFragment : ServiceBoundFragment() {
 
     viewModel.sessionManager_liveData.zip(lastMessageId).observe(
       this, Observer {
-      val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
       runInBackground {
         val session = it?.first?.orNull()
         val message = it?.second
@@ -132,13 +140,6 @@ class MessageListFragment : ServiceBoundFragment() {
           markAsRead(bufferSyncer, message.bufferId, message.messageId)
           previousMessageId = message.messageId
         }
-      }
-    })
-
-    viewModel.markerLine_liveData.observe(this, Observer {
-      it?.ifPresent {
-        adapter.markerLinePosition = it
-        adapter.notifyDataSetChanged()
       }
     })
 
@@ -156,7 +157,7 @@ class MessageListFragment : ServiceBoundFragment() {
     var lastBuffer = -1
     data.observe(this, Observer { list ->
       val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
-      val firstVisibleMessageId = adapter[firstVisibleItemPosition]?.messageId
+      val firstVisibleMessageId = adapter[firstVisibleItemPosition]?.content?.messageId
       runInBackground {
         activity?.runOnUiThread {
           list?.let(adapter::submitList)
@@ -200,7 +201,7 @@ class MessageListFragment : ServiceBoundFragment() {
   override fun onPause() {
     val previous = lastBuffer
     val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
-    val messageId = adapter[firstVisibleItemPosition]?.messageId
+    val messageId = adapter[firstVisibleItemPosition]?.content?.messageId
     val bufferSyncer = viewModel.session.value?.orNull()?.bufferSyncer
     if (previous != null && messageId != null) {
       bufferSyncer?.requestSetMarkerLine(previous, messageId)
@@ -208,13 +209,13 @@ class MessageListFragment : ServiceBoundFragment() {
     super.onPause()
   }
 
-  private fun loadMore(initial: Boolean = false) {
+  private fun loadMore(initial: Boolean = false, lastMessageId: MsgId? = null) {
     runInBackground {
       viewModel.buffer { bufferId ->
         viewModel.session {
           it.orNull()?.backlogManager?.requestBacklog(
             bufferId = bufferId,
-            last = database.message().findFirstByBufferId(
+            last = lastMessageId ?: database.message().findFirstByBufferId(
               bufferId
             )?.messageId ?: -1,
             limit = if (initial) backlogSettings.initialAmount else backlogSettings.pageSize
@@ -223,4 +224,5 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     }
   }
+
 }

@@ -5,26 +5,25 @@ import android.support.v7.util.DiffUtil
 import android.util.LruCache
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.protocol.Message_Flag
+import de.kuschku.libquassel.protocol.Message_Flags
+import de.kuschku.libquassel.protocol.Message_Type
+import de.kuschku.libquassel.protocol.Message_Types
 import de.kuschku.libquassel.util.hasFlag
-import de.kuschku.quasseldroid.persistence.QuasselDatabase.DatabaseMessage
 import de.kuschku.quasseldroid.util.helper.getOrPut
 
 class MessageAdapter(
-  private val messageRenderer: MessageRenderer,
-  var markerLinePosition: Pair<MsgId, MsgId>? = null
-) : PagedListAdapter<DatabaseMessage, QuasselMessageViewHolder>(
-  object : DiffUtil.ItemCallback<DatabaseMessage>() {
-    override fun areItemsTheSame(oldItem: DatabaseMessage, newItem: DatabaseMessage) =
-      oldItem.messageId == newItem.messageId
+  private val messageRenderer: MessageRenderer
+) : PagedListAdapter<DisplayMessage, QuasselMessageViewHolder>(
+  object : DiffUtil.ItemCallback<DisplayMessage>() {
+    override fun areItemsTheSame(oldItem: DisplayMessage, newItem: DisplayMessage) =
+      oldItem.content.messageId == newItem.content.messageId
 
-    override fun areContentsTheSame(oldItem: DatabaseMessage, newItem: DatabaseMessage) =
-      oldItem == newItem &&
-      oldItem.messageId != markerLinePosition?.first &&
-      oldItem.messageId != markerLinePosition?.second
+    override fun areContentsTheSame(oldItem: DisplayMessage, newItem: DisplayMessage) =
+      oldItem == newItem
   }) {
 
-  private val messageCache = LruCache<Int, FormattedMessage>(512)
+  private val messageCache = LruCache<DisplayMessage.Tag, FormattedMessage>(512)
 
   fun clearCache() {
     messageCache.evictAll()
@@ -34,24 +33,15 @@ class MessageAdapter(
     getItem(position)?.let {
       messageRenderer.bind(
         holder,
-        if (it.messageId == markerLinePosition?.second || it.messageId == markerLinePosition?.first) {
-          val value = messageRenderer.render(
-            holder.itemView.context, it, markerLinePosition?.second ?: -1
-          )
-          messageCache.put(it.messageId, value)
-          value
-        } else {
-          messageCache.getOrPut(it.messageId) {
-            messageRenderer.render(
-              holder.itemView.context, it, markerLinePosition?.second ?: -1
-            )
-          }
-        })
+        messageCache.getOrPut(it.tag) {
+          messageRenderer.render(holder.itemView.context, it)
+        }
+      )
     }
   }
 
   override fun getItemViewType(position: Int) = getItem(position)?.let {
-    viewType(Message_Flags.of(it.type), Message_Flags.of(it.flag))
+    viewType(Message_Flags.of(it.content.type), Message_Flags.of(it.content.flag))
   } ?: 0
 
   private fun viewType(type: Message_Types, flags: Message_Flags) =
@@ -62,7 +52,7 @@ class MessageAdapter(
     }
 
   override fun getItemId(position: Int): Long {
-    return getItem(position)?.messageId?.toLong() ?: 0L
+    return getItem(position)?.content?.messageId?.toLong() ?: 0L
   }
 
   private fun messageType(viewType: Int): Message_Type? =

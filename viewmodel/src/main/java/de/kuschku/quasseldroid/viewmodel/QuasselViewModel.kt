@@ -3,6 +3,7 @@ package de.kuschku.quasseldroid.viewmodel
 import android.arch.lifecycle.ViewModel
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
@@ -26,6 +27,9 @@ import java.util.concurrent.TimeUnit
 
 class QuasselViewModel : ViewModel() {
   val backendWrapper = BehaviorSubject.createDefault(Observable.empty<Optional<Backend>>())
+
+  val selectedMessages = BehaviorSubject.createDefault(emptyList<MsgId>())
+  val expandedMessages = BehaviorSubject.createDefault(emptyList<MsgId>())
 
   val buffer = BehaviorSubject.createDefault(-1)
   val buffer_liveData = buffer.toLiveData()
@@ -69,8 +73,7 @@ class QuasselViewModel : ViewModel() {
   val markerLine = session.mapSwitchMap { currentSession ->
     buffer.switchMap { currentBuffer ->
       // Get a stream of the latest marker line
-      val raw = currentSession.bufferSyncer?.liveMarkerLine(currentBuffer) ?: Observable.empty()
-      raw.scan(Pair(-1, -1)) { (_, previous), next -> Pair(previous, next) }
+      currentSession.bufferSyncer?.liveMarkerLine(currentBuffer) ?: Observable.empty()
     }
   }
   val markerLine_liveData = markerLine.toLiveData()

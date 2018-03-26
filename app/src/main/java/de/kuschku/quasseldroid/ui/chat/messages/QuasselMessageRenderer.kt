@@ -12,10 +12,8 @@ import android.util.TypedValue
 import de.kuschku.libquassel.protocol.Message.MessageType.*
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
-import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AppearanceSettings.ColorizeNicknamesMode
 import de.kuschku.quasseldroid.settings.AppearanceSettings.ShowPrefixMode
@@ -95,8 +93,7 @@ class QuasselMessageRenderer @Inject constructor(
   }
 
   override fun render(context: Context,
-                      message: QuasselDatabase.DatabaseMessage,
-                      markerLine: MsgId): FormattedMessage {
+                      message: DisplayMessage): FormattedMessage {
     context.theme.styledAttributes(
       R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
       R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
@@ -108,224 +105,224 @@ class QuasselMessageRenderer @Inject constructor(
       }
     }
 
-    val self = Message_Flag.of(message.flag).hasFlag(Message_Flag.Self)
-    val highlight = Message_Flag.of(message.flag).hasFlag(Message_Flag.Highlight)
-    return when (Message_Type.of(message.type).enabledValues().firstOrNull()) {
+    val self = Message_Flag.of(message.content.flag).hasFlag(Message_Flag.Self)
+    val highlight = Message_Flag.of(message.content.flag).hasFlag(Message_Flag.Highlight)
+    return when (Message_Type.of(message.content.type).enabledValues().firstOrNull()) {
       Message_Type.Plain        -> FormattedMessage(
-        message.messageId,
-        timeFormatter.format(message.time.atZone(zoneId)),
+        message.content.messageId,
+        timeFormatter.format(message.content.time.atZone(zoneId)),
         SpanFormatter.format(
           context.getString(R.string.message_format_plain),
-          formatPrefix(message.senderPrefixes, highlight),
-          formatNick(message.sender, self, highlight, false),
-          formatContent(context, message.content, highlight)
+          formatPrefix(message.content.senderPrefixes, highlight),
+          formatNick(message.content.sender, self, highlight, false),
+          formatContent(context, message.content.content, highlight)
         ),
-        message.messageId == markerLine
+        message.isMarkerLine
       )
       Message_Type.Action       -> FormattedMessage(
-        message.messageId,
-        timeFormatter.format(message.time.atZone(zoneId)),
+        message.content.messageId,
+        timeFormatter.format(message.content.time.atZone(zoneId)),
         SpanFormatter.format(
           context.getString(R.string.message_format_action),
-          formatPrefix(message.senderPrefixes, highlight),
-          formatNick(message.sender, self, highlight, false),
-          formatContent(context, message.content, highlight)
+          formatPrefix(message.content.senderPrefixes, highlight),
+          formatNick(message.content.sender, self, highlight, false),
+          formatContent(context, message.content.content, highlight)
         ),
-        message.messageId == markerLine
+        message.isMarkerLine
       )
       Message_Type.Notice       -> FormattedMessage(
-        message.messageId,
-        timeFormatter.format(message.time.atZone(zoneId)),
+        message.content.messageId,
+        timeFormatter.format(message.content.time.atZone(zoneId)),
         SpanFormatter.format(
           context.getString(R.string.message_format_notice),
-          formatPrefix(message.senderPrefixes, highlight),
-          formatNick(message.sender, self, highlight, false),
-          formatContent(context, message.content, highlight)
+          formatPrefix(message.content.senderPrefixes, highlight),
+          formatNick(message.content.sender, self, highlight, false),
+          formatContent(context, message.content.content, highlight)
         ),
-        message.messageId == markerLine
+        message.isMarkerLine
       )
       Message_Type.Nick         -> {
-        val nickSelf = message.sender == message.content || self
+        val nickSelf = message.content.sender == message.content.content || self
         FormattedMessage(
-          message.messageId,
-          timeFormatter.format(message.time.atZone(zoneId)),
+          message.content.messageId,
+          timeFormatter.format(message.content.time.atZone(zoneId)),
           if (nickSelf) {
             SpanFormatter.format(
               context.getString(R.string.message_format_nick_self),
-              formatPrefix(message.senderPrefixes, highlight),
-              formatNick(message.sender, nickSelf, highlight, false)
+              formatPrefix(message.content.senderPrefixes, highlight),
+              formatNick(message.content.sender, nickSelf, highlight, false)
             )
           } else {
             SpanFormatter.format(
               context.getString(R.string.message_format_nick),
-              formatPrefix(message.senderPrefixes, highlight),
-              formatNick(message.sender, nickSelf, highlight, false),
-              formatPrefix(message.senderPrefixes, highlight),
-              formatNick(message.content, nickSelf, highlight, false)
+              formatPrefix(message.content.senderPrefixes, highlight),
+              formatNick(message.content.sender, nickSelf, highlight, false),
+              formatPrefix(message.content.senderPrefixes, highlight),
+              formatNick(message.content.content, nickSelf, highlight, false)
             )
           },
-          message.messageId == markerLine
+          message.isMarkerLine
         )
       }
       Message_Type.Mode         -> FormattedMessage(
-        message.messageId,
-        timeFormatter.format(message.time.atZone(zoneId)),
+        message.content.messageId,
+        timeFormatter.format(message.content.time.atZone(zoneId)),
         SpanFormatter.format(
           context.getString(R.string.message_format_mode),
-          message.content,
-          formatPrefix(message.senderPrefixes, highlight),
-          formatNick(message.sender, self, highlight, false)
+          message.content.content,
+          formatPrefix(message.content.senderPrefixes, highlight),
+          formatNick(message.content.sender, self, highlight, false)
         ),
-        message.messageId == markerLine
+        message.isMarkerLine
       )
       Message_Type.Join         -> FormattedMessage(
-        message.messageId,
-        timeFormatter.format(message.time.atZone(zoneId)),
+        message.content.messageId,
+        timeFormatter.format(message.content.time.atZone(zoneId)),
         SpanFormatter.format(
           context.getString(R.string.message_format_join),
-          formatPrefix(message.senderPrefixes, highlight),
-          formatNick(message.sender, self, highlight, true),
-          message.content
+          formatPrefix(message.content.senderPrefixes, highlight),
+          formatNick(message.content.sender, self, highlight, true),
+          message.content.content
         ),
-        message.messageId == markerLine
+        message.isMarkerLine
       )
       Message_Type.Part         -> FormattedMessage(
-        message.messageId,
-        timeFormatter.format(message.time.atZone(zoneId)),
-        if (message.content.isBlank()) {
+        message.content.messageId,
+        timeFormatter.format(message.content.time.atZone(zoneId)),
+        if (message.content.content.isBlank()) {
           SpanFormatter.format(
             context.getString(R.string.message_format_part_1),
-            formatPrefix(message.senderPrefixes, highlight),
-            formatNick(message.sender, self, highlight, true)
+            formatPrefix(message.content.senderPrefixes, highlight),
+            formatNick(message.content.sender, self, highlight, true)
           )
         } else {
           SpanFormatter.format(
             context.getString(R.string.message_format_part_2),
-            formatPrefix(message.senderPrefixes, highlight),
-            formatNick(message.sender, self, highlight, true),
-            formatContent(context, message.content, highlight)
+            formatPrefix(message.content.senderPrefixes, highlight),
+            formatNick(message.content.sender, self, highlight, true),
+            formatContent(context, message.content.content, highlight)
           )
         },
-        message.messageId == markerLine
+        message.isMarkerLine
       )
       Message_Type.Quit         -> FormattedMessage(
-        message.messageId,
-        timeFormatter.format(message.time.atZone(zoneId)),
-        if (message.content.isBlank()) {
+        message.content.messageId,
+        timeFormatter.format(message.content.time.atZone(zoneId)),
+        if (message.content.content.isBlank()) {
           SpanFormatter.format(
             context.getString(R.string.message_format_quit_1),
-            formatPrefix(message.senderPrefixes, highlight),
-            formatNick(message.sender, self, highlight, true)
+            formatPrefix(message.content.senderPrefixes, highlight),
+            formatNick(message.content.sender, self, highlight, true)
           )
         } else {
           SpanFormatter.format(
             context.getString(R.string.message_format_quit_2),
-            formatPrefix(message.senderPrefixes, highlight),
-            formatNick(message.sender, self, highlight, true),
-            formatContent(context, message.content, highlight)
+            formatPrefix(message.content.senderPrefixes, highlight),
+            formatNick(message.content.sender, self, highlight, true),
+            formatContent(context, message.content.content, highlight)
           )
         },
-        message.messageId == markerLine
+        message.isMarkerLine
       )
       Message_Type.Kick         -> {
-        val (user, reason) = message.content.split(' ', limit = 2) + listOf("", "")
+        val (user, reason) = message.content.content.split(' ', limit = 2) + listOf("", "")
         FormattedMessage(
-          message.messageId,
-          timeFormatter.format(message.time.atZone(zoneId)),
+          message.content.messageId,
+          timeFormatter.format(message.content.time.atZone(zoneId)),
           if (reason.isBlank()) {
             SpanFormatter.format(
               context.getString(R.string.message_format_kick_1),
               formatNick(user, false, highlight, false),
-              formatPrefix(message.senderPrefixes, highlight),
-              formatNick(message.sender, self, highlight, true)
+              formatPrefix(message.content.senderPrefixes, highlight),
+              formatNick(message.content.sender, self, highlight, true)
             )
           } else {
             SpanFormatter.format(
               context.getString(R.string.message_format_kick_2),
               formatNick(user, false, highlight, false),
-              formatPrefix(message.senderPrefixes, highlight),
-              formatNick(message.sender, self, highlight, true),
+              formatPrefix(message.content.senderPrefixes, highlight),
+              formatNick(message.content.sender, self, highlight, true),
               formatContent(context, reason, highlight)
             )
           },
-          message.messageId == markerLine
+          message.isMarkerLine
         )
       }
       Message_Type.Kill         -> {
-        val (user, reason) = message.content.split(' ', limit = 2) + listOf("", "")
+        val (user, reason) = message.content.content.split(' ', limit = 2) + listOf("", "")
         FormattedMessage(
-          message.messageId,
-          timeFormatter.format(message.time.atZone(zoneId)),
+          message.content.messageId,
+          timeFormatter.format(message.content.time.atZone(zoneId)),
           if (reason.isBlank()) {
             SpanFormatter.format(
               context.getString(R.string.message_format_kill_1),
               formatNick(user, false, highlight, false),
-              formatPrefix(message.senderPrefixes, highlight),
-              formatNick(message.sender, self, highlight, true)
+              formatPrefix(message.content.senderPrefixes, highlight),
+              formatNick(message.content.sender, self, highlight, true)
             )
           } else {
             SpanFormatter.format(
               context.getString(R.string.message_format_kill_2),
               formatNick(user, false, highlight, false),
-              formatPrefix(message.senderPrefixes, highlight),
-              formatNick(message.sender, self, highlight, true),
+              formatPrefix(message.content.senderPrefixes, highlight),
+              formatNick(message.content.sender, self, highlight, true),
               formatContent(context, reason, highlight)
             )
           },
-          message.messageId == markerLine
+          message.isMarkerLine
         )
       }
       Message_Type.NetsplitJoin -> {
-        val split = message.content.split("#:#")
+        val split = message.content.content.split("#:#")
         val (server1, server2) = split.last().split(' ')
         val usersAffected = split.size - 1
         FormattedMessage(
-          message.messageId,
-          timeFormatter.format(message.time.atZone(zoneId)),
+          message.content.messageId,
+          timeFormatter.format(message.content.time.atZone(zoneId)),
           context.resources.getQuantityString(
             R.plurals.message_netsplit_join, usersAffected, server1, server2, usersAffected
           ),
-          message.messageId == markerLine
+          message.isMarkerLine
         )
       }
       Message_Type.NetsplitQuit -> {
-        val split = message.content.split("#:#")
+        val split = message.content.content.split("#:#")
         val (server1, server2) = split.last().split(' ')
         val usersAffected = split.size - 1
         FormattedMessage(
-          message.messageId,
-          timeFormatter.format(message.time.atZone(zoneId)),
+          message.content.messageId,
+          timeFormatter.format(message.content.time.atZone(zoneId)),
           context.resources.getQuantityString(
             R.plurals.message_netsplit_quit, usersAffected, server1, server2, usersAffected
           ),
-          message.messageId == markerLine
+          message.isMarkerLine
         )
       }
       Message_Type.Server,
       Message_Type.Info,
       Message_Type.Error        -> FormattedMessage(
-        message.messageId,
-        timeFormatter.format(message.time.atZone(zoneId)),
-        formatContent(context, message.content, highlight),
-        message.messageId == markerLine
+        message.content.messageId,
+        timeFormatter.format(message.content.time.atZone(zoneId)),
+        formatContent(context, message.content.content, highlight),
+        message.isMarkerLine
       )
       Message_Type.Topic        -> FormattedMessage(
-        message.messageId,
-        timeFormatter.format(message.time.atZone(zoneId)),
-        formatContent(context, message.content, highlight),
-        message.messageId == markerLine
+        message.content.messageId,
+        timeFormatter.format(message.content.time.atZone(zoneId)),
+        formatContent(context, message.content.content, highlight),
+        message.isMarkerLine
       )
       else                      -> FormattedMessage(
-        message.messageId,
-        timeFormatter.format(message.time.atZone(zoneId)),
+        message.content.messageId,
+        timeFormatter.format(message.content.time.atZone(zoneId)),
         SpanFormatter.format(
           "[%d] %s%s: %s",
-          message.type,
-          formatPrefix(message.senderPrefixes, highlight),
-          formatNick(message.sender, self, highlight, true),
-          message.content
+          message.content.type,
+          formatPrefix(message.content.senderPrefixes, highlight),
+          formatNick(message.content.sender, self, highlight, true),
+          message.content.content
         ),
-        message.messageId == markerLine
+        message.isMarkerLine
       )
     }
   }
