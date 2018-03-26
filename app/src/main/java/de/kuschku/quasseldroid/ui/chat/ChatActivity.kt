@@ -35,6 +35,7 @@ import de.kuschku.libquassel.util.or
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.chat.input.Editor
 import de.kuschku.quasseldroid.ui.chat.input.MessageHistoryAdapter
 import de.kuschku.quasseldroid.ui.settings.app.AppSettingsActivity
@@ -111,6 +112,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       viewModel.lastWord,
       findViewById(R.id.chatline),
       findViewById(R.id.send),
+      findViewById(R.id.tab_complete),
       listOf(
         findViewById(R.id.autocomplete_list),
         findViewById(R.id.autocomplete_list_expanded)
@@ -253,6 +255,13 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     editorPanel.addPanelSlideListener(panelSlideListener)
     editorPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+  }
+
+  override fun onStart() {
+    if (Settings.autoComplete(this) != autoCompleteSettings) {
+      recreate()
+    }
+    super.onStart()
   }
 
   data class AutoCompletionState(

@@ -19,6 +19,7 @@ import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.util.helper.lastWordIndices
 import de.kuschku.quasseldroid.util.helper.lineSequence
 import de.kuschku.quasseldroid.util.helper.retint
+import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -32,6 +33,7 @@ class Editor(
   // Views
   val chatline: AppCompatEditText,
   send: AppCompatImageButton,
+  tabComplete: AppCompatImageButton,
   autoCompleteLists: List<RecyclerView>,
   formattingMenu: ActionMenuView,
   formattingToolbar: Toolbar,
@@ -156,6 +158,11 @@ class Editor(
       chatline.setOnTouchListener { _, event ->
         gestureDetector.onTouchEvent(event)
       }
+    }
+
+    tabComplete.visibleIf(autoCompleteSettings.button)
+    tabComplete.setOnClickListener {
+      autoComplete()
     }
 
     lastWordContainer.onNext(lastWord)

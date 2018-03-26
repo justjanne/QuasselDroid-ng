@@ -63,6 +63,27 @@ object Settings {
     )
   }
 
+  fun autoComplete(context: Context) = context.sharedPreferences {
+    AutoCompleteSettings(
+      button = getBoolean(
+        context.getString(R.string.preference_autocomplete_button_key),
+        AutoCompleteSettings.DEFAULT.button
+      ),
+      doubleTap = getBoolean(
+        context.getString(R.string.preference_autocomplete_doubletap_key),
+        AutoCompleteSettings.DEFAULT.button
+      ),
+      auto = getBoolean(
+        context.getString(R.string.preference_autocomplete_auto_key),
+        AutoCompleteSettings.DEFAULT.button
+      ),
+      prefix = getBoolean(
+        context.getString(R.string.preference_autocomplete_prefix_key),
+        AutoCompleteSettings.DEFAULT.button
+      )
+    )
+  }
+
   fun backlog(context: Context) = context.sharedPreferences {
     BacklogSettings(
       pageSize = getString(

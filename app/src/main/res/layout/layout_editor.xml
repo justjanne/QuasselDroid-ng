@@ -4,6 +4,19 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
+  <android.support.v7.widget.AppCompatImageButton
+    android:id="@+id/tab_complete"
+    style="?attr/buttonStyleSmall"
+    android:layout_width="?attr/actionBarSize"
+    android:layout_height="?attr/actionBarSize"
+    android:layout_gravity="top"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:padding="12dp"
+    android:scaleType="fitXY"
+    app:tint="?attr/colorTextSecondary"
+    app:layout_constraintStart_toStartOf="parent"
+    app:srcCompat="@drawable/ic_tab" />
+
   <ScrollView
     android:id="@+id/chatline_scroller"
     android:layout_width="0dp"
@@ -11,7 +24,7 @@
     app:layout_constraintBottom_toTopOf="@+id/autocomplete_list_expanded"
     app:layout_constraintEnd_toStartOf="@+id/send"
     app:layout_constraintHorizontal_bias="1.0"
-    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintStart_toEndOf="@+id/tab_complete"
     app:layout_constraintTop_toTopOf="parent">
 
     <android.support.v7.widget.AppCompatEditText
