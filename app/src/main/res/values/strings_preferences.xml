@@ -92,8 +92,23 @@
     <item>SEND</item>
   </string-array>
 
-  <string name="preference_autocomplete_key" translatable="false">autocomplete</string>
-  <string name="preference_autocomplete_title">Show AutoComplete UI</string>
+  <string name="preference_autocomplete_title">Autocomplete</string>
+
+  <string name="preference_autocomplete_button_key" translatable="false">autocomplete_button</string>
+  <string name="preference_autocomplete_button_title">Autocomplete Button</string>
+  <string name="preference_autocomplete_button_summary">Shows a button on the left of the input line that triggers tabcomplete</string>
+
+  <string name="preference_autocomplete_doubletap_key" translatable="false">autocomplete_doubletap</string>
+  <string name="preference_autocomplete_doubletap_title">Double tap to autocomplete</string>
+  <string name="preference_autocomplete_doubletap_summary">Suggest nicks and channels after doubleclicking on the input field</string>
+
+  <string name="preference_autocomplete_auto_key" translatable="false">autocomplete_auto</string>
+  <string name="preference_autocomplete_auto_title">Show automatically</string>
+  <string name="preference_autocomplete_auto_summary">Suggest nicks and channels after entering the first 3 characters</string>
+
+  <string name="preference_autocomplete_prefix_key" translatable="false">autocomplete_prefix</string>
+  <string name="preference_autocomplete_prefix_title">Show after prefix</string>
+  <string name="preference_autocomplete_prefix_summary">Suggest nicks and channels after entering @ or #</string>
 
   <string name="preference_hostmask_key" translatable="false">hostmask</string>
   <string name="preference_hostmask_title">Show Hostmask</string>

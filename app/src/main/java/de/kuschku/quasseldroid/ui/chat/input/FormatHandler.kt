@@ -19,7 +19,9 @@ import de.kuschku.quasseldroid.util.helper.selection
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid.util.irc.format.spans.*
 
-class FormatHandler(private val editText: EditText) {
+class FormatHandler(
+  private val editText: EditText
+) {
   private val serializer = IrcFormatSerializer(editText.context)
   val formattedText: Sequence<String>
     get() = editText.text.lineSequence().map { serializer.toEscapeCodes(SpannableString(it)) }

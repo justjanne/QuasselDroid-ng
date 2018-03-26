@@ -118,6 +118,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       findViewById(R.id.formatting_menu),
       findViewById(R.id.formatting_toolbar),
       appearanceSettings,
+      autoCompleteSettings,
       { lines ->
         viewModel.session { sessionOptional ->
           val session = sessionOptional.orNull()

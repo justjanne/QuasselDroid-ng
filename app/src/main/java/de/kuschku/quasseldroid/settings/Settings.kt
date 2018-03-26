@@ -52,10 +52,6 @@ object Settings {
         context.getString(R.string.preference_colorize_mirc_key),
         AppearanceSettings.DEFAULT.colorizeMirc
       ),
-      showAutocomplete = getBoolean(
-        context.getString(R.string.preference_autocomplete_key),
-        AppearanceSettings.DEFAULT.showAutocomplete
-      ),
       showHostmask = getBoolean(
         context.getString(R.string.preference_hostmask_key),
         AppearanceSettings.DEFAULT.showHostmask

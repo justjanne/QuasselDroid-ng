@@ -12,7 +12,6 @@ data class AppearanceSettings(
   val textSize: Int = 14,
   val showSeconds: Boolean = false,
   val use24hClock: Boolean = true,
-  val showAutocomplete: Boolean = true,
   val showHostmask: Boolean = false,
   val showLag: Boolean = true,
   val theme: Theme = Theme.QUASSEL_LIGHT

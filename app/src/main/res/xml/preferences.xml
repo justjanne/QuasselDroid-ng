@@ -60,11 +60,6 @@
       android:title="@string/preference_show_prefix_title" />
 
     <SwitchPreference
-      android:defaultValue="true"
-      android:key="@string/preference_autocomplete_key"
-      android:title="@string/preference_autocomplete_title" />
-
-    <SwitchPreference
       android:defaultValue="false"
       android:key="@string/preference_hostmask_key"
       android:summary="@string/preference_hostmask_summary"
@@ -75,6 +70,33 @@
       android:key="@string/preference_show_lag_key"
       android:summary="@string/preference_show_lag_summary"
       android:title="@string/preference_show_lag_title" />
+  </PreferenceCategory>
+
+  <PreferenceCategory android:title="@string/preference_autocomplete_title">
+
+    <SwitchPreference
+      android:defaultValue="false"
+      android:key="@string/preference_autocomplete_button_key"
+      android:summary="@string/preference_autocomplete_button_summary"
+      android:title="@string/preference_autocomplete_button_title" />
+
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="@string/preference_autocomplete_doubletap_key"
+      android:summary="@string/preference_autocomplete_doubletap_summary"
+      android:title="@string/preference_autocomplete_doubletap_title" />
+
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="@string/preference_autocomplete_auto_key"
+      android:summary="@string/preference_autocomplete_auto_summary"
+      android:title="@string/preference_autocomplete_auto_title" />
+
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="@string/preference_autocomplete_prefix_key"
+      android:summary="@string/preference_autocomplete_prefix_summary"
+      android:title="@string/preference_autocomplete_prefix_title" />
   </PreferenceCategory>
 
   <PreferenceCategory android:title="@string/preference_backlog_title">

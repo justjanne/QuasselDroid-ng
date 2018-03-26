@@ -7,11 +7,14 @@ import android.support.v7.widget.*
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
+import android.view.GestureDetector
 import android.view.KeyEvent
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.inputmethod.EditorInfo
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
+import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.util.helper.lastWordIndices
 import de.kuschku.quasseldroid.util.helper.lineSequence
@@ -34,6 +37,7 @@ class Editor(
   formattingToolbar: Toolbar,
   // Settings
   private val appearanceSettings: AppearanceSettings,
+  private val autoCompleteSettings: AutoCompleteSettings,
   // Listeners
   private val sendCallback: (Sequence<Pair<CharSequence, String>>) -> Unit,
   private val panelStateCallback: (Boolean) -> Unit
@@ -116,7 +120,6 @@ class Editor(
 
     chatline.addTextChangedListener(textWatcher)
 
-
     val autocompleteAdapter = AutoCompleteAdapter(
       // This is still broken when mixing tab complete and UI auto complete
       formatHandler::autoComplete
@@ -124,16 +127,34 @@ class Editor(
 
     autoCompleteData.observe(activity, Observer {
       val query = it?.first ?: ""
-      val list = if (query.length >= 3) it?.second.orEmpty() else emptyList()
-
-      autocompleteAdapter.submitList(list)
+      val shouldShowResults = (autoCompleteSettings.auto && query.length >= 3) ||
+                              (autoCompleteSettings.prefix && query.startsWith('@')) ||
+                              (autoCompleteSettings.prefix && query.startsWith('#'))
+      autocompleteAdapter.submitList(if (shouldShowResults) it?.second.orEmpty() else emptyList())
     })
 
-    if (appearanceSettings.showAutocomplete) {
+    if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
       for (autoCompleteList in autoCompleteLists) {
         autoCompleteList.layoutManager = LinearLayoutManager(activity)
         autoCompleteList.itemAnimator = DefaultItemAnimator()
         autoCompleteList.adapter = autocompleteAdapter
+      }
+    }
+
+    if (autoCompleteSettings.doubleTap) {
+      val gestureDetector = GestureDetector(
+        chatline.context, object : GestureDetector.SimpleOnGestureListener() {
+        override fun onDoubleTap(e: MotionEvent?): Boolean {
+          autoComplete()
+          return true
+        }
+
+        override fun onDoubleTapEvent(e: MotionEvent?): Boolean {
+          return true
+        }
+      })
+      chatline.setOnTouchListener { _, event ->
+        gestureDetector.onTouchEvent(event)
       }
     }
 

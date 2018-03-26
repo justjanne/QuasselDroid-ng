@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.Provides
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
+import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.BacklogSettings
 import de.kuschku.quasseldroid.settings.ConnectionSettings
 import de.kuschku.quasseldroid.util.helper.sharedPreferences
@@ -58,10 +59,6 @@ class SettingsModule {
         context.getString(R.string.preference_colorize_mirc_key),
         AppearanceSettings.DEFAULT.colorizeMirc
       ),
-      showAutocomplete = getBoolean(
-        context.getString(R.string.preference_autocomplete_key),
-        AppearanceSettings.DEFAULT.showAutocomplete
-      ),
       showHostmask = getBoolean(
         context.getString(R.string.preference_hostmask_key),
         AppearanceSettings.DEFAULT.showHostmask
@@ -69,6 +66,28 @@ class SettingsModule {
       showLag = getBoolean(
         context.getString(R.string.preference_show_lag_key),
         AppearanceSettings.DEFAULT.showLag
+      )
+    )
+  }
+
+  @Provides
+  fun provideAutoCompleteSettings(context: Context) = context.sharedPreferences {
+    AutoCompleteSettings(
+      button = getBoolean(
+        context.getString(R.string.preference_autocomplete_button_key),
+        AutoCompleteSettings.DEFAULT.button
+      ),
+      doubleTap = getBoolean(
+        context.getString(R.string.preference_autocomplete_doubletap_key),
+        AutoCompleteSettings.DEFAULT.button
+      ),
+      auto = getBoolean(
+        context.getString(R.string.preference_autocomplete_auto_key),
+        AutoCompleteSettings.DEFAULT.button
+      ),
+      prefix = getBoolean(
+        context.getString(R.string.preference_autocomplete_prefix_key),
+        AutoCompleteSettings.DEFAULT.button
       )
     )
   }

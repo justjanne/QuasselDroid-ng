@@ -37,7 +37,19 @@
   <string name="preference_input_enter_entry_emoji">Emoji-Auswahl</string>
   <string name="preference_input_enter_entry_send">Senden</string>
 
-  <string name="preference_autocomplete_title">Autovervollständigungs-UI</string>
+  <string name="preference_autocomplete_title">Autovervollständigung</string>
+
+  <string name="preference_autocomplete_button_title">Autovervollständigungsknopf</string>
+  <string name="preference_autocomplete_button_summary">Zeigt einen Knopf um Namen und Chats zu vervollständigen</string>
+
+  <string name="preference_autocomplete_doubletap_title">Doppelclick-Autocomplete</string>
+  <string name="preference_autocomplete_doubletap_summary">Vervollständigt Namen und Chats automatisch, wenn auf das Eingabefeld doppelgeklickt wird</string>
+
+  <string name="preference_autocomplete_auto_title">Automatisch anzeigen</string>
+  <string name="preference_autocomplete_auto_summary">Vervollständigt Namen und Chats automatischen nach den ersten 3 Buchstaben</string>
+
+  <string name="preference_autocomplete_prefix_title">Nach Präfix anzeigen</string>
+  <string name="preference_autocomplete_prefix_summary">Vervollständigt Namen und Chats automatisch nach einem @ oder #</string>
 
   <string name="preference_hostmask_title">Hostmaske</string>
   <string name="preference_hostmask_summary">Zeigt die gesame Spitzname!Ident@Host Information an</string>
