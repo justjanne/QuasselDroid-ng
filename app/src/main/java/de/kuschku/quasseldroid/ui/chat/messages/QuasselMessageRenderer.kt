@@ -37,6 +37,8 @@ class QuasselMessageRenderer @Inject constructor(
     timePattern(appearanceSettings.showSeconds, appearanceSettings.use24hClock)
   )
 
+  val monospaceItalic = Typeface.create(Typeface.MONOSPACE, Typeface.ITALIC)
+
   private fun timePattern(showSeconds: Boolean,
                           use24hClock: Boolean) = when (use24hClock to showSeconds) {
     false to true  -> "hh:mm:ss a"
@@ -74,7 +76,12 @@ class QuasselMessageRenderer @Inject constructor(
       }
     }
     if (appearanceSettings.useMonospace) {
-      viewHolder.content.typeface = Typeface.MONOSPACE
+      val old = viewHolder.content.typeface
+      if (old.isItalic) {
+        viewHolder.content.typeface = monospaceItalic
+      } else {
+        viewHolder.content.typeface = Typeface.MONOSPACE
+      }
     }
     val textSize = appearanceSettings.textSize.toFloat()
     viewHolder.time.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)

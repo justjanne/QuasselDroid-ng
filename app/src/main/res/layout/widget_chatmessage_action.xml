@@ -25,7 +25,7 @@
       android:layout_marginRight="@dimen/message_horizontal"
       android:textColor="?attr/colorForegroundSecondary"
       android:typeface="monospace"
-      tools:text="[15:55]" />
+      tools:text="@sample/messages.json/data/time" />
 
     <TextView
       android:id="@+id/content"
@@ -35,7 +35,7 @@
       android:textColor="?attr/colorForegroundAction"
       android:textIsSelectable="true"
       android:textStyle="italic"
-      tools:text="-*- justJanne loves the new version" />
+      tools:text="@sample/messages.json/data/message" />
   </LinearLayout>
 
   <View

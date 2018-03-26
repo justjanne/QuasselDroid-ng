@@ -25,7 +25,7 @@
       android:layout_marginRight="@dimen/message_horizontal"
       android:fontFamily="monospace"
       android:textColor="?attr/colorForegroundSecondary"
-      tools:text="[15:55]" />
+      tools:text="@sample/messages.json/data/time" />
 
     <TextView
       android:id="@+id/content"
@@ -35,7 +35,7 @@
       android:textColor="?attr/colorForegroundSecondary"
       android:textIsSelectable="true"
       android:textStyle="italic"
-      tools:text="Connecting to irc.freenode.net:6667..." />
+      tools:text="@sample/messages.json/data/message" />
   </LinearLayout>
 
   <View
