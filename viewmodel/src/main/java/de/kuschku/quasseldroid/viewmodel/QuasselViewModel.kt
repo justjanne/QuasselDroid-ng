@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModel
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.NetworkId
-import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
@@ -247,7 +246,7 @@ class QuasselViewModel : ViewModel() {
                     combineLatest<AutoCompleteItem>(nicks + buffers)
                       .map { list ->
                         val ignoredStartingCharacters = charArrayOf(
-                          '-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\'
+                          '-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\', '@'
                         )
 
                         Pair(
