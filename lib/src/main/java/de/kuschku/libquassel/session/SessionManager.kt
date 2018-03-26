@@ -134,11 +134,7 @@ class SessionManager(offlineSession: ISession,
       val userData = lastUserData
 
       if (clientData != null && trustManager != null && address != null && userData != null) {
-        state.or(ConnectionState.DISCONNECTED).let {
-          if (it == ConnectionState.DISCONNECTED || it == ConnectionState.CLOSED || forceReconnect) {
-            connect(clientData, trustManager, address, userData, forceReconnect)
-          }
-        }
+        connect(clientData, trustManager, address, userData, forceReconnect)
       }
     }
   }

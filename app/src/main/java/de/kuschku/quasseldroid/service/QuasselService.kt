@@ -7,6 +7,8 @@ import android.net.ConnectivityManager
 import android.os.Binder
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.session.*
+import de.kuschku.libquassel.util.compatibility.LoggingHandler
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
@@ -44,7 +46,7 @@ class QuasselService : DaggerLifecycleService(),
     if (this.connectionSettings.showNotification != connectionSettings.showNotification) {
       this.connectionSettings = connectionSettings
 
-      updateNotificationStatus()
+      updateNotificationStatus(this.progress)
     }
 
     val (accountId, reconnect) = this.sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
@@ -68,11 +70,11 @@ class QuasselService : DaggerLifecycleService(),
   private var notificationHandle: QuasseldroidNotificationManager.Handle? = null
   private var progress = Triple(ConnectionState.DISCONNECTED, 0, 0)
 
-  private fun updateNotificationStatus() {
+  private fun updateNotificationStatus(rawProgress: Triple<ConnectionState, Int, Int>) {
     if (connectionSettings.showNotification) {
       val notificationHandle = notificationManager.notificationBackground()
       this.notificationHandle = notificationHandle
-      updateNotification(notificationHandle)
+      updateNotification(notificationHandle, rawProgress)
       startForeground(notificationHandle.id, notificationHandle.builder.build())
     } else {
       this.notificationHandle = null
@@ -96,8 +98,10 @@ class QuasselService : DaggerLifecycleService(),
     }
   }
 
-  private fun updateNotification(handle: QuasseldroidNotificationManager.Handle) {
-    val (state, progress, max) = this.progress
+  private fun updateNotification(handle: QuasseldroidNotificationManager.Handle,
+                                 rawProgress: Triple<ConnectionState, Int, Int>) {
+    log(LoggingHandler.LogLevel.ERROR, "DEBUG", "progress: $rawProgress")
+    val (state, progress, max) = rawProgress
     when (state) {
       ConnectionState.DISCONNECTED -> {
         handle.builder.setContentTitle(getString(R.string.label_status_disconnected))
@@ -267,15 +271,17 @@ class QuasselService : DaggerLifecycleService(),
     )
 
     sessionManager.connectionProgress.toLiveData().observe(this, Observer {
+      log(LoggingHandler.LogLevel.ERROR, "DEBUG", "progress: $it")
       if (this.progress.first != it?.first && it?.first == ConnectionState.CONNECTED) {
         handlerService.backend {
           database.message().clearMessages()
         }
       }
-      this.progress = it ?: Triple(ConnectionState.DISCONNECTED, 0, 0)
+      val rawProgress = it ?: Triple(ConnectionState.DISCONNECTED, 0, 0)
+      this.progress = rawProgress
       val handle = this.notificationHandle
       if (handle != null) {
-        updateNotification(handle)
+        updateNotification(handle, rawProgress)
         notificationManager.notify(handle)
       }
     })
@@ -283,16 +289,15 @@ class QuasselService : DaggerLifecycleService(),
     Observable.combineLatest(
       sessionManager.state.filter { it == ConnectionState.DISCONNECTED || it == ConnectionState.CLOSED },
       connectivity,
-      BiFunction { a: ConnectionState, b: Unit -> a to b })
+      BiFunction { a: ConnectionState, _: Unit -> a })
       .distinctUntilChanged()
       .delay(200, TimeUnit.MILLISECONDS)
-      .throttleFirst(5, TimeUnit.SECONDS)
+      .throttleFirst(1, TimeUnit.SECONDS)
       .toLiveData()
       .observe(
         this, Observer {
-        sessionManager.ifDisconnected {
+        if (it == ConnectionState.DISCONNECTED || it == ConnectionState.CLOSED)
           sessionManager.reconnect(true)
-        }
       })
 
     sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
@@ -308,7 +313,7 @@ class QuasselService : DaggerLifecycleService(),
     notificationManager.init()
 
     update()
-    updateNotificationStatus()
+    updateNotificationStatus(this.progress)
   }
 
   override fun onDestroy() {
