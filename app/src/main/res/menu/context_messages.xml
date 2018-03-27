@@ -2,8 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
   <item
     android:id="@+id/action_copy"
+    android:icon="@drawable/ic_copy"
     android:title="@string/label_copy" />
   <item
     android:id="@+id/action_share"
+    android:icon="@drawable/ic_share"
     android:title="@string/label_share" />
 </menu>
