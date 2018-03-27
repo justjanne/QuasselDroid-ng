@@ -2,7 +2,9 @@ package de.kuschku.quasseldroid.persistence
 
 import android.arch.lifecycle.LiveData
 import android.arch.paging.DataSource
+import android.arch.persistence.db.SimpleSQLiteQuery
 import android.arch.persistence.db.SupportSQLiteDatabase
+import android.arch.persistence.db.SupportSQLiteQuery
 import android.arch.persistence.room.*
 import android.arch.persistence.room.migration.Migration
 import android.content.Context
@@ -59,6 +61,15 @@ abstract class QuasselDatabase : RoomDatabase() {
       "SELECT * FROM message WHERE bufferId = :bufferId AND type & ~ :type > 0 ORDER BY messageId DESC"
     )
     fun findByBufferIdPaged(bufferId: Int, type: Int): DataSource.Factory<Int, DatabaseMessage>
+
+    @RawQuery(observedEntities = [DatabaseMessage::class])
+    fun findMessagesRawPaged(query: SupportSQLiteQuery): DataSource.Factory<Int, DatabaseMessage>
+
+    @RawQuery
+    fun findDaysRaw(query: SupportSQLiteQuery): List<Instant>
+
+    @RawQuery
+    fun findMessagesRaw(query: SupportSQLiteQuery): List<DatabaseMessage>
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId DESC LIMIT 1")
     fun findLastByBufferId(bufferId: Int): DatabaseMessage?
@@ -164,3 +175,71 @@ fun QuasselDatabase.MessageDao.clearMessages(
 ) {
   this.clearMessages(bufferId, idRange.first, idRange.last)
 }
+
+fun QuasselDatabase.MessageDao.findByBufferIdPagedWithDayChange(bufferId: Int, type: Int) =
+  this.findMessagesRawPaged(SimpleSQLiteQuery("""
+SELECT t.*
+FROM
+  (
+    SELECT
+      messageId,
+      time,
+      type,
+      flag,
+      bufferId,
+      sender,
+      senderPrefixes,
+      content
+    FROM message
+    WHERE bufferId = ?
+          AND type & ~? > 0
+    UNION ALL
+    SELECT DISTINCT
+      strftime('%s', date(datetime(time / 1000, 'unixepoch')), 'utc') * -1000 AS messageId,
+      strftime('%s', date(datetime(time / 1000, 'unixepoch')), 'utc') * 1000  AS time,
+      8192                                                             AS type,
+      0                                                                AS flag,
+      ?                                                                AS bufferId,
+      ''                                                               AS sender,
+      ''                                                               AS senderPrefixes,
+      ''                                                               AS content
+    FROM message
+    WHERE bufferId = ?
+          AND type & ~? > 0
+  ) t
+ORDER BY time DESC
+  """, arrayOf(bufferId, type, bufferId, bufferId, type)))
+
+fun QuasselDatabase.MessageDao.findByBufferIdWithDayChange(bufferId: Int, type: Int) =
+  this.findMessagesRaw(SimpleSQLiteQuery("""
+SELECT t.*
+FROM
+  (
+    SELECT
+      messageId,
+      time,
+      type,
+      flag,
+      bufferId,
+      sender,
+      senderPrefixes,
+      content
+    FROM message
+    WHERE bufferId = ?
+          AND type & ~? > 0
+    UNION ALL
+    SELECT DISTINCT
+      strftime('%s', date(datetime(time / 1000, 'unixepoch'))) * -1000 AS messageId,
+      strftime('%s', date(datetime(time / 1000, 'unixepoch'))) * 1000  AS time,
+      8192                                                             AS type,
+      0                                                                AS flag,
+      ?                                                                AS bufferId,
+      ''                                                               AS sender,
+      ''                                                               AS senderPrefixes,
+      ''                                                               AS content
+    FROM message
+    WHERE bufferId = ?
+          AND type & ~? > 0
+  ) t
+ORDER BY time DESC
+  """, arrayOf(bufferId, type, bufferId, bufferId, type)))

@@ -104,13 +104,15 @@ class MessageAdapter(
     expansionListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null
   ) : RecyclerView.ViewHolder(itemView) {
     @BindView(R.id.time)
-    lateinit var time: TextView
+    @JvmField
+    var time: TextView? = null
 
     @BindView(R.id.content)
     lateinit var content: TextView
 
     @BindView(R.id.markerline)
-    lateinit var markerline: View
+    @JvmField
+    var markerline: View? = null
 
     private var message: FormattedMessage? = null
 
@@ -142,9 +144,9 @@ class MessageAdapter(
     fun bind(message: FormattedMessage) {
       this.message = message
 
-      time.text = message.time
+      time?.text = message.time
       content.text = message.content
-      markerline.visibleIf(message.isMarkerLine)
+      markerline?.visibleIf(message.isMarkerLine)
 
       this.itemView.isSelected = message.isSelected
     }

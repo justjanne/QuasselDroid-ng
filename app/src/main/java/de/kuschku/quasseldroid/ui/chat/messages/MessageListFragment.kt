@@ -20,6 +20,7 @@ import de.kuschku.libquassel.quassel.syncables.BufferSyncer
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.findByBufferIdPagedWithDayChange
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.BacklogSettings
 import de.kuschku.quasseldroid.util.helper.*
@@ -126,8 +127,7 @@ class MessageListFragment : ServiceBoundFragment() {
   private val boundaryCallback = object :
     PagedList.BoundaryCallback<DisplayMessage>() {
     override fun onItemAtFrontLoaded(itemAtFront: DisplayMessage) = Unit
-    override fun onItemAtEndLoaded(itemAtEnd: DisplayMessage) =
-      loadMore(lastMessageId = itemAtEnd.content.messageId)
+    override fun onItemAtEndLoaded(itemAtEnd: DisplayMessage) = loadMore()
   }
 
   override fun onCreateView(
@@ -162,6 +162,9 @@ class MessageListFragment : ServiceBoundFragment() {
     messageList.layoutManager = linearLayoutManager
     messageList.itemAnimator = null
     messageList.setItemViewCacheSize(20)
+    messageList.addItemDecoration(object : RecyclerView.ItemDecoration() {
+
+    })
 
     var isScrolling = false
     messageList.addOnScrollListener(
@@ -189,8 +192,9 @@ class MessageListFragment : ServiceBoundFragment() {
                              viewModel.markerLine)
       .toLiveData().switchMapNotNull { (buffer, selected, expanded, markerLine) ->
         database.filtered().listen(accountId, buffer).switchMapNotNull { filtered ->
+
           LivePagedListBuilder(
-            database.message().findByBufferIdPaged(buffer, filtered).map {
+            database.message().findByBufferIdPagedWithDayChange(buffer, filtered).map {
               DisplayMessage(
                 content = it,
                 isSelected = selected.contains(it.messageId),

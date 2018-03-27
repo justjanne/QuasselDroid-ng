@@ -26,6 +26,7 @@ import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 import org.intellij.lang.annotations.Language
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 import javax.inject.Inject
 
 class QuasselMessageRenderer @Inject constructor(
@@ -35,6 +36,8 @@ class QuasselMessageRenderer @Inject constructor(
   private val timeFormatter = DateTimeFormatter.ofPattern(
     timePattern(appearanceSettings.showSeconds, appearanceSettings.use24hClock)
   )
+
+  private val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 
   val monospaceItalic = Typeface.create(Typeface.MONOSPACE, Typeface.ITALIC)
 
@@ -52,14 +55,15 @@ class QuasselMessageRenderer @Inject constructor(
   private val zoneId = ZoneId.systemDefault()
 
   override fun layout(type: Message_Type?, hasHighlight: Boolean) = when (type) {
-    Notice -> R.layout.widget_chatmessage_notice
-    Server -> R.layout.widget_chatmessage_server
-    Error  -> R.layout.widget_chatmessage_error
-    Action -> R.layout.widget_chatmessage_action
-    Plain  -> R.layout.widget_chatmessage_plain
-    Nick, Mode, Join, Part, Quit, Kick, Kill, Info, DayChange, Topic, NetsplitJoin, NetsplitQuit,
-    Invite -> R.layout.widget_chatmessage_info
-    else   -> R.layout.widget_chatmessage_placeholder
+    Notice    -> R.layout.widget_chatmessage_notice
+    Server    -> R.layout.widget_chatmessage_server
+    Error     -> R.layout.widget_chatmessage_error
+    Action    -> R.layout.widget_chatmessage_action
+    Plain     -> R.layout.widget_chatmessage_plain
+    Nick, Mode, Join, Part, Quit, Kick, Kill, Info, Topic, NetsplitJoin, NetsplitQuit,
+    Invite    -> R.layout.widget_chatmessage_info
+    DayChange -> R.layout.widget_chatmessage_daychange
+    else      -> R.layout.widget_chatmessage_placeholder
   }
 
   override fun init(viewHolder: MessageAdapter.QuasselMessageViewHolder,
@@ -69,7 +73,7 @@ class QuasselMessageRenderer @Inject constructor(
       viewHolder.itemView.context.theme.styledAttributes(
         R.attr.colorForegroundHighlight, R.attr.colorBackgroundHighlight
       ) {
-        viewHolder.time.setTextColor(getColor(0, 0))
+        viewHolder.time?.setTextColor(getColor(0, 0))
         viewHolder.content.setTextColor(getColor(0, 0))
         viewHolder.itemView.setBackgroundColor(getColor(1, 0))
       }
@@ -83,7 +87,7 @@ class QuasselMessageRenderer @Inject constructor(
       }
     }
     val textSize = appearanceSettings.textSize.toFloat()
-    viewHolder.time.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
+    viewHolder.time?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
     viewHolder.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
   }
 
@@ -322,7 +326,7 @@ class QuasselMessageRenderer @Inject constructor(
       }
       Message_Type.Server,
       Message_Type.Info,
-      Message_Type.Error        -> FormattedMessage(
+      Message_Type.Error -> FormattedMessage(
         message.content.messageId,
         timeFormatter.format(message.content.time.atZone(zoneId)),
         formatContent(context, message.content.content, highlight),
@@ -330,7 +334,7 @@ class QuasselMessageRenderer @Inject constructor(
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
       )
-      Message_Type.Topic        -> FormattedMessage(
+      Message_Type.Topic -> FormattedMessage(
         message.content.messageId,
         timeFormatter.format(message.content.time.atZone(zoneId)),
         formatContent(context, message.content.content, highlight),
@@ -338,7 +342,15 @@ class QuasselMessageRenderer @Inject constructor(
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
       )
-      else                      -> FormattedMessage(
+      DayChange          -> FormattedMessage(
+        message.content.messageId,
+        "",
+        dateFormatter.format(message.content.time.atZone(zoneId)),
+        isMarkerLine = false,
+        isExpanded = false,
+        isSelected = false
+      )
+      else               -> FormattedMessage(
         message.content.messageId,
         timeFormatter.format(message.content.time.atZone(zoneId)),
         SpanFormatter.format(
