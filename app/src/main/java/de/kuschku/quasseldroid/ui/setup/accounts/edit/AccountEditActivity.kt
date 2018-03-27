@@ -5,15 +5,14 @@ import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
+import dagger.android.support.DaggerAppCompatActivity
 import de.kuschku.quasseldroid.Keys
-import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.util.AndroidHandlerThread
 import de.kuschku.quasseldroid.util.Patterns
@@ -21,7 +20,7 @@ import de.kuschku.quasseldroid.util.TextValidator
 import de.kuschku.quasseldroid.util.helper.editCommit
 import javax.inject.Inject
 
-class AccountEditActivity : AppCompatActivity() {
+class AccountEditActivity : DaggerAppCompatActivity() {
   @BindView(R.id.nameWrapper)
   lateinit var nameWrapper: TextInputLayout
   @BindView(R.id.name)
