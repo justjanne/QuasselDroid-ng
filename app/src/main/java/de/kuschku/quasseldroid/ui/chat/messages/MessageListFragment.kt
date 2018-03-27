@@ -105,6 +105,7 @@ class MessageListFragment : ServiceBoundFragment() {
     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
       actionMode = mode
       mode?.menuInflater?.inflate(R.menu.context_messages, menu)
+      menu?.retint(requireContext())
       return true
     }
 
