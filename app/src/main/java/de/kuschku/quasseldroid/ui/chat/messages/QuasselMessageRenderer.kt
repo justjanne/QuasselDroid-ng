@@ -2,6 +2,8 @@ package de.kuschku.quasseldroid.ui.chat.messages
 
 import android.content.Context
 import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.LayerDrawable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
@@ -71,11 +73,17 @@ class QuasselMessageRenderer @Inject constructor(
                     hasHighlight: Boolean) {
     if (hasHighlight) {
       viewHolder.itemView.context.theme.styledAttributes(
-        R.attr.colorForegroundHighlight, R.attr.colorBackgroundHighlight
+        R.attr.colorForegroundHighlight, R.attr.colorBackgroundHighlight,
+        R.attr.backgroundMenuItem
       ) {
         viewHolder.time?.setTextColor(getColor(0, 0))
         viewHolder.content.setTextColor(getColor(0, 0))
-        viewHolder.itemView.setBackgroundColor(getColor(1, 0))
+        viewHolder.itemView.background = LayerDrawable(
+          arrayOf(
+            ColorDrawable(getColor(1, 0)),
+            getDrawable(2)
+          )
+        )
       }
     }
     if (appearanceSettings.useMonospace) {
@@ -92,7 +100,10 @@ class QuasselMessageRenderer @Inject constructor(
   }
 
   override fun bind(holder: MessageAdapter.QuasselMessageViewHolder, message: FormattedMessage,
-                    original: QuasselDatabase.DatabaseMessage) = holder.bind(message)
+                    original: QuasselDatabase.DatabaseMessage) =
+    Message_Type.of(original.type).hasFlag(DayChange).let { isDayChange ->
+      holder.bind(message, !isDayChange, !isDayChange)
+    }
 
   override fun render(context: Context,
                       message: DisplayMessage): FormattedMessage {
@@ -326,7 +337,7 @@ class QuasselMessageRenderer @Inject constructor(
       }
       Message_Type.Server,
       Message_Type.Info,
-      Message_Type.Error -> FormattedMessage(
+      Message_Type.Error        -> FormattedMessage(
         message.content.messageId,
         timeFormatter.format(message.content.time.atZone(zoneId)),
         formatContent(context, message.content.content, highlight),
@@ -334,7 +345,7 @@ class QuasselMessageRenderer @Inject constructor(
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
       )
-      Message_Type.Topic -> FormattedMessage(
+      Message_Type.Topic        -> FormattedMessage(
         message.content.messageId,
         timeFormatter.format(message.content.time.atZone(zoneId)),
         formatContent(context, message.content.content, highlight),
@@ -342,7 +353,7 @@ class QuasselMessageRenderer @Inject constructor(
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
       )
-      DayChange          -> FormattedMessage(
+      DayChange                 -> FormattedMessage(
         message.content.messageId,
         "",
         dateFormatter.format(message.content.time.atZone(zoneId)),
@@ -350,7 +361,7 @@ class QuasselMessageRenderer @Inject constructor(
         isExpanded = false,
         isSelected = false
       )
-      else               -> FormattedMessage(
+      else                      -> FormattedMessage(
         message.content.messageId,
         timeFormatter.format(message.content.time.atZone(zoneId)),
         SpanFormatter.format(

@@ -115,16 +115,22 @@ class MessageAdapter(
     var markerline: View? = null
 
     private var message: FormattedMessage? = null
+    private var selectable: Boolean = false
+    private var clickable: Boolean = false
 
     private val localClickListener = View.OnClickListener {
-      message?.let {
-        clickListener?.invoke(it)
+      if (clickable) {
+        message?.let {
+          clickListener?.invoke(it)
+        }
       }
     }
 
     private val localLongClickListener = View.OnLongClickListener {
-      message?.let {
-        selectionListener?.invoke(it)
+      if (selectable) {
+        message?.let {
+          selectionListener?.invoke(it)
+        }
       }
       true
     }
@@ -141,8 +147,10 @@ class MessageAdapter(
       content.setOnLongClickListener(localLongClickListener)
     }
 
-    fun bind(message: FormattedMessage) {
+    fun bind(message: FormattedMessage, selectable: Boolean = true, clickable: Boolean = true) {
       this.message = message
+      this.selectable = selectable
+      this.clickable = clickable
 
       time?.text = message.time
       content.text = message.content
