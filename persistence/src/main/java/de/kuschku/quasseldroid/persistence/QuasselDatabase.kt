@@ -195,8 +195,8 @@ FROM
           AND type & ~? > 0
     UNION ALL
     SELECT DISTINCT
-      strftime('%s', date(datetime(time / 1000, 'unixepoch')), 'utc') * -1000 AS messageId,
-      strftime('%s', date(datetime(time / 1000, 'unixepoch')), 'utc') * 1000  AS time,
+      strftime('%s', date(datetime(time / 1000, 'unixepoch', 'localtime')), 'utc') * -1000 AS messageId,
+      strftime('%s', date(datetime(time / 1000, 'unixepoch', 'localtime')), 'utc') * 1000  AS time,
       8192                                                             AS type,
       0                                                                AS flag,
       ?                                                                AS bufferId,
