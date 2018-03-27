@@ -162,9 +162,6 @@ class MessageListFragment : ServiceBoundFragment() {
     messageList.layoutManager = linearLayoutManager
     messageList.itemAnimator = null
     messageList.setItemViewCacheSize(20)
-    messageList.addItemDecoration(object : RecyclerView.ItemDecoration() {
-
-    })
 
     var isScrolling = false
     messageList.addOnScrollListener(
