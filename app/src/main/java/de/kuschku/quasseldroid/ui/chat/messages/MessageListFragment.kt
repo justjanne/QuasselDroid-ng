@@ -4,13 +4,14 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
@@ -23,6 +24,7 @@ import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.BacklogSettings
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
+import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import javax.inject.Inject
 
@@ -53,6 +55,69 @@ class MessageListFragment : ServiceBoundFragment() {
   private var lastBuffer: BufferId? = null
   private var previousMessageId: MsgId? = null
 
+  private var actionMode: ActionMode? = null
+
+  private val actionModeCallback = object : ActionMode.Callback {
+    override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?) = when (item?.itemId) {
+      R.id.action_copy  -> {
+        val data = viewModel.selectedMessages.value.values.sortedBy {
+          it.id
+        }.joinToString("\n") {
+          SpanFormatter.format(
+            getString(R.string.message_format_copy),
+            it.time,
+            it.content
+          )
+        }
+
+        val clipboard = requireActivity().systemService<ClipboardManager>()
+        val clip = ClipData.newPlainText(null, data)
+        clipboard.primaryClip = clip
+        actionMode?.finish()
+        true
+      }
+      R.id.action_share -> {
+        val data = viewModel.selectedMessages.value.values.sortedBy {
+          it.id
+        }.joinToString("\n") {
+          SpanFormatter.format(
+            getString(R.string.message_format_copy),
+            it.time,
+            it.content
+          )
+        }
+
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, data)
+        requireContext().startActivity(
+          Intent.createChooser(
+            intent,
+            requireContext().getString(R.string.label_share)
+          )
+        )
+        actionMode?.finish()
+        true
+      }
+      else              -> false
+    }
+
+    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+      actionMode = mode
+      mode?.menuInflater?.inflate(R.menu.context_messages, menu)
+      return true
+    }
+
+    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+      return false
+    }
+
+    override fun onDestroyActionMode(mode: ActionMode?) {
+      actionMode = null
+      viewModel.selectedMessages.onNext(emptyMap())
+    }
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
@@ -75,7 +140,24 @@ class MessageListFragment : ServiceBoundFragment() {
     linearLayoutManager = LinearLayoutManager(context)
     linearLayoutManager.reverseLayout = true
 
-    adapter = MessageAdapter(messageRenderer)
+    adapter = MessageAdapter(
+      messageRenderer,
+      { msg ->
+        if (actionMode != null) {
+          if (!viewModel.selectedMessagesToggle(msg.id, msg)) {
+            actionMode?.finish()
+          }
+        }
+      },
+      { msg ->
+        if (actionMode == null) {
+          activity?.startActionMode(actionModeCallback)
+        }
+        if (!viewModel.selectedMessagesToggle(msg.id, msg)) {
+          actionMode?.finish()
+        }
+      }
+    )
     messageList.adapter = adapter
     messageList.layoutManager = linearLayoutManager
     messageList.itemAnimator = null

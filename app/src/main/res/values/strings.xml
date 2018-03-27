@@ -13,6 +13,7 @@
   <string name="label_close">Close</string>
   <string name="label_connect">Connect</string>
   <string name="label_contributors">Contributors</string>
+  <string name="label_copy">Copy</string>
   <string name="label_crashes">Crashes</string>
   <string name="label_delete">Delete</string>
   <string name="label_delete_all">Delete All</string>
@@ -33,6 +34,7 @@
   <string name="label_save">Save</string>
   <string name="label_select_multiple">Select</string>
   <string name="label_settings">Settings</string>
+  <string name="label_share">Share</string>
   <string name="label_share_crashreport">Share Crashreport</string>
   <string name="label_show_hidden">Show Hidden</string>
   <string name="label_unhide">Make Visible</string>

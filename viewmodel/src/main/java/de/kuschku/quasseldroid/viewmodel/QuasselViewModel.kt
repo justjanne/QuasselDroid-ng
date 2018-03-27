@@ -28,7 +28,14 @@ import java.util.concurrent.TimeUnit
 class QuasselViewModel : ViewModel() {
   val backendWrapper = BehaviorSubject.createDefault(Observable.empty<Optional<Backend>>())
 
-  val selectedMessages = BehaviorSubject.createDefault(emptyList<MsgId>())
+  val selectedMessages = BehaviorSubject.createDefault(emptyMap<MsgId, FormattedMessage>())
+  fun selectedMessagesToggle(key: MsgId, value: FormattedMessage): Boolean {
+    val set = selectedMessages.value.orEmpty()
+    val result = if (set.containsKey(key)) set - key else set + Pair(key, value)
+    selectedMessages.onNext(result)
+    return result.isNotEmpty()
+  }
+
   val expandedMessages = BehaviorSubject.createDefault(emptyList<MsgId>())
 
   val buffer = BehaviorSubject.createDefault(-1)

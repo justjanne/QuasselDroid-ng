@@ -6,6 +6,9 @@
   <string name="message_type_nick">Benutzernamensänderungen</string>
   <string name="message_type_mode">Modiänderungen</string>
   <string name="message_type_topic">Themenänderungen</string>
+
+  <string name="message_format_copy">[%1$s] %2$s</string>
+
   <string name="message_format_plain">%1$s%2$s: %3$s</string>
   <string name="message_format_action">* %1$s%2$s %3$s</string>
   <string name="message_format_notice">[%1$s%2$s] %3$s</string>

@@ -37,6 +37,7 @@ dependencies {
   implementation("org.jetbrains", "annotations", "16.0.1")
 
   // Quassel
+  implementation(project(":persistence"))
   implementation(project(":lib")) {
     exclude(group = "org.threeten", module = "threetenbp")
   }

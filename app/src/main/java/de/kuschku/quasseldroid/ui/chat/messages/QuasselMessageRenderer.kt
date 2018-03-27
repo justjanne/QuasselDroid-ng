@@ -14,14 +14,15 @@ import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AppearanceSettings.ColorizeNicknamesMode
 import de.kuschku.quasseldroid.settings.AppearanceSettings.ShowPrefixMode
 import de.kuschku.quasseldroid.util.helper.styledAttributes
-import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.quassel.IrcUserUtils
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
+import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 import org.intellij.lang.annotations.Language
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
@@ -61,7 +62,7 @@ class QuasselMessageRenderer @Inject constructor(
     else   -> R.layout.widget_chatmessage_placeholder
   }
 
-  override fun init(viewHolder: QuasselMessageViewHolder,
+  override fun init(viewHolder: MessageAdapter.QuasselMessageViewHolder,
                     messageType: Message_Type?,
                     hasHighlight: Boolean) {
     if (hasHighlight) {
@@ -86,11 +87,8 @@ class QuasselMessageRenderer @Inject constructor(
     viewHolder.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
   }
 
-  override fun bind(holder: QuasselMessageViewHolder, message: FormattedMessage) {
-    holder.time.text = message.time
-    holder.content.text = message.content
-    holder.markerline.visibleIf(message.markerline)
-  }
+  override fun bind(holder: MessageAdapter.QuasselMessageViewHolder, message: FormattedMessage,
+                    original: QuasselDatabase.DatabaseMessage) = holder.bind(message)
 
   override fun render(context: Context,
                       message: DisplayMessage): FormattedMessage {
@@ -117,7 +115,9 @@ class QuasselMessageRenderer @Inject constructor(
           formatNick(message.content.sender, self, highlight, false),
           formatContent(context, message.content.content, highlight)
         ),
-        message.isMarkerLine
+        isMarkerLine = message.isMarkerLine,
+        isExpanded = message.isExpanded,
+        isSelected = message.isSelected
       )
       Message_Type.Action       -> FormattedMessage(
         message.content.messageId,
@@ -128,7 +128,9 @@ class QuasselMessageRenderer @Inject constructor(
           formatNick(message.content.sender, self, highlight, false),
           formatContent(context, message.content.content, highlight)
         ),
-        message.isMarkerLine
+        isMarkerLine = message.isMarkerLine,
+        isExpanded = message.isExpanded,
+        isSelected = message.isSelected
       )
       Message_Type.Notice       -> FormattedMessage(
         message.content.messageId,
@@ -139,7 +141,9 @@ class QuasselMessageRenderer @Inject constructor(
           formatNick(message.content.sender, self, highlight, false),
           formatContent(context, message.content.content, highlight)
         ),
-        message.isMarkerLine
+        isMarkerLine = message.isMarkerLine,
+        isExpanded = message.isExpanded,
+        isSelected = message.isSelected
       )
       Message_Type.Nick         -> {
         val nickSelf = message.content.sender == message.content.content || self
@@ -161,7 +165,9 @@ class QuasselMessageRenderer @Inject constructor(
               formatNick(message.content.content, nickSelf, highlight, false)
             )
           },
-          message.isMarkerLine
+          isMarkerLine = message.isMarkerLine,
+          isExpanded = message.isExpanded,
+          isSelected = message.isSelected
         )
       }
       Message_Type.Mode         -> FormattedMessage(
@@ -173,7 +179,9 @@ class QuasselMessageRenderer @Inject constructor(
           formatPrefix(message.content.senderPrefixes, highlight),
           formatNick(message.content.sender, self, highlight, false)
         ),
-        message.isMarkerLine
+        isMarkerLine = message.isMarkerLine,
+        isExpanded = message.isExpanded,
+        isSelected = message.isSelected
       )
       Message_Type.Join         -> FormattedMessage(
         message.content.messageId,
@@ -184,7 +192,9 @@ class QuasselMessageRenderer @Inject constructor(
           formatNick(message.content.sender, self, highlight, true),
           message.content.content
         ),
-        message.isMarkerLine
+        isMarkerLine = message.isMarkerLine,
+        isExpanded = message.isExpanded,
+        isSelected = message.isSelected
       )
       Message_Type.Part         -> FormattedMessage(
         message.content.messageId,
@@ -203,7 +213,9 @@ class QuasselMessageRenderer @Inject constructor(
             formatContent(context, message.content.content, highlight)
           )
         },
-        message.isMarkerLine
+        isMarkerLine = message.isMarkerLine,
+        isExpanded = message.isExpanded,
+        isSelected = message.isSelected
       )
       Message_Type.Quit         -> FormattedMessage(
         message.content.messageId,
@@ -222,7 +234,9 @@ class QuasselMessageRenderer @Inject constructor(
             formatContent(context, message.content.content, highlight)
           )
         },
-        message.isMarkerLine
+        isMarkerLine = message.isMarkerLine,
+        isExpanded = message.isExpanded,
+        isSelected = message.isSelected
       )
       Message_Type.Kick         -> {
         val (user, reason) = message.content.content.split(' ', limit = 2) + listOf("", "")
@@ -245,7 +259,9 @@ class QuasselMessageRenderer @Inject constructor(
               formatContent(context, reason, highlight)
             )
           },
-          message.isMarkerLine
+          isMarkerLine = message.isMarkerLine,
+          isExpanded = message.isExpanded,
+          isSelected = message.isSelected
         )
       }
       Message_Type.Kill         -> {
@@ -269,7 +285,9 @@ class QuasselMessageRenderer @Inject constructor(
               formatContent(context, reason, highlight)
             )
           },
-          message.isMarkerLine
+          isMarkerLine = message.isMarkerLine,
+          isExpanded = message.isExpanded,
+          isSelected = message.isSelected
         )
       }
       Message_Type.NetsplitJoin -> {
@@ -282,7 +300,9 @@ class QuasselMessageRenderer @Inject constructor(
           context.resources.getQuantityString(
             R.plurals.message_netsplit_join, usersAffected, server1, server2, usersAffected
           ),
-          message.isMarkerLine
+          isMarkerLine = message.isMarkerLine,
+          isExpanded = message.isExpanded,
+          isSelected = message.isSelected
         )
       }
       Message_Type.NetsplitQuit -> {
@@ -295,7 +315,9 @@ class QuasselMessageRenderer @Inject constructor(
           context.resources.getQuantityString(
             R.plurals.message_netsplit_quit, usersAffected, server1, server2, usersAffected
           ),
-          message.isMarkerLine
+          isMarkerLine = message.isMarkerLine,
+          isExpanded = message.isExpanded,
+          isSelected = message.isSelected
         )
       }
       Message_Type.Server,
@@ -304,13 +326,17 @@ class QuasselMessageRenderer @Inject constructor(
         message.content.messageId,
         timeFormatter.format(message.content.time.atZone(zoneId)),
         formatContent(context, message.content.content, highlight),
-        message.isMarkerLine
+        isMarkerLine = message.isMarkerLine,
+        isExpanded = message.isExpanded,
+        isSelected = message.isSelected
       )
       Message_Type.Topic        -> FormattedMessage(
         message.content.messageId,
         timeFormatter.format(message.content.time.atZone(zoneId)),
         formatContent(context, message.content.content, highlight),
-        message.isMarkerLine
+        isMarkerLine = message.isMarkerLine,
+        isExpanded = message.isExpanded,
+        isSelected = message.isSelected
       )
       else                      -> FormattedMessage(
         message.content.messageId,
@@ -322,7 +348,9 @@ class QuasselMessageRenderer @Inject constructor(
           formatNick(message.content.sender, self, highlight, true),
           message.content.content
         ),
-        message.isMarkerLine
+        isMarkerLine = message.isMarkerLine,
+        isExpanded = message.isExpanded,
+        isSelected = message.isSelected
       )
     }
   }

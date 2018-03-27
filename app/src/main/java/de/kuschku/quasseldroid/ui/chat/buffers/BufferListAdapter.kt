@@ -47,12 +47,10 @@ class BufferListAdapter(
       collapsedNetworks.onNext(collapsedNetworks.value.orEmpty() + networkId)
   }
 
-  fun toggleSelection(buffer: BufferId) {
-    if (selectedBuffer.value == buffer) {
-      selectedBuffer.onNext(-1)
-    } else {
-      selectedBuffer.onNext(buffer)
-    }
+  fun toggleSelection(buffer: BufferId): Boolean {
+    val next = if (selectedBuffer.value == buffer) -1 else buffer
+    selectedBuffer.onNext(next)
+    return next != -1
   }
 
   fun unselectAll() {

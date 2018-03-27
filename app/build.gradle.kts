@@ -137,6 +137,7 @@ dependencies {
   // UI
   implementation("me.zhanghai.android.materialprogressbar", "library", "1.4.2")
   implementation("com.afollestad.material-dialogs", "core", "0.9.6.0")
+  implementation("me.saket", "better-link-movement-method", "2.1.0")
   implementation(project(":slidingpanel"))
 
   // Quality Assurance

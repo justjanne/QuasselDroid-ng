@@ -325,6 +325,8 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     if (actionMode == null) {
       chatListToolbar.startActionMode(actionModeCallback)
     }
-    listAdapter.toggleSelection(it)
+    if (!listAdapter.toggleSelection(it)) {
+      actionMode?.finish()
+    }
   }
 }

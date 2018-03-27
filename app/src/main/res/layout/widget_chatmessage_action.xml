@@ -3,6 +3,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
+  android:background="?attr/backgroundMenuItem"
   android:orientation="vertical"
   android:textAppearance="?android:attr/textAppearanceListItemSmall">
 
@@ -33,7 +34,6 @@
       android:layout_height="wrap_content"
       android:layout_weight="1"
       android:textColor="?attr/colorForegroundAction"
-      android:textIsSelectable="true"
       android:textStyle="italic"
       tools:text="@sample/messages.json/data/message" />
   </LinearLayout>
