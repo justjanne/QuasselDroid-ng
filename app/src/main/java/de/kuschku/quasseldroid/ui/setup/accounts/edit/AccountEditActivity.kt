@@ -13,6 +13,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import dagger.android.support.DaggerAppCompatActivity
 import de.kuschku.quasseldroid.Keys
+import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.util.AndroidHandlerThread
 import de.kuschku.quasseldroid.util.Patterns
