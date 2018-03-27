@@ -10,9 +10,10 @@ fun Menu.retint(context: Context) {
     val color = getColor(0, 0)
 
     for (item in (0 until size()).map { getItem(it) }) {
-      val drawable = item.icon.mutate()
-      DrawableCompat.setTint(drawable, color)
-      item.icon = drawable
+      item.icon?.mutate()?.let { drawable ->
+        DrawableCompat.setTint(drawable, color)
+        item.icon = drawable
+      }
     }
   }
 }

@@ -16,10 +16,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.text.Html
-import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -41,6 +38,7 @@ import de.kuschku.quasseldroid.ui.chat.input.MessageHistoryAdapter
 import de.kuschku.quasseldroid.ui.settings.app.AppSettingsActivity
 import de.kuschku.quasseldroid.util.helper.editCommit
 import de.kuschku.quasseldroid.util.helper.invoke
+import de.kuschku.quasseldroid.util.helper.retint
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
@@ -255,6 +253,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     editorPanel.addPanelSlideListener(panelSlideListener)
     editorPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+  }
+
+  override fun onActionModeStarted(mode: ActionMode?) {
+    mode?.menu?.retint(toolbar.context)
+    super.onActionModeStarted(mode)
   }
 
   override fun onStart() {

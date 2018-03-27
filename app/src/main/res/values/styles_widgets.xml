@@ -20,6 +20,7 @@
     <item name="colorControlNormal">?colorTextPrimary</item>
     <item name="android:textColorPrimary">?colorTextPrimary</item>
     <item name="android:textColorSecondary">?colorTextSecondary</item>
+    <item name="android:actionModeBackground">?colorPrimary</item>
   </style>
 
   <style name="Widget.AppBarOverlay.Light" parent="ThemeOverlay.AppCompat.ActionBar">
