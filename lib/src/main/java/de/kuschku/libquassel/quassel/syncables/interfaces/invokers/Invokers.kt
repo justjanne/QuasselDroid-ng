@@ -68,6 +68,6 @@ object Invokers {
 
   private fun <T> register(invoker: Invoker<T>?) {
     if (invoker != null)
-      registry.put(invoker.className, invoker)
+      registry[invoker.className] = invoker
   }
 }

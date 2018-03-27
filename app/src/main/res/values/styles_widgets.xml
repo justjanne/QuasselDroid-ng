@@ -56,4 +56,22 @@
   <style name="Widget.DialogTheme" parent="Theme.AppCompat.Dialog.Alert" />
 
   <style name="Widget.DialogTheme.Light" parent="Theme.AppCompat.Light.Dialog.Alert" />
+
+  <!-- NavigationDrawerLayout -->
+  <declare-styleable name="NavigationDrawerLayout">
+    <attr name="insetBackground" />
+  </declare-styleable>
+
+  <style name="Widget.NavigationDrawerLayout" parent="">
+    <item name="insetBackground">#4000</item>
+  </style>
+
+  <!-- DrawerRecyclerView -->
+  <declare-styleable name="DrawerRecyclerView">
+    <attr name="insetBackground" />
+  </declare-styleable>
+
+  <style name="Widget.DrawerRecyclerView" parent="">
+    <item name="insetBackground">#4000</item>
+  </style>
 </resources>

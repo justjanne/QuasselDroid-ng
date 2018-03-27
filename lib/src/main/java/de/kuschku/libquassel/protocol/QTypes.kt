@@ -55,7 +55,7 @@ fun QVariantList.toVariantMap(): QVariantMap {
   while (i < size) {
     val key = get(i).value<ByteBuffer?>().deserializeString(StringSerializer.UTF8) ?: ""
     val value = get(i + 1)
-    map.put(key, value)
+    map[key] = value
     i += 2
   }
   return map

@@ -16,6 +16,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:inputType="textVisiblePassword|textNoSuggestions"
+      android:hint="@string/label_account_user"
       app:errorEnabled="true" />
   </android.support.design.widget.TextInputLayout>
 
@@ -31,6 +32,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:inputType="textPassword"
+      android:hint="@string/label_account_pass"
       app:errorEnabled="true" />
   </android.support.design.widget.TextInputLayout>
 

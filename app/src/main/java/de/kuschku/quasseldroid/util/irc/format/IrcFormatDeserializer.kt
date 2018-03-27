@@ -96,12 +96,12 @@ class IrcFormatDeserializer @Inject constructor() {
           normalCount = 0
 
           // If there is an element on stack with the same code, close it
-          if (bold != null) {
+          bold = if (bold != null) {
             if (colorize) bold.apply(plainText, plainText.length)
-            bold = null
+            null
             // Otherwise create a new one
           } else {
-            bold = FormatDescription(plainText.length, BoldIrcFormat())
+            FormatDescription(plainText.length, BoldIrcFormat())
           }
         }
         CODE_ITALIC        -> {
@@ -109,12 +109,12 @@ class IrcFormatDeserializer @Inject constructor() {
           normalCount = 0
 
           // If there is an element on stack with the same code, close it
-          if (italic != null) {
+          italic = if (italic != null) {
             if (colorize) italic.apply(plainText, plainText.length)
-            italic = null
+            null
             // Otherwise create a new one
           } else {
-            italic = FormatDescription(plainText.length, ItalicIrcFormat())
+            FormatDescription(plainText.length, ItalicIrcFormat())
           }
         }
         CODE_UNDERLINE     -> {
@@ -122,12 +122,12 @@ class IrcFormatDeserializer @Inject constructor() {
           normalCount = 0
 
           // If there is an element on stack with the same code, close it
-          if (underline != null) {
+          underline = if (underline != null) {
             if (colorize) underline.apply(plainText, plainText.length)
-            underline = null
+            null
             // Otherwise create a new one
           } else {
-            underline = FormatDescription(plainText.length, UnderlineIrcFormat())
+            FormatDescription(plainText.length, UnderlineIrcFormat())
           }
         }
         CODE_STRIKETHROUGH -> {
@@ -135,12 +135,12 @@ class IrcFormatDeserializer @Inject constructor() {
           normalCount = 0
 
           // If there is an element on stack with the same code, close it
-          if (strikethrough != null) {
+          strikethrough = if (strikethrough != null) {
             if (colorize) strikethrough.apply(plainText, plainText.length)
-            strikethrough = null
+            null
             // Otherwise create a new one
           } else {
-            strikethrough = FormatDescription(plainText.length, StrikethroughIrcFormat())
+            FormatDescription(plainText.length, StrikethroughIrcFormat())
           }
         }
         CODE_MONOSPACE     -> {
@@ -148,12 +148,12 @@ class IrcFormatDeserializer @Inject constructor() {
           normalCount = 0
 
           // If there is an element on stack with the same code, close it
-          if (monospace != null) {
+          monospace = if (monospace != null) {
             if (colorize) monospace.apply(plainText, plainText.length)
-            monospace = null
+            null
             // Otherwise create a new one
           } else {
-            monospace = FormatDescription(plainText.length, MonospaceIrcFormat())
+            FormatDescription(plainText.length, MonospaceIrcFormat())
           }
         }
         CODE_COLOR         -> {
@@ -308,7 +308,7 @@ class IrcFormatDeserializer @Inject constructor() {
     fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int)
   }
 
-  private class FormatDescription<U : IrcFormat>(val start: Int, val format: U) {
+  private class FormatDescription<out U : IrcFormat>(val start: Int, val format: U) {
 
     fun apply(editable: SpannableStringBuilder, end: Int) {
       format.applyTo(editable, start, end)
@@ -387,15 +387,15 @@ class IrcFormatDeserializer @Inject constructor() {
   }
 
   companion object {
-    val CODE_BOLD = 0x02.toChar()
-    val CODE_COLOR = 0x03.toChar()
-    val CODE_HEXCOLOR = 0x04.toChar()
-    val CODE_ITALIC = 0x1D.toChar()
-    val CODE_UNDERLINE = 0x1F.toChar()
-    val CODE_STRIKETHROUGH = 0x1E.toChar()
-    val CODE_MONOSPACE = 0x11.toChar()
-    val CODE_SWAP = 0x16.toChar()
-    val CODE_RESET = 0x0F.toChar()
+    private const val CODE_BOLD = 0x02.toChar()
+    private const val CODE_COLOR = 0x03.toChar()
+    private const val CODE_HEXCOLOR = 0x04.toChar()
+    private const val CODE_ITALIC = 0x1D.toChar()
+    private const val CODE_UNDERLINE = 0x1F.toChar()
+    private const val CODE_STRIKETHROUGH = 0x1E.toChar()
+    private const val CODE_MONOSPACE = 0x11.toChar()
+    private const val CODE_SWAP = 0x16.toChar()
+    private const val CODE_RESET = 0x0F.toChar()
 
     /**
      * Try to read a number from a String in specified bounds

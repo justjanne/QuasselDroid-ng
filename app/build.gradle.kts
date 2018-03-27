@@ -49,6 +49,8 @@ android {
 
     setProperty("archivesBaseName", "QuasselDroidNG-$versionName")
 
+    multiDexEnabled = false
+
     // Disable test runner analytics
     testInstrumentationRunnerArguments = mapOf(
       "disableAnalytics" to "true"
@@ -79,6 +81,10 @@ android {
         "proguard-rules.pro"
       )
     }
+  }
+
+  lintOptions {
+    disable("ResourceType")
   }
 }
 

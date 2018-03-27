@@ -82,7 +82,7 @@ class NickListAdapter(
   }
 
   companion object {
-    val VIEWTYPE_ACTIVE = 0
-    val VIEWTYPE_AWAY = 1
+    const val VIEWTYPE_ACTIVE = 0
+    const val VIEWTYPE_AWAY = 1
   }
 }

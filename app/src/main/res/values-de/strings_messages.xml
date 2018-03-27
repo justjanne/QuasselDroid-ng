@@ -13,7 +13,7 @@
   <string name="message_format_action">* %1$s%2$s %3$s</string>
   <string name="message_format_notice">[%1$s%2$s] %3$s</string>
   <string name="message_format_nick">%1$s%2$s heißt jetzt %3$s%4$s</string>
-  <string name="message_format_nick_self">Du heißt jetzt justJanne</string>
+  <string name="message_format_nick_self">Du heißt jetzt %1$s%2$s</string>
   <string name="message_format_mode">Modus %1$s durch %2$s%3$s</string>
   <string name="message_format_join">%1$s%2$s hat %3$s betreten</string>
   <string name="message_format_part_1">%1$s%2$s hat den Kanal verlassen</string>

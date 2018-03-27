@@ -43,6 +43,7 @@
           android:id="@+id/name"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:hint="@string/label_account_name"
           android:inputType="text" />
       </android.support.design.widget.TextInputLayout>
     </LinearLayout>
@@ -86,6 +87,7 @@
             android:id="@+id/host"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/label_connection_host"
             android:inputType="textUri" />
         </android.support.design.widget.TextInputLayout>
 
@@ -105,6 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
+            android:hint="@string/labelConnectionPort"
             android:text="@string/defaultConnectionPort" />
         </android.support.design.widget.TextInputLayout>
       </LinearLayout>
@@ -150,6 +153,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textVisiblePassword|textNoSuggestions"
+            android:hint="@string/label_account_user"
             app:errorEnabled="true" />
         </android.support.design.widget.TextInputLayout>
 
@@ -165,6 +169,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
+            android:hint="@string/label_account_pass"
             app:errorEnabled="true" />
         </android.support.design.widget.TextInputLayout>
 

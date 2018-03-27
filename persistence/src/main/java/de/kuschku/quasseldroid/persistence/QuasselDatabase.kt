@@ -207,39 +207,5 @@ FROM
     WHERE bufferId = ?
           AND type & ~? > 0
   ) t
-ORDER BY time, messageId DESC
-  """, arrayOf(bufferId, type, bufferId, bufferId, type)))
-
-fun QuasselDatabase.MessageDao.findByBufferIdWithDayChange(bufferId: Int, type: Int) =
-  this.findMessagesRaw(SimpleSQLiteQuery("""
-SELECT t.*
-FROM
-  (
-    SELECT
-      messageId,
-      time,
-      type,
-      flag,
-      bufferId,
-      sender,
-      senderPrefixes,
-      content
-    FROM message
-    WHERE bufferId = ?
-          AND type & ~? > 0
-    UNION ALL
-    SELECT DISTINCT
-      strftime('%s', date(datetime(time / 1000, 'unixepoch'))) * -1000 AS messageId,
-      strftime('%s', date(datetime(time / 1000, 'unixepoch'))) * 1000  AS time,
-      8192                                                             AS type,
-      0                                                                AS flag,
-      ?                                                                AS bufferId,
-      ''                                                               AS sender,
-      ''                                                               AS senderPrefixes,
-      ''                                                               AS content
-    FROM message
-    WHERE bufferId = ?
-          AND type & ~? > 0
-  ) t
-ORDER BY time, messageId DESC
+ORDER BY time DESC, messageId DESC
   """, arrayOf(bufferId, type, bufferId, bufferId, type)))

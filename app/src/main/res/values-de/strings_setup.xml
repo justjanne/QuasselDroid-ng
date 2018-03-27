@@ -3,11 +3,11 @@
   <!-- Account Selection -->
   <string name="slide_account_select_title">Account Auswählen</string>
   <string name="slide_account_select_description">Wähle einen Account aus oder erstelle einen neuen</string>
-  <string name="label_user_on_host">%1$s @ %2$s:%3$s</string>
+  <string name="label_user_on_host">%1$s auf %2$s:%3$d</string>
 
   <!-- Account Connection -->
   <string name="slide_account_connection_title">Verbindung</string>
-  <string name="slideAccountConnectionDescription">Bitte gebe an die Addresse des Servers an, auf dem dein Core läuft</string>
+  <string name="slideAccountConnectionDescription">Bitte gebe an die Adresse des Servers an, auf dem dein Core läuft</string>
 
   <string name="label_connection_host">Hostname</string>
   <string name="labelConnectionPort">Port</string>

@@ -105,7 +105,7 @@ class MaterialContentLoadingProgressBar @JvmOverloads constructor(context: Conte
   }
 
   companion object {
-    private val MIN_SHOW_TIME = 500 // ms
-    private val MIN_DELAY = 500 // ms
+    private const val MIN_SHOW_TIME = 500 // ms
+    private const val MIN_DELAY = 500 // ms
   }
 }

@@ -88,9 +88,9 @@ class FormatHandler(
       return
 
     val exists = editText.text.removeSpans<UnderlineSpan, IrcUnderlineSpan>(range) { span ->
-      when {
-        span is IrcUnderlineSpan -> span
-        else                     -> IrcUnderlineSpan()
+      when (span) {
+        is IrcUnderlineSpan -> span
+        else                -> IrcUnderlineSpan()
       }
     }
 
@@ -106,9 +106,9 @@ class FormatHandler(
       return
 
     val exists = editText.text.removeSpans<StrikethroughSpan, IrcStrikethroughSpan>(range) { span ->
-      when {
-        span is IrcStrikethroughSpan -> span
-        else                         -> IrcStrikethroughSpan()
+      when (span) {
+        is IrcStrikethroughSpan -> span
+        else                    -> IrcStrikethroughSpan()
       }
     }
 

@@ -22,7 +22,7 @@
     android:layout_gravity="start"
     android:background="?attr/colorBackground"
     android:fitsSystemWindows="true"
-    app:insetForeground="?attr/colorPrimaryDark">
+    app:insetBackground="?attr/colorPrimaryDark">
 
     <fragment
       android:id="@+id/fragment_chat_list"

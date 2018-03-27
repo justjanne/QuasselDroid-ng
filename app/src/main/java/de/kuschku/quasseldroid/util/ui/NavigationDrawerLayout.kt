@@ -37,10 +37,10 @@ class NavigationDrawerLayout @JvmOverloads constructor(
   init {
     val a = context.obtainStyledAttributes(
       attrs,
-      R.styleable.ScrimInsetsFrameLayout, defStyleAttr,
-      R.style.Widget_Design_ScrimInsetsFrameLayout
+      R.styleable.NavigationDrawerLayout, defStyleAttr,
+      R.style.Widget_NavigationDrawerLayout
     )
-    mInsetForeground = a.getDrawable(R.styleable.ScrimInsetsFrameLayout_insetForeground)
+    mInsetForeground = a.getDrawable(R.styleable.NavigationDrawerLayout_insetBackground)
     a.recycle()
     setWillNotDraw(true) // No need to draw until the insets are adjusted
     ViewCompat.setOnApplyWindowInsetsListener(

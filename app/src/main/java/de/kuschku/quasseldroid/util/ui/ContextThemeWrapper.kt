@@ -16,7 +16,7 @@ import de.kuschku.quasseldroid.R
  *
  * @hide
  */
-class ContextThemeWrapper : ContextWrapper {
+open class ContextThemeWrapper : ContextWrapper {
   var themeResId: Int = 0
     private set
   private var mTheme: Resources.Theme? = null
@@ -68,10 +68,6 @@ class ContextThemeWrapper : ContextWrapper {
    */
   constructor(base: Context, theme: Resources.Theme?) : super(base) {
     mTheme = theme
-  }
-
-  override fun attachBaseContext(newBase: Context) {
-    super.attachBaseContext(newBase)
   }
 
   /**

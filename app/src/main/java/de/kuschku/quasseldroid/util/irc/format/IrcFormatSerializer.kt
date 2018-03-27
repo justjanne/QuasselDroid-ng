@@ -209,14 +209,14 @@ class IrcFormatSerializer @Inject constructor(private val context: Context) {
   }
 
   companion object {
-    val CODE_BOLD: Char = 0x02.toChar()
-    val CODE_COLOR: Char = 0x03.toChar()
-    val CODE_HEXCOLOR = 0x04.toChar()
-    val CODE_ITALIC: Char = 0x1D.toChar()
-    val CODE_UNDERLINE: Char = 0x1F.toChar()
-    val CODE_STRIKETHROUGH = 0x1E.toChar()
-    val CODE_MONOSPACE = 0x11.toChar()
-    val CODE_SWAP: Char = 0x16.toChar()
-    val CODE_RESET: Char = 0x0F.toChar()
+    private const val CODE_BOLD: Char = 0x02.toChar()
+    private const val CODE_COLOR: Char = 0x03.toChar()
+    private const val CODE_HEXCOLOR = 0x04.toChar()
+    private const val CODE_ITALIC: Char = 0x1D.toChar()
+    private const val CODE_UNDERLINE: Char = 0x1F.toChar()
+    private const val CODE_STRIKETHROUGH = 0x1E.toChar()
+    private const val CODE_MONOSPACE = 0x11.toChar()
+    private const val CODE_SWAP: Char = 0x16.toChar()
+    private const val CODE_RESET: Char = 0x0F.toChar()
   }
 }

@@ -54,7 +54,7 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
     override fun onPageSelected(position: Int) = Unit
   }
 
-  private val pageChangeListener = SetupActivityViewPagerPageChangeListener(this)
+  private lateinit var pageChangeListener: SetupActivityViewPagerPageChangeListener
 
   private fun pageChanged() {
     currentPage.value = adapter.getItem(viewPager.currentItem)
@@ -83,6 +83,8 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
     adapter = SlidePagerAdapter(supportFragmentManager)
     fragments.forEach(adapter::addFragment)
     viewPager.adapter = adapter
+
+    pageChangeListener = SetupActivityViewPagerPageChangeListener(this)
 
     button.setOnClickListener {
       if (viewPager.currentItem == adapter.totalCount - 1)

@@ -81,7 +81,7 @@ class ToolbarFragment : ServiceBoundFragment() {
             this.subtitle = colorizeDescription(data?.description)
           } else {
             val description = colorizeDescription(data?.description)
-            if (description.isNullOrBlank()) {
+            if (description.isBlank()) {
               this.subtitle = "Lag: ${lag}ms"
             } else {
               this.subtitle = SpanFormatter.format(
@@ -101,5 +101,4 @@ class ToolbarFragment : ServiceBoundFragment() {
   private fun colorizeDescription(description: String?) = ircFormatDeserializer.formatString(
     requireContext(), description, appearanceSettings.colorizeMirc
   )
-                                                          ?: description
 }

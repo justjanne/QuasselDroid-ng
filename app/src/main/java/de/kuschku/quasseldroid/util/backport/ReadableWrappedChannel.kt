@@ -61,6 +61,6 @@ class ReadableWrappedChannel(
   override fun implCloseChannel() = backingStream.close()
 
   companion object {
-    private val PAGE_SIZE = 8192
+    private const val PAGE_SIZE = 8192
   }
 }

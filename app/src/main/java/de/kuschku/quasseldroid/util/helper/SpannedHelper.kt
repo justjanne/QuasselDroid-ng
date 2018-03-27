@@ -28,7 +28,7 @@ private class DelimitedRangesSequence(
             nextSearchIndex = -1
           } else {
             val (index, length) = match
-            nextItem = currentStartIndex..index - 1
+            nextItem = currentStartIndex until index
             currentStartIndex = index + length
             nextSearchIndex = currentStartIndex + if (length == 0) 1 else 0
           }

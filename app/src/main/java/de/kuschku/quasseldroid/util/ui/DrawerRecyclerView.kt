@@ -22,10 +22,10 @@ class DrawerRecyclerView @JvmOverloads constructor(
   init {
     val a = context.obtainStyledAttributes(
       attrs,
-      R.styleable.ScrimInsetsFrameLayout, defStyleAttr,
-      R.style.Widget_Design_ScrimInsetsFrameLayout
+      R.styleable.DrawerRecyclerView, defStyleAttr,
+      R.style.Widget_DrawerRecyclerView
     )
-    mInsetForeground = a.getDrawable(R.styleable.ScrimInsetsFrameLayout_insetForeground)
+    mInsetForeground = a.getDrawable(R.styleable.DrawerRecyclerView_insetBackground)
     a.recycle()
     setWillNotDraw(true) // No need to draw until the insets are adjusted
     ViewCompat.setOnApplyWindowInsetsListener(

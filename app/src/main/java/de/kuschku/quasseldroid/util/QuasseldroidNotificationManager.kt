@@ -83,7 +83,7 @@ class QuasseldroidNotificationManager(private val context: Context) {
   }
 
   companion object {
-    val BACKGROUND_NOTIFICATION_ID = Int.MAX_VALUE
+    const val BACKGROUND_NOTIFICATION_ID = Int.MAX_VALUE
   }
 
   data class Handle(

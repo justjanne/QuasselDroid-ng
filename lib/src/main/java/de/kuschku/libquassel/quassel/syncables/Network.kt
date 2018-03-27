@@ -349,24 +349,24 @@ class Network constructor(
 
   fun ircUsers() = _ircUsers.values.toList()
   fun ircUserCount(): UInt = _ircUsers.size
-  fun newIrcChannel(channelName: String, initData: QVariantMap = emptyMap()): IrcChannel {
-    val channel = ircChannel(channelName)
-    if (channel == null) {
-      val ircChannel = IrcChannel(channelName, this, proxy)
-      ircChannel.init()
-      if (initData.isNotEmpty()) {
-        ircChannel.fromVariantMap(initData)
-        ircChannel.initialized = true
+  fun newIrcChannel(channelName: String, initData: QVariantMap = emptyMap()): IrcChannel =
+    ircChannel(channelName).let { channel ->
+      return if (channel == null) {
+        val ircChannel = IrcChannel(channelName, this, proxy)
+        ircChannel.init()
+        if (initData.isNotEmpty()) {
+          ircChannel.fromVariantMap(initData)
+          ircChannel.initialized = true
+        }
+        proxy.synchronize(ircChannel)
+        _ircChannels[caseMapper.toLowerCase(channelName)] = ircChannel
+        live_ircChannels.onNext(_ircChannels)
+        super.addIrcChannel(channelName)
+        ircChannel
+      } else {
+        channel
       }
-      proxy.synchronize(ircChannel)
-      _ircChannels[caseMapper.toLowerCase(channelName)] = ircChannel
-      live_ircChannels.onNext(_ircChannels)
-      super.addIrcChannel(channelName)
-      return ircChannel
-    } else {
-      return channel
     }
-  }
 
   fun ircChannel(channelName: String?) = _ircChannels[channelName?.let(caseMapper::toLowerCase)]
   fun liveIrcChannel(channelName: String?) = live_ircChannels.map {

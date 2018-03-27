@@ -54,8 +54,8 @@ interface SignalProxy {
       override fun callRpc(slot: String, params: List<QVariant_>) = Unit
       override fun shouldSync(type: String, instance: String, slot: String) = false
       override fun shouldRpc(slot: String) = false
-      override fun network(id: NetworkId) = null
-      override fun identity(id: IdentityId) = null
+      override fun network(id: NetworkId): Network? = null
+      override fun identity(id: IdentityId): Identity? = null
       override fun renameObject(syncableObject: ISyncableObject, newName: String,
                                 oldName: String) = Unit
 

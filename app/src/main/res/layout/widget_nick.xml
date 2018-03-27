@@ -10,6 +10,7 @@
   android:paddingEnd="?listPreferredItemPaddingRight"
   android:paddingLeft="?listPreferredItemPaddingLeft"
   android:paddingRight="?listPreferredItemPaddingRight"
+  android:baselineAligned="false"
   android:paddingStart="?listPreferredItemPaddingLeft">
 
   <FrameLayout

@@ -261,14 +261,6 @@ class IrcUser(
     proxy.stopSynchronize(this)
   }
 
-  override fun addUserModes(modes: String) {
-    super.addUserModes(modes)
-  }
-
-  override fun removeUserModes(modes: String) {
-    super.removeUserModes(modes)
-  }
-
   fun updateObjectName() {
     val identifier = "${network().networkId()}/${nick()}"
     renameObject(identifier)

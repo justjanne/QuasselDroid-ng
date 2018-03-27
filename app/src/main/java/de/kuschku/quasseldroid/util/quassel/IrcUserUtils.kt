@@ -39,19 +39,19 @@ object IrcUserUtils {
                                 startIndex: Int? = null,
                                 ignoreCase: Boolean = false): Int? {
     val lastIndex = indexOf(char, startIndex ?: 0, ignoreCase)
-    if (lastIndex < 0)
-      return null
+    return if (lastIndex < 0)
+      null
     else
-      return lastIndex
+      lastIndex
   }
 
   private fun String.lastIndex(char: Char,
                                startIndex: Int? = null,
-                               ignoreCase: Boolean = false): Int? {
-    val lastIndex = lastIndexOf(char, startIndex ?: lastIndex, ignoreCase)
-    if (lastIndex < 0)
-      return null
-    else
-      return lastIndex
-  }
+                               ignoreCase: Boolean = false): Int? =
+    lastIndexOf(char, startIndex ?: lastIndex, ignoreCase).let { lastIndex ->
+      if (lastIndex < 0)
+        null
+      else
+        lastIndex
+    }
 }

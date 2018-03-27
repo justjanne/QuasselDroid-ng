@@ -392,7 +392,6 @@ public class SlidingUpPanelLayout extends ViewGroup {
     if (getPanelState() == PanelState.COLLAPSED) {
       smoothToBottom();
       invalidate();
-      return;
     }
   }
 
@@ -495,7 +494,6 @@ public class SlidingUpPanelLayout extends ViewGroup {
           }
         }
       });
-      ;
     }
   }
 
@@ -733,12 +731,16 @@ public class SlidingUpPanelLayout extends ViewGroup {
       }
 
       int childWidthSpec;
-      if (lp.width == LayoutParams.WRAP_CONTENT) {
-        childWidthSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST);
-      } else if (lp.width == LayoutParams.MATCH_PARENT) {
-        childWidthSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY);
-      } else {
-        childWidthSpec = MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY);
+      switch (lp.width) {
+        case LayoutParams.WRAP_CONTENT:
+          childWidthSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST);
+          break;
+        case LayoutParams.MATCH_PARENT:
+          childWidthSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY);
+          break;
+        default:
+          childWidthSpec = MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY);
+          break;
       }
 
       int childHeightSpec;
@@ -1328,14 +1330,14 @@ public class SlidingUpPanelLayout extends ViewGroup {
      * @param panel       The child view that was moved
      * @param slideOffset The new offset of this sliding pane within its range, from 0-1
      */
-    public void onPanelSlide(View panel, float slideOffset);
+    void onPanelSlide(View panel, float slideOffset);
 
     /**
      * Called when a sliding panel state changes
      *
      * @param panel The child view that was slid to an collapsed position
      */
-    public void onPanelStateChanged(View panel, PanelState previousState, PanelState newState);
+    void onPanelStateChanged(View panel, PanelState previousState, PanelState newState);
   }
 
   /**
