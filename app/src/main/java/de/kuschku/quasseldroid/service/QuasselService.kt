@@ -100,7 +100,6 @@ class QuasselService : DaggerLifecycleService(),
 
   private fun updateNotification(handle: QuasseldroidNotificationManager.Handle,
                                  rawProgress: Triple<ConnectionState, Int, Int>) {
-    log(LoggingHandler.LogLevel.ERROR, "DEBUG", "progress: $rawProgress")
     val (state, progress, max) = rawProgress
     when (state) {
       ConnectionState.DISCONNECTED -> {
