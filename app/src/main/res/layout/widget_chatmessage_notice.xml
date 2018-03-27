@@ -28,7 +28,7 @@
       android:textColor="?attr/colorForegroundNotice"
       tools:text="@sample/messages.json/data/time" />
 
-    <TextView
+    <de.kuschku.quasseldroid.ui.chat.messages.RipplePassthroughTextView
       android:id="@+id/content"
       android:layout_width="0dip"
       android:layout_height="wrap_content"

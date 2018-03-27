@@ -141,10 +141,7 @@ class MessageAdapter(
       content.movementMethod = BetterLinkMovementMethod.getInstance()
 
       itemView.setOnClickListener(localClickListener)
-      content.setOnClickListener(localClickListener)
-
       itemView.setOnLongClickListener(localLongClickListener)
-      content.setOnLongClickListener(localLongClickListener)
     }
 
     fun bind(message: FormattedMessage, selectable: Boolean = true, clickable: Boolean = true) {
