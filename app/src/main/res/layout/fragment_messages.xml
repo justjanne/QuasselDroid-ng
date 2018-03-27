@@ -7,12 +7,19 @@
   android:background="?attr/colorBackground"
   tools:showIn="@layout/activity_main">
 
-  <android.support.v7.widget.RecyclerView
-    android:id="@+id/messages"
+  <android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:stackFromEnd="true"
-    tools:listitem="@layout/widget_chatmessage_plain" />
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/messages"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:stackFromEnd="true"
+      tools:listitem="@layout/widget_chatmessage_plain" />
+
+  </android.support.v4.widget.SwipeRefreshLayout>
 
   <android.support.design.widget.FloatingActionButton
     android:id="@+id/scrollDown"

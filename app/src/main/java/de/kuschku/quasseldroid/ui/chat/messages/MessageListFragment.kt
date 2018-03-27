@@ -9,6 +9,7 @@ import android.content.ClipboardManager
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
@@ -37,6 +38,9 @@ class MessageListFragment : ServiceBoundFragment() {
 
   @BindView(R.id.scrollDown)
   lateinit var scrollDown: FloatingActionButton
+
+  @BindView(R.id.swipeRefreshLayout)
+  lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
   @Inject
   lateinit var appearanceSettings: AppearanceSettings
@@ -176,6 +180,11 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     }
 
+    swipeRefreshLayout.setColorSchemeColors(*senderColors)
+    swipeRefreshLayout.setOnRefreshListener {
+      loadMore()
+    }
+
     var isScrolling = false
     messageList.addOnScrollListener(
       object : RecyclerView.OnScrollListener() {
@@ -242,6 +251,8 @@ class MessageListFragment : ServiceBoundFragment() {
           if (first != null) {
             if (previousVisible == visible) {
               loadMore()
+            } else {
+              swipeRefreshLayout.isRefreshing = false
             }
 
             previousVisible = visible
