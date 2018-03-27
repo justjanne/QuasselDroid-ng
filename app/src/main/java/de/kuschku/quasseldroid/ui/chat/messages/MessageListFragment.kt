@@ -27,6 +27,8 @@ import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
+import io.reactivex.BackpressureStrategy
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class MessageListFragment : ServiceBoundFragment() {
@@ -163,6 +165,17 @@ class MessageListFragment : ServiceBoundFragment() {
     messageList.itemAnimator = null
     messageList.setItemViewCacheSize(20)
 
+    val senderColors = requireContext().theme.styledAttributes(
+      R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
+      R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
+      R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
+      R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF
+    ) {
+      IntArray(16) {
+        getColor(it, 0)
+      }
+    }
+
     var isScrolling = false
     messageList.addOnScrollListener(
       object : RecyclerView.OnScrollListener() {
@@ -189,7 +202,6 @@ class MessageListFragment : ServiceBoundFragment() {
                              viewModel.markerLine)
       .toLiveData().switchMapNotNull { (buffer, selected, expanded, markerLine) ->
         database.filtered().listen(accountId, buffer).switchMapNotNull { filtered ->
-
           LivePagedListBuilder(
             database.message().findByBufferIdPagedWithDayChange(buffer, filtered).map {
               DisplayMessage(
@@ -213,7 +225,31 @@ class MessageListFragment : ServiceBoundFragment() {
       database.message().lastMsgId(it)
     }
 
-    viewModel.sessionManager_liveData.zip(lastMessageId).observe(
+    var previousVisible = -1
+    viewModel.buffer.toFlowable(BackpressureStrategy.LATEST).switchMap { buffer ->
+      database.filtered().listenRx(accountId, buffer).switchMap { filtered ->
+        database.message().firstMsgId(buffer).map {
+          Pair(it, database.message().firstVisibleMsgId(buffer, filtered))
+        }
+      }
+    }.distinctUntilChanged()
+      .throttleLast(1, TimeUnit.SECONDS)
+      .toLiveData().observe(this, Observer {
+        runInBackground {
+          val first = it?.first
+          val visible = it?.second ?: -1
+
+          if (first != null) {
+            if (previousVisible == visible) {
+              loadMore()
+            }
+
+            previousVisible = visible
+          }
+        }
+      })
+
+    viewModel.session.toLiveData().zip(lastMessageId).observe(
       this, Observer {
       runInBackground {
         val session = it?.first?.orNull()

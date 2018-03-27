@@ -11,8 +11,10 @@ import android.content.Context
 import android.support.annotation.IntRange
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
+import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.quasseldroid.persistence.QuasselDatabase.DatabaseMessage
 import de.kuschku.quasseldroid.persistence.QuasselDatabase.Filtered
+import io.reactivex.Flowable
 import org.threeten.bp.Instant
 
 @Database(entities = [DatabaseMessage::class, Filtered::class], version = 3)
@@ -77,6 +79,12 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId DESC LIMIT 1")
     fun lastMsgId(bufferId: Int): LiveData<DatabaseMessage>
 
+    @Query("SELECT messageId FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC LIMIT 1")
+    fun firstMsgId(bufferId: Int): Flowable<MsgId>
+
+    @Query("SELECT messageId FROM message WHERE bufferId = :bufferId AND type & ~ :type > 0 ORDER BY messageId ASC LIMIT 1")
+    fun firstVisibleMsgId(bufferId: Int, type: Int): MsgId?
+
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC LIMIT 1")
     fun findFirstByBufferId(bufferId: Int): DatabaseMessage?
 
@@ -122,6 +130,11 @@ abstract class QuasselDatabase : RoomDatabase() {
       "SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT 0 as filtered ORDER BY filtered DESC LIMIT 1"
     )
     fun listen(accountId: Long, bufferId: Int): LiveData<Int>
+
+    @Query(
+      "SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT 0 as filtered ORDER BY filtered DESC LIMIT 1"
+    )
+    fun listenRx(accountId: Long, bufferId: Int): Flowable<Int>
 
     @Query("SELECT * FROM filtered WHERE accountId = :accountId")
     fun listen(accountId: Long): LiveData<List<Filtered>>

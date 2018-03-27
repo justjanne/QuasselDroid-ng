@@ -3,6 +3,7 @@ package de.kuschku.quasseldroid.util.helper
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.LiveDataReactiveStreams
 import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.functions.BiFunction
@@ -10,6 +11,8 @@ import io.reactivex.functions.BiFunction
 inline fun <T> Observable<T>.toLiveData(
   strategy: BackpressureStrategy = BackpressureStrategy.LATEST
 ): LiveData<T> = LiveDataReactiveStreams.fromPublisher(toFlowable(strategy))
+
+inline fun <T> Flowable<T>.toLiveData(): LiveData<T> = LiveDataReactiveStreams.fromPublisher(this)
 
 inline fun <reified A, B> combineLatest(
   a: ObservableSource<A>,
