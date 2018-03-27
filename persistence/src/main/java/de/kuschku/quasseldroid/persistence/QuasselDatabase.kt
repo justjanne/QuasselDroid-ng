@@ -207,7 +207,7 @@ FROM
     WHERE bufferId = ?
           AND type & ~? > 0
   ) t
-ORDER BY time DESC
+ORDER BY time, messageId DESC
   """, arrayOf(bufferId, type, bufferId, bufferId, type)))
 
 fun QuasselDatabase.MessageDao.findByBufferIdWithDayChange(bufferId: Int, type: Int) =
@@ -241,5 +241,5 @@ FROM
     WHERE bufferId = ?
           AND type & ~? > 0
   ) t
-ORDER BY time DESC
+ORDER BY time, messageId DESC
   """, arrayOf(bufferId, type, bufferId, bufferId, type)))
