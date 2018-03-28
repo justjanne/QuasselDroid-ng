@@ -17,6 +17,7 @@
   <string name="label_crashes">Crashes</string>
   <string name="label_delete">Delete</string>
   <string name="label_delete_all">Delete All</string>
+  <string name="label_details">Details</string>
   <string name="label_disconnect">Disconnect</string>
   <string name="label_filter_messages">Filter Messages</string>
   <string name="label_github">GitHub</string>

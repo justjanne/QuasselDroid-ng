@@ -33,6 +33,12 @@
         <data android:mimeType="text/plain" />
       </intent-filter>
     </activity>
+    <activity
+      android:name=".ui.chat.detailinfo.InfoActivity"
+      android:exported="false"
+      android:label="@string/label_details"
+      android:parentActivityName=".ui.chat.ChatActivity"
+      android:windowSoftInputMode="adjustResize" />
 
     <activity
       android:name=".ui.setup.accounts.setup.AccountSetupActivity"

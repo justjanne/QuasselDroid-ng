@@ -3,6 +3,7 @@ package de.kuschku.quasseldroid.ui.chat
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +12,14 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.hasFlag
+import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
+import de.kuschku.quasseldroid.ui.chat.detailinfo.InfoActivity
+import de.kuschku.quasseldroid.ui.chat.detailinfo.InfoDescriptor
+import de.kuschku.quasseldroid.ui.chat.detailinfo.InfoType
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.helper.visibleIf
@@ -29,6 +35,9 @@ class ToolbarFragment : ServiceBoundFragment() {
 
   @BindView(R.id.toolbar_subtitle)
   lateinit var toolbarSubtitle: TextView
+
+  @BindView(R.id.toolbar_action_area)
+  lateinit var actionArea: View
 
   @Inject
   lateinit var ircFormatDeserializer: IrcFormatDeserializer
@@ -72,7 +81,7 @@ class ToolbarFragment : ServiceBoundFragment() {
         if (it != null) {
           val (data, isSecure, lag) = it
           if (data?.info?.type?.hasFlag(Buffer_Type.StatusBuffer) == true) {
-            this.title = data.network?.networkName
+            this.title = data.network?.networkName()
           } else {
             this.title = data?.info?.bufferName
           }
@@ -92,8 +101,33 @@ class ToolbarFragment : ServiceBoundFragment() {
             }
           }
         }
+      })
+
+    actionArea.setOnClickListener {
+      viewModel.bufferData.value?.info?.let { info ->
+        when (info.type.toInt()) {
+          BufferInfo.Type.QueryBuffer.toInt()   -> InfoDescriptor(
+            type = InfoType.User,
+            nick = info.bufferName,
+            network = info.networkId
+          )
+          BufferInfo.Type.ChannelBuffer.toInt() -> InfoDescriptor(
+            type = InfoType.Channel,
+            channel = info.bufferName,
+            network = info.networkId
+          )
+          BufferInfo.Type.StatusBuffer.toInt()  -> InfoDescriptor(
+            type = InfoType.Network,
+            network = info.networkId
+          )
+          else                                  -> null
+        }
+      }?.let { infoDescriptor ->
+        val intent = Intent(requireContext(), InfoActivity::class.java)
+        intent.putExtra("info", infoDescriptor)
+        startActivity(intent)
       }
-      )
+    }
 
     return view
   }

@@ -124,6 +124,7 @@ class IrcChannel(
     _userModes.getOr(ircUser, "")
   }
 
+  fun userModes(): Map<IrcUser, String> = _userModes
   fun userModes(nick: String) = network().ircUser(nick)?.let { userModes(it) } ?: ""
   fun liveUserModes(nick: String) = network().ircUser(nick)?.let { userModes(it) } ?: ""
 
@@ -370,10 +371,10 @@ class IrcChannel(
   private var _codecForEncoding: Charset? = null
   private var _codecForDecoding: Charset? = null
 
-  private var _A_channelModes: MutableMap<Char, MutableSet<String>> = mutableMapOf()
-  private var _B_channelModes: MutableMap<Char, String> = mutableMapOf()
-  private var _C_channelModes: MutableMap<Char, String> = mutableMapOf()
-  private var _D_channelModes: MutableSet<Char> = mutableSetOf()
+  var _A_channelModes: MutableMap<Char, MutableSet<String>> = mutableMapOf()
+  var _B_channelModes: MutableMap<Char, String> = mutableMapOf()
+  var _C_channelModes: MutableMap<Char, String> = mutableMapOf()
+  var _D_channelModes: MutableSet<Char> = mutableSetOf()
 
   companion object {
     val NULL = IrcChannel("", Network.NULL, SignalProxy.NULL)

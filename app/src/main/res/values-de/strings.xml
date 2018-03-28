@@ -17,6 +17,7 @@
   <string name="label_crashes">Absturzberichte</string>
   <string name="label_delete">Löschen</string>
   <string name="label_delete_all">Alle Löschen</string>
+  <string name="label_details">Details</string>
   <string name="label_disconnect">Verbindung trennen</string>
   <string name="label_filter_messages">Nachrichten filtern</string>
   <string name="label_github">GitHub</string>

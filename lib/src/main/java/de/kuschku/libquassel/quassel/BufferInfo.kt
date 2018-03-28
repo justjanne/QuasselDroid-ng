@@ -6,9 +6,13 @@ import de.kuschku.libquassel.util.Flags
 import de.kuschku.libquassel.util.ShortFlag
 import de.kuschku.libquassel.util.ShortFlags
 
-data class BufferInfo(var bufferId: Int, var networkId: Int, var type: Buffer_Types,
-                      var groupId: Int,
-                      var bufferName: String?) {
+data class BufferInfo(
+  var bufferId: Int,
+  var networkId: Int,
+  var type: Buffer_Types,
+  var groupId: Int,
+  var bufferName: String?
+) {
   enum class Type(override val bit: Short) : ShortFlag<Type> {
     InvalidBuffer(0x00),
     StatusBuffer(0x01),

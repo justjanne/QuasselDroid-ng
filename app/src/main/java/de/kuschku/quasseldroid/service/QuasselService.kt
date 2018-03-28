@@ -7,8 +7,6 @@ import android.net.ConnectivityManager
 import android.os.Binder
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.session.*
-import de.kuschku.libquassel.util.compatibility.LoggingHandler
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
@@ -270,7 +268,6 @@ class QuasselService : DaggerLifecycleService(),
     )
 
     sessionManager.connectionProgress.toLiveData().observe(this, Observer {
-      log(LoggingHandler.LogLevel.ERROR, "DEBUG", "progress: $it")
       if (this.progress.first != it?.first && it?.first == ConnectionState.CONNECTED) {
         handlerService.backend {
           database.message().clearMessages()

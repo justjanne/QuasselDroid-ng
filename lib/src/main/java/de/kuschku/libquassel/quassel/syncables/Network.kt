@@ -262,6 +262,9 @@ class Network constructor(
     }
   }
 
+  fun channelModes(): Map<ChannelModeType, Set<Char>>? = _channelModes
+
+  fun supports(): Map<String, String> = _supports
   fun supports(param: String) = _supports.contains(param.toUpperCase(Locale.US))
   fun support(param: String) = _supports.getOr(param, "")
   /**
@@ -431,7 +434,7 @@ class Network constructor(
     if (_connectionState == actualConnectionState)
       return
     _connectionState = actualConnectionState
-    liveConnectionState.onNext(_connectionState)
+    live_connectionState.onNext(_connectionState)
     super.setConnectionState(state)
   }
 
@@ -884,7 +887,7 @@ class Network constructor(
   private var _currentServer: String = ""
   private var _connected: Boolean = false
   private var _connectionState: ConnectionState = ConnectionState.Disconnected
-  val liveConnectionState = BehaviorSubject.createDefault(ConnectionState.Disconnected)
+  val live_connectionState = BehaviorSubject.createDefault(ConnectionState.Disconnected)
   private var _prefixes: List<Char>? = null
   private var _prefixModes: List<Char>? = null
   private var _channelModes: Map<ChannelModeType, Set<Char>>? = null

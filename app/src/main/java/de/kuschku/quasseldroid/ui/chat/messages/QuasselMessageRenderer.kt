@@ -5,11 +5,8 @@ import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.LayerDrawable
 import android.text.SpannableString
-import android.text.Spanned
-import android.text.TextPaint
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.text.style.URLSpan
 import android.util.TypedValue
 import de.kuschku.libquassel.protocol.Message.MessageType.*
 import de.kuschku.libquassel.protocol.Message_Flag
@@ -21,11 +18,10 @@ import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AppearanceSettings.ColorizeNicknamesMode
 import de.kuschku.quasseldroid.settings.AppearanceSettings.ShowPrefixMode
 import de.kuschku.quasseldroid.util.helper.styledAttributes
-import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
+import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.quassel.IrcUserUtils
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
-import org.intellij.lang.annotations.Language
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
@@ -33,7 +29,7 @@ import javax.inject.Inject
 
 class QuasselMessageRenderer @Inject constructor(
   private val appearanceSettings: AppearanceSettings,
-  private val ircFormatDeserializer: IrcFormatDeserializer
+  private val contentFormatter: ContentFormatter
 ) : MessageRenderer {
   private val timeFormatter = DateTimeFormatter.ofPattern(
     timePattern(appearanceSettings.showSeconds, appearanceSettings.use24hClock)
@@ -128,7 +124,7 @@ class QuasselMessageRenderer @Inject constructor(
           context.getString(R.string.message_format_plain),
           formatPrefix(message.content.senderPrefixes, highlight),
           formatNick(message.content.sender, self, highlight, false),
-          formatContent(context, message.content.content, highlight)
+          contentFormatter.format(context, message.content.content, highlight)
         ),
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
@@ -141,7 +137,7 @@ class QuasselMessageRenderer @Inject constructor(
           context.getString(R.string.message_format_action),
           formatPrefix(message.content.senderPrefixes, highlight),
           formatNick(message.content.sender, self, highlight, false),
-          formatContent(context, message.content.content, highlight)
+          contentFormatter.format(context, message.content.content, highlight)
         ),
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
@@ -154,7 +150,7 @@ class QuasselMessageRenderer @Inject constructor(
           context.getString(R.string.message_format_notice),
           formatPrefix(message.content.senderPrefixes, highlight),
           formatNick(message.content.sender, self, highlight, false),
-          formatContent(context, message.content.content, highlight)
+          contentFormatter.format(context, message.content.content, highlight)
         ),
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
@@ -225,7 +221,7 @@ class QuasselMessageRenderer @Inject constructor(
             context.getString(R.string.message_format_part_2),
             formatPrefix(message.content.senderPrefixes, highlight),
             formatNick(message.content.sender, self, highlight, true),
-            formatContent(context, message.content.content, highlight)
+            contentFormatter.format(context, message.content.content, highlight)
           )
         },
         isMarkerLine = message.isMarkerLine,
@@ -246,7 +242,7 @@ class QuasselMessageRenderer @Inject constructor(
             context.getString(R.string.message_format_quit_2),
             formatPrefix(message.content.senderPrefixes, highlight),
             formatNick(message.content.sender, self, highlight, true),
-            formatContent(context, message.content.content, highlight)
+            contentFormatter.format(context, message.content.content, highlight)
           )
         },
         isMarkerLine = message.isMarkerLine,
@@ -271,7 +267,7 @@ class QuasselMessageRenderer @Inject constructor(
               formatNick(user, false, highlight, false),
               formatPrefix(message.content.senderPrefixes, highlight),
               formatNick(message.content.sender, self, highlight, true),
-              formatContent(context, reason, highlight)
+              contentFormatter.format(context, reason, highlight)
             )
           },
           isMarkerLine = message.isMarkerLine,
@@ -297,7 +293,7 @@ class QuasselMessageRenderer @Inject constructor(
               formatNick(user, false, highlight, false),
               formatPrefix(message.content.senderPrefixes, highlight),
               formatNick(message.content.sender, self, highlight, true),
-              formatContent(context, reason, highlight)
+              contentFormatter.format(context, reason, highlight)
             )
           },
           isMarkerLine = message.isMarkerLine,
@@ -340,7 +336,7 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Error        -> FormattedMessage(
         message.content.messageId,
         timeFormatter.format(message.content.time.atZone(zoneId)),
-        formatContent(context, message.content.content, highlight),
+        contentFormatter.format(context, message.content.content, highlight),
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
@@ -348,7 +344,7 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Topic        -> FormattedMessage(
         message.content.messageId,
         timeFormatter.format(message.content.time.atZone(zoneId)),
-        formatContent(context, message.content.content, highlight),
+        contentFormatter.format(context, message.content.content, highlight),
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
@@ -375,59 +371,6 @@ class QuasselMessageRenderer @Inject constructor(
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
       )
-    }
-  }
-
-  @Language("RegExp")
-  private val scheme = "(?:(?:mailto:|magnet:|(?:[+.-]?\\w)+://)|www(?=\\.\\S+\\.))"
-  @Language("RegExp")
-  private val authority = "(?:(?:[,.;@:]?[-\\w]+)+\\.?|\\[[0-9a-f:.]+])?(?::\\d+)?"
-  @Language("RegExp")
-  private val urlChars = "(?:[,.;:]*[\\w~@/?&=+$()!%#*-])"
-  @Language("RegExp")
-  private val urlEnd = "((?:>|[,.;:\"]*\\s|\\b|$))"
-
-  private val urlPattern = Regex(
-    "\\b($scheme$authority(?:$urlChars*)?)$urlEnd",
-    RegexOption.IGNORE_CASE
-  )
-
-  private val channelPattern = Regex(
-    "((?:#|![A-Z0-9]{5})[^,:\\s]+(?::[^,:\\s]+)?)\\b",
-    RegexOption.IGNORE_CASE
-  )
-
-  private fun formatContent(context: Context, content: String, highlight: Boolean): CharSequence {
-    val formattedText = ircFormatDeserializer.formatString(
-      context, content, appearanceSettings.colorizeMirc
-    )
-    val text = SpannableString(formattedText)
-
-    for (result in urlPattern.findAll(formattedText)) {
-      val group = result.groups[1]
-      if (group != null) {
-        text.setSpan(
-          QuasselURLSpan(group.value, highlight), group.range.start,
-          group.range.start + group.value.length,
-          Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-        )
-      }
-    }
-    /*
-    for (result in channelPattern.findAll(content)) {
-      text.setSpan(URLSpan(result.value), result.range.start, result.range.endInclusive, Spanned.SPAN_INCLUSIVE_INCLUSIVE)}
-    */
-
-    return text
-  }
-
-  class QuasselURLSpan(text: String, private val highlight: Boolean) : URLSpan(text) {
-    override fun updateDrawState(ds: TextPaint?) {
-      if (ds != null) {
-        if (!highlight)
-          ds.color = ds.linkColor
-        ds.isUnderlineText = true
-      }
     }
   }
 

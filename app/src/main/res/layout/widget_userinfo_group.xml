@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_marginBottom="12dp"
+  android:layout_marginLeft="8dp"
+  android:layout_marginRight="8dp"
+  app:cardElevation="2dp">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+      android:id="@+id/title_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+      <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:ellipsize="end"
+        android:paddingBottom="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?colorAccent"
+        tools:text="@sample/userinfo_groups.json/data/name" />
+
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="?colorDivider" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/properties"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      tools:itemCount="3"
+      tools:listitem="@layout/widget_userinfo" />
+  </LinearLayout>
+</android.support.v7.widget.CardView>

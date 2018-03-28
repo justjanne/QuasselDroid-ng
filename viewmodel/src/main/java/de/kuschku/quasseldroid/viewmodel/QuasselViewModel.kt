@@ -110,7 +110,7 @@ class QuasselViewModel : ViewModel() {
                 it.updates().map { user ->
                   BufferData(
                     info = info,
-                    network = network.networkInfo(),
+                    network = network,
                     description = user.realName()
                   )
                 }
@@ -123,17 +123,17 @@ class QuasselViewModel : ViewModel() {
                 channel.liveTopic().map { topic ->
                   BufferData(
                     info = info,
-                    network = network.networkInfo(),
+                    network = network,
                     description = topic
                   )
                 }
               }
             }
             BufferInfo.Type.StatusBuffer.toInt()  -> {
-              network.liveConnectionState.map {
+              network.live_connectionState.map {
                 BufferData(
                   info = info,
-                  network = network.networkInfo()
+                  network = network
                 )
               }
             }
@@ -315,7 +315,7 @@ class QuasselViewModel : ViewModel() {
           val network = session.networks[info.networkId]
           when (info.type.enabledValues().firstOrNull()) {
             Buffer_Type.StatusBuffer  -> {
-              network?.liveConnectionState?.map {
+              network?.live_connectionState?.map {
                 SelectedBufferItem(
                   info,
                   connectionState = it,
@@ -422,7 +422,7 @@ class QuasselViewModel : ViewModel() {
                           }
                         }
                         BufferInfo.Type.StatusBuffer.toInt()  -> {
-                          network.liveConnectionState.map {
+                          network.live_connectionState.map {
                             BufferProps(
                               info = info,
                               network = network.networkInfo(),

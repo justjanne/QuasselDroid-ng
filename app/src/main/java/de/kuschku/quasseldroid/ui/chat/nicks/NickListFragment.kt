@@ -2,6 +2,7 @@ package de.kuschku.quasseldroid.ui.chat.nicks
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -11,9 +12,14 @@ import android.view.View
 import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
+import de.kuschku.quasseldroid.ui.chat.detailinfo.InfoActivity
+import de.kuschku.quasseldroid.ui.chat.detailinfo.InfoDescriptor
+import de.kuschku.quasseldroid.ui.chat.detailinfo.InfoType
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
@@ -72,7 +78,15 @@ class NickListFragment : ServiceBoundFragment() {
     return view
   }
 
-  private val clickListener: ((String) -> Unit)? = {
-    // TODO
+  private val clickListener: ((String) -> Unit)? = { nick ->
+    viewModel.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
+      val intent = Intent(requireContext(), InfoActivity::class.java)
+      intent.putExtra("info", InfoDescriptor(
+        type = InfoType.User,
+        nick = nick,
+        network = networkId
+      ))
+      startActivity(intent)
+    }
   }
 }
