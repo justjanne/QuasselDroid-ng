@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.util.Optional
@@ -15,8 +16,6 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
-import de.kuschku.quasseldroid.viewmodel.data.InfoGroup
-import de.kuschku.quasseldroid.viewmodel.data.InfoProperty
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -52,26 +51,26 @@ class InfoFragment : ServiceBoundFragment() {
                   network = network,
                   properties = listOf(
                     InfoGroup(
-                      name = "Identity",
+                      name = getString(R.string.property_group_ircuser_identity),
                       properties = listOf(
                         InfoProperty(
-                          name = "Nickname",
+                          name = getString(R.string.property_ircuser_nick),
                           value = user.nick()
                         ),
                         InfoProperty(
-                          name = "Ident",
+                          name = getString(R.string.property_ircuser_user),
                           value = user.user()
                         ),
                         InfoProperty(
-                          name = "Host",
+                          name = getString(R.string.property_ircuser_host),
                           value = user.host()
                         ),
                         InfoProperty(
-                          name = "Real Name",
+                          name = getString(R.string.property_ircuser_realname),
                           value = contentFormatter.format(requireContext(), user.realName())
                         ),
                         InfoProperty(
-                          name = "Account",
+                          name = getString(R.string.property_ircuser_account),
                           value = user.account()
                         )
                       )
@@ -89,11 +88,24 @@ class InfoFragment : ServiceBoundFragment() {
                 network = network,
                 properties = listOf(
                   InfoGroup(
-                    name = "Channel",
+                    name = getString(R.string.property_group_ircchannel_channel),
                     properties = listOf(
                       InfoProperty(
-                        name = "Topic",
-                        value = contentFormatter.format(requireContext(), channel.topic())
+                        name = getString(R.string.property_ircchannel_topic),
+                        value = contentFormatter.format(requireContext(), channel.topic()),
+                        actions = listOf(
+                          InfoPropertyAction(
+                            name = getString(R.string.property_ircchannel_topic_action_edit),
+                            featured = true,
+                            onClick = {
+                              Toast.makeText(
+                                requireContext(),
+                                "Not implemented",
+                                Toast.LENGTH_SHORT
+                              ).show()
+                            }
+                          )
+                        )
                       )
                     )
                   )

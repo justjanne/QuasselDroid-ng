@@ -2,6 +2,7 @@ package de.kuschku.quasseldroid.ui.chat.info
 
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.util.DiffUtil
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,6 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.visibleIf
-import de.kuschku.quasseldroid.viewmodel.data.InfoProperty
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 class InfoPropertyAdapter :
@@ -26,7 +26,7 @@ class InfoPropertyAdapter :
     }
   ) {
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = InfoPropertyViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.widget_userinfo, parent, false)
+    LayoutInflater.from(parent.context).inflate(R.layout.widget_info_property, parent, false)
   )
 
   override fun onBindViewHolder(holder: InfoPropertyViewHolder, position: Int) =
@@ -45,8 +45,17 @@ class InfoPropertyAdapter :
     @BindView(R.id.value)
     lateinit var value: TextView
 
+    @BindView(R.id.actions)
+    lateinit var actions: RecyclerView
+
+    private val adapter = InfoPropertyActionAdapter()
+
     init {
       ButterKnife.bind(this, itemView)
+
+      actions.layoutManager = LinearLayoutManager(itemView.context, RecyclerView.HORIZONTAL, false)
+      actions.adapter = adapter
+
       value.movementMethod = BetterLinkMovementMethod.getInstance()
     }
 
@@ -54,6 +63,8 @@ class InfoPropertyAdapter :
       item.icon?.let(icon::setImageResource)
       name.text = item.name
       value.text = item.value
+
+      adapter.submitList(item.actions)
 
       iconFrame.visibleIf(item.icon != null)
     }

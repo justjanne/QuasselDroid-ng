@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="property_group_ircuser_identity">Identity</string>
+  <string name="property_ircuser_nick">Nickname</string>
+  <string name="property_ircuser_user">Ident</string>
+  <string name="property_ircuser_host">Host</string>
+  <string name="property_ircuser_realname">Real Name</string>
+  <string name="property_ircuser_account">Account</string>
+
+  <string name="property_group_ircchannel_channel">Channel</string>
+  <string name="property_ircchannel_topic">Topic</string>
+  <string name="property_ircchannel_topic_action_edit">Edit Topic</string>
+  <string name="property_ircchannel_topic_default">No Topic Set</string>
+</resources>

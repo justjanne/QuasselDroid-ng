@@ -12,7 +12,6 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.viewmodel.data.InfoGroup
 
 class InfoGroupAdapter :
   ListAdapter<InfoGroup, InfoGroupAdapter.InfoGroupViewHolder>(
@@ -26,7 +25,7 @@ class InfoGroupAdapter :
   ) {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = InfoGroupViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.widget_userinfo_group, parent, false)
+    LayoutInflater.from(parent.context).inflate(R.layout.widget_info_group, parent, false)
   )
 
   override fun onBindViewHolder(holder: InfoGroupViewHolder, position: Int) =
@@ -39,12 +38,10 @@ class InfoGroupAdapter :
     @BindView(R.id.properties)
     lateinit var properties: RecyclerView
 
-    private val adapter: InfoPropertyAdapter
+    private val adapter = InfoPropertyAdapter()
 
     init {
       ButterKnife.bind(this, itemView)
-
-      adapter = InfoPropertyAdapter()
 
       properties.layoutManager = LinearLayoutManager(itemView.context)
       properties.adapter = adapter

@@ -65,5 +65,14 @@
       android:textAppearance="?android:attr/textAppearanceSmall"
       android:textColor="?colorTextSecondary"
       tools:text="@sample/userinfo_basic.json/data/value" />
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/actions"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="-4dp"
+      android:layout_marginStart="-4dp"
+      android:orientation="horizontal"
+      tools:listitem="@layout/widget_info_action_main" />
   </LinearLayout>
 </LinearLayout>
