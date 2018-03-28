@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid.ui.chat.detailinfo
+package de.kuschku.quasseldroid.ui.chat.info
 
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.quassel.syncables.IrcUser

@@ -1,52 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:layout_marginBottom="12dp"
-  android:layout_marginLeft="8dp"
-  android:layout_marginRight="8dp"
-  app:cardElevation="2dp">
+  android:orientation="vertical">
 
-  <LinearLayout
+  <TextView
+    android:id="@+id/title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:gravity="center_vertical"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:paddingBottom="8dp"
+    android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+    android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+    android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+    android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+    android:paddingTop="8dp"
+    android:textColor="?colorAccent"
+    android:textSize="16sp"
+    android:textStyle="bold"
+    tools:text="@sample/userinfo_groups.json/data/name" />
 
-    <LinearLayout
-      android:id="@+id/title_container"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="vertical">
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/properties"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:itemCount="3"
+    tools:listitem="@layout/widget_userinfo" />
 
-      <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:ellipsize="end"
-        android:paddingBottom="20dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="20dp"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?colorAccent"
-        tools:text="@sample/userinfo_groups.json/data/name" />
-
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="?colorDivider" />
-
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-      android:id="@+id/properties"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      tools:itemCount="3"
-      tools:listitem="@layout/widget_userinfo" />
-  </LinearLayout>
-</android.support.v7.widget.CardView>
+</LinearLayout>

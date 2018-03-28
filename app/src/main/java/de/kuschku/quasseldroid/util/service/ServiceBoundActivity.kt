@@ -1,6 +1,7 @@
 package de.kuschku.quasseldroid.util.service
 
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -25,6 +26,7 @@ import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity
 import de.kuschku.quasseldroid.util.helper.sharedPreferences
 import de.kuschku.quasseldroid.util.helper.updateRecentsHeaderIfExisting
+import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
@@ -77,6 +79,8 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
   @Inject
   lateinit var connectionSettings: ConnectionSettings
 
+  protected lateinit var viewModel: QuasselViewModel
+
   protected var accountId: Long = -1
 
   private var startedSelection = false
@@ -87,6 +91,9 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
     connection.context = this
 
     checkConnection()
+
+    viewModel = ViewModelProviders.of(this)[QuasselViewModel::class.java]
+    viewModel.backendWrapper.onNext(this.backend)
 
     setTheme(appearanceSettings.theme.style)
     super.onCreate(savedInstanceState)

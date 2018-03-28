@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid.ui.chat.nicks
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
@@ -17,18 +16,15 @@ import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
-import de.kuschku.quasseldroid.ui.chat.detailinfo.InfoActivity
-import de.kuschku.quasseldroid.ui.chat.detailinfo.InfoDescriptor
-import de.kuschku.quasseldroid.ui.chat.detailinfo.InfoType
+import de.kuschku.quasseldroid.ui.chat.info.InfoActivity
+import de.kuschku.quasseldroid.ui.chat.info.InfoDescriptor
+import de.kuschku.quasseldroid.ui.chat.info.InfoType
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
-import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import javax.inject.Inject
 
 class NickListFragment : ServiceBoundFragment() {
-  private lateinit var viewModel: QuasselViewModel
-
   @BindView(R.id.nickList)
   lateinit var nickList: RecyclerView
 
@@ -37,12 +33,6 @@ class NickListFragment : ServiceBoundFragment() {
 
   @Inject
   lateinit var ircFormatDeserializer: IrcFormatDeserializer
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-
-    viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
-  }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {

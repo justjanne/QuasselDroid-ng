@@ -1,54 +1,42 @@
-package de.kuschku.quasseldroid.ui.chat.detailinfo
+package de.kuschku.quasseldroid.ui.chat.info
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.compatibility.LoggingHandler
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
-import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
-import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
+import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.viewmodel.data.InfoGroup
 import de.kuschku.quasseldroid.viewmodel.data.InfoProperty
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class InfoActivity : ServiceBoundActivity() {
-  @BindView(R.id.toolbar)
-  lateinit var toolbar: Toolbar
-
+class InfoFragment : ServiceBoundFragment() {
   @BindView(R.id.groups)
   lateinit var groups: RecyclerView
 
   @Inject
   lateinit var contentFormatter: ContentFormatter
 
-  private lateinit var viewModel: QuasselViewModel
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_info)
-    ButterKnife.bind(this)
-
-    setSupportActionBar(toolbar)
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-    viewModel = ViewModelProviders.of(this)[QuasselViewModel::class.java]
-    viewModel.backendWrapper.onNext(this.backend)
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                            savedInstanceState: Bundle?): View? {
+    val view = inflater.inflate(R.layout.fragment_info, container, false)
+    ButterKnife.bind(this, view)
 
     val adapter = InfoGroupAdapter()
-    groups.layoutManager = LinearLayoutManager(this)
+    groups.layoutManager = LinearLayoutManager(requireContext())
     groups.adapter = adapter
 
-    val info = intent.getSerializableExtra("info") as? InfoDescriptor
+    val info = arguments?.getSerializable("info") as? InfoDescriptor
     viewModel.session.switchMap { sessionOptional ->
       val network = sessionOptional.orNull()?.networks?.get(info?.network)
       if (info == null || network == null) {
@@ -80,7 +68,7 @@ class InfoActivity : ServiceBoundActivity() {
                         ),
                         InfoProperty(
                           name = "Real Name",
-                          value = contentFormatter.format(this, user.realName())
+                          value = contentFormatter.format(requireContext(), user.realName())
                         ),
                         InfoProperty(
                           name = "Account",
@@ -101,10 +89,11 @@ class InfoActivity : ServiceBoundActivity() {
                 network = network,
                 properties = listOf(
                   InfoGroup(
+                    name = "Channel",
                     properties = listOf(
                       InfoProperty(
                         name = "Topic",
-                        value = contentFormatter.format(this, channel.topic())
+                        value = contentFormatter.format(requireContext(), channel.topic())
                       )
                     )
                   )
@@ -123,10 +112,10 @@ class InfoActivity : ServiceBoundActivity() {
         }
       }
     }.toLiveData().observe(this, Observer {
-      log(LoggingHandler.LogLevel.ERROR, "DEBUG", "data: $it")
+      LoggingHandler.log(LoggingHandler.LogLevel.ERROR, "DEBUG", "data: $it")
       adapter.submitList(it?.orNull()?.properties.orEmpty())
     })
 
-    viewModel.buffer.onNext(intent.getIntExtra("buffer", -1))
+    return view
   }
 }

@@ -44,9 +44,7 @@ class AccountSelectionSlide : SlideFragment() {
                                savedInstanceState: Bundle?): View {
     val view = inflater.inflate(R.layout.setup_select_account, container, false)
     ButterKnife.bind(this, view)
-    val accountViewModel = ViewModelProviders.of(this).get(
-      AccountViewModel::class.java
-    )
+    val accountViewModel = ViewModelProviders.of(this).get(AccountViewModel::class.java)
     val firstObserver = object : Observer<List<AccountDatabase.Account>?> {
       override fun onChanged(t: List<AccountDatabase.Account>?) {
         if (t?.isEmpty() != false)

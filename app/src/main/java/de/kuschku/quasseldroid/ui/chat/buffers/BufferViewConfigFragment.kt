@@ -1,8 +1,6 @@
 package de.kuschku.quasseldroid.ui.chat.buffers
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.*
 import android.view.*
@@ -26,7 +24,6 @@ import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.helper.zip
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
-import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid.viewmodel.data.BufferHiddenState
 import javax.inject.Inject
 
@@ -48,8 +45,6 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
   @Inject
   lateinit var ircFormatDeserializer: IrcFormatDeserializer
-
-  private lateinit var viewModel: QuasselViewModel
 
   private var actionMode: ActionMode? = null
 
@@ -161,11 +156,6 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   }
 
   private lateinit var listAdapter: BufferListAdapter
-
-  override fun onAttach(context: Context?) {
-    super.onAttach(context)
-    viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
-  }
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,

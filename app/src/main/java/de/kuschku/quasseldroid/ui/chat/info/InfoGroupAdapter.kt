@@ -1,7 +1,8 @@
-package de.kuschku.quasseldroid.ui.chat.detailinfo
+package de.kuschku.quasseldroid.ui.chat.info
 
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.util.DiffUtil
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -11,7 +12,6 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.viewmodel.data.InfoGroup
 
 class InfoGroupAdapter :
@@ -33,9 +33,6 @@ class InfoGroupAdapter :
     holder.bind(getItem(position))
 
   class InfoGroupViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.title_container)
-    lateinit var titleContainer: View
-
     @BindView(R.id.title)
     lateinit var title: TextView
 
@@ -51,12 +48,13 @@ class InfoGroupAdapter :
 
       properties.layoutManager = LinearLayoutManager(itemView.context)
       properties.adapter = adapter
+      properties.addItemDecoration(
+        DividerItemDecoration(itemView.context, DividerItemDecoration.VERTICAL)
+      )
     }
 
     fun bind(item: InfoGroup) {
       title.text = item.name
-      titleContainer.visibleIf(item.name != null)
-
       adapter.submitList(item.properties)
     }
   }

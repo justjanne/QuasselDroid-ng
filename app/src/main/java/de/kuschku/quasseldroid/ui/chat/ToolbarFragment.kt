@@ -1,8 +1,6 @@
 package de.kuschku.quasseldroid.ui.chat
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,16 +15,15 @@ import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
-import de.kuschku.quasseldroid.ui.chat.detailinfo.InfoActivity
-import de.kuschku.quasseldroid.ui.chat.detailinfo.InfoDescriptor
-import de.kuschku.quasseldroid.ui.chat.detailinfo.InfoType
+import de.kuschku.quasseldroid.ui.chat.info.InfoActivity
+import de.kuschku.quasseldroid.ui.chat.info.InfoDescriptor
+import de.kuschku.quasseldroid.ui.chat.info.InfoType
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
-import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import javax.inject.Inject
 
 class ToolbarFragment : ServiceBoundFragment() {
@@ -45,8 +42,6 @@ class ToolbarFragment : ServiceBoundFragment() {
   @Inject
   lateinit var appearanceSettings: AppearanceSettings
 
-  private lateinit var viewModel: QuasselViewModel
-
   var title: CharSequence?
     get() = toolbarTitle.text
     set(value) {
@@ -62,11 +57,6 @@ class ToolbarFragment : ServiceBoundFragment() {
       toolbarSubtitle.text = value ?: ""
       toolbarSubtitle.visibleIf(value?.isNotEmpty() == true)
     }
-
-  override fun onAttach(context: Context?) {
-    super.onAttach(context)
-    viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
-  }
 
   override fun onCreateView(
     inflater: LayoutInflater,

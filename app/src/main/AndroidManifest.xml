@@ -34,7 +34,7 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".ui.chat.detailinfo.InfoActivity"
+      android:name=".ui.chat.info.InfoActivity"
       android:exported="false"
       android:label="@string/label_details"
       android:parentActivityName=".ui.chat.ChatActivity"

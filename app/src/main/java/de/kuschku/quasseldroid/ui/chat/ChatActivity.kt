@@ -2,7 +2,6 @@ package de.kuschku.quasseldroid.ui.chat
 
 import android.annotation.TargetApi
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -42,7 +41,6 @@ import de.kuschku.quasseldroid.util.helper.retint
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
-import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import javax.inject.Inject
 
@@ -66,8 +64,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   lateinit var msgHistory: RecyclerView
 
   private lateinit var drawerToggle: ActionBarDrawerToggle
-
-  private lateinit var viewModel: QuasselViewModel
 
   @Inject
   lateinit var database: QuasselDatabase
@@ -100,9 +96,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     ButterKnife.bind(this)
-
-    viewModel = ViewModelProviders.of(this)[QuasselViewModel::class.java]
-    viewModel.backendWrapper.onNext(this.backend)
 
     editor = Editor(
       this,

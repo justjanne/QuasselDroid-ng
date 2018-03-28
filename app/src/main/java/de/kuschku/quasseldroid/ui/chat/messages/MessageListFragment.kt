@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid.ui.chat.messages
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import android.content.ClipData
@@ -27,7 +26,6 @@ import de.kuschku.quasseldroid.settings.BacklogSettings
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
-import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import io.reactivex.BackpressureStrategy
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -53,8 +51,6 @@ class MessageListFragment : ServiceBoundFragment() {
 
   @Inject
   lateinit var messageRenderer: QuasselMessageRenderer
-
-  private lateinit var viewModel: QuasselViewModel
 
   private lateinit var linearLayoutManager: LinearLayoutManager
   private lateinit var adapter: MessageAdapter
@@ -123,11 +119,6 @@ class MessageListFragment : ServiceBoundFragment() {
       actionMode = null
       viewModel.selectedMessages.onNext(emptyMap())
     }
-  }
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    viewModel = ViewModelProviders.of(activity!!)[QuasselViewModel::class.java]
   }
 
   private val boundaryCallback = object :

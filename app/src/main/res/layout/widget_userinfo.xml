@@ -4,45 +4,66 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:minHeight="72dp"
-  android:orientation="horizontal">
+  android:background="?android:attr/selectableItemBackground"
+  android:baselineAligned="false"
+  android:clipToPadding="false"
+  android:focusable="true"
+  android:gravity="center_vertical"
+  android:minHeight="?android:attr/listPreferredItemHeightSmall"
+  android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+  android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+  android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+  android:paddingStart="?android:attr/listPreferredItemPaddingLeft">
 
-  <android.support.v7.widget.AppCompatImageView
-    android:id="@+id/icon"
-    android:layout_width="40dp"
-    android:layout_height="40dp"
-    android:layout_gravity="center_vertical"
-    android:layout_marginLeft="20dp"
-    android:layout_marginStart="20dp"
-    android:scaleType="fitCenter"
-    app:srcCompat="@drawable/ic_account"
-    app:tint="?colorAccent" />
+  <FrameLayout
+    android:id="@+id/icon_frame"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="-4dp"
+    android:layout_marginStart="-4dp"
+    android:gravity="start|center_vertical"
+    android:minWidth="60dp"
+    android:orientation="horizontal"
+    android:paddingBottom="4dp"
+    android:paddingEnd="12dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="12dp"
+    android:paddingStart="0dp"
+    android:paddingTop="4dp">
+
+    <android.support.v7.internal.widget.PreferenceImageView
+      android:id="@+id/icon"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:maxHeight="48dp"
+      app:maxWidth="48dp" />
+  </FrameLayout>
 
   <LinearLayout
-    android:layout_width="match_parent"
+    android:layout_width="0dip"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical"
-    android:layout_marginLeft="12dp"
-    android:layout_marginStart="12dp"
-    android:orientation="vertical">
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:paddingBottom="16dp"
+    android:paddingTop="16dp">
 
     <TextView
       android:id="@+id/name"
-      android:layout_width="match_parent"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
-      android:ellipsize="end"
+      android:ellipsize="marquee"
       android:singleLine="true"
-      android:textAppearance="?android:attr/textAppearanceSmall"
+      android:textColor="?colorTextPrimary"
+      android:textSize="16sp"
       tools:text="@sample/userinfo_basic.json/data/name" />
 
     <TextView
       android:id="@+id/value"
-      android:layout_width="match_parent"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="8dp"
-      android:textAppearance="?android:attr/textAppearanceMedium"
-      android:textColor="?colorTextPrimary"
+      android:maxLines="10"
+      android:textAppearance="?android:attr/textAppearanceSmall"
+      android:textColor="?colorTextSecondary"
       tools:text="@sample/userinfo_basic.json/data/value" />
   </LinearLayout>
 </LinearLayout>

@@ -15,6 +15,7 @@ abstract class SettingsActivity(private val fragment: Fragment? = null) : Servic
   lateinit var toolbar: Toolbar
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    val arguments = intent.extras
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_settings)
     ButterKnife.bind(this)
@@ -26,6 +27,7 @@ abstract class SettingsActivity(private val fragment: Fragment? = null) : Servic
 
     if (fragment != null) {
       val transaction = supportFragmentManager.beginTransaction()
+      fragment.arguments = arguments
       transaction.replace(R.id.fragment_container, fragment)
       transaction.commit()
     }

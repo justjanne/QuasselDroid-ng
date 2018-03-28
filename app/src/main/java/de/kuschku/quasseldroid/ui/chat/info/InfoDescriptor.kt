@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid.ui.chat.detailinfo
+package de.kuschku.quasseldroid.ui.chat.info
 
 import java.io.Serializable
 
