@@ -13,6 +13,7 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.service.QuasselService
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.util.helper.editApply
+import de.kuschku.quasseldroid.util.helper.getColorCompat
 import de.kuschku.quasseldroid.util.helper.sharedPreferences
 import de.kuschku.quasseldroid.util.helper.systemService
 
@@ -69,7 +70,7 @@ class QuasseldroidNotificationManager(private val context: Context) {
       .addAction(0, context.getString(R.string.label_open), pendingIntentOpen)
       .addAction(0, context.getString(R.string.label_disconnect), pendingIntentDisconnect)
       .setSmallIcon(R.drawable.ic_logo)
-      .setColor(context.resources.getColor(R.color.colorPrimary))
+      .setColor(context.getColorCompat(R.color.colorPrimary))
       .setPriority(NotificationCompat.PRIORITY_MIN)
     return Handle(BACKGROUND_NOTIFICATION_ID, notification)
   }

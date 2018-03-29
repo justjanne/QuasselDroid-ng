@@ -18,7 +18,6 @@
       android:id="@+id/host"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:hint="@string/label_connection_host"
       android:inputType="textUri" />
   </android.support.design.widget.TextInputLayout>
 
@@ -34,7 +33,6 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:inputType="number"
-      android:hint="@string/labelConnectionPort"
       android:text="@string/defaultConnectionPort" />
   </android.support.design.widget.TextInputLayout>
 

@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid.ui.chat.input
 
 import android.graphics.drawable.Drawable
-import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -14,8 +13,9 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.chat.nicks.NickListAdapter.Companion.VIEWTYPE_AWAY
-import de.kuschku.quasseldroid.util.helper.getCompatDrawable
+import de.kuschku.quasseldroid.util.helper.getDrawableCompat
 import de.kuschku.quasseldroid.util.helper.styledAttributes
+import de.kuschku.quasseldroid.util.helper.tint
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
@@ -124,8 +124,8 @@ class AutoCompleteAdapter(
 
       var value: String? = null
 
-      private val online: Drawable
-      private val offline: Drawable
+      private val online: Drawable?
+      private val offline: Drawable?
 
       init {
         ButterKnife.bind(this, itemView)
@@ -135,14 +135,14 @@ class AutoCompleteAdapter(
             clickListener?.invoke(value)
         }
 
-        online = itemView.context.getCompatDrawable(R.drawable.ic_status_channel).mutate()
-        offline = itemView.context.getCompatDrawable(R.drawable.ic_status_channel_offline).mutate()
+        online = itemView.context.getDrawableCompat(R.drawable.ic_status_channel)?.mutate()
+        offline = itemView.context.getDrawableCompat(R.drawable.ic_status_channel_offline)?.mutate()
 
         itemView.context.theme.styledAttributes(
           R.attr.colorAccent, R.attr.colorAway
         ) {
-          DrawableCompat.setTint(online, getColor(0, 0))
-          DrawableCompat.setTint(offline, getColor(1, 0))
+          online?.tint(getColor(0, 0))
+          offline?.tint(getColor(1, 0))
         }
       }
 

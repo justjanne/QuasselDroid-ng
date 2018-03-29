@@ -4,7 +4,6 @@ import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.graphics.drawable.Drawable
-import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -220,9 +219,9 @@ class BufferListAdapter(
         itemView.isSelected = state.selected
 
         if (state.networkExpanded) {
-          status.setImageDrawable(itemView.context.getCompatDrawable(R.drawable.ic_chevron_up))
+          status.setImageDrawable(itemView.context.getDrawableCompat(R.drawable.ic_chevron_up))
         } else {
-          status.setImageDrawable(itemView.context.getCompatDrawable(R.drawable.ic_chevron_down))
+          status.setImageDrawable(itemView.context.getDrawableCompat(R.drawable.ic_chevron_down))
         }
       }
     }
@@ -243,8 +242,8 @@ class BufferListAdapter(
 
       var bufferId: BufferId? = null
 
-      private val online: Drawable
-      private val offline: Drawable
+      private val online: Drawable?
+      private val offline: Drawable?
 
       private var none: Int = 0
       private var activity: Int = 0
@@ -269,16 +268,16 @@ class BufferListAdapter(
           }
         }
 
-        online = itemView.context.getCompatDrawable(R.drawable.ic_status).mutate()
-        offline = itemView.context.getCompatDrawable(R.drawable.ic_status_offline).mutate()
+        online = itemView.context.getDrawableCompat(R.drawable.ic_status)?.mutate()
+        offline = itemView.context.getDrawableCompat(R.drawable.ic_status_offline)?.mutate()
 
         itemView.context.theme.styledAttributes(
           R.attr.colorAccent, R.attr.colorAway,
           R.attr.colorTextPrimary, R.attr.colorTintActivity, R.attr.colorTintMessage,
           R.attr.colorTintHighlight
         ) {
-          DrawableCompat.setTint(online, getColor(0, 0))
-          DrawableCompat.setTint(offline, getColor(1, 0))
+          online?.tint(getColor(0, 0))
+          offline?.tint(getColor(1, 0))
 
           none = getColor(2, 0)
           activity = getColor(3, 0)
@@ -331,8 +330,8 @@ class BufferListAdapter(
 
       var bufferId: BufferId? = null
 
-      private val online: Drawable
-      private val offline: Drawable
+      private val online: Drawable?
+      private val offline: Drawable?
 
       private var none: Int = 0
       private var activity: Int = 0
@@ -357,16 +356,16 @@ class BufferListAdapter(
           }
         }
 
-        online = itemView.context.getCompatDrawable(R.drawable.ic_status_channel).mutate()
-        offline = itemView.context.getCompatDrawable(R.drawable.ic_status_channel_offline).mutate()
+        online = itemView.context.getDrawableCompat(R.drawable.ic_status_channel)?.mutate()
+        offline = itemView.context.getDrawableCompat(R.drawable.ic_status_channel_offline)?.mutate()
 
         itemView.context.theme.styledAttributes(
           R.attr.colorAccent, R.attr.colorAway,
           R.attr.colorTextPrimary, R.attr.colorTintActivity, R.attr.colorTintMessage,
           R.attr.colorTintHighlight
         ) {
-          DrawableCompat.setTint(online, getColor(0, 0))
-          DrawableCompat.setTint(offline, getColor(1, 0))
+          online?.tint(getColor(0, 0))
+          offline?.tint(getColor(1, 0))
 
           none = getColor(2, 0)
           activity = getColor(3, 0)
@@ -419,9 +418,9 @@ class BufferListAdapter(
 
       var bufferId: BufferId? = null
 
-      private val online: Drawable
-      private val away: Drawable
-      private val offline: Drawable
+      private val online: Drawable?
+      private val away: Drawable?
+      private val offline: Drawable?
 
       private var none: Int = 0
       private var activity: Int = 0
@@ -446,18 +445,18 @@ class BufferListAdapter(
           }
         }
 
-        online = itemView.context.getCompatDrawable(R.drawable.ic_status).mutate()
-        away = itemView.context.getCompatDrawable(R.drawable.ic_status).mutate()
-        offline = itemView.context.getCompatDrawable(R.drawable.ic_status_offline).mutate()
+        online = itemView.context.getDrawableCompat(R.drawable.ic_status)?.mutate()
+        away = itemView.context.getDrawableCompat(R.drawable.ic_status)?.mutate()
+        offline = itemView.context.getDrawableCompat(R.drawable.ic_status_offline)?.mutate()
 
         itemView.context.theme.styledAttributes(
           R.attr.colorAccent, R.attr.colorAway,
           R.attr.colorTextPrimary, R.attr.colorTintActivity, R.attr.colorTintMessage,
           R.attr.colorTintHighlight
         ) {
-          DrawableCompat.setTint(online, getColor(0, 0))
-          DrawableCompat.setTint(away, getColor(1, 0))
-          DrawableCompat.setTint(offline, getColor(1, 0))
+          online?.tint(getColor(0, 0))
+          away?.tint(getColor(1, 0))
+          offline?.tint(getColor(1, 0))
 
           none = getColor(2, 0)
           activity = getColor(3, 0)

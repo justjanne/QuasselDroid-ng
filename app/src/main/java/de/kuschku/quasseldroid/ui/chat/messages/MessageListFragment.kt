@@ -112,7 +112,8 @@ class MessageListFragment : ServiceBoundFragment() {
     }
 
     override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-      return false
+      mode?.tag = "MESSAGES"
+      return true
     }
 
     override fun onDestroyActionMode(mode: ActionMode?) {

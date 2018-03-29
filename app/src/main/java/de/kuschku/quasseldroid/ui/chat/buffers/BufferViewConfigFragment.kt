@@ -1,6 +1,7 @@
 package de.kuschku.quasseldroid.ui.chat.buffers
 
 import android.arch.lifecycle.Observer
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.*
 import android.view.*
@@ -146,7 +147,11 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     }
 
     override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-      return false
+      mode?.tag = "MESSAGES"
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        mode?.type = ActionMode.TYPE_FLOATING
+      }
+      return true
     }
 
     override fun onDestroyActionMode(mode: ActionMode?) {

@@ -30,6 +30,7 @@ import de.kuschku.libquassel.util.and
 import de.kuschku.libquassel.util.or
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.chat.input.Editor
@@ -67,6 +68,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   @Inject
   lateinit var database: QuasselDatabase
+
+  @Inject
+  lateinit var accountDatabase: AccountDatabase
 
   private lateinit var editor: Editor
 
@@ -194,27 +198,41 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                 disconnect()
               }
               .onPositive { _, _ ->
-                MaterialDialog.Builder(this)
-                  .title("Login Required")
-                  .customView(R.layout.setup_account_user, false)
-                  .negativeText(R.string.label_disconnect)
-                  .positiveText(R.string.label_save)
-                  .onNegative { _, _ ->
-                    disconnect()
-                  }
-                  .onPositive { dialog, _ ->
+                runInBackground {
+                  val account = accountDatabase.accounts().findById(accountId)
+
+                  runOnUiThread {
+                    val dialog = MaterialDialog.Builder(this)
+                      .title("Login Required")
+                      .customView(R.layout.setup_account_user, false)
+                      .negativeText(R.string.label_disconnect)
+                      .positiveText(R.string.label_save)
+                      .onNegative { _, _ ->
+                        disconnect()
+                      }
+                      .onPositive { dialog, _ ->
+                        dialog.customView?.run {
+                          val userField = findViewById<EditText>(R.id.user)
+                          val passField = findViewById<EditText>(R.id.pass)
+
+                          val user = userField.text.toString()
+                          val pass = passField.text.toString()
+
+                          backend.value.orNull()?.updateUserDataAndLogin(user, pass)
+                        }
+                      }
+                      .build()
                     dialog.customView?.run {
                       val userField = findViewById<EditText>(R.id.user)
                       val passField = findViewById<EditText>(R.id.pass)
 
-                      val user = userField.text.toString()
-                      val pass = passField.text.toString()
-
-                      backend.value.orNull()?.updateUserDataAndLogin(user, pass)
+                      account?.let {
+                        userField.setText(it.user)
+                      }
                     }
+                    dialog.show()
                   }
-                  .build()
-                  .show()
+                }
               }
               .build()
               .show()
@@ -249,7 +267,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   }
 
   override fun onActionModeStarted(mode: ActionMode?) {
-    mode?.menu?.retint(toolbar.context)
+    when (mode?.tag) {
+      "BUFFER",
+      "MESSAGES" -> mode.menu?.retint(toolbar.context)
+    }
     super.onActionModeStarted(mode)
   }
 
