@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid.ui.chat.buffers
 
 import android.arch.lifecycle.Observer
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.*
 import android.view.*
@@ -147,10 +146,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     }
 
     override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-      mode?.tag = "MESSAGES"
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        mode?.type = ActionMode.TYPE_FLOATING
-      }
+      mode?.tag = "BUFFERS"
       return true
     }
 
@@ -216,8 +212,8 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       viewModel.collapsedNetworks,
       ::runInBackground,
       activity!!::runOnUiThread,
-      clickListener,
-      longClickListener
+      ::clickListener,
+      ::longClickListener
     )
     chatList.adapter = listAdapter
 
@@ -320,15 +316,15 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     outState.putParcelable(KEY_STATE_SPINNER, chatListSpinner.onSaveInstanceState())
   }
 
-  private val clickListener: ((BufferId) -> Unit)? = {
+  private fun clickListener(it: BufferId) {
     if (actionMode != null) {
-      longClickListener?.invoke(it)
+      longClickListener(it)
     } else {
       viewModel.buffer.onNext(it)
     }
   }
 
-  private val longClickListener: ((BufferId) -> Unit)? = {
+  private fun longClickListener(it: BufferId) {
     if (actionMode == null) {
       chatListToolbar.startActionMode(actionModeCallback)
     }
