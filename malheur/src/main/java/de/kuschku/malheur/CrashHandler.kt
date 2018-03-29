@@ -60,9 +60,9 @@ object CrashHandler {
           crashFile.writeText(json)
           Log.e("Malheur", "Crash report saved: $crashFile", throwable)
           handler.post {
-            Toast.makeText(application,
-                           "Crash report saved: ${crashFile.name}",
-                           Toast.LENGTH_LONG).show()
+            Toast.makeText(
+              application, "Crash report saved: ${crashFile.name}", Toast.LENGTH_LONG
+            ).show()
           }
         } catch (e: Throwable) {
           e.printStackTrace()

@@ -43,6 +43,8 @@ abstract class ProtocolHandler(
       if (!super<SignalProxy>.handle(f)) {
         log(DEBUG, "ProtocolHandler", "No receiver registered for $f")
       }
+    } catch (e: ObjectNotFoundException) {
+      log(DEBUG, "ProtocolHandler", "An error has occured while processing $f", e)
     } catch (e: Throwable) {
       exceptionHandler.invoke(MessageHandlingException.SignalProxy(f, e))
     }
@@ -56,6 +58,8 @@ abstract class ProtocolHandler(
       if (!super<AuthHandler>.handle(f)) {
         log(DEBUG, "ProtocolHandler", "No receiver registered for $f")
       }
+    } catch (e: ObjectNotFoundException) {
+      log(DEBUG, "ProtocolHandler", "An error has occured while processing $f", e)
     } catch (e: Throwable) {
       exceptionHandler.invoke(MessageHandlingException.Handshake(f, e))
     }
