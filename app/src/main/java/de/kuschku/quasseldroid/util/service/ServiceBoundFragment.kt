@@ -31,11 +31,6 @@ abstract class ServiceBoundFragment : DaggerFragment() {
 
   protected var accountId: Long = -1
 
-  override fun onAttach(context: Context?) {
-    super.onAttach(context)
-    viewModel = ViewModelProviders.of(requireActivity())[QuasselViewModel::class.java]
-  }
-
   override fun onCreate(savedInstanceState: Bundle?) {
     accountId = context?.getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
       ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
@@ -43,6 +38,8 @@ abstract class ServiceBoundFragment : DaggerFragment() {
     connection.context = context
     super.onCreate(savedInstanceState)
     connection.start()
+
+    viewModel = ViewModelProviders.of(requireActivity())[QuasselViewModel::class.java]
   }
 
   override fun onStart() {
