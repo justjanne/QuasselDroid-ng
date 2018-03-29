@@ -11,21 +11,15 @@ import java.nio.charset.CharsetEncoder
 import kotlin.concurrent.getOrSet
 
 abstract class StringSerializer(
-  private val encoder: CharsetEncoder,
-  private val decoder: CharsetDecoder,
+  private val charset: Charset,
   private val trailingNullBytes: Int
 ) : Serializer<String?> {
-  constructor(charset: Charset, trailingNullByte: Boolean = false) : this(
-    charset.newEncoder(),
-    charset.newDecoder(),
-    if (trailingNullByte) {
-      1
-    } else {
-      0
-    }
-  )
+  constructor(charset: Charset, trailingNullByte: Boolean = false) :
+    this(charset, if (trailingNullByte) 1 else 0)
 
   private val charBuffer = ThreadLocal<CharBuffer>()
+  private val encoder = ThreadLocal<CharsetEncoder>()
+  private val decoder = ThreadLocal<CharsetDecoder>()
 
   object UTF16 : StringSerializer(Charsets.UTF_16BE)
   object UTF8 : StringSerializer(Charsets.UTF_8)
@@ -45,6 +39,9 @@ abstract class StringSerializer(
     return buf
   }
 
+  private inline fun encoder() = encoder.getOrSet(charset::newEncoder)
+  private inline fun decoder() = decoder.getOrSet(charset::newDecoder)
+
   override fun serialize(buffer: ChainedByteBuffer, data: String?, features: QuasselFeatures) =
     try {
       if (data == null) {
@@ -53,6 +50,7 @@ abstract class StringSerializer(
         val charBuffer = charBuffer(data.length)
         charBuffer.put(data)
         charBuffer.flip()
+        val encoder = encoder()
         encoder.reset()
         val byteBuffer = encoder.encode(charBuffer)
         IntSerializer.serialize(buffer, byteBuffer.remaining() + trailingNullBytes, features)
@@ -71,6 +69,7 @@ abstract class StringSerializer(
       val charBuffer = charBuffer(data.length)
       charBuffer.put(data)
       charBuffer.flip()
+      val encoder = encoder()
       encoder.reset()
       encoder.encode(charBuffer)
     }
@@ -86,6 +85,7 @@ abstract class StringSerializer(
       val limit = buffer.limit()
       buffer.limit(buffer.position() + len - trailingNullBytes)
       val charBuffer = charBuffer(len)
+      val decoder = decoder()
       decoder.reset()
       decoder.decode(buffer, charBuffer, true)
       buffer.limit(limit)
@@ -106,6 +106,7 @@ abstract class StringSerializer(
       val limit = buffer.limit()
       buffer.limit(buffer.position() + Math.max(0, len - trailingNullBytes))
       val charBuffer = charBuffer(len)
+      val decoder = decoder()
       decoder.decode(buffer, charBuffer, true)
       buffer.limit(limit)
       buffer.position(buffer.position() + trailingNullBytes)
