@@ -16,9 +16,12 @@ import io.reactivex.subjects.BehaviorSubject
 import javax.net.ssl.SSLSession
 import javax.net.ssl.X509TrustManager
 
-class SessionManager(offlineSession: ISession,
-                     val backlogStorage: BacklogStorage,
-                     val handlerService: HandlerService) : ISession {
+class SessionManager(
+  offlineSession: ISession,
+  val backlogStorage: BacklogStorage,
+  val handlerService: HandlerService,
+  private val disconnectFromCore: () -> Unit
+) : ISession {
   override val features: Features
     get() = session.or(lastSession).features
   override val sslSession: SSLSession?
@@ -121,7 +124,8 @@ class SessionManager(offlineSession: ISession,
         address,
         handlerService,
         backlogStorage,
-        userData
+        userData,
+        disconnectFromCore
       )
     )
   }

@@ -35,7 +35,9 @@ enum class QuasselFeature(override val bit: Int) : Flag<QuasselFeature> {
   /** Core-Side highlight configuration and matching */
   CoreSideHighlights(0x1000),
   /** Show prefixes for senders in backlog */
-  SenderPrefixes(0x2000);
+  SenderPrefixes(0x2000),
+  /** Supports RPC call disconnectFromCore to remotely disconnect a client */
+  RemoteDisconnect(0x4000);
 
   companion object : Flags.Factory<QuasselFeature> {
     override val NONE: Flags<QuasselFeature> = QuasselFeature.of()

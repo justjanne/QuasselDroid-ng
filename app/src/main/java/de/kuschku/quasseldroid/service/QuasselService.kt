@@ -19,6 +19,7 @@ import de.kuschku.quasseldroid.util.QuasseldroidNotificationManager
 import de.kuschku.quasseldroid.util.backport.DaggerLifecycleService
 import de.kuschku.quasseldroid.util.compatibility.AndroidHandlerService
 import de.kuschku.quasseldroid.util.helper.editApply
+import de.kuschku.quasseldroid.util.helper.editCommit
 import de.kuschku.quasseldroid.util.helper.sharedPreferences
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import io.reactivex.Observable
@@ -253,9 +254,21 @@ class QuasselService : DaggerLifecycleService(),
   }
   private val connectivity = BehaviorSubject.createDefault(Unit)
 
+  private fun disconnectFromCore() {
+    getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editCommit {
+      putBoolean(Keys.Status.reconnect, false)
+    }
+  }
+
   override fun onCreate() {
     super.onCreate()
-    sessionManager = SessionManager(ISession.NULL, QuasselBacklogStorage(database), handlerService)
+    sessionManager = SessionManager(
+      ISession.NULL,
+      QuasselBacklogStorage(database),
+      handlerService,
+      ::disconnectFromCore
+    )
+
     clientData = ClientData(
       identifier = "${resources.getString(R.string.app_name)} ${BuildConfig.VERSION_NAME}",
       buildDate = Instant.ofEpochSecond(BuildConfig.GIT_COMMIT_DATE),

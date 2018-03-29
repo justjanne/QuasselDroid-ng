@@ -37,8 +37,7 @@ class RpcHandler(
   override fun passwordChanged(ignored: Long, success: Boolean) {
   }
 
-  override fun disconnectFromCore() {
-  }
+  override fun disconnectFromCore() = session.disconnectFromCore()
 
   override fun objectRenamed(classname: ByteBuffer, newname: String, oldname: String) {
     session.renameObject(classname.deserializeString(StringSerializer.UTF8) ?: "", newname, oldname)
@@ -64,16 +63,12 @@ class RpcHandler(
   override fun requestPasswordChange(peerPtr: Long, user: String, old: String, new: String) {
   }
 
-  override fun requestKickClient(id: Int) {
-    RPC("2requestKickClient(Int)", ARG(id, Type.Int))
-  }
+  override fun requestKickClient(id: Int) = RPC("2requestKickClient(Int)", ARG(id, Type.Int))
 
-  override fun sendInput(bufferInfo: BufferInfo, message: String) {
-    RPC(
-      "2sendInput(BufferInfo,QString)", ARG(bufferInfo, QType.BufferInfo),
-      ARG(message, Type.QString)
-    )
-  }
+  override fun sendInput(bufferInfo: BufferInfo, message: String) = RPC(
+    "2sendInput(BufferInfo,QString)", ARG(bufferInfo, QType.BufferInfo),
+    ARG(message, Type.QString)
+  )
 
   inline fun RPC(function: String, vararg arg: QVariant_) {
     // Don’t transmit calls back that we just got from the network

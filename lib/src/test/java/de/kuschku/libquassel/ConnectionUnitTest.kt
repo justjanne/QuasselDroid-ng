@@ -36,8 +36,8 @@ class ConnectionUnitTest {
         buildDate = Instant.EPOCH,
         clientFeatures = Quassel_Feature.of(*QuasselFeature.validValues),
         protocolFeatures = Protocol_Feature.of(ProtocolFeature.TLS, ProtocolFeature.Compression),
-        supportedProtocols = listOf(Protocol.Datastream)
-      ), object : X509TrustManager {
+        supportedProtocols = listOf(Protocol.Datastream),
+        ), object : X509TrustManager {
       override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) {
       }
 
@@ -51,8 +51,8 @@ class ConnectionUnitTest {
       override fun clearMessages(bufferId: BufferId, idRange: IntRange) = Unit
       override fun clearMessages(bufferId: BufferId) = Unit
       override fun clearMessages() = Unit
-    }, user to pass
-    )
+    }, user to pass,
+      ) {}
     session.join()
   }
 }

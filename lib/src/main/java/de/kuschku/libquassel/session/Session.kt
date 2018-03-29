@@ -20,7 +20,8 @@ class Session(
   address: SocketAddress,
   private val handlerService: HandlerService,
   backlogStorage: BacklogStorage,
-  private var userData: Pair<String, String>
+  private var userData: Pair<String, String>,
+  val disconnectFromCore: () -> Unit
 ) : ProtocolHandler(), ISession {
   override val features = Features(clientData.clientFeatures, Quassel_Features.of())
 
