@@ -63,6 +63,13 @@
 
   <style name="Widget.DialogTheme.Light" parent="Theme.AppCompat.Light.Dialog.Alert" />
 
+  <style name="Widget.Button.Format" parent="">
+    <item name="android:layout_width">48dp</item>
+    <item name="android:layout_height">48dp</item>
+    <item name="android:layout_gravity">center</item>
+    <item name="android:background">?backgroundMenuItem</item>
+  </style>
+
   <!-- NavigationDrawerLayout -->
   <declare-styleable name="NavigationDrawerLayout">
     <attr name="insetBackground" />

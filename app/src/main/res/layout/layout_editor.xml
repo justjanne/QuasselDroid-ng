@@ -13,9 +13,9 @@
     android:background="?attr/selectableItemBackgroundBorderless"
     android:padding="12dp"
     android:scaleType="fitXY"
-    app:tint="?attr/colorTextSecondary"
     app:layout_constraintStart_toStartOf="parent"
-    app:srcCompat="@drawable/ic_tab" />
+    app:srcCompat="@drawable/ic_tab"
+    app:tint="?attr/colorTextSecondary" />
 
   <ScrollView
     android:id="@+id/chatline_scroller"
@@ -27,7 +27,7 @@
     app:layout_constraintStart_toEndOf="@+id/tab_complete"
     app:layout_constraintTop_toTopOf="parent">
 
-    <android.support.v7.widget.AppCompatEditText
+    <de.kuschku.quasseldroid.util.ui.EditTextSelectionChange
       android:id="@+id/chatline"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -54,9 +54,9 @@
     android:background="?attr/selectableItemBackgroundBorderless"
     android:padding="12dp"
     android:scaleType="fitXY"
-    app:tint="?attr/colorAccent"
     app:layout_constraintEnd_toEndOf="parent"
-    app:srcCompat="@drawable/ic_send" />
+    app:srcCompat="@drawable/ic_send"
+    app:tint="?attr/colorAccent" />
 
   <de.kuschku.quasseldroid.util.ui.AutoCompleteRecyclerView
     android:id="@+id/autocomplete_list_expanded"
@@ -82,11 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.ActionMenuView
-          android:id="@+id/formatting_menu"
-          android:layout_width="wrap_content"
-          android:layout_height="match_parent"
-          android:theme="?attr/formatBarTheme" />
+        <include layout="@layout/widget_formatting" />
       </HorizontalScrollView>
     </android.support.v7.widget.Toolbar>
   </android.support.design.widget.AppBarLayout>

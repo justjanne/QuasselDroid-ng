@@ -112,7 +112,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         findViewById(R.id.autocomplete_list),
         findViewById(R.id.autocomplete_list_expanded)
       ),
-      findViewById(R.id.formatting_menu),
       findViewById(R.id.formatting_toolbar),
       appearanceSettings,
       autoCompleteSettings,
@@ -279,6 +278,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       recreate()
     }
     super.onStart()
+    editor.onStart()
+  }
+
+  override fun onStop() {
+    editor.onStop()
+    super.onStop()
   }
 
   data class AutoCompletionState(

@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid.ui.chat.input
 
 import android.graphics.Typeface
-import android.support.annotation.MenuRes
 import android.text.Editable
 import android.text.SpannableString
 import android.text.Spanned
@@ -9,13 +8,12 @@ import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
 import android.text.style.UnderlineSpan
-import android.view.MenuItem
 import android.widget.EditText
-import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.util.helper.lastWordIndices
 import de.kuschku.quasseldroid.util.helper.lineSequence
 import de.kuschku.quasseldroid.util.helper.selection
+import de.kuschku.quasseldroid.util.helper.without
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid.util.irc.format.spans.*
 
@@ -42,14 +40,13 @@ class FormatHandler(
       text
     }
 
-  @MenuRes
-  val menu: Int = R.menu.formatting
+  fun isBold(range: IntRange) = editText.text.hasSpans<StyleSpan>(range) {
+    it.style == Typeface.BOLD || it.style == Typeface.BOLD_ITALIC
+  }
 
   fun toggleBold(range: IntRange, createNew: Boolean = true) {
-    if (range.isEmpty())
-      return
-
-    val exists = editText.text.removeSpans<StyleSpan, IrcBoldSpan>(range) { span ->
+    val bold = isBold(range)
+    editText.text.removeSpans<StyleSpan, IrcBoldSpan>(range) { span ->
       when {
         span is IrcBoldSpan         -> span
         span.style == Typeface.BOLD -> IrcBoldSpan()
@@ -57,18 +54,21 @@ class FormatHandler(
       }
     }
 
-    if (!exists && createNew) {
+    if (!bold && createNew) {
       editText.text.setSpan(
-        IrcBoldSpan(), range.start, range.endInclusive + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        IrcBoldSpan(), range.start, range.endInclusive + 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE
       )
     }
   }
 
-  fun toggleItalic(range: IntRange, createNew: Boolean = true) {
-    if (range.isEmpty())
-      return
+  fun isItalic(range: IntRange) = editText.text.hasSpans<StyleSpan>(range) {
+    it.style == Typeface.ITALIC || it.style == Typeface.BOLD_ITALIC
+  }
 
-    val exists = editText.text.removeSpans<StyleSpan, IrcItalicSpan>(range) { span ->
+  fun toggleItalic(range: IntRange, createNew: Boolean = true) {
+    val italic = isItalic(range)
+
+    editText.text.removeSpans<StyleSpan, IrcItalicSpan>(range) { span ->
       when {
         span is IrcItalicSpan         -> span
         span.style == Typeface.ITALIC -> IrcItalicSpan()
@@ -76,55 +76,60 @@ class FormatHandler(
       }
     }
 
-    if (!exists && createNew) {
+    if (!italic && createNew) {
       editText.text.setSpan(
-        IrcItalicSpan(), range.start, range.endInclusive + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        IrcItalicSpan(), range.start, range.endInclusive + 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE
       )
     }
   }
 
-  fun toggleUnderline(range: IntRange, createNew: Boolean = true) {
-    if (range.isEmpty())
-      return
+  fun isUnderline(range: IntRange) = editText.text.hasSpans<UnderlineSpan>(range)
 
-    val exists = editText.text.removeSpans<UnderlineSpan, IrcUnderlineSpan>(range) { span ->
+  fun toggleUnderline(range: IntRange, createNew: Boolean = true) {
+    val underline = isUnderline(range)
+
+    editText.text.removeSpans<UnderlineSpan, IrcUnderlineSpan>(range) { span ->
       when (span) {
         is IrcUnderlineSpan -> span
         else                -> IrcUnderlineSpan()
       }
     }
 
-    if (!exists && createNew) {
+    if (!underline && createNew) {
       editText.text.setSpan(
-        IrcUnderlineSpan(), range.start, range.endInclusive + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        IrcUnderlineSpan(), range.start, range.endInclusive + 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE
       )
     }
   }
 
-  fun toggleStrikethrough(range: IntRange, createNew: Boolean = true) {
-    if (range.isEmpty())
-      return
+  fun isStrikethrough(range: IntRange) = editText.text.hasSpans<StrikethroughSpan>(range)
 
-    val exists = editText.text.removeSpans<StrikethroughSpan, IrcStrikethroughSpan>(range) { span ->
+  fun toggleStrikethrough(range: IntRange, createNew: Boolean = true) {
+    val strikethrough = isStrikethrough(range)
+
+    editText.text.removeSpans<StrikethroughSpan, IrcStrikethroughSpan>(range) { span ->
       when (span) {
         is IrcStrikethroughSpan -> span
         else                    -> IrcStrikethroughSpan()
       }
     }
 
-    if (!exists && createNew) {
+    if (!strikethrough && createNew) {
       editText.text.setSpan(
         IrcStrikethroughSpan(), range.start, range.endInclusive + 1,
-        Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        Spanned.SPAN_INCLUSIVE_INCLUSIVE
       )
     }
   }
 
-  fun toggleMonospace(range: IntRange, createNew: Boolean = true) {
-    if (range.isEmpty())
-      return
+  fun isMonospace(range: IntRange) = editText.text.hasSpans<TypefaceSpan>(range) {
+    it.family == "monospace"
+  }
 
-    val exists = editText.text.removeSpans<TypefaceSpan, IrcMonospaceSpan>(range) { span ->
+  fun toggleMonospace(range: IntRange, createNew: Boolean = true) {
+    val monospace = isMonospace(range)
+
+    editText.text.removeSpans<TypefaceSpan, IrcMonospaceSpan>(range) { span ->
       when {
         span is IrcMonospaceSpan   -> span
         span.family == "monospace" -> IrcMonospaceSpan()
@@ -132,17 +137,14 @@ class FormatHandler(
       }
     }
 
-    if (!exists && createNew) {
+    if (!monospace && createNew) {
       editText.text.setSpan(
-        IrcMonospaceSpan(), range.start, range.endInclusive + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        IrcMonospaceSpan(), range.start, range.endInclusive + 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE
       )
     }
   }
 
   fun clearFormatting(range: IntRange) {
-    if (range.isEmpty())
-      return
-
     toggleBold(range, false)
     toggleItalic(range, false)
     toggleUnderline(range, false)
@@ -150,40 +152,24 @@ class FormatHandler(
     toggleMonospace(range, false)
   }
 
-  fun onMenuItemClick(item: MenuItem?) = when (item?.itemId) {
-    R.id.format_bold          -> {
-      toggleBold(editText.selection)
-      true
+  private inline fun <reified U> Spanned.hasSpans(range: IntRange) =
+    getSpans(range.start, range.endInclusive + 1, U::class.java).any {
+      getSpanFlags(it) and Spanned.SPAN_COMPOSING == 0 &&
+      (getSpanEnd(it) != range.start ||
+       getSpanFlags(it) and 0x02 != 0)
     }
-    R.id.format_italic        -> {
-      toggleItalic(editText.selection)
-      true
+
+  private inline fun <reified U> Spanned.hasSpans(range: IntRange, f: (U) -> Boolean) =
+    getSpans(range.start, range.last + 1, U::class.java).any {
+      f(it) &&
+      getSpanFlags(it) and Spanned.SPAN_COMPOSING == 0 &&
+      (getSpanEnd(it) != range.start ||
+       getSpanFlags(it) and 0x02 != 0)
     }
-    R.id.format_underline     -> {
-      toggleUnderline(editText.selection)
-      true
-    }
-    R.id.format_strikethrough -> {
-      toggleStrikethrough(editText.selection)
-      true
-    }
-    R.id.format_monospace     -> {
-      toggleMonospace(editText.selection)
-      true
-    }
-    R.id.format_clear         -> {
-      clearFormatting(editText.selection)
-      true
-    }
-    else                      -> false
-  }
 
   private inline fun <reified U, T> Editable.removeSpans(
-    range: IntRange, removeInvalid: Boolean = false, f: (U) -> T?): Boolean where T : Copyable<T> {
-    if (range.isEmpty())
-      return false
-
-    var removedAny = false
+    range: IntRange, removeInvalid: Boolean = false, f: (U) -> T?
+  ) where T : Copyable<T> {
 
     for (raw in getSpans<U>(range.start, range.endInclusive + 1, U::class.java)) {
       val spanFlags = getSpanFlags(raw)
@@ -199,36 +185,20 @@ class FormatHandler(
       } else {
         removeSpan(raw)
 
-        val endIsIn = spanEnd in range
-        val endIsAfter = spanEnd > range.endInclusive + 1
-
-        val startIsIn = spanStart in range
-        val startIsBefore = spanStart < range.start
-
-        if (endIsIn && startIsIn) {
-          removedAny = true
-        } else if (endIsIn) {
-          setSpan(span, spanStart, range.start, spanFlags)
-          removedAny = true
-        } else if (startIsIn) {
-          setSpan(span, range.endInclusive + 1, spanEnd, spanFlags)
-          removedAny = true
-        } else if (startIsBefore && endIsAfter) {
-          setSpan(span, spanStart, range.start, spanFlags)
-          setSpan(span.copy(), range.endInclusive + 1, spanEnd, spanFlags)
-          removedAny = true
-        } else if (startIsBefore) {
-          setSpan(span, spanStart, range.start, spanFlags)
-          removedAny = true
+        for (spanRange in spanStart until spanEnd without range) {
+          setSpan(
+            span.copy(),
+            spanRange.start,
+            spanRange.endInclusive + 1,
+            (spanFlags and 0x03.inv()) or 0x01
+          )
         }
       }
     }
-
-    return removedAny
   }
 
   fun autoComplete(text: CharSequence) {
-    val range = editText.text.lastWordIndices(editText.selectionStart, true)
+    val range = editText.text.lastWordIndices(editText.selection.start, true)
     val replacement = if (range?.start == 0) {
       "$text: "
     } else {

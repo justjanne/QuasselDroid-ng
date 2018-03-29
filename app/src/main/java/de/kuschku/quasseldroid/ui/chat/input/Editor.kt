@@ -7,19 +7,16 @@ import android.support.v7.widget.*
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
-import android.view.GestureDetector
-import android.view.KeyEvent
-import android.view.MenuItem
-import android.view.MotionEvent
+import android.view.*
 import android.view.inputmethod.EditorInfo
+import butterknife.BindView
+import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
-import de.kuschku.quasseldroid.util.helper.lastWordIndices
-import de.kuschku.quasseldroid.util.helper.lineSequence
-import de.kuschku.quasseldroid.util.helper.retint
-import de.kuschku.quasseldroid.util.helper.visibleIf
+import de.kuschku.quasseldroid.util.helper.*
+import de.kuschku.quasseldroid.util.ui.EditTextSelectionChange
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -31,11 +28,10 @@ class Editor(
   private val autoCompleteData: LiveData<Pair<String, List<AutoCompleteItem>>>,
   lastWordContainer: BehaviorSubject<Observable<Pair<String, IntRange>>>,
   // Views
-  val chatline: AppCompatEditText,
+  val chatline: EditTextSelectionChange,
   send: AppCompatImageButton,
   tabComplete: AppCompatImageButton,
   autoCompleteLists: List<RecyclerView>,
-  formattingMenu: ActionMenuView,
   formattingToolbar: Toolbar,
   // Settings
   private val appearanceSettings: AppearanceSettings,
@@ -49,7 +45,7 @@ class Editor(
       panelStateCallback(true)
       true
     }
-    else                      -> formatHandler.onMenuItemClick(item)
+    else                      -> false
   }
 
   private val lastWord = BehaviorSubject.createDefault(Pair("", IntRange.EMPTY))
@@ -78,6 +74,8 @@ class Editor(
       }
 
       lastWord.onNext(next ?: Pair("", IntRange.EMPTY))
+
+      updateButtons(chatline.selection)
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
@@ -87,6 +85,30 @@ class Editor(
   val formatHandler = FormatHandler(chatline)
 
   private var autocompletionState: ChatActivity.AutoCompletionState? = null
+
+  @BindView(R.id.action_format_bold)
+  lateinit var boldButton: View
+
+  @BindView(R.id.action_format_italic)
+  lateinit var italicButton: View
+
+  @BindView(R.id.action_format_underline)
+  lateinit var underlineButton: View
+
+  @BindView(R.id.action_format_strikethrough)
+  lateinit var strikethroughButton: View
+
+  @BindView(R.id.action_format_monospace)
+  lateinit var monospaceButton: View
+
+  @BindView(R.id.action_format_foreground)
+  lateinit var foregroundButton: View
+
+  @BindView(R.id.action_format_background)
+  lateinit var backgroundButton: View
+
+  @BindView(R.id.action_format_clear)
+  lateinit var clearButton: View
 
   init {
     send.setOnClickListener {
@@ -120,8 +142,6 @@ class Editor(
         EditorInfo.IME_FLAG_NO_EXTRACT_UI
       )
     }.fold(0, Int::or)
-
-    chatline.addTextChangedListener(textWatcher)
 
     val autocompleteAdapter = AutoCompleteAdapter(
       // This is still broken when mixing tab complete and UI auto complete
@@ -168,13 +188,75 @@ class Editor(
 
     lastWordContainer.onNext(lastWord)
 
-    activity.menuInflater.inflate(formatHandler.menu, formattingMenu.menu)
-    formattingMenu.menu.retint(activity)
-    formattingMenu.setOnMenuItemClickListener(this)
-
     activity.menuInflater.inflate(R.menu.editor, formattingToolbar.menu)
     formattingToolbar.menu.retint(activity)
     formattingToolbar.setOnMenuItemClickListener(this)
+
+    ButterKnife.bind(this, formattingToolbar)
+
+    boldButton.setOnClickListener {
+      formatHandler.toggleBold(chatline.selection)
+      updateButtons(chatline.selection)
+    }
+    italicButton.setOnClickListener {
+      formatHandler.toggleItalic(chatline.selection)
+      updateButtons(chatline.selection)
+    }
+    underlineButton.setOnClickListener {
+      formatHandler.toggleUnderline(chatline.selection)
+      updateButtons(chatline.selection)
+    }
+    strikethroughButton.setOnClickListener {
+      formatHandler.toggleStrikethrough(chatline.selection)
+      updateButtons(chatline.selection)
+    }
+    monospaceButton.setOnClickListener {
+      formatHandler.toggleMonospace(chatline.selection)
+      updateButtons(chatline.selection)
+    }
+    clearButton.setOnClickListener {
+      formatHandler.clearFormatting(chatline.selection)
+      updateButtons(chatline.selection)
+    }
+
+    chatline.setOnKeyListener { _, keyCode, event ->
+      if (event.isCtrlPressed && !event.isAltPressed) when (keyCode) {
+        KeyEvent.KEYCODE_B -> {
+          formatHandler.toggleBold(chatline.selection)
+          updateButtons(chatline.selection)
+          true
+        }
+        KeyEvent.KEYCODE_I -> {
+          formatHandler.toggleItalic(chatline.selection)
+          updateButtons(chatline.selection)
+          true
+        }
+        KeyEvent.KEYCODE_U -> {
+          formatHandler.toggleUnderline(chatline.selection)
+          updateButtons(chatline.selection)
+          true
+        }
+        else               -> false
+      } else false
+    }
+  }
+
+  fun updateButtons(selection: IntRange) {
+    boldButton.isSelected = formatHandler.isBold(selection)
+    italicButton.isSelected = formatHandler.isItalic(selection)
+    underlineButton.isSelected = formatHandler.isUnderline(selection)
+    strikethroughButton.isSelected = formatHandler.isStrikethrough(selection)
+    monospaceButton.isSelected = formatHandler.isMonospace(selection)
+  }
+
+  fun onStart() {
+    chatline.addTextChangedListener(textWatcher)
+    chatline.setSelectionChangeListener(::updateButtons)
+  }
+
+  fun onStop() {
+    chatline.removeTextChangedListener(textWatcher)
+    chatline.removeSelectionChangeListener()
   }
 
   private fun send() {
