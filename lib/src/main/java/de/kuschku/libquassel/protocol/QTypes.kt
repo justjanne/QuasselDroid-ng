@@ -12,7 +12,7 @@ import java.nio.ByteBuffer
 
 typealias QStringList = List<String?>
 typealias All_ = Any?
-typealias QVariant_ = QVariant<All_>
+typealias QVariant_ = QVariant<*>
 typealias QVariantMap = Map<String, QVariant_>
 typealias QVariantList = List<QVariant_>
 
@@ -47,7 +47,8 @@ typealias UShort = Short
 typealias UInt = Int
 typealias ULong = Long
 
-typealias ARG = QVariant_
+inline fun <T> ARG(data: T?, type: Type) = QVariant.of(data, type)
+inline fun <T> ARG(data: T?, type: QType) = QVariant.of(data, type)
 
 fun QVariantList.toVariantMap(): QVariantMap {
   val map = HashMap<String, QVariant_>()

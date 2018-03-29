@@ -1,29 +1,30 @@
 package de.kuschku.libquassel.protocol
 
+import de.kuschku.libquassel.protocol.primitive.serializer.*
 import java.util.*
 
 
-enum class Type(val id: kotlin.Int) {
-  Void(0),
-  Bool(1),
-  Int(2),
-  UInt(3),
+enum class Type(val id: kotlin.Int, val serializer: Serializer<*>? = null) {
+  Void(0, VoidSerializer),
+  Bool(1, BoolSerializer),
+  Int(2, IntSerializer),
+  UInt(3, IntSerializer),
   LongLong(4),
   ULongLong(5),
 
   Double(6),
-  QChar(7),
-  QVariantMap(8),
-  QVariantList(9),
+  QChar(7, CharSerializer),
+  QVariantMap(8, VariantMapSerializer),
+  QVariantList(9, VariantListSerializer),
 
-  QString(10),
-  QStringList(11),
-  QByteArray(12),
+  QString(10, StringSerializer.UTF16),
+  QStringList(11, StringListSerializer),
+  QByteArray(12, ByteArraySerializer),
 
   QBitArray(13),
   QDate(14),
-  QTime(15),
-  QDateTime(16),
+  QTime(15, TimeSerializer),
+  QDateTime(16, DateTimeSerializer),
   QUrl(17),
 
   QLocale(18),
@@ -73,18 +74,18 @@ enum class Type(val id: kotlin.Int) {
   QQuaternion(86),
 
   VoidStar(128),
-  Long(129),
-  Short(130),
-  Char(131),
-  ULong(132),
+  Long(129, LongSerializer),
+  Short(130, ShortSerializer),
+  Char(131, ByteSerializer),
+  ULong(132, LongSerializer),
 
-  UShort(133),
-  UChar(134),
+  UShort(133, ShortSerializer),
+  UChar(134, ByteSerializer),
   Float(135),
   QObjectStar(136),
   QWidgetStar(137),
 
-  QVariant(138),
+  QVariant(138, VariantSerializer),
 
   User(256),
   UserType(127),

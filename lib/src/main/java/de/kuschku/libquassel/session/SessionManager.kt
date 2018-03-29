@@ -20,7 +20,8 @@ class SessionManager(
   offlineSession: ISession,
   val backlogStorage: BacklogStorage,
   val handlerService: HandlerService,
-  private val disconnectFromCore: () -> Unit
+  private val disconnectFromCore: () -> Unit,
+  private val exceptionHandler: (Throwable) -> Unit
 ) : ISession {
   override val features: Features
     get() = session.or(lastSession).features
@@ -125,7 +126,8 @@ class SessionManager(
         handlerService,
         backlogStorage,
         userData,
-        disconnectFromCore
+        disconnectFromCore,
+        exceptionHandler
       )
     )
   }

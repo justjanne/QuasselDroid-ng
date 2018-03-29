@@ -20,8 +20,8 @@ class CertManager constructor(
   }
 
   override fun initProperties(): QVariantMap = mapOf(
-    "sslKey" to QVariant_(sslKeyPem(), Type.QByteArray),
-    "sslCert" to QVariant_(sslCertPem(), Type.QByteArray)
+    "sslKey" to QVariant.of(sslKeyPem(), Type.QByteArray),
+    "sslCert" to QVariant.of(sslCertPem(), Type.QByteArray)
   )
 
   override fun initSetProperties(properties: QVariantMap) {

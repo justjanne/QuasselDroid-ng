@@ -1,20 +1,22 @@
 package de.kuschku.libquassel.session
 
-import de.kuschku.libquassel.protocol.QVariant_
+import de.kuschku.libquassel.protocol.QVariantList
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
+import de.kuschku.libquassel.quassel.exceptions.MessageHandlingException
 import de.kuschku.libquassel.quassel.exceptions.ObjectNotFoundException
 import de.kuschku.libquassel.quassel.syncables.RpcHandler
 import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
 import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
 import org.threeten.bp.Instant
 import java.io.Closeable
 
 @Suppress("LeakingThis")
-abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
+abstract class ProtocolHandler(
+  protected val exceptionHandler: (Throwable) -> Unit
+) : SignalProxy, AuthHandler, Closeable {
   protected var closed = false
 
   private val objectStorage: ObjectStorage = ObjectStorage(this)
@@ -42,7 +44,7 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
         log(DEBUG, "ProtocolHandler", "No receiver registered for $f")
       }
     } catch (e: Throwable) {
-      log(WARN, "ProtocolHandler", "Error Handling SignalProxyMessage", e)
+      exceptionHandler.invoke(MessageHandlingException.SignalProxy(f, e))
     }
     return true
   }
@@ -55,13 +57,12 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
         log(DEBUG, "ProtocolHandler", "No receiver registered for $f")
       }
     } catch (e: Throwable) {
-      log(WARN, "ProtocolHandler", "Error Handling HandshakeMessage", e)
+      exceptionHandler.invoke(MessageHandlingException.Handshake(f, e))
     }
     return true
   }
 
   override fun handle(f: SignalProxyMessage.InitData): Boolean {
-    log(DEBUG, "ProtocolHandler", "< $f")
     val obj: ISyncableObject = objectStorage.get(f.className, f.objectName)
                                ?: throw ObjectNotFoundException(f.className, f.objectName)
 
@@ -83,7 +84,7 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
         try {
           this.handle(it)
         } catch (e: Throwable) {
-          log(WARN, "ProtocolHandler", e)
+          exceptionHandler.invoke(e)
         }
       }
     }
@@ -92,36 +93,32 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
   open fun onInitStatusChanged(progress: Int, total: Int) {}
 
   override fun handle(f: SignalProxyMessage.SyncMessage): Boolean {
-    log(DEBUG, "ProtocolHandler", "< $f")
-
     val obj = objectStorage.get(f.className, f.objectName) ?: if (isInitializing) {
       syncQueue.add(f)
       return true
-    } else {
-      throw ObjectNotFoundException(f.className, f.objectName)
-    }
+    } else null
 
-    val initQueue = toInit[obj]
-    if (initQueue != null) {
-      initQueue.add(f)
-      return true
-    }
+    obj?.let {
+      val initQueue = toInit[it]
+      if (initQueue != null) {
+        initQueue.add(f)
+        return true
+      }
 
-    val invoker = Invokers.get(f.className)
-                  ?: throw IllegalArgumentException("Invalid classname: ${f.className}")
-    currentCallClass = f.className
-    currentCallInstance = f.objectName
-    currentCallSlot = f.slotName
-    invoker.invoke(obj, f.slotName, f.params)
-    currentCallClass = ""
-    currentCallInstance = ""
-    currentCallSlot = ""
+      val invoker = Invokers.get(f.className)
+                    ?: throw IllegalArgumentException("Invalid classname: ${f.className}")
+      currentCallClass = f.className
+      currentCallInstance = f.objectName
+      currentCallSlot = f.slotName
+      invoker.invoke(it, f.slotName, f.params)
+      currentCallClass = ""
+      currentCallInstance = ""
+      currentCallSlot = ""
+    }
     return true
   }
 
   override fun handle(f: SignalProxyMessage.RpcCall): Boolean {
-    log(DEBUG, "ProtocolHandler", "< $f")
-
     currentCallSlot = f.slotName
     Invokers.RPC?.invoke(rpcHandler, f.slotName, f.params)
     currentCallSlot = ""
@@ -137,13 +134,13 @@ abstract class ProtocolHandler : SignalProxy, AuthHandler, Closeable {
   override fun shouldSync(type: String, instance: String,
                           slot: String): Boolean = type != currentCallClass || slot != currentCallSlot || instance != currentCallInstance
 
-  override fun callSync(type: String, instance: String, slot: String, params: List<QVariant_>) {
+  override fun callSync(type: String, instance: String, slot: String, params: QVariantList) {
     dispatch(SignalProxyMessage.SyncMessage(type, instance, slot, params))
   }
 
   override fun shouldRpc(slot: String): Boolean = slot != currentCallSlot
 
-  override fun callRpc(slot: String, params: List<QVariant_>) {
+  override fun callRpc(slot: String, params: QVariantList) {
     dispatch(SignalProxyMessage.RpcCall(slot, params))
   }
 

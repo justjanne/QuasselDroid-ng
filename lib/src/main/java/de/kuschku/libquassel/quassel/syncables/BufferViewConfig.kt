@@ -19,9 +19,9 @@ class BufferViewConfig constructor(
   }
 
   override fun toVariantMap(): QVariantMap = mapOf(
-    "BufferList" to QVariant_(initBufferList(), Type.QVariantList),
-    "RemovedBuffers" to QVariant_(initBufferList(), Type.QVariantList),
-    "TemporarilyRemovedBuffers" to QVariant_(initBufferList(), Type.QVariantList)
+    "BufferList" to QVariant.of(initBufferList(), Type.QVariantList),
+    "RemovedBuffers" to QVariant.of(initBufferList(), Type.QVariantList),
+    "TemporarilyRemovedBuffers" to QVariant.of(initBufferList(), Type.QVariantList)
   ) + initProperties()
 
   override fun fromVariantMap(properties: QVariantMap) {
@@ -39,28 +39,28 @@ class BufferViewConfig constructor(
   }
 
   override fun initBufferList(): QVariantList = _buffers.map {
-    QVariant_(it, QType.BufferId)
+    QVariant.of(it, QType.BufferId)
   }
 
   override fun initRemovedBuffers(): QVariantList = _removedBuffers.map {
-    QVariant_(it, QType.BufferId)
+    QVariant.of(it, QType.BufferId)
   }
 
   override fun initTemporarilyRemovedBuffers(): QVariantList = _temporarilyRemovedBuffers.map {
-    QVariant_(it, QType.BufferId)
+    QVariant.of(it, QType.BufferId)
   }
 
   override fun initProperties(): QVariantMap = mapOf(
-    "bufferViewName" to QVariant_(bufferViewName(), Type.QString),
-    "networkId" to QVariant_(networkId(), QType.NetworkId),
-    "addNewBuffersAutomatically" to QVariant_(addNewBuffersAutomatically(), Type.Bool),
-    "sortAlphabetically" to QVariant_(sortAlphabetically(), Type.Bool),
-    "hideInactiveBuffers" to QVariant_(hideInactiveBuffers(), Type.Bool),
-    "hideInactiveNetworks" to QVariant_(hideInactiveNetworks(), Type.Bool),
-    "disableDecoration" to QVariant_(disableDecoration(), Type.Bool),
-    "allowedBufferTypes" to QVariant_(allowedBufferTypes(), Type.Int),
-    "minimumActivity" to QVariant_(minimumActivity(), Type.Int),
-    "showSearch" to QVariant_(showSearch(), Type.Bool)
+    "bufferViewName" to QVariant.of(bufferViewName(), Type.QString),
+    "networkId" to QVariant.of(networkId(), QType.NetworkId),
+    "addNewBuffersAutomatically" to QVariant.of(addNewBuffersAutomatically(), Type.Bool),
+    "sortAlphabetically" to QVariant.of(sortAlphabetically(), Type.Bool),
+    "hideInactiveBuffers" to QVariant.of(hideInactiveBuffers(), Type.Bool),
+    "hideInactiveNetworks" to QVariant.of(hideInactiveNetworks(), Type.Bool),
+    "disableDecoration" to QVariant.of(disableDecoration(), Type.Bool),
+    "allowedBufferTypes" to QVariant.of(allowedBufferTypes(), Type.Int),
+    "minimumActivity" to QVariant.of(minimumActivity(), Type.Int),
+    "showSearch" to QVariant.of(showSearch(), Type.Bool)
   )
 
   override fun initSetBufferList(buffers: QVariantList) {

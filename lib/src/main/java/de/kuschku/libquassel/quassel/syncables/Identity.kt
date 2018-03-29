@@ -17,25 +17,25 @@ class Identity constructor(
   }
 
   override fun initProperties(): QVariantMap = mapOf(
-    "identityId" to QVariant_(id(), QType.IdentityId),
-    "identityName" to QVariant_(identityName(), Type.QString),
-    "realName" to QVariant_(realName(), Type.QString),
-    "nicks" to QVariant_(nicks(), Type.QStringList),
-    "awayNick" to QVariant_(awayNick(), Type.QString),
-    "awayNickEnabled" to QVariant_(awayNickEnabled(), Type.Bool),
-    "awayReason" to QVariant_(awayReason(), Type.QString),
-    "awayReasonEnabled" to QVariant_(awayReasonEnabled(), Type.Bool),
-    "autoAwayEnabled" to QVariant_(autoAwayEnabled(), Type.Bool),
-    "autoAwayTime" to QVariant_(autoAwayTime(), Type.Int),
-    "autoAwayReason" to QVariant_(autoAwayReason(), Type.QString),
-    "autoAwayReasonEnabled" to QVariant_(autoAwayReasonEnabled(), Type.Bool),
-    "detachAwayEnabled" to QVariant_(detachAwayEnabled(), Type.Bool),
-    "detachAwayReason" to QVariant_(detachAwayReason(), Type.QString),
-    "detachAwayReasonEnabled" to QVariant_(detachAwayReasonEnabled(), Type.Bool),
-    "ident" to QVariant_(ident(), Type.QString),
-    "kickReason" to QVariant_(kickReason(), Type.QString),
-    "partReason" to QVariant_(partReason(), Type.QString),
-    "quitReason" to QVariant_(quitReason(), Type.QString)
+    "identityId" to QVariant.of(id(), QType.IdentityId),
+    "identityName" to QVariant.of(identityName(), Type.QString),
+    "realName" to QVariant.of(realName(), Type.QString),
+    "nicks" to QVariant.of(nicks(), Type.QStringList),
+    "awayNick" to QVariant.of(awayNick(), Type.QString),
+    "awayNickEnabled" to QVariant.of(awayNickEnabled(), Type.Bool),
+    "awayReason" to QVariant.of(awayReason(), Type.QString),
+    "awayReasonEnabled" to QVariant.of(awayReasonEnabled(), Type.Bool),
+    "autoAwayEnabled" to QVariant.of(autoAwayEnabled(), Type.Bool),
+    "autoAwayTime" to QVariant.of(autoAwayTime(), Type.Int),
+    "autoAwayReason" to QVariant.of(autoAwayReason(), Type.QString),
+    "autoAwayReasonEnabled" to QVariant.of(autoAwayReasonEnabled(), Type.Bool),
+    "detachAwayEnabled" to QVariant.of(detachAwayEnabled(), Type.Bool),
+    "detachAwayReason" to QVariant.of(detachAwayReason(), Type.QString),
+    "detachAwayReasonEnabled" to QVariant.of(detachAwayReasonEnabled(), Type.Bool),
+    "ident" to QVariant.of(ident(), Type.QString),
+    "kickReason" to QVariant.of(kickReason(), Type.QString),
+    "partReason" to QVariant.of(partReason(), Type.QString),
+    "quitReason" to QVariant.of(quitReason(), Type.QString)
   )
 
   override fun initSetProperties(properties: QVariantMap) {

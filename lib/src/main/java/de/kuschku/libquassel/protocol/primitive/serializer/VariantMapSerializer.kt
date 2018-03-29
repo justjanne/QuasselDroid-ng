@@ -24,5 +24,4 @@ object VariantMapSerializer : Serializer<QVariantMap> {
       }.toTypedArray()
     )
   }
-
 }

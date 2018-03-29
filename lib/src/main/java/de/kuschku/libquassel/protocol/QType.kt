@@ -1,19 +1,30 @@
 package de.kuschku.libquassel.protocol
 
-enum class QType(val typeName: String) {
-  BufferId("BufferId"),
-  BufferInfo("BufferInfo"),
-  DccConfig_IpDetectionMode("DccConfig::IpDetectionMode"),
-  DccConfig_PortSelectionMode("DccConfig::PortSelectionMode"),
-  IrcUser("IrcUser"),
-  IrcChannel("IrcChannel"),
-  Identity("Identity"),
-  IdentityId("IdentityId"),
-  Message("Message"),
-  MsgId("MsgId"),
-  Network("Network"),
-  NetworkId("NetworkId"),
-  NetworkInfo("NetworkInfo"),
-  Network_Server("Network::Server"),
-  QHostAddress("QHostAddress")
+import de.kuschku.libquassel.protocol.primitive.serializer.*
+
+enum class QType(val typeName: String, val serializer: Serializer<*>,
+                 val type: Type = Type.UserType) {
+  BufferId("BufferId", IntSerializer),
+  BufferInfo("BufferInfo", BufferInfoSerializer),
+  DccConfig_IpDetectionMode("DccConfig::IpDetectionMode", DccConfig_IpDetectionModeSerializer),
+  DccConfig_PortSelectionMode("DccConfig::PortSelectionMode",
+                              DccConfig_PortSelectionModeSerializer),
+  IrcUser("IrcUser", VariantMapSerializer),
+  IrcChannel("IrcChannel", VariantMapSerializer),
+  Identity("Identity", VariantMapSerializer),
+  IdentityId("IdentityId", IntSerializer),
+  Message("Message", MessageSerializer),
+  MsgId("MsgId", IntSerializer),
+  NetworkId("NetworkId", IntSerializer),
+  NetworkInfo("NetworkInfo", VariantMapSerializer),
+  Network_Server("Network::Server", VariantMapSerializer),
+  QHostAddress("QHostAddress", HostAddressSerializer),
+  PeerPtr("PeerPtr", LongSerializer, type = Type.Long);
+
+  override fun toString() = "QType($typeName, $type)"
+
+  companion object {
+    private val map = values().associateBy(QType::typeName)
+    fun of(name: String) = map[name]
+  }
 }

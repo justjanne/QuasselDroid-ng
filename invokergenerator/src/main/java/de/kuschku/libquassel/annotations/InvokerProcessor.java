@@ -9,6 +9,7 @@ import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.WildcardTypeName;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -129,9 +130,11 @@ public class InvokerProcessor extends AbstractProcessor {
       .builder(
         ParameterizedTypeName.get(
           ClassName.get(List.class),
-          ParameterizedTypeName.get(
-            ClassName.get("de.kuschku.libquassel.protocol", "QVariant"),
-            TypeName.get(Object.class)
+          WildcardTypeName.subtypeOf(
+            ParameterizedTypeName.get(
+              ClassName.get("de.kuschku.libquassel.protocol", "QVariant"),
+              WildcardTypeName.subtypeOf(Object.class)
+            )
           )
         ),
         "params"
@@ -159,7 +162,7 @@ public class InvokerProcessor extends AbstractProcessor {
         TypeMirror parameterType = slot.type.getParameterTypes().get(i);
         boolean isLast = i + 1 == slot.type.getParameterTypes().size();
 
-        invokeSpec = invokeSpec.addCode("($T) $N.get($L).getData()", parameterType, parameterSpecParams, i);
+        invokeSpec = invokeSpec.addCode("($T) ($T) $N.get($L).getData()", parameterType, Object.class, parameterSpecParams, i);
         if (!isLast)
           invokeSpec = invokeSpec.addCode(",");
         invokeSpec = invokeSpec.addCode("\n");

@@ -23,8 +23,8 @@ class IrcChannel(
   }
 
   override fun toVariantMap(): QVariantMap = mapOf(
-    "ChanModes" to QVariant_(initChanModes(), Type.QVariantMap),
-    "UserModes" to QVariant_(initUserModes(), Type.QVariantMap)
+    "ChanModes" to QVariant.of(initChanModes(), Type.QVariantMap),
+    "UserModes" to QVariant.of(initUserModes(), Type.QVariantMap)
   ) + initProperties()
 
   override fun fromVariantMap(properties: QVariantMap) {
@@ -34,33 +34,30 @@ class IrcChannel(
   }
 
   override fun initChanModes(): QVariantMap = mapOf(
-    "A" to QVariant_(
-      _A_channelModes.entries.map { (key, value) ->
-        key to QVariant_(value.toList(), Type.QStringList)
-      }, Type.QVariantMap
+    "A" to QVariant.of(_A_channelModes.entries.map { (key, value) ->
+      key to QVariant.of(value.toList(), Type.QStringList)
+    }, Type.QVariantMap
     ),
-    "B" to QVariant_(
-      _B_channelModes.entries.map { (key, value) ->
-        key to QVariant_(value, Type.QString)
-      }, Type.QVariantMap
+    "B" to QVariant.of(_B_channelModes.entries.map { (key, value) ->
+      key to QVariant.of(value, Type.QString)
+    }, Type.QVariantMap
     ),
-    "C" to QVariant_(
-      _C_channelModes.entries.map { (key, value) ->
-        key to QVariant_(value, Type.QString)
-      }, Type.QVariantMap
+    "C" to QVariant.of(_C_channelModes.entries.map { (key, value) ->
+      key to QVariant.of(value, Type.QString)
+    }, Type.QVariantMap
     ),
-    "D" to QVariant_(_D_channelModes.joinToString(), Type.QString)
+    "D" to QVariant.of(_D_channelModes.joinToString(), Type.QString)
   )
 
   override fun initUserModes(): QVariantMap = _userModes.entries.map { (key, value) ->
-    key.nick() to QVariant_(value, Type.QString)
+    key.nick() to QVariant.of(value, Type.QString)
   }.toMap()
 
   override fun initProperties(): QVariantMap = mapOf(
-    "name" to QVariant_(name(), Type.QString),
-    "topic" to QVariant_(topic(), Type.QString),
-    "password" to QVariant_(password(), Type.QString),
-    "encrypted" to QVariant_(encrypted(), Type.Bool)
+    "name" to QVariant.of(name(), Type.QString),
+    "topic" to QVariant.of(topic(), Type.QString),
+    "password" to QVariant.of(password(), Type.QString),
+    "encrypted" to QVariant.of(encrypted(), Type.Bool)
   )
 
   override fun initSetChanModes(chanModes: QVariantMap) {

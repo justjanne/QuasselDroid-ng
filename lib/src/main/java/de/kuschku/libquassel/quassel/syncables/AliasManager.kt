@@ -1,7 +1,7 @@
 package de.kuschku.libquassel.quassel.syncables
 
+import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.QVariant_
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.protocol.valueOr
 import de.kuschku.libquassel.quassel.BufferInfo
@@ -16,7 +16,7 @@ class AliasManager constructor(
   proxy: SignalProxy
 ) : SyncableObject(proxy, "AliasManager"), IAliasManager, ISyncableObject {
   override fun toVariantMap(): QVariantMap = mapOf(
-    "Aliases" to QVariant_(initAliases(), Type.QVariantMap)
+    "Aliases" to QVariant.of(initAliases(), Type.QVariantMap)
   )
 
   override fun fromVariantMap(properties: QVariantMap) {
@@ -24,8 +24,8 @@ class AliasManager constructor(
   }
 
   override fun initAliases(): QVariantMap = mapOf(
-    "names" to QVariant_(_aliases.map(Alias::name), Type.QStringList),
-    "expansions" to QVariant_(_aliases.map(Alias::expansion), Type.QStringList)
+    "names" to QVariant.of(_aliases.map(Alias::name), Type.QStringList),
+    "expansions" to QVariant.of(_aliases.map(Alias::expansion), Type.QStringList)
   )
 
   override fun initSetAliases(aliases: QVariantMap) {

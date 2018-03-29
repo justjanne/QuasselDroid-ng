@@ -7,34 +7,29 @@ import java.nio.ByteBuffer
 
 object VariantSerializer : Serializer<QVariant_> {
   override fun serialize(buffer: ChainedByteBuffer, data: QVariant_, features: QuasselFeatures) {
-    IntSerializer.serialize(buffer, data.type.type.id, features)
+    IntSerializer.serialize(buffer, data.type.id, features)
     BoolSerializer.serialize(buffer, false, features)
-    if (data.type.type == Type.UserType) {
-      StringSerializer.C.serialize(buffer, data.type.name, features)
+    if (data is QVariant.Custom && data.type == Type.UserType) {
+      StringSerializer.C.serialize(buffer, data.qtype.name, features)
     }
-    if (data.type.serializer == null) {
-      throw IllegalArgumentException("Unknown type: ${data.type.name}")
-    }
-    data.type.serializer.serialize(buffer, data.data, features)
+    (data.serializer as Serializer<Any?>).serialize(buffer, data.data, features)
   }
 
   override fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): QVariant_ {
     val rawType = IntSerializer.deserialize(buffer, features)
     val type = Type.of(rawType)
-
     val isNull = BoolSerializer.deserialize(buffer, features)
 
-    val metaType: MetaType<All_> = if (type == Type.UserType) {
-      val deserialize = StringSerializer.C.deserialize(buffer, features)
-      MetaType.get(deserialize)
+    return if (type == Type.UserType) {
+      val name = StringSerializer.C.deserialize(buffer, features)
+      val qType = name?.let(QType.Companion::of)
+                  ?: throw IllegalArgumentException("No such type: $name")
+      val value = qType.serializer.deserialize(buffer, features)
+      QVariant.of<All_>(value, qType)
     } else {
-      MetaType.get(type)
+      val serializer = type?.serializer ?: throw IllegalArgumentException("No such type: $type")
+      val value = serializer.deserialize(buffer, features)
+      QVariant.of<All_>(value, type)
     }
-    if (metaType.serializer == null) {
-      throw IllegalArgumentException("Unknown type: ${metaType.name}")
-    }
-
-    val result = metaType.serializer.deserialize(buffer, features)
-    return QVariant(result, metaType)
   }
 }

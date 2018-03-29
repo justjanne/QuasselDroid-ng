@@ -1,7 +1,7 @@
 package de.kuschku.libquassel.quassel.syncables
 
+import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.QVariant_
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.protocol.valueOr
 import de.kuschku.libquassel.quassel.syncables.interfaces.IIgnoreListManager
@@ -11,7 +11,7 @@ class IgnoreListManager constructor(
   proxy: SignalProxy
 ) : SyncableObject(proxy, "IgnoreListManager"), IIgnoreListManager {
   override fun toVariantMap(): QVariantMap = mapOf(
-    "IgnoreList" to QVariant_(initIgnoreList(), Type.QVariantMap)
+    "IgnoreList" to QVariant.of(initIgnoreList(), Type.QVariantMap)
   )
 
   override fun fromVariantMap(properties: QVariantMap) {

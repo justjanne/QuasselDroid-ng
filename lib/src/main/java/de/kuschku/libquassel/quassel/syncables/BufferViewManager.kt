@@ -13,7 +13,7 @@ class BufferViewManager constructor(
   private val session: ISession
 ) : SyncableObject(proxy, "BufferViewManager"), IBufferViewManager {
   override fun toVariantMap(): QVariantMap = mapOf(
-    "BufferViewIds" to QVariant_(initBufferViewIds(), Type.QVariantList)
+    "BufferViewIds" to QVariant.of(initBufferViewIds(), Type.QVariantList)
   )
 
   override fun fromVariantMap(properties: QVariantMap) {
@@ -21,7 +21,7 @@ class BufferViewManager constructor(
   }
 
   override fun initBufferViewIds(): QVariantList = _bufferViewConfigs.keys.map {
-    QVariant_(it, Type.Int)
+    QVariant.of(it, Type.Int)
   }
 
   fun bufferViewConfig(bufferViewId: Int) = _bufferViewConfigs[bufferViewId]

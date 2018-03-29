@@ -180,7 +180,7 @@ class CoreConnection(
         }
         dataBuffer.flip()
 
-        handlerService.serialize {
+        handlerService.deserialize {
           when (state.value) {
             ConnectionState.CLOSED    ->
               // Connection closed, do nothing
@@ -195,6 +195,7 @@ class CoreConnection(
       }
     } catch (e: Throwable) {
       log(WARN, TAG, "Error encountered in connection", e)
+      log(WARN, TAG, "Last sent message: ${MessageRunnable.lastSent.get()}")
       close()
     }
   }

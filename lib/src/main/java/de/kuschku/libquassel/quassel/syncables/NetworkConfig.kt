@@ -1,7 +1,7 @@
 package de.kuschku.libquassel.quassel.syncables
 
+import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.QVariant_
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.protocol.valueOr
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetworkConfig
@@ -21,14 +21,14 @@ class NetworkConfig constructor(
   }
 
   override fun initProperties(): QVariantMap = mapOf(
-    "pingTimeoutEnabled" to QVariant_(pingTimeoutEnabled(), Type.Bool),
-    "pingInterval" to QVariant_(pingInterval(), Type.Int),
-    "maxPingCount" to QVariant_(maxPingCount(), Type.Int),
-    "autoWhoEnabled" to QVariant_(autoWhoEnabled(), Type.Bool),
-    "autoWhoInterval" to QVariant_(autoWhoInterval(), Type.Int),
-    "autoWhoNickLimit" to QVariant_(autoWhoNickLimit(), Type.Int),
-    "autoWhoDelay" to QVariant_(autoWhoDelay(), Type.Int),
-    "standardCtcp" to QVariant_(standardCtcp(), Type.Bool)
+    "pingTimeoutEnabled" to QVariant.of(pingTimeoutEnabled(), Type.Bool),
+    "pingInterval" to QVariant.of(pingInterval(), Type.Int),
+    "maxPingCount" to QVariant.of(maxPingCount(), Type.Int),
+    "autoWhoEnabled" to QVariant.of(autoWhoEnabled(), Type.Bool),
+    "autoWhoInterval" to QVariant.of(autoWhoInterval(), Type.Int),
+    "autoWhoNickLimit" to QVariant.of(autoWhoNickLimit(), Type.Int),
+    "autoWhoDelay" to QVariant.of(autoWhoDelay(), Type.Int),
+    "standardCtcp" to QVariant.of(standardCtcp(), Type.Bool)
   )
 
   override fun initSetProperties(properties: QVariantMap) {

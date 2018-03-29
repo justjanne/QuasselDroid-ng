@@ -5,7 +5,6 @@ import de.kuschku.libquassel.protocol.QVariantList
 import de.kuschku.libquassel.protocol.QVariantMap
 import de.kuschku.libquassel.protocol.value
 
-
 sealed class HandshakeMessage {
   class ClientInit(
     val clientVersion: String?, val buildDate: String?,
@@ -112,6 +111,5 @@ sealed class HandshakeMessage {
         )
       }
     }
-
   }
 }

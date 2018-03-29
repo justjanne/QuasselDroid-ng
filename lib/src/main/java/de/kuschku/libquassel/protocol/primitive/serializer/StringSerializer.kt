@@ -15,8 +15,7 @@ abstract class StringSerializer(
   private val decoder: CharsetDecoder,
   private val trailingNullBytes: Int
 ) : Serializer<String?> {
-  constructor(charset: Charset,
-              trailingNullByte: Boolean = false) : this(
+  constructor(charset: Charset, trailingNullByte: Boolean = false) : this(
     charset.newEncoder(),
     charset.newDecoder(),
     if (trailingNullByte) {

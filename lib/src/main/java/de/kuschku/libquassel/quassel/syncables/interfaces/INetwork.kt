@@ -298,18 +298,18 @@ interface INetwork : ISyncableObject {
     val proxyPass: String = ""
   ) {
     fun toVariantMap(): QVariantMap = mapOf(
-      "Host" to QVariant_(host, Type.QString),
-      "Port" to QVariant_(port, Type.UInt),
-      "Password" to QVariant_(password, Type.QString),
-      "UseSSL" to QVariant_(useSsl, Type.Bool),
-      "sslVerify" to QVariant_(sslVerify, Type.Bool),
-      "sslVersion" to QVariant_(sslVersion, Type.Int),
-      "UseProxy" to QVariant_(useProxy, Type.Bool),
-      "ProxyType" to QVariant_(proxyType, Type.Bool),
-      "ProxyHost" to QVariant_(proxyHost, Type.QString),
-      "ProxyPort" to QVariant_(proxyPort, Type.UInt),
-      "ProxyUser" to QVariant_(proxyUser, Type.QString),
-      "ProxyPass" to QVariant_(proxyPass, Type.QString)
+      "Host" to QVariant.of(host, Type.QString),
+      "Port" to QVariant.of(port, Type.UInt),
+      "Password" to QVariant.of(password, Type.QString),
+      "UseSSL" to QVariant.of(useSsl, Type.Bool),
+      "sslVerify" to QVariant.of(sslVerify, Type.Bool),
+      "sslVersion" to QVariant.of(sslVersion, Type.Int),
+      "UseProxy" to QVariant.of(useProxy, Type.Bool),
+      "ProxyType" to QVariant.of(proxyType, Type.Bool),
+      "ProxyHost" to QVariant.of(proxyHost, Type.QString),
+      "ProxyPort" to QVariant.of(proxyPort, Type.UInt),
+      "ProxyUser" to QVariant.of(proxyUser, Type.QString),
+      "ProxyPass" to QVariant.of(proxyPass, Type.QString)
     )
 
     companion object {

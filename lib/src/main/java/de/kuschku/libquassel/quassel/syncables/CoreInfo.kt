@@ -1,7 +1,7 @@
 package de.kuschku.libquassel.quassel.syncables
 
+import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.QVariant_
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.protocol.value
 import de.kuschku.libquassel.quassel.syncables.interfaces.ICoreInfo
@@ -17,7 +17,7 @@ class CoreInfo constructor(
   }
 
   override fun initProperties(): QVariantMap = mapOf(
-    "coreData" to QVariant_(coreData(), Type.QVariantMap)
+    "coreData" to QVariant.of(coreData(), Type.QVariantMap)
   )
 
   override fun initSetProperties(properties: QVariantMap) {

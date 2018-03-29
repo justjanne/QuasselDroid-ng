@@ -11,6 +11,7 @@ import de.kuschku.libquassel.protocol.Protocol_Feature
 import de.kuschku.libquassel.protocol.Protocol_Features
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.session.*
+import de.kuschku.malheur.CrashHandler
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
@@ -270,7 +271,8 @@ class QuasselService : DaggerLifecycleService(),
       ISession.NULL,
       QuasselBacklogStorage(database),
       handlerService,
-      ::disconnectFromCore
+      ::disconnectFromCore,
+      CrashHandler::handle
     )
 
     clientData = ClientData(

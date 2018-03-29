@@ -12,7 +12,6 @@ object CharSerializer : Serializer<Char> {
   private val charBufferOut = CharBuffer.allocate(1)
   private val encoder = Charsets.UTF_16BE.newEncoder()
   private val decoder = Charsets.UTF_16BE.newDecoder()
-
   override fun serialize(buffer: ChainedByteBuffer, data: Char, features: QuasselFeatures) {
     charBufferIn.clear()
     charBufferIn.put(data)

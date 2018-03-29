@@ -58,7 +58,7 @@ object CrashHandler {
           val crashFile = File(crashDirectory, "${System.currentTimeMillis()}.json")
           crashFile.createNewFile()
           crashFile.writeText(json)
-          Log.e("Malheur", "Crash report saved: $crashFile")
+          Log.e("Malheur", "Crash report saved: $crashFile", throwable)
           handler.post {
             Toast.makeText(application,
                            "Crash report saved: ${crashFile.name}",

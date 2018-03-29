@@ -7,9 +7,6 @@ import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.util.compatibility.HandlerService
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
 import javax.net.ssl.X509TrustManager
@@ -21,8 +18,9 @@ class Session(
   private val handlerService: HandlerService,
   backlogStorage: BacklogStorage,
   private var userData: Pair<String, String>,
-  val disconnectFromCore: () -> Unit
-) : ProtocolHandler(), ISession {
+  val disconnectFromCore: () -> Unit,
+  exceptionHandler: (Throwable) -> Unit
+) : ProtocolHandler(exceptionHandler), ISession {
   override val features = Features(clientData.clientFeatures, QuasselFeatures.empty())
 
   override val sslSession
@@ -152,8 +150,6 @@ class Session(
 
   override fun onInitDone() {
     coreConnection.setState(ConnectionState.CONNECTED)
-    log(INFO, "Session", "Initialization finished")
-
     dispatch(SignalProxyMessage.HeartBeat(Instant.now()))
   }
 
@@ -167,14 +163,11 @@ class Session(
   override fun dispatch(message: SignalProxyMessage) {
     if (closed) return
 
-    log(DEBUG, "Session", "> $message")
     coreConnection.dispatch(message)
   }
 
   override fun dispatch(message: HandshakeMessage) {
     if (closed) return
-
-    log(DEBUG, "Session", "> $message")
     coreConnection.dispatch(message)
   }
 

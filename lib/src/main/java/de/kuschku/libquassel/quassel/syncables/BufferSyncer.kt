@@ -46,10 +46,10 @@ class BufferSyncer constructor(
   fun liveBufferInfos(): Observable<Map<BufferId, BufferInfo>> = live_bufferInfos
 
   override fun toVariantMap(): QVariantMap = mapOf(
-    "Activities" to QVariant_(initActivities(), Type.QVariantList),
-    "HighlightCounts" to QVariant_(initHighlightCounts(), Type.QVariantList),
-    "LastSeenMsg" to QVariant_(initLastSeenMsg(), Type.QVariantList),
-    "MarkerLines" to QVariant_(initMarkerLines(), Type.QVariantList)
+    "Activities" to QVariant.of(initActivities(), Type.QVariantList),
+    "HighlightCounts" to QVariant.of(initHighlightCounts(), Type.QVariantList),
+    "LastSeenMsg" to QVariant.of(initLastSeenMsg(), Type.QVariantList),
+    "MarkerLines" to QVariant.of(initMarkerLines(), Type.QVariantList)
   )
 
   override fun fromVariantMap(properties: QVariantMap) {
@@ -62,8 +62,8 @@ class BufferSyncer constructor(
   override fun initActivities(): QVariantList {
     val list: MutableList<QVariant_> = mutableListOf()
     for ((key, value) in _bufferActivities) {
-      list.add(QVariant_(key, QType.BufferId))
-      list.add(QVariant_(value, Type.Int))
+      list.add(QVariant.of(key, QType.BufferId))
+      list.add(QVariant.of(value, Type.Int))
     }
     return list
   }
@@ -71,8 +71,8 @@ class BufferSyncer constructor(
   override fun initHighlightCounts(): QVariantList {
     val list: MutableList<QVariant_> = mutableListOf()
     for ((key, value) in _highlightCounts) {
-      list.add(QVariant_(key, QType.BufferId))
-      list.add(QVariant_(value, Type.Int))
+      list.add(QVariant.of(key, QType.BufferId))
+      list.add(QVariant.of(value, Type.Int))
     }
     return list
   }
@@ -80,8 +80,8 @@ class BufferSyncer constructor(
   override fun initLastSeenMsg(): QVariantList {
     val list: MutableList<QVariant_> = mutableListOf()
     for ((key, value) in _bufferActivities) {
-      list.add(QVariant_(key, QType.BufferId))
-      list.add(QVariant_(value, QType.MsgId))
+      list.add(QVariant.of(key, QType.BufferId))
+      list.add(QVariant.of(value, QType.MsgId))
     }
     return list
   }
@@ -89,8 +89,8 @@ class BufferSyncer constructor(
   override fun initMarkerLines(): QVariantList {
     val list: MutableList<QVariant_> = mutableListOf()
     for ((key, value) in _bufferActivities) {
-      list.add(QVariant_(key, QType.BufferId))
-      list.add(QVariant_(value, QType.MsgId))
+      list.add(QVariant.of(key, QType.BufferId))
+      list.add(QVariant.of(value, QType.MsgId))
     }
     return list
   }

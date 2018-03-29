@@ -33,11 +33,11 @@ class Network constructor(
   }
 
   override fun toVariantMap(): QVariantMap = mapOf(
-    "Caps" to QVariant_(initCaps(), Type.QVariantMap),
-    "CapsEnabled" to QVariant_(initCapsEnabled(), Type.QVariantList),
-    "IrcUsersAndChannels" to QVariant_(initIrcUsersAndChannels(), Type.QVariantMap),
-    "ServerList" to QVariant_(initServerList(), Type.QVariantList),
-    "Supports" to QVariant_(initSupports(), Type.QVariantMap)
+    "Caps" to QVariant.of(initCaps(), Type.QVariantMap),
+    "CapsEnabled" to QVariant.of(initCapsEnabled(), Type.QVariantList),
+    "IrcUsersAndChannels" to QVariant.of(initIrcUsersAndChannels(), Type.QVariantMap),
+    "ServerList" to QVariant.of(initServerList(), Type.QVariantList),
+    "Supports" to QVariant.of(initSupports(), Type.QVariantMap)
   ) + initProperties()
 
   fun isMyNick(nick: String) = myNick().equals(nick, true)
@@ -174,7 +174,7 @@ class Network constructor(
       setCodecForDecoding(Charset.forName(info.codecForDecoding))
     // FIXME compare components
     if (info.serverList.isNotEmpty())
-      setServerList(info.serverList.map { QVariant_(it, QType.Network_Server) })
+      setServerList(info.serverList.map { QVariant.of(it, QType.Network_Server) })
     if (info.useRandomServer != useRandomServer())
       setUseRandomServer(info.useRandomServer)
     if (info.perform != perform())
@@ -682,73 +682,68 @@ class Network constructor(
   }
 
   override fun initSupports(): QVariantMap = _supports.entries.map { (key, value) ->
-    key to QVariant_(value, Type.QString)
+    key to QVariant.of(value, Type.QString)
   }.toMap()
 
   override fun initCaps(): QVariantMap = _caps.entries.map { (key, value) ->
-    key to QVariant_(value, Type.QString)
+    key to QVariant.of(value, Type.QString)
   }.toMap()
 
   override fun initCapsEnabled(): QVariantList = _capsEnabled.map {
-    QVariant_(it, Type.QString)
+    QVariant.of(it, Type.QString)
   }.toList()
 
   override fun initServerList(): QVariantList = _serverList.map {
-    QVariant_(it, QType.Network_Server)
+    QVariant.of(it, QType.Network_Server)
   }.toList()
 
   override fun initIrcUsersAndChannels(): QVariantMap {
     return mapOf(
-      "Users" to QVariant_(
-        _ircUsers.values.map { it.toVariantMap() }.transpose().map {
-          QVariant_(it, Type.QVariantList)
-        }, Type.QVariantMap
+      "Users" to QVariant.of(_ircUsers.values.map { it.toVariantMap() }.transpose().map {
+        QVariant.of(it, Type.QVariantList)
+      }, Type.QVariantMap
       ),
-      "Channels" to QVariant_(
-        _ircChannels.values.map { it.toVariantMap() }.transpose().map {
-          QVariant_(it, Type.QVariantList)
-        }, Type.QVariantMap
+      "Channels" to QVariant.of(_ircChannels.values.map { it.toVariantMap() }.transpose().map {
+        QVariant.of(it, Type.QVariantList)
+      }, Type.QVariantMap
       )
     )
   }
 
   override fun initProperties(): QVariantMap = mapOf(
-    "networkName" to QVariant_(networkName(), Type.QString),
-    "currentServer" to QVariant_(currentServer(), Type.QString),
-    "myNick" to QVariant_(myNick(), Type.QString),
-    "latency" to QVariant_(latency(), Type.Int),
-    "codecForServer" to QVariant_(
-      codecForServer().serializeString(StringSerializer.UTF8),
-      Type.QByteArray
+    "networkName" to QVariant.of(networkName(), Type.QString),
+    "currentServer" to QVariant.of(currentServer(), Type.QString),
+    "myNick" to QVariant.of(myNick(), Type.QString),
+    "latency" to QVariant.of(latency(), Type.Int),
+    "codecForServer" to QVariant.of(codecForServer().serializeString(StringSerializer.UTF8),
+                                    Type.QByteArray
     ),
-    "codecForEncoding" to QVariant_(
-      codecForEncoding().serializeString(StringSerializer.UTF8),
-      Type.QByteArray
+    "codecForEncoding" to QVariant.of(codecForEncoding().serializeString(StringSerializer.UTF8),
+                                      Type.QByteArray
     ),
-    "codecForDecoding" to QVariant_(
-      codecForDecoding().serializeString(StringSerializer.UTF8),
-      Type.QByteArray
+    "codecForDecoding" to QVariant.of(codecForDecoding().serializeString(StringSerializer.UTF8),
+                                      Type.QByteArray
     ),
-    "identityId" to QVariant_(identity(), QType.IdentityId),
-    "isConnected" to QVariant_(isConnected(), Type.Bool),
-    "connectionState" to QVariant_(connectionState(), Type.Int),
-    "useRandomServer" to QVariant_(useRandomServer(), Type.Bool),
-    "perform" to QVariant_(perform(), Type.QStringList),
-    "useAutoIdentify" to QVariant_(useAutoIdentify(), Type.Bool),
-    "autoIdentifyService" to QVariant_(autoIdentifyService(), Type.QString),
-    "autoIdentifyPassword" to QVariant_(autoIdentifyPassword(), Type.QString),
-    "useSasl" to QVariant_(useSasl(), Type.Bool),
-    "saslAccount" to QVariant_(saslAccount(), Type.QString),
-    "saslPassword" to QVariant_(saslPassword(), Type.QString),
-    "useAutoReconnect" to QVariant_(useAutoReconnect(), Type.Bool),
-    "autoReconnectInterval" to QVariant_(autoReconnectInterval(), Type.UInt),
-    "autoReconnectRetries" to QVariant_(autoReconnectRetries(), Type.UShort),
-    "unlimitedReconnectRetries" to QVariant_(unlimitedReconnectRetries(), Type.Bool),
-    "rejoinChannels" to QVariant_(rejoinChannels(), Type.Bool),
-    "useCustomMessageRate" to QVariant_(useCustomMessageRate(), Type.Bool),
-    "msgRateBurstSize" to QVariant_(messageRateBurstSize(), Type.UInt),
-    "msgRateMessageDelay" to QVariant_(messageRateDelay(), Type.UInt),
-    "unlimitedMessageRate" to QVariant_(unlimitedMessageRate(), Type.Bool)
+    "identityId" to QVariant.of(identity(), QType.IdentityId),
+    "isConnected" to QVariant.of(isConnected(), Type.Bool),
+    "connectionState" to QVariant.of(connectionState(), Type.Int),
+    "useRandomServer" to QVariant.of(useRandomServer(), Type.Bool),
+    "perform" to QVariant.of(perform(), Type.QStringList),
+    "useAutoIdentify" to QVariant.of(useAutoIdentify(), Type.Bool),
+    "autoIdentifyService" to QVariant.of(autoIdentifyService(), Type.QString),
+    "autoIdentifyPassword" to QVariant.of(autoIdentifyPassword(), Type.QString),
+    "useSasl" to QVariant.of(useSasl(), Type.Bool),
+    "saslAccount" to QVariant.of(saslAccount(), Type.QString),
+    "saslPassword" to QVariant.of(saslPassword(), Type.QString),
+    "useAutoReconnect" to QVariant.of(useAutoReconnect(), Type.Bool),
+    "autoReconnectInterval" to QVariant.of(autoReconnectInterval(), Type.UInt),
+    "autoReconnectRetries" to QVariant.of(autoReconnectRetries(), Type.UShort),
+    "unlimitedReconnectRetries" to QVariant.of(unlimitedReconnectRetries(), Type.Bool),
+    "rejoinChannels" to QVariant.of(rejoinChannels(), Type.Bool),
+    "useCustomMessageRate" to QVariant.of(useCustomMessageRate(), Type.Bool),
+    "msgRateBurstSize" to QVariant.of(messageRateBurstSize(), Type.UInt),
+    "msgRateMessageDelay" to QVariant.of(messageRateDelay(), Type.UInt),
+    "unlimitedMessageRate" to QVariant.of(unlimitedMessageRate(), Type.Bool)
   )
 
   override fun initSetSupports(supports: QVariantMap) {

@@ -11,7 +11,7 @@ class AndroidHandlerService : HandlerService {
   }
 
   override fun deserialize(f: () -> Unit) {
-    serializeHandler.post(f)
+    deserializeHandler.post(f)
   }
 
   override fun write(f: () -> Unit) {

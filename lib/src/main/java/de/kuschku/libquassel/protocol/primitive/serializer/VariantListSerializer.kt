@@ -22,5 +22,4 @@ object VariantListSerializer : Serializer<QVariantList> {
     }
     return result
   }
-
 }

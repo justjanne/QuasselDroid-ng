@@ -67,7 +67,5 @@ sealed class SignalProxyMessage {
         else                       -> throw IllegalArgumentException("Invalid MsgType: $type")
       }
     }
-
   }
 }
-

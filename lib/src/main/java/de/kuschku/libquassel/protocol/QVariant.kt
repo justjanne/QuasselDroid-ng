@@ -1,17 +1,39 @@
 package de.kuschku.libquassel.protocol
 
-class QVariant<T>(val data: T?, val type: MetaType<T>) {
-  constructor(data: T?, type: Type) : this(data, MetaType.Companion.get(type))
-  constructor(data: T?, type: QType) : this(data, type.typeName)
-  constructor(data: T?, type: String) : this(data, MetaType.Companion.get(type))
+import de.kuschku.libquassel.protocol.primitive.serializer.Serializer
+import java.nio.ByteBuffer
+import java.nio.CharBuffer
+
+sealed class QVariant<T> constructor(val data: T?, val type: Type, val serializer: Serializer<T>) {
+  class Typed<T> internal constructor(data: T?, type: Type, serializer: Serializer<T>) :
+    QVariant<T>(data, type, serializer) {
+    override fun toString() = "QVariant.Typed(${type.serializableName}, ${toString(data)})"
+  }
+
+  class Custom<T> internal constructor(data: T?, val qtype: QType, serializer: Serializer<T>) :
+    QVariant<T>(data, qtype.type, serializer) {
+    override fun toString() = "QVariant.Custom($qtype, ${toString(data)})"
+  }
 
   fun or(defValue: T): T {
     return data ?: defValue
   }
 
-  override fun toString(): String {
-    return "QVariant(${type.name}, $data)"
+  companion object {
+    fun <T> of(data: T?, type: Type): QVariant<T> {
+      return QVariant.Typed(data, type, type.serializer as Serializer<T>)
+    }
+
+    fun <T> of(data: T?, type: QType) =
+      QVariant.Custom(data, type, type.serializer as Serializer<T>)
   }
+}
+
+inline fun toString(data: Any?) = when (data) {
+  is ByteBuffer -> data.array()?.contentToString()
+  is CharBuffer -> data.array()?.contentToString()
+  is Array<*>   -> data.contentToString()
+  else          -> data.toString()
 }
 
 inline fun <reified U> QVariant_?.value(): U? = this?.value<U?>(null)

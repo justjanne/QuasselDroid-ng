@@ -1,20 +1,7 @@
 package de.kuschku.libquassel
 
-import de.kuschku.libquassel.protocol.*
-import de.kuschku.libquassel.quassel.LegacyFeature
-import de.kuschku.libquassel.quassel.ProtocolFeature
-import de.kuschku.libquassel.session.BacklogStorage
-import de.kuschku.libquassel.session.Session
-import de.kuschku.libquassel.session.SocketAddress
-import de.kuschku.libquassel.util.compatibility.reference.JavaHandlerService
-import org.junit.BeforeClass
-import org.junit.Test
-import org.threeten.bp.Instant
-import java.security.cert.X509Certificate
-import java.util.logging.LogManager
-import javax.net.ssl.X509TrustManager
-
 class ConnectionUnitTest {
+/*
   companion object {
     @JvmStatic
     @BeforeClass
@@ -55,4 +42,5 @@ class ConnectionUnitTest {
       ) {}
     session.join()
   }
+*/
 }

@@ -5,7 +5,7 @@ import de.kuschku.libquassel.protocol.Legacy_Features
 
 class QuasselFeatures(
   val enabledFeatures: Set<ExtendedFeature>,
-  val unknownFeatures: Set<String>
+  val unknownFeatures: Set<String> = emptySet()
 ) {
   constructor(legacyFeatures: Legacy_Features?, extendedFeatures: Collection<String>) : this(
     legacyFeatures?.enabledValues()?.map(Legacy_Feature::toExtended).orEmpty() union

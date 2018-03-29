@@ -1,8 +1,10 @@
 package de.kuschku.libquassel
 
-import de.kuschku.libquassel.protocol.Quassel_Feature
-import de.kuschku.libquassel.protocol.Quassel_Features
+import de.kuschku.libquassel.protocol.QType
+import de.kuschku.libquassel.protocol.QVariant
+import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.protocol.primitive.serializer.*
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
@@ -97,9 +99,89 @@ class SerializerUnitTest {
     assertEquals(0L.inv(), roundTrip(LongSerializer, 0L.inv()))
   }
 
+  @Test
+  fun stringSerializer() {
+    assertEquals("Test", roundTrip(StringSerializer.UTF16, "Test"))
+    assertEquals("Test", roundTrip(StringSerializer.UTF8, "Test"))
+    assertEquals("Test", roundTrip(StringSerializer.C, "Test"))
+  }
+
+  @Test
+  fun variantListSerializer() {
+    val value = listOf(
+      QVariant.of(1, Type.Int),
+      QVariant.of(ByteBuffer.wrap(byteArrayOf(
+        66,
+        97,
+        99,
+        107,
+        108,
+        111,
+        103,
+        77,
+        97,
+        110,
+        97,
+        103,
+        101,
+        114,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      )), Type.QByteArray),
+      QVariant.of(ByteBuffer.wrap(byteArrayOf(
+        114,
+        101,
+        113,
+        117,
+        101,
+        115,
+        116,
+        66,
+        97,
+        99,
+        107,
+        108,
+        111,
+        103,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      )), Type.QByteArray),
+      QVariant.of(1873, QType.BufferId),
+      QVariant.of(-1, QType.MsgId),
+      QVariant.of(-1, QType.MsgId),
+      QVariant.of(20, Type.Int),
+      QVariant.of(0, Type.Int)
+    )
+    assert(value == roundTrip(VariantListSerializer, value))
+  }
+
   companion object {
     fun <T> roundTrip(serializer: Serializer<T>, value: T,
-                      features: Quassel_Features = Quassel_Feature.NONE): T {
+                      features: QuasselFeatures = QuasselFeatures.all()): T {
       val chainedBuffer = ChainedByteBuffer(
         direct = false
       )

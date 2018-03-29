@@ -8,6 +8,7 @@ import de.kuschku.libquassel.util.helpers.write
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import de.kuschku.libquassel.util.nio.WrappedChannel
 import java.nio.ByteBuffer
+import java.util.concurrent.atomic.AtomicReference
 
 class MessageRunnable<T>(
   private val data: T,
@@ -25,8 +26,13 @@ class MessageRunnable<T>(
       channel?.write(sizeBuffer)
       channel?.write(chainedBuffer)
       channel?.flush()
+      lastSent.set(data)
     } catch (e: Throwable) {
       log(WARN, "MessageDispatching", e)
     }
+  }
+
+  companion object {
+    val lastSent = AtomicReference<Any>()
   }
 }

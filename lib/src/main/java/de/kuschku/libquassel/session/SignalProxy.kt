@@ -2,7 +2,7 @@ package de.kuschku.libquassel.session
 
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
-import de.kuschku.libquassel.protocol.QVariant_
+import de.kuschku.libquassel.protocol.QVariantList
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.quassel.syncables.Identity
@@ -29,8 +29,8 @@ interface SignalProxy {
   fun dispatch(message: SignalProxyMessage)
   fun dispatch(message: HandshakeMessage)
 
-  fun callSync(type: String, instance: String, slot: String, params: List<QVariant_>)
-  fun callRpc(slot: String, params: List<QVariant_>)
+  fun callSync(type: String, instance: String, slot: String, params: QVariantList)
+  fun callRpc(slot: String, params: QVariantList)
 
   fun shouldSync(type: String, instance: String, slot: String): Boolean
   fun shouldRpc(slot: String): Boolean
@@ -49,9 +49,9 @@ interface SignalProxy {
       override fun dispatch(message: SignalProxyMessage) = Unit
       override fun dispatch(message: HandshakeMessage) = Unit
       override fun callSync(type: String, instance: String, slot: String,
-                            params: List<QVariant_>) = Unit
+                            params: QVariantList) = Unit
 
-      override fun callRpc(slot: String, params: List<QVariant_>) = Unit
+      override fun callRpc(slot: String, params: QVariantList) = Unit
       override fun shouldSync(type: String, instance: String, slot: String) = false
       override fun shouldRpc(slot: String) = false
       override fun network(id: NetworkId): Network? = null

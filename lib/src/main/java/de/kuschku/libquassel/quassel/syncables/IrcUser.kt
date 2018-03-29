@@ -1,7 +1,7 @@
 package de.kuschku.libquassel.quassel.syncables
 
+import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.QVariant_
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.protocol.valueOr
 import de.kuschku.libquassel.quassel.syncables.interfaces.IIrcUser
@@ -28,24 +28,24 @@ class IrcUser(
   }
 
   override fun initProperties(): QVariantMap = mapOf(
-    "user" to QVariant_(user(), Type.QString),
-    "host" to QVariant_(host(), Type.QString),
-    "nick" to QVariant_(nick(), Type.QString),
-    "realName" to QVariant_(realName(), Type.QString),
-    "account" to QVariant_(account(), Type.QString),
-    "away" to QVariant_(isAway(), Type.Bool),
-    "awayMessage" to QVariant_(awayMessage(), Type.QString),
-    "idleTime" to QVariant_(idleTime(), Type.QDateTime),
-    "loginTime" to QVariant_(loginTime(), Type.QDateTime),
-    "server" to QVariant_(server(), Type.QString),
-    "ircOperator" to QVariant_(ircOperator(), Type.QString),
-    "lastAwayMessage" to QVariant_(lastAwayMessage(), Type.Int),
-    "whoisServiceReply" to QVariant_(whoisServiceReply(), Type.QString),
-    "suserHost" to QVariant_(suserHost(), Type.QString),
-    "encrypted" to QVariant_(encrypted(), Type.Bool),
+    "user" to QVariant.of(user(), Type.QString),
+    "host" to QVariant.of(host(), Type.QString),
+    "nick" to QVariant.of(nick(), Type.QString),
+    "realName" to QVariant.of(realName(), Type.QString),
+    "account" to QVariant.of(account(), Type.QString),
+    "away" to QVariant.of(isAway(), Type.Bool),
+    "awayMessage" to QVariant.of(awayMessage(), Type.QString),
+    "idleTime" to QVariant.of(idleTime(), Type.QDateTime),
+    "loginTime" to QVariant.of(loginTime(), Type.QDateTime),
+    "server" to QVariant.of(server(), Type.QString),
+    "ircOperator" to QVariant.of(ircOperator(), Type.QString),
+    "lastAwayMessage" to QVariant.of(lastAwayMessage(), Type.Int),
+    "whoisServiceReply" to QVariant.of(whoisServiceReply(), Type.QString),
+    "suserHost" to QVariant.of(suserHost(), Type.QString),
+    "encrypted" to QVariant.of(encrypted(), Type.Bool),
 
-    "channels" to QVariant_(channels(), Type.QStringList),
-    "userModes" to QVariant_(userModes(), Type.QString)
+    "channels" to QVariant.of(channels(), Type.QStringList),
+    "userModes" to QVariant.of(userModes(), Type.QString)
   )
 
   override fun initSetProperties(properties: QVariantMap) {

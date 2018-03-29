@@ -1,7 +1,7 @@
 package de.kuschku.libquassel.session
 
 import de.kuschku.libquassel.protocol.QType
-import de.kuschku.libquassel.protocol.QVariant_
+import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.quassel.exceptions.ObjectNotFoundException
@@ -47,8 +47,8 @@ class ObjectStorage(private val proxy: SignalProxy) {
         SignalProxyMessage.RpcCall(
           "__objectRenamed__",
           listOf(
-            QVariant_(obj.className, Type.QString), QVariant_(new, Type.QString),
-            QVariant_(old, Type.QString)
+            QVariant.of(obj.className, Type.QString), QVariant.of(new, Type.QString),
+            QVariant.of(old, Type.QString)
           )
         )
       )
