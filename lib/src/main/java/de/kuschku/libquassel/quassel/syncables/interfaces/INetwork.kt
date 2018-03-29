@@ -267,6 +267,7 @@ interface INetwork : ISyncableObject {
       val validValues = values().filter { it.bit != 0 }.toTypedArray()
       override fun of(bit: Int) = Flags.of<ChannelModeType>(bit)
       override fun of(vararg flags: ChannelModeType) = Flags.of(*flags)
+      override fun of(flags: Iterable<ChannelModeType>) = Flags.of(flags)
     }
   }
 

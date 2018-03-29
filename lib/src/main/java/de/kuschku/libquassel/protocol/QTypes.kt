@@ -2,8 +2,8 @@ package de.kuschku.libquassel.protocol
 
 import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
 import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.quassel.LegacyFeature
 import de.kuschku.libquassel.quassel.ProtocolFeature
-import de.kuschku.libquassel.quassel.QuasselFeature
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.Flags
 import de.kuschku.libquassel.util.ShortFlags
@@ -27,8 +27,8 @@ typealias Message_Types = Flags<Message_Type>
 typealias Message_Flag = Message.MessageFlag
 typealias Message_Flags = Flags<Message_Flag>
 
-typealias Quassel_Feature = QuasselFeature
-typealias Quassel_Features = Flags<Quassel_Feature>
+typealias Legacy_Feature = LegacyFeature
+typealias Legacy_Features = Flags<Legacy_Feature>
 
 typealias Protocol_Feature = ProtocolFeature
 typealias Protocol_Features = Flags<Protocol_Feature>

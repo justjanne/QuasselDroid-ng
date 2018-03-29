@@ -1,11 +1,11 @@
 package de.kuschku.libquassel.protocol.primitive.serializer
 
-import de.kuschku.libquassel.protocol.Quassel_Features
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import java.nio.ByteBuffer
 
 object ByteArraySerializer : Serializer<ByteBuffer?> {
-  override fun serialize(buffer: ChainedByteBuffer, data: ByteBuffer?, features: Quassel_Features) {
+  override fun serialize(buffer: ChainedByteBuffer, data: ByteBuffer?, features: QuasselFeatures) {
     if (data == null) {
       IntSerializer.serialize(buffer, -1, features)
     } else {
@@ -14,7 +14,7 @@ object ByteArraySerializer : Serializer<ByteBuffer?> {
     }
   }
 
-  override fun deserialize(buffer: ByteBuffer, features: Quassel_Features): ByteBuffer? {
+  override fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): ByteBuffer? {
     val len = IntSerializer.deserialize(buffer, features)
     return if (len == -1) {
       null

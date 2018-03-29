@@ -5,7 +5,11 @@ import android.arch.lifecycle.Observer
 import android.content.*
 import android.net.ConnectivityManager
 import android.os.Binder
-import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.protocol.ClientData
+import de.kuschku.libquassel.protocol.Protocol
+import de.kuschku.libquassel.protocol.Protocol_Feature
+import de.kuschku.libquassel.protocol.Protocol_Features
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.session.*
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.Keys
@@ -272,7 +276,7 @@ class QuasselService : DaggerLifecycleService(),
     clientData = ClientData(
       identifier = "${resources.getString(R.string.app_name)} ${BuildConfig.VERSION_NAME}",
       buildDate = Instant.ofEpochSecond(BuildConfig.GIT_COMMIT_DATE),
-      clientFeatures = Quassel_Features.of(*Quassel_Feature.validValues),
+      clientFeatures = QuasselFeatures.all(),
       protocolFeatures = Protocol_Features.of(
         Protocol_Feature.Compression,
         Protocol_Feature.TLS

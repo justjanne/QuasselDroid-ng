@@ -12,5 +12,6 @@ enum class ProtocolFeature(override val bit: Int) : Flag<ProtocolFeature> {
     override val NONE = ProtocolFeature.of()
     override fun of(bit: Int) = Flags.of<ProtocolFeature>(bit)
     override fun of(vararg flags: ProtocolFeature) = Flags.of(*flags)
+    override fun of(flags: Iterable<ProtocolFeature>) = Flags.of(flags)
   }
 }

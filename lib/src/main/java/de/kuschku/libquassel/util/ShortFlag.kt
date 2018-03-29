@@ -57,11 +57,16 @@ data class ShortFlags<E>(
     inline fun <reified T> of(vararg flags: ShortFlag<T>): ShortFlags<T>
       where T : ShortFlag<T>, T : Enum<T> =
       ShortFlags(flags.map(ShortFlag<T>::bit).distinct().sum().toShort(), enumValues())
+
+    inline fun <reified T> of(flags: Iterable<T>): ShortFlags<T>
+      where T : ShortFlag<T>, T : Enum<T> =
+      ShortFlags(flags.map(ShortFlag<T>::bit).distinct().sum().toShort(), enumValues())
   }
 
   interface Factory<E> where E : ShortFlag<E>, E : Enum<E> {
     fun of(bit: Short): ShortFlags<E>
     fun of(vararg flags: E): ShortFlags<E>
+    fun of(flags: Iterable<E>): ShortFlags<E>
   }
 }
 

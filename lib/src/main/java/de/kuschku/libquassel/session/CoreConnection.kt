@@ -110,7 +110,8 @@ class CoreConnection(
             clientVersion = clientData.identifier,
             buildDate = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm:ss")
               .format(clientData.buildDate.atOffset(ZoneOffset.UTC)),
-            clientFeatures = clientData.clientFeatures
+            clientFeatures = clientData.clientFeatures.toInt(),
+            featureList = clientData.clientFeatures.toStringList()
           )
         )
       }

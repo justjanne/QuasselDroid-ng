@@ -12,13 +12,15 @@ object ClientInitAckSerializer : HandshakeMessageSerializer<HandshakeMessage.Cli
     "CoreFeatures" to QVariant_(data.coreFeatures?.toInt(), Type.UInt),
     "StorageBackends" to QVariant_(data.backendInfo, Type.QVariantList),
     "Authenticator" to QVariant_(data.authenticatorInfo, Type.QVariantList),
-    "Configured" to QVariant_(data.coreConfigured, Type.Bool)
+    "Configured" to QVariant_(data.coreConfigured, Type.Bool),
+    "FeatureList" to QVariant_(data.featureList, Type.QStringList)
   )
 
   override fun deserialize(data: QVariantMap) = HandshakeMessage.ClientInitAck(
     coreFeatures = Flags.Companion.of(data["CoreFeatures"].value(0)),
     backendInfo = data["StorageBackends"].value(),
     authenticatorInfo = data["Authenticators"].value(),
-    coreConfigured = data["Configured"].value()
+    coreConfigured = data["Configured"].value(),
+    featureList = data["FeatureList"].value(emptyList())
   )
 }

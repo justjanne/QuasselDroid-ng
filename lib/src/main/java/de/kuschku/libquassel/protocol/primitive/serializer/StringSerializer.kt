@@ -1,6 +1,6 @@
 package de.kuschku.libquassel.protocol.primitive.serializer
 
-import de.kuschku.libquassel.protocol.Quassel_Features
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.util.helpers.hexDump
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import java.nio.ByteBuffer
@@ -46,7 +46,7 @@ abstract class StringSerializer(
     return buf
   }
 
-  override fun serialize(buffer: ChainedByteBuffer, data: String?, features: Quassel_Features) =
+  override fun serialize(buffer: ChainedByteBuffer, data: String?, features: QuasselFeatures) =
     try {
       if (data == null) {
         IntSerializer.serialize(buffer, -1, features)
@@ -99,7 +99,7 @@ abstract class StringSerializer(
     throw RuntimeException(e)
   }
 
-  override fun deserialize(buffer: ByteBuffer, features: Quassel_Features): String? = try {
+  override fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): String? = try {
     val len = IntSerializer.deserialize(buffer, features)
     if (len == -1) {
       null

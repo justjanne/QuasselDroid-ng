@@ -1,11 +1,15 @@
 package de.kuschku.libquassel.protocol.primitive.serializer
 
-import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.protocol.QVariantMap
+import de.kuschku.libquassel.protocol.QVariant_
+import de.kuschku.libquassel.protocol.Type
+import de.kuschku.libquassel.protocol.value
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import java.nio.ByteBuffer
 
 object HandshakeVariantMapSerializer : Serializer<QVariantMap> {
-  override fun serialize(buffer: ChainedByteBuffer, data: QVariantMap, features: Quassel_Features) {
+  override fun serialize(buffer: ChainedByteBuffer, data: QVariantMap, features: QuasselFeatures) {
     IntSerializer.serialize(buffer, data.size * 2, features)
     data.entries.forEach { (key, value) ->
       VariantSerializer.serialize(buffer, QVariant_(key, Type.QString), features)
@@ -13,7 +17,7 @@ object HandshakeVariantMapSerializer : Serializer<QVariantMap> {
     }
   }
 
-  override fun deserialize(buffer: ByteBuffer, features: Quassel_Features): QVariantMap {
+  override fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): QVariantMap {
     val range = 0 until IntSerializer.deserialize(buffer, features) / 2
     val pairs = range.map {
       val keyRaw: ByteBuffer? = VariantSerializer.deserialize(buffer, features).value()

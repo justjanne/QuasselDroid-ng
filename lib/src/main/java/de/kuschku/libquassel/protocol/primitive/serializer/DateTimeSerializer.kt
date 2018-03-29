@@ -1,6 +1,6 @@
 package de.kuschku.libquassel.protocol.primitive.serializer
 
-import de.kuschku.libquassel.protocol.Quassel_Features
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import org.threeten.bp.*
 import org.threeten.bp.temporal.ChronoField
@@ -21,7 +21,7 @@ object DateTimeSerializer : Serializer<Temporal> {
     }
   }
 
-  override fun serialize(buffer: ChainedByteBuffer, data: Temporal, features: Quassel_Features) {
+  override fun serialize(buffer: ChainedByteBuffer, data: Temporal, features: QuasselFeatures) {
     when (data) {
       is LocalDateTime  -> {
         IntSerializer.serialize(buffer, data.getLong(JulianFields.JULIAN_DAY).toInt(), features)
@@ -53,7 +53,7 @@ object DateTimeSerializer : Serializer<Temporal> {
     }
   }
 
-  override fun deserialize(buffer: ByteBuffer, features: Quassel_Features): Temporal {
+  override fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): Temporal {
     val julianDay = IntSerializer.deserialize(buffer, features).toLong()
     val milliOfDay = IntSerializer.deserialize(buffer, features).toLong()
     val timeSpec = TimeSpec.of(ByteSerializer.deserialize(buffer, features))

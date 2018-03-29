@@ -17,11 +17,11 @@
 
 package de.kuschku.libquassel.protocol.primitive.serializer
 
-import de.kuschku.libquassel.protocol.Quassel_Features
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import java.nio.ByteBuffer
 
 interface Serializer<T> {
-  fun serialize(buffer: ChainedByteBuffer, data: T, features: Quassel_Features)
-  fun deserialize(buffer: ByteBuffer, features: Quassel_Features): T
+  fun serialize(buffer: ChainedByteBuffer, data: T, features: QuasselFeatures)
+  fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): T
 }

@@ -1,15 +1,15 @@
 package de.kuschku.libquassel.protocol.primitive.serializer
 
-import de.kuschku.libquassel.protocol.Quassel_Features
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import java.nio.ByteBuffer
 
 object LongSerializer : Serializer<Long> {
-  override fun serialize(buffer: ChainedByteBuffer, data: Long, features: Quassel_Features) {
+  override fun serialize(buffer: ChainedByteBuffer, data: Long, features: QuasselFeatures) {
     buffer.putLong(data)
   }
 
-  override fun deserialize(buffer: ByteBuffer, features: Quassel_Features): Long {
+  override fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): Long {
     return buffer.long
   }
 }

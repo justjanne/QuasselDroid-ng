@@ -51,13 +51,17 @@ data class LongFlags<E>(
 
     inline fun <reified T> of(vararg flags: LongFlag<T>): LongFlags<T>
       where T : LongFlag<T>, T : Enum<T> =
-      LongFlags(flags.map(LongFlag<T>::bit).distinct().sum(), enumValues()
-    )
+      LongFlags(flags.map(LongFlag<T>::bit).distinct().sum(), enumValues())
+
+    inline fun <reified T> of(flags: Iterable<T>): LongFlags<T>
+      where T : LongFlag<T>, T : Enum<T> =
+      LongFlags(flags.map(LongFlag<T>::bit).distinct().sum(), enumValues())
   }
 
   interface Factory<E> where E : LongFlag<E>, E : Enum<E> {
     fun of(bit: Long): LongFlags<E>
     fun of(vararg flags: E): LongFlags<E>
+    fun of(flags: Iterable<E>): LongFlags<E>
   }
 }
 

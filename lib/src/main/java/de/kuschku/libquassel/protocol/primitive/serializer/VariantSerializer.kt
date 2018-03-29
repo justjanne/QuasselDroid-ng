@@ -1,11 +1,12 @@
 package de.kuschku.libquassel.protocol.primitive.serializer
 
 import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import java.nio.ByteBuffer
 
 object VariantSerializer : Serializer<QVariant_> {
-  override fun serialize(buffer: ChainedByteBuffer, data: QVariant_, features: Quassel_Features) {
+  override fun serialize(buffer: ChainedByteBuffer, data: QVariant_, features: QuasselFeatures) {
     IntSerializer.serialize(buffer, data.type.type.id, features)
     BoolSerializer.serialize(buffer, false, features)
     if (data.type.type == Type.UserType) {
@@ -17,7 +18,7 @@ object VariantSerializer : Serializer<QVariant_> {
     data.type.serializer.serialize(buffer, data.data, features)
   }
 
-  override fun deserialize(buffer: ByteBuffer, features: Quassel_Features): QVariant_ {
+  override fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): QVariant_ {
     val rawType = IntSerializer.deserialize(buffer, features)
     val type = Type.of(rawType)
 

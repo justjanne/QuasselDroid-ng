@@ -24,6 +24,7 @@ data class BufferInfo(
       val validValues = values().filter { it.bit != 0.toShort() }.toTypedArray()
       override fun of(bit: Short) = ShortFlags.of<Type>(bit)
       override fun of(vararg flags: Type) = ShortFlags.of(*flags)
+      override fun of(flags: Iterable<Type>) = ShortFlags.of(flags)
     }
   }
 
@@ -37,6 +38,7 @@ data class BufferInfo(
       override val NONE = Activity.of()
       override fun of(bit: Int) = Flags.of<Activity>(bit)
       override fun of(vararg flags: Activity) = Flags.of(*flags)
+      override fun of(flags: Iterable<Activity>) = Flags.of(flags)
     }
   }
 }

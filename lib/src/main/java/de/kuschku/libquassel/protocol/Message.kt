@@ -40,6 +40,7 @@ class Message(
       override val NONE = MessageType.of()
       override fun of(bit: Int) = Flags.of<MessageType>(bit)
       override fun of(vararg flags: MessageType) = Flags.of(*flags)
+      override fun of(flags: Iterable<MessageType>) = Flags.of(flags)
     }
   }
 
@@ -54,6 +55,7 @@ class Message(
       override val NONE = MessageFlag.of()
       override fun of(bit: Int) = Flags.of<MessageFlag>(bit)
       override fun of(vararg flags: MessageFlag) = Flags.of(*flags)
+      override fun of(flags: Iterable<MessageFlag>) = Flags.of(flags)
     }
   }
 

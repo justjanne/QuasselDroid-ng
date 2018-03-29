@@ -3,13 +3,13 @@ package de.kuschku.libquassel.session
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
-import de.kuschku.libquassel.quassel.QuasselFeature
+import de.kuschku.libquassel.quassel.ExtendedFeature
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
-import de.kuschku.libquassel.util.hasFlag
 import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
 import javax.net.ssl.X509TrustManager
@@ -23,7 +23,7 @@ class Session(
   private var userData: Pair<String, String>,
   val disconnectFromCore: () -> Unit
 ) : ProtocolHandler(), ISession {
-  override val features = Features(clientData.clientFeatures, Quassel_Features.of())
+  override val features = Features(clientData.clientFeatures, QuasselFeatures.empty())
 
   override val sslSession
     get() = coreConnection.sslSession
@@ -59,7 +59,7 @@ class Session(
   }
 
   override fun handle(f: HandshakeMessage.ClientInitAck): Boolean {
-    features.core = f.coreFeatures ?: Quassel_Feature.NONE
+    features.core = QuasselFeatures(f.coreFeatures, f.featureList)
 
     if (f.coreConfigured == true) {
       login()
@@ -132,7 +132,7 @@ class Session(
       synchronize(bufferSyncer, true)
       synchronize(bufferViewManager, true)
       synchronize(coreInfo, true)
-      if (features.negotiated.hasFlag(QuasselFeature.DccFileTransfer))
+      if (features.negotiated.hasFeature(ExtendedFeature.DccFileTransfer))
         synchronize(dccConfig, true)
       synchronize(ignoreListManager, true)
       synchronize(ircListHelper, true)

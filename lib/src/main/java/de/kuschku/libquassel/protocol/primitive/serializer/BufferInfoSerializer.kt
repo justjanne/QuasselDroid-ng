@@ -1,13 +1,13 @@
 package de.kuschku.libquassel.protocol.primitive.serializer
 
 import de.kuschku.libquassel.protocol.Buffer_Type
-import de.kuschku.libquassel.protocol.Quassel_Features
 import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import java.nio.ByteBuffer
 
 object BufferInfoSerializer : Serializer<BufferInfo> {
-  override fun serialize(buffer: ChainedByteBuffer, data: BufferInfo, features: Quassel_Features) {
+  override fun serialize(buffer: ChainedByteBuffer, data: BufferInfo, features: QuasselFeatures) {
     IntSerializer.serialize(buffer, data.bufferId, features)
     IntSerializer.serialize(buffer, data.networkId, features)
     ShortSerializer.serialize(buffer, data.type.toShort(), features)
@@ -15,7 +15,7 @@ object BufferInfoSerializer : Serializer<BufferInfo> {
     StringSerializer.UTF8.serialize(buffer, data.bufferName, features)
   }
 
-  override fun deserialize(buffer: ByteBuffer, features: Quassel_Features): BufferInfo {
+  override fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): BufferInfo {
     val bufferId = IntSerializer.deserialize(buffer, features)
     val networkId = IntSerializer.deserialize(buffer, features)
     val type = Buffer_Type.of(ShortSerializer.deserialize(buffer, features))

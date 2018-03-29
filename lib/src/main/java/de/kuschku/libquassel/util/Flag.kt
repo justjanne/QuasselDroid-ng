@@ -49,16 +49,20 @@ data class Flags<E>(
     inline fun <reified T> of(int: Int): Flags<T>
       where T : Flag<T>, T : Enum<T> = Flags(int, enumValues())
 
-    inline fun <reified T> of(vararg flags: Flag<T>): Flags<T>
+    inline fun <reified T> of(vararg flags: T): Flags<T>
       where T : Flag<T>, T : Enum<T> =
-      Flags(flags.map(Flag<T>::bit).distinct().sum(), enumValues()
-      )
+      Flags(flags.map(Flag<T>::bit).distinct().sum(), enumValues())
+
+    inline fun <reified T> of(flags: Iterable<T>): Flags<T>
+      where T : Flag<T>, T : Enum<T> =
+      Flags(flags.map(Flag<T>::bit).distinct().sum(), enumValues())
   }
 
   interface Factory<E> where E : Flag<E>, E : Enum<E> {
     val NONE: Flags<E>
     fun of(bit: Int): Flags<E>
     fun of(vararg flags: E): Flags<E>
+    fun of(flags: Iterable<E>): Flags<E>
   }
 }
 

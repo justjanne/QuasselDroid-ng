@@ -1,16 +1,18 @@
 package de.kuschku.libquassel.protocol.message
 
+import de.kuschku.libquassel.protocol.Legacy_Features
 import de.kuschku.libquassel.protocol.QVariantList
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.Quassel_Features
 import de.kuschku.libquassel.protocol.value
 
 
 sealed class HandshakeMessage {
-  class ClientInit(val clientVersion: String?, val buildDate: String?,
-                   val clientFeatures: Quassel_Features?) : HandshakeMessage() {
+  class ClientInit(
+    val clientVersion: String?, val buildDate: String?,
+    val clientFeatures: Legacy_Features?, val featureList: List<String>
+  ) : HandshakeMessage() {
     override fun toString(): String {
-      return "ClientInit(clientVersion=$clientVersion, buildDate=$buildDate, clientFeatures=$clientFeatures)"
+      return "ClientInit(clientVersion=$clientVersion, buildDate=$buildDate, clientFeatures=$clientFeatures, featureList=$featureList)"
     }
   }
 
@@ -20,11 +22,13 @@ sealed class HandshakeMessage {
     }
   }
 
-  class ClientInitAck(val coreFeatures: Quassel_Features?, val coreConfigured: Boolean?,
-                      val backendInfo: QVariantList?,
-                      val authenticatorInfo: QVariantList?) : HandshakeMessage() {
+  class ClientInitAck(
+    val coreFeatures: Legacy_Features?, val coreConfigured: Boolean?,
+    val backendInfo: QVariantList?, val authenticatorInfo: QVariantList?,
+    val featureList: List<String>
+  ) : HandshakeMessage() {
     override fun toString(): String {
-      return "ClientInitAck(coreFeatures=$coreFeatures, coreConfigured=$coreConfigured, backendInfo=$backendInfo, authenticatorInfo=$authenticatorInfo)"
+      return "ClientInitAck(coreFeatures=$coreFeatures, coreConfigured=$coreConfigured, backendInfo=$backendInfo, authenticatorInfo=$authenticatorInfo, featureList=$featureList)"
     }
   }
 

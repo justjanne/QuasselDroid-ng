@@ -1,7 +1,7 @@
 package de.kuschku.libquassel.protocol.primitive.serializer
 
 import de.kuschku.libquassel.protocol.NetworkLayerProtocol
-import de.kuschku.libquassel.protocol.Quassel_Features
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import java.net.Inet4Address
 import java.net.Inet6Address
@@ -9,7 +9,7 @@ import java.net.InetAddress
 import java.nio.ByteBuffer
 
 object HostAddressSerializer : Serializer<InetAddress> {
-  override fun serialize(buffer: ChainedByteBuffer, data: InetAddress, features: Quassel_Features) {
+  override fun serialize(buffer: ChainedByteBuffer, data: InetAddress, features: QuasselFeatures) {
     when (data) {
       is Inet4Address -> {
         ByteSerializer.serialize(buffer, NetworkLayerProtocol.IPv4Protocol.value, features)
@@ -29,7 +29,7 @@ object HostAddressSerializer : Serializer<InetAddress> {
     }
   }
 
-  override fun deserialize(buffer: ByteBuffer, features: Quassel_Features): InetAddress {
+  override fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): InetAddress {
     val type = ByteSerializer.deserialize(buffer, features)
     return when (NetworkLayerProtocol.of(type)) {
       NetworkLayerProtocol.IPv4Protocol -> {

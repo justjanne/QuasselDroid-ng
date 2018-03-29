@@ -1,8 +1,8 @@
 package de.kuschku.libquassel
 
 import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.quassel.LegacyFeature
 import de.kuschku.libquassel.quassel.ProtocolFeature
-import de.kuschku.libquassel.quassel.QuasselFeature
 import de.kuschku.libquassel.session.BacklogStorage
 import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.session.SocketAddress
@@ -34,7 +34,7 @@ class ConnectionUnitTest {
       ClientData(
         identifier = "libquassel test",
         buildDate = Instant.EPOCH,
-        clientFeatures = Quassel_Feature.of(*QuasselFeature.validValues),
+        clientFeatures = Quassel_Feature.of(*LegacyFeature.validValues),
         protocolFeatures = Protocol_Feature.of(ProtocolFeature.TLS, ProtocolFeature.Compression),
         supportedProtocols = listOf(Protocol.Datastream),
         ), object : X509TrustManager {

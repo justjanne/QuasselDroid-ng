@@ -1,7 +1,7 @@
 package de.kuschku.libquassel.session
 
-import de.kuschku.libquassel.protocol.Quassel_Features
 import de.kuschku.libquassel.protocol.primitive.serializer.Serializer
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
 import de.kuschku.libquassel.util.helpers.write
@@ -14,7 +14,7 @@ class MessageRunnable<T>(
   private val serializer: Serializer<T>,
   private val chainedBuffer: ChainedByteBuffer,
   private val channel: WrappedChannel?,
-  private val features: Quassel_Features
+  private val features: QuasselFeatures
 ) : () -> Unit {
   override fun invoke() {
     try {
