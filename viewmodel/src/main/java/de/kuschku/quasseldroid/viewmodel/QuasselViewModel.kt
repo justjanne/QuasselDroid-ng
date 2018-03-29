@@ -19,6 +19,7 @@ import de.kuschku.libquassel.util.and
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.libquassel.util.helpers.*
 import de.kuschku.quasseldroid.util.helper.combineLatest
+import de.kuschku.quasseldroid.util.helper.switchMapNotNull
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.viewmodel.data.*
 import io.reactivex.Observable
@@ -71,8 +72,9 @@ class QuasselViewModel : ViewModel() {
     }
   }
 
-  val errors = sessionManager.mapSwitchMap(SessionManager::error)
-  val errors_liveData = errors.toLiveData()
+  val errors = sessionManager.toLiveData().switchMapNotNull {
+    it.orNull()?.error?.toLiveData()
+  }
 
   /**
    * An observable of the changes of the markerline, as pairs of `(old, new)`

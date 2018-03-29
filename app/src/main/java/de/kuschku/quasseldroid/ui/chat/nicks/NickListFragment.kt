@@ -65,7 +65,16 @@ class NickListFragment : ServiceBoundFragment() {
       }
     }.toLiveData().observe(this, Observer(nickListAdapter::submitList))
 
+    savedInstanceState?.run {
+      nickList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
+    }
+
     return view
+  }
+
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    outState.putParcelable(KEY_STATE_LIST, nickList.layoutManager.onSaveInstanceState())
   }
 
   private val clickListener: ((String) -> Unit)? = { nick ->
@@ -78,5 +87,9 @@ class NickListFragment : ServiceBoundFragment() {
       ))
       startActivity(intent)
     }
+  }
+
+  companion object {
+    private const val KEY_STATE_LIST = "KEY_STATE_LIST"
   }
 }

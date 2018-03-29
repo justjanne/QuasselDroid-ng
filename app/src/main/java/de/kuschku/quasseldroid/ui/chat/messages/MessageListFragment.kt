@@ -225,6 +225,10 @@ class MessageListFragment : ServiceBoundFragment() {
       database.message().lastMsgId(it)
     }
 
+    viewModel.buffer.toLiveData().observe(this, Observer { bufferId ->
+      swipeRefreshLayout.isEnabled = (bufferId != null || bufferId != -1)
+    })
+
     var previousVisible = -1
     viewModel.buffer.toFlowable(BackpressureStrategy.LATEST).switchMap { buffer ->
       database.filtered().listenRx(accountId, buffer).switchMap { filtered ->
@@ -296,7 +300,17 @@ class MessageListFragment : ServiceBoundFragment() {
     })
     scrollDown.hide()
     scrollDown.setOnClickListener { messageList.scrollToPosition(0) }
+
+    savedInstanceState?.run {
+      messageList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
+    }
+
     return view
+  }
+
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    outState.putParcelable(KEY_STATE_LIST, messageList.layoutManager.onSaveInstanceState())
   }
 
   private fun markAsRead(bufferSyncer: BufferSyncer, buffer: BufferId, lastMessageId: MsgId?) {
@@ -346,4 +360,7 @@ class MessageListFragment : ServiceBoundFragment() {
     }
   }
 
+  companion object {
+    private const val KEY_STATE_LIST = "KEY_STATE_LIST"
+  }
 }

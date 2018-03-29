@@ -167,8 +167,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       drawerToggle.syncState()
     }
 
-    viewModel.errors_liveData.observe(this, Observer { optional ->
-      optional?.orNull().let {
+    viewModel.errors.observe(this, Observer { error ->
+      error?.let {
         when (it) {
           is HandshakeMessage.ClientInitReject  ->
             MaterialDialog.Builder(this)

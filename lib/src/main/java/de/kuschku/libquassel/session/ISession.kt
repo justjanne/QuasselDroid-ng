@@ -5,6 +5,8 @@ import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.*
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.io.Closeable
@@ -30,7 +32,7 @@ interface ISession : Closeable {
   val rpcHandler: RpcHandler?
   val initStatus: Observable<Pair<Int, Int>>
 
-  val error: Observable<HandshakeMessage>
+  val error: Flowable<HandshakeMessage>
 
   val lag: Observable<Long>
 
@@ -39,6 +41,7 @@ interface ISession : Closeable {
   companion object {
     val NULL = object : ISession {
       override val error = BehaviorSubject.create<HandshakeMessage>()
+        .toFlowable(BackpressureStrategy.BUFFER)
       override val state = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
       override val features: Features = Features(QuasselFeatures.empty(), QuasselFeatures.empty())
       override val sslSession: SSLSession? = null

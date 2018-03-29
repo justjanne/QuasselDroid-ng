@@ -300,7 +300,19 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     }
     chatList.itemAnimator = DefaultItemAnimator()
     chatList.setItemViewCacheSize(10)
+
+    savedInstanceState?.run {
+      chatList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
+      chatListSpinner.onRestoreInstanceState(getParcelable(KEY_STATE_SPINNER))
+    }
+
     return view
+  }
+
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    outState.putParcelable(KEY_STATE_LIST, chatList.layoutManager.onSaveInstanceState())
+    outState.putParcelable(KEY_STATE_SPINNER, chatListSpinner.onSaveInstanceState())
   }
 
   private val clickListener: ((BufferId) -> Unit)? = {
@@ -318,5 +330,10 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     if (!listAdapter.toggleSelection(it)) {
       actionMode?.finish()
     }
+  }
+
+  companion object {
+    private const val KEY_STATE_LIST = "KEY_STATE_LIST"
+    private const val KEY_STATE_SPINNER = "KEY_STATE_SPINNER"
   }
 }

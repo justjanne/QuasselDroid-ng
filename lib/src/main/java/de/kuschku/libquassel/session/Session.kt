@@ -7,7 +7,9 @@ import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.util.compatibility.HandlerService
+import io.reactivex.BackpressureStrategy
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import org.threeten.bp.Instant
 import javax.net.ssl.X509TrustManager
 
@@ -31,7 +33,8 @@ class Session(
   )
   override val state = coreConnection.state
 
-  override val error = BehaviorSubject.create<HandshakeMessage>()
+  private val _error = PublishSubject.create<HandshakeMessage>()
+  override val error = _error.toFlowable(BackpressureStrategy.BUFFER)
 
   override val aliasManager = AliasManager(this)
   override val backlogManager = BacklogManager(this, backlogStorage)
@@ -62,7 +65,7 @@ class Session(
     if (f.coreConfigured == true) {
       login()
     } else {
-      error.onNext(f)
+      _error.onNext(f)
     }
     return true
   }
@@ -87,17 +90,17 @@ class Session(
   }
 
   override fun handle(f: HandshakeMessage.ClientInitReject): Boolean {
-    error.onNext(f)
+    _error.onNext(f)
     return true
   }
 
   override fun handle(f: HandshakeMessage.CoreSetupReject): Boolean {
-    error.onNext(f)
+    _error.onNext(f)
     return true
   }
 
   override fun handle(f: HandshakeMessage.ClientLoginReject): Boolean {
-    error.onNext(f)
+    _error.onNext(f)
     return true
   }
 
