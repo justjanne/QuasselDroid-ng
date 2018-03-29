@@ -61,7 +61,8 @@ class Editor(
         val end = Math.min(
           s.length, previous.range.start + previous.completion.name.length + suffix.length
         )
-        val sequence = s.substring(previous.range.start, end)
+        val sequence = if (end > previous.range.start) "" else s.substring(previous.range.start,
+                                                                           end)
         if (sequence == previous.completion.name + suffix) {
           previous.originalWord to (previous.range.start until end)
         } else {
