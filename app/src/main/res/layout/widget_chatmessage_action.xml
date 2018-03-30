@@ -31,7 +31,7 @@
 
     <Space
       android:id="@+id/avatar_placeholder"
-      android:layout_width="40dp"
+      android:layout_width="@dimen/avatar_size"
       android:layout_height="match_parent"
       android:layout_marginEnd="@dimen/message_horizontal"
       android:layout_marginRight="@dimen/message_horizontal"
