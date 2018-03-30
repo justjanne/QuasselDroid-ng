@@ -341,6 +341,7 @@ public class ColorChooserDialog extends DialogFragment
                 subIndex(-1); // Do this to avoid ArrayIndexOutOfBoundsException
                 invalidate();
               } else {
+                builder.callback.onColorReset(ColorChooserDialog.this);
                 dialog.cancel();
               }
             }
@@ -574,6 +575,7 @@ public class ColorChooserDialog extends DialogFragment
   }
 
   public interface ColorCallback {
+    void onColorReset(@NonNull ColorChooserDialog dialog);
 
     void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int selectedColor);
 

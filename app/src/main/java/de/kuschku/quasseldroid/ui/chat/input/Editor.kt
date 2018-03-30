@@ -289,7 +289,7 @@ class Editor(
   private fun showColorChooser(
     activity: FragmentActivity, @StringRes title: Int, @ColorInt preselect: Int, f: (Int?) -> Unit
   ) {
-    var selectedColor: Int? = null
+    var selectedColor: Int? = preselect
     ColorChooserDialog.Builder(chatline.context, title)
       .customColors(intArrayOf(
         formatHandler.mircColors[0],
@@ -318,6 +318,10 @@ class Editor(
       .dynamicButtonColor(false)
       .allowUserColorInputAlpha(false)
       .callback(object : ColorChooserDialog.ColorCallback {
+        override fun onColorReset(dialog: ColorChooserDialog) {
+          selectedColor = null
+        }
+
         override fun onColorSelection(dialog: ColorChooserDialog, color: Int) {
           selectedColor = color
         }
