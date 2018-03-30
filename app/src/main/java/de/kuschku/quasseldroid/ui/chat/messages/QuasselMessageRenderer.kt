@@ -161,6 +161,7 @@ class QuasselMessageRenderer @Inject constructor(
           combined = SpanFormatter.format("%s: %s", nick, content),
           avatarUrl = message.avatarUrl,
           fallbackDrawable = TextDrawable.builder().buildRound(initial, senderColor),
+          isFollowUp = message.content.followUp,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected

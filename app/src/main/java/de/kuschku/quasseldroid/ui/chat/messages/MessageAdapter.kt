@@ -184,6 +184,11 @@ class MessageAdapter(
 
       this.itemView.isSelected = message.isSelected
 
+      if (message.isFollowUp) {
+        name?.visibility = View.GONE
+        avatar?.visibility = View.GONE
+      }
+
       avatar?.let { avatarView ->
         GlideApp.with(itemView)
           .load(message.avatarUrl)

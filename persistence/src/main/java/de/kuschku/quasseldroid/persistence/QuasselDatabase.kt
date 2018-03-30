@@ -17,7 +17,7 @@ import de.kuschku.quasseldroid.persistence.QuasselDatabase.Filtered
 import io.reactivex.Flowable
 import org.threeten.bp.Instant
 
-@Database(entities = [DatabaseMessage::class, Filtered::class], version = 3)
+@Database(entities = [DatabaseMessage::class, Filtered::class], version = 4)
 @TypeConverters(DatabaseMessage.MessageTypeConverters::class)
 abstract class QuasselDatabase : RoomDatabase() {
   abstract fun message(): MessageDao
@@ -32,7 +32,8 @@ abstract class QuasselDatabase : RoomDatabase() {
     var bufferId: Int,
     var sender: String,
     var senderPrefixes: String,
-    var content: String
+    var content: String,
+    var followUp: Boolean
   ) {
     class MessageTypeConverters {
       @TypeConverter
@@ -169,7 +170,15 @@ abstract class QuasselDatabase : RoomDatabase() {
                     "CREATE TABLE filtered(bufferId INTEGER, accountId INTEGER, filtered INTEGER, PRIMARY KEY(accountId, bufferId));"
                   )
                 }
-              }).build()
+              },
+              object : Migration(3, 4) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL(
+                    "ALTER TABLE message ADD followUp INT DEFAULT 0 NOT NULL;"
+                  )
+                }
+              }
+            ).build()
           }
         }
       }
@@ -202,7 +211,17 @@ FROM
       bufferId,
       sender,
       senderPrefixes,
-      content
+      content,
+      sender = coalesce((SELECT sender
+                         FROM message m
+                         WHERE m.messageId < message.messageId
+                               AND bufferId = ?
+                               AND type & ~? > 0
+                               AND date(datetime(m.time / 1000, 'unixepoch', 'localtime')) =
+                                   date(datetime(message.time / 1000, 'unixepoch', 'localtime'))
+                         ORDER BY m.messageId
+                           DESC
+                         LIMIT 1), 0) AS followUp
     FROM message
     WHERE bufferId = ?
           AND type & ~? > 0
@@ -210,15 +229,18 @@ FROM
     SELECT DISTINCT
       strftime('%s', date(datetime(time / 1000, 'unixepoch', 'localtime')), 'utc') * -1000 AS messageId,
       strftime('%s', date(datetime(time / 1000, 'unixepoch', 'localtime')), 'utc') * 1000  AS time,
-      8192                                                             AS type,
-      0                                                                AS flag,
-      ?                                                                AS bufferId,
-      ''                                                               AS sender,
-      ''                                                               AS senderPrefixes,
-      ''                                                               AS content
+      8192                                                                                 AS type,
+      0                                                                                    AS flag,
+      ?                                                                                    AS bufferId,
+      ''                                                                                   AS sender,
+      ''                                                                                   AS senderPrefixes,
+      ''                                                                                   AS content,
+      0                                                                                    AS followUp
     FROM message
     WHERE bufferId = ?
           AND type & ~? > 0
   ) t
-ORDER BY time DESC, messageId DESC
-  """, arrayOf(bufferId, type, bufferId, bufferId, type)))
+ORDER BY TIME
+  DESC, messageId
+  DESC
+  """, arrayOf(bufferId, type, bufferId, type, bufferId, bufferId, type)))
