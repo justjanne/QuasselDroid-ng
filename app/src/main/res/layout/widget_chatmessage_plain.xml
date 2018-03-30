@@ -34,10 +34,8 @@
       android:id="@+id/avatar_container"
       android:layout_width="@dimen/avatar_size"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="@dimen/message_vertical"
       android:layout_marginEnd="@dimen/message_horizontal"
       android:layout_marginRight="@dimen/message_horizontal"
-      android:layout_marginTop="@dimen/message_vertical"
       android:visibility="gone"
       tools:visibility="visible">
 
@@ -105,8 +103,9 @@
           android:layout_marginLeft="@dimen/message_horizontal"
           android:layout_marginStart="@dimen/message_horizontal"
           android:textColor="?attr/colorForegroundSecondary"
-          android:textSize="11.9sp"
+          android:textStyle="italic"
           android:visibility="gone"
+          tools:textSize="11.9sp"
           tools:text="@sample/messages.json/data/time"
           tools:visibility="visible" />
       </LinearLayout>

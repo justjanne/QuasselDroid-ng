@@ -48,13 +48,15 @@
       android:id="@+id/time_right"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="bottom"
+      android:layout_gravity="top"
       android:layout_marginLeft="@dimen/message_horizontal"
       android:layout_marginStart="@dimen/message_horizontal"
       android:textColor="?attr/colorForegroundSecondary"
-      android:typeface="monospace"
+      android:textStyle="italic"
       android:visibility="gone"
-      tools:text="@sample/messages.json/data/time" />
+      tools:text="@sample/messages.json/data/time"
+      tools:textSize="11.9sp"
+      tools:visibility="visible" />
   </LinearLayout>
 
   <View

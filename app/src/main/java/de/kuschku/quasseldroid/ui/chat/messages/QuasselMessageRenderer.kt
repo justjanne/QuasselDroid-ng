@@ -110,10 +110,10 @@ class QuasselMessageRenderer @Inject constructor(
 
     val textSize = messageSettings.textSize.toFloat()
     viewHolder.timeLeft?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
-    viewHolder.timeRight?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
+    viewHolder.timeRight?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize * 0.9f)
     viewHolder.content?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
     viewHolder.combined?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
-    viewHolder.name?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize * 0.8f)
+    viewHolder.name?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
   }
 
   override fun bind(holder: MessageAdapter.QuasselMessageViewHolder, message: FormattedMessage,
