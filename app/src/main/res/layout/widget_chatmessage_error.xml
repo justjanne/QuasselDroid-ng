@@ -19,7 +19,7 @@
     android:paddingTop="@dimen/message_vertical">
 
     <TextView
-      android:id="@+id/timeLeft"
+      android:id="@+id/time_left"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginEnd="@dimen/message_horizontal"
@@ -28,14 +28,12 @@
       android:typeface="monospace"
       tools:text="@sample/messages.json/data/time" />
 
-    <ImageView
-      android:id="@+id/avatar"
+    <Space
+      android:id="@+id/avatar_placeholder"
       android:layout_width="40dp"
       android:layout_height="match_parent"
-      android:layout_marginBottom="@dimen/message_vertical"
       android:layout_marginEnd="@dimen/message_horizontal"
       android:layout_marginRight="@dimen/message_horizontal"
-      android:layout_marginTop="@dimen/message_vertical"
       android:visibility="gone" />
 
     <de.kuschku.quasseldroid.ui.chat.messages.RipplePassthroughTextView
@@ -47,7 +45,7 @@
       tools:text="@sample/messages.json/data/message" />
 
     <TextView
-      android:id="@+id/timeRight"
+      android:id="@+id/time_right"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="bottom"

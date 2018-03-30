@@ -8,14 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Space
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.bumptech.glide.request.RequestOptions
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Flags
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.Message_Types
 import de.kuschku.libquassel.util.hasFlag
+import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.util.helper.getOrPut
@@ -104,17 +107,21 @@ class MessageAdapter(
     selectionListener: ((FormattedMessage) -> Unit)? = null,
     expansionListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null
   ) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.timeLeft)
+    @BindView(R.id.time_left)
     @JvmField
     var timeLeft: TextView? = null
 
-    @BindView(R.id.timeRight)
+    @BindView(R.id.time_right)
     @JvmField
     var timeRight: TextView? = null
 
     @BindView(R.id.avatar)
     @JvmField
     var avatar: ImageView? = null
+
+    @BindView(R.id.avatar_placeholder)
+    @JvmField
+    var avatarPlaceholder: Space? = null
 
     @BindView(R.id.name)
     @JvmField
@@ -176,6 +183,14 @@ class MessageAdapter(
       markerline?.visibleIf(message.isMarkerLine)
 
       this.itemView.isSelected = message.isSelected
+
+      avatar?.let { avatarView ->
+        GlideApp.with(itemView)
+          .load(message.avatarUrl)
+          .apply(RequestOptions.circleCropTransform())
+          .placeholder(message.fallbackDrawable)
+          .into(avatarView)
+      }
     }
   }
 }

@@ -107,12 +107,12 @@
   <string name="preference_nicks_on_new_line_title">Separate Nicknames</string>
   <string name="preference_nicks_on_new_line_summary">Shows nicknames on a separate line</string>
 
+  <string name="preference_show_avatars_key" translatable="false">show_avatars</string>
+  <string name="preference_show_avatars_title">Show Avatars</string>
+
   <string name="preference_time_at_end_key" translatable="false">time_at_end</string>
   <string name="preference_time_at_end_title">Right-Aligned Timestamps</string>
   <string name="preference_time_at_end_summary">Aligns timestamps at the end of each message</string>
-
-  <string name="preference_show_avatars_key" translatable="false">show_avatars</string>
-  <string name="preference_show_avatars_title">Show Avatars</string>
 
   <string name="preference_autocomplete_title">Autocomplete</string>
 

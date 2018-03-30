@@ -25,9 +25,7 @@ import de.kuschku.quasseldroid.persistence.findByBufferIdPagedWithDayChange
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.BacklogSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
-import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.util.helper.*
-import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import io.reactivex.BackpressureStrategy
@@ -312,6 +310,25 @@ class MessageListFragment : ServiceBoundFragment() {
     savedInstanceState?.run {
       messageList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
     }
+
+    /*
+    val avatar_size = resources.getDimensionPixelSize(R.dimen.avatar_size)
+
+    val sizeProvider = FixedPreloadSizeProvider<String>(avatar_size, avatar_size)
+
+    val preloadModelProvider = object : ListPreloader.PreloadModelProvider<String> {
+      override fun getPreloadItems(position: Int) = adapter[position]?.avatarUrl?.let {
+        mutableListOf(it)
+      } ?: mutableListOf()
+
+      override fun getPreloadRequestBuilder(item: String) =
+        GlideApp.with(this@MessageListFragment).load(item).override(avatar_size)
+    }
+
+    val preloader = RecyclerViewPreloader(Glide.with(this), preloadModelProvider, sizeProvider, 10)
+
+    messageList.addOnScrollListener(preloader)
+    */
 
     return view
   }

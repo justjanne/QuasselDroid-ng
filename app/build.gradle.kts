@@ -146,6 +146,11 @@ dependencies {
     implementation("com.afollestad.material-dialogs", "core", version)
     implementation("com.afollestad.material-dialogs", "commons", version)
   }
+  withVersion("4.6.1") {
+    implementation("com.github.bumptech.glide", "glide", version)
+    implementation("com.github.bumptech.glide", "recyclerview-integration", version)
+    kapt("com.github.bumptech.glide", "compiler", version)
+  }
   implementation("com.mikhaellopez", "circularimageview", "3.0.2")
   implementation("me.saket", "better-link-movement-method", "2.1.0")
   implementation(project(":slidingpanel"))

@@ -1,4 +1,4 @@
-package com.robobunny
+package de.kuschku.quasseldroid.util.ui
 
 import android.content.Context
 import android.content.res.TypedArray
@@ -75,9 +75,12 @@ class SeekBarPreference : Preference, SeekBar.OnSeekBarChangeListener {
   private fun setValuesFromXml(attrs: AttributeSet) {
     maxValue = attrs.getAttributeIntValue(NAMESPACE_ANDROID, "max", 100)
     minValue = attrs.getAttributeIntValue(NAMESPACE_ROBOBUNNY, "min", 0)
-    unitsLeftText = getAttributeStringValue(attrs, NAMESPACE_ROBOBUNNY, "unitsLeft", "")
-    val units = getAttributeStringValue(attrs, NAMESPACE_ROBOBUNNY, "units", "")
-    unitsRightText = getAttributeStringValue(attrs, NAMESPACE_ROBOBUNNY, "unitsRight", units)
+    unitsLeftText = getAttributeStringValue(attrs,
+                                            NAMESPACE_ROBOBUNNY, "unitsLeft", "")
+    val units = getAttributeStringValue(attrs,
+                                        NAMESPACE_ROBOBUNNY, "units", "")
+    unitsRightText = getAttributeStringValue(attrs,
+                                             NAMESPACE_ROBOBUNNY, "unitsRight", units)
     try {
       val newInterval = attrs.getAttributeValue(NAMESPACE_ROBOBUNNY, "interval")
       if (newInterval != null)
@@ -126,7 +129,8 @@ class SeekBarPreference : Preference, SeekBar.OnSeekBarChangeListener {
 
   override fun onStartTrackingTouch(seekBar: SeekBar) = Unit
   override fun onStopTrackingTouch(seekBar: SeekBar) = notifyChanged()
-  override fun onGetDefaultValue(ta: TypedArray, index: Int) = ta.getInt(index, DEFAULT_VALUE)
+  override fun onGetDefaultValue(ta: TypedArray, index: Int) = ta.getInt(index,
+                                                                         DEFAULT_VALUE)
   override fun onSetInitialValue(restoreValue: Boolean, defaultValue: Any?) {
     if (restoreValue) {
       currentValue = getPersistedInt(currentValue)

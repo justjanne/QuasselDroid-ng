@@ -12,6 +12,7 @@ import de.kuschku.libquassel.protocol.Message.MessageType.*
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.util.hasFlag
+import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.MessageSettings
@@ -22,6 +23,7 @@ import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.quassel.IrcUserUtils
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
+import de.kuschku.quasseldroid.util.ui.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
@@ -50,6 +52,7 @@ class QuasselMessageRenderer @Inject constructor(
   }
 
   private lateinit var senderColors: IntArray
+  private var selfColor: Int = 0
 
   private val zoneId = ZoneId.systemDefault()
 
@@ -92,7 +95,8 @@ class QuasselMessageRenderer @Inject constructor(
       viewHolder.combined?.typeface = if (viewHolder.combined?.typeface?.isItalic == true) monospaceItalic else Typeface.MONOSPACE
     }
 
-    viewHolder.avatar?.visibleIf(messageSettings.showAvatars)
+    viewHolder.avatar?.visibleIf(messageSettings.showAvatars || true)
+    viewHolder.avatarPlaceholder?.visibleIf(messageSettings.showAvatars || true)
     val separateLine = viewHolder.content != null && viewHolder.name != null && messageSettings.nicksOnNewLine
     viewHolder.name?.visibleIf(separateLine)
     viewHolder.content?.visibleIf(separateLine)
@@ -121,11 +125,13 @@ class QuasselMessageRenderer @Inject constructor(
       R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
       R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
       R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
-      R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF
+      R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF,
+      R.attr.colorForegroundSecondary
     ) {
       senderColors = IntArray(16) {
         getColor(it, 0)
       }
+      selfColor = getColor(16, 0)
     }
 
     val self = Message_Flag.of(message.content.flag).hasFlag(Message_Flag.Self)
@@ -138,12 +144,23 @@ class QuasselMessageRenderer @Inject constructor(
           formatNick(message.content.sender, self, highlight, false)
         )
         val content = contentFormatter.format(context, message.content.content, highlight)
+        val nickName = HostmaskHelper.nick(message.content.sender)
+        val senderColorIndex = IrcUserUtils.senderColor(nickName)
+        val initial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
+          .firstOrNull()?.toUpperCase().toString()
+        val senderColor = if (Message_Flag.of(message.content.flag).hasFlag(Message_Flag.Self))
+          selfColor
+        else
+          senderColors[senderColorIndex]
+
         FormattedMessage(
           id = message.content.messageId,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
           name = nick,
           content = content,
           combined = SpanFormatter.format("%s: %s", nick, content),
+          avatarUrl = message.avatarUrl,
+          fallbackDrawable = TextDrawable.builder().buildRound(initial, senderColor),
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected

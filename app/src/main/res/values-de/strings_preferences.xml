@@ -49,10 +49,10 @@
   <string name="preference_nicks_on_new_line_title">Separate Spitznamen</string>
   <string name="preference_nicks_on_new_line_summary">Zeigt Spitznamen in einer eigenen Zeile an</string>
 
+  <string name="preference_show_avatars_title">Benutzerbilder anzeigen</string>
+
   <string name="preference_time_at_end_title">Rechts-Ausgerichtete Zeit</string>
   <string name="preference_time_at_end_summary">Zeigt die Zeit rechts in Nachrichten an</string>
-
-  <string name="preference_show_avatars_title">Benutzerbilder anzeigen</string>
 
 
   <string name="preference_autocomplete_title">Autovervollständigung</string>
