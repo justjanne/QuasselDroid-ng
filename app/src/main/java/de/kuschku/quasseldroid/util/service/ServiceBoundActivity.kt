@@ -87,16 +87,12 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
 
   override fun onCreate(savedInstanceState: Bundle?) {
     AndroidInjection.inject(this)
-
     connection.context = this
-
     checkConnection()
-
-    viewModel = ViewModelProviders.of(this)[QuasselViewModel::class.java]
-    viewModel.backendWrapper.onNext(this.backend)
-
     setTheme(appearanceSettings.theme.style)
     super.onCreate(savedInstanceState)
+    viewModel = ViewModelProviders.of(this)[QuasselViewModel::class.java]
+    viewModel.backendWrapper.onNext(this.backend)
     updateRecentsHeader()
   }
 
