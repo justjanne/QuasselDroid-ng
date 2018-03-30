@@ -192,7 +192,8 @@ class IrcFormatSerializer @Inject constructor(private val context: Context) {
         val backgroundAfterCodeValid = afterBackgroundCode != null
 
         if ((!hasBackgroundAfter || backgroundAfterCodeValid) &&
-            (!hasForegroundAfter || foregroundAfterCodeValid)) {
+            (!hasForegroundAfter || foregroundAfterCodeValid) &&
+            (hasBackgroundAfter || hasForegroundAfter)) {
           if (afterForegroundCode == backgroundCode && afterBackgroundCode == foregroundCode) {
             writeSwap(afterForegroundCode, afterBackgroundCode)
           } else {
