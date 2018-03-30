@@ -183,13 +183,13 @@ class IrcFormatSerializer @Inject constructor(private val context: Context) {
 
         val hasForegroundBefore = foreground != null
         val hasBackgroundBefore = background != null
-        val foregroundBeforeCodeValid = foregroundCode != null
-        val backgroundBeforeCodeValid = backgroundCode != null
+        val foregroundBeforeCodeValid = foregroundCode != null && foregroundCode < 16
+        val backgroundBeforeCodeValid = backgroundCode != null && backgroundCode < 16
 
         val hasForegroundAfter = afterForeground != null
         val hasBackgroundAfter = afterBackground != null
-        val foregroundAfterCodeValid = afterForegroundCode != null
-        val backgroundAfterCodeValid = afterBackgroundCode != null
+        val foregroundAfterCodeValid = afterForegroundCode != null && afterForegroundCode < 16
+        val backgroundAfterCodeValid = afterBackgroundCode != null && afterBackgroundCode < 16
 
         if ((!hasBackgroundAfter || backgroundAfterCodeValid) &&
             (!hasForegroundAfter || foregroundAfterCodeValid) &&
