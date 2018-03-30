@@ -69,7 +69,7 @@ class QuasseldroidNotificationManager(private val context: Context) {
       .setContentIntent(pendingIntentOpen)
       .addAction(0, context.getString(R.string.label_open), pendingIntentOpen)
       .addAction(0, context.getString(R.string.label_disconnect), pendingIntentDisconnect)
-      .setSmallIcon(R.drawable.ic_logo)
+      .setSmallIcon(R.mipmap.ic_logo)
       .setColor(context.getColorCompat(R.color.colorPrimary))
       .setPriority(NotificationCompat.PRIORITY_MIN)
     return Handle(BACKGROUND_NOTIFICATION_ID, notification)

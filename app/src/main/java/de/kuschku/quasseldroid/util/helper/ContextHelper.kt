@@ -7,6 +7,7 @@ import android.preference.PreferenceManager
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
+import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
 
 inline fun <reified T> Context.systemService(): T =
@@ -17,6 +18,9 @@ inline fun <reified T> Context.systemService(): T =
   }
 
 fun Context.getDrawableCompat(@DrawableRes id: Int) = ContextCompat.getDrawable(this, id)
+
+fun Context.getVectorDrawableCompat(@DrawableRes id: Int) =
+  VectorDrawableCompat.create(this.resources, id, this.theme)
 
 @ColorInt
 fun Context.getColorCompat(@ColorRes id: Int) = ContextCompat.getColor(this, id)

@@ -219,9 +219,9 @@ class BufferListAdapter(
         itemView.isSelected = state.selected
 
         if (state.networkExpanded) {
-          status.setImageDrawable(itemView.context.getDrawableCompat(R.drawable.ic_chevron_up))
+          status.setImageResource(R.drawable.ic_chevron_up)
         } else {
-          status.setImageDrawable(itemView.context.getDrawableCompat(R.drawable.ic_chevron_down))
+          status.setImageResource(R.drawable.ic_chevron_down)
         }
       }
     }
@@ -268,8 +268,8 @@ class BufferListAdapter(
           }
         }
 
-        online = itemView.context.getDrawableCompat(R.drawable.ic_status)?.mutate()
-        offline = itemView.context.getDrawableCompat(R.drawable.ic_status_offline)?.mutate()
+        online = itemView.context.getVectorDrawableCompat(R.drawable.ic_status)?.mutate()
+        offline = itemView.context.getVectorDrawableCompat(R.drawable.ic_status_offline)?.mutate()
 
         itemView.context.theme.styledAttributes(
           R.attr.colorAccent, R.attr.colorAway,
@@ -356,8 +356,8 @@ class BufferListAdapter(
           }
         }
 
-        online = itemView.context.getDrawableCompat(R.drawable.ic_status_channel)?.mutate()
-        offline = itemView.context.getDrawableCompat(R.drawable.ic_status_channel_offline)?.mutate()
+        online = itemView.context.getVectorDrawableCompat(R.drawable.ic_status_channel)?.mutate()
+        offline = itemView.context.getVectorDrawableCompat(R.drawable.ic_status_channel_offline)?.mutate()
 
         itemView.context.theme.styledAttributes(
           R.attr.colorAccent, R.attr.colorAway,
@@ -445,9 +445,9 @@ class BufferListAdapter(
           }
         }
 
-        online = itemView.context.getDrawableCompat(R.drawable.ic_status)?.mutate()
-        away = itemView.context.getDrawableCompat(R.drawable.ic_status)?.mutate()
-        offline = itemView.context.getDrawableCompat(R.drawable.ic_status_offline)?.mutate()
+        online = itemView.context.getVectorDrawableCompat(R.drawable.ic_status)?.mutate()
+        away = itemView.context.getVectorDrawableCompat(R.drawable.ic_status)?.mutate()
+        offline = itemView.context.getVectorDrawableCompat(R.drawable.ic_status_offline)?.mutate()
 
         itemView.context.theme.styledAttributes(
           R.attr.colorAccent, R.attr.colorAway,
