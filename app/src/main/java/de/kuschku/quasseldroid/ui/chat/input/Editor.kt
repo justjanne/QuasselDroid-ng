@@ -125,23 +125,6 @@ class Editor(
       send()
     }
 
-    chatline.setOnKeyListener { _, keyCode, event ->
-      when (keyCode) {
-        KeyEvent.KEYCODE_ENTER,
-        KeyEvent.KEYCODE_NUMPAD_ENTER -> if (event.hasNoModifiers()) {
-          send()
-          true
-        } else {
-          false
-        }
-        KeyEvent.KEYCODE_TAB          -> {
-          autoComplete(event.isShiftPressed)
-          true
-        }
-        else                          -> false
-      }
-    }
-
     chatline.imeOptions = when (appearanceSettings.inputEnter) {
       AppearanceSettings.InputEnterMode.EMOJI -> listOf(
         EditorInfo.IME_ACTION_NONE,
@@ -286,7 +269,20 @@ class Editor(
           true
         }
         else               -> false
-      } else false
+      } else when (keyCode) {
+        KeyEvent.KEYCODE_ENTER,
+        KeyEvent.KEYCODE_NUMPAD_ENTER -> if (event.isShiftPressed) {
+          false
+        } else {
+          send()
+          true
+        }
+        KeyEvent.KEYCODE_TAB          -> {
+          autoComplete(event.isShiftPressed)
+          true
+        }
+        else                          -> false
+      }
     }
   }
 

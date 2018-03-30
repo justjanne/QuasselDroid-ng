@@ -187,8 +187,14 @@ class IrcFormatSerializer @Inject constructor(private val context: Context) {
           } else {
             writeColor(afterForegroundCode, afterBackgroundCode)
           }
-        } else {
+        } else if (afterForeground != null || afterBackground != null) {
           writeHexColor(afterForeground, afterBackground)
+        } else {
+          if (foregroundCode != null || backgroundCode != null) {
+            writeColor(afterForeground, afterBackground)
+          } else {
+            writeHexColor(afterForeground, afterBackground)
+          }
         }
       }
 
