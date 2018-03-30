@@ -158,6 +158,7 @@
 
   <!-- Menu Items -->
   <attr name="backgroundMenuItem" format="reference" />
+  <attr name="backgroundMenuItemRounded" format="reference" />
 
   <!-- InsetLayouts -->
   <attr name="insetBackground" format="color|reference" />

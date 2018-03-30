@@ -69,7 +69,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/colorBackgroundCard"
-    android:theme="?attr/formatBarTheme"
     app:layout_constraintBottom_toBottomOf="parent">
 
     <android.support.v7.widget.Toolbar

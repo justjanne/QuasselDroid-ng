@@ -6,6 +6,7 @@
     <item name="colorAccent">@color/colorAccent</item>
 
     <item name="backgroundMenuItem">@drawable/bg_menuitem_dark</item>
+    <item name="backgroundMenuItemRounded">@drawable/bg_menuitem_rounded_dark</item>
   </style>
 
   <style name="Theme.AppTheme.Light" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -14,6 +15,7 @@
     <item name="colorAccent">@color/colorAccent</item>
 
     <item name="backgroundMenuItem">@drawable/bg_menuitem_light</item>
+    <item name="backgroundMenuItemRounded">@drawable/bg_menuitem_rounded_light</item>
   </style>
 
   <style name="Theme.AppTheme.NoActionBar" parent="Theme.AppTheme">
@@ -21,6 +23,7 @@
     <item name="windowNoTitle">true</item>
 
     <item name="backgroundMenuItem">@drawable/bg_menuitem_dark</item>
+    <item name="backgroundMenuItemRounded">@drawable/bg_menuitem_rounded_dark</item>
   </style>
 
   <style name="Theme.AppTheme.Light.NoActionBar" parent="Theme.AppTheme.Light">
@@ -28,6 +31,7 @@
     <item name="windowNoTitle">true</item>
 
     <item name="backgroundMenuItem">@drawable/bg_menuitem_light</item>
+    <item name="backgroundMenuItemRounded">@drawable/bg_menuitem_rounded_light</item>
   </style>
 
   <style name="Theme.Base.ChatTheme" parent="Theme.AppTheme.NoActionBar" />
@@ -47,6 +51,7 @@
     <item name="actionBarPopupTheme">@style/Widget.PopupOverlay</item>
 
     <item name="backgroundMenuItem">@drawable/bg_menuitem_dark</item>
+    <item name="backgroundMenuItemRounded">@drawable/bg_menuitem_rounded_dark</item>
 
     <item name="windowActionModeOverlay">true</item>
 
@@ -180,6 +185,7 @@
     <item name="actionBarPopupTheme">@style/Widget.PopupOverlay.Light</item>
 
     <item name="backgroundMenuItem">@drawable/bg_menuitem_light</item>
+    <item name="backgroundMenuItemRounded">@drawable/bg_menuitem_rounded_light</item>
 
     <item name="windowActionModeOverlay">true</item>
 

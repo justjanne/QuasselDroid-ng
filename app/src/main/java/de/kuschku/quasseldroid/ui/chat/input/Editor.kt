@@ -198,26 +198,47 @@ class Editor(
       formatHandler.toggleBold(chatline.selection)
       updateButtons(chatline.selection)
     }
+    TooltipCompat.setTooltipText(boldButton, boldButton.contentDescription)
+
     italicButton.setOnClickListener {
       formatHandler.toggleItalic(chatline.selection)
       updateButtons(chatline.selection)
     }
+    TooltipCompat.setTooltipText(italicButton, italicButton.contentDescription)
+
     underlineButton.setOnClickListener {
       formatHandler.toggleUnderline(chatline.selection)
       updateButtons(chatline.selection)
     }
+    TooltipCompat.setTooltipText(underlineButton, underlineButton.contentDescription)
+
     strikethroughButton.setOnClickListener {
       formatHandler.toggleStrikethrough(chatline.selection)
       updateButtons(chatline.selection)
     }
+    TooltipCompat.setTooltipText(strikethroughButton, strikethroughButton.contentDescription)
+
     monospaceButton.setOnClickListener {
       formatHandler.toggleMonospace(chatline.selection)
       updateButtons(chatline.selection)
     }
+    TooltipCompat.setTooltipText(monospaceButton, monospaceButton.contentDescription)
+
+    foregroundButton.setOnClickListener {
+
+    }
+    TooltipCompat.setTooltipText(foregroundButton, foregroundButton.contentDescription)
+
+    backgroundButton.setOnClickListener {
+
+    }
+    TooltipCompat.setTooltipText(backgroundButton, backgroundButton.contentDescription)
+
     clearButton.setOnClickListener {
       formatHandler.clearFormatting(chatline.selection)
       updateButtons(chatline.selection)
     }
+    TooltipCompat.setTooltipText(clearButton, clearButton.contentDescription)
 
     chatline.setOnKeyListener { _, keyCode, event ->
       if (event.isCtrlPressed && !event.isAltPressed) when (keyCode) {

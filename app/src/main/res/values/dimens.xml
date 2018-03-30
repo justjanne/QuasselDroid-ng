@@ -7,4 +7,6 @@
   <dimen name="autocomplete_max_height">96dp</dimen>
 
   <dimen name="max_content_width">480dp</dimen>
+
+  <dimen name="button_corner_radius">2dp</dimen>
 </resources>
