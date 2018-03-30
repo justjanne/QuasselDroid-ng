@@ -11,6 +11,9 @@ class SettingsModule {
   fun provideAppearanceSettings(context: Context) = Settings.appearance(context)
 
   @Provides
+  fun provideMessageSettings(context: Context) = Settings.message(context)
+
+  @Provides
   fun provideAutoCompleteSettings(context: Context) = Settings.autoComplete(context)
 
   @Provides

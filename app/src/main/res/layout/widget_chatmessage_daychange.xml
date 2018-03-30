@@ -16,12 +16,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingBottom="@dimen/message_vertical"
+    android:paddingBottom="@dimen/message_vertical_daychange"
     android:paddingEnd="@dimen/message_horizontal"
     android:paddingLeft="@dimen/message_horizontal"
     android:paddingRight="@dimen/message_horizontal"
     android:paddingStart="@dimen/message_horizontal"
-    android:paddingTop="@dimen/message_vertical">
+    android:paddingTop="@dimen/message_vertical_daychange">
 
     <de.kuschku.quasseldroid.ui.chat.messages.RipplePassthroughTextView
       android:id="@+id/content"

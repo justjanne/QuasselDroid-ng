@@ -14,10 +14,11 @@ import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
-import de.kuschku.quasseldroid.settings.AppearanceSettings
-import de.kuschku.quasseldroid.settings.AppearanceSettings.ColorizeNicknamesMode
-import de.kuschku.quasseldroid.settings.AppearanceSettings.ShowPrefixMode
+import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.settings.MessageSettings.ColorizeNicknamesMode
+import de.kuschku.quasseldroid.settings.MessageSettings.ShowPrefixMode
 import de.kuschku.quasseldroid.util.helper.styledAttributes
+import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.quassel.IrcUserUtils
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
@@ -28,11 +29,11 @@ import org.threeten.bp.format.FormatStyle
 import javax.inject.Inject
 
 class QuasselMessageRenderer @Inject constructor(
-  private val appearanceSettings: AppearanceSettings,
+  private val messageSettings: MessageSettings,
   private val contentFormatter: ContentFormatter
 ) : MessageRenderer {
   private val timeFormatter = DateTimeFormatter.ofPattern(
-    timePattern(appearanceSettings.showSeconds, appearanceSettings.use24hClock)
+    timePattern(messageSettings.showSeconds, messageSettings.use24hClock)
   )
 
   private val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
@@ -72,8 +73,11 @@ class QuasselMessageRenderer @Inject constructor(
         R.attr.colorForegroundHighlight, R.attr.colorBackgroundHighlight,
         R.attr.backgroundMenuItem
       ) {
-        viewHolder.time?.setTextColor(getColor(0, 0))
-        viewHolder.content.setTextColor(getColor(0, 0))
+        viewHolder.timeLeft?.setTextColor(getColor(0, 0))
+        viewHolder.timeRight?.setTextColor(getColor(0, 0))
+        viewHolder.name?.setTextColor(getColor(0, 0))
+        viewHolder.combined?.setTextColor(getColor(0, 0))
+        viewHolder.content?.setTextColor(getColor(0, 0))
         viewHolder.itemView.background = LayerDrawable(
           arrayOf(
             ColorDrawable(getColor(1, 0)),
@@ -82,17 +86,27 @@ class QuasselMessageRenderer @Inject constructor(
         )
       }
     }
-    if (appearanceSettings.useMonospace) {
-      val old = viewHolder.content.typeface
-      if (old.isItalic) {
-        viewHolder.content.typeface = monospaceItalic
-      } else {
-        viewHolder.content.typeface = Typeface.MONOSPACE
-      }
+
+    if (messageSettings.useMonospace) {
+      viewHolder.content?.typeface = if (viewHolder.content?.typeface?.isItalic == true) monospaceItalic else Typeface.MONOSPACE
+      viewHolder.combined?.typeface = if (viewHolder.combined?.typeface?.isItalic == true) monospaceItalic else Typeface.MONOSPACE
     }
-    val textSize = appearanceSettings.textSize.toFloat()
-    viewHolder.time?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
-    viewHolder.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
+
+    viewHolder.avatar?.visibleIf(messageSettings.showAvatars)
+    val separateLine = viewHolder.content != null && viewHolder.name != null && messageSettings.nicksOnNewLine
+    viewHolder.name?.visibleIf(separateLine)
+    viewHolder.content?.visibleIf(separateLine)
+    viewHolder.combined?.visibleIf(!separateLine)
+
+    viewHolder.timeLeft?.visibleIf(!messageSettings.timeAtEnd)
+    viewHolder.timeRight?.visibleIf(messageSettings.timeAtEnd)
+
+    val textSize = messageSettings.textSize.toFloat()
+    viewHolder.timeLeft?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
+    viewHolder.timeRight?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
+    viewHolder.content?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
+    viewHolder.combined?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
+    viewHolder.name?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
   }
 
   override fun bind(holder: MessageAdapter.QuasselMessageViewHolder, message: FormattedMessage,
@@ -117,23 +131,28 @@ class QuasselMessageRenderer @Inject constructor(
     val self = Message_Flag.of(message.content.flag).hasFlag(Message_Flag.Self)
     val highlight = Message_Flag.of(message.content.flag).hasFlag(Message_Flag.Highlight)
     return when (Message_Type.of(message.content.type).enabledValues().firstOrNull()) {
-      Message_Type.Plain        -> FormattedMessage(
-        message.content.messageId,
-        timeFormatter.format(message.content.time.atZone(zoneId)),
-        SpanFormatter.format(
-          context.getString(R.string.message_format_plain),
+      Message_Type.Plain        -> {
+        val nick = SpanFormatter.format(
+          "%s%s",
           formatPrefix(message.content.senderPrefixes, highlight),
-          formatNick(message.content.sender, self, highlight, false),
-          contentFormatter.format(context, message.content.content, highlight)
-        ),
-        isMarkerLine = message.isMarkerLine,
-        isExpanded = message.isExpanded,
-        isSelected = message.isSelected
-      )
+          formatNick(message.content.sender, self, highlight, false)
+        )
+        val content = contentFormatter.format(context, message.content.content, highlight)
+        FormattedMessage(
+          id = message.content.messageId,
+          time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          name = nick,
+          content = content,
+          combined = SpanFormatter.format("%s: %s", nick, content),
+          isMarkerLine = message.isMarkerLine,
+          isExpanded = message.isExpanded,
+          isSelected = message.isSelected
+        )
+      }
       Message_Type.Action       -> FormattedMessage(
-        message.content.messageId,
-        timeFormatter.format(message.content.time.atZone(zoneId)),
-        SpanFormatter.format(
+        id = message.content.messageId,
+        time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        combined = SpanFormatter.format(
           context.getString(R.string.message_format_action),
           formatPrefix(message.content.senderPrefixes, highlight),
           formatNick(message.content.sender, self, highlight, false),
@@ -144,9 +163,9 @@ class QuasselMessageRenderer @Inject constructor(
         isSelected = message.isSelected
       )
       Message_Type.Notice       -> FormattedMessage(
-        message.content.messageId,
-        timeFormatter.format(message.content.time.atZone(zoneId)),
-        SpanFormatter.format(
+        id = message.content.messageId,
+        time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        combined = SpanFormatter.format(
           context.getString(R.string.message_format_notice),
           formatPrefix(message.content.senderPrefixes, highlight),
           formatNick(message.content.sender, self, highlight, false),
@@ -159,9 +178,9 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Nick         -> {
         val nickSelf = message.content.sender == message.content.content || self
         FormattedMessage(
-          message.content.messageId,
-          timeFormatter.format(message.content.time.atZone(zoneId)),
-          if (nickSelf) {
+          id = message.content.messageId,
+          time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          combined = if (nickSelf) {
             SpanFormatter.format(
               context.getString(R.string.message_format_nick_self),
               formatPrefix(message.content.senderPrefixes, highlight),
@@ -182,9 +201,9 @@ class QuasselMessageRenderer @Inject constructor(
         )
       }
       Message_Type.Mode         -> FormattedMessage(
-        message.content.messageId,
-        timeFormatter.format(message.content.time.atZone(zoneId)),
-        SpanFormatter.format(
+        id = message.content.messageId,
+        time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        combined = SpanFormatter.format(
           context.getString(R.string.message_format_mode),
           message.content.content,
           formatPrefix(message.content.senderPrefixes, highlight),
@@ -195,9 +214,9 @@ class QuasselMessageRenderer @Inject constructor(
         isSelected = message.isSelected
       )
       Message_Type.Join         -> FormattedMessage(
-        message.content.messageId,
-        timeFormatter.format(message.content.time.atZone(zoneId)),
-        SpanFormatter.format(
+        id = message.content.messageId,
+        time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        combined = SpanFormatter.format(
           context.getString(R.string.message_format_join),
           formatPrefix(message.content.senderPrefixes, highlight),
           formatNick(message.content.sender, self, highlight, true),
@@ -208,9 +227,9 @@ class QuasselMessageRenderer @Inject constructor(
         isSelected = message.isSelected
       )
       Message_Type.Part         -> FormattedMessage(
-        message.content.messageId,
-        timeFormatter.format(message.content.time.atZone(zoneId)),
-        if (message.content.content.isBlank()) {
+        id = message.content.messageId,
+        time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        combined = if (message.content.content.isBlank()) {
           SpanFormatter.format(
             context.getString(R.string.message_format_part_1),
             formatPrefix(message.content.senderPrefixes, highlight),
@@ -229,9 +248,9 @@ class QuasselMessageRenderer @Inject constructor(
         isSelected = message.isSelected
       )
       Message_Type.Quit         -> FormattedMessage(
-        message.content.messageId,
-        timeFormatter.format(message.content.time.atZone(zoneId)),
-        if (message.content.content.isBlank()) {
+        id = message.content.messageId,
+        time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        combined = if (message.content.content.isBlank()) {
           SpanFormatter.format(
             context.getString(R.string.message_format_quit_1),
             formatPrefix(message.content.senderPrefixes, highlight),
@@ -252,9 +271,9 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Kick         -> {
         val (user, reason) = message.content.content.split(' ', limit = 2) + listOf("", "")
         FormattedMessage(
-          message.content.messageId,
-          timeFormatter.format(message.content.time.atZone(zoneId)),
-          if (reason.isBlank()) {
+          id = message.content.messageId,
+          time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          combined = if (reason.isBlank()) {
             SpanFormatter.format(
               context.getString(R.string.message_format_kick_1),
               formatNick(user, false, highlight, false),
@@ -278,9 +297,9 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Kill         -> {
         val (user, reason) = message.content.content.split(' ', limit = 2) + listOf("", "")
         FormattedMessage(
-          message.content.messageId,
-          timeFormatter.format(message.content.time.atZone(zoneId)),
-          if (reason.isBlank()) {
+          id = message.content.messageId,
+          time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          combined = if (reason.isBlank()) {
             SpanFormatter.format(
               context.getString(R.string.message_format_kill_1),
               formatNick(user, false, highlight, false),
@@ -306,9 +325,9 @@ class QuasselMessageRenderer @Inject constructor(
         val (server1, server2) = split.last().split(' ')
         val usersAffected = split.size - 1
         FormattedMessage(
-          message.content.messageId,
-          timeFormatter.format(message.content.time.atZone(zoneId)),
-          context.resources.getQuantityString(
+          id = message.content.messageId,
+          time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          combined = context.resources.getQuantityString(
             R.plurals.message_netsplit_join, usersAffected, server1, server2, usersAffected
           ),
           isMarkerLine = message.isMarkerLine,
@@ -321,9 +340,9 @@ class QuasselMessageRenderer @Inject constructor(
         val (server1, server2) = split.last().split(' ')
         val usersAffected = split.size - 1
         FormattedMessage(
-          message.content.messageId,
-          timeFormatter.format(message.content.time.atZone(zoneId)),
-          context.resources.getQuantityString(
+          id = message.content.messageId,
+          time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          combined = context.resources.getQuantityString(
             R.plurals.message_netsplit_quit, usersAffected, server1, server2, usersAffected
           ),
           isMarkerLine = message.isMarkerLine,
@@ -334,33 +353,33 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Server,
       Message_Type.Info,
       Message_Type.Error        -> FormattedMessage(
-        message.content.messageId,
-        timeFormatter.format(message.content.time.atZone(zoneId)),
-        contentFormatter.format(context, message.content.content, highlight),
+        id = message.content.messageId,
+        time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        combined = contentFormatter.format(context, message.content.content, highlight),
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
       )
       Message_Type.Topic        -> FormattedMessage(
-        message.content.messageId,
-        timeFormatter.format(message.content.time.atZone(zoneId)),
-        contentFormatter.format(context, message.content.content, highlight),
+        id = message.content.messageId,
+        time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        combined = contentFormatter.format(context, message.content.content, highlight),
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
       )
-      DayChange                 -> FormattedMessage(
-        message.content.messageId,
-        "",
-        dateFormatter.format(message.content.time.atZone(zoneId)),
+      Message_Type.DayChange    -> FormattedMessage(
+        id = message.content.messageId,
+        time = "",
+        combined = dateFormatter.format(message.content.time.atZone(zoneId)),
         isMarkerLine = false,
         isExpanded = false,
         isSelected = false
       )
       else                      -> FormattedMessage(
-        message.content.messageId,
-        timeFormatter.format(message.content.time.atZone(zoneId)),
-        SpanFormatter.format(
+        id = message.content.messageId,
+        time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        combined = SpanFormatter.format(
           "[%d] %s%s: %s",
           message.content.type,
           formatPrefix(message.content.senderPrefixes, highlight),
@@ -408,17 +427,17 @@ class QuasselMessageRenderer @Inject constructor(
 
   private fun formatNick(sender: String, self: Boolean,
                          highlight: Boolean, showHostmask: Boolean) =
-    when (appearanceSettings.colorizeNicknames) {
+    when (messageSettings.colorizeNicknames) {
       ColorizeNicknamesMode.ALL          ->
-        formatNickImpl(sender, !highlight, appearanceSettings.showHostmask && showHostmask)
+        formatNickImpl(sender, !highlight, messageSettings.showHostmask && showHostmask)
       ColorizeNicknamesMode.ALL_BUT_MINE ->
-        formatNickImpl(sender, !self && !highlight, appearanceSettings.showHostmask && showHostmask)
+        formatNickImpl(sender, !self && !highlight, messageSettings.showHostmask && showHostmask)
       ColorizeNicknamesMode.NONE         ->
-        formatNickImpl(sender, false, appearanceSettings.showHostmask && showHostmask)
+        formatNickImpl(sender, false, messageSettings.showHostmask && showHostmask)
     }
 
   private fun formatPrefix(prefix: String,
-                           highlight: Boolean) = when (appearanceSettings.showPrefix) {
+                           highlight: Boolean) = when (messageSettings.showPrefix) {
     ShowPrefixMode.ALL     -> prefix
     ShowPrefixMode.HIGHEST -> prefix.substring(0, Math.min(prefix.length, 1))
     ShowPrefixMode.NONE    -> ""

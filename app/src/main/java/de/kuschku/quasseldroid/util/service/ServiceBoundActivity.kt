@@ -19,10 +19,7 @@ import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.settings.AppearanceSettings
-import de.kuschku.quasseldroid.settings.AutoCompleteSettings
-import de.kuschku.quasseldroid.settings.ConnectionSettings
-import de.kuschku.quasseldroid.settings.Settings
+import de.kuschku.quasseldroid.settings.*
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity
 import de.kuschku.quasseldroid.util.helper.sharedPreferences
 import de.kuschku.quasseldroid.util.helper.updateRecentsHeaderIfExisting

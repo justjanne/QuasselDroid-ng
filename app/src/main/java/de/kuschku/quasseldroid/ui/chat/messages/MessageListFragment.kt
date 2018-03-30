@@ -24,7 +24,10 @@ import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.persistence.findByBufferIdPagedWithDayChange
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.BacklogSettings
+import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.util.helper.*
+import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import io.reactivex.BackpressureStrategy
@@ -46,6 +49,9 @@ class MessageListFragment : ServiceBoundFragment() {
 
   @Inject
   lateinit var backlogSettings: BacklogSettings
+
+  @Inject
+  lateinit var messageSettings: MessageSettings
 
   @Inject
   lateinit var database: QuasselDatabase

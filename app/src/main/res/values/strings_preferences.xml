@@ -30,6 +30,26 @@
     <item>GRUVBOX_DARK</item>
   </string-array>
 
+  <string name="preference_input_enter_key" translatable="false">input_enter</string>
+  <string name="preference_input_enter_title">Enter key on keyboard</string>
+  <string name="preference_input_enter_entry_emoji">Emoji</string>
+  <string name="preference_input_enter_entry_send">Send</string>
+  <string-array name="preference_input_enter_entries">
+    <item>@string/preference_input_enter_entry_emoji</item>
+    <item>@string/preference_input_enter_entry_send</item>
+  </string-array>
+  <string-array name="preference_input_enter_entryvalues" translatable="false">
+    <item>EMOJI</item>
+    <item>SEND</item>
+  </string-array>
+
+  <string name="preference_show_lag_key" translatable="false">show_lag</string>
+  <string name="preference_show_lag_title">Show lag</string>
+  <string name="preference_show_lag_summary">Displays the lag between client and core in the action bar</string>
+
+
+  <string name="preference_messages_title">Messages</string>
+
   <string name="preference_monospace_key" translatable="false">monospace</string>
   <string name="preference_monospace_title">Use Monospace Font</string>
 
@@ -79,18 +99,20 @@
     <item>NONE</item>
   </string-array>
 
-  <string name="preference_input_enter_key" translatable="false">input_enter</string>
-  <string name="preference_input_enter_title">Enter key on keyboard</string>
-  <string name="preference_input_enter_entry_emoji">Emoji</string>
-  <string name="preference_input_enter_entry_send">Send</string>
-  <string-array name="preference_input_enter_entries">
-    <item>@string/preference_input_enter_entry_emoji</item>
-    <item>@string/preference_input_enter_entry_send</item>
-  </string-array>
-  <string-array name="preference_input_enter_entryvalues" translatable="false">
-    <item>EMOJI</item>
-    <item>SEND</item>
-  </string-array>
+  <string name="preference_hostmask_key" translatable="false">hostmask</string>
+  <string name="preference_hostmask_title">Show Hostmask</string>
+  <string name="preference_hostmask_summary">Display the full nick!ident@host in messages</string>
+
+  <string name="preference_nicks_on_new_line_key" translatable="false">nicks_on_new_line</string>
+  <string name="preference_nicks_on_new_line_title">Separate Nicknames</string>
+  <string name="preference_nicks_on_new_line_summary">Shows nicknames on a separate line</string>
+
+  <string name="preference_time_at_end_key" translatable="false">time_at_end</string>
+  <string name="preference_time_at_end_title">Right-Aligned Timestamps</string>
+  <string name="preference_time_at_end_summary">Aligns timestamps at the end of each message</string>
+
+  <string name="preference_show_avatars_key" translatable="false">show_avatars</string>
+  <string name="preference_show_avatars_title">Show Avatars</string>
 
   <string name="preference_autocomplete_title">Autocomplete</string>
 
@@ -109,14 +131,6 @@
   <string name="preference_autocomplete_prefix_key" translatable="false">autocomplete_prefix</string>
   <string name="preference_autocomplete_prefix_title">Show after prefix</string>
   <string name="preference_autocomplete_prefix_summary">Suggest nicks and channels after entering @ or #</string>
-
-  <string name="preference_hostmask_key" translatable="false">hostmask</string>
-  <string name="preference_hostmask_title">Show Hostmask</string>
-  <string name="preference_hostmask_summary">Display the full nick!ident@host in messages</string>
-
-  <string name="preference_show_lag_key" translatable="false">show_lag</string>
-  <string name="preference_show_lag_title">Show lag</string>
-  <string name="preference_show_lag_summary">Displays the lag between client and core in the action bar</string>
 
 
   <string name="preference_backlog_title">Backlog</string>

@@ -32,6 +32,7 @@ import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.chat.input.Editor
 import de.kuschku.quasseldroid.ui.chat.input.MessageHistoryAdapter
@@ -71,6 +72,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   @Inject
   lateinit var accountDatabase: AccountDatabase
+
+  @Inject
+  lateinit var messageSettings: MessageSettings
 
   private lateinit var editor: Editor
 
@@ -287,6 +291,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onStart() {
     if (Settings.autoComplete(this) != autoCompleteSettings) {
+      recreate()
+    }
+    if (Settings.message(this) != messageSettings) {
       recreate()
     }
     super.onStart()

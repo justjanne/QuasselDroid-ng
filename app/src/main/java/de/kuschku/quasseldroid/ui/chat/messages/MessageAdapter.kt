@@ -7,6 +7,7 @@ import android.util.LruCache
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -103,12 +104,29 @@ class MessageAdapter(
     selectionListener: ((FormattedMessage) -> Unit)? = null,
     expansionListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null
   ) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.time)
+    @BindView(R.id.timeLeft)
     @JvmField
-    var time: TextView? = null
+    var timeLeft: TextView? = null
+
+    @BindView(R.id.timeRight)
+    @JvmField
+    var timeRight: TextView? = null
+
+    @BindView(R.id.avatar)
+    @JvmField
+    var avatar: ImageView? = null
+
+    @BindView(R.id.name)
+    @JvmField
+    var name: TextView? = null
 
     @BindView(R.id.content)
-    lateinit var content: TextView
+    @JvmField
+    var content: TextView? = null
+
+    @BindView(R.id.combined)
+    @JvmField
+    var combined: TextView? = null
 
     @BindView(R.id.markerline)
     @JvmField
@@ -138,7 +156,8 @@ class MessageAdapter(
     init {
       ButterKnife.bind(this, itemView)
 
-      content.movementMethod = BetterLinkMovementMethod.getInstance()
+      content?.movementMethod = BetterLinkMovementMethod.getInstance()
+      combined?.movementMethod = BetterLinkMovementMethod.getInstance()
 
       itemView.setOnClickListener(localClickListener)
       itemView.setOnLongClickListener(localLongClickListener)
@@ -149,8 +168,11 @@ class MessageAdapter(
       this.selectable = selectable
       this.clickable = clickable
 
-      time?.text = message.time
-      content.text = message.content
+      timeLeft?.text = message.time
+      timeRight?.text = message.time
+      name?.text = message.name
+      content?.text = message.content
+      combined?.text = message.combined
       markerline?.visibleIf(message.isMarkerLine)
 
       this.itemView.isSelected = message.isSelected

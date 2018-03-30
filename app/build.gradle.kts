@@ -146,8 +146,8 @@ dependencies {
     implementation("com.afollestad.material-dialogs", "core", version)
     implementation("com.afollestad.material-dialogs", "commons", version)
   }
+  implementation("com.mikhaellopez", "circularimageview", "3.0.2")
   implementation("me.saket", "better-link-movement-method", "2.1.0")
-  implementation("com.nex3z", "flow-layout", "1.2.2")
   implementation(project(":slidingpanel"))
 
   // Quality Assurance

@@ -4,43 +4,13 @@ import android.support.annotation.StyleRes
 import de.kuschku.quasseldroid.R
 
 data class AppearanceSettings(
-  val showPrefix: ShowPrefixMode = ShowPrefixMode.HIGHEST,
-  val colorizeNicknames: ColorizeNicknamesMode = ColorizeNicknamesMode.ALL_BUT_MINE,
   val inputEnter: InputEnterMode = InputEnterMode.EMOJI,
-  val colorizeMirc: Boolean = true,
-  val useMonospace: Boolean = false,
-  val textSize: Int = 14,
-  val showSeconds: Boolean = false,
-  val use24hClock: Boolean = true,
-  val showHostmask: Boolean = false,
   val showLag: Boolean = true,
   val theme: Theme = Theme.QUASSEL_LIGHT
 ) {
-  enum class ColorizeNicknamesMode {
-    ALL,
-    ALL_BUT_MINE,
-    NONE;
-
-    companion object {
-      private val map = values().associateBy { it.name }
-      fun of(name: String) = map[name]
-    }
-  }
-
   enum class InputEnterMode {
     EMOJI,
     SEND;
-
-    companion object {
-      private val map = values().associateBy { it.name }
-      fun of(name: String) = map[name]
-    }
-  }
-
-  enum class ShowPrefixMode {
-    ALL,
-    HIGHEST,
-    NONE;
 
     companion object {
       private val map = values().associateBy { it.name }

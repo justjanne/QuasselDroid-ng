@@ -5,13 +5,13 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
 import android.text.style.URLSpan
-import de.kuschku.quasseldroid.settings.AppearanceSettings
+import de.kuschku.quasseldroid.settings.MessageSettings
 import org.intellij.lang.annotations.Language
 import javax.inject.Inject
 
 class ContentFormatter @Inject constructor(
   private val ircFormatDeserializer: IrcFormatDeserializer,
-  private val appearanceSettings: AppearanceSettings
+  private val messageSettings: MessageSettings
 ) {
   @Language("RegExp")
   private val scheme = "(?:(?:mailto:|magnet:|(?:[+.-]?\\w)+://)|www(?=\\.\\S+\\.))"
@@ -44,7 +44,7 @@ class ContentFormatter @Inject constructor(
 
   fun format(context: Context, content: String, highlight: Boolean = false): CharSequence {
     val formattedText = ircFormatDeserializer.formatString(
-      context, content, appearanceSettings.colorizeMirc
+      context, content, messageSettings.colorizeMirc
     )
     val text = SpannableString(formattedText)
 

@@ -10,7 +10,7 @@
   <string name="message_format_copy">[%1$s] %2$s</string>
 
   <string name="message_format_plain">%1$s%2$s: %3$s</string>
-  <string name="message_format_action">* %1$s%2$s %3$s</string>
+  <string name="message_format_action">— %1$s%2$s %3$s</string>
   <string name="message_format_notice">[%1$s%2$s] %3$s</string>
   <string name="message_format_nick">%1$s%2$s heißt jetzt %3$s%4$s</string>
   <string name="message_format_nick_self">Du heißt jetzt %1$s%2$s</string>

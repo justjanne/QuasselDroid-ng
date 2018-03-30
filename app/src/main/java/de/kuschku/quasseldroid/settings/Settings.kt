@@ -2,7 +2,8 @@ package de.kuschku.quasseldroid.settings
 
 import android.content.Context
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.settings.AppearanceSettings.*
+import de.kuschku.quasseldroid.settings.AppearanceSettings.InputEnterMode
+import de.kuschku.quasseldroid.settings.AppearanceSettings.Theme
 import de.kuschku.quasseldroid.util.helper.sharedPreferences
 
 object Settings {
@@ -14,51 +15,68 @@ object Settings {
           ""
         )
       ) ?: AppearanceSettings.DEFAULT.theme,
-      useMonospace = getBoolean(
-        context.getString(R.string.preference_monospace_key),
-        AppearanceSettings.DEFAULT.useMonospace
-      ),
-      textSize = getInt(
-        context.getString(R.string.preference_textsize_key),
-        AppearanceSettings.DEFAULT.textSize
-      ),
-      showSeconds = getBoolean(
-        context.getString(R.string.preference_show_seconds_key),
-        AppearanceSettings.DEFAULT.showSeconds
-      ),
-      use24hClock = getBoolean(
-        context.getString(R.string.preference_use_24h_clock_key),
-        AppearanceSettings.DEFAULT.use24hClock
-      ),
-      showPrefix = ShowPrefixMode.of(
-        getString(
-          context.getString(R.string.preference_show_prefix_key),
-          ""
-        )
-      ) ?: AppearanceSettings.DEFAULT.showPrefix,
-      colorizeNicknames = ColorizeNicknamesMode.of(
-        getString(
-          context.getString(R.string.preference_colorize_nicknames_key),
-          ""
-        )
-      ) ?: AppearanceSettings.DEFAULT.colorizeNicknames,
       inputEnter = InputEnterMode.of(
         getString(
           context.getString(R.string.preference_input_enter_key),
           ""
         )
       ) ?: AppearanceSettings.DEFAULT.inputEnter,
-      colorizeMirc = getBoolean(
-        context.getString(R.string.preference_colorize_mirc_key),
-        AppearanceSettings.DEFAULT.colorizeMirc
-      ),
-      showHostmask = getBoolean(
-        context.getString(R.string.preference_hostmask_key),
-        AppearanceSettings.DEFAULT.showHostmask
-      ),
       showLag = getBoolean(
         context.getString(R.string.preference_show_lag_key),
         AppearanceSettings.DEFAULT.showLag
+      )
+    )
+  }
+
+  fun message(context: Context) = context.sharedPreferences {
+    MessageSettings(
+      useMonospace = getBoolean(
+        context.getString(R.string.preference_monospace_key),
+        MessageSettings.DEFAULT.useMonospace
+      ),
+      textSize = getInt(
+        context.getString(R.string.preference_textsize_key),
+        MessageSettings.DEFAULT.textSize
+      ),
+      showSeconds = getBoolean(
+        context.getString(R.string.preference_show_seconds_key),
+        MessageSettings.DEFAULT.showSeconds
+      ),
+      use24hClock = getBoolean(
+        context.getString(R.string.preference_use_24h_clock_key),
+        MessageSettings.DEFAULT.use24hClock
+      ),
+      showPrefix = MessageSettings.ShowPrefixMode.of(
+        getString(
+          context.getString(R.string.preference_show_prefix_key),
+          ""
+        )
+      ) ?: MessageSettings.DEFAULT.showPrefix,
+      colorizeNicknames = MessageSettings.ColorizeNicknamesMode.of(
+        getString(
+          context.getString(R.string.preference_colorize_nicknames_key),
+          ""
+        )
+      ) ?: MessageSettings.DEFAULT.colorizeNicknames,
+      colorizeMirc = getBoolean(
+        context.getString(R.string.preference_colorize_mirc_key),
+        MessageSettings.DEFAULT.colorizeMirc
+      ),
+      showHostmask = getBoolean(
+        context.getString(R.string.preference_hostmask_key),
+        MessageSettings.DEFAULT.showHostmask
+      ),
+      nicksOnNewLine = getBoolean(
+        context.getString(R.string.preference_nicks_on_new_line_key),
+        MessageSettings.DEFAULT.nicksOnNewLine
+      ),
+      timeAtEnd = getBoolean(
+        context.getString(R.string.preference_time_at_end_key),
+        MessageSettings.DEFAULT.timeAtEnd
+      ),
+      showAvatars = getBoolean(
+        context.getString(R.string.preference_show_avatars_key),
+        MessageSettings.DEFAULT.showAvatars
       )
     )
   }

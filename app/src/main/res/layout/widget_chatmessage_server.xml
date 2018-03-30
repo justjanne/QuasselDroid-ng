@@ -19,22 +19,44 @@
     android:paddingTop="@dimen/message_vertical">
 
     <TextView
-      android:id="@+id/time"
+      android:id="@+id/timeLeft"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginEnd="@dimen/message_horizontal"
-      android:layout_marginRight="@dimen/message_horizontal"
+      android:layout_marginLeft="@dimen/message_horizontal"
+      android:layout_marginStart="@dimen/message_horizontal"
       android:textColor="?attr/colorForegroundSecondary"
       android:typeface="monospace"
       tools:text="@sample/messages.json/data/time" />
 
+    <ImageView
+      android:id="@+id/avatar"
+      android:layout_width="40dp"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="@dimen/message_vertical"
+      android:layout_marginEnd="@dimen/message_horizontal"
+      android:layout_marginRight="@dimen/message_horizontal"
+      android:layout_marginTop="@dimen/message_vertical"
+      android:visibility="gone" />
+
     <de.kuschku.quasseldroid.ui.chat.messages.RipplePassthroughTextView
-      android:id="@+id/content"
+      android:id="@+id/combined"
       android:layout_width="0dip"
       android:layout_height="wrap_content"
       android:layout_weight="1"
       android:textColor="?attr/colorForegroundSecondary"
       tools:text="@sample/messages.json/data/message" />
+
+    <TextView
+      android:id="@+id/timeRight"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      android:layout_marginEnd="@dimen/message_horizontal"
+      android:layout_marginRight="@dimen/message_horizontal"
+      android:textColor="?attr/colorForegroundSecondary"
+      android:typeface="monospace"
+      android:visibility="gone"
+      tools:text="@sample/messages.json/data/time" />
   </LinearLayout>
 
   <View

@@ -19,6 +19,7 @@ import de.kuschku.libquassel.util.minus
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
+import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.helper.map
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.helper.zip
@@ -39,6 +40,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
   @Inject
   lateinit var appearanceSettings: AppearanceSettings
+
+  @Inject
+  lateinit var messageSettings: MessageSettings
 
   @Inject
   lateinit var database: QuasselDatabase
@@ -189,7 +193,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
           val activity = it.activity - (activities[it.info.bufferId] ?: 0)
           it.copy(
             description = ircFormatDeserializer.formatString(
-              requireContext(), it.description.toString(), appearanceSettings.colorizeMirc
+              requireContext(), it.description.toString(), messageSettings.colorizeMirc
             ),
             activity = activity,
             bufferActivity = Buffer_Activity.of(

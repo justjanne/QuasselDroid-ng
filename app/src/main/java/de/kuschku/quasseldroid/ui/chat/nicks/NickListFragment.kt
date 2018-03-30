@@ -16,6 +16,7 @@ import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
+import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.info.InfoActivity
 import de.kuschku.quasseldroid.ui.chat.info.InfoDescriptor
 import de.kuschku.quasseldroid.ui.chat.info.InfoType
@@ -30,6 +31,9 @@ class NickListFragment : ServiceBoundFragment() {
 
   @Inject
   lateinit var appearanceSettings: AppearanceSettings
+
+  @Inject
+  lateinit var messageSettings: MessageSettings
 
   @Inject
   lateinit var ircFormatDeserializer: IrcFormatDeserializer
@@ -48,14 +52,14 @@ class NickListFragment : ServiceBoundFragment() {
     viewModel.nickData.map {
       it.map {
         it.copy(
-          modes = when (appearanceSettings.showPrefix) {
-            AppearanceSettings.ShowPrefixMode.ALL ->
+          modes = when (messageSettings.showPrefix) {
+            MessageSettings.ShowPrefixMode.ALL ->
               it.modes
-            else                                  ->
+            else                               ->
               it.modes.substring(0, Math.min(it.modes.length, 1))
           },
           realname = ircFormatDeserializer.formatString(
-            requireContext(), it.realname.toString(), appearanceSettings.colorizeMirc
+            requireContext(), it.realname.toString(), messageSettings.colorizeMirc
           )
         )
       }.sortedBy {

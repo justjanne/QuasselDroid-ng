@@ -1,23 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<View xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
-  android:layout_height="48dp">
-
-  <TextView
-    android:id="@+id/time"
-    android:layout_width="0dip"
-    android:layout_height="0dip"
-    android:visibility="gone" />
-
-  <TextView
-    android:id="@+id/content"
-    android:layout_width="0dip"
-    android:layout_height="0dip"
-    android:visibility="gone" />
-
-  <View
-    android:id="@+id/markerline"
-    android:layout_width="0dip"
-    android:layout_height="0dip"
-    android:visibility="gone" />
-</LinearLayout>
+  android:layout_height="48dp" />

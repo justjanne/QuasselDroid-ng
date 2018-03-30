@@ -11,6 +11,16 @@
   <string name="preference_theme_entry_gruvbox_light">Gruvbox (Hell)</string>
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Dunkel)</string>
 
+  <string name="preference_input_enter_title">Eingabetaste auf Tastatur</string>
+  <string name="preference_input_enter_entry_emoji">Emoji-Auswahl</string>
+  <string name="preference_input_enter_entry_send">Senden</string>
+
+  <string name="preference_show_lag_title">Latenz anzeigen</string>
+  <string name="preference_show_lag_summary">Zeigt die Gerät-Core-Latenz in der Statusleiste</string>
+
+
+  <string name="preference_messages_title">Nachrichten</string>
+
   <string name="preference_monospace_title">Monospace-Schrift verwenden</string>
 
   <string name="preference_textsize_title">Schriftgröße</string>
@@ -33,9 +43,17 @@
   <string name="preference_show_prefix_entry_highest">Höchsten Modus</string>
   <string name="preference_show_prefix_entry_none">Keine</string>
 
-  <string name="preference_input_enter_title">Eingabetaste auf Tastatur</string>
-  <string name="preference_input_enter_entry_emoji">Emoji-Auswahl</string>
-  <string name="preference_input_enter_entry_send">Senden</string>
+  <string name="preference_hostmask_title">Hostmaske</string>
+  <string name="preference_hostmask_summary">Zeigt die gesame Spitzname!Ident@Host Information an</string>
+
+  <string name="preference_nicks_on_new_line_title">Separate Spitznamen</string>
+  <string name="preference_nicks_on_new_line_summary">Zeigt Spitznamen in einer eigenen Zeile an</string>
+
+  <string name="preference_time_at_end_title">Rechts-Ausgerichtete Zeit</string>
+  <string name="preference_time_at_end_summary">Zeigt die Zeit rechts in Nachrichten an</string>
+
+  <string name="preference_show_avatars_title">Benutzerbilder anzeigen</string>
+
 
   <string name="preference_autocomplete_title">Autovervollständigung</string>
 
@@ -50,12 +68,6 @@
 
   <string name="preference_autocomplete_prefix_title">Nach Präfix anzeigen</string>
   <string name="preference_autocomplete_prefix_summary">Vervollständigt Namen und Chats automatisch nach einem @ oder #</string>
-
-  <string name="preference_hostmask_title">Hostmaske</string>
-  <string name="preference_hostmask_summary">Zeigt die gesame Spitzname!Ident@Host Information an</string>
-
-  <string name="preference_show_lag_title">Latenz anzeigen</string>
-  <string name="preference_show_lag_summary">Zeigt die Gerät-Core-Latenz in der Statusleiste</string>
 
 
   <string name="preference_backlog_title">Verlauf</string>

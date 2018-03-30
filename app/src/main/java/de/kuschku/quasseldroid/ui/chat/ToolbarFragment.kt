@@ -15,6 +15,7 @@ import de.kuschku.libquassel.util.hasFlag
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
+import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.info.InfoActivity
 import de.kuschku.quasseldroid.ui.chat.info.InfoDescriptor
 import de.kuschku.quasseldroid.ui.chat.info.InfoType
@@ -41,6 +42,9 @@ class ToolbarFragment : ServiceBoundFragment() {
 
   @Inject
   lateinit var appearanceSettings: AppearanceSettings
+
+  @Inject
+  lateinit var messageSettings: MessageSettings
 
   var title: CharSequence?
     get() = toolbarTitle.text
@@ -123,6 +127,6 @@ class ToolbarFragment : ServiceBoundFragment() {
   }
 
   private fun colorizeDescription(description: String?) = ircFormatDeserializer.formatString(
-    requireContext(), description, appearanceSettings.colorizeMirc
+    requireContext(), description, messageSettings.colorizeMirc
   )
 }
