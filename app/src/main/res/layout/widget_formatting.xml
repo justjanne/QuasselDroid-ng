@@ -76,7 +76,7 @@
       app:tint="?colorControlNormal" />
 
     <View
-      android:id="@+id/ic_format_foreground_preview"
+      android:id="@+id/action_format_foreground_preview"
       android:layout_width="match_parent"
       android:layout_height="4dp"
       android:layout_gravity="center_horizontal|bottom"
@@ -105,7 +105,7 @@
       app:tint="?colorControlNormal" />
 
     <View
-      android:id="@+id/ic_format_background_preview"
+      android:id="@+id/action_format_background_preview"
       android:layout_width="match_parent"
       android:layout_height="4dp"
       android:layout_gravity="center_horizontal|bottom"

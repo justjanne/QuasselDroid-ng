@@ -8,9 +8,12 @@
   <string name="connection_service_description">Hält eine Verbindung zum Core, um Benachrichtigungen und die Übertragung von Nachrichten zu ermöglichen</string>
 
   <string name="label_about">Über</string>
+  <string name="label_back">Zurück</string>
   <string name="label_buffer_name">Chatname</string>
   <string name="label_cancel">Abbrechen</string>
   <string name="label_close">Schließen</string>
+  <string name="label_colors_custom">Anpassen</string>
+  <string name="label_colors_mirc">mIRC</string>
   <string name="label_connect">Verbinden</string>
   <string name="label_contributors">Mitwirkende</string>
   <string name="label_copy">Kopieren</string>
@@ -29,12 +32,13 @@
   <string name="label_license">Lizenz</string>
   <string name="label_new_account">Account hinzufügen</string>
   <string name="label_no">Nein</string>
+  <string name="label_reset">Zurücksetzen</string>
   <string name="label_open">Öffnen</string>
   <string name="label_part">Verlassen</string>
   <string name="label_placeholder">Nachricht schreiben…</string>
   <string name="label_rename">Umbenennen</string>
   <string name="label_save">Speichern</string>
-  <string name="label_select_multiple">Auswählen</string>
+  <string name="label_select">Auswählen</string>
   <string name="label_settings">Einstellungen</string>
   <string name="label_share">Teilen</string>
   <string name="label_share_crashreport">Absturzbericht Teilen</string>

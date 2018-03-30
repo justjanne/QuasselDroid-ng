@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.SpannableStringBuilder
 import android.view.*
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -63,36 +64,36 @@ class MessageListFragment : ServiceBoundFragment() {
   private val actionModeCallback = object : ActionMode.Callback {
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?) = when (item?.itemId) {
       R.id.action_copy  -> {
-        val data = viewModel.selectedMessages.value.values.sortedBy {
+        val builder = SpannableStringBuilder()
+        viewModel.selectedMessages.value.values.sortedBy {
           it.id
-        }.joinToString("\n") {
-          SpanFormatter.format(
-            getString(R.string.message_format_copy),
-            it.time,
-            it.content
-          )
+        }.map {
+          SpanFormatter.format(getString(R.string.message_format_copy), it.time, it.content)
+        }.forEach {
+          builder.append(it)
+          builder.append("\n")
         }
 
         val clipboard = requireActivity().systemService<ClipboardManager>()
-        val clip = ClipData.newPlainText(null, data)
+        val clip = ClipData.newPlainText(null, builder)
         clipboard.primaryClip = clip
         actionMode?.finish()
         true
       }
       R.id.action_share -> {
-        val data = viewModel.selectedMessages.value.values.sortedBy {
+        val builder = SpannableStringBuilder()
+        viewModel.selectedMessages.value.values.sortedBy {
           it.id
-        }.joinToString("\n") {
-          SpanFormatter.format(
-            getString(R.string.message_format_copy),
-            it.time,
-            it.content
-          )
+        }.map {
+          SpanFormatter.format(getString(R.string.message_format_copy), it.time, it.content)
+        }.forEach {
+          builder.append(it)
+          builder.append("\n")
         }
 
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TEXT, data)
+        intent.putExtra(Intent.EXTRA_TEXT, builder)
         requireContext().startActivity(
           Intent.createChooser(
             intent,

@@ -350,13 +350,13 @@ class IrcFormatDeserializer @Inject constructor() {
     override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
       if (foreground >= 0) {
         editable.setSpan(
-          IrcHexForegroundColorSpan(foreground or 0xFFFFFF.inv()), from, to,
+          IrcForegroundColorSpan.HEX(foreground or 0xFFFFFF.inv()), from, to,
           Spanned.SPAN_INCLUSIVE_EXCLUSIVE
         )
       }
       if (background >= 0) {
         editable.setSpan(
-          IrcHexBackgroundColorSpan(background or 0xFFFFFF.inv()), from, to,
+          IrcBackgroundColorSpan.HEX(background or 0xFFFFFF.inv()), from, to,
           Spanned.SPAN_INCLUSIVE_EXCLUSIVE
         )
       }
@@ -369,13 +369,13 @@ class IrcFormatDeserializer @Inject constructor() {
     override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
       if (foreground.toInt() >= 0 && foreground.toInt() < mircColors.size) {
         editable.setSpan(
-          IrcForegroundColorSpan(foreground.toInt(), mircColors[foreground.toInt()]), from, to,
+          IrcForegroundColorSpan.MIRC(foreground.toInt(), mircColors[foreground.toInt()]), from, to,
           Spanned.SPAN_INCLUSIVE_EXCLUSIVE
         )
       }
       if (background.toInt() >= 0 && background.toInt() < mircColors.size) {
         editable.setSpan(
-          IrcBackgroundColorSpan(background.toInt(), mircColors[background.toInt()]), from, to,
+          IrcBackgroundColorSpan.MIRC(background.toInt(), mircColors[background.toInt()]), from, to,
           Spanned.SPAN_INCLUSIVE_EXCLUSIVE
         )
       }

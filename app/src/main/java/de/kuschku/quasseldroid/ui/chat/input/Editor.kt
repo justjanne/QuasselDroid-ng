@@ -2,6 +2,9 @@ package de.kuschku.quasseldroid.ui.chat.input
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
+import android.support.annotation.ColorInt
+import android.support.annotation.StringRes
+import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.*
 import android.text.Editable
@@ -16,6 +19,7 @@ import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.util.helper.*
+import de.kuschku.quasseldroid.util.ui.ColorChooserDialog
 import de.kuschku.quasseldroid.util.ui.EditTextSelectionChange
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import io.reactivex.Observable
@@ -104,8 +108,14 @@ class Editor(
   @BindView(R.id.action_format_foreground)
   lateinit var foregroundButton: View
 
+  @BindView(R.id.action_format_foreground_preview)
+  lateinit var foregroundButtonPreview: View
+
   @BindView(R.id.action_format_background)
   lateinit var backgroundButton: View
+
+  @BindView(R.id.action_format_background_preview)
+  lateinit var backgroundButtonPreview: View
 
   @BindView(R.id.action_format_clear)
   lateinit var clearButton: View
@@ -225,12 +235,30 @@ class Editor(
     TooltipCompat.setTooltipText(monospaceButton, monospaceButton.contentDescription)
 
     foregroundButton.setOnClickListener {
-
+      showColorChooser(
+        activity,
+        R.string.label_foreground,
+        formatHandler.foregroundColor(chatline.selection)
+        ?: formatHandler.defaultForegroundColor
+      ) { color ->
+        formatHandler.toggleForeground(chatline.selection, color,
+                                       formatHandler.mircColorMap[color])
+        updateButtons(chatline.selection)
+      }
     }
     TooltipCompat.setTooltipText(foregroundButton, foregroundButton.contentDescription)
 
     backgroundButton.setOnClickListener {
-
+      showColorChooser(
+        activity,
+        R.string.label_background,
+        formatHandler.backgroundColor(chatline.selection)
+        ?: formatHandler.defaultBackgroundColor
+      ) { color ->
+        formatHandler.toggleBackground(chatline.selection, color,
+                                       formatHandler.mircColorMap[color])
+        updateButtons(chatline.selection)
+      }
     }
     TooltipCompat.setTooltipText(backgroundButton, backgroundButton.contentDescription)
 
@@ -262,12 +290,59 @@ class Editor(
     }
   }
 
+  private fun showColorChooser(
+    activity: FragmentActivity, @StringRes title: Int, @ColorInt preselect: Int, f: (Int?) -> Unit
+  ) {
+    var selectedColor: Int? = null
+    ColorChooserDialog.Builder(chatline.context, title)
+      .customColors(intArrayOf(
+        formatHandler.mircColors[0],
+        formatHandler.mircColors[1],
+        formatHandler.mircColors[2],
+        formatHandler.mircColors[3],
+        formatHandler.mircColors[4],
+        formatHandler.mircColors[5],
+        formatHandler.mircColors[6],
+        formatHandler.mircColors[7],
+        formatHandler.mircColors[8],
+        formatHandler.mircColors[9],
+        formatHandler.mircColors[10],
+        formatHandler.mircColors[11],
+        formatHandler.mircColors[12],
+        formatHandler.mircColors[13],
+        formatHandler.mircColors[14],
+        formatHandler.mircColors[15]
+      ), null)
+      .doneButton(R.string.label_select)
+      .cancelButton(R.string.label_reset)
+      .backButton(R.string.label_back)
+      .customButton(R.string.label_colors_custom)
+      .presetsButton(R.string.label_colors_mirc)
+      .preselect(preselect)
+      .dynamicButtonColor(false)
+      .allowUserColorInputAlpha(false)
+      .callback(object : ColorChooserDialog.ColorCallback {
+        override fun onColorSelection(dialog: ColorChooserDialog, color: Int) {
+          selectedColor = color
+        }
+
+        override fun onColorChooserDismissed(dialog: ColorChooserDialog) {
+          f(selectedColor)
+        }
+      })
+      .show(activity)
+  }
+
   fun updateButtons(selection: IntRange) {
     boldButton.isSelected = formatHandler.isBold(selection)
     italicButton.isSelected = formatHandler.isItalic(selection)
     underlineButton.isSelected = formatHandler.isUnderline(selection)
     strikethroughButton.isSelected = formatHandler.isStrikethrough(selection)
     monospaceButton.isSelected = formatHandler.isMonospace(selection)
+    foregroundButtonPreview.setBackgroundColor(formatHandler.foregroundColor(selection)
+                                               ?: formatHandler.defaultForegroundColor)
+    backgroundButtonPreview.setBackgroundColor(formatHandler.backgroundColor(selection)
+                                               ?: formatHandler.defaultBackgroundColor)
   }
 
   fun onStart() {

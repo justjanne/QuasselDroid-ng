@@ -178,6 +178,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
               .title(R.string.label_error_init)
               .content(Html.fromHtml(it.errorString))
               .neutralText(R.string.label_close)
+              .titleColorAttr(R.attr.colorTextPrimary)
+              .backgroundColorAttr(R.attr.colorBackgroundCard)
+              .contentColorAttr(R.attr.colorTextPrimary)
               .build()
               .show()
           is HandshakeMessage.CoreSetupReject   ->
@@ -185,6 +188,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
               .title(R.string.label_error_setup)
               .content(Html.fromHtml(it.errorString))
               .neutralText(R.string.label_close)
+              .titleColorAttr(R.attr.colorTextPrimary)
+              .backgroundColorAttr(R.attr.colorBackgroundCard)
+              .contentColorAttr(R.attr.colorTextPrimary)
               .build()
               .show()
           is HandshakeMessage.ClientLoginReject ->
@@ -220,6 +226,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                           backend.value.orNull()?.updateUserDataAndLogin(user, pass)
                         }
                       }
+                      .titleColorAttr(R.attr.colorTextPrimary)
+                      .backgroundColorAttr(R.attr.colorBackgroundCard)
+                      .contentColorAttr(R.attr.colorTextPrimary)
                       .build()
                     dialog.customView?.run {
                       val userField = findViewById<EditText>(R.id.user)
@@ -233,6 +242,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   }
                 }
               }
+              .titleColorAttr(R.attr.colorTextPrimary)
+              .backgroundColorAttr(R.attr.colorBackgroundCard)
+              .contentColorAttr(R.attr.colorTextPrimary)
               .build()
               .show()
         }
@@ -355,7 +367,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             .items(R.array.message_filter_types)
             .itemsIds(flags)
             .itemsCallbackMultiChoice(selectedIndices, { _, _, _ -> false })
-            .positiveText(R.string.label_select_multiple)
+            .positiveText(R.string.label_select)
             .negativeText(R.string.label_cancel)
             .onPositive { dialog, _ ->
               val selected = dialog.selectedIndices ?: emptyArray()
@@ -371,6 +383,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             }.negativeColorAttr(R.attr.colorTextPrimary)
             .backgroundColorAttr(R.attr.colorBackgroundCard)
             .contentColorAttr(R.attr.colorTextPrimary)
+            .titleColorAttr(R.attr.colorTextPrimary)
             .build()
             .show()
         }

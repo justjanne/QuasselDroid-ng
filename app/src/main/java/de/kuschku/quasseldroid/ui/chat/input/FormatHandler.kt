@@ -1,25 +1,60 @@
 package de.kuschku.quasseldroid.ui.chat.input
 
 import android.graphics.Typeface
+import android.support.annotation.ColorInt
 import android.text.Editable
 import android.text.SpannableString
 import android.text.Spanned
-import android.text.style.StrikethroughSpan
-import android.text.style.StyleSpan
-import android.text.style.TypefaceSpan
-import android.text.style.UnderlineSpan
+import android.text.style.*
 import android.widget.EditText
+import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
-import de.kuschku.quasseldroid.util.helper.lastWordIndices
-import de.kuschku.quasseldroid.util.helper.lineSequence
-import de.kuschku.quasseldroid.util.helper.selection
-import de.kuschku.quasseldroid.util.helper.without
+import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid.util.irc.format.spans.*
 
 class FormatHandler(
   private val editText: EditText
 ) {
+  val mircColors = editText.context.theme.styledAttributes(
+    R.attr.mircColor00, R.attr.mircColor01, R.attr.mircColor02, R.attr.mircColor03,
+    R.attr.mircColor04, R.attr.mircColor05, R.attr.mircColor06, R.attr.mircColor07,
+    R.attr.mircColor08, R.attr.mircColor09, R.attr.mircColor10, R.attr.mircColor11,
+    R.attr.mircColor12, R.attr.mircColor13, R.attr.mircColor14, R.attr.mircColor15,
+    R.attr.mircColor16, R.attr.mircColor17, R.attr.mircColor18, R.attr.mircColor19,
+    R.attr.mircColor20, R.attr.mircColor21, R.attr.mircColor22, R.attr.mircColor23,
+    R.attr.mircColor24, R.attr.mircColor25, R.attr.mircColor26, R.attr.mircColor27,
+    R.attr.mircColor28, R.attr.mircColor29, R.attr.mircColor30, R.attr.mircColor31,
+    R.attr.mircColor32, R.attr.mircColor33, R.attr.mircColor34, R.attr.mircColor35,
+    R.attr.mircColor36, R.attr.mircColor37, R.attr.mircColor38, R.attr.mircColor39,
+    R.attr.mircColor40, R.attr.mircColor41, R.attr.mircColor42, R.attr.mircColor43,
+    R.attr.mircColor44, R.attr.mircColor45, R.attr.mircColor46, R.attr.mircColor47,
+    R.attr.mircColor48, R.attr.mircColor49, R.attr.mircColor50, R.attr.mircColor51,
+    R.attr.mircColor52, R.attr.mircColor53, R.attr.mircColor54, R.attr.mircColor55,
+    R.attr.mircColor56, R.attr.mircColor57, R.attr.mircColor58, R.attr.mircColor59,
+    R.attr.mircColor60, R.attr.mircColor61, R.attr.mircColor62, R.attr.mircColor63,
+    R.attr.mircColor64, R.attr.mircColor65, R.attr.mircColor66, R.attr.mircColor67,
+    R.attr.mircColor68, R.attr.mircColor69, R.attr.mircColor70, R.attr.mircColor71,
+    R.attr.mircColor72, R.attr.mircColor73, R.attr.mircColor74, R.attr.mircColor75,
+    R.attr.mircColor76, R.attr.mircColor77, R.attr.mircColor78, R.attr.mircColor79,
+    R.attr.mircColor80, R.attr.mircColor81, R.attr.mircColor82, R.attr.mircColor83,
+    R.attr.mircColor84, R.attr.mircColor85, R.attr.mircColor86, R.attr.mircColor87,
+    R.attr.mircColor88, R.attr.mircColor89, R.attr.mircColor90, R.attr.mircColor91,
+    R.attr.mircColor92, R.attr.mircColor93, R.attr.mircColor94, R.attr.mircColor95,
+    R.attr.mircColor96, R.attr.mircColor97, R.attr.mircColor98
+  ) {
+    (0..98).map { getColor(it, 0) }
+  }
+  val mircColorMap = mircColors.withIndex().map { (key, value) -> key to value }.toMap()
+
+  val defaultForegroundColor = editText.context.theme.styledAttributes(R.attr.colorForeground) {
+    getColor(0, 0)
+  }
+
+  val defaultBackgroundColor = editText.context.theme.styledAttributes(R.attr.colorBackground) {
+    getColor(0, 0)
+  }
+
   private val serializer = IrcFormatSerializer(editText.context)
   val formattedText: Sequence<String>
     get() = editText.text.lineSequence().map { serializer.toEscapeCodes(SpannableString(it)) }
@@ -144,13 +179,92 @@ class FormatHandler(
     }
   }
 
+  fun foregroundColors(range: IntRange) = editText.text.spans<ForegroundColorSpan>(range)
+  fun foregroundColor(range: IntRange) = foregroundColors(range).singleOrNull()?.foregroundColor
+  fun toggleForeground(range: IntRange, @ColorInt color: Int? = null, mircColor: Int? = null) {
+    editText.text.removeSpans<ForegroundColorSpan, IrcForegroundColorSpan<*>>(range) { span ->
+      val mirc = mircColorMap[span.foregroundColor]
+      when {
+        span is IrcForegroundColorSpan<*> -> span
+        mirc != null                      -> IrcForegroundColorSpan.MIRC(mirc, span.foregroundColor)
+        else                              -> IrcForegroundColorSpan.HEX(span.foregroundColor)
+      }
+    }
+
+    if (color != null) {
+      if (mircColor != null) {
+        editText.text.setSpan(
+          IrcForegroundColorSpan.MIRC(mircColor, color),
+          range.start,
+          range.last + 1,
+          Spanned.SPAN_INCLUSIVE_INCLUSIVE
+        )
+      } else {
+        editText.text.setSpan(
+          IrcForegroundColorSpan.HEX(color),
+          range.start,
+          range.last + 1,
+          Spanned.SPAN_INCLUSIVE_INCLUSIVE
+        )
+      }
+    }
+  }
+
+  fun backgroundColors(range: IntRange) = editText.text.spans<BackgroundColorSpan>(range)
+  fun backgroundColor(range: IntRange) = backgroundColors(range).singleOrNull()?.backgroundColor
+  fun toggleBackground(range: IntRange, @ColorInt color: Int? = null, mircColor: Int? = null) {
+    editText.text.removeSpans<BackgroundColorSpan, IrcBackgroundColorSpan<*>>(range) { span ->
+      val mirc = mircColorMap[span.backgroundColor]
+      when {
+        span is IrcBackgroundColorSpan<*> -> span
+        mirc != null                      -> IrcBackgroundColorSpan.MIRC(mirc, span.backgroundColor)
+        else                              -> IrcBackgroundColorSpan.HEX(span.backgroundColor)
+      }
+    }
+
+    if (color != null) {
+      if (mircColor != null) {
+        editText.text.setSpan(
+          IrcBackgroundColorSpan.MIRC(mircColor, color),
+          range.start,
+          range.last + 1,
+          Spanned.SPAN_INCLUSIVE_INCLUSIVE
+        )
+      } else {
+        editText.text.setSpan(
+          IrcBackgroundColorSpan.HEX(color),
+          range.start,
+          range.last + 1,
+          Spanned.SPAN_INCLUSIVE_INCLUSIVE
+        )
+      }
+    }
+  }
+
   fun clearFormatting(range: IntRange) {
     toggleBold(range, false)
     toggleItalic(range, false)
     toggleUnderline(range, false)
     toggleStrikethrough(range, false)
     toggleMonospace(range, false)
+    toggleForeground(range, null, null)
+    toggleBackground(range, null, null)
   }
+
+  private inline fun <reified U> Spanned.spans(range: IntRange) =
+    getSpans(range.start, range.endInclusive + 1, U::class.java).filter {
+      getSpanFlags(it) and Spanned.SPAN_COMPOSING == 0 &&
+      (getSpanEnd(it) != range.start ||
+       getSpanFlags(it) and 0x02 != 0)
+    }
+
+  private inline fun <reified U> Spanned.spans(range: IntRange, f: (U) -> Boolean) =
+    getSpans(range.start, range.last + 1, U::class.java).filter {
+      f(it) &&
+      getSpanFlags(it) and Spanned.SPAN_COMPOSING == 0 &&
+      (getSpanEnd(it) != range.start ||
+       getSpanFlags(it) and 0x02 != 0)
+    }
 
   private inline fun <reified U> Spanned.hasSpans(range: IntRange) =
     getSpans(range.start, range.endInclusive + 1, U::class.java).any {
