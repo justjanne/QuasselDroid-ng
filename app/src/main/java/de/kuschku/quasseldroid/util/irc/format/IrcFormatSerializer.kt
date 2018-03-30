@@ -181,16 +181,28 @@ class IrcFormatSerializer @Inject constructor(private val context: Context) {
         val afterForegroundCode = mircColorMap[afterForeground]
         val afterBackgroundCode = mircColorMap[afterBackground]
 
-        if (afterForegroundCode != null || afterBackgroundCode != null) {
+        val hasForegroundBefore = foreground != null
+        val hasBackgroundBefore = background != null
+        val foregroundBeforeCodeValid = foregroundCode != null
+        val backgroundBeforeCodeValid = backgroundCode != null
+
+        val hasForegroundAfter = afterForeground != null
+        val hasBackgroundAfter = afterBackground != null
+        val foregroundAfterCodeValid = afterForegroundCode != null
+        val backgroundAfterCodeValid = afterBackgroundCode != null
+
+        if ((!hasBackgroundAfter || backgroundAfterCodeValid) &&
+            (!hasForegroundAfter || foregroundAfterCodeValid)) {
           if (afterForegroundCode == backgroundCode && afterBackgroundCode == foregroundCode) {
             writeSwap(afterForegroundCode, afterBackgroundCode)
           } else {
             writeColor(afterForegroundCode, afterBackgroundCode)
           }
-        } else if (afterForeground != null || afterBackground != null) {
+        } else if (hasForegroundAfter || hasBackgroundAfter) {
           writeHexColor(afterForeground, afterBackground)
         } else {
-          if (foregroundCode != null || backgroundCode != null) {
+          if ((!hasBackgroundBefore || backgroundBeforeCodeValid) &&
+              (!hasForegroundBefore || foregroundBeforeCodeValid)) {
             writeColor(afterForeground, afterBackground)
           } else {
             writeHexColor(afterForeground, afterBackground)
