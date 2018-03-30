@@ -113,7 +113,7 @@ class QuasselMessageRenderer @Inject constructor(
     viewHolder.timeRight?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
     viewHolder.content?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
     viewHolder.combined?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
-    viewHolder.name?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
+    viewHolder.name?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize * 0.8f)
   }
 
   override fun bind(holder: MessageAdapter.QuasselMessageViewHolder, message: FormattedMessage,

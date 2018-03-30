@@ -8,6 +8,7 @@
   <string name="connection_service_description">Hält eine Verbindung zum Core, um Benachrichtigungen und die Übertragung von Nachrichten zu ermöglichen</string>
 
   <string name="label_about">Über</string>
+  <string name="label_avatar">Avatar</string>
   <string name="label_back">Zurück</string>
   <string name="label_buffer_name">Chatname</string>
   <string name="label_cancel">Abbrechen</string>

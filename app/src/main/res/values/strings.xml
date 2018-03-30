@@ -8,6 +8,7 @@
   <string name="connection_service_description">Keeps a connection to your core to allow for notifications, and to transmit messages.</string>
 
   <string name="label_about">About</string>
+  <string name="label_avatar">Avatar</string>
   <string name="label_back">Back</string>
   <string name="label_buffer_name">Buffer Name</string>
   <string name="label_cancel">Cancel</string>
