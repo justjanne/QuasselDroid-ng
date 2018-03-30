@@ -221,8 +221,8 @@ class Editor(
       showColorChooser(
         activity,
         R.string.label_foreground,
-        formatHandler.foregroundColor(chatline.selection)
-        ?: formatHandler.defaultForegroundColor
+        formatHandler.foregroundColor(chatline.selection),
+        formatHandler.defaultForegroundColor
       ) { color ->
         formatHandler.toggleForeground(chatline.selection, color,
                                        formatHandler.mircColorMap[color])
@@ -235,8 +235,8 @@ class Editor(
       showColorChooser(
         activity,
         R.string.label_background,
-        formatHandler.backgroundColor(chatline.selection)
-        ?: formatHandler.defaultBackgroundColor
+        formatHandler.backgroundColor(chatline.selection),
+        formatHandler.defaultBackgroundColor
       ) { color ->
         formatHandler.toggleBackground(chatline.selection, color,
                                        formatHandler.mircColorMap[color])
@@ -287,7 +287,11 @@ class Editor(
   }
 
   private fun showColorChooser(
-    activity: FragmentActivity, @StringRes title: Int, @ColorInt preselect: Int, f: (Int?) -> Unit
+    activity: FragmentActivity,
+    @StringRes title: Int,
+    @ColorInt preselect: Int?,
+    @ColorInt default: Int,
+    f: (Int?) -> Unit
   ) {
     var selectedColor: Int? = preselect
     ColorChooserDialog.Builder(chatline.context, title)
@@ -314,7 +318,7 @@ class Editor(
       .backButton(R.string.label_back)
       .customButton(R.string.label_colors_custom)
       .presetsButton(R.string.label_colors_mirc)
-      .preselect(preselect)
+      .preselect(preselect ?: default)
       .dynamicButtonColor(false)
       .allowUserColorInputAlpha(false)
       .callback(object : ColorChooserDialog.ColorCallback {
