@@ -8,7 +8,7 @@ import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 
 interface MessageRenderer {
   @LayoutRes
-  fun layout(type: Message_Type?, hasHighlight: Boolean): Int
+  fun layout(type: Message_Type?, hasHighlight: Boolean, isFollowUp: Boolean): Int
 
   fun bind(holder: MessageAdapter.QuasselMessageViewHolder, message: FormattedMessage,
            original: QuasselDatabase.DatabaseMessage)
@@ -17,7 +17,8 @@ interface MessageRenderer {
 
   fun init(viewHolder: MessageAdapter.QuasselMessageViewHolder,
            messageType: Message_Type?,
-           hasHighlight: Boolean) {
+           hasHighlight: Boolean,
+           isFollowUp: Boolean) {
   }
 }
 

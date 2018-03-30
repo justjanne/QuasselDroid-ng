@@ -212,16 +212,21 @@ FROM
       sender,
       senderPrefixes,
       content,
-      sender = coalesce((SELECT sender
-                         FROM message m
-                         WHERE m.messageId < message.messageId
-                               AND bufferId = ?
-                               AND type & ~? > 0
-                               AND date(datetime(m.time / 1000, 'unixepoch', 'localtime')) =
-                                   date(datetime(message.time / 1000, 'unixepoch', 'localtime'))
-                         ORDER BY m.messageId
-                           DESC
-                         LIMIT 1), 0) AS followUp
+      (SELECT 1
+       FROM
+         (SELECT *
+          FROM message m
+          WHERE m.messageId < message.messageId
+                AND bufferId = ?
+                AND type & ~? > 0
+          ORDER BY m.messageId
+            DESC
+          LIMIT 1) t
+       WHERE t.sender = message.sender
+             AND strftime('%s', date(datetime(t.time / 1000, 'unixepoch', 'localtime')), 'utc') * 1000 =
+                 strftime('%s', date(datetime(message.time / 1000, 'unixepoch', 'localtime')), 'utc') * 1000
+             AND t.type = message.type
+      ) = 1 AS followUp
     FROM message
     WHERE bufferId = ?
           AND type & ~? > 0

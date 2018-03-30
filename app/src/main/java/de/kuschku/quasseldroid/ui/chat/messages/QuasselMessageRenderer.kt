@@ -56,7 +56,8 @@ class QuasselMessageRenderer @Inject constructor(
 
   private val zoneId = ZoneId.systemDefault()
 
-  override fun layout(type: Message_Type?, hasHighlight: Boolean) = when (type) {
+  override fun layout(type: Message_Type?, hasHighlight: Boolean,
+                      isFollowUp: Boolean) = when (type) {
     Notice    -> R.layout.widget_chatmessage_notice
     Server    -> R.layout.widget_chatmessage_server
     Error     -> R.layout.widget_chatmessage_error
@@ -70,7 +71,8 @@ class QuasselMessageRenderer @Inject constructor(
 
   override fun init(viewHolder: MessageAdapter.QuasselMessageViewHolder,
                     messageType: Message_Type?,
-                    hasHighlight: Boolean) {
+                    hasHighlight: Boolean,
+                    isFollowUp: Boolean) {
     if (hasHighlight) {
       viewHolder.itemView.context.theme.styledAttributes(
         R.attr.colorForegroundHighlight, R.attr.colorBackgroundHighlight,
@@ -95,10 +97,11 @@ class QuasselMessageRenderer @Inject constructor(
       viewHolder.combined?.typeface = if (viewHolder.combined?.typeface?.isItalic == true) monospaceItalic else Typeface.MONOSPACE
     }
 
-    viewHolder.avatar?.visibleIf(messageSettings.showAvatars || true)
-    viewHolder.avatarPlaceholder?.visibleIf(messageSettings.showAvatars || true)
+    viewHolder.avatar?.visibleIf(!isFollowUp)
+    viewHolder.avatarContainer?.visibleIf(messageSettings.showAvatars)
+    viewHolder.avatarPlaceholder?.visibleIf(messageSettings.showAvatars)
     val separateLine = viewHolder.content != null && viewHolder.name != null && messageSettings.nicksOnNewLine
-    viewHolder.name?.visibleIf(separateLine)
+    viewHolder.name?.visibleIf(separateLine && !isFollowUp)
     viewHolder.content?.visibleIf(separateLine)
     viewHolder.combined?.visibleIf(!separateLine)
 
@@ -161,7 +164,6 @@ class QuasselMessageRenderer @Inject constructor(
           combined = SpanFormatter.format("%s: %s", nick, content),
           avatarUrl = message.avatarUrl,
           fallbackDrawable = TextDrawable.builder().buildRound(initial, senderColor),
-          isFollowUp = message.content.followUp,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected

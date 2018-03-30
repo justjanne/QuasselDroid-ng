@@ -30,6 +30,7 @@
       tools:text="@sample/messages.json/data/time" />
 
     <FrameLayout
+      android:id="@+id/avatar_container"
       android:layout_width="@dimen/avatar_size"
       android:layout_height="wrap_content"
       android:layout_marginBottom="@dimen/message_vertical"

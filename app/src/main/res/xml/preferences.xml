@@ -69,8 +69,9 @@
 
     <SwitchPreference
       android:defaultValue="false"
-      android:dependency="@string/preference_nicks_on_new_line_summary"
-      android:key="@string/preference_show_avatars_key" />
+      android:dependency="@string/preference_nicks_on_new_line_key"
+      android:key="@string/preference_show_avatars_key"
+      android:title="@string/preference_show_avatars_title" />
 
     <SwitchPreference
       android:defaultValue="false"

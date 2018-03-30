@@ -59,31 +59,42 @@ class MessageAdapter(
   }
 
   override fun getItemViewType(position: Int) = getItem(position)?.let {
-    viewType(Message_Flags.of(it.content.type), Message_Flags.of(it.content.flag))
+    viewType(Message_Flags.of(it.content.type),
+             Message_Flags.of(it.content.flag),
+             it.content.followUp)
   } ?: 0
 
-  private fun viewType(type: Message_Types, flags: Message_Flags) =
-    if (flags.hasFlag(Message_Flag.Highlight)) {
-      -type.value
-    } else {
-      type.value
-    }
+  private fun viewType(type: Message_Types, flags: Message_Flags, followUp: Boolean) =
+    type.value or
+      (if (flags.hasFlag(Message_Flag.Highlight)) MASK_HIGHLIGHT else 0x00) or
+      (if (followUp) MASK_FOLLOWUP else 0x00)
 
   override fun getItemId(position: Int): Long {
     return getItem(position)?.content?.messageId?.toLong() ?: 0L
   }
 
   private fun messageType(viewType: Int): Message_Type? =
-    Message_Type.of(Math.abs(viewType)).enabledValues().firstOrNull()
+    Message_Type.of(viewType and MASK_TYPE).enabledValues().firstOrNull()
 
-  private fun hasHiglight(viewType: Int) = viewType < 0
+  private fun hasHiglight(viewType: Int) = viewType and MASK_HIGHLIGHT != 0
+
+  private fun isFollowUp(viewType: Int) = viewType and MASK_FOLLOWUP != 0
+
+  companion object {
+    const val SHIFT_HIGHLIGHT = 32 - 1
+    const val SHIFT_FOLLOWUP = SHIFT_HIGHLIGHT - 1
+    const val MASK_HIGHLIGHT = 0x01 shl SHIFT_HIGHLIGHT
+    const val MASK_FOLLOWUP = 0x01 shl SHIFT_FOLLOWUP
+    const val MASK_TYPE = 0xFFFF
+  }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuasselMessageViewHolder {
     val messageType = messageType(viewType)
     val hasHighlight = hasHiglight(viewType)
+    val isFollowUp = isFollowUp(viewType)
     val viewHolder = QuasselMessageViewHolder(
       LayoutInflater.from(parent.context).inflate(
-        messageRenderer.layout(messageType, hasHighlight),
+        messageRenderer.layout(messageType, hasHighlight, isFollowUp),
         parent,
         false
       ),
@@ -91,7 +102,7 @@ class MessageAdapter(
       selectionListener,
       expansionListener
     )
-    messageRenderer.init(viewHolder, messageType, hasHighlight)
+    messageRenderer.init(viewHolder, messageType, hasHighlight, isFollowUp)
     return viewHolder
   }
 
@@ -118,6 +129,10 @@ class MessageAdapter(
     @BindView(R.id.avatar)
     @JvmField
     var avatar: ImageView? = null
+
+    @BindView(R.id.avatar_container)
+    @JvmField
+    var avatarContainer: View? = null
 
     @BindView(R.id.avatar_placeholder)
     @JvmField
@@ -183,11 +198,6 @@ class MessageAdapter(
       markerline?.visibleIf(message.isMarkerLine)
 
       this.itemView.isSelected = message.isSelected
-
-      if (message.isFollowUp) {
-        name?.visibility = View.GONE
-        avatar?.visibility = View.GONE
-      }
 
       avatar?.let { avatarView ->
         GlideApp.with(itemView)

@@ -10,7 +10,6 @@ class FormattedMessage(
   val combined: CharSequence,
   val fallbackDrawable: Drawable? = null,
   val avatarUrl: String? = null,
-  val isFollowUp: Boolean = false,
   val isSelected: Boolean,
   val isExpanded: Boolean,
   val isMarkerLine: Boolean
