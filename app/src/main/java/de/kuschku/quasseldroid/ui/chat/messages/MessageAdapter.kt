@@ -85,7 +85,7 @@ class MessageAdapter(
     const val SHIFT_FOLLOWUP = SHIFT_HIGHLIGHT - 1
     const val MASK_HIGHLIGHT = 0x01 shl SHIFT_HIGHLIGHT
     const val MASK_FOLLOWUP = 0x01 shl SHIFT_FOLLOWUP
-    const val MASK_TYPE = 0xFFFF
+    const val MASK_TYPE = 0xFFFFFF
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuasselMessageViewHolder {

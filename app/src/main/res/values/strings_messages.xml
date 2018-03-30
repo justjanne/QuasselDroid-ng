@@ -16,8 +16,8 @@
   </string-array>
 
   <string name="message_format_copy">[%1$s] %2$s</string>
+  <string name="message_format_copy_complex">[%1$s] &lt;%2$s&gt; %3$s</string>
 
-  <string name="message_format_plain">%1$s%2$s: %3$s</string>
   <string name="message_format_action">— %1$s%2$s %3$s</string>
   <string name="message_format_notice">[%1$s%2$s] %3$s</string>
   <string name="message_format_nick">%1$s%2$s is now known as %3$s%4$s</string>

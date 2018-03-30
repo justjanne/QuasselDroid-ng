@@ -359,7 +359,7 @@ class QuasselMessageRenderer @Inject constructor(
         val split = message.content.content.split("#:#")
         val (server1, server2) = split.last().split(' ')
         val usersAffected = split.size - 1
-        FormattedMessage(
+        val it = FormattedMessage(
           id = message.content.messageId,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
           combined = context.resources.getQuantityString(
@@ -369,6 +369,8 @@ class QuasselMessageRenderer @Inject constructor(
           isExpanded = message.isExpanded,
           isSelected = message.isSelected
         )
+        println("hi")
+        it
       }
       Message_Type.Server,
       Message_Type.Info,

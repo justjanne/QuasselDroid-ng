@@ -15,10 +15,15 @@ import android.text.SpannableStringBuilder
 import android.view.*
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.bumptech.glide.Glide
+import com.bumptech.glide.ListPreloader
+import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
+import com.bumptech.glide.util.FixedPreloadSizeProvider
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.quassel.syncables.BufferSyncer
 import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.persistence.findByBufferIdPagedWithDayChange
@@ -72,14 +77,26 @@ class MessageListFragment : ServiceBoundFragment() {
         viewModel.selectedMessages.value.values.sortedBy {
           it.id
         }.map {
-          SpanFormatter.format(getString(R.string.message_format_copy), it.time, it.content)
+          if (it.name != null && it.content != null) {
+            SpanFormatter.format(getString(R.string.message_format_copy_complex),
+                                 it.time,
+                                 it.name,
+                                 it.content)
+          } else {
+            SpanFormatter.format(getString(R.string.message_format_copy), it.time, it.combined)
+          }
         }.forEach {
           builder.append(it)
           builder.append("\n")
         }
 
+        val data = if (builder.endsWith('\n'))
+          builder.subSequence(0, builder.length - 1)
+        else
+          builder
+
         val clipboard = requireActivity().systemService<ClipboardManager>()
-        val clip = ClipData.newPlainText(null, builder)
+        val clip = ClipData.newPlainText(null, data)
         clipboard.primaryClip = clip
         actionMode?.finish()
         true
@@ -89,15 +106,27 @@ class MessageListFragment : ServiceBoundFragment() {
         viewModel.selectedMessages.value.values.sortedBy {
           it.id
         }.map {
-          SpanFormatter.format(getString(R.string.message_format_copy), it.time, it.content)
+          if (it.name != null && it.content != null) {
+            SpanFormatter.format(getString(R.string.message_format_copy_complex),
+                                 it.time,
+                                 it.name,
+                                 it.content)
+          } else {
+            SpanFormatter.format(getString(R.string.message_format_copy), it.time, it.combined)
+          }
         }.forEach {
           builder.append(it)
           builder.append("\n")
         }
 
+        val data = if (builder.endsWith('\n'))
+          builder.subSequence(0, builder.length - 1)
+        else
+          builder
+
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TEXT, builder)
+        intent.putExtra(Intent.EXTRA_TEXT, data)
         requireContext().startActivity(
           Intent.createChooser(
             intent,
@@ -311,7 +340,6 @@ class MessageListFragment : ServiceBoundFragment() {
       messageList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
     }
 
-    /*
     val avatar_size = resources.getDimensionPixelSize(R.dimen.avatar_size)
 
     val sizeProvider = FixedPreloadSizeProvider<String>(avatar_size, avatar_size)
@@ -328,7 +356,6 @@ class MessageListFragment : ServiceBoundFragment() {
     val preloader = RecyclerViewPreloader(Glide.with(this), preloadModelProvider, sizeProvider, 10)
 
     messageList.addOnScrollListener(preloader)
-    */
 
     return view
   }
