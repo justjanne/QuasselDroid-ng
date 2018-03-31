@@ -252,6 +252,10 @@ class QuasselViewModel : ViewModel() {
                           val lowestMode = userModes.mapNotNull(prefixModes::indexOf).min()
                                            ?: prefixModes.size
 
+                          if (user.nick() == "jwheare") {
+                            println(user.user())
+                          }
+
                           AutoCompleteItem.UserItem(
                             user.nick(),
                             network.modesToPrefixes(userModes),
