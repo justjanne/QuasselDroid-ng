@@ -6,14 +6,20 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.bumptech.glide.request.RequestOptions
+import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.helper.visibleIf
+import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import de.kuschku.quasseldroid.viewmodel.data.IrcUserItem
 
 class NickListAdapter(
+  private val messageSettings: MessageSettings,
   private val clickListener: ((String) -> Unit)? = null
 ) : ListAdapter<IrcUserItem, NickListAdapter.NickViewHolder>(
   object : DiffUtil.ItemCallback<IrcUserItem>() {
@@ -23,8 +29,8 @@ class NickListAdapter(
     override fun areContentsTheSame(oldItem: IrcUserItem?, newItem: IrcUserItem?) =
       oldItem == newItem
   }) {
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-    NickViewHolder(
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NickViewHolder {
+    val holder = NickViewHolder(
       LayoutInflater.from(parent.context).inflate(
         when (viewType) {
           VIEWTYPE_AWAY -> R.layout.widget_nick_away
@@ -33,6 +39,13 @@ class NickListAdapter(
       ),
       clickListener = clickListener
     )
+
+    holder.avatar.visibleIf(messageSettings.showAvatars)
+
+    return holder
+  }
+
+  operator fun get(position: Int): IrcUserItem? = super.getItem(position)
 
   override fun onBindViewHolder(holder: NickViewHolder, position: Int) =
     holder.bind(getItem(position))
@@ -47,11 +60,8 @@ class NickListAdapter(
     itemView: View,
     private val clickListener: ((String) -> Unit)? = null
   ) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.modesContainer)
-    lateinit var modesContainer: View
-
-    @BindView(R.id.modes)
-    lateinit var modes: TextView
+    @BindView(R.id.avatar)
+    lateinit var avatar: ImageView
 
     @BindView(R.id.nick)
     lateinit var nick: TextView
@@ -73,11 +83,15 @@ class NickListAdapter(
     fun bind(data: IrcUserItem) {
       user = data.nick
 
-      nick.text = data.nick
-      modes.text = data.modes
+      nick.text = SpanFormatter.format("%s%s", data.modes, data.displayNick ?: data.nick)
       realname.text = data.realname
 
-      modes.visibleIf(data.modes.isNotBlank())
+
+      GlideApp.with(itemView)
+        .load(data.avatarUrl)
+        .apply(RequestOptions.circleCropTransform())
+        .placeholder(data.fallbackDrawable)
+        .into(avatar)
     }
   }
 

@@ -11,7 +11,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.BufferInfo
-import de.kuschku.libquassel.util.hasFlag
+import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings

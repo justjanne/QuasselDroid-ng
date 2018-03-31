@@ -4,7 +4,7 @@ import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.QVariantMap
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.protocol.value
-import de.kuschku.libquassel.util.Flags
+import de.kuschku.libquassel.util.flag.Flags
 
 object ClientInitSerializer : HandshakeMessageSerializer<HandshakeMessage.ClientInit> {
   override fun serialize(data: HandshakeMessage.ClientInit) = mapOf(

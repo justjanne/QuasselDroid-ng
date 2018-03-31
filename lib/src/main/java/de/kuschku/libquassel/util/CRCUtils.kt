@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid.util.quassel
+package de.kuschku.libquassel.util
 
 object CRCUtils {
   fun qChecksum(data: ByteArray): Int {

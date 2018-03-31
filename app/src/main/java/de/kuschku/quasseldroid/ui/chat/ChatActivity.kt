@@ -26,8 +26,8 @@ import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.session.ConnectionState
-import de.kuschku.libquassel.util.and
-import de.kuschku.libquassel.util.or
+import de.kuschku.libquassel.util.flag.and
+import de.kuschku.libquassel.util.flag.or
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.AccountDatabase
@@ -41,6 +41,7 @@ import de.kuschku.quasseldroid.util.helper.editCommit
 import de.kuschku.quasseldroid.util.helper.invoke
 import de.kuschku.quasseldroid.util.helper.retint
 import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
@@ -75,6 +76,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   @Inject
   lateinit var messageSettings: MessageSettings
+
+  @Inject
+  lateinit var ircFormatDeserializer: IrcFormatDeserializer
 
   private lateinit var editor: Editor
 
@@ -117,8 +121,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         findViewById(R.id.autocomplete_list_expanded)
       ),
       findViewById(R.id.formatting_toolbar),
+      ircFormatDeserializer,
       appearanceSettings,
       autoCompleteSettings,
+      messageSettings,
       { lines ->
         viewModel.session { sessionOptional ->
           val session = sessionOptional.orNull()

@@ -1,9 +1,10 @@
 package de.kuschku.libquassel.quassel
 
-import de.kuschku.libquassel.util.Flag
-import de.kuschku.libquassel.util.Flags
+import de.kuschku.libquassel.util.flag.Flag
+import de.kuschku.libquassel.util.flag.Flags
 
-enum class ProtocolFeature(override val bit: Int) : Flag<ProtocolFeature> {
+enum class ProtocolFeature(override val bit: Int) :
+  Flag<ProtocolFeature> {
   None(0x00),
   TLS(0x01),
   Compression(0x02);

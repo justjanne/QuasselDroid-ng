@@ -1,4 +1,4 @@
-package de.kuschku.libquassel.util
+package de.kuschku.libquassel.util.flag
 
 interface Flag<T> where T : Enum<T>, T : Flag<T> {
   val bit: Int
@@ -47,15 +47,19 @@ data class Flags<E>(
 
   companion object {
     inline fun <reified T> of(int: Int): Flags<T>
-      where T : Flag<T>, T : Enum<T> = Flags(int, enumValues())
+      where T : Flag<T>, T : Enum<T> = Flags(
+      int,
+      enumValues())
 
     inline fun <reified T> of(vararg flags: T): Flags<T>
       where T : Flag<T>, T : Enum<T> =
-      Flags(flags.map(Flag<T>::bit).distinct().sum(), enumValues())
+      Flags(flags.map(Flag<T>::bit).distinct().sum(),
+            enumValues())
 
     inline fun <reified T> of(flags: Iterable<T>): Flags<T>
       where T : Flag<T>, T : Enum<T> =
-      Flags(flags.map(Flag<T>::bit).distinct().sum(), enumValues())
+      Flags(flags.map(Flag<T>::bit).distinct().sum(),
+            enumValues())
   }
 
   interface Factory<E> where E : Flag<E>, E : Enum<E> {
@@ -74,40 +78,53 @@ infix fun <T> Flags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : Flag<T>
 }
 
 infix fun <T> Flags<T>.or(other: Int): Flags<T>
-  where T : kotlin.Enum<T>, T : Flag<T> = Flags(value or other)
+  where T : kotlin.Enum<T>, T : Flag<T> = Flags(
+  value or other)
 
 infix fun <T> Flags<T>.or(other: Flag<T>): Flags<T>
-  where T : kotlin.Enum<T>, T : Flag<T> = Flags(value or other.bit)
+  where T : kotlin.Enum<T>, T : Flag<T> = Flags(
+  value or other.bit)
 
 infix fun <T> Flags<T>.or(other: Flags<T>): Flags<T>
-  where T : kotlin.Enum<T>, T : Flag<T> = Flags(value or other.value)
+  where T : kotlin.Enum<T>, T : Flag<T> = Flags(
+  value or other.value)
 
 infix fun <T> Flags<T>.and(other: Int): Flags<T>
-  where T : kotlin.Enum<T>, T : Flag<T> = Flags(value and other)
+  where T : kotlin.Enum<T>, T : Flag<T> = Flags(
+  value and other)
 
 infix fun <T> Flags<T>.and(other: Flag<T>): Flags<T>
-  where T : kotlin.Enum<T>, T : Flag<T> = Flags(value and other.bit)
+  where T : kotlin.Enum<T>, T : Flag<T> = Flags(
+  value and other.bit)
 
 infix fun <T> Flags<T>.and(other: Flags<T>): Flags<T>
-  where T : kotlin.Enum<T>, T : Flag<T> = Flags(value and other.value)
+  where T : kotlin.Enum<T>, T : Flag<T> = Flags(
+  value and other.value)
 
 infix operator fun <T> Flags<T>.plus(other: Int): Flags<T>
-  where T : Enum<T>, T : Flag<T> = Flags(value or other)
+  where T : Enum<T>, T : Flag<T> = Flags(
+  value or other)
 
 infix operator fun <T> Flags<T>.plus(other: Flag<T>): Flags<T>
-  where T : Enum<T>, T : Flag<T> = Flags(value or other.bit)
+  where T : Enum<T>, T : Flag<T> = Flags(
+  value or other.bit)
 
 infix operator fun <T> Flags<T>.plus(other: Flags<T>): Flags<T>
-  where T : Enum<T>, T : Flag<T> = Flags(value or other.value)
+  where T : Enum<T>, T : Flag<T> = Flags(
+  value or other.value)
 
 infix operator fun <T> Flags<T>.minus(other: Int): Flags<T>
-  where T : Enum<T>, T : Flag<T> = Flags(value and other.inv())
+  where T : Enum<T>, T : Flag<T> = Flags(
+  value and other.inv())
 
 infix operator fun <T> Flags<T>.minus(other: Flag<T>): Flags<T>
-  where T : Enum<T>, T : Flag<T> = Flags(value and other.bit.inv())
+  where T : Enum<T>, T : Flag<T> = Flags(
+  value and other.bit.inv())
 
 infix operator fun <T> Flags<T>.minus(other: Flags<T>): Flags<T>
-  where T : Enum<T>, T : Flag<T> = Flags(value and other.value.inv())
+  where T : Enum<T>, T : Flag<T> = Flags(
+  value and other.value.inv())
 
 infix fun <T> Flags<T>.unset(which: T): Flags<T>
-  where T : Enum<T>, T : Flag<T> = Flags(value xor which.bit)
+  where T : Enum<T>, T : Flag<T> = Flags(
+  value xor which.bit)

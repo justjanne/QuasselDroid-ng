@@ -3,8 +3,8 @@ package de.kuschku.libquassel.quassel.syncables.interfaces
 import de.kuschku.libquassel.annotations.Slot
 import de.kuschku.libquassel.annotations.Syncable
 import de.kuschku.libquassel.protocol.*
-import de.kuschku.libquassel.util.Flag
-import de.kuschku.libquassel.util.Flags
+import de.kuschku.libquassel.util.flag.Flag
+import de.kuschku.libquassel.util.flag.Flags
 import java.nio.ByteBuffer
 
 @Syncable(name = "Network")
@@ -255,7 +255,8 @@ interface INetwork : ISyncableObject {
    * {@see http://www.irc.org/tech_docs/005.html}
    * {@see http://www.irc.org/tech_docs/draft-brocklesby-irc-isupport-03.txt}
    */
-  enum class ChannelModeType(override val bit: Int) : Flag<ChannelModeType> {
+  enum class ChannelModeType(override val bit: Int) :
+    Flag<ChannelModeType> {
     NOT_A_CHANMODE(0x00),
     A_CHANMODE(0x01),
     B_CHANMODE(0x02),

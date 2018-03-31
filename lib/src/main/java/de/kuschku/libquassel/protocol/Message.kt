@@ -1,8 +1,8 @@
 package de.kuschku.libquassel.protocol
 
 import de.kuschku.libquassel.quassel.BufferInfo
-import de.kuschku.libquassel.util.Flag
-import de.kuschku.libquassel.util.Flags
+import de.kuschku.libquassel.util.flag.Flag
+import de.kuschku.libquassel.util.flag.Flags
 import org.threeten.bp.Instant
 
 class Message(
@@ -15,7 +15,8 @@ class Message(
   val senderPrefixes: String,
   val content: String
 ) {
-  enum class MessageType(override val bit: Int) : Flag<MessageType> {
+  enum class MessageType(override val bit: Int) :
+    Flag<MessageType> {
     Plain(0x00001),
     Notice(0x00002),
     Action(0x00004),
@@ -44,7 +45,8 @@ class Message(
     }
   }
 
-  enum class MessageFlag(override val bit: Int) : Flag<MessageFlag> {
+  enum class MessageFlag(override val bit: Int) :
+    Flag<MessageFlag> {
     Self(0x01),
     Highlight(0x02),
     Redirected(0x04),

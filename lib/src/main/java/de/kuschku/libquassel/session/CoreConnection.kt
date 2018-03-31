@@ -13,7 +13,7 @@ import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
-import de.kuschku.libquassel.util.hasFlag
+import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helpers.hexDump
 import de.kuschku.libquassel.util.helpers.write
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer

@@ -1,7 +1,7 @@
 package de.kuschku.libquassel.quassel
 
-import de.kuschku.libquassel.util.Flag
-import de.kuschku.libquassel.util.Flags
+import de.kuschku.libquassel.util.flag.Flag
+import de.kuschku.libquassel.util.flag.Flags
 
 /**
  * A list of features that are optional in core and/or client, but need runtime checking
@@ -12,7 +12,8 @@ import de.kuschku.libquassel.util.Flags
  *
  * This list should be cleaned up after every protocol break, as we can assume them to be present then.
  */
-enum class LegacyFeature(override val bit: Int) : Flag<LegacyFeature> {
+enum class LegacyFeature(override val bit: Int) :
+  Flag<LegacyFeature> {
   SynchronizedMarkerLine(0x0001),
   SaslAuthentication(0x0002),
   SaslExternal(0x0004),

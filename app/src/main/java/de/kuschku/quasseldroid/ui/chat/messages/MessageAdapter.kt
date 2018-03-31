@@ -17,7 +17,7 @@ import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Flags
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.Message_Types
-import de.kuschku.libquassel.util.hasFlag
+import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase

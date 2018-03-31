@@ -5,8 +5,8 @@ import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.LegacyFeature
 import de.kuschku.libquassel.quassel.ProtocolFeature
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
-import de.kuschku.libquassel.util.Flags
-import de.kuschku.libquassel.util.ShortFlags
+import de.kuschku.libquassel.util.flag.Flags
+import de.kuschku.libquassel.util.flag.ShortFlags
 import de.kuschku.libquassel.util.helpers.deserializeString
 import java.nio.ByteBuffer
 

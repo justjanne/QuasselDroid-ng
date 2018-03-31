@@ -13,9 +13,9 @@ import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
-import de.kuschku.libquassel.util.hasFlag
+import de.kuschku.libquassel.util.flag.hasFlag
+import de.kuschku.libquassel.util.flag.minus
 import de.kuschku.libquassel.util.helpers.value
-import de.kuschku.libquassel.util.minus
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings

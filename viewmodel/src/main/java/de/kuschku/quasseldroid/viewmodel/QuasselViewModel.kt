@@ -15,8 +15,8 @@ import de.kuschku.libquassel.session.ConnectionState
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.Optional
-import de.kuschku.libquassel.util.and
-import de.kuschku.libquassel.util.hasFlag
+import de.kuschku.libquassel.util.flag.and
+import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helpers.*
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.switchMapNotNull
@@ -181,7 +181,10 @@ class QuasselViewModel : ViewModel() {
                       lowestMode,
                       user.realName(),
                       user.isAway(),
-                      network.support("CASEMAPPING")
+                      network.support("CASEMAPPING"),
+                      Regex("[us]id(\\d+)").matchEntire(user.user())?.groupValues?.lastOrNull()?.let {
+                        "https://www.irccloud.com/avatar-redirect/$it"
+                      }
                     )
                   }
                 }
@@ -255,7 +258,10 @@ class QuasselViewModel : ViewModel() {
                             lowestMode,
                             user.realName(),
                             user.isAway(),
-                            network.support("CASEMAPPING")
+                            network.support("CASEMAPPING"),
+                            Regex("[us]id(\\d+)").matchEntire(user.user())?.groupValues?.lastOrNull()?.let {
+                              "https://www.irccloud.com/avatar-redirect/$it"
+                            }
                           )
                         }
                       }

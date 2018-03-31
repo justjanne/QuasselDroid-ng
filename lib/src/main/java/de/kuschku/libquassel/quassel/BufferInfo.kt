@@ -1,10 +1,10 @@
 package de.kuschku.libquassel.quassel
 
 import de.kuschku.libquassel.protocol.Buffer_Types
-import de.kuschku.libquassel.util.Flag
-import de.kuschku.libquassel.util.Flags
-import de.kuschku.libquassel.util.ShortFlag
-import de.kuschku.libquassel.util.ShortFlags
+import de.kuschku.libquassel.util.flag.Flag
+import de.kuschku.libquassel.util.flag.Flags
+import de.kuschku.libquassel.util.flag.ShortFlag
+import de.kuschku.libquassel.util.flag.ShortFlags
 
 data class BufferInfo(
   var bufferId: Int,

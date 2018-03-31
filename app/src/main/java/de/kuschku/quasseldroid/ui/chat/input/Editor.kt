@@ -2,6 +2,7 @@ package de.kuschku.quasseldroid.ui.chat.input
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
+import android.graphics.Typeface
 import android.support.annotation.ColorInt
 import android.support.annotation.StringRes
 import android.support.v4.app.FragmentActivity
@@ -9,18 +10,25 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.*
 import android.text.Editable
 import android.text.InputType
+import android.text.SpannableString
 import android.text.TextWatcher
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.util.IrcUserUtils
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
+import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.util.helper.*
+import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.ui.ColorChooserDialog
 import de.kuschku.quasseldroid.util.ui.EditTextSelectionChange
+import de.kuschku.quasseldroid.util.ui.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -37,9 +45,12 @@ class Editor(
   tabComplete: AppCompatImageButton,
   autoCompleteLists: List<RecyclerView>,
   formattingToolbar: Toolbar,
+  // Helpers
+  private val ircFormatDeserializer: IrcFormatDeserializer,
   // Settings
   private val appearanceSettings: AppearanceSettings,
   private val autoCompleteSettings: AutoCompleteSettings,
+  private val messageSettings: MessageSettings,
   // Listeners
   private val sendCallback: (Sequence<Pair<CharSequence, String>>) -> Unit,
   private val panelStateCallback: (Boolean) -> Unit
@@ -50,6 +61,17 @@ class Editor(
       true
     }
     else                      -> false
+  }
+
+  private val senderColors = activity.theme.styledAttributes(
+    R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
+    R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
+    R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
+    R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF
+  ) {
+    IntArray(16) {
+      getColor(it, 0)
+    }
   }
 
   private val lastWord = BehaviorSubject.createDefault(Pair("", IntRange.EMPTY))
@@ -137,6 +159,7 @@ class Editor(
     }.fold(0, Int::or)
 
     val autocompleteAdapter = AutoCompleteAdapter(
+      messageSettings,
       // This is still broken when mixing tab complete and UI auto complete
       formatHandler::autoComplete
     )
@@ -146,7 +169,49 @@ class Editor(
       val shouldShowResults = (autoCompleteSettings.auto && query.length >= 3) ||
                               (autoCompleteSettings.prefix && query.startsWith('@')) ||
                               (autoCompleteSettings.prefix && query.startsWith('#'))
-      autocompleteAdapter.submitList(if (shouldShowResults) it?.second.orEmpty() else emptyList())
+      val list = if (shouldShowResults) it?.second.orEmpty() else emptyList()
+      autocompleteAdapter.submitList(list.map {
+        if (it is AutoCompleteItem.UserItem) {
+          val nickName = it.nick
+          val senderColorIndex = IrcUserUtils.senderColor(nickName)
+          val initial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
+            .firstOrNull()?.toUpperCase().toString()
+          val senderColor = senderColors[senderColorIndex]
+
+          fun formatNick(nick: CharSequence): CharSequence {
+            val spannableString = SpannableString(nick)
+            spannableString.setSpan(
+              ForegroundColorSpan(senderColor),
+              0,
+              nick.length,
+              SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+            spannableString.setSpan(
+              StyleSpan(Typeface.BOLD),
+              0,
+              nick.length,
+              SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+            return spannableString
+          }
+
+          it.copy(
+            displayNick = formatNick(it.nick),
+            fallbackDrawable = TextDrawable.builder().buildRound(initial, senderColor),
+            modes = when (messageSettings.showPrefix) {
+              MessageSettings.ShowPrefixMode.ALL ->
+                it.modes
+              else                               ->
+                it.modes.substring(0, Math.min(it.modes.length, 1))
+            },
+            realname = ircFormatDeserializer.formatString(
+              activity, it.realname.toString(), messageSettings.colorizeMirc
+            )
+          )
+        } else {
+          it
+        }
+      })
     })
 
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {

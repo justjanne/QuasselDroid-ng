@@ -18,7 +18,7 @@ import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
-import de.kuschku.libquassel.util.hasFlag
+import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.viewmodel.data.BufferListItem

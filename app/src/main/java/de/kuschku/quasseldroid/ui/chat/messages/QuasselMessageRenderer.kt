@@ -11,7 +11,8 @@ import android.util.TypedValue
 import de.kuschku.libquassel.protocol.Message.MessageType.*
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
-import de.kuschku.libquassel.util.hasFlag
+import de.kuschku.libquassel.util.IrcUserUtils
+import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
@@ -21,7 +22,6 @@ import de.kuschku.quasseldroid.settings.MessageSettings.ShowPrefixMode
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
-import de.kuschku.quasseldroid.util.quassel.IrcUserUtils
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import de.kuschku.quasseldroid.util.ui.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
@@ -420,7 +420,7 @@ class QuasselMessageRenderer @Inject constructor(
     if (colorize) {
       val senderColor = IrcUserUtils.senderColor(nick)
       spannableString.setSpan(
-        ForegroundColorSpan(senderColors[senderColor % senderColors.size]),
+        ForegroundColorSpan(senderColors[(senderColor + senderColors.size) % senderColors.size]),
         0,
         nick.length,
         SpannableString.SPAN_INCLUSIVE_EXCLUSIVE

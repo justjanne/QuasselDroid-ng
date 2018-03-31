@@ -1,5 +1,6 @@
 package de.kuschku.quasseldroid.viewmodel.data
 
+import android.graphics.drawable.Drawable
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 
@@ -20,7 +21,10 @@ sealed class AutoCompleteItem(open val name: String) : Comparable<AutoCompleteIt
     val lowestMode: Int,
     val realname: CharSequence,
     val away: Boolean,
-    val networkCasemapping: String?
+    val networkCasemapping: String?,
+    val displayNick: CharSequence? = null,
+    val avatarUrl: String? = null,
+    val fallbackDrawable: Drawable? = null
   ) : AutoCompleteItem(nick)
 
   data class ChannelItem(

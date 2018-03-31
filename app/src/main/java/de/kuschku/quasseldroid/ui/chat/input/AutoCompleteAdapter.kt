@@ -11,16 +11,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.bumptech.glide.request.RequestOptions
+import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.nicks.NickListAdapter.Companion.VIEWTYPE_AWAY
 import de.kuschku.quasseldroid.util.helper.getDrawableCompat
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.tint
 import de.kuschku.quasseldroid.util.helper.visibleIf
+import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
 
 class AutoCompleteAdapter(
+  private val messageSettings: MessageSettings,
   private val clickListener: ((String) -> Unit)? = null
 ) : ListAdapter<AutoCompleteItem, AutoCompleteAdapter.AutoCompleteViewHolder>(
   object : DiffUtil.ItemCallback<AutoCompleteItem>() {
@@ -37,15 +42,21 @@ class AutoCompleteAdapter(
         .inflate(R.layout.widget_buffer, parent, false),
       clickListener = clickListener
     )
-    VIEWTYPE_NICK_ACTIVE, VIEWTYPE_NICK_AWAY -> AutoCompleteViewHolder.NickViewHolder(
-      LayoutInflater.from(parent.context).inflate(
-        when (viewType) {
-          VIEWTYPE_AWAY -> R.layout.widget_nick_away
-          else          -> R.layout.widget_nick
-        }, parent, false
-      ),
-      clickListener = clickListener
-    )
+    VIEWTYPE_NICK_ACTIVE, VIEWTYPE_NICK_AWAY -> {
+      val holder = AutoCompleteViewHolder.NickViewHolder(
+        LayoutInflater.from(parent.context).inflate(
+          when (viewType) {
+            VIEWTYPE_AWAY -> R.layout.widget_nick_away
+            else          -> R.layout.widget_nick
+          }, parent, false
+        ),
+        clickListener = clickListener
+      )
+
+      holder.avatar.visibleIf(messageSettings.showAvatars)
+
+      holder
+    }
     else                                     -> throw IllegalArgumentException(
       "Invoked with wrong item type"
     )
@@ -75,11 +86,8 @@ class AutoCompleteAdapter(
       itemView: View,
       private val clickListener: ((String) -> Unit)? = null
     ) : AutoCompleteViewHolder(itemView) {
-      @BindView(R.id.modesContainer)
-      lateinit var modesContainer: View
-
-      @BindView(R.id.modes)
-      lateinit var modes: TextView
+      @BindView(R.id.avatar)
+      lateinit var avatar: ImageView
 
       @BindView(R.id.nick)
       lateinit var nick: TextView
@@ -101,11 +109,14 @@ class AutoCompleteAdapter(
       fun bindImpl(data: AutoCompleteItem.UserItem) {
         value = data.name
 
-        nick.text = data.nick
-        modes.text = data.modes
+        nick.text = SpanFormatter.format("%s%s", data.modes, data.displayNick ?: data.nick)
         realname.text = data.realname
 
-        modes.visibleIf(data.modes.isNotBlank())
+        GlideApp.with(itemView)
+          .load(data.avatarUrl)
+          .apply(RequestOptions.circleCropTransform())
+          .placeholder(data.fallbackDrawable)
+          .into(avatar)
       }
     }
 

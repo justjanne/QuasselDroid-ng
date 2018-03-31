@@ -1,7 +1,7 @@
 package de.kuschku.libquassel.protocol.message
 
 import de.kuschku.libquassel.protocol.*
-import de.kuschku.libquassel.util.Flags
+import de.kuschku.libquassel.util.flag.Flags
 
 object ClientInitAckSerializer : HandshakeMessageSerializer<HandshakeMessage.ClientInitAck> {
   override fun serialize(data: HandshakeMessage.ClientInitAck) = mapOf(

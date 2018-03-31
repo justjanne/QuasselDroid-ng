@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid.util.quassel
+package de.kuschku.libquassel.util
 
 import java.util.*
 
