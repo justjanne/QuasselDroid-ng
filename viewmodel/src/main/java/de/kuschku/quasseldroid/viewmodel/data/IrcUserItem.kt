@@ -6,5 +6,5 @@ data class IrcUserItem(
   val lowestMode: Int,
   val realname: CharSequence,
   val away: Boolean,
-  val networkCasemapping: String
+  val networkCasemapping: String?
 )

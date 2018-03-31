@@ -44,7 +44,7 @@ object IrcCaseMappers {
     }
   }
 
-  operator fun get(caseMapping: String) = if (caseMapping.equals("rfc1459", ignoreCase = true)) {
+  operator fun get(caseMapping: String?) = if (caseMapping.equals("rfc1459", ignoreCase = true)) {
     irc
   } else {
     unicode

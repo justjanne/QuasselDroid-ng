@@ -8,6 +8,7 @@ import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import io.reactivex.BackpressureStrategy
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import org.threeten.bp.Instant
@@ -43,10 +44,18 @@ class Session(
   override val certManagers = mutableMapOf<IdentityId, CertManager>()
   override val coreInfo = CoreInfo(this)
   override val dccConfig = DccConfig(this)
+
   override val identities = mutableMapOf<IdentityId, Identity>()
+  private val live_identities = BehaviorSubject.createDefault(Unit)
+  override fun live_identities(): Observable<Map<IdentityId, Identity>> = live_identities.map { identities }
+
   override val ignoreListManager = IgnoreListManager(this)
   override val ircListHelper = IrcListHelper(this)
+
   override val networks = mutableMapOf<NetworkId, Network>()
+  private val live_networks = BehaviorSubject.createDefault(Unit)
+  override fun live_networks(): Observable<Map<NetworkId, Network>> = live_networks.map { networks }
+
   override val networkConfig = NetworkConfig(this)
 
   override var rpcHandler: RpcHandler? = RpcHandler(this, backlogStorage)
@@ -104,6 +113,33 @@ class Session(
     return true
   }
 
+  fun addNetwork(networkId: NetworkId) {
+    val network = Network(networkId, this)
+    networks[networkId] = network
+    synchronize(network)
+    live_networks.onNext(Unit)
+  }
+
+  fun removeNetwork(networkId: NetworkId) {
+    val network = networks.remove(networkId)
+    stopSynchronize(network)
+    live_networks.onNext(Unit)
+  }
+
+  fun addIdentity(initData: QVariantMap) {
+    val identity = Identity(this)
+    identity.fromVariantMap(initData)
+    identities[identity.id()] = identity
+    synchronize(identity)
+    live_identities.onNext(Unit)
+  }
+
+  fun removeIdentity(identityId: IdentityId) {
+    val identity = identities.remove(identityId)
+    stopSynchronize(identity)
+    live_identities.onNext(Unit)
+  }
+
   override fun handle(f: HandshakeMessage.SessionInit): Boolean {
     coreConnection.setState(ConnectionState.INIT)
 
@@ -114,6 +150,7 @@ class Session(
         val network = Network(it.value(-1), this)
         networks[network.networkId()] = network
       }
+      live_networks.onNext(Unit)
 
       f.identities?.forEach {
         val identity = Identity(this)

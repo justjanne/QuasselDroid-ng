@@ -44,7 +44,7 @@ class Network constructor(
   fun isMe(ircUser: IrcUser) = myNick().equals(ircUser.nick(), true)
   fun isChannelName(channelName: String) = when {
     channelName.isBlank() -> false
-    supports("CHANTYPES") -> support("CHANTYPES").contains(channelName[0])
+    supports("CHANTYPES") -> support("CHANTYPES")?.contains(channelName[0]) ?: false
     else                  -> "#&!+".contains(channelName[0])
   }
 
@@ -63,7 +63,7 @@ class Network constructor(
    */
   fun isStatusMsg(target: String) = when {
     target.isBlank()      -> false
-    supports("STATUSMSG") -> support("STATUSMSG").contains(target[0])
+    supports("STATUSMSG") -> support("STATUSMSG")?.contains(target[0]) ?: false
     else                  -> "@+".contains(target[0])
   }
 
@@ -98,9 +98,10 @@ class Network constructor(
     _channelModes = ChannelModeType.validValues
       .zip(
         support("CHANMODES")
-          .split(',', limit = ChannelModeType.validValues.size)
-          .map(String::toCharArray)
-          .map(CharArray::toSet)
+          ?.split(',', limit = ChannelModeType.validValues.size)
+          ?.map(String::toCharArray)
+          ?.map(CharArray::toSet)
+          .orEmpty()
       ).toMap()
   }
 
@@ -160,6 +161,8 @@ class Network constructor(
     unlimitedMessageRate = unlimitedMessageRate()
   )
 
+  fun liveNetworkInfo() = live_networkInfo.map { networkInfo() }
+
   fun setNetworkInfo(info: NetworkInfo) {
     // we don't set our ID!
     if (!info.networkName.isEmpty() && info.networkName != networkName())
@@ -174,7 +177,7 @@ class Network constructor(
       setCodecForDecoding(Charset.forName(info.codecForDecoding))
     // FIXME compare components
     if (info.serverList.isNotEmpty())
-      setServerList(info.serverList.map { QVariant.of(it, QType.Network_Server) })
+      setServerList(info.serverList.map { QVariant.of(it.toVariantMap(), QType.Network_Server) })
     if (info.useRandomServer != useRandomServer())
       setUseRandomServer(info.useRandomServer)
     if (info.perform != perform())
@@ -226,7 +229,7 @@ class Network constructor(
 
   private fun determinePrefixes() {
     // seems like we have to construct them first
-    val prefix = support("PREFIX")
+    val prefix = support("PREFIX") ?: ""
     if (prefix.startsWith("(") && prefix.contains(")")) {
       val (prefixModes, prefixes) = prefix.substring(1)
         .split(')', limit = 2)
@@ -264,7 +267,7 @@ class Network constructor(
 
   fun channelModes(): Map<ChannelModeType, Set<Char>>? = _channelModes
 
-  fun supports(): Map<String, String> = _supports
+  fun supports(): Map<String, String?> = _supports
   fun supports(param: String) = _supports.contains(param.toUpperCase(Locale.US))
   fun support(param: String) = _supports.getOr(param, "")
   /**
@@ -319,7 +322,8 @@ class Network constructor(
     // reduce the risk of breaking existing setups.
     // See: http://ircv3.net/specs/extensions/sasl-3.1.html
     // And: http://ircv3.net/specs/extensions/sasl-3.2.html
-    return (capValue.isBlank() || capValue.contains(saslMechanism, ignoreCase = true))
+    return (capValue.isNullOrBlank() ||
+            capValue?.contains(saslMechanism, ignoreCase = true) ?: false)
   }
 
   fun newIrcUser(hostMask: String, initData: QVariantMap = emptyMap()): IrcUser {
@@ -410,7 +414,7 @@ class Network constructor(
     super.setNetworkName(networkName)
   }
 
-  override fun setCurrentServer(currentServer: String) {
+  override fun setCurrentServer(currentServer: String?) {
     if (_currentServer == currentServer)
       return
     _currentServer = currentServer
@@ -438,12 +442,12 @@ class Network constructor(
     super.setConnectionState(state)
   }
 
-  override fun setMyNick(mynick: String) {
+  override fun setMyNick(mynick: String?) {
     if (_myNick == mynick)
       return
     _myNick = mynick
-    if (_myNick.isNotEmpty() && ircUser(myNick()) == null) {
-      newIrcUser(myNick())
+    if (_myNick != null && _myNick.isNullOrEmpty() && ircUser(myNick()) == null) {
+      newIrcUser(myNick() ?: "")
     }
     super.setMyNick(mynick)
   }
@@ -464,8 +468,9 @@ class Network constructor(
 
   override fun setServerList(serverList: QVariantList) {
     val actualServerList = serverList.map {
-      it.valueOrThrow<Server>()
-    }
+      it.valueOrThrow<QVariantMap>()
+    }.map(Server.Companion::fromVariantMap)
+
     if (_serverList == actualServerList)
       return
     _serverList = actualServerList
@@ -631,7 +636,7 @@ class Network constructor(
     setCodecForDecoding(Charset.forName(codecName))
   }
 
-  override fun addSupport(param: String, value: String) {
+  override fun addSupport(param: String, value: String?) {
     _supports[param] = value
     super.addSupport(param, value)
   }
@@ -643,7 +648,7 @@ class Network constructor(
     super.removeSupport(param)
   }
 
-  override fun addCap(capability: String, value: String) {
+  override fun addCap(capability: String, value: String?) {
     _caps[capability.toLowerCase(Locale.US)] = value
     super.addCap(capability, value)
   }
@@ -699,13 +704,17 @@ class Network constructor(
 
   override fun initIrcUsersAndChannels(): QVariantMap {
     return mapOf(
-      "Users" to QVariant.of(_ircUsers.values.map { it.toVariantMap() }.transpose().map {
-        QVariant.of(it, Type.QVariantList)
-      }, Type.QVariantMap
+      "Users" to QVariant.of(
+        _ircUsers.values.map { it.toVariantMap() }.transpose().map {
+          QVariant.of(it, Type.QVariantList)
+        },
+        Type.QVariantMap
       ),
-      "Channels" to QVariant.of(_ircChannels.values.map { it.toVariantMap() }.transpose().map {
-        QVariant.of(it, Type.QVariantList)
-      }, Type.QVariantMap
+      "Channels" to QVariant.of(
+        _ircChannels.values.map { it.toVariantMap() }.transpose().map {
+          QVariant.of(it, Type.QVariantList)
+        },
+        Type.QVariantMap
       )
     )
   }
@@ -715,14 +724,14 @@ class Network constructor(
     "currentServer" to QVariant.of(currentServer(), Type.QString),
     "myNick" to QVariant.of(myNick(), Type.QString),
     "latency" to QVariant.of(latency(), Type.Int),
-    "codecForServer" to QVariant.of(codecForServer().serializeString(StringSerializer.UTF8),
-                                    Type.QByteArray
+    "codecForServer" to QVariant.of(
+      codecForServer().serializeString(StringSerializer.UTF8), Type.QByteArray
     ),
-    "codecForEncoding" to QVariant.of(codecForEncoding().serializeString(StringSerializer.UTF8),
-                                      Type.QByteArray
+    "codecForEncoding" to QVariant.of(
+      codecForEncoding().serializeString(StringSerializer.UTF8), Type.QByteArray
     ),
-    "codecForDecoding" to QVariant.of(codecForDecoding().serializeString(StringSerializer.UTF8),
-                                      Type.QByteArray
+    "codecForDecoding" to QVariant.of(
+      codecForDecoding().serializeString(StringSerializer.UTF8), Type.QByteArray
     ),
     "identityId" to QVariant.of(identity(), QType.IdentityId),
     "isConnected" to QVariant.of(isConnected(), Type.Bool),
@@ -875,11 +884,23 @@ class Network constructor(
   }
 
   private var _networkId: NetworkId = networkId
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   private var _identity: IdentityId = -1
-  private var _myNick: String = ""
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
+  private var _myNick: String? = null
   private var _latency: Int = 0
   private var _networkName: String = "<not initialized>"
-  private var _currentServer: String = ""
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
+  private var _currentServer: String? = null
   private var _connected: Boolean = false
   private var _connectionState: ConnectionState = ConnectionState.Disconnected
   val live_connectionState = BehaviorSubject.createDefault(ConnectionState.Disconnected)
@@ -893,47 +914,133 @@ class Network constructor(
   private var _ircChannels: MutableMap<String, IrcChannel> = mutableMapOf()
   private val live_ircChannels = BehaviorSubject.createDefault(emptyMap<String, IrcChannel>())
   // stores results from RPL_ISUPPORT
-  private var _supports: MutableMap<String, String> = mutableMapOf()
+  private var _supports: MutableMap<String, String?> = mutableMapOf()
   /**
    * Capabilities supported by the IRC server
    * By synchronizing the supported capabilities, the client could suggest certain behaviors, e.g.
    * in the Network settings dialog, recommending SASL instead of using NickServ, or warning if
    * SASL EXTERNAL isn't available.
    */
-  private var _caps: MutableMap<String, String> = mutableMapOf()
+  private var _caps: MutableMap<String, String?> = mutableMapOf()
   /**
    * Enabled capabilities that received 'CAP ACK'
    * _capsEnabled uses the same values from the <name>=<value> pairs stored in _caps
    */
   private var _capsEnabled: MutableSet<String> = mutableSetOf()
-  private var _serverList: List<Server> = mutableListOf()
+  private var _serverList: List<Server> = listOf()
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   private var _useRandomServer: Boolean = false
-  private var _perform: List<String> = mutableListOf()
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
+  private var _perform: List<String> = listOf()
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   private var _useAutoIdentify: Boolean = false
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   private var _autoIdentifyService: String = ""
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   private var _autoIdentifyPassword: String = ""
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   private var _useSasl: Boolean = false
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   private var _saslAccount: String = ""
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   private var _saslPassword: String = ""
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   private var _useAutoReconnect: Boolean = false
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   private var _autoReconnectInterval: UInt = 60
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   private var _autoReconnectRetries: UShort = 10
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   private var _unlimitedReconnectRetries = false
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   private var _rejoinChannels = false
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   // Custom rate limiting
   /** If true, use custom rate limits, otherwise use defaults */
   private var _useCustomMessageRate: Boolean = false
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   /** Maximum number of messages to send without any delays */
   private var _messageRateBurstSize: UInt = 5
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   /** Delay in ms. for messages when max. burst messages sent */
   private var _messageRateDelay: UInt = 2200
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   /** If true, disable rate limiting, otherwise apply limits */
   private var _unlimitedMessageRate: Boolean = false
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   private var _codecForServer: Charset = Charsets.UTF_8
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   private var _codecForEncoding: Charset = Charsets.UTF_8
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   private var _codecForDecoding: Charset = Charsets.UTF_8
+    set(value) {
+      field = value
+      live_networkInfo.onNext(Unit)
+    }
   /** when this is active handle305 and handle306 don't trigger any output */
   private var _autoAwayActive: Boolean = false
+
+  private val live_networkInfo = BehaviorSubject.createDefault(Unit)
 
   companion object {
     val NULL = Network(-1, SignalProxy.NULL)

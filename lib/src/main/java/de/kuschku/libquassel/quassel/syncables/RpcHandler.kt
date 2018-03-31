@@ -21,18 +21,11 @@ class RpcHandler(
     session.bufferSyncer.bufferInfoUpdated(bufferInfo)
   }
 
-  override fun identityCreated(identity: QVariantMap) {
-  }
+  override fun identityCreated(identity: QVariantMap) = session.addIdentity(identity)
+  override fun identityRemoved(identityId: IdentityId) = session.removeIdentity(identityId)
 
-  override fun identityRemoved(identityId: IdentityId) {
-  }
-
-  override fun networkCreated(networkId: NetworkId) {
-
-  }
-
-  override fun networkRemoved(networkId: NetworkId) {
-  }
+  override fun networkCreated(networkId: NetworkId) = session.addNetwork(networkId)
+  override fun networkRemoved(networkId: NetworkId) = session.removeNetwork(networkId)
 
   override fun passwordChanged(ignored: Long, success: Boolean) {
   }

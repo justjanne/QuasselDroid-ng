@@ -29,7 +29,7 @@ interface INetwork : ISyncableObject {
   }
 
   @Slot
-  fun addCap(capability: String, value: String = "") {
+  fun addCap(capability: String, value: String?) {
     SYNC("addCap", ARG(capability, Type.QString), ARG(value, Type.QString))
   }
 
@@ -44,7 +44,7 @@ interface INetwork : ISyncableObject {
   }
 
   @Slot
-  fun addSupport(param: String, value: String = String()) {
+  fun addSupport(param: String, value: String? = null) {
     SYNC(
       "addSupport(param: String, value: String = String", ARG(param, Type.QString),
       ARG(value, Type.QString)
@@ -135,7 +135,7 @@ interface INetwork : ISyncableObject {
   }
 
   @Slot
-  fun setCurrentServer(currentServer: String) {
+  fun setCurrentServer(currentServer: String?) {
     SYNC("setCurrentServer", ARG(currentServer, Type.QString))
   }
 
@@ -160,7 +160,7 @@ interface INetwork : ISyncableObject {
   }
 
   @Slot
-  fun setMyNick(mynick: String) {
+  fun setMyNick(mynick: String?) {
     SYNC("setMyNick", ARG(mynick, Type.QString))
   }
 

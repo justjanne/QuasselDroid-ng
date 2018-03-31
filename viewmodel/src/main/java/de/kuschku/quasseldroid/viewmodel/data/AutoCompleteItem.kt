@@ -20,7 +20,7 @@ sealed class AutoCompleteItem(open val name: String) : Comparable<AutoCompleteIt
     val lowestMode: Int,
     val realname: CharSequence,
     val away: Boolean,
-    val networkCasemapping: String
+    val networkCasemapping: String?
   ) : AutoCompleteItem(nick)
 
   data class ChannelItem(

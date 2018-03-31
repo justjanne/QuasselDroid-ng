@@ -100,50 +100,52 @@ class QuasselViewModel : ViewModel() {
     val session = sessionOptional.orNull()
     val bufferSyncer = session?.bufferSyncer
     if (bufferSyncer != null) {
-      bufferSyncer.liveBufferInfos().switchMap {
-        val info = bufferSyncer.bufferInfo(id)
-        val network = session.networks[info?.networkId]
-        if (info == null || network == null) {
-          Observable.just(BufferData())
-        } else {
-          when (info.type.toInt()) {
-            BufferInfo.Type.QueryBuffer.toInt()   -> {
-              network.liveIrcUser(info.bufferName).switchMap {
-                it.updates().map { user ->
+      session.live_networks().switchMap { networks ->
+        bufferSyncer.liveBufferInfos().switchMap {
+          val info = bufferSyncer.bufferInfo(id)
+          val network = networks[info?.networkId]
+          if (info == null || network == null) {
+            Observable.just(BufferData())
+          } else {
+            when (info.type.toInt()) {
+              BufferInfo.Type.QueryBuffer.toInt()   -> {
+                network.liveIrcUser(info.bufferName).switchMap {
+                  it.updates().map { user ->
+                    BufferData(
+                      info = info,
+                      network = network,
+                      description = user.realName()
+                    )
+                  }
+                }
+              }
+              BufferInfo.Type.ChannelBuffer.toInt() -> {
+                network.liveIrcChannel(
+                  info.bufferName
+                ).switchMap { channel ->
+                  channel.liveTopic().map { topic ->
+                    BufferData(
+                      info = info,
+                      network = network,
+                      description = topic
+                    )
+                  }
+                }
+              }
+              BufferInfo.Type.StatusBuffer.toInt()  -> {
+                network.live_connectionState.map {
                   BufferData(
                     info = info,
-                    network = network,
-                    description = user.realName()
+                    network = network
                   )
                 }
               }
-            }
-            BufferInfo.Type.ChannelBuffer.toInt() -> {
-              network.liveIrcChannel(
-                info.bufferName
-              ).switchMap { channel ->
-                channel.liveTopic().map { topic ->
-                  BufferData(
-                    info = info,
-                    network = network,
-                    description = topic
-                  )
-                }
-              }
-            }
-            BufferInfo.Type.StatusBuffer.toInt()  -> {
-              network.live_connectionState.map {
+              else                                  -> Observable.just(
                 BufferData(
-                  info = info,
-                  network = network
+                  description = "type is unknown: ${info.type.toInt()}"
                 )
-              }
-            }
-            else                                  -> Observable.just(
-              BufferData(
-                description = "type is unknown: ${info.type.toInt()}"
               )
-            )
+            }
           }
         }
       }
@@ -158,34 +160,36 @@ class QuasselViewModel : ViewModel() {
       val bufferSyncer = session?.bufferSyncer
       val bufferInfo = bufferSyncer?.bufferInfo(buffer)
       if (bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
-        val network = session.networks[bufferInfo.networkId]
-        val ircChannel = network?.ircChannel(bufferInfo.bufferName)
-        if (ircChannel != null) {
-          ircChannel.liveIrcUsers().switchMap { users ->
-            combineLatest<IrcUserItem>(
-              users.map<IrcUser, Observable<IrcUserItem>?> {
-                it.updates().map { user ->
-                  val userModes = ircChannel.userModes(user)
-                  val prefixModes = network.prefixModes()
+        session.live_networks().switchMap { networks ->
+          val network = networks[bufferInfo.networkId]
+          val ircChannel = network?.ircChannel(bufferInfo.bufferName)
+          if (ircChannel != null) {
+            ircChannel.liveIrcUsers().switchMap { users ->
+              combineLatest<IrcUserItem>(
+                users.map<IrcUser, Observable<IrcUserItem>?> {
+                  it.updates().map { user ->
+                    val userModes = ircChannel.userModes(user)
+                    val prefixModes = network.prefixModes()
 
-                  val lowestMode = userModes.mapNotNull {
-                    prefixModes.indexOf(it)
-                  }.min() ?: prefixModes.size
+                    val lowestMode = userModes.mapNotNull {
+                      prefixModes.indexOf(it)
+                    }.min() ?: prefixModes.size
 
-                  IrcUserItem(
-                    user.nick(),
-                    network.modesToPrefixes(userModes),
-                    lowestMode,
-                    user.realName(),
-                    user.isAway(),
-                    network.support("CASEMAPPING")
-                  )
+                    IrcUserItem(
+                      user.nick(),
+                      network.modesToPrefixes(userModes),
+                      lowestMode,
+                      user.realName(),
+                      user.isAway(),
+                      network.support("CASEMAPPING")
+                    )
+                  }
                 }
-              }
-            )
+              )
+            }
+          } else {
+            Observable.just(emptyList())
           }
-        } else {
-          Observable.just(emptyList())
         }
       } else {
         Observable.just(emptyList())
@@ -204,80 +208,82 @@ class QuasselViewModel : ViewModel() {
           val bufferSyncer = session?.bufferSyncer
           val bufferInfo = bufferSyncer?.bufferInfo(id)
           if (bufferSyncer != null) {
-            bufferSyncer.liveBufferInfos().switchMap { infos ->
-              if (bufferInfo?.type?.hasFlag(
-                  Buffer_Type.ChannelBuffer
-                ) == true) {
-                val network = session.networks[bufferInfo.networkId]
-                val ircChannel = network?.ircChannel(
-                  bufferInfo.bufferName
-                )
-                if (ircChannel != null) {
-                  ircChannel.liveIrcUsers().switchMap { users ->
-                    val buffers: List<Observable<AutoCompleteItem.ChannelItem>?> = infos.values
-                      .filter {
-                        it.type.toInt() == Buffer_Type.ChannelBuffer.toInt()
-                      }.mapNotNull { info ->
-                        session.networks[info.networkId]?.let { info to it }
-                      }.map<Pair<BufferInfo, Network>, Observable<AutoCompleteItem.ChannelItem>?> { (info, network) ->
-                        network.liveIrcChannel(
-                          info.bufferName
-                        ).switchMap { channel ->
-                          channel.liveTopic().map { topic ->
-                            AutoCompleteItem.ChannelItem(
-                              info = info,
-                              network = network.networkInfo(),
-                              bufferStatus = when (channel) {
-                                IrcChannel.NULL -> BufferStatus.OFFLINE
-                                else            -> BufferStatus.ONLINE
-                              },
-                              description = topic
-                            )
+            session.live_networks().switchMap { networks ->
+              bufferSyncer.liveBufferInfos().switchMap { infos ->
+                if (bufferInfo?.type?.hasFlag(
+                    Buffer_Type.ChannelBuffer
+                  ) == true) {
+                  val network = networks[bufferInfo.networkId]
+                  val ircChannel = network?.ircChannel(
+                    bufferInfo.bufferName
+                  )
+                  if (ircChannel != null) {
+                    ircChannel.liveIrcUsers().switchMap { users ->
+                      val buffers: List<Observable<AutoCompleteItem.ChannelItem>?> = infos.values
+                        .filter {
+                          it.type.toInt() == Buffer_Type.ChannelBuffer.toInt()
+                        }.mapNotNull { info ->
+                          networks[info.networkId]?.let { info to it }
+                        }.map<Pair<BufferInfo, Network>, Observable<AutoCompleteItem.ChannelItem>?> { (info, network) ->
+                          network.liveIrcChannel(
+                            info.bufferName
+                          ).switchMap { channel ->
+                            channel.liveTopic().map { topic ->
+                              AutoCompleteItem.ChannelItem(
+                                info = info,
+                                network = network.networkInfo(),
+                                bufferStatus = when (channel) {
+                                  IrcChannel.NULL -> BufferStatus.OFFLINE
+                                  else            -> BufferStatus.ONLINE
+                                },
+                                description = topic
+                              )
+                            }
                           }
                         }
-                      }
-                    val nicks = users.map<IrcUser, Observable<AutoCompleteItem.UserItem>?> {
-                      it.updates().map { user ->
-                        val userModes = ircChannel.userModes(user)
-                        val prefixModes = network.prefixModes()
+                      val nicks = users.map<IrcUser, Observable<AutoCompleteItem.UserItem>?> {
+                        it.updates().map { user ->
+                          val userModes = ircChannel.userModes(user)
+                          val prefixModes = network.prefixModes()
 
-                        val lowestMode = userModes.mapNotNull(prefixModes::indexOf).min()
-                                         ?: prefixModes.size
+                          val lowestMode = userModes.mapNotNull(prefixModes::indexOf).min()
+                                           ?: prefixModes.size
 
-                        AutoCompleteItem.UserItem(
-                          user.nick(),
-                          network.modesToPrefixes(userModes),
-                          lowestMode,
-                          user.realName(),
-                          user.isAway(),
-                          network.support("CASEMAPPING")
-                        )
+                          AutoCompleteItem.UserItem(
+                            user.nick(),
+                            network.modesToPrefixes(userModes),
+                            lowestMode,
+                            user.realName(),
+                            user.isAway(),
+                            network.support("CASEMAPPING")
+                          )
+                        }
                       }
+
+                      combineLatest<AutoCompleteItem>(nicks + buffers)
+                        .map { list ->
+                          val ignoredStartingCharacters = charArrayOf(
+                            '-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\', '@'
+                          )
+
+                          Pair(
+                            lastWord.first,
+                            list.filter {
+                              it.name.trimStart(*ignoredStartingCharacters)
+                                .startsWith(
+                                  lastWord.first.trimStart(*ignoredStartingCharacters),
+                                  ignoreCase = true
+                                )
+                            }.sorted()
+                          )
+                        }
                     }
-
-                    combineLatest<AutoCompleteItem>(nicks + buffers)
-                      .map { list ->
-                        val ignoredStartingCharacters = charArrayOf(
-                          '-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\', '@'
-                        )
-
-                        Pair(
-                          lastWord.first,
-                          list.filter {
-                            it.name.trimStart(*ignoredStartingCharacters)
-                              .startsWith(
-                                lastWord.first.trimStart(*ignoredStartingCharacters),
-                                ignoreCase = true
-                              )
-                          }.sorted()
-                        )
-                      }
+                  } else {
+                    Observable.just(Pair(lastWord.first, emptyList()))
                   }
                 } else {
                   Observable.just(Pair(lastWord.first, emptyList()))
                 }
-              } else {
-                Observable.just(Pair(lastWord.first, emptyList()))
               }
             }
           } else {
@@ -303,42 +309,44 @@ class QuasselViewModel : ViewModel() {
       val bufferSyncer = session?.bufferSyncer
       val bufferViewConfig = bufferViewConfigOptional.orNull()
       if (bufferSyncer != null && bufferViewConfig != null) {
-        val hiddenState = when {
-          bufferViewConfig.removedBuffers().contains(buffer)            ->
-            BufferHiddenState.HIDDEN_PERMANENT
-          bufferViewConfig.temporarilyRemovedBuffers().contains(buffer) ->
-            BufferHiddenState.HIDDEN_TEMPORARY
-          else                                                          ->
-            BufferHiddenState.VISIBLE
-        }
-
-        val info = bufferSyncer.bufferInfo(buffer)
-        if (info != null) {
-          val network = session.networks[info.networkId]
-          when (info.type.enabledValues().firstOrNull()) {
-            Buffer_Type.StatusBuffer  -> {
-              network?.live_connectionState?.map {
-                SelectedBufferItem(
-                  info,
-                  connectionState = it,
-                  hiddenState = hiddenState
-                )
-              } ?: Observable.just(SelectedBufferItem(info, hiddenState = hiddenState))
-            }
-            Buffer_Type.ChannelBuffer -> {
-              network?.liveIrcChannel(info.bufferName)?.map {
-                SelectedBufferItem(
-                  info,
-                  joined = it != IrcChannel.NULL,
-                  hiddenState = hiddenState
-                )
-              } ?: Observable.just(SelectedBufferItem(info, hiddenState = hiddenState))
-            }
-            else                      ->
-              Observable.just(SelectedBufferItem(info, hiddenState = hiddenState))
+        session.live_networks().switchMap { networks ->
+          val hiddenState = when {
+            bufferViewConfig.removedBuffers().contains(buffer)            ->
+              BufferHiddenState.HIDDEN_PERMANENT
+            bufferViewConfig.temporarilyRemovedBuffers().contains(buffer) ->
+              BufferHiddenState.HIDDEN_TEMPORARY
+            else                                                          ->
+              BufferHiddenState.VISIBLE
           }
-        } else {
-          Observable.just(SelectedBufferItem())
+
+          val info = bufferSyncer.bufferInfo(buffer)
+          if (info != null) {
+            val network = networks[info.networkId]
+            when (info.type.enabledValues().firstOrNull()) {
+              Buffer_Type.StatusBuffer  -> {
+                network?.live_connectionState?.map {
+                  SelectedBufferItem(
+                    info,
+                    connectionState = it,
+                    hiddenState = hiddenState
+                  )
+                } ?: Observable.just(SelectedBufferItem(info, hiddenState = hiddenState))
+              }
+              Buffer_Type.ChannelBuffer -> {
+                network?.liveIrcChannel(info.bufferName)?.map {
+                  SelectedBufferItem(
+                    info,
+                    joined = it != IrcChannel.NULL,
+                    hiddenState = hiddenState
+                  )
+                } ?: Observable.just(SelectedBufferItem(info, hiddenState = hiddenState))
+              }
+              else                      ->
+                Observable.just(SelectedBufferItem(info, hiddenState = hiddenState))
+            }
+          } else {
+            Observable.just(SelectedBufferItem())
+          }
         }
       } else {
         Observable.just(SelectedBufferItem())
@@ -354,77 +362,96 @@ class QuasselViewModel : ViewModel() {
         val showHidden = showHiddenRaw ?: false
         val config = configOptional.orNull()
         if (bufferSyncer != null && config != null) {
-          config.live_config
-            .debounce(16, TimeUnit.MILLISECONDS)
-            .switchMap { currentConfig ->
-              combineLatest<Collection<BufferId>>(
-                listOf(
-                  config.live_buffers,
-                  config.live_temporarilyRemovedBuffers,
-                  config.live_removedBuffers
-                )
-              ).switchMap { (ids, temp, perm) ->
-                fun transformIds(ids: Collection<BufferId>, state: BufferHiddenState) =
-                  ids.mapNotNull { id ->
-                    bufferSyncer.bufferInfo(id)
-                  }.filter {
-                    currentConfig.networkId() <= 0 || currentConfig.networkId() == it.networkId
-                  }.filter {
-                    (currentConfig.allowedBufferTypes() and it.type).isNotEmpty() ||
-                    it.type.hasFlag(Buffer_Type.StatusBuffer)
-                  }.mapNotNull {
-                    val network = session.networks[it.networkId]
-                    if (network == null) {
-                      null
-                    } else {
-                      it to network
-                    }
-                  }.map<Pair<BufferInfo, Network>, Observable<BufferProps>?> { (info, network) ->
-                    bufferSyncer.liveActivity(info.bufferId).switchMap { activity ->
-                      bufferSyncer.liveHighlightCount(info.bufferId).map { highlights ->
-                        activity to highlights
+          session.live_networks().switchMap { networks ->
+            config.live_config
+              .debounce(16, TimeUnit.MILLISECONDS)
+              .switchMap { currentConfig ->
+                combineLatest<Collection<BufferId>>(
+                  listOf(
+                    config.live_buffers,
+                    config.live_temporarilyRemovedBuffers,
+                    config.live_removedBuffers
+                  )
+                ).switchMap { (ids, temp, perm) ->
+                  fun transformIds(ids: Collection<BufferId>, state: BufferHiddenState) =
+                    ids.mapNotNull { id ->
+                      bufferSyncer.bufferInfo(id)
+                    }.filter {
+                      currentConfig.networkId() <= 0 || currentConfig.networkId() == it.networkId
+                    }.filter {
+                      (currentConfig.allowedBufferTypes() and it.type).isNotEmpty() ||
+                      it.type.hasFlag(Buffer_Type.StatusBuffer)
+                    }.mapNotNull {
+                      val network = networks[it.networkId]
+                      if (network == null) {
+                        null
+                      } else {
+                        it to network
                       }
-                    }.switchMap { (activity, highlights) ->
-                      when (info.type.toInt()) {
-                        BufferInfo.Type.QueryBuffer.toInt()   -> {
-                          network.liveIrcUser(info.bufferName).switchMap {
-                            it.updates().map { user ->
-                              BufferProps(
-                                info = info,
-                                network = network.networkInfo(),
-                                bufferStatus = when {
-                                  user == IrcUser.NULL -> BufferStatus.OFFLINE
-                                  user.isAway()        -> BufferStatus.AWAY
-                                  else                 -> BufferStatus.ONLINE
-                                },
-                                description = user.realName(),
-                                activity = activity,
-                                highlights = highlights,
-                                hiddenState = state
-                              )
+                    }.map<Pair<BufferInfo, Network>, Observable<BufferProps>?> { (info, network) ->
+                      bufferSyncer.liveActivity(info.bufferId).switchMap { activity ->
+                        bufferSyncer.liveHighlightCount(info.bufferId).map { highlights ->
+                          activity to highlights
+                        }
+                      }.switchMap { (activity, highlights) ->
+                        when (info.type.toInt()) {
+                          BufferInfo.Type.QueryBuffer.toInt()   -> {
+                            network.liveNetworkInfo().switchMap { networkInfo ->
+                              network.liveIrcUser(info.bufferName).switchMap {
+                                it.updates().map { user ->
+                                  BufferProps(
+                                    info = info,
+                                    network = networkInfo,
+                                    bufferStatus = when {
+                                      user == IrcUser.NULL -> BufferStatus.OFFLINE
+                                      user.isAway()        -> BufferStatus.AWAY
+                                      else                 -> BufferStatus.ONLINE
+                                    },
+                                    description = user.realName(),
+                                    activity = activity,
+                                    highlights = highlights,
+                                    hiddenState = state
+                                  )
+                                }
+                              }
                             }
                           }
-                        }
-                        BufferInfo.Type.ChannelBuffer.toInt() -> {
-                          network.liveIrcChannel(info.bufferName).switchMap { channel ->
-                            channel.liveTopic().map { topic ->
-                              BufferProps(
-                                info = info,
-                                network = network.networkInfo(),
-                                bufferStatus = when (channel) {
-                                  IrcChannel.NULL -> BufferStatus.OFFLINE
-                                  else            -> BufferStatus.ONLINE
-                                },
-                                description = topic,
-                                activity = activity,
-                                highlights = highlights,
-                                hiddenState = state
-                              )
+                          BufferInfo.Type.ChannelBuffer.toInt() -> {
+                            network.liveNetworkInfo().switchMap { networkInfo ->
+                              network.liveIrcChannel(info.bufferName).switchMap { channel ->
+                                channel.liveTopic().map { topic ->
+                                  BufferProps(
+                                    info = info,
+                                    network = networkInfo,
+                                    bufferStatus = when (channel) {
+                                      IrcChannel.NULL -> BufferStatus.OFFLINE
+                                      else            -> BufferStatus.ONLINE
+                                    },
+                                    description = topic,
+                                    activity = activity,
+                                    highlights = highlights,
+                                    hiddenState = state
+                                  )
+                                }
+                              }
                             }
                           }
-                        }
-                        BufferInfo.Type.StatusBuffer.toInt()  -> {
-                          network.live_connectionState.map {
+                          BufferInfo.Type.StatusBuffer.toInt()  -> {
+                            network.liveNetworkInfo().switchMap { networkInfo ->
+                              network.live_connectionState.map {
+                                BufferProps(
+                                  info = info,
+                                  network = networkInfo,
+                                  bufferStatus = BufferStatus.OFFLINE,
+                                  description = "",
+                                  activity = activity,
+                                  highlights = highlights,
+                                  hiddenState = state
+                                )
+                              }
+                            }
+                          }
+                          else                                  -> Observable.just(
                             BufferProps(
                               info = info,
                               network = network.networkInfo(),
@@ -434,45 +461,34 @@ class QuasselViewModel : ViewModel() {
                               highlights = highlights,
                               hiddenState = state
                             )
-                          }
-                        }
-                        else                                  -> Observable.just(
-                          BufferProps(
-                            info = info,
-                            network = network.networkInfo(),
-                            bufferStatus = BufferStatus.OFFLINE,
-                            description = "",
-                            activity = activity,
-                            highlights = highlights,
-                            hiddenState = state
                           )
-                        )
+                        }
                       }
                     }
-                  }
 
-                bufferSyncer.liveBufferInfos().switchMap {
-                  val buffers = if (showHidden) {
-                    transformIds(ids, BufferHiddenState.VISIBLE) +
-                    transformIds(temp, BufferHiddenState.HIDDEN_TEMPORARY) +
-                    transformIds(perm, BufferHiddenState.HIDDEN_PERMANENT)
-                  } else {
-                    transformIds(ids, BufferHiddenState.VISIBLE)
-                  }
+                  bufferSyncer.liveBufferInfos().switchMap {
+                    val buffers = if (showHidden) {
+                      transformIds(ids, BufferHiddenState.VISIBLE) +
+                      transformIds(temp, BufferHiddenState.HIDDEN_TEMPORARY) +
+                      transformIds(perm, BufferHiddenState.HIDDEN_PERMANENT)
+                    } else {
+                      transformIds(ids, BufferHiddenState.VISIBLE)
+                    }
 
-                  combineLatest<BufferProps>(buffers).map { list ->
-                    Pair<BufferViewConfig?, List<BufferProps>>(
-                      config,
-                      list.filter {
-                        (!config.hideInactiveBuffers()) ||
-                        it.bufferStatus != BufferStatus.OFFLINE ||
-                        it.info.type.hasFlag(Buffer_Type.StatusBuffer)
-                      }
-                    )
+                    combineLatest<BufferProps>(buffers).map { list ->
+                      Pair<BufferViewConfig?, List<BufferProps>>(
+                        config,
+                        list.filter {
+                          (!config.hideInactiveBuffers()) ||
+                          it.bufferStatus != BufferStatus.OFFLINE ||
+                          it.info.type.hasFlag(Buffer_Type.StatusBuffer)
+                        }
+                      )
+                    }
                   }
                 }
               }
-            }
+          }
         } else {
           Observable.just(Pair<BufferViewConfig?, List<BufferProps>>(null, emptyList()))
         }
