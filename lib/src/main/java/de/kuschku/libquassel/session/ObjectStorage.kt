@@ -6,6 +6,7 @@ import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.quassel.exceptions.ObjectNotFoundException
 import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
+import de.kuschku.libquassel.util.helpers.removeIfEqual
 
 class ObjectStorage(private val proxy: SignalProxy) {
   private val objectTree: MutableMap<Pair<String, String>, ISyncableObject> = HashMap()
@@ -35,7 +36,7 @@ class ObjectStorage(private val proxy: SignalProxy) {
 
   fun rename(obj: ISyncableObject, new: String, old: String) {
     objectTree[Pair(obj.className, new)] = obj
-    objectTree.remove(Pair(obj.className, old), obj)
+    objectTree.removeIfEqual(Pair(obj.className, old), obj)
     if (get(obj.className, new) != obj) {
       throw IllegalStateException("Object should be existing")
     }
