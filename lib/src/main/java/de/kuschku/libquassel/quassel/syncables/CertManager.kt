@@ -34,12 +34,10 @@ class CertManager constructor(
 
   override fun setSslCert(encoded: ByteBuffer?) {
     _sslCert = encoded
-    super.setSslCert(encoded)
   }
 
   override fun setSslKey(encoded: ByteBuffer?) {
     _sslKey = encoded
-    super.setSslKey(encoded)
   }
 
   private var _sslKey: ByteBuffer? = null

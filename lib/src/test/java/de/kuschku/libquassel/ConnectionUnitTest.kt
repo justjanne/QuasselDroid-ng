@@ -1,7 +1,20 @@
 package de.kuschku.libquassel
 
+import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.quassel.ProtocolFeature
+import de.kuschku.libquassel.quassel.QuasselFeatures
+import de.kuschku.libquassel.session.BacklogStorage
+import de.kuschku.libquassel.session.Session
+import de.kuschku.libquassel.session.SocketAddress
+import de.kuschku.libquassel.util.compatibility.reference.JavaHandlerService
+import org.junit.BeforeClass
+import org.junit.Test
+import org.threeten.bp.Instant
+import java.security.cert.X509Certificate
+import java.util.logging.LogManager
+import javax.net.ssl.X509TrustManager
+
 class ConnectionUnitTest {
-/*
   companion object {
     @JvmStatic
     @BeforeClass
@@ -21,10 +34,10 @@ class ConnectionUnitTest {
       ClientData(
         identifier = "libquassel test",
         buildDate = Instant.EPOCH,
-        clientFeatures = Quassel_Feature.of(*LegacyFeature.validValues),
+        clientFeatures = QuasselFeatures.all(),
         protocolFeatures = Protocol_Feature.of(ProtocolFeature.TLS, ProtocolFeature.Compression),
-        supportedProtocols = listOf(Protocol.Datastream),
-        ), object : X509TrustManager {
+        supportedProtocols = listOf(Protocol.Datastream)
+      ), object : X509TrustManager {
       override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) {
       }
 
@@ -38,9 +51,7 @@ class ConnectionUnitTest {
       override fun clearMessages(bufferId: BufferId, idRange: IntRange) = Unit
       override fun clearMessages(bufferId: BufferId) = Unit
       override fun clearMessages() = Unit
-    }, user to pass,
-      ) {}
+    }, user to pass, {}, {})
     session.join()
   }
-*/
 }

@@ -20,7 +20,7 @@ data class DisplayMessage(
 
   val tag = Tag(content.messageId, content.followUp, isSelected, isExpanded, isMarkerLine)
   val avatarUrl = content.sender.let {
-    Regex("[us]id(\\d+)").matchEntire(HostmaskHelper.user(it))?.groupValues?.lastOrNull()?.let {
+    Regex("~?[us]id(\\d+)").matchEntire(HostmaskHelper.user(it))?.groupValues?.lastOrNull()?.let {
       "https://www.irccloud.com/avatar-redirect/$it"
     }
   }
