@@ -80,22 +80,22 @@ class NetworkConfigFragment : SettingsFragment() {
   }
 
 
-  override fun onSave() {
-    networkConfig?.let {
-      val config = it.copy()
+  override fun onSave() = networkConfig?.let {
+    val config = it.copy()
 
-      config.setPingTimeoutEnabled(pingTimeoutEnabled.isChecked)
-      pingInterval.text.toString().toIntOrNull()?.let(config::setPingInterval)
-      maxPingCount.text.toString().toIntOrNull()?.let(config::setMaxPingCount)
+    config.setPingTimeoutEnabled(pingTimeoutEnabled.isChecked)
+    pingInterval.text.toString().toIntOrNull()?.let(config::setPingInterval)
+    maxPingCount.text.toString().toIntOrNull()?.let(config::setMaxPingCount)
 
-      config.setAutoWhoEnabled(autoWhoEnabled.isChecked)
-      autoWhoInterval.text.toString().toIntOrNull()?.let(config::setAutoWhoInterval)
-      autoWhoNickLimit.text.toString().toIntOrNull()?.let(config::setAutoWhoNickLimit)
-      autoWhoDelay.text.toString().toIntOrNull()?.let(config::setAutoWhoDelay)
-      config.setStandardCtcp(standardCtcp.isChecked)
+    config.setAutoWhoEnabled(autoWhoEnabled.isChecked)
+    autoWhoInterval.text.toString().toIntOrNull()?.let(config::setAutoWhoInterval)
+    autoWhoNickLimit.text.toString().toIntOrNull()?.let(config::setAutoWhoNickLimit)
+    autoWhoDelay.text.toString().toIntOrNull()?.let(config::setAutoWhoDelay)
+    config.setStandardCtcp(standardCtcp.isChecked)
 
-      val properties = config.toVariantMap()
-      it.requestUpdate(properties)
-    }
-  }
+    val properties = config.toVariantMap()
+    it.requestUpdate(properties)
+
+    true
+  } ?: false
 }

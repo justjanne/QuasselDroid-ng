@@ -20,11 +20,11 @@ abstract class SettingsFragment : ServiceBoundFragment() {
 
   override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
     R.id.action_save -> {
-      onSave()
+      if (onSave()) activity?.finish()
       true
     }
     else             -> super.onOptionsItemSelected(item)
   }
 
-  abstract fun onSave()
+  abstract fun onSave(): Boolean
 }
