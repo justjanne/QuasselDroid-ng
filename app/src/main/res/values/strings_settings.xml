@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="settings_networkconfig_title">IRC Config</string>
+  <string name="settings_networkconfig_description" />
+
+  <string name="settings_networkconfig_ping_timeout">Ping Timeout Detection</string>
+
+  <string name="settings_networkconfig_ping_interval">Ping Interval</string>
+  <string name="settings_networkconfig_ping_interval_unit">seconds</string>
+
+  <string name="settings_networkconfig_max_ping_count">Disconnect after</string>
+  <string name="settings_networkconfig_max_ping_count_unit">missed pings</string>
+
+  <string name="settings_networkconfig_auto_who">Automatic User Info Lookup</string>
+  <string name="settings_networkconfig_auto_who_interval">Update interval</string>
+  <string name="settings_networkconfig_auto_who_interval_unit">seconds</string>
+  <string name="settings_networkconfig_auto_who_nick_limit">Ignore channels with more than</string>
+  <string name="settings_networkconfig_auto_who_nick_limit_unit">users</string>
+  <string name="settings_networkconfig_auto_who_delay">Minimum delay between requests</string>
+  <string name="settings_networkconfig_auto_who_delay_unit">seconds</string>
+
+  <string name="settings_networkconfig_standard_ctcp">Standard-Compliant CTCP behavior</string>
+</resources>

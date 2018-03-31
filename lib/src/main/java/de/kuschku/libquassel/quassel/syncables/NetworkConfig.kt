@@ -91,6 +91,12 @@ class NetworkConfig constructor(
     super.setStandardCtcp(standardCtcp)
   }
 
+  fun copy(): NetworkConfig {
+    val config = NetworkConfig(SignalProxy.NULL)
+    config.fromVariantMap(this.toVariantMap())
+    return config
+  }
+
   private var _pingTimeoutEnabled: Boolean = true
   private var _pingInterval: Int = 30
   private var _maxPingCount: Int = 6

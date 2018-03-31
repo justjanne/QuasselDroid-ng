@@ -8,14 +8,18 @@ import de.kuschku.quasseldroid.ui.chat.ChatActivityModule
 import de.kuschku.quasseldroid.ui.chat.ChatFragmentProvider
 import de.kuschku.quasseldroid.ui.chat.info.InfoActivity
 import de.kuschku.quasseldroid.ui.chat.info.InfoFragmentProvider
-import de.kuschku.quasseldroid.ui.settings.about.AboutSettingsActivity
-import de.kuschku.quasseldroid.ui.settings.about.AboutSettingsFragmentProvider
-import de.kuschku.quasseldroid.ui.settings.app.AppSettingsActivity
-import de.kuschku.quasseldroid.ui.settings.app.AppSettingsFragmentProvider
-import de.kuschku.quasseldroid.ui.settings.crash.CrashSettingsActivity
-import de.kuschku.quasseldroid.ui.settings.crash.CrashSettingsFragmentProvider
-import de.kuschku.quasseldroid.ui.settings.license.LicenseSettingsActivity
-import de.kuschku.quasseldroid.ui.settings.license.LicenseSettingsFragmentProvider
+import de.kuschku.quasseldroid.ui.clientsettings.about.AboutSettingsActivity
+import de.kuschku.quasseldroid.ui.clientsettings.about.AboutSettingsFragmentProvider
+import de.kuschku.quasseldroid.ui.clientsettings.app.AppSettingsActivity
+import de.kuschku.quasseldroid.ui.clientsettings.app.AppSettingsFragmentProvider
+import de.kuschku.quasseldroid.ui.clientsettings.crash.CrashSettingsActivity
+import de.kuschku.quasseldroid.ui.clientsettings.crash.CrashSettingsFragmentProvider
+import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseSettingsActivity
+import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseSettingsFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
+import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivity
+import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionFragmentProvider
@@ -41,6 +45,12 @@ abstract class ActivityModule {
 
   @ContributesAndroidInjector(modules = [LicenseSettingsFragmentProvider::class])
   abstract fun bindLicenseSettingsActivity(): LicenseSettingsActivity
+
+  @ContributesAndroidInjector(modules = [CoreSettingsFragmentProvider::class])
+  abstract fun bindCoreSettingsActivity(): CoreSettingsActivity
+
+  @ContributesAndroidInjector(modules = [NetworkConfigFragmentProvider::class])
+  abstract fun bindNetworkConfigActivity(): NetworkConfigActivity
 
   @ContributesAndroidInjector(modules = [AccountSetupFragmentProvider::class])
   abstract fun bindAccountSetupActivity(): AccountSetupActivity

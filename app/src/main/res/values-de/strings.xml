@@ -41,6 +41,8 @@
   <string name="label_save">Speichern</string>
   <string name="label_select">Auswählen</string>
   <string name="label_settings">Einstellungen</string>
+  <string name="label_settings_client">Client-Einstellungen</string>
+  <string name="label_settings_core">Core-Einstellungen</string>
   <string name="label_share">Teilen</string>
   <string name="label_share_crashreport">Absturzbericht Teilen</string>
   <string name="label_show_hidden">Alle anzeigen</string>

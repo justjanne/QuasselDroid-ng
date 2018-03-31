@@ -4,8 +4,11 @@
     android:id="@+id/action_filter_messages"
     android:title="@string/label_filter_messages" />
   <item
-    android:id="@+id/action_settings"
-    android:title="@string/label_settings" />
+    android:id="@+id/action_core_settings"
+    android:title="@string/label_settings_core" />
+  <item
+    android:id="@+id/action_client_settings"
+    android:title="@string/label_settings_client" />
   <item
     android:id="@+id/action_disconnect"
     android:title="@string/label_disconnect" />

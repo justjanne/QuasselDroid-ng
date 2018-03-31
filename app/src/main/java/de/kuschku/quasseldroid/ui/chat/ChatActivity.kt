@@ -36,7 +36,8 @@ import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.chat.input.Editor
 import de.kuschku.quasseldroid.ui.chat.input.MessageHistoryAdapter
-import de.kuschku.quasseldroid.ui.settings.app.AppSettingsActivity
+import de.kuschku.quasseldroid.ui.clientsettings.app.AppSettingsActivity
+import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
 import de.kuschku.quasseldroid.util.helper.editCommit
 import de.kuschku.quasseldroid.util.helper.invoke
 import de.kuschku.quasseldroid.util.helper.retint
@@ -403,8 +404,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
       true
     }
-    R.id.action_settings        -> {
-      startActivity(Intent(applicationContext, AppSettingsActivity::class.java))
+    R.id.action_core_settings   -> {
+      startActivity(Intent(this, CoreSettingsActivity::class.java))
+      true
+    }
+    R.id.action_client_settings -> {
+      startActivity(Intent(this, AppSettingsActivity::class.java))
       true
     }
     R.id.action_disconnect      -> {

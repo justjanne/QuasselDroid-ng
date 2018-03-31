@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_history" />
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/ping_timeout_enabled"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_networkconfig_ping_timeout" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/ping_timeout_group"
+      style="@style/Widget.CoreSettings.DependentGroup"
+      tools:visibility="visible">
+
+      <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputLayout
+          style="@style/Widget.CoreSettings.EditTextLayout"
+          android:hint="@string/settings_networkconfig_ping_interval">
+
+          <android.support.design.widget.TextInputEditText
+            android:id="@+id/ping_interval"
+            style="@style/Widget.CoreSettings.EditText"
+            android:inputType="number"
+            tools:text="30" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_networkconfig_ping_interval_unit" />
+      </FrameLayout>
+
+      <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputLayout
+          style="@style/Widget.CoreSettings.EditTextLayout"
+          android:hint="@string/settings_networkconfig_max_ping_count">
+
+          <android.support.design.widget.TextInputEditText
+            android:id="@+id/max_ping_count"
+            style="@style/Widget.CoreSettings.EditText"
+            android:inputType="number"
+            tools:text="10" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_networkconfig_max_ping_count_unit" />
+      </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_account" />
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/auto_who_enabled"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_networkconfig_auto_who" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/auto_who_group"
+      style="@style/Widget.CoreSettings.DependentGroup"
+      tools:visibility="visible">
+
+      <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputLayout
+          style="@style/Widget.CoreSettings.EditTextLayout"
+          android:hint="@string/settings_networkconfig_auto_who_interval">
+
+          <android.support.design.widget.TextInputEditText
+            android:id="@+id/auto_who_interval"
+            style="@style/Widget.CoreSettings.EditText"
+            android:inputType="number"
+            tools:text="90" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_networkconfig_auto_who_interval_unit" />
+      </FrameLayout>
+
+      <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputLayout
+          style="@style/Widget.CoreSettings.EditTextLayout"
+          android:hint="@string/settings_networkconfig_auto_who_nick_limit">
+
+          <android.support.design.widget.TextInputEditText
+            android:id="@+id/auto_who_nick_limit"
+            style="@style/Widget.CoreSettings.EditText"
+            android:inputType="number"
+            tools:text="100" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_networkconfig_auto_who_nick_limit_unit" />
+      </FrameLayout>
+
+      <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputLayout
+          style="@style/Widget.CoreSettings.EditTextLayout"
+          android:hint="@string/settings_networkconfig_auto_who_delay">
+
+          <android.support.design.widget.TextInputEditText
+            android:id="@+id/auto_who_delay"
+            style="@style/Widget.CoreSettings.EditText"
+            android:inputType="number"
+            tools:text="5" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_networkconfig_auto_who_delay_unit" />
+      </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_message_bulleted" />
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/standard_ctcp"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_networkconfig_standard_ctcp" />
+    </LinearLayout>
+  </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

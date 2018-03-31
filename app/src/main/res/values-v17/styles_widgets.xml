@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="Widget.CoreSettings.Wrapper" parent="">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:paddingStart">?listPreferredItemPaddingLeft</item>
+    <item name="android:paddingLeft">?listPreferredItemPaddingLeft</item>
+    <item name="android:paddingEnd">?listPreferredItemPaddingRight</item>
+    <item name="android:paddingRight">?listPreferredItemPaddingRight</item>
+  </style>
+
+  <style name="Widget.CoreSettings.PrimaryItemIcon" parent="">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:layout_marginRight">32dp</item>
+    <item name="android:layout_marginEnd">32dp</item>
+    <item name="tint">?colorTextSecondary</item>
+  </style>
+
+  <style name="Widget.CoreSettings.DependentGroup" parent="">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:visibility">gone</item>
+    <item name="android:layout_marginLeft">56dp</item>
+    <item name="android:layout_marginStart">56dp</item>
+  </style>
+
+  <style name="Widget.CoreSettings.EditTextLayout" parent="">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginLeft">-4dp</item>
+    <item name="android:layout_marginStart">-4dp</item>
+  </style>
+
+  <style name="Widget.CoreSettings.EditTextSuffix" parent="">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">bottom|end</item>
+    <item name="android:layout_marginBottom">12dp</item>
+    <item name="android:layout_marginEnd">8dp</item>
+    <item name="android:layout_marginRight">8dp</item>
+    <item name="android:textColor">?colorTextSecondary</item>
+  </style>
+</resources>

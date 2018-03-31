@@ -100,7 +100,7 @@ class QuasselViewModel : ViewModel() {
     val session = sessionOptional.orNull()
     val bufferSyncer = session?.bufferSyncer
     if (bufferSyncer != null) {
-      session.live_networks().switchMap { networks ->
+      session.liveNetworks().switchMap { networks ->
         bufferSyncer.liveBufferInfos().switchMap {
           val info = bufferSyncer.bufferInfo(id)
           val network = networks[info?.networkId]
@@ -160,7 +160,7 @@ class QuasselViewModel : ViewModel() {
       val bufferSyncer = session?.bufferSyncer
       val bufferInfo = bufferSyncer?.bufferInfo(buffer)
       if (bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
-        session.live_networks().switchMap { networks ->
+        session.liveNetworks().switchMap { networks ->
           val network = networks[bufferInfo.networkId]
           val ircChannel = network?.ircChannel(bufferInfo.bufferName)
           if (ircChannel != null) {
@@ -211,7 +211,7 @@ class QuasselViewModel : ViewModel() {
           val bufferSyncer = session?.bufferSyncer
           val bufferInfo = bufferSyncer?.bufferInfo(id)
           if (bufferSyncer != null) {
-            session.live_networks().switchMap { networks ->
+            session.liveNetworks().switchMap { networks ->
               bufferSyncer.liveBufferInfos().switchMap { infos ->
                 if (bufferInfo?.type?.hasFlag(
                     Buffer_Type.ChannelBuffer
@@ -319,7 +319,7 @@ class QuasselViewModel : ViewModel() {
       val bufferSyncer = session?.bufferSyncer
       val bufferViewConfig = bufferViewConfigOptional.orNull()
       if (bufferSyncer != null && bufferViewConfig != null) {
-        session.live_networks().switchMap { networks ->
+        session.liveNetworks().switchMap { networks ->
           val hiddenState = when {
             bufferViewConfig.removedBuffers().contains(buffer)            ->
               BufferHiddenState.HIDDEN_PERMANENT
@@ -372,7 +372,7 @@ class QuasselViewModel : ViewModel() {
         val showHidden = showHiddenRaw ?: false
         val config = configOptional.orNull()
         if (bufferSyncer != null && config != null) {
-          session.live_networks().switchMap { networks ->
+          session.liveNetworks().switchMap { networks ->
             config.live_config
               .debounce(16, TimeUnit.MILLISECONDS)
               .switchMap { currentConfig ->

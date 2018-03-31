@@ -25,11 +25,11 @@ interface ISession : Closeable {
   val coreInfo: CoreInfo?
   val dccConfig: DccConfig?
   val identities: Map<IdentityId, Identity>
-  fun live_identities(): Observable<Map<IdentityId, Identity>>
+  fun liveIdentities(): Observable<Map<IdentityId, Identity>>
   val ignoreListManager: IgnoreListManager?
   val ircListHelper: IrcListHelper?
   val networks: Map<NetworkId, Network>
-  fun live_networks(): Observable<Map<NetworkId, Network>>
+  fun liveNetworks(): Observable<Map<NetworkId, Network>>
   val networkConfig: NetworkConfig?
   val rpcHandler: RpcHandler?
   val initStatus: Observable<Pair<Int, Int>>
@@ -57,11 +57,11 @@ interface ISession : Closeable {
       override val coreInfo: CoreInfo? = null
       override val dccConfig: DccConfig? = null
       override val identities: Map<IdentityId, Identity> = emptyMap()
-      override fun live_identities() = Observable.empty<Map<IdentityId, Identity>>()
+      override fun liveIdentities() = Observable.empty<Map<IdentityId, Identity>>()
       override val ignoreListManager: IgnoreListManager? = null
       override val ircListHelper: IrcListHelper? = null
       override val networks: Map<NetworkId, Network> = emptyMap()
-      override fun live_networks() = Observable.empty<Map<NetworkId, Network>>()
+      override fun liveNetworks() = Observable.empty<Map<NetworkId, Network>>()
       override val networkConfig: NetworkConfig? = null
       override val initStatus: Observable<Pair<Int, Int>> = Observable.just(0 to 0)
       override val lag: Observable<Long> = Observable.just(0L)

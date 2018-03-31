@@ -10,9 +10,9 @@
   <application
     android:name=".QuasselDroid"
     android:allowBackup="true"
+    android:description="@string/app_description"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
-    android:description="@string/app_description"
     android:supportsRtl="true"
     android:theme="@style/Theme.SplashTheme">
     <activity
@@ -53,28 +53,40 @@
       android:parentActivityName=".ui.setup.accounts.selection.AccountSelectionActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.settings.app.AppSettingsActivity"
+      android:name=".ui.coresettings.CoreSettingsActivity"
       android:exported="false"
-      android:label="@string/label_settings"
+      android:label="@string/label_settings_core"
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.settings.crash.CrashSettingsActivity"
+      android:name=".ui.coresettings.networkconfig.NetworkConfigActivity"
+      android:exported="false"
+      android:label="@string/settings_networkconfig_title"
+      android:parentActivityName=".ui.chat.ChatActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.clientsettings.app.AppSettingsActivity"
+      android:exported="false"
+      android:label="@string/label_settings_client"
+      android:parentActivityName=".ui.chat.ChatActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.clientsettings.crash.CrashSettingsActivity"
       android:exported="false"
       android:label="@string/label_crashes"
-      android:parentActivityName=".ui.settings.app.AppSettingsActivity"
+      android:parentActivityName=".ui.clientsettings.app.AppSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.settings.about.AboutSettingsActivity"
+      android:name=".ui.clientsettings.about.AboutSettingsActivity"
       android:exported="false"
       android:label="@string/label_about"
-      android:parentActivityName=".ui.settings.app.AppSettingsActivity"
+      android:parentActivityName=".ui.clientsettings.app.AppSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.settings.license.LicenseSettingsActivity"
+      android:name=".ui.clientsettings.license.LicenseSettingsActivity"
       android:exported="false"
       android:label="@string/label_license"
-      android:parentActivityName=".ui.settings.about.AboutSettingsActivity"
+      android:parentActivityName=".ui.clientsettings.about.AboutSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
 
     <activity

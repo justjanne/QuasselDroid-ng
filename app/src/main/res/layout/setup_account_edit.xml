@@ -23,11 +23,11 @@
         android:layout_width="56dp"
         android:layout_height="68dp">
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
           android:layout_width="24dp"
           android:layout_height="24dp"
           android:layout_gravity="center_vertical"
-          android:tint="#757575"
+          app:tint="?android:textColorSecondary"
           app:srcCompat="@drawable/ic_pencil"
           tools:ignore="ContentDescription" />
       </FrameLayout>
@@ -61,11 +61,11 @@
         android:layout_width="56dp"
         android:layout_height="68dp">
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
           android:layout_width="24dp"
           android:layout_height="24dp"
           android:layout_gravity="center_vertical"
-          android:tint="#757575"
+          app:tint="?android:textColorSecondary"
           app:srcCompat="@drawable/ic_server_network"
           tools:ignore="ContentDescription" />
       </FrameLayout>
@@ -88,10 +88,6 @@
             android:layout_height="wrap_content"
             android:inputType="textUri" />
         </android.support.design.widget.TextInputLayout>
-
-        <android.support.v4.widget.Space
-          android:layout_width="56dp"
-          android:layout_height="match_parent" />
 
         <android.support.design.widget.TextInputLayout
           android:id="@+id/portWrapper"
@@ -125,11 +121,11 @@
         android:layout_width="56dp"
         android:layout_height="68dp">
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
           android:layout_width="24dp"
           android:layout_height="24dp"
           android:layout_gravity="center_vertical"
-          android:tint="#757575"
+          app:tint="?android:textColorSecondary"
           app:srcCompat="@drawable/ic_account"
           tools:ignore="ContentDescription" />
       </FrameLayout>
