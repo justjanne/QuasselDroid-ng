@@ -212,6 +212,44 @@ FROM
       sender,
       senderPrefixes,
       content,
+      followUp
+    FROM message
+    WHERE bufferId = ?
+          AND type & ~? > 0
+    UNION ALL
+    SELECT DISTINCT
+      strftime('%s', date(datetime(time / 1000, 'unixepoch', 'localtime')), 'utc') * -1000 AS messageId,
+      strftime('%s', date(datetime(time / 1000, 'unixepoch', 'localtime')), 'utc') * 1000  AS time,
+      8192                                                                                 AS type,
+      0                                                                                    AS flag,
+      ?                                                                                    AS bufferId,
+      ''                                                                                   AS sender,
+      ''                                                                                   AS senderPrefixes,
+      ''                                                                                   AS content,
+      0                                                                                    AS followUp
+    FROM message
+    WHERE bufferId = ?
+          AND type & ~? > 0
+  ) t
+ORDER BY TIME
+  DESC, messageId
+  DESC
+  """, arrayOf(bufferId, type, bufferId, bufferId, type)))
+
+fun QuasselDatabase.MessageDao.findByBufferIdPagedWithDayChangeSlow(bufferId: Int, type: Int) =
+  this.findMessagesRawPaged(SimpleSQLiteQuery("""
+SELECT t.*
+FROM
+  (
+    SELECT
+      messageId,
+      time,
+      type,
+      flag,
+      bufferId,
+      sender,
+      senderPrefixes,
+      content,
       (SELECT 1
        FROM
          (SELECT *

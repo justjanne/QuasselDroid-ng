@@ -231,6 +231,21 @@ class MessageListFragment : ServiceBoundFragment() {
         }
       })
 
+    fun processMessages(list: List<QuasselDatabase.DatabaseMessage>, selected: Set<MsgId>,
+                        expanded: Set<MsgId>, markerLine: MsgId?): List<DisplayMessage> {
+      var previous: QuasselDatabase.DatabaseMessage? = null
+      return list.asReversed().map {
+        it.followUp = previous?.sender == it.sender
+        previous = it
+        DisplayMessage(
+          content = it,
+          isSelected = selected.contains(it.messageId),
+          isExpanded = expanded.contains(it.messageId),
+          isMarkerLine = markerLine == it.messageId
+        )
+      }.asReversed()
+    }
+
     val data = combineLatest(viewModel.buffer,
                              viewModel.selectedMessages,
                              viewModel.expandedMessages,
@@ -238,13 +253,8 @@ class MessageListFragment : ServiceBoundFragment() {
       .toLiveData().switchMapNotNull { (buffer, selected, expanded, markerLine) ->
         database.filtered().listen(accountId, buffer).switchMapNotNull { filtered ->
           LivePagedListBuilder(
-            database.message().findByBufferIdPagedWithDayChange(buffer, filtered).map {
-              DisplayMessage(
-                content = it,
-                isSelected = selected.contains(it.messageId),
-                isExpanded = expanded.contains(it.messageId),
-                isMarkerLine = markerLine.orNull() == it.messageId
-              )
+            database.message().findByBufferIdPagedWithDayChange(buffer, filtered).mapByPage {
+              processMessages(it, selected.keys, expanded, markerLine.orNull())
             },
             PagedList.Config.Builder()
               .setPageSize(backlogSettings.pageSize)

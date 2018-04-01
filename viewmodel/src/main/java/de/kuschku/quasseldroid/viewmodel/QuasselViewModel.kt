@@ -37,7 +37,7 @@ class QuasselViewModel : ViewModel() {
     return result.isNotEmpty()
   }
 
-  val expandedMessages = BehaviorSubject.createDefault(emptyList<MsgId>())
+  val expandedMessages = BehaviorSubject.createDefault(emptySet<MsgId>())
 
   val buffer = BehaviorSubject.createDefault(-1)
   val buffer_liveData = buffer.toLiveData()
