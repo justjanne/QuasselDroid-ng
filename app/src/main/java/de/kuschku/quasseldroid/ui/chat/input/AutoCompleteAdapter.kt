@@ -16,7 +16,7 @@ import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.nicks.NickListAdapter.Companion.VIEWTYPE_AWAY
-import de.kuschku.quasseldroid.util.helper.getDrawableCompat
+import de.kuschku.quasseldroid.util.helper.getVectorDrawableCompat
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.tint
 import de.kuschku.quasseldroid.util.helper.visibleIf
@@ -146,8 +146,8 @@ class AutoCompleteAdapter(
             clickListener?.invoke(value)
         }
 
-        online = itemView.context.getDrawableCompat(R.drawable.ic_status_channel)?.mutate()
-        offline = itemView.context.getDrawableCompat(R.drawable.ic_status_channel_offline)?.mutate()
+        online = itemView.context.getVectorDrawableCompat(R.drawable.ic_status_channel)?.mutate()
+        offline = itemView.context.getVectorDrawableCompat(R.drawable.ic_status_channel_offline)?.mutate()
 
         itemView.context.theme.styledAttributes(
           R.attr.colorAccent, R.attr.colorAway
