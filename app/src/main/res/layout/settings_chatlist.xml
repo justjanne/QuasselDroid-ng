@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:scrollbars="vertical">
+
+  <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_eye" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_ui" />
+    </LinearLayout>
+
+    <LinearLayout
+      style="@style/Widget.CoreSettings.DependentGroup"
+      android:visibility="visible">
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_chatlist_buffer_view_name">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/buffer_view_name"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="All Chats" />
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/show_search"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_show_search" />
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/sort_alphabetically"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_sort_alphabetically" />
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/add_new_buffers_automatically"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_add_new_buffers_automatically" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_server_network" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_network" />
+    </LinearLayout>
+
+    <LinearLayout
+      style="@style/Widget.CoreSettings.DependentGroup"
+      android:visibility="visible">
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/disable_decoration"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_disable_decoration" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_tag_text" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_types" />
+    </LinearLayout>
+
+    <LinearLayout
+      style="@style/Widget.CoreSettings.DependentGroup"
+      android:visibility="visible">
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/show_channels"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_show_channels" />
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/show_queries"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_show_queries" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_clock" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_activity" />
+    </LinearLayout>
+
+    <LinearLayout
+      style="@style/Widget.CoreSettings.DependentGroup"
+      android:visibility="visible">
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/hide_inactive_buffers"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_hide_inactive_buffers" />
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/hide_inactive_networks"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlist_hide_inactive_networks" />
+    </LinearLayout>
+  </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

@@ -150,7 +150,7 @@
 
       <android.support.v7.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
-        app:srcCompat="@drawable/ic_history" />
+        app:srcCompat="@drawable/ic_clock" />
 
       <TextView
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
@@ -170,35 +170,27 @@
           style="@style/Widget.CoreSettings.EditText"
           tools:text="Gone Fishing." />
       </android.support.design.widget.TextInputLayout>
-    </LinearLayout>
-
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:minHeight="48dp">
-
-      <Space style="@style/Widget.CoreSettings.PrimaryItemIcon" />
 
       <android.support.v7.widget.SwitchCompat
         android:id="@+id/detach_away"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_identity_detach_away" />
-    </LinearLayout>
 
-    <LinearLayout
-      android:id="@+id/detach_away_group"
-      style="@style/Widget.CoreSettings.DependentGroup"
-      tools:visibility="visible">
+      <LinearLayout
+        android:id="@+id/detach_away_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-      <android.support.design.widget.TextInputLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
-        android:hint="@string/settings_identity_detach_away_reason">
+        <android.support.design.widget.TextInputLayout
+          style="@style/Widget.CoreSettings.EditTextLayout"
+          android:hint="@string/settings_identity_detach_away_reason">
 
-        <android.support.design.widget.TextInputEditText
-          android:id="@+id/detach_away_reason"
-          style="@style/Widget.CoreSettings.EditText"
-          tools:text="Gone Fishing." />
-      </android.support.design.widget.TextInputLayout>
+          <android.support.design.widget.TextInputEditText
+            android:id="@+id/detach_away_reason"
+            style="@style/Widget.CoreSettings.EditText"
+            tools:text="Gone Fishing." />
+        </android.support.design.widget.TextInputLayout>
+      </LinearLayout>
     </LinearLayout>
   </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

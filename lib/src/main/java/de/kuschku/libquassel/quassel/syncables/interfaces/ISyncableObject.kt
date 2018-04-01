@@ -28,13 +28,13 @@ interface ISyncableObject {
   fun toVariantMap(): QVariantMap = emptyMap()
 }
 
-inline fun ISyncableObject.SYNC(function: String, vararg arg: QVariant_) {
+/*inline*/ fun ISyncableObject.SYNC(function: String, vararg arg: QVariant_) {
   // Don’t transmit calls back that we just got from the network
   if (initialized && proxy.shouldSync(className, objectName, function))
     proxy.callSync(className, objectName, function, arg.toList())
 }
 
-inline fun ISyncableObject.REQUEST(function: String, vararg arg: QVariant_) {
+/*inline*/ fun ISyncableObject.REQUEST(function: String, vararg arg: QVariant_) {
   // Don’t transmit calls back that we just got from the network
   if (initialized && proxy.shouldSync(className, objectName, function))
     proxy.callSync(className, objectName, function, arg.toList())

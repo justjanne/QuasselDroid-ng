@@ -16,6 +16,7 @@ import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatListActivity
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityActivity
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivity
 import de.kuschku.quasseldroid.util.helper.combineLatest
@@ -55,11 +56,9 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     }
 
     val chatListAdapter = SettingsItemAdapter {
-      /*
-      val intent = Intent(requireContext(), BufferViewConfigActivity::class.java)
-      intent.putExtra("bufferviewconfig", it)
+      val intent = Intent(requireContext(), ChatListActivity::class.java)
+      intent.putExtra("chatlist", it)
       startActivity(intent)
-      */
     }
 
     val itemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
@@ -99,8 +98,8 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     chatlists.addItemDecoration(itemDecoration)
     ViewCompat.setNestedScrollingEnabled(chatlists, false)
 
-    viewModel.bufferViewConfigs.switchMap {
-      combineLatest(it.map(BufferViewConfig::live_config)).map {
+    viewModel.bufferViewConfigMap.switchMap {
+      combineLatest(it.values.map(BufferViewConfig::liveUpdates)).map {
         it.map {
           SettingsItem(it.bufferViewId(), it.bufferViewName())
         }.sortedBy(SettingsItem::name)

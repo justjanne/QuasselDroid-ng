@@ -18,6 +18,8 @@ import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseSettingsActivity
 import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseSettingsFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatListActivity
+import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatListFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityActivity
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivity
@@ -53,6 +55,9 @@ abstract class ActivityModule {
 
   @ContributesAndroidInjector(modules = [IdentityFragmentProvider::class])
   abstract fun bindIdentityActivity(): IdentityActivity
+
+  @ContributesAndroidInjector(modules = [ChatListFragmentProvider::class])
+  abstract fun bindChatListActivity(): ChatListActivity
 
   @ContributesAndroidInjector(modules = [NetworkConfigFragmentProvider::class])
   abstract fun bindNetworkConfigActivity(): NetworkConfigActivity

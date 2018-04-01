@@ -39,7 +39,7 @@ class Session(
 
   override val aliasManager = AliasManager(this)
   override val backlogManager = BacklogManager(this, backlogStorage)
-  override val bufferViewManager = BufferViewManager(this, this)
+  override val bufferViewManager = BufferViewManager(this)
   override val bufferSyncer = BufferSyncer(this, this)
   override val certManagers = mutableMapOf<IdentityId, CertManager>()
   override val coreInfo = CoreInfo(this)
@@ -191,6 +191,11 @@ class Session(
   }
 
   override fun onInitDone() {
+    for (config in bufferViewManager.bufferViewConfigs()) {
+      for (info in bufferSyncer.bufferInfos()) {
+        config.handleBuffer(info, bufferSyncer)
+      }
+    }
     coreConnection.setState(ConnectionState.CONNECTED)
     dispatch(SignalProxyMessage.HeartBeat(Instant.now()))
   }

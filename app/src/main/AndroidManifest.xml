@@ -82,6 +82,12 @@
       android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
+      android:name=".ui.coresettings.chatlist.ChatListActivity"
+      android:exported="false"
+      android:label="@string/settings_chatlist_title"
+      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
       android:name=".ui.coresettings.networkconfig.NetworkConfigActivity"
       android:exported="false"
       android:label="@string/settings_networkconfig_title"

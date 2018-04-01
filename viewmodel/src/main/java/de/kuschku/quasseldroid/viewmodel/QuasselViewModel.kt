@@ -318,6 +318,14 @@ class QuasselViewModel : ViewModel() {
     }
   }.mapOrElse(emptyList())
 
+  val bufferViewConfigMap = bufferViewManager.switchMap {
+    it.map { manager ->
+      manager.liveBufferViewConfigs().map {
+        it.mapNotNull(manager::bufferViewConfig).associateBy(BufferViewConfig::bufferViewId)
+      }
+    }.orElse(Observable.empty())
+  }
+
   val showHidden = BehaviorSubject.createDefault(false)
   val collapsedNetworks = BehaviorSubject.createDefault(emptySet<NetworkId>())
   val selectedBufferId = BehaviorSubject.createDefault(-1)
@@ -381,14 +389,14 @@ class QuasselViewModel : ViewModel() {
         val config = configOptional.orNull()
         if (bufferSyncer != null && config != null) {
           session.liveNetworks().switchMap { networks ->
-            config.live_config
+            config.liveUpdates()
               .debounce(16, TimeUnit.MILLISECONDS)
               .switchMap { currentConfig ->
                 combineLatest<Collection<BufferId>>(
                   listOf(
-                    config.live_buffers,
-                    config.live_temporarilyRemovedBuffers,
-                    config.live_removedBuffers
+                    config.liveBuffers(),
+                    config.liveTemporarilyRemovedBuffers(),
+                    config.liveRemovedBuffers()
                   )
                 ).switchMap { (ids, temp, perm) ->
                   fun transformIds(ids: Collection<BufferId>, state: BufferHiddenState) =

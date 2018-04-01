@@ -21,6 +21,19 @@
 
   <string name="settings_chatlists_title">Chatlists</string>
   <string name="settings_chatlist_title">Chatlist</string>
+  <string name="settings_chatlist_ui">User Interface</string>
+  <string name="settings_chatlist_buffer_view_name">Name</string>
+  <string name="settings_chatlist_show_search">Show Search</string>
+  <string name="settings_chatlist_sort_alphabetically">Sort Alphabetically</string>
+  <string name="settings_chatlist_add_new_buffers_automatically">Add new chats automatically</string>
+  <string name="settings_chatlist_network">Network</string>
+  <string name="settings_chatlist_disable_decoration">Hide Status Buffer</string>
+  <string name="settings_chatlist_types">Chat Types</string>
+  <string name="settings_chatlist_show_channels">Show Channels</string>
+  <string name="settings_chatlist_show_queries">Show Queries</string>
+  <string name="settings_chatlist_activity">Activity</string>
+  <string name="settings_chatlist_hide_inactive_buffers">Hide Inactive Chats</string>
+  <string name="settings_chatlist_hide_inactive_networks">Hide Inactive Networks</string>
 
   <string name="settings_networkconfig_title">IRC Config</string>
   <string name="settings_networkconfig_ping_timeout">Ping Timeout Detection</string>

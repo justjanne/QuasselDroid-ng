@@ -17,11 +17,11 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import de.kuschku.libquassel.quassel.syncables.Identity
-import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
+import io.reactivex.Observable
 
 
 class IdentityFragment : SettingsFragment() {
@@ -73,11 +73,9 @@ class IdentityFragment : SettingsFragment() {
 
     val identityId = arguments?.getInt("identity", -1) ?: -1
 
-    viewModel.identities.map {
-      Optional.ofNullable(it[identityId])
-    }.filter(Optional<Identity>::isPresent)
-      .map(Optional<Identity>::get)
-      .firstElement()
+    viewModel.identities.switchMap {
+      it[identityId]?.liveUpdates() ?: Observable.empty()
+    }.firstElement()
       .toLiveData().observe(this, Observer {
         if (it != null) {
           this.identity = Pair(it, it.copy())

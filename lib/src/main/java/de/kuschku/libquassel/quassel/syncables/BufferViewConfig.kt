@@ -5,14 +5,13 @@ import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferViewConfig
-import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SignalProxy
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
 class BufferViewConfig constructor(
   bufferViewId: Int,
-  proxy: SignalProxy,
-  private val session: ISession
+  proxy: SignalProxy
 ) : SyncableObject(proxy, "BufferViewConfig"), IBufferViewConfig {
   override fun init() {
     renameObject("$_bufferViewId")
@@ -20,8 +19,8 @@ class BufferViewConfig constructor(
 
   override fun toVariantMap(): QVariantMap = mapOf(
     "BufferList" to QVariant.of(initBufferList(), Type.QVariantList),
-    "RemovedBuffers" to QVariant.of(initBufferList(), Type.QVariantList),
-    "TemporarilyRemovedBuffers" to QVariant.of(initBufferList(), Type.QVariantList)
+    "RemovedBuffers" to QVariant.of(initRemovedBuffers(), Type.QVariantList),
+    "TemporarilyRemovedBuffers" to QVariant.of(initTemporarilyRemovedBuffers(), Type.QVariantList)
   ) + initProperties()
 
   override fun fromVariantMap(properties: QVariantMap) {
@@ -29,13 +28,6 @@ class BufferViewConfig constructor(
     initSetRemovedBuffers(properties["RemovedBuffers"].valueOr(::emptyList))
     initSetTemporarilyRemovedBuffers(properties["TemporarilyRemovedBuffers"].valueOr(::emptyList))
     initSetProperties(properties)
-
-    val bufferSyncer = session.bufferSyncer
-    if (bufferSyncer != null) {
-      for (info in bufferSyncer.bufferInfos()) {
-        handleBuffer(info, bufferSyncer)
-      }
-    }
   }
 
   override fun initBufferList(): QVariantList = _buffers.map {
@@ -79,18 +71,16 @@ class BufferViewConfig constructor(
   }
 
   override fun initSetProperties(properties: QVariantMap) {
-    setBufferViewName(properties["bufferViewName"].valueOr(this::bufferViewName))
-    setNetworkId(properties["networkId"].valueOr(this::networkId))
-    setAddNewBuffersAutomatically(
-      properties["addNewBuffersAutomatically"].valueOr(this::addNewBuffersAutomatically)
-    )
-    setSortAlphabetically(properties["sortAlphabetically"].valueOr(this::sortAlphabetically))
-    setHideInactiveBuffers(properties["hideInactiveBuffers"].valueOr(this::hideInactiveBuffers))
-    setHideInactiveNetworks(properties["hideInactiveNetworks"].valueOr(this::hideInactiveNetworks))
-    setDisableDecoration(properties["disableDecoration"].valueOr(this::disableDecoration))
-    setAllowedBufferTypes(properties["allowedBufferTypes"].valueOr { allowedBufferTypes().toInt() })
-    setMinimumActivity(properties["minimumActivity"].valueOr { minimumActivity().toInt() })
-    setShowSearch(properties["showSearch"].valueOr(this::showSearch))
+    _bufferViewName = properties["bufferViewName"].valueOr(this::bufferViewName)
+    _networkId = properties["networkId"].valueOr(this::networkId)
+    _addNewBuffersAutomatically = properties["addNewBuffersAutomatically"].valueOr(this::addNewBuffersAutomatically)
+    _sortAlphabetically = properties["sortAlphabetically"].valueOr(this::sortAlphabetically)
+    _hideInactiveBuffers = properties["hideInactiveBuffers"].valueOr(this::hideInactiveBuffers)
+    _hideInactiveNetworks = properties["hideInactiveNetworks"].valueOr(this::hideInactiveNetworks)
+    _disableDecoration = properties["disableDecoration"].valueOr(this::disableDecoration)
+    _allowedBufferTypes = properties["allowedBufferTypes"].valueOr(this::allowedBufferTypes)
+    _minimumActivity = properties["minimumActivity"].valueOr(this::minimumActivity)
+    _showSearch = properties["showSearch"].valueOr(this::showSearch)
   }
 
   override fun addBuffer(bufferId: BufferId, pos: Int) {
@@ -177,93 +167,125 @@ class BufferViewConfig constructor(
   fun removedBuffers(): Set<BufferId> = _removedBuffers
   fun temporarilyRemovedBuffers(): Set<BufferId> = _temporarilyRemovedBuffers
 
+  fun liveUpdates(): Observable<BufferViewConfig> = live_config
+  fun liveBuffers(): Observable<List<BufferId>> = live_buffers
+  fun liveRemovedBuffers(): Observable<Set<BufferId>> = live_removedBuffers
+  fun liveTemporarilyRemovedBuffers(): Observable<Set<BufferId>> = live_temporarilyRemovedBuffers
+
+  fun copy(): BufferViewConfig {
+    val config = BufferViewConfig(this.bufferViewId(), SignalProxy.NULL)
+    config.fromVariantMap(toVariantMap())
+    return config
+  }
+
   override fun setAddNewBuffersAutomatically(addNewBuffersAutomatically: Boolean) {
     _addNewBuffersAutomatically = addNewBuffersAutomatically
     super.setAddNewBuffersAutomatically(addNewBuffersAutomatically)
-    live_config.onNext(this)
   }
 
   override fun setAllowedBufferTypes(bufferTypes: Int) {
     _allowedBufferTypes = Buffer_Type.of(bufferTypes.toShort())
     super.setAllowedBufferTypes(bufferTypes)
-    live_config.onNext(this)
   }
 
   override fun setBufferViewName(bufferViewName: String) {
     _bufferViewName = bufferViewName
     super.setBufferViewName(bufferViewName)
-    live_config.onNext(this)
   }
 
   override fun setDisableDecoration(disableDecoration: Boolean) {
     _disableDecoration = disableDecoration
     super.setDisableDecoration(disableDecoration)
-    live_config.onNext(this)
   }
 
   override fun setHideInactiveBuffers(hideInactiveBuffers: Boolean) {
     _hideInactiveBuffers = hideInactiveBuffers
     super.setHideInactiveBuffers(hideInactiveBuffers)
-    live_config.onNext(this)
   }
 
   override fun setHideInactiveNetworks(hideInactiveNetworks: Boolean) {
     _hideInactiveNetworks = hideInactiveNetworks
     super.setHideInactiveNetworks(hideInactiveNetworks)
-    live_config.onNext(this)
   }
 
   override fun setMinimumActivity(activity: Int) {
     _minimumActivity = Buffer_Activity.of(activity)
     super.setMinimumActivity(activity)
-    live_config.onNext(this)
   }
 
   override fun setNetworkId(networkId: NetworkId) {
     _networkId = networkId
     super.setNetworkId(networkId)
-    live_config.onNext(this)
   }
 
   override fun setShowSearch(showSearch: Boolean) {
     _showSearch = showSearch
     super.setShowSearch(showSearch)
-    live_config.onNext(this)
   }
 
   override fun setSortAlphabetically(sortAlphabetically: Boolean) {
     _sortAlphabetically = sortAlphabetically
     super.setSortAlphabetically(sortAlphabetically)
-    live_config.onNext(this)
   }
 
   private val _bufferViewId: Int = bufferViewId
   private var _bufferViewName: String = ""
+    set(value) {
+      field = value
+      live_config.onNext(this)
+    }
   private var _networkId: NetworkId = 0
+    set(value) {
+      field = value
+      live_config.onNext(this)
+    }
   private var _addNewBuffersAutomatically: Boolean = true
+    set(value) {
+      field = value
+      live_config.onNext(this)
+    }
   private var _sortAlphabetically: Boolean = true
+    set(value) {
+      field = value
+      live_config.onNext(this)
+    }
   private var _hideInactiveBuffers: Boolean = false
+    set(value) {
+      field = value
+      live_config.onNext(this)
+    }
   private var _hideInactiveNetworks: Boolean = false
+    set(value) {
+      field = value
+      live_config.onNext(this)
+    }
   private var _disableDecoration: Boolean = false
+    set(value) {
+      field = value
+      live_config.onNext(this)
+    }
   private var _allowedBufferTypes: Buffer_Types = Buffer_Type.of(*Buffer_Type.validValues)
+    set(value) {
+      field = value
+      live_config.onNext(this)
+    }
   private var _minimumActivity: Buffer_Activities = Buffer_Activities.of(0)
+    set(value) {
+      field = value
+      live_config.onNext(this)
+    }
   private var _showSearch: Boolean = false
+    set(value) {
+      field = value
+      live_config.onNext(this)
+    }
   private var _buffers: MutableList<BufferId> = mutableListOf()
   private var _removedBuffers: MutableSet<BufferId> = mutableSetOf()
   private var _temporarilyRemovedBuffers: MutableSet<BufferId> = mutableSetOf()
-  val live_config = BehaviorSubject.createDefault(this)
-
-  val live_buffers: BehaviorSubject<List<BufferId>> = BehaviorSubject.createDefault<List<BufferId>>(
-    emptyList()
-  )
-
-  val live_removedBuffers: BehaviorSubject<Set<BufferId>> = BehaviorSubject.createDefault<Set<BufferId>>(
-    emptySet()
-  )
-
-  val live_temporarilyRemovedBuffers: BehaviorSubject<Set<BufferId>> = BehaviorSubject.createDefault<Set<BufferId>>(
-    emptySet()
-  )
+  private val live_config = BehaviorSubject.createDefault(this)
+  private val live_buffers = BehaviorSubject.createDefault<List<BufferId>>(emptyList())
+  private val live_removedBuffers = BehaviorSubject.createDefault<Set<BufferId>>(emptySet())
+  private val live_temporarilyRemovedBuffers = BehaviorSubject.createDefault<Set<BufferId>>(emptySet())
 
   object NameComparator : Comparator<BufferViewConfig> {
     override fun compare(a: BufferViewConfig?, b: BufferViewConfig?) =
