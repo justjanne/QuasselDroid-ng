@@ -27,6 +27,7 @@
       android:ellipsize="marquee"
       android:singleLine="true"
       android:textColor="?colorTextPrimary"
+      android:textAppearance="?android:textAppearanceMedium"
       android:textSize="16sp"
       tools:text="IRC Config" />
 
