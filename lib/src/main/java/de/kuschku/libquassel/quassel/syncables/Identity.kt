@@ -3,6 +3,8 @@ package de.kuschku.libquassel.quassel.syncables
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.IIdentity
 import de.kuschku.libquassel.session.SignalProxy
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 
 class Identity constructor(
   proxy: SignalProxy
@@ -64,6 +66,8 @@ class Identity constructor(
     setQuitReason(properties["quitReason"].valueOr(this::quitReason))
   }
 
+  fun liveUpdates(): Observable<Identity> = _change.map { this }
+
   fun id() = _identityId
   fun identityName() = _identityName
   fun realName() = _realName
@@ -83,6 +87,12 @@ class Identity constructor(
   fun kickReason() = _kickReason
   fun partReason() = _partReason
   fun quitReason() = _quitReason
+
+  fun copy(): Identity {
+    val identity = Identity(SignalProxy.NULL)
+    identity.fromVariantMap(this.toVariantMap())
+    return identity
+  }
 
   override fun setAutoAwayEnabled(enabled: Boolean) {
     _autoAwayEnabled = enabled
@@ -179,23 +189,101 @@ class Identity constructor(
     super.setRealName(realName)
   }
 
+  private val _change = BehaviorSubject.createDefault(Unit)
+
   private var _identityId: IdentityId = -1
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _identityName: String = "<isEmpty>"
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _realName: String = ""
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _nicks: MutableList<String> = mutableListOf("quassel")
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _awayNick: String = ""
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _awayNickEnabled: Boolean = false
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _awayReason: String = "Gone fishing."
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _awayReasonEnabled: Boolean = true
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _autoAwayEnabled: Boolean = false
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _autoAwayTime: Int = 10
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _autoAwayReason: String = "Not here. No, really. not here!"
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _autoAwayReasonEnabled: Boolean = false
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _detachAwayEnabled: Boolean = false
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _detachAwayReason: String = "All Quassel clients vanished from the face of the earth..."
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _detachAwayReasonEnabled: Boolean = false
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _ident: String = "quassel"
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _kickReason: String = "Kindergarten is elsewhere!"
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _partReason: String = "http://quassel-irc.org - Chat comfortably. Anywhere."
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
   private var _quitReason: String = "http://quassel-irc.org - Chat comfortably. Anywhere."
+    set(value) {
+      field = value
+      _change.onNext(Unit)
+    }
 }

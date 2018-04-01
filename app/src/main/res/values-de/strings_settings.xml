@@ -20,4 +20,23 @@
   <string name="settings_networkconfig_auto_who_delay_unit">Sekunden</string>
 
   <string name="settings_networkconfig_standard_ctcp">Standardkonformes CTCP-Verhalten aktivieren</string>
+
+
+  <string name="settings_identities_title">Identitäten</string>
+  <string name="settings_identities_description" />
+
+  <string name="settings_identity_title">Identität</string>
+  <string name="settings_identity_names">Namen</string>
+  <string name="settings_identity_identity_name">Identitätsname</string>
+  <string name="settings_identity_real_name">Realname</string>
+  <string name="settings_identity_ident">Ident</string>
+  <string name="settings_identity_nicks">Spitznamen</string>
+  <string name="settings_identity_messages">Meldungen</string>
+  <string name="settings_identity_kick_reason">Rauswurfgrund</string>
+  <string name="settings_identity_part_reason">Part-Grund</string>
+  <string name="settings_identity_quit_reason">Beendigungsgrund</string>
+  <string name="settings_identity_away">Abwesenheitsmeldungen</string>
+  <string name="settings_identity_away_reason">Abwesenheitsgrund</string>
+  <string name="settings_identity_detach_away">Abwesend wenn nicht verbunden</string>
+  <string name="settings_identity_detach_away_reason">Abwesenheitsgrund</string>
 </resources>

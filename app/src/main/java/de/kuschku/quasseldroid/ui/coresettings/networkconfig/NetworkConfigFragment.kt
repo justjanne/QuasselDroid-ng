@@ -10,14 +10,14 @@ import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.NetworkConfig
-import de.kuschku.libquassel.session.ISession
+import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
 
 class NetworkConfigFragment : SettingsFragment() {
-  private var networkConfig: NetworkConfig? = null
+  private var networkConfig: Pair<NetworkConfig, NetworkConfig>? = null
 
   @BindView(R.id.ping_timeout_enabled)
   lateinit var pingTimeoutEnabled: SwitchCompat
@@ -51,27 +51,30 @@ class NetworkConfigFragment : SettingsFragment() {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-    val view = inflater.inflate(R.layout.fragment_networksettings, container, false)
+    val view = inflater.inflate(R.layout.settings_networkconfig, container, false)
     ButterKnife.bind(this, view)
 
-    setHasOptionsMenu(true)
+    viewModel.networkConfig
+      .filter(Optional<NetworkConfig?>::isPresent)
+      .map(Optional<NetworkConfig?>::get)
+      .firstElement()
+      .toLiveData().observe(this, Observer {
+        if (it != null) {
+          this.networkConfig = Pair(it, it.copy())
+          this.networkConfig?.let { (_, data) ->
+            pingTimeoutEnabled.isChecked = data.pingTimeoutEnabled()
+            pingInterval.setText(data.pingInterval().toString())
+            maxPingCount.setText(data.maxPingCount().toString())
 
-    viewModel.session.map { it.map(ISession::networkConfig) }.toLiveData().observe(this, Observer {
-      it?.orNull()?.let {
-        this.networkConfig = it
+            autoWhoEnabled.isChecked = data.autoWhoEnabled()
+            autoWhoInterval.setText(data.autoWhoInterval().toString())
+            autoWhoNickLimit.setText(data.autoWhoNickLimit().toString())
+            autoWhoDelay.setText(data.autoWhoDelay().toString())
 
-        pingTimeoutEnabled.isChecked = it.pingTimeoutEnabled()
-        pingInterval.setText(it.pingInterval().toString())
-        maxPingCount.setText(it.maxPingCount().toString())
-
-        autoWhoEnabled.isChecked = it.autoWhoEnabled()
-        autoWhoInterval.setText(it.autoWhoInterval().toString())
-        autoWhoNickLimit.setText(it.autoWhoNickLimit().toString())
-        autoWhoDelay.setText(it.autoWhoDelay().toString())
-
-        standardCtcp.isChecked = it.standardCtcp()
-      }
-    })
+            standardCtcp.isChecked = data.standardCtcp()
+          }
+        }
+      })
 
     pingTimeoutEnabled.setDependent(pingTimeoutGroup)
     autoWhoEnabled.setDependent(autoWhoGroup)
@@ -80,22 +83,18 @@ class NetworkConfigFragment : SettingsFragment() {
   }
 
 
-  override fun onSave() = networkConfig?.let {
-    val config = it.copy()
+  override fun onSave() = networkConfig?.let { (it, data) ->
+    data.setPingTimeoutEnabled(pingTimeoutEnabled.isChecked)
+    pingInterval.text.toString().toIntOrNull()?.let(data::setPingInterval)
+    maxPingCount.text.toString().toIntOrNull()?.let(data::setMaxPingCount)
 
-    config.setPingTimeoutEnabled(pingTimeoutEnabled.isChecked)
-    pingInterval.text.toString().toIntOrNull()?.let(config::setPingInterval)
-    maxPingCount.text.toString().toIntOrNull()?.let(config::setMaxPingCount)
+    data.setAutoWhoEnabled(autoWhoEnabled.isChecked)
+    autoWhoInterval.text.toString().toIntOrNull()?.let(data::setAutoWhoInterval)
+    autoWhoNickLimit.text.toString().toIntOrNull()?.let(data::setAutoWhoNickLimit)
+    autoWhoDelay.text.toString().toIntOrNull()?.let(data::setAutoWhoDelay)
+    data.setStandardCtcp(standardCtcp.isChecked)
 
-    config.setAutoWhoEnabled(autoWhoEnabled.isChecked)
-    autoWhoInterval.text.toString().toIntOrNull()?.let(config::setAutoWhoInterval)
-    autoWhoNickLimit.text.toString().toIntOrNull()?.let(config::setAutoWhoNickLimit)
-    autoWhoDelay.text.toString().toIntOrNull()?.let(config::setAutoWhoDelay)
-    config.setStandardCtcp(standardCtcp.isChecked)
-
-    val properties = config.toVariantMap()
-    it.requestUpdate(properties)
-
+    it.requestUpdate(data.toVariantMap())
     true
   } ?: false
 }

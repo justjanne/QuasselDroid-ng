@@ -18,6 +18,10 @@ import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseSettingsActivity
 import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseSettingsFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.identity.IdentitiesActivity
+import de.kuschku.quasseldroid.ui.coresettings.identity.IdentitiesFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityActivity
+import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivity
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditActivity
@@ -48,6 +52,12 @@ abstract class ActivityModule {
 
   @ContributesAndroidInjector(modules = [CoreSettingsFragmentProvider::class])
   abstract fun bindCoreSettingsActivity(): CoreSettingsActivity
+
+  @ContributesAndroidInjector(modules = [IdentitiesFragmentProvider::class])
+  abstract fun bindIdentitiesActivity(): IdentitiesActivity
+
+  @ContributesAndroidInjector(modules = [IdentityFragmentProvider::class])
+  abstract fun bindIdentityActivity(): IdentityActivity
 
   @ContributesAndroidInjector(modules = [NetworkConfigFragmentProvider::class])
   abstract fun bindNetworkConfigActivity(): NetworkConfigActivity

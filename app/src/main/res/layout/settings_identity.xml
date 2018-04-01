@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_account_card" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_identity_names" />
+    </LinearLayout>
+
+    <LinearLayout
+      style="@style/Widget.CoreSettings.DependentGroup"
+      android:visibility="visible">
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_identity_identity_name">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/identity_name"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="Standardidentität" />
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_identity_real_name">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/real_name"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="Janne Koschinski" />
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_identity_ident">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/ident"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="justJanne" />
+      </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <Space style="@style/Widget.CoreSettings.PrimaryItemIcon" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_identity_nicks" />
+    </LinearLayout>
+
+    <LinearLayout
+      style="@style/Widget.CoreSettings.DependentGroup"
+      android:orientation="vertical"
+      android:visibility="visible">
+
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/nicks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:itemCount="4"
+        tools:listitem="@layout/settings_identity_nick" />
+
+      <LinearLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:orientation="horizontal">
+
+        <Button
+          android:id="@+id/new_nick"
+          style="@style/Widget.Button.Borderless.Colored"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/label_new_nick" />
+      </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_message_bulleted" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_identity_messages" />
+    </LinearLayout>
+
+    <LinearLayout
+      style="@style/Widget.CoreSettings.DependentGroup"
+      android:visibility="visible">
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_identity_kick_reason">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/kick_reason"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="" />
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_identity_part_reason">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/part_reason"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="So if you care to find me, look to the western sky. As someone told me lately, everyone deserves a chance to fly." />
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_identity_quit_reason">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/quit_reason"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="So if you care to find me, look to the western sky. As someone told me lately, everyone deserves a chance to fly." />
+      </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_history" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_identity_away" />
+    </LinearLayout>
+
+    <LinearLayout
+      style="@style/Widget.CoreSettings.DependentGroup"
+      android:visibility="visible">
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_identity_away_reason">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/away_reason"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="Gone Fishing." />
+      </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <Space style="@style/Widget.CoreSettings.PrimaryItemIcon" />
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/detach_away"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_identity_detach_away" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/detach_away_group"
+      style="@style/Widget.CoreSettings.DependentGroup"
+      tools:visibility="visible">
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_identity_detach_away_reason">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/detach_away_reason"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="Gone Fishing." />
+      </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+  </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

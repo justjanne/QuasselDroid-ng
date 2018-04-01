@@ -23,6 +23,7 @@
   <string name="label_delete_all">Delete All</string>
   <string name="label_details">Details</string>
   <string name="label_disconnect">Disconnect</string>
+  <string name="label_edit_nick">Edit nickname</string>
   <string name="label_filter_messages">Filter Messages</string>
   <string name="label_github">GitHub</string>
   <string name="label_hide_perm">Hide Permanently</string>
@@ -32,6 +33,7 @@
   <string name="label_libraries">Libraries</string>
   <string name="label_license">License</string>
   <string name="label_new_account">New Account</string>
+  <string name="label_new_nick">New Nick</string>
   <string name="label_no">No</string>
   <string name="label_reset">Reset</string>
   <string name="label_open">Open</string>

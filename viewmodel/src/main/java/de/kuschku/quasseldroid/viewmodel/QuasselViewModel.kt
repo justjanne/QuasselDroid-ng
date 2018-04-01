@@ -76,6 +76,18 @@ class QuasselViewModel : ViewModel() {
     it.orNull()?.error?.toLiveData()
   }
 
+  val networkConfig = session.map {
+    it.map(ISession::networkConfig)
+  }
+
+  val networks = session.switchMap {
+    it.map(ISession::liveNetworks).orElse(Observable.just(emptyMap()))
+  }
+
+  val identities = session.switchMap {
+    it.map(ISession::liveIdentities).orElse(Observable.just(emptyMap()))
+  }
+
   /**
    * An observable of the changes of the markerline, as pairs of `(old, new)`
    */

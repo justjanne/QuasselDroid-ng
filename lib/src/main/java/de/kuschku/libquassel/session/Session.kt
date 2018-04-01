@@ -156,7 +156,9 @@ class Session(
         val identity = Identity(this)
         identity.fromVariantMap(it.valueOr(::emptyMap))
         identity.initialized = true
+        identity.init()
         identities[identity.id()] = identity
+        synchronize(identity)
 
         val certManager = CertManager(identity.id(), this)
         certManagers[identity.id()] = certManager

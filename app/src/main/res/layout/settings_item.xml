@@ -35,6 +35,6 @@
       android:layout_height="wrap_content"
       android:textAppearance="?android:attr/textAppearanceSmall"
       android:textColor="?colorTextPrimary"
-      tools:visibility="gone" />
+      android:visibility="gone" />
   </LinearLayout>
 </LinearLayout>
