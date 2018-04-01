@@ -10,6 +10,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseSettingsActivity
+import de.kuschku.quasseldroid.util.helper.visibleIf
 
 class LibraryAdapter(private val libraries: List<Library>) :
   RecyclerView.Adapter<LibraryAdapter.LibraryViewHolder>() {
@@ -39,8 +40,7 @@ class LibraryAdapter(private val libraries: List<Library>) :
       ButterKnife.bind(this, itemView)
       itemView.setOnClickListener {
         this.item?.run {
-          val intent = Intent(itemView.context,
-                              LicenseSettingsActivity::class.java)
+          val intent = Intent(itemView.context, LicenseSettingsActivity::class.java)
           intent.putExtra("license_name", license.fullName)
           intent.putExtra("license_text", license.text)
           itemView.context.startActivity(intent)
@@ -52,6 +52,7 @@ class LibraryAdapter(private val libraries: List<Library>) :
       this.item = item
       this.name.text = item.name
       this.version.text = item.version
+      this.version.visibleIf(!item.version.isNullOrBlank())
       this.license.text = item.license.shortName
     }
   }

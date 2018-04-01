@@ -3,14 +3,15 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:background="?android:attr/selectableItemBackground"
+  android:background="?selectableItemBackground"
   android:focusable="true"
   android:gravity="center_vertical"
-  android:minHeight="?android:attr/listPreferredItemHeightSmall"
-  android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
-  android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
-  android:paddingRight="?android:attr/listPreferredItemPaddingRight"
-  android:paddingStart="?android:attr/listPreferredItemPaddingLeft">
+  android:minHeight="?listPreferredItemHeightSmall"
+  android:paddingEnd="?listPreferredItemPaddingRight"
+  android:paddingLeft="8dp"
+  android:paddingRight="?listPreferredItemPaddingRight"
+  android:paddingStart="8dp"
+  tools:showIn="@layout/settings_list">
 
   <LinearLayout
     android:layout_width="match_parent"
@@ -33,7 +34,7 @@
       android:id="@+id/summary"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:textAppearance="?android:attr/textAppearanceSmall"
+      android:textAppearance="?android:textAppearanceSmall"
       android:textColor="?colorTextPrimary"
       android:visibility="gone" />
   </LinearLayout>

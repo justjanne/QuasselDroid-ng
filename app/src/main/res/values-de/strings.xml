@@ -33,6 +33,9 @@
   <string name="label_libraries">Bibliotheken</string>
   <string name="label_license">Lizenz</string>
   <string name="label_new_account">Account hinzufügen</string>
+  <string name="label_new_chatlist">Chatliste hinzufügen</string>
+  <string name="label_new_identity">Identität hinzufügen</string>
+  <string name="label_new_network">Netzwerk hinzufügen</string>
   <string name="label_new_nick">Spitzname hinzufügen</string>
   <string name="label_no">Nein</string>
   <string name="label_reset">Zurücksetzen</string>

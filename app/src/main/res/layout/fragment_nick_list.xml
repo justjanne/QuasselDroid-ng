@@ -6,5 +6,6 @@
   android:background="?attr/colorBackground"
   android:clipToPadding="false"
   android:fitsSystemWindows="true"
+  android:scrollbars="vertical"
   tools:listitem="@layout/widget_nick"
   tools:showIn="@layout/activity_main" />

@@ -1,7 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/list"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:listitem="@layout/settings_item" />
+  android:scrollbars="vertical">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:minHeight="?listPreferredItemHeightSmall"
+      android:paddingEnd="?listPreferredItemPaddingRight"
+      android:paddingLeft="?listPreferredItemPaddingLeft"
+      android:paddingRight="?listPreferredItemPaddingRight"
+      android:paddingStart="?listPreferredItemPaddingLeft">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_server_network" />
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp">
+
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:ellipsize="marquee"
+          android:singleLine="true"
+          android:text="@string/settings_networks_title"
+          android:textColor="?colorTextPrimary"
+          android:textSize="16sp" />
+      </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="72dp"
+      android:layout_marginStart="72dp"
+      android:orientation="vertical">
+
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/networks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        tools:itemCount="2"
+        tools:listitem="@layout/settings_item" />
+
+      <LinearLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:orientation="horizontal">
+
+        <Button
+          android:id="@+id/new_network"
+          style="@style/Widget.Button.Borderless.Colored"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/label_new_network" />
+      </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:minHeight="?listPreferredItemHeightSmall"
+      android:paddingEnd="?listPreferredItemPaddingRight"
+      android:paddingLeft="?listPreferredItemPaddingLeft"
+      android:paddingRight="?listPreferredItemPaddingRight"
+      android:paddingStart="?listPreferredItemPaddingLeft">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_account_card" />
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp">
+
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:ellipsize="marquee"
+          android:singleLine="true"
+          android:text="@string/settings_identities_title"
+          android:textColor="?colorTextPrimary"
+          android:textSize="16sp" />
+      </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="72dp"
+      android:layout_marginStart="72dp"
+      android:orientation="vertical">
+
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/identities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        tools:itemCount="1"
+        tools:listitem="@layout/settings_item" />
+
+      <LinearLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:orientation="horizontal">
+
+        <Button
+          android:id="@+id/new_identity"
+          style="@style/Widget.Button.Borderless.Colored"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/label_new_identity" />
+      </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:minHeight="?listPreferredItemHeightSmall"
+      android:paddingEnd="?listPreferredItemPaddingRight"
+      android:paddingLeft="?listPreferredItemPaddingLeft"
+      android:paddingRight="?listPreferredItemPaddingRight"
+      android:paddingStart="?listPreferredItemPaddingLeft">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_list_bulleted" />
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp">
+
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:ellipsize="marquee"
+          android:singleLine="true"
+          android:text="@string/settings_chatlists_title"
+          android:textColor="?colorTextPrimary"
+          android:textSize="16sp" />
+      </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="72dp"
+      android:layout_marginStart="72dp"
+      android:orientation="vertical">
+
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/chatlists"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        tools:itemCount="2"
+        tools:listitem="@layout/settings_item" />
+
+      <LinearLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:orientation="horizontal">
+
+        <Button
+          android:id="@+id/new_chatlist"
+          style="@style/Widget.Button.Borderless.Colored"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/label_new_chatlist" />
+      </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/networkconfig"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="?selectableItemBackground"
+      android:focusable="true"
+      android:gravity="center_vertical"
+      android:minHeight="?listPreferredItemHeightSmall"
+      android:paddingEnd="?listPreferredItemPaddingRight"
+      android:paddingLeft="?listPreferredItemPaddingLeft"
+      android:paddingRight="?listPreferredItemPaddingRight"
+      android:paddingStart="?listPreferredItemPaddingLeft">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_message_bulleted" />
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp">
+
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:ellipsize="marquee"
+          android:singleLine="true"
+          android:text="@string/settings_networkconfig_title"
+          android:textColor="?colorTextPrimary"
+          android:textSize="16sp" />
+      </LinearLayout>
+    </LinearLayout>
+  </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

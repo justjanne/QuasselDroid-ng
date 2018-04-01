@@ -33,6 +33,9 @@
   <string name="label_libraries">Libraries</string>
   <string name="label_license">License</string>
   <string name="label_new_account">New Account</string>
+  <string name="label_new_chatlist">New Chatlist</string>
+  <string name="label_new_identity">New Identity</string>
+  <string name="label_new_network">New Network</string>
   <string name="label_new_nick">New Nick</string>
   <string name="label_no">No</string>
   <string name="label_reset">Reset</string>

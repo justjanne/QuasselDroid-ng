@@ -1,91 +1,118 @@
 package de.kuschku.quasseldroid.ui.coresettings
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
+import de.kuschku.libquassel.quassel.syncables.Identity
+import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.ui.coresettings.identity.IdentitiesActivity
+import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityActivity
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivity
-import de.kuschku.quasseldroid.util.helper.visibleIf
+import de.kuschku.quasseldroid.util.helper.combineLatest
+import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 
 class CoreSettingsFragment : ServiceBoundFragment() {
-  @BindView(R.id.list)
-  lateinit var list: RecyclerView
+  @BindView(R.id.networks)
+  lateinit var networks: RecyclerView
+
+  @BindView(R.id.identities)
+  lateinit var identities: RecyclerView
+
+  @BindView(R.id.chatlists)
+  lateinit var chatlists: RecyclerView
+
+  @BindView(R.id.networkconfig)
+  lateinit var networkConfig: View
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.settings_list, container, false)
     ButterKnife.bind(this, view)
 
-    val adapter = CoreSettingsAdapter(listOf(
-      CoreSetting(
-        getString(R.string.settings_identities_title),
-        getString(R.string.settings_identities_description),
-        Intent(requireContext(), IdentitiesActivity::class.java)
-      ),
-      CoreSetting(
-        getString(R.string.settings_networkconfig_title),
-        getString(R.string.settings_networkconfig_description),
-        Intent(requireContext(), NetworkConfigActivity::class.java)
-      )
-    ))
-    list.adapter = adapter
-    list.layoutManager = LinearLayoutManager(context)
-    list.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+    val networkAdapter = SettingsItemAdapter {
+      /*
+      val intent = Intent(requireContext(), NetworkActivity::class.java)
+      intent.putExtra("network", it)
+      startActivity(intent)
+      */
+    }
+
+    val identityAdapter = SettingsItemAdapter {
+      val intent = Intent(requireContext(), IdentityActivity::class.java)
+      intent.putExtra("identity", it)
+      startActivity(intent)
+    }
+
+    val chatListAdapter = SettingsItemAdapter {
+      /*
+      val intent = Intent(requireContext(), BufferViewConfigActivity::class.java)
+      intent.putExtra("bufferviewconfig", it)
+      startActivity(intent)
+      */
+    }
+
+    val itemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+
+    networks.adapter = networkAdapter
+    networks.layoutManager = LinearLayoutManager(context)
+    networks.addItemDecoration(itemDecoration)
+    ViewCompat.setNestedScrollingEnabled(networks, false)
+
+    viewModel.networks.switchMap {
+      combineLatest(it.values.map(Network::liveNetworkInfo)).map {
+        it.map {
+          SettingsItem(it.networkId, it.networkName)
+        }.sortedBy(SettingsItem::name)
+      }
+    }.toLiveData().observe(this, Observer {
+      networkAdapter.submitList(it.orEmpty())
+    })
+
+    identities.adapter = identityAdapter
+    identities.layoutManager = LinearLayoutManager(context)
+    identities.addItemDecoration(itemDecoration)
+    ViewCompat.setNestedScrollingEnabled(identities, false)
+
+    viewModel.identities.switchMap {
+      combineLatest(it.values.map(Identity::liveUpdates)).map {
+        it.map {
+          SettingsItem(it.id(), it.identityName())
+        }.sortedBy(SettingsItem::name)
+      }
+    }.toLiveData().observe(this, Observer {
+      identityAdapter.submitList(it.orEmpty())
+    })
+
+    chatlists.adapter = chatListAdapter
+    chatlists.layoutManager = LinearLayoutManager(context)
+    chatlists.addItemDecoration(itemDecoration)
+    ViewCompat.setNestedScrollingEnabled(chatlists, false)
+
+    viewModel.bufferViewConfigs.switchMap {
+      combineLatest(it.map(BufferViewConfig::live_config)).map {
+        it.map {
+          SettingsItem(it.bufferViewId(), it.bufferViewName())
+        }.sortedBy(SettingsItem::name)
+      }
+    }.toLiveData().observe(this, Observer {
+      chatListAdapter.submitList(it.orEmpty())
+    })
+
+    networkConfig.setOnClickListener {
+      startActivity(Intent(requireContext(), NetworkConfigActivity::class.java))
+    }
 
     return view
-  }
-
-  data class CoreSetting(
-    val title: CharSequence,
-    val summary: CharSequence? = null,
-    val intent: Intent? = null
-  )
-
-  class CoreSettingsAdapter(private val data: List<CoreSetting>) :
-    RecyclerView.Adapter<CoreSettingsAdapter.CoreSettingsViewHolder>() {
-    override fun getItemCount() = data.size
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CoreSettingsViewHolder(
-      LayoutInflater.from(parent.context).inflate(R.layout.settings_item, parent, false)
-    )
-
-    override fun onBindViewHolder(holder: CoreSettingsViewHolder, position: Int) {
-      holder.bind(data[position])
-    }
-
-    class CoreSettingsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-      @BindView(R.id.title)
-      lateinit var title: TextView
-
-      @BindView(R.id.summary)
-      lateinit var summary: TextView
-
-      var item: CoreSetting? = null
-
-      init {
-        ButterKnife.bind(this, itemView)
-        itemView.setOnClickListener {
-          item?.intent?.let(itemView.context::startActivity)
-        }
-      }
-
-      fun bind(item: CoreSetting) {
-        this.item = item
-
-        this.title.text = item.title
-        this.summary.text = item.summary
-        this.summary.visibleIf(!item.summary.isNullOrBlank())
-      }
-    }
   }
 }

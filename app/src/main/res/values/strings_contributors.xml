@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="contributor_description_freqmod">Initial qdatastream deserialization attempts</string>
+  <string name="contributor_description_sandsmark">Legacy protocol implementation, (de)serializers, project (de)moralizer</string>
+  <string name="contributor_description_magnuf">Legacy UI</string>
+  <string name="contributor_description_kenji">Legacy UI</string>
+  <string name="contributor_description_justjanne">Rewrite, UI, Annotation Processors, Backend</string>
+</resources>

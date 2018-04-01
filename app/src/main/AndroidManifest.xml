@@ -76,22 +76,16 @@
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
+      android:name=".ui.coresettings.identity.IdentityActivity"
+      android:exported="false"
+      android:label="@string/settings_identity_title"
+      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
       android:name=".ui.coresettings.networkconfig.NetworkConfigActivity"
       android:exported="false"
       android:label="@string/settings_networkconfig_title"
       android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
-      android:windowSoftInputMode="adjustResize" />
-    <activity
-      android:name=".ui.coresettings.identity.IdentitiesActivity"
-      android:exported="false"
-      android:label="@string/settings_identities_title"
-      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
-      android:windowSoftInputMode="adjustResize" />
-    <activity
-      android:name=".ui.coresettings.identity.IdentityActivity"
-      android:exported="false"
-      android:label="@string/settings_identity_title"
-      android:parentActivityName=".ui.coresettings.identity.IdentitiesActivity"
       android:windowSoftInputMode="adjustResize" />
 
     <!-- Client Setup Flow -->

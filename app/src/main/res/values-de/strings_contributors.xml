@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="contributor_description_freqmod">Ursprüngliche qdatastream Deserialisierungsversuche</string>
+  <string name="contributor_description_sandsmark">Historische Protokollimplementierung, (De-)Serialisierer, Projekt (De-)Moralisierer</string>
+  <string name="contributor_description_magnuf">Historisches UI</string>
+  <string name="contributor_description_kenji">Historisches UI</string>
+  <string name="contributor_description_justjanne">Rwerite, UI, Annotation Processors, Backend</string>
+</resources>

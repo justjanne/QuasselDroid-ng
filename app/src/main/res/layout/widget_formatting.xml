@@ -68,9 +68,9 @@
     <android.support.v7.widget.AppCompatImageButton
       android:id="@+id/action_format_foreground"
       style="@style/Widget.Button.Format"
-      android:contentDescription="@string/label_foreground"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:contentDescription="@string/label_foreground"
       android:paddingBottom="4dp"
       app:srcCompat="@drawable/ic_format_foreground"
       app:tint="?colorControlNormal" />
@@ -97,9 +97,9 @@
     <android.support.v7.widget.AppCompatImageButton
       android:id="@+id/action_format_background"
       style="@style/Widget.Button.Format"
-      android:contentDescription="@string/label_background"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:contentDescription="@string/label_background"
       android:paddingBottom="4dp"
       app:srcCompat="@drawable/ic_format_background"
       app:tint="?colorControlNormal" />

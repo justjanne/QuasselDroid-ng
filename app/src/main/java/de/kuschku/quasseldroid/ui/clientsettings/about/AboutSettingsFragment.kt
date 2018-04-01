@@ -140,6 +140,21 @@ class AboutSettingsFragment : DaggerFragment() {
         url = "https://github.com/square/leakcanary"
       ),
       Library(
+        name = "Material Design Icons: Community",
+        license = License(
+          shortName = "SIL Open Font License v1.1",
+          fullName = "SIL OPEN FONT LICENSE",
+          text = R.string.license_materialdesignicons
+        ),
+        url = "https://github.com/Templarian/MaterialDesign"
+      ),
+      Library(
+        name = "Material Design Icons: Google",
+        version = "3.0.1",
+        license = apache2,
+        url = "https://github.com/google/material-design-icons"
+      ),
+      Library(
         name = "Material Dialogs",
         version = "0.9.6.0",
         license = License(
@@ -179,27 +194,27 @@ class AboutSettingsFragment : DaggerFragment() {
       Contributor(
         name = "Frederik M. J. Vestre",
         nickName = "freqmod",
-        description = "Initial qdatastream deserialization attempts"
+        description = getString(R.string.contributor_description_freqmod)
       ),
       Contributor(
         name = "Martin “Java Sucks” Sandsmark",
         nickName = "sandsmark",
-        description = "Legacy protocol implementation, (de)serializers, project (de)moralizer"
+        description = getString(R.string.contributor_description_sandsmark)
       ),
       Contributor(
         name = "Magnus Fjell",
         nickName = "magnuf",
-        description = "Legacy UI"
+        description = getString(R.string.contributor_description_magnuf)
       ),
       Contributor(
         name = "Ken Børge Viktil",
         nickName = "Kenji",
-        description = "Legacy UI"
+        description = getString(R.string.contributor_description_kenji)
       ),
       Contributor(
         name = "Janne Koschinski",
         nickName = "justJanne",
-        description = "Rewrite, UI, Annotation Processors, Backend"
+        description = getString(R.string.contributor_description_justjanne)
       )
     ))
     contributors.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))

@@ -2,6 +2,7 @@ package de.kuschku.quasseldroid.ui.coresettings.identity
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.ViewHolder
@@ -98,6 +99,8 @@ class IdentityFragment : SettingsFragment() {
     adapter = IdentityNicksAdapter(::nickClick, ::startDrag)
     nicks.layoutManager = LinearLayoutManager(requireContext())
     nicks.adapter = adapter
+    ViewCompat.setNestedScrollingEnabled(nicks, false)
+
     val callback = DragSortItemTouchHelperCallback(adapter)
     helper = ItemTouchHelper(callback)
     helper.attachToRecyclerView(nicks)

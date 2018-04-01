@@ -5,24 +5,10 @@
   android:layout_height="match_parent"
   android:scrollbars="vertical">
 
-  <LinearLayout
+  <TextView
+    android:id="@+id/text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <TextView
-      android:id="@+id/name"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="8dp"
-      android:textAppearance="@style/TextAppearance.AppCompat.Title"
-      tools:text="Apache-2.0" />
-
-    <TextView
-      android:id="@+id/text"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      tools:text="@string/license_apache_2" />
-  </LinearLayout>
+    android:padding="16dp"
+    tools:text="@string/license_apache_2" />
 </android.support.v4.widget.NestedScrollView>

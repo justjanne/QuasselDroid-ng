@@ -1,30 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="settings_networkconfig_title">Network Config</string>
-  <string name="settings_networkconfig_description" />
-
-  <string name="settings_networkconfig_ping_timeout">Erkennung von Ping-Zeitüberschreitungen</string>
-
-  <string name="settings_networkconfig_ping_interval">Ping-Intervall</string>
-  <string name="settings_networkconfig_ping_interval_unit">Sekunden</string>
-
-  <string name="settings_networkconfig_max_ping_count">Verbindungstrennung nach</string>
-  <string name="settings_networkconfig_max_ping_count_unit">verpassten Pings</string>
-
-  <string name="settings_networkconfig_auto_who">Automatische Suche nach Nutzerinformationen</string>
-  <string name="settings_networkconfig_auto_who_interval">Aktualisierungs-Intervall</string>
-  <string name="settings_networkconfig_auto_who_interval_unit">Sekunden</string>
-  <string name="settings_networkconfig_auto_who_nick_limit">Ignoriere Chats mit mehr als</string>
-  <string name="settings_networkconfig_auto_who_nick_limit_unit">Nutzern</string>
-  <string name="settings_networkconfig_auto_who_delay">Mindestabstand zwischen zwei Abfragen</string>
-  <string name="settings_networkconfig_auto_who_delay_unit">Sekunden</string>
-
-  <string name="settings_networkconfig_standard_ctcp">Standardkonformes CTCP-Verhalten aktivieren</string>
-
+  <string name="settings_networks_title">Netzwerke</string>
+  <string name="settings_network_title">Netzwerk</string>
 
   <string name="settings_identities_title">Identitäten</string>
-  <string name="settings_identities_description" />
-
   <string name="settings_identity_title">Identität</string>
   <string name="settings_identity_names">Namen</string>
   <string name="settings_identity_identity_name">Identitätsname</string>
@@ -39,4 +18,22 @@
   <string name="settings_identity_away_reason">Abwesenheitsgrund</string>
   <string name="settings_identity_detach_away">Abwesend wenn nicht verbunden</string>
   <string name="settings_identity_detach_away_reason">Abwesenheitsgrund</string>
+
+  <string name="settings_chatlists_title">Chatlisten</string>
+  <string name="settings_chatlist_title">Chatliste</string>
+
+  <string name="settings_networkconfig_title">IRC Konfiguration</string>
+  <string name="settings_networkconfig_ping_timeout">Erkennung von Ping-Zeitüberschreitungen</string>
+  <string name="settings_networkconfig_ping_interval">Ping-Intervall</string>
+  <string name="settings_networkconfig_ping_interval_unit">Sekunden</string>
+  <string name="settings_networkconfig_max_ping_count">Verbindungstrennung nach</string>
+  <string name="settings_networkconfig_max_ping_count_unit">verpassten Pings</string>
+  <string name="settings_networkconfig_auto_who">Automatische Suche nach Nutzerinformationen</string>
+  <string name="settings_networkconfig_auto_who_interval">Aktualisierungs-Intervall</string>
+  <string name="settings_networkconfig_auto_who_interval_unit">Sekunden</string>
+  <string name="settings_networkconfig_auto_who_nick_limit">Ignoriere Chats mit mehr als</string>
+  <string name="settings_networkconfig_auto_who_nick_limit_unit">Nutzern</string>
+  <string name="settings_networkconfig_auto_who_delay">Mindestabstand zwischen zwei Abfragen</string>
+  <string name="settings_networkconfig_auto_who_delay_unit">Sekunden</string>
+  <string name="settings_networkconfig_standard_ctcp">Standardkonformes CTCP-Verhalten aktivieren</string>
 </resources>
