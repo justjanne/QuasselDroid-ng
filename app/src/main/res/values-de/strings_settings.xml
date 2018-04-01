@@ -19,8 +19,21 @@
   <string name="settings_identity_detach_away">Abwesend wenn nicht verbunden</string>
   <string name="settings_identity_detach_away_reason">Abwesenheitsgrund</string>
 
-  <string name="settings_chatlists_title">Chatlisten</string>
-  <string name="settings_chatlist_title">Chatliste</string>
+  <string name="settings_chatlists_title">Chat-Listen</string>
+  <string name="settings_chatlist_title">Chat-Liste</string>
+  <string name="settings_chatlist_ui">Benutzerinterface</string>
+  <string name="settings_chatlist_buffer_view_name">Name</string>
+  <string name="settings_chatlist_show_search">Suche anzeigen</string>
+  <string name="settings_chatlist_sort_alphabetically">Alphabetisch Sortieren</string>
+  <string name="settings_chatlist_add_new_buffers_automatically">Neue Chats automatisch hinzufügen</string>
+  <string name="settings_chatlist_network">Netzwerk</string>
+  <string name="settings_chatlist_disable_decoration">Status-Fenster verstecken</string>
+  <string name="settings_chatlist_types">Chat-Typen</string>
+  <string name="settings_chatlist_show_channels">Kanäle anzeigen</string>
+  <string name="settings_chatlist_show_queries">Dialoge anzeigen</string>
+  <string name="settings_chatlist_activity">Aktivität</string>
+  <string name="settings_chatlist_hide_inactive_buffers">Inaktive Chats verstecken</string>
+  <string name="settings_chatlist_hide_inactive_networks">Inaktive Netzwerke verstecken</string>
 
   <string name="settings_networkconfig_title">IRC Konfiguration</string>
   <string name="settings_networkconfig_ping_timeout">Erkennung von Ping-Zeitüberschreitungen</string>
