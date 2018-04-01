@@ -70,10 +70,15 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
 
+      <Spinner
+        android:id="@+id/network_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
       <android.support.v7.widget.SwitchCompat
-        android:id="@+id/disable_decoration"
+        android:id="@+id/show_status_buffer"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_chatlist_disable_decoration" />
+        android:text="@string/settings_chatlist_show_status_buffer" />
     </LinearLayout>
 
     <LinearLayout
@@ -122,6 +127,11 @@
     <LinearLayout
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
+
+      <Spinner
+        android:id="@+id/minimum_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
       <android.support.v7.widget.SwitchCompat
         android:id="@+id/hide_inactive_buffers"

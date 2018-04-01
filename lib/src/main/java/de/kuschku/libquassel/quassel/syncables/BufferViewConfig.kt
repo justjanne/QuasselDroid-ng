@@ -183,6 +183,11 @@ class BufferViewConfig constructor(
     super.setAddNewBuffersAutomatically(addNewBuffersAutomatically)
   }
 
+  fun setAllowedBufferTypes(bufferTypes: Buffer_Types) {
+    _allowedBufferTypes = bufferTypes
+    super.setAllowedBufferTypes(bufferTypes.toInt())
+  }
+
   override fun setAllowedBufferTypes(bufferTypes: Int) {
     _allowedBufferTypes = Buffer_Type.of(bufferTypes.toShort())
     super.setAllowedBufferTypes(bufferTypes)

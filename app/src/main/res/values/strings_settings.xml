@@ -27,11 +27,15 @@
   <string name="settings_chatlist_sort_alphabetically">Sort Alphabetically</string>
   <string name="settings_chatlist_add_new_buffers_automatically">Add new chats automatically</string>
   <string name="settings_chatlist_network">Network</string>
-  <string name="settings_chatlist_disable_decoration">Hide Status Buffer</string>
+  <string name="settings_chatlist_show_status_buffer">Show Status Buffer</string>
   <string name="settings_chatlist_types">Chat Types</string>
   <string name="settings_chatlist_show_channels">Show Channels</string>
   <string name="settings_chatlist_show_queries">Show Queries</string>
   <string name="settings_chatlist_activity">Activity</string>
+  <string name="settings_chatlist_minimum_activity_no_activity">No Activity</string>
+  <string name="settings_chatlist_minimum_activity_other_activity">Other Activity</string>
+  <string name="settings_chatlist_minimum_activity_new_message">New Message</string>
+  <string name="settings_chatlist_minimum_activity_highlight">Highlight</string>
   <string name="settings_chatlist_hide_inactive_buffers">Hide Inactive Chats</string>
   <string name="settings_chatlist_hide_inactive_networks">Hide Inactive Networks</string>
 

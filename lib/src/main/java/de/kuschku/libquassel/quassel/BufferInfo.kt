@@ -32,7 +32,7 @@ data class BufferInfo(
     NoActivity(0x00),
     OtherActivity(0x01),
     NewMessage(0x02),
-    Highlight(0x40);
+    Highlight(0x04);
 
     companion object : Flags.Factory<Activity> {
       override val NONE = Activity.of()

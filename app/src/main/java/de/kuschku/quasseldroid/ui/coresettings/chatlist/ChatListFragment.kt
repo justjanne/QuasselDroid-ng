@@ -6,12 +6,22 @@ import android.support.v7.widget.SwitchCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.Spinner
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.protocol.Buffer_Activity
+import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
+import de.kuschku.libquassel.quassel.syncables.Network
+import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
+import de.kuschku.libquassel.util.flag.hasFlag
+import de.kuschku.libquassel.util.flag.minus
+import de.kuschku.libquassel.util.flag.plus
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
+import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import io.reactivex.Observable
 
@@ -30,14 +40,20 @@ class ChatListFragment : SettingsFragment() {
   @BindView(R.id.add_new_buffers_automatically)
   lateinit var addNewBuffersAutomatically: SwitchCompat
 
-  @BindView(R.id.disable_decoration)
-  lateinit var disableDecoration: SwitchCompat
+  @BindView(R.id.network_id)
+  lateinit var networkId: Spinner
+
+  @BindView(R.id.show_status_buffer)
+  lateinit var showStatusBuffer: SwitchCompat
 
   @BindView(R.id.show_channels)
   lateinit var showChannels: SwitchCompat
 
   @BindView(R.id.show_queries)
   lateinit var showQueries: SwitchCompat
+
+  @BindView(R.id.minimum_activity)
+  lateinit var minimumActivity: Spinner
 
   @BindView(R.id.hide_inactive_buffers)
   lateinit var hideInactiveBuffers: SwitchCompat
@@ -52,24 +68,86 @@ class ChatListFragment : SettingsFragment() {
 
     val chatlistId = arguments?.getInt("chatlist", -1) ?: -1
 
-    viewModel.bufferViewConfigMap.switchMap {
-      it[chatlistId]?.liveUpdates() ?: Observable.empty()
-    }.firstElement()
-      .toLiveData().observe(this, Observer {
-        if (it != null) {
-          this.chatlist = Pair(it, it.copy())
-          this.chatlist?.let { (_, data) ->
-            bufferViewName.text = data.bufferViewName()
-            showSearch.isChecked = data.showSearch()
-            sortAlphabetically.isChecked = data.sortAlphabetically()
-            addNewBuffersAutomatically.isChecked = data.addNewBuffersAutomatically()
-            disableDecoration.isChecked = data.disableDecoration()
+    val minimumActivityAdapter = MinimumActivityAdapter(listOf(
+      MinimumActivityItem(
+        activity = Buffer_Activity.NoActivity,
+        name = R.string.settings_chatlist_minimum_activity_no_activity
+      ),
+      MinimumActivityItem(
+        activity = Buffer_Activity.OtherActivity,
+        name = R.string.settings_chatlist_minimum_activity_other_activity
+      ),
+      MinimumActivityItem(
+        activity = Buffer_Activity.NewMessage,
+        name = R.string.settings_chatlist_minimum_activity_new_message
+      ),
+      MinimumActivityItem(
+        activity = Buffer_Activity.Highlight,
+        name = R.string.settings_chatlist_minimum_activity_highlight
+      )
+    ))
+    minimumActivity.adapter = minimumActivityAdapter
 
-            hideInactiveBuffers.isChecked = data.hideInactiveBuffers()
-            hideInactiveNetworks.isChecked = data.hideInactiveNetworks()
+    val networkAdapter = NetworkAdapter()
+    networkId.adapter = networkAdapter
+
+    viewModel.networks.switchMap {
+      combineLatest(it.values.map(Network::liveNetworkInfo)).map {
+        it.sortedBy(INetwork.NetworkInfo::networkName)
+      }
+    }.toLiveData().observe(this, Observer {
+      if (it != null) {
+        val selectOriginal = networkId.selectedItemId == Spinner.INVALID_ROW_ID
+        networkAdapter.submitList(listOf(null) + it)
+        if (selectOriginal) {
+          this.chatlist?.let { (_, data) ->
+            networkAdapter.indexOf(data.networkId())?.let(networkId::setSelection)
           }
         }
-      })
+      }
+    })
+
+    viewModel.bufferViewConfigMap.switchMap {
+      it[chatlistId]?.liveUpdates() ?: Observable.empty()
+    }.firstElement().toLiveData().observe(this, Observer {
+      if (it != null) {
+        this.chatlist = Pair(it, it.copy())
+        this.chatlist?.let { (_, data) ->
+          bufferViewName.text = data.bufferViewName()
+          showSearch.isChecked = data.showSearch()
+          sortAlphabetically.isChecked = data.sortAlphabetically()
+          addNewBuffersAutomatically.isChecked = data.addNewBuffersAutomatically()
+          showStatusBuffer.isChecked = data.allowedBufferTypes().hasFlag(Buffer_Type.StatusBuffer)
+
+          minimumActivity.setSelection(
+            minimumActivityAdapter.indexOf(data.minimumActivity()) ?: 0
+          )
+
+          networkAdapter.indexOf(data.networkId())?.let(networkId::setSelection)
+
+          hideInactiveBuffers.isChecked = data.hideInactiveBuffers()
+          hideInactiveNetworks.isChecked = data.hideInactiveNetworks()
+
+          showQueries.isChecked = data.allowedBufferTypes().hasFlag(Buffer_Type.QueryBuffer)
+          showChannels.isChecked = data.allowedBufferTypes().hasFlag(Buffer_Type.ChannelBuffer)
+        }
+      }
+    })
+    networkId.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+      override fun onNothingSelected(parent: AdapterView<*>?) {
+        showStatusBuffer.isChecked = true
+        showStatusBuffer.isEnabled = false
+      }
+
+      override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        if (id == -1L) {
+          showStatusBuffer.isChecked = true
+          showStatusBuffer.isEnabled = false
+        } else {
+          showStatusBuffer.isEnabled = true
+        }
+      }
+    }
 
     return view
   }
@@ -79,10 +157,21 @@ class ChatListFragment : SettingsFragment() {
     data.setShowSearch(showSearch.isChecked)
     data.setSortAlphabetically(sortAlphabetically.isChecked)
     data.setAddNewBuffersAutomatically(addNewBuffersAutomatically.isChecked)
-    data.setDisableDecoration(disableDecoration.isChecked)
 
     data.setHideInactiveBuffers(hideInactiveBuffers.isChecked)
     data.setHideInactiveNetworks(hideInactiveNetworks.isChecked)
+
+    var allowedBufferTypes = data.allowedBufferTypes()
+    if (showQueries.isChecked) allowedBufferTypes += Buffer_Type.QueryBuffer
+    else allowedBufferTypes -= Buffer_Type.QueryBuffer
+    if (showChannels.isChecked) allowedBufferTypes += Buffer_Type.ChannelBuffer
+    else allowedBufferTypes -= Buffer_Type.ChannelBuffer
+    if (showStatusBuffer.isChecked) allowedBufferTypes += Buffer_Type.StatusBuffer
+    else allowedBufferTypes -= Buffer_Type.StatusBuffer
+    data.setAllowedBufferTypes(allowedBufferTypes)
+
+    data.setNetworkId(networkId.selectedItemId.toInt())
+    data.setMinimumActivity(minimumActivity.selectedItemId.toInt())
 
     it.requestUpdate(data.toVariantMap())
     true
