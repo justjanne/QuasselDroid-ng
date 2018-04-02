@@ -510,7 +510,7 @@ class QuasselViewModel : ViewModel() {
                           (!config.hideInactiveBuffers()) ||
                           it.bufferStatus != BufferStatus.OFFLINE ||
                           it.info.type.hasFlag(Buffer_Type.StatusBuffer)
-                        }
+                        }.distinct()
                       )
                     }
                   }
