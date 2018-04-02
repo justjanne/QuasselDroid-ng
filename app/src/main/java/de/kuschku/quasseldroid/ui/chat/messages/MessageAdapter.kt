@@ -29,7 +29,8 @@ class MessageAdapter(
   private val messageRenderer: MessageRenderer,
   private val clickListener: ((FormattedMessage) -> Unit)? = null,
   private val selectionListener: ((FormattedMessage) -> Unit)? = null,
-  private val expansionListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null
+  private val expansionListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null,
+  private val urlLongClickListener: ((TextView, String) -> Boolean)? = null
 ) : PagedListAdapter<DisplayMessage, MessageAdapter.QuasselMessageViewHolder>(
   object : DiffUtil.ItemCallback<DisplayMessage>() {
     override fun areItemsTheSame(oldItem: DisplayMessage, newItem: DisplayMessage) =
@@ -38,6 +39,13 @@ class MessageAdapter(
     override fun areContentsTheSame(oldItem: DisplayMessage, newItem: DisplayMessage) =
       oldItem == newItem
   }) {
+  private val movementMethod = BetterLinkMovementMethod.newInstance()
+
+  init {
+    movementMethod.setOnLinkLongClickListener { textView, url ->
+      urlLongClickListener?.invoke(textView, url) ?: false
+    }
+  }
 
   private val messageCache = LruCache<DisplayMessage.Tag, FormattedMessage>(512)
 
@@ -99,7 +107,8 @@ class MessageAdapter(
       ),
       clickListener,
       selectionListener,
-      expansionListener
+      expansionListener,
+      movementMethod
     )
     messageRenderer.init(viewHolder, messageType, hasHighlight, isFollowUp)
     return viewHolder
@@ -115,7 +124,8 @@ class MessageAdapter(
     itemView: View,
     clickListener: ((FormattedMessage) -> Unit)? = null,
     selectionListener: ((FormattedMessage) -> Unit)? = null,
-    expansionListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null
+    expansionListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null,
+    movementMethod: BetterLinkMovementMethod
   ) : RecyclerView.ViewHolder(itemView) {
     @BindView(R.id.time_left)
     @JvmField
@@ -172,9 +182,8 @@ class MessageAdapter(
 
     init {
       ButterKnife.bind(this, itemView)
-
-      content?.movementMethod = BetterLinkMovementMethod.getInstance()
-      combined?.movementMethod = BetterLinkMovementMethod.getInstance()
+      content?.movementMethod = movementMethod
+      combined?.movementMethod = movementMethod
 
       itemView.setOnClickListener(localClickListener)
       itemView.setOnLongClickListener(localLongClickListener)

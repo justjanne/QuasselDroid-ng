@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.text.SpannableStringBuilder
 import android.view.*
@@ -97,7 +98,7 @@ class MessageListFragment : ServiceBoundFragment() {
         else
           builder
 
-        val clipboard = requireActivity().systemService<ClipboardManager>()
+        val clipboard = requireContext().systemService<ClipboardManager>()
         val clip = ClipData.newPlainText(null, data)
         clipboard.primaryClip = clip
         actionMode?.finish()
@@ -174,6 +175,7 @@ class MessageListFragment : ServiceBoundFragment() {
     linearLayoutManager = LinearLayoutManager(context)
     linearLayoutManager.reverseLayout = true
 
+    var linkMenu: PopupMenu? = null
     adapter = MessageAdapter(
       messageRenderer,
       { msg ->
@@ -190,6 +192,41 @@ class MessageListFragment : ServiceBoundFragment() {
         if (!viewModel.selectedMessagesToggle(msg.id, msg)) {
           actionMode?.finish()
         }
+      },
+      null,
+      { textView, url ->
+        if (linkMenu == null) {
+          linkMenu = PopupMenu(requireContext(), textView).also { menu ->
+            linkMenu?.dismiss()
+            menu.menuInflater.inflate(R.menu.context_link, menu.menu)
+            menu.setOnMenuItemClickListener {
+              when (it.itemId) {
+                R.id.action_copy  -> {
+                  val clipboard = requireContext().systemService<ClipboardManager>()
+                  val clip = ClipData.newPlainText(null, url)
+                  clipboard.primaryClip = clip
+                  menu.dismiss()
+                  linkMenu = null
+                  true
+                }
+                R.id.action_share -> {
+                  val intent = Intent(Intent.ACTION_SEND)
+                  intent.type = "text/plain"
+                  intent.putExtra(Intent.EXTRA_TEXT, url)
+                  requireContext().startActivity(
+                    Intent.createChooser(intent, requireContext().getString(R.string.label_share))
+                  )
+                  menu.dismiss()
+                  linkMenu = null
+                  true
+                }
+                else              -> false
+              }
+            }
+            menu.show()
+          }
+        }
+        true
       }
     )
     messageList.adapter = adapter
