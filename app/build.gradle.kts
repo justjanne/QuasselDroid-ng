@@ -151,7 +151,6 @@ dependencies {
     implementation("com.github.bumptech.glide", "recyclerview-integration", version)
     kapt("com.github.bumptech.glide", "compiler", version)
   }
-  implementation("com.mikhaellopez", "circularimageview", "3.0.2")
   implementation("me.saket", "better-link-movement-method", "2.1.0")
   implementation(project(":slidingpanel"))
 

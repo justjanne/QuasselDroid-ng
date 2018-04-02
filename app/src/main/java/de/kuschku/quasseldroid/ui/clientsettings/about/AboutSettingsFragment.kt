@@ -75,15 +75,22 @@ class AboutSettingsFragment : DaggerFragment() {
         url = "https://android.googlesource.com/platform/frameworks/support/+/master/paging"
       ),
       Library(
+        name = "Android Architecture Components: Persistence",
+        version = "1.1.0-beta1",
+        license = apache2,
+        url = "https://android.googlesource.com/platform/frameworks/support/+/master/persistence"
+      ),
+      Library(
         name = "Android Architecture Components: Room",
         version = "1.1.0-beta1",
         license = apache2,
-        url = "https://android.googlesource.com/platform/frameworks/support/+/master/room"
+        url = "https://android.googlesource.com/platform/frameworks/support/+/master/persistence"
       ),
       Library(
         name = "Android Sliding Up Panel",
         version = "3.5.0",
-        license = apache2
+        license = apache2,
+        url = "https://github.com/umano/AndroidSlidingUpPanel"
       ),
       Library(
         name = "Android Support Library",
@@ -92,10 +99,27 @@ class AboutSettingsFragment : DaggerFragment() {
         url = "https://android.googlesource.com/platform/frameworks/support/+/master"
       ),
       Library(
+        name = "Android Support Library: Constraint Layout",
+        version = "1.1.0-beta6",
+        license = apache2,
+        url = "https://android.googlesource.com/platform/frameworks/opt/sherpa/+/studio-3.0/constraintlayout"
+      ),
+      Library(
+        name = "atinject",
+        license = apache2,
+        url = "https://code.google.com/archive/p/atinject/"
+      ),
+      Library(
         name = "AutoService",
         version = "1.0-rc4",
         license = apache2,
         url = "https://github.com/google/auto/tree/master/service"
+      ),
+      Library(
+        name = "Better Link Movement Method",
+        version = "2.1.0",
+        license = apache2,
+        url = "https://github.com/Saketme/Better-Link-Movement-Method"
       ),
       Library(
         name = "Butter Knife",
@@ -108,6 +132,12 @@ class AboutSettingsFragment : DaggerFragment() {
         version = "2.15",
         license = apache2,
         url = "https://google.github.io/dagger/"
+      ),
+      Library(
+        name = "Glide",
+        version = "4.6.1",
+        license = apache2,
+        url = "https://bumptech.github.io/glide/"
       ),
       Library(
         name = "Gson",
@@ -169,6 +199,16 @@ class AboutSettingsFragment : DaggerFragment() {
         version = "1.4.2",
         license = apache2,
         url = "https://github.com/DreaminginCodeZH/MaterialProgressBar"
+      ),
+      Library(
+        name = "Reactive Streams",
+        version = "1.0.2",
+        license = License(
+          shortName = "CC0",
+          fullName = "Public Domain (CC0)",
+          text = R.string.license_cc0
+        ),
+        url = "https://github.com/ReactiveX/RxJava"
       ),
       Library(
         name = "RxJava",
