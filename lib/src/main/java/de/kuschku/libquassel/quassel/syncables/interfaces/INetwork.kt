@@ -46,7 +46,7 @@ interface INetwork : ISyncableObject {
   @Slot
   fun addSupport(param: String, value: String? = null) {
     SYNC(
-      "addSupport(param: String, value: String = String", ARG(param, Type.QString),
+      "addSupport", ARG(param, Type.QString),
       ARG(value, Type.QString)
     )
   }
