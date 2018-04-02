@@ -173,6 +173,10 @@ class ChatListFragment : SettingsFragment() {
     data.setNetworkId(networkId.selectedItemId.toInt())
     data.setMinimumActivity(minimumActivity.selectedItemId.toInt())
 
+    data.initSetBufferList(it.initBufferList())
+    data.initSetTemporarilyRemovedBuffers(it.initTemporarilyRemovedBuffers())
+    data.initSetRemovedBuffers(it.initRemovedBuffers())
+
     it.requestUpdate(data.toVariantMap())
     true
   } ?: false
