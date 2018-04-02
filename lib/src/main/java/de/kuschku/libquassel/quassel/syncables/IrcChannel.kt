@@ -174,12 +174,22 @@ class IrcChannel(
 
   fun codecForEncoding() = _codecForEncoding
   fun codecForDecoding() = _codecForDecoding
-  fun setCodecForEncoding(codecName: String) = setCodecForEncoding(Charset.forName(codecName))
+  fun setCodecForEncoding(codecName: String) {
+    val charset = Charset.availableCharsets()[codecName]
+    if (charset != null) {
+      setCodecForEncoding(charset)
+    }
+  }
   fun setCodecForEncoding(codec: Charset) {
     _codecForEncoding = codec
   }
 
-  fun setCodecForDecoding(codecName: String) = setCodecForDecoding(Charset.forName(codecName))
+  fun setCodecForDecoding(codecName: String) {
+    val charset = Charset.availableCharsets()[codecName]
+    if (charset != null) {
+      setCodecForDecoding(charset)
+    }
+  }
   fun setCodecForDecoding(codec: Charset) {
     _codecForDecoding = codec
   }

@@ -625,15 +625,24 @@ class Network constructor(
   }
 
   fun setCodecForDecoding(codecName: String) {
-    setCodecForDecoding(Charset.forName(codecName))
+    val charset = Charset.availableCharsets()[codecName]
+    if (charset != null) {
+      setCodecForDecoding(charset)
+    }
   }
 
   fun setCodecForEncoding(codecName: String) {
-    setCodecForDecoding(Charset.forName(codecName))
+    val charset = Charset.availableCharsets()[codecName]
+    if (charset != null) {
+      setCodecForEncoding(charset)
+    }
   }
 
   fun setCodecForServer(codecName: String) {
-    setCodecForDecoding(Charset.forName(codecName))
+    val charset = Charset.availableCharsets()[codecName]
+    if (charset != null) {
+      setCodecForServer(charset)
+    }
   }
 
   override fun addSupport(param: String, value: String?) {

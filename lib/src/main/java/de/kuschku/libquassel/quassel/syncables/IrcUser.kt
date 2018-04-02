@@ -11,7 +11,6 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
 import java.nio.charset.Charset
-
 class IrcUser(
   hostmask: String,
   network: Network,
@@ -96,12 +95,22 @@ class IrcUser(
   fun channels() = _channels.map(IrcChannel::name)
   fun codecForEncoding() = _codecForEncoding
   fun codecForDecoding() = _codecForDecoding
-  fun setCodecForEncoding(codecName: String) = setCodecForEncoding(Charset.forName(codecName))
+  fun setCodecForEncoding(codecName: String) {
+    val charset = Charset.availableCharsets()[codecName]
+    if (charset != null) {
+      setCodecForEncoding(charset)
+    }
+  }
   fun setCodecForEncoding(codec: Charset) {
     _codecForEncoding = codec
   }
 
-  fun setCodecForDecoding(codecName: String) = setCodecForDecoding(Charset.forName(codecName))
+  fun setCodecForDecoding(codecName: String) {
+    val charset = Charset.availableCharsets()[codecName]
+    if (charset != null) {
+      setCodecForDecoding(charset)
+    }
+  }
   fun setCodecForDecoding(codec: Charset) {
     _codecForDecoding = codec
   }
@@ -375,3 +384,4 @@ class IrcUser(
     val NULL = IrcUser("", Network.NULL, SignalProxy.NULL)
   }
 }
+

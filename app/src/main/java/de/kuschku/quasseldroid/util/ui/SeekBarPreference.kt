@@ -131,6 +131,7 @@ class SeekBarPreference : Preference, SeekBar.OnSeekBarChangeListener {
   override fun onStopTrackingTouch(seekBar: SeekBar) = notifyChanged()
   override fun onGetDefaultValue(ta: TypedArray, index: Int) = ta.getInt(index,
                                                                          DEFAULT_VALUE)
+
   override fun onSetInitialValue(restoreValue: Boolean, defaultValue: Any?) {
     if (restoreValue) {
       currentValue = getPersistedInt(currentValue)
