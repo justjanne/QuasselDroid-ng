@@ -414,6 +414,8 @@ class QuasselViewModel : ViewModel() {
                       } else {
                         it to network
                       }
+                    }.filter {
+                      !config.hideInactiveNetworks() || it.second.isConnected()
                     }.map<Pair<BufferInfo, Network>, Observable<BufferProps>?> { (info, network) ->
                       bufferSyncer.liveActivity(info.bufferId).switchMap { activity ->
                         bufferSyncer.liveHighlightCount(info.bufferId).map { highlights ->
