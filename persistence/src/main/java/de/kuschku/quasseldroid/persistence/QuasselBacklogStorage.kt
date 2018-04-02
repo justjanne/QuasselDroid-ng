@@ -29,8 +29,7 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
           bufferId = message.bufferInfo.bufferId,
           sender = message.sender,
           senderPrefixes = message.senderPrefixes,
-          content = message.content,
-          followUp = false
+          content = message.content
         )
       )
     }

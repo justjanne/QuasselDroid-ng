@@ -2,7 +2,6 @@ package de.kuschku.quasseldroid.persistence
 
 import android.arch.lifecycle.LiveData
 import android.arch.paging.DataSource
-import android.arch.persistence.db.SimpleSQLiteQuery
 import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.db.SupportSQLiteQuery
 import android.arch.persistence.room.*
@@ -17,7 +16,7 @@ import de.kuschku.quasseldroid.persistence.QuasselDatabase.Filtered
 import io.reactivex.Flowable
 import org.threeten.bp.Instant
 
-@Database(entities = [DatabaseMessage::class, Filtered::class], version = 4)
+@Database(entities = [DatabaseMessage::class, Filtered::class], version = 5)
 @TypeConverters(DatabaseMessage.MessageTypeConverters::class)
 abstract class QuasselDatabase : RoomDatabase() {
   abstract fun message(): MessageDao
@@ -32,8 +31,7 @@ abstract class QuasselDatabase : RoomDatabase() {
     var bufferId: Int,
     var sender: String,
     var senderPrefixes: String,
-    var content: String,
-    var followUp: Boolean
+    var content: String
   ) {
     class MessageTypeConverters {
       @TypeConverter
@@ -177,6 +175,12 @@ abstract class QuasselDatabase : RoomDatabase() {
                     "ALTER TABLE message ADD followUp INT DEFAULT 0 NOT NULL;"
                   )
                 }
+              },
+              object : Migration(4, 5) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL("drop table message;")
+                  database.execSQL("create table message (messageId INTEGER not null primary key, time INTEGER not null, type INTEGER not null, flag INTEGER not null, bufferId INTEGER not null, sender TEXT not null, senderPrefixes TEXT not null, content TEXT not null);")
+                }
               }
             ).build()
           }
@@ -197,93 +201,3 @@ fun QuasselDatabase.MessageDao.clearMessages(
 ) {
   this.clearMessages(bufferId, idRange.first, idRange.last)
 }
-
-fun QuasselDatabase.MessageDao.findByBufferIdPagedWithDayChange(bufferId: Int, type: Int) =
-  this.findMessagesRawPaged(SimpleSQLiteQuery("""
-SELECT t.*
-FROM
-  (
-    SELECT
-      messageId,
-      time,
-      type,
-      flag,
-      bufferId,
-      sender,
-      senderPrefixes,
-      content,
-      followUp
-    FROM message
-    WHERE bufferId = ?
-          AND type & ~? > 0
-    UNION ALL
-    SELECT DISTINCT
-      strftime('%s', date(datetime(time / 1000, 'unixepoch', 'localtime')), 'utc') * -1000 AS messageId,
-      strftime('%s', date(datetime(time / 1000, 'unixepoch', 'localtime')), 'utc') * 1000  AS time,
-      8192                                                                                 AS type,
-      0                                                                                    AS flag,
-      ?                                                                                    AS bufferId,
-      ''                                                                                   AS sender,
-      ''                                                                                   AS senderPrefixes,
-      ''                                                                                   AS content,
-      0                                                                                    AS followUp
-    FROM message
-    WHERE bufferId = ?
-          AND type & ~? > 0
-  ) t
-ORDER BY TIME
-  DESC, messageId
-  DESC
-  """, arrayOf(bufferId, type, bufferId, bufferId, type)))
-
-fun QuasselDatabase.MessageDao.findByBufferIdPagedWithDayChangeSlow(bufferId: Int, type: Int) =
-  this.findMessagesRawPaged(SimpleSQLiteQuery("""
-SELECT t.*
-FROM
-  (
-    SELECT
-      messageId,
-      time,
-      type,
-      flag,
-      bufferId,
-      sender,
-      senderPrefixes,
-      content,
-      (SELECT 1
-       FROM
-         (SELECT *
-          FROM message m
-          WHERE m.messageId < message.messageId
-                AND bufferId = ?
-                AND type & ~? > 0
-          ORDER BY m.messageId
-            DESC
-          LIMIT 1) t
-       WHERE t.sender = message.sender
-             AND strftime('%s', date(datetime(t.time / 1000, 'unixepoch', 'localtime')), 'utc') * 1000 =
-                 strftime('%s', date(datetime(message.time / 1000, 'unixepoch', 'localtime')), 'utc') * 1000
-             AND t.type = message.type
-      ) = 1 AS followUp
-    FROM message
-    WHERE bufferId = ?
-          AND type & ~? > 0
-    UNION ALL
-    SELECT DISTINCT
-      strftime('%s', date(datetime(time / 1000, 'unixepoch', 'localtime')), 'utc') * -1000 AS messageId,
-      strftime('%s', date(datetime(time / 1000, 'unixepoch', 'localtime')), 'utc') * 1000  AS time,
-      8192                                                                                 AS type,
-      0                                                                                    AS flag,
-      ?                                                                                    AS bufferId,
-      ''                                                                                   AS sender,
-      ''                                                                                   AS senderPrefixes,
-      ''                                                                                   AS content,
-      0                                                                                    AS followUp
-    FROM message
-    WHERE bufferId = ?
-          AND type & ~? > 0
-  ) t
-ORDER BY TIME
-  DESC, messageId
-  DESC
-  """, arrayOf(bufferId, type, bufferId, type, bufferId, bufferId, type)))

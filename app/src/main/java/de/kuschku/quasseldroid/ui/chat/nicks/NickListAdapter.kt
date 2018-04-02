@@ -86,12 +86,15 @@ class NickListAdapter(
       nick.text = SpanFormatter.format("%s%s", data.modes, data.displayNick ?: data.nick)
       realname.text = data.realname
 
-
-      GlideApp.with(itemView)
-        .load(data.avatarUrl)
-        .apply(RequestOptions.circleCropTransform())
-        .placeholder(data.fallbackDrawable)
-        .into(avatar)
+      if (data.avatarUrl != null) {
+        GlideApp.with(itemView)
+          .load(data.avatarUrl)
+          .apply(RequestOptions.circleCropTransform())
+          .placeholder(data.fallbackDrawable)
+          .into(avatar)
+      } else {
+        avatar.setImageDrawable(data.fallbackDrawable)
+      }
     }
   }
 

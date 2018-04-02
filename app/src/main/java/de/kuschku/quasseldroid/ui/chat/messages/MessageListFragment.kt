@@ -26,7 +26,6 @@ import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
-import de.kuschku.quasseldroid.persistence.findByBufferIdPagedWithDayChange
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.BacklogSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
@@ -34,6 +33,9 @@ import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import io.reactivex.BackpressureStrategy
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -234,11 +236,17 @@ class MessageListFragment : ServiceBoundFragment() {
     fun processMessages(list: List<QuasselDatabase.DatabaseMessage>, selected: Set<MsgId>,
                         expanded: Set<MsgId>, markerLine: MsgId?): List<DisplayMessage> {
       var previous: QuasselDatabase.DatabaseMessage? = null
+      var previousDate: ZonedDateTime? = null
       return list.asReversed().map {
-        it.followUp = previous?.sender == it.sender
+        val date = it.time.atZone(ZoneId.systemDefault()).truncatedTo(ChronoUnit.DAYS)
+        val isSameDay = previousDate?.isEqual(date) ?: false
+        val isFollowUp = previous?.sender == it.sender && isSameDay
         previous = it
+        previousDate = date
         DisplayMessage(
           content = it,
+          hasDayChange = !isSameDay,
+          isFollowUp = isFollowUp,
           isSelected = selected.contains(it.messageId),
           isExpanded = expanded.contains(it.messageId),
           isMarkerLine = markerLine == it.messageId
@@ -253,7 +261,7 @@ class MessageListFragment : ServiceBoundFragment() {
       .toLiveData().switchMapNotNull { (buffer, selected, expanded, markerLine) ->
         database.filtered().listen(accountId, buffer).switchMapNotNull { filtered ->
           LivePagedListBuilder(
-            database.message().findByBufferIdPagedWithDayChange(buffer, filtered).mapByPage {
+            database.message().findByBufferIdPaged(buffer, filtered).mapByPage {
               processMessages(it, selected.keys, expanded, markerLine.orNull())
             },
             PagedList.Config.Builder()
@@ -368,6 +376,7 @@ class MessageListFragment : ServiceBoundFragment() {
     val preloader = RecyclerViewPreloader(Glide.with(this), preloadModelProvider, sizeProvider, 10)
 
     messageList.addOnScrollListener(preloader)
+    messageList.addItemDecoration(DayChangeItemDecoration(adapter))
 
     return view
   }

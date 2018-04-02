@@ -61,7 +61,7 @@ class MessageAdapter(
   override fun getItemViewType(position: Int) = getItem(position)?.let {
     viewType(Message_Flags.of(it.content.type),
              Message_Flags.of(it.content.flag),
-             it.content.followUp)
+             it.isFollowUp)
   } ?: 0
 
   private fun viewType(type: Message_Types, flags: Message_Flags, followUp: Boolean) =
@@ -200,11 +200,15 @@ class MessageAdapter(
       this.itemView.isSelected = message.isSelected
 
       avatar?.let { avatarView ->
-        GlideApp.with(itemView)
-          .load(message.avatarUrl)
-          .apply(RequestOptions.circleCropTransform())
-          .placeholder(message.fallbackDrawable)
-          .into(avatarView)
+        if (message.avatarUrl != null) {
+          GlideApp.with(itemView)
+            .load(message.avatarUrl)
+            .apply(RequestOptions.circleCropTransform())
+            .placeholder(message.fallbackDrawable)
+            .into(avatarView)
+        } else {
+          avatarView.setImageDrawable(message.fallbackDrawable)
+        }
       }
     }
   }
