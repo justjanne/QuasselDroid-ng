@@ -223,6 +223,9 @@ class MessageListFragment : ServiceBoundFragment() {
                 else              -> false
               }
             }
+            menu.setOnDismissListener {
+              linkMenu = null
+            }
             menu.show()
           }
         }
