@@ -5,6 +5,8 @@
   <dimen name="message_vertical">2dp</dimen>
   <dimen name="message_vertical_daychange">8dp</dimen>
 
+  <dimen name="markerline_height">1dp</dimen>
+
   <dimen name="autocomplete_max_height">96dp</dimen>
 
   <dimen name="max_content_width">480dp</dimen>

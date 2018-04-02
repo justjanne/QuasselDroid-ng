@@ -377,6 +377,9 @@ class MessageListFragment : ServiceBoundFragment() {
 
     messageList.addOnScrollListener(preloader)
     messageList.addItemDecoration(DayChangeItemDecoration(adapter))
+    messageList.addItemDecoration(MarkerLineItemDecoration(
+      adapter, requireContext(), R.dimen.markerline_height, R.attr.colorMarkerLine
+    ))
 
     return view
   }

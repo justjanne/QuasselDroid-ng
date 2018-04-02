@@ -16,7 +16,7 @@ import org.threeten.bp.temporal.ChronoUnit
 class DayChangeItemDecoration(private val adapter: MessageAdapter) :
   RecyclerView.ItemDecoration() {
   private val dayChangeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
-  private val mBounds = Rect()
+  private val bounds = Rect()
 
   override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
     c.save()
@@ -35,9 +35,9 @@ class DayChangeItemDecoration(private val adapter: MessageAdapter) :
     for (i in 0 until childCount) {
       val child = parent.getChildAt(i)
       if (child.getTag(R.id.tag_daychange) == true) {
-        parent.getDecoratedBoundsWithMargins(child, mBounds)
-        val bottom = mBounds.bottom + Math.round(child.translationY)
-        val top = mBounds.top + Math.round(child.translationY)
+        parent.getDecoratedBoundsWithMargins(child, bounds)
+        val bottom = bounds.bottom + Math.round(child.translationY)
+        val top = bounds.top + Math.round(child.translationY)
         val layout = child.getTag(R.id.tag_daychange_layout) as View
         c.save()
         c.clipRect(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat())

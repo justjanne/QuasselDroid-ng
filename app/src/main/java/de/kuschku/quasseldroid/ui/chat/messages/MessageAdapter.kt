@@ -22,7 +22,6 @@ import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.util.helper.getOrPut
-import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
@@ -150,10 +149,6 @@ class MessageAdapter(
     @JvmField
     var combined: TextView? = null
 
-    @BindView(R.id.markerline)
-    @JvmField
-    var markerline: View? = null
-
     private var message: FormattedMessage? = null
     private var selectable: Boolean = false
     private var clickable: Boolean = false
@@ -195,7 +190,6 @@ class MessageAdapter(
       name?.text = message.name
       content?.text = message.content
       combined?.text = message.combined
-      markerline?.visibleIf(message.isMarkerLine)
 
       this.itemView.isSelected = message.isSelected
 

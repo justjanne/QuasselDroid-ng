@@ -3,4 +3,6 @@
   <item name="tag_daychange" type="id" />
   <item name="tag_daychange_layout" type="id" />
   <item name="tag_daychange_content" type="id" />
+
+  <item name="tag_markerline" type="id" />
 </resources>
