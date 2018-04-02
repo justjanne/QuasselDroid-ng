@@ -292,7 +292,9 @@ class MessageListFragment : ServiceBoundFragment() {
             if (previousVisible == visible) {
               loadMore()
             } else {
-              swipeRefreshLayout.isRefreshing = false
+              requireActivity().runOnUiThread {
+                swipeRefreshLayout.isRefreshing = false
+              }
             }
 
             previousVisible = visible
