@@ -37,6 +37,7 @@
   <string name="label_new_identity">Identität hinzufügen</string>
   <string name="label_new_network">Netzwerk hinzufügen</string>
   <string name="label_new_nick">Spitzname hinzufügen</string>
+  <string name="label_nicklist">Benutzerliste</string>
   <string name="label_no">Nein</string>
   <string name="label_reset">Zurücksetzen</string>
   <string name="label_open">Öffnen</string>

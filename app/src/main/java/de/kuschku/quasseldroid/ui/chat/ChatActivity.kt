@@ -21,12 +21,14 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.session.ConnectionState
 import de.kuschku.libquassel.util.flag.and
+import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.or
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
@@ -46,6 +48,7 @@ import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
+import de.kuschku.quasseldroid.viewmodel.data.BufferData
 import javax.inject.Inject
 
 class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -158,8 +161,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       historyPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
     }
     msgHistory.adapter = messageHistoryAdapter
-    viewModel.recentlySentMessages_liveData.observe(this,
-                                                    Observer(messageHistoryAdapter::submitList))
+    viewModel.recentlySentMessages_liveData
+      .observe(this, Observer(messageHistoryAdapter::submitList))
 
     setSupportActionBar(toolbar)
 
@@ -180,6 +183,21 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       )
       drawerToggle.syncState()
     }
+
+    drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+      override fun onDrawerStateChanged(newState: Int) = Unit
+      override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+        actionMode?.finish()
+      }
+
+      override fun onDrawerClosed(drawerView: View) {
+        actionMode?.finish()
+      }
+
+      override fun onDrawerOpened(drawerView: View) {
+        actionMode?.finish()
+      }
+    })
 
     viewModel.errors.observe(this, Observer { error ->
       error?.let {
@@ -262,7 +280,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
     })
 
-    viewModel.connectionProgress_liveData.observe(this, Observer { it ->
+    viewModel.connectionProgress_liveData.observe(this, Observer {
       val (state, progress, max) = it ?: Triple(ConnectionState.DISCONNECTED, 0, 0)
       when (state) {
         ConnectionState.CONNECTED,
@@ -284,16 +302,36 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
     })
 
+    viewModel.bufferData.distinctUntilChanged().toLiveData().observe(this, Observer {
+      bufferData = it
+      if (bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.END)
+      } else {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.END)
+      }
+
+      invalidateOptionsMenu()
+    })
+
     editorPanel.addPanelSlideListener(panelSlideListener)
     editorPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
   }
+
+  var bufferData: BufferData? = null
+  var actionMode: ActionMode? = null
 
   override fun onActionModeStarted(mode: ActionMode?) {
     when (mode?.tag) {
       "BUFFER",
       "MESSAGES" -> mode.menu?.retint(toolbar.context)
     }
+    actionMode = mode
     super.onActionModeStarted(mode)
+  }
+
+  override fun onActionModeFinished(mode: ActionMode?) {
+    actionMode = null
+    super.onActionModeFinished(mode)
   }
 
   override fun onStart() {
@@ -348,6 +386,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     menuInflater.inflate(R.menu.activity_main, menu)
+    menu?.findItem(R.id.action_nicklist)?.isVisible = bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) ?: false
+    menu?.findItem(R.id.action_filter_messages)?.isVisible = bufferData != null
+    menu?.retint(toolbar.context)
     return super.onCreateOptionsMenu(menu)
   }
 
@@ -355,7 +396,14 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     android.R.id.home           -> {
       drawerToggle.onOptionsItemSelected(item)
     }
-
+    R.id.action_nicklist        -> {
+      if (drawerLayout.isDrawerVisible(Gravity.END)) {
+        drawerLayout.closeDrawer(Gravity.END)
+      } else {
+        drawerLayout.openDrawer(Gravity.END)
+      }
+      true
+    }
     R.id.action_filter_messages -> {
       runInBackground {
         viewModel.buffer { buffer ->

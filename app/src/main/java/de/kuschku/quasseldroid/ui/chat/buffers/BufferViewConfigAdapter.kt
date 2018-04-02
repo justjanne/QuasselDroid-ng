@@ -1,8 +1,5 @@
 package de.kuschku.quasseldroid.ui.chat.buffers
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.ThemedSpinnerAdapter
 import android.view.LayoutInflater
@@ -16,22 +13,14 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.ui.ContextThemeWrapper
 import de.kuschku.quasseldroid.util.ui.RecyclerSpinnerAdapter
 
-class BufferViewConfigAdapter(
-  lifecycleOwner: LifecycleOwner,
-  liveData: LiveData<List<BufferViewConfig>?>
-) : RecyclerSpinnerAdapter<BufferViewConfigAdapter.BufferViewConfigViewHolder>(),
-    ThemedSpinnerAdapter {
-  val data = mutableListOf<BufferViewConfig>()
+class BufferViewConfigAdapter :
+  RecyclerSpinnerAdapter<BufferViewConfigAdapter.BufferViewConfigViewHolder>(),
+  ThemedSpinnerAdapter {
+  var data = emptyList<BufferViewConfig>()
 
-  init {
-    liveData.observe(
-      lifecycleOwner, Observer { list: List<BufferViewConfig>? ->
-      data.clear()
-      if (list != null) {
-        data.addAll(list)
-      }
-      notifyDataSetChanged()
-    })
+  fun submitList(list: List<BufferViewConfig>) {
+    data = list
+    notifyDataSetChanged()
   }
 
   override fun isEmpty() = data.isEmpty()

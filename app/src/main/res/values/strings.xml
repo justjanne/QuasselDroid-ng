@@ -37,6 +37,7 @@
   <string name="label_new_identity">New Identity</string>
   <string name="label_new_network">New Network</string>
   <string name="label_new_nick">New Nick</string>
+  <string name="label_nicklist">Nick List</string>
   <string name="label_no">No</string>
   <string name="label_reset">Reset</string>
   <string name="label_open">Open</string>

@@ -12,6 +12,7 @@ import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message_Type
+import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.minus
@@ -20,6 +21,7 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.map
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.helper.zip
@@ -169,7 +171,14 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     val view = inflater.inflate(R.layout.fragment_chat_list, container, false)
     ButterKnife.bind(this, view)
 
-    val adapter = BufferViewConfigAdapter(this, viewModel.bufferViewConfigs.toLiveData())
+    val adapter = BufferViewConfigAdapter()
+    viewModel.bufferViewConfigs.switchMap {
+      combineLatest(it.map(BufferViewConfig::liveUpdates))
+    }.toLiveData().observe(this, Observer {
+      if (it != null) {
+        adapter.submitList(it)
+      }
+    })
 
     chatListSpinner.adapter = adapter
     chatListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
