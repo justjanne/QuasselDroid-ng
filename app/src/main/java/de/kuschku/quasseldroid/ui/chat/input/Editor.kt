@@ -317,7 +317,7 @@ class Editor(
     TooltipCompat.setTooltipText(clearButton, clearButton.contentDescription)
 
     chatline.setOnKeyListener { _, keyCode, event ->
-      if (event.isCtrlPressed && !event.isAltPressed) when (keyCode) {
+      if (event.isCtrlPressed && !event.isAltPressed && event.action == KeyEvent.ACTION_DOWN) when (keyCode) {
         KeyEvent.KEYCODE_B -> {
           formatHandler.toggleBold(chatline.selection)
           updateButtons(chatline.selection)
