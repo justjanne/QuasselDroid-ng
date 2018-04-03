@@ -115,7 +115,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     editor = Editor(
       this,
-      viewModel.autoCompleteData.toLiveData(),
+      viewModel.autoCompleteData,
       viewModel.lastWord,
       findViewById(R.id.chatline),
       findViewById(R.id.send),

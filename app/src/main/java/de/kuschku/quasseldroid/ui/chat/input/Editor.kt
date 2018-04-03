@@ -1,6 +1,5 @@
 package de.kuschku.quasseldroid.ui.chat.input
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.graphics.Typeface
 import android.support.annotation.ColorInt
@@ -19,6 +18,7 @@ import android.view.inputmethod.EditorInfo
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.util.IrcUserUtils
+import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
@@ -32,12 +32,13 @@ import de.kuschku.quasseldroid.util.ui.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import java.util.concurrent.TimeUnit
 
 class Editor(
   // Contexts
   activity: AppCompatActivity,
   // LiveData
-  private val autoCompleteData: LiveData<Pair<String, List<AutoCompleteItem>>>,
+  private val autoCompleteData: Observable<Pair<String, List<AutoCompleteItem>>>,
   lastWordContainer: BehaviorSubject<Observable<Pair<String, IntRange>>>,
   // Views
   val chatline: EditTextSelectionChange,
@@ -164,55 +165,56 @@ class Editor(
       formatHandler::autoComplete
     )
 
-    autoCompleteData.observe(activity, Observer {
-      val query = it?.first ?: ""
-      val shouldShowResults = (autoCompleteSettings.auto && query.length >= 3) ||
-                              (autoCompleteSettings.prefix && query.startsWith('@')) ||
-                              (autoCompleteSettings.prefix && query.startsWith('#'))
-      val list = if (shouldShowResults) it?.second.orEmpty() else emptyList()
-      autocompleteAdapter.submitList(list.map {
-        if (it is AutoCompleteItem.UserItem) {
-          val nickName = it.nick
-          val senderColorIndex = IrcUserUtils.senderColor(nickName)
-          val initial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
-            .firstOrNull()?.toUpperCase().toString()
-          val senderColor = senderColors[senderColorIndex]
+    autoCompleteData.debounce(300, TimeUnit.MILLISECONDS)
+      .toLiveData().observe(activity, Observer {
+        val query = it?.first ?: ""
+        val shouldShowResults = (autoCompleteSettings.auto && query.length >= 3) ||
+                                (autoCompleteSettings.prefix && query.startsWith('@')) ||
+                                (autoCompleteSettings.prefix && query.startsWith('#'))
+        val list = if (shouldShowResults) it?.second.orEmpty() else emptyList()
+        autocompleteAdapter.submitList(list.map {
+          if (it is AutoCompleteItem.UserItem) {
+            val nickName = it.nick
+            val senderColorIndex = IrcUserUtils.senderColor(nickName)
+            val initial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
+              .firstOrNull()?.toUpperCase().toString()
+            val senderColor = senderColors[senderColorIndex]
 
-          fun formatNick(nick: CharSequence): CharSequence {
-            val spannableString = SpannableString(nick)
-            spannableString.setSpan(
-              ForegroundColorSpan(senderColor),
-              0,
-              nick.length,
-              SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+            fun formatNick(nick: CharSequence): CharSequence {
+              val spannableString = SpannableString(nick)
+              spannableString.setSpan(
+                ForegroundColorSpan(senderColor),
+                0,
+                nick.length,
+                SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+              )
+              spannableString.setSpan(
+                StyleSpan(Typeface.BOLD),
+                0,
+                nick.length,
+                SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+              )
+              return spannableString
+            }
+
+            it.copy(
+              displayNick = formatNick(it.nick),
+              fallbackDrawable = TextDrawable.builder().buildRound(initial, senderColor),
+              modes = when (messageSettings.showPrefix) {
+                MessageSettings.ShowPrefixMode.ALL ->
+                  it.modes
+                else                               ->
+                  it.modes.substring(0, Math.min(it.modes.length, 1))
+              },
+              realname = ircFormatDeserializer.formatString(
+                activity, it.realname.toString(), messageSettings.colorizeMirc
+              )
             )
-            spannableString.setSpan(
-              StyleSpan(Typeface.BOLD),
-              0,
-              nick.length,
-              SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
-            )
-            return spannableString
+          } else {
+            it
           }
-
-          it.copy(
-            displayNick = formatNick(it.nick),
-            fallbackDrawable = TextDrawable.builder().buildRound(initial, senderColor),
-            modes = when (messageSettings.showPrefix) {
-              MessageSettings.ShowPrefixMode.ALL ->
-                it.modes
-              else                               ->
-                it.modes.substring(0, Math.min(it.modes.length, 1))
-            },
-            realname = ircFormatDeserializer.formatString(
-              activity, it.realname.toString(), messageSettings.colorizeMirc
-            )
-          )
-        } else {
-          it
-        }
+        })
       })
-    })
 
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
       for (autoCompleteList in autoCompleteLists) {
@@ -343,8 +345,12 @@ class Editor(
           true
         }
         KeyEvent.KEYCODE_TAB          -> {
-          autoComplete(event.isShiftPressed)
-          true
+          if (!event.isAltPressed && !event.isCtrlPressed) {
+            autoComplete(event.isShiftPressed)
+            true
+          } else {
+            false
+          }
         }
         else                          -> false
       }

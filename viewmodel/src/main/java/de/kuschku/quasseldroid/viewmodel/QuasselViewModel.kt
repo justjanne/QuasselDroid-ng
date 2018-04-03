@@ -217,7 +217,6 @@ class QuasselViewModel : ViewModel() {
     combineLatest(session, buffer, lastWord).switchMap { (sessionOptional, id, lastWordWrapper) ->
       lastWordWrapper
         .distinctUntilChanged()
-        .debounce(300, TimeUnit.MILLISECONDS)
         .switchMap { lastWord ->
           val session = sessionOptional.orNull()
           val bufferSyncer = session?.bufferSyncer
