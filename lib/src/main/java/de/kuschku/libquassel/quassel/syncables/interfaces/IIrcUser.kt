@@ -2,133 +2,81 @@ package de.kuschku.libquassel.quassel.syncables.interfaces
 
 import de.kuschku.libquassel.annotations.Slot
 import de.kuschku.libquassel.annotations.Syncable
-import de.kuschku.libquassel.protocol.ARG
 import de.kuschku.libquassel.protocol.QVariantMap
-import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import org.threeten.bp.Instant
 
 @Syncable(name = "IrcUser")
 interface IIrcUser : ISyncableObject {
-
   fun initProperties(): QVariantMap
   fun initSetProperties(properties: QVariantMap)
+  @Slot
+  fun addUserModes(modes: String)
+
+  fun joinChannel(channel: IrcChannel, skip_channel_join: Boolean = false)
+  @Slot
+  fun joinChannel(channelname: String)
+
+  fun partChannel(channel: IrcChannel)
+  @Slot
+  fun partChannel(channelname: String)
 
   @Slot
-  fun addUserModes(modes: String) {
-    SYNC("addUserModes", ARG(modes, Type.QString))
-  }
-
-  fun joinChannel(channel: IrcChannel, skip_channel_join: Boolean = false) {
-  }
+  fun quit()
 
   @Slot
-  fun joinChannel(channelname: String) {
-    SYNC("joinChannel", ARG(channelname, Type.QString))
-  }
-
-  fun partChannel(channel: IrcChannel) {
-  }
+  fun removeUserModes(modes: String)
 
   @Slot
-  fun partChannel(channelname: String) {
-    SYNC("partChannel", ARG(channelname, Type.QString))
-  }
+  fun setAccount(account: String)
 
   @Slot
-  fun quit() {
-    SYNC("quit")
-  }
+  fun setAway(away: Boolean)
 
   @Slot
-  fun removeUserModes(modes: String) {
-    SYNC("removeUserModes", ARG(modes, Type.QString))
-  }
+  fun setAwayMessage(awayMessage: String)
 
   @Slot
-  fun setAccount(account: String) {
-    SYNC("setAccount", ARG(account, Type.QString))
-  }
+  fun setEncrypted(encrypted: Boolean)
 
   @Slot
-  fun setAway(away: Boolean) {
-    SYNC("setAway", ARG(away, Type.Bool))
-  }
+  fun setHost(host: String)
 
   @Slot
-  fun setAwayMessage(awayMessage: String) {
-    SYNC("setAwayMessage", ARG(awayMessage, Type.QString))
-  }
+  fun setIdleTime(idleTime: Instant)
 
   @Slot
-  fun setEncrypted(encrypted: Boolean) {
-    SYNC("setEncrypted", ARG(encrypted, Type.Bool))
-  }
+  fun setIrcOperator(ircOperator: String)
 
   @Slot
-  fun setHost(host: String) {
-    SYNC("setHost", ARG(host, Type.QString))
-  }
+  fun setLastAwayMessage(lastAwayMessage: Int)
 
   @Slot
-  fun setIdleTime(idleTime: Instant) {
-    SYNC("setIdleTime", ARG(idleTime, Type.QDateTime))
-  }
+  fun setLoginTime(loginTime: Instant)
 
   @Slot
-  fun setIrcOperator(ircOperator: String) {
-    SYNC("setIrcOperator", ARG(ircOperator, Type.QString))
-  }
+  fun setNick(nick: String)
 
   @Slot
-  fun setLastAwayMessage(lastAwayMessage: Int) {
-    SYNC("setLastAwayMessage", ARG(lastAwayMessage, Type.Int))
-  }
+  fun setRealName(realName: String)
 
   @Slot
-  fun setLoginTime(loginTime: Instant) {
-    SYNC("setLoginTime", ARG(loginTime, Type.QDateTime))
-  }
+  fun setServer(server: String)
 
   @Slot
-  fun setNick(nick: String) {
-    SYNC("setNick", ARG(nick, Type.QString))
-  }
+  fun setSuserHost(suserHost: String)
 
   @Slot
-  fun setRealName(realName: String) {
-    SYNC("setRealName", ARG(realName, Type.QString))
-  }
+  fun setUser(user: String)
 
   @Slot
-  fun setServer(server: String) {
-    SYNC("setServer", ARG(server, Type.QString))
-  }
+  fun setUserModes(modes: String)
 
   @Slot
-  fun setSuserHost(suserHost: String) {
-    SYNC("setSuserHost", ARG(suserHost, Type.QString))
-  }
+  fun setWhoisServiceReply(whoisServiceReply: String)
 
   @Slot
-  fun setUser(user: String) {
-    SYNC("setUser", ARG(user, Type.QString))
-  }
-
-  @Slot
-  fun setUserModes(modes: String) {
-    SYNC("setUserModes", ARG(modes, Type.QString))
-  }
-
-  @Slot
-  fun setWhoisServiceReply(whoisServiceReply: String) {
-    SYNC("setWhoisServiceReply", ARG(whoisServiceReply, Type.QString))
-  }
-
-  @Slot
-  fun updateHostmask(mask: String) {
-    SYNC("updateHostmask", ARG(mask, Type.QString))
-  }
+  fun updateHostmask(mask: String)
 
   @Slot
   override fun update(properties: QVariantMap) {

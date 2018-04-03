@@ -135,11 +135,11 @@ class QuasselViewModel : ViewModel() {
                 network.liveIrcChannel(
                   info.bufferName
                 ).switchMap { channel ->
-                  channel.liveTopic().map { topic ->
+                  channel.liveUpdates().map {
                     BufferData(
                       info = info,
                       network = network,
-                      description = topic
+                      description = it.topic()
                     )
                   }
                 }
@@ -243,15 +243,15 @@ class QuasselViewModel : ViewModel() {
                           network.liveIrcChannel(
                             info.bufferName
                           ).switchMap { channel ->
-                            channel.liveTopic().map { topic ->
+                            channel.liveUpdates().map {
                               AutoCompleteItem.ChannelItem(
                                 info = info,
                                 network = network.networkInfo(),
-                                bufferStatus = when (channel) {
+                                bufferStatus = when (it) {
                                   IrcChannel.NULL -> BufferStatus.OFFLINE
                                   else            -> BufferStatus.ONLINE
                                 },
-                                description = topic
+                                description = it.topic()
                               )
                             }
                           }
@@ -447,15 +447,15 @@ class QuasselViewModel : ViewModel() {
                           BufferInfo.Type.ChannelBuffer.toInt() -> {
                             network.liveNetworkInfo().switchMap { networkInfo ->
                               network.liveIrcChannel(info.bufferName).switchMap { channel ->
-                                channel.liveTopic().map { topic ->
+                                channel.liveUpdates().map {
                                   BufferProps(
                                     info = info,
                                     network = networkInfo,
-                                    bufferStatus = when (channel) {
+                                    bufferStatus = when (it) {
                                       IrcChannel.NULL -> BufferStatus.OFFLINE
                                       else            -> BufferStatus.ONLINE
                                     },
-                                    description = topic,
+                                    description = it.topic(),
                                     activity = activity,
                                     highlights = highlights,
                                     hiddenState = state
@@ -497,10 +497,10 @@ class QuasselViewModel : ViewModel() {
                   bufferSyncer.liveBufferInfos().switchMap {
                     val buffers = if (showHidden) {
                       transformIds(ids, BufferHiddenState.VISIBLE) +
-                      transformIds(temp, BufferHiddenState.HIDDEN_TEMPORARY) +
-                      transformIds(perm, BufferHiddenState.HIDDEN_PERMANENT)
+                      transformIds(temp - ids, BufferHiddenState.HIDDEN_TEMPORARY) +
+                      transformIds(perm - temp - ids, BufferHiddenState.HIDDEN_PERMANENT)
                     } else {
-                      transformIds(ids, BufferHiddenState.VISIBLE)
+                      transformIds(ids.distinct(), BufferHiddenState.VISIBLE)
                     }
 
                     combineLatest<BufferProps>(buffers).map { list ->

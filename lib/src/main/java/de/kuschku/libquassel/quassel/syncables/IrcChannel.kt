@@ -99,19 +99,10 @@ class IrcChannel(
   }
 
   fun name() = _name
-  fun liveName(): Observable<String> = live_name
-
   fun topic() = _topic
-  fun liveTopic(): Observable<String> = live_topic
-
   fun password() = _password
-  fun livePassword(): Observable<String> = live_password
-
   fun encrypted() = _encrypted
-  fun liveEncrypted(): Observable<Boolean> = live_encrypted
-
   fun network() = _network
-
   fun ircUsers() = _userModes.keys
   fun liveIrcUsers(): Observable<MutableSet<IrcUser>> =
     live_userModes.map(MutableMap<IrcUser, String>::keys)
@@ -124,6 +115,8 @@ class IrcChannel(
   fun userModes(): Map<IrcUser, String> = _userModes
   fun userModes(nick: String) = network().ircUser(nick)?.let { userModes(it) } ?: ""
   fun liveUserModes(nick: String) = network().ircUser(nick)?.let { userModes(it) } ?: ""
+
+  fun liveUpdates(): Observable<IrcChannel> = live_updates.map { this }
 
   fun hasMode(mode: Char) = when (network().channelModeType(mode)) {
     INetwork.ChannelModeType.A_CHANMODE ->
@@ -198,21 +191,18 @@ class IrcChannel(
     if (_topic == topic)
       return
     _topic = topic
-    super.setTopic(topic)
   }
 
   override fun setPassword(password: String) {
     if (_password == password)
       return
     _password = password
-    super.setPassword(password)
   }
 
   override fun setEncrypted(encrypted: Boolean) {
     if (_encrypted == encrypted)
       return
     _encrypted = encrypted
-    super.setEncrypted(encrypted)
   }
 
   override fun joinIrcUsers(nicks: QStringList, modes: QStringList) {
@@ -237,11 +227,6 @@ class IrcChannel(
       user.joinChannel(this, true)
     }
     live_userModes.onNext(_userModes)
-    if (newNicks.isNotEmpty())
-      super.joinIrcUsers(
-        newNicks.map(Pair<IrcUser, String>::first).map(IrcUser::nick),
-        newNicks.map(Pair<IrcUser, String>::second)
-      )
   }
 
   override fun joinIrcUser(ircuser: IrcUser) {
@@ -264,7 +249,6 @@ class IrcChannel(
       proxy.stopSynchronize(this)
     }
     live_userModes.onNext(_userModes)
-    super.part(ircuser)
   }
 
   override fun part(nick: String) {
@@ -276,7 +260,6 @@ class IrcChannel(
       return
     _userModes[ircuser] = modes
     live_userModes.onNext(_userModes)
-    super.setUserModes(ircuser.nick(), modes)
   }
 
   override fun setUserModes(nick: String, modes: String) {
@@ -284,7 +267,7 @@ class IrcChannel(
   }
 
   fun addUserMode(ircuser: IrcUser, mode: Char) {
-    super.addUserMode(ircuser, Character.toString(mode))
+    addUserMode(ircuser, String(charArrayOf(mode)))
   }
 
   override fun addUserMode(ircuser: IrcUser?, mode: String) {
@@ -294,7 +277,6 @@ class IrcChannel(
       return
     _userModes[ircuser] = _userModes.getOr(ircuser, "") + mode
     live_userModes.onNext(_userModes)
-    super.addUserMode(ircuser.nick(), mode)
   }
 
   override fun addUserMode(nick: String, mode: String) {
@@ -309,7 +291,6 @@ class IrcChannel(
     _userModes[ircuser] = _userModes.getOr(ircuser, "")
       .replace(mode, "", ignoreCase = true)
     live_userModes.onNext(_userModes)
-    super.addUserMode(ircuser.nick(), mode)
   }
 
   override fun removeUserMode(nick: String, mode: String) {
@@ -329,7 +310,6 @@ class IrcChannel(
       INetwork.ChannelModeType.NOT_A_CHANMODE ->
         throw IllegalArgumentException("Received invalid channel mode: $mode $value")
     }
-    super.addChannelMode(mode, value)
   }
 
   override fun removeChannelMode(mode: Char, value: String?) {
@@ -345,28 +325,36 @@ class IrcChannel(
       INetwork.ChannelModeType.NOT_A_CHANMODE ->
         throw IllegalArgumentException("Received invalid channel mode: $mode $value")
     }
-    super.removeChannelMode(mode, value)
   }
 
-  private val live_name = BehaviorSubject.createDefault(name)
-  private var _name: String
-    get() = live_name.value
-    set(value) = live_name.onNext(value)
+  override fun update(properties: QVariantMap) {
+    fromVariantMap(properties)
+  }
 
-  private val live_topic = BehaviorSubject.createDefault("")
-  private var _topic: String
-    get() = live_topic.value
-    set(value) = live_topic.onNext(value)
+  private val live_updates = BehaviorSubject.createDefault(Unit)
+  private var _name: String = ""
+    set(value) {
+      field = value
+      live_updates.onNext(Unit)
+    }
 
-  private val live_password = BehaviorSubject.createDefault("")
-  private var _password: String
-    get() = live_password.value
-    set(value) = live_password.onNext(value)
+  private var _topic: String = ""
+    set(value) {
+      field = value
+      live_updates.onNext(Unit)
+    }
 
-  private val live_encrypted = BehaviorSubject.createDefault(false)
-  private var _encrypted: Boolean
-    get() = live_encrypted.value
-    set(value) = live_encrypted.onNext(value)
+  private var _password: String = ""
+    set(value) {
+      field = value
+      live_updates.onNext(Unit)
+    }
+
+  private var _encrypted: Boolean = false
+    set(value) {
+      field = value
+      live_updates.onNext(Unit)
+    }
 
   private val live_userModes = BehaviorSubject.createDefault(mutableMapOf<IrcUser, String>())
   private var _userModes: MutableMap<IrcUser, String>

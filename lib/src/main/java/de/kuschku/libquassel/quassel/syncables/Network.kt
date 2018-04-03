@@ -339,7 +339,6 @@ class Network constructor(
       proxy.synchronize(ircUser)
       _ircUsers[nick] = ircUser
       val mask = ircUser.hostMask()
-      super.addIrcUser(mask)
       live_ircUsers.onNext(_ircUsers)
       ircUser
     } else {
@@ -368,7 +367,6 @@ class Network constructor(
         proxy.synchronize(ircChannel)
         _ircChannels[caseMapper.toLowerCase(channelName)] = ircChannel
         live_ircChannels.onNext(_ircChannels)
-        super.addIrcChannel(channelName)
         ircChannel
       } else {
         channel
@@ -389,17 +387,14 @@ class Network constructor(
   fun codecForDecoding(): String = _codecForDecoding.name()
   fun setCodecForDecoding(codec: Charset) {
     _codecForDecoding = codec
-    super.setCodecForDecoding(Charsets.ISO_8859_1.encode(codecForDecoding()))
   }
 
   fun setCodecForEncoding(codec: Charset) {
     _codecForEncoding = codec
-    super.setCodecForEncoding(Charsets.ISO_8859_1.encode(codecForEncoding()))
   }
 
   fun setCodecForServer(codec: Charset) {
     _codecForServer = codec
-    super.setCodecForServer(Charsets.ISO_8859_1.encode(codecForServer()))
   }
 
   fun autoAwayActive() = _autoAwayActive
@@ -411,14 +406,12 @@ class Network constructor(
     if (_networkName == networkName)
       return
     _networkName = networkName
-    super.setNetworkName(networkName)
   }
 
   override fun setCurrentServer(currentServer: String?) {
     if (_currentServer == currentServer)
       return
     _currentServer = currentServer
-    super.setCurrentServer(currentServer)
   }
 
   override fun setConnected(isConnected: Boolean) {
@@ -430,7 +423,6 @@ class Network constructor(
       setCurrentServer("")
       removeChansAndUsers()
     }
-    super.setConnected(isConnected)
   }
 
   override fun setConnectionState(state: Int) {
@@ -439,7 +431,6 @@ class Network constructor(
       return
     _connectionState = actualConnectionState
     live_connectionState.onNext(_connectionState)
-    super.setConnectionState(state)
   }
 
   override fun setMyNick(mynick: String?) {
@@ -449,21 +440,18 @@ class Network constructor(
     if (_myNick != null && _myNick.isNullOrEmpty() && ircUser(myNick()) == null) {
       newIrcUser(myNick() ?: "")
     }
-    super.setMyNick(mynick)
   }
 
   override fun setLatency(latency: Int) {
     if (_latency == latency)
       return
     _latency = latency
-    super.setLatency(latency)
   }
 
   override fun setIdentity(identity: IdentityId) {
     if (_identity == identity)
       return
     _identity = identity
-    super.setIdentity(identity)
   }
 
   override fun setServerList(serverList: QVariantList) {
@@ -474,14 +462,12 @@ class Network constructor(
     if (_serverList == actualServerList)
       return
     _serverList = actualServerList
-    super.setServerList(serverList)
   }
 
   override fun setUseRandomServer(randomServer: Boolean) {
     if (_useRandomServer == randomServer)
       return
     _useRandomServer = randomServer
-    super.setUseRandomServer(randomServer)
   }
 
   override fun setPerform(perform: QStringList) {
@@ -489,84 +475,72 @@ class Network constructor(
     if (_perform == actualPerform)
       return
     _perform = actualPerform
-    super.setPerform(perform)
   }
 
   override fun setUseAutoIdentify(autoIdentify: Boolean) {
     if (_useAutoIdentify == autoIdentify)
       return
     _useAutoIdentify = autoIdentify
-    super.setUseAutoIdentify(autoIdentify)
   }
 
   override fun setAutoIdentifyService(service: String) {
     if (_autoIdentifyService == service)
       return
     _autoIdentifyService = service
-    super.setAutoIdentifyService(service)
   }
 
   override fun setAutoIdentifyPassword(password: String) {
     if (_autoIdentifyPassword == password)
       return
     _autoIdentifyPassword = password
-    super.setAutoIdentifyPassword(password)
   }
 
   override fun setUseSasl(sasl: Boolean) {
     if (_useSasl == sasl)
       return
     _useSasl = sasl
-    super.setUseSasl(sasl)
   }
 
   override fun setSaslAccount(account: String) {
     if (_saslAccount == account)
       return
     _saslAccount = account
-    super.setSaslAccount(account)
   }
 
   override fun setSaslPassword(password: String) {
     if (_saslPassword == password)
       return
     _saslPassword = password
-    super.setSaslPassword(password)
   }
 
   override fun setUseAutoReconnect(autoReconnect: Boolean) {
     if (_useAutoReconnect == autoReconnect)
       return
     _useAutoReconnect = autoReconnect
-    super.setUseAutoReconnect(autoReconnect)
   }
 
   override fun setAutoReconnectInterval(interval: UInt) {
     if (_autoReconnectInterval == interval)
       return
     _autoReconnectInterval = interval
-    super.setAutoReconnectInterval(interval)
   }
 
   override fun setAutoReconnectRetries(retries: UShort) {
     if (_autoReconnectRetries == retries)
       return
     _autoReconnectRetries = retries
-    super.setAutoReconnectRetries(retries)
   }
 
   override fun setUnlimitedReconnectRetries(unlimitedRetries: Boolean) {
     if (_unlimitedReconnectRetries == unlimitedRetries)
       return
     _unlimitedReconnectRetries = unlimitedRetries
-    super.setUnlimitedReconnectRetries(unlimitedRetries)
   }
 
   override fun setRejoinChannels(rejoinChannels: Boolean) {
     if (_rejoinChannels == rejoinChannels)
       return
     _rejoinChannels = rejoinChannels
-    super.setRejoinChannels(rejoinChannels)
   }
 
   /**
@@ -581,7 +555,6 @@ class Network constructor(
     if (_useCustomMessageRate == useCustomRate)
       return
     _useCustomMessageRate = useCustomRate
-    super.setUseCustomMessageRate(useCustomRate)
   }
 
   override fun setMessageRateBurstSize(burstSize: UInt) {
@@ -590,7 +563,6 @@ class Network constructor(
     if (burstSize < 1)
       throw IllegalArgumentException("Message Burst Size must be a positive number: $burstSize")
     _messageRateBurstSize = burstSize
-    super.setMessageRateBurstSize(burstSize)
   }
 
   override fun setMessageRateDelay(messageDelay: UInt) {
@@ -599,14 +571,12 @@ class Network constructor(
     if (messageDelay < 1)
       throw IllegalArgumentException("Message Delay must be a positive number: $messageDelay")
     _messageRateDelay = messageDelay
-    super.setMessageRateDelay(messageDelay)
   }
 
   override fun setUnlimitedMessageRate(unlimitedRate: Boolean) {
     if (_unlimitedMessageRate == unlimitedRate)
       return
     _unlimitedMessageRate = unlimitedRate
-    super.setUnlimitedMessageRate(unlimitedRate)
   }
 
   override fun setCodecForDecoding(codecName: ByteBuffer?) {
@@ -647,19 +617,16 @@ class Network constructor(
 
   override fun addSupport(param: String, value: String?) {
     _supports[param] = value
-    super.addSupport(param, value)
   }
 
   override fun removeSupport(param: String) {
     if (!_supports.contains(param))
       return
     _supports.remove(param)
-    super.removeSupport(param)
   }
 
   override fun addCap(capability: String, value: String?) {
     _caps[capability.toLowerCase(Locale.US)] = value
-    super.addCap(capability, value)
   }
 
   override fun acknowledgeCap(capability: String) {
@@ -667,7 +634,6 @@ class Network constructor(
     if (!_capsEnabled.contains(lowerCase))
       return
     _capsEnabled.add(lowerCase)
-    super.acknowledgeCap(capability)
   }
 
   override fun removeCap(capability: String) {
@@ -676,7 +642,6 @@ class Network constructor(
       return
     _caps.remove(lowerCase)
     _capsEnabled.remove(lowerCase)
-    super.removeCap(capability)
   }
 
   override fun clearCaps() {
@@ -684,7 +649,6 @@ class Network constructor(
       return
     _caps.clear()
     _capsEnabled.clear()
-    super.clearCaps()
   }
 
   override fun addIrcUser(hostmask: String) {

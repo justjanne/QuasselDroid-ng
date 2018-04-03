@@ -11,6 +11,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
 import java.nio.charset.Charset
+
 class IrcUser(
   hostmask: String,
   network: Network,
@@ -93,39 +94,24 @@ class IrcUser(
   fun network() = _network
   fun userModes() = _userModes
   fun channels() = _channels.map(IrcChannel::name)
-  fun codecForEncoding() = _codecForEncoding
-  fun codecForDecoding() = _codecForDecoding
-  fun setCodecForEncoding(codecName: String) {
-    val charset = Charset.availableCharsets()[codecName]
-    if (charset != null) {
-      setCodecForEncoding(charset)
-    }
-  }
-  fun setCodecForEncoding(codec: Charset) {
-    _codecForEncoding = codec
+
+  override fun addUserModes(modes: String) {
+    (_userModes.toSet() + modes.toSet()).joinToString()
   }
 
-  fun setCodecForDecoding(codecName: String) {
-    val charset = Charset.availableCharsets()[codecName]
-    if (charset != null) {
-      setCodecForDecoding(charset)
-    }
-  }
-  fun setCodecForDecoding(codec: Charset) {
-    _codecForDecoding = codec
+  override fun removeUserModes(modes: String) {
+    (_userModes.toSet() - modes.toSet()).joinToString()
   }
 
   override fun setUser(user: String) {
     if (_user != user) {
       _user = user
-      super.setUser(user)
     }
   }
 
   override fun setHost(host: String) {
     if (_host != host) {
       _host = host
-      super.setHost(host)
     }
   }
 
@@ -134,35 +120,30 @@ class IrcUser(
       network().ircUserNickChanged(_nick, nick)
       _nick = nick
       updateObjectName()
-      super.setNick(nick)
     }
   }
 
   override fun setRealName(realName: String) {
     if (_realName != realName) {
       _realName = realName
-      super.setRealName(realName)
     }
   }
 
   override fun setAccount(account: String) {
     if (_account != account) {
       _account = account
-      super.setAccount(account)
     }
   }
 
   override fun setAway(away: Boolean) {
     if (_away != away) {
       _away = away
-      super.setAway(away)
     }
   }
 
   override fun setAwayMessage(awayMessage: String) {
     if (_awayMessage != awayMessage) {
       _awayMessage = awayMessage
-      super.setAwayMessage(awayMessage)
     }
   }
 
@@ -170,49 +151,48 @@ class IrcUser(
     if (_idleTime != idleTime) {
       _idleTime = idleTime
       _idleTimeSet = Instant.now()
-      super.setIdleTime(idleTime)
     }
   }
 
   override fun setLoginTime(loginTime: Instant) {
     if (_loginTime != loginTime) {
       _loginTime = loginTime
-      super.setLoginTime(loginTime)
     }
   }
 
   override fun setIrcOperator(ircOperator: String) {
     if (_ircOperator != ircOperator) {
       _ircOperator = ircOperator
-      super.setIrcOperator(ircOperator)
     }
   }
 
   override fun setLastAwayMessage(lastAwayMessage: Int) {
     if (lastAwayMessage > _lastAwayMessage) {
       _lastAwayMessage = lastAwayMessage
-      super.setLastAwayMessage(lastAwayMessage)
     }
   }
 
   override fun setWhoisServiceReply(whoisServiceReply: String) {
     if (_whoisServiceReply != whoisServiceReply) {
       _whoisServiceReply = whoisServiceReply
-      super.setWhoisServiceReply(whoisServiceReply)
     }
   }
 
   override fun setSuserHost(suserHost: String) {
     if (_suserHost != suserHost) {
       _suserHost = suserHost
-      super.setSuserHost(suserHost)
     }
   }
 
   override fun setEncrypted(encrypted: Boolean) {
     if (_encrypted != encrypted) {
       _encrypted = encrypted
-      super.setEncrypted(encrypted)
+    }
+  }
+
+  override fun setServer(server: String) {
+    if (_server != server) {
+      _server = server
     }
   }
 
@@ -227,7 +207,6 @@ class IrcUser(
   override fun setUserModes(modes: String) {
     if (_userModes != modes) {
       _userModes = modes
-      super.setUserModes(modes)
     }
   }
 
@@ -247,7 +226,6 @@ class IrcUser(
     if (_channels.contains(channel)) {
       _channels.remove(channel)
       channel.part(this)
-      super.partChannel(channel.name())
       if (_channels.isEmpty() && !network().isMe(this))
         quit()
     }
@@ -266,7 +244,6 @@ class IrcUser(
     }
     _channels.clear()
     network().removeIrcUser(this)
-    super.quit()
     proxy.stopSynchronize(this)
   }
 
