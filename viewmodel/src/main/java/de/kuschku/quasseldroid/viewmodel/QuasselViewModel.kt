@@ -18,6 +18,7 @@ import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.and
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helpers.*
+import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.switchMapNotNull
 import de.kuschku.quasseldroid.util.helper.toLiveData
@@ -511,7 +512,7 @@ class QuasselViewModel : ViewModel() {
                           it.info.type.hasFlag(Buffer_Type.StatusBuffer)
                         }.let {
                           if (config.sortAlphabetically())
-                            it.sortedBy { it.info.bufferName }
+                            it.sortedBy { IrcCaseMappers.unicode.toLowerCaseNullable(it.info.bufferName) }
                               .sortedByDescending { it.hiddenState == BufferHiddenState.VISIBLE }
                           else it
                         }.distinctBy { it.info.bufferId }

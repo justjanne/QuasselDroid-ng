@@ -84,8 +84,8 @@ class Editor(
         val end = Math.min(
           s.length, previous.range.start + previous.completion.name.length + suffix.length
         )
-        val sequence = if (end > previous.range.start) "" else s.substring(previous.range.start,
-                                                                           end)
+        val sequence = if (end < previous.range.start) ""
+        else s.substring(previous.range.start, end)
         if (sequence == previous.completion.name + suffix) {
           previous.originalWord to (previous.range.start until end)
         } else {
@@ -319,41 +319,43 @@ class Editor(
     TooltipCompat.setTooltipText(clearButton, clearButton.contentDescription)
 
     chatline.setOnKeyListener { _, keyCode, event ->
-      if (event.isCtrlPressed && !event.isAltPressed && event.action == KeyEvent.ACTION_DOWN) when (keyCode) {
-        KeyEvent.KEYCODE_B -> {
-          formatHandler.toggleBold(chatline.selection)
-          updateButtons(chatline.selection)
-          true
-        }
-        KeyEvent.KEYCODE_I -> {
-          formatHandler.toggleItalic(chatline.selection)
-          updateButtons(chatline.selection)
-          true
-        }
-        KeyEvent.KEYCODE_U -> {
-          formatHandler.toggleUnderline(chatline.selection)
-          updateButtons(chatline.selection)
-          true
-        }
-        else               -> false
-      } else when (keyCode) {
-        KeyEvent.KEYCODE_ENTER,
-        KeyEvent.KEYCODE_NUMPAD_ENTER -> if (event.isShiftPressed) {
-          false
-        } else {
-          send()
-          true
-        }
-        KeyEvent.KEYCODE_TAB          -> {
-          if (!event.isAltPressed && !event.isCtrlPressed) {
-            autoComplete(event.isShiftPressed)
+      if (event.action == KeyEvent.ACTION_DOWN) {
+        if (event.isCtrlPressed && !event.isAltPressed) when (keyCode) {
+          KeyEvent.KEYCODE_B -> {
+            formatHandler.toggleBold(chatline.selection)
+            updateButtons(chatline.selection)
             true
-          } else {
-            false
           }
+          KeyEvent.KEYCODE_I -> {
+            formatHandler.toggleItalic(chatline.selection)
+            updateButtons(chatline.selection)
+            true
+          }
+          KeyEvent.KEYCODE_U -> {
+            formatHandler.toggleUnderline(chatline.selection)
+            updateButtons(chatline.selection)
+            true
+          }
+          else               -> false
+        } else when (keyCode) {
+          KeyEvent.KEYCODE_ENTER,
+          KeyEvent.KEYCODE_NUMPAD_ENTER -> if (event.isShiftPressed) {
+            false
+          } else {
+            send()
+            true
+          }
+          KeyEvent.KEYCODE_TAB          -> {
+            if (!event.isAltPressed && !event.isCtrlPressed) {
+              autoComplete(event.isShiftPressed)
+              true
+            } else {
+              false
+            }
+          }
+          else                          -> false
         }
-        else                          -> false
-      }
+      } else false
     }
   }
 
