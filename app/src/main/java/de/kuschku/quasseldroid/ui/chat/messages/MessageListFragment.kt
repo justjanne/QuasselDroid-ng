@@ -280,7 +280,7 @@ class MessageListFragment : ServiceBoundFragment() {
       return list.asReversed().map {
         val date = it.time.atZone(ZoneId.systemDefault()).truncatedTo(ChronoUnit.DAYS)
         val isSameDay = previousDate?.isEqual(date) ?: false
-        val isFollowUp = previous?.sender == it.sender && isSameDay
+        val isFollowUp = previous?.sender == it.sender && previous?.type == it.type && isSameDay
         previous = it
         previousDate = date
         DisplayMessage(
