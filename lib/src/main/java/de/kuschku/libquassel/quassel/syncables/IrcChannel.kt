@@ -332,7 +332,7 @@ class IrcChannel(
   }
 
   private val live_updates = BehaviorSubject.createDefault(Unit)
-  private var _name: String = ""
+  private var _name: String = name
     set(value) {
       field = value
       live_updates.onNext(Unit)
