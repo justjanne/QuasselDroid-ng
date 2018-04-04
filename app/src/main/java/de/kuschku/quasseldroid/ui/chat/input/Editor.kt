@@ -172,65 +172,65 @@ class Editor(
     )
 
     autoCompleteData.toLiveData().observe(activity, Observer {
-        val query = it?.first ?: ""
-        val shouldShowResults = (autoCompleteSettings.auto && query.length >= 3) ||
-                                (autoCompleteSettings.prefix && query.startsWith('@')) ||
-                                (autoCompleteSettings.prefix && query.startsWith('#'))
-        val list = if (shouldShowResults) it?.second.orEmpty() else emptyList()
-        autocompleteAdapter.submitList(list.map {
-          if (it is AutoCompleteItem.UserItem) {
-            val nickName = it.nick
-            val senderColorIndex = IrcUserUtils.senderColor(nickName)
-            val rawInitial = nickName.trimStart('-',
-                                                '_',
-                                                '[',
-                                                ']',
-                                                '{',
-                                                '}',
-                                                '|',
-                                                '`',
-                                                '^',
-                                                '.',
-                                                '\\')
-                               .firstOrNull() ?: nickName.firstOrNull()
-            val initial = rawInitial?.toUpperCase().toString()
-            val senderColor = senderColors[senderColorIndex]
+      val query = it?.first ?: ""
+      val shouldShowResults = (autoCompleteSettings.auto && query.length >= 3) ||
+                              (autoCompleteSettings.prefix && query.startsWith('@')) ||
+                              (autoCompleteSettings.prefix && query.startsWith('#'))
+      val list = if (shouldShowResults) it?.second.orEmpty() else emptyList()
+      autocompleteAdapter.submitList(list.map {
+        if (it is AutoCompleteItem.UserItem) {
+          val nickName = it.nick
+          val senderColorIndex = IrcUserUtils.senderColor(nickName)
+          val rawInitial = nickName.trimStart('-',
+                                              '_',
+                                              '[',
+                                              ']',
+                                              '{',
+                                              '}',
+                                              '|',
+                                              '`',
+                                              '^',
+                                              '.',
+                                              '\\')
+                             .firstOrNull() ?: nickName.firstOrNull()
+          val initial = rawInitial?.toUpperCase().toString()
+          val senderColor = senderColors[senderColorIndex]
 
-            fun formatNick(nick: CharSequence): CharSequence {
-              val spannableString = SpannableString(nick)
-              spannableString.setSpan(
-                ForegroundColorSpan(senderColor),
-                0,
-                nick.length,
-                SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
-              )
-              spannableString.setSpan(
-                StyleSpan(Typeface.BOLD),
-                0,
-                nick.length,
-                SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
-              )
-              return spannableString
-            }
-
-            it.copy(
-              displayNick = formatNick(it.nick),
-              fallbackDrawable = TextDrawable.builder().buildRound(initial, senderColor),
-              modes = when (messageSettings.showPrefix) {
-                MessageSettings.ShowPrefixMode.ALL ->
-                  it.modes
-                else                               ->
-                  it.modes.substring(0, Math.min(it.modes.length, 1))
-              },
-              realname = ircFormatDeserializer.formatString(
-                activity, it.realname.toString(), messageSettings.colorizeMirc
-              )
+          fun formatNick(nick: CharSequence): CharSequence {
+            val spannableString = SpannableString(nick)
+            spannableString.setSpan(
+              ForegroundColorSpan(senderColor),
+              0,
+              nick.length,
+              SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
             )
-          } else {
-            it
+            spannableString.setSpan(
+              StyleSpan(Typeface.BOLD),
+              0,
+              nick.length,
+              SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+            return spannableString
           }
-        })
+
+          it.copy(
+            displayNick = formatNick(it.nick),
+            fallbackDrawable = TextDrawable.builder().buildRound(initial, senderColor),
+            modes = when (messageSettings.showPrefix) {
+              MessageSettings.ShowPrefixMode.ALL ->
+                it.modes
+              else                               ->
+                it.modes.substring(0, Math.min(it.modes.length, 1))
+            },
+            realname = ircFormatDeserializer.formatString(
+              activity, it.realname.toString(), messageSettings.colorizeMirc
+            )
+          )
+        } else {
+          it
+        }
       })
+    })
 
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
       for (autoCompleteList in autoCompleteLists) {
@@ -334,21 +334,19 @@ class Editor(
     }
     TooltipCompat.setTooltipText(clearButton, clearButton.contentDescription)
 
-    chatline.setOnEditorActionListener { _, actionId, event ->
-      if (event.action == KeyEvent.ACTION_DOWN) {
-        when (actionId) {
-          EditorInfo.IME_ACTION_SEND,
-          EditorInfo.IME_ACTION_DONE -> {
-            send()
-            true
-          }
-          else                       -> false
+    chatline.setOnEditorActionListener { _, actionId, event: KeyEvent? ->
+      when (actionId) {
+        EditorInfo.IME_ACTION_SEND,
+        EditorInfo.IME_ACTION_DONE -> {
+          if (event?.action == KeyEvent.ACTION_DOWN) send()
+          true
         }
-      } else false
+        else                       -> false
+      }
     }
 
-    chatline.setOnKeyListener { _, keyCode, event ->
-      if (event.action == KeyEvent.ACTION_DOWN) {
+    chatline.setOnKeyListener { _, keyCode, event: KeyEvent? ->
+      if (event?.action == KeyEvent.ACTION_DOWN) {
         if (event.isCtrlPressed && !event.isAltPressed) when (keyCode) {
           KeyEvent.KEYCODE_B -> {
             formatHandler.toggleBold(chatline.selection)
@@ -385,7 +383,7 @@ class Editor(
           else                          -> false
         }
       } else if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER) {
-        !event.isShiftPressed
+        !(event?.isShiftPressed ?: false)
       } else {
         false
       }
