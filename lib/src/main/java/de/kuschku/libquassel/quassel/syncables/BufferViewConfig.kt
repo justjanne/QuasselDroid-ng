@@ -6,6 +6,7 @@ import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferViewConfig
 import de.kuschku.libquassel.session.SignalProxy
+import de.kuschku.libquassel.util.flag.hasFlag
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -297,7 +298,7 @@ class BufferViewConfig constructor(
       (a?.bufferViewName() ?: "").compareTo((b?.bufferViewName() ?: ""), true)
   }
 
-  fun requestAddBuffer(info: BufferInfo, bufferSyncer: BufferSyncer) {
+  fun insertBufferSorted(info: BufferInfo, bufferSyncer: BufferSyncer) {
     if (!_buffers.contains(info.bufferId)) {
       val position = if (_sortAlphabetically) {
         val sortedBuffers = _buffers.mapNotNull { bufferSyncer.bufferInfo(it)?.bufferName }
@@ -313,8 +314,9 @@ class BufferViewConfig constructor(
     if (_addNewBuffersAutomatically &&
         !_buffers.contains(info.bufferId) &&
         !_temporarilyRemovedBuffers.contains(info.bufferId) &&
-        !_removedBuffers.contains(info.bufferId)) {
-      requestAddBuffer(info, bufferSyncer)
+        !_removedBuffers.contains(info.bufferId) &&
+        !info.type.hasFlag(Buffer_Type.StatusBuffer)) {
+      insertBufferSorted(info, bufferSyncer)
     }
   }
 }

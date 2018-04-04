@@ -126,7 +126,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
           }
           R.id.action_unhide     -> {
             bufferSyncer?.let {
-              bufferViewConfig?.orNull()?.requestAddBuffer(info, bufferSyncer)
+              bufferViewConfig?.orNull()?.insertBufferSorted(info, bufferSyncer)
             }
             true
           }
