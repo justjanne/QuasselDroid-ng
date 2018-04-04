@@ -78,8 +78,9 @@ class NickListFragment : ServiceBoundFragment() {
       it.map {
         val nickName = it.nick
         val senderColorIndex = IrcUserUtils.senderColor(nickName)
-        val initial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
-          .firstOrNull()?.toUpperCase().toString()
+        val rawInitial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
+                           .firstOrNull() ?: nickName.firstOrNull()
+        val initial = rawInitial?.toUpperCase().toString()
         val senderColor = senderColors[senderColorIndex]
 
 

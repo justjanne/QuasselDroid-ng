@@ -149,8 +149,9 @@ class QuasselMessageRenderer @Inject constructor(
         val content = contentFormatter.format(context, message.content.content, highlight)
         val nickName = HostmaskHelper.nick(message.content.sender)
         val senderColorIndex = IrcUserUtils.senderColor(nickName)
-        val initial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
-          .firstOrNull()?.toUpperCase().toString()
+        val rawInitial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
+                           .firstOrNull() ?: nickName.firstOrNull()
+        val initial = rawInitial?.toUpperCase().toString()
         val senderColor = if (Message_Flag.of(message.content.flag).hasFlag(Message_Flag.Self))
           selfColor
         else

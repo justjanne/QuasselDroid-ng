@@ -181,8 +181,19 @@ class Editor(
           if (it is AutoCompleteItem.UserItem) {
             val nickName = it.nick
             val senderColorIndex = IrcUserUtils.senderColor(nickName)
-            val initial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
-              .firstOrNull()?.toUpperCase().toString()
+            val rawInitial = nickName.trimStart('-',
+                                                '_',
+                                                '[',
+                                                ']',
+                                                '{',
+                                                '}',
+                                                '|',
+                                                '`',
+                                                '^',
+                                                '.',
+                                                '\\')
+                               .firstOrNull() ?: nickName.firstOrNull()
+            val initial = rawInitial?.toUpperCase().toString()
             val senderColor = senderColors[senderColorIndex]
 
             fun formatNick(nick: CharSequence): CharSequence {
