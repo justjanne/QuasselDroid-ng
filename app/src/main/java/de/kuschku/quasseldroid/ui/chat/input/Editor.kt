@@ -334,6 +334,19 @@ class Editor(
     }
     TooltipCompat.setTooltipText(clearButton, clearButton.contentDescription)
 
+    chatline.setOnEditorActionListener { _, actionId, event ->
+      if (event.action == KeyEvent.ACTION_DOWN) {
+        when (actionId) {
+          EditorInfo.IME_ACTION_SEND,
+          EditorInfo.IME_ACTION_DONE -> {
+            send()
+            true
+          }
+          else                       -> false
+        }
+      } else false
+    }
+
     chatline.setOnKeyListener { _, keyCode, event ->
       if (event.action == KeyEvent.ACTION_DOWN) {
         if (event.isCtrlPressed && !event.isAltPressed) when (keyCode) {
@@ -371,7 +384,11 @@ class Editor(
           }
           else                          -> false
         }
-      } else false
+      } else if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER) {
+        !event.isShiftPressed
+      } else {
+        false
+      }
     }
   }
 
