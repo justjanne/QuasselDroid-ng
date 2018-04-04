@@ -39,6 +39,12 @@
   <string name="settings_chatlist_hide_inactive_buffers">Inaktive Chats verstecken</string>
   <string name="settings_chatlist_hide_inactive_networks">Inaktive Netzwerke verstecken</string>
 
+  <string name="settings_ignorelist_title">Ignorieren-Liste</string>
+
+  <string name="settings_highlightlist_title">Hervorhebungen</string>
+
+  <string name="settings_aliaslist_title">Aliase</string>
+
   <string name="settings_networkconfig_title">IRC Konfiguration</string>
   <string name="settings_networkconfig_ping_timeout">Erkennung von Ping-Zeitüberschreitungen</string>
   <string name="settings_networkconfig_ping_interval">Ping-Intervall</string>

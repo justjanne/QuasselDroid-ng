@@ -35,8 +35,6 @@
         <TextView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:ellipsize="marquee"
-          android:singleLine="true"
           android:text="@string/settings_networks_title"
           android:textColor="?colorTextPrimary"
           android:textSize="16sp" />
@@ -54,7 +52,6 @@
         android:id="@+id/networks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
         tools:itemCount="2"
         tools:listitem="@layout/settings_item" />
 
@@ -95,8 +92,6 @@
         <TextView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:ellipsize="marquee"
-          android:singleLine="true"
           android:text="@string/settings_identities_title"
           android:textColor="?colorTextPrimary"
           android:textSize="16sp" />
@@ -114,7 +109,6 @@
         android:id="@+id/identities"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
         tools:itemCount="1"
         tools:listitem="@layout/settings_item" />
 
@@ -155,8 +149,6 @@
         <TextView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:ellipsize="marquee"
-          android:singleLine="true"
           android:text="@string/settings_chatlists_title"
           android:textColor="?colorTextPrimary"
           android:textSize="16sp" />
@@ -174,7 +166,6 @@
         android:id="@+id/chatlists"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
         tools:itemCount="2"
         tools:listitem="@layout/settings_item" />
 
@@ -192,7 +183,73 @@
     </LinearLayout>
 
     <LinearLayout
-      android:id="@+id/networkconfig"
+      android:id="@+id/ignorelist"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="?selectableItemBackground"
+      android:focusable="true"
+      android:gravity="center_vertical"
+      android:minHeight="?listPreferredItemHeightSmall"
+      android:paddingEnd="?listPreferredItemPaddingRight"
+      android:paddingLeft="?listPreferredItemPaddingLeft"
+      android:paddingRight="?listPreferredItemPaddingRight"
+      android:paddingStart="?listPreferredItemPaddingLeft">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_filter" />
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp">
+
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/settings_ignorelist_title"
+          android:textColor="?colorTextPrimary"
+          android:textSize="16sp" />
+      </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/highlightlist"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="?selectableItemBackground"
+      android:focusable="true"
+      android:gravity="center_vertical"
+      android:minHeight="?listPreferredItemHeightSmall"
+      android:paddingEnd="?listPreferredItemPaddingRight"
+      android:paddingLeft="?listPreferredItemPaddingLeft"
+      android:paddingRight="?listPreferredItemPaddingRight"
+      android:paddingStart="?listPreferredItemPaddingLeft">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_bell" />
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp">
+
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/settings_highlightlist_title"
+          android:textColor="?colorTextPrimary"
+          android:textSize="16sp" />
+      </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/aliaslist"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="?selectableItemBackground"
@@ -218,8 +275,39 @@
         <TextView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:ellipsize="marquee"
-          android:singleLine="true"
+          android:text="@string/settings_aliaslist_title"
+          android:textColor="?colorTextPrimary"
+          android:textSize="16sp" />
+      </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/networkconfig"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="?selectableItemBackground"
+      android:focusable="true"
+      android:gravity="center_vertical"
+      android:minHeight="?listPreferredItemHeightSmall"
+      android:paddingEnd="?listPreferredItemPaddingRight"
+      android:paddingLeft="?listPreferredItemPaddingLeft"
+      android:paddingRight="?listPreferredItemPaddingRight"
+      android:paddingStart="?listPreferredItemPaddingLeft">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_settings" />
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp">
+
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
           android:text="@string/settings_networkconfig_title"
           android:textColor="?colorTextPrimary"
           android:textSize="16sp" />

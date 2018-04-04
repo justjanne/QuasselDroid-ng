@@ -33,8 +33,17 @@ class CoreSettingsFragment : ServiceBoundFragment() {
   @BindView(R.id.chatlists)
   lateinit var chatlists: RecyclerView
 
+  @BindView(R.id.ignorelist)
+  lateinit var ignorelist: View
+
+  @BindView(R.id.highlightlist)
+  lateinit var highlightlist: View
+
+  @BindView(R.id.aliaslist)
+  lateinit var aliaslist: View
+
   @BindView(R.id.networkconfig)
-  lateinit var networkConfig: View
+  lateinit var networkconfig: View
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
@@ -108,7 +117,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
       chatListAdapter.submitList(it.orEmpty())
     })
 
-    networkConfig.setOnClickListener {
+    networkconfig.setOnClickListener {
       startActivity(Intent(requireContext(), NetworkConfigActivity::class.java))
     }
 
