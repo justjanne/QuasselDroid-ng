@@ -17,7 +17,12 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.quassel.syncables.IrcChannel
+import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.IrcUserUtils
+import de.kuschku.libquassel.util.Optional
+import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
@@ -30,14 +35,15 @@ import de.kuschku.quasseldroid.util.ui.ColorChooserDialog
 import de.kuschku.quasseldroid.util.ui.EditTextSelectionChange
 import de.kuschku.quasseldroid.util.ui.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
+import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import java.util.concurrent.TimeUnit
 
 class Editor(
   // Contexts
   activity: AppCompatActivity,
   // LiveData
+  private val autoCompleteDataRaw: Observable<Triple<Optional<ISession>, Int, Pair<String, IntRange>>>,
   private val autoCompleteData: Observable<Pair<String, List<AutoCompleteItem>>>,
   lastWordContainer: BehaviorSubject<Observable<Pair<String, IntRange>>>,
   // Views
@@ -165,8 +171,7 @@ class Editor(
       formatHandler::autoComplete
     )
 
-    autoCompleteData.debounce(300, TimeUnit.MILLISECONDS)
-      .toLiveData().observe(activity, Observer {
+    autoCompleteData.toLiveData().observe(activity, Observer {
         val query = it?.first ?: ""
         val shouldShowResults = (autoCompleteSettings.auto && query.length >= 3) ||
                                 (autoCompleteSettings.prefix && query.startsWith('@')) ||
@@ -452,12 +457,79 @@ class Editor(
     chatline.setSelection(selectionStart, selectionEnd)
   }
 
+  private fun autoCompleteDataFull(): List<AutoCompleteItem> {
+    return autoCompleteDataRaw.value?.let { (sessionOptional, id, lastWord) ->
+      val session = sessionOptional.orNull()
+      val bufferInfo = session?.bufferSyncer?.bufferInfo(id)
+      session?.networks?.let { networks ->
+        session.bufferSyncer?.bufferInfos()?.let { infos ->
+          if (bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
+            val network = networks[bufferInfo.networkId]
+            network?.ircChannel(
+              bufferInfo.bufferName
+            )?.let { ircChannel ->
+              val users = ircChannel.ircUsers()
+              val buffers = infos
+                .filter {
+                  it.type.toInt() == Buffer_Type.ChannelBuffer.toInt()
+                }.mapNotNull { info ->
+                  networks[info.networkId]?.let { info to it }
+                }.map { (info, network) ->
+                  val channel = network.ircChannel(info.bufferName) ?: IrcChannel.NULL
+                  AutoCompleteItem.ChannelItem(
+                    info = info,
+                    network = network.networkInfo(),
+                    bufferStatus = when (channel) {
+                      IrcChannel.NULL -> BufferStatus.OFFLINE
+                      else            -> BufferStatus.ONLINE
+                    },
+                    description = channel.topic()
+                  )
+                }
+              val nicks = users.map { user ->
+                val userModes = ircChannel.userModes(user)
+                val prefixModes = network.prefixModes()
+
+                val lowestMode = userModes.mapNotNull(prefixModes::indexOf).min()
+                                 ?: prefixModes.size
+
+                AutoCompleteItem.UserItem(
+                  user.nick(),
+                  network.modesToPrefixes(userModes),
+                  lowestMode,
+                  user.realName(),
+                  user.isAway(),
+                  network.support("CASEMAPPING"),
+                  Regex("[us]id(\\d+)").matchEntire(user.user())?.groupValues?.lastOrNull()?.let {
+                    "https://www.irccloud.com/avatar-redirect/$it"
+                  }
+                )
+              }
+
+              val ignoredStartingCharacters = charArrayOf(
+                '-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\', '@'
+              )
+
+              (nicks + buffers).filter {
+                it.name.trimStart(*ignoredStartingCharacters)
+                  .startsWith(
+                    lastWord.first.trimStart(*ignoredStartingCharacters),
+                    ignoreCase = true
+                  )
+              }.sorted()
+            }
+          } else null
+        }
+      }
+    } ?: emptyList()
+  }
+
   private fun autoComplete(reverse: Boolean = false) {
     val originalWord = lastWord.value
 
     val previous = autocompletionState
     if (!originalWord.second.isEmpty()) {
-      val autoCompletedWords = autoCompleteData.value?.second.orEmpty()
+      val autoCompletedWords = autoCompleteDataFull()
       if (previous != null && lastWord.value.first == previous.originalWord && lastWord.value.second.start == previous.range.start) {
         val previousIndex = autoCompletedWords.indexOf(previous.completion)
         val autoCompletedWord = if (previousIndex != -1) {

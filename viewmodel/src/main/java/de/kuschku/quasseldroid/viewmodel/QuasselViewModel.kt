@@ -214,100 +214,120 @@ class QuasselViewModel : ViewModel() {
 
   val lastWord = BehaviorSubject.create<Observable<Pair<String, IntRange>>>()
 
-  val autoCompleteData: Observable<Pair<String, List<AutoCompleteItem>>> =
+  val rawAutoCompleteData: Observable<Triple<Optional<ISession>, Int, Pair<String, IntRange>>> =
     combineLatest(session, buffer, lastWord).switchMap { (sessionOptional, id, lastWordWrapper) ->
       lastWordWrapper
         .distinctUntilChanged()
-        .switchMap { lastWord ->
-          val session = sessionOptional.orNull()
-          val bufferSyncer = session?.bufferSyncer
-          val bufferInfo = bufferSyncer?.bufferInfo(id)
-          if (bufferSyncer != null) {
-            session.liveNetworks().switchMap { networks ->
-              bufferSyncer.liveBufferInfos().switchMap { infos ->
-                if (bufferInfo?.type?.hasFlag(
-                    Buffer_Type.ChannelBuffer
-                  ) == true) {
-                  val network = networks[bufferInfo.networkId]
-                  val ircChannel = network?.ircChannel(
-                    bufferInfo.bufferName
-                  )
-                  if (ircChannel != null) {
-                    ircChannel.liveIrcUsers().switchMap { users ->
-                      val buffers: List<Observable<AutoCompleteItem.ChannelItem>?> = infos.values
-                        .filter {
-                          it.type.toInt() == Buffer_Type.ChannelBuffer.toInt()
-                        }.mapNotNull { info ->
-                          networks[info.networkId]?.let { info to it }
-                        }.map<Pair<BufferInfo, Network>, Observable<AutoCompleteItem.ChannelItem>?> { (info, network) ->
-                          network.liveIrcChannel(
-                            info.bufferName
-                          ).switchMap { channel ->
-                            channel.liveUpdates().map {
-                              AutoCompleteItem.ChannelItem(
-                                info = info,
-                                network = network.networkInfo(),
-                                bufferStatus = when (it) {
-                                  IrcChannel.NULL -> BufferStatus.OFFLINE
-                                  else            -> BufferStatus.ONLINE
-                                },
-                                description = it.topic()
-                              )
-                            }
-                          }
-                        }
-                      val nicks = users.map<IrcUser, Observable<AutoCompleteItem.UserItem>?> {
-                        it.updates().map { user ->
-                          val userModes = ircChannel.userModes(user)
-                          val prefixModes = network.prefixModes()
+        .map { lastWord ->
+          Triple(sessionOptional, id, lastWord)
+        }
+    }
 
-                          val lowestMode = userModes.mapNotNull(prefixModes::indexOf).min()
-                                           ?: prefixModes.size
-
-                          AutoCompleteItem.UserItem(
-                            user.nick(),
-                            network.modesToPrefixes(userModes),
-                            lowestMode,
-                            user.realName(),
-                            user.isAway(),
-                            network.support("CASEMAPPING"),
-                            Regex("[us]id(\\d+)").matchEntire(user.user())?.groupValues?.lastOrNull()?.let {
-                              "https://www.irccloud.com/avatar-redirect/$it"
-                            }
+  var time = 0L
+  var previous: Any? = null
+  val autoCompleteData = rawAutoCompleteData
+    .distinctUntilChanged()
+    .debounce(300, TimeUnit.MILLISECONDS)
+    .map {
+      val now = System.currentTimeMillis()
+      val difference = now - time
+      if (difference < 300) {
+        println("Updated too early!: $difference")
+      }
+      time = now
+      if (it == previous) {
+        println("what the fuck")
+      }
+      previous = it
+      it
+    }
+    .switchMap { (sessionOptional, id, lastWord) ->
+      val session = sessionOptional.orNull()
+      val bufferSyncer = session?.bufferSyncer
+      val bufferInfo = bufferSyncer?.bufferInfo(id)
+      if (bufferSyncer != null) {
+        session.liveNetworks().switchMap { networks ->
+          bufferSyncer.liveBufferInfos().switchMap { infos ->
+            if (bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
+              val network = networks[bufferInfo.networkId]
+              val ircChannel = network?.ircChannel(
+                bufferInfo.bufferName
+              )
+              if (ircChannel != null) {
+                ircChannel.liveIrcUsers().switchMap { users ->
+                  val buffers: List<Observable<AutoCompleteItem.ChannelItem>?> = infos.values
+                    .filter {
+                      it.type.toInt() == Buffer_Type.ChannelBuffer.toInt()
+                    }.mapNotNull { info ->
+                      networks[info.networkId]?.let { info to it }
+                    }.map { (info, network) ->
+                      network.liveIrcChannel(
+                        info.bufferName
+                      ).switchMap { channel ->
+                        channel.liveUpdates().map {
+                          AutoCompleteItem.ChannelItem(
+                            info = info,
+                            network = network.networkInfo(),
+                            bufferStatus = when (it) {
+                              IrcChannel.NULL -> BufferStatus.OFFLINE
+                              else            -> BufferStatus.ONLINE
+                            },
+                            description = it.topic()
                           )
                         }
                       }
-
-                      combineLatest<AutoCompleteItem>(nicks + buffers)
-                        .map { list ->
-                          val ignoredStartingCharacters = charArrayOf(
-                            '-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\', '@'
-                          )
-
-                          Pair(
-                            lastWord.first,
-                            list.filter {
-                              it.name.trimStart(*ignoredStartingCharacters)
-                                .startsWith(
-                                  lastWord.first.trimStart(*ignoredStartingCharacters),
-                                  ignoreCase = true
-                                )
-                            }.sorted()
-                          )
-                        }
                     }
-                  } else {
-                    Observable.just(Pair(lastWord.first, emptyList()))
+                  val nicks = users.map<IrcUser, Observable<AutoCompleteItem.UserItem>?> {
+                    it.updates().map { user ->
+                      val userModes = ircChannel.userModes(user)
+                      val prefixModes = network.prefixModes()
+
+                      val lowestMode = userModes.mapNotNull(prefixModes::indexOf).min()
+                                       ?: prefixModes.size
+
+                      AutoCompleteItem.UserItem(
+                        user.nick(),
+                        network.modesToPrefixes(userModes),
+                        lowestMode,
+                        user.realName(),
+                        user.isAway(),
+                        network.support("CASEMAPPING"),
+                        Regex("[us]id(\\d+)").matchEntire(user.user())?.groupValues?.lastOrNull()?.let {
+                          "https://www.irccloud.com/avatar-redirect/$it"
+                        }
+                      )
+                    }
                   }
-                } else {
-                  Observable.just(Pair(lastWord.first, emptyList()))
+
+                  combineLatest<AutoCompleteItem>(nicks + buffers)
+                    .map { list ->
+                      val ignoredStartingCharacters = charArrayOf(
+                        '-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\', '@'
+                      )
+
+                      Pair(
+                        lastWord.first,
+                        list.filter {
+                          it.name.trimStart(*ignoredStartingCharacters)
+                            .startsWith(
+                              lastWord.first.trimStart(*ignoredStartingCharacters),
+                              ignoreCase = true
+                            )
+                        }.sorted()
+                      )
+                    }
                 }
+              } else {
+                Observable.just(Pair(lastWord.first, emptyList()))
               }
+            } else {
+              Observable.just(Pair(lastWord.first, emptyList()))
             }
-          } else {
-            Observable.just(Pair(lastWord.first, emptyList()))
           }
         }
+      } else {
+        Observable.just(Pair(lastWord.first, emptyList()))
+      }
     }
 
   val bufferViewConfigs = bufferViewManager.mapSwitchMap { manager ->

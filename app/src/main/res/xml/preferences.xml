@@ -35,7 +35,7 @@
       android:key="@string/preference_textsize_key"
       android:max="24"
       android:title="@string/preference_textsize_title"
-      robobunny:min="12" />
+      robobunny:min="6" />
 
     <SwitchPreference
       android:defaultValue="false"
