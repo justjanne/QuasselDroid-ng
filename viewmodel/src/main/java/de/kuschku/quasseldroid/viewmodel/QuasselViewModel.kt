@@ -228,19 +228,6 @@ class QuasselViewModel : ViewModel() {
   val autoCompleteData = rawAutoCompleteData
     .distinctUntilChanged()
     .debounce(300, TimeUnit.MILLISECONDS)
-    .map {
-      val now = System.currentTimeMillis()
-      val difference = now - time
-      if (difference < 300) {
-        println("Updated too early!: $difference")
-      }
-      time = now
-      if (it == previous) {
-        println("what the fuck")
-      }
-      previous = it
-      it
-    }
     .switchMap { (sessionOptional, id, lastWord) ->
       val session = sessionOptional.orNull()
       val bufferSyncer = session?.bufferSyncer
