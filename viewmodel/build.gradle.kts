@@ -20,7 +20,7 @@ dependencies {
   implementation(kotlin("stdlib", "1.2.31"))
 
   // App Compat
-  withVersion("27.1.0") {
+  withVersion("27.1.1") {
     implementation("com.android.support", "appcompat-v7", version)
   }
 

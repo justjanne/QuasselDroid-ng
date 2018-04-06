@@ -26,12 +26,12 @@ dependencies {
   implementation(kotlin("stdlib", "1.2.31"))
 
   // App Compat
-  withVersion("27.1.0") {
+  withVersion("27.1.1") {
     implementation("com.android.support", "appcompat-v7", version)
   }
 
   // App Arch Persistence
-  withVersion("1.1.0-beta1") {
+  withVersion("1.1.0-beta2") {
     implementation("android.arch.persistence.room", "runtime", version)
     implementation("android.arch.persistence.room", "rxjava2", version)
     kapt("android.arch.persistence.room", "compiler", version)
@@ -39,7 +39,7 @@ dependencies {
   }
 
   // App Arch Paging
-  implementation("android.arch.paging", "runtime", "1.0.0-alpha7") {
+  implementation("android.arch.paging", "runtime", "1.0.0-beta1") {
     exclude(group = "junit", module = "junit")
   }
 

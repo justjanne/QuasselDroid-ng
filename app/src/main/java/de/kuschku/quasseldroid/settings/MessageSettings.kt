@@ -8,7 +8,8 @@ data class MessageSettings(
   val textSize: Int = 14,
   val showSeconds: Boolean = false,
   val use24hClock: Boolean = true,
-  val showHostmask: Boolean = false,
+  val showHostmaskActions: Boolean = false,
+  val showHostmaskPlain: Boolean = false,
   val nicksOnNewLine: Boolean = false,
   val timeAtEnd: Boolean = false,
   val showAvatars: Boolean = false

@@ -43,8 +43,11 @@
   <string name="preference_show_prefix_entry_highest">Höchsten Modus</string>
   <string name="preference_show_prefix_entry_none">Keine</string>
 
-  <string name="preference_hostmask_title">Hostmaske</string>
-  <string name="preference_hostmask_summary">Zeigt die gesame Spitzname!Ident@Host Information an</string>
+  <string name="preference_hostmask_actions_title">Hostmaske</string>
+  <string name="preference_hostmask_actions_summary">Zeigt Ident und Host in Betreten/Verlassen-Nachrichten</string>
+
+  <string name="preference_hostmask_plain_title">Hostmaske</string>
+  <string name="preference_hostmask_plain_summary">Zeigt Ident und Host in normalen Nachrichten</string>
 
   <string name="preference_nicks_on_new_line_title">Separate Spitznamen</string>
   <string name="preference_nicks_on_new_line_summary">Zeigt Spitznamen in einer eigenen Zeile an</string>

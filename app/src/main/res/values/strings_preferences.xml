@@ -99,9 +99,13 @@
     <item>NONE</item>
   </string-array>
 
-  <string name="preference_hostmask_key" translatable="false">hostmask</string>
-  <string name="preference_hostmask_title">Show Hostmask</string>
-  <string name="preference_hostmask_summary">Display the full nick!ident@host in messages</string>
+  <string name="preference_hostmask_actions_key" translatable="false">hostmaskactions_</string>
+  <string name="preference_hostmask_actions_title">Show Hostmask</string>
+  <string name="preference_hostmask_actions_summary">Display the full nick!ident@host in join/part/quit messages</string>
+
+  <string name="preference_hostmask_plain_key" translatable="false">hostmask_plain</string>
+  <string name="preference_hostmask_plain_title">Show Hostmask</string>
+  <string name="preference_hostmask_plain_summary">Display the full nick!ident@host in normal messages</string>
 
   <string name="preference_nicks_on_new_line_key" translatable="false">nicks_on_new_line</string>
   <string name="preference_nicks_on_new_line_title">Separate Nicknames</string>

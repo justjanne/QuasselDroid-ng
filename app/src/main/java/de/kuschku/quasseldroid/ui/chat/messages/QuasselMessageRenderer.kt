@@ -144,7 +144,12 @@ class QuasselMessageRenderer @Inject constructor(
         val nick = SpanFormatter.format(
           "%s%s",
           formatPrefix(message.content.senderPrefixes, highlight),
-          formatNick(message.content.sender, self, highlight, false)
+          formatNick(
+            message.content.sender,
+            self,
+            highlight,
+            messageSettings.showHostmaskPlain && messageSettings.nicksOnNewLine
+          )
         )
         val content = contentFormatter.format(context, message.content.content, highlight)
         val nickName = HostmaskHelper.nick(message.content.sender)
@@ -240,7 +245,7 @@ class QuasselMessageRenderer @Inject constructor(
         combined = SpanFormatter.format(
           context.getString(R.string.message_format_join),
           formatPrefix(message.content.senderPrefixes, highlight),
-          formatNick(message.content.sender, self, highlight, true),
+          formatNick(message.content.sender, self, highlight, messageSettings.showHostmaskActions),
           message.content.content
         ),
         isMarkerLine = message.isMarkerLine,
@@ -254,13 +259,16 @@ class QuasselMessageRenderer @Inject constructor(
           SpanFormatter.format(
             context.getString(R.string.message_format_part_1),
             formatPrefix(message.content.senderPrefixes, highlight),
-            formatNick(message.content.sender, self, highlight, true)
+            formatNick(message.content.sender, self, highlight, messageSettings.showHostmaskActions)
           )
         } else {
           SpanFormatter.format(
             context.getString(R.string.message_format_part_2),
             formatPrefix(message.content.senderPrefixes, highlight),
-            formatNick(message.content.sender, self, highlight, true),
+            formatNick(message.content.sender,
+                       self,
+                       highlight,
+                       messageSettings.showHostmaskActions),
             contentFormatter.format(context, message.content.content, highlight)
           )
         },
@@ -275,13 +283,16 @@ class QuasselMessageRenderer @Inject constructor(
           SpanFormatter.format(
             context.getString(R.string.message_format_quit_1),
             formatPrefix(message.content.senderPrefixes, highlight),
-            formatNick(message.content.sender, self, highlight, true)
+            formatNick(message.content.sender, self, highlight, messageSettings.showHostmaskActions)
           )
         } else {
           SpanFormatter.format(
             context.getString(R.string.message_format_quit_2),
             formatPrefix(message.content.senderPrefixes, highlight),
-            formatNick(message.content.sender, self, highlight, true),
+            formatNick(message.content.sender,
+                       self,
+                       highlight,
+                       messageSettings.showHostmaskActions),
             contentFormatter.format(context, message.content.content, highlight)
           )
         },
@@ -299,14 +310,20 @@ class QuasselMessageRenderer @Inject constructor(
               context.getString(R.string.message_format_kick_1),
               formatNick(user, false, highlight, false),
               formatPrefix(message.content.senderPrefixes, highlight),
-              formatNick(message.content.sender, self, highlight, true)
+              formatNick(message.content.sender,
+                         self,
+                         highlight,
+                         messageSettings.showHostmaskActions)
             )
           } else {
             SpanFormatter.format(
               context.getString(R.string.message_format_kick_2),
               formatNick(user, false, highlight, false),
               formatPrefix(message.content.senderPrefixes, highlight),
-              formatNick(message.content.sender, self, highlight, true),
+              formatNick(message.content.sender,
+                         self,
+                         highlight,
+                         messageSettings.showHostmaskActions),
               contentFormatter.format(context, reason, highlight)
             )
           },
@@ -325,14 +342,20 @@ class QuasselMessageRenderer @Inject constructor(
               context.getString(R.string.message_format_kill_1),
               formatNick(user, false, highlight, false),
               formatPrefix(message.content.senderPrefixes, highlight),
-              formatNick(message.content.sender, self, highlight, true)
+              formatNick(message.content.sender,
+                         self,
+                         highlight,
+                         messageSettings.showHostmaskActions)
             )
           } else {
             SpanFormatter.format(
               context.getString(R.string.message_format_kill_2),
               formatNick(user, false, highlight, false),
               formatPrefix(message.content.senderPrefixes, highlight),
-              formatNick(message.content.sender, self, highlight, true),
+              formatNick(message.content.sender,
+                         self,
+                         highlight,
+                         messageSettings.showHostmaskActions),
               contentFormatter.format(context, reason, highlight)
             )
           },
@@ -406,7 +429,7 @@ class QuasselMessageRenderer @Inject constructor(
           "[%d] %s%s: %s",
           message.content.type,
           formatPrefix(message.content.senderPrefixes, highlight),
-          formatNick(message.content.sender, self, highlight, true),
+          formatNick(message.content.sender, self, highlight, messageSettings.showHostmaskActions),
           message.content.content
         ),
         isMarkerLine = message.isMarkerLine,
@@ -452,11 +475,11 @@ class QuasselMessageRenderer @Inject constructor(
                          highlight: Boolean, showHostmask: Boolean) =
     when (messageSettings.colorizeNicknames) {
       ColorizeNicknamesMode.ALL          ->
-        formatNickImpl(sender, !highlight, messageSettings.showHostmask && showHostmask)
+        formatNickImpl(sender, !highlight, showHostmask)
       ColorizeNicknamesMode.ALL_BUT_MINE ->
-        formatNickImpl(sender, !self && !highlight, messageSettings.showHostmask && showHostmask)
+        formatNickImpl(sender, !self && !highlight, showHostmask)
       ColorizeNicknamesMode.NONE         ->
-        formatNickImpl(sender, false, messageSettings.showHostmask && showHostmask)
+        formatNickImpl(sender, false, showHostmask)
     }
 
   private fun formatPrefix(prefix: String,

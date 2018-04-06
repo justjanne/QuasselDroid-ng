@@ -62,9 +62,13 @@ object Settings {
         context.getString(R.string.preference_colorize_mirc_key),
         MessageSettings.DEFAULT.colorizeMirc
       ),
-      showHostmask = getBoolean(
-        context.getString(R.string.preference_hostmask_key),
-        MessageSettings.DEFAULT.showHostmask
+      showHostmaskActions = getBoolean(
+        context.getString(R.string.preference_hostmask_actions_key),
+        MessageSettings.DEFAULT.showHostmaskActions
+      ),
+      showHostmaskPlain = getBoolean(
+        context.getString(R.string.preference_hostmask_plain_key),
+        MessageSettings.DEFAULT.showHostmaskPlain
       ),
       nicksOnNewLine = getBoolean(
         context.getString(R.string.preference_nicks_on_new_line_key),
