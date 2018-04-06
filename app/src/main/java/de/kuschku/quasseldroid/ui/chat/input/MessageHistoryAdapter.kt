@@ -11,9 +11,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 
-class MessageHistoryAdapter(
-  private val clickListener: ((CharSequence) -> Unit)? = null
-) : ListAdapter<CharSequence, MessageHistoryAdapter.MessageViewHolder>(
+class MessageHistoryAdapter : ListAdapter<CharSequence, MessageHistoryAdapter.MessageViewHolder>(
   object : DiffUtil.ItemCallback<CharSequence>() {
     override fun areItemsTheSame(oldItem: CharSequence?, newItem: CharSequence?) =
       oldItem === newItem
@@ -21,6 +19,12 @@ class MessageHistoryAdapter(
     override fun areContentsTheSame(oldItem: CharSequence?, newItem: CharSequence?) =
       oldItem == newItem
   }) {
+  private var clickListener: ((CharSequence) -> Unit)? = null
+
+  fun setOnItemClickListener(listener: (CharSequence) -> Unit) {
+    this.clickListener = listener
+  }
+
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
     MessageViewHolder(
       LayoutInflater.from(parent.context).inflate(R.layout.widget_history_message, parent, false),

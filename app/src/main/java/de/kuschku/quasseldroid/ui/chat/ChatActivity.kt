@@ -115,9 +115,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     editor = Editor(
       this,
-      viewModel.rawAutoCompleteData,
-      viewModel.autoCompleteData,
-      viewModel.lastWord,
+      viewModel,
       findViewById(R.id.chatline),
       findViewById(R.id.send),
       findViewById(R.id.tab_complete),
@@ -129,35 +127,38 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       ircFormatDeserializer,
       appearanceSettings,
       autoCompleteSettings,
-      messageSettings,
-      { lines ->
-        viewModel.session { sessionOptional ->
-          val session = sessionOptional.orNull()
-          viewModel.buffer { bufferId ->
-            session?.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
-              val output = mutableListOf<IAliasManager.Command>()
-              for ((stripped, formatted) in lines) {
-                viewModel.addRecentlySentMessage(stripped)
-                session.aliasManager?.processInput(bufferInfo, formatted, output)
-              }
-              for (command in output) {
-                session.rpcHandler?.sendInput(command.buffer, command.message)
-              }
+      messageSettings
+    )
+
+    editor.setOnSendListener { lines ->
+      viewModel.session { sessionOptional ->
+        val session = sessionOptional.orNull()
+        viewModel.buffer { bufferId ->
+          session?.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
+            val output = mutableListOf<IAliasManager.Command>()
+            for ((stripped, formatted) in lines) {
+              viewModel.addRecentlySentMessage(stripped)
+              session.aliasManager?.processInput(bufferInfo, formatted, output)
+            }
+            for (command in output) {
+              session.rpcHandler?.sendInput(command.buffer, command.message)
             }
           }
         }
-      },
-      { expanded ->
-        historyPanel.panelState = if (expanded)
-          SlidingUpPanelLayout.PanelState.EXPANDED
-        else
-          SlidingUpPanelLayout.PanelState.COLLAPSED
       }
-    )
+    }
+
+    editor.setOnPanelStateListener { expanded ->
+      historyPanel.panelState = if (expanded)
+        SlidingUpPanelLayout.PanelState.EXPANDED
+      else
+        SlidingUpPanelLayout.PanelState.COLLAPSED
+    }
 
     msgHistory.itemAnimator = DefaultItemAnimator()
     msgHistory.layoutManager = LinearLayoutManager(this)
-    val messageHistoryAdapter = MessageHistoryAdapter { text ->
+    val messageHistoryAdapter = MessageHistoryAdapter()
+    messageHistoryAdapter.setOnItemClickListener { text ->
       editor.formatHandler.replace(text)
       historyPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
     }

@@ -23,7 +23,7 @@
     android:paddingStart="@dimen/message_horizontal"
     android:paddingTop="@dimen/message_vertical_daychange">
 
-    <de.kuschku.quasseldroid.ui.chat.messages.RipplePassthroughTextView
+    <de.kuschku.quasseldroid.util.ui.RipplePassthroughTextView
       android:id="@+id/combined"
       android:layout_width="0dip"
       android:layout_height="wrap_content"

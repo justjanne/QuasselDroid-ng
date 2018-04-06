@@ -19,9 +19,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
-import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.IrcUserUtils
-import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
@@ -34,18 +32,16 @@ import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.ui.ColorChooserDialog
 import de.kuschku.quasseldroid.util.ui.EditTextSelectionChange
 import de.kuschku.quasseldroid.util.ui.TextDrawable
+import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
-import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
 class Editor(
   // Contexts
   activity: AppCompatActivity,
   // LiveData
-  private val autoCompleteDataRaw: Observable<Triple<Optional<ISession>, Int, Pair<String, IntRange>>>,
-  private val autoCompleteData: Observable<Pair<String, List<AutoCompleteItem>>>,
-  lastWordContainer: BehaviorSubject<Observable<Pair<String, IntRange>>>,
+  private val viewModel: QuasselViewModel,
   // Views
   val chatline: EditTextSelectionChange,
   send: AppCompatImageButton,
@@ -57,14 +53,23 @@ class Editor(
   // Settings
   private val appearanceSettings: AppearanceSettings,
   private val autoCompleteSettings: AutoCompleteSettings,
-  private val messageSettings: MessageSettings,
+  private val messageSettings: MessageSettings
   // Listeners
-  private val sendCallback: (Sequence<Pair<CharSequence, String>>) -> Unit,
-  private val panelStateCallback: (Boolean) -> Unit
 ) : ActionMenuView.OnMenuItemClickListener, Toolbar.OnMenuItemClickListener {
+  private var sendListener: ((Sequence<Pair<CharSequence, String>>) -> Unit)? = null
+  private var panelStateListener: ((Boolean) -> Unit)? = null
+
+  fun setOnSendListener(listener: (Sequence<Pair<CharSequence, String>>) -> Unit) {
+    this.sendListener = listener
+  }
+
+  fun setOnPanelStateListener(listener: (Boolean) -> Unit) {
+    this.panelStateListener = listener
+  }
+
   override fun onMenuItemClick(item: MenuItem?) = when (item?.itemId) {
     R.id.action_input_history -> {
-      panelStateCallback(true)
+      panelStateListener?.invoke(true)
       true
     }
     else                      -> false
@@ -171,7 +176,7 @@ class Editor(
       formatHandler::autoComplete
     )
 
-    autoCompleteData.toLiveData().observe(activity, Observer {
+    viewModel.autoCompleteData.toLiveData().observe(activity, Observer {
       val query = it?.first ?: ""
       val shouldShowResults = (autoCompleteSettings.auto && query.length >= 3) ||
                               (autoCompleteSettings.prefix && query.startsWith('@')) ||
@@ -262,7 +267,7 @@ class Editor(
       autoComplete()
     }
 
-    lastWordContainer.onNext(lastWord)
+    viewModel.lastWord.onNext(lastWord)
 
     activity.menuInflater.inflate(R.menu.editor, formattingToolbar.menu)
     formattingToolbar.menu.retint(activity)
@@ -465,7 +470,7 @@ class Editor(
 
   private fun send() {
     if (rawText.isNotBlank()) {
-      sendCallback(strippedText.lineSequence().zip(formattedText))
+      sendListener?.invoke(strippedText.lineSequence().zip(formattedText))
     }
     chatline.setText("")
   }
@@ -484,7 +489,7 @@ class Editor(
   }
 
   private fun autoCompleteDataFull(): List<AutoCompleteItem> {
-    return autoCompleteDataRaw.value?.let { (sessionOptional, id, lastWord) ->
+    return viewModel.rawAutoCompleteData.value?.let { (sessionOptional, id, lastWord) ->
       val session = sessionOptional.orNull()
       val bufferInfo = session?.bufferSyncer?.bufferInfo(id)
       session?.networks?.let { networks ->

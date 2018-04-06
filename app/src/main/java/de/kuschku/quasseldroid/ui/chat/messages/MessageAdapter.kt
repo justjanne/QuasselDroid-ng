@@ -24,13 +24,10 @@ import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.util.helper.getOrPut
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
+import javax.inject.Inject
 
-class MessageAdapter(
-  private val messageRenderer: MessageRenderer,
-  private val clickListener: ((FormattedMessage) -> Unit)? = null,
-  private val selectionListener: ((FormattedMessage) -> Unit)? = null,
-  private val expansionListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null,
-  private val urlLongClickListener: ((TextView, String) -> Boolean)? = null
+class MessageAdapter @Inject constructor(
+  private val messageRenderer: MessageRenderer
 ) : PagedListAdapter<DisplayMessage, MessageAdapter.QuasselMessageViewHolder>(
   object : DiffUtil.ItemCallback<DisplayMessage>() {
     override fun areItemsTheSame(oldItem: DisplayMessage, newItem: DisplayMessage) =
@@ -40,6 +37,26 @@ class MessageAdapter(
       oldItem == newItem
   }) {
   private val movementMethod = BetterLinkMovementMethod.newInstance()
+  private var clickListener: ((FormattedMessage) -> Unit)? = null
+  private var selectionListener: ((FormattedMessage) -> Unit)? = null
+  private var expansionListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null
+  private var urlLongClickListener: ((TextView, String) -> Boolean)? = null
+
+  fun setOnClickListener(listener: (FormattedMessage) -> Unit) {
+    this.clickListener = listener
+  }
+
+  fun setOnSelectionListener(listener: (FormattedMessage) -> Unit) {
+    this.selectionListener = listener
+  }
+
+  fun setOnExpansionListener(listener: (QuasselDatabase.DatabaseMessage) -> Unit) {
+    this.expansionListener = listener
+  }
+
+  fun setOnUrlLongClickListener(listener: (TextView, String) -> Boolean) {
+    this.urlLongClickListener = listener
+  }
 
   init {
     movementMethod.setOnLinkLongClickListener { textView, url ->

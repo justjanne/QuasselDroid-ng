@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid.ui.chat.messages
+package de.kuschku.quasseldroid.util.ui
 
 import android.content.Context
 import android.text.Spannable

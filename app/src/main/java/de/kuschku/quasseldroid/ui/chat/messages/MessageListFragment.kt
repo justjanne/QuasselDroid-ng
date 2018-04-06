@@ -63,10 +63,9 @@ class MessageListFragment : ServiceBoundFragment() {
   lateinit var database: QuasselDatabase
 
   @Inject
-  lateinit var messageRenderer: QuasselMessageRenderer
+  lateinit var adapter: MessageAdapter
 
   private lateinit var linearLayoutManager: LinearLayoutManager
-  private lateinit var adapter: MessageAdapter
 
   private var lastBuffer: BufferId? = null
   private var previousMessageId: MsgId? = null
@@ -176,62 +175,59 @@ class MessageListFragment : ServiceBoundFragment() {
     linearLayoutManager.reverseLayout = true
 
     var linkMenu: PopupMenu? = null
-    adapter = MessageAdapter(
-      messageRenderer,
-      { msg ->
-        if (actionMode != null) {
-          if (!viewModel.selectedMessagesToggle(msg.id, msg)) {
-            actionMode?.finish()
-          }
-        }
-      },
-      { msg ->
-        if (actionMode == null) {
-          activity?.startActionMode(actionModeCallback)
-        }
+    adapter.setOnClickListener { msg ->
+      if (actionMode != null) {
         if (!viewModel.selectedMessagesToggle(msg.id, msg)) {
           actionMode?.finish()
         }
-      },
-      null,
-      { textView, url ->
-        if (linkMenu == null) {
-          linkMenu = PopupMenu(requireContext(), textView).also { menu ->
-            linkMenu?.dismiss()
-            menu.menuInflater.inflate(R.menu.context_link, menu.menu)
-            menu.setOnMenuItemClickListener {
-              when (it.itemId) {
-                R.id.action_copy  -> {
-                  val clipboard = requireContext().systemService<ClipboardManager>()
-                  val clip = ClipData.newPlainText(null, url)
-                  clipboard.primaryClip = clip
-                  menu.dismiss()
-                  linkMenu = null
-                  true
-                }
-                R.id.action_share -> {
-                  val intent = Intent(Intent.ACTION_SEND)
-                  intent.type = "text/plain"
-                  intent.putExtra(Intent.EXTRA_TEXT, url)
-                  requireContext().startActivity(
-                    Intent.createChooser(intent, requireContext().getString(R.string.label_share))
-                  )
-                  menu.dismiss()
-                  linkMenu = null
-                  true
-                }
-                else              -> false
-              }
-            }
-            menu.setOnDismissListener {
-              linkMenu = null
-            }
-            menu.show()
-          }
-        }
-        true
       }
-    )
+    }
+    adapter.setOnSelectionListener { msg ->
+      if (actionMode == null) {
+        activity?.startActionMode(actionModeCallback)
+      }
+      if (!viewModel.selectedMessagesToggle(msg.id, msg)) {
+        actionMode?.finish()
+      }
+    }
+    adapter.setOnUrlLongClickListener { textView, url ->
+      if (linkMenu == null) {
+        linkMenu = PopupMenu(requireContext(), textView).also { menu ->
+          linkMenu?.dismiss()
+          menu.menuInflater.inflate(R.menu.context_link, menu.menu)
+          menu.setOnMenuItemClickListener {
+            when (it.itemId) {
+              R.id.action_copy  -> {
+                val clipboard = requireContext().systemService<ClipboardManager>()
+                val clip = ClipData.newPlainText(null, url)
+                clipboard.primaryClip = clip
+                menu.dismiss()
+                linkMenu = null
+                true
+              }
+              R.id.action_share -> {
+                val intent = Intent(Intent.ACTION_SEND)
+                intent.type = "text/plain"
+                intent.putExtra(Intent.EXTRA_TEXT, url)
+                requireContext().startActivity(
+                  Intent.createChooser(intent, requireContext().getString(R.string.label_share))
+                )
+                menu.dismiss()
+                linkMenu = null
+                true
+              }
+              else              -> false
+            }
+          }
+          menu.setOnDismissListener {
+            linkMenu = null
+          }
+          menu.show()
+        }
+      }
+      true
+    }
+
     messageList.adapter = adapter
     messageList.layoutManager = linearLayoutManager
     messageList.itemAnimator = null

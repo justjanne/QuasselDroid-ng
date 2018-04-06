@@ -73,7 +73,7 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <de.kuschku.quasseldroid.ui.chat.messages.RipplePassthroughTextView
+        <de.kuschku.quasseldroid.util.ui.RipplePassthroughTextView
           android:id="@+id/content"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
           tools:text="@sample/messages.json/data/content"
           tools:visibility="visible" />
 
-        <de.kuschku.quasseldroid.ui.chat.messages.RipplePassthroughTextView
+        <de.kuschku.quasseldroid.util.ui.RipplePassthroughTextView
           android:id="@+id/combined"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
