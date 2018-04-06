@@ -17,6 +17,7 @@
     android:id="@+id/time_left"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_gravity="top"
     android:layout_marginEnd="@dimen/message_horizontal"
     android:layout_marginRight="@dimen/message_horizontal"
     android:textColor="?attr/colorForegroundSecondary"

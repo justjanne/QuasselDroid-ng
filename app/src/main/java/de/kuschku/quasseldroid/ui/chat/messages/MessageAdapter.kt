@@ -210,6 +210,7 @@ class MessageAdapter(
             .placeholder(message.fallbackDrawable)
             .into(avatarView)
         } else {
+          GlideApp.with(itemView).clear(avatarView)
           avatarView.setImageDrawable(message.fallbackDrawable)
         }
       }
