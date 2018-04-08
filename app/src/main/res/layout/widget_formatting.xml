@@ -1,127 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="wrap_content"
-  android:layout_height="match_parent"
-  android:padding="2dp">
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
 
-  <android.support.v7.widget.AppCompatImageButton
-    android:id="@+id/action_format_bold"
-    style="@style/Widget.Button.Format"
-    android:contentDescription="@string/label_bold"
-    app:srcCompat="@drawable/ic_format_bold"
-    app:tint="?colorControlNormal" />
-
-  <Space
-    android:layout_width="2dp"
-    android:layout_height="match_parent" />
-
-  <android.support.v7.widget.AppCompatImageButton
-    android:id="@+id/action_format_italic"
-    style="@style/Widget.Button.Format"
-    android:contentDescription="@string/label_italic"
-    app:srcCompat="@drawable/ic_format_italic"
-    app:tint="?colorControlNormal" />
-
-  <Space
-    android:layout_width="2dp"
-    android:layout_height="match_parent" />
-
-  <android.support.v7.widget.AppCompatImageButton
-    android:id="@+id/action_format_underline"
-    style="@style/Widget.Button.Format"
-    android:contentDescription="@string/label_underline"
-    app:srcCompat="@drawable/ic_format_underline"
-    app:tint="?colorControlNormal" />
-
-  <Space
-    android:layout_width="2dp"
-    android:layout_height="match_parent" />
-
-  <android.support.v7.widget.AppCompatImageButton
-    android:id="@+id/action_format_strikethrough"
-    style="@style/Widget.Button.Format"
-    android:contentDescription="@string/label_strikethrough"
-    app:srcCompat="@drawable/ic_format_strikethrough"
-    app:tint="?colorControlNormal" />
-
-  <Space
-    android:layout_width="2dp"
-    android:layout_height="match_parent" />
-
-  <android.support.v7.widget.AppCompatImageButton
-    android:id="@+id/action_format_monospace"
-    style="@style/Widget.Button.Format"
-    android:contentDescription="@string/label_bold"
-    app:srcCompat="@drawable/ic_format_monospace"
-    app:tint="?colorControlNormal" />
-
-  <Space
-    android:layout_width="2dp"
-    android:layout_height="match_parent" />
-
-  <FrameLayout
-    android:layout_width="48dp"
-    android:layout_height="48dp"
-    android:layout_gravity="center">
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:padding="2dp">
 
     <android.support.v7.widget.AppCompatImageButton
-      android:id="@+id/action_format_foreground"
+      android:id="@+id/action_format_bold"
       style="@style/Widget.Button.Format"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:contentDescription="@string/label_foreground"
-      android:paddingBottom="4dp"
-      app:srcCompat="@drawable/ic_format_foreground"
+      android:contentDescription="@string/label_bold"
+      app:srcCompat="@drawable/ic_format_bold"
       app:tint="?colorControlNormal" />
 
-    <View
-      android:id="@+id/action_format_foreground_preview"
-      android:layout_width="match_parent"
-      android:layout_height="4dp"
-      android:layout_gravity="center_horizontal|bottom"
-      android:layout_margin="8dp"
-      android:background="?colorForeground" />
-
-  </FrameLayout>
-
-  <Space
-    android:layout_width="2dp"
-    android:layout_height="match_parent" />
-
-  <FrameLayout
-    android:layout_width="48dp"
-    android:layout_height="48dp"
-    android:layout_gravity="center">
+    <Space
+      android:layout_width="2dp"
+      android:layout_height="match_parent" />
 
     <android.support.v7.widget.AppCompatImageButton
-      android:id="@+id/action_format_background"
+      android:id="@+id/action_format_italic"
       style="@style/Widget.Button.Format"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:contentDescription="@string/label_background"
-      android:paddingBottom="4dp"
-      app:srcCompat="@drawable/ic_format_background"
+      android:contentDescription="@string/label_italic"
+      app:srcCompat="@drawable/ic_format_italic"
       app:tint="?colorControlNormal" />
 
-    <View
-      android:id="@+id/action_format_background_preview"
-      android:layout_width="match_parent"
-      android:layout_height="4dp"
-      android:layout_gravity="center_horizontal|bottom"
-      android:layout_margin="8dp"
-      android:background="?colorBackground" />
+    <Space
+      android:layout_width="2dp"
+      android:layout_height="match_parent" />
 
-  </FrameLayout>
+    <android.support.v7.widget.AppCompatImageButton
+      android:id="@+id/action_format_underline"
+      style="@style/Widget.Button.Format"
+      android:contentDescription="@string/label_underline"
+      app:srcCompat="@drawable/ic_format_underline"
+      app:tint="?colorControlNormal" />
 
-  <Space
-    android:layout_width="2dp"
-    android:layout_height="match_parent" />
+    <Space
+      android:layout_width="2dp"
+      android:layout_height="match_parent" />
 
-  <android.support.v7.widget.AppCompatImageButton
-    android:id="@+id/action_format_clear"
-    style="@style/Widget.Button.Format"
-    android:contentDescription="@string/label_clear_formatting"
-    app:srcCompat="@drawable/ic_format_clear"
-    app:tint="?colorControlNormal" />
-</LinearLayout>
+    <android.support.v7.widget.AppCompatImageButton
+      android:id="@+id/action_format_strikethrough"
+      style="@style/Widget.Button.Format"
+      android:contentDescription="@string/label_strikethrough"
+      app:srcCompat="@drawable/ic_format_strikethrough"
+      app:tint="?colorControlNormal" />
+
+    <Space
+      android:layout_width="2dp"
+      android:layout_height="match_parent" />
+
+    <android.support.v7.widget.AppCompatImageButton
+      android:id="@+id/action_format_monospace"
+      style="@style/Widget.Button.Format"
+      android:contentDescription="@string/label_bold"
+      app:srcCompat="@drawable/ic_format_monospace"
+      app:tint="?colorControlNormal" />
+
+    <Space
+      android:layout_width="2dp"
+      android:layout_height="match_parent" />
+
+    <FrameLayout
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:layout_gravity="center">
+
+      <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/action_format_foreground"
+        style="@style/Widget.Button.Format"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/label_foreground"
+        android:paddingBottom="4dp"
+        app:srcCompat="@drawable/ic_format_foreground"
+        app:tint="?colorControlNormal" />
+
+      <View
+        android:id="@+id/action_format_foreground_preview"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_margin="8dp"
+        android:background="?colorForeground" />
+    </FrameLayout>
+
+    <Space
+      android:layout_width="2dp"
+      android:layout_height="match_parent" />
+
+    <FrameLayout
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:layout_gravity="center">
+
+      <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/action_format_background"
+        style="@style/Widget.Button.Format"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/label_background"
+        android:paddingBottom="4dp"
+        app:srcCompat="@drawable/ic_format_background"
+        app:tint="?colorControlNormal" />
+
+      <View
+        android:id="@+id/action_format_background_preview"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_margin="8dp"
+        android:background="?colorBackground" />
+    </FrameLayout>
+
+    <Space
+      android:layout_width="2dp"
+      android:layout_height="match_parent" />
+
+    <android.support.v7.widget.AppCompatImageButton
+      android:id="@+id/action_format_clear"
+      style="@style/Widget.Button.Format"
+      android:contentDescription="@string/label_clear_formatting"
+      app:srcCompat="@drawable/ic_format_clear"
+      app:tint="?colorControlNormal" />
+  </LinearLayout>
+</HorizontalScrollView>

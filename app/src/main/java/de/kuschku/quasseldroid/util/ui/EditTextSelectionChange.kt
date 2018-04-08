@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.v7.widget.AppCompatEditText
 import android.util.AttributeSet
 
-class EditTextSelectionChange : AppCompatEditText {
+open class EditTextSelectionChange : AppCompatEditText {
   constructor(context: Context?) : super(context)
   constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
   constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) :

@@ -39,7 +39,12 @@
         android:background="?colorBackgroundCard" />
     </LinearLayout>
 
-    <include layout="@layout/layout_slider" />
+    <fragment
+      android:id="@+id/fragment_chatline"
+      android:name="de.kuschku.quasseldroid.ui.chat.input.ChatlineFragment"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      tools:layout="@layout/fragment_chatline" />
 
   </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 

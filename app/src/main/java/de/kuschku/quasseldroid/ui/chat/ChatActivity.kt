@@ -10,9 +10,6 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.text.Html
 import android.view.*
@@ -25,7 +22,6 @@ import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
-import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.session.ConnectionState
 import de.kuschku.libquassel.util.flag.and
 import de.kuschku.libquassel.util.flag.hasFlag
@@ -36,8 +32,7 @@ import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.Settings
-import de.kuschku.quasseldroid.ui.chat.input.Editor
-import de.kuschku.quasseldroid.ui.chat.input.MessageHistoryAdapter
+import de.kuschku.quasseldroid.ui.chat.input.ChatlineFragment
 import de.kuschku.quasseldroid.ui.clientsettings.app.AppSettingsActivity
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
 import de.kuschku.quasseldroid.util.helper.editCommit
@@ -47,7 +42,6 @@ import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
-import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferData
 import javax.inject.Inject
 
@@ -64,14 +58,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   @BindView(R.id.editor_panel)
   lateinit var editorPanel: SlidingUpPanelLayout
 
-  @BindView(R.id.history_panel)
-  lateinit var historyPanel: SlidingUpPanelLayout
-
-  @BindView(R.id.msg_history)
-  lateinit var msgHistory: RecyclerView
-
-  private lateinit var drawerToggle: ActionBarDrawerToggle
-
   @Inject
   lateinit var database: QuasselDatabase
 
@@ -84,25 +70,16 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   @Inject
   lateinit var ircFormatDeserializer: IrcFormatDeserializer
 
-  private lateinit var editor: Editor
+  private lateinit var drawerToggle: ActionBarDrawerToggle
 
-  private val panelSlideListener: SlidingUpPanelLayout.PanelSlideListener = object :
-    SlidingUpPanelLayout.PanelSlideListener {
-    override fun onPanelSlide(panel: View?, slideOffset: Float) = Unit
-
-    override fun onPanelStateChanged(panel: View?,
-                                     previousState: SlidingUpPanelLayout.PanelState?,
-                                     newState: SlidingUpPanelLayout.PanelState?) {
-      editor.setMultiLine(newState == SlidingUpPanelLayout.PanelState.COLLAPSED)
-    }
-  }
+  private var chatlineFragment: ChatlineFragment? = null
 
   override fun onNewIntent(intent: Intent?) {
     super.onNewIntent(intent)
     if (intent != null) {
       when {
         intent.type == "text/plain" -> {
-          editor.formatHandler.replace(intent.getStringExtra(Intent.EXTRA_TEXT))
+          chatlineFragment?.editorHelper?.replaceText(intent.getStringExtra(Intent.EXTRA_TEXT))
         }
       }
     }
@@ -113,58 +90,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     setContentView(R.layout.activity_main)
     ButterKnife.bind(this)
 
-    editor = Editor(
-      this,
-      viewModel,
-      findViewById(R.id.chatline),
-      findViewById(R.id.send),
-      findViewById(R.id.tab_complete),
-      listOf(
-        findViewById(R.id.autocomplete_list),
-        findViewById(R.id.autocomplete_list_expanded)
-      ),
-      findViewById(R.id.formatting_toolbar),
-      ircFormatDeserializer,
-      appearanceSettings,
-      autoCompleteSettings,
-      messageSettings
-    )
-
-    editor.setOnSendListener { lines ->
-      viewModel.session { sessionOptional ->
-        val session = sessionOptional.orNull()
-        viewModel.buffer { bufferId ->
-          session?.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
-            val output = mutableListOf<IAliasManager.Command>()
-            for ((stripped, formatted) in lines) {
-              viewModel.addRecentlySentMessage(stripped)
-              session.aliasManager?.processInput(bufferInfo, formatted, output)
-            }
-            for (command in output) {
-              session.rpcHandler?.sendInput(command.buffer, command.message)
-            }
-          }
-        }
-      }
-    }
-
-    editor.setOnPanelStateListener { expanded ->
-      historyPanel.panelState = if (expanded)
-        SlidingUpPanelLayout.PanelState.EXPANDED
-      else
-        SlidingUpPanelLayout.PanelState.COLLAPSED
-    }
-
-    msgHistory.itemAnimator = DefaultItemAnimator()
-    msgHistory.layoutManager = LinearLayoutManager(this)
-    val messageHistoryAdapter = MessageHistoryAdapter()
-    messageHistoryAdapter.setOnItemClickListener { text ->
-      editor.formatHandler.replace(text)
-      historyPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-    }
-    msgHistory.adapter = messageHistoryAdapter
-    viewModel.recentlySentMessages_liveData
-      .observe(this, Observer(messageHistoryAdapter::submitList))
+    chatlineFragment = supportFragmentManager.findFragmentById(R.id.fragment_chatline) as? ChatlineFragment
 
     setSupportActionBar(toolbar)
 
@@ -315,8 +241,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       invalidateOptionsMenu()
     })
 
-    editorPanel.addPanelSlideListener(panelSlideListener)
     editorPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+    chatlineFragment?.panelSlideListener?.let(editorPanel::addPanelSlideListener)
+
+    onNewIntent(intent)
   }
 
   var bufferData: BufferData? = null
@@ -344,20 +272,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       recreate()
     }
     super.onStart()
-    editor.onStart()
   }
-
-  override fun onStop() {
-    editor.onStop()
-    super.onStop()
-  }
-
-  data class AutoCompletionState(
-    val originalWord: String,
-    val range: IntRange,
-    val lastCompletion: AutoCompleteItem? = null,
-    val completion: AutoCompleteItem
-  )
 
   override fun onSaveInstanceState(outState: Bundle?) {
     super.onSaveInstanceState(outState)

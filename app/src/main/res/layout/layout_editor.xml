@@ -27,7 +27,7 @@
     app:layout_constraintStart_toEndOf="@+id/tab_complete"
     app:layout_constraintTop_toTopOf="parent">
 
-    <de.kuschku.quasseldroid.util.ui.EditTextSelectionChange
+    <de.kuschku.quasseldroid.ui.chat.input.RichEditText
       android:id="@+id/chatline"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -71,18 +71,10 @@
     android:background="?attr/colorBackgroundCard"
     app:layout_constraintBottom_toBottomOf="parent">
 
-    <android.support.v7.widget.Toolbar
+    <de.kuschku.quasseldroid.ui.chat.input.RichToolbar
       android:id="@+id/formatting_toolbar"
       android:layout_width="match_parent"
       android:layout_height="?attr/actionBarSize"
-      app:contentInsetStart="0dip">
-
-      <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <include layout="@layout/widget_formatting" />
-      </HorizontalScrollView>
-    </android.support.v7.widget.Toolbar>
+      app:contentInsetStart="0dip" />
   </android.support.design.widget.AppBarLayout>
 </android.support.constraint.ConstraintLayout>
