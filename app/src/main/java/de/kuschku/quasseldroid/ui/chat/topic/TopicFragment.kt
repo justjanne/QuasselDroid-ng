@@ -31,7 +31,7 @@ class TopicFragment : SettingsFragment() {
   @BindView(R.id.formatting_toolbar)
   lateinit var toolbar: RichToolbar
 
-  @BindView(R.id.autocomplete_list_expanded)
+  @BindView(R.id.autocomplete_list)
   lateinit var autoCompleteList: RecyclerView
 
   @Inject
@@ -49,7 +49,7 @@ class TopicFragment : SettingsFragment() {
   @Inject
   lateinit var formatSerializer: IrcFormatSerializer
 
-  lateinit var editorHelper: EditorHelper
+  private lateinit var editorHelper: EditorHelper
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {

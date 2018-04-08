@@ -59,7 +59,7 @@
     app:tint="?attr/colorAccent" />
 
   <de.kuschku.quasseldroid.util.ui.AutoCompleteRecyclerView
-    android:id="@+id/autocomplete_list_expanded"
+    android:id="@+id/autocomplete_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintBottom_toTopOf="@+id/formatting_toolbar_container" />

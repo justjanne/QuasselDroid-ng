@@ -48,7 +48,7 @@ class ChatlineFragment : ServiceBoundFragment() {
   @BindView(R.id.history_panel)
   lateinit var historyPanel: SlidingUpPanelLayout
 
-  @BindView(R.id.autocomplete_list_expanded)
+  @BindView(R.id.autocomplete_list)
   lateinit var autoCompleteList: RecyclerView
 
   @Inject
