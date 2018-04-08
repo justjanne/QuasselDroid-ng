@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.text.SpannableStringBuilder
+import android.util.TypedValue
 import android.view.*
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -39,6 +40,7 @@ import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 class MessageListFragment : ServiceBoundFragment() {
   @BindView(R.id.messages)
@@ -255,7 +257,6 @@ class MessageListFragment : ServiceBoundFragment() {
           val canScrollDown = recyclerView.canScrollVertically(1)
           val isScrollingDown = dy > 0
 
-          scrollDown.visibility = View.VISIBLE
           scrollDown.toggle(canScrollDown && isScrollingDown)
         }
 
@@ -388,16 +389,25 @@ class MessageListFragment : ServiceBoundFragment() {
         }
       }
     })
-    scrollDown.hide()
+
+    scrollDown.hide(object : FloatingActionButton.OnVisibilityChangedListener() {
+      override fun onHidden(fab: FloatingActionButton) {
+        fab.visibility = View.VISIBLE
+      }
+    })
     scrollDown.setOnClickListener { messageList.scrollToPosition(0) }
 
     savedInstanceState?.run {
       messageList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
     }
 
-    val avatar_size = resources.getDimensionPixelSize(R.dimen.avatar_size)
+    val avatarSize = TypedValue.applyDimension(
+      TypedValue.COMPLEX_UNIT_SP,
+      messageSettings.textSize * 2.5f,
+      requireContext().resources.displayMetrics
+    ).roundToInt()
 
-    val sizeProvider = FixedPreloadSizeProvider<String>(avatar_size, avatar_size)
+    val sizeProvider = FixedPreloadSizeProvider<String>(avatarSize, avatarSize)
 
     val preloadModelProvider = object : ListPreloader.PreloadModelProvider<String> {
       override fun getPreloadItems(position: Int) = adapter[position]?.avatarUrl?.let {
@@ -405,13 +415,13 @@ class MessageListFragment : ServiceBoundFragment() {
       } ?: mutableListOf()
 
       override fun getPreloadRequestBuilder(item: String) =
-        GlideApp.with(this@MessageListFragment).load(item).override(avatar_size)
+        GlideApp.with(this@MessageListFragment).load(item).override(avatarSize)
     }
 
     val preloader = RecyclerViewPreloader(Glide.with(this), preloadModelProvider, sizeProvider, 10)
 
     messageList.addOnScrollListener(preloader)
-    messageList.addItemDecoration(DayChangeItemDecoration(adapter))
+    messageList.addItemDecoration(DayChangeItemDecoration(adapter, messageSettings.textSize))
     messageList.addItemDecoration(MarkerLineItemDecoration(
       adapter, requireContext(), R.dimen.markerline_height, R.attr.colorMarkerLine
     ))

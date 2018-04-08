@@ -29,7 +29,7 @@
   <FrameLayout
     android:id="@+id/avatar_container"
     android:layout_width="@dimen/avatar_size"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/avatar_size"
     android:layout_marginEnd="@dimen/message_horizontal"
     android:layout_marginRight="@dimen/message_horizontal"
     android:visibility="gone"
@@ -37,12 +37,10 @@
 
     <ImageView
       android:id="@+id/avatar"
-      android:layout_width="@dimen/avatar_size"
-      android:layout_height="@dimen/avatar_size"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
       android:contentDescription="@string/label_avatar"
-      android:visibility="gone"
-      tools:src="@tools:sample/avatars"
-      tools:visibility="visible" />
+      tools:src="@tools:sample/avatars" />
   </FrameLayout>
 
   <LinearLayout

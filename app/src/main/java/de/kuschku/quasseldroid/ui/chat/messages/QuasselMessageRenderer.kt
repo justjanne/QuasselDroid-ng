@@ -4,10 +4,14 @@ import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.LayerDrawable
+import android.os.Build
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.TypedValue
+import android.view.View
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import de.kuschku.libquassel.protocol.Message.MessageType.*
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
@@ -29,6 +33,7 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 class QuasselMessageRenderer @Inject constructor(
   private val messageSettings: MessageSettings,
@@ -92,14 +97,17 @@ class QuasselMessageRenderer @Inject constructor(
       }
     }
 
+    val avatarContainer = viewHolder.itemView.findViewById<View>(R.id.avatar_container)
+    val avatarPlaceholder = viewHolder.itemView.findViewById<View>(R.id.avatar_placeholder)
+
     if (messageSettings.useMonospace) {
       viewHolder.content?.typeface = if (viewHolder.content?.typeface?.isItalic == true) monospaceItalic else Typeface.MONOSPACE
       viewHolder.combined?.typeface = if (viewHolder.combined?.typeface?.isItalic == true) monospaceItalic else Typeface.MONOSPACE
     }
 
     viewHolder.avatar?.visibleIf(!isFollowUp)
-    viewHolder.avatarContainer?.visibleIf(messageSettings.showAvatars)
-    viewHolder.avatarPlaceholder?.visibleIf(messageSettings.showAvatars)
+    avatarContainer?.visibleIf(messageSettings.showAvatars)
+    avatarPlaceholder?.visibleIf(messageSettings.showAvatars)
     val separateLine = viewHolder.content != null && viewHolder.name != null && messageSettings.nicksOnNewLine
     viewHolder.name?.visibleIf(separateLine && !isFollowUp)
     viewHolder.content?.visibleIf(separateLine)
@@ -114,6 +122,29 @@ class QuasselMessageRenderer @Inject constructor(
     viewHolder.content?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
     viewHolder.combined?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
     viewHolder.name?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
+    val avatarSize = TypedValue.applyDimension(
+      TypedValue.COMPLEX_UNIT_SP,
+      textSize * 2.5f,
+      viewHolder.itemView.context.resources.displayMetrics
+    ).roundToInt()
+    viewHolder.avatar?.layoutParams =
+      FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, avatarSize)
+    avatarContainer?.layoutParams =
+      LinearLayout.LayoutParams(avatarSize, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
+        val margin = viewHolder.itemView.context.resources.getDimensionPixelSize(R.dimen.message_horizontal)
+        setMargins(0, 0, margin, 0)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+          marginEnd = margin
+        }
+      }
+    avatarPlaceholder?.layoutParams =
+      LinearLayout.LayoutParams(avatarSize, LinearLayout.LayoutParams.MATCH_PARENT).apply {
+        val margin = viewHolder.itemView.context.resources.getDimensionPixelSize(R.dimen.message_horizontal)
+        setMargins(0, 0, margin, 0)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+          marginEnd = margin
+        }
+      }
   }
 
   override fun bind(holder: MessageAdapter.QuasselMessageViewHolder, message: FormattedMessage,

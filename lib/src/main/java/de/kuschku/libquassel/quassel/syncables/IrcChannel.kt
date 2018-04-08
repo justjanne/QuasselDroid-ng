@@ -173,6 +173,7 @@ class IrcChannel(
       setCodecForEncoding(charset)
     }
   }
+
   fun setCodecForEncoding(codec: Charset) {
     _codecForEncoding = codec
   }
@@ -183,6 +184,7 @@ class IrcChannel(
       setCodecForDecoding(charset)
     }
   }
+
   fun setCodecForDecoding(codec: Charset) {
     _codecForDecoding = codec
   }

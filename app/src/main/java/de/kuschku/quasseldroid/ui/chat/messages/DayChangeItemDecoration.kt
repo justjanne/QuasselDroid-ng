@@ -3,6 +3,7 @@ package de.kuschku.quasseldroid.ui.chat.messages
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.support.v7.widget.RecyclerView
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,10 @@ import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 import org.threeten.bp.temporal.ChronoUnit
 
-class DayChangeItemDecoration(private val adapter: MessageAdapter) :
+class DayChangeItemDecoration(
+  private val adapter: MessageAdapter,
+  private val textSize: Int
+) :
   RecyclerView.ItemDecoration() {
   private val dayChangeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
   private val bounds = Rect()
@@ -86,6 +90,7 @@ class DayChangeItemDecoration(private val adapter: MessageAdapter) :
           content?.text = dayChangeFormatter.format(
             it.content.time.atZone(ZoneId.systemDefault()).truncatedTo(ChronoUnit.DAYS)
           )
+          content?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize.toFloat())
           fixLayoutSize(layout, parent)
 
           v.setTag(R.id.tag_daychange_layout, layout)
@@ -93,7 +98,7 @@ class DayChangeItemDecoration(private val adapter: MessageAdapter) :
         }
         v.setTag(R.id.tag_daychange, true)
         val layout = v.getTag(R.id.tag_daychange_layout) as View
-        outRect.set(0, layout.measuredHeight, 0, 10)
+        outRect.set(0, layout.measuredHeight, 0, 0)
       } else {
         v.setTag(R.id.tag_daychange, false)
       }
