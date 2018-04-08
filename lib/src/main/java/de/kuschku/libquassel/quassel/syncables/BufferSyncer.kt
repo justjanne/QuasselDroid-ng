@@ -207,6 +207,32 @@ class BufferSyncer constructor(
     live_highlightCounts.onNext(_highlightCounts)
   }
 
+  fun all(
+    bufferName: String? = null,
+    bufferId: BufferId? = null,
+    networkId: NetworkId? = null,
+    type: Buffer_Types? = null,
+    groupId: Int? = null
+  ) = _bufferInfos.values.filter {
+    bufferId == null || it.bufferId == bufferId
+  }.filter {
+    networkId == null || it.networkId == networkId
+  }.filter {
+    type == null || it.type == type
+  }.filter {
+    groupId == null || it.groupId == groupId
+  }.filter {
+    bufferName == null || it.bufferName == bufferName
+  }
+
+  fun find(
+    bufferName: String? = null,
+    bufferId: BufferId? = null,
+    networkId: NetworkId? = null,
+    type: Buffer_Types? = null,
+    groupId: Int? = null
+  ) = all(bufferName, bufferId, networkId, type, groupId).firstOrNull()
+
   private val _lastSeenMsg: MutableMap<BufferId, MsgId> = mutableMapOf()
   private val live_lastSeenMsg = BehaviorSubject.createDefault(mapOf<BufferId, MsgId>())
 

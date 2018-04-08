@@ -31,6 +31,9 @@ class TopicFragment : SettingsFragment() {
   @BindView(R.id.formatting_toolbar)
   lateinit var toolbar: RichToolbar
 
+  @BindView(R.id.autocomplete_list_expanded)
+  lateinit var autoCompleteList: RecyclerView
+
   @Inject
   lateinit var autoCompleteSettings: AutoCompleteSettings
 
@@ -76,17 +79,14 @@ class TopicFragment : SettingsFragment() {
     editorViewModel.lastWord.onNext(editorHelper.lastWord)
 
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
-      val autoCompleteLists = listOfNotNull<RecyclerView>(
-        view.findViewById(R.id.autocomplete_list)
-      )
       val autocompleteAdapter = AutoCompleteAdapter(messageSettings, chatline::autoComplete)
-      for (autoCompleteList in autoCompleteLists) {
-        autoCompleteList.layoutManager = LinearLayoutManager(activity)
-        autoCompleteList.itemAnimator = DefaultItemAnimator()
-        autoCompleteList.adapter = autocompleteAdapter
+      autoCompleteList.layoutManager = LinearLayoutManager(activity)
+      autoCompleteList.itemAnimator = DefaultItemAnimator()
+      autoCompleteList.adapter = autocompleteAdapter
+      autoCompleteHelper.setDataListener {
+        autocompleteAdapter.submitList(it)
       }
     }
-
 
     val bufferId = arguments?.getInt("buffer", -1) ?: -1
     viewModel.buffer.onNext(bufferId)

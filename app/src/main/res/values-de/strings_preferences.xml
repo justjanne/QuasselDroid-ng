@@ -43,7 +43,7 @@
   <string name="preference_show_prefix_entry_highest">Höchsten Modus</string>
   <string name="preference_show_prefix_entry_none">Keine</string>
 
-  <string name="preference_hostmask_actions_title">Hostmaske</string>
+  <string name="preference_hostmask_actions_title">Hostmaske in Aktionen</string>
   <string name="preference_hostmask_actions_summary">Zeigt Ident und Host in Betreten/Verlassen-Nachrichten</string>
 
   <string name="preference_hostmask_plain_title">Hostmaske</string>

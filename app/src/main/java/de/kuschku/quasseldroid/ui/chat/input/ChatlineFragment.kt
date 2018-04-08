@@ -48,6 +48,9 @@ class ChatlineFragment : ServiceBoundFragment() {
   @BindView(R.id.history_panel)
   lateinit var historyPanel: SlidingUpPanelLayout
 
+  @BindView(R.id.autocomplete_list_expanded)
+  lateinit var autoCompleteList: RecyclerView
+
   @Inject
   lateinit var autoCompleteSettings: AutoCompleteSettings
 
@@ -64,6 +67,8 @@ class ChatlineFragment : ServiceBoundFragment() {
   lateinit var ircFormatSerializer: IrcFormatSerializer
 
   lateinit var editorHelper: EditorHelper
+
+  lateinit var autoCompleteHelper: AutoCompleteHelper
 
   val panelSlideListener = object : SlidingUpPanelLayout.PanelSlideListener {
     override fun onPanelSlide(panel: View?, slideOffset: Float) = Unit
@@ -84,7 +89,7 @@ class ChatlineFragment : ServiceBoundFragment() {
     val editorViewModel = ViewModelProviders.of(this).get(EditorViewModel::class.java)
     editorViewModel.quasselViewModel.onNext(viewModel)
 
-    val autoCompleteHelper = AutoCompleteHelper(
+    autoCompleteHelper = AutoCompleteHelper(
       requireActivity(),
       autoCompleteSettings,
       messageSettings,
@@ -104,15 +109,12 @@ class ChatlineFragment : ServiceBoundFragment() {
     editorViewModel.lastWord.onNext(editorHelper.lastWord)
 
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
-      val autoCompleteLists = listOfNotNull<RecyclerView>(
-        view.findViewById(R.id.autocomplete_list),
-        view.findViewById(R.id.autocomplete_list_expanded)
-      )
       val autocompleteAdapter = AutoCompleteAdapter(messageSettings, chatline::autoComplete)
-      for (autoCompleteList in autoCompleteLists) {
-        autoCompleteList.layoutManager = LinearLayoutManager(activity)
-        autoCompleteList.itemAnimator = DefaultItemAnimator()
-        autoCompleteList.adapter = autocompleteAdapter
+      autoCompleteList.layoutManager = LinearLayoutManager(activity)
+      autoCompleteList.itemAnimator = DefaultItemAnimator()
+      autoCompleteList.adapter = autocompleteAdapter
+      autoCompleteHelper.setDataListener {
+        autocompleteAdapter.submitList(it)
       }
     }
 

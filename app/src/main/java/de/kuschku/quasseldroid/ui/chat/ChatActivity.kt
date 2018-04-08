@@ -10,6 +10,9 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.text.Html
 import android.view.*
@@ -32,6 +35,7 @@ import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.Settings
+import de.kuschku.quasseldroid.ui.chat.input.AutoCompleteAdapter
 import de.kuschku.quasseldroid.ui.chat.input.ChatlineFragment
 import de.kuschku.quasseldroid.ui.clientsettings.app.AppSettingsActivity
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
@@ -57,6 +61,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   @BindView(R.id.editor_panel)
   lateinit var editorPanel: SlidingUpPanelLayout
+
+  @BindView(R.id.autocomplete_list)
+  lateinit var autoCompleteList: RecyclerView
 
   @Inject
   lateinit var database: QuasselDatabase
@@ -126,6 +133,18 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         actionMode?.finish()
       }
     })
+
+    if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
+      chatlineFragment?.let {
+        val autocompleteAdapter = AutoCompleteAdapter(messageSettings, it.chatline::autoComplete)
+        autoCompleteList.layoutManager = LinearLayoutManager(it.activity)
+        autoCompleteList.itemAnimator = DefaultItemAnimator()
+        autoCompleteList.adapter = autocompleteAdapter
+        it.autoCompleteHelper.setDataListener {
+          autocompleteAdapter.submitList(it)
+        }
+      }
+    }
 
     viewModel.errors.observe(this, Observer { error ->
       error?.let {
