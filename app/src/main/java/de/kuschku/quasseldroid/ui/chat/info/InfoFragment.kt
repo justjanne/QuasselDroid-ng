@@ -1,18 +1,19 @@
 package de.kuschku.quasseldroid.ui.chat.info
 
 import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.compatibility.LoggingHandler
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
@@ -98,11 +99,9 @@ class InfoFragment : ServiceBoundFragment() {
                             name = getString(R.string.property_ircchannel_topic_action_edit),
                             featured = true,
                             onClick = {
-                              Toast.makeText(
-                                requireContext(),
-                                "Not implemented",
-                                Toast.LENGTH_SHORT
-                              ).show()
+                              val intent = Intent(requireContext(), TopicActivity::class.java)
+                              intent.putExtra("buffer", info.buffer)
+                              startActivity(intent)
                             }
                           )
                         )

@@ -33,7 +33,7 @@
       android:layout_height="wrap_content"
       android:background="@android:color/transparent"
       android:gravity="center_vertical"
-      android:hint="@string/label_placeholder"
+      android:hint="@string/label_placeholder_message"
       android:imeOptions="flagNoExtractUi"
       android:inputType="textCapSentences|textAutoCorrect|textShortMessage"
       android:minHeight="?attr/actionBarSize"

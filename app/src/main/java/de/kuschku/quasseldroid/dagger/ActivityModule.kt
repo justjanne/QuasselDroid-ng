@@ -8,6 +8,8 @@ import de.kuschku.quasseldroid.ui.chat.ChatActivityModule
 import de.kuschku.quasseldroid.ui.chat.ChatFragmentProvider
 import de.kuschku.quasseldroid.ui.chat.info.InfoActivity
 import de.kuschku.quasseldroid.ui.chat.info.InfoFragmentProvider
+import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
+import de.kuschku.quasseldroid.ui.chat.topic.TopicFragmentProvider
 import de.kuschku.quasseldroid.ui.clientsettings.about.AboutSettingsActivity
 import de.kuschku.quasseldroid.ui.clientsettings.about.AboutSettingsFragmentProvider
 import de.kuschku.quasseldroid.ui.clientsettings.app.AppSettingsActivity
@@ -37,6 +39,9 @@ abstract class ActivityModule {
 
   @ContributesAndroidInjector(modules = [InfoFragmentProvider::class])
   abstract fun bindInfoActivity(): InfoActivity
+
+  @ContributesAndroidInjector(modules = [TopicFragmentProvider::class])
+  abstract fun bindTopicActivity(): TopicActivity
 
   @ContributesAndroidInjector(modules = [AppSettingsFragmentProvider::class])
   abstract fun bindAppSettingsActivity(): AppSettingsActivity

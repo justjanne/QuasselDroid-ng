@@ -41,6 +41,12 @@
       android:label="@string/label_details"
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.chat.topic.TopicActivity"
+      android:exported="false"
+      android:label="@string/label_topic"
+      android:parentActivityName=".ui.chat.info.InfoActivity"
+      android:windowSoftInputMode="adjustResize" />
 
     <!-- Client Settings -->
     <activity

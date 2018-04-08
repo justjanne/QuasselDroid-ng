@@ -103,15 +103,18 @@ class ToolbarFragment : ServiceBoundFragment() {
           BufferInfo.Type.QueryBuffer.toInt()   -> InfoDescriptor(
             type = InfoType.User,
             nick = info.bufferName,
+            buffer = info.bufferId,
             network = info.networkId
           )
           BufferInfo.Type.ChannelBuffer.toInt() -> InfoDescriptor(
             type = InfoType.Channel,
             channel = info.bufferName,
+            buffer = info.bufferId,
             network = info.networkId
           )
           BufferInfo.Type.StatusBuffer.toInt()  -> InfoDescriptor(
             type = InfoType.Network,
+            buffer = info.bufferId,
             network = info.networkId
           )
           else                                  -> null

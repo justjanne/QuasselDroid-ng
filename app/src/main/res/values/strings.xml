@@ -42,7 +42,8 @@
   <string name="label_reset">Reset</string>
   <string name="label_open">Open</string>
   <string name="label_part">Part</string>
-  <string name="label_placeholder">Write a message…</string>
+  <string name="label_placeholder_message">Write a message…</string>
+  <string name="label_placeholder_topic">Describe the channel topic…</string>
   <string name="label_rename">Rename</string>
   <string name="label_save">Save</string>
   <string name="label_select">Select</string>
@@ -52,6 +53,7 @@
   <string name="label_share">Share</string>
   <string name="label_share_crashreport">Share Crash Report</string>
   <string name="label_show_hidden">Show Hidden</string>
+  <string name="label_topic">Channel Topic</string>
   <string name="label_unhide">Make Visible</string>
   <string name="label_website">Website</string>
   <string name="label_yes">Yes</string>

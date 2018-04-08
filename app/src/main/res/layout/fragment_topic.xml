@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <ScrollView
+    android:id="@+id/chatline_scroller"
+    android:layout_width="match_parent"
+    android:layout_height="0dip"
+    android:layout_weight="1">
+
+    <de.kuschku.quasseldroid.ui.chat.input.RichEditText
+      android:id="@+id/chatline"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@android:color/transparent"
+      android:gravity="center_vertical"
+      android:hint="@string/label_placeholder_topic"
+      android:imeOptions="flagNoExtractUi"
+      android:inputType="textCapSentences|textAutoCorrect|textShortMessage|textMultiLine"
+      android:minHeight="?attr/actionBarSize"
+      android:paddingBottom="8dp"
+      android:paddingLeft="20dp"
+      android:paddingRight="20dp"
+      android:paddingTop="8dp"
+      android:textColor="?attr/colorForeground"
+      android:textSize="16sp" />
+  </ScrollView>
+
+  <de.kuschku.quasseldroid.util.ui.AutoCompleteRecyclerView
+    android:id="@+id/autocomplete_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+  <android.support.design.widget.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorBackgroundCard">
+
+    <de.kuschku.quasseldroid.ui.chat.input.RichToolbar
+      android:id="@+id/formatting_toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      app:contentInsetStart="0dip" />
+  </android.support.design.widget.AppBarLayout>
+</LinearLayout>

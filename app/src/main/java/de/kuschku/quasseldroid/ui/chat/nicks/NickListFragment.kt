@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.ListPreloader
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.util.FixedPreloadSizeProvider
+import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.IrcUserUtils
 import de.kuschku.libquassel.util.helpers.value
@@ -151,14 +152,21 @@ class NickListFragment : ServiceBoundFragment() {
   }
 
   private val clickListener: ((String) -> Unit)? = { nick ->
-    viewModel.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
-      val intent = Intent(requireContext(), InfoActivity::class.java)
-      intent.putExtra("info", InfoDescriptor(
-        type = InfoType.User,
-        nick = nick,
-        network = networkId
-      ))
-      startActivity(intent)
+    viewModel.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
+      viewModel.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
+        val intent = Intent(requireContext(), InfoActivity::class.java)
+        intent.putExtra("info", InfoDescriptor(
+          type = InfoType.User,
+          nick = nick,
+          buffer = bufferSyncer.find(
+            bufferName = nick,
+            networkId = networkId,
+            type = Buffer_Type.of(Buffer_Type.QueryBuffer)
+          )?.bufferId ?: -1,
+          network = networkId
+        ))
+        startActivity(intent)
+      }
     }
   }
 

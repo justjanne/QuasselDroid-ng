@@ -6,5 +6,6 @@ data class InfoDescriptor(
   val type: InfoType,
   val nick: String? = null,
   val channel: String? = null,
+  val buffer: Int,
   val network: Int
 ) : Serializable
