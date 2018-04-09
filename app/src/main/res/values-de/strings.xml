@@ -23,6 +23,7 @@
   <string name="label_delete_all">Alle Löschen</string>
   <string name="label_disconnect">Verbindung trennen</string>
   <string name="label_edit_nick">Spitznamen bearbeiten</string>
+  <string name="label_edit_topic">Thema ändern</string>
   <string name="label_filter_messages">Nachrichten filtern</string>
   <string name="label_github">GitHub</string>
   <string name="label_hide_perm">Permanent ausblenden</string>
