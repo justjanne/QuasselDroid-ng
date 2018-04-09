@@ -141,7 +141,7 @@ class UserInfoFragment : ServiceBoundFragment() {
         awayMessage.text = user.awayMessage()
         awayContainer.visibleIf(user.awayMessage().isNotBlank())
 
-        account.text = user.user()
+        account.text = user.account()
         accountContainer.visibleIf(user.account().isNotBlank())
 
         ident.text = user.user()
