@@ -12,7 +12,8 @@ data class MessageSettings(
   val showHostmaskPlain: Boolean = false,
   val nicksOnNewLine: Boolean = false,
   val timeAtEnd: Boolean = false,
-  val showAvatars: Boolean = false
+  val showAvatars: Boolean = false,
+  val largerEmoji: Boolean = false
 ) {
 
   enum class ColorizeNicknamesMode {

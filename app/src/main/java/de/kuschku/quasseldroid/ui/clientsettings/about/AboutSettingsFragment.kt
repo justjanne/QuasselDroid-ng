@@ -134,6 +134,16 @@ class AboutSettingsFragment : DaggerFragment() {
         url = "https://google.github.io/dagger/"
       ),
       Library(
+        name = "emoji-java",
+        version = "4.0.0",
+        license = License(
+          shortName = "MIT",
+          fullName = "The MIT License (MIT)",
+          text = R.string.license_emojijava
+        ),
+        url = "https://github.com/vdurmont/emoji-java"
+      ),
+      Library(
         name = "Glide",
         version = "4.6.1",
         license = apache2,

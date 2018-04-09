@@ -45,7 +45,7 @@ class QuasselMessageRenderer @Inject constructor(
 
   private val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 
-  val monospaceItalic = Typeface.create(Typeface.MONOSPACE, Typeface.ITALIC)
+  private val monospaceItalic = Typeface.create(Typeface.MONOSPACE, Typeface.ITALIC)
 
   private fun timePattern(showSeconds: Boolean,
                           use24hClock: Boolean) = when (use24hClock to showSeconds) {
@@ -62,7 +62,7 @@ class QuasselMessageRenderer @Inject constructor(
   private val zoneId = ZoneId.systemDefault()
 
   override fun layout(type: Message_Type?, hasHighlight: Boolean,
-                      isFollowUp: Boolean) = when (type) {
+                      isFollowUp: Boolean, isEmoji: Boolean) = when (type) {
     Notice    -> R.layout.widget_chatmessage_notice
     Server    -> R.layout.widget_chatmessage_server
     Error     -> R.layout.widget_chatmessage_error
@@ -77,7 +77,8 @@ class QuasselMessageRenderer @Inject constructor(
   override fun init(viewHolder: MessageAdapter.QuasselMessageViewHolder,
                     messageType: Message_Type?,
                     hasHighlight: Boolean,
-                    isFollowUp: Boolean) {
+                    isFollowUp: Boolean,
+                    isEmoji: Boolean) {
     if (hasHighlight) {
       viewHolder.itemView.context.theme.styledAttributes(
         R.attr.colorForegroundHighlight, R.attr.colorBackgroundHighlight,
@@ -119,9 +120,10 @@ class QuasselMessageRenderer @Inject constructor(
     val textSize = messageSettings.textSize.toFloat()
     viewHolder.timeLeft?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
     viewHolder.timeRight?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize * 0.9f)
-    viewHolder.content?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
-    viewHolder.combined?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
     viewHolder.name?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
+    val contentSize = if (messageSettings.largerEmoji && isEmoji) textSize * 2f else textSize
+    viewHolder.content?.setTextSize(TypedValue.COMPLEX_UNIT_SP, contentSize)
+    viewHolder.combined?.setTextSize(TypedValue.COMPLEX_UNIT_SP, contentSize)
     val avatarSize = TypedValue.applyDimension(
       TypedValue.COMPLEX_UNIT_SP,
       textSize * 2.5f,

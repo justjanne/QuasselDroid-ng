@@ -248,7 +248,8 @@ class MessageListFragment : ServiceBoundFragment() {
           isFollowUp = isFollowUp,
           isSelected = selected.contains(it.messageId),
           isExpanded = expanded.contains(it.messageId),
-          isMarkerLine = markerLine == it.messageId
+          isMarkerLine = markerLine == it.messageId,
+          isEmoji = false
         )
       }.asReversed()
     }

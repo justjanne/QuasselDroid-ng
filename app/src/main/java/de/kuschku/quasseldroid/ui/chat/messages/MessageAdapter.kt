@@ -13,9 +13,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.bumptech.glide.request.RequestOptions
 import de.kuschku.libquassel.protocol.Message_Flag
-import de.kuschku.libquassel.protocol.Message_Flags
 import de.kuschku.libquassel.protocol.Message_Type
-import de.kuschku.libquassel.protocol.Message_Types
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
@@ -82,15 +80,11 @@ class MessageAdapter @Inject constructor(
   }
 
   override fun getItemViewType(position: Int) = getItem(position)?.let {
-    viewType(Message_Flags.of(it.content.type),
-             Message_Flags.of(it.content.flag),
-             it.isFollowUp)
+    Message_Flag.of(it.content.type).value or
+      (if (Message_Flag.of(it.content.flag).hasFlag(Message_Flag.Highlight)) MASK_HIGHLIGHT else 0x00) or
+      (if (it.isFollowUp) MASK_FOLLOWUP else 0x00) or
+      (if (it.isEmoji) MASK_EMOJI else 0x00)
   } ?: 0
-
-  private fun viewType(type: Message_Types, flags: Message_Flags, followUp: Boolean) =
-    type.value or
-      (if (flags.hasFlag(Message_Flag.Highlight)) MASK_HIGHLIGHT else 0x00) or
-      (if (followUp) MASK_FOLLOWUP else 0x00)
 
   override fun getItemId(position: Int): Long {
     return getItem(position)?.content?.messageId?.toLong() ?: 0L
@@ -103,11 +97,15 @@ class MessageAdapter @Inject constructor(
 
   private fun isFollowUp(viewType: Int) = viewType and MASK_FOLLOWUP != 0
 
+  private fun isEmoji(viewType: Int) = viewType and MASK_EMOJI != 0
+
   companion object {
-    const val SHIFT_HIGHLIGHT = 32 - 1
-    const val SHIFT_FOLLOWUP = SHIFT_HIGHLIGHT - 1
+    private const val SHIFT_HIGHLIGHT = 32 - 1
+    private const val SHIFT_FOLLOWUP = SHIFT_HIGHLIGHT - 1
+    private const val SHIFT_EMOJI = SHIFT_FOLLOWUP - 1
     const val MASK_HIGHLIGHT = 0x01 shl SHIFT_HIGHLIGHT
     const val MASK_FOLLOWUP = 0x01 shl SHIFT_FOLLOWUP
+    const val MASK_EMOJI = 0x01 shl SHIFT_EMOJI
     const val MASK_TYPE = 0xFFFFFF
   }
 
@@ -115,9 +113,10 @@ class MessageAdapter @Inject constructor(
     val messageType = messageType(viewType)
     val hasHighlight = hasHiglight(viewType)
     val isFollowUp = isFollowUp(viewType)
+    val isEmoji = isEmoji(viewType)
     val viewHolder = QuasselMessageViewHolder(
       LayoutInflater.from(parent.context).inflate(
-        messageRenderer.layout(messageType, hasHighlight, isFollowUp),
+        messageRenderer.layout(messageType, hasHighlight, isFollowUp, isEmoji),
         parent,
         false
       ),
@@ -126,7 +125,7 @@ class MessageAdapter @Inject constructor(
       expansionListener,
       movementMethod
     )
-    messageRenderer.init(viewHolder, messageType, hasHighlight, isFollowUp)
+    messageRenderer.init(viewHolder, messageType, hasHighlight, isFollowUp, isEmoji)
     return viewHolder
   }
 

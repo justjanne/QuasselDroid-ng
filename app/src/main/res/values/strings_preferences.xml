@@ -118,6 +118,11 @@
   <string name="preference_time_at_end_title">Right-Aligned Timestamps</string>
   <string name="preference_time_at_end_summary">Aligns timestamps at the end of each message</string>
 
+  <string name="preference_larger_emoji_key" translatable="false">larger_emoji</string>
+  <string name="preference_larger_emoji_title">Larger Reactions</string>
+  <string name="preference_larger_emoji_summary">Increase the size of emoji-only messages</string>
+
+
   <string name="preference_autocomplete_title">Autocomplete</string>
 
   <string name="preference_autocomplete_button_key" translatable="false">autocomplete_button</string>

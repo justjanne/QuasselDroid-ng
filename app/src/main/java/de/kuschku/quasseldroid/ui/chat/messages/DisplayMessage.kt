@@ -10,7 +10,8 @@ data class DisplayMessage(
   val isFollowUp: Boolean,
   val isSelected: Boolean,
   val isExpanded: Boolean,
-  val isMarkerLine: Boolean
+  val isMarkerLine: Boolean,
+  val isEmoji: Boolean
 ) {
   data class Tag(
     val id: MsgId,
@@ -18,10 +19,19 @@ data class DisplayMessage(
     val isFollowUp: Boolean,
     val isSelected: Boolean,
     val isExpanded: Boolean,
-    val isMarkerLine: Boolean
+    val isMarkerLine: Boolean,
+    val isEmoji: Boolean
   )
 
-  val tag = Tag(content.messageId, hasDayChange, isFollowUp, isSelected, isExpanded, isMarkerLine)
+  val tag = Tag(
+    content.messageId,
+    hasDayChange,
+    isFollowUp,
+    isSelected,
+    isExpanded,
+    isMarkerLine,
+    isEmoji
+  )
   val avatarUrl = content.sender.let {
     Regex("[us]id(\\d+)").matchEntire(HostmaskHelper.user(it))?.groupValues?.lastOrNull()?.let {
       "https://www.irccloud.com/avatar-redirect/$it"

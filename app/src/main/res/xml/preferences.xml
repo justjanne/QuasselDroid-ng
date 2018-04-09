@@ -98,6 +98,14 @@
       android:key="@string/preference_time_at_end_key"
       android:summary="@string/preference_time_at_end_summary"
       android:title="@string/preference_time_at_end_title" />
+    <!--
+    <SwitchPreference
+      android:defaultValue="false"
+      android:dependency="@string/preference_nicks_on_new_line_key"
+      android:key="@string/preference_larger_emoji_key"
+      android:title="@string/preference_larger_emoji_title"
+      android:summary="@string/preference_larger_emoji_summary" />
+    -->
   </PreferenceCategory>
 
   <PreferenceCategory android:title="@string/preference_autocomplete_title">

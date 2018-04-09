@@ -81,6 +81,10 @@ object Settings {
       showAvatars = getBoolean(
         context.getString(R.string.preference_show_avatars_key),
         MessageSettings.DEFAULT.showAvatars
+      ),
+      largerEmoji = getBoolean(
+        context.getString(R.string.preference_larger_emoji_key),
+        MessageSettings.DEFAULT.largerEmoji
       )
     )
   }
