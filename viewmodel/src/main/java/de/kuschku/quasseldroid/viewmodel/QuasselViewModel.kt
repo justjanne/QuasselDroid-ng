@@ -89,6 +89,11 @@ class QuasselViewModel : ViewModel() {
     it.map(ISession::liveIdentities).orElse(Observable.just(emptyMap()))
   }
 
+  val bufferSyncer = session.mapMapNullable(ISession::bufferSyncer)
+  val allBuffers = bufferSyncer.mapSwitchMap {
+    it.liveBufferInfos().map(Map<BufferId, BufferInfo>::values)
+  }.mapOrElse(emptyList())
+
   /**
    * An observable of the changes of the markerline, as pairs of `(old, new)`
    */
@@ -136,7 +141,7 @@ class QuasselViewModel : ViewModel() {
                 network.liveIrcChannel(
                   info.bufferName
                 ).switchMap { channel ->
-                  channel.liveUpdates().map {
+                  channel.updates().map {
                     BufferData(
                       info = info,
                       network = network,
@@ -349,7 +354,7 @@ class QuasselViewModel : ViewModel() {
                           BufferInfo.Type.ChannelBuffer.toInt() -> {
                             network.liveNetworkInfo().switchMap { networkInfo ->
                               network.liveIrcChannel(info.bufferName).switchMap { channel ->
-                                channel.liveUpdates().map {
+                                channel.updates().map {
                                   BufferProps(
                                     info = info,
                                     network = networkInfo,

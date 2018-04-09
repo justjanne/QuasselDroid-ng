@@ -93,6 +93,7 @@ class NickListAdapter(
           .placeholder(data.fallbackDrawable)
           .into(avatar)
       } else {
+        GlideApp.with(itemView).clear(avatar)
         avatar.setImageDrawable(data.fallbackDrawable)
       }
     }

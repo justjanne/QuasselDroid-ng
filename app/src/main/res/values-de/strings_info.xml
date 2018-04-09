@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="label_user_away">Abwesend</string>
+  <string name="label_user_away_reason">Grund</string>
+  <string name="label_user_identity">Identität</string>
+  <string name="label_user_account">Account</string>
+  <string name="label_user_ident">Ident</string>
+  <string name="label_user_host">Host</string>
+  <string name="label_user_server">Server</string>
+
+  <string name="property_group_ircchannel_channel">Kanal</string>
+  <string name="property_ircchannel_topic">Thema</string>
+  <string name="property_ircchannel_topic_action_edit">Thema ändern</string>
+  <string name="property_ircchannel_topic_default">Kein Thema gesetzt</string>
+</resources>

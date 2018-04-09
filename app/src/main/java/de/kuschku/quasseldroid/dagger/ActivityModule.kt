@@ -6,8 +6,10 @@ import de.kuschku.quasseldroid.service.QuasselService
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.ui.chat.ChatActivityModule
 import de.kuschku.quasseldroid.ui.chat.ChatFragmentProvider
-import de.kuschku.quasseldroid.ui.chat.info.InfoActivity
-import de.kuschku.quasseldroid.ui.chat.info.InfoFragmentProvider
+import de.kuschku.quasseldroid.ui.chat.info.channel.ChannelInfoActivity
+import de.kuschku.quasseldroid.ui.chat.info.channel.ChannelInfoFragmentProvider
+import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoActivity
+import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoFragmentProvider
 import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
 import de.kuschku.quasseldroid.ui.chat.topic.TopicFragmentProvider
 import de.kuschku.quasseldroid.ui.clientsettings.about.AboutSettingsActivity
@@ -37,8 +39,11 @@ abstract class ActivityModule {
   @ContributesAndroidInjector(modules = [ChatActivityModule::class, ChatFragmentProvider::class])
   abstract fun bindChatActivity(): ChatActivity
 
-  @ContributesAndroidInjector(modules = [InfoFragmentProvider::class])
-  abstract fun bindInfoActivity(): InfoActivity
+  @ContributesAndroidInjector(modules = [UserInfoFragmentProvider::class])
+  abstract fun bindUserInfoActivity(): UserInfoActivity
+
+  @ContributesAndroidInjector(modules = [ChannelInfoFragmentProvider::class])
+  abstract fun bindChannelInfoActivity(): ChannelInfoActivity
 
   @ContributesAndroidInjector(modules = [TopicFragmentProvider::class])
   abstract fun bindTopicActivity(): TopicActivity

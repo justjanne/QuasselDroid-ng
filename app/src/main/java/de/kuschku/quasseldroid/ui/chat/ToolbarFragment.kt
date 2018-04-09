@@ -16,9 +16,8 @@ import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
-import de.kuschku.quasseldroid.ui.chat.info.InfoActivity
-import de.kuschku.quasseldroid.ui.chat.info.InfoDescriptor
-import de.kuschku.quasseldroid.ui.chat.info.InfoType
+import de.kuschku.quasseldroid.ui.chat.info.channel.ChannelInfoActivity
+import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoActivity
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.helper.visibleIf
@@ -100,29 +99,20 @@ class ToolbarFragment : ServiceBoundFragment() {
     actionArea.setOnClickListener {
       viewModel.bufferData.value?.info?.let { info ->
         when (info.type.toInt()) {
-          BufferInfo.Type.QueryBuffer.toInt()   -> InfoDescriptor(
-            type = InfoType.User,
-            nick = info.bufferName,
-            buffer = info.bufferId,
-            network = info.networkId
-          )
-          BufferInfo.Type.ChannelBuffer.toInt() -> InfoDescriptor(
-            type = InfoType.Channel,
-            channel = info.bufferName,
-            buffer = info.bufferId,
-            network = info.networkId
-          )
-          BufferInfo.Type.StatusBuffer.toInt()  -> InfoDescriptor(
-            type = InfoType.Network,
-            buffer = info.bufferId,
-            network = info.networkId
-          )
+          BufferInfo.Type.QueryBuffer.toInt()   -> {
+            val intent = Intent(requireContext(), UserInfoActivity::class.java)
+            intent.putExtra("bufferId", info.bufferId)
+            intent.putExtra("openBuffer", true)
+            startActivity(intent)
+          }
+          BufferInfo.Type.ChannelBuffer.toInt() -> {
+            val intent = Intent(requireContext(), ChannelInfoActivity::class.java)
+            intent.putExtra("bufferId", info.bufferId)
+            intent.putExtra("openBuffer", true)
+            startActivity(intent)
+          }
           else                                  -> null
         }
-      }?.let { infoDescriptor ->
-        val intent = Intent(requireContext(), InfoActivity::class.java)
-        intent.putExtra("info", infoDescriptor)
-        startActivity(intent)
       }
     }
 

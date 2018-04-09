@@ -87,6 +87,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       when {
         intent.type == "text/plain" -> {
           chatlineFragment?.editorHelper?.replaceText(intent.getStringExtra(Intent.EXTRA_TEXT))
+          drawerLayout.closeDrawers()
+        }
+        intent.hasExtra("bufferId") -> {
+          viewModel.buffer.onNext(intent.getIntExtra("bufferId", -1))
+          drawerLayout.closeDrawers()
         }
       }
     }
@@ -230,19 +235,24 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     viewModel.connectionProgress_liveData.observe(this, Observer {
       val (state, progress, max) = it ?: Triple(ConnectionState.DISCONNECTED, 0, 0)
       when (state) {
-        ConnectionState.CONNECTED,
-        ConnectionState.DISCONNECTED,
-        ConnectionState.CLOSED -> {
+        ConnectionState.CONNECTED -> {
+          if (resources.getBoolean(R.bool.buffer_drawer_exists) && viewModel.buffer.value == -1) {
+            drawerLayout.openDrawer(Gravity.START)
+          }
           progressBar.visibility = View.INVISIBLE
         }
-        ConnectionState.INIT   -> {
+        ConnectionState.DISCONNECTED,
+        ConnectionState.CLOSED    -> {
+          progressBar.visibility = View.INVISIBLE
+        }
+        ConnectionState.INIT      -> {
           progressBar.visibility = View.VISIBLE
           // Show indeterminate when no progress has been made yet
           progressBar.isIndeterminate = progress == 0 || max == 0
           progressBar.progress = progress
           progressBar.max = max
         }
-        else                   -> {
+        else                      -> {
           progressBar.visibility = View.VISIBLE
           progressBar.isIndeterminate = true
         }
@@ -260,10 +270,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       invalidateOptionsMenu()
     })
 
+    onNewIntent(intent)
+
     editorPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
     chatlineFragment?.panelSlideListener?.let(editorPanel::addPanelSlideListener)
-
-    onNewIntent(intent)
   }
 
   var bufferData: BufferData? = null

@@ -8,6 +8,12 @@ object IrcCaseMappers {
 
   interface IrcCaseMapper {
     fun equalsIgnoreCase(a: String, b: String): Boolean
+    fun equalsIgnoreCaseNullable(a: String?, b: String?) =  when {
+      a === null && b === null -> true
+      a === null -> false
+      b === null -> false
+      else -> this.equalsIgnoreCase(a, b)
+    }
 
     fun toLowerCase(value: String): String
     fun toLowerCaseNullable(value: String?): String? = value?.let(this@IrcCaseMapper::toLowerCase)

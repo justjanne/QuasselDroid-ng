@@ -33,4 +33,8 @@ class BacklogManager(
                                  messages: QVariantList) {
     backlogStorage.storeMessages(messages.mapNotNull(QVariant_::value), initialLoad = true)
   }
+
+  fun removeBuffer(buffer: BufferId) {
+    backlogStorage.clearMessages(buffer)
+  }
 }

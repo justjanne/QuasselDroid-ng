@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.text.SpannableStringBuilder
 import android.util.TypedValue
@@ -33,6 +32,7 @@ import de.kuschku.quasseldroid.settings.BacklogSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
+import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import io.reactivex.BackpressureStrategy
 import org.threeten.bp.ZoneId
@@ -176,7 +176,6 @@ class MessageListFragment : ServiceBoundFragment() {
     linearLayoutManager = LinearLayoutManager(context)
     linearLayoutManager.reverseLayout = true
 
-    var linkMenu: PopupMenu? = null
     adapter.setOnClickListener { msg ->
       if (actionMode != null) {
         if (!viewModel.selectedMessagesToggle(msg.id, msg)) {
@@ -192,43 +191,7 @@ class MessageListFragment : ServiceBoundFragment() {
         actionMode?.finish()
       }
     }
-    adapter.setOnUrlLongClickListener { textView, url ->
-      if (linkMenu == null) {
-        linkMenu = PopupMenu(requireContext(), textView).also { menu ->
-          linkMenu?.dismiss()
-          menu.menuInflater.inflate(R.menu.context_link, menu.menu)
-          menu.setOnMenuItemClickListener {
-            when (it.itemId) {
-              R.id.action_copy  -> {
-                val clipboard = requireContext().systemService<ClipboardManager>()
-                val clip = ClipData.newPlainText(null, url)
-                clipboard.primaryClip = clip
-                menu.dismiss()
-                linkMenu = null
-                true
-              }
-              R.id.action_share -> {
-                val intent = Intent(Intent.ACTION_SEND)
-                intent.type = "text/plain"
-                intent.putExtra(Intent.EXTRA_TEXT, url)
-                requireContext().startActivity(
-                  Intent.createChooser(intent, requireContext().getString(R.string.label_share))
-                )
-                menu.dismiss()
-                linkMenu = null
-                true
-              }
-              else              -> false
-            }
-          }
-          menu.setOnDismissListener {
-            linkMenu = null
-          }
-          menu.show()
-        }
-      }
-      true
-    }
+    adapter.setOnUrlLongClickListener(LinkLongClickMenuHelper())
 
     messageList.adapter = adapter
     messageList.layoutManager = linearLayoutManager
@@ -240,7 +203,7 @@ class MessageListFragment : ServiceBoundFragment() {
       R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
       R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF
     ) {
-      IntArray(16) {
+      IntArray(length()) {
         getColor(it, 0)
       }
     }

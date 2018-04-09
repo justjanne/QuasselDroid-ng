@@ -6,6 +6,7 @@ import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferSyncer
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SignalProxy
+import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -151,6 +152,7 @@ class BufferSyncer constructor(
     _bufferActivities.remove(buffer);live_bufferActivities.onNext(_bufferActivities)
     _highlightCounts.remove(buffer);live_highlightCounts.onNext(_highlightCounts)
     _bufferInfos.remove(buffer);live_bufferInfos.onNext(_bufferInfos)
+    session.backlogManager?.removeBuffer(buffer)
   }
 
   override fun renameBuffer(buffer: BufferId, newName: String) {
@@ -222,7 +224,7 @@ class BufferSyncer constructor(
   }.filter {
     groupId == null || it.groupId == groupId
   }.filter {
-    bufferName == null || it.bufferName == bufferName
+    bufferName == null || IrcCaseMappers.unicode.equalsIgnoreCaseNullable(it.bufferName, bufferName)
   }
 
   fun find(

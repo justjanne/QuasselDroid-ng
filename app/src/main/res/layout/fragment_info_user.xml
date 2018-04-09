@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.constraint.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="H,1.77:1"
+        tools:src="@tools:sample/avatars" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:minHeight="?listPreferredItemHeight"
+      android:orientation="vertical"
+      android:paddingBottom="8dp"
+      android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+      android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+      android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingTop="8dp">
+
+      <TextView
+        android:id="@+id/nick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        tools:text="justJanne" />
+
+      <TextView
+        android:id="@+id/real_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:text="Janne Koschinski https://kuschku.de/" />
+    </LinearLayout>
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="?colorDivider" />
+
+    <HorizontalScrollView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+        android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+        android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+        android:paddingStart="?android:attr/listPreferredItemPaddingLeft">
+
+        <android.support.v7.widget.AppCompatButton
+          android:id="@+id/action_query"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="?backgroundMenuItem"
+          android:drawablePadding="4dp"
+          android:drawableTop="@drawable/ic_message_bulleted"
+          android:fontFamily="sans-serif"
+          android:minWidth="96dp"
+          android:paddingBottom="12dp"
+          android:paddingLeft="16dp"
+          android:paddingRight="16dp"
+          android:paddingTop="12dp"
+          android:text="@string/label_query"
+          android:textAllCaps="false"
+          android:textStyle="normal" />
+
+        <android.support.v7.widget.AppCompatButton
+          android:id="@+id/action_ignore"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="?backgroundMenuItem"
+          android:drawablePadding="4dp"
+          android:drawableTop="@drawable/ic_eye_off"
+          android:fontFamily="sans-serif"
+          android:minWidth="96dp"
+          android:paddingBottom="12dp"
+          android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+          android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+          android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+          android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+          android:paddingTop="12dp"
+          android:text="@string/label_ignore"
+          android:textAllCaps="false"
+          android:textStyle="normal" />
+
+        <android.support.v7.widget.AppCompatButton
+          android:id="@+id/action_mention"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="?backgroundMenuItem"
+          android:drawablePadding="4dp"
+          android:drawableTop="@drawable/ic_share_alternative"
+          android:fontFamily="sans-serif"
+          android:minWidth="96dp"
+          android:paddingBottom="12dp"
+          android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+          android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+          android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+          android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+          android:paddingTop="12dp"
+          android:text="@string/label_mention"
+          android:textAllCaps="false"
+          android:textStyle="normal" />
+      </LinearLayout>
+    </HorizontalScrollView>
+
+    <LinearLayout
+      android:id="@+id/away_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?colorDivider" />
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:paddingBottom="8dp"
+        android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+        android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+        android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+        android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+        android:paddingTop="8dp"
+        android:text="@string/label_user_away"
+        android:textColor="?colorTextPrimary"
+        android:textStyle="bold" />
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+        android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+        android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+        android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+        android:paddingTop="16dp">
+
+        <TextView
+          android:id="@+id/away_message"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textColor="?colorTextPrimary"
+          android:textSize="16sp"
+          tools:text="~justJanne" />
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/label_user_away_reason"
+          android:textAppearance="?android:attr/textAppearanceSmall"
+          android:textColor="?colorTextSecondary" />
+      </LinearLayout>
+    </LinearLayout>
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="?colorDivider" />
+
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:minHeight="48dp"
+      android:paddingBottom="8dp"
+      android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+      android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+      android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingTop="8dp"
+      android:text="@string/label_user_identity"
+      android:textColor="?colorTextPrimary"
+      android:textStyle="bold" />
+
+    <LinearLayout
+      android:id="@+id/account_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:minHeight="?android:attr/listPreferredItemHeightSmall"
+      android:orientation="vertical"
+      android:paddingBottom="16dp"
+      android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+      android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+      android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingTop="16dp">
+
+      <TextView
+        android:id="@+id/account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?colorTextPrimary"
+        android:textSize="16sp"
+        tools:text="kuschku" />
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_user_account"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="?colorTextSecondary" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/ident_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:minHeight="?android:attr/listPreferredItemHeightSmall"
+      android:orientation="vertical"
+      android:paddingBottom="16dp"
+      android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+      android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+      android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingTop="16dp">
+
+      <TextView
+        android:id="@+id/ident"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?colorTextPrimary"
+        android:textSize="16sp"
+        tools:text="~justJanne" />
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_user_ident"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="?colorTextSecondary" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/host_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:minHeight="?android:attr/listPreferredItemHeightSmall"
+      android:orientation="vertical"
+      android:paddingBottom="16dp"
+      android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+      android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+      android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingTop="16dp">
+
+      <TextView
+        android:id="@+id/host"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?colorTextPrimary"
+        android:textSize="16sp"
+        tools:text="lithium.kuschku.de" />
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_user_host"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="?colorTextSecondary" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/server_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:minHeight="?android:attr/listPreferredItemHeightSmall"
+      android:orientation="vertical"
+      android:paddingBottom="16dp"
+      android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+      android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+      android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingTop="16dp">
+
+      <TextView
+        android:id="@+id/server"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?colorTextPrimary"
+        android:textSize="16sp"
+        tools:text="irc.freenode.org" />
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_user_server"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="?colorTextSecondary" />
+    </LinearLayout>
+  </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

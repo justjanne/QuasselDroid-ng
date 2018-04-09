@@ -28,9 +28,7 @@ import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
-import de.kuschku.quasseldroid.ui.chat.info.InfoActivity
-import de.kuschku.quasseldroid.ui.chat.info.InfoDescriptor
-import de.kuschku.quasseldroid.ui.chat.info.InfoType
+import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoActivity
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
@@ -70,7 +68,7 @@ class NickListFragment : ServiceBoundFragment() {
       R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
       R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF
     ) {
-      IntArray(16) {
+      IntArray(length()) {
         getColor(it, 0)
       }
     }
@@ -154,17 +152,17 @@ class NickListFragment : ServiceBoundFragment() {
   private val clickListener: ((String) -> Unit)? = { nick ->
     viewModel.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
       viewModel.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
-        val intent = Intent(requireContext(), InfoActivity::class.java)
-        intent.putExtra("info", InfoDescriptor(
-          type = InfoType.User,
-          nick = nick,
-          buffer = bufferSyncer.find(
-            bufferName = nick,
-            networkId = networkId,
-            type = Buffer_Type.of(Buffer_Type.QueryBuffer)
-          )?.bufferId ?: -1,
-          network = networkId
-        ))
+        val intent = Intent(requireContext(), UserInfoActivity::class.java)
+        bufferSyncer.find(
+          bufferName = nick,
+          networkId = networkId,
+          type = Buffer_Type.of(Buffer_Type.QueryBuffer)
+        )?.let {
+          intent.putExtra("bufferId", it.bufferId)
+        }
+        intent.putExtra("nick", nick)
+        intent.putExtra("networkId", networkId)
+        intent.putExtra("openBuffer", false)
         startActivity(intent)
       }
     }

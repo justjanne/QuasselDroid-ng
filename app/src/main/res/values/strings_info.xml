@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="label_user_away">Away</string>
+  <string name="label_user_away_reason">Reason</string>
+  <string name="label_user_identity">Identity</string>
+  <string name="label_user_account">Account</string>
+  <string name="label_user_ident">Ident</string>
+  <string name="label_user_host">Host</string>
+  <string name="label_user_server">Server</string>
+
+  <string name="property_group_ircchannel_channel">Channel</string>
+  <string name="property_ircchannel_topic">Topic</string>
+  <string name="property_ircchannel_topic_action_edit">Edit Topic</string>
+  <string name="property_ircchannel_topic_default">No Topic Set</string>
+</resources>

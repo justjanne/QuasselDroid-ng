@@ -57,7 +57,7 @@ class EditorViewModel : ViewModel() {
                       network.liveIrcChannel(
                         info.bufferName
                       ).switchMap { channel ->
-                        channel.liveUpdates().map {
+                        channel.updates().map {
                           AutoCompleteItem.ChannelItem(
                             info = info,
                             network = network.networkInfo(),

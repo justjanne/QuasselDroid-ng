@@ -21,17 +21,20 @@
   <string name="label_crashes">Absturzberichte</string>
   <string name="label_delete">Löschen</string>
   <string name="label_delete_all">Alle Löschen</string>
-  <string name="label_details">Details</string>
   <string name="label_disconnect">Verbindung trennen</string>
   <string name="label_edit_nick">Spitznamen bearbeiten</string>
   <string name="label_filter_messages">Nachrichten filtern</string>
   <string name="label_github">GitHub</string>
   <string name="label_hide_perm">Permanent ausblenden</string>
   <string name="label_hide_temp">Temporär ausblenden</string>
+  <string name="label_ignore">Ignorieren</string>
+  <string name="label_info_channel">Kanalinformationen</string>
+  <string name="label_info_user">Benutzerinformationen</string>
   <string name="label_input_history">Eingabeverlauf</string>
   <string name="label_join">Verbinden</string>
   <string name="label_libraries">Bibliotheken</string>
   <string name="label_license">Lizenz</string>
+  <string name="label_mention">Erwähnen</string>
   <string name="label_new_account">Account hinzufügen</string>
   <string name="label_new_chatlist">Chatliste hinzufügen</string>
   <string name="label_new_identity">Identität hinzufügen</string>
@@ -44,6 +47,7 @@
   <string name="label_part">Verlassen</string>
   <string name="label_placeholder_message">Nachricht schreiben…</string>
   <string name="label_placeholder_topic">Beschreib das Thema des Kanals…</string>
+  <string name="label_query">Dialog</string>
   <string name="label_rename">Umbenennen</string>
   <string name="label_save">Speichern</string>
   <string name="label_select">Auswählen</string>
@@ -56,6 +60,7 @@
   <string name="label_topic">Kanal-Thema</string>
   <string name="label_unhide">Nicht mehr ausblenden</string>
   <string name="label_website">Webseite</string>
+  <string name="label_whois">Whois</string>
   <string name="label_yes">Ja</string>
 
   <string name="notification_channel_connection_title">Verbindung</string>

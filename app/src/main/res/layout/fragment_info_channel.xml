@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:minHeight="?listPreferredItemHeight"
+      android:orientation="vertical"
+      android:paddingBottom="8dp"
+      android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+      android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+      android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+      android:paddingTop="8dp">
+
+      <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        tools:text="#quassel" />
+
+      <TextView
+        android:id="@+id/topic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:text="Quassel IRC - https://quassel-irc.org || Latest: 0.12.4 || Mailing Lists: https://lists.quassel-irc.org || Tracker: https://bugs.quassel-irc.org || Activity RSS: #quassel-announce || German: #quassel.de || Quassel on Android: #quasseldroid; on iOS: #woboquassel || Server migration complete; new IPs may still need some time to propagate" />
+    </LinearLayout>
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="?colorDivider" />
+
+    <HorizontalScrollView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+        android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+        android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+        android:paddingStart="?android:attr/listPreferredItemPaddingLeft">
+
+        <android.support.v7.widget.AppCompatButton
+          android:id="@+id/action_edit_topic"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="?backgroundMenuItem"
+          android:drawablePadding="4dp"
+          android:drawableTop="@drawable/ic_pencil"
+          android:fontFamily="sans-serif"
+          android:minWidth="96dp"
+          android:paddingBottom="12dp"
+          android:paddingLeft="16dp"
+          android:paddingRight="16dp"
+          android:paddingTop="12dp"
+          android:text="@string/label_edit_topic"
+          android:textAllCaps="false"
+          android:textStyle="normal" />
+
+        <android.support.v7.widget.AppCompatButton
+          android:id="@+id/action_part"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="?backgroundMenuItem"
+          android:drawablePadding="4dp"
+          android:drawableTop="@drawable/ic_account_minus"
+          android:fontFamily="sans-serif"
+          android:minWidth="96dp"
+          android:paddingBottom="12dp"
+          android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+          android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+          android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+          android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+          android:paddingTop="12dp"
+          android:text="@string/label_part"
+          android:textAllCaps="false"
+          android:textStyle="normal" />
+      </LinearLayout>
+    </HorizontalScrollView>
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="?colorDivider" />
+  </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

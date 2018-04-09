@@ -116,7 +116,7 @@ class IrcChannel(
   fun userModes(nick: String) = network().ircUser(nick)?.let { userModes(it) } ?: ""
   fun liveUserModes(nick: String) = network().ircUser(nick)?.let { userModes(it) } ?: ""
 
-  fun liveUpdates(): Observable<IrcChannel> = live_updates.map { this }
+  fun updates(): Observable<IrcChannel> = live_updates.map { this }
 
   fun hasMode(mode: Char) = when (network().channelModeType(mode)) {
     INetwork.ChannelModeType.A_CHANMODE ->
