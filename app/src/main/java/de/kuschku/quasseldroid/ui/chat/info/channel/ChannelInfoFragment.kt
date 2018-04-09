@@ -16,6 +16,7 @@ import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
 import de.kuschku.quasseldroid.util.helper.combineLatest
+import de.kuschku.quasseldroid.util.helper.retint
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
@@ -70,6 +71,7 @@ class ChannelInfoFragment : ServiceBoundFragment() {
           intent.putExtra("buffer", arguments?.getInt("bufferId") ?: -1)
           startActivity(intent)
         }
+        actionEditTopic.retint()
 
         actionPart.setOnClickListener {
           viewModel.session.value?.orNull()?.let { session ->
@@ -82,6 +84,7 @@ class ChannelInfoFragment : ServiceBoundFragment() {
             }
           }
         }
+        actionPart.retint()
       }
     })
 

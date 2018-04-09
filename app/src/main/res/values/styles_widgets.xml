@@ -135,6 +135,85 @@
     <item name="android:textColor">?colorTextSecondary</item>
   </style>
 
+  <style name="Widget.Info.Header" parent="">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:minHeight">?listPreferredItemHeight</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:paddingBottom">8dp</item>
+    <item name="android:paddingLeft">?android:attr/listPreferredItemPaddingLeft</item>
+    <item name="android:paddingRight">?android:attr/listPreferredItemPaddingRight</item>
+    <item name="android:paddingTop">8dp</item>
+  </style>
+
+  <style name="Widget.Info.Header.Name" parent="">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textAppearance">@style/TextAppearance.AppCompat.Headline</item>
+  </style>
+
+  <style name="Widget.Info.Header.Description" parent="">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+  </style>
+
+  <style name="Widget.Info.ActionButton" parent="">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:background">?backgroundMenuItem</item>
+    <item name="android:drawablePadding">4dp</item>
+    <item name="android:fontFamily">sans-serif</item>
+    <item name="android:minWidth">96dp</item>
+    <item name="android:paddingBottom">12dp</item>
+    <item name="android:paddingLeft">?android:attr/listPreferredItemPaddingLeft</item>
+    <item name="android:paddingRight">?android:attr/listPreferredItemPaddingRight</item>
+    <item name="android:paddingTop">12dp</item>
+    <item name="android:textAllCaps">false</item>
+    <item name="android:textColor">?colorTextPrimary</item>
+    <item name="android:textStyle">normal</item>
+  </style>
+
+  <style name="Widget.Info.Section" parent="">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:minHeight">48dp</item>
+    <item name="android:paddingBottom">8dp</item>
+    <item name="android:paddingLeft">?android:attr/listPreferredItemPaddingLeft</item>
+    <item name="android:paddingRight">?android:attr/listPreferredItemPaddingRight</item>
+    <item name="android:paddingTop">8dp</item>
+    <item name="android:textColor">?colorTextPrimary</item>
+    <item name="android:textStyle">bold</item>
+  </style>
+
+  <style name="Widget.Info.Item" parent="">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:minHeight">?android:attr/listPreferredItemHeightSmall</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:paddingBottom">16dp</item>
+    <item name="android:paddingLeft">?android:attr/listPreferredItemPaddingLeft</item>
+    <item name="android:paddingRight">?android:attr/listPreferredItemPaddingRight</item>
+    <item name="android:paddingTop">16dp</item>
+  </style>
+
+  <style name="Widget.Info.Item.Content" parent="">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textColor">?colorTextPrimary</item>
+    <item name="android:textSize">16sp</item>
+  </style>
+
+  <style name="Widget.Info.Item.Description" parent="">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+    <item name="android:textColor">?colorTextSecondary</item>
+  </style>
+
   <!-- NavigationDrawerLayout -->
   <declare-styleable name="NavigationDrawerLayout">
     <attr name="insetBackground" />

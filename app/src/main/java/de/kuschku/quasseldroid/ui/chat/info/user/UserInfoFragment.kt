@@ -190,6 +190,12 @@ class UserInfoFragment : ServiceBoundFragment() {
             }
           }
         }
+        actionQuery.retint()
+
+        actionIgnore.setOnClickListener {
+          Toast.makeText(requireContext(), "Not Implemented", Toast.LENGTH_SHORT).show()
+        }
+        actionIgnore.retint()
 
         actionMention.setOnClickListener {
           val intent = Intent(requireContext(), ChatActivity::class.java)
@@ -198,10 +204,7 @@ class UserInfoFragment : ServiceBoundFragment() {
           startActivity(intent)
         }
         actionMention.visibleIf(arguments?.getBoolean("openBuffer") == false)
-
-        actionIgnore.setOnClickListener {
-          Toast.makeText(requireContext(), "Not Implemented", Toast.LENGTH_SHORT).show()
-        }
+        actionMention.retint()
       }
     })
 
