@@ -17,6 +17,7 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.retint
+import de.kuschku.quasseldroid.util.helper.setTooltip
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
@@ -61,7 +62,7 @@ class ChannelInfoFragment : ServiceBoundFragment() {
       } ?: IrcChannel.NULL
     }.filter {
       it != IrcChannel.NULL
-    }.switchMap(IrcChannel::updates).firstElement().toLiveData().observe(this, Observer { channel ->
+    }.switchMap(IrcChannel::updates).toLiveData().observe(this, Observer { channel ->
       if (channel != null) {
         name.text = channel.name()
         topic.text = contentFormatter.format(requireContext(), channel.topic())
@@ -71,7 +72,6 @@ class ChannelInfoFragment : ServiceBoundFragment() {
           intent.putExtra("buffer", arguments?.getInt("bufferId") ?: -1)
           startActivity(intent)
         }
-        actionEditTopic.retint()
 
         actionPart.setOnClickListener {
           viewModel.session.value?.orNull()?.let { session ->
@@ -84,13 +84,17 @@ class ChannelInfoFragment : ServiceBoundFragment() {
             }
           }
         }
-        actionPart.retint()
       }
     })
 
     val movementMethod = BetterLinkMovementMethod.newInstance()
     movementMethod.setOnLinkLongClickListener(LinkLongClickMenuHelper())
     topic.movementMethod = movementMethod
+
+    actionEditTopic.setTooltip()
+    actionEditTopic.retint()
+    actionPart.setTooltip()
+    actionPart.retint()
 
     return view
   }

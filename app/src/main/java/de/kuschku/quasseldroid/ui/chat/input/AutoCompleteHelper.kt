@@ -14,6 +14,7 @@ import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.util.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
@@ -147,9 +148,7 @@ class AutoCompleteHelper(
                   user.realName(),
                   user.isAway(),
                   network.support("CASEMAPPING"),
-                  Regex("[us]id(\\d+)").matchEntire(user.user())?.groupValues?.lastOrNull()?.let {
-                    "https://www.irccloud.com/avatar-redirect/$it"
-                  }
+                  AvatarHelper.avatar(user = user)
                 )
               }
 

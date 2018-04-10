@@ -1,8 +1,8 @@
 package de.kuschku.quasseldroid.ui.chat.messages
 
 import de.kuschku.libquassel.protocol.MsgId
-import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.util.AvatarHelper
 
 data class DisplayMessage(
   val content: QuasselDatabase.DatabaseMessage,
@@ -32,9 +32,5 @@ data class DisplayMessage(
     isMarkerLine,
     isEmoji
   )
-  val avatarUrl = content.sender.let {
-    Regex("[us]id(\\d+)").matchEntire(HostmaskHelper.user(it))?.groupValues?.lastOrNull()?.let {
-      "https://www.irccloud.com/avatar-redirect/$it"
-    }
-  }
+  val avatarUrl = AvatarHelper.avatar(message = content)
 }

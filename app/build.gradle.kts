@@ -71,6 +71,7 @@ android {
 
     getByName("debug") {
       applicationIdSuffix = "debug"
+      /*
 
       isZipAlignEnabled = true
       isMinifyEnabled = true
@@ -80,6 +81,7 @@ android {
         getDefaultProguardFile("proguard-android.txt"),
         "proguard-rules.pro"
       )
+      */
     }
   }
 

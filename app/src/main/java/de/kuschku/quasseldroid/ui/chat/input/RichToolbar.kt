@@ -3,13 +3,13 @@ package de.kuschku.quasseldroid.ui.chat.input
 import android.content.Context
 import android.support.annotation.ColorInt
 import android.support.v7.widget.Toolbar
-import android.support.v7.widget.TooltipCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.util.helper.setTooltip
 
 class RichToolbar : Toolbar {
   @BindView(R.id.action_format_bold)
@@ -53,14 +53,14 @@ class RichToolbar : Toolbar {
     LayoutInflater.from(context).inflate(R.layout.widget_formatting, this, true)
     ButterKnife.bind(this)
 
-    TooltipCompat.setTooltipText(boldButton, boldButton.contentDescription)
-    TooltipCompat.setTooltipText(italicButton, italicButton.contentDescription)
-    TooltipCompat.setTooltipText(underlineButton, underlineButton.contentDescription)
-    TooltipCompat.setTooltipText(strikethroughButton, strikethroughButton.contentDescription)
-    TooltipCompat.setTooltipText(monospaceButton, monospaceButton.contentDescription)
-    TooltipCompat.setTooltipText(foregroundButton, foregroundButton.contentDescription)
-    TooltipCompat.setTooltipText(backgroundButton, backgroundButton.contentDescription)
-    TooltipCompat.setTooltipText(clearButton, clearButton.contentDescription)
+    boldButton.setTooltip()
+    italicButton.setTooltip()
+    underlineButton.setTooltip()
+    strikethroughButton.setTooltip()
+    monospaceButton.setTooltip()
+    foregroundButton.setTooltip()
+    backgroundButton.setTooltip()
+    clearButton.setTooltip()
 
     boldButton.setOnClickListener { listener?.onBold() }
     italicButton.setOnClickListener { listener?.onItalic() }

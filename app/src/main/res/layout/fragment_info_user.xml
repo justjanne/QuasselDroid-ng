@@ -9,6 +9,7 @@
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:orientation="vertical">
 
     <android.support.constraint.ConstraintLayout
@@ -59,33 +60,49 @@
         <android.support.v7.widget.AppCompatButton
           android:id="@+id/action_query"
           style="@style/Widget.Info.ActionButton"
+          android:contentDescription="@string/label_query_long"
           android:drawableTop="@drawable/ic_message_bulleted"
-          android:text="@string/label_query" />
+          android:text="@string/label_query"
+          tools:drawableTint="?colorTextSecondary" />
 
         <android.support.v7.widget.AppCompatButton
           android:id="@+id/action_ignore"
           style="@style/Widget.Info.ActionButton"
+          android:contentDescription="@string/label_ignore_long"
           android:drawableTop="@drawable/ic_eye_off"
-          android:text="@string/label_ignore" />
+          android:text="@string/label_ignore"
+          tools:drawableTint="?colorTextSecondary" />
+
+        <android.support.v7.widget.AppCompatButton
+          android:id="@+id/action_whois"
+          style="@style/Widget.Info.ActionButton"
+          android:contentDescription="@string/label_whois_long"
+          android:drawableTop="@drawable/ic_info"
+          android:text="@string/label_whois"
+          tools:drawableTint="?colorTextSecondary" />
 
         <android.support.v7.widget.AppCompatButton
           android:id="@+id/action_mention"
           style="@style/Widget.Info.ActionButton"
+          android:contentDescription="@string/label_mention_long"
           android:drawableTop="@drawable/ic_share_alternative"
-          android:text="@string/label_mention" />
+          android:text="@string/label_mention"
+          tools:drawableTint="?colorTextSecondary" />
       </LinearLayout>
     </HorizontalScrollView>
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="?colorDivider" />
 
     <LinearLayout
       android:id="@+id/away_container"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="vertical">
-
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?colorDivider" />
+      android:orientation="vertical"
+      android:visibility="gone"
+      tools:visibility="visible">
 
       <TextView
         style="@style/Widget.Info.Section"
@@ -102,12 +119,12 @@
           style="@style/Widget.Info.Item.Description"
           android:text="@string/label_user_away_reason" />
       </LinearLayout>
-    </LinearLayout>
 
-    <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="?colorDivider" />
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?colorDivider" />
+    </LinearLayout>
 
     <TextView
       style="@style/Widget.Info.Section"
@@ -115,7 +132,9 @@
 
     <LinearLayout
       android:id="@+id/account_container"
-      style="@style/Widget.Info.Item">
+      style="@style/Widget.Info.Item"
+      android:visibility="gone"
+      tools:visibility="visible">
 
       <TextView
         android:id="@+id/account"
@@ -129,7 +148,9 @@
 
     <LinearLayout
       android:id="@+id/ident_container"
-      style="@style/Widget.Info.Item">
+      style="@style/Widget.Info.Item"
+      android:visibility="gone"
+      tools:visibility="visible">
 
       <TextView
         android:id="@+id/ident"
@@ -143,7 +164,9 @@
 
     <LinearLayout
       android:id="@+id/host_container"
-      style="@style/Widget.Info.Item">
+      style="@style/Widget.Info.Item"
+      android:visibility="gone"
+      tools:visibility="visible">
 
       <TextView
         android:id="@+id/host"
@@ -157,7 +180,9 @@
 
     <LinearLayout
       android:id="@+id/server_container"
-      style="@style/Widget.Info.Item">
+      style="@style/Widget.Info.Item"
+      android:visibility="gone"
+      tools:visibility="visible">
 
       <TextView
         android:id="@+id/server"

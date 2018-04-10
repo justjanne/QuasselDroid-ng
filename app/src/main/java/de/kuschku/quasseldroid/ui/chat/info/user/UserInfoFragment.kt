@@ -19,11 +19,13 @@ import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.ui.chat.input.AutoCompleteHelper.Companion.IGNORED_CHARS
+import de.kuschku.quasseldroid.util.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
 import de.kuschku.quasseldroid.util.ui.TextDrawable
+import io.reactivex.Observable
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import javax.inject.Inject
 
@@ -42,6 +44,9 @@ class UserInfoFragment : ServiceBoundFragment() {
 
   @BindView(R.id.action_ignore)
   lateinit var actionIgnore: Button
+
+  @BindView(R.id.action_whois)
+  lateinit var actionWhois: Button
 
   @BindView(R.id.action_mention)
   lateinit var actionMention: Button
@@ -99,20 +104,20 @@ class UserInfoFragment : ServiceBoundFragment() {
 
     val networkId = arguments?.getInt("networkId")
     val nickName = arguments?.getString("nick")
-    combineLatest(viewModel.session, viewModel.networks).map { (sessionOptional, networks) ->
+    combineLatest(viewModel.session, viewModel.networks).switchMap { (sessionOptional, networks) ->
       if (openBuffer == true) {
         val session = sessionOptional?.orNull()
         val bufferSyncer = session?.bufferSyncer
         val bufferInfo = bufferSyncer?.bufferInfo(arguments?.getInt("bufferId") ?: -1)
         bufferInfo?.let {
-          networks[it.networkId]?.ircUser(it.bufferName)
+          networks[it.networkId]?.liveIrcUser(it.bufferName)
         }
       } else {
-        networks[networkId]?.ircUser(nickName)
-      } ?: IrcUser.NULL
+        networks[networkId]?.liveIrcUser(nickName)
+      } ?: Observable.just(IrcUser.NULL)
     }.filter {
       it != IrcUser.NULL
-    }.switchMap(IrcUser::updates).firstElement().toLiveData().observe(this, Observer { user ->
+    }.switchMap(IrcUser::updates).toLiveData().observe(this, Observer { user ->
       if (user != null) {
         val senderColorIndex = IrcUserUtils.senderColor(user.nick())
         val rawInitial = user.nick().trimStart(*IGNORED_CHARS).firstOrNull()
@@ -122,9 +127,7 @@ class UserInfoFragment : ServiceBoundFragment() {
 
         val fallbackDrawable = TextDrawable.builder().buildRect(initial, senderColor)
 
-        val avatarUrl = Regex("[us]id(\\d+)").matchEntire(user.user())?.groupValues?.lastOrNull()?.let {
-          "https://www.irccloud.com/avatar-redirect/$it"
-        }
+        val avatarUrl = AvatarHelper.avatar(user = user)
         if (avatarUrl != null) {
           GlideApp.with(avatar)
             .load(avatarUrl)
@@ -190,12 +193,23 @@ class UserInfoFragment : ServiceBoundFragment() {
             }
           }
         }
-        actionQuery.retint()
 
         actionIgnore.setOnClickListener {
           Toast.makeText(requireContext(), "Not Implemented", Toast.LENGTH_SHORT).show()
         }
-        actionIgnore.retint()
+
+        actionWhois.setOnClickListener {
+          viewModel.session {
+            it.orNull()?.let { session ->
+              session.bufferSyncer?.find(
+                networkId = networkId,
+                type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+              )?.let { statusInfo ->
+                session.rpcHandler?.sendInput(statusInfo, "/whois ${user.nick()}")
+              }
+            }
+          }
+        }
 
         actionMention.setOnClickListener {
           val intent = Intent(requireContext(), ChatActivity::class.java)
@@ -204,13 +218,21 @@ class UserInfoFragment : ServiceBoundFragment() {
           startActivity(intent)
         }
         actionMention.visibleIf(arguments?.getBoolean("openBuffer") == false)
-        actionMention.retint()
       }
     })
 
     val movementMethod = BetterLinkMovementMethod.newInstance()
     movementMethod.setOnLinkLongClickListener(LinkLongClickMenuHelper())
     realName.movementMethod = movementMethod
+
+    actionQuery.setTooltip()
+    actionQuery.retint()
+    actionIgnore.setTooltip()
+    actionIgnore.retint()
+    actionWhois.setTooltip()
+    actionWhois.retint()
+    actionMention.setTooltip()
+    actionMention.retint()
 
     return view
   }
