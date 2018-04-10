@@ -155,6 +155,7 @@ class ChatlineFragment : ServiceBoundFragment() {
       chatline.setText("")
     }
 
+    editorHelper.setOnEnterListener(::send)
     send.setOnClickListener { send() }
 
     tabComplete.visibleIf(autoCompleteSettings.button)

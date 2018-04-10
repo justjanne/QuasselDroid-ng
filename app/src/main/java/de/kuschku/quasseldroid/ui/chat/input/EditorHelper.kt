@@ -48,13 +48,10 @@ class EditorHelper(
       val previous = autoCompleteHelper.autoCompletionState
       val next = if (previous != null && s != null) {
         val suffix = if (previous.range.start == 0) ": " else " "
-        val end = Math.min(
-          s.length, previous.range.start + previous.completion.name.length + suffix.length
-        )
-        val sequence = if (end < previous.range.start) ""
-        else s.substring(previous.range.start, end)
+        val sequence = if (s.length < previous.range.start) ""
+        else s.substring(previous.range.start)
         if (sequence == previous.completion.name + suffix) {
-          previous.originalWord to (previous.range.start until end)
+          previous.originalWord to (previous.range.start until s.length)
         } else {
           autoCompleteHelper.autoCompletionState = null
           s.lastWordIndices(editText.selectionStart, onlyBeforeCursor = true)?.let { indices ->
@@ -165,6 +162,10 @@ class EditorHelper(
         EditorInfo.IME_FLAG_NO_EXTRACT_UI
       )
     }.fold(0, Int::or)
+  }
+
+  fun setOnEnterListener(listener: (() -> Unit)?) {
+    this.enterListener = listener
   }
 
   fun setMultiLine(enabled: Boolean) = editText.setMultiLine(enabled)
