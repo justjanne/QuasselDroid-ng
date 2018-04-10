@@ -67,6 +67,8 @@
   <string name="label_topic">Kanal-Thema</string>
   <string name="label_unhide">Nicht mehr ausblenden</string>
   <string name="label_website">Webseite</string>
+  <string name="label_who">Who</string>
+  <string name="label_who_long">Informationen aller Nutzer aktualisieren</string>
   <string name="label_whois">Whois</string>
   <string name="label_whois_long">Nutzerinformationen aktualisieren</string>
   <string name="label_yes">Ja</string>

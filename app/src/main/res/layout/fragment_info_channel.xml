@@ -50,6 +50,14 @@
           tools:drawableTint="?colorTextSecondary" />
 
         <android.support.v7.widget.AppCompatButton
+          android:id="@+id/action_who"
+          style="@style/Widget.Info.ActionButton"
+          android:contentDescription="@string/label_who_long"
+          android:drawableTop="@drawable/ic_info"
+          android:text="@string/label_who"
+          tools:drawableTint="?colorTextSecondary" />
+
+        <android.support.v7.widget.AppCompatButton
           android:id="@+id/action_part"
           style="@style/Widget.Info.ActionButton"
           android:contentDescription="@string/label_part_long"

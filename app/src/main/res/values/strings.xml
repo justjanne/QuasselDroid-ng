@@ -67,6 +67,8 @@
   <string name="label_topic">Channel Topic</string>
   <string name="label_unhide">Make Visible</string>
   <string name="label_website">Website</string>
+  <string name="label_who">Who</string>
+  <string name="label_who_long">Update user information of all users</string>
   <string name="label_whois">Whois</string>
   <string name="label_whois_long">Update user information</string>
   <string name="label_yes">Yes</string>

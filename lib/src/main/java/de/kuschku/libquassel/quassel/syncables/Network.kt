@@ -346,11 +346,9 @@ class Network constructor(
     }
   }
 
-  fun ircUser(nickName: String?) = _ircUsers[nickName?.let(caseMapper::toLowerCase)]
+  fun ircUser(nickName: String?) = _ircUsers[caseMapper.toLowerCaseNullable(nickName)]
   fun liveIrcUser(nickName: String?) = live_ircUsers.map {
-    ircUser(
-      nickName
-    ) ?: IrcUser.NULL
+    ircUser(nickName) ?: IrcUser.NULL
   }.distinctUntilChanged()
 
   fun ircUsers() = _ircUsers.values.toList()

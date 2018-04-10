@@ -36,8 +36,14 @@ class ChannelInfoFragment : ServiceBoundFragment() {
   @BindView(R.id.action_edit_topic)
   lateinit var actionEditTopic: Button
 
+  @BindView(R.id.action_who)
+  lateinit var actionWho: Button
+
   @BindView(R.id.action_part)
   lateinit var actionPart: Button
+
+  @BindView(R.id.action_join)
+  lateinit var actionJoin: Button
 
   @Inject
   lateinit var contentFormatter: ContentFormatter
@@ -84,6 +90,18 @@ class ChannelInfoFragment : ServiceBoundFragment() {
             }
           }
         }
+
+        actionWho.setOnClickListener {
+          viewModel.session.value?.orNull()?.let { session ->
+            session.bufferSyncer?.find(
+              networkId = channel.network().networkId(),
+              type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+            )?.let { statusInfo ->
+              session.rpcHandler?.sendInput(statusInfo, "/who ${channel.name()}")
+              requireActivity().finish()
+            }
+          }
+        }
       }
     })
 
@@ -93,6 +111,10 @@ class ChannelInfoFragment : ServiceBoundFragment() {
 
     actionEditTopic.setTooltip()
     actionEditTopic.retint()
+    actionWho.setTooltip()
+    actionWho.retint()
+    actionJoin.setTooltip()
+    actionJoin.retint()
     actionPart.setTooltip()
     actionPart.retint()
 

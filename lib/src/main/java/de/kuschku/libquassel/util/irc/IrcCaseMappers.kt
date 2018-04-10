@@ -3,8 +3,8 @@ package de.kuschku.libquassel.util.irc
 import java.util.*
 
 object IrcCaseMappers {
-  var irc: IrcCaseMapper = UnicodeCaseMapper()
-  var unicode: IrcCaseMapper = ClassicalIrcCaseMapper()
+  var irc: IrcCaseMapper = ClassicalIrcCaseMapper()
+  var unicode: IrcCaseMapper = UnicodeCaseMapper()
 
   interface IrcCaseMapper {
     fun equalsIgnoreCase(a: String, b: String): Boolean
