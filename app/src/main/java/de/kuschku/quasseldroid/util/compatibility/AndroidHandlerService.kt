@@ -2,10 +2,18 @@ package de.kuschku.quasseldroid.util.compatibility
 
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Message
 import android.os.Process
 import de.kuschku.libquassel.util.compatibility.HandlerService
+import io.reactivex.Scheduler
+import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.Disposables
+import io.reactivex.plugins.RxJavaPlugins
+import java.util.concurrent.TimeUnit
 
 class AndroidHandlerService : HandlerService {
+  override lateinit var scheduler: Scheduler
+
   override fun serialize(f: () -> Unit) {
     serializeHandler.post(f)
   }
@@ -56,6 +64,8 @@ class AndroidHandlerService : HandlerService {
     deserializeHandler = Handler(deserializeThread.looper)
     writeHandler = Handler(writeThread.looper)
     backendHandler = Handler(backendThread.looper)
+
+    scheduler = HandlerScheduler(backendHandler)
   }
 
   override var exceptionHandler: Thread.UncaughtExceptionHandler? = null
@@ -66,5 +76,78 @@ class AndroidHandlerService : HandlerService {
     deserializeThread.quit()
     writeThread.quit()
     backendThread.quit()
+  }
+
+  internal class HandlerScheduler(private val handler: Handler) : Scheduler() {
+    override fun scheduleDirect(run: Runnable, delay: Long, unit: TimeUnit): Disposable {
+      val scheduled = ScheduledRunnable(handler, RxJavaPlugins.onSchedule(run))
+      handler.postDelayed(scheduled, unit.toMillis(delay))
+      return scheduled
+    }
+
+    override fun createWorker(): Scheduler.Worker {
+      return HandlerWorker(handler)
+    }
+
+    private class HandlerWorker constructor(private val handler: Handler) : Scheduler.Worker() {
+      @Volatile
+      private var disposed: Boolean = false
+
+      override fun schedule(run: Runnable, delay: Long, unit: TimeUnit): Disposable {
+        if (disposed) {
+          return Disposables.disposed()
+        }
+
+        val scheduled = ScheduledRunnable(handler, RxJavaPlugins.onSchedule(run))
+
+        val message = Message.obtain(handler, scheduled)
+        message.obj = this // Used as token for batch disposal of this worker's runnables.
+
+        handler.sendMessageDelayed(message, unit.toMillis(delay))
+
+        // Re-check disposed state for removing in case we were racing a call to dispose().
+        if (disposed) {
+          handler.removeCallbacks(scheduled)
+          return Disposables.disposed()
+        }
+
+        return scheduled
+      }
+
+      override fun dispose() {
+        disposed = true
+        handler.removeCallbacksAndMessages(this /* token */)
+      }
+
+      override fun isDisposed(): Boolean {
+        return disposed
+      }
+    }
+
+    private class ScheduledRunnable internal constructor(private val handler: Handler,
+                                                         private val delegate: Runnable) : Runnable,
+                                                                                           Disposable {
+
+      @Volatile
+      private var disposed: Boolean = false
+
+      override fun run() {
+        try {
+          delegate.run()
+        } catch (t: Throwable) {
+          RxJavaPlugins.onError(t)
+        }
+
+      }
+
+      override fun dispose() {
+        disposed = true
+        handler.removeCallbacks(this)
+      }
+
+      override fun isDisposed(): Boolean {
+        return disposed
+      }
+    }
   }
 }

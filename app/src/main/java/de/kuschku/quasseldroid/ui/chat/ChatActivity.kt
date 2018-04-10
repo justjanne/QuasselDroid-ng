@@ -106,7 +106,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     setSupportActionBar(toolbar)
 
-    viewModel.buffer_liveData.observe(this, Observer {
+    viewModel.buffer.toLiveData().observe(this, Observer {
       if (it != null && drawerLayout.isDrawerOpen(Gravity.START)) {
         drawerLayout.closeDrawer(Gravity.START, true)
       }
@@ -151,8 +151,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
     }
 
-    viewModel.errors.observe(this, Observer { error ->
-      error?.let {
+    viewModel.errors.toLiveData().observe(this, Observer { error ->
+      error?.orNull()?.let {
         when (it) {
           is HandshakeMessage.ClientInitReject  ->
             MaterialDialog.Builder(this)
@@ -232,7 +232,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
     })
 
-    viewModel.connectionProgress_liveData.observe(this, Observer {
+    viewModel.connectionProgress.toLiveData().observe(this, Observer {
       val (state, progress, max) = it ?: Triple(ConnectionState.DISCONNECTED, 0, 0)
       when (state) {
         ConnectionState.CONNECTED -> {

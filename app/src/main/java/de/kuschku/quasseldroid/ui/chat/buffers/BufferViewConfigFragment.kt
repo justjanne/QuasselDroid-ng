@@ -230,7 +230,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     )
     chatList.adapter = listAdapter
 
-    viewModel.selectedBuffer_liveData.observe(this, Observer { buffer ->
+    viewModel.selectedBuffer.toLiveData().observe(this, Observer { buffer ->
       if (buffer != null) {
         val menu = actionMode?.menu
         if (menu != null) {

@@ -126,6 +126,7 @@ dependencies {
   }
 
   // Utility
+  implementation("io.reactivex.rxjava2", "rxandroid", "2.0.2")
   implementation("io.reactivex.rxjava2", "rxjava", "2.1.9")
   implementation("org.threeten", "threetenbp", "1.3.6", classifier = "no-tzdb")
   implementation("org.jetbrains", "annotations", "16.0.1")

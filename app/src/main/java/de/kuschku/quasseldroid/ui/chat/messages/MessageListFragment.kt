@@ -274,7 +274,7 @@ class MessageListFragment : ServiceBoundFragment() {
         }
       }
 
-    val lastMessageId = viewModel.buffer_liveData.switchMapNotNull {
+    val lastMessageId = viewModel.buffer.toLiveData().switchMapNotNull {
       database.message().lastMsgId(it)
     }
 

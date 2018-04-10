@@ -19,10 +19,7 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
-import de.kuschku.quasseldroid.util.helper.invoke
-import de.kuschku.quasseldroid.util.helper.lineSequence
-import de.kuschku.quasseldroid.util.helper.retint
-import de.kuschku.quasseldroid.util.helper.visibleIf
+import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
@@ -126,9 +123,8 @@ class ChatlineFragment : ServiceBoundFragment() {
       historyPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
     }
     messageHistory.adapter = messageHistoryAdapter
-    viewModel.recentlySentMessages_liveData.observe(
-      this, Observer(messageHistoryAdapter::submitList)
-    )
+    viewModel.recentlySentMessages.toLiveData()
+      .observe(this, Observer(messageHistoryAdapter::submitList))
 
     fun send() {
       if (chatline.text.isNotBlank()) {
