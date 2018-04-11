@@ -29,6 +29,8 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoActivity
+import de.kuschku.quasseldroid.util.AvatarHelper
+import de.kuschku.quasseldroid.util.helper.loadWithFallbacks
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
@@ -73,6 +75,8 @@ class NickListFragment : ServiceBoundFragment() {
       }
     }
 
+    val avatarSize = resources.getDimensionPixelSize(R.dimen.avatar_size)
+
     viewModel.nickData.map {
       it.map {
         val nickName = it.nick
@@ -111,10 +115,11 @@ class NickListFragment : ServiceBoundFragment() {
           },
           realname = ircFormatDeserializer.formatString(
             requireContext(), it.realname.toString(), messageSettings.colorizeMirc
-          )
+          ),
+          avatarUrls = AvatarHelper.avatar(messageSettings, it, avatarSize)
         )
       }.sortedBy {
-        IrcCaseMappers[it.networkCasemapping].toLowerCase(it.nick)
+        IrcCaseMappers.unicode.toLowerCase(it.nick)
       }.sortedBy {
         it.lowestMode
       }
@@ -124,17 +129,15 @@ class NickListFragment : ServiceBoundFragment() {
       nickList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
     }
 
-    val avatar_size = resources.getDimensionPixelSize(R.dimen.avatar_size)
+    val sizeProvider = FixedPreloadSizeProvider<List<String>>(avatarSize, avatarSize)
 
-    val sizeProvider = FixedPreloadSizeProvider<String>(avatar_size, avatar_size)
+    val preloadModelProvider = object : ListPreloader.PreloadModelProvider<List<String>> {
+      override fun getPreloadItems(position: Int) = listOfNotNull(
+        nickListAdapter[position]?.let { AvatarHelper.avatar(messageSettings, it) }
+      )
 
-    val preloadModelProvider = object : ListPreloader.PreloadModelProvider<String> {
-      override fun getPreloadItems(position: Int) = nickListAdapter[position]?.avatarUrl?.let {
-        mutableListOf(it)
-      } ?: mutableListOf()
-
-      override fun getPreloadRequestBuilder(item: String) =
-        GlideApp.with(this@NickListFragment).load(item).override(avatar_size)
+      override fun getPreloadRequestBuilder(item: List<String>) =
+        GlideApp.with(this@NickListFragment).loadWithFallbacks(item)?.override(avatarSize)
     }
 
     val preloader = RecyclerViewPreloader(Glide.with(this), preloadModelProvider, sizeProvider, 10)

@@ -10,10 +10,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.bumptech.glide.request.RequestOptions
-import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.util.helper.loadAvatars
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import de.kuschku.quasseldroid.viewmodel.data.IrcUserItem
@@ -86,16 +85,7 @@ class NickListAdapter(
       nick.text = SpanFormatter.format("%s%s", data.modes, data.displayNick ?: data.nick)
       realname.text = data.realname
 
-      if (data.avatarUrl != null) {
-        GlideApp.with(itemView)
-          .load(data.avatarUrl)
-          .apply(RequestOptions.circleCropTransform())
-          .placeholder(data.fallbackDrawable)
-          .into(avatar)
-      } else {
-        GlideApp.with(itemView).clear(avatar)
-        avatar.setImageDrawable(data.fallbackDrawable)
-      }
+      avatar.loadAvatars(data.avatarUrls, data.fallbackDrawable)
     }
   }
 

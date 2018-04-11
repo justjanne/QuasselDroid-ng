@@ -12,7 +12,10 @@ data class MessageSettings(
   val showHostmaskPlain: Boolean = false,
   val nicksOnNewLine: Boolean = false,
   val timeAtEnd: Boolean = false,
-  val showAvatars: Boolean = false,
+  val showRealNames: Boolean = false,
+  val showAvatars: Boolean = true,
+  val showIRCCloudAvatars: Boolean = false,
+  val showGravatarAvatars: Boolean = false,
   val largerEmoji: Boolean = false
 ) {
 

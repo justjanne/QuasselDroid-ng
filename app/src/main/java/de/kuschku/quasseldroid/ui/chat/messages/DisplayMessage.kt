@@ -2,7 +2,6 @@ package de.kuschku.quasseldroid.ui.chat.messages
 
 import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
-import de.kuschku.quasseldroid.util.AvatarHelper
 
 data class DisplayMessage(
   val content: QuasselDatabase.DatabaseMessage,
@@ -32,5 +31,4 @@ data class DisplayMessage(
     isMarkerLine,
     isEmoji
   )
-  val avatarUrl = AvatarHelper.avatar(message = content)
 }

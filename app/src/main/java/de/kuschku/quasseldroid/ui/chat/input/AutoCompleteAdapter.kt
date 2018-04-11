@@ -11,15 +11,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.bumptech.glide.request.RequestOptions
-import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.nicks.NickListAdapter.Companion.VIEWTYPE_AWAY
-import de.kuschku.quasseldroid.util.helper.getVectorDrawableCompat
-import de.kuschku.quasseldroid.util.helper.styledAttributes
-import de.kuschku.quasseldroid.util.helper.tint
-import de.kuschku.quasseldroid.util.helper.visibleIf
+import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
@@ -112,15 +107,7 @@ class AutoCompleteAdapter(
         nick.text = SpanFormatter.format("%s%s", data.modes, data.displayNick ?: data.nick)
         realname.text = data.realname
 
-        if (data.avatarUrl != null) {
-          GlideApp.with(itemView)
-            .load(data.avatarUrl)
-            .apply(RequestOptions.circleCropTransform())
-            .placeholder(data.fallbackDrawable)
-            .into(avatar)
-        } else {
-          avatar.setImageDrawable(data.fallbackDrawable)
-        }
+        avatar.loadAvatars(data.avatarUrls, data.fallbackDrawable)
       }
     }
 

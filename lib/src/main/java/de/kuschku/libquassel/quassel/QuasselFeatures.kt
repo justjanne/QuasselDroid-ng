@@ -9,11 +9,11 @@ class QuasselFeatures(
 ) {
   constructor(legacyFeatures: Legacy_Features?, extendedFeatures: Collection<String>) : this(
     legacyFeatures?.enabledValues()?.map(Legacy_Feature::toExtended).orEmpty() union
-      extendedFeatures.mapNotNull { ExtendedFeature.of(it) },
+      extendedFeatures.mapNotNull(ExtendedFeature.Companion::of),
     extendedFeatures.filter { ExtendedFeature.of(it) == null }.toSet()
   )
 
-  fun toInt() = LegacyFeature.of(enabledFeatures.map(LegacyFeature.Companion::fromExtended))
+  fun toInt() = LegacyFeature.of(enabledFeatures.mapNotNull(LegacyFeature.Companion::fromExtended))
 
   fun toStringList() = enabledFeatures.map(ExtendedFeature::name)
 

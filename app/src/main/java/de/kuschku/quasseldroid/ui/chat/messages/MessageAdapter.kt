@@ -11,14 +11,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.bumptech.glide.request.RequestOptions
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.util.flag.hasFlag
-import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.util.helper.getOrPut
+import de.kuschku.quasseldroid.util.helper.loadAvatars
+import de.kuschku.quasseldroid.util.ui.DoubleClickHelper
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import javax.inject.Inject
@@ -35,23 +35,28 @@ class MessageAdapter @Inject constructor(
   }) {
   private val movementMethod = BetterLinkMovementMethod.newInstance()
   private var clickListener: ((FormattedMessage) -> Unit)? = null
-  private var selectionListener: ((FormattedMessage) -> Unit)? = null
+  private var longClickListener: ((FormattedMessage) -> Unit)? = null
+  private var doubleClickListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null
   private var expansionListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null
   private var urlLongClickListener: ((TextView, String) -> Boolean)? = null
 
-  fun setOnClickListener(listener: (FormattedMessage) -> Unit) {
+  fun setOnClickListener(listener: ((FormattedMessage) -> Unit)?) {
     this.clickListener = listener
   }
 
-  fun setOnSelectionListener(listener: (FormattedMessage) -> Unit) {
-    this.selectionListener = listener
+  fun setOnLongClickListener(listener: ((FormattedMessage) -> Unit)?) {
+    this.longClickListener = listener
   }
 
-  fun setOnExpansionListener(listener: (QuasselDatabase.DatabaseMessage) -> Unit) {
+  fun setOnDoubleClickListener(listener: ((QuasselDatabase.DatabaseMessage) -> Unit)?) {
+    this.doubleClickListener = listener
+  }
+
+  fun setOnExpansionListener(listener: ((QuasselDatabase.DatabaseMessage) -> Unit)?) {
     this.expansionListener = listener
   }
 
-  fun setOnUrlLongClickListener(listener: (TextView, String) -> Boolean) {
+  fun setOnUrlLongClickListener(listener: ((TextView, String) -> Boolean)?) {
     this.urlLongClickListener = listener
   }
 
@@ -121,7 +126,8 @@ class MessageAdapter @Inject constructor(
         false
       ),
       clickListener,
-      selectionListener,
+      longClickListener,
+      doubleClickListener,
       expansionListener,
       movementMethod
     )
@@ -138,7 +144,8 @@ class MessageAdapter @Inject constructor(
   class QuasselMessageViewHolder(
     itemView: View,
     clickListener: ((FormattedMessage) -> Unit)? = null,
-    selectionListener: ((FormattedMessage) -> Unit)? = null,
+    longClickListener: ((FormattedMessage) -> Unit)? = null,
+    doubleClickListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null,
     expansionListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null,
     movementMethod: BetterLinkMovementMethod
   ) : RecyclerView.ViewHolder(itemView) {
@@ -167,6 +174,7 @@ class MessageAdapter @Inject constructor(
     var combined: TextView? = null
 
     private var message: FormattedMessage? = null
+    private var original: QuasselDatabase.DatabaseMessage? = null
     private var selectable: Boolean = false
     private var clickable: Boolean = false
 
@@ -181,10 +189,18 @@ class MessageAdapter @Inject constructor(
     private val localLongClickListener = View.OnLongClickListener {
       if (selectable) {
         message?.let {
-          selectionListener?.invoke(it)
+          longClickListener?.invoke(it)
         }
       }
       true
+    }
+
+    private val localDoubleClickListener = {
+      if (clickable) {
+        original?.let {
+          doubleClickListener?.invoke(it)
+        }
+      }
     }
 
     init {
@@ -194,10 +210,15 @@ class MessageAdapter @Inject constructor(
 
       itemView.setOnClickListener(localClickListener)
       itemView.setOnLongClickListener(localLongClickListener)
+      itemView.setOnTouchListener(DoubleClickHelper(itemView).apply {
+        this.doubleClickListener = localDoubleClickListener
+      })
     }
 
-    fun bind(message: FormattedMessage, selectable: Boolean = true, clickable: Boolean = true) {
+    fun bind(message: FormattedMessage, original: QuasselDatabase.DatabaseMessage,
+             selectable: Boolean = true, clickable: Boolean = true) {
       this.message = message
+      this.original = original
       this.selectable = selectable
       this.clickable = clickable
 
@@ -209,18 +230,7 @@ class MessageAdapter @Inject constructor(
 
       this.itemView.isSelected = message.isSelected
 
-      avatar?.let { avatarView ->
-        if (message.avatarUrl != null) {
-          GlideApp.with(itemView)
-            .load(message.avatarUrl)
-            .apply(RequestOptions.circleCropTransform())
-            .placeholder(message.fallbackDrawable)
-            .into(avatarView)
-        } else {
-          GlideApp.with(itemView).clear(avatarView)
-          avatarView.setImageDrawable(message.fallbackDrawable)
-        }
-      }
+      avatar?.loadAvatars(message.avatarUrls, message.fallbackDrawable)
     }
   }
 }

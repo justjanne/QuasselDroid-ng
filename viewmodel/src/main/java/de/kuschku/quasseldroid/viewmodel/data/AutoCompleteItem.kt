@@ -22,7 +22,7 @@ sealed class AutoCompleteItem(open val name: String) : Comparable<AutoCompleteIt
     val realname: CharSequence,
     val away: Boolean,
     val networkCasemapping: String?,
-    val avatarUrl: String? = null,
+    val avatarUrls: List<String> = emptyList(),
     val fallbackDrawable: Drawable? = null,
     val displayNick: CharSequence? = null
   ) : AutoCompleteItem(nick)

@@ -20,8 +20,6 @@ import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helpers.*
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.util.helper.combineLatest
-import de.kuschku.quasseldroid.util.helper.switchMapNotNull
-import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.viewmodel.data.*
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -41,13 +39,11 @@ class QuasselViewModel : ViewModel() {
   val expandedMessages = BehaviorSubject.createDefault(emptySet<MsgId>())
 
   val buffer = BehaviorSubject.createDefault(-1)
-  val buffer_liveData = buffer.toLiveData()
 
   val bufferViewConfigId = BehaviorSubject.createDefault(-1)
 
   val MAX_RECENT_MESSAGES = 20
   val recentlySentMessages = BehaviorSubject.createDefault(emptyList<CharSequence>())
-  val recentlySentMessages_liveData = recentlySentMessages.toLiveData()
   fun addRecentlySentMessage(message: CharSequence) {
     recentlySentMessages.onNext(
       listOf(message) + recentlySentMessages.value
@@ -58,12 +54,10 @@ class QuasselViewModel : ViewModel() {
 
   val backend = backendWrapper.switchMap { it }
   val sessionManager = backend.mapMap(Backend::sessionManager)
-  val sessionManager_liveData = sessionManager.toLiveData()
   val session = sessionManager.mapSwitchMap(SessionManager::session)
 
   val connectionProgress = sessionManager.mapSwitchMap(SessionManager::connectionProgress)
     .mapOrElse(Triple(ConnectionState.DISCONNECTED, 0, 0))
-  val connectionProgress_liveData = connectionProgress.toLiveData()
 
   val bufferViewManager = session.mapMapNullable(ISession::bufferViewManager)
 
@@ -73,9 +67,7 @@ class QuasselViewModel : ViewModel() {
     }
   }
 
-  val errors = sessionManager.toLiveData().switchMapNotNull {
-    it.orNull()?.error?.toLiveData()
-  }
+  val errors = sessionManager.mapSwitchMap(SessionManager::error)
 
   val networkConfig = session.map {
     it.map(ISession::networkConfig)
@@ -94,6 +86,12 @@ class QuasselViewModel : ViewModel() {
     it.liveBufferInfos().map(Map<BufferId, BufferInfo>::values)
   }.mapOrElse(emptyList())
 
+  val network = combineLatest(bufferSyncer,
+                              networks,
+                              buffer).map { (bufferSyncer, networks, buffer) ->
+    Optional.ofNullable(bufferSyncer.orNull()?.bufferInfo(buffer)?.let { networks[it.networkId] })
+  }
+
   /**
    * An observable of the changes of the markerline, as pairs of `(old, new)`
    */
@@ -103,7 +101,6 @@ class QuasselViewModel : ViewModel() {
       currentSession.bufferSyncer?.liveMarkerLine(currentBuffer) ?: Observable.empty()
     }
   }
-  val markerLine_liveData = markerLine.toLiveData()
 
   // Remove orElse
   val lag: Observable<Long> = session.mapSwitchMap(ISession::lag).mapOrElse(0)
@@ -198,11 +195,9 @@ class QuasselViewModel : ViewModel() {
                       network.modesToPrefixes(userModes),
                       lowestMode,
                       user.realName(),
+                      user.hostMask(),
                       user.isAway(),
-                      network.support("CASEMAPPING"),
-                      Regex("[us]id(\\d+)").matchEntire(user.user())?.groupValues?.lastOrNull()?.let {
-                        "https://www.irccloud.com/avatar-redirect/$it"
-                      }
+                      network.support("CASEMAPPING")
                     )
                   }
                 }
@@ -285,7 +280,6 @@ class QuasselViewModel : ViewModel() {
         Observable.just(SelectedBufferItem())
       }
     }
-  val selectedBuffer_liveData = selectedBuffer.toLiveData()
 
   val bufferList: Observable<Pair<BufferViewConfig?, List<BufferProps>>?> =
     combineLatest(session, bufferViewConfig, showHidden)

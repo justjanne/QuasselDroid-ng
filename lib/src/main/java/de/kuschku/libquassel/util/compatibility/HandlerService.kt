@@ -1,6 +1,12 @@
 package de.kuschku.libquassel.util.compatibility
 
+import io.reactivex.Scheduler
+
 interface HandlerService {
+  val scheduler: Scheduler
+
+  var exceptionHandler: Thread.UncaughtExceptionHandler?
+
   fun serialize(f: () -> Unit)
   fun deserialize(f: () -> Unit)
   fun write(f: () -> Unit)
@@ -8,6 +14,4 @@ interface HandlerService {
   fun backendDelayed(delayMillis: Long, f: () -> Unit)
 
   fun quit()
-
-  var exceptionHandler: Thread.UncaughtExceptionHandler?
 }

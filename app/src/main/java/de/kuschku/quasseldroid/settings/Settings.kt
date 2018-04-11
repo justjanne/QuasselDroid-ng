@@ -78,9 +78,21 @@ object Settings {
         context.getString(R.string.preference_time_at_end_key),
         MessageSettings.DEFAULT.timeAtEnd
       ),
+      showRealNames = getBoolean(
+        context.getString(R.string.preference_show_realnames_key),
+        MessageSettings.DEFAULT.showRealNames
+      ),
       showAvatars = getBoolean(
         context.getString(R.string.preference_show_avatars_key),
         MessageSettings.DEFAULT.showAvatars
+      ),
+      showIRCCloudAvatars = getBoolean(
+        context.getString(R.string.preference_show_irccloud_avatars_key),
+        MessageSettings.DEFAULT.showIRCCloudAvatars
+      ),
+      showGravatarAvatars = getBoolean(
+        context.getString(R.string.preference_show_gravatar_avatars_key),
+        MessageSettings.DEFAULT.showGravatarAvatars
       ),
       largerEmoji = getBoolean(
         context.getString(R.string.preference_larger_emoji_key),
@@ -91,21 +103,25 @@ object Settings {
 
   fun autoComplete(context: Context) = context.sharedPreferences {
     AutoCompleteSettings(
+      senderDoubleClick = getBoolean(
+        context.getString(R.string.preference_autocomplete_sender_doubleclick_key),
+        AutoCompleteSettings.DEFAULT.senderDoubleClick
+      ),
       button = getBoolean(
         context.getString(R.string.preference_autocomplete_button_key),
         AutoCompleteSettings.DEFAULT.button
       ),
       doubleTap = getBoolean(
         context.getString(R.string.preference_autocomplete_doubletap_key),
-        AutoCompleteSettings.DEFAULT.button
+        AutoCompleteSettings.DEFAULT.doubleTap
       ),
       auto = getBoolean(
         context.getString(R.string.preference_autocomplete_auto_key),
-        AutoCompleteSettings.DEFAULT.button
+        AutoCompleteSettings.DEFAULT.auto
       ),
       prefix = getBoolean(
         context.getString(R.string.preference_autocomplete_prefix_key),
-        AutoCompleteSettings.DEFAULT.button
+        AutoCompleteSettings.DEFAULT.prefix
       )
     )
   }

@@ -15,8 +15,8 @@ import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.util.IrcUserUtils
-import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.ui.chat.input.AutoCompleteHelper.Companion.IGNORED_CHARS
 import de.kuschku.quasseldroid.util.AvatarHelper
@@ -84,6 +84,9 @@ class UserInfoFragment : ServiceBoundFragment() {
   @Inject
   lateinit var contentFormatter: ContentFormatter
 
+  @Inject
+  lateinit var messageSettings: MessageSettings
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.fragment_info_user, container, false)
@@ -125,17 +128,11 @@ class UserInfoFragment : ServiceBoundFragment() {
         val initial = rawInitial?.toUpperCase().toString()
         val senderColor = senderColors[senderColorIndex]
 
-        val fallbackDrawable = TextDrawable.builder().buildRect(initial, senderColor)
-
-        val avatarUrl = AvatarHelper.avatar(user = user)
-        if (avatarUrl != null) {
-          GlideApp.with(avatar)
-            .load(avatarUrl)
-            .placeholder(fallbackDrawable)
-            .into(avatar)
-        } else {
-          avatar.setImageDrawable(fallbackDrawable)
-        }
+        avatar.loadAvatars(
+          AvatarHelper.avatar(messageSettings, user, maxOf(avatar.width, avatar.height)),
+          TextDrawable.builder().buildRect(initial, senderColor),
+          crop = false
+        )
 
         nick.text = user.nick()
         realName.text = contentFormatter.format(requireContext(), user.realName())

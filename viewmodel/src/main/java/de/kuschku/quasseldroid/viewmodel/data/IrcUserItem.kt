@@ -7,9 +7,10 @@ data class IrcUserItem(
   val modes: String,
   val lowestMode: Int,
   val realname: CharSequence,
+  val hostmask: String,
   val away: Boolean,
   val networkCasemapping: String?,
-  val avatarUrl: String? = null,
+  val avatarUrls: List<String> = emptyList(),
   val fallbackDrawable: Drawable? = null,
   val displayNick: CharSequence? = null
 )

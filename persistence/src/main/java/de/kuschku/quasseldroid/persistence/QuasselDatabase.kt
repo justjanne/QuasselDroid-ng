@@ -16,7 +16,7 @@ import de.kuschku.quasseldroid.persistence.QuasselDatabase.Filtered
 import io.reactivex.Flowable
 import org.threeten.bp.Instant
 
-@Database(entities = [DatabaseMessage::class, Filtered::class], version = 5)
+@Database(entities = [DatabaseMessage::class, Filtered::class], version = 6)
 @TypeConverters(DatabaseMessage.MessageTypeConverters::class)
 abstract class QuasselDatabase : RoomDatabase() {
   abstract fun message(): MessageDao
@@ -31,6 +31,8 @@ abstract class QuasselDatabase : RoomDatabase() {
     var bufferId: Int,
     var sender: String,
     var senderPrefixes: String,
+    var realName: String,
+    var avatarUrl: String,
     var content: String
   ) {
     class MessageTypeConverters {
@@ -46,7 +48,7 @@ abstract class QuasselDatabase : RoomDatabase() {
         type
       )}, flag=${Message_Flag.of(
         flag
-      )}, bufferId=$bufferId, sender='$sender', senderPrefixes='$senderPrefixes', content='$content')"
+      )}, bufferId=$bufferId, sender='$sender', senderPrefixes='$senderPrefixes', realName='$realName', avatarUrl='$avatarUrl', content='$content')"
     }
   }
 
@@ -180,6 +182,12 @@ abstract class QuasselDatabase : RoomDatabase() {
                 override fun migrate(database: SupportSQLiteDatabase) {
                   database.execSQL("drop table message;")
                   database.execSQL("create table message (messageId INTEGER not null primary key, time INTEGER not null, type INTEGER not null, flag INTEGER not null, bufferId INTEGER not null, sender TEXT not null, senderPrefixes TEXT not null, content TEXT not null);")
+                }
+              },
+              object : Migration(5, 6) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL("drop table message;")
+                  database.execSQL("create table message (messageId INTEGER not null primary key, time INTEGER not null, type INTEGER not null, flag INTEGER not null, bufferId INTEGER not null, sender TEXT not null, senderPrefixes TEXT not null, realName TEXT not null, avatarUrl TEXT not null, content TEXT not null);")
                 }
               }
             ).build()

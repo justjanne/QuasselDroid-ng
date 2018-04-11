@@ -22,7 +22,7 @@
         android:layout_height="0dp"
         android:contentDescription="@string/label_avatar"
         android:scaleType="centerCrop"
-        app:layout_constraintDimensionRatio="H,1.77:1"
+        app:layout_constraintDimensionRatio="H,3:2"
         tools:src="@tools:sample/avatars" />
 
     </android.support.constraint.ConstraintLayout>

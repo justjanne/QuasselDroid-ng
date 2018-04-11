@@ -44,6 +44,8 @@ class AutoCompleteHelper(
     IntArray(length()) { getColor(it, 0) }
   }
 
+  private val avatarSize = activity.resources.getDimensionPixelSize(R.dimen.avatar_size)
+
   init {
     viewModel.autoCompleteData.toLiveData().observe(activity, Observer {
       val query = it?.first ?: ""
@@ -148,7 +150,7 @@ class AutoCompleteHelper(
                   user.realName(),
                   user.isAway(),
                   network.support("CASEMAPPING"),
-                  AvatarHelper.avatar(user = user)
+                  AvatarHelper.avatar(messageSettings, user, avatarSize)
                 )
               }
 

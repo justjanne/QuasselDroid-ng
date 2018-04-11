@@ -99,7 +99,7 @@ class Identity constructor(
     super.setAutoAwayEnabled(enabled)
   }
 
-  override fun setAutoAwayReason(reason: String) {
+  override fun setAutoAwayReason(reason: String?) {
     _autoAwayReason = reason
     super.setAutoAwayReason(reason)
   }
@@ -114,7 +114,7 @@ class Identity constructor(
     super.setAutoAwayTime(time)
   }
 
-  override fun setAwayNick(awayNick: String) {
+  override fun setAwayNick(awayNick: String?) {
     _awayNick = awayNick
     super.setAwayNick(awayNick)
   }
@@ -124,7 +124,7 @@ class Identity constructor(
     super.setAwayNickEnabled(enabled)
   }
 
-  override fun setAwayReason(awayReason: String) {
+  override fun setAwayReason(awayReason: String?) {
     _awayReason = awayReason
     super.setAwayReason(awayReason)
   }
@@ -139,7 +139,7 @@ class Identity constructor(
     super.setDetachAwayEnabled(enabled)
   }
 
-  override fun setDetachAwayReason(reason: String) {
+  override fun setDetachAwayReason(reason: String?) {
     _detachAwayReason = reason
     super.setDetachAwayReason(reason)
   }
@@ -154,17 +154,17 @@ class Identity constructor(
     super.setId(id)
   }
 
-  override fun setIdent(ident: String) {
+  override fun setIdent(ident: String?) {
     _ident = ident
     super.setIdent(ident)
   }
 
-  override fun setIdentityName(name: String) {
+  override fun setIdentityName(name: String?) {
     _identityName = name
     super.setIdentityName(name)
   }
 
-  override fun setKickReason(reason: String) {
+  override fun setKickReason(reason: String?) {
     _kickReason = reason
     super.setKickReason(reason)
   }
@@ -174,17 +174,17 @@ class Identity constructor(
     super.setNicks(nicks)
   }
 
-  override fun setPartReason(reason: String) {
+  override fun setPartReason(reason: String?) {
     _partReason = reason
     super.setPartReason(reason)
   }
 
-  override fun setQuitReason(reason: String) {
+  override fun setQuitReason(reason: String?) {
     _quitReason = reason
     super.setQuitReason(reason)
   }
 
-  override fun setRealName(realName: String) {
+  override fun setRealName(realName: String?) {
     _realName = realName
     super.setRealName(realName)
   }
@@ -196,12 +196,12 @@ class Identity constructor(
       field = value
       _change.onNext(Unit)
     }
-  private var _identityName: String = "<isEmpty>"
+  private var _identityName: String? = "<empty>"
     set(value) {
       field = value
       _change.onNext(Unit)
     }
-  private var _realName: String = ""
+  private var _realName: String? = ""
     set(value) {
       field = value
       _change.onNext(Unit)
@@ -211,7 +211,7 @@ class Identity constructor(
       field = value
       _change.onNext(Unit)
     }
-  private var _awayNick: String = ""
+  private var _awayNick: String? = ""
     set(value) {
       field = value
       _change.onNext(Unit)
@@ -221,7 +221,7 @@ class Identity constructor(
       field = value
       _change.onNext(Unit)
     }
-  private var _awayReason: String = "Gone fishing."
+  private var _awayReason: String? = "Gone fishing."
     set(value) {
       field = value
       _change.onNext(Unit)
@@ -241,7 +241,7 @@ class Identity constructor(
       field = value
       _change.onNext(Unit)
     }
-  private var _autoAwayReason: String = "Not here. No, really. not here!"
+  private var _autoAwayReason: String? = "Not here. No, really. not here!"
     set(value) {
       field = value
       _change.onNext(Unit)
@@ -256,7 +256,7 @@ class Identity constructor(
       field = value
       _change.onNext(Unit)
     }
-  private var _detachAwayReason: String = "All Quassel clients vanished from the face of the earth..."
+  private var _detachAwayReason: String? = "All Quassel clients vanished from the face of the earth..."
     set(value) {
       field = value
       _change.onNext(Unit)
@@ -266,22 +266,22 @@ class Identity constructor(
       field = value
       _change.onNext(Unit)
     }
-  private var _ident: String = "quassel"
+  private var _ident: String? = "quassel"
     set(value) {
       field = value
       _change.onNext(Unit)
     }
-  private var _kickReason: String = "Kindergarten is elsewhere!"
+  private var _kickReason: String? = "Kindergarten is elsewhere!"
     set(value) {
       field = value
       _change.onNext(Unit)
     }
-  private var _partReason: String = "http://quassel-irc.org - Chat comfortably. Anywhere."
+  private var _partReason: String? = "http://quassel-irc.org - Chat comfortably. Anywhere."
     set(value) {
       field = value
       _change.onNext(Unit)
     }
-  private var _quitReason: String = "http://quassel-irc.org - Chat comfortably. Anywhere."
+  private var _quitReason: String? = "http://quassel-irc.org - Chat comfortably. Anywhere."
     set(value) {
       field = value
       _change.onNext(Unit)

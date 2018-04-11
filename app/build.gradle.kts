@@ -131,6 +131,7 @@ dependencies {
   implementation("org.threeten", "threetenbp", "1.3.6", classifier = "no-tzdb")
   implementation("org.jetbrains", "annotations", "16.0.1")
   implementation("com.google.code.gson", "gson", "2.8.2")
+  implementation("commons-codec", "commons-codec", "1.11")
   withVersion("8.8.1") {
     implementation("com.jakewharton", "butterknife", version)
     kapt("com.jakewharton", "butterknife-compiler", version)

@@ -24,12 +24,16 @@ import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.quassel.syncables.BufferSyncer
 import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
+import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.BacklogSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.ui.chat.ChatActivity
+import de.kuschku.quasseldroid.util.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
@@ -54,6 +58,9 @@ class MessageListFragment : ServiceBoundFragment() {
 
   @Inject
   lateinit var appearanceSettings: AppearanceSettings
+
+  @Inject
+  lateinit var autoCompleteSettings: AutoCompleteSettings
 
   @Inject
   lateinit var backlogSettings: BacklogSettings
@@ -183,7 +190,7 @@ class MessageListFragment : ServiceBoundFragment() {
         }
       }
     }
-    adapter.setOnSelectionListener { msg ->
+    adapter.setOnLongClickListener { msg ->
       if (actionMode == null) {
         activity?.startActionMode(actionModeCallback)
       }
@@ -191,6 +198,13 @@ class MessageListFragment : ServiceBoundFragment() {
         actionMode?.finish()
       }
     }
+    if (autoCompleteSettings.senderDoubleClick)
+      adapter.setOnDoubleClickListener { msg ->
+        val intent = Intent(requireContext(), ChatActivity::class.java)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, "${HostmaskHelper.nick(msg.sender)}: ")
+        startActivity(intent)
+      }
     adapter.setOnUrlLongClickListener(LinkLongClickMenuHelper())
 
     messageList.adapter = adapter
@@ -371,15 +385,15 @@ class MessageListFragment : ServiceBoundFragment() {
       requireContext().resources.displayMetrics
     ).roundToInt()
 
-    val sizeProvider = FixedPreloadSizeProvider<String>(avatarSize, avatarSize)
+    val sizeProvider = FixedPreloadSizeProvider<List<String>>(avatarSize, avatarSize)
 
-    val preloadModelProvider = object : ListPreloader.PreloadModelProvider<String> {
-      override fun getPreloadItems(position: Int) = adapter[position]?.avatarUrl?.let {
-        mutableListOf(it)
-      } ?: mutableListOf()
+    val preloadModelProvider = object : ListPreloader.PreloadModelProvider<List<String>> {
+      override fun getPreloadItems(position: Int) = listOfNotNull(
+        adapter[position]?.content?.let { AvatarHelper.avatar(messageSettings, it, avatarSize) }
+      )
 
-      override fun getPreloadRequestBuilder(item: String) =
-        GlideApp.with(this@MessageListFragment).load(item).override(avatarSize)
+      override fun getPreloadRequestBuilder(item: List<String>) =
+        GlideApp.with(this@MessageListFragment).loadWithFallbacks(item)?.override(avatarSize)
     }
 
     val preloader = RecyclerViewPreloader(Glide.with(this), preloadModelProvider, sizeProvider, 10)

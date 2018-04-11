@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.LayerDrawable
 import android.os.Build
 import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.TypedValue
@@ -23,6 +24,7 @@ import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.MessageSettings.ColorizeNicknamesMode
 import de.kuschku.quasseldroid.settings.MessageSettings.ShowPrefixMode
+import de.kuschku.quasseldroid.util.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
@@ -152,11 +154,10 @@ class QuasselMessageRenderer @Inject constructor(
   override fun bind(holder: MessageAdapter.QuasselMessageViewHolder, message: FormattedMessage,
                     original: QuasselDatabase.DatabaseMessage) =
     Message_Type.of(original.type).hasFlag(DayChange).let { isDayChange ->
-      holder.bind(message, !isDayChange, !isDayChange)
+      holder.bind(message, original, !isDayChange, !isDayChange)
     }
 
-  override fun render(context: Context,
-                      message: DisplayMessage): FormattedMessage {
+  override fun render(context: Context, message: DisplayMessage): FormattedMessage {
     context.theme.styledAttributes(
       R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
       R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
@@ -170,20 +171,30 @@ class QuasselMessageRenderer @Inject constructor(
       selfColor = getColor(16, 0)
     }
 
+    val avatarSize = TypedValue.applyDimension(
+      TypedValue.COMPLEX_UNIT_SP,
+      messageSettings.textSize * 2.5f,
+      context.resources.displayMetrics
+    ).roundToInt()
+
     val self = Message_Flag.of(message.content.flag).hasFlag(Message_Flag.Self)
     val highlight = Message_Flag.of(message.content.flag).hasFlag(Message_Flag.Highlight)
     return when (Message_Type.of(message.content.type).enabledValues().firstOrNull()) {
       Message_Type.Plain        -> {
-        val nick = SpanFormatter.format(
-          "%s%s",
-          formatPrefix(message.content.senderPrefixes, highlight),
-          formatNick(
+        val realName = contentFormatter.format(context, message.content.realName, highlight)
+        val nick = SpannableStringBuilder().apply {
+          append(formatPrefix(message.content.senderPrefixes, highlight))
+          append(formatNick(
             message.content.sender,
             self,
             highlight,
             messageSettings.showHostmaskPlain && messageSettings.nicksOnNewLine
-          )
-        )
+          ))
+          if (messageSettings.showRealNames) {
+            append(" ")
+            append(realName)
+          }
+        }
         val content = contentFormatter.format(context, message.content.content, highlight)
         val nickName = HostmaskHelper.nick(message.content.sender)
         val senderColorIndex = IrcUserUtils.senderColor(nickName)
@@ -200,8 +211,13 @@ class QuasselMessageRenderer @Inject constructor(
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
           name = nick,
           content = content,
-          combined = SpanFormatter.format("%s: %s", nick, content),
-          avatarUrl = message.avatarUrl,
+          combined = SpannableStringBuilder().apply {
+            append(nick)
+            append(": ")
+            append(content)
+          },
+          realName = realName,
+          avatarUrls = AvatarHelper.avatar(messageSettings, message.content, avatarSize),
           fallbackDrawable = TextDrawable.builder().buildRound(initial, senderColor),
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,

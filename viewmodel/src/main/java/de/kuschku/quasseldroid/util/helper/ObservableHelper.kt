@@ -2,23 +2,28 @@ package de.kuschku.quasseldroid.util.helper
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.LiveDataReactiveStreams
+import de.kuschku.libquassel.util.compatibility.HandlerService
 import io.reactivex.*
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 
 inline fun <T> Observable<T>.toLiveData(
-  strategy: BackpressureStrategy = BackpressureStrategy.LATEST
-): LiveData<T> = LiveDataReactiveStreams.fromPublisher(
-  subscribeOn(Schedulers.computation()).toFlowable(strategy)
-)
+  strategy: BackpressureStrategy = BackpressureStrategy.LATEST,
+  handlerService: HandlerService? = null,
+  scheduler: Scheduler = handlerService?.scheduler ?: Schedulers.computation()
+): LiveData<T> =
+  LiveDataReactiveStreams.fromPublisher(subscribeOn(scheduler).toFlowable(strategy))
 
-inline fun <T> Maybe<T>.toLiveData(): LiveData<T> = LiveDataReactiveStreams.fromPublisher(
-  subscribeOn(Schedulers.computation()).toFlowable()
-)
+inline fun <T> Maybe<T>.toLiveData(
+  handlerService: HandlerService? = null,
+  scheduler: Scheduler = handlerService?.scheduler ?: Schedulers.computation()
+): LiveData<T> =
+  LiveDataReactiveStreams.fromPublisher(subscribeOn(scheduler).toFlowable())
 
-inline fun <T> Flowable<T>.toLiveData(): LiveData<T> = LiveDataReactiveStreams.fromPublisher(
-  subscribeOn(Schedulers.computation())
-)
+inline fun <T> Flowable<T>.toLiveData(
+  handlerService: HandlerService? = null,
+  scheduler: Scheduler = handlerService?.scheduler ?: Schedulers.computation()
+): LiveData<T> = LiveDataReactiveStreams.fromPublisher(subscribeOn(scheduler))
 
 inline fun <reified A, B> combineLatest(
   a: ObservableSource<A>,

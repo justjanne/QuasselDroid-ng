@@ -111,8 +111,19 @@
   <string name="preference_nicks_on_new_line_title">Separate Nicknames</string>
   <string name="preference_nicks_on_new_line_summary">Shows nicknames on a separate line</string>
 
+  <string name="preference_show_realnames_key" translatable="false">show_realnames</string>
+  <string name="preference_show_realnames_title">Show Realnames</string>
+
   <string name="preference_show_avatars_key" translatable="false">show_avatars</string>
   <string name="preference_show_avatars_title">Show Avatars</string>
+
+  <string name="preference_show_irccloud_avatars_key" translatable="false">show_irccloud_avatars</string>
+  <string name="preference_show_irccloud_avatars_title">Show IRCCloud Avatars</string>
+  <string name="preference_show_irccloud_avatars_summary">Shows for users without avatar their IRCCloud fallback, if available</string>
+
+  <string name="preference_show_gravatar_avatars_key" translatable="false">show_gravatar_avatars</string>
+  <string name="preference_show_gravatar_avatars_title">Show Gravatar Avatars</string>
+  <string name="preference_show_gravatar_avatars_summary">Shows for users without avatar their Gravatar fallback, if available</string>
 
   <string name="preference_time_at_end_key" translatable="false">time_at_end</string>
   <string name="preference_time_at_end_title">Right-Aligned Timestamps</string>
@@ -124,6 +135,10 @@
 
 
   <string name="preference_autocomplete_title">Autocomplete</string>
+
+  <string name="preference_autocomplete_sender_doubleclick_key" translatable="false">autocomplete_sender_doubleclick</string>
+  <string name="preference_autocomplete_sender_doubleclick_title">Sender Autocomplete</string>
+  <string name="preference_autocomplete_sender_doubleclick_summary">Doubleclick on a message to autocomplete its sender</string>
 
   <string name="preference_autocomplete_button_key" translatable="false">autocomplete_button</string>
   <string name="preference_autocomplete_button_title">Autocomplete Button</string>

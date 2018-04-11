@@ -22,7 +22,7 @@ interface IIdentity : ISyncableObject {
   }
 
   @Slot
-  fun setAutoAwayReason(reason: String) {
+  fun setAutoAwayReason(reason: String?) {
     SYNC("setAutoAwayReason", ARG(reason, Type.QString))
   }
 
@@ -37,7 +37,7 @@ interface IIdentity : ISyncableObject {
   }
 
   @Slot
-  fun setAwayNick(awayNick: String) {
+  fun setAwayNick(awayNick: String?) {
     SYNC("setAwayNick", ARG(awayNick, Type.QString))
   }
 
@@ -47,7 +47,7 @@ interface IIdentity : ISyncableObject {
   }
 
   @Slot
-  fun setAwayReason(awayReason: String) {
+  fun setAwayReason(awayReason: String?) {
     SYNC("setAwayReason", ARG(awayReason, Type.QString))
   }
 
@@ -62,7 +62,7 @@ interface IIdentity : ISyncableObject {
   }
 
   @Slot
-  fun setDetachAwayReason(reason: String) {
+  fun setDetachAwayReason(reason: String?) {
     SYNC("setDetachAwayReason", ARG(reason, Type.QString))
   }
 
@@ -77,17 +77,17 @@ interface IIdentity : ISyncableObject {
   }
 
   @Slot
-  fun setIdent(ident: String) {
+  fun setIdent(ident: String?) {
     SYNC("setIdent", ARG(ident, Type.QString))
   }
 
   @Slot
-  fun setIdentityName(name: String) {
+  fun setIdentityName(name: String?) {
     SYNC("setIdentityName", ARG(name, Type.QString))
   }
 
   @Slot
-  fun setKickReason(reason: String) {
+  fun setKickReason(reason: String?) {
     SYNC("setKickReason", ARG(reason, Type.QString))
   }
 
@@ -97,17 +97,17 @@ interface IIdentity : ISyncableObject {
   }
 
   @Slot
-  fun setPartReason(reason: String) {
+  fun setPartReason(reason: String?) {
     SYNC("setPartReason", ARG(reason, Type.QString))
   }
 
   @Slot
-  fun setQuitReason(reason: String) {
+  fun setQuitReason(reason: String?) {
     SYNC("setQuitReason", ARG(reason, Type.QString))
   }
 
   @Slot
-  fun setRealName(realName: String) {
+  fun setRealName(realName: String?) {
     SYNC("setRealName", ARG(realName, Type.QString))
   }
 

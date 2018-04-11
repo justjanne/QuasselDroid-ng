@@ -84,10 +84,7 @@ class EditorViewModel : ViewModel() {
                         lowestMode,
                         user.realName(),
                         user.isAway(),
-                        network.support("CASEMAPPING"),
-                        Regex("[us]id(\\d+)").matchEntire(user.user())?.groupValues?.lastOrNull()?.let {
-                          "https://www.irccloud.com/avatar-redirect/$it"
-                        }
+                        network.support("CASEMAPPING")
                       )
                     }
                   }

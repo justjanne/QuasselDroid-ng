@@ -9,7 +9,8 @@ class FormattedMessage(
   val content: CharSequence? = null,
   val combined: CharSequence,
   val fallbackDrawable: Drawable? = null,
-  val avatarUrl: String? = null,
+  val realName: CharSequence? = null,
+  val avatarUrls: List<String> = emptyList(),
   val isSelected: Boolean,
   val isExpanded: Boolean,
   val isMarkerLine: Boolean

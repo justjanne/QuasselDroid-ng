@@ -47,14 +47,14 @@ class Session(
 
   override val identities = mutableMapOf<IdentityId, Identity>()
   private val live_identities = BehaviorSubject.createDefault(Unit)
-  override fun liveIdentities(): Observable<Map<IdentityId, Identity>> = live_identities.map { identities }
+  override fun liveIdentities(): Observable<Map<IdentityId, Identity>> = live_identities.map { identities.toMap() }
 
   override val ignoreListManager = IgnoreListManager(this)
   override val ircListHelper = IrcListHelper(this)
 
   override val networks = mutableMapOf<NetworkId, Network>()
   private val live_networks = BehaviorSubject.createDefault(Unit)
-  override fun liveNetworks(): Observable<Map<NetworkId, Network>> = live_networks.map { networks }
+  override fun liveNetworks(): Observable<Map<NetworkId, Network>> = live_networks.map { networks.toMap() }
 
   override val networkConfig = NetworkConfig(this)
 

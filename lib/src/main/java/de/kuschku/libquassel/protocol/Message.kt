@@ -13,6 +13,8 @@ class Message(
   val bufferInfo: BufferInfo,
   val sender: String,
   val senderPrefixes: String,
+  val realName: String,
+  val avatarUrl: String,
   val content: String
 ) {
   enum class MessageType(override val bit: Int) :

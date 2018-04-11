@@ -8,7 +8,6 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.helpers.or
 import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
@@ -40,8 +39,11 @@ class SessionManager(
     else
       lastSession
   }
-  val error: Flowable<HandshakeMessage>
-    get() = inProgressSession.toFlowable(BackpressureStrategy.LATEST).switchMap(ISession::error)
+  val error: Observable<HandshakeMessage>
+    get() = inProgressSession
+      .toFlowable(BackpressureStrategy.LATEST)
+      .switchMap(ISession::error)
+      .toObservable()
 
   val connectionProgress: Observable<Triple<ConnectionState, Int, Int>> = Observable.combineLatest(
     state, initStatus,

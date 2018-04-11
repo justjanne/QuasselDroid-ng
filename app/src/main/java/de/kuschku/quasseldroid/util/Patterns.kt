@@ -6,6 +6,9 @@ import java.util.regex.Pattern
 @SuppressWarnings("Access")
 object Patterns {
   @Language("RegExp")
+  const val WORD_BOUNDARY = "(?:\\b|$|^)"
+
+  @Language("RegExp")
   const val IPv4 = "(?:(?:[0-1]?[0-9]?[0-9]|2[0-5][0-5])\\.){3}(?:[0-1]?[0-9]?[0-9]|2[0-5][0-5])"
 
   @Language("RegExp")
@@ -41,7 +44,7 @@ object Patterns {
   const val TLD = """(?:$PUNYCODE_TLD|[$TLD_CHAR]{2,63})"""
 
   @Language("RegExp")
-  const val HOST_NAME = """(?:$IRI_LABEL\.)+$TLD.?"""
+  const val HOST_NAME = """(?:$IRI_LABEL\.)+$TLD\.?"""
 
   @Language("RegExp")
   const val LOCAL_HOST_NAME = """(?:$IRI_LABEL\.)*$IRI_LABEL"""
@@ -49,4 +52,32 @@ object Patterns {
   @Language("RegExp")
   const val DOMAIN_NAME_STR = """(?:$LOCAL_HOST_NAME|$HOST_NAME|$IP_ADDRESS_STRING)"""
   val DOMAIN_NAME: Pattern = Pattern.compile(DOMAIN_NAME_STR)
+
+  /**
+   * Regular expression for valid email characters. Does not include some of the valid characters
+   * defined in RFC5321: #&~!^`{}/=$*?|
+   */
+  @Language("RegExp")
+  const val EMAIL_CHAR = """$LABEL_CHAR\+-_%'"""
+
+  /**
+   * Regular expression for local part of an email address. RFC5321 section 4.5.3.1.1 limits
+   * the local part to be at most 64 octets.
+   */
+  @Language("RegExp")
+  const val EMAIL_ADDRESS_LOCAL_PART = """[$EMAIL_CHAR](?:[$EMAIL_CHAR.]{0,62}[$EMAIL_CHAR])?"""
+
+  /**
+   * Regular expression for the domain part of an email address. RFC5321 section 4.5.3.1.2 limits
+   * the domain to be at most 255 octets.
+   */
+  @Language("RegExp")
+  const val EMAIL_ADDRESS_DOMAIN = """(?=.{1,255}(?:\s|$|^))$HOST_NAME"""
+
+  /**
+   * Regular expression pattern to match email addresses. It excludes double quoted local parts
+   * and the special characters #&~!^`{}/=$*?| that are included in RFC5321.
+   */
+  const val AUTOLINK_EMAIL_ADDRESS_STR = """($WORD_BOUNDARY(?:$EMAIL_ADDRESS_LOCAL_PART@$EMAIL_ADDRESS_DOMAIN)$WORD_BOUNDARY)"""
+  val AUTOLINK_EMAIL_ADDRESS = Pattern.compile(AUTOLINK_EMAIL_ADDRESS_STR)
 }

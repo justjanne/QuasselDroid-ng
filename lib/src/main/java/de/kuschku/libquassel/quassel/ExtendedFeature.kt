@@ -26,7 +26,11 @@ enum class ExtendedFeature {
   /** Supports RPC call disconnectFromCore to remotely disconnect a client */
   RemoteDisconnect,
   /** Transmit features as list of strings */
-  ExtendedFeatures;
+  ExtendedFeatures,
+  /** Serialize message time as 64-bit */
+  LongMessageTime,
+  /** Real Name and Avatar URL in backlog */
+  RichMessages;
 
   companion object {
     private val map = values().associateBy(ExtendedFeature::name)

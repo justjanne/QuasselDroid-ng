@@ -19,32 +19,38 @@ class BufferSyncer constructor(
     markerLine(buffer)
   }.distinctUntilChanged()
 
-  fun liveLastSeenMsgs(): Observable<Map<BufferId, MsgId>> = live_lastSeenMsg
+  fun liveLastSeenMsgs(): Observable<Map<BufferId, MsgId>> =
+    live_lastSeenMsg.map { _lastSeenMsg.toMap() }
 
   fun markerLine(buffer: BufferId): MsgId = _markerLines[buffer] ?: 0
-  fun liveMarkerLine(
-    buffer: BufferId): Observable<MsgId> = live_markerLines.map { markerLine(buffer) }.distinctUntilChanged()
+  fun liveMarkerLine(buffer: BufferId): Observable<MsgId> =
+    live_markerLines.map { markerLine(buffer) }.distinctUntilChanged()
 
-  fun liveMarkerLines(): Observable<Map<BufferId, MsgId>> = live_markerLines
+  fun liveMarkerLines(): Observable<Map<BufferId, MsgId>> =
+    live_markerLines.map { _markerLines.toMap() }
 
-  fun activity(buffer: BufferId): Message_Types = _bufferActivities[buffer] ?: Message_Types.of()
-  fun liveActivity(
-    buffer: BufferId): Observable<Message_Types> = live_bufferActivities.map { activity(buffer) }.distinctUntilChanged()
+  fun activity(buffer: BufferId): Message_Types =
+    _bufferActivities[buffer] ?: Message_Types.of()
 
-  fun liveActivities(): Observable<Map<BufferId, Message_Types>> = live_bufferActivities
+  fun liveActivity(buffer: BufferId): Observable<Message_Types> =
+    live_bufferActivities.map { activity(buffer) }.distinctUntilChanged()
+
+  fun liveActivities(): Observable<Map<BufferId, Message_Types>> =
+    live_bufferActivities.map { _bufferActivities.toMap() }
 
   fun highlightCount(buffer: BufferId): Int = _highlightCounts[buffer] ?: 0
-  fun liveHighlightCount(
-    buffer: BufferId): Observable<Int> = live_highlightCounts.map { highlightCount(buffer) }.distinctUntilChanged()
+  fun liveHighlightCount(buffer: BufferId): Observable<Int> =
+    live_highlightCounts.map { highlightCount(buffer) }.distinctUntilChanged()
 
-  fun liveHighlightCounts(): Observable<Map<BufferId, Int>> = live_highlightCounts
+  fun liveHighlightCounts(): Observable<Map<BufferId, Int>> =
+    live_highlightCounts.map { _highlightCounts.toMap() }
 
   fun bufferInfo(bufferId: BufferId) = _bufferInfos[bufferId]
-  fun liveBufferInfo(
-    bufferId: BufferId) = live_bufferInfos.map { bufferInfo(bufferId) }.distinctUntilChanged()
+  fun liveBufferInfo(bufferId: BufferId) =
+    live_bufferInfos.map { bufferInfo(bufferId) }.distinctUntilChanged()
 
-  fun bufferInfos(): Collection<BufferInfo> = _bufferInfos.values
-  fun liveBufferInfos(): Observable<Map<BufferId, BufferInfo>> = live_bufferInfos
+  fun bufferInfos(): Collection<BufferInfo> = _bufferInfos.values.toList()
+  fun liveBufferInfos(): Observable<Map<BufferId, BufferInfo>> = live_bufferInfos.map { _bufferInfos.toMap() }
 
   override fun toVariantMap(): QVariantMap = mapOf(
     "Activities" to QVariant.of(initActivities(), Type.QVariantList),
@@ -102,7 +108,7 @@ class BufferSyncer constructor(
     }.forEach { (buffer, activity) ->
       setBufferActivity(buffer, activity)
     }
-    live_bufferActivities.onNext(_bufferActivities)
+    live_bufferActivities.onNext(Unit)
   }
 
   override fun initSetHighlightCounts(data: QVariantList) {
@@ -111,7 +117,7 @@ class BufferSyncer constructor(
     }.forEach { (buffer, count) ->
       setHighlightCount(buffer, count)
     }
-    live_highlightCounts.onNext(_highlightCounts)
+    live_highlightCounts.onNext(Unit)
   }
 
   override fun initSetLastSeenMsg(data: QVariantList) {
@@ -120,7 +126,7 @@ class BufferSyncer constructor(
     }.forEach { (buffer, msgId) ->
       setLastSeenMsg(buffer, msgId)
     }
-    live_lastSeenMsg.onNext(_lastSeenMsg)
+    live_lastSeenMsg.onNext(Unit)
   }
 
   override fun initSetMarkerLines(data: QVariantList) {
@@ -129,29 +135,29 @@ class BufferSyncer constructor(
     }.forEach { (buffer, msgId) ->
       setMarkerLine(buffer, msgId)
     }
-    live_markerLines.onNext(_markerLines)
+    live_markerLines.onNext(Unit)
   }
 
   fun initSetBufferInfos(infos: QVariantList?) {
     _bufferInfos.clear()
     infos?.mapNotNull { it.value<BufferInfo>() }?.forEach { _bufferInfos[it.bufferId] = it }
-    live_bufferInfos.onNext(_bufferInfos)
+    live_bufferInfos.onNext(Unit)
   }
 
   override fun mergeBuffersPermanently(buffer1: BufferId, buffer2: BufferId) {
-    _lastSeenMsg.remove(buffer2);live_lastSeenMsg.onNext(_lastSeenMsg)
-    _markerLines.remove(buffer2);live_markerLines.onNext(_markerLines)
-    _bufferActivities.remove(buffer2);live_bufferActivities.onNext(_bufferActivities)
-    _highlightCounts.remove(buffer2);live_highlightCounts.onNext(_highlightCounts)
-    _bufferInfos.remove(buffer2);live_bufferInfos.onNext(_bufferInfos)
+    _lastSeenMsg.remove(buffer2);live_lastSeenMsg.onNext(Unit)
+    _markerLines.remove(buffer2);live_markerLines.onNext(Unit)
+    _bufferActivities.remove(buffer2);live_bufferActivities.onNext(Unit)
+    _highlightCounts.remove(buffer2);live_highlightCounts.onNext(Unit)
+    _bufferInfos.remove(buffer2);live_bufferInfos.onNext(Unit)
   }
 
   override fun removeBuffer(buffer: BufferId) {
-    _lastSeenMsg.remove(buffer);live_lastSeenMsg.onNext(_lastSeenMsg)
-    _markerLines.remove(buffer);live_markerLines.onNext(_markerLines)
-    _bufferActivities.remove(buffer);live_bufferActivities.onNext(_bufferActivities)
-    _highlightCounts.remove(buffer);live_highlightCounts.onNext(_highlightCounts)
-    _bufferInfos.remove(buffer);live_bufferInfos.onNext(_bufferInfos)
+    _lastSeenMsg.remove(buffer);live_lastSeenMsg.onNext(Unit)
+    _markerLines.remove(buffer);live_markerLines.onNext(Unit)
+    _bufferActivities.remove(buffer);live_bufferActivities.onNext(Unit)
+    _highlightCounts.remove(buffer);live_highlightCounts.onNext(Unit)
+    _bufferInfos.remove(buffer);live_bufferInfos.onNext(Unit)
     session.backlogManager?.removeBuffer(buffer)
   }
 
@@ -159,7 +165,7 @@ class BufferSyncer constructor(
     val bufferInfo = _bufferInfos[buffer]
     if (bufferInfo != null) {
       _bufferInfos[buffer] = bufferInfo.copy(bufferName = newName)
-      live_bufferInfos.onNext(_bufferInfos)
+      live_bufferInfos.onNext(Unit)
     }
   }
 
@@ -167,7 +173,7 @@ class BufferSyncer constructor(
     val oldInfo = _bufferInfos[info.bufferId]
     if (info != oldInfo) {
       _bufferInfos[info.bufferId] = info
-      live_bufferInfos.onNext(_bufferInfos)
+      live_bufferInfos.onNext(Unit)
 
       if (oldInfo == null) {
         session.bufferViewManager?.handleBuffer(info, this)
@@ -182,7 +188,7 @@ class BufferSyncer constructor(
     val oldLastSeenMsg = lastSeenMsg(buffer)
     if (oldLastSeenMsg < msgId) {
       _lastSeenMsg[buffer] = msgId
-      live_lastSeenMsg.onNext(_lastSeenMsg)
+      live_lastSeenMsg.onNext(Unit)
       super.setLastSeenMsg(buffer, msgId)
     }
   }
@@ -192,7 +198,7 @@ class BufferSyncer constructor(
       return
 
     _markerLines[buffer] = msgId
-    live_markerLines.onNext(_markerLines)
+    live_markerLines.onNext(Unit)
     super.setMarkerLine(buffer, msgId)
   }
 
@@ -200,13 +206,13 @@ class BufferSyncer constructor(
     val flags = Message_Types.of<Message_Type>(activity)
     super.setBufferActivity(buffer, activity)
     _bufferActivities[buffer] = flags
-    live_bufferActivities.onNext(_bufferActivities)
+    live_bufferActivities.onNext(Unit)
   }
 
   override fun setHighlightCount(buffer: BufferId, count: Int) {
     super.setHighlightCount(buffer, count)
     _highlightCounts[buffer] = count
-    live_highlightCounts.onNext(_highlightCounts)
+    live_highlightCounts.onNext(Unit)
   }
 
   fun all(
@@ -236,17 +242,17 @@ class BufferSyncer constructor(
   ) = all(bufferName, bufferId, networkId, type, groupId).firstOrNull()
 
   private val _lastSeenMsg: MutableMap<BufferId, MsgId> = mutableMapOf()
-  private val live_lastSeenMsg = BehaviorSubject.createDefault(mapOf<BufferId, MsgId>())
+  private val live_lastSeenMsg = BehaviorSubject.createDefault(Unit)
 
   private val _markerLines: MutableMap<BufferId, MsgId> = mutableMapOf()
-  private val live_markerLines = BehaviorSubject.createDefault(mapOf<BufferId, MsgId>())
+  private val live_markerLines = BehaviorSubject.createDefault(Unit)
 
   private val _bufferActivities: MutableMap<BufferId, Message_Types> = mutableMapOf()
-  private val live_bufferActivities = BehaviorSubject.createDefault(mapOf<BufferId, Message_Types>())
+  private val live_bufferActivities = BehaviorSubject.createDefault(Unit)
 
   private val _highlightCounts: MutableMap<BufferId, Int> = mutableMapOf()
-  private val live_highlightCounts = BehaviorSubject.createDefault(mapOf<BufferId, Int>())
+  private val live_highlightCounts = BehaviorSubject.createDefault(Unit)
 
   private val _bufferInfos = mutableMapOf<BufferId, BufferInfo>()
-  private val live_bufferInfos = BehaviorSubject.createDefault(mapOf<BufferId, BufferInfo>())
+  private val live_bufferInfos = BehaviorSubject.createDefault(Unit)
 }

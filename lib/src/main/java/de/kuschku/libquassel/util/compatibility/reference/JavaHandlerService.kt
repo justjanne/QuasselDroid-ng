@@ -1,9 +1,12 @@
 package de.kuschku.libquassel.util.compatibility.reference
 
 import de.kuschku.libquassel.util.compatibility.HandlerService
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.Executors
 
 class JavaHandlerService : HandlerService {
+  override val scheduler = Schedulers.computation()
+
   override fun backendDelayed(delayMillis: Long, f: () -> Unit) = backend(f)
 
   private val serializeExecutor = Executors.newSingleThreadExecutor()

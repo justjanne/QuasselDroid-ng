@@ -95,7 +95,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     viewModel.identities.switchMap {
       combineLatest(it.values.map(Identity::liveUpdates)).map {
         it.map {
-          SettingsItem(it.id(), it.identityName())
+          SettingsItem(it.id(), it.identityName() ?: "")
         }.sortedBy(SettingsItem::name)
       }
     }.toLiveData().observe(this, Observer {

@@ -157,3 +157,5 @@ fun CharSequence.lastWordIndices(cursor: Int = this.length,
     null
   }
 }
+
+inline fun <T : CharSequence> T?.notBlank(): T? = if (this.isNullOrBlank()) null else this

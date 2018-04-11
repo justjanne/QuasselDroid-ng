@@ -58,13 +58,14 @@ enum class LegacyFeature(override val bit: Int) :
       ExtendedFeature.VerifyServerSSL        -> LegacyFeature.VerifyServerSSL
       ExtendedFeature.CustomRateLimits       -> LegacyFeature.CustomRateLimits
       ExtendedFeature.DccFileTransfer        -> LegacyFeature.DccFileTransfer
-      ExtendedFeature.AwayFormatTimestamp    -> LegacyFeature.AwayFormatTimestamp
-      ExtendedFeature.Authenticators         -> LegacyFeature.Authenticators
-      ExtendedFeature.BufferActivitySync     -> LegacyFeature.BufferActivitySync
-      ExtendedFeature.CoreSideHighlights     -> LegacyFeature.CoreSideHighlights
-      ExtendedFeature.SenderPrefixes         -> LegacyFeature.SenderPrefixes
-      ExtendedFeature.RemoteDisconnect       -> LegacyFeature.RemoteDisconnect
-      ExtendedFeature.ExtendedFeatures       -> LegacyFeature.ExtendedFeatures
+      ExtendedFeature.AwayFormatTimestamp -> LegacyFeature.AwayFormatTimestamp
+      ExtendedFeature.Authenticators      -> LegacyFeature.Authenticators
+      ExtendedFeature.BufferActivitySync  -> LegacyFeature.BufferActivitySync
+      ExtendedFeature.CoreSideHighlights  -> LegacyFeature.CoreSideHighlights
+      ExtendedFeature.SenderPrefixes      -> LegacyFeature.SenderPrefixes
+      ExtendedFeature.RemoteDisconnect    -> LegacyFeature.RemoteDisconnect
+      ExtendedFeature.ExtendedFeatures    -> LegacyFeature.ExtendedFeatures
+      else                                -> null
     }
   }
 
