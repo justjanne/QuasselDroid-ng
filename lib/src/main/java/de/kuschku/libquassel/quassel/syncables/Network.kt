@@ -24,11 +24,11 @@ class Network constructor(
   }
 
   override fun fromVariantMap(properties: QVariantMap) {
+    initSetSupports(properties["Supports"].valueOr(::emptyMap))
     initSetCaps(properties["Caps"].valueOr(::emptyMap))
     initSetCapsEnabled(properties["CapsEnabled"].valueOr(::emptyList))
     initSetIrcUsersAndChannels(properties["IrcUsersAndChannels"].valueOr(::emptyMap))
     initSetServerList(properties["ServerList"].valueOr(::emptyList))
-    initSetSupports(properties["Supports"].valueOr(::emptyMap))
     initSetProperties(properties)
   }
 

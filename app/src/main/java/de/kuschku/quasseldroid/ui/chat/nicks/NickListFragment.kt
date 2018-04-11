@@ -29,6 +29,7 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoActivity
+import de.kuschku.quasseldroid.ui.chat.input.AutoCompleteHelper.Companion.IGNORED_CHARS
 import de.kuschku.quasseldroid.util.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.loadWithFallbacks
 import de.kuschku.quasseldroid.util.helper.styledAttributes
@@ -119,7 +120,8 @@ class NickListFragment : ServiceBoundFragment() {
           avatarUrls = AvatarHelper.avatar(messageSettings, it, avatarSize)
         )
       }.sortedBy {
-        IrcCaseMappers.unicode.toLowerCase(it.nick)
+        IrcCaseMappers[it.networkCasemapping].toLowerCase(it.nick.trimStart(*IGNORED_CHARS))
+          .trimStart(*IGNORED_CHARS)
       }.sortedBy {
         it.lowestMode
       }

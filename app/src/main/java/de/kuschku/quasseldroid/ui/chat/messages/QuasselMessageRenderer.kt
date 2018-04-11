@@ -520,8 +520,7 @@ class QuasselMessageRenderer @Inject constructor(
     }
   }
 
-  private fun formatNick(sender: String, self: Boolean,
-                         highlight: Boolean, showHostmask: Boolean) =
+  private fun formatNick(sender: String, self: Boolean, highlight: Boolean, showHostmask: Boolean) =
     when (messageSettings.colorizeNicknames) {
       ColorizeNicknamesMode.ALL          ->
         formatNickImpl(sender, !highlight, showHostmask)
@@ -531,8 +530,7 @@ class QuasselMessageRenderer @Inject constructor(
         formatNickImpl(sender, false, showHostmask)
     }
 
-  private fun formatPrefix(prefix: String,
-                           highlight: Boolean) = when (messageSettings.showPrefix) {
+  private fun formatPrefix(prefix: String, highlight: Boolean) = when (messageSettings.showPrefix) {
     ShowPrefixMode.ALL     -> prefix
     ShowPrefixMode.HIGHEST -> prefix.substring(0, Math.min(prefix.length, 1))
     ShowPrefixMode.NONE    -> ""

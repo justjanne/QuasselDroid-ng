@@ -230,7 +230,8 @@ class BufferSyncer constructor(
   }.filter {
     groupId == null || it.groupId == groupId
   }.filter {
-    bufferName == null || IrcCaseMappers.unicode.equalsIgnoreCaseNullable(it.bufferName, bufferName)
+    val caseMapper = IrcCaseMappers[session.networks[it.bufferId]?.support("CASEMAPPING")]
+    bufferName == null || caseMapper.equalsIgnoreCaseNullable(it.bufferName, bufferName)
   }
 
   fun find(
