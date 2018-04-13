@@ -89,7 +89,7 @@
   <style name="Widget.CoreSettings.PrimaryItemSwitch" parent="">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_gravity">fill_vertical</item>
+    <item name="android:layout_gravity">center_vertical</item>
     <item name="android:paddingTop">10dp</item>
     <item name="android:paddingBottom">10dp</item>
     <item name="android:gravity">center_vertical</item>
@@ -133,6 +133,15 @@
     <item name="android:layout_marginBottom">12dp</item>
     <item name="android:layout_marginRight">8dp</item>
     <item name="android:textColor">?colorTextSecondary</item>
+  </style>
+
+  <style name="Widget.CoreSettings.EditTextHeader" parent="">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:paddingBottom">8dp</item>
+    <item name="android:paddingLeft">3dp</item>
+    <item name="android:paddingRight">3dp</item>
+    <item name="android:textSize">12sp</item>
   </style>
 
   <style name="Widget.Info.Header" parent="">

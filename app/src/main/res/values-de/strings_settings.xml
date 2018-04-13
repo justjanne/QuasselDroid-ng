@@ -41,6 +41,23 @@
 
   <string name="settings_ignorelist_title">Ignorieren-Liste</string>
 
+  <string name="settings_ignoreitem_title">Ignorieren-Regel</string>
+  <string name="settings_ignoreitem_enabled">Aktiviert</string>
+  <string name="settings_ignoreitem_ignorerule">Ignorier-Regel</string>
+  <string name="settings_ignoreitem_isregex">Regulärer Ausdruck</string>
+  <string name="settings_ignoreitem_type">Regeltyp</string>
+  <string name="settings_ignoreitem_type_sender">Absender</string>
+  <string name="settings_ignoreitem_type_message">Mitteilung</string>
+  <string name="settings_ignoreitem_type_ctcp">CTCP</string>
+  <string name="settings_ignoreitem_strictness">Striktheit</string>
+  <string name="settings_ignoreitem_strictness_soft">Dynamisch</string>
+  <string name="settings_ignoreitem_strictness_hard">Permanent</string>
+  <string name="settings_ignoreitem_scope">Gültigkeitsbereich</string>
+  <string name="settings_ignoreitem_scope_global">Global</string>
+  <string name="settings_ignoreitem_scope_network">Netzwerk</string>
+  <string name="settings_ignoreitem_scope_channel">Raum</string>
+  <string name="settings_ignoreitem_scoperule">Gültigkeitsregel</string>
+
   <string name="settings_highlightlist_title">Hervorhebungen</string>
 
   <string name="settings_aliaslist_title">Aliase</string>

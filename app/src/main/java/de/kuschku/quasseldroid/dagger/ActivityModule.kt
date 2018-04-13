@@ -26,6 +26,10 @@ import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatListActivity
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatListFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityActivity
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.ignoreitem.IgnoreItemActivity
+import de.kuschku.quasseldroid.ui.coresettings.ignoreitem.IgnoreItemFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.ignorelist.IgnoreListActivity
+import de.kuschku.quasseldroid.ui.coresettings.ignorelist.IgnoreListFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivity
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditActivity
@@ -68,6 +72,12 @@ abstract class ActivityModule {
 
   @ContributesAndroidInjector(modules = [ChatListFragmentProvider::class])
   abstract fun bindChatListActivity(): ChatListActivity
+
+  @ContributesAndroidInjector(modules = [IgnoreListFragmentProvider::class])
+  abstract fun bindIgnoreActivity(): IgnoreListActivity
+
+  @ContributesAndroidInjector(modules = [IgnoreItemFragmentProvider::class])
+  abstract fun bindIgnoreItemActivity(): IgnoreItemActivity
 
   @ContributesAndroidInjector(modules = [NetworkConfigFragmentProvider::class])
   abstract fun bindNetworkConfigActivity(): NetworkConfigActivity

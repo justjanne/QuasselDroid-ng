@@ -69,9 +69,9 @@ class QuasselViewModel : ViewModel() {
 
   val errors = sessionManager.mapSwitchMap(SessionManager::error)
 
-  val networkConfig = session.map {
-    it.map(ISession::networkConfig)
-  }
+  val networkConfig = session.mapMapNullable(ISession::networkConfig)
+
+  val ignoreListManager = session.mapMapNullable(ISession::ignoreListManager)
 
   val networks = session.switchMap {
     it.map(ISession::liveNetworks).orElse(Observable.just(emptyMap()))
@@ -86,10 +86,8 @@ class QuasselViewModel : ViewModel() {
     it.liveBufferInfos().map(Map<BufferId, BufferInfo>::values)
   }.mapOrElse(emptyList())
 
-  val network = combineLatest(bufferSyncer,
-                              networks,
-                              buffer).map { (bufferSyncer, networks, buffer) ->
-    Optional.ofNullable(bufferSyncer.orNull()?.bufferInfo(buffer)?.let { networks[it.networkId] })
+  val network = combineLatest(bufferSyncer, networks, buffer).map { (syncer, networks, buffer) ->
+    Optional.ofNullable(syncer.orNull()?.bufferInfo(buffer)?.let { networks[it.networkId] })
   }
 
   /**

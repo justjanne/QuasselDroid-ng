@@ -150,6 +150,16 @@ class AboutSettingsFragment : DaggerFragment() {
         url = "https://bumptech.github.io/glide/"
       ),
       Library(
+        name = "GlobTransformer",
+        version = "4.6.1",
+        license = License(
+          shortName = "CC BY-SA 3.0",
+          fullName = "Creative Commons Attribution-ShareAlike 3.0 Unported",
+          text = R.string.license_cc_by_sa_3_0
+        ),
+        url = "https://bumptech.github.io/glide/"
+      ),
+      Library(
         name = "Gson",
         version = "2.8.2",
         license = apache2,
@@ -215,8 +225,8 @@ class AboutSettingsFragment : DaggerFragment() {
         version = "1.0.2",
         license = License(
           shortName = "CC0",
-          fullName = "Public Domain (CC0)",
-          text = R.string.license_cc0
+          fullName = "Creative Commons CC0 1.0 Universal",
+          text = R.string.license_cc_0
         ),
         url = "https://github.com/ReactiveX/RxJava"
       ),

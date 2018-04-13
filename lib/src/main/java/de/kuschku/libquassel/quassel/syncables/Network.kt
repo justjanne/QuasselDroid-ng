@@ -676,14 +676,14 @@ class Network constructor(
   override fun initIrcUsersAndChannels(): QVariantMap {
     return mapOf(
       "Users" to QVariant.of(
-        _ircUsers.values.map { it.toVariantMap() }.transpose().map {
-          QVariant.of(it, Type.QVariantList)
+        _ircUsers.values.map { it.toVariantMap() }.transpose().mapValues { (_, value) ->
+          QVariant.of(value, Type.QVariantList)
         },
         Type.QVariantMap
       ),
       "Channels" to QVariant.of(
-        _ircChannels.values.map { it.toVariantMap() }.transpose().map {
-          QVariant.of(it, Type.QVariantList)
+        _ircChannels.values.map { it.toVariantMap() }.transpose().mapValues { (_, value) ->
+          QVariant.of(value, Type.QVariantList)
         },
         Type.QVariantMap
       )

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:scrollbars="vertical">
+
+  <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_filter" />
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/enabled"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_ignoreitem_enabled" />
+    </LinearLayout>
+
+    <LinearLayout
+      style="@style/Widget.CoreSettings.DependentGroup"
+      android:visibility="visible">
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_ignoreitem_ignorerule">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/ignorerule"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="https://clbin.com/*.jpg*" />
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/isregex"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_ignoreitem_isregex" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.EditTextHeader"
+        android:text="@string/settings_ignoreitem_type" />
+
+      <Spinner
+        android:id="@+id/type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/settings_item" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.EditTextHeader"
+        android:text="@string/settings_ignoreitem_strictness" />
+
+      <Spinner
+        android:id="@+id/strictness"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/settings_item" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_tag_text" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_ignoreitem_scope" />
+    </LinearLayout>
+
+    <LinearLayout
+      style="@style/Widget.CoreSettings.DependentGroup"
+      android:visibility="visible">
+
+      <Spinner
+        android:id="@+id/scope"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/settings_item" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/scopegroup"
+      style="@style/Widget.CoreSettings.DependentGroup"
+      android:visibility="visible">
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_ignoreitem_scoperule">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/scoperule"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="https://clbin.com/*.jpg*" />
+      </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+  </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

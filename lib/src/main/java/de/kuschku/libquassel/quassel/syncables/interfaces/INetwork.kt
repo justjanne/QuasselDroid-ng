@@ -263,10 +263,7 @@ interface INetwork : ISyncableObject {
     FtpCachingProxy(5);
 
     companion object {
-      private val byId = enumValues<ProxyType>().associateBy(
-        ProxyType::value
-      )
-
+      private val byId = enumValues<ProxyType>().associateBy(ProxyType::value)
       fun of(value: Int) = byId[value] ?: DefaultProxy
     }
   }

@@ -55,8 +55,8 @@ class NetworkConfigFragment : SettingsFragment() {
     ButterKnife.bind(this, view)
 
     viewModel.networkConfig
-      .filter(Optional<NetworkConfig?>::isPresent)
-      .map(Optional<NetworkConfig?>::get)
+      .filter(Optional<NetworkConfig>::isPresent)
+      .map(Optional<NetworkConfig>::get)
       .firstElement()
       .toLiveData().observe(this, Observer {
         if (it != null) {

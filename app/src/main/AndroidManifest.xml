@@ -54,6 +54,44 @@
       android:parentActivityName=".ui.chat.info.channel.ChannelInfoActivity"
       android:windowSoftInputMode="adjustResize" />
 
+    <!-- Core Settings -->
+    <activity
+      android:name=".ui.coresettings.CoreSettingsActivity"
+      android:exported="false"
+      android:label="@string/label_settings_core"
+      android:parentActivityName=".ui.chat.ChatActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.coresettings.identity.IdentityActivity"
+      android:exported="false"
+      android:label="@string/settings_identity_title"
+      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.coresettings.chatlist.ChatListActivity"
+      android:exported="false"
+      android:label="@string/settings_chatlist_title"
+      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.coresettings.ignorelist.IgnoreListActivity"
+      android:exported="false"
+      android:label="@string/settings_ignorelist_title"
+      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.coresettings.ignoreitem.IgnoreItemActivity"
+      android:exported="false"
+      android:label="@string/settings_ignoreitem_title"
+      android:parentActivityName=".ui.coresettings.ignorelist.IgnoreListActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.coresettings.networkconfig.NetworkConfigActivity"
+      android:exported="false"
+      android:label="@string/settings_networkconfig_title"
+      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+
     <!-- Client Settings -->
     <activity
       android:name=".ui.clientsettings.app.AppSettingsActivity"
@@ -78,32 +116,6 @@
       android:exported="false"
       android:label="@string/label_license"
       android:parentActivityName=".ui.clientsettings.about.AboutSettingsActivity"
-      android:windowSoftInputMode="adjustResize" />
-
-    <!-- Core Settings -->
-    <activity
-      android:name=".ui.coresettings.CoreSettingsActivity"
-      android:exported="false"
-      android:label="@string/label_settings_core"
-      android:parentActivityName=".ui.chat.ChatActivity"
-      android:windowSoftInputMode="adjustResize" />
-    <activity
-      android:name=".ui.coresettings.identity.IdentityActivity"
-      android:exported="false"
-      android:label="@string/settings_identity_title"
-      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
-      android:windowSoftInputMode="adjustResize" />
-    <activity
-      android:name=".ui.coresettings.chatlist.ChatListActivity"
-      android:exported="false"
-      android:label="@string/settings_chatlist_title"
-      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
-      android:windowSoftInputMode="adjustResize" />
-    <activity
-      android:name=".ui.coresettings.networkconfig.NetworkConfigActivity"
-      android:exported="false"
-      android:label="@string/settings_networkconfig_title"
-      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
 
     <!-- Client Setup Flow -->

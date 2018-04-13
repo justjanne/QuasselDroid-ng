@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.ViewHolder
 import android.support.v7.widget.SwitchCompat
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
@@ -73,27 +72,6 @@ class IdentityFragment : SettingsFragment() {
 
     val identityId = arguments?.getInt("identity", -1) ?: -1
 
-    viewModel.identities.switchMap {
-      it[identityId]?.liveUpdates() ?: Observable.empty()
-    }.firstElement()
-      .toLiveData().observe(this, Observer {
-        if (it != null) {
-          this.identity = Pair(it, it.copy())
-          this.identity?.let { (_, data) ->
-            identityName.text = data.identityName()
-            realName.text = data.realName()
-            ident.text = data.ident()
-            kickReason.text = data.kickReason()
-            partReason.text = data.partReason()
-            quitReason.text = data.quitReason()
-            awayReason.text = data.awayReason()
-            detachAway.isChecked = data.detachAwayEnabled()
-            detachAwayReason.text = data.detachAwayReason()
-            adapter.nicks = data.nicks()
-          }
-        }
-      })
-
     adapter = IdentityNicksAdapter(::nickClick, ::startDrag)
     nicks.layoutManager = LinearLayoutManager(requireContext())
     nicks.adapter = adapter
@@ -117,6 +95,27 @@ class IdentityFragment : SettingsFragment() {
           }
         }.build().show()
     }
+
+    viewModel.identities.switchMap {
+      it[identityId]?.liveUpdates() ?: Observable.empty()
+    }.firstElement()
+      .toLiveData().observe(this, Observer {
+        if (it != null) {
+          this.identity = Pair(it, it.copy())
+          this.identity?.let { (_, data) ->
+            identityName.text = data.identityName()
+            realName.text = data.realName()
+            ident.text = data.ident()
+            kickReason.text = data.kickReason()
+            partReason.text = data.partReason()
+            quitReason.text = data.quitReason()
+            awayReason.text = data.awayReason()
+            detachAway.isChecked = data.detachAwayEnabled()
+            detachAwayReason.text = data.detachAwayReason()
+            adapter.nicks = data.nicks()
+          }
+        }
+      })
 
     detachAway.setDependent(detachAwayGroup)
 
@@ -156,26 +155,4 @@ class IdentityFragment : SettingsFragment() {
     true
   } ?: false
 
-  class DragSortItemTouchHelperCallback(private val adapter: IdentityNicksAdapter) :
-    ItemTouchHelper.Callback() {
-    override fun isLongPressDragEnabled() = true
-
-    override fun isItemViewSwipeEnabled() = true
-
-    override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: ViewHolder): Int {
-      val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
-      val swipeFlags = ItemTouchHelper.START or ItemTouchHelper.END
-      return ItemTouchHelper.Callback.makeMovementFlags(dragFlags, swipeFlags)
-    }
-
-    override fun onMove(recyclerView: RecyclerView, viewHolder: ViewHolder,
-                        target: ViewHolder): Boolean {
-      adapter.moveNick(viewHolder.adapterPosition, target.adapterPosition)
-      return true
-    }
-
-    override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
-      adapter.removeNick(viewHolder.adapterPosition)
-    }
-  }
 }

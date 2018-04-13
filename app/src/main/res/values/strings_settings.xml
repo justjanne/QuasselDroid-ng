@@ -39,7 +39,24 @@
   <string name="settings_chatlist_hide_inactive_buffers">Hide Inactive Chats</string>
   <string name="settings_chatlist_hide_inactive_networks">Hide Inactive Networks</string>
 
-  <string name="settings_ignorelist_title">Ignorelist</string>
+  <string name="settings_ignorelist_title">Ignore List</string>
+
+  <string name="settings_ignoreitem_title">Ignore Rule</string>
+  <string name="settings_ignoreitem_enabled">Enabled</string>
+  <string name="settings_ignoreitem_ignorerule">Ignore Rule</string>
+  <string name="settings_ignoreitem_isregex">Regular Expression</string>
+  <string name="settings_ignoreitem_type">Type</string>
+  <string name="settings_ignoreitem_type_sender">Sender</string>
+  <string name="settings_ignoreitem_type_message">Message</string>
+  <string name="settings_ignoreitem_type_ctcp">Ctcp</string>
+  <string name="settings_ignoreitem_strictness">Strictness</string>
+  <string name="settings_ignoreitem_strictness_soft">Dynamic</string>
+  <string name="settings_ignoreitem_strictness_hard">Permanent</string>
+  <string name="settings_ignoreitem_scope">Scope</string>
+  <string name="settings_ignoreitem_scope_global">Global Scope</string>
+  <string name="settings_ignoreitem_scope_network">Network Scope</string>
+  <string name="settings_ignoreitem_scope_channel">Channel Scope</string>
+  <string name="settings_ignoreitem_scoperule">Scope Rule</string>
 
   <string name="settings_highlightlist_title">Highlights</string>
 
