@@ -232,13 +232,20 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
     })
 
+    viewModel.connectionProgress
+      .filter { (it, _, _) -> it == ConnectionState.CONNECTED }
+      .firstElement()
+      .toLiveData()
+      .observe(this, Observer {
+        if (resources.getBoolean(R.bool.buffer_drawer_exists) && viewModel.buffer.value == -1) {
+          drawerLayout.openDrawer(Gravity.START)
+        }
+      })
+
     viewModel.connectionProgress.toLiveData().observe(this, Observer {
       val (state, progress, max) = it ?: Triple(ConnectionState.DISCONNECTED, 0, 0)
       when (state) {
         ConnectionState.CONNECTED -> {
-          if (resources.getBoolean(R.bool.buffer_drawer_exists) && viewModel.buffer.value == -1) {
-            drawerLayout.openDrawer(Gravity.START)
-          }
           progressBar.visibility = View.INVISIBLE
         }
         ConnectionState.DISCONNECTED,
@@ -411,6 +418,20 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       true
     }
     else                        -> super.onOptionsItemSelected(item)
+  }
+
+  override fun onBackPressed() {
+    if (chatlineFragment?.historyPanel?.panelState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+      chatlineFragment?.historyPanel?.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+      return
+    }
+
+    if (editorPanel.panelState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+      editorPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+      return
+    }
+
+    super.onBackPressed()
   }
 
   private fun disconnect() {

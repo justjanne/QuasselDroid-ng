@@ -3,35 +3,26 @@ package de.kuschku.libquassel.quassel.syncables
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBacklogManager
 import de.kuschku.libquassel.session.BacklogStorage
-import de.kuschku.libquassel.session.SignalProxy
-import java.util.concurrent.atomic.AtomicInteger
+import de.kuschku.libquassel.session.Session
 
 class BacklogManager(
-  proxy: SignalProxy,
+  private val session: Session,
   private val backlogStorage: BacklogStorage
-) : SyncableObject(proxy, "BacklogManager"), IBacklogManager {
+) : SyncableObject(session, "BacklogManager"), IBacklogManager {
   init {
     initialized = true
   }
 
-  private var loading = AtomicInteger(-1)
-
-  override fun requestBacklog(bufferId: BufferId, first: MsgId, last: MsgId, limit: Int,
-                              additional: Int) {
-    if (loading.getAndSet(bufferId) != bufferId) {
-      super.requestBacklog(bufferId, first, last, limit, additional)
-    }
-  }
+  fun updateIgnoreRules() = backlogStorage.updateIgnoreRules(session)
 
   override fun receiveBacklog(bufferId: BufferId, first: MsgId, last: MsgId, limit: Int,
                               additional: Int, messages: QVariantList) {
-    loading.compareAndSet(bufferId, -1)
-    backlogStorage.storeMessages(messages.mapNotNull(QVariant_::value), initialLoad = true)
+    backlogStorage.storeMessages(session, messages.mapNotNull(QVariant_::value), initialLoad = true)
   }
 
   override fun receiveBacklogAll(first: MsgId, last: MsgId, limit: Int, additional: Int,
                                  messages: QVariantList) {
-    backlogStorage.storeMessages(messages.mapNotNull(QVariant_::value), initialLoad = true)
+    backlogStorage.storeMessages(session, messages.mapNotNull(QVariant_::value), initialLoad = true)
   }
 
   fun removeBuffer(buffer: BufferId) {

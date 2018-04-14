@@ -38,7 +38,7 @@ class RpcHandler(
 
   override fun displayMsg(message: Message) {
     session.bufferSyncer.bufferInfoUpdated(message.bufferInfo)
-    backlogStorage.storeMessages(message)
+    backlogStorage.storeMessages(session, message)
   }
 
   override fun requestCreateIdentity(identity: QVariantMap, additional: QVariantMap) {

@@ -2,15 +2,15 @@ package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.IIgnoreListManager
-import de.kuschku.libquassel.session.SignalProxy
+import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.util.GlobTransformer
 import de.kuschku.libquassel.util.flag.and
 import io.reactivex.subjects.BehaviorSubject
 import java.io.Serializable
 
 class IgnoreListManager constructor(
-  proxy: SignalProxy
-) : SyncableObject(proxy, "IgnoreListManager"), IIgnoreListManager {
+  private val session: Session
+) : SyncableObject(session, "IgnoreListManager"), IIgnoreListManager {
   override fun toVariantMap(): QVariantMap = mapOf(
     "IgnoreList" to QVariant.of(initIgnoreList(), Type.QVariantMap)
   )
@@ -100,7 +100,7 @@ class IgnoreListManager constructor(
 
   fun updates() = live_updates.map { this }
 
-  fun copy() = IgnoreListManager(proxy).also {
+  fun copy() = IgnoreListManager(session).also {
     it.fromVariantMap(toVariantMap())
   }
 
@@ -265,5 +265,6 @@ class IgnoreListManager constructor(
     set(value) {
       field = value
       live_updates.onNext(Unit)
+      if (initialized) session.backlogManager.updateIgnoreRules()
     }
 }

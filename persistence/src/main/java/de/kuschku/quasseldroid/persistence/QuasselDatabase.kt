@@ -3,7 +3,6 @@ package de.kuschku.quasseldroid.persistence
 import android.arch.lifecycle.LiveData
 import android.arch.paging.DataSource
 import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.db.SupportSQLiteQuery
 import android.arch.persistence.room.*
 import android.arch.persistence.room.migration.Migration
 import android.content.Context
@@ -16,13 +15,13 @@ import de.kuschku.quasseldroid.persistence.QuasselDatabase.Filtered
 import io.reactivex.Flowable
 import org.threeten.bp.Instant
 
-@Database(entities = [DatabaseMessage::class, Filtered::class], version = 6)
+@Database(entities = [DatabaseMessage::class, Filtered::class], version = 8)
 @TypeConverters(DatabaseMessage.MessageTypeConverters::class)
 abstract class QuasselDatabase : RoomDatabase() {
   abstract fun message(): MessageDao
   abstract fun filtered(): FilteredDao
 
-  @Entity(tableName = "message")
+  @Entity(tableName = "message", indices = [Index("bufferId"), Index("ignored")])
   data class DatabaseMessage(
     @PrimaryKey var messageId: Int,
     var time: Instant,
@@ -33,7 +32,8 @@ abstract class QuasselDatabase : RoomDatabase() {
     var senderPrefixes: String,
     var realName: String,
     var avatarUrl: String,
-    var content: String
+    var content: String,
+    var ignored: Boolean
   ) {
     class MessageTypeConverters {
       @TypeConverter
@@ -54,25 +54,17 @@ abstract class QuasselDatabase : RoomDatabase() {
 
   @Dao
   interface MessageDao {
+    @Query("SELECT * FROM message")
+    fun all(): List<DatabaseMessage>
+
     @Query("SELECT * FROM message WHERE messageId = :messageId")
     fun find(messageId: Int): DatabaseMessage?
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC")
     fun findByBufferId(bufferId: Int): List<DatabaseMessage>
 
-    @Query(
-      "SELECT * FROM message WHERE bufferId = :bufferId AND type & ~ :type > 0 ORDER BY messageId DESC"
-    )
+    @Query("SELECT * FROM message WHERE bufferId = :bufferId AND type & ~ :type > 0 AND ignored = 0 ORDER BY messageId DESC")
     fun findByBufferIdPaged(bufferId: Int, type: Int): DataSource.Factory<Int, DatabaseMessage>
-
-    @RawQuery(observedEntities = [DatabaseMessage::class])
-    fun findMessagesRawPaged(query: SupportSQLiteQuery): DataSource.Factory<Int, DatabaseMessage>
-
-    @RawQuery
-    fun findDaysRaw(query: SupportSQLiteQuery): List<Instant>
-
-    @RawQuery
-    fun findMessagesRaw(query: SupportSQLiteQuery): List<DatabaseMessage>
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId DESC LIMIT 1")
     fun findLastByBufferId(bufferId: Int): DatabaseMessage?
@@ -83,7 +75,7 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Query("SELECT messageId FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC LIMIT 1")
     fun firstMsgId(bufferId: Int): Flowable<MsgId>
 
-    @Query("SELECT messageId FROM message WHERE bufferId = :bufferId AND type & ~ :type > 0 ORDER BY messageId ASC LIMIT 1")
+    @Query("SELECT messageId FROM message WHERE bufferId = :bufferId AND type & ~ :type > 0 AND ignored = 0 ORDER BY messageId ASC LIMIT 1")
     fun firstVisibleMsgId(bufferId: Int, type: Int): MsgId?
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC LIMIT 1")
@@ -188,6 +180,18 @@ abstract class QuasselDatabase : RoomDatabase() {
                 override fun migrate(database: SupportSQLiteDatabase) {
                   database.execSQL("drop table message;")
                   database.execSQL("create table message (messageId INTEGER not null primary key, time INTEGER not null, type INTEGER not null, flag INTEGER not null, bufferId INTEGER not null, sender TEXT not null, senderPrefixes TEXT not null, realName TEXT not null, avatarUrl TEXT not null, content TEXT not null);")
+                }
+              },
+              object : Migration(6, 7) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL("drop table message;")
+                  database.execSQL("create table message (messageId INTEGER not null primary key, time INTEGER not null, type INTEGER not null, flag INTEGER not null, bufferId INTEGER not null, sender TEXT not null, senderPrefixes TEXT not null, realName TEXT not null, avatarUrl TEXT not null, content TEXT not null, ignored INTEGER not null);")
+                }
+              },
+              object : Migration(7, 8) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL("CREATE INDEX index_message_bufferId ON message(bufferId);")
+                  database.execSQL("CREATE INDEX index_message_ignored ON message(ignored);")
                 }
               }
             ).build()

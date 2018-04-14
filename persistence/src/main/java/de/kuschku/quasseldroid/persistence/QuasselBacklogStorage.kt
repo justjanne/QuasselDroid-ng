@@ -2,39 +2,39 @@ package de.kuschku.quasseldroid.persistence
 
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Message
+import de.kuschku.libquassel.protocol.Message_Type
+import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.libquassel.session.BacklogStorage
+import de.kuschku.libquassel.session.Session
 
 class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
-  override fun storeMessages(vararg messages: Message, initialLoad: Boolean) = storeMessages(
-    messages.asIterable(), initialLoad
-  )
+  override fun updateIgnoreRules(session: Session) {
+    db.message().save(
+      *db.message().all().map {
+        it.copy(ignored = isIgnored(session, it))
+      }.toTypedArray()
+    )
+  }
 
-  override fun storeMessages(messages: Iterable<Message>, initialLoad: Boolean) {
-    if (initialLoad)
-      for ((bufferId, bufferMessages) in messages.sortedBy { it.messageId }.groupBy { it.bufferInfo.bufferId }) {
-        val lastMessageId = db.message().findLastByBufferId(bufferId)?.messageId
-        val firstMessage = bufferMessages.firstOrNull()
-        if (lastMessageId == null || firstMessage == null || lastMessageId < firstMessage.messageId) {
-          db.message().clearMessages(bufferId)
-        }
-      }
+  override fun storeMessages(session: Session, vararg messages: Message, initialLoad: Boolean) =
+    storeMessages(session, messages.asIterable(), initialLoad)
 
-    for (message in messages) {
-      db.message().save(
-        QuasselDatabase.DatabaseMessage(
-          messageId = message.messageId,
-          time = message.time,
-          type = message.type.value,
-          flag = message.flag.value,
-          bufferId = message.bufferInfo.bufferId,
-          sender = message.sender,
-          senderPrefixes = message.senderPrefixes,
-          realName = message.realName,
-          avatarUrl = message.avatarUrl,
-          content = message.content
-        )
+  override fun storeMessages(session: Session, messages: Iterable<Message>, initialLoad: Boolean) {
+    db.message().save(*messages.map {
+      QuasselDatabase.DatabaseMessage(
+        messageId = it.messageId,
+        time = it.time,
+        type = it.type.value,
+        flag = it.flag.value,
+        bufferId = it.bufferInfo.bufferId,
+        sender = it.sender,
+        senderPrefixes = it.senderPrefixes,
+        realName = it.realName,
+        avatarUrl = it.avatarUrl,
+        content = it.content,
+        ignored = isIgnored(session, it)
       )
-    }
+    }.toTypedArray())
   }
 
   override fun clearMessages(bufferId: BufferId, idRange: IntRange) {
@@ -49,4 +49,24 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
     db.message().clearMessages()
   }
 
+  private fun isIgnored(session: Session, message: Message): Boolean {
+    val bufferName = message.bufferInfo.bufferName ?: ""
+    val networkId = message.bufferInfo.networkId
+    val networkName = session.network(networkId)?.networkName() ?: ""
+
+    return session.ignoreListManager.match(
+      message.content, message.sender, message.type, networkName, bufferName
+    ) != IgnoreListManager.StrictnessType.UnmatchedStrictness
+  }
+
+  private fun isIgnored(session: Session, message: QuasselDatabase.DatabaseMessage): Boolean {
+    val bufferInfo = session.bufferSyncer.bufferInfo(message.bufferId)
+    val bufferName = bufferInfo?.bufferName ?: ""
+    val networkId = bufferInfo?.networkId ?: -1
+    val networkName = session.network(networkId)?.networkName() ?: ""
+
+    return session.ignoreListManager.match(
+      message.content, message.sender, Message_Type.of(message.type), networkName, bufferName
+    ) != IgnoreListManager.StrictnessType.UnmatchedStrictness
+  }
 }
