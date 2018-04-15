@@ -1,197 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical">
+  android:layout_height="match_parent">
 
-  <LinearLayout
+  <android.support.design.widget.AppBarLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:background="#40000000"
+    app:elevation="0dip">
 
-    <android.support.constraint.ConstraintLayout
+    <android.support.design.widget.CollapsingToolbarLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="wrap_content"
+      app:layout_scrollFlags="scroll">
 
       <ImageView
         android:id="@+id/avatar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
         android:contentDescription="@string/label_avatar"
-        android:scaleType="centerCrop"
-        app:layout_constraintDimensionRatio="H,3:2"
+        android:scaleType="fitXY"
+        app:layout_collapseMode="parallax"
         tools:src="@tools:sample/avatars" />
 
-    </android.support.constraint.ConstraintLayout>
+    </android.support.design.widget.CollapsingToolbarLayout>
+  </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout style="@style/Widget.Info.Header">
-
-      <TextView
-        android:id="@+id/nick"
-        style="@style/Widget.Info.Header.Name"
-        tools:text="justJanne" />
-
-      <TextView
-        android:id="@+id/real_name"
-        style="@style/Widget.Info.Header.Description"
-        tools:text="Janne Koschinski https://kuschku.de/" />
-    </LinearLayout>
-
-    <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="?colorDivider" />
-
-    <HorizontalScrollView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-
-      <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
-        android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
-        android:paddingRight="?android:attr/listPreferredItemPaddingRight"
-        android:paddingStart="?android:attr/listPreferredItemPaddingLeft">
-
-        <android.support.v7.widget.AppCompatButton
-          android:id="@+id/action_query"
-          style="@style/Widget.Info.ActionButton"
-          android:contentDescription="@string/label_query_long"
-          android:drawableTop="@drawable/ic_message_bulleted"
-          android:text="@string/label_query"
-          tools:drawableTint="?colorTextSecondary" />
-
-        <android.support.v7.widget.AppCompatButton
-          android:id="@+id/action_ignore"
-          style="@style/Widget.Info.ActionButton"
-          android:contentDescription="@string/label_ignore_long"
-          android:drawableTop="@drawable/ic_eye_off"
-          android:text="@string/label_ignore"
-          tools:drawableTint="?colorTextSecondary" />
-
-        <android.support.v7.widget.AppCompatButton
-          android:id="@+id/action_whois"
-          style="@style/Widget.Info.ActionButton"
-          android:contentDescription="@string/label_whois_long"
-          android:drawableTop="@drawable/ic_info"
-          android:text="@string/label_whois"
-          tools:drawableTint="?colorTextSecondary" />
-
-        <android.support.v7.widget.AppCompatButton
-          android:id="@+id/action_mention"
-          style="@style/Widget.Info.ActionButton"
-          android:contentDescription="@string/label_mention_long"
-          android:drawableTop="@drawable/ic_share_alternative"
-          android:text="@string/label_mention"
-          tools:drawableTint="?colorTextSecondary" />
-      </LinearLayout>
-    </HorizontalScrollView>
-
-    <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="?colorDivider" />
+  <android.support.v4.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
-      android:id="@+id/away_container"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:visibility="gone"
-      tools:visibility="visible">
+      android:layout_height="match_parent"
+      android:animateLayoutChanges="true"
+      android:orientation="vertical">
 
-      <TextView
-        style="@style/Widget.Info.Section"
-        android:text="@string/label_user_away" />
-
-      <LinearLayout style="@style/Widget.Info.Item">
+      <LinearLayout style="@style/Widget.Info.Header">
 
         <TextView
-          android:id="@+id/away_message"
-          style="@style/Widget.Info.Item.Content"
-          tools:text="~justJanne" />
+          android:id="@+id/nick"
+          style="@style/Widget.Info.Header.Name"
+          tools:text="justJanne" />
 
         <TextView
-          style="@style/Widget.Info.Item.Description"
-          android:text="@string/label_user_away_reason" />
+          android:id="@+id/real_name"
+          style="@style/Widget.Info.Header.Description"
+          tools:text="Janne Koschinski https://kuschku.de/" />
       </LinearLayout>
 
       <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?colorDivider" />
+
+      <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+          android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+          android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+          android:paddingStart="?android:attr/listPreferredItemPaddingLeft">
+
+          <android.support.v7.widget.AppCompatButton
+            android:id="@+id/action_query"
+            style="@style/Widget.Info.ActionButton"
+            android:contentDescription="@string/label_query_long"
+            android:drawableTop="@drawable/ic_message_bulleted"
+            android:text="@string/label_query"
+            tools:drawableTint="?colorTextSecondary" />
+
+          <android.support.v7.widget.AppCompatButton
+            android:id="@+id/action_ignore"
+            style="@style/Widget.Info.ActionButton"
+            android:contentDescription="@string/label_ignore_long"
+            android:drawableTop="@drawable/ic_eye_off"
+            android:text="@string/label_ignore"
+            android:visibility="gone"
+            tools:drawableTint="?colorTextSecondary"
+            tools:visibility="visible" />
+
+          <android.support.v7.widget.AppCompatButton
+            android:id="@+id/action_whois"
+            style="@style/Widget.Info.ActionButton"
+            android:contentDescription="@string/label_whois_long"
+            android:drawableTop="@drawable/ic_info"
+            android:text="@string/label_whois"
+            tools:drawableTint="?colorTextSecondary" />
+
+          <android.support.v7.widget.AppCompatButton
+            android:id="@+id/action_mention"
+            style="@style/Widget.Info.ActionButton"
+            android:contentDescription="@string/label_mention_long"
+            android:drawableTop="@drawable/ic_share_alternative"
+            android:text="@string/label_mention"
+            tools:drawableTint="?colorTextSecondary" />
+        </LinearLayout>
+      </HorizontalScrollView>
+
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?colorDivider" />
+
+      <LinearLayout
+        android:id="@+id/away_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+          style="@style/Widget.Info.Section"
+          android:text="@string/label_user_away" />
+
+        <LinearLayout style="@style/Widget.Info.Item">
+
+          <TextView
+            android:id="@+id/away_message"
+            style="@style/Widget.Info.Item.Content"
+            tools:text="~justJanne" />
+
+          <TextView
+            style="@style/Widget.Info.Item.Description"
+            android:text="@string/label_user_away_reason" />
+        </LinearLayout>
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="?colorDivider" />
+      </LinearLayout>
+
+      <TextView
+        style="@style/Widget.Info.Section"
+        android:text="@string/label_user_identity" />
+
+      <LinearLayout
+        android:id="@+id/account_container"
+        style="@style/Widget.Info.Item"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+          android:id="@+id/account"
+          style="@style/Widget.Info.Item.Content"
+          tools:text="kuschku" />
+
+        <TextView
+          style="@style/Widget.Info.Item.Description"
+          android:text="@string/label_user_account" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/ident_container"
+        style="@style/Widget.Info.Item"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+          android:id="@+id/ident"
+          style="@style/Widget.Info.Item.Content"
+          tools:text="~justJanne" />
+
+        <TextView
+          style="@style/Widget.Info.Item.Description"
+          android:text="@string/label_user_ident" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/host_container"
+        style="@style/Widget.Info.Item"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+          android:id="@+id/host"
+          style="@style/Widget.Info.Item.Content"
+          tools:text="lithium.kuschku.de" />
+
+        <TextView
+          style="@style/Widget.Info.Item.Description"
+          android:text="@string/label_user_host" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/server_container"
+        style="@style/Widget.Info.Item"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+          android:id="@+id/server"
+          style="@style/Widget.Info.Item.Content"
+          tools:text="irc.freenode.org" />
+
+        <TextView
+          style="@style/Widget.Info.Item.Description"
+          android:text="@string/label_user_server" />
+      </LinearLayout>
     </LinearLayout>
-
-    <TextView
-      style="@style/Widget.Info.Section"
-      android:text="@string/label_user_identity" />
-
-    <LinearLayout
-      android:id="@+id/account_container"
-      style="@style/Widget.Info.Item"
-      android:visibility="gone"
-      tools:visibility="visible">
-
-      <TextView
-        android:id="@+id/account"
-        style="@style/Widget.Info.Item.Content"
-        tools:text="kuschku" />
-
-      <TextView
-        style="@style/Widget.Info.Item.Description"
-        android:text="@string/label_user_account" />
-    </LinearLayout>
-
-    <LinearLayout
-      android:id="@+id/ident_container"
-      style="@style/Widget.Info.Item"
-      android:visibility="gone"
-      tools:visibility="visible">
-
-      <TextView
-        android:id="@+id/ident"
-        style="@style/Widget.Info.Item.Content"
-        tools:text="~justJanne" />
-
-      <TextView
-        style="@style/Widget.Info.Item.Description"
-        android:text="@string/label_user_ident" />
-    </LinearLayout>
-
-    <LinearLayout
-      android:id="@+id/host_container"
-      style="@style/Widget.Info.Item"
-      android:visibility="gone"
-      tools:visibility="visible">
-
-      <TextView
-        android:id="@+id/host"
-        style="@style/Widget.Info.Item.Content"
-        tools:text="lithium.kuschku.de" />
-
-      <TextView
-        style="@style/Widget.Info.Item.Description"
-        android:text="@string/label_user_host" />
-    </LinearLayout>
-
-    <LinearLayout
-      android:id="@+id/server_container"
-      style="@style/Widget.Info.Item"
-      android:visibility="gone"
-      tools:visibility="visible">
-
-      <TextView
-        android:id="@+id/server"
-        style="@style/Widget.Info.Item.Content"
-        tools:text="irc.freenode.org" />
-
-      <TextView
-        style="@style/Widget.Info.Item.Description"
-        android:text="@string/label_user_server" />
-    </LinearLayout>
-  </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+  </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>
