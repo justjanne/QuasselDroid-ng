@@ -13,7 +13,7 @@ class IdentityEditFragment : IdentityBaseFragment(), SettingsFragment.Deletable 
   override fun onDelete() {
     identity?.let { (it, _) ->
       it?.let {
-        viewModel.session.value?.orNull()?.rpcHandler?.requestRemoveIdentity(it.id())
+        viewModel.session.value?.orNull()?.rpcHandler?.removeIdentity(it.id())
       }
     }
   }

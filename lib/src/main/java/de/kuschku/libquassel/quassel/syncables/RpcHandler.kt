@@ -41,38 +41,44 @@ class RpcHandler(
     backlogStorage.storeMessages(session, message)
   }
 
-  override fun requestCreateIdentity(identity: QVariantMap, additional: QVariantMap) =
+  override fun createIdentity(identity: QVariantMap, additional: QVariantMap) =
     RPC(
-      "2requestCreateIdentity(Identity,QVariantMap)",
+      "2createIdentity(Identity,QVariantMap)",
       ARG(identity, QType.Identity),
       ARG(additional, Type.QVariantMap)
     )
 
-  override fun requestRemoveIdentity(identityId: IdentityId) =
+  override fun removeIdentity(identityId: IdentityId) =
     RPC(
-      "2requestRemoveIdentity(IdentityId)",
+      "2removeIdentity(IdentityId)",
       ARG(identityId, QType.IdentityId)
     )
 
-  override fun requestCreateNetwork(networkInfo: INetwork.NetworkInfo, channels: List<String>) =
+  override fun createNetwork(networkInfo: INetwork.NetworkInfo, channels: List<String>) =
     RPC(
-      "2requestCreateNetwork(NetworkInfo,QStringList)",
+      "2createNetwork(NetworkInfo,QStringList)",
       ARG(networkInfo, QType.NetworkInfo),
       ARG(channels, Type.QStringList)
     )
 
-  override fun requestRemoveNetwork(networkId: NetworkId) =
+  override fun removeNetwork(networkId: NetworkId) =
     RPC(
-      "2requestRemoveNetwork(NetworkId)",
+      "2removeNetwork(NetworkId)",
       ARG(networkId, QType.NetworkId)
     )
 
-  override fun requestPasswordChange(peerPtr: Long, user: String, old: String, new: String) {
-  }
+  override fun changePassword(peerPtr: Long, user: String, old: String, new: String) =
+    RPC(
+      "2changePassword(PeerPtr,QString,QString,QString)",
+      ARG(peerPtr, QType.PeerPtr),
+      ARG(user, Type.QString),
+      ARG(old, Type.QString),
+      ARG(new, Type.QString)
+    )
 
   override fun requestKickClient(id: Int) =
     RPC(
-      "2requestKickClient(Int)",
+      "2kickClient(Int)",
       ARG(id, Type.Int)
     )
 

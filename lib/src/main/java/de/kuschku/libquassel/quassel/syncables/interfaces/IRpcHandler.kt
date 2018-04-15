@@ -44,11 +44,11 @@ interface IRpcHandler {
   @Slot("2disconnectFromCore()")
   fun disconnectFromCore()
 
-  fun requestCreateIdentity(identity: QVariantMap, additional: QVariantMap)
-  fun requestRemoveIdentity(identityId: IdentityId)
-  fun requestCreateNetwork(networkInfo: INetwork.NetworkInfo, channels: List<String>)
-  fun requestRemoveNetwork(networkId: NetworkId)
-  fun requestPasswordChange(peerPtr: Long, user: String, old: String, new: String)
+  fun createIdentity(identity: QVariantMap, additional: QVariantMap)
+  fun removeIdentity(identityId: IdentityId)
+  fun createNetwork(networkInfo: INetwork.NetworkInfo, channels: List<String>)
+  fun removeNetwork(networkId: NetworkId)
+  fun changePassword(peerPtr: Long, user: String, old: String, new: String)
   fun requestKickClient(id: Int)
   fun sendInput(bufferInfo: BufferInfo, message: String)
 }
