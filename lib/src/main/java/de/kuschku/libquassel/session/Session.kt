@@ -24,6 +24,7 @@ class Session(
   val disconnectFromCore: () -> Unit,
   exceptionHandler: (Throwable) -> Unit
 ) : ProtocolHandler(exceptionHandler), ISession {
+  override val proxy: SignalProxy = this
   override val features = Features(clientData.clientFeatures, QuasselFeatures.empty())
 
   override val sslSession

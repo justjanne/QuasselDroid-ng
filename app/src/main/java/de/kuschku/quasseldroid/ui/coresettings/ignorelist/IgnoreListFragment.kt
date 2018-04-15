@@ -21,7 +21,8 @@ import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.ui.coresettings.ignoreitem.IgnoreItemActivity
 import de.kuschku.quasseldroid.util.helper.toLiveData
 
-class IgnoreListFragment : SettingsFragment() {
+class IgnoreListFragment : SettingsFragment(), SettingsFragment.Savable,
+                           SettingsFragment.Changeable {
   @BindView(R.id.list)
   lateinit var list: RecyclerView
 
@@ -96,10 +97,19 @@ class IgnoreListFragment : SettingsFragment() {
   }
 
   override fun onSave() = ignoreListManager?.let { (it, data) ->
-    data.setIgnoreList(adapter.list)
+    applyChanges(data)
     it.requestUpdate(data.toVariantMap())
     true
   } ?: false
+
+  override fun hasChanged() = ignoreListManager?.let { (it, data) ->
+    applyChanges(data)
+    data != it
+  } ?: false
+
+  private fun applyChanges(data: IgnoreListManager) {
+    data.setIgnoreList(adapter.list)
+  }
 
   companion object {
     private const val REQUEST_UPDATE_RULE = 1

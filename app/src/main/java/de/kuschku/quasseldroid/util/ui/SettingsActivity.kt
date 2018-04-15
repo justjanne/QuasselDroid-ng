@@ -5,11 +5,15 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.afollestad.materialdialogs.MaterialDialog
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 
 abstract class SettingsActivity(private val fragment: Fragment? = null) : ServiceBoundActivity() {
   protected open fun fragment(): Fragment? = null
+
+  private var changeable: SettingsFragment.Changeable? = null
 
   @BindView(R.id.toolbar)
   lateinit var toolbar: Toolbar
@@ -31,5 +35,25 @@ abstract class SettingsActivity(private val fragment: Fragment? = null) : Servic
       transaction.replace(R.id.fragment_container, fragment)
       transaction.commit()
     }
+
+    this.changeable = fragment as? SettingsFragment.Changeable
+  }
+
+  override fun onBackPressed() {
+    val changeable = this.changeable
+    if (changeable?.hasChanged() == true) {
+      MaterialDialog.Builder(this)
+        .content(R.string.cancel_confirmation)
+        .positiveText(R.string.label_yes)
+        .negativeText(R.string.label_no)
+        .negativeColorAttr(R.attr.colorTextPrimary)
+        .backgroundColorAttr(R.attr.colorBackgroundCard)
+        .contentColorAttr(R.attr.colorTextPrimary)
+        .onPositive { _, _ ->
+          super.onBackPressed()
+        }
+        .build()
+        .show()
+    } else super.onBackPressed()
   }
 }

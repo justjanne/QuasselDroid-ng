@@ -25,8 +25,9 @@ import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import io.reactivex.Observable
 
-class ChatListFragment : SettingsFragment() {
-  private var chatlist: Pair<BufferViewConfig, BufferViewConfig>? = null
+abstract class ChatListBaseFragment : SettingsFragment(), SettingsFragment.Savable,
+                                      SettingsFragment.Changeable {
+  protected var chatlist: Pair<BufferViewConfig?, BufferViewConfig>? = null
 
   @BindView(R.id.buffer_view_name)
   lateinit var bufferViewName: TextView
@@ -152,7 +153,22 @@ class ChatListFragment : SettingsFragment() {
     return view
   }
 
-  override fun onSave() = chatlist?.let { (it, data) ->
+  override fun hasChanged() = chatlist?.let { (it, data) ->
+    applyChanges(data, it)
+
+    it == null ||
+    data.bufferViewName() != it.bufferViewName() ||
+    data.showSearch() != it.showSearch() ||
+    data.sortAlphabetically() != it.sortAlphabetically() ||
+    data.addNewBuffersAutomatically() != it.addNewBuffersAutomatically() ||
+    data.hideInactiveBuffers() != it.hideInactiveBuffers() ||
+    data.hideInactiveNetworks() != it.hideInactiveNetworks() ||
+    data.allowedBufferTypes() != it.allowedBufferTypes() ||
+    data.networkId() != it.networkId() ||
+    data.minimumActivity() != it.minimumActivity()
+  } ?: false
+
+  protected fun applyChanges(data: BufferViewConfig, old: BufferViewConfig?) {
     data.setBufferViewName(bufferViewName.text.toString())
     data.setShowSearch(showSearch.isChecked)
     data.setSortAlphabetically(sortAlphabetically.isChecked)
@@ -173,11 +189,10 @@ class ChatListFragment : SettingsFragment() {
     data.setNetworkId(networkId.selectedItemId.toInt())
     data.setMinimumActivity(minimumActivity.selectedItemId.toInt())
 
-    data.initSetBufferList(it.initBufferList())
-    data.initSetTemporarilyRemovedBuffers(it.initTemporarilyRemovedBuffers())
-    data.initSetRemovedBuffers(it.initRemovedBuffers())
-
-    it.requestUpdate(data.toVariantMap())
-    true
-  } ?: false
+    if (old != null) {
+      data.initSetBufferList(old.initBufferList())
+      data.initSetTemporarilyRemovedBuffers(old.initTemporarilyRemovedBuffers())
+      data.initSetRemovedBuffers(old.initRemovedBuffers())
+    }
+  }
 }

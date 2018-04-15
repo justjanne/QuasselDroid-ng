@@ -34,6 +34,8 @@ interface ISession : Closeable {
   val rpcHandler: RpcHandler?
   val initStatus: Observable<Pair<Int, Int>>
 
+  val proxy: SignalProxy
+
   val error: Flowable<HandshakeMessage>
 
   val lag: Observable<Long>
@@ -42,6 +44,7 @@ interface ISession : Closeable {
 
   companion object {
     val NULL = object : ISession {
+      override val proxy: SignalProxy = SignalProxy.NULL
       override val error = BehaviorSubject.create<HandshakeMessage>()
         .toFlowable(BackpressureStrategy.BUFFER)
       override val state = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)

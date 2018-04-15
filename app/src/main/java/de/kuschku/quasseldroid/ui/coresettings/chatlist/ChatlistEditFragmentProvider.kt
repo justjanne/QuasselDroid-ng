@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
-abstract class ChatListFragmentProvider {
+abstract class ChatlistEditFragmentProvider {
   @ContributesAndroidInjector
-  abstract fun bindChatListFragment(): ChatListFragment
+  abstract fun bindChatListEditFragment(): ChatListEditFragment
 }

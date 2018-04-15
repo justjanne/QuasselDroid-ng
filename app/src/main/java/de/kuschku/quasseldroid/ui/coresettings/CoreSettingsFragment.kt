@@ -9,14 +9,17 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatListActivity
-import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityActivity
+import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistCreateActivity
+import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistEditActivity
+import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityCreateActivity
+import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityEditActivity
 import de.kuschku.quasseldroid.ui.coresettings.ignorelist.IgnoreListActivity
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivity
 import de.kuschku.quasseldroid.util.helper.combineLatest
@@ -27,11 +30,20 @@ class CoreSettingsFragment : ServiceBoundFragment() {
   @BindView(R.id.networks)
   lateinit var networks: RecyclerView
 
+  @BindView(R.id.new_network)
+  lateinit var newNetwork: Button
+
   @BindView(R.id.identities)
   lateinit var identities: RecyclerView
 
+  @BindView(R.id.new_identity)
+  lateinit var newIdentity: Button
+
   @BindView(R.id.chatlists)
   lateinit var chatlists: RecyclerView
+
+  @BindView(R.id.new_chatlist)
+  lateinit var newChatlist: Button
 
   @BindView(R.id.ignorelist)
   lateinit var ignorelist: View
@@ -59,11 +71,11 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     }
 
     val identityAdapter = SettingsItemAdapter {
-      IdentityActivity.launch(requireContext(), identity = it)
+      IdentityEditActivity.launch(requireContext(), identity = it)
     }
 
     val chatListAdapter = SettingsItemAdapter {
-      ChatListActivity.launch(requireContext(), chatlist = it)
+      ChatlistEditActivity.launch(requireContext(), chatlist = it)
     }
 
     val itemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
@@ -119,6 +131,18 @@ class CoreSettingsFragment : ServiceBoundFragment() {
 
     ignorelist.setOnClickListener {
       IgnoreListActivity.launch(requireContext())
+    }
+
+    newNetwork.setOnClickListener {
+      //
+    }
+
+    newIdentity.setOnClickListener {
+      IdentityCreateActivity.launch(requireContext())
+    }
+
+    newChatlist.setOnClickListener {
+      ChatlistCreateActivity.launch(requireContext())
     }
 
     return view

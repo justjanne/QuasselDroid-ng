@@ -24,7 +24,7 @@ import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import javax.inject.Inject
 
-class TopicFragment : SettingsFragment() {
+class TopicFragment : SettingsFragment(), SettingsFragment.Savable {
   @BindView(R.id.chatline)
   lateinit var chatline: RichEditText
 

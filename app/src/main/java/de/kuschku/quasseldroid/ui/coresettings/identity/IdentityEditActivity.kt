@@ -5,7 +5,7 @@ import android.content.Intent
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.quasseldroid.util.ui.SettingsActivity
 
-class IdentityActivity : SettingsActivity(IdentityFragment()) {
+class IdentityEditActivity : SettingsActivity(IdentityEditFragment()) {
   companion object {
     fun launch(
       context: Context,
@@ -15,7 +15,7 @@ class IdentityActivity : SettingsActivity(IdentityFragment()) {
     fun intent(
       context: Context,
       identity: IdentityId
-    ) = Intent(context, IdentityActivity::class.java).apply {
+    ) = Intent(context, IdentityEditActivity::class.java).apply {
       putExtra("identity", identity)
     }
   }

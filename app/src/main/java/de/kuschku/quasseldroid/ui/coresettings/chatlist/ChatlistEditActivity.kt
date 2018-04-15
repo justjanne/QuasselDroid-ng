@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import de.kuschku.quasseldroid.util.ui.SettingsActivity
 
-class ChatListActivity : SettingsActivity(ChatListFragment()) {
+class ChatlistEditActivity : SettingsActivity(ChatListEditFragment()) {
   companion object {
     fun launch(
       context: Context,
@@ -14,7 +14,7 @@ class ChatListActivity : SettingsActivity(ChatListFragment()) {
     fun intent(
       context: Context,
       chatlist: Int
-    ) = Intent(context, ChatListActivity::class.java).apply {
+    ) = Intent(context, ChatlistEditActivity::class.java).apply {
       putExtra("chatlist", chatlist)
     }
   }

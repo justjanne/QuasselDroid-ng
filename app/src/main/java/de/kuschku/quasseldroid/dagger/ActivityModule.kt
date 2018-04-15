@@ -22,10 +22,14 @@ import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseSettingsActivity
 import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseSettingsFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsFragmentProvider
-import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatListActivity
-import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatListFragmentProvider
-import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityActivity
-import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistCreateActivity
+import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistCreateFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistEditActivity
+import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistEditFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityCreateActivity
+import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityCreateFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityEditActivity
+import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityEditFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.ignoreitem.IgnoreItemActivity
 import de.kuschku.quasseldroid.ui.coresettings.ignoreitem.IgnoreItemFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.ignorelist.IgnoreListActivity
@@ -67,11 +71,17 @@ abstract class ActivityModule {
   @ContributesAndroidInjector(modules = [CoreSettingsFragmentProvider::class])
   abstract fun bindCoreSettingsActivity(): CoreSettingsActivity
 
-  @ContributesAndroidInjector(modules = [IdentityFragmentProvider::class])
-  abstract fun bindIdentityActivity(): IdentityActivity
+  @ContributesAndroidInjector(modules = [IdentityCreateFragmentProvider::class])
+  abstract fun bindIdentityCreateActivity(): IdentityCreateActivity
 
-  @ContributesAndroidInjector(modules = [ChatListFragmentProvider::class])
-  abstract fun bindChatListActivity(): ChatListActivity
+  @ContributesAndroidInjector(modules = [IdentityEditFragmentProvider::class])
+  abstract fun bindIdentityEditActivity(): IdentityEditActivity
+
+  @ContributesAndroidInjector(modules = [ChatlistCreateFragmentProvider::class])
+  abstract fun bindChatListCreateActivity(): ChatlistCreateActivity
+
+  @ContributesAndroidInjector(modules = [ChatlistEditFragmentProvider::class])
+  abstract fun bindChatListEditActivity(): ChatlistEditActivity
 
   @ContributesAndroidInjector(modules = [IgnoreListFragmentProvider::class])
   abstract fun bindIgnoreActivity(): IgnoreListActivity

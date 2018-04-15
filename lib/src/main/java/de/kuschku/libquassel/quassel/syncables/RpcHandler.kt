@@ -41,27 +41,47 @@ class RpcHandler(
     backlogStorage.storeMessages(session, message)
   }
 
-  override fun requestCreateIdentity(identity: QVariantMap, additional: QVariantMap) {
-  }
+  override fun requestCreateIdentity(identity: QVariantMap, additional: QVariantMap) =
+    RPC(
+      "2requestCreateIdentity(Identity,QVariantMap)",
+      ARG(identity, QType.Identity),
+      ARG(additional, Type.QVariantMap)
+    )
 
-  override fun requestRemoveIdentity(identityId: IdentityId) {
-  }
+  override fun requestRemoveIdentity(identityId: IdentityId) =
+    RPC(
+      "2requestRemoveIdentity(IdentityId)",
+      ARG(identityId, QType.IdentityId)
+    )
 
-  override fun requestCreateNetwork(networkInfo: INetwork.NetworkInfo, channels: List<String>) {
-  }
+  override fun requestCreateNetwork(networkInfo: INetwork.NetworkInfo, channels: List<String>) =
+    RPC(
+      "2requestCreateNetwork(NetworkInfo,QStringList)",
+      ARG(networkInfo, QType.NetworkInfo),
+      ARG(channels, Type.QStringList)
+    )
 
-  override fun requestRemoveNetwork(networkId: NetworkId) {
-  }
+  override fun requestRemoveNetwork(networkId: NetworkId) =
+    RPC(
+      "2requestRemoveNetwork(NetworkId)",
+      ARG(networkId, QType.NetworkId)
+    )
 
   override fun requestPasswordChange(peerPtr: Long, user: String, old: String, new: String) {
   }
 
-  override fun requestKickClient(id: Int) = RPC("2requestKickClient(Int)", ARG(id, Type.Int))
+  override fun requestKickClient(id: Int) =
+    RPC(
+      "2requestKickClient(Int)",
+      ARG(id, Type.Int)
+    )
 
-  override fun sendInput(bufferInfo: BufferInfo, message: String) = RPC(
-    "2sendInput(BufferInfo,QString)", ARG(bufferInfo, QType.BufferInfo),
-    ARG(message, Type.QString)
-  )
+  override fun sendInput(bufferInfo: BufferInfo, message: String) =
+    RPC(
+      "2sendInput(BufferInfo,QString)",
+      ARG(bufferInfo, QType.BufferInfo),
+      ARG(message, Type.QString)
+    )
 
   inline fun RPC(function: String, vararg arg: QVariant_) {
     // Don’t transmit calls back that we just got from the network

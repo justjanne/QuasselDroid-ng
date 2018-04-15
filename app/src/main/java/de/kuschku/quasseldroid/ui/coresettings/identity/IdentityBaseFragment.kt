@@ -23,8 +23,10 @@ import de.kuschku.quasseldroid.util.helper.toLiveData
 import io.reactivex.Observable
 
 
-class IdentityFragment : SettingsFragment() {
-  private var identity: Pair<Identity, Identity>? = null
+abstract class IdentityBaseFragment : SettingsFragment(), SettingsFragment.Savable,
+                                      SettingsFragment.Changeable {
+
+  protected var identity: Pair<Identity?, Identity>? = null
 
   @BindView(R.id.identity_name)
   lateinit var identityName: TextView
@@ -139,7 +141,23 @@ class IdentityFragment : SettingsFragment() {
       }.build().show()
   }
 
-  override fun onSave() = identity?.let { (it, data) ->
+  override fun hasChanged() = identity?.let { (it, data) ->
+    applyChanges(data)
+
+    it == null ||
+    data.identityName() != it.identityName() ||
+    data.realName() != it.realName() ||
+    data.ident() != it.ident() ||
+    data.kickReason() != it.kickReason() ||
+    data.partReason() != it.partReason() ||
+    data.quitReason() != it.quitReason() ||
+    data.awayReason() != it.awayReason() ||
+    data.detachAwayEnabled() != it.detachAwayEnabled() ||
+    data.detachAwayReason() != it.detachAwayReason() ||
+    data.nicks() != it.nicks()
+  } ?: false
+
+  protected fun applyChanges(data: Identity) {
     data.setIdentityName(identityName.text.toString())
     data.setRealName(realName.text.toString())
     data.setIdent(ident.text.toString())
@@ -150,9 +168,5 @@ class IdentityFragment : SettingsFragment() {
     data.setDetachAwayEnabled(detachAway.isChecked)
     data.setDetachAwayReason(detachAwayReason.text.toString())
     data.setNicks(adapter.nicks)
-
-    it.requestUpdate(data.toVariantMap())
-    true
-  } ?: false
-
+  }
 }

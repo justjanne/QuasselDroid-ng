@@ -17,7 +17,8 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.ui.AnimationHelper
 
-class IgnoreItemFragment : SettingsFragment() {
+class IgnoreItemFragment : SettingsFragment(), SettingsFragment.Savable,
+                           SettingsFragment.Changeable {
   @BindView(R.id.enabled)
   lateinit var enabled: SwitchCompat
 
@@ -141,4 +142,13 @@ class IgnoreItemFragment : SettingsFragment() {
     true
   }
 
+  override fun hasChanged() = item != IgnoreListManager.IgnoreListItem(
+    isActive = enabled.isChecked,
+    ignoreRule = ignoreRule.text.toString(),
+    isRegEx = isRegEx.isChecked,
+    type = type.selectedItemId.toInt(),
+    strictness = strictness.selectedItemId.toInt(),
+    scope = scope.selectedItemId.toInt(),
+    scopeRule = scopeRule.text.toString()
+  )
 }

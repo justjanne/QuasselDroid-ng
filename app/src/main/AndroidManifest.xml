@@ -62,13 +62,25 @@
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.coresettings.identity.IdentityActivity"
+      android:name=".ui.coresettings.identity.IdentityCreateActivity"
       android:exported="false"
       android:label="@string/settings_identity_title"
       android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.coresettings.chatlist.ChatListActivity"
+      android:name=".ui.coresettings.identity.IdentityEditActivity"
+      android:exported="false"
+      android:label="@string/settings_identity_title"
+      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.coresettings.chatlist.ChatlistCreateActivity"
+      android:exported="false"
+      android:label="@string/settings_chatlist_title"
+      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.coresettings.chatlist.ChatlistEditActivity"
       android:exported="false"
       android:label="@string/settings_chatlist_title"
       android:parentActivityName=".ui.coresettings.CoreSettingsActivity"

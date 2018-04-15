@@ -98,9 +98,11 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                   session.bufferSyncer?.requestRemoveBuffer(info.bufferId)
                 }
               }
+              .onAny { _, _ ->
+                actionMode?.finish()
+              }
               .build()
               .show()
-            actionMode?.finish()
             true
           }
           R.id.action_rename     -> {
@@ -119,9 +121,11 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
               .negativeColorAttr(R.attr.colorTextPrimary)
               .backgroundColorAttr(R.attr.colorBackgroundCard)
               .contentColorAttr(R.attr.colorTextPrimary)
+              .onAny { _, _ ->
+                actionMode?.finish()
+              }
               .build()
               .show()
-            actionMode?.finish()
             true
           }
           R.id.action_unhide     -> {

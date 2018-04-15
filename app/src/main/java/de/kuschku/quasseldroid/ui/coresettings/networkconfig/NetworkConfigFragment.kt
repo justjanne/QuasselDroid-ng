@@ -16,7 +16,8 @@ import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
 
-class NetworkConfigFragment : SettingsFragment() {
+class NetworkConfigFragment : SettingsFragment(), SettingsFragment.Savable,
+                              SettingsFragment.Changeable {
   private var networkConfig: Pair<NetworkConfig, NetworkConfig>? = null
 
   @BindView(R.id.ping_timeout_enabled)
@@ -84,6 +85,26 @@ class NetworkConfigFragment : SettingsFragment() {
 
 
   override fun onSave() = networkConfig?.let { (it, data) ->
+    applyChanges(data)
+
+    it.requestUpdate(data.toVariantMap())
+    true
+  } ?: false
+
+  override fun hasChanged() = networkConfig?.let { (it, data) ->
+    applyChanges(data)
+
+    data.pingTimeoutEnabled() != it.pingTimeoutEnabled() ||
+    data.pingInterval() != it.pingInterval() ||
+    data.maxPingCount() != it.maxPingCount() ||
+    data.autoWhoEnabled() != it.autoWhoEnabled() ||
+    data.autoWhoInterval() != it.autoWhoInterval() ||
+    data.autoWhoNickLimit() != it.autoWhoNickLimit() ||
+    data.autoWhoDelay() != it.autoWhoDelay() ||
+    data.standardCtcp() != it.standardCtcp()
+  } ?: false
+
+  private fun applyChanges(data: NetworkConfig) {
     data.setPingTimeoutEnabled(pingTimeoutEnabled.isChecked)
     pingInterval.text.toString().toIntOrNull()?.let(data::setPingInterval)
     maxPingCount.text.toString().toIntOrNull()?.let(data::setMaxPingCount)
@@ -93,8 +114,5 @@ class NetworkConfigFragment : SettingsFragment() {
     autoWhoNickLimit.text.toString().toIntOrNull()?.let(data::setAutoWhoNickLimit)
     autoWhoDelay.text.toString().toIntOrNull()?.let(data::setAutoWhoDelay)
     data.setStandardCtcp(standardCtcp.isChecked)
-
-    it.requestUpdate(data.toVariantMap())
-    true
-  } ?: false
+  }
 }

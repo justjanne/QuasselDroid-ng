@@ -55,6 +55,7 @@ class QuasselViewModel : ViewModel() {
   val backend = backendWrapper.switchMap { it }
   val sessionManager = backend.mapMap(Backend::sessionManager)
   val session = sessionManager.mapSwitchMap(SessionManager::session)
+  val rpcHandler = session.mapMapNullable(ISession::rpcHandler)
 
   val connectionProgress = sessionManager.mapSwitchMap(SessionManager::connectionProgress)
     .mapOrElse(Triple(ConnectionState.DISCONNECTED, 0, 0))

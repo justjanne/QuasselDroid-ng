@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
-abstract class IdentityFragmentProvider {
+abstract class IdentityCreateFragmentProvider {
   @ContributesAndroidInjector
-  abstract fun bindIdentityFragment(): IdentityFragment
+  abstract fun bindIdentityCreateFragment(): IdentityCreateFragment
 }
