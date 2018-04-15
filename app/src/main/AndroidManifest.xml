@@ -62,6 +62,18 @@
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
+      android:name=".ui.coresettings.network.NetworkCreateActivity"
+      android:exported="false"
+      android:label="@string/settings_network_title"
+      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.coresettings.network.NetworkEditActivity"
+      android:exported="false"
+      android:label="@string/settings_network_title"
+      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
       android:name=".ui.coresettings.identity.IdentityCreateActivity"
       android:exported="false"
       android:label="@string/settings_identity_title"

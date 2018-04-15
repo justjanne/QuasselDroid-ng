@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "host": "ipv6-irc.snoonet.org",
+      "port": "6697"
+    },
+    {
+      "host": "irc.snoonet.org",
+      "port": "6697"
+    },
+    {
+      "host": "eu-irc.snoonet.org",
+      "port": "6697"
+    },
+    {
+      "host": "alt-irc.snoonet.org",
+      "port": "6697"
+    },
+    {
+      "host": "asiapac-irc.snoonet.org",
+      "port": "6697"
+    }
+  ]
+}

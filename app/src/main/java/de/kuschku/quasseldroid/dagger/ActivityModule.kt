@@ -34,6 +34,10 @@ import de.kuschku.quasseldroid.ui.coresettings.ignoreitem.IgnoreItemActivity
 import de.kuschku.quasseldroid.ui.coresettings.ignoreitem.IgnoreItemFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.ignorelist.IgnoreListActivity
 import de.kuschku.quasseldroid.ui.coresettings.ignorelist.IgnoreListFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.network.NetworkCreateActivity
+import de.kuschku.quasseldroid.ui.coresettings.network.NetworkCreateFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
+import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivity
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditActivity
@@ -70,6 +74,12 @@ abstract class ActivityModule {
 
   @ContributesAndroidInjector(modules = [CoreSettingsFragmentProvider::class])
   abstract fun bindCoreSettingsActivity(): CoreSettingsActivity
+
+  @ContributesAndroidInjector(modules = [NetworkCreateFragmentProvider::class])
+  abstract fun bindNetworkCreateActivity(): NetworkCreateActivity
+
+  @ContributesAndroidInjector(modules = [NetworkEditFragmentProvider::class])
+  abstract fun bindNetworkEditActivity(): NetworkEditActivity
 
   @ContributesAndroidInjector(modules = [IdentityCreateFragmentProvider::class])
   abstract fun bindIdentityCreateActivity(): IdentityCreateActivity

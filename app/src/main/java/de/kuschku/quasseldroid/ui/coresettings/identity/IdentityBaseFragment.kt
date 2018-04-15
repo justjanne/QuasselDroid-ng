@@ -11,31 +11,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
+import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import de.kuschku.libquassel.quassel.syncables.Identity
+import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
-import io.reactivex.Observable
 
 
 abstract class IdentityBaseFragment : SettingsFragment(), SettingsFragment.Savable,
                                       SettingsFragment.Changeable {
 
-  protected var identity: Pair<Identity?, Identity>? = null
-
   @BindView(R.id.identity_name)
-  lateinit var identityName: TextView
+  lateinit var identityName: EditText
 
   @BindView(R.id.real_name)
-  lateinit var realName: TextView
+  lateinit var realName: EditText
 
   @BindView(R.id.ident)
-  lateinit var ident: TextView
+  lateinit var ident: EditText
 
   @BindView(R.id.nicks)
   lateinit var nicks: RecyclerView
@@ -44,16 +42,16 @@ abstract class IdentityBaseFragment : SettingsFragment(), SettingsFragment.Savab
   lateinit var newNick: Button
 
   @BindView(R.id.kick_reason)
-  lateinit var kickReason: TextView
+  lateinit var kickReason: EditText
 
   @BindView(R.id.part_reason)
-  lateinit var partReason: TextView
+  lateinit var partReason: EditText
 
   @BindView(R.id.quit_reason)
-  lateinit var quitReason: TextView
+  lateinit var quitReason: EditText
 
   @BindView(R.id.away_reason)
-  lateinit var awayReason: TextView
+  lateinit var awayReason: EditText
 
   @BindView(R.id.detach_away)
   lateinit var detachAway: SwitchCompat
@@ -62,7 +60,9 @@ abstract class IdentityBaseFragment : SettingsFragment(), SettingsFragment.Savab
   lateinit var detachAwayGroup: ViewGroup
 
   @BindView(R.id.detach_away_reason)
-  lateinit var detachAwayReason: TextView
+  lateinit var detachAwayReason: EditText
+
+  protected var identity: Pair<Identity?, Identity>? = null
 
   private lateinit var adapter: IdentityNicksAdapter
   private lateinit var helper: ItemTouchHelper
@@ -98,22 +98,23 @@ abstract class IdentityBaseFragment : SettingsFragment(), SettingsFragment.Savab
         }.build().show()
     }
 
-    viewModel.identities.switchMap {
-      it[identityId]?.liveUpdates() ?: Observable.empty()
-    }.firstElement()
+    viewModel.identities.map { Optional.ofNullable(it[identityId]) }
+      .filter(Optional<Identity>::isPresent)
+      .map(Optional<Identity>::get)
+      .firstElement()
       .toLiveData().observe(this, Observer {
-        if (it != null) {
+        it?.let {
           this.identity = Pair(it, it.copy())
           this.identity?.let { (_, data) ->
-            identityName.text = data.identityName()
-            realName.text = data.realName()
-            ident.text = data.ident()
-            kickReason.text = data.kickReason()
-            partReason.text = data.partReason()
-            quitReason.text = data.quitReason()
-            awayReason.text = data.awayReason()
+            identityName.setText(data.identityName())
+            realName.setText(data.realName())
+            ident.setText(data.ident())
+            kickReason.setText(data.kickReason())
+            partReason.setText(data.partReason())
+            quitReason.setText(data.quitReason())
+            awayReason.setText(data.awayReason())
             detachAway.isChecked = data.detachAwayEnabled()
-            detachAwayReason.text = data.detachAwayReason()
+            detachAwayReason.setText(data.detachAwayReason())
             adapter.nicks = data.nicks()
           }
         }
@@ -124,9 +125,10 @@ abstract class IdentityBaseFragment : SettingsFragment(), SettingsFragment.Savab
     return view
   }
 
-  fun startDrag(holder: IdentityNicksAdapter.IdentityNickViewHolder) = helper.startDrag(holder)
+  private fun startDrag(holder: IdentityNicksAdapter.IdentityNickViewHolder) = helper.startDrag(
+    holder)
 
-  fun nickClick(index: Int, nick: String) {
+  private fun nickClick(index: Int, nick: String) {
     MaterialDialog.Builder(requireContext())
       .input(null, nick, false) { _, _ -> }
       .title(R.string.label_edit_nick)
@@ -155,7 +157,7 @@ abstract class IdentityBaseFragment : SettingsFragment(), SettingsFragment.Savab
     data.detachAwayEnabled() != it.detachAwayEnabled() ||
     data.detachAwayReason() != it.detachAwayReason() ||
     data.nicks() != it.nicks()
-  } ?: false
+  } ?: true
 
   protected fun applyChanges(data: Identity) {
     data.setIdentityName(identityName.text.toString())

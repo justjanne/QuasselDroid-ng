@@ -54,6 +54,10 @@
     <item name="colorTintActivity">#859900</item>
     <item name="colorTintMessage">#268BD2</item>
     <item name="colorTintHighlight">#EB6B36</item>
+
+    <item name="colorTintSecure">#859900</item>
+    <item name="colorTintPartiallySecure">#D5A920</item>
+    <item name="colorTintInsecure">#CB4B16</item>
   </style>
 
   <color name="solarized_dark_background">#002B36</color>
@@ -109,5 +113,9 @@
     <item name="colorTintActivity">#859900</item>
     <item name="colorTintMessage">#268BD2</item>
     <item name="colorTintHighlight">#EB6B36</item>
+
+    <item name="colorTintSecure">#859900</item>
+    <item name="colorTintPartiallySecure">#B58900</item>
+    <item name="colorTintInsecure">#CB4B16</item>
   </style>
 </resources>

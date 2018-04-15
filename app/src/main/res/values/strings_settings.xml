@@ -2,6 +2,27 @@
 <resources>
   <string name="settings_networks_title">Networks</string>
   <string name="settings_network_title">Network</string>
+  <string name="settings_network_network_name">Network Name</string>
+  <string name="settings_network_identity">Identity</string>
+  <string name="settings_network_sasl_enabled">SASL</string>
+  <string name="settings_network_sasl_account">Account</string>
+  <string name="settings_network_sasl_password">Password</string>
+  <string name="settings_network_autoidentify_enabled">Auto Identify</string>
+  <string name="settings_network_autoidentify_service">Service</string>
+  <string name="settings_network_autoidentify_password">Password</string>
+  <string name="settings_network_connection">Connection</string>
+  <string name="settings_network_perform">Perform</string>
+  <string name="settings_network_rejoin_channels">Rejoin Channels</string>
+  <string name="settings_network_autoreconnect_enabled">Autoreconnect</string>
+  <string name="settings_network_autoreconnect_interval">Interval</string>
+  <string name="settings_network_autoreconnect_interval_unit">seconds</string>
+  <string name="settings_network_autoreconnect_attempts">Maximum Attempts</string>
+  <string name="settings_network_autoreconnect_unlimited">Unlimited Attempts</string>
+  <string name="settings_network_customratelimits_enabled">Custom Rate Limits</string>
+  <string name="settings_network_customratelimits_burstsize">Burst Size</string>
+  <string name="settings_network_customratelimits_unlimited">Unlimited</string>
+  <string name="settings_network_customratelimits_delay">Delay</string>
+  <string name="settings_network_customratelimits_interval_unit">seconds</string>
 
   <string name="settings_identities_title">Identities</string>
   <string name="settings_identity_title">Identity</string>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_margin="2dp"
+  app:cardBackgroundColor="?colorBackgroundCard"
+  app:cardElevation="2dp"
+  tools:showIn="@layout/settings_network">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:orientation="horizontal"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp">
+
+    <android.support.v7.widget.AppCompatImageView
+      android:id="@+id/ssl_enabled"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_gravity="center_vertical"
+      android:paddingEnd="32dp"
+      android:paddingLeft="?listPreferredItemPaddingLeft"
+      android:paddingRight="32dp"
+      android:paddingStart="?listPreferredItemPaddingLeft"
+      tools:srcCompat="@drawable/ic_lock"
+      tools:tint="?colorTintSecure" />
+
+    <LinearLayout
+      android:layout_width="0dip"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:layout_weight="1"
+      android:orientation="vertical">
+
+      <TextView
+        android:id="@+id/host"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textAppearance="?textAppearanceListItemSmall"
+        tools:text="@sample/networks.json/data/host" />
+
+      <TextView
+        android:id="@+id/port"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textAppearance="?textAppearanceListItemSecondary"
+        android:textColor="?colorTextSecondary"
+        tools:text="@sample/networks.json/data/port" />
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatImageView
+      android:id="@+id/handle"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_gravity="center_vertical"
+      android:paddingEnd="?listPreferredItemPaddingRight"
+      android:paddingLeft="32dp"
+      android:paddingRight="?listPreferredItemPaddingRight"
+      android:paddingStart="32dp"
+      app:srcCompat="@drawable/ic_reorder"
+      app:tint="?colorTextSecondary" />
+  </LinearLayout>
+</android.support.v7.widget.CardView>

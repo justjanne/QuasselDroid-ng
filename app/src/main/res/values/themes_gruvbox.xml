@@ -54,6 +54,10 @@
     <item name="colorTintActivity">#98971a</item>
     <item name="colorTintMessage">#458588</item>
     <item name="colorTintHighlight">#d65d0e</item>
+
+    <item name="colorTintSecure">#98971a</item>
+    <item name="colorTintPartiallySecure">#d79921</item>
+    <item name="colorTintInsecure">#9d0006</item>
   </style>
 
   <color name="gruvbox_dark_background">#282828</color>
@@ -109,5 +113,9 @@
     <item name="colorTintActivity">#98971a</item>
     <item name="colorTintMessage">#458588</item>
     <item name="colorTintHighlight">#d65d0e</item>
+
+    <item name="colorTintSecure">#98971a</item>
+    <item name="colorTintPartiallySecure">#d79921</item>
+    <item name="colorTintInsecure">#cc241d</item>
   </style>
 </resources>

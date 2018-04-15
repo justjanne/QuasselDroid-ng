@@ -156,6 +156,10 @@
   <attr name="buttonThemeColored" format="reference" />
   <attr name="cardStyle" format="reference" />
 
+  <attr name="colorTintSecure" format="color" />
+  <attr name="colorTintPartiallySecure" format="color" />
+  <attr name="colorTintInsecure" format="color" />
+
   <!-- Menu Items -->
   <attr name="backgroundMenuItem" format="reference" />
   <attr name="backgroundMenuItemRounded" format="reference" />

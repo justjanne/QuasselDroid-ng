@@ -21,6 +21,7 @@ import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistEditActivity
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityCreateActivity
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityEditActivity
 import de.kuschku.quasseldroid.ui.coresettings.ignorelist.IgnoreListActivity
+import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivity
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
@@ -63,11 +64,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     ButterKnife.bind(this, view)
 
     val networkAdapter = SettingsItemAdapter {
-      /*
-      val intent = Intent(requireContext(), NetworkActivity::class.java)
-      intent.putExtra("network", it)
-      startActivity(intent)
-      */
+      NetworkEditActivity.launch(requireContext(), network = it)
     }
 
     val identityAdapter = SettingsItemAdapter {

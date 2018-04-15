@@ -67,11 +67,11 @@ class IgnoreListFragment : SettingsFragment(), SettingsFragment.Savable,
     return view
   }
 
-  fun itemClick(item: IgnoreListManager.IgnoreListItem) {
+  private fun itemClick(item: IgnoreListManager.IgnoreListItem) {
     startActivityForResult(IgnoreItemActivity.intent(requireContext(), item), REQUEST_UPDATE_RULE)
   }
 
-  fun startDrag(holder: IgnoreListAdapter.IgnoreItemViewHolder) = helper.startDrag(holder)
+  private fun startDrag(holder: IgnoreListAdapter.IgnoreItemViewHolder) = helper.startDrag(holder)
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (resultCode == Activity.RESULT_OK && data != null) {

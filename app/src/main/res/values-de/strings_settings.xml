@@ -2,6 +2,27 @@
 <resources>
   <string name="settings_networks_title">Netzwerke</string>
   <string name="settings_network_title">Netzwerk</string>
+  <string name="settings_network_network_name">Netzwerkname</string>
+  <string name="settings_network_identity">Identität</string>
+  <string name="settings_network_sasl_enabled">SASL</string>
+  <string name="settings_network_sasl_account">Kontoname</string>
+  <string name="settings_network_sasl_password">Passwort</string>
+  <string name="settings_network_autoidentify_enabled">Auto-Identifizieren</string>
+  <string name="settings_network_autoidentify_service">Service</string>
+  <string name="settings_network_autoidentify_password">Passwort</string>
+  <string name="settings_network_connection">Verbindung</string>
+  <string name="settings_network_perform">Befehle</string>
+  <string name="settings_network_rejoin_channels">Beim Verbinden Kanäle wieder betreten</string>
+  <string name="settings_network_autoreconnect_enabled">Automatisches Wiederverbinden</string>
+  <string name="settings_network_autoreconnect_interval">Zeit zwischen Verbindungsversuchen</string>
+  <string name="settings_network_autoreconnect_interval_unit">Sekunden</string>
+  <string name="settings_network_autoreconnect_attempts">Maximale Anzahl an Verbindungsversuchen</string>
+  <string name="settings_network_autoreconnect_unlimited">Unbegrenzt</string>
+  <string name="settings_network_customratelimits_enabled">Benutzerdefinierte Nachrichtenrate</string>
+  <string name="settings_network_customratelimits_burstsize">Anzahl Nachrichten pro Übertragung</string>
+  <string name="settings_network_customratelimits_unlimited">Unbegrenzt</string>
+  <string name="settings_network_customratelimits_delay">Zeit zwischen Übertragungen</string>
+  <string name="settings_network_customratelimits_interval_unit">Sekunden</string>
 
   <string name="settings_identities_title">Identitäten</string>
   <string name="settings_identity_title">Identität</string>

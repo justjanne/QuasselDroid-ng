@@ -42,6 +42,10 @@
     <item name="colorTintActivity">#88cc33</item>
     <item name="colorTintMessage">#2277dd</item>
     <item name="colorTintHighlight">#ff8811</item>
+
+    <item name="colorTintSecure">#88cc33</item>
+    <item name="colorTintPartiallySecure">#ffaf3b</item>
+    <item name="colorTintInsecure">#BB2222</item>
   </style>
 
   <color name="quassel_dark_background">#303030</color>
@@ -85,5 +89,9 @@
     <item name="colorTintActivity">#88cc33</item>
     <item name="colorTintMessage">#2277dd</item>
     <item name="colorTintHighlight">#ff8811</item>
+
+    <item name="colorTintSecure">#88cc33</item>
+    <item name="colorTintPartiallySecure">#ffaf3b</item>
+    <item name="colorTintInsecure">#BB2222</item>
   </style>
 </resources>
