@@ -206,10 +206,3 @@ abstract class QuasselDatabase : RoomDatabase() {
     const val DATABASE_NAME = "persistence-clientData"
   }
 }
-
-fun QuasselDatabase.MessageDao.clearMessages(
-  @IntRange(from = 0) bufferId: Int,
-  idRange: kotlin.ranges.IntRange
-) {
-  this.clearMessages(bufferId, idRange.first, idRange.last)
-}

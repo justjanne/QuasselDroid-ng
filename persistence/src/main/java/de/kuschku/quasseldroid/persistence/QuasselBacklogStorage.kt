@@ -38,7 +38,7 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
   }
 
   override fun clearMessages(bufferId: BufferId, idRange: IntRange) {
-    db.message().clearMessages(bufferId, idRange)
+    db.message().clearMessages(bufferId, idRange.first, idRange.last)
   }
 
   override fun clearMessages(bufferId: BufferId) {
