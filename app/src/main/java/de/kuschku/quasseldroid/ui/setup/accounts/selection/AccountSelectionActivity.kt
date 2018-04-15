@@ -2,6 +2,7 @@ package de.kuschku.quasseldroid.ui.setup.accounts.selection
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import de.kuschku.quasseldroid.Keys
@@ -12,6 +13,9 @@ class AccountSelectionActivity : SetupActivity() {
   companion object {
     const val REQUEST_CREATE_FIRST = 0
     const val REQUEST_CREATE_NEW = 1
+
+    fun launch(context: Context) = context.startActivity(intent(context))
+    fun intent(context: Context) = Intent(context, AccountSelectionActivity::class.java)
   }
 
   override val fragments = listOf(

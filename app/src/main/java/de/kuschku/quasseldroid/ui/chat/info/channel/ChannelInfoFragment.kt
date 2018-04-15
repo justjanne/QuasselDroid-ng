@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid.ui.chat.info.channel
 
 import android.arch.lifecycle.Observer
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -74,9 +73,7 @@ class ChannelInfoFragment : ServiceBoundFragment() {
         topic.text = contentFormatter.format(requireContext(), channel.topic())
 
         actionEditTopic.setOnClickListener {
-          val intent = Intent(requireContext(), TopicActivity::class.java)
-          intent.putExtra("buffer", arguments?.getInt("bufferId") ?: -1)
-          startActivity(intent)
+          TopicActivity.launch(requireContext(), buffer = arguments?.getInt("bufferId") ?: -1)
         }
 
         actionPart.setOnClickListener {

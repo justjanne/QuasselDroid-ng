@@ -7,6 +7,7 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.util.Optional
+import de.kuschku.quasseldroid.service.QuasselBinder
 import de.kuschku.quasseldroid.service.QuasselService
 import io.reactivex.subjects.BehaviorSubject
 
@@ -26,21 +27,21 @@ class BackendServiceConnection : ServiceConnection {
   override fun onServiceConnected(component: ComponentName?, binder: IBinder?) {
     when (component) {
       ComponentName(context, QuasselService::class.java) ->
-        if (binder is QuasselService.QuasselBinder) {
+        if (binder is QuasselBinder) {
           backend.onNext(Optional.of(binder.backend))
         }
     }
   }
 
-  fun start(intent: Intent = Intent(context, QuasselService::class.java)) {
+  fun start(intent: Intent = QuasselService.intent(context!!)) {
     context?.startService(intent)
   }
 
-  fun bind(intent: Intent = Intent(context, QuasselService::class.java), flags: Int = 0) {
+  fun bind(intent: Intent = QuasselService.intent(context!!), flags: Int = 0) {
     context?.bindService(intent, this, flags)
   }
 
-  fun stop(intent: Intent = Intent(context, QuasselService::class.java)) {
+  fun stop(intent: Intent = QuasselService.intent(context!!)) {
     context?.stopService(intent)
   }
 

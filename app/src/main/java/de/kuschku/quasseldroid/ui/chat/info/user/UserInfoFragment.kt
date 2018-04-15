@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid.ui.chat.info.user
 
 import android.arch.lifecycle.Observer
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -162,10 +161,8 @@ class UserInfoFragment : ServiceBoundFragment() {
                 type = Buffer_Type.of(Buffer_Type.QueryBuffer)
               )
 
-              val intent = Intent(requireContext(), ChatActivity::class.java)
               if (info != null) {
-                intent.putExtra("bufferId", info.bufferId)
-                startActivity(intent)
+                ChatActivity.launch(requireContext(), bufferId = info.bufferId)
               } else {
                 viewModel.allBuffers.map {
                   listOfNotNull(it.find {
@@ -175,8 +172,7 @@ class UserInfoFragment : ServiceBoundFragment() {
                   it.isNotEmpty()
                 }.firstElement().toLiveData().observe(this, Observer {
                   it?.firstOrNull()?.let { info ->
-                    intent.putExtra("bufferId", info.bufferId)
-                    startActivity(intent)
+                    ChatActivity.launch(requireContext(), bufferId = info.bufferId)
                   }
                 })
 
@@ -209,10 +205,7 @@ class UserInfoFragment : ServiceBoundFragment() {
         }
 
         actionMention.setOnClickListener {
-          val intent = Intent(requireContext(), ChatActivity::class.java)
-          intent.type = "text/plain"
-          intent.putExtra(Intent.EXTRA_TEXT, "${user.nick()}: ")
-          startActivity(intent)
+          ChatActivity.launch(requireContext(), sharedText = "${user.nick()}: ")
         }
         actionMention.visibleIf(arguments?.getBoolean("openBuffer") == false)
       }

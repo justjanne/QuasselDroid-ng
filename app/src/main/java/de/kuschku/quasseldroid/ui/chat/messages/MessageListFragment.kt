@@ -200,10 +200,7 @@ class MessageListFragment : ServiceBoundFragment() {
     }
     if (autoCompleteSettings.senderDoubleClick)
       adapter.setOnDoubleClickListener { msg ->
-        val intent = Intent(requireContext(), ChatActivity::class.java)
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TEXT, "${HostmaskHelper.nick(msg.sender)}: ")
-        startActivity(intent)
+        ChatActivity.launch(requireContext(), sharedText = "${HostmaskHelper.nick(msg.sender)}: ")
       }
     adapter.setOnUrlLongClickListener(LinkLongClickMenuHelper())
 

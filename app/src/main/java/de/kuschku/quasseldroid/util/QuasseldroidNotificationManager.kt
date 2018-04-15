@@ -52,14 +52,20 @@ class QuasseldroidNotificationManager(private val context: Context) {
   }
 
   fun notificationBackground(): Handle {
-    val intentOpen = Intent(context.applicationContext, ChatActivity::class.java)
-    intentOpen.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-    val pendingIntentOpen = PendingIntent.getActivity(context.applicationContext, 0, intentOpen, 0)
+    val pendingIntentOpen = PendingIntent.getActivity(
+      context.applicationContext,
+      0,
+      ChatActivity.intent(context.applicationContext).apply {
+        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+      },
+      0
+    )
 
-    val intentDisconnect = Intent(context, QuasselService::class.java)
-    intentDisconnect.putExtra("disconnect", true)
     val pendingIntentDisconnect = PendingIntent.getService(
-      context, 0, intentDisconnect, PendingIntent.FLAG_UPDATE_CURRENT
+      context,
+      0,
+      QuasselService.intent(context.applicationContext, disconnect = true),
+      PendingIntent.FLAG_UPDATE_CURRENT
     )
 
     val notification = NotificationCompat.Builder(

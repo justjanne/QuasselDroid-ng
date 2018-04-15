@@ -1,6 +1,5 @@
 package de.kuschku.quasseldroid.ui.clientsettings.about
 
-import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -40,10 +39,9 @@ class LibraryAdapter(private val libraries: List<Library>) :
       ButterKnife.bind(this, itemView)
       itemView.setOnClickListener {
         this.item?.run {
-          val intent = Intent(itemView.context, LicenseSettingsActivity::class.java)
-          intent.putExtra("license_name", license.fullName)
-          intent.putExtra("license_text", license.text)
-          itemView.context.startActivity(intent)
+          LicenseSettingsActivity.launch(itemView.context,
+                                         license_name = license.fullName,
+                                         license_text = license.text)
         }
       }
     }

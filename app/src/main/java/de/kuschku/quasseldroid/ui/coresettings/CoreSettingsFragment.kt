@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid.ui.coresettings
 
 import android.arch.lifecycle.Observer
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.DividerItemDecoration
@@ -60,15 +59,11 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     }
 
     val identityAdapter = SettingsItemAdapter {
-      val intent = Intent(requireContext(), IdentityActivity::class.java)
-      intent.putExtra("identity", it)
-      startActivity(intent)
+      IdentityActivity.launch(requireContext(), identity = it)
     }
 
     val chatListAdapter = SettingsItemAdapter {
-      val intent = Intent(requireContext(), ChatListActivity::class.java)
-      intent.putExtra("chatlist", it)
-      startActivity(intent)
+      ChatListActivity.launch(requireContext(), chatlist = it)
     }
 
     val itemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
@@ -119,11 +114,11 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     })
 
     networkconfig.setOnClickListener {
-      startActivity(Intent(requireContext(), NetworkConfigActivity::class.java))
+      NetworkConfigActivity.launch(requireContext())
     }
 
     ignorelist.setOnClickListener {
-      startActivity(Intent(requireContext(), IgnoreListActivity::class.java))
+      IgnoreListActivity.launch(requireContext())
     }
 
     return view

@@ -406,11 +406,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       true
     }
     R.id.action_core_settings   -> {
-      startActivity(Intent(this, CoreSettingsActivity::class.java))
+      CoreSettingsActivity.launch(this)
       true
     }
     R.id.action_client_settings -> {
-      startActivity(Intent(this, AppSettingsActivity::class.java))
+      AppSettingsActivity.launch(this)
       true
     }
     R.id.action_disconnect      -> {
@@ -437,6 +437,28 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   private fun disconnect() {
     getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editCommit {
       putBoolean(Keys.Status.reconnect, false)
+    }
+  }
+
+  companion object {
+    fun launch(
+      context: Context,
+      sharedText: CharSequence? = null,
+      bufferId: Int? = null
+    ) = context.startActivity(intent(context, sharedText, bufferId))
+
+    fun intent(
+      context: Context,
+      sharedText: CharSequence? = null,
+      bufferId: Int? = null
+    ) = Intent(context, ChatActivity::class.java).apply {
+      if (sharedText != null) {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, sharedText)
+      }
+      if (bufferId != null) {
+        putExtra("bufferId", bufferId)
+      }
     }
   }
 }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.content.*
 import android.net.ConnectivityManager
-import android.os.Binder
 import de.kuschku.libquassel.protocol.ClientData
 import de.kuschku.libquassel.protocol.Protocol
 import de.kuschku.libquassel.protocol.Protocol_Feature
@@ -206,43 +205,7 @@ class QuasselService : DaggerLifecycleService(),
 
   private val handlerService = AndroidHandlerService()
 
-  private val asyncBackend = object : Backend {
-    override fun updateUserDataAndLogin(user: String, pass: String) {
-      handlerService.backend {
-        backendImplementation.updateUserDataAndLogin(user, pass)
-      }
-    }
-
-    override fun connectUnlessConnected(address: SocketAddress, user: String, pass: String,
-                                        reconnect: Boolean) {
-      handlerService.backend {
-        backendImplementation.connectUnlessConnected(address, user, pass, reconnect)
-      }
-    }
-
-    override fun connect(address: SocketAddress, user: String, pass: String, reconnect: Boolean) {
-      handlerService.backend {
-        backendImplementation.connect(address, user, pass, reconnect)
-      }
-    }
-
-    override fun reconnect() {
-      handlerService.backend {
-        backendImplementation.reconnect()
-      }
-    }
-
-    override fun disconnect(forever: Boolean) {
-      handlerService.backend {
-        backendImplementation.disconnect(forever)
-        if (forever) {
-          stopSelf()
-        }
-      }
-    }
-
-    override fun sessionManager() = backendImplementation.sessionManager()
-  }
+  private val asyncBackend = AsyncBackend(handlerService, backendImplementation, ::stopSelf)
 
   @Inject
   lateinit var database: QuasselDatabase
@@ -350,5 +313,19 @@ class QuasselService : DaggerLifecycleService(),
     return QuasselBinder(asyncBackend)
   }
 
-  class QuasselBinder(val backend: Backend) : Binder()
+  companion object {
+    fun launch(
+      context: Context,
+      disconnect: Boolean? = null
+    ) = context.startService(intent(context, disconnect))
+
+    fun intent(
+      context: Context,
+      disconnect: Boolean? = null
+    ) = Intent(context, QuasselService::class.java).apply {
+      if (disconnect != null) {
+        putExtra("disconnect", disconnect)
+      }
+    }
+  }
 }

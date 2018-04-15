@@ -48,8 +48,7 @@ class IgnoreListFragment : SettingsFragment() {
     helper.attachToRecyclerView(list)
 
     add.setOnClickListener {
-      val intent = Intent(requireContext(), IgnoreItemActivity::class.java)
-      startActivityForResult(intent, REQUEST_CREATE_RULE)
+      startActivityForResult(IgnoreItemActivity.intent(requireContext()), REQUEST_CREATE_RULE)
     }
 
     viewModel.ignoreListManager
@@ -68,9 +67,7 @@ class IgnoreListFragment : SettingsFragment() {
   }
 
   fun itemClick(item: IgnoreListManager.IgnoreListItem) {
-    val intent = Intent(requireContext(), IgnoreItemActivity::class.java)
-    intent.putExtra("item", item)
-    startActivityForResult(intent, REQUEST_UPDATE_RULE)
+    startActivityForResult(IgnoreItemActivity.intent(requireContext(), item), REQUEST_UPDATE_RULE)
   }
 
   fun startDrag(holder: IgnoreListAdapter.IgnoreItemViewHolder) = helper.startDrag(holder)

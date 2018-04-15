@@ -49,7 +49,7 @@ class AccountSelectionSlide : SlideFragment() {
       override fun onChanged(t: List<AccountDatabase.Account>?) {
         if (t?.isEmpty() != false)
           startActivityForResult(
-            Intent(context, AccountSetupActivity::class.java),
+            AccountSetupActivity.intent(requireContext()),
             REQUEST_CREATE_FIRST
           )
         accountViewModel.accounts.removeObserver(this)
@@ -65,12 +65,10 @@ class AccountSelectionSlide : SlideFragment() {
     accountList.adapter = adapter
 
     adapter.addAddListener {
-      startActivityForResult(Intent(context, AccountSetupActivity::class.java), -1)
+      startActivityForResult(AccountSetupActivity.intent(requireContext()), -1)
     }
     adapter.addEditListener { id ->
-      val intent = Intent(context, AccountEditActivity::class.java)
-      intent.putExtra("account", id)
-      startActivityForResult(intent, REQUEST_CREATE_NEW)
+      startActivityForResult(AccountEditActivity.intent(requireContext(), id), REQUEST_CREATE_NEW)
     }
     adapter.addSelectionListener {
       updateValidity()

@@ -1,5 +1,6 @@
 package de.kuschku.quasseldroid.ui.clientsettings.app
 
+import android.content.Context
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
@@ -16,13 +17,18 @@ class AppSettingsActivity : SettingsActivity(AppSettingsFragment()) {
 
   override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
     R.id.action_about   -> {
-      startActivity(Intent(applicationContext, AboutSettingsActivity::class.java))
+      AboutSettingsActivity.launch(this)
       true
     }
     R.id.action_crashes -> {
-      startActivity(Intent(applicationContext, CrashSettingsActivity::class.java))
+      CrashSettingsActivity.launch(this)
       true
     }
     else                -> super.onOptionsItemSelected(item)
+  }
+
+  companion object {
+    fun launch(context: Context) = context.startActivity(intent(context))
+    fun intent(context: Context) = Intent(context, AppSettingsActivity::class.java)
   }
 }

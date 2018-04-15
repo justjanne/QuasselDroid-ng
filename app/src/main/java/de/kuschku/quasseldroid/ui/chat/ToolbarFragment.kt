@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid.ui.chat
 
 import android.arch.lifecycle.Observer
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -100,16 +99,12 @@ class ToolbarFragment : ServiceBoundFragment() {
       viewModel.bufferData.value?.info?.let { info ->
         when (info.type.toInt()) {
           BufferInfo.Type.QueryBuffer.toInt()   -> {
-            val intent = Intent(requireContext(), UserInfoActivity::class.java)
-            intent.putExtra("bufferId", info.bufferId)
-            intent.putExtra("openBuffer", true)
-            startActivity(intent)
+            UserInfoActivity.launch(requireContext(), bufferId = info.bufferId, openBuffer = true)
           }
           BufferInfo.Type.ChannelBuffer.toInt() -> {
-            val intent = Intent(requireContext(), ChannelInfoActivity::class.java)
-            intent.putExtra("bufferId", info.bufferId)
-            intent.putExtra("openBuffer", true)
-            startActivity(intent)
+            ChannelInfoActivity.launch(requireContext(),
+                                       bufferId = info.bufferId,
+                                       openBuffer = true)
           }
           else                                  -> null
         }

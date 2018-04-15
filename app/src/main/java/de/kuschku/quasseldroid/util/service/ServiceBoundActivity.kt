@@ -140,9 +140,7 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
     if (!reconnect || !accountIdValid) {
 
       if (!startedSelection) {
-        startActivityForResult(
-          Intent(this, AccountSelectionActivity::class.java), REQUEST_SELECT_ACCOUNT
-        )
+        startActivityForResult(AccountSelectionActivity.intent(this), REQUEST_SELECT_ACCOUNT)
         startedSelection = true
       }
     } else {

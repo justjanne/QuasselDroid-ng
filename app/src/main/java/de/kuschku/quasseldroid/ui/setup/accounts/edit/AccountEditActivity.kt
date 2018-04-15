@@ -2,6 +2,7 @@ package de.kuschku.quasseldroid.ui.setup.accounts.edit
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.support.v7.app.AlertDialog
@@ -180,5 +181,19 @@ class AccountEditActivity : DaggerAppCompatActivity() {
       true
     }
     else               -> super.onOptionsItemSelected(item)
+  }
+
+  companion object {
+    fun launch(
+      context: Context,
+      account: Long
+    ) = context.startActivity(intent(context, account))
+
+    fun intent(
+      context: Context,
+      account: Long
+    ) = Intent(context, AccountEditActivity::class.java).apply {
+      putExtra("account", account)
+    }
   }
 }

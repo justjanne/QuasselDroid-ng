@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid.ui.chat.nicks
 
 import android.arch.lifecycle.Observer
-import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
@@ -157,18 +156,17 @@ class NickListFragment : ServiceBoundFragment() {
   private val clickListener: ((String) -> Unit)? = { nick ->
     viewModel.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
       viewModel.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
-        val intent = Intent(requireContext(), UserInfoActivity::class.java)
-        bufferSyncer.find(
-          bufferName = nick,
-          networkId = networkId,
-          type = Buffer_Type.of(Buffer_Type.QueryBuffer)
-        )?.let {
-          intent.putExtra("bufferId", it.bufferId)
-        }
-        intent.putExtra("nick", nick)
-        intent.putExtra("networkId", networkId)
-        intent.putExtra("openBuffer", false)
-        startActivity(intent)
+        UserInfoActivity.launch(
+          requireContext(),
+          openBuffer = false,
+          bufferId = bufferSyncer.find(
+            bufferName = nick,
+            networkId = networkId,
+            type = Buffer_Type.of(Buffer_Type.QueryBuffer)
+          )?.let(BufferInfo::bufferId),
+          nick = nick,
+          networkId = networkId
+        )
       }
     }
   }

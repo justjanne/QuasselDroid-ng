@@ -1,6 +1,8 @@
 package de.kuschku.quasseldroid.ui.setup.accounts.setup
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.ui.setup.SetupActivity
@@ -48,4 +50,9 @@ class AccountSetupActivity : SetupActivity() {
     AccountSetupUserSlide(),
     AccountSetupNameSlide()
   )
+
+  companion object {
+    fun launch(context: Context) = context.startActivity(intent(context))
+    fun intent(context: Context) = Intent(context, AccountSetupActivity::class.java)
+  }
 }
