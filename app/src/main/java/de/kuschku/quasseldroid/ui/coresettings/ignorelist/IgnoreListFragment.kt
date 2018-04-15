@@ -47,6 +47,11 @@ class IgnoreListFragment : SettingsFragment() {
     helper = ItemTouchHelper(callback)
     helper.attachToRecyclerView(list)
 
+    add.setOnClickListener {
+      val intent = Intent(requireContext(), IgnoreItemActivity::class.java)
+      startActivityForResult(intent, REQUEST_CREATE_RULE)
+    }
+
     viewModel.ignoreListManager
       .filter(Optional<IgnoreListManager>::isPresent)
       .map(Optional<IgnoreListManager>::get)
@@ -77,12 +82,16 @@ class IgnoreListFragment : SettingsFragment() {
           val oldRule = data.getSerializableExtra("old") as? IgnoreListManager.IgnoreListItem
           val newRule = data.getSerializableExtra("new") as? IgnoreListManager.IgnoreListItem
 
-          println(oldRule)
-          println(newRule)
-
           if (oldRule != null && newRule != null) {
             val index = adapter.indexOf(oldRule.ignoreRule)
             adapter.replace(index, newRule)
+          }
+        }
+        REQUEST_CREATE_RULE -> {
+          val newRule = data.getSerializableExtra("new") as? IgnoreListManager.IgnoreListItem
+
+          if (newRule != null) {
+            adapter.add(newRule)
           }
         }
       }
@@ -97,5 +106,6 @@ class IgnoreListFragment : SettingsFragment() {
 
   companion object {
     private const val REQUEST_UPDATE_RULE = 1
+    private const val REQUEST_CREATE_RULE = 2
   }
 }

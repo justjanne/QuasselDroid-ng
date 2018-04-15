@@ -124,7 +124,7 @@ class IgnoreItemFragment : SettingsFragment() {
     return view
   }
 
-  override fun onSave() = item?.let { data ->
+  override fun onSave() = item.let { data ->
     val intent = Intent()
     intent.putExtra("old", data)
     val new = IgnoreListManager.IgnoreListItem(
@@ -139,6 +139,6 @@ class IgnoreItemFragment : SettingsFragment() {
     intent.putExtra("new", new)
     requireActivity().setResult(Activity.RESULT_OK, intent)
     true
-  } ?: false
+  }
 
 }
