@@ -10,6 +10,7 @@
   <string name="preference_theme_entry_solarized_dark">Solarized (Dunkel)</string>
   <string name="preference_theme_entry_gruvbox_light">Gruvbox (Hell)</string>
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Dunkel)</string>
+  <string name="preference_theme_entry_dracula">Dracula</string>
 
   <string name="preference_input_enter_title">Eingabetaste auf Tastatur</string>
   <string name="preference_input_enter_entry_emoji">Emoji-Auswahl</string>

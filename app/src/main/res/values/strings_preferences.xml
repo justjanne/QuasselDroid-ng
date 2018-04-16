@@ -11,6 +11,7 @@
   <string name="preference_theme_entry_solarized_dark">Solarized (Dark)</string>
   <string name="preference_theme_entry_gruvbox_light">Gruvbox (Light)</string>
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Dark)</string>
+  <string name="preference_theme_entry_dracula">Dracula</string>
   <string-array name="preference_theme_entries">
     <item>@string/preference_theme_entry_quassel_light</item>
     <item>@string/preference_theme_entry_quassel_dark</item>
@@ -19,6 +20,7 @@
     <item>@string/preference_theme_entry_solarized_dark</item>
     <item>@string/preference_theme_entry_gruvbox_light</item>
     <item>@string/preference_theme_entry_gruvbox_dark</item>
+    <item>@string/preference_theme_entry_dracula</item>
   </string-array>
   <string-array name="preference_theme_entryvalues" translatable="false">
     <item>QUASSEL_LIGHT</item>
@@ -28,6 +30,7 @@
     <item>SOLARIZED_DARK</item>
     <item>GRUVBOX_LIGHT</item>
     <item>GRUVBOX_DARK</item>
+    <item>DRACULA</item>
   </string-array>
 
   <string name="preference_input_enter_key" translatable="false">input_enter</string>

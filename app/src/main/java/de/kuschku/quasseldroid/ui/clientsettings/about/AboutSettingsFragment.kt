@@ -134,14 +134,13 @@ class AboutSettingsFragment : DaggerFragment() {
         url = "https://google.github.io/dagger/"
       ),
       Library(
-        name = "emoji-java",
-        version = "4.0.0",
+        name = "Dracula",
         license = License(
           shortName = "MIT",
           fullName = "The MIT License (MIT)",
-          text = R.string.license_emojijava
+          text = R.string.license_dracula
         ),
-        url = "https://github.com/vdurmont/emoji-java"
+        url = "https://draculatheme.com/"
       ),
       Library(
         name = "Glide",
@@ -164,6 +163,15 @@ class AboutSettingsFragment : DaggerFragment() {
         version = "2.8.2",
         license = apache2,
         url = "https://github.com/google/gson"
+      ),
+      Library(
+        name = "Gruvbox",
+        license = License(
+          shortName = "MIT",
+          fullName = "The MIT License (MIT)",
+          text = R.string.license_gruvbox
+        ),
+        url = "https://github.com/morhetz/gruvbox"
       ),
       Library(
         name = "JavaPoet",
@@ -221,6 +229,16 @@ class AboutSettingsFragment : DaggerFragment() {
         url = "https://github.com/DreaminginCodeZH/MaterialProgressBar"
       ),
       Library(
+        name = "Quassel",
+        version = "0.13.0",
+        license = License(
+          shortName = "GPLv3",
+          fullName = "GNU GENERAL PUBLIC LICENSE",
+          text = R.string.license_gpl_v3
+        ),
+        url = "https://quassel-irc.org/"
+      ),
+      Library(
         name = "Reactive Streams",
         version = "1.0.2",
         license = License(
@@ -235,6 +253,15 @@ class AboutSettingsFragment : DaggerFragment() {
         version = "2.1.9",
         license = apache2,
         url = "https://github.com/ReactiveX/RxJava"
+      ),
+      Library(
+        name = "Solarized",
+        license = License(
+          shortName = "MIT",
+          fullName = "The MIT License (MIT)",
+          text = R.string.license_solarized
+        ),
+        url = "http://ethanschoonover.com/solarized"
       ),
       Library(
         name = "ThreeTen backport project",

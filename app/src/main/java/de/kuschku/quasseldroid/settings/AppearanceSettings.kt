@@ -25,7 +25,8 @@ data class AppearanceSettings(
     SOLARIZED_LIGHT(R.style.Theme_ChatTheme_Solarized_Light),
     SOLARIZED_DARK(R.style.Theme_ChatTheme_Solarized_Dark),
     GRUVBOX_LIGHT(R.style.Theme_ChatTheme_Gruvbox_Light),
-    GRUVBOX_DARK(R.style.Theme_ChatTheme_Gruvbox_Dark);
+    GRUVBOX_DARK(R.style.Theme_ChatTheme_Gruvbox_Dark),
+    DRACULA(R.style.Theme_ChatTheme_Dracula);
 
     companion object {
       private val map = values().associateBy { it.name }
