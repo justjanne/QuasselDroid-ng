@@ -26,7 +26,7 @@
     <item name="senderColorF">#af3a03</item>
 
     <item name="colorForeground">#3c3836</item>
-    <item name="colorForegroundHighlight">#282828</item>
+    <item name="colorForegroundHighlight">#3c3836</item>
     <item name="colorForegroundSecondary">#665c54</item>
     <item name="colorForegroundAction">#076678</item>
     <item name="colorForegroundNotice">#b57614</item>
@@ -41,7 +41,7 @@
 
     <item name="android:windowBackground">@color/gruvbox_light_background</item>
     <item name="colorBackground">#fbf1c7</item>
-    <item name="colorBackgroundHighlight">#d79921</item>
+    <item name="colorBackgroundHighlight">#40d65d0e</item>
     <item name="colorBackgroundSecondary">@null</item>
     <item name="colorBackgroundCard">#ebdbb2</item>
     <item name="colorBackgroundDialog">#f2d5bc</item>
@@ -85,7 +85,7 @@
     <item name="senderColorF">#fe8019</item>
 
     <item name="colorForeground">#dbdbb2</item>
-    <item name="colorForegroundHighlight">#282828</item>
+    <item name="colorForegroundHighlight">#dbdbb2</item>
     <item name="colorForegroundSecondary">#bdae93</item>
     <item name="colorForegroundAction">#458588</item>
     <item name="colorForegroundNotice">#d79921</item>
@@ -100,7 +100,7 @@
 
     <item name="android:windowBackground">@color/gruvbox_dark_background</item>
     <item name="colorBackground">#282828</item>
-    <item name="colorBackgroundHighlight">#d79921</item>
+    <item name="colorBackgroundHighlight">#40d65d0e</item>
     <item name="colorBackgroundSecondary">@null</item>
     <item name="colorBackgroundCard">#504945</item>
     <item name="colorBackgroundDialog">#3c3836</item>

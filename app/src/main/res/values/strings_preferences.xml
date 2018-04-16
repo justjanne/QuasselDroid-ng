@@ -4,6 +4,8 @@
 
   <string name="preference_theme_key" translatable="false">theme</string>
   <string name="preference_theme_title">Theme</string>
+  <string name="preference_theme_entry_material_light">Material (Light)</string>
+  <string name="preference_theme_entry_material_dark">Material (Dark)</string>
   <string name="preference_theme_entry_quassel_light">Quassel (Light)</string>
   <string name="preference_theme_entry_quassel_dark">Quassel (Dark)</string>
   <string name="preference_theme_entry_amoled">AMOLED</string>
@@ -13,6 +15,8 @@
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Dark)</string>
   <string name="preference_theme_entry_dracula">Dracula</string>
   <string-array name="preference_theme_entries">
+    <item>@string/preference_theme_entry_material_light</item>
+    <item>@string/preference_theme_entry_material_dark</item>
     <item>@string/preference_theme_entry_quassel_light</item>
     <item>@string/preference_theme_entry_quassel_dark</item>
     <item>@string/preference_theme_entry_amoled</item>
@@ -23,6 +27,8 @@
     <item>@string/preference_theme_entry_dracula</item>
   </string-array>
   <string-array name="preference_theme_entryvalues" translatable="false">
+    <item>MATERIAL_LIGHT</item>
+    <item>MATERIAL_DARK</item>
     <item>QUASSEL_LIGHT</item>
     <item>QUASSEL_DARK</item>
     <item>AMOLED</item>

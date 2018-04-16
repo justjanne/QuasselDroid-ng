@@ -3,6 +3,8 @@
   <string name="preference_appearance_title">Aussehen</string>
 
   <string name="preference_theme_title">Farbschema</string>
+  <string name="preference_theme_entry_material_light">Material (Hell)</string>
+  <string name="preference_theme_entry_material_dark">Material (Dunkel)</string>
   <string name="preference_theme_entry_quassel_light">Quassel (Hell)</string>
   <string name="preference_theme_entry_quassel_dark">Quassel (Dunkel)</string>
   <string name="preference_theme_entry_amoled">AMOLED</string>

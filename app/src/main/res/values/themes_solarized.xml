@@ -26,7 +26,7 @@
     <item name="senderColorF">#657900</item>
 
     <item name="colorForeground">#586e75</item>
-    <item name="colorForegroundHighlight">#002B36</item>
+    <item name="colorForegroundHighlight">#586e75</item>
     <item name="colorForegroundSecondary">#657b83</item>
     <item name="colorForegroundAction">#268BD2</item>
     <item name="colorForegroundNotice">#B58900</item>
@@ -41,7 +41,7 @@
 
     <item name="android:windowBackground">@color/solarized_light_background</item>
     <item name="colorBackground">#FDF6E3</item>
-    <item name="colorBackgroundHighlight">#D5A920</item>
+    <item name="colorBackgroundHighlight">#40B58900</item>
     <item name="colorBackgroundSecondary">@null</item>
     <item name="colorBackgroundCard">#EEE8D5</item>
     <item name="colorBackgroundDialog">#FDF6E3</item>
@@ -85,7 +85,7 @@
     <item name="senderColorF">#657900</item>
 
     <item name="colorForeground">#93a1a1</item>
-    <item name="colorForegroundHighlight">#002B36</item>
+    <item name="colorForegroundHighlight">#93a1a1</item>
     <item name="colorForegroundSecondary">#839496</item>
     <item name="colorForegroundAction">#268BD2</item>
     <item name="colorForegroundNotice">#B58900</item>
@@ -100,7 +100,7 @@
 
     <item name="android:windowBackground">@color/solarized_dark_background</item>
     <item name="colorBackground">#002B36</item>
-    <item name="colorBackgroundHighlight">#B58900</item>
+    <item name="colorBackgroundHighlight">#30268BD2</item>
     <item name="colorBackgroundSecondary">@null</item>
     <item name="colorBackgroundCard">#073642</item>
     <item name="colorBackgroundDialog">#002B36</item>

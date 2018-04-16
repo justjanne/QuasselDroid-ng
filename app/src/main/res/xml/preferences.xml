@@ -3,7 +3,7 @@
   xmlns:robobunny="http://robobunny.com">
   <PreferenceCategory android:title="@string/preference_appearance_title">
     <ListPreference
-      android:defaultValue="QUASSEL_LIGHT"
+      android:defaultValue="MATERIAL_LIGHT"
       android:entries="@array/preference_theme_entries"
       android:entryValues="@array/preference_theme_entryvalues"
       android:key="@string/preference_theme_key"
@@ -112,7 +112,7 @@
       android:title="@string/preference_hostmask_plain_title" />
 
     <SwitchPreference
-      android:defaultValue="false"
+      android:defaultValue="true"
       android:key="@string/preference_time_at_end_key"
       android:summary="@string/preference_time_at_end_summary"
       android:title="@string/preference_time_at_end_title" />

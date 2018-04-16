@@ -41,7 +41,7 @@
 
     <item name="android:windowBackground">@color/dracula_dark_background</item>
     <item name="colorBackground">#282a36</item>
-    <item name="colorBackgroundHighlight">#44475a</item>
+    <item name="colorBackgroundHighlight">#20ff79c6</item>
     <item name="colorBackgroundSecondary">@null</item>
     <item name="colorBackgroundCard">#44475a</item>
     <item name="colorBackgroundDialog">#282a36</item>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+  <color name="material_light_background">#fafafa</color>
+
+  <style name="Theme.ChatTheme.Material_Light" parent="Theme.ChatTheme.Light">
+    <item name="senderColor0">#F44336</item>
+    <item name="senderColor1">#2196F3</item>
+    <item name="senderColor2">#7CB342</item>
+    <item name="senderColor3">#7B1FA2</item>
+    <item name="senderColor4">#DA8E00</item>
+    <item name="senderColor5">#4CAF50</item>
+    <item name="senderColor6">#3F51B5</item>
+    <item name="senderColor7">#E91E63</item>
+    <item name="senderColor8">#b94600</item>
+    <item name="senderColor9">#9E9D24</item>
+    <item name="senderColorA">#558B2F</item>
+    <item name="senderColorB">#009688</item>
+    <item name="senderColorC">#0277BD</item>
+    <item name="senderColorD">#00838F</item>
+    <item name="senderColorE">#9C27B0</item>
+    <item name="senderColorF">#C51162</item>
+
+    <item name="colorForeground">#DE000000</item>
+    <item name="colorForegroundHighlight">#DE000000</item>
+    <item name="colorForegroundSecondary">#8A000000</item>
+    <item name="colorForegroundAction">#01579B</item>
+    <item name="colorForegroundNotice">#B56A00</item>
+    <item name="colorForegroundError">#B71C1C</item>
+
+    <item name="colorForegroundMirc">0x1</item>
+
+    <item name="android:windowBackground">@color/material_light_background</item>
+    <item name="colorBackground">#FAFAFA</item>
+    <item name="colorBackgroundHighlight">#40ffaf3b</item>
+    <item name="colorBackgroundSecondary">@null</item>
+    <item name="colorBackgroundCard">#FFFFFF</item>
+    <item name="colorBackgroundDialog">#FAFAFA</item>
+
+    <item name="colorMarkerLine">#B71C1C</item>
+
+    <item name="colorTintActivity">#AFB42B</item>
+    <item name="colorTintMessage">#1976D2</item>
+    <item name="colorTintHighlight">#FFAB00</item>
+
+    <item name="colorTintSecure">#4CAF50</item>
+    <item name="colorTintPartiallySecure">#FFC107</item>
+    <item name="colorTintInsecure">#D32F2F</item>
+  </style>
+
+  <color name="material_dark_background">#303030</color>
+
+  <style name="Theme.ChatTheme.Material_Dark" parent="Theme.ChatTheme">
+    <item name="senderColor0">#F44336</item>
+    <item name="senderColor1">#2196F3</item>
+    <item name="senderColor2">#8BC34A</item>
+    <item name="senderColor3">#673AB7</item>
+    <item name="senderColor4">#FFC107</item>
+    <item name="senderColor5">#4CAF50</item>
+    <item name="senderColor6">#3F51B5</item>
+    <item name="senderColor7">#E91E63</item>
+    <item name="senderColor8">#b94600</item>
+    <item name="senderColor9">#CDDC39</item>
+    <item name="senderColorA">#558B2F</item>
+    <item name="senderColorB">#009688</item>
+    <item name="senderColorC">#0277BD</item>
+    <item name="senderColorD">#00838F</item>
+    <item name="senderColorE">#9C27B0</item>
+    <item name="senderColorF">#C51162</item>
+
+    <item name="colorForeground">#FFFFFF</item>
+    <item name="colorForegroundHighlight">#FFFFFF</item>
+    <item name="colorForegroundSecondary">#B3FFFFFF</item>
+    <item name="colorForegroundAction">#448AFF</item>
+    <item name="colorForegroundNotice">#FFD740</item>
+    <item name="colorForegroundError">#FF5252</item>
+
+    <item name="colorForegroundMirc">0x0</item>
+
+    <item name="android:windowBackground">@color/material_dark_background</item>
+    <item name="colorBackground">#303030</item>
+    <item name="colorBackgroundHighlight">#40ffaf3b</item>
+    <item name="colorBackgroundSecondary">@null</item>
+    <item name="colorBackgroundCard">#424242</item>
+    <item name="colorBackgroundDialog">#303030</item>
+
+    <item name="colorMarkerLine">#B71C1C</item>
+
+    <item name="colorTintActivity">#AFB42B</item>
+    <item name="colorTintMessage">#42A5F5</item>
+    <item name="colorTintHighlight">#FFAB00</item>
+
+    <item name="colorTintSecure">#4CAF50</item>
+    <item name="colorTintPartiallySecure">#FFC107</item>
+    <item name="colorTintInsecure">#D32F2F</item>
+  </style>
+</resources>
