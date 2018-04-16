@@ -10,7 +10,6 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager.Alias
 import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
 import de.kuschku.libquassel.session.SignalProxy
 import java.util.*
-import java.util.regex.Pattern
 
 class AliasManager constructor(
   proxy: SignalProxy
@@ -89,11 +88,13 @@ class AliasManager constructor(
     } else {
       // check for aliases
       val split = msg.split(' ', ignoreCase = true, limit = 2)
-      val search: String? = split.firstOrNull()
+      val search: String? = split.firstOrNull()?.substring(1)
       if (search != null) {
         val found = _aliases.firstOrNull { it.name.equals(search, true) }
-        if (found != null)
+        if (found != null) {
           expand(found.expansion, info, split.getOrNull(1) ?: "", previousCommands)
+          return
+        }
       }
     }
 
@@ -104,43 +105,40 @@ class AliasManager constructor(
              previousCommands: MutableList<IAliasManager.Command>) {
     val network = proxy.network(bufferInfo.networkId)
 
-    val paramRange = Pattern.compile("""\$(\d+)\.\.(\d*)""")
-    val commands = Arrays.asList(
-      *expansion.split("; ?").dropLastWhile { it.isEmpty() }.toTypedArray()
-    )
-    val params = Arrays.asList<String>(
-      *msg.split(' ').dropLastWhile({ it.isEmpty() }).toTypedArray()
-    )
+    val paramRange = Regex("""\$(\d+)\.\.(\d*)""")
+    val commands = expansion.split("; ?".toRegex()).dropLastWhile { it.isEmpty() }
+    val params = msg.split(' ').dropLastWhile({ it.isEmpty() })
     val expandedCommands = LinkedList<String>()
 
     for (i in commands.indices) {
       var command = commands[i]
 
-      if (params.size != 0) {
-        val m = paramRange.matcher(command)
-        while (m.find()) {
-          val start = m.group(1).toIntOrNull() ?: -1
+      if (params.isNotEmpty()) {
+        for (match in paramRange.findAll(command)) {
+          val start = match.groups[1]?.value?.toIntOrNull() ?: -1
           val replacement: String
           // $1.. would be "arg1 and all following"
-          replacement = if (m.group(2).isEmpty()) {
+          replacement = if (match.groups[2]?.value.isNullOrEmpty()) {
             params.subList(start, params.size).joinToString(" ")
           } else {
-            val end = m.group(2).toIntOrNull() ?: -1
+            val end = match.groups[2]?.value?.toIntOrNull() ?: -1
             if (end < start) {
               ""
             } else {
               params.subList(start, end).joinToString(" ")
             }
           }
-          command = command.substring(0, m.start()) + replacement + command.substring(m.end())
+          command = command.substring(0, match.range.start) + replacement +
+            command.substring(match.range.endInclusive + 1)
         }
       }
 
       for (j in params.size downTo 1) {
         val user = network?.ircUser(params[j - 1])
-        val host = user?.host() ?: "*"
-        command = command.replace(String.format(Locale.US, "$%d:hostname", j).toRegex(), host)
-        command = command.replace(String.format(Locale.US, "$%d", j).toRegex(), params[j - 1])
+        command = command.replace("\$$j:hostname", user?.host() ?: "*")
+        command = command.replace("\$$j:ident", user?.user() ?: "*")
+        command = command.replace("\$$j:account", user?.account() ?: "*")
+        command = command.replace("\$$j", params[j - 1])
       }
       command = command.replace("$0", msg)
       command = command.replace("\$channelname", bufferInfo.bufferName ?: "")
@@ -152,11 +150,11 @@ class AliasManager constructor(
     }
     while (!expandedCommands.isEmpty()) {
       val command: String
-      if (expandedCommands[0].trim { it <= ' ' }.toLowerCase(Locale.US).startsWith("/wait ")) {
+      if (expandedCommands[0].trim().toLowerCase(Locale.US).startsWith("/wait ")) {
         command = expandedCommands.joinToString("; ")
         expandedCommands.clear()
       } else {
-        command = expandedCommands[0]
+        command = expandedCommands.removeAt(0)
       }
       previousCommands.add(IAliasManager.Command(bufferInfo, command))
     }
