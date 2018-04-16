@@ -4,6 +4,9 @@
   <color name="colorPrimaryDark">#105a94</color>
   <color name="colorAccent">#ffaf3b</color>
 
+  <color name="colorIconLight">#0291e7</color>
+  <color name="colorIconDark">#124e99</color>
+
   <color name="colorFillLight">#757575</color>
   <color name="colorFillDark">#ffffff</color>
 
