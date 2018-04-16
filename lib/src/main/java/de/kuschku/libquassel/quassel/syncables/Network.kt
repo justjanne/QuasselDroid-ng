@@ -453,13 +453,15 @@ class Network constructor(
   }
 
   override fun setServerList(serverList: QVariantList) {
-    val actualServerList = serverList.map {
+    setActualServerList(serverList.map {
       it.valueOrThrow<QVariantMap>()
-    }.map(Server.Companion::fromVariantMap)
+    }.map(Server.Companion::fromVariantMap))
+  }
 
-    if (_serverList == actualServerList)
+  fun setActualServerList(serverList: List<INetwork.Server>) {
+    if (_serverList == serverList)
       return
-    _serverList = actualServerList
+    _serverList = serverList
   }
 
   override fun setUseRandomServer(randomServer: Boolean) {
@@ -670,7 +672,7 @@ class Network constructor(
   }.toList()
 
   override fun initServerList(): QVariantList = _serverList.map {
-    QVariant.of(it, QType.Network_Server)
+    QVariant.of(it.toVariantMap(), QType.Network_Server)
   }.toList()
 
   override fun initIrcUsersAndChannels(): QVariantMap {
@@ -852,6 +854,12 @@ class Network constructor(
   fun removeIrcChannel(channel: IrcChannel) {
     _ircChannels.remove(caseMapper.toLowerCase(channel.name()))
     live_ircChannels.onNext(_ircChannels)
+  }
+
+  fun copy(): Network {
+    val identity = Network(this.networkId(), SignalProxy.NULL)
+    identity.fromVariantMap(this.toVariantMap())
+    return identity
   }
 
   private var _networkId: NetworkId = networkId

@@ -51,7 +51,6 @@
       android:name=".ui.chat.topic.TopicActivity"
       android:exported="false"
       android:label="@string/label_topic"
-      android:parentActivityName=".ui.chat.info.channel.ChannelInfoActivity"
       android:windowSoftInputMode="adjustResize" />
 
     <!-- Core Settings -->
@@ -72,6 +71,11 @@
       android:exported="false"
       android:label="@string/settings_network_title"
       android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.coresettings.networkserver.NetworkServerActivity"
+      android:exported="false"
+      android:label="@string/settings_network_title"
       android:windowSoftInputMode="adjustResize" />
     <activity
       android:name=".ui.coresettings.identity.IdentityCreateActivity"

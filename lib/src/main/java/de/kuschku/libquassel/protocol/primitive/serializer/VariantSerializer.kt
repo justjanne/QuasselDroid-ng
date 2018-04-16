@@ -10,7 +10,7 @@ object VariantSerializer : Serializer<QVariant_> {
     IntSerializer.serialize(buffer, data.type.id, features)
     BoolSerializer.serialize(buffer, false, features)
     if (data is QVariant.Custom && data.type == Type.UserType) {
-      StringSerializer.C.serialize(buffer, data.qtype.name, features)
+      StringSerializer.C.serialize(buffer, data.qtype.typeName, features)
     }
     (data.serializer as Serializer<Any?>).serialize(buffer, data.data, features)
   }

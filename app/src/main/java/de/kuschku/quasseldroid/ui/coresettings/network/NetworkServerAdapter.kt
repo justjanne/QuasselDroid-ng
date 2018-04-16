@@ -18,7 +18,7 @@ import de.kuschku.quasseldroid.util.helper.tint
 import java.util.*
 
 class NetworkServerAdapter(
-  private val clickListener: (Int, INetwork.Server) -> Unit,
+  private val clickListener: (INetwork.Server) -> Unit,
   private val dragListener: (NetworkServerViewHolder) -> Unit
 ) : RecyclerView.Adapter<NetworkServerAdapter.NetworkServerViewHolder>() {
   private val data = mutableListOf<INetwork.Server>()
@@ -38,9 +38,20 @@ class NetworkServerAdapter(
     notifyItemInserted(index)
   }
 
-  fun replace(index: Int, item: INetwork.Server) {
-    data[index] = item
-    notifyItemChanged(index)
+  fun indexOf(item: INetwork.Server): Int? {
+    for ((index, it) in data.withIndex()) {
+      if (it == item) {
+        return index
+      }
+    }
+    return null
+  }
+
+  fun replace(old: INetwork.Server, new: INetwork.Server) {
+    indexOf(old)?.let {
+      data[it] = new
+      notifyItemChanged(it)
+    }
   }
 
   fun remove(index: Int) {
@@ -67,7 +78,7 @@ class NetworkServerAdapter(
 
   class NetworkServerViewHolder(
     itemView: View,
-    clickListener: (Int, INetwork.Server) -> Unit,
+    clickListener: (INetwork.Server) -> Unit,
     dragListener: (NetworkServerViewHolder) -> Unit
   ) : RecyclerView.ViewHolder(itemView) {
     @BindView(R.id.host)
@@ -92,7 +103,7 @@ class NetworkServerAdapter(
       ButterKnife.bind(this, itemView)
       itemView.setOnClickListener {
         item?.let {
-          clickListener(adapterPosition, it)
+          clickListener(it)
         }
       }
       handle.setOnTouchListener { _, event ->

@@ -3,8 +3,11 @@ package de.kuschku.libquassel.quassel.syncables.interfaces
 import de.kuschku.libquassel.annotations.Slot
 import de.kuschku.libquassel.annotations.Syncable
 import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
 import de.kuschku.libquassel.util.flag.Flag
 import de.kuschku.libquassel.util.flag.Flags
+import de.kuschku.libquassel.util.helpers.serializeString
+import java.io.Serializable
 import java.nio.ByteBuffer
 
 @Syncable(name = "Network")
@@ -220,7 +223,7 @@ interface INetwork : ISyncableObject {
     val proxyPort: UInt = 8080,
     val proxyUser: String = "",
     val proxyPass: String = ""
-  ) {
+  ) : Serializable {
     fun toVariantMap(): QVariantMap = mapOf(
       "Host" to QVariant.of(host, Type.QString),
       "Port" to QVariant.of(port, Type.UInt),
@@ -229,7 +232,7 @@ interface INetwork : ISyncableObject {
       "sslVerify" to QVariant.of(sslVerify, Type.Bool),
       "sslVersion" to QVariant.of(sslVersion, Type.Int),
       "UseProxy" to QVariant.of(useProxy, Type.Bool),
-      "ProxyType" to QVariant.of(proxyType, Type.Bool),
+      "ProxyType" to QVariant.of(proxyType, Type.Int),
       "ProxyHost" to QVariant.of(proxyHost, Type.QString),
       "ProxyPort" to QVariant.of(proxyPort, Type.UInt),
       "ProxyUser" to QVariant.of(proxyUser, Type.QString),
@@ -295,7 +298,73 @@ interface INetwork : ISyncableObject {
     var messageRateBurstSize: Int = 0,
     var messageRateDelay: Int = 0,
     var unlimitedMessageRate: Boolean = false
-  )
+  ) {
+    fun toVariantMap() = mapOf(
+      "NetworkId" to QVariant.of(networkId, QType.NetworkId),
+      "NetworkName" to QVariant.of(networkName, Type.QString),
+      "Identity" to QVariant.of(identity, QType.IdentityId),
+      "UseCustomEncodings" to QVariant.of(useCustomEncodings, Type.Bool),
+      "CodecForServer" to QVariant.of(
+        codecForServer.serializeString(StringSerializer.UTF8), Type.QByteArray
+      ),
+      "CodecForEncoding" to QVariant.of(
+        codecForEncoding.serializeString(StringSerializer.UTF8), Type.QByteArray
+      ),
+      "CodecForDecoding" to QVariant.of(
+        codecForDecoding.serializeString(StringSerializer.UTF8), Type.QByteArray
+      ),
+      "ServerList" to QVariant.of(serverList.map {
+        QVariant.of(it.toVariantMap(), QType.Network_Server)
+      }, Type.QVariantList),
+      "UseRandomServer" to QVariant.of(useRandomServer, Type.Bool),
+      "Perform" to QVariant.of(perform, Type.QStringList),
+      "UseAutoIdentify" to QVariant.of(useAutoIdentify, Type.Bool),
+      "AutoIdentifyService" to QVariant.of(autoIdentifyService, Type.QString),
+      "AutoIdentifyPassword" to QVariant.of(autoIdentifyPassword, Type.QString),
+      "UseSasl" to QVariant.of(useSasl, Type.Bool),
+      "SaslAccount" to QVariant.of(saslAccount, Type.QString),
+      "SaslPassword" to QVariant.of(saslPassword, Type.QString),
+      "UseAutoReconnect" to QVariant.of(useAutoReconnect, Type.Bool),
+      "AutoReconnectInterval" to QVariant.of(autoReconnectInterval, Type.UInt),
+      "AutoReconnectRetries" to QVariant.of(autoReconnectRetries, Type.Int),
+      "UnlimitedReconnectRetries" to QVariant.of(unlimitedReconnectRetries, Type.Bool),
+      "RejoinChannels" to QVariant.of(rejoinChannels, Type.Bool),
+      "UseCustomMessageRate" to QVariant.of(useCustomMessageRate, Type.Bool),
+      "MessageRateBurstSize" to QVariant.of(messageRateBurstSize, Type.UInt),
+      "MessageRateDelay" to QVariant.of(messageRateDelay, Type.UInt),
+      "UnlimitedMessageRate" to QVariant.of(unlimitedMessageRate, Type.Bool)
+    )
+
+    fun fromVariantMap(map: QVariantMap) {
+      networkId = map["NetworkId"].value(networkId)
+      networkName = map["NetworkName"].value(networkName)
+      identity = map["Identity"].value(identity)
+      useCustomEncodings = map["UseCustomEncodings"].value(useCustomEncodings)
+      codecForServer = map["CodecForServer"].value(codecForServer)
+      codecForEncoding = map["CodecForEncoding"].value(codecForEncoding)
+      codecForDecoding = map["CodecForDecoding"].value(codecForDecoding)
+      serverList = map["ServerList"].value(emptyList<QVariant_>()).map {
+        INetwork.Server.fromVariantMap(it.value(emptyMap()))
+      }
+      useRandomServer = map["UseRandomServer"].value(useRandomServer)
+      perform = map["Perform"].value(perform)
+      useAutoIdentify = map["UseAutoIdentify"].value(useAutoIdentify)
+      autoIdentifyService = map["AutoIdentifyService"].value(autoIdentifyService)
+      autoIdentifyPassword = map["AutoIdentifyPassword"].value(autoIdentifyPassword)
+      useSasl = map["UseSasl"].value(useSasl)
+      saslAccount = map["SaslAccount"].value(saslAccount)
+      saslPassword = map["SaslPassword"].value(saslPassword)
+      useAutoReconnect = map["UseAutoReconnect"].value(useAutoReconnect)
+      autoReconnectInterval = map["AutoReconnectInterval"].value(autoReconnectInterval)
+      autoReconnectRetries = map["AutoReconnectRetries"].value(autoReconnectRetries)
+      unlimitedReconnectRetries = map["UnlimitedReconnectRetries"].value(unlimitedReconnectRetries)
+      rejoinChannels = map["RejoinChannels"].value(rejoinChannels)
+      useCustomMessageRate = map["UseCustomMessageRate"].value(useCustomMessageRate)
+      messageRateBurstSize = map["MessageRateBurstSize"].value(messageRateBurstSize)
+      messageRateDelay = map["MessageRateDelay"].value(messageRateDelay)
+      unlimitedMessageRate = map["UnlimitedMessageRate"].value(unlimitedMessageRate)
+    }
+  }
 
   /**
    * IRCv3 capability names and values

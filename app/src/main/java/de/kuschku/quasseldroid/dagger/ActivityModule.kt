@@ -40,6 +40,8 @@ import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
 import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivity
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.networkserver.NetworkServerActivity
+import de.kuschku.quasseldroid.ui.coresettings.networkserver.NetworkServerFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionFragmentProvider
@@ -80,6 +82,9 @@ abstract class ActivityModule {
 
   @ContributesAndroidInjector(modules = [NetworkEditFragmentProvider::class])
   abstract fun bindNetworkEditActivity(): NetworkEditActivity
+
+  @ContributesAndroidInjector(modules = [NetworkServerFragmentProvider::class])
+  abstract fun bindNetworkServerActivity(): NetworkServerActivity
 
   @ContributesAndroidInjector(modules = [IdentityCreateFragmentProvider::class])
   abstract fun bindIdentityCreateActivity(): IdentityCreateActivity

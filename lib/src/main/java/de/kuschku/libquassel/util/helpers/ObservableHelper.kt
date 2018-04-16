@@ -9,21 +9,20 @@ fun <T> Observable<T>.or(default: T): T = try {
   default
 }
 
-val <T> Observable<T>.value
+val <T : Any> Observable<T>.value
   get() = this.map { Optional.of(it) }.blockingMostRecent(Optional.empty()).firstOrNull()?.orNull()
 
-fun <T, U> Observable<Optional<T>>.mapMap(mapper: (T) -> U): Observable<Optional<U>> = map {
-  it.map(mapper)
-}
+fun <T : Any, U : Any> Observable<Optional<T>>.mapMap(mapper: (T) -> U): Observable<Optional<U>> =
+  map { it.map(mapper) }
 
-fun <T, U> Observable<Optional<T>>.mapMapNullable(
+fun <T : Any, U : Any> Observable<Optional<T>>.mapMapNullable(
   mapper: (T) -> U?): Observable<Optional<U>> = map {
   it.flatMap {
     Optional.ofNullable(mapper(it))
   }
 }
 
-fun <T, U> Observable<Optional<T>>.mapSwitchMap(
+fun <T : Any, U : Any> Observable<Optional<T>>.mapSwitchMap(
   mapper: (T) -> Observable<U>): Observable<Optional<U>> = switchMap {
   if (it.isPresent()) {
     it.map(mapper).get().map { Optional.of(it) }
@@ -32,7 +31,7 @@ fun <T, U> Observable<Optional<T>>.mapSwitchMap(
   }
 }
 
-fun <T, U> Observable<Optional<T>>.mapSwitchMapEmpty(
+fun <T : Any, U : Any> Observable<Optional<T>>.mapSwitchMapEmpty(
   mapper: (T) -> Observable<U>): Observable<U> = switchMap {
   if (it.isPresent()) {
     it.map(mapper).get()
@@ -41,11 +40,11 @@ fun <T, U> Observable<Optional<T>>.mapSwitchMapEmpty(
   }
 }
 
-fun <T, U> Observable<Optional<T>>.flatMapSwitchMap(
+fun <T : Any, U : Any> Observable<Optional<T>>.flatMapSwitchMap(
   mapper: (T) -> Observable<Optional<U>>): Observable<Optional<U>> = switchMap {
   it.map(mapper).orElse(Observable.just(Optional.empty()))
 }
 
-fun <T> Observable<Optional<T>>.mapOrElse(orElse: T): Observable<T> = map {
+fun <T : Any> Observable<Optional<T>>.mapOrElse(orElse: T): Observable<T> = map {
   it.orElse(orElse)
 }

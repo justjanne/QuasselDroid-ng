@@ -200,6 +200,7 @@
         <android.support.design.widget.TextInputEditText
           android:id="@+id/perform"
           style="@style/Widget.CoreSettings.EditText"
+          android:inputType="textMultiLine"
           tools:text="/mode -x" />
       </android.support.design.widget.TextInputLayout>
 

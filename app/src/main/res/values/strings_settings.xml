@@ -24,6 +24,22 @@
   <string name="settings_network_customratelimits_delay">Delay</string>
   <string name="settings_network_customratelimits_interval_unit">seconds</string>
 
+  <string name="settings_networkserver_title">Network Server</string>
+  <string name="settings_networkserver_connection">Connection</string>
+  <string name="settings_networkserver_host">Host</string>
+  <string name="settings_networkserver_port">Port</string>
+  <string name="settings_networkserver_ssl_enabled">Use SSL</string>
+  <string name="settings_networkserver_ssl_verify">Verify SSL</string>
+  <string name="settings_networkserver_password">Password</string>
+  <string name="settings_networkserver_proxy_enabled">Use Proxy</string>
+  <string name="settings_networkserver_proxy_type">Type</string>
+  <string name="settings_networkserver_proxy_type_http">HTTP</string>
+  <string name="settings_networkserver_proxy_type_socks5">SOCKS 5</string>
+  <string name="settings_networkserver_proxy_host">Host</string>
+  <string name="settings_networkserver_proxy_port">Port</string>
+  <string name="settings_networkserver_proxy_user">Username</string>
+  <string name="settings_networkserver_proxy_pass">Password</string>
+
   <string name="settings_identities_title">Identities</string>
   <string name="settings_identity_title">Identity</string>
   <string name="settings_identity_names">Names</string>

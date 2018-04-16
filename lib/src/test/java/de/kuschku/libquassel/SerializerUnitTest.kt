@@ -2,6 +2,7 @@ package de.kuschku.libquassel
 
 import de.kuschku.libquassel.protocol.primitive.serializer.*
 import de.kuschku.libquassel.quassel.QuasselFeatures
+import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
@@ -101,6 +102,30 @@ class SerializerUnitTest {
     assertEquals("Test", roundTrip(StringSerializer.UTF16, "Test"))
     assertEquals("Test", roundTrip(StringSerializer.UTF8, "Test"))
     assertEquals("Test", roundTrip(StringSerializer.C, "Test"))
+  }
+
+  @Test
+  fun networkInfoSerializer() {
+    val info = INetwork.NetworkInfo(
+      networkName = "QuakeNet",
+      identity = 5,
+      serverList = listOf(
+        INetwork.Server(
+          host = "irc.quakenet.org",
+          port = 6667
+        )
+      )
+    )
+    val info2 = info.copy()
+    info2.fromVariantMap(roundTrip(VariantMapSerializer, info.toVariantMap()))
+    assertEquals(info, info2)
+  }
+
+  @Test
+  fun captureSerializer() {
+    val data = byteArrayOf(
+
+    )
   }
 
   companion object {

@@ -104,18 +104,20 @@ abstract class IdentityBaseFragment : SettingsFragment(), SettingsFragment.Savab
       .firstElement()
       .toLiveData().observe(this, Observer {
         it?.let {
-          this.identity = Pair(it, it.copy())
-          this.identity?.let { (_, data) ->
-            identityName.setText(data.identityName())
-            realName.setText(data.realName())
-            ident.setText(data.ident())
-            kickReason.setText(data.kickReason())
-            partReason.setText(data.partReason())
-            quitReason.setText(data.quitReason())
-            awayReason.setText(data.awayReason())
-            detachAway.isChecked = data.detachAwayEnabled()
-            detachAwayReason.setText(data.detachAwayReason())
-            adapter.nicks = data.nicks()
+          if (this.identity == null) {
+            this.identity = Pair(it, it.copy())
+            this.identity?.let { (_, data) ->
+              identityName.setText(data.identityName())
+              realName.setText(data.realName())
+              ident.setText(data.ident())
+              kickReason.setText(data.kickReason())
+              partReason.setText(data.partReason())
+              quitReason.setText(data.quitReason())
+              awayReason.setText(data.awayReason())
+              detachAway.isChecked = data.detachAwayEnabled()
+              detachAwayReason.setText(data.detachAwayReason())
+              adapter.nicks = data.nicks()
+            }
           }
         }
       })

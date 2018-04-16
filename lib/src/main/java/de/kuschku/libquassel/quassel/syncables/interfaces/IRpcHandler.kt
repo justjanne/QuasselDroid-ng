@@ -7,6 +7,7 @@ import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.QVariantMap
 import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.session.Session
 import java.nio.ByteBuffer
 
@@ -44,9 +45,9 @@ interface IRpcHandler {
   @Slot("2disconnectFromCore()")
   fun disconnectFromCore()
 
-  fun createIdentity(identity: QVariantMap, additional: QVariantMap)
+  fun createIdentity(identity: Identity, additional: QVariantMap)
   fun removeIdentity(identityId: IdentityId)
-  fun createNetwork(networkInfo: INetwork.NetworkInfo, channels: List<String>)
+  fun createNetwork(networkInfo: INetwork.NetworkInfo, channels: List<String> = emptyList())
   fun removeNetwork(networkId: NetworkId)
   fun changePassword(peerPtr: Long, user: String, old: String, new: String)
   fun requestKickClient(id: Int)

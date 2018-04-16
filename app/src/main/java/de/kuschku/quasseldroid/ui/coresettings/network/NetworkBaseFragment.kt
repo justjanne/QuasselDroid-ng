@@ -1,6 +1,8 @@
 package de.kuschku.quasseldroid.ui.coresettings.network
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
@@ -21,6 +23,7 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
+import de.kuschku.quasseldroid.ui.coresettings.networkserver.NetworkServerActivity
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
@@ -80,6 +83,9 @@ abstract class NetworkBaseFragment : SettingsFragment(), SettingsFragment.Savabl
   @BindView(R.id.autoreconnect_unlimited)
   lateinit var autoreconnectUnlimited: SwitchCompat
 
+  @BindView(R.id.perform)
+  lateinit var perform: EditText
+
   @BindView(R.id.rejoin_channels)
   lateinit var rejoinChannels: SwitchCompat
 
@@ -120,7 +126,10 @@ abstract class NetworkBaseFragment : SettingsFragment(), SettingsFragment.Savabl
     helper.attachToRecyclerView(servers)
 
     newServer.setOnClickListener {
-      // TODO: Add server screen
+      startActivityForResult(
+        NetworkServerActivity.intent(requireContext()),
+        REQUEST_CREATE_SERVER
+      )
     }
 
     val identityAdapter = IdentityAdapter()
@@ -148,33 +157,36 @@ abstract class NetworkBaseFragment : SettingsFragment(), SettingsFragment.Savabl
       .firstElement()
       .toLiveData().observe(this, Observer {
         it?.let {
-          this.network = Pair(it, it.copy())
-          this.network?.let { (_, data) ->
-            networkName.setText(data.networkName())
+          if (this.network == null) {
+            this.network = Pair(it, it.copy())
+            this.network?.let { (_, data) ->
+              networkName.setText(data.networkName())
 
-            identityAdapter.indexOf(data.identity())?.let(identity::setSelection)
+              identityAdapter.indexOf(data.identity())?.let(identity::setSelection)
 
-            adapter.list = data.serverList()
+              adapter.list = data.serverList()
 
-            saslEnabled.isChecked = data.useSasl()
-            saslAccount.setText(data.saslAccount())
-            saslPassword.setText(data.saslPassword())
+              saslEnabled.isChecked = data.useSasl()
+              saslAccount.setText(data.saslAccount())
+              saslPassword.setText(data.saslPassword())
 
-            autoidentifyEnabled.isChecked = data.useAutoIdentify()
-            autoidentifyService.setText(data.autoIdentifyService())
-            autoidentifyPassword.setText(data.autoIdentifyPassword())
+              autoidentifyEnabled.isChecked = data.useAutoIdentify()
+              autoidentifyService.setText(data.autoIdentifyService())
+              autoidentifyPassword.setText(data.autoIdentifyPassword())
 
-            autoreconnectEnabled.isChecked = data.useAutoReconnect()
-            autoreconnectInterval.setText(data.autoReconnectInterval().toString())
-            autoreconnectRetries.setText(data.autoReconnectRetries().toString())
-            autoreconnectUnlimited.isChecked = data.unlimitedReconnectRetries()
+              autoreconnectEnabled.isChecked = data.useAutoReconnect()
+              autoreconnectInterval.setText(data.autoReconnectInterval().toString())
+              autoreconnectRetries.setText(data.autoReconnectRetries().toString())
+              autoreconnectUnlimited.isChecked = data.unlimitedReconnectRetries()
 
-            rejoinChannels.isChecked = data.rejoinChannels()
+              perform.setText(data.perform().joinToString("\n"))
+              rejoinChannels.isChecked = data.rejoinChannels()
 
-            customratelimitsEnabled.isChecked = data.useCustomMessageRate()
-            customratelimitsBurstSize.setText(data.messageRateBurstSize().toString())
-            customratelimitsUnlimited.isChecked = data.unlimitedMessageRate()
-            customratelimitsDelay.setText("${data.messageRateDelay() / 1000.0}")
+              customratelimitsEnabled.isChecked = data.useCustomMessageRate()
+              customratelimitsBurstSize.setText(data.messageRateBurstSize().toString())
+              customratelimitsUnlimited.isChecked = data.unlimitedMessageRate()
+              customratelimitsDelay.setText("${data.messageRateDelay() / 1000.0}")
+            }
           }
         }
       })
@@ -193,12 +205,35 @@ abstract class NetworkBaseFragment : SettingsFragment(), SettingsFragment.Savabl
     return view
   }
 
-  private fun serverClick(index: Int, server: INetwork.Server) {
-    // TODO: Add server screen
+  private fun serverClick(server: INetwork.Server) {
+    startActivityForResult(
+      NetworkServerActivity.intent(requireContext(), server = server),
+      REQUEST_UPDATE_SERVER
+    )
   }
 
   private fun startDrag(holder: RecyclerView.ViewHolder) {
     helper.startDrag(holder)
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    if (resultCode == Activity.RESULT_OK && data != null) {
+      when (requestCode) {
+        REQUEST_UPDATE_SERVER -> {
+          val old = data.getSerializableExtra("old") as? INetwork.Server
+          val new = data.getSerializableExtra("new") as? INetwork.Server
+          if (old != null && new != null) {
+            adapter.replace(old, new)
+          }
+        }
+        REQUEST_CREATE_SERVER -> {
+          val new = data.getSerializableExtra("new") as? INetwork.Server
+          if (new != null) {
+            adapter.add(new)
+          }
+        }
+      }
+    }
   }
 
   override fun hasChanged() = network?.let { (it, data) ->
@@ -219,6 +254,7 @@ abstract class NetworkBaseFragment : SettingsFragment(), SettingsFragment.Savabl
     data.autoReconnectRetries() != it.autoReconnectRetries() ||
     data.unlimitedReconnectRetries() != it.unlimitedReconnectRetries() ||
     data.rejoinChannels() != it.rejoinChannels() ||
+    data.perform() != it.perform() ||
     data.useCustomMessageRate() != it.useCustomMessageRate() ||
     data.messageRateBurstSize() != it.messageRateBurstSize() ||
     data.unlimitedMessageRate() != it.unlimitedMessageRate() ||
@@ -247,6 +283,7 @@ abstract class NetworkBaseFragment : SettingsFragment(), SettingsFragment.Savabl
                                  ?: data.autoReconnectRetries())
     data.setUnlimitedReconnectRetries(autoreconnectUnlimited.isChecked)
 
+    data.setPerform(perform.text.lines())
     data.setRejoinChannels(rejoinChannels.isChecked)
 
     data.setUseCustomMessageRate(customratelimitsEnabled.isChecked)
@@ -256,5 +293,10 @@ abstract class NetworkBaseFragment : SettingsFragment(), SettingsFragment.Savabl
     data.setMessageRateDelay(customratelimitsDelay.toString().toFloatOrNull()
                                ?.let { (it * 1000).roundToInt() }
                              ?: data.messageRateDelay())
+  }
+
+  companion object {
+    private const val REQUEST_UPDATE_SERVER = 1
+    private const val REQUEST_CREATE_SERVER = 2
   }
 }

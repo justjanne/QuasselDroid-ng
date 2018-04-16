@@ -41,10 +41,10 @@ class RpcHandler(
     backlogStorage.storeMessages(session, message)
   }
 
-  override fun createIdentity(identity: QVariantMap, additional: QVariantMap) =
+  override fun createIdentity(identity: Identity, additional: QVariantMap) =
     RPC(
       "2createIdentity(Identity,QVariantMap)",
-      ARG(identity, QType.Identity),
+      ARG(identity.toVariantMap(), QType.Identity),
       ARG(additional, Type.QVariantMap)
     )
 
@@ -57,7 +57,7 @@ class RpcHandler(
   override fun createNetwork(networkInfo: INetwork.NetworkInfo, channels: List<String>) =
     RPC(
       "2createNetwork(NetworkInfo,QStringList)",
-      ARG(networkInfo, QType.NetworkInfo),
+      ARG(networkInfo.toVariantMap(), QType.NetworkInfo),
       ARG(channels, Type.QStringList)
     )
 

@@ -14,15 +14,31 @@
   <string name="settings_network_perform">Befehle</string>
   <string name="settings_network_rejoin_channels">Beim Verbinden Kanäle wieder betreten</string>
   <string name="settings_network_autoreconnect_enabled">Automatisches Wiederverbinden</string>
-  <string name="settings_network_autoreconnect_interval">Zeit zwischen Verbindungsversuchen</string>
+  <string name="settings_network_autoreconnect_interval">Intervall</string>
   <string name="settings_network_autoreconnect_interval_unit">Sekunden</string>
   <string name="settings_network_autoreconnect_attempts">Maximale Anzahl an Verbindungsversuchen</string>
   <string name="settings_network_autoreconnect_unlimited">Unbegrenzt</string>
   <string name="settings_network_customratelimits_enabled">Benutzerdefinierte Nachrichtenrate</string>
   <string name="settings_network_customratelimits_burstsize">Anzahl Nachrichten pro Übertragung</string>
   <string name="settings_network_customratelimits_unlimited">Unbegrenzt</string>
-  <string name="settings_network_customratelimits_delay">Zeit zwischen Übertragungen</string>
+  <string name="settings_network_customratelimits_delay">Verzögerung</string>
   <string name="settings_network_customratelimits_interval_unit">Sekunden</string>
+
+  <string name="settings_networkserver_title">Netzwerk-Server</string>
+  <string name="settings_networkserver_connection">Verbindung</string>
+  <string name="settings_networkserver_host">Adresse</string>
+  <string name="settings_networkserver_port">Port</string>
+  <string name="settings_networkserver_ssl_enabled">SSL verwenden</string>
+  <string name="settings_networkserver_ssl_verify">SSL verifizieren</string>
+  <string name="settings_networkserver_password">Passwort</string>
+  <string name="settings_networkserver_proxy_enabled">Proxy verwenden</string>
+  <string name="settings_networkserver_proxy_type">Typ</string>
+  <string name="settings_networkserver_proxy_type_http">HTTP</string>
+  <string name="settings_networkserver_proxy_type_socks5">SOCKS 5</string>
+  <string name="settings_networkserver_proxy_host">Adresse</string>
+  <string name="settings_networkserver_proxy_port">Port</string>
+  <string name="settings_networkserver_proxy_user">Benutzername</string>
+  <string name="settings_networkserver_proxy_pass">Passwort</string>
 
   <string name="settings_identities_title">Identitäten</string>
   <string name="settings_identity_title">Identität</string>

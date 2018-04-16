@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:scrollbars="vertical">
+
+  <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_server_network" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_networkserver_connection" />
+    </LinearLayout>
+
+    <LinearLayout
+      style="@style/Widget.CoreSettings.DependentGroup"
+      android:visibility="visible">
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_networkserver_host">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/host"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="irc.freenode.org" />
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_networkserver_port">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/port"
+          style="@style/Widget.CoreSettings.EditText"
+          android:inputType="number"
+          tools:text="6667" />
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/ssl_enabled"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_networkserver_ssl_enabled" />
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/ssl_verify"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_networkserver_ssl_verify" />
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_networkserver_password"
+        app:passwordToggleEnabled="true">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/password"
+          style="@style/Widget.CoreSettings.EditText"
+          android:inputType="textPassword"
+          tools:text="thisisasecurepassword" />
+      </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_settings" />
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/proxy_enabled"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_networkserver_proxy_enabled" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/proxy_group"
+      style="@style/Widget.CoreSettings.DependentGroup"
+      tools:visibility="visible">
+
+      <TextView
+        style="@style/Widget.CoreSettings.EditTextHeader"
+        android:text="@string/settings_networkserver_proxy_type" />
+
+      <Spinner
+        android:id="@+id/proxy_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/widget_spinner_item_toolbar" />
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_networkserver_proxy_host">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/proxy_host"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="localhost" />
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_networkserver_proxy_port">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/proxy_port"
+          style="@style/Widget.CoreSettings.EditText"
+          android:inputType="number"
+          tools:text="8080" />
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_networkserver_proxy_user">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/proxy_user"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="justjanne" />
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:hint="@string/settings_networkserver_proxy_pass"
+        app:passwordToggleEnabled="true">
+
+        <android.support.design.widget.TextInputEditText
+          android:id="@+id/proxy_pass"
+          style="@style/Widget.CoreSettings.EditText"
+          android:inputType="textPassword"
+          tools:text="thisisasecurepassword" />
+      </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+  </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

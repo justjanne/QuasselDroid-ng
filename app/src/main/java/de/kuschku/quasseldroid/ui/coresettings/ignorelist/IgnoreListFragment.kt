@@ -57,9 +57,11 @@ class IgnoreListFragment : SettingsFragment(), SettingsFragment.Savable,
       .map(Optional<IgnoreListManager>::get)
       .toLiveData().observe(this, Observer {
         if (it != null) {
-          this.ignoreListManager = Pair(it, it.copy())
-          this.ignoreListManager?.let { (_, data) ->
-            if (adapter.list.isEmpty()) adapter.list = data.ignoreList()
+          if (this.ignoreListManager == null) {
+            this.ignoreListManager = Pair(it, it.copy())
+            this.ignoreListManager?.let { (_, data) ->
+              adapter.list = data.ignoreList()
+            }
           }
         }
       })
@@ -104,7 +106,7 @@ class IgnoreListFragment : SettingsFragment(), SettingsFragment.Savable,
 
   override fun hasChanged() = ignoreListManager?.let { (it, data) ->
     applyChanges(data)
-    data != it
+    data.ignoreList() != it.ignoreList()
   } ?: false
 
   private fun applyChanges(data: IgnoreListManager) {

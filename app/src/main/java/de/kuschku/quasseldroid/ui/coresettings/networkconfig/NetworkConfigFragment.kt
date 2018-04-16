@@ -60,19 +60,21 @@ class NetworkConfigFragment : SettingsFragment(), SettingsFragment.Savable,
       .map(Optional<NetworkConfig>::get)
       .firstElement()
       .toLiveData().observe(this, Observer {
-        if (it != null) {
-          this.networkConfig = Pair(it, it.copy())
-          this.networkConfig?.let { (_, data) ->
-            pingTimeoutEnabled.isChecked = data.pingTimeoutEnabled()
-            pingInterval.setText(data.pingInterval().toString())
-            maxPingCount.setText(data.maxPingCount().toString())
+        it?.let {
+          if (this.networkConfig == null) {
+            this.networkConfig = Pair(it, it.copy())
+            this.networkConfig?.let { (_, data) ->
+              pingTimeoutEnabled.isChecked = data.pingTimeoutEnabled()
+              pingInterval.setText(data.pingInterval().toString())
+              maxPingCount.setText(data.maxPingCount().toString())
 
-            autoWhoEnabled.isChecked = data.autoWhoEnabled()
-            autoWhoInterval.setText(data.autoWhoInterval().toString())
-            autoWhoNickLimit.setText(data.autoWhoNickLimit().toString())
-            autoWhoDelay.setText(data.autoWhoDelay().toString())
+              autoWhoEnabled.isChecked = data.autoWhoEnabled()
+              autoWhoInterval.setText(data.autoWhoInterval().toString())
+              autoWhoNickLimit.setText(data.autoWhoNickLimit().toString())
+              autoWhoDelay.setText(data.autoWhoDelay().toString())
 
-            standardCtcp.isChecked = data.standardCtcp()
+              standardCtcp.isChecked = data.standardCtcp()
+            }
           }
         }
       })

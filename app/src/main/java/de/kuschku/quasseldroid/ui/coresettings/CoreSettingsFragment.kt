@@ -21,6 +21,7 @@ import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistEditActivity
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityCreateActivity
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityEditActivity
 import de.kuschku.quasseldroid.ui.coresettings.ignorelist.IgnoreListActivity
+import de.kuschku.quasseldroid.ui.coresettings.network.NetworkCreateActivity
 import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivity
 import de.kuschku.quasseldroid.util.helper.combineLatest
@@ -131,7 +132,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     }
 
     newNetwork.setOnClickListener {
-      //
+      NetworkCreateActivity.launch(requireContext())
     }
 
     newIdentity.setOnClickListener {
