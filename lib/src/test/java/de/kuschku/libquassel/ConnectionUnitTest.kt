@@ -30,6 +30,16 @@ class ConnectionUnitTest {
     runTest("localhost", 4242, "user", "pass")
   }
 
+  @Test
+  fun testRemote() {
+    runTest(
+      host = System.getenv("TEST_HOST"),
+      port = System.getenv("TEST_PORT").toInt(),
+      user = System.getenv("TEST_USER"),
+      pass = System.getenv("TEST_PASS")
+    )
+  }
+
   private fun runTest(host: String, port: Int, user: String, pass: String) {
     val start = System.currentTimeMillis()
     val session = Session(
