@@ -4,7 +4,6 @@ import java.nio.ByteBuffer
 import java.nio.channels.WritableByteChannel
 import java.util.*
 
-
 class ChainedByteBuffer(private val bufferSize: Int = 1024, private val direct: Boolean = false) {
   private val bufferList: MutableList<ByteBuffer> = ArrayList()
 

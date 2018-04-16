@@ -124,6 +124,7 @@ class CoreConnection(
   override fun close() {
     try {
       setState(ConnectionState.CLOSED)
+      interrupt()
     } catch (e: Throwable) {
       log(WARN, TAG, "Error encountered while closing connection", e)
     }

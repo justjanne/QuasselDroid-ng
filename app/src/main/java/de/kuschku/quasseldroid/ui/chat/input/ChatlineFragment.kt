@@ -82,7 +82,6 @@ class ChatlineFragment : ServiceBoundFragment() {
     val view = inflater.inflate(R.layout.fragment_chatline, container, false)
     ButterKnife.bind(this, view)
 
-
     val editorViewModel = ViewModelProviders.of(this).get(EditorViewModel::class.java)
     editorViewModel.quasselViewModel.onNext(viewModel)
 

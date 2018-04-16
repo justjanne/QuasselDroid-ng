@@ -1,18 +1,3 @@
-package de.kuschku.quasseldroid.util.ui
-
-import android.content.Context
-import android.content.res.TypedArray
-import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceViewHolder
-import android.support.v7.widget.AppCompatSeekBar
-import android.util.AttributeSet
-import android.util.Log
-import android.widget.SeekBar
-import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
-import de.kuschku.quasseldroid.R
-
 /*
  * Copyright (c) 2015 IRCCloud, Ltd.
  *
@@ -28,8 +13,22 @@ import de.kuschku.quasseldroid.R
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-class SeekBarPreference : Preference, SeekBar.OnSeekBarChangeListener {
+package de.kuschku.quasseldroid.util.ui
 
+import android.content.Context
+import android.content.res.TypedArray
+import android.support.v7.preference.Preference
+import android.support.v7.preference.PreferenceViewHolder
+import android.support.v7.widget.AppCompatSeekBar
+import android.util.AttributeSet
+import android.util.Log
+import android.widget.SeekBar
+import android.widget.TextView
+import butterknife.BindView
+import butterknife.ButterKnife
+import de.kuschku.quasseldroid.R
+
+class SeekBarPreference : Preference, SeekBar.OnSeekBarChangeListener {
   private val TAG = javaClass.name
 
   private var maxValue = 100

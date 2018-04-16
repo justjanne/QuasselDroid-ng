@@ -550,7 +550,6 @@ class Network constructor(
    *
    * @param useCustomRate If true, use custom rate limits, otherwise use Quassel defaults.
    */
-
   override fun setUseCustomMessageRate(useCustomRate: Boolean) {
     if (_useCustomMessageRate == useCustomRate)
       return

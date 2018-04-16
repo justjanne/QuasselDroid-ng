@@ -1,7 +1,6 @@
 package de.kuschku.quasseldroid.util
 
 import org.intellij.lang.annotations.Language
-import java.util.regex.Pattern
 
 @SuppressWarnings("Access")
 object Patterns {
@@ -51,8 +50,7 @@ object Patterns {
 
   @Language("RegExp")
   const val DOMAIN_NAME_STR = """(?:$LOCAL_HOST_NAME|$HOST_NAME|$IP_ADDRESS_STRING)"""
-  val DOMAIN_NAME: Pattern = Pattern.compile(DOMAIN_NAME_STR)
-
+  val DOMAIN_NAME = Regex(DOMAIN_NAME_STR)
   /**
    * Regular expression for valid email characters. Does not include some of the valid characters
    * defined in RFC5321: #&~!^`{}/=$*?|
@@ -79,5 +77,11 @@ object Patterns {
    * and the special characters #&~!^`{}/=$*?| that are included in RFC5321.
    */
   const val AUTOLINK_EMAIL_ADDRESS_STR = """($WORD_BOUNDARY(?:$EMAIL_ADDRESS_LOCAL_PART@$EMAIL_ADDRESS_DOMAIN)$WORD_BOUNDARY)"""
-  val AUTOLINK_EMAIL_ADDRESS = Pattern.compile(AUTOLINK_EMAIL_ADDRESS_STR)
+  val AUTOLINK_EMAIL_ADDRESS = Regex(AUTOLINK_EMAIL_ADDRESS_STR)
+
+  /**
+   * Regular expression pattern to match IRCCloud user idents.
+   */
+  const val IRCCLOUD_IDENT_STR = """(?:~?)[us]id(\d+)"""
+  val IRCCLOUD_IDENT = Regex(IRCCLOUD_IDENT_STR)
 }

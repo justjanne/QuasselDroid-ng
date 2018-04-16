@@ -20,4 +20,3 @@ interface AppComponent : AndroidInjector<QuasselDroid> {
   @Component.Builder
   abstract class Builder : AndroidInjector.Builder<QuasselDroid>()
 }
-

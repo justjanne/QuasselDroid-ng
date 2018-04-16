@@ -112,11 +112,9 @@ class NetworkServerAdapter(
         }
         false
       }
-
       secure = itemView.context.getVectorDrawableCompat(R.drawable.ic_lock)?.mutate()
       partiallySecure = itemView.context.getVectorDrawableCompat(R.drawable.ic_lock)?.mutate()
       insecure = itemView.context.getVectorDrawableCompat(R.drawable.ic_lock_open)?.mutate()
-
       itemView.context.theme.styledAttributes(
         R.attr.colorTintSecure,
         R.attr.colorTintPartiallySecure,
@@ -132,7 +130,6 @@ class NetworkServerAdapter(
       this.item = item
       host.text = item.host
       port.text = item.port.toString()
-
       sslEnabled.setImageDrawable(
         when {
           item.useSsl && item.sslVerify -> secure

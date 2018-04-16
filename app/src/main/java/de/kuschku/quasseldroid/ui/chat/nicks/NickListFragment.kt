@@ -63,7 +63,6 @@ class NickListFragment : ServiceBoundFragment() {
     }
     nickList.itemAnimator = DefaultItemAnimator()
 
-
     val senderColors = requireContext().theme.styledAttributes(
       R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
       R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
@@ -76,56 +75,63 @@ class NickListFragment : ServiceBoundFragment() {
     }
 
     val avatarSize = resources.getDimensionPixelSize(R.dimen.avatar_size)
-
-    viewModel.nickData.map {
-      it.map {
-        val nickName = it.nick
-        val senderColorIndex = IrcUserUtils.senderColor(nickName)
-        val rawInitial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
-                           .firstOrNull() ?: nickName.firstOrNull()
-        val initial = rawInitial?.toUpperCase().toString()
-        val senderColor = senderColors[senderColorIndex]
-
-
-        fun formatNick(nick: CharSequence): CharSequence {
-          val spannableString = SpannableString(nick)
-          spannableString.setSpan(
-            ForegroundColorSpan(senderColor),
-            0,
-            nick.length,
-            SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+    viewModel.nickData.toLiveData().observe(this, Observer {
+      runInBackground {
+        it?.map {
+          val nickName = it.nick
+          val senderColorIndex = IrcUserUtils.senderColor(nickName)
+          val rawInitial = nickName.trimStart('-',
+                                              '_',
+                                              '[',
+                                              ']',
+                                              '{',
+                                              '}',
+                                              '|',
+                                              '`',
+                                              '^',
+                                              '.',
+                                              '\\')
+                             .firstOrNull() ?: nickName.firstOrNull()
+          val initial = rawInitial?.toUpperCase().toString()
+          val senderColor = senderColors[senderColorIndex]
+          fun formatNick(nick: CharSequence): CharSequence {
+            val spannableString = SpannableString(nick)
+            spannableString.setSpan(
+              ForegroundColorSpan(senderColor),
+              0,
+              nick.length,
+              SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+            spannableString.setSpan(
+              StyleSpan(Typeface.BOLD),
+              0,
+              nick.length,
+              SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+            return spannableString
+          }
+          it.copy(
+            displayNick = formatNick(it.nick),
+            fallbackDrawable = TextDrawable.builder().buildRound(initial, senderColor),
+            modes = when (messageSettings.showPrefix) {
+              MessageSettings.ShowPrefixMode.ALL ->
+                it.modes
+              else                               ->
+                it.modes.substring(0, Math.min(it.modes.length, 1))
+            },
+            realname = ircFormatDeserializer.formatString(
+              requireContext(), it.realname.toString(), messageSettings.colorizeMirc
+            ),
+            avatarUrls = AvatarHelper.avatar(messageSettings, it, avatarSize)
           )
-          spannableString.setSpan(
-            StyleSpan(Typeface.BOLD),
-            0,
-            nick.length,
-            SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
-          )
-          return spannableString
-        }
-
-        it.copy(
-          displayNick = formatNick(it.nick),
-          fallbackDrawable = TextDrawable.builder().buildRound(initial, senderColor),
-          modes = when (messageSettings.showPrefix) {
-            MessageSettings.ShowPrefixMode.ALL ->
-              it.modes
-            else                               ->
-              it.modes.substring(0, Math.min(it.modes.length, 1))
-          },
-          realname = ircFormatDeserializer.formatString(
-            requireContext(), it.realname.toString(), messageSettings.colorizeMirc
-          ),
-          avatarUrls = AvatarHelper.avatar(messageSettings, it, avatarSize)
-        )
-      }.sortedBy {
-        IrcCaseMappers[it.networkCasemapping].toLowerCase(it.nick.trimStart(*IGNORED_CHARS))
-          .trimStart(*IGNORED_CHARS)
-      }.sortedBy {
-        it.lowestMode
+        }?.sortedBy {
+          IrcCaseMappers[it.networkCasemapping].toLowerCase(it.nick.trimStart(*IGNORED_CHARS))
+            .trimStart(*IGNORED_CHARS)
+        }?.sortedBy {
+          it.lowestMode
+        }?.let(nickListAdapter::submitList)
       }
-    }.toLiveData().observe(this, Observer(nickListAdapter::submitList))
-
+    })
     savedInstanceState?.run {
       nickList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
     }

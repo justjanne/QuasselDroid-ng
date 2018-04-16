@@ -22,7 +22,6 @@ class IrcUser(
   }
 
   override fun toVariantMap() = initProperties()
-
   override fun fromVariantMap(properties: QVariantMap) {
     initSetProperties(properties)
   }
@@ -64,7 +63,6 @@ class IrcUser(
     setWhoisServiceReply(properties["whoisServiceReply"].valueOr(this::whoisServiceReply))
     setSuserHost(properties["suserHost"].valueOr(this::suserHost))
     setEncrypted(properties["encrypted"].valueOr(this::encrypted))
-
     setUserModes(properties["userModes"].valueOr(this::userModes))
   }
 
@@ -253,106 +251,93 @@ class IrcUser(
   }
 
   private val hasChangedNotification = BehaviorSubject.createDefault(Unit)
+
   private var _nick: String = HostmaskHelper.nick(hostmask)
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
-
   private var _user: String = HostmaskHelper.user(hostmask)
-
+    set(value) {
+      field = value
+      hasChangedNotification.onNext(Unit)
+    }
   private var _host: String = HostmaskHelper.host(hostmask)
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
-
   private var _realName: String = ""
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
-
   private var _account: String = ""
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
-
   private var _awayMessage: String = ""
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
-
   private var _away: Boolean = false
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
-
   private var _server: String = ""
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
-
   private var _idleTime: Instant = Instant.EPOCH
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
-
   private var _idleTimeSet: Instant = Instant.EPOCH
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
-
   private var _loginTime: Instant = Instant.EPOCH
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
-
   private var _ircOperator: String = ""
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
-
   private var _lastAwayMessage: Int = 0
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
-
   private var _whoisServiceReply: String = ""
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
-
   private var _suserHost: String = ""
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
-
   private var _encrypted: Boolean = false
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
-
   private var _channels: MutableSet<IrcChannel> = mutableSetOf()
-
   private var _userModes: String = ""
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
     }
-
   private var _network: Network = network
   private var _codecForEncoding: Charset? = null
   private var _codecForDecoding: Charset? = null
@@ -361,4 +346,3 @@ class IrcUser(
     val NULL = IrcUser("", Network.NULL, SignalProxy.NULL)
   }
 }
-

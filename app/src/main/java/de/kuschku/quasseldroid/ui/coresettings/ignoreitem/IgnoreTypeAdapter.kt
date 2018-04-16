@@ -68,4 +68,3 @@ class IgnoreTypeAdapter(val data: List<IgnoreTypeItem>) :
     }
   }
 }
-

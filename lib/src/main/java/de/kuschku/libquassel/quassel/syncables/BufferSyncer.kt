@@ -5,15 +5,13 @@ import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferSyncer
 import de.kuschku.libquassel.session.ISession
-import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
 class BufferSyncer constructor(
-  proxy: SignalProxy,
   private val session: ISession
-) : SyncableObject(proxy, "BufferSyncer"), IBufferSyncer {
+) : SyncableObject(session.proxy, "BufferSyncer"), IBufferSyncer {
   fun lastSeenMsg(buffer: BufferId): MsgId = _lastSeenMsg[buffer] ?: 0
   fun liveLastSeenMsg(buffer: BufferId): Observable<MsgId> = live_lastSeenMsg.map {
     markerLine(buffer)

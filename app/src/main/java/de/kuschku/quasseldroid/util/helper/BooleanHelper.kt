@@ -7,4 +7,3 @@ inline fun <R> Boolean.letIf(block: () -> R): R? {
 inline fun <R> Boolean.letUnless(block: () -> R): R? {
   return if (this) null else block()
 }
-

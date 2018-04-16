@@ -7,7 +7,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.concurrent.atomic.AtomicBoolean
 
-
 object AndroidThreeTenBackport {
   private val initialized = AtomicBoolean()
 

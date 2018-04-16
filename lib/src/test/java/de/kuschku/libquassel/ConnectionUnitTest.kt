@@ -3,7 +3,6 @@ package de.kuschku.libquassel
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.ProtocolFeature
 import de.kuschku.libquassel.quassel.QuasselFeatures
-import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.session.BacklogStorage
 import de.kuschku.libquassel.session.ConnectionState
 import de.kuschku.libquassel.session.Session
@@ -32,6 +31,7 @@ class ConnectionUnitTest {
   }
 
   private fun runTest(host: String, port: Int, user: String, pass: String) {
+    val start = System.currentTimeMillis()
     val session = Session(
       ClientData(
         identifier = "libquassel test",
@@ -61,16 +61,9 @@ class ConnectionUnitTest {
     }, user to pass, {}, {})
     session.state.subscribe {
       if (it == ConnectionState.CONNECTED) {
-        session.rpcHandler?.createNetwork(INetwork.NetworkInfo(
-          networkName = "QuakeNet",
-          identity = session.identities.values.firstOrNull()?.id()!!,
-          serverList = listOf(
-            INetwork.Server(
-              host = "irc.quakenet.org",
-              port = 6667
-            )
-          )
-        ), emptyList())
+        val end = System.currentTimeMillis()
+        println("Connection took ${0.001 * (end - start)} seconds")
+        session.close()
       }
     }
     session.join()

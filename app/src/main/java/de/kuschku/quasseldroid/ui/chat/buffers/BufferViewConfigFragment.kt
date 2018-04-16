@@ -12,6 +12,7 @@ import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message_Type
+import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.flag.hasFlag
@@ -22,12 +23,13 @@ import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.helper.combineLatest
-import de.kuschku.quasseldroid.util.helper.map
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.helper.zip
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.viewmodel.data.BufferHiddenState
+import de.kuschku.quasseldroid.viewmodel.data.BufferListItem
+import de.kuschku.quasseldroid.viewmodel.data.BufferState
 import javax.inject.Inject
 
 class BufferViewConfigFragment : ServiceBoundFragment() {
@@ -196,42 +198,58 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     }
 
     listAdapter = BufferListAdapter(
-      this,
-      viewModel.bufferList.toLiveData().zip(database.filtered().listen(accountId)).map {
-        val (data, activityList) = it
-        val (config, list) = data ?: Pair(null, emptyList())
-        val minimumActivity = config?.minimumActivity() ?: Buffer_Activity.NONE
-        val activities = activityList.map { it.bufferId to it.filtered }.toMap()
-        list.map {
-          val activity = it.activity - (activities[it.info.bufferId] ?: 0)
-          it.copy(
-            description = ircFormatDeserializer.formatString(
-              requireContext(), it.description.toString(), messageSettings.colorizeMirc
-            ),
-            activity = activity,
-            bufferActivity = Buffer_Activity.of(
-              when {
-                it.highlights > 0                     -> Buffer_Activity.Highlight
-                activity.hasFlag(Message_Type.Plain) ||
-                activity.hasFlag(Message_Type.Notice) ||
-                activity.hasFlag(Message_Type.Action) -> Buffer_Activity.NewMessage
-                activity.isNotEmpty()                 -> Buffer_Activity.OtherActivity
-                else                                  -> Buffer_Activity.NoActivity
-              }
-            )
-          )
-        }.filter { props ->
-          minimumActivity.toInt() <= props.bufferActivity.toInt() ||
-          props.info.type.hasFlag(Buffer_Type.StatusBuffer)
-        }
-      },
       viewModel.selectedBufferId,
-      viewModel.collapsedNetworks,
-      ::runInBackground,
-      activity!!::runOnUiThread,
-      ::clickListener,
-      ::longClickListener
+      viewModel.collapsedNetworks
     )
+    combineLatest(viewModel.bufferList, viewModel.collapsedNetworks, viewModel.selectedBuffer)
+      .toLiveData().zip(database.filtered().listen(accountId))
+      .observe(this, Observer { it ->
+        it?.let { (data, activityList) ->
+          runInBackground {
+            val (info, collapsedNetworks, selected) = data
+            val (config, list) = info ?: Pair(null, emptyList())
+            val minimumActivity = config?.minimumActivity() ?: Buffer_Activity.NONE
+            val activities = activityList.associate { it.bufferId to it.filtered }
+            listAdapter.submitList(list.sortedBy { props ->
+              !props.info.type.hasFlag(Buffer_Type.StatusBuffer)
+            }.sortedBy { props ->
+              props.network.networkName
+            }.map { props ->
+              BufferListItem(
+                props,
+                BufferState(
+                  networkExpanded = !collapsedNetworks.contains(props.network.networkId),
+                  selected = selected.info?.bufferId == props.info.bufferId
+                )
+              )
+            }.filter { (props, state) ->
+              props.info.type.hasFlag(BufferInfo.Type.StatusBuffer) || state.networkExpanded
+            }.map {
+              val activity = it.props.activity - (activities[it.props.info.bufferId] ?: 0)
+              it.copy(
+                props = it.props.copy(
+                  activity = activity,
+                  bufferActivity = Buffer_Activity.of(
+                    when {
+                      it.props.highlights > 0               -> Buffer_Activity.Highlight
+                      activity.hasFlag(Message_Type.Plain) ||
+                      activity.hasFlag(Message_Type.Notice) ||
+                      activity.hasFlag(Message_Type.Action) -> Buffer_Activity.NewMessage
+                      activity.isNotEmpty()                 -> Buffer_Activity.OtherActivity
+                      else                                  -> Buffer_Activity.NoActivity
+                    }
+                  )
+                )
+              )
+            }.filter {
+              minimumActivity.toInt() <= it.props.bufferActivity.toInt() ||
+              it.props.info.type.hasFlag(Buffer_Type.StatusBuffer)
+            })
+          }
+        }
+      })
+    listAdapter.setOnClickListener(this@BufferViewConfigFragment::clickListener)
+    listAdapter.setOnLongClickListener(this@BufferViewConfigFragment::longClickListener)
     chatList.adapter = listAdapter
 
     viewModel.selectedBuffer.toLiveData().observe(this, Observer { buffer ->

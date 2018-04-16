@@ -24,6 +24,7 @@ class Session(
   val disconnectFromCore: () -> Unit,
   exceptionHandler: (Throwable) -> Unit
 ) : ProtocolHandler(exceptionHandler), ISession {
+  override val objectStorage: ObjectStorage = ObjectStorage(this)
   override val proxy: SignalProxy = this
   override val features = Features(clientData.clientFeatures, QuasselFeatures.empty())
 
@@ -41,7 +42,7 @@ class Session(
   override val aliasManager = AliasManager(this)
   override val backlogManager = BacklogManager(this, backlogStorage)
   override val bufferViewManager = BufferViewManager(this)
-  override val bufferSyncer = BufferSyncer(this, this)
+  override val bufferSyncer = BufferSyncer(this)
   override val certManagers = mutableMapOf<IdentityId, CertManager>()
   override val coreInfo = CoreInfo(this)
   override val dccConfig = DccConfig(this)
@@ -210,7 +211,6 @@ class Session(
 
   override fun dispatch(message: SignalProxyMessage) {
     if (closed) return
-
     coreConnection.dispatch(message)
   }
 

@@ -13,7 +13,6 @@ import de.kuschku.quasseldroid.util.compatibility.AndroidCompatibilityUtils
 import de.kuschku.quasseldroid.util.compatibility.AndroidLoggingHandler
 import de.kuschku.quasseldroid.util.compatibility.AndroidStreamChannelFactory
 
-
 class QuasselDroid : DaggerApplication() {
   override fun applicationInjector(): AndroidInjector<out QuasselDroid> =
     DaggerAppComponent.builder().create(this)

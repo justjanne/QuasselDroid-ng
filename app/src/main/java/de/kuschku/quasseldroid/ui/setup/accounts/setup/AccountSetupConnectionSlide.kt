@@ -17,6 +17,7 @@ import de.kuschku.quasseldroid.util.TextValidator
 class AccountSetupConnectionSlide : SlideFragment() {
   @BindView(R.id.hostWrapper)
   lateinit var hostWrapper: TextInputLayout
+
   @BindView(R.id.host)
   lateinit var hostField: EditText
 
@@ -54,7 +55,7 @@ class AccountSetupConnectionSlide : SlideFragment() {
       hostWrapper::setError, resources.getString(R.string.hint_invalid_host)
     ) {
       override fun validate(text: Editable) =
-        text.toString().matches(Patterns.DOMAIN_NAME.toRegex())
+        text.toString().matches(Patterns.DOMAIN_NAME)
 
       override fun onChanged() = updateValidity()
     }

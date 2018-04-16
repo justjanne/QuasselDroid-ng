@@ -1,5 +1,3 @@
-package de.kuschku.quasseldroid.util.ui
-
 /*
  * Copyright (C) 2013 The Android Open Source Project
  *
@@ -15,6 +13,7 @@ package de.kuschku.quasseldroid.util.ui
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package de.kuschku.quasseldroid.util.ui
 
 import android.content.Context
 import android.util.AttributeSet

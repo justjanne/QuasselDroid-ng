@@ -1,9 +1,7 @@
 package de.kuschku.quasseldroid.ui.chat.buffers
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
 import android.graphics.drawable.Drawable
+import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -15,12 +13,14 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Activity
-import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.util.helper.*
+import de.kuschku.quasseldroid.util.helper.getVectorDrawableCompat
+import de.kuschku.quasseldroid.util.helper.styledAttributes
+import de.kuschku.quasseldroid.util.helper.tint
+import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.viewmodel.data.BufferListItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferProps
 import de.kuschku.quasseldroid.viewmodel.data.BufferState
@@ -28,16 +28,26 @@ import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
 import io.reactivex.subjects.BehaviorSubject
 
 class BufferListAdapter(
-  lifecycleOwner: LifecycleOwner,
-  liveData: LiveData<List<BufferProps>?>,
   private val selectedBuffer: BehaviorSubject<BufferId>,
-  private val collapsedNetworks: BehaviorSubject<Set<NetworkId>>,
-  runInBackground: (() -> Unit) -> Any,
-  runOnUiThread: (Runnable) -> Any,
-  private val clickListener: ((BufferId) -> Unit)? = null,
-  private val longClickListener: ((BufferId) -> Unit)? = null
-) : RecyclerView.Adapter<BufferListAdapter.BufferViewHolder>() {
-  var data = emptyList<BufferListItem>()
+  private val collapsedNetworks: BehaviorSubject<Set<NetworkId>>
+) : ListAdapter<BufferListItem, BufferListAdapter.BufferViewHolder>(
+  object : DiffUtil.ItemCallback<BufferListItem>() {
+    override fun areItemsTheSame(oldItem: BufferListItem, newItem: BufferListItem) =
+      oldItem.props.info.bufferId == newItem.props.info.bufferId
+
+    override fun areContentsTheSame(oldItem: BufferListItem, newItem: BufferListItem) =
+      oldItem == newItem
+  }
+) {
+  private var clickListener: ((BufferId) -> Unit)? = null
+  private var longClickListener: ((BufferId) -> Unit)? = null
+  fun setOnClickListener(listener: ((BufferId) -> Unit)?) {
+    this.clickListener = listener
+  }
+
+  fun setOnLongClickListener(listener: ((BufferId) -> Unit)?) {
+    this.longClickListener = listener
+  }
 
   fun expandListener(networkId: NetworkId) {
     if (collapsedNetworks.value.orEmpty().contains(networkId))
@@ -54,52 +64,6 @@ class BufferListAdapter(
 
   fun unselectAll() {
     selectedBuffer.onNext(-1)
-  }
-
-  init {
-    liveData.zip(collapsedNetworks.toLiveData(), selectedBuffer.toLiveData()).observe(
-      lifecycleOwner, Observer { it: Triple<List<BufferProps>?, Set<NetworkId>, BufferId>? ->
-      val old: List<BufferListItem> = data
-      runInBackground {
-        val list = it?.first ?: emptyList()
-        val collapsedNetworks = it?.second ?: emptySet()
-        val selected = it?.third ?: -1
-
-        val new: List<BufferListItem> = list.sortedBy { props ->
-          !props.info.type.hasFlag(Buffer_Type.StatusBuffer)
-        }.sortedBy { props ->
-          props.network.networkName
-        }.map { props ->
-          BufferListItem(
-            props,
-            BufferState(
-              networkExpanded = !collapsedNetworks.contains(props.network.networkId),
-              selected = selected == props.info.bufferId
-            )
-          )
-        }.filter { (props, state) ->
-          props.info.type.hasFlag(BufferInfo.Type.StatusBuffer) || state.networkExpanded
-        }
-
-        val result = DiffUtil.calculateDiff(
-          object : DiffUtil.Callback() {
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-              old[oldItemPosition].props.info.bufferId == new[newItemPosition].props.info.bufferId
-
-            override fun getOldListSize() = old.size
-            override fun getNewListSize() = new.size
-
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-              old[oldItemPosition] == new[newItemPosition]
-          }, true
-        )
-        runOnUiThread(
-          Runnable {
-            data = new
-            result.dispatchUpdatesTo(this@BufferListAdapter)
-          })
-      }
-    })
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
@@ -138,12 +102,9 @@ class BufferListAdapter(
   }
 
   override fun onBindViewHolder(holder: BufferViewHolder, position: Int) =
-    holder.bind(data[position].props, data[position].state)
+    holder.bind(getItem(position).props, getItem(position).state)
 
-  override fun getItemCount() = data.size
-
-  override fun getItemViewType(position: Int) = data[position].props.info.type.toInt()
-
+  override fun getItemViewType(position: Int) = getItem(position).props.info.type.toInt()
   abstract class BufferViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     abstract fun bind(props: BufferProps, state: BufferState)
 

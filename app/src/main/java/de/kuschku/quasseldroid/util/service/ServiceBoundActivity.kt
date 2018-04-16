@@ -43,7 +43,6 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
   protected val backend: BehaviorSubject<Optional<Backend>>
     get() = connection.backend
 
-
   @Inject
   lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 

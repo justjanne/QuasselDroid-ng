@@ -30,7 +30,6 @@ abstract class SettingsActivity(private val fragment: Fragment? = null) : Servic
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     val fragment = this.fragment ?: this.fragment()
-
     if (fragment != null) {
       val transaction = supportFragmentManager.beginTransaction()
       fragment.arguments = arguments

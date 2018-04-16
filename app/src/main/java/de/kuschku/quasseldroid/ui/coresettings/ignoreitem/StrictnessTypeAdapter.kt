@@ -68,4 +68,3 @@ class StrictnessTypeAdapter(val data: List<StrictnessTypeItem>) :
     }
   }
 }
-

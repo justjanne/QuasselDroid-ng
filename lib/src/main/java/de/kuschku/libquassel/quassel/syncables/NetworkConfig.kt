@@ -15,7 +15,6 @@ class NetworkConfig constructor(
   }
 
   override fun toVariantMap() = initProperties()
-
   override fun fromVariantMap(properties: QVariantMap) {
     initSetProperties(properties)
   }

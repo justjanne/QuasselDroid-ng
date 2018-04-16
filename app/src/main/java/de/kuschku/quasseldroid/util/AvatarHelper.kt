@@ -42,7 +42,7 @@ object AvatarHelper {
   ).flatten()
 
   private fun gravatarFallback(realname: String, size: Int?): List<String> {
-    return Regex(Patterns.AUTOLINK_EMAIL_ADDRESS_STR)
+    return Patterns.AUTOLINK_EMAIL_ADDRESS
       .findAll(realname)
       .mapNotNull {
         it.groups[1]?.value
@@ -57,7 +57,7 @@ object AvatarHelper {
   }
 
   private fun ircCloudFallback(ident: String, size: Int?): List<String> {
-    val userId = Regex("(?:~?)[us]id(\\d+)").matchEntire(ident)?.groupValues?.lastOrNull()
+    val userId = Patterns.IRCCLOUD_IDENT.matchEntire(ident)?.groupValues?.lastOrNull()
                  ?: return emptyList()
 
     if (size != null) {

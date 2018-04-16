@@ -22,7 +22,6 @@ import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
 
-
 abstract class IdentityBaseFragment : SettingsFragment(), SettingsFragment.Savable,
                                       SettingsFragment.Changeable {
 

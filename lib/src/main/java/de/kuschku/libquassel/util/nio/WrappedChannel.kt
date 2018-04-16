@@ -20,7 +20,6 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLSocket
 import javax.net.ssl.X509TrustManager
 
-
 class WrappedChannel(
   private val socket: Socket,
   private var rawInStream: InputStream? = null,

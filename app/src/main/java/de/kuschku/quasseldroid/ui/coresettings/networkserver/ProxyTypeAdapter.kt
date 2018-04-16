@@ -64,4 +64,3 @@ class ProxyTypeAdapter(val data: List<ProxyTypeItem>) :
     }
   }
 }
-

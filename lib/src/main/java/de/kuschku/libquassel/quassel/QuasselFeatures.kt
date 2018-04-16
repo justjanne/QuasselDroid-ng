@@ -24,4 +24,3 @@ class QuasselFeatures(
     fun all() = QuasselFeatures(ExtendedFeature.values().toSet(), emptySet())
   }
 }
-

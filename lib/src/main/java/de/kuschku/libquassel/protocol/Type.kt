@@ -3,7 +3,6 @@ package de.kuschku.libquassel.protocol
 import de.kuschku.libquassel.protocol.primitive.serializer.*
 import java.util.*
 
-
 enum class Type(val id: kotlin.Int, val serializer: Serializer<*>? = null) {
   Void(0, VoidSerializer),
   Bool(1, BoolSerializer),

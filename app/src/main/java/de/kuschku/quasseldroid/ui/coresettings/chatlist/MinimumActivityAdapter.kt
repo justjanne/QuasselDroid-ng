@@ -68,4 +68,3 @@ class MinimumActivityAdapter(val data: List<MinimumActivityItem>) :
     }
   }
 }
-

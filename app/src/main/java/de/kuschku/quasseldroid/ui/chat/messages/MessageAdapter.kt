@@ -234,4 +234,3 @@ class MessageAdapter @Inject constructor(
     }
   }
 }
-

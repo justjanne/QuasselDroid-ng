@@ -5,4 +5,3 @@ enum class BufferHiddenState {
   HIDDEN_TEMPORARY,
   HIDDEN_PERMANENT
 }
-

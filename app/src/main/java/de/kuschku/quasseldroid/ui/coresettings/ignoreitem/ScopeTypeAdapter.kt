@@ -68,4 +68,3 @@ class ScopeTypeAdapter(val data: List<ScopeTypeItem>) :
     }
   }
 }
-

@@ -35,9 +35,7 @@ interface ISession : Closeable {
   val initStatus: Observable<Pair<Int, Int>>
 
   val proxy: SignalProxy
-
   val error: Flowable<HandshakeMessage>
-
   val lag: Observable<Long>
 
   fun login(user: String, pass: String)
@@ -70,7 +68,6 @@ interface ISession : Closeable {
       override val lag: Observable<Long> = Observable.just(0L)
 
       override fun login(user: String, pass: String) = Unit
-
       override fun close() = Unit
     }
   }

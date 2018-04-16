@@ -18,8 +18,6 @@ import de.kuschku.quasseldroid.util.helper.toLiveData
 
 class NetworkConfigFragment : SettingsFragment(), SettingsFragment.Savable,
                               SettingsFragment.Changeable {
-  private var networkConfig: Pair<NetworkConfig, NetworkConfig>? = null
-
   @BindView(R.id.ping_timeout_enabled)
   lateinit var pingTimeoutEnabled: SwitchCompat
 
@@ -49,6 +47,8 @@ class NetworkConfigFragment : SettingsFragment(), SettingsFragment.Savable,
 
   @BindView(R.id.standard_ctcp)
   lateinit var standardCtcp: SwitchCompat
+
+  private var networkConfig: Pair<NetworkConfig, NetworkConfig>? = null
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
@@ -84,7 +84,6 @@ class NetworkConfigFragment : SettingsFragment(), SettingsFragment.Savable,
 
     return view
   }
-
 
   override fun onSave() = networkConfig?.let { (it, data) ->
     applyChanges(data)

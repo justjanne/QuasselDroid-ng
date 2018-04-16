@@ -31,7 +31,6 @@ abstract class RecyclerSpinnerAdapter<VH : RecyclerView.ViewHolder> : BaseAdapte
     return holder.itemView
   }
 
-
   protected abstract fun onBindViewHolder(holder: VH, position: Int)
   protected abstract fun onCreateViewHolder(parent: ViewGroup, dropDown: Boolean): VH
 }

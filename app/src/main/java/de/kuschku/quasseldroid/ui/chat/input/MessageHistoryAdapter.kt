@@ -54,7 +54,6 @@ class MessageHistoryAdapter : ListAdapter<CharSequence, MessageHistoryAdapter.Me
 
     fun bind(data: CharSequence) {
       value = data
-
       content.text = data
     }
   }

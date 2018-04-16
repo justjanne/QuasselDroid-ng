@@ -5,7 +5,6 @@ import java.nio.ByteBuffer
 import java.nio.channels.WritableByteChannel
 import java.nio.channels.spi.AbstractInterruptibleChannel
 
-
 class WritableWrappedChannel(
   private var backingStream: OutputStream
 ) : AbstractInterruptibleChannel(), WritableByteChannel {

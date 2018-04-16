@@ -16,11 +16,13 @@ import de.kuschku.quasseldroid.util.TextValidator
 class AccountSetupUserSlide : SlideFragment() {
   @BindView(R.id.userWrapper)
   lateinit var userWrapper: TextInputLayout
+
   @BindView(R.id.user)
   lateinit var userField: EditText
 
   @BindView(R.id.passWrapper)
   lateinit var passWrapper: TextInputLayout
+
   @BindView(R.id.pass)
   lateinit var passField: EditText
 

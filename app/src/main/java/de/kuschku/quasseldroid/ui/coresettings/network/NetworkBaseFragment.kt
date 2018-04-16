@@ -31,7 +31,6 @@ import kotlin.math.roundToInt
 
 abstract class NetworkBaseFragment : SettingsFragment(), SettingsFragment.Savable,
                                      SettingsFragment.Changeable {
-
   @BindView(R.id.network_name)
   lateinit var networkName: EditText
 

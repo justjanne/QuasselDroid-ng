@@ -27,8 +27,6 @@ import de.kuschku.quasseldroid.util.helper.toLiveData
 
 abstract class ChatListBaseFragment : SettingsFragment(), SettingsFragment.Savable,
                                       SettingsFragment.Changeable {
-  protected var chatlist: Pair<BufferViewConfig?, BufferViewConfig>? = null
-
   @BindView(R.id.buffer_view_name)
   lateinit var bufferViewName: EditText
 
@@ -61,6 +59,8 @@ abstract class ChatListBaseFragment : SettingsFragment(), SettingsFragment.Savab
 
   @BindView(R.id.hide_inactive_networks)
   lateinit var hideInactiveNetworks: SwitchCompat
+
+  protected var chatlist: Pair<BufferViewConfig?, BufferViewConfig>? = null
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {

@@ -54,10 +54,10 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical"
-      android:textColor="?attr/colorForegroundSecondary"
-      android:visibility="gone"
       android:ellipsize="marquee"
       android:singleLine="true"
+      android:textColor="?attr/colorForegroundSecondary"
+      android:visibility="gone"
       tools:text="@sample/messages.json/data/sender"
       tools:visibility="visible" />
 

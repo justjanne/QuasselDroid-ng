@@ -22,4 +22,3 @@ class ChannelInfoActivity : SettingsActivity(ChannelInfoFragment()) {
     }
   }
 }
-

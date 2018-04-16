@@ -52,13 +52,9 @@ class NetworkAdapter : RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(
   }
 
   override fun getItem(position: Int): INetwork.NetworkInfo? = data[position]
-
   override fun getItemId(position: Int) = getItem(position)?.networkId?.toLong() ?: -1
-
   override fun hasStableIds() = true
-
   override fun getCount() = data.size
-
   class NetworkViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     @BindView(android.R.id.text1)
     lateinit var text: TextView

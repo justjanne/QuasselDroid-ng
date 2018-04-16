@@ -124,10 +124,10 @@ class AndroidHandlerService : HandlerService {
       }
     }
 
-    private class ScheduledRunnable internal constructor(private val handler: Handler,
-                                                         private val delegate: Runnable) : Runnable,
-                                                                                           Disposable {
-
+    private class ScheduledRunnable internal constructor(
+      private val handler: Handler,
+      private val delegate: Runnable
+    ) : Runnable, Disposable {
       @Volatile
       private var disposed: Boolean = false
 

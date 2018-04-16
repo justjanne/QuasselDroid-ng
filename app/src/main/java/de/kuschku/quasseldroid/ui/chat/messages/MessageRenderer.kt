@@ -21,4 +21,3 @@ interface MessageRenderer {
            isFollowUp: Boolean,
            isEmoji: Boolean) = Unit
 }
-

@@ -247,7 +247,7 @@ class MessageListFragment : ServiceBoundFragment() {
                         expanded: Set<MsgId>, markerLine: MsgId?): List<DisplayMessage> {
       var previous: QuasselDatabase.DatabaseMessage? = null
       var previousDate: ZonedDateTime? = null
-      return list.asReversed().map {
+      return list.mapReverse {
         val date = it.time.atZone(ZoneId.systemDefault()).truncatedTo(ChronoUnit.DAYS)
         val isSameDay = previousDate?.isEqual(date) ?: false
         val isFollowUp = previous?.sender == it.sender && previous?.type == it.type && isSameDay
@@ -262,7 +262,7 @@ class MessageListFragment : ServiceBoundFragment() {
           isMarkerLine = markerLine == it.messageId,
           isEmoji = false
         )
-      }.asReversed()
+      }
     }
 
     val data = combineLatest(viewModel.buffer,
