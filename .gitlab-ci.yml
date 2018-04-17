@@ -24,7 +24,7 @@ build:
     - cp app/build/outputs/apk/release/*.apk .
   artifacts:
     paths:
-    - *.apk
+      - *.apk
 
 unitTests:
   stage: test
