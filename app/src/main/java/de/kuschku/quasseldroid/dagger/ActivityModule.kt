@@ -26,6 +26,8 @@ import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistCreateActivity
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistCreateFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistEditActivity
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistEditFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.highlightlist.HighlightListActivity
+import de.kuschku.quasseldroid.ui.coresettings.highlightlist.HighlightListFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityCreateActivity
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityCreateFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityEditActivity
@@ -99,7 +101,10 @@ abstract class ActivityModule {
   abstract fun bindChatListEditActivity(): ChatlistEditActivity
 
   @ContributesAndroidInjector(modules = [IgnoreListFragmentProvider::class])
-  abstract fun bindIgnoreActivity(): IgnoreListActivity
+  abstract fun bindIgnoreListActivity(): IgnoreListActivity
+
+  @ContributesAndroidInjector(modules = [HighlightListFragmentProvider::class])
+  abstract fun bindHighlightListActivity(): HighlightListActivity
 
   @ContributesAndroidInjector(modules = [IgnoreItemFragmentProvider::class])
   abstract fun bindIgnoreItemActivity(): IgnoreItemActivity

@@ -89,7 +89,7 @@
     <activity
       android:name=".ui.coresettings.networkserver.NetworkServerActivity"
       android:exported="false"
-      android:label="@string/settings_network_title"
+      android:label="@string/settings_networkserver_title"
       android:windowSoftInputMode="adjustResize" />
     <activity
       android:name=".ui.coresettings.identity.IdentityCreateActivity"
@@ -126,6 +126,12 @@
       android:exported="false"
       android:label="@string/settings_ignoreitem_title"
       android:parentActivityName=".ui.coresettings.ignorelist.IgnoreListActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.coresettings.highlightlist.HighlightListActivity"
+      android:exported="false"
+      android:label="@string/settings_highlightlist_title"
+      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
       android:name=".ui.coresettings.networkconfig.NetworkConfigActivity"
