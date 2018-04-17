@@ -27,6 +27,7 @@ interface ISession : Closeable {
   val identities: Map<IdentityId, Identity>
   fun liveIdentities(): Observable<Map<IdentityId, Identity>>
   val ignoreListManager: IgnoreListManager?
+  val highlightRuleManager: HighlightRuleManager?
   val ircListHelper: IrcListHelper?
   val networks: Map<NetworkId, Network>
   fun liveNetworks(): Observable<Map<NetworkId, Network>>
@@ -60,6 +61,7 @@ interface ISession : Closeable {
       override val identities: Map<IdentityId, Identity> = emptyMap()
       override fun liveIdentities() = Observable.empty<Map<IdentityId, Identity>>()
       override val ignoreListManager: IgnoreListManager? = null
+      override val highlightRuleManager: HighlightRuleManager? = null
       override val ircListHelper: IrcListHelper? = null
       override val networks: Map<NetworkId, Network> = emptyMap()
       override fun liveNetworks() = Observable.empty<Map<NetworkId, Network>>()

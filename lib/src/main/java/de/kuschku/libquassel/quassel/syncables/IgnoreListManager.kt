@@ -80,12 +80,12 @@ class IgnoreListManager constructor(
 
   override fun toggleIgnoreRule(ignoreRule: String) {
     _ignoreList = _ignoreList.map {
-      if (it.ignoreRule == ignoreRule) it.toggleActive() else it
+      if (it.ignoreRule == ignoreRule) it.copy(isActive = !it.isActive) else it
     }
   }
 
-  fun indexOf(ignore: String): Int = _ignoreList.map(IgnoreListItem::ignoreRule).indexOf(ignore)
-  fun contains(ignore: String) = _ignoreList.map(IgnoreListItem::ignoreRule).contains(ignore)
+  fun indexOf(ignore: String): Int = _ignoreList.indexOfFirst { it.ignoreRule == ignore }
+  fun contains(ignore: String) = _ignoreList.any { it.ignoreRule == ignore }
   fun isEmpty() = _ignoreList.isEmpty()
   fun count() = _ignoreList.count()
   fun removeAt(index: Int) {
@@ -165,18 +165,6 @@ class IgnoreListManager constructor(
         .map(GlobTransformer::convertGlobToRegex)
         .map { Regex(it, RegexOption.IGNORE_CASE) }
         .toSet()
-    )
-
-    fun toggleActive(isActive: Boolean = !this.isActive) = IgnoreListItem(
-      type = type,
-      ignoreRule = ignoreRule,
-      isRegEx = isRegEx,
-      strictness = strictness,
-      scope = scope,
-      scopeRule = scopeRule,
-      isActive = isActive,
-      scopeRegEx = scopeRegEx,
-      regEx = regEx
     )
 
     fun copy(

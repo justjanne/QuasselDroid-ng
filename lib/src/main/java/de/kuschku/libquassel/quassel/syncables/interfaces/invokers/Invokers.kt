@@ -26,6 +26,7 @@ object Invokers {
     register(invoker<IDccConfig>())
     register(invoker<IIdentity>())
     register(invoker<IIgnoreListManager>())
+    register(invoker<IHighlightRuleManager>())
     register(invoker<IIrcChannel>())
     register(invoker<IIrcListHelper>())
     register(invoker<IIrcUser>())

@@ -52,6 +52,7 @@ class Session(
   override fun liveIdentities(): Observable<Map<IdentityId, Identity>> = live_identities.map { identities.toMap() }
 
   override val ignoreListManager = IgnoreListManager(this)
+  override val highlightRuleManager = HighlightRuleManager(this)
   override val ircListHelper = IrcListHelper(this)
 
   override val networks = mutableMapOf<NetworkId, Network>()
@@ -177,6 +178,8 @@ class Session(
       if (features.negotiated.hasFeature(ExtendedFeature.DccFileTransfer))
         synchronize(dccConfig, true)
       synchronize(ignoreListManager, true)
+      if (features.negotiated.hasFeature(ExtendedFeature.CoreSideHighlights))
+        synchronize(highlightRuleManager, true)
       synchronize(ircListHelper, true)
       synchronize(networkConfig, true)
 

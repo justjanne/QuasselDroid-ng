@@ -10,6 +10,7 @@ import de.kuschku.libquassel.protocol.Type
 interface IIgnoreListManager : ISyncableObject {
   fun initIgnoreList(): QVariantMap
   fun initSetIgnoreList(ignoreList: QVariantMap)
+
   @Slot
   fun addIgnoreListItem(type: Int, ignoreRule: String, isRegEx: Boolean, strictness: Int,
                         scope: Int, scopeRule: String, isActive: Boolean)
