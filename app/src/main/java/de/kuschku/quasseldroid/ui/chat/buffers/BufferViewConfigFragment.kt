@@ -210,43 +210,44 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
             val (config, list) = info ?: Pair(null, emptyList())
             val minimumActivity = config?.minimumActivity() ?: Buffer_Activity.NONE
             val activities = activityList.associate { it.bufferId to it.filtered }
-            activity?.runOnUiThread {
-              listAdapter.submitList(list.asSequence().sortedBy { props ->
-                !props.info.type.hasFlag(Buffer_Type.StatusBuffer)
-              }.sortedBy { props ->
-                props.network.networkName
-              }.map { props ->
-                val activity = props.activity - (activities[props.info.bufferId] ?: 0)
-                BufferListItem(
-                  props.copy(
-                    activity = activity,
-                    description = ircFormatDeserializer.formatString(
-                      requireContext(),
-                      props.description.toString(),
-                      colorize = messageSettings.colorizeMirc
-                    ),
-                    bufferActivity = Buffer_Activity.of(
-                      when {
-                        props.highlights > 0                  -> Buffer_Activity.Highlight
-                        activity.hasFlag(Message_Type.Plain) ||
-                        activity.hasFlag(Message_Type.Notice) ||
-                        activity.hasFlag(Message_Type.Action) -> Buffer_Activity.NewMessage
-                        activity.isNotEmpty()                 -> Buffer_Activity.OtherActivity
-                        else                                  -> Buffer_Activity.NoActivity
-                      }
-                    )
+            val processedList = list.asSequence().sortedBy { props ->
+              !props.info.type.hasFlag(Buffer_Type.StatusBuffer)
+            }.sortedBy { props ->
+              props.network.networkName
+            }.map { props ->
+              val activity = props.activity - (activities[props.info.bufferId] ?: 0)
+              BufferListItem(
+                props.copy(
+                  activity = activity,
+                  description = ircFormatDeserializer.formatString(
+                    requireContext(),
+                    props.description.toString(),
+                    colorize = messageSettings.colorizeMirc
                   ),
-                  BufferState(
-                    networkExpanded = !collapsedNetworks.contains(props.network.networkId),
-                    selected = selected.info?.bufferId == props.info.bufferId
+                  bufferActivity = Buffer_Activity.of(
+                    when {
+                      props.highlights > 0                  -> Buffer_Activity.Highlight
+                      activity.hasFlag(Message_Type.Plain) ||
+                      activity.hasFlag(Message_Type.Notice) ||
+                      activity.hasFlag(Message_Type.Action) -> Buffer_Activity.NewMessage
+                      activity.isNotEmpty()                 -> Buffer_Activity.OtherActivity
+                      else                                  -> Buffer_Activity.NoActivity
+                    }
                   )
+                ),
+                BufferState(
+                  networkExpanded = !collapsedNetworks.contains(props.network.networkId),
+                  selected = selected.info?.bufferId == props.info.bufferId
                 )
-              }.filter { (props, state) ->
-                props.info.type.hasFlag(BufferInfo.Type.StatusBuffer) || state.networkExpanded
-              }.filter {
-                minimumActivity.toInt() <= it.props.bufferActivity.toInt() ||
-                it.props.info.type.hasFlag(Buffer_Type.StatusBuffer)
-              }.toList())
+              )
+            }.filter { (props, state) ->
+              (props.info.type.hasFlag(BufferInfo.Type.StatusBuffer) || state.networkExpanded) &&
+              (minimumActivity.toInt() <= props.bufferActivity.toInt() ||
+               props.info.type.hasFlag(Buffer_Type.StatusBuffer))
+            }.toList()
+
+            activity?.runOnUiThread {
+              listAdapter.submitList(processedList)
             }
           }
         }
