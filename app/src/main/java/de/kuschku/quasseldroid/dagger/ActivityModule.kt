@@ -28,7 +28,8 @@ import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistEditActivity
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistEditFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.highlightlist.HighlightListActivity
 import de.kuschku.quasseldroid.ui.coresettings.highlightlist.HighlightListFragmentProvider
-import de.kuschku.quasseldroid.ui.coresettings.highlightrule.HighlightRuleFragment
+import de.kuschku.quasseldroid.ui.coresettings.highlightrule.HighlightRuleActivity
+import de.kuschku.quasseldroid.ui.coresettings.highlightrule.HighlightRuleFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityCreateActivity
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityCreateFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityEditActivity
@@ -107,8 +108,8 @@ abstract class ActivityModule {
   @ContributesAndroidInjector(modules = [HighlightListFragmentProvider::class])
   abstract fun bindHighlightListActivity(): HighlightListActivity
 
-  @ContributesAndroidInjector(modules = [HighlightRuleFragment::class])
-  abstract fun bindHighlightRuleFragment(): HighlightRuleFragment
+  @ContributesAndroidInjector(modules = [HighlightRuleFragmentProvider::class])
+  abstract fun bindHighlightRuleActivity(): HighlightRuleActivity
 
   @ContributesAndroidInjector(modules = [IgnoreItemFragmentProvider::class])
   abstract fun bindIgnoreItemActivity(): IgnoreItemActivity
