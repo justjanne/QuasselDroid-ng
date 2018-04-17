@@ -13,7 +13,7 @@ variables:
 before_script:
   - apt-get --quiet update --yes
   - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
-  
+
   - wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
   - unzip -q android-sdk.zip -d android-sdk-linux
 
@@ -27,6 +27,8 @@ before_script:
   - export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
   - chmod +x ./gradlew
 
+  - echo $SIGNING_KEYSTORE | base64 -d > /root/signing.keystore
+
 stages:
   - build
   - test
@@ -34,6 +36,7 @@ stages:
 build:
   stage: build
   script:
+    - echo $SIGNING_PROPERTIES > signing.properties
     - ./gradlew assembleRelease
   artifacts:
     paths:
