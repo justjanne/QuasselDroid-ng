@@ -31,7 +31,7 @@ class IgnoreListFragment : SettingsFragment(), SettingsFragment.Savable,
 
   private var ignoreListManager: Pair<IgnoreListManager, IgnoreListManager>? = null
 
-  lateinit var helper: ItemTouchHelper
+  private lateinit var helper: ItemTouchHelper
 
   private val adapter = IgnoreListAdapter(::itemClick, ::startDrag)
 
@@ -83,8 +83,7 @@ class IgnoreListFragment : SettingsFragment(), SettingsFragment.Savable,
           val newRule = data.getSerializableExtra("new") as? IgnoreListManager.IgnoreListItem
 
           if (oldRule != null && newRule != null) {
-            val index = adapter.indexOf(oldRule.ignoreRule)
-            adapter.replace(index, newRule)
+            adapter.replace(adapter.indexOf(oldRule.ignoreRule), newRule)
           }
         }
         REQUEST_CREATE_RULE -> {

@@ -96,8 +96,21 @@
   <string name="settings_ignoreitem_scoperule">Gültigkeitsregel</string>
 
   <string name="settings_highlightlist_title">Hervorhebungen</string>
+  <string name="settings_highlightlist_highlight_nick">Hervorgehobene Spitznamen</string>
+  <string name="settings_highlightlist_highlight_nick_all_nicks">Alle Spitznamen aus Identität</string>
+  <string name="settings_highlightlist_highlight_nick_current_nick">Aktueller Spitzname</string>
+  <string name="settings_highlightlist_highlight_nick_none">Keine</string>
+  <string name="settings_highlightlist_nicks_case_sensitive">Groß-/Kleinschreibung beachten</string>
+  <string name="settings_highlightlist_rules">Hervorhebungsregeln</string>
+  <string name="settings_highlightlist_ignore_rules">Hervorhebungsignorierregeln</string>
 
   <string name="settings_highlightrule_title">Hervorhebungsregel</string>
+  <string name="settings_highlightrule_enabled">Aktiviert</string>
+  <string name="settings_highlightrule_name">Name</string>
+  <string name="settings_highlightrule_regular_expression">Regulärer Ausdruck</string>
+  <string name="settings_highlightrule_case_sensitive">Groß-/Kleinschreibung beachten</string>
+  <string name="settings_highlightrule_sender">Absender</string>
+  <string name="settings_highlightrule_channel">Raum</string>
 
   <string name="settings_aliaslist_title">Aliase</string>
 

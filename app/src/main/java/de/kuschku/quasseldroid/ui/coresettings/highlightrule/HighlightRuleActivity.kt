@@ -9,16 +9,19 @@ class HighlightRuleActivity : SettingsActivity(HighlightRuleFragment()) {
   companion object {
     fun launch(
       context: Context,
-      rule: HighlightRuleManager.HighlightRule? = null
-    ) = context.startActivity(intent(context, rule))
+      rule: HighlightRuleManager.HighlightRule? = null,
+      ignore: Boolean = false
+    ) = context.startActivity(intent(context, rule, ignore))
 
     fun intent(
       context: Context,
-      rule: HighlightRuleManager.HighlightRule? = null
+      rule: HighlightRuleManager.HighlightRule? = null,
+      ignore: Boolean = false
     ) = Intent(context, HighlightRuleActivity::class.java).apply {
       if (rule != null) {
         putExtra("item", rule)
       }
+      putExtra("ignore", ignore)
     }
   }
 }

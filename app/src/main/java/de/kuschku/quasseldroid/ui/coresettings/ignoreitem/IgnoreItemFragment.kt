@@ -22,7 +22,7 @@ class IgnoreItemFragment : SettingsFragment(), SettingsFragment.Savable,
   @BindView(R.id.enabled)
   lateinit var enabled: SwitchCompat
 
-  @BindView(R.id.ignorerule)
+  @BindView(R.id.ignore_rule)
   lateinit var ignoreRule: EditText
 
   @BindView(R.id.isregex)
@@ -37,7 +37,7 @@ class IgnoreItemFragment : SettingsFragment(), SettingsFragment.Savable,
   @BindView(R.id.scope)
   lateinit var scope: Spinner
 
-  @BindView(R.id.scoperule)
+  @BindView(R.id.scope_rule)
   lateinit var scopeRule: EditText
 
   @BindView(R.id.scopegroup)
@@ -125,24 +125,7 @@ class IgnoreItemFragment : SettingsFragment(), SettingsFragment.Savable,
     return view
   }
 
-  override fun onSave() = item.let { data ->
-    val intent = Intent()
-    intent.putExtra("old", data)
-    val new = IgnoreListManager.IgnoreListItem(
-      isActive = enabled.isChecked,
-      ignoreRule = ignoreRule.text.toString(),
-      isRegEx = isRegEx.isChecked,
-      type = type.selectedItemId.toInt(),
-      strictness = strictness.selectedItemId.toInt(),
-      scope = scope.selectedItemId.toInt(),
-      scopeRule = scopeRule.text.toString()
-    )
-    intent.putExtra("new", new)
-    requireActivity().setResult(Activity.RESULT_OK, intent)
-    true
-  }
-
-  override fun hasChanged() = item != IgnoreListManager.IgnoreListItem(
+  private fun applyChanges() = IgnoreListManager.IgnoreListItem(
     isActive = enabled.isChecked,
     ignoreRule = ignoreRule.text.toString(),
     isRegEx = isRegEx.isChecked,
@@ -151,4 +134,17 @@ class IgnoreItemFragment : SettingsFragment(), SettingsFragment.Savable,
     scope = scope.selectedItemId.toInt(),
     scopeRule = scopeRule.text.toString()
   )
+
+  override fun onSave() = item.let { data ->
+    requireActivity().setResult(
+      Activity.RESULT_OK,
+      Intent().also {
+        it.putExtra("old", data)
+        it.putExtra("new", applyChanges())
+      }
+    )
+    true
+  }
+
+  override fun hasChanged() = item != applyChanges()
 }

@@ -42,6 +42,8 @@
   <string name="label_mention_long">Copy username into input line</string>
   <string name="label_new_account">New Account</string>
   <string name="label_new_chatlist">New Chatlist</string>
+  <string name="label_new_highlight_rule">New Highlight Rule</string>
+  <string name="label_new_highlight_ignore_rule">New Highlight Ignore Rule</string>
   <string name="label_new_identity">New Identity</string>
   <string name="label_new_network">New Network</string>
   <string name="label_new_nick">New Nick</string>

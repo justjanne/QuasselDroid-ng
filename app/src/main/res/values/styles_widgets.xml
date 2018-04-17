@@ -39,6 +39,14 @@
     <item name="android:textColorSecondary">?colorTextSecondary</item>
   </style>
 
+  <style name="Widget.TabLayout.Auto" parent="Widget.Design.TabLayout">
+    <item name="tabIndicatorColor">?colorAccent</item>
+    <item name="tabIndicatorHeight">3dp</item>
+    <item name="tabBackground">?backgroundMenuItem</item>
+    <item name="tabSelectedTextColor">?colorAccent</item>
+    <item name="android:textColor">?colorTextPrimary</item>
+  </style>
+
   <style name="Widget.DrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">
     <item name="color">?attr/colorControlNormal</item>
   </style>

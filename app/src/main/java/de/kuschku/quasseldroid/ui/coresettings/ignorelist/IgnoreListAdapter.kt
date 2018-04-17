@@ -11,6 +11,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.util.helper.visibleIf
 import java.util.*
 
 class IgnoreListAdapter(
@@ -75,8 +76,11 @@ class IgnoreListAdapter(
     toggleListener: (IgnoreListManager.IgnoreListItem, Boolean) -> Unit,
     dragListener: (IgnoreItemViewHolder) -> Unit
   ) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.title)
-    lateinit var title: TextView
+    @BindView(R.id.ignore_rule)
+    lateinit var ignoreRule: TextView
+
+    @BindView(R.id.scope_rule)
+    lateinit var scopeRule: TextView
 
     @BindView(R.id.toggle)
     lateinit var toggle: SwitchCompat
@@ -108,7 +112,9 @@ class IgnoreListAdapter(
 
     fun bind(item: IgnoreListManager.IgnoreListItem) {
       this.item = item
-      title.text = item.ignoreRule
+      ignoreRule.text = item.ignoreRule
+      scopeRule.text = item.scopeRule
+      scopeRule.visibleIf(item.scopeRule.isNotBlank() && item.scope != IgnoreListManager.ScopeType.GlobalScope)
       toggle.isChecked = item.isActive
     }
   }

@@ -96,8 +96,21 @@
   <string name="settings_ignoreitem_scoperule">Scope Rule</string>
 
   <string name="settings_highlightlist_title">Highlights</string>
+  <string name="settings_highlightlist_highlight_nick">Highlight Nick</string>
+  <string name="settings_highlightlist_highlight_nick_all_nicks">All Nicks from Identity</string>
+  <string name="settings_highlightlist_highlight_nick_current_nick">Current Nick</string>
+  <string name="settings_highlightlist_highlight_nick_none">None</string>
+  <string name="settings_highlightlist_nicks_case_sensitive">Case Sensitive</string>
+  <string name="settings_highlightlist_rules">Highlight Rules</string>
+  <string name="settings_highlightlist_ignore_rules">Highlight Ignore Rules</string>
 
   <string name="settings_highlightrule_title">Highlight Rule</string>
+  <string name="settings_highlightrule_enabled">Enabled</string>
+  <string name="settings_highlightrule_name">Name</string>
+  <string name="settings_highlightrule_regular_expression">Regular Expression</string>
+  <string name="settings_highlightrule_case_sensitive">Case Sensitive</string>
+  <string name="settings_highlightrule_sender">Sender</string>
+  <string name="settings_highlightrule_channel">Channel</string>
 
   <string name="settings_aliaslist_title">Aliases</string>
 

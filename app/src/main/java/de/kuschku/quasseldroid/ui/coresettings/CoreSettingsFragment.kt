@@ -18,6 +18,7 @@ import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistCreateActivity
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistEditActivity
+import de.kuschku.quasseldroid.ui.coresettings.highlightlist.HighlightListActivity
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityCreateActivity
 import de.kuschku.quasseldroid.ui.coresettings.identity.IdentityEditActivity
 import de.kuschku.quasseldroid.ui.coresettings.ignorelist.IgnoreListActivity
@@ -129,6 +130,10 @@ class CoreSettingsFragment : ServiceBoundFragment() {
 
     ignorelist.setOnClickListener {
       IgnoreListActivity.launch(requireContext())
+    }
+
+    highlightlist.setOnClickListener {
+      HighlightListActivity.launch(requireContext())
     }
 
     newNetwork.setOnClickListener {
