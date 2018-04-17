@@ -134,6 +134,12 @@
       android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
+      android:name=".ui.coresettings.highlightrule.HighlightRuleActivity"
+      android:exported="false"
+      android:label="@string/settings_highlightrule_title"
+      android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
       android:name=".ui.coresettings.networkconfig.NetworkConfigActivity"
       android:exported="false"
       android:label="@string/settings_networkconfig_title"

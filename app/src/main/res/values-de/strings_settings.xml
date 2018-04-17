@@ -97,6 +97,8 @@
 
   <string name="settings_highlightlist_title">Hervorhebungen</string>
 
+  <string name="settings_highlightrule_title">Hervorhebungsregel</string>
+
   <string name="settings_aliaslist_title">Aliase</string>
 
   <string name="settings_networkconfig_title">IRC Konfiguration</string>

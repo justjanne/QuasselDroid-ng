@@ -3,6 +3,7 @@ package de.kuschku.libquassel.quassel.syncables
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.IHighlightRuleManager
 import de.kuschku.libquassel.session.SignalProxy
+import java.io.Serializable
 
 class HighlightRuleManager(
   proxy: SignalProxy
@@ -15,7 +16,7 @@ class HighlightRuleManager(
     val isInverse: Boolean = false,
     val sender: String,
     val channel: String
-  )
+  ) : Serializable
 
   override fun toVariantMap(): QVariantMap = mapOf(
     "HighlightRuleList" to QVariant.of(initHighlightRuleList(), Type.QVariantMap),

@@ -97,6 +97,8 @@
 
   <string name="settings_highlightlist_title">Highlights</string>
 
+  <string name="settings_highlightrule_title">Highlight Rule</string>
+
   <string name="settings_aliaslist_title">Aliases</string>
 
   <string name="settings_networkconfig_title">IRC Config</string>
