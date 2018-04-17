@@ -2,31 +2,31 @@ image: k8r.eu/justjanne/android-sdk:27-27.0.3-26.1.1
 
 cache:
   paths:
-    - .m2/
-    - .gradle/
+    - ".m2/"
+    - ".gradle/"
 
 before_script:
-  - export ANDROID_HOME=/android-sdk-linux
-  - export PATH=$PATH:/android-sdk-linux/platform-tools/
-  - chmod +x ./gradlew
+  - "export ANDROID_HOME=/android-sdk-linux"
+  - "export PATH=$PATH:/android-sdk-linux/platform-tools/"
+  - "chmod +x ./gradlew"
 
-  - echo $SIGNING_KEYSTORE | base64 -d > /root/signing.keystore
+  - "echo $SIGNING_KEYSTORE | base64 -d > /root/signing.keystore"
 
 stages:
-  - build
-  - test
+  - "build"
+  - "test"
 
 build:
-  stage: build
+  stage: "build"
   script:
-    - echo $SIGNING_PROPERTIES > signing.properties
-    - ./gradlew assembleRelease
-    - cp app/build/outputs/apk/release/*.apk .
+    - "echo $SIGNING_PROPERTIES > signing.properties"
+    - "./gradlew assembleRelease"
+    - "cp app/build/outputs/apk/release/*.apk ."
   artifacts:
     paths:
-      - *.apk
+      - "*.apk"
 
 unitTests:
   stage: test
   script:
-    - ./gradlew test
+    - "./gradlew test"
