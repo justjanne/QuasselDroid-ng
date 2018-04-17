@@ -121,13 +121,6 @@ class SerializerUnitTest {
     assertEquals(info, info2)
   }
 
-  @Test
-  fun captureSerializer() {
-    val data = byteArrayOf(
-
-    )
-  }
-
   companion object {
     fun <T> roundTrip(serializer: Serializer<T>, value: T,
                       features: QuasselFeatures = QuasselFeatures.all()): T {
