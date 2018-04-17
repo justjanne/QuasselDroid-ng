@@ -26,6 +26,7 @@ build:
   script:
     - "./gradlew assembleRelease"
     - "cp app/build/outputs/apk/release/*.apk ."
+    - "cp *.apk QuasselDroidNG-release.apk"
   artifacts:
     paths:
       - "*.apk"
