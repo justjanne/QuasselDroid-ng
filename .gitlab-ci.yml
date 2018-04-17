@@ -1,15 +1,16 @@
 image: k8r.eu/justjanne/android-sdk:27-27.0.3-26.1.1
 
 variables:
-  GRADLE_USER_HOME: $CI_PROJECT_DIR/.gradle
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
 cache:
-  key: $CI_PROJECT_NAME
+  key: "$CI_PROJECT_NAME"
   paths:
-    - ".m2/"
-    - ".gradle/"
+    - ".gradle/wrapper"
+    - ".gradle/caches"
 
 before_script:
+  - "export GRADLE_USER_HOME=$(pwd)/.gradle"
   - "export ANDROID_HOME=/android-sdk-linux"
   - "export PATH=$PATH:/android-sdk-linux/platform-tools/"
   - "chmod +x ./gradlew"
@@ -33,5 +34,7 @@ build:
 
 unitTests:
   stage: test
+  cache:
+    policy: pull
   script:
     - "./gradlew test"
