@@ -19,26 +19,20 @@ class HighlightRuleManager(
   ) : Serializable
 
   override fun toVariantMap(): QVariantMap = mapOf(
-    "HighlightRuleList" to QVariant.of(initHighlightRuleList(), Type.QVariantMap),
-    "HighlightNick" to QVariant.of(_highlightNick.value, Type.Int),
-    "NicksCaseSensitive" to QVariant.of(_nicksCaseSensitive, Type.Bool)
+    "HighlightRuleList" to QVariant.of(initHighlightRuleList(), Type.QVariantMap)
   )
 
   override fun fromVariantMap(properties: QVariantMap) {
     initSetHighlightRuleList(properties["HighlightRuleList"].valueOr(::emptyMap))
-    _highlightNick = properties["HighlightNick"].value<Int>()?.let {
-      IHighlightRuleManager.HighlightNickType.of(it)
-    } ?: _highlightNick
-    _nicksCaseSensitive = properties["NicksCaseSensitive"].value(_nicksCaseSensitive)
   }
 
   override fun initHighlightRuleList(): QVariantMap = mapOf(
     "name" to QVariant.of(_highlightRuleList.map {
-      QVariant.of(it.name, Type.QString)
-    }, Type.QVariantList),
+      it.name
+    }, Type.QStringList),
     "isRegEx" to QVariant.of(_highlightRuleList.map {
       QVariant.of(it.isRegEx, Type.Bool)
-    }, Type.QStringList),
+    }, Type.QVariantList),
     "isCaseSensitive" to QVariant.of(_highlightRuleList.map {
       QVariant.of(it.isCaseSensitive, Type.Bool)
     }, Type.QVariantList),
@@ -49,11 +43,13 @@ class HighlightRuleManager(
       QVariant.of(it.isInverse, Type.Bool)
     }, Type.QVariantList),
     "sender" to QVariant.of(_highlightRuleList.map {
-      QVariant.of(it.sender, Type.QString)
+      it.sender
     }, Type.QStringList),
     "channel" to QVariant.of(_highlightRuleList.map {
-      QVariant.of(it.channel, Type.QString)
-    }, Type.QVariantList)
+      it.channel
+    }, Type.QStringList),
+    "highlightNick" to QVariant.of(_highlightNick.value, Type.Int),
+    "nicksCaseSensitive" to QVariant.of(_nicksCaseSensitive, Type.Bool)
   )
 
   override fun initSetHighlightRuleList(highlightRuleList: QVariantMap) {
@@ -81,6 +77,10 @@ class HighlightRuleManager(
         channel = channelList[it] ?: ""
       )
     })
+    _highlightNick = highlightRuleList["highlightNick"].value<Int>()?.let {
+      IHighlightRuleManager.HighlightNickType.of(it)
+    } ?: _highlightNick
+    _nicksCaseSensitive = highlightRuleList["nicksCaseSensitive"].value(_nicksCaseSensitive)
   }
 
   override fun removeHighlightRule(highlightRule: String) = removeAt(indexOf(highlightRule))
@@ -101,10 +101,13 @@ class HighlightRuleManager(
     )
   }
 
+
+  fun highlightNick() = _highlightNick
   override fun setHighlightNick(highlightNick: Int) {
     _highlightNick = IHighlightRuleManager.HighlightNickType.of(highlightNick) ?: _highlightNick
   }
 
+  fun nicksCaseSensitive() = _nicksCaseSensitive
   override fun setNicksCaseSensitive(nicksCaseSensitive: Boolean) {
     _nicksCaseSensitive = nicksCaseSensitive
   }
@@ -122,6 +125,10 @@ class HighlightRuleManager(
   fun highlightRuleList() = _highlightRuleList
   fun setHighlightRuleList(list: List<HighlightRule>) {
     _highlightRuleList = list
+  }
+
+  fun copy() = HighlightRuleManager(proxy).also {
+    it.fromVariantMap(toVariantMap())
   }
 
   private var _highlightRuleList = emptyList<HighlightRule>()
