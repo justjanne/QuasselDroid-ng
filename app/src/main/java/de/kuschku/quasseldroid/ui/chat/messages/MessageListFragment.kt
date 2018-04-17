@@ -85,7 +85,7 @@ class MessageListFragment : ServiceBoundFragment() {
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?) = when (item?.itemId) {
       R.id.action_copy  -> {
         val builder = SpannableStringBuilder()
-        viewModel.selectedMessages.value.values.sortedBy {
+        viewModel.selectedMessages.value.values.asSequence().sortedBy {
           it.id
         }.map {
           if (it.name != null && it.content != null) {
@@ -114,7 +114,7 @@ class MessageListFragment : ServiceBoundFragment() {
       }
       R.id.action_share -> {
         val builder = SpannableStringBuilder()
-        viewModel.selectedMessages.value.values.sortedBy {
+        viewModel.selectedMessages.value.values.asSequence().sortedBy {
           it.id
         }.map {
           if (it.name != null && it.content != null) {

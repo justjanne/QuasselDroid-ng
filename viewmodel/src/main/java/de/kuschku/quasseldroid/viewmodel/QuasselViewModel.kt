@@ -185,7 +185,7 @@ class QuasselViewModel : ViewModel() {
                     val userModes = ircChannel.userModes(user)
                     val prefixModes = network.prefixModes()
 
-                    val lowestMode = userModes.mapNotNull {
+                    val lowestMode = userModes.asSequence().mapNotNull {
                       prefixModes.indexOf(it)
                     }.min() ?: prefixModes.size
 
@@ -300,7 +300,7 @@ class QuasselViewModel : ViewModel() {
                   )
                 ).switchMap { (ids, temp, perm) ->
                   fun transformIds(ids: Collection<BufferId>, state: BufferHiddenState) =
-                    ids.mapNotNull { id ->
+                    ids.asSequence().mapNotNull { id ->
                       bufferSyncer.bufferInfo(id)
                     }.filter {
                       currentConfig.networkId() <= 0 || currentConfig.networkId() == it.networkId
@@ -403,10 +403,10 @@ class QuasselViewModel : ViewModel() {
                       transformIds(ids.distinct(), BufferHiddenState.VISIBLE)
                     }
 
-                    combineLatest<BufferProps>(buffers).map { list ->
+                    combineLatest<BufferProps>(buffers.toList()).map { list ->
                       Pair<BufferViewConfig?, List<BufferProps>>(
                         config,
-                        list.filter {
+                        list.asSequence().filter {
                           (!config.hideInactiveBuffers()) ||
                           it.bufferStatus != BufferStatus.OFFLINE ||
                           it.info.type.hasFlag(Buffer_Type.StatusBuffer)
@@ -415,7 +415,7 @@ class QuasselViewModel : ViewModel() {
                             it.sortedBy { IrcCaseMappers.unicode.toLowerCaseNullable(it.info.bufferName) }
                               .sortedByDescending { it.hiddenState == BufferHiddenState.VISIBLE }
                           else it
-                        }.distinctBy { it.info.bufferId }
+                        }.distinctBy { it.info.bufferId }.toList()
                       )
                     }
                   }

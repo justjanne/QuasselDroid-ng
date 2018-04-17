@@ -388,6 +388,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
               val selected = dialog.selectedIndices ?: emptyArray()
               runInBackground {
                 val newlyFiltered = selected
+                  .asSequence()
                   .map { flags[it] }
                   .fold(Message_Type.of()) { acc, i -> acc or i }
 

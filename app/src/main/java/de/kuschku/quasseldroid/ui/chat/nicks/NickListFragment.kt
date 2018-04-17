@@ -77,7 +77,7 @@ class NickListFragment : ServiceBoundFragment() {
     val avatarSize = resources.getDimensionPixelSize(R.dimen.avatar_size)
     viewModel.nickData.toLiveData().observe(this, Observer {
       runInBackground {
-        it?.map {
+        it?.asSequence()?.map {
           val nickName = it.nick
           val senderColorIndex = IrcUserUtils.senderColor(nickName)
           val rawInitial = nickName.trimStart('-',
@@ -129,7 +129,11 @@ class NickListFragment : ServiceBoundFragment() {
             .trimStart(*IGNORED_CHARS)
         }?.sortedBy {
           it.lowestMode
-        }?.let(nickListAdapter::submitList)
+        }?.toList()?.let {
+          activity?.runOnUiThread {
+            nickListAdapter.submitList(it)
+          }
+        }
       }
     })
     savedInstanceState?.run {

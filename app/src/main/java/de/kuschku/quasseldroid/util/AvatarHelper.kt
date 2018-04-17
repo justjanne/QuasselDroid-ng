@@ -61,7 +61,7 @@ object AvatarHelper {
                  ?: return emptyList()
 
     if (size != null) {
-      return listOf("https://static.irccloud-cdn.com/avatar-redirect/w${truncateSize(size)}/$userId")
+      return listOf("https://static.irccloud-cdn.com/avatar-redirect/s${truncateSize(size)}/$userId")
     }
 
     return listOf("https://static.irccloud-cdn.com/avatar-redirect/$userId")

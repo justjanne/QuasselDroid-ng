@@ -120,6 +120,7 @@ class AutoCompleteHelper(
             )?.let { ircChannel ->
               val users = ircChannel.ircUsers()
               val buffers = infos
+                .asSequence()
                 .filter {
                   it.type.toInt() == Buffer_Type.ChannelBuffer.toInt()
                 }.mapNotNull { info ->
@@ -136,7 +137,7 @@ class AutoCompleteHelper(
                     description = channel.topic()
                   )
                 }
-              val nicks = users.map { user ->
+              val nicks = users.asSequence().map { user ->
                 val userModes = ircChannel.userModes(user)
                 val prefixModes = network.prefixModes()
 
@@ -160,7 +161,7 @@ class AutoCompleteHelper(
                     lastWord.first.trimStart(*IGNORED_CHARS),
                     ignoreCase = true
                   )
-              }.sorted()
+              }.sorted().toList()
             }
           } else null
         }

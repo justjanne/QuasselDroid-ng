@@ -46,7 +46,7 @@ class AppSettingsFragment : DaggerPreferenceFragmentCompat(),
 
   fun initSummary(preference: Preference) {
     if (preference is PreferenceGroup) {
-      (0 until preference.preferenceCount).map(preference::getPreference).forEach(::initSummary)
+      (0 until preference.preferenceCount).asSequence().map(preference::getPreference).forEach(::initSummary)
     } else {
       updateSummary(preference)
     }

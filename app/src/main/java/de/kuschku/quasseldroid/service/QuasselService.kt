@@ -26,9 +26,7 @@ import de.kuschku.quasseldroid.util.helper.editApply
 import de.kuschku.quasseldroid.util.helper.editCommit
 import de.kuschku.quasseldroid.util.helper.sharedPreferences
 import de.kuschku.quasseldroid.util.helper.toLiveData
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import org.threeten.bp.Instant
 import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
@@ -220,7 +218,7 @@ class QuasselService : DaggerLifecycleService(),
       }
     }
   }
-  private val connectivity = BehaviorSubject.createDefault(Unit)
+  private val connectivity = PublishSubject.create<Unit>()
 
   private fun disconnectFromCore() {
     getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editCommit {
@@ -264,18 +262,27 @@ class QuasselService : DaggerLifecycleService(),
       }
     })
 
-    Observable.combineLatest(
-      sessionManager.state.filter { it == ConnectionState.DISCONNECTED || it == ConnectionState.CLOSED },
-      connectivity,
-      BiFunction { a: ConnectionState, _: Unit -> a })
+    var wasEverConnected = false
+    connectivity
+      .delay(200, TimeUnit.MILLISECONDS)
+      .throttleFirst(1, TimeUnit.SECONDS)
+      .toLiveData()
+      .observe(this, Observer {
+        if (wasEverConnected) sessionManager.reconnect(true)
+      })
+
+    sessionManager.state
       .distinctUntilChanged()
       .delay(200, TimeUnit.MILLISECONDS)
       .throttleFirst(1, TimeUnit.SECONDS)
       .toLiveData()
       .observe(
         this, Observer {
-        if (it == ConnectionState.DISCONNECTED || it == ConnectionState.CLOSED)
-          sessionManager.reconnect(true)
+        if (it == ConnectionState.DISCONNECTED || it == ConnectionState.CLOSED) {
+          if (wasEverConnected) sessionManager.reconnect()
+        } else {
+          wasEverConnected = true
+        }
       })
 
     sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
