@@ -4,6 +4,7 @@ cache:
   paths:
     - ".m2/"
     - ".gradle/"
+    - "/root/.gradle/"
 
 before_script:
   - "export ANDROID_HOME=/android-sdk-linux"
