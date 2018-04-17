@@ -1,5 +1,10 @@
 image: openjdk:8-jdk
 
+cache:
+  paths:
+    - .m2/
+    - .gradle/
+
 variables:
   ANDROID_COMPILE_SDK: "27"
   ANDROID_BUILD_TOOLS: "27.0.3"
