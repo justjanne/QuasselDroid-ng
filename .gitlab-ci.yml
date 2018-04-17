@@ -1,10 +1,13 @@
 image: k8r.eu/justjanne/android-sdk:27-27.0.3-26.1.1
 
+variables:
+  GRADLE_USER_HOME: $CI_PROJECT_DIR/.gradle
+
 cache:
+  key: $CI_PROJECT_NAME
   paths:
     - ".m2/"
     - ".gradle/"
-    - "/root/.gradle/"
 
 before_script:
   - "export ANDROID_HOME=/android-sdk-linux"
