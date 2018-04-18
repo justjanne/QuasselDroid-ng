@@ -57,6 +57,7 @@
   <string name="label_part_long">Kanal verlassen</string>
   <string name="label_placeholder_message">Nachricht schreiben…</string>
   <string name="label_placeholder_topic">Beschreib das Thema des Kanals…</string>
+  <string name="label_privacy_policy">Datenschutzerklärung</string>
   <string name="label_query">Dialog</string>
   <string name="label_query_long">Öffnet einen privaten Chat</string>
   <string name="label_rename">Umbenennen</string>

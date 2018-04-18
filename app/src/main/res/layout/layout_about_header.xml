@@ -66,6 +66,13 @@
       android:layout_height="wrap_content"
       android:text="@string/label_github" />
 
+    <Button
+      android:id="@+id/action_privacy_policy"
+      style="@style/Widget.Button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/label_privacy_policy" />
+
   </android.support.v7.widget.ButtonBarLayout>
 
   <TextView

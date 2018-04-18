@@ -57,6 +57,7 @@
   <string name="label_part_long">Leave Channel</string>
   <string name="label_placeholder_message">Write a message…</string>
   <string name="label_placeholder_topic">Describe the channel topic…</string>
+  <string name="label_privacy_policy">Privacy Policy</string>
   <string name="label_query">Query</string>
   <string name="label_query_long">Open private chat with user</string>
   <string name="label_rename">Rename</string>

@@ -29,6 +29,9 @@ class AboutSettingsFragment : DaggerFragment() {
   @BindView(R.id.action_github)
   lateinit var github: Button
 
+  @BindView(R.id.action_privacy_policy)
+  lateinit var privacyPolicy: Button
+
   @BindView(R.id.contributors)
   lateinit var contributors: RecyclerView
 
@@ -51,6 +54,12 @@ class AboutSettingsFragment : DaggerFragment() {
     github.setOnClickListener {
       val intent = Intent(Intent.ACTION_VIEW)
       intent.data = Uri.parse("https://github.com/justjanne/quasseldroid-ng")
+      context?.startActivity(intent)
+    }
+
+    privacyPolicy.setOnClickListener {
+      val intent = Intent(Intent.ACTION_VIEW)
+      intent.data = Uri.parse("http://quasseldroid.info/privacy-policy/")
       context?.startActivity(intent)
     }
 
