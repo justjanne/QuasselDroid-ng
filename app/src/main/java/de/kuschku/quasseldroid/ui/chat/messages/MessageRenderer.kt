@@ -7,6 +7,8 @@ import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 
 interface MessageRenderer {
+  fun updateColors(context: Context)
+
   @LayoutRes
   fun layout(type: Message_Type?, hasHighlight: Boolean, isFollowUp: Boolean, isEmoji: Boolean): Int
 

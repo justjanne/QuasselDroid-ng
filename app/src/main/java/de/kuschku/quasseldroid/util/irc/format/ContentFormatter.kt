@@ -1,6 +1,5 @@
 package de.kuschku.quasseldroid.util.irc.format
 
-import android.content.Context
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
@@ -42,9 +41,9 @@ class ContentFormatter @Inject constructor(
     }
   }
 
-  fun format(context: Context, content: String, highlight: Boolean = false): CharSequence {
+  fun format(mircColors: IntArray, content: String, highlight: Boolean = false): CharSequence {
     val formattedText = ircFormatDeserializer.formatString(
-      context, content, messageSettings.colorizeMirc
+      mircColors, content, messageSettings.colorizeMirc
     )
     val text = SpannableString(formattedText)
 

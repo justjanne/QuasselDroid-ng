@@ -1,6 +1,7 @@
 package de.kuschku.quasseldroid.ui.chat.messages
 
 import android.arch.paging.PagedListAdapter
+import android.content.Context
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.util.LruCache
@@ -139,6 +140,10 @@ class MessageAdapter @Inject constructor(
     getItem(position)
   } else {
     null
+  }
+
+  fun updateColors(context: Context) {
+    messageRenderer.updateColors(context)
   }
 
   class QuasselMessageViewHolder(

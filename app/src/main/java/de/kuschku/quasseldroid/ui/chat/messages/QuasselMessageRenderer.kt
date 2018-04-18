@@ -58,6 +58,7 @@ class QuasselMessageRenderer @Inject constructor(
     else           -> "HH:mm"
   }
 
+  private lateinit var mircColors: IntArray
   private lateinit var senderColors: IntArray
   private var selfColor: Int = 0
 
@@ -157,7 +158,39 @@ class QuasselMessageRenderer @Inject constructor(
       holder.bind(message, original, !isDayChange, !isDayChange)
     }
 
-  override fun render(context: Context, message: DisplayMessage): FormattedMessage {
+  override fun updateColors(context: Context) {
+    mircColors = context.theme.styledAttributes(
+      R.attr.mircColor00, R.attr.mircColor01, R.attr.mircColor02, R.attr.mircColor03,
+      R.attr.mircColor04, R.attr.mircColor05, R.attr.mircColor06, R.attr.mircColor07,
+      R.attr.mircColor08, R.attr.mircColor09, R.attr.mircColor10, R.attr.mircColor11,
+      R.attr.mircColor12, R.attr.mircColor13, R.attr.mircColor14, R.attr.mircColor15,
+      R.attr.mircColor16, R.attr.mircColor17, R.attr.mircColor18, R.attr.mircColor19,
+      R.attr.mircColor20, R.attr.mircColor21, R.attr.mircColor22, R.attr.mircColor23,
+      R.attr.mircColor24, R.attr.mircColor25, R.attr.mircColor26, R.attr.mircColor27,
+      R.attr.mircColor28, R.attr.mircColor29, R.attr.mircColor30, R.attr.mircColor31,
+      R.attr.mircColor32, R.attr.mircColor33, R.attr.mircColor34, R.attr.mircColor35,
+      R.attr.mircColor36, R.attr.mircColor37, R.attr.mircColor38, R.attr.mircColor39,
+      R.attr.mircColor40, R.attr.mircColor41, R.attr.mircColor42, R.attr.mircColor43,
+      R.attr.mircColor44, R.attr.mircColor45, R.attr.mircColor46, R.attr.mircColor47,
+      R.attr.mircColor48, R.attr.mircColor49, R.attr.mircColor50, R.attr.mircColor51,
+      R.attr.mircColor52, R.attr.mircColor53, R.attr.mircColor54, R.attr.mircColor55,
+      R.attr.mircColor56, R.attr.mircColor57, R.attr.mircColor58, R.attr.mircColor59,
+      R.attr.mircColor60, R.attr.mircColor61, R.attr.mircColor62, R.attr.mircColor63,
+      R.attr.mircColor64, R.attr.mircColor65, R.attr.mircColor66, R.attr.mircColor67,
+      R.attr.mircColor68, R.attr.mircColor69, R.attr.mircColor70, R.attr.mircColor71,
+      R.attr.mircColor72, R.attr.mircColor73, R.attr.mircColor74, R.attr.mircColor75,
+      R.attr.mircColor76, R.attr.mircColor77, R.attr.mircColor78, R.attr.mircColor79,
+      R.attr.mircColor80, R.attr.mircColor81, R.attr.mircColor82, R.attr.mircColor83,
+      R.attr.mircColor84, R.attr.mircColor85, R.attr.mircColor86, R.attr.mircColor87,
+      R.attr.mircColor88, R.attr.mircColor89, R.attr.mircColor90, R.attr.mircColor91,
+      R.attr.mircColor92, R.attr.mircColor93, R.attr.mircColor94, R.attr.mircColor95,
+      R.attr.mircColor96, R.attr.mircColor97, R.attr.mircColor98
+    ) {
+      IntArray(99) {
+        getColor(it, 0)
+      }
+    }
+
     context.theme.styledAttributes(
       R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
       R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
@@ -170,7 +203,9 @@ class QuasselMessageRenderer @Inject constructor(
       }
       selfColor = getColor(16, 0)
     }
+  }
 
+  override fun render(context: Context, message: DisplayMessage): FormattedMessage {
     val avatarSize = TypedValue.applyDimension(
       TypedValue.COMPLEX_UNIT_SP,
       messageSettings.textSize * 2.5f,
@@ -181,7 +216,7 @@ class QuasselMessageRenderer @Inject constructor(
     val highlight = Message_Flag.of(message.content.flag).hasFlag(Message_Flag.Highlight)
     return when (Message_Type.of(message.content.type).enabledValues().firstOrNull()) {
       Message_Type.Plain        -> {
-        val realName = contentFormatter.format(context, message.content.realName, highlight)
+        val realName = contentFormatter.format(mircColors, message.content.realName, highlight)
         val nick = SpannableStringBuilder().apply {
           append(formatPrefix(message.content.senderPrefixes, highlight))
           append(formatNick(
@@ -195,7 +230,7 @@ class QuasselMessageRenderer @Inject constructor(
             append(realName)
           }
         }
-        val content = contentFormatter.format(context, message.content.content, highlight)
+        val content = contentFormatter.format(mircColors, message.content.content, highlight)
         val nickName = HostmaskHelper.nick(message.content.sender)
         val senderColorIndex = IrcUserUtils.senderColor(nickName)
         val rawInitial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
@@ -231,7 +266,7 @@ class QuasselMessageRenderer @Inject constructor(
           context.getString(R.string.message_format_action),
           formatPrefix(message.content.senderPrefixes, highlight),
           formatNick(message.content.sender, self, highlight, false),
-          contentFormatter.format(context, message.content.content, highlight)
+          contentFormatter.format(mircColors, message.content.content, highlight)
         ),
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
@@ -244,7 +279,7 @@ class QuasselMessageRenderer @Inject constructor(
           context.getString(R.string.message_format_notice),
           formatPrefix(message.content.senderPrefixes, highlight),
           formatNick(message.content.sender, self, highlight, false),
-          contentFormatter.format(context, message.content.content, highlight)
+          contentFormatter.format(mircColors, message.content.content, highlight)
         ),
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
@@ -318,7 +353,7 @@ class QuasselMessageRenderer @Inject constructor(
                        self,
                        highlight,
                        messageSettings.showHostmaskActions),
-            contentFormatter.format(context, message.content.content, highlight)
+            contentFormatter.format(mircColors, message.content.content, highlight)
           )
         },
         isMarkerLine = message.isMarkerLine,
@@ -342,7 +377,7 @@ class QuasselMessageRenderer @Inject constructor(
                        self,
                        highlight,
                        messageSettings.showHostmaskActions),
-            contentFormatter.format(context, message.content.content, highlight)
+            contentFormatter.format(mircColors, message.content.content, highlight)
           )
         },
         isMarkerLine = message.isMarkerLine,
@@ -373,7 +408,7 @@ class QuasselMessageRenderer @Inject constructor(
                          self,
                          highlight,
                          messageSettings.showHostmaskActions),
-              contentFormatter.format(context, reason, highlight)
+              contentFormatter.format(mircColors, reason, highlight)
             )
           },
           isMarkerLine = message.isMarkerLine,
@@ -405,7 +440,7 @@ class QuasselMessageRenderer @Inject constructor(
                          self,
                          highlight,
                          messageSettings.showHostmaskActions),
-              contentFormatter.format(context, reason, highlight)
+              contentFormatter.format(mircColors, reason, highlight)
             )
           },
           isMarkerLine = message.isMarkerLine,
@@ -450,7 +485,7 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Error        -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
-        combined = contentFormatter.format(context, message.content.content, highlight),
+        combined = contentFormatter.format(mircColors, message.content.content, highlight),
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
@@ -458,7 +493,7 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Topic        -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
-        combined = contentFormatter.format(context, message.content.content, highlight),
+        combined = contentFormatter.format(mircColors, message.content.content, highlight),
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
