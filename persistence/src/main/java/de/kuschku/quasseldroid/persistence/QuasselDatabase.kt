@@ -10,16 +10,16 @@ import android.support.annotation.IntRange
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.MsgId
-import de.kuschku.quasseldroid.persistence.QuasselDatabase.DatabaseMessage
-import de.kuschku.quasseldroid.persistence.QuasselDatabase.Filtered
+import de.kuschku.quasseldroid.persistence.QuasselDatabase.*
 import io.reactivex.Flowable
 import org.threeten.bp.Instant
 
-@Database(entities = [DatabaseMessage::class, Filtered::class], version = 8)
+@Database(entities = [DatabaseMessage::class, Filtered::class, SslException::class], version = 9)
 @TypeConverters(DatabaseMessage.MessageTypeConverters::class)
 abstract class QuasselDatabase : RoomDatabase() {
   abstract fun message(): MessageDao
   abstract fun filtered(): FilteredDao
+  abstract fun sslExceptions(): SslExceptionDao
 
   @Entity(tableName = "message", indices = [Index("bufferId"), Index("ignored")])
   data class DatabaseMessage(
@@ -142,6 +142,31 @@ abstract class QuasselDatabase : RoomDatabase() {
     fun clear(accountId: Long, bufferId: Int)
   }
 
+  @Entity(tableName = "ssl_exception", primaryKeys = ["accountId", "certificateFingerprint"])
+  data class SslException(
+    var accountId: Long,
+    var certificateFingerprint: String,
+    var ignoreValidityDate: Boolean
+  )
+
+  @Dao
+  interface SslExceptionDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun save(vararg entities: SslException)
+
+    @Query("SELECT * FROM ssl_exception WHERE accountId = :accountId AND certificateFingerprint = :certificateFingerprint")
+    fun all(accountId: Long, certificateFingerprint: String): List<SslException>
+
+    @Query("DELETE FROM ssl_exception")
+    fun clear()
+
+    @Query("DELETE FROM ssl_exception WHERE accountId = :accountId")
+    fun clear(accountId: Long)
+
+    @Query("DELETE FROM ssl_exception WHERE accountId = :accountId AND certificateFingerprint = :certificateFingerprint")
+    fun clear(accountId: Long, certificateFingerprint: String)
+  }
+
   object Creator {
     private var database: QuasselDatabase? = null
 
@@ -192,6 +217,11 @@ abstract class QuasselDatabase : RoomDatabase() {
                 override fun migrate(database: SupportSQLiteDatabase) {
                   database.execSQL("CREATE INDEX index_message_bufferId ON message(bufferId);")
                   database.execSQL("CREATE INDEX index_message_ignored ON message(ignored);")
+                }
+              },
+              object : Migration(8, 9) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL("create table ssl_exception (accountId INTEGER not null, certificateFingerprint TEXT not null, ignoreValidityDate INTEGER not null, primary key(accountId, certificateFingerprint));")
                 }
               }
             ).build()

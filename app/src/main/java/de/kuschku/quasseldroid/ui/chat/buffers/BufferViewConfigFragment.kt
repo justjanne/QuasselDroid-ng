@@ -22,6 +22,7 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.toLiveData
@@ -68,6 +69,13 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
       return if (info != null && session != null) {
         when (item?.itemId) {
+          R.id.action_configure  -> {
+            network?.let {
+              NetworkEditActivity.launch(requireContext(), network = it.networkId())
+            }
+            actionMode?.finish()
+            true
+          }
           R.id.action_connect    -> {
             network?.requestConnect()
             actionMode?.finish()
@@ -294,6 +302,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
         val menu = actionMode?.menu
         if (menu != null) {
           val allActions = setOf(
+            R.id.action_configure,
             R.id.action_connect,
             R.id.action_disconnect,
             R.id.action_join,
@@ -323,10 +332,14 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
           val availableActions = when (buffer.info?.type?.enabledValues()?.firstOrNull()) {
             Buffer_Type.StatusBuffer  -> {
               when (buffer.connectionState) {
-                INetwork.ConnectionState.Disconnected -> setOf(R.id.action_connect)
-                INetwork.ConnectionState.Initialized  -> setOf(R.id.action_disconnect)
+                INetwork.ConnectionState.Disconnected -> setOf(
+                  R.id.action_configure, R.id.action_connect
+                )
+                INetwork.ConnectionState.Initialized  -> setOf(
+                  R.id.action_configure, R.id.action_disconnect
+                )
                 else                                  -> setOf(
-                  R.id.action_connect, R.id.action_disconnect
+                  R.id.action_configure, R.id.action_connect, R.id.action_disconnect
                 )
               }
             }

@@ -1,10 +1,7 @@
 package de.kuschku.quasseldroid.viewmodel
 
 import android.arch.lifecycle.ViewModel
-import de.kuschku.libquassel.protocol.BufferId
-import de.kuschku.libquassel.protocol.Buffer_Type
-import de.kuschku.libquassel.protocol.MsgId
-import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
@@ -248,7 +245,15 @@ class QuasselViewModel : ViewModel() {
               BufferHiddenState.VISIBLE
           }
 
-          val info = bufferSyncer.bufferInfo(buffer)
+          val info = if (buffer < 0) networks[-buffer]?.let {
+            BufferInfo(
+              bufferId = buffer,
+              networkId = it.networkId(),
+              groupId = 0,
+              bufferName = it.networkName(),
+              type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+            )
+          } else bufferSyncer.bufferInfo(buffer)
           if (info != null) {
             val network = networks[info.networkId]
             when (info.type.enabledValues().firstOrNull()) {
@@ -308,7 +313,7 @@ class QuasselViewModel : ViewModel() {
                       currentConfig.networkId() <= 0 || currentConfig.networkId() == it.networkId
                     }.filter {
                       (currentConfig.allowedBufferTypes() and it.type).isNotEmpty() ||
-                      it.type.hasFlag(Buffer_Type.StatusBuffer)
+                      (it.type.hasFlag(Buffer_Type.StatusBuffer) && currentConfig.networkId() < 0)
                     }.mapNotNull {
                       val network = networks[it.networkId]
                       if (network == null) {
@@ -396,13 +401,62 @@ class QuasselViewModel : ViewModel() {
                       }
                     }
 
+                  fun missingStatusBuffers(
+                    list: Collection<BufferId>): Sequence<Observable<BufferProps>?> {
+                    val totalNetworks = networks.keys
+                    val wantedNetworks = if (currentConfig.networkId() <= 0) totalNetworks
+                    else listOf(currentConfig.networkId())
+
+                    val availableNetworks = list.asSequence().mapNotNull { id ->
+                      bufferSyncer.bufferInfo(id)
+                    }.filter {
+                      it.type.hasFlag(Buffer_Type.StatusBuffer)
+                    }.map {
+                      it.networkId
+                    }
+
+                    val missingNetworks = wantedNetworks - availableNetworks
+
+                    return missingNetworks.asSequence().filter {
+                      currentConfig.networkId() <= 0 || currentConfig.networkId() == it
+                    }.filter {
+                      currentConfig.allowedBufferTypes().hasFlag(Buffer_Type.StatusBuffer)
+                    }.mapNotNull {
+                      networks[it]
+                    }.filter {
+                      !config.hideInactiveNetworks() || it.isConnected()
+                    }.map<Network, Observable<BufferProps>?> { network ->
+                      network.liveNetworkInfo().switchMap { networkInfo ->
+                        network.live_connectionState.map {
+                          BufferProps(
+                            info = BufferInfo(
+                              bufferId = -networkInfo.networkId,
+                              networkId = networkInfo.networkId,
+                              groupId = 0,
+                              bufferName = networkInfo.networkName,
+                              type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+                            ),
+                            network = networkInfo,
+                            bufferStatus = BufferStatus.OFFLINE,
+                            description = "",
+                            activity = Message_Type.of(),
+                            highlights = 0,
+                            hiddenState = BufferHiddenState.VISIBLE
+                          )
+                        }
+                      }
+                    }
+                  }
+
                   bufferSyncer.liveBufferInfos().switchMap {
                     val buffers = if (showHidden) {
                       transformIds(ids, BufferHiddenState.VISIBLE) +
                       transformIds(temp - ids, BufferHiddenState.HIDDEN_TEMPORARY) +
-                      transformIds(perm - temp - ids, BufferHiddenState.HIDDEN_PERMANENT)
+                      transformIds(perm - temp - ids, BufferHiddenState.HIDDEN_PERMANENT) +
+                      missingStatusBuffers(ids + temp + perm)
                     } else {
-                      transformIds(ids.distinct(), BufferHiddenState.VISIBLE)
+                      transformIds(ids, BufferHiddenState.VISIBLE) +
+                      missingStatusBuffers(ids)
                     }
 
                     combineLatest<BufferProps>(buffers.toList()).map { list ->
@@ -417,7 +471,9 @@ class QuasselViewModel : ViewModel() {
                             it.sortedBy { IrcCaseMappers.unicode.toLowerCaseNullable(it.info.bufferName) }
                               .sortedByDescending { it.hiddenState == BufferHiddenState.VISIBLE }
                           else it
-                        }.distinctBy { it.info.bufferId }.toList()
+                        }.distinctBy {
+                          it.info.bufferId
+                        }.toList()
                       )
                     }
                   }

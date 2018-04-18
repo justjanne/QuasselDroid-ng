@@ -2,7 +2,6 @@ package de.kuschku.quasseldroid.util.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.NavUtils
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import butterknife.BindView
@@ -68,7 +67,8 @@ abstract class SettingsActivity(private val fragment: Fragment? = null) : Servic
         if (supportParentActivityIntent == null) {
           super.onBackPressed()
         } else {
-          NavUtils.navigateUpFromSameTask(this)
+          startActivity(supportParentActivityIntent)
+          finish()
         }
       }
       true

@@ -15,6 +15,7 @@
   <string name="label_close">Close</string>
   <string name="label_colors_custom">Custom</string>
   <string name="label_colors_mirc">mIRC</string>
+  <string name="label_configure">Configure</string>
   <string name="label_connect">Connect</string>
   <string name="label_contributors">Contributors</string>
   <string name="label_copy">Copy</string>
