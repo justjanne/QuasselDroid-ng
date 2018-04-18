@@ -77,6 +77,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   @Inject
   lateinit var ircFormatDeserializer: IrcFormatDeserializer
 
+  @Inject
+  lateinit var autoCompleteAdapter: AutoCompleteAdapter
+
   private lateinit var drawerToggle: ActionBarDrawerToggle
 
   private var chatlineFragment: ChatlineFragment? = null
@@ -141,12 +144,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
       chatlineFragment?.let {
-        val autocompleteAdapter = AutoCompleteAdapter(messageSettings, it.chatline::autoComplete)
+        autoCompleteAdapter.setOnClickListener(it.chatline::autoComplete)
         autoCompleteList.layoutManager = LinearLayoutManager(it.activity)
         autoCompleteList.itemAnimator = DefaultItemAnimator()
-        autoCompleteList.adapter = autocompleteAdapter
+        autoCompleteList.adapter = autoCompleteAdapter
         it.autoCompleteHelper.setDataListener {
-          autocompleteAdapter.submitList(it)
+          autoCompleteAdapter.submitList(it)
         }
       }
     }

@@ -18,10 +18,10 @@ import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
+import javax.inject.Inject
 
-class AutoCompleteAdapter(
-  private val messageSettings: MessageSettings,
-  private val clickListener: ((String) -> Unit)? = null
+class AutoCompleteAdapter @Inject constructor(
+  private val messageSettings: MessageSettings
 ) : ListAdapter<AutoCompleteItem, AutoCompleteAdapter.AutoCompleteViewHolder>(
   object : DiffUtil.ItemCallback<AutoCompleteItem>() {
     override fun areItemsTheSame(oldItem: AutoCompleteItem, newItem: AutoCompleteItem) =
@@ -30,6 +30,11 @@ class AutoCompleteAdapter(
     override fun areContentsTheSame(oldItem: AutoCompleteItem, newItem: AutoCompleteItem) =
       oldItem == newItem
   }) {
+  private var clickListener: ((String) -> Unit)? = null
+
+  fun setOnClickListener(listener: ((String) -> Unit)?) {
+    this.clickListener = listener
+  }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
     VIEWTYPE_CHANNEL                         -> AutoCompleteViewHolder.ChannelViewHolder(

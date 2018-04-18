@@ -50,6 +50,9 @@ class TopicFragment : SettingsFragment(), SettingsFragment.Savable {
   @Inject
   lateinit var formatSerializer: IrcFormatSerializer
 
+  @Inject
+  lateinit var autoCompleteAdapter: AutoCompleteAdapter
+
   private lateinit var editorHelper: EditorHelper
 
   private lateinit var mircColorMap: Map<Int, Int>
@@ -124,12 +127,12 @@ class TopicFragment : SettingsFragment(), SettingsFragment.Savable {
     editorViewModel.lastWord.onNext(editorHelper.lastWord)
 
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
-      val autocompleteAdapter = AutoCompleteAdapter(messageSettings, chatline::autoComplete)
+      autoCompleteAdapter.setOnClickListener(chatline::autoComplete)
       autoCompleteList.layoutManager = LinearLayoutManager(activity)
       autoCompleteList.itemAnimator = DefaultItemAnimator()
-      autoCompleteList.adapter = autocompleteAdapter
+      autoCompleteList.adapter = autoCompleteAdapter
       autoCompleteHelper.setDataListener {
-        autocompleteAdapter.submitList(it)
+        autoCompleteAdapter.submitList(it)
       }
     }
 

@@ -1,21 +1,19 @@
 package de.kuschku.quasseldroid.util.irc.format
 
 import android.graphics.Typeface
-import android.support.annotation.ColorInt
 import android.text.Spanned
 import android.text.style.*
 import java.util.*
 import javax.inject.Inject
 
 class IrcFormatSerializer @Inject constructor() {
-  fun toEscapeCodes(@ColorInt colorForegroundMirc: Int, mircColorMap: Map<Int, Int>,
-                    text: Spanned): String {
+  fun toEscapeCodes(colorForegroundMirc: Int, mircColorMap: Map<Int, Int>, text: Spanned): String {
     val out = StringBuilder()
     withinParagraph(colorForegroundMirc, mircColorMap, out, text, 0, text.length)
     return out.toString()
   }
 
-  private fun withinParagraph(@ColorInt colorForegroundMirc: Int, mircColorMap: Map<Int, Int>,
+  private fun withinParagraph(colorForegroundMirc: Int, mircColorMap: Map<Int, Int>,
                               out: StringBuilder, text: Spanned, start: Int, end: Int) {
     fun writeBold() {
       out.append(CODE_BOLD)

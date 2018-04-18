@@ -63,6 +63,9 @@ class ChatlineFragment : ServiceBoundFragment() {
   @Inject
   lateinit var ircFormatSerializer: IrcFormatSerializer
 
+  @Inject
+  lateinit var autoCompleteAdapter: AutoCompleteAdapter
+
   lateinit var editorHelper: EditorHelper
 
   lateinit var autoCompleteHelper: AutoCompleteHelper
@@ -145,12 +148,12 @@ class ChatlineFragment : ServiceBoundFragment() {
     editorViewModel.lastWord.onNext(editorHelper.lastWord)
 
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
-      val autocompleteAdapter = AutoCompleteAdapter(messageSettings, chatline::autoComplete)
+      autoCompleteAdapter.setOnClickListener(chatline::autoComplete)
       autoCompleteList.layoutManager = LinearLayoutManager(activity)
       autoCompleteList.itemAnimator = DefaultItemAnimator()
-      autoCompleteList.adapter = autocompleteAdapter
+      autoCompleteList.adapter = autoCompleteAdapter
       autoCompleteHelper.setDataListener {
-        autocompleteAdapter.submitList(it)
+        autoCompleteAdapter.submitList(it)
       }
     }
 

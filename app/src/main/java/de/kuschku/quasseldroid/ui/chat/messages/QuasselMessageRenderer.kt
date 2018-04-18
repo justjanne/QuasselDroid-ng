@@ -110,8 +110,8 @@ class QuasselMessageRenderer @Inject constructor(
     }
 
     viewHolder.avatar?.visibleIf(!isFollowUp)
-    avatarContainer?.visibleIf(messageSettings.showAvatars)
-    avatarPlaceholder?.visibleIf(messageSettings.showAvatars)
+    avatarContainer?.visibleIf(messageSettings.showAvatars && messageSettings.nicksOnNewLine)
+    avatarPlaceholder?.visibleIf(messageSettings.showAvatars && messageSettings.nicksOnNewLine)
     val separateLine = viewHolder.content != null && viewHolder.name != null && messageSettings.nicksOnNewLine
     viewHolder.name?.visibleIf(separateLine && !isFollowUp)
     viewHolder.content?.visibleIf(separateLine)
