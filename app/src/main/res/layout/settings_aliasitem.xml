@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:fillViewport="true"
+  android:scrollbars="vertical">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp">
+
+        <android.support.design.widget.TextInputLayout
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:hint="@string/settings_aliasitem_name">
+
+          <android.support.design.widget.TextInputEditText
+            android:id="@+id/name"
+            style="@style/Widget.CoreSettings.EditText"
+            tools:text="back" />
+        </android.support.design.widget.TextInputLayout>
+      </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="0dip"
+      android:layout_weight="1">
+
+      <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
+
+        <android.support.design.widget.TextInputLayout
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:hint="@string/settings_aliasitem_expansion">
+
+          <de.kuschku.quasseldroid.ui.chat.input.RichEditText
+            android:id="@+id/expansion"
+            style="@style/Widget.CoreSettings.EditText"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="textMultiLine"
+            android:textColor="?attr/colorForeground"
+            android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+      </LinearLayout>
+    </ScrollView>
+
+    <de.kuschku.quasseldroid.util.ui.AutoCompleteRecyclerView
+      android:id="@+id/autocomplete_list"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      tools:listitem="@layout/widget_nick" />
+
+    <android.support.design.widget.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="?attr/colorBackgroundCard">
+
+      <de.kuschku.quasseldroid.ui.chat.input.RichToolbar
+        android:id="@+id/formatting_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:contentInsetStart="0dip" />
+    </android.support.design.widget.AppBarLayout>
+  </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

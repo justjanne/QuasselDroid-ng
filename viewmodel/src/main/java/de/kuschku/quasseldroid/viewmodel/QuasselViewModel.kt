@@ -73,6 +73,8 @@ class QuasselViewModel : ViewModel() {
 
   val highlightRuleManager = session.mapMapNullable(ISession::highlightRuleManager)
 
+  val aliasManager = session.mapMapNullable(ISession::aliasManager)
+
   val networks = session.switchMap {
     it.map(ISession::liveNetworks).orElse(Observable.just(emptyMap()))
   }

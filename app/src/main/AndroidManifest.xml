@@ -137,7 +137,19 @@
       android:name=".ui.coresettings.highlightrule.HighlightRuleActivity"
       android:exported="false"
       android:label="@string/settings_highlightrule_title"
+      android:parentActivityName=".ui.coresettings.highlightlist.HighlightListActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.coresettings.aliaslist.AliasListActivity"
+      android:exported="false"
+      android:label="@string/settings_aliaslist_title"
       android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.coresettings.aliasitem.AliasItemActivity"
+      android:exported="false"
+      android:label="@string/settings_aliasitem_title"
+      android:parentActivityName=".ui.coresettings.aliaslist.AliasListActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
       android:name=".ui.coresettings.networkconfig.NetworkConfigActivity"

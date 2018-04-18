@@ -61,21 +61,6 @@
 
     </LinearLayout>
 
-    <TextView
-      android:id="@+id/title"
-      android:layout_width="0dip"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:ellipsize="marquee"
-      android:orientation="vertical"
-      android:paddingBottom="16dp"
-      android:paddingTop="16dp"
-      android:singleLine="true"
-      android:textAppearance="?android:textAppearanceMedium"
-      android:textColor="?colorTextPrimary"
-      android:textSize="16sp"
-      tools:text="https://clbin.com/*.jpg*" />
-
     <android.support.v7.widget.SwitchCompat
       android:id="@+id/toggle"
       android:layout_width="wrap_content"

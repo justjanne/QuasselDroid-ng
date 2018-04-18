@@ -11,7 +11,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="2dp"
     android:paddingRight="2dp"
-    tools:listitem="@layout/settings_ignorelist_item" />
+    tools:listitem="@layout/settings_aliaslist_item" />
 
   <android.support.design.widget.FloatingActionButton
     android:id="@+id/add"

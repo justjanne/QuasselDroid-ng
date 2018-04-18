@@ -22,6 +22,10 @@ import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseSettingsActivity
 import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseSettingsFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.aliasitem.AliasItemActivity
+import de.kuschku.quasseldroid.ui.coresettings.aliasitem.AliasItemFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.aliaslist.AliasListActivity
+import de.kuschku.quasseldroid.ui.coresettings.aliaslist.AliasListFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistCreateActivity
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistCreateFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistEditActivity
@@ -105,14 +109,20 @@ abstract class ActivityModule {
   @ContributesAndroidInjector(modules = [IgnoreListFragmentProvider::class])
   abstract fun bindIgnoreListActivity(): IgnoreListActivity
 
+  @ContributesAndroidInjector(modules = [IgnoreItemFragmentProvider::class])
+  abstract fun bindIgnoreItemActivity(): IgnoreItemActivity
+
   @ContributesAndroidInjector(modules = [HighlightListFragmentProvider::class])
   abstract fun bindHighlightListActivity(): HighlightListActivity
 
   @ContributesAndroidInjector(modules = [HighlightRuleFragmentProvider::class])
   abstract fun bindHighlightRuleActivity(): HighlightRuleActivity
 
-  @ContributesAndroidInjector(modules = [IgnoreItemFragmentProvider::class])
-  abstract fun bindIgnoreItemActivity(): IgnoreItemActivity
+  @ContributesAndroidInjector(modules = [AliasListFragmentProvider::class])
+  abstract fun bindAliasListActivity(): AliasListActivity
+
+  @ContributesAndroidInjector(modules = [AliasItemFragmentProvider::class])
+  abstract fun bindAliasItemActivity(): AliasItemActivity
 
   @ContributesAndroidInjector(modules = [NetworkConfigFragmentProvider::class])
   abstract fun bindNetworkConfigActivity(): NetworkConfigActivity

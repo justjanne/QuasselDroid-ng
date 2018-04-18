@@ -114,6 +114,10 @@
 
   <string name="settings_aliaslist_title">Aliases</string>
 
+  <string name="settings_aliasitem_title">Alias</string>
+  <string name="settings_aliasitem_name">Name</string>
+  <string name="settings_aliasitem_expansion">Expansion</string>
+
   <string name="settings_networkconfig_title">IRC Config</string>
   <string name="settings_networkconfig_ping_timeout">Ping Timeout Detection</string>
   <string name="settings_networkconfig_ping_interval">Ping Interval</string>

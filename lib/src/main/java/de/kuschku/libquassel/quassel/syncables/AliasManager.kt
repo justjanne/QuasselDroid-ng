@@ -36,8 +36,7 @@ class AliasManager constructor(
         "Sizes do not match: names=${names.size}, expansions=${expansions.size}"
       )
 
-    _aliases.clear()
-    _aliases.addAll(names.zip(expansions, ::Alias))
+    _aliases = names.zip(expansions, ::Alias).toList()
   }
 
   override fun addAlias(name: String, expansion: String) {
@@ -45,7 +44,7 @@ class AliasManager constructor(
       return
     }
 
-    _aliases.add(Alias(name, expansion))
+    _aliases += Alias(name, expansion)
 
     super.addAlias(name, expansion)
   }
@@ -69,6 +68,16 @@ class AliasManager constructor(
     Alias("inxi", "/exec inxi $0"),
     Alias("sysinfo", "/exec inxi -d")
   )
+
+  fun aliasList() = _aliases
+
+  fun setAliasList(list: List<Alias>) {
+    _aliases = list
+  }
+
+  fun copy() = AliasManager(proxy).also {
+    it.fromVariantMap(toVariantMap())
+  }
 
   fun processInput(info: BufferInfo, message: String,
                    previousCommands: MutableList<IAliasManager.Command>) {
@@ -160,5 +169,5 @@ class AliasManager constructor(
     }
   }
 
-  private val _aliases = mutableListOf<IAliasManager.Alias>()
+  private var _aliases = listOf<IAliasManager.Alias>()
 }

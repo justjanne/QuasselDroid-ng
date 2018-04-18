@@ -6,6 +6,7 @@ import de.kuschku.libquassel.protocol.ARG
 import de.kuschku.libquassel.protocol.QVariantMap
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.quassel.BufferInfo
+import java.io.Serializable
 
 @Syncable(name = "AliasManager")
 interface IAliasManager : ISyncableObject {
@@ -24,7 +25,7 @@ interface IAliasManager : ISyncableObject {
   data class Alias(
     val name: String,
     val expansion: String
-  )
+  ) : Serializable
 
   data class Command(
     val buffer: BufferInfo,

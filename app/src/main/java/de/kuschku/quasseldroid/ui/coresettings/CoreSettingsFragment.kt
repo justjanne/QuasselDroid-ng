@@ -16,6 +16,7 @@ import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.ui.coresettings.aliaslist.AliasListActivity
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistCreateActivity
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistEditActivity
 import de.kuschku.quasseldroid.ui.coresettings.highlightlist.HighlightListActivity
@@ -134,6 +135,10 @@ class CoreSettingsFragment : ServiceBoundFragment() {
 
     highlightlist.setOnClickListener {
       HighlightListActivity.launch(requireContext())
+    }
+
+    aliaslist.setOnClickListener {
+      AliasListActivity.launch(requireContext())
     }
 
     newNetwork.setOnClickListener {

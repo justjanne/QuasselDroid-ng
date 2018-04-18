@@ -64,11 +64,11 @@ abstract class SettingsActivity(private val fragment: Fragment? = null) : Servic
   override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
     android.R.id.home -> {
       shouldNavigateAway {
-        if (supportParentActivityIntent == null) {
-          super.onBackPressed()
-        } else {
+        if (supportParentActivityIntent != null) {
           startActivity(supportParentActivityIntent)
           finish()
+        } else {
+          super.onBackPressed()
         }
       }
       true
