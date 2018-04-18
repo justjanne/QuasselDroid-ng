@@ -13,13 +13,13 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import dagger.android.support.DaggerFragment
 import de.kuschku.malheur.data.Report
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.fromJson
-import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import java.io.File
 
-class CrashSettingsFragment : ServiceBoundFragment() {
+class CrashSettingsFragment : DaggerFragment() {
   @BindView(R.id.list)
   lateinit var list: RecyclerView
 
@@ -85,7 +85,7 @@ class CrashSettingsFragment : ServiceBoundFragment() {
 
   override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
     R.id.action_delete_all -> {
-      runInBackground {
+      handler.post {
         crashDir?.mkdirs()
         crashDir?.listFiles()?.forEach {
           it.delete()

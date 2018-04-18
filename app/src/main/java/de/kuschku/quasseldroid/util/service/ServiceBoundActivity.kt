@@ -8,32 +8,23 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import dagger.android.AndroidInjection
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasFragmentInjector
-import dagger.android.support.HasSupportFragmentInjector
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.ConnectionSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity
 import de.kuschku.quasseldroid.util.helper.sharedPreferences
 import de.kuschku.quasseldroid.util.helper.updateRecentsHeaderIfExisting
+import de.kuschku.quasseldroid.util.ui.ThemedActivity
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
-abstract class ServiceBoundActivity : AppCompatActivity(),
-                                      SharedPreferences.OnSharedPreferenceChangeListener,
-                                      HasSupportFragmentInjector,
-                                      HasFragmentInjector {
+abstract class ServiceBoundActivity : ThemedActivity(),
+                                      SharedPreferences.OnSharedPreferenceChangeListener {
   @DrawableRes
   protected val icon: Int = R.mipmap.ic_launcher_recents
   @ColorRes
@@ -42,20 +33,6 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
   private val connection = BackendServiceConnection()
   protected val backend: BehaviorSubject<Optional<Backend>>
     get() = connection.backend
-
-  @Inject
-  lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
-
-  @Inject
-  lateinit var frameworkFragmentInjector: DispatchingAndroidInjector<android.app.Fragment>
-
-  override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
-    return supportFragmentInjector
-  }
-
-  override fun fragmentInjector(): AndroidInjector<android.app.Fragment>? {
-    return frameworkFragmentInjector
-  }
 
   protected fun runInBackground(f: () -> Unit) {
     connection.backend.value.ifPresent {
@@ -70,9 +47,6 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
   }
 
   @Inject
-  lateinit var appearanceSettings: AppearanceSettings
-
-  @Inject
   lateinit var autoCompleteSettings: AutoCompleteSettings
 
   @Inject
@@ -85,10 +59,8 @@ abstract class ServiceBoundActivity : AppCompatActivity(),
   private var startedSelection = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    AndroidInjection.inject(this)
     connection.context = this
     checkConnection()
-    setTheme(appearanceSettings.theme.style)
     super.onCreate(savedInstanceState)
     viewModel = ViewModelProviders.of(this)[QuasselViewModel::class.java]
     viewModel.backendWrapper.onNext(this.backend)

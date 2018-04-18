@@ -3,9 +3,9 @@ package de.kuschku.quasseldroid.ui.coresettings.highlightrule
 import android.content.Context
 import android.content.Intent
 import de.kuschku.libquassel.quassel.syncables.HighlightRuleManager
-import de.kuschku.quasseldroid.util.ui.SettingsActivity
+import de.kuschku.quasseldroid.util.ui.ServiceBoundSettingsActivity
 
-class HighlightRuleActivity : SettingsActivity(HighlightRuleFragment()) {
+class HighlightRuleActivity : ServiceBoundSettingsActivity(HighlightRuleFragment()) {
   companion object {
     fun launch(
       context: Context,

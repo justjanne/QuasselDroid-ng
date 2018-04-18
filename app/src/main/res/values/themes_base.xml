@@ -38,7 +38,10 @@
 
   <style name="Theme.Base.ChatTheme.Light" parent="Theme.AppTheme.Light.NoActionBar" />
 
-  <style name="Theme.SetupTheme" parent="Theme.AppTheme.Light.NoActionBar" />
+  <style name="Theme.SetupTheme" parent="Theme.AppTheme.Light.NoActionBar">
+    <item name="actionBarTheme">@style/Widget.AppBarOverlay</item>
+    <item name="actionBarPopupTheme">@style/Widget.PopupOverlay.Light</item>
+  </style>
 
   <style name="Theme.SplashTheme" parent="Theme.AppTheme.Light.NoActionBar">
     <item name="android:windowBackground">@drawable/bg_splash</item>

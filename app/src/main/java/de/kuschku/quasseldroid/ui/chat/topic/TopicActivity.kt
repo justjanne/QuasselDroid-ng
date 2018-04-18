@@ -2,9 +2,9 @@ package de.kuschku.quasseldroid.ui.chat.topic
 
 import android.content.Context
 import android.content.Intent
-import de.kuschku.quasseldroid.util.ui.SettingsActivity
+import de.kuschku.quasseldroid.util.ui.ServiceBoundSettingsActivity
 
-class TopicActivity : SettingsActivity(TopicFragment()) {
+class TopicActivity : ServiceBoundSettingsActivity(TopicFragment()) {
   companion object {
     fun launch(
       context: Context,

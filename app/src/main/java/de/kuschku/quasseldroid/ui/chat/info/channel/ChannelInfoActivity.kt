@@ -2,9 +2,9 @@ package de.kuschku.quasseldroid.ui.chat.info.channel
 
 import android.content.Context
 import android.content.Intent
-import de.kuschku.quasseldroid.util.ui.SettingsActivity
+import de.kuschku.quasseldroid.util.ui.ServiceBoundSettingsActivity
 
-class ChannelInfoActivity : SettingsActivity(ChannelInfoFragment()) {
+class ChannelInfoActivity : ServiceBoundSettingsActivity(ChannelInfoFragment()) {
   companion object {
     fun launch(
       context: Context,

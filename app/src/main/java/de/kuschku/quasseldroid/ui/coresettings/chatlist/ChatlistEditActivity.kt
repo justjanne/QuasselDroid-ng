@@ -2,9 +2,9 @@ package de.kuschku.quasseldroid.ui.coresettings.chatlist
 
 import android.content.Context
 import android.content.Intent
-import de.kuschku.quasseldroid.util.ui.SettingsActivity
+import de.kuschku.quasseldroid.util.ui.ServiceBoundSettingsActivity
 
-class ChatlistEditActivity : SettingsActivity(ChatListEditFragment()) {
+class ChatlistEditActivity : ServiceBoundSettingsActivity(ChatListEditFragment()) {
   companion object {
     fun launch(
       context: Context,

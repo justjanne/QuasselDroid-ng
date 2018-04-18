@@ -3,9 +3,9 @@ package de.kuschku.quasseldroid.ui.coresettings.aliasitem
 import android.content.Context
 import android.content.Intent
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
-import de.kuschku.quasseldroid.util.ui.SettingsActivity
+import de.kuschku.quasseldroid.util.ui.ServiceBoundSettingsActivity
 
-class AliasItemActivity : SettingsActivity(AliasItemFragment()) {
+class AliasItemActivity : ServiceBoundSettingsActivity(AliasItemFragment()) {
   companion object {
     fun launch(
       context: Context,

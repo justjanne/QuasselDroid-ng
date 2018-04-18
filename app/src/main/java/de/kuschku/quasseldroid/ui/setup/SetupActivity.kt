@@ -10,18 +10,25 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
+import android.support.v7.widget.ActionMenuView
 import android.util.SparseArray
 import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import dagger.android.support.DaggerAppCompatActivity
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.ui.clientsettings.about.AboutSettingsActivity
+import de.kuschku.quasseldroid.ui.clientsettings.app.AppSettingsActivity
+import de.kuschku.quasseldroid.ui.clientsettings.crash.CrashSettingsActivity
 import de.kuschku.quasseldroid.util.helper.observeSticky
 import de.kuschku.quasseldroid.util.helper.or
 import de.kuschku.quasseldroid.util.helper.switchMap
 import de.kuschku.quasseldroid.util.helper.updateRecentsHeaderIfExisting
 
 abstract class SetupActivity : DaggerAppCompatActivity() {
+  @BindView(R.id.menu_view)
+  lateinit var menuView: ActionMenuView
+
   @BindView(R.id.view_pager)
   lateinit var viewPager: ViewPager
 
@@ -79,6 +86,26 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_setup)
     ButterKnife.bind(this)
+
+    menuView.popupTheme = R.style.Widget_PopupOverlay_Light
+    menuInflater.inflate(R.menu.activity_setup, menuView.menu)
+    menuView.setOnMenuItemClickListener {
+      when (it.itemId) {
+        R.id.action_client_settings -> {
+          AppSettingsActivity.launch(this)
+          true
+        }
+        R.id.action_crashes         -> {
+          CrashSettingsActivity.launch(this)
+          true
+        }
+        R.id.action_about           -> {
+          AboutSettingsActivity.launch(this)
+          true
+        }
+        else                        -> false
+      }
+    }
 
     adapter = SlidePagerAdapter(supportFragmentManager)
     fragments.forEach(adapter::addFragment)
