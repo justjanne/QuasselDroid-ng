@@ -1,6 +1,5 @@
 package de.kuschku.quasseldroid.ui.clientsettings.crash
 
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
@@ -30,15 +29,15 @@ class CrashSettingsFragment : DaggerFragment() {
   private var crashDir: File? = null
   private var adapter: CrashAdapter? = null
 
-  override fun onAttach(context: Context?) {
-    super.onAttach(context)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
     handlerThread = HandlerThread("CrashSettings")
     handlerThread.start()
     handler = Handler(handlerThread.looper)
   }
 
-  override fun onDetach() {
-    super.onDetach()
+  override fun onDestroy() {
+    super.onDestroy()
     handlerThread.quit()
   }
 
