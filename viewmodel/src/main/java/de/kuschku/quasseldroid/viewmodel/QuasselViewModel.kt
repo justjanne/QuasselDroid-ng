@@ -18,6 +18,8 @@ import de.kuschku.libquassel.util.helpers.*
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.viewmodel.data.*
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
@@ -65,7 +67,9 @@ class QuasselViewModel : ViewModel() {
     }
   }
 
-  val errors = sessionManager.mapSwitchMap(SessionManager::error)
+  val errors = sessionManager.toFlowable(BackpressureStrategy.LATEST).switchMap {
+    it.orNull()?.error ?: Flowable.empty()
+  }
 
   val networkConfig = session.mapMapNullable(ISession::networkConfig)
 

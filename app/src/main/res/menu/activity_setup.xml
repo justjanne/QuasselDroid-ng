@@ -4,6 +4,9 @@
     android:id="@+id/action_client_settings"
     android:title="@string/label_settings_client" />
   <item
+    android:id="@+id/action_certificates"
+    android:title="@string/label_certificates" />
+  <item
     android:id="@+id/action_crashes"
     android:title="@string/label_crashes" />
   <item

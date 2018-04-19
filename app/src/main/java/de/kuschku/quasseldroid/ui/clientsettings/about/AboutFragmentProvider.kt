@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
-abstract class AboutSettingsFragmentProvider {
+abstract class AboutFragmentProvider {
   @ContributesAndroidInjector
-  abstract fun bindAboutSettingsFragment(): AboutSettingsFragment
+  abstract fun bindAboutFragment(): AboutFragment
 }

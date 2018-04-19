@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:minHeight="?android:attr/listPreferredItemHeightSmall"
+  android:orientation="horizontal"
+  tools:showIn="@layout/preferences_whitelist">
+
+  <LinearLayout
+    android:layout_width="0dip"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:paddingBottom="16dp"
+    android:paddingEnd="0dip"
+    android:paddingLeft="?listPreferredItemPaddingLeft"
+    android:paddingRight="0dip"
+    android:paddingStart="?listPreferredItemPaddingLeft"
+    android:paddingTop="16dp">
+
+    <TextView
+      android:id="@+id/hostname"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textAppearance="?android:textAppearanceMedium"
+      android:textColor="?colorTextPrimary"
+      android:textSize="16sp"
+      tools:text="www.google.com" />
+
+    <TextView
+      android:id="@+id/fingerprint"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textAppearance="?textAppearanceListItemSecondary"
+      android:textColor="?colorTextSecondary"
+      tools:text="65:F9:0D:04:8A:7B:4F:D8:C8:D8:75:8D:EC:48:8C:F2:96:86:00:44" />
+
+  </LinearLayout>
+
+  <android.support.v7.widget.AppCompatImageButton
+    android:id="@+id/action_delete"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:background="?selectableItemBackgroundBorderless"
+    android:paddingEnd="?listPreferredItemPaddingRight"
+    android:paddingLeft="32dp"
+    android:paddingRight="?listPreferredItemPaddingRight"
+    android:paddingStart="32dp"
+    app:srcCompat="@drawable/ic_delete"
+    app:tint="?colorTextSecondary" />
+</LinearLayout>

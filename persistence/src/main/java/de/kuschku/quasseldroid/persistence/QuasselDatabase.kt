@@ -161,6 +161,12 @@ abstract class QuasselDatabase : RoomDatabase() {
 
     @Query("SELECT * FROM ssl_validity_whitelist WHERE fingerprint = :fingerprint")
     fun find(fingerprint: String): SslValidityWhitelistEntry?
+
+    @Query("DELETE FROM ssl_validity_whitelist WHERE fingerprint = :fingerprint")
+    fun delete(fingerprint: String)
+
+    @Query("DELETE FROM ssl_validity_whitelist")
+    fun clear()
   }
 
   @Entity(tableName = "ssl_hostname_whitelist", primaryKeys = ["fingerprint", "hostname"])
@@ -179,6 +185,12 @@ abstract class QuasselDatabase : RoomDatabase() {
 
     @Query("SELECT * FROM ssl_hostname_whitelist WHERE fingerprint = :fingerprint AND hostname = :hostname")
     fun find(fingerprint: String, hostname: String): SslHostnameWhitelistEntry?
+
+    @Query("DELETE FROM ssl_hostname_whitelist WHERE fingerprint = :fingerprint AND hostname = :hostname")
+    fun delete(fingerprint: String, hostname: String)
+
+    @Query("DELETE FROM ssl_hostname_whitelist")
+    fun clear()
   }
 
   object Creator {

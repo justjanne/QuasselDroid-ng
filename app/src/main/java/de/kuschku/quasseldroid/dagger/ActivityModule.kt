@@ -12,14 +12,16 @@ import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoActivity
 import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoFragmentProvider
 import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
 import de.kuschku.quasseldroid.ui.chat.topic.TopicFragmentProvider
-import de.kuschku.quasseldroid.ui.clientsettings.about.AboutSettingsActivity
-import de.kuschku.quasseldroid.ui.clientsettings.about.AboutSettingsFragmentProvider
-import de.kuschku.quasseldroid.ui.clientsettings.app.AppSettingsActivity
-import de.kuschku.quasseldroid.ui.clientsettings.app.AppSettingsFragmentProvider
-import de.kuschku.quasseldroid.ui.clientsettings.crash.CrashSettingsActivity
-import de.kuschku.quasseldroid.ui.clientsettings.crash.CrashSettingsFragmentProvider
-import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseSettingsActivity
-import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseSettingsFragmentProvider
+import de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity
+import de.kuschku.quasseldroid.ui.clientsettings.about.AboutFragmentProvider
+import de.kuschku.quasseldroid.ui.clientsettings.client.ClientSettingsActivity
+import de.kuschku.quasseldroid.ui.clientsettings.client.ClientSettingsFragmentProvider
+import de.kuschku.quasseldroid.ui.clientsettings.crash.CrashActivity
+import de.kuschku.quasseldroid.ui.clientsettings.crash.CrashFragmentProvider
+import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseActivity
+import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseFragmentProvider
+import de.kuschku.quasseldroid.ui.clientsettings.whitelist.WhitelistActivity
+import de.kuschku.quasseldroid.ui.clientsettings.whitelist.WhitelistFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.aliasitem.AliasItemActivity
@@ -70,17 +72,20 @@ abstract class ActivityModule {
   @ContributesAndroidInjector(modules = [TopicFragmentProvider::class])
   abstract fun bindTopicActivity(): TopicActivity
 
-  @ContributesAndroidInjector(modules = [AppSettingsFragmentProvider::class])
-  abstract fun bindAppSettingsActivity(): AppSettingsActivity
+  @ContributesAndroidInjector(modules = [ClientSettingsFragmentProvider::class])
+  abstract fun bindClientSettingsActivity(): ClientSettingsActivity
 
-  @ContributesAndroidInjector(modules = [CrashSettingsFragmentProvider::class])
-  abstract fun bindCrashSettingsActivity(): CrashSettingsActivity
+  @ContributesAndroidInjector(modules = [WhitelistFragmentProvider::class])
+  abstract fun bindWhitelistActivity(): WhitelistActivity
 
-  @ContributesAndroidInjector(modules = [AboutSettingsFragmentProvider::class])
-  abstract fun bindAboutSettingsActivity(): AboutSettingsActivity
+  @ContributesAndroidInjector(modules = [CrashFragmentProvider::class])
+  abstract fun bindCrashActivity(): CrashActivity
 
-  @ContributesAndroidInjector(modules = [LicenseSettingsFragmentProvider::class])
-  abstract fun bindLicenseSettingsActivity(): LicenseSettingsActivity
+  @ContributesAndroidInjector(modules = [AboutFragmentProvider::class])
+  abstract fun bindAboutActivity(): AboutActivity
+
+  @ContributesAndroidInjector(modules = [LicenseFragmentProvider::class])
+  abstract fun bindLicenseActivity(): LicenseActivity
 
   @ContributesAndroidInjector(modules = [CoreSettingsFragmentProvider::class])
   abstract fun bindCoreSettingsActivity(): CoreSettingsActivity

@@ -7,12 +7,18 @@
   <string name="label_error_certificate_no_certificate">Kein Zertifikat verfügbar</string>
   <string name="label_error_certificate_no_hostname">Kein Rechnername verfügbar</string>
   <string name="label_error_certificate_invalid"><![CDATA[
-    <p>Das Zertifikat mit Fingerabdruck <code>%1$s</code> ist nur gültig im Zeitraum von %2$s bis %3$s</p>
+    <p>Das Zertifikat mit Fingerabdruck<br/>
+    <code>%1$s</code><br/>
+    ist nur gültig im Zeitraum von %2$s bis %3$s</p>
   ]]></string>
   <string name="label_error_certificate_untrusted"><![CDATA[
-    <p>Das Zertifikat mit Fingerabdruck <code>%1$s</code> ist nicht vertrauenswürdig.</p>
+    <p>Das Zertifikat mit Fingerabdruck<br/>
+    <code>%1$s</code><br/>
+    ist nicht vertrauenswürdig.</p>
   ]]></string>
   <string name="label_error_certificate_no_match"><![CDATA[
-    <p>Das Zertifikat mit Fingerabdruck <code>%1$s</code> ist nicht gültig für %2$s.</p>
+    <p>Das Zertifikat mit Fingerabdruck<br/>
+    <code>%1$s</code><br/>
+    ist nicht gültig für %2$s.</p>
   ]]></string>
 </resources>

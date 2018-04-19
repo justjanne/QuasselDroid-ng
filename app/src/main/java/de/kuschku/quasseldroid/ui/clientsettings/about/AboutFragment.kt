@@ -18,7 +18,7 @@ import dagger.android.support.DaggerFragment
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.R
 
-class AboutSettingsFragment : DaggerFragment() {
+class AboutFragment : DaggerFragment() {
 
   @BindView(R.id.version)
   lateinit var version: TextView
@@ -40,7 +40,7 @@ class AboutSettingsFragment : DaggerFragment() {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-    val view = inflater.inflate(R.layout.fragment_about, container, false)
+    val view = inflater.inflate(R.layout.preferences_about, container, false)
     ButterKnife.bind(this, view)
 
     version.text = BuildConfig.VERSION_NAME

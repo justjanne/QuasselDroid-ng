@@ -276,7 +276,8 @@ class QuasselService : DaggerLifecycleService(),
       .throttleFirst(1, TimeUnit.SECONDS)
       .toLiveData()
       .observe(this, Observer {
-        if (wasEverConnected) sessionManager.reconnect(true)
+        if (wasEverConnected && !sessionManager.hasErrored)
+          sessionManager.reconnect(true)
       })
 
     sessionManager.state
@@ -287,7 +288,8 @@ class QuasselService : DaggerLifecycleService(),
       .observe(
         this, Observer {
         if (it == ConnectionState.DISCONNECTED || it == ConnectionState.CLOSED) {
-          if (wasEverConnected) sessionManager.reconnect()
+          if (wasEverConnected && !sessionManager.hasErrored)
+            sessionManager.reconnect()
         } else {
           wasEverConnected = true
         }

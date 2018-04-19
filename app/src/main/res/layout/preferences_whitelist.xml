@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+      style="@style/Widget.Subhead"
+      android:text="@string/label_whitelist_certificates" />
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/certificate_whitelist"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingLeft="2dp"
+      android:paddingRight="2dp"
+      tools:itemCount="2"
+      tools:listitem="@layout/preferences_whitelist_certificate_item" />
+
+    <TextView
+      style="@style/Widget.Subhead"
+      android:text="@string/label_whitelist_hostnames" />
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/hostname_whitelist"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingLeft="2dp"
+      android:paddingRight="2dp"
+      tools:itemCount="3"
+      tools:listitem="@layout/preferences_whitelist_hostname_item" />
+
+  </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

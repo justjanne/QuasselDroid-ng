@@ -160,28 +160,34 @@
 
     <!-- Client Settings -->
     <activity
-      android:name=".ui.clientsettings.app.AppSettingsActivity"
+      android:name=".ui.clientsettings.client.ClientSettingsActivity"
       android:exported="false"
       android:label="@string/label_settings_client"
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.clientsettings.crash.CrashSettingsActivity"
+      android:name=".ui.clientsettings.crash.CrashActivity"
       android:exported="false"
       android:label="@string/label_crashes"
-      android:parentActivityName=".ui.clientsettings.app.AppSettingsActivity"
+      android:parentActivityName=".ui.clientsettings.client.ClientSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.clientsettings.about.AboutSettingsActivity"
+      android:name=".ui.clientsettings.whitelist.WhitelistActivity"
+      android:exported="false"
+      android:label="@string/label_certificates"
+      android:parentActivityName=".ui.clientsettings.client.ClientSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.clientsettings.about.AboutActivity"
       android:exported="false"
       android:label="@string/label_about"
-      android:parentActivityName=".ui.clientsettings.app.AppSettingsActivity"
+      android:parentActivityName=".ui.clientsettings.client.ClientSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.clientsettings.license.LicenseSettingsActivity"
+      android:name=".ui.clientsettings.license.LicenseActivity"
       android:exported="false"
       android:label="@string/label_license"
-      android:parentActivityName=".ui.clientsettings.about.AboutSettingsActivity"
+      android:parentActivityName=".ui.clientsettings.about.AboutActivity"
       android:windowSoftInputMode="adjustResize" />
 
     <!-- Client Setup Flow -->

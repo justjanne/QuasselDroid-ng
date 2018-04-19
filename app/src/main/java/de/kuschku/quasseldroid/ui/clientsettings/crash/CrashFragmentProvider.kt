@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
-abstract class CrashSettingsFragmentProvider {
+abstract class CrashFragmentProvider {
   @ContributesAndroidInjector
-  abstract fun bindAppSettingsFragment(): CrashSettingsFragment
+  abstract fun bindClientSettingsFragment(): CrashFragment
 }

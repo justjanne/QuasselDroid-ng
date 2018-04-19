@@ -1,12 +1,12 @@
-package de.kuschku.quasseldroid.ui.clientsettings.about
+package de.kuschku.quasseldroid.ui.clientsettings.whitelist
 
 import android.content.Context
 import android.content.Intent
 import de.kuschku.quasseldroid.util.ui.SettingsActivity
 
-class AboutSettingsActivity : SettingsActivity(AboutSettingsFragment()) {
+class WhitelistActivity : SettingsActivity(WhitelistFragment()) {
   companion object {
     fun launch(context: Context) = context.startActivity(intent(context))
-    fun intent(context: Context) = Intent(context, AboutSettingsActivity::class.java)
+    fun intent(context: Context) = Intent(context, WhitelistActivity::class.java)
   }
 }

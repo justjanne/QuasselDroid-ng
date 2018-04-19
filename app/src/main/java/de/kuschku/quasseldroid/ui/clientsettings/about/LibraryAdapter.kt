@@ -8,7 +8,7 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseSettingsActivity
+import de.kuschku.quasseldroid.ui.clientsettings.license.LicenseActivity
 import de.kuschku.quasseldroid.util.helper.visibleIf
 
 class LibraryAdapter(private val libraries: List<Library>) :
@@ -39,9 +39,9 @@ class LibraryAdapter(private val libraries: List<Library>) :
       ButterKnife.bind(this, itemView)
       itemView.setOnClickListener {
         this.item?.run {
-          LicenseSettingsActivity.launch(itemView.context,
-                                         license_name = license.fullName,
-                                         license_text = license.text)
+          LicenseActivity.launch(itemView.context,
+                                 license_name = license.fullName,
+                                 license_text = license.text)
         }
       }
     }

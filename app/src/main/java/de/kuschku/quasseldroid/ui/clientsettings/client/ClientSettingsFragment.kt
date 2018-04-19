@@ -1,4 +1,4 @@
-package de.kuschku.quasseldroid.ui.clientsettings.app
+package de.kuschku.quasseldroid.ui.clientsettings.client
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -11,13 +11,14 @@ import android.view.MenuItem
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.Settings
-import de.kuschku.quasseldroid.ui.clientsettings.about.AboutSettingsActivity
-import de.kuschku.quasseldroid.ui.clientsettings.crash.CrashSettingsActivity
+import de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity
+import de.kuschku.quasseldroid.ui.clientsettings.crash.CrashActivity
+import de.kuschku.quasseldroid.ui.clientsettings.whitelist.WhitelistActivity
 import de.kuschku.quasseldroid.util.backport.DaggerPreferenceFragmentCompat
 import javax.inject.Inject
 
-class AppSettingsFragment : DaggerPreferenceFragmentCompat(),
-                            SharedPreferences.OnSharedPreferenceChangeListener {
+class ClientSettingsFragment : DaggerPreferenceFragmentCompat(),
+                               SharedPreferences.OnSharedPreferenceChangeListener {
   @Inject
   lateinit var appearanceSettings: AppearanceSettings
 
@@ -68,14 +69,18 @@ class AppSettingsFragment : DaggerPreferenceFragmentCompat(),
   }
 
   override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
-    R.id.action_about   -> {
-      AboutSettingsActivity.launch(requireContext())
+    R.id.action_certificates -> {
+      WhitelistActivity.launch(requireContext())
       true
     }
-    R.id.action_crashes -> {
-      CrashSettingsActivity.launch(requireContext())
+    R.id.action_crashes      -> {
+      CrashActivity.launch(requireContext())
       true
     }
-    else                -> super.onOptionsItemSelected(item)
+    R.id.action_about        -> {
+      AboutActivity.launch(requireContext())
+      true
+    }
+    else                     -> super.onOptionsItemSelected(item)
   }
 }

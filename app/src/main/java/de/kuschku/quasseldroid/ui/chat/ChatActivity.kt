@@ -39,7 +39,7 @@ import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.chat.input.AutoCompleteAdapter
 import de.kuschku.quasseldroid.ui.chat.input.ChatlineFragment
-import de.kuschku.quasseldroid.ui.clientsettings.app.AppSettingsActivity
+import de.kuschku.quasseldroid.ui.clientsettings.client.ClientSettingsActivity
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
@@ -162,7 +162,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     val dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
 
     viewModel.errors.toLiveData().observe(this, Observer { error ->
-      error?.orNull()?.let {
+      error?.let {
         when (it) {
           is Error.HandshakeError -> it.message.let {
             when (it) {
@@ -567,7 +567,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       true
     }
     R.id.action_client_settings -> {
-      AppSettingsActivity.launch(this)
+      ClientSettingsActivity.launch(this)
       true
     }
     R.id.action_disconnect      -> {

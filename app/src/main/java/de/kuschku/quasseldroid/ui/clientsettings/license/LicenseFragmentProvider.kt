@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
-abstract class LicenseSettingsFragmentProvider {
+abstract class LicenseFragmentProvider {
   @ContributesAndroidInjector
-  abstract fun bindLicenseSettingsFragment(): LicenseSettingsFragment
+  abstract fun bindLicenseFragment(): LicenseFragment
 }

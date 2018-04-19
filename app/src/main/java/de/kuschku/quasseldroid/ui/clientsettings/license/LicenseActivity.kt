@@ -5,7 +5,7 @@ import android.content.Intent
 import android.support.annotation.StringRes
 import de.kuschku.quasseldroid.util.ui.SettingsActivity
 
-class LicenseSettingsActivity : SettingsActivity(LicenseSettingsFragment()) {
+class LicenseActivity : SettingsActivity(LicenseFragment()) {
   companion object {
     fun launch(
       context: Context,
@@ -17,7 +17,7 @@ class LicenseSettingsActivity : SettingsActivity(LicenseSettingsFragment()) {
       context: Context,
       license_name: String,
       @StringRes license_text: Int
-    ) = Intent(context, LicenseSettingsActivity::class.java).apply {
+    ) = Intent(context, LicenseActivity::class.java).apply {
       putExtra("license_name", license_name)
       putExtra("license_text", license_text)
     }

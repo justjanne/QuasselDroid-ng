@@ -13,6 +13,7 @@
   <string name="label_buffer_name">Chatname</string>
   <string name="label_cancel">Abbrechen</string>
   <string name="label_update_user_password">Benutzernamen/Passwort ändern</string>
+  <string name="label_certificates">Zertifikate</string>
   <string name="label_close">Schließen</string>
   <string name="label_colors_custom">Anpassen</string>
   <string name="label_colors_mirc">mIRC</string>
@@ -74,6 +75,9 @@
   <string name="label_unhide">Nicht mehr ausblenden</string>
   <string name="label_website">Webseite</string>
   <string name="label_whitelist">Ignorieren</string>
+  <string name="label_whitelist_ignore_date">Verfallsdatum wird ignoriert für dieses Zertifikat</string>
+  <string name="label_whitelist_certificates">Zertifikate</string>
+  <string name="label_whitelist_hostnames">Hosts</string>
   <string name="label_who">Who</string>
   <string name="label_who_long">Informationen aller Nutzer aktualisieren</string>
   <string name="label_whois">Whois</string>

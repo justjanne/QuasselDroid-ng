@@ -17,9 +17,10 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import dagger.android.support.DaggerAppCompatActivity
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.ui.clientsettings.about.AboutSettingsActivity
-import de.kuschku.quasseldroid.ui.clientsettings.app.AppSettingsActivity
-import de.kuschku.quasseldroid.ui.clientsettings.crash.CrashSettingsActivity
+import de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity
+import de.kuschku.quasseldroid.ui.clientsettings.client.ClientSettingsActivity
+import de.kuschku.quasseldroid.ui.clientsettings.crash.CrashActivity
+import de.kuschku.quasseldroid.ui.clientsettings.whitelist.WhitelistActivity
 import de.kuschku.quasseldroid.util.helper.observeSticky
 import de.kuschku.quasseldroid.util.helper.or
 import de.kuschku.quasseldroid.util.helper.switchMap
@@ -92,15 +93,19 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
     menuView.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.action_client_settings -> {
-          AppSettingsActivity.launch(this)
+          ClientSettingsActivity.launch(this)
+          true
+        }
+        R.id.action_certificates    -> {
+          WhitelistActivity.launch(this)
           true
         }
         R.id.action_crashes         -> {
-          CrashSettingsActivity.launch(this)
+          CrashActivity.launch(this)
           true
         }
         R.id.action_about           -> {
-          AboutSettingsActivity.launch(this)
+          AboutActivity.launch(this)
           true
         }
         else                        -> false

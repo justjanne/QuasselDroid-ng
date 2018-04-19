@@ -10,6 +10,7 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.helpers.or
 import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
@@ -42,11 +43,14 @@ class SessionManager(
     else
       lastSession
   }
-  val error: Observable<Error>
+
+  var hasErrored: Boolean = false
+    private set
+
+  val error: Flowable<Error>
     get() = inProgressSession
       .toFlowable(BackpressureStrategy.LATEST)
       .switchMap(ISession::error)
-      .toObservable()
 
   val connectionProgress: Observable<Triple<ConnectionState, Int, Int>> = Observable.combineLatest(
     state, initStatus,
@@ -61,6 +65,10 @@ class SessionManager(
       if (it == ConnectionState.CONNECTED) {
         lastSession.close()
       }
+    }
+
+    error.subscribe {
+      hasErrored = true
     }
 
     // This should preload them
@@ -90,6 +98,7 @@ class SessionManager(
     lastAddress = address
     lastUserData = userData
     lastShouldReconnect = shouldReconnect
+    hasErrored = false
     inProgressSession.onNext(
       Session(
         clientData,

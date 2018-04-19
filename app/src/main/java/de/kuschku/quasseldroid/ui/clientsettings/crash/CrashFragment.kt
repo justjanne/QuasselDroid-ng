@@ -18,7 +18,7 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.fromJson
 import java.io.File
 
-class CrashSettingsFragment : DaggerFragment() {
+class CrashFragment : DaggerFragment() {
   @BindView(R.id.list)
   lateinit var list: RecyclerView
 
@@ -31,7 +31,7 @@ class CrashSettingsFragment : DaggerFragment() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    handlerThread = HandlerThread("CrashSettings")
+    handlerThread = HandlerThread("Crash")
     handlerThread.start()
     handler = Handler(handlerThread.looper)
   }
@@ -43,7 +43,7 @@ class CrashSettingsFragment : DaggerFragment() {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-    val view = inflater.inflate(R.layout.fragment_crash, container, false)
+    val view = inflater.inflate(R.layout.preferences_crash, container, false)
     ButterKnife.bind(this, view)
 
     setHasOptionsMenu(true)
