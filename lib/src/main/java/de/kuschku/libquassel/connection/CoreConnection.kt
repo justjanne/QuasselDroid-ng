@@ -127,10 +127,11 @@ class CoreConnection(
   override fun close() {
     try {
       setState(ConnectionState.CLOSED)
+      channel?.flush()
+      channel?.close()
       interrupt()
     } catch (e: Throwable) {
-      log(WARN,
-          TAG, "Error encountered while closing connection", e)
+      log(WARN, TAG, "Error encountered while closing connection", e)
     }
   }
 
@@ -200,14 +201,13 @@ class CoreConnection(
           }
         }
       }
+      channel?.close()
     } catch (e: QuasselSecurityException) {
       close()
       securityExceptionCallback(e)
     } catch (e: Throwable) {
-      log(WARN,
-          TAG, "Error encountered in connection", e)
-      log(WARN,
-          TAG, "Last sent message: ${MessageRunnable.lastSent.get()}")
+      log(WARN, TAG, "Error encountered in connection", e)
+      log(WARN, TAG, "Last sent message: ${MessageRunnable.lastSent.get()}")
       close()
     }
   }

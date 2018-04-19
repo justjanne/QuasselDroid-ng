@@ -186,6 +186,7 @@ class WrappedChannel(
     rawIn = null
     rawOut?.close()
     rawOut = null
+    socket.close()
   }
 
   /**
