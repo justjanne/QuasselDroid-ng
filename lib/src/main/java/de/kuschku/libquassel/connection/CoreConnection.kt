@@ -1,4 +1,4 @@
-package de.kuschku.libquassel.session
+package de.kuschku.libquassel.connection
 
 import de.kuschku.libquassel.protocol.ClientData
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
@@ -8,6 +8,7 @@ import de.kuschku.libquassel.protocol.primitive.serializer.IntSerializer
 import de.kuschku.libquassel.protocol.primitive.serializer.ProtocolInfoSerializer
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantListSerializer
 import de.kuschku.libquassel.quassel.ProtocolFeature
+import de.kuschku.libquassel.session.ProtocolHandler
 import de.kuschku.libquassel.util.compatibility.CompatibilityUtils
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
@@ -33,8 +34,10 @@ class CoreConnection(
   private val clientData: ClientData,
   private val features: Features,
   private val trustManager: X509TrustManager,
+  private val hostnameVerifier: HostnameVerifier,
   private val address: SocketAddress,
-  private val handlerService: HandlerService
+  private val handlerService: HandlerService,
+  private val securityExceptionCallback: (QuasselSecurityException) -> Unit
 ) : Thread(), Closeable {
   companion object {
     private const val TAG = "CoreConnection"
@@ -93,7 +96,7 @@ class CoreConnection(
 
     // Wrap socket in SSL context if ssl is enabled
     if (protocol.flags.hasFlag(ProtocolFeature.TLS)) {
-      channel = channel?.withSSL(trustManager, address)
+      channel = channel?.withSSL(trustManager, hostnameVerifier, address)
     }
 
     // Wrap socket in deflater if compression is enabled
@@ -126,7 +129,8 @@ class CoreConnection(
       setState(ConnectionState.CLOSED)
       interrupt()
     } catch (e: Throwable) {
-      log(WARN, TAG, "Error encountered while closing connection", e)
+      log(WARN,
+          TAG, "Error encountered while closing connection", e)
     }
   }
 
@@ -141,7 +145,8 @@ class CoreConnection(
           )
         )
       } catch (e: Throwable) {
-        log(WARN, TAG, "Error encountered while serializing handshake message", e)
+        log(WARN,
+            TAG, "Error encountered while serializing handshake message", e)
       }
     }
   }
@@ -157,7 +162,8 @@ class CoreConnection(
           )
         )
       } catch (e: Throwable) {
-        log(WARN, TAG, "Error encountered while serializing sigproxy message", e)
+        log(WARN,
+            TAG, "Error encountered while serializing sigproxy message", e)
       }
     }
   }
@@ -194,9 +200,14 @@ class CoreConnection(
           }
         }
       }
+    } catch (e: QuasselSecurityException) {
+      close()
+      securityExceptionCallback(e)
     } catch (e: Throwable) {
-      log(WARN, TAG, "Error encountered in connection", e)
-      log(WARN, TAG, "Last sent message: ${MessageRunnable.lastSent.get()}")
+      log(WARN,
+          TAG, "Error encountered in connection", e)
+      log(WARN,
+          TAG, "Last sent message: ${MessageRunnable.lastSent.get()}")
       close()
     }
   }
@@ -210,13 +221,15 @@ class CoreConnection(
         try {
           handler.handle(msg)
         } catch (e: Throwable) {
-          log(WARN, TAG, "Error encountered while handling sigproxy message", e)
+          log(WARN,
+              TAG, "Error encountered while handling sigproxy message", e)
           log(WARN, TAG, msg.toString())
         }
       }
 
     } catch (e: Throwable) {
-      log(WARN, TAG, "Error encountered while parsing sigproxy message", e)
+      log(WARN,
+          TAG, "Error encountered while parsing sigproxy message", e)
       dataBuffer.hexDump()
     }
   }
@@ -228,12 +241,14 @@ class CoreConnection(
     try {
       handler.handle(msg)
     } catch (e: Throwable) {
-      log(WARN, TAG, "Error encountered while handling handshake message", e)
+      log(WARN,
+          TAG, "Error encountered while handling handshake message", e)
       log(WARN, TAG, msg.toString())
     }
   } catch (e: Throwable) {
     log(
-      WARN, TAG, "Error encountered while parsing handshake message", e
+      WARN,
+      TAG, "Error encountered while parsing handshake message", e
     )
   }
 

@@ -12,6 +12,7 @@
   <string name="label_back">Back</string>
   <string name="label_buffer_name">Buffer Name</string>
   <string name="label_cancel">Cancel</string>
+  <string name="label_update_user_password">Update User/Password</string>
   <string name="label_close">Close</string>
   <string name="label_colors_custom">Custom</string>
   <string name="label_colors_mirc">mIRC</string>
@@ -72,6 +73,7 @@
   <string name="label_topic">Channel Topic</string>
   <string name="label_unhide">Make Visible</string>
   <string name="label_website">Website</string>
+  <string name="label_whitelist">Ignore</string>
   <string name="label_who">Who</string>
   <string name="label_who_long">Update user information of all users</string>
   <string name="label_whois">Whois</string>

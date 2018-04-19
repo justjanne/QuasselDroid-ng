@@ -3,4 +3,16 @@
   <string name="label_error_login">Login Error</string>
   <string name="label_error_setup">Setup Error</string>
   <string name="label_error_init">Connection Error</string>
+  <string name="label_error_certificate">Certificate Error</string>
+  <string name="label_error_certificate_no_certificate">No certificate available</string>
+  <string name="label_error_certificate_no_hostname">No hostname available</string>
+  <string name="label_error_certificate_invalid"><![CDATA[
+    <p>The certificate <code>%1$s</code> is only valid from %2$s to %3$s</p>
+  ]]></string>
+  <string name="label_error_certificate_untrusted"><![CDATA[
+    <p>The certificate <code>%1$s</code> is not trusted.</p>
+  ]]></string>
+  <string name="label_error_certificate_no_match"><![CDATA[
+    <p>The certificate <code>%1$s</code> is not valid for %2$s.</p>
+  ]]></string>
 </resources>

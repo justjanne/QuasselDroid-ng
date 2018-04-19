@@ -1,15 +1,19 @@
 package de.kuschku.quasseldroid.service
 
-import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.content.*
 import android.net.ConnectivityManager
+import de.kuschku.libquassel.connection.ConnectionState
+import de.kuschku.libquassel.connection.HostnameVerifier
+import de.kuschku.libquassel.connection.SocketAddress
 import de.kuschku.libquassel.protocol.ClientData
 import de.kuschku.libquassel.protocol.Protocol
 import de.kuschku.libquassel.protocol.Protocol_Feature
 import de.kuschku.libquassel.protocol.Protocol_Features
 import de.kuschku.libquassel.quassel.QuasselFeatures
-import de.kuschku.libquassel.session.*
+import de.kuschku.libquassel.session.Backend
+import de.kuschku.libquassel.session.ISession
+import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.malheur.CrashHandler
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.Keys
@@ -19,6 +23,10 @@ import de.kuschku.quasseldroid.persistence.QuasselBacklogStorage
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.ConnectionSettings
 import de.kuschku.quasseldroid.settings.Settings
+import de.kuschku.quasseldroid.ssl.QuasselHostnameVerifier
+import de.kuschku.quasseldroid.ssl.QuasselTrustManager
+import de.kuschku.quasseldroid.ssl.custom.QuasselCertificateManager
+import de.kuschku.quasseldroid.ssl.custom.QuasselHostnameManager
 import de.kuschku.quasseldroid.util.QuasseldroidNotificationManager
 import de.kuschku.quasseldroid.util.backport.DaggerLifecycleService
 import de.kuschku.quasseldroid.util.compatibility.AndroidHandlerService
@@ -28,7 +36,6 @@ import de.kuschku.quasseldroid.util.helper.sharedPreferences
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import io.reactivex.subjects.PublishSubject
 import org.threeten.bp.Instant
-import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.net.ssl.X509TrustManager
@@ -158,15 +165,11 @@ class QuasselService : DaggerLifecycleService(),
 
   private lateinit var clientData: ClientData
 
-  private val trustManager = object : X509TrustManager {
-    @SuppressLint("TrustAllX509TrustManager")
-    override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) = Unit
+  private lateinit var trustManager: X509TrustManager
 
-    @SuppressLint("TrustAllX509TrustManager")
-    override fun checkServerTrusted(p0: Array<out X509Certificate>?, p1: String?) = Unit
+  private lateinit var hostnameVerifier: HostnameVerifier
 
-    override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
-  }
+  private lateinit var certificateManager: QuasselCertificateManager
 
   private val backendImplementation = object : Backend {
     override fun updateUserDataAndLogin(user: String, pass: String) {
@@ -188,7 +191,7 @@ class QuasselService : DaggerLifecycleService(),
     override fun connect(address: SocketAddress, user: String, pass: String, reconnect: Boolean) {
       disconnect()
       sessionManager.connect(
-        clientData, trustManager, address, user to pass, reconnect
+        clientData, trustManager, hostnameVerifier, address, user to pass, reconnect
       )
     }
 
@@ -228,6 +231,11 @@ class QuasselService : DaggerLifecycleService(),
 
   override fun onCreate() {
     super.onCreate()
+
+    certificateManager = QuasselCertificateManager(database.validityWhitelist())
+    hostnameVerifier = QuasselHostnameVerifier(QuasselHostnameManager(database.hostnameWhitelist()))
+    trustManager = QuasselTrustManager(certificateManager)
+
     sessionManager = SessionManager(
       ISession.NULL,
       QuasselBacklogStorage(database),

@@ -14,12 +14,14 @@ import de.kuschku.quasseldroid.persistence.QuasselDatabase.*
 import io.reactivex.Flowable
 import org.threeten.bp.Instant
 
-@Database(entities = [DatabaseMessage::class, Filtered::class, SslException::class], version = 9)
+@Database(entities = [DatabaseMessage::class, Filtered::class, SslValidityWhitelistEntry::class, SslHostnameWhitelistEntry::class],
+          version = 13)
 @TypeConverters(DatabaseMessage.MessageTypeConverters::class)
 abstract class QuasselDatabase : RoomDatabase() {
   abstract fun message(): MessageDao
   abstract fun filtered(): FilteredDao
-  abstract fun sslExceptions(): SslExceptionDao
+  abstract fun validityWhitelist(): SslValidityWhitelistDao
+  abstract fun hostnameWhitelist(): SslHostnameWhitelistDao
 
   @Entity(tableName = "message", indices = [Index("bufferId"), Index("ignored")])
   data class DatabaseMessage(
@@ -142,29 +144,41 @@ abstract class QuasselDatabase : RoomDatabase() {
     fun clear(accountId: Long, bufferId: Int)
   }
 
-  @Entity(tableName = "ssl_exception", primaryKeys = ["accountId", "certificateFingerprint"])
-  data class SslException(
-    var accountId: Long,
-    var certificateFingerprint: String,
-    var ignoreValidityDate: Boolean
+  @Entity(tableName = "ssl_validity_whitelist")
+  data class SslValidityWhitelistEntry(
+    @PrimaryKey
+    var fingerprint: String,
+    var ignoreDate: Boolean
   )
 
   @Dao
-  interface SslExceptionDao {
+  interface SslValidityWhitelistDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(vararg entities: SslException)
+    fun save(vararg entities: SslValidityWhitelistEntry)
 
-    @Query("SELECT * FROM ssl_exception WHERE accountId = :accountId AND certificateFingerprint = :certificateFingerprint")
-    fun all(accountId: Long, certificateFingerprint: String): List<SslException>
+    @Query("SELECT * FROM ssl_validity_whitelist")
+    fun all(): List<SslValidityWhitelistEntry>
 
-    @Query("DELETE FROM ssl_exception")
-    fun clear()
+    @Query("SELECT * FROM ssl_validity_whitelist WHERE fingerprint = :fingerprint")
+    fun find(fingerprint: String): SslValidityWhitelistEntry?
+  }
 
-    @Query("DELETE FROM ssl_exception WHERE accountId = :accountId")
-    fun clear(accountId: Long)
+  @Entity(tableName = "ssl_hostname_whitelist", primaryKeys = ["fingerprint", "hostname"])
+  data class SslHostnameWhitelistEntry(
+    var fingerprint: String,
+    var hostname: String
+  )
 
-    @Query("DELETE FROM ssl_exception WHERE accountId = :accountId AND certificateFingerprint = :certificateFingerprint")
-    fun clear(accountId: Long, certificateFingerprint: String)
+  @Dao
+  interface SslHostnameWhitelistDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun save(vararg entities: SslHostnameWhitelistEntry)
+
+    @Query("SELECT * FROM ssl_hostname_whitelist")
+    fun all(): List<SslHostnameWhitelistEntry>
+
+    @Query("SELECT * FROM ssl_hostname_whitelist WHERE fingerprint = :fingerprint AND hostname = :hostname")
+    fun find(fingerprint: String, hostname: String): SslHostnameWhitelistEntry?
   }
 
   object Creator {
@@ -222,6 +236,33 @@ abstract class QuasselDatabase : RoomDatabase() {
               object : Migration(8, 9) {
                 override fun migrate(database: SupportSQLiteDatabase) {
                   database.execSQL("create table ssl_exception (accountId INTEGER not null, certificateFingerprint TEXT not null, ignoreValidityDate INTEGER not null, primary key(accountId, certificateFingerprint));")
+                }
+              },
+              object : Migration(9, 10) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL("drop table ssl_exception;")
+                  database.execSQL("create table ssl_exception (accountId INTEGER not null, hostName TEXT not null, certificateFingerprint TEXT not null, ignoreValidityDate INTEGER not null, primary key(accountId, hostName, certificateFingerprint));")
+                }
+              },
+              object : Migration(10, 11) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL("drop table ssl_exception;")
+                  database.execSQL("create table ssl_exception (accountId INTEGER not null, certificateFingerprint TEXT not null, ignoreValidityDate INTEGER not null, primary key(accountId, certificateFingerprint));")
+                }
+              },
+              object : Migration(11, 12) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL("drop table ssl_exception;")
+                  database.execSQL("create table ssl_validity_whitelist (fingerprint TEXT not null, ignoreDate INTEGER not null, primary key(fingerprint));")
+                  database.execSQL("create table ssl_hostname_whitelist (fingerprint TEXT not null, hostname TEXT not null, primary key(fingerprint, hostname));")
+                }
+              },
+              object : Migration(12, 13) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL("drop table ssl_validity_whitelist;")
+                  database.execSQL("drop table ssl_hostname_whitelist;")
+                  database.execSQL("create table ssl_validity_whitelist (fingerprint TEXT not null, ignoreDate INTEGER not null, primary key(fingerprint));")
+                  database.execSQL("create table ssl_hostname_whitelist (fingerprint TEXT not null, hostname TEXT not null, primary key(fingerprint, hostname));")
                 }
               }
             ).build()

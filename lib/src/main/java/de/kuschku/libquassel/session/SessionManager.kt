@@ -1,7 +1,9 @@
 package de.kuschku.libquassel.session
 
+import de.kuschku.libquassel.connection.ConnectionState
+import de.kuschku.libquassel.connection.HostnameVerifier
+import de.kuschku.libquassel.connection.SocketAddress
 import de.kuschku.libquassel.protocol.ClientData
-import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler
@@ -24,6 +26,7 @@ class SessionManager(
 
   private var lastClientData: ClientData? = null
   private var lastTrustManager: X509TrustManager? = null
+  private var lastHostnameVerifier: HostnameVerifier? = null
   private var lastAddress: SocketAddress? = null
   private var lastUserData: Pair<String, String>? = null
   private var lastShouldReconnect = false
@@ -39,7 +42,7 @@ class SessionManager(
     else
       lastSession
   }
-  val error: Observable<HandshakeMessage>
+  val error: Observable<Error>
     get() = inProgressSession
       .toFlowable(BackpressureStrategy.LATEST)
       .switchMap(ISession::error)
@@ -75,6 +78,7 @@ class SessionManager(
   fun connect(
     clientData: ClientData,
     trustManager: X509TrustManager,
+    hostnameVerifier: HostnameVerifier,
     address: SocketAddress,
     userData: Pair<String, String>,
     shouldReconnect: Boolean = false
@@ -82,6 +86,7 @@ class SessionManager(
     inProgressSession.value.close()
     lastClientData = clientData
     lastTrustManager = trustManager
+    lastHostnameVerifier = hostnameVerifier
     lastAddress = address
     lastUserData = userData
     lastShouldReconnect = shouldReconnect
@@ -89,6 +94,7 @@ class SessionManager(
       Session(
         clientData,
         trustManager,
+        hostnameVerifier,
         address,
         handlerService,
         backlogStorage,
@@ -103,11 +109,12 @@ class SessionManager(
     if (lastShouldReconnect || forceReconnect) {
       val clientData = lastClientData
       val trustManager = lastTrustManager
+      val hostnameVerifier = lastHostnameVerifier
       val address = lastAddress
       val userData = lastUserData
 
-      if (clientData != null && trustManager != null && address != null && userData != null) {
-        connect(clientData, trustManager, address, userData, forceReconnect)
+      if (clientData != null && trustManager != null && hostnameVerifier != null && address != null && userData != null) {
+        connect(clientData, trustManager, hostnameVerifier, address, userData, forceReconnect)
       }
     }
   }

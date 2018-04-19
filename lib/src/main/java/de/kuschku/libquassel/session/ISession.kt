@@ -1,8 +1,9 @@
 package de.kuschku.libquassel.session
 
+import de.kuschku.libquassel.connection.ConnectionState
+import de.kuschku.libquassel.connection.Features
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
-import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.*
 import io.reactivex.BackpressureStrategy
@@ -36,7 +37,7 @@ interface ISession : Closeable {
   val initStatus: Observable<Pair<Int, Int>>
 
   val proxy: SignalProxy
-  val error: Flowable<HandshakeMessage>
+  val error: Flowable<Error>
   val lag: Observable<Long>
 
   fun login(user: String, pass: String)
@@ -44,10 +45,11 @@ interface ISession : Closeable {
   companion object {
     val NULL = object : ISession {
       override val proxy: SignalProxy = SignalProxy.NULL
-      override val error = BehaviorSubject.create<HandshakeMessage>()
-        .toFlowable(BackpressureStrategy.BUFFER)
+      override val error = BehaviorSubject.create<Error>().toFlowable(BackpressureStrategy.BUFFER)
       override val state = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
-      override val features: Features = Features(QuasselFeatures.empty(), QuasselFeatures.empty())
+      override val features: Features = Features(
+        QuasselFeatures.empty(),
+        QuasselFeatures.empty())
       override val sslSession: SSLSession? = null
 
       override val rpcHandler: RpcHandler? = null

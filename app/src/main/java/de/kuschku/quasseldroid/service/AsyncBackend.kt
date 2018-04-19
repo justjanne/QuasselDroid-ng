@@ -1,7 +1,7 @@
 package de.kuschku.quasseldroid.service
 
+import de.kuschku.libquassel.connection.SocketAddress
 import de.kuschku.libquassel.session.Backend
-import de.kuschku.libquassel.session.SocketAddress
 import de.kuschku.libquassel.util.compatibility.HandlerService
 
 class AsyncBackend(

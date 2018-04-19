@@ -1,4 +1,4 @@
-package de.kuschku.libquassel.session
+package de.kuschku.libquassel.connection
 
 enum class ConnectionState {
   DISCONNECTED,

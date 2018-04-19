@@ -21,11 +21,13 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import de.kuschku.libquassel.connection.ConnectionState
+import de.kuschku.libquassel.connection.QuasselSecurityException
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
-import de.kuschku.libquassel.session.ConnectionState
+import de.kuschku.libquassel.session.Error
 import de.kuschku.libquassel.util.flag.and
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.or
@@ -39,14 +41,17 @@ import de.kuschku.quasseldroid.ui.chat.input.AutoCompleteAdapter
 import de.kuschku.quasseldroid.ui.chat.input.ChatlineFragment
 import de.kuschku.quasseldroid.ui.clientsettings.app.AppSettingsActivity
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
-import de.kuschku.quasseldroid.util.helper.editCommit
-import de.kuschku.quasseldroid.util.helper.invoke
-import de.kuschku.quasseldroid.util.helper.retint
-import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
 import de.kuschku.quasseldroid.viewmodel.data.BufferData
+import org.threeten.bp.Instant
+import org.threeten.bp.ZoneId
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
+import java.security.cert.CertificateExpiredException
+import java.security.cert.CertificateNotYetValidException
 import javax.inject.Inject
 
 class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -154,83 +159,231 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
     }
 
+    val dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+
     viewModel.errors.toLiveData().observe(this, Observer { error ->
       error?.orNull()?.let {
         when (it) {
-          is HandshakeMessage.ClientInitReject  ->
-            MaterialDialog.Builder(this)
-              .title(R.string.label_error_init)
-              .content(Html.fromHtml(it.errorString))
-              .neutralText(R.string.label_close)
-              .titleColorAttr(R.attr.colorTextPrimary)
-              .backgroundColorAttr(R.attr.colorBackgroundCard)
-              .contentColorAttr(R.attr.colorTextPrimary)
-              .build()
-              .show()
-          is HandshakeMessage.CoreSetupReject   ->
-            MaterialDialog.Builder(this)
-              .title(R.string.label_error_setup)
-              .content(Html.fromHtml(it.errorString))
-              .neutralText(R.string.label_close)
-              .titleColorAttr(R.attr.colorTextPrimary)
-              .backgroundColorAttr(R.attr.colorBackgroundCard)
-              .contentColorAttr(R.attr.colorTextPrimary)
-              .build()
-              .show()
-          is HandshakeMessage.ClientLoginReject ->
-            MaterialDialog.Builder(this)
-              .title(R.string.label_error_login)
-              .content(Html.fromHtml(it.errorString))
-              .negativeText(R.string.label_disconnect)
-              .positiveText("Change User/Password")
-              .onNegative { _, _ ->
-                disconnect()
-              }
-              .onPositive { _, _ ->
-                runInBackground {
-                  val account = accountDatabase.accounts().findById(accountId)
+          is Error.HandshakeError -> it.message.let {
+            when (it) {
+              is HandshakeMessage.ClientInitReject  ->
+                MaterialDialog.Builder(this)
+                  .title(R.string.label_error_init)
+                  .content(Html.fromHtml(it.errorString))
+                  .neutralText(R.string.label_close)
+                  .titleColorAttr(R.attr.colorTextPrimary)
+                  .backgroundColorAttr(R.attr.colorBackgroundCard)
+                  .contentColorAttr(R.attr.colorTextPrimary)
+                  .build()
+                  .show()
+              is HandshakeMessage.CoreSetupReject   ->
+                MaterialDialog.Builder(this)
+                  .title(R.string.label_error_setup)
+                  .content(Html.fromHtml(it.errorString))
+                  .neutralText(R.string.label_close)
+                  .titleColorAttr(R.attr.colorTextPrimary)
+                  .backgroundColorAttr(R.attr.colorBackgroundCard)
+                  .contentColorAttr(R.attr.colorTextPrimary)
+                  .build()
+                  .show()
+              is HandshakeMessage.ClientLoginReject ->
+                MaterialDialog.Builder(this)
+                  .title(R.string.label_error_login)
+                  .content(Html.fromHtml(it.errorString))
+                  .negativeText(R.string.label_disconnect)
+                  .positiveText(R.string.label_update_user_password)
+                  .onNegative { _, _ ->
+                    disconnect()
+                  }
+                  .onPositive { _, _ ->
+                    runInBackground {
+                      val account = accountDatabase.accounts().findById(accountId)
 
-                  runOnUiThread {
-                    val dialog = MaterialDialog.Builder(this)
-                      .title("Login Required")
-                      .customView(R.layout.setup_account_user, false)
-                      .negativeText(R.string.label_disconnect)
-                      .positiveText(R.string.label_save)
-                      .onNegative { _, _ ->
-                        disconnect()
-                      }
-                      .onPositive { dialog, _ ->
+                      runOnUiThread {
+                        val dialog = MaterialDialog.Builder(this)
+                          .title(R.string.label_error_login)
+                          .customView(R.layout.setup_account_user, false)
+                          .negativeText(R.string.label_disconnect)
+                          .positiveText(R.string.label_save)
+                          .onNegative { _, _ ->
+                            disconnect()
+                          }
+                          .onPositive { dialog, _ ->
+                            dialog.customView?.run {
+                              val userField = findViewById<EditText>(R.id.user)
+                              val passField = findViewById<EditText>(R.id.pass)
+
+                              val user = userField.text.toString()
+                              val pass = passField.text.toString()
+
+                              backend.value.orNull()?.updateUserDataAndLogin(user, pass)
+                            }
+                          }
+                          .titleColorAttr(R.attr.colorTextPrimary)
+                          .backgroundColorAttr(R.attr.colorBackgroundCard)
+                          .contentColorAttr(R.attr.colorTextPrimary)
+                          .build()
                         dialog.customView?.run {
                           val userField = findViewById<EditText>(R.id.user)
                           val passField = findViewById<EditText>(R.id.pass)
 
-                          val user = userField.text.toString()
-                          val pass = passField.text.toString()
+                          account?.let {
+                            userField.setText(it.user)
+                          }
+                        }
+                        dialog.show()
+                      }
+                    }
+                  }
+                  .titleColorAttr(R.attr.colorTextPrimary)
+                  .backgroundColorAttr(R.attr.colorBackgroundCard)
+                  .contentColorAttr(R.attr.colorTextPrimary)
+                  .build()
+                  .show()
+            }
+          }
+          is Error.SslError       -> {
+            it.exception.let {
+              val leafCertificate = it.certificateChain?.firstOrNull()
+              if (leafCertificate == null) {
+                MaterialDialog.Builder(this)
+                  .title(R.string.label_error_certificate)
+                  .content(R.string.label_error_certificate_no_certificate)
+                  .neutralText(R.string.label_close)
+                  .titleColorAttr(R.attr.colorTextPrimary)
+                  .backgroundColorAttr(R.attr.colorBackgroundCard)
+                  .contentColorAttr(R.attr.colorTextPrimary)
+                  .build()
+                  .show()
+              } else {
+                when {
+                  it is QuasselSecurityException.Certificate &&
+                  (it.cause is CertificateNotYetValidException ||
+                   it.cause is CertificateExpiredException)  -> {
+                    MaterialDialog.Builder(this)
+                      .title(R.string.label_error_certificate)
+                      .content(
+                        Html.fromHtml(
+                          getString(
+                            R.string.label_error_certificate_invalid,
+                            leafCertificate.fingerprint,
+                            dateTimeFormatter.format(Instant.ofEpochMilli(leafCertificate.notBefore.time)
+                                                       .atZone(ZoneId.systemDefault())),
+                            dateTimeFormatter.format(Instant.ofEpochMilli(leafCertificate.notAfter.time)
+                                                       .atZone(ZoneId.systemDefault()))
+                          )
+                        )
+                      )
+                      .negativeText(R.string.label_disconnect)
+                      .positiveText(R.string.label_whitelist)
+                      .onNegative { _, _ ->
+                        disconnect()
+                      }
+                      .onPositive { _, _ ->
+                        runInBackground {
+                          database.validityWhitelist().save(
+                            QuasselDatabase.SslValidityWhitelistEntry(
+                              fingerprint = leafCertificate.fingerprint,
+                              ignoreDate = true
+                            )
+                          )
 
-                          backend.value.orNull()?.updateUserDataAndLogin(user, pass)
+                          runOnUiThread {
+                            backend.value.orNull()?.reconnect()
+                          }
                         }
                       }
                       .titleColorAttr(R.attr.colorTextPrimary)
                       .backgroundColorAttr(R.attr.colorBackgroundCard)
                       .contentColorAttr(R.attr.colorTextPrimary)
                       .build()
-                    dialog.customView?.run {
-                      val userField = findViewById<EditText>(R.id.user)
-                      val passField = findViewById<EditText>(R.id.pass)
-
-                      account?.let {
-                        userField.setText(it.user)
+                      .show()
+                  }
+                  it is QuasselSecurityException.Certificate -> {
+                    MaterialDialog.Builder(this)
+                      .title(R.string.label_error_certificate)
+                      .content(
+                        Html.fromHtml(
+                          getString(
+                            R.string.label_error_certificate_untrusted,
+                            leafCertificate.fingerprint
+                          )
+                        )
+                      )
+                      .negativeText(R.string.label_disconnect)
+                      .positiveText(R.string.label_whitelist)
+                      .onNegative { _, _ ->
+                        disconnect()
                       }
-                    }
-                    dialog.show()
+                      .onPositive { _, _ ->
+                        runInBackground {
+                          database.validityWhitelist().save(
+                            QuasselDatabase.SslValidityWhitelistEntry(
+                              fingerprint = leafCertificate.fingerprint,
+                              ignoreDate = !leafCertificate.isValid
+                            )
+                          )
+                          accountDatabase.accounts().findById(accountId)?.let {
+                            database.hostnameWhitelist().save(
+                              QuasselDatabase.SslHostnameWhitelistEntry(
+                                fingerprint = leafCertificate.fingerprint,
+                                hostname = it.host
+                              )
+                            )
+                          }
+
+                          runOnUiThread {
+                            backend.value.orNull()?.reconnect()
+                          }
+                        }
+                      }
+                      .titleColorAttr(R.attr.colorTextPrimary)
+                      .backgroundColorAttr(R.attr.colorBackgroundCard)
+                      .contentColorAttr(R.attr.colorTextPrimary)
+                      .build()
+                      .show()
+                  }
+                  it is QuasselSecurityException.Hostname    -> {
+                    MaterialDialog.Builder(this)
+                      .title(R.string.label_error_certificate)
+                      .content(
+                        Html.fromHtml(
+                          getString(
+                            R.string.label_error_certificate_no_match,
+                            leafCertificate.fingerprint,
+                            it.address.host
+                          )
+                        )
+                      )
+                      .negativeText(R.string.label_disconnect)
+                      .positiveText(R.string.label_whitelist)
+                      .onNegative { _, _ ->
+                        disconnect()
+                      }
+                      .onPositive { _, _ ->
+                        runInBackground {
+                          database.hostnameWhitelist().save(
+                            QuasselDatabase.SslHostnameWhitelistEntry(
+                              fingerprint = leafCertificate.fingerprint,
+                              hostname = it.address.host
+                            )
+                          )
+
+                          runOnUiThread {
+                            backend.value.orNull()?.reconnect()
+                          }
+                        }
+                      }
+                      .titleColorAttr(R.attr.colorTextPrimary)
+                      .backgroundColorAttr(R.attr.colorBackgroundCard)
+                      .contentColorAttr(R.attr.colorTextPrimary)
+                      .build()
+                      .show()
                   }
                 }
               }
-              .titleColorAttr(R.attr.colorTextPrimary)
-              .backgroundColorAttr(R.attr.colorBackgroundCard)
-              .contentColorAttr(R.attr.colorTextPrimary)
-              .build()
-              .show()
+            }
+          }
         }
       }
     })

@@ -1,5 +1,6 @@
 package de.kuschku.libquassel.session
 
+import de.kuschku.libquassel.connection.*
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
@@ -17,6 +18,7 @@ import javax.net.ssl.X509TrustManager
 class Session(
   clientData: ClientData,
   trustManager: X509TrustManager,
+  hostnameVerifier: HostnameVerifier,
   address: SocketAddress,
   private val handlerService: HandlerService,
   backlogStorage: BacklogStorage,
@@ -26,17 +28,18 @@ class Session(
 ) : ProtocolHandler(exceptionHandler), ISession {
   override val objectStorage: ObjectStorage = ObjectStorage(this)
   override val proxy: SignalProxy = this
-  override val features = Features(clientData.clientFeatures, QuasselFeatures.empty())
+  override val features = Features(clientData.clientFeatures,
+                                   QuasselFeatures.empty())
 
   override val sslSession
     get() = coreConnection.sslSession
 
   private val coreConnection = CoreConnection(
-    this, clientData, features, trustManager, address, handlerService
+    this, clientData, features, trustManager, hostnameVerifier, address, handlerService, ::handle
   )
   override val state = coreConnection.state
 
-  private val _error = PublishSubject.create<HandshakeMessage>()
+  private val _error = PublishSubject.create<Error>()
   override val error = _error.toFlowable(BackpressureStrategy.BUFFER)
 
   override val aliasManager = AliasManager(this)
@@ -77,7 +80,7 @@ class Session(
     if (f.coreConfigured == true) {
       login()
     } else {
-      _error.onNext(f)
+      _error.onNext(Error.HandshakeError(f))
     }
     return true
   }
@@ -102,18 +105,22 @@ class Session(
   }
 
   override fun handle(f: HandshakeMessage.ClientInitReject): Boolean {
-    _error.onNext(f)
+    _error.onNext(Error.HandshakeError(f))
     return true
   }
 
   override fun handle(f: HandshakeMessage.CoreSetupReject): Boolean {
-    _error.onNext(f)
+    _error.onNext(Error.HandshakeError(f))
     return true
   }
 
   override fun handle(f: HandshakeMessage.ClientLoginReject): Boolean {
-    _error.onNext(f)
+    _error.onNext(Error.HandshakeError(f))
     return true
+  }
+
+  fun handle(f: QuasselSecurityException) {
+    _error.onNext(Error.SslError(f))
   }
 
   fun addNetwork(networkId: NetworkId) {

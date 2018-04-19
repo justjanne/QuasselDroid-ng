@@ -1,4 +1,4 @@
-package de.kuschku.libquassel.session
+package de.kuschku.libquassel.connection
 
 import de.kuschku.libquassel.protocol.primitive.serializer.Serializer
 import de.kuschku.libquassel.quassel.QuasselFeatures

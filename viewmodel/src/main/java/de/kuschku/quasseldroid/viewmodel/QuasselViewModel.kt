@@ -1,6 +1,7 @@
 package de.kuschku.quasseldroid.viewmodel
 
 import android.arch.lifecycle.ViewModel
+import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
@@ -8,7 +9,6 @@ import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.session.Backend
-import de.kuschku.libquassel.session.ConnectionState
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.Optional

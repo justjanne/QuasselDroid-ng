@@ -1,6 +1,7 @@
 package de.kuschku.libquassel.util.nio
 
-import de.kuschku.libquassel.session.SocketAddress
+import de.kuschku.libquassel.connection.HostnameVerifier
+import de.kuschku.libquassel.connection.SocketAddress
 import de.kuschku.libquassel.util.compatibility.CompatibilityUtils
 import de.kuschku.libquassel.util.compatibility.StreamChannelFactory
 import java.io.Flushable
@@ -15,9 +16,11 @@ import java.nio.channels.InterruptibleChannel
 import java.nio.channels.ReadableByteChannel
 import java.nio.channels.WritableByteChannel
 import java.security.GeneralSecurityException
+import java.security.cert.X509Certificate
 import java.util.zip.InflaterInputStream
 import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLSocket
+import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.X509TrustManager
 
 class WrappedChannel(
@@ -57,13 +60,22 @@ class WrappedChannel(
   }
 
   @Throws(GeneralSecurityException::class, IOException::class)
-  fun withSSL(certificateManager: X509TrustManager, address: SocketAddress): WrappedChannel {
+  fun withSSL(certificateManager: X509TrustManager, hostnameVerifier: HostnameVerifier,
+              address: SocketAddress): WrappedChannel {
     val context = SSLContext.getInstance("TLSv1.2")
     val managers = arrayOf(certificateManager)
     context.init(null, managers, null)
     val factory = context.socketFactory
+    SSLSocketFactory.getDefault()
+
     val socket = factory.createSocket(socket, address.host, address.port, true) as SSLSocket
     socket.useClientMode = true
+    socket.addHandshakeCompletedListener {
+      hostnameVerifier.checkValid(
+        address,
+        socket.session.peerCertificates.map { it as X509Certificate }.toTypedArray()
+      )
+    }
     socket.startHandshake()
     return WrappedChannel.ofSocket(socket)
   }
