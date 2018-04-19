@@ -17,7 +17,7 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.2.31"))
+  implementation(kotlin("stdlib", "1.2.40"))
 
   // App Compat
   withVersion("27.1.1") {
@@ -25,7 +25,7 @@ dependencies {
   }
 
   // App Arch Lifecycle
-  withVersion("1.1.0") {
+  withVersion("1.1.1") {
     implementation("android.arch.lifecycle", "extensions", version)
     implementation("android.arch.lifecycle", "reactivestreams", version)
     kapt("android.arch.lifecycle", "compiler", version)
