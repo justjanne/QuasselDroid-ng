@@ -77,7 +77,7 @@ class NetworkServerFragment : SettingsFragment(), SettingsFragment.Savable,
     ))
     proxyType.adapter = typeAdapter
 
-    item?.let { data ->
+    (item ?: INetwork.Server()).let { data ->
       host.setText(data.host)
       port.setText(data.port.toString())
       sslEnabled.isChecked = data.useSsl

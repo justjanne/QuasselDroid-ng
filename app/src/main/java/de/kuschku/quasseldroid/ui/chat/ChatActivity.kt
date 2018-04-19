@@ -28,6 +28,7 @@ import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.session.Error
+import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.and
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.or
@@ -84,6 +85,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   @Inject
   lateinit var autoCompleteAdapter: AutoCompleteAdapter
+
+  private val dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
 
   private lateinit var drawerToggle: ActionBarDrawerToggle
 
@@ -159,8 +162,20 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
     }
 
-    val dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+    // If we connect to a new network without statusbuffer, the bufferid may be -networkId.
+    // In that case, once we’re connected (and a status buffer exists), we want to switch to it.
+    combineLatest(viewModel.allBuffers, viewModel.buffer).map { (buffers, current) ->
+      if (current > 0) Optional.empty()
+      else Optional.ofNullable(buffers.firstOrNull {
+        it.networkId == -current && it.type.hasFlag(Buffer_Type.StatusBuffer)
+      })
+    }.toLiveData().observe(this, Observer { info ->
+      info?.orNull()?.let {
+        viewModel.buffer.onNext(it.bufferId)
+      }
+    })
 
+    // User-actionable errors that require immediate action, and should show up as dialog
     viewModel.errors.toLiveData().observe(this, Observer { error ->
       error?.let {
         when (it) {
@@ -246,6 +261,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             it.exception.let {
               val leafCertificate = it.certificateChain?.firstOrNull()
               if (leafCertificate == null) {
+                // No certificate exists in the chain
                 MaterialDialog.Builder(this)
                   .title(R.string.label_error_certificate)
                   .content(R.string.label_error_certificate_no_certificate)
@@ -257,6 +273,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   .show()
               } else {
                 when {
+                // Certificate has expired
                   it is QuasselSecurityException.Certificate &&
                   (it.cause is CertificateNotYetValidException ||
                    it.cause is CertificateExpiredException)  -> {
@@ -299,6 +316,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                       .build()
                       .show()
                   }
+                // Certificate is in any other way invalid
                   it is QuasselSecurityException.Certificate -> {
                     MaterialDialog.Builder(this)
                       .title(R.string.label_error_certificate)
@@ -343,6 +361,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                       .build()
                       .show()
                   }
+                // Certificate not valid for this hostname
                   it is QuasselSecurityException.Hostname    -> {
                     MaterialDialog.Builder(this)
                       .title(R.string.label_error_certificate)
@@ -388,16 +407,20 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
     })
 
+    // After initial connect, open the drawer
+    var isInitialConnect = true
     viewModel.connectionProgress
       .filter { (it, _, _) -> it == ConnectionState.CONNECTED }
       .firstElement()
       .toLiveData()
       .observe(this, Observer {
-        if (resources.getBoolean(R.bool.buffer_drawer_exists) && viewModel.buffer.value == -1) {
+        if (resources.getBoolean(R.bool.buffer_drawer_exists) && viewModel.buffer.value == -1 && isInitialConnect) {
           drawerLayout.openDrawer(Gravity.START)
+          isInitialConnect = true
         }
       })
 
+    // Show Connection Progress Bar
     viewModel.connectionProgress.toLiveData().observe(this, Observer {
       val (state, progress, max) = it ?: Triple(ConnectionState.DISCONNECTED, 0, 0)
       when (state) {
@@ -422,6 +445,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
     })
 
+    // Only show nick list when we’re in a channel buffer
     viewModel.bufferData.distinctUntilChanged().toLiveData().observe(this, Observer {
       bufferData = it
       if (bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
