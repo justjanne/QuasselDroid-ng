@@ -21,20 +21,31 @@ before_script:
 stages:
   - "build"
   - "test"
+  - "deploy"
 
 build:
   stage: "build"
   script:
     - "./gradlew assembleRelease"
     - "cp app/build/outputs/apk/release/*.apk ."
-    - "cp *.apk QuasselDroidNG-release.apk"
   artifacts:
     paths:
       - "*.apk"
 
 unitTests:
-  stage: test
+  stage: "test"
   cache:
-    policy: pull
+    policy: "pull"
   script:
     - "./gradlew test"
+
+deploy:
+  stage: "deploy"
+  image: "k8r.eu/justjanne/docker-s3cmd:latest"
+  dependencies:
+  - "build"
+  script:
+  - "echo $S3_CONFIG > $HOME/.s3cfg"
+  - "export VERSION=$(ls *.apk)"
+  - "s3cmd put $VERSION s3://releases/quasseldroid-ng/$VERSION"
+  - "s3cmd cp s3://releases/quasseldroid-ng/$VERSION s3://releases/quasseldroid-ng/QuasselDroidNG-latest.apk"
