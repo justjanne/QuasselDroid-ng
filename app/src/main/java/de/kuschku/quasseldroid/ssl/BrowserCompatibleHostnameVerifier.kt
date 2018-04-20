@@ -15,9 +15,30 @@ class BrowserCompatibleHostnameVerifier : HostnameVerifier {
   }
 
   private fun matches(name: String, host: String): Boolean {
-    val normalizedName = IDN.toASCII(name).trimEnd('.')
-    val normalizedHost = IDN.toASCII(host).trimEnd('.')
-    return normalizedName.equals(normalizedHost, ignoreCase = true)
+    // First we normalize both by removing trailing dots (absolute DNS names), splitting into DNS
+    // labels, and punycoding all unicode parts.
+    val normalizedName = name.trimEnd('.').split('.').map(IDN::toASCII)
+    val normalizedHost = host.trimEnd('.').split('.').map(IDN::toASCII)
+
+    // Only if both have the same number of DNS labels they can match
+    if (normalizedHost.size != normalizedName.size) return false
+
+    // Hosts with size of zero are invalid
+    if (normalizedHost.isEmpty()) return false
+
+    val both = normalizedName.zip(normalizedHost)
+
+    // The first label has to either match exactly, or be *
+    if (!both.take(1).all { (target, actual) ->
+        target.equals(actual, ignoreCase = true) || target == "*"
+      }) return false
+
+    // All other labels have to match exactly.
+    if (!both.drop(1).all { (target, actual) ->
+        target.equals(actual, ignoreCase = true)
+      }) return false
+
+    return true
   }
 
   private fun hostnames(certificate: X509Certificate): Sequence<String> =
