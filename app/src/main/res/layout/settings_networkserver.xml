@@ -96,9 +96,8 @@
 
       <Spinner
         android:id="@+id/proxy_type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/widget_spinner_item_toolbar" />
+        style="@style/Widget.FullWidthSpinner"
+        tools:listitem="@layout/widget_spinner_item_inline" />
 
       <android.support.design.widget.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"

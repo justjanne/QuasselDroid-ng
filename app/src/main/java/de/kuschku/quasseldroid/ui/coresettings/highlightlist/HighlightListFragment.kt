@@ -83,7 +83,7 @@ class HighlightListFragment : SettingsFragment(), SettingsFragment.Savable,
     newHighlightIgnoreRule.setOnClickListener {
       startActivityForResult(
         HighlightRuleActivity.intent(requireContext(), ignore = true),
-        REQUEST_CREATE_RULE
+        REQUEST_CREATE_IGNORE_RULE
       )
     }
 

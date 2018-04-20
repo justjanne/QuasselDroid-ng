@@ -21,7 +21,7 @@ class HighlightRuleActivity : ServiceBoundSettingsActivity(HighlightRuleFragment
       if (rule != null) {
         putExtra("item", rule)
       }
-      putExtra("ignore", ignore)
+      putExtra("inverse", ignore)
     }
   }
 }

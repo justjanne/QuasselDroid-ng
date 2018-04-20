@@ -28,7 +28,7 @@ class ProxyTypeAdapter(val data: List<ProxyTypeItem>) :
       else parent.context
     )
     return ProxyTypeViewHolder(
-      inflater.inflate(R.layout.widget_spinner_item_toolbar, parent, false)
+      inflater.inflate(R.layout.widget_spinner_item_inline, parent, false)
     )
   }
 

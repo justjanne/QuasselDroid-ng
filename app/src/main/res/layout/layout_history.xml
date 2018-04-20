@@ -27,21 +27,26 @@
         android:orientation="horizontal">
 
         <TextView
-          android:layout_width="0dip"
+          style="@style/Widget.RtlConformTextView"
+          android:layout_width="wrap_content"
           android:layout_height="match_parent"
-          android:layout_weight="1"
-          android:gravity="center_vertical|fill_horizontal"
+          android:gravity="center_vertical|start"
           android:paddingLeft="16dp"
           android:paddingRight="16dp"
           android:text="@string/label_input_history"
           android:textAppearance="@style/TextAppearance.AppCompat.Body2"
           android:textColor="?attr/colorForegroundSecondary" />
 
+        <Space
+          android:layout_width="0dip"
+          android:layout_height="match_parent"
+          android:layout_weight="1" />
+
         <android.support.v7.widget.AppCompatImageView
           android:id="@+id/send"
           android:layout_width="48dp"
           android:layout_height="48dp"
-          android:layout_gravity="top"
+          android:layout_gravity="top|end"
           android:background="?attr/selectableItemBackgroundBorderless"
           android:padding="12dp"
           android:scaleType="fitXY"

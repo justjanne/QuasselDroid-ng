@@ -19,9 +19,11 @@
 
       <android.support.v7.widget.AppCompatSpinner
         android:id="@+id/chatListSpinner"
+        style="@style/Widget.FullWidthSpinner"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        app:popupTheme="?attr/actionBarPopupTheme" />
+        app:popupTheme="?attr/actionBarPopupTheme"
+        tools:listitem="@layout/widget_spinner_item_toolbar" />
 
     </android.support.v7.widget.Toolbar>
 

@@ -23,7 +23,8 @@
 
     <TextView
       android:id="@+id/fingerprint"
-      android:layout_width="match_parent"
+      style="@style/Widget.RtlConformTextView"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textAppearance="?android:textAppearanceMedium"
       android:textColor="?colorTextPrimary"
@@ -32,7 +33,8 @@
 
     <TextView
       android:id="@+id/ignore_date"
-      android:layout_width="match_parent"
+      style="@style/Widget.RtlConformTextView"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/label_whitelist_ignore_date"
       android:textAppearance="?textAppearanceListItemSecondary"

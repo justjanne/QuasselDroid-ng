@@ -90,6 +90,7 @@ class QuasselMessageRenderer @Inject constructor(
         viewHolder.timeLeft?.setTextColor(getColor(0, 0))
         viewHolder.timeRight?.setTextColor(getColor(0, 0))
         viewHolder.name?.setTextColor(getColor(0, 0))
+        viewHolder.realname?.setTextColor(getColor(0, 0))
         viewHolder.combined?.setTextColor(getColor(0, 0))
         viewHolder.content?.setTextColor(getColor(0, 0))
         viewHolder.itemView.background = LayerDrawable(
@@ -114,6 +115,7 @@ class QuasselMessageRenderer @Inject constructor(
     avatarPlaceholder?.visibleIf(messageSettings.showAvatars && messageSettings.nicksOnNewLine)
     val separateLine = viewHolder.content != null && viewHolder.name != null && messageSettings.nicksOnNewLine
     viewHolder.name?.visibleIf(separateLine && !isFollowUp)
+    viewHolder.realname?.visibleIf(separateLine && !isFollowUp && messageSettings.showRealNames && messageSettings.nicksOnNewLine)
     viewHolder.content?.visibleIf(separateLine)
     viewHolder.combined?.visibleIf(!separateLine)
 
@@ -124,6 +126,7 @@ class QuasselMessageRenderer @Inject constructor(
     viewHolder.timeLeft?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
     viewHolder.timeRight?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize * 0.9f)
     viewHolder.name?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
+    viewHolder.realname?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
     val contentSize = if (messageSettings.largerEmoji && isEmoji) textSize * 2f else textSize
     viewHolder.content?.setTextSize(TypedValue.COMPLEX_UNIT_SP, contentSize)
     viewHolder.combined?.setTextSize(TypedValue.COMPLEX_UNIT_SP, contentSize)
@@ -225,10 +228,6 @@ class QuasselMessageRenderer @Inject constructor(
             highlight,
             messageSettings.showHostmaskPlain && messageSettings.nicksOnNewLine
           ))
-          if (messageSettings.showRealNames) {
-            append(" ")
-            append(realName)
-          }
         }
         val content = contentFormatter.format(mircColors, message.content.content, highlight)
         val nickName = HostmaskHelper.nick(message.content.sender)

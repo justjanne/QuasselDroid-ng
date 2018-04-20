@@ -38,7 +38,8 @@
 
       <TextView
         android:id="@+id/name"
-        android:layout_width="match_parent"
+        style="@style/Widget.RtlConformTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
         android:orientation="vertical"
@@ -50,7 +51,8 @@
 
       <TextView
         android:id="@+id/sender"
-        android:layout_width="match_parent"
+        style="@style/Widget.RtlConformTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
         android:singleLine="true"
@@ -60,7 +62,8 @@
 
       <TextView
         android:id="@+id/channel"
-        android:layout_width="match_parent"
+        style="@style/Widget.RtlConformTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
         android:singleLine="true"
@@ -77,6 +80,7 @@
       android:paddingEnd="?listPreferredItemPaddingRight"
       android:paddingLeft="?listPreferredItemPaddingLeft"
       android:paddingRight="?listPreferredItemPaddingRight"
-      android:paddingStart="?listPreferredItemPaddingLeft" />
+      android:paddingStart="?listPreferredItemPaddingLeft"
+      android:text="" />
   </LinearLayout>
 </android.support.v7.widget.CardView>

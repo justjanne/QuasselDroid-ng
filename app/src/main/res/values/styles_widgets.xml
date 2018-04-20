@@ -2,6 +2,8 @@
 
   <style name="Widget" />
 
+  <style name="Widget.RtlConformTextView" parent=""></style>
+
   <style name="Widget.Button.Borderless" parent="Widget.AppCompat.Button.Borderless">
     <item name="android:textColor">?attr/colorTextPrimary</item>
   </style>
@@ -78,6 +80,13 @@
     <item name="android:background">?backgroundMenuItemRounded</item>
   </style>
 
+  <style name="Widget.FullWidthSpinner" parent="">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:paddingLeft">0dip</item>
+    <item name="android:paddingRight">0dip</item>
+  </style>
+
   <style name="Widget.CoreSettings.Wrapper" parent="">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
@@ -94,7 +103,7 @@
     <item name="android:layout_marginLeft">56dp</item>
   </style>
 
-  <style name="Widget.CoreSettings.PrimaryItemSwitch" parent="">
+  <style name="Widget.CoreSettings.PrimaryItemSwitch" parent="Widget.RtlConformTextView">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_gravity">center_vertical</item>
@@ -122,13 +131,13 @@
     <item name="android:layout_marginLeft">56dp</item>
   </style>
 
-  <style name="Widget.CoreSettings.EditTextLayout" parent="">
+  <style name="Widget.CoreSettings.EditTextLayout" parent="Widget.RtlConformTextView">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginLeft">-4dp</item>
   </style>
 
-  <style name="Widget.CoreSettings.EditText" parent="">
+  <style name="Widget.CoreSettings.EditText" parent="Widget.RtlConformTextView">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textColor">?colorTextPrimary</item>
@@ -143,7 +152,7 @@
     <item name="android:textColor">?colorTextSecondary</item>
   </style>
 
-  <style name="Widget.CoreSettings.EditTextHeader" parent="">
+  <style name="Widget.CoreSettings.EditTextHeader" parent="Widget.RtlConformTextView">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:paddingBottom">8dp</item>
@@ -165,15 +174,15 @@
     <item name="android:animateLayoutChanges">true</item>
   </style>
 
-  <style name="Widget.Info.Header.Name" parent="">
-    <item name="android:layout_width">match_parent</item>
+  <style name="Widget.Info.Header.Name" parent="Widget.RtlConformTextView">
+    <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textAppearance">@style/TextAppearance.AppCompat.Headline</item>
     <item name="android:animateLayoutChanges">true</item>
   </style>
 
-  <style name="Widget.Info.Header.Description" parent="">
-    <item name="android:layout_width">match_parent</item>
+  <style name="Widget.Info.Header.Description" parent="Widget.RtlConformTextView">
+    <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
     <item name="android:animateLayoutChanges">true</item>
@@ -195,8 +204,8 @@
     <item name="android:textStyle">normal</item>
   </style>
 
-  <style name="Widget.Info.Section" parent="">
-    <item name="android:layout_width">match_parent</item>
+  <style name="Widget.Info.Section" parent="Widget.RtlConformTextView">
+    <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:gravity">center_vertical</item>
     <item name="android:minHeight">48dp</item>
@@ -221,22 +230,22 @@
     <item name="android:animateLayoutChanges">true</item>
   </style>
 
-  <style name="Widget.Info.Item.Content" parent="">
-    <item name="android:layout_width">match_parent</item>
+  <style name="Widget.Info.Item.Content" parent="Widget.RtlConformTextView">
+    <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textColor">?colorTextPrimary</item>
     <item name="android:textSize">16sp</item>
   </style>
 
-  <style name="Widget.Info.Item.Description" parent="">
-    <item name="android:layout_width">match_parent</item>
+  <style name="Widget.Info.Item.Description" parent="Widget.RtlConformTextView">
+    <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
     <item name="android:textColor">?colorTextSecondary</item>
   </style>
 
-  <style name="Widget.Subhead" parent="">
-    <item name="android:layout_width">match_parent</item>
+  <style name="Widget.Subhead" parent="Widget.RtlConformTextView">
+    <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:gravity">center_vertical</item>
     <item name="android:minHeight">?listPreferredItemHeightSmall</item>

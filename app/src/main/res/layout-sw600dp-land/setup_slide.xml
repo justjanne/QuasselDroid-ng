@@ -17,7 +17,8 @@
 
     <TextView
       android:id="@+id/title"
-      android:layout_width="match_parent"
+      style="@style/Widget.RtlConformTextView"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="end"
       android:gravity="end"
@@ -32,7 +33,8 @@
 
     <TextView
       android:id="@+id/description"
-      android:layout_width="match_parent"
+      style="@style/Widget.RtlConformTextView"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="end"
       android:gravity="end"

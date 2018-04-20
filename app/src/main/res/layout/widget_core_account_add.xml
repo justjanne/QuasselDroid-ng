@@ -23,6 +23,7 @@
 
   <TextView
     android:id="@+id/account_name"
+    style="@style/Widget.RtlConformTextView"
     android:layout_width="0dip"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical|start"

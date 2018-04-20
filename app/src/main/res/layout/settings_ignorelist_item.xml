@@ -39,7 +39,8 @@
 
       <TextView
         android:id="@+id/ignore_rule"
-        android:layout_width="match_parent"
+        style="@style/Widget.RtlConformTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
         android:orientation="vertical"
@@ -51,7 +52,8 @@
 
       <TextView
         android:id="@+id/scope_rule"
-        android:layout_width="match_parent"
+        style="@style/Widget.RtlConformTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
         android:singleLine="true"

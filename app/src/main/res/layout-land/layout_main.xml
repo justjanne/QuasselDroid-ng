@@ -31,7 +31,8 @@
       android:id="@+id/autocomplete_list"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="?colorBackgroundCard" />
+      android:background="?colorBackgroundCard"
+      tools:listitem="@layout/widget_nick" />
   </LinearLayout>
 
   <fragment

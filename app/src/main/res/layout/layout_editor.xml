@@ -30,6 +30,7 @@
 
     <de.kuschku.quasseldroid.ui.chat.input.RichEditText
       android:id="@+id/chatline"
+      style="@style/Widget.RtlConformTextView"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@android:color/transparent"
@@ -65,7 +66,8 @@
     android:id="@+id/autocomplete_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:layout_constraintBottom_toTopOf="@+id/formatting_toolbar_container" />
+    app:layout_constraintBottom_toTopOf="@+id/formatting_toolbar_container"
+    tools:listitem="@layout/widget_nick" />
 
   <android.support.design.widget.AppBarLayout
     android:id="@+id/formatting_toolbar_container"

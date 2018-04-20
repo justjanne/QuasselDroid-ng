@@ -29,9 +29,9 @@
 
     <TextView
       android:id="@+id/name"
-      android:layout_width="match_parent"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="center"
+      android:layout_gravity="center_vertical|start"
       android:fontFamily="sans-serif-medium"
       android:singleLine="true"
       android:textColor="?attr/colorTextPrimary"
@@ -40,9 +40,9 @@
 
     <TextView
       android:id="@+id/description"
-      android:layout_width="match_parent"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="center"
+      android:layout_gravity="center_vertical|start"
       android:singleLine="true"
       android:textColor="?attr/colorTextSecondary"
       android:textSize="12sp"

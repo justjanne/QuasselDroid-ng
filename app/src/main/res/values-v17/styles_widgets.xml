@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+  <style name="Widget.RtlConformTextView" parent="">
+    <item name="android:textAlignment">gravity</item>
+    <item name="android:textDirection">locale</item>
+  </style>
+
   <style name="Widget.CoreSettings.Wrapper" parent="">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
@@ -29,14 +34,14 @@
     <item name="android:layout_marginStart">56dp</item>
   </style>
 
-  <style name="Widget.CoreSettings.EditTextLayout" parent="">
+  <style name="Widget.CoreSettings.EditTextLayout" parent="Widget.RtlConformTextView">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginLeft">-4dp</item>
     <item name="android:layout_marginStart">-4dp</item>
   </style>
 
-  <style name="Widget.CoreSettings.EditTextSuffix" parent="">
+  <style name="Widget.CoreSettings.EditTextSuffix" parent="Widget.RtlConformTextView">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_gravity">bottom|end</item>
@@ -60,8 +65,8 @@
     <item name="android:paddingTop">8dp</item>
   </style>
 
-  <style name="Widget.Info.Section" parent="">
-    <item name="android:layout_width">match_parent</item>
+  <style name="Widget.Info.Section" parent="Widget.RtlConformTextView">
+    <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:gravity">center_vertical</item>
     <item name="android:minHeight">48dp</item>
@@ -89,7 +94,7 @@
     <item name="android:paddingTop">16dp</item>
   </style>
 
-  <style name="Widget.Subhead" parent="">
+  <style name="Widget.Subhead" parent="Widget.RtlConformTextView">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:gravity">center_vertical</item>

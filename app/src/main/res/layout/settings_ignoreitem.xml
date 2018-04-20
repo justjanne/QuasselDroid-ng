@@ -48,9 +48,8 @@
 
       <Spinner
         android:id="@+id/type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/settings_item" />
+        style="@style/Widget.FullWidthSpinner"
+        tools:listitem="@layout/widget_spinner_item_inline" />
 
       <TextView
         style="@style/Widget.CoreSettings.EditTextHeader"
@@ -58,9 +57,8 @@
 
       <Spinner
         android:id="@+id/strictness"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/settings_item" />
+        style="@style/Widget.FullWidthSpinner"
+        tools:listitem="@layout/widget_spinner_item_inline" />
     </LinearLayout>
 
     <LinearLayout
@@ -83,9 +81,8 @@
 
       <Spinner
         android:id="@+id/scope"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/settings_item" />
+        style="@style/Widget.FullWidthSpinner"
+        tools:listitem="@layout/widget_spinner_item_inline" />
     </LinearLayout>
 
     <LinearLayout

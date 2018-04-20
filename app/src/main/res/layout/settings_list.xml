@@ -25,20 +25,9 @@
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_server_network" />
 
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp">
-
-        <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/settings_networks_title"
-          android:textColor="?colorTextPrimary"
-          android:textSize="16sp" />
-      </LinearLayout>
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_networks_title" />
     </LinearLayout>
 
     <LinearLayout
@@ -82,20 +71,9 @@
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_account_card" />
 
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp">
-
-        <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/settings_identities_title"
-          android:textColor="?colorTextPrimary"
-          android:textSize="16sp" />
-      </LinearLayout>
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_identities_title" />
     </LinearLayout>
 
     <LinearLayout
@@ -139,20 +117,9 @@
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_list_bulleted" />
 
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp">
-
-        <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/settings_chatlists_title"
-          android:textColor="?colorTextPrimary"
-          android:textSize="16sp" />
-      </LinearLayout>
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_chatlists_title" />
     </LinearLayout>
 
     <LinearLayout
@@ -199,20 +166,9 @@
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_filter" />
 
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp">
-
-        <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/settings_ignorelist_title"
-          android:textColor="?colorTextPrimary"
-          android:textSize="16sp" />
-      </LinearLayout>
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_ignorelist_title" />
     </LinearLayout>
 
     <LinearLayout
@@ -232,20 +188,9 @@
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_bell" />
 
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp">
-
-        <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/settings_highlightlist_title"
-          android:textColor="?colorTextPrimary"
-          android:textSize="16sp" />
-      </LinearLayout>
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_highlightlist_title" />
     </LinearLayout>
 
     <LinearLayout
@@ -265,20 +210,9 @@
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_message_bulleted" />
 
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp">
-
-        <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/settings_aliaslist_title"
-          android:textColor="?colorTextPrimary"
-          android:textSize="16sp" />
-      </LinearLayout>
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_aliaslist_title" />
     </LinearLayout>
 
     <LinearLayout
@@ -298,20 +232,9 @@
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_settings" />
 
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp">
-
-        <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/settings_networkconfig_title"
-          android:textColor="?colorTextPrimary"
-          android:textSize="16sp" />
-      </LinearLayout>
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_networkconfig_title" />
     </LinearLayout>
   </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

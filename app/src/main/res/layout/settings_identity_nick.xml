@@ -17,11 +17,14 @@
 
     <TextView
       android:id="@+id/nick"
+      style="@style/Widget.RtlConformTextView"
       android:layout_width="0dip"
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical"
       android:layout_weight="1"
+      android:paddingEnd="0dip"
       android:paddingLeft="?listPreferredItemPaddingLeft"
+      android:paddingRight="0dip"
       android:paddingStart="?listPreferredItemPaddingLeft"
       android:textAppearance="?android:attr/textAppearanceListItemSmall"
       tools:text="@sample/messages.json/data/sender" />

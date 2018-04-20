@@ -82,9 +82,8 @@
 
       <Spinner
         android:id="@+id/identity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/widget_spinner_item_toolbar" />
+        style="@style/Widget.FullWidthSpinner"
+        tools:listitem="@layout/widget_spinner_item_inline" />
     </LinearLayout>
 
     <LinearLayout

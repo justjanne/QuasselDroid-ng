@@ -34,6 +34,7 @@
 
   <de.kuschku.quasseldroid.util.ui.RipplePassthroughTextView
     android:id="@+id/combined"
+    style="@style/Widget.RtlConformTextView"
     android:layout_width="0dip"
     android:layout_height="wrap_content"
     android:layout_weight="1"

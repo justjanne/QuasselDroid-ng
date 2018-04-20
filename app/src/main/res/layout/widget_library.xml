@@ -22,7 +22,8 @@
 
     <TextView
       android:id="@+id/name"
-      android:layout_width="match_parent"
+      style="@style/Widget.RtlConformTextView"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textColor="?colorTextPrimary"
       android:textSize="16sp"
@@ -30,7 +31,8 @@
 
     <TextView
       android:id="@+id/version"
-      android:layout_width="match_parent"
+      style="@style/Widget.RtlConformTextView"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textAppearance="?android:attr/textAppearanceSmall"
       android:textColor="?colorTextSecondary"
@@ -38,7 +40,8 @@
 
     <TextView
       android:id="@+id/license"
-      android:layout_width="match_parent"
+      style="@style/Widget.RtlConformTextView"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textAppearance="?android:attr/textAppearanceSmall"
       android:textColor="?colorTextSecondary"

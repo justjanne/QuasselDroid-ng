@@ -38,7 +38,8 @@
 
       <TextView
         android:id="@+id/host"
-        android:layout_width="match_parent"
+        style="@style/Widget.RtlConformTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
         android:singleLine="true"
@@ -47,7 +48,8 @@
 
       <TextView
         android:id="@+id/port"
-        android:layout_width="match_parent"
+        style="@style/Widget.RtlConformTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
         android:singleLine="true"

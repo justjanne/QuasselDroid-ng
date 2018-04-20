@@ -30,7 +30,7 @@ class MinimumActivityAdapter(val data: List<MinimumActivityItem>) :
       else
         parent.context
     )
-    val view = inflater.inflate(R.layout.widget_spinner_item_toolbar, parent, false)
+    val view = inflater.inflate(R.layout.widget_spinner_item_inline, parent, false)
     return MinimumActivityViewHolder(
       view
     )

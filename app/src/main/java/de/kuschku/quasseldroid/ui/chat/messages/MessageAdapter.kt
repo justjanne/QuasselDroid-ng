@@ -170,6 +170,10 @@ class MessageAdapter @Inject constructor(
     @JvmField
     var name: TextView? = null
 
+    @BindView(R.id.realname)
+    @JvmField
+    var realname: TextView? = null
+
     @BindView(R.id.content)
     @JvmField
     var content: TextView? = null
@@ -230,6 +234,7 @@ class MessageAdapter @Inject constructor(
       timeLeft?.text = message.time
       timeRight?.text = message.time
       name?.text = message.name
+      realname?.text = message.realName
       content?.text = message.content
       combined?.text = message.combined
 
