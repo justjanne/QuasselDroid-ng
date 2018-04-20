@@ -10,10 +10,6 @@ to your Quassel core using your Android ™ phone.
 
 ![Screenshot of QuasselDroid on Phone and Tablet](https://i.k8r.eu/4V7PhQl)
 
-## Warning
-
-This is a very early alpha version, and should not be used in production.
-
 ## Build Requirements
 
 QuasselDroid requires you to have the latest version of gradle installed, and
