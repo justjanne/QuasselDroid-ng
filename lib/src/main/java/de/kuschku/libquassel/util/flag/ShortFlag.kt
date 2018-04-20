@@ -52,19 +52,16 @@ data class ShortFlags<E>(
 
   companion object {
     inline fun <reified T> of(int: Short): ShortFlags<T>
-      where T : ShortFlag<T>, T : Enum<T> = ShortFlags(
-      int,
-      enumValues())
+      where T : ShortFlag<T>, T : Enum<T> =
+      ShortFlags(int, enumValues())
 
     inline fun <reified T> of(vararg flags: ShortFlag<T>): ShortFlags<T>
       where T : ShortFlag<T>, T : Enum<T> =
-      ShortFlags(flags.map(ShortFlag<T>::bit).distinct().sum().toShort(),
-                 enumValues())
+      ShortFlags(flags.map(ShortFlag<T>::bit).distinct().sum().toShort(), enumValues())
 
     inline fun <reified T> of(flags: Iterable<T>): ShortFlags<T>
       where T : ShortFlag<T>, T : Enum<T> =
-      ShortFlags(flags.map(ShortFlag<T>::bit).distinct().sum().toShort(),
-                 enumValues())
+      ShortFlags(flags.map(ShortFlag<T>::bit).distinct().sum().toShort(), enumValues())
   }
 
   interface Factory<E> where E : ShortFlag<E>, E : Enum<E> {
@@ -82,53 +79,53 @@ infix fun <T> ShortFlags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : Sh
 }
 
 infix fun <T> ShortFlags<T>.or(other: Short): ShortFlags<T>
-  where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value or other)
+  where T : kotlin.Enum<T>, T : ShortFlag<T> =
+  ShortFlags(value or other)
 
 infix fun <T> ShortFlags<T>.or(other: ShortFlag<T>): ShortFlags<T>
-  where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value or other.bit)
+  where T : kotlin.Enum<T>, T : ShortFlag<T> =
+  ShortFlags(value or other.bit)
 
 infix fun <T> ShortFlags<T>.or(other: ShortFlags<T>): ShortFlags<T>
-  where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value or other.value)
+  where T : kotlin.Enum<T>, T : ShortFlag<T> =
+  ShortFlags(value or other.value)
 
 infix fun <T> ShortFlags<T>.and(other: Short): ShortFlags<T>
-  where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value and other)
+  where T : kotlin.Enum<T>, T : ShortFlag<T> =
+  ShortFlags(value and other)
 
 infix fun <T> ShortFlags<T>.and(other: ShortFlag<T>): ShortFlags<T>
-  where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value and other.bit)
+  where T : kotlin.Enum<T>, T : ShortFlag<T> =
+  ShortFlags(value and other.bit)
 
 infix fun <T> ShortFlags<T>.and(other: ShortFlags<T>): ShortFlags<T>
-  where T : kotlin.Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value and other.value)
+  where T : kotlin.Enum<T>, T : ShortFlag<T> =
+  ShortFlags(value and other.value)
 
 infix operator fun <T> ShortFlags<T>.plus(other: Short): ShortFlags<T>
-  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value or other)
+  where T : Enum<T>, T : ShortFlag<T> =
+  ShortFlags(value or other)
 
 infix operator fun <T> ShortFlags<T>.plus(other: ShortFlag<T>): ShortFlags<T>
-  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value or other.bit)
+  where T : Enum<T>, T : ShortFlag<T> =
+  ShortFlags(value or other.bit)
 
 infix operator fun <T> ShortFlags<T>.plus(other: ShortFlags<T>): ShortFlags<T>
-  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value or other.value)
+  where T : Enum<T>, T : ShortFlag<T> =
+  ShortFlags(value or other.value)
 
 infix operator fun <T> ShortFlags<T>.minus(other: Short): ShortFlags<T>
-  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value and other.inv())
+  where T : Enum<T>, T : ShortFlag<T> =
+  ShortFlags(value and other.inv())
 
 infix operator fun <T> ShortFlags<T>.minus(other: ShortFlag<T>): ShortFlags<T>
-  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value and other.bit.inv())
+  where T : Enum<T>, T : ShortFlag<T> =
+  ShortFlags(value and other.bit.inv())
 
 infix operator fun <T> ShortFlags<T>.minus(other: ShortFlags<T>): ShortFlags<T>
-  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value and other.value.inv())
+  where T : Enum<T>, T : ShortFlag<T> =
+  ShortFlags(value and other.value.inv())
 
 infix fun <T> ShortFlags<T>.unset(which: T): ShortFlags<T>
-  where T : Enum<T>, T : ShortFlag<T> = ShortFlags(
-  value xor which.bit)
+  where T : Enum<T>, T : ShortFlag<T> =
+  ShortFlags(value xor which.bit)
