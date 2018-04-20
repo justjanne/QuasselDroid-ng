@@ -202,13 +202,21 @@ class CoreConnection(
         }
       }
       channel?.close()
-    } catch (e: QuasselSecurityException) {
-      close()
-      securityExceptionCallback(e)
     } catch (e: Throwable) {
-      log(WARN, TAG, "Error encountered in connection", e)
-      log(WARN, TAG, "Last sent message: ${MessageRunnable.lastSent.get()}")
-      close()
+      var cause: Throwable? = e
+      var exception: QuasselSecurityException?
+      do {
+        exception = cause as? QuasselSecurityException
+        cause = cause?.cause
+      } while (cause != null && exception == null)
+      if (exception != null) {
+        close()
+        securityExceptionCallback(exception)
+      } else {
+        log(WARN, TAG, "Error encountered in connection", e)
+        log(WARN, TAG, "Last sent message: ${MessageRunnable.lastSent.get()}")
+        close()
+      }
     }
   }
 
