@@ -8,7 +8,7 @@ to your Quassel core using your Android ™ phone.
 
 *Inspired by and based on [QuasselDroid](https://github.com/sandsmark/QuasselDroid)*
 
-![Screenshot of QuasselDroid on Phone and Tablet](https://i.imgur.com/XUqcN7j.png)
+![Screenshot of QuasselDroid on Phone and Tablet](https://i.k8r.eu/4V7PhQ)
 
 ## Warning
 
@@ -92,7 +92,7 @@ The older implementation is still available at <https://github.com/sandsmark/Qua
 
 > This program is free software: you can redistribute it and/or modify it
 > under the terms of the GNU General Public License as published by the Free
-> Software Foundation, either version 2 of the License, or (at your option)
+> Software Foundation, either version 3 of the License, or (at your option)
 > any later version.
 
 > This program is distributed in the hope that it will be useful,
