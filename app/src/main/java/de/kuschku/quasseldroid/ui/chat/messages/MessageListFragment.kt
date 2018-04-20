@@ -5,6 +5,7 @@ import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -106,7 +107,7 @@ class MessageListFragment : ServiceBoundFragment() {
         else
           builder
 
-        val clipboard = requireContext().systemService<ClipboardManager>()
+        val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText(null, data)
         clipboard.primaryClip = clip
         actionMode?.finish()

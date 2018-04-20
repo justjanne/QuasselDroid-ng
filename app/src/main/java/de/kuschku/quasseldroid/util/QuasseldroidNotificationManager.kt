@@ -15,7 +15,6 @@ import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.util.helper.editApply
 import de.kuschku.quasseldroid.util.helper.getColorCompat
 import de.kuschku.quasseldroid.util.helper.sharedPreferences
-import de.kuschku.quasseldroid.util.helper.systemService
 
 class QuasseldroidNotificationManager(private val context: Context) {
   fun init() {
@@ -25,7 +24,7 @@ class QuasseldroidNotificationManager(private val context: Context) {
 
   @TargetApi(Build.VERSION_CODES.O)
   private fun prepareChannels() {
-    val notificationManager = context.systemService<NotificationManager>()
+    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.createNotificationChannels(
       listOf(
         NotificationChannel(

@@ -2,11 +2,11 @@ package de.kuschku.quasseldroid.util.ui
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.PopupMenu
 import android.widget.TextView
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.util.helper.systemService
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 class LinkLongClickMenuHelper :
@@ -23,7 +23,7 @@ class LinkLongClickMenuHelper :
         menu.setOnMenuItemClickListener {
           when (it.itemId) {
             R.id.action_copy  -> {
-              val clipboard = anchor.context.systemService<ClipboardManager>()
+              val clipboard = anchor.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
               val clip = ClipData.newPlainText(null, url)
               clipboard.primaryClip = clip
               menu.dismiss()
