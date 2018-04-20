@@ -37,9 +37,9 @@ class QuasselViewModel : ViewModel() {
 
   val expandedMessages = BehaviorSubject.createDefault(emptySet<MsgId>())
 
-  val buffer = BehaviorSubject.createDefault(-1)
+  val buffer = BehaviorSubject.createDefault(Int.MAX_VALUE)
 
-  val bufferViewConfigId = BehaviorSubject.createDefault(-1)
+  val bufferViewConfigId = BehaviorSubject.createDefault(Int.MAX_VALUE)
 
   val MAX_RECENT_MESSAGES = 20
   val recentlySentMessages = BehaviorSubject.createDefault(emptyList<CharSequence>())

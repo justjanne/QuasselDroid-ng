@@ -5,7 +5,7 @@ buildscript {
   }
   dependencies {
     classpath("com.android.tools.build:gradle:3.1.1")
-    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.31")
+    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.40")
   }
 }
 
@@ -14,5 +14,17 @@ allprojects {
     google()
     jcenter()
     maven(url = "https://jitpack.io")
+  }
+}
+
+subprojects {
+  configurations.all {
+    resolutionStrategy {
+      eachDependency {
+        if (requested.name == "kotlin-compiler-embeddable") {
+          useVersion("1.2.31")
+        }
+      }
+    }
   }
 }
