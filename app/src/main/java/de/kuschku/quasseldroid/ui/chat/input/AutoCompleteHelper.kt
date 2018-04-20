@@ -24,7 +24,7 @@ import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
 
 class AutoCompleteHelper(
-  private val activity: FragmentActivity,
+  activity: FragmentActivity,
   private val autoCompleteSettings: AutoCompleteSettings,
   private val messageSettings: MessageSettings,
   private val ircFormatDeserializer: IrcFormatDeserializer,

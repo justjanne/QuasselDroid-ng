@@ -5,7 +5,7 @@ import android.text.style.BackgroundColorSpan
 
 sealed class IrcBackgroundColorSpan<T : IrcBackgroundColorSpan<T>>(@ColorInt color: Int) :
   BackgroundColorSpan(color), Copyable<T> {
-  class MIRC(val mircColor: Int, @ColorInt color: Int) :
+  class MIRC(private val mircColor: Int, @ColorInt color: Int) :
     IrcBackgroundColorSpan<MIRC>(color), Copyable<MIRC> {
     override fun copy() = MIRC(mircColor, backgroundColor)
   }

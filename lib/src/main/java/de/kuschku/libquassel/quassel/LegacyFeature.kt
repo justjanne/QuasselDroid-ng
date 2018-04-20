@@ -51,21 +51,21 @@ enum class LegacyFeature(override val bit: Int) :
     fun fromExtended(it: ExtendedFeature) = when (it) {
       ExtendedFeature.SynchronizedMarkerLine -> LegacyFeature.SynchronizedMarkerLine
       ExtendedFeature.SaslAuthentication     -> LegacyFeature.SaslAuthentication
-      ExtendedFeature.SaslExternal         -> LegacyFeature.SaslExternal
-      ExtendedFeature.HideInactiveNetworks -> LegacyFeature.HideInactiveNetworks
-      ExtendedFeature.PasswordChange       -> LegacyFeature.PasswordChange
-      ExtendedFeature.CapNegotiation       -> LegacyFeature.CapNegotiation
-      ExtendedFeature.VerifyServerSSL      -> LegacyFeature.VerifyServerSSL
-      ExtendedFeature.CustomRateLimits     -> LegacyFeature.CustomRateLimits
-      ExtendedFeature.DccFileTransfer      -> LegacyFeature.DccFileTransfer
-      ExtendedFeature.AwayFormatTimestamp  -> LegacyFeature.AwayFormatTimestamp
-      ExtendedFeature.Authenticators       -> LegacyFeature.Authenticators
-      ExtendedFeature.BufferActivitySync   -> LegacyFeature.BufferActivitySync
-      ExtendedFeature.CoreSideHighlights   -> LegacyFeature.CoreSideHighlights
-      ExtendedFeature.SenderPrefixes       -> LegacyFeature.SenderPrefixes
-      ExtendedFeature.RemoteDisconnect     -> LegacyFeature.RemoteDisconnect
-      ExtendedFeature.ExtendedFeatures     -> LegacyFeature.ExtendedFeatures
-      else                                 -> null
+      ExtendedFeature.SaslExternal           -> LegacyFeature.SaslExternal
+      ExtendedFeature.HideInactiveNetworks   -> LegacyFeature.HideInactiveNetworks
+      ExtendedFeature.PasswordChange         -> LegacyFeature.PasswordChange
+      ExtendedFeature.CapNegotiation         -> LegacyFeature.CapNegotiation
+      ExtendedFeature.VerifyServerSSL        -> LegacyFeature.VerifyServerSSL
+      ExtendedFeature.CustomRateLimits       -> LegacyFeature.CustomRateLimits
+      ExtendedFeature.DccFileTransfer        -> LegacyFeature.DccFileTransfer
+      ExtendedFeature.AwayFormatTimestamp    -> LegacyFeature.AwayFormatTimestamp
+      ExtendedFeature.Authenticators         -> LegacyFeature.Authenticators
+      ExtendedFeature.BufferActivitySync     -> LegacyFeature.BufferActivitySync
+      ExtendedFeature.CoreSideHighlights     -> LegacyFeature.CoreSideHighlights
+      ExtendedFeature.SenderPrefixes         -> LegacyFeature.SenderPrefixes
+      ExtendedFeature.RemoteDisconnect       -> LegacyFeature.RemoteDisconnect
+      ExtendedFeature.ExtendedFeatures       -> LegacyFeature.ExtendedFeatures
+      else                                   -> null
     }
   }
 

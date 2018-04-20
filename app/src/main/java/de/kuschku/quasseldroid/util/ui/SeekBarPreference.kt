@@ -29,8 +29,6 @@ import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 
 class SeekBarPreference : Preference, SeekBar.OnSeekBarChangeListener {
-  private val TAG = javaClass.name
-
   private var maxValue = 100
   private var minValue = 0
   private var interval = 1
@@ -85,7 +83,7 @@ class SeekBarPreference : Preference, SeekBar.OnSeekBarChangeListener {
       if (newInterval != null)
         interval = Integer.parseInt(newInterval)
     } catch (e: Exception) {
-      Log.e(TAG, "Invalid interval value", e)
+      Log.e("SeekBarPreference", "Invalid interval value", e)
     }
   }
 
@@ -139,7 +137,7 @@ class SeekBarPreference : Preference, SeekBar.OnSeekBarChangeListener {
       try {
         temp = defaultValue as Int
       } catch (ex: Exception) {
-        Log.e(TAG, "Invalid default value: " + defaultValue.toString())
+        Log.e("SeekBarPreference", "Invalid default value: " + defaultValue.toString())
       }
       persistInt(temp)
       currentValue = temp

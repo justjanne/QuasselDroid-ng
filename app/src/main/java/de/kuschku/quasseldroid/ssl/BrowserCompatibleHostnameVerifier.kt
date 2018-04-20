@@ -25,7 +25,6 @@ class BrowserCompatibleHostnameVerifier : HostnameVerifier {
       .filterNotNull()
       .distinct()
 
-  private val COMMON_NAME = Regex("""(?:^|,\s?)(?:CN=("(?:[^"]|"")+"|[^,]+))""")
   private fun commonName(certificate: X509Certificate): String? {
     return COMMON_NAME.find(certificate.subjectX500Principal.name)?.groups?.get(1)?.value
   }
@@ -42,4 +41,8 @@ class BrowserCompatibleHostnameVerifier : HostnameVerifier {
     }.map { (_, name) ->
       name
     }
+
+  companion object {
+    private val COMMON_NAME = Regex("""(?:^|,\s?)(?:CN=("(?:[^"]|"")+"|[^,]+))""")
+  }
 }

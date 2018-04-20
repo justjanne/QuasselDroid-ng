@@ -15,7 +15,7 @@ import android.graphics.drawable.shapes.RoundRectShape;
 
 /**
  * @author amulya
- * @datetime 14 Oct 2014, 3:53 PM
+ * created 14 Oct 2014
  */
 public class TextDrawable extends ShapeDrawable {
 
@@ -23,7 +23,6 @@ public class TextDrawable extends ShapeDrawable {
   private final Paint textPaint;
   private final Paint borderPaint;
   private final String text;
-  private final int color;
   private final RectShape shape;
   private final int height;
   private final int width;
@@ -42,7 +41,6 @@ public class TextDrawable extends ShapeDrawable {
 
     // text and color
     text = builder.toUpperCase ? builder.text.toUpperCase() : builder.text;
-    color = builder.color;
 
     // text paint settings
     fontSize = builder.fontSize;
@@ -58,13 +56,13 @@ public class TextDrawable extends ShapeDrawable {
     // border paint settings
     borderThickness = builder.borderThickness;
     borderPaint = new Paint();
-    borderPaint.setColor(getDarkerShade(color));
+    borderPaint.setColor(getDarkerShade(builder.color));
     borderPaint.setStyle(Paint.Style.STROKE);
     borderPaint.setStrokeWidth(borderThickness);
 
     // drawable paint color
     Paint paint = getPaint();
-    paint.setColor(color);
+    paint.setColor(builder.color);
 
   }
 
@@ -142,49 +140,46 @@ public class TextDrawable extends ShapeDrawable {
   }
 
   public interface IConfigBuilder {
-    public IConfigBuilder width(int width);
+    IConfigBuilder width(int width);
 
-    public IConfigBuilder height(int height);
+    IConfigBuilder height(int height);
 
-    public IConfigBuilder textColor(int color);
+    IConfigBuilder textColor(int color);
 
-    public IConfigBuilder withBorder(int thickness);
+    IConfigBuilder withBorder(int thickness);
 
-    public IConfigBuilder useFont(Typeface font);
+    IConfigBuilder useFont(Typeface font);
 
-    public IConfigBuilder fontSize(int size);
+    IConfigBuilder fontSize(int size);
 
-    public IConfigBuilder bold();
+    IConfigBuilder bold();
 
-    public IConfigBuilder toUpperCase();
+    IConfigBuilder toUpperCase();
 
-    public IShapeBuilder endConfig();
+    IShapeBuilder endConfig();
   }
 
-  public static interface IBuilder {
-
-    public TextDrawable build(String text, int color);
+  public interface IBuilder {
+    TextDrawable build(String text, int color);
   }
 
-  public static interface IShapeBuilder {
+  public interface IShapeBuilder {
+    IConfigBuilder beginConfig();
 
-    public IConfigBuilder beginConfig();
+    IBuilder rect();
 
-    public IBuilder rect();
+    IBuilder round();
 
-    public IBuilder round();
+    IBuilder roundRect(int radius);
 
-    public IBuilder roundRect(int radius);
+    TextDrawable buildRect(String text, int color);
 
-    public TextDrawable buildRect(String text, int color);
+    TextDrawable buildRoundRect(String text, int color, int radius);
 
-    public TextDrawable buildRoundRect(String text, int color, int radius);
-
-    public TextDrawable buildRound(String text, int color);
+    TextDrawable buildRound(String text, int color);
   }
 
   public static class Builder implements IConfigBuilder, IShapeBuilder, IBuilder {
-
     public int textColor;
     public float radius;
     private String text;

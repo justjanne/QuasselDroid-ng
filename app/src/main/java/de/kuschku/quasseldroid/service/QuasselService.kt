@@ -338,7 +338,7 @@ class QuasselService : DaggerLifecycleService(),
     fun launch(
       context: Context,
       disconnect: Boolean? = null
-    ) = context.startService(intent(context, disconnect))
+    ): ComponentName = context.startService(intent(context, disconnect))
 
     fun intent(
       context: Context,

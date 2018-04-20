@@ -6,5 +6,5 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class CoreSettingsFragmentProvider {
   @ContributesAndroidInjector
-  abstract fun CoreSettingsFragmentbind(): CoreSettingsFragment
+  abstract fun bindCoreSettingsFragment(): CoreSettingsFragment
 }

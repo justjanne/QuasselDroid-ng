@@ -42,7 +42,8 @@ class EditorHelper(
     getColor(0, 0)
   }
 
-  val lastWord = BehaviorSubject.createDefault(Pair("", IntRange.EMPTY))
+  val lastWord: BehaviorSubject<Pair<String, IntRange>> = BehaviorSubject.createDefault(Pair("",
+                                                                                             IntRange.EMPTY))
   private val textWatcher = object : TextWatcher {
     override fun afterTextChanged(s: Editable?) {
       val previous = autoCompleteHelper.autoCompletionState

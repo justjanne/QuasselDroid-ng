@@ -78,7 +78,7 @@ class Hex : BinaryEncoder, BinaryDecoder {
    * @since 1.4
    * @since 1.7 throws UnsupportedCharsetException if the named charset is unavailable
    */
-  constructor(charsetName: String) : this(Charset.forName(charsetName)) {}
+  constructor(charsetName: String) : this(Charset.forName(charsetName))
 
   /**
    * Converts an array of character bytes representing hexadecimal values into an array of bytes of those same values.
@@ -120,7 +120,7 @@ class Hex : BinaryEncoder, BinaryDecoder {
    * same values. The returned array will be half the length of the passed String or array, as it takes two characters
    * to represent any given byte. An exception is thrown if the passed char array has an odd number of elements.
    *
-   * @param object
+   * @param obj
    * A String, ByteBuffer, byte[], or an array of character bytes containing hexadecimal digits
    * @return A byte array containing binary data decoded from the supplied byte array (representing characters).
    * @throws DecoderException
@@ -129,20 +129,13 @@ class Hex : BinaryEncoder, BinaryDecoder {
    * @see .decodeHex
    */
   @Throws(DecoderException::class)
-  override fun decode(`object`: Any): Any {
-    return if (`object` is String) {
-      decode(`object`.toCharArray())
-    } else if (`object` is ByteArray) {
-      decode(`object`)
-    } else if (`object` is ByteBuffer) {
-      decode(`object`)
-    } else {
-      try {
-        decodeHex(`object` as CharArray)
-      } catch (e: ClassCastException) {
-        throw DecoderException(e.message, e)
-      }
-
+  override fun decode(obj: Any): Any {
+    return when (obj) {
+      is String     -> decode(obj.toCharArray())
+      is ByteArray  -> decode(obj)
+      is ByteBuffer -> decode(obj)
+      is CharArray  -> decodeHex(obj)
+      else          -> throw DecoderException()
     }
   }
 
@@ -196,7 +189,7 @@ class Hex : BinaryEncoder, BinaryDecoder {
    * [.getCharset].
    *
    *
-   * @param object
+   * @param obj
    * a String, ByteBuffer, or byte[] to convert to Hex characters
    * @return A char[] containing lower-case hexadecimal characters
    * @throws EncoderException
@@ -204,22 +197,14 @@ class Hex : BinaryEncoder, BinaryDecoder {
    * @see .encodeHex
    */
   @Throws(EncoderException::class)
-  override fun encode(`object`: Any): Any {
-    val byteArray: ByteArray
-    if (`object` is String) {
-      byteArray = `object`.toByteArray(this.charset)
-    } else if (`object` is ByteBuffer) {
-      byteArray = `object`.array()
-    } else {
-      try {
-        byteArray = `object` as ByteArray
-      } catch (e: ClassCastException) {
-        throw EncoderException(e.message, e)
-      }
-
+  override fun encode(obj: Any) = encodeHex(
+    when (obj) {
+      is String     -> obj.toByteArray(charset)
+      is ByteBuffer -> obj.array()
+      is ByteArray  -> obj
+      else          -> throw EncoderException()
     }
-    return encodeHex(byteArray)
-  }
+  )
 
   /**
    * Returns a string representation of the object, which includes the charset name.
@@ -237,14 +222,14 @@ class Hex : BinaryEncoder, BinaryDecoder {
      *
      * @since 1.7
      */
-    val DEFAULT_CHARSET = Charsets.UTF_8
+    val DEFAULT_CHARSET: Charset = Charsets.UTF_8
 
     /**
      * Default charset name is [CharEncoding.UTF_8]
      *
      * @since 1.4
      */
-    val DEFAULT_CHARSET_NAME = CharEncoding.UTF_8
+    const val DEFAULT_CHARSET_NAME = CharEncoding.UTF_8
 
     /**
      * Used to build output as Hex
@@ -387,7 +372,7 @@ class Hex : BinaryEncoder, BinaryDecoder {
      * For best results, this should be either upper- or lower-case hex.
      * @since 1.4
      */
-    protected fun encodeHex(data: ByteArray, toDigits: CharArray): CharArray {
+    private fun encodeHex(data: ByteArray, toDigits: CharArray): CharArray {
       val l = data.size
       val out = CharArray(l shl 1)
       // two characters form the hex value.
@@ -414,7 +399,7 @@ class Hex : BinaryEncoder, BinaryDecoder {
      * For best results, this should be either upper- or lower-case hex.
      * @since 1.11
      */
-    protected fun encodeHex(data: ByteBuffer, toDigits: CharArray): CharArray {
+    private fun encodeHex(data: ByteBuffer, toDigits: CharArray): CharArray {
       return encodeHex(data.array(), toDigits)
     }
 
@@ -486,7 +471,7 @@ class Hex : BinaryEncoder, BinaryDecoder {
      * Thrown if ch is an illegal hex character
      */
     @Throws(DecoderException::class)
-    protected fun toDigit(ch: Char, index: Int): Int {
+    private fun toDigit(ch: Char, index: Int): Int {
       val digit = Character.digit(ch, 16)
       if (digit == -1) {
         throw DecoderException("Illegal hexadecimal character $ch at index $index")

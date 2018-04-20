@@ -12,7 +12,7 @@ import de.kuschku.quasseldroid.service.QuasselService
 import io.reactivex.subjects.BehaviorSubject
 
 class BackendServiceConnection : ServiceConnection {
-  val backend = BehaviorSubject.createDefault(Optional.empty<Backend>())
+  val backend: BehaviorSubject<Optional<Backend>> = BehaviorSubject.createDefault(Optional.empty())
 
   var context: Context? = null
 

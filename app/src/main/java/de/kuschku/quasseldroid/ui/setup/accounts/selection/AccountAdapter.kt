@@ -21,8 +21,8 @@ import de.kuschku.quasseldroid.util.helper.zip
 
 class AccountAdapter(
   owner: LifecycleOwner,
-  val liveData: LiveData<List<AccountDatabase.Account>>,
-  val selectedItem: MutableLiveData<Pair<Long, Long>>
+  liveData: LiveData<List<AccountDatabase.Account>>,
+  private val selectedItem: MutableLiveData<Pair<Long, Long>>
 ) : RecyclerView.Adapter<AccountAdapter.AccountViewHolder>() {
   private val actionListeners = mutableSetOf<(Long) -> Unit>()
   private val addListeners = mutableSetOf<() -> Unit>()

@@ -77,7 +77,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
   /**
    * Default initial state for the component
    */
-  private static PanelState DEFAULT_SLIDE_STATE = PanelState.COLLAPSED;
+  private static final PanelState DEFAULT_SLIDE_STATE = PanelState.COLLAPSED;
   /**
    * The paint used to dim the main layout when sliding
    */

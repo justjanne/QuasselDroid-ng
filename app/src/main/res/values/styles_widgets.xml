@@ -2,7 +2,7 @@
 
   <style name="Widget" />
 
-  <style name="Widget.RtlConformTextView" parent=""></style>
+  <style name="Widget.RtlConformTextView" parent="" />
 
   <style name="Widget.Button.Borderless" parent="Widget.AppCompat.Button.Borderless">
     <item name="android:textColor">?attr/colorTextPrimary</item>
