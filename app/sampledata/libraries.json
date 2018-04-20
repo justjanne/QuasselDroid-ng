@@ -4,8 +4,8 @@
       "name": "Android Architecture Components: Lifecycle",
       "version": "1.1.1",
       "license": {
-        "shortName": "Apache-2.0",
-        "fullName": "Apache License"
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
       },
       "url": "https://android.googlesource.com/platform/frameworks/support/+/master/lifecycle"
     },
@@ -13,52 +13,88 @@
       "name": "Android Architecture Components: Paging",
       "version": "1.0.0-alpha7",
       "license": {
-        "shortName": "Apache-2.0",
-        "fullName": "Apache License"
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
       },
       "url": "https://android.googlesource.com/platform/frameworks/support/+/master/paging"
+    },
+    {
+      "name": "Android Architecture Components: Persistence",
+      "version": "1.1.0-beta1",
+      "license": {
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
+      },
+      "url": "https://android.googlesource.com/platform/frameworks/support/+/master/persistence"
     },
     {
       "name": "Android Architecture Components: Room",
       "version": "1.1.0-beta1",
       "license": {
-        "shortName": "Apache-2.0",
-        "fullName": "Apache License"
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
       },
-      "url": "https://android.googlesource.com/platform/frameworks/support/+/master/room"
+      "url": "https://android.googlesource.com/platform/frameworks/support/+/master/persistence"
     },
     {
       "name": "Android Sliding Up Panel",
       "version": "3.5.0",
       "license": {
-        "shortName": "Apache-2.0",
-        "fullName": "Apache License"
-      }
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
+      },
+      "url": "https://github.com/umano/AndroidSlidingUpPanel"
     },
     {
       "name": "Android Support Library",
       "version": "27.1.0",
       "license": {
-        "shortName": "Apache-2.0",
-        "fullName": "Apache License"
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
       },
       "url": "https://android.googlesource.com/platform/frameworks/support/+/master"
+    },
+    {
+      "name": "Android Support Library: Constraint Layout",
+      "version": "1.1.0-beta6",
+      "license": {
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
+      },
+      "url": "https://android.googlesource.com/platform/frameworks/opt/sherpa/+/studio-3.0/constraintlayout"
+    },
+    {
+      "name": "atinject",
+      "license": {
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
+      },
+      "url": "https://code.google.com/archive/p/atinject/"
     },
     {
       "name": "AutoService",
       "version": "1.0-rc4",
       "license": {
-        "shortName": "Apache-2.0",
-        "fullName": "Apache License"
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
       },
       "url": "https://github.com/google/auto/tree/master/service"
+    },
+    {
+      "name": "Better Link Movement Method",
+      "version": "2.1.0",
+      "license": {
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
+      },
+      "url": "https://github.com/Saketme/Better-Link-Movement-Method"
     },
     {
       "name": "Butter Knife",
       "version": "8.8.1",
       "license": {
-        "shortName": "Apache-2.0",
-        "fullName": "Apache License"
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
       },
       "url": "http://jakewharton.github.io/butterknife/"
     },
@@ -66,26 +102,60 @@
       "name": "Dagger 2",
       "version": "2.15",
       "license": {
-        "shortName": "Apache-2.0",
-        "fullName": "Apache License"
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
       },
       "url": "https://google.github.io/dagger/"
+    },
+    {
+      "name": "Dracula",
+      "license": {
+        "short_name": "MIT",
+        "full_name": "The MIT License (MIT}"
+      },
+      "url": "https://draculatheme.com/"
+    },
+    {
+      "name": "Glide",
+      "version": "4.6.1",
+      "license": {
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
+      },
+      "url": "https://bumptech.github.io/glide/"
+    },
+    {
+      "name": "GlobTransformer",
+      "version": "4.6.1",
+      "license": {
+        "short_name": "CC BY-SA 3.0",
+        "full_name": "Creative Commons Attribution-ShareAlike 3.0 Unported"
+      },
+      "url": "https://bumptech.github.io/glide/"
     },
     {
       "name": "Gson",
       "version": "2.8.2",
       "license": {
-        "shortName": "Apache-2.0",
-        "fullName": "Apache License"
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
       },
       "url": "https://github.com/google/gson"
+    },
+    {
+      "name": "Gruvbox",
+      "license": {
+        "short_name": "MIT",
+        "full_name": "The MIT License (MIT}"
+      },
+      "url": "https://github.com/morhetz/gruvbox"
     },
     {
       "name": "JavaPoet",
       "version": "1.10.0",
       "license": {
-        "shortName": "Apache-2.0",
-        "fullName": "Apache License"
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
       },
       "url": "https://github.com/square/javapoet"
     },
@@ -93,8 +163,8 @@
       "name": "JetBrains Java Annotations",
       "version": "16.0.1",
       "license": {
-        "shortName": "Apache-2.0",
-        "fullName": "Apache License"
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
       },
       "url": "https://github.com/JetBrains/java-annotations"
     },
@@ -102,8 +172,8 @@
       "name": "Kotlin Standard Library",
       "version": "1.2.40",
       "license": {
-        "shortName": "Apache-2.0",
-        "fullName": "Apache License"
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
       },
       "url": "https://kotlinlang.org/"
     },
@@ -111,17 +181,34 @@
       "name": "LeakCanary",
       "version": "1.5.4",
       "license": {
-        "shortName": "Apache-2.0",
-        "fullName": "Apache License"
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
       },
       "url": "https://github.com/square/leakcanary"
+    },
+    {
+      "name": "Material Design Icons: Community",
+      "license": {
+        "short_name": "SIL Open Font License v1.1",
+        "full_name": "SIL OPEN FONT LICENSE"
+      },
+      "url": "https://github.com/Templarian/MaterialDesign"
+    },
+    {
+      "name": "Material Design Icons: Google",
+      "version": "3.0.1",
+      "license": {
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
+      },
+      "url": "https://github.com/google/material-design-icons"
     },
     {
       "name": "Material Dialogs",
       "version": "0.9.6.0",
       "license": {
-        "shortName": "MIT",
-        "fullName": "The MIT License (MIT}"
+        "short_name": "MIT",
+        "full_name": "The MIT License (MIT}"
       },
       "url": "https://github.com/afollestad/material-dialogs"
     },
@@ -129,25 +216,51 @@
       "name": "MaterialProgressBar",
       "version": "1.4.2",
       "license": {
-        "shortName": "Apache-2.0",
-        "fullName": "Apache License"
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
       },
       "url": "https://github.com/DreaminginCodeZH/MaterialProgressBar"
+    },
+    {
+      "name": "Quassel",
+      "version": "0.13.0",
+      "license": {
+        "short_name": "GPLv3",
+        "full_name": "GNU GENERAL PUBLIC LICENSE"
+      },
+      "url": "https://quassel-irc.org/"
+    },
+    {
+      "name": "Reactive Streams",
+      "version": "1.0.2",
+      "license": {
+        "short_name": "CC0",
+        "full_name": "Creative Commons CC0 1.0 Universal"
+      },
+      "url": "https://github.com/ReactiveX/RxJava"
     },
     {
       "name": "RxJava",
       "version": "2.1.9",
       "license": {
-        "shortName": "Apache-2.0",
-        "fullName": "Apache License"
+        "short_name": "Apache-2.0",
+        "full_name": "Apache License"
       },
       "url": "https://github.com/ReactiveX/RxJava"
+    },
+    {
+      "name": "Solarized",
+      "license": {
+        "short_name": "MIT",
+        "full_name": "The MIT License (MIT}"
+      },
+      "url": "http://ethanschoonover.com/solarized"
     },
     {
       "name": "ThreeTen backport project",
       "version": "1.3.6",
       "license": {
-        "shortName": "BSD 3-clause"
+        "short_name": "BSD 3-clause"
       },
       "url": "http://www.threeten.org/threetenbp/"
     }

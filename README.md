@@ -1,6 +1,6 @@
 # QuasselDroid-ng
 
-[![Release Version](http://github-release-version.herokuapp.com/github/justjanne/QuasselDroid-ng/release.svg?style=flat)](https://github.com/justjanne/QuasselDroid-ng/releases)
+[![Release Version](https://img.shields.io/github/release/justjanne/QuasselDroid-ng/all.svg)](https://github.com/justjanne/QuasselDroid-ng/releases)
 
 Quassel is a distributed, decentralized IRC client, written using C++ and Qt.
 QuasselDroid is a pure-java client for the Quassel core, allowing you to connect
@@ -8,7 +8,7 @@ to your Quassel core using your Android ™ phone.
 
 *Inspired by and based on [QuasselDroid](https://github.com/sandsmark/QuasselDroid)*
 
-![Screenshot of QuasselDroid on Phone and Tablet](https://i.k8r.eu/4V7PhQ)
+![Screenshot of QuasselDroid on Phone and Tablet](https://i.k8r.eu/4V7PhQl)
 
 ## Warning
 
@@ -70,23 +70,68 @@ The older implementation is still available at <https://github.com/sandsmark/Qua
 
 ### QuasselDroid
 
-* [**Android Support**](http://developer.android.com/tools/support-library/index.html)
-  Apache 2.0
-* [**Android App Architecture**](https://developer.android.com/topic/libraries/architecture/guide.html)
-  Apache 2.0
-* [**ThreeTen Backport**](http://www.threeten.org/threetenbp/)
+* [**Android Architecture Components: Lifecycle**](https://android.googlesource.com/platform/frameworks/support/+/master/lifecycle)
+  Apache-2.0
+* [**Android Architecture Components: Paging**](https://android.googlesource.com/platform/frameworks/support/+/master/paging)
+  Apache-2.0
+* [**Android Architecture Components: Persistence**](https://android.googlesource.com/platform/frameworks/support/+/master/persistence)
+  Apache-2.0
+* [**Android Architecture Components: Room**](https://android.googlesource.com/platform/frameworks/support/+/master/persistence)
+  Apache-2.0
+* [**Android Sliding Up Panel**](https://github.com/umano/AndroidSlidingUpPanel)
+  Apache-2.0
+* [**Android Support Library**](https://android.googlesource.com/platform/frameworks/support/+/master)
+  Apache-2.0
+* [**Android Support Library: Constraint Layout**](https://android.googlesource.com/platform/frameworks/opt/sherpa/+/studio-3.0/constraintlayout)
+  Apache-2.0
+* [**atinject**](https://code.google.com/archive/p/atinject/)
+  Apache-2.0
+* [**AutoService**](https://github.com/google/auto/tree/master/service)
+  Apache-2.0
+* [**Better Link Movement Method**](https://github.com/Saketme/Better-Link-Movement-Method)
+  Apache-2.0
+* [**Butter Knife**](http://jakewharton.github.io/butterknife/)
+  Apache-2.0
+* [**Dagger 2**](https://google.github.io/dagger/)
+  Apache-2.0
+* [**Glide**](https://bumptech.github.io/glide/)
+  Apache-2.0
+* [**GlobTransformer**](https://bumptech.github.io/glide/)
+  CC BY-SA 3.0
+* [**Gson**](https://github.com/google/gson)
+  Apache-2.0
+* [**JavaPoet**](https://github.com/square/javapoet)
+  Apache-2.0
+* [**JetBrains Java Annotations**](https://github.com/JetBrains/java-annotations)
+  Apache-2.0
+* [**Kotlin Standard Library**](https://kotlinlang.org/)
+  Apache-2.0
+* [**LeakCanary**](https://github.com/square/leakcanary)
+  Apache-2.0
+* [**Material Design Icons: Community**](https://github.com/Templarian/MaterialDesign)
+  SIL Open Font License v1.1
+* [**Material Design Icons: Google**](https://github.com/google/material-design-icons)
+  Apache-2.0
+* [**Material Dialogs**](https://github.com/afollestad/material-dialogs)
+  MIT
+* [**MaterialProgressBar**](https://github.com/DreaminginCodeZH/MaterialProgressBar)
+  Apache-2.0
+* [**Quassel**](https://quassel-irc.org/)
+  GPLv3
+* [**Reactive Streams**](https://github.com/ReactiveX/RxJava)
+  CC0
+* [**RxJava**](https://github.com/ReactiveX/RxJava)
+  Apache-2.0
+* [**ThreeTen backport project**](http://www.threeten.org/threetenbp/)
   BSD 3-clause
-* [**ButterKnife**](https://github.com/JakeWharton/butterknife/)
-  Apache 2.0
-* [**ACRA**](https://github.com/JakeWharton/butterknife/)
-  Apache 2.0
 
-### InvokerGenerator, a preprocessor included in this project
-
-* [**Google AutoService**](https://github.com/google/auto/tree/master/service)
-  Apache 2.0
-* [**Square JavaPoet**](https://github.com/square/javapoet)
-  Apache 2.0
+## Themes
+* [**Dracula**](https://draculatheme.com/)
+  MIT
+* [**Gruvbox**](https://github.com/morhetz/gruvbox)
+  MIT
+* [**Solarized**](http://ethanschoonover.com/solarized)
+  MIT
 
 ## License
 

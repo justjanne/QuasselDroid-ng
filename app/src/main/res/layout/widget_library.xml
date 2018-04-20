@@ -45,6 +45,6 @@
       android:layout_height="wrap_content"
       android:textAppearance="?android:attr/textAppearanceSmall"
       android:textColor="?colorTextSecondary"
-      tools:text="@sample/libraries.json/data/license/shortName" />
+      tools:text="@sample/libraries.json/data/license/short_name" />
   </LinearLayout>
 </LinearLayout>
