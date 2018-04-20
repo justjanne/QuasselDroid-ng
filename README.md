@@ -8,7 +8,7 @@ to your Quassel core using your Android ™ phone.
 
 *Inspired by and based on [QuasselDroid](https://github.com/sandsmark/QuasselDroid)*
 
-![Screenshot of QuasselDroid on Phone and Tablet](https://i.k8r.eu/4V7PhQl)
+![Screenshot of QuasselDroid on Phone and Tablet](https://i.k8r.eu/4V7PhQ)
 
 ## Build Requirements
 
