@@ -1,5 +1,3 @@
-package de.kuschku.quasseldroid.util.backport.codec
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -16,6 +14,8 @@ package de.kuschku.quasseldroid.util.backport.codec
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package de.kuschku.quasseldroid.util.backport.codec
 
 import org.apache.commons.codec.*
 import java.nio.ByteBuffer
