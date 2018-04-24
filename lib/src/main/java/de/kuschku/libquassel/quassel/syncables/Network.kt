@@ -707,7 +707,7 @@ class Network constructor(
     ),
     "identityId" to QVariant.of(identity(), QType.IdentityId),
     "isConnected" to QVariant.of(isConnected(), Type.Bool),
-    "connectionState" to QVariant.of(connectionState(), Type.Int),
+    "connectionState" to QVariant.of(connectionState().value, Type.Int),
     "useRandomServer" to QVariant.of(useRandomServer(), Type.Bool),
     "perform" to QVariant.of(perform(), Type.QStringList),
     "useAutoIdentify" to QVariant.of(useAutoIdentify(), Type.Bool),
@@ -1019,6 +1019,73 @@ class Network constructor(
   private var _autoAwayActive: Boolean = false
 
   private val live_networkInfo = BehaviorSubject.createDefault(Unit)
+
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as Network
+
+    if (_networkId != other._networkId) return false
+    if (_identity != other._identity) return false
+    if (_networkName != other._networkName) return false
+    if (_serverList != other._serverList) return false
+    if (_useRandomServer != other._useRandomServer) return false
+    if (_perform != other._perform) return false
+    if (_useAutoIdentify != other._useAutoIdentify) return false
+    if (_autoIdentifyService != other._autoIdentifyService) return false
+    if (_autoIdentifyPassword != other._autoIdentifyPassword) return false
+    if (_useSasl != other._useSasl) return false
+    if (_saslAccount != other._saslAccount) return false
+    if (_saslPassword != other._saslPassword) return false
+    if (_useAutoReconnect != other._useAutoReconnect) return false
+    if (_autoReconnectInterval != other._autoReconnectInterval) return false
+    if (_autoReconnectRetries != other._autoReconnectRetries) return false
+    if (_unlimitedReconnectRetries != other._unlimitedReconnectRetries) return false
+    if (_rejoinChannels != other._rejoinChannels) return false
+    if (_useCustomMessageRate != other._useCustomMessageRate) return false
+    if (_messageRateBurstSize != other._messageRateBurstSize) return false
+    if (_messageRateDelay != other._messageRateDelay) return false
+    if (_unlimitedMessageRate != other._unlimitedMessageRate) return false
+    if (_codecForServer != other._codecForServer) return false
+    if (_codecForEncoding != other._codecForEncoding) return false
+    if (_codecForDecoding != other._codecForDecoding) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = _networkId
+    result = 31 * result + _identity
+    result = 31 * result + _networkName.hashCode()
+    result = 31 * result + _serverList.hashCode()
+    result = 31 * result + _useRandomServer.hashCode()
+    result = 31 * result + _perform.hashCode()
+    result = 31 * result + _useAutoIdentify.hashCode()
+    result = 31 * result + _autoIdentifyService.hashCode()
+    result = 31 * result + _autoIdentifyPassword.hashCode()
+    result = 31 * result + _useSasl.hashCode()
+    result = 31 * result + _saslAccount.hashCode()
+    result = 31 * result + _saslPassword.hashCode()
+    result = 31 * result + _useAutoReconnect.hashCode()
+    result = 31 * result + _autoReconnectInterval
+    result = 31 * result + _autoReconnectRetries
+    result = 31 * result + _unlimitedReconnectRetries.hashCode()
+    result = 31 * result + _rejoinChannels.hashCode()
+    result = 31 * result + _useCustomMessageRate.hashCode()
+    result = 31 * result + _messageRateBurstSize
+    result = 31 * result + _messageRateDelay
+    result = 31 * result + _unlimitedMessageRate.hashCode()
+    result = 31 * result + _codecForServer.hashCode()
+    result = 31 * result + _codecForEncoding.hashCode()
+    result = 31 * result + _codecForDecoding.hashCode()
+    return result
+  }
+
+  override fun toString(): String {
+    return "Network(_networkId=$_networkId, _identity=$_identity, _networkName='$_networkName', _serverList=$_serverList, _useRandomServer=$_useRandomServer, _perform=$_perform, _useAutoIdentify=$_useAutoIdentify, _autoIdentifyService='$_autoIdentifyService', _autoIdentifyPassword='$_autoIdentifyPassword', _useSasl=$_useSasl, _saslAccount='$_saslAccount', _saslPassword='$_saslPassword', _useAutoReconnect=$_useAutoReconnect, _autoReconnectInterval=$_autoReconnectInterval, _autoReconnectRetries=$_autoReconnectRetries, _unlimitedReconnectRetries=$_unlimitedReconnectRetries, _rejoinChannels=$_rejoinChannels, _useCustomMessageRate=$_useCustomMessageRate, _messageRateBurstSize=$_messageRateBurstSize, _messageRateDelay=$_messageRateDelay, _unlimitedMessageRate=$_unlimitedMessageRate, _codecForServer=$_codecForServer, _codecForEncoding=$_codecForEncoding, _codecForDecoding=$_codecForDecoding)"
+  }
 
   companion object {
     val NULL = Network(-1, SignalProxy.NULL)

@@ -2,15 +2,20 @@ package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.IIgnoreListManager
+import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.Session
+import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.GlobTransformer
 import de.kuschku.libquassel.util.flag.and
 import io.reactivex.subjects.BehaviorSubject
 import java.io.Serializable
 
 class IgnoreListManager constructor(
-  private val session: Session
-) : SyncableObject(session, "IgnoreListManager"), IIgnoreListManager {
+  private val session: ISession,
+  proxy: SignalProxy
+) : SyncableObject(proxy, "IgnoreListManager"), IIgnoreListManager {
+  constructor(session: Session) : this(session, session)
+
   override fun toVariantMap(): QVariantMap = mapOf(
     "IgnoreList" to QVariant.of(initIgnoreList(), Type.QVariantMap)
   )
@@ -100,7 +105,7 @@ class IgnoreListManager constructor(
 
   fun updates() = live_updates.map { this }
 
-  fun copy() = IgnoreListManager(session).also {
+  fun copy() = IgnoreListManager(session, proxy).also {
     it.fromVariantMap(toVariantMap())
   }
 
@@ -253,6 +258,27 @@ class IgnoreListManager constructor(
     set(value) {
       field = value
       live_updates.onNext(Unit)
-      if (initialized) session.backlogManager.updateIgnoreRules()
+      if (initialized) session.backlogManager?.updateIgnoreRules()
     }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as IgnoreListManager
+
+    if (_ignoreList != other._ignoreList) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    return _ignoreList.hashCode()
+  }
+
+  override fun toString(): String {
+    return "IgnoreListManager(_ignoreList=$_ignoreList)"
+  }
+
+
 }

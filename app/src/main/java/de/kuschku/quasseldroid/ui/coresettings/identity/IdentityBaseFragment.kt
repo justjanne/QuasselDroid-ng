@@ -147,17 +147,7 @@ abstract class IdentityBaseFragment : SettingsFragment(), SettingsFragment.Savab
   override fun hasChanged() = identity?.let { (it, data) ->
     applyChanges(data)
 
-    it == null ||
-    data.identityName() != it.identityName() ||
-    data.realName() != it.realName() ||
-    data.ident() != it.ident() ||
-    data.kickReason() != it.kickReason() ||
-    data.partReason() != it.partReason() ||
-    data.quitReason() != it.quitReason() ||
-    data.awayReason() != it.awayReason() ||
-    data.detachAwayEnabled() != it.detachAwayEnabled() ||
-    data.detachAwayReason() != it.detachAwayReason() ||
-    data.nicks() != it.nicks()
+    data != it
   } ?: true
 
   protected fun applyChanges(data: Identity) {

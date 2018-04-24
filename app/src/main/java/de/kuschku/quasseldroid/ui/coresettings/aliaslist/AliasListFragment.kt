@@ -114,7 +114,7 @@ class AliasListFragment : SettingsFragment(), SettingsFragment.Savable,
 
   override fun hasChanged() = aliasManager?.let { (it, data) ->
     applyChanges(data)
-    data.aliasList() != it.aliasList()
+    data != it
   } ?: false
 
   private fun applyChanges(data: AliasManager) {

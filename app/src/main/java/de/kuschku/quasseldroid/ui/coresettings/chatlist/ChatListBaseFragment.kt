@@ -158,16 +158,7 @@ abstract class ChatListBaseFragment : SettingsFragment(), SettingsFragment.Savab
   override fun hasChanged() = chatlist?.let { (it, data) ->
     applyChanges(data, it)
 
-    it == null ||
-    data.bufferViewName() != it.bufferViewName() ||
-    data.showSearch() != it.showSearch() ||
-    data.sortAlphabetically() != it.sortAlphabetically() ||
-    data.addNewBuffersAutomatically() != it.addNewBuffersAutomatically() ||
-    data.hideInactiveBuffers() != it.hideInactiveBuffers() ||
-    data.hideInactiveNetworks() != it.hideInactiveNetworks() ||
-    data.allowedBufferTypes() != it.allowedBufferTypes() ||
-    data.networkId() != it.networkId() ||
-    data.minimumActivity() != it.minimumActivity()
+    data != it
   } ?: true
 
   protected fun applyChanges(data: BufferViewConfig, old: BufferViewConfig?) {

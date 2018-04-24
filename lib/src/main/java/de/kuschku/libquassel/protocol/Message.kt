@@ -63,7 +63,28 @@ class Message(
     }
   }
 
+
   override fun toString(): String {
     return "Message(messageId=$messageId, time=$time, type=$type, flag=$flag, bufferInfo=$bufferInfo, sender='$sender', senderPrefixes='$senderPrefixes', content='$content')"
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as Message
+
+    if (messageId != other.messageId) return false
+    if (time != other.time) return false
+    if (type != other.type) return false
+    if (flag != other.flag) return false
+    if (bufferInfo != other.bufferInfo) return false
+    if (sender != other.sender) return false
+    if (senderPrefixes != other.senderPrefixes) return false
+    if (realName != other.realName) return false
+    if (avatarUrl != other.avatarUrl) return false
+    if (content != other.content) return false
+
+    return true
   }
 }

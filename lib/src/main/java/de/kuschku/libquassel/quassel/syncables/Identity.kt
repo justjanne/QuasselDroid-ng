@@ -286,4 +286,60 @@ class Identity constructor(
       field = value
       _change.onNext(Unit)
     }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as Identity
+
+    if (_identityId != other._identityId) return false
+    if (_identityName != other._identityName) return false
+    if (_realName != other._realName) return false
+    if (_nicks != other._nicks) return false
+    if (_awayNick != other._awayNick) return false
+    if (_awayNickEnabled != other._awayNickEnabled) return false
+    if (_awayReason != other._awayReason) return false
+    if (_awayReasonEnabled != other._awayReasonEnabled) return false
+    if (_autoAwayEnabled != other._autoAwayEnabled) return false
+    if (_autoAwayTime != other._autoAwayTime) return false
+    if (_autoAwayReason != other._autoAwayReason) return false
+    if (_autoAwayReasonEnabled != other._autoAwayReasonEnabled) return false
+    if (_detachAwayEnabled != other._detachAwayEnabled) return false
+    if (_detachAwayReason != other._detachAwayReason) return false
+    if (_detachAwayReasonEnabled != other._detachAwayReasonEnabled) return false
+    if (_ident != other._ident) return false
+    if (_kickReason != other._kickReason) return false
+    if (_partReason != other._partReason) return false
+    if (_quitReason != other._quitReason) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = _identityId
+    result = 31 * result + (_identityName?.hashCode() ?: 0)
+    result = 31 * result + (_realName?.hashCode() ?: 0)
+    result = 31 * result + _nicks.hashCode()
+    result = 31 * result + (_awayNick?.hashCode() ?: 0)
+    result = 31 * result + _awayNickEnabled.hashCode()
+    result = 31 * result + (_awayReason?.hashCode() ?: 0)
+    result = 31 * result + _awayReasonEnabled.hashCode()
+    result = 31 * result + _autoAwayEnabled.hashCode()
+    result = 31 * result + _autoAwayTime
+    result = 31 * result + (_autoAwayReason?.hashCode() ?: 0)
+    result = 31 * result + _autoAwayReasonEnabled.hashCode()
+    result = 31 * result + _detachAwayEnabled.hashCode()
+    result = 31 * result + (_detachAwayReason?.hashCode() ?: 0)
+    result = 31 * result + _detachAwayReasonEnabled.hashCode()
+    result = 31 * result + (_ident?.hashCode() ?: 0)
+    result = 31 * result + (_kickReason?.hashCode() ?: 0)
+    result = 31 * result + (_partReason?.hashCode() ?: 0)
+    result = 31 * result + (_quitReason?.hashCode() ?: 0)
+    return result
+  }
+
+  override fun toString(): String {
+    return "Identity(_identityId=$_identityId, _identityName=$_identityName, _realName=$_realName, _nicks=$_nicks, _awayNick=$_awayNick, _awayNickEnabled=$_awayNickEnabled, _awayReason=$_awayReason, _awayReasonEnabled=$_awayReasonEnabled, _autoAwayEnabled=$_autoAwayEnabled, _autoAwayTime=$_autoAwayTime, _autoAwayReason=$_autoAwayReason, _autoAwayReasonEnabled=$_autoAwayReasonEnabled, _detachAwayEnabled=$_detachAwayEnabled, _detachAwayReason=$_detachAwayReason, _detachAwayReasonEnabled=$_detachAwayReasonEnabled, _ident=$_ident, _kickReason=$_kickReason, _partReason=$_partReason, _quitReason=$_quitReason)"
+  }
 }

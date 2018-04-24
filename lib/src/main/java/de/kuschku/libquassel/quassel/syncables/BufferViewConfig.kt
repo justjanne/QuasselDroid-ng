@@ -241,6 +241,7 @@ class BufferViewConfig constructor(
     super.setSortAlphabetically(sortAlphabetically)
   }
 
+
   private val _bufferViewId: Int = bufferViewId
   private var _bufferViewName: String = ""
     set(value) {
@@ -325,5 +326,45 @@ class BufferViewConfig constructor(
         !info.type.hasFlag(Buffer_Type.StatusBuffer)) {
       insertBufferSorted(info, bufferSyncer)
     }
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as BufferViewConfig
+
+    if (_bufferViewId != other._bufferViewId) return false
+    if (_bufferViewName != other._bufferViewName) return false
+    if (_networkId != other._networkId) return false
+    if (_addNewBuffersAutomatically != other._addNewBuffersAutomatically) return false
+    if (_sortAlphabetically != other._sortAlphabetically) return false
+    if (_hideInactiveBuffers != other._hideInactiveBuffers) return false
+    if (_hideInactiveNetworks != other._hideInactiveNetworks) return false
+    if (_disableDecoration != other._disableDecoration) return false
+    if (_allowedBufferTypes != other._allowedBufferTypes) return false
+    if (_minimumActivity != other._minimumActivity) return false
+    if (_showSearch != other._showSearch) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = _bufferViewId
+    result = 31 * result + _bufferViewName.hashCode()
+    result = 31 * result + _networkId
+    result = 31 * result + _addNewBuffersAutomatically.hashCode()
+    result = 31 * result + _sortAlphabetically.hashCode()
+    result = 31 * result + _hideInactiveBuffers.hashCode()
+    result = 31 * result + _hideInactiveNetworks.hashCode()
+    result = 31 * result + _disableDecoration.hashCode()
+    result = 31 * result + _allowedBufferTypes.hashCode()
+    result = 31 * result + _minimumActivity.hashCode()
+    result = 31 * result + _showSearch.hashCode()
+    return result
+  }
+
+  override fun toString(): String {
+    return "BufferViewConfig(_bufferViewId=$_bufferViewId, _bufferViewName='$_bufferViewName', _networkId=$_networkId, _addNewBuffersAutomatically=$_addNewBuffersAutomatically, _sortAlphabetically=$_sortAlphabetically, _hideInactiveBuffers=$_hideInactiveBuffers, _hideInactiveNetworks=$_hideInactiveNetworks, _disableDecoration=$_disableDecoration, _allowedBufferTypes=$_allowedBufferTypes, _minimumActivity=$_minimumActivity, _showSearch=$_showSearch)"
   }
 }

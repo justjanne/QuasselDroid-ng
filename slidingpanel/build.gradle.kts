@@ -9,6 +9,11 @@ android {
   defaultConfig {
     minSdkVersion(14)
     targetSdkVersion(27)
+
+    // Disable test runner analytics
+    testInstrumentationRunnerArguments = mapOf(
+      "disableAnalytics" to "true"
+    )
   }
 }
 

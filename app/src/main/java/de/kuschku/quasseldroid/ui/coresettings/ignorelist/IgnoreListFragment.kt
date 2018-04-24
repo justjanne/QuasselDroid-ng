@@ -105,7 +105,7 @@ class IgnoreListFragment : SettingsFragment(), SettingsFragment.Savable,
 
   override fun hasChanged() = ignoreListManager?.let { (it, data) ->
     applyChanges(data)
-    data.ignoreList() != it.ignoreList()
+    data != it
   } ?: false
 
   private fun applyChanges(data: IgnoreListManager) {

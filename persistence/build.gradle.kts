@@ -19,6 +19,11 @@ android {
         arguments = mapOf("room.schemaLocation" to "$projectDir/schemas")
       }
     }
+
+    // Disable test runner analytics
+    testInstrumentationRunnerArguments = mapOf(
+      "disableAnalytics" to "true"
+    )
   }
 }
 

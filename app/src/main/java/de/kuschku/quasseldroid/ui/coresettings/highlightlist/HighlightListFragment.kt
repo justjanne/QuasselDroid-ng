@@ -189,9 +189,7 @@ class HighlightListFragment : SettingsFragment(), SettingsFragment.Savable,
 
   override fun hasChanged() = ruleManager?.let { (it, data) ->
     applyChanges(data)
-    data.highlightNick() != it.highlightNick() ||
-    data.nicksCaseSensitive() != it.nicksCaseSensitive() ||
-    data.highlightRuleList() != it.highlightRuleList()
+    data != it
   } ?: false
 
   private fun applyChanges(data: HighlightRuleManager) {

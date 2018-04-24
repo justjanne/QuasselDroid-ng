@@ -134,4 +134,28 @@ class HighlightRuleManager(
   private var _highlightRuleList = emptyList<HighlightRule>()
   private var _highlightNick = IHighlightRuleManager.HighlightNickType.CurrentNick
   private var _nicksCaseSensitive = false
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as HighlightRuleManager
+
+    if (_highlightRuleList != other._highlightRuleList) return false
+    if (_highlightNick != other._highlightNick) return false
+    if (_nicksCaseSensitive != other._nicksCaseSensitive) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = _highlightRuleList.hashCode()
+    result = 31 * result + _highlightNick.hashCode()
+    result = 31 * result + _nicksCaseSensitive.hashCode()
+    return result
+  }
+
+  override fun toString(): String {
+    return "HighlightRuleManager(_highlightRuleList=$_highlightRuleList, _highlightNick=$_highlightNick, _nicksCaseSensitive=$_nicksCaseSensitive)"
+  }
 }

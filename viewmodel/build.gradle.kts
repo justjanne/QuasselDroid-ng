@@ -13,6 +13,11 @@ android {
     targetSdkVersion(27)
 
     consumerProguardFiles("proguard-rules.pro")
+
+    // Disable test runner analytics
+    testInstrumentationRunnerArguments = mapOf(
+      "disableAnalytics" to "true"
+    )
   }
 }
 

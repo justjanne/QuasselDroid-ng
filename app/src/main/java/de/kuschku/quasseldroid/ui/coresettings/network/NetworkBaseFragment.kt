@@ -238,26 +238,7 @@ abstract class NetworkBaseFragment : SettingsFragment(), SettingsFragment.Savabl
   override fun hasChanged() = network?.let { (it, data) ->
     applyChanges(data)
 
-    it == null ||
-    data.networkName() != it.networkName() ||
-    data.identity() != it.identity() ||
-    data.serverList() != it.serverList() ||
-    data.useSasl() != it.useSasl() ||
-    data.saslAccount() != it.saslAccount() ||
-    data.saslPassword() != it.saslPassword() ||
-    data.useAutoIdentify() != it.useAutoIdentify() ||
-    data.autoIdentifyService() != it.autoIdentifyService() ||
-    data.autoIdentifyPassword() != it.autoIdentifyPassword() ||
-    data.useAutoReconnect() != it.useAutoReconnect() ||
-    data.autoReconnectInterval() != it.autoReconnectInterval() ||
-    data.autoReconnectRetries() != it.autoReconnectRetries() ||
-    data.unlimitedReconnectRetries() != it.unlimitedReconnectRetries() ||
-    data.rejoinChannels() != it.rejoinChannels() ||
-    data.perform() != it.perform() ||
-    data.useCustomMessageRate() != it.useCustomMessageRate() ||
-    data.messageRateBurstSize() != it.messageRateBurstSize() ||
-    data.unlimitedMessageRate() != it.unlimitedMessageRate() ||
-    data.messageRateDelay() != it.messageRateDelay()
+    data != it
   } ?: true
 
   protected fun applyChanges(data: Network) {
