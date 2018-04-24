@@ -27,7 +27,6 @@ import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.randomString
 import de.kuschku.libquassel.util.randomUInt
 import de.kuschku.libquassel.util.roundTrip
-import org.junit.Assert
 import org.junit.Test
 
 class IdentityTest {
@@ -45,7 +44,7 @@ class IdentityTest {
 
     val copy = original.copy()
     copy.fromVariantMap(roundTrip(VariantMapSerializer, original.toVariantMap()))
-    Assert.assertEquals(original, copy)
+    assert(original.isEqual(copy))
   }
 
   @Test
@@ -62,6 +61,6 @@ class IdentityTest {
 
     val copy = original.copy()
     copy.fromVariantMap(original.toVariantMap())
-    Assert.assertEquals(original, copy)
+    assert(original.isEqual(copy))
   }
 }

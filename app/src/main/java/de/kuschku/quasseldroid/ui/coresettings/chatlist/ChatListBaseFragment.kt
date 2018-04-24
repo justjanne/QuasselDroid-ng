@@ -179,8 +179,7 @@ abstract class ChatListBaseFragment : SettingsFragment(), SettingsFragment.Savab
 
   override fun hasChanged() = chatlist?.let { (it, data) ->
     applyChanges(data, it)
-
-    data != it
+    it == null || !data.isEqual(it)
   } ?: true
 
   protected fun applyChanges(data: BufferViewConfig, old: BufferViewConfig?) {

@@ -25,7 +25,6 @@ package de.kuschku.libquassel.quassel.syncables
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.roundTrip
-import org.junit.Assert
 import org.junit.Test
 
 class AliasManagerTest {
@@ -36,7 +35,7 @@ class AliasManagerTest {
 
     val copy = original.copy()
     copy.fromVariantMap(roundTrip(VariantMapSerializer, original.toVariantMap()))
-    Assert.assertEquals(original, copy)
+    assert(original.isEqual(copy))
   }
 
   @Test
@@ -46,6 +45,6 @@ class AliasManagerTest {
 
     val copy = original.copy()
     copy.fromVariantMap(original.toVariantMap())
-    Assert.assertEquals(original, copy)
+    assert(original.isEqual(copy))
   }
 }

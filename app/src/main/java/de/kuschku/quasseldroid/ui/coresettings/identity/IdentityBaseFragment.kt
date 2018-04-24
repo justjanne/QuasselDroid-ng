@@ -168,8 +168,7 @@ abstract class IdentityBaseFragment : SettingsFragment(), SettingsFragment.Savab
 
   override fun hasChanged() = identity?.let { (it, data) ->
     applyChanges(data)
-
-    data != it
+    it == null || !data.isEqual(it)
   } ?: true
 
   protected fun applyChanges(data: Identity) {

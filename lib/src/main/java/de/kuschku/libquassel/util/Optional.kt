@@ -49,7 +49,7 @@ interface Optional<T : Any> : Serializable {
     override fun orNull(): T? = value
     override fun <X : Throwable> orElseThrow(supplier: () -> X) = value
     override fun equals(other: Any?) = (other as? Present<*>)?.value == value
-    override fun hashCode() = value?.hashCode() ?: 0
+    override fun hashCode() = value.hashCode()
     override fun toString() = "Optional[$value]"
   }
 

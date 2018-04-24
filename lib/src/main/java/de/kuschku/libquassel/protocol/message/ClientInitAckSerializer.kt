@@ -36,7 +36,7 @@ object ClientInitAckSerializer : HandshakeMessageSerializer<HandshakeMessage.Cli
   )
 
   override fun deserialize(data: QVariantMap) = HandshakeMessage.ClientInitAck(
-    coreFeatures = Flags.Companion.of(data["CoreFeatures"].value(0)),
+    coreFeatures = Flags.of(data["CoreFeatures"].value(0)),
     backendInfo = data["StorageBackends"].value(),
     authenticatorInfo = data["Authenticators"].value(),
     coreConfigured = data["Configured"].value(),

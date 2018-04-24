@@ -259,8 +259,7 @@ abstract class NetworkBaseFragment : SettingsFragment(), SettingsFragment.Savabl
 
   override fun hasChanged() = network?.let { (it, data) ->
     applyChanges(data)
-
-    data != it
+    it == null || !data.isEqual(it)
   } ?: true
 
   protected fun applyChanges(data: Network) {

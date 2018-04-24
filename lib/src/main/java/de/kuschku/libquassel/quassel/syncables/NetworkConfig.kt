@@ -127,36 +127,15 @@ class NetworkConfig constructor(
   private var _autoWhoDelay: Int = 5
   private var _standardCtcp: Boolean = false
 
-
-  override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (javaClass != other?.javaClass) return false
-
-    other as NetworkConfig
-
-    if (_pingTimeoutEnabled != other._pingTimeoutEnabled) return false
-    if (_pingInterval != other._pingInterval) return false
-    if (_maxPingCount != other._maxPingCount) return false
-    if (_autoWhoEnabled != other._autoWhoEnabled) return false
-    if (_autoWhoInterval != other._autoWhoInterval) return false
-    if (_autoWhoNickLimit != other._autoWhoNickLimit) return false
-    if (_autoWhoDelay != other._autoWhoDelay) return false
-    if (_standardCtcp != other._standardCtcp) return false
-
-    return true
-  }
-
-  override fun hashCode(): Int {
-    var result = _pingTimeoutEnabled.hashCode()
-    result = 31 * result + _pingInterval
-    result = 31 * result + _maxPingCount
-    result = 31 * result + _autoWhoEnabled.hashCode()
-    result = 31 * result + _autoWhoInterval
-    result = 31 * result + _autoWhoNickLimit
-    result = 31 * result + _autoWhoDelay
-    result = 31 * result + _standardCtcp.hashCode()
-    return result
-  }
+  fun isEqual(other: NetworkConfig): Boolean =
+    this.pingTimeoutEnabled() == other.pingTimeoutEnabled() &&
+    this.pingInterval() == other.pingInterval() &&
+    this.maxPingCount() == other.maxPingCount() &&
+    this.autoWhoEnabled() == other.autoWhoEnabled() &&
+    this.autoWhoInterval() == other.autoWhoInterval() &&
+    this.autoWhoNickLimit() == other.autoWhoNickLimit() &&
+    this.autoWhoDelay() == other.autoWhoDelay() &&
+    this.standardCtcp() == other.standardCtcp()
 
   override fun toString(): String {
     return "NetworkConfig(_pingTimeoutEnabled=$_pingTimeoutEnabled, _pingInterval=$_pingInterval, _maxPingCount=$_maxPingCount, _autoWhoEnabled=$_autoWhoEnabled, _autoWhoInterval=$_autoWhoInterval, _autoWhoNickLimit=$_autoWhoNickLimit, _autoWhoDelay=$_autoWhoDelay, _standardCtcp=$_standardCtcp)"

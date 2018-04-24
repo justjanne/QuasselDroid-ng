@@ -283,20 +283,8 @@ class IgnoreListManager constructor(
       if (initialized) session.backlogManager?.updateIgnoreRules()
     }
 
-  override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (javaClass != other?.javaClass) return false
-
-    other as IgnoreListManager
-
-    if (_ignoreList != other._ignoreList) return false
-
-    return true
-  }
-
-  override fun hashCode(): Int {
-    return _ignoreList.hashCode()
-  }
+  fun isEqual(other: IgnoreListManager): Boolean =
+    this.ignoreList() == other.ignoreList()
 
   override fun toString(): String {
     return "IgnoreListManager(_ignoreList=$_ignoreList)"

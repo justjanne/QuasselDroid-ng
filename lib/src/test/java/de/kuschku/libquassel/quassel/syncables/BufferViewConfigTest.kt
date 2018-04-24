@@ -27,7 +27,6 @@ import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.*
-import org.junit.Assert
 import org.junit.Test
 
 class BufferViewConfigTest {
@@ -47,7 +46,7 @@ class BufferViewConfigTest {
 
     val copy = original.copy()
     copy.fromVariantMap(roundTrip(VariantMapSerializer, original.toVariantMap()))
-    Assert.assertEquals(original, copy)
+    assert(original.isEqual(copy))
   }
 
   @Test
@@ -66,6 +65,6 @@ class BufferViewConfigTest {
 
     val copy = original.copy()
     copy.fromVariantMap(original.toVariantMap())
-    Assert.assertEquals(original, copy)
+    assert(original.isEqual(copy))
   }
 }

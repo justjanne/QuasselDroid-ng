@@ -193,20 +193,8 @@ class AliasManager constructor(
 
   private var _aliases = listOf<IAliasManager.Alias>()
 
-  override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (javaClass != other?.javaClass) return false
-
-    other as AliasManager
-
-    if (_aliases != other._aliases) return false
-
-    return true
-  }
-
-  override fun hashCode(): Int {
-    return _aliases.hashCode()
-  }
+  fun isEqual(other: AliasManager): Boolean =
+    this.aliasList() == other.aliasList()
 
   override fun toString(): String {
     return "AliasManager(_aliases=$_aliases)"

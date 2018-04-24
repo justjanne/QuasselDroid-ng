@@ -211,8 +211,8 @@ class HighlightListFragment : SettingsFragment(), SettingsFragment.Savable,
 
   override fun hasChanged() = ruleManager?.let { (it, data) ->
     applyChanges(data)
-    data != it
-  } ?: false
+    !data.isEqual(it)
+  } == true
 
   private fun applyChanges(data: HighlightRuleManager) {
     data.setHighlightNick(highlightNickType.selectedItemId.toInt())

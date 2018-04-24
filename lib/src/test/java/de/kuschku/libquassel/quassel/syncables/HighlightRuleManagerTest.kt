@@ -29,7 +29,6 @@ import de.kuschku.libquassel.util.randomBoolean
 import de.kuschku.libquassel.util.randomOf
 import de.kuschku.libquassel.util.randomString
 import de.kuschku.libquassel.util.roundTrip
-import org.junit.Assert
 import org.junit.Test
 
 class HighlightRuleManagerTest {
@@ -70,7 +69,7 @@ class HighlightRuleManagerTest {
 
     val copy = original.copy()
     copy.fromVariantMap(roundTrip(VariantMapSerializer, original.toVariantMap()))
-    Assert.assertEquals(original, copy)
+    assert(original.isEqual(copy))
   }
 
   @Test
@@ -110,6 +109,6 @@ class HighlightRuleManagerTest {
 
     val copy = original.copy()
     copy.fromVariantMap(original.toVariantMap())
-    Assert.assertEquals(original, copy)
+    assert(original.isEqual(copy))
   }
 }

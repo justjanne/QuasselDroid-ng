@@ -25,7 +25,7 @@ package de.kuschku.libquassel.protocol.primitive.serializer
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.roundTrip
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class BufferInfoSerializerTest {
@@ -38,7 +38,7 @@ class BufferInfoSerializerTest {
       -1,
       ""
     )
-    Assert.assertEquals(value, roundTrip(BufferInfoSerializer, value))
+    assertEquals(value, roundTrip(BufferInfoSerializer, value))
   }
 
   @Test
@@ -50,6 +50,6 @@ class BufferInfoSerializerTest {
       Int.MAX_VALUE,
       "äẞ\u0000\uFFFF"
     )
-    Assert.assertEquals(value, roundTrip(BufferInfoSerializer, value))
+    assertEquals(value, roundTrip(BufferInfoSerializer, value))
   }
 }

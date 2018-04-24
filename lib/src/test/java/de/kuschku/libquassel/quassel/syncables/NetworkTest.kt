@@ -26,7 +26,6 @@ import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.*
-import org.junit.Assert
 import org.junit.Test
 
 class NetworkTest {
@@ -78,7 +77,7 @@ class NetworkTest {
 
     val copy = original.copy()
     copy.fromVariantMap(roundTrip(VariantMapSerializer, original.toVariantMap()))
-    Assert.assertEquals(original, copy)
+    assert(original.isEqual(copy))
   }
 
   @Test
@@ -130,6 +129,6 @@ class NetworkTest {
 
     val copy = original.copy()
     copy.fromVariantMap(original.toVariantMap())
-    Assert.assertEquals(original, copy)
+    assert(original.isEqual(copy))
   }
 }
