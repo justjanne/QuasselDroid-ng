@@ -31,7 +31,7 @@ import org.threeten.bp.Instant
 
 class AvatarHelperTest {
   @Test
-  fun testGravatar() {
+  fun testGravatarAvatars() {
     val message = QuasselDatabase.DatabaseMessage(
       messageId = 1,
       time = Instant.now(),
@@ -68,7 +68,7 @@ class AvatarHelperTest {
   }
 
   @Test
-  fun testIrcCloud() {
+  fun testIrcCloudAvatars() {
     val message = QuasselDatabase.DatabaseMessage(
       messageId = 1,
       time = Instant.now(),
