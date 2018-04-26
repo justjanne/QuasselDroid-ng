@@ -7,5 +7,6 @@
 /captures
 .externalNativeBuild
 build/
-/*/schemas/
+/reports/
+/persistence/schemas/
 /deploy.sh
