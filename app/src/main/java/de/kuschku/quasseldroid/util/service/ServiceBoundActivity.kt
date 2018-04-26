@@ -23,7 +23,6 @@
 package de.kuschku.quasseldroid.util.service
 
 import android.app.Activity
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -74,7 +73,8 @@ abstract class ServiceBoundActivity : ThemedActivity(),
   @Inject
   lateinit var connectionSettings: ConnectionSettings
 
-  protected lateinit var viewModel: QuasselViewModel
+  @Inject
+  lateinit var viewModel: QuasselViewModel
 
   protected var accountId: Long = -1
 
@@ -84,7 +84,6 @@ abstract class ServiceBoundActivity : ThemedActivity(),
     connection.context = this
     checkConnection()
     super.onCreate(savedInstanceState)
-    viewModel = ViewModelProviders.of(this)[QuasselViewModel::class.java]
     viewModel.backendWrapper.onNext(this.backend)
     updateRecentsHeader()
   }

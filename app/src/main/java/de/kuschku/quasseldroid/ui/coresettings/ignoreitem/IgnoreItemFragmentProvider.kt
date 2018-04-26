@@ -22,7 +22,7 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.ignoreitem
 
-import android.content.Context
+import android.support.v4.app.FragmentActivity
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -30,7 +30,7 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class IgnoreItemFragmentProvider {
   @Binds
-  abstract fun bindContext(activity: IgnoreItemActivity): Context
+  abstract fun bindFragmentActivity(activity: IgnoreItemActivity): FragmentActivity
 
   @ContributesAndroidInjector
   abstract fun bindIgnoreItemFragment(): IgnoreItemFragment

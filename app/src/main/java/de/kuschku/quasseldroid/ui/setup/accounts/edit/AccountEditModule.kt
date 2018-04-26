@@ -22,12 +22,12 @@
 
 package de.kuschku.quasseldroid.ui.setup.accounts.edit
 
-import android.content.Context
+import android.support.v4.app.FragmentActivity
 import dagger.Binds
 import dagger.Module
 
 @Module
 abstract class AccountEditModule {
   @Binds
-  abstract fun bindContext(activity: AccountEditActivity): Context
+  abstract fun bindFragmentActivity(activity: AccountEditActivity): FragmentActivity
 }

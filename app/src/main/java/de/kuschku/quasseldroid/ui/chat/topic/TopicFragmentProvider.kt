@@ -22,7 +22,7 @@
 
 package de.kuschku.quasseldroid.ui.chat.topic
 
-import android.content.Context
+import android.support.v4.app.FragmentActivity
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -30,7 +30,7 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class TopicFragmentProvider {
   @Binds
-  abstract fun bindContext(activity: TopicActivity): Context
+  abstract fun bindFragmentActivity(activity: TopicActivity): FragmentActivity
 
   @ContributesAndroidInjector
   abstract fun bindTopicFragment(): TopicFragment

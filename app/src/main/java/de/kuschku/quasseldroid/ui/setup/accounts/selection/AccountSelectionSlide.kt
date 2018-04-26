@@ -24,7 +24,6 @@ package de.kuschku.quasseldroid.ui.setup.accounts.selection
 
 import android.app.Activity
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
@@ -42,10 +41,14 @@ import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity.Companion.REQUEST_CREATE_FIRST
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity.Companion.REQUEST_CREATE_NEW
 import de.kuschku.quasseldroid.ui.setup.accounts.setup.AccountSetupActivity
+import javax.inject.Inject
 
 class AccountSelectionSlide : SlideFragment() {
   @BindView(R.id.account_list)
   lateinit var accountList: RecyclerView
+
+  @Inject
+  lateinit var accountViewModel: AccountViewModel
 
   override fun isValid() = adapter?.selectedItemId ?: -1L != -1L
 
@@ -66,7 +69,6 @@ class AccountSelectionSlide : SlideFragment() {
                                savedInstanceState: Bundle?): View {
     val view = inflater.inflate(R.layout.setup_select_account, container, false)
     ButterKnife.bind(this, view)
-    val accountViewModel = ViewModelProviders.of(this).get(AccountViewModel::class.java)
     val firstObserver = object : Observer<List<AccountDatabase.Account>?> {
       override fun onChanged(t: List<AccountDatabase.Account>?) {
         if (t?.isEmpty() != false)

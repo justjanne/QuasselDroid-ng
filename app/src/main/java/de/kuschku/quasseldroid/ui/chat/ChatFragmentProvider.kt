@@ -22,7 +22,7 @@
 
 package de.kuschku.quasseldroid.ui.chat
 
-import android.content.Context
+import android.support.v4.app.FragmentActivity
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -34,7 +34,7 @@ import de.kuschku.quasseldroid.ui.chat.nicks.NickListFragment
 @Module
 abstract class ChatFragmentProvider {
   @Binds
-  abstract fun bindContext(activity: ChatActivity): Context
+  abstract fun bindFragmentActivity(activity: ChatActivity): FragmentActivity
 
   @ContributesAndroidInjector
   abstract fun bindBufferViewConfigFragment(): BufferViewConfigFragment

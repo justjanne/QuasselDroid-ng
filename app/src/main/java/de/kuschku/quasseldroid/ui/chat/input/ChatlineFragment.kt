@@ -23,7 +23,6 @@
 package de.kuschku.quasseldroid.ui.chat.input
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.AppCompatImageButton
 import android.support.v7.widget.DefaultItemAnimator
@@ -88,6 +87,9 @@ class ChatlineFragment : ServiceBoundFragment() {
   @Inject
   lateinit var autoCompleteAdapter: AutoCompleteAdapter
 
+  @Inject
+  lateinit var editorViewModel: EditorViewModel
+
   lateinit var editorHelper: EditorHelper
 
   lateinit var autoCompleteHelper: AutoCompleteHelper
@@ -107,7 +109,6 @@ class ChatlineFragment : ServiceBoundFragment() {
     val view = inflater.inflate(R.layout.fragment_chatline, container, false)
     ButterKnife.bind(this, view)
 
-    val editorViewModel = ViewModelProviders.of(this).get(EditorViewModel::class.java)
     editorViewModel.quasselViewModel.onNext(viewModel)
 
     autoCompleteHelper = AutoCompleteHelper(

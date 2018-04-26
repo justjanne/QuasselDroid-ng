@@ -23,7 +23,6 @@
 package de.kuschku.quasseldroid.ui.chat.topic
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -74,6 +73,9 @@ class TopicFragment : SettingsFragment(), SettingsFragment.Savable {
   @Inject
   lateinit var autoCompleteAdapter: AutoCompleteAdapter
 
+  @Inject
+  lateinit var editorViewModel: EditorViewModel
+
   private lateinit var editorHelper: EditorHelper
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -81,7 +83,6 @@ class TopicFragment : SettingsFragment(), SettingsFragment.Savable {
     val view = inflater.inflate(R.layout.fragment_topic, container, false)
     ButterKnife.bind(this, view)
 
-    val editorViewModel = ViewModelProviders.of(this).get(EditorViewModel::class.java)
     editorViewModel.quasselViewModel.onNext(viewModel)
 
     val autoCompleteHelper = AutoCompleteHelper(

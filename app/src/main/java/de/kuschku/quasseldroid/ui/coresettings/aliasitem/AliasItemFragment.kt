@@ -23,7 +23,6 @@
 package de.kuschku.quasseldroid.ui.coresettings.aliasitem
 
 import android.app.Activity
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
@@ -80,6 +79,9 @@ class AliasItemFragment : SettingsFragment(), SettingsFragment.Savable,
   @Inject
   lateinit var autoCompleteAdapter: AutoCompleteAdapter
 
+  @Inject
+  lateinit var editorViewModel: EditorViewModel
+
   private lateinit var editorHelper: EditorHelper
 
   private var rule: IAliasManager.Alias? = null
@@ -94,7 +96,6 @@ class AliasItemFragment : SettingsFragment(), SettingsFragment.Savable,
       rule = it
     }
 
-    val editorViewModel = ViewModelProviders.of(this).get(EditorViewModel::class.java)
     editorViewModel.quasselViewModel.onNext(viewModel)
 
     val autoCompleteHelper = AutoCompleteHelper(

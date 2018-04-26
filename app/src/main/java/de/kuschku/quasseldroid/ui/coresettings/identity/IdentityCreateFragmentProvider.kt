@@ -22,7 +22,7 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.identity
 
-import android.content.Context
+import android.support.v4.app.FragmentActivity
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -30,7 +30,7 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class IdentityCreateFragmentProvider {
   @Binds
-  abstract fun bindContext(activity: IdentityCreateActivity): Context
+  abstract fun bindFragmentActivity(activity: IdentityCreateActivity): FragmentActivity
 
   @ContributesAndroidInjector
   abstract fun bindIdentityCreateFragment(): IdentityCreateFragment

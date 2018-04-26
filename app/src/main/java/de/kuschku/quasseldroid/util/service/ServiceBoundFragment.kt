@@ -22,7 +22,6 @@
 
 package de.kuschku.quasseldroid.util.service
 
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import dagger.android.support.DaggerFragment
@@ -31,13 +30,15 @@ import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import io.reactivex.subjects.BehaviorSubject
+import javax.inject.Inject
 
 abstract class ServiceBoundFragment : DaggerFragment() {
+  @Inject
+  lateinit var viewModel: QuasselViewModel
+
   private val connection = BackendServiceConnection()
   protected val backend: BehaviorSubject<Optional<Backend>>
     get() = connection.backend
-
-  protected lateinit var viewModel: QuasselViewModel
 
   protected fun runInBackground(f: () -> Unit) {
     connection.backend.value.ifPresent {
@@ -60,8 +61,6 @@ abstract class ServiceBoundFragment : DaggerFragment() {
     connection.context = context
     super.onCreate(savedInstanceState)
     connection.start()
-
-    viewModel = ViewModelProviders.of(requireActivity())[QuasselViewModel::class.java]
   }
 
   override fun onStart() {

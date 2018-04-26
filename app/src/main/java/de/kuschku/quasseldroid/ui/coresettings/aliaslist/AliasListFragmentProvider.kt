@@ -22,7 +22,7 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.aliaslist
 
-import android.content.Context
+import android.support.v4.app.FragmentActivity
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -30,7 +30,7 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class AliasListFragmentProvider {
   @Binds
-  abstract fun bindContext(activity: AliasListActivity): Context
+  abstract fun bindFragmentActivity(activity: AliasListActivity): FragmentActivity
 
   @ContributesAndroidInjector
   abstract fun bindAliasListFragment(): AliasListFragment
