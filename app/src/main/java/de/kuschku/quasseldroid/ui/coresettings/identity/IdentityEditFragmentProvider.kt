@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.identity
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class IdentityEditFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: IdentityEditActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindIdentityEditFragment(): IdentityEditFragment
 }

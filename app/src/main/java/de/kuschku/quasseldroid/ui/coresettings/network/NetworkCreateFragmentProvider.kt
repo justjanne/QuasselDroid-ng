@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.network
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class NetworkCreateFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: NetworkCreateActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindNetworkCreateFragment(): NetworkCreateFragment
 }

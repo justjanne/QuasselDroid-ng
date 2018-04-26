@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.networkserver
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class NetworkServerFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: NetworkServerActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindNetworkServerFragment(): NetworkServerFragment
 }

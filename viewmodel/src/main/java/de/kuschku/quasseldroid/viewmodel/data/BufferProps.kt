@@ -30,6 +30,7 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 data class BufferProps(
   val info: BufferInfo,
   val network: INetwork.NetworkInfo,
+  val networkConnectionState: INetwork.ConnectionState,
   val bufferStatus: BufferStatus,
   val description: CharSequence,
   val activity: Message_Types,

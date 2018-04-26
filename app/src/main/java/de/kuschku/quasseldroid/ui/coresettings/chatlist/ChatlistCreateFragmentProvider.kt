@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.chatlist
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class ChatlistCreateFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: ChatlistCreateActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindChatListCreateFragment(): ChatListCreateFragment
 }

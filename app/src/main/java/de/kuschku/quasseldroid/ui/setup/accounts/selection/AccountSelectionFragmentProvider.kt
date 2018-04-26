@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.setup.accounts.selection
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class AccountSelectionFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: AccountSelectionActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindAccountSelectionSlide(): AccountSelectionSlide
 }

@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.clientsettings.license
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class LicenseFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: LicenseActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindLicenseFragment(): LicenseFragment
 }

@@ -20,18 +20,14 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.coresettings
+package de.kuschku.quasseldroid.ui.setup.accounts.edit
 
 import android.content.Context
 import dagger.Binds
 import dagger.Module
-import dagger.android.ContributesAndroidInjector
 
 @Module
-abstract class CoreSettingsFragmentProvider {
+abstract class AccountEditModule {
   @Binds
-  abstract fun bindContext(activity: CoreSettingsActivity): Context
-
-  @ContributesAndroidInjector
-  abstract fun bindCoreSettingsFragment(): CoreSettingsFragment
+  abstract fun bindContext(activity: AccountEditActivity): Context
 }

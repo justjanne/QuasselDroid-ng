@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.highlightlist
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class HighlightListFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: HighlightListActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindHighlightListFragment(): HighlightListFragment
 }

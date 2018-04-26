@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.ignorelist
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class IgnoreListFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: IgnoreListActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindIgnoreFragment(): IgnoreListFragment
 }

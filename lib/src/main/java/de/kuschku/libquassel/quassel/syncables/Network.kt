@@ -32,6 +32,7 @@ import de.kuschku.libquassel.util.helpers.getOr
 import de.kuschku.libquassel.util.helpers.serializeString
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
@@ -91,6 +92,8 @@ class Network constructor(
 
   fun isConnected() = _connected
   fun connectionState() = _connectionState
+  fun liveConnectionState(): Observable<ConnectionState> = live_connectionState
+
   fun prefixToMode(prefix: Char): Char? = prefixModes().elementAtOrNull(prefixes().indexOf(prefix))
 
   fun prefixesToModes(prefixes: String): String = prefixes.mapNotNull {
@@ -903,7 +906,7 @@ class Network constructor(
   private var _currentServer: String? = null
   private var _connected: Boolean = false
   private var _connectionState: ConnectionState = ConnectionState.Disconnected
-  val live_connectionState = BehaviorSubject.createDefault(ConnectionState.Disconnected)
+  private val live_connectionState = BehaviorSubject.createDefault(ConnectionState.Disconnected)
   private var _prefixes: List<Char>? = null
   private var _prefixModes: List<Char>? = null
   private var _channelModes: Map<ChannelModeType, Set<Char>>? = null

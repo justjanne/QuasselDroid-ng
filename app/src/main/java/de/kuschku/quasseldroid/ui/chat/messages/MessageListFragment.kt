@@ -231,8 +231,6 @@ class MessageListFragment : ServiceBoundFragment() {
     messageList.layoutManager = linearLayoutManager
     messageList.itemAnimator = null
 
-    adapter.updateColors(requireContext())
-
     val senderColors = requireContext().theme.styledAttributes(
       R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
       R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,

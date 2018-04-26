@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.highlightrule
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class HighlightRuleFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: HighlightRuleActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindHighlightRuleFragment(): HighlightRuleFragment
 }

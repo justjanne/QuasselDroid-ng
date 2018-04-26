@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.clientsettings.about
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class AboutFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: AboutActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindAboutFragment(): AboutFragment
 }

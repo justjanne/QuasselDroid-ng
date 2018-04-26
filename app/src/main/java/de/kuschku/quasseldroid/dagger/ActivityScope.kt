@@ -20,18 +20,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.coresettings
+package de.kuschku.quasseldroid.dagger
 
-import android.content.Context
-import dagger.Binds
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
+import javax.inject.Scope
 
-@Module
-abstract class CoreSettingsFragmentProvider {
-  @Binds
-  abstract fun bindContext(activity: CoreSettingsActivity): Context
-
-  @ContributesAndroidInjector
-  abstract fun bindCoreSettingsFragment(): CoreSettingsFragment
-}
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ActivityScope

@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.chat.topic
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class TopicFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: TopicActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindTopicFragment(): TopicFragment
 }

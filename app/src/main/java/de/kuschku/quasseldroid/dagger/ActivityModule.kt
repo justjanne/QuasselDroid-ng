@@ -25,6 +25,7 @@ package de.kuschku.quasseldroid.dagger
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import de.kuschku.quasseldroid.service.QuasselService
+import de.kuschku.quasseldroid.service.QuasselServiceModule
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.ui.chat.ChatActivityModule
 import de.kuschku.quasseldroid.ui.chat.ChatFragmentProvider
@@ -75,6 +76,7 @@ import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigFragme
 import de.kuschku.quasseldroid.ui.coresettings.networkserver.NetworkServerActivity
 import de.kuschku.quasseldroid.ui.coresettings.networkserver.NetworkServerFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditActivity
+import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditModule
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.accounts.setup.AccountSetupActivity
@@ -82,87 +84,115 @@ import de.kuschku.quasseldroid.ui.setup.accounts.setup.AccountSetupFragmentProvi
 
 @Module
 abstract class ActivityModule {
-  @ContributesAndroidInjector(modules = [ChatActivityModule::class, ChatFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [ChatActivityModule::class, ChatFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindChatActivity(): ChatActivity
 
-  @ContributesAndroidInjector(modules = [UserInfoFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [UserInfoFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindUserInfoActivity(): UserInfoActivity
 
-  @ContributesAndroidInjector(modules = [ChannelInfoFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [ChannelInfoFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindChannelInfoActivity(): ChannelInfoActivity
 
-  @ContributesAndroidInjector(modules = [TopicFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [TopicFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindTopicActivity(): TopicActivity
 
-  @ContributesAndroidInjector(modules = [ClientSettingsFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [ClientSettingsFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindClientSettingsActivity(): ClientSettingsActivity
 
-  @ContributesAndroidInjector(modules = [WhitelistFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [WhitelistFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindWhitelistActivity(): WhitelistActivity
 
-  @ContributesAndroidInjector(modules = [CrashFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [CrashFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindCrashActivity(): CrashActivity
 
-  @ContributesAndroidInjector(modules = [AboutFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [AboutFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindAboutActivity(): AboutActivity
 
-  @ContributesAndroidInjector(modules = [LicenseFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [LicenseFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindLicenseActivity(): LicenseActivity
 
-  @ContributesAndroidInjector(modules = [CoreSettingsFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [CoreSettingsFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindCoreSettingsActivity(): CoreSettingsActivity
 
-  @ContributesAndroidInjector(modules = [NetworkCreateFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [NetworkCreateFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindNetworkCreateActivity(): NetworkCreateActivity
 
-  @ContributesAndroidInjector(modules = [NetworkEditFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [NetworkEditFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindNetworkEditActivity(): NetworkEditActivity
 
-  @ContributesAndroidInjector(modules = [NetworkServerFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [NetworkServerFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindNetworkServerActivity(): NetworkServerActivity
 
-  @ContributesAndroidInjector(modules = [IdentityCreateFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [IdentityCreateFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindIdentityCreateActivity(): IdentityCreateActivity
 
-  @ContributesAndroidInjector(modules = [IdentityEditFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [IdentityEditFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindIdentityEditActivity(): IdentityEditActivity
 
-  @ContributesAndroidInjector(modules = [ChatlistCreateFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [ChatlistCreateFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindChatListCreateActivity(): ChatlistCreateActivity
 
-  @ContributesAndroidInjector(modules = [ChatlistEditFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [ChatlistEditFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindChatListEditActivity(): ChatlistEditActivity
 
-  @ContributesAndroidInjector(modules = [IgnoreListFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [IgnoreListFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindIgnoreListActivity(): IgnoreListActivity
 
-  @ContributesAndroidInjector(modules = [IgnoreItemFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [IgnoreItemFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindIgnoreItemActivity(): IgnoreItemActivity
 
-  @ContributesAndroidInjector(modules = [HighlightListFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [HighlightListFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindHighlightListActivity(): HighlightListActivity
 
-  @ContributesAndroidInjector(modules = [HighlightRuleFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [HighlightRuleFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindHighlightRuleActivity(): HighlightRuleActivity
 
-  @ContributesAndroidInjector(modules = [AliasListFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [AliasListFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindAliasListActivity(): AliasListActivity
 
-  @ContributesAndroidInjector(modules = [AliasItemFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [AliasItemFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindAliasItemActivity(): AliasItemActivity
 
-  @ContributesAndroidInjector(modules = [NetworkConfigFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [NetworkConfigFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindNetworkConfigActivity(): NetworkConfigActivity
 
-  @ContributesAndroidInjector(modules = [AccountSetupFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [AccountSetupFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindAccountSetupActivity(): AccountSetupActivity
 
-  @ContributesAndroidInjector(modules = [AccountSelectionFragmentProvider::class])
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [AccountSelectionFragmentProvider::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindAccountSelectionActivity(): AccountSelectionActivity
 
-  @ContributesAndroidInjector
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [AccountEditModule::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindAccountEditActivity(): AccountEditActivity
 
-  @ContributesAndroidInjector
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [QuasselServiceModule::class, SettingsModule::class, DatabaseModule::class])
   abstract fun bindQuasselService(): QuasselService
 }

@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.clientsettings.crash
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class CrashFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: CrashActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindClientSettingsFragment(): CrashFragment
 }

@@ -20,18 +20,14 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.coresettings
+package de.kuschku.quasseldroid.service
 
 import android.content.Context
 import dagger.Binds
 import dagger.Module
-import dagger.android.ContributesAndroidInjector
 
 @Module
-abstract class CoreSettingsFragmentProvider {
+abstract class QuasselServiceModule {
   @Binds
-  abstract fun bindContext(activity: CoreSettingsActivity): Context
-
-  @ContributesAndroidInjector
-  abstract fun bindCoreSettingsFragment(): CoreSettingsFragment
+  abstract fun bindContext(service: QuasselService): Context
 }

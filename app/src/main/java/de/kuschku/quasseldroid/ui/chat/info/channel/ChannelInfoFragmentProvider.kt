@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.chat.info.channel
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class ChannelInfoFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: ChannelInfoActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindChannelInfoFragment(): ChannelInfoFragment
 }

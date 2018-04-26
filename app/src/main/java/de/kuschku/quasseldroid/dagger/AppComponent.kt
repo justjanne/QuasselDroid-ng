@@ -33,9 +33,7 @@ import javax.inject.Singleton
   modules = [
     AndroidSupportInjectionModule::class,
     AppModule::class,
-    ActivityModule::class,
-    DatabaseModule::class,
-    SettingsModule::class
+    ActivityModule::class
   ]
 )
 interface AppComponent : AndroidInjector<QuasselDroid> {

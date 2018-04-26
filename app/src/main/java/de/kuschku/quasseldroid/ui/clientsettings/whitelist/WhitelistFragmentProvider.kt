@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.clientsettings.whitelist
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class WhitelistFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: WhitelistActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindWhitelistFragment(): WhitelistFragment
 }

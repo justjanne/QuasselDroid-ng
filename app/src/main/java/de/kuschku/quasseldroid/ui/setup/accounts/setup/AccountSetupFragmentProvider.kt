@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.setup.accounts.setup
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class AccountSetupFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: AccountSetupActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindAccountSetupConnectionSlide(): AccountSetupConnectionSlide
 

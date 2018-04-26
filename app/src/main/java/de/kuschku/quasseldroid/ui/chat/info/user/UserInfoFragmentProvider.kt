@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.chat.info.user
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class UserInfoFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: UserInfoActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindUserInfoFragment(): UserInfoFragment
 }

@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.aliasitem
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class AliasItemFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: AliasItemActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindAliasItemFragment(): AliasItemFragment
 }

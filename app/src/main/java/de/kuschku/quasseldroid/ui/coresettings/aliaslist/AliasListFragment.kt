@@ -66,7 +66,6 @@ class AliasListFragment : SettingsFragment(), SettingsFragment.Savable,
     val view = inflater.inflate(R.layout.settings_ignorelist, container, false)
     ButterKnife.bind(this, view)
 
-    adapter.updateColors(requireContext())
     adapter.setOnClickListener(::itemClick)
     adapter.setOnDragListener(::startDrag)
 

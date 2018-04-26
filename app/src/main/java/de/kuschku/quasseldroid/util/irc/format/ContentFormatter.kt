@@ -63,10 +63,8 @@ class ContentFormatter @Inject constructor(
     }
   }
 
-  fun format(mircColors: IntArray, content: String, highlight: Boolean = false): CharSequence {
-    val formattedText = ircFormatDeserializer.formatString(
-      mircColors, content, messageSettings.colorizeMirc
-    )
+  fun format(content: String, highlight: Boolean = false): CharSequence {
+    val formattedText = ircFormatDeserializer.formatString(content, messageSettings.colorizeMirc)
     val text = SpannableString(formattedText)
 
     for (result in urlPattern.findAll(formattedText)) {

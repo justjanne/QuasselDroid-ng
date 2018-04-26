@@ -22,11 +22,16 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.identity
 
+import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class IdentityCreateFragmentProvider {
+  @Binds
+  abstract fun bindContext(activity: IdentityCreateActivity): Context
+
   @ContributesAndroidInjector
   abstract fun bindIdentityCreateFragment(): IdentityCreateFragment
 }
