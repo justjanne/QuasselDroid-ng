@@ -63,7 +63,7 @@ android {
     buildConfigField("String", "GIT_HEAD", "\"${cmd("git", "rev-parse", "HEAD") ?: ""}\"")
     buildConfigField("long", "GIT_COMMIT_DATE", "${cmd("git", "show", "-s", "--format=%ct") ?: 0}L")
 
-    signingConfig = signingConfigs.getByName("default")
+    signingConfig = signingConfigs.findByName("default")
 
     resConfigs("de", "en")
 
