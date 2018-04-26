@@ -67,7 +67,8 @@ class IdentityAdapter : RecyclerSpinnerAdapter<IdentityAdapter.NetworkViewHolder
     return null
   }
 
-  override fun getItem(position: Int): Identity? = data[position]
+  override fun getItem(position: Int): Identity? =
+    if (position in 0 until data.size) data[position] else null
 
   override fun getItemId(position: Int) = getItem(position)?.id()?.toLong() ?: -1
 
