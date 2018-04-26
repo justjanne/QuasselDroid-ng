@@ -40,9 +40,9 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.util.helper.getOrPut
 import de.kuschku.quasseldroid.util.helper.loadAvatars
+import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 import de.kuschku.quasseldroid.util.ui.DoubleClickHelper
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
-import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import javax.inject.Inject
 
 class MessageAdapter @Inject constructor(

@@ -175,7 +175,6 @@ dependencies {
     implementation("com.github.bumptech.glide", "recyclerview-integration", version)
     kapt("com.github.bumptech.glide", "compiler", version)
   }
-  implementation("me.saket", "better-link-movement-method", "2.1.0")
   implementation(project(":slidingpanel"))
 
   // Quality Assurance

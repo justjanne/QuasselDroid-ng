@@ -29,7 +29,6 @@ import android.content.Intent
 import android.support.v7.widget.PopupMenu
 import android.widget.TextView
 import de.kuschku.quasseldroid.R
-import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 class LinkLongClickMenuHelper :
   BetterLinkMovementMethod.OnLinkLongClickListener,

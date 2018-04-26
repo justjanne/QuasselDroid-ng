@@ -44,10 +44,10 @@ import de.kuschku.quasseldroid.util.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
+import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
 import de.kuschku.quasseldroid.util.ui.TextDrawable
 import io.reactivex.Observable
-import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import javax.inject.Inject
 
 class UserInfoFragment : ServiceBoundFragment() {
