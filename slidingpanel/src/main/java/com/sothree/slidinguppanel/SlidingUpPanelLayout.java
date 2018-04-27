@@ -906,6 +906,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
     return mDragHelper.shouldInterceptTouchEvent(ev);
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   @Override
   public boolean onTouchEvent(MotionEvent ev) {
     if (!isEnabled() || !isTouchEnabled()) {

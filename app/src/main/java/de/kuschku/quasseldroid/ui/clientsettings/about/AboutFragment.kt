@@ -107,13 +107,13 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Android Architecture Components: Persistence",
-        version = "1.1.0-beta1",
+        version = "1.1.0-beta3",
         license = apache2,
         url = "https://android.googlesource.com/platform/frameworks/support/+/master/persistence"
       ),
       Library(
         name = "Android Architecture Components: Room",
-        version = "1.1.0-beta1",
+        version = "1.1.0-beta3",
         license = apache2,
         url = "https://android.googlesource.com/platform/frameworks/support/+/master/persistence"
       ),
@@ -125,7 +125,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Android Support Library",
-        version = "27.1.0",
+        version = "27.1.1",
         license = apache2,
         url = "https://android.googlesource.com/platform/frameworks/support/+/master"
       ),

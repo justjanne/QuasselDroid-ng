@@ -1,0 +1,17 @@
+<lint>
+  <issue id="NewerVersionAvailable" severity="error" />
+
+  <!-- Because of course paging and room have incompatible versions -->
+  <issue id="GradleCompatible" severity="ignore" />
+
+  <!-- Because these are entirely broken -->
+  <issue id="ResourceType" severity="ignore" />
+  <issue id="UnusedResources" severity="ignore" />
+  <issue id="ObsoleteLintCustomCheck" severity="ignore" />
+
+  <!-- Because otherwise I can’t use the legacy icon in the settings -->
+  <issue id="IconDuplicates" severity="ignore" />
+
+  <!-- Because this doesn’t work when using splash themes -->
+  <issue id="Overdraw" severity="ignore" />
+</lint>

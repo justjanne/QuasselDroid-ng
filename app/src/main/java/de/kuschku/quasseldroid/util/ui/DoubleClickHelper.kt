@@ -22,6 +22,7 @@
 
 package de.kuschku.quasseldroid.util.ui
 
+import android.annotation.SuppressLint
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -43,5 +44,6 @@ class DoubleClickHelper(view: View) : View.OnTouchListener {
     }
   )
 
+  @SuppressLint("ClickableViewAccessibility")
   override fun onTouch(v: View?, event: MotionEvent?) = gestureDetector.onTouchEvent(event)
 }

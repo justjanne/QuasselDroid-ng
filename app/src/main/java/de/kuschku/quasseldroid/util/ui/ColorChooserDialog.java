@@ -67,7 +67,7 @@ import de.kuschku.quasseldroid.R;
 /**
  * @author Aidan Follestad (afollestad)
  */
-@SuppressWarnings({"FieldCanBeLocal", "ConstantConditions"})
+@SuppressWarnings({"FieldCanBeLocal", "ConstantConditions", "PrivateResource"})
 public class ColorChooserDialog extends DialogFragment
   implements View.OnClickListener, View.OnLongClickListener {
 

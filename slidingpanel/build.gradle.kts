@@ -15,6 +15,11 @@ android {
       "disableAnalytics" to "true"
     )
   }
+
+  lintOptions {
+    isWarningsAsErrors = true
+    setLintConfig(file("../lint.xml"))
+  }
 }
 
 dependencies {

@@ -37,11 +37,16 @@ unitTests:
   cache:
     policy: "pull"
   script:
-    - "./gradlew test"
+    - "./gradlew check"
 
 deploy:
   stage: "deploy"
   image: "k8r.eu/justjanne/docker-s3cmd:latest"
+  only:
+    refs:
+    - "master"
+    variables:
+    - "$S3_CONFIG != ''"
   dependencies:
   - "build"
   script:

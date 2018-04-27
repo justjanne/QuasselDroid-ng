@@ -35,6 +35,8 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RectShape;
 import android.graphics.drawable.shapes.RoundRectShape;
 
+import java.util.Locale;
+
 /**
  * @author amulya
  * created 14 Oct 2014
@@ -62,7 +64,7 @@ public class TextDrawable extends ShapeDrawable {
     radius = builder.radius;
 
     // text and color
-    text = builder.toUpperCase ? builder.text.toUpperCase() : builder.text;
+    text = builder.toUpperCase ? builder.text.toUpperCase(Locale.getDefault()) : builder.text;
 
     // text paint settings
     fontSize = builder.fontSize;

@@ -47,6 +47,11 @@ android {
       "disableAnalytics" to "true"
     )
   }
+
+  lintOptions {
+    isWarningsAsErrors = true
+    setLintConfig(file("../lint.xml"))
+  }
 }
 
 dependencies {
@@ -58,7 +63,7 @@ dependencies {
   }
 
   // App Arch Persistence
-  withVersion("1.1.0-beta2") {
+  withVersion("1.1.0-beta3") {
     implementation("android.arch.persistence.room", "runtime", version)
     implementation("android.arch.persistence.room", "rxjava2", version)
     kapt("android.arch.persistence.room", "compiler", version)
@@ -66,7 +71,7 @@ dependencies {
   }
 
   // App Arch Paging
-  implementation("android.arch.paging", "runtime", "1.0.0-beta1") {
+  implementation("android.arch.paging", "runtime", "1.0.0-rc1") {
     exclude(group = "junit", module = "junit")
   }
 

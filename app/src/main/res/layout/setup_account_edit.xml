@@ -59,7 +59,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/label_account_name"
-        app:errorEnabled="true">
+        app:errorEnabled="true"
+        tools:ignore="LabelFor">
 
         <EditText
           android:id="@+id/name"
@@ -102,7 +103,8 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:hint="@string/label_connection_host"
-          app:errorEnabled="true">
+          app:errorEnabled="true"
+          tools:ignore="LabelFor">
 
           <EditText
             android:id="@+id/host"
@@ -116,7 +118,8 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:hint="@string/labelConnectionPort"
-          app:errorEnabled="true">
+          app:errorEnabled="true"
+          tools:ignore="LabelFor">
 
           <EditText
             android:id="@+id/port"
@@ -161,7 +164,8 @@
           android:id="@+id/userWrapper"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/label_account_user">
+          android:hint="@string/label_account_user"
+          tools:ignore="LabelFor">
 
           <EditText
             android:id="@+id/user"
@@ -176,7 +180,8 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:hint="@string/label_account_pass"
-          app:passwordToggleEnabled="true">
+          app:passwordToggleEnabled="true"
+          tools:ignore="LabelFor">
 
           <EditText
             android:id="@+id/pass"

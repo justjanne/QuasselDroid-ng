@@ -1,3 +1,10 @@
-include ':invokerannotations', ':invokergenerator', ':lib', ':malheur', ':app', ":slidingpanel", ":viewmodel", ":persistence"
+include ':invokerannotations',
+        ':invokergenerator',
+        ':lib',
+        ":viewmodel",
+        ":persistence",
+        ":slidingpanel",
+        ':malheur',
+        ':app'
 
 rootProject.buildFileName = 'build.gradle.kts'

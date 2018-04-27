@@ -64,7 +64,7 @@
           android:layout_weight="1" />
 
         <android.support.v7.widget.AppCompatImageView
-          android:id="@+id/send"
+          android:id="@+id/close"
           android:layout_width="48dp"
           android:layout_height="48dp"
           android:layout_gravity="top|end"

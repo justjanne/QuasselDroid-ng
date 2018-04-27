@@ -27,7 +27,8 @@
   android:layout_height="wrap_content"
   android:orientation="vertical"
   android:paddingBottom="@dimen/md_title_frame_margin_bottom"
-  android:paddingTop="@dimen/md_title_frame_margin_bottom">
+  android:paddingTop="@dimen/md_title_frame_margin_bottom"
+  tools:ignore="PrivateResource">
 
   <View
     android:id="@+id/md_colorIndicator"
@@ -63,6 +64,7 @@
       android:textColor="?colorTextPrimary"
       android:textColorHint="?colorTextSecondary"
       android:textSize="@dimen/md_title_textsize"
+      android:inputType="textNoSuggestions"
       tools:ignore="HardcodedText" />
 
   </LinearLayout>

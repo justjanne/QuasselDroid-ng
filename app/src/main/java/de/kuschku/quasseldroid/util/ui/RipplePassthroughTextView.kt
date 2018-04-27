@@ -22,6 +22,7 @@
 
 package de.kuschku.quasseldroid.util.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v7.widget.AppCompatTextView
 import android.text.Spannable
@@ -36,6 +37,7 @@ class RipplePassthroughTextView : AppCompatTextView {
 
   // The goal is to provide all normal interaction to the parent view, unless a link is touched
   // But additionally, we want to provide all normal textview interactions as well
+  @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean {
     val movementMethod = this.movementMethod
     this.movementMethod = null

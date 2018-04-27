@@ -20,7 +20,7 @@
     },
     {
       "name": "Android Architecture Components: Persistence",
-      "version": "1.1.0-beta1",
+      "version": "1.1.0-beta3",
       "license": {
         "short_name": "Apache-2.0",
         "full_name": "Apache License"
@@ -29,7 +29,7 @@
     },
     {
       "name": "Android Architecture Components: Room",
-      "version": "1.1.0-beta1",
+      "version": "1.1.0-beta3",
       "license": {
         "short_name": "Apache-2.0",
         "full_name": "Apache License"
@@ -47,7 +47,7 @@
     },
     {
       "name": "Android Support Library",
-      "version": "27.1.0",
+      "version": "27.1.1",
       "license": {
         "short_name": "Apache-2.0",
         "full_name": "Apache License"
