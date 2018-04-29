@@ -1,15 +1,15 @@
 /*
- * QuasselDroid - Quassel client for Android
+ * Quasseldroid - Quassel client for Android
  *
  * Copyright (c) 2018 Janne Koschinski
  * Copyright (c) 2018 Ken Børge Viktil
  * Copyright (c) 2018 Magnus Fjell
  * Copyright (c) 2018 Martin Sandsmark
+ * Copyright (c) 2018 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option)
- * any later version.
+ * under the terms of the GNU General Public License version 3 as published
+ * by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -25,7 +25,7 @@ package de.kuschku.quasseldroid.dagger
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
-import de.kuschku.quasseldroid.QuasselDroid
+import de.kuschku.quasseldroid.Quasseldroid
 import javax.inject.Singleton
 
 @Singleton
@@ -36,7 +36,7 @@ import javax.inject.Singleton
     ActivityModule::class
   ]
 )
-interface AppComponent : AndroidInjector<QuasselDroid> {
+interface AppComponent : AndroidInjector<Quasseldroid> {
   @Component.Builder
-  abstract class Builder : AndroidInjector.Builder<QuasselDroid>()
+  abstract class Builder : AndroidInjector.Builder<Quasseldroid>()
 }

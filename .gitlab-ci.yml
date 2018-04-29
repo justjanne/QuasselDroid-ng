@@ -53,4 +53,4 @@ deploy:
   - "echo $S3_CONFIG > $HOME/.s3cfg"
   - "export VERSION=$(ls *.apk)"
   - "s3cmd put $VERSION s3://releases/quasseldroid-ng/$VERSION"
-  - "s3cmd cp s3://releases/quasseldroid-ng/$VERSION s3://releases/quasseldroid-ng/QuasselDroidNG-latest.apk"
+  - "s3cmd cp s3://releases/quasseldroid-ng/$VERSION s3://releases/quasseldroid-ng/Quasseldroid-latest.apk"

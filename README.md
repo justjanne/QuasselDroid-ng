@@ -1,18 +1,16 @@
-# QuasselDroid-ng
+#[Quasseldroid](https://quasseldroid.info/)
 
-[![Release Version](https://img.shields.io/github/release/justjanne/QuasselDroid-ng/all.svg)](https://github.com/justjanne/QuasselDroid-ng/releases)
+[![Release Version](https://img.shields.io/github/release/justjanne/quasseldroid-ng/all.svg)](https://github.com/justjanne/Quasseldroid-ng/releases)
 
 Quassel is a distributed, decentralized IRC client, written using C++ and Qt.
-QuasselDroid is a pure-java client for the Quassel core, allowing you to connect
-to your Quassel core using your Android ™ phone.
+Quasseldroid is a pure-java client for the Quassel core, allowing you to connect
+to your Quassel core using your Android™ phone.
 
-*Inspired by and based on [QuasselDroid](https://github.com/sandsmark/QuasselDroid)*
-
-![Screenshot of QuasselDroid on Phone and Tablet](https://i.k8r.eu/4V7PhQ)
+![Screenshot of Quasseldroid on Phone and Tablet](https://i.k8r.eu/4V7PhQ)
 
 ## Build Requirements
 
-QuasselDroid requires you to have the latest version of gradle installed, and
+Quasseldroid requires you to have the latest version of gradle installed, and
 a recent version of the Android SDK installed (and configured via the
 environment variable ANDROID_HOME)
 
@@ -36,7 +34,15 @@ keyPassword=passwordofyourkeyhere
 
 ## Authors
 
-*(in chronological order of appearance)*
+* **Janne Koschinski** (justJanne)
+  Rewrite, UI, Annotation Processors, Backend
+  
+## Acknowledgements
+
+This project was inspired by and is based on [Quasseldroid](https://github.com/sandsmark/quasseldroid)
+as well as [Quassel](https://quassel-irc.org/).
+
+Authors of the previous version of Quasseldroid:
 
 * **Frederik M. J. Vestre** (freqmod)
   Initial qdatastream deserialization attempts
@@ -46,25 +52,10 @@ keyPassword=passwordofyourkeyhere
   Legacy UI
 * **Ken Børge Viktil** (Kenji)
   Legacy UI
-* **Janne Koschinski** (justJanne)
-  Rewrite, UI, Annotation Processors, Backend
-
-## History
-
-The project was originally started by freqmod in December 2010 as a simple PoC, and then expanded by
-magnuf, sandsmark and Kenji until late 2014 into a usable Android app. At that time justJanne
-started a first fork to introduce Holo design, then rebased that fork and turned it into a pull
-request. Later finding more and more missing features, and more and more bugs, justJanne ended up
-rewrite large parts of the code, and became the sole maintainer in late 2015.
-
-This is a rewrite of that version, with focus on better performance, higher code quality, and
-better UI.
-
-The older implementation is still available at <https://github.com/sandsmark/QuasselDroid>.
 
 ## Used Libraries
 
-### QuasselDroid
+### Quasseldroid
 
 * [**Android Architecture Components: Lifecycle**](https://android.googlesource.com/platform/frameworks/support/+/master/lifecycle)
   Apache-2.0
@@ -132,9 +123,8 @@ The older implementation is still available at <https://github.com/sandsmark/Qua
 ## License
 
 > This program is free software: you can redistribute it and/or modify it
-> under the terms of the GNU General Public License as published by the Free
-> Software Foundation, either version 3 of the License, or (at your option)
-> any later version.
+> under the terms of the GNU General Public License version 3 as published
+> by the Free Software Foundation.
 
 > This program is distributed in the hope that it will be useful,
 > but WITHOUT ANY WARRANTY; without even the implied warranty of
