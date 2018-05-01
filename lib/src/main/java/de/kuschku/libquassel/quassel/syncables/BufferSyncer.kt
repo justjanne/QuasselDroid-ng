@@ -27,12 +27,14 @@ import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferSyncer
 import de.kuschku.libquassel.session.ISession
+import de.kuschku.libquassel.session.NotificationManager
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
 class BufferSyncer constructor(
-  private val session: ISession
+  private val session: ISession,
+  private val notificationManager: NotificationManager?
 ) : SyncableObject(session.proxy, "BufferSyncer"), IBufferSyncer {
   fun lastSeenMsg(buffer: BufferId): MsgId = _lastSeenMsg[buffer] ?: 0
   fun liveLastSeenMsg(buffer: BufferId): Observable<MsgId> = live_lastSeenMsg.map {
@@ -165,11 +167,7 @@ class BufferSyncer constructor(
   }
 
   override fun mergeBuffersPermanently(buffer1: BufferId, buffer2: BufferId) {
-    _lastSeenMsg.remove(buffer2);live_lastSeenMsg.onNext(Unit)
-    _markerLines.remove(buffer2);live_markerLines.onNext(Unit)
-    _bufferActivities.remove(buffer2);live_bufferActivities.onNext(Unit)
-    _highlightCounts.remove(buffer2);live_highlightCounts.onNext(Unit)
-    _bufferInfos.remove(buffer2);live_bufferInfos.onNext(Unit)
+    removeBuffer(buffer2)
   }
 
   override fun removeBuffer(buffer: BufferId) {
@@ -179,6 +177,7 @@ class BufferSyncer constructor(
     _highlightCounts.remove(buffer);live_highlightCounts.onNext(Unit)
     _bufferInfos.remove(buffer);live_bufferInfos.onNext(Unit)
     session.backlogManager?.removeBuffer(buffer)
+    notificationManager?.clear(buffer)
   }
 
   override fun renameBuffer(buffer: BufferId, newName: String) {
@@ -210,6 +209,7 @@ class BufferSyncer constructor(
       _lastSeenMsg[buffer] = msgId
       live_lastSeenMsg.onNext(Unit)
       super.setLastSeenMsg(buffer, msgId)
+      notificationManager?.clear(buffer, msgId)
     }
   }
 

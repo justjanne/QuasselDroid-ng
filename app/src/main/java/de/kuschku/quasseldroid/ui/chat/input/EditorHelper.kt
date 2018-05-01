@@ -32,6 +32,7 @@ import android.view.inputmethod.EditorInfo
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
+import de.kuschku.quasseldroid.util.helper.getColorCompat
 import de.kuschku.quasseldroid.util.helper.lastWordIndices
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.ui.ColorChooserDialog
@@ -47,14 +48,12 @@ class EditorHelper(
 ) {
   private var enterListener: (() -> Unit)? = null
 
-  private val mircColors = editText.context.theme.styledAttributes(
-    R.attr.mircColor00, R.attr.mircColor01, R.attr.mircColor02, R.attr.mircColor03,
-    R.attr.mircColor04, R.attr.mircColor05, R.attr.mircColor06, R.attr.mircColor07,
-    R.attr.mircColor08, R.attr.mircColor09, R.attr.mircColor10, R.attr.mircColor11,
-    R.attr.mircColor12, R.attr.mircColor13, R.attr.mircColor14, R.attr.mircColor15
-  ) {
-    IntArray(length(), { getColor(it, 0) })
-  }
+  private val mircColors = listOf(
+    R.color.mircColor00, R.color.mircColor01, R.color.mircColor02, R.color.mircColor03,
+    R.color.mircColor04, R.color.mircColor05, R.color.mircColor06, R.color.mircColor07,
+    R.color.mircColor08, R.color.mircColor09, R.color.mircColor10, R.color.mircColor11,
+    R.color.mircColor12, R.color.mircColor13, R.color.mircColor14, R.color.mircColor15
+  ).map(activity::getColorCompat).toIntArray()
 
   private val defaultForegroundColor = editText.context.theme.styledAttributes(R.attr.colorForeground) {
     getColor(0, 0)

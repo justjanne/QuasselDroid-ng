@@ -26,7 +26,7 @@ import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 
 data class DisplayMessage(
-  val content: QuasselDatabase.DatabaseMessage,
+  val content: QuasselDatabase.MessageData,
   val hasDayChange: Boolean,
   val isFollowUp: Boolean,
   val isSelected: Boolean,

@@ -156,7 +156,7 @@ class UserInfoFragment : ServiceBoundFragment() {
         )
 
         nick.text = user.nick()
-        realName.text = contentFormatter.format(user.realName())
+        realName.text = contentFormatter.formatContent(user.realName())
         realName.visibleIf(user.realName().isNotBlank() && user.realName() != user.nick())
 
         awayMessage.text = user.awayMessage()

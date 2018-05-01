@@ -25,17 +25,18 @@ package de.kuschku.quasseldroid.service
 import android.arch.lifecycle.Observer
 import android.content.*
 import android.net.ConnectivityManager
+import android.support.v4.app.RemoteInput
+import android.text.SpannableString
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.connection.HostnameVerifier
 import de.kuschku.libquassel.connection.SocketAddress
-import de.kuschku.libquassel.protocol.ClientData
-import de.kuschku.libquassel.protocol.Protocol
-import de.kuschku.libquassel.protocol.Protocol_Feature
-import de.kuschku.libquassel.protocol.Protocol_Features
+import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.QuasselFeatures
+import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SessionManager
+import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.malheur.CrashHandler
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.Keys
@@ -44,6 +45,7 @@ import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.persistence.QuasselBacklogStorage
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.ConnectionSettings
+import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ssl.QuasselHostnameVerifier
 import de.kuschku.quasseldroid.ssl.QuasselTrustManager
@@ -52,10 +54,9 @@ import de.kuschku.quasseldroid.ssl.custom.QuasselHostnameManager
 import de.kuschku.quasseldroid.util.QuasseldroidNotificationManager
 import de.kuschku.quasseldroid.util.backport.DaggerLifecycleService
 import de.kuschku.quasseldroid.util.compatibility.AndroidHandlerService
-import de.kuschku.quasseldroid.util.helper.editApply
-import de.kuschku.quasseldroid.util.helper.editCommit
-import de.kuschku.quasseldroid.util.helper.sharedPreferences
-import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.util.helper.*
+import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
+import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import io.reactivex.subjects.PublishSubject
 import org.threeten.bp.Instant
 import java.util.concurrent.TimeUnit
@@ -96,7 +97,15 @@ class QuasselService : DaggerLifecycleService(),
   private var accountId: Long = -1
   private var reconnect: Boolean = false
 
-  private lateinit var notificationManager: QuasseldroidNotificationManager
+  @Inject
+  lateinit var notificationManager: QuasseldroidNotificationManager
+
+  @Inject
+  lateinit var notificationBackend: QuasselNotificationBackend
+
+  @Inject
+  lateinit var ircFormatSerializer: IrcFormatSerializer
+
   private var notificationHandle: QuasseldroidNotificationManager.Handle? = null
   private var progress = Triple(ConnectionState.DISCONNECTED, 0, 0)
 
@@ -114,17 +123,45 @@ class QuasselService : DaggerLifecycleService(),
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     val result = super.onStartCommand(intent, flags, startId)
-    handleIntent(intent)
+    intent?.let(this@QuasselService::handleIntent)
     return result
   }
 
-  private fun handleIntent(intent: Intent?) {
-    if (intent?.getBooleanExtra("disconnect", false) == true) {
+  private fun handleIntent(intent: Intent) {
+    if (intent.getBooleanExtra("disconnect", false)) {
       sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
         editApply {
           putBoolean(Keys.Status.reconnect, false)
         }
       }
+    }
+
+    val bufferId = intent.getIntExtra("buffer", -1)
+
+    val inputResults = RemoteInput.getResultsFromIntent(intent)?.getCharSequence("reply_content")
+    if (inputResults != null && bufferId != -1) {
+      if (inputResults.isNotBlank()) {
+        val lines = inputResults.lineSequence().map {
+          it.toString() to ircFormatSerializer.toEscapeCodes(SpannableString(it))
+        }
+
+        sessionManager.session.value?.let { session ->
+          session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
+            val output = mutableListOf<IAliasManager.Command>()
+            for ((_, formatted) in lines) {
+              session.aliasManager?.processInput(bufferInfo, formatted, output)
+            }
+            for (command in output) {
+              session.rpcHandler?.sendInput(command.buffer, command.message)
+            }
+          }
+        }
+      }
+    }
+
+    val clearMessageId = intent.getIntExtra("mark_read_message", -1)
+    if (bufferId != -1 && clearMessageId != -1) {
+      sessionManager.session.value?.bufferSyncer?.requestSetLastSeenMsg(bufferId, clearMessageId)
     }
   }
 
@@ -236,7 +273,13 @@ class QuasselService : DaggerLifecycleService(),
   @Inject
   lateinit var accountDatabase: AccountDatabase
 
-  private val receiver = object : BroadcastReceiver() {
+  @Inject
+  lateinit var contentFormatter: ContentFormatter
+
+  @Inject
+  lateinit var messageSettings: MessageSettings
+
+  private val connectivityReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
       if (context != null && intent != null) {
         connectivity.onNext(Unit)
@@ -261,6 +304,7 @@ class QuasselService : DaggerLifecycleService(),
     sessionManager = SessionManager(
       ISession.NULL,
       QuasselBacklogStorage(database),
+      notificationBackend,
       handlerService,
       ::disconnectFromCore,
       CrashHandler::handle
@@ -328,9 +372,8 @@ class QuasselService : DaggerLifecycleService(),
       registerOnSharedPreferenceChangeListener(this@QuasselService)
     }
 
-    registerReceiver(receiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+    registerReceiver(connectivityReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
 
-    notificationManager = QuasseldroidNotificationManager(this)
     notificationManager.init()
 
     update()
@@ -345,7 +388,7 @@ class QuasselService : DaggerLifecycleService(),
       unregisterOnSharedPreferenceChangeListener(this@QuasselService)
     }
 
-    unregisterReceiver(receiver)
+    unregisterReceiver(connectivityReceiver)
 
     notificationHandle?.let { notificationManager.remove(it) }
     super.onDestroy()
@@ -359,15 +402,25 @@ class QuasselService : DaggerLifecycleService(),
   companion object {
     fun launch(
       context: Context,
-      disconnect: Boolean? = null
-    ): ComponentName = context.startService(intent(context, disconnect))
+      disconnect: Boolean? = null,
+      markRead: BufferId? = null,
+      markReadMessage: MsgId? = null
+    ): ComponentName = context.startService(intent(context, disconnect, markRead, markReadMessage))
 
     fun intent(
       context: Context,
-      disconnect: Boolean? = null
+      disconnect: Boolean? = null,
+      bufferId: BufferId? = null,
+      markReadMessage: MsgId? = null
     ) = Intent(context, QuasselService::class.java).apply {
       if (disconnect != null) {
         putExtra("disconnect", disconnect)
+      }
+      if (bufferId != null) {
+        putExtra("buffer", bufferId)
+      }
+      if (markReadMessage != null) {
+        putExtra("mark_read_message", markReadMessage)
       }
     }
   }

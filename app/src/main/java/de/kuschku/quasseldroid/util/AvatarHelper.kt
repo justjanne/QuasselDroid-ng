@@ -34,7 +34,18 @@ import de.kuschku.quasseldroid.viewmodel.data.IrcUserItem
 import org.apache.commons.codec.digest.DigestUtils
 
 object AvatarHelper {
-  fun avatar(settings: MessageSettings, message: QuasselDatabase.DatabaseMessage,
+  fun avatar(settings: MessageSettings, message: QuasselDatabase.NotificationData,
+             size: Int? = null) = listOfNotNull(
+    message.avatarUrl.notBlank()?.let { listOf(it) },
+    settings.showIRCCloudAvatars.letIf {
+      ircCloudFallback(HostmaskHelper.user(message.sender), size)
+    },
+    settings.showGravatarAvatars.letIf {
+      gravatarFallback(message.realName, size)
+    }
+  ).flatten()
+
+  fun avatar(settings: MessageSettings, message: QuasselDatabase.MessageData,
              size: Int? = null) = listOfNotNull(
     message.avatarUrl.notBlank()?.let { listOf(it) },
     settings.showIRCCloudAvatars.letIf {

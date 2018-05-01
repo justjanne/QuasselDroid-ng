@@ -28,13 +28,15 @@ import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.quassel.syncables.interfaces.IRpcHandler
 import de.kuschku.libquassel.session.BacklogStorage
+import de.kuschku.libquassel.session.NotificationManager
 import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.util.helpers.deserializeString
 import java.nio.ByteBuffer
 
 class RpcHandler(
   override val session: Session,
-  private val backlogStorage: BacklogStorage
+  private val backlogStorage: BacklogStorage,
+  private val notificationManager: NotificationManager?
 ) : IRpcHandler {
   override fun displayStatusMsg(net: String, msg: String) {
   }
@@ -61,6 +63,7 @@ class RpcHandler(
   override fun displayMsg(message: Message) {
     session.bufferSyncer.bufferInfoUpdated(message.bufferInfo)
     backlogStorage.storeMessages(session, message)
+    notificationManager?.processMessages(session, message)
   }
 
   override fun createIdentity(identity: Identity, additional: QVariantMap) =

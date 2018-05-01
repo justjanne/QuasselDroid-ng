@@ -266,9 +266,9 @@ class MessageListFragment : ServiceBoundFragment() {
         }
       })
 
-    fun processMessages(list: List<QuasselDatabase.DatabaseMessage>, selected: Set<MsgId>,
+    fun processMessages(list: List<QuasselDatabase.MessageData>, selected: Set<MsgId>,
                         expanded: Set<MsgId>, markerLine: MsgId?): List<DisplayMessage> {
-      var previous: QuasselDatabase.DatabaseMessage? = null
+      var previous: QuasselDatabase.MessageData? = null
       var previousDate: ZonedDateTime? = null
       return list.mapReverse {
         val date = it.time.atZone(ZoneId.systemDefault()).truncatedTo(ChronoUnit.DAYS)

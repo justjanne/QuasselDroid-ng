@@ -2,9 +2,6 @@
  * Quasseldroid - Quassel client for Android
  *
  * Copyright (c) 2018 Janne Koschinski
- * Copyright (c) 2018 Ken Børge Viktil
- * Copyright (c) 2018 Magnus Fjell
- * Copyright (c) 2018 Martin Sandsmark
  * Copyright (c) 2018 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -20,19 +17,16 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.service
+package de.kuschku.quasseldroid.util
 
-import android.content.Context
-import dagger.Binds
-import dagger.Module
-import de.kuschku.quasseldroid.ui.chat.messages.MessageRenderer
-import de.kuschku.quasseldroid.ui.chat.messages.QuasselMessageRenderer
+import android.graphics.drawable.Drawable
+import de.kuschku.libquassel.protocol.MsgId
+import org.threeten.bp.Instant
 
-@Module
-abstract class QuasselServiceModule {
-  @Binds
-  abstract fun bindContext(service: QuasselService): Context
-
-  @Binds
-  abstract fun bindMessageRenderer(messageRenderer: QuasselMessageRenderer): MessageRenderer
-}
+data class NotificationMessage(
+  val messageId: MsgId,
+  val sender: CharSequence,
+  val content: CharSequence,
+  val time: Instant,
+  val avatar: Drawable?
+)

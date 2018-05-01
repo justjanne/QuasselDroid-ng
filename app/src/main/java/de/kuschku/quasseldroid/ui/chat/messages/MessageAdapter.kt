@@ -58,8 +58,8 @@ class MessageAdapter @Inject constructor(
   private val movementMethod = BetterLinkMovementMethod.newInstance()
   private var clickListener: ((FormattedMessage) -> Unit)? = null
   private var longClickListener: ((FormattedMessage) -> Unit)? = null
-  private var doubleClickListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null
-  private var expansionListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null
+  private var doubleClickListener: ((QuasselDatabase.MessageData) -> Unit)? = null
+  private var expansionListener: ((QuasselDatabase.MessageData) -> Unit)? = null
   private var urlLongClickListener: ((TextView, String) -> Boolean)? = null
 
   fun setOnClickListener(listener: ((FormattedMessage) -> Unit)?) {
@@ -70,11 +70,11 @@ class MessageAdapter @Inject constructor(
     this.longClickListener = listener
   }
 
-  fun setOnDoubleClickListener(listener: ((QuasselDatabase.DatabaseMessage) -> Unit)?) {
+  fun setOnDoubleClickListener(listener: ((QuasselDatabase.MessageData) -> Unit)?) {
     this.doubleClickListener = listener
   }
 
-  fun setOnExpansionListener(listener: ((QuasselDatabase.DatabaseMessage) -> Unit)?) {
+  fun setOnExpansionListener(listener: ((QuasselDatabase.MessageData) -> Unit)?) {
     this.expansionListener = listener
   }
 
@@ -107,8 +107,8 @@ class MessageAdapter @Inject constructor(
   }
 
   override fun getItemViewType(position: Int) = getItem(position)?.let {
-    Message_Flag.of(it.content.type).value or
-      (if (Message_Flag.of(it.content.flag).hasFlag(Message_Flag.Highlight)) MASK_HIGHLIGHT else 0x00) or
+    it.content.type.value or
+      (if (it.content.flag.hasFlag(Message_Flag.Highlight)) MASK_HIGHLIGHT else 0x00) or
       (if (it.isFollowUp) MASK_FOLLOWUP else 0x00) or
       (if (it.isEmoji) MASK_EMOJI else 0x00)
   } ?: 0
@@ -167,8 +167,8 @@ class MessageAdapter @Inject constructor(
     itemView: View,
     clickListener: ((FormattedMessage) -> Unit)? = null,
     longClickListener: ((FormattedMessage) -> Unit)? = null,
-    doubleClickListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null,
-    expansionListener: ((QuasselDatabase.DatabaseMessage) -> Unit)? = null,
+    doubleClickListener: ((QuasselDatabase.MessageData) -> Unit)? = null,
+    expansionListener: ((QuasselDatabase.MessageData) -> Unit)? = null,
     movementMethod: BetterLinkMovementMethod
   ) : RecyclerView.ViewHolder(itemView) {
     @BindView(R.id.time_left)
@@ -200,7 +200,7 @@ class MessageAdapter @Inject constructor(
     var combined: TextView? = null
 
     private var message: FormattedMessage? = null
-    private var original: QuasselDatabase.DatabaseMessage? = null
+    private var original: QuasselDatabase.MessageData? = null
     private var selectable: Boolean = false
     private var clickable: Boolean = false
 
@@ -241,7 +241,7 @@ class MessageAdapter @Inject constructor(
       })
     }
 
-    fun bind(message: FormattedMessage, original: QuasselDatabase.DatabaseMessage,
+    fun bind(message: FormattedMessage, original: QuasselDatabase.MessageData,
              selectable: Boolean = true, clickable: Boolean = true) {
       this.message = message
       this.original = original

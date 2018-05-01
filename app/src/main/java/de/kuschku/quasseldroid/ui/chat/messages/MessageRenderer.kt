@@ -33,7 +33,7 @@ interface MessageRenderer {
   fun layout(type: Message_Type?, hasHighlight: Boolean, isFollowUp: Boolean, isEmoji: Boolean): Int
 
   fun bind(holder: MessageAdapter.QuasselMessageViewHolder, message: FormattedMessage,
-           original: QuasselDatabase.DatabaseMessage)
+           original: QuasselDatabase.MessageData)
 
   fun render(context: Context, message: DisplayMessage): FormattedMessage
 

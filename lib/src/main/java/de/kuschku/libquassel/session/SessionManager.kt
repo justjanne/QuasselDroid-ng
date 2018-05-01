@@ -41,6 +41,7 @@ import javax.net.ssl.X509TrustManager
 class SessionManager(
   offlineSession: ISession,
   val backlogStorage: BacklogStorage,
+  val notificationManager: NotificationManager?,
   val handlerService: HandlerService,
   private val disconnectFromCore: () -> Unit,
   private val exceptionHandler: (Throwable) -> Unit
@@ -129,6 +130,7 @@ class SessionManager(
         address,
         handlerService,
         backlogStorage,
+        notificationManager,
         userData,
         disconnectFromCore,
         exceptionHandler

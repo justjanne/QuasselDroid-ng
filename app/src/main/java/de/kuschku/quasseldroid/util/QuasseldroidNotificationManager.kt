@@ -28,17 +28,25 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
+import android.support.v4.app.RemoteInput
+import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.service.QuasselService
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
-import de.kuschku.quasseldroid.util.helper.editApply
 import de.kuschku.quasseldroid.util.helper.getColorCompat
-import de.kuschku.quasseldroid.util.helper.sharedPreferences
+import javax.inject.Inject
 
-class QuasseldroidNotificationManager(private val context: Context) {
+class QuasseldroidNotificationManager @Inject constructor(private val context: Context) {
+  private val notificationManagerCompat = NotificationManagerCompat.from(context)
+
   fun init() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
       prepareChannels()
@@ -63,19 +71,107 @@ class QuasseldroidNotificationManager(private val context: Context) {
     )
   }
 
-  private fun id(): Int = context.sharedPreferences {
-    val key = context.getString(R.string.preference_notification_id_key)
-    val id = getInt(key, 1) + 1
-    editApply {
-      putInt(key, id)
-    }
-    id
+  private fun bitmapFromDrawable(drawable: Drawable): Bitmap {
+    val bitmap = Bitmap.createBitmap(
+      context.resources.getDimensionPixelSize(R.dimen.notification_avatar_width),
+      context.resources.getDimensionPixelSize(R.dimen.notification_avatar_height),
+      Bitmap.Config.ARGB_8888
+    )
+
+    val canvas = Canvas(bitmap)
+    drawable.setBounds(0, 0, canvas.width, canvas.height)
+    drawable.draw(canvas)
+    return bitmap
+  }
+
+  fun notificationGroup(bufferInfo: BufferInfo, notifications: List<NotificationMessage>): Handle {
+    val pendingIntentOpen = PendingIntent.getActivity(
+      context.applicationContext,
+      System.currentTimeMillis().toInt(),
+      ChatActivity.intent(context.applicationContext).apply {
+        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+      },
+      0
+    )
+
+    val remoteInput = RemoteInput.Builder("reply_content")
+      .setLabel("Reply")
+      .build()
+
+    val replyPendingIntent = PendingIntent.getService(
+      context.applicationContext,
+      System.currentTimeMillis().toInt(),
+      QuasselService.intent(
+        context,
+        bufferId = bufferInfo.bufferId,
+        markReadMessage = notifications.last().messageId
+      ),
+      0
+    )
+
+    val markReadPendingIntent = PendingIntent.getService(
+      context.applicationContext,
+      System.currentTimeMillis().toInt(),
+      QuasselService.intent(
+        context,
+        bufferId = bufferInfo.bufferId,
+        markReadMessage = notifications.last().messageId
+      ),
+      0
+    )
+
+    val deletePendingIntent = PendingIntent.getService(
+      context.applicationContext,
+      System.currentTimeMillis().toInt(),
+      QuasselService.intent(
+        context,
+        bufferId = bufferInfo.bufferId,
+        markReadMessage = notifications.last().messageId
+      ),
+      0
+    )
+
+    val notification = NotificationCompat.Builder(
+      context.applicationContext,
+      context.getString(R.string.notification_channel_highlight)
+    )
+      .setContentIntent(pendingIntentOpen)
+      .setDeleteIntent(deletePendingIntent)
+      .setSmallIcon(R.mipmap.ic_logo)
+      .setColor(context.getColorCompat(R.color.colorPrimary))
+      .setPriority(NotificationCompat.PRIORITY_HIGH)
+      .setStyle(NotificationCompat.MessagingStyle("")
+                  .setConversationTitle(bufferInfo.bufferName)
+                  .also {
+                    for (notification in notifications) {
+                      it.addMessage(
+                        notification.content,
+                        notification.time.toEpochMilli(),
+                        notification.sender
+                      )
+                    }
+                  }
+      )
+      .addAction(0, "Mark Read", markReadPendingIntent)
+      .addAction(
+        NotificationCompat.Action.Builder(0, "Reply", replyPendingIntent)
+          .addRemoteInput(remoteInput)
+          .build()
+      )
+      .apply {
+        if (bufferInfo.type.hasFlag(Buffer_Type.QueryBuffer)) {
+          notifications.lastOrNull()?.avatar?.let {
+            setLargeIcon(bitmapFromDrawable(it))
+          }
+        }
+      }
+    return Handle(bufferInfo.bufferId, notification)
   }
 
   fun notificationBackground(): Handle {
     val pendingIntentOpen = PendingIntent.getActivity(
       context.applicationContext,
-      0,
+      System.currentTimeMillis().toInt(),
       ChatActivity.intent(context.applicationContext).apply {
         flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
       },
@@ -84,9 +180,9 @@ class QuasseldroidNotificationManager(private val context: Context) {
 
     val pendingIntentDisconnect = PendingIntent.getService(
       context,
-      0,
+      System.currentTimeMillis().toInt(),
       QuasselService.intent(context.applicationContext, disconnect = true),
-      PendingIntent.FLAG_UPDATE_CURRENT
+      0
     )
 
     val notification = NotificationCompat.Builder(
@@ -103,11 +199,15 @@ class QuasseldroidNotificationManager(private val context: Context) {
   }
 
   fun notify(handle: Handle) {
-    NotificationManagerCompat.from(context).notify(handle.id, handle.builder.build())
+    notificationManagerCompat.notify(handle.id, handle.builder.build())
   }
 
   fun remove(handle: Handle) {
-    NotificationManagerCompat.from(context).cancel(handle.id)
+    notificationManagerCompat.cancel(handle.id)
+  }
+
+  fun remove(id: Int) {
+    notificationManagerCompat.cancel(id)
   }
 
   companion object {

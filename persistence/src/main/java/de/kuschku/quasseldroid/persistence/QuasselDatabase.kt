@@ -29,72 +29,81 @@ import android.arch.persistence.room.*
 import android.arch.persistence.room.migration.Migration
 import android.content.Context
 import android.support.annotation.IntRange
-import de.kuschku.libquassel.protocol.Message_Flag
-import de.kuschku.libquassel.protocol.Message_Type
-import de.kuschku.libquassel.protocol.MsgId
+import de.kuschku.libquassel.protocol.*
 import de.kuschku.quasseldroid.persistence.QuasselDatabase.*
 import io.reactivex.Flowable
 import org.threeten.bp.Instant
 
-@Database(entities = [DatabaseMessage::class, Filtered::class, SslValidityWhitelistEntry::class, SslHostnameWhitelistEntry::class],
-          version = 13)
-@TypeConverters(DatabaseMessage.MessageTypeConverters::class)
+@Database(entities = [MessageData::class, Filtered::class, SslValidityWhitelistEntry::class, SslHostnameWhitelistEntry::class, NotificationData::class],
+          version = 14)
+@TypeConverters(MessageTypeConverter::class)
 abstract class QuasselDatabase : RoomDatabase() {
   abstract fun message(): MessageDao
   abstract fun filtered(): FilteredDao
   abstract fun validityWhitelist(): SslValidityWhitelistDao
   abstract fun hostnameWhitelist(): SslHostnameWhitelistDao
+  abstract fun notifications(): NotificationDao
+
+  class MessageTypeConverter {
+    @TypeConverter
+    fun convertInstant(value: Long): Instant = Instant.ofEpochMilli(value)
+
+    @TypeConverter
+    fun convertInstant(value: Instant) = value.toEpochMilli()
+
+    @TypeConverter
+    fun convertBufferTypes(value: Buffer_Types) = value.toShort()
+
+    @TypeConverter
+    fun convertBufferTypes(value: Short) = Buffer_Type.of(value)
+
+    @TypeConverter
+    fun convertMessageTypes(value: Message_Types) = value.toInt()
+
+    @TypeConverter
+    fun convertMessageTypes(value: Int) = Message_Type.of(value)
+
+    @TypeConverter
+    fun convertMessageFlags(value: Message_Flags) = value.toInt()
+
+    @TypeConverter
+    fun convertMessageFlags(value: Int) = Message_Flag.of(value)
+  }
 
   @Entity(tableName = "message", indices = [Index("bufferId"), Index("ignored")])
-  data class DatabaseMessage(
+  data class MessageData(
     @PrimaryKey var messageId: Int,
     var time: Instant,
-    var type: Int,
-    var flag: Int,
-    var bufferId: Int,
+    var type: Message_Types,
+    var flag: Message_Flags,
+    var bufferId: BufferId,
     var sender: String,
     var senderPrefixes: String,
     var realName: String,
     var avatarUrl: String,
     var content: String,
     var ignored: Boolean
-  ) {
-    class MessageTypeConverters {
-      @TypeConverter
-      fun convertInstant(value: Long): Instant = Instant.ofEpochMilli(value)
-
-      @TypeConverter
-      fun convertInstant(value: Instant) = value.toEpochMilli()
-    }
-
-    override fun toString(): String {
-      return "Message(messageId=$messageId, time=$time, type=${Message_Type.of(
-        type
-      )}, flag=${Message_Flag.of(
-        flag
-      )}, bufferId=$bufferId, sender='$sender', senderPrefixes='$senderPrefixes', realName='$realName', avatarUrl='$avatarUrl', content='$content')"
-    }
-  }
+  )
 
   @Dao
   interface MessageDao {
     @Query("SELECT * FROM message")
-    fun all(): List<DatabaseMessage>
+    fun all(): List<MessageData>
 
     @Query("SELECT * FROM message WHERE messageId = :messageId")
-    fun find(messageId: Int): DatabaseMessage?
+    fun find(messageId: Int): MessageData?
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC")
-    fun findByBufferId(bufferId: Int): List<DatabaseMessage>
+    fun findByBufferId(bufferId: Int): List<MessageData>
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId AND type & ~ :type > 0 AND ignored = 0 ORDER BY messageId DESC")
-    fun findByBufferIdPaged(bufferId: Int, type: Int): DataSource.Factory<Int, DatabaseMessage>
+    fun findByBufferIdPaged(bufferId: Int, type: Int): DataSource.Factory<Int, MessageData>
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId DESC LIMIT 1")
-    fun findLastByBufferId(bufferId: Int): DatabaseMessage?
+    fun findLastByBufferId(bufferId: Int): MessageData?
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId DESC LIMIT 1")
-    fun lastMsgId(bufferId: Int): LiveData<DatabaseMessage>
+    fun lastMsgId(bufferId: Int): LiveData<MessageData>
 
     @Query("SELECT messageId FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC LIMIT 1")
     fun firstMsgId(bufferId: Int): Flowable<MsgId>
@@ -103,10 +112,10 @@ abstract class QuasselDatabase : RoomDatabase() {
     fun firstVisibleMsgId(bufferId: Int, type: Int): MsgId?
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC LIMIT 1")
-    fun findFirstByBufferId(bufferId: Int): DatabaseMessage?
+    fun findFirstByBufferId(bufferId: Int): MessageData?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(vararg entities: DatabaseMessage)
+    fun save(vararg entities: MessageData)
 
     @Query("UPDATE message SET bufferId = :bufferId1 WHERE bufferId = :bufferId2")
     fun merge(@IntRange(from = 0) bufferId1: Int, @IntRange(from = 0) bufferId2: Int)
@@ -129,7 +138,7 @@ abstract class QuasselDatabase : RoomDatabase() {
   @Entity(tableName = "filtered", primaryKeys = ["accountId", "bufferId"])
   data class Filtered(
     var accountId: Long,
-    var bufferId: Int,
+    var bufferId: BufferId,
     var filtered: Int
   )
 
@@ -215,6 +224,38 @@ abstract class QuasselDatabase : RoomDatabase() {
     fun clear()
   }
 
+  @Entity(tableName = "notification", indices = [Index("bufferId")])
+  data class NotificationData(
+    @PrimaryKey var messageId: Int,
+    var time: Instant,
+    var type: Message_Types,
+    var flag: Message_Flags,
+    var bufferId: BufferId,
+    var bufferName: String,
+    var bufferType: Buffer_Types,
+    var networkId: NetworkId,
+    var sender: String,
+    var senderPrefixes: String,
+    var realName: String,
+    var avatarUrl: String,
+    var content: String
+  )
+
+  @Dao
+  interface NotificationDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun save(vararg entities: NotificationData)
+
+    @Query("SELECT * FROM notification WHERE bufferId = :bufferId ORDER BY time ASC")
+    fun all(bufferId: BufferId): List<NotificationData>
+
+    @Query("DELETE FROM notification WHERE bufferId = :bufferId AND messageId <= :messageId")
+    fun markRead(bufferId: BufferId, messageId: MsgId)
+
+    @Query("DELETE FROM notification")
+    fun clear()
+  }
+
   object Creator {
     private var database: QuasselDatabase? = null
 
@@ -297,6 +338,12 @@ abstract class QuasselDatabase : RoomDatabase() {
                   database.execSQL("drop table ssl_hostname_whitelist;")
                   database.execSQL("create table ssl_validity_whitelist (fingerprint TEXT not null, ignoreDate INTEGER not null, primary key(fingerprint));")
                   database.execSQL("create table ssl_hostname_whitelist (fingerprint TEXT not null, hostname TEXT not null, primary key(fingerprint, hostname));")
+                }
+              },
+              object : Migration(13, 14) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL("CREATE TABLE IF NOT EXISTS `notification` (`messageId` INTEGER NOT NULL, `time` INTEGER NOT NULL, `type` INTEGER NOT NULL, `flag` INTEGER NOT NULL, `bufferId` INTEGER NOT NULL, `bufferName` TEXT NOT NULL, `bufferType` INTEGER NOT NULL, `networkId` INTEGER NOT NULL, `sender` TEXT NOT NULL, `senderPrefixes` TEXT NOT NULL, `realName` TEXT NOT NULL, `avatarUrl` TEXT NOT NULL, `content` TEXT NOT NULL, PRIMARY KEY(`messageId`));")
+                  database.execSQL("CREATE  INDEX `index_notification_bufferId` ON `notification` (`bufferId`);")
                 }
               }
             ).build()

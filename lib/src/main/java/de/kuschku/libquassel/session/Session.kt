@@ -44,14 +44,14 @@ class Session(
   address: SocketAddress,
   private val handlerService: HandlerService,
   backlogStorage: BacklogStorage,
+  private val notificationManager: NotificationManager?,
   private var userData: Pair<String, String>,
   val disconnectFromCore: () -> Unit,
   exceptionHandler: (Throwable) -> Unit
 ) : ProtocolHandler(exceptionHandler), ISession {
   override val objectStorage: ObjectStorage = ObjectStorage(this)
   override val proxy: SignalProxy = this
-  override val features = Features(clientData.clientFeatures,
-                                   QuasselFeatures.empty())
+  override val features = Features(clientData.clientFeatures, QuasselFeatures.empty())
 
   override val sslSession
     get() = coreConnection.sslSession
@@ -67,7 +67,7 @@ class Session(
   override val aliasManager = AliasManager(this)
   override val backlogManager = BacklogManager(this, backlogStorage)
   override val bufferViewManager = BufferViewManager(this)
-  override val bufferSyncer = BufferSyncer(this)
+  override val bufferSyncer = BufferSyncer(this, notificationManager)
   override val certManagers = mutableMapOf<IdentityId, CertManager>()
   override val coreInfo = CoreInfo(this)
   override val dccConfig = DccConfig(this)
@@ -86,7 +86,7 @@ class Session(
 
   override val networkConfig = NetworkConfig(this)
 
-  override var rpcHandler: RpcHandler? = RpcHandler(this, backlogStorage)
+  override var rpcHandler: RpcHandler? = RpcHandler(this, backlogStorage, notificationManager)
 
   override val initStatus = BehaviorSubject.createDefault(0 to 0)
 
@@ -230,6 +230,7 @@ class Session(
         config.handleBuffer(info, bufferSyncer)
       }
     }
+    notificationManager?.init(this)
     coreConnection.setState(ConnectionState.CONNECTED)
     dispatch(SignalProxyMessage.HeartBeat(Instant.now()))
   }

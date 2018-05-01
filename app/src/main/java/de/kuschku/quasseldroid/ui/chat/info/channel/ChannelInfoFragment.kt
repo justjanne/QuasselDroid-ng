@@ -92,7 +92,7 @@ class ChannelInfoFragment : ServiceBoundFragment() {
     }.switchMap(IrcChannel::updates).toLiveData().observe(this, Observer { channel ->
       if (channel != null) {
         name.text = channel.name()
-        topic.text = contentFormatter.format(channel.topic())
+        topic.text = contentFormatter.formatContent(channel.topic())
 
         actionEditTopic.setOnClickListener {
           TopicActivity.launch(requireContext(), buffer = arguments?.getInt("bufferId") ?: -1)
