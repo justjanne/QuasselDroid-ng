@@ -162,6 +162,7 @@ class QuasselService : DaggerLifecycleService(),
     val clearMessageId = intent.getIntExtra("mark_read_message", -1)
     if (bufferId != -1 && clearMessageId != -1) {
       sessionManager.session.value?.bufferSyncer?.requestSetLastSeenMsg(bufferId, clearMessageId)
+      sessionManager.session.value?.bufferSyncer?.requestMarkBufferAsRead(bufferId)
     }
   }
 
