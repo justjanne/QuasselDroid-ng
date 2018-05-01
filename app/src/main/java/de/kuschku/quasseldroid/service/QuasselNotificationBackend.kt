@@ -40,6 +40,7 @@ import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.util.AvatarHelper
 import de.kuschku.quasseldroid.util.NotificationMessage
 import de.kuschku.quasseldroid.util.QuasseldroidNotificationManager
+import de.kuschku.quasseldroid.util.helper.getColorCompat
 import de.kuschku.quasseldroid.util.helper.loadWithFallbacks
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
@@ -65,7 +66,7 @@ class QuasselNotificationBackend @Inject constructor(
     appearanceSettings = Settings.appearance(context)
     messageSettings = Settings.message(context)
 
-    context.setTheme(AppearanceSettings.DEFAULT.theme.style)
+    context.setTheme(appearanceSettings.theme.style)
     senderColors = context.theme.styledAttributes(
       R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
       R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
@@ -76,9 +77,7 @@ class QuasselNotificationBackend @Inject constructor(
         getColor(it, 0)
       }
     }
-    selfColor = context.theme.styledAttributes(R.attr.colorForegroundSecondary) {
-      getColor(0, 0)
-    }
+    selfColor = context.getColorCompat(R.color.material_dark_background)
   }
 
   override fun init(session: Session) {
@@ -129,7 +128,7 @@ class QuasselNotificationBackend @Inject constructor(
     appearanceSettings = Settings.appearance(context)
     messageSettings = Settings.message(context)
 
-    context.setTheme(AppearanceSettings.DEFAULT.theme.style)
+    context.setTheme(appearanceSettings.theme.style)
     senderColors = context.theme.styledAttributes(
       R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
       R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
@@ -140,9 +139,7 @@ class QuasselNotificationBackend @Inject constructor(
         getColor(it, 0)
       }
     }
-    selfColor = context.theme.styledAttributes(R.attr.colorForegroundSecondary) {
-      getColor(0, 0)
-    }
+    selfColor = context.getColorCompat(R.color.material_dark_background)
   }
 
   @Synchronized
