@@ -2,9 +2,6 @@
  * Quasseldroid - Quassel client for Android
  *
  * Copyright (c) 2018 Janne Koschinski
- * Copyright (c) 2018 Ken Børge Viktil
- * Copyright (c) 2018 Magnus Fjell
- * Copyright (c) 2018 Martin Sandsmark
  * Copyright (c) 2018 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -38,9 +35,12 @@ class BackendServiceConnection : ServiceConnection {
 
   var context: Context? = null
 
+  var bound: Boolean = false
+
   override fun onServiceDisconnected(component: ComponentName?) {
     when (component) {
       ComponentName(context, QuasselService::class.java) -> {
+        bound = false
         backend.onNext(Optional.empty())
       }
     }
@@ -50,24 +50,25 @@ class BackendServiceConnection : ServiceConnection {
     when (component) {
       ComponentName(context, QuasselService::class.java) ->
         if (binder is QuasselBinder) {
+          bound = true
           backend.onNext(Optional.of(binder.backend))
         }
     }
   }
 
   fun start(intent: Intent = QuasselService.intent(context!!)) {
-    context?.startService(intent)
+    if (!this.bound) context?.startService(intent)
   }
 
   fun bind(intent: Intent = QuasselService.intent(context!!), flags: Int = 0) {
-    context?.bindService(intent, this, flags)
+    if (!this.bound) context?.bindService(intent, this, flags)
   }
 
   fun stop(intent: Intent = QuasselService.intent(context!!)) {
-    context?.stopService(intent)
+    if (this.bound) context?.stopService(intent)
   }
 
   fun unbind() {
-    context?.unbindService(this)
+    if (this.bound) context?.unbindService(this)
   }
 }

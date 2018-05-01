@@ -2,9 +2,6 @@
  * Quasseldroid - Quassel client for Android
  *
  * Copyright (c) 2018 Janne Koschinski
- * Copyright (c) 2018 Ken Børge Viktil
- * Copyright (c) 2018 Magnus Fjell
- * Copyright (c) 2018 Martin Sandsmark
  * Copyright (c) 2018 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -51,7 +48,6 @@ import de.kuschku.quasseldroid.ssl.QuasselHostnameVerifier
 import de.kuschku.quasseldroid.ssl.QuasselTrustManager
 import de.kuschku.quasseldroid.ssl.custom.QuasselCertificateManager
 import de.kuschku.quasseldroid.ssl.custom.QuasselHostnameManager
-import de.kuschku.quasseldroid.util.QuasseldroidNotificationManager
 import de.kuschku.quasseldroid.util.backport.DaggerLifecycleService
 import de.kuschku.quasseldroid.util.compatibility.AndroidHandlerService
 import de.kuschku.quasseldroid.util.helper.*
@@ -91,7 +87,30 @@ class QuasselService : DaggerLifecycleService(),
       this.accountId = accountId
       this.reconnect = reconnect
 
-      updateConnection(accountId, reconnect)
+      handlerService.backend {
+        val account = if (accountId != -1L && reconnect) {
+          accountDatabase.accounts().findById(accountId)
+        } else {
+          null
+        }
+
+        if (account == null) {
+          backendImplementation.disconnect(true)
+          stopSelf()
+        } else {
+          backendImplementation.connectUnlessConnected(
+            SocketAddress(account.host, account.port),
+            account.user,
+            account.pass,
+            true
+          )
+        }
+      }
+    } else if (accountId == -1L || !reconnect) {
+      handlerService.backend {
+        backendImplementation.disconnect(true)
+        stopSelf()
+      }
     }
   }
 
@@ -208,7 +227,6 @@ class QuasselService : DaggerLifecycleService(),
       }
 
       if (account == null) {
-        sessionManager.state.toLiveData()
         backendImplementation.disconnect(true)
         stopSelf()
       } else {

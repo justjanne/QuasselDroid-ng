@@ -39,7 +39,6 @@ import de.kuschku.quasseldroid.settings.NotificationSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.util.AvatarHelper
 import de.kuschku.quasseldroid.util.NotificationMessage
-import de.kuschku.quasseldroid.util.QuasseldroidNotificationManager
 import de.kuschku.quasseldroid.util.helper.getColorCompat
 import de.kuschku.quasseldroid.util.helper.loadWithFallbacks
 import de.kuschku.quasseldroid.util.helper.styledAttributes
@@ -206,7 +205,7 @@ class QuasselNotificationBackend @Inject constructor(
         networkId = it.networkId,
         groupId = 0
       )
-      val notification = notificationHandler.notificationGroup(bufferInfo, data.map {
+      val notificationData = data.map {
         val nick = SpannableStringBuilder().apply {
           append(contentFormatter.formatPrefix(it.senderPrefixes))
           append(contentFormatter.formatNick(
@@ -256,7 +255,10 @@ class QuasselNotificationBackend @Inject constructor(
           time = it.time,
           avatar = avatar
         )
-      })
+      }
+      val notification = notificationHandler.notificationMessage(
+        notificationSettings, bufferInfo, notificationData
+      )
       notificationHandler.notify(notification)
     } ?: notificationHandler.remove(buffer)
   }

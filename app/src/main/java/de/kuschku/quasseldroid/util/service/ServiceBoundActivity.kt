@@ -2,9 +2,6 @@
  * Quasseldroid - Quassel client for Android
  *
  * Copyright (c) 2018 Janne Koschinski
- * Copyright (c) 2018 Ken Børge Viktil
- * Copyright (c) 2018 Magnus Fjell
- * Copyright (c) 2018 Martin Sandsmark
  * Copyright (c) 2018 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -103,7 +100,6 @@ abstract class ServiceBoundActivity : ThemedActivity(),
     sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
       registerOnSharedPreferenceChangeListener(this@ServiceBoundActivity)
     }
-    connection.bind()
     checkConnection()
     super.onStart()
   }
@@ -137,6 +133,7 @@ abstract class ServiceBoundActivity : ThemedActivity(),
       }
     } else {
       connection.start()
+      connection.bind()
     }
   }
 
@@ -148,6 +145,8 @@ abstract class ServiceBoundActivity : ThemedActivity(),
 
       if (resultCode == Activity.RESULT_CANCELED) {
         finish()
+      } else {
+        checkConnection()
       }
     }
   }

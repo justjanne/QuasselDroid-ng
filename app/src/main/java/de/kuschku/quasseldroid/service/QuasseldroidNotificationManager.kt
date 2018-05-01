@@ -2,9 +2,6 @@
  * Quasseldroid - Quassel client for Android
  *
  * Copyright (c) 2018 Janne Koschinski
- * Copyright (c) 2018 Ken Børge Viktil
- * Copyright (c) 2018 Magnus Fjell
- * Copyright (c) 2018 Martin Sandsmark
  * Copyright (c) 2018 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -20,9 +17,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.util
+package de.kuschku.quasseldroid.service
 
 import android.annotation.TargetApi
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -39,8 +37,9 @@ import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.service.QuasselService
+import de.kuschku.quasseldroid.settings.NotificationSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
+import de.kuschku.quasseldroid.util.NotificationMessage
 import de.kuschku.quasseldroid.util.helper.getColorCompat
 import javax.inject.Inject
 
@@ -66,7 +65,12 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
           context.getString(R.string.notification_channel_highlight),
           context.getString(R.string.notification_channel_highlight_title),
           NotificationManager.IMPORTANCE_HIGH
-        )
+        ).apply {
+          enableLights(true)
+          enableVibration(true)
+          lightColor = context.getColorCompat(R.color.colorPrimary)
+          lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+        }
       )
     )
   }
@@ -84,7 +88,8 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
     return bitmap
   }
 
-  fun notificationGroup(bufferInfo: BufferInfo, notifications: List<NotificationMessage>): Handle {
+  fun notificationMessage(notificationSettings: NotificationSettings, bufferInfo: BufferInfo,
+                          notifications: List<NotificationMessage>): Handle {
     val pendingIntentOpen = PendingIntent.getActivity(
       context.applicationContext,
       System.currentTimeMillis().toInt(),
@@ -139,6 +144,24 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       .setDeleteIntent(deletePendingIntent)
       .setSmallIcon(R.mipmap.ic_logo)
       .setColor(context.getColorCompat(R.color.colorPrimary))
+      .setLights(context.getColorCompat(R.color.colorPrimary), 200, 200)
+      .apply {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+          var defaults = 0
+          if (notificationSettings.notificationSoundEnabled) {
+            if (notificationSettings.notificationSound != null) {
+              setSound(notificationSettings.notificationSound)
+            } else {
+              defaults = defaults or NotificationCompat.DEFAULT_SOUND
+            }
+          }
+          if (notificationSettings.vibrate) {
+            defaults = defaults or NotificationCompat.DEFAULT_VIBRATE
+          }
+          setDefaults(defaults)
+        }
+      }
+      .setCategory(NotificationCompat.CATEGORY_MESSAGE)
       .setPriority(NotificationCompat.PRIORITY_HIGH)
       .setStyle(NotificationCompat.MessagingStyle("")
                   .setConversationTitle(bufferInfo.bufferName)
@@ -154,11 +177,11 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       )
       .addAction(0, context.getString(R.string.label_mark_read), markReadPendingIntent)
       .addAction(
-        NotificationCompat.Action.Builder(0,
-                                          context.getString(R.string.label_reply),
-                                          replyPendingIntent)
-          .addRemoteInput(remoteInput)
-          .build()
+        NotificationCompat.Action.Builder(
+          0,
+          context.getString(R.string.label_reply),
+          replyPendingIntent
+        ).addRemoteInput(remoteInput).build()
       )
       .apply {
         if (bufferInfo.type.hasFlag(Buffer_Type.QueryBuffer)) {
@@ -167,7 +190,8 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
           }
         }
       }
-    return Handle(bufferInfo.bufferId, notification)
+    return Handle(bufferInfo.bufferId,
+                  notification)
   }
 
   fun notificationBackground(): Handle {
@@ -197,7 +221,8 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       .setSmallIcon(R.mipmap.ic_logo)
       .setColor(context.getColorCompat(R.color.colorPrimary))
       .setPriority(NotificationCompat.PRIORITY_MIN)
-    return Handle(BACKGROUND_NOTIFICATION_ID, notification)
+    return Handle(BACKGROUND_NOTIFICATION_ID,
+                  notification)
   }
 
   fun notify(handle: Handle) {

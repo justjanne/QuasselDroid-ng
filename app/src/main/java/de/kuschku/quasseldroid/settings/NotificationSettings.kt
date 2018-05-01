@@ -2,9 +2,6 @@
  * Quasseldroid - Quassel client for Android
  *
  * Copyright (c) 2018 Janne Koschinski
- * Copyright (c) 2018 Ken Børge Viktil
- * Copyright (c) 2018 Magnus Fjell
- * Copyright (c) 2018 Martin Sandsmark
  * Copyright (c) 2018 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -22,10 +19,15 @@
 
 package de.kuschku.quasseldroid.settings
 
+import android.net.Uri
+
 data class NotificationSettings(
   val query: Level = Level.ALL,
   val channel: Level = Level.HIGHLIGHT,
-  val other: Level = Level.NONE
+  val other: Level = Level.NONE,
+  val notificationSoundEnabled: Boolean = false,
+  val notificationSound: Uri? = null,
+  val vibrate: Boolean = true
 ) {
   enum class Level {
     ALL,
