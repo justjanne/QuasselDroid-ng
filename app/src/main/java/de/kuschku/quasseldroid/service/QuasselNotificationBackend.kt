@@ -60,9 +60,30 @@ class QuasselNotificationBackend @Inject constructor(
   private val selfColor = context.getColorCompat(android.R.color.background_dark)
 
   override fun init(session: Session) {
-    for (buffer in session.bufferSyncer.bufferInfos()) {
+    val buffers = session.bufferSyncer.bufferInfos()
+    for (buffer in buffers) {
       val lastSeenId = session.bufferSyncer.lastSeenMsg(buffer.bufferId)
       database.notifications().markRead(buffer.bufferId, lastSeenId)
+
+      if (buffer.type.hasFlag(Buffer_Type.QueryBuffer)) {
+        val activity = session.bufferSyncer.activity(buffer.bufferId)
+        if (activity.hasFlag(Message_Type.Plain) ||
+            activity.hasFlag(Message_Type.Action) ||
+            activity.hasFlag(Message_Type.Notice))
+          session.backlogManager.requestBacklogFiltered(
+            buffer.bufferId, lastSeenId, -1, 20, 0,
+            Message_Type.of(Message_Type.Plain, Message_Type.Action, Message_Type.Notice).toInt(),
+            0
+          )
+      } else {
+        if (session.bufferSyncer.highlightCount(buffer.bufferId) != 0) {
+          session.backlogManager.requestBacklogFiltered(
+            buffer.bufferId, lastSeenId, -1, 20, 0,
+            Message_Type.of(Message_Type.Plain, Message_Type.Action, Message_Type.Notice).toInt(),
+            Message_Flag.of(Message_Flag.Highlight).toInt()
+          )
+        }
+      }
     }
   }
 

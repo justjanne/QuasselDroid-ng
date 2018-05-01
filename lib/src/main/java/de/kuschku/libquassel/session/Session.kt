@@ -65,7 +65,7 @@ class Session(
   override val error = _error.toFlowable(BackpressureStrategy.BUFFER)
 
   override val aliasManager = AliasManager(this)
-  override val backlogManager = BacklogManager(this, backlogStorage)
+  override val backlogManager = BacklogManager(this, notificationManager, backlogStorage)
   override val bufferViewManager = BufferViewManager(this)
   override val bufferSyncer = BufferSyncer(this, notificationManager)
   override val certManagers = mutableMapOf<IdentityId, CertManager>()
