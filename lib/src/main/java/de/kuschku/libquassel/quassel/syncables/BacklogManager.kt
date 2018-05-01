@@ -27,8 +27,6 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.IBacklogManager
 import de.kuschku.libquassel.session.BacklogStorage
 import de.kuschku.libquassel.session.NotificationManager
 import de.kuschku.libquassel.session.Session
-import de.kuschku.libquassel.util.compatibility.LoggingHandler
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 
 class BacklogManager(
   private val session: Session,
@@ -38,9 +36,7 @@ class BacklogManager(
   override fun receiveBacklogFiltered(bufferId: BufferId, first: MsgId, last: MsgId, limit: Int,
                                       additional: Int, type: Int, flags: Int,
                                       messages: QVariantList) {
-    log(LoggingHandler.LogLevel.ERROR, "DEBUG", "$messages")
     val actualMessages = messages.mapNotNull { it.value<Message?>(null) }
-    log(LoggingHandler.LogLevel.ERROR, "DEBUG", "$actualMessages")
     notificationManager?.processMessages(
       session, *actualMessages.toTypedArray()
     )

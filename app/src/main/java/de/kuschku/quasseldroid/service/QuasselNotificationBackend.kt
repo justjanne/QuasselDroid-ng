@@ -76,7 +76,8 @@ class QuasselNotificationBackend @Inject constructor(
             0
           )
       } else {
-        if (session.bufferSyncer.highlightCount(buffer.bufferId) != 0) {
+        val highlightCount = session.bufferSyncer.highlightCount(buffer.bufferId)
+        if (highlightCount != 0) {
           session.backlogManager.requestBacklogFiltered(
             buffer.bufferId, lastSeenId, -1, 20, 0,
             Message_Type.of(Message_Type.Plain, Message_Type.Action, Message_Type.Notice).toInt(),
@@ -106,6 +107,8 @@ class QuasselNotificationBackend @Inject constructor(
       it.type.hasFlag(Message_Type.Action)
     }.filter {
       !it.flag.hasFlag(Message_Flag.Self)
+    }.filter {
+      it.messageId > session.bufferSyncer.lastSeenMsg(it.bufferInfo.bufferId)
     }.map {
       QuasselDatabase.NotificationData(
         messageId = it.messageId,

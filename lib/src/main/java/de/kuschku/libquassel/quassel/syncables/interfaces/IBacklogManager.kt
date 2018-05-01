@@ -26,8 +26,6 @@ import de.kuschku.libquassel.annotations.Slot
 import de.kuschku.libquassel.annotations.Syncable
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.protocol.Type
-import de.kuschku.libquassel.util.compatibility.LoggingHandler
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 
 @Syncable(name = "BacklogManager")
 interface IBacklogManager : ISyncableObject {
@@ -44,9 +42,6 @@ interface IBacklogManager : ISyncableObject {
   fun requestBacklogFiltered(bufferId: BufferId, first: MsgId = -1, last: MsgId = -1,
                              limit: Int = -1, additional: Int = 0, type: Int = -1,
                              flags: Int = -1) {
-    log(LoggingHandler.LogLevel.ERROR,
-        "DEBUG",
-        "bufferId: $bufferId, first: $first, last: $last, limit: $limit, additional: $additional, type: $type, flags: $flags")
     REQUEST(
       "requestBacklogFiltered", ARG(bufferId, QType.BufferId), ARG(first, QType.MsgId),
       ARG(last, QType.MsgId), ARG(limit, Type.Int), ARG(additional, Type.Int), ARG(type, Type.Int),
