@@ -31,7 +31,8 @@ enum class ExtendedFeature {
   VerifyServerSSL,
   /** IRC server custom message rate limits */
   CustomRateLimits,
-  DccFileTransfer,
+  // Currently not supported
+  // DccFileTransfer,
   /** Timestamp formatting in away (e.g. %%hh:mm%%) */
   AwayFormatTimestamp,
   /** Whether or not the core supports auth backends. */
