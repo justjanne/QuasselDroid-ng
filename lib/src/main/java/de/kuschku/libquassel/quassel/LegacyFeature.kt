@@ -31,8 +31,7 @@ import de.kuschku.libquassel.util.flag.Flags
  *
  * This list should be cleaned up after every protocol break, as we can assume them to be present then.
  */
-enum class LegacyFeature(override val bit: Int) :
-  Flag<LegacyFeature> {
+enum class LegacyFeature(override val bit: Int) : Flag<LegacyFeature> {
   SynchronizedMarkerLine(0x0001),
   SaslAuthentication(0x0002),
   SaslExternal(0x0004),
@@ -62,7 +61,6 @@ enum class LegacyFeature(override val bit: Int) :
 
   companion object : Flags.Factory<LegacyFeature> {
     override val NONE: Flags<LegacyFeature> = LegacyFeature.of()
-    val validValues = values().filter { it.bit != 0 }.toTypedArray()
     override fun of(bit: Int) = Flags.of<LegacyFeature>(bit)
     override fun of(vararg flags: LegacyFeature) = Flags.of(*flags)
     override fun of(flags: Iterable<LegacyFeature>) = Flags.of(flags)

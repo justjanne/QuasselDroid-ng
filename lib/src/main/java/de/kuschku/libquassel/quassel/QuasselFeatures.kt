@@ -40,6 +40,10 @@ class QuasselFeatures(
 
   companion object {
     fun empty() = QuasselFeatures(emptySet(), emptySet())
-    fun all() = QuasselFeatures(ExtendedFeature.values().toSet(), emptySet())
+    fun all() = QuasselFeatures(
+      // Dcc is disabled
+      ExtendedFeature.values().toSet() - ExtendedFeature.DccFileTransfer,
+      emptySet()
+    )
   }
 }

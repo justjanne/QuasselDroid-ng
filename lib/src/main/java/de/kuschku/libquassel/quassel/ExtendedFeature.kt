@@ -32,7 +32,7 @@ enum class ExtendedFeature {
   /** IRC server custom message rate limits */
   CustomRateLimits,
   // Currently not supported
-  // DccFileTransfer,
+  DccFileTransfer,
   /** Timestamp formatting in away (e.g. %%hh:mm%%) */
   AwayFormatTimestamp,
   /** Whether or not the core supports auth backends. */
