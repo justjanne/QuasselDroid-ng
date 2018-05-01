@@ -24,6 +24,7 @@ import android.support.annotation.ColorInt
 import android.text.SpannableStringBuilder
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.libquassel.session.NotificationManager
 import de.kuschku.libquassel.session.Session
@@ -80,43 +81,49 @@ class QuasselNotificationBackend @Inject constructor(
   }
 
   override fun init(session: Session) {
-    val buffers = session.bufferSyncer.bufferInfos()
-    for (buffer in buffers) {
-      val lastSeenId = session.bufferSyncer.lastSeenMsg(buffer.bufferId)
-      database.notifications().markRead(buffer.bufferId, lastSeenId)
+    if (session.features.negotiated.hasFeature(ExtendedFeature.BacklogFilterType)) {
+      val buffers = session.bufferSyncer.bufferInfos()
+      for (buffer in buffers) {
+        val lastSeenId = session.bufferSyncer.lastSeenMsg(buffer.bufferId)
+        database.notifications().markRead(buffer.bufferId, lastSeenId)
 
-      val level = buffer.type.let {
-        when {
-          it hasFlag Buffer_Type.QueryBuffer   -> notificationSettings.query
-          it hasFlag Buffer_Type.ChannelBuffer -> notificationSettings.channel
-          else                                 -> notificationSettings.other
-        }
-      }
-
-      when (level) {
-        NotificationSettings.Level.ALL       -> {
-          val activity = session.bufferSyncer.activity(buffer.bufferId)
-          if (activity.hasFlag(Message_Type.Plain) ||
-              activity.hasFlag(Message_Type.Action) ||
-              activity.hasFlag(Message_Type.Notice))
-            session.backlogManager.requestBacklogFiltered(
-              buffer.bufferId, lastSeenId, -1, 20, 0,
-              Message_Type.of(Message_Type.Plain, Message_Type.Action, Message_Type.Notice).toInt(),
-              0
-            )
-        }
-        NotificationSettings.Level.HIGHLIGHT -> {
-          val highlightCount = session.bufferSyncer.highlightCount(buffer.bufferId)
-          if (highlightCount != 0) {
-            session.backlogManager.requestBacklogFiltered(
-              buffer.bufferId, lastSeenId, -1, 20, 0,
-              Message_Type.of(Message_Type.Plain, Message_Type.Action, Message_Type.Notice).toInt(),
-              Message_Flag.of(Message_Flag.Highlight).toInt()
-            )
+        val level = buffer.type.let {
+          when {
+            it hasFlag Buffer_Type.QueryBuffer   -> notificationSettings.query
+            it hasFlag Buffer_Type.ChannelBuffer -> notificationSettings.channel
+            else                                 -> notificationSettings.other
           }
         }
-        NotificationSettings.Level.NONE      -> {
-          // We don’t want notifications for this type of channel, so we won’t get any.
+
+        when (level) {
+          NotificationSettings.Level.ALL       -> {
+            val activity = session.bufferSyncer.activity(buffer.bufferId)
+            if (activity.hasFlag(Message_Type.Plain) ||
+                activity.hasFlag(Message_Type.Action) ||
+                activity.hasFlag(Message_Type.Notice))
+              session.backlogManager.requestBacklogFiltered(
+                buffer.bufferId, lastSeenId, -1, 20, 0,
+                Message_Type.of(Message_Type.Plain,
+                                Message_Type.Action,
+                                Message_Type.Notice).toInt(),
+                0
+              )
+          }
+          NotificationSettings.Level.HIGHLIGHT -> {
+            val highlightCount = session.bufferSyncer.highlightCount(buffer.bufferId)
+            if (highlightCount != 0) {
+              session.backlogManager.requestBacklogFiltered(
+                buffer.bufferId, lastSeenId, -1, 20, 0,
+                Message_Type.of(Message_Type.Plain,
+                                Message_Type.Action,
+                                Message_Type.Notice).toInt(),
+                Message_Flag.of(Message_Flag.Highlight).toInt()
+              )
+            }
+          }
+          NotificationSettings.Level.NONE      -> {
+            // We don’t want notifications for this type of channel, so we won’t get any.
+          }
         }
       }
     }

@@ -50,6 +50,8 @@ enum class ExtendedFeature {
   LongMessageTime,
   /** Real Name and Avatar URL in backlog */
   RichMessages,
+  /** Backlogmanager supports filtering backlog by messagetype */
+  BacklogFilterType,
   /** 64-bit IDs for messages */
   LongMessageId;
 
