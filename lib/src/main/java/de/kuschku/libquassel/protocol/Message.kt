@@ -25,7 +25,7 @@ import de.kuschku.libquassel.util.flag.Flags
 import org.threeten.bp.Instant
 
 class Message(
-  val messageId: Int,
+  val messageId: MsgId,
   val time: Instant,
   val type: Message_Types,
   val flag: Message_Flags,

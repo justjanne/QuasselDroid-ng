@@ -35,10 +35,13 @@ typealias QVariant_ = QVariant<*>
 typealias QVariantMap = Map<String, QVariant_>
 typealias QVariantList = List<QVariant_>
 
-typealias IdentityId = Int
-typealias BufferId = Int
-typealias MsgId = Int
-typealias NetworkId = Int
+typealias SignedId = Int
+typealias SignedId64 = Long
+
+typealias IdentityId = SignedId
+typealias BufferId = SignedId
+typealias MsgId = SignedId64
+typealias NetworkId = SignedId
 
 typealias Message_Type = Message.MessageType
 typealias Message_Types = Flags<Message_Type>

@@ -20,9 +20,10 @@
 package de.kuschku.quasseldroid.viewmodel.data
 
 import android.graphics.drawable.Drawable
+import de.kuschku.libquassel.protocol.MsgId
 
 class FormattedMessage(
-  val id: Int,
+  val id: MsgId,
   val time: CharSequence,
   val name: CharSequence? = null,
   val content: CharSequence? = null,

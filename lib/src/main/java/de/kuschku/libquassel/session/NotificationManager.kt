@@ -26,5 +26,5 @@ import de.kuschku.libquassel.protocol.MsgId
 interface NotificationManager {
   fun init(session: Session)
   fun processMessages(session: Session, vararg messages: Message)
-  fun clear(buffer: BufferId, lastRead: MsgId = Int.MAX_VALUE)
+  fun clear(buffer: BufferId, lastRead: MsgId = MsgId.MAX_VALUE)
 }

@@ -69,7 +69,7 @@ abstract class QuasselDatabase : RoomDatabase() {
 
   @Entity(tableName = "message", indices = [Index("bufferId"), Index("ignored")])
   data class MessageData(
-    @PrimaryKey var messageId: Int,
+    @PrimaryKey var messageId: MsgId,
     var time: Instant,
     var type: Message_Types,
     var flag: Message_Flags,
@@ -223,7 +223,7 @@ abstract class QuasselDatabase : RoomDatabase() {
 
   @Entity(tableName = "notification", indices = [Index("bufferId")])
   data class NotificationData(
-    @PrimaryKey var messageId: Int,
+    @PrimaryKey var messageId: MsgId,
     var time: Instant,
     var type: Message_Types,
     var flag: Message_Flags,

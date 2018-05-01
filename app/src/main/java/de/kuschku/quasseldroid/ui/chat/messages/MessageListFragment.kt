@@ -313,7 +313,7 @@ class MessageListFragment : ServiceBoundFragment() {
       swipeRefreshLayout.isEnabled = (bufferId != null || bufferId != -1)
     })
 
-    var previousVisible = -1
+    var previousVisible = -1L
     viewModel.buffer.toFlowable(BackpressureStrategy.LATEST).switchMap { buffer ->
       database.filtered().listenRx(accountId, buffer).switchMap { filtered ->
         database.message().firstMsgId(buffer).map {

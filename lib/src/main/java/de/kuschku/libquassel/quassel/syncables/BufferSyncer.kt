@@ -141,7 +141,7 @@ class BufferSyncer constructor(
 
   override fun initSetLastSeenMsg(data: QVariantList) {
     (0 until data.size step 2).map {
-      data[it].value(0) to data[it + 1].value(0)
+      data[it].value(0) to data[it + 1].value(0L)
     }.forEach { (buffer, msgId) ->
       setLastSeenMsg(buffer, msgId)
     }
@@ -150,7 +150,7 @@ class BufferSyncer constructor(
 
   override fun initSetMarkerLines(data: QVariantList) {
     (0 until data.size step 2).map {
-      data[it].value(0) to data[it + 1].value(0)
+      data[it].value(0) to data[it + 1].value(0L)
     }.forEach { (buffer, msgId) ->
       setMarkerLine(buffer, msgId)
     }

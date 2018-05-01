@@ -49,7 +49,9 @@ enum class ExtendedFeature {
   /** Serialize message time as 64-bit */
   LongMessageTime,
   /** Real Name and Avatar URL in backlog */
-  RichMessages;
+  RichMessages,
+  /** 64-bit IDs for messages */
+  LongMessageId;
 
   companion object {
     private val map = values().associateBy(ExtendedFeature::name)
