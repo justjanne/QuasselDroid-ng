@@ -338,15 +338,13 @@ class QuasselService : DaggerLifecycleService(),
       }
     })
 
-    var wasEverConnected = false
     connectivity
       .delay(200, TimeUnit.MILLISECONDS)
       .throttleFirst(1, TimeUnit.SECONDS)
       .toLiveData()
       .observe(this, Observer {
         handlerService.backend {
-          if (wasEverConnected && !sessionManager.hasErrored)
-            sessionManager.reconnect(true)
+          sessionManager.autoReconnect(true)
         }
       })
 
@@ -358,12 +356,7 @@ class QuasselService : DaggerLifecycleService(),
       .observe(
         this, Observer {
         handlerService.backend {
-          if (it == ConnectionState.DISCONNECTED || it == ConnectionState.CLOSED) {
-            if (wasEverConnected && !sessionManager.hasErrored)
-              sessionManager.reconnect()
-          } else {
-            wasEverConnected = true
-          }
+          sessionManager.autoReconnect()
         }
       })
 
