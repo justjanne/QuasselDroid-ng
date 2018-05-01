@@ -20,6 +20,7 @@
 package de.kuschku.quasseldroid.service
 
 import android.content.Context
+import android.support.annotation.ColorInt
 import android.text.SpannableStringBuilder
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
@@ -32,14 +33,15 @@ import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.NotificationSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.util.AvatarHelper
 import de.kuschku.quasseldroid.util.NotificationMessage
 import de.kuschku.quasseldroid.util.QuasseldroidNotificationManager
-import de.kuschku.quasseldroid.util.helper.getColorCompat
 import de.kuschku.quasseldroid.util.helper.loadWithFallbacks
+import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.ui.TextDrawable
 import javax.inject.Inject
@@ -50,21 +52,33 @@ class QuasselNotificationBackend @Inject constructor(
   private val contentFormatter: ContentFormatter,
   private val notificationHandler: QuasseldroidNotificationManager
 ) : NotificationManager {
-  private val senderColors = listOf(
-    R.color.senderColor0, R.color.senderColor1, R.color.senderColor2, R.color.senderColor3,
-    R.color.senderColor4, R.color.senderColor5, R.color.senderColor6, R.color.senderColor7,
-    R.color.senderColor8, R.color.senderColor9, R.color.senderColorA, R.color.senderColorB,
-    R.color.senderColorC, R.color.senderColorD, R.color.senderColorE, R.color.senderColorF
-  ).map(context::getColorCompat).toIntArray()
+  private var notificationSettings: NotificationSettings
+  private var appearanceSettings: AppearanceSettings
+  private var messageSettings: MessageSettings
 
-  private lateinit var notificationSettings: NotificationSettings
-
-  private lateinit var messageSettings: MessageSettings
-
-  private val selfColor = context.getColorCompat(android.R.color.background_dark)
+  @ColorInt
+  private var selfColor: Int
+  private var senderColors: IntArray
 
   init {
-    updateSettings()
+    notificationSettings = Settings.notification(context)
+    appearanceSettings = Settings.appearance(context)
+    messageSettings = Settings.message(context)
+
+    context.setTheme(AppearanceSettings.DEFAULT.theme.style)
+    senderColors = context.theme.styledAttributes(
+      R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
+      R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
+      R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
+      R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF
+    ) {
+      IntArray(16) {
+        getColor(it, 0)
+      }
+    }
+    selfColor = context.theme.styledAttributes(R.attr.colorForegroundSecondary) {
+      getColor(0, 0)
+    }
   }
 
   override fun init(session: Session) {
@@ -112,7 +126,23 @@ class QuasselNotificationBackend @Inject constructor(
 
   fun updateSettings() {
     notificationSettings = Settings.notification(context)
+    appearanceSettings = Settings.appearance(context)
     messageSettings = Settings.message(context)
+
+    context.setTheme(AppearanceSettings.DEFAULT.theme.style)
+    senderColors = context.theme.styledAttributes(
+      R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
+      R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
+      R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
+      R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF
+    ) {
+      IntArray(16) {
+        getColor(it, 0)
+      }
+    }
+    selfColor = context.theme.styledAttributes(R.attr.colorForegroundSecondary) {
+      getColor(0, 0)
+    }
   }
 
   @Synchronized
