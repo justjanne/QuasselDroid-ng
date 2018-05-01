@@ -78,6 +78,32 @@
   <string name="preference_show_lag_summary">Displays the lag between client and core in the action bar</string>
 
 
+  <string name="preference_notifications_title">Notifications</string>
+
+  <string name="preference_notification_query_key" translatable="false">notification_query</string>
+  <string name="preference_notification_query_title">Direct Messages</string>
+
+  <string name="preference_notification_channel_key" translatable="false">notification_channel</string>
+  <string name="preference_notification_channel_title">Channel Messages</string>
+
+  <string name="preference_notification_other_key" translatable="false">notification_other</string>
+  <string name="preference_notification_other_title">Other Messages</string>
+
+  <string name="preference_notifications_level_all">All Messages</string>
+  <string name="preference_notifications_level_highlight">Mentions</string>
+  <string name="preference_notifications_level_none">Never</string>
+  <string-array name="preference_notifications_level_entries">
+    <item>@string/preference_notifications_level_all</item>
+    <item>@string/preference_notifications_level_highlight</item>
+    <item>@string/preference_notifications_level_none</item>
+  </string-array>
+  <string-array name="preference_notifications_level_entryvalues" translatable="false">
+    <item>ALL</item>
+    <item>HIGHLIGHT</item>
+    <item>NONE</item>
+  </string-array>
+
+
   <string name="preference_messages_title">Messages</string>
 
   <string name="preference_monospace_key" translatable="false">monospace</string>

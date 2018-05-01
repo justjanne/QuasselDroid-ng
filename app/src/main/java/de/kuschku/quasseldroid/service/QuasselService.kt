@@ -70,6 +70,7 @@ class QuasselService : DaggerLifecycleService(),
 
   override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
     update()
+    notificationBackend.updateSettings()
   }
 
   private fun update() {

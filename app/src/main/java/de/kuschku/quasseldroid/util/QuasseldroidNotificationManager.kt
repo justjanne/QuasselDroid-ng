@@ -60,7 +60,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
         NotificationChannel(
           context.getString(R.string.notification_channel_background),
           context.getString(R.string.notification_channel_connection_title),
-          NotificationManager.IMPORTANCE_MIN
+          NotificationManager.IMPORTANCE_LOW
         ),
         NotificationChannel(
           context.getString(R.string.notification_channel_highlight),

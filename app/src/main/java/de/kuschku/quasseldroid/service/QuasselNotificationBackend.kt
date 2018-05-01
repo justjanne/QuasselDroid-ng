@@ -33,6 +33,8 @@ import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.settings.NotificationSettings
+import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.util.AvatarHelper
 import de.kuschku.quasseldroid.util.NotificationMessage
 import de.kuschku.quasseldroid.util.QuasseldroidNotificationManager
@@ -45,7 +47,6 @@ import javax.inject.Inject
 class QuasselNotificationBackend @Inject constructor(
   private val context: Context,
   private val database: QuasselDatabase,
-  private val messageSettings: MessageSettings,
   private val contentFormatter: ContentFormatter,
   private val notificationHandler: QuasseldroidNotificationManager
 ) : NotificationManager {
@@ -56,8 +57,15 @@ class QuasselNotificationBackend @Inject constructor(
     R.color.senderColorC, R.color.senderColorD, R.color.senderColorE, R.color.senderColorF
   ).map(context::getColorCompat).toIntArray()
 
+  private lateinit var notificationSettings: NotificationSettings
+
+  private lateinit var messageSettings: MessageSettings
 
   private val selfColor = context.getColorCompat(android.R.color.background_dark)
+
+  init {
+    updateSettings()
+  }
 
   override fun init(session: Session) {
     val buffers = session.bufferSyncer.bufferInfos()
@@ -65,34 +73,64 @@ class QuasselNotificationBackend @Inject constructor(
       val lastSeenId = session.bufferSyncer.lastSeenMsg(buffer.bufferId)
       database.notifications().markRead(buffer.bufferId, lastSeenId)
 
-      if (buffer.type.hasFlag(Buffer_Type.QueryBuffer)) {
-        val activity = session.bufferSyncer.activity(buffer.bufferId)
-        if (activity.hasFlag(Message_Type.Plain) ||
-            activity.hasFlag(Message_Type.Action) ||
-            activity.hasFlag(Message_Type.Notice))
-          session.backlogManager.requestBacklogFiltered(
-            buffer.bufferId, lastSeenId, -1, 20, 0,
-            Message_Type.of(Message_Type.Plain, Message_Type.Action, Message_Type.Notice).toInt(),
-            0
-          )
-      } else {
-        val highlightCount = session.bufferSyncer.highlightCount(buffer.bufferId)
-        if (highlightCount != 0) {
-          session.backlogManager.requestBacklogFiltered(
-            buffer.bufferId, lastSeenId, -1, 20, 0,
-            Message_Type.of(Message_Type.Plain, Message_Type.Action, Message_Type.Notice).toInt(),
-            Message_Flag.of(Message_Flag.Highlight).toInt()
-          )
+      val level = buffer.type.let {
+        when {
+          it hasFlag Buffer_Type.QueryBuffer   -> notificationSettings.query
+          it hasFlag Buffer_Type.ChannelBuffer -> notificationSettings.channel
+          else                                 -> notificationSettings.other
+        }
+      }
+
+      when (level) {
+        NotificationSettings.Level.ALL       -> {
+          val activity = session.bufferSyncer.activity(buffer.bufferId)
+          if (activity.hasFlag(Message_Type.Plain) ||
+              activity.hasFlag(Message_Type.Action) ||
+              activity.hasFlag(Message_Type.Notice))
+            session.backlogManager.requestBacklogFiltered(
+              buffer.bufferId, lastSeenId, -1, 20, 0,
+              Message_Type.of(Message_Type.Plain, Message_Type.Action, Message_Type.Notice).toInt(),
+              0
+            )
+        }
+        NotificationSettings.Level.HIGHLIGHT -> {
+          val highlightCount = session.bufferSyncer.highlightCount(buffer.bufferId)
+          if (highlightCount != 0) {
+            session.backlogManager.requestBacklogFiltered(
+              buffer.bufferId, lastSeenId, -1, 20, 0,
+              Message_Type.of(Message_Type.Plain, Message_Type.Action, Message_Type.Notice).toInt(),
+              Message_Flag.of(Message_Flag.Highlight).toInt()
+            )
+          }
+        }
+        NotificationSettings.Level.NONE      -> {
+          // We don’t want notifications for this type of channel, so we won’t get any.
         }
       }
     }
   }
 
+  fun updateSettings() {
+    notificationSettings = Settings.notification(context)
+    messageSettings = Settings.message(context)
+  }
+
   @Synchronized
   override fun processMessages(session: Session, vararg messages: Message) {
     val results = messages.filter {
-      it.flag.hasFlag(Message_Flag.Highlight) ||
-      it.bufferInfo.type.hasFlag(Buffer_Type.QueryBuffer)
+      val level = it.bufferInfo.type.let {
+        when {
+          it hasFlag Buffer_Type.QueryBuffer   -> notificationSettings.query
+          it hasFlag Buffer_Type.ChannelBuffer -> notificationSettings.channel
+          else                                 -> notificationSettings.other
+        }
+      }
+
+      when (level) {
+        NotificationSettings.Level.ALL       -> true
+        NotificationSettings.Level.HIGHLIGHT -> it.flag.hasFlag(Message_Flag.Highlight)
+        NotificationSettings.Level.NONE      -> false
+      }
     }.filter {
       val bufferName = it.bufferInfo.bufferName ?: ""
       val networkId = it.bufferInfo.networkId
@@ -173,11 +211,15 @@ class QuasselNotificationBackend @Inject constructor(
 
         val size = context.resources.getDimensionPixelSize(R.dimen.notification_avatar_width)
         val avatarList = AvatarHelper.avatar(messageSettings, it)
-        val avatarResult = GlideApp.with(context).loadWithFallbacks(avatarList)
-          ?.optionalCircleCrop()
-          ?.placeholder(TextDrawable.builder().buildRound(initial, senderColor))
-          ?.submit(size, size)
-          ?.get()
+        val avatarResult = try {
+          GlideApp.with(context).loadWithFallbacks(avatarList)
+            ?.optionalCircleCrop()
+            ?.placeholder(TextDrawable.builder().buildRound(initial, senderColor))
+            ?.submit(size, size)
+            ?.get()
+        } catch (_: Throwable) {
+          null
+        }
         val avatar = avatarResult ?: TextDrawable.builder().buildRound(initial, senderColor)
 
         NotificationMessage(

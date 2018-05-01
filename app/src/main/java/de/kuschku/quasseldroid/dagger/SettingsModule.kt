@@ -36,6 +36,9 @@ class SettingsModule {
   fun provideMessageSettings(context: Context) = Settings.message(context)
 
   @Provides
+  fun provideNotificationSettings(context: Context) = Settings.notification(context)
+
+  @Provides
   fun provideAutoCompleteSettings(context: Context) = Settings.autoComplete(context)
 
   @Provides

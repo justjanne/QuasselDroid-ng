@@ -123,6 +123,29 @@ object Settings {
     )
   }
 
+  fun notification(context: Context) = context.sharedPreferences {
+    NotificationSettings(
+      query = NotificationSettings.Level.of(
+        getString(
+          context.getString(R.string.preference_notification_query_key),
+          ""
+        )
+      ) ?: NotificationSettings.DEFAULT.query,
+      channel = NotificationSettings.Level.of(
+        getString(
+          context.getString(R.string.preference_notification_channel_key),
+          ""
+        )
+      ) ?: NotificationSettings.DEFAULT.channel,
+      other = NotificationSettings.Level.of(
+        getString(
+          context.getString(R.string.preference_notification_other_key),
+          ""
+        )
+      ) ?: NotificationSettings.DEFAULT.other
+    )
+  }
+
   fun autoComplete(context: Context) = context.sharedPreferences {
     AutoCompleteSettings(
       senderDoubleClick = getBoolean(

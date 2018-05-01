@@ -246,11 +246,17 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun save(vararg entities: NotificationData)
 
+    @Query("SELECT * FROM notification ORDER BY time ASC")
+    fun all(): List<NotificationData>
+
     @Query("SELECT * FROM notification WHERE bufferId = :bufferId ORDER BY time ASC")
     fun all(bufferId: BufferId): List<NotificationData>
 
     @Query("DELETE FROM notification WHERE bufferId = :bufferId AND messageId <= :messageId")
     fun markRead(bufferId: BufferId, messageId: MsgId)
+
+    @Query("DELETE FROM notification WHERE bufferId = :bufferId AND flag & 2 = 0")
+    fun markReadNormal(bufferId: BufferId)
 
     @Query("DELETE FROM notification")
     fun clear()

@@ -2,6 +2,9 @@
  * Quasseldroid - Quassel client for Android
  *
  * Copyright (c) 2018 Janne Koschinski
+ * Copyright (c) 2018 Ken Børge Viktil
+ * Copyright (c) 2018 Magnus Fjell
+ * Copyright (c) 2018 Martin Sandsmark
  * Copyright (c) 2018 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -17,33 +20,25 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-buildscript {
-  repositories {
-    google()
-    jcenter()
-  }
-  dependencies {
-    classpath("com.android.tools.build:gradle:3.1.2")
-    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.41")
-  }
-}
+package de.kuschku.quasseldroid.settings
 
-allprojects {
-  repositories {
-    google()
-    jcenter()
-    maven(url = "https://jitpack.io")
-  }
-}
+data class NotificationSettings(
+  val query: Level = Level.ALL,
+  val channel: Level = Level.HIGHLIGHT,
+  val other: Level = Level.NONE
+) {
+  enum class Level {
+    ALL,
+    HIGHLIGHT,
+    NONE;
 
-subprojects {
-  configurations.all {
-    resolutionStrategy {
-      eachDependency {
-        if (requested.name == "kotlin-compiler-embeddable") {
-          useVersion("1.2.31")
-        }
-      }
+    companion object {
+      private val map = values().associateBy { it.name }
+      fun of(name: String) = map[name]
     }
+  }
+
+  companion object {
+    val DEFAULT = NotificationSettings()
   }
 }

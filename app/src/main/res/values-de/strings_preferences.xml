@@ -43,6 +43,16 @@
   <string name="preference_show_lag_summary">Zeigt die Gerät-Core-Latenz in der Statusleiste</string>
 
 
+  <string name="preference_notifications_title">Benachrichtigungen</string>
+
+  <string name="preference_notification_query_title">Direktnachrichten</string>
+  <string name="preference_notification_channel_title">Räume</string>
+  <string name="preference_notification_other_title">Andere Nachrichten</string>
+  <string name="preference_notifications_level_all">Alle Nachrichten</string>
+  <string name="preference_notifications_level_highlight">Erwähnungen</string>
+  <string name="preference_notifications_level_none">Niemals</string>
+
+
   <string name="preference_messages_title">Nachrichten</string>
 
   <string name="preference_monospace_title">Monospace-Schrift verwenden</string>
