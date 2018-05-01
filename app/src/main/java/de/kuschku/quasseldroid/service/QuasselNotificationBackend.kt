@@ -60,7 +60,10 @@ class QuasselNotificationBackend @Inject constructor(
   private val selfColor = context.getColorCompat(android.R.color.background_dark)
 
   override fun init(session: Session) {
-    // TODO
+    for (buffer in session.bufferSyncer.bufferInfos()) {
+      val lastSeenId = session.bufferSyncer.lastSeenMsg(buffer.bufferId)
+      database.notifications().markRead(buffer.bufferId, lastSeenId)
+    }
   }
 
   @Synchronized
