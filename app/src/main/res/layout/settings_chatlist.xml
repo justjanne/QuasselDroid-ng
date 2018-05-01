@@ -60,16 +60,19 @@
       <android.support.v7.widget.SwitchCompat
         android:id="@+id/show_search"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:checked="true"
         android:text="@string/settings_chatlist_show_search" />
 
       <android.support.v7.widget.SwitchCompat
         android:id="@+id/sort_alphabetically"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:checked="true"
         android:text="@string/settings_chatlist_sort_alphabetically" />
 
       <android.support.v7.widget.SwitchCompat
         android:id="@+id/add_new_buffers_automatically"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:checked="true"
         android:text="@string/settings_chatlist_add_new_buffers_automatically" />
     </LinearLayout>
 
@@ -99,6 +102,7 @@
       <android.support.v7.widget.SwitchCompat
         android:id="@+id/show_status_buffer"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:checked="true"
         android:text="@string/settings_chatlist_show_status_buffer" />
     </LinearLayout>
 
@@ -123,11 +127,13 @@
       <android.support.v7.widget.SwitchCompat
         android:id="@+id/show_channels"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:checked="true"
         android:text="@string/settings_chatlist_show_channels" />
 
       <android.support.v7.widget.SwitchCompat
         android:id="@+id/show_queries"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:checked="true"
         android:text="@string/settings_chatlist_show_queries" />
     </LinearLayout>
 

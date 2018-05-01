@@ -101,8 +101,8 @@ class BufferViewConfig constructor(
     _hideInactiveBuffers = properties["hideInactiveBuffers"].valueOr(this::hideInactiveBuffers)
     _hideInactiveNetworks = properties["hideInactiveNetworks"].valueOr(this::hideInactiveNetworks)
     _disableDecoration = properties["disableDecoration"].valueOr(this::disableDecoration)
-    _allowedBufferTypes = properties["allowedBufferTypes"].valueOr(this::allowedBufferTypes)
-    _minimumActivity = properties["minimumActivity"].valueOr(this::minimumActivity)
+    _allowedBufferTypes = Buffer_Type.of(properties["allowedBufferTypes"].value(_allowedBufferTypes.value.toInt()).toShort())
+    _minimumActivity = Buffer_Activity.of(properties["minimumActivity"].value(_minimumActivity.value))
     _showSearch = properties["showSearch"].valueOr(this::showSearch)
   }
 
