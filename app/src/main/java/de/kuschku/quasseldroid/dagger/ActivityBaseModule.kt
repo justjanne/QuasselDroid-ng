@@ -34,24 +34,29 @@ import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 
 @Module
 object ActivityBaseModule {
+  @ActivityScope
   @Provides
   @JvmStatic
   fun bindContext(activity: FragmentActivity): Context = activity
 
+  @ActivityScope
   @Provides
   @JvmStatic
   fun provideViewModelProvider(activity: FragmentActivity) = ViewModelProviders.of(activity)
 
+  @ActivityScope
   @Provides
   @JvmStatic
   fun provideQuasselViewModel(viewModelProvider: ViewModelProvider) =
     viewModelProvider[QuasselViewModel::class.java]
 
+  @ActivityScope
   @Provides
   @JvmStatic
   fun provideAccountViewModel(viewModelProvider: ViewModelProvider) =
     viewModelProvider[AccountViewModel::class.java]
 
+  @ActivityScope
   @Provides
   @JvmStatic
   fun provideEditorViewModel(viewModelProvider: ViewModelProvider) =
