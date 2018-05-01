@@ -35,8 +35,8 @@ class AvatarHelperTest {
     val message = QuasselDatabase.MessageData(
       messageId = 1,
       time = Instant.now(),
-      type = Message_Type.of(Message_Type.Plain).toInt(),
-      flag = Message_Flag.of().toInt(),
+      type = Message_Type.of(Message_Type.Plain),
+      flag = Message_Flag.of(),
       bufferId = 0,
       sender = "justJanne",
       senderPrefixes = "",
@@ -72,8 +72,8 @@ class AvatarHelperTest {
     val message = QuasselDatabase.MessageData(
       messageId = 1,
       time = Instant.now(),
-      type = Message_Type.of(Message_Type.Plain).toInt(),
-      flag = Message_Flag.of().toInt(),
+      type = Message_Type.of(Message_Type.Plain),
+      flag = Message_Flag.of(),
       bufferId = 0,
       sender = "jwheare!sid2@irccloud.com",
       senderPrefixes = "",
@@ -109,8 +109,8 @@ class AvatarHelperTest {
     val message = QuasselDatabase.MessageData(
       messageId = 1,
       time = Instant.now(),
-      type = Message_Type.of(Message_Type.Plain).toInt(),
-      flag = Message_Flag.of().toInt(),
+      type = Message_Type.of(Message_Type.Plain),
+      flag = Message_Flag.of(),
       bufferId = 0,
       sender = "jwheare!sid2@irccloud.com",
       senderPrefixes = "",
