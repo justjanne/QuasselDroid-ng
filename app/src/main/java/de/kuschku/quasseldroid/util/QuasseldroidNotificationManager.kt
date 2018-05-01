@@ -88,14 +88,14 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
     val pendingIntentOpen = PendingIntent.getActivity(
       context.applicationContext,
       System.currentTimeMillis().toInt(),
-      ChatActivity.intent(context.applicationContext).apply {
+      ChatActivity.intent(context.applicationContext, bufferId = bufferInfo.bufferId).apply {
         flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
       },
       0
     )
 
     val remoteInput = RemoteInput.Builder("reply_content")
-      .setLabel("Reply")
+      .setLabel(context.getString(R.string.label_reply))
       .build()
 
     val replyPendingIntent = PendingIntent.getService(
@@ -152,9 +152,11 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
                     }
                   }
       )
-      .addAction(0, "Mark Read", markReadPendingIntent)
+      .addAction(0, context.getString(R.string.label_mark_read), markReadPendingIntent)
       .addAction(
-        NotificationCompat.Action.Builder(0, "Reply", replyPendingIntent)
+        NotificationCompat.Action.Builder(0,
+                                          context.getString(R.string.label_reply),
+                                          replyPendingIntent)
           .addRemoteInput(remoteInput)
           .build()
       )

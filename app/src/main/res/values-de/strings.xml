@@ -62,6 +62,7 @@
   <string name="label_join_long">Kanal Betreten</string>
   <string name="label_libraries">Bibliotheken</string>
   <string name="label_license">Lizenz</string>
+  <string name="label_mark_read">Gelesen</string>
   <string name="label_mention">Erwähnen</string>
   <string name="label_mention_long">Kopiert den Nutzernamen in die Eingabezeile</string>
   <string name="label_new_account">Account hinzufügen</string>
@@ -74,6 +75,7 @@
   <string name="label_new_server">Server hinzufügen</string>
   <string name="label_nicklist">Benutzerliste</string>
   <string name="label_no">Nein</string>
+  <string name="label_reply">Antworten</string>
   <string name="label_reset">Zurücksetzen</string>
   <string name="label_open">Öffnen</string>
   <string name="label_part">Verlassen</string>
