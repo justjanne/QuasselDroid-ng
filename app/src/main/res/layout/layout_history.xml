@@ -25,7 +25,8 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/card_panel"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  tools:ignore="MergeRootFrame">
 
   <android.support.v7.widget.CardView
     style="?attr/cardStyle"
