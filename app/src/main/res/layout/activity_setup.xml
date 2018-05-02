@@ -30,7 +30,7 @@
 
   <android.support.v7.widget.ActionMenuView
     android:id="@+id/menu_view"
-    android:layout_width="?actionBarSize"
+    android:layout_width="56dp"
     android:layout_height="?actionBarSize"
     android:layout_gravity="end|top"
     android:theme="?attr/actionBarTheme" />
