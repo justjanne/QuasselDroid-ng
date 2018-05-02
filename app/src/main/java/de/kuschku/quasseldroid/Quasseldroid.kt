@@ -109,7 +109,7 @@ class Quasseldroid : DaggerApplication() {
               edit.putBoolean(getString(R.string.preference_show_seconds_key),
                               timestamp.contains("ss"))
               edit.putBoolean(getString(R.string.preference_show_seconds_key),
-                              timestamp.contains("hh") || timestamp.contains("a"))
+                              !timestamp.contains("hh") && !timestamp.contains("a"))
             }
             edit.remove("timestamp")
           }
