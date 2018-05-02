@@ -28,7 +28,6 @@ data class MessageSettings(
   val showSeconds: Boolean = false,
   val use24hClock: Boolean = true,
   val showHostmaskActions: Boolean = false,
-  val showHostmaskPlain: Boolean = false,
   val nicksOnNewLine: Boolean = false,
   val timeAtEnd: Boolean = false,
   val showRealNames: Boolean = false,

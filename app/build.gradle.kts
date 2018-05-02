@@ -72,7 +72,7 @@ android {
     minSdkVersion(16)
     targetSdkVersion(27)
 
-    applicationId = "de.kuschku.quasseldroid"
+    applicationId = "com.iskrembilen.quasseldroid"
     versionCode = cmd("git", "rev-list", "--count", "HEAD")?.toIntOrNull() ?: 1
     versionName = cmd("git", "describe", "--always", "--tags", "HEAD") ?: "1.0.0"
 

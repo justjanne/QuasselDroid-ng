@@ -29,6 +29,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
@@ -148,12 +149,8 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       .apply {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
           var defaults = 0
-          if (notificationSettings.notificationSoundEnabled) {
-            if (notificationSettings.notificationSound != null) {
-              setSound(notificationSettings.notificationSound)
-            } else {
-              defaults = defaults or NotificationCompat.DEFAULT_SOUND
-            }
+          if (!notificationSettings.sound.isNullOrEmpty()) {
+            setSound(Uri.parse(notificationSettings.sound))
           }
           if (notificationSettings.vibrate) {
             defaults = defaults or NotificationCompat.DEFAULT_VIBRATE

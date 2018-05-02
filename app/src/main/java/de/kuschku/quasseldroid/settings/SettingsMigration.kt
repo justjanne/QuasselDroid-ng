@@ -19,25 +19,23 @@
 
 package de.kuschku.quasseldroid.settings
 
-data class NotificationSettings(
-  val query: Level = Level.ALL,
-  val channel: Level = Level.HIGHLIGHT,
-  val other: Level = Level.NONE,
-  val sound: String? = null,
-  val vibrate: Boolean = true
-) {
-  enum class Level {
-    ALL,
-    HIGHLIGHT,
-    NONE;
+import android.content.SharedPreferences
 
-    companion object {
-      private val map = values().associateBy { it.name }
-      fun of(name: String) = map[name]
-    }
-  }
+interface SettingsMigration {
+  val from: Int
+  val to: Int
+
+  fun migrate(preferences: SharedPreferences, editor: SharedPreferences.Editor)
 
   companion object {
-    val DEFAULT = NotificationSettings()
+    fun migrationOf(from: Int, to: Int,
+                    migrationFunction: (SharedPreferences, SharedPreferences.Editor) -> Unit): SettingsMigration {
+      return object : SettingsMigration {
+        override val from = from
+        override val to = to
+        override fun migrate(preferences: SharedPreferences, editor: SharedPreferences.Editor) =
+          migrationFunction(preferences, editor)
+      }
+    }
   }
 }

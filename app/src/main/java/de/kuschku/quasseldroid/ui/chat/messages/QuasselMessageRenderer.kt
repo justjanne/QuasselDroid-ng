@@ -205,7 +205,7 @@ class QuasselMessageRenderer @Inject constructor(
             message.content.sender,
             self,
             highlight,
-            messageSettings.showHostmaskPlain && messageSettings.nicksOnNewLine
+            false
           ))
         }
         val content = contentFormatter.formatContent(message.content.content, highlight)

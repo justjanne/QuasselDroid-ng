@@ -19,25 +19,28 @@
 
 package de.kuschku.quasseldroid.settings
 
-data class NotificationSettings(
-  val query: Level = Level.ALL,
-  val channel: Level = Level.HIGHLIGHT,
-  val other: Level = Level.NONE,
-  val sound: String? = null,
-  val vibrate: Boolean = true
-) {
-  enum class Level {
-    ALL,
-    HIGHLIGHT,
-    NONE;
+import android.content.SharedPreferences
 
-    companion object {
-      private val map = values().associateBy { it.name }
-      fun of(name: String) = map[name]
+class SettingsMigrationManager(
+  migrations: List<SettingsMigration>
+) {
+  private val migrationMap = migrations.associateBy(SettingsMigration::from)
+  private val currentVersion = migrations.map(SettingsMigration::to).max()
+
+  fun migrate(preferences: SharedPreferences) {
+    var version = preferences.getInt(SETTINGS_VERSION, 0)
+    while (version != currentVersion) {
+      val migration = migrationMap[version]
+                      ?: throw IllegalArgumentException("Migration not available")
+      val editor = preferences.edit()
+      migration.migrate(preferences, editor)
+      version = migration.to
+      editor.putInt(SETTINGS_VERSION, version)
+      editor.commit()
     }
   }
 
   companion object {
-    val DEFAULT = NotificationSettings()
+    private const val SETTINGS_VERSION = "settings_version"
   }
 }

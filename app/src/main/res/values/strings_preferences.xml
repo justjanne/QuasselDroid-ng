@@ -159,10 +159,6 @@
   <string name="preference_hostmask_actions_title">Show Hostmask in actions</string>
   <string name="preference_hostmask_actions_summary">Display the full nick!ident@host in join/part/quit messages</string>
 
-  <string name="preference_hostmask_plain_key" translatable="false">hostmask_plain</string>
-  <string name="preference_hostmask_plain_title">Show Hostmask in normal messages</string>
-  <string name="preference_hostmask_plain_summary">Display the full nick!ident@host in normal messages</string>
-
   <string name="preference_nicks_on_new_line_key" translatable="false">nicks_on_new_line</string>
   <string name="preference_nicks_on_new_line_title">Separate Nicknames</string>
   <string name="preference_nicks_on_new_line_summary">Shows nicknames on a separate line</string>
