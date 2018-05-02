@@ -26,7 +26,7 @@ stages:
 build:
   stage: "build"
   script:
-    - "./gradlew assembleRelease"
+    - "./gradlew assembleRelease -x lintRelease -x lintVitalRelease"
     - "cp app/build/outputs/apk/release/*.apk ."
   artifacts:
     paths:

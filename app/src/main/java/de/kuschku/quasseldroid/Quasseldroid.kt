@@ -85,7 +85,6 @@ class Quasseldroid : DaggerApplication() {
             lastUsed = 0
           )
         }.toTypedArray())
-        accountDatabase.close()
         Thread(Runnable {
           deleteDatabase("data")
         }).start()
