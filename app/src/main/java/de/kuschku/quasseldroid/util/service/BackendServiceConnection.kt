@@ -37,13 +37,10 @@ class BackendServiceConnection : ServiceConnection {
 
   private var bound: Boolean = false
 
-  private var binding: Boolean = false
-
   override fun onServiceDisconnected(component: ComponentName?) {
     when (component) {
       ComponentName(context, QuasselService::class.java) -> {
         bound = false
-        binding = false
         backend.onNext(Optional.empty())
       }
     }
@@ -54,7 +51,6 @@ class BackendServiceConnection : ServiceConnection {
       ComponentName(context, QuasselService::class.java) ->
         if (binder is QuasselBinder) {
           bound = true
-          binding = false
           backend.onNext(Optional.of(binder.backend))
         }
     }
@@ -66,10 +62,7 @@ class BackendServiceConnection : ServiceConnection {
 
   @Synchronized
   fun bind(intent: Intent = QuasselService.intent(context!!), flags: Int = 0) {
-    if (!this.bound && !this.binding) {
-      this.binding = true
-      context?.bindService(intent, this, flags)
-    }
+    context?.bindService(intent, this, flags)
   }
 
   fun stop(intent: Intent = QuasselService.intent(context!!)) {
@@ -78,9 +71,6 @@ class BackendServiceConnection : ServiceConnection {
 
   @Synchronized
   fun unbind() {
-    if (this.bound && !this.binding) {
-      this.binding = true
-      context?.unbindService(this)
-    }
+    if (bound) context?.unbindService(this)
   }
 }

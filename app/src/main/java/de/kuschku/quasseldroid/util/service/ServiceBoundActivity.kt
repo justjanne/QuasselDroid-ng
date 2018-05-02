@@ -124,9 +124,7 @@ abstract class ServiceBoundActivity : ThemedActivity(),
       getBoolean(Keys.Status.reconnect, false)
     }
     val accountIdValid = accountId != -1L
-
     if (!reconnect || !accountIdValid) {
-
       if (!startedSelection) {
         startActivityForResult(AccountSelectionActivity.intent(this), REQUEST_SELECT_ACCOUNT)
         startedSelection = true
@@ -145,8 +143,6 @@ abstract class ServiceBoundActivity : ThemedActivity(),
 
       if (resultCode == Activity.RESULT_CANCELED) {
         finish()
-      } else {
-        checkConnection()
       }
     }
   }
