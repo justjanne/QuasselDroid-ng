@@ -337,12 +337,15 @@ class BufferViewConfig constructor(
     }
   }
 
-  fun handleBuffer(info: BufferInfo, bufferSyncer: BufferSyncer) {
+  fun handleBuffer(info: BufferInfo, bufferSyncer: BufferSyncer, unhide: Boolean = false) {
     if (_addNewBuffersAutomatically &&
         !_buffers.contains(info.bufferId) &&
         !_temporarilyRemovedBuffers.contains(info.bufferId) &&
         !_removedBuffers.contains(info.bufferId) &&
         !info.type.hasFlag(Buffer_Type.StatusBuffer)) {
+      insertBufferSorted(info, bufferSyncer)
+    } else if (unhide && !_buffers.contains(info.bufferId) &&
+               _temporarilyRemovedBuffers.contains(info.bufferId)) {
       insertBufferSorted(info, bufferSyncer)
     }
   }

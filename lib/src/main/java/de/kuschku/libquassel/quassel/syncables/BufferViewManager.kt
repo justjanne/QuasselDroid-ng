@@ -82,9 +82,9 @@ class BufferViewManager constructor(
   private val live_bufferViewConfigs: BehaviorSubject<Set<Int>> = BehaviorSubject.createDefault<Set<Int>>(
     emptySet())
 
-  fun handleBuffer(info: BufferInfo, bufferSyncer: BufferSyncer) {
+  fun handleBuffer(info: BufferInfo, bufferSyncer: BufferSyncer, unhide: Boolean = false) {
     for (bufferViewConfig in bufferViewConfigs()) {
-      bufferViewConfig.handleBuffer(info, bufferSyncer)
+      bufferViewConfig.handleBuffer(info, bufferSyncer, unhide)
     }
   }
 }

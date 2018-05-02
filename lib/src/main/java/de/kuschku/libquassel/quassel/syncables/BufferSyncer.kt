@@ -222,6 +222,11 @@ class BufferSyncer constructor(
   override fun setBufferActivity(buffer: BufferId, activity: Int) {
     val flags = Message_Types.of<Message_Type>(activity)
     super.setBufferActivity(buffer, activity)
+    if (activity != 0) {
+      bufferInfo(buffer)?.let {
+        session.bufferViewManager?.handleBuffer(it, this, true)
+      }
+    }
     _bufferActivities[buffer] = flags
     live_bufferActivities.onNext(Unit)
   }
