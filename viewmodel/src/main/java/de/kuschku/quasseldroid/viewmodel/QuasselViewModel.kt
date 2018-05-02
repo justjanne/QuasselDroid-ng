@@ -201,34 +201,35 @@ class QuasselViewModel : ViewModel() {
       if (bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
         session.liveNetworks().switchMap { networks ->
           val network = networks[bufferInfo.networkId]
-          val ircChannel = network?.ircChannel(bufferInfo.bufferName)
-          if (ircChannel != null) {
-            ircChannel.liveIrcUsers().switchMap { users ->
-              combineLatest<IrcUserItem>(
-                users.map<IrcUser, Observable<IrcUserItem>?> {
-                  it.updates().map { user ->
-                    val userModes = ircChannel.userModes(user)
-                    val prefixModes = network.prefixModes()
+          network?.liveIrcChannel(bufferInfo.bufferName)?.switchMap { ircChannel ->
+            if (ircChannel != IrcChannel.NULL) {
+              ircChannel.liveIrcUsers().switchMap { users ->
+                combineLatest<IrcUserItem>(
+                  users.map<IrcUser, Observable<IrcUserItem>?> {
+                    it.updates().map { user ->
+                      val userModes = ircChannel.userModes(user)
+                      val prefixModes = network.prefixModes()
 
-                    val lowestMode = userModes.asSequence().mapNotNull {
-                      prefixModes.indexOf(it)
-                    }.min() ?: prefixModes.size
+                      val lowestMode = userModes.asSequence().mapNotNull {
+                        prefixModes.indexOf(it)
+                      }.min() ?: prefixModes.size
 
-                    IrcUserItem(
-                      user.nick(),
-                      network.modesToPrefixes(userModes),
-                      lowestMode,
-                      user.realName(),
-                      user.hostMask(),
-                      user.isAway(),
-                      network.support("CASEMAPPING")
-                    )
+                      IrcUserItem(
+                        user.nick(),
+                        network.modesToPrefixes(userModes),
+                        lowestMode,
+                        user.realName(),
+                        user.hostMask(),
+                        user.isAway(),
+                        network.support("CASEMAPPING")
+                      )
+                    }
                   }
-                }
-              )
+                )
+              }
+            } else {
+              Observable.just(emptyList())
             }
-          } else {
-            Observable.just(emptyList())
           }
         }
       } else {
