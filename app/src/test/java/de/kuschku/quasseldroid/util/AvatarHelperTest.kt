@@ -24,6 +24,7 @@ import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
+import de.kuschku.quasseldroid.viewmodel.data.Avatar
 import org.junit.Test
 import org.threeten.bp.Instant
 
@@ -51,7 +52,9 @@ class AvatarHelperTest {
           showIRCCloudAvatars = true
         ),
         message
-      ).contains("https://www.gravatar.com/avatar/81128f11cae692bc486e3f88b854ddf1?d=404")
+      ).contains(
+        Avatar.GravatarAvatar("https://www.gravatar.com/avatar/81128f11cae692bc486e3f88b854ddf1?d=404")
+      )
     )
 
     assert(
@@ -88,7 +91,9 @@ class AvatarHelperTest {
           showIRCCloudAvatars = true
         ),
         message
-      ).contains("https://static.irccloud-cdn.com/avatar-redirect/2")
+      ).contains(
+        Avatar.IRCCloudAvatar("https://static.irccloud-cdn.com/avatar-redirect/2")
+      )
     )
 
     assert(
@@ -125,7 +130,9 @@ class AvatarHelperTest {
           showIRCCloudAvatars = true
         ),
         message
-      ).contains("https://quasseldroid.info/favicon.png")
+      ).contains(
+        Avatar.NativeAvatar("https://quasseldroid.info/favicon.png")
+      )
     )
 
     assert(
@@ -135,7 +142,7 @@ class AvatarHelperTest {
           showIRCCloudAvatars = false
         ),
         message
-      ) == listOf("https://quasseldroid.info/favicon.png")
+      ) == listOf(Avatar.NativeAvatar("https://quasseldroid.info/favicon.png"))
     )
   }
 }
