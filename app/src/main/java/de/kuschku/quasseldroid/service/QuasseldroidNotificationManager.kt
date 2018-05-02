@@ -180,6 +180,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
           replyPendingIntent
         ).addRemoteInput(remoteInput).build()
       )
+      .setWhen(notifications.last().time.toEpochMilli())
       .apply {
         if (bufferInfo.type.hasFlag(Buffer_Type.QueryBuffer)) {
           notifications.lastOrNull()?.avatar?.let {
@@ -187,8 +188,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
           }
         }
       }
-    return Handle(bufferInfo.bufferId,
-                  notification)
+    return Handle(bufferInfo.bufferId, notification)
   }
 
   fun notificationBackground(): Handle {
@@ -218,8 +218,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       .setSmallIcon(R.mipmap.ic_logo)
       .setColor(context.getColorCompat(R.color.colorPrimary))
       .setPriority(NotificationCompat.PRIORITY_MIN)
-    return Handle(BACKGROUND_NOTIFICATION_ID,
-                  notification)
+    return Handle(BACKGROUND_NOTIFICATION_ID, notification)
   }
 
   fun notify(handle: Handle) {
