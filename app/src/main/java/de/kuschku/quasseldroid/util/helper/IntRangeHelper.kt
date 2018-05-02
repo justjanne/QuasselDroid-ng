@@ -19,7 +19,7 @@
 
 package de.kuschku.quasseldroid.util.helper
 
-import clamp
+import de.kuschku.libquassel.util.helpers.clamp
 
 infix fun IntRange.without(other: IntRange): Iterable<IntRange> {
   val otherStart = minOf(other.start, other.last + 1).clamp(this.start, this.last + 1)

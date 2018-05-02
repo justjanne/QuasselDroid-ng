@@ -19,13 +19,13 @@
 
 package de.kuschku.libquassel.quassel.syncables
 
-import clamp
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferViewConfig
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.flag.hasFlag
+import de.kuschku.libquassel.util.helpers.clamp
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
