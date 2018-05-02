@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.settings
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 
 class SettingsMigrationManager(
@@ -27,6 +28,8 @@ class SettingsMigrationManager(
   private val migrationMap = migrations.associateBy(SettingsMigration::from)
   private val currentVersion = migrations.map(SettingsMigration::to).max()
 
+  // This runs during initial start and has to run synchronously
+  @SuppressLint("ApplySharedPref")
   fun migrate(preferences: SharedPreferences) {
     var version = preferences.getInt(SETTINGS_VERSION, 0)
     while (version != currentVersion) {
