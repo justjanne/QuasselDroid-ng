@@ -57,7 +57,7 @@ class BackendServiceConnection : ServiceConnection {
   }
 
   fun start(intent: Intent = QuasselService.intent(context!!)) {
-    if (!this.bound) context?.startService(intent)
+    context?.startService(intent)
   }
 
   fun bind(intent: Intent = QuasselService.intent(context!!), flags: Int = 0) {
@@ -65,7 +65,7 @@ class BackendServiceConnection : ServiceConnection {
   }
 
   fun stop(intent: Intent = QuasselService.intent(context!!)) {
-    if (this.bound) context?.stopService(intent)
+    context?.stopService(intent)
   }
 
   fun unbind() {
