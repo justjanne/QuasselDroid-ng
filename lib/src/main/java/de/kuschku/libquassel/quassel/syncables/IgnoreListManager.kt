@@ -169,7 +169,7 @@ class IgnoreListManager constructor(
     val scope: ScopeType,
     val scopeRule: String,
     val isActive: Boolean,
-    val regEx: Regex,
+    val regEx: Regex?,
     val scopeRegEx: Set<Regex>
   ) : Serializable {
     constructor(type: Int, ignoreRule: String, isRegEx: Boolean, strictness: Int, scope: Int,
@@ -181,13 +181,23 @@ class IgnoreListManager constructor(
     constructor(type: IgnoreType, ignoreRule: String, isRegEx: Boolean, strictness: StrictnessType,
                 scope: ScopeType, scopeRule: String, isActive: Boolean) : this(
       type, ignoreRule, isRegEx, strictness, scope, scopeRule, isActive,
-      Regex(ignoreRule.let {
-        if (isRegEx) it else GlobTransformer.convertGlobToRegex(it)
-      }, RegexOption.IGNORE_CASE),
+      try {
+        Regex(ignoreRule.let {
+          if (isRegEx) it else GlobTransformer.convertGlobToRegex(it)
+        }, RegexOption.IGNORE_CASE)
+      } catch (_: Throwable) {
+        null
+      },
       scopeRule.split(';')
         .map(String::trim)
         .map(GlobTransformer::convertGlobToRegex)
-        .map { Regex(it, RegexOption.IGNORE_CASE) }
+        .mapNotNull {
+          try {
+            Regex(it, RegexOption.IGNORE_CASE)
+          } catch (e: Throwable) {
+            null
+          }
+        }
         .toSet()
     )
 
@@ -263,8 +273,8 @@ class IgnoreListManager constructor(
       it.scope == ScopeType.ChannelScope && it.scopeRegEx.any { it matches bufferName }
     }.filter {
       val content = if (it.type == IgnoreType.MessageIgnore) msgContents else msgSender
-      !it.isRegEx && it.regEx.matches(content) ||
-      it.isRegEx && it.regEx.containsMatchIn(content)
+      !it.isRegEx && it.regEx?.matches(content) == true ||
+      it.isRegEx && it.regEx?.containsMatchIn(content) == true
     }.map {
       it.strictness
     }.sortedByDescending {
