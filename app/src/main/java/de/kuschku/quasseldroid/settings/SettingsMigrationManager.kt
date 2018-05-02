@@ -39,7 +39,7 @@ class SettingsMigrationManager(
     val defaultValueSp = context.getSharedPreferences(KEY_HAS_SET_DEFAULT_VALUES,
                                                       Context.MODE_PRIVATE)
 
-    if (!defaultValueSp.getBoolean(KEY_HAS_SET_DEFAULT_VALUES, false)) {
+    if (defaultValueSp.getBoolean(KEY_HAS_SET_DEFAULT_VALUES, false)) {
       val preferences = PreferenceManager.getDefaultSharedPreferences(context)
       var version = preferences.getInt(SETTINGS_VERSION, 0)
       while (version != currentVersion) {
