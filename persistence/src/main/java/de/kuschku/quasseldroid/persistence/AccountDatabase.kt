@@ -73,8 +73,7 @@ abstract class AccountDatabase : RoomDatabase() {
             database = Room.databaseBuilder(
               context.applicationContext,
               AccountDatabase::class.java, DATABASE_NAME
-            )
-              .build()
+            ).allowMainThreadQueries().build()
           }
         }
       }
