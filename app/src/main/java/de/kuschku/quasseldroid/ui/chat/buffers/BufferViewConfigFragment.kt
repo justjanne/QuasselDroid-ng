@@ -161,14 +161,17 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
             bufferSyncer?.let {
               bufferViewConfig?.orNull()?.insertBufferSorted(info, bufferSyncer)
             }
+            actionMode?.finish()
             true
           }
           R.id.action_hide_temp  -> {
             bufferViewConfig?.orNull()?.requestRemoveBuffer(info.bufferId)
+            actionMode?.finish()
             true
           }
           R.id.action_hide_perm  -> {
             bufferViewConfig?.orNull()?.requestRemoveBufferPermanently(info.bufferId)
+            actionMode?.finish()
             true
           }
           else                   -> false
