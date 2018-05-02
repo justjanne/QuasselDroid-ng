@@ -151,7 +151,7 @@ class ChatlineFragment : ServiceBoundFragment() {
     fun send() {
       if (chatline.text.isNotBlank()) {
         val lines = chatline.text.lineSequence().map {
-          it.toString() to ircFormatSerializer.toEscapeCodes(SpannableString(it))
+          it to ircFormatSerializer.toEscapeCodes(SpannableString(it))
         }
 
         viewModel.session { sessionOptional ->
@@ -159,8 +159,8 @@ class ChatlineFragment : ServiceBoundFragment() {
           viewModel.buffer { bufferId ->
             session?.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
               val output = mutableListOf<IAliasManager.Command>()
-              for ((stripped, formatted) in lines) {
-                viewModel.addRecentlySentMessage(stripped)
+              for ((raw, formatted) in lines) {
+                viewModel.addRecentlySentMessage(raw)
                 session.aliasManager?.processInput(bufferInfo, formatted, output)
               }
               for (command in output) {
@@ -194,5 +194,12 @@ class ChatlineFragment : ServiceBoundFragment() {
     }
 
     return view
+  }
+
+  fun replaceText(text: CharSequence) {
+    if (chatline.text.isNotBlank()) {
+      chatline.text.lineSequence().forEach(viewModel::addRecentlySentMessage)
+    }
+    editorHelper.replaceText(text)
   }
 }

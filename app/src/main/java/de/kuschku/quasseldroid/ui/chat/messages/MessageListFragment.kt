@@ -224,7 +224,8 @@ class MessageListFragment : ServiceBoundFragment() {
     }
     if (autoCompleteSettings.senderDoubleClick)
       adapter.setOnDoubleClickListener { msg ->
-        ChatActivity.launch(requireContext(), sharedText = "${HostmaskHelper.nick(msg.sender)}: ")
+        ChatActivity.launch(requireContext(),
+                            autoCompleteText = "${HostmaskHelper.nick(msg.sender)}: ")
       }
     adapter.setOnUrlLongClickListener(LinkLongClickMenuHelper())
 

@@ -324,8 +324,15 @@ class RichEditText : EditTextSelectionChange {
     }
   }
 
-  fun replace(text: CharSequence?) {
+  fun replaceText(text: CharSequence?) {
     this.setText(text)
+    this.setSelection(this.text.length)
+  }
+
+  fun appendText(text: CharSequence?) {
+    if (!this.text.endsWith(" "))
+      this.text.append(" ")
+    this.text.append(text)
     this.setSelection(this.text.length)
   }
 

@@ -117,12 +117,16 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     super.onNewIntent(intent)
     if (intent != null) {
       when {
-        intent.type == "text/plain" -> {
-          chatlineFragment?.editorHelper?.replaceText(intent.getStringExtra(Intent.EXTRA_TEXT))
+        intent.type == "text/plain"            -> {
+          chatlineFragment?.replaceText(intent.getStringExtra(Intent.EXTRA_TEXT))
           drawerLayout.closeDrawers()
         }
-        intent.hasExtra("bufferId") -> {
-          viewModel.buffer.onNext(intent.getIntExtra("bufferId", -1))
+        intent.hasExtra(KEY_BUFFER_ID)         -> {
+          viewModel.buffer.onNext(intent.getIntExtra(KEY_BUFFER_ID, -1))
+          drawerLayout.closeDrawers()
+        }
+        intent.hasExtra(KEY_AUTOCOMPLETE_TEXT) -> {
+          chatlineFragment?.editorHelper?.appendText(intent.getStringExtra(KEY_AUTOCOMPLETE_TEXT))
           drawerLayout.closeDrawers()
         }
       }
@@ -643,23 +647,31 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   }
 
   companion object {
+    private val KEY_AUTOCOMPLETE_TEXT = "autocomplete_text"
+    private val KEY_BUFFER_ID = "buffer_id"
+
     fun launch(
       context: Context,
       sharedText: CharSequence? = null,
+      autoCompleteText: CharSequence? = null,
       bufferId: Int? = null
-    ) = context.startActivity(intent(context, sharedText, bufferId))
+    ) = context.startActivity(intent(context, sharedText, autoCompleteText, bufferId))
 
     fun intent(
       context: Context,
       sharedText: CharSequence? = null,
+      autoCompleteText: CharSequence? = null,
       bufferId: Int? = null
     ) = Intent(context, ChatActivity::class.java).apply {
       if (sharedText != null) {
         type = "text/plain"
         putExtra(Intent.EXTRA_TEXT, sharedText)
       }
+      if (autoCompleteText != null) {
+        putExtra(KEY_AUTOCOMPLETE_TEXT, autoCompleteText)
+      }
       if (bufferId != null) {
-        putExtra("bufferId", bufferId)
+        putExtra(KEY_BUFFER_ID, bufferId)
       }
     }
   }

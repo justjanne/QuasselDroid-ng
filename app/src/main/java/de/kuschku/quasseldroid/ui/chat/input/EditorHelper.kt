@@ -189,7 +189,9 @@ class EditorHelper(
 
   fun setMultiLine(enabled: Boolean) = editText.setMultiLine(enabled)
 
-  fun replaceText(text: CharSequence?) = editText.replace(text)
+  fun replaceText(text: CharSequence?) = editText.replaceText(text)
+
+  fun appendText(text: CharSequence?) = editText.appendText(text)
 
   private fun showColorChooser(
     @StringRes title: Int,
