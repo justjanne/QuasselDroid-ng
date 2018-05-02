@@ -110,8 +110,7 @@ class AccountEditActivity : DaggerAppCompatActivity() {
     hostValidator = object : TextValidator(
       hostWrapper::setError, resources.getString(R.string.hint_invalid_host)
     ) {
-      override fun validate(text: Editable) =
-        text.toString().matches(Patterns.DOMAIN_NAME)
+      override fun validate(text: Editable) = text.toString().matches(Patterns.DOMAIN_NAME)
     }
 
     portValidator = object : TextValidator(
