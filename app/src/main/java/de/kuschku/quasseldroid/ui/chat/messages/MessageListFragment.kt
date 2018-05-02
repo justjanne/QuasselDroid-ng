@@ -40,9 +40,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.ListPreloader
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.util.FixedPreloadSizeProvider
+import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.quassel.syncables.BufferSyncer
+import de.kuschku.libquassel.session.SessionManager
+import de.kuschku.libquassel.util.helpers.mapSwitchMap
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.quasseldroid.GlideApp
@@ -246,23 +249,22 @@ class MessageListFragment : ServiceBoundFragment() {
     }
 
     var isScrolling = false
-    messageList.addOnScrollListener(
-      object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-          val canScrollDown = recyclerView.canScrollVertically(1)
-          val isScrollingDown = dy > 0
+    messageList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+      override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        val canScrollDown = recyclerView.canScrollVertically(1)
+        val isScrollingDown = dy > 0
 
-          scrollDown.toggle(canScrollDown && isScrollingDown)
-        }
+        scrollDown.toggle(canScrollDown && isScrollingDown)
+      }
 
-        override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
-          isScrolling = when (newState) {
-            RecyclerView.SCROLL_STATE_SETTLING, RecyclerView.SCROLL_STATE_IDLE -> false
-            RecyclerView.SCROLL_STATE_DRAGGING                                 -> true
-            else                                                               -> isScrolling
-          }
+      override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+        isScrolling = when (newState) {
+          RecyclerView.SCROLL_STATE_SETTLING, RecyclerView.SCROLL_STATE_IDLE -> false
+          RecyclerView.SCROLL_STATE_DRAGGING                                 -> true
+          else                                                               -> isScrolling
         }
-      })
+      }
+    })
 
     fun processMessages(list: List<QuasselDatabase.MessageData>, selected: Set<MsgId>,
                         expanded: Set<MsgId>, markerLine: MsgId?): List<DisplayMessage> {
@@ -312,6 +314,15 @@ class MessageListFragment : ServiceBoundFragment() {
 
     viewModel.buffer.toLiveData().observe(this, Observer { bufferId ->
       swipeRefreshLayout.isEnabled = (bufferId != null || bufferId != -1)
+    })
+
+    viewModel.sessionManager.mapSwitchMap(SessionManager::state).distinctUntilChanged().toLiveData().observe(
+      this, Observer {
+      if (it?.orNull() == ConnectionState.CONNECTED) {
+        runInBackgroundDelayed(16) {
+          loadMore()
+        }
+      }
     })
 
     var previousVisible = -1L
