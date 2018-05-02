@@ -16,7 +16,7 @@ before_script:
   - "chmod +x ./gradlew"
 
   - "echo $SIGNING_KEYSTORE | base64 -d > /root/signing.keystore"
-  - "echo $SIGNING_PROPERTIES > signing.properties"
+  - "echo $SIGNING_PROPERTIES | base64 -d > signing.properties"
 
 stages:
   - "build"
