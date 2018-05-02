@@ -218,6 +218,7 @@ abstract class NetworkBaseFragment : SettingsFragment(), SettingsFragment.Savabl
     customratelimitsEnabled.setDependent(customratelimitsGroup)
     customratelimitsUnlimited.setOnCheckedChangeListener { _, isChecked ->
       customratelimitsBurstSize.isEnabled = !isChecked
+      customratelimitsBurstSize.isEnabled = !isChecked
     }
 
     return view

@@ -302,6 +302,11 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       tools:visibility="visible">
 
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/customratelimits_unlimited"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_network_customratelimits_unlimited" />
+
       <android.support.design.widget.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_network_customratelimits_burstsize">
@@ -311,11 +316,6 @@
           style="@style/Widget.CoreSettings.EditText"
           tools:text="5" />
       </android.support.design.widget.TextInputLayout>
-
-      <android.support.v7.widget.SwitchCompat
-        android:id="@+id/customratelimits_unlimited"
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_network_customratelimits_unlimited" />
 
       <FrameLayout
         android:layout_width="match_parent"
