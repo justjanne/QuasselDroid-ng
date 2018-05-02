@@ -20,9 +20,14 @@
 package de.kuschku.quasseldroid.settings
 
 import android.annotation.SuppressLint
-import android.content.SharedPreferences
+import android.content.Context
+import android.support.annotation.XmlRes
+import android.support.v7.preference.PreferenceManager
+import android.support.v7.preference.PreferenceManager.KEY_HAS_SET_DEFAULT_VALUES
+import de.kuschku.quasseldroid.R.xml.preferences
 
 class SettingsMigrationManager(
+  @XmlRes preferences: Int,
   migrations: List<SettingsMigration>
 ) {
   private val migrationMap = migrations.associateBy(SettingsMigration::from)
@@ -30,17 +35,24 @@ class SettingsMigrationManager(
 
   // This runs during initial start and has to run synchronously
   @SuppressLint("ApplySharedPref")
-  fun migrate(preferences: SharedPreferences) {
-    var version = preferences.getInt(SETTINGS_VERSION, 0)
-    while (version != currentVersion) {
-      val migration = migrationMap[version]
-                      ?: throw IllegalArgumentException("Migration not available")
-      val editor = preferences.edit()
-      migration.migrate(preferences, editor)
-      version = migration.to
-      editor.putInt(SETTINGS_VERSION, version)
-      editor.commit()
+  fun migrate(context: Context) {
+    val defaultValueSp = context.getSharedPreferences(KEY_HAS_SET_DEFAULT_VALUES,
+                                                      Context.MODE_PRIVATE)
+
+    if (!defaultValueSp.getBoolean(KEY_HAS_SET_DEFAULT_VALUES, false)) {
+      val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+      var version = preferences.getInt(SETTINGS_VERSION, 0)
+      while (version != currentVersion) {
+        val migration = migrationMap[version]
+                        ?: throw IllegalArgumentException("Migration not available")
+        val editor = preferences.edit()
+        migration.migrate(preferences, editor)
+        version = migration.to
+        editor.putInt(SETTINGS_VERSION, version)
+        editor.commit()
+      }
     }
+    PreferenceManager.setDefaultValues(context, preferences, false)
   }
 
   companion object {
