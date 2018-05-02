@@ -112,6 +112,10 @@ class NetworkServerFragment : SettingsFragment(), SettingsFragment.Savable,
 
     proxyEnabled.setDependent(proxyGroup)
 
+    sslEnabled.setOnCheckedChangeListener { _, isChecked ->
+      sslVerify.isEnabled = isChecked
+    }
+
     return view
   }
 
