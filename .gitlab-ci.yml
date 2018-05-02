@@ -50,7 +50,7 @@ deploy:
   dependencies:
   - "build"
   script:
-  - "echo $S3_CONFIG > $HOME/.s3cfg"
+  - "echo $S3_CONFIG | base64 -d > $HOME/.s3cfg"
   - "export VERSION=$(ls *.apk)"
   - "s3cmd put $VERSION s3://releases/quasseldroid-ng/$VERSION"
   - "s3cmd cp s3://releases/quasseldroid-ng/$VERSION s3://releases/quasseldroid-ng/Quasseldroid-latest.apk"

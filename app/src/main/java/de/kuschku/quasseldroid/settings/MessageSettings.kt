@@ -34,6 +34,7 @@ data class MessageSettings(
   val showAvatars: Boolean = true,
   val showIRCCloudAvatars: Boolean = false,
   val showGravatarAvatars: Boolean = false,
+  val showMatrixAvatars: Boolean = false,
   val largerEmoji: Boolean = false
 ) {
 

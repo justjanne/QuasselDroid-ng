@@ -38,8 +38,8 @@ import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.NotificationSettings
 import de.kuschku.quasseldroid.settings.Settings
-import de.kuschku.quasseldroid.util.AvatarHelper
 import de.kuschku.quasseldroid.util.NotificationMessage
+import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.getColorCompat
 import de.kuschku.quasseldroid.util.helper.loadWithFallbacks
 import de.kuschku.quasseldroid.util.helper.styledAttributes

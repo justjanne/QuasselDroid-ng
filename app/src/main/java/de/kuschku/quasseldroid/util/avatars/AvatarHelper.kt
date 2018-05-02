@@ -17,48 +17,64 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.util
+package de.kuschku.quasseldroid.util.avatars
 
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.util.Patterns
 import de.kuschku.quasseldroid.util.backport.codec.Hex
 import de.kuschku.quasseldroid.util.helper.letIf
 import de.kuschku.quasseldroid.util.helper.notBlank
+import de.kuschku.quasseldroid.viewmodel.data.Avatar
 import de.kuschku.quasseldroid.viewmodel.data.IrcUserItem
 import org.apache.commons.codec.digest.DigestUtils
 
 object AvatarHelper {
   fun avatar(settings: MessageSettings, message: QuasselDatabase.NotificationData,
              size: Int? = null) = listOfNotNull(
-    message.avatarUrl.notBlank()?.let { listOf(it) },
+    message.avatarUrl.notBlank()?.let { listOf(Avatar.NativeAvatar(it)) },
     settings.showIRCCloudAvatars.letIf {
-      ircCloudFallback(HostmaskHelper.user(message.sender), size)
+      ircCloudFallback(HostmaskHelper.user(message.sender),
+                       size)
     },
     settings.showGravatarAvatars.letIf {
       gravatarFallback(message.realName, size)
+    },
+    settings.showMatrixAvatars.letIf {
+      matrixFallback(message.realName, size)
     }
   ).flatten()
 
   fun avatar(settings: MessageSettings, message: QuasselDatabase.MessageData,
              size: Int? = null) = listOfNotNull(
-    message.avatarUrl.notBlank()?.let { listOf(it) },
+    message.avatarUrl.notBlank()?.let { listOf(Avatar.NativeAvatar(it)) },
     settings.showIRCCloudAvatars.letIf {
-      ircCloudFallback(HostmaskHelper.user(message.sender), size)
+      ircCloudFallback(HostmaskHelper.user(message.sender),
+                       size)
     },
     settings.showGravatarAvatars.letIf {
       gravatarFallback(message.realName, size)
+    },
+    settings.showMatrixAvatars.letIf {
+      matrixFallback(message.realName, size)
     }
   ).flatten()
 
   fun avatar(settings: MessageSettings, user: IrcUserItem, size: Int? = null) = listOfNotNull(
     settings.showIRCCloudAvatars.letIf {
-      ircCloudFallback(HostmaskHelper.user(user.hostmask), size)
+      ircCloudFallback(HostmaskHelper.user(user.hostmask),
+                       size)
     },
     settings.showGravatarAvatars.letIf {
-      gravatarFallback(user.realname.toString(), size)
+      gravatarFallback(user.realname.toString(),
+                       size)
+    },
+    settings.showMatrixAvatars.letIf {
+      matrixFallback(user.realname.toString(),
+                     size)
     }
   ).flatten()
 
@@ -68,10 +84,32 @@ object AvatarHelper {
     },
     settings.showGravatarAvatars.letIf {
       gravatarFallback(user.realName(), size)
+    },
+    settings.showMatrixAvatars.letIf {
+      matrixFallback(user.realName(), size)
     }
   ).flatten()
 
-  private fun gravatarFallback(realname: String, size: Int?): List<String> {
+  private fun ircCloudFallback(ident: String, size: Int?): List<Avatar> {
+    val userId = Patterns.IRCCLOUD_IDENT.matchEntire(ident)?.groupValues?.lastOrNull()
+                 ?: return emptyList()
+
+    if (size != null) {
+      return listOf(
+        Avatar.IRCCloudAvatar(
+          "https://static.irccloud-cdn.com/avatar-redirect/s${truncateSize(size)}/$userId"
+        )
+      )
+    }
+
+    return listOf(
+      Avatar.IRCCloudAvatar(
+        "https://static.irccloud-cdn.com/avatar-redirect/$userId"
+      )
+    )
+  }
+
+  private fun gravatarFallback(realname: String, size: Int?): List<Avatar> {
     return Patterns.AUTOLINK_EMAIL_ADDRESS
       .findAll(realname)
       .mapNotNull {
@@ -83,18 +121,17 @@ object AvatarHelper {
         } else {
           "https://www.gravatar.com/avatar/$hash?d=404&s=${truncateSize(size)}"
         }
-      }.toList()
+      }.map { Avatar.GravatarAvatar(it) }.toList()
   }
 
-  private fun ircCloudFallback(ident: String, size: Int?): List<String> {
-    val userId = Patterns.IRCCLOUD_IDENT.matchEntire(ident)?.groupValues?.lastOrNull()
-                 ?: return emptyList()
-
-    if (size != null) {
-      return listOf("https://static.irccloud-cdn.com/avatar-redirect/s${truncateSize(size)}/$userId")
+  private fun matrixFallback(realname: String, size: Int?): List<Avatar> {
+    return if (Patterns.MATRIX_REALNAME.matches(realname)) {
+      listOf(
+        Avatar.MatrixAvatar(realname, size?.let(this::truncateSize))
+      )
+    } else {
+      emptyList()
     }
-
-    return listOf("https://static.irccloud-cdn.com/avatar-redirect/$userId")
   }
 
   private fun truncateSize(originalSize: Int) = if (originalSize > 72) 512 else 72

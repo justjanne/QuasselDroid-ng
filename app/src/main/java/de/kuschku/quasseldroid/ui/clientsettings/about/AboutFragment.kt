@@ -277,6 +277,12 @@ class AboutFragment : DaggerFragment() {
         url = "https://github.com/ReactiveX/RxJava"
       ),
       Library(
+        name = "Retrofit",
+        version = "2.4.0",
+        license = apache2,
+        url = "https://square.github.io/retrofit/"
+      ),
+      Library(
         name = "RxJava",
         version = "2.1.9",
         license = apache2,

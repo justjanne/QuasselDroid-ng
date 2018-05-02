@@ -36,6 +36,25 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+ * Quasseldroid - Quassel client for Android
+ *
+ * Copyright (c) 2018 Janne Koschinski
+ * Copyright (c) 2018 The Quassel Project
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 3 as published
+ * by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import org.gradle.api.Project
 import java.io.FileInputStream
 import java.util.*
@@ -169,6 +188,8 @@ dependencies {
   implementation("org.jetbrains", "annotations", "16.0.1")
   implementation("com.google.code.gson", "gson", "2.8.2")
   implementation("commons-codec", "commons-codec", "1.11")
+  implementation("com.squareup.retrofit2", "retrofit", "2.4.0")
+  implementation("com.squareup.retrofit2", "converter-gson", "2.4.0")
   withVersion("8.8.1") {
     implementation("com.jakewharton", "butterknife", version)
     kapt("com.jakewharton", "butterknife-compiler", version)

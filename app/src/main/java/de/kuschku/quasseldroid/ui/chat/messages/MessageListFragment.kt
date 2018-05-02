@@ -53,11 +53,12 @@ import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.BacklogSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
-import de.kuschku.quasseldroid.util.AvatarHelper
+import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
+import de.kuschku.quasseldroid.viewmodel.data.Avatar
 import io.reactivex.BackpressureStrategy
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
@@ -402,14 +403,14 @@ class MessageListFragment : ServiceBoundFragment() {
       requireContext().resources.displayMetrics
     ).roundToInt()
 
-    val sizeProvider = FixedPreloadSizeProvider<List<String>>(avatarSize, avatarSize)
+    val sizeProvider = FixedPreloadSizeProvider<List<Avatar>>(avatarSize, avatarSize)
 
-    val preloadModelProvider = object : ListPreloader.PreloadModelProvider<List<String>> {
+    val preloadModelProvider = object : ListPreloader.PreloadModelProvider<List<Avatar>> {
       override fun getPreloadItems(position: Int) = listOfNotNull(
         adapter[position]?.content?.let { AvatarHelper.avatar(messageSettings, it, avatarSize) }
       )
 
-      override fun getPreloadRequestBuilder(item: List<String>) =
+      override fun getPreloadRequestBuilder(item: List<Avatar>) =
         GlideApp.with(this@MessageListFragment).loadWithFallbacks(item)?.override(avatarSize)
     }
 

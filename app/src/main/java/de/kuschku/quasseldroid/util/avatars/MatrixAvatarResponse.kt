@@ -17,19 +17,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.viewmodel.data
+package de.kuschku.quasseldroid.util.avatars
 
-import android.graphics.drawable.Drawable
+import com.google.gson.annotations.SerializedName
 
-data class IrcUserItem(
-  val nick: String,
-  val modes: String,
-  val lowestMode: Int,
-  val realname: CharSequence,
-  val hostmask: String,
-  val away: Boolean,
-  val networkCasemapping: String?,
-  val avatarUrls: List<Avatar> = emptyList(),
-  val fallbackDrawable: Drawable? = null,
-  val displayNick: CharSequence? = null
+data class MatrixAvatarResponse(
+  @SerializedName("avatar_url")
+  val avatarUrl: String?
 )
+

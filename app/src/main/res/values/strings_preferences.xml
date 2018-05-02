@@ -177,6 +177,10 @@
   <string name="preference_show_gravatar_avatars_title">Show Gravatar Avatars</string>
   <string name="preference_show_gravatar_avatars_summary">Shows for users without avatar their Gravatar fallback, if available</string>
 
+  <string name="preference_show_matrix_avatars_key" translatable="false">show_matrix_avatars</string>
+  <string name="preference_show_matrix_avatars_title">Show Matrix Avatars</string>
+  <string name="preference_show_matrix_avatars_summary">Shows for users without avatar their Matrix fallback, if available</string>
+
   <string name="preference_time_at_end_key" translatable="false">time_at_end</string>
   <string name="preference_time_at_end_title">Right-Aligned Timestamps</string>
   <string name="preference_time_at_end_summary">Aligns timestamps at the end of each message</string>

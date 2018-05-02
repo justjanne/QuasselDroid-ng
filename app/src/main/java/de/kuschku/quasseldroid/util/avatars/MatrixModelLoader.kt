@@ -17,19 +17,21 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.viewmodel.data
+package de.kuschku.quasseldroid.util.avatars
 
-import android.graphics.drawable.Drawable
+import com.bumptech.glide.load.Options
+import com.bumptech.glide.load.model.ModelLoader
+import com.bumptech.glide.signature.ObjectKey
+import de.kuschku.quasseldroid.viewmodel.data.Avatar
+import java.io.InputStream
 
-data class IrcUserItem(
-  val nick: String,
-  val modes: String,
-  val lowestMode: Int,
-  val realname: CharSequence,
-  val hostmask: String,
-  val away: Boolean,
-  val networkCasemapping: String?,
-  val avatarUrls: List<Avatar> = emptyList(),
-  val fallbackDrawable: Drawable? = null,
-  val displayNick: CharSequence? = null
-)
+class MatrixModelLoader(val api: MatrixApi) : ModelLoader<Avatar.MatrixAvatar, InputStream> {
+  override fun buildLoadData(model: Avatar.MatrixAvatar, width: Int, height: Int,
+                             options: Options): ModelLoader.LoadData<InputStream>? {
+    return ModelLoader.LoadData(ObjectKey(model), MatrixDataFetcher(model, api))
+  }
+
+  override fun handles(model: Avatar.MatrixAvatar): Boolean {
+    return true
+  }
+}

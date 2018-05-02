@@ -93,6 +93,9 @@
   <string name="preference_show_gravatar_avatars_title">Gravatar Avatare anzeigen</string>
   <string name="preference_show_gravatar_avatars_summary">Zeigt für Nutzer ohne Avatare den Gravatar-Avatar an, falls verfügbar</string>
 
+  <string name="preference_show_matrix_avatars_title">Matrix Avatare anzeigen</string>
+  <string name="preference_show_matrix_avatars_summary">Zeigt für Nutzer ohne Avatare den Matrix-Avatar an, falls verfügbar</string>
+
   <string name="preference_time_at_end_title">Rechts-Ausgerichtete Zeit</string>
   <string name="preference_time_at_end_summary">Zeigt die Zeit rechts in Nachrichten an</string>
 

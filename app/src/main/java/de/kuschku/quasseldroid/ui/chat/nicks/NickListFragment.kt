@@ -48,13 +48,14 @@ import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoActivity
 import de.kuschku.quasseldroid.ui.chat.input.AutoCompleteHelper.Companion.IGNORED_CHARS
-import de.kuschku.quasseldroid.util.AvatarHelper
+import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.loadWithFallbacks
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.TextDrawable
+import de.kuschku.quasseldroid.viewmodel.data.Avatar
 import javax.inject.Inject
 
 class NickListFragment : ServiceBoundFragment() {
@@ -159,14 +160,14 @@ class NickListFragment : ServiceBoundFragment() {
       nickList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
     }
 
-    val sizeProvider = FixedPreloadSizeProvider<List<String>>(avatarSize, avatarSize)
+    val sizeProvider = FixedPreloadSizeProvider<List<Avatar>>(avatarSize, avatarSize)
 
-    val preloadModelProvider = object : ListPreloader.PreloadModelProvider<List<String>> {
+    val preloadModelProvider = object : ListPreloader.PreloadModelProvider<List<Avatar>> {
       override fun getPreloadItems(position: Int) = listOfNotNull(
         nickListAdapter[position]?.let { AvatarHelper.avatar(messageSettings, it) }
       )
 
-      override fun getPreloadRequestBuilder(item: List<String>) =
+      override fun getPreloadRequestBuilder(item: List<Avatar>) =
         GlideApp.with(this@NickListFragment).loadWithFallbacks(item)?.override(avatarSize)
     }
 

@@ -109,6 +109,10 @@ object Settings {
         context.getString(R.string.preference_show_gravatar_avatars_key),
         MessageSettings.DEFAULT.showGravatarAvatars
       ),
+      showMatrixAvatars = getBoolean(
+        context.getString(R.string.preference_show_matrix_avatars_key),
+        MessageSettings.DEFAULT.showMatrixAvatars
+      ),
       largerEmoji = getBoolean(
         context.getString(R.string.preference_larger_emoji_key),
         MessageSettings.DEFAULT.largerEmoji

@@ -38,7 +38,7 @@ import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.MessageSettings
-import de.kuschku.quasseldroid.util.AvatarHelper
+import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter

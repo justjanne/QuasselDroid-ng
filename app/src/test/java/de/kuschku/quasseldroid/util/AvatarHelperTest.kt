@@ -23,6 +23,7 @@ import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import org.junit.Test
 import org.threeten.bp.Instant
 

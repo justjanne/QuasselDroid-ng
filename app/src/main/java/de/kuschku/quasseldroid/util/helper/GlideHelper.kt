@@ -25,10 +25,16 @@ import com.bumptech.glide.RequestBuilder
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.GlideRequest
 import de.kuschku.quasseldroid.GlideRequests
+import de.kuschku.quasseldroid.viewmodel.data.Avatar
 
-fun GlideRequests.loadWithFallbacks(urls: List<String>): GlideRequest<Drawable>? {
-  fun fold(url: String, fallback: RequestBuilder<Drawable>?): GlideRequest<Drawable> {
-    return this.load(url).let {
+fun GlideRequests.loadWithFallbacks(urls: List<Avatar>): GlideRequest<Drawable>? {
+  fun fold(url: Avatar, fallback: RequestBuilder<Drawable>?): GlideRequest<Drawable> {
+    return when (url) {
+      is Avatar.NativeAvatar   -> this.load(url.url)
+      is Avatar.GravatarAvatar -> this.load(url.url)
+      is Avatar.IRCCloudAvatar -> this.load(url.url)
+      is Avatar.MatrixAvatar   -> this.load(url)
+    }.let {
       if (fallback != null) it.error(fallback) else it
     }
   }
@@ -36,7 +42,7 @@ fun GlideRequests.loadWithFallbacks(urls: List<String>): GlideRequest<Drawable>?
   return urls.foldRight(null, ::fold)
 }
 
-fun ImageView.loadAvatars(urls: List<String>, fallback: Drawable? = null, crop: Boolean = true) {
+fun ImageView.loadAvatars(urls: List<Avatar>, fallback: Drawable? = null, crop: Boolean = true) {
   if (urls.isNotEmpty()) {
     GlideApp.with(this)
       .loadWithFallbacks(urls)

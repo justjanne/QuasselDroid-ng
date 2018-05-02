@@ -107,6 +107,8 @@ Authors of the previous version of Quasseldroid:
   GPLv3
 * [**Reactive Streams**](https://github.com/ReactiveX/RxJava)
   CC0
+* [**Retrofit**](https://square.github.io/retrofit/)
+  Apache-2.0
 * [**RxJava**](https://github.com/ReactiveX/RxJava)
   Apache-2.0
 * [**ThreeTen backport project**](http://www.threeten.org/threetenbp/)

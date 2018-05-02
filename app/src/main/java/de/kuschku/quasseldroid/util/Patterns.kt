@@ -67,7 +67,9 @@ object Patterns {
   @Language("RegExp")
   const val LOCAL_HOST_NAME = """(?:$IRI_LABEL\.)*$IRI_LABEL"""
 
-  val DOMAIN_NAME = Regex("""(?:$LOCAL_HOST_NAME|$HOST_NAME|$IP_ADDRESS_STRING)""")
+  @Language("RegExp")
+  const val DOMAIN_NAME_STR = """(?:$LOCAL_HOST_NAME|$HOST_NAME|$IP_ADDRESS_STRING)"""
+  val DOMAIN_NAME = Regex(DOMAIN_NAME_STR)
   /**
    * Regular expression for valid email characters. Does not include some of the valid characters
    * defined in RFC5321: #&~!^`{}/=$*?|
@@ -94,11 +96,21 @@ object Patterns {
    * Regular expression pattern to match email addresses. It excludes double quoted local parts
    * and the special characters #&~!^`{}/=$*?| that are included in RFC5321.
    */
-  val AUTOLINK_EMAIL_ADDRESS = Regex("""($WORD_BOUNDARY(?:$EMAIL_ADDRESS_LOCAL_PART@$EMAIL_ADDRESS_DOMAIN)$WORD_BOUNDARY)""")
+  @Language("RegExp")
+  val AUTOLINK_EMAIL_ADDRESS_STR = """($WORD_BOUNDARY(?:$EMAIL_ADDRESS_LOCAL_PART@$EMAIL_ADDRESS_DOMAIN)$WORD_BOUNDARY)"""
+  val AUTOLINK_EMAIL_ADDRESS = Regex(AUTOLINK_EMAIL_ADDRESS_STR)
 
   /**
    * Regular expression pattern to match IRCCloud user idents.
    */
+  @Language("RegExp")
   const val IRCCLOUD_IDENT_STR = """(?:~?)[us]id(\d+)"""
   val IRCCLOUD_IDENT = Regex(IRCCLOUD_IDENT_STR)
+
+  /**
+   * Regular expression pattern to match Matrix user realnames.
+   */
+  @Language("RegExp")
+  const val MATRIX_REALNAME_STR = """^@[^:]+:$DOMAIN_NAME_STR$"""
+  val MATRIX_REALNAME = Regex(MATRIX_REALNAME_STR)
 }

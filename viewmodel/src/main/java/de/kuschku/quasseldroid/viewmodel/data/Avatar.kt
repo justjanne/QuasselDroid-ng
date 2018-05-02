@@ -19,17 +19,9 @@
 
 package de.kuschku.quasseldroid.viewmodel.data
 
-import android.graphics.drawable.Drawable
-
-data class IrcUserItem(
-  val nick: String,
-  val modes: String,
-  val lowestMode: Int,
-  val realname: CharSequence,
-  val hostmask: String,
-  val away: Boolean,
-  val networkCasemapping: String?,
-  val avatarUrls: List<Avatar> = emptyList(),
-  val fallbackDrawable: Drawable? = null,
-  val displayNick: CharSequence? = null
-)
+sealed class Avatar {
+  data class NativeAvatar(val url: String) : Avatar()
+  data class IRCCloudAvatar(val url: String) : Avatar()
+  data class GravatarAvatar(val url: String) : Avatar()
+  data class MatrixAvatar(val userId: String, val size: Int?) : Avatar()
+}
