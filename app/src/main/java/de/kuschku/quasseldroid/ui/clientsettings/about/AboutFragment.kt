@@ -115,12 +115,6 @@ class AboutFragment : DaggerFragment() {
         url = "https://android.googlesource.com/platform/frameworks/support/+/master/persistence"
       ),
       Library(
-        name = "Android Sliding Up Panel",
-        version = "3.5.0",
-        license = apache2,
-        url = "https://github.com/umano/AndroidSlidingUpPanel"
-      ),
-      Library(
         name = "Android Support Library",
         version = "27.1.1",
         license = apache2,

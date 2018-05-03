@@ -113,4 +113,6 @@
 
   <string name="delete_confirmation">Are you sure you want to delete this permanently? This can not be undone.</string>
   <string name="cancel_confirmation">You have unsaved changes. Do you wish to discard them?</string>
+
+  <string name="drag_intercept_bottom_sheet_behavior" translatable="false">de.kuschku.quasseldroid.util.ui.DragInterceptBottomSheetBehavior</string>
 </resources>

@@ -17,20 +17,15 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/history_panel"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:gravity="bottom"
-  app:umanoFadeColor="?colorBackground"
-  app:umanoOverlay="true"
-  app:umanoPanelHeight="0dip"
-  app:umanoScrollableView="@id/msg_history"
-  app:umanoShadowHeight="0dip">
+  android:background="?colorBackground"
+  android:gravity="bottom">
 
   <include layout="@layout/layout_editor" />
 
   <include layout="@layout/layout_history" />
 
-</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+</android.support.design.widget.CoordinatorLayout>

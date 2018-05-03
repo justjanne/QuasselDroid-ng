@@ -21,6 +21,7 @@ package de.kuschku.quasseldroid.ui.chat.input
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.AppCompatImageButton
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -31,7 +32,6 @@ import android.view.View
 import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
@@ -60,11 +60,17 @@ class ChatlineFragment : ServiceBoundFragment() {
   @BindView(R.id.msg_history)
   lateinit var messageHistory: RecyclerView
 
-  @BindView(R.id.history_panel)
-  lateinit var historyPanel: SlidingUpPanelLayout
-
   @BindView(R.id.autocomplete_list)
   lateinit var autoCompleteList: RecyclerView
+
+  @BindView(R.id.close)
+  lateinit var close: AppCompatImageButton
+
+  @BindView(R.id.card_panel)
+  lateinit var cardPanel: View
+
+  @BindView(R.id.editor_container)
+  lateinit var editorContainer: View
 
   @Inject
   lateinit var autoCompleteSettings: AutoCompleteSettings
@@ -91,13 +97,13 @@ class ChatlineFragment : ServiceBoundFragment() {
 
   lateinit var autoCompleteHelper: AutoCompleteHelper
 
-  val panelSlideListener = object : SlidingUpPanelLayout.PanelSlideListener {
-    override fun onPanelSlide(panel: View?, slideOffset: Float) = Unit
+  lateinit var historyBottomSheet: BottomSheetBehavior<View>
 
-    override fun onPanelStateChanged(panel: View?,
-                                     previousState: SlidingUpPanelLayout.PanelState?,
-                                     newState: SlidingUpPanelLayout.PanelState?) {
-      editorHelper.setMultiLine(newState == SlidingUpPanelLayout.PanelState.COLLAPSED)
+  val panelSlideListener = object : BottomSheetBehavior.BottomSheetCallback() {
+    override fun onSlide(bottomSheet: View, slideOffset: Float) = Unit
+
+    override fun onStateChanged(bottomSheet: View, newState: Int) {
+      editorHelper.setMultiLine(newState != BottomSheetBehavior.STATE_COLLAPSED)
     }
   }
 
@@ -127,22 +133,31 @@ class ChatlineFragment : ServiceBoundFragment() {
 
     editorViewModel.lastWord.onNext(editorHelper.lastWord)
 
+    val autoCompleteBottomSheet = BottomSheetBehavior.from(autoCompleteList)
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
       autoCompleteAdapter.setOnClickListener(chatline::autoComplete)
-      autoCompleteList.layoutManager = LinearLayoutManager(activity)
+      autoCompleteList.layoutManager = LinearLayoutManager(context)
       autoCompleteList.itemAnimator = DefaultItemAnimator()
       autoCompleteList.adapter = autoCompleteAdapter
-      autoCompleteHelper.setDataListener {
+      autoCompleteHelper.addDataListener {
+        autoCompleteBottomSheet.state =
+          if (it.isEmpty()) BottomSheetBehavior.STATE_HIDDEN
+          else BottomSheetBehavior.STATE_COLLAPSED
         autoCompleteAdapter.submitList(it)
       }
     }
 
+    historyBottomSheet = BottomSheetBehavior.from(cardPanel)
+    historyBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
     messageHistory.itemAnimator = DefaultItemAnimator()
     messageHistory.layoutManager = LinearLayoutManager(requireContext())
     val messageHistoryAdapter = MessageHistoryAdapter()
     messageHistoryAdapter.setOnItemClickListener { text ->
       editorHelper.replaceText(text)
-      historyPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+      historyBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
+    }
+    close.setOnClickListener {
+      historyBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
     }
     messageHistory.adapter = messageHistoryAdapter
     viewModel.recentlySentMessages.toLiveData()
@@ -186,7 +201,7 @@ class ChatlineFragment : ServiceBoundFragment() {
     toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.action_input_history -> {
-          historyPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+          historyBottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
           true
         }
         else                      -> false

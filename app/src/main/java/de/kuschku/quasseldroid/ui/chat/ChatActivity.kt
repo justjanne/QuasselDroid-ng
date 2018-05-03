@@ -27,6 +27,7 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.support.design.widget.BottomSheetBehavior
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.DefaultItemAnimator
@@ -39,7 +40,6 @@ import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.connection.QuasselSecurityException
 import de.kuschku.libquassel.protocol.Buffer_Type
@@ -64,6 +64,7 @@ import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
+import de.kuschku.quasseldroid.util.ui.DragInterceptBottomSheetBehavior
 import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
 import de.kuschku.quasseldroid.viewmodel.data.BufferData
 import org.threeten.bp.Instant
@@ -85,9 +86,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   @BindView(R.id.progress_bar)
   lateinit var progressBar: MaterialContentLoadingProgressBar
 
-  @BindView(R.id.editor_panel)
-  lateinit var editorPanel: SlidingUpPanelLayout
-
   @BindView(R.id.autocomplete_list)
   lateinit var autoCompleteList: RecyclerView
 
@@ -106,6 +104,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   @Inject
   @Named("ui")
   lateinit var autoCompleteAdapter: AutoCompleteAdapter
+
+  lateinit var editorBottomSheet: DragInterceptBottomSheetBehavior<View>
 
   private val dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
 
@@ -176,12 +176,16 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     })
 
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
+      val autoCompleteBottomSheet = BottomSheetBehavior.from(autoCompleteList)
       chatlineFragment?.let {
         autoCompleteAdapter.setOnClickListener(it.chatline::autoComplete)
         autoCompleteList.layoutManager = LinearLayoutManager(it.activity)
         autoCompleteList.itemAnimator = DefaultItemAnimator()
         autoCompleteList.adapter = autoCompleteAdapter
-        it.autoCompleteHelper.setDataListener {
+        it.autoCompleteHelper.addDataListener {
+          autoCompleteBottomSheet.state =
+            if (it.isEmpty()) BottomSheetBehavior.STATE_HIDDEN
+            else BottomSheetBehavior.STATE_COLLAPSED
           autoCompleteAdapter.submitList(it)
         }
       }
@@ -484,8 +488,22 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     onNewIntent(intent)
 
-    editorPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-    chatlineFragment?.panelSlideListener?.let(editorPanel::addPanelSlideListener)
+    editorBottomSheet = DragInterceptBottomSheetBehavior.from(chatlineFragment?.view)
+    editorBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+    chatlineFragment?.panelSlideListener?.let(editorBottomSheet::setBottomSheetCallback)
+
+    chatlineFragment?.historyBottomSheet?.setBottomSheetCallback(
+      object : BottomSheetBehavior.BottomSheetCallback() {
+        override fun onSlide(bottomSheet: View, slideOffset: Float) {
+          val opacity = (1.0f - slideOffset) / 2.0f
+          chatlineFragment?.editorContainer?.alpha = opacity
+        }
+
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+          editorBottomSheet.allowDragging = newState == BottomSheetBehavior.STATE_HIDDEN
+        }
+      }
+    )
   }
 
   var bufferData: BufferData? = null
@@ -627,13 +645,13 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   }
 
   override fun onBackPressed() {
-    if (chatlineFragment?.historyPanel?.panelState == SlidingUpPanelLayout.PanelState.EXPANDED) {
-      chatlineFragment?.historyPanel?.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+    if (chatlineFragment?.historyBottomSheet?.state == BottomSheetBehavior.STATE_EXPANDED) {
+      chatlineFragment?.historyBottomSheet?.state = BottomSheetBehavior.STATE_HIDDEN
       return
     }
 
-    if (editorPanel.panelState == SlidingUpPanelLayout.PanelState.EXPANDED) {
-      editorPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+    if (editorBottomSheet.state == BottomSheetBehavior.STATE_EXPANDED) {
+      editorBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
       return
     }
 

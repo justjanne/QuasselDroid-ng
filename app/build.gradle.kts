@@ -175,7 +175,6 @@ dependencies {
     implementation("com.github.bumptech.glide", "recyclerview-integration", version)
     kapt("com.github.bumptech.glide", "compiler", version)
   }
-  implementation(project(":slidingpanel"))
 
   // Quality Assurance
   implementation(project(":malheur"))

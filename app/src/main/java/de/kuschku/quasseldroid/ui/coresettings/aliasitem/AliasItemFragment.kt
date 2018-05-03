@@ -119,7 +119,7 @@ class AliasItemFragment : SettingsFragment(), SettingsFragment.Savable,
       autoCompleteList.layoutManager = LinearLayoutManager(activity)
       autoCompleteList.itemAnimator = DefaultItemAnimator()
       autoCompleteList.adapter = autoCompleteAdapter
-      autoCompleteHelper.setDataListener {
+      autoCompleteHelper.addDataListener {
         autoCompleteAdapter.submitList(it)
       }
     }

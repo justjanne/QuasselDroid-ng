@@ -65,8 +65,6 @@ Authors of the previous version of Quasseldroid:
   Apache-2.0
 * [**Android Architecture Components: Room**](https://android.googlesource.com/platform/frameworks/support/+/master/persistence)
   Apache-2.0
-* [**Android Sliding Up Panel**](https://github.com/umano/AndroidSlidingUpPanel)
-  Apache-2.0
 * [**Android Support Library**](https://android.googlesource.com/platform/frameworks/support/+/master)
   Apache-2.0
 * [**Android Support Library: Constraint Layout**](https://android.googlesource.com/platform/frameworks/opt/sherpa/+/studio-3.0/constraintlayout)

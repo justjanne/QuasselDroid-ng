@@ -37,15 +37,6 @@
       "url": "https://android.googlesource.com/platform/frameworks/support/+/master/persistence"
     },
     {
-      "name": "Android Sliding Up Panel",
-      "version": "3.5.0",
-      "license": {
-        "short_name": "Apache-2.0",
-        "full_name": "Apache License"
-      },
-      "url": "https://github.com/umano/AndroidSlidingUpPanel"
-    },
-    {
       "name": "Android Support Library",
       "version": "27.1.1",
       "license": {

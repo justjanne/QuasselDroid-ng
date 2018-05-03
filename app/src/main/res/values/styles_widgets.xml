@@ -275,6 +275,10 @@
     <item name="android:textStyle">bold</item>
   </style>
 
+  <style name="Widget.DrawerRecyclerView" parent="">
+    <item name="insetBackground">#4000</item>
+  </style>
+
   <!-- NavigationDrawerLayout -->
   <declare-styleable name="NavigationDrawerLayout">
     <attr name="insetBackground" />
@@ -289,7 +293,8 @@
     <attr name="insetBackground" />
   </declare-styleable>
 
-  <style name="Widget.DrawerRecyclerView" parent="">
-    <item name="insetBackground">#4000</item>
-  </style>
+  <!-- ShadowView -->
+  <declare-styleable name="ShadowView">
+    <attr name="android:gravity" />
+  </declare-styleable>
 </resources>

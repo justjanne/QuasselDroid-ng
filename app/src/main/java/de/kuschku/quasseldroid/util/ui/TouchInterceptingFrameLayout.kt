@@ -17,12 +17,22 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-include ':invokerannotations',
-        ':invokergenerator',
-        ':lib',
-        ":viewmodel",
-        ":persistence",
-        ':malheur',
-        ':app'
+package de.kuschku.quasseldroid.util.ui
 
-rootProject.buildFileName = 'build.gradle.kts'
+import android.annotation.SuppressLint
+import android.content.Context
+import android.util.AttributeSet
+import android.view.MotionEvent
+import android.widget.FrameLayout
+
+class TouchInterceptingFrameLayout : FrameLayout {
+  constructor(context: Context?) : super(context)
+  constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+  constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) :
+    super(context, attrs, defStyleAttr)
+
+  @SuppressLint("ClickableViewAccessibility")
+  override fun onTouchEvent(event: MotionEvent): Boolean {
+    return true
+  }
+}

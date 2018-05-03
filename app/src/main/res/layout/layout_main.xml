@@ -27,44 +27,51 @@
 
   <include layout="@layout/layout_toolbar" />
 
-  <com.sothree.slidinguppanel.SlidingUpPanelLayout
-    android:id="@+id/editor_panel"
+  <android.support.design.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom"
-    app:umanoAntiDragView="@id/card_panel"
-    app:umanoPanelHeight="?actionBarSize"
-    app:umanoScrollableView="@id/chatline_scroller"
-    app:umanoShadowHeight="4dp">
+    android:gravity="bottom">
 
-    <LinearLayout
+    <android.support.design.widget.CoordinatorLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:layout_marginBottom="?actionBarSize"
       android:orientation="vertical">
 
       <fragment
         android:id="@+id/fragment_messages"
         android:name="de.kuschku.quasseldroid.ui.chat.messages.MessageListFragment"
         android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         tools:layout="@layout/fragment_messages" />
 
-      <de.kuschku.quasseldroid.util.ui.AutoCompleteRecyclerView
+      <android.support.v7.widget.RecyclerView
         android:id="@+id/autocomplete_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?colorBackgroundCard"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="@dimen/autocomplete_max_height"
+        app:layout_behavior="@string/bottom_sheet_behavior"
         tools:listitem="@layout/widget_nick" />
-    </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+
+    <de.kuschku.quasseldroid.util.ui.ShadowView
+      android:layout_width="match_parent"
+      android:layout_height="16dp"
+      android:gravity="bottom"
+      app:layout_anchor="@id/fragment_chatline" />
 
     <fragment
       android:id="@+id/fragment_chatline"
       android:name="de.kuschku.quasseldroid.ui.chat.input.ChatlineFragment"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      app:behavior_hideable="false"
+      app:behavior_peekHeight="?actionBarSize"
+      app:layout_behavior="@string/drag_intercept_bottom_sheet_behavior"
       tools:layout="@layout/fragment_chatline" />
 
-  </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+  </android.support.design.widget.CoordinatorLayout>
 
 </LinearLayout>

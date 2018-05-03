@@ -17,75 +17,92 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/editor_container"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  android:orientation="vertical">
 
-  <android.support.v7.widget.AppCompatImageButton
-    android:id="@+id/tab_complete"
-    style="?attr/buttonStyleSmall"
-    android:layout_width="?attr/actionBarSize"
-    android:layout_height="?attr/actionBarSize"
-    android:layout_gravity="top"
-    android:background="?attr/selectableItemBackgroundBorderless"
-    android:padding="12dp"
-    android:scaleType="fitXY"
-    app:layout_constraintStart_toStartOf="parent"
-    app:srcCompat="@drawable/ic_tab"
-    app:tint="?attr/colorTextSecondary" />
+  <android.support.design.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dip"
+    android:layout_weight="1"
+    android:orientation="vertical">
 
-  <ScrollView
-    android:id="@+id/chatline_scroller"
-    android:layout_width="0dp"
-    android:layout_height="0dp"
-    app:layout_constraintBottom_toTopOf="@+id/autocomplete_list"
-    app:layout_constraintEnd_toStartOf="@+id/send"
-    app:layout_constraintHorizontal_bias="1.0"
-    app:layout_constraintStart_toEndOf="@+id/tab_complete"
-    app:layout_constraintTop_toTopOf="parent">
+    <android.support.constraint.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
 
-    <de.kuschku.quasseldroid.ui.chat.input.RichEditText
-      android:id="@+id/chatline"
-      style="@style/Widget.RtlConformTextView"
+      <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/tab_complete"
+        style="?attr/buttonStyleSmall"
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="top"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="12dp"
+        android:scaleType="fitXY"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_tab"
+        app:tint="?attr/colorTextSecondary" />
+
+      <ScrollView
+        android:id="@+id/chatline_scroller"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/send"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/tab_complete"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <de.kuschku.quasseldroid.ui.chat.input.RichEditText
+          android:id="@+id/chatline"
+          style="@style/Widget.RtlConformTextView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@android:color/transparent"
+          android:gravity="center_vertical"
+          android:hint="@string/label_placeholder_message"
+          android:imeOptions="flagNoExtractUi"
+          android:inputType="textCapSentences|textAutoCorrect|textShortMessage"
+          android:minHeight="?attr/actionBarSize"
+          android:paddingBottom="8dp"
+          android:paddingLeft="20dp"
+          android:paddingRight="20dp"
+          android:paddingTop="8dp"
+          android:textColor="?attr/colorForeground"
+          android:textSize="16sp" />
+      </ScrollView>
+
+      <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/send"
+        style="?attr/buttonStyleSmall"
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="top"
+        android:autoMirrored="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="12dp"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_send"
+        app:tint="?attr/colorAccent"
+        tools:ignore="UnusedAttribute" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/autocomplete_list"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="@android:color/transparent"
-      android:gravity="center_vertical"
-      android:hint="@string/label_placeholder_message"
-      android:imeOptions="flagNoExtractUi"
-      android:inputType="textCapSentences|textAutoCorrect|textShortMessage"
-      android:minHeight="?attr/actionBarSize"
-      android:paddingBottom="8dp"
-      android:paddingLeft="20dp"
-      android:paddingRight="20dp"
-      android:paddingTop="8dp"
-      android:textColor="?attr/colorForeground"
-      android:textSize="16sp" />
-  </ScrollView>
-
-  <android.support.v7.widget.AppCompatImageButton
-    android:id="@+id/send"
-    style="?attr/buttonStyleSmall"
-    android:layout_width="?attr/actionBarSize"
-    android:layout_height="?attr/actionBarSize"
-    android:layout_gravity="top"
-    android:autoMirrored="true"
-    android:background="?attr/selectableItemBackgroundBorderless"
-    android:padding="12dp"
-    android:scaleType="fitXY"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:srcCompat="@drawable/ic_send"
-    app:tint="?attr/colorAccent"
-    tools:ignore="UnusedAttribute" />
-
-  <de.kuschku.quasseldroid.util.ui.AutoCompleteRecyclerView
-    android:id="@+id/autocomplete_list"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintBottom_toTopOf="@+id/formatting_toolbar_container"
-    tools:listitem="@layout/widget_nick" />
+      android:background="?colorBackgroundCard"
+      app:behavior_hideable="true"
+      app:behavior_peekHeight="@dimen/autocomplete_max_height"
+      app:layout_behavior="@string/bottom_sheet_behavior"
+      tools:listitem="@layout/widget_nick" />
+  </android.support.design.widget.CoordinatorLayout>
 
   <android.support.design.widget.AppBarLayout
     android:id="@+id/formatting_toolbar_container"
@@ -100,4 +117,4 @@
       android:layout_height="?attr/actionBarSize"
       app:contentInsetStart="0dip" />
   </android.support.design.widget.AppBarLayout>
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

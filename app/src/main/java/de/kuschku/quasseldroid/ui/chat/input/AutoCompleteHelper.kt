@@ -50,7 +50,7 @@ class AutoCompleteHelper(
   private val viewModel: EditorViewModel
 ) {
   private var autocompleteListener: ((AutoCompletionState) -> Unit)? = null
-  private var dataListener: ((List<AutoCompleteItem>) -> Unit)? = null
+  private var dataListeners: List<((List<AutoCompleteItem>) -> Unit)> = emptyList()
 
   var autoCompletionState: AutoCompletionState? = null
 
@@ -72,7 +72,7 @@ class AutoCompleteHelper(
                               (autoCompleteSettings.prefix && query.startsWith('@')) ||
                               (autoCompleteSettings.prefix && query.startsWith('#'))
       val list = if (shouldShowResults) it?.second.orEmpty() else emptyList()
-      dataListener?.invoke(list.map {
+      val data = list.map {
         if (it is AutoCompleteItem.UserItem) {
           val nickName = it.nick
           val senderColorIndex = IrcUserUtils.senderColor(nickName)
@@ -114,7 +114,10 @@ class AutoCompleteHelper(
         } else {
           it
         }
-      })
+      }
+      dataListeners.forEach {
+        it(data)
+      }
     })
   }
 
@@ -122,8 +125,12 @@ class AutoCompleteHelper(
     this.autocompleteListener = listener
   }
 
-  fun setDataListener(listener: ((List<AutoCompleteItem>) -> Unit)?) {
-    this.dataListener = listener
+  fun addDataListener(listener: ((List<AutoCompleteItem>) -> Unit)) {
+    this.dataListeners += listener
+  }
+
+  fun removeDataListener(listener: ((List<AutoCompleteItem>) -> Unit)) {
+    this.dataListeners -= listener
   }
 
   private fun autoCompleteDataFull(): List<AutoCompleteItem> {
