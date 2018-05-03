@@ -70,8 +70,8 @@ class BufferViewConfig constructor(
     "hideInactiveBuffers" to QVariant.of(hideInactiveBuffers(), Type.Bool),
     "hideInactiveNetworks" to QVariant.of(hideInactiveNetworks(), Type.Bool),
     "disableDecoration" to QVariant.of(disableDecoration(), Type.Bool),
-    "allowedBufferTypes" to QVariant.of(allowedBufferTypes(), Type.Int),
-    "minimumActivity" to QVariant.of(minimumActivity(), Type.Int),
+    "allowedBufferTypes" to QVariant.of(allowedBufferTypes().toInt(), Type.Int),
+    "minimumActivity" to QVariant.of(minimumActivity().toInt(), Type.Int),
     "showSearch" to QVariant.of(showSearch(), Type.Bool)
   )
 

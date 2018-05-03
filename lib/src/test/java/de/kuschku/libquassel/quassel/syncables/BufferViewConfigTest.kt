@@ -37,7 +37,8 @@ class BufferViewConfigTest {
     original.setHideInactiveNetworks(randomBoolean())
     original.setHideInactiveNetworks(randomBoolean())
     original.setDisableDecoration(randomBoolean())
-    original.setAllowedBufferTypes(Buffer_Type.of(*Buffer_Type.validValues))
+    original.setAllowedBufferTypes(Buffer_Type.of(randomOf(*Buffer_Type.validValues),
+                                                  randomOf(*Buffer_Type.validValues)))
     original.setMinimumActivity(randomOf(*Buffer_Activity.values()).toInt())
     original.setShowSearch(randomBoolean())
 
@@ -56,7 +57,8 @@ class BufferViewConfigTest {
     original.setHideInactiveNetworks(randomBoolean())
     original.setHideInactiveNetworks(randomBoolean())
     original.setDisableDecoration(randomBoolean())
-    original.setAllowedBufferTypes(Buffer_Type.of(*Buffer_Type.validValues))
+    original.setAllowedBufferTypes(Buffer_Type.of(randomOf(*Buffer_Type.validValues),
+                                                  randomOf(*Buffer_Type.validValues)))
     original.setMinimumActivity(randomOf(*Buffer_Activity.values()).toInt())
     original.setShowSearch(randomBoolean())
 
