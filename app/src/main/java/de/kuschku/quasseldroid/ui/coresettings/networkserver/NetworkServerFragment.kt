@@ -115,6 +115,7 @@ class NetworkServerFragment : SettingsFragment(), SettingsFragment.Savable,
     sslEnabled.setOnCheckedChangeListener { _, isChecked ->
       sslVerify.isEnabled = isChecked
     }
+    sslVerify.isEnabled = sslEnabled.isChecked
 
     return view
   }
