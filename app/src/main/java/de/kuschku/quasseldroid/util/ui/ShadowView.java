@@ -16,6 +16,7 @@
 
 package de.kuschku.quasseldroid.util.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -102,6 +103,7 @@ public class ShadowView extends View {
   /**
    * Creates an approximated cubic gradient using a multi-stop linear gradient.
    */
+  @SuppressLint("RtlHardcoded")
   private Drawable makeCubicGradientScrimDrawable(int baseColor, int numStops, int gravity) {
 
     // Generate a cache key by hashing together the inputs, based on the method described in the Effective Java book
