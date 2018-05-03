@@ -24,13 +24,13 @@
   android:layout_height="match_parent"
   android:gravity="bottom">
 
-  <include layout="@layout/layout_toolbar" />
-
   <android.support.design.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="?actionBarSize"
     android:orientation="vertical">
+
+    <include layout="@layout/layout_toolbar" />
 
     <fragment
       android:id="@+id/fragment_messages"
@@ -38,12 +38,6 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       tools:layout="@layout/fragment_messages" />
-
-    <de.kuschku.quasseldroid.util.ui.ShadowView
-      android:layout_width="match_parent"
-      android:layout_height="16dp"
-      android:gravity="bottom"
-      app:layout_anchor="@id/autocomplete_list" />
 
     <android.support.v7.widget.RecyclerView
       android:id="@+id/autocomplete_list"
