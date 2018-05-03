@@ -443,7 +443,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       .firstElement()
       .toLiveData()
       .observe(this, Observer {
-        if (resources.getBoolean(R.bool.buffer_drawer_exists) && viewModel.buffer.value == -1 && isInitialConnect) {
+        if (resources.getBoolean(R.bool.buffer_drawer_exists) &&
+            viewModel.buffer.value == Int.MAX_VALUE &&
+            isInitialConnect) {
           drawerLayout.openDrawer(Gravity.START)
           isInitialConnect = true
         }
