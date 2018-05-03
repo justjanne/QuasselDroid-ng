@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2018 Janne Koschinski
+  Copyright (c) 2018 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+  <string name="label_error_login">Prisijungimo Klaida</string>
+  <string name="label_error_setup">Sąrankos Klaida</string>
+  <string name="label_error_init">Ryšio Klaida</string>
+  <string name="label_error_certificate">Certifikato Klaida</string>
+  <string name="label_error_certificate_no_certificate">Nėra certifikatų</string>
+  <string name="label_error_certificate_no_hostname">Nėra tinkamo hostname</string>
+  <string name="label_error_certificate_invalid"><![CDATA[
+    <p>Certifikatas su atspaudu<br/>
+    <code>%1$s</code> galioja tik nuo %2$s iki %3$s</p>
+  ]]></string>
+  <string name="label_error_certificate_untrusted"><![CDATA[
+    <p>Certifikatas su atspaudu<br/>
+    <code>%1$s</code><br/>
+    yra nepatikimas.</p>
+  ]]></string>
+  <string name="label_error_certificate_no_match"><![CDATA[
+    <p>Certifikatas su atspaudu<br/>
+    <code>%1$s</code><br/>
+    negalioja %2$s.</p>
+  ]]></string>
+</resources>

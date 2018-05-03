@@ -1,0 +1,64 @@
+<!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2018 Janne Koschinski
+  Copyright (c) 2018 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+  <!-- Account Selection -->
+  <string name="slide_account_select_title">Pasirinkti Paskyrą</string>
+  <string name="slide_account_select_description">Pasirinkite paskyrą iš sąrašo arba pridėkite naują</string>
+  <string name="label_user_on_host">%1$s ant %2$s:%3$d</string>
+
+  <!-- Account Connection -->
+  <string name="slide_account_connection_title">Ryšys</string>
+  <string name="slideAccountConnectionDescription">Pirma, pasirinkite prie kurio serverio prisijungęs jūsų branduolys.</string>
+
+  <string name="label_connection_host">Host</string>
+  <string name="labelConnectionPort">Port</string>
+
+  <string name="hint_invalid_host">Netinkamas hostname</string>
+  <string name="hint_invalid_port">Netinkamas port</string>
+
+  <!-- Account User -->
+  <string name="slide_account_user_title">Jūsų Paskyra</string>
+  <string name="slide_account_user_description">Įveskite jūsų branduolio vartotojo vardą ir slaptažodį. Jeigu kątik sukūrėte branduolį, mes jums padėsime sutvarkyti paskyrą</string>
+
+  <string name="label_account_user">Vartotojo Vardas</string>
+  <string name="label_account_pass">Slaptažodis</string>
+
+  <string name="hint_invalid_user">Vartotojo vardas negali būti tuščias</string>
+
+  <!-- Account Name -->
+  <string name="slide_account_name_title">Paskyros Nustatymai</string>
+  <string name="slide_account_name_description">Suteikite šiai paskyrai pavadinimą</string>
+
+  <string name="label_account_name">Paskyros Pavadinimas</string>
+
+  <string name="hint_invalid_name">Pavadinimas negali būti tuįčias</string>
+
+  <!-- Core Authenticator Select -->
+  <string name="slide_core_authenticator_select_title">Pasirinkite Autentifikacijos Backend</string>
+  <string name="slide_core_authenticator_select_description">Pasirinkite autentifikacijos backend Quassel Branduoliui naudoti autentifikuojant vartotojus.</string>
+
+  <!-- Core Backend Select -->
+  <string name="slide_core_backend_select_title">Pasirinkite Talpyklos Backend</string>
+  <string name="slide_core_backend_select_description">Pasirinkite duomenų bazės backend Quassel Branduolio talpyklai laikyti senas žinutes ir kitus duomenis.</string>
+
+  <!-- Core Backend Config -->
+  <string name="slide_core_backend_setup_title">Konfigūruoti Talpyklos Backend</string>
+  <string name="slide_core_backend_setup_description">Sukonfigūruokite pasirinktos duomenų bazės backend.</string>
+</resources>

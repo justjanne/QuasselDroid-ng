@@ -17,9 +17,10 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-  <gradient
-    android:angle="270"
-    android:endColor="@android:color/transparent"
-    android:startColor="#20000000" />
-</shape>
+<resources>
+  <string name="contributor_description_freqmod">Pradiniai qdatastream deserijalizacijos bandymai</string>
+  <string name="contributor_description_sandsmark">Senų protokolų implementacija, (de)serijalizuotojas, projekto (de)moralizuotojas</string>
+  <string name="contributor_description_magnuf">Sena Vartotojo Sąsaja</string>
+  <string name="contributor_description_kenji">Sena Vartotojo Sąsaja</string>
+  <string name="contributor_description_justjanne">Perrašymas, Vartotojo Sąsaja, Anotacijų Procesoriai, Backend</string>
+</resources>

@@ -17,9 +17,13 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-  <gradient
-    android:angle="90"
-    android:endColor="@android:color/transparent"
-    android:startColor="#20000000" />
-</shape>
+<resources>
+  <string name="label_bold">Paryškintas</string>
+  <string name="label_italic">Pasvirasis</string>
+  <string name="label_strikethrough">Perbrauktas</string>
+  <string name="label_underline">Pabrauktas</string>
+  <string name="label_monospace">Monospace</string>
+  <string name="label_foreground">Teksto Spalva</string>
+  <string name="label_background">Fono Spalva</string>
+  <string name="label_clear_formatting">Išvalyti Formatavimą</string>
+</resources>

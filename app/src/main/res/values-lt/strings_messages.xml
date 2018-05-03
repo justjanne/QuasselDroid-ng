@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2018 Janne Koschinski
+  Copyright (c) 2018 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+  <string name="message_type_join">Prisijungimas</string>
+  <string name="message_type_part">Atsijungimas</string>
+  <string name="message_type_quit">Išėjimas</string>
+  <string name="message_type_nick">Slapyvardis</string>
+  <string name="message_type_mode">Rėžimas</string>
+  <string name="message_type_topic">Tema</string>
+
+  <string name="message_format_copy">[%1$s] %2$s</string>
+  <string name="message_format_copy_complex">[%1$s] &lt;%2$s&gt; %3$s</string>
+
+  <string name="message_format_action">— %1$s%2$s %3$s</string>
+  <string name="message_format_notice">[%1$s%2$s] %3$s</string>
+  <string name="message_format_nick">%1$s%2$s dabar žinomas kaip %3$s%4$s</string>
+  <string name="message_format_nick_self">Jūs dabar žinomas kaip %1$s%2$s</string>
+  <string name="message_format_mode">Naujas rėžimas %1$s parinktas %2$s%3$s</string>
+  <string name="message_format_join">%1$s%2$s prisijungė į %3$s</string>
+  <string name="message_format_part_1">%1$s%2$s paliko kanalą</string>
+  <string name="message_format_part_2">%1$s%2$s paliko (%3$s)</string>
+  <string name="message_format_quit_1">%1$s%2$s išėjo</string>
+  <string name="message_format_quit_2">%1$s%2$s išėjo (%3$s)</string>
+  <string name="message_format_kick_1">%1$s buvo išspirtas %2$s%3$s</string>
+  <string name="message_format_kick_2">%1$s buvo išspirtas %2$s%3$s (%4$s)</string>
+  <string name="message_format_kill_1">%1$s buvo nužudytas %2$s%3$s</string>
+  <string name="message_format_kill_2">%1$s buvo nužudytas %2$s%3$s (%4$s)</string>
+  <plurals name="message_netsplit_join">
+    <item quantity="one">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojas prisijungė</item>
+    <item quantity="few">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojai prisijungė</item>
+    <item quantity="other">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojų prisijungė</item>
+  </plurals>
+  <plurals name="message_netsplit_quit">
+    <item quantity="one">Netsplit tarp %1$s ir %2$s: %3$d vartotojas išėjo</item>
+    <item quantity="few">Netsplit tarp %1$s ir %2$s: %3$d vartotojai išėjo</item>
+    <item quantity="other">Netsplit tarp %1$s ir %2$s: %3$d vartotojų išėjo</item>
+  </plurals>
+</resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2018 Janne Koschinski
+  Copyright (c) 2018 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+  <string name="label_user_away">Neaktyvus</string>
+  <string name="label_user_away_reason">Priežastis</string>
+  <string name="label_user_identity">Tapatybė</string>
+  <string name="label_user_account">Paskyra</string>
+  <string name="label_user_ident">Ident</string>
+  <string name="label_user_host">Host</string>
+  <string name="label_user_server">Serveris</string>
+
+  <string name="property_group_ircchannel_channel">Kanalas</string>
+  <string name="property_ircchannel_topic">Tema</string>
+  <string name="property_ircchannel_topic_action_edit">Keisti Temą</string>
+  <string name="property_ircchannel_topic_default">Tema Nenustatyta</string>
+</resources>
