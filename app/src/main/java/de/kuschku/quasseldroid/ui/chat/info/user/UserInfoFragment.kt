@@ -157,7 +157,7 @@ class UserInfoFragment : ServiceBoundFragment() {
         realName.visibleIf(user.realName().isNotBlank() && user.realName() != user.nick())
 
         awayMessage.text = user.awayMessage()
-        awayContainer.visibleIf(user.awayMessage().isNotBlank())
+        awayContainer.visibleIf(user.isAway() && user.awayMessage().isNotBlank())
 
         account.text = user.account()
         accountContainer.visibleIf(user.account().isNotBlank())
