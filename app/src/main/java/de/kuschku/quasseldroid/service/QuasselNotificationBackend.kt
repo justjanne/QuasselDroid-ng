@@ -107,7 +107,9 @@ class QuasselNotificationBackend @Inject constructor(
                                 Message_Type.Action,
                                 Message_Type.Notice).toInt(),
                 0
-              )
+              ) {
+                processMessages(session, *it.toTypedArray())
+              }
           }
           NotificationSettings.Level.HIGHLIGHT -> {
             val highlightCount = session.bufferSyncer.highlightCount(buffer.bufferId)
@@ -118,7 +120,9 @@ class QuasselNotificationBackend @Inject constructor(
                                 Message_Type.Action,
                                 Message_Type.Notice).toInt(),
                 Message_Flag.of(Message_Flag.Highlight).toInt()
-              )
+              ) {
+                processMessages(session, *it.toTypedArray())
+              }
             }
           }
           NotificationSettings.Level.NONE      -> {

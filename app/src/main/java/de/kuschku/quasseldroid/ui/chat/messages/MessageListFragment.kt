@@ -51,6 +51,7 @@ import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.service.BacklogRequester
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.BacklogSettings
@@ -99,6 +100,8 @@ class MessageListFragment : ServiceBoundFragment() {
   lateinit var adapter: MessageAdapter
 
   private lateinit var linearLayoutManager: LinearLayoutManager
+
+  private lateinit var backlogRequester: BacklogRequester
 
   private var lastBuffer: BufferId? = null
   private var previousMessageId: MsgId? = null
@@ -206,6 +209,8 @@ class MessageListFragment : ServiceBoundFragment() {
 
     linearLayoutManager = LinearLayoutManager(context)
     linearLayoutManager.reverseLayout = true
+
+    backlogRequester = BacklogRequester(viewModel, database)
 
     adapter.setOnClickListener { msg ->
       if (actionMode != null) {
@@ -481,14 +486,19 @@ class MessageListFragment : ServiceBoundFragment() {
         if (bufferId > 0 && bufferId != Int.MAX_VALUE) {
           if (initial) swipeRefreshLayout.isRefreshing = true
           runInBackground {
-            viewModel.session {
-              it.orNull()?.backlogManager?.requestBacklog(
-                bufferId = bufferId,
-                last = lastMessageId ?: database.message().findFirstByBufferId(
-                  bufferId
-                )?.messageId ?: -1,
-                limit = if (initial) backlogSettings.initialAmount else backlogSettings.pageSize
-              )
+            backlogRequester.loadMore(
+              accountId = accountId,
+              buffer = bufferId,
+              amount = if (initial) backlogSettings.initialAmount else backlogSettings.pageSize,
+              pageSize = backlogSettings.pageSize,
+              lastMessageId = lastMessageId
+                              ?: database.message().findFirstByBufferId(bufferId)?.messageId ?: -1,
+              untilVisible = initial
+            ) {
+              Throwable().printStackTrace()
+              requireActivity().runOnUiThread {
+                swipeRefreshLayout.isRefreshing = false
+              }
             }
           }
         }
