@@ -79,7 +79,7 @@
   <string name="preference_language_entry_auto">System Default</string>
   <string name="preference_language_entry_en" translatable="false">English</string>
   <string name="preference_language_entry_de" translatable="false">Deutsch</string>
-  <string name="preference_language_entry_lt" translatable="false">Lithuanian</string>
+  <string name="preference_language_entry_lt" translatable="false">Lietuvių</string>
   <string-array name="preference_language_entries">
     <item>@string/preference_language_entry_auto</item>
     <item>@string/preference_language_entry_en</item>

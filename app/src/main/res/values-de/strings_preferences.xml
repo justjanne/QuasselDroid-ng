@@ -39,6 +39,9 @@
   <string name="preference_show_lag_title">Latenz anzeigen</string>
   <string name="preference_show_lag_summary">Zeigt die Gerät-Core-Latenz in der Statusleiste</string>
 
+  <string name="preference_language_title">Sprache</string>
+  <string name="preference_language_entry_auto">System-Standardsprache</string>
+
 
   <string name="preference_notifications_title">Benachrichtigungen</string>
 

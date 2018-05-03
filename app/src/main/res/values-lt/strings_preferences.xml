@@ -39,6 +39,9 @@
   <string name="preference_show_lag_title">Rodyti delsimą</string>
   <string name="preference_show_lag_summary">Veiksmų juostoje rodys laiką kiek klijentas atsilieka nuo branduolio</string>
 
+  <string name="preference_language_title">Kalba</string>
+  <string name="preference_language_entry_auto">Sistemos Numatyta</string>
+
 
   <string name="preference_notifications_title">Pranešimai</string>
 
