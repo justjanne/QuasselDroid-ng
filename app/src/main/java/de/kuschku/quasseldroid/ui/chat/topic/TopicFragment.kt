@@ -21,6 +21,7 @@ package de.kuschku.quasseldroid.ui.chat.topic
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -102,11 +103,15 @@ class TopicFragment : SettingsFragment(), SettingsFragment.Savable {
     editorViewModel.lastWord.onNext(editorHelper.lastWord)
 
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
+      val autoCompleteBottomSheet = BottomSheetBehavior.from(autoCompleteList)
       autoCompleteAdapter.setOnClickListener(chatline::autoComplete)
       autoCompleteList.layoutManager = LinearLayoutManager(activity)
       autoCompleteList.itemAnimator = DefaultItemAnimator()
       autoCompleteList.adapter = autoCompleteAdapter
       autoCompleteHelper.addDataListener {
+        autoCompleteBottomSheet.state =
+          if (it.isEmpty()) BottomSheetBehavior.STATE_HIDDEN
+          else BottomSheetBehavior.STATE_COLLAPSED
         autoCompleteAdapter.submitList(it)
       }
     }

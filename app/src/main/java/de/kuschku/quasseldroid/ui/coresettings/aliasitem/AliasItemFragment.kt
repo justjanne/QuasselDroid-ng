@@ -22,6 +22,7 @@ package de.kuschku.quasseldroid.ui.coresettings.aliasitem
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -115,11 +116,15 @@ class AliasItemFragment : SettingsFragment(), SettingsFragment.Savable,
     editorViewModel.lastWord.onNext(editorHelper.lastWord)
 
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
+      val autoCompleteBottomSheet = BottomSheetBehavior.from(autoCompleteList)
       autoCompleteAdapter.setOnClickListener(expansion::autoComplete)
       autoCompleteList.layoutManager = LinearLayoutManager(activity)
       autoCompleteList.itemAnimator = DefaultItemAnimator()
       autoCompleteList.adapter = autoCompleteAdapter
       autoCompleteHelper.addDataListener {
+        autoCompleteBottomSheet.state =
+          if (it.isEmpty()) BottomSheetBehavior.STATE_HIDDEN
+          else BottomSheetBehavior.STATE_COLLAPSED
         autoCompleteAdapter.submitList(it)
       }
     }
