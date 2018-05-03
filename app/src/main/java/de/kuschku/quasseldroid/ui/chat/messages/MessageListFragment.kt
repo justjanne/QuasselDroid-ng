@@ -321,7 +321,7 @@ class MessageListFragment : ServiceBoundFragment() {
       this, Observer {
       if (it?.orNull() == ConnectionState.CONNECTED) {
         runInBackgroundDelayed(16) {
-          loadMore()
+          loadMore(initial = true)
         }
       }
     })
@@ -457,7 +457,9 @@ class MessageListFragment : ServiceBoundFragment() {
     }
     // Try loading messages when switching to isEmpty buffer
     if (database.message().bufferSize(current) == 0) {
-      loadMore(initial = true)
+      if (current > 0 && current != Int.MAX_VALUE) {
+        loadMore(initial = true)
+      }
     }
     activity?.runOnUiThread { messageList.scrollToPosition(0) }
   }
@@ -474,16 +476,21 @@ class MessageListFragment : ServiceBoundFragment() {
   }
 
   private fun loadMore(initial: Boolean = false, lastMessageId: MsgId? = null) {
-    runInBackground {
+    requireActivity().runOnUiThread {
       viewModel.buffer { bufferId ->
-        viewModel.session {
-          it.orNull()?.backlogManager?.requestBacklog(
-            bufferId = bufferId,
-            last = lastMessageId ?: database.message().findFirstByBufferId(
-              bufferId
-            )?.messageId ?: -1,
-            limit = if (initial) backlogSettings.initialAmount else backlogSettings.pageSize
-          )
+        if (bufferId > 0 && bufferId != Int.MAX_VALUE) {
+          if (initial) swipeRefreshLayout.isRefreshing = true
+          runInBackground {
+            viewModel.session {
+              it.orNull()?.backlogManager?.requestBacklog(
+                bufferId = bufferId,
+                last = lastMessageId ?: database.message().findFirstByBufferId(
+                  bufferId
+                )?.messageId ?: -1,
+                limit = if (initial) backlogSettings.initialAmount else backlogSettings.pageSize
+              )
+            }
+          }
         }
       }
     }
