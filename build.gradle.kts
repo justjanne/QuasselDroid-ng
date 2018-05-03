@@ -35,15 +35,3 @@ allprojects {
     maven(url = "https://jitpack.io")
   }
 }
-
-subprojects {
-  configurations.all {
-    resolutionStrategy {
-      eachDependency {
-        if (requested.name == "kotlin-compiler-embeddable") {
-          useVersion("1.2.31")
-        }
-      }
-    }
-  }
-}

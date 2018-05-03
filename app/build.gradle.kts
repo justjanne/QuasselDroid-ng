@@ -131,7 +131,7 @@ dependencies {
   }
 
   // App Arch Persistence
-  withVersion("1.1.0-beta3") {
+  withVersion("1.1.0-rc1") {
     implementation("android.arch.persistence.room", "runtime", version)
     implementation("android.arch.persistence.room", "rxjava2", version)
     kapt("android.arch.persistence.room", "compiler", version)
