@@ -20,6 +20,7 @@
 package de.kuschku.malheur
 
 import android.app.Application
+import android.os.Build
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
@@ -85,11 +86,16 @@ object CrashHandler {
           }
         } catch (e: Throwable) {
           e.printStackTrace()
-          originalHandler?.uncaughtException(activeThread, throwable)
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            throwable.addSuppressed(e)
+          }
         }
       }.start()
     }
-    Thread.setDefaultUncaughtExceptionHandler(myHandler)
+    Thread.setDefaultUncaughtExceptionHandler { currentThread, throwable ->
+      myHandler?.uncaughtException(currentThread, throwable)
+      originalHandler?.uncaughtException(currentThread, throwable)
+    }
   }
 
   fun handle(throwable: Throwable) {
