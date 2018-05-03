@@ -207,23 +207,31 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     val view = inflater.inflate(R.layout.fragment_chat_list, container, false)
     ButterKnife.bind(this, view)
 
+    var hasSetBufferViewConfigId = false
     val adapter = BufferViewConfigAdapter()
     viewModel.bufferViewConfigs.switchMap {
       combineLatest(it.map(BufferViewConfig::liveUpdates))
     }.toLiveData().observe(this, Observer {
       if (it != null) {
         adapter.submitList(it)
+        if (!hasSetBufferViewConfigId) {
+          chatListSpinner.setSelection(adapter.indexOf(viewModel.bufferViewConfigId.value))
+          hasSetBufferViewConfigId = true
+        }
       }
     })
 
     chatListSpinner.adapter = adapter
     chatListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-      override fun onNothingSelected(p0: AdapterView<*>?) {
-        viewModel.bufferViewConfigId.onNext(-1)
+      override fun onNothingSelected(adapter: AdapterView<*>?) {
+        if (hasSetBufferViewConfigId)
+          viewModel.bufferViewConfigId.onNext(-1)
       }
 
-      override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        viewModel.bufferViewConfigId.onNext(adapter.getItem(p2)?.bufferViewId() ?: -1)
+      override fun onItemSelected(adapter: AdapterView<*>?, element: View?, position: Int,
+                                  id: Long) {
+        if (hasSetBufferViewConfigId)
+          viewModel.bufferViewConfigId.onNext(id.toInt())
       }
     }
 

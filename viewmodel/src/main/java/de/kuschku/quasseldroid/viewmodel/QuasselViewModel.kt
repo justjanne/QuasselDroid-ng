@@ -32,6 +32,8 @@ import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.Optional
+import de.kuschku.libquassel.util.compatibility.LoggingHandler
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.flag.and
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helpers.*
@@ -45,6 +47,10 @@ import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 
 class QuasselViewModel : ViewModel() {
+  init {
+    log(LoggingHandler.LogLevel.ERROR, "DEBUG", "QuasselViewModel created! ${hashCode()}")
+  }
+
   val backendWrapper = BehaviorSubject.createDefault(Observable.empty<Optional<Backend>>())
 
   val selectedMessages = BehaviorSubject.createDefault(emptyMap<MsgId, FormattedMessage>())

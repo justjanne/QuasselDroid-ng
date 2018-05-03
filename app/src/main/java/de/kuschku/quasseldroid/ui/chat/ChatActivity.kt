@@ -538,18 +538,22 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   override fun onSaveInstanceState(outState: Bundle?) {
     super.onSaveInstanceState(outState)
     outState?.putInt("OPEN_BUFFER", viewModel.buffer.value ?: -1)
+    outState?.putInt("OPEN_BUFFERVIEWCONFIG", viewModel.bufferViewConfigId.value ?: -1)
   }
 
   override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
     super.onSaveInstanceState(outState, outPersistentState)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       outPersistentState?.putInt("OPEN_BUFFER", viewModel.buffer.value ?: -1)
+      outPersistentState?.putInt("OPEN_BUFFERVIEWCONFIG", viewModel.bufferViewConfigId.value ?: -1)
     }
   }
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
     super.onRestoreInstanceState(savedInstanceState)
     viewModel.buffer.onNext(savedInstanceState?.getInt("OPEN_BUFFER", -1) ?: -1)
+    viewModel.bufferViewConfigId.onNext(savedInstanceState?.getInt("OPEN_BUFFERVIEWCONFIG", -1)
+                                        ?: -1)
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -557,8 +561,16 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                                       persistentState: PersistableBundle?) {
     super.onRestoreInstanceState(savedInstanceState, persistentState)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      val fallback = persistentState?.getInt("OPEN_BUFFER", -1) ?: -1
-      viewModel.buffer.onNext(savedInstanceState?.getInt("OPEN_BUFFER", fallback) ?: fallback)
+      val fallbackBuffer = persistentState?.getInt("OPEN_BUFFER", -1) ?: -1
+      viewModel.buffer.onNext(
+        savedInstanceState?.getInt("OPEN_BUFFER", fallbackBuffer)
+        ?: fallbackBuffer
+      )
+      val fallbackBufferViewConfigId = persistentState?.getInt("OPEN_BUFFERVIEWCONFIG", -1) ?: -1
+      viewModel.bufferViewConfigId.onNext(
+        savedInstanceState?.getInt("OPEN_BUFFERVIEWCONFIG", fallbackBufferViewConfigId)
+        ?: fallbackBufferViewConfigId
+      )
     }
   }
 

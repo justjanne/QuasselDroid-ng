@@ -42,6 +42,8 @@ class BufferViewConfigAdapter :
     notifyDataSetChanged()
   }
 
+  fun indexOf(id: Int) = data.indexOfFirst { it.bufferViewId() == id }
+
   override fun isEmpty() = data.isEmpty()
 
   override fun onBindViewHolder(holder: BufferViewConfigViewHolder, position: Int) =
