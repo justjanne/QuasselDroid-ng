@@ -29,6 +29,7 @@ import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.util.IrcUserUtils
 import de.kuschku.libquassel.util.flag.hasFlag
+import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
@@ -152,15 +153,15 @@ class AutoCompleteHelper(
                 }.mapNotNull { info ->
                   networks[info.networkId]?.let { info to it }
                 }.map { (info, network) ->
-                  val channel = network.ircChannel(info.bufferName) ?: IrcChannel.NULL
+                  val channel = network.ircChannel(info.bufferName).nullIf { it == IrcChannel.NULL }
                   AutoCompleteItem.ChannelItem(
                     info = info,
                     network = network.networkInfo(),
                     bufferStatus = when (channel) {
-                      IrcChannel.NULL -> BufferStatus.OFFLINE
-                      else            -> BufferStatus.ONLINE
+                      null -> BufferStatus.OFFLINE
+                      else -> BufferStatus.ONLINE
                     },
-                    description = channel.topic()
+                    description = channel?.topic() ?: ""
                   )
                 }
               val nicks = users.asSequence().map { user ->

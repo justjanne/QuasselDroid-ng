@@ -39,6 +39,13 @@
       android:key="@string/preference_show_lag_key"
       android:summary="@string/preference_show_lag_summary"
       android:title="@string/preference_show_lag_title" />
+
+    <DropDownPreference
+      android:defaultValue=""
+      android:entries="@array/preference_language_entries"
+      android:entryValues="@array/preference_language_entryvalues"
+      android:key="@string/preference_language_key"
+      android:title="@string/preference_language_title" />
   </PreferenceCategory>
 
   <PreferenceCategory android:title="@string/preference_notifications_title">

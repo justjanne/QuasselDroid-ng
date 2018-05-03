@@ -43,6 +43,10 @@ object Settings {
       showLag = getBoolean(
         context.getString(R.string.preference_show_lag_key),
         AppearanceSettings.DEFAULT.showLag
+      ),
+      language = getString(
+        context.getString(R.string.preference_language_key),
+        AppearanceSettings.DEFAULT.language
       )
     )
   }

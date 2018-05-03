@@ -21,6 +21,8 @@ package de.kuschku.quasseldroid.ui.setup
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.annotation.ColorRes
@@ -35,6 +37,7 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import dagger.android.support.DaggerAppCompatActivity
+import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity
 import de.kuschku.quasseldroid.ui.clientsettings.client.ClientSettingsActivity
@@ -44,6 +47,7 @@ import de.kuschku.quasseldroid.util.helper.observeSticky
 import de.kuschku.quasseldroid.util.helper.or
 import de.kuschku.quasseldroid.util.helper.switchMap
 import de.kuschku.quasseldroid.util.helper.updateRecentsHeaderIfExisting
+import de.kuschku.quasseldroid.util.ui.LocaleHelper
 
 abstract class SetupActivity : DaggerAppCompatActivity() {
   @BindView(R.id.menu_view)
@@ -104,6 +108,8 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.Theme_SetupTheme)
     super.onCreate(savedInstanceState)
+    packageManager.getActivityInfo(componentName, PackageManager.GET_META_DATA).labelRes
+      .nullIf { it == 0 }?.let(this::setTitle)
     setContentView(R.layout.activity_setup)
     ButterKnife.bind(this)
 
@@ -156,6 +162,10 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
     viewPager.addOnPageChangeListener(pageChangeListener)
     pageChanged()
     updateRecentsHeader()
+  }
+
+  override fun attachBaseContext(newBase: Context) {
+    super.attachBaseContext(LocaleHelper.setLocale(newBase))
   }
 
   private fun onDoneInternal() {

@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid
 
+import android.content.Context
 import android.os.Build
 import android.os.StrictMode
 import com.squareup.leakcanary.LeakCanary
@@ -35,6 +36,7 @@ import de.kuschku.quasseldroid.util.backport.AndroidThreeTenBackport
 import de.kuschku.quasseldroid.util.compatibility.AndroidCompatibilityUtils
 import de.kuschku.quasseldroid.util.compatibility.AndroidLoggingHandler
 import de.kuschku.quasseldroid.util.compatibility.AndroidStreamChannelFactory
+import de.kuschku.quasseldroid.util.ui.LocaleHelper
 
 class Quasseldroid : DaggerApplication() {
   override fun applicationInjector(): AndroidInjector<Quasseldroid> =
@@ -225,5 +227,9 @@ class Quasseldroid : DaggerApplication() {
           .build()
       )
     }
+  }
+
+  override fun attachBaseContext(base: Context) {
+    super.attachBaseContext(LocaleHelper.setLocale(base))
   }
 }

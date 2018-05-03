@@ -19,6 +19,8 @@
 
 package de.kuschku.quasseldroid.util.ui
 
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -27,6 +29,7 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasFragmentInjector
 import dagger.android.support.HasSupportFragmentInjector
+import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import javax.inject.Inject
 
@@ -45,6 +48,12 @@ abstract class ThemedActivity : AppCompatActivity(), HasSupportFragmentInjector,
     AndroidInjection.inject(this)
     setTheme(appearanceSettings.theme.style)
     super.onCreate(savedInstanceState)
+    packageManager.getActivityInfo(componentName, PackageManager.GET_META_DATA).labelRes
+      .nullIf { it == 0 }?.let(this::setTitle)
+  }
+
+  override fun attachBaseContext(newBase: Context) {
+    super.attachBaseContext(LocaleHelper.setLocale(newBase))
   }
 
   override fun supportFragmentInjector(): AndroidInjector<Fragment>? {

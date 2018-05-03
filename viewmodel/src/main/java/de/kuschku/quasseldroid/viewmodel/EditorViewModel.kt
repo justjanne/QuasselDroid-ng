@@ -26,6 +26,7 @@ import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.hasFlag
+import de.kuschku.libquassel.util.helpers.mapNullable
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
@@ -76,15 +77,15 @@ class EditorViewModel : ViewModel() {
                       network.liveIrcChannel(
                         info.bufferName
                       ).switchMap { channel ->
-                        channel.updates().map {
+                        channel.updates().mapNullable(IrcChannel.NULL) {
                           AutoCompleteItem.ChannelItem(
                             info = info,
                             network = network.networkInfo(),
                             bufferStatus = when (it) {
-                              IrcChannel.NULL -> BufferStatus.OFFLINE
-                              else            -> BufferStatus.ONLINE
+                              null -> BufferStatus.OFFLINE
+                              else -> BufferStatus.ONLINE
                             },
-                            description = it.topic()
+                            description = it?.topic() ?: ""
                           )
                         }
                       }

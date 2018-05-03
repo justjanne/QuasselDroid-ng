@@ -63,7 +63,9 @@ class ClientSettingsFragment : DaggerPreferenceFragmentCompat(),
 
   override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
     updateSummary(findPreference(key))
-    if (appearanceSettings.theme != Settings.appearance(context!!).theme) {
+    val appearanceSettings = Settings.appearance(context!!)
+    if (this.appearanceSettings.theme != appearanceSettings.theme ||
+        this.appearanceSettings.language != appearanceSettings.language) {
       activity?.recreate()
     }
   }

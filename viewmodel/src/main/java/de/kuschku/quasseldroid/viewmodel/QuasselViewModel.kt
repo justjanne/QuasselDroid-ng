@@ -201,35 +201,31 @@ class QuasselViewModel : ViewModel() {
       if (bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
         session.liveNetworks().switchMap { networks ->
           val network = networks[bufferInfo.networkId]
-          network?.liveIrcChannel(bufferInfo.bufferName)?.switchMap { ircChannel ->
-            if (ircChannel != IrcChannel.NULL) {
-              ircChannel.liveIrcUsers().switchMap { users ->
-                combineLatest<IrcUserItem>(
-                  users.map<IrcUser, Observable<IrcUserItem>?> {
-                    it.updates().map { user ->
-                      val userModes = ircChannel.userModes(user)
-                      val prefixModes = network.prefixModes()
+          network?.liveIrcChannel(bufferInfo.bufferName)?.switchMapNullable(IrcChannel.NULL) { ircChannel ->
+            ircChannel?.liveIrcUsers()?.switchMap { users ->
+              combineLatest<IrcUserItem>(
+                users.map<IrcUser, Observable<IrcUserItem>?> {
+                  it.updates().map { user ->
+                    val userModes = ircChannel.userModes(user)
+                    val prefixModes = network.prefixModes()
 
-                      val lowestMode = userModes.asSequence().mapNotNull {
-                        prefixModes.indexOf(it)
-                      }.min() ?: prefixModes.size
+                    val lowestMode = userModes.asSequence().mapNotNull {
+                      prefixModes.indexOf(it)
+                    }.min() ?: prefixModes.size
 
-                      IrcUserItem(
-                        user.nick(),
-                        network.modesToPrefixes(userModes),
-                        lowestMode,
-                        user.realName(),
-                        user.hostMask(),
-                        user.isAway(),
-                        network.support("CASEMAPPING")
-                      )
-                    }
+                    IrcUserItem(
+                      user.nick(),
+                      network.modesToPrefixes(userModes),
+                      lowestMode,
+                      user.realName(),
+                      user.hostMask(),
+                      user.isAway(),
+                      network.support("CASEMAPPING")
+                    )
                   }
-                )
-              }
-            } else {
-              Observable.just(emptyList())
-            }
+                }
+              )
+            } ?: Observable.just(emptyList())
           }
         }
       } else {
@@ -294,10 +290,10 @@ class QuasselViewModel : ViewModel() {
                 } ?: Observable.just(SelectedBufferItem(info, hiddenState = hiddenState))
               }
               Buffer_Type.ChannelBuffer -> {
-                network?.liveIrcChannel(info.bufferName)?.map {
+                network?.liveIrcChannel(info.bufferName)?.mapNullable(IrcChannel.NULL) {
                   SelectedBufferItem(
                     info,
-                    joined = it != IrcChannel.NULL,
+                    joined = it != null,
                     hiddenState = hiddenState
                   )
                 } ?: Observable.just(SelectedBufferItem(info, hiddenState = hiddenState))
@@ -359,17 +355,17 @@ class QuasselViewModel : ViewModel() {
                             network.liveNetworkInfo().switchMap { networkInfo ->
                               network.liveConnectionState().switchMap { connectionState ->
                                 network.liveIrcUser(info.bufferName).switchMap {
-                                  it.updates().map { user ->
+                                  it.updates().mapNullable(IrcUser.NULL) { user ->
                                     BufferProps(
                                       info = info,
                                       network = networkInfo,
                                       networkConnectionState = connectionState,
                                       bufferStatus = when {
-                                        user == IrcUser.NULL -> BufferStatus.OFFLINE
-                                        user.isAway()        -> BufferStatus.AWAY
-                                        else                 -> BufferStatus.ONLINE
+                                        user == null  -> BufferStatus.OFFLINE
+                                        user.isAway() -> BufferStatus.AWAY
+                                        else          -> BufferStatus.ONLINE
                                       },
-                                      description = user.realName(),
+                                      description = user?.realName() ?: "",
                                       activity = activity,
                                       highlights = highlights,
                                       hiddenState = state
@@ -383,16 +379,16 @@ class QuasselViewModel : ViewModel() {
                             network.liveNetworkInfo().switchMap { networkInfo ->
                               network.liveConnectionState().switchMap { connectionState ->
                                 network.liveIrcChannel(info.bufferName).switchMap { channel ->
-                                  channel.updates().map {
+                                  channel.updates().mapNullable(IrcChannel.NULL) {
                                     BufferProps(
                                       info = info,
                                       network = networkInfo,
                                       networkConnectionState = connectionState,
                                       bufferStatus = when (it) {
-                                        IrcChannel.NULL -> BufferStatus.OFFLINE
-                                        else            -> BufferStatus.ONLINE
+                                        null -> BufferStatus.OFFLINE
+                                        else -> BufferStatus.ONLINE
                                       },
-                                      description = it.topic(),
+                                      description = it?.topic() ?: "",
                                       activity = activity,
                                       highlights = highlights,
                                       hiddenState = state

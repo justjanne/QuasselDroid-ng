@@ -41,6 +41,18 @@ fun <T : Any, U : Any> Observable<Optional<T>>.mapMapNullable(
   }
 }
 
+fun <T : Any, U : Any> Observable<T>.mapNullable(
+  nullableValue: T,
+  mapper: (T?) -> U): Observable<U> = map {
+  mapper(it.nullIf { it == nullableValue })
+}
+
+fun <T : Any, U : Any> Observable<T>.switchMapNullable(
+  nullableValue: T,
+  mapper: (T?) -> Observable<U>): Observable<U> = switchMap {
+  mapper(it.nullIf { it == nullableValue })
+}
+
 fun <T : Any, U : Any> Observable<Optional<T>>.mapSwitchMap(
   mapper: (T) -> Observable<U>): Observable<Optional<U>> = switchMap {
   if (it.isPresent()) {

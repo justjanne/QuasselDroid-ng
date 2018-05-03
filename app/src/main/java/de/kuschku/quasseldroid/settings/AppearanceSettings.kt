@@ -25,7 +25,8 @@ import de.kuschku.quasseldroid.R
 data class AppearanceSettings(
   val inputEnter: InputEnterMode = InputEnterMode.EMOJI,
   val showLag: Boolean = true,
-  val theme: Theme = Theme.MATERIAL_LIGHT
+  val theme: Theme = Theme.MATERIAL_LIGHT,
+  val language: String = ""
 ) {
   enum class InputEnterMode {
     EMOJI,
