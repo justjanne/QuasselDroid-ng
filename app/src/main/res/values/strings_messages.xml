@@ -24,7 +24,7 @@
   <string name="message_type_nick">Nick</string>
   <string name="message_type_mode">Mode</string>
   <string name="message_type_topic">Topic</string>
-  <string-array name="message_filter_types">
+  <string-array name="message_filter_types" translatable="false">
     <item>@string/message_type_join</item>
     <item>@string/message_type_part</item>
     <item>@string/message_type_quit</item>

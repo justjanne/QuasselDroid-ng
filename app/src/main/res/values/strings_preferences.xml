@@ -32,7 +32,7 @@
   <string name="preference_theme_entry_gruvbox_light">Gruvbox (Light)</string>
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Dark)</string>
   <string name="preference_theme_entry_dracula">Dracula</string>
-  <string-array name="preference_theme_entries">
+  <string-array name="preference_theme_entries" translatable="false">
     <item>@string/preference_theme_entry_material_light</item>
     <item>@string/preference_theme_entry_material_dark</item>
     <item>@string/preference_theme_entry_quassel_light</item>
@@ -61,7 +61,7 @@
   <string name="preference_input_enter_title">Enter key on keyboard</string>
   <string name="preference_input_enter_entry_emoji">Emoji</string>
   <string name="preference_input_enter_entry_send">Send</string>
-  <string-array name="preference_input_enter_entries">
+  <string-array name="preference_input_enter_entries" translatable="false">
     <item>@string/preference_input_enter_entry_emoji</item>
     <item>@string/preference_input_enter_entry_send</item>
   </string-array>
@@ -80,7 +80,7 @@
   <string name="preference_language_entry_en" translatable="false">English</string>
   <string name="preference_language_entry_de" translatable="false">Deutsch</string>
   <string name="preference_language_entry_lt" translatable="false">Lietuvių</string>
-  <string-array name="preference_language_entries">
+  <string-array name="preference_language_entries" translatable="false">
     <item>@string/preference_language_entry_auto</item>
     <item>@string/preference_language_entry_en</item>
     <item>@string/preference_language_entry_de</item>
@@ -120,7 +120,7 @@
   <string name="preference_notifications_level_all">All Messages</string>
   <string name="preference_notifications_level_highlight">Mentions</string>
   <string name="preference_notifications_level_none">Never</string>
-  <string-array name="preference_notifications_level_entries">
+  <string-array name="preference_notifications_level_entries" translatable="false">
     <item>@string/preference_notifications_level_all</item>
     <item>@string/preference_notifications_level_highlight</item>
     <item>@string/preference_notifications_level_none</item>
@@ -156,7 +156,7 @@
   <string name="preference_colorize_nicknames_entry_all">All nicks</string>
   <string name="preference_colorize_nicknames_entry_all_but_mine">All but own nick</string>
   <string name="preference_colorize_nicknames_entry_none">No nicks</string>
-  <string-array name="preference_colorize_nicknames_entries">
+  <string-array name="preference_colorize_nicknames_entries" translatable="false">
     <item>@string/preference_colorize_nicknames_entry_all</item>
     <item>@string/preference_colorize_nicknames_entry_all_but_mine</item>
     <item>@string/preference_colorize_nicknames_entry_none</item>
@@ -172,7 +172,7 @@
   <string name="preference_show_prefix_entry_all">All modes</string>
   <string name="preference_show_prefix_entry_highest">Highest mode</string>
   <string name="preference_show_prefix_entry_none">No modes</string>
-  <string-array name="preference_show_prefix_entries">
+  <string-array name="preference_show_prefix_entries" translatable="false">
     <item>@string/preference_show_prefix_entry_all</item>
     <item>@string/preference_show_prefix_entry_highest</item>
     <item>@string/preference_show_prefix_entry_none</item>

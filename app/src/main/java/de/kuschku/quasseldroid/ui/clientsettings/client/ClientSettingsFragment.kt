@@ -55,7 +55,7 @@ class ClientSettingsFragment : DaggerPreferenceFragmentCompat(),
       findPreference(getString(R.string.preference_notification_vibration_key)).isVisible = false
       findPreference(getString(R.string.preference_notification_light_key)).isVisible = false
     } else {
-      findPreference(getString(R.string.preference_notification_configure_key)).isVisible = true
+      findPreference(getString(R.string.preference_notification_configure_key)).isVisible = false
     }
   }
 
