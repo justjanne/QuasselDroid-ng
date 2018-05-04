@@ -21,7 +21,7 @@ package de.kuschku.quasseldroid.ui.clientsettings.whitelist
 
 import android.content.Context
 import android.content.Intent
-import de.kuschku.quasseldroid.util.ui.SettingsActivity
+import de.kuschku.quasseldroid.util.ui.settings.SettingsActivity
 
 class WhitelistActivity : SettingsActivity(WhitelistFragment()) {
   companion object {

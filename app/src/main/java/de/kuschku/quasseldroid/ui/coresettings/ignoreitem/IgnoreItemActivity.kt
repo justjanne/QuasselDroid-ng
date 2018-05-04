@@ -22,7 +22,7 @@ package de.kuschku.quasseldroid.ui.coresettings.ignoreitem
 import android.content.Context
 import android.content.Intent
 import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
-import de.kuschku.quasseldroid.util.ui.ServiceBoundSettingsActivity
+import de.kuschku.quasseldroid.util.ui.settings.ServiceBoundSettingsActivity
 
 class IgnoreItemActivity : ServiceBoundSettingsActivity(IgnoreItemFragment()) {
   companion object {

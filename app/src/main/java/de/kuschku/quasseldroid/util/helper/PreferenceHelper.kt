@@ -17,15 +17,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.clientsettings.client
+package de.kuschku.quasseldroid.util.helper
 
-import android.content.Context
-import android.content.Intent
-import de.kuschku.quasseldroid.util.ui.settings.SettingsActivity
+import android.support.v7.preference.PreferenceCategory
+import android.support.v7.preference.PreferenceScreen
 
-class ClientSettingsActivity : SettingsActivity(ClientSettingsFragment()) {
-  companion object {
-    fun launch(context: Context) = context.startActivity(intent(context))
-    fun intent(context: Context) = Intent(context, ClientSettingsActivity::class.java)
-  }
-}
+fun PreferenceCategory.preferences() = (0 until preferenceCount).map(this::getPreference)
+fun PreferenceScreen.preferences() = (0 until preferenceCount).map(this::getPreference)

@@ -22,6 +22,8 @@
   <string name="app_description">An Android-based client for the decentralized Quassel IRC client.</string>
   <string name="app_description_long">Quassel is a distributed, decentralized IRC client, written using C++ and Qt. Quasseldroid is a pure-kotlin client for the Quassel core, allowing you to connect to your Quassel core using your Android™ phone.</string>
 
+  <string name="package_name">com.iskrembilen.quasseldroid</string>
+
   <string name="connection_service_title">Connection Service</string>
   <string name="connection_service_description">Keeps a connection to your core to allow for notifications, and to transmit messages.</string>
 
@@ -73,6 +75,7 @@
   <string name="label_nicklist">Nick List</string>
   <string name="label_no">No</string>
   <string name="label_no_away_message">No away message available</string>
+  <string name="label_no_sound">None</string>
   <string name="label_reply">Reply</string>
   <string name="label_reset">Reset</string>
   <string name="label_open">Open</string>

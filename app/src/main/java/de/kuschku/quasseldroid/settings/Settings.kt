@@ -143,7 +143,19 @@ object Settings {
           context.getString(R.string.preference_notification_other_key),
           ""
         )
-      ) ?: NotificationSettings.DEFAULT.other
+      ) ?: NotificationSettings.DEFAULT.other,
+      sound = getString(
+        context.getString(R.string.preference_notification_sound_key),
+        NotificationSettings.DEFAULT.sound
+      ),
+      vibrate = getBoolean(
+        context.getString(R.string.preference_notification_sound_key),
+        NotificationSettings.DEFAULT.vibrate
+      ),
+      light = getBoolean(
+        context.getString(R.string.preference_notification_light_key),
+        NotificationSettings.DEFAULT.light
+      )
     )
   }
 

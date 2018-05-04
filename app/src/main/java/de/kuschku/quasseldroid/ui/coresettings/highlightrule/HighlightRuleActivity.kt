@@ -22,7 +22,7 @@ package de.kuschku.quasseldroid.ui.coresettings.highlightrule
 import android.content.Context
 import android.content.Intent
 import de.kuschku.libquassel.quassel.syncables.HighlightRuleManager
-import de.kuschku.quasseldroid.util.ui.ServiceBoundSettingsActivity
+import de.kuschku.quasseldroid.util.ui.settings.ServiceBoundSettingsActivity
 
 class HighlightRuleActivity : ServiceBoundSettingsActivity(HighlightRuleFragment()) {
   companion object {

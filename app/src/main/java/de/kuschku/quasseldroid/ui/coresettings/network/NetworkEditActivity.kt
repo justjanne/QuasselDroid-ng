@@ -22,7 +22,7 @@ package de.kuschku.quasseldroid.ui.coresettings.network
 import android.content.Context
 import android.content.Intent
 import de.kuschku.libquassel.protocol.NetworkId
-import de.kuschku.quasseldroid.util.ui.ServiceBoundSettingsActivity
+import de.kuschku.quasseldroid.util.ui.settings.ServiceBoundSettingsActivity
 
 class NetworkEditActivity : ServiceBoundSettingsActivity(NetworkEditFragment()) {
   companion object {

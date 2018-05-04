@@ -104,6 +104,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:paddingLeft">0dip</item>
     <item name="android:paddingRight">0dip</item>
+    <item name="android:popupBackground">?colorBackground</item>
   </style>
 
   <style name="Widget.CoreSettings.Wrapper" parent="">
@@ -263,6 +264,14 @@
     <item name="android:textColor">?colorTextSecondary</item>
   </style>
 
+  <style name="Widget.RingtonePreference" parent="">
+    <item name="android:layout">@layout/preference_vertical</item>
+
+    <item name="ringtoneType">ringtone</item>
+    <item name="showSilent">true</item>
+    <item name="showDefault">true</item>
+  </style>
+
   <style name="Widget.Subhead" parent="Widget.RtlConformTextView">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
@@ -296,5 +305,24 @@
   <!-- ShadowView -->
   <declare-styleable name="ShadowView">
     <attr name="android:gravity" />
+  </declare-styleable>
+
+  <!-- RingtonePreference -->
+  <declare-styleable name="RingtonePreference">
+    <!-- Which ringtone type(s) to show in the picker. -->
+    <attr name="ringtoneType">
+      <!-- Ringtones. -->
+      <flag name="ringtone" value="1" />
+      <!-- Notification sounds. -->
+      <flag name="notification" value="2" />
+      <!-- Alarm sounds. -->
+      <flag name="alarm" value="4" />
+      <!-- All available ringtone sounds. -->
+      <flag name="all" value="7" />
+    </attr>
+    <!-- Whether to show an item for a default sound. -->
+    <attr name="showDefault" format="boolean" />
+    <!-- Whether to show an item for 'Silent'. -->
+    <attr name="showSilent" format="boolean" />
   </declare-styleable>
 </resources>

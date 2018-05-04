@@ -17,7 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.util.ui
+package de.kuschku.quasseldroid.util.ui.settings
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -28,8 +28,10 @@ import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
+import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 
-abstract class SettingsActivity(private val fragment: Fragment? = null) : ThemedActivity() {
+abstract class ServiceBoundSettingsActivity(private val fragment: Fragment? = null) :
+  ServiceBoundActivity() {
   protected open fun fragment(): Fragment? = null
 
   private var changeable: SettingsFragment.Changeable? = null

@@ -23,8 +23,9 @@ data class NotificationSettings(
   val query: Level = Level.ALL,
   val channel: Level = Level.HIGHLIGHT,
   val other: Level = Level.NONE,
-  val sound: String? = null,
-  val vibrate: Boolean = true
+  val sound: String = "content://settings/system/notification_sound",
+  val vibrate: Boolean = true,
+  val light: Boolean = true
 ) {
   enum class Level {
     ALL,

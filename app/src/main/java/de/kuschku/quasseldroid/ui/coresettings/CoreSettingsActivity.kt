@@ -21,7 +21,7 @@ package de.kuschku.quasseldroid.ui.coresettings
 
 import android.content.Context
 import android.content.Intent
-import de.kuschku.quasseldroid.util.ui.ServiceBoundSettingsActivity
+import de.kuschku.quasseldroid.util.ui.settings.ServiceBoundSettingsActivity
 
 class CoreSettingsActivity : ServiceBoundSettingsActivity(CoreSettingsFragment()) {
   companion object {

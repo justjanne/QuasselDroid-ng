@@ -149,7 +149,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       .apply {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
           var defaults = 0
-          if (!notificationSettings.sound.isNullOrEmpty()) {
+          if (!notificationSettings.sound.isEmpty()) {
             setSound(Uri.parse(notificationSettings.sound))
           }
           if (notificationSettings.vibrate) {

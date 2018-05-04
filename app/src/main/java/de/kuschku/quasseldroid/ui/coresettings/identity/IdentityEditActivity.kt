@@ -22,7 +22,7 @@ package de.kuschku.quasseldroid.ui.coresettings.identity
 import android.content.Context
 import android.content.Intent
 import de.kuschku.libquassel.protocol.IdentityId
-import de.kuschku.quasseldroid.util.ui.ServiceBoundSettingsActivity
+import de.kuschku.quasseldroid.util.ui.settings.ServiceBoundSettingsActivity
 
 class IdentityEditActivity : ServiceBoundSettingsActivity(IdentityEditFragment()) {
   companion object {

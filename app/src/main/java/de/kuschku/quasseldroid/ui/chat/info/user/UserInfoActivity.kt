@@ -23,7 +23,7 @@ import android.content.Context
 import android.content.Intent
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.NetworkId
-import de.kuschku.quasseldroid.util.ui.ServiceBoundSettingsActivity
+import de.kuschku.quasseldroid.util.ui.settings.ServiceBoundSettingsActivity
 
 class UserInfoActivity : ServiceBoundSettingsActivity(UserInfoFragment()) {
   companion object {

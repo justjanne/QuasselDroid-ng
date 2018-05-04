@@ -73,6 +73,7 @@
   <string name="label_nicklist">Slapyvardžių Sąrašas</string>
   <string name="label_no">Ne</string>
   <string name="label_no_away_message">Nėra pasišalinimo žinutės</string>
+  <string name="label_no_sound">Nėra</string>
   <string name="label_reply">Atsakyti</string>
   <string name="label_reset">Atstatyti</string>
   <string name="label_open">Atverti</string>

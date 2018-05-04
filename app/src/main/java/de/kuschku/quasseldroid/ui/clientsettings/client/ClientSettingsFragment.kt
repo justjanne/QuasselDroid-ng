@@ -20,6 +20,7 @@
 package de.kuschku.quasseldroid.ui.clientsettings.client
 
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
@@ -33,11 +34,12 @@ import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity
 import de.kuschku.quasseldroid.ui.clientsettings.crash.CrashActivity
 import de.kuschku.quasseldroid.ui.clientsettings.whitelist.WhitelistActivity
-import de.kuschku.quasseldroid.util.backport.DaggerPreferenceFragmentCompat
+import de.kuschku.quasseldroid.util.ui.settings.DaggerPreferenceFragmentCompat
 import javax.inject.Inject
 
 class ClientSettingsFragment : DaggerPreferenceFragmentCompat(),
                                SharedPreferences.OnSharedPreferenceChangeListener {
+
   @Inject
   lateinit var appearanceSettings: AppearanceSettings
 
@@ -48,6 +50,13 @@ class ClientSettingsFragment : DaggerPreferenceFragmentCompat(),
 
   override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
     setPreferencesFromResource(R.xml.preferences, rootKey)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      findPreference(getString(R.string.preference_notification_sound_key)).isVisible = false
+      findPreference(getString(R.string.preference_notification_vibration_key)).isVisible = false
+      findPreference(getString(R.string.preference_notification_light_key)).isVisible = false
+    } else {
+      findPreference(getString(R.string.preference_notification_configure_key)).isVisible = true
+    }
   }
 
   override fun onStart() {

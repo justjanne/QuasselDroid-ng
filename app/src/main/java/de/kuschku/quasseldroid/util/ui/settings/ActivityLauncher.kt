@@ -17,15 +17,13 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.clientsettings.client
+package de.kuschku.quasseldroid.util.ui.settings
 
-import android.content.Context
 import android.content.Intent
-import de.kuschku.quasseldroid.util.ui.settings.SettingsActivity
 
-class ClientSettingsActivity : SettingsActivity(ClientSettingsFragment()) {
-  companion object {
-    fun launch(context: Context) = context.startActivity(intent(context))
-    fun intent(context: Context) = Intent(context, ClientSettingsActivity::class.java)
-  }
+interface ActivityLauncher {
+  fun startActivityForResult(intent: Intent, requestCode: Int)
+  fun registerOnActivityResultListener(listener: OnActivityResultListener)
+  fun unregisterOnActivityResultListener(listener: OnActivityResultListener)
+  fun getNextRequestCode(): Int
 }

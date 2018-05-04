@@ -21,7 +21,7 @@ package de.kuschku.quasseldroid.ui.coresettings.ignorelist
 
 import android.content.Context
 import android.content.Intent
-import de.kuschku.quasseldroid.util.ui.ServiceBoundSettingsActivity
+import de.kuschku.quasseldroid.util.ui.settings.ServiceBoundSettingsActivity
 
 class IgnoreListActivity : ServiceBoundSettingsActivity(IgnoreListFragment()) {
   companion object {

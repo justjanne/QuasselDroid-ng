@@ -51,6 +51,12 @@
 
   <string name="preference_notification_other_title">Kitos žinutės</string>
 
+  <string name="preference_notification_sound_title">Pranešimo garsas</string>
+  <string name="preference_notification_vibration_title">Vibracija</string>
+  <string name="preference_notification_light_title">LED Lemputė</string>
+
+  <string name="preference_notification_configure_title">Pranešimų nustatymai</string>
+
   <string name="preference_notifications_level_all">Visos žinutės</string>
   <string name="preference_notifications_level_highlight">Paminėjimai</string>
   <string name="preference_notifications_level_none">Niekada</string>

@@ -46,8 +46,19 @@
   <string name="preference_notifications_title">Benachrichtigungen</string>
 
   <string name="preference_notification_query_title">Direktnachrichten</string>
+
   <string name="preference_notification_channel_title">Räume</string>
+
   <string name="preference_notification_other_title">Andere Nachrichten</string>
+
+  <string name="preference_notification_sound_title">Benachrichtigungston</string>
+
+  <string name="preference_notification_vibration_title">Vibration</string>
+
+  <string name="preference_notification_light_title">LED</string>
+
+  <string name="preference_notification_configure_title">Benachrichtigungen konfigurieren</string>
+
   <string name="preference_notifications_level_all">Alle Nachrichten</string>
   <string name="preference_notifications_level_highlight">Erwähnungen</string>
   <string name="preference_notifications_level_none">Niemals</string>

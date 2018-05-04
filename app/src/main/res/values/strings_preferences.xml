@@ -105,6 +105,18 @@
   <string name="preference_notification_other_key" translatable="false">notification_other</string>
   <string name="preference_notification_other_title">Other Messages</string>
 
+  <string name="preference_notification_sound_key" translatable="false">notification_sound</string>
+  <string name="preference_notification_sound_title">Notification Sound</string>
+
+  <string name="preference_notification_vibration_key" translatable="false">notification_vibration</string>
+  <string name="preference_notification_vibration_title">Vibration</string>
+
+  <string name="preference_notification_light_key" translatable="false">notification_light</string>
+  <string name="preference_notification_light_title">LED</string>
+
+  <string name="preference_notification_configure_key" translatable="false">notification_configure</string>
+  <string name="preference_notification_configure_title">Configure Notifications</string>
+
   <string name="preference_notifications_level_all">All Messages</string>
   <string name="preference_notifications_level_highlight">Mentions</string>
   <string name="preference_notifications_level_none">Never</string>
