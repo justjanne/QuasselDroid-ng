@@ -324,7 +324,14 @@ class MessageListFragment : ServiceBoundFragment() {
       this, Observer {
       if (it?.orNull() == ConnectionState.CONNECTED) {
         runInBackgroundDelayed(16) {
-          loadMore(initial = true)
+          viewModel.buffer { bufferId ->
+            // Try loading messages when switching to isEmpty buffer
+            if (database.message().bufferSize(bufferId) == 0) {
+              if (bufferId > 0 && bufferId != Int.MAX_VALUE) {
+                loadMore(initial = true)
+              }
+            }
+          }
         }
       }
     })
