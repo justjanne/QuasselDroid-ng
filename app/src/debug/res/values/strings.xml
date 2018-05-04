@@ -20,5 +20,5 @@
 <resources>
   <string name="app_name">QuasselTest</string>
 
-  <string name="package_name">com.iskrembilen.quasseldroid.debug</string>
+  <string name="package_name" translatable="false">com.iskrembilen.quasseldroid.debug</string>
 </resources>
