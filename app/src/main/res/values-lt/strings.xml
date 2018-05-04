@@ -72,7 +72,7 @@
   <string name="label_new_server">Naujas Serveris</string>
   <string name="label_nicklist">Slapyvardžių Sąrašas</string>
   <string name="label_no">Ne</string>
-  <string name="label_no_away_message">Priežastis nenurodyta</string>
+  <string name="label_no_away_message">Nėra pasišalinimo žinutės</string>
   <string name="label_reply">Atsakyti</string>
   <string name="label_reset">Atstatyti</string>
   <string name="label_open">Atverti</string>

@@ -72,7 +72,7 @@
   <string name="label_new_server">Server hinzufügen</string>
   <string name="label_nicklist">Benutzerliste</string>
   <string name="label_no">Nein</string>
-  <string name="label_no_away_message">Kein Abwesenheitsgrund angegeben</string>
+  <string name="label_no_away_message">Kein Abwesenheitsgrund verfügbar</string>
   <string name="label_reply">Antworten</string>
   <string name="label_reset">Zurücksetzen</string>
   <string name="label_open">Öffnen</string>
