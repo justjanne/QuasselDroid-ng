@@ -32,7 +32,7 @@ class BacklogRequester(
 ) {
   fun loadMore(accountId: Long, buffer: BufferId, amount: Int, pageSize: Int,
                lastMessageId: MsgId? = null,
-               untilVisible: Boolean = false,
+               untilAllVisible: Boolean = false,
                finishCallback: () -> Unit) {
     var missing = amount
     viewModel.session.value?.orNull()?.backlogManager?.let {
@@ -43,14 +43,22 @@ class BacklogRequester(
         )?.messageId ?: -1,
         limit = amount
       ) {
-        if (untilVisible && it.isNotEmpty()) {
+        if (it.isNotEmpty()) {
           val filtered = database.filtered().get(accountId, buffer) ?: 0
           missing -= it.count {
             (it.type.value and filtered.inv()) != 0
           }
-          val messageId = it.map(Message::messageId).min()
-          if (missing > 0) {
-            loadMore(accountId, buffer, missing, pageSize, messageId, untilVisible, finishCallback)
+          val hasLoadedAll = missing == 0
+          val hasLoadedAny = missing < amount
+          if (untilAllVisible && !hasLoadedAll || !untilAllVisible && !hasLoadedAny) {
+            val messageId = it.map(Message::messageId).min()
+            loadMore(accountId,
+                     buffer,
+                     missing,
+                     pageSize,
+                     messageId,
+                     untilAllVisible,
+                     finishCallback)
           } else {
             finishCallback()
           }

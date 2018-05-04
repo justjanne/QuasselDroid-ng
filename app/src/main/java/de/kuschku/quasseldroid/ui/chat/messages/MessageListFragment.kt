@@ -470,7 +470,7 @@ class MessageListFragment : ServiceBoundFragment() {
               pageSize = backlogSettings.pageSize,
               lastMessageId = lastMessageId
                               ?: database.message().findFirstByBufferId(bufferId)?.messageId ?: -1,
-              untilVisible = initial
+              untilAllVisible = initial
             ) {
               activity?.runOnUiThread {
                 swipeRefreshLayout.isRefreshing = false
