@@ -25,6 +25,7 @@ import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferSyncer
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.NotificationManager
+import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -222,7 +223,9 @@ class BufferSyncer constructor(
   override fun setBufferActivity(buffer: BufferId, activity: Int) {
     val flags = Message_Types.of<Message_Type>(activity)
     super.setBufferActivity(buffer, activity)
-    if (activity != 0) {
+    if (flags hasFlag Message_Type.Plain ||
+        flags hasFlag Message_Type.Notice ||
+        flags hasFlag Message_Type.Action) {
       bufferInfo(buffer)?.let {
         session.bufferViewManager?.handleBuffer(it, this, true)
       }
