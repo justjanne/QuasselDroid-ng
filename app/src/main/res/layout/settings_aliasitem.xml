@@ -35,45 +35,51 @@
       android:layout_height="0dip"
       android:layout_weight="1">
 
-      <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
-
-        <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:minHeight="48dp">
-
-          <android.support.design.widget.TextInputLayout
-            style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-            android:hint="@string/settings_aliasitem_name">
-
-            <android.support.design.widget.TextInputEditText
-              android:id="@+id/name"
-              style="@style/Widget.CoreSettings.EditText"
-              tools:text="back" />
-          </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
-      </LinearLayout>
-
-      <ScrollView
+      <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
 
-          <android.support.design.widget.TextInputLayout
-            style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-            android:hint="@string/settings_aliasitem_expansion">
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp">
 
-            <de.kuschku.quasseldroid.ui.chat.input.RichEditText
-              android:id="@+id/expansion"
-              style="@style/Widget.CoreSettings.EditText"
-              android:imeOptions="flagNoExtractUi"
-              android:inputType="textMultiLine"
-              android:textColor="?attr/colorForeground"
-              android:textSize="16sp" />
-          </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+              style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+              android:hint="@string/settings_aliasitem_name">
+
+              <android.support.design.widget.TextInputEditText
+                android:id="@+id/name"
+                style="@style/Widget.CoreSettings.EditText"
+                tools:text="back" />
+            </android.support.design.widget.TextInputLayout>
+          </LinearLayout>
         </LinearLayout>
-      </ScrollView>
+
+        <ScrollView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+
+          <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
+
+            <android.support.design.widget.TextInputLayout
+              style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+              android:hint="@string/settings_aliasitem_expansion">
+
+              <de.kuschku.quasseldroid.ui.chat.input.RichEditText
+                android:id="@+id/expansion"
+                style="@style/Widget.CoreSettings.EditText"
+                android:imeOptions="flagNoExtractUi"
+                android:inputType="textMultiLine"
+                android:textColor="?attr/colorForeground"
+                android:textSize="16sp" />
+            </android.support.design.widget.TextInputLayout>
+          </LinearLayout>
+        </ScrollView>
+      </LinearLayout>
 
       <android.support.v7.widget.RecyclerView
         android:id="@+id/autocomplete_list"
