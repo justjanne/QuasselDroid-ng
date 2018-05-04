@@ -32,6 +32,8 @@
 
   <dimen name="button_corner_radius">2dp</dimen>
 
+  <dimen name="shadow_height">4dp</dimen>
+
   <dimen name="colorchooser_circlesize">56dp</dimen>
   <dimen name="avatar_size">35sp</dimen>
 

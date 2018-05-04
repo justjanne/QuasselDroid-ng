@@ -49,11 +49,22 @@
         tools:listitem="@layout/widget_nick" />
     </android.support.design.widget.CoordinatorLayout>
 
-    <de.kuschku.quasseldroid.util.ui.ShadowView
+    <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="16dp"
-      android:gravity="bottom"
-      app:layout_anchor="@id/fragment_chatline" />
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_anchor="@id/fragment_chatline"
+      app:layout_anchorGravity="top">
+
+      <de.kuschku.quasseldroid.util.ui.ShadowView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/shadow_height"
+        android:gravity="bottom" />
+
+      <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/shadow_height" />
+    </LinearLayout>
 
     <fragment
       android:id="@+id/fragment_chatline"
