@@ -63,11 +63,9 @@ import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import de.kuschku.quasseldroid.viewmodel.data.Avatar
-import io.reactivex.BackpressureStrategy
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.temporal.ChronoUnit
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -331,34 +329,6 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     })
 
-    var previousVisible = -1L
-    viewModel.buffer.toFlowable(BackpressureStrategy.LATEST).switchMap { buffer ->
-      database.filtered().listenRx(accountId, buffer).switchMap { filtered ->
-        database.message().firstMsgId(buffer).map {
-          Pair(it, database.message().firstVisibleMsgId(buffer, filtered))
-        }
-      }
-    }.distinctUntilChanged()
-      .throttleLast(1, TimeUnit.SECONDS)
-      .toLiveData().observe(this, Observer {
-        runInBackground {
-          val first = it?.first
-          val visible = it?.second ?: -1
-
-          if (first != null) {
-            if (previousVisible == visible) {
-              loadMore()
-            } else {
-              requireActivity().runOnUiThread {
-                swipeRefreshLayout.isRefreshing = false
-              }
-            }
-
-            previousVisible = visible
-          }
-        }
-      })
-
     viewModel.session.toLiveData().zip(lastMessageId).observe(
       this, Observer {
       runInBackground {
@@ -495,8 +465,7 @@ class MessageListFragment : ServiceBoundFragment() {
                               ?: database.message().findFirstByBufferId(bufferId)?.messageId ?: -1,
               untilVisible = initial
             ) {
-              Throwable().printStackTrace()
-              requireActivity().runOnUiThread {
+              activity?.runOnUiThread {
                 swipeRefreshLayout.isRefreshing = false
               }
             }
