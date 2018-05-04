@@ -32,40 +32,40 @@
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Tamsi)</string>
   <string name="preference_theme_entry_dracula">Dracula</string>
 
-  <string name="preference_input_enter_title">Enter mygtukas klaviatūroje</string>
-  <string name="preference_input_enter_entry_emoji">Emoji</string>
-  <string name="preference_input_enter_entry_send">Siųsti</string>
+  <string name="preference_input_enter_title">Enter mygtuko elgsena</string>
+  <string name="preference_input_enter_entry_emoji">Emoji pasirinkimas</string>
+  <string name="preference_input_enter_entry_send">Siųsti žinutę</string>
 
   <string name="preference_show_lag_title">Rodyti delsimą</string>
-  <string name="preference_show_lag_summary">Veiksmų juostoje rodys laiką kiek klijentas atsilieka nuo branduolio</string>
+  <string name="preference_show_lag_summary">Veiksmų juostoje matysite kiek klijentas atsilieka nuo branduolio</string>
 
   <string name="preference_language_title">Kalba</string>
-  <string name="preference_language_entry_auto">Sistemos Numatyta</string>
+  <string name="preference_language_entry_auto">Sistemos numatyta</string>
 
 
   <string name="preference_notifications_title">Pranešimai</string>
 
-  <string name="preference_notification_query_title">Tiesioginės Žinutės</string>
+  <string name="preference_notification_query_title">Tiesioginės žinutės</string>
 
-  <string name="preference_notification_channel_title">Kanalo Žinutės</string>
+  <string name="preference_notification_channel_title">Kanalo žinutės</string>
 
-  <string name="preference_notification_other_title">Kitos Žinutės</string>
+  <string name="preference_notification_other_title">Kitos žinutės</string>
 
-  <string name="preference_notifications_level_all">Visos Žinutės</string>
+  <string name="preference_notifications_level_all">Visos žinutės</string>
   <string name="preference_notifications_level_highlight">Paminėjimai</string>
   <string name="preference_notifications_level_none">Niekada</string>
 
   <string name="preference_messages_title">Žinutės</string>
 
-  <string name="preference_monospace_title">Naudoti Monospace Šriftą</string>
+  <string name="preference_monospace_title">Naudoti Monospace šriftą</string>
 
-  <string name="preference_textsize_title">Teksto Dydis</string>
+  <string name="preference_textsize_title">Teksto dydis</string>
 
-  <string name="preference_show_seconds_title">Rodyti Sekundes</string>
+  <string name="preference_show_seconds_title">Rodyti sekundes</string>
 
-  <string name="preference_use_24h_clock_title">Naudoti 24h Laikrodį</string>
+  <string name="preference_use_24h_clock_title">Naudoti 24h formatą</string>
 
-  <string name="preference_colorize_mirc_title">Naudoti mIRC Spalvas</string>
+  <string name="preference_colorize_mirc_title">Naudoti mIRC spalvas</string>
   <string name="preference_colorize_mirc_summaryon">Rodyti mIRC spalvas žinutėse</string>
   <string name="preference_colorize_mirc_summaryoff">Naikinti mIRC spalvas iš žinučių</string>
 
@@ -74,7 +74,7 @@
   <string name="preference_colorize_nicknames_entry_all_but_mine">Visi išskyrus savo</string>
   <string name="preference_colorize_nicknames_entry_none">Nei vienas</string>
 
-  <string name="preference_show_prefix_title">Rodyti sendermodes</string>
+  <string name="preference_show_prefix_title">Rodyti Sendermodes</string>
   <string name="preference_show_prefix_entry_all">Visus</string>
   <string name="preference_show_prefix_entry_highest">Aukščiausią</string>
   <string name="preference_show_prefix_entry_none">Nei vieno</string>
@@ -82,59 +82,59 @@
   <string name="preference_hostmask_actions_title">Rodyti Hostmask veiksmuose</string>
   <string name="preference_hostmask_actions_summary">Rodyti nick!ident@host prisijungimo/atsijungimo/išėjimo žinutėse</string>
 
-  <string name="preference_nicks_on_new_line_title">Atskirti slapyvardžius</string>
+  <string name="preference_nicks_on_new_line_title">Išskirti slapyvardžius</string>
   <string name="preference_nicks_on_new_line_summary">Rodyti slapyvardžius atskiroje eilutėje</string>
 
-  <string name="preference_show_realnames_title">Rodyti Tikrus Vardus</string>
+  <string name="preference_show_realnames_title">Rodyti tikrus vardus</string>
 
-  <string name="preference_show_avatars_title">Rodyti Avatarus</string>
+  <string name="preference_show_avatars_title">Rodyti avatarus</string>
 
-  <string name="preference_show_irccloud_avatars_title">Rodyti IRCCloud Avatarus</string>
+  <string name="preference_show_irccloud_avatars_title">Rodyti IRCCloud avatarus</string>
   <string name="preference_show_irccloud_avatars_summary">Jei galima, vartotojams be avataro rodys jų IRCCloud alternatyvą</string>
 
-  <string name="preference_show_gravatar_avatars_title">Rodyti Gravatar Avatarus</string>
+  <string name="preference_show_gravatar_avatars_title">Rodyti Gravatar avatarus</string>
   <string name="preference_show_gravatar_avatars_summary">Jei galima, vartotojams be avataro rodys jų Gravatar alternatyvą</string>
 
-  <string name="preference_show_matrix_avatars_title">Rodyti Matrix Avatarus</string>
+  <string name="preference_show_matrix_avatars_title">Rodyti Matrix avatarus</string>
   <string name="preference_show_matrix_avatars_summary">Jei galima, vartotojams be avataro rodys jų Matrix alternatyvą</string>
 
-  <string name="preference_time_at_end_title">Dešinės Lygiuotės Laiko Žymės</string>
+  <string name="preference_time_at_end_title">Laiko žymes lygiuoti dešinėje</string>
   <string name="preference_time_at_end_summary">Lygiuoja laiko žymes kiekvienos žinutės pabaigoje</string>
 
   <string name="preference_larger_emoji_title">Didesni Emoji</string>
   <string name="preference_larger_emoji_summary">Padidinti emoji žinutes</string>
 
 
-  <string name="preference_autocomplete_title">Automatinis Užbaigimas</string>
+  <string name="preference_autocomplete_title">Automatinis užbaigimas</string>
 
-  <string name="preference_autocomplete_sender_doubleclick_title">Siuntėjo Automatinis Užbaigimas</string>
-  <string name="preference_autocomplete_sender_doubleclick_summary">Du kart paspausti ant žinutės jog būtų automatiškai užbaigtas jos siuntėjas</string>
+  <string name="preference_autocomplete_sender_doubleclick_title">Automatinis siuntėjo įvedimas</string>
+  <string name="preference_autocomplete_sender_doubleclick_summary">Du kart paspauskite ant žinutės jog būtų automatiškai įvestas jos siuntėjas</string>
 
-  <string name="preference_autocomplete_button_title">Automatinio Užbaigimo Mygtukas</string>
+  <string name="preference_autocomplete_button_title">Automatinio užbaigimo mygtukas</string>
   <string name="preference_autocomplete_button_summary">Rodyti mygtuką įvedimo eilutės kairėje, kuris automatiškai užbaigtų įvedimą</string>
 
-  <string name="preference_autocomplete_doubletap_title">Du kart paspausti norint automatiškai užbaigti</string>
+  <string name="preference_autocomplete_doubletap_title">Pasiūlymai po dvigubo paspaudimo</string>
   <string name="preference_autocomplete_doubletap_summary">Pasiūlyti slapyvardžius ir kanalus du kart paspaudus ant įvedimo laukelio</string>
 
-  <string name="preference_autocomplete_auto_title">Automatiškai Rodyti</string>
+  <string name="preference_autocomplete_auto_title">Automatiškai siūlyti</string>
   <string name="preference_autocomplete_auto_summary">Siūlyti slapyvardžius ir kanalus įvedus pirmas 3 raides</string>
 
-  <string name="preference_autocomplete_prefix_title">Rodyti po Simbolio</string>
+  <string name="preference_autocomplete_prefix_title">Siūlyti po simbolio</string>
   <string name="preference_autocomplete_prefix_summary">Siūlyti slapyvardžius ir kanalus įvedus @ arba #</string>
 
 
-  <string name="preference_backlog_title">Žinučių Žurnalas</string>
+  <string name="preference_backlog_title">Žinučių žurnalas</string>
 
-  <string name="preference_page_size_title">Puslapio Dydis</string>
-  <string name="preference_page_size_summary">Žinučių kiekis, kurį užkrauti ir laikyti atmintyje</string>
+  <string name="preference_page_size_title">Atminties dydis</string>
+  <string name="preference_page_size_summary">Žinučių kiekis, kuris bus užkrautas ir laikomas atmintyje</string>
 
-  <string name="preference_initial_amount_title">Pradinis Kiekis</string>
-  <string name="preference_initial_amount_summary">Žinučių kiekis, kurį užkrauti pirmą kartą atvėrus buferį</string>
+  <string name="preference_initial_amount_title">Pradinis dydis</string>
+  <string name="preference_initial_amount_summary">Žinučių kiekis, kuris bus užkraunamas pirmą kartą atvėrus buferį</string>
 
 
   <string name="preference_connection_title">Ryšys</string>
 
-  <string name="preference_show_notification_title">Rodyti Pranešimą</string>
+  <string name="preference_show_notification_title">Rodyti aktyvųjį pranešimą</string>
   <string name="preference_show_notification_summary">Quasseldroid bus visada prijungtas rodant pastovų pranešimą</string>
 
 </resources>
