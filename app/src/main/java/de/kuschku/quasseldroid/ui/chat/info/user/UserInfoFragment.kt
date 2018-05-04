@@ -21,6 +21,7 @@ package de.kuschku.quasseldroid.ui.chat.info.user
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
+import android.text.SpannableString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,7 @@ import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.util.IrcUserUtils
+import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
@@ -40,6 +42,7 @@ import de.kuschku.quasseldroid.ui.chat.input.AutoCompleteHelper.Companion.IGNORE
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
+import de.kuschku.quasseldroid.util.irc.format.spans.IrcItalicSpan
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
@@ -156,8 +159,10 @@ class UserInfoFragment : ServiceBoundFragment() {
         realName.text = contentFormatter.formatContent(user.realName())
         realName.visibleIf(user.realName().isNotBlank() && user.realName() != user.nick())
 
-        awayMessage.text = user.awayMessage()
-        awayContainer.visibleIf(user.isAway() && user.awayMessage().isNotBlank())
+        awayMessage.text = user.awayMessage().nullIf { it.isBlank() } ?: SpannableString(getString(R.string.label_no_away_message)).apply {
+          setSpan(IrcItalicSpan(), 0, length, 0)
+        }
+        awayContainer.visibleIf(user.isAway())
 
         account.text = user.account()
         accountContainer.visibleIf(user.account().isNotBlank())

@@ -72,6 +72,7 @@
   <string name="label_new_server">New Server</string>
   <string name="label_nicklist">Nick List</string>
   <string name="label_no">No</string>
+  <string name="label_no_away_message">No Away Message Set</string>
   <string name="label_reply">Reply</string>
   <string name="label_reset">Reset</string>
   <string name="label_open">Open</string>
