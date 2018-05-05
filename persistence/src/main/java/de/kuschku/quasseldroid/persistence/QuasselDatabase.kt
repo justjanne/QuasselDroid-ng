@@ -111,6 +111,9 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC LIMIT 1")
     fun findFirstByBufferId(bufferId: Int): MessageData?
 
+    @Query("SELECT EXISTS(SELECT 1 FROM message WHERE bufferId = :bufferId AND type & ~ :type > 0 AND ignored = 0)")
+    fun hasVisibleMessages(bufferId: Int, type: Int): Boolean
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun save(vararg entities: MessageData)
 

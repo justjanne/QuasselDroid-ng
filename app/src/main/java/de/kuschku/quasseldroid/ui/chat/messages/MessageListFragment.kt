@@ -325,8 +325,9 @@ class MessageListFragment : ServiceBoundFragment() {
       if (it?.orNull() == ConnectionState.CONNECTED) {
         runInBackgroundDelayed(16) {
           viewModel.buffer { bufferId ->
+            val filtered = database.filtered().get(accountId, bufferId)
             // Try loading messages when switching to isEmpty buffer
-            if (database.message().bufferSize(bufferId) == 0) {
+            if (!database.message().hasVisibleMessages(bufferId, filtered ?: 0)) {
               if (bufferId > 0 && bufferId != Int.MAX_VALUE) {
                 loadMore(initial = true)
               }
@@ -438,7 +439,8 @@ class MessageListFragment : ServiceBoundFragment() {
       bufferSyncer.requestSetMarkerLine(previous, lastMessageId)
     }
     // Try loading messages when switching to isEmpty buffer
-    if (database.message().bufferSize(current) == 0) {
+    val filtered = database.filtered().get(accountId, current)
+    if (!database.message().hasVisibleMessages(current, filtered ?: 0)) {
       if (current > 0 && current != Int.MAX_VALUE) {
         loadMore(initial = true)
       }
