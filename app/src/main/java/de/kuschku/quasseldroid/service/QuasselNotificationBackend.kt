@@ -109,6 +109,7 @@ class QuasselNotificationBackend @Inject constructor(
                 0
               ) {
                 processMessages(session, *it.toTypedArray())
+                false
               }
           }
           NotificationSettings.Level.HIGHLIGHT -> {
@@ -122,6 +123,7 @@ class QuasselNotificationBackend @Inject constructor(
                 Message_Flag.of(Message_Flag.Highlight).toInt()
               ) {
                 processMessages(session, *it.toTypedArray())
+                false
               }
             }
           }
