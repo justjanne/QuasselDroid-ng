@@ -23,19 +23,14 @@ object AndroidCrashFixer {
   fun removeCrashableCharacters(text: String): String {
     var previousRtlModifier = 0.toChar()
     return text.fold(StringBuilder()) { builder, char ->
-      previousRtlModifier = if (char != '\u200E' && char != '\u200F') {
-        if (!char.isWhitespace()) {
-          if (previousRtlModifier != 0.toChar()) {
-            builder.append(previousRtlModifier)
-          }
-          builder.append(char)
-          0.toChar()
-        } else {
-          builder.append(char)
-          previousRtlModifier
+      if (char != '\u200E' && char != '\u200F') {
+        if (previousRtlModifier != 0.toChar() && !char.isWhitespace()) {
+          builder.append(previousRtlModifier)
+          previousRtlModifier = 0.toChar()
         }
+        builder.append(char)
       } else {
-        char
+        previousRtlModifier = char
       }
       builder
     }.toString()
