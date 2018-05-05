@@ -23,6 +23,7 @@ import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.libquassel.session.BacklogStorage
+import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.Session
 
 class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
@@ -34,10 +35,10 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
     )
   }
 
-  override fun storeMessages(session: Session, vararg messages: Message, initialLoad: Boolean) =
-    storeMessages(session, messages.asIterable(), initialLoad)
+  override fun storeMessages(session: Session, vararg messages: Message) =
+    storeMessages(session, messages.asIterable())
 
-  override fun storeMessages(session: Session, messages: Iterable<Message>, initialLoad: Boolean) {
+  override fun storeMessages(session: Session, messages: Iterable<Message>) {
     db.message().save(*messages.map {
       QuasselDatabase.MessageData(
         messageId = it.messageId,
@@ -67,24 +68,26 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
     db.message().clearMessages()
   }
 
-  private fun isIgnored(session: Session, message: Message): Boolean {
-    val bufferName = message.bufferInfo.bufferName ?: ""
-    val networkId = message.bufferInfo.networkId
-    val networkName = session.network(networkId)?.networkName() ?: ""
+  companion object {
+    fun isIgnored(session: ISession, message: Message): Boolean {
+      val bufferName = message.bufferInfo.bufferName ?: ""
+      val networkId = message.bufferInfo.networkId
+      val networkName = session.network(networkId)?.networkName() ?: ""
 
-    return session.ignoreListManager.match(
-      message.content, message.sender, message.type, networkName, bufferName
-    ) != IgnoreListManager.StrictnessType.UnmatchedStrictness
-  }
+      return session.ignoreListManager?.match(
+        message.content, message.sender, message.type, networkName, bufferName
+      ) != IgnoreListManager.StrictnessType.UnmatchedStrictness
+    }
 
-  private fun isIgnored(session: Session, message: QuasselDatabase.MessageData): Boolean {
-    val bufferInfo = session.bufferSyncer.bufferInfo(message.bufferId)
-    val bufferName = bufferInfo?.bufferName ?: ""
-    val networkId = bufferInfo?.networkId ?: -1
-    val networkName = session.network(networkId)?.networkName() ?: ""
+    fun isIgnored(session: ISession, message: QuasselDatabase.MessageData): Boolean {
+      val bufferInfo = session.bufferSyncer?.bufferInfo(message.bufferId)
+      val bufferName = bufferInfo?.bufferName ?: ""
+      val networkId = bufferInfo?.networkId ?: -1
+      val networkName = session.network(networkId)?.networkName() ?: ""
 
-    return session.ignoreListManager.match(
-      message.content, message.sender, message.type, networkName, bufferName
-    ) != IgnoreListManager.StrictnessType.UnmatchedStrictness
+      return session.ignoreListManager?.match(
+        message.content, message.sender, message.type, networkName, bufferName
+      ) != IgnoreListManager.StrictnessType.UnmatchedStrictness
+    }
   }
 }
