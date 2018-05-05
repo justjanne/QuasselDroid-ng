@@ -25,8 +25,8 @@ import de.kuschku.libquassel.protocol.Message
 interface BacklogStorage {
   fun updateIgnoreRules(session: Session)
 
-  fun storeMessages(session: Session, vararg messages: Message, initialLoad: Boolean = false)
-  fun storeMessages(session: Session, messages: Iterable<Message>, initialLoad: Boolean = false)
+  fun storeMessages(session: Session, vararg messages: Message)
+  fun storeMessages(session: Session, messages: Iterable<Message>)
 
   fun clearMessages(bufferId: BufferId, idRange: IntRange)
 

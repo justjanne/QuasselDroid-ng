@@ -55,6 +55,8 @@ interface ISession : Closeable {
   val rpcHandler: RpcHandler?
   val initStatus: Observable<Pair<Int, Int>>
 
+  fun network(networkId: NetworkId): Network?
+
   val proxy: SignalProxy
   val error: Flowable<Error>
   val lag: Observable<Long>
@@ -89,6 +91,8 @@ interface ISession : Closeable {
       override val networkConfig: NetworkConfig? = null
       override val initStatus: Observable<Pair<Int, Int>> = Observable.just(0 to 0)
       override val lag: Observable<Long> = Observable.just(0L)
+
+      override fun network(networkId: NetworkId) = null
 
       override fun login(user: String, pass: String) = Unit
       override fun close() = Unit
