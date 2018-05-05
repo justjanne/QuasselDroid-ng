@@ -23,6 +23,7 @@ import android.content.Context
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.util.compatibility.AndroidCrashFixer
 import de.kuschku.quasseldroid.util.helper.getColorCompat
 import de.kuschku.quasseldroid.util.irc.format.spans.*
 import javax.inject.Inject
@@ -66,8 +67,10 @@ class IrcFormatDeserializer @Inject constructor(context: Context) {
    * @param str mIRC formatted String
    * @return a CharSequence with Android’s span format representing the input string
    */
-  fun formatString(str: String?, colorize: Boolean): CharSequence {
-    if (str == null) return ""
+  fun formatString(content: String?, colorize: Boolean): CharSequence {
+    if (content == null) return ""
+
+    val str = AndroidCrashFixer.removeCrashableCharacters(content)
 
     val plainText = SpannableStringBuilder()
     var bold: FormatDescription<BoldIrcFormat>? = null
