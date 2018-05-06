@@ -40,6 +40,15 @@
     <item name="senderColorE">#b300cc</item>
     <item name="senderColorF">#cc004d</item>
 
+    <item name="colorTextPrimary">#212121</item>
+    <item name="colorTextPrimaryInverse">#FAFAFA</item>
+    <item name="colorTextSecondary">#757575</item>
+    <item name="colorDivider">#1F000000</item>
+
+    <item name="android:textColor">?colorTextPrimary</item>
+    <item name="android:textColorSecondary">?colorTextSecondary</item>
+    <item name="colorControlNormal">?colorTextPrimary</item>
+
     <item name="colorForeground">#DE000000</item>
     <item name="colorForegroundHighlight">#DE000000</item>
     <item name="colorForegroundSecondary">#8A000000</item>
@@ -86,6 +95,15 @@
     <item name="senderColorD">#0099cc</item>
     <item name="senderColorE">#b300cc</item>
     <item name="senderColorF">#cc004d</item>
+
+    <item name="colorTextPrimary">#dedede</item>
+    <item name="colorTextPrimaryInverse">#303030</item>
+    <item name="colorTextSecondary">#8a8a8a</item>
+    <item name="colorDivider">#1FFFFFFF</item>
+
+    <item name="android:textColor">?colorTextPrimary</item>
+    <item name="android:textColorSecondary">?colorTextSecondary</item>
+    <item name="colorControlNormal">?colorTextPrimary</item>
 
     <item name="colorForeground">#FFFFFF</item>
     <item name="colorForegroundHighlight">#DE000000</item>
