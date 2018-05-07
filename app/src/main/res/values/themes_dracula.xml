@@ -54,6 +54,7 @@
     <item name="colorTextPrimary">#f8f8f2</item>
     <item name="colorTextPrimaryInverse">#282a36</item>
     <item name="colorTextSecondary">#6272a4</item>
+    <item name="colorTextSecondaryInverse">#586e75</item>
     <item name="colorDivider">#19f8f8f2</item>
 
     <item name="colorForegroundMirc">0x0</item>

@@ -44,6 +44,12 @@
     <item name="senderColorE">#b39775</item>
     <item name="senderColorF">#3176b3</item>
 
+    <item name="colorTextPrimary">#dedede</item>
+    <item name="colorTextPrimaryInverse">#303030</item>
+    <item name="colorTextSecondary">#8a8a8a</item>
+    <item name="colorTextSecondaryInverse">#757575</item>
+    <item name="colorDivider">#1FFFFFFF</item>
+
     <item name="colorForeground">#FFFFFF</item>
     <item name="colorForegroundHighlight">#FFFFFF</item>
     <item name="colorForegroundSecondary">#B3FFFFFF</item>
@@ -52,8 +58,6 @@
     <item name="colorForegroundError">#800000</item>
 
     <item name="colorForegroundMirc">0x0</item>
-
-    <item name="colorDivider">#1FFFFFFF</item>
 
     <item name="colorBackground">#000000</item>
     <item name="android:windowBackground">@color/amoled_background</item>

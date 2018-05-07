@@ -56,8 +56,16 @@
 
   <style name="Widget.AppBarOverlay.Light.Auto" parent="Widget.AppBarOverlay.Light">
     <item name="colorControlNormal">?colorTextPrimary</item>
+    <item name="android:textColor">?colorTextPrimary</item>
     <item name="android:textColorPrimary">?colorTextPrimary</item>
     <item name="android:textColorSecondary">?colorTextSecondary</item>
+  </style>
+
+  <style name="Widget.AppBarOverlay.Light.DarkHead" parent="Widget.AppBarOverlay.Light">
+    <item name="colorControlNormal">?colorTextPrimaryInverse</item>
+    <item name="android:textColor">?colorTextPrimaryInverse</item>
+    <item name="android:textColorPrimary">?colorTextPrimaryInverse</item>
+    <item name="android:textColorSecondary">?colorTextSecondaryInverse</item>
   </style>
 
   <style name="Widget.TabLayout.Auto" parent="Widget.Design.TabLayout">
@@ -85,6 +93,7 @@
   <style name="Widget.PopupOverlay.Light" parent="ThemeOverlay.AppCompat.Light" />
 
   <style name="Widget.PopupOverlay.Light.Auto" parent="Widget.PopupOverlay.Light">
+    <item name="android:textColor">?colorTextPrimary</item>
     <item name="android:colorBackground">?colorBackgroundCard</item>
   </style>
 

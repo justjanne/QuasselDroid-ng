@@ -49,6 +49,7 @@
       android:layout_marginTop="2dp"
       android:gravity="center"
       android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+      android:textColor="?android:textColorPrimary"
       android:textSize="16sp"
       android:visibility="gone" />
 
@@ -61,7 +62,8 @@
       android:gravity="center_vertical"
       android:singleLine="true"
       android:text="@string/app_name"
-      android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
+      android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+      android:textColor="?android:textColorPrimary" />
 
   </LinearLayout>
 
@@ -73,5 +75,6 @@
     android:layout_marginTop="-3dp"
     android:ellipsize="end"
     android:singleLine="true"
+    android:textColor="?android:textColorSecondary"
     android:visibility="gone" />
 </LinearLayout>

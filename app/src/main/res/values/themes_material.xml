@@ -22,7 +22,7 @@
 <resources>
   <color name="material_light_background">#fafafa</color>
 
-  <style name="Theme.ChatTheme.Material_Light" parent="Theme.ChatTheme.Light">
+  <style name="Theme.ChatTheme.Material_Light" parent="Theme.ChatTheme.Light.DarkHead">
     <item name="senderColor0">#F44336</item>
     <item name="senderColor1">#2196F3</item>
     <item name="senderColor2">#7CB342</item>
@@ -43,11 +43,8 @@
     <item name="colorTextPrimary">#212121</item>
     <item name="colorTextPrimaryInverse">#FAFAFA</item>
     <item name="colorTextSecondary">#757575</item>
+    <item name="colorTextSecondaryInverse">#8a8a8a</item>
     <item name="colorDivider">#1F000000</item>
-
-    <item name="android:textColor">?colorTextPrimary</item>
-    <item name="android:textColorSecondary">?colorTextSecondary</item>
-    <item name="colorControlNormal">?colorTextPrimary</item>
 
     <item name="colorForeground">#DE000000</item>
     <item name="colorForegroundHighlight">#DE000000</item>
@@ -78,7 +75,7 @@
 
   <color name="material_dark_background">#303030</color>
 
-  <style name="Theme.ChatTheme.Material_Dark" parent="Theme.ChatTheme">
+  <style name="Theme.ChatTheme.Material_Dark" parent="Theme.ChatTheme.Auto">
     <item name="senderColor0">#F44336</item>
     <item name="senderColor1">#2196F3</item>
     <item name="senderColor2">#8BC34A</item>
@@ -99,11 +96,8 @@
     <item name="colorTextPrimary">#dedede</item>
     <item name="colorTextPrimaryInverse">#303030</item>
     <item name="colorTextSecondary">#8a8a8a</item>
+    <item name="colorTextSecondaryInverse">#757575</item>
     <item name="colorDivider">#1FFFFFFF</item>
-
-    <item name="android:textColor">?colorTextPrimary</item>
-    <item name="android:textColorSecondary">?colorTextSecondary</item>
-    <item name="colorControlNormal">?colorTextPrimary</item>
 
     <item name="colorForeground">#FFFFFF</item>
     <item name="colorForegroundHighlight">#FFFFFF</item>

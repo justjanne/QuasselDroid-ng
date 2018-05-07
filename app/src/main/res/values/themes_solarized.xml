@@ -54,6 +54,7 @@
     <item name="colorTextPrimary">#586e75</item>
     <item name="colorTextPrimaryInverse">#FDF6E3</item>
     <item name="colorTextSecondary">#657b83</item>
+    <item name="colorTextSecondaryInverse">#839496</item>
     <item name="colorDivider">#19586e75</item>
 
     <item name="colorForegroundMirc">0x1</item>
@@ -113,6 +114,7 @@
     <item name="colorTextPrimary">#93a1a1</item>
     <item name="colorTextPrimaryInverse">#002B36</item>
     <item name="colorTextSecondary">#839496</item>
+    <item name="colorTextSecondaryInverse">#657b83</item>
     <item name="colorDivider">#1993a1a1</item>
 
     <item name="colorForegroundMirc">0x0</item>
