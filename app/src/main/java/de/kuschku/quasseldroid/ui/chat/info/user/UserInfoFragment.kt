@@ -126,6 +126,10 @@ class UserInfoFragment : ServiceBoundFragment() {
       }
     }
 
+    val selfColor = requireContext().theme.styledAttributes(R.attr.colorForegroundSecondary) {
+      getColor(0, 0)
+    }
+
     val networkId = arguments?.getInt("networkId")
     val nickName = arguments?.getString("nick")
     combineLatest(viewModel.session, viewModel.networks).switchMap { (sessionOptional, networks) ->
@@ -147,7 +151,13 @@ class UserInfoFragment : ServiceBoundFragment() {
         val rawInitial = user.nick().trimStart(*IGNORED_CHARS).firstOrNull()
                          ?: user.nick().firstOrNull()
         val initial = rawInitial?.toUpperCase().toString()
-        val senderColor = senderColors[senderColorIndex]
+        val senderColor = when (messageSettings.colorizeNicknames) {
+          MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
+          MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+            if (user.network().isMyNick(user.nick())) selfColor
+            else senderColors[senderColorIndex]
+          MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
+        }
 
         avatar.loadAvatars(
           AvatarHelper.avatar(messageSettings, user, maxOf(avatar.width, avatar.height)),

@@ -40,6 +40,7 @@ sealed class AutoCompleteItem(open val name: String) : Comparable<AutoCompleteIt
     val lowestMode: Int,
     val realname: CharSequence,
     val away: Boolean,
+    val self: Boolean,
     val networkCasemapping: String?,
     val avatarUrls: List<Avatar> = emptyList(),
     val fallbackDrawable: Drawable? = null,

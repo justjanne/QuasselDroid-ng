@@ -28,6 +28,7 @@ data class IrcUserItem(
   val realname: CharSequence,
   val hostmask: String,
   val away: Boolean,
+  val self: Boolean,
   val networkCasemapping: String?,
   val avatarUrls: List<Avatar> = emptyList(),
   val fallbackDrawable: Drawable? = null,

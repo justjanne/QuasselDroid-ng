@@ -243,10 +243,13 @@ class QuasselNotificationBackend @Inject constructor(
                                             '\\')
                            .firstOrNull() ?: nickName.firstOrNull()
         val initial = rawInitial?.toUpperCase().toString()
-        val senderColor = if (it.flag.hasFlag(Message_Flag.Self))
-          selfColor
-        else
-          senderColors[senderColorIndex]
+        val senderColor = when (messageSettings.colorizeNicknames) {
+          MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
+          MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+            if (it.flag.hasFlag(Message_Flag.Self)) selfColor
+            else senderColors[senderColorIndex]
+          MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
+        }
 
         val size = context.resources.getDimensionPixelSize(R.dimen.notification_avatar_width)
         val avatarList = AvatarHelper.avatar(messageSettings, it)

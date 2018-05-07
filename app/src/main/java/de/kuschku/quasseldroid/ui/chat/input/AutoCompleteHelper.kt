@@ -64,6 +64,10 @@ class AutoCompleteHelper(
     IntArray(length()) { getColor(it, 0) }
   }
 
+  private val selfColor = activity.theme.styledAttributes(R.attr.colorForegroundSecondary) {
+    getColor(0, 0)
+  }
+
   private val avatarSize = activity.resources.getDimensionPixelSize(R.dimen.avatar_size)
 
   init {
@@ -80,7 +84,13 @@ class AutoCompleteHelper(
           val rawInitial = nickName.trimStart(*IGNORED_CHARS).firstOrNull()
                            ?: nickName.firstOrNull()
           val initial = rawInitial?.toUpperCase().toString()
-          val senderColor = senderColors[senderColorIndex]
+          val senderColor = when (messageSettings.colorizeNicknames) {
+            MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
+            MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+              if (it.self) selfColor
+              else senderColors[senderColorIndex]
+            MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
+          }
 
           fun formatNick(nick: CharSequence): CharSequence {
             val spannableString = SpannableString(nick)
@@ -177,6 +187,7 @@ class AutoCompleteHelper(
                   lowestMode,
                   user.realName(),
                   user.isAway(),
+                  user.network().isMyNick(user.nick()),
                   network.support("CASEMAPPING"),
                   AvatarHelper.avatar(messageSettings, user, avatarSize)
                 )

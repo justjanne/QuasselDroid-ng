@@ -94,6 +94,10 @@ class NickListFragment : ServiceBoundFragment() {
       }
     }
 
+    val selfColor = requireContext().theme.styledAttributes(R.attr.colorForegroundSecondary) {
+      getColor(0, 0)
+    }
+
     val avatarSize = resources.getDimensionPixelSize(R.dimen.avatar_size)
     viewModel.nickData.toLiveData().observe(this, Observer {
       runInBackground {
@@ -113,7 +117,13 @@ class NickListFragment : ServiceBoundFragment() {
                                               '\\')
                              .firstOrNull() ?: nickName.firstOrNull()
           val initial = rawInitial?.toUpperCase().toString()
-          val senderColor = senderColors[senderColorIndex]
+          val senderColor = when (messageSettings.colorizeNicknames) {
+            MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
+            MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+              if (it.self) selfColor
+              else senderColors[senderColorIndex]
+            MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
+          }
           fun formatNick(nick: CharSequence): CharSequence {
             val spannableString = SpannableString(nick)
             spannableString.setSpan(

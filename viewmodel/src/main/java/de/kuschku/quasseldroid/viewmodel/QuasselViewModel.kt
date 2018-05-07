@@ -220,6 +220,7 @@ class QuasselViewModel : ViewModel() {
                       user.realName(),
                       user.hostMask(),
                       user.isAway(),
+                      user.network().isMyNick(user.nick()),
                       network.support("CASEMAPPING")
                     )
                   }

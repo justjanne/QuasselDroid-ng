@@ -104,6 +104,7 @@ class EditorViewModel : ViewModel() {
                         lowestMode,
                         user.realName(),
                         user.isAway(),
+                        user.network().isMyNick(user.nick()),
                         network.support("CASEMAPPING")
                       )
                     }

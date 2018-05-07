@@ -214,10 +214,13 @@ class QuasselMessageRenderer @Inject constructor(
         val rawInitial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
                            .firstOrNull() ?: nickName.firstOrNull()
         val initial = rawInitial?.toUpperCase().toString()
-        val senderColor = if (message.content.flag.hasFlag(Message_Flag.Self))
-          selfColor
-        else
-          senderColors[senderColorIndex]
+        val senderColor = when (messageSettings.colorizeNicknames) {
+          MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
+          MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+            if (message.content.flag.hasFlag(Message_Flag.Self)) selfColor
+            else senderColors[senderColorIndex]
+          MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
+        }
 
         FormattedMessage(
           id = message.content.messageId,
