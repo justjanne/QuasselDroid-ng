@@ -40,10 +40,10 @@
     <item name="senderColorE">#b300cc</item>
     <item name="senderColorF">#cc004d</item>
 
-    <item name="colorTextPrimary">#212121</item>
-    <item name="colorTextPrimaryInverse">#FAFAFA</item>
-    <item name="colorTextSecondary">#757575</item>
-    <item name="colorTextSecondaryInverse">#8a8a8a</item>
+    <item name="colorTextPrimary">#de000000</item>
+    <item name="colorTextPrimaryInverse">#ffffffff</item>
+    <item name="colorTextSecondary">#8a000000</item>
+    <item name="colorTextSecondaryInverse">#b3ffffff</item>
     <item name="colorDivider">#1F000000</item>
 
     <item name="colorForeground">#DE000000</item>
@@ -93,10 +93,10 @@
     <item name="senderColorE">#b300cc</item>
     <item name="senderColorF">#cc004d</item>
 
-    <item name="colorTextPrimary">#dedede</item>
-    <item name="colorTextPrimaryInverse">#303030</item>
-    <item name="colorTextSecondary">#8a8a8a</item>
-    <item name="colorTextSecondaryInverse">#757575</item>
+    <item name="colorTextPrimary">#ffffffff</item>
+    <item name="colorTextPrimaryInverse">#de000000</item>
+    <item name="colorTextSecondary">#b3ffffff</item>
+    <item name="colorTextSecondaryInverse">#8a000000</item>
     <item name="colorDivider">#1FFFFFFF</item>
 
     <item name="colorForeground">#FFFFFF</item>

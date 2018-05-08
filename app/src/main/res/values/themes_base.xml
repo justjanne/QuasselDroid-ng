@@ -79,9 +79,10 @@
 
     <item name="windowActionModeOverlay">true</item>
 
-    <item name="colorTextPrimary">#dedede</item>
-    <item name="colorTextPrimaryInverse">?colorBackground</item>
-    <item name="colorTextSecondary">#8a8a8a</item>
+    <item name="colorTextPrimary">#ffffffff</item>
+    <item name="colorTextPrimaryInverse">#de000000</item>
+    <item name="colorTextSecondary">#b3ffffff</item>
+    <item name="colorTextSecondaryInverse">#8a000000</item>
     <item name="colorDivider">#1FFFFFFF</item>
     <item name="android:textColorHint">?colorTextSecondary</item>
 
@@ -114,10 +115,10 @@
     <item name="backgroundMenuItemRounded">@drawable/bg_menuitem_rounded_light</item>
 
     <item name="windowActionModeOverlay">true</item>
-
-    <item name="colorTextPrimary">#212121</item>
-    <item name="colorTextPrimaryInverse">?colorBackground</item>
-    <item name="colorTextSecondary">#757575</item>
+    <item name="colorTextPrimary">#de000000</item>
+    <item name="colorTextPrimaryInverse">#ffffffff</item>
+    <item name="colorTextSecondary">#8a000000</item>
+    <item name="colorTextSecondaryInverse">#b3ffffff</item>
     <item name="colorDivider">#1F000000</item>
     <item name="android:textColorHint">?colorTextSecondary</item>
 
