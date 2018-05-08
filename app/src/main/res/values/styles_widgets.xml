@@ -66,6 +66,7 @@
     <item name="android:textColor">?colorTextPrimaryInverse</item>
     <item name="android:textColorPrimary">?colorTextPrimaryInverse</item>
     <item name="android:textColorSecondary">?colorTextSecondaryInverse</item>
+    <item name="android:actionModeBackground">?colorPrimary</item>
   </style>
 
   <style name="Widget.TabLayout.Auto" parent="Widget.Design.TabLayout">
