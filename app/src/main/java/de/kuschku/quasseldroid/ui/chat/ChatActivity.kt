@@ -632,7 +632,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                 database.filtered().replace(
                   QuasselDatabase.Filtered(accountId, buffer, newlyFiltered.value)
                 )
-                backend.value.orNull()?.sessionManager()?.backlogStorage?.clearMessages(buffer)
               }
             }.negativeColorAttr(R.attr.colorTextPrimary)
             .backgroundColorAttr(R.attr.colorBackgroundCard)
