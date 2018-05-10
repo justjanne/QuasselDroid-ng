@@ -31,18 +31,14 @@
   <string name="preference_theme_entry_gruvbox_light">Gruvbox (Hell)</string>
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Dunkel)</string>
   <string name="preference_theme_entry_dracula">Dracula</string>
-
   <string name="preference_input_enter_title">Eingabetaste auf Tastatur</string>
   <string name="preference_input_enter_entry_emoji">Emoji-Auswahl</string>
   <string name="preference_input_enter_entry_send">Senden</string>
-
   <string name="preference_show_lag_title">Latenz anzeigen</string>
   <string name="preference_show_lag_summary">Zeigt die Gerät-Core-Latenz in der Statusleiste</string>
 
   <string name="preference_language_title">Sprache</string>
   <string name="preference_language_entry_auto">System-Standardsprache</string>
-
-
   <string name="preference_notifications_title">Benachrichtigungen</string>
 
   <string name="preference_notification_query_title">Direktnachrichten</string>
@@ -62,8 +58,6 @@
   <string name="preference_notifications_level_all">Alle Nachrichten</string>
   <string name="preference_notifications_level_highlight">Erwähnungen</string>
   <string name="preference_notifications_level_none">Niemals</string>
-
-
   <string name="preference_messages_title">Nachrichten</string>
 
   <string name="preference_monospace_title">Monospace-Schrift verwenden</string>
@@ -82,12 +76,10 @@
   <string name="preference_colorize_nicknames_entry_all">Alle Benutzernamen</string>
   <string name="preference_colorize_nicknames_entry_all_but_mine">Alle außer Eigenem</string>
   <string name="preference_colorize_nicknames_entry_none">Keine</string>
-
   <string name="preference_show_prefix_title">Sendermodi anzeigen</string>
   <string name="preference_show_prefix_entry_all">Alle Modi</string>
   <string name="preference_show_prefix_entry_highest">Höchsten Modus</string>
   <string name="preference_show_prefix_entry_none">Keine</string>
-
   <string name="preference_hostmask_actions_title">Hostmaske in Aktionen</string>
   <string name="preference_hostmask_actions_summary">Zeigt Ident und Host in Betreten/Verlassen-Nachrichten</string>
 
@@ -145,4 +137,5 @@
 
   <string name="preference_show_notification_title">Benachrichtigung anzeigen</string>
   <string name="preference_show_notification_summary">Zeigt eine permanente Benachrichtigung an, damit Quasseldroid durchgehend verbunden bleiben kann</string>
-</resources>
+
+  </resources>

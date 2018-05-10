@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2018 Janne Koschinski
+  Copyright (c) 2018 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+  <string name="label_error_login">Erro de Login</string>
+  <string name="label_error_setup">Erro de Configuração</string>
+  <string name="label_error_init">Erro de Ligação</string>
+  <string name="label_error_certificate">Erro de Certificado</string>
+  <string name="label_error_certificate_no_certificate">Sem certificado disponível</string>
+  <string name="label_error_certificate_no_hostname">Nenhum nome de anfitrião disponível</string>
+  <string name="label_error_certificate_invalid"><![CDATA[
+    <p>O certificado com impressão digital<br/>
+    <code>%1$s</code> só é válido a partir de %2$s até %3$s</p>
+  ]]></string>
+  <string name="label_error_certificate_untrusted"><![CDATA[
+    <p>O certificado com impressão digital<br/>
+    <code>%1$s</code><br/>
+    não é confiável.</p>
+  ]]></string>
+  <string name="label_error_certificate_no_match"><![CDATA[
+    <p>O certificado com impressão digital<br/>
+    <code>%1$s</code><br/>
+    não é válido para %2$s.</p>
+  ]]></string>
+</resources>

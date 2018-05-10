@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2018 Janne Koschinski
+  Copyright (c) 2018 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+  <string name="app_name">QuasselDroid</string>
+  <string name="app_description">Um cliente baseado no Android para o cliente de IRC Quassel descentralizado.</string>
+  <string name="app_description_long">Quassel é um cliente IRC distribuído e descentralizado, escrito usando C++ e Qt. O Quasseldroid é um cliente puramente kotlin para o núcleo Quassel, permitindo que você se ligue ao seu núcleo Quassel usando seu telemóvel Android™.</string>
+
+  <string name="connection_service_title">Serviço de Ligação</string>
+  <string name="connection_service_description">Mantém uma ligação com o seu núcleo para permitir notificações e para transmitir mensagens.</string>
+
+  <string name="label_about">Sobre</string>
+  <string name="label_avatar">Avatar</string>
+  <string name="label_back">Voltar</string>
+  <string name="label_buffer_name">Nome do Chat</string>
+  <string name="label_cancel">Cancelar</string>
+  <string name="label_update_user_password">Actualizar Utilizador/Senha</string>
+  <string name="label_certificates">Certificados</string>
+  <string name="label_close">Fechar</string>
+  <string name="label_colors_custom">Personalizado</string>
+  <string name="label_colors_mirc">mIRC</string>
+  <string name="label_configure">Configurar</string>
+  <string name="label_connect">Ligar</string>
+  <string name="label_contributors">Contribuidores</string>
+  <string name="label_copy">Copiar</string>
+  <string name="label_crashes">Crashes</string>
+  <string name="label_delete">Apagar</string>
+  <string name="label_delete_all">Apagar Todos</string>
+  <string name="label_disconnect">Desligar</string>
+  <string name="label_edit_nick">Editar alcunha</string>
+  <string name="label_edit_topic">Editar Tópico</string>
+  <string name="label_edit_topic_long">Abre a caixa de diálogo para alterar o tópico do canal</string>
+  <string name="label_filter_messages">Filtrar Mensagens</string>
+  <string name="label_github">GitHub</string>
+  <string name="label_hide_perm">Ocultar Permanentemente</string>
+  <string name="label_hide_temp">Ocultar Temporariamente</string>
+  <string name="label_ignore">Ignorar</string>
+  <string name="label_ignore_long">Adiciona/remove o utilizador na/da lista de ignorados</string>
+  <string name="label_info_channel">Detalhes do Canal</string>
+  <string name="label_info_user">Detalhes do Utilizador</string>
+  <string name="label_input_history">Histórico de Escrita</string>
+  <string name="label_join">Entrar</string>
+  <string name="label_join_long">Entrar no Canal</string>
+  <string name="label_libraries">Livrarias</string>
+  <string name="label_license">Licença</string>
+  <string name="label_mark_read">Marcar como lida</string>
+  <string name="label_mention">Mencionar</string>
+  <string name="label_mention_long">Copia o nome de utilizador para a caixa de digitação</string>
+  <string name="label_new_account">Adicionar Conta</string>
+  <string name="label_new_chatlist">Adicionar Lista de Chats</string>
+  <string name="label_new_highlight_rule">Nova Regra de Menções</string>
+  <string name="label_new_highlight_ignore_rule">Nova Regra de Ignore de Menções</string>
+  <string name="label_new_identity">Adicionar Identidade</string>
+  <string name="label_new_network">Adicionar Rede</string>
+  <string name="label_new_nick">Adicionar Alcunha</string>
+  <string name="label_new_server">Adicionar Servidor</string>
+  <string name="label_nicklist">Lista de Alcunhas</string>
+  <string name="label_no">Não</string>
+  <string name="label_no_away_message">Sem mensagem de ausência disponível</string>
+  <string name="label_no_sound">Nenhum</string>
+  <string name="label_reply">Responder</string>
+  <string name="label_reset">Restabelecer</string>
+  <string name="label_open">Abrir</string>
+  <string name="label_part">Sair</string>
+  <string name="label_part_long">Sair do Canal</string>
+  <string name="label_placeholder_message">Escrever uma mensagem...</string>
+  <string name="label_placeholder_topic">Descreva o tópico do canal…</string>
+  <string name="label_privacy_policy">Política de Privacidade</string>
+  <string name="label_query">Abrir conversa privada</string>
+  <string name="label_query_long">Abrir conversa privada com o utilizador</string>
+  <string name="label_rename">Renomear</string>
+  <string name="label_save">Guardar</string>
+  <string name="label_select">Selecionar</string>
+  <string name="label_settings">Configurações</string>
+  <string name="label_settings_client">Configurações do Cliente</string>
+  <string name="label_settings_core">Configurações do núcleo</string>
+  <string name="label_share">Partilhar</string>
+  <string name="label_share_crashreport">Partilhar Relatório de Crash</string>
+  <string name="label_show_hidden">Mostrar oculto</string>
+  <string name="label_topic">Tópico do Canal</string>
+  <string name="label_unhide">Tornar Visível</string>
+  <string name="label_website">Site</string>
+  <string name="label_whitelist">Ignorar</string>
+  <string name="label_whitelist_ignore_date">A data de caducidade é ignorada para este certificado</string>
+  <string name="label_whitelist_certificates">Certificados</string>
+  <string name="label_whitelist_hostnames">Anfitriões</string>
+  <string name="label_who">Who</string>
+  <string name="label_who_long">Atualizar as informações de utilizador de todos os utilizadores</string>
+  <string name="label_whois">Whois</string>
+  <string name="label_whois_long">Atualizar informações de utilizador</string>
+  <string name="label_yes">Sim</string>
+
+  <string name="notification_channel_connection_title">Ligação</string>
+  <string name="notification_channel_highlight_title">Menção</string>
+
+  <string name="buffer_delete_confirmation">Você deseja excluir este chat permanentemente?</string>
+
+  <string name="delete_confirmation">Tem certeza de que deseja excluir isto permanentemente? Isto não pode ser revertido.</string>
+  <string name="cancel_confirmation">Você tem alterações não guardadas. Você deseja descartá-las?</string>
+
+  </resources>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2018 Janne Koschinski
+  Copyright (c) 2018 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+  <string name="settings_networks_title">Redes</string>
+  <string name="settings_network_title">Rede</string>
+  <string name="settings_network_network_name">Nome da Rede</string>
+  <string name="settings_network_identity">Identidade</string>
+  <string name="settings_network_sasl_enabled">SASL</string>
+  <string name="settings_network_sasl_account">Conta</string>
+  <string name="settings_network_sasl_password">Senha</string>
+  <string name="settings_network_autoidentify_enabled">Auto Identificação</string>
+  <string name="settings_network_autoidentify_service">Serviço</string>
+  <string name="settings_network_autoidentify_password">Senha</string>
+  <string name="settings_network_connection">Ligação</string>
+  <string name="settings_network_perform">Comandos executados na ligação</string>
+  <string name="settings_network_rejoin_channels">Reentrar nos Canais</string>
+  <string name="settings_network_autoreconnect_enabled">Reconexão automática</string>
+  <string name="settings_network_autoreconnect_interval">Intervalo</string>
+  <string name="settings_network_autoreconnect_interval_unit">segundos</string>
+  <string name="settings_network_autoreconnect_attempts">Máximo de Tentativas</string>
+  <string name="settings_network_autoreconnect_unlimited">Tentativas Ilimitadas</string>
+  <string name="settings_network_customratelimits_enabled">Limites Personalizados</string>
+  <string name="settings_network_customratelimits_burstsize">Tamanho do Burst</string>
+  <string name="settings_network_customratelimits_unlimited">Ilimitado</string>
+  <string name="settings_network_customratelimits_delay">Atraso</string>
+  <string name="settings_network_customratelimits_interval_unit">segundos</string>
+
+  <string name="settings_networkserver_title">Servidor da Rede</string>
+  <string name="settings_networkserver_connection">Ligação</string>
+  <string name="settings_networkserver_host">Anfitrião</string>
+  <string name="settings_networkserver_port">Porta</string>
+  <string name="settings_networkserver_ssl_enabled">Utilizar SSL/TLS</string>
+  <string name="settings_networkserver_ssl_verify">Verificar SSL/TLS</string>
+  <string name="settings_networkserver_password">Senha</string>
+  <string name="settings_networkserver_proxy_enabled">Utilizar Proxy</string>
+  <string name="settings_networkserver_proxy_type">Tipo</string>
+  <string name="settings_networkserver_proxy_type_http">HTPP</string>
+  <string name="settings_networkserver_proxy_type_socks5">SOCKS 5</string>
+  <string name="settings_networkserver_proxy_host">Anfitrião</string>
+  <string name="settings_networkserver_proxy_port">Porta</string>
+  <string name="settings_networkserver_proxy_user">Nome de Utilizador</string>
+  <string name="settings_networkserver_proxy_pass">Senha</string>
+
+  <string name="settings_identities_title">Identidades</string>
+  <string name="settings_identity_title">Identidade</string>
+  <string name="settings_identity_names">Nomes</string>
+  <string name="settings_identity_identity_name">Nome da identidade</string>
+  <string name="settings_identity_real_name">Nome Real</string>
+  <string name="settings_identity_ident">Identidade</string>
+  <string name="settings_identity_nicks">Alcunhas</string>
+  <string name="settings_identity_messages">Mensagens</string>
+  <string name="settings_identity_kick_reason">Razão de Kick</string>
+  <string name="settings_identity_part_reason">Razão de Saída</string>
+  <string name="settings_identity_quit_reason">Razão de Desconexão</string>
+  <string name="settings_identity_away">Mensagens de Ausência</string>
+  <string name="settings_identity_away_reason">Razão de Ausência</string>
+  <string name="settings_identity_detach_away">Ausente ao desligar</string>
+  <string name="settings_identity_detach_away_reason">Razão de Ausência ao Desligar</string>
+
+  <string name="settings_chatlists_title">Listas de Chats</string>
+  <string name="settings_chatlist_title">Lista de Chats</string>
+  <string name="settings_chatlist_ui">Interface de Utilizador</string>
+  <string name="settings_chatlist_buffer_view_name">Nome</string>
+  <string name="settings_chatlist_show_search">Mostrar Pesquisar</string>
+  <string name="settings_chatlist_sort_alphabetically">Ordenar Alfabeticamente</string>
+  <string name="settings_chatlist_add_new_buffers_automatically">Adicionar novos chats automaticamente</string>
+  <string name="settings_chatlist_network">Rede</string>
+  <string name="settings_chatlist_show_status_buffer">Mostrar Janela de Estado</string>
+  <string name="settings_chatlist_types">Tipos de Chats</string>
+  <string name="settings_chatlist_show_channels">Mostrar Canais</string>
+  <string name="settings_chatlist_show_queries">Mostrar Mensagens Privadas</string>
+  <string name="settings_chatlist_activity">Actividade</string>
+  <string name="settings_chatlist_minimum_activity_no_activity">Sem Actividade</string>
+  <string name="settings_chatlist_minimum_activity_other_activity">Outra Actividade</string>
+  <string name="settings_chatlist_minimum_activity_new_message">Nova Mensagem</string>
+  <string name="settings_chatlist_minimum_activity_highlight">Menção</string>
+  <string name="settings_chatlist_hide_inactive_buffers">Ocultar Chats Inactivos</string>
+  <string name="settings_chatlist_hide_inactive_networks">Ocultar Redes Inactivas</string>
+
+  <string name="settings_ignorelist_title">Lista de Ignorados</string>
+
+  <string name="settings_ignoreitem_title">Regra de Ignorar</string>
+  <string name="settings_ignoreitem_enabled">Activado</string>
+  <string name="settings_ignoreitem_ignorerule">Regra de Ignorar</string>
+  <string name="settings_ignoreitem_isregex">Expressão Regular</string>
+  <string name="settings_ignoreitem_type">Tipo</string>
+  <string name="settings_ignoreitem_type_sender">Remetente</string>
+  <string name="settings_ignoreitem_type_message">Mensagem</string>
+  <string name="settings_ignoreitem_type_ctcp">Ctcp</string>
+  <string name="settings_ignoreitem_strictness">Rigor</string>
+  <string name="settings_ignoreitem_strictness_soft">Dinâmico</string>
+  <string name="settings_ignoreitem_strictness_hard">Permanente</string>
+  <string name="settings_ignoreitem_scope">Âmbito</string>
+  <string name="settings_ignoreitem_scope_global">Âmbito Global</string>
+  <string name="settings_ignoreitem_scope_network">Âmbito de Rede</string>
+  <string name="settings_ignoreitem_scope_channel">Âmbito de Canal</string>
+  <string name="settings_ignoreitem_scoperule">Âmbito da Regra</string>
+
+  <string name="settings_highlightlist_title">Menções</string>
+  <string name="settings_highlightlist_highlight_nick">Menções de Alcunhas</string>
+  <string name="settings_highlightlist_highlight_nick_all_nicks">Todas as Alcunhas da Identidade</string>
+  <string name="settings_highlightlist_highlight_nick_current_nick">Alcunha Actual</string>
+  <string name="settings_highlightlist_highlight_nick_none">Nenhum</string>
+  <string name="settings_highlightlist_nicks_case_sensitive">Sensível a Maiúsculas e Minúsculas</string>
+  <string name="settings_highlightlist_rules">Regras de Menções</string>
+  <string name="settings_highlightlist_ignore_rules">Regras de Ignorar Menções</string>
+
+  <string name="settings_highlightrule_title">Regra de Menção</string>
+  <string name="settings_highlightrule_enabled">Activado</string>
+  <string name="settings_highlightrule_name">Nome</string>
+  <string name="settings_highlightrule_regular_expression">Expressão Regular</string>
+  <string name="settings_highlightrule_case_sensitive">Sensível a Maiúsculas e Minúsculas</string>
+  <string name="settings_highlightrule_sender">Remetente</string>
+  <string name="settings_highlightrule_channel">Canal</string>
+
+  <string name="settings_aliaslist_title">Aliases</string>
+
+  <string name="settings_aliasitem_title">Alias</string>
+  <string name="settings_aliasitem_name">Nome</string>
+  <string name="settings_aliasitem_expansion">Expansão</string>
+
+  <string name="settings_networkconfig_title">Configuração IRC</string>
+  <string name="settings_networkconfig_ping_timeout">Detecção Ping Timeout</string>
+  <string name="settings_networkconfig_ping_interval">Intervalo de Ping</string>
+  <string name="settings_networkconfig_ping_interval_unit">segundos</string>
+  <string name="settings_networkconfig_max_ping_count">Desligar após</string>
+  <string name="settings_networkconfig_max_ping_count_unit">pings perdidos</string>
+  <string name="settings_networkconfig_auto_who">Pesquisa Automática Informações Utilizador</string>
+  <string name="settings_networkconfig_auto_who_interval">Intervalo de atualização</string>
+  <string name="settings_networkconfig_auto_who_interval_unit">segundos</string>
+  <string name="settings_networkconfig_auto_who_nick_limit">Ignorar canais com mais de</string>
+  <string name="settings_networkconfig_auto_who_nick_limit_unit">utilizadores</string>
+  <string name="settings_networkconfig_auto_who_delay">Atraso mínimo entre pedidos</string>
+  <string name="settings_networkconfig_auto_who_delay_unit">segundos</string>
+  <string name="settings_networkconfig_standard_ctcp">Comportamento CTCP Compatível Padrão</string>
+</resources>

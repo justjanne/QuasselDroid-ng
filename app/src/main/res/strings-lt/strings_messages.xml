@@ -24,7 +24,6 @@
   <string name="message_type_nick">Slapyvardis</string>
   <string name="message_type_mode">Rėžimas</string>
   <string name="message_type_topic">Tema</string>
-
   <string name="message_format_copy">[%1$s] %2$s</string>
   <string name="message_format_copy_complex">[%1$s] &lt;%2$s&gt; %3$s</string>
 

@@ -31,18 +31,14 @@
   <string name="preference_theme_entry_gruvbox_light">Gruvbox (Šviesi)</string>
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Tamsi)</string>
   <string name="preference_theme_entry_dracula">Dracula</string>
-
   <string name="preference_input_enter_title">Enter mygtuko elgsena</string>
   <string name="preference_input_enter_entry_emoji">Emoji pasirinkimas</string>
   <string name="preference_input_enter_entry_send">Siųsti žinutę</string>
-
   <string name="preference_show_lag_title">Rodyti delsimą</string>
   <string name="preference_show_lag_summary">Veiksmų juostoje matysite kiek klijentas atsilieka nuo branduolio</string>
 
   <string name="preference_language_title">Kalba</string>
   <string name="preference_language_entry_auto">Sistemos numatyta</string>
-
-
   <string name="preference_notifications_title">Pranešimai</string>
 
   <string name="preference_notification_query_title">Tiesioginės žinutės</string>
@@ -52,7 +48,9 @@
   <string name="preference_notification_other_title">Kitos žinutės</string>
 
   <string name="preference_notification_sound_title">Pranešimo garsas</string>
+
   <string name="preference_notification_vibration_title">Vibracija</string>
+
   <string name="preference_notification_light_title">LED Lemputė</string>
 
   <string name="preference_notification_configure_title">Pranešimų nustatymai</string>
@@ -60,7 +58,6 @@
   <string name="preference_notifications_level_all">Visos žinutės</string>
   <string name="preference_notifications_level_highlight">Paminėjimai</string>
   <string name="preference_notifications_level_none">Niekada</string>
-
   <string name="preference_messages_title">Žinutės</string>
 
   <string name="preference_monospace_title">Naudoti Monospace šriftą</string>
@@ -79,12 +76,10 @@
   <string name="preference_colorize_nicknames_entry_all">Visi</string>
   <string name="preference_colorize_nicknames_entry_all_but_mine">Visi išskyrus savo</string>
   <string name="preference_colorize_nicknames_entry_none">Nei vienas</string>
-
   <string name="preference_show_prefix_title">Rodyti Sendermodes</string>
   <string name="preference_show_prefix_entry_all">Visus</string>
   <string name="preference_show_prefix_entry_highest">Aukščiausią</string>
   <string name="preference_show_prefix_entry_none">Nei vieno</string>
-
   <string name="preference_hostmask_actions_title">Rodyti Hostmask veiksmuose</string>
   <string name="preference_hostmask_actions_summary">Rodyti nick!ident@host prisijungimo/atsijungimo/išėjimo žinutėse</string>
 
@@ -143,4 +138,4 @@
   <string name="preference_show_notification_title">Rodyti aktyvųjį pranešimą</string>
   <string name="preference_show_notification_summary">Quasseldroid bus visada prijungtas rodant pastovų pranešimą</string>
 
-</resources>
+  </resources>

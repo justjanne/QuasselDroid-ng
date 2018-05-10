@@ -1,0 +1,64 @@
+<!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2018 Janne Koschinski
+  Copyright (c) 2018 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+  <!-- Account Selection -->
+  <string name="slide_account_select_title">Selecione uma conta</string>
+  <string name="slide_account_select_description">Por favor, selecione uma conta da lista ou adicione uma</string>
+  <string name="label_user_on_host">%1$s em %2$s:%3$d</string>
+
+  <!-- Account Connection -->
+  <string name="slide_account_connection_title">Ligação</string>
+  <string name="slideAccountConnectionDescription">Primeiro, por favor, escolha em qual servidor seu núcleo está hospedado.</string>
+
+  <string name="label_connection_host">Anfiriao</string>
+  <string name="labelConnectionPort">Porta</string>
+
+  <string name="hint_invalid_host">Não é um nome de anfitrião válido</string>
+  <string name="hint_invalid_port">Não é uma porta válida</string>
+
+  <!-- Account User -->
+  <string name="slide_account_user_title">Sua conta</string>
+  <string name="slide_account_user_description">Agora, digite o nome de utilizador e a senha da sua conta no núcleo. Se acabou de criar esse núcleo, configuraremos essa conta para si</string>
+
+  <string name="label_account_user">Nome de Utilizador</string>
+  <string name="label_account_pass">Senha</string>
+
+  <string name="hint_invalid_user">O nome de utilizador não pode estar vazio</string>
+
+  <!-- Account Name -->
+  <string name="slide_account_name_title">Personalizar Conta</string>
+  <string name="slide_account_name_description">Dê um nome a esta conta</string>
+
+  <string name="label_account_name">Nome da Conta</string>
+
+  <string name="hint_invalid_name">O nome não pode estar vazio</string>
+
+  <!-- Core Authenticator Select -->
+  <string name="slide_core_authenticator_select_title">Selecione o tipo de autenticação</string>
+  <string name="slide_core_authenticator_select_description">Selecione um tipo de autenticação para o núcleo Quassel utilizar para autenticar usuários.</string>
+
+  <!-- Core Backend Select -->
+  <string name="slide_core_backend_select_title">Selecione o tipo de armazenamento</string>
+  <string name="slide_core_backend_select_description">Selecione um um tipo de base de dados para o núcleo do Quassel armazenar o histórico e outros dados.</string>
+
+  <!-- Core Backend Config -->
+  <string name="slide_core_backend_setup_title">Configurar tipo de armazenamento</string>
+  <string name="slide_core_backend_setup_description">Por favor, configure o tipo de base de dados selecionado.</string>
+</resources>

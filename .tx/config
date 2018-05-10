@@ -1,0 +1,73 @@
+[main]
+host = https://www.transifex.com
+
+[quasseldroid-1.strings_statusxml]
+source_file = app/src/main/res/strings/strings_status.xml
+source_lang = en
+trans.de = app/src/main/res/strings-de/strings_status.xml
+trans.lt = app/src/main/res/strings-lt/strings_status.xml
+trans.pt = app/src/main/res/strings-pt/strings_status.xml
+
+[quasseldroid-1.strings_errorxml]
+source_file = app/src/main/res/strings/strings_error.xml
+source_lang = en
+trans.de = app/src/main/res/strings-de/strings_error.xml
+trans.lt = app/src/main/res/strings-lt/strings_error.xml
+trans.pt = app/src/main/res/strings-pt/strings_error.xml
+
+[quasseldroid-1.strings_formatxml]
+source_file = app/src/main/res/strings/strings_format.xml
+source_lang = en
+trans.de = app/src/main/res/strings-de/strings_format.xml
+trans.lt = app/src/main/res/strings-lt/strings_format.xml
+trans.pt = app/src/main/res/strings-pt/strings_format.xml
+
+[quasseldroid-1.strings_preferencesxml]
+source_file = app/src/main/res/strings/strings_preferences.xml
+source_lang = en
+trans.de = app/src/main/res/strings-de/strings_preferences.xml
+trans.lt = app/src/main/res/strings-lt/strings_preferences.xml
+trans.pt = app/src/main/res/strings-pt/strings_preferences.xml
+
+[quasseldroid-1.strings_messagesxml]
+source_file = app/src/main/res/strings/strings_messages.xml
+source_lang = en
+trans.de = app/src/main/res/strings-de/strings_messages.xml
+trans.lt = app/src/main/res/strings-lt/strings_messages.xml
+trans.pt = app/src/main/res/strings-pt/strings_messages.xml
+
+[quasseldroid-1.stringsxml]
+source_file = app/src/main/res/strings/strings.xml
+source_lang = en
+trans.de = app/src/main/res/strings-de/strings.xml
+trans.lt = app/src/main/res/strings-lt/strings.xml
+trans.pt = app/src/main/res/strings-pt/strings.xml
+
+[quasseldroid-1.strings_setupxml]
+source_file = app/src/main/res/strings/strings_setup.xml
+source_lang = en
+trans.de = app/src/main/res/strings-de/strings_setup.xml
+trans.lt = app/src/main/res/strings-lt/strings_setup.xml
+trans.pt = app/src/main/res/strings-pt/strings_setup.xml
+
+[quasseldroid-1.strings_contributorsxml]
+source_file = app/src/main/res/strings/strings_contributors.xml
+source_lang = en
+trans.de = app/src/main/res/strings-de/strings_contributors.xml
+trans.lt = app/src/main/res/strings-lt/strings_contributors.xml
+trans.pt = app/src/main/res/strings-pt/strings_contributors.xml
+
+[quasseldroid-1.strings_infoxml]
+source_file = app/src/main/res/strings/strings_info.xml
+source_lang = en
+trans.de = app/src/main/res/strings-de/strings_info.xml
+trans.lt = app/src/main/res/strings-lt/strings_info.xml
+trans.pt = app/src/main/res/strings-pt/strings_info.xml
+
+[quasseldroid-1.strings_settingsxml]
+source_file = app/src/main/res/strings/strings_settings.xml
+source_lang = en
+trans.de = app/src/main/res/strings-de/strings_settings.xml
+trans.lt = app/src/main/res/strings-lt/strings_settings.xml
+trans.pt = app/src/main/res/strings-pt/strings_settings.xml
+
