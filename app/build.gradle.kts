@@ -62,7 +62,7 @@ android {
 
     signingConfig = signingConfigs.findByName("default")
 
-    resConfigs("en", "de", "lt")
+    resConfigs("en", "de", "lt", "pt")
 
     vectorDrawables.useSupportLibrary = true
 

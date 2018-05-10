@@ -80,17 +80,20 @@
   <string name="preference_language_entry_en" translatable="false">English</string>
   <string name="preference_language_entry_de" translatable="false">Deutsch</string>
   <string name="preference_language_entry_lt" translatable="false">Lietuvių</string>
+  <string name="preference_language_entry_pt" translatable="false">Português</string>
   <string-array name="preference_language_entries" translatable="false">
     <item>@string/preference_language_entry_auto</item>
     <item>@string/preference_language_entry_en</item>
     <item>@string/preference_language_entry_de</item>
     <item>@string/preference_language_entry_lt</item>
+    <item>@string/preference_language_entry_pt</item>
   </string-array>
   <string-array name="preference_language_entryvalues" translatable="false">
     <item />
     <item>en</item>
     <item>de</item>
     <item>lt</item>
+    <item>pt</item>
   </string-array>
 
 
