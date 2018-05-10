@@ -1,4 +1,4 @@
-#[Quasseldroid](https://quasseldroid.info/)
+# [Quasseldroid](https://quasseldroid.info/)
 
 [![Release Version](https://img.shields.io/github/release/justjanne/quasseldroid-ng/all.svg)](https://github.com/justjanne/Quasseldroid-ng/releases)
 
