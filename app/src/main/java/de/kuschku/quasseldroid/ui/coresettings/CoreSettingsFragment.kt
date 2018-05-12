@@ -48,6 +48,7 @@ import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivi
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
+import io.reactivex.Observable
 
 class CoreSettingsFragment : ServiceBoundFragment() {
   @BindView(R.id.networks)
@@ -105,10 +106,14 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     ViewCompat.setNestedScrollingEnabled(networks, false)
 
     viewModel.networks.switchMap {
-      combineLatest(it.values.map(Network::liveNetworkInfo)).map {
-        it.map {
-          SettingsItem(it.networkId, it.networkName)
-        }.sortedBy(SettingsItem::name)
+      if (it.isEmpty()) {
+        Observable.just(emptyList())
+      } else {
+        combineLatest(it.values.map(Network::liveNetworkInfo)).map {
+          it.map {
+            SettingsItem(it.networkId, it.networkName)
+          }.sortedBy(SettingsItem::name)
+        }
       }
     }.toLiveData().observe(this, Observer {
       networkAdapter.submitList(it.orEmpty())
@@ -120,10 +125,14 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     ViewCompat.setNestedScrollingEnabled(identities, false)
 
     viewModel.identities.switchMap {
-      combineLatest(it.values.map(Identity::liveUpdates)).map {
-        it.map {
-          SettingsItem(it.id(), it.identityName() ?: "")
-        }.sortedBy(SettingsItem::name)
+      if (it.isEmpty()) {
+        Observable.just(emptyList())
+      } else {
+        combineLatest(it.values.map(Identity::liveUpdates)).map {
+          it.map {
+            SettingsItem(it.id(), it.identityName() ?: "")
+          }.sortedBy(SettingsItem::name)
+        }
       }
     }.toLiveData().observe(this, Observer {
       identityAdapter.submitList(it.orEmpty())

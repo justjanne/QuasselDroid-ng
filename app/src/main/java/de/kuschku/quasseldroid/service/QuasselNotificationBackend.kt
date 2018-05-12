@@ -136,6 +136,8 @@ class QuasselNotificationBackend @Inject constructor(
   }
 
   fun updateSettings() {
+    notificationHandler.updateTranslation()
+
     notificationSettings = Settings.notification(context)
     appearanceSettings = Settings.appearance(context)
     messageSettings = Settings.message(context)

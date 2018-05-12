@@ -114,7 +114,7 @@
           android:id="@+id/portWrapper"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/labelConnectionPort"
+          android:hint="@string/label_connection_port"
           tools:ignore="LabelFor">
 
           <EditText

@@ -22,7 +22,7 @@ package de.kuschku.quasseldroid.ui.coresettings.network
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 
-class NetworkEditFragment : NetworkBaseFragment(), SettingsFragment.Deletable {
+class NetworkEditFragment : NetworkBaseFragment(false), SettingsFragment.Deletable {
   override fun onSave() = network?.let { (it, data) ->
     applyChanges(data)
     it?.requestUpdate(data.toVariantMap())

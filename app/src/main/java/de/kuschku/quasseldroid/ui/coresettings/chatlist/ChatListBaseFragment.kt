@@ -35,17 +35,19 @@ import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
+import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.minus
 import de.kuschku.libquassel.util.flag.plus
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.defaults.Defaults
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
 
-abstract class ChatListBaseFragment : SettingsFragment(), SettingsFragment.Savable,
-                                      SettingsFragment.Changeable {
+abstract class ChatListBaseFragment(private val initDefault: Boolean) :
+  SettingsFragment(), SettingsFragment.Savable, SettingsFragment.Changeable {
   @BindView(R.id.buffer_view_name)
   lateinit var bufferViewName: EditText
 
@@ -127,34 +129,30 @@ abstract class ChatListBaseFragment : SettingsFragment(), SettingsFragment.Savab
       }
     })
 
-    viewModel.bufferViewConfigMap.map { Optional.ofNullable(it[chatlistId]) }
-      .filter(Optional<BufferViewConfig>::isPresent)
-      .map(Optional<BufferViewConfig>::get)
-      .firstElement()
-      .toLiveData().observe(this, Observer {
-        it?.let {
-          this.chatlist = Pair(it, it.copy())
-          this.chatlist?.let { (_, data) ->
-            bufferViewName.setText(data.bufferViewName())
-            showSearch.isChecked = data.showSearch()
-            sortAlphabetically.isChecked = data.sortAlphabetically()
-            addNewBuffersAutomatically.isChecked = data.addNewBuffersAutomatically()
-            showStatusBuffer.isChecked = data.allowedBufferTypes().hasFlag(Buffer_Type.StatusBuffer)
-
-            minimumActivity.setSelection(
-              minimumActivityAdapter.indexOf(data.minimumActivity()) ?: 0
-            )
-
-            networkAdapter.indexOf(data.networkId())?.let(networkId::setSelection)
-
-            hideInactiveBuffers.isChecked = data.hideInactiveBuffers()
-            hideInactiveNetworks.isChecked = data.hideInactiveNetworks()
-
-            showQueries.isChecked = data.allowedBufferTypes().hasFlag(Buffer_Type.QueryBuffer)
-            showChannels.isChecked = data.allowedBufferTypes().hasFlag(Buffer_Type.ChannelBuffer)
+    if (initDefault) {
+      viewModel.session
+        .filter(Optional<ISession>::isPresent)
+        .map(Optional<ISession>::get)
+        .firstElement()
+        .toLiveData().observe(this, Observer {
+          it?.let {
+            update(Defaults.bufferViewConfig(requireContext(), it.proxy),
+                   minimumActivityAdapter,
+                   networkAdapter)
           }
-        }
-      })
+        })
+    } else {
+      viewModel.bufferViewConfigMap.map { Optional.ofNullable(it[chatlistId]) }
+        .filter(Optional<BufferViewConfig>::isPresent)
+        .map(Optional<BufferViewConfig>::get)
+        .firstElement()
+        .toLiveData().observe(this, Observer {
+          it?.let {
+            update(it, minimumActivityAdapter, networkAdapter)
+          }
+        })
+    }
+
     networkId.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
       override fun onNothingSelected(parent: AdapterView<*>?) {
         showStatusBuffer.isChecked = true
@@ -172,6 +170,33 @@ abstract class ChatListBaseFragment : SettingsFragment(), SettingsFragment.Savab
     }
 
     return view
+  }
+
+  private fun update(it: BufferViewConfig,
+                     minimumActivityAdapter: MinimumActivityAdapter,
+                     networkAdapter: NetworkAdapter) {
+    if (this.chatlist == null) {
+      this.chatlist = Pair(it, it.copy())
+      this.chatlist?.let { (_, data) ->
+        bufferViewName.setText(data.bufferViewName())
+        showSearch.isChecked = data.showSearch()
+        sortAlphabetically.isChecked = data.sortAlphabetically()
+        addNewBuffersAutomatically.isChecked = data.addNewBuffersAutomatically()
+        showStatusBuffer.isChecked = data.allowedBufferTypes().hasFlag(Buffer_Type.StatusBuffer)
+
+        minimumActivity.setSelection(
+          minimumActivityAdapter.indexOf(data.minimumActivity()) ?: 0
+        )
+
+        networkAdapter.indexOf(data.networkId())?.let(networkId::setSelection)
+
+        hideInactiveBuffers.isChecked = data.hideInactiveBuffers()
+        hideInactiveNetworks.isChecked = data.hideInactiveNetworks()
+
+        showQueries.isChecked = data.allowedBufferTypes().hasFlag(Buffer_Type.QueryBuffer)
+        showChannels.isChecked = data.allowedBufferTypes().hasFlag(Buffer_Type.ChannelBuffer)
+      }
+    }
   }
 
   override fun hasChanged() = chatlist?.let { (it, data) ->

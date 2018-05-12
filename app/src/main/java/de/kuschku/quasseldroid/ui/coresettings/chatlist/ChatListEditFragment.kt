@@ -22,7 +22,7 @@ package de.kuschku.quasseldroid.ui.coresettings.chatlist
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 
-class ChatListEditFragment : ChatListBaseFragment(), SettingsFragment.Deletable {
+class ChatListEditFragment : ChatListBaseFragment(false), SettingsFragment.Deletable {
   override fun onSave() = chatlist?.let { (it, data) ->
     applyChanges(data, it)
     it?.requestUpdate(data.toVariantMap())

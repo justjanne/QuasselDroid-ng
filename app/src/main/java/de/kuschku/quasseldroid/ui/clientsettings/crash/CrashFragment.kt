@@ -30,12 +30,12 @@ import android.view.*
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import dagger.android.support.DaggerFragment
 import de.kuschku.malheur.data.Report
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.fromJson
 import java.io.File
+import javax.inject.Inject
 
 class CrashFragment : DaggerFragment() {
   @BindView(R.id.list)
@@ -44,7 +44,9 @@ class CrashFragment : DaggerFragment() {
   private lateinit var handlerThread: HandlerThread
   private lateinit var handler: Handler
 
-  private var gson: Gson? = null
+  @Inject
+  lateinit var gson: Gson
+
   private var crashDir: File? = null
   private var adapter: CrashAdapter? = null
 
@@ -69,7 +71,6 @@ class CrashFragment : DaggerFragment() {
 
     this.adapter = CrashAdapter()
     this.crashDir = File(requireContext().cacheDir, "crashes")
-    this.gson = GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create()
 
     list.layoutManager = LinearLayoutManager(context)
     list.adapter = adapter
@@ -80,7 +81,7 @@ class CrashFragment : DaggerFragment() {
       val crashDir = this.crashDir
       val gson = this.gson
 
-      if (crashDir != null && gson != null) {
+      if (crashDir != null) {
         crashDir.mkdirs()
         val list: List<Pair<Report, String>> = crashDir.listFiles()
           .orEmpty()

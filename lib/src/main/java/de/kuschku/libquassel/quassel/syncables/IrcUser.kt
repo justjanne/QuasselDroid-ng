@@ -57,7 +57,7 @@ class IrcUser(
     "loginTime" to QVariant.of(loginTime(), Type.QDateTime),
     "server" to QVariant.of(server(), Type.QString),
     "ircOperator" to QVariant.of(ircOperator(), Type.QString),
-    "lastAwayMessage" to QVariant.of(lastAwayMessage(), Type.Int),
+    "lastAwayMessage" to QVariant.of(lastAwayMessage(), Type.Long),
     "whoisServiceReply" to QVariant.of(whoisServiceReply(), Type.QString),
     "suserHost" to QVariant.of(suserHost(), Type.QString),
     "encrypted" to QVariant.of(encrypted(), Type.Bool),
@@ -183,7 +183,7 @@ class IrcUser(
     }
   }
 
-  override fun setLastAwayMessage(lastAwayMessage: Int) {
+  override fun setLastAwayMessage(lastAwayMessage: Long) {
     if (lastAwayMessage > _lastAwayMessage) {
       _lastAwayMessage = lastAwayMessage
     }
@@ -331,7 +331,7 @@ class IrcUser(
       field = value
       hasChangedNotification.onNext(Unit)
     }
-  private var _lastAwayMessage: Int = 0
+  private var _lastAwayMessage: Long = 0L
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)

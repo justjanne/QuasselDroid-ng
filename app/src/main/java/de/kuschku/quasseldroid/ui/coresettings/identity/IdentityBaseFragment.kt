@@ -35,14 +35,16 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import de.kuschku.libquassel.quassel.syncables.Identity
+import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.defaults.Defaults
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
 
-abstract class IdentityBaseFragment : SettingsFragment(), SettingsFragment.Savable,
-                                      SettingsFragment.Changeable {
+abstract class IdentityBaseFragment(private val initDefault: Boolean) :
+  SettingsFragment(), SettingsFragment.Savable, SettingsFragment.Changeable {
 
   @BindView(R.id.identity_name)
   lateinit var identityName: EditText
@@ -116,37 +118,53 @@ abstract class IdentityBaseFragment : SettingsFragment(), SettingsFragment.Savab
         }.build().show()
     }
 
-    viewModel.identities.map { Optional.ofNullable(it[identityId]) }
-      .filter(Optional<Identity>::isPresent)
-      .map(Optional<Identity>::get)
-      .firstElement()
-      .toLiveData().observe(this, Observer {
-        it?.let {
-          if (this.identity == null) {
-            this.identity = Pair(it, it.copy())
-            this.identity?.let { (_, data) ->
-              identityName.setText(data.identityName())
-              realName.setText(data.realName())
-              ident.setText(data.ident())
-              kickReason.setText(data.kickReason())
-              partReason.setText(data.partReason())
-              quitReason.setText(data.quitReason())
-              awayReason.setText(data.awayReason())
-              detachAway.isChecked = data.detachAwayEnabled()
-              detachAwayReason.setText(data.detachAwayReason())
-              adapter.nicks = data.nicks()
-            }
+    if (initDefault) {
+      viewModel.session
+        .filter(Optional<ISession>::isPresent)
+        .map(Optional<ISession>::get)
+        .firstElement()
+        .toLiveData().observe(this, Observer {
+          it?.let {
+            update(Defaults.identity(requireContext(), it.proxy))
           }
-        }
-      })
+        })
+    } else {
+      viewModel.identities.map { Optional.ofNullable(it[identityId]) }
+        .filter(Optional<Identity>::isPresent)
+        .map(Optional<Identity>::get)
+        .firstElement()
+        .toLiveData().observe(this, Observer {
+          it?.let {
+            update(it)
+          }
+        })
+    }
 
     detachAway.setDependent(detachAwayGroup)
 
     return view
   }
 
-  private fun startDrag(holder: IdentityNicksAdapter.IdentityNickViewHolder) = helper.startDrag(
-    holder)
+  private fun update(it: Identity) {
+    if (this.identity == null) {
+      this.identity = Pair(it, it.copy())
+      this.identity?.let { (_, data) ->
+        identityName.setText(data.identityName())
+        realName.setText(data.realName())
+        ident.setText(data.ident())
+        kickReason.setText(data.kickReason())
+        partReason.setText(data.partReason())
+        quitReason.setText(data.quitReason())
+        awayReason.setText(data.awayReason())
+        detachAway.isChecked = data.detachAwayEnabled()
+        detachAwayReason.setText(data.detachAwayReason())
+        adapter.nicks = data.nicks()
+      }
+    }
+  }
+
+  private fun startDrag(holder: IdentityNicksAdapter.IdentityNickViewHolder) =
+    helper.startDrag(holder)
 
   private fun nickClick(index: Int, nick: String) {
     MaterialDialog.Builder(requireContext())

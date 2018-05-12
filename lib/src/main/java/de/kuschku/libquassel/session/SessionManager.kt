@@ -41,6 +41,7 @@ class SessionManager(
   val notificationManager: NotificationManager?,
   val handlerService: HandlerService,
   private val disconnectFromCore: () -> Unit,
+  private val initCallback: (Session) -> Unit,
   private val exceptionHandler: (Throwable) -> Unit
 ) {
   fun close() = session.or(lastSession).close()
@@ -138,6 +139,7 @@ class SessionManager(
         notificationManager,
         userData,
         disconnectFromCore,
+        initCallback,
         exceptionHandler
       )
     )

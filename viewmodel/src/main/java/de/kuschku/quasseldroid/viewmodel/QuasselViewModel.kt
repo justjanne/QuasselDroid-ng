@@ -252,7 +252,7 @@ class QuasselViewModel : ViewModel() {
 
   val showHidden = BehaviorSubject.createDefault(false)
   val collapsedNetworks = BehaviorSubject.createDefault(emptySet<NetworkId>())
-  val selectedBufferId = BehaviorSubject.createDefault(-1)
+  val selectedBufferId = BehaviorSubject.createDefault(Int.MAX_VALUE)
   val selectedBuffer = combineLatest(session, selectedBufferId, bufferViewConfig)
     .switchMap { (sessionOptional, buffer, bufferViewConfigOptional) ->
       val session = sessionOptional.orNull()

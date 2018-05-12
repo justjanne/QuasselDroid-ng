@@ -25,10 +25,10 @@
 
   <!-- Account Connection -->
   <string name="slide_account_connection_title">Ligação</string>
-  <string name="slideAccountConnectionDescription">Primeiro, por favor, escolha em qual servidor seu núcleo está hospedado.</string>
+  <string name="slide_account_connection_description">Primeiro, por favor, escolha em qual servidor seu núcleo está hospedado.</string>
 
   <string name="label_connection_host">Anfiriao</string>
-  <string name="labelConnectionPort">Porta</string>
+  <string name="label_connection_port">Porta</string>
 
   <string name="hint_invalid_host">Não é um nome de anfitrião válido</string>
   <string name="hint_invalid_port">Não é uma porta válida</string>

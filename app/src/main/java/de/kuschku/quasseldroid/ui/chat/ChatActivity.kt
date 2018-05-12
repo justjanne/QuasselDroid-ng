@@ -20,6 +20,7 @@
 package de.kuschku.quasseldroid.ui.chat
 
 import android.annotation.TargetApi
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
@@ -51,16 +52,20 @@ import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.and
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.or
+import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.chat.input.AutoCompleteAdapter
 import de.kuschku.quasseldroid.ui.chat.input.ChatlineFragment
 import de.kuschku.quasseldroid.ui.clientsettings.client.ClientSettingsActivity
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
+import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity
+import de.kuschku.quasseldroid.ui.setup.user.UserSetupActivity
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
@@ -91,6 +96,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   @Inject
   lateinit var database: QuasselDatabase
+
+  @Inject
+  lateinit var autoCompleteSettings: AutoCompleteSettings
 
   @Inject
   lateinit var accountDatabase: AccountDatabase
@@ -447,7 +455,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             viewModel.buffer.value == Int.MAX_VALUE &&
             isInitialConnect) {
           drawerLayout.openDrawer(Gravity.START)
-          isInitialConnect = true
+          isInitialConnect = false
+          viewModel.session.value?.orNull()?.let {
+            if (it.identities.isEmpty()) {
+              UserSetupActivity.launch(this)
+            }
+          }
         }
       })
 
@@ -675,6 +688,27 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   private fun disconnect() {
     getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editCommit {
       putBoolean(Keys.Status.reconnect, false)
+    }
+  }
+
+  private var startedSelection = false
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+
+    if (requestCode == REQUEST_SELECT_ACCOUNT) {
+      startedSelection = false
+
+      if (resultCode == Activity.RESULT_CANCELED) {
+        finish()
+      }
+    }
+  }
+
+  override fun onSelectAccount() {
+    if (!startedSelection) {
+      startActivityForResult(AccountSelectionActivity.intent(this), REQUEST_SELECT_ACCOUNT)
+      startedSelection = true
     }
   }
 

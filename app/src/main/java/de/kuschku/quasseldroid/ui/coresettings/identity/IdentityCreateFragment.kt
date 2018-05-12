@@ -19,15 +19,14 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.identity
 
-import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.util.helpers.value
 
-class IdentityCreateFragment : IdentityBaseFragment() {
+class IdentityCreateFragment : IdentityBaseFragment(true) {
   override fun onSave() = viewModel.session.value?.orNull()?.let { session ->
-    Identity(session.proxy).let { data ->
+    identity?.let { (_, data) ->
       applyChanges(data)
       session.rpcHandler?.createIdentity(data, mapOf())
       true
-    }
+    } ?: false
   } ?: false
 }

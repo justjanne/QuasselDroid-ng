@@ -39,8 +39,10 @@ import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
+import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.defaults.Defaults
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.ui.coresettings.networkserver.NetworkServerActivity
 import de.kuschku.quasseldroid.util.helper.combineLatest
@@ -48,8 +50,8 @@ import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import kotlin.math.roundToInt
 
-abstract class NetworkBaseFragment : SettingsFragment(), SettingsFragment.Savable,
-                                     SettingsFragment.Changeable {
+abstract class NetworkBaseFragment(private val initDefault: Boolean) :
+  SettingsFragment(), SettingsFragment.Savable, SettingsFragment.Changeable {
   @BindView(R.id.network_name)
   lateinit var networkName: EditText
 
@@ -169,45 +171,27 @@ abstract class NetworkBaseFragment : SettingsFragment(), SettingsFragment.Savabl
       }
     })
 
-    viewModel.networks.map { Optional.ofNullable(it[networkId]) }
-      .filter(Optional<Network>::isPresent)
-      .map(Optional<Network>::get)
-      .firstElement()
-      .toLiveData().observe(this, Observer {
-        it?.let {
-          if (this.network == null) {
-            this.network = Pair(it, it.copy())
-            this.network?.let { (_, data) ->
-              networkName.setText(data.networkName())
-
-              identityAdapter.indexOf(data.identity())?.let(identity::setSelection)
-
-              adapter.list = data.serverList()
-
-              saslEnabled.isChecked = data.useSasl()
-              saslAccount.setText(data.saslAccount())
-              saslPassword.setText(data.saslPassword())
-
-              autoidentifyEnabled.isChecked = data.useAutoIdentify()
-              autoidentifyService.setText(data.autoIdentifyService())
-              autoidentifyPassword.setText(data.autoIdentifyPassword())
-
-              autoreconnectEnabled.isChecked = data.useAutoReconnect()
-              autoreconnectInterval.setText(data.autoReconnectInterval().toString())
-              autoreconnectRetries.setText(data.autoReconnectRetries().toString())
-              autoreconnectUnlimited.isChecked = data.unlimitedReconnectRetries()
-
-              perform.setText(data.perform().joinToString("\n"))
-              rejoinChannels.isChecked = data.rejoinChannels()
-
-              customratelimitsEnabled.isChecked = data.useCustomMessageRate()
-              customratelimitsBurstSize.setText(data.messageRateBurstSize().toString())
-              customratelimitsUnlimited.isChecked = data.unlimitedMessageRate()
-              customratelimitsDelay.setText("${data.messageRateDelay() / 1000.0}")
-            }
+    if (initDefault) {
+      viewModel.session
+        .filter(Optional<ISession>::isPresent)
+        .map(Optional<ISession>::get)
+        .firstElement()
+        .toLiveData().observe(this, Observer {
+          it?.let {
+            update(Defaults.network(requireContext(), it.proxy), identityAdapter)
           }
-        }
-      })
+        })
+    } else {
+      viewModel.networks.map { Optional.ofNullable(it[networkId]) }
+        .filter(Optional<Network>::isPresent)
+        .map(Optional<Network>::get)
+        .firstElement()
+        .toLiveData().observe(this, Observer {
+          it?.let {
+            update(it, identityAdapter)
+          }
+        })
+    }
 
     saslEnabled.setDependent(saslGroup)
     autoidentifyEnabled.setDependent(autoidentifyGroup)
@@ -224,6 +208,40 @@ abstract class NetworkBaseFragment : SettingsFragment(), SettingsFragment.Savabl
     customratelimitsDelay.isEnabled = !customratelimitsUnlimited.isChecked
 
     return view
+  }
+
+  private fun update(it: Network, identityAdapter: IdentityAdapter) {
+    if (this.network == null) {
+      this.network = Pair(it, it.copy())
+      this.network?.let { (_, data) ->
+        networkName.setText(data.networkName())
+
+        identityAdapter.indexOf(data.identity())?.let(identity::setSelection)
+
+        adapter.list = data.serverList()
+
+        saslEnabled.isChecked = data.useSasl()
+        saslAccount.setText(data.saslAccount())
+        saslPassword.setText(data.saslPassword())
+
+        autoidentifyEnabled.isChecked = data.useAutoIdentify()
+        autoidentifyService.setText(data.autoIdentifyService())
+        autoidentifyPassword.setText(data.autoIdentifyPassword())
+
+        autoreconnectEnabled.isChecked = data.useAutoReconnect()
+        autoreconnectInterval.setText(data.autoReconnectInterval().toString())
+        autoreconnectRetries.setText(data.autoReconnectRetries().toString())
+        autoreconnectUnlimited.isChecked = data.unlimitedReconnectRetries()
+
+        perform.setText(data.perform().joinToString("\n"))
+        rejoinChannels.isChecked = data.rejoinChannels()
+
+        customratelimitsEnabled.isChecked = data.useCustomMessageRate()
+        customratelimitsBurstSize.setText(data.messageRateBurstSize().toString())
+        customratelimitsUnlimited.isChecked = data.unlimitedMessageRate()
+        customratelimitsDelay.setText("${data.messageRateDelay() / 1000.0}")
+      }
+    }
   }
 
   private fun serverClick(server: INetwork.Server) {

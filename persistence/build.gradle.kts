@@ -79,17 +79,15 @@ dependencies {
   }
 
   // App Arch Persistence
-  withVersion("1.1.0-rc1") {
+  withVersion("1.1.0") {
     implementation("android.arch.persistence.room", "runtime", version)
-    implementation("android.arch.persistence.room", "rxjava2", version)
     kapt("android.arch.persistence.room", "compiler", version)
+    implementation("android.arch.persistence.room", "rxjava2", version)
     testImplementation("android.arch.persistence.room", "testing", version)
   }
 
   // App Arch Paging
-  implementation("android.arch.paging", "runtime", "1.0.0-rc1") {
-    exclude(group = "junit", module = "junit")
-  }
+  implementation("android.arch.paging", "runtime", "1.0.0")
 
   // Utility
   implementation("org.threeten", "threetenbp", "1.3.6", classifier = "no-tzdb")

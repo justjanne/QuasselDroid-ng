@@ -51,7 +51,7 @@ class AccountSetupConnectionSlide : SlideFragment() {
   }
 
   override val title = R.string.slide_account_connection_title
-  override val description = R.string.slideAccountConnectionDescription
+  override val description = R.string.slide_account_connection_description
 
   override fun setData(data: Bundle) {
     if (data.containsKey("host"))

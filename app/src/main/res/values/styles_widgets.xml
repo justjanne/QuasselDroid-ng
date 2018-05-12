@@ -27,7 +27,9 @@
     <item name="android:textColor">?attr/colorTextPrimary</item>
   </style>
 
-  <style name="Widget.Button.Borderless.Colored" parent="Widget.AppCompat.Button.Borderless.Colored" />
+  <style name="Widget.Button.Borderless.Colored" parent="Widget.AppCompat.Button.Borderless.Colored">
+    <item name="android:textColor">?attr/colorAccent</item>
+  </style>
 
   <style name="Widget.Button" parent="Widget.AppCompat.Button">
     <item name="backgroundTint">?attr/colorBackgroundCard</item>

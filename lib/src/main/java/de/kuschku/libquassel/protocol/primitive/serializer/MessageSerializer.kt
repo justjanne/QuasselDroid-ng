@@ -29,7 +29,8 @@ import java.nio.ByteBuffer
 object MessageSerializer : Serializer<Message> {
   override fun serialize(buffer: ChainedByteBuffer, data: Message, features: QuasselFeatures) {
     SignedId64Serializer.serialize(buffer, data.messageId, features)
-    if (features.hasFeature(ExtendedFeature.LongMessageTime))
+    if (features.hasFeature(ExtendedFeature.LongMessageTime) ||
+        features.hasFeature(ExtendedFeature.LongTime))
       LongSerializer.serialize(buffer, data.time.toEpochMilli(), features)
     else
       IntSerializer.serialize(buffer, data.time.epochSecond.toInt(), features)
@@ -49,7 +50,8 @@ object MessageSerializer : Serializer<Message> {
   override fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): Message {
     return Message(
       messageId = SignedId64Serializer.deserialize(buffer, features),
-      time = if (features.hasFeature(ExtendedFeature.LongMessageTime))
+      time = if (features.hasFeature(ExtendedFeature.LongMessageTime) ||
+                 features.hasFeature(ExtendedFeature.LongTime))
         Instant.ofEpochMilli(LongSerializer.deserialize(buffer, features))
       else
         Instant.ofEpochSecond(IntSerializer.deserialize(buffer, features).toLong()),

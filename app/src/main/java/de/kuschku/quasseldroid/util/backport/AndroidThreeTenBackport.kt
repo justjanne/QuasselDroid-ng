@@ -37,7 +37,7 @@ object AndroidThreeTenBackport {
     val provider: TzdbZoneRulesProvider
     var inputStream: InputStream? = null
     try {
-      inputStream = context.assets.open("org/threeten/bp/TZDB.dat")
+      inputStream = context.assets.open("TZDB.dat")
       provider = TzdbZoneRulesProvider(inputStream)
     } catch (e: IOException) {
       throw IllegalStateException("TZDB.dat missing from assets.", e)

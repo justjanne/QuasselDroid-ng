@@ -32,12 +32,14 @@ import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.ISession
+import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.malheur.CrashHandler
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.defaults.Defaults
 import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.persistence.QuasselBacklogStorage
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
@@ -53,6 +55,7 @@ import de.kuschku.quasseldroid.util.compatibility.AndroidHandlerService
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
+import de.kuschku.quasseldroid.util.ui.LocaleHelper
 import io.reactivex.subjects.PublishSubject
 import org.threeten.bp.Instant
 import java.util.concurrent.TimeUnit
@@ -64,8 +67,11 @@ class QuasselService : DaggerLifecycleService(),
   @Inject
   lateinit var connectionSettings: ConnectionSettings
 
+  private lateinit var translatedLocale: Context
+
   override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
     update()
+    translatedLocale = LocaleHelper.setLocale(this)
     notificationBackend.updateSettings()
   }
 
@@ -317,6 +323,8 @@ class QuasselService : DaggerLifecycleService(),
   override fun onCreate() {
     super.onCreate()
 
+    translatedLocale = LocaleHelper.setLocale(this)
+
     certificateManager = QuasselCertificateManager(database.validityWhitelist())
     hostnameVerifier = QuasselHostnameVerifier(QuasselHostnameManager(database.hostnameWhitelist()))
     trustManager = QuasselTrustManager(certificateManager)
@@ -327,6 +335,7 @@ class QuasselService : DaggerLifecycleService(),
       notificationBackend,
       handlerService,
       ::disconnectFromCore,
+      ::initCallback,
       CrashHandler::handle
     )
 
@@ -412,13 +421,28 @@ class QuasselService : DaggerLifecycleService(),
     return QuasselBinder(asyncBackend)
   }
 
+  private fun initCallback(session: Session) {
+    if (session.bufferViewManager.bufferViewConfigs().isEmpty()) {
+      session.bufferViewManager.requestCreateBufferView(
+        Defaults.bufferViewConfigInitial(translatedLocale).apply {
+          for (info in session.bufferSyncer.bufferInfos()) {
+            handleBuffer(info, session.bufferSyncer)
+          }
+        }.toVariantMap()
+      )
+    }
+  }
+
   companion object {
     fun launch(
       context: Context,
       disconnect: Boolean? = null,
       markRead: BufferId? = null,
       markReadMessage: MsgId? = null
-    ): ComponentName = context.startService(intent(context, disconnect, markRead, markReadMessage))
+    ): ComponentName = context.startService(intent(context,
+                                                   disconnect,
+                                                   markRead,
+                                                   markReadMessage))
 
     fun intent(
       context: Context,

@@ -224,6 +224,14 @@
       android:parentActivityName=".ui.setup.accounts.selection.AccountSelectionActivity"
       android:windowSoftInputMode="adjustResize" />
 
+    <!-- Core User Setup Flow -->
+    <activity
+      android:name=".ui.setup.user.UserSetupActivity"
+      android:exported="false"
+      android:label="@string/settings_identity_title"
+      android:parentActivityName=".ui.chat.ChatActivity"
+      android:windowSoftInputMode="adjustResize" />
+
     <!-- Services -->
     <service
       android:name=".service.QuasselService"

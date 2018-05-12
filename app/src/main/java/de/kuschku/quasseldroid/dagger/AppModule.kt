@@ -19,7 +19,13 @@
 
 package de.kuschku.quasseldroid.dagger
 
+import com.google.gson.GsonBuilder
 import dagger.Module
+import dagger.Provides
 
 @Module
-abstract class AppModule
+object AppModule {
+  @Provides
+  @JvmStatic
+  fun provideGson() = GsonBuilder().setPrettyPrinting().create()
+}

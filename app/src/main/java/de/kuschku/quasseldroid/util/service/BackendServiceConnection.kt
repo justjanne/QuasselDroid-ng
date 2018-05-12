@@ -19,6 +19,10 @@
 
 package de.kuschku.quasseldroid.util.service
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.LifecycleOwner
+import android.arch.lifecycle.OnLifecycleEvent
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -30,7 +34,7 @@ import de.kuschku.quasseldroid.service.QuasselBinder
 import de.kuschku.quasseldroid.service.QuasselService
 import io.reactivex.subjects.BehaviorSubject
 
-class BackendServiceConnection : ServiceConnection {
+class BackendServiceConnection : ServiceConnection, LifecycleObserver {
   val backend: BehaviorSubject<Optional<Backend>> = BehaviorSubject.createDefault(Optional.empty())
 
   var context: Context? = null
@@ -75,10 +79,6 @@ class BackendServiceConnection : ServiceConnection {
     }
   }
 
-  fun stop(intent: Intent = QuasselService.intent(context!!)) {
-    context?.stopService(intent)
-  }
-
   @Synchronized
   fun unbind() {
     if (state == State.BOUND || state == State.BINDING) {
@@ -86,4 +86,13 @@ class BackendServiceConnection : ServiceConnection {
       context?.unbindService(this)
     }
   }
+
+  @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+  fun onCreate(lifecycleOwner: LifecycleOwner) = start()
+
+  @OnLifecycleEvent(Lifecycle.Event.ON_START)
+  fun onStart(lifecycleOwner: LifecycleOwner) = bind()
+
+  @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+  fun onStop(lifecycleOwner: LifecycleOwner) = unbind()
 }

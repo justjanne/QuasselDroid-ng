@@ -128,20 +128,19 @@ dependencies {
     implementation("android.arch.lifecycle", "extensions", version)
     implementation("android.arch.lifecycle", "reactivestreams", version)
     kapt("android.arch.lifecycle", "compiler", version)
+    testImplementation("android.arch.core", "core-testing", version)
   }
 
   // App Arch Persistence
-  withVersion("1.1.0-rc1") {
+  withVersion("1.1.0") {
     implementation("android.arch.persistence.room", "runtime", version)
-    implementation("android.arch.persistence.room", "rxjava2", version)
     kapt("android.arch.persistence.room", "compiler", version)
+    implementation("android.arch.persistence.room", "rxjava2", version)
     testImplementation("android.arch.persistence.room", "testing", version)
   }
 
   // App Arch Paging
-  implementation("android.arch.paging", "runtime", "1.0.0-rc1") {
-    exclude(group = "junit", module = "junit")
-  }
+  implementation("android.arch.paging", "runtime", "1.0.0")
 
   // Utility
   implementation("io.reactivex.rxjava2", "rxandroid", "2.0.2")

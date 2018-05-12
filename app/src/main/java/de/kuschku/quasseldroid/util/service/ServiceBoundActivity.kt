@@ -19,9 +19,7 @@
 
 package de.kuschku.quasseldroid.util.service
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.annotation.ColorRes
@@ -30,10 +28,8 @@ import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.ConnectionSettings
 import de.kuschku.quasseldroid.settings.Settings
-import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity
 import de.kuschku.quasseldroid.util.helper.sharedPreferences
 import de.kuschku.quasseldroid.util.helper.updateRecentsHeaderIfExisting
 import de.kuschku.quasseldroid.util.ui.ThemedActivity
@@ -41,8 +37,8 @@ import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
-abstract class ServiceBoundActivity : ThemedActivity(),
-                                      SharedPreferences.OnSharedPreferenceChangeListener {
+abstract class ServiceBoundActivity :
+  ThemedActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
   @DrawableRes
   protected val icon: Int = R.mipmap.ic_launcher_recents
   @ColorRes
@@ -65,9 +61,6 @@ abstract class ServiceBoundActivity : ThemedActivity(),
   }
 
   @Inject
-  lateinit var autoCompleteSettings: AutoCompleteSettings
-
-  @Inject
   lateinit var connectionSettings: ConnectionSettings
 
   @Inject
@@ -75,14 +68,13 @@ abstract class ServiceBoundActivity : ThemedActivity(),
 
   protected var accountId: Long = -1
 
-  private var startedSelection = false
-
   override fun onCreate(savedInstanceState: Bundle?) {
-    connection.context = this
-    checkConnection()
     super.onCreate(savedInstanceState)
     viewModel.backendWrapper.onNext(this.backend)
     updateRecentsHeader()
+    connection.context = this
+    lifecycle.addObserver(connection)
+    checkConnection()
   }
 
   fun updateRecentsHeader() =
@@ -106,15 +98,18 @@ abstract class ServiceBoundActivity : ThemedActivity(),
 
   override fun onStop() {
     super.onStop()
-    connection.unbind()
     sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
       unregisterOnSharedPreferenceChangeListener(this@ServiceBoundActivity)
     }
   }
 
-  override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-    checkConnection()
+  override fun onDestroy() {
+    lifecycle.removeObserver(connection)
+    super.onDestroy()
   }
+
+  override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) =
+    checkConnection()
 
   private fun checkConnection() {
     accountId = getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
@@ -125,32 +120,14 @@ abstract class ServiceBoundActivity : ThemedActivity(),
     }
     val accountIdValid = accountId != -1L
     if (!reconnect || !accountIdValid) {
-      if (!startedSelection) {
-        startActivityForResult(AccountSelectionActivity.intent(this), REQUEST_SELECT_ACCOUNT)
-        startedSelection = true
-      }
+      onSelectAccount()
     } else {
       connection.start()
       connection.bind()
     }
   }
 
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    super.onActivityResult(requestCode, resultCode, data)
-
-    if (requestCode == REQUEST_SELECT_ACCOUNT) {
-      startedSelection = false
-
-      if (resultCode == Activity.RESULT_CANCELED) {
-        finish()
-      }
-    }
-  }
-
-  protected fun stopService() {
-    connection.unbind()
-    connection.stop()
-  }
+  protected open fun onSelectAccount() = Unit
 
   companion object {
     const val REQUEST_SELECT_ACCOUNT = 1

@@ -44,6 +44,7 @@ class Session(
   private val notificationManager: NotificationManager?,
   private var userData: Pair<String, String>,
   val disconnectFromCore: () -> Unit,
+  private val initCallback: (Session) -> Unit,
   exceptionHandler: (Throwable) -> Unit
 ) : ProtocolHandler(exceptionHandler), ISession {
   override val objectStorage: ObjectStorage = ObjectStorage(this)
@@ -222,6 +223,7 @@ class Session(
   }
 
   override fun onInitDone() {
+    initCallback(this)
     for (config in bufferViewManager.bufferViewConfigs()) {
       for (info in bufferSyncer.bufferInfos()) {
         config.handleBuffer(info, bufferSyncer)

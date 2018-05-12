@@ -64,6 +64,7 @@
   <string name="settings_identity_identity_name">Nome da identidade</string>
   <string name="settings_identity_real_name">Nome Real</string>
   <string name="settings_identity_ident">Identidade</string>
+  <string name="settings_identity_nick">Alcunha</string>
   <string name="settings_identity_nicks">Alcunhas</string>
   <string name="settings_identity_messages">Mensagens</string>
   <string name="settings_identity_kick_reason">Razão de Kick</string>

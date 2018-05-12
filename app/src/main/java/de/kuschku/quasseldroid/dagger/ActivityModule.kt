@@ -78,6 +78,8 @@ import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActiv
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.accounts.setup.AccountSetupActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.setup.AccountSetupFragmentProvider
+import de.kuschku.quasseldroid.ui.setup.user.UserSetupActivity
+import de.kuschku.quasseldroid.ui.setup.user.UserSetupFragmentProvider
 
 @Module
 abstract class ActivityModule {
@@ -188,6 +190,10 @@ abstract class ActivityModule {
   @ActivityScope
   @ContributesAndroidInjector(modules = [AccountEditModule::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
   abstract fun bindAccountEditActivity(): AccountEditActivity
+
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [UserSetupFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
+  abstract fun bindUserSetupActivity(): UserSetupActivity
 
   @ActivityScope
   @ContributesAndroidInjector(modules = [QuasselServiceModule::class, SettingsModule::class, DatabaseModule::class])

@@ -56,17 +56,12 @@ abstract class ServiceBoundFragment : DaggerFragment() {
       ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
 
     connection.context = context
+    lifecycle.addObserver(connection)
     super.onCreate(savedInstanceState)
-    connection.start()
   }
 
-  override fun onStart() {
-    connection.bind()
-    super.onStart()
-  }
-
-  override fun onStop() {
-    super.onStop()
-    connection.unbind()
+  override fun onDestroy() {
+    lifecycle.removeObserver(connection)
+    super.onDestroy()
   }
 }

@@ -48,6 +48,7 @@ enum class ExtendedFeature {
   /** Transmit features as list of strings */
   ExtendedFeatures,
   /** Serialize message time as 64-bit */
+  LongTime,
   LongMessageTime,
   /** Real Name and Avatar URL in backlog */
   RichMessages,

@@ -42,10 +42,16 @@ import de.kuschku.quasseldroid.settings.NotificationSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.util.NotificationMessage
 import de.kuschku.quasseldroid.util.helper.getColorCompat
+import de.kuschku.quasseldroid.util.ui.LocaleHelper
 import javax.inject.Inject
 
 class QuasseldroidNotificationManager @Inject constructor(private val context: Context) {
   private val notificationManagerCompat = NotificationManagerCompat.from(context)
+  private var translatedLocale: Context = LocaleHelper.setLocale(context)
+
+  fun updateTranslation() {
+    translatedLocale = LocaleHelper.setLocale(context)
+  }
 
   fun init() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -58,13 +64,13 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
     notificationManager.createNotificationChannels(
       listOf(
         NotificationChannel(
-          context.getString(R.string.notification_channel_background),
-          context.getString(R.string.notification_channel_connection_title),
+          translatedLocale.getString(R.string.notification_channel_background),
+          translatedLocale.getString(R.string.notification_channel_connection_title),
           NotificationManager.IMPORTANCE_LOW
         ),
         NotificationChannel(
-          context.getString(R.string.notification_channel_highlight),
-          context.getString(R.string.notification_channel_highlight_title),
+          translatedLocale.getString(R.string.notification_channel_highlight),
+          translatedLocale.getString(R.string.notification_channel_highlight_title),
           NotificationManager.IMPORTANCE_HIGH
         ).apply {
           enableLights(true)
@@ -101,7 +107,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
     )
 
     val remoteInput = RemoteInput.Builder("reply_content")
-      .setLabel(context.getString(R.string.label_reply))
+      .setLabel(translatedLocale.getString(R.string.label_reply))
       .build()
 
     val replyPendingIntent = PendingIntent.getService(
@@ -139,7 +145,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
 
     val notification = NotificationCompat.Builder(
       context.applicationContext,
-      context.getString(R.string.notification_channel_highlight)
+      translatedLocale.getString(R.string.notification_channel_highlight)
     )
       .setContentIntent(pendingIntentOpen)
       .setDeleteIntent(deletePendingIntent)
@@ -172,11 +178,11 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
                     }
                   }
       )
-      .addAction(0, context.getString(R.string.label_mark_read), markReadPendingIntent)
+      .addAction(0, translatedLocale.getString(R.string.label_mark_read), markReadPendingIntent)
       .addAction(
         NotificationCompat.Action.Builder(
           0,
-          context.getString(R.string.label_reply),
+          translatedLocale.getString(R.string.label_reply),
           replyPendingIntent
         ).addRemoteInput(remoteInput).build()
       )
@@ -210,11 +216,11 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
 
     val notification = NotificationCompat.Builder(
       context.applicationContext,
-      context.getString(R.string.notification_channel_background)
+      translatedLocale.getString(R.string.notification_channel_background)
     )
       .setContentIntent(pendingIntentOpen)
-      .addAction(0, context.getString(R.string.label_open), pendingIntentOpen)
-      .addAction(0, context.getString(R.string.label_disconnect), pendingIntentDisconnect)
+      .addAction(0, translatedLocale.getString(R.string.label_open), pendingIntentOpen)
+      .addAction(0, translatedLocale.getString(R.string.label_disconnect), pendingIntentDisconnect)
       .setSmallIcon(R.mipmap.ic_logo)
       .setColor(context.getColorCompat(R.color.colorPrimary))
       .setPriority(NotificationCompat.PRIORITY_MIN)

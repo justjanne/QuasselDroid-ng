@@ -33,4 +33,7 @@
 
   <!-- Because this doesn’t work when using splash themes -->
   <issue id="Overdraw" severity="ignore" />
+
+  <!-- Can’t request a translation without a release, can’t release without translation -->
+  <issue id="MissingTranslation" severity="warning" />
 </lint>
