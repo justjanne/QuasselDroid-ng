@@ -25,7 +25,7 @@
 
   <!-- Account Connection -->
   <string name="slide_account_connection_title">Ligação</string>
-  <string name="slide_account_connection_description">Primeiro, por favor, escolha em qual servidor seu núcleo está hospedado.</string>
+  <string name="slide_account_connection_description">Primeiro, escolha o servidor no qual o seu núcleo está alojado.</string>
 
   <string name="label_connection_host">Anfiriao</string>
   <string name="label_connection_port">Porta</string>
@@ -61,4 +61,22 @@
   <!-- Core Backend Config -->
   <string name="slide_core_backend_setup_title">Configurar tipo de armazenamento</string>
   <string name="slide_core_backend_setup_description">Por favor, configure o tipo de base de dados selecionado.</string>
+
+  <!-- User Identity -->
+  <string name="slide_user_identity_title">Configurar Identidade</string>
+  <string name="slide_user_identity_description">Por favor escolha uma alcunha</string>
+
+  <string name="hint_invalid_nick">Não é uma alcunha válida</string>
+
+  <!-- User Network -->
+  <string name="slide_user_network_title">Configurar Rede</string>
+  <string name="slide_user_network_description">Selecione uma rede para se ligar.</string>
+
+  <string name="label_network_custom">Rede Personalizada…</string>
+
+  <!-- User Channels -->
+  <string name="slide_user_channels_title">Configurar Canais</string>
+  <string name="slide_user_channels_description">Escolha os canais para entrar.</string>
+
+  <string name="label_channels">Canais</string>
 </resources>

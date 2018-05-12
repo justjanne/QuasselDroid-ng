@@ -18,17 +18,17 @@
   -->
 
 <resources>
-  <string name="default_bufferviewconfig_name">All Chats</string>
+  <string name="default_bufferviewconfig_name">Alle Chats</string>
 
-  <string name="default_identity_identity_name">Default Identity</string>
-  <string name="default_identity_name">&lt;empty&gt;</string>
-  <string name="default_identity_realname">Quassel IRC User</string>
+  <string name="default_identity_identity_name">Standardidentität</string>
+  <string name="default_identity_name">&lt;leer&gt;</string>
+  <string name="default_identity_realname">Quassel-IRC-Benutzer</string>
   <string name="default_identity_nick">quassel%1$d</string>
   <string name="default_identity_ident">quassel</string>
-  <string name="default_identity_awayreason">Gone fishing.</string>
-  <string name="default_identity_autoawayreason">Not here. No, really. not here!</string>
-  <string name="default_identity_detachawayreason">All Quassel clients vanished from the face of the earth…</string>
-  <string name="default_identity_kickreason">Kindergarten is elsewhere!</string>
+  <string name="default_identity_awayreason">Mit\'m Fahrrad Sahne holen.</string>
+  <string name="default_identity_autoawayreason">Nicht da. Nein, ehrlich. Nicht da!</string>
+  <string name="default_identity_detachawayreason">Alle Quassel-Clients sind vom Erdboden verschwunden…</string>
+  <string name="default_identity_kickreason">Der Kindergarten ist woanders!</string>
   <string name="default_identity_partreason">https://quassel-irc.org - Chat comfortably. Anywhere.</string>
   <string name="default_identity_quitreason">https://quassel-irc.org - Chat comfortably. Anywhere.</string>
 </resources>

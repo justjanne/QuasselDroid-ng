@@ -18,7 +18,7 @@
   -->
 
 <resources>
-  <string name="label_error_login">Erro de Login</string>
+  <string name="label_error_login">Falha na autenticação</string>
   <string name="label_error_setup">Erro de Configuração</string>
   <string name="label_error_init">Erro de Ligação</string>
   <string name="label_error_certificate">Erro de Certificado</string>

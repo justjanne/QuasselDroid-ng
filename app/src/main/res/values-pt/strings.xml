@@ -20,7 +20,7 @@
 <resources>
   <string name="app_name">QuasselDroid</string>
   <string name="app_description">Um cliente baseado no Android para o cliente de IRC Quassel descentralizado.</string>
-  <string name="app_description_long">Quassel é um cliente IRC distribuído e descentralizado, escrito usando C++ e Qt. O Quasseldroid é um cliente puramente kotlin para o núcleo Quassel, permitindo que você se ligue ao seu núcleo Quassel usando seu telemóvel Android™.</string>
+  <string name="app_description_long">Quassel é um cliente IRC distribuído e descentralizado, escrito usando C++ e Qt. O Quasseldroid é um cliente escrito puramente em kotlin para o núcleo Quassel, permitindo que você se ligue ao seu núcleo Quassel usando seu telemóvel Android™.</string>
 
   <string name="connection_service_title">Serviço de Ligação</string>
   <string name="connection_service_description">Mantém uma ligação com o seu núcleo para permitir notificações e para transmitir mensagens.</string>
@@ -79,7 +79,7 @@
   <string name="label_open">Abrir</string>
   <string name="label_part">Sair</string>
   <string name="label_part_long">Sair do Canal</string>
-  <string name="label_placeholder_message">Escrever uma mensagem...</string>
+  <string name="label_placeholder_message">Escrever uma mensagem…</string>
   <string name="label_placeholder_topic">Descreva o tópico do canal…</string>
   <string name="label_privacy_policy">Política de Privacidade</string>
   <string name="label_query">Abrir conversa privada</string>
