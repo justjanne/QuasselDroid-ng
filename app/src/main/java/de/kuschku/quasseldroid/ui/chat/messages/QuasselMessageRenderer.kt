@@ -496,12 +496,13 @@ class QuasselMessageRenderer @Inject constructor(
         isExpanded = false,
         isSelected = false
       )
+    //Message_Type.Invite
       else                      -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         combined = SpanFormatter.format(
           "[%d] %s%s: %s",
-          message.content.type,
+          message.content.type.toInt(),
           contentFormatter.formatPrefix(message.content.senderPrefixes),
           contentFormatter.formatNick(message.content.sender,
                                       self,
