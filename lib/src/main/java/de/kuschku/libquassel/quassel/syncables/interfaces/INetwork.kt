@@ -87,7 +87,7 @@ interface INetwork : ISyncableObject {
 
   @Slot
   fun requestSetNetworkInfo(info: NetworkInfo) {
-    REQUEST("requestSetNetworkInfo", ARG(info, QType.NetworkInfo))
+    REQUEST("requestSetNetworkInfo", ARG(info.toVariantMap(), QType.NetworkInfo))
   }
 
   @Slot
@@ -139,16 +139,19 @@ interface INetwork : ISyncableObject {
   fun setNetworkName(networkName: String)
 
   @Slot
+  fun setNetworkInfo(info: NetworkInfo)
+
+  @Slot
   fun setPerform(perform: QStringList)
 
   @Slot
   fun setRejoinChannels(rejoinChannels: Boolean)
 
   @Slot
-  fun setSaslAccount(account: String)
+  fun setSaslAccount(account: String?)
 
   @Slot
-  fun setSaslPassword(password: String)
+  fun setSaslPassword(password: String?)
 
   @Slot
   fun setServerList(serverList: QVariantList)
@@ -306,8 +309,8 @@ interface INetwork : ISyncableObject {
     var autoIdentifyService: String = "",
     var autoIdentifyPassword: String = "",
     var useSasl: Boolean = false,
-    var saslAccount: String = "",
-    var saslPassword: String = "",
+    var saslAccount: String? = null,
+    var saslPassword: String? = null,
     var useAutoReconnect: Boolean = true,
     var autoReconnectInterval: Int = 0,
     var autoReconnectRetries: Short = 0,

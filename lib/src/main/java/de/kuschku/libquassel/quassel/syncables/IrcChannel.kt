@@ -53,18 +53,15 @@ class IrcChannel(
   }
 
   override fun initChanModes(): QVariantMap = mapOf(
-    "A" to QVariant.of(_A_channelModes.entries.map { (key, value) ->
-      key to QVariant.of(value.toList(), Type.QStringList)
-    }, Type.QVariantMap
-    ),
-    "B" to QVariant.of(_B_channelModes.entries.map { (key, value) ->
-      key to QVariant.of(value, Type.QString)
-    }, Type.QVariantMap
-    ),
-    "C" to QVariant.of(_C_channelModes.entries.map { (key, value) ->
-      key to QVariant.of(value, Type.QString)
-    }, Type.QVariantMap
-    ),
+    "A" to QVariant.of(_A_channelModes.mapValues { (_, value) ->
+      QVariant.of(value.toList(), Type.QStringList)
+    }, Type.QVariantMap),
+    "B" to QVariant.of(_B_channelModes.mapValues { (_, value) ->
+      QVariant.of(value, Type.QString)
+    }, Type.QVariantMap),
+    "C" to QVariant.of(_C_channelModes.mapValues { (_, value) ->
+      QVariant.of(value, Type.QString)
+    }, Type.QVariantMap),
     "D" to QVariant.of(_D_channelModes.joinToString(), Type.QString)
   )
 

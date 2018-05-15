@@ -25,7 +25,7 @@ import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 class NetworkEditFragment : NetworkBaseFragment(false), SettingsFragment.Deletable {
   override fun onSave() = network?.let { (it, data) ->
     applyChanges(data)
-    it?.requestUpdate(data.toVariantMap())
+    it?.requestSetNetworkInfo(data.networkInfo())
     true
   } ?: false
 

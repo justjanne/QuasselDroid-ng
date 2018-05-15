@@ -185,7 +185,7 @@ class Network constructor(
 
   fun liveNetworkInfo() = live_networkInfo.map { networkInfo() }
 
-  fun setNetworkInfo(info: NetworkInfo) {
+  override fun setNetworkInfo(info: NetworkInfo) {
     // we don't set our ID!
     if (!info.networkName.isEmpty() && info.networkName != networkName())
       setNetworkName(info.networkName)
@@ -523,13 +523,13 @@ class Network constructor(
     _useSasl = sasl
   }
 
-  override fun setSaslAccount(account: String) {
+  override fun setSaslAccount(account: String?) {
     if (_saslAccount == account)
       return
     _saslAccount = account
   }
 
-  override fun setSaslPassword(password: String) {
+  override fun setSaslPassword(password: String?) {
     if (_saslPassword == password)
       return
     _saslPassword = password
@@ -962,12 +962,12 @@ class Network constructor(
       field = value
       live_networkInfo.onNext(Unit)
     }
-  private var _saslAccount: String = ""
+  private var _saslAccount: String? = null
     set(value) {
       field = value
       live_networkInfo.onNext(Unit)
     }
-  private var _saslPassword: String = ""
+  private var _saslPassword: String? = null
     set(value) {
       field = value
       live_networkInfo.onNext(Unit)
