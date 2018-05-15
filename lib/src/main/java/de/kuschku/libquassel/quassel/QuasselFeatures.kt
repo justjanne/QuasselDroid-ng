@@ -36,7 +36,7 @@ class QuasselFeatures(
 
   fun toStringList() = enabledFeatures.map(ExtendedFeature::name)
 
-  fun hasFeature(feature: ExtendedFeature) = enabledFeatures.contains(feature)
+  infix fun hasFeature(feature: ExtendedFeature) = enabledFeatures.contains(feature)
 
   companion object {
     fun empty() = QuasselFeatures(emptySet(), emptySet())

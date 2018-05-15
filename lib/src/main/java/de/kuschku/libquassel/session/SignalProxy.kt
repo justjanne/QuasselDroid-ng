@@ -19,11 +19,13 @@
 
 package de.kuschku.libquassel.session
 
+import de.kuschku.libquassel.connection.Features
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.QVariantList
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
@@ -63,6 +65,8 @@ interface SignalProxy {
   fun synchronize(syncableObject: ISyncableObject?) = synchronize(syncableObject, false)
   fun stopSynchronize(syncableObject: ISyncableObject?)
 
+  val features: Features
+
   companion object {
     val NULL = object : SignalProxy {
       override fun dispatch(message: SignalProxyMessage) = Unit
@@ -81,6 +85,8 @@ interface SignalProxy {
       override fun renameObject(className: String, newName: String, oldName: String) = Unit
       override fun synchronize(syncableObject: ISyncableObject?, baseInit: Boolean) = Unit
       override fun stopSynchronize(syncableObject: ISyncableObject?) = Unit
+
+      override val features get() = Features(QuasselFeatures.empty(), QuasselFeatures.empty())
     }
   }
 }

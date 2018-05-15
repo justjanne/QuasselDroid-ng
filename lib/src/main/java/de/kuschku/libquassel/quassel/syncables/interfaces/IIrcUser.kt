@@ -68,7 +68,10 @@ interface IIrcUser : ISyncableObject {
   fun setIrcOperator(ircOperator: String)
 
   @Slot
-  fun setLastAwayMessage(lastAwayMessage: Long)
+  fun setLastAwayMessage(lastAwayMessage: Int)
+
+  @Slot
+  fun setLastAwayMessageTime(lastAwayMessageTime: Instant)
 
   @Slot
   fun setLoginTime(loginTime: Instant)

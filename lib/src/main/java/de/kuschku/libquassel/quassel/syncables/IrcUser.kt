@@ -23,6 +23,7 @@ import de.kuschku.libquassel.protocol.QVariant
 import de.kuschku.libquassel.protocol.QVariantMap
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.protocol.valueOr
+import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.quassel.syncables.interfaces.IIrcUser
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.irc.HostmaskHelper
@@ -58,6 +59,7 @@ class IrcUser(
     "server" to QVariant.of(server(), Type.QString),
     "ircOperator" to QVariant.of(ircOperator(), Type.QString),
     "lastAwayMessage" to QVariant.of(lastAwayMessage(), Type.Long),
+    "lastAwayMessageTime" to QVariant.of(lastAwayMessageTime(), Type.Long),
     "whoisServiceReply" to QVariant.of(whoisServiceReply(), Type.QString),
     "suserHost" to QVariant.of(suserHost(), Type.QString),
     "encrypted" to QVariant.of(encrypted(), Type.Bool),
@@ -78,7 +80,9 @@ class IrcUser(
     setLoginTime(properties["loginTime"].valueOr(this::loginTime))
     setServer(properties["server"].valueOr(this::server))
     setIrcOperator(properties["ircOperator"].valueOr(this::ircOperator))
-    setLastAwayMessage(properties["lastAwayMessage"].valueOr(this::lastAwayMessage))
+    setLastAwayMessageTime(properties["lastAwayMessageTime"].valueOr {
+      Instant.ofEpochSecond(properties["lastAwayMessage"].valueOr(this::lastAwayMessage).toLong())
+    })
     setWhoisServiceReply(properties["whoisServiceReply"].valueOr(this::whoisServiceReply))
     setSuserHost(properties["suserHost"].valueOr(this::suserHost))
     setEncrypted(properties["encrypted"].valueOr(this::encrypted))
@@ -104,7 +108,8 @@ class IrcUser(
 
   fun loginTime() = _loginTime
   fun ircOperator() = _ircOperator
-  fun lastAwayMessage() = _lastAwayMessage
+  fun lastAwayMessage() = _lastAwayMessageTime.epochSecond.toInt()
+  fun lastAwayMessageTime() = _lastAwayMessageTime
   fun whoisServiceReply() = _whoisServiceReply
   fun suserHost() = _suserHost
   fun encrypted() = _encrypted
@@ -183,10 +188,15 @@ class IrcUser(
     }
   }
 
-  override fun setLastAwayMessage(lastAwayMessage: Long) {
-    if (lastAwayMessage > _lastAwayMessage) {
-      _lastAwayMessage = lastAwayMessage
+  override fun setLastAwayMessage(lastAwayMessage: Int) {
+    if (lastAwayMessage > lastAwayMessage() &&
+        !(proxy.features.negotiated hasFeature ExtendedFeature.LongTime)) {
+      _lastAwayMessageTime = Instant.ofEpochSecond(lastAwayMessage.toLong())
     }
+  }
+
+  override fun setLastAwayMessageTime(lastAwayMessageTime: Instant) {
+    _lastAwayMessageTime = lastAwayMessageTime
   }
 
   override fun setWhoisServiceReply(whoisServiceReply: String) {
@@ -331,7 +341,7 @@ class IrcUser(
       field = value
       hasChangedNotification.onNext(Unit)
     }
-  private var _lastAwayMessage: Long = 0L
+  private var _lastAwayMessageTime: Instant = Instant.EPOCH
     set(value) {
       field = value
       hasChangedNotification.onNext(Unit)
