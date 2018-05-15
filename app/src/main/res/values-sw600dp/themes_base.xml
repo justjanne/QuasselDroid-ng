@@ -19,9 +19,24 @@
 
 <resources>
 
-  <style name="Theme.SetupTheme" parent="Theme.ChatTheme.Material_Light">
+  <style name="Theme.SetupTheme" parent="Theme.AppTheme.Light">
     <item name="windowActionBar">false</item>
     <item name="windowNoTitle">true</item>
+
+    <item name="actionBarPopupTheme">@style/Widget.PopupOverlay.Setup</item>
+
+    <item name="colorTextPrimary">#de000000</item>
+    <item name="colorTextPrimaryInverse">#ffffffff</item>
+    <item name="colorTextSecondary">#8a000000</item>
+    <item name="colorTextSecondaryInverse">#b3ffffff</item>
+    <item name="colorDivider">#1F000000</item>
+
+    <item name="android:textColor">?colorTextPrimary</item>
+    <item name="android:textColorPrimary">?colorTextPrimary</item>
+    <item name="android:textColorSecondary">?colorTextSecondary</item>
+    <item name="colorControlNormal">?colorTextPrimary</item>
+
     <item name="android:windowBackground">?attr/colorPrimary</item>
+    <item name="colorBackground">#FAFAFA</item>
   </style>
 </resources>

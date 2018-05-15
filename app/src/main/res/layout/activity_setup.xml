@@ -33,7 +33,7 @@
     android:layout_width="56dp"
     android:layout_height="?actionBarSize"
     android:layout_gravity="end|top"
-    android:theme="?attr/actionBarTheme" />
+    android:theme="?attr/actionBarPopupTheme" />
 
   <android.support.design.widget.FloatingActionButton
     android:id="@+id/next_button"
