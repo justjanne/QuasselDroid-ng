@@ -58,6 +58,7 @@ android {
     versionName = cmd("git", "describe", "--always", "--tags", "HEAD") ?: "1.0.0"
 
     buildConfigField("String", "GIT_HEAD", "\"${cmd("git", "rev-parse", "HEAD") ?: ""}\"")
+    buildConfigField("String", "FANCY_VERSION_NAME", "\"${fancyVersionName() ?: ""}\"")
     buildConfigField("long", "GIT_COMMIT_DATE", "${cmd("git", "show", "-s", "--format=%ct") ?: 0}L")
 
     signingConfig = signingConfigs.findByName("default")

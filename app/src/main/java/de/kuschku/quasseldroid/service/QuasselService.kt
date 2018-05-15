@@ -340,7 +340,7 @@ class QuasselService : DaggerLifecycleService(),
     )
 
     clientData = ClientData(
-      identifier = "${resources.getString(R.string.app_name)} ${BuildConfig.VERSION_NAME}",
+      identifier = "${resources.getString(R.string.app_name)} ${BuildConfig.FANCY_VERSION_NAME}",
       buildDate = Instant.ofEpochSecond(BuildConfig.GIT_COMMIT_DATE),
       clientFeatures = QuasselFeatures.all(),
       protocolFeatures = Protocol_Features.of(
