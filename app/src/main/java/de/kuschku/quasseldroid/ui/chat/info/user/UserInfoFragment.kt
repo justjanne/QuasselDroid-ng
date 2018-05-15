@@ -185,66 +185,66 @@ class UserInfoFragment : ServiceBoundFragment() {
 
         server.text = user.server()
         serverContainer.visibleIf(user.server().isNotBlank())
-
-        actionQuery.setOnClickListener {
-          viewModel.session {
-            it.orNull()?.let { session ->
-              val info = session.bufferSyncer?.find(
-                bufferName = user.nick(),
-                networkId = user.network().networkId(),
-                type = Buffer_Type.of(Buffer_Type.QueryBuffer)
-              )
-
-              if (info != null) {
-                ChatActivity.launch(requireContext(), bufferId = info.bufferId)
-              } else {
-                viewModel.allBuffers.map {
-                  listOfNotNull(it.find {
-                    it.networkId == user.network().networkId() && it.bufferName == user.nick()
-                  })
-                }.filter {
-                  it.isNotEmpty()
-                }.firstElement().toLiveData().observe(this, Observer {
-                  it?.firstOrNull()?.let { info ->
-                    ChatActivity.launch(requireContext(), bufferId = info.bufferId)
-                  }
-                })
-
-                session.bufferSyncer?.find(
-                  networkId = networkId,
-                  type = Buffer_Type.of(Buffer_Type.StatusBuffer)
-                )?.let { statusInfo ->
-                  session.rpcHandler?.sendInput(statusInfo, "/query ${user.nick()}")
-                }
-              }
-            }
-          }
-        }
-
-        actionIgnore.setOnClickListener {
-          Toast.makeText(requireContext(), "Not Implemented", Toast.LENGTH_SHORT).show()
-        }
-
-        actionWhois.setOnClickListener {
-          viewModel.session {
-            it.orNull()?.let { session ->
-              session.bufferSyncer?.find(
-                networkId = networkId,
-                type = Buffer_Type.of(Buffer_Type.StatusBuffer)
-              )?.let { statusInfo ->
-                val nick = user.nick()
-                session.rpcHandler?.sendInput(statusInfo, "/whois $nick $nick")
-              }
-            }
-          }
-        }
-
-        actionMention.setOnClickListener {
-          ChatActivity.launch(requireContext(), sharedText = "${user.nick()}: ")
-        }
-        actionMention.visibleIf(arguments?.getBoolean("openBuffer") == false)
       }
     })
+
+    actionQuery.setOnClickListener {
+      viewModel.session {
+        it.orNull()?.let { session ->
+          val info = session.bufferSyncer?.find(
+            bufferName = nickName,
+            networkId = networkId,
+            type = Buffer_Type.of(Buffer_Type.QueryBuffer)
+          )
+
+          if (info != null) {
+            ChatActivity.launch(requireContext(), bufferId = info.bufferId)
+          } else {
+            viewModel.allBuffers.map {
+              listOfNotNull(it.find {
+                it.networkId == networkId && it.bufferName == nickName
+              })
+            }.filter {
+              it.isNotEmpty()
+            }.firstElement().toLiveData().observe(this, Observer {
+              it?.firstOrNull()?.let { info ->
+                ChatActivity.launch(requireContext(), bufferId = info.bufferId)
+              }
+            })
+
+            session.bufferSyncer?.find(
+              networkId = networkId,
+              type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+            )?.let { statusInfo ->
+              session.rpcHandler?.sendInput(statusInfo, "/query $nickName")
+            }
+          }
+        }
+      }
+    }
+
+    actionIgnore.setOnClickListener {
+      Toast.makeText(requireContext(), "Not Implemented", Toast.LENGTH_SHORT).show()
+    }
+
+    actionMention.setOnClickListener {
+      ChatActivity.launch(requireContext(), sharedText = "$nickName: ")
+    }
+
+    actionWhois.setOnClickListener {
+      viewModel.session {
+        it.orNull()?.let { session ->
+          session.bufferSyncer?.find(
+            networkId = networkId,
+            type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+          )?.let { statusInfo ->
+            session.rpcHandler?.sendInput(statusInfo, "/whois $nickName $nickName")
+          }
+        }
+      }
+    }
+
+    actionMention.visibleIf(arguments?.getBoolean("openBuffer") == false)
 
     val movementMethod = BetterLinkMovementMethod.newInstance()
     movementMethod.setOnLinkLongClickListener(LinkLongClickMenuHelper())
