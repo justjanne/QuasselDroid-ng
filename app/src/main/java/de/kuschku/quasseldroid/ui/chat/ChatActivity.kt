@@ -451,10 +451,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       .firstElement()
       .toLiveData()
       .observe(this, Observer {
-        if (resources.getBoolean(R.bool.buffer_drawer_exists) &&
-            viewModel.buffer.value == Int.MAX_VALUE &&
-            isInitialConnect) {
-          drawerLayout.openDrawer(Gravity.START)
+        if (isInitialConnect) {
+          if (resources.getBoolean(R.bool.buffer_drawer_exists) &&
+              viewModel.buffer.value == Int.MAX_VALUE) {
+            drawerLayout.openDrawer(Gravity.START)
+          }
           isInitialConnect = false
           viewModel.session.value?.orNull()?.let {
             if (it.identities.isEmpty()) {
