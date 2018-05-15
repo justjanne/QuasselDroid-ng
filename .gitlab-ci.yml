@@ -34,8 +34,6 @@ build:
 
 unitTests:
   stage: "test"
-  cache:
-    policy: "pull"
   script:
     - "./gradlew check"
 
