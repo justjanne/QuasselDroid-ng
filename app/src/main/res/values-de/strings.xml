@@ -114,4 +114,6 @@
   <string name="delete_confirmation">Bist du sicher, dass du dies auf ewig löschen möchtest? Dies kann nicht Rückgängig gemacht werden.</string>
   <string name="cancel_confirmation">Du hast nicht gespeicherte Änderungen. Möchtest du sie verwerfen?</string>
 
-  </resources>
+  <string name="info_copied_version">Version in die Zwischenablage kopiert</string>
+
+</resources>

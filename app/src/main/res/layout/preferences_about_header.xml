@@ -30,8 +30,12 @@
   android:paddingTop="?listPreferredItemHeight">
 
   <LinearLayout
+    android:id="@+id/version_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="horizontal">
 
     <android.support.v7.widget.AppCompatImageView

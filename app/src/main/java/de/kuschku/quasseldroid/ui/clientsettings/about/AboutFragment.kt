@@ -19,6 +19,9 @@
 
 package de.kuschku.quasseldroid.ui.clientsettings.about
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -31,6 +34,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import dagger.android.support.DaggerFragment
@@ -38,6 +42,9 @@ import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.R
 
 class AboutFragment : DaggerFragment() {
+
+  @BindView(R.id.version_container)
+  lateinit var versionContainer: View
 
   @BindView(R.id.version)
   lateinit var version: TextView
@@ -64,6 +71,13 @@ class AboutFragment : DaggerFragment() {
 
     version.text = BuildConfig.VERSION_NAME
 
+    versionContainer.setOnClickListener {
+      val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+      val clip = ClipData.newPlainText(null, BuildConfig.VERSION_NAME)
+      clipboard.primaryClip = clip
+      Toast.makeText(requireContext(), R.string.info_copied_version, Toast.LENGTH_LONG).show()
+    }
+
     website.setOnClickListener {
       val intent = Intent(Intent.ACTION_VIEW)
       intent.data = Uri.parse("https://quasseldroid.info/")
@@ -89,6 +103,7 @@ class AboutFragment : DaggerFragment() {
     )
 
     libraries.layoutManager = LinearLayoutManager(context)
+    libraries.itemAnimator = null
     libraries.adapter = LibraryAdapter(listOf(
       Library(
         name = "Android Architecture Components: Lifecycle",
@@ -305,6 +320,7 @@ class AboutFragment : DaggerFragment() {
     ViewCompat.setNestedScrollingEnabled(libraries, false)
 
     contributors.layoutManager = LinearLayoutManager(context)
+    contributors.itemAnimator = null
     contributors.adapter = ContributorAdapter(listOf(
       Contributor(
         name = "Frederik M. J. Vestre",
