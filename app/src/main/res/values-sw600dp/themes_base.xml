@@ -19,7 +19,9 @@
 
 <resources>
 
-  <style name="Theme.SetupTheme" parent="Theme.AppTheme.Light.NoActionBar">
+  <style name="Theme.SetupTheme" parent="Theme.ChatTheme.Material_Light">
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
     <item name="android:windowBackground">?attr/colorPrimary</item>
   </style>
 </resources>
