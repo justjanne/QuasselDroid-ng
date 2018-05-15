@@ -232,7 +232,8 @@ class UserInfoFragment : ServiceBoundFragment() {
                 networkId = networkId,
                 type = Buffer_Type.of(Buffer_Type.StatusBuffer)
               )?.let { statusInfo ->
-                session.rpcHandler?.sendInput(statusInfo, "/whois ${user.nick()}")
+                val nick = user.nick()
+                session.rpcHandler?.sendInput(statusInfo, "/whois $nick $nick")
               }
             }
           }
