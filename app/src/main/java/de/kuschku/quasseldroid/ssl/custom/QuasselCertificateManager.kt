@@ -30,7 +30,7 @@ class QuasselCertificateManager(
   fun isServerTrusted(chain: Array<out X509Certificate>?): Boolean {
     // Verify input conditions
     // If no certificate exists, this can’t be valid
-    val leafCertificate = chain?.lastOrNull() ?: return false
+    val leafCertificate = chain?.firstOrNull() ?: return false
     return isServerTrusted(leafCertificate)
   }
 
