@@ -31,11 +31,16 @@
   <string name="preference_theme_entry_gruvbox_light">Gruvbox (Hell)</string>
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Dunkel)</string>
   <string name="preference_theme_entry_dracula">Dracula</string>
+
   <string name="preference_input_enter_title">Eingabetaste auf Tastatur</string>
   <string name="preference_input_enter_entry_emoji">Emoji-Auswahl</string>
   <string name="preference_input_enter_entry_send">Senden</string>
+
   <string name="preference_show_lag_title">Latenz anzeigen</string>
   <string name="preference_show_lag_summary">Zeigt die Gerät-Core-Latenz in der Statusleiste</string>
+
+  <string name="preference_keep_screen_on_title">Bildschirm aktiv halten</string>
+  <string name="preference_keep_screen_on_summary">Verhindert, dass das Gerät in den Schlafmodus wechselt während die App im Vordergrund ist</string>
 
   <string name="preference_language_title">Sprache</string>
   <string name="preference_language_entry_auto">System-Standardsprache</string>

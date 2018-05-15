@@ -74,6 +74,10 @@
   <string name="preference_show_lag_title">Show lag</string>
   <string name="preference_show_lag_summary">Displays the lag between client and core in the action bar</string>
 
+  <string name="preference_keep_screen_on_key" translatable="false">keep_screen_on</string>
+  <string name="preference_keep_screen_on_title">Keep Screen Active</string>
+  <string name="preference_keep_screen_on_summary">Prevents the device from going to sleep while the app is in foreground</string>
+
   <string name="preference_language_key" translatable="false">language</string>
   <string name="preference_language_title">Language</string>
   <string name="preference_language_entry_auto">System Default</string>

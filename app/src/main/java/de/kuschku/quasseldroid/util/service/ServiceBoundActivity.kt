@@ -24,6 +24,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
+import android.view.WindowManager
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.Keys
@@ -75,6 +76,10 @@ abstract class ServiceBoundActivity :
     connection.context = this
     lifecycle.addObserver(connection)
     checkConnection()
+
+    if (appearanceSettings.keepScreenOn) {
+      window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
   }
 
   fun updateRecentsHeader() =

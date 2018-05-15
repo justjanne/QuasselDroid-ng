@@ -41,6 +41,12 @@
       android:summary="@string/preference_show_lag_summary"
       android:title="@string/preference_show_lag_title" />
 
+    <SwitchPreference
+      android:defaultValue="false"
+      android:key="@string/preference_keep_screen_on_key"
+      android:summary="@string/preference_keep_screen_on_summary"
+      android:title="@string/preference_keep_screen_on_title" />
+
     <DropDownPreference
       android:defaultValue=""
       android:entries="@array/preference_language_entries"

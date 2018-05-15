@@ -44,6 +44,10 @@ object Settings {
         context.getString(R.string.preference_show_lag_key),
         AppearanceSettings.DEFAULT.showLag
       ),
+      keepScreenOn = getBoolean(
+        context.getString(R.string.preference_keep_screen_on_key),
+        AppearanceSettings.DEFAULT.keepScreenOn
+      ),
       language = getString(
         context.getString(R.string.preference_language_key),
         AppearanceSettings.DEFAULT.language
