@@ -32,9 +32,12 @@ import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.util.IrcUserUtils
+import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.helpers.nullIf
+import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
@@ -130,31 +133,55 @@ class UserInfoFragment : ServiceBoundFragment() {
       getColor(0, 0)
     }
 
-    val networkId = arguments?.getInt("networkId")
-    val nickName = arguments?.getString("nick")
+    val networkId2 = arguments?.getInt("networkId")
+    val nickName2 = arguments?.getString("nick")
     combineLatest(viewModel.session, viewModel.networks).switchMap { (sessionOptional, networks) ->
+      fun processUser(user: IrcUser, info: BufferInfo? = null) = when {
+        user == IrcUser.NULL && info != null -> Optional.of(IrcUserInfo(
+          info.networkId,
+          info.bufferName ?: ""
+        ))
+        user == IrcUser.NULL                 -> Optional.empty()
+        else                                 -> Optional.of(IrcUserInfo(
+          networkId = user.network().networkId(),
+          nick = user.nick(),
+          user = user.user(),
+          host = user.host(),
+          account = user.account(),
+          server = user.server(),
+          realName = user.realName(),
+          isAway = user.isAway(),
+          awayMessage = user.awayMessage(),
+          network = user.network(),
+          knownToCore = true
+        ))
+      }
+
       if (openBuffer == true) {
         val session = sessionOptional?.orNull()
         val bufferSyncer = session?.bufferSyncer
         val bufferInfo = bufferSyncer?.bufferInfo(arguments?.getInt("bufferId") ?: -1)
         bufferInfo?.let {
-          networks[it.networkId]?.liveIrcUser(it.bufferName)
+          networks[it.networkId]?.liveIrcUser(it.bufferName)?.switchMap(IrcUser::updates)?.map {
+            processUser(it, bufferInfo)
+          }
         }
       } else {
-        networks[networkId]?.liveIrcUser(nickName)
-      } ?: Observable.just(IrcUser.NULL)
-    }.filter {
-      it != IrcUser.NULL
-    }.switchMap(IrcUser::updates).toLiveData().observe(this, Observer { user ->
-      if (user != null) {
-        val senderColorIndex = IrcUserUtils.senderColor(user.nick())
-        val rawInitial = user.nick().trimStart(*IGNORED_CHARS).firstOrNull()
-                         ?: user.nick().firstOrNull()
+        networks[networkId2]
+          ?.liveIrcUser(nickName2)
+          ?.switchMap(IrcUser::updates)
+          ?.map { user -> processUser(user) }
+      } ?: Observable.just(IrcUser.NULL).map { user -> processUser(user) }
+    }.toLiveData().observe(this, Observer {
+      val processUser = { user: IrcUserInfo ->
+        val senderColorIndex = IrcUserUtils.senderColor(user.nick)
+        val rawInitial = user.nick.trimStart(*IGNORED_CHARS).firstOrNull()
+                         ?: user.nick.firstOrNull()
         val initial = rawInitial?.toUpperCase().toString()
         val senderColor = when (messageSettings.colorizeNicknames) {
           MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
           MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
-            if (user.network().isMyNick(user.nick())) selfColor
+            if (user.network?.isMyNick(user.nick) == true) selfColor
             else senderColors[senderColorIndex]
           MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
         }
@@ -165,84 +192,90 @@ class UserInfoFragment : ServiceBoundFragment() {
           crop = false
         )
 
-        nick.text = user.nick()
-        realName.text = contentFormatter.formatContent(user.realName())
-        realName.visibleIf(user.realName().isNotBlank() && user.realName() != user.nick())
+        nick.text = user.nick
+        realName.text = contentFormatter.formatContent(user.realName ?: "")
+        realName.visibleIf(!user.realName.isNullOrBlank() && user.realName != user.nick)
 
-        awayMessage.text = user.awayMessage().nullIf { it.isBlank() } ?: SpannableString(getString(R.string.label_no_away_message)).apply {
+        awayMessage.text = user.awayMessage.nullIf { it.isNullOrBlank() } ?: SpannableString(
+          getString(
+            R.string.label_no_away_message)).apply {
           setSpan(IrcItalicSpan(), 0, length, 0)
         }
-        awayContainer.visibleIf(user.isAway())
+        awayContainer.visibleIf(user.isAway == true)
 
-        account.text = user.account()
-        accountContainer.visibleIf(user.account().isNotBlank())
+        account.text = user.account
+        accountContainer.visibleIf(!user.account.isNullOrBlank())
 
-        ident.text = user.user()
-        identContainer.visibleIf(user.user().isNotBlank())
+        ident.text = user.user
+        identContainer.visibleIf(!user.user.isNullOrBlank())
 
-        host.text = user.host()
-        hostContainer.visibleIf(user.host().isNotBlank())
+        host.text = user.host
+        hostContainer.visibleIf(!user.host.isNullOrBlank())
 
-        server.text = user.server()
-        serverContainer.visibleIf(user.server().isNotBlank())
-      }
-    })
+        server.text = user.server
+        serverContainer.visibleIf(!user.server.isNullOrBlank())
 
-    actionQuery.setOnClickListener {
-      viewModel.session {
-        it.orNull()?.let { session ->
-          val info = session.bufferSyncer?.find(
-            bufferName = nickName,
-            networkId = networkId,
-            type = Buffer_Type.of(Buffer_Type.QueryBuffer)
-          )
+        actionWhois.visibleIf(user.knownToCore)
 
-          if (info != null) {
-            ChatActivity.launch(requireContext(), bufferId = info.bufferId)
-          } else {
-            viewModel.allBuffers.map {
-              listOfNotNull(it.find {
-                it.networkId == networkId && it.bufferName == nickName
+        actionQuery.setOnClickListener {
+          viewModel.session.value?.orNull()?.let { session ->
+            val info = session.bufferSyncer?.find(
+              bufferName = user.nick,
+              networkId = user.networkId,
+              type = Buffer_Type.of(Buffer_Type.QueryBuffer)
+            )
+
+            if (info != null) {
+              ChatActivity.launch(requireContext(),
+                                  bufferId = info.bufferId)
+            } else {
+              viewModel.allBuffers.map {
+                listOfNotNull(it.find {
+                  it.networkId == user.networkId && it.bufferName == user.nick
+                })
+              }.filter {
+                it.isNotEmpty()
+              }.firstElement().toLiveData().observe(this, Observer {
+                it?.firstOrNull()?.let { info ->
+                  ChatActivity.launch(requireContext(),
+                                      bufferId = info.bufferId)
+                }
               })
-            }.filter {
-              it.isNotEmpty()
-            }.firstElement().toLiveData().observe(this, Observer {
-              it?.firstOrNull()?.let { info ->
-                ChatActivity.launch(requireContext(), bufferId = info.bufferId)
-              }
-            })
 
-            session.bufferSyncer?.find(
-              networkId = networkId,
-              type = Buffer_Type.of(Buffer_Type.StatusBuffer)
-            )?.let { statusInfo ->
-              session.rpcHandler?.sendInput(statusInfo, "/query $nickName")
+              session.bufferSyncer?.find(
+                networkId = user.networkId,
+                type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+              )?.let { statusInfo ->
+                session.rpcHandler?.sendInput(statusInfo,
+                                              "/query ${user.nick}")
+              }
+            }
+          }
+        }
+
+        actionIgnore.setOnClickListener {
+          Toast.makeText(requireContext(), "Not Implemented", Toast.LENGTH_SHORT).show()
+        }
+
+        actionMention.setOnClickListener {
+          ChatActivity.launch(requireContext(), sharedText = "${user.nick}: ")
+        }
+
+        actionWhois.setOnClickListener {
+          viewModel.session {
+            it.orNull()?.let { session ->
+              session.bufferSyncer?.find(
+                networkId = user.networkId,
+                type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+              )?.let { statusInfo ->
+                session.rpcHandler?.sendInput(statusInfo, "/whois ${user.nick} ${user.nick}")
+              }
             }
           }
         }
       }
-    }
-
-    actionIgnore.setOnClickListener {
-      Toast.makeText(requireContext(), "Not Implemented", Toast.LENGTH_SHORT).show()
-    }
-
-    actionMention.setOnClickListener {
-      ChatActivity.launch(requireContext(), sharedText = "$nickName: ")
-    }
-
-    actionWhois.setOnClickListener {
-      viewModel.session {
-        it.orNull()?.let { session ->
-          session.bufferSyncer?.find(
-            networkId = networkId,
-            type = Buffer_Type.of(Buffer_Type.StatusBuffer)
-          )?.let { statusInfo ->
-            session.rpcHandler?.sendInput(statusInfo, "/whois $nickName $nickName")
-          }
-        }
-      }
-    }
+      it?.orNull()?.let(processUser)
+    })
 
     actionMention.visibleIf(arguments?.getBoolean("openBuffer") == false)
 

@@ -24,6 +24,7 @@ import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.ui.chat.info.user.IrcUserInfo
 import de.kuschku.quasseldroid.util.Patterns
 import de.kuschku.quasseldroid.util.backport.codec.Hex
 import de.kuschku.quasseldroid.util.helper.letIf
@@ -37,8 +38,7 @@ object AvatarHelper {
              size: Int? = null) = listOfNotNull(
     message.avatarUrl.notBlank()?.let { listOf(Avatar.NativeAvatar(it)) },
     settings.showIRCCloudAvatars.letIf {
-      ircCloudFallback(HostmaskHelper.user(message.sender),
-                       size)
+      ircCloudFallback(HostmaskHelper.user(message.sender), size)
     },
     settings.showGravatarAvatars.letIf {
       gravatarFallback(message.realName, size)
@@ -52,8 +52,7 @@ object AvatarHelper {
              size: Int? = null) = listOfNotNull(
     message.avatarUrl.notBlank()?.let { listOf(Avatar.NativeAvatar(it)) },
     settings.showIRCCloudAvatars.letIf {
-      ircCloudFallback(HostmaskHelper.user(message.sender),
-                       size)
+      ircCloudFallback(HostmaskHelper.user(message.sender), size)
     },
     settings.showGravatarAvatars.letIf {
       gravatarFallback(message.realName, size)
@@ -65,16 +64,25 @@ object AvatarHelper {
 
   fun avatar(settings: MessageSettings, user: IrcUserItem, size: Int? = null) = listOfNotNull(
     settings.showIRCCloudAvatars.letIf {
-      ircCloudFallback(HostmaskHelper.user(user.hostmask),
-                       size)
+      ircCloudFallback(HostmaskHelper.user(user.hostmask), size)
     },
     settings.showGravatarAvatars.letIf {
-      gravatarFallback(user.realname.toString(),
-                       size)
+      gravatarFallback(user.realname.toString(), size)
     },
     settings.showMatrixAvatars.letIf {
-      matrixFallback(user.realname.toString(),
-                     size)
+      matrixFallback(user.realname.toString(), size)
+    }
+  ).flatten()
+
+  fun avatar(settings: MessageSettings, user: IrcUserInfo, size: Int? = null) = listOfNotNull(
+    settings.showIRCCloudAvatars.letIf {
+      ircCloudFallback(user.user ?: "", size)
+    },
+    settings.showGravatarAvatars.letIf {
+      gravatarFallback(user.realName ?: "", size)
+    },
+    settings.showMatrixAvatars.letIf {
+      matrixFallback(user.realName ?: "", size)
     }
   ).flatten()
 
