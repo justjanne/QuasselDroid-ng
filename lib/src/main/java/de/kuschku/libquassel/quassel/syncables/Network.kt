@@ -32,7 +32,6 @@ import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.nio.ByteBuffer
-import java.nio.charset.Charset
 import java.util.*
 
 class Network constructor(
@@ -192,11 +191,11 @@ class Network constructor(
     if (info.identity > 0 && info.identity != identity())
       setIdentity(info.identity)
     if (info.codecForServer != codecForServer())
-      setCodecForServer(Charset.forName(info.codecForServer))
+      setCodecForServer(info.codecForServer)
     if (info.codecForEncoding != codecForEncoding())
-      setCodecForEncoding(Charset.forName(info.codecForEncoding))
+      setCodecForEncoding(info.codecForEncoding)
     if (info.codecForDecoding != codecForDecoding())
-      setCodecForDecoding(Charset.forName(info.codecForDecoding))
+      setCodecForDecoding(info.codecForDecoding)
     // FIXME compare components
     if (info.serverList.isNotEmpty())
       setServerList(info.serverList.map { QVariant.of(it.toVariantMap(), QType.Network_Server) })
@@ -348,19 +347,19 @@ class Network constructor(
             capValue?.contains(saslMechanism, ignoreCase = true) ?: false)
   }
 
-  fun newIrcUser(hostMask: String, initData: QVariantMap = emptyMap()): IrcUser {
+  fun newIrcUser(hostMask: String, initData: QVariantMap = emptyMap(),
+                 index: Int? = null): IrcUser {
     val nick = caseMapper.toLowerCase(HostmaskHelper.nick(hostMask))
     val user = ircUser(nick)
     return if (user == null) {
       val ircUser = IrcUser(hostMask, this, proxy)
       ircUser.init()
       if (initData.isNotEmpty()) {
-        ircUser.fromVariantMap(initData)
+        ircUser.fromVariantMap(initData, index)
         ircUser.initialized = true
       }
       proxy.synchronize(ircUser)
       _ircUsers[nick] = ircUser
-      val mask = ircUser.hostMask()
       live_ircUsers.onNext(_ircUsers)
       ircUser
     } else {
@@ -375,13 +374,14 @@ class Network constructor(
 
   fun ircUsers() = _ircUsers.values.toList()
   fun ircUserCount(): UInt = _ircUsers.size
-  fun newIrcChannel(channelName: String, initData: QVariantMap = emptyMap()): IrcChannel =
+  fun newIrcChannel(channelName: String, initData: QVariantMap = emptyMap(),
+                    index: Int? = null): IrcChannel =
     ircChannel(channelName).let { channel ->
       return if (channel == null) {
         val ircChannel = IrcChannel(channelName, this, proxy)
         ircChannel.init()
         if (initData.isNotEmpty()) {
-          ircChannel.fromVariantMap(initData)
+          ircChannel.fromVariantMap(initData, index)
           ircChannel.initialized = true
         }
         proxy.synchronize(ircChannel)
@@ -402,18 +402,18 @@ class Network constructor(
 
   fun ircChannels() = _ircChannels.values.toList()
   fun ircChannelCount(): UInt = _ircChannels.size
-  fun codecForServer(): String = _codecForServer.name()
-  fun codecForEncoding(): String = _codecForEncoding.name()
-  fun codecForDecoding(): String = _codecForDecoding.name()
-  fun setCodecForDecoding(codec: Charset) {
+  fun codecForServer(): String = _codecForServer
+  fun codecForEncoding(): String = _codecForEncoding
+  fun codecForDecoding(): String = _codecForDecoding
+  fun setCodecForDecoding(codec: String) {
     _codecForDecoding = codec
   }
 
-  fun setCodecForEncoding(codec: Charset) {
+  fun setCodecForEncoding(codec: String) {
     _codecForEncoding = codec
   }
 
-  fun setCodecForServer(codec: Charset) {
+  fun setCodecForServer(codec: String) {
     _codecForServer = codec
   }
 
@@ -615,27 +615,6 @@ class Network constructor(
       setCodecForServer(Charsets.ISO_8859_1.decode(codecName).toString())
   }
 
-  fun setCodecForDecoding(codecName: String) {
-    val charset = Charset.availableCharsets()[codecName]
-    if (charset != null) {
-      setCodecForDecoding(charset)
-    }
-  }
-
-  fun setCodecForEncoding(codecName: String) {
-    val charset = Charset.availableCharsets()[codecName]
-    if (charset != null) {
-      setCodecForEncoding(charset)
-    }
-  }
-
-  fun setCodecForServer(codecName: String) {
-    val charset = Charset.availableCharsets()[codecName]
-    if (charset != null) {
-      setCodecForServer(charset)
-    }
-  }
-
   override fun addSupport(param: String, value: String?) {
     _supports[param] = value
   }
@@ -773,25 +752,13 @@ class Network constructor(
     val users: Map<String, QVariant_> = usersAndChannels["Users"].valueOr(::emptyMap)
     val userKeys = users.keys
     users["nick"].valueOr<QVariantList>(::emptyList).forEachIndexed { index, nick ->
-      val data = mutableMapOf<String, QVariant_>()
-      for (it in userKeys) {
-        val value = users[it].value<QVariantList>()?.get(index)
-        if (value != null)
-          data[it] = value
-      }
-      newIrcUser(nick.value(""), data)
+      newIrcUser(nick.value(""), users, index)
     }
 
     val channels: Map<String, QVariant_> = usersAndChannels["Channels"].valueOr(::emptyMap)
     val channelKeys = channels.keys
     channels["name"].valueOr<QVariantList>(::emptyList).forEachIndexed { index, nick ->
-      val data = mutableMapOf<String, QVariant_>()
-      for (it in channelKeys) {
-        val value = channels[it].value<QVariantList>()?.get(index)
-        if (value != null)
-          data[it] = value
-      }
-      newIrcChannel(nick.value(""), data)
+      newIrcChannel(nick.value(""), channels, index)
     }
   }
 
@@ -1022,17 +989,17 @@ class Network constructor(
       field = value
       live_networkInfo.onNext(Unit)
     }
-  private var _codecForServer: Charset = Charsets.UTF_8
+  private var _codecForServer: String = "UTF_8"
     set(value) {
       field = value
       live_networkInfo.onNext(Unit)
     }
-  private var _codecForEncoding: Charset = Charsets.UTF_8
+  private var _codecForEncoding: String = "UTF_8"
     set(value) {
       field = value
       live_networkInfo.onNext(Unit)
     }
-  private var _codecForDecoding: Charset = Charsets.UTF_8
+  private var _codecForDecoding: String = "UTF_8"
     set(value) {
       field = value
       live_networkInfo.onNext(Unit)

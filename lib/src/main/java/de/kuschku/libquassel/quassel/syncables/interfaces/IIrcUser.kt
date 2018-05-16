@@ -28,7 +28,7 @@ import org.threeten.bp.Instant
 @Syncable(name = "IrcUser")
 interface IIrcUser : ISyncableObject {
   fun initProperties(): QVariantMap
-  fun initSetProperties(properties: QVariantMap)
+  fun initSetProperties(properties: QVariantMap, index: Int? = null)
   @Slot
   fun addUserModes(modes: String)
 

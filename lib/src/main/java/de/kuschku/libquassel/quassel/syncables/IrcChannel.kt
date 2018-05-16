@@ -46,6 +46,18 @@ class IrcChannel(
     "UserModes" to QVariant.of(initUserModes(), Type.QVariantMap)
   ) + initProperties()
 
+  private inline fun QVariant_?.indexed(index: Int?) = this?.let {
+    index?.let { i ->
+      it.valueOr<QVariantList>(::emptyList)[i]
+    } ?: it
+  }
+
+  fun fromVariantMap(properties: QVariantMap, i: Int? = null) {
+    initSetChanModes(properties["ChanModes"].indexed(i).valueOr(::emptyMap))
+    initSetUserModes(properties["UserModes"].indexed(i).valueOr(::emptyMap))
+    initSetProperties(properties, i)
+  }
+
   override fun fromVariantMap(properties: QVariantMap) {
     initSetChanModes(properties["ChanModes"].valueOr(::emptyMap))
     initSetUserModes(properties["UserModes"].valueOr(::emptyMap))
@@ -100,10 +112,10 @@ class IrcChannel(
     joinIrcUsersInternal(users, modes)
   }
 
-  override fun initSetProperties(properties: QVariantMap) {
-    setTopic(properties["topic"].valueOr(this::topic))
-    setPassword(properties["password"].valueOr(this::password))
-    setEncrypted(properties["encrypted"].valueOr(this::encrypted))
+  override fun initSetProperties(properties: QVariantMap, i: Int?) {
+    setTopic(properties["topic"].indexed(i).valueOr(this::topic))
+    setPassword(properties["password"].indexed(i).valueOr(this::password))
+    setEncrypted(properties["encrypted"].indexed(i).valueOr(this::encrypted))
   }
 
   fun isKnownUser(ircUser: IrcUser): Boolean {

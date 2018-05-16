@@ -33,7 +33,7 @@ interface IIrcChannel : ISyncableObject {
   fun initSetUserModes(usermodes: QVariantMap)
 
   fun initProperties(): QVariantMap
-  fun initSetProperties(properties: QVariantMap)
+  fun initSetProperties(properties: QVariantMap, i: Int? = null)
 
   @Slot
   fun addChannelMode(mode: Char, value: String?)
