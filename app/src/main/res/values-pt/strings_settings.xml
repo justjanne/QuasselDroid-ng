@@ -25,7 +25,7 @@
   <string name="settings_network_sasl_enabled">SASL</string>
   <string name="settings_network_sasl_account">Conta</string>
   <string name="settings_network_sasl_password">Senha</string>
-  <string name="settings_network_autoidentify_enabled">Auto Identificação</string>
+  <string name="settings_network_autoidentify_enabled">Identificação Automática</string>
   <string name="settings_network_autoidentify_service">Serviço</string>
   <string name="settings_network_autoidentify_password">Senha</string>
   <string name="settings_network_connection">Ligação</string>
@@ -108,11 +108,11 @@
   <string name="settings_ignoreitem_strictness">Rigor</string>
   <string name="settings_ignoreitem_strictness_soft">Dinâmico</string>
   <string name="settings_ignoreitem_strictness_hard">Permanente</string>
-  <string name="settings_ignoreitem_scope">Âmbito</string>
-  <string name="settings_ignoreitem_scope_global">Âmbito Global</string>
-  <string name="settings_ignoreitem_scope_network">Âmbito de Rede</string>
-  <string name="settings_ignoreitem_scope_channel">Âmbito de Canal</string>
-  <string name="settings_ignoreitem_scoperule">Âmbito da Regra</string>
+  <string name="settings_ignoreitem_scope">Tipo</string>
+  <string name="settings_ignoreitem_scope_global">Ignorar Global</string>
+  <string name="settings_ignoreitem_scope_network">Ignorar na Rede</string>
+  <string name="settings_ignoreitem_scope_channel">Ignorar em Canal</string>
+  <string name="settings_ignoreitem_scoperule">Tipo de Ignore</string>
 
   <string name="settings_highlightlist_title">Menções</string>
   <string name="settings_highlightlist_highlight_nick">Menções de Alcunhas</string>
@@ -148,7 +148,7 @@
   <string name="settings_networkconfig_auto_who_interval_unit">segundos</string>
   <string name="settings_networkconfig_auto_who_nick_limit">Ignorar canais com mais de</string>
   <string name="settings_networkconfig_auto_who_nick_limit_unit">utilizadores</string>
-  <string name="settings_networkconfig_auto_who_delay">Atraso mínimo entre pedidos</string>
+  <string name="settings_networkconfig_auto_who_delay">Tempo mínimo entre pedidos</string>
   <string name="settings_networkconfig_auto_who_delay_unit">segundos</string>
   <string name="settings_networkconfig_standard_ctcp">Comportamento CTCP Compatível Padrão</string>
 </resources>

@@ -21,7 +21,7 @@
   <string name="label_status_disconnected">Desligado</string>
   <string name="label_status_connecting">Ligando</string>
   <string name="label_status_handshake">Handshake</string>
-  <string name="label_status_init">Iniciação</string>
+  <string name="label_status_init">Inicializando</string>
   <string name="label_status_connected">Ligado</string>
   <string name="label_status_closed">Ligação Perdida</string>
 </resources>

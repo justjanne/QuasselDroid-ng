@@ -18,12 +18,12 @@
   -->
 
 <resources>
-  <string name="label_error_login">Falha na autenticação</string>
+  <string name="label_error_login">Falha de Autenticação</string>
   <string name="label_error_setup">Erro de Configuração</string>
   <string name="label_error_init">Erro de Ligação</string>
   <string name="label_error_certificate">Erro de Certificado</string>
   <string name="label_error_certificate_no_certificate">Sem certificado disponível</string>
-  <string name="label_error_certificate_no_hostname">Nenhum nome de anfitrião disponível</string>
+  <string name="label_error_certificate_no_hostname">Nenhum anfitrião disponível</string>
   <string name="label_error_certificate_invalid"><![CDATA[
     <p>O certificado com impressão digital<br/>
     <code>%1$s</code> só é válido a partir de %2$s até %3$s</p>

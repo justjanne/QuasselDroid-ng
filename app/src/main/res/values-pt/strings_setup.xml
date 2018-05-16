@@ -19,7 +19,7 @@
 
 <resources>
   <!-- Account Selection -->
-  <string name="slide_account_select_title">Selecione uma conta</string>
+  <string name="slide_account_select_title">Selecione Conta</string>
   <string name="slide_account_select_description">Por favor, selecione uma conta da lista ou adicione uma</string>
   <string name="label_user_on_host">%1$s em %2$s:%3$d</string>
 
@@ -27,14 +27,14 @@
   <string name="slide_account_connection_title">Ligação</string>
   <string name="slide_account_connection_description">Primeiro, escolha o servidor no qual o seu núcleo está alojado.</string>
 
-  <string name="label_connection_host">Anfiriao</string>
+  <string name="label_connection_host">Anfitrião</string>
   <string name="label_connection_port">Porta</string>
 
-  <string name="hint_invalid_host">Não é um nome de anfitrião válido</string>
+  <string name="hint_invalid_host">Não é um anfitrião válido</string>
   <string name="hint_invalid_port">Não é uma porta válida</string>
 
   <!-- Account User -->
-  <string name="slide_account_user_title">Sua conta</string>
+  <string name="slide_account_user_title">Sua Conta</string>
   <string name="slide_account_user_description">Agora, digite o nome de utilizador e a senha da sua conta no núcleo. Se acabou de criar esse núcleo, configuraremos essa conta para si</string>
 
   <string name="label_account_user">Nome de Utilizador</string>
@@ -55,11 +55,11 @@
   <string name="slide_core_authenticator_select_description">Selecione um tipo de autenticação para o núcleo Quassel utilizar para autenticar usuários.</string>
 
   <!-- Core Backend Select -->
-  <string name="slide_core_backend_select_title">Selecione o tipo de armazenamento</string>
+  <string name="slide_core_backend_select_title">Selecione o Tipo de Armazenamento</string>
   <string name="slide_core_backend_select_description">Selecione um um tipo de base de dados para o núcleo do Quassel armazenar o histórico e outros dados.</string>
 
   <!-- Core Backend Config -->
-  <string name="slide_core_backend_setup_title">Configurar tipo de armazenamento</string>
+  <string name="slide_core_backend_setup_title">Configurar Tipo de Armazenamento</string>
   <string name="slide_core_backend_setup_description">Por favor, configure o tipo de base de dados selecionado.</string>
 
   <!-- User Identity -->

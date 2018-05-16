@@ -23,7 +23,7 @@
   <string name="app_description_long">Quassel é um cliente IRC distribuído e descentralizado, escrito usando C++ e Qt. O Quasseldroid é um cliente escrito puramente em kotlin para o núcleo Quassel, permitindo que você se ligue ao seu núcleo Quassel usando seu telemóvel Android™.</string>
 
   <string name="connection_service_title">Serviço de Ligação</string>
-  <string name="connection_service_description">Mantém uma ligação com o seu núcleo para permitir notificações e para transmitir mensagens.</string>
+  <string name="connection_service_description">Mantém uma ligação com o seu núcleo para permitir notificações e transmissão de mensagens.</string>
 
   <string name="label_about">Sobre</string>
   <string name="label_avatar">Avatar</string>
@@ -54,10 +54,10 @@
   <string name="label_ignore_long">Adiciona/remove o utilizador na/da lista de ignorados</string>
   <string name="label_info_channel">Detalhes do Canal</string>
   <string name="label_info_user">Detalhes do Utilizador</string>
-  <string name="label_input_history">Histórico de Escrita</string>
+  <string name="label_input_history">Histórico de Mensagens</string>
   <string name="label_join">Entrar</string>
   <string name="label_join_long">Entrar no Canal</string>
-  <string name="label_libraries">Livrarias</string>
+  <string name="label_libraries">Bibliotecas</string>
   <string name="label_license">Licença</string>
   <string name="label_mark_read">Marcar como lida</string>
   <string name="label_mention">Mencionar</string>
@@ -89,7 +89,7 @@
   <string name="label_select">Selecionar</string>
   <string name="label_settings">Configurações</string>
   <string name="label_settings_client">Configurações do Cliente</string>
-  <string name="label_settings_core">Configurações do núcleo</string>
+  <string name="label_settings_core">Configurações do Núcleo</string>
   <string name="label_share">Partilhar</string>
   <string name="label_share_crashreport">Partilhar Relatório de Crash</string>
   <string name="label_show_hidden">Mostrar oculto</string>
@@ -114,4 +114,6 @@
   <string name="delete_confirmation">Tem certeza de que deseja excluir isto permanentemente? Isto não pode ser revertido.</string>
   <string name="cancel_confirmation">Você tem alterações não guardadas. Você deseja descartá-las?</string>
 
-  </resources>
+  <string name="info_copied_version">Versão copiada para a área de transferência</string>
+
+</resources>
