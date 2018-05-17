@@ -71,6 +71,79 @@ class NetworkTest {
     original.setCodecForServer(randomCharset().name())
     original.setCodecForEncoding(randomCharset().name())
     original.setCodecForDecoding(randomCharset().name())
+    original.addSupport("AWAYLEN", "200")
+    original.addSupport("CALLERID", "g")
+    original.addSupport("CASEMAPPING", "rfc1459")
+    original.addSupport("CHANMODES", "IXZbegw,k,FHJLUdfjlx,ABCDKMNOPQRSTcimnprstuz")
+    original.addSupport("CHANNELLEN", "64")
+    original.addSupport("CHANTYPES", "#")
+    original.addSupport("CHARSET", "ascii")
+    original.addSupport("ELIST", "MU")
+    original.addSupport("ESILENCE", null)
+    original.addSupport("EXCEPTS", "e")
+    original.addSupport("EXTBAN", ",ABCNOQRSTUcjmprsz")
+    original.addSupport("FNC", null)
+    original.addSupport("INVEX", "I")
+    for (i in 0 until randomUByte()) {
+      original.newIrcUser(randomString() + "!" + randomString() + "@" + randomString()).apply {
+        setUser(randomString())
+        setHost(randomString())
+        setNick(randomString())
+        setRealName(randomString())
+        setAccount(randomString())
+        setAway(randomBoolean())
+        setAwayMessage(randomString())
+        setIdleTime(randomInstant())
+        setLoginTime(randomInstant())
+        setServer(randomString())
+        setIrcOperator(randomString())
+        setLastAwayMessageTime(randomInstant())
+        setWhoisServiceReply(randomString())
+        setSuserHost(randomString())
+        setEncrypted(randomBoolean())
+        setUserModes(listOf(
+          randomOf(*USERMODES),
+          randomOf(*USERMODES),
+          randomOf(*USERMODES)
+        ).toString())
+      }
+    }
+    for (i in 0 until randomUByte()) {
+      original.newIrcChannel(randomString(), mapOf()).apply {
+        setTopic(randomString())
+        setPassword(randomString())
+        setEncrypted(randomBoolean())
+        addChannelMode(randomOf(*CHANMODES_A), randomString())
+        addChannelMode(randomOf(*CHANMODES_A), randomString())
+        addChannelMode(randomOf(*CHANMODES_A), randomString())
+        addChannelMode(randomOf(*CHANMODES_B), randomString())
+        addChannelMode(randomOf(*CHANMODES_C), randomString())
+        addChannelMode(randomOf(*CHANMODES_C), randomString())
+        addChannelMode(randomOf(*CHANMODES_D), null)
+        addChannelMode(randomOf(*CHANMODES_D), null)
+        addChannelMode(randomOf(*CHANMODES_D), null)
+        randomOf(original.ircUsers()).let {
+          joinIrcUser(it)
+          setUserModes(it, randomOf(*CHANMODES_PREFIX).toString())
+        }
+        randomOf(original.ircUsers()).let {
+          joinIrcUser(it)
+          setUserModes(it, randomOf(*CHANMODES_PREFIX).toString())
+        }
+        randomOf(original.ircUsers()).let {
+          joinIrcUser(it)
+          setUserModes(it, randomOf(*CHANMODES_PREFIX).toString())
+        }
+        randomOf(original.ircUsers()).let {
+          joinIrcUser(it)
+          setUserModes(it, randomOf(*CHANMODES_PREFIX).toString())
+        }
+        randomOf(original.ircUsers()).let {
+          joinIrcUser(it)
+          setUserModes(it, randomOf(*CHANMODES_PREFIX).toString())
+        }
+      }
+    }
 
     val copy = original.copy()
     copy.fromVariantMap(roundTrip(VariantMapSerializer, original.toVariantMap()))
@@ -122,10 +195,105 @@ class NetworkTest {
     original.setCodecForServer(randomCharset().name())
     original.setCodecForEncoding(randomCharset().name())
     original.setCodecForDecoding(randomCharset().name())
-    original.setAutoAwayActive(randomBoolean())
+    original.addSupport("AWAYLEN", "200")
+    original.addSupport("CALLERID", "g")
+    original.addSupport("CASEMAPPING", "rfc1459")
+    original.addSupport("CHANMODES", "IXZbegw,k,FHJLUdfjlx,ABCDKMNOPQRSTcimnprstuz")
+    original.addSupport("CHANNELLEN", "64")
+    original.addSupport("CHANTYPES", "#")
+    original.addSupport("CHARSET", "ascii")
+    original.addSupport("ELIST", "MU")
+    original.addSupport("ESILENCE", null)
+    original.addSupport("EXCEPTS", "e")
+    original.addSupport("EXTBAN", ",ABCNOQRSTUcjmprsz")
+    original.addSupport("FNC", null)
+    original.addSupport("INVEX", "I")
+    for (i in 0 until randomUByte()) {
+      original.newIrcUser(randomString() + "!" + randomString() + "@" + randomString()).apply {
+        setUser(randomString())
+        setHost(randomString())
+        setNick(randomString())
+        setRealName(randomString())
+        setAccount(randomString())
+        setAway(randomBoolean())
+        setAwayMessage(randomString())
+        setIdleTime(randomInstant())
+        setLoginTime(randomInstant())
+        setServer(randomString())
+        setIrcOperator(randomString())
+        setLastAwayMessageTime(randomInstant())
+        setWhoisServiceReply(randomString())
+        setSuserHost(randomString())
+        setEncrypted(randomBoolean())
+        setUserModes(listOf(
+          randomOf(*USERMODES),
+          randomOf(*USERMODES),
+          randomOf(*USERMODES)
+        ).toString())
+      }
+    }
+    for (i in 0 until randomUByte()) {
+      original.newIrcChannel(randomString(), mapOf()).apply {
+        setTopic(randomString())
+        setPassword(randomString())
+        setEncrypted(randomBoolean())
+        addChannelMode(randomOf(*CHANMODES_A), randomString())
+        addChannelMode(randomOf(*CHANMODES_A), randomString())
+        addChannelMode(randomOf(*CHANMODES_A), randomString())
+        addChannelMode(randomOf(*CHANMODES_B), randomString())
+        addChannelMode(randomOf(*CHANMODES_C), randomString())
+        addChannelMode(randomOf(*CHANMODES_C), randomString())
+        addChannelMode(randomOf(*CHANMODES_D), null)
+        addChannelMode(randomOf(*CHANMODES_D), null)
+        addChannelMode(randomOf(*CHANMODES_D), null)
+        randomOf(original.ircUsers()).let {
+          joinIrcUser(it)
+          setUserModes(it, randomOf(*CHANMODES_PREFIX).toString())
+        }
+        randomOf(original.ircUsers()).let {
+          joinIrcUser(it)
+          setUserModes(it, randomOf(*CHANMODES_PREFIX).toString())
+        }
+        randomOf(original.ircUsers()).let {
+          joinIrcUser(it)
+          setUserModes(it, randomOf(*CHANMODES_PREFIX).toString())
+        }
+        randomOf(original.ircUsers()).let {
+          joinIrcUser(it)
+          setUserModes(it, randomOf(*CHANMODES_PREFIX).toString())
+        }
+        randomOf(original.ircUsers()).let {
+          joinIrcUser(it)
+          setUserModes(it, randomOf(*CHANMODES_PREFIX).toString())
+        }
+      }
+    }
 
     val copy = original.copy()
     copy.fromVariantMap(original.toVariantMap())
     assert(original.isEqual(copy))
+  }
+
+  companion object {
+    private val USERMODES = arrayOf(
+      'B', 'H', 'I', 'L', 'O', 'R', 'S', 'T', 'W', 'c', 'd', 'g', 'h', 'i', 'k', 'o', 'r', 's', 'w',
+      'x'
+    )
+    private val CHANMODES_PREFIX = arrayOf(
+      'Y', 'o', 'h', 'v'
+    )
+    private val CHANMODES_A = arrayOf(
+      'I', 'X', 'Z', 'b', 'e', 'g', 'w'
+    )
+    private val CHANMODES_B = arrayOf(
+      'k'
+    )
+    private val CHANMODES_C = arrayOf(
+      'F', 'H', 'J', 'L', 'U', 'd', 'f', 'j', 'l', 'x'
+    )
+    private val CHANMODES_D = arrayOf(
+      'A', 'B', 'C', 'D', 'K', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'c', 'i', 'm', 'n', 'p', 'r',
+      's', 't', 'u', 'z'
+    )
   }
 }

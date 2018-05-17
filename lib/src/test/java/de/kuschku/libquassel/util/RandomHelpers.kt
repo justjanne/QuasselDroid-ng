@@ -22,6 +22,7 @@ package de.kuschku.libquassel.util
 import de.kuschku.libquassel.protocol.UByte
 import de.kuschku.libquassel.protocol.UInt
 import de.kuschku.libquassel.protocol.UShort
+import org.threeten.bp.Instant
 import java.nio.charset.Charset
 import java.util.*
 
@@ -42,6 +43,9 @@ fun Any?.randomLong(): Long = random.nextLong()
 
 fun Any?.randomString(): String = UUID.randomUUID().toString()
 
+fun Any?.randomInstant(): Instant = Instant.ofEpochMilli(randomLong())
+
 fun <T> Any?.randomOf(vararg elements: T): T = elements[random.nextInt(elements.size)]
+fun <T> Any?.randomOf(elements: List<T>): T = elements[random.nextInt(elements.size)]
 
 fun Any?.randomCharset(): Charset = randomOf(*Charset.availableCharsets().values.toTypedArray())

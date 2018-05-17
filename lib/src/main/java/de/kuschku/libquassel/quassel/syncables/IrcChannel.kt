@@ -65,15 +65,15 @@ class IrcChannel(
   }
 
   override fun initChanModes(): QVariantMap = mapOf(
-    "A" to QVariant.of(_A_channelModes.mapValues { (_, value) ->
-      QVariant.of(value.toList(), Type.QStringList)
-    }, Type.QVariantMap),
-    "B" to QVariant.of(_B_channelModes.mapValues { (_, value) ->
-      QVariant.of(value, Type.QString)
-    }, Type.QVariantMap),
-    "C" to QVariant.of(_C_channelModes.mapValues { (_, value) ->
-      QVariant.of(value, Type.QString)
-    }, Type.QVariantMap),
+    "A" to QVariant.of(_A_channelModes.map { (key, value) ->
+      key.toString() to QVariant.of(value.toList(), Type.QStringList)
+    }.toMap(), Type.QVariantMap),
+    "B" to QVariant.of(_B_channelModes.map { (key, value) ->
+      key.toString() to QVariant.of(value, Type.QString)
+    }.toMap(), Type.QVariantMap),
+    "C" to QVariant.of(_C_channelModes.map { (key, value) ->
+      key.toString() to QVariant.of(value, Type.QString)
+    }.toMap(), Type.QVariantMap),
     "D" to QVariant.of(_D_channelModes.joinToString(), Type.QString)
   )
 
@@ -89,14 +89,14 @@ class IrcChannel(
   )
 
   override fun initSetChanModes(chanModes: QVariantMap) {
-    chanModes["A"].valueOr<Map<String, QVariant_>>(::emptyMap).forEach { (key, variant) ->
+    chanModes["A"].valueOr<QVariantMap>(::emptyMap).forEach { (key, variant) ->
       _A_channelModes[key.toCharArray().first()] =
         variant.valueOr<QStringList>(::emptyList).filterNotNull().toMutableSet()
     }
-    chanModes["B"].valueOr<Map<String, QVariant_>>(::emptyMap).forEach { (key, variant) ->
+    chanModes["B"].valueOr<QVariantMap>(::emptyMap).forEach { (key, variant) ->
       _B_channelModes[key.toCharArray().first()] = variant.value("")
     }
-    chanModes["C"].valueOr<Map<String, QVariant_>>(::emptyMap).forEach { (key, variant) ->
+    chanModes["C"].valueOr<QVariantMap>(::emptyMap).forEach { (key, variant) ->
       _C_channelModes[key.toCharArray().first()] = variant.value("")
     }
     _D_channelModes = chanModes["D"].value("").toCharArray().toMutableSet()
