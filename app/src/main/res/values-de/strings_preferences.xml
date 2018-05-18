@@ -128,6 +128,12 @@
   <string name="preference_autocomplete_prefix_title">Nach Präfix anzeigen</string>
   <string name="preference_autocomplete_prefix_summary">Vervollständigt Namen und Chats automatisch nach einem @ oder #</string>
 
+  <string name="preference_autocomplete_nicks_title">Vervollständige Spitznamen</string>
+
+  <string name="preference_autocomplete_buffers_title">Vervollständige Chats</string>
+
+  <string name="preference_autocomplete_aliases_title">Vervollständige Aliase</string>
+
 
   <string name="preference_backlog_title">Verlauf</string>
 

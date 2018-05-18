@@ -28,6 +28,8 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager.Alias
 import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
 import de.kuschku.libquassel.session.SignalProxy
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 import java.util.*
 
 class AliasManager constructor(
@@ -93,6 +95,8 @@ class AliasManager constructor(
   fun setAliasList(list: List<Alias>) {
     _aliases = list
   }
+
+  fun updates(): Observable<AliasManager> = live_updates.map { this }
 
   fun copy() = AliasManager(proxy).also {
     it.fromVariantMap(toVariantMap())
@@ -188,7 +192,12 @@ class AliasManager constructor(
     }
   }
 
+  private val live_updates = BehaviorSubject.createDefault(Unit)
   private var _aliases = listOf<IAliasManager.Alias>()
+    set(value) {
+      field = value
+      live_updates.onNext(Unit)
+    }
 
   fun isEqual(other: AliasManager): Boolean =
     this.aliasList() == other.aliasList()

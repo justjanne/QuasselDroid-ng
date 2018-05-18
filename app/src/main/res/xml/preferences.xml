@@ -245,6 +245,21 @@
       android:key="@string/preference_autocomplete_prefix_key"
       android:summary="@string/preference_autocomplete_prefix_summary"
       android:title="@string/preference_autocomplete_prefix_title" />
+
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="@string/preference_autocomplete_nicks_key"
+      android:title="@string/preference_autocomplete_nicks_title" />
+
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="@string/preference_autocomplete_buffers_key"
+      android:title="@string/preference_autocomplete_buffers_title" />
+
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="@string/preference_autocomplete_aliases_key"
+      android:title="@string/preference_autocomplete_aliases_title" />
   </PreferenceCategory>
 
   <PreferenceCategory android:layout="@layout/widget_preference_divider" />

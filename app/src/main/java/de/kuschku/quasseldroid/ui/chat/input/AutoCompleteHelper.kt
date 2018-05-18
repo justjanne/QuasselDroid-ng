@@ -25,23 +25,18 @@ import android.support.v4.app.FragmentActivity
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import de.kuschku.libquassel.protocol.Buffer_Type
-import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.util.IrcUserUtils
-import de.kuschku.libquassel.util.flag.hasFlag
-import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
-import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.ui.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
+import de.kuschku.quasseldroid.viewmodel.EditorViewModel.Companion.IGNORED_CHARS
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
-import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
 
 class AutoCompleteHelper(
   activity: FragmentActivity,
@@ -68,16 +63,20 @@ class AutoCompleteHelper(
     getColor(0, 0)
   }
 
-  private val avatarSize = activity.resources.getDimensionPixelSize(R.dimen.avatar_size)
-
   init {
     viewModel.autoCompleteData.toLiveData().observe(activity, Observer {
       val query = it?.first ?: ""
-      val shouldShowResults = (autoCompleteSettings.auto && query.length >= 3) ||
-                              (autoCompleteSettings.prefix && query.startsWith('@')) ||
-                              (autoCompleteSettings.prefix && query.startsWith('#'))
+      val shouldShowResults =
+        (autoCompleteSettings.auto && query.length >= 3) ||
+        (autoCompleteSettings.prefix && autoCompleteSettings.nicks && query.startsWith('@')) ||
+        (autoCompleteSettings.prefix && autoCompleteSettings.buffers && query.startsWith('#')) ||
+        (autoCompleteSettings.prefix && autoCompleteSettings.aliases && query.startsWith('/'))
       val list = if (shouldShowResults) it?.second.orEmpty() else emptyList()
-      val data = list.map {
+      val data = list.filter {
+        it is AutoCompleteItem.AliasItem && autoCompleteSettings.aliases ||
+        it is AutoCompleteItem.UserItem && autoCompleteSettings.nicks ||
+        it is AutoCompleteItem.ChannelItem && autoCompleteSettings.buffers
+      }.map {
         if (it is AutoCompleteItem.UserItem) {
           val nickName = it.nick
           val senderColorIndex = IrcUserUtils.senderColor(nickName)
@@ -144,74 +143,16 @@ class AutoCompleteHelper(
     this.dataListeners -= listener
   }
 
-  private fun autoCompleteDataFull(): List<AutoCompleteItem> {
-    return viewModel.rawAutoCompleteData.value?.let { (sessionOptional, id, lastWord) ->
-      val session = sessionOptional.orNull()
-      val bufferInfo = session?.bufferSyncer?.bufferInfo(id)
-      session?.networks?.let { networks ->
-        session.bufferSyncer?.bufferInfos()?.let { infos ->
-          if (bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
-            val network = networks[bufferInfo.networkId]
-            network?.ircChannel(
-              bufferInfo.bufferName
-            )?.let { ircChannel ->
-              val users = ircChannel.ircUsers()
-              val buffers = infos
-                .asSequence()
-                .filter {
-                  it.type.toInt() == Buffer_Type.ChannelBuffer.toInt()
-                }.mapNotNull { info ->
-                  networks[info.networkId]?.let { info to it }
-                }.map { (info, network) ->
-                  val channel = network.ircChannel(info.bufferName).nullIf { it == IrcChannel.NULL }
-                  AutoCompleteItem.ChannelItem(
-                    info = info,
-                    network = network.networkInfo(),
-                    bufferStatus = when (channel) {
-                      null -> BufferStatus.OFFLINE
-                      else -> BufferStatus.ONLINE
-                    },
-                    description = channel?.topic() ?: ""
-                  )
-                }
-              val nicks = users.asSequence().map { user ->
-                val userModes = ircChannel.userModes(user)
-                val prefixModes = network.prefixModes()
-
-                val lowestMode = userModes.mapNotNull(prefixModes::indexOf).min()
-                                 ?: prefixModes.size
-
-                AutoCompleteItem.UserItem(
-                  user.nick(),
-                  network.modesToPrefixes(userModes),
-                  lowestMode,
-                  user.realName(),
-                  user.isAway(),
-                  user.network().isMyNick(user.nick()),
-                  network.support("CASEMAPPING"),
-                  AvatarHelper.avatar(messageSettings, user, avatarSize)
-                )
-              }
-
-              (nicks + buffers).filter {
-                it.name.trimStart(*IGNORED_CHARS)
-                  .startsWith(
-                    lastWord.first.trimStart(*IGNORED_CHARS),
-                    ignoreCase = true
-                  )
-              }.sorted().toList()
-            }
-          } else null
-        }
-      }
-    } ?: emptyList()
-  }
-
   fun autoComplete(reverse: Boolean = false) {
     viewModel.lastWord.switchMap { it }.value?.let { originalWord ->
       val previous = autoCompletionState
       if (!originalWord.second.isEmpty()) {
-        val autoCompletedWords = autoCompleteDataFull()
+        val autoCompletedWords = viewModel.autoCompleteData.value?.second?.filter {
+          it is AutoCompleteItem.AliasItem && autoCompleteSettings.aliases ||
+          it is AutoCompleteItem.UserItem && autoCompleteSettings.nicks ||
+          it is AutoCompleteItem.ChannelItem && autoCompleteSettings.buffers
+        }.orEmpty()
+
         if (previous != null && originalWord.first == previous.originalWord && originalWord.second.start == previous.range.start) {
           val previousIndex = autoCompletedWords.indexOf(previous.completion)
           val autoCompletedWord = if (previousIndex != -1) {
@@ -251,9 +192,5 @@ class AutoCompleteHelper(
         }
       }
     }
-  }
-
-  companion object {
-    val IGNORED_CHARS = charArrayOf('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\', '@')
   }
 }

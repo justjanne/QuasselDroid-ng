@@ -247,6 +247,15 @@
   <string name="preference_autocomplete_prefix_title">Show after prefix</string>
   <string name="preference_autocomplete_prefix_summary">Suggest nicks and channels after entering @ or #</string>
 
+  <string name="preference_autocomplete_nicks_key" translatable="false">autocomplete_nicks</string>
+  <string name="preference_autocomplete_nicks_title">Autocomplete Nicknames</string>
+
+  <string name="preference_autocomplete_buffers_key" translatable="false">autocomplete_buffers</string>
+  <string name="preference_autocomplete_buffers_title">Autocomplete Chats</string>
+
+  <string name="preference_autocomplete_aliases_key" translatable="false">autocomplete_aliases</string>
+  <string name="preference_autocomplete_aliases_title">Autocomplete Commands</string>
+
 
   <string name="preference_backlog_title">Backlog</string>
 

@@ -23,15 +23,11 @@ import android.graphics.drawable.Drawable
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 
-sealed class AutoCompleteItem(open val name: String) : Comparable<AutoCompleteItem> {
-  override fun compareTo(other: AutoCompleteItem): Int {
-    return when {
-      this is UserItem &&
-      other is ChannelItem -> -1
-      this is ChannelItem &&
-      other is UserItem    -> 1
-      else                 -> this.name.compareTo(other.name)
-    }
+sealed class AutoCompleteItem(open val name: String, private val type: Int) :
+  Comparable<AutoCompleteItem> {
+  override fun compareTo(other: AutoCompleteItem) = when {
+    this.type != other.type -> this.type.compareTo(other.type)
+    else                    -> this.name.compareTo(other.name)
   }
 
   data class UserItem(
@@ -45,12 +41,17 @@ sealed class AutoCompleteItem(open val name: String) : Comparable<AutoCompleteIt
     val avatarUrls: List<Avatar> = emptyList(),
     val fallbackDrawable: Drawable? = null,
     val displayNick: CharSequence? = null
-  ) : AutoCompleteItem(nick)
+  ) : AutoCompleteItem(nick, 0)
+
+  data class AliasItem(
+    val alias: String,
+    val expansion: String
+  ) : AutoCompleteItem(alias, 1)
 
   data class ChannelItem(
     val info: BufferInfo,
     val network: INetwork.NetworkInfo,
     val bufferStatus: BufferStatus,
     val description: CharSequence
-  ) : AutoCompleteItem(info.bufferName ?: "")
+  ) : AutoCompleteItem(info.bufferName ?: "", 2)
 }

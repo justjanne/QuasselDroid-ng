@@ -21,12 +21,15 @@ package de.kuschku.quasseldroid.viewmodel
 
 import android.arch.lifecycle.ViewModel
 import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.quassel.syncables.AliasManager
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.quassel.syncables.IrcUser
+import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helpers.mapNullable
+import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
@@ -51,7 +54,7 @@ class EditorViewModel : ViewModel() {
         }
     }
 
-  val autoCompleteData = rawAutoCompleteData
+  val autoCompleteData: Observable<Pair<String, List<AutoCompleteItem>>> = rawAutoCompleteData
     .distinctUntilChanged()
     .debounce(300, TimeUnit.MILLISECONDS)
     .switchMap { (sessionOptional, id, lastWord) ->
@@ -61,78 +64,97 @@ class EditorViewModel : ViewModel() {
       if (bufferSyncer != null) {
         session.liveNetworks().switchMap { networks ->
           bufferSyncer.liveBufferInfos().switchMap { infos ->
-            if (bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
-              val network = networks[bufferInfo.networkId]
-              val ircChannel = network?.ircChannel(
-                bufferInfo.bufferName
-              )
-              if (ircChannel != null) {
-                ircChannel.liveIrcUsers().switchMap { users ->
-                  val buffers: List<Observable<AutoCompleteItem.ChannelItem>?> = infos.values
-                    .filter {
-                      it.type.toInt() == Buffer_Type.ChannelBuffer.toInt()
-                    }.mapNotNull { info ->
-                      networks[info.networkId]?.let { info to it }
-                    }.map { (info, network) ->
-                      network.liveIrcChannel(
-                        info.bufferName
-                      ).switchMap { channel ->
-                        channel.updates().mapNullable(IrcChannel.NULL) {
-                          AutoCompleteItem.ChannelItem(
-                            info = info,
-                            network = network.networkInfo(),
-                            bufferStatus = when (it) {
-                              null -> BufferStatus.OFFLINE
-                              else -> BufferStatus.ONLINE
-                            },
-                            description = it?.topic() ?: ""
+            (session.aliasManager?.updates()?.map(AliasManager::aliasList)
+             ?: Observable.just(emptyList())).switchMap { aliases ->
+              val network = networks[bufferInfo?.networkId] ?: Network.NULL
+              val ircChannel = if (bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
+                network.ircChannel(bufferInfo.bufferName) ?: IrcChannel.NULL
+              } else IrcChannel.NULL
+              ircChannel.liveIrcUsers().switchMap { users ->
+                fun processResults(results: List<Observable<out AutoCompleteItem>>) =
+                  combineLatest<AutoCompleteItem>(results)
+                    .map { list ->
+                      val filtered = list.filter {
+                        it.name.trimStart(*IGNORED_CHARS)
+                          .startsWith(
+                            lastWord.first.trimStart(*IGNORED_CHARS),
+                            ignoreCase = true
                           )
-                        }
                       }
-                    }
-                  val nicks = users.map<IrcUser, Observable<AutoCompleteItem.UserItem>?> {
-                    it.updates().map { user ->
-                      val userModes = ircChannel.userModes(user)
-                      val prefixModes = network.prefixModes()
-
-                      val lowestMode = userModes.mapNotNull(prefixModes::indexOf).min()
-                                       ?: prefixModes.size
-
-                      AutoCompleteItem.UserItem(
-                        user.nick(),
-                        network.modesToPrefixes(userModes),
-                        lowestMode,
-                        user.realName(),
-                        user.isAway(),
-                        user.network().isMyNick(user.nick()),
-                        network.support("CASEMAPPING")
+                      Pair(
+                        lastWord.first,
+                        filtered.sorted()
                       )
+                    }
+
+                fun getAliases() = aliases.map {
+                  Observable.just(AutoCompleteItem.AliasItem(
+                    it.name,
+                    it.expansion
+                  ))
+                }
+
+                fun getBuffers() = infos.values
+                  .filter {
+                    it.type.toInt() == Buffer_Type.ChannelBuffer.toInt()
+                  }.mapNotNull { info ->
+                    networks[info.networkId]?.let { info to it }
+                  }.map { (info, network) ->
+                    network.liveIrcChannel(
+                      info.bufferName
+                    ).switchMap { channel ->
+                      channel.updates().mapNullable(IrcChannel.NULL) {
+                        AutoCompleteItem.ChannelItem(
+                          info = info,
+                          network = network.networkInfo(),
+                          bufferStatus = when (it) {
+                            null -> BufferStatus.OFFLINE
+                            else -> BufferStatus.ONLINE
+                          },
+                          description = it?.topic() ?: ""
+                        )
+                      }
                     }
                   }
 
-                  combineLatest<AutoCompleteItem>(nicks + buffers)
-                    .map { list ->
-                      val ignoredStartingCharacters = charArrayOf(
-                        '-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\', '@'
-                      )
-
-                      Pair(
-                        lastWord.first,
-                        list.filter {
-                          it.name.trimStart(*ignoredStartingCharacters)
-                            .startsWith(
-                              lastWord.first.trimStart(*ignoredStartingCharacters),
-                              ignoreCase = true
-                            )
-                        }.sorted()
-                      )
-                    }
+                fun getUsers(): Set<IrcUser> = when {
+                  bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true ->
+                    users
+                  bufferInfo?.type?.hasFlag(Buffer_Type.QueryBuffer) == true   ->
+                    network.ircUser(bufferInfo.bufferName).nullIf { it == IrcUser.NULL }?.let {
+                      setOf(it)
+                    } ?: emptySet()
+                  else                                                         ->
+                    emptySet()
                 }
-              } else {
-                Observable.just(Pair(lastWord.first, emptyList()))
+
+                fun getNicks() = getUsers().map<IrcUser, Observable<AutoCompleteItem.UserItem>> {
+                  it.updates().map { user ->
+                    val userModes = ircChannel.userModes(user)
+                    val prefixModes = network.prefixModes()
+
+                    val lowestMode = userModes.mapNotNull(prefixModes::indexOf).min()
+                                     ?: prefixModes.size
+
+                    AutoCompleteItem.UserItem(
+                      user.nick(),
+                      network.modesToPrefixes(userModes),
+                      lowestMode,
+                      user.realName(),
+                      user.isAway(),
+                      user.network().isMyNick(user.nick()),
+                      network.support("CASEMAPPING")
+                    )
+                  }
+                }
+
+                when (lastWord.first.firstOrNull()) {
+                  '/'  -> processResults(getAliases())
+                  '@'  -> processResults(getNicks())
+                  '#'  -> processResults(getBuffers())
+                  else -> processResults(getAliases() + getNicks() + getBuffers())
+                }
               }
-            } else {
-              Observable.just(Pair(lastWord.first, emptyList()))
             }
           }
         }
@@ -140,4 +162,10 @@ class EditorViewModel : ViewModel() {
         Observable.just(Pair(lastWord.first, emptyList()))
       }
     }
+
+  companion object {
+    val IGNORED_CHARS = charArrayOf(
+      '-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\', '@', '#', '/'
+    )
+  }
 }

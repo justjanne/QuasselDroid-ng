@@ -76,6 +76,11 @@ class AutoCompleteAdapter @Inject constructor(
 
       holder
     }
+    VIEWTYPE_ALIAS                           -> AutoCompleteViewHolder.AliasViewHolder(
+      LayoutInflater.from(parent.context)
+        .inflate(R.layout.widget_alias, parent, false),
+      clickListener = clickListener
+    )
     else                                     -> throw IllegalArgumentException(
       "Invoked with wrong item type"
     )
@@ -87,6 +92,7 @@ class AutoCompleteAdapter @Inject constructor(
   override fun getItemViewType(position: Int) = getItem(position).let {
     when {
       it is AutoCompleteItem.ChannelItem         -> VIEWTYPE_CHANNEL
+      it is AutoCompleteItem.AliasItem           -> VIEWTYPE_ALIAS
       it is AutoCompleteItem.UserItem && it.away -> VIEWTYPE_NICK_AWAY
       else                                       -> VIEWTYPE_NICK_ACTIVE
     }
@@ -96,6 +102,7 @@ class AutoCompleteAdapter @Inject constructor(
     fun bind(data: AutoCompleteItem) = when {
       data is AutoCompleteItem.UserItem && this is NickViewHolder       -> this.bindImpl(data)
       data is AutoCompleteItem.ChannelItem && this is ChannelViewHolder -> this.bindImpl(data)
+      data is AutoCompleteItem.AliasItem && this is AliasViewHolder     -> this.bindImpl(data)
       else                                                              -> throw IllegalArgumentException(
         "Invoked with wrong item type"
       )
@@ -188,11 +195,41 @@ class AutoCompleteAdapter @Inject constructor(
         )
       }
     }
+
+    class AliasViewHolder(
+      itemView: View,
+      private val clickListener: ((String) -> Unit)? = null
+    ) : AutoCompleteViewHolder(itemView) {
+      @BindView(R.id.alias)
+      lateinit var alias: TextView
+
+      @BindView(R.id.expansion)
+      lateinit var expansion: TextView
+
+      var value: String? = null
+
+      init {
+        ButterKnife.bind(this, itemView)
+        itemView.setOnClickListener {
+          val value = value
+          if (value != null)
+            clickListener?.invoke(value)
+        }
+      }
+
+      fun bindImpl(data: AutoCompleteItem.AliasItem) {
+        value = data.name
+
+        alias.text = data.alias
+        expansion.text = data.expansion
+      }
+    }
   }
 
   companion object {
     const val VIEWTYPE_CHANNEL = 0
     const val VIEWTYPE_NICK_ACTIVE = 1
     const val VIEWTYPE_NICK_AWAY = 2
+    const val VIEWTYPE_ALIAS = 3
   }
 }

@@ -184,6 +184,18 @@ object Settings {
       prefix = getBoolean(
         context.getString(R.string.preference_autocomplete_prefix_key),
         AutoCompleteSettings.DEFAULT.prefix
+      ),
+      nicks = getBoolean(
+        context.getString(R.string.preference_autocomplete_nicks_key),
+        AutoCompleteSettings.DEFAULT.nicks
+      ),
+      buffers = getBoolean(
+        context.getString(R.string.preference_autocomplete_buffers_key),
+        AutoCompleteSettings.DEFAULT.buffers
+      ),
+      aliases = getBoolean(
+        context.getString(R.string.preference_autocomplete_aliases_key),
+        AutoCompleteSettings.DEFAULT.aliases
       )
     )
   }
