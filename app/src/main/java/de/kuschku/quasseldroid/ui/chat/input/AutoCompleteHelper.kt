@@ -240,7 +240,7 @@ class AutoCompleteHelper(
         '/'  -> processResults(getAliases())
         '@'  -> processResults(getNicks())
         '#'  -> processResults(getBuffers())
-        else -> processResults(getAliases() + getNicks() + getBuffers())
+        else -> processResults(getNicks())
       }
     } else {
       emptyList()
