@@ -134,7 +134,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           drawerLayout.closeDrawers()
         }
         intent.hasExtra(KEY_AUTOCOMPLETE_TEXT) -> {
-          chatlineFragment?.editorHelper?.appendText(intent.getStringExtra(KEY_AUTOCOMPLETE_TEXT))
+          chatlineFragment?.editorHelper?.appendText(
+            intent.getStringExtra(KEY_AUTOCOMPLETE_TEXT),
+            intent.getStringExtra(KEY_AUTOCOMPLETE_SUFFIX)
+          )
           drawerLayout.closeDrawers()
         }
       }
@@ -715,19 +718,24 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   companion object {
     private val KEY_AUTOCOMPLETE_TEXT = "autocomplete_text"
+    private val KEY_AUTOCOMPLETE_SUFFIX = "autocomplete_suffix"
     private val KEY_BUFFER_ID = "buffer_id"
 
     fun launch(
       context: Context,
       sharedText: CharSequence? = null,
       autoCompleteText: CharSequence? = null,
+      autoCompleteSuffix: String? = null,
       bufferId: Int? = null
-    ) = context.startActivity(intent(context, sharedText, autoCompleteText, bufferId))
+    ) = context.startActivity(
+      intent(context, sharedText, autoCompleteText, autoCompleteSuffix, bufferId)
+    )
 
     fun intent(
       context: Context,
       sharedText: CharSequence? = null,
       autoCompleteText: CharSequence? = null,
+      autoCompleteSuffix: String? = null,
       bufferId: Int? = null
     ) = Intent(context, ChatActivity::class.java).apply {
       if (sharedText != null) {
@@ -736,6 +744,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
       if (autoCompleteText != null) {
         putExtra(KEY_AUTOCOMPLETE_TEXT, autoCompleteText)
+        if (autoCompleteSuffix != null) {
+          putExtra(KEY_AUTOCOMPLETE_SUFFIX, autoCompleteSuffix)
+        }
       }
       if (bufferId != null) {
         putExtra(KEY_BUFFER_ID, bufferId)

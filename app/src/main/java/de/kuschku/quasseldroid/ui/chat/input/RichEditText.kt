@@ -287,10 +287,10 @@ class RichEditText : EditTextSelectionChange {
     setSelection(selectionStart, selectionEnd)
   }
 
-  fun autoComplete(text: CharSequence) {
+  fun autoComplete(text: CharSequence, suffix: String) {
     val range = this.text.lastWordIndices(this.selection.start, true)
     val replacement = if (range?.start == 0) {
-      "$text: "
+      "$text$suffix"
     } else {
       "$text "
     }
@@ -305,7 +305,7 @@ class RichEditText : EditTextSelectionChange {
   }
 
   fun autoComplete(item: AutoCompletionState) {
-    val suffix = if (item.range.start == 0) ": " else " "
+    val suffix = if (item.range.start == 0) item.completion.suffix else " "
     val replacement = "${item.completion.name}$suffix"
     val previousReplacement = item.lastCompletion?.let { "${item.lastCompletion.name}$suffix" }
 
@@ -329,10 +329,13 @@ class RichEditText : EditTextSelectionChange {
     this.setSelection(this.text.length)
   }
 
-  fun appendText(text: CharSequence?) {
+  fun appendText(text: CharSequence?, suffix: String?) {
+    val shouldAddSuffix = this.text.isEmpty()
     if (!this.text.endsWith(" "))
       this.text.append(" ")
     this.text.append(text)
+    if (shouldAddSuffix)
+      this.text.append(suffix)
     this.setSelection(this.text.length)
   }
 

@@ -49,9 +49,9 @@ class AutoCompleteAdapter @Inject constructor(
     override fun areContentsTheSame(oldItem: AutoCompleteItem, newItem: AutoCompleteItem) =
       oldItem == newItem
   }) {
-  private var clickListener: ((String) -> Unit)? = null
+  private var clickListener: ((String, String) -> Unit)? = null
 
-  fun setOnClickListener(listener: ((String) -> Unit)?) {
+  fun setOnClickListener(listener: ((String, String) -> Unit)?) {
     this.clickListener = listener
   }
 
@@ -110,7 +110,7 @@ class AutoCompleteAdapter @Inject constructor(
 
     class NickViewHolder(
       itemView: View,
-      private val clickListener: ((String) -> Unit)? = null
+      private val clickListener: ((String, String) -> Unit)? = null
     ) : AutoCompleteViewHolder(itemView) {
       @BindView(R.id.avatar)
       lateinit var avatar: ImageView
@@ -121,19 +121,19 @@ class AutoCompleteAdapter @Inject constructor(
       @BindView(R.id.realname)
       lateinit var realname: TextView
 
-      var value: String? = null
+      var value: AutoCompleteItem? = null
 
       init {
         ButterKnife.bind(this, itemView)
         itemView.setOnClickListener {
           val value = value
           if (value != null)
-            clickListener?.invoke(value)
+            clickListener?.invoke(value.name, value.suffix)
         }
       }
 
       fun bindImpl(data: AutoCompleteItem.UserItem) {
-        value = data.name
+        value = data
 
         nick.text = SpanFormatter.format("%s%s", data.modes, data.displayNick ?: data.nick)
         realname.text = data.realname
@@ -144,7 +144,7 @@ class AutoCompleteAdapter @Inject constructor(
 
     class ChannelViewHolder(
       itemView: View,
-      private val clickListener: ((String) -> Unit)? = null
+      private val clickListener: ((String, String) -> Unit)? = null
     ) : AutoCompleteViewHolder(itemView) {
       @BindView(R.id.status)
       lateinit var status: ImageView
@@ -155,7 +155,7 @@ class AutoCompleteAdapter @Inject constructor(
       @BindView(R.id.description)
       lateinit var description: TextView
 
-      var value: String? = null
+      var value: AutoCompleteItem? = null
 
       private val online: Drawable?
       private val offline: Drawable?
@@ -165,7 +165,7 @@ class AutoCompleteAdapter @Inject constructor(
         itemView.setOnClickListener {
           val value = value
           if (value != null)
-            clickListener?.invoke(value)
+            clickListener?.invoke(value.name, value.suffix)
         }
 
         online = itemView.context.getVectorDrawableCompat(R.drawable.ic_status_channel)?.mutate()
@@ -180,7 +180,7 @@ class AutoCompleteAdapter @Inject constructor(
       }
 
       fun bindImpl(data: AutoCompleteItem.ChannelItem) {
-        value = data.name
+        value = data
 
         name.text = data.info.bufferName
         description.text = data.description
@@ -198,7 +198,7 @@ class AutoCompleteAdapter @Inject constructor(
 
     class AliasViewHolder(
       itemView: View,
-      private val clickListener: ((String) -> Unit)? = null
+      private val clickListener: ((String, String) -> Unit)? = null
     ) : AutoCompleteViewHolder(itemView) {
       @BindView(R.id.alias)
       lateinit var alias: TextView
@@ -206,19 +206,19 @@ class AutoCompleteAdapter @Inject constructor(
       @BindView(R.id.expansion)
       lateinit var expansion: TextView
 
-      var value: String? = null
+      var value: AutoCompleteItem? = null
 
       init {
         ButterKnife.bind(this, itemView)
         itemView.setOnClickListener {
           val value = value
           if (value != null)
-            clickListener?.invoke(value)
+            clickListener?.invoke(value.name, value.suffix)
         }
       }
 
       fun bindImpl(data: AutoCompleteItem.AliasItem) {
-        value = data.name
+        value = data
 
         alias.text = data.alias
         expansion.text = data.expansion

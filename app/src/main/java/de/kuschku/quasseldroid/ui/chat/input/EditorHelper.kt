@@ -60,13 +60,13 @@ class EditorHelper(
     getColor(0, 0)
   }
 
-  val lastWord: BehaviorSubject<Pair<String, IntRange>> = BehaviorSubject.createDefault(Pair("",
-                                                                                             IntRange.EMPTY))
+  val lastWord: BehaviorSubject<Pair<String, IntRange>> =
+    BehaviorSubject.createDefault(Pair("", IntRange.EMPTY))
   private val textWatcher = object : TextWatcher {
     override fun afterTextChanged(s: Editable?) {
       val previous = autoCompleteHelper.autoCompletionState
       val next = if (previous != null && s != null) {
-        val suffix = if (previous.range.start == 0) ": " else " "
+        val suffix = if (previous.range.start == 0) previous.completion.suffix else " "
         val sequence = if (s.length < previous.range.start) ""
         else s.substring(previous.range.start)
         if (sequence == previous.completion.name + suffix) {
@@ -191,7 +191,7 @@ class EditorHelper(
 
   fun replaceText(text: CharSequence?) = editText.replaceText(text)
 
-  fun appendText(text: CharSequence?) = editText.appendText(text)
+  fun appendText(text: CharSequence?, suffix: String?) = editText.appendText(text, suffix)
 
   private fun showColorChooser(
     @StringRes title: Int,
