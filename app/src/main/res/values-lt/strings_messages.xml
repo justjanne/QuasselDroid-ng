@@ -17,7 +17,7 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="message_type_join">Prisijungimas</string>
   <string name="message_type_part">Atsijungimas</string>
   <string name="message_type_quit">Išėjimas</string>
@@ -41,13 +41,14 @@
   <string name="message_format_kick_2">%1$s buvo išspirtas %2$s%3$s (%4$s)</string>
   <string name="message_format_kill_1">%1$s buvo nužudytas %2$s%3$s</string>
   <string name="message_format_kill_2">%1$s buvo nužudytas %2$s%3$s (%4$s)</string>
-  <plurals name="message_netsplit_join">
+  <!-- Transifex’ quantity handling is different from Android’s. Issue opened on 2018-05-18 -->
+  <plurals name="message_netsplit_join" tools:ignore="UnusedQuantity">
     <item quantity="one">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojas prisijungė</item>
     <item quantity="few">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojai prisijungė</item>
     <item quantity="many">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojų prisijungė</item>
     <item quantity="other">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojų prisijungė</item>
   </plurals>
-  <plurals name="message_netsplit_quit">
+  <plurals name="message_netsplit_quit" tools:ignore="UnusedQuantity">
     <item quantity="one">Netsplit tarp %1$s ir %2$s: %3$d vartotojas išėjo</item>
     <item quantity="few">Netsplit tarp %1$s ir %2$s: %3$d vartotojai išėjo</item>
     <item quantity="many">Netsplit tarp %1$s ir %2$s: %3$d vartotojų išėjo</item>

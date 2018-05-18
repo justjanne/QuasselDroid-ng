@@ -23,37 +23,30 @@
   android:layout_height="wrap_content"
   android:background="?attr/backgroundMenuItem"
   android:minHeight="48dp"
+  android:orientation="vertical"
   android:paddingBottom="8dp"
   android:paddingLeft="16dp"
   android:paddingRight="16dp"
   android:paddingTop="8dp">
 
-  <LinearLayout
-    android:layout_width="0dip"
+  <TextView
+    android:id="@+id/alias"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:layout_weight="1"
-    android:orientation="vertical">
+    android:layout_gravity="center_vertical|start"
+    android:fontFamily="sans-serif-medium"
+    android:singleLine="true"
+    android:textColor="?attr/colorTextPrimary"
+    android:textSize="13sp"
+    tools:text="#quasseldroid" />
 
-    <TextView
-      android:id="@+id/alias"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center_vertical|start"
-      android:fontFamily="sans-serif-medium"
-      android:singleLine="true"
-      android:textColor="?attr/colorTextPrimary"
-      android:textSize="13sp"
-      tools:text="#quasseldroid" />
-
-    <TextView
-      android:id="@+id/expansion"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center_vertical|start"
-      android:singleLine="true"
-      android:textColor="?attr/colorTextSecondary"
-      android:textSize="12sp"
-      tools:text="Quasseldroid is an Android client for #quassel ♥ justJanne's much improved version: https://dl.kuschku.de/releases/quasseldroid/ ♥ http://github.com/sandsmark/Quasseldroid ♥ Quasseldroid  on play  https://market.android.com/details?id=com.iskrembilen.quasseldroid ♥ Sign up for beta: https://plus.google.com/communities/104094956084217666662" />
-  </LinearLayout>
+  <TextView
+    android:id="@+id/expansion"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical|start"
+    android:singleLine="true"
+    android:textColor="?attr/colorTextSecondary"
+    android:textSize="12sp"
+    tools:text="Quasseldroid is an Android client for #quassel ♥ justJanne's much improved version: https://dl.kuschku.de/releases/quasseldroid/ ♥ http://github.com/sandsmark/Quasseldroid ♥ Quasseldroid  on play  https://market.android.com/details?id=com.iskrembilen.quasseldroid ♥ Sign up for beta: https://plus.google.com/communities/104094956084217666662" />
 </LinearLayout>
