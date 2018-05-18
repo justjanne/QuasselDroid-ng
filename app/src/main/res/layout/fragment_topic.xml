@@ -22,7 +22,6 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:minHeight="240dp"
   android:orientation="vertical">
 
   <android.support.design.widget.CoordinatorLayout
@@ -31,9 +30,9 @@
     android:layout_weight="1">
 
     <ScrollView
-      android:id="@+id/chatline_scroller"
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
+      android:layout_height="match_parent"
+      android:scrollbars="vertical">
 
       <de.kuschku.quasseldroid.ui.chat.input.RichEditText
         android:id="@+id/chatline"

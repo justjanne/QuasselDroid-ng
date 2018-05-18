@@ -160,8 +160,19 @@ fun CharSequence.lastWordIndices(cursor: Int = this.length,
     length
   }
 
-  val beginningOfWord = lastIndexOf(' ', cursorPosition - 1)
-  val endOfWord = indexOf(' ', cursorPosition)
+  val beginningOfWord = sequenceOf(
+    lastIndexOf(' ', cursorPosition - 1),
+    lastIndexOf('\r', cursorPosition - 1),
+    lastIndexOf('\n', cursorPosition - 1),
+    lastIndexOf('\t', cursorPosition - 1)
+  ).max() ?: -1
+
+  val endOfWord = sequenceOf(
+    indexOf(' ', cursorPosition),
+    indexOf('\r', cursorPosition),
+    indexOf('\n', cursorPosition),
+    indexOf('\t', cursorPosition)
+  ).min() ?: -1
 
   val start = beginningOfWord + 1
   val end = when {

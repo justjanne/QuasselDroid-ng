@@ -17,27 +17,26 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:fillViewport="true"
-  android:scrollbars="vertical">
+  android:orientation="vertical">
 
-  <LinearLayout
+  <android.support.design.widget.CoordinatorLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="0dip"
+    android:layout_weight="1">
 
-    <android.support.design.widget.CoordinatorLayout
+    <android.support.v4.widget.NestedScrollView
       android:layout_width="match_parent"
-      android:layout_height="0dip"
-      android:layout_weight="1">
+      android:layout_height="match_parent"
+      android:scrollbars="vertical">
 
       <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
@@ -59,50 +58,45 @@
           </LinearLayout>
         </LinearLayout>
 
-        <ScrollView
-          android:layout_width="match_parent"
-          android:layout_height="match_parent">
+        <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
 
-          <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
+          <android.support.design.widget.TextInputLayout
+            style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+            android:hint="@string/settings_aliasitem_expansion">
 
-            <android.support.design.widget.TextInputLayout
-              style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-              android:hint="@string/settings_aliasitem_expansion">
-
-              <de.kuschku.quasseldroid.ui.chat.input.RichEditText
-                android:id="@+id/expansion"
-                style="@style/Widget.CoreSettings.EditText"
-                android:imeOptions="flagNoExtractUi"
-                android:inputType="textMultiLine"
-                android:textColor="?attr/colorForeground"
-                android:textSize="16sp" />
-            </android.support.design.widget.TextInputLayout>
-          </LinearLayout>
-        </ScrollView>
+            <de.kuschku.quasseldroid.ui.chat.input.RichEditText
+              android:id="@+id/expansion"
+              style="@style/Widget.CoreSettings.EditText"
+              android:imeOptions="flagNoExtractUi"
+              android:inputType="textMultiLine"
+              android:textColor="?attr/colorForeground"
+              android:textSize="16sp" />
+          </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
       </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-      <android.support.v7.widget.RecyclerView
-        android:id="@+id/autocomplete_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?colorBackgroundCard"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="@dimen/autocomplete_max_height"
-        app:layout_behavior="@string/bottom_sheet_behavior"
-        tools:listitem="@layout/widget_nick" />
-
-    </android.support.design.widget.CoordinatorLayout>
-
-    <android.support.design.widget.AppBarLayout
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/autocomplete_list"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="?attr/colorBackgroundCard">
+      android:background="?colorBackgroundCard"
+      app:behavior_hideable="true"
+      app:behavior_peekHeight="@dimen/autocomplete_max_height"
+      app:layout_behavior="@string/bottom_sheet_behavior"
+      tools:listitem="@layout/widget_nick" />
 
-      <de.kuschku.quasseldroid.ui.chat.input.RichToolbar
-        android:id="@+id/formatting_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:contentInsetStart="0dip" />
-    </android.support.design.widget.AppBarLayout>
-  </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+  </android.support.design.widget.CoordinatorLayout>
+
+  <android.support.design.widget.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorBackgroundCard">
+
+    <de.kuschku.quasseldroid.ui.chat.input.RichToolbar
+      android:id="@+id/formatting_toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      app:contentInsetStart="0dip" />
+  </android.support.design.widget.AppBarLayout>
+</LinearLayout>

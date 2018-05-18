@@ -89,7 +89,7 @@ class EditorViewModel : ViewModel() {
 
                 fun getAliases() = aliases.map {
                   Observable.just(AutoCompleteItem.AliasItem(
-                    it.name,
+                    "/${it.name}",
                     it.expansion
                   ))
                 }
