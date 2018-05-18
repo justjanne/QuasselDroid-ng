@@ -37,6 +37,9 @@
   <string name="preference_show_lag_title">Rodyti delsimą</string>
   <string name="preference_show_lag_summary">Veiksmų juostoje matysite kiek klijentas atsilieka nuo branduolio</string>
 
+  <string name="preference_keep_screen_on_title">Laikyti ekraną įjungtą</string>
+  <string name="preference_keep_screen_on_summary">Neleidžia prietaisui užmigti kol programėlė aktyvi</string>
+
   <string name="preference_language_title">Kalba</string>
   <string name="preference_language_entry_auto">Sistemos numatyta</string>
   <string name="preference_notifications_title">Pranešimai</string>
