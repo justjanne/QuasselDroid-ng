@@ -44,11 +44,13 @@
   <plurals name="message_netsplit_join">
     <item quantity="one">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojas prisijungė</item>
     <item quantity="few">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojai prisijungė</item>
+    <item quantity="many">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojų prisijungė</item>
     <item quantity="other">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojų prisijungė</item>
   </plurals>
   <plurals name="message_netsplit_quit">
     <item quantity="one">Netsplit tarp %1$s ir %2$s: %3$d vartotojas išėjo</item>
     <item quantity="few">Netsplit tarp %1$s ir %2$s: %3$d vartotojai išėjo</item>
+    <item quantity="many">Netsplit tarp %1$s ir %2$s: %3$d vartotojų išėjo</item>
     <item quantity="other">Netsplit tarp %1$s ir %2$s: %3$d vartotojų išėjo</item>
   </plurals>
 </resources>

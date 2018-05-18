@@ -58,10 +58,10 @@
       android:digits="0123456789abcdefABCDEF"
       android:focusable="true"
       android:hint="FF0099CC"
+      android:inputType="textNoSuggestions"
       android:textColor="?colorTextPrimary"
       android:textColorHint="?colorTextSecondary"
       android:textSize="@dimen/md_title_textsize"
-      android:inputType="textNoSuggestions"
       tools:ignore="HardcodedText" />
 
   </LinearLayout>

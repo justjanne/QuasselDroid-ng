@@ -34,8 +34,8 @@
   <application
     android:name=".Quasseldroid"
     android:allowBackup="true"
-    android:fullBackupContent="@xml/backup_content"
     android:description="@string/app_description"
+    android:fullBackupContent="@xml/backup_content"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
     android:supportsRtl="true"

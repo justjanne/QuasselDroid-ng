@@ -126,7 +126,6 @@
   <string name="preference_autocomplete_prefix_title">Siūlyti po simbolio</string>
   <string name="preference_autocomplete_prefix_summary">Siūlyti slapyvardžius ir kanalus įvedus @ arba #</string>
 
-
   <string name="preference_backlog_title">Žinučių žurnalas</string>
 
   <string name="preference_page_size_title">Atminties dydis</string>

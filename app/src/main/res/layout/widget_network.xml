@@ -65,7 +65,7 @@
       android:paddingStart="16dp"
       android:paddingTop="12dp"
       android:scaleType="fitEnd"
-      app:tint="?attr/colorTextSecondary"
-      app:srcCompat="@drawable/ic_chevron_down" />
+      app:srcCompat="@drawable/ic_chevron_down"
+      app:tint="?attr/colorTextSecondary" />
   </LinearLayout>
 </LinearLayout>

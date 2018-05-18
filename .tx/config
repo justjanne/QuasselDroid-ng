@@ -8,6 +8,8 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_status.xml
 trans.lt = app/src/main/res/values-lt/strings_status.xml
 trans.pt = app/src/main/res/values-pt/strings_status.xml
+trans.sr = app/src/main/res/values-sr/strings_status.xml
+trans.fr = app/src/main/res/values-fr/strings_status.xml
 
 [quasseldroid-1.strings_errorxml]
 type = ANDROID
@@ -16,6 +18,8 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_error.xml
 trans.lt = app/src/main/res/values-lt/strings_error.xml
 trans.pt = app/src/main/res/values-pt/strings_error.xml
+trans.sr = app/src/main/res/values-sr/strings_error.xml
+trans.fr = app/src/main/res/values-fr/strings_error.xml
 
 [quasseldroid-1.strings_defaultsxml]
 type = ANDROID
@@ -24,6 +28,8 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_defaults.xml
 trans.lt = app/src/main/res/values-lt/strings_defaults.xml
 trans.pt = app/src/main/res/values-pt/strings_defaults.xml
+trans.sr = app/src/main/res/values-sr/strings_defaults.xml
+trans.fr = app/src/main/res/values-fr/strings_defaults.xml
 
 [quasseldroid-1.strings_formatxml]
 type = ANDROID
@@ -32,6 +38,8 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_format.xml
 trans.lt = app/src/main/res/values-lt/strings_format.xml
 trans.pt = app/src/main/res/values-pt/strings_format.xml
+trans.sr = app/src/main/res/values-sr/strings_format.xml
+trans.fr = app/src/main/res/values-fr/strings_format.xml
 
 [quasseldroid-1.strings_preferencesxml]
 type = ANDROID
@@ -40,6 +48,8 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_preferences.xml
 trans.lt = app/src/main/res/values-lt/strings_preferences.xml
 trans.pt = app/src/main/res/values-pt/strings_preferences.xml
+trans.sr = app/src/main/res/values-sr/strings_preferences.xml
+trans.fr = app/src/main/res/values-fr/strings_preferences.xml
 
 [quasseldroid-1.strings_messagesxml]
 type = ANDROID
@@ -48,6 +58,8 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_messages.xml
 trans.lt = app/src/main/res/values-lt/strings_messages.xml
 trans.pt = app/src/main/res/values-pt/strings_messages.xml
+trans.sr = app/src/main/res/values-sr/strings_messages.xml
+trans.fr = app/src/main/res/values-fr/strings_messages.xml
 
 [quasseldroid-1.stringsxml]
 type = ANDROID
@@ -56,6 +68,8 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings.xml
 trans.lt = app/src/main/res/values-lt/strings.xml
 trans.pt = app/src/main/res/values-pt/strings.xml
+trans.sr = app/src/main/res/values-sr/strings.xml
+trans.fr = app/src/main/res/values-fr/strings.xml
 
 [quasseldroid-1.strings_setupxml]
 type = ANDROID
@@ -64,6 +78,8 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_setup.xml
 trans.lt = app/src/main/res/values-lt/strings_setup.xml
 trans.pt = app/src/main/res/values-pt/strings_setup.xml
+trans.sr = app/src/main/res/values-sr/strings_setup.xml
+trans.fr = app/src/main/res/values-fr/strings_setup.xml
 
 [quasseldroid-1.strings_contributorsxml]
 type = ANDROID
@@ -72,6 +88,8 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_contributors.xml
 trans.lt = app/src/main/res/values-lt/strings_contributors.xml
 trans.pt = app/src/main/res/values-pt/strings_contributors.xml
+trans.sr = app/src/main/res/values-sr/strings_contributors.xml
+trans.fr = app/src/main/res/values-fr/strings_contributors.xml
 
 [quasseldroid-1.strings_infoxml]
 type = ANDROID
@@ -80,6 +98,8 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_info.xml
 trans.lt = app/src/main/res/values-lt/strings_info.xml
 trans.pt = app/src/main/res/values-pt/strings_info.xml
+trans.sr = app/src/main/res/values-sr/strings_info.xml
+trans.fr = app/src/main/res/values-fr/strings_info.xml
 
 [quasseldroid-1.strings_settingsxml]
 type = ANDROID
@@ -88,4 +108,6 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_settings.xml
 trans.lt = app/src/main/res/values-lt/strings_settings.xml
 trans.pt = app/src/main/res/values-pt/strings_settings.xml
+trans.sr = app/src/main/res/values-sr/strings_settings.xml
+trans.fr = app/src/main/res/values-fr/strings_settings.xml
 

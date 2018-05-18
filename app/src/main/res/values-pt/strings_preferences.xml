@@ -126,6 +126,12 @@
   <string name="preference_autocomplete_prefix_title">Mostrar após prefixo</string>
   <string name="preference_autocomplete_prefix_summary">Sugere alcunhas e canais depois de inserir @ ou #</string>
 
+  <string name="preference_autocomplete_nicks_title">Preenchimento Automático de Alcunhas</string>
+
+  <string name="preference_autocomplete_buffers_title">Preenchimento Automático de Chats</string>
+
+  <string name="preference_autocomplete_aliases_title">Preenchimento Automático de Comandos</string>
+
 
   <string name="preference_backlog_title">Histórico</string>
 
