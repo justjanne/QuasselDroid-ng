@@ -79,8 +79,8 @@
   <string name="label_open">Otvori</string>
   <string name="label_part">Napusti</string>
   <string name="label_part_long">Napusti Kanal</string>
-  <string name="label_placeholder_message">Napiši poruku...</string>
-  <string name="label_placeholder_topic">Opiši temu kanala...</string>
+  <string name="label_placeholder_message">Napiši poruku…</string>
+  <string name="label_placeholder_topic">Opiši temu kanala…</string>
   <string name="label_privacy_policy">Pravila Privatnosti</string>
   <string name="label_query">Upit</string>
   <string name="label_query_long">Otvori privatni čet sa korisnikom</string>
