@@ -74,7 +74,7 @@
     <android.support.v7.widget.AppCompatImageButton
       android:id="@+id/action_format_monospace"
       style="@style/Widget.Button.Format"
-      android:contentDescription="@string/label_bold"
+      android:contentDescription="@string/label_monospace"
       app:srcCompat="@drawable/ic_format_monospace"
       app:tint="?colorControlNormal" />
 
