@@ -331,7 +331,7 @@ class RichEditText : EditTextSelectionChange {
 
   fun appendText(text: CharSequence?, suffix: String?) {
     val shouldAddSuffix = this.text.isEmpty()
-    if (!this.text.endsWith(" "))
+    if (this.text.isNotEmpty() && !this.text.endsWith(" "))
       this.text.append(" ")
     this.text.append(text)
     if (shouldAddSuffix)
