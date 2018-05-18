@@ -57,6 +57,7 @@ import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.BacklogSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
+import de.kuschku.quasseldroid.util.Patterns
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
@@ -292,7 +293,8 @@ class MessageListFragment : ServiceBoundFragment() {
           isSelected = selected.contains(it.messageId),
           isExpanded = expanded.contains(it.messageId),
           isMarkerLine = markerLine == it.messageId,
-          isEmoji = false
+          // Do not run the emoji regex if not necessary, this saves quite a bit of performance
+          isEmoji = messageSettings.largerEmoji && Patterns.EMOJI.matches(it.content)
         )
       }
     }

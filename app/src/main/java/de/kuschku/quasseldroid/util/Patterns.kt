@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.util
 
+import de.kuschku.quasseldroid.util.emoji.EmojiData
 import org.intellij.lang.annotations.Language
 
 @SuppressWarnings("Access")
@@ -117,4 +118,14 @@ object Patterns {
   @Language("RegExp")
   const val IRC_NICK_STR = """[A-Za-z\x5b-\x60\x7b-\x7d][A-Za-z0-9\x5b-\x60\x7b-\x7d]*"""
   val IRC_NICK = Regex(IRC_NICK_STR)
+
+  /**
+   * Regular expression to detect emoji
+   */
+  val EMOJI_STRING = EmojiData.emojis.joinToString(
+    prefix = """(?:\s|\Q""",
+    separator = """\E|\Q""",
+    postfix = """\E)+"""
+  )
+  val EMOJI = Regex(EMOJI_STRING)
 }
