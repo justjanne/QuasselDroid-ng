@@ -138,6 +138,7 @@ class EditorViewModel : ViewModel() {
 
                     AutoCompleteItem.UserItem(
                       user.nick(),
+                      user.hostMask(),
                       network.modesToPrefixes(userModes),
                       lowestMode,
                       user.realName(),

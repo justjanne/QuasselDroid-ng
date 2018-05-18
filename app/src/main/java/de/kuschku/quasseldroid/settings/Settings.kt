@@ -109,6 +109,10 @@ object Settings {
         context.getString(R.string.preference_show_avatars_key),
         MessageSettings.DEFAULT.showAvatars
       ),
+      squareAvatars = getBoolean(
+        context.getString(R.string.preference_square_avatars_key),
+        MessageSettings.DEFAULT.squareAvatars
+      ),
       showIRCCloudAvatars = getBoolean(
         context.getString(R.string.preference_show_irccloud_avatars_key),
         MessageSettings.DEFAULT.showIRCCloudAvatars

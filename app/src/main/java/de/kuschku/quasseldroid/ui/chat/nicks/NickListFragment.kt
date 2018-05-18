@@ -142,7 +142,10 @@ class NickListFragment : ServiceBoundFragment() {
           }
           it.copy(
             displayNick = formatNick(it.nick),
-            fallbackDrawable = TextDrawable.builder().buildRound(initial, senderColor),
+            fallbackDrawable = TextDrawable.builder().let {
+              if (messageSettings.squareAvatars) it.buildRect(initial, senderColor)
+              else it.buildRound(initial, senderColor)
+            },
             modes = when (messageSettings.showPrefix) {
               MessageSettings.ShowPrefixMode.ALL ->
                 it.modes

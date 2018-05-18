@@ -32,6 +32,7 @@ sealed class AutoCompleteItem(open val name: String, val suffix: String, private
 
   data class UserItem(
     val nick: String,
+    val hostMask: String,
     val modes: String,
     val lowestMode: Int,
     val realname: CharSequence,

@@ -204,6 +204,9 @@
   <string name="preference_show_avatars_key" translatable="false">show_avatars</string>
   <string name="preference_show_avatars_title">Show Avatars</string>
 
+  <string name="preference_square_avatars_key" translatable="false">square_avatars</string>
+  <string name="preference_square_avatars_title">Square Avatars</string>
+
   <string name="preference_show_irccloud_avatars_key" translatable="false">show_irccloud_avatars</string>
   <string name="preference_show_irccloud_avatars_title">Show IRCCloud Avatars</string>
   <string name="preference_show_irccloud_avatars_summary">Shows for users without avatar their IRCCloud fallback, if available</string>

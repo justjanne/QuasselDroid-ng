@@ -35,6 +35,7 @@ import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.helper.getOrPut
 import de.kuschku.quasseldroid.util.helper.loadAvatars
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
@@ -239,7 +240,8 @@ class MessageAdapter @Inject constructor(
     }
 
     fun bind(message: FormattedMessage, original: QuasselDatabase.MessageData,
-             selectable: Boolean = true, clickable: Boolean = true) {
+             selectable: Boolean = true, clickable: Boolean = true,
+             messageSettings: MessageSettings) {
       this.message = message
       this.original = original
       this.selectable = selectable
@@ -254,7 +256,9 @@ class MessageAdapter @Inject constructor(
 
       this.itemView.isSelected = message.isSelected
 
-      avatar?.loadAvatars(message.avatarUrls, message.fallbackDrawable)
+      avatar?.loadAvatars(message.avatarUrls,
+                          message.fallbackDrawable,
+                          crop = !messageSettings.squareAvatars)
     }
   }
 }

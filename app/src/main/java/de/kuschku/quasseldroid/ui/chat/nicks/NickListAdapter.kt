@@ -66,7 +66,7 @@ class NickListAdapter(
   operator fun get(position: Int): IrcUserItem? = super.getItem(position)
 
   override fun onBindViewHolder(holder: NickViewHolder, position: Int) =
-    holder.bind(getItem(position))
+    holder.bind(getItem(position), messageSettings)
 
   override fun getItemViewType(position: Int) = if (getItem(position).away) {
     VIEWTYPE_AWAY
@@ -98,13 +98,15 @@ class NickListAdapter(
       }
     }
 
-    fun bind(data: IrcUserItem) {
+    fun bind(data: IrcUserItem, messageSettings: MessageSettings) {
       user = data.nick
 
       nick.text = SpanFormatter.format("%s%s", data.modes, data.displayNick ?: data.nick)
       realname.text = data.realname
 
-      avatar.loadAvatars(data.avatarUrls, data.fallbackDrawable)
+      avatar.loadAvatars(data.avatarUrls,
+                         data.fallbackDrawable,
+                         crop = !messageSettings.squareAvatars)
     }
   }
 

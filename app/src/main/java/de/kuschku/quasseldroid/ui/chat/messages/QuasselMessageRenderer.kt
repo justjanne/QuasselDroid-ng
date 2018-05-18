@@ -184,7 +184,7 @@ class QuasselMessageRenderer @Inject constructor(
   override fun bind(holder: MessageAdapter.QuasselMessageViewHolder, message: FormattedMessage,
                     original: QuasselDatabase.MessageData) =
     original.type.hasFlag(DayChange).let { isDayChange ->
-      holder.bind(message, original, !isDayChange, !isDayChange)
+      holder.bind(message, original, !isDayChange, !isDayChange, messageSettings)
     }
 
   override fun render(context: Context, message: DisplayMessage): FormattedMessage {
@@ -234,7 +234,10 @@ class QuasselMessageRenderer @Inject constructor(
           },
           realName = realName,
           avatarUrls = AvatarHelper.avatar(messageSettings, message.content, avatarSize),
-          fallbackDrawable = TextDrawable.builder().buildRound(initial, senderColor),
+          fallbackDrawable = TextDrawable.builder().let {
+            if (messageSettings.squareAvatars) it.buildRect(initial, senderColor)
+            else it.buildRound(initial, senderColor)
+          },
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected
@@ -337,9 +340,9 @@ class QuasselMessageRenderer @Inject constructor(
             context.getString(R.string.message_format_part_2),
             contentFormatter.formatPrefix(message.content.senderPrefixes),
             contentFormatter.formatNick(message.content.sender,
-                       self,
-                       highlight,
-                       messageSettings.showHostmaskActions),
+                                        self,
+                                        highlight,
+                                        messageSettings.showHostmaskActions),
             contentFormatter.formatContent(message.content.content, highlight)
           )
         },
@@ -364,9 +367,9 @@ class QuasselMessageRenderer @Inject constructor(
             context.getString(R.string.message_format_quit_2),
             contentFormatter.formatPrefix(message.content.senderPrefixes),
             contentFormatter.formatNick(message.content.sender,
-                       self,
-                       highlight,
-                       messageSettings.showHostmaskActions),
+                                        self,
+                                        highlight,
+                                        messageSettings.showHostmaskActions),
             contentFormatter.formatContent(message.content.content, highlight)
           )
         },
@@ -385,9 +388,9 @@ class QuasselMessageRenderer @Inject constructor(
               contentFormatter.formatNick(user, false, highlight, false),
               contentFormatter.formatPrefix(message.content.senderPrefixes),
               contentFormatter.formatNick(message.content.sender,
-                         self,
-                         highlight,
-                         messageSettings.showHostmaskActions)
+                                          self,
+                                          highlight,
+                                          messageSettings.showHostmaskActions)
             )
           } else {
             SpanFormatter.format(
@@ -395,9 +398,9 @@ class QuasselMessageRenderer @Inject constructor(
               contentFormatter.formatNick(user, false, highlight, false),
               contentFormatter.formatPrefix(message.content.senderPrefixes),
               contentFormatter.formatNick(message.content.sender,
-                         self,
-                         highlight,
-                         messageSettings.showHostmaskActions),
+                                          self,
+                                          highlight,
+                                          messageSettings.showHostmaskActions),
               contentFormatter.formatContent(reason, highlight)
             )
           },
@@ -417,9 +420,9 @@ class QuasselMessageRenderer @Inject constructor(
               contentFormatter.formatNick(user, false, highlight, false),
               contentFormatter.formatPrefix(message.content.senderPrefixes),
               contentFormatter.formatNick(message.content.sender,
-                         self,
-                         highlight,
-                         messageSettings.showHostmaskActions)
+                                          self,
+                                          highlight,
+                                          messageSettings.showHostmaskActions)
             )
           } else {
             SpanFormatter.format(
@@ -427,9 +430,9 @@ class QuasselMessageRenderer @Inject constructor(
               contentFormatter.formatNick(user, false, highlight, false),
               contentFormatter.formatPrefix(message.content.senderPrefixes),
               contentFormatter.formatNick(message.content.sender,
-                         self,
-                         highlight,
-                         messageSettings.showHostmaskActions),
+                                          self,
+                                          highlight,
+                                          messageSettings.showHostmaskActions),
               contentFormatter.formatContent(reason, highlight)
             )
           },

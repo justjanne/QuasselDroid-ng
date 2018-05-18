@@ -87,7 +87,7 @@ class AutoCompleteAdapter @Inject constructor(
   }
 
   override fun onBindViewHolder(holder: AutoCompleteViewHolder, position: Int) =
-    holder.bind(getItem(position))
+    holder.bind(getItem(position), messageSettings)
 
   override fun getItemViewType(position: Int) = getItem(position).let {
     when {
@@ -99,13 +99,15 @@ class AutoCompleteAdapter @Inject constructor(
   }
 
   sealed class AutoCompleteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(data: AutoCompleteItem) = when {
-      data is AutoCompleteItem.UserItem && this is NickViewHolder       -> this.bindImpl(data)
-      data is AutoCompleteItem.ChannelItem && this is ChannelViewHolder -> this.bindImpl(data)
-      data is AutoCompleteItem.AliasItem && this is AliasViewHolder     -> this.bindImpl(data)
-      else                                                              -> throw IllegalArgumentException(
-        "Invoked with wrong item type"
-      )
+    fun bind(data: AutoCompleteItem, messageSettings: MessageSettings) = when {
+      data is AutoCompleteItem.UserItem && this is NickViewHolder       ->
+        this.bindImpl(data, messageSettings)
+      data is AutoCompleteItem.ChannelItem && this is ChannelViewHolder ->
+        this.bindImpl(data, messageSettings)
+      data is AutoCompleteItem.AliasItem && this is AliasViewHolder     ->
+        this.bindImpl(data, messageSettings)
+      else                                                              ->
+        throw IllegalArgumentException("Invoked with wrong item type")
     }
 
     class NickViewHolder(
@@ -132,13 +134,15 @@ class AutoCompleteAdapter @Inject constructor(
         }
       }
 
-      fun bindImpl(data: AutoCompleteItem.UserItem) {
+      fun bindImpl(data: AutoCompleteItem.UserItem, messageSettings: MessageSettings) {
         value = data
 
         nick.text = SpanFormatter.format("%s%s", data.modes, data.displayNick ?: data.nick)
         realname.text = data.realname
 
-        avatar.loadAvatars(data.avatarUrls, data.fallbackDrawable)
+        avatar.loadAvatars(data.avatarUrls,
+                           data.fallbackDrawable,
+                           crop = !messageSettings.squareAvatars)
       }
     }
 
@@ -179,7 +183,7 @@ class AutoCompleteAdapter @Inject constructor(
         }
       }
 
-      fun bindImpl(data: AutoCompleteItem.ChannelItem) {
+      fun bindImpl(data: AutoCompleteItem.ChannelItem, messageSettings: MessageSettings) {
         value = data
 
         name.text = data.info.bufferName
@@ -217,7 +221,7 @@ class AutoCompleteAdapter @Inject constructor(
         }
       }
 
-      fun bindImpl(data: AutoCompleteItem.AliasItem) {
+      fun bindImpl(data: AutoCompleteItem.AliasItem, messageSettings: MessageSettings) {
         value = data
 
         alias.text = data.alias

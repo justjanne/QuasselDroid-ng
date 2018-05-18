@@ -20,6 +20,7 @@
 package de.kuschku.quasseldroid.service
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.text.SpannableStringBuilder
 import de.kuschku.libquassel.protocol.*
@@ -32,6 +33,7 @@ import de.kuschku.libquassel.util.IrcUserUtils
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.quasseldroid.GlideApp
+import de.kuschku.quasseldroid.GlideRequest
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
@@ -41,6 +43,7 @@ import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.util.NotificationMessage
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.getColorCompat
+import de.kuschku.quasseldroid.util.helper.letIf
 import de.kuschku.quasseldroid.util.helper.loadWithFallbacks
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
@@ -257,14 +260,20 @@ class QuasselNotificationBackend @Inject constructor(
         val avatarList = AvatarHelper.avatar(messageSettings, it)
         val avatarResult = try {
           GlideApp.with(context).loadWithFallbacks(avatarList)
-            ?.optionalCircleCrop()
-            ?.placeholder(TextDrawable.builder().buildRound(initial, senderColor))
+            ?.letIf(!messageSettings.squareAvatars, GlideRequest<Drawable>::optionalCircleCrop)
+            ?.placeholder(TextDrawable.builder()?.let {
+              if (messageSettings.squareAvatars) it.buildRect(initial, senderColor)
+              else it.buildRound(initial, senderColor)
+            })
             ?.submit(size, size)
             ?.get()
         } catch (_: Throwable) {
           null
         }
-        val avatar = avatarResult ?: TextDrawable.builder().buildRound(initial, senderColor)
+        val avatar = avatarResult ?: TextDrawable.builder().let {
+          if (messageSettings.squareAvatars) it.buildRect(initial, senderColor)
+          else it.buildRound(initial, senderColor)
+        }
 
         NotificationMessage(
           messageId = it.messageId,

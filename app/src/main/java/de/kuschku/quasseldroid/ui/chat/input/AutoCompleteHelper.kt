@@ -38,6 +38,7 @@ import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
@@ -119,7 +120,10 @@ class AutoCompleteHelper(
 
           it.copy(
             displayNick = formatNick(it.nick),
-            fallbackDrawable = TextDrawable.builder().buildRound(initial, senderColor),
+            fallbackDrawable = TextDrawable.builder().let {
+              if (messageSettings.squareAvatars) it.buildRect(initial, senderColor)
+              else it.buildRound(initial, senderColor)
+            },
             modes = when (messageSettings.showPrefix) {
               MessageSettings.ShowPrefixMode.ALL ->
                 it.modes
@@ -128,7 +132,8 @@ class AutoCompleteHelper(
             },
             realname = ircFormatDeserializer.formatString(
               it.realname.toString(), messageSettings.colorizeMirc
-            )
+            ),
+            avatarUrls = AvatarHelper.avatar(messageSettings, it)
           )
         } else {
           it
@@ -221,6 +226,7 @@ class AutoCompleteHelper(
 
         AutoCompleteItem.UserItem(
           user.nick(),
+          user.hostMask(),
           network.modesToPrefixes(userModes),
           lowestMode,
           user.realName(),

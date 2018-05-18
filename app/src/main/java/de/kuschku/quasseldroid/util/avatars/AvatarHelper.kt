@@ -29,74 +29,45 @@ import de.kuschku.quasseldroid.util.Patterns
 import de.kuschku.quasseldroid.util.backport.codec.Hex
 import de.kuschku.quasseldroid.util.helper.letIf
 import de.kuschku.quasseldroid.util.helper.notBlank
+import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import de.kuschku.quasseldroid.viewmodel.data.Avatar
 import de.kuschku.quasseldroid.viewmodel.data.IrcUserItem
 import org.apache.commons.codec.digest.DigestUtils
 
 object AvatarHelper {
+  private fun avatar(settings: MessageSettings, ident: String, realName: String,
+                     avatarUrl: String?, size: Int?) =
+    listOfNotNull(
+      avatarUrl.notBlank()?.let { listOf(Avatar.NativeAvatar(it)) },
+      settings.showIRCCloudAvatars.letIf {
+        ircCloudFallback(ident, size)
+      },
+      settings.showGravatarAvatars.letIf {
+        gravatarFallback(realName, size)
+      },
+      settings.showMatrixAvatars.letIf {
+        matrixFallback(realName, size)
+      }
+    ).flatten()
+
   fun avatar(settings: MessageSettings, message: QuasselDatabase.NotificationData,
-             size: Int? = null) = listOfNotNull(
-    message.avatarUrl.notBlank()?.let { listOf(Avatar.NativeAvatar(it)) },
-    settings.showIRCCloudAvatars.letIf {
-      ircCloudFallback(HostmaskHelper.user(message.sender), size)
-    },
-    settings.showGravatarAvatars.letIf {
-      gravatarFallback(message.realName, size)
-    },
-    settings.showMatrixAvatars.letIf {
-      matrixFallback(message.realName, size)
-    }
-  ).flatten()
+             size: Int? = null) =
+    avatar(settings, HostmaskHelper.user(message.sender), message.realName, message.avatarUrl, size)
 
-  fun avatar(settings: MessageSettings, message: QuasselDatabase.MessageData,
-             size: Int? = null) = listOfNotNull(
-    message.avatarUrl.notBlank()?.let { listOf(Avatar.NativeAvatar(it)) },
-    settings.showIRCCloudAvatars.letIf {
-      ircCloudFallback(HostmaskHelper.user(message.sender), size)
-    },
-    settings.showGravatarAvatars.letIf {
-      gravatarFallback(message.realName, size)
-    },
-    settings.showMatrixAvatars.letIf {
-      matrixFallback(message.realName, size)
-    }
-  ).flatten()
+  fun avatar(settings: MessageSettings, message: QuasselDatabase.MessageData, size: Int? = null) =
+    avatar(settings, HostmaskHelper.user(message.sender), message.realName, message.avatarUrl, size)
 
-  fun avatar(settings: MessageSettings, user: IrcUserItem, size: Int? = null) = listOfNotNull(
-    settings.showIRCCloudAvatars.letIf {
-      ircCloudFallback(HostmaskHelper.user(user.hostmask), size)
-    },
-    settings.showGravatarAvatars.letIf {
-      gravatarFallback(user.realname.toString(), size)
-    },
-    settings.showMatrixAvatars.letIf {
-      matrixFallback(user.realname.toString(), size)
-    }
-  ).flatten()
+  fun avatar(settings: MessageSettings, user: IrcUserItem, size: Int? = null) =
+    avatar(settings, HostmaskHelper.user(user.hostmask), user.realname.toString(), null, size)
 
-  fun avatar(settings: MessageSettings, user: IrcUserInfo, size: Int? = null) = listOfNotNull(
-    settings.showIRCCloudAvatars.letIf {
-      ircCloudFallback(user.user ?: "", size)
-    },
-    settings.showGravatarAvatars.letIf {
-      gravatarFallback(user.realName ?: "", size)
-    },
-    settings.showMatrixAvatars.letIf {
-      matrixFallback(user.realName ?: "", size)
-    }
-  ).flatten()
+  fun avatar(settings: MessageSettings, user: IrcUserInfo, size: Int? = null) =
+    avatar(settings, user.user ?: "", user.realName ?: "", null, size)
 
-  fun avatar(settings: MessageSettings, user: IrcUser, size: Int? = null) = listOfNotNull(
-    settings.showIRCCloudAvatars.letIf {
-      ircCloudFallback(user.user(), size)
-    },
-    settings.showGravatarAvatars.letIf {
-      gravatarFallback(user.realName(), size)
-    },
-    settings.showMatrixAvatars.letIf {
-      matrixFallback(user.realName(), size)
-    }
-  ).flatten()
+  fun avatar(settings: MessageSettings, user: IrcUser, size: Int? = null) =
+    avatar(settings, user.user(), user.realName(), null, size)
+
+  fun avatar(settings: MessageSettings, user: AutoCompleteItem.UserItem, size: Int? = null) =
+    avatar(settings, HostmaskHelper.user(user.hostMask), user.realname.toString(), null, size)
 
   private fun ircCloudFallback(ident: String, size: Int?): List<Avatar> {
     val userId = Patterns.IRCCLOUD_IDENT.matchEntire(ident)?.groupValues?.lastOrNull()
