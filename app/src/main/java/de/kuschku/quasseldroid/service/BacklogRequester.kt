@@ -52,17 +52,11 @@ class BacklogRequester(
           )?.messageId ?: -1,
           limit = amount
         ) {
-          log(ERROR,
-              "BacklogRequester",
-              "received(buffer: $buffer, amount: $amount, pageSize: $pageSize, lastMessageId: $lastMessageId, untilAllVisible: $untilAllVisible)")
-          log(ERROR, "BacklogRequester", "message count: ${it.size}")
           if (it.isNotEmpty()) {
-            val visibleMessages = it.count {
+            missing -= it.count {
               (it.type.value and filtered.inv()) != 0 &&
               !QuasselBacklogStorage.isIgnored(session, it)
             }
-            log(ERROR, "BacklogRequester", "visibleMessages: $visibleMessages")
-            missing -= visibleMessages
             val hasLoadedAll = missing == 0
             val hasLoadedAny = missing < amount
             if (untilAllVisible && !hasLoadedAll || !untilAllVisible && !hasLoadedAny) {
@@ -76,12 +70,10 @@ class BacklogRequester(
                        finishCallback)
               true
             } else {
-              log(ERROR, "BacklogRequester", "finished")
               finishCallback()
               true
             }
           } else {
-            log(ERROR, "BacklogRequester", "finished")
             finishCallback()
             true
           }

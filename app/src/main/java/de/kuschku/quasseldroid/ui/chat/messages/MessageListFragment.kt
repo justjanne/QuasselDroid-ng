@@ -45,8 +45,6 @@ import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.quassel.syncables.BufferSyncer
 import de.kuschku.libquassel.session.SessionManager
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.ERROR
 import de.kuschku.libquassel.util.helpers.mapSwitchMap
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.libquassel.util.irc.HostmaskHelper
@@ -198,7 +196,6 @@ class MessageListFragment : ServiceBoundFragment() {
     PagedList.BoundaryCallback<DisplayMessage>() {
     override fun onItemAtFrontLoaded(itemAtFront: DisplayMessage) = Unit
     override fun onItemAtEndLoaded(itemAtEnd: DisplayMessage) {
-      log(ERROR, "MessageListFragment", "onItemAtEndLoaded")
       loadMore()
     }
   }
@@ -257,7 +254,6 @@ class MessageListFragment : ServiceBoundFragment() {
 
     swipeRefreshLayout.setColorSchemeColors(*senderColors)
     swipeRefreshLayout.setOnRefreshListener {
-      log(ERROR, "MessageListFragment", "swipeRefreshed")
       loadMore()
     }
 
@@ -337,7 +333,6 @@ class MessageListFragment : ServiceBoundFragment() {
             val filtered = database.filtered().get(accountId, bufferId)
             // Try loading messages when switching to isEmpty buffer
             val hasVisibleMessages = database.message().hasVisibleMessages(bufferId, filtered ?: 0)
-            log(ERROR, "MessageListFragment", "connected(hasVisibleMessages: $hasVisibleMessages)")
             if (!hasVisibleMessages) {
               if (bufferId > 0 && bufferId != Int.MAX_VALUE) {
                 loadMore(initial = true)
@@ -374,8 +369,6 @@ class MessageListFragment : ServiceBoundFragment() {
 
     var lastBuffer = -1
     data.observe(this, Observer { list ->
-      log(ERROR, "MessageListFragment", "Messages Changed ${list?.size}")
-
       val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
       val firstVisibleMessageId = adapter[firstVisibleItemPosition]?.content?.messageId
       runInBackground {
@@ -454,7 +447,6 @@ class MessageListFragment : ServiceBoundFragment() {
     // Try loading messages when switching to isEmpty buffer
     val filtered = database.filtered().get(accountId, current)
     val hasVisibleMessages = database.message().hasVisibleMessages(current, filtered ?: 0)
-    log(ERROR, "MessageListFragment", "bufferChange(hasVisibleMessages: $hasVisibleMessages)")
     if (!hasVisibleMessages) {
       if (current > 0 && current != Int.MAX_VALUE) {
         loadMore(initial = true)
