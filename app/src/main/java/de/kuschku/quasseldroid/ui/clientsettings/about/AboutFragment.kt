@@ -61,6 +61,9 @@ class AboutFragment : DaggerFragment() {
   @BindView(R.id.contributors)
   lateinit var contributors: RecyclerView
 
+  @BindView(R.id.translators)
+  lateinit var translators: RecyclerView
+
   @BindView(R.id.libraries)
   lateinit var libraries: RecyclerView
 
@@ -350,6 +353,25 @@ class AboutFragment : DaggerFragment() {
     ))
     contributors.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
     ViewCompat.setNestedScrollingEnabled(contributors, false)
+
+    translators.layoutManager = LinearLayoutManager(context)
+    translators.itemAnimator = null
+    translators.adapter = TranslatorAdapter(listOf(
+      Translator(
+        name = "TDa_",
+        language = R.string.preference_language_entry_lt
+      ),
+      Translator(
+        name = "Exterminador",
+        language = R.string.preference_language_entry_pt
+      ),
+      Translator(
+        name = "Luka Ilić",
+        language = R.string.preference_language_entry_sr
+      )
+    ))
+    translators.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+    ViewCompat.setNestedScrollingEnabled(translators, false)
 
     return view
   }

@@ -57,6 +57,25 @@
 
       <TextView
         style="@style/Widget.Subhead"
+        android:text="@string/label_translators" />
+
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/translators"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:itemCount="5"
+        tools:listitem="@layout/widget_translator" />
+
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="?listPreferredItemHeight"
+      android:orientation="vertical">
+
+      <TextView
+        style="@style/Widget.Subhead"
         android:text="@string/label_libraries" />
 
       <android.support.v7.widget.RecyclerView
