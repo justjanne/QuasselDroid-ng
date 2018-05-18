@@ -25,7 +25,15 @@ import android.support.v4.app.FragmentActivity
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.quassel.syncables.IrcChannel
+import de.kuschku.libquassel.quassel.syncables.IrcUser
+import de.kuschku.libquassel.quassel.syncables.Network
+import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.IrcUserUtils
+import de.kuschku.libquassel.util.Optional
+import de.kuschku.libquassel.util.flag.hasFlag
+import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
@@ -37,6 +45,7 @@ import de.kuschku.quasseldroid.util.ui.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel.Companion.IGNORED_CHARS
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
+import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
 
 class AutoCompleteHelper(
   activity: FragmentActivity,
@@ -143,11 +152,102 @@ class AutoCompleteHelper(
     this.dataListeners -= listener
   }
 
+  private fun fullAutoComplete(sessionOptional: Optional<ISession>, id: Int,
+                               lastWord: Pair<String, IntRange>): List<AutoCompleteItem> {
+    val session = sessionOptional.orNull()
+    val bufferSyncer = session?.bufferSyncer
+    val bufferInfo = bufferSyncer?.bufferInfo(id)
+    return if (bufferSyncer != null) {
+      val networks = session.networks
+      val infos = bufferSyncer.bufferInfos()
+      val aliases = session.aliasManager?.aliasList().orEmpty()
+      val network = networks[bufferInfo?.networkId] ?: Network.NULL
+      val ircChannel = if (bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
+        network.ircChannel(bufferInfo.bufferName) ?: IrcChannel.NULL
+      } else IrcChannel.NULL
+      val users = ircChannel.ircUsers()
+      fun processResults(list: List<AutoCompleteItem>) = list.filter {
+        it.name.trimStart(*IGNORED_CHARS)
+          .startsWith(
+            lastWord.first.trimStart(*IGNORED_CHARS),
+            ignoreCase = true
+          )
+      }.sorted()
+
+      fun getAliases() = aliases.map {
+        AutoCompleteItem.AliasItem(
+          "/${it.name}",
+          it.expansion
+        )
+      }
+
+      fun getBuffers() = infos.filter {
+        it.type.toInt() == Buffer_Type.ChannelBuffer.toInt()
+      }.mapNotNull { info ->
+        networks[info.networkId]?.let { info to it }
+      }.map { (info, network) ->
+        val channel = network.ircChannel(
+          info.bufferName
+        ).nullIf { it == IrcChannel.NULL }
+
+        AutoCompleteItem.ChannelItem(
+          info = info,
+          network = network.networkInfo(),
+          bufferStatus = when (channel) {
+            null -> BufferStatus.OFFLINE
+            else -> BufferStatus.ONLINE
+          },
+          description = channel?.topic() ?: ""
+        )
+      }
+
+      fun getUsers(): Set<IrcUser> = when {
+        bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true ->
+          users
+        bufferInfo?.type?.hasFlag(Buffer_Type.QueryBuffer) == true   ->
+          network.ircUser(bufferInfo.bufferName).nullIf { it == IrcUser.NULL }?.let {
+            setOf(it)
+          } ?: emptySet()
+        else                                                         ->
+          emptySet()
+      }
+
+      fun getNicks() = getUsers().map { user ->
+        val userModes = ircChannel.userModes(user)
+        val prefixModes = network.prefixModes()
+
+        val lowestMode = userModes.mapNotNull(prefixModes::indexOf).min()
+                         ?: prefixModes.size
+
+        AutoCompleteItem.UserItem(
+          user.nick(),
+          network.modesToPrefixes(userModes),
+          lowestMode,
+          user.realName(),
+          user.isAway(),
+          user.network().isMyNick(user.nick()),
+          network.support("CASEMAPPING")
+        )
+      }
+
+      when (lastWord.first.firstOrNull()) {
+        '/'  -> processResults(getAliases())
+        '@'  -> processResults(getNicks())
+        '#'  -> processResults(getBuffers())
+        else -> processResults(getAliases() + getNicks() + getBuffers())
+      }
+    } else {
+      emptyList()
+    }
+  }
+
   fun autoComplete(reverse: Boolean = false) {
     viewModel.lastWord.switchMap { it }.value?.let { originalWord ->
       val previous = autoCompletionState
       if (!originalWord.second.isEmpty()) {
-        val autoCompletedWords = viewModel.autoCompleteData.value?.second?.filter {
+        val autoCompletedWords = viewModel.rawAutoCompleteData.value?.let { (sessionOptional, id, lastWord) ->
+          fullAutoComplete(sessionOptional, id, lastWord)
+        }?.filter {
           it is AutoCompleteItem.AliasItem && autoCompleteSettings.aliases ||
           it is AutoCompleteItem.UserItem && autoCompleteSettings.nicks ||
           it is AutoCompleteItem.ChannelItem && autoCompleteSettings.buffers
