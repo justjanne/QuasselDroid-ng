@@ -17,4 +17,18 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="default_bufferviewconfig_name">Svi Četovi</string>
+
+  <string name="default_identity_identity_name">Podrazumjevani Identitet</string>
+  <string name="default_identity_name">&lt;empty&gt;</string>
+  <string name="default_identity_realname">Quassel IRC Korisnik</string>
+  <string name="default_identity_nick">quassel%1$d</string>
+  <string name="default_identity_ident">quassel</string>
+  <string name="default_identity_awayreason">Otišli pecati.</string>
+  <string name="default_identity_autoawayreason">Ne ovde. Ne, stvarno. ne ovde!</string>
+  <string name="default_identity_detachawayreason">Svi Quassel klijenti su nestali sa lica zemlje…</string>
+  <string name="default_identity_kickreason">Vrtić je negdje drugo!</string>
+  <string name="default_identity_partreason">https://quassel-irc.org - Četuj lagodno. Bilo gdje.</string>
+  <string name="default_identity_quitreason">https://quassel-irc.org - Četuj lagodno. Bilo gdje.</string>
+</resources>

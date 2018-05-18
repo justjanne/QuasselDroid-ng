@@ -93,6 +93,8 @@
 
   <string name="preference_show_avatars_title">Rodyti avatarus</string>
 
+  <string name="preference_square_avatars_title">Neapvalinti avatarų</string>
+
   <string name="preference_show_irccloud_avatars_title">Rodyti IRCCloud avatarus</string>
   <string name="preference_show_irccloud_avatars_summary">Jei galima, vartotojams be avataro rodys jų IRCCloud alternatyvą</string>
 
@@ -109,12 +111,12 @@
   <string name="preference_larger_emoji_summary">Padidinti emoji žinutes</string>
 
 
-  <string name="preference_autocomplete_title">Automatinis užbaigimas</string>
+  <string name="preference_autocomplete_title">Auto-užbaigimas</string>
 
-  <string name="preference_autocomplete_sender_doubleclick_title">Automatinis siuntėjo įvedimas</string>
+  <string name="preference_autocomplete_sender_doubleclick_title">Siuntėjo auto-įvedimas</string>
   <string name="preference_autocomplete_sender_doubleclick_summary">Du kart paspauskite ant žinutės jog būtų automatiškai įvestas jos siuntėjas</string>
 
-  <string name="preference_autocomplete_button_title">Automatinio užbaigimo mygtukas</string>
+  <string name="preference_autocomplete_button_title">Auto-užbaigimo mygtukas</string>
   <string name="preference_autocomplete_button_summary">Rodyti mygtuką įvedimo eilutės kairėje, kuris automatiškai užbaigtų įvedimą</string>
 
   <string name="preference_autocomplete_doubletap_title">Pasiūlymai po dvigubo paspaudimo</string>
@@ -125,6 +127,13 @@
 
   <string name="preference_autocomplete_prefix_title">Siūlyti po simbolio</string>
   <string name="preference_autocomplete_prefix_summary">Siūlyti slapyvardžius ir kanalus įvedus @ arba #</string>
+
+  <string name="preference_autocomplete_nicks_title">Auto-užbaigti slapyvardžius</string>
+
+  <string name="preference_autocomplete_buffers_title">Auto-užbaigti pokalbius</string>
+
+  <string name="preference_autocomplete_aliases_title">Auto-užbaigti komandas</string>
+
 
   <string name="preference_backlog_title">Žinučių žurnalas</string>
 

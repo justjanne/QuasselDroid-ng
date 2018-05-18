@@ -17,4 +17,10 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="contributor_description_freqmod">Initial qdatastream deserialization attempts</string>
+  <string name="contributor_description_sandsmark">Stari tip implementacije protokola, (de)serijalizacija, (de)moralizator projekta</string>
+  <string name="contributor_description_magnuf">Stari Tip Korisničkog Interfejsa</string>
+  <string name="contributor_description_kenji">Stari Tip Korisničkog Interfejsa</string>
+  <string name="contributor_description_justjanne">Prepiši, Korisnički Interfejs, Obrađivači Obavještenja, Pozadinski Mehanizam</string>
+</resources>

@@ -17,4 +17,66 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <!-- Account Selection -->
+  <string name="slide_account_select_title">Odaberi Nalog</string>
+  <string name="slide_account_select_description">Odaberi nalog iz liste ili dodaj novi</string>
+  <string name="label_user_on_host">%1$s na %2$s:%3$d</string>
+
+  <!-- Account Connection -->
+  <string name="slide_account_connection_title">Veza</string>
+  <string name="slide_account_connection_description">Prvo, molimo odaberite server na kom je vaše jezgro hostovano.</string>
+
+  <string name="label_connection_host">Host</string>
+  <string name="label_connection_port">Port</string>
+
+  <string name="hint_invalid_host">Hostname nije validno</string>
+  <string name="hint_invalid_port">Port nije validan</string>
+
+  <!-- Account User -->
+  <string name="slide_account_user_title">Vaš Nalog</string>
+  <string name="slide_account_user_description">Sada, molimo unesite korisničko ime i lozinku za vaš nalog na jezgru. Ako ste upravo napravili to jezgro, mi ćemo podesiti ovaj nalog za vas.</string>
+
+  <string name="label_account_user">Korisničko Ime</string>
+  <string name="label_account_pass">Lozinka</string>
+
+  <string name="hint_invalid_user">Korisničko ime ne može biti prazno</string>
+
+  <!-- Account Name -->
+  <string name="slide_account_name_title">Prilagodi Nalog</string>
+  <string name="slide_account_name_description">Daj ovom nalogu ime</string>
+
+  <string name="label_account_name">Ime naloga</string>
+
+  <string name="hint_invalid_name">Ime ne može biti prazno</string>
+
+  <!-- Core Authenticator Select -->
+  <string name="slide_core_authenticator_select_title">Odaberi Pozadinski Mehanizam za Potvrđivanje Autentičnosti</string>
+  <string name="slide_core_authenticator_select_description">Molimo odaberite backend za potvrdu autentičnosti da bi Quassel Core mogao potvrditi autentičnost korisnika.</string>
+
+  <!-- Core Backend Select -->
+  <string name="slide_core_backend_select_title">Odaberi Backend za Skladištenje</string>
+  <string name="slide_core_backend_select_description">Molimo odaberite backend databaze od Quassel Core memorije da bi skladištili backlog i druge podatke.</string>
+
+  <!-- Core Backend Config -->
+  <string name="slide_core_backend_setup_title">Podesi Backend za Skladištenje</string>
+  <string name="slide_core_backend_setup_description">Molimo podesite odabrani backend databaze.</string>
+
+  <!-- User Identity -->
+  <string name="slide_user_identity_title">Postavka Identiteta</string>
+  <string name="slide_user_identity_description">Molimo odaberite nadimak</string>
+
+  <string name="hint_invalid_nick">Nadimak nije validan</string>
+
+  <!-- User Network -->
+  <string name="slide_user_network_title">Podesi Mrežu</string>
+  <string name="slide_user_network_description">Odaberi mrežu za spajanje.</string>
+
+  <string name="label_network_custom">Prilagođena Mreža…</string>
+
+  <!-- User Channels -->
+  <string name="slide_user_channels_title">Podesi Kanale</string>
+  <string name="slide_user_channels_description">Odaberite kojim kanalima da se pridružite.</string>
+
+  <string name="label_channels">Kanali</string>
+</resources>
