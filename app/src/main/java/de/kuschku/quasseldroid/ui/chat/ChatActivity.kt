@@ -47,7 +47,6 @@ import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
-import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.session.Error
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.and
@@ -69,8 +68,8 @@ import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActiv
 import de.kuschku.quasseldroid.ui.setup.user.UserSetupActivity
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
-import de.kuschku.quasseldroid.util.missingfeatures.MissingFeature
 import de.kuschku.quasseldroid.util.missingfeatures.MissingFeaturesDialog
+import de.kuschku.quasseldroid.util.missingfeatures.RequiredFeatures
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid.util.ui.DragInterceptBottomSheetBehavior
 import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
@@ -464,58 +463,20 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             drawerLayout.openDrawer(Gravity.START)
           }
           connectedAccount = accountId
-          viewModel.session.value?.orNull()?.let {
-            if (it.identities.isEmpty()) {
+          viewModel.session.value?.orNull()?.let { session ->
+            if (session.identities.isEmpty()) {
               UserSetupActivity.launch(this)
             }
-            val missingFeatures = listOf(
-              ExtendedFeature.SynchronizedMarkerLine,
-              ExtendedFeature.SaslAuthentication,
-              ExtendedFeature.SaslExternal,
-              ExtendedFeature.HideInactiveNetworks,
-              ExtendedFeature.PasswordChange,
-              ExtendedFeature.CapNegotiation,
-              ExtendedFeature.VerifyServerSSL,
-              ExtendedFeature.CustomRateLimits,
-              ExtendedFeature.AwayFormatTimestamp,
-              ExtendedFeature.BufferActivitySync,
-              ExtendedFeature.CoreSideHighlights,
-              ExtendedFeature.SenderPrefixes,
-              ExtendedFeature.RemoteDisconnect,
-              ExtendedFeature.RichMessages,
-              ExtendedFeature.BacklogFilterType
-            ) - it.features.core.enabledFeatures
+            val missingFeatures = RequiredFeatures.features.filter {
+              it.feature !in session.features.core.enabledFeatures
+            }
             if (missingFeatures.isNotEmpty()) {
               runInBackground {
                 val accounts = accountDatabase.accounts()
                 val account = accounts.findById(accountId)
                 if (account?.acceptedMissingFeatures == false) {
                   val dialog = MissingFeaturesDialog.Builder(this)
-                    .missingFeatures(missingFeatures.mapNotNull { feature ->
-                      when (feature) {
-                        ExtendedFeature.SynchronizedMarkerLine -> R.string.label_feature_synchronizedmarkerline
-                        ExtendedFeature.SaslAuthentication     -> R.string.label_feature_saslauthentication
-                        ExtendedFeature.SaslExternal           -> R.string.label_feature_saslexternal
-                        ExtendedFeature.HideInactiveNetworks   -> R.string.label_feature_hideinactivenetworks
-                        ExtendedFeature.PasswordChange         -> R.string.label_feature_passwordchange
-                        ExtendedFeature.CapNegotiation         -> R.string.label_feature_capnegotiation
-                        ExtendedFeature.VerifyServerSSL        -> R.string.label_feature_verifyserverssl
-                        ExtendedFeature.CustomRateLimits       -> R.string.label_feature_customratelimits
-                        ExtendedFeature.AwayFormatTimestamp    -> R.string.label_feature_awayformattimestamp
-                        ExtendedFeature.BufferActivitySync     -> R.string.label_feature_bufferactivitysync
-                        ExtendedFeature.CoreSideHighlights     -> R.string.label_feature_coresidehighlights
-                        ExtendedFeature.SenderPrefixes         -> R.string.label_feature_senderprefixes
-                        ExtendedFeature.RemoteDisconnect       -> R.string.label_feature_remotedisconnect
-                        ExtendedFeature.RichMessages           -> R.string.label_feature_richmessages
-                        ExtendedFeature.BacklogFilterType      -> R.string.label_feature_backlogfiltertype
-                        else                                   -> null
-                      }?.let {
-                        MissingFeature(
-                          feature = feature,
-                          description = it
-                        )
-                      }
-                    })
+                    .missingFeatures(missingFeatures)
                     .positiveListener(MaterialDialog.SingleButtonCallback { _, _ ->
                       runInBackground {
                         accounts.save(account.copy(acceptedMissingFeatures = true))
