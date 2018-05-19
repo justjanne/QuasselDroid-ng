@@ -469,7 +469,8 @@ class MessageListFragment : ServiceBoundFragment() {
   }
 
   private fun loadMore(initial: Boolean = false, lastMessageId: MsgId? = null) {
-    requireActivity().runOnUiThread {
+    // This can be called *after* we’re already detached from the activity
+    activity?.runOnUiThread {
       viewModel.buffer { bufferId ->
         if (bufferId > 0 && bufferId != Int.MAX_VALUE) {
           if (initial) swipeRefreshLayout.isRefreshing = true
