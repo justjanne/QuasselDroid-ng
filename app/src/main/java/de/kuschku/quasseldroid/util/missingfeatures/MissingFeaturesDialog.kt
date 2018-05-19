@@ -45,6 +45,9 @@ class MissingFeaturesDialog : DialogFragment() {
       .customView(R.layout.dialog_missing_features, true)
       .title(R.string.label_missing_features)
       .positiveText(R.string.label_accept)
+      .also { dialog ->
+        builder?.positiveListener?.let(dialog::onPositive)
+      }
       .build()
     ButterKnife.bind(this, dialog.customView!!)
     list.layoutManager = LinearLayoutManager(list.context)
@@ -57,7 +60,7 @@ class MissingFeaturesDialog : DialogFragment() {
 
   override fun onDismiss(dialog: DialogInterface?) {
     super.onDismiss(dialog)
-    builder?.dismissListener?.onDismiss(this)
+    builder?.dismissListener?.onDismiss(this.dialog)
   }
 
   fun show(context: FragmentActivity) = show(context.supportFragmentManager)
@@ -73,15 +76,11 @@ class MissingFeaturesDialog : DialogFragment() {
     }
   }
 
-  @FunctionalInterface
-  interface OnDismissListener {
-    fun onDismiss(dialog: MissingFeaturesDialog)
-  }
-
   class Builder(private val fragmentManager: FragmentManager) : Serializable {
     constructor(context: FragmentActivity) : this(context.supportFragmentManager)
 
-    var dismissListener: OnDismissListener? = null
+    var dismissListener: DialogInterface.OnDismissListener? = null
+    var positiveListener: MaterialDialog.SingleButtonCallback? = null
     var missingFeatures: List<MissingFeature>? = null
 
     fun missingFeatures(missingFeatures: List<MissingFeature>): Builder {
@@ -89,8 +88,13 @@ class MissingFeaturesDialog : DialogFragment() {
       return this
     }
 
-    fun dismissListener(dismissListener: OnDismissListener): Builder {
+    fun dismissListener(dismissListener: DialogInterface.OnDismissListener): Builder {
       this.dismissListener = dismissListener
+      return this
+    }
+
+    fun positiveListener(positiveListener: MaterialDialog.SingleButtonCallback): Builder {
+      this.positiveListener = positiveListener
       return this
     }
 

@@ -124,7 +124,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   private var chatlineFragment: ChatlineFragment? = null
 
-  private var isInitialConnect = true
+  private var connectedAccount = -1L
 
   override fun onNewIntent(intent: Intent?) {
     super.onNewIntent(intent)
@@ -458,12 +458,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       .firstElement()
       .toLiveData()
       .observe(this, Observer {
-        if (isInitialConnect) {
+        if (connectedAccount != accountId) {
           if (resources.getBoolean(R.bool.buffer_drawer_exists) &&
               viewModel.buffer.value == Int.MAX_VALUE) {
             drawerLayout.openDrawer(Gravity.START)
           }
-          isInitialConnect = false
+          connectedAccount = accountId
           viewModel.session.value?.orNull()?.let {
             if (it.identities.isEmpty()) {
               UserSetupActivity.launch(this)
@@ -486,33 +486,46 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
               ExtendedFeature.BacklogFilterType
             ) - it.features.core.enabledFeatures
             if (missingFeatures.isNotEmpty()) {
-              MissingFeaturesDialog.Builder(this)
-                .missingFeatures(missingFeatures.mapNotNull { feature ->
-                  when (feature) {
-                    ExtendedFeature.SynchronizedMarkerLine -> R.string.label_feature_synchronizedmarkerline
-                    ExtendedFeature.SaslAuthentication     -> R.string.label_feature_saslauthentication
-                    ExtendedFeature.SaslExternal           -> R.string.label_feature_saslexternal
-                    ExtendedFeature.HideInactiveNetworks   -> R.string.label_feature_hideinactivenetworks
-                    ExtendedFeature.PasswordChange         -> R.string.label_feature_passwordchange
-                    ExtendedFeature.CapNegotiation         -> R.string.label_feature_capnegotiation
-                    ExtendedFeature.VerifyServerSSL        -> R.string.label_feature_verifyserverssl
-                    ExtendedFeature.CustomRateLimits       -> R.string.label_feature_customratelimits
-                    ExtendedFeature.AwayFormatTimestamp    -> R.string.label_feature_awayformattimestamp
-                    ExtendedFeature.BufferActivitySync     -> R.string.label_feature_bufferactivitysync
-                    ExtendedFeature.CoreSideHighlights     -> R.string.label_feature_coresidehighlights
-                    ExtendedFeature.SenderPrefixes         -> R.string.label_feature_senderprefixes
-                    ExtendedFeature.RemoteDisconnect       -> R.string.label_feature_remotedisconnect
-                    ExtendedFeature.RichMessages           -> R.string.label_feature_richmessages
-                    ExtendedFeature.BacklogFilterType      -> R.string.label_feature_backlogfiltertype
-                    else                                   -> null
-                  }?.let {
-                    MissingFeature(
-                      feature = feature,
-                      description = it
-                    )
+              runInBackground {
+                val accounts = accountDatabase.accounts()
+                val account = accounts.findById(accountId)
+                if (account?.acceptedMissingFeatures == false) {
+                  val dialog = MissingFeaturesDialog.Builder(this)
+                    .missingFeatures(missingFeatures.mapNotNull { feature ->
+                      when (feature) {
+                        ExtendedFeature.SynchronizedMarkerLine -> R.string.label_feature_synchronizedmarkerline
+                        ExtendedFeature.SaslAuthentication     -> R.string.label_feature_saslauthentication
+                        ExtendedFeature.SaslExternal           -> R.string.label_feature_saslexternal
+                        ExtendedFeature.HideInactiveNetworks   -> R.string.label_feature_hideinactivenetworks
+                        ExtendedFeature.PasswordChange         -> R.string.label_feature_passwordchange
+                        ExtendedFeature.CapNegotiation         -> R.string.label_feature_capnegotiation
+                        ExtendedFeature.VerifyServerSSL        -> R.string.label_feature_verifyserverssl
+                        ExtendedFeature.CustomRateLimits       -> R.string.label_feature_customratelimits
+                        ExtendedFeature.AwayFormatTimestamp    -> R.string.label_feature_awayformattimestamp
+                        ExtendedFeature.BufferActivitySync     -> R.string.label_feature_bufferactivitysync
+                        ExtendedFeature.CoreSideHighlights     -> R.string.label_feature_coresidehighlights
+                        ExtendedFeature.SenderPrefixes         -> R.string.label_feature_senderprefixes
+                        ExtendedFeature.RemoteDisconnect       -> R.string.label_feature_remotedisconnect
+                        ExtendedFeature.RichMessages           -> R.string.label_feature_richmessages
+                        ExtendedFeature.BacklogFilterType      -> R.string.label_feature_backlogfiltertype
+                        else                                   -> null
+                      }?.let {
+                        MissingFeature(
+                          feature = feature,
+                          description = it
+                        )
+                      }
+                    })
+                    .positiveListener(MaterialDialog.SingleButtonCallback { _, _ ->
+                      runInBackground {
+                        accounts.save(account.copy(acceptedMissingFeatures = true))
+                      }
+                    })
+                  runOnUiThread {
+                    dialog.show()
                   }
-                })
-                .show()
+                }
+              }
             }
           }
         }
@@ -606,18 +619,18 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     super.onSaveInstanceState(outState)
     outState?.putInt("OPEN_BUFFER", viewModel.buffer.value ?: -1)
     outState?.putInt("OPEN_BUFFERVIEWCONFIG", viewModel.bufferViewConfigId.value ?: -1)
-    outState?.putBoolean("HAS_BEEN_CONNECTED", isInitialConnect)
+    outState?.putLong("CONNECTED_ACCOUNT", connectedAccount)
   }
 
   override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
     super.onSaveInstanceState(outState, outPersistentState)
     outState?.putInt("OPEN_BUFFER", viewModel.buffer.value ?: -1)
     outState?.putInt("OPEN_BUFFERVIEWCONFIG", viewModel.bufferViewConfigId.value ?: -1)
-    outState?.putBoolean("HAS_BEEN_CONNECTED", isInitialConnect)
+    outState?.putLong("CONNECTED_ACCOUNT", connectedAccount)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
       outPersistentState?.putInt("OPEN_BUFFER", viewModel.buffer.value ?: -1)
       outPersistentState?.putInt("OPEN_BUFFERVIEWCONFIG", viewModel.bufferViewConfigId.value ?: -1)
-      outPersistentState?.putBoolean("HAS_BEEN_CONNECTED", isInitialConnect)
+      outPersistentState?.putLong("CONNECTED_ACCOUNT", connectedAccount)
     }
   }
 
@@ -626,7 +639,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     viewModel.buffer.onNext(savedInstanceState?.getInt("OPEN_BUFFER", -1) ?: -1)
     viewModel.bufferViewConfigId.onNext(savedInstanceState?.getInt("OPEN_BUFFERVIEWCONFIG", -1)
                                         ?: -1)
-    isInitialConnect = savedInstanceState?.getBoolean("HAS_BEEN_CONNECTED", true) ?: true
+    connectedAccount = savedInstanceState?.getLong("CONNECTED_ACCOUNT", -1L) ?: -1L
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -644,10 +657,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         savedInstanceState?.getInt("OPEN_BUFFERVIEWCONFIG", fallbackBufferViewConfigId)
         ?: fallbackBufferViewConfigId
       )
-      val fallbackIsInitialConnect = persistentState?.getBoolean("HAS_BEEN_CONNECTED", true) ?: true
-      isInitialConnect = savedInstanceState?.getBoolean(
-        "HAS_BEEN_CONNECTED", fallbackIsInitialConnect
-      ) ?: fallbackIsInitialConnect
+      val fallbackConnectedAccount = persistentState?.getLong("CONNECTED_ACCOUNT", -1L) ?: -1L
+      connectedAccount = savedInstanceState?.getLong(
+        "CONNECTED_ACCOUNT", fallbackConnectedAccount
+      ) ?: fallbackConnectedAccount
     }
   }
 

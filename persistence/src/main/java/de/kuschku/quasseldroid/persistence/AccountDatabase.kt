@@ -20,10 +20,12 @@
 package de.kuschku.quasseldroid.persistence
 
 import android.arch.lifecycle.LiveData
+import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.*
+import android.arch.persistence.room.migration.Migration
 import android.content.Context
 
-@Database(entities = [(AccountDatabase.Account::class)], version = 1)
+@Database(entities = [(AccountDatabase.Account::class)], version = 2)
 abstract class AccountDatabase : RoomDatabase() {
   abstract fun accounts(): AccountDao
 
@@ -36,7 +38,8 @@ abstract class AccountDatabase : RoomDatabase() {
     var user: String,
     var pass: String,
     var name: String,
-    var lastUsed: Long
+    var lastUsed: Long,
+    var acceptedMissingFeatures: Boolean
   )
 
   @Dao
@@ -73,6 +76,12 @@ abstract class AccountDatabase : RoomDatabase() {
             database = Room.databaseBuilder(
               context.applicationContext,
               AccountDatabase::class.java, DATABASE_NAME
+            ).addMigrations(
+              object : Migration(1, 2) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL("ALTER TABLE account ADD COLUMN acceptedMissingFeatures INTEGER NOT NULL DEFAULT 0;")
+                }
+              }
             ).allowMainThreadQueries().build()
           }
         }

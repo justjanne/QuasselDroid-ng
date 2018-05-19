@@ -43,7 +43,8 @@ class AccountSetupActivity : SetupActivity() {
       user = data.getString("user"),
       pass = data.getString("pass"),
       name = data.getString("name"),
-      lastUsed = Instant.now().epochSecond
+      lastUsed = Instant.now().epochSecond,
+      acceptedMissingFeatures = false
     )
     handler.post {
       database.accounts().create(account)
