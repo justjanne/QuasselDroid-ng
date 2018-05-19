@@ -26,6 +26,7 @@
   <string name="connection_service_description">Hält eine Verbindung zum Core, um Benachrichtigungen und die Übertragung von Nachrichten zu ermöglichen</string>
 
   <string name="label_about">Über</string>
+  <string name="label_accept">Akzeptieren</string>
   <string name="label_avatar">Avatar</string>
   <string name="label_back">Zurück</string>
   <string name="label_buffer_name">Chatname</string>
@@ -107,8 +108,27 @@
   <string name="label_whois_long">Nutzerinformationen aktualisieren</string>
   <string name="label_yes">Ja</string>
 
+  <string name="label_feature_synchronizedmarkerline">Benötigt um die vorherige Position in Chats zu synchronisieren</string>
+  <string name="label_feature_saslauthentication">Benötigt für SASL</string>
+  <string name="label_feature_saslexternal">Benötigt für SASL mit Zertifikaten</string>
+  <string name="label_feature_hideinactivenetworks">Benötigt um inaktive Netzwerke aus Chatlisten auszublenden</string>
+  <string name="label_feature_passwordchange">Benötigt um Passwörter zu ändern.</string>
+  <string name="label_feature_capnegotiation">Benötigt für IRCv3-Features</string>
+  <string name="label_feature_verifyserverssl">Benötigt um das SSL-Zertifikat von IRC-Netzwerken zu verifizieren</string>
+  <string name="label_feature_customratelimits">Benötigt um benutzerdefinierte Grenzwerte für IRC-Netzwerke festzulegen</string>
+  <string name="label_feature_awayformattimestamp">Benötigt um benutzerdefinierte Zeitformate in Abwesenheitsnachrichten zu verwenden</string>
+  <string name="label_feature_bufferactivitysync">Benötigt um die Aktivität von Chats in Chatlisten zu sehen</string>
+  <string name="label_feature_coresidehighlights">Benötigt für Hervorhebungen</string>
+  <string name="label_feature_senderprefixes">Benötigt um die Präfixe (+, @) von Nutzern in Nachrichten zu sehen</string>
+  <string name="label_feature_remotedisconnect">Benötigt um die Verbindung eigener Clients aus der Ferne zu trennen</string>
+  <string name="label_feature_richmessages">Benötigt um Echtnamen oder IRCv3 oder Gravatar-Avatare in Nachrichten zu sehen.</string>
+  <string name="label_feature_backlogfiltertype">Benötigt um vergangene Benachrichtigungen nach dem Verbinden zu erhalten</string>
+
   <string name="notification_channel_connection_title">Verbindung</string>
   <string name="notification_channel_highlight_title">Erwähnungen</string>
+
+  <string name="label_missing_features">Fehlende Features</string>
+  <string name="info_missing_features">Deinem Core fehlen bestimmte Features die benötigt werden damit Quasseldroid korrekt funktionieren kann</string>
 
   <string name="buffer_delete_confirmation">Bist du sicher, dass du diesen Chat auf ewig löschen möchtest?</string>
 

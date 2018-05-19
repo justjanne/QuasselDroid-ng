@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2018 Janne Koschinski
+  Copyright (c) 2018 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+  <string name="message_type_join">Joindre</string>
+  <string name="message_type_part">Partir</string>
+  <string name="message_type_quit">Quitter</string>
+  <string name="message_type_nick">Nom</string>
+  <string name="message_type_mode">Mode</string>
+  <string name="message_type_topic">Topique</string>
+  <string name="message_format_copy">[%1$s] %2$s</string>
+  <string name="message_format_copy_complex">[%1$s] &lt; %2$s&gt; %3$s</string>
+
+  <string name="message_format_action">— %1$s%2$s %3$s</string>
+  <string name="message_format_notice">[%1$s%2$s] %3$s</string>
+  <string name="message_format_nick">%1$s%2$s est maintenant connu selon: %3$s%4$s</string>
+  <string name="message_format_nick_self">Vous êtes maintenant connus selon: %1$s%2$s</string>
+  <string name="message_format_mode">Mode %1$s par %2$s%3$s</string>
+  <string name="message_format_join">%1$s%2$s a joint %3$s</string>
+  <string name="message_format_part_1">%1$s%2$s est parti</string>
+  <string name="message_format_part_2">%1$s%2$s est parti (%3$s)</string>
+  <string name="message_format_quit_1">%1$s%2$s a quitté</string>
+  <string name="message_format_quit_2">%1$s%2$s a quitté (%3$s)</string>
+  <string name="message_format_kick_1">%1$s a été expulsé %2$s%3$s</string>
+  <string name="message_format_kick_2">%1$s a été expulsé par %2$s%3$s (%4$s)</string>
+  <string name="message_format_kill_1">%1$s a été supprimé %2$s%3$s</string>
+  <string name="message_format_kill_2">%1$s a été supprimé par %2$s%3$s (%4$s)</string>
+  <plurals name="message_netsplit_join">
+    <item quantity="one">Netsplit entre %1$s et %2$s est terminé: %3$d nouvel utilisateur</item>
+    <item quantity="other">Netsplit entre %1$s et %2$s est terminé: %3$d nouveaux utilisateurs</item>
+  </plurals>
+  <plurals name="message_netsplit_quit">
+    <item quantity="one">Netsplit entre %1$s et %2$s: %3$d utilisateur a quitté</item>
+    <item quantity="other">Netsplit entre %1$s et %2$s: %3$d utilisateurs ont quittés</item>
+  </plurals>
+</resources>

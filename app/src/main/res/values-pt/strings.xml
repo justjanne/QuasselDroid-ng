@@ -20,15 +20,16 @@
 <resources>
   <string name="app_name">QuasselDroid</string>
   <string name="app_description">Um cliente baseado no Android para o cliente de IRC Quassel descentralizado.</string>
-  <string name="app_description_long">Quassel é um cliente IRC distribuído e descentralizado, escrito usando C++ e Qt. O Quasseldroid é um cliente escrito puramente em kotlin para o núcleo Quassel, permitindo que você se ligue ao seu núcleo Quassel usando seu telemóvel Android™.</string>
+  <string name="app_description_long">Quassel é um cliente IRC distribuído e descentralizado, escrito usando C++ e Qt. O Quasseldroid é um cliente escrito puramente em kotlin para o núcleo Quassel, permitindo que você se ligue ao seu núcleo Quassel usando o seu telemóvel Android™.</string>
 
   <string name="connection_service_title">Serviço de Ligação</string>
   <string name="connection_service_description">Mantém uma ligação com o seu núcleo para permitir notificações e transmissão de mensagens.</string>
 
   <string name="label_about">Sobre</string>
+  <string name="label_accept">Aceitar</string>
   <string name="label_avatar">Avatar</string>
   <string name="label_back">Voltar</string>
-  <string name="label_buffer_name">Nome do Chat</string>
+  <string name="label_buffer_name">Nome da Janela</string>
   <string name="label_cancel">Cancelar</string>
   <string name="label_update_user_password">Actualizar Utilizador/Senha</string>
   <string name="label_certificates">Certificados</string>
@@ -65,7 +66,7 @@
   <string name="label_new_account">Adicionar Conta</string>
   <string name="label_new_chatlist">Adicionar Lista de Chats</string>
   <string name="label_new_highlight_rule">Nova Regra de Menções</string>
-  <string name="label_new_highlight_ignore_rule">Nova Regra de Ignore de Menções</string>
+  <string name="label_new_highlight_ignore_rule">Nova Regra para Ignorar Menções</string>
   <string name="label_new_identity">Adicionar Identidade</string>
   <string name="label_new_network">Adicionar Rede</string>
   <string name="label_new_nick">Adicionar Alcunha</string>
@@ -94,6 +95,7 @@
   <string name="label_share_crashreport">Partilhar Relatório de Crash</string>
   <string name="label_show_hidden">Mostrar oculto</string>
   <string name="label_topic">Tópico do Canal</string>
+  <string name="label_translators">Tradutores</string>
   <string name="label_unhide">Tornar Visível</string>
   <string name="label_website">Site</string>
   <string name="label_whitelist">Ignorar</string>
@@ -106,10 +108,29 @@
   <string name="label_whois_long">Atualizar informações de utilizador</string>
   <string name="label_yes">Sim</string>
 
+  <string name="label_feature_synchronizedmarkerline">Necessário para sincronizar a última posição nos canais</string>
+  <string name="label_feature_saslauthentication">Necessario para SASL</string>
+  <string name="label_feature_saslexternal">Necessário para SASL com certificados</string>
+  <string name="label_feature_hideinactivenetworks">Obrigatório para ocultar redes inativas das listas de chats</string>
+  <string name="label_feature_passwordchange">Necessário para alterar senhas a partir do cliente</string>
+  <string name="label_feature_capnegotiation">Necessário para recursos do IRCv3</string>
+  <string name="label_feature_verifyserverssl">Necessário para verificar o certificado SSL das redes de IRC às quais você se conecta</string>
+  <string name="label_feature_customratelimits">Necessário para limites personalizados para redes de IRC</string>
+  <string name="label_feature_awayformattimestamp">Necessário para personalização de data/hora em mensagens de ausencia</string>
+  <string name="label_feature_bufferactivitysync">Obrigatório para ver a atividade de chats na lista de chats</string>
+  <string name="label_feature_coresidehighlights">Obrigatório para menções</string>
+  <string name="label_feature_senderprefixes">Necessário para ver os modos de prefixo (+, @) dos utilizadores nas mensagens</string>
+  <string name="label_feature_remotedisconnect">Necessário para desconexões remotas de seus próprios clientes</string>
+  <string name="label_feature_richmessages">Necessário para ver nomes reais ou avatares do IRCV3 ou do Gravatar em mensagens</string>
+  <string name="label_feature_backlogfiltertype">Obrigatório para receber notificações passadas após a conexão</string>
+
   <string name="notification_channel_connection_title">Ligação</string>
   <string name="notification_channel_highlight_title">Menção</string>
 
-  <string name="buffer_delete_confirmation">Você deseja excluir este chat permanentemente?</string>
+  <string name="label_missing_features">Recursos Ausentes</string>
+  <string name="info_missing_features">O seu núcleo tem em falta recursos que são necessários para o QuasselDroid funcionar corretamente.</string>
+
+  <string name="buffer_delete_confirmation">Você deseja excluir esta janela permanentemente?</string>
 
   <string name="delete_confirmation">Tem certeza de que deseja excluir isto permanentemente? Isto não pode ser revertido.</string>
   <string name="cancel_confirmation">Você tem alterações não guardadas. Você deseja descartá-las?</string>

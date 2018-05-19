@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2018 Janne Koschinski
+  Copyright (c) 2018 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+  <string name="app_name">Quasseldroid</string>
+  <string name="app_description">Un client Android pour Quassel, un client IRC décentralisé.</string>
+  <string name="app_description_long">Quassel est un client IRC distribué et décentralisé, écrit en C++ et en Qt. Quasseldroid est un client pour le Quassel Core écrit purement en Kotlin, vous offrant la possibilité de vous connecter à un Quassel Core avec votre téléphone Android™.</string>
+
+  <string name="connection_service_title">Service de Connection</string>
+  <string name="connection_service_description">Maintient une connection a un Core pour recevoir des notifications et transmettre des messages.</string>
+
+  <string name="label_about">À Propos</string>
+  <string name="label_accept">Accepter</string>
+  <string name="label_avatar">Avatar</string>
+  <string name="label_back">Retour</string>
+  <string name="label_buffer_name">Nom du Tchat</string>
+  <string name="label_cancel">Annuler</string>
+  <string name="label_update_user_password">Mettre à Jour l\'Utilisateur ou le Mot de Passe</string>
+  <string name="label_certificates">Certificats</string>
+  <string name="label_close">Fermer</string>
+  <string name="label_colors_custom">Personnalisé</string>
+  <string name="label_colors_mirc">mIRC</string>
+  <string name="label_configure">Configurer</string>
+  <string name="label_connect">Connecter</string>
+  <string name="label_contributors">Contributeurs</string>
+  <string name="label_copy">Copier</string>
+  <string name="label_crashes">Crashes</string>
+  <string name="label_delete">Supprimer</string>
+  <string name="label_delete_all">Supprimer Tout</string>
+  <string name="label_disconnect">Déconnecter</string>
+  <string name="label_edit_nick">Changer le Nom d\'Utilisateur</string>
+  <string name="label_edit_topic">Changer le Topique</string>
+  <string name="label_edit_topic_long">Ouvrir un dialogue pour changer le topique de la chaîne</string>
+  <string name="label_filter_messages">Filtrer les Messages</string>
+  <string name="label_github">GitHub</string>
+  <string name="label_hide_perm">Cacher en Permanence</string>
+  <string name="label_hide_temp">Cacher Temporairement</string>
+  <string name="label_ignore">Ignorer</string>
+  <string name="label_ignore_long">Ajouter ou Supprimer des utilisateurs de la liste des utilisateurs ignorés</string>
+  <string name="label_info_channel">Détails de la Chaîne</string>
+  <string name="label_info_user">Détails des Utilisateurs</string>
+  <string name="label_input_history">Historique des Entrées</string>
+  <string name="label_join">Joindre</string>
+  <string name="label_join_long">Joindre la Chaîne</string>
+  <string name="label_libraries">Librairies</string>
+  <string name="label_license">Licence</string>
+  <string name="label_mark_read">Marquer Comme Lu</string>
+  <string name="label_mention">Mentionner</string>
+  <string name="label_mention_long">Copier le nom d\'utilisateur dans la zone de texte</string>
+  <string name="label_new_account">Nouveau Compte</string>
+  <string name="label_new_chatlist">Nouvelle Liste de Tchats</string>
+  <string name="label_new_highlight_rule">Nouvelle Règle de Highlight</string>
+  <string name="label_new_highlight_ignore_rule">Nouvelle Règle de Highlight à Ignorer</string>
+  <string name="label_new_identity">Nouvelle Identité</string>
+  <string name="label_new_network">Nouveau Réseau</string>
+  <string name="label_new_nick">Nouveau Nom d\'Utilisateur</string>
+  <string name="label_new_server">Nouveau Serveur</string>
+  <string name="label_nicklist">Liste de Noms</string>
+  <string name="label_no">Non</string>
+  <string name="label_no_away_message">Aucuns Messages d\'Absence Disponibles</string>
+  <string name="label_no_sound">Aucun</string>
+  <string name="label_reply">Répondre</string>
+  <string name="label_reset">Réinitialiser</string>
+  <string name="label_open">Ouvrir</string>
+  <string name="label_part">Partir</string>
+  <string name="label_part_long">Partir de la Chaîne</string>
+  <string name="label_placeholder_message">Inscrivez un message…</string>
+  <string name="label_placeholder_topic">Inscrivez le Topique de la Chaîne…</string>
+  <string name="label_privacy_policy">Politique de Confidentialité</string>
+  <string name="label_query">Requêter</string>
+  <string name="label_query_long">Ouvrir une session privée avec cet utilisateur</string>
+  <string name="label_rename">Renommer</string>
+  <string name="label_save">Enregistrer</string>
+  <string name="label_select">Sélectionner</string>
+  <string name="label_settings">Paramètres</string>
+  <string name="label_settings_client">Paramètres du Client</string>
+  <string name="label_settings_core">Paramètres du Core</string>
+  <string name="label_share">Partager</string>
+  <string name="label_share_crashreport">Partager le Rapport du Crash</string>
+  <string name="label_show_hidden">Montrer les Objets Cachés</string>
+  <string name="label_topic">Topique de la Chaîne</string>
+  <string name="label_translators">Traducteurs</string>
+  <string name="label_unhide">Rendre Visible</string>
+  <string name="label_website">Site Web</string>
+  <string name="label_whitelist">Ignorer</string>
+  <string name="label_whitelist_ignore_date">La date d\'expiration est ignorée pour ce certificat</string>
+  <string name="label_whitelist_certificates">Certificats</string>
+  <string name="label_whitelist_hostnames">Hosts</string>
+  <string name="label_who">Who</string>
+  <string name="label_who_long">Mettre à jour les informations sur tous les utilisateurs</string>
+  <string name="label_whois">Whois</string>
+  <string name="label_whois_long">Mettre à jour les informations sur l\'utilisateur</string>
+  <string name="label_yes">Oui</string>
+
+  <string name="label_feature_synchronizedmarkerline">Requis pour synchroniser la dernière position du tchat dans les chaînes</string>
+  <string name="label_feature_saslauthentication">Requis pour le protocole SASL</string>
+  <string name="label_feature_saslexternal">Requis pour le protocole SASL avec certificats</string>
+  <string name="label_feature_hideinactivenetworks">Requis pour cacher les réseaux inactifs de la liste de tchats</string>
+  <string name="label_feature_passwordchange">Requis pour changer les mots de passe à partir du client</string>
+  <string name="label_feature_capnegotiation">Requis pour les capacités IRCv3</string>
+  <string name="label_feature_verifyserverssl">Requis pour vérifier les certificats SSL des réseaux IRC durant la connection</string>
+  <string name="label_feature_customratelimits">Requis pour spécifier des limites de fréquence personnalisées aux réseaux IRC</string>
+  <string name="label_feature_awayformattimestamp">Requis pour les marqueurs de temps personnalisés dans les messages d\'absence</string>
+  <string name="label_feature_bufferactivitysync">Requis pour voir l\'activité des tchats dans la liste de tchats</string>
+  <string name="label_feature_coresidehighlights">Requis pour les highlights</string>
+  <string name="label_feature_senderprefixes">Requis pour voir les préfixes de modes (+, @) des utilisateurs dans les messages</string>
+  <string name="label_feature_remotedisconnect">Requis pour déconnecter vos propres clients à distance</string>
+  <string name="label_feature_richmessages">Requis pour voir les vrais noms ou les avatars IRCv3 ou Gravatar dans les messages</string>
+  <string name="label_feature_backlogfiltertype">Requis pour recevoir des notifications antérieures après la connection</string>
+
+  <string name="notification_channel_connection_title">Connection</string>
+  <string name="notification_channel_highlight_title">Highlight</string>
+
+  <string name="label_missing_features">Fonctionnalités Manquantes</string>
+  <string name="info_missing_features">Votre Core manque certaines fonctionnalités qui sont requises pour que Quasseldroid marche correctement.</string>
+
+  <string name="buffer_delete_confirmation">Voulez-vous supprimer ce tchat en permanence?</string>
+
+  <string name="delete_confirmation">Êtes-vous surs que vous voulez supprimer ceci en permanence? Cette action ne peut pas être réparée.</string>
+  <string name="cancel_confirmation">Vous avez des changements non-sauvegardés. Voulez-vous les abandonner?</string>
+
+  <string name="info_copied_version">Version copiée au clipboard</string>
+
+</resources>

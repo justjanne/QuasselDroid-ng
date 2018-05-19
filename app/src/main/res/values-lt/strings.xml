@@ -26,6 +26,7 @@
   <string name="connection_service_description">Palaiko ryšį su jūsų branduoliu, jog būtų galima siųsti žinutes ir gauti pranešimus.</string>
 
   <string name="label_about">Apie</string>
+  <string name="label_accept">Priimti</string>
   <string name="label_avatar">Avataras</string>
   <string name="label_back">Atgal</string>
   <string name="label_buffer_name">Buferio pavadinimas</string>
@@ -94,6 +95,7 @@
   <string name="label_share_crashreport">Dalintis klaidos ataskaita</string>
   <string name="label_show_hidden">Rodyti paslėptus</string>
   <string name="label_topic">Kanalo tema</string>
+  <string name="label_translators">Vertėjai</string>
   <string name="label_unhide">Rodyti</string>
   <string name="label_website">Tinklalapis</string>
   <string name="label_whitelist">Ignoruoti</string>
@@ -106,8 +108,27 @@
   <string name="label_whois_long">Atnaujinti vartotojo informaciją</string>
   <string name="label_yes">Taip</string>
 
+  <string name="label_feature_synchronizedmarkerline">Reikalinga norint sinchronizuoti poziciją kanaluose</string>
+  <string name="label_feature_saslauthentication">Reikalinga SASL</string>
+  <string name="label_feature_saslexternal">Reikalinga SASL su certifikatais</string>
+  <string name="label_feature_hideinactivenetworks">Reikalinga norint paslėpti neaktyvius tinklus iš pokalbių sarašų</string>
+  <string name="label_feature_passwordchange">Reikalinga norint keisti slaptažodžius per klientą</string>
+  <string name="label_feature_capnegotiation">Reikalinga norint turėti IRCv3 funkcionalumą</string>
+  <string name="label_feature_verifyserverssl">Reikalinga norint patvirtinti IRC tinklų, prie kurių jūs prisijungėte, SSL certifikatą</string>
+  <string name="label_feature_customratelimits">Reikalinga norint nustatyti suasmenintus siuntimo limitus IRC tinklams</string>
+  <string name="label_feature_awayformattimestamp">Reikalinga suasmeninto formato laiko žymėms neaktyvumo žinutėse</string>
+  <string name="label_feature_bufferactivitysync">Reikalinga norint matyti pokalbių aktyvumą jų saraše</string>
+  <string name="label_feature_coresidehighlights">Reikalinga paryškinimams</string>
+  <string name="label_feature_senderprefixes">Reikalinga norint matyti naudotoju priešdėlių rėžimus (+, @) žinutėse</string>
+  <string name="label_feature_remotedisconnect">Reikalinga jūsų klientų nuotoliniam atsijungimui</string>
+  <string name="label_feature_richmessages">Reikalinga norint matyti tikruosius vardus ar IRCv3/Gravatar avatarus žinutėse</string>
+  <string name="label_feature_backlogfiltertype">Reikalinga norint gauti senus pranešimus po prisijungimo</string>
+
   <string name="notification_channel_connection_title">Ryšys</string>
   <string name="notification_channel_highlight_title">Pažymėta</string>
+
+  <string name="label_missing_features">Trūkstamos funkcijos</string>
+  <string name="info_missing_features">Jūsų branduolyje trūksta funkcijų kurios užtikrintų sklandų Quasseldroid darbą</string>
 
   <string name="buffer_delete_confirmation">Ar norite ištrinti šį buferį visam laikui?</string>
 

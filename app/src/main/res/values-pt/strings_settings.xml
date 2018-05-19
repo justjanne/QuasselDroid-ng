@@ -83,7 +83,7 @@
   <string name="settings_chatlist_sort_alphabetically">Ordenar Alfabeticamente</string>
   <string name="settings_chatlist_add_new_buffers_automatically">Adicionar novos chats automaticamente</string>
   <string name="settings_chatlist_network">Rede</string>
-  <string name="settings_chatlist_show_status_buffer">Mostrar Janela de Estado</string>
+  <string name="settings_chatlist_show_status_buffer">Mostrar Janela de Servidor</string>
   <string name="settings_chatlist_types">Tipos de Chats</string>
   <string name="settings_chatlist_show_channels">Mostrar Canais</string>
   <string name="settings_chatlist_show_queries">Mostrar Mensagens Privadas</string>
@@ -97,9 +97,9 @@
 
   <string name="settings_ignorelist_title">Lista de Ignorados</string>
 
-  <string name="settings_ignoreitem_title">Regra de Ignorar</string>
+  <string name="settings_ignoreitem_title">Regra para Ignorar</string>
   <string name="settings_ignoreitem_enabled">Activado</string>
-  <string name="settings_ignoreitem_ignorerule">Regra de Ignorar</string>
+  <string name="settings_ignoreitem_ignorerule">Regra para Ignorar</string>
   <string name="settings_ignoreitem_isregex">Expressão Regular</string>
   <string name="settings_ignoreitem_type">Tipo</string>
   <string name="settings_ignoreitem_type_sender">Remetente</string>
@@ -121,7 +121,7 @@
   <string name="settings_highlightlist_highlight_nick_none">Nenhum</string>
   <string name="settings_highlightlist_nicks_case_sensitive">Sensível a Maiúsculas e Minúsculas</string>
   <string name="settings_highlightlist_rules">Regras de Menções</string>
-  <string name="settings_highlightlist_ignore_rules">Regras de Ignorar Menções</string>
+  <string name="settings_highlightlist_ignore_rules">Regras para Ignorar Menções</string>
 
   <string name="settings_highlightrule_title">Regra de Menção</string>
   <string name="settings_highlightrule_enabled">Activado</string>

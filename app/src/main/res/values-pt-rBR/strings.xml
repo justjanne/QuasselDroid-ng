@@ -17,4 +17,17 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="app_description">Um cliente baseado em Android para o cliente decentralizado Quassel IRC.</string>
+  <string name="app_description_long">Quassel é um cliente IRC distribuído e decentralizado, escrito usando C++ e Qt. Quasseldroid é um cliente em Kotlin puro para o núcleo Quassel, permitindo você conectar ao seu núcleo Quassel usando seu celular Android™.</string>
+
+  <string name="connection_service_title">Serviço de Conexão</string>
+  <string name="connection_service_description">Mantém a conexão ao seu núcleo para possibilitar notificações, e transmitir mensagens.</string>
+
+  <string name="label_about">Sobre</string>
+  <string name="label_accept">Aceito</string>
+  <string name="label_avatar">Avatar</string>
+  <string name="label_back">Voltar</string>
+  <string name="label_cancel">Cancelar</string>
+  <string name="label_certificates">Certificados</string>
+</resources>

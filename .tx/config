@@ -6,118 +6,140 @@ type = ANDROID
 source_file = app/src/main/res/values/strings_status.xml
 source_lang = en
 trans.de = app/src/main/res/values-de/strings_status.xml
+trans.fr = app/src/main/res/values-fr/strings_status.xml
+trans.fr_CA = app/src/main/res/values-fr-rCA/strings_status.xml
+trans.nl = app/src/main/res/values-nl/strings_status.xml
 trans.lt = app/src/main/res/values-lt/strings_status.xml
 trans.pt = app/src/main/res/values-pt/strings_status.xml
 trans.pt_BR = app/src/main/res/values-pt-rBR/strings_status.xml
 trans.sr = app/src/main/res/values-sr/strings_status.xml
-trans.fr = app/src/main/res/values-fr/strings_status.xml
 
 [quasseldroid-1.strings_errorxml]
 type = ANDROID
 source_file = app/src/main/res/values/strings_error.xml
 source_lang = en
 trans.de = app/src/main/res/values-de/strings_error.xml
+trans.fr = app/src/main/res/values-fr/strings_error.xml
+trans.fr_CA = app/src/main/res/values-fr-rCA/strings_error.xml
+trans.nl = app/src/main/res/values-nl/strings_error.xml
 trans.lt = app/src/main/res/values-lt/strings_error.xml
 trans.pt = app/src/main/res/values-pt/strings_error.xml
 trans.pt_BR = app/src/main/res/values-pt-rBR/strings_error.xml
 trans.sr = app/src/main/res/values-sr/strings_error.xml
-trans.fr = app/src/main/res/values-fr/strings_error.xml
 
 [quasseldroid-1.strings_defaultsxml]
 type = ANDROID
 source_file = app/src/main/res/values/strings_defaults.xml
 source_lang = en
 trans.de = app/src/main/res/values-de/strings_defaults.xml
+trans.fr = app/src/main/res/values-fr/strings_defaults.xml
+trans.fr_CA = app/src/main/res/values-fr-rCA/strings_defaults.xml
+trans.nl = app/src/main/res/values-nl/strings_defaults.xml
 trans.lt = app/src/main/res/values-lt/strings_defaults.xml
 trans.pt = app/src/main/res/values-pt/strings_defaults.xml
 trans.pt_BR = app/src/main/res/values-pt-rBR/strings_defaults.xml
 trans.sr = app/src/main/res/values-sr/strings_defaults.xml
-trans.fr = app/src/main/res/values-fr/strings_defaults.xml
 
 [quasseldroid-1.strings_formatxml]
 type = ANDROID
 source_file = app/src/main/res/values/strings_format.xml
 source_lang = en
 trans.de = app/src/main/res/values-de/strings_format.xml
+trans.fr = app/src/main/res/values-fr/strings_format.xml
+trans.fr_CA = app/src/main/res/values-fr-rCA/strings_format.xml
+trans.nl = app/src/main/res/values-nl/strings_format.xml
 trans.lt = app/src/main/res/values-lt/strings_format.xml
 trans.pt = app/src/main/res/values-pt/strings_format.xml
 trans.pt_BR = app/src/main/res/values-pt-rBR/strings_format.xml
 trans.sr = app/src/main/res/values-sr/strings_format.xml
-trans.fr = app/src/main/res/values-fr/strings_format.xml
 
 [quasseldroid-1.strings_preferencesxml]
 type = ANDROID
 source_file = app/src/main/res/values/strings_preferences.xml
 source_lang = en
 trans.de = app/src/main/res/values-de/strings_preferences.xml
+trans.fr = app/src/main/res/values-fr/strings_preferences.xml
+trans.fr_CA = app/src/main/res/values-fr-rCA/strings_preferences.xml
+trans.nl = app/src/main/res/values-nl/strings_preferences.xml
 trans.lt = app/src/main/res/values-lt/strings_preferences.xml
 trans.pt = app/src/main/res/values-pt/strings_preferences.xml
 trans.pt_BR = app/src/main/res/values-pt-rBR/strings_preferences.xml
 trans.sr = app/src/main/res/values-sr/strings_preferences.xml
-trans.fr = app/src/main/res/values-fr/strings_preferences.xml
 
 [quasseldroid-1.strings_messagesxml]
 type = ANDROID
 source_file = app/src/main/res/values/strings_messages.xml
 source_lang = en
 trans.de = app/src/main/res/values-de/strings_messages.xml
+trans.fr = app/src/main/res/values-fr/strings_messages.xml
+trans.fr_CA = app/src/main/res/values-fr-rCA/strings_messages.xml
+trans.nl = app/src/main/res/values-nl/strings_messages.xml
 trans.lt = app/src/main/res/values-lt/strings_messages.xml
 trans.pt = app/src/main/res/values-pt/strings_messages.xml
 trans.pt_BR = app/src/main/res/values-pt-rBR/strings_messages.xml
 trans.sr = app/src/main/res/values-sr/strings_messages.xml
-trans.fr = app/src/main/res/values-fr/strings_messages.xml
 
 [quasseldroid-1.stringsxml]
 type = ANDROID
 source_file = app/src/main/res/values/strings.xml
 source_lang = en
 trans.de = app/src/main/res/values-de/strings.xml
+trans.fr = app/src/main/res/values-fr/strings.xml
+trans.fr_CA = app/src/main/res/values-fr-rCA/strings.xml
+trans.nl = app/src/main/res/values-nl/strings.xml
 trans.lt = app/src/main/res/values-lt/strings.xml
 trans.pt = app/src/main/res/values-pt/strings.xml
 trans.pt_BR = app/src/main/res/values-pt-rBR/strings.xml
 trans.sr = app/src/main/res/values-sr/strings.xml
-trans.fr = app/src/main/res/values-fr/strings.xml
 
 [quasseldroid-1.strings_setupxml]
 type = ANDROID
 source_file = app/src/main/res/values/strings_setup.xml
 source_lang = en
 trans.de = app/src/main/res/values-de/strings_setup.xml
+trans.fr = app/src/main/res/values-fr/strings_setup.xml
+trans.fr_CA = app/src/main/res/values-fr-rCA/strings_setup.xml
+trans.nl = app/src/main/res/values-nl/strings_setup.xml
 trans.lt = app/src/main/res/values-lt/strings_setup.xml
 trans.pt = app/src/main/res/values-pt/strings_setup.xml
 trans.pt_BR = app/src/main/res/values-pt-rBR/strings_setup.xml
 trans.sr = app/src/main/res/values-sr/strings_setup.xml
-trans.fr = app/src/main/res/values-fr/strings_setup.xml
 
 [quasseldroid-1.strings_contributorsxml]
 type = ANDROID
 source_file = app/src/main/res/values/strings_contributors.xml
 source_lang = en
 trans.de = app/src/main/res/values-de/strings_contributors.xml
+trans.fr = app/src/main/res/values-fr/strings_contributors.xml
+trans.fr_CA = app/src/main/res/values-fr-rCA/strings_contributors.xml
+trans.nl = app/src/main/res/values-nl/strings_contributors.xml
 trans.lt = app/src/main/res/values-lt/strings_contributors.xml
 trans.pt = app/src/main/res/values-pt/strings_contributors.xml
 trans.pt_BR = app/src/main/res/values-pt-rBR/strings_contributors.xml
 trans.sr = app/src/main/res/values-sr/strings_contributors.xml
-trans.fr = app/src/main/res/values-fr/strings_contributors.xml
 
 [quasseldroid-1.strings_infoxml]
 type = ANDROID
 source_file = app/src/main/res/values/strings_info.xml
 source_lang = en
 trans.de = app/src/main/res/values-de/strings_info.xml
+trans.fr = app/src/main/res/values-fr/strings_info.xml
+trans.fr_CA = app/src/main/res/values-fr-rCA/strings_info.xml
+trans.nl = app/src/main/res/values-nl/strings_info.xml
 trans.lt = app/src/main/res/values-lt/strings_info.xml
 trans.pt = app/src/main/res/values-pt/strings_info.xml
 trans.pt_BR = app/src/main/res/values-pt-rBR/strings_info.xml
 trans.sr = app/src/main/res/values-sr/strings_info.xml
-trans.fr = app/src/main/res/values-fr/strings_info.xml
 
 [quasseldroid-1.strings_settingsxml]
 type = ANDROID
 source_file = app/src/main/res/values/strings_settings.xml
 source_lang = en
 trans.de = app/src/main/res/values-de/strings_settings.xml
+trans.fr = app/src/main/res/values-fr/strings_settings.xml
+trans.fr_CA = app/src/main/res/values-fr-rCA/strings_settings.xml
+trans.nl = app/src/main/res/values-nl/strings_settings.xml
 trans.lt = app/src/main/res/values-lt/strings_settings.xml
 trans.pt = app/src/main/res/values-pt/strings_settings.xml
 trans.pt_BR = app/src/main/res/values-pt-rBR/strings_settings.xml
 trans.sr = app/src/main/res/values-sr/strings_settings.xml
-trans.fr = app/src/main/res/values-fr/strings_settings.xml

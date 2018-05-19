@@ -93,6 +93,8 @@
 
   <string name="preference_show_avatars_title">Mostrar Avatares</string>
 
+  <string name="preference_square_avatars_title">Avatares Quadrados</string>
+
   <string name="preference_show_irccloud_avatars_title">Mostrar Avatares IRCCloud</string>
   <string name="preference_show_irccloud_avatars_summary">Mostra a utilizadores sem avatar, o avatar IRCCloud correspondente, se disponível</string>
 
@@ -139,7 +141,7 @@
   <string name="preference_page_size_summary">O número de mensagens carregadas e mantidas na memória de cada vez</string>
 
   <string name="preference_initial_amount_title">Quantidade inicial</string>
-  <string name="preference_initial_amount_summary">Número de mensagens para carregar ao abrir um chat pela primeira vez</string>
+  <string name="preference_initial_amount_summary">Número de mensagens para carregar ao abrir uma janela pela primeira vez</string>
 
 
   <string name="preference_connection_title">Ligação</string>

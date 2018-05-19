@@ -71,7 +71,7 @@
   </string-array>
 
   <string name="preference_show_lag_key" translatable="false">show_lag</string>
-  <string name="preference_show_lag_title">Show lag</string>
+  <string name="preference_show_lag_title">Show Lag</string>
   <string name="preference_show_lag_summary">Displays the lag between client and core in the action bar</string>
 
   <string name="preference_keep_screen_on_key" translatable="false">keep_screen_on</string>
@@ -83,6 +83,9 @@
   <string name="preference_language_entry_auto">System Default</string>
   <string name="preference_language_entry_en" translatable="false">English</string>
   <string name="preference_language_entry_de" translatable="false">Deutsch</string>
+  <string name="preference_language_entry_fr" translatable="false">Français</string>
+  <string name="preference_language_entry_fr_ca" translatable="false">Français (Canadien)</string>
+  <string name="preference_language_entry_nl" translatable="false">Nederlands</string>
   <string name="preference_language_entry_lt" translatable="false">Lietuvių</string>
   <string name="preference_language_entry_pt" translatable="false">Português</string>
   <string name="preference_language_entry_pt_br" translatable="false">Português (Brasil)</string>
@@ -91,6 +94,9 @@
     <item>@string/preference_language_entry_auto</item>
     <item>@string/preference_language_entry_en</item>
     <item>@string/preference_language_entry_de</item>
+    <!--<item>@string/preference_language_entry_fr</item>-->
+    <item>@string/preference_language_entry_fr_ca</item>
+    <!--<item>@string/preference_language_entry_nl</item>-->
     <item>@string/preference_language_entry_lt</item>
     <item>@string/preference_language_entry_pt</item>
     <!--<item>@string/preference_language_entry_pt_br</item>-->
@@ -100,6 +106,9 @@
     <item />
     <item>en</item>
     <item>de</item>
+    <!--<item>fr</item>-->
+    <item>fr_ca</item>
+    <!--<item>nl</item>-->
     <item>lt</item>
     <item>pt</item>
     <!--<item>pt_BR</item>-->

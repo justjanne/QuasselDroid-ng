@@ -121,7 +121,7 @@
   <string name="label_feature_awayformattimestamp">Required for custom formatted timestamps in away messages</string>
   <string name="label_feature_bufferactivitysync">Required for seeing activity of chats in the chat list</string>
   <string name="label_feature_coresidehighlights">Required for highlights</string>
-  <string name="label_feature_senderprefixes">Required for seeing prefix modes (+, @) of users in channels</string>
+  <string name="label_feature_senderprefixes">Required for seeing prefix modes (+, @) of users in messages</string>
   <string name="label_feature_remotedisconnect">Required for remote disconnects of your own clients</string>
   <string name="label_feature_richmessages">Required for seeing real names or IRCv3 or Gravatar avatars in messages</string>
   <string name="label_feature_backlogfiltertype">Required for receiving past notifications after connecting</string>
