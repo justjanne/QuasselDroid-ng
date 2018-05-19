@@ -31,8 +31,17 @@ object LocaleHelper {
     return updateResources(context, Settings.appearance(context).language)
   }
 
+  fun parseLanguageCode(rawLanguage: String): Locale {
+    val split = rawLanguage.split("-", limit = 3)
+    return when (split.size) {
+      3    -> Locale(split[0], split[2], split[1])
+      2    -> Locale(split[0], split[1], "")
+      else -> Locale(split[0], "", "")
+    }
+  }
+
   private fun updateResources(context: Context, language: String) = if (language.isNotEmpty()) {
-    val locale = Locale(language)
+    val locale = parseLanguageCode(language)
     Locale.setDefault(locale)
 
     val config = Configuration(context.resources.configuration)

@@ -107,11 +107,11 @@
     <item>en</item>
     <item>de</item>
     <!--<item>fr</item>-->
-    <item>fr_ca</item>
+    <item>fr-CA</item>
     <!--<item>nl</item>-->
     <item>lt</item>
     <item>pt</item>
-    <!--<item>pt_BR</item>-->
+    <!--<item>pt-BR</item>-->
     <!--<item>sr</item>-->
   </string-array>
 

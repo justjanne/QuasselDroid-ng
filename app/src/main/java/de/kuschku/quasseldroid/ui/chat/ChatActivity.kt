@@ -588,7 +588,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     outState?.putInt("OPEN_BUFFER", viewModel.buffer.value ?: -1)
     outState?.putInt("OPEN_BUFFERVIEWCONFIG", viewModel.bufferViewConfigId.value ?: -1)
     outState?.putLong("CONNECTED_ACCOUNT", connectedAccount)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       outPersistentState?.putInt("OPEN_BUFFER", viewModel.buffer.value ?: -1)
       outPersistentState?.putInt("OPEN_BUFFERVIEWCONFIG", viewModel.bufferViewConfigId.value ?: -1)
       outPersistentState?.putLong("CONNECTED_ACCOUNT", connectedAccount)
@@ -607,7 +607,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   override fun onRestoreInstanceState(savedInstanceState: Bundle?,
                                       persistentState: PersistableBundle?) {
     super.onRestoreInstanceState(savedInstanceState, persistentState)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       val fallbackBuffer = persistentState?.getInt("OPEN_BUFFER", -1) ?: -1
       viewModel.buffer.onNext(
         savedInstanceState?.getInt("OPEN_BUFFER", fallbackBuffer)
