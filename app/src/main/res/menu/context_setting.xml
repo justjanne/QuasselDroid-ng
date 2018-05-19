@@ -25,6 +25,5 @@
     app:showAsAction="ifRoom" />
   <item
     android:id="@+id/action_delete"
-    android:title="@string/label_delete"
-    app:showAsAction="ifRoom" />
+    android:title="@string/label_delete" />
 </menu>
