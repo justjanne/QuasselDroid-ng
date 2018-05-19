@@ -34,7 +34,6 @@ import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.IrcUser
-import de.kuschku.libquassel.util.IrcUserUtils
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.libquassel.util.helpers.value
@@ -48,7 +47,6 @@ import de.kuschku.quasseldroid.util.irc.format.spans.IrcItalicSpan
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
-import de.kuschku.quasseldroid.viewmodel.EditorViewModel.Companion.IGNORED_CHARS
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -173,9 +171,6 @@ class UserInfoFragment : ServiceBoundFragment() {
       } ?: Observable.just(IrcUser.NULL).map { user -> processUser(user) }
     }.toLiveData().observe(this, Observer {
       val processUser = { user: IrcUserInfo ->
-        val senderColorIndex = IrcUserUtils.senderColor(user.nick)
-        val rawInitial = user.nick.trimStart(*IGNORED_CHARS).firstOrNull()
-                         ?: user.nick.firstOrNull()
         avatar.loadAvatars(
           AvatarHelper.avatar(messageSettings, user, maxOf(avatar.width, avatar.height)),
           crop = false
