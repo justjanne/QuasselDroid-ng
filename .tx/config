@@ -8,6 +8,7 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_status.xml
 trans.lt = app/src/main/res/values-lt/strings_status.xml
 trans.pt = app/src/main/res/values-pt/strings_status.xml
+trans.pt_BR = app/src/main/res/values-pt-rBR/strings_status.xml
 trans.sr = app/src/main/res/values-sr/strings_status.xml
 trans.fr = app/src/main/res/values-fr/strings_status.xml
 
@@ -18,6 +19,7 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_error.xml
 trans.lt = app/src/main/res/values-lt/strings_error.xml
 trans.pt = app/src/main/res/values-pt/strings_error.xml
+trans.pt_BR = app/src/main/res/values-pt-rBR/strings_error.xml
 trans.sr = app/src/main/res/values-sr/strings_error.xml
 trans.fr = app/src/main/res/values-fr/strings_error.xml
 
@@ -28,6 +30,7 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_defaults.xml
 trans.lt = app/src/main/res/values-lt/strings_defaults.xml
 trans.pt = app/src/main/res/values-pt/strings_defaults.xml
+trans.pt_BR = app/src/main/res/values-pt-rBR/strings_defaults.xml
 trans.sr = app/src/main/res/values-sr/strings_defaults.xml
 trans.fr = app/src/main/res/values-fr/strings_defaults.xml
 
@@ -38,6 +41,7 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_format.xml
 trans.lt = app/src/main/res/values-lt/strings_format.xml
 trans.pt = app/src/main/res/values-pt/strings_format.xml
+trans.pt_BR = app/src/main/res/values-pt-rBR/strings_format.xml
 trans.sr = app/src/main/res/values-sr/strings_format.xml
 trans.fr = app/src/main/res/values-fr/strings_format.xml
 
@@ -48,6 +52,7 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_preferences.xml
 trans.lt = app/src/main/res/values-lt/strings_preferences.xml
 trans.pt = app/src/main/res/values-pt/strings_preferences.xml
+trans.pt_BR = app/src/main/res/values-pt-rBR/strings_preferences.xml
 trans.sr = app/src/main/res/values-sr/strings_preferences.xml
 trans.fr = app/src/main/res/values-fr/strings_preferences.xml
 
@@ -58,6 +63,7 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_messages.xml
 trans.lt = app/src/main/res/values-lt/strings_messages.xml
 trans.pt = app/src/main/res/values-pt/strings_messages.xml
+trans.pt_BR = app/src/main/res/values-pt-rBR/strings_messages.xml
 trans.sr = app/src/main/res/values-sr/strings_messages.xml
 trans.fr = app/src/main/res/values-fr/strings_messages.xml
 
@@ -68,6 +74,7 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings.xml
 trans.lt = app/src/main/res/values-lt/strings.xml
 trans.pt = app/src/main/res/values-pt/strings.xml
+trans.pt_BR = app/src/main/res/values-pt-rBR/strings.xml
 trans.sr = app/src/main/res/values-sr/strings.xml
 trans.fr = app/src/main/res/values-fr/strings.xml
 
@@ -78,6 +85,7 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_setup.xml
 trans.lt = app/src/main/res/values-lt/strings_setup.xml
 trans.pt = app/src/main/res/values-pt/strings_setup.xml
+trans.pt_BR = app/src/main/res/values-pt-rBR/strings_setup.xml
 trans.sr = app/src/main/res/values-sr/strings_setup.xml
 trans.fr = app/src/main/res/values-fr/strings_setup.xml
 
@@ -88,6 +96,7 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_contributors.xml
 trans.lt = app/src/main/res/values-lt/strings_contributors.xml
 trans.pt = app/src/main/res/values-pt/strings_contributors.xml
+trans.pt_BR = app/src/main/res/values-pt-rBR/strings_contributors.xml
 trans.sr = app/src/main/res/values-sr/strings_contributors.xml
 trans.fr = app/src/main/res/values-fr/strings_contributors.xml
 
@@ -98,6 +107,7 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_info.xml
 trans.lt = app/src/main/res/values-lt/strings_info.xml
 trans.pt = app/src/main/res/values-pt/strings_info.xml
+trans.pt_BR = app/src/main/res/values-pt-rBR/strings_info.xml
 trans.sr = app/src/main/res/values-sr/strings_info.xml
 trans.fr = app/src/main/res/values-fr/strings_info.xml
 
@@ -108,6 +118,6 @@ source_lang = en
 trans.de = app/src/main/res/values-de/strings_settings.xml
 trans.lt = app/src/main/res/values-lt/strings_settings.xml
 trans.pt = app/src/main/res/values-pt/strings_settings.xml
+trans.pt_BR = app/src/main/res/values-pt-rBR/strings_settings.xml
 trans.sr = app/src/main/res/values-sr/strings_settings.xml
 trans.fr = app/src/main/res/values-fr/strings_settings.xml
-

@@ -358,12 +358,20 @@ class AboutFragment : DaggerFragment() {
     translators.itemAnimator = null
     translators.adapter = TranslatorAdapter(listOf(
       Translator(
+        name = "Janne Koschinski",
+        language = R.string.preference_language_entry_de
+      ),
+      Translator(
         name = "TDa_",
         language = R.string.preference_language_entry_lt
       ),
       Translator(
         name = "Exterminador",
         language = R.string.preference_language_entry_pt
+      ),
+      Translator(
+        name = "Soni",
+        language = R.string.preference_language_entry_pt_br
       ),
       Translator(
         name = "Luka Ilić",
