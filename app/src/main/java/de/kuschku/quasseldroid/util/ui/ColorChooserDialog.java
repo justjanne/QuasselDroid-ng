@@ -94,16 +94,6 @@ public class ColorChooserDialog extends DialogFragment
   public ColorChooserDialog() {
   }
 
-  @Nullable
-  public static ColorChooserDialog findVisible(
-    @NonNull FragmentManager fragmentManager, @ColorChooserTag String tag) {
-    Fragment frag = fragmentManager.findFragmentByTag(tag);
-    if (frag != null && frag instanceof ColorChooserDialog) {
-      return (ColorChooserDialog) frag;
-    }
-    return null;
-  }
-
   private void generateColors() {
     Builder builder = getBuilder();
     colorsTop = builder.colorsTop;

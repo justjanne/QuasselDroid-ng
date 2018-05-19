@@ -28,6 +28,7 @@
   <string name="connection_service_description">Keeps a connection to your core to allow for notifications, and to transmit messages.</string>
 
   <string name="label_about">About</string>
+  <string name="label_accept">Accept</string>
   <string name="label_avatar">Avatar</string>
   <string name="label_back">Back</string>
   <string name="label_buffer_name">Buffer Name</string>
@@ -109,10 +110,29 @@
   <string name="label_whois_long">Update user information</string>
   <string name="label_yes">Yes</string>
 
+  <string name="label_feature_synchronizedmarkerline">Required for synchronizing the last position in channels</string>
+  <string name="label_feature_saslauthentication">Required for SASL</string>
+  <string name="label_feature_saslexternal">Required for SASL with certificates</string>
+  <string name="label_feature_hideinactivenetworks">Required for hiding inactive networks from chat lists</string>
+  <string name="label_feature_passwordchange">Required for changing passwords from the client</string>
+  <string name="label_feature_capnegotiation">Required for IRCv3 capabilities</string>
+  <string name="label_feature_verifyserverssl">Required for verifying the SSL certificate of IRC networks you connect to</string>
+  <string name="label_feature_customratelimits">Required for custom rate limits for IRC networks</string>
+  <string name="label_feature_awayformattimestamp">Required for custom formatted timestamps in away messages</string>
+  <string name="label_feature_bufferactivitysync">Required for seeing activity of chats in the chat list</string>
+  <string name="label_feature_coresidehighlights">Required for highlights</string>
+  <string name="label_feature_senderprefixes">Required for seeing prefix modes (+, @) of users in channels</string>
+  <string name="label_feature_remotedisconnect">Required for remote disconnects of your own clients</string>
+  <string name="label_feature_richmessages">Required for seeing real names or IRCv3 or Gravatar avatars in messages</string>
+  <string name="label_feature_backlogfiltertype">Required for receiving past notifications after connecting</string>
+
   <string name="notification_channel_background" translatable="false">background</string>
   <string name="notification_channel_connection_title">Connection</string>
   <string name="notification_channel_highlight" translatable="false">highlight</string>
   <string name="notification_channel_highlight_title">Highlight</string>
+
+  <string name="label_missing_features">Missing Features</string>
+  <string name="info_missing_features">Your core is missing features that are required for Quasseldroid to work correctly.</string>
 
   <string name="buffer_delete_confirmation">Do you want to delete this buffer permanently?</string>
 
