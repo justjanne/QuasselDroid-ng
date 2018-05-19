@@ -124,6 +124,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   private var chatlineFragment: ChatlineFragment? = null
 
+  private var isInitialConnect = true
+
   override fun onNewIntent(intent: Intent?) {
     super.onNewIntent(intent)
     if (intent != null) {
@@ -451,7 +453,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     })
 
     // After initial connect, open the drawer
-    var isInitialConnect = true
     viewModel.connectionProgress
       .filter { (it, _, _) -> it == ConnectionState.CONNECTED }
       .firstElement()
@@ -605,13 +606,18 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     super.onSaveInstanceState(outState)
     outState?.putInt("OPEN_BUFFER", viewModel.buffer.value ?: -1)
     outState?.putInt("OPEN_BUFFERVIEWCONFIG", viewModel.bufferViewConfigId.value ?: -1)
+    outState?.putBoolean("HAS_BEEN_CONNECTED", isInitialConnect)
   }
 
   override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
     super.onSaveInstanceState(outState, outPersistentState)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    outState?.putInt("OPEN_BUFFER", viewModel.buffer.value ?: -1)
+    outState?.putInt("OPEN_BUFFERVIEWCONFIG", viewModel.bufferViewConfigId.value ?: -1)
+    outState?.putBoolean("HAS_BEEN_CONNECTED", isInitialConnect)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
       outPersistentState?.putInt("OPEN_BUFFER", viewModel.buffer.value ?: -1)
       outPersistentState?.putInt("OPEN_BUFFERVIEWCONFIG", viewModel.bufferViewConfigId.value ?: -1)
+      outPersistentState?.putBoolean("HAS_BEEN_CONNECTED", isInitialConnect)
     }
   }
 
@@ -620,13 +626,14 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     viewModel.buffer.onNext(savedInstanceState?.getInt("OPEN_BUFFER", -1) ?: -1)
     viewModel.bufferViewConfigId.onNext(savedInstanceState?.getInt("OPEN_BUFFERVIEWCONFIG", -1)
                                         ?: -1)
+    isInitialConnect = savedInstanceState?.getBoolean("HAS_BEEN_CONNECTED", true) ?: true
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   override fun onRestoreInstanceState(savedInstanceState: Bundle?,
                                       persistentState: PersistableBundle?) {
     super.onRestoreInstanceState(savedInstanceState, persistentState)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
       val fallbackBuffer = persistentState?.getInt("OPEN_BUFFER", -1) ?: -1
       viewModel.buffer.onNext(
         savedInstanceState?.getInt("OPEN_BUFFER", fallbackBuffer)
@@ -637,6 +644,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         savedInstanceState?.getInt("OPEN_BUFFERVIEWCONFIG", fallbackBufferViewConfigId)
         ?: fallbackBufferViewConfigId
       )
+      val fallbackIsInitialConnect = persistentState?.getBoolean("HAS_BEEN_CONNECTED", true) ?: true
+      isInitialConnect = savedInstanceState?.getBoolean(
+        "HAS_BEEN_CONNECTED", fallbackIsInitialConnect
+      ) ?: fallbackIsInitialConnect
     }
   }
 
