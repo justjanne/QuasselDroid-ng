@@ -48,7 +48,6 @@ import de.kuschku.quasseldroid.util.irc.format.spans.IrcItalicSpan
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
-import de.kuschku.quasseldroid.util.ui.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel.Companion.IGNORED_CHARS
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -177,18 +176,8 @@ class UserInfoFragment : ServiceBoundFragment() {
         val senderColorIndex = IrcUserUtils.senderColor(user.nick)
         val rawInitial = user.nick.trimStart(*IGNORED_CHARS).firstOrNull()
                          ?: user.nick.firstOrNull()
-        val initial = rawInitial?.toUpperCase().toString()
-        val senderColor = when (messageSettings.colorizeNicknames) {
-          MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
-          MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
-            if (user.network?.isMyNick(user.nick) == true) selfColor
-            else senderColors[senderColorIndex]
-          MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
-        }
-
         avatar.loadAvatars(
           AvatarHelper.avatar(messageSettings, user, maxOf(avatar.width, avatar.height)),
-          TextDrawable.builder().buildRect(initial, senderColor),
           crop = false
         )
 
