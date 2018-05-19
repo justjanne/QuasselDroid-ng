@@ -17,4 +17,11 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="default_bufferviewconfig_name">Todas as Conversas</string>
+
+  <string name="default_identity_identity_name">Identidade Padrão</string>
+  <string name="default_identity_realname">Usuário Quassel IRC</string>
+  <string name="default_identity_awayreason">Fui pescar.</string>
+  <string name="default_identity_detachawayreason">Todos os clientes Quassel desapareceram da face da terra…</string>
+</resources>

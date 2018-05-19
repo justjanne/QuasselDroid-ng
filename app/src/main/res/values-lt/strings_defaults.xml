@@ -21,10 +21,7 @@
   <string name="default_bufferviewconfig_name">Visi pokalbiai</string>
 
   <string name="default_identity_identity_name">Numatyta tapatybė</string>
-  <string name="default_identity_name">&lt;tuščias&gt;</string>
   <string name="default_identity_realname">Quassel IRC vartotojas</string>
-  <string name="default_identity_nick">quassel%1$d</string>
-  <string name="default_identity_ident">quassel</string>
   <string name="default_identity_awayreason">Išėjau žvejoti.</string>
   <string name="default_identity_autoawayreason">Manęs nėra. Prižadu!</string>
   <string name="default_identity_detachawayreason">Visi Quassel klientai išnyko nuo žemės paviršiaus…</string>

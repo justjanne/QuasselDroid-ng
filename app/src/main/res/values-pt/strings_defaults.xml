@@ -21,10 +21,7 @@
   <string name="default_bufferviewconfig_name">Todos os Chats</string>
 
   <string name="default_identity_identity_name">Identidade Padrão</string>
-  <string name="default_identity_name">&lt;vazio&gt;</string>
   <string name="default_identity_realname">Utilizador Quassel IRC</string>
-  <string name="default_identity_nick">quassel%1$d</string>
-  <string name="default_identity_ident">quassel</string>
   <string name="default_identity_awayreason">Fui pescar.</string>
   <string name="default_identity_autoawayreason">Não estou aqui. Não, a sério. Não estou aqui!</string>
   <string name="default_identity_detachawayreason">Todos os clientes Quassel desapareceram da face da terra…</string>
