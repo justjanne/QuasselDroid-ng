@@ -27,6 +27,7 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.SpannableString
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -166,7 +167,13 @@ class ChatlineFragment : ServiceBoundFragment() {
     fun send() {
       if (chatline.text.isNotBlank()) {
         val lines = chatline.text.lineSequence().map {
-          it to ircFormatSerializer.toEscapeCodes(SpannableString(it))
+          SpannableString(it).apply {
+            for (span in getSpans(0, length, Any::class.java)) {
+              if (getSpanFlags(span) and Spanned.SPAN_COMPOSING != 0) {
+                removeSpan(span)
+              }
+            }
+          } to ircFormatSerializer.toEscapeCodes(SpannableString(it))
         }
 
         viewModel.session { sessionOptional ->
@@ -174,8 +181,8 @@ class ChatlineFragment : ServiceBoundFragment() {
           viewModel.buffer { bufferId ->
             session?.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
               val output = mutableListOf<IAliasManager.Command>()
-              for ((raw, formatted) in lines) {
-                viewModel.addRecentlySentMessage(raw)
+              for ((stripped, formatted) in lines) {
+                viewModel.addRecentlySentMessage(stripped)
                 session.aliasManager?.processInput(bufferInfo, formatted, output)
               }
               for (command in output) {
