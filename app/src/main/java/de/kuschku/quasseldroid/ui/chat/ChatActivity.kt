@@ -736,6 +736,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     if (requestCode == REQUEST_SELECT_ACCOUNT) {
       startedSelection = false
+      connectedAccount = -1L
 
       if (resultCode == Activity.RESULT_CANCELED) {
         finish()
