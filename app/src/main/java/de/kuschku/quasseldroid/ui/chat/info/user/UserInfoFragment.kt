@@ -115,21 +115,6 @@ class UserInfoFragment : ServiceBoundFragment() {
 
     val openBuffer = arguments?.getBoolean("openBuffer")
 
-    val senderColors = requireContext().theme.styledAttributes(
-      R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
-      R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
-      R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
-      R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF
-    ) {
-      IntArray(length()) {
-        getColor(it, 0)
-      }
-    }
-
-    val selfColor = requireContext().theme.styledAttributes(R.attr.colorForegroundSecondary) {
-      getColor(0, 0)
-    }
-
     val networkId2 = arguments?.getInt("networkId")
     val nickName2 = arguments?.getString("nick")
     combineLatest(viewModel.session, viewModel.networks).switchMap { (sessionOptional, networks) ->
