@@ -176,13 +176,15 @@ class ChatlineFragment : ServiceBoundFragment() {
           } to ircFormatSerializer.toEscapeCodes(SpannableString(it))
         }
 
+        for ((stripped, _) in lines) {
+          viewModel.addRecentlySentMessage(stripped)
+        }
         viewModel.session { sessionOptional ->
           val session = sessionOptional.orNull()
           viewModel.buffer { bufferId ->
             session?.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
               val output = mutableListOf<IAliasManager.Command>()
-              for ((stripped, formatted) in lines) {
-                viewModel.addRecentlySentMessage(stripped)
+              for ((_, formatted) in lines) {
                 session.aliasManager?.processInput(bufferInfo, formatted, output)
               }
               for (command in output) {
