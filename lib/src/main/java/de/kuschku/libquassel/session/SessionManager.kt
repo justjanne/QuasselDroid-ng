@@ -25,8 +25,9 @@ import de.kuschku.libquassel.connection.SocketAddress
 import de.kuschku.libquassel.protocol.ClientData
 import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
 import de.kuschku.libquassel.util.compatibility.HandlerService
-import de.kuschku.libquassel.util.compatibility.LoggingHandler
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import de.kuschku.libquassel.util.helpers.or
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -80,7 +81,7 @@ class SessionManager(
     })
 
   init {
-    log(LoggingHandler.LogLevel.INFO, "Session", "Session created")
+    log(INFO, "Session", "Session created")
 
     state.subscribe {
       if (it == ConnectionState.CONNECTED) {
@@ -120,6 +121,7 @@ class SessionManager(
     userData: Pair<String, String>,
     shouldReconnect: Boolean = false
   ) {
+    log(DEBUG, "SessionManager", "Connecting")
     inProgressSession.value.close()
     lastClientData = clientData
     lastTrustManager = trustManager
@@ -147,9 +149,16 @@ class SessionManager(
 
   fun autoReconnect(forceReconnect: Boolean = false) {
     if (!hasErrored) {
-      ifClosed {
-        reconnect(forceReconnect)
+      state.or(ConnectionState.DISCONNECTED).let {
+        if (it == ConnectionState.CLOSED) {
+          log(INFO, "SessionManager", "Autoreconnect triggered")
+          reconnect(forceReconnect)
+        } else {
+          log(INFO, "SessionManager", "Autoreconnect failed: state is $it")
+        }
       }
+    } else {
+      log(INFO, "SessionManager", "Autoreconnect failed: hasErrored")
     }
   }
 
@@ -163,7 +172,11 @@ class SessionManager(
 
       if (clientData != null && trustManager != null && hostnameVerifier != null && address != null && userData != null) {
         connect(clientData, trustManager, hostnameVerifier, address, userData, forceReconnect)
+      } else {
+        log(INFO, "SessionManager", "Reconnect failed: not enough data available")
       }
+    } else {
+      log(INFO, "SessionManager", "Reconnect failed: reconnect not allowed")
     }
   }
 

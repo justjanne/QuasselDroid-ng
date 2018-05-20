@@ -150,7 +150,7 @@ class CoreConnection(
       channel?.close()
       interrupt()
     } catch (e: Throwable) {
-      log(WARN, TAG, "Error encountered while closing connection", e)
+      log(WARN, TAG, "Error encountered while closing connection: $e")
     }
   }
 
@@ -165,8 +165,7 @@ class CoreConnection(
           )
         )
       } catch (e: Throwable) {
-        log(WARN,
-            TAG, "Error encountered while serializing handshake message", e)
+        log(WARN, TAG, "Error encountered while serializing handshake message", e)
       }
     }
   }
@@ -182,8 +181,7 @@ class CoreConnection(
           )
         )
       } catch (e: Throwable) {
-        log(WARN,
-            TAG, "Error encountered while serializing sigproxy message", e)
+        log(WARN, TAG, "Error encountered while serializing sigproxy message", e)
       }
     }
   }
@@ -248,8 +246,7 @@ class CoreConnection(
         try {
           handler.handle(msg)
         } catch (e: Throwable) {
-          log(WARN,
-              TAG, "Error encountered while handling sigproxy message", e)
+          log(WARN, TAG, "Error encountered while handling sigproxy message", e)
           log(WARN, TAG, msg.toString())
         }
       }

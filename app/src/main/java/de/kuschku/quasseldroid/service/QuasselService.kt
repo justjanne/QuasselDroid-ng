@@ -34,6 +34,8 @@ import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.session.SessionManager
+import de.kuschku.libquassel.util.compatibility.LoggingHandler
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.malheur.CrashHandler
 import de.kuschku.quasseldroid.BuildConfig
@@ -224,28 +226,6 @@ class QuasselService : DaggerLifecycleService(),
     }
   }
 
-  private fun updateConnection(accountId: Long, reconnect: Boolean) {
-    handlerService.backend {
-      val account = if (accountId != -1L && reconnect) {
-        accountDatabase.accounts().findById(accountId)
-      } else {
-        null
-      }
-
-      if (account == null) {
-        backendImplementation.disconnect(true)
-        stopSelf()
-      } else {
-        backendImplementation.connectUnlessConnected(
-          SocketAddress(account.host, account.port),
-          account.user,
-          account.pass,
-          true
-        )
-      }
-    }
-  }
-
   private lateinit var sessionManager: SessionManager
 
   private lateinit var clientData: ClientData
@@ -371,6 +351,7 @@ class QuasselService : DaggerLifecycleService(),
       .toLiveData()
       .observe(this, Observer {
         handlerService.backend {
+          LoggingHandler.log(INFO, "QuasselService", "Autoreconnect: Network changed")
           sessionManager.autoReconnect(true)
         }
       })
@@ -383,6 +364,7 @@ class QuasselService : DaggerLifecycleService(),
       .observe(
         this, Observer {
         handlerService.backend {
+          LoggingHandler.log(INFO, "QuasselService", "Autoreconnect: Closed")
           sessionManager.autoReconnect()
         }
       })
