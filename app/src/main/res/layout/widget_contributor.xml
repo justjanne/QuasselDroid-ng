@@ -22,7 +22,6 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:background="?android:attr/selectableItemBackground"
-  android:focusable="true"
   android:gravity="center_vertical"
   android:minHeight="?android:attr/listPreferredItemHeightSmall"
   android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
