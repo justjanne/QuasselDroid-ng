@@ -20,7 +20,7 @@
 <resources>
   <string name="settings_networks_title">Mreže</string>
   <string name="settings_network_title">Mreža</string>
-  <string name="settings_network_network_name">Ime Mreže</string>
+  <string name="settings_network_network_name">Ime mreže</string>
   <string name="settings_network_identity">Identitet</string>
   <string name="settings_network_sasl_enabled">SASL</string>
   <string name="settings_network_sasl_account">Nalog</string>
@@ -30,12 +30,12 @@
   <string name="settings_network_autoidentify_password">Lozinka</string>
   <string name="settings_network_connection">Veza</string>
   <string name="settings_network_perform">Izvrši</string>
-  <string name="settings_network_rejoin_channels">Ponovo Se Pridruži Kanalima</string>
+  <string name="settings_network_rejoin_channels">Ponovo se pridruži kanalima</string>
   <string name="settings_network_autoreconnect_enabled">Automatsko Prespajanje</string>
   <string name="settings_network_autoreconnect_interval">Interval</string>
   <string name="settings_network_autoreconnect_interval_unit">sekundi</string>
-  <string name="settings_network_autoreconnect_attempts">Maksimalan Broj Pokušaja</string>
-  <string name="settings_network_autoreconnect_unlimited">Neograničen Broj Pokušaja</string>
+  <string name="settings_network_autoreconnect_attempts">Maksimalan broj pokušaja</string>
+  <string name="settings_network_autoreconnect_unlimited">Neograničen broj pokušaja</string>
   <string name="settings_network_customratelimits_enabled">Limiti Posebne Rate</string>
   <string name="settings_network_customratelimits_burstsize">Broj Uzastopnih Poruka</string>
   <string name="settings_network_customratelimits_unlimited">Neograničeno</string>
@@ -75,8 +75,8 @@
   <string name="settings_identity_detach_away">Odsutan Na Razdvajanju</string>
   <string name="settings_identity_detach_away_reason">Razlog Odsutnosti Na Razdvajanju</string>
 
-  <string name="settings_chatlists_title">Četliste</string>
-  <string name="settings_chatlist_title">Četlista</string>
+  <string name="settings_chatlists_title">Liste razgovora</string>
+  <string name="settings_chatlist_title">Lista razgovora</string>
   <string name="settings_chatlist_ui">Korisnički Interfejs</string>
   <string name="settings_chatlist_buffer_view_name">Ime</string>
   <string name="settings_chatlist_show_search">Prikaži Pretragu</string>
@@ -84,40 +84,40 @@
   <string name="settings_chatlist_add_new_buffers_automatically">Dodaj nove četove automatski</string>
   <string name="settings_chatlist_network">Mreža</string>
   <string name="settings_chatlist_show_status_buffer">Prikazuj Statusni Buffer</string>
-  <string name="settings_chatlist_types">Tipovi Četa</string>
-  <string name="settings_chatlist_show_channels">Prikaži Kanale</string>
-  <string name="settings_chatlist_show_queries">Prikaži Upite</string>
+  <string name="settings_chatlist_types">Tipovi razgovora</string>
+  <string name="settings_chatlist_show_channels">Prikaži kanale</string>
+  <string name="settings_chatlist_show_queries">Prikaži upite</string>
   <string name="settings_chatlist_activity">Aktivnost</string>
-  <string name="settings_chatlist_minimum_activity_no_activity">Bez Aktivnosti</string>
-  <string name="settings_chatlist_minimum_activity_other_activity">Druge Aktivnosti</string>
-  <string name="settings_chatlist_minimum_activity_new_message">Nove Poruke</string>
+  <string name="settings_chatlist_minimum_activity_no_activity">Bez aktivnosti</string>
+  <string name="settings_chatlist_minimum_activity_other_activity">Druge aktivnosti</string>
+  <string name="settings_chatlist_minimum_activity_new_message">Nove poruke</string>
   <string name="settings_chatlist_minimum_activity_highlight">Isticanje</string>
-  <string name="settings_chatlist_hide_inactive_buffers">Sakrij Neaktivne Četove</string>
-  <string name="settings_chatlist_hide_inactive_networks">Sakrij Neaktivne Mreže</string>
+  <string name="settings_chatlist_hide_inactive_buffers">Sakrij neaktivne razgovore</string>
+  <string name="settings_chatlist_hide_inactive_networks">Sakrij neaktivne mreže</string>
 
-  <string name="settings_ignorelist_title">Lista Ignorisanja</string>
+  <string name="settings_ignorelist_title">Lista ignorisanja</string>
 
-  <string name="settings_ignoreitem_title">Pravilo za Ignorisanje</string>
+  <string name="settings_ignoreitem_title">Pravilo za ignorisanje</string>
   <string name="settings_ignoreitem_enabled">Aktivirano</string>
-  <string name="settings_ignoreitem_ignorerule">Pravilo za Ignorisanje</string>
-  <string name="settings_ignoreitem_isregex">Regex</string>
+  <string name="settings_ignoreitem_ignorerule">Pravilo za ignorisanje</string>
+  <string name="settings_ignoreitem_isregex">Regularni izraz</string>
   <string name="settings_ignoreitem_type">Tip</string>
-  <string name="settings_ignoreitem_type_sender">Pošiljaoc</string>
+  <string name="settings_ignoreitem_type_sender">Pošiljalac</string>
   <string name="settings_ignoreitem_type_message">Poruka</string>
   <string name="settings_ignoreitem_type_ctcp">CTCP</string>
   <string name="settings_ignoreitem_strictness">Striktnost</string>
   <string name="settings_ignoreitem_strictness_soft">Dinamično</string>
   <string name="settings_ignoreitem_strictness_hard">Trajno</string>
-  <string name="settings_ignoreitem_scope">Obim</string>
-  <string name="settings_ignoreitem_scope_global">Globalni Obim</string>
-  <string name="settings_ignoreitem_scope_network">Obim u Mreži</string>
-  <string name="settings_ignoreitem_scope_channel">Obim u Kanalu</string>
-  <string name="settings_ignoreitem_scoperule">Pravilo Obima</string>
+  <string name="settings_ignoreitem_scope">Doseg</string>
+  <string name="settings_ignoreitem_scope_global">Globalni doseg</string>
+  <string name="settings_ignoreitem_scope_network">Doseg u mreži</string>
+  <string name="settings_ignoreitem_scope_channel">Doseg u kanalu</string>
+  <string name="settings_ignoreitem_scoperule">Pravilo dosega</string>
 
   <string name="settings_highlightlist_title">Isticanja</string>
   <string name="settings_highlightlist_highlight_nick">Ističi Nadimak</string>
   <string name="settings_highlightlist_highlight_nick_all_nicks">Sve Nadimke od Identiteta</string>
-  <string name="settings_highlightlist_highlight_nick_current_nick">Trenutni Nadimak</string>
+  <string name="settings_highlightlist_highlight_nick_current_nick">Trenutni nadimak</string>
   <string name="settings_highlightlist_highlight_nick_none">Nijedno</string>
   <string name="settings_highlightlist_nicks_case_sensitive">Osjetljivo na Kapitalizaciju</string>
   <string name="settings_highlightlist_rules">Pravila Isticanja</string>
@@ -126,9 +126,9 @@
   <string name="settings_highlightrule_title">Pravilo Isticanja</string>
   <string name="settings_highlightrule_enabled">Aktivirano</string>
   <string name="settings_highlightrule_name">Ime</string>
-  <string name="settings_highlightrule_regular_expression">Regex</string>
+  <string name="settings_highlightrule_regular_expression">Regularni izraz</string>
   <string name="settings_highlightrule_case_sensitive">Osjetljivo na Kapitalizaciju</string>
-  <string name="settings_highlightrule_sender">Pošiljaoc</string>
+  <string name="settings_highlightrule_sender">Pošiljalac</string>
   <string name="settings_highlightrule_channel">Kanal</string>
 
   <string name="settings_aliaslist_title">Aliasi</string>
@@ -144,7 +144,7 @@
   <string name="settings_networkconfig_max_ping_count">Prekini vezu posle</string>
   <string name="settings_networkconfig_max_ping_count_unit">propuštenih pingova</string>
   <string name="settings_networkconfig_auto_who">Automatsko Pretraživanje Korisničkih Informacija</string>
-  <string name="settings_networkconfig_auto_who_interval">Interval Osvježavanja</string>
+  <string name="settings_networkconfig_auto_who_interval">Interval osvježavanja</string>
   <string name="settings_networkconfig_auto_who_interval_unit">sekundi</string>
   <string name="settings_networkconfig_auto_who_nick_limit">Ignoriši kanale sa više od</string>
   <string name="settings_networkconfig_auto_who_nick_limit_unit">korisnika</string>

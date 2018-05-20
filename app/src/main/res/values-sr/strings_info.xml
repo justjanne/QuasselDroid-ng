@@ -28,6 +28,6 @@
 
   <string name="property_group_ircchannel_channel">Kanal</string>
   <string name="property_ircchannel_topic">Tema</string>
-  <string name="property_ircchannel_topic_action_edit">Promijeni Temu</string>
-  <string name="property_ircchannel_topic_default">Tema Nije Postavljena</string>
+  <string name="property_ircchannel_topic_action_edit">Promijeni temu</string>
+  <string name="property_ircchannel_topic_default">Tema nije postavljena</string>
 </resources>

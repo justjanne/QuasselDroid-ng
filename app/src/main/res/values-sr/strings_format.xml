@@ -18,12 +18,12 @@
   -->
 
 <resources>
-  <string name="label_bold">Bold</string>
+  <string name="label_bold">Podebljano</string>
   <string name="label_italic">Italik</string>
   <string name="label_strikethrough">Precrtano</string>
   <string name="label_underline">Podvučeno</string>
   <string name="label_monospace">Monospace</string>
-  <string name="label_foreground">Boje Prednjeg Plana</string>
-  <string name="label_background">Boje Pozadine</string>
-  <string name="label_clear_formatting">Jasno Formatiranje</string>
+  <string name="label_foreground">Boja prednjeg plana</string>
+  <string name="label_background">Boja pozadine</string>
+  <string name="label_clear_formatting">Ukloni formatiranje</string>
 </resources>

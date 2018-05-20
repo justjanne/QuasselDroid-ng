@@ -21,7 +21,7 @@
   <string name="label_status_disconnected">Odvojeni</string>
   <string name="label_status_connecting">Povezivanje</string>
   <string name="label_status_handshake">Handshake</string>
-  <string name="label_status_init">Init</string>
+  <string name="label_status_init">Inicijalizacija</string>
   <string name="label_status_connected">Povezano</string>
-  <string name="label_status_closed">Veza Izgubljena</string>
+  <string name="label_status_closed">Veza izgubljena</string>
 </resources>

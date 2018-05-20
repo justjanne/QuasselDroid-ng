@@ -18,24 +18,24 @@
   -->
 
 <resources>
-  <string name="label_error_login">Greška Pri Prijavi</string>
-  <string name="label_error_setup">Greška Pri Postavci</string>
-  <string name="label_error_init">Greška u Vezi</string>
-  <string name="label_error_certificate">Greška u Sertifikatu</string>
+  <string name="label_error_login">Greška pri prijavi</string>
+  <string name="label_error_setup">Greška pri postavci</string>
+  <string name="label_error_init">Greška pri povezivanju</string>
+  <string name="label_error_certificate">Greška u sertifikatu</string>
   <string name="label_error_certificate_no_certificate">Sertifikat nije dostupan</string>
   <string name="label_error_certificate_no_hostname">Hostname nije dostupno</string>
   <string name="label_error_certificate_invalid"><![CDATA[
-    <p>Sertifikat sa fingerprint-om<br/>
-    <code>%1$s</code> je validan samo od %2$s do %3$s</p>
+    <p>Sertifikat sa otiskom<br/>
+    <code>%1$s</code> je važeći od %2$s do %3$s</p>
   ]]></string>
   <string name="label_error_certificate_untrusted"><![CDATA[
-    <p>Sertifikat sa fingerprint-om<br/>
+    <p>Sertifikat sa otiskom<br/>
     <code>%1$s</code><br/>
     nije pouzdan.</p>
   ]]></string>
   <string name="label_error_certificate_no_match"><![CDATA[
-    <p>Sertifikat sa fingerprint-om<br/>
+    <p>Sertifikat sa otiskom<br/>
     <code>%1$s</code><br/>
-    nije validan za %2$s.</p>
+    nije važeći za %2$s.</p>
   ]]></string>
 </resources>
