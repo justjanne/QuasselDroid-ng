@@ -364,7 +364,7 @@ class QuasselService : DaggerLifecycleService(),
       .observe(
         this, Observer {
         handlerService.backend {
-          LoggingHandler.log(INFO, "QuasselService", "Autoreconnect: Closed")
+          LoggingHandler.log(INFO, "QuasselService", "Autoreconnect: State Changed")
           sessionManager.autoReconnect()
         }
       })

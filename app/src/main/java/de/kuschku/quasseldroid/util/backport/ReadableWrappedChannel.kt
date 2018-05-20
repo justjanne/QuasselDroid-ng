@@ -19,6 +19,8 @@
 
 package de.kuschku.quasseldroid.util.backport
 
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.ERROR
 import java.io.InputStream
 import java.nio.ByteBuffer
 import java.nio.channels.ReadableByteChannel
@@ -57,6 +59,10 @@ class ReadableWrappedChannel(
         } finally {
           // end blocking operation, this handles interruption etc. properly
           end(readData > 0)
+        }
+
+        if (readData <= 0) {
+          log(ERROR, "ReadableWrappedChannel", "Read: $readData")
         }
 
         // read is negative if no data was read, in that case, terminate

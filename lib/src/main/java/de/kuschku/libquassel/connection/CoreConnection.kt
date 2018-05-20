@@ -86,8 +86,13 @@ class CoreConnection(
   }
 
   fun setState(value: ConnectionState) {
-    log(DEBUG, TAG, value.name)
-    state.onNext(value)
+    val current = state.value
+    if (current != ConnectionState.CLOSED) {
+      log(DEBUG, TAG, value.name)
+      state.onNext(value)
+    } else if (current != value) {
+      log(WARN, TAG, "Trying to set state while closed: $value", Throwable())
+    }
   }
 
   private fun sendHandshake() {
