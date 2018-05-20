@@ -17,4 +17,17 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="label_user_away">Odsutni</string>
+  <string name="label_user_away_reason">Razlog</string>
+  <string name="label_user_identity">Identitet</string>
+  <string name="label_user_account">Nalog</string>
+  <string name="label_user_ident">Ident</string>
+  <string name="label_user_host">Host</string>
+  <string name="label_user_server">Server</string>
+
+  <string name="property_group_ircchannel_channel">Kanal</string>
+  <string name="property_ircchannel_topic">Tema</string>
+  <string name="property_ircchannel_topic_action_edit">Promijeni Temu</string>
+  <string name="property_ircchannel_topic_default">Tema Nije Postavljena</string>
+</resources>

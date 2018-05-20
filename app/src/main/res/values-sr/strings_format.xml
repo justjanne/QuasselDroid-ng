@@ -17,4 +17,13 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="label_bold">Bold</string>
+  <string name="label_italic">Italik</string>
+  <string name="label_strikethrough">Precrtano</string>
+  <string name="label_underline">Podvučeno</string>
+  <string name="label_monospace">Monospace</string>
+  <string name="label_foreground">Boje Prednjeg Plana</string>
+  <string name="label_background">Boje Pozadine</string>
+  <string name="label_clear_formatting">Jasno Formatiranje</string>
+</resources>

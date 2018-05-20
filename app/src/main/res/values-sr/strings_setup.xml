@@ -25,7 +25,7 @@
 
   <!-- Account Connection -->
   <string name="slide_account_connection_title">Veza</string>
-  <string name="slide_account_connection_description">Prvo, molimo odaberite server na kom je vaše jezgro hostovano.</string>
+  <string name="slide_account_connection_description">Prvo, molimo odaberite server na kom je vaš Core hostovan.</string>
 
   <string name="label_connection_host">Host</string>
   <string name="label_connection_port">Port</string>
@@ -35,7 +35,7 @@
 
   <!-- Account User -->
   <string name="slide_account_user_title">Vaš Nalog</string>
-  <string name="slide_account_user_description">Sada, molimo unesite korisničko ime i lozinku za vaš nalog na jezgru. Ako ste upravo napravili to jezgro, mi ćemo podesiti ovaj nalog za vas.</string>
+  <string name="slide_account_user_description">Sada, molimo unesite korisničko ime i lozinku za vaš nalog na Core-u. Ako ste upravo napravili taj Core, mi ćemo podesiti ovaj nalog za vas.</string>
 
   <string name="label_account_user">Korisničko Ime</string>
   <string name="label_account_pass">Lozinka</string>

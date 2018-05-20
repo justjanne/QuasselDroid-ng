@@ -17,4 +17,136 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="preference_appearance_title">Izgled</string>
+
+  <string name="preference_theme_title">Tema</string>
+  <string name="preference_theme_entry_material_light">Material (Svijetlo)</string>
+  <string name="preference_theme_entry_material_dark">Material (Tamno)</string>
+  <string name="preference_theme_entry_quassel_light">Quassel (Svijetlo)</string>
+  <string name="preference_theme_entry_quassel_dark">Quassel (Tamno)</string>
+  <string name="preference_theme_entry_amoled">AMOLED</string>
+  <string name="preference_theme_entry_solarized_light">Solarized (Svijetlo)</string>
+  <string name="preference_theme_entry_solarized_dark">Solarized (Tamno)</string>
+  <string name="preference_theme_entry_gruvbox_light">Gruvbox (Svijetlo)</string>
+  <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Tamno)</string>
+  <string name="preference_theme_entry_dracula">Drakula</string>
+  <string name="preference_input_enter_title">Unesi ključ na tastaturi</string>
+  <string name="preference_input_enter_entry_emoji">Emoji</string>
+  <string name="preference_input_enter_entry_send">Pošalji</string>
+  <string name="preference_show_lag_title">Prikaži Lag</string>
+  <string name="preference_show_lag_summary">Prikazuje lag između klijenta i Core-a u action traci</string>
+
+  <string name="preference_keep_screen_on_title">Održi Screen Aktivnim</string>
+  <string name="preference_keep_screen_on_summary">Sprečava uređaj od odlaženja u sleep mod dok je aplikacija u prvom planu</string>
+
+  <string name="preference_language_title">Jezik</string>
+  <string name="preference_language_entry_auto">Sistemski Zadano</string>
+  <string name="preference_notifications_title">Obavještenja</string>
+
+  <string name="preference_notification_query_title">Direktne Poruka</string>
+
+  <string name="preference_notification_channel_title">Poruke Kanala</string>
+
+  <string name="preference_notification_other_title">Druge Poruke</string>
+
+  <string name="preference_notification_sound_title">Zvuk Obavještenja</string>
+
+  <string name="preference_notification_vibration_title">Vibracija</string>
+
+  <string name="preference_notification_light_title">LED</string>
+
+  <string name="preference_notification_configure_title">Podesi Obavještenja</string>
+
+  <string name="preference_notifications_level_all">Sve Poruke</string>
+  <string name="preference_notifications_level_highlight">Spominjanja</string>
+  <string name="preference_notifications_level_none">Nikad</string>
+  <string name="preference_messages_title">Poruke</string>
+
+  <string name="preference_monospace_title">Koristi Monospace Font</string>
+
+  <string name="preference_textsize_title">Veličina Teksta</string>
+
+  <string name="preference_show_seconds_title">Prikazuj Sekunde</string>
+
+  <string name="preference_use_24h_clock_title">Koristi 24-časovni Sat</string>
+
+  <string name="preference_colorize_mirc_title">Koristi mIRC Boje</string>
+  <string name="preference_colorize_mirc_summaryon">Prikazuj mIRC boje u porukama</string>
+  <string name="preference_colorize_mirc_summaryoff">Skini mIRC boje sa poruka</string>
+
+  <string name="preference_colorize_nicknames_title">Oboji nadimke</string>
+  <string name="preference_colorize_nicknames_entry_all">Svi nadimci</string>
+  <string name="preference_colorize_nicknames_entry_all_but_mine">Svi sem vlastitog nadimka</string>
+  <string name="preference_colorize_nicknames_entry_none">Nijedan nadimak</string>
+  <string name="preference_show_prefix_title">Prikazuj mod pošiljaoca</string>
+  <string name="preference_show_prefix_entry_all">Svi modovi</string>
+  <string name="preference_show_prefix_entry_highest">Najviši mod</string>
+  <string name="preference_show_prefix_entry_none">Nijedan mod</string>
+  <string name="preference_hostmask_actions_title">Prikazuj Hostmask u akcijama</string>
+  <string name="preference_hostmask_actions_summary">Prikaži čitav nick!ident@host u join/part/quit porukama</string>
+
+  <string name="preference_nicks_on_new_line_title">Razdvoj Nadimke</string>
+  <string name="preference_nicks_on_new_line_summary">Prikazuje nadimke na odvojenoj liniji</string>
+
+  <string name="preference_show_realnames_title">Prikazuj Realname</string>
+
+  <string name="preference_show_avatars_title">Prikazuj Avatare</string>
+
+  <string name="preference_square_avatars_title">Kvadratni Avatari</string>
+
+  <string name="preference_show_irccloud_avatars_title">Prikazuj IRCCloud Avatare</string>
+  <string name="preference_show_irccloud_avatars_summary">Prikazuje korisnicima bez avatara njihov IRCCloud avatar, ako je dostupan</string>
+
+  <string name="preference_show_gravatar_avatars_title">Prikazuj Gravatar Avatar</string>
+  <string name="preference_show_gravatar_avatars_summary">Prikazuje korisnicima bez avatara njihov Gravatar, ako je dostupan</string>
+
+  <string name="preference_show_matrix_avatars_title">Prikazuj Matrix Avatare</string>
+  <string name="preference_show_matrix_avatars_summary">Prikazuje korisnicima bez avatara njihov Matrix avatar, ako je dostupan</string>
+
+  <string name="preference_time_at_end_title">Desno Poravnata Vremenska Oznaka</string>
+  <string name="preference_time_at_end_summary">Poravnava vremenske oznake na kraju svake poruke</string>
+
+  <string name="preference_larger_emoji_title">Veće Poruke Koje Sadrže Samo Emoji</string>
+  <string name="preference_larger_emoji_summary">Povećaj veličinu poruka koje sadže samo emoji</string>
+
+
+  <string name="preference_autocomplete_title">Autokompletiranje</string>
+
+  <string name="preference_autocomplete_sender_doubleclick_title">Autokompletiranje Pošiljaoca</string>
+  <string name="preference_autocomplete_sender_doubleclick_summary">Dvoklik na poruku za autokompletiranje njenog pošaljioca</string>
+
+  <string name="preference_autocomplete_button_title">Dugme za Autokompletiranje</string>
+  <string name="preference_autocomplete_button_summary">Prikazuje dugme sa lijeve strane linije za unos koje pokreće tab kompletiranje</string>
+
+  <string name="preference_autocomplete_doubletap_title">Dvotap za Autokompletiranje</string>
+  <string name="preference_autocomplete_doubletap_summary">Predlaže nadimke i kanale posle dvoklika na liniju za unos</string>
+
+  <string name="preference_autocomplete_auto_title">Prikazuj Automatski</string>
+  <string name="preference_autocomplete_auto_summary">Predloži nadimke i kanale posle unosa prva 3 znaka</string>
+
+  <string name="preference_autocomplete_prefix_title">Prikaži posle prefiksa</string>
+  <string name="preference_autocomplete_prefix_summary">Predloži nadimke i kanale posle unosa @ ili #</string>
+
+  <string name="preference_autocomplete_nicks_title">Autokompletiraj Nadimke</string>
+
+  <string name="preference_autocomplete_buffers_title">Autokompletiraj Četove</string>
+
+  <string name="preference_autocomplete_aliases_title">Autokompletiraj Komande</string>
+
+
+  <string name="preference_backlog_title">Zaostatak</string>
+
+  <string name="preference_page_size_title">Veličina Stranice</string>
+  <string name="preference_page_size_summary">Broj poruka učitan i održan u memoriji u jednom momentu</string>
+
+  <string name="preference_initial_amount_title">Početna Količina</string>
+  <string name="preference_initial_amount_summary">Broj poruka koje će biti učitane pri prvom otvaranju buffer-a</string>
+
+
+  <string name="preference_connection_title">Veza</string>
+
+  <string name="preference_show_notification_title">Prikazuj obavještenja</string>
+  <string name="preference_show_notification_summary">Održava Quasseldroid uvijek spojenim koristeći trajno obavještenje</string>
+
+</resources>

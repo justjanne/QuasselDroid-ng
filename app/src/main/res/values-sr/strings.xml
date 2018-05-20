@@ -20,12 +20,13 @@
 <resources>
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Android baziran klijent za decentralizovani Quassel IRC klijent.</string>
-  <string name="app_description_long">Quassel je distribuiran, decentralizovan IRC klijent, napisan pomoću C++ i Qt-a. Quasseldroid je čisto kotlin klijent za Quassel jezgro, omogućujući vam da se povežete na vaše Quassel jezgro koristeći vaš Android™ telefon. </string>
+  <string name="app_description_long">Quassel je distribuiran, decentralizovan IRC klijent, napisan pomoću C++ i Qt-a. Quasseldroid je čisto kotlin klijent za Quassel Core, omogućujući vam da se povežete na vaše Quassel Core koristeći vaš Android™ telefon. </string>
 
   <string name="connection_service_title">Usluga Povezivanja</string>
-  <string name="connection_service_description">Održava vezu sa vašim jezgrom što omogućava obavještenja i slanje poruka.</string>
+  <string name="connection_service_description">Održava vezu sa vašim Core-om što omogućava obavještenja i slanje poruka.</string>
 
   <string name="label_about">O aplikaciji</string>
+  <string name="label_accept">Prihvati</string>
   <string name="label_avatar">Avatar</string>
   <string name="label_back">Vrati se nazad</string>
   <string name="label_buffer_name">Ime Buffera</string>
@@ -89,11 +90,12 @@
   <string name="label_select">Odaberi</string>
   <string name="label_settings">Podešavanja</string>
   <string name="label_settings_client">Podešavanja Klijenta</string>
-  <string name="label_settings_core">Podešavanja Jezgra</string>
+  <string name="label_settings_core">Podešavanja Core-a</string>
   <string name="label_share">Podijeli</string>
   <string name="label_share_crashreport">Podijeli Izvještaj o Padu Programa</string>
   <string name="label_show_hidden">Pokaži Sakriveno</string>
   <string name="label_topic">Tema Kanala</string>
+  <string name="label_translators">Prevodioci</string>
   <string name="label_unhide">Učini Vidljivim</string>
   <string name="label_website">Web Stranica</string>
   <string name="label_whitelist">Ignoriši</string>
@@ -106,8 +108,27 @@
   <string name="label_whois_long">Obnovi korisničke informacije</string>
   <string name="label_yes">Da</string>
 
+  <string name="label_feature_synchronizedmarkerline">Potrebno za sinhronizovanje zadnje pozicije u kanalima</string>
+  <string name="label_feature_saslauthentication">Potrebno za SASL</string>
+  <string name="label_feature_saslexternal">Potrebno za SASL sa sertifikatima</string>
+  <string name="label_feature_hideinactivenetworks">Potrebno za sakrivanje neaktivnih mreža sa čet lista</string>
+  <string name="label_feature_passwordchange">Potrebno za mijenjanje lozinke od klijenta</string>
+  <string name="label_feature_capnegotiation">Potrebno za IRCv3 mogućnosti</string>
+  <string name="label_feature_verifyserverssl">Potrebno za verifikaciju SSL sertifikata IRC mreža na koje ste spojeni</string>
+  <string name="label_feature_customratelimits">Potrebno za posebne rate limite IRC mreža</string>
+  <string name="label_feature_awayformattimestamp">Potrebno za posebno formatirane vremenske oznake u porukama iz odsutnosti</string>
+  <string name="label_feature_bufferactivitysync">Potrebno za traženje aktivnosti četova u čet listi</string>
+  <string name="label_feature_coresidehighlights">Potrebno za isticanje</string>
+  <string name="label_feature_senderprefixes">Potrebno za vidljivost prefiksa modova (+, @) korisnika u porukama</string>
+  <string name="label_feature_remotedisconnect">Potrebno za daljinsko prekidanje veze vaših klijenata</string>
+  <string name="label_feature_richmessages">Potrebno za vidljivost pravih imena ili IRCv3 ili Gravatar avatara u porukama</string>
+  <string name="label_feature_backlogfiltertype">Potrebno za primanje prošlih obavještenja posle povezivanja</string>
+
   <string name="notification_channel_connection_title">Veza</string>
   <string name="notification_channel_highlight_title">Isticanje</string>
+
+  <string name="label_missing_features">Nedostajuće Funkcije</string>
+  <string name="info_missing_features">Vašem Core-u nedostaju funkcije koje su potrebne da Quasseldroid fukncioniše pravilno</string>
 
   <string name="buffer_delete_confirmation">Da li želite trajno obrisati ovaj buffer?</string>
 

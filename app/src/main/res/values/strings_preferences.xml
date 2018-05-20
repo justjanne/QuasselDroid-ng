@@ -100,7 +100,7 @@
     <item>@string/preference_language_entry_lt</item>
     <item>@string/preference_language_entry_pt</item>
     <!--<item>@string/preference_language_entry_pt_br</item>-->
-    <!--<item>@string/preference_language_entry_sr</item>-->
+    <item>@string/preference_language_entry_sr</item>
   </string-array>
   <string-array name="preference_language_entryvalues" translatable="false">
     <item />
@@ -112,7 +112,7 @@
     <item>lt</item>
     <item>pt</item>
     <!--<item>pt-BR</item>-->
-    <!--<item>sr</item>-->
+    <item>sr</item>
   </string-array>
 
 

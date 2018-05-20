@@ -17,4 +17,38 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="message_type_join">Join</string>
+  <string name="message_type_part">Part</string>
+  <string name="message_type_quit">Quit</string>
+  <string name="message_type_nick">Nadimak</string>
+  <string name="message_type_mode">Mod</string>
+  <string name="message_type_topic">Tema</string>
+  <string name="message_format_copy">[%1$s] %2$s</string>
+  <string name="message_format_copy_complex">[%1$s] &lt;%2$s&gt; %3$s</string>
+
+  <string name="message_format_action">— %1$s%2$s %3$s</string>
+  <string name="message_format_notice">[%1$s%2$s] %3$s</string>
+  <string name="message_format_nick">%1$s%2$s je sada %3$s%4$s</string>
+  <string name="message_format_nick_self">Vi ste sada %1$s%2$s</string>
+  <string name="message_format_mode">Mod %1$s od %2$s%3$s</string>
+  <string name="message_format_join">%1$s%2$s se pridružio/la %3$s</string>
+  <string name="message_format_part_1">%1$s%2$s je napustio/la</string>
+  <string name="message_format_part_2">%1$s%2$s je napustio/la (%3$s)</string>
+  <string name="message_format_quit_1">%1$s%2$s je izašao/la</string>
+  <string name="message_format_quit_2">%1$s%2$s je izašao/la iz (%3$s)</string>
+  <string name="message_format_kick_1">%1$s je izbačen od %2$s%3$s</string>
+  <string name="message_format_kick_2">%1$s je izbačen od %2$s%3$s (%4$s)</string>
+  <string name="message_format_kill_1">%1$s je ubijen/na od %2$s%3$s</string>
+  <string name="message_format_kill_2">%1$s je ubijen/na od %2$s%3$s (%4$s)</string>
+  <plurals name="message_netsplit_join">
+    <item quantity="one">Netsplit između %1$s i %2$s se završio: %3$d se pridružio/la</item>
+    <item quantity="few">Netsplit između %1$s i %2$s se završio: %3$d su se pridružili</item>
+    <item quantity="other">Netsplit između %1$s i %2$s se završio: %3$d su se pridružili</item>
+  </plurals>
+  <plurals name="message_netsplit_quit">
+    <item quantity="one">Netsplit između %1$s i %2$s: %3$d je napustio/la</item>
+    <item quantity="few">Netsplit između %1$s i %2$s: %3$d su napustili</item>
+    <item quantity="other">Netsplit između %1$s i %2$s: %3$d su napustili</item>
+  </plurals>
+</resources>
