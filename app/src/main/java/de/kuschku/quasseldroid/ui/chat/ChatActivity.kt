@@ -593,28 +593,28 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onSaveInstanceState(outState: Bundle?) {
     super.onSaveInstanceState(outState)
-    outState?.putInt("OPEN_BUFFER", viewModel.buffer.value ?: -1)
-    outState?.putInt("OPEN_BUFFERVIEWCONFIG", viewModel.bufferViewConfigId.value ?: -1)
-    outState?.putLong("CONNECTED_ACCOUNT", connectedAccount)
-    outState?.putBoolean("OPEN_DRAWER_START", drawerLayout.isDrawerOpen(Gravity.START))
-    outState?.putBoolean("OPEN_DRAWER_END", drawerLayout.isDrawerOpen(Gravity.END))
+    outState?.putInt(KEY_OPEN_BUFFER, viewModel.buffer.value ?: -1)
+    outState?.putInt(KEY_OPEN_BUFFERVIEWCONFIG, viewModel.bufferViewConfigId.value ?: -1)
+    outState?.putLong(KEY_CONNECTED_ACCOUNT, connectedAccount)
+    outState?.putBoolean(KEY_OPEN_DRAWER_START, drawerLayout.isDrawerOpen(Gravity.START))
+    outState?.putBoolean(KEY_OPEN_DRAWER_END, drawerLayout.isDrawerOpen(Gravity.END))
   }
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
     super.onRestoreInstanceState(savedInstanceState)
-    viewModel.buffer.onNext(savedInstanceState?.getInt("OPEN_BUFFER", -1) ?: -1)
-    viewModel.bufferViewConfigId.onNext(savedInstanceState?.getInt("OPEN_BUFFERVIEWCONFIG", -1)
+    viewModel.buffer.onNext(savedInstanceState?.getInt(KEY_OPEN_BUFFER, -1) ?: -1)
+    viewModel.bufferViewConfigId.onNext(savedInstanceState?.getInt(KEY_OPEN_BUFFERVIEWCONFIG, -1)
                                         ?: -1)
-    connectedAccount = savedInstanceState?.getLong("CONNECTED_ACCOUNT", -1L) ?: -1L
+    connectedAccount = savedInstanceState?.getLong(KEY_CONNECTED_ACCOUNT, -1L) ?: -1L
 
-    if (savedInstanceState?.getBoolean("OPEN_DRAWER_START") == true) {
+    if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_START) == true) {
       drawerLayout.openDrawer(Gravity.START)
     }
-    if (savedInstanceState?.getBoolean("OPEN_DRAWER_END") == true) {
+    if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_END) == true) {
       drawerLayout.openDrawer(Gravity.END)
     }
-    if (savedInstanceState?.getBoolean("OPEN_DRAWER_START") != null ||
-        savedInstanceState?.getBoolean("OPEN_DRAWER_END") != null) {
+    if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_START) != null ||
+        savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_END) != null) {
       restoredDrawerState = true
     }
   }
@@ -746,9 +746,17 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   }
 
   companion object {
-    private val KEY_AUTOCOMPLETE_TEXT = "autocomplete_text"
-    private val KEY_AUTOCOMPLETE_SUFFIX = "autocomplete_suffix"
-    private val KEY_BUFFER_ID = "buffer_id"
+    // Intent keys
+    private const val KEY_AUTOCOMPLETE_TEXT = "autocomplete_text"
+    private const val KEY_AUTOCOMPLETE_SUFFIX = "autocomplete_suffix"
+    private const val KEY_BUFFER_ID = "buffer_id"
+
+    // Instance state keys
+    private const val KEY_OPEN_BUFFER = "open_buffer"
+    private const val KEY_OPEN_BUFFERVIEWCONFIG = "open_bufferviewconfig"
+    private const val KEY_CONNECTED_ACCOUNT = "connected_account"
+    private const val KEY_OPEN_DRAWER_START = "open_drawer_start"
+    private const val KEY_OPEN_DRAWER_END = "open_drawer_end"
 
     fun launch(
       context: Context,
