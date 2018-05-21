@@ -79,7 +79,6 @@ import org.threeten.bp.format.FormatStyle
 import java.security.cert.CertificateExpiredException
 import java.security.cert.CertificateNotYetValidException
 import javax.inject.Inject
-import javax.inject.Named
 
 class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
   @BindView(R.id.drawer_layout)
@@ -110,7 +109,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   lateinit var ircFormatDeserializer: IrcFormatDeserializer
 
   @Inject
-  @Named("ui")
   lateinit var autoCompleteAdapter: AutoCompleteAdapter
 
   lateinit var editorBottomSheet: DragInterceptBottomSheetBehavior<View>
