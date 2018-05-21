@@ -42,6 +42,7 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
 class QuasselViewModel : ViewModel() {
@@ -58,6 +59,7 @@ class QuasselViewModel : ViewModel() {
   val expandedMessages = BehaviorSubject.createDefault(emptySet<MsgId>())
 
   val buffer = BehaviorSubject.createDefault(Int.MAX_VALUE)
+  val bufferOpened = PublishSubject.create<Unit>()
 
   val bufferViewConfigId = BehaviorSubject.createDefault(Int.MAX_VALUE)
 

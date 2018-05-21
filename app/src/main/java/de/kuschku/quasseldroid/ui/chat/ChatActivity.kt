@@ -19,7 +19,6 @@
 
 package de.kuschku.quasseldroid.ui.chat
 
-import android.annotation.TargetApi
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.content.Context
@@ -27,7 +26,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -125,6 +123,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   private var connectedAccount = -1L
 
+  private var restoredDrawerState = false
+
   override fun onNewIntent(intent: Intent?) {
     super.onNewIntent(intent)
     if (intent != null) {
@@ -157,8 +157,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     setSupportActionBar(toolbar)
 
-    viewModel.buffer.toLiveData().observe(this, Observer {
-      if (it != null && drawerLayout.isDrawerOpen(Gravity.START)) {
+    viewModel.bufferOpened.toLiveData().observe(this, Observer {
+      actionMode?.finish()
+      if (drawerLayout.isDrawerOpen(Gravity.START)) {
         drawerLayout.closeDrawer(Gravity.START, true)
       }
     })
@@ -459,7 +460,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       .observe(this, Observer {
         if (connectedAccount != accountId) {
           if (resources.getBoolean(R.bool.buffer_drawer_exists) &&
-              viewModel.buffer.value == Int.MAX_VALUE) {
+              viewModel.buffer.value == Int.MAX_VALUE &&
+              !restoredDrawerState) {
             drawerLayout.openDrawer(Gravity.START)
           }
           connectedAccount = accountId
@@ -551,6 +553,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   var bufferData: BufferData? = null
   var actionMode: ActionMode? = null
+  private var statusBarColor: Int? = null
 
   override fun onActionModeStarted(mode: ActionMode?) {
     when (mode?.tag) {
@@ -558,12 +561,24 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       "MESSAGES" -> mode.menu?.retint(toolbar.context)
     }
     actionMode = mode
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      statusBarColor = window.statusBarColor
+      window.statusBarColor = theme.styledAttributes(R.attr.colorPrimaryDark) {
+        getColor(0, 0)
+      }
+    }
     super.onActionModeStarted(mode)
   }
 
   override fun onActionModeFinished(mode: ActionMode?) {
     actionMode = null
     super.onActionModeFinished(mode)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      statusBarColor?.let {
+        window.statusBarColor = it
+        statusBarColor = null
+      }
+    }
   }
 
   override fun onStart() {
@@ -581,18 +596,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     outState?.putInt("OPEN_BUFFER", viewModel.buffer.value ?: -1)
     outState?.putInt("OPEN_BUFFERVIEWCONFIG", viewModel.bufferViewConfigId.value ?: -1)
     outState?.putLong("CONNECTED_ACCOUNT", connectedAccount)
-  }
-
-  override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-    super.onSaveInstanceState(outState, outPersistentState)
-    outState?.putInt("OPEN_BUFFER", viewModel.buffer.value ?: -1)
-    outState?.putInt("OPEN_BUFFERVIEWCONFIG", viewModel.bufferViewConfigId.value ?: -1)
-    outState?.putLong("CONNECTED_ACCOUNT", connectedAccount)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      outPersistentState?.putInt("OPEN_BUFFER", viewModel.buffer.value ?: -1)
-      outPersistentState?.putInt("OPEN_BUFFERVIEWCONFIG", viewModel.bufferViewConfigId.value ?: -1)
-      outPersistentState?.putLong("CONNECTED_ACCOUNT", connectedAccount)
-    }
+    outState?.putBoolean("OPEN_DRAWER_START", drawerLayout.isDrawerOpen(Gravity.START))
+    outState?.putBoolean("OPEN_DRAWER_END", drawerLayout.isDrawerOpen(Gravity.END))
   }
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
@@ -601,27 +606,16 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     viewModel.bufferViewConfigId.onNext(savedInstanceState?.getInt("OPEN_BUFFERVIEWCONFIG", -1)
                                         ?: -1)
     connectedAccount = savedInstanceState?.getLong("CONNECTED_ACCOUNT", -1L) ?: -1L
-  }
 
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  override fun onRestoreInstanceState(savedInstanceState: Bundle?,
-                                      persistentState: PersistableBundle?) {
-    super.onRestoreInstanceState(savedInstanceState, persistentState)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      val fallbackBuffer = persistentState?.getInt("OPEN_BUFFER", -1) ?: -1
-      viewModel.buffer.onNext(
-        savedInstanceState?.getInt("OPEN_BUFFER", fallbackBuffer)
-        ?: fallbackBuffer
-      )
-      val fallbackBufferViewConfigId = persistentState?.getInt("OPEN_BUFFERVIEWCONFIG", -1) ?: -1
-      viewModel.bufferViewConfigId.onNext(
-        savedInstanceState?.getInt("OPEN_BUFFERVIEWCONFIG", fallbackBufferViewConfigId)
-        ?: fallbackBufferViewConfigId
-      )
-      val fallbackConnectedAccount = persistentState?.getLong("CONNECTED_ACCOUNT", -1L) ?: -1L
-      connectedAccount = savedInstanceState?.getLong(
-        "CONNECTED_ACCOUNT", fallbackConnectedAccount
-      ) ?: fallbackConnectedAccount
+    if (savedInstanceState?.getBoolean("OPEN_DRAWER_START") == true) {
+      drawerLayout.openDrawer(Gravity.START)
+    }
+    if (savedInstanceState?.getBoolean("OPEN_DRAWER_END") == true) {
+      drawerLayout.openDrawer(Gravity.END)
+    }
+    if (savedInstanceState?.getBoolean("OPEN_DRAWER_START") != null ||
+        savedInstanceState?.getBoolean("OPEN_DRAWER_END") != null) {
+      restoredDrawerState = true
     }
   }
 

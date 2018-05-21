@@ -37,9 +37,17 @@ class BufferViewConfigAdapter :
   ThemedSpinnerAdapter {
   var data = emptyList<BufferViewConfig>()
 
+
+  private var updateFinishedListener: ((List<BufferViewConfig>) -> Unit)? = null
+
+  fun setOnUpdateFinishedListener(listener: ((List<BufferViewConfig>) -> Unit)?) {
+    this.updateFinishedListener = listener
+  }
+
   fun submitList(list: List<BufferViewConfig>) {
     data = list
     notifyDataSetChanged()
+    updateFinishedListener?.invoke(list)
   }
 
   fun indexOf(id: Int) = data.indexOfFirst { it.bufferViewId() == id }

@@ -20,7 +20,6 @@
 package de.kuschku.quasseldroid.ui.chat.buffers
 
 import android.graphics.drawable.Drawable
-import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -40,6 +39,7 @@ import de.kuschku.quasseldroid.util.helper.getVectorDrawableCompat
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.tint
 import de.kuschku.quasseldroid.util.helper.visibleIf
+import de.kuschku.quasseldroid.util.lists.ListAdapter
 import de.kuschku.quasseldroid.viewmodel.data.BufferListItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferProps
 import de.kuschku.quasseldroid.viewmodel.data.BufferState
@@ -60,12 +60,21 @@ class BufferListAdapter(
 ) {
   private var clickListener: ((BufferId) -> Unit)? = null
   private var longClickListener: ((BufferId) -> Unit)? = null
+  private var updateFinishedListener: ((List<BufferListItem>) -> Unit)? = null
   fun setOnClickListener(listener: ((BufferId) -> Unit)?) {
     this.clickListener = listener
   }
 
   fun setOnLongClickListener(listener: ((BufferId) -> Unit)?) {
     this.longClickListener = listener
+  }
+
+  fun setOnUpdateFinishedListener(listener: ((List<BufferListItem>) -> Unit)?) {
+    this.updateFinishedListener = listener
+  }
+
+  override fun onUpdateFinished(list: List<BufferListItem>) {
+    this.updateFinishedListener?.invoke(list)
   }
 
   fun expandListener(networkId: NetworkId) {

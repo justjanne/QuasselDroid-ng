@@ -128,8 +128,8 @@ dependencies {
   withVersion("1.1.1") {
     implementation("android.arch.lifecycle", "extensions", version)
     implementation("android.arch.lifecycle", "reactivestreams", version)
-    kapt("android.arch.lifecycle", "compiler", version)
     testImplementation("android.arch.core", "core-testing", version)
+    implementation(project(":lifecycle-ktx"))
   }
 
   // App Arch Persistence

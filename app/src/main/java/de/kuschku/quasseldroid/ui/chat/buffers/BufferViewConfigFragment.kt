@@ -21,6 +21,7 @@ package de.kuschku.quasseldroid.ui.chat.buffers
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v7.widget.*
 import android.view.*
 import android.widget.AdapterView
@@ -207,21 +208,28 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     val view = inflater.inflate(R.layout.fragment_chat_list, container, false)
     ButterKnife.bind(this, view)
 
-    var hasSetBufferViewConfigId = false
     val adapter = BufferViewConfigAdapter()
     viewModel.bufferViewConfigs.switchMap {
       combineLatest(it.map(BufferViewConfig::liveUpdates))
     }.toLiveData().observe(this, Observer {
       if (it != null) {
         adapter.submitList(it)
-        if (!hasSetBufferViewConfigId) {
-          chatListSpinner.setSelection(adapter.indexOf(viewModel.bufferViewConfigId.value))
-          hasSetBufferViewConfigId = true
-        }
       }
     })
 
-    chatListSpinner.adapter = adapter
+    var hasSetBufferViewConfigId = false
+    var hasRestoredSpinnerState = false
+    adapter.setOnUpdateFinishedListener {
+      if (!hasRestoredSpinnerState) {
+        savedInstanceState?.getParcelable<Parcelable>(KEY_STATE_SPINNER)
+          ?.let(chatListSpinner::onRestoreInstanceState)
+        hasRestoredSpinnerState = true
+      }
+      if (!hasSetBufferViewConfigId) {
+        chatListSpinner.setSelection(adapter.indexOf(viewModel.bufferViewConfigId.value))
+        hasSetBufferViewConfigId = true
+      }
+    }
     chatListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
       override fun onNothingSelected(adapter: AdapterView<*>?) {
         if (hasSetBufferViewConfigId)
@@ -234,6 +242,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
           viewModel.bufferViewConfigId.onNext(id.toInt())
       }
     }
+    chatListSpinner.adapter = adapter
 
     listAdapter = BufferListAdapter(
       viewModel.selectedBufferId,
@@ -291,6 +300,15 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       })
     listAdapter.setOnClickListener(this@BufferViewConfigFragment::clickListener)
     listAdapter.setOnLongClickListener(this@BufferViewConfigFragment::longClickListener)
+
+    var hasRestoredChatListState = false
+    listAdapter.setOnUpdateFinishedListener {
+      if (!hasRestoredChatListState) {
+        savedInstanceState?.getParcelable<Parcelable>(KEY_STATE_LIST)
+          ?.let(chatList.layoutManager::onRestoreInstanceState)
+        hasRestoredChatListState = true
+      }
+    }
     chatList.adapter = listAdapter
 
     viewModel.selectedBuffer.toLiveData().observe(this, Observer { buffer ->
@@ -402,6 +420,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       longClickListener(it)
     } else {
       viewModel.buffer.onNext(it)
+      viewModel.bufferOpened.onNext(Unit)
     }
   }
 
@@ -415,7 +434,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   }
 
   companion object {
-    private const val KEY_STATE_LIST = "KEY_STATE_LIST"
-    private const val KEY_STATE_SPINNER = "KEY_STATE_SPINNER"
+    private const val KEY_STATE_LIST = "STATE_LIST"
+    private const val KEY_STATE_SPINNER = "STATE_SPINNER"
   }
 }

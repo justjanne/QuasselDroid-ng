@@ -17,7 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-include ':invokerannotations',
+include ':invokerannotations', ':lifecycle-ktx',
         ':invokergenerator',
         ':lib',
         ":viewmodel",
