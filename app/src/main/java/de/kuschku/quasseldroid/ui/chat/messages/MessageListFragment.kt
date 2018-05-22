@@ -420,7 +420,6 @@ class MessageListFragment : ServiceBoundFragment() {
     val preloader = RecyclerViewPreloader(Glide.with(this), preloadModelProvider, sizeProvider, 10)
 
     messageList.addOnScrollListener(preloader)
-    messageList.addItemDecoration(DayChangeItemDecoration(adapter, messageSettings.textSize))
     messageList.addItemDecoration(MarkerLineItemDecoration(
       adapter, requireContext(), R.dimen.markerline_height, R.attr.colorMarkerLine
     ))

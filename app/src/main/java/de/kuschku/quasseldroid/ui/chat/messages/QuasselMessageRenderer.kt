@@ -48,6 +48,7 @@ import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
+import org.threeten.bp.temporal.ChronoUnit
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -183,9 +184,10 @@ class QuasselMessageRenderer @Inject constructor(
 
   override fun bind(holder: MessageAdapter.QuasselMessageViewHolder, message: FormattedMessage,
                     original: QuasselDatabase.MessageData) =
-    original.type.hasFlag(DayChange).let { isDayChange ->
-      holder.bind(message, original, !isDayChange, !isDayChange, messageSettings)
-    }
+    holder.bind(message,
+                original,
+                hasDayChange = message.hasDayChange,
+                messageSettings = messageSettings)
 
   override fun render(context: Context, message: DisplayMessage): FormattedMessage {
     val avatarSize = TypedValue.applyDimension(
@@ -225,6 +227,7 @@ class QuasselMessageRenderer @Inject constructor(
         FormattedMessage(
           id = message.content.messageId,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          dayChange = formatDayChange(message),
           name = nick,
           content = content,
           combined = SpannableStringBuilder().apply {
@@ -238,6 +241,7 @@ class QuasselMessageRenderer @Inject constructor(
             if (messageSettings.squareAvatars) it.buildRect(initial, senderColor)
             else it.buildRound(initial, senderColor)
           },
+          hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected
@@ -246,12 +250,14 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Action       -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        dayChange = formatDayChange(message),
         combined = SpanFormatter.format(
           context.getString(R.string.message_format_action),
           contentFormatter.formatPrefix(message.content.senderPrefixes),
           contentFormatter.formatNick(message.content.sender, self, highlight, false),
           contentFormatter.formatContent(message.content.content, highlight)
         ),
+        hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
@@ -259,12 +265,14 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Notice       -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        dayChange = formatDayChange(message),
         combined = SpanFormatter.format(
           context.getString(R.string.message_format_notice),
           contentFormatter.formatPrefix(message.content.senderPrefixes),
           contentFormatter.formatNick(message.content.sender, self, highlight, false),
           contentFormatter.formatContent(message.content.content, highlight)
         ),
+        hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
@@ -274,6 +282,7 @@ class QuasselMessageRenderer @Inject constructor(
         FormattedMessage(
           id = message.content.messageId,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          dayChange = formatDayChange(message),
           combined = if (nickSelf) {
             SpanFormatter.format(
               context.getString(R.string.message_format_nick_self),
@@ -289,6 +298,7 @@ class QuasselMessageRenderer @Inject constructor(
               contentFormatter.formatNick(message.content.content, nickSelf, highlight, false)
             )
           },
+          hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected
@@ -297,12 +307,14 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Mode         -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        dayChange = formatDayChange(message),
         combined = SpanFormatter.format(
           context.getString(R.string.message_format_mode),
           message.content.content,
           contentFormatter.formatPrefix(message.content.senderPrefixes),
           contentFormatter.formatNick(message.content.sender, self, highlight, false)
         ),
+        hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
@@ -310,6 +322,7 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Join         -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        dayChange = formatDayChange(message),
         combined = SpanFormatter.format(
           context.getString(R.string.message_format_join),
           contentFormatter.formatPrefix(message.content.senderPrefixes),
@@ -319,6 +332,7 @@ class QuasselMessageRenderer @Inject constructor(
                                       messageSettings.showHostmaskActions),
           message.content.content
         ),
+        hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
@@ -326,6 +340,7 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Part         -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        dayChange = formatDayChange(message),
         combined = if (message.content.content.isBlank()) {
           SpanFormatter.format(
             context.getString(R.string.message_format_part_1),
@@ -346,6 +361,7 @@ class QuasselMessageRenderer @Inject constructor(
             contentFormatter.formatContent(message.content.content, highlight)
           )
         },
+        hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
@@ -353,6 +369,7 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Quit         -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        dayChange = formatDayChange(message),
         combined = if (message.content.content.isBlank()) {
           SpanFormatter.format(
             context.getString(R.string.message_format_quit_1),
@@ -373,6 +390,7 @@ class QuasselMessageRenderer @Inject constructor(
             contentFormatter.formatContent(message.content.content, highlight)
           )
         },
+        hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
@@ -382,6 +400,7 @@ class QuasselMessageRenderer @Inject constructor(
         FormattedMessage(
           id = message.content.messageId,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          dayChange = formatDayChange(message),
           combined = if (reason.isBlank()) {
             SpanFormatter.format(
               context.getString(R.string.message_format_kick_1),
@@ -404,6 +423,7 @@ class QuasselMessageRenderer @Inject constructor(
               contentFormatter.formatContent(reason, highlight)
             )
           },
+          hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected
@@ -414,6 +434,7 @@ class QuasselMessageRenderer @Inject constructor(
         FormattedMessage(
           id = message.content.messageId,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          dayChange = formatDayChange(message),
           combined = if (reason.isBlank()) {
             SpanFormatter.format(
               context.getString(R.string.message_format_kill_1),
@@ -436,6 +457,7 @@ class QuasselMessageRenderer @Inject constructor(
               contentFormatter.formatContent(reason, highlight)
             )
           },
+          hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected
@@ -448,9 +470,11 @@ class QuasselMessageRenderer @Inject constructor(
         FormattedMessage(
           id = message.content.messageId,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          dayChange = formatDayChange(message),
           combined = context.resources.getQuantityString(
             R.plurals.message_netsplit_join, usersAffected, server1, server2, usersAffected
           ),
+          hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected
@@ -460,25 +484,27 @@ class QuasselMessageRenderer @Inject constructor(
         val split = message.content.content.split("#:#")
         val (server1, server2) = split.last().split(' ')
         val usersAffected = split.size - 1
-        val it = FormattedMessage(
+        FormattedMessage(
           id = message.content.messageId,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          dayChange = formatDayChange(message),
           combined = context.resources.getQuantityString(
             R.plurals.message_netsplit_quit, usersAffected, server1, server2, usersAffected
           ),
+          hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected
         )
-        println("hi")
-        it
       }
       Message_Type.Server,
       Message_Type.Info,
       Message_Type.Error        -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        dayChange = formatDayChange(message),
         combined = contentFormatter.formatContent(message.content.content, highlight),
+        hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
@@ -486,7 +512,9 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Topic        -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        dayChange = formatDayChange(message),
         combined = contentFormatter.formatContent(message.content.content, highlight),
+        hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
@@ -494,7 +522,9 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.DayChange    -> FormattedMessage(
         id = message.content.messageId,
         time = "",
+        dayChange = formatDayChange(message),
         combined = dateFormatter.format(message.content.time.atZone(zoneId)),
+        hasDayChange = message.hasDayChange,
         isMarkerLine = false,
         isExpanded = false,
         isSelected = false
@@ -503,6 +533,7 @@ class QuasselMessageRenderer @Inject constructor(
       else                      -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        dayChange = formatDayChange(message),
         combined = SpanFormatter.format(
           "[%d] %s%s: %s",
           message.content.type.toInt(),
@@ -513,10 +544,16 @@ class QuasselMessageRenderer @Inject constructor(
                                       messageSettings.showHostmaskActions),
           message.content.content
         ),
+        hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
       )
     }
   }
+
+  private fun formatDayChange(
+    message: DisplayMessage) =
+    if (message.hasDayChange) dateFormatter.format(message.content.time.atZone(zoneId).truncatedTo(
+      ChronoUnit.DAYS)) else null
 }

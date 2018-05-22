@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.chat.messages
 
+import android.annotation.SuppressLint
 import android.arch.paging.PagedListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -38,6 +39,7 @@ import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.helper.getOrPut
 import de.kuschku.quasseldroid.util.helper.loadAvatars
+import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 import de.kuschku.quasseldroid.util.ui.DoubleClickHelper
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
@@ -161,6 +163,7 @@ class MessageAdapter @Inject constructor(
     null
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   class QuasselMessageViewHolder(
     itemView: View,
     clickListener: ((FormattedMessage) -> Unit)? = null,
@@ -169,6 +172,18 @@ class MessageAdapter @Inject constructor(
     expansionListener: ((QuasselDatabase.MessageData) -> Unit)? = null,
     movementMethod: BetterLinkMovementMethod
   ) : RecyclerView.ViewHolder(itemView) {
+    @BindView(R.id.daychange_container)
+    @JvmField
+    var daychangeContainer: View? = null
+
+    @BindView(R.id.daychange)
+    @JvmField
+    var daychange: TextView? = null
+
+    @BindView(R.id.message_container)
+    @JvmField
+    var messageContainer: View? = null
+
     @BindView(R.id.time_left)
     @JvmField
     var timeLeft: TextView? = null
@@ -199,31 +214,23 @@ class MessageAdapter @Inject constructor(
 
     private var message: FormattedMessage? = null
     private var original: QuasselDatabase.MessageData? = null
-    private var selectable: Boolean = false
-    private var clickable: Boolean = false
 
     private val localClickListener = View.OnClickListener {
-      if (clickable) {
-        message?.let {
-          clickListener?.invoke(it)
-        }
+      message?.let {
+        clickListener?.invoke(it)
       }
     }
 
     private val localLongClickListener = View.OnLongClickListener {
-      if (selectable) {
-        message?.let {
-          longClickListener?.invoke(it)
-        }
+      message?.let {
+        longClickListener?.invoke(it)
       }
       true
     }
 
-    private val localDoubleClickListener = {
-      if (clickable) {
-        original?.let {
-          doubleClickListener?.invoke(it)
-        }
+    private val localDoubleClickListener: () -> Unit = {
+      original?.let {
+        doubleClickListener?.invoke(it)
       }
     }
 
@@ -232,20 +239,17 @@ class MessageAdapter @Inject constructor(
       content?.movementMethod = movementMethod
       combined?.movementMethod = movementMethod
 
-      itemView.setOnClickListener(localClickListener)
-      itemView.setOnLongClickListener(localLongClickListener)
-      itemView.setOnTouchListener(DoubleClickHelper(itemView).apply {
+      messageContainer?.setOnClickListener(localClickListener)
+      messageContainer?.setOnLongClickListener(localLongClickListener)
+      messageContainer?.setOnTouchListener(DoubleClickHelper(itemView).apply {
         this.doubleClickListener = localDoubleClickListener
       })
     }
 
     fun bind(message: FormattedMessage, original: QuasselDatabase.MessageData,
-             selectable: Boolean = true, clickable: Boolean = true,
-             messageSettings: MessageSettings) {
+             hasDayChange: Boolean, messageSettings: MessageSettings) {
       this.message = message
       this.original = original
-      this.selectable = selectable
-      this.clickable = clickable
 
       timeLeft?.text = message.time
       timeRight?.text = message.time
@@ -254,7 +258,10 @@ class MessageAdapter @Inject constructor(
       content?.text = message.content
       combined?.text = message.combined
 
-      this.itemView.isSelected = message.isSelected
+      this.messageContainer?.isSelected = message.isSelected
+
+      if (hasDayChange) daychange?.text = message.dayChange
+      daychangeContainer?.visibleIf(hasDayChange)
 
       avatar?.loadAvatars(message.avatarUrls,
                           message.fallbackDrawable,

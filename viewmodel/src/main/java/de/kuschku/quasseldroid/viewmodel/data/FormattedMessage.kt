@@ -25,12 +25,14 @@ import de.kuschku.libquassel.protocol.MsgId
 class FormattedMessage(
   val id: MsgId,
   val time: CharSequence,
+  val dayChange: CharSequence? = null,
   val name: CharSequence? = null,
   val content: CharSequence? = null,
   val combined: CharSequence,
   val fallbackDrawable: Drawable? = null,
   val realName: CharSequence? = null,
   val avatarUrls: List<Avatar> = emptyList(),
+  val hasDayChange: Boolean,
   val isSelected: Boolean,
   val isExpanded: Boolean,
   val isMarkerLine: Boolean

@@ -21,56 +21,66 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:background="?attr/backgroundMenuItem"
-  android:orientation="horizontal"
-  android:paddingBottom="@dimen/message_vertical"
-  android:paddingEnd="@dimen/message_horizontal"
-  android:paddingLeft="@dimen/message_horizontal"
-  android:paddingRight="@dimen/message_horizontal"
-  android:paddingStart="@dimen/message_horizontal"
-  android:paddingTop="@dimen/message_vertical"
-  android:textAppearance="?android:attr/textAppearanceListItemSmall">
+  android:orientation="vertical"
+  tools:showIn="@layout/fragment_messages">
 
-  <TextView
-    android:id="@+id/time_left"
-    android:layout_width="wrap_content"
+  <include layout="@layout/widget_chatmessage_daychange" />
+
+  <LinearLayout
+    android:id="@+id/message_container"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="top"
-    android:layout_marginEnd="@dimen/message_horizontal"
-    android:layout_marginRight="@dimen/message_horizontal"
-    android:textColor="?attr/colorForegroundSecondary"
-    android:typeface="monospace"
-    tools:text="@sample/messages.json/data/time" />
+    android:background="?attr/backgroundMenuItem"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/message_vertical"
+    android:paddingEnd="@dimen/message_horizontal"
+    android:paddingLeft="@dimen/message_horizontal"
+    android:paddingRight="@dimen/message_horizontal"
+    android:paddingStart="@dimen/message_horizontal"
+    android:paddingTop="@dimen/message_vertical"
+    android:textAppearance="?android:attr/textAppearanceListItemSmall">
 
-  <Space
-    android:id="@+id/avatar_placeholder"
-    android:layout_width="@dimen/avatar_size"
-    android:layout_height="match_parent"
-    android:layout_marginEnd="@dimen/message_horizontal"
-    android:layout_marginRight="@dimen/message_horizontal"
-    android:visibility="gone" />
+    <TextView
+      android:id="@+id/time_left"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="top"
+      android:layout_marginEnd="@dimen/message_horizontal"
+      android:layout_marginRight="@dimen/message_horizontal"
+      android:textColor="?attr/colorForegroundSecondary"
+      android:typeface="monospace"
+      tools:text="@sample/messages.json/data/time" />
 
-  <de.kuschku.quasseldroid.util.ui.RipplePassthroughTextView
-    android:id="@+id/combined"
-    style="@style/Widget.RtlConformTextView"
-    android:layout_width="0dip"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"
-    android:textColor="?attr/colorForegroundSecondary"
-    android:textStyle="italic"
-    tools:text="@sample/messages.json/data/message" />
+    <Space
+      android:id="@+id/avatar_placeholder"
+      android:layout_width="@dimen/avatar_size"
+      android:layout_height="match_parent"
+      android:layout_marginEnd="@dimen/message_horizontal"
+      android:layout_marginRight="@dimen/message_horizontal"
+      android:visibility="gone" />
 
-  <TextView
-    android:id="@+id/time_right"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="top"
-    android:layout_marginLeft="@dimen/message_horizontal"
-    android:layout_marginStart="@dimen/message_horizontal"
-    android:textColor="?attr/colorForegroundSecondary"
-    android:textStyle="italic"
-    android:visibility="gone"
-    tools:text="@sample/messages.json/data/time"
-    tools:textSize="11.9sp"
-    tools:visibility="visible" />
+    <de.kuschku.quasseldroid.util.ui.RipplePassthroughTextView
+      android:id="@+id/combined"
+      style="@style/Widget.RtlConformTextView"
+      android:layout_width="0dip"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:textColor="?attr/colorForegroundSecondary"
+      android:textStyle="italic"
+      tools:text="@sample/messages.json/data/message" />
+
+    <TextView
+      android:id="@+id/time_right"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="top"
+      android:layout_marginLeft="@dimen/message_horizontal"
+      android:layout_marginStart="@dimen/message_horizontal"
+      android:textColor="?attr/colorForegroundSecondary"
+      android:textStyle="italic"
+      android:visibility="gone"
+      tools:text="@sample/messages.json/data/time"
+      tools:textSize="11.9sp"
+      tools:visibility="visible" />
+  </LinearLayout>
 </LinearLayout>

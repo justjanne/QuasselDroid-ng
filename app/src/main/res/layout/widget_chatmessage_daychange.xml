@@ -19,6 +19,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/daychange_container"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:background="?attr/backgroundMenuItem"
@@ -42,7 +43,7 @@
     android:paddingTop="@dimen/message_vertical_daychange">
 
     <de.kuschku.quasseldroid.util.ui.RipplePassthroughTextView
-      android:id="@+id/combined"
+      android:id="@+id/daychange"
       style="@style/Widget.RtlConformTextView"
       android:layout_width="0dip"
       android:layout_height="wrap_content"
