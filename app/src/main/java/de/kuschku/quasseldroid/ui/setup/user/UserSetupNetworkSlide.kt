@@ -124,14 +124,14 @@ class UserSetupNetworkSlide : SlideFragment() {
     val view = inflater.inflate(R.layout.setup_user_network, container, false)
     ButterKnife.bind(this, view)
     nameValidator = object : TextValidator(
-      nameWrapper::setError, resources.getString(R.string.hint_invalid_name)
+      requireActivity(), nameWrapper::setError, resources.getString(R.string.hint_invalid_name)
     ) {
       override fun validate(text: Editable) = text.isNotBlank()
 
       override fun onChanged() = updateValidity()
     }
     hostValidator = object : TextValidator(
-      hostWrapper::setError, resources.getString(R.string.hint_invalid_host)
+      requireActivity(), hostWrapper::setError, resources.getString(R.string.hint_invalid_host)
     ) {
       override fun validate(text: Editable) =
         text.toString().matches(Patterns.DOMAIN_NAME)
@@ -139,7 +139,7 @@ class UserSetupNetworkSlide : SlideFragment() {
       override fun onChanged() = updateValidity()
     }
     portValidator = object : TextValidator(
-      portWrapper::setError, resources.getString(R.string.hint_invalid_port)
+      requireActivity(), portWrapper::setError, resources.getString(R.string.hint_invalid_port)
     ) {
       override fun validate(text: Editable) = text.toString().toIntOrNull() in (0 until 65536)
 

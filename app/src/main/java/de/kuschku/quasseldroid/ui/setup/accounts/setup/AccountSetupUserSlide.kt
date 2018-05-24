@@ -69,7 +69,7 @@ class AccountSetupUserSlide : SlideFragment() {
     val view = inflater.inflate(R.layout.setup_account_user, container, false)
     ButterKnife.bind(this, view)
     userValidator = object : TextValidator(
-      userWrapper::setError, resources.getString(R.string.hint_invalid_user)
+      requireActivity(), userWrapper::setError, resources.getString(R.string.hint_invalid_user)
     ) {
       override fun validate(text: Editable) = text.isNotBlank()
 

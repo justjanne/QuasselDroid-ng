@@ -60,7 +60,7 @@ class AccountSetupNameSlide : SlideFragment() {
     val view = inflater.inflate(R.layout.setup_account_name, container, false)
     ButterKnife.bind(this, view)
     nameValidator = object : TextValidator(
-      nameWrapper::setError, resources.getString(R.string.hint_invalid_name)
+      requireActivity(), nameWrapper::setError, resources.getString(R.string.hint_invalid_name)
     ) {
       override fun validate(text: Editable) = text.isNotBlank()
 

@@ -80,7 +80,7 @@ class UserSetupIdentitySlide : SlideFragment() {
     val view = inflater.inflate(R.layout.setup_user_identity, container, false)
     ButterKnife.bind(this, view)
     nickValidator = object : TextValidator(
-      nickWrapper::setError, resources.getString(R.string.hint_invalid_nick)
+      requireActivity(), nickWrapper::setError, resources.getString(R.string.hint_invalid_nick)
     ) {
       override fun validate(text: Editable) = text.isNotEmpty() && text.matches(Patterns.IRC_NICK)
 

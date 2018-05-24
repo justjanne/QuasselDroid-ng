@@ -102,25 +102,25 @@ class AccountEditActivity : DaggerAppCompatActivity() {
     }
 
     nameValidator = object : TextValidator(
-      nameWrapper::setError, resources.getString(R.string.hint_invalid_name)
+      this, nameWrapper::setError, resources.getString(R.string.hint_invalid_name)
     ) {
       override fun validate(text: Editable) = text.isNotBlank()
     }
 
     hostValidator = object : TextValidator(
-      hostWrapper::setError, resources.getString(R.string.hint_invalid_host)
+      this, hostWrapper::setError, resources.getString(R.string.hint_invalid_host)
     ) {
       override fun validate(text: Editable) = text.toString().matches(Patterns.DOMAIN_NAME)
     }
 
     portValidator = object : TextValidator(
-      portWrapper::setError, resources.getString(R.string.hint_invalid_port)
+      this, portWrapper::setError, resources.getString(R.string.hint_invalid_port)
     ) {
       override fun validate(text: Editable) = text.toString().toIntOrNull() in (0 until 65536)
     }
 
     userValidator = object : TextValidator(
-      userWrapper::setError, resources.getString(R.string.hint_invalid_user)
+      this, userWrapper::setError, resources.getString(R.string.hint_invalid_user)
     ) {
       override fun validate(text: Editable) = text.isNotBlank()
     }
