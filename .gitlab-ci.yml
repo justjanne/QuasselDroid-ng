@@ -21,7 +21,8 @@ before_script:
 stages:
   - "build"
   - "test"
-  - "deploy"
+  - "deploy-local"
+  - "deploy-beta"
 
 build:
   stage: "build"
@@ -37,8 +38,8 @@ unitTests:
   script:
     - "./gradlew check"
 
-deploy:
-  stage: "deploy"
+deploy-local:
+  stage: "deploy-local"
   image: "k8r.eu/justjanne/docker-s3cmd:latest"
   only:
     refs:
@@ -52,3 +53,18 @@ deploy:
   - "export VERSION=$(ls *.apk)"
   - "s3cmd put $VERSION s3://releases/quasseldroid-ng/$VERSION"
   - "s3cmd cp s3://releases/quasseldroid-ng/$VERSION s3://releases/quasseldroid-ng/Quasseldroid-latest.apk"
+
+deploy-beta:
+  stage: "deploy-beta"
+  image: "k8r.eu/justjanne/docker-fastlane:latest"
+  only:
+    refs:
+    - "master"
+    variables:
+    - "$FASTLANE_CONFIG"
+  dependencies:
+  - "build"
+  script:
+  - "echo $FASTLANE_CONFIG | base64 -d > $HOME/key.json"
+  - "export VERSION=$(ls *.apk)"
+  - "fastlane supply --apk $VERSION --track beta --json_key $HOME/key.json --package_name com.iskrembilen.quasseldroid"
