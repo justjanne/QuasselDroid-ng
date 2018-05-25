@@ -27,7 +27,8 @@ import android.text.TextPaint
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.URLSpan
-import de.kuschku.libquassel.util.IrcUserUtils
+import de.kuschku.libquassel.util.irc.HostmaskHelper
+import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.helper.styledAttributes
@@ -106,7 +107,7 @@ class ContentFormatter @Inject constructor(
                                  senderColors: IntArray): CharSequence {
     val spannableString = SpannableString(nick)
     if (colorize) {
-      val senderColor = IrcUserUtils.senderColor(nick)
+      val senderColor = SenderColorUtil.senderColor(nick)
       spannableString.setSpan(
         ForegroundColorSpan(senderColors[(senderColor + senderColors.size) % senderColors.size]),
         0,
@@ -125,12 +126,11 @@ class ContentFormatter @Inject constructor(
 
   private fun formatNickImpl(sender: String, colorize: Boolean, hostmask: Boolean,
                              senderColors: IntArray): CharSequence {
-    val nick = IrcUserUtils.nick(sender)
-    val mask = IrcUserUtils.mask(sender)
+    val (nick, user, host) = HostmaskHelper.split(sender)
     val formattedNick = formatNickNickImpl(nick, colorize, senderColors)
 
     return if (hostmask) {
-      SpanFormatter.format("%s (%s)", formattedNick, mask)
+      SpanFormatter.format("%s (%s@%s)", formattedNick, user, host)
     } else {
       formattedNick
     }

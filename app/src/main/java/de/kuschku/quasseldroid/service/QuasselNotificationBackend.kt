@@ -29,9 +29,9 @@ import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.libquassel.session.NotificationManager
 import de.kuschku.libquassel.session.Session
-import de.kuschku.libquassel.util.IrcUserUtils
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.irc.HostmaskHelper
+import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.GlideRequest
 import de.kuschku.quasseldroid.R
@@ -234,7 +234,7 @@ class QuasselNotificationBackend @Inject constructor(
         val content = contentFormatter.formatContent(it.content, false)
 
         val nickName = HostmaskHelper.nick(it.sender)
-        val senderColorIndex = IrcUserUtils.senderColor(nickName)
+        val senderColorIndex = SenderColorUtil.senderColor(nickName)
         val rawInitial = nickName.trimStart('-',
                                             '_',
                                             '[',

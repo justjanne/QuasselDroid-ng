@@ -32,9 +32,9 @@ import android.widget.LinearLayout
 import de.kuschku.libquassel.protocol.Message.MessageType.*
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
-import de.kuschku.libquassel.util.IrcUserUtils
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.irc.HostmaskHelper
+import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.MessageSettings
@@ -212,7 +212,7 @@ class QuasselMessageRenderer @Inject constructor(
         }
         val content = contentFormatter.formatContent(message.content.content, highlight)
         val nickName = HostmaskHelper.nick(message.content.sender)
-        val senderColorIndex = IrcUserUtils.senderColor(nickName)
+        val senderColorIndex = SenderColorUtil.senderColor(nickName)
         val rawInitial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
                            .firstOrNull() ?: nickName.firstOrNull()
         val initial = rawInitial?.toUpperCase().toString()

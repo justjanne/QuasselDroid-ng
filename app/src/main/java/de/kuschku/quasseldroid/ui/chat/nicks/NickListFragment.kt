@@ -39,9 +39,9 @@ import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.util.FixedPreloadSizeProvider
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.BufferInfo
-import de.kuschku.libquassel.util.IrcUserUtils
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
+import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
@@ -103,7 +103,7 @@ class NickListFragment : ServiceBoundFragment() {
       runInBackground {
         it?.asSequence()?.map {
           val nickName = it.nick
-          val senderColorIndex = IrcUserUtils.senderColor(nickName)
+          val senderColorIndex = SenderColorUtil.senderColor(nickName)
           val rawInitial = nickName.trimStart('-',
                                               '_',
                                               '[',
