@@ -31,6 +31,7 @@ data class IrcUserItem(
   val self: Boolean,
   val networkCasemapping: String?,
   val avatarUrls: List<Avatar> = emptyList(),
+  val initial: String? = "",
   val fallbackDrawable: Drawable? = null,
   val displayNick: CharSequence? = null
 )

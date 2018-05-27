@@ -29,6 +29,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.NetworkId
@@ -57,7 +58,9 @@ class BufferListAdapter(
     override fun areContentsTheSame(oldItem: BufferListItem, newItem: BufferListItem) =
       oldItem == newItem
   }
-) {
+), FastScrollRecyclerView.SectionedAdapter {
+  override fun getSectionName(position: Int) = getItem(position).props.network.networkName
+
   private var clickListener: ((BufferId) -> Unit)? = null
   private var longClickListener: ((BufferId) -> Unit)? = null
   private var updateFinishedListener: ((List<BufferListItem>) -> Unit)? = null

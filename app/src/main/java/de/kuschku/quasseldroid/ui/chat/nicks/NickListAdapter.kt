@@ -29,8 +29,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.util.helper.letIf
 import de.kuschku.quasseldroid.util.helper.loadAvatars
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
@@ -46,7 +49,12 @@ class NickListAdapter(
 
     override fun areContentsTheSame(oldItem: IrcUserItem?, newItem: IrcUserItem?) =
       oldItem == newItem
-  }) {
+  }), FastScrollRecyclerView.SectionedAdapter {
+  override fun getSectionName(position: Int) = getItem(position).let {
+    it.modes.letIf(it.modes.isNotEmpty()) { it.substring(0, 1) } +
+    (it.initial.nullIf(String?::isNullOrBlank) ?: "123")
+  }
+
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NickViewHolder {
     val holder = NickViewHolder(
       LayoutInflater.from(parent.context).inflate(

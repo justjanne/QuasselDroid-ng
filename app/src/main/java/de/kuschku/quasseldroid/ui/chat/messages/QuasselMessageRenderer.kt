@@ -128,7 +128,7 @@ class QuasselMessageRenderer @Inject constructor(
         viewHolder.realname?.setTextColor(getColor(1, 0))
         viewHolder.combined?.setTextColor(getColor(0, 0))
         viewHolder.content?.setTextColor(getColor(0, 0))
-        viewHolder.itemView.background = LayerDrawable(
+        viewHolder.messageContainer?.background = LayerDrawable(
           arrayOf(
             ColorDrawable(getColor(2, 0)),
             getDrawable(3)

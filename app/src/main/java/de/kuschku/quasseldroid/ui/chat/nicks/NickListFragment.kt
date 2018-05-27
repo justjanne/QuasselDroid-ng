@@ -146,6 +146,7 @@ class NickListFragment : ServiceBoundFragment() {
               if (messageSettings.squareAvatars) it.buildRect(initial, senderColor)
               else it.buildRound(initial, senderColor)
             },
+            initial = initial,
             modes = when (messageSettings.showPrefix) {
               MessageSettings.ShowPrefixMode.ALL ->
                 it.modes

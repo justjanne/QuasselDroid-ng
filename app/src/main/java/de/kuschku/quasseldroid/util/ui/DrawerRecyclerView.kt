@@ -24,15 +24,15 @@ import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.support.v4.view.ViewCompat
-import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import de.kuschku.quasseldroid.R
 
 class DrawerRecyclerView @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
   defStyleAttr: Int = 0
-) : RecyclerView(context, attrs, defStyleAttr) {
+) : FastScrollRecyclerView(context, attrs, defStyleAttr) {
   private var mInsetForeground: Drawable? = null
   private var mInsets: Rect? = null
   private val mTempRect = Rect()
