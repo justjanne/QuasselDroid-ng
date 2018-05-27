@@ -48,6 +48,7 @@
 
     <item name="colorForeground">#DE000000</item>
     <item name="colorForegroundHighlight">#DE000000</item>
+    <item name="colorForegroundHighlightSecondary">#8A000000</item>
     <item name="colorForegroundSecondary">#8A000000</item>
     <item name="colorForegroundAction">#01579B</item>
     <item name="colorForegroundNotice">#B56A00</item>
@@ -101,6 +102,7 @@
 
     <item name="colorForeground">#FFFFFF</item>
     <item name="colorForegroundHighlight">#FFFFFF</item>
+    <item name="colorForegroundHighlightSecondary">#B3FFFFFF</item>
     <item name="colorForegroundSecondary">#B3FFFFFF</item>
     <item name="colorForegroundAction">#448AFF</item>
     <item name="colorForegroundNotice">#FFD740</item>

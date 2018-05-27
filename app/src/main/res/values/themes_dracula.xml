@@ -46,6 +46,7 @@
 
     <item name="colorForeground">#f8f8f2</item>
     <item name="colorForegroundHighlight">#f8f8f2</item>
+    <item name="colorForegroundHighlightSecondary">#6272a4</item>
     <item name="colorForegroundSecondary">#6272a4</item>
     <item name="colorForegroundAction">#50fa7b</item>
     <item name="colorForegroundNotice">#44475a</item>

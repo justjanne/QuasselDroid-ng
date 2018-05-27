@@ -46,6 +46,7 @@
 
     <item name="colorForeground">#3c3836</item>
     <item name="colorForegroundHighlight">#3c3836</item>
+    <item name="colorForegroundHighlightSecondary">#665c54</item>
     <item name="colorForegroundSecondary">#665c54</item>
     <item name="colorForegroundAction">#076678</item>
     <item name="colorForegroundNotice">#b57614</item>
@@ -106,6 +107,7 @@
 
     <item name="colorForeground">#dbdbb2</item>
     <item name="colorForegroundHighlight">#dbdbb2</item>
+    <item name="colorForegroundHighlightSecondary">#bdae93</item>
     <item name="colorForegroundSecondary">#bdae93</item>
     <item name="colorForegroundAction">#458588</item>
     <item name="colorForegroundNotice">#d79921</item>

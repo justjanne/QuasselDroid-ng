@@ -42,6 +42,7 @@ import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
+import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import de.kuschku.quasseldroid.util.ui.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
@@ -55,7 +56,8 @@ import kotlin.math.roundToInt
 class QuasselMessageRenderer @Inject constructor(
   context: Context,
   private val messageSettings: MessageSettings,
-  private val contentFormatter: ContentFormatter
+  private val contentFormatter: ContentFormatter,
+  private val ircFormatDeserializer: IrcFormatDeserializer
 ) : MessageRenderer {
   private val timeFormatter = DateTimeFormatter.ofPattern(
     timePattern(messageSettings.showSeconds, messageSettings.use24hClock)
@@ -85,6 +87,12 @@ class QuasselMessageRenderer @Inject constructor(
     }
   }
 
+  private val monochromeHighlights = context.theme.styledAttributes(
+    R.attr.colorForegroundHighlightMonochrome
+  ) {
+    getBoolean(0, false)
+  }
+
   private val selfColor: Int = context.theme.styledAttributes(R.attr.colorForegroundSecondary) {
     getColor(0, 0)
   }
@@ -111,19 +119,19 @@ class QuasselMessageRenderer @Inject constructor(
                     isEmoji: Boolean) {
     if (hasHighlight) {
       viewHolder.itemView.context.theme.styledAttributes(
-        R.attr.colorForegroundHighlight, R.attr.colorBackgroundHighlight,
-        R.attr.backgroundMenuItem
+        R.attr.colorForegroundHighlight, R.attr.colorForegroundHighlightSecondary,
+        R.attr.colorBackgroundHighlight, R.attr.backgroundMenuItem
       ) {
-        viewHolder.timeLeft?.setTextColor(getColor(0, 0))
-        viewHolder.timeRight?.setTextColor(getColor(0, 0))
-        viewHolder.name?.setTextColor(getColor(0, 0))
-        viewHolder.realname?.setTextColor(getColor(0, 0))
+        viewHolder.timeLeft?.setTextColor(getColor(1, 0))
+        viewHolder.timeRight?.setTextColor(getColor(1, 0))
+        viewHolder.name?.setTextColor(getColor(1, 0))
+        viewHolder.realname?.setTextColor(getColor(1, 0))
         viewHolder.combined?.setTextColor(getColor(0, 0))
         viewHolder.content?.setTextColor(getColor(0, 0))
         viewHolder.itemView.background = LayerDrawable(
           arrayOf(
-            ColorDrawable(getColor(1, 0)),
-            getDrawable(2)
+            ColorDrawable(getColor(2, 0)),
+            getDrawable(3)
           )
         )
       }
@@ -197,20 +205,22 @@ class QuasselMessageRenderer @Inject constructor(
     ).roundToInt()
 
     val self = message.content.flag.hasFlag(Message_Flag.Self)
-    val highlight = message.content.flag.hasFlag(Message_Flag.Highlight)
+    val highlight__ = message.content.flag.hasFlag(Message_Flag.Highlight)
+    val monochromeForeground = highlight__ && monochromeHighlights
     return when (message.content.type.enabledValues().firstOrNull()) {
       Message_Type.Plain        -> {
-        val realName = contentFormatter.formatContent(message.content.realName, highlight)
+        val realName = ircFormatDeserializer.formatString(message.content.realName,
+                                                          !monochromeForeground)
         val nick = SpannableStringBuilder().apply {
           append(contentFormatter.formatPrefix(message.content.senderPrefixes))
           append(contentFormatter.formatNick(
             message.content.sender,
             self,
-            highlight,
+            monochromeForeground,
             false
           ))
         }
-        val content = contentFormatter.formatContent(message.content.content, highlight)
+        val content = contentFormatter.formatContent(message.content.content, monochromeForeground)
         val nickName = HostmaskHelper.nick(message.content.sender)
         val senderColorIndex = SenderColorUtil.senderColor(nickName)
         val rawInitial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
@@ -254,8 +264,8 @@ class QuasselMessageRenderer @Inject constructor(
         combined = SpanFormatter.format(
           context.getString(R.string.message_format_action),
           contentFormatter.formatPrefix(message.content.senderPrefixes),
-          contentFormatter.formatNick(message.content.sender, self, highlight, false),
-          contentFormatter.formatContent(message.content.content, highlight)
+          contentFormatter.formatNick(message.content.sender, self, monochromeForeground, false),
+          contentFormatter.formatContent(message.content.content, monochromeForeground)
         ),
         hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
@@ -269,8 +279,8 @@ class QuasselMessageRenderer @Inject constructor(
         combined = SpanFormatter.format(
           context.getString(R.string.message_format_notice),
           contentFormatter.formatPrefix(message.content.senderPrefixes),
-          contentFormatter.formatNick(message.content.sender, self, highlight, false),
-          contentFormatter.formatContent(message.content.content, highlight)
+          contentFormatter.formatNick(message.content.sender, self, monochromeForeground, false),
+          contentFormatter.formatContent(message.content.content, monochromeForeground)
         ),
         hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
@@ -287,15 +297,30 @@ class QuasselMessageRenderer @Inject constructor(
             SpanFormatter.format(
               context.getString(R.string.message_format_nick_self),
               contentFormatter.formatPrefix(message.content.senderPrefixes),
-              contentFormatter.formatNick(message.content.sender, nickSelf, highlight, false)
+              contentFormatter.formatNick(
+                message.content.sender,
+                nickSelf,
+                monochromeForeground,
+                false
+              )
             )
           } else {
             SpanFormatter.format(
               context.getString(R.string.message_format_nick),
               contentFormatter.formatPrefix(message.content.senderPrefixes),
-              contentFormatter.formatNick(message.content.sender, nickSelf, highlight, false),
+              contentFormatter.formatNick(
+                message.content.sender,
+                nickSelf,
+                monochromeForeground,
+                false
+              ),
               contentFormatter.formatPrefix(message.content.senderPrefixes),
-              contentFormatter.formatNick(message.content.content, nickSelf, highlight, false)
+              contentFormatter.formatNick(
+                message.content.content,
+                nickSelf,
+                monochromeForeground,
+                false
+              )
             )
           },
           hasDayChange = message.hasDayChange,
@@ -312,7 +337,7 @@ class QuasselMessageRenderer @Inject constructor(
           context.getString(R.string.message_format_mode),
           message.content.content,
           contentFormatter.formatPrefix(message.content.senderPrefixes),
-          contentFormatter.formatNick(message.content.sender, self, highlight, false)
+          contentFormatter.formatNick(message.content.sender, self, monochromeForeground, false)
         ),
         hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
@@ -326,10 +351,12 @@ class QuasselMessageRenderer @Inject constructor(
         combined = SpanFormatter.format(
           context.getString(R.string.message_format_join),
           contentFormatter.formatPrefix(message.content.senderPrefixes),
-          contentFormatter.formatNick(message.content.sender,
-                                      self,
-                                      highlight,
-                                      messageSettings.showHostmaskActions),
+          contentFormatter.formatNick(
+            message.content.sender,
+            self,
+            monochromeForeground,
+            messageSettings.showHostmaskActions
+          ),
           message.content.content
         ),
         hasDayChange = message.hasDayChange,
@@ -345,20 +372,24 @@ class QuasselMessageRenderer @Inject constructor(
           SpanFormatter.format(
             context.getString(R.string.message_format_part_1),
             contentFormatter.formatPrefix(message.content.senderPrefixes),
-            contentFormatter.formatNick(message.content.sender,
-                                        self,
-                                        highlight,
-                                        messageSettings.showHostmaskActions)
+            contentFormatter.formatNick(
+              message.content.sender,
+              self,
+              monochromeForeground,
+              messageSettings.showHostmaskActions
+            )
           )
         } else {
           SpanFormatter.format(
             context.getString(R.string.message_format_part_2),
             contentFormatter.formatPrefix(message.content.senderPrefixes),
-            contentFormatter.formatNick(message.content.sender,
-                                        self,
-                                        highlight,
-                                        messageSettings.showHostmaskActions),
-            contentFormatter.formatContent(message.content.content, highlight)
+            contentFormatter.formatNick(
+              message.content.sender,
+              self,
+              monochromeForeground,
+              messageSettings.showHostmaskActions
+            ),
+            contentFormatter.formatContent(message.content.content, monochromeForeground)
           )
         },
         hasDayChange = message.hasDayChange,
@@ -374,20 +405,24 @@ class QuasselMessageRenderer @Inject constructor(
           SpanFormatter.format(
             context.getString(R.string.message_format_quit_1),
             contentFormatter.formatPrefix(message.content.senderPrefixes),
-            contentFormatter.formatNick(message.content.sender,
-                                        self,
-                                        highlight,
-                                        messageSettings.showHostmaskActions)
+            contentFormatter.formatNick(
+              message.content.sender,
+              self,
+              monochromeForeground,
+              messageSettings.showHostmaskActions
+            )
           )
         } else {
           SpanFormatter.format(
             context.getString(R.string.message_format_quit_2),
             contentFormatter.formatPrefix(message.content.senderPrefixes),
-            contentFormatter.formatNick(message.content.sender,
-                                        self,
-                                        highlight,
-                                        messageSettings.showHostmaskActions),
-            contentFormatter.formatContent(message.content.content, highlight)
+            contentFormatter.formatNick(
+              message.content.sender,
+              self,
+              monochromeForeground,
+              messageSettings.showHostmaskActions
+            ),
+            contentFormatter.formatContent(message.content.content, monochromeForeground)
           )
         },
         hasDayChange = message.hasDayChange,
@@ -404,23 +439,27 @@ class QuasselMessageRenderer @Inject constructor(
           combined = if (reason.isBlank()) {
             SpanFormatter.format(
               context.getString(R.string.message_format_kick_1),
-              contentFormatter.formatNick(user, false, highlight, false),
+              contentFormatter.formatNick(user, false, monochromeForeground, false),
               contentFormatter.formatPrefix(message.content.senderPrefixes),
-              contentFormatter.formatNick(message.content.sender,
-                                          self,
-                                          highlight,
-                                          messageSettings.showHostmaskActions)
+              contentFormatter.formatNick(
+                message.content.sender,
+                self,
+                monochromeForeground,
+                messageSettings.showHostmaskActions
+              )
             )
           } else {
             SpanFormatter.format(
               context.getString(R.string.message_format_kick_2),
-              contentFormatter.formatNick(user, false, highlight, false),
+              contentFormatter.formatNick(user, false, monochromeForeground, false),
               contentFormatter.formatPrefix(message.content.senderPrefixes),
-              contentFormatter.formatNick(message.content.sender,
-                                          self,
-                                          highlight,
-                                          messageSettings.showHostmaskActions),
-              contentFormatter.formatContent(reason, highlight)
+              contentFormatter.formatNick(
+                message.content.sender,
+                self,
+                monochromeForeground,
+                messageSettings.showHostmaskActions
+              ),
+              contentFormatter.formatContent(reason, monochromeForeground)
             )
           },
           hasDayChange = message.hasDayChange,
@@ -438,23 +477,27 @@ class QuasselMessageRenderer @Inject constructor(
           combined = if (reason.isBlank()) {
             SpanFormatter.format(
               context.getString(R.string.message_format_kill_1),
-              contentFormatter.formatNick(user, false, highlight, false),
+              contentFormatter.formatNick(user, false, monochromeForeground, false),
               contentFormatter.formatPrefix(message.content.senderPrefixes),
-              contentFormatter.formatNick(message.content.sender,
-                                          self,
-                                          highlight,
-                                          messageSettings.showHostmaskActions)
+              contentFormatter.formatNick(
+                message.content.sender,
+                self,
+                monochromeForeground,
+                messageSettings.showHostmaskActions
+              )
             )
           } else {
             SpanFormatter.format(
               context.getString(R.string.message_format_kill_2),
-              contentFormatter.formatNick(user, false, highlight, false),
+              contentFormatter.formatNick(user, false, monochromeForeground, false),
               contentFormatter.formatPrefix(message.content.senderPrefixes),
-              contentFormatter.formatNick(message.content.sender,
-                                          self,
-                                          highlight,
-                                          messageSettings.showHostmaskActions),
-              contentFormatter.formatContent(reason, highlight)
+              contentFormatter.formatNick(
+                message.content.sender,
+                self,
+                monochromeForeground,
+                messageSettings.showHostmaskActions
+              ),
+              contentFormatter.formatContent(reason, monochromeForeground)
             )
           },
           hasDayChange = message.hasDayChange,
@@ -503,7 +546,7 @@ class QuasselMessageRenderer @Inject constructor(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
-        combined = contentFormatter.formatContent(message.content.content, highlight),
+        combined = contentFormatter.formatContent(message.content.content, monochromeForeground),
         hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
@@ -513,7 +556,7 @@ class QuasselMessageRenderer @Inject constructor(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
-        combined = contentFormatter.formatContent(message.content.content, highlight),
+        combined = contentFormatter.formatContent(message.content.content, monochromeForeground),
         hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
@@ -538,10 +581,12 @@ class QuasselMessageRenderer @Inject constructor(
           "[%d] %s%s: %s",
           message.content.type.toInt(),
           contentFormatter.formatPrefix(message.content.senderPrefixes),
-          contentFormatter.formatNick(message.content.sender,
-                                      self,
-                                      highlight,
-                                      messageSettings.showHostmaskActions),
+          contentFormatter.formatNick(
+            message.content.sender,
+            self,
+            monochromeForeground,
+            messageSettings.showHostmaskActions
+          ),
           message.content.content
         ),
         hasDayChange = message.hasDayChange,

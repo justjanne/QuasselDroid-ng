@@ -87,7 +87,7 @@
           android:layout_gravity="center_vertical"
           android:ellipsize="marquee"
           android:singleLine="true"
-          android:textColor="?attr/colorForeground"
+          android:textColor="?attr/colorForegroundSecondary"
           android:visibility="gone"
           tools:text="@sample/messages.json/data/sender"
           tools:visibility="visible" />

@@ -39,10 +39,13 @@
   <!-- Background and foreground colors for UI -->
   <attr name="colorForeground" format="color" />
   <attr name="colorForegroundHighlight" format="color" />
+  <attr name="colorForegroundHighlightSecondary" format="color" />
   <attr name="colorForegroundSecondary" format="color" />
   <attr name="colorForegroundNotice" format="color" />
   <attr name="colorForegroundAction" format="color" />
   <attr name="colorForegroundError" format="color" />
+
+  <attr name="colorForegroundHighlightMonochrome" format="boolean" />
 
   <attr name="colorForegroundMirc" format="integer" />
 

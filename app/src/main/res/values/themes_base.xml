@@ -101,6 +101,8 @@
     <item name="colorDivider">#1FFFFFFF</item>
     <item name="android:textColorHint">?colorTextSecondary</item>
 
+    <item name="colorForegroundHighlightMonochrome">false</item>
+
     <item name="colorFill">@color/colorFillDark</item>
     <item name="colorOffline">@color/colorOfflineDark</item>
     <item name="colorAway">@color/colorAwayDark</item>
@@ -136,6 +138,8 @@
     <item name="colorTextSecondaryInverse">#b3ffffff</item>
     <item name="colorDivider">#1F000000</item>
     <item name="android:textColorHint">?colorTextSecondary</item>
+
+    <item name="colorForegroundHighlightMonochrome">false</item>
 
     <item name="colorFill">@color/colorFillLight</item>
     <item name="colorOffline">@color/colorOfflineLight</item>
