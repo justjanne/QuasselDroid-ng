@@ -289,6 +289,12 @@ class AboutFragment : DaggerFragment() {
         url = "https://github.com/ReactiveX/RxJava"
       ),
       Library(
+        name = "RecyclerView-FastScroll",
+        version = "1.0.18",
+        license = apache2,
+        url = "https://github.com/timusus/RecyclerView-FastScroll"
+      ),
+      Library(
         name = "Retrofit",
         version = "2.4.0",
         license = apache2,
