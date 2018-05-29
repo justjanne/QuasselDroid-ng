@@ -79,7 +79,7 @@
   <string name="label_reset">Resetuj</string>
   <string name="label_open">Otvori</string>
   <string name="label_part">Napusti</string>
-  <string name="label_part_long">Napusti Kanal</string>
+  <string name="label_part_long">Napusti kanal</string>
   <string name="label_placeholder_message">Napiši poruku…</string>
   <string name="label_placeholder_topic">Opiši temu kanala…</string>
   <string name="label_privacy_policy">Politika privatnosti</string>
@@ -96,7 +96,7 @@
   <string name="label_show_hidden">Pokaži Sakriveno</string>
   <string name="label_topic">Tema kanala</string>
   <string name="label_translators">Prevodioci</string>
-  <string name="label_unhide">Učini Vidljivim</string>
+  <string name="label_unhide">Učini vidljivim</string>
   <string name="label_website">Veb stranica</string>
   <string name="label_whitelist">Ignoriši</string>
   <string name="label_whitelist_ignore_date">Datum isteka je ignorisan za ovaj sertifikat</string>
@@ -112,7 +112,7 @@
   <string name="label_feature_saslauthentication">Potrebno za SASL</string>
   <string name="label_feature_saslexternal">Potrebno za SASL sa sertifikatima</string>
   <string name="label_feature_hideinactivenetworks">Potrebno za sakrivanje neaktivnih mreža sa čet lista</string>
-  <string name="label_feature_passwordchange">Potrebno za mijenjanje lozinke od klijenta</string>
+  <string name="label_feature_passwordchange">Potrebno za mijenjanje lozinke iz klijenta</string>
   <string name="label_feature_capnegotiation">Potrebno za IRCv3 mogućnosti</string>
   <string name="label_feature_verifyserverssl">Potrebno za verifikaciju SSL sertifikata IRC mreža na koje ste spojeni</string>
   <string name="label_feature_customratelimits">Potrebno za posebne rate limite IRC mreža</string>

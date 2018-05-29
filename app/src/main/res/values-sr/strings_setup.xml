@@ -51,12 +51,12 @@
   <string name="hint_invalid_name">Ime ne može biti prazno</string>
 
   <!-- Core Authenticator Select -->
-  <string name="slide_core_authenticator_select_title">Odaberi Pozadinski Mehanizam za Potvrđivanje Autentičnosti</string>
-  <string name="slide_core_authenticator_select_description">Molimo odaberite backend za potvrdu autentičnosti da bi Quassel Core mogao potvrditi autentičnost korisnika.</string>
+  <string name="slide_core_authenticator_select_title">Odaberi backend za proveru identiteta</string>
+  <string name="slide_core_authenticator_select_description">Molimo odaberite backend za proveru identiteta koji će Quassel Core koristiti za identifikovanje korisnika.</string>
 
   <!-- Core Backend Select -->
   <string name="slide_core_backend_select_title">Odaberi backend za skladištenje podataka</string>
-  <string name="slide_core_backend_select_description">Molimo odaberite backend databaze od Quassel Core memorije da bi skladištili backlog i druge podatke.</string>
+  <string name="slide_core_backend_select_description">Molimo odaberite backend za bazu podataka koji će Quassel Core koristiti za skladištenje zaostalih poruka i ostalih podataka.</string>
 
   <!-- Core Backend Config -->
   <string name="slide_core_backend_setup_title">Podesi backend za skladištenje podataka</string>
