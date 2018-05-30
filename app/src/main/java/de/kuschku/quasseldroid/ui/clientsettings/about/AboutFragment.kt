@@ -196,7 +196,7 @@ class AboutFragment : DaggerFragment() {
           fullName = "Creative Commons Attribution-ShareAlike 3.0 Unported",
           text = R.string.license_cc_by_sa_3_0
         ),
-        url = "https://bumptech.github.io/glide/"
+        url = "https://stackoverflow.com/a/17369948"
       ),
       Library(
         name = "Gson",

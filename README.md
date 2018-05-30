@@ -81,7 +81,7 @@ Authors of the previous version of Quasseldroid:
   Apache-2.0
 * [**Glide**](https://bumptech.github.io/glide/)
   Apache-2.0
-* [**GlobTransformer**](https://bumptech.github.io/glide/)
+* [**GlobTransformer**](https://stackoverflow.com/a/17369948)
   CC BY-SA 3.0
 * [**Gson**](https://github.com/google/gson)
   Apache-2.0
