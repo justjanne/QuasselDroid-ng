@@ -299,6 +299,7 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     }
 
+    var previousLoadKey: Int? = null
     val data = combineLatest(viewModel.buffer,
                              viewModel.selectedMessages,
                              viewModel.expandedMessages,
@@ -315,7 +316,11 @@ class MessageListFragment : ServiceBoundFragment() {
               .setInitialLoadSizeHint(backlogSettings.pageSize)
               .setEnablePlaceholders(true)
               .build()
-          ).setBoundaryCallback(boundaryCallback).build()
+          ).setBoundaryCallback(boundaryCallback)
+            .letIf(lastBuffer == buffer) {
+              it.setInitialLoadKey(previousLoadKey)
+            }
+            .build()
         }
       }
 
@@ -371,6 +376,7 @@ class MessageListFragment : ServiceBoundFragment() {
 
     var lastBuffer = -1
     data.observe(this, Observer { list ->
+      previousLoadKey = list?.lastKey as? Int
       val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
       val firstVisibleMessageId = adapter[firstVisibleItemPosition]?.content?.messageId
       runInBackground {
