@@ -552,7 +552,7 @@ class QuasselMessageRenderer @Inject constructor(
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
       )
-      Message_Type.Topic        -> FormattedMessage(
+      Message_Type.Topic     -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
@@ -562,7 +562,7 @@ class QuasselMessageRenderer @Inject constructor(
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
       )
-      Message_Type.DayChange    -> FormattedMessage(
+      Message_Type.DayChange -> FormattedMessage(
         id = message.content.messageId,
         time = "",
         dayChange = formatDayChange(message),
@@ -572,8 +572,17 @@ class QuasselMessageRenderer @Inject constructor(
         isExpanded = false,
         isSelected = false
       )
-    //Message_Type.Invite
-      else                      -> FormattedMessage(
+      Message_Type.Invite    -> FormattedMessage(
+        id = message.content.messageId,
+        time = timeFormatter.format(message.content.time.atZone(zoneId)),
+        dayChange = formatDayChange(message),
+        combined = contentFormatter.formatContent(message.content.content, monochromeForeground),
+        hasDayChange = message.hasDayChange,
+        isMarkerLine = message.isMarkerLine,
+        isExpanded = message.isExpanded,
+        isSelected = message.isSelected
+      )
+      else                   -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
