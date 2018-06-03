@@ -238,6 +238,14 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     adapter.setOnUrlLongClickListener(LinkLongClickMenuHelper())
 
+    adapter.setOnExpansionListener { (messageId) ->
+      val value = viewModel.expandedMessages.value
+      viewModel.expandedMessages.onNext(
+        if (value.contains(messageId)) value - messageId
+        else value + messageId
+      )
+    }
+
     messageList.adapter = adapter
     messageList.layoutManager = linearLayoutManager
     messageList.itemAnimator = null
