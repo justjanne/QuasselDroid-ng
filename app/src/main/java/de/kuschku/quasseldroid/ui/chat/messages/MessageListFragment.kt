@@ -325,9 +325,7 @@ class MessageListFragment : ServiceBoundFragment() {
               .setEnablePlaceholders(true)
               .build()
           ).setBoundaryCallback(boundaryCallback)
-            .letIf(lastBuffer == buffer) {
-              it.setInitialLoadKey(previousLoadKey)
-            }
+            .setInitialLoadKey(previousLoadKey)
             .build()
         }
       }
