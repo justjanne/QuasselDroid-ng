@@ -42,9 +42,11 @@ import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.util.FixedPreloadSizeProvider
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.quassel.syncables.BufferSyncer
 import de.kuschku.libquassel.session.SessionManager
+import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helpers.mapSwitchMap
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.libquassel.util.irc.HostmaskHelper
@@ -302,7 +304,9 @@ class MessageListFragment : ServiceBoundFragment() {
           isExpanded = expanded.contains(it.messageId),
           isMarkerLine = markerLine == it.messageId,
           // Do not run the emoji regex if not necessary, this saves quite a bit of performance
-          isEmoji = messageSettings.largerEmoji && Patterns.EMOJI.matches(it.content)
+          isEmoji = it.type.hasFlag(Message_Type.Plain) &&
+                    it.content.isNotBlank() &&
+                    messageSettings.largerEmoji && Patterns.EMOJI.matches(it.content)
         )
       }
     }
