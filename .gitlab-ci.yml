@@ -20,7 +20,7 @@ before_script:
 
 stages:
   - "build"
-  - "test"
+#  - "test"
   - "deploy-local"
   - "deploy-beta"
 
@@ -33,10 +33,10 @@ build:
     paths:
       - "*.apk"
 
-unitTests:
-  stage: "test"
-  script:
-    - "./gradlew check"
+#test:
+#  stage: "test"
+#  script:
+#    - "./gradlew check"
 
 deploy-local:
   stage: "deploy-local"
