@@ -19,8 +19,13 @@
 
 package de.kuschku.quasseldroid.viewmodel.data
 
-enum class BufferStatus {
-  ONLINE,
-  AWAY,
-  OFFLINE
+enum class BufferStatus(val value: Short) {
+  ONLINE(0),
+  AWAY(1),
+  OFFLINE(2);
+
+  companion object {
+    private val map = values().associateBy { it.value }
+    fun of(value: Short) = map[value]
+  }
 }

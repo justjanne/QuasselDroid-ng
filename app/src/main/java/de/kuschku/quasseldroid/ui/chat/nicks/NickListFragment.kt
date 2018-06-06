@@ -104,17 +104,7 @@ class NickListFragment : ServiceBoundFragment() {
         it?.asSequence()?.map {
           val nickName = it.nick
           val senderColorIndex = SenderColorUtil.senderColor(nickName)
-          val rawInitial = nickName.trimStart('-',
-                                              '_',
-                                              '[',
-                                              ']',
-                                              '{',
-                                              '}',
-                                              '|',
-                                              '`',
-                                              '^',
-                                              '.',
-                                              '\\')
+          val rawInitial = nickName.trimStart(*IGNORED_CHARS)
                              .firstOrNull() ?: nickName.firstOrNull()
           val initial = rawInitial?.toUpperCase().toString()
           val senderColor = when (messageSettings.colorizeNicknames) {

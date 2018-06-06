@@ -19,9 +19,11 @@
 
 package de.kuschku.quasseldroid.viewmodel.data
 
+import android.graphics.drawable.Drawable
 import de.kuschku.libquassel.protocol.Buffer_Activities
 import de.kuschku.libquassel.protocol.Message_Types
 import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 
 data class BufferProps(
@@ -35,5 +37,8 @@ data class BufferProps(
   val bufferActivity: Buffer_Activities = BufferInfo.Activity.of(
     BufferInfo.Activity.NoActivity
   ),
-  val hiddenState: BufferHiddenState
+  val hiddenState: BufferHiddenState,
+  val ircUser: IrcUser? = null,
+  val avatarUrls: List<Avatar> = emptyList(),
+  val fallbackDrawable: Drawable? = null
 )

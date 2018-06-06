@@ -36,10 +36,8 @@ import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.util.helper.getVectorDrawableCompat
-import de.kuschku.quasseldroid.util.helper.styledAttributes
-import de.kuschku.quasseldroid.util.helper.tint
-import de.kuschku.quasseldroid.util.helper.visibleIf
+import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.lists.ListAdapter
 import de.kuschku.quasseldroid.viewmodel.data.BufferListItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferProps
@@ -48,6 +46,7 @@ import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
 import io.reactivex.subjects.BehaviorSubject
 
 class BufferListAdapter(
+  private val messageSettings: MessageSettings,
   private val selectedBuffer: BehaviorSubject<BufferId>,
   private val expandedNetworks: BehaviorSubject<Map<NetworkId, Boolean>>
 ) : ListAdapter<BufferListItem, BufferListAdapter.BufferViewHolder>(
@@ -94,47 +93,56 @@ class BufferListAdapter(
     selectedBuffer.onNext(Int.MAX_VALUE)
   }
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
-    BufferInfo.Type.ChannelBuffer.toInt() -> BufferViewHolder.ChannelBuffer(
-      LayoutInflater.from(parent.context).inflate(
-        R.layout.widget_buffer, parent, false
-      ),
-      clickListener = clickListener,
-      longClickListener = longClickListener
-    )
-    BufferInfo.Type.QueryBuffer.toInt()   -> BufferViewHolder.QueryBuffer(
-      LayoutInflater.from(parent.context).inflate(
-        R.layout.widget_buffer, parent, false
-      ),
-      clickListener = clickListener,
-      longClickListener = longClickListener
-    )
-    BufferInfo.Type.GroupBuffer.toInt()   -> BufferViewHolder.GroupBuffer(
-      LayoutInflater.from(parent.context).inflate(
-        R.layout.widget_buffer, parent, false
-      ),
-      clickListener = clickListener,
-      longClickListener = longClickListener
-    )
-    BufferInfo.Type.StatusBuffer.toInt()  -> BufferViewHolder.StatusBuffer(
-      LayoutInflater.from(parent.context).inflate(
-        R.layout.widget_network, parent, false
-      ),
-      clickListener = clickListener,
-      longClickListener = longClickListener,
-      expansionListener = ::expandListener
-    )
-    else                                  -> throw IllegalArgumentException(
-      "No such viewType: $viewType"
-    )
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BufferViewHolder {
+    val bufferType = viewType and 0xFFFF
+    val bufferStatus = BufferStatus.of(((viewType ushr 16) and 0xFFFF).toShort())
+    return when (bufferType) {
+      BufferInfo.Type.ChannelBuffer.toInt() -> BufferViewHolder.ChannelBuffer(
+        LayoutInflater.from(parent.context).inflate(
+          R.layout.widget_buffer, parent, false
+        ),
+        clickListener = clickListener,
+        longClickListener = longClickListener
+      )
+      BufferInfo.Type.QueryBuffer.toInt()   -> BufferViewHolder.QueryBuffer(
+        LayoutInflater.from(parent.context).inflate(
+          if (bufferStatus == BufferStatus.AWAY) R.layout.widget_buffer_away
+          else R.layout.widget_buffer
+          , parent, false
+        ),
+        clickListener = clickListener,
+        longClickListener = longClickListener
+      )
+      BufferInfo.Type.GroupBuffer.toInt()   -> BufferViewHolder.GroupBuffer(
+        LayoutInflater.from(parent.context).inflate(
+          R.layout.widget_buffer, parent, false
+        ),
+        clickListener = clickListener,
+        longClickListener = longClickListener
+      )
+      BufferInfo.Type.StatusBuffer.toInt()  -> BufferViewHolder.StatusBuffer(
+        LayoutInflater.from(parent.context).inflate(
+          R.layout.widget_network, parent, false
+        ),
+        clickListener = clickListener,
+        longClickListener = longClickListener,
+        expansionListener = ::expandListener
+      )
+      else                                  -> throw IllegalArgumentException(
+        "No such viewType: ${viewType.toString(16)}"
+      )
+    }
   }
 
   override fun onBindViewHolder(holder: BufferViewHolder, position: Int) =
-    holder.bind(getItem(position).props, getItem(position).state)
+    holder.bind(getItem(position).props, getItem(position).state, messageSettings)
 
-  override fun getItemViewType(position: Int) = getItem(position).props.info.type.toInt()
+  override fun getItemViewType(position: Int) = getItem(position).let {
+    (it.props.bufferStatus.ordinal shl 16) + (it.props.info.type.toInt() and 0xFFFF)
+  }
+
   abstract class BufferViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    abstract fun bind(props: BufferProps, state: BufferState)
+    abstract fun bind(props: BufferProps, state: BufferState, messageSettings: MessageSettings)
 
     class StatusBuffer(
       itemView: View,
@@ -193,7 +201,7 @@ class BufferListAdapter(
         }
       }
 
-      override fun bind(props: BufferProps, state: BufferState) {
+      override fun bind(props: BufferProps, state: BufferState, messageSettings: MessageSettings) {
         name.text = props.network.networkName
         bufferId = props.info.bufferId
         networkId = props.info.networkId
@@ -279,7 +287,7 @@ class BufferListAdapter(
         }
       }
 
-      override fun bind(props: BufferProps, state: BufferState) {
+      override fun bind(props: BufferProps, state: BufferState, messageSettings: MessageSettings) {
         bufferId = props.info.bufferId
 
         name.text = props.info.bufferName
@@ -367,7 +375,7 @@ class BufferListAdapter(
         }
       }
 
-      override fun bind(props: BufferProps, state: BufferState) {
+      override fun bind(props: BufferProps, state: BufferState, messageSettings: MessageSettings) {
         bufferId = props.info.bufferId
 
         name.text = props.info.bufferName
@@ -411,8 +419,6 @@ class BufferListAdapter(
 
       var bufferId: BufferId? = null
 
-      private val online: Drawable?
-      private val away: Drawable?
       private val offline: Drawable?
 
       private var none: Int = 0
@@ -438,27 +444,23 @@ class BufferListAdapter(
           }
         }
 
-        online = itemView.context.getVectorDrawableCompat(R.drawable.ic_status)?.mutate()
-        away = itemView.context.getVectorDrawableCompat(R.drawable.ic_status)?.mutate()
         offline = itemView.context.getVectorDrawableCompat(R.drawable.ic_status_offline)?.mutate()
 
         itemView.context.theme.styledAttributes(
-          R.attr.colorAccent, R.attr.colorAway,
+          R.attr.colorAway,
           R.attr.colorTextPrimary, R.attr.colorTintActivity, R.attr.colorTintMessage,
           R.attr.colorTintHighlight
         ) {
-          online?.tint(getColor(0, 0))
-          away?.tint(getColor(1, 0))
-          offline?.tint(getColor(1, 0))
+          offline?.tint(getColor(0, 0))
 
-          none = getColor(2, 0)
-          activity = getColor(3, 0)
-          message = getColor(4, 0)
-          highlight = getColor(5, 0)
+          none = getColor(1, 0)
+          activity = getColor(2, 0)
+          message = getColor(3, 0)
+          highlight = getColor(4, 0)
         }
       }
 
-      override fun bind(props: BufferProps, state: BufferState) {
+      override fun bind(props: BufferProps, state: BufferState, messageSettings: MessageSettings) {
         bufferId = props.info.bufferId
 
         name.text = props.info.bufferName
@@ -477,13 +479,9 @@ class BufferListAdapter(
 
         description.visibleIf(props.description.isNotBlank())
 
-        status.setImageDrawable(
-          when (props.bufferStatus) {
-            BufferStatus.ONLINE -> online
-            BufferStatus.AWAY   -> away
-            else                -> offline
-          }
-        )
+        status.loadAvatars(props.avatarUrls,
+                           props.fallbackDrawable ?: offline,
+                           crop = !messageSettings.squareAvatars)
       }
     }
   }

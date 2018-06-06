@@ -379,7 +379,8 @@ class QuasselViewModel : ViewModel() {
                                       description = user?.realName() ?: "",
                                       activity = activity,
                                       highlights = highlights,
-                                      hiddenState = state
+                                      hiddenState = state,
+                                      ircUser = user
                                     )
                                   }
                                 }

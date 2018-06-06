@@ -38,16 +38,21 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.minus
 import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
+import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.combineLatest
+import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.helper.zip
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
+import de.kuschku.quasseldroid.util.ui.TextDrawable
+import de.kuschku.quasseldroid.viewmodel.EditorViewModel.Companion.IGNORED_CHARS
 import de.kuschku.quasseldroid.viewmodel.data.BufferHiddenState
 import de.kuschku.quasseldroid.viewmodel.data.BufferListItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferState
@@ -245,9 +250,28 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     chatListSpinner.adapter = adapter
 
     listAdapter = BufferListAdapter(
+      messageSettings,
       viewModel.selectedBufferId,
       viewModel.expandedNetworks
     )
+
+    val avatarSize = resources.getDimensionPixelSize(R.dimen.avatar_size_buffer)
+
+    val senderColors = requireContext().theme.styledAttributes(
+      R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
+      R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
+      R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
+      R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF
+    ) {
+      IntArray(length()) {
+        getColor(it, 0)
+      }
+    }
+
+    val selfColor = requireContext().theme.styledAttributes(R.attr.colorForegroundSecondary) {
+      getColor(0, 0)
+    }
+
     combineLatest(viewModel.bufferList, viewModel.expandedNetworks, viewModel.selectedBuffer)
       .toLiveData().zip(database.filtered().listen(accountId))
       .observe(this, Observer { it ->
@@ -279,7 +303,29 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                       activity.isNotEmpty()                 -> Buffer_Activity.OtherActivity
                       else                                  -> Buffer_Activity.NoActivity
                     }
-                  )
+                  ),
+                  fallbackDrawable = props.ircUser?.let {
+                    val nickName = it.nick()
+                    val senderColorIndex = SenderColorUtil.senderColor(nickName)
+                    val rawInitial = nickName.trimStart(*IGNORED_CHARS).firstOrNull()
+                                     ?: nickName.firstOrNull()
+                    val initial = rawInitial?.toUpperCase().toString()
+                    val senderColor = when (messageSettings.colorizeNicknames) {
+                      MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
+                      MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+                        if (props.ircUser?.network()?.isMyNick(nickName) == true) selfColor
+                        else senderColors[senderColorIndex]
+                      MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
+                    }
+
+                    TextDrawable.builder().let {
+                      if (messageSettings.squareAvatars) it.buildRect(initial, senderColor)
+                      else it.buildRound(initial, senderColor)
+                    }
+                  },
+                  avatarUrls = props.ircUser?.let {
+                    AvatarHelper.avatar(messageSettings, it, avatarSize)
+                  } ?: emptyList()
                 ),
                 BufferState(
                   networkExpanded = expandedNetworks[props.network.networkId]
