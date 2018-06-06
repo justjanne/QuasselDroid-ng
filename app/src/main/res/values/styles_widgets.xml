@@ -301,12 +301,13 @@
   </style>
 
   <style name="Widget.FastScroller" parent="">
+    <item name="fastScrollPopupBackgroundSize">62dp</item>
     <item name="fastScrollPopupBgColor">?colorAccent</item>
     <item name="fastScrollPopupTextColor">?colorTextPrimaryInverse</item>
-    <item name="fastScrollThumbColor">?colorAccent</item>
     <item name="fastScrollPopupTextSize">32dp</item>
-    <item name="fastScrollPopupBackgroundSize">62dp</item>
-    <item name="fastScrollAutoHide">false</item>
+    <item name="fastScrollThumbColor">?colorAccent</item>
+    <item name="fastScrollThumbInactiveColor">?colorDivider</item>
+    <item name="fastScrollTrackColor">?colorDivider</item>
   </style>
 
   <!-- NavigationDrawerLayout -->
