@@ -246,14 +246,14 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
     listAdapter = BufferListAdapter(
       viewModel.selectedBufferId,
-      viewModel.collapsedNetworks
+      viewModel.expandedNetworks
     )
-    combineLatest(viewModel.bufferList, viewModel.collapsedNetworks, viewModel.selectedBuffer)
+    combineLatest(viewModel.bufferList, viewModel.expandedNetworks, viewModel.selectedBuffer)
       .toLiveData().zip(database.filtered().listen(accountId))
       .observe(this, Observer { it ->
         it?.let { (data, activityList) ->
           runInBackground {
-            val (info, collapsedNetworks, selected) = data
+            val (info, expandedNetworks, selected) = data
             val (config, list) = info ?: Pair(null, emptyList())
             val minimumActivity = config?.minimumActivity() ?: Buffer_Activity.NONE
             val activities = activityList.associate { it.bufferId to it.filtered }
@@ -282,7 +282,8 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                   )
                 ),
                 BufferState(
-                  networkExpanded = !collapsedNetworks.contains(props.network.networkId),
+                  networkExpanded = expandedNetworks[props.network.networkId]
+                                    ?: (props.networkConnectionState == INetwork.ConnectionState.Initialized),
                   selected = selected.info?.bufferId == props.info.bufferId
                 )
               )

@@ -49,7 +49,7 @@ import io.reactivex.subjects.BehaviorSubject
 
 class BufferListAdapter(
   private val selectedBuffer: BehaviorSubject<BufferId>,
-  private val collapsedNetworks: BehaviorSubject<Set<NetworkId>>
+  private val expandedNetworks: BehaviorSubject<Map<NetworkId, Boolean>>
 ) : ListAdapter<BufferListItem, BufferListAdapter.BufferViewHolder>(
   object : DiffUtil.ItemCallback<BufferListItem>() {
     override fun areItemsTheSame(oldItem: BufferListItem, newItem: BufferListItem) =
@@ -80,11 +80,8 @@ class BufferListAdapter(
     this.updateFinishedListener?.invoke(list)
   }
 
-  fun expandListener(networkId: NetworkId) {
-    if (collapsedNetworks.value.orEmpty().contains(networkId))
-      collapsedNetworks.onNext(collapsedNetworks.value.orEmpty() - networkId)
-    else
-      collapsedNetworks.onNext(collapsedNetworks.value.orEmpty() + networkId)
+  fun expandListener(networkId: NetworkId, expand: Boolean) {
+    expandedNetworks.onNext(expandedNetworks.value.orEmpty() + Pair(networkId, expand))
   }
 
   fun toggleSelection(buffer: BufferId): Boolean {
@@ -143,7 +140,7 @@ class BufferListAdapter(
       itemView: View,
       private val clickListener: ((BufferId) -> Unit)? = null,
       private val longClickListener: ((BufferId) -> Unit)? = null,
-      private val expansionListener: ((NetworkId) -> Unit)? = null
+      private val expansionListener: ((NetworkId, Boolean) -> Unit)? = null
     ) : BufferViewHolder(itemView) {
       @BindView(R.id.status)
       lateinit var status: ImageView
@@ -158,6 +155,8 @@ class BufferListAdapter(
       private var activity: Int = 0
       private var message: Int = 0
       private var highlight: Int = 0
+
+      private var expanded: Boolean = false
 
       init {
         ButterKnife.bind(this, itemView)
@@ -180,7 +179,7 @@ class BufferListAdapter(
         status.setOnClickListener {
           val network = networkId
           if (network != null)
-            expansionListener?.invoke(network)
+            expansionListener?.invoke(network, !expanded)
         }
 
         itemView.context.theme.styledAttributes(
@@ -207,6 +206,8 @@ class BufferListAdapter(
             else                                                        -> none
           }
         )
+
+        this.expanded = state.networkExpanded
 
         itemView.isSelected = state.selected
 
