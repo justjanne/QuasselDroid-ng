@@ -46,6 +46,14 @@ import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
 class QuasselViewModel : ViewModel() {
+  fun resetAccount() {
+    buffer.onNext(Int.MAX_VALUE)
+    bufferViewConfigId.onNext(Int.MAX_VALUE)
+    selectedMessages.onNext(emptyMap())
+    expandedMessages.onNext(emptySet())
+    recentlySentMessages.onNext(emptyList())
+  }
+
   val backendWrapper = BehaviorSubject.createDefault(Observable.empty<Optional<Backend>>())
 
   val selectedMessages = BehaviorSubject.createDefault(emptyMap<MsgId, FormattedMessage>())

@@ -740,6 +740,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     if (!startedSelection) {
       startActivityForResult(AccountSelectionActivity.intent(this), REQUEST_SELECT_ACCOUNT)
       startedSelection = true
+      viewModel.resetAccount()
     }
   }
 
