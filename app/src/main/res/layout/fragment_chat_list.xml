@@ -51,10 +51,8 @@
 
   <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
     android:id="@+id/chatList"
+    style="@style/Widget.FastScroller"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:fastScrollPopupBgColor="?colorAccent"
-    app:fastScrollPopupTextColor="?colorTextPrimaryInverse"
-    app:fastScrollThumbColor="?colorAccent"
     tools:listitem="@layout/widget_buffer" />
 </LinearLayout>

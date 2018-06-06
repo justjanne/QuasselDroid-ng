@@ -300,6 +300,14 @@
     <item name="insetBackground">#4000</item>
   </style>
 
+  <style name="Widget.FastScroller" parent="">
+    <item name="fastScrollPopupBgColor">?colorAccent</item>
+    <item name="fastScrollPopupTextColor">?colorTextPrimaryInverse</item>
+    <item name="fastScrollThumbColor">?colorAccent</item>
+    <item name="fastScrollPopupTextSize">32dp</item>
+    <item name="fastScrollPopupBackgroundSize">62dp</item>
+  </style>
+
   <!-- NavigationDrawerLayout -->
   <declare-styleable name="NavigationDrawerLayout">
     <attr name="insetBackground" />
