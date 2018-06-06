@@ -26,6 +26,7 @@ import android.graphics.drawable.LayerDrawable
 import android.os.Build
 import android.text.SpannableStringBuilder
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -165,15 +166,22 @@ class QuasselMessageRenderer @Inject constructor(
     val contentSize = if (messageSettings.largerEmoji && isEmoji) textSize * 2f else textSize
     viewHolder.content?.setTextSize(TypedValue.COMPLEX_UNIT_SP, contentSize)
     viewHolder.combined?.setTextSize(TypedValue.COMPLEX_UNIT_SP, contentSize)
-    val avatarSize = TypedValue.applyDimension(
+    val avatarContainerSize = TypedValue.applyDimension(
       TypedValue.COMPLEX_UNIT_SP,
       textSize * 2.5f,
       viewHolder.itemView.context.resources.displayMetrics
     ).roundToInt()
-    viewHolder.avatar?.layoutParams =
-      FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, avatarSize)
+    val avatarSize = TypedValue.applyDimension(
+      TypedValue.COMPLEX_UNIT_SP,
+      if (messageType == Plain) textSize * 2.5f
+      else textSize * 1.5f,
+      viewHolder.itemView.context.resources.displayMetrics
+    ).roundToInt()
+    viewHolder.avatar?.layoutParams = FrameLayout.LayoutParams(avatarSize, avatarSize).apply {
+      gravity = Gravity.END
+    }
     avatarContainer?.layoutParams =
-      LinearLayout.LayoutParams(avatarSize, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
+      LinearLayout.LayoutParams(avatarContainerSize, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
         val margin = viewHolder.itemView.context.resources.getDimensionPixelSize(R.dimen.message_horizontal)
         setMargins(0, 0, margin, 0)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -181,7 +189,7 @@ class QuasselMessageRenderer @Inject constructor(
         }
       }
     avatarPlaceholder?.layoutParams =
-      LinearLayout.LayoutParams(avatarSize, LinearLayout.LayoutParams.MATCH_PARENT).apply {
+      LinearLayout.LayoutParams(avatarContainerSize, LinearLayout.LayoutParams.MATCH_PARENT).apply {
         val margin = viewHolder.itemView.context.resources.getDimensionPixelSize(R.dimen.message_horizontal)
         setMargins(0, 0, margin, 0)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -208,7 +216,7 @@ class QuasselMessageRenderer @Inject constructor(
     val highlight__ = message.content.flag.hasFlag(Message_Flag.Highlight)
     val monochromeForeground = highlight__ && monochromeHighlights
     return when (message.content.type.enabledValues().firstOrNull()) {
-      Message_Type.Plain        -> {
+      Message_Type.Plain     -> {
         val realName = ircFormatDeserializer.formatString(message.content.realName,
                                                           !monochromeForeground)
         val nick = SpannableStringBuilder().apply {
@@ -257,22 +265,42 @@ class QuasselMessageRenderer @Inject constructor(
           isSelected = message.isSelected
         )
       }
-      Message_Type.Action       -> FormattedMessage(
-        id = message.content.messageId,
-        time = timeFormatter.format(message.content.time.atZone(zoneId)),
-        dayChange = formatDayChange(message),
-        combined = SpanFormatter.format(
-          context.getString(R.string.message_format_action),
-          contentFormatter.formatPrefix(message.content.senderPrefixes),
-          contentFormatter.formatNick(message.content.sender, self, monochromeForeground, false),
-          contentFormatter.formatContent(message.content.content, monochromeForeground)
-        ),
-        hasDayChange = message.hasDayChange,
-        isMarkerLine = message.isMarkerLine,
-        isExpanded = message.isExpanded,
-        isSelected = message.isSelected
-      )
-      Message_Type.Notice       -> FormattedMessage(
+      Message_Type.Action    -> {
+        val nickName = HostmaskHelper.nick(message.content.sender)
+        val senderColorIndex = SenderColorUtil.senderColor(nickName)
+        val rawInitial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
+                           .firstOrNull() ?: nickName.firstOrNull()
+        val initial = rawInitial?.toUpperCase().toString()
+        val senderColor = when (messageSettings.colorizeNicknames) {
+          MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
+          MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+            if (message.content.flag.hasFlag(Message_Flag.Self)) selfColor
+            else senderColors[senderColorIndex]
+          MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
+        }
+
+        FormattedMessage(
+          id = message.content.messageId,
+          time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          dayChange = formatDayChange(message),
+          combined = SpanFormatter.format(
+            context.getString(R.string.message_format_action),
+            contentFormatter.formatPrefix(message.content.senderPrefixes),
+            contentFormatter.formatNick(message.content.sender, self, monochromeForeground, false),
+            contentFormatter.formatContent(message.content.content, monochromeForeground)
+          ),
+          avatarUrls = AvatarHelper.avatar(messageSettings, message.content, avatarSize),
+          fallbackDrawable = TextDrawable.builder().let {
+            if (messageSettings.squareAvatars) it.buildRect(initial, senderColor)
+            else it.buildRound(initial, senderColor)
+          },
+          hasDayChange = message.hasDayChange,
+          isMarkerLine = message.isMarkerLine,
+          isExpanded = message.isExpanded,
+          isSelected = message.isSelected
+        )
+      }
+      Message_Type.Notice    -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
@@ -542,7 +570,7 @@ class QuasselMessageRenderer @Inject constructor(
       }
       Message_Type.Server,
       Message_Type.Info,
-      Message_Type.Error        -> FormattedMessage(
+      Message_Type.Error     -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),

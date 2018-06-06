@@ -36,6 +36,7 @@
 
   <dimen name="colorchooser_circlesize">56dp</dimen>
   <dimen name="avatar_size">35sp</dimen>
+  <dimen name="avatar_size_action">20sp</dimen>
 
   <dimen name="notification_avatar_width">64dp</dimen>
   <dimen name="notification_avatar_height">64dp</dimen>
