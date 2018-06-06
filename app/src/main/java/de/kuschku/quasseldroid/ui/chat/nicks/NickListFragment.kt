@@ -98,6 +98,12 @@ class NickListFragment : ServiceBoundFragment() {
       getColor(0, 0)
     }
 
+    val colorBackground = requireContext().theme.styledAttributes(R.attr.colorBackground) {
+      getColor(0, 0)
+    }
+
+    val radius = requireContext().resources.getDimensionPixelSize(R.dimen.avatar_radius)
+
     val avatarSize = resources.getDimensionPixelSize(R.dimen.avatar_size)
     viewModel.nickData.toLiveData().observe(this, Observer {
       runInBackground {
@@ -132,8 +138,8 @@ class NickListFragment : ServiceBoundFragment() {
           }
           it.copy(
             displayNick = formatNick(it.nick),
-            fallbackDrawable = TextDrawable.builder().let {
-              if (messageSettings.squareAvatars) it.buildRect(initial, senderColor)
+            fallbackDrawable = TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
+              if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
               else it.buildRound(initial, senderColor)
             },
             initial = initial,

@@ -98,6 +98,12 @@ class QuasselMessageRenderer @Inject constructor(
     getColor(0, 0)
   }
 
+  private val colorBackground = context.theme.styledAttributes(R.attr.colorBackground) {
+    getColor(0, 0)
+  }
+
+  private val radius = context.resources.getDimensionPixelSize(R.dimen.avatar_radius)
+
   private val zoneId = ZoneId.systemDefault()
 
   override fun layout(type: Message_Type?, hasHighlight: Boolean,
@@ -255,8 +261,8 @@ class QuasselMessageRenderer @Inject constructor(
           },
           realName = realName,
           avatarUrls = AvatarHelper.avatar(messageSettings, message.content, avatarSize),
-          fallbackDrawable = TextDrawable.builder().let {
-            if (messageSettings.squareAvatars) it.buildRect(initial, senderColor)
+          fallbackDrawable = TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
+            if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
             else it.buildRound(initial, senderColor)
           },
           hasDayChange = message.hasDayChange,
@@ -290,8 +296,8 @@ class QuasselMessageRenderer @Inject constructor(
             contentFormatter.formatContent(message.content.content, monochromeForeground)
           ),
           avatarUrls = AvatarHelper.avatar(messageSettings, message.content, avatarSize),
-          fallbackDrawable = TextDrawable.builder().let {
-            if (messageSettings.squareAvatars) it.buildRect(initial, senderColor)
+          fallbackDrawable = TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
+            if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
             else it.buildRound(initial, senderColor)
           },
           hasDayChange = message.hasDayChange,

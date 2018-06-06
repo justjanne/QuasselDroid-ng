@@ -56,6 +56,7 @@ import de.kuschku.quasseldroid.viewmodel.EditorViewModel.Companion.IGNORED_CHARS
 import de.kuschku.quasseldroid.viewmodel.data.BufferHiddenState
 import de.kuschku.quasseldroid.viewmodel.data.BufferListItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferState
+import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
 import javax.inject.Inject
 
 class BufferViewConfigFragment : ServiceBoundFragment() {
@@ -272,6 +273,20 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       getColor(0, 0)
     }
 
+    val colorAccent = requireContext().theme.styledAttributes(R.attr.colorAccent) {
+      getColor(0, 0)
+    }
+
+    val colorAway = requireContext().theme.styledAttributes(R.attr.colorAway) {
+      getColor(0, 0)
+    }
+
+    val colorBackground = requireContext().theme.styledAttributes(R.attr.colorBackground) {
+      getColor(0, 0)
+    }
+
+    val radius = requireContext().resources.getDimensionPixelSize(R.dimen.avatar_radius)
+
     combineLatest(viewModel.bufferList, viewModel.expandedNetworks, viewModel.selectedBuffer)
       .toLiveData().zip(database.filtered().listen(accountId))
       .observe(this, Observer { it ->
@@ -304,23 +319,39 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                       else                                  -> Buffer_Activity.NoActivity
                     }
                   ),
-                  fallbackDrawable = props.ircUser?.let {
-                    val nickName = it.nick()
-                    val senderColorIndex = SenderColorUtil.senderColor(nickName)
-                    val rawInitial = nickName.trimStart(*IGNORED_CHARS).firstOrNull()
-                                     ?: nickName.firstOrNull()
-                    val initial = rawInitial?.toUpperCase().toString()
-                    val senderColor = when (messageSettings.colorizeNicknames) {
-                      MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
-                      MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
-                        if (props.ircUser?.network()?.isMyNick(nickName) == true) selfColor
-                        else senderColors[senderColorIndex]
-                      MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
-                    }
+                  fallbackDrawable = if (props.info.type.hasFlag(Buffer_Type.QueryBuffer)) {
+                    props.ircUser?.let {
+                      val nickName = it.nick()
+                      val senderColorIndex = SenderColorUtil.senderColor(nickName)
+                      val rawInitial = nickName.trimStart(*IGNORED_CHARS).firstOrNull()
+                                       ?: nickName.firstOrNull()
+                      val initial = rawInitial?.toUpperCase().toString()
+                      val senderColor = when (messageSettings.colorizeNicknames) {
+                        MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
+                        MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+                          if (props.ircUser?.network()?.isMyNick(nickName) == true) selfColor
+                          else senderColors[senderColorIndex]
+                        MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
+                      }
 
-                    TextDrawable.builder().let {
-                      if (messageSettings.squareAvatars) it.buildRect(initial, senderColor)
-                      else it.buildRound(initial, senderColor)
+                      TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
+                        if (messageSettings.squareAvatars) it.buildRoundRect(initial,
+                                                                             senderColor,
+                                                                             radius)
+                        else it.buildRound(initial, senderColor)
+                      }
+                    }
+                    ?: TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
+                      if (messageSettings.squareAvatars) it.buildRoundRect("", colorAway, radius)
+                      else it.buildRound("", colorAway)
+                    }
+                  } else {
+                    val color = if (props.bufferStatus == BufferStatus.ONLINE) colorAccent
+                    else colorAway
+
+                    TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
+                      if (messageSettings.squareAvatars) it.buildRoundRect("#", color, radius)
+                      else it.buildRound("#", color)
                     }
                   },
                   avatarUrls = props.ircUser?.let {

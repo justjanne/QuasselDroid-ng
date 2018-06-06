@@ -22,9 +22,11 @@ package de.kuschku.quasseldroid.util.helper
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.GlideRequest
 import de.kuschku.quasseldroid.GlideRequests
+import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.viewmodel.data.Avatar
 
 fun GlideRequests.loadWithFallbacks(urls: List<Avatar>): GlideRequest<Drawable>? {
@@ -46,8 +48,12 @@ fun ImageView.loadAvatars(urls: List<Avatar>, fallback: Drawable? = null, crop: 
   if (urls.isNotEmpty()) {
     GlideApp.with(this)
       .loadWithFallbacks(urls)
-      ?.letIf(crop) {
-        it.optionalCircleCrop()
+      ?.let {
+        if (crop) {
+          it.optionalCircleCrop()
+        } else {
+          it.transform(RoundedCorners(this.context.resources.getDimensionPixelSize(R.dimen.avatar_radius)))
+        }
       }
       ?.placeholder(fallback)
       ?.into(this)

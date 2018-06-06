@@ -331,9 +331,6 @@ class BufferListAdapter(
 
       var bufferId: BufferId? = null
 
-      private val online: Drawable?
-      private val offline: Drawable?
-
       private var none: Int = 0
       private var activity: Int = 0
       private var message: Int = 0
@@ -357,21 +354,14 @@ class BufferListAdapter(
           }
         }
 
-        online = itemView.context.getVectorDrawableCompat(R.drawable.ic_status_channel)?.mutate()
-        offline = itemView.context.getVectorDrawableCompat(R.drawable.ic_status_channel_offline)?.mutate()
-
         itemView.context.theme.styledAttributes(
-          R.attr.colorAccent, R.attr.colorAway,
           R.attr.colorTextPrimary, R.attr.colorTintActivity, R.attr.colorTintMessage,
           R.attr.colorTintHighlight
         ) {
-          online?.tint(getColor(0, 0))
-          offline?.tint(getColor(1, 0))
-
-          none = getColor(2, 0)
-          activity = getColor(3, 0)
-          message = getColor(4, 0)
-          highlight = getColor(5, 0)
+          none = getColor(0, 0)
+          activity = getColor(1, 0)
+          message = getColor(2, 0)
+          highlight = getColor(3, 0)
         }
       }
 
@@ -394,12 +384,7 @@ class BufferListAdapter(
 
         description.visibleIf(props.description.isNotBlank())
 
-        status.setImageDrawable(
-          when (props.bufferStatus) {
-            BufferStatus.ONLINE -> online
-            else                -> offline
-          }
-        )
+        status.setImageDrawable(props.fallbackDrawable)
       }
     }
 
@@ -418,8 +403,6 @@ class BufferListAdapter(
       lateinit var description: TextView
 
       var bufferId: BufferId? = null
-
-      private val offline: Drawable?
 
       private var none: Int = 0
       private var activity: Int = 0
@@ -444,19 +427,14 @@ class BufferListAdapter(
           }
         }
 
-        offline = itemView.context.getVectorDrawableCompat(R.drawable.ic_status_offline)?.mutate()
-
         itemView.context.theme.styledAttributes(
-          R.attr.colorAway,
           R.attr.colorTextPrimary, R.attr.colorTintActivity, R.attr.colorTintMessage,
           R.attr.colorTintHighlight
         ) {
-          offline?.tint(getColor(0, 0))
-
-          none = getColor(1, 0)
-          activity = getColor(2, 0)
-          message = getColor(3, 0)
-          highlight = getColor(4, 0)
+          none = getColor(0, 0)
+          activity = getColor(1, 0)
+          message = getColor(2, 0)
+          highlight = getColor(3, 0)
         }
       }
 
@@ -480,7 +458,7 @@ class BufferListAdapter(
         description.visibleIf(props.description.isNotBlank())
 
         status.loadAvatars(props.avatarUrls,
-                           props.fallbackDrawable ?: offline,
+                           props.fallbackDrawable,
                            crop = !messageSettings.squareAvatars)
       }
     }

@@ -73,6 +73,20 @@ class AutoCompleteHelper(
     getColor(0, 0)
   }
 
+  private val colorAccent = activity.theme.styledAttributes(R.attr.colorAccent) {
+    getColor(0, 0)
+  }
+
+  private val colorAway = activity.theme.styledAttributes(R.attr.colorAway) {
+    getColor(0, 0)
+  }
+
+  private val colorBackground = activity.theme.styledAttributes(R.attr.colorBackground) {
+    getColor(0, 0)
+  }
+
+  private val radius = activity.resources.getDimensionPixelSize(R.dimen.avatar_radius)
+
   init {
     viewModel.autoCompleteData.toLiveData().observe(activity, Observer {
       val query = it?.first ?: ""
@@ -87,56 +101,68 @@ class AutoCompleteHelper(
         it is AutoCompleteItem.UserItem && autoCompleteSettings.nicks ||
         it is AutoCompleteItem.ChannelItem && autoCompleteSettings.buffers
       }.map {
-        if (it is AutoCompleteItem.UserItem) {
-          val nickName = it.nick
-          val senderColorIndex = SenderColorUtil.senderColor(nickName)
-          val rawInitial = nickName.trimStart(*IGNORED_CHARS).firstOrNull()
-                           ?: nickName.firstOrNull()
-          val initial = rawInitial?.toUpperCase().toString()
-          val senderColor = when (messageSettings.colorizeNicknames) {
-            MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
-            MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
-              if (it.self) selfColor
-              else senderColors[senderColorIndex]
-            MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
-          }
+        when (it) {
+          is AutoCompleteItem.UserItem    -> {
+            val nickName = it.nick
+            val senderColorIndex = SenderColorUtil.senderColor(nickName)
+            val rawInitial = nickName.trimStart(*IGNORED_CHARS).firstOrNull()
+                             ?: nickName.firstOrNull()
+            val initial = rawInitial?.toUpperCase().toString()
+            val senderColor = when (messageSettings.colorizeNicknames) {
+              MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
+              MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+                if (it.self) selfColor
+                else senderColors[senderColorIndex]
+              MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
+            }
 
-          fun formatNick(nick: CharSequence): CharSequence {
-            val spannableString = SpannableString(nick)
-            spannableString.setSpan(
-              ForegroundColorSpan(senderColor),
-              0,
-              nick.length,
-              SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
-            )
-            spannableString.setSpan(
-              StyleSpan(Typeface.BOLD),
-              0,
-              nick.length,
-              SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
-            )
-            return spannableString
-          }
+            fun formatNick(nick: CharSequence): CharSequence {
+              val spannableString = SpannableString(nick)
+              spannableString.setSpan(
+                ForegroundColorSpan(senderColor),
+                0,
+                nick.length,
+                SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+              )
+              spannableString.setSpan(
+                StyleSpan(Typeface.BOLD),
+                0,
+                nick.length,
+                SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+              )
+              return spannableString
+            }
 
-          it.copy(
-            displayNick = formatNick(it.nick),
-            fallbackDrawable = TextDrawable.builder().let {
-              if (messageSettings.squareAvatars) it.buildRect(initial, senderColor)
-              else it.buildRound(initial, senderColor)
-            },
-            modes = when (messageSettings.showPrefix) {
-              MessageSettings.ShowPrefixMode.ALL ->
-                it.modes
-              else                               ->
-                it.modes.substring(0, Math.min(it.modes.length, 1))
-            },
-            realname = ircFormatDeserializer.formatString(
-              it.realname.toString(), messageSettings.colorizeMirc
-            ),
-            avatarUrls = AvatarHelper.avatar(messageSettings, it)
-          )
-        } else {
-          it
+            it.copy(
+              displayNick = formatNick(it.nick),
+              fallbackDrawable = TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
+                if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
+                else it.buildRound(initial, senderColor)
+              },
+              modes = when (messageSettings.showPrefix) {
+                MessageSettings.ShowPrefixMode.ALL ->
+                  it.modes
+                else                               ->
+                  it.modes.substring(0, Math.min(it.modes.length, 1))
+              },
+              realname = ircFormatDeserializer.formatString(
+                it.realname.toString(), messageSettings.colorizeMirc
+              ),
+              avatarUrls = AvatarHelper.avatar(messageSettings, it)
+            )
+          }
+          is AutoCompleteItem.ChannelItem -> {
+            val color = if (it.bufferStatus == BufferStatus.ONLINE) colorAccent
+            else colorAway
+
+            it.copy(
+              icon = TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
+                if (messageSettings.squareAvatars) it.buildRoundRect("#", color, radius)
+                else it.buildRound("#", color)
+              }
+            )
+          }
+          else                            -> it
         }
       }
       dataListeners.forEach {

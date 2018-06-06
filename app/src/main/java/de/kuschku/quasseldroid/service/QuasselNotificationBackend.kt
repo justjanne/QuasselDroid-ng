@@ -64,6 +64,9 @@ class QuasselNotificationBackend @Inject constructor(
   private var selfColor: Int
   private var senderColors: IntArray
 
+  @ColorInt
+  private var colorBackground: Int
+
   init {
     notificationSettings = Settings.notification(context)
     appearanceSettings = Settings.appearance(context)
@@ -81,6 +84,9 @@ class QuasselNotificationBackend @Inject constructor(
       }
     }
     selfColor = context.getColorCompat(R.color.material_dark_background)
+    colorBackground = context.theme.styledAttributes(R.attr.colorBackground) {
+      getColor(0, 0)
+    }
   }
 
   override fun init(session: Session) {
@@ -157,6 +163,9 @@ class QuasselNotificationBackend @Inject constructor(
       }
     }
     selfColor = context.getColorCompat(R.color.material_dark_background)
+    colorBackground = context.theme.styledAttributes(R.attr.colorBackground) {
+      getColor(0, 0)
+    }
   }
 
   @Synchronized
@@ -258,12 +267,13 @@ class QuasselNotificationBackend @Inject constructor(
         }
 
         val size = context.resources.getDimensionPixelSize(R.dimen.notification_avatar_width)
+        val radius = context.resources.getDimensionPixelSize(R.dimen.avatar_radius)
         val avatarList = AvatarHelper.avatar(messageSettings, it)
         val avatarResult = try {
           GlideApp.with(context).loadWithFallbacks(avatarList)
             ?.letIf(!messageSettings.squareAvatars, GlideRequest<Drawable>::optionalCircleCrop)
-            ?.placeholder(TextDrawable.builder()?.let {
-              if (messageSettings.squareAvatars) it.buildRect(initial, senderColor)
+            ?.placeholder(TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
+              if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
               else it.buildRound(initial, senderColor)
             })
             ?.submit(size, size)
@@ -271,8 +281,11 @@ class QuasselNotificationBackend @Inject constructor(
         } catch (_: Throwable) {
           null
         }
-        val avatar = avatarResult ?: TextDrawable.builder().let {
-          if (messageSettings.squareAvatars) it.buildRect(initial, senderColor)
+        val avatar = avatarResult
+                     ?: TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
+                       if (messageSettings.squareAvatars) it.buildRoundRect(initial,
+                                                                            senderColor,
+                                                                            radius)
           else it.buildRound(initial, senderColor)
         }
 

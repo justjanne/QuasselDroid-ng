@@ -53,6 +53,7 @@ sealed class AutoCompleteItem(open val name: String, val suffix: String, private
     val info: BufferInfo,
     val network: INetwork.NetworkInfo,
     val bufferStatus: BufferStatus,
-    val description: CharSequence
+    val description: CharSequence,
+    val icon: Drawable? = null
   ) : AutoCompleteItem(info.bufferName ?: "", " ", 2)
 }

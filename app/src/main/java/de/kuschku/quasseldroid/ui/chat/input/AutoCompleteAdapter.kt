@@ -19,7 +19,6 @@
 
 package de.kuschku.quasseldroid.ui.chat.input
 
-import android.graphics.drawable.Drawable
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -33,10 +32,10 @@ import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.nicks.NickListAdapter.Companion.VIEWTYPE_AWAY
-import de.kuschku.quasseldroid.util.helper.*
+import de.kuschku.quasseldroid.util.helper.loadAvatars
+import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
-import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
 import javax.inject.Inject
 
 class AutoCompleteAdapter @Inject constructor(
@@ -161,25 +160,12 @@ class AutoCompleteAdapter @Inject constructor(
 
       var value: AutoCompleteItem? = null
 
-      private val online: Drawable?
-      private val offline: Drawable?
-
       init {
         ButterKnife.bind(this, itemView)
         itemView.setOnClickListener {
           val value = value
           if (value != null)
             clickListener?.invoke(value.name, value.suffix)
-        }
-
-        online = itemView.context.getVectorDrawableCompat(R.drawable.ic_status_channel)?.mutate()
-        offline = itemView.context.getVectorDrawableCompat(R.drawable.ic_status_channel_offline)?.mutate()
-
-        itemView.context.theme.styledAttributes(
-          R.attr.colorAccent, R.attr.colorAway
-        ) {
-          online?.tint(getColor(0, 0))
-          offline?.tint(getColor(1, 0))
         }
       }
 
@@ -191,12 +177,7 @@ class AutoCompleteAdapter @Inject constructor(
 
         description.visibleIf(data.description.isNotBlank())
 
-        status.setImageDrawable(
-          when (data.bufferStatus) {
-            BufferStatus.ONLINE -> online
-            else                -> offline
-          }
-        )
+        status.setImageDrawable(data.icon)
       }
     }
 
