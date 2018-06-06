@@ -83,23 +83,13 @@
         android:orientation="vertical">
 
         <de.kuschku.quasseldroid.util.ui.RipplePassthroughTextView
-          android:id="@+id/content"
-          style="@style/Widget.RtlConformTextView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:textColor="?attr/colorForeground"
-          android:visibility="gone"
-          tools:text="@sample/messages.json/data/content"
-          tools:visibility="visible" />
-
-        <de.kuschku.quasseldroid.util.ui.RipplePassthroughTextView
           android:id="@+id/combined"
           style="@style/Widget.RtlConformTextView"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:textColor="?attr/colorForeground"
-          tools:text="@sample/messages.json/data/message"
-          tools:visibility="gone" />
+          android:textColor="?attr/colorForegroundAction"
+          android:textStyle="italic"
+          tools:text="@sample/messages.json/data/message" />
 
       </LinearLayout>
 
