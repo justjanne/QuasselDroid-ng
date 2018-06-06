@@ -21,6 +21,7 @@ package de.kuschku.quasseldroid.util.irc.format
 
 import android.content.Context
 import android.graphics.Typeface
+import android.support.annotation.ColorInt
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
@@ -71,6 +72,11 @@ class ContentFormatter @Inject constructor(
     }
   }
 
+  @ColorInt
+  private val selfColor: Int = context.theme.styledAttributes(R.attr.colorForegroundSecondary) {
+    getColor(0, 0)
+  }
+
   class QuasselURLSpan(text: String, private val highlight: Boolean) : URLSpan(text) {
     override fun updateDrawState(ds: TextPaint?) {
       if (ds != null) {
@@ -103,13 +109,14 @@ class ContentFormatter @Inject constructor(
     return text
   }
 
-  private fun formatNickNickImpl(nick: String, colorize: Boolean,
-                                 senderColors: IntArray): CharSequence {
+  private fun formatNickNickImpl(nick: String, self: Boolean, colorize: Boolean,
+                                 senderColors: IntArray, @ColorInt selfColor: Int): CharSequence {
     val spannableString = SpannableString(nick)
     if (colorize) {
-      val senderColor = SenderColorUtil.senderColor(nick)
+      val color = if (self) selfColor
+      else senderColors[(SenderColorUtil.senderColor(nick) + senderColors.size) % senderColors.size]
       spannableString.setSpan(
-        ForegroundColorSpan(senderColors[(senderColor + senderColors.size) % senderColors.size]),
+        ForegroundColorSpan(color),
         0,
         nick.length,
         SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
@@ -124,10 +131,10 @@ class ContentFormatter @Inject constructor(
     return spannableString
   }
 
-  private fun formatNickImpl(sender: String, colorize: Boolean, hostmask: Boolean,
-                             senderColors: IntArray): CharSequence {
+  private fun formatNickImpl(sender: String, self: Boolean, colorize: Boolean, hostmask: Boolean,
+                             senderColors: IntArray, @ColorInt selfColor: Int): CharSequence {
     val (nick, user, host) = HostmaskHelper.split(sender)
-    val formattedNick = formatNickNickImpl(nick, colorize, senderColors)
+    val formattedNick = formatNickNickImpl(nick, self, colorize, senderColors, selfColor)
 
     return if (hostmask) {
       SpanFormatter.format("%s (%s@%s)", formattedNick, user, host)
@@ -137,14 +144,15 @@ class ContentFormatter @Inject constructor(
   }
 
   fun formatNick(sender: String, self: Boolean = false, highlight: Boolean = false,
-                 showHostmask: Boolean = false, senderColors: IntArray = this.senderColors) =
+                 showHostmask: Boolean = false, senderColors: IntArray = this.senderColors,
+                 @ColorInt selfColor: Int = this.selfColor) =
     when (messageSettings.colorizeNicknames) {
       MessageSettings.ColorizeNicknamesMode.ALL          ->
-        formatNickImpl(sender, !highlight, showHostmask, senderColors)
+        formatNickImpl(sender, false, !highlight, showHostmask, senderColors, selfColor)
       MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
-        formatNickImpl(sender, !self && !highlight, showHostmask, senderColors)
+        formatNickImpl(sender, self, !highlight, showHostmask, senderColors, selfColor)
       MessageSettings.ColorizeNicknamesMode.NONE         ->
-        formatNickImpl(sender, false, showHostmask, senderColors)
+        formatNickImpl(sender, false, false, showHostmask, senderColors, selfColor)
     }
 
   fun formatPrefix(prefix: String) = when (messageSettings.showPrefix) {

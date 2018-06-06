@@ -228,7 +228,8 @@ class QuasselNotificationBackend @Inject constructor(
           append(contentFormatter.formatPrefix(it.senderPrefixes))
           append(contentFormatter.formatNick(
             it.sender,
-            senderColors = senderColors
+            senderColors = senderColors,
+            selfColor = selfColor
           ))
         }
         val content = contentFormatter.formatContent(it.content, false)
