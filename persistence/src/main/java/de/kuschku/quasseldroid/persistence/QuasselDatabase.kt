@@ -93,7 +93,7 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC")
     fun findByBufferId(bufferId: Int): List<MessageData>
 
-    @Query("SELECT * FROM message WHERE bufferId = :bufferId AND type & ~ :type > 0 AND ignored = 0 ORDER BY messageId ASC")
+    @Query("SELECT * FROM message WHERE bufferId = :bufferId AND type & ~ :type > 0 AND ignored = 0 ORDER BY messageId DESC")
     fun findByBufferIdPaged(bufferId: Int, type: Int): DataSource.Factory<Int, MessageData>
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId DESC LIMIT 1")

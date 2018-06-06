@@ -197,8 +197,10 @@ class MessageListFragment : ServiceBoundFragment() {
 
   private val boundaryCallback = object :
     PagedList.BoundaryCallback<DisplayMessage>() {
-    override fun onItemAtFrontLoaded(itemAtFront: DisplayMessage) = loadMore()
-    override fun onItemAtEndLoaded(itemAtEnd: DisplayMessage) = Unit
+    override fun onItemAtFrontLoaded(itemAtFront: DisplayMessage) = Unit
+    override fun onItemAtEndLoaded(itemAtEnd: DisplayMessage) {
+      loadMore()
+    }
   }
 
   override fun onCreateView(
@@ -209,6 +211,7 @@ class MessageListFragment : ServiceBoundFragment() {
     ButterKnife.bind(this, view)
 
     linearLayoutManager = LinearLayoutManager(context)
+    linearLayoutManager.reverseLayout = true
 
     backlogRequester = BacklogRequester(viewModel, database)
 
@@ -287,7 +290,7 @@ class MessageListFragment : ServiceBoundFragment() {
                         expanded: Set<MsgId>, markerLine: MsgId?): List<DisplayMessage> {
       var previous: QuasselDatabase.MessageData? = null
       var previousDate: ZonedDateTime? = null
-      return list.map {
+      return list.mapReverse {
         val date = it.time.atZone(ZoneId.systemDefault()).truncatedTo(ChronoUnit.DAYS)
         val isSameDay = previousDate?.isEqual(date) ?: false
         val isFollowUp = previous?.sender == it.sender && previous?.type == it.type && isSameDay
@@ -371,8 +374,8 @@ class MessageListFragment : ServiceBoundFragment() {
     })
 
     fun checkScroll() {
-      if (linearLayoutManager.findLastVisibleItemPosition() > linearLayoutManager.itemCount - 2 && !isScrolling) {
-        messageList.scrollToPosition(linearLayoutManager.itemCount - 1)
+      if (linearLayoutManager.findFirstVisibleItemPosition() < 2 && !isScrolling) {
+        messageList.scrollToPosition(0)
       }
     }
 
@@ -407,7 +410,7 @@ class MessageListFragment : ServiceBoundFragment() {
         fab.visibility = View.VISIBLE
       }
     })
-    scrollDown.setOnClickListener { messageList.scrollToPosition(linearLayoutManager.itemCount - 1) }
+    scrollDown.setOnClickListener { messageList.scrollToPosition(0) }
 
     savedInstanceState?.run {
       messageList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
