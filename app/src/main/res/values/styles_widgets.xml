@@ -306,6 +306,7 @@
     <item name="fastScrollThumbColor">?colorAccent</item>
     <item name="fastScrollPopupTextSize">32dp</item>
     <item name="fastScrollPopupBackgroundSize">62dp</item>
+    <item name="fastScrollAutoHide">false</item>
   </style>
 
   <!-- NavigationDrawerLayout -->
