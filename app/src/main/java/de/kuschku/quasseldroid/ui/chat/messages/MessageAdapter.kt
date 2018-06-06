@@ -31,6 +31,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.util.flag.hasFlag
@@ -43,6 +44,9 @@ import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 import de.kuschku.quasseldroid.util.ui.DoubleClickHelper
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
+import org.threeten.bp.ZoneId
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 import javax.inject.Inject
 
 class MessageAdapter @Inject constructor(
@@ -54,7 +58,12 @@ class MessageAdapter @Inject constructor(
 
     override fun areContentsTheSame(oldItem: DisplayMessage, newItem: DisplayMessage) =
       oldItem == newItem
-  }) {
+  }), FastScrollRecyclerView.SectionedAdapter {
+  private val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
+
+  override fun getSectionName(position: Int) =
+    getItem(position)?.content?.time?.atZone(ZoneId.systemDefault())?.format(dateFormatter) ?: ""
+
   private val movementMethod = BetterLinkMovementMethod.newInstance()
   private var clickListener: ((FormattedMessage) -> Unit)? = null
   private var longClickListener: ((FormattedMessage) -> Unit)? = null
