@@ -222,7 +222,7 @@ class QuasselMessageRenderer @Inject constructor(
     val highlight__ = message.content.flag.hasFlag(Message_Flag.Highlight)
     val monochromeForeground = highlight__ && monochromeHighlights
     return when (message.content.type.enabledValues().firstOrNull()) {
-      Message_Type.Plain     -> {
+      Message_Type.Plain        -> {
         val realName = ircFormatDeserializer.formatString(message.content.realName,
                                                           !monochromeForeground)
         val nick = SpannableStringBuilder().apply {
@@ -261,17 +261,18 @@ class QuasselMessageRenderer @Inject constructor(
           },
           realName = realName,
           avatarUrls = AvatarHelper.avatar(messageSettings, message.content, avatarSize),
-          fallbackDrawable = TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
-            if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
-            else it.buildRound(initial, senderColor)
-          },
+          fallbackDrawable = TextDrawable.builder().beginConfig()
+            .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24)).useFont(Typeface.DEFAULT_BOLD).endConfig().let {
+              if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
+              else it.buildRound(initial, senderColor)
+            },
           hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected
         )
       }
-      Message_Type.Action    -> {
+      Message_Type.Action       -> {
         val nickName = HostmaskHelper.nick(message.content.sender)
         val senderColorIndex = SenderColorUtil.senderColor(nickName)
         val rawInitial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
@@ -296,17 +297,18 @@ class QuasselMessageRenderer @Inject constructor(
             contentFormatter.formatContent(message.content.content, monochromeForeground)
           ),
           avatarUrls = AvatarHelper.avatar(messageSettings, message.content, avatarSize),
-          fallbackDrawable = TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
-            if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
-            else it.buildRound(initial, senderColor)
-          },
+          fallbackDrawable = TextDrawable.builder().beginConfig()
+            .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24)).useFont(Typeface.DEFAULT_BOLD).endConfig().let {
+              if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
+              else it.buildRound(initial, senderColor)
+            },
           hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected
         )
       }
-      Message_Type.Notice    -> FormattedMessage(
+      Message_Type.Notice       -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
@@ -576,7 +578,7 @@ class QuasselMessageRenderer @Inject constructor(
       }
       Message_Type.Server,
       Message_Type.Info,
-      Message_Type.Error     -> FormattedMessage(
+      Message_Type.Error        -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
@@ -586,7 +588,7 @@ class QuasselMessageRenderer @Inject constructor(
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
       )
-      Message_Type.Topic     -> FormattedMessage(
+      Message_Type.Topic        -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
@@ -596,7 +598,7 @@ class QuasselMessageRenderer @Inject constructor(
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
       )
-      Message_Type.DayChange -> FormattedMessage(
+      Message_Type.DayChange    -> FormattedMessage(
         id = message.content.messageId,
         time = "",
         dayChange = formatDayChange(message),
@@ -606,7 +608,7 @@ class QuasselMessageRenderer @Inject constructor(
         isExpanded = false,
         isSelected = false
       )
-      Message_Type.Invite    -> FormattedMessage(
+      Message_Type.Invite       -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
@@ -616,7 +618,7 @@ class QuasselMessageRenderer @Inject constructor(
         isExpanded = message.isExpanded,
         isSelected = message.isSelected
       )
-      else                   -> FormattedMessage(
+      else                      -> FormattedMessage(
         id = message.content.messageId,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),

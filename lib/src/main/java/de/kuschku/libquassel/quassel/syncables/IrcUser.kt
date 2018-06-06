@@ -42,6 +42,7 @@ class IrcUser(
   fun fromVariantMap(properties: QVariantMap, index: Int? = null) {
     initSetProperties(properties, index)
   }
+
   override fun fromVariantMap(properties: QVariantMap) {
     initSetProperties(properties)
   }

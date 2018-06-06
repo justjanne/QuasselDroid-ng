@@ -740,6 +740,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     if (!startedSelection) {
       startActivityForResult(AccountSelectionActivity.intent(this), REQUEST_SELECT_ACCOUNT)
       startedSelection = true
+      drawerLayout.closeDrawers()
+      connectedAccount = -1L
+      restoredDrawerState = false
       viewModel.resetAccount()
     }
   }

@@ -120,6 +120,7 @@ class NickListFragment : ServiceBoundFragment() {
               else senderColors[senderColorIndex]
             MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
           }
+
           fun formatNick(nick: CharSequence): CharSequence {
             val spannableString = SpannableString(nick)
             spannableString.setSpan(
@@ -138,10 +139,11 @@ class NickListFragment : ServiceBoundFragment() {
           }
           it.copy(
             displayNick = formatNick(it.nick),
-            fallbackDrawable = TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
-              if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
-              else it.buildRound(initial, senderColor)
-            },
+            fallbackDrawable = TextDrawable.builder().beginConfig()
+              .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24)).useFont(Typeface.DEFAULT_BOLD).endConfig().let {
+                if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
+                else it.buildRound(initial, senderColor)
+              },
             initial = initial,
             modes = when (messageSettings.showPrefix) {
               MessageSettings.ShowPrefixMode.ALL ->

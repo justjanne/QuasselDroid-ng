@@ -135,10 +135,11 @@ class AutoCompleteHelper(
 
             it.copy(
               displayNick = formatNick(it.nick),
-              fallbackDrawable = TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
-                if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
-                else it.buildRound(initial, senderColor)
-              },
+              fallbackDrawable = TextDrawable.builder().beginConfig()
+                .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24)).useFont(Typeface.DEFAULT_BOLD).endConfig().let {
+                  if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
+                  else it.buildRound(initial, senderColor)
+                },
               modes = when (messageSettings.showPrefix) {
                 MessageSettings.ShowPrefixMode.ALL ->
                   it.modes
@@ -156,7 +157,7 @@ class AutoCompleteHelper(
             else colorAway
 
             it.copy(
-              icon = TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
+              icon = TextDrawable.builder().beginConfig().useFont(Typeface.DEFAULT_BOLD).endConfig().let {
                 if (messageSettings.squareAvatars) it.buildRoundRect("#", color, radius)
                 else it.buildRound("#", color)
               }

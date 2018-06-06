@@ -20,6 +20,7 @@
 package de.kuschku.quasseldroid.service
 
 import android.content.Context
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.text.SpannableStringBuilder
@@ -272,22 +273,22 @@ class QuasselNotificationBackend @Inject constructor(
         val avatarResult = try {
           GlideApp.with(context).loadWithFallbacks(avatarList)
             ?.letIf(!messageSettings.squareAvatars, GlideRequest<Drawable>::optionalCircleCrop)
-            ?.placeholder(TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
-              if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
-              else it.buildRound(initial, senderColor)
-            })
+            ?.placeholder(TextDrawable.builder().beginConfig()
+                            .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24)).useFont(
+                Typeface.DEFAULT_BOLD).endConfig().let {
+                if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
+                else it.buildRound(initial, senderColor)
+              })
             ?.submit(size, size)
             ?.get()
         } catch (_: Throwable) {
           null
         }
-        val avatar = avatarResult
-                     ?: TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
-                       if (messageSettings.squareAvatars) it.buildRoundRect(initial,
-                                                                            senderColor,
-                                                                            radius)
-          else it.buildRound(initial, senderColor)
-        }
+        val avatar = avatarResult ?: TextDrawable.builder().beginConfig()
+          .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24)).useFont(Typeface.DEFAULT_BOLD).endConfig().let {
+            if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
+            else it.buildRound(initial, senderColor)
+          }
 
         NotificationMessage(
           messageId = it.messageId,

@@ -20,6 +20,7 @@
 package de.kuschku.quasseldroid.ui.chat.buffers
 
 import android.arch.lifecycle.Observer
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v7.widget.*
@@ -334,22 +335,23 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                         MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
                       }
 
-                      TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
-                        if (messageSettings.squareAvatars) it.buildRoundRect(initial,
-                                                                             senderColor,
-                                                                             radius)
-                        else it.buildRound(initial, senderColor)
+                      TextDrawable.builder().beginConfig()
+                        .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24)).useFont(Typeface.DEFAULT_BOLD).endConfig().let {
+                          if (messageSettings.squareAvatars)
+                            it.buildRoundRect(initial, senderColor, radius)
+                          else it.buildRound(initial, senderColor)
+                        }
+                    }
+                    ?: TextDrawable.builder().beginConfig()
+                      .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24)).useFont(Typeface.DEFAULT_BOLD).endConfig().let {
+                        if (messageSettings.squareAvatars) it.buildRoundRect("", colorAway, radius)
+                        else it.buildRound("", colorAway)
                       }
-                    }
-                    ?: TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
-                      if (messageSettings.squareAvatars) it.buildRoundRect("", colorAway, radius)
-                      else it.buildRound("", colorAway)
-                    }
                   } else {
                     val color = if (props.bufferStatus == BufferStatus.ONLINE) colorAccent
                     else colorAway
 
-                    TextDrawable.builder().beginConfig().textColor(colorBackground).endConfig().let {
+                    TextDrawable.builder().beginConfig().useFont(Typeface.DEFAULT_BOLD).endConfig().let {
                       if (messageSettings.squareAvatars) it.buildRoundRect("#", color, radius)
                       else it.buildRound("#", color)
                     }
