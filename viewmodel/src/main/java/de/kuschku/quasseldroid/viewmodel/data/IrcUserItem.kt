@@ -34,4 +34,40 @@ data class IrcUserItem(
   val initial: String? = "",
   val fallbackDrawable: Drawable? = null,
   val displayNick: CharSequence? = null
-)
+) {
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as IrcUserItem
+
+    if (nick != other.nick) return false
+    if (modes != other.modes) return false
+    if (lowestMode != other.lowestMode) return false
+    if (realname != other.realname) return false
+    if (hostmask != other.hostmask) return false
+    if (away != other.away) return false
+    if (self != other.self) return false
+    if (networkCasemapping != other.networkCasemapping) return false
+    if (avatarUrls != other.avatarUrls) return false
+    if (initial != other.initial) return false
+    if (displayNick != other.displayNick) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = nick.hashCode()
+    result = 31 * result + modes.hashCode()
+    result = 31 * result + lowestMode
+    result = 31 * result + realname.hashCode()
+    result = 31 * result + hostmask.hashCode()
+    result = 31 * result + away.hashCode()
+    result = 31 * result + self.hashCode()
+    result = 31 * result + (networkCasemapping?.hashCode() ?: 0)
+    result = 31 * result + avatarUrls.hashCode()
+    result = 31 * result + (initial?.hashCode() ?: 0)
+    result = 31 * result + (displayNick?.hashCode() ?: 0)
+    return result
+  }
+}

@@ -36,4 +36,42 @@ class FormattedMessage(
   val isSelected: Boolean,
   val isExpanded: Boolean,
   val isMarkerLine: Boolean
-)
+) {
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as FormattedMessage
+
+    if (id != other.id) return false
+    if (time != other.time) return false
+    if (dayChange != other.dayChange) return false
+    if (name != other.name) return false
+    if (content != other.content) return false
+    if (combined != other.combined) return false
+    if (realName != other.realName) return false
+    if (avatarUrls != other.avatarUrls) return false
+    if (hasDayChange != other.hasDayChange) return false
+    if (isSelected != other.isSelected) return false
+    if (isExpanded != other.isExpanded) return false
+    if (isMarkerLine != other.isMarkerLine) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = id.hashCode()
+    result = 31 * result + time.hashCode()
+    result = 31 * result + (dayChange?.hashCode() ?: 0)
+    result = 31 * result + (name?.hashCode() ?: 0)
+    result = 31 * result + (content?.hashCode() ?: 0)
+    result = 31 * result + combined.hashCode()
+    result = 31 * result + (realName?.hashCode() ?: 0)
+    result = 31 * result + avatarUrls.hashCode()
+    result = 31 * result + hasDayChange.hashCode()
+    result = 31 * result + isSelected.hashCode()
+    result = 31 * result + isExpanded.hashCode()
+    result = 31 * result + isMarkerLine.hashCode()
+    return result
+  }
+}

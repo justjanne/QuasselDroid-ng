@@ -41,4 +41,40 @@ data class BufferProps(
   val ircUser: IrcUser? = null,
   val avatarUrls: List<Avatar> = emptyList(),
   val fallbackDrawable: Drawable? = null
-)
+) {
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as BufferProps
+
+    if (info != other.info) return false
+    if (network != other.network) return false
+    if (networkConnectionState != other.networkConnectionState) return false
+    if (bufferStatus != other.bufferStatus) return false
+    if (description != other.description) return false
+    if (activity != other.activity) return false
+    if (highlights != other.highlights) return false
+    if (bufferActivity != other.bufferActivity) return false
+    if (hiddenState != other.hiddenState) return false
+    if (ircUser != other.ircUser) return false
+    if (avatarUrls != other.avatarUrls) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = info.hashCode()
+    result = 31 * result + network.hashCode()
+    result = 31 * result + networkConnectionState.hashCode()
+    result = 31 * result + bufferStatus.hashCode()
+    result = 31 * result + description.hashCode()
+    result = 31 * result + activity.hashCode()
+    result = 31 * result + highlights
+    result = 31 * result + bufferActivity.hashCode()
+    result = 31 * result + hiddenState.hashCode()
+    result = 31 * result + (ircUser?.hashCode() ?: 0)
+    result = 31 * result + avatarUrls.hashCode()
+    return result
+  }
+}
