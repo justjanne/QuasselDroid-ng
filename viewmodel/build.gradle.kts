@@ -20,7 +20,6 @@
 plugins {
   id("com.android.library")
   kotlin("android")
-  kotlin("kapt")
 }
 
 android {
@@ -41,7 +40,7 @@ android {
 
   lintOptions {
     isWarningsAsErrors = true
-    setLintConfig(file("../lint.xml"))
+    lintConfig = file("../lint.xml")
   }
 }
 
@@ -57,7 +56,6 @@ dependencies {
   withVersion("1.1.1") {
     implementation("android.arch.lifecycle", "extensions", version)
     implementation("android.arch.lifecycle", "reactivestreams", version)
-    kapt("android.arch.lifecycle", "compiler", version)
   }
 
   // Utility

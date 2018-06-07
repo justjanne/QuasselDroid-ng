@@ -44,7 +44,6 @@ import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
-import de.kuschku.quasseldroid.settings.ConnectionSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity
 import de.kuschku.quasseldroid.ui.clientsettings.client.ClientSettingsActivity
@@ -99,17 +98,12 @@ abstract class ServiceBoundSetupActivity :
   }
 
   @Inject
-  lateinit var connectionSettings: ConnectionSettings
-
-  @Inject
   lateinit var appearanceSettings: AppearanceSettings
 
   @Inject
   lateinit var viewModel: QuasselViewModel
 
   protected var accountId: Long = -1
-
-  private var startedSelection = false
 
   class SetupActivityViewPagerPageChangeListener(private val activity: ServiceBoundSetupActivity) :
     ViewPager.OnPageChangeListener {

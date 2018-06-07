@@ -39,13 +39,13 @@ import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
-import de.kuschku.quasseldroid.util.ui.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
@@ -98,11 +98,7 @@ class QuasselMessageRenderer @Inject constructor(
     getColor(0, 0)
   }
 
-  private val colorBackground = context.theme.styledAttributes(R.attr.colorBackground) {
-    getColor(0, 0)
-  }
-
-  private val radius = context.resources.getDimensionPixelSize(R.dimen.avatar_radius)
+  private val colorContext = ColorContext(context, messageSettings)
 
   private val zoneId = ZoneId.systemDefault()
 
@@ -240,13 +236,13 @@ class QuasselMessageRenderer @Inject constructor(
         val rawInitial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
                            .firstOrNull() ?: nickName.firstOrNull()
         val initial = rawInitial?.toUpperCase().toString()
-        val senderColor = when (messageSettings.colorizeNicknames) {
-          MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
+        val useSelfColor = when (messageSettings.colorizeNicknames) {
+          MessageSettings.ColorizeNicknamesMode.ALL          -> false
           MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
-            if (message.content.flag.hasFlag(Message_Flag.Self)) selfColor
-            else senderColors[senderColorIndex]
-          MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
+            message.content.flag.hasFlag(Message_Flag.Self)
+          MessageSettings.ColorizeNicknamesMode.NONE         -> true
         }
+        val senderColor = if (useSelfColor) selfColor else senderColors[senderColorIndex]
 
         FormattedMessage(
           id = message.content.messageId,
@@ -261,11 +257,7 @@ class QuasselMessageRenderer @Inject constructor(
           },
           realName = realName,
           avatarUrls = AvatarHelper.avatar(messageSettings, message.content, avatarSize),
-          fallbackDrawable = TextDrawable.builder().beginConfig()
-            .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24)).useFont(Typeface.DEFAULT_BOLD).endConfig().let {
-              if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
-              else it.buildRound(initial, senderColor)
-            },
+          fallbackDrawable = colorContext.buildTextDrawable(initial, senderColor),
           hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
@@ -278,13 +270,13 @@ class QuasselMessageRenderer @Inject constructor(
         val rawInitial = nickName.trimStart('-', '_', '[', ']', '{', '}', '|', '`', '^', '.', '\\')
                            .firstOrNull() ?: nickName.firstOrNull()
         val initial = rawInitial?.toUpperCase().toString()
-        val senderColor = when (messageSettings.colorizeNicknames) {
-          MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
+        val useSelfColor = when (messageSettings.colorizeNicknames) {
+          MessageSettings.ColorizeNicknamesMode.ALL          -> false
           MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
-            if (message.content.flag.hasFlag(Message_Flag.Self)) selfColor
-            else senderColors[senderColorIndex]
-          MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
+            message.content.flag.hasFlag(Message_Flag.Self)
+          MessageSettings.ColorizeNicknamesMode.NONE         -> true
         }
+        val senderColor = if (useSelfColor) selfColor else senderColors[senderColorIndex]
 
         FormattedMessage(
           id = message.content.messageId,
@@ -297,11 +289,7 @@ class QuasselMessageRenderer @Inject constructor(
             contentFormatter.formatContent(message.content.content, monochromeForeground)
           ),
           avatarUrls = AvatarHelper.avatar(messageSettings, message.content, avatarSize),
-          fallbackDrawable = TextDrawable.builder().beginConfig()
-            .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24)).useFont(Typeface.DEFAULT_BOLD).endConfig().let {
-              if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
-              else it.buildRound(initial, senderColor)
-            },
+          fallbackDrawable = colorContext.buildTextDrawable(initial, senderColor),
           hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,

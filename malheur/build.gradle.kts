@@ -20,7 +20,6 @@
 plugins {
   id("com.android.library")
   kotlin("android")
-  kotlin("kapt")
 }
 
 android {
@@ -41,7 +40,7 @@ android {
 
   lintOptions {
     isWarningsAsErrors = true
-    setLintConfig(file("../lint.xml"))
+    lintConfig = file("../lint.xml")
   }
 }
 

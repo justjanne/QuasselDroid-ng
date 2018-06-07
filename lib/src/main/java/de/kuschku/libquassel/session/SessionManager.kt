@@ -97,14 +97,6 @@ class SessionManager(
     Invokers
   }
 
-  fun ifClosed(closure: (ISession) -> Unit) {
-    state.or(ConnectionState.DISCONNECTED).let {
-      if (it == ConnectionState.CLOSED) {
-        closure(inProgressSession.value)
-      }
-    }
-  }
-
   fun ifDisconnected(closure: (ISession) -> Unit) {
     state.or(ConnectionState.DISCONNECTED).let {
       if (it == ConnectionState.CLOSED || it == ConnectionState.DISCONNECTED) {

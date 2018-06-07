@@ -147,11 +147,6 @@ fun CharSequence.splitToSequence(vararg delimiters: String, ignoreCase: Boolean 
 
 fun CharSequence.lineSequence(): Sequence<CharSequence> = splitToSequence("\r\n", "\n", "\r")
 
-fun CharSequence.lastWord(cursor: Int = this.length,
-                          onlyBeforeCursor: Boolean = false): CharSequence {
-  return lastWordIndices(cursor, onlyBeforeCursor)?.let { subSequence(it) } ?: ""
-}
-
 fun CharSequence.lastWordIndices(cursor: Int = this.length,
                                  onlyBeforeCursor: Boolean = false): IntRange? {
   val cursorPosition = if (cursor != -1) {

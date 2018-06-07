@@ -62,15 +62,6 @@ fun <T : Any, U : Any> Observable<Optional<T>>.mapSwitchMap(
   }
 }
 
-fun <T : Any, U : Any> Observable<Optional<T>>.mapSwitchMapEmpty(
-  mapper: (T) -> Observable<U>): Observable<U> = switchMap {
-  if (it.isPresent()) {
-    it.map(mapper).get()
-  } else {
-    Observable.empty()
-  }
-}
-
 fun <T : Any, U : Any> Observable<Optional<T>>.flatMapSwitchMap(
   mapper: (T) -> Observable<Optional<U>>): Observable<Optional<U>> = switchMap {
   it.map(mapper).orElse(Observable.just(Optional.empty()))

@@ -26,7 +26,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -75,6 +74,7 @@ import de.kuschku.quasseldroid.ui.clientsettings.client.ClientSettingsActivity
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity
 import de.kuschku.quasseldroid.ui.setup.user.UserSetupActivity
+import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
@@ -83,7 +83,6 @@ import de.kuschku.quasseldroid.util.missingfeatures.RequiredFeatures
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid.util.ui.DragInterceptBottomSheetBehavior
 import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
-import de.kuschku.quasseldroid.util.ui.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.data.BufferData
 import org.threeten.bp.Instant
@@ -755,9 +754,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             }
           }
 
-          val colorBackground = theme.styledAttributes(R.attr.colorBackground) {
-            getColor(0, 0)
-          }
+          val colorContext = ColorContext(this, messageSettings)
 
           if (info.type.hasFlag(Buffer_Type.QueryBuffer)) {
             val nickName = info.bufferName ?: ""
@@ -767,12 +764,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             val initial = rawInitial?.toUpperCase().toString()
             val senderColor = senderColors[senderColorIndex]
 
-            val fallback = TextDrawable.builder()
-              .beginConfig()
-              .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24))
-              .useFont(Typeface.DEFAULT_BOLD)
-              .endConfig()
-              .buildRect(initial, senderColor)
+            val fallback = colorContext.prepareTextDrawable().buildRect(initial, senderColor)
 
             val urls = viewModel.networks.value?.get(info.networkId)?.ircUser(info.bufferName)?.let {
               AvatarHelper.avatar(messageSettings, it, 432)

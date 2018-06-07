@@ -55,7 +55,6 @@ import de.kuschku.quasseldroid.ssl.custom.QuasselHostnameManager
 import de.kuschku.quasseldroid.util.backport.DaggerLifecycleService
 import de.kuschku.quasseldroid.util.compatibility.AndroidHandlerService
 import de.kuschku.quasseldroid.util.helper.*
-import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid.util.ui.LocaleHelper
 import io.reactivex.subjects.PublishSubject
@@ -278,9 +277,6 @@ class QuasselService : DaggerLifecycleService(),
 
   @Inject
   lateinit var accountDatabase: AccountDatabase
-
-  @Inject
-  lateinit var contentFormatter: ContentFormatter
 
   @Inject
   lateinit var messageSettings: MessageSettings

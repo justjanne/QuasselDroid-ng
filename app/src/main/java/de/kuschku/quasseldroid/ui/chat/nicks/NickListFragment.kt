@@ -47,13 +47,13 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoActivity
+import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.loadWithFallbacks
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
-import de.kuschku.quasseldroid.util.ui.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel.Companion.IGNORED_CHARS
 import de.kuschku.quasseldroid.viewmodel.data.Avatar
 import javax.inject.Inject
@@ -98,11 +98,7 @@ class NickListFragment : ServiceBoundFragment() {
       getColor(0, 0)
     }
 
-    val colorBackground = requireContext().theme.styledAttributes(R.attr.colorBackground) {
-      getColor(0, 0)
-    }
-
-    val radius = requireContext().resources.getDimensionPixelSize(R.dimen.avatar_radius)
+    val colorContext = ColorContext(requireContext(), messageSettings)
 
     val avatarSize = resources.getDimensionPixelSize(R.dimen.avatar_size)
     viewModel.nickData.toLiveData().observe(this, Observer {
@@ -113,13 +109,12 @@ class NickListFragment : ServiceBoundFragment() {
           val rawInitial = nickName.trimStart(*IGNORED_CHARS)
                              .firstOrNull() ?: nickName.firstOrNull()
           val initial = rawInitial?.toUpperCase().toString()
-          val senderColor = when (messageSettings.colorizeNicknames) {
-            MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
-            MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
-              if (it.self) selfColor
-              else senderColors[senderColorIndex]
-            MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
+          val useSelfColor = when (messageSettings.colorizeNicknames) {
+            MessageSettings.ColorizeNicknamesMode.ALL          -> false
+            MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE -> it.self
+            MessageSettings.ColorizeNicknamesMode.NONE         -> true
           }
+          val senderColor = if (useSelfColor) selfColor else senderColors[senderColorIndex]
 
           fun formatNick(nick: CharSequence): CharSequence {
             val spannableString = SpannableString(nick)
@@ -139,11 +134,7 @@ class NickListFragment : ServiceBoundFragment() {
           }
           it.copy(
             displayNick = formatNick(it.nick),
-            fallbackDrawable = TextDrawable.builder().beginConfig()
-              .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24)).useFont(Typeface.DEFAULT_BOLD).endConfig().let {
-                if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
-                else it.buildRound(initial, senderColor)
-              },
+            fallbackDrawable = colorContext.buildTextDrawable(initial, senderColor),
             initial = initial,
             modes = when (messageSettings.showPrefix) {
               MessageSettings.ShowPrefixMode.ALL ->

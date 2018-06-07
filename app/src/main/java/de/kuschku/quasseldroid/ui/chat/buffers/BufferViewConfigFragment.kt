@@ -20,7 +20,6 @@
 package de.kuschku.quasseldroid.ui.chat.buffers
 
 import android.arch.lifecycle.Observer
-import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v7.widget.*
@@ -39,12 +38,12 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.minus
 import de.kuschku.libquassel.util.helpers.value
-import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
+import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.styledAttributes
@@ -52,8 +51,6 @@ import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.helper.zip
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
-import de.kuschku.quasseldroid.util.ui.TextDrawable
-import de.kuschku.quasseldroid.viewmodel.EditorViewModel.Companion.IGNORED_CHARS
 import de.kuschku.quasseldroid.viewmodel.data.BufferHiddenState
 import de.kuschku.quasseldroid.viewmodel.data.BufferListItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferState
@@ -259,20 +256,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
     val avatarSize = resources.getDimensionPixelSize(R.dimen.avatar_size_buffer)
 
-    val senderColors = requireContext().theme.styledAttributes(
-      R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
-      R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
-      R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
-      R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF
-    ) {
-      IntArray(length()) {
-        getColor(it, 0)
-      }
-    }
-
-    val selfColor = requireContext().theme.styledAttributes(R.attr.colorForegroundSecondary) {
-      getColor(0, 0)
-    }
+    val colorContext = ColorContext(requireContext(), messageSettings)
 
     val colorAccent = requireContext().theme.styledAttributes(R.attr.colorAccent) {
       getColor(0, 0)
@@ -281,12 +265,6 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     val colorAway = requireContext().theme.styledAttributes(R.attr.colorAway) {
       getColor(0, 0)
     }
-
-    val colorBackground = requireContext().theme.styledAttributes(R.attr.colorBackground) {
-      getColor(0, 0)
-    }
-
-    val radius = requireContext().resources.getDimensionPixelSize(R.dimen.avatar_radius)
 
     combineLatest(viewModel.bufferList, viewModel.expandedNetworks, viewModel.selectedBuffer)
       .toLiveData().zip(database.filtered().listen(accountId))
@@ -323,38 +301,20 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                   fallbackDrawable = if (props.info.type.hasFlag(Buffer_Type.QueryBuffer)) {
                     props.ircUser?.let {
                       val nickName = it.nick()
-                      val senderColorIndex = SenderColorUtil.senderColor(nickName)
-                      val rawInitial = nickName.trimStart(*IGNORED_CHARS).firstOrNull()
-                                       ?: nickName.firstOrNull()
-                      val initial = rawInitial?.toUpperCase().toString()
-                      val senderColor = when (messageSettings.colorizeNicknames) {
-                        MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
+                      val useSelfColor = when (messageSettings.colorizeNicknames) {
+                        MessageSettings.ColorizeNicknamesMode.ALL          -> false
                         MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
-                          if (props.ircUser?.network()?.isMyNick(nickName) == true) selfColor
-                          else senderColors[senderColorIndex]
-                        MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
+                          props.ircUser?.network()?.isMyNick(nickName) == true
+                        MessageSettings.ColorizeNicknamesMode.NONE         -> true
                       }
 
-                      TextDrawable.builder().beginConfig()
-                        .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24)).useFont(Typeface.DEFAULT_BOLD).endConfig().let {
-                          if (messageSettings.squareAvatars)
-                            it.buildRoundRect(initial, senderColor, radius)
-                          else it.buildRound(initial, senderColor)
-                        }
-                    }
-                    ?: TextDrawable.builder().beginConfig()
-                      .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24)).useFont(Typeface.DEFAULT_BOLD).endConfig().let {
-                        if (messageSettings.squareAvatars) it.buildRoundRect("", colorAway, radius)
-                        else it.buildRound("", colorAway)
-                      }
+                      colorContext.buildTextDrawable(it.nick(), useSelfColor)
+                    } ?: colorContext.buildTextDrawable("", colorAway)
                   } else {
                     val color = if (props.bufferStatus == BufferStatus.ONLINE) colorAccent
                     else colorAway
 
-                    TextDrawable.builder().beginConfig().useFont(Typeface.DEFAULT_BOLD).endConfig().let {
-                      if (messageSettings.squareAvatars) it.buildRoundRect("#", color, radius)
-                      else it.buildRound("#", color)
-                    }
+                    colorContext.buildTextDrawable("#", color)
                   },
                   avatarUrls = props.ircUser?.let {
                     AvatarHelper.avatar(messageSettings, it, avatarSize)

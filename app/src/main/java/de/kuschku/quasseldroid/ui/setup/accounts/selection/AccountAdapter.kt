@@ -133,24 +133,12 @@ class AccountAdapter(
     actionListeners.add(f)
   }
 
-  fun removeEditListener(f: (Long) -> Unit) {
-    actionListeners.remove(f)
-  }
-
   fun addAddListener(f: () -> Unit) {
     addListeners.add(f)
   }
 
-  fun removeAddListener(f: () -> Unit) {
-    addListeners.remove(f)
-  }
-
   fun addSelectionListener(f: (Long) -> Unit) {
     selectionListeners.add(f)
-  }
-
-  fun removeSelectionListener(f: (Long) -> Unit) {
-    selectionListeners.remove(f)
   }
 
   override fun onBindViewHolder(holder: AccountViewHolder,

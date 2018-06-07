@@ -104,30 +104,12 @@ inline fun <X, Y> LiveData<X?>.switchMapRx(
 }
 
 @MainThread
-inline fun <X, Y> LiveData<out X?>.switchMapRx(
-  crossinline func: (X) -> Observable<Y>?
-): LiveData<Y?> = switchMapRx(BackpressureStrategy.LATEST, func)
-
-@MainThread
 inline fun <X, Y> LiveData<out X?>.map(
   crossinline func: (X) -> Y?
 ): LiveData<Y?> {
   val result = MediatorLiveData<Y?>()
   result.addSource(this) { x ->
     result.value = if (x == null) null else func.invoke(x)
-  }
-  return result
-}
-
-@MainThread
-inline fun <X> LiveData<X>.orElse(
-  crossinline func: () -> X
-): LiveData<X> {
-  val result = object : MediatorLiveData<X>() {
-    override fun getValue() = super.getValue() ?: func()
-  }
-  result.addSource(this) { x ->
-    result.value = x ?: func()
   }
   return result
 }
