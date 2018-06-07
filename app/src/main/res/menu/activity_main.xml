@@ -28,6 +28,9 @@
     android:id="@+id/action_filter_messages"
     android:title="@string/label_filter_messages" />
   <item
+    android:id="@+id/action_create_shortcut"
+    android:title="@string/label_create_shortcut" />
+  <item
     android:id="@+id/action_core_settings"
     android:title="@string/label_settings_core" />
   <item

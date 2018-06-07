@@ -24,9 +24,16 @@ import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
+import android.support.v4.content.pm.ShortcutInfoCompat
+import android.support.v4.content.pm.ShortcutManagerCompat
+import android.support.v4.graphics.drawable.IconCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.DefaultItemAnimator
@@ -39,6 +46,8 @@ import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.connection.QuasselSecurityException
 import de.kuschku.libquassel.protocol.Buffer_Type
@@ -51,6 +60,8 @@ import de.kuschku.libquassel.util.flag.and
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.or
 import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.irc.SenderColorUtil
+import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.AccountDatabase
@@ -64,6 +75,7 @@ import de.kuschku.quasseldroid.ui.clientsettings.client.ClientSettingsActivity
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity
 import de.kuschku.quasseldroid.ui.setup.user.UserSetupActivity
+import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.missingfeatures.MissingFeaturesDialog
@@ -71,6 +83,8 @@ import de.kuschku.quasseldroid.util.missingfeatures.RequiredFeatures
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid.util.ui.DragInterceptBottomSheetBehavior
 import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
+import de.kuschku.quasseldroid.util.ui.TextDrawable
+import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.data.BufferData
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
@@ -134,6 +148,17 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         intent.hasExtra(KEY_BUFFER_ID)         -> {
           viewModel.buffer.onNext(intent.getIntExtra(KEY_BUFFER_ID, -1))
           drawerLayout.closeDrawers()
+          if (intent.hasExtra(KEY_ACCOUNT_ID)) {
+            val accountId = intent.getLongExtra(ChatActivity.KEY_ACCOUNT_ID, -1)
+            if (accountId != this.accountId) {
+              resetAccount()
+              connectToAccount(accountId)
+              startedSelection = false
+              connectedAccount = -1L
+              checkConnection()
+              recreate()
+            }
+          }
         }
         intent.hasExtra(KEY_AUTOCOMPLETE_TEXT) -> {
           chatlineFragment?.editorHelper?.appendText(
@@ -529,8 +554,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       invalidateOptionsMenu()
     })
 
-    onNewIntent(intent)
-
     editorBottomSheet = DragInterceptBottomSheetBehavior.from(chatlineFragment?.view)
     editorBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
     chatlineFragment?.panelSlideListener?.let(editorBottomSheet::setBottomSheetCallback)
@@ -547,6 +570,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         }
       }
     )
+
+    onNewIntent(intent)
   }
 
   var bufferData: BufferData? = null
@@ -621,6 +646,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     menuInflater.inflate(R.menu.activity_main, menu)
     menu?.findItem(R.id.action_nicklist)?.isVisible = bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) ?: false
     menu?.findItem(R.id.action_filter_messages)?.isVisible = bufferData != null
+    menu?.findItem(R.id.action_create_shortcut)?.isVisible =
+      (bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) ?: false ||
+       bufferData?.info?.type?.hasFlag(Buffer_Type.QueryBuffer) ?: false) &&
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
     menu?.retint(toolbar.context)
     return super.onCreateOptionsMenu(menu)
   }
@@ -686,6 +715,93 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
       true
     }
+    R.id.action_create_shortcut -> {
+      bufferData?.also { data ->
+        data.info?.also { info ->
+          val callback: (IconCompat) -> Unit = { icon ->
+            ShortcutManagerCompat.requestPinShortcut(
+              this,
+              ShortcutInfoCompat.Builder(this, "${System.currentTimeMillis()}")
+                .setShortLabel(info.bufferName ?: "")
+                .setIcon(icon)
+                .setIntent(
+                  ChatActivity.intent(
+                    this,
+                    bufferId = info.bufferId,
+                    accountId = accountId
+                  ).setAction(Intent.ACTION_VIEW)
+                )
+                .build(),
+              null
+            )
+          }
+
+          val resultAvailable: (Drawable) -> Unit = { resource ->
+            val bitmap = Bitmap.createBitmap(432, 432, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            resource.setBounds(0, 0, canvas.width, canvas.height)
+            resource.draw(canvas)
+            callback(IconCompat.createWithAdaptiveBitmap(bitmap))
+          }
+
+          val senderColors = theme.styledAttributes(
+            R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
+            R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
+            R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
+            R.attr.senderColorC, R.attr.senderColorD, R.attr.senderColorE, R.attr.senderColorF
+          ) {
+            IntArray(length()) {
+              getColor(it, 0)
+            }
+          }
+
+          val colorBackground = theme.styledAttributes(R.attr.colorBackground) {
+            getColor(0, 0)
+          }
+
+          if (info.type.hasFlag(Buffer_Type.QueryBuffer)) {
+            val nickName = info.bufferName ?: ""
+            val senderColorIndex = SenderColorUtil.senderColor(nickName)
+            val rawInitial = nickName.trimStart(*EditorViewModel.IGNORED_CHARS).firstOrNull()
+                             ?: nickName.firstOrNull()
+            val initial = rawInitial?.toUpperCase().toString()
+            val senderColor = senderColors[senderColorIndex]
+
+            val fallback = TextDrawable.builder()
+              .beginConfig()
+              .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24))
+              .useFont(Typeface.DEFAULT_BOLD)
+              .endConfig()
+              .buildRect(initial, senderColor)
+
+            val urls = viewModel.networks.value?.get(info.networkId)?.ircUser(info.bufferName)?.let {
+              AvatarHelper.avatar(messageSettings, it, 432)
+            }
+
+            if (urls == null || urls.isEmpty()) {
+              resultAvailable(fallback)
+            } else {
+              GlideApp.with(this)
+                .loadWithFallbacks(urls)
+                ?.placeholder(fallback)
+                ?.into(object : SimpleTarget<Drawable>(432, 432) {
+                  override fun onResourceReady(resource: Drawable,
+                                               transition: Transition<in Drawable>?) {
+                    resultAvailable(resource)
+                  }
+
+                  override fun onLoadFailed(errorDrawable: Drawable?) {
+                    resultAvailable(errorDrawable!!)
+                  }
+                })
+            }
+          } else {
+            callback(IconCompat.createWithResource(this, R.drawable.ic_shortcut_channel))
+          }
+        }
+      }
+      true
+    }
     R.id.action_core_settings   -> {
       CoreSettingsActivity.launch(this)
       true
@@ -736,14 +852,17 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     }
   }
 
+  private fun resetAccount() {
+    startedSelection = true
+    connectedAccount = -1L
+    restoredDrawerState = false
+    viewModel.resetAccount()
+  }
+
   override fun onSelectAccount() {
     if (!startedSelection) {
       startActivityForResult(AccountSelectionActivity.intent(this), REQUEST_SELECT_ACCOUNT)
-      startedSelection = true
-      drawerLayout.closeDrawers()
-      connectedAccount = -1L
-      restoredDrawerState = false
-      viewModel.resetAccount()
+      resetAccount()
     }
   }
 
@@ -752,6 +871,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     private const val KEY_AUTOCOMPLETE_TEXT = "autocomplete_text"
     private const val KEY_AUTOCOMPLETE_SUFFIX = "autocomplete_suffix"
     private const val KEY_BUFFER_ID = "buffer_id"
+    private const val KEY_ACCOUNT_ID = "account_id"
 
     // Instance state keys
     private const val KEY_OPEN_BUFFER = "open_buffer"
@@ -765,7 +885,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       sharedText: CharSequence? = null,
       autoCompleteText: CharSequence? = null,
       autoCompleteSuffix: String? = null,
-      bufferId: Int? = null
+      bufferId: Int? = null,
+      accountId: Int? = null
     ) = context.startActivity(
       intent(context, sharedText, autoCompleteText, autoCompleteSuffix, bufferId)
     )
@@ -775,7 +896,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       sharedText: CharSequence? = null,
       autoCompleteText: CharSequence? = null,
       autoCompleteSuffix: String? = null,
-      bufferId: Int? = null
+      bufferId: Int? = null,
+      accountId: Long? = null
     ) = Intent(context, ChatActivity::class.java).apply {
       if (sharedText != null) {
         type = "text/plain"
@@ -789,6 +911,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
       if (bufferId != null) {
         putExtra(KEY_BUFFER_ID, bufferId)
+        if (accountId != null) {
+          putExtra(KEY_ACCOUNT_ID, accountId)
+        }
       }
     }
   }

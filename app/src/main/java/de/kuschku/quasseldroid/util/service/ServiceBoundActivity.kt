@@ -31,6 +31,7 @@ import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.ConnectionSettings
 import de.kuschku.quasseldroid.settings.Settings
+import de.kuschku.quasseldroid.util.helper.editCommit
 import de.kuschku.quasseldroid.util.helper.sharedPreferences
 import de.kuschku.quasseldroid.util.helper.updateRecentsHeaderIfExisting
 import de.kuschku.quasseldroid.util.ui.ThemedActivity
@@ -58,6 +59,16 @@ abstract class ServiceBoundActivity :
   protected fun runInBackgroundDelayed(delayMillis: Long, f: () -> Unit) {
     connection.backend.value.ifPresent {
       it.sessionManager().handlerService.backendDelayed(delayMillis, f)
+    }
+  }
+
+  fun connectToAccount(accountId: Long) {
+    getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editCommit {
+      putBoolean(Keys.Status.reconnect, false)
+    }
+    getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editCommit {
+      putLong(Keys.Status.selectedAccount, accountId)
+      putBoolean(Keys.Status.reconnect, true)
     }
   }
 
@@ -116,7 +127,7 @@ abstract class ServiceBoundActivity :
   override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) =
     checkConnection()
 
-  private fun checkConnection() {
+  protected fun checkConnection() {
     accountId = getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
       ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
 
