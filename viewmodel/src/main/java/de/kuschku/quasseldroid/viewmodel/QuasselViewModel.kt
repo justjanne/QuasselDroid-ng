@@ -47,12 +47,15 @@ import java.util.concurrent.TimeUnit
 
 class QuasselViewModel : ViewModel() {
   fun resetAccount() {
+    stateReset.onNext(Unit)
     buffer.onNext(Int.MAX_VALUE)
-    bufferViewConfigId.onNext(Int.MAX_VALUE)
+    bufferViewConfigId.onNext(-1)
     selectedMessages.onNext(emptyMap())
     expandedMessages.onNext(emptySet())
     recentlySentMessages.onNext(emptyList())
   }
+
+  val stateReset = PublishSubject.create<Unit>()
 
   val backendWrapper = BehaviorSubject.createDefault(Observable.empty<Optional<Backend>>())
 
@@ -69,7 +72,7 @@ class QuasselViewModel : ViewModel() {
   val buffer = BehaviorSubject.createDefault(Int.MAX_VALUE)
   val bufferOpened = PublishSubject.create<Unit>()
 
-  val bufferViewConfigId = BehaviorSubject.createDefault(Int.MAX_VALUE)
+  val bufferViewConfigId = BehaviorSubject.createDefault(-1)
 
   val MAX_RECENT_MESSAGES = 20
   val recentlySentMessages = BehaviorSubject.createDefault(emptyList<CharSequence>())
@@ -321,7 +324,7 @@ class QuasselViewModel : ViewModel() {
       }
     }
 
-  val bufferList: Observable<Pair<BufferViewConfig?, List<BufferProps>>?> =
+  val bufferList: Observable<Pair<BufferViewConfig?, List<BufferProps>>> =
     combineLatest(session, bufferViewConfig, showHidden)
       .switchMap { (sessionOptional, configOptional, showHiddenRaw) ->
         val session = sessionOptional.orNull()

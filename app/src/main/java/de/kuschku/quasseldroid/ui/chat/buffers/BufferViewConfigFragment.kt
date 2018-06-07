@@ -231,6 +231,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       }
       if (!hasSetBufferViewConfigId) {
         chatListSpinner.setSelection(adapter.indexOf(viewModel.bufferViewConfigId.value))
+        viewModel.bufferViewConfigId.onNext(chatListSpinner.selectedItemId.toInt())
         hasSetBufferViewConfigId = true
       }
     }
@@ -445,6 +446,11 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       chatList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
       chatListSpinner.onRestoreInstanceState(getParcelable(KEY_STATE_SPINNER))
     }
+
+    viewModel.stateReset.toLiveData().observe(this, Observer {
+      hasSetBufferViewConfigId = false
+      hasRestoredSpinnerState = false
+    })
 
     return view
   }
