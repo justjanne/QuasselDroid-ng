@@ -37,6 +37,7 @@ import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.minus
+import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
@@ -230,7 +231,8 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
         hasRestoredSpinnerState = true
       }
       if (!hasSetBufferViewConfigId) {
-        chatListSpinner.setSelection(adapter.indexOf(viewModel.bufferViewConfigId.value))
+        chatListSpinner.setSelection(adapter.indexOf(viewModel.bufferViewConfigId.value).nullIf { it == -1 }
+                                     ?: 0)
         viewModel.bufferViewConfigId.onNext(chatListSpinner.selectedItemId.toInt())
         hasSetBufferViewConfigId = true
       }
