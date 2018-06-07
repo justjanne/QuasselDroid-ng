@@ -296,9 +296,7 @@ class MessageListFragment : ServiceBoundFragment() {
         if (it.sender.startsWith("testcrc3")) {
           println("$previous:$it")
         }
-        val isFollowUp = previous?.sender == it.sender &&
-                         (previous?.type?.hasFlag(Message_Type.Plain) == true || previous?.type == it.type) &&
-                         isSameDay
+        val isFollowUp = previous?.sender == it.sender && previous?.type == it.type && isSameDay
         previous = it
         previousDate = date
         DisplayMessage(
