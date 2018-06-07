@@ -50,6 +50,7 @@ public class TextDrawable extends ShapeDrawable {
   private final int fontSize;
   private final float radius;
   private final int borderThickness;
+  private final float scale;
 
   private TextDrawable(Builder builder) {
     super(builder.shape);
@@ -59,6 +60,8 @@ public class TextDrawable extends ShapeDrawable {
     height = builder.height;
     width = builder.width;
     radius = builder.radius;
+
+    scale = builder.scale;
 
     // text and color
     text = builder.toUpperCase ? builder.text.toUpperCase(Locale.getDefault()) : builder.text;
@@ -114,7 +117,7 @@ public class TextDrawable extends ShapeDrawable {
     // draw text
     int width = this.width < 0 ? r.width() : this.width;
     int height = this.height < 0 ? r.height() : this.height;
-    int fontSize = this.fontSize < 0 ? (int) (Math.min(width, height) * 0.67) : this.fontSize;
+    int fontSize = this.fontSize < 0 ? (int) (Math.min(width, height) * scale) : this.fontSize;
     textPaint.setTextSize(fontSize);
     canvas.drawText(text, width / 2, height / 2 - ((textPaint.descent() + textPaint.ascent()) / 2), textPaint);
 
@@ -165,6 +168,8 @@ public class TextDrawable extends ShapeDrawable {
 
     IConfigBuilder height(int height);
 
+    IConfigBuilder scale(float scale);
+
     IConfigBuilder textColor(int color);
 
     IConfigBuilder withBorder(int thickness);
@@ -203,6 +208,7 @@ public class TextDrawable extends ShapeDrawable {
   public static class Builder implements IConfigBuilder, IShapeBuilder, IBuilder {
     public int textColor;
     public float radius;
+    private float scale;
     private String text;
     private int color;
     private int borderThickness;
@@ -221,6 +227,7 @@ public class TextDrawable extends ShapeDrawable {
       borderThickness = 0;
       width = -1;
       height = -1;
+      scale = 0.67f;
       shape = new RectShape();
       font = Typeface.create("sans-serif-light", Typeface.NORMAL);
       fontSize = -1;
@@ -228,41 +235,55 @@ public class TextDrawable extends ShapeDrawable {
       toUpperCase = false;
     }
 
+    @Override
     public IConfigBuilder width(int width) {
       this.width = width;
       return this;
     }
 
+    @Override
     public IConfigBuilder height(int height) {
       this.height = height;
       return this;
     }
 
+    @Override
     public IConfigBuilder textColor(int color) {
       this.textColor = color;
       return this;
     }
 
+    @Override
+    public IConfigBuilder scale(float scale) {
+      this.scale = scale;
+      return this;
+    }
+
+    @Override
     public IConfigBuilder withBorder(int thickness) {
       this.borderThickness = thickness;
       return this;
     }
 
+    @Override
     public IConfigBuilder useFont(Typeface font) {
       this.font = font;
       return this;
     }
 
+    @Override
     public IConfigBuilder fontSize(int size) {
       this.fontSize = size;
       return this;
     }
 
+    @Override
     public IConfigBuilder bold() {
       this.isBold = true;
       return this;
     }
 
+    @Override
     public IConfigBuilder toUpperCase() {
       this.toUpperCase = true;
       return this;

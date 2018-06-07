@@ -764,7 +764,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             val initial = rawInitial?.toUpperCase().toString()
             val senderColor = senderColors[senderColorIndex]
 
-            val fallback = colorContext.prepareTextDrawable().buildRect(initial, senderColor)
+            val fallback = colorContext.prepareTextDrawable()
+              .beginConfig()
+              .scale(0.5f)
+              .endConfig()
+              .buildRect(initial, senderColor)
 
             val urls = viewModel.networks.value?.get(info.networkId)?.ircUser(info.bufferName)?.let {
               AvatarHelper.avatar(messageSettings, it, 432)
