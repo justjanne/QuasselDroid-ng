@@ -644,7 +644,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     menuInflater.inflate(R.menu.activity_main, menu)
     menu?.findItem(R.id.action_nicklist)?.isVisible = bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) ?: false
-    menu?.findItem(R.id.action_filter_messages)?.isVisible = bufferData != null
+    menu?.findItem(R.id.action_filter_messages)?.isVisible =
+      (bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) ?: false ||
+       bufferData?.info?.type?.hasFlag(Buffer_Type.QueryBuffer) ?: false)
     menu?.findItem(R.id.action_create_shortcut)?.isVisible =
       (bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) ?: false ||
        bufferData?.info?.type?.hasFlag(Buffer_Type.QueryBuffer) ?: false) &&
