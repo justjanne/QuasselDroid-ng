@@ -604,10 +604,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   }
 
   override fun onStart() {
-    val buffers = viewModel.bufferList.value
-    val bufferId = viewModel.buffer.value
-    val bufferViewConfigId = viewModel.bufferViewConfigId.value
-    val bufferViewConfig = viewModel.bufferViewConfig.value
     if (Settings.autoComplete(this) != autoCompleteSettings) {
       recreate()
     }
