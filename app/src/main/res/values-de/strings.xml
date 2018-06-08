@@ -90,6 +90,7 @@
   <string name="label_rename">Umbenennen</string>
   <string name="label_save">Speichern</string>
   <string name="label_select">Auswählen</string>
+  <string name="label_set_default">Als Standard setzen</string>
   <string name="label_settings">Einstellungen</string>
   <string name="label_settings_client">Client-Einstellungen</string>
   <string name="label_settings_core">Core-Einstellungen</string>
@@ -99,6 +100,7 @@
   <string name="label_topic">Kanal-Thema</string>
   <string name="label_translators">Übersetzer</string>
   <string name="label_unhide">Nicht mehr ausblenden</string>
+  <string name="label_use_default">Standardwerte benutzen</string>
   <string name="label_website">Webseite</string>
   <string name="label_whitelist">Ignorieren</string>
   <string name="label_whitelist_ignore_date">Verfallsdatum wird ignoriert für dieses Zertifikat</string>

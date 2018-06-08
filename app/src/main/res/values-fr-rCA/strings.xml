@@ -90,6 +90,7 @@
   <string name="label_rename">Renommer</string>
   <string name="label_save">Enregistrer</string>
   <string name="label_select">Sélectionner</string>
+  <string name="label_set_default">Définir par défaut</string>
   <string name="label_settings">Paramètres</string>
   <string name="label_settings_client">Paramètres du Client</string>
   <string name="label_settings_core">Paramètres du Core</string>
@@ -99,6 +100,7 @@
   <string name="label_topic">Topique de la Chaîne</string>
   <string name="label_translators">Traducteurs</string>
   <string name="label_unhide">Rendre Visible</string>
+  <string name="label_use_default">Utiliser les paramètres par défaut</string>
   <string name="label_website">Site Web</string>
   <string name="label_whitelist">Ignorer</string>
   <string name="label_whitelist_ignore_date">La date d\'expiration est ignorée pour ce certificat</string>

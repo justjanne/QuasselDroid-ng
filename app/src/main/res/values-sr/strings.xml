@@ -41,6 +41,7 @@
   <string name="label_contributors">Saradnici</string>
   <string name="label_copy">Kopiraj</string>
   <string name="label_crashes">Padovi Aplikacije</string>
+  <string name="label_create_shortcut">Kreiraj prečicu</string>
   <string name="label_delete">Obriši</string>
   <string name="label_delete_all">Obriši sve</string>
   <string name="label_disconnect">Prekini vezu</string>
@@ -54,6 +55,7 @@
   <string name="label_ignore">Ignoriši</string>
   <string name="label_ignore_long">Dodaj/ukloni korisnika u/iz listu/liste ignorisanih</string>
   <string name="label_info_channel">Detalji Kanala</string>
+  <string name="label_info_core">Podaci o Core-u</string>
   <string name="label_info_user">Detalji o Korisniku</string>
   <string name="label_input_history">Istorija Unošenja</string>
   <string name="label_join">Pridruži se</string>
@@ -88,6 +90,7 @@
   <string name="label_rename">Preimenuj</string>
   <string name="label_save">Sačuvaj</string>
   <string name="label_select">Odaberi</string>
+  <string name="label_set_default">Podesi podrazumevane parametre</string>
   <string name="label_settings">Podešavanja</string>
   <string name="label_settings_client">Podešavanja klijenta</string>
   <string name="label_settings_core">Podešavanja Core-a</string>
@@ -97,6 +100,7 @@
   <string name="label_topic">Tema kanala</string>
   <string name="label_translators">Prevodioci</string>
   <string name="label_unhide">Učini vidljivim</string>
+  <string name="label_use_default">Koristi podrazumevane parametre</string>
   <string name="label_website">Veb stranica</string>
   <string name="label_whitelist">Ignoriši</string>
   <string name="label_whitelist_ignore_date">Datum isteka je ignorisan za ovaj sertifikat</string>

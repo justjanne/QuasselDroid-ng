@@ -26,6 +26,16 @@
   <string name="label_user_host">Host</string>
   <string name="label_user_server">Server</string>
 
+  <string name="label_core_version">Verzija</string>
+  <string name="label_core_uptime">Uptime</string>
+  <string name="label_core_security">Bezbednost</string>
+  <string name="label_core_clients">Klijenti</string>
+  <string name="label_core_online_since">Na mreži od %1$s</string>
+  <string name="label_core_connected_since">Povezan od %1$s</string>
+  <string name="label_core_connection_verified_by">Veza verifikovana od strane %1$s</string>
+  <string name="label_core_connection_verified_by_unknown">Nepoznato</string>
+  <string name="label_core_connection_insecure">Nebezbedna mreža</string>
+
   <string name="property_group_ircchannel_channel">Kanal</string>
   <string name="property_ircchannel_topic">Tema</string>
   <string name="property_ircchannel_topic_action_edit">Promijeni temu</string>

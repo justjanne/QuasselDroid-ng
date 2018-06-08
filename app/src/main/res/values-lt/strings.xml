@@ -79,7 +79,7 @@
   <string name="label_no_sound">Nėra</string>
   <string name="label_reply">Atsakyti</string>
   <string name="label_reset">Atstatyti</string>
-  <string name="label_open">Atverti</string>
+  <string name="label_open">Atidaryti</string>
   <string name="label_part">Išeiti</string>
   <string name="label_part_long">Palikti kanalą</string>
   <string name="label_placeholder_message">Rašyti žinutę…</string>
@@ -90,6 +90,7 @@
   <string name="label_rename">Pervardinti</string>
   <string name="label_save">Išsaugoti</string>
   <string name="label_select">Pasirinkti</string>
+  <string name="label_set_default">Nustatyti kaip numatytąjį</string>
   <string name="label_settings">Nustatymai</string>
   <string name="label_settings_client">Kliento nustatymai</string>
   <string name="label_settings_core">Branduolio nustatymai</string>
@@ -99,6 +100,7 @@
   <string name="label_topic">Kanalo tema</string>
   <string name="label_translators">Vertėjai</string>
   <string name="label_unhide">Rodyti</string>
+  <string name="label_use_default">Naudoti numatytas parinktis</string>
   <string name="label_website">Tinklalapis</string>
   <string name="label_whitelist">Ignoruoti</string>
   <string name="label_whitelist_ignore_date">Galiojimo data yra ignoruojama šiam certifikatui</string>
