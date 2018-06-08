@@ -28,6 +28,7 @@ import de.kuschku.libquassel.protocol.primitive.serializer.ProtocolInfoSerialize
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantListSerializer
 import de.kuschku.libquassel.quassel.ProtocolFeature
 import de.kuschku.libquassel.session.ProtocolHandler
+import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.compatibility.CompatibilityUtils
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
@@ -46,6 +47,7 @@ import java.lang.Thread.UncaughtExceptionHandler
 import java.net.Socket
 import java.net.SocketException
 import java.nio.ByteBuffer
+import javax.net.ssl.SSLSession
 import javax.net.ssl.X509TrustManager
 
 class CoreConnection(
@@ -74,6 +76,10 @@ class CoreConnection(
   )
 
   private var channel: WrappedChannel? = null
+    set(value) {
+      field = value
+      sslSession.onNext(Optional.ofNullable(value?.sslSession))
+    }
 
   private fun connect() {
     setState(ConnectionState.CONNECTING)
@@ -281,6 +287,6 @@ class CoreConnection(
     )
   }
 
-  val sslSession
-    get() = channel?.sslSession
+
+  val sslSession: BehaviorSubject<Optional<SSLSession>> = BehaviorSubject.createDefault(Optional.empty())
 }

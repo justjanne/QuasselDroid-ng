@@ -25,6 +25,7 @@ import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.*
+import de.kuschku.libquassel.util.Optional
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -35,7 +36,7 @@ import javax.net.ssl.SSLSession
 interface ISession : Closeable {
   val state: Observable<ConnectionState>
   val features: Features
-  val sslSession: SSLSession?
+  val sslSession: Observable<Optional<SSLSession>>
 
   val aliasManager: AliasManager?
   val backlogManager: BacklogManager?
@@ -71,7 +72,7 @@ interface ISession : Closeable {
       override val features: Features = Features(
         QuasselFeatures.empty(),
         QuasselFeatures.empty())
-      override val sslSession: SSLSession? = null
+      override val sslSession: Observable<Optional<SSLSession>> = Observable.empty()
 
       override val rpcHandler: RpcHandler? = null
       override val aliasManager: AliasManager? = null

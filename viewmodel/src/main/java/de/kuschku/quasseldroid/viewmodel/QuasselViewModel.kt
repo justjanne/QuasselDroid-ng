@@ -23,10 +23,7 @@ import android.arch.lifecycle.ViewModel
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
-import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
-import de.kuschku.libquassel.quassel.syncables.IrcChannel
-import de.kuschku.libquassel.quassel.syncables.IrcUser
-import de.kuschku.libquassel.quassel.syncables.Network
+import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.ISession
@@ -47,15 +44,15 @@ import java.util.concurrent.TimeUnit
 
 class QuasselViewModel : ViewModel() {
   fun resetAccount() {
-    stateReset.onNext(Unit)
     buffer.onNext(Int.MAX_VALUE)
     bufferViewConfigId.onNext(-1)
     selectedMessages.onNext(emptyMap())
     expandedMessages.onNext(emptySet())
     recentlySentMessages.onNext(emptyList())
+    stateReset.onNext(Unit)
   }
 
-  val stateReset = PublishSubject.create<Unit>()
+  val stateReset = BehaviorSubject.create<Unit>()
 
   val backendWrapper = BehaviorSubject.createDefault(Observable.empty<Optional<Backend>>())
 
@@ -103,6 +100,12 @@ class QuasselViewModel : ViewModel() {
   val errors = sessionManager.toFlowable(BackpressureStrategy.LATEST).switchMap {
     it.orNull()?.error ?: Flowable.empty()
   }
+
+  val sslSession = session.flatMapSwitchMap(ISession::sslSession)
+
+  val coreInfo = session.mapMapNullable(ISession::coreInfo).mapSwitchMap(CoreInfo::liveInfo)
+  val coreInfoClients = coreInfo.mapMap(CoreInfo.CoreData::sessionConnectedClientData)
+    .mapOrElse(emptyList())
 
   val networkConfig = session.mapMapNullable(ISession::networkConfig)
 

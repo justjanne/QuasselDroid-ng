@@ -100,7 +100,7 @@ class RpcHandler(
 
   override fun requestKickClient(id: Int) =
     RPC(
-      "2kickClient(Int)",
+      "2kickClient(int)",
       ARG(id, Type.Int)
     )
 
