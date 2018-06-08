@@ -28,6 +28,8 @@ import de.kuschku.quasseldroid.ui.chat.ChatActivityModule
 import de.kuschku.quasseldroid.ui.chat.ChatFragmentProvider
 import de.kuschku.quasseldroid.ui.chat.info.channel.ChannelInfoActivity
 import de.kuschku.quasseldroid.ui.chat.info.channel.ChannelInfoFragmentProvider
+import de.kuschku.quasseldroid.ui.chat.info.core.CoreInfoActivity
+import de.kuschku.quasseldroid.ui.chat.info.core.CoreInfoFragmentProvider
 import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoActivity
 import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoFragmentProvider
 import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
@@ -94,6 +96,10 @@ abstract class ActivityModule {
   @ActivityScope
   @ContributesAndroidInjector(modules = [ChannelInfoFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
   abstract fun bindChannelInfoActivity(): ChannelInfoActivity
+
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [CoreInfoFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
+  abstract fun bindCoreInfoActivity(): CoreInfoActivity
 
   @ActivityScope
   @ContributesAndroidInjector(modules = [TopicFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])

@@ -29,15 +29,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center_vertical"
-      android:minHeight="?listPreferredItemHeightSmall"
-      android:paddingEnd="?listPreferredItemPaddingRight"
-      android:paddingLeft="?listPreferredItemPaddingLeft"
-      android:paddingRight="?listPreferredItemPaddingRight"
-      android:paddingStart="?listPreferredItemPaddingLeft">
+    <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
       <android.support.v7.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
@@ -48,12 +40,7 @@
         android:text="@string/settings_networks_title" />
     </LinearLayout>
 
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="72dp"
-      android:layout_marginStart="72dp"
-      android:orientation="vertical">
+    <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroup">
 
       <android.support.v7.widget.RecyclerView
         android:id="@+id/networks"
@@ -75,15 +62,7 @@
       </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center_vertical"
-      android:minHeight="?listPreferredItemHeightSmall"
-      android:paddingEnd="?listPreferredItemPaddingRight"
-      android:paddingLeft="?listPreferredItemPaddingLeft"
-      android:paddingRight="?listPreferredItemPaddingRight"
-      android:paddingStart="?listPreferredItemPaddingLeft">
+    <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
       <android.support.v7.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
@@ -121,15 +100,7 @@
       </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center_vertical"
-      android:minHeight="?listPreferredItemHeightSmall"
-      android:paddingEnd="?listPreferredItemPaddingRight"
-      android:paddingLeft="?listPreferredItemPaddingLeft"
-      android:paddingRight="?listPreferredItemPaddingRight"
-      android:paddingStart="?listPreferredItemPaddingLeft">
+    <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
       <android.support.v7.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
@@ -140,12 +111,7 @@
         android:text="@string/settings_chatlists_title" />
     </LinearLayout>
 
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="72dp"
-      android:layout_marginStart="72dp"
-      android:orientation="vertical">
+    <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroup">
 
       <android.support.v7.widget.RecyclerView
         android:id="@+id/chatlists"
@@ -169,16 +135,8 @@
 
     <LinearLayout
       android:id="@+id/ignorelist"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="?selectableItemBackground"
-      android:focusable="true"
-      android:gravity="center_vertical"
-      android:minHeight="?listPreferredItemHeightSmall"
-      android:paddingEnd="?listPreferredItemPaddingRight"
-      android:paddingLeft="?listPreferredItemPaddingLeft"
-      android:paddingRight="?listPreferredItemPaddingRight"
-      android:paddingStart="?listPreferredItemPaddingLeft">
+      style="@style/Widget.CoreSettings.PrimaryItemGroupHeader"
+      android:focusable="true">
 
       <android.support.v7.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
@@ -191,16 +149,8 @@
 
     <LinearLayout
       android:id="@+id/highlightlist"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="?selectableItemBackground"
-      android:focusable="true"
-      android:gravity="center_vertical"
-      android:minHeight="?listPreferredItemHeightSmall"
-      android:paddingEnd="?listPreferredItemPaddingRight"
-      android:paddingLeft="?listPreferredItemPaddingLeft"
-      android:paddingRight="?listPreferredItemPaddingRight"
-      android:paddingStart="?listPreferredItemPaddingLeft">
+      style="@style/Widget.CoreSettings.PrimaryItemGroupHeader"
+      android:focusable="true">
 
       <android.support.v7.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
@@ -213,16 +163,8 @@
 
     <LinearLayout
       android:id="@+id/aliaslist"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="?selectableItemBackground"
-      android:focusable="true"
-      android:gravity="center_vertical"
-      android:minHeight="?listPreferredItemHeightSmall"
-      android:paddingEnd="?listPreferredItemPaddingRight"
-      android:paddingLeft="?listPreferredItemPaddingLeft"
-      android:paddingRight="?listPreferredItemPaddingRight"
-      android:paddingStart="?listPreferredItemPaddingLeft">
+      style="@style/Widget.CoreSettings.PrimaryItemGroupHeader"
+      android:focusable="true">
 
       <android.support.v7.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
@@ -235,16 +177,8 @@
 
     <LinearLayout
       android:id="@+id/networkconfig"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="?selectableItemBackground"
-      android:focusable="true"
-      android:gravity="center_vertical"
-      android:minHeight="?listPreferredItemHeightSmall"
-      android:paddingEnd="?listPreferredItemPaddingRight"
-      android:paddingLeft="?listPreferredItemPaddingLeft"
-      android:paddingRight="?listPreferredItemPaddingRight"
-      android:paddingStart="?listPreferredItemPaddingLeft">
+      style="@style/Widget.CoreSettings.PrimaryItemGroupHeader"
+      android:focusable="true">
 
       <android.support.v7.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
@@ -253,6 +187,20 @@
       <TextView
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_networkconfig_title" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/coreinfo"
+      style="@style/Widget.CoreSettings.PrimaryItemGroupHeader"
+      android:focusable="true">
+
+      <android.support.v7.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_info" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/label_info_core" />
     </LinearLayout>
   </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

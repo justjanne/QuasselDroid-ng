@@ -80,6 +80,12 @@
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
+      android:name=".ui.chat.info.core.CoreInfoActivity"
+      android:exported="false"
+      android:label="@string/label_info_core"
+      android:parentActivityName=".ui.chat.ChatActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
       android:name=".ui.chat.topic.TopicActivity"
       android:exported="false"
       android:label="@string/label_topic"

@@ -57,6 +57,7 @@
   <string name="label_ignore">Ignore</string>
   <string name="label_ignore_long">Add/remove user to/from ignore list</string>
   <string name="label_info_channel">Channel Details</string>
+  <string name="label_info_core">Core Details</string>
   <string name="label_info_user">User Details</string>
   <string name="label_input_history">Input History</string>
   <string name="label_join">Join</string>

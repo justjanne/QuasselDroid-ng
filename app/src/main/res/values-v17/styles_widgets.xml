@@ -34,6 +34,26 @@
     <item name="android:paddingRight">?listPreferredItemPaddingRight</item>
   </style>
 
+  <style name="Widget.CoreSettings.PrimaryItemGroupHeader" parent="">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:background">?selectableItemBackground</item>
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:minHeight">?listPreferredItemHeightSmall</item>
+    <item name="android:paddingEnd">?listPreferredItemPaddingRight</item>
+    <item name="android:paddingLeft">?listPreferredItemPaddingLeft</item>
+    <item name="android:paddingRight">?listPreferredItemPaddingRight</item>
+    <item name="android:paddingStart">?listPreferredItemPaddingLeft</item>
+  </style>
+
+  <style name="Widget.CoreSettings.PrimaryItemGroup" parent="">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginLeft">72dp</item>
+    <item name="android:layout_marginStart">72dp</item>
+    <item name="android:orientation">vertical</item>
+  </style>
+
   <style name="Widget.CoreSettings.PrimaryItemIcon" parent="">
     <item name="android:layout_width">24dp</item>
     <item name="android:layout_height">24dp</item>

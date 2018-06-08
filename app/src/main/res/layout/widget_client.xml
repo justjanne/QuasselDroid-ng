@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  style="@style/Widget.Info.Item"
+  android:orientation="horizontal">
+
+  <LinearLayout
+    android:layout_width="0dip"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/ip"
+      style="@style/Widget.Info.Item.Content"
+      tools:text="51.15.1.223" />
+
+    <TextView
+      android:id="@+id/version"
+      style="@style/Widget.Info.Item.Description"
+      tools:text="Quasseldroid v0.4.0-218-g0e6e562c" />
+
+    <TextView
+      android:id="@+id/uptime"
+      style="@style/Widget.Info.Item.Description"
+      tools:text="Connected since 08.06.18 01:39" />
+
+    <TextView
+      android:id="@+id/location"
+      style="@style/Widget.Info.Item.Description"
+      tools:text="Kiel, Germany" />
+
+    <Button
+      android:id="@+id/disconnect"
+      style="@style/Widget.Button.Borderless.Colored"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/label_disconnect" />
+  </LinearLayout>
+
+  <android.support.v7.widget.AppCompatImageView
+    android:id="@+id/secure_icon"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_gravity="top"
+    android:layout_marginLeft="16dp"
+    android:layout_marginStart="16dp"
+    app:srcCompat="@drawable/ic_lock" />
+</LinearLayout>

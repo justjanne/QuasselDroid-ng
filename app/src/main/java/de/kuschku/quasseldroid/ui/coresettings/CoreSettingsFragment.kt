@@ -35,6 +35,7 @@ import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.ui.chat.info.core.CoreInfoActivity
 import de.kuschku.quasseldroid.ui.coresettings.aliaslist.AliasListActivity
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistCreateActivity
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistEditActivity
@@ -51,6 +52,9 @@ import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import io.reactivex.Observable
 
 class CoreSettingsFragment : ServiceBoundFragment() {
+  @BindView(R.id.coreinfo)
+  lateinit var coreinfo: View
+
   @BindView(R.id.networks)
   lateinit var networks: RecyclerView
 
@@ -99,6 +103,10 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     }
 
     val itemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+
+    coreinfo.setOnClickListener {
+      CoreInfoActivity.launch(requireContext())
+    }
 
     networks.adapter = networkAdapter
     networks.layoutManager = LinearLayoutManager(context)

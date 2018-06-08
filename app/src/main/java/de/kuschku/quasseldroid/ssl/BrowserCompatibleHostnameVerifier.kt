@@ -21,6 +21,7 @@ package de.kuschku.quasseldroid.ssl
 
 import de.kuschku.libquassel.connection.HostnameVerifier
 import de.kuschku.libquassel.connection.SocketAddress
+import de.kuschku.quasseldroid.ssl.X509Helper.hostnames
 import java.net.IDN
 import java.security.cert.X509Certificate
 import javax.net.ssl.SSLException
@@ -58,31 +59,5 @@ class BrowserCompatibleHostnameVerifier : HostnameVerifier {
       }) return false
 
     return true
-  }
-
-  private fun hostnames(certificate: X509Certificate): Sequence<String> =
-    (sequenceOf(commonName(certificate)) + subjectAlternativeNames(certificate))
-      .filterNotNull()
-      .distinct()
-
-  private fun commonName(certificate: X509Certificate): String? {
-    return COMMON_NAME.find(certificate.subjectX500Principal.name)?.groups?.get(1)?.value
-  }
-
-  private fun subjectAlternativeNames(certificate: X509Certificate): Sequence<String> =
-    certificate.subjectAlternativeNames.orEmpty().asSequence().mapNotNull {
-      val type = it[0] as? Int
-      val name = it[1] as? String
-      if (type != null && name != null) Pair(type, name)
-      else null
-    }.filter { (type, _) ->
-      // 2 is DNS Name
-      type == 2
-    }.map { (_, name) ->
-      name
-    }
-
-  companion object {
-    private val COMMON_NAME = Regex("""(?:^|,\s?)(?:CN=("(?:[^"]|"")+"|[^,]+))""")
   }
 }

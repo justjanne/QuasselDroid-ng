@@ -26,6 +26,16 @@
   <string name="label_user_host">Host</string>
   <string name="label_user_server">Server</string>
 
+  <string name="label_core_version">Version</string>
+  <string name="label_core_uptime">Uptime</string>
+  <string name="label_core_security">Security</string>
+  <string name="label_core_clients">Clients</string>
+  <string name="label_core_online_since">Online since %1$s</string>
+  <string name="label_core_connected_since">Connected since %1$s</string>
+  <string name="label_core_connection_verified_by">Connection verified by %1$s</string>
+  <string name="label_core_connection_verified_by_unknown">Unknown</string>
+  <string name="label_core_connection_insecure">Insecure Connection</string>
+
   <string name="property_group_ircchannel_channel">Channel</string>
   <string name="property_ircchannel_topic">Topic</string>
   <string name="property_ircchannel_topic_action_edit">Edit Topic</string>
