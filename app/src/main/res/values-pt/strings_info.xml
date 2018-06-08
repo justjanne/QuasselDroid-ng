@@ -26,6 +26,16 @@
   <string name="label_user_host">Anfitrião</string>
   <string name="label_user_server">Servidor</string>
 
+  <string name="label_core_version">Versão</string>
+  <string name="label_core_uptime">Tempo de atividade</string>
+  <string name="label_core_security">Segurança</string>
+  <string name="label_core_clients">Clientes</string>
+  <string name="label_core_online_since">Online desde %1$s</string>
+  <string name="label_core_connected_since">Ligado desde %1$s</string>
+  <string name="label_core_connection_verified_by">Ligação verificada por %1$s</string>
+  <string name="label_core_connection_verified_by_unknown">Desconhecido</string>
+  <string name="label_core_connection_insecure">Ligação insegura</string>
+
   <string name="property_group_ircchannel_channel">Canal</string>
   <string name="property_ircchannel_topic">Tópico</string>
   <string name="property_ircchannel_topic_action_edit">Editar Tópico</string>

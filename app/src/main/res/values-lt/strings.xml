@@ -41,6 +41,7 @@
   <string name="label_contributors">Prisidėję asmenys</string>
   <string name="label_copy">Kopijuoti</string>
   <string name="label_crashes">Klaidos</string>
+  <string name="label_create_shortcut">Sukurti nuorodą</string>
   <string name="label_delete">Ištrinti</string>
   <string name="label_delete_all">Ištrinti viską</string>
   <string name="label_disconnect">Atsijungti</string>
@@ -54,6 +55,7 @@
   <string name="label_ignore">Ignoruoti</string>
   <string name="label_ignore_long">Pridėti/panaiktinti vartotoją į/iš ignoruojamų sarašo</string>
   <string name="label_info_channel">Kanalo aprašas</string>
+  <string name="label_info_core">Branduolio aprašas</string>
   <string name="label_info_user">Vartotojo aprašas</string>
   <string name="label_input_history">Įvesties istorija</string>
   <string name="label_join">Prisijungti</string>
@@ -137,4 +139,4 @@
 
   <string name="info_copied_version">Versija nukopijuota į atmintinę</string>
 
-</resources>
+  </resources>

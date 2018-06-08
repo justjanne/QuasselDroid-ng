@@ -26,6 +26,12 @@
   <string name="label_user_host">Host</string>
   <string name="label_user_server">Serveris</string>
 
+  <string name="label_core_version">Versija</string>
+  <string name="label_core_security">Saugumas</string>
+  <string name="label_core_clients">Klientai</string>
+  <string name="label_core_connection_verified_by">Ryšys patvirtintas %1$s</string>
+  <string name="label_core_connection_insecure">Nesaugus ryšys</string>
+
   <string name="property_group_ircchannel_channel">Kanalas</string>
   <string name="property_ircchannel_topic">Tema</string>
   <string name="property_ircchannel_topic_action_edit">Keisti Temą</string>

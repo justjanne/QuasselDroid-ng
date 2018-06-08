@@ -41,6 +41,7 @@
   <string name="label_contributors">Contributeurs</string>
   <string name="label_copy">Copier</string>
   <string name="label_crashes">Crashes</string>
+  <string name="label_create_shortcut">Créer un Raccourci</string>
   <string name="label_delete">Supprimer</string>
   <string name="label_delete_all">Supprimer Tout</string>
   <string name="label_disconnect">Déconnecter</string>
@@ -54,6 +55,7 @@
   <string name="label_ignore">Ignorer</string>
   <string name="label_ignore_long">Ajouter ou Supprimer des utilisateurs de la liste des utilisateurs ignorés</string>
   <string name="label_info_channel">Détails de la Chaîne</string>
+  <string name="label_info_core">Détails du Core</string>
   <string name="label_info_user">Détails des Utilisateurs</string>
   <string name="label_input_history">Historique des Entrées</string>
   <string name="label_join">Joindre</string>
@@ -137,4 +139,4 @@
 
   <string name="info_copied_version">Version copiée au clipboard</string>
 
-</resources>
+  </resources>

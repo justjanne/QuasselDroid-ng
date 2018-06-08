@@ -55,6 +55,7 @@
   <string name="label_ignore">Ignorieren</string>
   <string name="label_ignore_long">Add/remove user to/from ignore list</string>
   <string name="label_info_channel">Kanalinformationen</string>
+  <string name="label_info_core">Core-Details</string>
   <string name="label_info_user">Benutzerinformationen</string>
   <string name="label_input_history">Eingabeverlauf</string>
   <string name="label_join">Betreten</string>
@@ -138,4 +139,4 @@
 
   <string name="info_copied_version">Version in die Zwischenablage kopiert</string>
 
-</resources>
+  </resources>

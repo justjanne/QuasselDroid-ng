@@ -18,7 +18,7 @@
   -->
 
 <resources>
-  <string name="app_name">QuasselDroid</string>
+  <string name="app_name">Quasseldroid</string>
   <string name="app_description">Um cliente baseado no Android para o cliente de IRC Quassel descentralizado.</string>
   <string name="app_description_long">Quassel é um cliente IRC distribuído e descentralizado, escrito usando C++ e Qt. O Quasseldroid é um cliente escrito puramente em kotlin para o núcleo Quassel, permitindo que você se ligue ao seu núcleo Quassel usando o seu telemóvel Android™.</string>
 
@@ -41,6 +41,7 @@
   <string name="label_contributors">Contribuidores</string>
   <string name="label_copy">Copiar</string>
   <string name="label_crashes">Crashes</string>
+  <string name="label_create_shortcut">Criar atalho</string>
   <string name="label_delete">Apagar</string>
   <string name="label_delete_all">Apagar Todos</string>
   <string name="label_disconnect">Desligar</string>
@@ -54,6 +55,7 @@
   <string name="label_ignore">Ignorar</string>
   <string name="label_ignore_long">Adiciona/remove o utilizador na/da lista de ignorados</string>
   <string name="label_info_channel">Detalhes do Canal</string>
+  <string name="label_info_core">Detalhes do nucleo</string>
   <string name="label_info_user">Detalhes do Utilizador</string>
   <string name="label_input_history">Histórico de Mensagens</string>
   <string name="label_join">Entrar</string>
@@ -128,7 +130,7 @@
   <string name="notification_channel_highlight_title">Menção</string>
 
   <string name="label_missing_features">Recursos Ausentes</string>
-  <string name="info_missing_features">O seu núcleo tem em falta recursos que são necessários para o QuasselDroid funcionar corretamente.</string>
+  <string name="info_missing_features">O seu núcleo tem em falta recursos que são necessários para o Quasseldroid funcionar corretamente.</string>
 
   <string name="buffer_delete_confirmation">Você deseja excluir esta janela permanentemente?</string>
 
@@ -137,4 +139,4 @@
 
   <string name="info_copied_version">Versão copiada para a área de transferência</string>
 
-</resources>
+  </resources>
