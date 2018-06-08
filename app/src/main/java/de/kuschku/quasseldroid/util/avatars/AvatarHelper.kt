@@ -39,13 +39,13 @@ object AvatarHelper {
                      avatarUrl: String?, size: Int?) =
     listOfNotNull(
       avatarUrl.notBlank()?.let { listOf(Avatar.NativeAvatar(it)) },
-      settings.showIRCCloudAvatars.letIf {
+      (settings.showAvatars && settings.showIRCCloudAvatars).letIf {
         ircCloudFallback(ident, size)
       },
-      settings.showGravatarAvatars.letIf {
+      (settings.showAvatars && settings.showGravatarAvatars).letIf {
         gravatarFallback(realName, size)
       },
-      settings.showMatrixAvatars.letIf {
+      (settings.showAvatars && settings.showMatrixAvatars).letIf {
         matrixFallback(realName, size)
       }
     ).flatten()
