@@ -668,7 +668,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     R.id.action_filter_messages -> {
       runInBackground {
         viewModel.buffer { buffer ->
-          val filtered = Message_Type.of(database.filtered().get(accountId, buffer) ?: 0)
+          val filteredRaw = database.filtered().get(accountId,
+                                                    buffer,
+                                                    accountDatabase.accounts().findById(accountId)?.defaultFiltered
+                                                    ?: 0)
+          val filtered = Message_Type.of(filteredRaw)
           val flags = intArrayOf(
             Message.MessageType.Join.bit or Message.MessageType.NetsplitJoin.bit,
             Message.MessageType.Part.bit,
@@ -678,20 +682,35 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             Message.MessageType.Topic.bit
           )
           val selectedIndices = flags.withIndex().mapNotNull { (index, flag) ->
-            if ((filtered and flag).isNotEmpty()) {
-              index
-            } else {
-              null
-            }
+            if ((filtered and flag).isNotEmpty()) index
+            else null
           }.toTypedArray()
 
           MaterialDialog.Builder(this)
             .title(R.string.label_filter_messages)
             .items(R.array.message_filter_types)
             .itemsIds(flags)
-            .itemsCallbackMultiChoice(selectedIndices, { _, _, _ -> false })
+            .itemsCallbackMultiChoice(selectedIndices) { _, _, _ -> false }
             .positiveText(R.string.label_select)
-            .negativeText(R.string.label_cancel)
+            .negativeText(R.string.label_use_default)
+            .onNegative { _, _ ->
+              runInBackground {
+                database.filtered().clear(accountId, buffer)
+              }
+            }
+            .neutralText(R.string.label_set_default)
+            .onNeutral { dialog, _ ->
+              val selected = dialog.selectedIndices ?: emptyArray()
+              runInBackground {
+                val newlyFiltered = selected
+                  .asSequence()
+                  .map { flags[it] }
+                  .fold(Message_Type.of()) { acc, i -> acc or i }
+
+                accountDatabase.accounts().setFiltered(accountId, newlyFiltered.value)
+                database.filtered().setFiltered(accountId, buffer, newlyFiltered.value)
+              }
+            }
             .onPositive { dialog, _ ->
               val selected = dialog.selectedIndices ?: emptyArray()
               runInBackground {
@@ -704,7 +723,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   QuasselDatabase.Filtered(accountId, buffer, newlyFiltered.value)
                 )
               }
-            }.negativeColorAttr(R.attr.colorTextPrimary)
+            }
+            .negativeColorAttr(R.attr.colorTextPrimary)
+            .neutralColor(R.attr.colorTextPrimary)
             .backgroundColorAttr(R.attr.colorBackgroundCard)
             .contentColorAttr(R.attr.colorTextPrimary)
             .titleColorAttr(R.attr.colorTextPrimary)

@@ -145,12 +145,6 @@ class QuasselViewModel : ViewModel() {
   // Remove orElse
   val lag: Observable<Long> = session.mapSwitchMap(ISession::lag).mapOrElse(0)
 
-  val isSecure: Observable<Boolean> = session.mapSwitchMap { session ->
-    session.state.map { _ ->
-      session.sslSession != null
-    }
-  }.mapOrElse(false)
-
   val bufferData = combineLatest(session, buffer).switchMap { (sessionOptional, id) ->
     val session = sessionOptional.orNull()
     val bufferSyncer = session?.bufferSyncer

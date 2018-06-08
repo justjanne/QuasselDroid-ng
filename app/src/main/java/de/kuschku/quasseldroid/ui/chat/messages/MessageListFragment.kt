@@ -52,6 +52,7 @@ import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.service.BacklogRequester
 import de.kuschku.quasseldroid.settings.AppearanceSettings
@@ -96,6 +97,9 @@ class MessageListFragment : ServiceBoundFragment() {
 
   @Inject
   lateinit var database: QuasselDatabase
+
+  @Inject
+  lateinit var accountDatabase: AccountDatabase
 
   @Inject
   lateinit var adapter: MessageAdapter
@@ -213,7 +217,7 @@ class MessageListFragment : ServiceBoundFragment() {
     linearLayoutManager = LinearLayoutManager(context)
     linearLayoutManager.reverseLayout = true
 
-    backlogRequester = BacklogRequester(viewModel, database)
+    backlogRequester = BacklogRequester(viewModel, database, accountDatabase)
 
     adapter.setOnClickListener { msg ->
       if (actionMode != null) {
@@ -320,20 +324,24 @@ class MessageListFragment : ServiceBoundFragment() {
                              viewModel.expandedMessages,
                              viewModel.markerLine)
       .toLiveData().switchMapNotNull { (buffer, selected, expanded, markerLine) ->
-        database.filtered().listen(accountId, buffer).switchMapNotNull { filtered ->
-          LivePagedListBuilder(
-            database.message().findByBufferIdPaged(buffer, filtered).mapByPage {
-              processMessages(it, selected.keys, expanded, markerLine.orNull())
-            },
-            PagedList.Config.Builder()
-              .setPageSize(backlogSettings.pageSize)
-              .setPrefetchDistance(backlogSettings.pageSize)
-              .setInitialLoadSizeHint(backlogSettings.pageSize)
-              .setEnablePlaceholders(true)
+        accountDatabase.accounts().listen(accountId).switchMap {
+          database.filtered().listen(accountId,
+                                     buffer,
+                                     it.defaultFiltered).switchMapNotNull { filtered ->
+            LivePagedListBuilder(
+              database.message().findByBufferIdPaged(buffer, filtered).mapByPage {
+                processMessages(it, selected.keys, expanded, markerLine.orNull())
+              },
+              PagedList.Config.Builder()
+                .setPageSize(backlogSettings.pageSize)
+                .setPrefetchDistance(backlogSettings.pageSize)
+                .setInitialLoadSizeHint(backlogSettings.pageSize)
+                .setEnablePlaceholders(true)
+                .build()
+            ).setBoundaryCallback(boundaryCallback)
+              .setInitialLoadKey(previousLoadKey)
               .build()
-          ).setBoundaryCallback(boundaryCallback)
-            .setInitialLoadKey(previousLoadKey)
-            .build()
+          }
         }
       }
 
@@ -350,9 +358,12 @@ class MessageListFragment : ServiceBoundFragment() {
       if (it?.orNull() == ConnectionState.CONNECTED) {
         runInBackgroundDelayed(16) {
           viewModel.buffer { bufferId ->
-            val filtered = database.filtered().get(accountId, bufferId)
+            val filtered = database.filtered().get(accountId,
+                                                   bufferId,
+                                                   accountDatabase.accounts().findById(accountId)?.defaultFiltered
+                                                   ?: 0)
             // Try loading messages when switching to isEmpty buffer
-            val hasVisibleMessages = database.message().hasVisibleMessages(bufferId, filtered ?: 0)
+            val hasVisibleMessages = database.message().hasVisibleMessages(bufferId, filtered)
             if (!hasVisibleMessages) {
               if (bufferId > 0 && bufferId != Int.MAX_VALUE) {
                 loadMore(initial = true)
@@ -465,8 +476,11 @@ class MessageListFragment : ServiceBoundFragment() {
       bufferSyncer.requestSetMarkerLine(previous, lastMessageId)
     }
     // Try loading messages when switching to isEmpty buffer
-    val filtered = database.filtered().get(accountId, current)
-    val hasVisibleMessages = database.message().hasVisibleMessages(current, filtered ?: 0)
+    val filtered = database.filtered().get(accountId,
+                                           current,
+                                           accountDatabase.accounts().findById(accountId)?.defaultFiltered
+                                           ?: 0)
+    val hasVisibleMessages = database.message().hasVisibleMessages(current, filtered)
     if (!hasVisibleMessages) {
       if (current > 0 && current != Int.MAX_VALUE) {
         loadMore(initial = true)

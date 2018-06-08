@@ -26,13 +26,15 @@ import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.ERROR
 import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.persistence.QuasselBacklogStorage
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 
 class BacklogRequester(
   private val viewModel: QuasselViewModel,
-  private val database: QuasselDatabase
+  private val database: QuasselDatabase,
+  private val accountDatabase: AccountDatabase
 ) {
   fun loadMore(accountId: Long, buffer: BufferId, amount: Int, pageSize: Int,
                lastMessageId: MsgId? = null,
@@ -44,7 +46,10 @@ class BacklogRequester(
     var missing = amount
     viewModel.session.value?.orNull()?.let { session: ISession ->
       session.backlogManager?.let {
-        val filtered = database.filtered().get(accountId, buffer) ?: 0
+        val filtered = database.filtered().get(accountId,
+                                               buffer,
+                                               accountDatabase.accounts().findById(accountId)?.defaultFiltered
+                                               ?: 0)
         it.requestBacklog(
           bufferId = buffer,
           last = lastMessageId ?: database.message().findFirstByBufferId(

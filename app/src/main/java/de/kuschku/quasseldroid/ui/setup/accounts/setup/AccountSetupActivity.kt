@@ -44,7 +44,8 @@ class AccountSetupActivity : SetupActivity() {
       pass = data.getString("pass"),
       name = data.getString("name"),
       lastUsed = Instant.now().epochSecond,
-      acceptedMissingFeatures = false
+      acceptedMissingFeatures = false,
+      defaultFiltered = 0
     )
     handler.post {
       database.accounts().create(account)

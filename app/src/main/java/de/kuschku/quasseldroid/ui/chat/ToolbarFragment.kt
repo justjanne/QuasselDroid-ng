@@ -91,10 +91,10 @@ class ToolbarFragment : ServiceBoundFragment() {
       description, messageSettings.colorizeMirc
     )
 
-    combineLatest(viewModel.bufferData, viewModel.isSecure, viewModel.lag).toLiveData()
+    combineLatest(viewModel.bufferData, viewModel.lag).toLiveData()
       .observe(this, Observer {
         if (it != null) {
-          val (data, isSecure, lag) = it
+          val (data, lag) = it
           if (data?.info?.type?.hasFlag(Buffer_Type.StatusBuffer) == true) {
             this.title = data.network?.networkName()
           } else {

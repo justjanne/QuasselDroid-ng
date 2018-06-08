@@ -41,32 +41,6 @@ abstract class QuasselDatabase : RoomDatabase() {
   abstract fun hostnameWhitelist(): SslHostnameWhitelistDao
   abstract fun notifications(): NotificationDao
 
-  class MessageTypeConverter {
-    @TypeConverter
-    fun convertInstant(value: Long): Instant = Instant.ofEpochMilli(value)
-
-    @TypeConverter
-    fun convertInstant(value: Instant) = value.toEpochMilli()
-
-    @TypeConverter
-    fun convertBufferTypes(value: Buffer_Types) = value.toShort()
-
-    @TypeConverter
-    fun convertBufferTypes(value: Short) = Buffer_Type.of(value)
-
-    @TypeConverter
-    fun convertMessageTypes(value: Message_Types) = value.toInt()
-
-    @TypeConverter
-    fun convertMessageTypes(value: Int) = Message_Type.of(value)
-
-    @TypeConverter
-    fun convertMessageFlags(value: Message_Flags) = value.toInt()
-
-    @TypeConverter
-    fun convertMessageFlags(value: Int) = Message_Flag.of(value)
-  }
-
   @Entity(tableName = "message", indices = [Index("bufferId"), Index("ignored")])
   data class MessageData(
     @PrimaryKey var messageId: MsgId,
@@ -147,20 +121,18 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun replace(vararg entities: Filtered)
 
-    @Query(
-      "SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT 0 as filtered ORDER BY filtered DESC LIMIT 1"
-    )
-    fun get(accountId: Long, bufferId: Int): Int?
+    @Query("UPDATE filtered SET filtered = :filtered WHERE accountId = :accountId AND bufferId = :bufferId")
+    fun setFiltered(accountId: Long, bufferId: Int, filtered: Int)
 
     @Query(
-      "SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT 0 as filtered ORDER BY filtered DESC LIMIT 1"
+      "SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT :default as filtered ORDER BY filtered DESC LIMIT 1"
     )
-    fun listen(accountId: Long, bufferId: Int): LiveData<Int>
+    fun get(accountId: Long, bufferId: Int, default: Int): Int
 
     @Query(
-      "SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT 0 as filtered ORDER BY filtered DESC LIMIT 1"
+      "SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT :default as filtered ORDER BY filtered DESC LIMIT 1"
     )
-    fun listenRx(accountId: Long, bufferId: Int): Flowable<Int>
+    fun listen(accountId: Long, bufferId: Int, default: Int): LiveData<Int>
 
     @Query("SELECT * FROM filtered WHERE accountId = :accountId")
     fun listen(accountId: Long): LiveData<List<Filtered>>

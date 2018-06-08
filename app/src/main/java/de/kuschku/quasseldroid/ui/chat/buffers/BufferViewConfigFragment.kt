@@ -40,6 +40,7 @@ import de.kuschku.libquassel.util.flag.minus
 import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
@@ -76,6 +77,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
   @Inject
   lateinit var database: QuasselDatabase
+
+  @Inject
+  lateinit var accountDatabase: AccountDatabase
 
   @Inject
   lateinit var ircFormatDeserializer: IrcFormatDeserializer
@@ -264,9 +268,10 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     }
 
     combineLatest(viewModel.bufferList, viewModel.expandedNetworks, viewModel.selectedBuffer)
-      .toLiveData().zip(database.filtered().listen(accountId))
+      .toLiveData().zip(database.filtered().listen(accountId),
+                        accountDatabase.accounts().listen(accountId))
       .observe(this, Observer { it ->
-        it?.let { (data, activityList) ->
+        it?.let { (data, activityList, account) ->
           runInBackground {
             val (info, expandedNetworks, selected) = data
             val (config, list) = info ?: Pair(null, emptyList())
@@ -277,7 +282,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
             }.sortedBy { props ->
               props.network.networkName
             }.map { props ->
-              val activity = props.activity - (activities[props.info.bufferId] ?: 0)
+              val activity = props.activity - (activities[props.info.bufferId]
+                                               ?: account?.defaultFiltered
+                                               ?: 0)
               BufferListItem(
                 props.copy(
                   activity = activity,

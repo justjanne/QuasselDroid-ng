@@ -25,7 +25,7 @@ import android.arch.persistence.room.*
 import android.arch.persistence.room.migration.Migration
 import android.content.Context
 
-@Database(entities = [(AccountDatabase.Account::class)], version = 2)
+@Database(entities = [(AccountDatabase.Account::class)], version = 3)
 abstract class AccountDatabase : RoomDatabase() {
   abstract fun accounts(): AccountDao
 
@@ -39,7 +39,8 @@ abstract class AccountDatabase : RoomDatabase() {
     var pass: String,
     var name: String,
     var lastUsed: Long,
-    var acceptedMissingFeatures: Boolean
+    var acceptedMissingFeatures: Boolean,
+    var defaultFiltered: Int
   )
 
   @Dao
@@ -53,11 +54,17 @@ abstract class AccountDatabase : RoomDatabase() {
     @Query("SELECT * FROM account WHERE id = :id")
     fun findById(id: Long): AccountDatabase.Account?
 
+    @Query("SELECT * FROM account WHERE id = :id")
+    fun listen(id: Long): LiveData<AccountDatabase.Account?>
+
     @Query("SELECT * FROM account ORDER BY lastUsed DESC")
     fun all(): LiveData<List<Account>>
 
     @Delete
     fun delete(account: AccountDatabase.Account)
+
+    @Query("UPDATE account SET defaultFiltered = :defaultFiltered WHERE id = :id")
+    fun setFiltered(id: Long, defaultFiltered: Int)
 
     @Query("DELETE FROM account")
     fun clear()
@@ -80,6 +87,11 @@ abstract class AccountDatabase : RoomDatabase() {
               object : Migration(1, 2) {
                 override fun migrate(database: SupportSQLiteDatabase) {
                   database.execSQL("ALTER TABLE account ADD COLUMN acceptedMissingFeatures INTEGER NOT NULL DEFAULT 0;")
+                }
+              },
+              object : Migration(2, 3) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL("ALTER TABLE account ADD COLUMN defaultFiltered INTEGER NOT NULL DEFAULT 0;")
                 }
               }
             ).allowMainThreadQueries().build()

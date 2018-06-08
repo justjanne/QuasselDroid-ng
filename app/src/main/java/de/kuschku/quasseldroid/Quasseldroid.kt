@@ -86,7 +86,8 @@ class Quasseldroid : DaggerApplication() {
               pass = it.pass,
               name = it.name,
               lastUsed = 0,
-              acceptedMissingFeatures = false
+              acceptedMissingFeatures = false,
+              defaultFiltered = 0
             )
           }.toTypedArray())
           Thread(Runnable {
