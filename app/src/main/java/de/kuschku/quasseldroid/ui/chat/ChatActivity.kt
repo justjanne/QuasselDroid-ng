@@ -857,8 +857,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onSelectAccount() {
     if (!startedSelection) {
-      startActivityForResult(AccountSelectionActivity.intent(this), REQUEST_SELECT_ACCOUNT)
       resetAccount()
+      startActivityForResult(AccountSelectionActivity.intent(this), REQUEST_SELECT_ACCOUNT)
     }
   }
 

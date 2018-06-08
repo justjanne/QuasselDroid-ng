@@ -223,13 +223,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     })
 
     var hasSetBufferViewConfigId = false
-    var hasRestoredSpinnerState = false
     adapter.setOnUpdateFinishedListener {
-      if (!hasRestoredSpinnerState) {
-        savedInstanceState?.getParcelable<Parcelable>(KEY_STATE_SPINNER)
-          ?.let(chatListSpinner::onRestoreInstanceState)
-        hasRestoredSpinnerState = true
-      }
       if (!hasSetBufferViewConfigId) {
         chatListSpinner.setSelection(adapter.indexOf(viewModel.bufferViewConfigId.value).nullIf { it == -1 }
                                      ?: 0)
@@ -446,12 +440,11 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
     savedInstanceState?.run {
       chatList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
-      chatListSpinner.onRestoreInstanceState(getParcelable(KEY_STATE_SPINNER))
     }
 
     viewModel.stateReset.toLiveData().observe(this, Observer {
+      listAdapter.submitList(emptyList())
       hasSetBufferViewConfigId = false
-      hasRestoredSpinnerState = false
     })
 
     return view
@@ -460,7 +453,6 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     outState.putParcelable(KEY_STATE_LIST, chatList.layoutManager.onSaveInstanceState())
-    outState.putParcelable(KEY_STATE_SPINNER, chatListSpinner.onSaveInstanceState())
   }
 
   private fun clickListener(it: BufferId) {
@@ -483,6 +475,5 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
   companion object {
     private const val KEY_STATE_LIST = "STATE_LIST"
-    private const val KEY_STATE_SPINNER = "STATE_SPINNER"
   }
 }

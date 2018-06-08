@@ -417,10 +417,9 @@ class QuasselService : DaggerLifecycleService(),
       disconnect: Boolean? = null,
       markRead: BufferId? = null,
       markReadMessage: MsgId? = null
-    ): ComponentName = context.startService(intent(context,
-                                                   disconnect,
-                                                   markRead,
-                                                   markReadMessage))
+    ): ComponentName = context.startService(
+      intent(context, disconnect, markRead, markReadMessage)
+    )
 
     fun intent(
       context: Context,
