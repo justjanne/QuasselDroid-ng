@@ -45,6 +45,13 @@
         android:id="@+id/version_date"
         style="@style/Widget.Info.Item.Description"
         tools:text="June 8, 2018" />
+
+      <Button
+        android:id="@+id/missing_features"
+        style="@style/Widget.Button.Borderless.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_missing_features" />
     </LinearLayout>
 
     <View

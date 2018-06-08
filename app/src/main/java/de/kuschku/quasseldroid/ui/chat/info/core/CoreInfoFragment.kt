@@ -27,15 +27,23 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ssl.X509Helper
 import de.kuschku.quasseldroid.util.helper.*
+import de.kuschku.quasseldroid.util.missingfeatures.MissingFeature
+import de.kuschku.quasseldroid.util.missingfeatures.MissingFeaturesDialog
+import de.kuschku.quasseldroid.util.missingfeatures.RequiredFeatures
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
+import org.threeten.bp.ZoneId
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 
 class CoreInfoFragment : ServiceBoundFragment() {
 
@@ -44,6 +52,9 @@ class CoreInfoFragment : ServiceBoundFragment() {
 
   @BindView(R.id.version_date)
   lateinit var versionDate: TextView
+
+  @BindView(R.id.missing_features)
+  lateinit var missingFeatures: Button
 
   @BindView(R.id.uptime_container)
   lateinit var uptimeContainer: View
@@ -63,22 +74,38 @@ class CoreInfoFragment : ServiceBoundFragment() {
   @BindView(R.id.clients)
   lateinit var clients: RecyclerView
 
+  private val dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.fragment_info_core, container, false)
     ButterKnife.bind(this, view)
 
+    var missingFeatureList: List<MissingFeature> = emptyList()
     viewModel.coreInfo.toLiveData().observe(this, Observer {
-      it?.orNull().let {
-        version.text = it?.quasselVersion?.let(Html::fromHtml)
-        versionDate.text = it?.quasselBuildDate?.let(Html::fromHtml)
+      it?.orNull().let { data ->
+        version.text = data?.quasselVersion?.let(Html::fromHtml)
+        versionDate.text = data?.quasselBuildDate?.let(Html::fromHtml)
 
-        val startTime = it?.startTime?.toString()
+        val features = viewModel.session.value?.orNull()?.features?.core
+                       ?: QuasselFeatures.empty()
+        missingFeatureList = RequiredFeatures.features.filter {
+          it.feature !in features.enabledFeatures
+        }
+        missingFeatures.visibleIf(missingFeatureList.isNotEmpty())
+
+        val startTime = data?.startTime?.atZone(ZoneId.systemDefault())?.let(dateTimeFormatter::format)
         uptime.text = requireContext().getString(R.string.label_core_online_since,
                                                  startTime.toString())
         uptimeContainer.visibleIf(startTime != null)
       }
     })
+    missingFeatures.setOnClickListener {
+      MissingFeaturesDialog.Builder(requireActivity())
+        .missingFeatures(missingFeatureList)
+        .readOnly(true)
+        .show()
+    }
 
     val secure = requireContext().getVectorDrawableCompat(R.drawable.ic_lock)?.mutate()
     val partiallySecure = requireContext().getVectorDrawableCompat(R.drawable.ic_lock)?.mutate()

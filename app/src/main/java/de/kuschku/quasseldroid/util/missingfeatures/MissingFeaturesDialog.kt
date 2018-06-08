@@ -44,9 +44,10 @@ class MissingFeaturesDialog : DialogFragment() {
     val dialog = MaterialDialog.Builder(requireContext())
       .customView(R.layout.dialog_missing_features, true)
       .title(R.string.label_missing_features)
-      .positiveText(R.string.label_accept)
-      .also { dialog ->
-        builder?.positiveListener?.let(dialog::onPositive)
+      .also {
+        it.positiveText(if (builder?.readOnly == true) R.string.label_accept
+                        else R.string.label_close)
+        builder?.positiveListener?.let(it::onPositive)
       }
       .build()
     ButterKnife.bind(this, dialog.customView!!)
@@ -82,9 +83,15 @@ class MissingFeaturesDialog : DialogFragment() {
     var dismissListener: DialogInterface.OnDismissListener? = null
     var positiveListener: MaterialDialog.SingleButtonCallback? = null
     var missingFeatures: List<MissingFeature>? = null
+    var readOnly: Boolean = false
 
     fun missingFeatures(missingFeatures: List<MissingFeature>): Builder {
       this.missingFeatures = missingFeatures
+      return this
+    }
+
+    fun readOnly(readOnly: Boolean): Builder {
+      this.readOnly = readOnly
       return this
     }
 

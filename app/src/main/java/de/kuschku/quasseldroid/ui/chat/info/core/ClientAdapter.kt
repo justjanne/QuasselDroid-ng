@@ -20,6 +20,9 @@ import de.kuschku.quasseldroid.util.helper.getVectorDrawableCompat
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.tint
 import de.kuschku.quasseldroid.util.helper.visibleIf
+import org.threeten.bp.ZoneId
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 
 class ClientAdapter : ListAdapter<CoreInfo.ConnectedClientData, ClientAdapter.ClientViewHolder>(
   object : DiffUtil.ItemCallback<CoreInfo.ConnectedClientData>() {
@@ -41,14 +44,18 @@ class ClientAdapter : ListAdapter<CoreInfo.ConnectedClientData, ClientAdapter.Cl
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ClientViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.widget_client, parent, false),
+    dateTimeFormatter,
     ::disconnect
   )
+
+  private val dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
 
   override fun onBindViewHolder(holder: ClientViewHolder, position: Int) =
     holder.bind(getItem(position))
 
   class ClientViewHolder(
     itemView: View,
+    private val dateTimeFormatter: DateTimeFormatter,
     private val disconnectListener: (Int) -> Unit
   ) : RecyclerView.ViewHolder(itemView) {
 
@@ -97,8 +104,9 @@ class ClientAdapter : ListAdapter<CoreInfo.ConnectedClientData, ClientAdapter.Cl
 
       ip.text = data.remoteAddress
       version.text = Html.fromHtml(data.clientVersion)
+      val connectedSinceFormatted = dateTimeFormatter.format(data.connectedSince.atZone(ZoneId.systemDefault()))
       uptime.text = itemView.context.getString(R.string.label_core_connected_since,
-                                               data.connectedSince.toString())
+                                               connectedSinceFormatted)
       location.text = data.location
       location.visibleIf(data.location.isNotBlank())
 
