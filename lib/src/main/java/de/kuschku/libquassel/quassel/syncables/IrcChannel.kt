@@ -316,7 +316,7 @@ class IrcChannel(
   override fun removeUserMode(ircuser: IrcUser?, mode: String) {
     if (ircuser == null || !isKnownUser(ircuser) || !isValidChannelUserMode(mode))
       return
-    if (_userModes.getOr(ircuser, "").contains(mode, ignoreCase = true))
+    if (!_userModes.getOr(ircuser, "").contains(mode, ignoreCase = true))
       return
     _userModes[ircuser] = _userModes.getOr(ircuser, "")
       .replace(mode, "", ignoreCase = true)
