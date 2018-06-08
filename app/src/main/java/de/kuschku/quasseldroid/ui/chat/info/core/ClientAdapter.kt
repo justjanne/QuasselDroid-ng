@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.quassel.syncables.CoreInfo
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.getVectorDrawableCompat
@@ -102,6 +103,7 @@ class ClientAdapter : ListAdapter<CoreInfo.ConnectedClientData, ClientAdapter.Cl
       location.visibleIf(data.location.isNotBlank())
 
       secureIcon.setImageDrawable(if (data.secure) secure else insecure)
+      disconnect.visibleIf(data.features.hasFeature(ExtendedFeature.RemoteDisconnect))
     }
   }
 }

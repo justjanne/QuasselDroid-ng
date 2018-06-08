@@ -51,14 +51,14 @@ class CoreInfoFragment : ServiceBoundFragment() {
   @BindView(R.id.uptime)
   lateinit var uptime: TextView
 
-  @BindView(R.id.secure_container)
-  lateinit var secureContainer: View
-
   @BindView(R.id.secure)
   lateinit var secureText: TextView
 
   @BindView(R.id.secure_icon)
   lateinit var secureIcon: ImageView
+
+  @BindView(R.id.clients_title)
+  lateinit var clientsTitle: View
 
   @BindView(R.id.clients)
   lateinit var clients: RecyclerView
@@ -97,15 +97,14 @@ class CoreInfoFragment : ServiceBoundFragment() {
       val sslSession = it?.orNull()
       val leafCertificate = sslSession?.peerCertificateChain?.firstOrNull()
       val issuerName = leafCertificate?.issuerDN?.name?.let(X509Helper::commonName)
+                       ?: requireContext().getString(R.string.label_core_connection_verified_by_unknown)
 
       if (sslSession == null) {
         secureText.text = requireContext().getString(R.string.label_core_connection_insecure)
         secureIcon.setImageDrawable(insecure)
       } else {
         secureText.text = requireContext().getString(
-          R.string.label_core_connection_verified_by,
-          issuerName
-          ?: requireContext().getString(R.string.label_core_connection_verified_by_unknown)
+          R.string.label_core_connection_verified_by, issuerName
         )
         secureIcon.setImageDrawable(secure)
       }
@@ -121,6 +120,7 @@ class CoreInfoFragment : ServiceBoundFragment() {
     }
     clients.adapter = adapter
     viewModel.coreInfoClients.toLiveData().observe(this, Observer {
+      clientsTitle.visibleIf(it?.isNotEmpty() == true)
       adapter.submitList(it)
     })
 

@@ -78,7 +78,6 @@
       android:text="@string/label_core_security" />
 
     <LinearLayout
-      android:id="@+id/secure_container"
       style="@style/Widget.Info.Item"
       android:orientation="horizontal">
 
@@ -104,8 +103,11 @@
       android:background="?colorDivider" />
 
     <TextView
+      android:id="@+id/clients_title"
       style="@style/Widget.Info.Section"
-      android:text="@string/label_core_clients" />
+      android:text="@string/label_core_clients"
+      android:visibility="gone"
+      tools:visibility="visible" />
 
     <android.support.v7.widget.RecyclerView
       android:id="@+id/clients"
