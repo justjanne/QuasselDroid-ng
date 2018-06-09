@@ -128,6 +128,10 @@ object Settings {
       largerEmoji = getBoolean(
         context.getString(R.string.preference_larger_emoji_key),
         MessageSettings.DEFAULT.largerEmoji
+      ),
+      highlightOwnMessages = getBoolean(
+        context.getString(R.string.preference_highlight_own_messages_key),
+        MessageSettings.DEFAULT.highlightOwnMessages
       )
     )
   }

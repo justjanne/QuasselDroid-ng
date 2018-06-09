@@ -102,8 +102,11 @@ class QuasselMessageRenderer @Inject constructor(
 
   private val zoneId = ZoneId.systemDefault()
 
-  override fun layout(type: Message_Type?, hasHighlight: Boolean,
-                      isFollowUp: Boolean, isEmoji: Boolean) = when (type) {
+  override fun layout(type: Message_Type?,
+                      hasHighlight: Boolean,
+                      isFollowUp: Boolean,
+                      isEmoji: Boolean,
+                      isSelf: Boolean) = when (type) {
     Notice    -> R.layout.widget_chatmessage_notice
     Server    -> R.layout.widget_chatmessage_server
     Error     -> R.layout.widget_chatmessage_error
@@ -119,7 +122,8 @@ class QuasselMessageRenderer @Inject constructor(
                     messageType: Message_Type?,
                     hasHighlight: Boolean,
                     isFollowUp: Boolean,
-                    isEmoji: Boolean) {
+                    isEmoji: Boolean,
+                    isSelf: Boolean) {
     if (hasHighlight) {
       viewHolder.itemView.context.theme.styledAttributes(
         R.attr.colorForegroundHighlight, R.attr.colorForegroundHighlightSecondary,
@@ -135,6 +139,21 @@ class QuasselMessageRenderer @Inject constructor(
           arrayOf(
             ColorDrawable(getColor(2, 0)),
             getDrawable(3)
+          )
+        )
+      }
+    }
+
+
+    if (isSelf && messageSettings.highlightOwnMessages) {
+      viewHolder.itemView.context.theme.styledAttributes(
+        R.attr.colorBackgroundSecondary,
+        R.attr.backgroundMenuItem
+      ) {
+        viewHolder.messageContainer?.background = LayerDrawable(
+          arrayOf(
+            ColorDrawable(getColor(0, 0)),
+            getDrawable(1)
           )
         )
       }

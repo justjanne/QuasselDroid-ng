@@ -19,7 +19,9 @@
 
 package de.kuschku.quasseldroid.ui.chat.messages
 
+import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.MsgId
+import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 
 data class DisplayMessage(
@@ -33,6 +35,7 @@ data class DisplayMessage(
 ) {
   data class Tag(
     val id: MsgId,
+    val isSelf: Boolean,
     val hasDayChange: Boolean,
     val isFollowUp: Boolean,
     val isSelected: Boolean,
@@ -43,6 +46,7 @@ data class DisplayMessage(
 
   val tag = Tag(
     content.messageId,
+    content.flag.hasFlag(Message_Flag.Self),
     hasDayChange,
     isFollowUp,
     isSelected,

@@ -110,11 +110,12 @@ class MessageAdapter @Inject constructor(
     it.content.type.value or
       (if (it.content.flag.hasFlag(Message_Flag.Highlight)) MASK_HIGHLIGHT else 0x00) or
       (if (it.isFollowUp) MASK_FOLLOWUP else 0x00) or
-      (if (it.isEmoji) MASK_EMOJI else 0x00)
+      (if (it.isEmoji) MASK_EMOJI else 0x00) or
+      (if (it.content.flag.hasFlag(Message_Flag.Self)) MASK_SELF else 0x00)
   } ?: 0
 
   override fun getItemId(position: Int): Long {
-    return getItem(position)?.content?.messageId?.toLong() ?: 0L
+    return getItem(position)?.content?.messageId ?: 0L
   }
 
   private fun messageType(viewType: Int): Message_Type? =
@@ -126,13 +127,17 @@ class MessageAdapter @Inject constructor(
 
   private fun isEmoji(viewType: Int) = viewType and MASK_EMOJI != 0
 
+  private fun isSelf(viewType: Int) = viewType and MASK_SELF != 0
+
   companion object {
     private const val SHIFT_HIGHLIGHT = 32 - 1
     private const val SHIFT_FOLLOWUP = SHIFT_HIGHLIGHT - 1
     private const val SHIFT_EMOJI = SHIFT_FOLLOWUP - 1
+    private const val SHIFT_SELF = SHIFT_EMOJI - 1
     const val MASK_HIGHLIGHT = 0x01 shl SHIFT_HIGHLIGHT
     const val MASK_FOLLOWUP = 0x01 shl SHIFT_FOLLOWUP
     const val MASK_EMOJI = 0x01 shl SHIFT_EMOJI
+    const val MASK_SELF = 0x01 shl SHIFT_SELF
     const val MASK_TYPE = 0xFFFFFF
   }
 
@@ -141,9 +146,10 @@ class MessageAdapter @Inject constructor(
     val hasHighlight = hasHiglight(viewType)
     val isFollowUp = isFollowUp(viewType)
     val isEmoji = isEmoji(viewType)
+    val isSelf = isSelf(viewType)
     val viewHolder = QuasselMessageViewHolder(
       LayoutInflater.from(parent.context).inflate(
-        messageRenderer.layout(messageType, hasHighlight, isFollowUp, isEmoji),
+        messageRenderer.layout(messageType, hasHighlight, isFollowUp, isEmoji, isSelf),
         parent,
         false
       ),
@@ -153,7 +159,7 @@ class MessageAdapter @Inject constructor(
       expansionListener,
       movementMethod
     )
-    messageRenderer.init(viewHolder, messageType, hasHighlight, isFollowUp, isEmoji)
+    messageRenderer.init(viewHolder, messageType, hasHighlight, isFollowUp, isEmoji, isSelf)
     return viewHolder
   }
 

@@ -36,7 +36,8 @@ data class MessageSettings(
   val showIRCCloudAvatars: Boolean = false,
   val showGravatarAvatars: Boolean = false,
   val showMatrixAvatars: Boolean = false,
-  val largerEmoji: Boolean = false
+  val largerEmoji: Boolean = false,
+  val highlightOwnMessages: Boolean = false
 ) {
 
   enum class ColorizeNicknamesMode {

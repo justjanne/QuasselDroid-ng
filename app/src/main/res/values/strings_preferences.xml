@@ -242,6 +242,10 @@
   <string name="preference_larger_emoji_title">Larger Reactions</string>
   <string name="preference_larger_emoji_summary">Increase the size of emoji-only messages</string>
 
+  <string name="preference_highlight_own_messages_key" translatable="false">highlight_own_messages</string>
+  <string name="preference_highlight_own_messages_title">Highlight own messages</string>
+  <string name="preference_highlight_own_messages_summary">Shows your own messages more prominently</string>
+
 
   <string name="preference_autocomplete_title">Autocomplete</string>
 

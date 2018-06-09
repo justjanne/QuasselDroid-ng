@@ -59,7 +59,7 @@
     <item name="android:windowBackground">@color/material_light_background</item>
     <item name="colorBackground">#FAFAFA</item>
     <item name="colorBackgroundHighlight">#40ffaf3b</item>
-    <item name="colorBackgroundSecondary">@null</item>
+    <item name="colorBackgroundSecondary">#F0F0F0</item>
     <item name="colorBackgroundCard">#FFFFFF</item>
     <item name="colorBackgroundDialog">#FAFAFA</item>
 
@@ -113,7 +113,7 @@
     <item name="android:windowBackground">@color/material_dark_background</item>
     <item name="colorBackground">#303030</item>
     <item name="colorBackgroundHighlight">#40ffaf3b</item>
-    <item name="colorBackgroundSecondary">@null</item>
+    <item name="colorBackgroundSecondary">#424242</item>
     <item name="colorBackgroundCard">#424242</item>
     <item name="colorBackgroundDialog">#303030</item>
 
