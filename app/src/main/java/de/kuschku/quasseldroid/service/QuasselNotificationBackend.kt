@@ -49,6 +49,7 @@ import de.kuschku.quasseldroid.util.helper.loadWithFallbacks
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.ui.TextDrawable
+import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import javax.inject.Inject
 
 class QuasselNotificationBackend @Inject constructor(
@@ -242,21 +243,11 @@ class QuasselNotificationBackend @Inject constructor(
             selfColor = selfColor
           ))
         }
-        val content = contentFormatter.formatContent(it.content, false)
+        val content = contentFormatter.formatContent(it.content, false, it.networkId)
 
         val nickName = HostmaskHelper.nick(it.sender)
         val senderColorIndex = SenderColorUtil.senderColor(nickName)
-        val rawInitial = nickName.trimStart('-',
-                                            '_',
-                                            '[',
-                                            ']',
-                                            '{',
-                                            '}',
-                                            '|',
-                                            '`',
-                                            '^',
-                                            '.',
-                                            '\\')
+        val rawInitial = nickName.trimStart(*EditorViewModel.IGNORED_CHARS)
                            .firstOrNull() ?: nickName.firstOrNull()
         val initial = rawInitial?.toUpperCase().toString()
         val senderColor = when (messageSettings.colorizeNicknames) {

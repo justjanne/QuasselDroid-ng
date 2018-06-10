@@ -32,7 +32,7 @@ import io.reactivex.Flowable
 import org.threeten.bp.Instant
 
 @Database(entities = [MessageData::class, Filtered::class, SslValidityWhitelistEntry::class, SslHostnameWhitelistEntry::class, NotificationData::class],
-          version = 14)
+          version = 15)
 @TypeConverters(MessageTypeConverter::class)
 abstract class QuasselDatabase : RoomDatabase() {
   abstract fun message(): MessageDao
@@ -48,6 +48,7 @@ abstract class QuasselDatabase : RoomDatabase() {
     var type: Message_Types,
     var flag: Message_Flags,
     var bufferId: BufferId,
+    var networkId: NetworkId,
     var sender: String,
     var senderPrefixes: String,
     var realName: String,
@@ -322,6 +323,13 @@ abstract class QuasselDatabase : RoomDatabase() {
                 override fun migrate(database: SupportSQLiteDatabase) {
                   database.execSQL("CREATE TABLE IF NOT EXISTS `notification` (`messageId` INTEGER NOT NULL, `time` INTEGER NOT NULL, `type` INTEGER NOT NULL, `flag` INTEGER NOT NULL, `bufferId` INTEGER NOT NULL, `bufferName` TEXT NOT NULL, `bufferType` INTEGER NOT NULL, `networkId` INTEGER NOT NULL, `sender` TEXT NOT NULL, `senderPrefixes` TEXT NOT NULL, `realName` TEXT NOT NULL, `avatarUrl` TEXT NOT NULL, `content` TEXT NOT NULL, PRIMARY KEY(`messageId`));")
                   database.execSQL("CREATE  INDEX `index_notification_bufferId` ON `notification` (`bufferId`);")
+                }
+              },
+              object : Migration(14, 15) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL(
+                    "ALTER TABLE message ADD networkId INT DEFAULT 0 NOT NULL;"
+                  )
                 }
               }
             ).build()

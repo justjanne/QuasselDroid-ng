@@ -52,6 +52,7 @@ import de.kuschku.libquassel.connection.QuasselSecurityException
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.Message_Type
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.session.Error
 import de.kuschku.libquassel.util.Optional
@@ -140,13 +141,13 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     super.onNewIntent(intent)
     if (intent != null) {
       when {
-        intent.type == "text/plain"            -> {
+        intent.type == "text/plain"                                     -> {
           chatlineFragment?.replaceText(intent.getStringExtra(Intent.EXTRA_TEXT))
           drawerLayout.closeDrawers()
         }
-        intent.hasExtra(KEY_BUFFER_ID)         -> {
+        intent.hasExtra(KEY_BUFFER_ID)                                  -> {
           viewModel.buffer.onNext(intent.getIntExtra(KEY_BUFFER_ID, -1))
-          drawerLayout.closeDrawers()
+          viewModel.bufferOpened.onNext(Unit)
           if (intent.hasExtra(KEY_ACCOUNT_ID)) {
             val accountId = intent.getLongExtra(ChatActivity.KEY_ACCOUNT_ID, -1)
             if (accountId != this.accountId) {
@@ -159,12 +160,50 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             }
           }
         }
-        intent.hasExtra(KEY_AUTOCOMPLETE_TEXT) -> {
+        intent.hasExtra(KEY_AUTOCOMPLETE_TEXT)                          -> {
           chatlineFragment?.editorHelper?.appendText(
             intent.getStringExtra(KEY_AUTOCOMPLETE_TEXT),
             intent.getStringExtra(KEY_AUTOCOMPLETE_SUFFIX)
           )
           drawerLayout.closeDrawers()
+        }
+        intent.hasExtra(KEY_NETWORK_ID) && intent.hasExtra(KEY_CHANNEL) -> {
+          val networkId = intent.getIntExtra(KEY_NETWORK_ID, -1)
+          val channel = intent.getStringExtra(KEY_CHANNEL)
+
+          viewModel.session.value?.orNull()?.also { session ->
+            val info = session.bufferSyncer?.find(
+              bufferName = channel,
+              networkId = networkId,
+              type = Buffer_Type.of(Buffer_Type.QueryBuffer)
+            )
+
+            if (info != null) {
+              ChatActivity.launch(this, bufferId = info.bufferId)
+            } else {
+
+              viewModel.allBuffers.map {
+                listOfNotNull(it.find {
+                  it.networkId == networkId && it.bufferName == channel
+                })
+              }.filter {
+                it.isNotEmpty()
+              }.firstElement().toLiveData().observe(this, Observer {
+                it?.firstOrNull()?.let { info ->
+                  ChatActivity.launch(this, bufferId = info.bufferId)
+                }
+              })
+
+              session.bufferSyncer?.find(
+                networkId = networkId,
+                type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+              )?.let { statusInfo ->
+                session.rpcHandler?.sendInput(
+                  statusInfo, "/join $channel"
+                )
+              }
+            }
+          }
         }
       }
     }
@@ -891,6 +930,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     private const val KEY_AUTOCOMPLETE_SUFFIX = "autocomplete_suffix"
     private const val KEY_BUFFER_ID = "buffer_id"
     private const val KEY_ACCOUNT_ID = "account_id"
+    private const val KEY_NETWORK_ID = "network_id"
+    private const val KEY_CHANNEL = "channel"
 
     // Instance state keys
     private const val KEY_OPEN_BUFFER = "open_buffer"
@@ -904,10 +945,19 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       sharedText: CharSequence? = null,
       autoCompleteText: CharSequence? = null,
       autoCompleteSuffix: String? = null,
+      channel: String? = null,
+      networkId: NetworkId? = null,
       bufferId: Int? = null,
-      accountId: Int? = null
+      accountId: Long? = null
     ) = context.startActivity(
-      intent(context, sharedText, autoCompleteText, autoCompleteSuffix, bufferId)
+      intent(context,
+             sharedText,
+             autoCompleteText,
+             autoCompleteSuffix,
+             channel,
+             networkId,
+             bufferId,
+             accountId)
     )
 
     fun intent(
@@ -915,6 +965,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       sharedText: CharSequence? = null,
       autoCompleteText: CharSequence? = null,
       autoCompleteSuffix: String? = null,
+      channel: String? = null,
+      networkId: NetworkId? = null,
       bufferId: Int? = null,
       accountId: Long? = null
     ) = Intent(context, ChatActivity::class.java).apply {
@@ -933,6 +985,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         if (accountId != null) {
           putExtra(KEY_ACCOUNT_ID, accountId)
         }
+      }
+      if (networkId != null && channel != null) {
+        putExtra(KEY_NETWORK_ID, networkId)
+        putExtra(KEY_CHANNEL, channel)
       }
     }
   }

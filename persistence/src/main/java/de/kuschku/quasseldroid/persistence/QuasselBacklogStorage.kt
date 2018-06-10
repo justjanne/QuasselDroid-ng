@@ -46,6 +46,7 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
         type = it.type,
         flag = it.flag,
         bufferId = it.bufferInfo.bufferId,
+        networkId = it.bufferInfo.networkId,
         sender = it.sender,
         senderPrefixes = it.senderPrefixes,
         realName = it.realName,

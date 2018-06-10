@@ -25,13 +25,17 @@ import android.support.annotation.ColorInt
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
+import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.URLSpan
+import android.view.View
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import org.intellij.lang.annotations.Language
@@ -80,14 +84,33 @@ class ContentFormatter @Inject constructor(
   class QuasselURLSpan(text: String, private val highlight: Boolean) : URLSpan(text) {
     override fun updateDrawState(ds: TextPaint?) {
       if (ds != null) {
-        if (!highlight)
-          ds.color = ds.linkColor
+        if (!highlight) ds.color = ds.linkColor
         ds.isUnderlineText = true
       }
     }
   }
 
-  fun formatContent(content: String, highlight: Boolean = false): CharSequence {
+  class ChannelLinkSpan(private val networkId: NetworkId, private val text: String,
+                        private val highlight: Boolean) : ClickableSpan() {
+    override fun updateDrawState(ds: TextPaint?) {
+      if (ds != null) {
+        if (!highlight) ds.color = ds.linkColor
+        ds.isUnderlineText = true
+      }
+    }
+
+    override fun onClick(widget: View) {
+      ChatActivity.launch(
+        widget.context,
+        networkId = networkId,
+        channel = text
+      )
+    }
+  }
+
+  fun formatContent(content: String,
+                    highlight: Boolean = false,
+                    networkId: NetworkId?): CharSequence {
     val formattedText = ircFormatDeserializer.formatString(content, messageSettings.colorizeMirc)
     val text = SpannableString(formattedText)
 
@@ -101,10 +124,18 @@ class ContentFormatter @Inject constructor(
         )
       }
     }
-    /*
-    for (result in channelPattern.findAll(content)) {
-      text.setSpan(URLSpan(result.value), result.range.start, result.range.endInclusive, Spanned.SPAN_INCLUSIVE_INCLUSIVE)}
-    */
+
+    if (networkId != null) {
+      for (result in channelPattern.findAll(formattedText)) {
+        val group = result.groups[1]
+        if (group != null) {
+          text.setSpan(ChannelLinkSpan(networkId, group.value, highlight),
+                       group.range.start,
+                       group.range.endInclusive + 1,
+                       Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        }
+      }
+    }
 
     return text
   }
