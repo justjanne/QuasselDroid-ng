@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.chat.buffers
 
+import android.support.v7.view.ContextThemeWrapper
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.ThemedSpinnerAdapter
 import android.view.LayoutInflater
@@ -29,7 +30,6 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.util.ui.ContextThemeWrapper
 import de.kuschku.quasseldroid.util.ui.RecyclerSpinnerAdapter
 
 class BufferViewConfigAdapter :
@@ -60,10 +60,8 @@ class BufferViewConfigAdapter :
   override fun onCreateViewHolder(parent: ViewGroup, dropDown: Boolean)
     : BufferViewConfigViewHolder {
     val inflater = LayoutInflater.from(
-      if (dropDown)
-        ContextThemeWrapper(parent.context, dropDownViewTheme)
-      else
-        parent.context
+      if (dropDown) ContextThemeWrapper(parent.context, dropDownViewTheme)
+      else parent.context
     )
     val view = inflater.inflate(R.layout.widget_spinner_item_toolbar, parent, false)
     return BufferViewConfigViewHolder(
