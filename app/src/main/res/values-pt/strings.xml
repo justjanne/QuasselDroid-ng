@@ -90,7 +90,7 @@
   <string name="label_rename">Renomear</string>
   <string name="label_save">Guardar</string>
   <string name="label_select">Selecionar</string>
-  <string name="label_set_default">Definir Como Predefinido</string>
+  <string name="label_set_default">Definir Como Padrão</string>
   <string name="label_settings">Configurações</string>
   <string name="label_settings_client">Configurações do Cliente</string>
   <string name="label_settings_core">Configurações do Núcleo</string>
@@ -100,7 +100,7 @@
   <string name="label_topic">Tópico do Canal</string>
   <string name="label_translators">Tradutores</string>
   <string name="label_unhide">Tornar Visível</string>
-  <string name="label_use_default">Usar Predefinido</string>
+  <string name="label_use_default">Utilizar Padrão</string>
   <string name="label_website">Site</string>
   <string name="label_whitelist">Ignorar</string>
   <string name="label_whitelist_ignore_date">A data de caducidade é ignorada para este certificado</string>

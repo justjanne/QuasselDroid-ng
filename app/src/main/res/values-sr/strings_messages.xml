@@ -35,8 +35,8 @@
   <string name="message_format_join">%1$s%2$s se pridružio/la %3$s</string>
   <string name="message_format_part_1">%1$s%2$s je napustio/la kanal</string>
   <string name="message_format_part_2">%1$s%2$s je napustio/la kanal (%3$s)</string>
-  <string name="message_format_quit_1">%1$s%2$s je izašao/la</string>
-  <string name="message_format_quit_2">%1$s%2$s je izašao/la (%3$s)</string>
+  <string name="message_format_quit_1">%1$s%2$s je prekinuo/la vezu</string>
+  <string name="message_format_quit_2">%1$s%2$s je prekinuo/la vezu (%3$s)</string>
   <string name="message_format_kick_1">%1$s je izbačen od %2$s%3$s</string>
   <string name="message_format_kick_2">%1$s je izbačen od %2$s%3$s (%4$s)</string>
   <string name="message_format_kill_1">%1$s je ubijen/na od %2$s%3$s</string>
@@ -49,6 +49,6 @@
   <plurals name="message_netsplit_quit">
     <item quantity="one">Netsplit između %1$s i %2$s: %3$d je napustio/la</item>
     <item quantity="few">Netsplit između %1$s i %2$s: %3$d su napustili</item>
-    <item quantity="other">Netsplit između %1$s i %2$s: %3$d korisnika je izašlo</item>
+    <item quantity="other">Netsplit između %1$s i %2$s: %3$d korisnika je prekinulo vezu</item>
   </plurals>
 </resources>

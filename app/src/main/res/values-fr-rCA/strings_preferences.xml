@@ -110,7 +110,6 @@
   <string name="preference_larger_emoji_title">Réactions Plus Grosses</string>
   <string name="preference_larger_emoji_summary">Grossir les emoji si le message ne contient que des emojis</string>
 
-
   <string name="preference_autocomplete_title">Auto-Complétion</string>
 
   <string name="preference_autocomplete_sender_doubleclick_title">Auto-Complétion de l\'expéditeur</string>

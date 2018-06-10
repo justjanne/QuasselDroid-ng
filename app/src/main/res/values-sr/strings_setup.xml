@@ -30,12 +30,12 @@
   <string name="label_connection_host">Host</string>
   <string name="label_connection_port">Port</string>
 
-  <string name="hint_invalid_host">Hostname nije validno</string>
+  <string name="hint_invalid_host">Neispravan hostname</string>
   <string name="hint_invalid_port">Port nije validan</string>
 
   <!-- Account User -->
   <string name="slide_account_user_title">Vaš nalog</string>
-  <string name="slide_account_user_description">Sada, molimo unesite korisničko ime i lozinku za vaš nalog na Core-u. Ako ste upravo napravili taj Core, mi ćemo podesiti ovaj nalog za vas.</string>
+  <string name="slide_account_user_description">Sada, molimo unesite korisničko ime i lozinku za vaš nalog na jezgru. Ako ste upravo postavili to jezgro, mi ćemo podesiti ovaj nalog za vas.</string>
 
   <string name="label_account_user">Korisničko ime</string>
   <string name="label_account_pass">Lozinka</string>
@@ -72,7 +72,7 @@
   <string name="slide_user_network_title">Podesi mrežu</string>
   <string name="slide_user_network_description">Odaberi mrežu za povezivanje.</string>
 
-  <string name="label_network_custom">Prilagođena Mreža…</string>
+  <string name="label_network_custom">Prilagođena mreža…</string>
 
   <!-- User Channels -->
   <string name="slide_user_channels_title">Podesi kanale</string>

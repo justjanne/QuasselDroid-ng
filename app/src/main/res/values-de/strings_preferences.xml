@@ -110,6 +110,9 @@
   <string name="preference_larger_emoji_title">Große Reaktionen</string>
   <string name="preference_larger_emoji_summary">Zeigt Nachrichten, die nur Emoji enthalten, größer an</string>
 
+  <string name="preference_highlight_own_messages_title">Eigene Nachrichten hervorheben</string>
+  <string name="preference_highlight_own_messages_summary">Hebt eigene Nachrichten besser sichtbar hervor</string>
+
 
   <string name="preference_autocomplete_title">Autovervollständigung</string>
 

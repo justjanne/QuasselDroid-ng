@@ -31,7 +31,7 @@
   <string name="settings_network_connection">Veza</string>
   <string name="settings_network_perform">Izvrši</string>
   <string name="settings_network_rejoin_channels">Ponovo se pridruži kanalima</string>
-  <string name="settings_network_autoreconnect_enabled">Automatsko Prespajanje</string>
+  <string name="settings_network_autoreconnect_enabled">Automatsko ponovno povezivanje</string>
   <string name="settings_network_autoreconnect_interval">Interval</string>
   <string name="settings_network_autoreconnect_interval_unit">sekundi</string>
   <string name="settings_network_autoreconnect_attempts">Maksimalan broj pokušaja</string>
@@ -39,7 +39,7 @@
   <string name="settings_network_customratelimits_enabled">Limiti Posebne Rate</string>
   <string name="settings_network_customratelimits_burstsize">Broj Uzastopnih Poruka</string>
   <string name="settings_network_customratelimits_unlimited">Neograničeno</string>
-  <string name="settings_network_customratelimits_delay">Odgoda</string>
+  <string name="settings_network_customratelimits_delay">Odlaganje</string>
   <string name="settings_network_customratelimits_interval_unit">sekundi</string>
 
   <string name="settings_networkserver_title">Server Mreže</string>
@@ -49,41 +49,41 @@
   <string name="settings_networkserver_ssl_enabled">Koristi SSL</string>
   <string name="settings_networkserver_ssl_verify">Verifikuj SSL</string>
   <string name="settings_networkserver_password">Lozinka</string>
-  <string name="settings_networkserver_proxy_enabled">Koristi Proxy</string>
-  <string name="settings_networkserver_proxy_type">Tip Proxy-a</string>
+  <string name="settings_networkserver_proxy_enabled">Koristi proxy</string>
+  <string name="settings_networkserver_proxy_type">Tip</string>
   <string name="settings_networkserver_proxy_type_http">HTTP</string>
   <string name="settings_networkserver_proxy_type_socks5">SOCKS 5</string>
   <string name="settings_networkserver_proxy_host">Host</string>
   <string name="settings_networkserver_proxy_port">Port</string>
-  <string name="settings_networkserver_proxy_user">Korisničko Ime</string>
+  <string name="settings_networkserver_proxy_user">Korisničko ime</string>
   <string name="settings_networkserver_proxy_pass">Lozinka</string>
 
   <string name="settings_identities_title">Identiteti</string>
   <string name="settings_identity_title">Identitet</string>
   <string name="settings_identity_names">Imena</string>
   <string name="settings_identity_identity_name">Ime identiteta</string>
-  <string name="settings_identity_real_name">Pravo Ime</string>
+  <string name="settings_identity_real_name">Pravo ime</string>
   <string name="settings_identity_ident">Ident</string>
   <string name="settings_identity_nick">Nadimak</string>
   <string name="settings_identity_nicks">Nadimci</string>
   <string name="settings_identity_messages">Poruke</string>
-  <string name="settings_identity_kick_reason">Razlog Kick-a</string>
+  <string name="settings_identity_kick_reason">Razlog izbacivanja</string>
   <string name="settings_identity_part_reason">Razlog Part-a</string>
-  <string name="settings_identity_quit_reason">Razlog Quit-a</string>
-  <string name="settings_identity_away">Poruke Iz Odsustva</string>
-  <string name="settings_identity_away_reason">Razlog Odsustva</string>
+  <string name="settings_identity_quit_reason">Razlog prekida veze</string>
+  <string name="settings_identity_away">Poruke iz odsustva</string>
+  <string name="settings_identity_away_reason">Razlog odsustva</string>
   <string name="settings_identity_detach_away">Odsutan Na Razdvajanju</string>
   <string name="settings_identity_detach_away_reason">Razlog Odsutnosti Na Razdvajanju</string>
 
   <string name="settings_chatlists_title">Liste razgovora</string>
   <string name="settings_chatlist_title">Lista razgovora</string>
-  <string name="settings_chatlist_ui">Korisnički Interfejs</string>
+  <string name="settings_chatlist_ui">Korisnički interfejs</string>
   <string name="settings_chatlist_buffer_view_name">Ime</string>
-  <string name="settings_chatlist_show_search">Prikaži Pretragu</string>
-  <string name="settings_chatlist_sort_alphabetically">Poredaj Alfabetski</string>
-  <string name="settings_chatlist_add_new_buffers_automatically">Dodaj nove četove automatski</string>
+  <string name="settings_chatlist_show_search">Prikaži pretragu</string>
+  <string name="settings_chatlist_sort_alphabetically">Sortiraj abecedno</string>
+  <string name="settings_chatlist_add_new_buffers_automatically">Dodaj nove razgovore automatski</string>
   <string name="settings_chatlist_network">Mreža</string>
-  <string name="settings_chatlist_show_status_buffer">Prikazuj Statusni Buffer</string>
+  <string name="settings_chatlist_show_status_buffer">Prikazuj statusni bafer</string>
   <string name="settings_chatlist_types">Tipovi razgovora</string>
   <string name="settings_chatlist_show_channels">Prikaži kanale</string>
   <string name="settings_chatlist_show_queries">Prikaži upite</string>
@@ -95,10 +95,10 @@
   <string name="settings_chatlist_hide_inactive_buffers">Sakrij neaktivne razgovore</string>
   <string name="settings_chatlist_hide_inactive_networks">Sakrij neaktivne mreže</string>
 
-  <string name="settings_ignorelist_title">Lista ignorisanja</string>
+  <string name="settings_ignorelist_title">Lista ignorisanih</string>
 
   <string name="settings_ignoreitem_title">Pravilo za ignorisanje</string>
-  <string name="settings_ignoreitem_enabled">Aktivirano</string>
+  <string name="settings_ignoreitem_enabled">Uključeno</string>
   <string name="settings_ignoreitem_ignorerule">Pravilo za ignorisanje</string>
   <string name="settings_ignoreitem_isregex">Regularni izraz</string>
   <string name="settings_ignoreitem_type">Tip</string>
@@ -119,31 +119,31 @@
   <string name="settings_highlightlist_highlight_nick_all_nicks">Sve Nadimke od Identiteta</string>
   <string name="settings_highlightlist_highlight_nick_current_nick">Trenutni nadimak</string>
   <string name="settings_highlightlist_highlight_nick_none">Nijedno</string>
-  <string name="settings_highlightlist_nicks_case_sensitive">Osjetljivo na Kapitalizaciju</string>
+  <string name="settings_highlightlist_nicks_case_sensitive">Zavisno od razlikovanja velikih i malih slova</string>
   <string name="settings_highlightlist_rules">Pravila Isticanja</string>
   <string name="settings_highlightlist_ignore_rules">Pravila za Ignorisanje Isticanja</string>
 
   <string name="settings_highlightrule_title">Pravilo Isticanja</string>
-  <string name="settings_highlightrule_enabled">Aktivirano</string>
+  <string name="settings_highlightrule_enabled">Uključeno</string>
   <string name="settings_highlightrule_name">Ime</string>
   <string name="settings_highlightrule_regular_expression">Regularni izraz</string>
-  <string name="settings_highlightrule_case_sensitive">Osjetljivo na Kapitalizaciju</string>
+  <string name="settings_highlightrule_case_sensitive">Zavisno od razlikovanja velikih i malih slova</string>
   <string name="settings_highlightrule_sender">Pošiljalac</string>
   <string name="settings_highlightrule_channel">Kanal</string>
 
-  <string name="settings_aliaslist_title">Aliasi</string>
+  <string name="settings_aliaslist_title">Alijasi</string>
 
-  <string name="settings_aliasitem_title">Alias</string>
+  <string name="settings_aliasitem_title">Alijas</string>
   <string name="settings_aliasitem_name">Ime </string>
   <string name="settings_aliasitem_expansion">Ekspanzija</string>
 
   <string name="settings_networkconfig_title">IRC Podešavanja</string>
-  <string name="settings_networkconfig_ping_timeout">Detekcija Ping Timeout-a</string>
-  <string name="settings_networkconfig_ping_interval">Ping Interval</string>
+  <string name="settings_networkconfig_ping_timeout">Detekcija ping tajm-auta</string>
+  <string name="settings_networkconfig_ping_interval">Ping interval</string>
   <string name="settings_networkconfig_ping_interval_unit">sekundi</string>
   <string name="settings_networkconfig_max_ping_count">Prekini vezu posle</string>
   <string name="settings_networkconfig_max_ping_count_unit">propuštenih pingova</string>
-  <string name="settings_networkconfig_auto_who">Automatsko Pretraživanje Korisničkih Informacija</string>
+  <string name="settings_networkconfig_auto_who">Automatsko traženje korisničkih informacija</string>
   <string name="settings_networkconfig_auto_who_interval">Interval osvježavanja</string>
   <string name="settings_networkconfig_auto_who_interval_unit">sekundi</string>
   <string name="settings_networkconfig_auto_who_nick_limit">Ignoriši kanale sa više od</string>
