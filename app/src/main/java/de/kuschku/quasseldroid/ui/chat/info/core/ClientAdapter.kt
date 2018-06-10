@@ -20,6 +20,8 @@ import de.kuschku.quasseldroid.util.helper.getVectorDrawableCompat
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.tint
 import de.kuschku.quasseldroid.util.helper.visibleIf
+import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
+import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
@@ -33,6 +35,12 @@ class ClientAdapter : ListAdapter<CoreInfo.ConnectedClientData, ClientAdapter.Cl
                                     newItem: CoreInfo.ConnectedClientData) = oldItem == newItem
   }
 ) {
+  private val movementMethod = BetterLinkMovementMethod.newInstance()
+
+  init {
+    movementMethod.setOnLinkLongClickListener(LinkLongClickMenuHelper())
+  }
+
   private var disconnectListener: ((Int) -> Unit)? = null
   fun setDisconnectListener(listener: ((Int) -> Unit)?) {
     this.disconnectListener = listener
@@ -45,7 +53,8 @@ class ClientAdapter : ListAdapter<CoreInfo.ConnectedClientData, ClientAdapter.Cl
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ClientViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.widget_client, parent, false),
     dateTimeFormatter,
-    ::disconnect
+    ::disconnect,
+    movementMethod
   )
 
   private val dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
@@ -56,7 +65,8 @@ class ClientAdapter : ListAdapter<CoreInfo.ConnectedClientData, ClientAdapter.Cl
   class ClientViewHolder(
     itemView: View,
     private val dateTimeFormatter: DateTimeFormatter,
-    private val disconnectListener: (Int) -> Unit
+    private val disconnectListener: (Int) -> Unit,
+    movementMethod: BetterLinkMovementMethod
   ) : RecyclerView.ViewHolder(itemView) {
 
     @BindView(R.id.ip)
@@ -84,6 +94,7 @@ class ClientAdapter : ListAdapter<CoreInfo.ConnectedClientData, ClientAdapter.Cl
 
     init {
       ButterKnife.bind(this, itemView)
+      version.movementMethod = movementMethod
       disconnect.setOnClickListener {
         id?.let(disconnectListener::invoke)
       }

@@ -41,6 +41,8 @@ import de.kuschku.quasseldroid.util.missingfeatures.MissingFeature
 import de.kuschku.quasseldroid.util.missingfeatures.MissingFeaturesDialog
 import de.kuschku.quasseldroid.util.missingfeatures.RequiredFeatures
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
+import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
+import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
@@ -76,6 +78,12 @@ class CoreInfoFragment : ServiceBoundFragment() {
 
   private val dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
 
+  private val movementMethod = BetterLinkMovementMethod.newInstance()
+
+  init {
+    movementMethod.setOnLinkLongClickListener(LinkLongClickMenuHelper())
+  }
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.fragment_info_core, container, false)
@@ -106,6 +114,8 @@ class CoreInfoFragment : ServiceBoundFragment() {
         .readOnly(true)
         .show()
     }
+    version.movementMethod = movementMethod
+    versionDate.movementMethod = movementMethod
 
     val secure = requireContext().getVectorDrawableCompat(R.drawable.ic_lock)?.mutate()
     val partiallySecure = requireContext().getVectorDrawableCompat(R.drawable.ic_lock)?.mutate()
