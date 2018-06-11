@@ -21,10 +21,28 @@ package de.kuschku.quasseldroid.ui.clientsettings.client
 
 import android.content.Context
 import android.content.Intent
+import android.support.v7.preference.ListPreference
+import android.support.v7.preference.Preference
+import android.support.v7.preference.PreferenceFragmentCompat
+import de.kuschku.quasseldroid.util.ui.settings.ListPreferenceDialogFragmentCompat
 import de.kuschku.quasseldroid.util.ui.settings.SettingsActivity
 
-class ClientSettingsActivity : SettingsActivity(ClientSettingsFragment()) {
+class ClientSettingsActivity : SettingsActivity(ClientSettingsFragment()),
+                               PreferenceFragmentCompat.OnPreferenceDisplayDialogCallback {
+  override fun onPreferenceDisplayDialog(caller: PreferenceFragmentCompat, pref: Preference?) =
+    when (pref) {
+      is ListPreference -> {
+        val f = ListPreferenceDialogFragmentCompat.newInstance(pref.getKey())
+        f.setTargetFragment(fragment, 0)
+        f.show(supportFragmentManager!!, DIALOG_FRAGMENT_TAG)
+        true
+      }
+      else              -> false
+    }
+
   companion object {
+    private const val DIALOG_FRAGMENT_TAG = "android.support.v7.preference.PreferenceFragment.DIALOG"
+
     fun launch(context: Context) = context.startActivity(intent(context))
     fun intent(context: Context) = Intent(context, ClientSettingsActivity::class.java)
   }

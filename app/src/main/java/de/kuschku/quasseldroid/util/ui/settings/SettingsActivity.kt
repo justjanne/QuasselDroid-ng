@@ -30,7 +30,7 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.ui.ThemedActivity
 
-abstract class SettingsActivity(private val fragment: Fragment? = null) : ThemedActivity() {
+abstract class SettingsActivity(protected val fragment: Fragment? = null) : ThemedActivity() {
   protected open fun fragment(): Fragment? = null
 
   private var changeable: SettingsFragment.Changeable? = null

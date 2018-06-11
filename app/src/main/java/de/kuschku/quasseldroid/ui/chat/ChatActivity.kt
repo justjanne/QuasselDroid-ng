@@ -778,7 +778,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
               }
             }
             .negativeColorAttr(R.attr.colorTextPrimary)
-            .neutralColor(R.attr.colorTextPrimary)
+            .neutralColorAttr(R.attr.colorTextPrimary)
             .backgroundColorAttr(R.attr.colorBackgroundCard)
             .contentColorAttr(R.attr.colorTextPrimary)
             .titleColorAttr(R.attr.colorTextPrimary)
