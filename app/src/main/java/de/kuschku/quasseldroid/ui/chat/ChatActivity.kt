@@ -176,22 +176,25 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             val info = session.bufferSyncer?.find(
               bufferName = channel,
               networkId = networkId,
-              type = Buffer_Type.of(Buffer_Type.QueryBuffer)
+              type = Buffer_Type.of(Buffer_Type.ChannelBuffer)
             )
 
             if (info != null) {
-              ChatActivity.launch(this, bufferId = info.bufferId)
+              viewModel.buffer.onNext(info.bufferId)
+              viewModel.bufferOpened.onNext(Unit)
             } else {
-
               viewModel.allBuffers.map {
                 listOfNotNull(it.find {
-                  it.networkId == networkId && it.bufferName == channel
+                  it.networkId == networkId &&
+                  it.bufferName == channel &&
+                  it.type.hasFlag(Buffer_Type.ChannelBuffer)
                 })
               }.filter {
                 it.isNotEmpty()
               }.firstElement().toLiveData().observe(this, Observer {
                 it?.firstOrNull()?.let { info ->
-                  ChatActivity.launch(this, bufferId = info.bufferId)
+                  viewModel.buffer.onNext(info.bufferId)
+                  viewModel.bufferOpened.onNext(Unit)
                 }
               })
 
