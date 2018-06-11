@@ -84,6 +84,7 @@ import de.kuschku.quasseldroid.util.missingfeatures.RequiredFeatures
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid.util.ui.DragInterceptBottomSheetBehavior
 import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
+import de.kuschku.quasseldroid.util.ui.NickCountDrawable
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.data.BufferData
 import org.threeten.bp.Instant
@@ -681,6 +682,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    val nickCountDrawableSize = resources.getDimensionPixelSize(R.dimen.size_nick_count)
+    val nickCountDrawableColor = toolbar.context.theme.styledAttributes(R.attr.colorControlNormal) {
+      getColor(0, 0)
+    }
+
     menuInflater.inflate(R.menu.activity_main, menu)
     menu?.findItem(R.id.action_nicklist)?.isVisible = bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) ?: false
     menu?.findItem(R.id.action_filter_messages)?.isVisible =
@@ -691,6 +697,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
        bufferData?.info?.type?.hasFlag(Buffer_Type.QueryBuffer) ?: false) &&
       Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
     menu?.retint(toolbar.context)
+    viewModel.nickData.toLiveData().observe(this, Observer {
+      val count = it?.count() ?: 0
+      menu?.findItem(R.id.action_nicklist)?.icon = NickCountDrawable(count,
+                                                                     nickCountDrawableSize,
+                                                                     nickCountDrawableColor)
+    })
     return super.onCreateOptionsMenu(menu)
   }
 

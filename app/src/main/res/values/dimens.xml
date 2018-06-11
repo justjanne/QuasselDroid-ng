@@ -43,4 +43,5 @@
 
   <dimen name="notification_avatar_width">64dp</dimen>
   <dimen name="notification_avatar_height">64dp</dimen>
+  <dimen name="size_nick_count">24dp</dimen>
 </resources>
