@@ -140,6 +140,8 @@ class IrcChannel(
     _userModes.getOr(ircUser, "")
   }
 
+  fun userCount() = _userCount
+
   fun userModes(): Map<IrcUser, String> = _userModes
   fun userModes(nick: String) = network().ircUser(nick)?.let { userModes(it) } ?: ""
   fun liveUserModes(nick: String) = network().ircUser(nick)?.let { userModes(it) } ?: ""
@@ -256,7 +258,7 @@ class IrcChannel(
       _userModes[user] = modes
       user.joinChannel(this, true)
     }
-    live_userModes.onNext(_userModes)
+    updateUsers()
   }
 
   override fun joinIrcUser(ircuser: IrcUser) {
@@ -278,7 +280,7 @@ class IrcChannel(
       network().removeIrcChannel(this)
       proxy.stopSynchronize(this)
     }
-    live_userModes.onNext(_userModes)
+    updateUsers()
   }
 
   override fun part(nick: String) {
@@ -289,7 +291,7 @@ class IrcChannel(
     if (ircuser == null || !isKnownUser(ircuser))
       return
     _userModes[ircuser] = modes
-    live_userModes.onNext(_userModes)
+    updateUsers()
   }
 
   override fun setUserModes(nick: String, modes: String) {
@@ -306,7 +308,7 @@ class IrcChannel(
     if (_userModes.getOr(ircuser, "").contains(mode, ignoreCase = true))
       return
     _userModes[ircuser] = _userModes.getOr(ircuser, "") + mode
-    live_userModes.onNext(_userModes)
+    updateUsers()
   }
 
   override fun addUserMode(nick: String, mode: String) {
@@ -320,7 +322,7 @@ class IrcChannel(
       return
     _userModes[ircuser] = _userModes.getOr(ircuser, "")
       .replace(mode, "", ignoreCase = true)
-    live_userModes.onNext(_userModes)
+    updateUsers()
   }
 
   override fun removeUserMode(nick: String, mode: String) {
@@ -368,6 +370,12 @@ class IrcChannel(
       live_updates.onNext(Unit)
     }
 
+  private var _userCount: Int = 0
+    set(value) {
+      field = value
+      live_updates.onNext(Unit)
+    }
+
   private var _topic: String = ""
     set(value) {
       field = value
@@ -386,10 +394,17 @@ class IrcChannel(
       live_updates.onNext(Unit)
     }
 
+  private fun updateUsers() {
+    _userCount = _userModes.size
+    live_userModes.onNext(_userModes)
+  }
+
   private val live_userModes = BehaviorSubject.createDefault(mutableMapOf<IrcUser, String>())
   private var _userModes: MutableMap<IrcUser, String>
     get() = live_userModes.value
-    set(value) = live_userModes.onNext(value)
+    set(value) {
+      updateUsers()
+    }
 
   private var _network: Network = network
 

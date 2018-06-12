@@ -585,7 +585,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     })
 
     // Only show nick list when we’re in a channel buffer
-    viewModel.bufferData.distinctUntilChanged().toLiveData().observe(this, Observer {
+    viewModel.bufferData.toLiveData().observe(this, Observer {
       bufferData = it
       if (bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.END)
@@ -700,12 +700,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
        bufferData?.info?.type?.hasFlag(Buffer_Type.QueryBuffer) ?: false) &&
       Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
     menu?.retint(toolbar.context)
-    viewModel.nickData.toLiveData().observe(this, Observer {
-      val count = it?.count() ?: 0
-      menu?.findItem(R.id.action_nicklist)?.icon = NickCountDrawable(count,
-                                                                     nickCountDrawableSize,
-                                                                     nickCountDrawableColor)
-    })
+    menu?.findItem(R.id.action_nicklist)?.icon = NickCountDrawable(bufferData?.userCount ?: 0,
+                                                                   nickCountDrawableSize,
+                                                                   nickCountDrawableColor)
     return super.onCreateOptionsMenu(menu)
   }
 

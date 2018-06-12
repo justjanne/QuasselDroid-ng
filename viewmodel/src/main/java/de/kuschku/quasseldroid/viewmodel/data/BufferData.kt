@@ -25,5 +25,6 @@ import de.kuschku.libquassel.quassel.syncables.Network
 data class BufferData(
   val info: BufferInfo? = null,
   val network: Network? = null,
-  val description: String? = null
+  val description: String? = null,
+  val userCount: Int = 0
 )

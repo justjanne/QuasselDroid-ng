@@ -176,7 +176,8 @@ class QuasselViewModel : ViewModel() {
                     BufferData(
                       info = info,
                       network = network,
-                      description = it.topic()
+                      description = it.topic(),
+                      userCount = it.userCount()
                     )
                   }
                 }
@@ -201,7 +202,7 @@ class QuasselViewModel : ViewModel() {
     } else {
       Observable.just(BufferData())
     }
-  }
+  }.distinctUntilChanged().throttleLast(100, TimeUnit.MILLISECONDS)
 
   val nickData: Observable<List<IrcUserItem>> = combineLatest(session, buffer)
     .switchMap { (sessionOptional, buffer) ->
@@ -242,7 +243,7 @@ class QuasselViewModel : ViewModel() {
       } else {
         Observable.just(emptyList())
       }
-    }
+    }.distinctUntilChanged().throttleLast(100, TimeUnit.MILLISECONDS)
 
   val bufferViewConfigs = bufferViewManager.mapSwitchMap { manager ->
     manager.liveBufferViewConfigs().map { ids ->
@@ -331,7 +332,6 @@ class QuasselViewModel : ViewModel() {
         if (bufferSyncer != null && config != null) {
           session.liveNetworks().switchMap { networks ->
             config.liveUpdates()
-              .debounce(16, TimeUnit.MILLISECONDS)
               .switchMap { currentConfig ->
                 combineLatest<Collection<BufferId>>(
                   listOf(
@@ -517,5 +517,5 @@ class QuasselViewModel : ViewModel() {
         } else {
           Observable.just(Pair<BufferViewConfig?, List<BufferProps>>(null, emptyList()))
         }
-      }
+      }.distinctUntilChanged().throttleLast(100, TimeUnit.MILLISECONDS)
 }
