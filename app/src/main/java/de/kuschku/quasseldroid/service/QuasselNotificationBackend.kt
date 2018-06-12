@@ -50,6 +50,8 @@ import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.ui.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class QuasselNotificationBackend @Inject constructor(
@@ -61,6 +63,7 @@ class QuasselNotificationBackend @Inject constructor(
   private var notificationSettings: NotificationSettings
   private var appearanceSettings: AppearanceSettings
   private var messageSettings: MessageSettings
+  private val executor = Executors.newSingleThreadScheduledExecutor()
 
   @ColorInt
   private var selfColor: Int
@@ -220,7 +223,14 @@ class QuasselNotificationBackend @Inject constructor(
       )
     }
     database.notifications().save(*results.toTypedArray())
-    results.map(QuasselDatabase.NotificationData::bufferId).distinct().forEach(this::showNotification)
+    executor.schedule(
+      {
+        results.map(QuasselDatabase.NotificationData::bufferId).distinct()
+          .forEach(this::showNotification)
+      },
+      session.lag.value * 2,
+      TimeUnit.MILLISECONDS
+    )
   }
 
   @Synchronized
