@@ -267,7 +267,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       getColor(0, 0)
     }
 
-    combineLatest(viewModel.bufferList, viewModel.expandedNetworks, viewModel.selectedBuffer)
+    combineLatest(viewModel.bufferListThrottled,
+                  viewModel.expandedNetworks,
+                  viewModel.selectedBuffer)
       .toLiveData().zip(database.filtered().listen(accountId),
                         accountDatabase.accounts().listen(accountId))
       .observe(this, Observer { it ->

@@ -91,7 +91,7 @@ class ToolbarFragment : ServiceBoundFragment() {
       description, messageSettings.colorizeMirc
     )
 
-    combineLatest(viewModel.bufferData, viewModel.lag).toLiveData()
+    combineLatest(viewModel.bufferDataThrottled, viewModel.lag).toLiveData()
       .observe(this, Observer {
         if (it != null) {
           val (data, lag) = it
@@ -119,15 +119,22 @@ class ToolbarFragment : ServiceBoundFragment() {
       })
 
     actionArea.setOnClickListener {
-      viewModel.bufferData.value?.info?.let { info ->
+      val bufferData = viewModel.bufferData.value
+      bufferData?.info?.let { info ->
         when (info.type.toInt()) {
           BufferInfo.Type.QueryBuffer.toInt()   -> {
-            UserInfoActivity.launch(requireContext(), bufferId = info.bufferId, openBuffer = true)
+            UserInfoActivity.launch(
+              requireContext(),
+              bufferId = info.bufferId,
+              openBuffer = true
+            )
           }
           BufferInfo.Type.ChannelBuffer.toInt() -> {
-            ChannelInfoActivity.launch(requireContext(),
-                                       bufferId = info.bufferId,
-                                       openBuffer = true)
+            ChannelInfoActivity.launch(
+              requireContext(),
+              bufferId = info.bufferId,
+              openBuffer = true
+            )
           }
           else                                  -> null
         }

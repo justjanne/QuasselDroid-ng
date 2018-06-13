@@ -202,7 +202,9 @@ class QuasselViewModel : ViewModel() {
     } else {
       Observable.just(BufferData())
     }
-  }.distinctUntilChanged().throttleLast(100, TimeUnit.MILLISECONDS)
+  }
+  val bufferDataThrottled = bufferData.distinctUntilChanged().throttleLast(100,
+                                                                           TimeUnit.MILLISECONDS)
 
   val nickData: Observable<List<IrcUserItem>> = combineLatest(session, buffer)
     .switchMap { (sessionOptional, buffer) ->
@@ -243,7 +245,8 @@ class QuasselViewModel : ViewModel() {
       } else {
         Observable.just(emptyList())
       }
-    }.distinctUntilChanged().throttleLast(100, TimeUnit.MILLISECONDS)
+    }
+  val nickDataThrottled = nickData.distinctUntilChanged().throttleLast(100, TimeUnit.MILLISECONDS)
 
   val bufferViewConfigs = bufferViewManager.mapSwitchMap { manager ->
     manager.liveBufferViewConfigs().map { ids ->
@@ -517,5 +520,7 @@ class QuasselViewModel : ViewModel() {
         } else {
           Observable.just(Pair<BufferViewConfig?, List<BufferProps>>(null, emptyList()))
         }
-      }.distinctUntilChanged().throttleLast(100, TimeUnit.MILLISECONDS)
+      }
+  val bufferListThrottled = bufferList.distinctUntilChanged().throttleLast(100,
+                                                                           TimeUnit.MILLISECONDS)
 }

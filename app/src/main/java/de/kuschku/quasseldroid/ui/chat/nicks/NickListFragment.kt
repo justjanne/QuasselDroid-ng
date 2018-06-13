@@ -101,7 +101,7 @@ class NickListFragment : ServiceBoundFragment() {
     val colorContext = ColorContext(requireContext(), messageSettings)
 
     val avatarSize = resources.getDimensionPixelSize(R.dimen.avatar_size)
-    viewModel.nickData.toLiveData().observe(this, Observer {
+    viewModel.nickDataThrottled.toLiveData().observe(this, Observer {
       runInBackground {
         it?.asSequence()?.map {
           val nickName = it.nick

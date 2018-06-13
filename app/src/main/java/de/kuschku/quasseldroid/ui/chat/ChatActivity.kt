@@ -585,7 +585,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     })
 
     // Only show nick list when we’re in a channel buffer
-    viewModel.bufferData.toLiveData().observe(this, Observer {
+    viewModel.bufferDataThrottled.toLiveData().observe(this, Observer {
       bufferData = it
       if (bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.END)
