@@ -116,19 +116,19 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Android Architecture Components: Paging",
-        version = "1.0.0-alpha7",
+        version = "1.0.0",
         license = apache2,
         url = "https://android.googlesource.com/platform/frameworks/support/+/master/paging"
       ),
       Library(
         name = "Android Architecture Components: Persistence",
-        version = "1.1.0-rc1",
+        version = "1.1.1-rc1",
         license = apache2,
         url = "https://android.googlesource.com/platform/frameworks/support/+/master/persistence"
       ),
       Library(
         name = "Android Architecture Components: Room",
-        version = "1.1.0-rc1",
+        version = "1.1.1-rc1",
         license = apache2,
         url = "https://android.googlesource.com/platform/frameworks/support/+/master/persistence"
       ),
