@@ -26,7 +26,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.RestrictTo;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -43,8 +42,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import de.kuschku.quasseldroid.R;
-
-import static android.support.annotation.RestrictTo.Scope.LIBRARY_GROUP;
 
 /**
  * Abstract base class which presents a dialog associated with a
@@ -208,10 +205,7 @@ public abstract class PreferenceDialogFragmentCompat extends DialogFragment impl
    * Returns whether the preference needs to display a soft input method when the dialog
    * is displayed. Default is false. Subclasses should override this method if they need
    * the soft input method brought up automatically.
-   *
-   * @hide
    */
-  @RestrictTo(LIBRARY_GROUP)
   protected boolean needInputMethod() {
     return false;
   }

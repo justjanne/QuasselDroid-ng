@@ -29,7 +29,6 @@ import de.kuschku.malheur.CrashHandler
 import de.kuschku.quasseldroid.dagger.DaggerAppComponent
 import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.persistence.LegacyAccountDatabase
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.SettingsMigration
 import de.kuschku.quasseldroid.settings.SettingsMigrationManager

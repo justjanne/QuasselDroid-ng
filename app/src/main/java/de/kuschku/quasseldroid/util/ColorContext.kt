@@ -11,7 +11,7 @@ import de.kuschku.quasseldroid.util.ui.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 
 class ColorContext(context: Context, private val messageSettings: MessageSettings) {
-  val senderColors = context.theme.styledAttributes(
+  private val senderColors = context.theme.styledAttributes(
     R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
     R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,
     R.attr.senderColor8, R.attr.senderColor9, R.attr.senderColorA, R.attr.senderColorB,
@@ -22,15 +22,15 @@ class ColorContext(context: Context, private val messageSettings: MessageSetting
     }
   }
 
-  val selfColor = context.theme.styledAttributes(R.attr.colorForegroundSecondary) {
+  private val selfColor = context.theme.styledAttributes(R.attr.colorForegroundSecondary) {
     getColor(0, 0)
   }
 
-  val textColor = context.theme.styledAttributes(R.attr.colorBackground) {
+  private val textColor = context.theme.styledAttributes(R.attr.colorBackground) {
     getColor(0, 0)
   }
 
-  val radius = context.resources.getDimensionPixelSize(R.dimen.avatar_radius)
+  private val radius = context.resources.getDimensionPixelSize(R.dimen.avatar_radius)
 
 
   fun prepareTextDrawable(@ColorInt textColor: Int = this.textColor) =

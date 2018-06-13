@@ -616,7 +616,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     onNewIntent(intent)
   }
 
-  var bufferData: BufferData? = null
+  private var bufferData: BufferData? = null
   var actionMode: ActionMode? = null
   private var statusBarColor: Int? = null
 

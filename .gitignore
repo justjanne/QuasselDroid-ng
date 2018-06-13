@@ -5,8 +5,6 @@
 /.idea/
 .DS_Store
 /captures
-.externalNativeBuild
 build/
 /reports/
 /persistence/schemas/
-/deploy.sh

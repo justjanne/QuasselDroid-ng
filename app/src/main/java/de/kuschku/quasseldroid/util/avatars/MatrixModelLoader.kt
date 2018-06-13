@@ -25,7 +25,8 @@ import com.bumptech.glide.signature.ObjectKey
 import de.kuschku.quasseldroid.viewmodel.data.Avatar
 import java.io.InputStream
 
-class MatrixModelLoader(val api: MatrixApi) : ModelLoader<Avatar.MatrixAvatar, InputStream> {
+class MatrixModelLoader(private val api: MatrixApi) :
+  ModelLoader<Avatar.MatrixAvatar, InputStream> {
   override fun buildLoadData(model: Avatar.MatrixAvatar, width: Int, height: Int,
                              options: Options): ModelLoader.LoadData<InputStream>? {
     return ModelLoader.LoadData(ObjectKey(model), MatrixDataFetcher(model, api))

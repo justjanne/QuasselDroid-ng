@@ -38,8 +38,8 @@ import javax.net.ssl.X509TrustManager
 
 class SessionManager(
   offlineSession: ISession,
-  val backlogStorage: BacklogStorage,
-  val notificationManager: NotificationManager?,
+  private val backlogStorage: BacklogStorage,
+  private val notificationManager: NotificationManager?,
   val handlerService: HandlerService,
   private val disconnectFromCore: () -> Unit,
   private val initCallback: (Session) -> Unit,
@@ -58,7 +58,7 @@ class SessionManager(
   private var lastSession: ISession = offlineSession
   val state: Observable<ConnectionState> = inProgressSession.switchMap(ISession::state)
 
-  val initStatus: Observable<Pair<Int, Int>> = inProgressSession.switchMap(ISession::initStatus)
+  private val initStatus: Observable<Pair<Int, Int>> = inProgressSession.switchMap(ISession::initStatus)
   val session: Observable<ISession> = state.map { connectionState ->
     if (connectionState == ConnectionState.CONNECTED)
       inProgressSession.value
@@ -66,8 +66,7 @@ class SessionManager(
       lastSession
   }
 
-  var hasErrored: Boolean = false
-    private set
+  private var hasErrored: Boolean = false
 
   val error: Flowable<Error>
     get() = inProgressSession

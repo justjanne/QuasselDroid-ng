@@ -33,7 +33,7 @@ import javax.inject.Inject
  * color and format codes
  */
 class IrcFormatDeserializer @Inject constructor(context: Context) {
-  val mircColors = listOf(
+  private val mircColors = listOf(
     R.color.mircColor00, R.color.mircColor01, R.color.mircColor02, R.color.mircColor03,
     R.color.mircColor04, R.color.mircColor05, R.color.mircColor06, R.color.mircColor07,
     R.color.mircColor08, R.color.mircColor09, R.color.mircColor10, R.color.mircColor11,
@@ -64,7 +64,7 @@ class IrcFormatDeserializer @Inject constructor(context: Context) {
   /**
    * Function to handle mIRC formatted strings
    *
-   * @param str mIRC formatted String
+   * @param content mIRC formatted String
    * @return a CharSequence with Android’s span format representing the input string
    */
   fun formatString(content: String?, colorize: Boolean): CharSequence {

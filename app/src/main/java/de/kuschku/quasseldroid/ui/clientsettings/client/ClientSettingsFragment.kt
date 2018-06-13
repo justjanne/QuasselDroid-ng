@@ -79,13 +79,13 @@ class ClientSettingsFragment : DaggerPreferenceFragmentCompat(),
     }
   }
 
-  fun updateSummary(preference: Preference) {
+  private fun updateSummary(preference: Preference) {
     if (preference is ListPreference) {
       preference.summary = preference.entry
     }
   }
 
-  fun initSummary(preference: Preference) {
+  private fun initSummary(preference: Preference) {
     if (preference is PreferenceGroup) {
       (0 until preference.preferenceCount).asSequence().map(preference::getPreference).forEach(::initSummary)
     } else {

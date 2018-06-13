@@ -71,7 +71,6 @@ class QuasselViewModel : ViewModel() {
 
   val bufferViewConfigId = BehaviorSubject.createDefault(-1)
 
-  val MAX_RECENT_MESSAGES = 20
   val recentlySentMessages = BehaviorSubject.createDefault(emptyList<CharSequence>())
   fun addRecentlySentMessage(message: CharSequence) {
     recentlySentMessages.onNext(
@@ -523,4 +522,8 @@ class QuasselViewModel : ViewModel() {
       }
   val bufferListThrottled = bufferList.distinctUntilChanged().throttleLast(100,
                                                                            TimeUnit.MILLISECONDS)
+
+  companion object {
+    const val MAX_RECENT_MESSAGES = 20
+  }
 }

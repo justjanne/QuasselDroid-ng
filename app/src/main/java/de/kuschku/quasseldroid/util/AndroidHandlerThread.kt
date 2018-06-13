@@ -30,7 +30,7 @@ class AndroidHandlerThread(name: String) : HandlerThread(name) {
   private var handler: Handler? =
     null
 
-  fun started(): AndroidHandlerThread {
+  private fun started(): AndroidHandlerThread {
     onCreate()
     return this
   }

@@ -29,9 +29,9 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import de.kuschku.quasseldroid.R
 
-class RingtonePreference : DialogPreference,
-                           RequiresActivityLauncher,
-                           OnActivityResultListener {
+open class RingtonePreference : DialogPreference,
+                                RequiresActivityLauncher,
+                                OnActivityResultListener {
   private val TAG = "RingtonePreference"
 
   private var mRingtoneType: Int = 0

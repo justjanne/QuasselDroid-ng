@@ -42,7 +42,7 @@ import org.intellij.lang.annotations.Language
 import javax.inject.Inject
 
 class ContentFormatter @Inject constructor(
-  private val context: Context,
+  context: Context,
   private val ircFormatDeserializer: IrcFormatDeserializer,
   private val messageSettings: MessageSettings
 ) {
