@@ -24,7 +24,7 @@ import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.ERROR
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.persistence.QuasselBacklogStorage
@@ -40,7 +40,7 @@ class BacklogRequester(
                lastMessageId: MsgId? = null,
                untilAllVisible: Boolean = false,
                finishCallback: () -> Unit) {
-    log(ERROR,
+    log(DEBUG,
         "BacklogRequester",
         "requested(buffer: $buffer, amount: $amount, pageSize: $pageSize, lastMessageId: $lastMessageId, untilAllVisible: $untilAllVisible)")
     var missing = amount

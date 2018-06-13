@@ -24,7 +24,7 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.IBacklogManager
 import de.kuschku.libquassel.session.BacklogStorage
 import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.ERROR
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 
 class BacklogManager(
   private val session: Session,
@@ -73,7 +73,7 @@ class BacklogManager(
                               additional: Int, messages: QVariantList) {
     val list = messages.mapNotNull<QVariant_, Message>(QVariant_::value)
     loading.remove(bufferId)?.invoke(list)
-    log(ERROR, "BacklogManager", "storeMessages(${list.size})")
+    log(DEBUG, "BacklogManager", "storeMessages(${list.size})")
     backlogStorage.storeMessages(session, list)
   }
 
@@ -81,7 +81,7 @@ class BacklogManager(
                                  messages: QVariantList) {
     val list = messages.mapNotNull<QVariant_, Message>(QVariant_::value)
     loading.remove(-1)?.invoke(list)
-    log(ERROR, "BacklogManager", "storeMessages(${list.size})")
+    log(DEBUG, "BacklogManager", "storeMessages(${list.size})")
     backlogStorage.storeMessages(session, list)
   }
 
@@ -90,7 +90,7 @@ class BacklogManager(
                                       messages: QVariantList) {
     val list = messages.mapNotNull<QVariant_, Message>(QVariant_::value)
     loadingFiltered.remove(bufferId)?.invoke(list)
-    log(ERROR, "BacklogManager", "storeMessages(${list.size})")
+    log(DEBUG, "BacklogManager", "storeMessages(${list.size})")
     backlogStorage.storeMessages(session, list)
   }
 
@@ -98,7 +98,7 @@ class BacklogManager(
                                          type: Int, flags: Int, messages: QVariantList) {
     val list = messages.mapNotNull<QVariant_, Message>(QVariant_::value)
     loadingFiltered.remove(-1)?.invoke(list)
-    log(ERROR, "BacklogManager", "storeMessages(${list.size})")
+    log(DEBUG, "BacklogManager", "storeMessages(${list.size})")
     backlogStorage.storeMessages(session, list)
   }
 
