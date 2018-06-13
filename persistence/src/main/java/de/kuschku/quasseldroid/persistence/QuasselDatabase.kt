@@ -32,7 +32,7 @@ import io.reactivex.Flowable
 import org.threeten.bp.Instant
 
 @Database(entities = [MessageData::class, Filtered::class, SslValidityWhitelistEntry::class, SslHostnameWhitelistEntry::class, NotificationData::class],
-          version = 15)
+          version = 16)
 @TypeConverters(MessageTypeConverter::class)
 abstract class QuasselDatabase : RoomDatabase() {
   abstract fun message(): MessageDao
@@ -196,6 +196,7 @@ abstract class QuasselDatabase : RoomDatabase() {
   @Entity(tableName = "notification", indices = [Index("bufferId")])
   data class NotificationData(
     @PrimaryKey var messageId: MsgId,
+    var creationTime: Instant,
     var time: Instant,
     var type: Message_Types,
     var flag: Message_Flags,
@@ -212,7 +213,7 @@ abstract class QuasselDatabase : RoomDatabase() {
 
   @Dao
   interface NotificationDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun save(vararg entities: NotificationData)
 
     @Query("SELECT * FROM notification ORDER BY time ASC")
@@ -324,6 +325,11 @@ abstract class QuasselDatabase : RoomDatabase() {
               object : Migration(14, 15) {
                 override fun migrate(database: SupportSQLiteDatabase) {
                   database.execSQL("ALTER TABLE message ADD networkId INT DEFAULT 0 NOT NULL;")
+                }
+              },
+              object : Migration(15, 16) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL("ALTER TABLE `notification` ADD `creationTime` INT DEFAULT 0 NOT NULL;")
                 }
               }
             ).build()

@@ -50,6 +50,7 @@ import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.ui.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
+import org.threeten.bp.Instant
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -71,6 +72,8 @@ class QuasselNotificationBackend @Inject constructor(
 
   @ColorInt
   private var colorBackground: Int
+
+  private var initTime: Instant = Instant.EPOCH
 
   init {
     notificationSettings = Settings.notification(context)
@@ -95,6 +98,7 @@ class QuasselNotificationBackend @Inject constructor(
   }
 
   override fun init(session: Session) {
+    initTime = Instant.now()
     if (session.features.negotiated.hasFeature(ExtendedFeature.BacklogFilterType)) {
       val buffers = session.bufferSyncer.bufferInfos()
       for (buffer in buffers) {
@@ -175,6 +179,7 @@ class QuasselNotificationBackend @Inject constructor(
 
   @Synchronized
   override fun processMessages(session: Session, vararg messages: Message) {
+    val now = Instant.now()
     val results = messages.filter {
       val level = it.bufferInfo.type.let {
         when {
@@ -208,6 +213,7 @@ class QuasselNotificationBackend @Inject constructor(
     }.map {
       QuasselDatabase.NotificationData(
         messageId = it.messageId,
+        creationTime = now,
         time = it.time,
         type = it.type,
         flag = it.flag,
@@ -237,6 +243,10 @@ class QuasselNotificationBackend @Inject constructor(
   private fun showNotification(buffer: BufferId) {
     val data = database.notifications().all(buffer)
     data.lastOrNull()?.let {
+      // Only send a loud notification if it has any new messages
+      val max = data.maxBy { it.creationTime }
+      val isLoud = max?.creationTime?.isAfter(initTime) == true
+
       val bufferInfo = BufferInfo(
         bufferId = it.bufferId,
         bufferName = it.bufferName,
@@ -300,7 +310,7 @@ class QuasselNotificationBackend @Inject constructor(
         )
       }
       val notification = notificationHandler.notificationMessage(
-        notificationSettings, bufferInfo, notificationData
+        notificationSettings, bufferInfo, notificationData, isLoud
       )
       notificationHandler.notify(notification)
     } ?: notificationHandler.remove(buffer)

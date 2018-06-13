@@ -42,6 +42,7 @@ import de.kuschku.quasseldroid.settings.NotificationSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.util.NotificationMessage
 import de.kuschku.quasseldroid.util.helper.getColorCompat
+import de.kuschku.quasseldroid.util.helper.letIf
 import de.kuschku.quasseldroid.util.ui.LocaleHelper
 import javax.inject.Inject
 
@@ -77,6 +78,17 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
           enableVibration(true)
           lightColor = context.getColorCompat(R.color.colorPrimary)
           lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+        },
+        NotificationChannel(
+          translatedLocale.getString(R.string.notification_channel_old_highlight),
+          translatedLocale.getString(R.string.notification_channel_old_highlight_title),
+          NotificationManager.IMPORTANCE_DEFAULT
+        ).apply {
+          setSound(null, null)
+          enableLights(false)
+          enableVibration(false)
+          lightColor = context.getColorCompat(R.color.colorPrimary)
+          lockscreenVisibility = Notification.VISIBILITY_PRIVATE
         }
       )
     )
@@ -96,7 +108,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
   }
 
   fun notificationMessage(notificationSettings: NotificationSettings, bufferInfo: BufferInfo,
-                          notifications: List<NotificationMessage>): Handle {
+                          notifications: List<NotificationMessage>, isLoud: Boolean): Handle {
     val pendingIntentOpen = PendingIntent.getActivity(
       context.applicationContext,
       System.currentTimeMillis().toInt(),
@@ -145,7 +157,10 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
 
     val notification = NotificationCompat.Builder(
       context.applicationContext,
-      translatedLocale.getString(R.string.notification_channel_highlight)
+      translatedLocale.getString(
+        if (isLoud) R.string.notification_channel_highlight
+        else R.string.notification_channel_old_highlight
+      )
     )
       .setContentIntent(pendingIntentOpen)
       .setDeleteIntent(deletePendingIntent)
@@ -153,7 +168,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       .setColor(context.getColorCompat(R.color.colorPrimary))
       .setLights(context.getColorCompat(R.color.colorPrimary), 200, 200)
       .apply {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O && isLoud) {
           var defaults = 0
           if (!notificationSettings.sound.isEmpty()) {
             setSound(Uri.parse(notificationSettings.sound))
@@ -179,13 +194,15 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
                   }
       )
       .addAction(0, translatedLocale.getString(R.string.label_mark_read), markReadPendingIntent)
-      .addAction(
-        NotificationCompat.Action.Builder(
-          0,
-          translatedLocale.getString(R.string.label_reply),
-          replyPendingIntent
-        ).addRemoteInput(remoteInput).build()
-      )
+      .letIf(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        it.addAction(
+          NotificationCompat.Action.Builder(
+            0,
+            translatedLocale.getString(R.string.label_reply),
+            replyPendingIntent
+          ).addRemoteInput(remoteInput).build()
+        )
+      }
       .setWhen(notifications.last().time.toEpochMilli())
       .apply {
         if (bufferInfo.type.hasFlag(Buffer_Type.QueryBuffer)) {

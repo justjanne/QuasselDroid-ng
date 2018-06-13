@@ -133,7 +133,9 @@
   <string name="notification_channel_background" translatable="false">background</string>
   <string name="notification_channel_connection_title">Connection</string>
   <string name="notification_channel_highlight" translatable="false">highlight</string>
-  <string name="notification_channel_highlight_title">Highlight</string>
+  <string name="notification_channel_highlight_title">Highlights</string>
+  <string name="notification_channel_old_highlight" translatable="false">old_highlight</string>
+  <string name="notification_channel_old_highlight_title">Old Highlights</string>
 
   <string name="label_missing_features">Missing Features</string>
   <string name="info_missing_features">Your core is missing features that are required for Quasseldroid to work correctly.</string>
