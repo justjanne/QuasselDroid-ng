@@ -385,7 +385,6 @@ class QuasselService : DaggerLifecycleService(),
     updateNotificationStatus(this.progress)
   }
 
-  // Set default backoff to 5ms
   private var backoff = BACKOFF_MIN
   private var scheduled = false
   private fun scheduleReconnect() {
