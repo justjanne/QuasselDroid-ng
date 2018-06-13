@@ -323,7 +323,6 @@ abstract class QuasselDatabase : RoomDatabase() {
               },
               object : Migration(14, 15) {
                 override fun migrate(database: SupportSQLiteDatabase) {
-                  database.execSQL("DELETE FROM message;")
                   database.execSQL("ALTER TABLE message ADD networkId INT DEFAULT 0 NOT NULL;")
                 }
               }

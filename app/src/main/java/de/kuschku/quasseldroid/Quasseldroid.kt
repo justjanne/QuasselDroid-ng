@@ -157,10 +157,6 @@ class Quasseldroid : DaggerApplication() {
       )
     ).migrate(this)
 
-    // Initialize databases to run migrations
-    QuasselDatabase.Creator.init(this)
-    AccountDatabase.Creator.init(this)
-
     // Initialize preferences unless already set
 
     /*
