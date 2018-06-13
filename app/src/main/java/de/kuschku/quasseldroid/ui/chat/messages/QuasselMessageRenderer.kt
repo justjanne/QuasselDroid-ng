@@ -218,6 +218,13 @@ class QuasselMessageRenderer @Inject constructor(
           marginEnd = margin
         }
       }
+
+    viewHolder.messageContainer?.apply {
+      val horizontal = context.resources.getDimensionPixelSize(R.dimen.message_horizontal)
+      val vertical = context.resources.getDimensionPixelSize(R.dimen.message_vertical)
+
+      setPadding(horizontal, vertical, horizontal, vertical)
+    }
   }
 
   override fun bind(holder: MessageAdapter.QuasselMessageViewHolder, message: FormattedMessage,
@@ -235,8 +242,8 @@ class QuasselMessageRenderer @Inject constructor(
     ).roundToInt()
 
     val self = message.content.flag.hasFlag(Message_Flag.Self)
-    val highlight__ = message.content.flag.hasFlag(Message_Flag.Highlight)
-    val monochromeForeground = highlight__ && monochromeHighlights
+    val highlight = message.content.flag.hasFlag(Message_Flag.Highlight)
+    val monochromeForeground = highlight && monochromeHighlights
     return when (message.content.type.enabledValues().firstOrNull()) {
       Message_Type.Plain        -> {
         val realName = ircFormatDeserializer.formatString(message.content.realName,
