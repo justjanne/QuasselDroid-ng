@@ -216,6 +216,9 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun save(vararg entities: NotificationData)
 
+    @Query("SELECT DISTINCT bufferId FROM notification")
+    fun buffers(): List<BufferId>
+
     @Query("SELECT * FROM notification ORDER BY time ASC")
     fun all(): List<NotificationData>
 

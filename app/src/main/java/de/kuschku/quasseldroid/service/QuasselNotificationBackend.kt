@@ -126,7 +126,7 @@ class QuasselNotificationBackend @Inject constructor(
                                 Message_Type.Notice).toInt(),
                 0
               ) {
-                processMessages(session, *it.toTypedArray())
+                processMessages(session, false, *it.toTypedArray())
                 false
               }
           }
@@ -140,7 +140,7 @@ class QuasselNotificationBackend @Inject constructor(
                                 Message_Type.Notice).toInt(),
                 Message_Flag.of(Message_Flag.Highlight).toInt()
               ) {
-                processMessages(session, *it.toTypedArray())
+                processMessages(session, false, *it.toTypedArray())
                 false
               }
             }
@@ -150,6 +150,15 @@ class QuasselNotificationBackend @Inject constructor(
           }
         }
       }
+
+      // Cleanup
+      val removedBuffers = database.notifications().buffers().minus(buffers.map(BufferInfo::bufferId))
+      for (removedBuffer in removedBuffers) {
+        database.notifications().markRead(removedBuffer, MsgId.MAX_VALUE)
+      }
+
+      // Update notifications to have actions
+      showConnectedNotifications()
     }
   }
 
@@ -178,7 +187,7 @@ class QuasselNotificationBackend @Inject constructor(
   }
 
   @Synchronized
-  override fun processMessages(session: Session, vararg messages: Message) {
+  override fun processMessages(session: Session, show: Boolean, vararg messages: Message) {
     val now = Instant.now()
     val results = messages.filter {
       val level = it.bufferInfo.type.let {
@@ -229,18 +238,33 @@ class QuasselNotificationBackend @Inject constructor(
       )
     }
     database.notifications().save(*results.toTypedArray())
-    executor.schedule(
-      {
-        results.map(QuasselDatabase.NotificationData::bufferId).distinct()
-          .forEach(this::showNotification)
-      },
-      session.lag.value * 2,
-      TimeUnit.MILLISECONDS
-    )
+    if (show) {
+      executor.schedule(
+        {
+          results.map(QuasselDatabase.NotificationData::bufferId).distinct().forEach { buffer ->
+            this.showNotification(buffer)
+          }
+        },
+        session.lag.value * 2,
+        TimeUnit.MILLISECONDS
+      )
+    }
+  }
+
+  fun showConnectedNotifications() {
+    database.notifications().buffers().forEach { buffer ->
+      this.showNotification(buffer, true)
+    }
+  }
+
+  fun showDisconnectedNotifications() {
+    database.notifications().buffers().forEach { buffer ->
+      this.showNotification(buffer, false)
+    }
   }
 
   @Synchronized
-  private fun showNotification(buffer: BufferId) {
+  private fun showNotification(buffer: BufferId, isConnected: Boolean = true) {
     val data = database.notifications().all(buffer)
     data.lastOrNull()?.let {
       // Only send a loud notification if it has any new messages
@@ -310,7 +334,7 @@ class QuasselNotificationBackend @Inject constructor(
         )
       }
       val notification = notificationHandler.notificationMessage(
-        notificationSettings, bufferInfo, notificationData, isLoud
+        notificationSettings, bufferInfo, notificationData, isLoud, isConnected
       )
       notificationHandler.notify(notification)
     } ?: notificationHandler.remove(buffer)

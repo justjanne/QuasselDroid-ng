@@ -108,7 +108,8 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
   }
 
   fun notificationMessage(notificationSettings: NotificationSettings, bufferInfo: BufferInfo,
-                          notifications: List<NotificationMessage>, isLoud: Boolean): Handle {
+                          notifications: List<NotificationMessage>, isLoud: Boolean,
+                          isConnected: Boolean): Handle {
     val pendingIntentOpen = PendingIntent.getActivity(
       context.applicationContext,
       System.currentTimeMillis().toInt(),
@@ -198,15 +199,17 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
                     }
                   }
       )
-      .addAction(0, translatedLocale.getString(R.string.label_mark_read), markReadPendingIntent)
-      .letIf(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        it.addAction(
-          NotificationCompat.Action.Builder(
-            0,
-            translatedLocale.getString(R.string.label_reply),
-            replyPendingIntent
-          ).addRemoteInput(remoteInput).build()
-        )
+      .letIf(isConnected) {
+        it.addAction(0, translatedLocale.getString(R.string.label_mark_read), markReadPendingIntent)
+          .letIf(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            it.addAction(
+              NotificationCompat.Action.Builder(
+                0,
+                translatedLocale.getString(R.string.label_reply),
+                replyPendingIntent
+              ).addRemoteInput(remoteInput).build()
+            )
+          }
       }
       .setWhen(notifications.last().time.toEpochMilli())
       .apply {

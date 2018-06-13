@@ -366,6 +366,7 @@ class QuasselService : DaggerLifecycleService(),
 
           if (it == ConnectionState.CLOSED) {
             scheduleReconnect()
+            notificationBackend.showDisconnectedNotifications()
           }
         }
       })
