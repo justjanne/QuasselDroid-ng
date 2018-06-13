@@ -125,14 +125,10 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Query("UPDATE filtered SET filtered = :filtered WHERE accountId = :accountId AND bufferId = :bufferId")
     fun setFiltered(accountId: Long, bufferId: Int, filtered: Int)
 
-    @Query(
-      "SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT :default as filtered ORDER BY filtered DESC LIMIT 1"
-    )
+    @Query("SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT :default as filtered ORDER BY filtered DESC LIMIT 1")
     fun get(accountId: Long, bufferId: Int, default: Int): Int
 
-    @Query(
-      "SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT :default as filtered ORDER BY filtered DESC LIMIT 1"
-    )
+    @Query("SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT :default as filtered ORDER BY filtered DESC LIMIT 1")
     fun listen(accountId: Long, bufferId: Int, default: Int): LiveData<Int>
 
     @Query("SELECT * FROM filtered WHERE accountId = :accountId")
@@ -327,9 +323,8 @@ abstract class QuasselDatabase : RoomDatabase() {
               },
               object : Migration(14, 15) {
                 override fun migrate(database: SupportSQLiteDatabase) {
-                  database.execSQL(
-                    "ALTER TABLE message ADD networkId INT DEFAULT 0 NOT NULL;"
-                  )
+                  database.execSQL("DELETE FROM message;")
+                  database.execSQL("ALTER TABLE message ADD networkId INT DEFAULT 0 NOT NULL;")
                 }
               }
             ).build()
