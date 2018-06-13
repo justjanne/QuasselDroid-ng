@@ -47,10 +47,7 @@ import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
 import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
-import de.kuschku.quasseldroid.util.helper.combineLatest
-import de.kuschku.quasseldroid.util.helper.styledAttributes
-import de.kuschku.quasseldroid.util.helper.toLiveData
-import de.kuschku.quasseldroid.util.helper.zip
+import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.viewmodel.data.BufferHiddenState
@@ -269,10 +266,11 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
     combineLatest(viewModel.bufferListThrottled,
                   viewModel.expandedNetworks,
-                  viewModel.selectedBuffer)
-      .toLiveData().zip(database.filtered().listen(accountId),
-                        accountDatabase.accounts().listen(accountId))
-      .observe(this, Observer { it ->
+                  viewModel.selectedBuffer).toLiveData().switchMapNotNull { a ->
+      database.filtered().listen(accountId).zip(accountDatabase.accounts().listen(accountId)).map { (b, c) ->
+        Triple(a, b, c)
+      }
+    }.observe(this, Observer { it ->
         it?.let { (data, activityList, account) ->
           runInBackground {
             val (info, expandedNetworks, selected) = data

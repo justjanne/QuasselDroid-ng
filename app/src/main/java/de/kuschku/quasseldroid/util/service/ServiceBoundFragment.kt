@@ -60,6 +60,12 @@ abstract class ServiceBoundFragment : DaggerFragment() {
     super.onCreate(savedInstanceState)
   }
 
+  override fun onStart() {
+    super.onStart()
+    accountId = context?.getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
+      ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
+  }
+
   override fun onDestroy() {
     lifecycle.removeObserver(connection)
     super.onDestroy()
