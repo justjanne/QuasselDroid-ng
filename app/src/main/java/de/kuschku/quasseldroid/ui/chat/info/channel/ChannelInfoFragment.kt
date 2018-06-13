@@ -33,10 +33,7 @@ import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
-import de.kuschku.quasseldroid.util.helper.combineLatest
-import de.kuschku.quasseldroid.util.helper.retint
-import de.kuschku.quasseldroid.util.helper.setTooltip
-import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
@@ -127,12 +124,39 @@ class ChannelInfoFragment : ServiceBoundFragment() {
     topic.movementMethod = movementMethod
 
     actionEditTopic.setTooltip()
+    actionEditTopic.setCompoundDrawablesWithIntrinsicBounds(
+      null,
+      requireContext().getVectorDrawableCompat(R.drawable.ic_pencil),
+      null,
+      null
+    )
     actionEditTopic.retint()
+
     actionWho.setTooltip()
+    actionWho.setCompoundDrawablesWithIntrinsicBounds(
+      null,
+      requireContext().getVectorDrawableCompat(R.drawable.ic_info),
+      null,
+      null
+    )
     actionWho.retint()
+
     actionJoin.setTooltip()
+    actionJoin.setCompoundDrawablesWithIntrinsicBounds(
+      null,
+      requireContext().getVectorDrawableCompat(R.drawable.ic_account_plus),
+      null,
+      null
+    )
     actionJoin.retint()
+
     actionPart.setTooltip()
+    actionPart.setCompoundDrawablesWithIntrinsicBounds(
+      null,
+      requireContext().getVectorDrawableCompat(R.drawable.ic_account_minus),
+      null,
+      null
+    )
     actionPart.retint()
 
     return view

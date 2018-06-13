@@ -93,7 +93,6 @@
             android:id="@+id/action_query"
             style="@style/Widget.Info.ActionButton"
             android:contentDescription="@string/label_query_long"
-            android:drawableTop="@drawable/ic_message_bulleted"
             android:text="@string/label_query"
             tools:drawableTint="?colorTextSecondary" />
 
@@ -101,7 +100,6 @@
             android:id="@+id/action_ignore"
             style="@style/Widget.Info.ActionButton"
             android:contentDescription="@string/label_ignore_long"
-            android:drawableTop="@drawable/ic_eye_off"
             android:text="@string/label_ignore"
             android:visibility="gone"
             tools:drawableTint="?colorTextSecondary"
@@ -111,7 +109,6 @@
             android:id="@+id/action_whois"
             style="@style/Widget.Info.ActionButton"
             android:contentDescription="@string/label_whois_long"
-            android:drawableTop="@drawable/ic_info"
             android:text="@string/label_whois"
             tools:drawableTint="?colorTextSecondary" />
 
@@ -119,7 +116,6 @@
             android:id="@+id/action_mention"
             style="@style/Widget.Info.ActionButton"
             android:contentDescription="@string/label_mention_long"
-            android:drawableTop="@drawable/ic_share_alternative"
             android:text="@string/label_mention"
             tools:drawableTint="?colorTextSecondary" />
         </LinearLayout>

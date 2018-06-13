@@ -63,7 +63,6 @@
           android:id="@+id/action_edit_topic"
           style="@style/Widget.Info.ActionButton"
           android:contentDescription="@string/label_edit_topic_long"
-          android:drawableTop="@drawable/ic_pencil"
           android:text="@string/label_edit_topic"
           tools:drawableTint="?colorTextSecondary" />
 
@@ -71,7 +70,6 @@
           android:id="@+id/action_who"
           style="@style/Widget.Info.ActionButton"
           android:contentDescription="@string/label_who_long"
-          android:drawableTop="@drawable/ic_info"
           android:text="@string/label_who"
           tools:drawableTint="?colorTextSecondary" />
 
@@ -79,7 +77,6 @@
           android:id="@+id/action_part"
           style="@style/Widget.Info.ActionButton"
           android:contentDescription="@string/label_part_long"
-          android:drawableTop="@drawable/ic_account_minus"
           android:text="@string/label_part"
           tools:drawableTint="?colorTextSecondary" />
 
@@ -87,7 +84,6 @@
           android:id="@+id/action_join"
           style="@style/Widget.Info.ActionButton"
           android:contentDescription="@string/label_join_long"
-          android:drawableTop="@drawable/ic_account_plus"
           android:text="@string/label_join"
           android:visibility="gone"
           tools:drawableTint="?colorTextSecondary"

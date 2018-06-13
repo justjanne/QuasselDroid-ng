@@ -254,12 +254,39 @@ class UserInfoFragment : ServiceBoundFragment() {
     realName.movementMethod = movementMethod
 
     actionQuery.setTooltip()
+    actionQuery.setCompoundDrawablesWithIntrinsicBounds(
+      null,
+      requireContext().getVectorDrawableCompat(R.drawable.ic_message_bulleted),
+      null,
+      null
+    )
     actionQuery.retint()
+
     actionIgnore.setTooltip()
+    actionIgnore.setCompoundDrawablesWithIntrinsicBounds(
+      null,
+      requireContext().getVectorDrawableCompat(R.drawable.ic_eye_off),
+      null,
+      null
+    )
     actionIgnore.retint()
+
     actionWhois.setTooltip()
+    actionWhois.setCompoundDrawablesWithIntrinsicBounds(
+      null,
+      requireContext().getVectorDrawableCompat(R.drawable.ic_info),
+      null,
+      null
+    )
     actionWhois.retint()
+
     actionMention.setTooltip()
+    actionMention.setCompoundDrawablesWithIntrinsicBounds(
+      null,
+      requireContext().getVectorDrawableCompat(R.drawable.ic_share_alternative),
+      null,
+      null
+    )
     actionMention.retint()
 
     return view
