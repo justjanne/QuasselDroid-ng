@@ -32,6 +32,7 @@ class FormattedMessage(
   val fallbackDrawable: Drawable? = null,
   val realName: CharSequence? = null,
   val avatarUrls: List<Avatar> = emptyList(),
+  val urls: List<String> = emptyList(),
   val hasDayChange: Boolean,
   val isSelected: Boolean,
   val isExpanded: Boolean,
@@ -51,6 +52,7 @@ class FormattedMessage(
     if (combined != other.combined) return false
     if (realName != other.realName) return false
     if (avatarUrls != other.avatarUrls) return false
+    if (urls != other.urls) return false
     if (hasDayChange != other.hasDayChange) return false
     if (isSelected != other.isSelected) return false
     if (isExpanded != other.isExpanded) return false
@@ -68,6 +70,7 @@ class FormattedMessage(
     result = 31 * result + combined.hashCode()
     result = 31 * result + (realName?.hashCode() ?: 0)
     result = 31 * result + avatarUrls.hashCode()
+    result = 31 * result + urls.hashCode()
     result = 31 * result + hasDayChange.hashCode()
     result = 31 * result + isSelected.hashCode()
     result = 31 * result + isExpanded.hashCode()
