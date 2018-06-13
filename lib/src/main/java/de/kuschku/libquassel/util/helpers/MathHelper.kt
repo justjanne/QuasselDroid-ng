@@ -19,5 +19,8 @@
 
 package de.kuschku.libquassel.util.helpers
 
-inline fun Int.clamp(lowerBound: Int, upperBound: Int): Int =
-  maxOf(lowerBound, minOf(this, upperBound))
+inline fun clampOf(value: Int, lowerBound: Int, upperBound: Int): Int =
+  maxOf(lowerBound, minOf(value, upperBound))
+
+inline fun clampOf(value: Long, lowerBound: Long, upperBound: Long): Long =
+  maxOf(lowerBound, minOf(value, upperBound))

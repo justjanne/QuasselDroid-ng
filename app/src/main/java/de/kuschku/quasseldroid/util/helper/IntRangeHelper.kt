@@ -19,11 +19,11 @@
 
 package de.kuschku.quasseldroid.util.helper
 
-import de.kuschku.libquassel.util.helpers.clamp
+import de.kuschku.libquassel.util.helpers.clampOf
 
 infix fun IntRange.without(other: IntRange): Iterable<IntRange> {
-  val otherStart = minOf(other.start, other.last + 1).clamp(this.start, this.last + 1)
-  val otherLast = maxOf(other.start, other.last + 1).clamp(this.start, this.last + 1)
+  val otherStart = clampOf(minOf(other.start, other.last + 1), this.start, this.last + 1)
+  val otherLast = clampOf(maxOf(other.start, other.last + 1), this.start, this.last + 1)
 
   val startingFragment: IntRange = this.start until otherStart
   val endingFragment: IntRange = otherLast + 1 until this.last + 1

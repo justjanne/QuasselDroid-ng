@@ -35,7 +35,9 @@ import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.compatibility.LoggingHandler
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
+import de.kuschku.libquassel.util.helpers.clampOf
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.malheur.CrashHandler
 import de.kuschku.quasseldroid.BuildConfig
@@ -354,14 +356,17 @@ class QuasselService : DaggerLifecycleService(),
 
     sessionManager.state
       .distinctUntilChanged()
-      .delay(200, TimeUnit.MILLISECONDS)
-      .throttleFirst(1, TimeUnit.SECONDS)
       .toLiveData()
       .observe(
         this, Observer {
         handlerService.backend {
-          LoggingHandler.log(INFO, "QuasselService", "Autoreconnect: State Changed")
-          sessionManager.autoReconnect()
+          if (it == ConnectionState.HANDSHAKE) {
+            backoff = BACKOFF_MIN
+          }
+
+          if (it == ConnectionState.CLOSED) {
+            scheduleReconnect()
+          }
         }
       })
 
@@ -378,6 +383,23 @@ class QuasselService : DaggerLifecycleService(),
 
     update()
     updateNotificationStatus(this.progress)
+  }
+
+  // Set default backoff to 5ms
+  private var backoff = BACKOFF_MIN
+  private var scheduled = false
+  private fun scheduleReconnect() {
+    if (!scheduled) {
+      log(INFO, "QuasselService", "Reconnect: Scheduling backoff in ${backoff / 1_000} seconds")
+      scheduled = true
+      handlerService.backendDelayed(backoff) {
+        log(INFO, "QuasselService", "Reconnect: Scheduled backoff happened")
+        scheduled = false
+
+        backoff = clampOf(backoff * 2, BACKOFF_MIN, BACKOFF_MAX)
+        sessionManager.autoReconnect(true)
+      }
+    }
   }
 
   override fun onDestroy() {
@@ -412,6 +434,11 @@ class QuasselService : DaggerLifecycleService(),
   }
 
   companion object {
+    // default backoff is 5 seconds
+    const val BACKOFF_MIN = 5_000L
+    // max is 30 minutes
+    const val BACKOFF_MAX = 1_800_000L
+
     fun launch(
       context: Context,
       disconnect: Boolean? = null,

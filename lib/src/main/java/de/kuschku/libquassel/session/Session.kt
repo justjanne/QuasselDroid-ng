@@ -90,6 +90,8 @@ class Session(
 
   override val lag = BehaviorSubject.createDefault(0L)
 
+  private val heartBeatThread = HeartBeatThread(this)
+
   init {
     coreConnection.start()
   }
@@ -211,9 +213,9 @@ class Session(
       synchronize(networkConfig, true)
 
       synchronize(backlogManager)
-
-      dispatch(SignalProxyMessage.HeartBeat(Instant.now()))
     }
+
+    heartBeatThread.start()
 
     return true
   }
@@ -231,11 +233,11 @@ class Session(
     }
     notificationManager?.init(this)
     coreConnection.setState(ConnectionState.CONNECTED)
-    dispatch(SignalProxyMessage.HeartBeat(Instant.now()))
   }
 
   override fun handle(f: SignalProxyMessage.HeartBeatReply): Boolean {
     val now = Instant.now()
+    heartBeatThread.setLastHeartBeatReply(f.timestamp)
     val latency = now.toEpochMilli() - f.timestamp.toEpochMilli()
     lag.onNext(latency)
     return true
@@ -256,6 +258,8 @@ class Session(
 
   override fun close() {
     super.close()
+
+    heartBeatThread.end()
 
     coreConnection.close()
 

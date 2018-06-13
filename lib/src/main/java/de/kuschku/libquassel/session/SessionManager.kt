@@ -138,19 +138,23 @@ class SessionManager(
     )
   }
 
-  fun autoReconnect(forceReconnect: Boolean = false) {
-    if (!hasErrored) {
-      state.or(ConnectionState.DISCONNECTED).let {
-        if (it == ConnectionState.CLOSED) {
-          log(INFO, "SessionManager", "Autoreconnect triggered")
-          reconnect(forceReconnect)
-        } else {
-          log(INFO, "SessionManager", "Autoreconnect failed: state is $it")
-        }
+  /**
+   * @return if an autoreconnect has been necessary
+   */
+  fun autoReconnect(forceReconnect: Boolean = false) = if (!hasErrored) {
+    state.or(ConnectionState.DISCONNECTED).let {
+      if (it == ConnectionState.CLOSED) {
+        log(INFO, "SessionManager", "Autoreconnect triggered")
+        reconnect(forceReconnect)
+        true
+      } else {
+        log(INFO, "SessionManager", "Autoreconnect failed: state is $it")
+        false
       }
-    } else {
-      log(INFO, "SessionManager", "Autoreconnect failed: hasErrored")
     }
+  } else {
+    log(INFO, "SessionManager", "Autoreconnect failed: hasErrored")
+    false
   }
 
   fun reconnect(forceReconnect: Boolean = false) {

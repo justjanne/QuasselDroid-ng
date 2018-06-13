@@ -29,7 +29,6 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
 import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
-import org.threeten.bp.Instant
 import java.io.Closeable
 
 @Suppress("LeakingThis")
@@ -148,7 +147,6 @@ abstract class ProtocolHandler(
 
   override fun handle(f: SignalProxyMessage.HeartBeat): Boolean {
     dispatch(SignalProxyMessage.HeartBeatReply(f.timestamp))
-    dispatch(SignalProxyMessage.HeartBeat(Instant.now()))
     return true
   }
 
