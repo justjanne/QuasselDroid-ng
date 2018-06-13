@@ -168,13 +168,18 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       .setColor(context.getColorCompat(R.color.colorPrimary))
       .setLights(context.getColorCompat(R.color.colorPrimary), 200, 200)
       .apply {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O && isLoud) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
           var defaults = 0
-          if (!notificationSettings.sound.isEmpty()) {
-            setSound(Uri.parse(notificationSettings.sound))
+          if (isLoud) {
+            if (!notificationSettings.sound.isEmpty()) {
+              setSound(Uri.parse(notificationSettings.sound))
+            }
+            if (notificationSettings.vibrate) {
+              defaults = defaults or NotificationCompat.DEFAULT_VIBRATE
+            }
           }
-          if (notificationSettings.vibrate) {
-            defaults = defaults or NotificationCompat.DEFAULT_VIBRATE
+          if (notificationSettings.light) {
+            defaults = defaults or NotificationCompat.DEFAULT_LIGHTS
           }
           setDefaults(defaults)
         }
