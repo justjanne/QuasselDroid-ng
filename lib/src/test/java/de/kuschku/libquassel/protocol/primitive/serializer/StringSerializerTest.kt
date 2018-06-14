@@ -20,14 +20,37 @@
 package de.kuschku.libquassel.protocol.primitive.serializer
 
 import de.kuschku.libquassel.util.roundTrip
+import org.hamcrest.BaseMatcher
+import org.hamcrest.Description
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThat
 import org.junit.Test
 
 class StringSerializerTest {
   @Test
-  fun testAll() {
-    assertEquals("Test", roundTrip(StringSerializer.UTF16, "Test"))
-    assertEquals("Test", roundTrip(StringSerializer.UTF8, "Test"))
-    assertEquals("Test", roundTrip(StringSerializer.C, "Test"))
+  fun testVigListOfNaughtyStrings() {
+    this::class.java.getResourceAsStream("/blns.txt").bufferedReader(Charsets.UTF_8).forEachLine {
+      // Ignore comments
+      if (!it.startsWith('#')) {
+        assertThat<String>(roundTrip(StringSerializer.UTF16, it), BomMatcher(it))
+        assertThat<String>(roundTrip(StringSerializer.UTF8, it), BomMatcher(it))
+      }
+    }
+  }
+
+  @Test
+  fun testAscii() {
+    // The simple solution: Just test all
+    val it = String(CharArray(256, Int::toChar).toList().shuffled().toCharArray())
+    assertEquals(it, roundTrip(StringSerializer.C, it))
+  }
+
+  private class BomMatcher(private val expected: String) : BaseMatcher<String>() {
+    override fun describeTo(description: Description?) {
+      description?.appendText(expected)
+    }
+
+    override fun matches(item: Any?) =
+      (item as? String)?.endsWith(expected.trimStart('￾', '﻿')) == true
   }
 }
