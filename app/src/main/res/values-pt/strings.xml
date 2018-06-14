@@ -129,6 +129,9 @@
   <string name="label_feature_backlogfiltertype">Obrigatório para receber notificações passadas após a conexão</string>
 
   <string name="notification_channel_connection_title">Ligação</string>
+  <string name="notification_channel_highlight_title">Menções</string>
+  <string name="notification_channel_old_highlight_title">Menções Antigas</string>
+
   <string name="label_missing_features">Recursos Ausentes</string>
   <string name="info_missing_features">O seu núcleo tem em falta recursos que são necessários para o Quasseldroid funcionar corretamente.</string>
 
