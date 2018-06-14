@@ -39,10 +39,10 @@ keyPassword=passwordofyourkeyhere
   
 ## Acknowledgements
 
-This project was inspired by and is based on [Quasseldroid](https://github.com/sandsmark/quasseldroid)
+This project was inspired by and is based on [Quasseldroid Legacy](https://github.com/sandsmark/quasseldroid)
 as well as [Quassel](https://quassel-irc.org/).
 
-Authors of the previous version of Quasseldroid:
+Authors of legacy Quasseldroid:
 
 * **Frederik M. J. Vestre** (freqmod)
   Initial qdatastream deserialization attempts
