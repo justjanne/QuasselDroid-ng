@@ -114,6 +114,7 @@
     <item name="actionBarTheme">@style/Widget.AppBarOverlay.Auto</item>
     <item name="formatBarTheme">@style/Widget.AppBarOverlay.Auto</item>
     <item name="actionBarPopupTheme">@style/Widget.PopupOverlay.Auto</item>
+    <item name="popupTheme">@style/Widget.PopupOverlay.Auto</item>
 
     <item name="android:textColor">?colorTextPrimary</item>
     <item name="android:textColorSecondary">?colorTextSecondary</item>
@@ -152,6 +153,7 @@
     <item name="actionBarTheme">@style/Widget.AppBarOverlay.Light.Auto</item>
     <item name="formatBarTheme">@style/Widget.AppBarOverlay.Light.Auto</item>
     <item name="actionBarPopupTheme">@style/Widget.PopupOverlay.Light.Auto</item>
+    <item name="popupTheme">@style/Widget.PopupOverlay.Light.Auto</item>
 
     <item name="android:textColor">?colorTextPrimary</item>
     <item name="android:textColorPrimary">?colorTextPrimary</item>
@@ -163,6 +165,7 @@
     <item name="actionBarTheme">@style/Widget.AppBarOverlay.Light.DarkHead</item>
     <item name="formatBarTheme">@style/Widget.AppBarOverlay.Light.Auto</item>
     <item name="actionBarPopupTheme">@style/Widget.PopupOverlay.Light.Auto</item>
+    <item name="popupTheme">@style/Widget.PopupOverlay.Light.Auto</item>
 
     <item name="android:textColor">?colorTextPrimary</item>
     <item name="android:textColorPrimary">?colorTextPrimary</item>
