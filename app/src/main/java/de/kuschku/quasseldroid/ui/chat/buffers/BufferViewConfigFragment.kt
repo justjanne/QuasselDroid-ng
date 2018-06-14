@@ -264,7 +264,15 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       getColor(0, 0)
     }
 
-    combineLatest(viewModel.bufferListThrottled,
+    var hasRestoredChatListState = false
+    listAdapter.setOnUpdateFinishedListener {
+      if (!hasRestoredChatListState) {
+        savedInstanceState?.getParcelable<Parcelable>(KEY_STATE_LIST)
+          ?.let(chatList.layoutManager::onRestoreInstanceState)
+        hasRestoredChatListState = true
+      }
+    }
+    combineLatest(viewModel.bufferList,
                   viewModel.expandedNetworks,
                   viewModel.selectedBuffer).toLiveData().switchMapNotNull { a ->
       database.filtered().listen(accountId).zip(accountDatabase.accounts().listen(accountId)).map { (b, c) ->
@@ -344,15 +352,6 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       })
     listAdapter.setOnClickListener(this@BufferViewConfigFragment::clickListener)
     listAdapter.setOnLongClickListener(this@BufferViewConfigFragment::longClickListener)
-
-    var hasRestoredChatListState = false
-    listAdapter.setOnUpdateFinishedListener {
-      if (!hasRestoredChatListState) {
-        savedInstanceState?.getParcelable<Parcelable>(KEY_STATE_LIST)
-          ?.let(chatList.layoutManager::onRestoreInstanceState)
-        hasRestoredChatListState = true
-      }
-    }
     chatList.adapter = listAdapter
 
     viewModel.selectedBuffer.toLiveData().observe(this, Observer { buffer ->
@@ -444,10 +443,6 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     }
     chatList.itemAnimator = DefaultItemAnimator()
     chatList.setItemViewCacheSize(10)
-
-    savedInstanceState?.run {
-      chatList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
-    }
 
     viewModel.stateReset.toLiveData().observe(this, Observer {
       listAdapter.submitList(emptyList())

@@ -520,8 +520,6 @@ class QuasselViewModel : ViewModel() {
           Observable.just(Pair<BufferViewConfig?, List<BufferProps>>(null, emptyList()))
         }
       }
-  val bufferListThrottled = bufferList.distinctUntilChanged().throttleLast(100,
-                                                                           TimeUnit.MILLISECONDS)
 
   companion object {
     const val MAX_RECENT_MESSAGES = 20
