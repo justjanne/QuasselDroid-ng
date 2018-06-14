@@ -83,35 +83,26 @@
   <string name="preference_language_entry_auto">System Default</string>
   <string name="preference_language_entry_en" translatable="false">English</string>
   <string name="preference_language_entry_de" translatable="false">Deutsch</string>
-  <string name="preference_language_entry_fr" translatable="false">Français</string>
   <string name="preference_language_entry_fr_ca" translatable="false">Français (Canadien)</string>
-  <string name="preference_language_entry_nl" translatable="false">Nederlands</string>
   <string name="preference_language_entry_lt" translatable="false">Lietuvių</string>
   <string name="preference_language_entry_pt" translatable="false">Português</string>
-  <string name="preference_language_entry_pt_br" translatable="false">Português (Brasil)</string>
   <string name="preference_language_entry_sr" translatable="false">Srpski (latinica)</string>
   <string-array name="preference_language_entries" translatable="false">
     <item>@string/preference_language_entry_auto</item>
     <item>@string/preference_language_entry_en</item>
     <item>@string/preference_language_entry_de</item>
-    <!--<item>@string/preference_language_entry_fr</item>-->
     <item>@string/preference_language_entry_fr_ca</item>
-    <!--<item>@string/preference_language_entry_nl</item>-->
     <item>@string/preference_language_entry_lt</item>
     <item>@string/preference_language_entry_pt</item>
-    <!--<item>@string/preference_language_entry_pt_br</item>-->
     <item>@string/preference_language_entry_sr</item>
   </string-array>
   <string-array name="preference_language_entryvalues" translatable="false">
     <item />
     <item>en</item>
     <item>de</item>
-    <!--<item>fr</item>-->
     <item>fr-CA</item>
-    <!--<item>nl</item>-->
     <item>lt</item>
     <item>pt</item>
-    <!--<item>pt-BR</item>-->
     <item>sr</item>
   </string-array>
 

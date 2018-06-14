@@ -372,20 +372,12 @@ class AboutFragment : DaggerFragment() {
         language = R.string.preference_language_entry_fr_ca
       ),
       Translator(
-        name = "Noatak",
-        language = R.string.preference_language_entry_nl
-      ),
-      Translator(
         name = "TDa_",
         language = R.string.preference_language_entry_lt
       ),
       Translator(
         name = "Exterminador",
         language = R.string.preference_language_entry_pt
-      ),
-      Translator(
-        name = "Soni",
-        language = R.string.preference_language_entry_pt_br
       ),
       Translator(
         name = "Luka Ilić",
