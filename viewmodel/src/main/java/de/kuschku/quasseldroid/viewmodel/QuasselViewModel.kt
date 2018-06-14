@@ -44,7 +44,6 @@ import java.util.concurrent.TimeUnit
 
 class QuasselViewModel : ViewModel() {
   fun resetAccount() {
-    buffer.onNext(Int.MAX_VALUE)
     bufferViewConfigId.onNext(-1)
     selectedMessages.onNext(emptyMap())
     expandedMessages.onNext(emptySet())

@@ -55,6 +55,7 @@ import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.session.Error
+import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.and
 import de.kuschku.libquassel.util.flag.hasFlag
@@ -140,7 +141,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onNewIntent(intent: Intent?) {
     super.onNewIntent(intent)
-    if (intent != null && (intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
+    if (intent != null) {
       when {
         intent.type == "text/plain"                                     -> {
           chatlineFragment?.replaceText(intent.getStringExtra(Intent.EXTRA_TEXT))
@@ -172,39 +173,39 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           val networkId = intent.getIntExtra(KEY_NETWORK_ID, -1)
           val channel = intent.getStringExtra(KEY_CHANNEL)
 
-          viewModel.session.value?.orNull()?.also { session ->
-            val info = session.bufferSyncer?.find(
-              bufferName = channel,
-              networkId = networkId,
-              type = Buffer_Type.of(Buffer_Type.ChannelBuffer)
-            )
-
-            if (info != null) {
-              viewModel.buffer.onNext(info.bufferId)
-              viewModel.bufferOpened.onNext(Unit)
-            } else {
-              viewModel.allBuffers.map {
-                listOfNotNull(it.find {
-                  it.networkId == networkId &&
-                  it.bufferName == channel &&
-                  it.type.hasFlag(Buffer_Type.ChannelBuffer)
-                })
-              }.filter {
-                it.isNotEmpty()
-              }.firstElement().toLiveData().observe(this, Observer {
-                it?.firstOrNull()?.let { info ->
-                  viewModel.buffer.onNext(info.bufferId)
-                  viewModel.bufferOpened.onNext(Unit)
-                }
-              })
-
-              session.bufferSyncer?.find(
+          viewModel.session.filter(Optional<ISession>::isPresent).firstElement().subscribe {
+            it.orNull()?.also { session ->
+              val info = session.bufferSyncer?.find(
+                bufferName = channel,
                 networkId = networkId,
-                type = Buffer_Type.of(Buffer_Type.StatusBuffer)
-              )?.let { statusInfo ->
-                session.rpcHandler?.sendInput(
-                  statusInfo, "/join $channel"
-                )
+                type = Buffer_Type.of(Buffer_Type.ChannelBuffer)
+              )
+
+              if (info != null) {
+                ChatActivity.launch(this, bufferId = info.bufferId)
+              } else {
+                viewModel.allBuffers.map {
+                  listOfNotNull(it.find {
+                    it.networkId == networkId &&
+                    it.bufferName == channel &&
+                    it.type.hasFlag(Buffer_Type.ChannelBuffer)
+                  })
+                }.filter {
+                  it.isNotEmpty()
+                }.firstElement().subscribe {
+                  it?.firstOrNull()?.let { info ->
+                    ChatActivity.launch(this, bufferId = info.bufferId)
+                  }
+                }
+
+                session.bufferSyncer?.find(
+                  networkId = networkId,
+                  type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+                )?.let { statusInfo ->
+                  session.rpcHandler?.sendInput(
+                    statusInfo, "/join $channel"
+                  )
+                }
               }
             }
           }
@@ -281,7 +282,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       })
     }.toLiveData().observe(this, Observer { info ->
       info?.orNull()?.let {
-        viewModel.buffer.onNext(it.bufferId)
+        ChatActivity.launch(this, bufferId = it.bufferId)
       }
     })
 
@@ -926,6 +927,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     startedSelection = true
     connectedAccount = -1L
     restoredDrawerState = false
+    ChatActivity.launch(this, bufferId = Int.MAX_VALUE)
     viewModel.resetAccount()
   }
 

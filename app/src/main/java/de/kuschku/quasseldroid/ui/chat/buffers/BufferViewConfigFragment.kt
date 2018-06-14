@@ -44,6 +44,7 @@ import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
 import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
@@ -457,12 +458,13 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     outState.putParcelable(KEY_STATE_LIST, chatList.layoutManager.onSaveInstanceState())
   }
 
-  private fun clickListener(it: BufferId) {
+  private fun clickListener(bufferId: BufferId) {
     if (actionMode != null) {
-      longClickListener(it)
+      longClickListener(bufferId)
     } else {
-      viewModel.buffer.onNext(it)
-      viewModel.bufferOpened.onNext(Unit)
+      context?.let {
+        ChatActivity.launch(it, bufferId = bufferId)
+      }
     }
   }
 
