@@ -189,7 +189,7 @@ open class RingtonePreference : DialogPreference,
 
   private fun updateSummary(ringtoneUri: Uri?) {
     summary = ringtoneUri?.let {
-      RingtoneManager.getRingtone(context, ringtoneUri).getTitle(context)
+      RingtoneManager.getRingtone(context, ringtoneUri)?.getTitle(context)
     } ?: context.getString(R.string.label_no_sound)
   }
 
