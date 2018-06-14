@@ -35,7 +35,7 @@ import de.kuschku.quasseldroid.util.ui.RecyclerSpinnerAdapter
 
 class NetworkAdapter : RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(),
                        ThemedSpinnerAdapter {
-  var data = emptyList<INetwork.NetworkInfo?>()
+  var data = listOf<INetwork.NetworkInfo?>(null)
 
   fun submitList(list: List<INetwork.NetworkInfo?>) {
     data = list
@@ -83,7 +83,7 @@ class NetworkAdapter : RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(
     }
 
     fun bind(network: INetwork.NetworkInfo?) {
-      text.text = network?.networkName ?: "All"
+      text.text = network?.networkName ?: itemView.context.getString(R.string.settings_chatlist_network_all)
     }
   }
 }
