@@ -27,6 +27,8 @@ import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.util.compatibility.HandlerService
+import de.kuschku.libquassel.util.compatibility.LoggingHandler
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -239,6 +241,7 @@ class Session(
     val now = Instant.now()
     heartBeatThread.setLastHeartBeatReply(f.timestamp)
     val latency = now.toEpochMilli() - f.timestamp.toEpochMilli()
+    log(LoggingHandler.LogLevel.INFO, "Heartbeat", "Received Heartbeat with ${latency}ms latency")
     lag.onNext(latency)
     return true
   }

@@ -15,9 +15,10 @@ class HeartBeatThread(private val session: Session) : Thread() {
       val now = Instant.now()
       val duration = Duration.between(lastHeartBeatReply, now).toMillis()
       if (duration > TIMEOUT) {
-        log(INFO, "Session", "Ping Timeout: Last Response ${duration}ms ago")
+        log(INFO, "Heartbeat", "Ping Timeout: Last Response ${duration}ms ago")
         session.close()
       } else {
+        log(INFO, "Heartbeat", "Sending Heartbeat")
         session.dispatch(SignalProxyMessage.HeartBeat(now))
       }
     }
