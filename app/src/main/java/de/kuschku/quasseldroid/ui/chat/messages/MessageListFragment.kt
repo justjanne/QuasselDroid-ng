@@ -48,6 +48,7 @@ import de.kuschku.libquassel.quassel.syncables.BufferSyncer
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helpers.mapSwitchMap
+import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.quasseldroid.GlideApp
@@ -110,6 +111,7 @@ class MessageListFragment : ServiceBoundFragment() {
 
   private var lastBuffer: BufferId? = null
   private var previousMessageId: MsgId? = null
+  private var previousLoadKey: Int? = null
 
   private var actionMode: ActionMode? = null
 
@@ -318,7 +320,6 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     }
 
-    var previousLoadKey: Int? = null
     val data = combineLatest(viewModel.buffer,
                              viewModel.selectedMessages,
                              viewModel.expandedMessages,
@@ -387,9 +388,17 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     })
 
+    var hasLoaded = false
     fun checkScroll() {
-      if (linearLayoutManager.findFirstVisibleItemPosition() < 2 && !isScrolling) {
-        messageList.scrollToPosition(0)
+      if (hasLoaded) {
+        if (linearLayoutManager.findFirstVisibleItemPosition() < 2 && !isScrolling) {
+          messageList.scrollToPosition(0)
+        }
+      } else {
+        savedInstanceState?.apply {
+          messageList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
+        }
+        hasLoaded = true
       }
     }
 
@@ -398,37 +407,12 @@ class MessageListFragment : ServiceBoundFragment() {
       override fun onItemRangeInserted(positionStart: Int, itemCount: Int) = checkScroll()
     })
 
-    var lastBuffer = -1
-    data.observe(this, Observer { list ->
-      previousLoadKey = list?.lastKey as? Int
-      val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
-      val firstVisibleMessageId = adapter[firstVisibleItemPosition]?.content?.messageId
-      runInBackground {
-        activity?.runOnUiThread {
-          list?.let(adapter::submitList)
-        }
-
-        val buffer = viewModel.buffer.value ?: -1
-        if (buffer != lastBuffer) {
-          adapter.clearCache()
-          viewModel.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
-            onBufferChange(lastBuffer, buffer, firstVisibleMessageId, bufferSyncer)
-          }
-          lastBuffer = buffer
-        }
-      }
-    })
-
     scrollDown.hide(object : FloatingActionButton.OnVisibilityChangedListener() {
       override fun onHidden(fab: FloatingActionButton) {
         fab.visibility = View.VISIBLE
       }
     })
     scrollDown.setOnClickListener { messageList.scrollToPosition(0) }
-
-    savedInstanceState?.run {
-      messageList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
-    }
 
     val avatarSize = TypedValue.applyDimension(
       TypedValue.COMPLEX_UNIT_SP,
@@ -454,12 +438,40 @@ class MessageListFragment : ServiceBoundFragment() {
       adapter, requireContext(), R.dimen.markerline_height, R.attr.colorMarkerLine
     ))
 
+    savedInstanceState?.run {
+      messageList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
+      previousLoadKey = getInt(KEY_STATE_PAGING).nullIf { it == -1 }
+      lastBuffer = getInt(KEY_STATE_BUFFER).nullIf { it == -1 }
+    }
+
+    data.observe(this, Observer { list ->
+      previousLoadKey = list?.lastKey as? Int
+      val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
+      val firstVisibleMessageId = adapter[firstVisibleItemPosition]?.content?.messageId
+      runInBackground {
+        activity?.runOnUiThread {
+          list?.let(adapter::submitList)
+        }
+
+        val buffer = viewModel.buffer.value ?: -1
+        if (buffer != lastBuffer) {
+          adapter.clearCache()
+          viewModel.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
+            onBufferChange(lastBuffer, buffer, firstVisibleMessageId, bufferSyncer)
+          }
+          lastBuffer = buffer
+        }
+      }
+    })
+
     return view
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     outState.putParcelable(KEY_STATE_LIST, messageList.layoutManager.onSaveInstanceState())
+    outState.putInt(KEY_STATE_PAGING, previousLoadKey ?: -1)
+    outState.putInt(KEY_STATE_BUFFER, lastBuffer ?: -1)
   }
 
   private fun markAsRead(bufferSyncer: BufferSyncer, buffer: BufferId, lastMessageId: MsgId?) {
@@ -528,5 +540,7 @@ class MessageListFragment : ServiceBoundFragment() {
 
   companion object {
     private const val KEY_STATE_LIST = "KEY_STATE_LIST"
+    private const val KEY_STATE_PAGING = "KEY_STATE_PAGING"
+    private const val KEY_STATE_BUFFER = "KEY_STATE_BUFFER"
   }
 }
