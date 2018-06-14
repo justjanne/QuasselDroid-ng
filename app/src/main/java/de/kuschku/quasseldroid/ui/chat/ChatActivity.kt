@@ -140,7 +140,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onNewIntent(intent: Intent?) {
     super.onNewIntent(intent)
-    if (intent != null) {
+    if (intent != null && (intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
       when {
         intent.type == "text/plain"                                     -> {
           chatlineFragment?.replaceText(intent.getStringExtra(Intent.EXTRA_TEXT))
