@@ -111,7 +111,7 @@
   <string name="preference_larger_emoji_summary">Padidinti emoji žinutes</string>
 
   <string name="preference_highlight_own_messages_title">Žymėti savo žinutes</string>
-  <string name="preference_highlight_own_messages_summary">Paryškinti savo žinutes</string>
+  <string name="preference_highlight_own_messages_summary">Lengviau atskirsite savo išsiųstas žinutes</string>
 
 
   <string name="preference_autocomplete_title">Auto-užbaigimas</string>
