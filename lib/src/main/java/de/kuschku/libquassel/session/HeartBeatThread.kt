@@ -1,6 +1,8 @@
 package de.kuschku.libquassel.session
 
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 
@@ -11,7 +13,9 @@ class HeartBeatThread(private val session: Session) : Thread() {
     while (running) {
       Thread.sleep(30_000)
       val now = Instant.now()
-      if (Duration.between(lastHeartBeatReply, now).toMillis() > TIMEOUT) {
+      val duration = Duration.between(lastHeartBeatReply, now).toMillis()
+      if (duration > TIMEOUT) {
+        log(INFO, "Session", "Ping Timeout: Last Response ${duration}ms ago")
         session.close()
       } else {
         session.dispatch(SignalProxyMessage.HeartBeat(now))
