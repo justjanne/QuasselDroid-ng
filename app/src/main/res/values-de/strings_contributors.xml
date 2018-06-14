@@ -22,5 +22,5 @@
   <string name="contributor_description_sandsmark">Historische Protokollimplementierung, (De-)Serialisierer, Projekt (De-)Moralisierer</string>
   <string name="contributor_description_magnuf">Historisches UI</string>
   <string name="contributor_description_kenji">Historisches UI</string>
-  <string name="contributor_description_justjanne">Rwerite, UI, Annotation Processors, Backend</string>
+  <string name="contributor_description_justjanne">Rewrite, UI, Annotation Processors, Backend</string>
 </resources>
