@@ -90,7 +90,7 @@
   <string name="label_rename">Pervardinti</string>
   <string name="label_save">Išsaugoti</string>
   <string name="label_select">Pasirinkti</string>
-  <string name="label_set_default">Nustatyti kaip numatytąjį</string>
+  <string name="label_set_default">Nustatyti numatytą</string>
   <string name="label_settings">Nustatymai</string>
   <string name="label_settings_client">Kliento nustatymai</string>
   <string name="label_settings_core">Branduolio nustatymai</string>
@@ -129,7 +129,8 @@
   <string name="label_feature_backlogfiltertype">Reikalinga norint gauti senus pranešimus po prisijungimo</string>
 
   <string name="notification_channel_connection_title">Ryšys</string>
-  <string name="notification_channel_highlight_title">Pažymėta</string>
+  <string name="notification_channel_highlight_title">Žymėjimai</string>
+  <string name="notification_channel_old_highlight_title">Seni žymėjimai</string>
 
   <string name="label_missing_features">Trūkstamos funkcijos</string>
   <string name="info_missing_features">Jūsų branduolyje trūksta funkcijų kurios užtikrintų sklandų Quasseldroid darbą</string>

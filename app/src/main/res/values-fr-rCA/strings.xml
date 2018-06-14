@@ -129,8 +129,6 @@
   <string name="label_feature_backlogfiltertype">Requis pour recevoir des notifications antérieures après la connection</string>
 
   <string name="notification_channel_connection_title">Connection</string>
-  <string name="notification_channel_highlight_title">Highlight</string>
-
   <string name="label_missing_features">Fonctionnalités Manquantes</string>
   <string name="info_missing_features">Votre Core manque certaines fonctionnalités qui sont requises pour que Quasseldroid marche correctement.</string>
 

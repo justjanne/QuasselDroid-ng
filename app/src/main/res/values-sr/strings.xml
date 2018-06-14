@@ -129,8 +129,6 @@
   <string name="label_feature_backlogfiltertype">Potrebno za primanje prošlih obaveštenja posle povezivanja</string>
 
   <string name="notification_channel_connection_title">Veza</string>
-  <string name="notification_channel_highlight_title">Isticanje</string>
-
   <string name="label_missing_features">Funkcije koje nedostaju</string>
   <string name="info_missing_features">Vašem jezgru nedostaju funkcije potrebne za pravilno funkcionisanje Quasseldroid-a.</string>
 

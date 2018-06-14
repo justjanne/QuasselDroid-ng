@@ -129,7 +129,8 @@
   <string name="label_feature_backlogfiltertype">Benötigt um vergangene Benachrichtigungen nach dem Verbinden zu erhalten</string>
 
   <string name="notification_channel_connection_title">Verbindung</string>
-  <string name="notification_channel_highlight_title">Erwähnungen</string>
+  <string name="notification_channel_highlight_title">Benachrichtigungen</string>
+  <string name="notification_channel_old_highlight_title">Alte Benachrichtigungen</string>
 
   <string name="label_missing_features">Fehlende Features</string>
   <string name="info_missing_features">Deinem Core fehlen bestimmte Features die benötigt werden damit Quasseldroid korrekt funktionieren kann</string>
