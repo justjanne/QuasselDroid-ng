@@ -110,7 +110,7 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.2.41"))
+  implementation(kotlin("stdlib", "1.2.50"))
 
   // App Compat
   withVersion("27.1.1") {
