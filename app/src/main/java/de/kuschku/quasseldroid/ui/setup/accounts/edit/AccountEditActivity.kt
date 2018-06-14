@@ -24,13 +24,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
-import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.afollestad.materialdialogs.MaterialDialog
 import dagger.android.support.DaggerAppCompatActivity
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
@@ -156,10 +156,14 @@ class AccountEditActivity : DaggerAppCompatActivity() {
 
   override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
     R.id.action_delete -> {
-      AlertDialog.Builder(this)
-        .setTitle("Delete?")
-        .setMessage("Are you sure?")
-        .setPositiveButton("Delete") { _, _ ->
+      MaterialDialog.Builder(this)
+        .content(R.string.delete_confirmation)
+        .positiveText(R.string.label_yes)
+        .negativeText(R.string.label_no)
+        .negativeColorAttr(R.attr.colorTextPrimary)
+        .backgroundColorAttr(R.attr.colorBackgroundCard)
+        .contentColorAttr(R.attr.colorTextPrimary)
+        .onPositive { _, _ ->
           val it = account
           if (it != null)
             handler.post {
@@ -174,9 +178,7 @@ class AccountEditActivity : DaggerAppCompatActivity() {
           setResult(Activity.RESULT_OK)
           finish()
         }
-        .setNegativeButton("Cancel") { dialogInterface, _ ->
-          dialogInterface.cancel()
-        }
+        .build()
         .show()
       true
     }
