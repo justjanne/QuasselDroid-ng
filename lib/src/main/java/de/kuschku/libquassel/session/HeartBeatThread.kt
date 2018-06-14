@@ -11,7 +11,6 @@ class HeartBeatThread(private val session: Session) : Thread() {
   private var lastHeartBeatReply: Instant = Instant.now()
   override fun run() {
     while (running) {
-      Thread.sleep(30_000)
       val now = Instant.now()
       val duration = Duration.between(lastHeartBeatReply, now).toMillis()
       if (duration > TIMEOUT) {
@@ -21,6 +20,7 @@ class HeartBeatThread(private val session: Session) : Thread() {
         log(INFO, "Heartbeat", "Sending Heartbeat")
         session.dispatch(SignalProxyMessage.HeartBeat(now))
       }
+      Thread.sleep(30_000)
     }
   }
 
