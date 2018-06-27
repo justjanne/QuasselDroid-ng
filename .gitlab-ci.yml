@@ -1,4 +1,4 @@
-image: "k8r.eu/justjanne/android-sdk:27-27.0.3-26.1.1"
+image: "k8r.eu/justjanne/android-sdk:28-28.0.0-26.1.1"
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
