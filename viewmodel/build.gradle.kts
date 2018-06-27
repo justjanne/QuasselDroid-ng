@@ -23,12 +23,12 @@ plugins {
 }
 
 android {
-  compileSdkVersion(27)
-  buildToolsVersion("27.0.3")
+  compileSdkVersion(28)
+  buildToolsVersion("28.0.0")
 
   defaultConfig {
     minSdkVersion(16)
-    targetSdkVersion(27)
+    targetSdkVersion(28)
 
     consumerProguardFiles("proguard-rules.pro")
 

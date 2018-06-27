@@ -1,16 +1,23 @@
-package de.kuschku.libquassel.session
+package de.kuschku.quasseldroid.service
 
+import android.os.Handler
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
+import de.kuschku.libquassel.session.HeartBeatRunner
+import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 
-class HeartBeatThread(private val session: Session) : Thread() {
+class AndroidHeartBeatRunner(
+  private val session: Session,
+  private val handler: Handler
+) : HeartBeatRunner {
   private var running = true
   private var lastHeartBeatReply: Instant = Instant.now()
-  override fun run() {
-    while (running) {
+
+  override fun start() {
+    if (running) {
       val now = Instant.now()
       val duration = Duration.between(lastHeartBeatReply, now).toMillis()
       if (duration > TIMEOUT) {
@@ -20,20 +27,20 @@ class HeartBeatThread(private val session: Session) : Thread() {
         log(INFO, "Heartbeat", "Sending Heartbeat")
         session.dispatch(SignalProxyMessage.HeartBeat(now))
       }
-      Thread.sleep(30_000)
+      handler.postDelayed(::start, DELAY)
     }
   }
 
-  fun end() {
+  override fun end() {
     running = false
   }
 
-  fun setLastHeartBeatReply(time: Instant) {
+  override fun setLastHeartBeatReply(time: Instant) {
     this.lastHeartBeatReply = time
   }
 
   companion object {
-    // Timeout, set to 2 minutes
     const val TIMEOUT = 120_000L
+    const val DELAY = 30_000L
   }
 }

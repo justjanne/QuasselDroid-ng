@@ -41,6 +41,7 @@ class SessionManager(
   private val backlogStorage: BacklogStorage,
   private val notificationManager: NotificationManager?,
   val handlerService: HandlerService,
+  private val heartBeatFactory: (Session) -> HeartBeatRunner,
   private val disconnectFromCore: () -> Unit,
   private val initCallback: (Session) -> Unit,
   private val exceptionHandler: (Throwable) -> Unit
@@ -131,6 +132,7 @@ class SessionManager(
         backlogStorage,
         notificationManager,
         userData,
+        heartBeatFactory,
         disconnectFromCore,
         initCallback,
         exceptionHandler

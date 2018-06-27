@@ -22,6 +22,7 @@ package de.kuschku.quasseldroid.service
 import android.arch.lifecycle.Observer
 import android.content.*
 import android.net.ConnectivityManager
+import android.os.Handler
 import android.support.v4.app.RemoteInput
 import android.text.SpannableString
 import de.kuschku.libquassel.connection.ConnectionState
@@ -312,6 +313,7 @@ class QuasselService : DaggerLifecycleService(),
       QuasselBacklogStorage(database),
       notificationBackend,
       handlerService,
+      { session: Session -> AndroidHeartBeatRunner(session, Handler()) },
       ::disconnectFromCore,
       ::initCallback,
       CrashHandler::handle

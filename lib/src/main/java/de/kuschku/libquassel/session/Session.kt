@@ -45,6 +45,7 @@ class Session(
   backlogStorage: BacklogStorage,
   private val notificationManager: NotificationManager?,
   private var userData: Pair<String, String>,
+  heartBeatFactory: (Session) -> HeartBeatRunner,
   val disconnectFromCore: () -> Unit,
   private val initCallback: (Session) -> Unit,
   exceptionHandler: (Throwable) -> Unit
@@ -92,7 +93,7 @@ class Session(
 
   override val lag = BehaviorSubject.createDefault(0L)
 
-  private val heartBeatThread = HeartBeatThread(this)
+  private val heartBeatThread = heartBeatFactory(this)
 
   init {
     coreConnection.start()
