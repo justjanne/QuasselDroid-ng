@@ -29,7 +29,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
@@ -37,6 +36,7 @@ import de.kuschku.quasseldroid.util.helper.letIf
 import de.kuschku.quasseldroid.util.helper.loadAvatars
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
+import de.kuschku.quasseldroid.util.ui.fastscroll.views.FastScrollRecyclerView
 import de.kuschku.quasseldroid.viewmodel.data.IrcUserItem
 
 class NickListAdapter(

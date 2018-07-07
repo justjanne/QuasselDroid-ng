@@ -110,7 +110,7 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.2.50"))
+  implementation(kotlin("stdlib", "1.2.51"))
 
   // App Compat
   withVersion("27.1.1") {
@@ -166,7 +166,6 @@ dependencies {
 
   // UI
   implementation("me.zhanghai.android.materialprogressbar", "library", "1.4.2")
-  implementation("com.simplecityapps", "recyclerview-fastscroll", "1.0.18")
   withVersion("0.9.6.0") {
     implementation("com.afollestad.material-dialogs", "core", version)
     implementation("com.afollestad.material-dialogs", "commons", version)

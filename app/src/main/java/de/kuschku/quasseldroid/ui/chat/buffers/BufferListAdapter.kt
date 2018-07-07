@@ -29,7 +29,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.NetworkId
@@ -39,6 +38,7 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.lists.ListAdapter
+import de.kuschku.quasseldroid.util.ui.fastscroll.views.FastScrollRecyclerView
 import de.kuschku.quasseldroid.viewmodel.data.BufferListItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferProps
 import de.kuschku.quasseldroid.viewmodel.data.BufferState

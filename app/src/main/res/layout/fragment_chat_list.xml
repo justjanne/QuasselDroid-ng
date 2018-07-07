@@ -49,7 +49,7 @@
   </android.support.design.widget.AppBarLayout>
 
 
-  <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+  <de.kuschku.quasseldroid.util.ui.fastscroll.views.FastScrollRecyclerView
     android:id="@+id/chatList"
     style="@style/Widget.FastScroller"
     android:layout_width="match_parent"
