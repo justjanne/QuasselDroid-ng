@@ -15,16 +15,18 @@ class AndroidHeartBeatRunner(
 ) : HeartBeatRunner {
   private var running = true
   private var lastHeartBeatReply: Instant = Instant.now()
+  private var lastHeartBeatSend: Instant = Instant.now()
 
   override fun start() {
     if (running) {
-      val now = Instant.now()
-      val duration = Duration.between(lastHeartBeatReply, now).toMillis()
+      val duration = Duration.between(lastHeartBeatReply, lastHeartBeatSend).toMillis()
       if (duration > TIMEOUT) {
         log(INFO, "Heartbeat", "Ping Timeout: Last Response ${duration}ms ago")
         session.close()
       } else {
         log(INFO, "Heartbeat", "Sending Heartbeat")
+        val now = Instant.now()
+        lastHeartBeatSend = now
         session.dispatch(SignalProxyMessage.HeartBeat(now))
       }
       handler.postDelayed(::start, DELAY)
@@ -40,7 +42,7 @@ class AndroidHeartBeatRunner(
   }
 
   companion object {
-    const val TIMEOUT = 120_000L
+    const val TIMEOUT = 90_000L
     const val DELAY = 30_000L
   }
 }
