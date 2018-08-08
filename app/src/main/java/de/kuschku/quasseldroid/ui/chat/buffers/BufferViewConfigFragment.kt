@@ -267,7 +267,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
     var hasRestoredChatListState = false
     listAdapter.setOnUpdateFinishedListener {
-      if (!hasRestoredChatListState) {
+      if (!hasRestoredChatListState && it.isNotEmpty()) {
         savedInstanceState?.getParcelable<Parcelable>(KEY_STATE_LIST)
           ?.let(chatList.layoutManager::onRestoreInstanceState)
         hasRestoredChatListState = true
