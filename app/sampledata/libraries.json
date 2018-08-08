@@ -161,7 +161,7 @@
     },
     {
       "name": "Kotlin Standard Library",
-      "version": "1.2.51",
+      "version": "1.2.60",
       "license": {
         "short_name": "Apache-2.0",
         "full_name": "Apache License"

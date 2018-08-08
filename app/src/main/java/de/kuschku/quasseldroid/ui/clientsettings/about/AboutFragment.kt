@@ -227,7 +227,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Kotlin Standard Library",
-        version = "1.2.51",
+        version = "1.2.60",
         license = apache2,
         url = "https://kotlinlang.org/"
       ),
