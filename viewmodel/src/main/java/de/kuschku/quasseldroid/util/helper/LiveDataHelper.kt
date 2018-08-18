@@ -31,7 +31,7 @@ inline fun <X, Y> LiveData<X?>.switchMap(
   val result = MediatorLiveData<Y>()
   result.addSource(
     this, object : Observer<X?> {
-    internal var mSource: LiveData<Y>? = null
+    var mSource: LiveData<Y>? = null
 
     override fun onChanged(x: X?) {
       val newLiveData = if (x == null) null else func(x)
@@ -57,7 +57,7 @@ inline fun <X, Y> LiveData<X>.switchMapNotNull(
   val result = MediatorLiveData<Y>()
   result.addSource(
     this, object : Observer<X> {
-    internal var mSource: LiveData<Y>? = null
+    var mSource: LiveData<Y>? = null
 
     override fun onChanged(x: X?) {
       val newLiveData = if (x == null) null else func(x)
@@ -84,7 +84,7 @@ inline fun <X, Y> LiveData<X?>.switchMapRx(
   val result = MediatorLiveData<Y>()
   result.addSource(
     this, object : Observer<X?> {
-    internal var mSource: LiveData<Y>? = null
+    var mSource: LiveData<Y>? = null
 
     override fun onChanged(x: X?) {
       val newLiveData = if (x == null) null else func(x)?.toLiveData(strategy)
