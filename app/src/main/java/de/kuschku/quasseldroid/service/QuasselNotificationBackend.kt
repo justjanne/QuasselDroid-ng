@@ -246,7 +246,7 @@ class QuasselNotificationBackend @Inject constructor(
             this.showNotification(buffer)
           }
         },
-        clampOf(session.lag.value * 2, 16, 2_000),
+        clampOf(session.lag.value * 3 + 100, 16, 3_000),
         TimeUnit.MILLISECONDS
       )
     }
