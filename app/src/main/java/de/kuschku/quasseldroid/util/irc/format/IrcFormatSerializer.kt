@@ -66,6 +66,10 @@ class IrcFormatSerializer @Inject constructor(context: Context) {
     getColor(0, 0)
   }
 
+  private val colorForegroundHex = context.theme.styledAttributes(R.attr.colorForeground) {
+    getColor(0, 0)
+  }
+
   fun toEscapeCodes(text: Spanned): String {
     val out = StringBuilder()
     withinParagraph(out, text, 0, text.length)
@@ -120,6 +124,10 @@ class IrcFormatSerializer @Inject constructor(context: Context) {
           out.append(',')
           out.append(String.format(Locale.US, "%06x", background and 0x00FFFFFF))
         }
+      } else if (background != null) {
+        out.append(String.format(Locale.US, "%06x", this.colorForegroundHex and 0x00FFFFFF))
+        out.append(',')
+        out.append(String.format(Locale.US, "%06x", background and 0x00FFFFFF))
       }
     }
 
