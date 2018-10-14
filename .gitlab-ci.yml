@@ -8,6 +8,7 @@ cache:
   paths:
     - ".gradle/wrapper"
     - ".gradle/caches"
+  policy: pull
 
 before_script:
   - "export GRADLE_USER_HOME=$(pwd)/.gradle"
