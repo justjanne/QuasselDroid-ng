@@ -35,7 +35,6 @@ plugins {
 
 android {
   compileSdkVersion(28)
-  buildToolsVersion("28.0.0")
 
   signingConfigs {
     val signing = project.rootProject.properties("signing.properties")
@@ -90,7 +89,7 @@ android {
     }
 
     getByName("debug") {
-      applicationIdSuffix = "debug"
+      applicationIdSuffix = ".debug"
 
       isZipAlignEnabled = true
       isMinifyEnabled = true
