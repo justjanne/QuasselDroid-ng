@@ -244,6 +244,13 @@ class MessageListFragment : ServiceBoundFragment() {
           autoCompleteSuffix = ": "
         )
       }
+    adapter.setOnSenderIconClickListener { msg ->
+      ChatActivity.launch(
+        requireContext(),
+        autoCompleteText = HostmaskHelper.nick(msg.sender),
+        autoCompleteSuffix = ": "
+      )
+    }
     adapter.setOnUrlLongClickListener(LinkLongClickMenuHelper())
 
     adapter.setOnExpansionListener { (messageId) ->

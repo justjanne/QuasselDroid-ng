@@ -59,6 +59,7 @@ class MessageAdapter @Inject constructor(
   private var clickListener: ((FormattedMessage) -> Unit)? = null
   private var longClickListener: ((FormattedMessage) -> Unit)? = null
   private var doubleClickListener: ((QuasselDatabase.MessageData) -> Unit)? = null
+  private var senderIconClickListener: ((QuasselDatabase.MessageData) -> Unit)? = null
   private var expansionListener: ((QuasselDatabase.MessageData) -> Unit)? = null
   private var urlLongClickListener: ((TextView, String) -> Boolean)? = null
 
@@ -72,6 +73,10 @@ class MessageAdapter @Inject constructor(
 
   fun setOnDoubleClickListener(listener: ((QuasselDatabase.MessageData) -> Unit)?) {
     this.doubleClickListener = listener
+  }
+
+  fun setOnSenderIconClickListener(listener: ((QuasselDatabase.MessageData) -> Unit)?) {
+    this.senderIconClickListener = listener
   }
 
   fun setOnExpansionListener(listener: ((QuasselDatabase.MessageData) -> Unit)?) {
@@ -156,6 +161,7 @@ class MessageAdapter @Inject constructor(
       clickListener,
       longClickListener,
       doubleClickListener,
+      senderIconClickListener,
       expansionListener,
       movementMethod
     )
@@ -175,6 +181,7 @@ class MessageAdapter @Inject constructor(
     clickListener: ((FormattedMessage) -> Unit)? = null,
     longClickListener: ((FormattedMessage) -> Unit)? = null,
     doubleClickListener: ((QuasselDatabase.MessageData) -> Unit)? = null,
+    senderIconClickListener: ((QuasselDatabase.MessageData) -> Unit)? = null,
     expansionListener: ((QuasselDatabase.MessageData) -> Unit)? = null,
     movementMethod: BetterLinkMovementMethod
   ) : RecyclerView.ViewHolder(itemView) {
@@ -240,6 +247,12 @@ class MessageAdapter @Inject constructor(
       }
     }
 
+    private val localSenderIconClickListener = View.OnClickListener {
+      original?.let {
+        senderIconClickListener?.invoke(it)
+      }
+    }
+
     init {
       ButterKnife.bind(this, itemView)
       content?.movementMethod = movementMethod
@@ -250,6 +263,7 @@ class MessageAdapter @Inject constructor(
       messageContainer?.setOnTouchListener(DoubleClickHelper(itemView).apply {
         this.doubleClickListener = localDoubleClickListener
       })
+      avatar?.setOnClickListener(localSenderIconClickListener)
     }
 
     fun bind(message: FormattedMessage, original: QuasselDatabase.MessageData,
