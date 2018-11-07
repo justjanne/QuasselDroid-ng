@@ -100,6 +100,7 @@
   <string name="label_topic">Topique de la Chaîne</string>
   <string name="label_translators">Traducteurs</string>
   <string name="label_unhide">Rendre Visible</string>
+  <string name="label_unknown_sender">&lt;Inconnu&gt;</string>
   <string name="label_use_default">Utiliser les paramètres par défaut</string>
   <string name="label_website">Site Web</string>
   <string name="label_whitelist">Ignorer</string>

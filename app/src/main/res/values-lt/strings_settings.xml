@@ -83,6 +83,7 @@
   <string name="settings_chatlist_sort_alphabetically">Rikiuoti pagal abėcėlę</string>
   <string name="settings_chatlist_add_new_buffers_automatically">Automatiškai pridėti naujus pokalbius</string>
   <string name="settings_chatlist_network">Tinklas</string>
+  <string name="settings_chatlist_network_all">Visi tinklai</string>
   <string name="settings_chatlist_show_status_buffer">Rodyti būsenos buferį</string>
   <string name="settings_chatlist_types">Pokalbių tipai</string>
   <string name="settings_chatlist_show_channels">Rodyti kanalus</string>

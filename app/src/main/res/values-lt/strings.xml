@@ -100,6 +100,7 @@
   <string name="label_topic">Kanalo tema</string>
   <string name="label_translators">Vertėjai</string>
   <string name="label_unhide">Rodyti</string>
+  <string name="label_unknown_sender">&lt;Nežinoma&gt;</string>
   <string name="label_use_default">Naudoti numatytas parinktis</string>
   <string name="label_website">Tinklalapis</string>
   <string name="label_whitelist">Ignoruoti</string>

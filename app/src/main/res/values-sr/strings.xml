@@ -100,6 +100,7 @@
   <string name="label_topic">Tema kanala</string>
   <string name="label_translators">Prevodioci</string>
   <string name="label_unhide">Učini vidljivim</string>
+  <string name="label_unknown_sender">&lt;Nepoznato&gt;</string>
   <string name="label_use_default">Koristi podrazumevane parametre</string>
   <string name="label_website">Veb stranica</string>
   <string name="label_whitelist">Ignoriši</string>

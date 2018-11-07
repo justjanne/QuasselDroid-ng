@@ -83,6 +83,7 @@
   <string name="settings_chatlist_sort_alphabetically">Sortiraj abecedno</string>
   <string name="settings_chatlist_add_new_buffers_automatically">Dodaj nove razgovore automatski</string>
   <string name="settings_chatlist_network">Mreža</string>
+  <string name="settings_chatlist_network_all">Sve mreže</string>
   <string name="settings_chatlist_show_status_buffer">Prikazuj statusni bafer</string>
   <string name="settings_chatlist_types">Tipovi razgovora</string>
   <string name="settings_chatlist_show_channels">Prikaži kanale</string>

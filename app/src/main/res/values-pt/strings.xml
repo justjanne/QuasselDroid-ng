@@ -100,6 +100,7 @@
   <string name="label_topic">Tópico do Canal</string>
   <string name="label_translators">Tradutores</string>
   <string name="label_unhide">Tornar Visível</string>
+  <string name="label_unknown_sender">&lt;Desconhecido&gt;</string>
   <string name="label_use_default">Utilizar Padrão</string>
   <string name="label_website">Site</string>
   <string name="label_whitelist">Ignorar</string>
