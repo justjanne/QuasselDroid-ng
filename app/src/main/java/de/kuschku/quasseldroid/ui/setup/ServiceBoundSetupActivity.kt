@@ -22,6 +22,7 @@ package de.kuschku.quasseldroid.ui.setup
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.SparseArray
@@ -131,8 +132,11 @@ abstract class ServiceBoundSetupActivity :
     currentPage.value?.requestFocus()
   }
 
-  fun updateRecentsHeader() =
-    updateRecentsHeaderIfExisting(title.toString(), icon, recentsHeaderColor)
+  fun updateRecentsHeader() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+      updateRecentsHeaderIfExisting(title.toString(), icon, recentsHeaderColor)
+    }
+  }
 
   override fun setTitle(title: CharSequence?) {
     super.setTitle(title)
