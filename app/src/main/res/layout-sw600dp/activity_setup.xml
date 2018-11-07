@@ -23,19 +23,19 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-  <android.support.v4.view.ViewPager
+  <androidx.viewpager.widget.ViewPager
     android:id="@+id/view_pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
 
-  <android.support.v7.widget.ActionMenuView
+  <androidx.appcompat.widget.ActionMenuView
     android:id="@+id/menu_view"
     android:layout_width="56dp"
     android:layout_height="?actionBarSize"
     android:layout_gravity="end|top"
     android:theme="?attr/actionBarPopupTheme" />
 
-  <android.support.design.widget.FloatingActionButton
+  <com.google.android.material.floatingactionbutton.FloatingActionButton
     android:id="@+id/next_button"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

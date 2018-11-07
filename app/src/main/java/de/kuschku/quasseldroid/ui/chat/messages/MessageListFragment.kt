@@ -19,27 +19,27 @@
 
 package de.kuschku.quasseldroid.ui.chat.messages
 
-import android.arch.lifecycle.Observer
-import android.arch.paging.LivePagedListBuilder
-import android.arch.paging.PagedList
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.SpannableStringBuilder
 import android.util.TypedValue
 import android.view.*
+import androidx.lifecycle.Observer
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.bumptech.glide.Glide
 import com.bumptech.glide.ListPreloader
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.util.FixedPreloadSizeProvider
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Message_Type
@@ -201,8 +201,7 @@ class MessageListFragment : ServiceBoundFragment() {
     }
   }
 
-  private val boundaryCallback = object :
-    PagedList.BoundaryCallback<DisplayMessage>() {
+  private val boundaryCallback = object : PagedList.BoundaryCallback<DisplayMessage>() {
     override fun onItemAtFrontLoaded(itemAtFront: DisplayMessage) = Unit
     override fun onItemAtEndLoaded(itemAtEnd: DisplayMessage) {
       loadMore()
@@ -290,7 +289,7 @@ class MessageListFragment : ServiceBoundFragment() {
         scrollDown.toggle(canScrollDown && isScrollingDown)
       }
 
-      override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+      override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         isScrolling = when (newState) {
           RecyclerView.SCROLL_STATE_SETTLING, RecyclerView.SCROLL_STATE_IDLE -> false
           RecyclerView.SCROLL_STATE_DRAGGING                                 -> true
@@ -403,7 +402,8 @@ class MessageListFragment : ServiceBoundFragment() {
         }
       } else {
         savedInstanceState?.apply {
-          messageList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
+          (messageList.layoutManager as RecyclerView.LayoutManager).onRestoreInstanceState(
+            getParcelable(KEY_STATE_LIST))
         }
         hasLoaded = true
       }
@@ -416,7 +416,7 @@ class MessageListFragment : ServiceBoundFragment() {
 
     scrollDown.hide(object : FloatingActionButton.OnVisibilityChangedListener() {
       override fun onHidden(fab: FloatingActionButton) {
-        fab.visibility = View.VISIBLE
+        (fab as View).visibility = View.VISIBLE
       }
     })
     scrollDown.setOnClickListener { messageList.scrollToPosition(0) }
@@ -446,7 +446,8 @@ class MessageListFragment : ServiceBoundFragment() {
     ))
 
     savedInstanceState?.run {
-      messageList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
+      (messageList.layoutManager as RecyclerView.LayoutManager).onRestoreInstanceState(getParcelable(
+        KEY_STATE_LIST))
       previousLoadKey = getInt(KEY_STATE_PAGING).nullIf { it == -1 }
       lastBuffer = getInt(KEY_STATE_BUFFER).nullIf { it == -1 }
     }
@@ -476,7 +477,7 @@ class MessageListFragment : ServiceBoundFragment() {
 
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
-    outState.putParcelable(KEY_STATE_LIST, messageList.layoutManager.onSaveInstanceState())
+    outState.putParcelable(KEY_STATE_LIST, messageList.layoutManager?.onSaveInstanceState())
     outState.putInt(KEY_STATE_PAGING, previousLoadKey ?: -1)
     outState.putInt(KEY_STATE_BUFFER, lastBuffer ?: -1)
   }

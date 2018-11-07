@@ -17,7 +17,7 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
@@ -59,28 +59,28 @@
         android:paddingRight="?android:attr/listPreferredItemPaddingRight"
         android:paddingStart="?android:attr/listPreferredItemPaddingLeft">
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
           android:id="@+id/action_edit_topic"
           style="@style/Widget.Info.ActionButton"
           android:contentDescription="@string/label_edit_topic_long"
           android:text="@string/label_edit_topic"
           tools:drawableTint="?colorTextSecondary" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
           android:id="@+id/action_who"
           style="@style/Widget.Info.ActionButton"
           android:contentDescription="@string/label_who_long"
           android:text="@string/label_who"
           tools:drawableTint="?colorTextSecondary" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
           android:id="@+id/action_part"
           style="@style/Widget.Info.ActionButton"
           android:contentDescription="@string/label_part_long"
           android:text="@string/label_part"
           tools:drawableTint="?colorTextSecondary" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
           android:id="@+id/action_join"
           style="@style/Widget.Info.ActionButton"
           android:contentDescription="@string/label_join_long"
@@ -96,4 +96,4 @@
       android:layout_height="1dp"
       android:background="?colorDivider" />
   </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

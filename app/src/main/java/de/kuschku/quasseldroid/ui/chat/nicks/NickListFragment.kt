@@ -19,18 +19,18 @@
 
 package de.kuschku.quasseldroid.ui.chat.nicks
 
-import android.arch.lifecycle.Observer
 import android.graphics.Typeface
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.bumptech.glide.Glide
@@ -160,7 +160,8 @@ class NickListFragment : ServiceBoundFragment() {
       }
     })
     savedInstanceState?.run {
-      nickList.layoutManager.onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
+      (nickList.layoutManager as RecyclerView.LayoutManager)
+        .onRestoreInstanceState(getParcelable(KEY_STATE_LIST))
     }
 
     val sizeProvider = FixedPreloadSizeProvider<List<Avatar>>(avatarSize, avatarSize)
@@ -183,7 +184,7 @@ class NickListFragment : ServiceBoundFragment() {
 
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
-    outState.putParcelable(KEY_STATE_LIST, nickList.layoutManager.onSaveInstanceState())
+    outState.putParcelable(KEY_STATE_LIST, nickList.layoutManager?.onSaveInstanceState())
   }
 
   private val clickListener: ((String) -> Unit)? = { nick ->

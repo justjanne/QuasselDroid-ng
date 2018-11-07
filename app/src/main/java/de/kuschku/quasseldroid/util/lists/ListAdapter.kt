@@ -16,9 +16,9 @@
 
 package de.kuschku.quasseldroid.util.lists
 
-import android.support.v7.util.AdapterListUpdateCallback
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.AdapterListUpdateCallback
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * [RecyclerView.Adapter] base class for presenting List data in a

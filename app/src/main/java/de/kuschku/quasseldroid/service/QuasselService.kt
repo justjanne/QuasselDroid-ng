@@ -19,12 +19,12 @@
 
 package de.kuschku.quasseldroid.service
 
-import android.arch.lifecycle.Observer
 import android.content.*
 import android.net.ConnectivityManager
 import android.os.Handler
-import android.support.v4.app.RemoteInput
 import android.text.SpannableString
+import androidx.core.app.RemoteInput
+import androidx.lifecycle.Observer
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.connection.HostnameVerifier
 import de.kuschku.libquassel.connection.SocketAddress
@@ -187,12 +187,12 @@ class QuasselService : DaggerLifecycleService(),
           }
         }
       }
-    }
-
-    val clearMessageId = intent.getLongExtra("mark_read_message", -1)
-    if (bufferId != -1 && clearMessageId != -1L) {
-      sessionManager.session.value?.bufferSyncer?.requestSetLastSeenMsg(bufferId, clearMessageId)
-      sessionManager.session.value?.bufferSyncer?.requestMarkBufferAsRead(bufferId)
+    } else {
+      val clearMessageId = intent.getLongExtra("mark_read_message", -1)
+      if (bufferId != -1 && clearMessageId != -1L) {
+        sessionManager.session.value?.bufferSyncer?.requestSetLastSeenMsg(bufferId, clearMessageId)
+        sessionManager.session.value?.bufferSyncer?.requestMarkBufferAsRead(bufferId)
+      }
     }
   }
 

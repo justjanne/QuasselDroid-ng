@@ -46,16 +46,10 @@ android {
 dependencies {
   implementation(kotlin("stdlib", "1.2.60"))
 
-  // App Compat
-  withVersion("27.1.1") {
-    implementation("com.android.support", "appcompat-v7", version)
-  }
+  implementation("androidx.appcompat", "appcompat", "1.0.0")
 
-  // App Arch Lifecycle
-  withVersion("1.1.1") {
-    implementation("android.arch.lifecycle", "extensions", version)
-    implementation("android.arch.lifecycle", "reactivestreams", version)
-  }
+  implementation("androidx.lifecycle", "lifecycle-extensions", "2.0.0-rc01")
+  implementation("androidx.lifecycle", "lifecycle-reactivestreams", "2.0.0-rc01")
 
   // Utility
   implementation("io.reactivex.rxjava2", "rxandroid", "2.0.2")

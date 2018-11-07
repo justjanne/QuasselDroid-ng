@@ -22,8 +22,8 @@ package de.kuschku.quasseldroid.service
 import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.support.annotation.ColorInt
 import android.text.SpannableStringBuilder
+import androidx.annotation.ColorInt
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.ExtendedFeature

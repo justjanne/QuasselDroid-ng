@@ -19,20 +19,20 @@
 
 package de.kuschku.quasseldroid.ui.chat.input
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.v7.widget.AppCompatImageButton
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.SpannableString
 import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
@@ -165,8 +165,8 @@ class ChatlineFragment : ServiceBoundFragment() {
       .observe(this, Observer(messageHistoryAdapter::submitList))
 
     fun send() {
-      if (chatline.text.isNotBlank()) {
-        val lines = chatline.text.lineSequence().map {
+      if (chatline.safeText.isNotBlank()) {
+        val lines = chatline.safeText.lineSequence().map {
           SpannableString(it).apply {
             for (span in getSpans(0, length, Any::class.java)) {
               if (getSpanFlags(span) and Spanned.SPAN_COMPOSING != 0) {
@@ -221,8 +221,8 @@ class ChatlineFragment : ServiceBoundFragment() {
   }
 
   fun replaceText(text: CharSequence) {
-    if (chatline.text.isNotBlank()) {
-      chatline.text.lineSequence().forEach(viewModel::addRecentlySentMessage)
+    if (chatline.safeText.isNotBlank()) {
+      chatline.safeText.lineSequence().forEach(viewModel::addRecentlySentMessage)
     }
     editorHelper.replaceText(text)
   }

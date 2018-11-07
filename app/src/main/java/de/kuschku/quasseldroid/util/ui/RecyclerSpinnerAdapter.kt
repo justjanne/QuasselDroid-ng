@@ -20,11 +20,11 @@
 package de.kuschku.quasseldroid.util.ui
 
 import android.content.res.Resources
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.ThemedSpinnerAdapter
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import androidx.appcompat.widget.ThemedSpinnerAdapter
+import androidx.recyclerview.widget.RecyclerView
 
 abstract class RecyclerSpinnerAdapter<VH : RecyclerView.ViewHolder> : BaseAdapter(),
                                                                       ThemedSpinnerAdapter {

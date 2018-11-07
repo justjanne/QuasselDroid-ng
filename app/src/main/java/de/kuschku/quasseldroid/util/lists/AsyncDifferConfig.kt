@@ -18,8 +18,8 @@ package de.kuschku.quasseldroid.util.lists
 
 import android.os.Handler
 import android.os.Looper
-import android.support.annotation.RestrictTo
-import android.support.v7.util.DiffUtil
+import androidx.annotation.RestrictTo
+import androidx.recyclerview.widget.DiffUtil
 
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors

@@ -132,7 +132,7 @@
       android:textSize="@dimen/md_content_textsize"
       tools:ignore="HardcodedText" />
 
-    <SeekBar
+    <androidx.appcompat.widget.AppCompatSeekBar
       android:id="@+id/md_colorR"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

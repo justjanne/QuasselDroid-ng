@@ -29,11 +29,7 @@ plugins {
 dependencies {
   implementation(kotlin("stdlib", "1.2.60"))
 
-  withVersion("27.1.1") {
-    implementation("com.android.support", "support-annotations", version)
-  }
+  implementation("androidx.annotation", "annotation", "1.0.0")
 
-  withVersion("1.1.1") {
-    implementation("android.arch.lifecycle", "common", version)
-  }
+  implementation("androidx.lifecycle", "lifecycle-common", "2.0.0-rc01")
 }

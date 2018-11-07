@@ -1,6 +1,6 @@
 package de.kuschku.quasseldroid.persistence
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 import de.kuschku.libquassel.protocol.*
 import org.threeten.bp.Instant
 

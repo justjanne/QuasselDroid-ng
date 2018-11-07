@@ -19,12 +19,12 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.chatlist
 
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.ThemedSpinnerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.ThemedSpinnerAdapter
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.NetworkId

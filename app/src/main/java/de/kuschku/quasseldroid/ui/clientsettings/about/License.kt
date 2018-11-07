@@ -19,7 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.clientsettings.about
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 
 data class License(
   val shortName: String,

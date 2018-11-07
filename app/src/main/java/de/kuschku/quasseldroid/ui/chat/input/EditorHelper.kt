@@ -19,13 +19,13 @@
 
 package de.kuschku.quasseldroid.ui.chat.input
 
-import android.support.annotation.ColorInt
-import android.support.annotation.StringRes
-import android.support.v4.app.FragmentActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
+import androidx.annotation.ColorInt
+import androidx.annotation.StringRes
+import androidx.fragment.app.FragmentActivity
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
@@ -222,7 +222,6 @@ class EditorHelper(
         override fun onColorChooserDismissed(dialog: ColorChooserDialog) {
           f(selectedColor)
         }
-      })
-      .show(activity)
+      }).show(activity)
   }
 }

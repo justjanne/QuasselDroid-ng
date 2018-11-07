@@ -27,12 +27,12 @@
 
   <include layout="@layout/layout_toolbar" />
 
-  <android.support.design.widget.CoordinatorLayout
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom">
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginBottom="?actionBarSize"
@@ -45,7 +45,7 @@
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_messages" />
 
-      <android.support.v7.widget.RecyclerView
+      <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/autocomplete_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
         app:behavior_peekHeight="@dimen/autocomplete_max_height"
         app:layout_behavior="@string/bottom_sheet_behavior"
         tools:listitem="@layout/widget_nick" />
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <LinearLayout
       android:layout_width="match_parent"
@@ -83,6 +83,6 @@
       app:layout_behavior="@string/drag_intercept_bottom_sheet_behavior"
       tools:layout="@layout/fragment_chatline" />
 
-  </android.support.design.widget.CoordinatorLayout>
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </LinearLayout>

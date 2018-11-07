@@ -23,7 +23,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
 import android.text.Editable
 import android.view.Menu
 import android.view.MenuItem
@@ -31,6 +30,7 @@ import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.textfield.TextInputLayout
 import dagger.android.support.DaggerAppCompatActivity
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R

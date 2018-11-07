@@ -20,7 +20,7 @@
 package de.kuschku.quasseldroid.ui.chat.messages
 
 import android.content.Context
-import android.support.annotation.LayoutRes
+import androidx.annotation.LayoutRes
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage

@@ -20,11 +20,11 @@
 package de.kuschku.quasseldroid.util.ui
 
 import android.content.Context
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.CoordinatorLayout
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class DragInterceptBottomSheetBehavior<V : View> : BottomSheetBehavior<V> {
   constructor() : super()
@@ -32,8 +32,8 @@ class DragInterceptBottomSheetBehavior<V : View> : BottomSheetBehavior<V> {
 
   var allowDragging = true
 
-  override fun onInterceptTouchEvent(parent: CoordinatorLayout?, child: V,
-                                     event: MotionEvent?): Boolean {
+  override fun onInterceptTouchEvent(parent: CoordinatorLayout, child: V,
+                                     event: MotionEvent): Boolean {
     if (!allowDragging) return false
     return super.onInterceptTouchEvent(parent, child, event)
   }

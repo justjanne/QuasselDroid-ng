@@ -2,6 +2,7 @@ package de.kuschku.quasseldroid.ssl
 
 import java.security.cert.X509Certificate
 
+// FIXME: re-read RFC and check it's actually secure
 object X509Helper {
   fun hostnames(certificate: X509Certificate): Sequence<String> =
     (sequenceOf(commonName(certificate)) + subjectAlternativeNames(certificate))

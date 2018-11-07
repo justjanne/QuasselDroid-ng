@@ -19,13 +19,13 @@
 
 package de.kuschku.quasseldroid.persistence
 
-import android.arch.lifecycle.LiveData
-import android.arch.paging.DataSource
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.*
-import android.arch.persistence.room.migration.Migration
 import android.content.Context
-import android.support.annotation.IntRange
+import androidx.annotation.IntRange
+import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
+import androidx.room.*
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.quasseldroid.persistence.QuasselDatabase.*
 import io.reactivex.Flowable

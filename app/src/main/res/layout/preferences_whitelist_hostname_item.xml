@@ -60,7 +60,7 @@
 
   </LinearLayout>
 
-  <android.support.v7.widget.AppCompatImageButton
+  <androidx.appcompat.widget.AppCompatImageButton
     android:id="@+id/action_delete"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"

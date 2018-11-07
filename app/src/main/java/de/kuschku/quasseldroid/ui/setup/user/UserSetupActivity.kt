@@ -20,10 +20,10 @@
 package de.kuschku.quasseldroid.ui.setup.user
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.Identity
@@ -72,7 +72,7 @@ class UserSetupActivity : ServiceBoundSetupActivity() {
                       useSsl = it.secure
                     )
                   }
-                ), data.getStringArray("channels").toList())
+                ), data.getStringArray("channels")?.toList().orEmpty())
               }
             })
 

@@ -19,13 +19,13 @@
 
 package de.kuschku.quasseldroid.util.service
 
-import android.arch.lifecycle.DefaultLifecycleObserver
-import android.arch.lifecycle.LifecycleOwner
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.service.QuasselBinder

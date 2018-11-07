@@ -21,11 +21,13 @@ package de.kuschku.quasseldroid.ui.chat.input
 
 import android.content.Context
 import android.graphics.Typeface
-import android.support.annotation.ColorInt
+import android.text.Editable
 import android.text.InputType
+import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.*
 import android.util.AttributeSet
+import androidx.annotation.ColorInt
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.spans.*
@@ -33,6 +35,11 @@ import de.kuschku.quasseldroid.util.ui.DoubleClickHelper
 import de.kuschku.quasseldroid.util.ui.EditTextSelectionChange
 
 class RichEditText : EditTextSelectionChange {
+  val safeText: Editable
+    get() = this.text ?: SpannableStringBuilder("").also {
+      this.text = it
+    }
+
   val mircColors = listOf(
     R.color.mircColor00, R.color.mircColor01, R.color.mircColor02, R.color.mircColor03,
     R.color.mircColor04, R.color.mircColor05, R.color.mircColor06, R.color.mircColor07,
@@ -85,13 +92,13 @@ class RichEditText : EditTextSelectionChange {
     this.doubleClickHelper.doubleClickListener = listener
   }
 
-  fun isBold(range: IntRange = selection) = this.text.hasSpans<StyleSpan>(range) {
+  fun isBold(range: IntRange = selection) = this.safeText.hasSpans<StyleSpan>(range) {
     it.style == Typeface.BOLD || it.style == Typeface.BOLD_ITALIC
   }
 
   fun toggleBold(range: IntRange = selection, createNew: Boolean = true) {
     val bold = isBold(range)
-    this.text.removeSpans<StyleSpan, IrcBoldSpan>(range) { span ->
+    this.safeText.removeSpans<StyleSpan, IrcBoldSpan>(range) { span ->
       when {
         span is IrcBoldSpan         -> span
         span.style == Typeface.BOLD -> IrcBoldSpan()
@@ -100,21 +107,21 @@ class RichEditText : EditTextSelectionChange {
     }
 
     if (!bold && createNew) {
-      this.text.setSpan(
+      this.safeText.setSpan(
         IrcBoldSpan(), range.start, range.endInclusive + 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE
       )
     }
     selectedFormattingChanged()
   }
 
-  fun isItalic(range: IntRange = selection) = this.text.hasSpans<StyleSpan>(range) {
+  fun isItalic(range: IntRange = selection) = this.safeText.hasSpans<StyleSpan>(range) {
     it.style == Typeface.ITALIC || it.style == Typeface.BOLD_ITALIC
   }
 
   fun toggleItalic(range: IntRange = selection, createNew: Boolean = true) {
     val italic = isItalic(range)
 
-    this.text.removeSpans<StyleSpan, IrcItalicSpan>(range) { span ->
+    this.safeText.removeSpans<StyleSpan, IrcItalicSpan>(range) { span ->
       when {
         span is IrcItalicSpan         -> span
         span.style == Typeface.ITALIC -> IrcItalicSpan()
@@ -123,19 +130,19 @@ class RichEditText : EditTextSelectionChange {
     }
 
     if (!italic && createNew) {
-      this.text.setSpan(
+      this.safeText.setSpan(
         IrcItalicSpan(), range.start, range.endInclusive + 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE
       )
     }
     selectedFormattingChanged()
   }
 
-  fun isUnderline(range: IntRange = selection) = this.text.hasSpans<UnderlineSpan>(range)
+  fun isUnderline(range: IntRange = selection) = this.safeText.hasSpans<UnderlineSpan>(range)
 
   fun toggleUnderline(range: IntRange = selection, createNew: Boolean = true) {
     val underline = isUnderline(range)
 
-    this.text.removeSpans<UnderlineSpan, IrcUnderlineSpan>(range) { span ->
+    this.safeText.removeSpans<UnderlineSpan, IrcUnderlineSpan>(range) { span ->
       when (span) {
         is IrcUnderlineSpan -> span
         else                -> IrcUnderlineSpan()
@@ -143,19 +150,20 @@ class RichEditText : EditTextSelectionChange {
     }
 
     if (!underline && createNew) {
-      this.text.setSpan(
+      this.safeText.setSpan(
         IrcUnderlineSpan(), range.start, range.endInclusive + 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE
       )
     }
     selectedFormattingChanged()
   }
 
-  fun isStrikethrough(range: IntRange = selection) = this.text.hasSpans<StrikethroughSpan>(range)
+  fun isStrikethrough(
+    range: IntRange = selection) = this.safeText.hasSpans<StrikethroughSpan>(range)
 
   fun toggleStrikethrough(range: IntRange = selection, createNew: Boolean = true) {
     val strikethrough = isStrikethrough(range)
 
-    this.text.removeSpans<StrikethroughSpan, IrcStrikethroughSpan>(range) { span ->
+    this.safeText.removeSpans<StrikethroughSpan, IrcStrikethroughSpan>(range) { span ->
       when (span) {
         is IrcStrikethroughSpan -> span
         else                    -> IrcStrikethroughSpan()
@@ -163,7 +171,7 @@ class RichEditText : EditTextSelectionChange {
     }
 
     if (!strikethrough && createNew) {
-      this.text.setSpan(
+      this.safeText.setSpan(
         IrcStrikethroughSpan(), range.start, range.endInclusive + 1,
         Spanned.SPAN_INCLUSIVE_INCLUSIVE
       )
@@ -171,14 +179,14 @@ class RichEditText : EditTextSelectionChange {
     selectedFormattingChanged()
   }
 
-  fun isMonospace(range: IntRange = selection) = this.text.hasSpans<TypefaceSpan>(range) {
+  fun isMonospace(range: IntRange = selection) = this.safeText.hasSpans<TypefaceSpan>(range) {
     it.family == "monospace"
   }
 
   fun toggleMonospace(range: IntRange = selection, createNew: Boolean = true) {
     val monospace = isMonospace(range)
 
-    this.text.removeSpans<TypefaceSpan, IrcMonospaceSpan>(range) { span ->
+    this.safeText.removeSpans<TypefaceSpan, IrcMonospaceSpan>(range) { span ->
       when {
         span is IrcMonospaceSpan   -> span
         span.family == "monospace" -> IrcMonospaceSpan()
@@ -187,20 +195,21 @@ class RichEditText : EditTextSelectionChange {
     }
 
     if (!monospace && createNew) {
-      this.text.setSpan(
+      this.safeText.setSpan(
         IrcMonospaceSpan(), range.start, range.endInclusive + 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE
       )
     }
     selectedFormattingChanged()
   }
 
-  fun foregroundColors(range: IntRange = selection) = this.text.spans<ForegroundColorSpan>(range)
+  fun foregroundColors(
+    range: IntRange = selection) = this.safeText.spans<ForegroundColorSpan>(range)
   fun foregroundColor(range: IntRange = selection) =
     foregroundColors(range).singleOrNull()?.foregroundColor
 
   fun toggleForeground(range: IntRange = selection, @ColorInt color: Int? = null,
                        mircColor: Int? = null) {
-    this.text.removeSpans<ForegroundColorSpan, IrcForegroundColorSpan<*>>(range) { span ->
+    this.safeText.removeSpans<ForegroundColorSpan, IrcForegroundColorSpan<*>>(range) { span ->
       val mirc = mircColorMap[span.foregroundColor]
       when {
         span is IrcForegroundColorSpan<*> -> span
@@ -211,14 +220,14 @@ class RichEditText : EditTextSelectionChange {
 
     if (color != null) {
       if (mircColor != null) {
-        this.text.setSpan(
+        this.safeText.setSpan(
           IrcForegroundColorSpan.MIRC(mircColor, color),
           range.start,
           range.last + 1,
           Spanned.SPAN_INCLUSIVE_INCLUSIVE
         )
       } else {
-        this.text.setSpan(
+        this.safeText.setSpan(
           IrcForegroundColorSpan.HEX(color),
           range.start,
           range.last + 1,
@@ -229,13 +238,14 @@ class RichEditText : EditTextSelectionChange {
     selectedFormattingChanged()
   }
 
-  fun backgroundColors(range: IntRange = selection) = this.text.spans<BackgroundColorSpan>(range)
+  fun backgroundColors(
+    range: IntRange = selection) = this.safeText.spans<BackgroundColorSpan>(range)
   fun backgroundColor(range: IntRange = selection) =
     backgroundColors(range).singleOrNull()?.backgroundColor
 
   fun toggleBackground(range: IntRange = selection, @ColorInt color: Int? = null,
                        mircColor: Int? = null) {
-    this.text.removeSpans<BackgroundColorSpan, IrcBackgroundColorSpan<*>>(range) { span ->
+    this.safeText.removeSpans<BackgroundColorSpan, IrcBackgroundColorSpan<*>>(range) { span ->
       val mirc = mircColorMap[span.backgroundColor]
       when {
         span is IrcBackgroundColorSpan<*> -> span
@@ -246,14 +256,14 @@ class RichEditText : EditTextSelectionChange {
 
     if (color != null) {
       if (mircColor != null) {
-        this.text.setSpan(
+        this.safeText.setSpan(
           IrcBackgroundColorSpan.MIRC(mircColor, color),
           range.start,
           range.last + 1,
           Spanned.SPAN_INCLUSIVE_INCLUSIVE
         )
       } else {
-        this.text.setSpan(
+        this.safeText.setSpan(
           IrcBackgroundColorSpan.HEX(color),
           range.start,
           range.last + 1,
@@ -288,7 +298,7 @@ class RichEditText : EditTextSelectionChange {
   }
 
   fun autoComplete(text: CharSequence, suffix: String) {
-    val range = this.text.lastWordIndices(this.selection.start, true)
+    val range = this.safeText.lastWordIndices(this.selection.start, true)
     val replacement = if (range?.start == 0) {
       "$text$suffix"
     } else {
@@ -296,11 +306,11 @@ class RichEditText : EditTextSelectionChange {
     }
 
     if (range != null) {
-      this.text.replace(range.start, range.endInclusive + 1, replacement)
+      this.safeText.replace(range.start, range.endInclusive + 1, replacement)
       this.setSelection(range.start + replacement.length)
     } else {
-      this.text.append(replacement)
-      this.setSelection(this.text.length)
+      this.safeText.append(replacement)
+      this.setSelection(this.safeText.length)
     }
   }
 
@@ -310,33 +320,33 @@ class RichEditText : EditTextSelectionChange {
     val previousReplacement = item.lastCompletion?.let { "${item.lastCompletion.name}$suffix" }
 
     if (previousReplacement != null &&
-        this.text.length >= item.range.start + previousReplacement.length &&
-        this.text.substring(
+        this.safeText.length >= item.range.start + previousReplacement.length &&
+        this.safeText.substring(
           item.range.start, item.range.start + previousReplacement.length
         ) == previousReplacement) {
-      this.text.replace(
+      this.safeText.replace(
         item.range.start, item.range.start + previousReplacement.length, replacement
       )
       this.setSelection(item.range.start + replacement.length)
     } else {
-      this.text.replace(item.range.start, item.range.endInclusive + 1, replacement)
+      this.safeText.replace(item.range.start, item.range.endInclusive + 1, replacement)
       this.setSelection(item.range.start + replacement.length)
     }
   }
 
   fun replaceText(text: CharSequence?) {
     this.setText(text)
-    this.setSelection(this.text.length)
+    this.setSelection(this.safeText.length)
   }
 
   fun appendText(text: CharSequence?, suffix: String?) {
-    val shouldAddSuffix = this.text.isEmpty()
-    if (this.text.isNotEmpty() && !this.text.endsWith(" "))
-      this.text.append(" ")
-    this.text.append(text)
+    val shouldAddSuffix = this.safeText.isEmpty()
+    if (this.safeText.isNotEmpty() && !this.safeText.endsWith(" "))
+      this.safeText.append(" ")
+    this.safeText.append(text)
     if (shouldAddSuffix)
-      this.text.append(suffix)
-    this.setSelection(this.text.length)
+      this.safeText.append(suffix)
+    this.setSelection(this.safeText.length)
   }
 
   private fun selectedFormattingChanged(range: IntRange = selection) {

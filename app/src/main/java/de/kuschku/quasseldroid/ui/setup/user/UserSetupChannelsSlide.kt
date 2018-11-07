@@ -20,13 +20,13 @@
 package de.kuschku.quasseldroid.ui.setup.user
 
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.DefaultNetwork
 import de.kuschku.quasseldroid.ui.setup.SlideFragment
@@ -45,7 +45,7 @@ class UserSetupChannelsSlide : SlideFragment() {
 
   override fun setData(data: Bundle) {
     if (data.containsKey("channels"))
-      channelsField.setText(data.getStringArray("channels").joinToString("\n"))
+      channelsField.setText(data.getStringArray("channels")?.joinToString("\n"))
     else if (data.containsKey("network"))
       (data.getSerializable("network") as? DefaultNetwork)?.let {
         channelsField.setText(it.defaultChannels.joinToString("\n"))

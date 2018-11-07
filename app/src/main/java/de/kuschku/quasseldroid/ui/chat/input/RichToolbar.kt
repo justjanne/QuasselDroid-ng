@@ -20,11 +20,11 @@
 package de.kuschku.quasseldroid.ui.chat.input
 
 import android.content.Context
-import android.support.annotation.ColorInt
-import android.support.v7.widget.Toolbar
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import androidx.annotation.ColorInt
+import androidx.appcompat.widget.Toolbar
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R

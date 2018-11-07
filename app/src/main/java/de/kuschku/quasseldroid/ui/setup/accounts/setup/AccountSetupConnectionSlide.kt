@@ -20,7 +20,6 @@
 package de.kuschku.quasseldroid.ui.setup.accounts.setup
 
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +27,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.setup.SlideFragment
 import de.kuschku.quasseldroid.util.Patterns

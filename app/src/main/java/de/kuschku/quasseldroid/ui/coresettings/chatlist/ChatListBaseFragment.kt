@@ -19,15 +19,15 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.chatlist
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v7.widget.SwitchCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.appcompat.widget.SwitchCompat
+import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.Buffer_Activity

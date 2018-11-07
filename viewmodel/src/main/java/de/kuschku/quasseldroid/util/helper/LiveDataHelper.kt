@@ -19,8 +19,8 @@
 
 package de.kuschku.quasseldroid.util.helper
 
-import android.arch.lifecycle.*
-import android.support.annotation.MainThread
+import androidx.annotation.MainThread
+import androidx.lifecycle.*
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 

@@ -20,8 +20,8 @@
 package de.kuschku.quasseldroid.util.ui
 
 import android.content.Context
-import android.support.v7.widget.AppCompatEditText
 import android.util.AttributeSet
+import androidx.appcompat.widget.AppCompatEditText
 
 open class EditTextSelectionChange : AppCompatEditText {
   constructor(context: Context?) : super(context)

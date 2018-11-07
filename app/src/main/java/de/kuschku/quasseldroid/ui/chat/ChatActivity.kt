@@ -20,7 +20,6 @@
 package de.kuschku.quasseldroid.ui.chat
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -29,24 +28,29 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.v4.content.pm.ShortcutInfoCompat
-import android.support.v4.content.pm.ShortcutManagerCompat
-import android.support.v4.graphics.drawable.IconCompat
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
 import android.text.Html
-import android.view.*
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.connection.QuasselSecurityException
 import de.kuschku.libquassel.protocol.Buffer_Type
@@ -225,8 +229,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     viewModel.bufferOpened.toLiveData().observe(this, Observer {
       actionMode?.finish()
-      if (drawerLayout.isDrawerOpen(Gravity.START)) {
-        drawerLayout.closeDrawer(Gravity.START, true)
+      if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        drawerLayout.closeDrawer(GravityCompat.START, true)
       }
     })
 
@@ -528,7 +532,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           if (resources.getBoolean(R.bool.buffer_drawer_exists) &&
               viewModel.buffer.value == Int.MAX_VALUE &&
               !restoredDrawerState) {
-            drawerLayout.openDrawer(Gravity.START)
+            drawerLayout.openDrawer(GravityCompat.START)
           }
           connectedAccount = accountId
           viewModel.session.value?.orNull()?.let { session ->
@@ -589,9 +593,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     viewModel.bufferDataThrottled.toLiveData().observe(this, Observer {
       bufferData = it
       if (bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.END)
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END)
       } else {
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.END)
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END)
       }
 
       invalidateOptionsMenu()
@@ -662,8 +666,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     outState?.putInt(KEY_OPEN_BUFFER, viewModel.buffer.value ?: -1)
     outState?.putInt(KEY_OPEN_BUFFERVIEWCONFIG, viewModel.bufferViewConfigId.value ?: -1)
     outState?.putLong(KEY_CONNECTED_ACCOUNT, connectedAccount)
-    outState?.putBoolean(KEY_OPEN_DRAWER_START, drawerLayout.isDrawerOpen(Gravity.START))
-    outState?.putBoolean(KEY_OPEN_DRAWER_END, drawerLayout.isDrawerOpen(Gravity.END))
+    outState?.putBoolean(KEY_OPEN_DRAWER_START, drawerLayout.isDrawerOpen(GravityCompat.START))
+    outState?.putBoolean(KEY_OPEN_DRAWER_END, drawerLayout.isDrawerOpen(GravityCompat.END))
   }
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
@@ -674,10 +678,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     connectedAccount = savedInstanceState?.getLong(KEY_CONNECTED_ACCOUNT, -1L) ?: -1L
 
     if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_START) == true) {
-      drawerLayout.openDrawer(Gravity.START)
+      drawerLayout.openDrawer(GravityCompat.START)
     }
     if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_END) == true) {
-      drawerLayout.openDrawer(Gravity.END)
+      drawerLayout.openDrawer(GravityCompat.END)
     }
     if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_START) != null ||
         savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_END) != null) {
@@ -712,20 +716,21 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       drawerToggle.onOptionsItemSelected(item)
     }
     R.id.action_nicklist        -> {
-      if (drawerLayout.isDrawerVisible(Gravity.END)) {
-        drawerLayout.closeDrawer(Gravity.END)
+      if (drawerLayout.isDrawerVisible(GravityCompat.END)) {
+        drawerLayout.closeDrawer(GravityCompat.END)
       } else {
-        drawerLayout.openDrawer(Gravity.END)
+        drawerLayout.openDrawer(GravityCompat.END)
       }
       true
     }
     R.id.action_filter_messages -> {
       runInBackground {
         viewModel.buffer { buffer ->
-          val filteredRaw = database.filtered().get(accountId,
-                                                    buffer,
-                                                    accountDatabase.accounts().findById(accountId)?.defaultFiltered
-                                                    ?: 0)
+          val filteredRaw = database.filtered().get(
+            accountId,
+            buffer,
+            accountDatabase.accounts().findById(accountId)?.defaultFiltered ?: 0
+          )
           val filtered = Message_Type.of(filteredRaw)
           val flags = intArrayOf(
             Message.MessageType.Join.bit or Message.MessageType.NetsplitJoin.bit,

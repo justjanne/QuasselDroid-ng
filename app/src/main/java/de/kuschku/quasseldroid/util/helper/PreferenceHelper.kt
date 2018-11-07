@@ -19,8 +19,8 @@
 
 package de.kuschku.quasseldroid.util.helper
 
-import android.support.v7.preference.PreferenceCategory
-import android.support.v7.preference.PreferenceScreen
+import androidx.preference.PreferenceCategory
+import androidx.preference.PreferenceScreen
 
 fun PreferenceCategory.preferences() = (0 until preferenceCount).map(this::getPreference)
 fun PreferenceScreen.preferences() = (0 until preferenceCount).map(this::getPreference)

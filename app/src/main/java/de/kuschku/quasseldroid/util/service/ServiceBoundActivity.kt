@@ -22,9 +22,9 @@ package de.kuschku.quasseldroid.util.service
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.annotation.ColorRes
-import android.support.annotation.DrawableRes
 import android.view.WindowManager
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.Keys

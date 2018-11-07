@@ -19,7 +19,7 @@
 
 package de.kuschku.quasseldroid.settings
 
-import android.support.annotation.StyleRes
+import androidx.annotation.StyleRes
 import de.kuschku.quasseldroid.R
 
 data class AppearanceSettings(

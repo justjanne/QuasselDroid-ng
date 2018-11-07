@@ -19,12 +19,12 @@
 
 package de.kuschku.quasseldroid.ui.chat.input
 
-import android.arch.lifecycle.Observer
 import android.graphics.Typeface
-import android.support.v4.app.FragmentActivity
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.quassel.syncables.IrcUser

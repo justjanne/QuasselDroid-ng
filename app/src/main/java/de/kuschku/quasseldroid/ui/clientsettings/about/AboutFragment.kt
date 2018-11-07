@@ -25,16 +25,16 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import dagger.android.support.DaggerFragment
@@ -109,40 +109,9 @@ class AboutFragment : DaggerFragment() {
     libraries.itemAnimator = null
     libraries.adapter = LibraryAdapter(listOf(
       Library(
-        name = "Android Architecture Components: Lifecycle",
-        version = "1.1.1",
+        name = "AndroidX",
         license = apache2,
-        url = "https://android.googlesource.com/platform/frameworks/support/+/master/lifecycle"
-      ),
-      Library(
-        name = "Android Architecture Components: Paging",
-        version = "1.0.0",
-        license = apache2,
-        url = "https://android.googlesource.com/platform/frameworks/support/+/master/paging"
-      ),
-      Library(
-        name = "Android Architecture Components: Persistence",
-        version = "1.1.1-rc1",
-        license = apache2,
-        url = "https://android.googlesource.com/platform/frameworks/support/+/master/persistence"
-      ),
-      Library(
-        name = "Android Architecture Components: Room",
-        version = "1.1.1-rc1",
-        license = apache2,
-        url = "https://android.googlesource.com/platform/frameworks/support/+/master/persistence"
-      ),
-      Library(
-        name = "Android Support Library",
-        version = "27.1.1",
-        license = apache2,
-        url = "https://android.googlesource.com/platform/frameworks/support/+/master"
-      ),
-      Library(
-        name = "Android Support Library: Constraint Layout",
-        version = "1.1.0-beta6",
-        license = apache2,
-        url = "https://android.googlesource.com/platform/frameworks/opt/sherpa/+/studio-3.0/constraintlayout"
+        url = "https://developer.android.com/jetpack/androidx/"
       ),
       Library(
         name = "atinject",
@@ -163,7 +132,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Butter Knife",
-        version = "8.8.1",
+        version = "8.9.0",
         license = apache2,
         url = "http://jakewharton.github.io/butterknife/"
       ),
@@ -184,7 +153,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Glide",
-        version = "4.6.1",
+        version = "4.8.0",
         license = apache2,
         url = "https://bumptech.github.io/glide/"
       ),

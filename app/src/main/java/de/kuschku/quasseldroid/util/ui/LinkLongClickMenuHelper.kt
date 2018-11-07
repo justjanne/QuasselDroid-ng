@@ -23,8 +23,8 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.support.v7.widget.PopupMenu
 import android.widget.TextView
+import androidx.appcompat.widget.PopupMenu
 import de.kuschku.quasseldroid.R
 
 class LinkLongClickMenuHelper :

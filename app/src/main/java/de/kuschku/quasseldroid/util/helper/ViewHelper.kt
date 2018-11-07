@@ -19,8 +19,8 @@
 
 package de.kuschku.quasseldroid.util.helper
 
-import android.support.v7.widget.TooltipCompat
 import android.view.View
+import androidx.appcompat.widget.TooltipCompat
 
 fun View.visibleIf(check: Boolean) = if (check) {
   this.visibility = View.VISIBLE

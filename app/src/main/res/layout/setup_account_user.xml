@@ -25,7 +25,7 @@
   android:orientation="vertical"
   android:padding="32dp">
 
-  <android.support.design.widget.TextInputLayout
+  <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/userWrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -38,9 +38,9 @@
       android:layout_height="wrap_content"
       android:inputType="textVisiblePassword|textNoSuggestions"
       app:errorEnabled="true" />
-  </android.support.design.widget.TextInputLayout>
+  </com.google.android.material.textfield.TextInputLayout>
 
-  <android.support.design.widget.TextInputLayout
+  <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/passWrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -54,6 +54,6 @@
       android:layout_height="wrap_content"
       android:inputType="textPassword"
       app:errorEnabled="true" />
-  </android.support.design.widget.TextInputLayout>
+  </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

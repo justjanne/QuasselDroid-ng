@@ -24,19 +24,19 @@
   android:layout_height="match_parent"
   android:orientation="vertical">
 
-  <android.support.design.widget.AppBarLayout
+  <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:theme="?attr/actionBarTheme">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
       android:id="@+id/chatListToolbar"
       android:layout_width="match_parent"
       android:layout_height="?attr/actionBarSize"
       app:contentInsetStartWithNavigation="0dp"
       app:popupTheme="?attr/actionBarPopupTheme">
 
-      <android.support.v7.widget.AppCompatSpinner
+      <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/chatListSpinner"
         style="@style/Widget.FullWidthSpinner"
         android:layout_width="fill_parent"
@@ -44,9 +44,9 @@
         app:popupTheme="?attr/actionBarPopupTheme"
         tools:listitem="@layout/widget_spinner_item_toolbar" />
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
-  </android.support.design.widget.AppBarLayout>
+  </com.google.android.material.appbar.AppBarLayout>
 
 
   <de.kuschku.quasseldroid.util.ui.fastscroll.views.FastScrollRecyclerView

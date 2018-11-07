@@ -17,7 +17,7 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
@@ -31,7 +31,7 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_server_network" />
 
@@ -44,48 +44,48 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_networkserver_host">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/host"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="irc.freenode.org" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_networkserver_port">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/port"
           style="@style/Widget.CoreSettings.EditText"
           android:inputType="number"
           tools:text="6667" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.v7.widget.SwitchCompat
+      <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/ssl_enabled"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_networkserver_ssl_enabled" />
 
-      <android.support.v7.widget.SwitchCompat
+      <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/ssl_verify"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_networkserver_ssl_verify" />
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_networkserver_password"
         app:passwordToggleEnabled="true">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/password"
           style="@style/Widget.CoreSettings.EditText"
           android:inputType="textPassword"
           tools:text="thisisasecurepassword" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -93,11 +93,11 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_settings" />
 
-      <android.support.v7.widget.SwitchCompat
+      <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/proxy_enabled"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_networkserver_proxy_enabled" />
@@ -117,48 +117,48 @@
         style="@style/Widget.FullWidthSpinner"
         tools:listitem="@layout/widget_spinner_item_inline" />
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_networkserver_proxy_host">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/proxy_host"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="localhost" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_networkserver_proxy_port">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/proxy_port"
           style="@style/Widget.CoreSettings.EditText"
           android:inputType="number"
           tools:text="8080" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_networkserver_proxy_user">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/proxy_user"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="justjanne" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_networkserver_proxy_pass"
         app:passwordToggleEnabled="true">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/proxy_pass"
           style="@style/Widget.CoreSettings.EditText"
           android:inputType="textPassword"
           tools:text="thisisasecurepassword" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
   </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

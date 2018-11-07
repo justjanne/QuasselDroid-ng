@@ -17,7 +17,7 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
@@ -31,11 +31,11 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_filter" />
 
-      <android.support.v7.widget.SwitchCompat
+      <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/enabled"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_highlightrule_enabled" />
@@ -45,45 +45,45 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_highlightrule_name">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/name"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="https://clbin.com/*.jpg*" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.v7.widget.SwitchCompat
+      <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/is_regex"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_highlightrule_regular_expression" />
 
-      <android.support.v7.widget.SwitchCompat
+      <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/is_case_sensitive"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_highlightrule_case_sensitive" />
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_highlightrule_sender">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/sender"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="TARS" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_highlightrule_channel">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/channel"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="#yepityha" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
   </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

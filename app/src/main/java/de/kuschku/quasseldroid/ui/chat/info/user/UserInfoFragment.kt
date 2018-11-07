@@ -19,7 +19,6 @@
 
 package de.kuschku.quasseldroid.ui.chat.info.user
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.text.SpannableString
 import android.view.LayoutInflater
@@ -29,6 +28,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.Buffer_Type

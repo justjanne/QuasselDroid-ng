@@ -19,8 +19,8 @@
 
 package de.kuschku.quasseldroid.util.helper
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.LiveDataReactiveStreams
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.LiveDataReactiveStreams
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import io.reactivex.*
 import io.reactivex.functions.BiFunction

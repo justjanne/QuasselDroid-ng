@@ -20,8 +20,6 @@
 package de.kuschku.quasseldroid.ui.setup.user
 
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
-import android.support.v7.widget.SwitchCompat
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
@@ -29,8 +27,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.appcompat.widget.SwitchCompat
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.DefaultNetwork

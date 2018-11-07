@@ -42,7 +42,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/nameWrapper"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -55,9 +55,9 @@
         android:layout_height="wrap_content"
         android:inputType="textUri|textNoSuggestions"
         app:errorEnabled="true" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/hostWrapper"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -70,9 +70,9 @@
         android:layout_height="wrap_content"
         android:inputType="textUri|textNoSuggestions"
         app:errorEnabled="true" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/portWrapper"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -88,9 +88,9 @@
         android:text="6667"
         app:errorEnabled="true"
         tools:ignore="HardcodedText" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.v7.widget.SwitchCompat
+    <androidx.appcompat.widget.SwitchCompat
       android:id="@+id/ssl_enabled"
       style="@style/Widget.CoreSettings.PrimaryItemSwitch"
       android:layout_width="match_parent"

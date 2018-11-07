@@ -23,10 +23,10 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import android.support.annotation.AttrRes
-import android.support.annotation.DimenRes
-import android.support.v7.widget.RecyclerView
 import android.view.View
+import androidx.annotation.AttrRes
+import androidx.annotation.DimenRes
+import androidx.recyclerview.widget.RecyclerView
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 

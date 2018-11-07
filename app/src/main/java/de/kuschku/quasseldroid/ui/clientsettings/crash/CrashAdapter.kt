@@ -20,13 +20,13 @@
 package de.kuschku.quasseldroid.ui.clientsettings.crash
 
 import android.content.Intent
-import android.support.v7.recyclerview.extensions.ListAdapter
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.malheur.data.Report
@@ -37,11 +37,10 @@ import org.threeten.bp.format.DateTimeFormatter
 
 class CrashAdapter : ListAdapter<Pair<Report, String>, CrashAdapter.CrashViewHolder>(
   object : DiffUtil.ItemCallback<Pair<Report, String>>() {
-    override fun areItemsTheSame(oldItem: Pair<Report, String>?, newItem: Pair<Report, String>?) =
-      oldItem?.second == newItem?.second
+    override fun areItemsTheSame(oldItem: Pair<Report, String>, newItem: Pair<Report, String>) =
+      oldItem.second == newItem.second
 
-    override fun areContentsTheSame(oldItem: Pair<Report, String>?,
-                                    newItem: Pair<Report, String>?) =
+    override fun areContentsTheSame(oldItem: Pair<Report, String>, newItem: Pair<Report, String>) =
       oldItem == newItem
   }
 ) {

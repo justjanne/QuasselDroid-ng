@@ -19,8 +19,8 @@
 
 package de.kuschku.quasseldroid.util.helper
 
-import android.support.v4.graphics.drawable.DrawableCompat
 import android.widget.Button
+import androidx.core.graphics.drawable.DrawableCompat
 
 fun Button.retint() {
   val (left, top, right, bottom) = compoundDrawables.map {

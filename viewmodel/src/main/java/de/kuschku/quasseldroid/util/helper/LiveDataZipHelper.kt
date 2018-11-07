@@ -17,8 +17,9 @@
  */
 package de.kuschku.quasseldroid.util.helper
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MediatorLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+
 
 /**
  * This function creates a [LiveData] of a [Pair] of the two types provided. The resulting LiveData

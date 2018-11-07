@@ -17,18 +17,19 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:theme="?attr/actionBarTheme">
+  android:theme="?attr/actionBarTheme"
+  tools:showIn="@layout/activity_main">
 
   <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
       android:id="@+id/toolbar"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
@@ -42,7 +43,7 @@
         android:layout_height="fill_parent"
         tools:layout="@layout/fragment_toolbar" />
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
       android:id="@+id/progress_bar"
@@ -56,4 +57,4 @@
       tools:indeterminate="true" />
   </FrameLayout>
 
-</android.support.design.widget.AppBarLayout>
+</com.google.android.material.appbar.AppBarLayout>

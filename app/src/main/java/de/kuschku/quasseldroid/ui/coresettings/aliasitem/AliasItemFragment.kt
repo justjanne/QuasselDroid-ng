@@ -22,16 +22,16 @@ package de.kuschku.quasseldroid.ui.coresettings.aliasitem
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
@@ -140,7 +140,7 @@ class AliasItemFragment : SettingsFragment(), SettingsFragment.Savable,
 
   private fun applyChanges() = IAliasManager.Alias(
     name = name.text.toString(),
-    expansion = formatSerializer.toEscapeCodes(expansion.text)
+    expansion = formatSerializer.toEscapeCodes(expansion.safeText)
   )
 
   override fun onSave() = rule.let { data ->

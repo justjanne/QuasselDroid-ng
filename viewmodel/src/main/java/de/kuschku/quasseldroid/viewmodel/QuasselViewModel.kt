@@ -19,7 +19,7 @@
 
 package de.kuschku.quasseldroid.viewmodel
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo

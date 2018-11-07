@@ -19,12 +19,16 @@
 
 package de.kuschku.quasseldroid.ui.chat.buffers
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.v7.widget.*
 import android.view.*
 import android.widget.AdapterView
+import androidx.appcompat.widget.AppCompatSpinner
+import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
@@ -268,8 +272,10 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     var hasRestoredChatListState = false
     listAdapter.setOnUpdateFinishedListener {
       if (!hasRestoredChatListState && it.isNotEmpty()) {
-        savedInstanceState?.getParcelable<Parcelable>(KEY_STATE_LIST)
-          ?.let(chatList.layoutManager::onRestoreInstanceState)
+        chatList.layoutManager?.let {
+          savedInstanceState?.getParcelable<Parcelable>(KEY_STATE_LIST)
+            ?.let(it::onRestoreInstanceState)
+        }
         hasRestoredChatListState = true
       }
     }
@@ -455,7 +461,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
-    outState.putParcelable(KEY_STATE_LIST, chatList.layoutManager.onSaveInstanceState())
+    outState.putParcelable(KEY_STATE_LIST, chatList.layoutManager?.onSaveInstanceState())
   }
 
   private fun clickListener(bufferId: BufferId) {

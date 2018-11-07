@@ -27,7 +27,7 @@
     android:layout_height="match_parent"
     android:padding="2dp">
 
-    <android.support.v7.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
       android:id="@+id/action_format_bold"
       style="@style/Widget.Button.Format"
       android:contentDescription="@string/label_bold"
@@ -38,7 +38,7 @@
       android:layout_width="2dp"
       android:layout_height="match_parent" />
 
-    <android.support.v7.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
       android:id="@+id/action_format_italic"
       style="@style/Widget.Button.Format"
       android:contentDescription="@string/label_italic"
@@ -49,7 +49,7 @@
       android:layout_width="2dp"
       android:layout_height="match_parent" />
 
-    <android.support.v7.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
       android:id="@+id/action_format_underline"
       style="@style/Widget.Button.Format"
       android:contentDescription="@string/label_underline"
@@ -60,7 +60,7 @@
       android:layout_width="2dp"
       android:layout_height="match_parent" />
 
-    <android.support.v7.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
       android:id="@+id/action_format_strikethrough"
       style="@style/Widget.Button.Format"
       android:contentDescription="@string/label_strikethrough"
@@ -71,7 +71,7 @@
       android:layout_width="2dp"
       android:layout_height="match_parent" />
 
-    <android.support.v7.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
       android:id="@+id/action_format_monospace"
       style="@style/Widget.Button.Format"
       android:contentDescription="@string/label_monospace"
@@ -87,7 +87,7 @@
       android:layout_height="48dp"
       android:layout_gravity="center">
 
-      <android.support.v7.widget.AppCompatImageButton
+      <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/action_format_foreground"
         style="@style/Widget.Button.Format"
         android:layout_width="match_parent"
@@ -115,7 +115,7 @@
       android:layout_height="48dp"
       android:layout_gravity="center">
 
-      <android.support.v7.widget.AppCompatImageButton
+      <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/action_format_background"
         style="@style/Widget.Button.Format"
         android:layout_width="match_parent"
@@ -138,7 +138,7 @@
       android:layout_width="2dp"
       android:layout_height="match_parent" />
 
-    <android.support.v7.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
       android:id="@+id/action_format_clear"
       style="@style/Widget.Button.Format"
       android:contentDescription="@string/label_clear_formatting"

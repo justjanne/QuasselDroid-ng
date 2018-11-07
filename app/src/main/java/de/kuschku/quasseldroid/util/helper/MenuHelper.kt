@@ -20,8 +20,8 @@
 package de.kuschku.quasseldroid.util.helper
 
 import android.content.Context
-import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.Menu
+import androidx.core.graphics.drawable.DrawableCompat
 import de.kuschku.quasseldroid.R
 
 fun Menu.retint(context: Context) {

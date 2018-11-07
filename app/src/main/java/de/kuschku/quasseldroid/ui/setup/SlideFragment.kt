@@ -19,16 +19,16 @@
 
 package de.kuschku.quasseldroid.ui.setup
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.annotation.StringRes
-import android.support.design.widget.CollapsingToolbarLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.StringRes
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import dagger.android.support.DaggerFragment
 import de.kuschku.quasseldroid.R
 
@@ -41,12 +41,12 @@ abstract class SlideFragment : DaggerFragment() {
   protected abstract fun isValid(): Boolean
 
   val valid = object : MutableLiveData<Boolean>() {
-    override fun observe(owner: LifecycleOwner, observer: Observer<Boolean>) {
+    override fun observe(owner: LifecycleOwner, observer: Observer<in Boolean>) {
       super.observe(owner, observer)
       observer.onChanged(value)
     }
 
-    override fun observeForever(observer: Observer<Boolean>) {
+    override fun observeForever(observer: Observer<in Boolean>) {
       super.observeForever(observer)
       observer.onChanged(value)
     }

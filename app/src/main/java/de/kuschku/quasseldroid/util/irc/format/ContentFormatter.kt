@@ -21,7 +21,6 @@ package de.kuschku.quasseldroid.util.irc.format
 
 import android.content.Context
 import android.graphics.Typeface
-import android.support.annotation.ColorInt
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
@@ -30,6 +29,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.URLSpan
 import android.view.View
+import androidx.annotation.ColorInt
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.libquassel.util.irc.SenderColorUtil

@@ -112,35 +112,27 @@ dependencies {
   implementation(kotlin("stdlib", "1.2.60"))
 
   // App Compat
-  withVersion("27.1.1") {
-    implementation("com.android.support", "appcompat-v7", version)
-    implementation("com.android.support", "design", version)
-    implementation("com.android.support", "customtabs", version)
-    implementation("com.android.support", "cardview-v7", version)
-    implementation("com.android.support", "recyclerview-v7", version)
-    implementation("com.android.support", "preference-v7", version)
-    implementation("com.android.support", "preference-v14", version)
-  }
-  implementation("com.android.support.constraint", "constraint-layout", "1.1.0-beta6")
+  implementation("com.google.android.material", "material", "1.0.0-rc01")
 
-  // App Arch Lifecycle
-  withVersion("1.1.1") {
-    implementation("android.arch.lifecycle", "extensions", version)
-    implementation("android.arch.lifecycle", "reactivestreams", version)
-    testImplementation("android.arch.core", "core-testing", version)
-    implementation(project(":lifecycle-ktx"))
-  }
+  implementation("androidx.appcompat", "appcompat", "1.0.0")
+  implementation("androidx.browser", "browser", "1.0.0")
+  implementation("androidx.cardview", "cardview", "1.0.0")
+  implementation("androidx.recyclerview", "recyclerview", "1.0.0")
+  implementation("androidx.preference", "preference", "1.0.0")
+  implementation("androidx.legacy", "legacy-preference-v14", "1.0.0")
+  implementation("androidx.constraintlayout", "constraintlayout", "1.1.2")
 
-  // App Arch Persistence
-  withVersion("1.1.1-rc1") {
-    implementation("android.arch.persistence.room", "runtime", version)
-    kapt("android.arch.persistence.room", "compiler", version)
-    implementation("android.arch.persistence.room", "rxjava2", version)
-    testImplementation("android.arch.persistence.room", "testing", version)
-  }
+  implementation("androidx.lifecycle", "lifecycle-extensions", "2.0.0-rc01")
+  implementation("androidx.lifecycle", "lifecycle-reactivestreams", "2.0.0-rc01")
+  testImplementation("androidx.arch.core", "core-testing", "2.0.0-rc01")
+  implementation(project(":lifecycle-ktx"))
 
-  // App Arch Paging
-  implementation("android.arch.paging", "runtime", "1.0.0")
+  implementation("androidx.room", "room-runtime", "2.0.0-rc01")
+  kapt("androidx.room", "room-compiler", "2.0.0-rc01")
+  implementation("androidx.room", "room-rxjava2", "2.0.0-rc01")
+  testImplementation("androidx.room", "room-testing", "2.0.0-rc01")
+
+  implementation("androidx.paging", "paging-runtime", "2.0.0-rc01")
 
   // Utility
   implementation("io.reactivex.rxjava2", "rxandroid", "2.0.2")
@@ -151,7 +143,7 @@ dependencies {
   implementation("commons-codec", "commons-codec", "1.11")
   implementation("com.squareup.retrofit2", "retrofit", "2.4.0")
   implementation("com.squareup.retrofit2", "converter-gson", "2.4.0")
-  withVersion("8.8.1") {
+  withVersion("9.0.0-rc1") {
     implementation("com.jakewharton", "butterknife", version)
     kapt("com.jakewharton", "butterknife-compiler", version)
   }
@@ -169,7 +161,7 @@ dependencies {
     implementation("com.afollestad.material-dialogs", "core", version)
     implementation("com.afollestad.material-dialogs", "commons", version)
   }
-  withVersion("4.6.1") {
+  withVersion("4.8.0") {
     implementation("com.github.bumptech.glide", "glide", version)
     implementation("com.github.bumptech.glide", "recyclerview-integration", version)
     kapt("com.github.bumptech.glide", "compiler", version)
@@ -194,9 +186,4 @@ dependencies {
   }
 
   testImplementation("junit", "junit", "4.12")
-  withVersion("1.0.1") {
-    androidTestImplementation("com.android.support.test", "runner", version)
-    androidTestImplementation("com.android.support.test", "rules", version)
-  }
-  androidTestImplementation("com.android.support.test.espresso", "espresso-core", "3.0.1")
 }

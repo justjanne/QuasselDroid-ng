@@ -23,8 +23,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
-import android.support.v4.view.ViewCompat
 import android.util.AttributeSet
+import androidx.core.view.ViewCompat
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.ui.fastscroll.views.FastScrollRecyclerView
 
@@ -47,9 +47,7 @@ class DrawerRecyclerView @JvmOverloads constructor(
     mInsetForeground = a.getDrawable(R.styleable.DrawerRecyclerView_insetBackground)
     a.recycle()
     setWillNotDraw(true) // No need to draw until the insets are adjusted
-    ViewCompat.setOnApplyWindowInsetsListener(
-      this
-    ) { _, insets ->
+    ViewCompat.setOnApplyWindowInsetsListener(this) { _, insets ->
       if (null == mInsets) {
         mInsets = Rect()
       }

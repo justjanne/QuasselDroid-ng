@@ -19,7 +19,7 @@
 
 package de.kuschku.quasseldroid.util.missingfeatures
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import de.kuschku.libquassel.quassel.ExtendedFeature
 
 data class MissingFeature(

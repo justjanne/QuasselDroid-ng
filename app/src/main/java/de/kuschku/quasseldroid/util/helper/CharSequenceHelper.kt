@@ -60,7 +60,7 @@ private class DelimitedRangesSequence(
       if (nextState == -1)
         calcNext()
       if (nextState == 0)
-        throw NoSuchElementException()
+        throw java.util.NoSuchElementException()
       val result = nextItem as IntRange
       // Clean next to avoid keeping reference on yielded instance
       nextItem = null

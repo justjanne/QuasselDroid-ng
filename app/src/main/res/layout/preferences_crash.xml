@@ -17,8 +17,10 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/list"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:scrollbars="vertical" />
+  android:scrollbars="vertical"
+  tools:listitem="@layout/widget_crash" />

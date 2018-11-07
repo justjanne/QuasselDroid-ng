@@ -21,9 +21,9 @@ package de.kuschku.quasseldroid.ui.clientsettings.client
 
 import android.content.Context
 import android.content.Intent
-import android.support.v7.preference.ListPreference
-import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceFragmentCompat
+import androidx.preference.ListPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import de.kuschku.quasseldroid.util.ui.settings.ListPreferenceDialogFragmentCompat
 import de.kuschku.quasseldroid.util.ui.settings.SettingsActivity
 

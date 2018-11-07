@@ -19,10 +19,10 @@
 
 package de.kuschku.quasseldroid.persistence
 
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.*
-import android.arch.persistence.room.migration.Migration
 import android.content.Context
+import androidx.room.*
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(entities = [(LegacyAccountDatabase.Account::class)], version = 4)
 abstract class LegacyAccountDatabase : RoomDatabase() {

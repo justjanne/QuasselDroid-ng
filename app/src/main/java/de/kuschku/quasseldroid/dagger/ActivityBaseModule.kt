@@ -19,10 +19,10 @@
 
 package de.kuschku.quasseldroid.dagger
 
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import dagger.Module
 import dagger.Provides
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountViewModel

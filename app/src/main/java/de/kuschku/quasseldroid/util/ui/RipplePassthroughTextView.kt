@@ -21,10 +21,10 @@ package de.kuschku.quasseldroid.util.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.v7.widget.AppCompatTextView
 import android.text.Spannable
 import android.util.AttributeSet
 import android.view.MotionEvent
+import androidx.appcompat.widget.AppCompatTextView
 
 class RipplePassthroughTextView : AppCompatTextView {
   constructor(context: Context?) : super(context)

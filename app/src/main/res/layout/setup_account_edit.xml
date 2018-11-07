@@ -17,7 +17,7 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
@@ -28,7 +28,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <android.support.v4.widget.Space
+    <Space
       android:layout_width="match_parent"
       android:layout_height="16dp" />
 
@@ -42,7 +42,7 @@
         android:layout_width="56dp"
         android:layout_height="68dp">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
           android:layout_width="24dp"
           android:layout_height="24dp"
           android:layout_gravity="center_vertical"
@@ -51,7 +51,7 @@
           tools:ignore="ContentDescription" />
       </FrameLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,10 +64,10 @@
           android:layout_height="wrap_content"
           android:inputType="text"
           app:errorEnabled="true" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
-    <android.support.v4.widget.Space
+    <Space
       android:layout_width="match_parent"
       android:layout_height="16dp" />
 
@@ -81,7 +81,7 @@
         android:layout_width="56dp"
         android:layout_height="68dp">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
           android:layout_width="24dp"
           android:layout_height="24dp"
           android:layout_gravity="center_vertical"
@@ -95,7 +95,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/hostWrapper"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -108,9 +108,9 @@
             android:layout_height="wrap_content"
             android:inputType="textUri"
             app:errorEnabled="true" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/portWrapper"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -124,11 +124,11 @@
             android:inputType="number"
             android:text="@string/defaultConnectionPort"
             app:errorEnabled="true" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
       </LinearLayout>
     </LinearLayout>
 
-    <android.support.v4.widget.Space
+    <Space
       android:layout_width="match_parent"
       android:layout_height="16dp" />
 
@@ -143,7 +143,7 @@
         android:layout_width="56dp"
         android:layout_height="68dp">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
           android:layout_width="24dp"
           android:layout_height="24dp"
           android:layout_gravity="center_vertical"
@@ -157,7 +157,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/userWrapper"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -170,9 +170,9 @@
             android:layout_height="wrap_content"
             android:inputType="textVisiblePassword|textNoSuggestions"
             app:errorEnabled="true" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/passWrapper"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -186,13 +186,13 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             app:errorEnabled="true" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
       </LinearLayout>
     </LinearLayout>
 
-    <android.support.v4.widget.Space
+    <Space
       android:layout_width="match_parent"
       android:layout_height="16dp" />
   </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

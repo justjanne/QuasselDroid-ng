@@ -21,7 +21,7 @@ package de.kuschku.quasseldroid.ui.clientsettings.license
 
 import android.content.Context
 import android.content.Intent
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import de.kuschku.quasseldroid.util.ui.settings.SettingsActivity
 
 class LicenseActivity : SettingsActivity(LicenseFragment()) {

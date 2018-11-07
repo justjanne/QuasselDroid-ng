@@ -17,7 +17,7 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
@@ -31,7 +31,7 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_account_card" />
 
@@ -44,35 +44,35 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_identity_identity_name">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/identity_name"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="Standardidentität" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_identity_real_name">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/real_name"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="Janne Koschinski" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_identity_ident">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/ident"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="justJanne" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -92,7 +92,7 @@
       android:orientation="vertical"
       android:visibility="visible">
 
-      <android.support.v7.widget.RecyclerView
+      <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/nicks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_message_bulleted" />
 
@@ -130,35 +130,35 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_identity_kick_reason">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/kick_reason"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_identity_part_reason">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/part_reason"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="So if you care to find me, look to the western sky. As someone told me lately, everyone deserves a chance to fly." />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_identity_quit_reason">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/quit_reason"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="So if you care to find me, look to the western sky. As someone told me lately, everyone deserves a chance to fly." />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -166,7 +166,7 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_clock" />
 
@@ -179,17 +179,17 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_identity_away_reason">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/away_reason"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="Gone Fishing." />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.v7.widget.SwitchCompat
+      <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/detach_away"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_identity_detach_away" />
@@ -199,16 +199,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
           style="@style/Widget.CoreSettings.EditTextLayout"
           android:hint="@string/settings_identity_detach_away_reason">
 
-          <android.support.design.widget.TextInputEditText
+          <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/detach_away_reason"
             style="@style/Widget.CoreSettings.EditText"
             tools:text="Gone Fishing." />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
       </LinearLayout>
     </LinearLayout>
   </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

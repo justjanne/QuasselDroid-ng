@@ -22,12 +22,12 @@ package de.kuschku.quasseldroid.ui.clientsettings.client
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.preference.ListPreference
-import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceGroup
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.preference.ListPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceGroup
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.Settings

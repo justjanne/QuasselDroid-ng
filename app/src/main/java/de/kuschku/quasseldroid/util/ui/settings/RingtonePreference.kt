@@ -24,9 +24,9 @@ import android.content.Intent
 import android.content.res.TypedArray
 import android.media.RingtoneManager
 import android.net.Uri
-import android.support.v7.preference.DialogPreference
 import android.text.TextUtils
 import android.util.AttributeSet
+import androidx.preference.DialogPreference
 import de.kuschku.quasseldroid.R
 
 open class RingtonePreference : DialogPreference,

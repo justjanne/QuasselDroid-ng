@@ -17,7 +17,7 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
@@ -31,7 +31,7 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_message_bulleted" />
 
@@ -44,15 +44,15 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_network_network_name">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/network_name"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="Snoonet" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -60,7 +60,7 @@
       android:orientation="vertical"
       android:visibility="visible">
 
-      <android.support.v7.widget.RecyclerView
+      <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/servers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_account_card" />
 
@@ -109,11 +109,11 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_key_variant" />
 
-      <android.support.v7.widget.SwitchCompat
+      <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/sasl_enabled"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_network_sasl_enabled" />
@@ -124,27 +124,27 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       tools:visibility="gone">
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_network_sasl_account">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/sasl_account"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="justjanne" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_network_sasl_password"
         app:passwordToggleEnabled="true">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/sasl_password"
           style="@style/Widget.CoreSettings.EditText"
           android:inputType="textPassword"
           tools:text="thisisasecurepassword" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
       <!-- TODO: Add info box to show if network supports SASL when connected -->
     </LinearLayout>
@@ -154,11 +154,11 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_key_variant" />
 
-      <android.support.v7.widget.SwitchCompat
+      <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/autoidentify_enabled"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_network_autoidentify_enabled" />
@@ -169,27 +169,27 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       tools:visibility="gone">
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_network_autoidentify_service">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/autoidentify_service"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="NickServ" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_network_autoidentify_password"
         app:passwordToggleEnabled="true">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/autoidentify_password"
           style="@style/Widget.CoreSettings.EditText"
           android:inputType="textPassword"
           tools:text="thisisasecurepassword" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -197,7 +197,7 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_server_network" />
 
@@ -210,18 +210,18 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_network_perform">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/perform"
           style="@style/Widget.CoreSettings.EditText"
           android:inputType="textMultiLine"
           tools:text="/mode -x" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.v7.widget.SwitchCompat
+      <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/rejoin_channels"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_network_rejoin_channels" />
@@ -232,11 +232,11 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_clock" />
 
-      <android.support.v7.widget.SwitchCompat
+      <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/autoreconnect_enabled"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_network_autoreconnect_enabled" />
@@ -251,32 +251,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
           style="@style/Widget.CoreSettings.EditTextLayout"
           android:hint="@string/settings_network_autoreconnect_interval">
 
-          <android.support.design.widget.TextInputEditText
+          <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/autoreconnect_interval"
             style="@style/Widget.CoreSettings.EditText"
             tools:text="60" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
           style="@style/Widget.CoreSettings.EditTextSuffix"
           android:text="@string/settings_network_autoreconnect_interval_unit" />
       </FrameLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_network_autoreconnect_attempts">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/autoreconnect_attempts"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="20" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.v7.widget.SwitchCompat
+      <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/autoreconnect_unlimited"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_network_autoreconnect_unlimited" />
@@ -287,11 +287,11 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_settings" />
 
-      <android.support.v7.widget.SwitchCompat
+      <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/customratelimits_enabled"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_network_customratelimits_enabled" />
@@ -302,34 +302,34 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       tools:visibility="visible">
 
-      <android.support.v7.widget.SwitchCompat
+      <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/customratelimits_unlimited"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_network_customratelimits_unlimited" />
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CoreSettings.EditTextLayout"
         android:hint="@string/settings_network_customratelimits_burstsize">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/customratelimits_burstsize"
           style="@style/Widget.CoreSettings.EditText"
           tools:text="5" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
       <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
           style="@style/Widget.CoreSettings.EditTextLayout"
           android:hint="@string/settings_network_customratelimits_delay">
 
-          <android.support.design.widget.TextInputEditText
+          <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/customratelimits_delay"
             style="@style/Widget.CoreSettings.EditText"
             tools:text="2.20" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
           style="@style/Widget.CoreSettings.EditTextSuffix"
@@ -337,4 +337,4 @@
       </FrameLayout>
     </LinearLayout>
   </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

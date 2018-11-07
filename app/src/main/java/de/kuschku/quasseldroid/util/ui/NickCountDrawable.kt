@@ -2,8 +2,8 @@ package de.kuschku.quasseldroid.util.ui
 
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import android.support.annotation.ColorInt
-import android.support.annotation.Dimension
+import androidx.annotation.ColorInt
+import androidx.annotation.Dimension
 
 class NickCountDrawable(
   count: Int,

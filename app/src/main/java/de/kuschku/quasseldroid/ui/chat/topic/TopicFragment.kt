@@ -19,17 +19,17 @@
 
 package de.kuschku.quasseldroid.ui.chat.topic
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
@@ -132,7 +132,7 @@ class TopicFragment : SettingsFragment(), SettingsFragment.Savable {
       val session = sessionOptional.orNull()
       viewModel.buffer { bufferId ->
         session?.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
-          val topic = formatSerializer.toEscapeCodes(chatline.text)
+          val topic = formatSerializer.toEscapeCodes(chatline.safeText)
           session.rpcHandler?.sendInput(bufferInfo, "/topic $topic")
           return true
         }

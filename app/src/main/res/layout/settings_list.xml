@@ -17,7 +17,7 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
@@ -31,7 +31,7 @@
 
     <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_server_network" />
 
@@ -42,7 +42,7 @@
 
     <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroup">
 
-      <android.support.v7.widget.RecyclerView
+      <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/networks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
 
     <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_account_card" />
 
@@ -80,7 +80,7 @@
       android:layout_marginStart="72dp"
       android:orientation="vertical">
 
-      <android.support.v7.widget.RecyclerView
+      <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/identities"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
 
     <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_list_bulleted" />
 
@@ -113,7 +113,7 @@
 
     <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroup">
 
-      <android.support.v7.widget.RecyclerView
+      <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatlists"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -138,7 +138,7 @@
       style="@style/Widget.CoreSettings.PrimaryItemGroupHeader"
       android:focusable="true">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_filter" />
 
@@ -152,7 +152,7 @@
       style="@style/Widget.CoreSettings.PrimaryItemGroupHeader"
       android:focusable="true">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_bell" />
 
@@ -166,7 +166,7 @@
       style="@style/Widget.CoreSettings.PrimaryItemGroupHeader"
       android:focusable="true">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_message_bulleted" />
 
@@ -180,7 +180,7 @@
       style="@style/Widget.CoreSettings.PrimaryItemGroupHeader"
       android:focusable="true">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_settings" />
 
@@ -194,7 +194,7 @@
       style="@style/Widget.CoreSettings.PrimaryItemGroupHeader"
       android:focusable="true">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         style="@style/Widget.CoreSettings.PrimaryItemIcon"
         app:srcCompat="@drawable/ic_info" />
 
@@ -203,4 +203,4 @@
         android:text="@string/label_info_core" />
     </LinearLayout>
   </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

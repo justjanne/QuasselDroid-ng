@@ -21,8 +21,8 @@ package de.kuschku.quasseldroid.util.helper
 
 import android.content.res.Resources
 import android.os.Build
-import android.support.annotation.ColorInt
-import android.support.annotation.ColorRes
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 
 @ColorInt
 fun Resources.getColorBackport(@ColorRes color: Int, theme: Resources.Theme): Int {

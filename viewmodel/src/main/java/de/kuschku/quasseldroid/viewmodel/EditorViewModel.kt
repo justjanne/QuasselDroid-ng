@@ -19,7 +19,7 @@
 
 package de.kuschku.quasseldroid.viewmodel
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.syncables.AliasManager
 import de.kuschku.libquassel.quassel.syncables.IrcChannel

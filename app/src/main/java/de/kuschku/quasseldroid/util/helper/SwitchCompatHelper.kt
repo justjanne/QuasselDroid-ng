@@ -19,8 +19,8 @@
 
 package de.kuschku.quasseldroid.util.helper
 
-import android.support.v7.widget.SwitchCompat
 import android.view.ViewGroup
+import androidx.appcompat.widget.SwitchCompat
 import de.kuschku.quasseldroid.util.ui.AnimationHelper
 
 fun SwitchCompat.setDependent(view: ViewGroup, reverse: Boolean = false) {

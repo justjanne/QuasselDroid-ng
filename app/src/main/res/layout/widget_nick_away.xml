@@ -73,7 +73,7 @@
       tools:visibility="visible" />
   </LinearLayout>
 
-  <android.support.v7.widget.AppCompatImageView
+  <androidx.appcompat.widget.AppCompatImageView
     android:layout_width="24dp"
     android:layout_height="24dp"
     android:layout_gravity="center_vertical"

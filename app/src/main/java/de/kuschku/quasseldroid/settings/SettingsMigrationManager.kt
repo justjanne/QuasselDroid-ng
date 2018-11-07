@@ -21,9 +21,9 @@ package de.kuschku.quasseldroid.settings
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.annotation.XmlRes
-import android.support.v7.preference.PreferenceManager
-import android.support.v7.preference.PreferenceManager.KEY_HAS_SET_DEFAULT_VALUES
+import androidx.annotation.XmlRes
+import androidx.preference.PreferenceManager
+import androidx.preference.PreferenceManager.KEY_HAS_SET_DEFAULT_VALUES
 import de.kuschku.quasseldroid.R.xml.preferences
 
 class SettingsMigrationManager(

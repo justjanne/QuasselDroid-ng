@@ -17,7 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package android.arch.lifecycle;
+package androidx.lifecycle;
 
 public interface FullLifecycleObserverProxy extends FullLifecycleObserver {
 }

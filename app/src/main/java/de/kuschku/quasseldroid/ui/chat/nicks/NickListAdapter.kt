@@ -19,14 +19,14 @@
 
 package de.kuschku.quasseldroid.ui.chat.nicks
 
-import android.support.v7.recyclerview.extensions.ListAdapter
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.util.helpers.nullIf
@@ -47,7 +47,7 @@ class NickListAdapter(
     override fun areItemsTheSame(oldItem: IrcUserItem, newItem: IrcUserItem) =
       oldItem.nick == newItem.nick
 
-    override fun areContentsTheSame(oldItem: IrcUserItem?, newItem: IrcUserItem?) =
+    override fun areContentsTheSame(oldItem: IrcUserItem, newItem: IrcUserItem) =
       oldItem == newItem
   }), FastScrollRecyclerView.SectionedAdapter {
   override fun getSectionName(position: Int) = getItem(position).let {

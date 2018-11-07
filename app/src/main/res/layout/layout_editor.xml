@@ -25,17 +25,17 @@
   android:layout_height="match_parent"
   android:orientation="vertical">
 
-  <android.support.design.widget.CoordinatorLayout
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="0dip"
     android:layout_weight="1"
     android:orientation="vertical">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
-      <android.support.v7.widget.AppCompatImageButton
+      <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/tab_complete"
         style="?attr/buttonStyleSmall"
         android:layout_width="?attr/actionBarSize"
@@ -77,7 +77,7 @@
           android:textSize="16sp" />
       </ScrollView>
 
-      <android.support.v7.widget.AppCompatImageButton
+      <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/send"
         style="?attr/buttonStyleSmall"
         android:layout_width="?attr/actionBarSize"
@@ -91,9 +91,9 @@
         app:srcCompat="@drawable/ic_send"
         app:tint="?attr/colorAccent"
         tools:ignore="UnusedAttribute" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/autocomplete_list"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -102,9 +102,9 @@
       app:behavior_peekHeight="@dimen/autocomplete_max_height"
       app:layout_behavior="@string/bottom_sheet_behavior"
       tools:listitem="@layout/widget_nick" />
-  </android.support.design.widget.CoordinatorLayout>
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-  <android.support.design.widget.AppBarLayout
+  <com.google.android.material.appbar.AppBarLayout
     android:id="@+id/formatting_toolbar_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -116,5 +116,5 @@
       android:layout_width="match_parent"
       android:layout_height="?attr/actionBarSize"
       app:contentInsetStart="0dip" />
-  </android.support.design.widget.AppBarLayout>
+  </com.google.android.material.appbar.AppBarLayout>
 </LinearLayout>

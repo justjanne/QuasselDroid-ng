@@ -19,7 +19,7 @@
 
 package de.kuschku.quasseldroid.util.helper
 
-import android.support.design.widget.FloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 fun FloatingActionButton.toggle(visible: Boolean) {
   if (visible) show()

@@ -53,21 +53,14 @@ android {
 dependencies {
   implementation(kotlin("stdlib", "1.2.60"))
 
-  // App Compat
-  withVersion("27.1.1") {
-    implementation("com.android.support", "appcompat-v7", version)
-  }
+  implementation("androidx.appcompat", "appcompat", "1.0.0")
 
-  // App Arch Persistence
-  withVersion("1.1.1-rc1") {
-    implementation("android.arch.persistence.room", "runtime", version)
-    kapt("android.arch.persistence.room", "compiler", version)
-    implementation("android.arch.persistence.room", "rxjava2", version)
-    testImplementation("android.arch.persistence.room", "testing", version)
-  }
+  implementation("androidx.room", "room-runtime", "2.0.0-rc01")
+  kapt("androidx.room", "room-compiler", "2.0.0-rc01")
+  implementation("androidx.room", "room-rxjava2", "2.0.0-rc01")
+  testImplementation("androidx.room", "room-testing", "2.0.0-rc01")
 
-  // App Arch Paging
-  implementation("android.arch.paging", "runtime", "1.0.0")
+  implementation("androidx.paging", "paging-runtime", "2.0.0-rc01")
 
   // Utility
   implementation("org.threeten", "threetenbp", "1.3.6", classifier = "no-tzdb")

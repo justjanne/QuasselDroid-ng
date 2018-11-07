@@ -26,9 +26,9 @@ import android.view.MotionEvent
 import android.widget.FrameLayout
 
 class TouchInterceptingFrameLayout : FrameLayout {
-  constructor(context: Context?) : super(context)
-  constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-  constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) :
+  constructor(context: Context) : super(context)
+  constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+  constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     super(context, attrs, defStyleAttr)
 
   @SuppressLint("ClickableViewAccessibility")

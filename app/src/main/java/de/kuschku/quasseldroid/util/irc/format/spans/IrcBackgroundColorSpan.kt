@@ -19,8 +19,8 @@
 
 package de.kuschku.quasseldroid.util.irc.format.spans
 
-import android.support.annotation.ColorInt
 import android.text.style.BackgroundColorSpan
+import androidx.annotation.ColorInt
 
 sealed class IrcBackgroundColorSpan<T : IrcBackgroundColorSpan<T>>(@ColorInt color: Int) :
   BackgroundColorSpan(color), Copyable<T> {
