@@ -25,8 +25,9 @@ import org.threeten.bp.Instant
 
 data class NotificationMessage(
   val messageId: MsgId,
+  val fullSender: String,
   val sender: CharSequence,
   val content: CharSequence,
   val time: Instant,
-  val avatar: Drawable?
+  val avatar: Drawable
 )

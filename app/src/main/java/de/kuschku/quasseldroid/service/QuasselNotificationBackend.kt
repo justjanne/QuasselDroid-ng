@@ -221,6 +221,7 @@ class QuasselNotificationBackend @Inject constructor(
     }.filter {
       it.messageId > session.bufferSyncer.lastSeenMsg(it.bufferInfo.bufferId)
     }.map {
+      val me = session.network(it.bufferInfo.networkId)?.me()
       QuasselDatabase.NotificationData(
         messageId = it.messageId,
         creationTime = now,
@@ -235,7 +236,11 @@ class QuasselNotificationBackend @Inject constructor(
         senderPrefixes = it.senderPrefixes,
         realName = it.realName,
         avatarUrl = it.avatarUrl,
-        content = it.content
+        content = it.content,
+        ownNick = me?.nick() ?: "",
+        ownIdent = me?.user() ?: "",
+        ownRealName = me?.realName() ?: "",
+        ownAvatarUrl = ""
       )
     }
     database.notifications().save(*results.toTypedArray())
@@ -279,18 +284,13 @@ class QuasselNotificationBackend @Inject constructor(
         networkId = it.networkId,
         groupId = 0
       )
-      val notificationData = data.map {
-        val nick = SpannableStringBuilder().apply {
-          append(contentFormatter.formatPrefix(it.senderPrefixes))
-          append(contentFormatter.formatNick(
-            it.sender,
-            senderColors = senderColors,
-            selfColor = selfColor
-          ))
-        }
-        val content = contentFormatter.formatContent(it.content, false, it.networkId)
 
-        val nickName = HostmaskHelper.nick(it.sender)
+      val size = context.resources.getDimensionPixelSize(R.dimen.notification_avatar_width)
+      val radius = context.resources.getDimensionPixelSize(R.dimen.avatar_radius)
+      val unknownSenderLabel = context.getString(R.string.label_unknown_sender)
+
+      fun obtainAvatar(nickName: String, ident: String, realName: String, avatarUrl: String,
+                       self: Boolean): Drawable {
         val senderColorIndex = SenderColorUtil.senderColor(nickName)
         val rawInitial = nickName.trimStart(*EditorViewModel.IGNORED_CHARS)
                            .firstOrNull() ?: nickName.firstOrNull()
@@ -298,14 +298,12 @@ class QuasselNotificationBackend @Inject constructor(
         val senderColor = when (messageSettings.colorizeNicknames) {
           MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
           MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
-            if (it.flag.hasFlag(Message_Flag.Self)) selfColor
+            if (self) selfColor
             else senderColors[senderColorIndex]
           MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
         }
 
-        val size = context.resources.getDimensionPixelSize(R.dimen.notification_avatar_width)
-        val radius = context.resources.getDimensionPixelSize(R.dimen.avatar_radius)
-        val avatarList = AvatarHelper.avatar(messageSettings, it)
+        val avatarList = AvatarHelper.avatar(messageSettings, ident, realName, avatarUrl, size)
         val avatarResult = try {
           GlideApp.with(context).loadWithFallbacks(avatarList)
             ?.letIf(!messageSettings.squareAvatars, GlideRequest<Drawable>::optionalCircleCrop)
@@ -320,22 +318,52 @@ class QuasselNotificationBackend @Inject constructor(
         } catch (_: Throwable) {
           null
         }
-        val avatar = avatarResult ?: TextDrawable.builder().beginConfig()
+        return avatarResult ?: TextDrawable.builder().beginConfig()
           .textColor((colorBackground and 0xFFFFFF) or (0x8A shl 24)).useFont(Typeface.DEFAULT_BOLD).endConfig().let {
             if (messageSettings.squareAvatars) it.buildRoundRect(initial, senderColor, radius)
             else it.buildRound(initial, senderColor)
           }
+      }
+
+      val selfInfo = SelfInfo(
+        nick = if (it.ownNick.isNotEmpty()) it.ownNick else unknownSenderLabel,
+        avatar = obtainAvatar(
+          it.ownNick,
+          it.ownIdent,
+          it.ownRealName,
+          it.ownAvatarUrl,
+          true
+        )
+      )
+
+      val notificationData = data.map {
+        val nick = SpannableStringBuilder().apply {
+          append(contentFormatter.formatPrefix(it.senderPrefixes))
+          append(contentFormatter.formatNick(
+            it.sender,
+            senderColors = senderColors,
+            selfColor = selfColor
+          ))
+        }
+        val content = contentFormatter.formatContent(it.content, false, it.networkId)
 
         NotificationMessage(
           messageId = it.messageId,
-          sender = nick,
+          fullSender = it.sender,
+          sender = if (nick.isNotEmpty()) nick else unknownSenderLabel,
           content = content,
           time = it.time,
-          avatar = avatar
+          avatar = obtainAvatar(
+            HostmaskHelper.nick(it.sender),
+            HostmaskHelper.user(it.sender),
+            it.realName,
+            it.avatarUrl,
+            it.flag.hasFlag(Message_Flag.Self)
+          )
         )
       }
       val notification = notificationHandler.notificationMessage(
-        notificationSettings, bufferInfo, notificationData, isLoud, isConnected
+        notificationSettings, bufferInfo, selfInfo, notificationData, isLoud, isConnected
       )
       notificationHandler.notify(notification)
     } ?: notificationHandler.remove(buffer)

@@ -102,6 +102,7 @@
   <string name="label_topic">Channel Topic</string>
   <string name="label_translators">Translators</string>
   <string name="label_unhide">Make Visible</string>
+  <string name="label_unknown_sender">&lt;Unknown&gt;</string>
   <string name="label_use_default">Use Default</string>
   <string name="label_website">Website</string>
   <string name="label_whitelist">Ignore</string>

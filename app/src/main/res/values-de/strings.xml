@@ -100,6 +100,7 @@
   <string name="label_topic">Kanal-Thema</string>
   <string name="label_translators">Übersetzer</string>
   <string name="label_unhide">Nicht mehr ausblenden</string>
+  <string name="label_unknown_sender">&lt;Unbekannt&gt;</string>
   <string name="label_use_default">Standardwerte benutzen</string>
   <string name="label_website">Webseite</string>
   <string name="label_whitelist">Ignorieren</string>

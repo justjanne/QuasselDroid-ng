@@ -10,11 +10,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.quasseldroid.service
@@ -33,7 +33,9 @@ import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.Person
 import androidx.core.app.RemoteInput
+import androidx.core.graphics.drawable.IconCompat
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.flag.hasFlag
@@ -108,8 +110,8 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
   }
 
   fun notificationMessage(notificationSettings: NotificationSettings, bufferInfo: BufferInfo,
-                          notifications: List<NotificationMessage>, isLoud: Boolean,
-                          isConnected: Boolean): Handle {
+                          selfInfo: SelfInfo, notifications: List<NotificationMessage>,
+                          isLoud: Boolean, isConnected: Boolean): Handle {
     val pendingIntentOpen = PendingIntent.getActivity(
       context.applicationContext,
       System.currentTimeMillis().toInt(),
@@ -187,17 +189,27 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       }
       .setCategory(NotificationCompat.CATEGORY_MESSAGE)
       .setPriority(NotificationCompat.PRIORITY_HIGH)
-      .setStyle(NotificationCompat.MessagingStyle("")
-                  .setConversationTitle(bufferInfo.bufferName)
-                  .also {
-                    for (notification in notifications) {
-                      it.addMessage(
-                        notification.content,
-                        notification.time.toEpochMilli(),
-                        notification.sender
-                      )
-                    }
-                  }
+      .setStyle(
+        NotificationCompat.MessagingStyle(
+          Person.Builder()
+            .setKey("")
+            .setName(selfInfo.nick)
+            .setIcon(IconCompat.createWithBitmap(bitmapFromDrawable(selfInfo.avatar)))
+            .build()
+        ).setConversationTitle(bufferInfo.bufferName)
+          .also {
+            for (notification in notifications) {
+              it.addMessage(
+                notification.content,
+                notification.time.toEpochMilli(),
+                Person.Builder()
+                  .setKey(notification.fullSender)
+                  .setName(notification.sender)
+                  .setIcon(IconCompat.createWithBitmap(bitmapFromDrawable(notification.avatar)))
+                  .build()
+              )
+            }
+          }
       )
       .letIf(isConnected) {
         it.addAction(0, translatedLocale.getString(R.string.label_mark_read), markReadPendingIntent)

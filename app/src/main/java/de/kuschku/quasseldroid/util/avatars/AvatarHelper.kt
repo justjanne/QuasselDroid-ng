@@ -35,8 +35,8 @@ import de.kuschku.quasseldroid.viewmodel.data.IrcUserItem
 import org.apache.commons.codec.digest.DigestUtils
 
 object AvatarHelper {
-  private fun avatar(settings: MessageSettings, ident: String, realName: String,
-                     avatarUrl: String?, size: Int?) =
+  fun avatar(settings: MessageSettings, ident: String, realName: String,
+             avatarUrl: String?, size: Int?) =
     listOfNotNull(
       avatarUrl.notBlank()?.let { listOf(Avatar.NativeAvatar(it)) },
       (settings.showAvatars && settings.showIRCCloudAvatars).letIf {
