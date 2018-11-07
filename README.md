@@ -57,17 +57,7 @@ Authors of legacy Quasseldroid:
 
 ### Quasseldroid
 
-* [**Android Architecture Components: Lifecycle**](https://android.googlesource.com/platform/frameworks/support/+/master/lifecycle)
-  Apache-2.0
-* [**Android Architecture Components: Paging**](https://android.googlesource.com/platform/frameworks/support/+/master/paging)
-  Apache-2.0
-* [**Android Architecture Components: Persistence**](https://android.googlesource.com/platform/frameworks/support/+/master/persistence)
-  Apache-2.0
-* [**Android Architecture Components: Room**](https://android.googlesource.com/platform/frameworks/support/+/master/persistence)
-  Apache-2.0
-* [**Android Support Library**](https://android.googlesource.com/platform/frameworks/support/+/master)
-  Apache-2.0
-* [**Android Support Library: Constraint Layout**](https://android.googlesource.com/platform/frameworks/opt/sherpa/+/studio-3.0/constraintlayout)
+* [**Android X**](https://developer.android.com/jetpack/androidx/)
   Apache-2.0
 * [**atinject**](https://code.google.com/archive/p/atinject/)
   Apache-2.0
