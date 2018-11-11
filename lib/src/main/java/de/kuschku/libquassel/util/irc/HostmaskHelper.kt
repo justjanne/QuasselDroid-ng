@@ -20,26 +20,23 @@
 package de.kuschku.libquassel.util.irc
 
 object HostmaskHelper {
-  fun nick(mask: String) = mask
-    .substringBefore('!', missingDelimiterValue = mask)
+  fun nick(mask: String) = split(mask).first
 
-  fun user(mask: String) = mask
-    .substringBeforeLast('@', missingDelimiterValue = mask)
-    .substringAfter('!', missingDelimiterValue = "")
+  fun user(mask: String) = split(mask).second
 
-  fun host(mask: String) = mask
-    .substringAfterLast('@', missingDelimiterValue = "")
+  fun host(mask: String) = split(mask).third
 
   fun split(mask: String): Triple<String, String, String> {
-    val userPartHostSplit = mask.split("@", limit = 2)
-    if (userPartHostSplit.size < 2)
+    val atIndex = mask.lastIndexOf('@')
+    if (atIndex == -1)
       return Triple(mask, "", "")
 
-    val (userPart, host) = userPartHostSplit
+    val host = mask.substring(atIndex + 1)
+    val userPart = mask.substring(0, atIndex)
 
     val nickUserSplit = userPart.split('!', limit = 2)
     if (nickUserSplit.size < 2)
-      return Triple(mask, "", host)
+      return Triple(userPart, "", host)
 
     val (nick, user) = nickUserSplit
     return Triple(nick, user, host)
