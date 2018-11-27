@@ -185,6 +185,9 @@ class QuasselService : DaggerLifecycleService(),
               session.rpcHandler?.sendInput(command.buffer, command.message)
             }
           }
+          handlerService.backend {
+            notificationBackend.showConnectedNotifications()
+          }
         }
       }
     } else {
