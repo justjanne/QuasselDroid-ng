@@ -127,7 +127,7 @@ class QuasselNotificationBackend @Inject constructor(
                                 Message_Type.Notice).toInt(),
                 0
               ) {
-                processMessages(session, false, *it.toTypedArray())
+                processMessages(session, true, *it.toTypedArray())
                 false
               }
           }
@@ -141,7 +141,7 @@ class QuasselNotificationBackend @Inject constructor(
                                 Message_Type.Notice).toInt(),
                 Message_Flag.of(Message_Flag.Highlight).toInt()
               ) {
-                processMessages(session, false, *it.toTypedArray())
+                processMessages(session, true, *it.toTypedArray())
                 false
               }
             }
