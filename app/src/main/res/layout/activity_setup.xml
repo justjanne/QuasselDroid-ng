@@ -44,6 +44,8 @@
     android:layout_marginRight="16dp"
     android:tint="#ffffff"
     app:fabSize="normal"
-    tools:ignore="RtlHardcoded" />
+    app:tint="#ffffff"
+    tools:ignore="RtlHardcoded"
+    tools:src="@drawable/ic_arrow_right" />
 
 </merge>
