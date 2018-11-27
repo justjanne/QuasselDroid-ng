@@ -87,7 +87,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
           NotificationManager.IMPORTANCE_DEFAULT
         ).apply {
           setSound(null, null)
-          enableLights(false)
+          enableLights(true)
           enableVibration(false)
           lightColor = context.getColorCompat(R.color.colorPrimary)
           lockscreenVisibility = Notification.VISIBILITY_PRIVATE
@@ -219,7 +219,9 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
                 0,
                 translatedLocale.getString(R.string.label_reply),
                 replyPendingIntent
-              ).addRemoteInput(remoteInput).build()
+              ).addRemoteInput(remoteInput)
+                .setAllowGeneratedReplies(true)
+                .build()
             )
           }
       }
