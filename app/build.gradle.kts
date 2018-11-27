@@ -109,7 +109,7 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.2.60"))
+  implementation(kotlin("stdlib", "1.3.10"))
 
   // App Compat
   implementation("com.google.android.material", "material", "1.0.0-rc01")
@@ -137,12 +137,12 @@ dependencies {
   // Utility
   implementation("io.reactivex.rxjava2", "rxandroid", "2.0.2")
   implementation("io.reactivex.rxjava2", "rxjava", "2.1.9")
-  implementation("org.threeten", "threetenbp", "1.3.6", classifier = "no-tzdb")
-  implementation("org.jetbrains", "annotations", "16.0.1")
-  implementation("com.google.code.gson", "gson", "2.8.2")
+  implementation("org.threeten", "threetenbp", "1.3.8", classifier = "no-tzdb")
+  implementation("org.jetbrains", "annotations", "16.0.3")
+  implementation("com.google.code.gson", "gson", "2.8.5")
   implementation("commons-codec", "commons-codec", "1.11")
-  implementation("com.squareup.retrofit2", "retrofit", "2.4.0")
-  implementation("com.squareup.retrofit2", "converter-gson", "2.4.0")
+  implementation("com.squareup.retrofit2", "retrofit", "2.5.0")
+  implementation("com.squareup.retrofit2", "converter-gson", "2.5.0")
   withVersion("9.0.0-rc1") {
     implementation("com.jakewharton", "butterknife", version)
     kapt("com.jakewharton", "butterknife-compiler", version)
@@ -156,7 +156,7 @@ dependencies {
   }
 
   // UI
-  implementation("me.zhanghai.android.materialprogressbar", "library", "1.4.2")
+  implementation("me.zhanghai.android.materialprogressbar", "library", "1.6.0")
   withVersion("0.9.6.0") {
     implementation("com.afollestad.material-dialogs", "core", version)
     implementation("com.afollestad.material-dialogs", "commons", version)
@@ -169,7 +169,7 @@ dependencies {
 
   // Quality Assurance
   implementation(project(":malheur"))
-  withVersion("1.5.4") {
+  withVersion("1.6.2") {
     debugImplementation("com.squareup.leakcanary", "leakcanary-android", version)
     releaseImplementation("com.squareup.leakcanary", "leakcanary-android-no-op", version)
     testImplementation("com.squareup.leakcanary", "leakcanary-android-no-op", version)

@@ -401,7 +401,7 @@ class IrcChannel(
 
   private val live_userModes = BehaviorSubject.createDefault(mutableMapOf<IrcUser, String>())
   private var _userModes: MutableMap<IrcUser, String>
-    get() = live_userModes.value
+    get() = live_userModes.value!!
     set(value) {
       updateUsers()
     }

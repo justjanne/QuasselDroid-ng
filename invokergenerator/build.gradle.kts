@@ -28,5 +28,5 @@ plugins {
 dependencies {
   implementation(project(":invokerannotations"))
   implementation("com.google.auto.service:auto-service:1.0-rc4")
-  implementation("com.squareup:javapoet:1.10.0")
+  implementation("com.squareup:javapoet:1.11.1")
 }

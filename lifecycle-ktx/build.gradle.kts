@@ -27,7 +27,7 @@ plugins {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.2.60"))
+  implementation(kotlin("stdlib", "1.3.10"))
 
   implementation("androidx.annotation", "annotation", "1.0.0")
 

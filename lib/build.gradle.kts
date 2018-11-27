@@ -29,13 +29,11 @@ plugins {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.2.60"))
+  implementation(kotlin("stdlib", "1.3.10"))
 
-  withVersion("27.1.1") {
-    implementation("com.android.support", "support-annotations", version)
-  }
+  implementation("androidx.annotation", "annotation", "1.0.0")
 
-  implementation("org.threeten", "threetenbp", "1.3.6")
+  implementation("org.threeten", "threetenbp", "1.3.8")
   implementation("io.reactivex.rxjava2", "rxjava", "2.1.9")
 
   implementation(project(":invokerannotations"))

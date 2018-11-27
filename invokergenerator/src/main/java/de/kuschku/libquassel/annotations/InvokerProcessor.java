@@ -109,7 +109,7 @@ public class InvokerProcessor extends AbstractProcessor {
     ClassName type = ClassName.get(packageName, invokerName);
     ClassName wrongObjectTypeException = ClassName.get("de.kuschku.libquassel.quassel.exceptions", "WrongObjectTypeException");
     ClassName unknownMethodException = ClassName.get("de.kuschku.libquassel.quassel.exceptions", "UnknownMethodException");
-    ClassName nonNullAnnotation = ClassName.get("android.support.annotation", "NonNull");
+    ClassName nonNullAnnotation = ClassName.get("androidx.annotation", "NonNull");
 
     MethodSpec methodSpecConstructor = MethodSpec
       .constructorBuilder()
