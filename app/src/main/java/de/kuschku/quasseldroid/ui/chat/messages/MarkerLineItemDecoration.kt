@@ -44,7 +44,7 @@ class MarkerLineItemDecoration(
     }
   }
 
-  override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+  override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
     c.save()
     val left: Int
     val right: Int
@@ -75,7 +75,6 @@ class MarkerLineItemDecoration(
     adapter[parent.getChildAdapterPosition(view)]?.let {
       if (it.isMarkerLine) {
         view.setTag(R.id.tag_markerline, true)
-        outRect.set(0, 0, height, 0)
       } else {
         view.setTag(R.id.tag_markerline, false)
       }
