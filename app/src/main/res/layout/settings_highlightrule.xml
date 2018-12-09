@@ -38,6 +38,7 @@
       <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/enabled"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:checked="true"
         android:text="@string/settings_highlightrule_enabled" />
     </LinearLayout>
 
