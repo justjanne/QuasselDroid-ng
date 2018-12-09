@@ -22,10 +22,7 @@ package de.kuschku.libquassel.quassel.syncables
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
 import de.kuschku.libquassel.quassel.syncables.interfaces.IHighlightRuleManager
 import de.kuschku.libquassel.session.SignalProxy
-import de.kuschku.libquassel.util.randomBoolean
-import de.kuschku.libquassel.util.randomOf
-import de.kuschku.libquassel.util.randomString
-import de.kuschku.libquassel.util.roundTrip
+import de.kuschku.libquassel.util.*
 import org.junit.Test
 
 class HighlightRuleManagerTest {
@@ -36,6 +33,7 @@ class HighlightRuleManagerTest {
     original.setNicksCaseSensitive(randomBoolean())
     original.setHighlightRuleList(listOf(
       HighlightRuleManager.HighlightRule(
+        randomInt(),
         randomString(),
         randomBoolean(),
         randomBoolean(),
@@ -45,6 +43,7 @@ class HighlightRuleManagerTest {
         randomString()
       ),
       HighlightRuleManager.HighlightRule(
+        randomInt(),
         randomString(),
         randomBoolean(),
         randomBoolean(),
@@ -54,6 +53,7 @@ class HighlightRuleManagerTest {
         randomString()
       ),
       HighlightRuleManager.HighlightRule(
+        randomInt(),
         randomString(),
         randomBoolean(),
         randomBoolean(),
@@ -76,6 +76,7 @@ class HighlightRuleManagerTest {
     original.setNicksCaseSensitive(randomBoolean())
     original.setHighlightRuleList(listOf(
       HighlightRuleManager.HighlightRule(
+        randomInt(),
         randomString(),
         randomBoolean(),
         randomBoolean(),
@@ -85,6 +86,7 @@ class HighlightRuleManagerTest {
         randomString()
       ),
       HighlightRuleManager.HighlightRule(
+        randomInt(),
         randomString(),
         randomBoolean(),
         randomBoolean(),
@@ -94,6 +96,7 @@ class HighlightRuleManagerTest {
         randomString()
       ),
       HighlightRuleManager.HighlightRule(
+        randomInt(),
         randomString(),
         randomBoolean(),
         randomBoolean(),

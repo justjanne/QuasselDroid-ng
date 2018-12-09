@@ -48,12 +48,12 @@ interface IHighlightRuleManager : ISyncableObject {
    * @param highlightRule A valid ignore rule
    */
   @Slot
-  fun requestRemoveHighlightRule(highlightRule: String) {
-    REQUEST("requestRemoveHighlightRule", ARG(highlightRule, Type.QString))
+  fun requestRemoveHighlightRule(highlightRule: Int) {
+    REQUEST("requestRemoveHighlightRule", ARG(highlightRule, Type.Int))
   }
 
   @Slot
-  fun removeHighlightRule(highlightRule: String)
+  fun removeHighlightRule(highlightRule: Int)
 
   /**
    * Request toggling of "isEnabled" flag of a given ignore rule.
@@ -62,12 +62,12 @@ interface IHighlightRuleManager : ISyncableObject {
    * @param highlightRule A valid ignore rule
    */
   @Slot
-  fun requestToggleHighlightRule(highlightRule: String) {
-    REQUEST("requestToggleHighlightRule", ARG(highlightRule, Type.QString))
+  fun requestToggleHighlightRule(highlightRule: Int) {
+    REQUEST("requestToggleHighlightRule", ARG(highlightRule, Type.Int))
   }
 
   @Slot
-  fun toggleHighlightRule(highlightRule: String)
+  fun toggleHighlightRule(highlightRule: Int)
 
   /**
    * Request an HighlightRule to be added to the ignore list
@@ -79,17 +79,17 @@ interface IHighlightRuleManager : ISyncableObject {
    * @param chanName The channel in which the rule should apply
    */
   @Slot
-  fun requestAddHighlightRule(name: String, isRegEx: Boolean, isCaseSensitive: Boolean,
-                              isEnabled: Boolean,
-                              isInverse: Boolean, sender: String, chanName: String) {
-    REQUEST("requestAddHighlightRule", ARG(name, Type.QString), ARG(isRegEx, Type.Bool),
-            ARG(isCaseSensitive, Type.Bool), ARG(isEnabled, Type.Bool), ARG(isInverse, Type.Bool),
-            ARG(sender, Type.QString), ARG(chanName, Type.QString))
+  fun requestAddHighlightRule(id: Int, name: String, isRegEx: Boolean, isCaseSensitive: Boolean,
+                              isEnabled: Boolean, isInverse: Boolean, sender: String,
+                              chanName: String) {
+    REQUEST("requestAddHighlightRule", ARG(id, Type.Int), ARG(name, Type.QString),
+            ARG(isRegEx, Type.Bool), ARG(isCaseSensitive, Type.Bool), ARG(isEnabled, Type.Bool),
+            ARG(isInverse, Type.Bool), ARG(sender, Type.QString), ARG(chanName, Type.QString))
   }
 
   @Slot
-  fun addHighlightRule(name: String, isRegEx: Boolean, isCaseSensitive: Boolean, isEnabled: Boolean,
-                       isInverse: Boolean, sender: String, chanName: String)
+  fun addHighlightRule(id: Int, name: String, isRegEx: Boolean, isCaseSensitive: Boolean,
+                       isEnabled: Boolean, isInverse: Boolean, sender: String, chanName: String)
 
   @Slot
   fun requestSetHighlightNick(highlightNick: Int) {

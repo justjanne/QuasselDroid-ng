@@ -163,6 +163,18 @@ class HighlightListFragment : SettingsFragment(), SettingsFragment.Savable,
   private fun startIgnoreRuleDrag(holder: HighlightRuleAdapter.HighlightRuleViewHolder) =
     ignoreRulesHelper.startDrag(holder)
 
+  private fun nextId(): Int {
+    val maxRuleId = rulesAdapter.list.maxBy { it.id }?.id
+    val maxIgnoreRuleId = ignoreRulesAdapter.list.maxBy { it.id }?.id
+
+    return when {
+      maxRuleId != null && maxIgnoreRuleId != null -> maxOf(maxRuleId, maxIgnoreRuleId) + 1
+      maxIgnoreRuleId != null                      -> maxIgnoreRuleId + 1
+      maxRuleId != null                            -> maxRuleId + 1
+      else                                         -> 0
+    }
+  }
+
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (resultCode == Activity.RESULT_OK && data != null) {
       when (requestCode) {
@@ -178,7 +190,7 @@ class HighlightListFragment : SettingsFragment(), SettingsFragment.Savable,
           val newRule = data.getSerializableExtra("new") as? HighlightRuleManager.HighlightRule
 
           if (newRule != null) {
-            rulesAdapter.add(newRule)
+            rulesAdapter.add(newRule.copy(id = nextId()))
           }
         }
         REQUEST_UPDATE_IGNORE_RULE -> {
@@ -193,7 +205,7 @@ class HighlightListFragment : SettingsFragment(), SettingsFragment.Savable,
           val newRule = data.getSerializableExtra("new") as? HighlightRuleManager.HighlightRule
 
           if (newRule != null) {
-            ignoreRulesAdapter.add(newRule)
+            ignoreRulesAdapter.add(newRule.copy(id = nextId()))
           }
         }
       }

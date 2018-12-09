@@ -81,6 +81,7 @@ class HighlightRuleFragment : SettingsFragment(), SettingsFragment.Savable,
   }
 
   private fun applyChanges() = HighlightRuleManager.HighlightRule(
+    id = rule?.id ?: -1,
     isInverse = rule?.isInverse ?: isInverse ?: false,
     isEnabled = enabled.isChecked,
     name = name.text.toString(),

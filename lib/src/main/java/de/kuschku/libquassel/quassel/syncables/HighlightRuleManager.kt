@@ -28,6 +28,7 @@ class HighlightRuleManager(
   proxy: SignalProxy
 ) : SyncableObject(proxy, "HighlightRuleManager"), IHighlightRuleManager {
   data class HighlightRule(
+    val id: Int,
     val name: String,
     val isRegEx: Boolean = false,
     val isCaseSensitive: Boolean = false,
@@ -38,14 +39,24 @@ class HighlightRuleManager(
   ) : Serializable
 
   override fun toVariantMap(): QVariantMap = mapOf(
-    "HighlightRuleList" to QVariant.of(initHighlightRuleList(), Type.QVariantMap)
+    "HighlightRuleList" to QVariant.of(initHighlightRuleList(), Type.QVariantMap),
+    "highlightNick" to QVariant.of(_highlightNick.value, Type.Int),
+    "nicksCaseSensitive" to QVariant.of(_nicksCaseSensitive, Type.Bool)
   )
 
   override fun fromVariantMap(properties: QVariantMap) {
     initSetHighlightRuleList(properties["HighlightRuleList"].valueOr(::emptyMap))
+
+    _highlightNick = properties["highlightNick"].value<Int>()?.let {
+      IHighlightRuleManager.HighlightNickType.of(it)
+    } ?: _highlightNick
+    _nicksCaseSensitive = properties["nicksCaseSensitive"].value(_nicksCaseSensitive)
   }
 
   override fun initHighlightRuleList(): QVariantMap = mapOf(
+    "id" to QVariant.of(_highlightRuleList.map {
+      QVariant.of(it.id, Type.Int)
+    }, Type.QVariantList),
     "name" to QVariant.of(_highlightRuleList.map {
       it.name
     }, Type.QStringList),
@@ -66,12 +77,11 @@ class HighlightRuleManager(
     }, Type.QStringList),
     "channel" to QVariant.of(_highlightRuleList.map {
       it.channel
-    }, Type.QStringList),
-    "highlightNick" to QVariant.of(_highlightNick.value, Type.Int),
-    "nicksCaseSensitive" to QVariant.of(_nicksCaseSensitive, Type.Bool)
+    }, Type.QStringList)
   )
 
   override fun initSetHighlightRuleList(highlightRuleList: QVariantMap) {
+    val idList = highlightRuleList["id"].valueOr<QVariantList>(::emptyList)
     val nameList = highlightRuleList["name"].valueOr<QStringList>(::emptyList)
     val isRegExList = highlightRuleList["isRegEx"].valueOr<QVariantList>(::emptyList)
     val isCaseSensitiveList = highlightRuleList["isCaseSensitive"].valueOr<QVariantList>(::emptyList)
@@ -79,14 +89,15 @@ class HighlightRuleManager(
     val isInverseList = highlightRuleList["isInverse"].valueOr<QVariantList>(::emptyList)
     val senderList = highlightRuleList["sender"].valueOr<QStringList>(::emptyList)
     val channelList = highlightRuleList["channel"].valueOr<QStringList>(::emptyList)
-    val size = nameList.size
-    if (isRegExList.size != size || isCaseSensitiveList.size != size ||
+    val size = idList.size
+    if (nameList.size != size || isRegExList.size != size || isCaseSensitiveList.size != size ||
         isEnabledList.size != size || isInverseList.size != size || senderList.size != size ||
         channelList.size != size)
       return
 
-    _highlightRuleList = List(size, {
+    _highlightRuleList = List(size) {
       HighlightRule(
+        id = idList[it].value(0),
         name = nameList[it] ?: "",
         isRegEx = isRegExList[it].value(false),
         isCaseSensitive = isCaseSensitiveList[it].value(false),
@@ -95,28 +106,24 @@ class HighlightRuleManager(
         sender = senderList[it] ?: "",
         channel = channelList[it] ?: ""
       )
-    })
-    _highlightNick = highlightRuleList["highlightNick"].value<Int>()?.let {
-      IHighlightRuleManager.HighlightNickType.of(it)
-    } ?: _highlightNick
-    _nicksCaseSensitive = highlightRuleList["nicksCaseSensitive"].value(_nicksCaseSensitive)
-  }
-
-  override fun removeHighlightRule(highlightRule: String) = removeAt(indexOf(highlightRule))
-
-  override fun toggleHighlightRule(highlightRule: String) {
-    _highlightRuleList = _highlightRuleList.map {
-      if (it.name == highlightRule) it.copy(isEnabled = !it.isEnabled) else it
     }
   }
 
-  override fun addHighlightRule(name: String, isRegEx: Boolean, isCaseSensitive: Boolean,
+  override fun removeHighlightRule(highlightRule: Int) = removeAt(indexOf(highlightRule))
+
+  override fun toggleHighlightRule(highlightRule: Int) {
+    _highlightRuleList = _highlightRuleList.map {
+      if (it.id == highlightRule) it.copy(isEnabled = !it.isEnabled) else it
+    }
+  }
+
+  override fun addHighlightRule(id: Int, name: String, isRegEx: Boolean, isCaseSensitive: Boolean,
                                 isEnabled: Boolean, isInverse: Boolean, sender: String,
                                 chanName: String) {
-    if (contains(name)) return
+    if (contains(id)) return
 
     _highlightRuleList += HighlightRule(
-      name, isRegEx, isCaseSensitive, isEnabled, isInverse, sender, chanName
+      id, name, isRegEx, isCaseSensitive, isEnabled, isInverse, sender, chanName
     )
   }
 
@@ -131,8 +138,8 @@ class HighlightRuleManager(
     _nicksCaseSensitive = nicksCaseSensitive
   }
 
-  fun indexOf(name: String): Int = _highlightRuleList.indexOfFirst { it.name == name }
-  fun contains(name: String) = _highlightRuleList.any { it.name == name }
+  fun indexOf(id: Int): Int = _highlightRuleList.indexOfFirst { it.id == id }
+  fun contains(id: Int) = _highlightRuleList.any { it.id == id }
 
   fun isEmpty() = _highlightRuleList.isEmpty()
   fun count() = _highlightRuleList.count()
