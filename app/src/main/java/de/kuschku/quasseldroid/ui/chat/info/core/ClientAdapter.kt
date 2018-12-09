@@ -22,6 +22,7 @@ import de.kuschku.quasseldroid.util.helper.tint
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
+import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
@@ -53,11 +54,13 @@ class ClientAdapter : ListAdapter<CoreInfo.ConnectedClientData, ClientAdapter.Cl
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ClientViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.widget_client, parent, false),
     dateTimeFormatter,
+    dateFormatter,
     ::disconnect,
     movementMethod
   )
 
   private val dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+  private val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 
   override fun onBindViewHolder(holder: ClientViewHolder, position: Int) =
     holder.bind(getItem(position))
@@ -65,6 +68,7 @@ class ClientAdapter : ListAdapter<CoreInfo.ConnectedClientData, ClientAdapter.Cl
   class ClientViewHolder(
     itemView: View,
     private val dateTimeFormatter: DateTimeFormatter,
+    private val dateFormatter: DateTimeFormatter,
     private val disconnectListener: (Int) -> Unit,
     movementMethod: BetterLinkMovementMethod
   ) : RecyclerView.ViewHolder(itemView) {
@@ -114,7 +118,12 @@ class ClientAdapter : ListAdapter<CoreInfo.ConnectedClientData, ClientAdapter.Cl
       id = data.id
 
       ip.text = data.remoteAddress
-      version.text = Html.fromHtml(data.clientVersion)
+      val versionTime = data.clientVersionDate.toLongOrNull()
+      val formattedVersionTime = if (versionTime != null)
+        dateFormatter.format(Instant.ofEpochSecond(versionTime).atZone(ZoneId.systemDefault()))
+      else
+        data.clientVersionDate
+      version.text = Html.fromHtml(data.clientVersion + " ($formattedVersionTime)")
       val connectedSinceFormatted = dateTimeFormatter.format(data.connectedSince.atZone(ZoneId.systemDefault()))
       uptime.text = itemView.context.getString(R.string.label_core_connected_since,
                                                connectedSinceFormatted)

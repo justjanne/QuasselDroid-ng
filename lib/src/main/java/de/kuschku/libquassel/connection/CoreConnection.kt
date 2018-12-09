@@ -40,8 +40,6 @@ import de.kuschku.libquassel.util.helpers.write
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import de.kuschku.libquassel.util.nio.WrappedChannel
 import io.reactivex.subjects.BehaviorSubject
-import org.threeten.bp.ZoneOffset
-import org.threeten.bp.format.DateTimeFormatter
 import java.io.Closeable
 import java.lang.Thread.UncaughtExceptionHandler
 import java.net.Socket
@@ -141,8 +139,7 @@ class CoreConnection(
         dispatch(
           HandshakeMessage.ClientInit(
             clientVersion = clientData.identifier,
-            buildDate = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm:ss")
-              .format(clientData.buildDate.atOffset(ZoneOffset.UTC)),
+            buildDate = clientData.buildDate.epochSecond.toString(),
             clientFeatures = clientData.clientFeatures.toInt(),
             featureList = clientData.clientFeatures.toStringList()
           )
