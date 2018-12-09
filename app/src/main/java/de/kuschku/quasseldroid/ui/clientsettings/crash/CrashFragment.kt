@@ -89,7 +89,7 @@ class CrashFragment : DaggerFragment() {
           .map { Pair<Report, String>(gson.fromJson(it), it) }
           .sortedByDescending { it.first.environment?.crashTime }
 
-        requireActivity().runOnUiThread {
+        activity?.runOnUiThread {
           this.adapter?.submitList(list)
         }
       }
@@ -109,7 +109,7 @@ class CrashFragment : DaggerFragment() {
         crashDir?.listFiles()?.forEach {
           it.delete()
         }
-        requireActivity().runOnUiThread {
+        activity?.runOnUiThread {
           this.adapter?.submitList(emptyList())
         }
       }
