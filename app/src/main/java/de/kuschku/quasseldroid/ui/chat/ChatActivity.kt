@@ -148,8 +148,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     if (intent != null) {
       when {
         intent.type == "text/plain"                                     -> {
-          chatlineFragment?.replaceText(intent.getStringExtra(Intent.EXTRA_TEXT))
-          drawerLayout.closeDrawers()
+          val text = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)
+          if (text != null) {
+            chatlineFragment?.replaceText(text)
+            drawerLayout.closeDrawers()
+          }
         }
         intent.hasExtra(KEY_BUFFER_ID)                                  -> {
           viewModel.buffer.onNext(intent.getIntExtra(KEY_BUFFER_ID, -1))
