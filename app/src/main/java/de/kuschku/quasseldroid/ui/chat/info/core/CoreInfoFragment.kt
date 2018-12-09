@@ -43,6 +43,7 @@ import de.kuschku.quasseldroid.util.missingfeatures.RequiredFeatures
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
+import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
@@ -77,6 +78,7 @@ class CoreInfoFragment : ServiceBoundFragment() {
   lateinit var clients: RecyclerView
 
   private val dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+  private val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 
   private val movementMethod = BetterLinkMovementMethod.newInstance()
 
@@ -93,7 +95,12 @@ class CoreInfoFragment : ServiceBoundFragment() {
     viewModel.coreInfo.toLiveData().observe(this, Observer {
       it?.orNull().let { data ->
         version.text = data?.quasselVersion?.let(Html::fromHtml)
-        versionDate.text = data?.quasselBuildDate?.let(Html::fromHtml)
+        val versionTime = data?.quasselBuildDate?.toLongOrNull()
+        val formattedVersionTime = if (versionTime != null)
+          dateFormatter.format(Instant.ofEpochSecond(versionTime).atZone(ZoneId.systemDefault()))
+        else
+          data?.quasselBuildDate?.let(Html::fromHtml)
+        versionDate.text = formattedVersionTime
 
         val features = viewModel.session.value?.orNull()?.features?.core
                        ?: QuasselFeatures.empty()
