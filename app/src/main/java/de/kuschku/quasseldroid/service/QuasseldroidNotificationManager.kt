@@ -196,7 +196,9 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
             .setName(selfInfo.nick)
             .setIcon(IconCompat.createWithBitmap(bitmapFromDrawable(selfInfo.avatar)))
             .build()
-        ).setConversationTitle(bufferInfo.bufferName)
+        )
+          .setGroupConversation(!bufferInfo.type.hasFlag(Buffer_Type.QueryBuffer))
+          .setConversationTitle(bufferInfo.bufferName)
           .also {
             for (notification in notifications) {
               it.addMessage(
