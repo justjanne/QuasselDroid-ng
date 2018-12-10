@@ -233,7 +233,7 @@ class ExpressionMatch : Serializable {
       }
     }
 
-    if (_sourceExpressionEmpty && !isValid()) {
+    if (!isValid()) {
       // This can happen with invalid regex, so make it a bit more user-friendly.  Set it to Info
       // level as ideally someone's not just going to leave a broken match rule around.  For
       // MatchRegEx, they probably need to fix their regex rule.  For the other modes, there's
@@ -463,7 +463,7 @@ class ExpressionMatch : Serializable {
               1, 2 -> {
                 // "\!"  -> Elsewhere: keep as "\!"
                 // "\\!" -> Elsewhere: keep as "\\!"
-                curString += """\""".repeat(consecutiveSlashes)
+                curString += """\""".repeat(consecutiveSlashes) + "!"
               }
               else -> {
                 // This shouldn't ever happen (even with invalid wildcard rules), log a warning
@@ -718,7 +718,7 @@ class ExpressionMatch : Serializable {
      * @see ExpressionMatch::convertFromWildcard()
      * @return QString with all regular expression characters escaped
      */
-    fun wildcardToRegEx(expression: String): String {
+    private fun wildcardToRegEx(expression: String): String {
       // Convert the wildcard expression into regular expression format
 
       // We're taking a little bit different of a route...

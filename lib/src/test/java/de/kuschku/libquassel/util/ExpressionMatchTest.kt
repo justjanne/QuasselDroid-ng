@@ -193,7 +193,6 @@ class ExpressionMatchTest {
 
   @Test
   fun matchMultiWildcard() {
-    /*
     // Simple wildcards, case-insensitive
     val simpleMatch =
       ExpressionMatch("?test*;another?",
@@ -202,12 +201,10 @@ class ExpressionMatchTest {
     val simpleMatchCS =
       ExpressionMatch("?test*;another?",
                       ExpressionMatch.MatchMode.MatchMultiWildcard, true)
-                      */
     // Escaped wildcards, case-insensitive
     val simpleMatchEscape =
       ExpressionMatch("""\?test\*\;*thing\*""",
                       ExpressionMatch.MatchMode.MatchMultiWildcard, false)
-    /*
     // Inverted wildcards, case-insensitive
     val simpleMatchInvert =
       ExpressionMatch("""test*;!testing""",
@@ -217,7 +214,12 @@ class ExpressionMatchTest {
       ExpressionMatch("""!testing*""",
                       ExpressionMatch.MatchMode.MatchMultiWildcard, false)
     // Complex wildcard
-    val complexMatchFull = """norm;!invert; norm-space ; !invert-space ;;!;\!norm-escaped;\\!slash-invert;\\\\double; escape\;sep;slash-end-split\\;quad\\\\!noninvert;newline-split\nnewline-split-slash\\\nslash-at-end\\"""
+    val complexMatchFull = """norm;!invert; norm-space ; !invert-space ;;!;\!norm-escaped;""" +
+                           """\\!slash-invert;\\\\double; escape\;sep;slash-end-split\\;""" +
+                           """quad\\\\!noninvert;newline-split""" + "\n" +
+                           """newline-split-slash\\""" + "\n" +
+                           """slash-at-end\\"""
+
     // Match normal components
     val complexMatchNormal = listOf(
       """norm""",
@@ -234,8 +236,8 @@ class ExpressionMatchTest {
     )
     // Match negating components
     val complexMatchInvert = listOf(
-      """(invert)""",
-      """(invert-space)"""
+      """invert""",
+      """invert-space"""
     )
     val complexMatch =
       ExpressionMatch(complexMatchFull, ExpressionMatch.MatchMode.MatchMultiWildcard,
@@ -260,10 +262,8 @@ class ExpressionMatchTest {
     assertTrue(simpleMatch.match("@testing"))
     assertTrue(simpleMatch.match("!test"))
     assertTrue(simpleMatch.match("anotherA"))
-    */
     assertTrue(simpleMatchEscape.match("?test*;thing*"))
     assertTrue(simpleMatchEscape.match("?test*;AAAAAthing*"))
-    /*
     assertTrue(simpleMatchInvert.match("test"))
     assertTrue(simpleMatchInvert.match("testing things"))
     // Assert implicit wildcard succeeds
@@ -274,10 +274,8 @@ class ExpressionMatchTest {
     assertFalse(simpleMatch.match("anotherBB"))
     // Assert unrelated fails
     assertFalse(simpleMatch.match("not above"))
-    */
     // Assert escaped wildcard fails
     assertFalse(simpleMatchEscape.match("@testing"))
-    /*
     // Assert inverted match fails
     assertFalse(simpleMatchInvert.match("testing"))
     assertFalse(simpleMatchImplicit.match("testing"))
@@ -303,7 +301,6 @@ class ExpressionMatchTest {
     assertFalse(complexMatch.match(complexMatchFull))
     // Assert complex unrelated not match
     assertFalse(complexMatch.match("other"))
-    */
   }
 
   @Test
