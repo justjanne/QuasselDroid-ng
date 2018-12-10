@@ -24,7 +24,7 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.IIgnoreListManager
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.session.SignalProxy
-import de.kuschku.libquassel.util.GlobTransformer
+import de.kuschku.libquassel.util.ExpressionMatch
 import de.kuschku.libquassel.util.flag.and
 import io.reactivex.subjects.BehaviorSubject
 import java.io.Serializable
@@ -169,8 +169,8 @@ class IgnoreListManager constructor(
     val scope: ScopeType,
     val scopeRule: String,
     val isActive: Boolean,
-    val regEx: Regex?,
-    val scopeRegEx: Set<Regex>
+    val regEx: ExpressionMatch,
+    val scopeRegEx: ExpressionMatch
   ) : Serializable {
     constructor(type: Int, ignoreRule: String, isRegEx: Boolean, strictness: Int, scope: Int,
                 scopeRule: String, isActive: Boolean) : this(
@@ -181,24 +181,18 @@ class IgnoreListManager constructor(
     constructor(type: IgnoreType, ignoreRule: String, isRegEx: Boolean, strictness: StrictnessType,
                 scope: ScopeType, scopeRule: String, isActive: Boolean) : this(
       type, ignoreRule, isRegEx, strictness, scope, scopeRule, isActive,
-      try {
-        Regex(ignoreRule.let {
-          if (isRegEx) it else GlobTransformer.convertGlobToRegex(it)
-        }, RegexOption.IGNORE_CASE)
-      } catch (_: Throwable) {
-        null
-      },
-      scopeRule.split(';')
-        .map(String::trim)
-        .map(GlobTransformer::convertGlobToRegex)
-        .mapNotNull {
-          try {
-            Regex(it, RegexOption.IGNORE_CASE)
-          } catch (e: Throwable) {
-            null
-          }
-        }
-        .toSet()
+      ExpressionMatch(
+        ignoreRule,
+        if (isRegEx) ExpressionMatch.MatchMode.MatchRegEx
+        else ExpressionMatch.MatchMode.MatchWildcard,
+        true
+      ),
+      ExpressionMatch(
+        scopeRule,
+        if (isRegEx) ExpressionMatch.MatchMode.MatchRegEx
+        else ExpressionMatch.MatchMode.MatchMultiWildcard,
+        true
+      )
     )
 
     fun copy(
@@ -217,14 +211,17 @@ class IgnoreListManager constructor(
       scope = scope,
       scopeRule = scopeRule,
       isActive = isActive,
-      regEx = if (ignoreRule == this.ignoreRule) this.regEx else Regex(ignoreRule.let {
-        if (isRegEx) it else GlobTransformer.convertGlobToRegex(it)
-      }, RegexOption.IGNORE_CASE),
-      scopeRegEx = if (scopeRule == this.scopeRule) this.scopeRegEx else scopeRule.split(';')
-        .map(String::trim)
-        .map(GlobTransformer::convertGlobToRegex)
-        .map { Regex(it, RegexOption.IGNORE_CASE) }
-        .toSet()
+      regEx = ExpressionMatch(
+        ignoreRule,
+        if (isRegEx) ExpressionMatch.MatchMode.MatchRegEx
+        else ExpressionMatch.MatchMode.MatchWildcard,
+        true
+      ),
+      scopeRegEx = ExpressionMatch(
+        scopeRule,
+        ExpressionMatch.MatchMode.MatchMultiWildcard,
+        true
+      )
     )
 
     override fun equals(other: Any?): Boolean {
@@ -269,12 +266,11 @@ class IgnoreListManager constructor(
       it.isActive && it.type != IgnoreType.CtcpIgnore
     }.filter {
       it.scope == ScopeType.GlobalScope ||
-      it.scope == ScopeType.NetworkScope && it.scopeRegEx.any { it matches network } ||
-      it.scope == ScopeType.ChannelScope && it.scopeRegEx.any { it matches bufferName }
+      it.scope == ScopeType.NetworkScope && it.scopeRegEx.match(network) ||
+      it.scope == ScopeType.ChannelScope && it.scopeRegEx.match(bufferName)
     }.filter {
       val content = if (it.type == IgnoreType.MessageIgnore) msgContents else msgSender
-      !it.isRegEx && it.regEx?.matches(content) == true ||
-      it.isRegEx && it.regEx?.containsMatchIn(content) == true
+      it.regEx.match(content)
     }.map {
       it.strictness
     }.sortedByDescending {
@@ -296,6 +292,4 @@ class IgnoreListManager constructor(
   override fun toString(): String {
     return "IgnoreListManager(_ignoreList=$_ignoreList)"
   }
-
-
 }
