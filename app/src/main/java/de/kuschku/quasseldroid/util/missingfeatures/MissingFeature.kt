@@ -24,5 +24,6 @@ import de.kuschku.libquassel.quassel.ExtendedFeature
 
 data class MissingFeature(
   val feature: ExtendedFeature,
+  val minimumVersion: QuasselVersion,
   @StringRes val description: Int
 )

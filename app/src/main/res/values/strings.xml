@@ -139,7 +139,7 @@
   <string name="notification_channel_old_highlight_title">Old Highlights</string>
 
   <string name="label_missing_features">Missing Features</string>
-  <string name="info_missing_features">Your core is missing features that are required for Quasseldroid to work correctly.</string>
+  <string name="info_missing_features">Your core is missing features that are required for Quasseldroid to work correctly. You should &lt;a href="https://quassel-irc.org&gt;upgrade&lt;/a&gt; your Quassel core to %1$s or newer.</string>
 
   <string name="buffer_delete_confirmation">Do you want to delete this buffer permanently?</string>
 

@@ -22,6 +22,8 @@ package de.kuschku.quasseldroid.util.missingfeatures
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Html
+import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -31,6 +33,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 import java.io.Serializable
 
 class MissingFeaturesDialog : DialogFragment() {
@@ -39,6 +42,9 @@ class MissingFeaturesDialog : DialogFragment() {
 
   @BindView(R.id.list)
   lateinit var list: RecyclerView
+
+  @BindView(R.id.message)
+  lateinit var message: TextView
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val dialog = MaterialDialog.Builder(requireContext())
@@ -51,6 +57,10 @@ class MissingFeaturesDialog : DialogFragment() {
       }
       .build()
     ButterKnife.bind(this, dialog.customView!!)
+    val version = builder?.missingFeatures?.maxBy(MissingFeature::minimumVersion)?.minimumVersion
+                  ?: QuasselVersion.VERSION_0_13
+    message.text = Html.fromHtml(getString(R.string.info_missing_features, version.humanName))
+    message.movementMethod = BetterLinkMovementMethod.newInstance()
     list.layoutManager = LinearLayoutManager(list.context)
     val adapter = MissingFeaturesAdapter()
     list.adapter = adapter
