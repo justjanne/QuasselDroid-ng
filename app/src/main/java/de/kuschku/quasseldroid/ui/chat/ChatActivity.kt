@@ -34,7 +34,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -92,6 +95,7 @@ import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
 import de.kuschku.quasseldroid.util.ui.NickCountDrawable
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.data.BufferData
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
@@ -109,6 +113,18 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   @BindView(R.id.progress_bar)
   lateinit var progressBar: MaterialContentLoadingProgressBar
+
+  @BindView(R.id.connection_status)
+  lateinit var connectionStatusDisplay: LinearLayout
+
+  @BindView(R.id.connection_status_icon)
+  lateinit var connectionStatusDisplayIcon: AppCompatImageView
+
+  @BindView(R.id.connection_status_progress)
+  lateinit var connectionStatusDisplayProgress: MaterialProgressBar
+
+  @BindView(R.id.connection_status_text)
+  lateinit var connectionStatusDisplayText: TextView
 
   @BindView(R.id.autocomplete_list)
   lateinit var autoCompleteList: RecyclerView
@@ -571,23 +587,48 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     viewModel.connectionProgress.toLiveData().observe(this, Observer {
       val (state, progress, max) = it ?: Triple(ConnectionState.DISCONNECTED, 0, 0)
       when (state) {
-        ConnectionState.CONNECTED -> {
-          progressBar.visibility = View.INVISIBLE
-        }
         ConnectionState.DISCONNECTED,
-        ConnectionState.CLOSED    -> {
+        ConnectionState.CLOSED     -> {
           progressBar.visibility = View.INVISIBLE
+
+          connectionStatusDisplay.visibility = View.VISIBLE
+          connectionStatusDisplayText.text = getString(R.string.label_status_disconnected)
+          connectionStatusDisplayIcon.visibility = View.VISIBLE
+          connectionStatusDisplayProgress.visibility = View.GONE
         }
-        ConnectionState.INIT      -> {
+        ConnectionState.CONNECTING -> {
+          progressBar.visibility = View.VISIBLE
+          progressBar.isIndeterminate = true
+
+          connectionStatusDisplay.visibility = View.VISIBLE
+          connectionStatusDisplayText.text = getString(R.string.label_status_connecting)
+          connectionStatusDisplayIcon.visibility = View.GONE
+          connectionStatusDisplayProgress.visibility = View.VISIBLE
+        }
+        ConnectionState.HANDSHAKE  -> {
+          progressBar.visibility = View.VISIBLE
+          progressBar.isIndeterminate = true
+
+          connectionStatusDisplay.visibility = View.VISIBLE
+          connectionStatusDisplayText.text = getString(R.string.label_status_handshake)
+          connectionStatusDisplayIcon.visibility = View.GONE
+          connectionStatusDisplayProgress.visibility = View.VISIBLE
+        }
+        ConnectionState.INIT       -> {
           progressBar.visibility = View.VISIBLE
           // Show indeterminate when no progress has been made yet
           progressBar.isIndeterminate = progress == 0 || max == 0
           progressBar.progress = progress
           progressBar.max = max
+
+          connectionStatusDisplay.visibility = View.VISIBLE
+          connectionStatusDisplayText.text = getString(R.string.label_status_init)
+          connectionStatusDisplayIcon.visibility = View.GONE
+          connectionStatusDisplayProgress.visibility = View.VISIBLE
         }
-        else                      -> {
-          progressBar.visibility = View.VISIBLE
-          progressBar.isIndeterminate = true
+        ConnectionState.CONNECTED  -> {
+          progressBar.visibility = View.INVISIBLE
+          connectionStatusDisplay.visibility = View.GONE
         }
       }
     })

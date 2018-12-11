@@ -38,12 +38,20 @@
       android:layout_marginBottom="?actionBarSize"
       android:orientation="vertical">
 
-      <fragment
-        android:id="@+id/fragment_messages"
-        android:name="de.kuschku.quasseldroid.ui.chat.messages.MessageListFragment"
+      <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_messages" />
+        android:layout_height="match_parent">
+
+        <fragment
+          android:id="@+id/fragment_messages"
+          android:name="de.kuschku.quasseldroid.ui.chat.messages.MessageListFragment"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          tools:layout="@layout/fragment_messages" />
+
+        <include layout="@layout/widget_connection_status" />
+
+      </FrameLayout>
 
       <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/autocomplete_list"
