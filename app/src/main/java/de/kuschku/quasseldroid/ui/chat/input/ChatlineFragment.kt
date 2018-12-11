@@ -163,6 +163,9 @@ class ChatlineFragment : ServiceBoundFragment() {
     messageHistory.adapter = messageHistoryAdapter
     viewModel.recentlySentMessages.toLiveData()
       .observe(this, Observer(messageHistoryAdapter::submitList))
+    messageHistoryAdapter.setOnUpdateFinishedListener {
+      messageHistory.scrollToPosition(0)
+    }
 
     fun send() {
       if (chatline.safeText.isNotBlank()) {

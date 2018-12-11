@@ -24,11 +24,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.util.lists.ListAdapter
 
 class MessageHistoryAdapter : ListAdapter<CharSequence, MessageHistoryAdapter.MessageViewHolder>(
   object : DiffUtil.ItemCallback<CharSequence>() {
@@ -39,9 +39,14 @@ class MessageHistoryAdapter : ListAdapter<CharSequence, MessageHistoryAdapter.Me
       oldItem == newItem
   }) {
   private var clickListener: ((CharSequence) -> Unit)? = null
+  private var updateFinishedListener: (() -> Unit)? = null
 
-  fun setOnItemClickListener(listener: (CharSequence) -> Unit) {
+  fun setOnItemClickListener(listener: ((CharSequence) -> Unit)?) {
     this.clickListener = listener
+  }
+
+  fun setOnUpdateFinishedListener(listener: (() -> Unit)?) {
+    this.updateFinishedListener = listener
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -49,6 +54,10 @@ class MessageHistoryAdapter : ListAdapter<CharSequence, MessageHistoryAdapter.Me
       LayoutInflater.from(parent.context).inflate(R.layout.widget_history_message, parent, false),
       clickListener = clickListener
     )
+
+  override fun onUpdateFinished(list: List<CharSequence>) {
+    updateFinishedListener?.invoke()
+  }
 
   override fun onBindViewHolder(holder: MessageViewHolder, position: Int) =
     holder.bind(getItem(position))
