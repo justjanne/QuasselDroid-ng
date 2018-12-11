@@ -54,40 +54,82 @@
       android:paddingBottom="16dp"
       android:paddingTop="16dp">
 
-      <TextView
-        android:id="@+id/name"
-        style="@style/Widget.RtlConformTextView"
-        android:layout_width="wrap_content"
+      <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ellipsize="marquee"
-        android:orientation="vertical"
-        android:singleLine="true"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:textColor="?colorTextPrimary"
-        android:textSize="16sp"
-        tools:text="(janne): " />
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="8dp"
+          android:layout_marginRight="8dp"
+          app:srcCompat="@drawable/ic_message_bulleted"
+          app:tint="?colorTextSecondary" />
+
+        <TextView
+          android:id="@+id/name"
+          style="@style/Widget.RtlConformTextView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:ellipsize="marquee"
+          android:orientation="vertical"
+          android:singleLine="true"
+          android:textAppearance="?android:textAppearanceMedium"
+          android:textColor="?colorTextPrimary"
+          android:textSize="16sp"
+          tools:text="(janne): " />
+
+      </LinearLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="8dp"
+          android:layout_marginRight="8dp"
+          app:srcCompat="@drawable/ic_account"
+          app:tint="?colorTextSecondary" />
 
       <TextView
         android:id="@+id/sender"
         style="@style/Widget.RtlConformTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:textAppearance="?textAppearanceListItemSecondary"
         android:textColor="?colorTextSecondary"
         tools:text="TARS" />
+      </LinearLayout>
 
-      <TextView
-        android:id="@+id/channel"
-        style="@style/Widget.RtlConformTextView"
-        android:layout_width="wrap_content"
+      <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ellipsize="marquee"
-        android:singleLine="true"
-        android:textAppearance="?textAppearanceListItemSecondary"
-        android:textColor="?colorTextSecondary"
-        tools:text="#yepityha" />
+        android:orientation="horizontal">
+
+        <Space
+          android:layout_width="32dp"
+          android:layout_height="wrap_content" />
+
+        <TextView
+          android:id="@+id/channel"
+          style="@style/Widget.RtlConformTextView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:ellipsize="marquee"
+          android:singleLine="true"
+          android:textAppearance="?textAppearanceListItemSecondary"
+          android:textColor="?colorTextSecondary"
+          tools:text="#yepityha" />
+      </LinearLayout>
 
     </LinearLayout>
 
