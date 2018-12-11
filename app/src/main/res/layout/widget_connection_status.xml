@@ -5,13 +5,14 @@
   android:id="@+id/connection_status"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:background="?colorPrimaryDark"
+  android:background="?colorBackgroundSnackbar"
   android:minHeight="32dp"
   android:paddingLeft="16dp"
   android:paddingTop="6dp"
   android:paddingRight="16dp"
   android:paddingBottom="6dp"
   android:visibility="gone"
+  android:theme="?attr/actionBarTheme"
   tools:visibility="visible">
 
   <androidx.appcompat.widget.AppCompatImageView
@@ -19,7 +20,9 @@
     android:layout_width="20dp"
     android:layout_height="20dp"
     app:srcCompat="@drawable/ic_disconnected"
-    app:tint="?colorTextPrimaryInverse" />
+    android:visibility="gone"
+    app:tint="?android:textColorPrimary"
+    tools:visibility="visible" />
 
   <me.zhanghai.android.materialprogressbar.MaterialProgressBar
     android:id="@+id/connection_status_progress"
@@ -27,7 +30,8 @@
     android:layout_width="20dp"
     android:layout_height="20dp"
     android:indeterminate="true"
-    app:mpb_indeterminateTint="?colorTextPrimaryInverse" />
+    android:visibility="gone"
+    app:mpb_indeterminateTint="?android:textColorPrimary" />
 
   <TextView
     android:id="@+id/connection_status_text"
@@ -35,7 +39,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
     android:layout_marginLeft="16dp"
-    android:textColor="?colorTextPrimaryInverse"
+    android:textColor="?android:textColorPrimary"
     tools:text="@string/label_status_connecting" />
 
 </LinearLayout>

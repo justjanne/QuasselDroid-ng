@@ -127,6 +127,7 @@
     <item name="colorBackgroundSecondary">#073642</item>
     <item name="colorBackgroundCard">#073642</item>
     <item name="colorBackgroundDialog">#002B36</item>
+    <item name="colorBackgroundSnackbar">#04313c</item>
 
     <item name="colorOffline">#839496</item>
     <item name="colorAway">#839496</item>

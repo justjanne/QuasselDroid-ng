@@ -60,6 +60,7 @@
   <attr name="colorBackgroundSecondary" format="color" />
   <attr name="colorBackgroundCard" format="color" />
   <attr name="colorBackgroundDialog" format="color" />
+  <attr name="colorBackgroundSnackbar" format="color" />
 
   <attr name="colorMarkerLine" format="color" />
 

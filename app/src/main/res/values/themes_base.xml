@@ -119,6 +119,8 @@
     <item name="android:textColor">?colorTextPrimary</item>
     <item name="android:textColorSecondary">?colorTextSecondary</item>
     <item name="colorControlNormal">?colorTextPrimary</item>
+
+    <item name="colorBackgroundSnackbar">?colorPrimaryDark</item>
   </style>
 
   <style name="Theme.ChatTheme.Light" parent="Base.ChatTheme.Light">
@@ -159,9 +161,11 @@
     <item name="android:textColorPrimary">?colorTextPrimary</item>
     <item name="android:textColorSecondary">?colorTextSecondary</item>
     <item name="colorControlNormal">?colorTextPrimary</item>
+
+    <item name="colorBackgroundSnackbar">?colorPrimary</item>
   </style>
 
-  <style name="Theme.ChatTheme.Light.DarkHead" parent="Theme.ChatTheme.Light.Auto">
+  <style name="Theme.ChatTheme.Light.DarkHead" parent="Theme.ChatTheme.Light">
     <item name="actionBarTheme">@style/Widget.AppBarOverlay.Light.DarkHead</item>
     <item name="formatBarTheme">@style/Widget.AppBarOverlay.Light.Auto</item>
     <item name="actionBarPopupTheme">@style/Widget.PopupOverlay.Light.Auto</item>
@@ -171,6 +175,8 @@
     <item name="android:textColorPrimary">?colorTextPrimary</item>
     <item name="android:textColorSecondary">?colorTextSecondary</item>
     <item name="colorControlNormal">?colorTextPrimary</item>
+
+    <item name="colorBackgroundSnackbar">?colorPrimaryDark</item>
   </style>
 
   <style name="Widget.PopupOverlay.Setup" parent="Widget.AppBarOverlay.Light">
