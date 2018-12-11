@@ -134,7 +134,7 @@
   <string name="notification_channel_old_highlight_title">Seni žymėjimai</string>
 
   <string name="label_missing_features">Trūkstamos funkcijos</string>
-  <string name="info_missing_features">Jūsų branduolyje trūksta funkcijų kurios užtikrintų sklandų Quasseldroid darbą</string>
+  <string name="info_missing_features">Jūsų branduolyje trūksta funkcijų, kurių reikia norint užtikrinti, jog Quasseldroid veiktų sklandžiai. &lt;a href="https://quassel-irc.org&gt;Atnaujinkite&lt;/a&gt; savo Quassel branduolį į %1$s ar naujesnį.</string>
 
   <string name="buffer_delete_confirmation">Ar norite ištrinti šį buferį visam laikui?</string>
 
@@ -143,4 +143,6 @@
 
   <string name="info_copied_version">Versija nukopijuota į atmintinę</string>
 
-  </resources>
+  <string name="advertisement_support_patreon">Padėkite mums toliau plėtoti šią programėlę prisidėdami per &lt;a href="https://www.patreon.com/justjanne"&gt;Patreon&lt;/a&gt;.</string>
+
+</resources>

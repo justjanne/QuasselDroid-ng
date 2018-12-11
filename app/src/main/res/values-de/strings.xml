@@ -143,4 +143,6 @@
 
   <string name="info_copied_version">Version in die Zwischenablage kopiert</string>
 
-  </resources>
+  <string name="advertisement_support_patreon">Bitte hilf uns, indem du die Entwicklung dieser App über &lt;a href="https://www.patreon.com/justjanne"&gt;Patreon&lt;/a&gt;. unterstützt</string>
+
+</resources>
