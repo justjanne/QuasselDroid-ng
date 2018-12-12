@@ -27,6 +27,7 @@
 
   <string name="label_about">Über</string>
   <string name="label_accept">Akzeptieren</string>
+  <string name="label_autocomplete">Autovervollständigung</string>
   <string name="label_avatar">Avatar</string>
   <string name="label_back">Zurück</string>
   <string name="label_buffer_name">Chatname</string>
@@ -54,6 +55,7 @@
   <string name="label_hide_temp">Temporär ausblenden</string>
   <string name="label_ignore">Ignorieren</string>
   <string name="label_ignore_long">Add/remove user to/from ignore list</string>
+  <string name="label_info">Info</string>
   <string name="label_info_channel">Kanalinformationen</string>
   <string name="label_info_core">Core-Details</string>
   <string name="label_info_user">Benutzerinformationen</string>
@@ -62,6 +64,7 @@
   <string name="label_join_long">Kanal Betreten</string>
   <string name="label_libraries">Bibliotheken</string>
   <string name="label_license">Lizenz</string>
+  <string name="label_match_all">Betrifft alle Nachrichten</string>
   <string name="label_mark_read">Gelesen</string>
   <string name="label_mention">Erwähnen</string>
   <string name="label_mention_long">Kopiert den Nutzernamen in die Eingabezeile</string>
@@ -90,6 +93,7 @@
   <string name="label_rename">Umbenennen</string>
   <string name="label_save">Speichern</string>
   <string name="label_select">Auswählen</string>
+  <string name="label_send">Senden</string>
   <string name="label_set_default">Als Standard setzen</string>
   <string name="label_settings">Einstellungen</string>
   <string name="label_settings_client">Client-Einstellungen</string>
