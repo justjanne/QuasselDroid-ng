@@ -20,11 +20,13 @@
 package de.kuschku.quasseldroid.viewmodel.data
 
 import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.quassel.syncables.Network
 
 data class BufferData(
   val info: BufferInfo? = null,
   val network: Network? = null,
   val description: String? = null,
-  val userCount: Int = 0
+  val userCount: Int = 0,
+  val ircUser: IrcUser? = null
 )

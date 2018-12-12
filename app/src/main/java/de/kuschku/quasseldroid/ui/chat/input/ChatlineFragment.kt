@@ -202,6 +202,7 @@ class ChatlineFragment : ServiceBoundFragment() {
 
     editorHelper.setOnEnterListener(::send)
     send.setOnClickListener { send() }
+    send.setTooltip()
 
     tabComplete.visibleIf(autoCompleteSettings.button)
     tabComplete.setOnClickListener {

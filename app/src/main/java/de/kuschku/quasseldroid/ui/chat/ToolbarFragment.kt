@@ -24,6 +24,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -31,14 +32,15 @@ import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.info.channel.ChannelInfoActivity
 import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoActivity
-import de.kuschku.quasseldroid.util.helper.combineLatest
-import de.kuschku.quasseldroid.util.helper.toLiveData
-import de.kuschku.quasseldroid.util.helper.visibleIf
+import de.kuschku.quasseldroid.util.ColorContext
+import de.kuschku.quasseldroid.util.avatars.AvatarHelper
+import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
@@ -50,6 +52,9 @@ class ToolbarFragment : ServiceBoundFragment() {
 
   @BindView(R.id.toolbar_subtitle)
   lateinit var toolbarSubtitle: TextView
+
+  @BindView(R.id.toolbar_icon)
+  lateinit var icon: AppCompatImageView
 
   @BindView(R.id.toolbar_action_area)
   lateinit var actionArea: View
@@ -91,10 +96,42 @@ class ToolbarFragment : ServiceBoundFragment() {
       description, messageSettings.colorizeMirc
     )
 
-    combineLatest(viewModel.bufferDataThrottled, viewModel.lag).toLiveData()
+    val avatarSize = resources.getDimensionPixelSize(R.dimen.avatar_size_buffer)
+
+    val colorContext = ColorContext(requireContext(), messageSettings)
+
+    combineLatest(viewModel.bufferDataThrottled, viewModel.lag).map {
+      val avatarInfo = it.first?.ircUser?.let { user ->
+        val avatarUrls = AvatarHelper.avatar(messageSettings, user, avatarSize)
+
+        val nickName = user.nick()
+        val useSelfColor = when (messageSettings.colorizeNicknames) {
+          MessageSettings.ColorizeNicknamesMode.ALL          -> false
+          MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+            user.network().isMyNick(nickName)
+          MessageSettings.ColorizeNicknamesMode.NONE         -> true
+        }
+
+        val fallbackDrawable = colorContext.buildTextDrawable(user.nick(), useSelfColor)
+
+        Pair(avatarUrls, fallbackDrawable)
+      }
+
+      Triple(it.first, it.second, avatarInfo)
+    }.toLiveData()
       .observe(this, Observer {
         if (it != null) {
-          val (data, lag) = it
+          val (data, lag, avatarInfo) = it
+
+          if (avatarInfo != null) {
+            val (avatarUrls, fallbackDrawable) = avatarInfo
+            icon.loadAvatars(avatarUrls, fallbackDrawable, crop = !messageSettings.squareAvatars)
+            icon.visibility = View.VISIBLE
+          } else {
+            GlideApp.with(icon).clear(icon)
+            icon.visibility = View.GONE
+          }
+
           if (data?.info?.type?.hasFlag(Buffer_Type.StatusBuffer) == true) {
             this.title = data.network?.networkName()
           } else {
@@ -140,6 +177,7 @@ class ToolbarFragment : ServiceBoundFragment() {
         }
       }
     }
+    actionArea.setTooltip()
 
     return view
   }

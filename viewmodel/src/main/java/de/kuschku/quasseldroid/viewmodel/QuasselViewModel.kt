@@ -161,7 +161,8 @@ class QuasselViewModel : ViewModel() {
                     BufferData(
                       info = info,
                       network = network,
-                      description = user.realName()
+                      description = user.realName(),
+                      ircUser = user
                     )
                   }
                 }

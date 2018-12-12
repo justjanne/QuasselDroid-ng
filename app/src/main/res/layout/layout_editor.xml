@@ -45,6 +45,7 @@
         android:padding="12dp"
         android:scaleType="fitXY"
         app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/label_autocomplete"
         app:srcCompat="@drawable/ic_tab"
         app:tint="?attr/colorTextSecondary" />
 
@@ -89,6 +90,7 @@
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_send"
+        android:contentDescription="@string/label_send"
         app:tint="?attr/colorAccent"
         tools:ignore="UnusedAttribute" />
     </androidx.constraintlayout.widget.ConstraintLayout>
