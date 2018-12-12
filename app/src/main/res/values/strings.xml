@@ -66,6 +66,7 @@
   <string name="label_join_long">Join Channel</string>
   <string name="label_libraries">Libraries</string>
   <string name="label_license">License</string>
+  <string name="label_match_all">Matches all messages</string>
   <string name="label_mark_read">Mark Read</string>
   <string name="label_mention">Mention</string>
   <string name="label_mention_long">Copy username into input line</string>

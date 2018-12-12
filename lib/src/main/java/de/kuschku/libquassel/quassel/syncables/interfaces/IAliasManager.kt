@@ -32,7 +32,7 @@ interface IAliasManager : ISyncableObject {
   fun initAliases(): QVariantMap
   fun initSetAliases(aliases: QVariantMap)
   @Slot
-  fun addAlias(name: String, expansion: String) {
+  fun addAlias(name: String?, expansion: String?) {
     SYNC("addAlias", ARG(name, Type.QString), ARG(expansion, Type.QString))
   }
 
@@ -42,8 +42,8 @@ interface IAliasManager : ISyncableObject {
   }
 
   data class Alias(
-    val name: String,
-    val expansion: String
+    val name: String?,
+    val expansion: String?
   ) : Serializable
 
   data class Command(

@@ -60,7 +60,7 @@ class AliasManager constructor(
     _aliases = names.zip(expansions, ::Alias).toList()
   }
 
-  override fun addAlias(name: String, expansion: String) {
+  override fun addAlias(name: String?, expansion: String?) {
     if (contains(name)) {
       return
     }
@@ -70,9 +70,9 @@ class AliasManager constructor(
     super.addAlias(name, expansion)
   }
 
-  fun indexOf(name: String) = _aliases.map(Alias::name).indexOf(name)
+  fun indexOf(name: String?) = _aliases.map(Alias::name).indexOf(name)
 
-  fun contains(name: String) = _aliases.map(Alias::name).contains(name)
+  fun contains(name: String?) = _aliases.map(Alias::name).contains(name)
 
   fun defaults() = listOf(
     Alias("j", "/join $0"),
@@ -124,7 +124,7 @@ class AliasManager constructor(
       if (search != null) {
         val found = _aliases.firstOrNull { it.name.equals(search, true) }
         if (found != null) {
-          expand(found.expansion, info, split.getOrNull(1) ?: "", previousCommands)
+          expand(found.expansion ?: "", info, split.getOrNull(1) ?: "", previousCommands)
           return
         }
       }
@@ -138,8 +138,8 @@ class AliasManager constructor(
     val network = proxy.network(bufferInfo.networkId)
 
     val paramRange = Regex("""\$(\d+)\.\.(\d*)""")
-    val commands = expansion.split("; ?".toRegex()).dropLastWhile { it.isEmpty() }
-    val params = msg.split(' ').dropLastWhile({ it.isEmpty() })
+    val commands = expansion.split("; ?".toRegex()).dropLastWhile(String::isEmpty)
+    val params = msg.split(' ').dropLastWhile(String::isEmpty)
     val expandedCommands = LinkedList<String>()
 
     for (i in commands.indices) {

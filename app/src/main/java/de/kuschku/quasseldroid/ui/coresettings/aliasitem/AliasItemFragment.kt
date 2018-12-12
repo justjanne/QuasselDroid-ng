@@ -39,7 +39,6 @@ import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.input.*
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
-import de.kuschku.quasseldroid.util.compatibility.AndroidCrashFixer
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
@@ -131,7 +130,7 @@ class AliasItemFragment : SettingsFragment(), SettingsFragment.Savable,
     }
 
     rule?.let { data ->
-      name.setText(AndroidCrashFixer.removeCrashableCharacters(data.name))
+      name.setText(data.name ?: "")
       expansion.setText(formatDeserializer.formatString(data.expansion, true))
     }
 

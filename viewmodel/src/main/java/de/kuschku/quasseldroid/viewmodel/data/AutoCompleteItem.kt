@@ -79,9 +79,9 @@ sealed class AutoCompleteItem(open val name: String, val suffix: String, private
   }
 
   data class AliasItem(
-    val alias: String,
-    val expansion: String
-  ) : AutoCompleteItem(alias, " ", 1)
+    val alias: String?,
+    val expansion: String?
+  ) : AutoCompleteItem(alias ?: "", " ", 1)
 
   data class ChannelItem(
     val info: BufferInfo,

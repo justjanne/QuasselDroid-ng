@@ -69,7 +69,7 @@ class AliasListAdapter @Inject constructor(
     notifyItemChanged(index)
   }
 
-  fun indexOf(name: String) = data.map(IAliasManager.Alias::name).indexOf(name)
+  fun indexOf(name: String?) = data.map(IAliasManager.Alias::name).indexOf(name)
 
   fun remove(index: Int) {
     data.removeAt(index)
