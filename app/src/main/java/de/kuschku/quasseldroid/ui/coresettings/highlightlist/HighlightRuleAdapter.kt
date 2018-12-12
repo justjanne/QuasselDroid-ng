@@ -99,11 +99,23 @@ class HighlightRuleAdapter(
     @BindView(R.id.name)
     lateinit var name: TextView
 
+    @BindView(R.id.name_row)
+    lateinit var nameRow: View
+
     @BindView(R.id.sender)
     lateinit var sender: TextView
 
+    @BindView(R.id.sender_row)
+    lateinit var senderRow: View
+
     @BindView(R.id.channel)
     lateinit var channel: TextView
+
+    @BindView(R.id.channel_row)
+    lateinit var channelRow: View
+
+    @BindView(R.id.match_all)
+    lateinit var matchAll: View
 
     @BindView(R.id.toggle)
     lateinit var toggle: SwitchCompat
@@ -136,10 +148,13 @@ class HighlightRuleAdapter(
     fun bind(item: HighlightRuleManager.HighlightRule) {
       this.item = item
       name.text = item.name
+      nameRow.visibleIf(item.name.isNotBlank())
       sender.text = item.sender
-      sender.visibleIf(item.sender.isNotBlank())
+      senderRow.visibleIf(item.sender.isNotBlank())
       channel.text = item.channel
-      channel.visibleIf(item.channel.isNotBlank())
+      channelRow.visibleIf(item.channel.isNotBlank())
+      matchAll.visibleIf(item.name.isBlank() && item.sender.isBlank() && item.channel.isBlank())
+
       toggle.isChecked = item.isEnabled
     }
   }

@@ -54,7 +54,25 @@
       android:paddingBottom="16dp"
       android:paddingTop="16dp">
 
+      <TextView
+        android:id="@+id/match_all"
+        style="@style/Widget.RtlConformTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:ellipsize="marquee"
+        android:orientation="vertical"
+        android:singleLine="true"
+        android:text="@string/label_match_all"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="?colorTextPrimary"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
       <LinearLayout
+        android:id="@+id/name_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -84,6 +102,7 @@
       </LinearLayout>
 
       <LinearLayout
+        android:id="@+id/sender_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -110,13 +129,18 @@
       </LinearLayout>
 
       <LinearLayout
+        android:id="@+id/channel_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Space
-          android:layout_width="32dp"
-          android:layout_height="wrap_content" />
+        <androidx.appcompat.widget.AppCompatImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="8dp"
+          android:layout_marginRight="8dp"
+          app:srcCompat="@drawable/ic_channel"
+          app:tint="?colorTextSecondary" />
 
         <TextView
           android:id="@+id/channel"
