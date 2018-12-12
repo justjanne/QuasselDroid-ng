@@ -114,16 +114,20 @@ class NetworkServerFragment : SettingsFragment(), SettingsFragment.Savable,
 
     sslEnabled.setOnCheckedChangeListener { _, isChecked ->
       sslVerify.isEnabled = isChecked
+      val portValue = port.text.trim().toString()
+      if (isChecked && portValue == "6667") {
+        port.setText("6697")
+      } else if (!isChecked && portValue == "6697") {
+        port.setText("6667")
+      }
     }
     sslVerify.isEnabled = sslEnabled.isChecked
 
     return view
   }
 
-  override fun onSave() = item.let { data ->
-    val intent = Intent()
-    intent.putExtra("old", data)
-    val new = INetwork.Server(
+  private fun applyChanges(data: INetwork.Server?): INetwork.Server {
+    return INetwork.Server(
       host = host.text.toString(),
       port = port.text.toString().toIntOrNull() ?: data?.port ?: 0,
       useSsl = sslEnabled.isChecked,
@@ -136,22 +140,16 @@ class NetworkServerFragment : SettingsFragment(), SettingsFragment.Savable,
       proxyUser = proxyUser.text.toString(),
       proxyPass = proxyPass.text.toString()
     )
+  }
+
+  override fun onSave() = item.let { data ->
+    val intent = Intent()
+    intent.putExtra("old", data)
+    val new = applyChanges(data)
     intent.putExtra("new", new)
     requireActivity().setResult(Activity.RESULT_OK, intent)
     true
   }
 
-  override fun hasChanged() = item != INetwork.Server(
-    host = host.text.toString(),
-    port = port.text.toString().toIntOrNull() ?: item?.port ?: 0,
-    useSsl = sslEnabled.isChecked,
-    sslVerify = sslVerify.isChecked,
-    password = password.text.toString(),
-    useProxy = proxyEnabled.isChecked,
-    proxyType = proxyType.selectedItemId.toInt(),
-    proxyHost = proxyHost.text.toString(),
-    proxyPort = proxyPort.text.toString().toIntOrNull() ?: item?.proxyPort ?: 0,
-    proxyUser = proxyUser.text.toString(),
-    proxyPass = proxyPass.text.toString()
-  )
+  override fun hasChanged() = item != applyChanges(item)
 }
