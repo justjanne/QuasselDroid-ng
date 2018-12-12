@@ -344,7 +344,7 @@ class Network constructor(
     // See: http://ircv3.net/specs/extensions/sasl-3.1.html
     // And: http://ircv3.net/specs/extensions/sasl-3.2.html
     return (capValue.isNullOrBlank() ||
-            capValue?.contains(saslMechanism, ignoreCase = true) ?: false)
+            capValue.contains(saslMechanism, ignoreCase = true))
   }
 
   fun newIrcUser(hostMask: String, initData: QVariantMap = emptyMap(),
@@ -1010,24 +1010,24 @@ class Network constructor(
   private val live_networkInfo = BehaviorSubject.createDefault(Unit)
 
   fun isEqual(other: Network): Boolean =
-    this.networkName() == other.networkName() ||
-    this.identity() == other.identity() ||
-    this.serverList() == other.serverList() ||
-    this.useSasl() == other.useSasl() ||
-    this.saslAccount() == other.saslAccount() ||
-    this.saslPassword() == other.saslPassword() ||
-    this.useAutoIdentify() == other.useAutoIdentify() ||
-    this.autoIdentifyService() == other.autoIdentifyService() ||
-    this.autoIdentifyPassword() == other.autoIdentifyPassword() ||
-    this.useAutoReconnect() == other.useAutoReconnect() ||
-    this.autoReconnectInterval() == other.autoReconnectInterval() ||
-    this.autoReconnectRetries() == other.autoReconnectRetries() ||
-    this.unlimitedReconnectRetries() == other.unlimitedReconnectRetries() ||
-    this.rejoinChannels() == other.rejoinChannels() ||
-    this.perform() == other.perform() ||
-    this.useCustomMessageRate() == other.useCustomMessageRate() ||
-    this.messageRateBurstSize() == other.messageRateBurstSize() ||
-    this.unlimitedMessageRate() == other.unlimitedMessageRate() ||
+    this.networkName() == other.networkName() &&
+    this.identity() == other.identity() &&
+    this.serverList() == other.serverList() &&
+    this.useSasl() == other.useSasl() &&
+    this.saslAccount() == other.saslAccount() &&
+    this.saslPassword() == other.saslPassword() &&
+    this.useAutoIdentify() == other.useAutoIdentify() &&
+    this.autoIdentifyService() == other.autoIdentifyService() &&
+    this.autoIdentifyPassword() == other.autoIdentifyPassword() &&
+    this.useAutoReconnect() == other.useAutoReconnect() &&
+    this.autoReconnectInterval() == other.autoReconnectInterval() &&
+    this.autoReconnectRetries() == other.autoReconnectRetries() &&
+    this.unlimitedReconnectRetries() == other.unlimitedReconnectRetries() &&
+    this.rejoinChannels() == other.rejoinChannels() &&
+    this.perform() == other.perform() &&
+    this.useCustomMessageRate() == other.useCustomMessageRate() &&
+    this.messageRateBurstSize() == other.messageRateBurstSize() &&
+    this.unlimitedMessageRate() == other.unlimitedMessageRate() &&
     this.messageRateDelay() == other.messageRateDelay()
 
   override fun toString(): String {

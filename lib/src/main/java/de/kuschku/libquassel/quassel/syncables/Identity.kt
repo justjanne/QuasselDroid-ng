@@ -307,15 +307,15 @@ class Identity constructor(
     }
 
   fun isEqual(other: Identity): Boolean =
-    this.identityName() == other.identityName() ||
-    this.realName() == other.realName() ||
-    this.ident() == other.ident() ||
-    this.kickReason() == other.kickReason() ||
-    this.partReason() == other.partReason() ||
-    this.quitReason() == other.quitReason() ||
-    this.awayReason() == other.awayReason() ||
-    this.detachAwayEnabled() == other.detachAwayEnabled() ||
-    this.detachAwayReason() == other.detachAwayReason() ||
+    this.identityName() == other.identityName() &&
+    this.realName() == other.realName() &&
+    this.ident() == other.ident() &&
+    this.kickReason() == other.kickReason() &&
+    this.partReason() == other.partReason() &&
+    this.quitReason() == other.quitReason() &&
+    this.awayReason() == other.awayReason() &&
+    this.detachAwayEnabled() == other.detachAwayEnabled() &&
+    this.detachAwayReason() == other.detachAwayReason() &&
     this.nicks() == other.nicks()
 
   override fun toString(): String {

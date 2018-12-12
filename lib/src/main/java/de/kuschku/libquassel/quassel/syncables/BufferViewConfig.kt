@@ -351,14 +351,14 @@ class BufferViewConfig constructor(
   }
 
   fun isEqual(other: BufferViewConfig): Boolean =
-    this.bufferViewName() == other.bufferViewName() ||
-    this.showSearch() == other.showSearch() ||
-    this.sortAlphabetically() == other.sortAlphabetically() ||
-    this.addNewBuffersAutomatically() == other.addNewBuffersAutomatically() ||
-    this.hideInactiveBuffers() == other.hideInactiveBuffers() ||
-    this.hideInactiveNetworks() == other.hideInactiveNetworks() ||
-    this.allowedBufferTypes() == other.allowedBufferTypes() ||
-    this.networkId() == other.networkId() ||
+    this.bufferViewName() == other.bufferViewName() &&
+    this.showSearch() == other.showSearch() &&
+    this.sortAlphabetically() == other.sortAlphabetically() &&
+    this.addNewBuffersAutomatically() == other.addNewBuffersAutomatically() &&
+    this.hideInactiveBuffers() == other.hideInactiveBuffers() &&
+    this.hideInactiveNetworks() == other.hideInactiveNetworks() &&
+    this.allowedBufferTypes() == other.allowedBufferTypes() &&
+    this.networkId() == other.networkId() &&
     this.minimumActivity() == other.minimumActivity()
 
   override fun toString(): String {

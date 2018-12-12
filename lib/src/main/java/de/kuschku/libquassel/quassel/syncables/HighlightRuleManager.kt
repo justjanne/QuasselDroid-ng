@@ -162,8 +162,8 @@ class HighlightRuleManager(
   private var _nicksCaseSensitive = false
 
   fun isEqual(other: HighlightRuleManager): Boolean =
-    this.highlightNick() == other.highlightNick() ||
-    this.nicksCaseSensitive() == other.nicksCaseSensitive() ||
+    this.highlightNick() == other.highlightNick() &&
+    this.nicksCaseSensitive() == other.nicksCaseSensitive() &&
     this.highlightRuleList() == other.highlightRuleList()
 
   override fun toString(): String {
