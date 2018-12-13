@@ -42,11 +42,11 @@
   <string name="message_format_kill_1">%1$s a été supprimé %2$s%3$s</string>
   <string name="message_format_kill_2">%1$s a été supprimé par %2$s%3$s (%4$s)</string>
   <plurals name="message_netsplit_join">
-    <item quantity="one">Netsplit entre %1$s et %2$s est terminé: %3$d nouvel utilisateur</item>
-    <item quantity="other">Netsplit entre %1$s et %2$s est terminé: %3$d nouveaux utilisateurs</item>
+    <item quantity="one">Netsplit entre %1$s et %2$s est terminé: %3$d nouvel utilisateur: %4$s</item>
+    <item quantity="other">Netsplit entre %1$s et %2$s est terminé: %3$d nouveaux utilisateurs: %4$s</item>
   </plurals>
   <plurals name="message_netsplit_quit">
-    <item quantity="one">Netsplit entre %1$s et %2$s: %3$d utilisateur a quitté</item>
-    <item quantity="other">Netsplit entre %1$s et %2$s: %3$d utilisateurs ont quittés</item>
+    <item quantity="one">Netsplit entre %1$s et %2$s: %3$d utilisateur a quitté: %4$s</item>
+    <item quantity="other">Netsplit entre %1$s et %2$s: %3$d utilisateurs ont quittés: %4$s</item>
   </plurals>
 </resources>

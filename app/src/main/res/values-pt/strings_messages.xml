@@ -42,11 +42,11 @@
   <string name="message_format_kill_1">%1$s foi killado por %2$s%3$s</string>
   <string name="message_format_kill_2">%1$s foi killado por %2$s%3$s (%4$s)</string>
   <plurals name="message_netsplit_join">
-    <item quantity="one">Netsplit entre %1$s e %2$s terminou: %3$d utilizadores entraram</item>
-    <item quantity="other">Netsplit entre %1$s e %2$s terminou: %3$d utilizadores entraram</item>
+    <item quantity="one">Netsplit entre %1$s e %2$s terminou: %3$d utilizadores entraram: %4$s</item>
+    <item quantity="other">Netsplit entre %1$s e %2$s terminou: %3$d utilizadores entraram: %4$s</item>
   </plurals>
   <plurals name="message_netsplit_quit">
-    <item quantity="one">Netsplit entre %1$s and %2$s: %3$d user qui</item>
-    <item quantity="other">Netsplit entre %1$s e %2$s: %3$d utilizadores desligaram</item>
+    <item quantity="one">Netsplit entre %1$s and %2$s: %3$d user qui: %4$s</item>
+    <item quantity="other">Netsplit entre %1$s e %2$s: %3$d utilizadores desligaram: %4$s</item>
   </plurals>
 </resources>

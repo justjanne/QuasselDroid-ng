@@ -42,13 +42,13 @@
   <string name="message_format_kill_1">%1$s je ubijen/na od %2$s%3$s</string>
   <string name="message_format_kill_2">%1$s je ubijen/na od %2$s%3$s (%4$s)</string>
   <plurals name="message_netsplit_join">
-    <item quantity="one">Netsplit između %1$s i %2$s se završio: %3$d se pridružio/la</item>
-    <item quantity="few">Netsplit između %1$s i %2$s se završio: %3$d su se pridružili</item>
-    <item quantity="other">Netsplit između %1$s i %2$s se završio: %3$d korisnika se pridružilo</item>
+    <item quantity="one">Netsplit između %1$s i %2$s se završio: %3$d se pridružio/la: %4$s</item>
+    <item quantity="few">Netsplit između %1$s i %2$s se završio: %3$d su se pridružili: %4$s</item>
+    <item quantity="other">Netsplit između %1$s i %2$s se završio: %3$d korisnika se pridružilo: %4$s</item>
   </plurals>
   <plurals name="message_netsplit_quit">
-    <item quantity="one">Netsplit između %1$s i %2$s: %3$d je napustio/la</item>
-    <item quantity="few">Netsplit između %1$s i %2$s: %3$d su napustili</item>
-    <item quantity="other">Netsplit između %1$s i %2$s: %3$d korisnika je prekinulo vezu</item>
+    <item quantity="one">Netsplit između %1$s i %2$s: %3$d je napustio/la: %4$s</item>
+    <item quantity="few">Netsplit između %1$s i %2$s: %3$d su napustili: %4$s</item>
+    <item quantity="other">Netsplit između %1$s i %2$s: %3$d korisnika je prekinulo vezu: %4$s</item>
   </plurals>
 </resources>

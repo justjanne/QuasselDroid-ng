@@ -42,11 +42,11 @@
   <string name="message_format_kill_1">%1$s wurde von %2$s%3$s aus dem Netzwerk geworfen</string>
   <string name="message_format_kill_2">%1$s wurde von %2$s%3$s aus dem Chat geworfen (%4$s)</string>
   <plurals name="message_netsplit_join">
-    <item quantity="one">Netsplit zwischen %1$s und %2$s beendet: %3$d Nutzer war betroffen</item>
-    <item quantity="other">Netsplit zwischen %1$s und %2$s beendet: %3$d Nutzer waren betroffen</item>
+    <item quantity="one">Netsplit zwischen %1$s und %2$s beendet: %3$d Nutzer war betroffen: %4$s</item>
+    <item quantity="other">Netsplit zwischen %1$s und %2$s beendet: %3$d Nutzer waren betroffen: %4$s</item>
   </plurals>
   <plurals name="message_netsplit_quit">
-    <item quantity="one">Netsplit zwischen %1$s und %2$s: %3$d Nutzer ist betroffen</item>
-    <item quantity="other">Netsplit zwischen %1$s und %2$s: %3$d Nutzer sind betroffen</item>
+    <item quantity="one">Netsplit zwischen %1$s und %2$s: %3$d Nutzer ist betroffen: %4$s</item>
+    <item quantity="other">Netsplit zwischen %1$s und %2$s: %3$d Nutzer sind betroffen: %4$s</item>
   </plurals>
 </resources>

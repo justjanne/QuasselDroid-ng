@@ -575,12 +575,21 @@ class QuasselMessageRenderer @Inject constructor(
         val split = message.content.content.split("#:#")
         val (server1, server2) = split.last().split(' ')
         val usersAffected = split.size - 1
+        val users = split.subList(0, split.size - 1).map {
+          contentFormatter.formatNick(it, false, monochromeForeground, false)
+        }
+
         FormattedMessage(
           id = message.content.messageId,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
           dayChange = formatDayChange(message),
           combined = context.resources.getQuantityString(
-            R.plurals.message_netsplit_join, usersAffected, server1, server2, usersAffected
+            R.plurals.message_netsplit_join,
+            usersAffected,
+            server1,
+            server2,
+            usersAffected,
+            users.joinToString(", ")
           ),
           hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
@@ -592,12 +601,21 @@ class QuasselMessageRenderer @Inject constructor(
         val split = message.content.content.split("#:#")
         val (server1, server2) = split.last().split(' ')
         val usersAffected = split.size - 1
+        val users = split.subList(0, split.size - 1).map {
+          contentFormatter.formatNick(it, false, monochromeForeground, false)
+        }
+
         FormattedMessage(
           id = message.content.messageId,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
           dayChange = formatDayChange(message),
           combined = context.resources.getQuantityString(
-            R.plurals.message_netsplit_quit, usersAffected, server1, server2, usersAffected
+            R.plurals.message_netsplit_quit,
+            usersAffected,
+            server1,
+            server2,
+            usersAffected,
+            users.joinToString(", ")
           ),
           hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,

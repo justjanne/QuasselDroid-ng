@@ -43,15 +43,15 @@
   <string name="message_format_kill_2">%1$s buvo nužudytas %2$s%3$s (%4$s)</string>
   <!-- Transifex’ quantity handling is different from Android’s. Issue opened on 2018-05-18 -->
   <plurals name="message_netsplit_join" tools:ignore="UnusedQuantity">
-    <item quantity="one">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojas prisijungė</item>
-    <item quantity="few">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojai prisijungė</item>
-    <item quantity="many">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojų prisijungė</item>
-    <item quantity="other">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojų prisijungė</item>
+    <item quantity="one">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojas prisijungė: %4$s</item>
+    <item quantity="few">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojai prisijungė: %4$s</item>
+    <item quantity="many">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojų prisijungė: %4$s</item>
+    <item quantity="other">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojų prisijungė: %4$s</item>
   </plurals>
   <plurals name="message_netsplit_quit" tools:ignore="UnusedQuantity">
-    <item quantity="one">Netsplit tarp %1$s ir %2$s: %3$d vartotojas išėjo</item>
-    <item quantity="few">Netsplit tarp %1$s ir %2$s: %3$d vartotojai išėjo</item>
-    <item quantity="many">Netsplit tarp %1$s ir %2$s: %3$d vartotojų išėjo</item>
-    <item quantity="other">Netsplit tarp %1$s ir %2$s: %3$d vartotojų išėjo</item>
+    <item quantity="one">Netsplit tarp %1$s ir %2$s: %3$d vartotojas išėjo: %4$s</item>
+    <item quantity="few">Netsplit tarp %1$s ir %2$s: %3$d vartotojai išėjo: %4$s</item>
+    <item quantity="many">Netsplit tarp %1$s ir %2$s: %3$d vartotojų išėjo: %4$s</item>
+    <item quantity="other">Netsplit tarp %1$s ir %2$s: %3$d vartotojų išėjo: %4$s</item>
   </plurals>
 </resources>
