@@ -160,9 +160,7 @@ class AccountEditActivity : DaggerAppCompatActivity() {
         .content(R.string.delete_confirmation)
         .positiveText(R.string.label_yes)
         .negativeText(R.string.label_no)
-        .negativeColorAttr(R.attr.colorTextPrimary)
-        .backgroundColorAttr(R.attr.colorBackgroundCard)
-        .contentColorAttr(R.attr.colorTextPrimary)
+        .negativeColorAttr(android.R.attr.textColorPrimary)
         .onPositive { _, _ ->
           val it = account
           if (it != null)
