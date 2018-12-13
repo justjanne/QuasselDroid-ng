@@ -74,6 +74,11 @@ class SessionManager(
       .toFlowable(BackpressureStrategy.LATEST)
       .switchMap(ISession::error)
 
+  val connectionError: Flowable<Throwable>
+    get() = inProgressSession
+      .toFlowable(BackpressureStrategy.LATEST)
+      .switchMap(ISession::connectionError)
+
   val connectionProgress: Observable<Triple<ConnectionState, Int, Int>> = Observable.combineLatest(
     state, initStatus,
     BiFunction<ConnectionState, Pair<Int, Int>, Triple<ConnectionState, Int, Int>> { t1, t2 ->

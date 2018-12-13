@@ -39,4 +39,9 @@
     <code>%1$s</code><br/>
     ist nicht gültig für %2$s.</p>
   ]]></string>
+
+  <string name="label_error_unknown_host">Host nicht gefunden: %1$s</string>
+  <string name="label_error_invalid_protocol_version">Unbekanntes Protokoll: %1$d</string>
+  <string name="label_error_connection">Fehler beim Herstellen der Verbindung: %1$s (%2$s)</string>
+  <string name="label_error_connection_closed">Fehler: Verbindung wurde unerwartet getrennt</string>
 </resources>

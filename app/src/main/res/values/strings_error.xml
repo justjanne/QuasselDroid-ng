@@ -38,4 +38,9 @@
     <code>%1$s</code><br/>
     is not valid for %2$s.</p>
   ]]></string>
+
+  <string name="label_error_unknown_host">Host not found: %1$s</string>
+  <string name="label_error_invalid_protocol_version">Invalid protocol: %1$d</string>
+  <string name="label_error_connection">Error encountered during connection: %1$s (%2$s)</string>
+  <string name="label_error_connection_closed">Error: Connection was unexpectedly closed</string>
 </resources>

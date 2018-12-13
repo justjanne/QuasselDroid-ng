@@ -61,6 +61,7 @@ interface ISession : Closeable {
 
   val proxy: SignalProxy
   val error: Flowable<Error>
+  val connectionError: Flowable<Throwable>
   val lag: Observable<Long>
 
   fun login(user: String, pass: String)
@@ -69,6 +70,8 @@ interface ISession : Closeable {
     val NULL = object : ISession {
       override val proxy: SignalProxy = SignalProxy.NULL
       override val error = BehaviorSubject.create<Error>().toFlowable(BackpressureStrategy.BUFFER)
+      override val connectionError = BehaviorSubject.create<Throwable>().toFlowable(
+        BackpressureStrategy.BUFFER)
       override val state = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
       override val features: Features = Features(
         QuasselFeatures.empty(),

@@ -28,6 +28,7 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.system.ErrnoException
 import android.text.Html
 import android.view.ActionMode
 import android.view.Menu
@@ -36,6 +37,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.Toolbar
@@ -55,6 +57,7 @@ import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.kuschku.libquassel.connection.ConnectionState
+import de.kuschku.libquassel.connection.ProtocolVersionException
 import de.kuschku.libquassel.connection.QuasselSecurityException
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message
@@ -85,6 +88,7 @@ import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActiv
 import de.kuschku.quasseldroid.ui.setup.user.UserSetupActivity
 import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
+import de.kuschku.quasseldroid.util.backport.OsConstants
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.missingfeatures.MissingFeaturesDialog
@@ -100,6 +104,8 @@ import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
+import java.net.ConnectException
+import java.net.UnknownHostException
 import java.security.cert.CertificateExpiredException
 import java.security.cert.CertificateNotYetValidException
 import javax.inject.Inject
@@ -536,6 +542,52 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                 }
               }
             }
+          }
+        }
+      }
+    })
+
+    // Connection errors that should show up as toast
+    viewModel.connectionErrors.toLiveData().observe(this, Observer { error ->
+      error?.let {
+        val cause = it.cause
+        when {
+          it is UnknownHostException         -> {
+            val host = it.message?.replace("Host is unresolved: ", "")
+
+            Toast.makeText(this,
+                           getString(R.string.label_error_unknown_host, host),
+                           Toast.LENGTH_LONG).show()
+          }
+          it is ProtocolVersionException     -> {
+            Toast.makeText(this,
+                           getString(R.string.label_error_invalid_protocol_version,
+                                     it.protocol.version),
+                           Toast.LENGTH_LONG).show()
+          }
+          it is ConnectException &&
+          cause is libcore.io.ErrnoException -> {
+            val errorCode = OsConstants.errnoName(cause.errno)
+            val errorName = OsConstants.strerror(cause.errno)
+
+            Toast.makeText(this,
+                           getString(R.string.label_error_connection, errorName, errorCode),
+                           Toast.LENGTH_LONG).show()
+          }
+          it is ConnectException &&
+          Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
+          cause is ErrnoException            -> {
+            val errorCode = OsConstants.errnoName(cause.errno)
+            val errorName = OsConstants.strerror(cause.errno)
+
+            Toast.makeText(this,
+                           getString(R.string.label_error_connection, errorName, errorCode),
+                           Toast.LENGTH_LONG).show()
+          }
+          else                               -> {
+            Toast.makeText(this,
+                           getString(R.string.label_error_connection_closed),
+                           Toast.LENGTH_LONG).show()
           }
         }
       }

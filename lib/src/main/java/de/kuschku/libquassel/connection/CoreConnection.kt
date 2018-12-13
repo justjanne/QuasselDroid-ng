@@ -56,7 +56,8 @@ class CoreConnection(
   private val hostnameVerifier: HostnameVerifier,
   private val address: SocketAddress,
   private val handlerService: HandlerService,
-  private val securityExceptionCallback: (QuasselSecurityException) -> Unit
+  private val securityExceptionCallback: (QuasselSecurityException) -> Unit,
+  private val exceptionCallback: (Throwable) -> Unit
 ) : Thread(), Closeable {
   companion object {
     private const val TAG = "CoreConnection"
@@ -146,7 +147,7 @@ class CoreConnection(
         )
       }
       else -> {
-        throw IllegalArgumentException("Invalid Protocol Version: $protocol")
+        throw ProtocolVersionException(protocol)
       }
     }
   }
@@ -241,6 +242,7 @@ class CoreConnection(
         log(WARN, TAG, "Error encountered in connection", e)
         log(WARN, TAG, "Last sent message: ${MessageRunnable.lastSent.get()}")
         close()
+        exceptionCallback(e)
       }
     }
   }

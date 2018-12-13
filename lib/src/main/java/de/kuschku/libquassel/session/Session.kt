@@ -58,12 +58,23 @@ class Session(
     get() = coreConnection.sslSession
 
   private val coreConnection = CoreConnection(
-    this, clientData, features, trustManager, hostnameVerifier, address, handlerService, ::handle
+    this,
+    clientData,
+    features,
+    trustManager,
+    hostnameVerifier,
+    address,
+    handlerService,
+    ::handle,
+    ::handleConnectionError
   )
   override val state = coreConnection.state
 
   private val _error = PublishSubject.create<Error>()
   override val error = _error.toFlowable(BackpressureStrategy.BUFFER)
+
+  private val _connectionError = PublishSubject.create<Throwable>()
+  override val connectionError = _connectionError.toFlowable(BackpressureStrategy.LATEST)
 
   override val aliasManager = AliasManager(this)
   override val backlogManager = BacklogManager(this, backlogStorage)
@@ -146,6 +157,10 @@ class Session(
 
   fun handle(f: QuasselSecurityException) {
     _error.onNext(Error.SslError(f))
+  }
+
+  fun handleConnectionError(f: Throwable) {
+    _connectionError.onNext(f)
   }
 
   fun addNetwork(networkId: NetworkId) {

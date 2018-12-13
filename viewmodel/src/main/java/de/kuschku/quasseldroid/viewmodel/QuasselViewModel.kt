@@ -99,6 +99,10 @@ class QuasselViewModel : ViewModel() {
     it.orNull()?.error ?: Flowable.empty()
   }
 
+  val connectionErrors = sessionManager.toFlowable(BackpressureStrategy.LATEST).switchMap {
+    it.orNull()?.connectionError ?: Flowable.empty()
+  }
+
   val sslSession = session.flatMapSwitchMap(ISession::sslSession)
 
   val coreInfo = session.mapMapNullable(ISession::coreInfo).mapSwitchMap(CoreInfo::liveInfo)
