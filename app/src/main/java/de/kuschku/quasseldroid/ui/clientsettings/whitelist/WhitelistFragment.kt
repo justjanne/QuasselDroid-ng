@@ -25,6 +25,7 @@ import android.os.HandlerThread
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +35,7 @@ import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
+import de.kuschku.quasseldroid.util.helper.visibleIf
 import javax.inject.Inject
 
 class WhitelistFragment : SettingsFragment(), SettingsFragment.Changeable,
@@ -41,8 +43,14 @@ class WhitelistFragment : SettingsFragment(), SettingsFragment.Changeable,
   @BindView(R.id.certificate_whitelist)
   lateinit var certificateList: RecyclerView
 
+  @BindView(R.id.certificate_whitelist_empty)
+  lateinit var certificateListEmpty: TextView
+
   @BindView(R.id.hostname_whitelist)
   lateinit var hostnameList: RecyclerView
+
+  @BindView(R.id.hostname_whitelist_empty)
+  lateinit var hostnameListEmpty: TextView
 
   @Inject
   lateinit var database: QuasselDatabase
@@ -90,6 +98,9 @@ class WhitelistFragment : SettingsFragment(), SettingsFragment.Changeable,
         certificateAdapter.list = it.certificates
         hostnameAdapter.list = it.hostnames
       }
+
+      certificateListEmpty.visibleIf(whitelist?.certificates.isNullOrEmpty())
+      hostnameListEmpty.visibleIf(whitelist?.hostnames.isNullOrEmpty())
     }
     return view
   }

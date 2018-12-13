@@ -110,7 +110,9 @@
   <string name="label_whitelist">Ignorieren</string>
   <string name="label_whitelist_ignore_date">Verfallsdatum wird ignoriert für dieses Zertifikat</string>
   <string name="label_whitelist_certificates">Zertifikate</string>
+  <string name="label_whitelist_certificates_empty">Keine Zertifikate auf der Whitelist</string>
   <string name="label_whitelist_hostnames">Hosts</string>
+  <string name="label_whitelist_hostnames_empty">Keine Hostnamen auf der Whitelist</string>
   <string name="label_who">Who</string>
   <string name="label_who_long">Informationen aller Nutzer aktualisieren</string>
   <string name="label_whois">Whois</string>

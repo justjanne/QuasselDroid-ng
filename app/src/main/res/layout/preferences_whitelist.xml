@@ -32,6 +32,21 @@
       style="@style/Widget.Subhead"
       android:text="@string/label_whitelist_certificates" />
 
+    <TextView
+      android:id="@+id/certificate_whitelist_empty"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:minHeight="?android:attr/listPreferredItemHeightSmall"
+      android:paddingStart="?listPreferredItemPaddingLeft"
+      android:paddingLeft="?listPreferredItemPaddingLeft"
+      android:paddingEnd="?listPreferredItemPaddingRight"
+      android:paddingRight="?listPreferredItemPaddingRight"
+      android:text="@string/label_whitelist_certificates_empty"
+      android:textColor="?colorTextSecondary"
+      android:textStyle="italic"
+      android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/certificate_whitelist"
       android:layout_width="match_parent"
@@ -44,6 +59,21 @@
     <TextView
       style="@style/Widget.Subhead"
       android:text="@string/label_whitelist_hostnames" />
+
+    <TextView
+      android:id="@+id/hostname_whitelist_empty"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:minHeight="?android:attr/listPreferredItemHeightSmall"
+      android:paddingStart="?listPreferredItemPaddingLeft"
+      android:paddingLeft="?listPreferredItemPaddingLeft"
+      android:paddingEnd="?listPreferredItemPaddingRight"
+      android:paddingRight="?listPreferredItemPaddingRight"
+      android:text="@string/label_whitelist_hostnames_empty"
+      android:textColor="?colorTextSecondary"
+      android:textStyle="italic"
+      android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/hostname_whitelist"

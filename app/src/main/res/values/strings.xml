@@ -112,7 +112,9 @@
   <string name="label_whitelist">Ignore</string>
   <string name="label_whitelist_ignore_date">Expiration date is ignored for this certificate</string>
   <string name="label_whitelist_certificates">Certificates</string>
+  <string name="label_whitelist_certificates_empty">No certificates whitelisted</string>
   <string name="label_whitelist_hostnames">Hosts</string>
+  <string name="label_whitelist_hostnames_empty">No hosts whitelisted</string>
   <string name="label_who">Who</string>
   <string name="label_who_long">Update user information of all users</string>
   <string name="label_whois">Whois</string>
