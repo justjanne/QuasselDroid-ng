@@ -152,7 +152,8 @@
 
   <string name="info_copied_version">Version copied to clipboard</string>
 
-  <string name="advertisement_support_patreon">Please help support the development of this app through &lt;a href="https://www.patreon.com/justjanne"&gt;Patreon&lt;/a&gt;.</string>
+  <string name="advertisement_support_patreon">Please help support the development of this app on Patreon</string>
+  <string name="advertisement_support_button">Donate</string>
 
   <string name="drag_intercept_bottom_sheet_behavior" translatable="false">de.kuschku.quasseldroid.util.ui.DragInterceptBottomSheetBehavior</string>
 </resources>

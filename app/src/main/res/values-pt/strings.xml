@@ -143,6 +143,5 @@
 
   <string name="info_copied_version">Versão copiada para a área de transferência</string>
 
-  <string name="advertisement_support_patreon">Por favor, ajudem a apoiar o desenvolvimento deste aplicativo através de &lt;a href=\"https://www.patreon.com/justjanne\"&gt;Patreon&lt;/a&gt;.</string>
-
+  <string name="advertisement_support_patreon">Por favor, ajudem a apoiar o desenvolvimento deste aplicativo através de Patreon</string>
 </resources>

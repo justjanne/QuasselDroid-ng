@@ -139,5 +139,4 @@
   <string name="cancel_confirmation">Vous avez des changements non-sauvegardés. Voulez-vous les abandonner?</string>
 
   <string name="info_copied_version">Version copiée au clipboard</string>
-
-  </resources>
+</resources>

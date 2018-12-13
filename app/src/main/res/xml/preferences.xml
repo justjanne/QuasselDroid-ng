@@ -20,6 +20,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:robobunny="http://robobunny.com">
+
+  <PreferenceScreen android:layout="@layout/widget_advertisement_support_patreon">
+    <intent
+      android:action="android.intent.action.VIEW"
+      android:data="https://www.patreon.com/justjanne" />
+  </PreferenceScreen>
+
   <PreferenceCategory android:title="@string/preference_appearance_title">
     <ListPreference
       android:defaultValue="MATERIAL_LIGHT"
