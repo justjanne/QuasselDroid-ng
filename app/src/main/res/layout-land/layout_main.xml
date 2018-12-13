@@ -34,14 +34,14 @@
 
     <FrameLayout
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
+      android:layout_height="match_parent"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
       <fragment
         android:id="@+id/fragment_messages"
         android:name="de.kuschku.quasseldroid.ui.chat.messages.MessageListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:layout="@layout/fragment_messages" />
 
       <include layout="@layout/widget_connection_status" />
