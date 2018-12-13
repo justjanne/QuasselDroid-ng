@@ -166,7 +166,9 @@ class QuasselViewModel : ViewModel() {
                       info = info,
                       network = network,
                       description = user.realName(),
-                      ircUser = user
+                      ircUser =
+                      if (user == IrcUser.NULL) null
+                      else user
                     )
                   }
                 }
