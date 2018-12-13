@@ -82,11 +82,11 @@
       android:text="@string/label_website" />
 
     <Button
-      android:id="@+id/action_github"
+      android:id="@+id/action_source"
       style="@style/Widget.Button"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/label_github" />
+      android:text="@string/label_source" />
 
     <Button
       android:id="@+id/action_donate"

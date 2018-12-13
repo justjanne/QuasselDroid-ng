@@ -52,8 +52,8 @@ class AboutFragment : DaggerFragment() {
   @BindView(R.id.action_website)
   lateinit var website: Button
 
-  @BindView(R.id.action_github)
-  lateinit var github: Button
+  @BindView(R.id.action_source)
+  lateinit var source: Button
 
   @BindView(R.id.action_donate)
   lateinit var donate: Button
@@ -90,9 +90,9 @@ class AboutFragment : DaggerFragment() {
       context?.startActivity(intent)
     }
 
-    github.setOnClickListener {
+    source.setOnClickListener {
       val intent = Intent(Intent.ACTION_VIEW)
-      intent.data = Uri.parse("https://github.com/justjanne/quasseldroid-ng")
+      intent.data = Uri.parse("https://git.kuschku.de/justJanne/QuasselDroid-ng")
       context?.startActivity(intent)
     }
 

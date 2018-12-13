@@ -49,7 +49,6 @@
   <string name="label_edit_topic">Izmeni temu</string>
   <string name="label_edit_topic_long">Otvori dijalog za mijenjanje teme kanala</string>
   <string name="label_filter_messages">Filtriraj poruke</string>
-  <string name="label_github">GitHub</string>
   <string name="label_hide_perm">Sakrij trajno</string>
   <string name="label_hide_temp">Sakrij privremeno</string>
   <string name="label_ignore">Ignoriši</string>

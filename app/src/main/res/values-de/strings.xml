@@ -50,7 +50,6 @@
   <string name="label_edit_topic">Thema ändern</string>
   <string name="label_edit_topic_long">Open dialog to change the channel topic</string>
   <string name="label_filter_messages">Nachrichten filtern</string>
-  <string name="label_github">GitHub</string>
   <string name="label_hide_perm">Permanent ausblenden</string>
   <string name="label_hide_temp">Temporär ausblenden</string>
   <string name="label_ignore">Ignorieren</string>
@@ -101,6 +100,7 @@
   <string name="label_share">Teilen</string>
   <string name="label_share_crashreport">Absturzbericht Teilen</string>
   <string name="label_show_hidden">Alle anzeigen</string>
+  <string name="label_source">Quellcode</string>
   <string name="label_topic">Kanal-Thema</string>
   <string name="label_translators">Übersetzer</string>
   <string name="label_unhide">Nicht mehr ausblenden</string>

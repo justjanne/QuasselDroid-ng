@@ -49,7 +49,6 @@
   <string name="label_edit_topic">Keisti temą</string>
   <string name="label_edit_topic_long">Atverti kanalo temos keitimo dialogą</string>
   <string name="label_filter_messages">Filtruoti žinutes</string>
-  <string name="label_github">GitHub</string>
   <string name="label_hide_perm">Slėpti visam laikui</string>
   <string name="label_hide_temp">Slėpti trumpam</string>
   <string name="label_ignore">Ignoruoti</string>

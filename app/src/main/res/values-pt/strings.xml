@@ -49,7 +49,6 @@
   <string name="label_edit_topic">Editar Tópico</string>
   <string name="label_edit_topic_long">Abre a caixa de diálogo para alterar o tópico do canal</string>
   <string name="label_filter_messages">Filtrar Mensagens</string>
-  <string name="label_github">GitHub</string>
   <string name="label_hide_perm">Ocultar Permanentemente</string>
   <string name="label_hide_temp">Ocultar Temporariamente</string>
   <string name="label_ignore">Ignorar</string>
@@ -121,7 +120,7 @@
   <string name="label_feature_capnegotiation">Necessário para recursos do IRCv3</string>
   <string name="label_feature_verifyserverssl">Necessário para verificar o certificado SSL das redes de IRC às quais você se conecta</string>
   <string name="label_feature_customratelimits">Necessário para limites personalizados para redes de IRC</string>
-  <string name="label_feature_awayformattimestamp">Necessário para personalização de data/hora em mensagens de ausencia</string>
+  <string name="label_feature_awayformattimestamp">Necessário para personalização de data/hora em mensagens de ausência</string>
   <string name="label_feature_bufferactivitysync">Obrigatório para ver a atividade de chats na lista de chats</string>
   <string name="label_feature_coresidehighlights">Obrigatório para menções</string>
   <string name="label_feature_senderprefixes">Necessário para ver os modos de prefixo (+, @) dos utilizadores nas mensagens</string>

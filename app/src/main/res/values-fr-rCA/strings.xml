@@ -49,7 +49,6 @@
   <string name="label_edit_topic">Changer le Topique</string>
   <string name="label_edit_topic_long">Ouvrir un dialogue pour changer le topique de la chaîne</string>
   <string name="label_filter_messages">Filtrer les Messages</string>
-  <string name="label_github">GitHub</string>
   <string name="label_hide_perm">Cacher en Permanence</string>
   <string name="label_hide_temp">Cacher Temporairement</string>
   <string name="label_ignore">Ignorer</string>

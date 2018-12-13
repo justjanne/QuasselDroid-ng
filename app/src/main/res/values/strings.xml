@@ -52,7 +52,6 @@
   <string name="label_edit_topic">Edit Topic</string>
   <string name="label_edit_topic_long">Open dialog to change the channel topic</string>
   <string name="label_filter_messages">Filter Messages</string>
-  <string name="label_github">GitHub</string>
   <string name="label_hide_perm">Hide Permanently</string>
   <string name="label_hide_temp">Hide Temporarily</string>
   <string name="label_ignore">Ignore</string>
@@ -103,6 +102,7 @@
   <string name="label_share">Share</string>
   <string name="label_share_crashreport">Share Crash Report</string>
   <string name="label_show_hidden">Show Hidden</string>
+  <string name="label_source">Source</string>
   <string name="label_topic">Channel Topic</string>
   <string name="label_translators">Translators</string>
   <string name="label_unhide">Make Visible</string>
