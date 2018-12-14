@@ -229,6 +229,8 @@ class CoreConnection(
       }
       channel?.close()
     } catch (e: Throwable) {
+      val closed = state.value == ConnectionState.CLOSED
+
       var cause: Throwable? = e
       var exception: QuasselSecurityException?
       do {
@@ -239,10 +241,12 @@ class CoreConnection(
         close()
         securityExceptionCallback(exception)
       } else {
-        log(WARN, TAG, "Error encountered in connection", e)
-        log(WARN, TAG, "Last sent message: ${MessageRunnable.lastSent.get()}")
+        if (!closed) {
+          log(WARN, TAG, "Error encountered in connection", e)
+          log(WARN, TAG, "Last sent message: ${MessageRunnable.lastSent.get()}")
+          exceptionCallback(e)
+        }
         close()
-        exceptionCallback(e)
       }
     }
   }
