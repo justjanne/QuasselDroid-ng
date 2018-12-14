@@ -62,6 +62,9 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Query("SELECT * FROM message")
     fun all(): List<MessageData>
 
+    @Query("SELECT DISTINCT bufferId FROM message")
+    fun buffers(): List<BufferId>
+
     @Query("SELECT * FROM message WHERE messageId = :messageId")
     fun find(messageId: Int): MessageData?
 
@@ -119,6 +122,9 @@ abstract class QuasselDatabase : RoomDatabase() {
 
   @Dao
   interface FilteredDao {
+    @Query("SELECT DISTINCT bufferId FROM filtered WHERE accountId = :accountId")
+    fun buffers(accountId: Long): List<BufferId>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun replace(vararg entities: Filtered)
 

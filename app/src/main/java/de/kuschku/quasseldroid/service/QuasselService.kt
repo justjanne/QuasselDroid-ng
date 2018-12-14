@@ -29,6 +29,7 @@ import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.connection.HostnameVerifier
 import de.kuschku.libquassel.connection.SocketAddress
 import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.session.Backend
@@ -436,6 +437,30 @@ class QuasselService : DaggerLifecycleService(),
         }.toVariantMap()
       )
     }
+
+    // Cleanup deleted buffers from cache
+
+    val buffers = session.bufferSyncer.bufferInfos().map(BufferInfo::bufferId)
+
+    val deletedBuffersMessage = database.message().buffers().toSet() - buffers
+    log(INFO, "QuasselService", "Buffers deleted from message storage: $deletedBuffersMessage")
+    for (deletedBuffer in deletedBuffersMessage) {
+      database.message().clearMessages(deletedBuffer)
+    }
+
+    val deletedBuffersFiltered = database.filtered().buffers(accountId).toSet() - buffers
+    log(INFO, "QuasselService", "Buffers deleted from filtered storage: $deletedBuffersFiltered")
+    for (deletedBuffer in deletedBuffersFiltered) {
+      database.filtered().clear(accountId, deletedBuffer)
+    }
+
+    val deletedBuffersNotifications = database.notifications().buffers().toSet() - buffers
+    log(INFO,
+        "QuasselService",
+        "Buffers deleted from notification storage: $deletedBuffersNotifications")
+    for (deletedBuffer in deletedBuffersNotifications) {
+      database.notifications().markReadNormal(deletedBuffer)
+    }
   }
 
   companion object {
@@ -449,7 +474,7 @@ class QuasselService : DaggerLifecycleService(),
       disconnect: Boolean? = null,
       markRead: BufferId? = null,
       markReadMessage: MsgId? = null
-    ): ComponentName = context.startService(
+    ): ComponentName? = context.startService(
       intent(context, disconnect, markRead, markReadMessage)
     )
 
