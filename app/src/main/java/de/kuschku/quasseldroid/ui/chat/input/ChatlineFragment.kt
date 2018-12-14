@@ -168,7 +168,7 @@ class ChatlineFragment : ServiceBoundFragment() {
     }
 
     fun send() {
-      if (chatline.safeText.isNotBlank()) {
+      if (chatline.safeText.isNotEmpty()) {
         val lines = chatline.safeText.lineSequence().map {
           SpannableString(it).apply {
             for (span in getSpans(0, length, Any::class.java)) {
@@ -225,7 +225,7 @@ class ChatlineFragment : ServiceBoundFragment() {
   }
 
   fun replaceText(text: CharSequence) {
-    if (chatline.safeText.isNotBlank()) {
+    if (chatline.safeText.isNotEmpty()) {
       chatline.safeText.lineSequence().forEach(viewModel::addRecentlySentMessage)
     }
     editorHelper.replaceText(text)
