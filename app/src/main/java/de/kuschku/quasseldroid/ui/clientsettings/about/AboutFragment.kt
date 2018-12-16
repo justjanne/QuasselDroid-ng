@@ -111,7 +111,7 @@ class AboutFragment : DaggerFragment() {
     val apache2 = License(
       shortName = "Apache-2.0",
       fullName = "Apache License",
-      text = R.string.license_apache_2
+      text = R.raw.license_apache_2
     )
 
     libraries.layoutManager = LinearLayoutManager(context)
@@ -156,7 +156,7 @@ class AboutFragment : DaggerFragment() {
         license = License(
           shortName = "MIT",
           fullName = "The MIT License (MIT)",
-          text = R.string.license_dracula
+          text = R.raw.license_dracula
         ),
         url = "https://draculatheme.com/"
       ),
@@ -165,16 +165,6 @@ class AboutFragment : DaggerFragment() {
         version = "4.8.0",
         license = apache2,
         url = "https://bumptech.github.io/glide/"
-      ),
-      Library(
-        name = "GlobTransformer",
-        version = "4.6.1",
-        license = License(
-          shortName = "CC BY-SA 3.0",
-          fullName = "Creative Commons Attribution-ShareAlike 3.0 Unported",
-          text = R.string.license_cc_by_sa_3_0
-        ),
-        url = "https://stackoverflow.com/a/17369948"
       ),
       Library(
         name = "Gson",
@@ -187,7 +177,7 @@ class AboutFragment : DaggerFragment() {
         license = License(
           shortName = "MIT",
           fullName = "The MIT License (MIT)",
-          text = R.string.license_gruvbox
+          text = R.raw.license_gruvbox
         ),
         url = "https://github.com/morhetz/gruvbox"
       ),
@@ -220,7 +210,7 @@ class AboutFragment : DaggerFragment() {
         license = License(
           shortName = "SIL Open Font License v1.1",
           fullName = "SIL OPEN FONT LICENSE",
-          text = R.string.license_materialdesignicons
+          text = R.raw.license_materialdesignicons
         ),
         url = "https://github.com/Templarian/MaterialDesign"
       ),
@@ -236,7 +226,7 @@ class AboutFragment : DaggerFragment() {
         license = License(
           shortName = "MIT",
           fullName = "The MIT License (MIT)",
-          text = R.string.license_materialdialogs
+          text = R.raw.license_materialdialogs
         ),
         url = "https://github.com/afollestad/material-dialogs"
       ),
@@ -252,7 +242,7 @@ class AboutFragment : DaggerFragment() {
         license = License(
           shortName = "GPLv3",
           fullName = "GNU GENERAL PUBLIC LICENSE",
-          text = R.string.license_gpl_v3
+          text = R.raw.license_gpl_v3
         ),
         url = "https://quassel-irc.org/"
       ),
@@ -262,7 +252,7 @@ class AboutFragment : DaggerFragment() {
         license = License(
           shortName = "CC0",
           fullName = "Creative Commons CC0 1.0 Universal",
-          text = R.string.license_cc_0
+          text = R.raw.license_cc_0
         ),
         url = "https://github.com/ReactiveX/RxJava"
       ),
@@ -289,7 +279,7 @@ class AboutFragment : DaggerFragment() {
         license = License(
           shortName = "MIT",
           fullName = "The MIT License (MIT)",
-          text = R.string.license_solarized
+          text = R.raw.license_solarized
         ),
         url = "http://ethanschoonover.com/solarized"
       ),
@@ -298,7 +288,7 @@ class AboutFragment : DaggerFragment() {
         version = "1.3.6",
         license = License(
           shortName = "BSD 3-clause",
-          text = R.string.license_threetenbp
+          text = R.raw.license_threetenbp
         ),
         url = "http://www.threeten.org/threetenbp/"
       )

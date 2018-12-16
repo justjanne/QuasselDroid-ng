@@ -41,7 +41,7 @@ class LicenseFragment : DaggerFragment() {
 
     val textResource = arguments?.getInt("license_text", 0) ?: 0
     if (textResource != 0) {
-      text.text = Html.fromHtml(getString(textResource))
+      text.text = Html.fromHtml(resources.openRawResource(textResource).bufferedReader(Charsets.UTF_8).readText())
     }
 
     return view
