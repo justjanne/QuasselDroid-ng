@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="Theme.ChatTheme.Material_DayNight" parent="Theme.ChatTheme.Material_Light" />
+  <style name="Theme.ChatTheme.Quassel_DayNight" parent="Theme.ChatTheme.Quassel_Light" />
+  <style name="Theme.ChatTheme.Solarized_DayNight" parent="Theme.ChatTheme.Solarized_Light" />
+  <style name="Theme.ChatTheme.Gruvbox_DayNight" parent="Theme.ChatTheme.Gruvbox_Light" />
+</resources>

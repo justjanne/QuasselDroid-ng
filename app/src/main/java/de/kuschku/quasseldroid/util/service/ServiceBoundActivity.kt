@@ -19,8 +19,10 @@
 
 package de.kuschku.quasseldroid.util.service
 
+import android.app.UiModeManager
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
@@ -50,6 +52,9 @@ abstract class ServiceBoundActivity :
   private val connection = BackendServiceConnection()
   protected val backend: BehaviorSubject<Optional<Backend>>
     get() = connection.backend
+
+  private var uiModeManager: UiModeManager? = null
+  private var nightMode: Int? = null
 
   protected fun runInBackground(f: () -> Unit) {
     connection.backend.value.ifPresent {
@@ -92,6 +97,8 @@ abstract class ServiceBoundActivity :
     if (appearanceSettings.keepScreenOn) {
       window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
+
+    nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
   }
 
   fun updateRecentsHeader() {
@@ -106,7 +113,8 @@ abstract class ServiceBoundActivity :
   }
 
   override fun onStart() {
-    if (Settings.appearance(this) != appearanceSettings) {
+    if (Settings.appearance(this) != appearanceSettings ||
+      (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) != nightMode) {
       recreate()
     }
     sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {

@@ -40,13 +40,17 @@ data class AppearanceSettings(
   }
 
   enum class Theme(@StyleRes val style: Int) {
+    MATERIAL_DAYNIGHT(R.style.Theme_ChatTheme_Material_DayNight),
     MATERIAL_LIGHT(R.style.Theme_ChatTheme_Material_Light),
     MATERIAL_DARK(R.style.Theme_ChatTheme_Material_Dark),
+    QUASSEL_DAYNIGHT(R.style.Theme_ChatTheme_Quassel_DayNight),
     QUASSEL_LIGHT(R.style.Theme_ChatTheme_Quassel_Light),
     QUASSEL_DARK(R.style.Theme_ChatTheme_Quassel_Dark),
     AMOLED(R.style.Theme_ChatTheme_Amoled),
+    SOLARIZED_DAYNIGHT(R.style.Theme_ChatTheme_Solarized_DayNight),
     SOLARIZED_LIGHT(R.style.Theme_ChatTheme_Solarized_Light),
     SOLARIZED_DARK(R.style.Theme_ChatTheme_Solarized_Dark),
+    GRUVBOX_DAYNIGHT(R.style.Theme_ChatTheme_Gruvbox_DayNight),
     GRUVBOX_LIGHT(R.style.Theme_ChatTheme_Gruvbox_Light),
     GRUVBOX_DARK(R.style.Theme_ChatTheme_Gruvbox_Dark),
     DRACULA(R.style.Theme_ChatTheme_Dracula);
