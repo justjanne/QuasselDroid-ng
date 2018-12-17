@@ -18,6 +18,7 @@
   -->
 
 <resources>
+  <!--
   <string-array name="preference_theme_entries" translatable="false">
     <item>@string/preference_theme_entry_material_daynight</item>
     <item>@string/preference_theme_entry_material_light</item>
@@ -50,4 +51,5 @@
     <item>GRUVBOX_DARK</item>
     <item>DRACULA</item>
   </string-array>
+  -->
 </resources>
