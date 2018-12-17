@@ -151,5 +151,4 @@
 
   <string name="preference_show_notification_title">Prikazuj obavještenja</string>
   <string name="preference_show_notification_summary">Održava Quasseldroid povezanim koristeći trajno obaveštenje</string>
-
-  </resources>
+</resources>

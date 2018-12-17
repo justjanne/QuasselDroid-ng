@@ -151,5 +151,4 @@
 
   <string name="preference_show_notification_title">Mostrar notificação</string>
   <string name="preference_show_notification_summary">Mantém o Quasseldroid sempre conectado, mostrando uma notificação persistente</string>
-
 </resources>

@@ -27,6 +27,7 @@
 
   <string name="label_about">O aplikaciji</string>
   <string name="label_accept">Prihvati</string>
+  <string name="label_autocomplete">Automatsko dovršavanje</string>
   <string name="label_avatar">Avatar</string>
   <string name="label_back">Nazad</string>
   <string name="label_buffer_name">Ime bafera</string>
@@ -53,6 +54,7 @@
   <string name="label_hide_temp">Sakrij privremeno</string>
   <string name="label_ignore">Ignoriši</string>
   <string name="label_ignore_long">Dodaj/ukloni korisnika iz liste ignorisanih</string>
+  <string name="label_info">Detalji</string>
   <string name="label_info_channel">Podaci o kanalu</string>
   <string name="label_info_core">Podaci o jezgru</string>
   <string name="label_info_user">Podaci o korisniku</string>
@@ -61,6 +63,7 @@
   <string name="label_join_long">Pridruži se kanalu</string>
   <string name="label_libraries">Biblioteke</string>
   <string name="label_license">Licenca</string>
+  <string name="label_match_all">Podudaranje sa svim porukama</string>
   <string name="label_mark_read">Označi pročitanim</string>
   <string name="label_mention">Spomeni</string>
   <string name="label_mention_long">Kopiraj korisničko ime u polje za unos</string>
@@ -89,6 +92,7 @@
   <string name="label_rename">Preimenuj</string>
   <string name="label_save">Sačuvaj</string>
   <string name="label_select">Odaberi</string>
+  <string name="label_send">Pošalji</string>
   <string name="label_set_default">Podesi podrazumevane parametre</string>
   <string name="label_settings">Podešavanje</string>
   <string name="label_settings_client">Podešavanje klijenta</string>
@@ -96,6 +100,7 @@
   <string name="label_share">Podijeli</string>
   <string name="label_share_crashreport">Podeli izveštaj o padu aplikacije</string>
   <string name="label_show_hidden">Prikaži sakrivene</string>
+  <string name="label_source">Izvor</string>
   <string name="label_topic">Tema kanala</string>
   <string name="label_translators">Prevodioci</string>
   <string name="label_unhide">Učini vidljivim</string>
@@ -105,7 +110,9 @@
   <string name="label_whitelist">Ignoriši</string>
   <string name="label_whitelist_ignore_date">Datum isteka je ignorisan za ovaj sertifikat</string>
   <string name="label_whitelist_certificates">Sertifikati</string>
+  <string name="label_whitelist_certificates_empty">Nema sertifikata u listi dozvoljenih</string>
   <string name="label_whitelist_hostnames">Hostovi</string>
+  <string name="label_whitelist_hostnames_empty">Nema hostova u listi dozvoljenih</string>
   <string name="label_who">Who</string>
   <string name="label_who_long">Ažuriraj korisničke informacije svakog korisnika</string>
   <string name="label_whois">Whois</string>
@@ -133,7 +140,7 @@
   <string name="notification_channel_old_highlight_title">Stara Isticanja</string>
 
   <string name="label_missing_features">Funkcije koje nedostaju</string>
-  <string name="info_missing_features">Vašem jezgru nedostaju funkcije potrebne za pravilno funkcionisanje Quasseldroid-a.</string>
+  <string name="info_missing_features">Vašem jezgru nedostaju funkcije potrebne za ispravan rad Quasseldroida. Trebalo bi da &lt;a href=\"https://quassel-irc.org&gt;ažurirate&lt;/a&gt; svoje Quassel jezgro na %1$s ili noviju verziju.</string>
 
   <string name="buffer_delete_confirmation">Želite li trajno obrisati ovaj bafer?</string>
 
@@ -141,4 +148,8 @@
   <string name="cancel_confirmation">Imate nesačuvane promene. Da li ih želite odbaciti?</string>
 
   <string name="info_copied_version">Verzija kopirana u klipbord</string>
+
+  <string name="advertisement_support_patreon">Molimo Vas da podržite razvoj ove aplikacije na Patreonu</string>
+  <string name="advertisement_support_button">Doniraj</string>
+
 </resources>

@@ -39,4 +39,8 @@
     nije važeći za %2$s.</p>
   ]]></string>
 
+  <string name="label_error_unknown_host">Host nije pronađen: %1$s</string>
+  <string name="label_error_invalid_protocol_version">Neispravan protokol: %1$d</string>
+  <string name="label_error_connection">Došlo je do greške u vezi: %1$s (%2$s)</string>
+  <string name="label_error_connection_closed">Greška: Došlo je do neočekivanog prekida veze</string>
 </resources>

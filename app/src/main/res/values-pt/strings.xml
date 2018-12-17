@@ -53,6 +53,7 @@
   <string name="label_hide_temp">Ocultar Temporariamente</string>
   <string name="label_ignore">Ignorar</string>
   <string name="label_ignore_long">Adiciona/remove o utilizador na/da lista de ignorados</string>
+  <string name="label_info">Detalhes</string>
   <string name="label_info_channel">Detalhes do Canal</string>
   <string name="label_info_core">Detalhes do nucleo</string>
   <string name="label_info_user">Detalhes do Utilizador</string>
@@ -89,6 +90,7 @@
   <string name="label_rename">Renomear</string>
   <string name="label_save">Guardar</string>
   <string name="label_select">Selecionar</string>
+  <string name="label_send">Enviar</string>
   <string name="label_set_default">Definir Como Padrão</string>
   <string name="label_settings">Configurações</string>
   <string name="label_settings_client">Configurações do Cliente</string>
@@ -96,6 +98,7 @@
   <string name="label_share">Partilhar</string>
   <string name="label_share_crashreport">Partilhar Relatório de Crash</string>
   <string name="label_show_hidden">Mostrar oculto</string>
+  <string name="label_source">Fonte</string>
   <string name="label_topic">Tópico do Canal</string>
   <string name="label_translators">Tradutores</string>
   <string name="label_unhide">Tornar Visível</string>
@@ -120,7 +123,7 @@
   <string name="label_feature_capnegotiation">Necessário para recursos do IRCv3</string>
   <string name="label_feature_verifyserverssl">Necessário para verificar o certificado SSL das redes de IRC às quais você se conecta</string>
   <string name="label_feature_customratelimits">Necessário para limites personalizados para redes de IRC</string>
-  <string name="label_feature_awayformattimestamp">Necessário para personalização de data/hora em mensagens de ausência</string>
+  <string name="label_feature_awayformattimestamp">Necessário para personalização de data/hora em mensagens de ausencia</string>
   <string name="label_feature_bufferactivitysync">Obrigatório para ver a atividade de chats na lista de chats</string>
   <string name="label_feature_coresidehighlights">Obrigatório para menções</string>
   <string name="label_feature_senderprefixes">Necessário para ver os modos de prefixo (+, @) dos utilizadores nas mensagens</string>

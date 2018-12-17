@@ -21,13 +21,17 @@
   <string name="preference_appearance_title">Aussehen</string>
 
   <string name="preference_theme_title">Farbschema</string>
+  <string name="preference_theme_entry_material_daynight">Material (Auto)</string>
   <string name="preference_theme_entry_material_light">Material (Hell)</string>
   <string name="preference_theme_entry_material_dark">Material (Dunkel)</string>
+  <string name="preference_theme_entry_quassel_daynight">Quassel (Auto)</string>
   <string name="preference_theme_entry_quassel_light">Quassel (Hell)</string>
   <string name="preference_theme_entry_quassel_dark">Quassel (Dunkel)</string>
   <string name="preference_theme_entry_amoled">AMOLED</string>
+  <string name="preference_theme_entry_solarized_daynight">Solarized (Auto)</string>
   <string name="preference_theme_entry_solarized_light">Solarized (Hell)</string>
   <string name="preference_theme_entry_solarized_dark">Solarized (Dunkel)</string>
+  <string name="preference_theme_entry_gruvbox_daynight">Gruvbox (Auto)</string>
   <string name="preference_theme_entry_gruvbox_light">Gruvbox (Hell)</string>
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Dunkel)</string>
   <string name="preference_theme_entry_dracula">Dracula</string>
@@ -151,5 +155,4 @@
 
   <string name="preference_show_notification_title">Benachrichtigung anzeigen</string>
   <string name="preference_show_notification_summary">Zeigt eine permanente Benachrichtigung an, damit Quasseldroid durchgehend verbunden bleiben kann</string>
-
 </resources>
