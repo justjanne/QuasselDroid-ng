@@ -21,13 +21,17 @@
   <string name="preference_appearance_title">Izgled</string>
 
   <string name="preference_theme_title">Tema</string>
+  <string name="preference_theme_entry_material_daynight">Material (Auto)</string>
   <string name="preference_theme_entry_material_light">Material (Svijetlo)</string>
   <string name="preference_theme_entry_material_dark">Material (Tamno)</string>
+  <string name="preference_theme_entry_quassel_daynight">Quassel (Auto)</string>
   <string name="preference_theme_entry_quassel_light">Quassel (Svijetlo)</string>
   <string name="preference_theme_entry_quassel_dark">Quassel (Tamno)</string>
   <string name="preference_theme_entry_amoled">AMOLED</string>
+  <string name="preference_theme_entry_solarized_daynight">Solarized (Auto)</string>
   <string name="preference_theme_entry_solarized_light">Solarized (Svijetlo)</string>
   <string name="preference_theme_entry_solarized_dark">Solarized (Tamno)</string>
+  <string name="preference_theme_entry_gruvbox_daynight">Gruvbox (Auto)</string>
   <string name="preference_theme_entry_gruvbox_light">Gruvbox (Svijetlo)</string>
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Tamno)</string>
   <string name="preference_theme_entry_dracula">Drakula</string>

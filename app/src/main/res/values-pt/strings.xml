@@ -27,6 +27,7 @@
 
   <string name="label_about">Sobre</string>
   <string name="label_accept">Aceitar</string>
+  <string name="label_autocomplete">Auto completar</string>
   <string name="label_avatar">Avatar</string>
   <string name="label_back">Voltar</string>
   <string name="label_buffer_name">Nome da Janela</string>
@@ -62,6 +63,7 @@
   <string name="label_join_long">Entrar no Canal</string>
   <string name="label_libraries">Bibliotecas</string>
   <string name="label_license">Licença</string>
+  <string name="label_match_all">Corresponde a todas as mensagens</string>
   <string name="label_mark_read">Marcar como lida</string>
   <string name="label_mention">Mencionar</string>
   <string name="label_mention_long">Copia o nome de utilizador para a caixa de digitação</string>
@@ -108,7 +110,9 @@
   <string name="label_whitelist">Ignorar</string>
   <string name="label_whitelist_ignore_date">A data de caducidade é ignorada para este certificado</string>
   <string name="label_whitelist_certificates">Certificados</string>
+  <string name="label_whitelist_certificates_empty">Nenhum certificado permitido</string>
   <string name="label_whitelist_hostnames">Anfitriões</string>
+  <string name="label_whitelist_hostnames_empty">Nenhum anfitrião permitido</string>
   <string name="label_who">Who</string>
   <string name="label_who_long">Atualizar as informações de utilizador de todos os utilizadores</string>
   <string name="label_whois">Whois</string>
@@ -146,4 +150,5 @@
   <string name="info_copied_version">Versão copiada para a área de transferência</string>
 
   <string name="advertisement_support_patreon">Por favor, ajudem a apoiar o desenvolvimento deste aplicativo através de Patreon</string>
+  <string name="advertisement_support_button">Doar</string>
 </resources>

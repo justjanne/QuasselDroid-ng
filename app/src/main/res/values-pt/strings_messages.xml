@@ -47,6 +47,6 @@
   </plurals>
   <plurals name="message_netsplit_quit">
     <item quantity="one">Netsplit entre %1$s and %2$s: %3$d user qui: %4$s</item>
-    <item quantity="other">Netsplit entre %1$s e %2$s: %3$d utilizadores desligaram: %4$s</item>
+    <item quantity="other">Netsplit entre %1$s e %2$s: %3$d utilizadores saíram: %4$s</item>
   </plurals>
 </resources>

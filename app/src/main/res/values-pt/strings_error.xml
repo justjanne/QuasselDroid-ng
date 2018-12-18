@@ -39,4 +39,8 @@
     não é válido para %2$s.</p>
   ]]></string>
 
+  <string name="label_error_unknown_host">Anfitrião não encontrado: %1$s</string>
+  <string name="label_error_invalid_protocol_version">Protocolo inválido: %1$d</string>
+  <string name="label_error_connection">Erro encontrado durante a conexão: %1$s (%2$s)</string>
+  <string name="label_error_connection_closed">Erro: a conexão foi fechada inesperadamente</string>
 </resources>

@@ -21,13 +21,17 @@
   <string name="preference_appearance_title">Aparência</string>
 
   <string name="preference_theme_title">Tema</string>
+  <string name="preference_theme_entry_material_daynight">Material (Auto)</string>
   <string name="preference_theme_entry_material_light">Material (Claro)</string>
   <string name="preference_theme_entry_material_dark">Material (Escuro)</string>
+  <string name="preference_theme_entry_quassel_daynight">Quassel (Auto)</string>
   <string name="preference_theme_entry_quassel_light">Quassel (Claro)</string>
   <string name="preference_theme_entry_quassel_dark">Quassel (Escuro)</string>
   <string name="preference_theme_entry_amoled">AMOLED</string>
+  <string name="preference_theme_entry_solarized_daynight">Solarized (Auto)</string>
   <string name="preference_theme_entry_solarized_light">Solarized (Claro)</string>
   <string name="preference_theme_entry_solarized_dark">Solarized (Escuro)</string>
+  <string name="preference_theme_entry_gruvbox_daynight">Gruvbox (Auto)</string>
   <string name="preference_theme_entry_gruvbox_light">Gruvbox (Claro)</string>
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Escuro)</string>
   <string name="preference_theme_entry_dracula">Dracula</string>
