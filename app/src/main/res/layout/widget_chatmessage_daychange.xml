@@ -26,11 +26,6 @@
   android:orientation="vertical"
   android:textAppearance="?android:attr/textAppearanceListItemSmall">
 
-  <View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="?colorDivider" />
-
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -42,16 +37,33 @@
     android:paddingStart="@dimen/message_horizontal"
     android:paddingTop="@dimen/message_vertical_daychange">
 
+    <View
+      android:layout_width="0dip"
+      android:layout_height="1dp"
+      android:layout_gravity="center_vertical"
+      android:layout_weight="1"
+      android:background="?colorDivider" />
+
     <de.kuschku.quasseldroid.util.ui.RipplePassthroughTextView
       android:id="@+id/daychange"
       style="@style/Widget.RtlConformTextView"
-      android:layout_width="0dip"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
 
       android:gravity="center"
       android:textColor="?attr/colorForeground"
       android:textStyle="bold"
+      android:layout_marginStart="@dimen/message_horizontal"
+      android:layout_marginLeft="@dimen/message_horizontal"
+      android:layout_marginEnd="@dimen/message_horizontal"
+      android:layout_marginRight="@dimen/message_horizontal"
       tools:text="27.03.2018" />
+
+    <View
+      android:layout_width="0dip"
+      android:layout_height="1dp"
+      android:layout_gravity="center_vertical"
+      android:layout_weight="1"
+      android:background="?colorDivider" />
   </LinearLayout>
 </LinearLayout>
