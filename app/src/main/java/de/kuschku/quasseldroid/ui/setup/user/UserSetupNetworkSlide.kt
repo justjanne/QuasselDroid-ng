@@ -174,6 +174,15 @@ class UserSetupNetworkSlide : SlideFragment() {
       }
     }
 
+    sslEnabled.setOnCheckedChangeListener { _, isChecked ->
+      val portValue = portField.text.trim().toString()
+      if (isChecked && portValue == "6667") {
+        portField.setText("6697")
+      } else if (!isChecked && portValue == "6697") {
+        portField.setText("6667")
+      }
+    }
+
     return view
   }
 

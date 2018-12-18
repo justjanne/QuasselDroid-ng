@@ -43,44 +43,44 @@ class UserSetupActivity : ServiceBoundSetupActivity() {
     }
 
   override fun onDone(data: Bundle) {
-      val network = data.getSerializable("network") as? DefaultNetwork
-      if (network != null) {
-        viewModel.backend?.value?.ifPresent { backend ->
-          viewModel.session.value?.orNull()?.rpcHandler?.apply {
-            createIdentity(Defaults.identity(this@UserSetupActivity).apply {
-              setIdentityName(this@UserSetupActivity.getString(R.string.default_identity_identity_name))
-              setNicks(listOf(data.getString("nick")))
-              setRealName(data.getString("realname"))
-            }, emptyMap())
+    val network = data.getSerializable("network") as? DefaultNetwork
+    if (network != null) {
+      viewModel.backend?.value?.ifPresent { backend ->
+        viewModel.session.value?.orNull()?.rpcHandler?.apply {
+          createIdentity(Defaults.identity(this@UserSetupActivity).apply {
+            setIdentityName(this@UserSetupActivity.getString(R.string.default_identity_identity_name))
+            setNicks(listOf(data.getString("nick")))
+            setRealName(data.getString("realname"))
+          }, emptyMap())
 
-            viewModel.identities
-              .map(Map<IdentityId, Identity>::values)
-              .filter(Collection<Identity>::isNotEmpty)
-              .map(Collection<Identity>::first)
-              .firstElement()
-              .toLiveData().observe(this@UserSetupActivity, Observer {
-                if (it != null) {
-                  createNetwork(INetwork.NetworkInfo(
-                    networkName = network.name,
-                    identity = it.id(),
-                    serverList = network.servers.map {
-                      INetwork.Server(
-                        host = it.host,
-                        port = it.port,
-                        useSsl = it.secure
-                      )
-                    }
-                  ), data.getStringArray("channels")?.toList().orEmpty())
+          viewModel.identities
+            .map(Map<IdentityId, Identity>::values)
+            .filter(Collection<Identity>::isNotEmpty)
+            .map(Collection<Identity>::first)
+            .firstElement()
+            .toLiveData().observe(this@UserSetupActivity, Observer {
+              if (it != null) {
+                createNetwork(INetwork.NetworkInfo(
+                  networkName = network.name,
+                  identity = it.id(),
+                  serverList = network.servers.map {
+                    INetwork.Server(
+                      host = it.host,
+                      port = it.port,
+                      useSsl = it.secure
+                    )
+                  }
+                ), data.getStringArray("channels")?.toList().orEmpty())
 
-                  backend.requestConnectNewNetwork()
-
-                  setResult(Activity.RESULT_OK)
-                  finish()
-                }
-              })
-          }
+                backend.requestConnectNewNetwork()
+              }
+            })
         }
       }
+    }
+
+    setResult(Activity.RESULT_OK)
+    finish()
   }
 
   override val fragments = listOf(

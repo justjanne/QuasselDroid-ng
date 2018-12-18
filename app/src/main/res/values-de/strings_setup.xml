@@ -48,7 +48,7 @@
 
   <string name="label_account_name">Accountname</string>
 
-  <string name="hint_invalid_name">Accountname darf nicht leer sein</string>
+  <string name="hint_invalid_name">Name darf nicht leer sein</string>
 
   <!-- Core Authenticator Select -->
   <string name="slide_core_authenticator_select_title">Authentifizierungsbackend auswählen</string>
