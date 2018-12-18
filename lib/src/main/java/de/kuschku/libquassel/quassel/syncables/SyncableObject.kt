@@ -21,6 +21,8 @@ package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
 import de.kuschku.libquassel.session.SignalProxy
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 
 abstract class SyncableObject(
   override val proxy: SignalProxy,
@@ -29,7 +31,15 @@ abstract class SyncableObject(
   final override var objectName: String = ""
     private set
   override var identifier = Pair(className, objectName)
-  override var initialized: Boolean = false
+  override var initialized: Boolean
+    get() = _liveInitialized.value
+    set(value) {
+      _liveInitialized.onNext(value)
+    }
+
+  private val _liveInitialized = BehaviorSubject.createDefault(false)
+  override val liveInitialized: Observable<Boolean>
+    get() = _liveInitialized
 
   protected fun renameObject(newName: String) {
     val oldName = objectName

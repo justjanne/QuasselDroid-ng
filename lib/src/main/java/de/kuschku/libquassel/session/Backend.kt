@@ -28,4 +28,5 @@ interface Backend {
   fun disconnect(forever: Boolean = false)
   fun sessionManager(): SessionManager
   fun updateUserDataAndLogin(user: String, pass: String)
+  fun requestConnectNewNetwork()
 }

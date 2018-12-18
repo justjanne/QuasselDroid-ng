@@ -19,12 +19,14 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.network
 
+import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.util.helpers.value
 
 class NetworkCreateFragment : NetworkBaseFragment(true) {
   override fun onSave() = viewModel.session.value?.orNull()?.let { session ->
     network?.let { (_, data) ->
       applyChanges(data)
+      viewModel.backend.value?.ifPresent(Backend::requestConnectNewNetwork)
       session.rpcHandler?.createNetwork(data.networkInfo(), emptyList())
       true
     }

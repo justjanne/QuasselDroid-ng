@@ -30,6 +30,7 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import java.io.Closeable
 import javax.net.ssl.SSLSession
 
@@ -52,6 +53,7 @@ interface ISession : Closeable {
   val ircListHelper: IrcListHelper?
   val networks: Map<NetworkId, Network>
   fun liveNetworks(): Observable<Map<NetworkId, Network>>
+  fun liveNetworkAdded(): Observable<NetworkId>
   val networkConfig: NetworkConfig?
   val rpcHandler: RpcHandler?
   val initStatus: Observable<Pair<Int, Int>>
@@ -93,6 +95,7 @@ interface ISession : Closeable {
       override val ircListHelper: IrcListHelper? = null
       override val networks: Map<NetworkId, Network> = emptyMap()
       override fun liveNetworks() = Observable.empty<Map<NetworkId, Network>>()
+      override fun liveNetworkAdded(): Observable<NetworkId> = PublishSubject.create()
       override val networkConfig: NetworkConfig? = null
       override val initStatus: Observable<Pair<Int, Int>> = Observable.just(0 to 0)
       override val lag: Observable<Long> = Observable.just(0L)

@@ -24,6 +24,7 @@ import de.kuschku.libquassel.protocol.QVariantMap
 import de.kuschku.libquassel.protocol.QVariant_
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.session.SignalProxy
+import io.reactivex.Observable
 
 interface ISyncableObject {
   val objectName: String
@@ -31,6 +32,7 @@ interface ISyncableObject {
   val className: String
   var initialized: Boolean
   val proxy: SignalProxy
+  val liveInitialized: Observable<Boolean>
 
   fun requestUpdate(properties: QVariantMap = toVariantMap()) {
     REQUEST("requestUpdate", ARG(properties, Type.QVariantMap))

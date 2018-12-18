@@ -273,6 +273,20 @@ class QuasselService : DaggerLifecycleService(),
     override fun disconnect(forever: Boolean) {
       sessionManager.disconnect(forever)
     }
+
+    override fun requestConnectNewNetwork() {
+      sessionManager.session.flatMap(ISession::liveNetworkAdded).firstElement().flatMap { id ->
+        sessionManager.session.flatMap(ISession::liveNetworks)
+          .map { it[id] }
+          .flatMap { network ->
+            network.liveInitialized
+              .filter { it }
+              .map { network }
+          }.firstElement()
+      }.toLiveData().observe(this@QuasselService, Observer {
+        it?.requestConnect()
+      })
+    }
   }
 
   private val handlerService = AndroidHandlerService()

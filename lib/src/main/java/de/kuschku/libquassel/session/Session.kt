@@ -96,6 +96,9 @@ class Session(
   private val live_networks = BehaviorSubject.createDefault(Unit)
   override fun liveNetworks(): Observable<Map<NetworkId, Network>> = live_networks.map { networks.toMap() }
 
+  private val network_added = PublishSubject.create<NetworkId>()
+  override fun liveNetworkAdded(): Observable<NetworkId> = network_added
+
   override val networkConfig = NetworkConfig(this)
 
   override var rpcHandler: RpcHandler? = RpcHandler(this, backlogStorage, notificationManager)
@@ -168,6 +171,7 @@ class Session(
     networks[networkId] = network
     synchronize(network)
     live_networks.onNext(Unit)
+    network_added.onNext(networkId)
   }
 
   fun removeNetwork(networkId: NetworkId) {

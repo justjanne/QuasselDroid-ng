@@ -63,4 +63,8 @@ class AsyncBackend(
   }
 
   override fun sessionManager() = backend.sessionManager()
+
+  override fun requestConnectNewNetwork() {
+    backend.requestConnectNewNetwork()
+  }
 }
