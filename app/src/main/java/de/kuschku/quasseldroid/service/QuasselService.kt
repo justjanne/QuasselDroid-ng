@@ -50,7 +50,6 @@ import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.persistence.QuasselBacklogStorage
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.ConnectionSettings
-import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.NotificationSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ssl.QuasselHostnameVerifier
@@ -85,7 +84,9 @@ class QuasselService : DaggerLifecycleService(),
   }
 
   private fun update() {
+    this.notificationSettings = Settings.notification(this)
     val connectionSettings = Settings.connection(this)
+
     if (this.connectionSettings.showNotification != connectionSettings.showNotification) {
       this.connectionSettings = connectionSettings
 
@@ -209,7 +210,7 @@ class QuasselService : DaggerLifecycleService(),
           sessionManager.session.value?.bufferSyncer?.requestMarkBufferAsRead(bufferId)
         } else {
           handlerService.backend {
-            database.notifications().markHidden(bufferId, clearMessageId)
+            database.notifications().markHidden(bufferId, hideMessageId)
           }
         }
       }
@@ -314,9 +315,6 @@ class QuasselService : DaggerLifecycleService(),
 
   @Inject
   lateinit var accountDatabase: AccountDatabase
-
-  @Inject
-  lateinit var messageSettings: MessageSettings
 
   private val connectivityReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -503,9 +501,10 @@ class QuasselService : DaggerLifecycleService(),
       context: Context,
       disconnect: Boolean? = null,
       markRead: BufferId? = null,
-      markReadMessage: MsgId? = null
+      markReadMessage: MsgId? = null,
+      hideMessage: MsgId? = null
     ): ComponentName? = context.startService(
-      intent(context, disconnect, markRead, markReadMessage)
+      intent(context, disconnect, markRead, markReadMessage, hideMessage)
     )
 
     fun intent(
