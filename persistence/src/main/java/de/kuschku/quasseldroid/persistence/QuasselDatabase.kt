@@ -32,7 +32,7 @@ import io.reactivex.Flowable
 import org.threeten.bp.Instant
 
 @Database(entities = [MessageData::class, Filtered::class, SslValidityWhitelistEntry::class, SslHostnameWhitelistEntry::class, NotificationData::class],
-          version = 17)
+          version = 18)
 @TypeConverters(MessageTypeConverter::class)
 abstract class QuasselDatabase : RoomDatabase() {
   abstract fun message(): MessageDao
@@ -218,7 +218,8 @@ abstract class QuasselDatabase : RoomDatabase() {
     var ownNick: String,
     var ownIdent: String,
     var ownRealName: String,
-    var ownAvatarUrl: String
+    var ownAvatarUrl: String,
+    var hidden: Boolean
   )
 
   @Dao
@@ -229,11 +230,17 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Query("SELECT DISTINCT bufferId FROM notification")
     fun buffers(): List<BufferId>
 
-    @Query("SELECT * FROM notification ORDER BY time ASC")
+    @Query("SELECT * FROM notification WHERE hidden = 0 ORDER BY time ASC")
     fun all(): List<NotificationData>
 
-    @Query("SELECT * FROM notification WHERE bufferId = :bufferId ORDER BY time ASC")
+    @Query("SELECT * FROM notification WHERE bufferId = :bufferId AND hidden = 0 ORDER BY time ASC")
     fun all(bufferId: BufferId): List<NotificationData>
+
+    @Query("UPDATE notification SET hidden = 1 WHERE bufferId = :bufferId AND messageId <= :messageId")
+    fun markHidden(bufferId: BufferId, messageId: MsgId)
+
+    @Query("UPDATE notification SET hidden = 1 WHERE bufferId = :bufferId AND flag & 2 = 0")
+    fun markHiddenNormal(bufferId: BufferId)
 
     @Query("DELETE FROM notification WHERE bufferId = :bufferId AND messageId <= :messageId")
     fun markRead(bufferId: BufferId, messageId: MsgId)
@@ -351,6 +358,11 @@ abstract class QuasselDatabase : RoomDatabase() {
                   database.execSQL("ALTER TABLE `notification` ADD `ownIdent` TEXT DEFAULT '' NOT NULL;")
                   database.execSQL("ALTER TABLE `notification` ADD `ownRealName` TEXT DEFAULT '' NOT NULL;")
                   database.execSQL("ALTER TABLE `notification` ADD `ownAvatarUrl` TEXT DEFAULT '' NOT NULL;")
+                }
+              },
+              object : Migration(17, 18) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL("ALTER TABLE `notification` ADD `hidden` INT DEFAULT 0 NOT NULL;")
                 }
               }
             ).build()

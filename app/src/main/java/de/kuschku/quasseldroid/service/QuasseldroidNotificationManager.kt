@@ -130,8 +130,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       System.currentTimeMillis().toInt(),
       QuasselService.intent(
         context,
-        bufferId = bufferInfo.bufferId,
-        markReadMessage = notifications.last().messageId
+        bufferId = bufferInfo.bufferId
       ),
       0
     )
@@ -153,7 +152,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       QuasselService.intent(
         context,
         bufferId = bufferInfo.bufferId,
-        markReadMessage = notifications.last().messageId
+        hideMessage = notifications.last().messageId
       ),
       0
     )

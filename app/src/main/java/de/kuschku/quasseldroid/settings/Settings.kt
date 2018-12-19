@@ -32,13 +32,13 @@ object Settings {
         getString(
           context.getString(R.string.preference_theme_key),
           ""
-        )
+        ) ?: ""
       ) ?: AppearanceSettings.DEFAULT.theme,
       inputEnter = InputEnterMode.of(
         getString(
           context.getString(R.string.preference_input_enter_key),
           ""
-        )
+        ) ?: ""
       ) ?: AppearanceSettings.DEFAULT.inputEnter,
       showLag = getBoolean(
         context.getString(R.string.preference_show_lag_key),
@@ -51,7 +51,7 @@ object Settings {
       language = getString(
         context.getString(R.string.preference_language_key),
         AppearanceSettings.DEFAULT.language
-      )
+      ) ?: ""
     )
   }
 
@@ -77,13 +77,13 @@ object Settings {
         getString(
           context.getString(R.string.preference_show_prefix_key),
           ""
-        )
+        ) ?: ""
       ) ?: MessageSettings.DEFAULT.showPrefix,
       colorizeNicknames = MessageSettings.ColorizeNicknamesMode.of(
         getString(
           context.getString(R.string.preference_colorize_nicknames_key),
           ""
-        )
+        ) ?: ""
       ) ?: MessageSettings.DEFAULT.colorizeNicknames,
       colorizeMirc = getBoolean(
         context.getString(R.string.preference_colorize_mirc_key),
@@ -142,24 +142,24 @@ object Settings {
         getString(
           context.getString(R.string.preference_notification_query_key),
           ""
-        )
+        ) ?: ""
       ) ?: NotificationSettings.DEFAULT.query,
       channel = NotificationSettings.Level.of(
         getString(
           context.getString(R.string.preference_notification_channel_key),
           ""
-        )
+        ) ?: ""
       ) ?: NotificationSettings.DEFAULT.channel,
       other = NotificationSettings.Level.of(
         getString(
           context.getString(R.string.preference_notification_other_key),
           ""
-        )
+        ) ?: ""
       ) ?: NotificationSettings.DEFAULT.other,
       sound = getString(
         context.getString(R.string.preference_notification_sound_key),
         NotificationSettings.DEFAULT.sound
-      ),
+      ) ?: "",
       vibrate = getBoolean(
         context.getString(R.string.preference_notification_vibration_key),
         NotificationSettings.DEFAULT.vibrate
@@ -167,6 +167,10 @@ object Settings {
       light = getBoolean(
         context.getString(R.string.preference_notification_light_key),
         NotificationSettings.DEFAULT.light
+      ),
+      markReadOnSwipe = getBoolean(
+        context.getString(R.string.preference_notification_mark_read_on_swipe_key),
+        NotificationSettings.DEFAULT.markReadOnSwipe
       )
     )
   }
@@ -213,11 +217,11 @@ object Settings {
       initialAmount = getString(
         context.getString(R.string.preference_initial_amount_key),
         BacklogSettings.DEFAULT.initialAmount.toString()
-      ).toIntOrNull() ?: BacklogSettings.DEFAULT.initialAmount,
+      )?.toIntOrNull() ?: BacklogSettings.DEFAULT.initialAmount,
       pageSize = getString(
         context.getString(R.string.preference_page_size_key),
         BacklogSettings.DEFAULT.pageSize.toString()
-      ).toIntOrNull() ?: BacklogSettings.DEFAULT.pageSize
+      )?.toIntOrNull() ?: BacklogSettings.DEFAULT.pageSize
     )
   }
 

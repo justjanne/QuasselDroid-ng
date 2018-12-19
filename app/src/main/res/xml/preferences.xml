@@ -84,6 +84,12 @@
       android:key="@string/preference_notification_other_key"
       android:title="@string/preference_notification_other_title" />
 
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="@string/preference_notification_mark_read_on_swipe_key"
+      android:summary="@string/preference_notification_mark_read_on_swipe_summary"
+      android:title="@string/preference_notification_mark_read_on_swipe_title" />
+
     <de.kuschku.quasseldroid.util.ui.settings.RingtonePreference
       android:defaultValue="content://settings/system/notification_sound"
       android:key="@string/preference_notification_sound_key"

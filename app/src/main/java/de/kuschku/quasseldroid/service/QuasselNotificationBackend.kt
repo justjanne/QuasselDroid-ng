@@ -240,7 +240,8 @@ class QuasselNotificationBackend @Inject constructor(
         ownNick = me?.nick() ?: "",
         ownIdent = me?.user() ?: "",
         ownRealName = me?.realName() ?: "",
-        ownAvatarUrl = ""
+        ownAvatarUrl = "",
+        hidden = false
       )
     }
     database.notifications().save(*results.toTypedArray())

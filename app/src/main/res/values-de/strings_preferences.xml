@@ -60,6 +60,9 @@
 
   <string name="preference_notification_light_title">LED</string>
 
+  <string name="preference_notification_mark_read_on_swipe_title">Wegwischen einer Benachrichtigung markiert den Channel als gelesen</string>
+  <string name="preference_notification_mark_read_on_swipe_summary">Markiert alle Nachrichten in einem Channel als gelesen wenn eine Benachrichtigung für den Channel weggewischt wird</string>
+
   <string name="preference_notification_configure_title">Benachrichtigungen konfigurieren</string>
 
   <string name="preference_notifications_level_all">Alle Nachrichten</string>

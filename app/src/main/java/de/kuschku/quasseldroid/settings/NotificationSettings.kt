@@ -25,7 +25,8 @@ data class NotificationSettings(
   val other: Level = Level.NONE,
   val sound: String = "content://settings/system/notification_sound",
   val vibrate: Boolean = true,
-  val light: Boolean = true
+  val light: Boolean = true,
+  val markReadOnSwipe: Boolean = true
 ) {
   enum class Level {
     ALL,

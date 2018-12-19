@@ -131,6 +131,10 @@
   <string name="preference_notification_light_key" translatable="false">notification_light</string>
   <string name="preference_notification_light_title">LED</string>
 
+  <string name="preference_notification_mark_read_on_swipe_key" translatable="false">mark_read_on_swipe</string>
+  <string name="preference_notification_mark_read_on_swipe_title">Mark channel read when swiping notifications</string>
+  <string name="preference_notification_mark_read_on_swipe_summary">Marks all messages in a channel as read when a notification for the channel is swiped away</string>
+
   <string name="preference_notification_configure_key" translatable="false">notification_configure</string>
   <string name="preference_notification_configure_title">Configure Notifications</string>
 

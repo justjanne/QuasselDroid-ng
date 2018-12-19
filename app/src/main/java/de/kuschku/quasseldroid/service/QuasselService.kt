@@ -51,6 +51,7 @@ import de.kuschku.quasseldroid.persistence.QuasselBacklogStorage
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.ConnectionSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.settings.NotificationSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ssl.QuasselHostnameVerifier
 import de.kuschku.quasseldroid.ssl.QuasselTrustManager
@@ -71,6 +72,9 @@ class QuasselService : DaggerLifecycleService(),
                        SharedPreferences.OnSharedPreferenceChangeListener {
   @Inject
   lateinit var connectionSettings: ConnectionSettings
+
+  @Inject
+  lateinit var notificationSettings: NotificationSettings
 
   private lateinit var translatedLocale: Context
 
@@ -196,6 +200,18 @@ class QuasselService : DaggerLifecycleService(),
       if (bufferId != -1 && clearMessageId != -1L) {
         sessionManager.session.value?.bufferSyncer?.requestSetLastSeenMsg(bufferId, clearMessageId)
         sessionManager.session.value?.bufferSyncer?.requestMarkBufferAsRead(bufferId)
+      }
+
+      val hideMessageId = intent.getLongExtra("hide_message", -1)
+      if (bufferId != -1 && hideMessageId != -1L) {
+        if (notificationSettings.markReadOnSwipe) {
+          sessionManager.session.value?.bufferSyncer?.requestSetLastSeenMsg(bufferId, hideMessageId)
+          sessionManager.session.value?.bufferSyncer?.requestMarkBufferAsRead(bufferId)
+        } else {
+          handlerService.backend {
+            database.notifications().markHidden(bufferId, clearMessageId)
+          }
+        }
       }
     }
   }
@@ -496,7 +512,8 @@ class QuasselService : DaggerLifecycleService(),
       context: Context,
       disconnect: Boolean? = null,
       bufferId: BufferId? = null,
-      markReadMessage: MsgId? = null
+      markReadMessage: MsgId? = null,
+      hideMessage: MsgId? = null
     ) = Intent(context, QuasselService::class.java).apply {
       if (disconnect != null) {
         putExtra("disconnect", disconnect)
@@ -506,6 +523,9 @@ class QuasselService : DaggerLifecycleService(),
       }
       if (markReadMessage != null) {
         putExtra("mark_read_message", markReadMessage)
+      }
+      if (hideMessage != null) {
+        putExtra("hide_message", hideMessage)
       }
     }
   }
