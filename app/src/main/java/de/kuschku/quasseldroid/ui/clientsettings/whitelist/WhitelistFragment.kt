@@ -65,7 +65,7 @@ class WhitelistFragment : SettingsFragment(), SettingsFragment.Changeable,
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    handlerThread = HandlerThread("Crash")
+    handlerThread = HandlerThread("Whitelist")
     handlerThread.start()
     handler = Handler(handlerThread.looper)
   }
@@ -99,8 +99,10 @@ class WhitelistFragment : SettingsFragment(), SettingsFragment.Changeable,
         hostnameAdapter.list = it.hostnames
       }
 
-      certificateListEmpty.visibleIf(whitelist?.certificates.isNullOrEmpty())
-      hostnameListEmpty.visibleIf(whitelist?.hostnames.isNullOrEmpty())
+      activity?.runOnUiThread {
+        certificateListEmpty.visibleIf(whitelist?.certificates.isNullOrEmpty())
+        hostnameListEmpty.visibleIf(whitelist?.hostnames.isNullOrEmpty())
+      }
     }
     return view
   }
