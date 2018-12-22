@@ -37,13 +37,12 @@ android {
   compileSdkVersion(28)
 
   signingConfigs {
-    val signing = project.rootProject.properties("signing.properties")
-    if (signing != null) {
+    SigningData.of(project.rootProject.properties("signing.properties"))?.let {
       create("default") {
-        storeFile = file(signing.getProperty("storeFile"))
-        storePassword = signing.getProperty("storePassword")
-        keyAlias = signing.getProperty("keyAlias")
-        keyPassword = signing.getProperty("keyPassword")
+        storeFile = file(it.storeFile)
+        storePassword = it.storePassword
+        keyAlias = it.keyAlias
+        keyPassword = it.keyPassword
       }
     }
   }
