@@ -113,9 +113,9 @@ class AliasManager constructor(
     if (!msg.startsWith('/') || firstSpacePos == 1 ||
         (secondSlashPos != -1 && (secondSlashPos < firstSpacePos || firstSpacePos == -1))) {
       if (msg.startsWith("//"))
-        msg = msg.substring(1)  // "//asdf" is transformed to "/asdf"
+        msg = msg.substring(1) // "//asdf" is transformed to "/asdf"
       else if (msg.startsWith("/ "))
-        msg.substring(2)  // "/ /asdf" is transformed to "/asdf"
+        msg = msg.substring(2) // "/ /asdf" is transformed to "/asdf"
       msg = "/SAY $msg" // make sure we only send proper commands to the core
     } else {
       // check for aliases
@@ -149,16 +149,12 @@ class AliasManager constructor(
         for (match in paramRange.findAll(command)) {
           val start = match.groups[1]?.value?.toIntOrNull() ?: -1
           val replacement: String
+          val end = match.groups[2]?.value?.toIntOrNull() ?: params.size
           // $1.. would be "arg1 and all following"
-          replacement = if (match.groups[2]?.value.isNullOrEmpty()) {
-            params.subList(start, params.size).joinToString(" ")
+          replacement = if (end < start) {
+            ""
           } else {
-            val end = match.groups[2]?.value?.toIntOrNull() ?: -1
-            if (end < start) {
-              ""
-            } else {
-              params.subList(start, end).joinToString(" ")
-            }
+            params.subList(start, end).joinToString(" ")
           }
           command = command.substring(0, match.range.start) + replacement +
             command.substring(match.range.endInclusive + 1)
