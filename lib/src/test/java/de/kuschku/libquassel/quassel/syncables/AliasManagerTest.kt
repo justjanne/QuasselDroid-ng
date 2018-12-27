@@ -19,9 +19,14 @@
 
 package de.kuschku.libquassel.quassel.syncables
 
+import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.protocol.Buffer_Types
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
+import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.roundTrip
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class AliasManagerTest {
@@ -43,5 +48,61 @@ class AliasManagerTest {
     val copy = original.copy()
     copy.fromVariantMap(original.toVariantMap())
     assert(original.isEqual(copy))
+  }
+
+  @Test
+  fun testExpansion() {
+    fun testExpansion(aliases: List<IAliasManager.Alias>, original: String,
+                      expanded: List<String>) {
+      val manager = AliasManager(SignalProxy.NULL)
+      manager.setAliasList(manager.defaults() + aliases)
+
+      val bufferInfo = BufferInfo(
+        bufferId = -1,
+        networkId = -1,
+        type = Buffer_Types.of(Buffer_Type.StatusBuffer),
+        bufferName = "#quassel-test",
+        groupId = -1
+      )
+
+      val previousCommands = mutableListOf<IAliasManager.Command>()
+      manager.processInput(
+        info = bufferInfo,
+        message = original,
+        previousCommands = previousCommands
+      )
+
+      assertEquals(previousCommands, expanded.map {
+        IAliasManager.Command(bufferInfo, it)
+      })
+    }
+
+    testExpansion(
+      listOf(
+        IAliasManager.Alias(
+          name = "d",
+          expansion = "/say first \"\$1\" second \"\$2\" some \"\$3..4\" more \"\$3..\""
+        )
+      ),
+      "/d a b c d e f",
+      listOf(
+        "/say first \"a\" second \"b\" some \"c d\" more \"c d e f\""
+      )
+    )
+
+    testExpansion(
+      listOf(
+        IAliasManager.Alias(
+          name = "test",
+          expansion = "Test $1; Test $2; Test All $0"
+        )
+      ),
+      "/test 1 2 3",
+      listOf(
+        "Test 1",
+        "Test 2",
+        "Test All 1 2 3"
+      )
+    )
   }
 }

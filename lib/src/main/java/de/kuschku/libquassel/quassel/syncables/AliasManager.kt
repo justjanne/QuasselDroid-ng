@@ -146,19 +146,30 @@ class AliasManager constructor(
       var command = commands[i]
 
       if (params.isNotEmpty()) {
+        val commandBuffer = StringBuilder()
+        var index = 0
         for (match in paramRange.findAll(command)) {
-          val start = match.groups[1]?.value?.toIntOrNull() ?: -1
+          val start = match.groups[1]?.value?.toIntOrNull() ?: 0
           val replacement: String
           val end = match.groups[2]?.value?.toIntOrNull() ?: params.size
           // $1.. would be "arg1 and all following"
           replacement = if (end < start) {
             ""
           } else {
-            params.subList(start, end).joinToString(" ")
+            params.subList(start - 1, end).joinToString(" ")
           }
-          command = command.substring(0, match.range.start) + replacement +
-            command.substring(match.range.endInclusive + 1)
+
+          // Append text between last match and this match
+          commandBuffer.append(command.substring(index, match.range.start))
+
+          // Append new replacement text
+          commandBuffer.append(replacement)
+          
+          index = match.range.endInclusive + 1
         }
+        // Append remaining text
+        commandBuffer.append(command.substring(index, command.length))
+        command = commandBuffer.toString()
       }
 
       for (j in params.size downTo 1) {
