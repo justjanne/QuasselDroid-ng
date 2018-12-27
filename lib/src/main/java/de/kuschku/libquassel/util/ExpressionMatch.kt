@@ -3,6 +3,7 @@ package de.kuschku.libquassel.util
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel
 import java.io.Serializable
+import java.util.regex.PatternSyntaxException
 
 class ExpressionMatch : Serializable {
   enum class MatchMode {
@@ -638,9 +639,12 @@ class ExpressionMatch : Serializable {
      * @param caseSensitive  If true, match case-sensitively, otherwise ignore case when matching
      * @return Configured QRegularExpression
      */
-    private fun regExFactory(regExString: String, caseSensitive: Boolean) =
+    private fun regExFactory(regExString: String, caseSensitive: Boolean) = try {
       if (caseSensitive) Regex(regExString)
       else Regex(regExString, RegexOption.IGNORE_CASE)
+    } catch (e: PatternSyntaxException) {
+      null
+    }
 
     /**
      * Escapes any regular expression characters in a string so they have no special meaning
