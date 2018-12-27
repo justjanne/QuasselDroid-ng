@@ -164,7 +164,7 @@ class AliasManager constructor(
 
           // Append new replacement text
           commandBuffer.append(replacement)
-          
+
           index = match.range.endInclusive + 1
         }
         // Append remaining text
@@ -174,9 +174,30 @@ class AliasManager constructor(
 
       for (j in params.size downTo 1) {
         val user = network?.ircUser(params[j - 1])
+        // Hostname, or "*" if blank/nonexistent
         command = command.replace("\$$j:hostname", user?.host() ?: "*")
+        // Identd
+        // Ident if verified, or "*" if blank/unknown/unverified (prefixed with "~")
+        //
+        // Most IRC daemons have the option to prefix an ident with "~" if it could not be
+        // verified via an identity daemon such as oidentd.  In these cases, it can be handy to
+        // have a way to ban via ident if verified, or all idents if not verified.  If the
+        // server does not verify idents, it usually won't add "~".
+        //
+        // Identd must be replaced before ident to avoid being treated as "$i:ident" + "d"
+        command = command.replace("\$$j:identd", (user?.user()).let {
+          when {
+            it == null ||
+            it.startsWith(prefix = "~") -> "*"
+            else                        -> it
+          }
+        })
+        // Ident, or "*" if blank/nonexistent
         command = command.replace("\$$j:ident", user?.user() ?: "*")
+        // Account, or "*" if blank/nonexistent/logged out
         command = command.replace("\$$j:account", user?.account() ?: "*")
+        // Nickname
+        // Must be replaced last to avoid interferring with more specific aliases
         command = command.replace("\$$j", params[j - 1])
       }
       command = command.replace("$0", msg)
