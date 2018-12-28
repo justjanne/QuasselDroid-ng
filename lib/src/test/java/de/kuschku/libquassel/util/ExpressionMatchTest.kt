@@ -400,4 +400,13 @@ class ExpressionMatchTest {
       assertEquals(ExpressionMatch.trimMultiWildcardWhitespace(result), result)
     }
   }
+
+  @Test
+  fun testInvalid() {
+    val invalidRegex = ExpressionMatch("*network", ExpressionMatch.MatchMode.MatchRegEx, false)
+    assertFalse(invalidRegex.isValid())
+    assertFalse(invalidRegex.match(""))
+    assertFalse(invalidRegex.match("network"))
+    assertFalse(invalidRegex.match("testnetwork"))
+  }
 }
