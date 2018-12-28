@@ -8,7 +8,6 @@ cache:
   paths:
     - ".gradle/wrapper"
     - ".gradle/caches"
-  policy: pull
 
 before_script:
   - "export GRADLE_USER_HOME=$(pwd)/.gradle"
@@ -21,9 +20,8 @@ before_script:
 
 stages:
   - "build"
-#  - "test"
-  - "deploy-local"
-  - "deploy-beta"
+  - "test"
+  - "deploy"
 
 build:
   stage: "build"
@@ -34,13 +32,13 @@ build:
     paths:
       - "*.apk"
 
-#test:
-#  stage: "test"
-#  script:
-#    - "./gradlew check"
+test:
+  stage: "test"
+  script:
+    - "./gradlew check"
 
 deploy-local:
-  stage: "deploy-local"
+  stage: "deploy"
   image: "k8r.eu/justjanne/docker-s3cmd:latest"
   cache: {}
   only:
@@ -57,7 +55,7 @@ deploy-local:
   - "s3cmd cp s3://releases/quasseldroid-ng/$VERSION s3://releases/quasseldroid-ng/Quasseldroid-latest.apk"
 
 deploy-beta:
-  stage: "deploy-beta"
+  stage: "deploy"
   image: "k8r.eu/justjanne/docker-fastlane:latest"
   cache: {}
   only:
