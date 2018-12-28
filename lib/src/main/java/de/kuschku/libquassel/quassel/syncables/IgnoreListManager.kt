@@ -189,8 +189,7 @@ class IgnoreListManager constructor(
       ),
       ExpressionMatch(
         scopeRule,
-        if (isRegEx) ExpressionMatch.MatchMode.MatchRegEx
-        else ExpressionMatch.MatchMode.MatchMultiWildcard,
+        ExpressionMatch.MatchMode.MatchMultiWildcard,
         true
       )
     )
