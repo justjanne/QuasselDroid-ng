@@ -34,6 +34,7 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.helper.setDependent
+import de.kuschku.quasseldroid.util.irc.IrcPorts
 
 class NetworkServerFragment : SettingsFragment(), SettingsFragment.Savable,
                               SettingsFragment.Changeable {
@@ -115,10 +116,10 @@ class NetworkServerFragment : SettingsFragment(), SettingsFragment.Savable,
     sslEnabled.setOnCheckedChangeListener { _, isChecked ->
       sslVerify.isEnabled = isChecked
       val portValue = port.text.trim().toString()
-      if (isChecked && portValue == "6667") {
-        port.setText("6697")
-      } else if (!isChecked && portValue == "6697") {
-        port.setText("6667")
+      if (isChecked && portValue == IrcPorts.normal) {
+        port.setText(IrcPorts.secure)
+      } else if (!isChecked && portValue == IrcPorts.secure) {
+        port.setText(IrcPorts.normal)
       }
     }
     sslVerify.isEnabled = sslEnabled.isChecked

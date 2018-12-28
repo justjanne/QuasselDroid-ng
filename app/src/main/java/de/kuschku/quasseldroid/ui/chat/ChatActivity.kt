@@ -221,7 +221,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   })
                 }.filter {
                   it.isNotEmpty()
-                }.firstElement().subscribe {
+                }.firstElement().toLiveData().observeForever {
                   it?.firstOrNull()?.let { info ->
                     ChatActivity.launch(this, bufferId = info.bufferId)
                   }

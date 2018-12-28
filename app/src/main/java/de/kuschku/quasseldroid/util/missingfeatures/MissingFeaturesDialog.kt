@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.util.missingfeatures
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -46,6 +47,7 @@ class MissingFeaturesDialog : DialogFragment() {
   @BindView(R.id.message)
   lateinit var message: TextView
 
+  @SuppressLint("StringFormatInvalid")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val dialog = MaterialDialog.Builder(requireContext())
       .customView(R.layout.dialog_missing_features, true)

@@ -38,6 +38,7 @@ import de.kuschku.quasseldroid.defaults.DefaultNetworkServer
 import de.kuschku.quasseldroid.ui.setup.SlideFragment
 import de.kuschku.quasseldroid.util.Patterns
 import de.kuschku.quasseldroid.util.TextValidator
+import de.kuschku.quasseldroid.util.irc.IrcPorts
 import de.kuschku.quasseldroid.util.ui.AnimationHelper
 import javax.inject.Inject
 
@@ -176,10 +177,10 @@ class UserSetupNetworkSlide : SlideFragment() {
 
     sslEnabled.setOnCheckedChangeListener { _, isChecked ->
       val portValue = portField.text.trim().toString()
-      if (isChecked && portValue == "6667") {
-        portField.setText("6697")
-      } else if (!isChecked && portValue == "6697") {
-        portField.setText("6667")
+      if (isChecked && portValue == IrcPorts.normal) {
+        portField.setText(IrcPorts.secure)
+      } else if (!isChecked && portValue == IrcPorts.secure) {
+        portField.setText(IrcPorts.normal)
       }
     }
 

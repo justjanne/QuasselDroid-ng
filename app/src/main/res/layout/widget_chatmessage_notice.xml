@@ -32,12 +32,12 @@
     android:layout_height="wrap_content"
     android:background="?attr/backgroundMenuItem"
     android:orientation="horizontal"
-    android:paddingBottom="@dimen/message_vertical"
-    android:paddingEnd="@dimen/message_horizontal"
-    android:paddingLeft="@dimen/message_horizontal"
-    android:paddingRight="@dimen/message_horizontal"
     android:paddingStart="@dimen/message_horizontal"
+    android:paddingLeft="@dimen/message_horizontal"
     android:paddingTop="@dimen/message_vertical"
+    android:paddingEnd="@dimen/message_horizontal"
+    android:paddingRight="@dimen/message_horizontal"
+    android:paddingBottom="@dimen/message_vertical"
     android:textAppearance="?android:attr/textAppearanceListItemSmall">
 
     <TextView
@@ -73,11 +73,12 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="top"
-      android:layout_marginLeft="@dimen/message_horizontal"
       android:layout_marginStart="@dimen/message_horizontal"
+      android:layout_marginLeft="@dimen/message_horizontal"
       android:textColor="?attr/colorForegroundSecondary"
       android:textStyle="italic"
       android:visibility="gone"
+      tools:ignore="SmallSp"
       tools:text="@sample/messages.json/data/time"
       tools:textSize="11.9sp"
       tools:visibility="visible" />

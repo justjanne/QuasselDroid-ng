@@ -105,6 +105,7 @@
         android:visibility="gone"
         tools:text="@sample/messages.json/data/time"
         tools:textSize="11.9sp"
+        tools:ignore="SmallSp"
         tools:visibility="visible" />
     </LinearLayout>
   </LinearLayout>

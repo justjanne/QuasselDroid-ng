@@ -38,4 +38,7 @@
   <issue id="MissingTranslation" severity="informational" />
   <!-- Because this tries to apply english orthography to other locales -->
   <issue id="Typos" severity="ignore" />
+
+  <!-- Because Autofill isn’t a priority at the moment -->
+  <issue id="Autofill" severity="informational" />
 </lint>
