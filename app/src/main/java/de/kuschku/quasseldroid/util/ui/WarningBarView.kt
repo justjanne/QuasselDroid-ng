@@ -1,5 +1,6 @@
 package de.kuschku.quasseldroid.util.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -56,6 +57,7 @@ class WarningBarView : LinearLayout {
     text.setText(content)
   }
 
+  @SuppressLint("SwitchIntDef")
   fun setMode(@WarningMode mode: Int) {
     when (mode) {
       MODE_NONE     -> {
