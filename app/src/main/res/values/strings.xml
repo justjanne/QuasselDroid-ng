@@ -137,6 +137,8 @@
   <string name="label_feature_richmessages">Required for seeing real names or IRCv3 or Gravatar avatars in messages</string>
   <string name="label_feature_backlogfiltertype">Required for receiving past notifications after connecting</string>
 
+  <string name="label_feature_context_bufferactivitysync">Quasseldroid cannot highlight unread chats. Upgrade your core to Quassel v0.13 to resolve this.</string>
+
   <string name="notification_channel_background" translatable="false">background</string>
   <string name="notification_channel_connection_title">Connection</string>
   <string name="notification_channel_highlight" translatable="false">highlight</string>

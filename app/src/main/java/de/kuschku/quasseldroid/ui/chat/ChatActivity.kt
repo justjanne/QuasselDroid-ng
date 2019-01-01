@@ -35,11 +35,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -97,9 +94,9 @@ import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid.util.ui.DragInterceptBottomSheetBehavior
 import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
 import de.kuschku.quasseldroid.util.ui.NickCountDrawable
+import de.kuschku.quasseldroid.util.ui.WarningBarView
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.data.BufferData
-import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
@@ -121,16 +118,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
   lateinit var progressBar: MaterialContentLoadingProgressBar
 
   @BindView(R.id.connection_status)
-  lateinit var connectionStatusDisplay: LinearLayout
-
-  @BindView(R.id.connection_status_icon)
-  lateinit var connectionStatusDisplayIcon: AppCompatImageView
-
-  @BindView(R.id.connection_status_progress)
-  lateinit var connectionStatusDisplayProgress: MaterialProgressBar
-
-  @BindView(R.id.connection_status_text)
-  lateinit var connectionStatusDisplayText: TextView
+  lateinit var connectionStatusDisplay: WarningBarView
 
   @BindView(R.id.autocomplete_list)
   lateinit var autoCompleteList: RecyclerView
@@ -643,28 +631,22 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         ConnectionState.CLOSED     -> {
           progressBar.visibility = View.INVISIBLE
 
-          connectionStatusDisplay.visibility = View.VISIBLE
-          connectionStatusDisplayText.text = getString(R.string.label_status_disconnected)
-          connectionStatusDisplayIcon.visibility = View.VISIBLE
-          connectionStatusDisplayProgress.visibility = View.GONE
+          connectionStatusDisplay.setMode(WarningBarView.MODE_ICON)
+          connectionStatusDisplay.setText(getString(R.string.label_status_disconnected))
         }
         ConnectionState.CONNECTING -> {
           progressBar.visibility = View.VISIBLE
           progressBar.isIndeterminate = true
 
-          connectionStatusDisplay.visibility = View.VISIBLE
-          connectionStatusDisplayText.text = getString(R.string.label_status_connecting)
-          connectionStatusDisplayIcon.visibility = View.GONE
-          connectionStatusDisplayProgress.visibility = View.VISIBLE
+          connectionStatusDisplay.setMode(WarningBarView.MODE_PROGRESS)
+          connectionStatusDisplay.setText(getString(R.string.label_status_connecting))
         }
         ConnectionState.HANDSHAKE  -> {
           progressBar.visibility = View.VISIBLE
           progressBar.isIndeterminate = true
 
-          connectionStatusDisplay.visibility = View.VISIBLE
-          connectionStatusDisplayText.text = getString(R.string.label_status_handshake)
-          connectionStatusDisplayIcon.visibility = View.GONE
-          connectionStatusDisplayProgress.visibility = View.VISIBLE
+          connectionStatusDisplay.setMode(WarningBarView.MODE_PROGRESS)
+          connectionStatusDisplay.setText(getString(R.string.label_status_handshake))
         }
         ConnectionState.INIT       -> {
           progressBar.visibility = View.VISIBLE
@@ -673,14 +655,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           progressBar.progress = progress
           progressBar.max = max
 
-          connectionStatusDisplay.visibility = View.VISIBLE
-          connectionStatusDisplayText.text = getString(R.string.label_status_init)
-          connectionStatusDisplayIcon.visibility = View.GONE
-          connectionStatusDisplayProgress.visibility = View.VISIBLE
+          connectionStatusDisplay.setMode(WarningBarView.MODE_PROGRESS)
+          connectionStatusDisplay.setText(getString(R.string.label_status_init))
         }
         ConnectionState.CONNECTED  -> {
           progressBar.visibility = View.INVISIBLE
-          connectionStatusDisplay.visibility = View.GONE
+          connectionStatusDisplay.setMode(WarningBarView.MODE_NONE)
         }
       }
     })

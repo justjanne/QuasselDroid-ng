@@ -28,7 +28,9 @@ inline fun <R> Resources.Theme.styledAttributes(vararg attributes: Int, f: Typed
   }
 
 inline fun <R> TypedArray.use(block: (TypedArray) -> R): R {
-  val result = block(this)
-  recycle()
-  return result
+  try {
+    return block(this)
+  } finally {
+    recycle()
+  }
 }

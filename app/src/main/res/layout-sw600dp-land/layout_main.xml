@@ -50,7 +50,12 @@
           android:layout_height="match_parent"
           tools:layout="@layout/fragment_messages" />
 
-        <include layout="@layout/widget_connection_status" />
+        <de.kuschku.quasseldroid.util.ui.WarningBarView
+          android:id="@+id/connection_status"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:icon="@drawable/ic_disconnected"
+          app:mode="none" />
       </FrameLayout>
 
       <androidx.recyclerview.widget.RecyclerView

@@ -21,8 +21,10 @@ package de.kuschku.quasseldroid.viewmodel
 
 import androidx.lifecycle.ViewModel
 import de.kuschku.libquassel.connection.ConnectionState
+import de.kuschku.libquassel.connection.Features
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.session.Backend
@@ -83,6 +85,9 @@ class QuasselViewModel : ViewModel() {
   val sessionManager = backend.mapMap(Backend::sessionManager)
   val session = sessionManager.mapSwitchMap(SessionManager::session)
   val rpcHandler = session.mapMapNullable(ISession::rpcHandler)
+  val features = session.mapMap(ISession::features)
+    .mapMap(Features::negotiated)
+    .mapOrElse(QuasselFeatures.empty())
 
   val connectionProgress = sessionManager.mapSwitchMap(SessionManager::connectionProgress)
     .mapOrElse(Triple(ConnectionState.DISCONNECTED, 0, 0))

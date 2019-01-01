@@ -335,4 +335,16 @@
   <style name="Widget.NavigationDrawerLayout" parent="">
     <item name="insetBackground">#4000</item>
   </style>
+
+  <!-- NavigationDrawerLayout -->
+  <declare-styleable name="WarningBarView">
+    <attr name="icon" format="reference" />
+    <attr name="text" format="string" />
+    <attr name="mode">
+      <enum name="none" value="0" />
+      <enum name="text" value="1" />
+      <enum name="icon" value="2" />
+      <enum name="progress" value="3" />
+    </attr>
+  </declare-styleable>
 </resources>

@@ -37,6 +37,7 @@ import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.flag.hasFlag
@@ -55,6 +56,7 @@ import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
+import de.kuschku.quasseldroid.util.ui.WarningBarView
 import de.kuschku.quasseldroid.viewmodel.data.BufferHiddenState
 import de.kuschku.quasseldroid.viewmodel.data.BufferListItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferState
@@ -70,6 +72,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
   @BindView(R.id.chatList)
   lateinit var chatList: RecyclerView
+
+  @BindView(R.id.feature_context_bufferactivitysync)
+  lateinit var featureContextBufferactivitysync: WarningBarView
 
   @Inject
   lateinit var appearanceSettings: AppearanceSettings
@@ -279,6 +284,14 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
         hasRestoredChatListState = true
       }
     }
+
+    viewModel.features.toLiveData().observe(this, Observer {
+      featureContextBufferactivitysync.setMode(
+        if (it.hasFeature(ExtendedFeature.BufferActivitySync)) WarningBarView.MODE_NONE
+        else WarningBarView.MODE_ICON
+      )
+    })
+
     combineLatest(viewModel.bufferList,
                   viewModel.expandedNetworks,
                   viewModel.selectedBuffer).toLiveData().switchMapNotNull { a ->
