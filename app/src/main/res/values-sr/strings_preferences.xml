@@ -60,6 +60,9 @@
 
   <string name="preference_notification_light_title">LED</string>
 
+  <string name="preference_notification_mark_read_on_swipe_title">Označi kanal pročitanim pri uklanjanju notifikacija</string>
+  <string name="preference_notification_mark_read_on_swipe_summary">Označava sve poruke u kanalu pročitanim kada je notifikacija vezana za kanal uklonjena</string>
+
   <string name="preference_notification_configure_title">Podesi obavještenja</string>
 
   <string name="preference_notifications_level_all">Sve poruke</string>

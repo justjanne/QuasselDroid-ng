@@ -17,7 +17,7 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Un client Android pour Quassel, un client IRC décentralisé.</string>
   <string name="app_description_long">Quassel est un client IRC distribué et décentralisé, écrit en C++ et en Qt. Quasseldroid est un client pour le Quassel Core écrit purement en Kotlin, vous offrant la possibilité de vous connecter à un Quassel Core avec votre téléphone Android™.</string>
@@ -130,7 +130,7 @@
 
   <string name="notification_channel_connection_title">Connection</string>
   <string name="label_missing_features">Fonctionnalités Manquantes</string>
-  <string name="info_missing_features">Votre Core manque certaines fonctionnalités qui sont requises pour que Quasseldroid marche correctement.</string>
+  <string name="info_missing_features" tools:ignore="StringFormatCount">Votre Core manque certaines fonctionnalités qui sont requises pour que Quasseldroid marche correctement.</string>
 
   <string name="buffer_delete_confirmation">Voulez-vous supprimer ce tchat en permanence?</string>
 

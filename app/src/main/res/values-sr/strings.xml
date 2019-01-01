@@ -17,7 +17,7 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Android baziran klijent za decentralizovani Quassel IRC klijent.</string>
   <string name="app_description_long">Quassel je distribuirani, decentralizovani IRC klijent, napisan koristeći C++ i Qt. Quasseldroid je klijent za Quassel jezgro napisan u Kotlinu, koji vam omogućava povezivanje na Quassel jezgro koristeći svoj Android™ telefon.</string>
@@ -140,7 +140,7 @@
   <string name="notification_channel_old_highlight_title">Stara Isticanja</string>
 
   <string name="label_missing_features">Funkcije koje nedostaju</string>
-  <string name="info_missing_features">Vašem jezgru nedostaju funkcije potrebne za ispravan rad Quasseldroida. Trebalo bi da &lt;a href=\"https://quassel-irc.org&gt;ažurirate&lt;/a&gt; svoje Quassel jezgro na %1$s ili noviju verziju.</string>
+  <string name="info_missing_features" tools:ignore="StringFormatCount">Vašem jezgru nedostaju funkcije potrebne za ispravan rad Quasseldroida. Trebalo bi da &lt;a href=\"https://quassel-irc.org&gt;ažurirate&lt;/a&gt; svoje Quassel jezgro na %1$s ili noviju verziju.</string>
 
   <string name="buffer_delete_confirmation">Želite li trajno obrisati ovaj bafer?</string>
 
@@ -151,5 +151,4 @@
 
   <string name="advertisement_support_patreon">Molimo Vas da podržite razvoj ove aplikacije na Patreonu</string>
   <string name="advertisement_support_button">Doniraj</string>
-
 </resources>

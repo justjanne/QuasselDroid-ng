@@ -17,7 +17,7 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Android klientas decentralizuotam Quassel IRC klientui.</string>
   <string name="app_description_long">Quassel yra išskirstytas, decentralizuotas IRC klientas, parašytas C++ ir Qt kalbomis. Quasseldroid yra klientas Quassel branduoliui, leidžiantis jums prisijungti prie Quassel branduolio naudojantis jūsų Android™ įrenginiu.</string>
@@ -133,7 +133,7 @@
   <string name="notification_channel_old_highlight_title">Seni žymėjimai</string>
 
   <string name="label_missing_features">Trūkstamos funkcijos</string>
-  <string name="info_missing_features">Jūsų branduolyje trūksta funkcijų, kurių reikia norint užtikrinti, jog Quasseldroid veiktų sklandžiai. &lt;a href="https://quassel-irc.org&gt;Atnaujinkite&lt;/a&gt; savo Quassel branduolį į %1$s ar naujesnį.</string>
+  <string name="info_missing_features" tools:ignore="StringFormatCount">Jūsų branduolyje trūksta funkcijų, kurių reikia norint užtikrinti, jog Quasseldroid veiktų sklandžiai. &lt;a href="https://quassel-irc.org&gt;Atnaujinkite&lt;/a&gt; savo Quassel branduolį į %1$s ar naujesnį.</string>
 
   <string name="buffer_delete_confirmation">Ar norite ištrinti šį buferį visam laikui?</string>
 

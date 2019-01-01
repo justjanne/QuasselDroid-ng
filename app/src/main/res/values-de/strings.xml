@@ -17,7 +17,7 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Ein Android-Client für das dezentralen Quassel IRC Client.</string>
   <string name="app_description_long">Quassel ist ein dezentraler IRC client, entwickelt in C++ mit Qt. Quasseldroid ist ein Kotlin-basierter Client für den Quassel Core, der es ermöglicht, Quassel auch auf Android™-Telefonen zu nutzen.</string>
@@ -140,7 +140,7 @@
   <string name="notification_channel_old_highlight_title">Alte Benachrichtigungen</string>
 
   <string name="label_missing_features">Fehlende Features</string>
-  <string name="info_missing_features">Deinem Core fehlen bestimmte Features die benötigt werden damit Quasseldroid korrekt funktionieren kann. Du solltest deinen Quassel Core auf Version %1$s oder neuer &lt;a href="https://quassel-irc.org&gt;updaten&lt;/a&gt;.</string>
+  <string name="info_missing_features" tools:ignore="StringFormatCount">Deinem Core fehlen bestimmte Features die benötigt werden damit Quasseldroid korrekt funktionieren kann. Du solltest deinen Quassel Core auf Version %1$s oder neuer &lt;a href="https://quassel-irc.org&gt;updaten&lt;/a&gt;.</string>
 
   <string name="buffer_delete_confirmation">Bist du sicher, dass du diesen Chat auf ewig löschen möchtest?</string>
 

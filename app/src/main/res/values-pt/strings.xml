@@ -17,7 +17,7 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Um cliente baseado no Android para o cliente de IRC Quassel descentralizado.</string>
   <string name="app_description_long">Quassel é um cliente IRC distribuído e descentralizado, escrito usando C++ e Qt. O Quasseldroid é um cliente escrito puramente em kotlin para o núcleo Quassel, permitindo que você se ligue ao seu núcleo Quassel usando o seu telemóvel Android™.</string>
@@ -140,7 +140,7 @@
   <string name="notification_channel_old_highlight_title">Menções Antigas</string>
 
   <string name="label_missing_features">Recursos Ausentes</string>
-  <string name="info_missing_features">O seu núcleo tem em falta alguns recursos que são necessários para o Quasseldroid funcionar corretamente. Deve &lt;a href=\"https://quassel-irc.org&gt;actualizar&lt;/a&gt; o seu núcleo Quassel para a versão %1$s ou superior.</string>
+  <string name="info_missing_features" tools:ignore="StringFormatCount">O seu núcleo tem em falta alguns recursos que são necessários para o Quasseldroid funcionar corretamente. Deve &lt;a href=\"https://quassel-irc.org&gt;actualizar&lt;/a&gt; o seu núcleo Quassel para a versão %1$s ou superior.</string>
 
   <string name="buffer_delete_confirmation">Você deseja excluir esta janela permanentemente?</string>
 
