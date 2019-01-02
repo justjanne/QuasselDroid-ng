@@ -307,9 +307,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
             val activities = activityList.associate { it.bufferId to it.filtered }
             val processedList = list.asSequence().sortedBy { props ->
               !props.info.type.hasFlag(Buffer_Type.StatusBuffer)
-            }.sortedBy { props ->
+            }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { props ->
               props.network.networkName
-            }.map { props ->
+            }).map { props ->
               val activity = props.activity - (activities[props.info.bufferId]
                                                ?: account?.defaultFiltered
                                                ?: 0)

@@ -128,7 +128,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
         combineLatest(it.values.map(Network::liveNetworkInfo)).map {
           it.map {
             SettingsItem(it.networkId, it.networkName)
-          }.sortedBy(SettingsItem::name)
+          }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, SettingsItem::name))
         }
       }
     }.toLiveData().observe(this, Observer {

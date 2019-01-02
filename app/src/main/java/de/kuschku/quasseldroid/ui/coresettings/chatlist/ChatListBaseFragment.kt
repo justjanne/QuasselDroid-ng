@@ -115,7 +115,7 @@ abstract class ChatListBaseFragment(private val initDefault: Boolean) :
 
     viewModel.networks.switchMap {
       combineLatest(it.values.map(Network::liveNetworkInfo)).map {
-        it.sortedBy(INetwork.NetworkInfo::networkName)
+        it.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, INetwork.NetworkInfo::networkName))
       }
     }.toLiveData().observe(this, Observer {
       if (it != null) {
