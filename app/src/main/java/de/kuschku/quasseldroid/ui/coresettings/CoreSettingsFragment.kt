@@ -48,10 +48,18 @@ import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivity
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.util.helper.visibleIf
+import de.kuschku.quasseldroid.util.missingfeatures.MissingFeature
+import de.kuschku.quasseldroid.util.missingfeatures.MissingFeaturesDialog
+import de.kuschku.quasseldroid.util.missingfeatures.RequiredFeatures
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
+import de.kuschku.quasseldroid.util.ui.BannerView
 import io.reactivex.Observable
 
 class CoreSettingsFragment : ServiceBoundFragment() {
+  @BindView(R.id.feature_context_missing)
+  lateinit var featureContextMissing: BannerView
+
   @BindView(R.id.coreinfo)
   lateinit var coreinfo: View
 
@@ -160,6 +168,21 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     }.toLiveData().observe(this, Observer {
       chatListAdapter.submitList(it.orEmpty())
     })
+
+    var missingFeatureList: List<MissingFeature> = emptyList()
+    viewModel.features.toLiveData().observe(this, Observer { features ->
+      missingFeatureList = RequiredFeatures.features.filter {
+        it.feature !in features.enabledFeatures
+      }
+      featureContextMissing.visibleIf(missingFeatureList.isNotEmpty())
+    })
+
+    featureContextMissing.setOnClickListener {
+      MissingFeaturesDialog.Builder(requireActivity())
+        .missingFeatures(missingFeatureList)
+        .readOnly(true)
+        .show()
+    }
 
     networkconfig.setOnClickListener {
       NetworkConfigActivity.launch(requireContext())

@@ -336,15 +336,27 @@
     <item name="insetBackground">#4000</item>
   </style>
 
-  <!-- NavigationDrawerLayout -->
+  <attr name="icon" format="reference" />
+  <attr name="text" format="string" />
+  <attr name="mode">
+    <enum name="none" value="0" />
+    <enum name="text" value="1" />
+    <enum name="icon" value="2" />
+    <enum name="progress" value="3" />
+  </attr>
+  <attr name="buttonText" format="string" />
+
+  <!-- WarningBarView -->
   <declare-styleable name="WarningBarView">
-    <attr name="icon" format="reference" />
-    <attr name="text" format="string" />
-    <attr name="mode">
-      <enum name="none" value="0" />
-      <enum name="text" value="1" />
-      <enum name="icon" value="2" />
-      <enum name="progress" value="3" />
-    </attr>
+    <attr name="icon" />
+    <attr name="text" />
+    <attr name="mode" />
+  </declare-styleable>
+
+  <!-- BannerView -->
+  <declare-styleable name="BannerView">
+    <attr name="icon" />
+    <attr name="text" />
+    <attr name="buttonText" />
   </declare-styleable>
 </resources>

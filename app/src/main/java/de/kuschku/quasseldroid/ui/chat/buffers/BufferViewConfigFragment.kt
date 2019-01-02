@@ -74,7 +74,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   lateinit var chatList: RecyclerView
 
   @BindView(R.id.feature_context_bufferactivitysync)
-  lateinit var featureContextBufferactivitysync: WarningBarView
+  lateinit var featureContextBufferActivitySync: WarningBarView
 
   @Inject
   lateinit var appearanceSettings: AppearanceSettings
@@ -286,7 +286,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     }
 
     viewModel.features.toLiveData().observe(this, Observer {
-      featureContextBufferactivitysync.setMode(
+      featureContextBufferActivitySync.setMode(
         if (it.hasFeature(ExtendedFeature.BufferActivitySync)) WarningBarView.MODE_NONE
         else WarningBarView.MODE_ICON
       )

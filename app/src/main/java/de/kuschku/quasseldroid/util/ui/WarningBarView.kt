@@ -5,7 +5,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.IntDef
 import androidx.annotation.StringRes
@@ -15,7 +15,7 @@ import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.use
 
-class WarningBarView : LinearLayout {
+class WarningBarView : FrameLayout {
   @BindView(R.id.icon)
   lateinit var icon: AppCompatImageView
 

@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.quassel.syncables.HighlightRuleManager
 import de.kuschku.libquassel.quassel.syncables.interfaces.IHighlightRuleManager
 import de.kuschku.libquassel.util.Optional
@@ -42,9 +43,13 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.ui.coresettings.highlightrule.HighlightRuleActivity
 import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.util.ui.WarningBarView
 
 class HighlightListFragment : SettingsFragment(), SettingsFragment.Savable,
                               SettingsFragment.Changeable {
+  @BindView(R.id.feature_context_coresidehighlights)
+  lateinit var featureContextCoreSideHighlights: WarningBarView
+
   @BindView(R.id.highlight_nick_type)
   lateinit var highlightNickType: Spinner
 
@@ -139,6 +144,13 @@ class HighlightListFragment : SettingsFragment(), SettingsFragment.Savable,
           }
         }
       })
+
+    viewModel.features.toLiveData().observe(this, Observer {
+      featureContextCoreSideHighlights.setMode(
+        if (it.hasFeature(ExtendedFeature.CoreSideHighlights)) WarningBarView.MODE_NONE
+        else WarningBarView.MODE_ICON
+      )
+    })
 
     return view
   }

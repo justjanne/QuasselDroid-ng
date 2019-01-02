@@ -29,6 +29,15 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <de.kuschku.quasseldroid.util.ui.BannerView
+      android:id="@+id/feature_context_missing"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="8dp"
+      app:buttonText="@string/label_feature_context_missing_button"
+      app:icon="@drawable/ic_alert"
+      app:text="@string/label_feature_context_missing" />
+
     <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
       <androidx.appcompat.widget.AppCompatImageView
@@ -76,8 +85,8 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="72dp"
       android:layout_marginStart="72dp"
+      android:layout_marginLeft="72dp"
       android:orientation="vertical">
 
       <androidx.recyclerview.widget.RecyclerView

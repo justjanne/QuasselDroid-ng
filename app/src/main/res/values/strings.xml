@@ -138,6 +138,9 @@
   <string name="label_feature_backlogfiltertype">Required for receiving past notifications after connecting</string>
 
   <string name="label_feature_context_bufferactivitysync">Quasseldroid cannot highlight unread chats. Upgrade your core to Quassel v0.13 to resolve this.</string>
+  <string name="label_feature_context_coresidehighlights">Quasseldroid cannot configure highlights. Upgrade your core to Quassel v0.13 to resolve this.</string>
+  <string name="label_feature_context_missing">Your core is missing features that are required for Quasseldroid to work correctly.</string>
+  <string name="label_feature_context_missing_button">Details</string>
 
   <string name="notification_channel_background" translatable="false">background</string>
   <string name="notification_channel_connection_title">Connection</string>

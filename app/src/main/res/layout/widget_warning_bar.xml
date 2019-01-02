@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:background="?colorBackgroundSnackbar"
@@ -18,9 +17,7 @@
     android:layout_height="20dp"
     android:layout_gravity="center_vertical"
     android:visibility="gone"
-    app:tint="?android:textColorPrimary"
-    tools:srcCompat="@drawable/ic_alert"
-    tools:visibility="visible" />
+    app:tint="?android:textColorPrimary" />
 
   <me.zhanghai.android.materialprogressbar.MaterialProgressBar
     android:id="@+id/progress"
@@ -37,7 +34,6 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
     android:layout_marginLeft="16dp"
-    android:textColor="?android:textColorPrimary"
-    tools:text="@string/label_feature_context_bufferactivitysync" />
+    android:textColor="?android:textColorPrimary" />
 
 </LinearLayout>

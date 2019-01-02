@@ -24,110 +24,124 @@
   android:layout_height="match_parent"
   android:scrollbars="vertical">
 
-  <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <de.kuschku.quasseldroid.util.ui.WarningBarView
+      android:id="@+id/feature_context_coresidehighlights"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:minHeight="48dp">
+      app:icon="@drawable/ic_alert"
+      app:mode="none"
+      app:text="@string/label_feature_context_coresidehighlights" />
 
-      <androidx.appcompat.widget.AppCompatImageView
-        style="@style/Widget.CoreSettings.PrimaryItemIcon"
-        app:srcCompat="@drawable/ic_server_network" />
-
-      <TextView
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_highlightlist_highlight_nick" />
-    </LinearLayout>
-
-    <LinearLayout
-      style="@style/Widget.CoreSettings.DependentGroup"
-      android:visibility="visible">
-
-      <Spinner
-        android:id="@+id/highlight_nick_type"
-        style="@style/Widget.FullWidthSpinner"
-        tools:listitem="@layout/widget_spinner_item_inline" />
-
-      <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/is_case_sensitive"
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_highlightlist_nicks_case_sensitive" />
-    </LinearLayout>
-
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:minHeight="48dp">
-
-      <androidx.appcompat.widget.AppCompatImageView
-        style="@style/Widget.CoreSettings.PrimaryItemIcon"
-        app:srcCompat="@drawable/ic_server_network" />
-
-      <TextView
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_highlightlist_rules" />
-    </LinearLayout>
-
-    <LinearLayout
-      style="@style/Widget.CoreSettings.DependentGroup"
-      android:visibility="visible">
-
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/highlight_rules"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:itemCount="2"
-        tools:listitem="@layout/settings_highlightlist_rule" />
+    <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
 
       <LinearLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
-        android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp">
 
-        <Button
-          android:id="@+id/new_highlight_rule"
-          style="@style/Widget.Button.Borderless.Colored"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/label_new_highlight_rule" />
+        <androidx.appcompat.widget.AppCompatImageView
+          style="@style/Widget.CoreSettings.PrimaryItemIcon"
+          app:srcCompat="@drawable/ic_server_network" />
+
+        <TextView
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/settings_highlightlist_highlight_nick" />
       </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:minHeight="48dp">
-
-      <androidx.appcompat.widget.AppCompatImageView
-        style="@style/Widget.CoreSettings.PrimaryItemIcon"
-        app:srcCompat="@drawable/ic_server_network" />
-
-      <TextView
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_highlightlist_ignore_rules" />
-    </LinearLayout>
-
-    <LinearLayout
-      style="@style/Widget.CoreSettings.DependentGroup"
-      android:visibility="visible">
-
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/highlight_ignore_rules"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:itemCount="2"
-        tools:listitem="@layout/settings_highlightlist_rule" />
 
       <LinearLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
-        android:orientation="horizontal">
+        style="@style/Widget.CoreSettings.DependentGroup"
+        android:visibility="visible">
 
-        <Button
-          android:id="@+id/new_highlight_ignore_rule"
-          style="@style/Widget.Button.Borderless.Colored"
-          android:layout_width="wrap_content"
+        <Spinner
+          android:id="@+id/highlight_nick_type"
+          style="@style/Widget.FullWidthSpinner"
+          tools:listitem="@layout/widget_spinner_item_inline" />
+
+        <androidx.appcompat.widget.SwitchCompat
+          android:id="@+id/is_case_sensitive"
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/settings_highlightlist_nicks_case_sensitive" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+          style="@style/Widget.CoreSettings.PrimaryItemIcon"
+          app:srcCompat="@drawable/ic_server_network" />
+
+        <TextView
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/settings_highlightlist_rules" />
+      </LinearLayout>
+
+      <LinearLayout
+        style="@style/Widget.CoreSettings.DependentGroup"
+        android:visibility="visible">
+
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/highlight_rules"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="@string/label_new_highlight_ignore_rule" />
+          tools:itemCount="2"
+          tools:listitem="@layout/settings_highlightlist_rule" />
+
+        <LinearLayout
+          style="@style/Widget.CoreSettings.EditTextLayout"
+          android:orientation="horizontal">
+
+          <Button
+            android:id="@+id/new_highlight_rule"
+            style="@style/Widget.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_new_highlight_rule" />
+        </LinearLayout>
+      </LinearLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+          style="@style/Widget.CoreSettings.PrimaryItemIcon"
+          app:srcCompat="@drawable/ic_server_network" />
+
+        <TextView
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/settings_highlightlist_ignore_rules" />
+      </LinearLayout>
+
+      <LinearLayout
+        style="@style/Widget.CoreSettings.DependentGroup"
+        android:visibility="visible">
+
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/highlight_ignore_rules"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          tools:itemCount="2"
+          tools:listitem="@layout/settings_highlightlist_rule" />
+
+        <LinearLayout
+          style="@style/Widget.CoreSettings.EditTextLayout"
+          android:orientation="horizontal">
+
+          <Button
+            android:id="@+id/new_highlight_ignore_rule"
+            style="@style/Widget.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_new_highlight_ignore_rule" />
+        </LinearLayout>
       </LinearLayout>
     </LinearLayout>
   </LinearLayout>
