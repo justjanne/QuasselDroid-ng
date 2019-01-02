@@ -39,7 +39,7 @@ class WarningBarView : FrameLayout {
 
     context.theme.obtainStyledAttributes(attrs, R.styleable.WarningBarView, 0, 0).use {
       if (it.hasValue(R.styleable.WarningBarView_icon))
-        icon.setImageDrawable(it.getDrawable(R.styleable.WarningBarView_icon))
+        icon.setImageResource(it.getResourceId(R.styleable.WarningBarView_icon, 0))
 
       if (it.hasValue(R.styleable.WarningBarView_text))
         text.text = it.getString(R.styleable.WarningBarView_text)
