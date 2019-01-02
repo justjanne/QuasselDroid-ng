@@ -53,8 +53,8 @@ class MissingFeaturesDialog : DialogFragment() {
       .customView(R.layout.dialog_missing_features, true)
       .title(R.string.label_missing_features)
       .also {
-        it.positiveText(if (builder?.readOnly == true) R.string.label_accept
-                        else R.string.label_close)
+        it.positiveText(if (builder?.readOnly == true) R.string.label_close
+                        else R.string.label_accept)
         builder?.positiveListener?.let(it::onPositive)
       }
       .build()

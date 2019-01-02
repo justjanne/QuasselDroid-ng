@@ -17,34 +17,40 @@
   with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:paddingBottom="8dp"
-  android:paddingTop="8dp">
+  android:layout_height="match_parent">
 
-  <TextView
-    android:id="@+id/message"
-    style="@style/Widget.RtlConformTextView"
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="8dp"
-    android:paddingEnd="?listPreferredItemPaddingRight"
-    android:paddingLeft="?listPreferredItemPaddingLeft"
-    android:paddingRight="?listPreferredItemPaddingRight"
-    android:paddingStart="?listPreferredItemPaddingLeft"
+    android:orientation="vertical"
     android:paddingTop="8dp"
-    android:textColor="?colorTextPrimary"
-    android:textSize="16sp" />
+    android:paddingBottom="8dp">
 
-  <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/list"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:nestedScrollingEnabled="false"
-    tools:ignore="UnusedAttribute"
-    tools:itemCount="3"
-    tools:listitem="@layout/widget_missing_feature" />
-</LinearLayout>
+    <TextView
+      android:id="@+id/message"
+      style="@style/Widget.RtlConformTextView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingStart="?listPreferredItemPaddingLeft"
+      android:paddingLeft="?listPreferredItemPaddingLeft"
+      android:paddingTop="8dp"
+      android:paddingEnd="?listPreferredItemPaddingRight"
+      android:paddingRight="?listPreferredItemPaddingRight"
+      android:paddingBottom="8dp"
+      android:textColor="?colorTextPrimary"
+      android:textSize="16sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/list"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:nestedScrollingEnabled="false"
+      tools:ignore="UnusedAttribute"
+      tools:itemCount="3"
+      tools:listitem="@layout/widget_missing_feature" />
+  </LinearLayout>
+</androidx.core.widget.NestedScrollView>
