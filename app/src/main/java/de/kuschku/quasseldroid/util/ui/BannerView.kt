@@ -36,7 +36,7 @@ class BannerView : FrameLayout {
 
     context.theme.obtainStyledAttributes(attrs, R.styleable.BannerView, 0, 0).use {
       if (it.hasValue(R.styleable.BannerView_icon))
-        icon.setImageDrawable(it.getDrawable(R.styleable.BannerView_icon))
+        icon.setImageResource(it.getResourceId(R.styleable.BannerView_icon, 0))
 
       if (it.hasValue(R.styleable.BannerView_text))
         text.text = it.getString(R.styleable.BannerView_text)
