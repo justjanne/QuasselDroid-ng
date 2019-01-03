@@ -120,8 +120,9 @@ class UserInfoFragment : ServiceBoundFragment() {
     combineLatest(viewModel.session, viewModel.networks).switchMap { (sessionOptional, networks) ->
       fun processUser(user: IrcUser, info: BufferInfo? = null) = when {
         user == IrcUser.NULL && info != null -> Optional.of(IrcUserInfo(
-          info.networkId,
-          info.bufferName ?: ""
+          networkId = info.networkId,
+          nick = info.bufferName ?: "",
+          knownToCore = true
         ))
         user == IrcUser.NULL                 -> Optional.empty()
         else                                 -> Optional.of(IrcUserInfo(
