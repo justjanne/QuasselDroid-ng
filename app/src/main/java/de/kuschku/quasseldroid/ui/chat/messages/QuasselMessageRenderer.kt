@@ -502,24 +502,20 @@ class QuasselMessageRenderer @Inject constructor(
               context.getString(R.string.message_format_kick_1),
               contentFormatter.formatNick(user, false, monochromeForeground, false),
               contentFormatter.formatPrefix(message.content.senderPrefixes),
-              contentFormatter.formatNick(
-                message.content.sender,
-                self,
-                monochromeForeground,
-                messageSettings.showHostmaskActions
-              )
+              contentFormatter.formatNick(message.content.sender,
+                                          self,
+                                          monochromeForeground,
+                                          false)
             )
           } else {
             SpanFormatter.format(
               context.getString(R.string.message_format_kick_2),
               contentFormatter.formatNick(user, false, monochromeForeground, false),
               contentFormatter.formatPrefix(message.content.senderPrefixes),
-              contentFormatter.formatNick(
-                message.content.sender,
-                self,
-                monochromeForeground,
-                messageSettings.showHostmaskActions
-              ),
+              contentFormatter.formatNick(message.content.sender,
+                                          self,
+                                          monochromeForeground,
+                                          false),
               contentFormatter.formatContent(reason,
                                              monochromeForeground,
                                              message.content.networkId)
@@ -542,24 +538,20 @@ class QuasselMessageRenderer @Inject constructor(
               context.getString(R.string.message_format_kill_1),
               contentFormatter.formatNick(user, false, monochromeForeground, false),
               contentFormatter.formatPrefix(message.content.senderPrefixes),
-              contentFormatter.formatNick(
-                message.content.sender,
-                self,
-                monochromeForeground,
-                messageSettings.showHostmaskActions
-              )
+              contentFormatter.formatNick(message.content.sender,
+                                          self,
+                                          monochromeForeground,
+                                          false)
             )
           } else {
             SpanFormatter.format(
               context.getString(R.string.message_format_kill_2),
               contentFormatter.formatNick(user, false, monochromeForeground, false),
               contentFormatter.formatPrefix(message.content.senderPrefixes),
-              contentFormatter.formatNick(
-                message.content.sender,
-                self,
-                monochromeForeground,
-                messageSettings.showHostmaskActions
-              ),
+              contentFormatter.formatNick(message.content.sender,
+                                          self,
+                                          monochromeForeground,
+                                          false),
               contentFormatter.formatContent(reason,
                                              monochromeForeground,
                                              message.content.networkId)
