@@ -39,11 +39,13 @@
       <TextView
         android:id="@+id/version"
         style="@style/Widget.Info.Item.Content"
+        android:textIsSelectable="true"
         tools:text="v0.13-pre (0.12.0+617 git-f4c93cad)" />
 
       <TextView
         android:id="@+id/version_date"
         style="@style/Widget.Info.Item.Description"
+        android:textIsSelectable="true"
         tools:text="June 8, 2018" />
 
       <Button
@@ -99,8 +101,8 @@
         android:id="@+id/secure_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         app:srcCompat="@drawable/ic_lock" />
     </LinearLayout>
 

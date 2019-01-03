@@ -14,21 +14,25 @@
     <TextView
       android:id="@+id/ip"
       style="@style/Widget.Info.Item.Content"
+      android:textIsSelectable="true"
       tools:text="51.15.1.223" />
 
     <TextView
       android:id="@+id/version"
       style="@style/Widget.Info.Item.Description"
+      android:textIsSelectable="true"
       tools:text="Quasseldroid v0.4.0-218-g0e6e562c" />
 
     <TextView
       android:id="@+id/uptime"
       style="@style/Widget.Info.Item.Description"
+      android:textIsSelectable="true"
       tools:text="Connected since 08.06.18 01:39" />
 
     <TextView
       android:id="@+id/location"
       style="@style/Widget.Info.Item.Description"
+      android:textIsSelectable="true"
       tools:text="Kiel, Germany" />
 
     <Button
@@ -44,7 +48,7 @@
     android:layout_width="24dp"
     android:layout_height="24dp"
     android:layout_gravity="top"
-    android:layout_marginLeft="16dp"
     android:layout_marginStart="16dp"
+    android:layout_marginLeft="16dp"
     app:srcCompat="@drawable/ic_lock" />
 </LinearLayout>
