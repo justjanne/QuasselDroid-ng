@@ -35,11 +35,9 @@ import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
-import java.io.Serializable
 
 class MissingFeaturesDialog : DialogFragment() {
-  val builder: Builder?
-    get() = arguments?.getSerializable("builder") as? Builder
+  private var builder: Builder? = null
 
   @BindView(R.id.list)
   lateinit var list: RecyclerView
@@ -89,7 +87,7 @@ class MissingFeaturesDialog : DialogFragment() {
     }
   }
 
-  class Builder(private val fragmentManager: FragmentManager) : Serializable {
+  class Builder(private val fragmentManager: FragmentManager) {
     constructor(context: FragmentActivity) : this(context.supportFragmentManager)
 
     var dismissListener: DialogInterface.OnDismissListener? = null
@@ -118,9 +116,7 @@ class MissingFeaturesDialog : DialogFragment() {
     }
 
     fun build() = MissingFeaturesDialog().apply {
-      arguments = Bundle().apply {
-        putSerializable("builder", this@Builder)
-      }
+      builder = this@Builder
     }
 
     fun show() = build().show(fragmentManager)
