@@ -20,6 +20,7 @@
 package de.kuschku.quasseldroid.ui.clientsettings.crash
 
 import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,12 +36,12 @@ import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 
-class CrashAdapter : ListAdapter<Pair<Report, String>, CrashAdapter.CrashViewHolder>(
-  object : DiffUtil.ItemCallback<Pair<Report, String>>() {
-    override fun areItemsTheSame(oldItem: Pair<Report, String>, newItem: Pair<Report, String>) =
+class CrashAdapter : ListAdapter<Pair<Report, Uri>, CrashAdapter.CrashViewHolder>(
+  object : DiffUtil.ItemCallback<Pair<Report, Uri>>() {
+    override fun areItemsTheSame(oldItem: Pair<Report, Uri>, newItem: Pair<Report, Uri>) =
       oldItem.second == newItem.second
 
-    override fun areContentsTheSame(oldItem: Pair<Report, String>, newItem: Pair<Report, String>) =
+    override fun areContentsTheSame(oldItem: Pair<Report, Uri>, newItem: Pair<Report, Uri>) =
       oldItem == newItem
   }
 ) {
@@ -49,8 +50,8 @@ class CrashAdapter : ListAdapter<Pair<Report, String>, CrashAdapter.CrashViewHol
   )
 
   override fun onBindViewHolder(holder: CrashViewHolder, position: Int) {
-    val (report, data) = getItem(position)
-    holder.bind(report, data)
+    val (report, uri) = getItem(position)
+    holder.bind(report, uri)
   }
 
   class CrashViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -64,20 +65,21 @@ class CrashAdapter : ListAdapter<Pair<Report, String>, CrashAdapter.CrashViewHol
     lateinit var error: TextView
 
     var item: Report? = null
-    var data: String? = null
+    var uri: Uri? = null
 
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss")
 
     init {
       ButterKnife.bind(this, itemView)
       itemView.setOnClickListener {
-        data?.let {
-          val intent = Intent(Intent.ACTION_SEND)
-          intent.type = "application/json"
-          intent.putExtra(Intent.EXTRA_TEXT, it)
+        uri?.let {
           itemView.context.startActivity(
             Intent.createChooser(
-              intent,
+              Intent(Intent.ACTION_SEND).apply {
+                type = "application/json"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+              },
               itemView.context.getString(R.string.label_share_crashreport)
             )
           )
@@ -85,9 +87,9 @@ class CrashAdapter : ListAdapter<Pair<Report, String>, CrashAdapter.CrashViewHol
       }
     }
 
-    fun bind(item: Report, data: String) {
+    fun bind(item: Report, uri: Uri) {
       this.item = item
-      this.data = data
+      this.uri = uri
 
       this.crashTime.text = item.environment?.crashTime?.let {
         dateTimeFormatter.format(Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()))

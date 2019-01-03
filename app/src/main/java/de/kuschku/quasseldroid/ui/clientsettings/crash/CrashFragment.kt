@@ -19,10 +19,12 @@
 
 package de.kuschku.quasseldroid.ui.clientsettings.crash
 
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.view.*
+import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -80,13 +82,18 @@ class CrashFragment : DaggerFragment() {
     handler.post {
       val crashDir = this.crashDir
       val gson = this.gson
+      val context = this.context
 
-      if (crashDir != null) {
+      if (crashDir != null && context != null) {
         crashDir.mkdirs()
-        val list: List<Pair<Report, String>> = crashDir.listFiles()
+        val list: List<Pair<Report, Uri>> = crashDir.listFiles()
           .orEmpty()
-          .map { it.readText() }
-          .map { Pair<Report, String>(gson.fromJson(it), it) }
+          .map {
+            Pair<Report, Uri>(
+              gson.fromJson(it.readText()),
+              FileProvider.getUriForFile(context, "de.kuschku.quasseldroid.fileprovider", it)
+            )
+          }
           .sortedByDescending { it.first.environment?.crashTime }
 
         activity?.runOnUiThread {
