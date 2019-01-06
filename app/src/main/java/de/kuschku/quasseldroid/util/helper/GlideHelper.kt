@@ -22,7 +22,11 @@ package de.kuschku.quasseldroid.util.helper
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.GlideRequest
 import de.kuschku.quasseldroid.GlideRequests
@@ -44,7 +48,8 @@ fun GlideRequests.loadWithFallbacks(urls: List<Avatar>): GlideRequest<Drawable>?
   return urls.foldRight(null, ::fold)
 }
 
-fun ImageView.loadAvatars(urls: List<Avatar>, fallback: Drawable? = null, crop: Boolean = true) {
+fun ImageView.loadAvatars(urls: List<Avatar>, fallback: Drawable? = null, crop: Boolean = true,
+                          listener: ((Any?) -> Unit)? = null) {
   if (urls.isNotEmpty()) {
     GlideApp.with(this)
       .loadWithFallbacks(urls)
@@ -56,6 +61,19 @@ fun ImageView.loadAvatars(urls: List<Avatar>, fallback: Drawable? = null, crop: 
         }
       }
       ?.placeholder(fallback)
+      ?.letIf(listener != null) {
+        it.addListener(object : RequestListener<Drawable> {
+          override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?,
+                                    isFirstResource: Boolean) = false
+
+          override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?,
+                                       dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+            listener?.invoke(model)
+
+            return false
+          }
+        })
+      }
       ?.into(this)
   } else {
     GlideApp.with(this).clear(this)
