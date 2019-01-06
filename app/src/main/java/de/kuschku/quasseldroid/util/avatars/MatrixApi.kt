@@ -29,7 +29,7 @@ interface MatrixApi {
   @GET("/_matrix/client/r0/profile/{name}/avatar_url")
   fun avatarUrl(@Path("name") name: String): Call<MatrixAvatarResponse>
 
-  @GET("/_matrix/media/r0/thumbnail/{server}/{id}/?width={width}&height={height}&method={method]")
+  @GET("/_matrix/media/r0/thumbnail/{server}/{id}/")
   fun avatarThumbnail(
     @Path("server") server: String,
     @Path("id") id: String,
