@@ -85,27 +85,27 @@ class AboutFragment : DaggerFragment() {
     }
 
     website.setOnClickListener {
-      val intent = Intent(Intent.ACTION_VIEW)
-      intent.data = Uri.parse("https://quasseldroid.info/")
-      context?.startActivity(intent)
+      context?.startActivity(Intent(Intent.ACTION_VIEW).apply {
+        data = Uri.parse("https://quasseldroid.info/")
+      })
     }
 
     source.setOnClickListener {
-      val intent = Intent(Intent.ACTION_VIEW)
-      intent.data = Uri.parse("https://git.kuschku.de/justJanne/QuasselDroid-ng")
-      context?.startActivity(intent)
+      context?.startActivity(Intent(Intent.ACTION_VIEW).apply {
+        data = Uri.parse("https://git.kuschku.de/justJanne/QuasselDroid-ng")
+      })
     }
 
     donate.setOnClickListener {
-      val intent = Intent(Intent.ACTION_VIEW)
-      intent.data = Uri.parse("https://www.patreon.com/justjanne")
-      context?.startActivity(intent)
+      context?.startActivity(Intent(Intent.ACTION_VIEW).apply {
+        data = Uri.parse("https://www.patreon.com/justjanne")
+      })
     }
 
     privacyPolicy.setOnClickListener {
-      val intent = Intent(Intent.ACTION_VIEW)
-      intent.data = Uri.parse("http://quasseldroid.info/privacy-policy/")
-      context?.startActivity(intent)
+      context?.startActivity(Intent(Intent.ACTION_VIEW).apply {
+        data = Uri.parse("http://quasseldroid.info/privacy-policy/")
+      })
     }
 
     val apache2 = License(
