@@ -20,10 +20,10 @@
 package de.kuschku.quasseldroid.viewmodel.data
 
 import android.graphics.drawable.Drawable
-import de.kuschku.libquassel.protocol.MsgId
+import de.kuschku.quasseldroid.persistence.QuasselDatabase
 
 class FormattedMessage(
-  val id: MsgId,
+  val original: QuasselDatabase.MessageData,
   val time: CharSequence,
   val dayChange: CharSequence? = null,
   val name: CharSequence? = null,
@@ -44,7 +44,7 @@ class FormattedMessage(
 
     other as FormattedMessage
 
-    if (id != other.id) return false
+    if (original != other.original) return false
     if (time != other.time) return false
     if (dayChange != other.dayChange) return false
     if (name != other.name) return false
@@ -62,7 +62,7 @@ class FormattedMessage(
   }
 
   override fun hashCode(): Int {
-    var result = id.hashCode()
+    var result = original.hashCode()
     result = 31 * result + time.hashCode()
     result = 31 * result + (dayChange?.hashCode() ?: 0)
     result = 31 * result + (name?.hashCode() ?: 0)

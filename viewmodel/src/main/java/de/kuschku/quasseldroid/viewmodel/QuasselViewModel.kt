@@ -58,11 +58,11 @@ class QuasselViewModel : ViewModel() {
   val backendWrapper = BehaviorSubject.createDefault(Observable.empty<Optional<Backend>>())
 
   val selectedMessages = BehaviorSubject.createDefault(emptyMap<MsgId, FormattedMessage>())
-  fun selectedMessagesToggle(key: MsgId, value: FormattedMessage): Boolean {
+  fun selectedMessagesToggle(key: MsgId, value: FormattedMessage): Int {
     val set = selectedMessages.value.orEmpty()
     val result = if (set.containsKey(key)) set - key else set + Pair(key, value)
     selectedMessages.onNext(result)
-    return result.isNotEmpty()
+    return result.size
   }
 
   val expandedMessages = BehaviorSubject.createDefault(emptySet<MsgId>())

@@ -120,10 +120,31 @@ class MessageListFragment : ServiceBoundFragment() {
 
   private val actionModeCallback = object : ActionMode.Callback {
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?) = when (item?.itemId) {
-      R.id.action_copy  -> {
+      R.id.action_user_info -> {
+        viewModel.selectedMessages.value.values.firstOrNull()?.let { msg ->
+          viewModel.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
+            viewModel.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
+              UserInfoActivity.launch(
+                requireContext(),
+                openBuffer = false,
+                bufferId = bufferSyncer.find(
+                  bufferName = HostmaskHelper.nick(msg.original.sender),
+                  networkId = networkId,
+                  type = Buffer_Type.of(Buffer_Type.QueryBuffer)
+                )?.let(BufferInfo::bufferId),
+                nick = HostmaskHelper.nick(msg.original.sender),
+                networkId = networkId
+              )
+            }
+          }
+
+          true
+        } ?: false
+      }
+      R.id.action_copy      -> {
         val builder = SpannableStringBuilder()
         viewModel.selectedMessages.value.values.asSequence().sortedBy {
-          it.id
+          it.original.messageId
         }.map {
           if (it.name != null && it.content != null) {
             SpanFormatter.format(getString(R.string.message_format_copy_complex),
@@ -149,10 +170,10 @@ class MessageListFragment : ServiceBoundFragment() {
         actionMode?.finish()
         true
       }
-      R.id.action_share -> {
+      R.id.action_share     -> {
         val builder = SpannableStringBuilder()
         viewModel.selectedMessages.value.values.asSequence().sortedBy {
-          it.id
+          it.original.messageId
         }.map {
           if (it.name != null && it.content != null) {
             SpanFormatter.format(getString(R.string.message_format_copy_complex),
@@ -225,8 +246,10 @@ class MessageListFragment : ServiceBoundFragment() {
 
     adapter.setOnClickListener { msg ->
       if (actionMode != null) {
-        if (!viewModel.selectedMessagesToggle(msg.id, msg)) {
-          actionMode?.finish()
+        when (viewModel.selectedMessagesToggle(msg.original.messageId, msg)) {
+          0    -> actionMode?.finish()
+          1    -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = true
+          else -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = false
         }
       }
     }
@@ -234,8 +257,10 @@ class MessageListFragment : ServiceBoundFragment() {
       if (actionMode == null) {
         activity?.startActionMode(actionModeCallback)
       }
-      if (!viewModel.selectedMessagesToggle(msg.id, msg)) {
-        actionMode?.finish()
+      when (viewModel.selectedMessagesToggle(msg.original.messageId, msg)) {
+        0    -> actionMode?.finish()
+        1    -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = true
+        else -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = false
       }
     }
     if (autoCompleteSettings.senderDoubleClick)

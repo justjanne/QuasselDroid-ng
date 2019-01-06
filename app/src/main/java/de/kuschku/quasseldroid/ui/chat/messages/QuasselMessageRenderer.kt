@@ -274,7 +274,7 @@ class QuasselMessageRenderer @Inject constructor(
         val senderColor = if (useSelfColor) selfColor else senderColors[senderColorIndex]
 
         FormattedMessage(
-          id = message.content.messageId,
+          original = message.content,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
           dayChange = formatDayChange(message),
           name = nick,
@@ -308,7 +308,7 @@ class QuasselMessageRenderer @Inject constructor(
         val senderColor = if (useSelfColor) selfColor else senderColors[senderColorIndex]
 
         FormattedMessage(
-          id = message.content.messageId,
+          original = message.content,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
           dayChange = formatDayChange(message),
           combined = SpanFormatter.format(
@@ -328,7 +328,7 @@ class QuasselMessageRenderer @Inject constructor(
         )
       }
       Message_Type.Notice       -> FormattedMessage(
-        id = message.content.messageId,
+        original = message.content,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
         combined = SpanFormatter.format(
@@ -347,7 +347,7 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Nick         -> {
         val nickSelf = message.content.sender == message.content.content || self
         FormattedMessage(
-          id = message.content.messageId,
+          original = message.content,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
           dayChange = formatDayChange(message),
           combined = if (nickSelf) {
@@ -387,7 +387,7 @@ class QuasselMessageRenderer @Inject constructor(
         )
       }
       Message_Type.Mode         -> FormattedMessage(
-        id = message.content.messageId,
+        original = message.content,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
         combined = SpanFormatter.format(
@@ -402,7 +402,7 @@ class QuasselMessageRenderer @Inject constructor(
         isSelected = message.isSelected
       )
       Message_Type.Join         -> FormattedMessage(
-        id = message.content.messageId,
+        original = message.content,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
         combined = SpanFormatter.format(
@@ -422,7 +422,7 @@ class QuasselMessageRenderer @Inject constructor(
         isSelected = message.isSelected
       )
       Message_Type.Part         -> FormattedMessage(
-        id = message.content.messageId,
+        original = message.content,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
         combined = if (message.content.content.isBlank()) {
@@ -457,7 +457,7 @@ class QuasselMessageRenderer @Inject constructor(
         isSelected = message.isSelected
       )
       Message_Type.Quit         -> FormattedMessage(
-        id = message.content.messageId,
+        original = message.content,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
         combined = if (message.content.content.isBlank()) {
@@ -494,7 +494,7 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Kick         -> {
         val (user, reason) = message.content.content.split(' ', limit = 2) + listOf("", "")
         FormattedMessage(
-          id = message.content.messageId,
+          original = message.content,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
           dayChange = formatDayChange(message),
           combined = if (reason.isBlank()) {
@@ -530,7 +530,7 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Kill         -> {
         val (user, reason) = message.content.content.split(' ', limit = 2) + listOf("", "")
         FormattedMessage(
-          id = message.content.messageId,
+          original = message.content,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
           dayChange = formatDayChange(message),
           combined = if (reason.isBlank()) {
@@ -572,7 +572,7 @@ class QuasselMessageRenderer @Inject constructor(
         }
 
         FormattedMessage(
-          id = message.content.messageId,
+          original = message.content,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
           dayChange = formatDayChange(message),
           combined = context.resources.getQuantityString(
@@ -598,7 +598,7 @@ class QuasselMessageRenderer @Inject constructor(
         }
 
         FormattedMessage(
-          id = message.content.messageId,
+          original = message.content,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
           dayChange = formatDayChange(message),
           combined = context.resources.getQuantityString(
@@ -618,7 +618,7 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Server,
       Message_Type.Info,
       Message_Type.Error        -> FormattedMessage(
-        id = message.content.messageId,
+        original = message.content,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
         combined = contentFormatter.formatContent(message.content.content,
@@ -630,7 +630,7 @@ class QuasselMessageRenderer @Inject constructor(
         isSelected = message.isSelected
       )
       Message_Type.Topic        -> FormattedMessage(
-        id = message.content.messageId,
+        original = message.content,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
         combined = contentFormatter.formatContent(message.content.content,
@@ -642,7 +642,7 @@ class QuasselMessageRenderer @Inject constructor(
         isSelected = message.isSelected
       )
       Message_Type.DayChange    -> FormattedMessage(
-        id = message.content.messageId,
+        original = message.content,
         time = "",
         dayChange = formatDayChange(message),
         combined = dateFormatter.format(message.content.time.atZone(zoneId)),
@@ -652,7 +652,7 @@ class QuasselMessageRenderer @Inject constructor(
         isSelected = false
       )
       Message_Type.Invite       -> FormattedMessage(
-        id = message.content.messageId,
+        original = message.content,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
         combined = contentFormatter.formatContent(message.content.content,
@@ -664,7 +664,7 @@ class QuasselMessageRenderer @Inject constructor(
         isSelected = message.isSelected
       )
       else                      -> FormattedMessage(
-        id = message.content.messageId,
+        original = message.content,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
         dayChange = formatDayChange(message),
         combined = SpanFormatter.format(

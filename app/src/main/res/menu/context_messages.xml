@@ -19,6 +19,10 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
   <item
+    android:id="@+id/action_user_info"
+    android:icon="@drawable/ic_account"
+    android:title="@string/label_info_user" />
+  <item
     android:id="@+id/action_copy"
     android:icon="@drawable/ic_copy"
     android:title="@string/label_copy" />
