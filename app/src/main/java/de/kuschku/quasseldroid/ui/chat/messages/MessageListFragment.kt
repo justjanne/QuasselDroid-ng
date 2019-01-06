@@ -42,8 +42,10 @@ import com.bumptech.glide.util.FixedPreloadSizeProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.MsgId
+import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.BufferSyncer
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.flag.hasFlag
@@ -61,6 +63,7 @@ import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.BacklogSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
+import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoActivity
 import de.kuschku.quasseldroid.util.Patterns
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.*
@@ -244,11 +247,21 @@ class MessageListFragment : ServiceBoundFragment() {
         )
       }
     adapter.setOnSenderIconClickListener { msg ->
-      ChatActivity.launch(
-        requireContext(),
-        autoCompleteText = HostmaskHelper.nick(msg.sender),
-        autoCompleteSuffix = ": "
-      )
+      viewModel.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
+        viewModel.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
+          UserInfoActivity.launch(
+            requireContext(),
+            openBuffer = false,
+            bufferId = bufferSyncer.find(
+              bufferName = HostmaskHelper.nick(msg.sender),
+              networkId = networkId,
+              type = Buffer_Type.of(Buffer_Type.QueryBuffer)
+            )?.let(BufferInfo::bufferId),
+            nick = HostmaskHelper.nick(msg.sender),
+            networkId = networkId
+          )
+        }
+      }
     }
     adapter.setOnUrlLongClickListener(LinkLongClickMenuHelper())
 
