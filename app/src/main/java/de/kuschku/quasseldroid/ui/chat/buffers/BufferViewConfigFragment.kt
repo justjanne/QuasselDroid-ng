@@ -285,9 +285,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       }
     }
 
-    viewModel.features.toLiveData().observe(this, Observer {
+    viewModel.negotiatedFeatures.toLiveData().observe(this, Observer { (connected, features) ->
       featureContextBufferActivitySync.setMode(
-        if (it.hasFeature(ExtendedFeature.BufferActivitySync)) WarningBarView.MODE_NONE
+        if (!connected || features.hasFeature(ExtendedFeature.BufferActivitySync)) WarningBarView.MODE_NONE
         else WarningBarView.MODE_ICON
       )
     })

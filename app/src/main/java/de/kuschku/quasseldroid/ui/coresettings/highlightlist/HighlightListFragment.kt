@@ -145,9 +145,9 @@ class HighlightListFragment : SettingsFragment(), SettingsFragment.Savable,
         }
       })
 
-    viewModel.features.toLiveData().observe(this, Observer {
+    viewModel.negotiatedFeatures.toLiveData().observe(this, Observer { (connected, features) ->
       featureContextCoreSideHighlights.setMode(
-        if (it.hasFeature(ExtendedFeature.CoreSideHighlights)) WarningBarView.MODE_NONE
+        if (!connected || features.hasFeature(ExtendedFeature.CoreSideHighlights)) WarningBarView.MODE_NONE
         else WarningBarView.MODE_ICON
       )
     })

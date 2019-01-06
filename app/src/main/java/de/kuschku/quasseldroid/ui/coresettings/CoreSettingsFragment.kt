@@ -170,11 +170,11 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     })
 
     var missingFeatureList: List<MissingFeature> = emptyList()
-    viewModel.features.toLiveData().observe(this, Observer { features ->
+    viewModel.negotiatedFeatures.toLiveData().observe(this, Observer { (connected, features) ->
       missingFeatureList = RequiredFeatures.features.filter {
         it.feature !in features.enabledFeatures
       }
-      featureContextMissing.visibleIf(missingFeatureList.isNotEmpty())
+      featureContextMissing.visibleIf(connected && missingFeatureList.isNotEmpty())
     })
 
     featureContextMissing.setOnClickListener {

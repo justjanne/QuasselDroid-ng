@@ -102,12 +102,12 @@ class CoreInfoFragment : ServiceBoundFragment() {
           data?.quasselBuildDate?.let(Html::fromHtml)
         versionDate.text = formattedVersionTime
 
-        val features = viewModel.session.value?.orNull()?.features?.core
-                       ?: QuasselFeatures.empty()
+        val (connected, features) = viewModel.coreFeatures.value ?: Pair(false,
+                                                                         QuasselFeatures.empty())
         missingFeatureList = RequiredFeatures.features.filter {
           it.feature !in features.enabledFeatures
         }
-        missingFeatures.visibleIf(missingFeatureList.isNotEmpty())
+        missingFeatures.visibleIf(connected && missingFeatureList.isNotEmpty())
 
         val startTime = data?.startTime?.atZone(ZoneId.systemDefault())?.let(dateTimeFormatter::format)
         uptime.text = requireContext().getString(R.string.label_core_online_since,

@@ -30,4 +30,9 @@ data class Features(
       core.enabledFeatures intersect client.enabledFeatures,
       core.unknownFeatures union client.unknownFeatures
     )
+
+  companion object {
+    fun empty() = Features(QuasselFeatures.empty(), QuasselFeatures.empty())
+    fun all() = Features(QuasselFeatures.all(), QuasselFeatures.all())
+  }
 }

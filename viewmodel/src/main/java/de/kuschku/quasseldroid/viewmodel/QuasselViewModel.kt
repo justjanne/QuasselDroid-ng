@@ -24,7 +24,6 @@ import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.connection.Features
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
-import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.session.Backend
@@ -85,9 +84,26 @@ class QuasselViewModel : ViewModel() {
   val sessionManager = backend.mapMap(Backend::sessionManager)
   val session = sessionManager.mapSwitchMap(SessionManager::session)
   val rpcHandler = session.mapMapNullable(ISession::rpcHandler)
-  val features = session.mapMap(ISession::features)
-    .mapMap(Features::negotiated)
-    .mapOrElse(QuasselFeatures.empty())
+  val features = sessionManager.mapSwitchMap { manager ->
+    manager.state.switchMap { state ->
+      if (state != ConnectionState.CONNECTED) {
+        Observable.just(Pair(false, Features.empty()))
+      } else {
+        manager.session.map {
+          Pair(true, it.features)
+        }
+      }
+    }
+  }.mapOrElse(Pair(false, Features.empty()))
+  val clientFeatures = features.map { (connected, features) ->
+    Pair(connected, features.client)
+  }
+  val negotiatedFeatures = features.map { (connected, features) ->
+    Pair(connected, features.negotiated)
+  }
+  val coreFeatures = features.map { (connected, features) ->
+    Pair(connected, features.core)
+  }
 
   val connectionProgress = sessionManager.mapSwitchMap(SessionManager::connectionProgress)
     .mapOrElse(Triple(ConnectionState.DISCONNECTED, 0, 0))
