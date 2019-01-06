@@ -171,6 +171,10 @@ object Settings {
       markReadOnSwipe = getBoolean(
         context.getString(R.string.preference_notification_mark_read_on_swipe_key),
         NotificationSettings.DEFAULT.markReadOnSwipe
+      ),
+      networkNameInNotificationTitle = getBoolean(
+        context.getString(R.string.preference_notification_network_name_in_notification_title_key),
+        NotificationSettings.DEFAULT.networkNameInNotificationTitle
       )
     )
   }

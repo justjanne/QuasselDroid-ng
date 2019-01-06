@@ -37,11 +37,11 @@ import androidx.core.app.Person
 import androidx.core.app.RemoteInput
 import androidx.core.graphics.drawable.IconCompat
 import de.kuschku.libquassel.protocol.Buffer_Type
-import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.NotificationSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
+import de.kuschku.quasseldroid.util.NotificationBuffer
 import de.kuschku.quasseldroid.util.NotificationMessage
 import de.kuschku.quasseldroid.util.helper.getColorCompat
 import de.kuschku.quasseldroid.util.helper.letIf
@@ -109,13 +109,13 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
     return bitmap
   }
 
-  fun notificationMessage(notificationSettings: NotificationSettings, bufferInfo: BufferInfo,
+  fun notificationMessage(notificationSettings: NotificationSettings, buffer: NotificationBuffer,
                           selfInfo: SelfInfo, notifications: List<NotificationMessage>,
                           isLoud: Boolean, isConnected: Boolean): Handle {
     val pendingIntentOpen = PendingIntent.getActivity(
       context.applicationContext,
       System.currentTimeMillis().toInt(),
-      ChatActivity.intent(context.applicationContext, bufferId = bufferInfo.bufferId).apply {
+      ChatActivity.intent(context.applicationContext, bufferId = buffer.id).apply {
         flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
       },
       0
@@ -130,7 +130,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       System.currentTimeMillis().toInt(),
       QuasselService.intent(
         context,
-        bufferId = bufferInfo.bufferId
+        bufferId = buffer.id
       ),
       0
     )
@@ -140,7 +140,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       System.currentTimeMillis().toInt(),
       QuasselService.intent(
         context,
-        bufferId = bufferInfo.bufferId,
+        bufferId = buffer.id,
         markReadMessage = notifications.last().messageId
       ),
       0
@@ -151,11 +151,13 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       System.currentTimeMillis().toInt(),
       QuasselService.intent(
         context,
-        bufferId = bufferInfo.bufferId,
+        bufferId = buffer.id,
         hideMessage = notifications.last().messageId
       ),
       0
     )
+
+    println(notificationSettings)
 
     val notification = NotificationCompat.Builder(
       context.applicationContext,
@@ -196,8 +198,11 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
             .setIcon(IconCompat.createWithBitmap(bitmapFromDrawable(selfInfo.avatar)))
             .build()
         )
-          .setGroupConversation(!bufferInfo.type.hasFlag(Buffer_Type.QueryBuffer))
-          .setConversationTitle(bufferInfo.bufferName)
+          .setGroupConversation(!buffer.type.hasFlag(Buffer_Type.QueryBuffer))
+          .setConversationTitle(
+            if (notificationSettings.networkNameInNotificationTitle) "${buffer.name} — ${buffer.networkName}"
+            else buffer.name
+          )
           .also {
             for (notification in notifications) {
               it.addMessage(
@@ -228,13 +233,13 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       }
       .setWhen(notifications.last().time.toEpochMilli())
       .apply {
-        if (bufferInfo.type.hasFlag(Buffer_Type.QueryBuffer)) {
+        if (buffer.type.hasFlag(Buffer_Type.QueryBuffer)) {
           notifications.lastOrNull()?.avatar?.let {
             setLargeIcon(bitmapFromDrawable(it))
           }
         }
       }
-    return Handle(bufferInfo.bufferId, notification)
+    return Handle(buffer.id, notification)
   }
 
   fun notificationBackground(): Handle {

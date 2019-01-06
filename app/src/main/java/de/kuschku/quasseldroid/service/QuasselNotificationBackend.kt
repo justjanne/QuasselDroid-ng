@@ -42,6 +42,7 @@ import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.NotificationSettings
 import de.kuschku.quasseldroid.settings.Settings
+import de.kuschku.quasseldroid.util.NotificationBuffer
 import de.kuschku.quasseldroid.util.NotificationMessage
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.getColorCompat
@@ -221,7 +222,8 @@ class QuasselNotificationBackend @Inject constructor(
     }.filter {
       it.messageId > session.bufferSyncer.lastSeenMsg(it.bufferInfo.bufferId)
     }.map {
-      val me = session.network(it.bufferInfo.networkId)?.me()
+      val network = session.network(it.bufferInfo.networkId)
+      val me = network?.me()
       QuasselDatabase.NotificationData(
         messageId = it.messageId,
         creationTime = now,
@@ -232,6 +234,7 @@ class QuasselNotificationBackend @Inject constructor(
         bufferName = it.bufferInfo.bufferName ?: "",
         bufferType = it.bufferInfo.type,
         networkId = it.bufferInfo.networkId,
+        networkName = network?.networkName() ?: "",
         sender = it.sender,
         senderPrefixes = it.senderPrefixes,
         realName = it.realName,
@@ -278,12 +281,11 @@ class QuasselNotificationBackend @Inject constructor(
       val max = data.maxBy { it.creationTime }
       val isLoud = max?.creationTime?.isAfter(initTime) == true
 
-      val bufferInfo = BufferInfo(
-        bufferId = it.bufferId,
-        bufferName = it.bufferName,
+      val buffer = NotificationBuffer(
+        id = it.bufferId,
+        name = it.bufferName,
         type = it.bufferType,
-        networkId = it.networkId,
-        groupId = 0
+        networkName = it.networkName
       )
 
       val size = context.resources.getDimensionPixelSize(R.dimen.notification_avatar_width)
@@ -364,7 +366,7 @@ class QuasselNotificationBackend @Inject constructor(
         )
       }
       val notification = notificationHandler.notificationMessage(
-        notificationSettings, bufferInfo, selfInfo, notificationData, isLoud, isConnected
+        notificationSettings, buffer, selfInfo, notificationData, isLoud, isConnected
       )
       notificationHandler.notify(notification)
     } ?: notificationHandler.remove(buffer)

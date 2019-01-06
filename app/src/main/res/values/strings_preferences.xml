@@ -135,6 +135,9 @@
   <string name="preference_notification_mark_read_on_swipe_title">Mark channel read when swiping notifications</string>
   <string name="preference_notification_mark_read_on_swipe_summary">Marks all messages in a channel as read when a notification for the channel is swiped away</string>
 
+  <string name="preference_notification_network_name_in_notification_title_key" translatable="false">network_name_in_notification_title</string>
+  <string name="preference_notification_network_name_in_notification_title_title">Show network name in notifications title</string>
+
   <string name="preference_notification_configure_key" translatable="false">notification_configure</string>
   <string name="preference_notification_configure_title">Configure Notifications</string>
 

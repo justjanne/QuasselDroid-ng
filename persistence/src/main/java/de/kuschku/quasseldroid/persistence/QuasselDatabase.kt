@@ -32,7 +32,7 @@ import io.reactivex.Flowable
 import org.threeten.bp.Instant
 
 @Database(entities = [MessageData::class, Filtered::class, SslValidityWhitelistEntry::class, SslHostnameWhitelistEntry::class, NotificationData::class],
-          version = 18)
+          version = 19)
 @TypeConverters(MessageTypeConverter::class)
 abstract class QuasselDatabase : RoomDatabase() {
   abstract fun message(): MessageDao
@@ -210,6 +210,7 @@ abstract class QuasselDatabase : RoomDatabase() {
     var bufferName: String,
     var bufferType: Buffer_Types,
     var networkId: NetworkId,
+    var networkName: String,
     var sender: String,
     var senderPrefixes: String,
     var realName: String,
@@ -363,6 +364,11 @@ abstract class QuasselDatabase : RoomDatabase() {
               object : Migration(17, 18) {
                 override fun migrate(database: SupportSQLiteDatabase) {
                   database.execSQL("ALTER TABLE `notification` ADD `hidden` INT DEFAULT 0 NOT NULL;")
+                }
+              },
+              object : Migration(18, 19) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL("ALTER TABLE `notification` ADD `networkName` TEXT DEFAULT '' NOT NULL;")
                 }
               }
             ).build()
