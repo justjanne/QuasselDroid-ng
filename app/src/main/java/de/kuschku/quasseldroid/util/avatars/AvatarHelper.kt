@@ -113,5 +113,5 @@ object AvatarHelper {
     }
   }
 
-  private fun truncateSize(originalSize: Int) = if (originalSize > 72) 512 else 72
+  private fun truncateSize(originalSize: Int) = originalSize //if (originalSize > 72) 512 else 72
 }
