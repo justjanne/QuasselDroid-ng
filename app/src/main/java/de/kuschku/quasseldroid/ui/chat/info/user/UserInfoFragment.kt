@@ -157,10 +157,12 @@ class UserInfoFragment : ServiceBoundFragment() {
       } ?: Observable.just(IrcUser.NULL).map { user -> processUser(user) }
     }.toLiveData().observe(this, Observer {
       val processUser = { user: IrcUserInfo ->
-        avatar.loadAvatars(
-          AvatarHelper.avatar(messageSettings, user, maxOf(avatar.width, avatar.height)),
-          crop = false
-        )
+        avatar.post {
+          avatar.loadAvatars(
+            AvatarHelper.avatar(messageSettings, user, maxOf(avatar.width, avatar.height)),
+            crop = false
+          )
+        }
 
         nick.text = user.nick
         realName.text = contentFormatter.formatContent(user.realName ?: "",
