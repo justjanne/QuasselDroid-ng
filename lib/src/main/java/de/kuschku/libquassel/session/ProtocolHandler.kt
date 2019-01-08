@@ -31,7 +31,6 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import java.io.Closeable
 
-@Suppress("LeakingThis")
 abstract class ProtocolHandler(
   private val exceptionHandler: (Throwable) -> Unit
 ) : SignalProxy, AuthHandler, Closeable {

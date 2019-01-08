@@ -19,7 +19,6 @@
 
 package de.kuschku.quasseldroid.util.ui;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -466,8 +465,6 @@ public class ColorChooserDialog extends DialogFragment
       customColorHex.addTextChangedListener(customColorTextWatcher);
       customColorRgbListener =
         new SeekBar.OnSeekBarChangeListener() {
-
-          @SuppressLint("DefaultLocale")
           @Override
           public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if (fromUser) {
@@ -478,20 +475,20 @@ public class ColorChooserDialog extends DialogFragment
                     customSeekR.getProgress(),
                     customSeekG.getProgress(),
                     customSeekB.getProgress());
-                customColorHex.setText(String.format("%08X", color));
+                customColorHex.setText(String.format(Locale.US, "%08X", color));
               } else {
                 int color =
                   Color.rgb(
                     customSeekR.getProgress(),
                     customSeekG.getProgress(),
                     customSeekB.getProgress());
-                customColorHex.setText(String.format("%06X", 0xFFFFFF & color));
+                customColorHex.setText(String.format(Locale.US, "%06X", 0xFFFFFF & color));
               }
             }
-            customSeekAValue.setText(String.format("%d", customSeekA.getProgress()));
-            customSeekRValue.setText(String.format("%d", customSeekR.getProgress()));
-            customSeekGValue.setText(String.format("%d", customSeekG.getProgress()));
-            customSeekBValue.setText(String.format("%d", customSeekB.getProgress()));
+            customSeekAValue.setText(String.format(Locale.US, "%d", customSeekA.getProgress()));
+            customSeekRValue.setText(String.format(Locale.US, "%d", customSeekR.getProgress()));
+            customSeekGValue.setText(String.format(Locale.US, "%d", customSeekG.getProgress()));
+            customSeekBValue.setText(String.format(Locale.US, "%d", customSeekB.getProgress()));
           }
 
           @Override
@@ -785,7 +782,6 @@ public class ColorChooserDialog extends DialogFragment
       return position;
     }
 
-    @SuppressLint("DefaultLocale")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
       if (convertView == null) {
@@ -800,7 +796,7 @@ public class ColorChooserDialog extends DialogFragment
       } else {
         child.setSelected(topIndex() == position);
       }
-      child.setTag(String.format("%d:%d", position, color));
+      child.setTag(String.format(Locale.US, "%d:%d", position, color));
       child.setOnClickListener(ColorChooserDialog.this);
       child.setOnLongClickListener(ColorChooserDialog.this);
       return convertView;

@@ -163,6 +163,13 @@ class ExpressionMatch : Serializable {
            _sourceCaseSensitive == other._sourceCaseSensitive
   }
 
+  override fun hashCode(): Int {
+    var result = _sourceExpression.hashCode()
+    result = 31 * result + _sourceMode.hashCode()
+    result = 31 * result + _sourceCaseSensitive.hashCode()
+    return result
+  }
+
   private fun cacheRegEx() {
     _matchRegExActive = false
     _matchInvertRegExActive = false

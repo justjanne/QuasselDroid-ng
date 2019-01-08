@@ -28,7 +28,7 @@ import java.util.*
  *
  *
  * It can be connected to a
- * [RecyclerView.Adapter][android.support.v7.widget.RecyclerView.Adapter], and will signal the
+ * [RecyclerView.Adapter][androidx.recyclerview.widget.RecyclerView.Adapter], and will signal the
  * adapter of changes between sumbitted lists.
  *
  *

@@ -130,15 +130,15 @@ private fun CharSequence.findAnyOf(strings: Collection<String>, startIndex: Int,
 private fun CharSequence.rangesDelimitedBy(delimiters: Array<out String>, startIndex: Int = 0,
                                            ignoreCase: Boolean = false,
                                            limit: Int = 0): Sequence<IntRange> {
-  require(limit >= 0, { "Limit must be non-negative, but was $limit." })
+  require(limit >= 0) { "Limit must be non-negative, but was $limit." }
   val delimitersList = delimiters.asList()
 
   return DelimitedRangesSequence(
-    this, startIndex, limit, { startIndex ->
+    this, startIndex, limit) { startIndex ->
     findAnyOf(
       delimitersList, startIndex, ignoreCase = ignoreCase, last = false
     )?.let { it.first to it.second.length }
-  })
+  }
 }
 
 fun CharSequence.splitToSequence(vararg delimiters: String, ignoreCase: Boolean = false,

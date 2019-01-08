@@ -85,7 +85,7 @@ class IgnoreListManager constructor(
         scopeList.size != size || scopeRuleList.size != size || isActiveList.size != size)
       return
 
-    _ignoreList = List(size, {
+    _ignoreList = List(size) {
       IgnoreListItem(
         type = ignoreTypeList[it].value(0),
         ignoreRule = ignoreRuleList[it] ?: "",
@@ -95,7 +95,7 @@ class IgnoreListManager constructor(
         scopeRule = scopeRuleList[it] ?: "",
         isActive = isActiveList[it].value(false)
       )
-    })
+    }
   }
 
   override fun addIgnoreListItem(type: Int, ignoreRule: String, isRegEx: Boolean, strictness: Int,

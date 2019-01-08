@@ -28,9 +28,6 @@
   <issue id="UnusedResources" severity="ignore" />
   <issue id="ObsoleteLintCustomCheck" severity="ignore" />
 
-  <!-- Because otherwise I can’t use the legacy icon in the settings -->
-  <issue id="IconDuplicates" severity="ignore" />
-
   <!-- Because this doesn’t work when using splash themes -->
   <issue id="Overdraw" severity="ignore" />
 

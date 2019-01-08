@@ -1,4 +1,5 @@
-[
+{
+  "data": [
   {
     "name": "SynchronizedMarkerLine",
     "description": "Required for synchronizing the last position in channels"
@@ -60,3 +61,4 @@
     "description": "Required for receiving past notifications after connecting"
   }
 ]
+}

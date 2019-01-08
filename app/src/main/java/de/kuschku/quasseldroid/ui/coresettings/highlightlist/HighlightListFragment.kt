@@ -135,8 +135,8 @@ class HighlightListFragment : SettingsFragment(), SettingsFragment.Savable,
           if (this.ruleManager == null) {
             this.ruleManager = Pair(it, it.copy())
             this.ruleManager?.let { (_, data) ->
-              rulesAdapter.list = data.highlightRuleList().filter { it.isInverse == false }
-              ignoreRulesAdapter.list = data.highlightRuleList().filter { it.isInverse == true }
+              rulesAdapter.list = data.highlightRuleList().filter { !it.isInverse }
+              ignoreRulesAdapter.list = data.highlightRuleList().filter { it.isInverse }
               highlightNickType.setSelection(highlightNickTypeAdapter.indexOf(data.highlightNick())
                                              ?: 0)
               isCaseSensitive.isChecked = data.nicksCaseSensitive()

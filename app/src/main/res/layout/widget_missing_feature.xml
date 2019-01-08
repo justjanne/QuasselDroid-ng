@@ -45,7 +45,7 @@
       android:layout_height="wrap_content"
       android:textColor="?colorTextPrimary"
       android:textSize="16sp"
-      tools:text="@sample/features.json/name" />
+      tools:text="@sample/features.json/data/name" />
 
     <TextView
       android:id="@+id/description"
@@ -54,6 +54,6 @@
       android:layout_height="wrap_content"
       android:textAppearance="?android:attr/textAppearanceSmall"
       android:textColor="?colorTextSecondary"
-      tools:text="@sample/features.json/description" />
+      tools:text="@sample/features.json/data/description" />
   </LinearLayout>
 </LinearLayout>
