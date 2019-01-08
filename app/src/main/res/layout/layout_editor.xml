@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2018 Janne Koschinski
-  Copyright (c) 2018 The Quassel Project
+  Copyright (c) 2019 Janne Koschinski
+  Copyright (c) 2019 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -10,11 +10,11 @@
 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses/>.
+  with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -42,10 +42,10 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="top"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/label_autocomplete"
         android:padding="12dp"
         android:scaleType="fitXY"
         app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="@string/label_autocomplete"
         app:srcCompat="@drawable/ic_tab"
         app:tint="?attr/colorTextSecondary" />
 
@@ -70,10 +70,10 @@
           android:imeOptions="flagNoExtractUi"
           android:inputType="textCapSentences|textAutoCorrect|textShortMessage"
           android:minHeight="?attr/actionBarSize"
-          android:paddingBottom="8dp"
           android:paddingLeft="20dp"
-          android:paddingRight="20dp"
           android:paddingTop="8dp"
+          android:paddingRight="20dp"
+          android:paddingBottom="8dp"
           android:textColor="?attr/colorForeground"
           android:textSize="16sp" />
       </ScrollView>
@@ -86,11 +86,11 @@
         android:layout_gravity="top"
         android:autoMirrored="true"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/label_send"
         android:padding="12dp"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_send"
-        android:contentDescription="@string/label_send"
         app:tint="?attr/colorAccent"
         tools:ignore="UnusedAttribute" />
     </androidx.constraintlayout.widget.ConstraintLayout>

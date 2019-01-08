@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2018 Janne Koschinski
-  Copyright (c) 2018 The Quassel Project
+  Copyright (c) 2019 Janne Koschinski
+  Copyright (c) 2019 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -10,11 +10,11 @@
 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses/>.
+  with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -23,8 +23,8 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="vertical"
-  android:paddingBottom="@dimen/md_title_frame_margin_bottom"
   android:paddingTop="@dimen/md_title_frame_margin_bottom"
+  android:paddingBottom="@dimen/md_title_frame_margin_bottom"
   tools:ignore="PrivateResource">
 
   <View
@@ -79,8 +79,8 @@
       android:id="@+id/md_colorALabel"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_alignBottom="@+id/md_colorA"
       android:layout_alignTop="@+id/md_colorA"
+      android:layout_alignBottom="@+id/md_colorA"
       android:layout_marginEnd="4dp"
       android:layout_marginRight="4dp"
       android:text="A"
@@ -93,10 +93,10 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/md_title_frame_margin_bottom"
-      android:layout_toEndOf="@+id/md_colorALabel"
-      android:layout_toLeftOf="@+id/md_colorAValue"
-      android:layout_toRightOf="@+id/md_colorALabel"
       android:layout_toStartOf="@+id/md_colorAValue"
+      android:layout_toLeftOf="@+id/md_colorAValue"
+      android:layout_toEndOf="@+id/md_colorALabel"
+      android:layout_toRightOf="@+id/md_colorALabel"
       android:focusable="true"
       android:max="255" />
 
@@ -104,12 +104,12 @@
       android:id="@+id/md_colorAValue"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_alignTop="@+id/md_colorA"
       android:layout_alignBottom="@+id/md_colorA"
       android:layout_alignParentEnd="true"
       android:layout_alignParentRight="true"
-      android:layout_alignTop="@+id/md_colorA"
-      android:layout_marginLeft="4dp"
       android:layout_marginStart="4dp"
+      android:layout_marginLeft="4dp"
       android:gravity="center"
       android:minWidth="24dp"
       android:text="0"
@@ -123,8 +123,8 @@
       android:id="@+id/md_colorRLabel"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_alignBottom="@+id/md_colorR"
       android:layout_alignTop="@+id/md_colorR"
+      android:layout_alignBottom="@+id/md_colorR"
       android:layout_marginEnd="4dp"
       android:layout_marginRight="4dp"
       android:text="R"
@@ -138,10 +138,10 @@
       android:layout_height="wrap_content"
       android:layout_below="@+id/md_colorA"
       android:layout_marginTop="@dimen/md_title_frame_margin_bottom"
-      android:layout_toEndOf="@+id/md_colorRLabel"
-      android:layout_toLeftOf="@+id/md_colorRValue"
-      android:layout_toRightOf="@+id/md_colorRLabel"
       android:layout_toStartOf="@+id/md_colorRValue"
+      android:layout_toLeftOf="@+id/md_colorRValue"
+      android:layout_toEndOf="@+id/md_colorRLabel"
+      android:layout_toRightOf="@+id/md_colorRLabel"
       android:focusable="true"
       android:max="255" />
 
@@ -149,12 +149,12 @@
       android:id="@+id/md_colorRValue"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_alignTop="@+id/md_colorR"
       android:layout_alignBottom="@+id/md_colorR"
       android:layout_alignParentEnd="true"
       android:layout_alignParentRight="true"
-      android:layout_alignTop="@+id/md_colorR"
-      android:layout_marginLeft="4dp"
       android:layout_marginStart="4dp"
+      android:layout_marginLeft="4dp"
       android:gravity="center"
       android:minWidth="24dp"
       android:text="0"
@@ -168,8 +168,8 @@
       android:id="@+id/md_colorGLabel"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_alignBottom="@+id/md_colorG"
       android:layout_alignTop="@+id/md_colorG"
+      android:layout_alignBottom="@+id/md_colorG"
       android:layout_marginEnd="4dp"
       android:layout_marginRight="4dp"
       android:text="G"
@@ -183,10 +183,10 @@
       android:layout_height="wrap_content"
       android:layout_below="@+id/md_colorR"
       android:layout_marginTop="@dimen/md_title_frame_margin_bottom"
-      android:layout_toEndOf="@+id/md_colorGLabel"
-      android:layout_toLeftOf="@+id/md_colorGValue"
-      android:layout_toRightOf="@+id/md_colorGLabel"
       android:layout_toStartOf="@+id/md_colorGValue"
+      android:layout_toLeftOf="@+id/md_colorGValue"
+      android:layout_toEndOf="@+id/md_colorGLabel"
+      android:layout_toRightOf="@+id/md_colorGLabel"
       android:focusable="true"
       android:max="255" />
 
@@ -194,12 +194,12 @@
       android:id="@+id/md_colorGValue"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_alignTop="@+id/md_colorG"
       android:layout_alignBottom="@+id/md_colorG"
       android:layout_alignParentEnd="true"
       android:layout_alignParentRight="true"
-      android:layout_alignTop="@+id/md_colorG"
-      android:layout_marginLeft="4dp"
       android:layout_marginStart="4dp"
+      android:layout_marginLeft="4dp"
       android:gravity="center"
       android:minWidth="24dp"
       android:text="0"
@@ -213,8 +213,8 @@
       android:id="@+id/md_colorBLabel"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_alignBottom="@+id/md_colorB"
       android:layout_alignTop="@+id/md_colorB"
+      android:layout_alignBottom="@+id/md_colorB"
       android:layout_marginEnd="4dp"
       android:layout_marginRight="4dp"
       android:text="B"
@@ -228,22 +228,22 @@
       android:layout_height="wrap_content"
       android:layout_below="@+id/md_colorG"
       android:layout_marginTop="@dimen/md_title_frame_margin_bottom"
-      android:layout_toEndOf="@+id/md_colorBLabel"
-      android:layout_toLeftOf="@+id/md_colorBValue"
-      android:layout_toRightOf="@+id/md_colorBLabel"
       android:layout_toStartOf="@+id/md_colorBValue"
+      android:layout_toLeftOf="@+id/md_colorBValue"
+      android:layout_toEndOf="@+id/md_colorBLabel"
+      android:layout_toRightOf="@+id/md_colorBLabel"
       android:max="255" />
 
     <TextView
       android:id="@+id/md_colorBValue"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_alignTop="@+id/md_colorB"
       android:layout_alignBottom="@+id/md_colorB"
       android:layout_alignParentEnd="true"
       android:layout_alignParentRight="true"
-      android:layout_alignTop="@+id/md_colorB"
-      android:layout_marginLeft="4dp"
       android:layout_marginStart="4dp"
+      android:layout_marginLeft="4dp"
       android:gravity="center"
       android:minWidth="24dp"
       android:text="0"

@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2018 Janne Koschinski
- * Copyright (c) 2018 The Quassel Project
+ * Copyright (c) 2019 Janne Koschinski
+ * Copyright (c) 2019 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -10,11 +10,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kuschku.quasseldroid.ui.chat.buffers
@@ -299,77 +299,77 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
         Triple(a, b, c)
       }
     }.observe(this, Observer { it ->
-        it?.let { (data, activityList, account) ->
-          runInBackground {
-            val (info, expandedNetworks, selected) = data
-            val (config, list) = info ?: Pair(null, emptyList())
-            val minimumActivity = config?.minimumActivity() ?: Buffer_Activity.NONE
-            val activities = activityList.associate { it.bufferId to it.filtered }
-            val processedList = list.asSequence().sortedBy { props ->
-              !props.info.type.hasFlag(Buffer_Type.StatusBuffer)
-            }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { props ->
-              props.network.networkName
-            }).map { props ->
-              val activity = props.activity - (activities[props.info.bufferId]
-                                               ?: account?.defaultFiltered
-                                               ?: 0)
-              BufferListItem(
-                props.copy(
-                  activity = activity,
-                  description = ircFormatDeserializer.formatString(
-                    props.description.toString(),
-                    colorize = messageSettings.colorizeMirc
-                  ),
-                  bufferActivity = Buffer_Activity.of(
-                    when {
-                      props.highlights > 0                  -> Buffer_Activity.Highlight
-                      activity.hasFlag(Message_Type.Plain) ||
-                      activity.hasFlag(Message_Type.Notice) ||
-                      activity.hasFlag(Message_Type.Action) -> Buffer_Activity.NewMessage
-                      activity.isNotEmpty()                 -> Buffer_Activity.OtherActivity
-                      else                                  -> Buffer_Activity.NoActivity
-                    }
-                  ),
-                  fallbackDrawable = if (props.info.type.hasFlag(Buffer_Type.QueryBuffer)) {
-                    props.ircUser?.let {
-                      val nickName = it.nick()
-                      val useSelfColor = when (messageSettings.colorizeNicknames) {
-                        MessageSettings.ColorizeNicknamesMode.ALL          -> false
-                        MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
-                          props.ircUser?.network()?.isMyNick(nickName) == true
-                        MessageSettings.ColorizeNicknamesMode.NONE         -> true
-                      }
-
-                      colorContext.buildTextDrawable(it.nick(), useSelfColor)
-                    } ?: colorContext.buildTextDrawable("", colorAway)
-                  } else {
-                    val color = if (props.bufferStatus == BufferStatus.ONLINE) colorAccent
-                    else colorAway
-
-                    colorContext.buildTextDrawable("#", color)
-                  },
-                  avatarUrls = props.ircUser?.let {
-                    AvatarHelper.avatar(messageSettings, it, avatarSize)
-                  } ?: emptyList()
+      it?.let { (data, activityList, account) ->
+        runInBackground {
+          val (info, expandedNetworks, selected) = data
+          val (config, list) = info ?: Pair(null, emptyList())
+          val minimumActivity = config?.minimumActivity() ?: Buffer_Activity.NONE
+          val activities = activityList.associate { it.bufferId to it.filtered }
+          val processedList = list.asSequence().sortedBy { props ->
+            !props.info.type.hasFlag(Buffer_Type.StatusBuffer)
+          }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { props ->
+            props.network.networkName
+          }).map { props ->
+            val activity = props.activity - (activities[props.info.bufferId]
+                                             ?: account?.defaultFiltered
+                                             ?: 0)
+            BufferListItem(
+              props.copy(
+                activity = activity,
+                description = ircFormatDeserializer.formatString(
+                  props.description.toString(),
+                  colorize = messageSettings.colorizeMirc
                 ),
-                BufferState(
-                  networkExpanded = expandedNetworks[props.network.networkId]
-                                    ?: (props.networkConnectionState == INetwork.ConnectionState.Initialized),
-                  selected = selected.info?.bufferId == props.info.bufferId
-                )
-              )
-            }.filter { (props, state) ->
-              (props.info.type.hasFlag(BufferInfo.Type.StatusBuffer) || state.networkExpanded) &&
-              (minimumActivity.toInt() <= props.bufferActivity.toInt() ||
-               props.info.type.hasFlag(Buffer_Type.StatusBuffer))
-            }.toList()
+                bufferActivity = Buffer_Activity.of(
+                  when {
+                    props.highlights > 0                  -> Buffer_Activity.Highlight
+                    activity.hasFlag(Message_Type.Plain) ||
+                    activity.hasFlag(Message_Type.Notice) ||
+                    activity.hasFlag(Message_Type.Action) -> Buffer_Activity.NewMessage
+                    activity.isNotEmpty()                 -> Buffer_Activity.OtherActivity
+                    else                                  -> Buffer_Activity.NoActivity
+                  }
+                ),
+                fallbackDrawable = if (props.info.type.hasFlag(Buffer_Type.QueryBuffer)) {
+                  props.ircUser?.let {
+                    val nickName = it.nick()
+                    val useSelfColor = when (messageSettings.colorizeNicknames) {
+                      MessageSettings.ColorizeNicknamesMode.ALL          -> false
+                      MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+                        props.ircUser?.network()?.isMyNick(nickName) == true
+                      MessageSettings.ColorizeNicknamesMode.NONE         -> true
+                    }
 
-            activity?.runOnUiThread {
-              listAdapter.submitList(processedList)
-            }
+                    colorContext.buildTextDrawable(it.nick(), useSelfColor)
+                  } ?: colorContext.buildTextDrawable("", colorAway)
+                } else {
+                  val color = if (props.bufferStatus == BufferStatus.ONLINE) colorAccent
+                  else colorAway
+
+                  colorContext.buildTextDrawable("#", color)
+                },
+                avatarUrls = props.ircUser?.let {
+                  AvatarHelper.avatar(messageSettings, it, avatarSize)
+                } ?: emptyList()
+              ),
+              BufferState(
+                networkExpanded = expandedNetworks[props.network.networkId]
+                                  ?: (props.networkConnectionState == INetwork.ConnectionState.Initialized),
+                selected = selected.info?.bufferId == props.info.bufferId
+              )
+            )
+          }.filter { (props, state) ->
+            (props.info.type.hasFlag(BufferInfo.Type.StatusBuffer) || state.networkExpanded) &&
+            (minimumActivity.toInt() <= props.bufferActivity.toInt() ||
+             props.info.type.hasFlag(Buffer_Type.StatusBuffer))
+          }.toList()
+
+          activity?.runOnUiThread {
+            listAdapter.submitList(processedList)
           }
         }
-      })
+      }
+    })
     listAdapter.setOnClickListener(this@BufferViewConfigFragment::clickListener)
     listAdapter.setOnLongClickListener(this@BufferViewConfigFragment::longClickListener)
     chatList.adapter = listAdapter

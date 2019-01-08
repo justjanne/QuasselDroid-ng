@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2018 Janne Koschinski
-  Copyright (c) 2018 The Quassel Project
+  Copyright (c) 2019 Janne Koschinski
+  Copyright (c) 2019 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -10,11 +10,11 @@
 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses/>.
+  with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -31,12 +31,12 @@
     android:layout_height="wrap_content"
     android:background="?attr/backgroundMenuItem"
     android:orientation="horizontal"
-    android:paddingBottom="@dimen/message_vertical"
-    android:paddingEnd="@dimen/message_horizontal"
-    android:paddingLeft="@dimen/message_horizontal"
-    android:paddingRight="@dimen/message_horizontal"
     android:paddingStart="@dimen/message_horizontal"
+    android:paddingLeft="@dimen/message_horizontal"
     android:paddingTop="@dimen/message_vertical"
+    android:paddingEnd="@dimen/message_horizontal"
+    android:paddingRight="@dimen/message_horizontal"
+    android:paddingBottom="@dimen/message_vertical"
     android:textAppearance="?android:attr/textAppearanceListItemSmall">
 
     <TextView
@@ -98,14 +98,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:layout_marginLeft="@dimen/message_horizontal"
         android:layout_marginStart="@dimen/message_horizontal"
+        android:layout_marginLeft="@dimen/message_horizontal"
         android:textColor="?attr/colorForegroundSecondary"
         android:textStyle="italic"
         android:visibility="gone"
+        tools:ignore="SmallSp"
         tools:text="@sample/messages.json/data/time"
         tools:textSize="11.9sp"
-        tools:ignore="SmallSp"
         tools:visibility="visible" />
     </LinearLayout>
   </LinearLayout>

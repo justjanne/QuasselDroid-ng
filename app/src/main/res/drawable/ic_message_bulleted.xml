@@ -1,8 +1,8 @@
 <!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2018 Janne Koschinski
-  Copyright (c) 2018 The Quassel Project
+  Copyright (c) 2019 Janne Koschinski
+  Copyright (c) 2019 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -10,18 +10,18 @@
 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses/>.
+  with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
   android:width="24dp"
   android:height="24dp"
-  android:viewportHeight="24"
-  android:viewportWidth="24">
+  android:viewportWidth="24"
+  android:viewportHeight="24">
   <path
     android:fillColor="#000"
     android:pathData="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M8,14H6V12H8V14M8,11H6V9H8V11M8,8H6V6H8V8M15,14H10V12H15V14M18,11H10V9H18V11M18,8H10V6H18V8Z" />

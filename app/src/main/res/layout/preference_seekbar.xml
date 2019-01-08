@@ -20,12 +20,12 @@
   android:layout_height="wrap_content"
   android:gravity="center_vertical"
   android:orientation="horizontal"
-  android:paddingBottom="5dp"
-  android:paddingEnd="10dp"
-  android:paddingLeft="15dp"
-  android:paddingRight="10dp"
   android:paddingStart="15dp"
-  android:paddingTop="5dp">
+  android:paddingLeft="15dp"
+  android:paddingTop="5dp"
+  android:paddingEnd="10dp"
+  android:paddingRight="10dp"
+  android:paddingBottom="5dp">
 
   <androidx.appcompat.widget.AppCompatSeekBar
     android:id="@+id/seekBarPrefSeekBar"

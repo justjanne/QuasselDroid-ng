@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2018 Janne Koschinski
-  Copyright (c) 2018 The Quassel Project
+  Copyright (c) 2019 Janne Koschinski
+  Copyright (c) 2019 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -10,11 +10,11 @@
 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses/>.
+  with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -32,18 +32,18 @@
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:orientation="horizontal"
-    android:paddingBottom="10dp"
-    android:paddingTop="10dp">
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
 
     <androidx.appcompat.widget.AppCompatImageView
       android:id="@+id/ssl_enabled"
       android:layout_width="wrap_content"
       android:layout_height="match_parent"
       android:layout_gravity="center_vertical"
-      android:paddingEnd="32dp"
-      android:paddingLeft="?listPreferredItemPaddingLeft"
-      android:paddingRight="32dp"
       android:paddingStart="?listPreferredItemPaddingLeft"
+      android:paddingLeft="?listPreferredItemPaddingLeft"
+      android:paddingEnd="32dp"
+      android:paddingRight="32dp"
       tools:srcCompat="@drawable/ic_lock"
       tools:tint="?colorTintSecure" />
 
@@ -81,10 +81,10 @@
       android:layout_width="wrap_content"
       android:layout_height="match_parent"
       android:layout_gravity="center_vertical"
-      android:paddingEnd="?listPreferredItemPaddingRight"
-      android:paddingLeft="32dp"
-      android:paddingRight="?listPreferredItemPaddingRight"
       android:paddingStart="32dp"
+      android:paddingLeft="32dp"
+      android:paddingEnd="?listPreferredItemPaddingRight"
+      android:paddingRight="?listPreferredItemPaddingRight"
       app:srcCompat="@drawable/ic_reorder"
       app:tint="?colorTextSecondary" />
   </LinearLayout>
