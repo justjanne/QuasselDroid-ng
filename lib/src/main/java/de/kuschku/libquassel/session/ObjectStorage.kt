@@ -27,7 +27,13 @@ import de.kuschku.libquassel.quassel.exceptions.ObjectNotFoundException
 import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
 import de.kuschku.libquassel.util.helpers.removeIfEqual
 
-class ObjectStorage(private val proxy: SignalProxy) {
+class ObjectStorage(private var proxy: SignalProxy) {
+  fun deinit() {
+    proxy = SignalProxy.NULL
+    objectTree.values.forEach(ISyncableObject::deinit)
+    objectTree.clear()
+  }
+
   private val objectTree: MutableMap<Pair<String, String>, ISyncableObject> = HashMap()
 
   fun add(obj: ISyncableObject) {

@@ -6,11 +6,20 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 
-class JavaHeartBeatRunner(
-  private val session: Session
-) : Thread(), HeartBeatRunner {
+class JavaHeartBeatRunner : Thread(), HeartBeatRunner {
   private var running = true
   private var lastHeartBeatReply: Instant = Instant.now()
+
+  private var closeCallback: (() -> Unit)? = null
+  private var heartbeatDispatchCallback: ((SignalProxyMessage.HeartBeat) -> Unit)? = null
+
+  override fun setCloseCallback(callback: (() -> Unit)?) {
+    this.closeCallback = callback
+  }
+
+  override fun setHeartbeatDispatchCallback(callback: ((SignalProxyMessage.HeartBeat) -> Unit)?) {
+    this.heartbeatDispatchCallback = callback
+  }
 
   override fun start() {
     while (running) {
@@ -18,10 +27,10 @@ class JavaHeartBeatRunner(
       val duration = Duration.between(lastHeartBeatReply, now).toMillis()
       if (duration > TIMEOUT) {
         log(INFO, "Heartbeat", "Ping Timeout: Last Response ${duration}ms ago")
-        session.close()
+        closeCallback?.invoke()
       } else {
         log(INFO, "Heartbeat", "Sending Heartbeat")
-        session.dispatch(SignalProxyMessage.HeartBeat(now))
+        heartbeatDispatchCallback?.invoke(SignalProxyMessage.HeartBeat(now))
       }
       Thread.sleep(DELAY)
     }

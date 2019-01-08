@@ -23,10 +23,10 @@ import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Message
 
 interface BacklogStorage {
-  fun updateIgnoreRules(session: Session)
+  fun updateIgnoreRules(session: ISession)
 
-  fun storeMessages(session: Session, vararg messages: Message)
-  fun storeMessages(session: Session, messages: Iterable<Message>)
+  fun storeMessages(session: ISession, vararg messages: Message)
+  fun storeMessages(session: ISession, messages: Iterable<Message>)
 
   fun clearMessages(bufferId: BufferId, idRange: IntRange)
 

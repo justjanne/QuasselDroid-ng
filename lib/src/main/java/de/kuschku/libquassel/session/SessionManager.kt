@@ -32,6 +32,7 @@ import de.kuschku.libquassel.util.helpers.or
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 import javax.net.ssl.X509TrustManager
@@ -41,11 +42,20 @@ class SessionManager(
   private val backlogStorage: BacklogStorage,
   private val notificationManager: NotificationManager?,
   val handlerService: HandlerService,
-  private val heartBeatFactory: (Session) -> HeartBeatRunner,
-  private val disconnectFromCore: () -> Unit,
-  private val initCallback: (Session) -> Unit,
+  private val heartBeatFactory: () -> HeartBeatRunner,
   private val exceptionHandler: (Throwable) -> Unit
 ) {
+  private var disconnectFromCore: (() -> Unit)? = null
+  private var initCallback: ((Session) -> Unit)? = null
+
+  fun setDisconnectFromCore(callback: (() -> Unit)?) {
+    this.disconnectFromCore = callback
+  }
+
+  fun setInitCallback(callback: ((Session) -> Unit)?) {
+    this.initCallback = callback
+  }
+
   fun close() = session.or(lastSession).close()
 
   private var lastClientData: ClientData? = null
@@ -85,29 +95,27 @@ class SessionManager(
       Triple(t1, t2.first, t2.second)
     })
 
+  val disposables = mutableListOf<Disposable>()
+
   init {
     log(INFO, "Session", "Session created")
 
-    state.subscribe {
+    disposables.add(state.subscribe {
       if (it == ConnectionState.CONNECTED) {
         lastSession.close()
       }
-    }
+    })
 
-    error.subscribe {
+    disposables.add(error.subscribe {
       hasErrored = true
-    }
+    })
 
     // This should preload them
     Invokers
   }
 
-  fun ifDisconnected(closure: (ISession) -> Unit) {
-    state.or(ConnectionState.DISCONNECTED).let {
-      if (it == ConnectionState.CLOSED || it == ConnectionState.DISCONNECTED) {
-        closure(inProgressSession.value)
-      }
-    }
+  fun login(user: String, pass: String) {
+    inProgressSession.value.login(user, pass)
   }
 
   fun connect(
@@ -189,7 +197,20 @@ class SessionManager(
     inProgressSession.onNext(ISession.NULL)
   }
 
-  fun login(user: String, pass: String) {
-    inProgressSession.value.login(user, pass)
+  fun ifDisconnected(closure: (ISession) -> Unit) {
+    state.or(ConnectionState.DISCONNECTED).let {
+      if (it == ConnectionState.CLOSED || it == ConnectionState.DISCONNECTED) {
+        closure(inProgressSession.value)
+      }
+    }
+  }
+
+  fun dispose() {
+    setDisconnectFromCore(null)
+    setInitCallback(null)
+    for (disposable in disposables) {
+      if (!disposable.isDisposed)
+        disposable.dispose()
+    }
   }
 }

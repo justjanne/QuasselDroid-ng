@@ -1,8 +1,12 @@
 package de.kuschku.libquassel.session
 
+import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import org.threeten.bp.Instant
 
 interface HeartBeatRunner {
+  fun setCloseCallback(callback: (() -> Unit)?)
+  fun setHeartbeatDispatchCallback(callback: ((SignalProxyMessage.HeartBeat) -> Unit)?)
+
   fun start()
   fun end()
 

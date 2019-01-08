@@ -31,9 +31,14 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
 class BufferSyncer constructor(
-  private val session: ISession,
+  var session: ISession,
   private val notificationManager: NotificationManager?
 ) : SyncableObject(session.proxy, "BufferSyncer"), IBufferSyncer {
+  override fun deinit() {
+    super.deinit()
+    session = ISession.NULL
+  }
+
   fun lastSeenMsg(buffer: BufferId): MsgId = _lastSeenMsg[buffer] ?: 0
   fun liveLastSeenMsg(buffer: BufferId): Observable<MsgId> = live_lastSeenMsg.map {
     markerLine(buffer)

@@ -87,4 +87,8 @@ class BufferViewManager constructor(
       bufferViewConfig.handleBuffer(info, bufferSyncer, unhide)
     }
   }
+
+  override fun deinit() {
+    _bufferViewConfigs.values.map(BufferViewConfig::deinit)
+  }
 }

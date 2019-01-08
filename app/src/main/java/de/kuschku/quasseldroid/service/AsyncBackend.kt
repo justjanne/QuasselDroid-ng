@@ -25,9 +25,14 @@ import de.kuschku.libquassel.util.compatibility.HandlerService
 
 class AsyncBackend(
   private val handler: HandlerService,
-  private val backend: Backend,
-  private val disconnectCallback: () -> Unit
+  private val backend: Backend
 ) : Backend {
+  private var disconnectCallback: (() -> Unit)? = null
+
+  fun setDisconnectCallback(callback: (() -> Unit)?) {
+    this.disconnectCallback = callback
+  }
+
   override fun updateUserDataAndLogin(user: String, pass: String) {
     handler.backend {
       backend.updateUserDataAndLogin(user, pass)

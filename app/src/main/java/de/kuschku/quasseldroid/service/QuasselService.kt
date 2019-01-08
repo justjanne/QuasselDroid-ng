@@ -21,7 +21,6 @@ package de.kuschku.quasseldroid.service
 
 import android.content.*
 import android.net.ConnectivityManager
-import android.os.Handler
 import android.text.SpannableString
 import androidx.core.app.RemoteInput
 import androidx.lifecycle.Observer
@@ -259,56 +258,72 @@ class QuasselService : DaggerLifecycleService(),
 
   private lateinit var certificateManager: QuasselCertificateManager
 
-  private val backendImplementation = object : Backend {
+  class BackendImplementation : Backend {
+    var service: QuasselService? = null
+
     override fun updateUserDataAndLogin(user: String, pass: String) {
-      accountDatabase.accounts().findById(accountId)?.let { old ->
-        accountDatabase.accounts().save(old.copy(user = user, pass = pass))
-        sessionManager.login(user, pass)
+      service?.apply {
+        accountDatabase.accounts().findById(accountId)?.let { old ->
+          accountDatabase.accounts().save(old.copy(user = user, pass = pass))
+          sessionManager.login(user, pass)
+        }
       }
     }
 
-    override fun sessionManager() = sessionManager
+    override fun sessionManager() = service!!.sessionManager
 
     override fun connectUnlessConnected(address: SocketAddress, user: String, pass: String,
                                         reconnect: Boolean) {
-      sessionManager.ifDisconnected {
-        this.connect(address, user, pass, reconnect)
+      service?.apply {
+        sessionManager.ifDisconnected {
+          connect(address, user, pass, reconnect)
+        }
       }
     }
 
     override fun connect(address: SocketAddress, user: String, pass: String, reconnect: Boolean) {
-      disconnect()
-      sessionManager.connect(
-        clientData, trustManager, hostnameVerifier, address, user to pass, reconnect
-      )
+      service?.apply {
+        disconnect()
+        sessionManager.connect(
+          clientData, trustManager, hostnameVerifier, address, user to pass, reconnect
+        )
+      }
     }
 
     override fun reconnect() {
-      sessionManager.reconnect()
+      service?.apply {
+        sessionManager.reconnect()
+      }
     }
 
     override fun disconnect(forever: Boolean) {
-      sessionManager.disconnect(forever)
+      service?.apply {
+        sessionManager.disconnect(forever)
+      }
     }
 
     override fun requestConnectNewNetwork() {
-      sessionManager.session.flatMap(ISession::liveNetworkAdded).firstElement().flatMap { id ->
-        sessionManager.session.flatMap(ISession::liveNetworks)
-          .map { it[id] }
-          .flatMap { network ->
-            network.liveInitialized
-              .filter { it }
-              .map { network }
-          }.firstElement()
-      }.toLiveData().observe(this@QuasselService, Observer {
-        it?.requestConnect()
-      })
+      service?.apply {
+        sessionManager.session.flatMap(ISession::liveNetworkAdded).firstElement().flatMap { id ->
+          sessionManager.session.flatMap(ISession::liveNetworks)
+            .map { it[id] }
+            .flatMap { network ->
+              network.liveInitialized
+                .filter { it }
+                .map { network }
+            }.firstElement()
+        }.toLiveData().observe(this, Observer {
+          it?.requestConnect()
+        })
+      }
     }
   }
 
+  private val backendImplementation = BackendImplementation()
+
   private val handlerService = AndroidHandlerService()
 
-  private val asyncBackend = AsyncBackend(handlerService, backendImplementation, ::stopSelf)
+  private val asyncBackend = AsyncBackend(handlerService, backendImplementation)
 
   @Inject
   lateinit var database: QuasselDatabase
@@ -316,14 +331,17 @@ class QuasselService : DaggerLifecycleService(),
   @Inject
   lateinit var accountDatabase: AccountDatabase
 
-  private val connectivityReceiver = object : BroadcastReceiver() {
+  class CustomConnectivityReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
       if (context != null && intent != null) {
         connectivity.onNext(Unit)
       }
     }
+
+    val connectivity = PublishSubject.create<Unit>()
   }
-  private val connectivity = PublishSubject.create<Unit>()
+
+  private val connectivityReceiver = CustomConnectivityReceiver()
 
   private fun disconnectFromCore() {
     getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editCommit {
@@ -333,6 +351,9 @@ class QuasselService : DaggerLifecycleService(),
 
   override fun onCreate() {
     super.onCreate()
+
+    backendImplementation.service = this
+    asyncBackend.setDisconnectCallback(::stopSelf)
 
     translatedLocale = LocaleHelper.setLocale(this)
 
@@ -345,11 +366,12 @@ class QuasselService : DaggerLifecycleService(),
       QuasselBacklogStorage(database),
       notificationBackend,
       handlerService,
-      { session: Session -> AndroidHeartBeatRunner(session, Handler()) },
-      ::disconnectFromCore,
-      ::initCallback,
+      ::AndroidHeartBeatRunner,
       CrashHandler::handle
     )
+
+    sessionManager.setDisconnectFromCore(::disconnectFromCore)
+    sessionManager.setInitCallback(::initCallback)
 
     clientData = ClientData(
       identifier = "${resources.getString(R.string.app_name)} ${BuildConfig.FANCY_VERSION_NAME}",
@@ -377,7 +399,7 @@ class QuasselService : DaggerLifecycleService(),
       }
     })
 
-    connectivity
+    connectivityReceiver.connectivity
       .delay(200, TimeUnit.MILLISECONDS)
       .throttleFirst(1, TimeUnit.SECONDS)
       .toLiveData()
@@ -445,6 +467,10 @@ class QuasselService : DaggerLifecycleService(),
     }
 
     unregisterReceiver(connectivityReceiver)
+
+    sessionManager.dispose()
+    asyncBackend.setDisconnectCallback(null)
+    backendImplementation.service = null
 
     notificationHandle?.let { notificationManager.remove(it) }
     super.onDestroy()

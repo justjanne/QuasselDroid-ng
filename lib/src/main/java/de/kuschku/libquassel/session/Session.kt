@@ -45,9 +45,9 @@ class Session(
   backlogStorage: BacklogStorage,
   private val notificationManager: NotificationManager?,
   private var userData: Pair<String, String>,
-  heartBeatFactory: (Session) -> HeartBeatRunner,
-  val disconnectFromCore: () -> Unit,
-  private val initCallback: (Session) -> Unit,
+  heartBeatFactory: () -> HeartBeatRunner,
+  val disconnectFromCore: (() -> Unit)?,
+  private val initCallback: ((Session) -> Unit)?,
   exceptionHandler: (Throwable) -> Unit
 ) : ProtocolHandler(exceptionHandler), ISession {
   override val objectStorage: ObjectStorage = ObjectStorage(this)
@@ -58,15 +58,12 @@ class Session(
     get() = coreConnection.sslSession
 
   private val coreConnection = CoreConnection(
-    this,
     clientData,
     features,
     trustManager,
     hostnameVerifier,
     address,
-    handlerService,
-    ::handle,
-    ::handleConnectionError
+    handlerService
   )
   override val state = coreConnection.state
 
@@ -107,9 +104,12 @@ class Session(
 
   override val lag = BehaviorSubject.createDefault(0L)
 
-  private val heartBeatThread = heartBeatFactory(this)
+  private val heartBeatThread = heartBeatFactory()
 
   init {
+    heartBeatThread.setCloseCallback(::close)
+    heartBeatThread.setHeartbeatDispatchCallback(::dispatch)
+    coreConnection.setHandlers(this, ::handle, ::handleConnectionError)
     coreConnection.start()
   }
 
@@ -247,7 +247,7 @@ class Session(
   }
 
   override fun onInitDone() {
-    initCallback(this)
+    initCallback?.invoke(this)
     for (config in bufferViewManager.bufferViewConfigs()) {
       for (info in bufferSyncer.bufferInfos()) {
         config.handleBuffer(info, bufferSyncer)
@@ -283,12 +283,28 @@ class Session(
     super.close()
 
     heartBeatThread.end()
-
     coreConnection.close()
+
+    objectStorage.deinit()
+
+    aliasManager.deinit()
+    bufferSyncer.deinit()
+    bufferViewManager.deinit()
+    coreInfo.deinit()
+    dccConfig.deinit()
+    ignoreListManager.deinit()
+    highlightRuleManager.deinit()
+    ircListHelper.deinit()
+    networkConfig.deinit()
+    backlogManager.deinit()
+
+    rpcHandler = null
 
     certManagers.clear()
     identities.clear()
+    live_identities.onNext(Unit)
     networks.clear()
+    live_networks.onNext(Unit)
   }
 
   fun join() {

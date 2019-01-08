@@ -193,6 +193,7 @@ abstract class ProtocolHandler(
     if (syncableObject == null)
       return
 
+    syncableObject.deinit()
     objectStorage.remove(syncableObject)
     toInit.remove(syncableObject)
   }

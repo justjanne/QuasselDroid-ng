@@ -49,18 +49,27 @@ import javax.net.ssl.SSLSession
 import javax.net.ssl.X509TrustManager
 
 class CoreConnection(
-  private val handler: ProtocolHandler,
   private val clientData: ClientData,
   private val features: Features,
   private val trustManager: X509TrustManager,
   private val hostnameVerifier: HostnameVerifier,
   private val address: SocketAddress,
-  private val handlerService: HandlerService,
-  private val securityExceptionCallback: (QuasselSecurityException) -> Unit,
-  private val exceptionCallback: (Throwable) -> Unit
+  private val handlerService: HandlerService
 ) : Thread(), Closeable {
   companion object {
     private const val TAG = "CoreConnection"
+  }
+
+  private var handler: ProtocolHandler? = null
+  private var securityExceptionCallback: ((QuasselSecurityException) -> Unit)? = null
+  private var exceptionCallback: ((Throwable) -> Unit)? = null
+
+  fun setHandlers(handler: ProtocolHandler?,
+                  securityExceptionCallback: ((QuasselSecurityException) -> Unit)?,
+                  exceptionCallback: ((Throwable) -> Unit)?) {
+    this.handler = handler
+    this.securityExceptionCallback = securityExceptionCallback
+    this.exceptionCallback = exceptionCallback
   }
 
   private val exceptionHandler = UncaughtExceptionHandler { thread, throwable ->
@@ -157,6 +166,7 @@ class CoreConnection(
       setState(ConnectionState.CLOSED)
       channel?.flush()
       channel?.close()
+      setHandlers(null, null, null)
       interrupt()
     } catch (e: Throwable) {
       log(WARN, TAG, "Error encountered while closing connection: $e")
@@ -239,12 +249,12 @@ class CoreConnection(
       } while (cause != null && exception == null)
       if (exception != null) {
         close()
-        securityExceptionCallback(exception)
+        securityExceptionCallback?.invoke(exception)
       } else {
         if (!closed) {
           log(WARN, TAG, "Error encountered in connection", e)
           log(WARN, TAG, "Last sent message: ${MessageRunnable.lastSent.get()}")
-          exceptionCallback(e)
+          exceptionCallback?.invoke(e)
         }
         close()
       }
@@ -258,7 +268,7 @@ class CoreConnection(
       )
       handlerService.backend {
         try {
-          handler.handle(msg)
+          handler?.handle(msg)
         } catch (e: Throwable) {
           log(WARN, TAG, "Error encountered while handling sigproxy message", e)
           log(WARN, TAG, msg.toString())
@@ -277,7 +287,7 @@ class CoreConnection(
       HandshakeVariantMapSerializer.deserialize(dataBuffer, features.negotiated)
     )
     try {
-      handler.handle(msg)
+      handler?.handle(msg)
     } catch (e: Throwable) {
       log(WARN,
           TAG, "Error encountered while handling handshake message", e)

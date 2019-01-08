@@ -24,10 +24,9 @@ import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.libquassel.session.BacklogStorage
 import de.kuschku.libquassel.session.ISession
-import de.kuschku.libquassel.session.Session
 
 class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
-  override fun updateIgnoreRules(session: Session) {
+  override fun updateIgnoreRules(session: ISession) {
     db.message().save(
       *db.message().all().map {
         it.copy(ignored = isIgnored(session, it))
@@ -35,10 +34,10 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
     )
   }
 
-  override fun storeMessages(session: Session, vararg messages: Message) =
+  override fun storeMessages(session: ISession, vararg messages: Message) =
     storeMessages(session, messages.asIterable())
 
-  override fun storeMessages(session: Session, messages: Iterable<Message>) {
+  override fun storeMessages(session: ISession, messages: Iterable<Message>) {
     db.message().save(*messages.map {
       QuasselDatabase.MessageData(
         messageId = it.messageId,

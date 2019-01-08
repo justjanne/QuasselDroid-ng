@@ -43,6 +43,7 @@ interface ISyncableObject {
     SYNC("update", ARG(properties, Type.QVariantMap))
   }
 
+  fun deinit()
   fun init() {}
 
   fun fromVariantMap(properties: QVariantMap) = Unit

@@ -30,10 +30,15 @@ import io.reactivex.subjects.BehaviorSubject
 import java.io.Serializable
 
 class IgnoreListManager constructor(
-  private val session: ISession,
+  var session: ISession,
   proxy: SignalProxy
 ) : SyncableObject(proxy, "IgnoreListManager"), IIgnoreListManager {
   constructor(session: Session) : this(session, session)
+
+  override fun deinit() {
+    super.deinit()
+    session = ISession.NULL
+  }
 
   override fun toVariantMap(): QVariantMap = mapOf(
     "IgnoreList" to QVariant.of(initIgnoreList(), Type.QVariantMap)

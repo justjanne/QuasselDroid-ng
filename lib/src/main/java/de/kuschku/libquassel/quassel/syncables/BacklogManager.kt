@@ -22,16 +22,21 @@ package de.kuschku.libquassel.quassel.syncables
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBacklogManager
 import de.kuschku.libquassel.session.BacklogStorage
-import de.kuschku.libquassel.session.Session
+import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 
 class BacklogManager(
-  private val session: Session,
+  var session: ISession,
   private val backlogStorage: BacklogStorage
-) : SyncableObject(session, "BacklogManager"), IBacklogManager {
+) : SyncableObject(session.proxy, "BacklogManager"), IBacklogManager {
   private val loading = mutableMapOf<BufferId, (List<Message>) -> Boolean>()
   private val loadingFiltered = mutableMapOf<BufferId, (List<Message>) -> Boolean>()
+
+  override fun deinit() {
+    super.deinit()
+    session = ISession.NULL
+  }
 
   init {
     initialized = true

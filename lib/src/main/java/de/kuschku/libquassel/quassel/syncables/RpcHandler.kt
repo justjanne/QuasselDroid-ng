@@ -51,7 +51,9 @@ class RpcHandler(
   override fun passwordChanged(ignored: Long, success: Boolean) {
   }
 
-  override fun disconnectFromCore() = session.disconnectFromCore()
+  override fun disconnectFromCore() {
+    session.disconnectFromCore?.invoke()
+  }
 
   override fun objectRenamed(classname: ByteBuffer, newname: String, oldname: String) {
     session.renameObject(classname.deserializeString(StringSerializer.UTF8) ?: "", newname, oldname)

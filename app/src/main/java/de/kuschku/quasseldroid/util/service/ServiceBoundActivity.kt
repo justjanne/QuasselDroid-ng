@@ -133,6 +133,7 @@ abstract class ServiceBoundActivity :
 
   override fun onDestroy() {
     lifecycle.removeObserver(connection)
+    connection.context = null
     super.onDestroy()
   }
 

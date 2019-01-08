@@ -25,7 +25,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
 abstract class SyncableObject(
-  override val proxy: SignalProxy,
+  override var proxy: SignalProxy,
   final override val className: String
 ) : ISyncableObject {
   final override var objectName: String = ""
@@ -51,6 +51,10 @@ abstract class SyncableObject(
       identifier = Pair(className, objectName)
       proxy.renameObject(this, newName, oldName)
     }
+  }
+
+  override fun deinit() {
+    this.proxy = SignalProxy.NULL
   }
 
   override fun toString() = "${identifier.first}:${identifier.second}"
