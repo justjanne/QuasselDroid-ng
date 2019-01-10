@@ -26,11 +26,8 @@ import de.kuschku.libquassel.protocol.ClientData
 import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.*
 import de.kuschku.libquassel.util.helpers.or
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
@@ -79,15 +76,9 @@ class SessionManager(
 
   private var hasErrored: Boolean = false
 
-  val error: Flowable<Error>
-    get() = inProgressSession
-      .toFlowable(BackpressureStrategy.LATEST)
-      .switchMap(ISession::error)
+  val error = inProgressSession.switchMap(ISession::error)
 
-  val connectionError: Flowable<Throwable>
-    get() = inProgressSession
-      .toFlowable(BackpressureStrategy.LATEST)
-      .switchMap(ISession::connectionError)
+  val connectionError = inProgressSession.switchMap(ISession::connectionError)
 
   val connectionProgress: Observable<Triple<ConnectionState, Int, Int>> = Observable.combineLatest(
     state, initStatus,
@@ -104,10 +95,6 @@ class SessionManager(
       if (it == ConnectionState.CONNECTED) {
         lastSession.close()
       }
-    })
-
-    disposables.add(error.subscribe {
-      hasErrored = true
     })
 
     // This should preload them
@@ -148,9 +135,15 @@ class SessionManager(
         heartBeatFactory,
         disconnectFromCore,
         initCallback,
-        exceptionHandler
+        exceptionHandler,
+        ::hasErroredCallback
       )
     )
+  }
+
+  fun hasErroredCallback(error: Error) {
+    log(WARN, "SessionManager", "Callback Error occured: $error")
+    hasErrored = true
   }
 
   /**

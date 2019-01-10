@@ -97,6 +97,7 @@ import de.kuschku.quasseldroid.util.ui.NickCountDrawable
 import de.kuschku.quasseldroid.util.ui.WarningBarView
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.data.BufferData
+import io.reactivex.BackpressureStrategy
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
@@ -304,7 +305,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     })
 
     // User-actionable errors that require immediate action, and should show up as dialog
-    viewModel.errors.toLiveData().observe(this, Observer { error ->
+    viewModel.errors.toLiveData(BackpressureStrategy.BUFFER).observe(this, Observer { error ->
       error?.let {
         when (it) {
           is Error.HandshakeError -> it.message.let {

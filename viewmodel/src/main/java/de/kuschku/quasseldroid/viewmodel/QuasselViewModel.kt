@@ -36,8 +36,6 @@ import de.kuschku.libquassel.util.helpers.*
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.viewmodel.data.*
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -116,12 +114,12 @@ class QuasselViewModel : ViewModel() {
     }
   }
 
-  val errors = sessionManager.toFlowable(BackpressureStrategy.LATEST).switchMap {
-    it.orNull()?.error ?: Flowable.empty()
+  val errors = sessionManager.switchMap {
+    it.orNull()?.error ?: Observable.empty()
   }
 
-  val connectionErrors = sessionManager.toFlowable(BackpressureStrategy.LATEST).switchMap {
-    it.orNull()?.connectionError ?: Flowable.empty()
+  val connectionErrors = sessionManager.switchMap {
+    it.orNull()?.connectionError ?: Observable.empty()
   }
 
   val sslSession = session.flatMapSwitchMap(ISession::sslSession)

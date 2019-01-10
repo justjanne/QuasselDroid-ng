@@ -26,8 +26,6 @@ import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.util.Optional
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -62,8 +60,8 @@ interface ISession : Closeable {
   fun identity(id: IdentityId): Identity?
 
   val proxy: SignalProxy
-  val error: Flowable<Error>
-  val connectionError: Flowable<Throwable>
+  val error: Observable<Error>
+  val connectionError: Observable<Throwable>
   val lag: Observable<Long>
 
   fun login(user: String, pass: String)
@@ -71,9 +69,8 @@ interface ISession : Closeable {
   companion object {
     val NULL = object : ISession {
       override val proxy: SignalProxy = SignalProxy.NULL
-      override val error = BehaviorSubject.create<Error>().toFlowable(BackpressureStrategy.BUFFER)
-      override val connectionError = BehaviorSubject.create<Throwable>().toFlowable(
-        BackpressureStrategy.BUFFER)
+      override val error = Observable.empty<Error>()
+      override val connectionError = Observable.empty<Throwable>()
       override val state = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
       override val features: Features = Features(
         QuasselFeatures.empty(),

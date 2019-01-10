@@ -248,7 +248,11 @@ class CoreConnection(
         cause = cause?.cause
       } while (cause != null && exception == null)
       if (exception != null) {
+        val securityExceptionCallback = this.securityExceptionCallback
         close()
+        log(WARN,
+            TAG,
+            "Security error encountered in connection: ${exception::class.java.canonicalName}")
         securityExceptionCallback?.invoke(exception)
       } else {
         if (!closed) {

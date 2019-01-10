@@ -27,9 +27,9 @@ import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.util.compatibility.HandlerService
-import de.kuschku.libquassel.util.compatibility.LoggingHandler
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
-import io.reactivex.BackpressureStrategy
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
+import de.kuschku.libquassel.util.rxjava.ReusableUnicastSubject
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -48,7 +48,8 @@ class Session(
   heartBeatFactory: () -> HeartBeatRunner,
   val disconnectFromCore: (() -> Unit)?,
   private val initCallback: ((Session) -> Unit)?,
-  exceptionHandler: (Throwable) -> Unit
+  exceptionHandler: (Throwable) -> Unit,
+  private val hasErroredCallback: (Error) -> Unit
 ) : ProtocolHandler(exceptionHandler), ISession {
   override val objectStorage: ObjectStorage = ObjectStorage(this)
   override val proxy: SignalProxy = this
@@ -67,11 +68,8 @@ class Session(
   )
   override val state = coreConnection.state
 
-  private val _error = PublishSubject.create<Error>()
-  override val error = _error.toFlowable(BackpressureStrategy.BUFFER)
-
-  private val _connectionError = PublishSubject.create<Throwable>()
-  override val connectionError = _connectionError.toFlowable(BackpressureStrategy.LATEST)
+  override val error = ReusableUnicastSubject.create<Error>()
+  override val connectionError = ReusableUnicastSubject.create<Throwable>()
 
   override val aliasManager = AliasManager(this)
   override val backlogManager = BacklogManager(this, backlogStorage)
@@ -113,13 +111,18 @@ class Session(
     coreConnection.start()
   }
 
+  private fun handleError(error: Error) {
+    hasErroredCallback.invoke(error)
+    this.error.onNext(error)
+  }
+
   override fun handle(f: HandshakeMessage.ClientInitAck): Boolean {
     features.core = QuasselFeatures(f.coreFeatures, f.featureList)
 
     if (f.coreConfigured == true) {
       login()
     } else {
-      _error.onNext(Error.HandshakeError(f))
+      handleError(Error.HandshakeError(f))
     }
     return true
   }
@@ -144,26 +147,26 @@ class Session(
   }
 
   override fun handle(f: HandshakeMessage.ClientInitReject): Boolean {
-    _error.onNext(Error.HandshakeError(f))
+    handleError(Error.HandshakeError(f))
     return true
   }
 
   override fun handle(f: HandshakeMessage.CoreSetupReject): Boolean {
-    _error.onNext(Error.HandshakeError(f))
+    handleError(Error.HandshakeError(f))
     return true
   }
 
   override fun handle(f: HandshakeMessage.ClientLoginReject): Boolean {
-    _error.onNext(Error.HandshakeError(f))
+    handleError(Error.HandshakeError(f))
     return true
   }
 
   fun handle(f: QuasselSecurityException) {
-    _error.onNext(Error.SslError(f))
+    handleError(Error.SslError(f))
   }
 
-  fun handleConnectionError(f: Throwable) {
-    _connectionError.onNext(f)
+  fun handleConnectionError(connectionError: Throwable) {
+    this.connectionError.onNext(connectionError)
   }
 
   fun addNetwork(networkId: NetworkId) {
@@ -261,7 +264,7 @@ class Session(
     val now = Instant.now()
     heartBeatThread.setLastHeartBeatReply(f.timestamp)
     val latency = now.toEpochMilli() - f.timestamp.toEpochMilli()
-    log(LoggingHandler.LogLevel.INFO, "Heartbeat", "Received Heartbeat with ${latency}ms latency")
+    log(INFO, "Heartbeat", "Received Heartbeat with ${latency}ms latency")
     lag.onNext(latency)
     return true
   }
