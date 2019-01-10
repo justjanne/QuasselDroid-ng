@@ -53,6 +53,8 @@ enum class ExtendedFeature {
   RichMessages,
   /** Backlogmanager supports filtering backlog by messagetype */
   BacklogFilterType,
+  /** ECDSA keys for CertFP in identities */
+  EcdsaCertfpKeys,
   /** 64-bit IDs for messages */
   LongMessageId,
   /** CoreInfo dynamically updated using signals */
