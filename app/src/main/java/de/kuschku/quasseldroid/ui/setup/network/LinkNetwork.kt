@@ -17,9 +17,13 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.util.irc
+package de.kuschku.quasseldroid.ui.setup.network
 
-object IrcPorts {
-  const val normal = 6667
-  const val secure = 6697
-}
+import de.kuschku.quasseldroid.defaults.DefaultNetworkServer
+import java.io.Serializable
+
+data class LinkNetwork(
+  val name: String,
+  val defaultChannels: List<String> = emptyList(),
+  val server: DefaultNetworkServer
+) : Serializable

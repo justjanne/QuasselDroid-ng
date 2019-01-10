@@ -67,11 +67,13 @@ import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.and
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.or
+import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.defaults.DefaultNetworkServer
 import de.kuschku.quasseldroid.persistence.AccountDatabase
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
@@ -82,11 +84,14 @@ import de.kuschku.quasseldroid.ui.chat.input.ChatlineFragment
 import de.kuschku.quasseldroid.ui.clientsettings.client.ClientSettingsActivity
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity
+import de.kuschku.quasseldroid.ui.setup.network.LinkNetwork
+import de.kuschku.quasseldroid.ui.setup.network.NetworkSetupActivity
 import de.kuschku.quasseldroid.ui.setup.user.UserSetupActivity
 import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.backport.OsConstants
 import de.kuschku.quasseldroid.util.helper.*
+import de.kuschku.quasseldroid.util.irc.IrcPorts
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.missingfeatures.MissingFeaturesDialog
 import de.kuschku.quasseldroid.util.missingfeatures.RequiredFeatures
@@ -226,6 +231,28 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                 }
               }
             }
+          }
+        }
+        intent.scheme == "irc" ||
+        intent.scheme == "ircs"                                         -> {
+          val uri = intent.data
+          if (uri != null) {
+            val channelString = (uri.path.let { it ?: "" }.trimStart('/')) +
+                                (uri.fragment?.let { "#$it" }.let { it ?: "" })
+            NetworkSetupActivity.launch(
+              this,
+              network = LinkNetwork(
+                name = "",
+                server = DefaultNetworkServer(
+                  host = uri.host ?: "",
+                  port = uri.port.nullIf { it == -1 }
+                         ?: if (uri.scheme == "irc") IrcPorts.normal
+                         else IrcPorts.secure,
+                  secure = uri.scheme == "ircs"
+                )
+              ),
+              channels = channelString.split(",").toTypedArray()
+            )
           }
         }
       }

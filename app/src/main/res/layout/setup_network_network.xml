@@ -1,0 +1,112 @@
+<!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2019 Janne Koschinski
+  Copyright (c) 2019 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:padding="32dp">
+
+  <TextView
+    style="@style/Widget.CoreSettings.EditTextHeader"
+    android:text="@string/settings_network_title" />
+
+  <Spinner
+    android:id="@+id/network"
+    style="@style/Widget.FullWidthSpinner"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:listitem="@layout/widget_spinner_item_inline" />
+
+  <LinearLayout
+    android:id="@+id/network_group"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+      style="@style/Widget.CoreSettings.EditTextHeader"
+      android:text="@string/settings_identity_title" />
+
+    <Spinner
+      android:id="@+id/identity"
+      style="@style/Widget.FullWidthSpinner"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      tools:listitem="@layout/widget_spinner_item_inline" />
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/nameWrapper"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/settings_network_network_name"
+      tools:ignore="LabelFor">
+
+      <EditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textUri|textNoSuggestions"
+        app:errorEnabled="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/hostWrapper"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/settings_networkserver_host"
+      tools:ignore="LabelFor">
+
+      <EditText
+        android:id="@+id/host"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textUri|textNoSuggestions"
+        app:errorEnabled="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/portWrapper"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/settings_networkserver_port"
+      app:passwordToggleEnabled="true"
+      tools:ignore="LabelFor">
+
+      <EditText
+        android:id="@+id/port"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:text="6667"
+        app:errorEnabled="true"
+        tools:ignore="HardcodedText" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.SwitchCompat
+      android:id="@+id/ssl_enabled"
+      style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/settings_networkserver_ssl_enabled" />
+  </LinearLayout>
+
+</LinearLayout>

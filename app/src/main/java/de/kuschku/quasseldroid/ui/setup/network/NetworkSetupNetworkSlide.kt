@@ -17,7 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.setup.user
+package de.kuschku.quasseldroid.ui.setup.network
 
 import android.os.Bundle
 import android.text.Editable
@@ -28,21 +28,29 @@ import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.widget.SwitchCompat
+import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputLayout
-import de.kuschku.libquassel.util.helpers.nullIf
+import de.kuschku.libquassel.quassel.syncables.Identity
+import de.kuschku.libquassel.quassel.syncables.Network
+import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.defaults.DefaultNetwork
 import de.kuschku.quasseldroid.defaults.DefaultNetworkServer
-import de.kuschku.quasseldroid.ui.setup.SlideFragment
+import de.kuschku.quasseldroid.ui.coresettings.chatlist.NetworkAdapter
+import de.kuschku.quasseldroid.ui.coresettings.network.IdentityAdapter
+import de.kuschku.quasseldroid.ui.setup.ServiceBoundSlideFragment
 import de.kuschku.quasseldroid.util.Patterns
 import de.kuschku.quasseldroid.util.TextValidator
+import de.kuschku.quasseldroid.util.helper.combineLatest
+import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.IrcPorts
 import de.kuschku.quasseldroid.util.ui.AnimationHelper
-import javax.inject.Inject
 
-class UserSetupNetworkSlide : SlideFragment() {
+class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
+  @BindView(R.id.identity)
+  lateinit var identity: Spinner
+
   @BindView(R.id.network)
   lateinit var network: Spinner
 
@@ -70,45 +78,42 @@ class UserSetupNetworkSlide : SlideFragment() {
   @BindView(R.id.ssl_enabled)
   lateinit var sslEnabled: SwitchCompat
 
-  @Inject
-  lateinit var networkAdapter: DefaultNetworkAdapter
+  private val identityAdapter = IdentityAdapter()
+  private val networkAdapter = NetworkAdapter()
 
   override fun isValid(): Boolean {
     return (this.network.selectedItemPosition != -1 &&
-            networkAdapter.getItem(this.network.selectedItemPosition) != null) ||
-           (nameValidator.isValid && hostValidator.isValid && portValidator.isValid)
+            networkAdapter.getItemId(this.network.selectedItemPosition) != -1L) ||
+           ((this.identity.selectedItemPosition != -1 &&
+             identityAdapter.getItemId(this.identity.selectedItemPosition) != -1L) &&
+            (nameValidator.isValid && hostValidator.isValid && portValidator.isValid))
   }
 
   override val title = R.string.slide_user_network_title
   override val description = R.string.slide_user_network_description
 
+  private var data: Bundle? = null
+  private var networks: List<INetwork.NetworkInfo>? = null
+
   override fun setData(data: Bundle) {
-    if (data.containsKey("network")) {
-      val network = data.getSerializable("network") as? DefaultNetwork
-                    ?: networkAdapter.default()
-      if (network != null) {
-        val position = networkAdapter.indexOf(network)
-        if (position == -1) {
-          this.network.setSelection(networkAdapter.indexOf(null))
-          network.servers.firstOrNull()?.let {
-            this.hostField.setText(it.host)
-            this.portField.setText(it.port.toString())
-            this.sslEnabled.isChecked = it.secure
-          }
-        }
-      }
-    }
-    updateValidity()
+    this.data = data
+    update()
   }
 
   override fun getData(data: Bundle) {
     data.putSerializable(
-      "network",
-      networkAdapter.getItem(this.network.selectedItemPosition)
-      ?: DefaultNetwork(
-        name = nameField.text.toString(),
-        servers = listOf(
-          DefaultNetworkServer(
+      "identity",
+      identityAdapter.getItemId(this.identity.selectedItemPosition)
+    )
+    val networkId = (network.selectedItem as? INetwork.NetworkInfo)?.networkId
+    if (networkId != null) {
+      data.putInt("network_id", networkId)
+    } else {
+      data.putSerializable(
+        "network",
+        LinkNetwork(
+          name = nameField.text.toString(),
+          server = DefaultNetworkServer(
             host = hostField.text.toString(),
             port = portField.text.toString().toIntOrNull()
                    ?: if (sslEnabled.isChecked) 6697
@@ -117,12 +122,12 @@ class UserSetupNetworkSlide : SlideFragment() {
           )
         )
       )
-    )
+    }
   }
 
   override fun onCreateContent(inflater: LayoutInflater, container: ViewGroup?,
                                savedInstanceState: Bundle?): View {
-    val view = inflater.inflate(R.layout.setup_user_network, container, false)
+    val view = inflater.inflate(R.layout.setup_network_network, container, false)
     ButterKnife.bind(this, view)
     nameValidator = object : TextValidator(
       requireActivity(), nameWrapper::setError, resources.getString(R.string.hint_invalid_name)
@@ -156,7 +161,7 @@ class UserSetupNetworkSlide : SlideFragment() {
 
     network.adapter = networkAdapter
     network.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-      fun selected(item: DefaultNetwork?) {
+      fun selected(item: INetwork.NetworkInfo?) {
         if (item == null) {
           AnimationHelper.expand(networkGroup)
         } else {
@@ -170,11 +175,27 @@ class UserSetupNetworkSlide : SlideFragment() {
       override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) =
         selected(networkAdapter.getItem(position))
     }
-    networkAdapter.default()?.let {
-      networkAdapter.indexOf(it).nullIf { it == -1 }?.let {
-        network.setSelection(it)
+
+    identity.adapter = identityAdapter
+
+    viewModel.identities.switchMap {
+      combineLatest(it.values.map(Identity::liveUpdates)).map {
+        it.sortedBy(Identity::identityName)
       }
-    }
+    }.toLiveData().observe(this, Observer {
+      if (it != null) {
+        identityAdapter.submitList(it)
+      }
+    })
+
+    viewModel.networks.toLiveData().observe(this, Observer {
+      if (it != null) {
+        this.networks = it.values.map(Network::networkInfo)
+        update()
+      }
+    })
+
+    identity.adapter = identityAdapter
 
     sslEnabled.setOnCheckedChangeListener { _, isChecked ->
       val portValue = portField.text.trim().toString()
@@ -186,6 +207,54 @@ class UserSetupNetworkSlide : SlideFragment() {
     }
 
     return view
+  }
+
+  private var hasSetUi = false
+  private var hasSetNetwork = false
+
+  private fun update() {
+    val data = this.data
+    val networks = this.networks
+
+    if (data != null && networks != null) {
+      networkAdapter.submitList(listOf(null) + networks)
+      val linkNetwork = data.getSerializable("network") as? LinkNetwork
+
+      val existingNetwork = networks.firstOrNull {
+        it.serverList.any {
+          it.host == linkNetwork?.server?.host
+        }
+      }
+
+      if (!hasSetNetwork) {
+        val networkPosition = networkAdapter.indexOf(existingNetwork?.networkId ?: -1) ?: -1
+        if (networkPosition != -1) {
+          network.setSelection(networkPosition)
+          hasSetNetwork = true
+        }
+      }
+
+      if (!hasSetUi) {
+        if (linkNetwork != null && !hasSetUi) {
+          nameField.setText(linkNetwork.name)
+          hostField.setText(linkNetwork.server.host)
+          portField.setText("${linkNetwork.server.port}")
+          sslEnabled.isChecked = linkNetwork.server.secure
+        }
+
+        if (data.containsKey("identity")) {
+          val identity = data.getInt("identity", -1)
+          if (identity != -1) {
+            val position = identityAdapter.indexOf(identity)
+            if (position == -1) {
+              this.identity.setSelection(-1)
+            }
+          }
+        }
+      }
+
+      updateValidity()
+    }
   }
 
   private lateinit var nameValidator: TextValidator

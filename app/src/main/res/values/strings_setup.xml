@@ -23,6 +23,8 @@
   <string name="slide_account_select_description">Please select an account from the list or add one</string>
   <string name="label_user_on_host">%1$s on %2$s:%3$d</string>
 
+  <!-- Account Setup -->
+
   <!-- Account Connection -->
   <string name="slide_account_connection_title">Connection</string>
   <string name="slide_account_connection_description">First, please choose which server your core is hosted on.</string>
@@ -50,6 +52,8 @@
 
   <string name="hint_invalid_name">Name can not be empty</string>
 
+  <!-- Core Setup -->
+
   <!-- Core Authenticator Select -->
   <string name="slide_core_authenticator_select_title">Select Authentication Backend</string>
   <string name="slide_core_authenticator_select_description">Please select an authentication backend for the Quassel Core to use for authenticating users.</string>
@@ -61,6 +65,10 @@
   <!-- Core Backend Config -->
   <string name="slide_core_backend_setup_title">Configure Storage Backend</string>
   <string name="slide_core_backend_setup_description">Please configure the selected database backend.</string>
+
+  <!-- User Setup -->
+
+  <string name="setup_user_title">Setup User</string>
 
   <!-- User Identity -->
   <string name="slide_user_identity_title">Setup Identity</string>
@@ -79,4 +87,8 @@
   <string name="slide_user_channels_description">Select what channels to join.</string>
 
   <string name="label_channels">Channels</string>
+
+  <!-- Network Setup -->
+
+  <string name="setup_network_title">Setup Network</string>
 </resources>

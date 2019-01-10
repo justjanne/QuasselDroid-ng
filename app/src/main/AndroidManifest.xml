@@ -66,6 +66,15 @@
         <category android:name="android.intent.category.DEFAULT" />
         <data android:mimeType="text/plain" />
       </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <data android:scheme="irc" />
+        <data android:scheme="ircs" />
+      </intent-filter>
     </activity>
     <activity
       android:name=".ui.chat.info.user.UserInfoActivity"
@@ -234,7 +243,13 @@
     <activity
       android:name=".ui.setup.user.UserSetupActivity"
       android:exported="false"
-      android:label="@string/settings_identity_title"
+      android:label="@string/setup_user_title"
+      android:parentActivityName=".ui.chat.ChatActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.setup.network.NetworkSetupActivity"
+      android:exported="false"
+      android:label="@string/setup_network_title"
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
 

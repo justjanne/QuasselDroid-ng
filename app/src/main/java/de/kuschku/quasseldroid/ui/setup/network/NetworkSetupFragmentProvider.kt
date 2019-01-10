@@ -17,9 +17,21 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.util.irc
+package de.kuschku.quasseldroid.ui.setup.network
 
-object IrcPorts {
-  const val normal = 6667
-  const val secure = 6697
+import androidx.fragment.app.FragmentActivity
+import dagger.Binds
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
+
+@Module
+abstract class NetworkSetupFragmentProvider {
+  @Binds
+  abstract fun bindFragmentActivity(activity: NetworkSetupActivity): FragmentActivity
+
+  @ContributesAndroidInjector
+  abstract fun bindNetworkSetupNetworkSlide(): NetworkSetupNetworkSlide
+
+  @ContributesAndroidInjector
+  abstract fun bindNetworkSetupChannelsSlide(): NetworkSetupChannelsSlide
 }

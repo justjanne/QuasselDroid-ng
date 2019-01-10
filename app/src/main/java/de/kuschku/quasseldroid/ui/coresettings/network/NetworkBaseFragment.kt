@@ -165,7 +165,7 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
         identityAdapter.submitList(it)
         if (selectOriginal) {
           this.network?.let { (_, data) ->
-            identityAdapter.indexOf(data.networkId())?.let(identity::setSelection)
+            identityAdapter.indexOf(data.identity())?.let(identity::setSelection)
           }
         }
       }

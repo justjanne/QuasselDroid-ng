@@ -116,10 +116,10 @@ class NetworkServerFragment : SettingsFragment(), SettingsFragment.Savable,
     sslEnabled.setOnCheckedChangeListener { _, isChecked ->
       sslVerify.isEnabled = isChecked
       val portValue = port.text.trim().toString()
-      if (isChecked && portValue == IrcPorts.normal) {
-        port.setText(IrcPorts.secure)
-      } else if (!isChecked && portValue == IrcPorts.secure) {
-        port.setText(IrcPorts.normal)
+      if (isChecked && portValue == IrcPorts.normal.toString()) {
+        port.setText(IrcPorts.secure.toString())
+      } else if (!isChecked && portValue == IrcPorts.secure.toString()) {
+        port.setText(IrcPorts.normal.toString())
       }
     }
     sslVerify.isEnabled = sslEnabled.isChecked
