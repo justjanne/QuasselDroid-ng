@@ -24,6 +24,8 @@ import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.quassel.syncables.interfaces.IIrcChannel
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.session.SignalProxy
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.ERROR
 import de.kuschku.libquassel.util.helpers.getOr
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -36,7 +38,7 @@ class IrcChannel(
 ) : SyncableObject(proxy, "IrcChannel"), IIrcChannel {
   override fun init() {
     if (name().isEmpty()) {
-      println("Error: channelName is empty")
+      log(ERROR, "IrcChannel", "Error: channelName is empty")
     }
     renameObject("${network().networkId()}/${name()}")
   }

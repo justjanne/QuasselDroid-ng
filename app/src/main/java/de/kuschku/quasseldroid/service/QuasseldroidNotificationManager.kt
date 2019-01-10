@@ -157,8 +157,6 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
       0
     )
 
-    println(notificationSettings)
-
     val notification = NotificationCompat.Builder(
       context.applicationContext,
       translatedLocale.getString(

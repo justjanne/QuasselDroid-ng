@@ -343,9 +343,6 @@ class MessageListFragment : ServiceBoundFragment() {
       return list.mapReverse {
         val date = it.time.atZone(ZoneId.systemDefault()).truncatedTo(ChronoUnit.DAYS)
         val isSameDay = previousDate?.isEqual(date) ?: false
-        if (it.sender.startsWith("testcrc3")) {
-          println("$previous:$it")
-        }
         val isFollowUp = previous?.sender == it.sender && previous?.type == it.type && isSameDay
         previous = it
         previousDate = date
