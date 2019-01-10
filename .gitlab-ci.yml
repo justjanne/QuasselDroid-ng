@@ -36,6 +36,9 @@ test:
   stage: "test"
   script:
     - "./gradlew check"
+  artifacts:
+    reports:
+      junit: "*/build/test-results/*/TEST-*.xml"
 
 deploy-local:
   stage: "deploy"
