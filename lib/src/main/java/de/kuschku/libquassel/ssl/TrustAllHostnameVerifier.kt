@@ -17,28 +17,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.protocol
+package de.kuschku.libquassel.ssl
 
-import de.kuschku.libquassel.quassel.QuasselFeatures
-import org.threeten.bp.Instant
+import de.kuschku.libquassel.connection.HostnameVerifier
+import de.kuschku.libquassel.connection.SocketAddress
+import java.security.cert.X509Certificate
 
-data class ClientData(
-  val identifier: String,
-  val buildDate: Instant,
-  val clientFeatures: QuasselFeatures,
-  val protocolFeatures: Protocol_Features,
-  val supportedProtocols: List<Protocol>
-) {
-  companion object {
-    val DEFAULT = ClientData(
-      identifier = "libquassel-java",
-      buildDate = Instant.EPOCH,
-      clientFeatures = QuasselFeatures.all(),
-      protocolFeatures = Protocol_Features.of(
-        Protocol_Feature.Compression,
-        Protocol_Feature.TLS
-      ),
-      supportedProtocols = listOf(Protocol.Datastream)
-    )
-  }
+class TrustAllHostnameVerifier : HostnameVerifier {
+  override fun checkValid(address: SocketAddress, chain: Array<out X509Certificate>) = Unit
 }

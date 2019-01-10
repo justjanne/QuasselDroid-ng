@@ -17,14 +17,15 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ssl
+package de.kuschku.libquassel.ssl
 
 import java.security.cert.X509Certificate
 
 // FIXME: re-read RFC and check it's actually secure
 object X509Helper {
   fun hostnames(certificate: X509Certificate): Sequence<String> =
-    (sequenceOf(commonName(certificate)) + subjectAlternativeNames(certificate))
+    (sequenceOf(commonName(certificate)) + subjectAlternativeNames(
+      certificate))
       .filterNotNull()
       .distinct()
 

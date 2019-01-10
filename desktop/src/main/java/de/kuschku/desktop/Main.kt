@@ -17,28 +17,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.protocol
+package de.kuschku.desktop
 
-import de.kuschku.libquassel.quassel.QuasselFeatures
-import org.threeten.bp.Instant
+import picocli.CommandLine
 
-data class ClientData(
-  val identifier: String,
-  val buildDate: Instant,
-  val clientFeatures: QuasselFeatures,
-  val protocolFeatures: Protocol_Features,
-  val supportedProtocols: List<Protocol>
-) {
-  companion object {
-    val DEFAULT = ClientData(
-      identifier = "libquassel-java",
-      buildDate = Instant.EPOCH,
-      clientFeatures = QuasselFeatures.all(),
-      protocolFeatures = Protocol_Features.of(
-        Protocol_Feature.Compression,
-        Protocol_Feature.TLS
-      ),
-      supportedProtocols = listOf(Protocol.Datastream)
-    )
-  }
+fun main(vararg args: String) {
+  val cliArguments = CliArguments()
+  CommandLine(cliArguments).parse(*args)
 }

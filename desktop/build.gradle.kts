@@ -17,28 +17,23 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.protocol
+plugins {
+  application
+  kotlin("jvm")
+  kotlin("kapt")
+}
 
-import de.kuschku.libquassel.quassel.QuasselFeatures
-import org.threeten.bp.Instant
+application {
+  mainClassName = "de.kuschku.cli.MainKt"
+}
 
-data class ClientData(
-  val identifier: String,
-  val buildDate: Instant,
-  val clientFeatures: QuasselFeatures,
-  val protocolFeatures: Protocol_Features,
-  val supportedProtocols: List<Protocol>
-) {
-  companion object {
-    val DEFAULT = ClientData(
-      identifier = "libquassel-java",
-      buildDate = Instant.EPOCH,
-      clientFeatures = QuasselFeatures.all(),
-      protocolFeatures = Protocol_Features.of(
-        Protocol_Feature.Compression,
-        Protocol_Feature.TLS
-      ),
-      supportedProtocols = listOf(Protocol.Datastream)
-    )
-  }
+dependencies {
+  implementation(kotlin("stdlib", "1.3.11"))
+
+  implementation("io.reactivex.rxjava2", "rxjava", "2.1.9")
+  implementation("info.picocli", "picocli", "3.9.0")
+
+  implementation(project(":lib"))
+
+  testImplementation("junit", "junit", "4.12")
 }

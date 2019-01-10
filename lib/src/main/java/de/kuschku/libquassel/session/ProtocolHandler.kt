@@ -32,7 +32,7 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import java.io.Closeable
 
 abstract class ProtocolHandler(
-  private val exceptionHandler: (Throwable) -> Unit
+  private val exceptionHandler: ((Throwable) -> Unit)? = null
 ) : SignalProxy, AuthHandler, Closeable {
   protected var closed = false
   protected abstract val objectStorage: ObjectStorage
@@ -61,7 +61,7 @@ abstract class ProtocolHandler(
     } catch (e: ObjectNotFoundException) {
       log(DEBUG, "ProtocolHandler", "An error has occured while processing $f", e)
     } catch (e: Throwable) {
-      exceptionHandler.invoke(MessageHandlingException.SignalProxy(f, e))
+      exceptionHandler?.invoke(MessageHandlingException.SignalProxy(f, e))
     }
     return true
   }
@@ -76,7 +76,7 @@ abstract class ProtocolHandler(
     } catch (e: ObjectNotFoundException) {
       log(DEBUG, "ProtocolHandler", "An error has occured while processing $f", e)
     } catch (e: Throwable) {
-      exceptionHandler.invoke(MessageHandlingException.Handshake(f, e))
+      exceptionHandler?.invoke(MessageHandlingException.Handshake(f, e))
     }
     return true
   }
@@ -103,7 +103,7 @@ abstract class ProtocolHandler(
         try {
           this.handle(it)
         } catch (e: Throwable) {
-          exceptionHandler.invoke(e)
+          exceptionHandler?.invoke(e)
         }
       }
     }

@@ -28,7 +28,7 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 
 class BacklogManager(
   var session: ISession,
-  private val backlogStorage: BacklogStorage
+  private val backlogStorage: BacklogStorage? = null
 ) : SyncableObject(session.proxy, "BacklogManager"), IBacklogManager {
   private val loading = mutableMapOf<BufferId, (List<Message>) -> Boolean>()
   private val loadingFiltered = mutableMapOf<BufferId, (List<Message>) -> Boolean>()
@@ -42,7 +42,7 @@ class BacklogManager(
     initialized = true
   }
 
-  fun updateIgnoreRules() = backlogStorage.updateIgnoreRules(session)
+  fun updateIgnoreRules() = backlogStorage?.updateIgnoreRules(session)
 
   fun requestBacklog(bufferId: BufferId, first: MsgId = -1, last: MsgId = -1, limit: Int = -1,
                      additional: Int = 0, callback: (List<Message>) -> Boolean) {
@@ -79,7 +79,7 @@ class BacklogManager(
     val list = messages.mapNotNull<QVariant_, Message>(QVariant_::value)
     if (loading.remove(bufferId)?.invoke(list) != false) {
       log(DEBUG, "BacklogManager", "storeMessages(${list.size})")
-      backlogStorage.storeMessages(session, list)
+      backlogStorage?.storeMessages(session, list)
     }
   }
 
@@ -88,7 +88,7 @@ class BacklogManager(
     val list = messages.mapNotNull<QVariant_, Message>(QVariant_::value)
     if (loading.remove(-1)?.invoke(list) != false) {
       log(DEBUG, "BacklogManager", "storeMessages(${list.size})")
-      backlogStorage.storeMessages(session, list)
+      backlogStorage?.storeMessages(session, list)
     }
   }
 
@@ -98,7 +98,7 @@ class BacklogManager(
     val list = messages.mapNotNull<QVariant_, Message>(QVariant_::value)
     if (loadingFiltered.remove(bufferId)?.invoke(list) != false) {
       log(DEBUG, "BacklogManager", "storeMessages(${list.size})")
-      backlogStorage.storeMessages(session, list)
+      backlogStorage?.storeMessages(session, list)
     }
   }
 
@@ -107,11 +107,11 @@ class BacklogManager(
     val list = messages.mapNotNull<QVariant_, Message>(QVariant_::value)
     if (loadingFiltered.remove(-1)?.invoke(list) != false) {
       log(DEBUG, "BacklogManager", "storeMessages(${list.size})")
-      backlogStorage.storeMessages(session, list)
+      backlogStorage?.storeMessages(session, list)
     }
   }
 
   fun removeBuffer(buffer: BufferId) {
-    backlogStorage.clearMessages(buffer)
+    backlogStorage?.clearMessages(buffer)
   }
 }

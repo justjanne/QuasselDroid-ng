@@ -22,6 +22,7 @@ package de.kuschku.quasseldroid.ssl
 import de.kuschku.libquassel.connection.HostnameVerifier
 import de.kuschku.libquassel.connection.QuasselSecurityException
 import de.kuschku.libquassel.connection.SocketAddress
+import de.kuschku.libquassel.ssl.BrowserCompatibleHostnameVerifier
 import de.kuschku.quasseldroid.ssl.custom.QuasselHostnameManager
 import java.security.cert.X509Certificate
 import javax.net.ssl.SSLException

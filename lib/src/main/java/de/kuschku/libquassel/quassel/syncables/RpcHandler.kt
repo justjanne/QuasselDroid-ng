@@ -32,8 +32,8 @@ import java.nio.ByteBuffer
 
 class RpcHandler(
   override val session: Session,
-  private val backlogStorage: BacklogStorage,
-  private val notificationManager: NotificationManager?
+  private val backlogStorage: BacklogStorage? = null,
+  private val notificationManager: NotificationManager? = null
 ) : IRpcHandler {
   override fun displayStatusMsg(net: String, msg: String) {
   }
@@ -61,7 +61,7 @@ class RpcHandler(
 
   override fun displayMsg(message: Message) {
     session.bufferSyncer.bufferInfoUpdated(message.bufferInfo)
-    backlogStorage.storeMessages(session, message)
+    backlogStorage?.storeMessages(session, message)
     notificationManager?.processMessages(session, true, message)
   }
 

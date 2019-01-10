@@ -32,7 +32,7 @@ import io.reactivex.subjects.BehaviorSubject
 
 class BufferSyncer constructor(
   var session: ISession,
-  private val notificationManager: NotificationManager?
+  private val notificationManager: NotificationManager? = null
 ) : SyncableObject(session.proxy, "BufferSyncer"), IBufferSyncer {
   override fun deinit() {
     super.deinit()

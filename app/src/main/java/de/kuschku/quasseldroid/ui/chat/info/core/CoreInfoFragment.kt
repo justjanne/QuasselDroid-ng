@@ -33,9 +33,9 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.QuasselFeatures
+import de.kuschku.libquassel.ssl.X509Helper
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.ssl.X509Helper
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.missingfeatures.MissingFeature
 import de.kuschku.quasseldroid.util.missingfeatures.MissingFeaturesDialog

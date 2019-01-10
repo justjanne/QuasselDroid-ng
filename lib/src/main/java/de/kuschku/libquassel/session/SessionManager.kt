@@ -124,19 +124,19 @@ class SessionManager(
     hasErrored = false
     inProgressSession.onNext(
       Session(
-        clientData,
+        address,
+        userData,
         trustManager,
         hostnameVerifier,
-        address,
+        clientData,
         handlerService,
-        backlogStorage,
-        notificationManager,
-        userData,
         heartBeatFactory,
         disconnectFromCore,
         initCallback,
         exceptionHandler,
-        ::hasErroredCallback
+        ::hasErroredCallback,
+        notificationManager,
+        backlogStorage
       )
     )
   }

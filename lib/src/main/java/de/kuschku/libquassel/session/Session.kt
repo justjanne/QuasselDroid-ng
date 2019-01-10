@@ -26,9 +26,12 @@ import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.*
+import de.kuschku.libquassel.ssl.BrowserCompatibleHostnameVerifier
+import de.kuschku.libquassel.ssl.TrustManagers
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
+import de.kuschku.libquassel.util.compatibility.reference.JavaHandlerService
 import de.kuschku.libquassel.util.rxjava.ReusableUnicastSubject
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -37,19 +40,19 @@ import org.threeten.bp.Instant
 import javax.net.ssl.X509TrustManager
 
 class Session(
-  clientData: ClientData,
-  trustManager: X509TrustManager,
-  hostnameVerifier: HostnameVerifier,
   address: SocketAddress,
-  private val handlerService: HandlerService,
-  backlogStorage: BacklogStorage,
-  private val notificationManager: NotificationManager?,
   private var userData: Pair<String, String>,
-  heartBeatFactory: () -> HeartBeatRunner,
-  val disconnectFromCore: (() -> Unit)?,
-  private val initCallback: ((Session) -> Unit)?,
-  exceptionHandler: (Throwable) -> Unit,
-  private val hasErroredCallback: (Error) -> Unit
+  trustManager: X509TrustManager = TrustManagers.default(),
+  hostnameVerifier: HostnameVerifier = BrowserCompatibleHostnameVerifier(),
+  clientData: ClientData = ClientData.DEFAULT,
+  private val handlerService: HandlerService = JavaHandlerService(),
+  heartBeatFactory: () -> HeartBeatRunner = ::JavaHeartBeatRunner,
+  val disconnectFromCore: (() -> Unit)? = null,
+  private val initCallback: ((Session) -> Unit)? = null,
+  exceptionHandler: ((Throwable) -> Unit)? = null,
+  private val hasErroredCallback: ((Error) -> Unit)? = null,
+  private val notificationManager: NotificationManager? = null,
+  backlogStorage: BacklogStorage? = null
 ) : ProtocolHandler(exceptionHandler), ISession {
   override val objectStorage: ObjectStorage = ObjectStorage(this)
   override val proxy: SignalProxy = this
@@ -59,12 +62,12 @@ class Session(
     get() = coreConnection.sslSession
 
   private val coreConnection = CoreConnection(
+    address,
     clientData,
     features,
+    handlerService,
     trustManager,
-    hostnameVerifier,
-    address,
-    handlerService
+    hostnameVerifier
   )
   override val state = coreConnection.state
 
@@ -112,7 +115,7 @@ class Session(
   }
 
   private fun handleError(error: Error) {
-    hasErroredCallback.invoke(error)
+    hasErroredCallback?.invoke(error)
     this.error.onNext(error)
   }
 

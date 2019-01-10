@@ -17,11 +17,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ssl
+package de.kuschku.libquassel.ssl
 
 import de.kuschku.libquassel.connection.HostnameVerifier
 import de.kuschku.libquassel.connection.SocketAddress
-import de.kuschku.quasseldroid.ssl.X509Helper.hostnames
+import de.kuschku.libquassel.ssl.X509Helper.hostnames
 import java.net.IDN
 import java.security.cert.X509Certificate
 import javax.net.ssl.SSLException

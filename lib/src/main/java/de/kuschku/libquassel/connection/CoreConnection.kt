@@ -27,13 +27,17 @@ import de.kuschku.libquassel.protocol.primitive.serializer.IntSerializer
 import de.kuschku.libquassel.protocol.primitive.serializer.ProtocolInfoSerializer
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantListSerializer
 import de.kuschku.libquassel.quassel.ProtocolFeature
+import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.session.ProtocolHandler
+import de.kuschku.libquassel.ssl.BrowserCompatibleHostnameVerifier
+import de.kuschku.libquassel.ssl.TrustManagers
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.compatibility.CompatibilityUtils
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
+import de.kuschku.libquassel.util.compatibility.reference.JavaHandlerService
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helpers.hexDump
 import de.kuschku.libquassel.util.helpers.write
@@ -49,12 +53,12 @@ import javax.net.ssl.SSLSession
 import javax.net.ssl.X509TrustManager
 
 class CoreConnection(
-  private val clientData: ClientData,
-  private val features: Features,
-  private val trustManager: X509TrustManager,
-  private val hostnameVerifier: HostnameVerifier,
   private val address: SocketAddress,
-  private val handlerService: HandlerService
+  private val clientData: ClientData = ClientData.DEFAULT,
+  private val features: Features = Features(clientData.clientFeatures, QuasselFeatures.empty()),
+  private val handlerService: HandlerService = JavaHandlerService(),
+  private val trustManager: X509TrustManager = TrustManagers.default(),
+  private val hostnameVerifier: HostnameVerifier = BrowserCompatibleHostnameVerifier()
 ) : Thread(), Closeable {
   companion object {
     private const val TAG = "CoreConnection"
