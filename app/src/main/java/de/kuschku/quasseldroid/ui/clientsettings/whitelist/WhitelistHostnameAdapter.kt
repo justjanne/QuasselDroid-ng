@@ -32,6 +32,12 @@ import de.kuschku.quasseldroid.persistence.QuasselDatabase
 
 class WhitelistHostnameAdapter :
   RecyclerView.Adapter<WhitelistHostnameAdapter.WhitelistItemViewHolder>() {
+  private var updateListener: ((List<QuasselDatabase.SslHostnameWhitelistEntry>) -> Unit)? = null
+
+  fun setOnUpdateListener(listener: ((List<QuasselDatabase.SslHostnameWhitelistEntry>) -> Unit)?) {
+    updateListener = listener
+  }
+
   private val data = mutableListOf<QuasselDatabase.SslHostnameWhitelistEntry>()
   var list: List<QuasselDatabase.SslHostnameWhitelistEntry>
     get() = data
@@ -41,17 +47,20 @@ class WhitelistHostnameAdapter :
       notifyItemRangeRemoved(0, length)
       data.addAll(value)
       notifyItemRangeInserted(0, list.size)
+      updateListener?.invoke(list)
     }
 
   fun add(item: QuasselDatabase.SslHostnameWhitelistEntry) {
     val index = data.size
     data.add(item)
     notifyItemInserted(index)
+    updateListener?.invoke(list)
   }
 
   fun replace(index: Int, item: QuasselDatabase.SslHostnameWhitelistEntry) {
     data[index] = item
     notifyItemChanged(index)
+    updateListener?.invoke(list)
   }
 
   fun indexOf(item: QuasselDatabase.SslHostnameWhitelistEntry) = data.indexOf(item)
@@ -59,6 +68,7 @@ class WhitelistHostnameAdapter :
   fun remove(index: Int) {
     data.removeAt(index)
     notifyItemRemoved(index)
+    updateListener?.invoke(list)
   }
 
   fun remove(item: QuasselDatabase.SslHostnameWhitelistEntry) = remove(indexOf(item))

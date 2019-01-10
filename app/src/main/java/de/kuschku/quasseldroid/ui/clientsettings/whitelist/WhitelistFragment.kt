@@ -92,16 +92,23 @@ class WhitelistFragment : SettingsFragment(), SettingsFragment.Changeable,
     hostnameList.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
     ViewCompat.setNestedScrollingEnabled(hostnameList, false)
 
+    certificateAdapter.setOnUpdateListener {
+      activity?.runOnUiThread {
+        certificateListEmpty.visibleIf(it.isNullOrEmpty())
+      }
+    }
+
+    hostnameAdapter.setOnUpdateListener {
+      activity?.runOnUiThread {
+        hostnameListEmpty.visibleIf(it.isNullOrEmpty())
+      }
+    }
+
     handler.post {
       whitelist = Whitelist(database.validityWhitelist().all(), database.hostnameWhitelist().all())
       whitelist?.let {
         certificateAdapter.list = it.certificates
         hostnameAdapter.list = it.hostnames
-      }
-
-      activity?.runOnUiThread {
-        certificateListEmpty.visibleIf(whitelist?.certificates.isNullOrEmpty())
-        hostnameListEmpty.visibleIf(whitelist?.hostnames.isNullOrEmpty())
       }
     }
     return view

@@ -34,9 +34,14 @@ import de.kuschku.quasseldroid.util.helper.visibleIf
 class WhitelistCertificateAdapter :
   RecyclerView.Adapter<WhitelistCertificateAdapter.WhitelistItemViewHolder>() {
   private var clickListener: ((QuasselDatabase.SslValidityWhitelistEntry) -> Unit)? = null
+  private var updateListener: ((List<QuasselDatabase.SslValidityWhitelistEntry>) -> Unit)? = null
 
   fun setOnClickListener(listener: ((QuasselDatabase.SslValidityWhitelistEntry) -> Unit)?) {
     clickListener = listener
+  }
+
+  fun setOnUpdateListener(listener: ((List<QuasselDatabase.SslValidityWhitelistEntry>) -> Unit)?) {
+    updateListener = listener
   }
 
   private val data = mutableListOf<QuasselDatabase.SslValidityWhitelistEntry>()
@@ -48,17 +53,20 @@ class WhitelistCertificateAdapter :
       notifyItemRangeRemoved(0, length)
       data.addAll(value)
       notifyItemRangeInserted(0, list.size)
+      updateListener?.invoke(list)
     }
 
   fun add(item: QuasselDatabase.SslValidityWhitelistEntry) {
     val index = data.size
     data.add(item)
     notifyItemInserted(index)
+    updateListener?.invoke(list)
   }
 
   fun replace(index: Int, item: QuasselDatabase.SslValidityWhitelistEntry) {
     data[index] = item
     notifyItemChanged(index)
+    updateListener?.invoke(list)
   }
 
   fun indexOf(item: QuasselDatabase.SslValidityWhitelistEntry) = data.indexOf(item)
@@ -66,6 +74,7 @@ class WhitelistCertificateAdapter :
   fun remove(index: Int) {
     data.removeAt(index)
     notifyItemRemoved(index)
+    updateListener?.invoke(list)
   }
 
   fun remove(item: QuasselDatabase.SslValidityWhitelistEntry) = remove(indexOf(item))
