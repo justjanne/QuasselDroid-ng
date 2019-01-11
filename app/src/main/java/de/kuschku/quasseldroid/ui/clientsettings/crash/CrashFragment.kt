@@ -34,6 +34,7 @@ import butterknife.ButterKnife
 import com.google.gson.Gson
 import dagger.android.support.DaggerFragment
 import de.kuschku.malheur.data.Report
+import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.fromJson
 import java.io.File
@@ -91,7 +92,7 @@ class CrashFragment : DaggerFragment() {
           .map {
             Pair<Report, Uri>(
               gson.fromJson(it.readText()),
-              FileProvider.getUriForFile(context, "de.kuschku.quasseldroid.fileprovider", it)
+              FileProvider.getUriForFile(context, "${BuildConfig.APPLICATION_ID}.fileprovider", it)
             )
           }
           .sortedByDescending { it.first.environment?.crashTime }
