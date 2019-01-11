@@ -84,6 +84,7 @@
   <string name="settings_chatlist_add_new_buffers_automatically">Add new chats automatically</string>
   <string name="settings_chatlist_network">Network</string>
   <string name="settings_chatlist_network_all">All Networks</string>
+  <string name="settings_chatlist_network_create">Create Network…</string>
   <string name="settings_chatlist_show_status_buffer">Show Status Buffer</string>
   <string name="settings_chatlist_types">Chat Types</string>
   <string name="settings_chatlist_show_channels">Show Channels</string>

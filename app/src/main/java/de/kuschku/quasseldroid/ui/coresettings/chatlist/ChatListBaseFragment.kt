@@ -110,7 +110,7 @@ abstract class ChatListBaseFragment(private val initDefault: Boolean) :
     ))
     minimumActivity.adapter = minimumActivityAdapter
 
-    val networkAdapter = NetworkAdapter()
+    val networkAdapter = NetworkAdapter(R.string.settings_chatlist_network_all)
     networkId.adapter = networkAdapter
 
     viewModel.networks.switchMap {

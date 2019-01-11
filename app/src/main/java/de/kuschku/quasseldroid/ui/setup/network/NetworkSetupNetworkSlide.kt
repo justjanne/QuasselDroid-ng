@@ -79,7 +79,7 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
   lateinit var sslEnabled: SwitchCompat
 
   private val identityAdapter = IdentityAdapter()
-  private val networkAdapter = NetworkAdapter()
+  private val networkAdapter = NetworkAdapter(R.string.settings_chatlist_network_create)
 
   override fun isValid(): Boolean {
     return (this.network.selectedItemPosition != -1 &&
@@ -188,9 +188,13 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
       }
     })
 
-    viewModel.networks.toLiveData().observe(this, Observer {
+    viewModel.networks.switchMap {
+      combineLatest(it.values.map(Network::liveNetworkInfo)).map {
+        it.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, INetwork.NetworkInfo::networkName))
+      }
+    }.toLiveData().observe(this, Observer {
       if (it != null) {
-        this.networks = it.values.map(Network::networkInfo)
+        this.networks = it
         update()
       }
     })

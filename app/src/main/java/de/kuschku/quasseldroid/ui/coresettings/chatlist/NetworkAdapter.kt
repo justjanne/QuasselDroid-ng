@@ -23,6 +23,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.StringRes
 import androidx.appcompat.widget.ThemedSpinnerAdapter
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -33,8 +34,8 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.ui.ContextThemeWrapper
 import de.kuschku.quasseldroid.util.ui.RecyclerSpinnerAdapter
 
-class NetworkAdapter : RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(),
-                       ThemedSpinnerAdapter {
+class NetworkAdapter(@StringRes private val fallbackName: Int) : RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(),
+  ThemedSpinnerAdapter {
   var data = listOf<INetwork.NetworkInfo?>(null)
 
   fun submitList(list: List<INetwork.NetworkInfo?>) {
@@ -56,9 +57,7 @@ class NetworkAdapter : RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(
         parent.context
     )
     val view = inflater.inflate(R.layout.widget_spinner_item_inline, parent, false)
-    return NetworkViewHolder(
-      view
-    )
+    return NetworkViewHolder(fallbackName, view)
   }
 
   fun indexOf(id: NetworkId): Int? {
@@ -74,7 +73,7 @@ class NetworkAdapter : RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(
   override fun getItemId(position: Int) = getItem(position)?.networkId?.toLong() ?: -1
   override fun hasStableIds() = true
   override fun getCount() = data.size
-  class NetworkViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+  class NetworkViewHolder(@StringRes private val fallbackName: Int, itemView: View) : RecyclerView.ViewHolder(itemView) {
     @BindView(android.R.id.text1)
     lateinit var text: TextView
 
@@ -83,7 +82,7 @@ class NetworkAdapter : RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(
     }
 
     fun bind(network: INetwork.NetworkInfo?) {
-      text.text = network?.networkName ?: itemView.context.getString(R.string.settings_chatlist_network_all)
+      text.text = network?.networkName ?: itemView.context.getString(fallbackName)
     }
   }
 }
