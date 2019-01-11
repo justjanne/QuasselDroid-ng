@@ -23,6 +23,8 @@
   <string name="slide_account_select_description">Veuillez sélectionner un compte à partir de la liste, ou en ajouter un</string>
   <string name="label_user_on_host">%1$s sur %2$s:%3$d</string>
 
+  <!-- Account Setup -->
+
   <!-- Account Connection -->
   <string name="slide_account_connection_title">Connection</string>
   <string name="slide_account_connection_description">Premièrement, choisissez le serveur où votre Core est hébergé.</string>
@@ -49,6 +51,8 @@
   <string name="label_account_name">Nom de compte</string>
 
   <string name="hint_invalid_name">Le nom ne peut pas être vide</string>
+
+  <!-- Core Setup -->
 
   <!-- Core Authenticator Select -->
   <string name="slide_core_authenticator_select_title">Sélectionnez un protocole d\'authentication</string>

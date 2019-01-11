@@ -135,6 +135,11 @@
   <string name="label_feature_richmessages">Benötigt um Echtnamen oder IRCv3 oder Gravatar-Avatare in Nachrichten zu sehen.</string>
   <string name="label_feature_backlogfiltertype">Benötigt um vergangene Benachrichtigungen nach dem Verbinden zu erhalten</string>
 
+  <string name="label_feature_context_bufferactivitysync">Quasseldroid kann ungelesene Chats nicht hervorheben. Update deinen Core auf Quassel v0.13 um dies zu beheben.</string>
+  <string name="label_feature_context_coresidehighlights">Quasseldroid kann Highlights nicht konfigurieren. Update deinen Core auf Quassel v0.13 um dies zu beheben.</string>
+  <string name="label_feature_context_missing">Deinem Core fehlen Features die benötigt werden, damit Quasseldroid korrekt funktionieren kann.</string>
+  <string name="label_feature_context_missing_button">Details</string>
+
   <string name="notification_channel_connection_title">Verbindung</string>
   <string name="notification_channel_highlight_title">Benachrichtigungen</string>
   <string name="notification_channel_old_highlight_title">Alte Benachrichtigungen</string>

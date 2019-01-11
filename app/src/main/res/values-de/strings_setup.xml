@@ -23,6 +23,8 @@
   <string name="slide_account_select_description">Wähle einen Account aus oder erstelle einen neuen</string>
   <string name="label_user_on_host">%1$s auf %2$s:%3$d</string>
 
+  <!-- Account Setup -->
+
   <!-- Account Connection -->
   <string name="slide_account_connection_title">Verbindung</string>
   <string name="slide_account_connection_description">Bitte gebe die Adresse des Servers an, auf dem dein Core läuft</string>
@@ -50,6 +52,8 @@
 
   <string name="hint_invalid_name">Name darf nicht leer sein</string>
 
+  <!-- Core Setup -->
+
   <!-- Core Authenticator Select -->
   <string name="slide_core_authenticator_select_title">Authentifizierungsbackend auswählen</string>
   <string name="slide_core_authenticator_select_description">Bitte wähle aus, welches Authentifizierungsbackend der Quassel Core verwenden soll</string>
@@ -61,6 +65,10 @@
   <!-- Core Backend Config -->
   <string name="slide_core_backend_setup_title">Datenbank konfigurieren</string>
   <string name="slide_core_backend_setup_description">Bitte konfiguriere das ausgewählte Datenbankbackend</string>
+
+  <!-- User Setup -->
+
+  <string name="setup_user_title">Nutzer einrichten</string>
 
   <!-- User Identity -->
   <string name="slide_user_identity_title">Identität Einrichten</string>
@@ -79,4 +87,8 @@
   <string name="slide_user_channels_description">Wähle aus, welche Räume du betreten möchtest.</string>
 
   <string name="label_channels">Räume</string>
+
+  <!-- Network Setup -->
+
+  <string name="setup_network_title">Netzwerk einrichten</string>
 </resources>

@@ -23,6 +23,8 @@
   <string name="slide_account_select_description">Por favor, selecione uma conta da lista ou adicione uma</string>
   <string name="label_user_on_host">%1$s em %2$s:%3$d</string>
 
+  <!-- Account Setup -->
+
   <!-- Account Connection -->
   <string name="slide_account_connection_title">Ligação</string>
   <string name="slide_account_connection_description">Primeiro, escolha o servidor no qual o seu núcleo está alojado.</string>
@@ -49,6 +51,8 @@
   <string name="label_account_name">Nome da Conta</string>
 
   <string name="hint_invalid_name">O nome não pode estar vazio</string>
+
+  <!-- Core Setup -->
 
   <!-- Core Authenticator Select -->
   <string name="slide_core_authenticator_select_title">Selecione o tipo de autenticação</string>

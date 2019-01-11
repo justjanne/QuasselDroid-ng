@@ -23,6 +23,8 @@
   <string name="slide_account_select_description">Odaberi nalog iz liste ili dodaj novi</string>
   <string name="label_user_on_host">%1$s na %2$s:%3$d</string>
 
+  <!-- Account Setup -->
+
   <!-- Account Connection -->
   <string name="slide_account_connection_title">Veza</string>
   <string name="slide_account_connection_description">Prvo, molimo odaberite server na kom je vaš Core hostovan.</string>
@@ -49,6 +51,8 @@
   <string name="label_account_name">Ime naloga</string>
 
   <string name="hint_invalid_name">Ime ne može biti prazno</string>
+
+  <!-- Core Setup -->
 
   <!-- Core Authenticator Select -->
   <string name="slide_core_authenticator_select_title">Odaberi backend za proveru identiteta</string>
