@@ -27,6 +27,7 @@
   <issue id="ResourceType" severity="ignore" />
   <issue id="UnusedResources" severity="ignore" />
   <issue id="ObsoleteLintCustomCheck" severity="ignore" />
+  <issue id="UnusedAttribute" severity="informational" />
 
   <!-- Because this doesn’t work when using splash themes -->
   <issue id="Overdraw" severity="ignore" />
