@@ -21,6 +21,7 @@ package de.kuschku.quasseldroid.ui.setup
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
@@ -29,6 +30,7 @@ import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.ActionMenuView
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.MutableLiveData
@@ -44,10 +46,7 @@ import de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity
 import de.kuschku.quasseldroid.ui.clientsettings.client.ClientSettingsActivity
 import de.kuschku.quasseldroid.ui.clientsettings.crash.CrashActivity
 import de.kuschku.quasseldroid.ui.clientsettings.whitelist.WhitelistActivity
-import de.kuschku.quasseldroid.util.helper.observeSticky
-import de.kuschku.quasseldroid.util.helper.or
-import de.kuschku.quasseldroid.util.helper.switchMap
-import de.kuschku.quasseldroid.util.helper.updateRecentsHeaderIfExisting
+import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.ui.LocaleHelper
 
 abstract class SetupActivity : DaggerAppCompatActivity() {
@@ -89,13 +88,20 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
   private lateinit var pageChangeListener: SetupActivityViewPagerPageChangeListener
 
   private fun pageChanged() {
-    currentPage.value = adapter.getItem(viewPager.currentItem)
-    val drawable = if (viewPager.currentItem == adapter.totalCount - 1)
-      R.drawable.ic_check
-    else
-      R.drawable.ic_arrow_right
-    button.setImageResource(drawable)
-    currentPage.value?.requestFocus()
+    val page = adapter.getItem(viewPager.currentItem)
+    currentPage.value = page
+
+    val finish = viewPager.currentItem == adapter.totalCount - 1
+    button.contentDescription =
+      if (finish) descriptionFinish
+      else descriptionNext
+    button.setTooltip()
+    button.setImageDrawable(
+      if (finish) drawableFinish
+      else drawableNext
+    )
+
+    page.requestFocus()
   }
 
   fun updateRecentsHeader() {
@@ -109,6 +115,12 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
     updateRecentsHeader()
   }
 
+  private var drawableFinish: Drawable? = null
+  private var drawableNext: Drawable? = null
+
+  private var descriptionFinish: String? = null
+  private var descriptionNext: String? = null
+
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.Theme_SetupTheme)
     super.onCreate(savedInstanceState)
@@ -116,6 +128,16 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
       .nullIf { it == 0 }?.let(this::setTitle)
     setContentView(R.layout.activity_setup)
     ButterKnife.bind(this)
+
+    drawableFinish = getVectorDrawableCompat(R.drawable.ic_check)?.mutate()?.also {
+      DrawableCompat.setTint(it, -1)
+    }
+    drawableNext = getVectorDrawableCompat(R.drawable.ic_arrow_right)?.mutate()?.also {
+      DrawableCompat.setTint(it, -1)
+    }
+
+    descriptionFinish = getString(R.string.label_finish)
+    descriptionNext = getString(R.string.label_next)
 
     menuView.popupTheme = R.style.Widget_PopupOverlay_Light
     menuInflater.inflate(R.menu.activity_setup, menuView.menu)
