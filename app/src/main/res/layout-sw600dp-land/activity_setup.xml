@@ -42,12 +42,10 @@
     android:layout_gravity="right|bottom"
     android:layout_marginRight="24dp"
     android:layout_marginBottom="24dp"
-    android:tint="#ffffff"
     app:backgroundTint="#8A000000"
     app:elevation="0dip"
     app:fabSize="normal"
     app:pressedTranslationZ="0dip"
-    app:tint="#ffffff"
     tools:ignore="RtlHardcoded" />
 
 </merge>

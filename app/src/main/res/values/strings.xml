@@ -52,6 +52,7 @@
   <string name="label_edit_topic">Edit Topic</string>
   <string name="label_edit_topic_long">Open dialog to change the channel topic</string>
   <string name="label_filter_messages">Filter Messages</string>
+  <string name="label_finish">Finish</string>
   <string name="label_hide_perm">Hide Permanently</string>
   <string name="label_hide_temp">Hide Temporarily</string>
   <string name="label_ignore">Ignore</string>
@@ -69,6 +70,7 @@
   <string name="label_mark_read">Mark Read</string>
   <string name="label_mention">Mention</string>
   <string name="label_mention_long">Copy username into input line</string>
+  <string name="label_next">Next</string>
   <string name="label_new_account">New Account</string>
   <string name="label_new_chatlist">New Chatlist</string>
   <string name="label_new_highlight_rule">New Highlight Rule</string>

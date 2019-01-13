@@ -42,9 +42,7 @@
     android:layout_gravity="right|bottom"
     android:layout_marginRight="16dp"
     android:layout_marginBottom="16dp"
-    android:tint="#ffffff"
     app:fabSize="normal"
-    app:tint="#ffffff"
     tools:ignore="RtlHardcoded"
     tools:src="@drawable/ic_arrow_right" />
 
