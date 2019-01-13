@@ -33,7 +33,6 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.google.gson.GsonBuilder
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.IrcUser
@@ -54,8 +53,6 @@ import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
 import de.kuschku.quasseldroid.viewmodel.data.Avatar
 import io.reactivex.Observable
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
 class UserInfoFragment : ServiceBoundFragment() {
@@ -116,18 +113,15 @@ class UserInfoFragment : ServiceBoundFragment() {
   @Inject
   lateinit var messageSettings: MessageSettings
 
+  @Inject
+  lateinit var matrixApi: MatrixApi
+
   private var actualUrl: String? = null
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.fragment_info_user, container, false)
     ButterKnife.bind(this, view)
-
-    val matrixApi = Retrofit.Builder()
-      .baseUrl("https://matrix.org/")
-      .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
-      .build()
-      .create(MatrixApi::class.java)
 
     val openBuffer = arguments?.getBoolean("openBuffer")
 
@@ -174,11 +168,13 @@ class UserInfoFragment : ServiceBoundFragment() {
     }.toLiveData().observe(this, Observer {
       val processUser = { user: IrcUserInfo ->
         avatar.post {
+          avatar.visibility = View.GONE
           actualUrl = null
           avatar.loadAvatars(
             AvatarHelper.avatar(messageSettings, user, maxOf(avatar.width, avatar.height)),
             crop = false
           ) { model ->
+            avatar.visibility = View.VISIBLE
             when (model) {
               is String              -> {
                 actualUrl = model
