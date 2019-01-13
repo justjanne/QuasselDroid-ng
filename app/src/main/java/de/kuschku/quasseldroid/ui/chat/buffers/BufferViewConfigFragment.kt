@@ -21,8 +21,12 @@ package de.kuschku.quasseldroid.ui.chat.buffers
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.widget.AdapterView
+import android.widget.EditText
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
@@ -75,6 +79,15 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
   @BindView(R.id.feature_context_bufferactivitysync)
   lateinit var featureContextBufferActivitySync: WarningBarView
+
+  @BindView(R.id.buffer_search)
+  lateinit var bufferSearch: EditText
+
+  @BindView(R.id.buffer_search_clear)
+  lateinit var bufferSearchClear: AppCompatImageButton
+
+  @BindView(R.id.buffer_search_container)
+  lateinit var bufferSearchContainer: ViewGroup
 
   @Inject
   lateinit var appearanceSettings: AppearanceSettings
@@ -468,6 +481,26 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       listAdapter.submitList(emptyList())
       hasSetBufferViewConfigId = false
     })
+
+    viewModel.bufferViewConfig.toLiveData().observe(this, Observer {
+      val visible = it.orNull()?.showSearch() ?: false
+      bufferSearchContainer.visibleIf(visible)
+      if (!visible) bufferSearch.setText("")
+    })
+
+    bufferSearch.addTextChangedListener(object : TextWatcher {
+      override fun afterTextChanged(s: Editable) {
+        viewModel.bufferSearch.onNext(s.toString())
+      }
+
+      override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
+
+      override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
+    })
+
+    bufferSearchClear.setOnClickListener {
+      bufferSearch.setText("")
+    }
 
     return view
   }
