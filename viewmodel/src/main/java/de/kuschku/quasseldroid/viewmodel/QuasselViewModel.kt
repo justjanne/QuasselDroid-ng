@@ -62,6 +62,8 @@ class QuasselViewModel : ViewModel() {
     return result.size
   }
 
+  val bufferSearch = BehaviorSubject.createDefault("")
+
   val expandedMessages = BehaviorSubject.createDefault(emptySet<MsgId>())
 
   val buffer = BehaviorSubject.createDefault(Int.MAX_VALUE)
@@ -111,7 +113,7 @@ class QuasselViewModel : ViewModel() {
   val bufferViewConfig = bufferViewManager.flatMapSwitchMap { manager ->
     bufferViewConfigId.map { id ->
       Optional.ofNullable(manager.bufferViewConfig(id))
-    }
+    }.mapSwitchMap(BufferViewConfig::liveUpdates)
   }
 
   val errors = sessionManager.switchMap {
@@ -350,8 +352,8 @@ class QuasselViewModel : ViewModel() {
     }
 
   val bufferList: Observable<Pair<BufferViewConfig?, List<BufferProps>>> =
-    combineLatest(session, bufferViewConfig, showHidden)
-      .switchMap { (sessionOptional, configOptional, showHiddenRaw) ->
+    combineLatest(session, bufferViewConfig, showHidden, bufferSearch)
+      .switchMap { (sessionOptional, configOptional, showHiddenRaw, bufferSearch) ->
         val session = sessionOptional.orNull()
         val bufferSyncer = session?.bufferSyncer
         val showHidden = showHiddenRaw ?: false
@@ -370,6 +372,10 @@ class QuasselViewModel : ViewModel() {
                   fun transformIds(ids: Collection<BufferId>, state: BufferHiddenState) =
                     ids.asSequence().mapNotNull { id ->
                       bufferSyncer.bufferInfo(id)
+                    }.filter {
+                      bufferSearch.isBlank() ||
+                      it.type.hasFlag(Buffer_Type.StatusBuffer) ||
+                      it.bufferName?.contains(bufferSearch, ignoreCase = true) == true
                     }.filter {
                       currentConfig.networkId() <= 0 || currentConfig.networkId() == it.networkId
                     }.filter {
@@ -507,7 +513,7 @@ class QuasselViewModel : ViewModel() {
                   }
 
                   bufferSyncer.liveBufferInfos().switchMap {
-                    val buffers = if (showHidden) {
+                    val buffers = if (showHidden || bufferSearch.isNotBlank()) {
                       transformIds(ids, BufferHiddenState.VISIBLE) +
                       transformIds(temp - ids, BufferHiddenState.HIDDEN_TEMPORARY) +
                       transformIds(perm - temp - ids, BufferHiddenState.HIDDEN_PERMANENT) +

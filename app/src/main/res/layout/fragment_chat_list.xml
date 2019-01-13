@@ -32,19 +32,70 @@
     <androidx.appcompat.widget.Toolbar
       android:id="@+id/chatListToolbar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      app:contentInsetStartWithNavigation="0dp"
+      android:layout_height="wrap_content"
+      android:minHeight="?attr/actionBarSize"
+      app:contentInsetLeft="0dip"
+      app:contentInsetStart="0dip"
+      app:contentInsetStartWithNavigation="0dip"
       app:popupTheme="?attr/actionBarPopupTheme">
 
-      <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/chatListSpinner"
-        style="@style/Widget.FullWidthSpinner"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        app:popupTheme="?attr/actionBarPopupTheme"
-        tools:listitem="@layout/widget_spinner_item_toolbar" />
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatSpinner
+          android:id="@+id/chatListSpinner"
+          style="@style/Widget.FullWidthSpinner"
+          android:layout_width="fill_parent"
+          android:layout_height="match_parent"
+          app:popupTheme="?attr/actionBarPopupTheme"
+          tools:listitem="@layout/widget_spinner_item_toolbar" />
+      </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>
+
+    <androidx.cardview.widget.CardView
+      android:id="@+id/buffer_search_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="6dp"
+      android:layout_marginRight="6dp"
+      android:layout_marginBottom="6dp">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+          android:id="@+id/buffer_search"
+          android:layout_width="0dip"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:background="@android:color/transparent"
+          android:hint="@string/label_search_buffer"
+          android:imeOptions="actionSearch"
+          android:inputType="textNoSuggestions"
+          android:lines="1"
+          android:minHeight="40dp"
+          android:paddingLeft="8dp"
+          android:paddingRight="8dp"
+          android:textColor="?colorTextPrimary"
+          android:textColorHint="?colorTextSecondary"
+          android:textSize="16sp" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+          android:id="@+id/buffer_search_clear"
+          android:layout_width="40dp"
+          android:layout_height="match_parent"
+          android:background="?selectableItemBackgroundBorderless"
+          app:srcCompat="@drawable/ic_close"
+          app:tint="?colorTextSecondary" />
+
+      </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
   </com.google.android.material.appbar.AppBarLayout>
 

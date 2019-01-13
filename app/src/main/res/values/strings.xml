@@ -93,6 +93,7 @@
   <string name="label_query_long">Open private chat with user</string>
   <string name="label_rename">Rename</string>
   <string name="label_save">Save</string>
+  <string name="label_search_buffer">Search…</string>
   <string name="label_select">Select</string>
   <string name="label_send">Send</string>
   <string name="label_set_default">Set Default</string>
