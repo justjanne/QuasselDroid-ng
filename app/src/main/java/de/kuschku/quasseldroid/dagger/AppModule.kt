@@ -22,10 +22,21 @@ package de.kuschku.quasseldroid.dagger
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
+import de.kuschku.quasseldroid.util.avatars.MatrixApi
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
 object AppModule {
   @Provides
   @JvmStatic
   fun provideGson() = GsonBuilder().setPrettyPrinting().create()
+
+  @Provides
+  @JvmStatic
+  fun provideMatrixApi() = Retrofit.Builder()
+    .baseUrl("https://matrix.org/")
+    .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
+    .build()
+    .create(MatrixApi::class.java)
 }
