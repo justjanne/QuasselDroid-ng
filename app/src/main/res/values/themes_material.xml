@@ -115,6 +115,7 @@
     <item name="colorBackgroundHighlight">#40ffaf3b</item>
     <item name="colorBackgroundSecondary">#424242</item>
     <item name="colorBackgroundCard">#424242</item>
+    <item name="colorBackgroundSearch">#FFFFFF</item>
     <item name="colorBackgroundDialog">#303030</item>
 
     <item name="colorMarkerLine">#B71C1C</item>

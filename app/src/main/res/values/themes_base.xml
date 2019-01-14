@@ -98,6 +98,8 @@
     <item name="colorTextPrimaryInverse">#de000000</item>
     <item name="colorTextSecondary">#b3ffffff</item>
     <item name="colorTextSecondaryInverse">#8a000000</item>
+    <item name="colorTextSearch">#de000000</item>
+    <item name="colorTextSearchSecondary">#8a000000</item>
     <item name="colorDivider">#1FFFFFFF</item>
     <item name="android:textColorHint">?colorTextSecondary</item>
 
@@ -121,6 +123,7 @@
     <item name="colorControlNormal">?colorTextPrimary</item>
 
     <item name="colorBackgroundSnackbar">?colorPrimaryDark</item>
+    <item name="colorBackgroundSearch">?colorBackgroundCard</item>
   </style>
 
   <style name="Theme.ChatTheme.Light" parent="Base.ChatTheme.Light">
@@ -139,6 +142,8 @@
     <item name="colorTextPrimaryInverse">#ffffffff</item>
     <item name="colorTextSecondary">#8a000000</item>
     <item name="colorTextSecondaryInverse">#b3ffffff</item>
+    <item name="colorTextSearch">#de000000</item>
+    <item name="colorTextSearchSecondary">#8a000000</item>
     <item name="colorDivider">#1F000000</item>
     <item name="android:textColorHint">?colorTextSecondary</item>
 
@@ -163,6 +168,7 @@
     <item name="colorControlNormal">?colorTextPrimary</item>
 
     <item name="colorBackgroundSnackbar">?colorPrimary</item>
+    <item name="colorBackgroundSearch">?colorBackgroundCard</item>
   </style>
 
   <style name="Theme.ChatTheme.Light.DarkHead" parent="Theme.ChatTheme.Light">
@@ -177,6 +183,7 @@
     <item name="colorControlNormal">?colorTextPrimary</item>
 
     <item name="colorBackgroundSnackbar">?colorPrimaryDark</item>
+    <item name="colorBackgroundSearch">?colorBackgroundCard</item>
   </style>
 
   <style name="Widget.PopupOverlay.Setup" parent="Widget.AppBarOverlay.Light">

@@ -48,6 +48,8 @@
     <item name="colorTextPrimaryInverse">#de000000</item>
     <item name="colorTextSecondary">#b3ffffff</item>
     <item name="colorTextSecondaryInverse">#8a000000</item>
+    <item name="colorTextSearch">#ffffffff</item>
+    <item name="colorTextSearchSecondary">#b3ffffff</item>
     <item name="colorDivider">#1FFFFFFF</item>
 
     <item name="colorForeground">#FFFFFF</item>

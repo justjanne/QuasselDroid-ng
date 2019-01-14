@@ -22,7 +22,7 @@
 <resources>
   <color name="dracula_dark_background">#282a36</color>
 
-  <style name="Theme_ChatTheme_Dracula" parent="Theme.ChatTheme.Auto">
+  <style name="Theme.ChatTheme.Dracula" parent="Theme.ChatTheme.Auto">
     <item name="colorPrimary">?attr/colorBackgroundCard</item>
     <item name="colorPrimaryDark">?attr/colorBackground</item>
     <item name="colorAccent">#ff79c6</item>
@@ -56,6 +56,8 @@
     <item name="colorTextPrimaryInverse">#282a36</item>
     <item name="colorTextSecondary">#6272a4</item>
     <item name="colorTextSecondaryInverse">#586e75</item>
+    <item name="colorTextSearch">#f8f8f2</item>
+    <item name="colorTextSearchSecondary">#6272a4</item>
     <item name="colorDivider">#19f8f8f2</item>
 
     <item name="colorForegroundMirc">0x0</item>

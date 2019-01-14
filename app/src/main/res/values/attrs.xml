@@ -53,12 +53,15 @@
   <attr name="colorTextPrimaryInverse" format="color" />
   <attr name="colorTextSecondary" format="color" />
   <attr name="colorTextSecondaryInverse" format="color" />
+  <attr name="colorTextSearch" format="color" />
+  <attr name="colorTextSearchSecondary" format="color" />
   <attr name="colorDivider" format="color" />
 
   <attr name="colorBackground" format="color" />
   <attr name="colorBackgroundHighlight" format="color" />
   <attr name="colorBackgroundSecondary" format="color" />
   <attr name="colorBackgroundCard" format="color" />
+  <attr name="colorBackgroundSearch" format="color" />
   <attr name="colorBackgroundDialog" format="color" />
   <attr name="colorBackgroundSnackbar" format="color" />
 

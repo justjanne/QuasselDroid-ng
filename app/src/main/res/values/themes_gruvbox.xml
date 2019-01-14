@@ -56,6 +56,8 @@
     <item name="colorTextPrimaryInverse">#fbf1c7</item>
     <item name="colorTextSecondary">#665c54</item>
     <item name="colorTextSecondaryInverse">#bdae93</item>
+    <item name="colorTextSearch">#3c3836</item>
+    <item name="colorTextSearchSecondary">#665c54</item>
     <item name="colorDivider">#2d928374</item>
 
     <item name="colorForegroundMirc">0x1</item>
@@ -117,6 +119,8 @@
     <item name="colorTextPrimaryInverse">#282828</item>
     <item name="colorTextSecondary">#bdae93</item>
     <item name="colorTextSecondaryInverse">#665c54</item>
+    <item name="colorTextSearch">#dbdbb2</item>
+    <item name="colorTextSearchSecondary">#bdae93</item>
     <item name="colorDivider">#33928374</item>
 
     <item name="colorForegroundMirc">0x0</item>
