@@ -42,7 +42,8 @@
   <string name="label_contributors">Mitwirkende</string>
   <string name="label_copy">Kopieren</string>
   <string name="label_crashes">Absturzberichte</string>
-  <string name="label_create_shortcut">Verknüpfung erstellen</string>
+  <string name="label_shortcut">Verknüpfung</string>
+  <string name="label_shortcut_long">Erstellt eine Verknüpfung auf dem Startbildschirm</string>
   <string name="label_delete">Löschen</string>
   <string name="label_delete_all">Alle Löschen</string>
   <string name="label_disconnect">Verbindung trennen</string>
