@@ -40,8 +40,15 @@ data class BufferProps(
   val hiddenState: BufferHiddenState,
   val ircUser: IrcUser? = null,
   val avatarUrls: List<Avatar> = emptyList(),
-  val fallbackDrawable: Drawable? = null
+  val fallbackDrawable: Drawable? = null,
+  val matchMode: BufferMatchMode = BufferMatchMode.EXACT
 ) {
+  enum class BufferMatchMode(val priority: Int) {
+    EXACT(0),
+    START(1),
+    CONTAINS(2);
+  }
+
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false

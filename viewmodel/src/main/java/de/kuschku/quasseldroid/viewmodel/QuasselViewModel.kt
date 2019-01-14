@@ -394,6 +394,16 @@ class QuasselViewModel : ViewModel() {
                           activity to highlights
                         }
                       }.switchMap { (activity, highlights) ->
+                        val name = info.bufferName?.trim() ?: ""
+                        val search = bufferSearch.trim()
+                        val matchMode = when {
+                          name.equals(search, ignoreCase = true)     ->
+                            BufferProps.BufferMatchMode.EXACT
+                          name.startsWith(search, ignoreCase = true) ->
+                            BufferProps.BufferMatchMode.START
+                          else                                       ->
+                            BufferProps.BufferMatchMode.CONTAINS
+                        }
                         when (info.type.toInt()) {
                           BufferInfo.Type.QueryBuffer.toInt()   -> {
                             network.liveNetworkInfo().switchMap { networkInfo ->
@@ -413,7 +423,8 @@ class QuasselViewModel : ViewModel() {
                                       activity = activity,
                                       highlights = highlights,
                                       hiddenState = state,
-                                      ircUser = user
+                                      ircUser = user,
+                                      matchMode = matchMode
                                     )
                                   }
                                 }
@@ -436,7 +447,8 @@ class QuasselViewModel : ViewModel() {
                                       description = it?.topic() ?: "",
                                       activity = activity,
                                       highlights = highlights,
-                                      hiddenState = state
+                                      hiddenState = state,
+                                      matchMode = matchMode
                                     )
                                   }
                                 }
@@ -454,7 +466,8 @@ class QuasselViewModel : ViewModel() {
                                   description = "",
                                   activity = activity,
                                   highlights = highlights,
-                                  hiddenState = state
+                                  hiddenState = state,
+                                  matchMode = matchMode
                                 )
                               }
                             }
@@ -536,6 +549,7 @@ class QuasselViewModel : ViewModel() {
                         }.let {
                           if (config.sortAlphabetically())
                             it.sortedBy { IrcCaseMappers.unicode.toLowerCaseNullable(it.info.bufferName) }
+                              .sortedBy { it.matchMode.priority }
                               .sortedByDescending { it.hiddenState == BufferHiddenState.VISIBLE }
                           else it
                         }.distinctBy {
