@@ -60,6 +60,7 @@ import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.protocol.coresetup.CoreSetupData
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.session.Error
 import de.kuschku.libquassel.session.ISession
@@ -84,6 +85,7 @@ import de.kuschku.quasseldroid.ui.chat.input.ChatlineFragment
 import de.kuschku.quasseldroid.ui.clientsettings.client.ClientSettingsActivity
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity
+import de.kuschku.quasseldroid.ui.setup.core.CoreSetupActivity
 import de.kuschku.quasseldroid.ui.setup.network.LinkNetwork
 import de.kuschku.quasseldroid.ui.setup.network.NetworkSetupActivity
 import de.kuschku.quasseldroid.ui.setup.user.UserSetupActivity
@@ -337,11 +339,21 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         when (it) {
           is Error.HandshakeError -> it.message.let {
             when (it) {
+              is HandshakeMessage.ClientInitAck     ->
+                if (it.coreConfigured == false)
+                  CoreSetupActivity.launch(
+                    this,
+                    accountDatabase.accounts().findById(accountId),
+                    CoreSetupData.of(it)
+                  )
               is HandshakeMessage.ClientInitReject  ->
                 MaterialDialog.Builder(this)
                   .title(R.string.label_error_init)
                   .content(Html.fromHtml(it.errorString))
-                  .neutralText(R.string.label_close)
+                  .negativeText(R.string.label_disconnect)
+                  .onNegative { _, _ ->
+                    disconnect()
+                  }
                   .titleColorAttr(R.attr.colorTextPrimary)
                   .backgroundColorAttr(R.attr.colorBackgroundCard)
                   .contentColorAttr(R.attr.colorTextPrimary)
@@ -351,7 +363,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                 MaterialDialog.Builder(this)
                   .title(R.string.label_error_setup)
                   .content(Html.fromHtml(it.errorString))
-                  .neutralText(R.string.label_close)
+                  .negativeText(R.string.label_disconnect)
+                  .onNegative { _, _ ->
+                    disconnect()
+                  }
                   .titleColorAttr(R.attr.colorTextPrimary)
                   .backgroundColorAttr(R.attr.colorBackgroundCard)
                   .contentColorAttr(R.attr.colorTextPrimary)

@@ -22,16 +22,13 @@ package de.kuschku.quasseldroid.ui.setup
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
-import android.util.SparseArray
-import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.ActionMenuView
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
@@ -123,13 +120,20 @@ abstract class ServiceBoundSetupActivity :
   private lateinit var pageChangeListener: SetupActivityViewPagerPageChangeListener
 
   private fun pageChanged() {
-    currentPage.value = adapter.getItem(viewPager.currentItem)
-    val drawable = if (viewPager.currentItem == adapter.totalCount - 1)
-      R.drawable.ic_check
-    else
-      R.drawable.ic_arrow_right
-    button.setImageResource(drawable)
-    currentPage.value?.requestFocus()
+    val page = adapter.getItem(viewPager.currentItem)
+    currentPage.value = page
+
+    val finish = viewPager.currentItem == adapter.totalCount - 1
+    button.contentDescription =
+      if (finish) descriptionFinish
+      else descriptionNext
+    button.setTooltip()
+    button.setImageDrawable(
+      if (finish) drawableFinish
+      else drawableNext
+    )
+
+    page.requestFocus()
   }
 
   fun updateRecentsHeader() {
@@ -143,6 +147,12 @@ abstract class ServiceBoundSetupActivity :
     updateRecentsHeader()
   }
 
+  private var drawableFinish: Drawable? = null
+  private var drawableNext: Drawable? = null
+
+  private var descriptionFinish: String? = null
+  private var descriptionNext: String? = null
+
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.Theme_SetupTheme)
     super.onCreate(savedInstanceState)
@@ -151,6 +161,16 @@ abstract class ServiceBoundSetupActivity :
       .nullIf { it == 0 }?.let(this::setTitle)
     setContentView(R.layout.activity_setup)
     ButterKnife.bind(this)
+
+    drawableFinish = getVectorDrawableCompat(R.drawable.ic_check)?.mutate()?.also {
+      DrawableCompat.setTint(it, -1)
+    }
+    drawableNext = getVectorDrawableCompat(R.drawable.ic_arrow_right)?.mutate()?.also {
+      DrawableCompat.setTint(it, -1)
+    }
+
+    descriptionFinish = getString(R.string.label_finish)
+    descriptionNext = getString(R.string.label_next)
 
     menuView.popupTheme = R.style.Widget_PopupOverlay_Light
     menuInflater.inflate(R.menu.activity_setup, menuView.menu)
@@ -237,70 +257,6 @@ abstract class ServiceBoundSetupActivity :
       currentPage.value = adapter.getItem(viewPager.currentItem)
     }
     pageChanged()
-  }
-
-  private class SlidePagerAdapter(private val fragmentManager: FragmentManager) :
-    FragmentStatePagerAdapter(fragmentManager) {
-    private val retainedFragments = SparseArray<SlideFragment>()
-
-    val result = Bundle()
-      get() {
-        (0 until retainedFragments.size()).map(retainedFragments::valueAt).forEach {
-          it.getData(field)
-        }
-        return field
-      }
-
-    var lastValidItem = -1
-      set(value) {
-        field = value
-        notifyDataSetChanged()
-      }
-    private val list = mutableListOf<SlideFragment>()
-
-    override fun getItem(position: Int): SlideFragment {
-      return retainedFragments.get(position) ?: list[position]
-    }
-
-    override fun getCount() = Math.min(list.size, lastValidItem + 2)
-    val totalCount get() = list.size
-    fun addFragment(fragment: SlideFragment) {
-      list.add(fragment)
-    }
-
-    override fun instantiateItem(container: ViewGroup, position: Int): Any {
-      val fragment = super.instantiateItem(container, position)
-      storeNewFragment(position, fragment as SlideFragment)
-      return fragment
-    }
-
-    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-      retainedFragments.get(position)?.getData(result)
-      retainedFragments.remove(position)
-      super.destroyItem(container, position, `object`)
-    }
-
-    override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
-      super.restoreState(state, loader)
-      if (state != null) {
-        val bundle = state as Bundle
-        val keys = bundle.keySet()
-        for (key in keys) {
-          if (key.startsWith("f")) {
-            val index = Integer.parseInt(key.substring(1))
-            val f = fragmentManager.getFragment(bundle, key)
-            if (f != null && f is SlideFragment) {
-              storeNewFragment(index, f)
-            }
-          }
-        }
-      }
-    }
-
-    private fun storeNewFragment(index: Int, fragment: SlideFragment) {
-      fragment.initData = result
-      retainedFragments.put(index, fragment)
-    }
   }
 
   override fun onStart() {

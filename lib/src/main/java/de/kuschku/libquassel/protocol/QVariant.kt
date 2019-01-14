@@ -24,7 +24,7 @@ import de.kuschku.libquassel.protocol.primitive.serializer.Serializer
 sealed class QVariant<T> constructor(val data: T?, val type: Type, val serializer: Serializer<T>) {
   class Typed<T> internal constructor(data: T?, type: Type, serializer: Serializer<T>) :
     QVariant<T>(data, type, serializer) {
-    override fun toString() = "QVariant.Typed(${type.serializableName}, $data})"
+    override fun toString() = "QVariant.Typed(${type.serializableName}, $data)"
     override fun equals(other: Any?): Boolean {
       if (this === other) return true
       if (other !is Typed<*>) return false

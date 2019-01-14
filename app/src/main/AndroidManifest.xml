@@ -239,6 +239,13 @@
       android:parentActivityName=".ui.setup.accounts.selection.AccountSelectionActivity"
       android:windowSoftInputMode="adjustResize" />
 
+    <!-- Core Setup Flow -->
+    <activity
+      android:name=".ui.setup.core.CoreSetupActivity"
+      android:exported="false"
+      android:label="@string/setup_core_title"
+      android:parentActivityName=".ui.chat.ChatActivity"
+      android:windowSoftInputMode="adjustResize" />
     <!-- Core User Setup Flow -->
     <activity
       android:name=".ui.setup.user.UserSetupActivity"
@@ -246,6 +253,7 @@
       android:label="@string/setup_user_title"
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
+    <!-- Network Setup Flow -->
     <activity
       android:name=".ui.setup.network.NetworkSetupActivity"
       android:exported="false"

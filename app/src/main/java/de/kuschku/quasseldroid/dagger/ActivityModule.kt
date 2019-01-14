@@ -80,6 +80,8 @@ import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActiv
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.accounts.setup.AccountSetupActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.setup.AccountSetupFragmentProvider
+import de.kuschku.quasseldroid.ui.setup.core.CoreSetupActivity
+import de.kuschku.quasseldroid.ui.setup.core.CoreSetupFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.network.NetworkSetupActivity
 import de.kuschku.quasseldroid.ui.setup.network.NetworkSetupFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.user.UserSetupActivity
@@ -206,6 +208,10 @@ abstract class ActivityModule {
   @ActivityScope
   @ContributesAndroidInjector(modules = [NetworkSetupFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
   abstract fun bindNetworkSetupActivity(): NetworkSetupActivity
+
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [CoreSetupFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
+  abstract fun bindCoreSetupActivity(): CoreSetupActivity
 
   @ActivityScope
   @ContributesAndroidInjector(modules = [QuasselServiceModule::class, SettingsModule::class, DatabaseModule::class])

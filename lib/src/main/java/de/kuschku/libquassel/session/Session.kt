@@ -144,6 +144,10 @@ class Session(
     login()
   }
 
+  override fun setupCore(setupData: HandshakeMessage.CoreSetupData) {
+    dispatch(setupData)
+  }
+
   override fun handle(f: HandshakeMessage.CoreSetupAck): Boolean {
     login()
     return true

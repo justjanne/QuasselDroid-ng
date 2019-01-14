@@ -23,8 +23,9 @@ import de.kuschku.libquassel.protocol.Legacy_Features
 import de.kuschku.libquassel.protocol.QVariantList
 import de.kuschku.libquassel.protocol.QVariantMap
 import de.kuschku.libquassel.protocol.value
+import java.io.Serializable
 
-sealed class HandshakeMessage {
+sealed class HandshakeMessage : Serializable {
   class ClientInit(
     val clientVersion: String?, val buildDate: String?,
     val clientFeatures: Legacy_Features?, val featureList: List<String>
@@ -55,7 +56,7 @@ sealed class HandshakeMessage {
                       val authSetupData: QVariantMap?) :
     HandshakeMessage() {
     override fun toString(): String {
-      return "CoreSetupData"
+      return "CoreSetupData(adminUser=$adminUser, adminPassword=$adminPassword, backend=$backend, setupData=$setupData, authenticator=$authenticator, authSetupData=$authSetupData)"
     }
   }
 

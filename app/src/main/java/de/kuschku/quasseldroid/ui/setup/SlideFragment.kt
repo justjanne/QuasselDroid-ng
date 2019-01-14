@@ -92,6 +92,15 @@ abstract class SlideFragment : DaggerFragment() {
     this.view?.requestFocus()
   }
 
+  private var hasChangedListener: ((SlideFragment) -> Unit)? = null
+  fun setHasChangedListener(listener: ((SlideFragment) -> Unit)?) {
+    hasChangedListener = listener
+  }
+
+  protected fun hasChanged() {
+    hasChangedListener?.invoke(this)
+  }
+
   protected abstract fun onCreateContent(inflater: LayoutInflater, container: ViewGroup?,
                                          savedInstanceState: Bundle?): View
 }

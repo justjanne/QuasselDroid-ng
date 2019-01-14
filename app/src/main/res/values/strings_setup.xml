@@ -54,6 +54,8 @@
 
   <!-- Core Setup -->
 
+  <string name="setup_core_title">Setup Core</string>
+
   <!-- Core Authenticator Select -->
   <string name="slide_core_authenticator_select_title">Select Authentication Backend</string>
   <string name="slide_core_authenticator_select_description">Please select an authentication backend for the Quassel Core to use for authenticating users.</string>
@@ -62,9 +64,13 @@
   <string name="slide_core_backend_select_title">Select Storage Backend</string>
   <string name="slide_core_backend_select_description">Please select a database backend for the Quassel Core storage to store the backlog and other data in.</string>
 
+  <string name="label_backend">Backend</string>
+
   <!-- Core Backend Config -->
   <string name="slide_core_backend_setup_title">Configure Storage Backend</string>
   <string name="slide_core_backend_setup_description">Please configure the selected database backend.</string>
+
+  <string name="setup_core_backend_no_options">This backend has no configuration options, you’re done here!</string>
 
   <!-- User Setup -->
 

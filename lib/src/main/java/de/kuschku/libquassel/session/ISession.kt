@@ -23,6 +23,7 @@ import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.connection.Features
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.util.Optional
@@ -65,6 +66,7 @@ interface ISession : Closeable {
   val lag: Observable<Long>
 
   fun login(user: String, pass: String)
+  fun setupCore(setupData: HandshakeMessage.CoreSetupData)
 
   companion object {
     val NULL = object : ISession {
@@ -101,6 +103,7 @@ interface ISession : Closeable {
       override fun identity(id: IdentityId): Identity? = null
 
       override fun login(user: String, pass: String) = Unit
+      override fun setupCore(setupData: HandshakeMessage.CoreSetupData) = Unit
       override fun close() = Unit
     }
   }

@@ -21,11 +21,12 @@ package de.kuschku.libquassel.quassel
 
 import de.kuschku.libquassel.protocol.Legacy_Feature
 import de.kuschku.libquassel.protocol.Legacy_Features
+import java.io.Serializable
 
 class QuasselFeatures(
   val enabledFeatures: Set<ExtendedFeature>,
   val unknownFeatures: Set<String> = emptySet()
-) {
+) : Serializable {
   constructor(legacyFeatures: Legacy_Features?, extendedFeatures: Collection<String>) : this(
     legacyFeatures?.enabledValues()?.map(Legacy_Feature::toExtended).orEmpty() union
       extendedFeatures.mapNotNull(ExtendedFeature.Companion::of),
@@ -37,6 +38,11 @@ class QuasselFeatures(
   fun toStringList() = enabledFeatures.map(ExtendedFeature::name)
 
   infix fun hasFeature(feature: ExtendedFeature) = enabledFeatures.contains(feature)
+
+  override fun toString(): String {
+    return "QuasselFeatures(enabledFeatures=$enabledFeatures, unknownFeatures=$unknownFeatures)"
+  }
+
 
   companion object {
     fun empty() = QuasselFeatures(emptySet(), emptySet())

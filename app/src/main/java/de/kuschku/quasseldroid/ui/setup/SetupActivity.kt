@@ -24,15 +24,10 @@ import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
-import android.util.SparseArray
-import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.ActionMenuView
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
@@ -223,70 +218,6 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
       currentPage.value = adapter.getItem(viewPager.currentItem)
     }
     pageChanged()
-  }
-
-  private class SlidePagerAdapter(private val fragmentManager: FragmentManager) :
-    FragmentStatePagerAdapter(fragmentManager) {
-    private val retainedFragments = SparseArray<SlideFragment>()
-
-    val result = Bundle()
-      get() {
-        (0 until retainedFragments.size()).map(retainedFragments::valueAt).forEach {
-          it.getData(field)
-        }
-        return field
-      }
-
-    var lastValidItem = -1
-      set(value) {
-        field = value
-        notifyDataSetChanged()
-      }
-    private val list = mutableListOf<SlideFragment>()
-
-    override fun getItem(position: Int): SlideFragment {
-      return retainedFragments.get(position) ?: list[position]
-    }
-
-    override fun getCount() = Math.min(list.size, lastValidItem + 2)
-    val totalCount get() = list.size
-    fun addFragment(fragment: SlideFragment) {
-      list.add(fragment)
-    }
-
-    override fun instantiateItem(container: ViewGroup, position: Int): Any {
-      val fragment = super.instantiateItem(container, position)
-      storeNewFragment(position, fragment as SlideFragment)
-      return fragment
-    }
-
-    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-      retainedFragments.get(position)?.getData(result)
-      retainedFragments.remove(position)
-      super.destroyItem(container, position, `object`)
-    }
-
-    override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
-      super.restoreState(state, loader)
-      if (state != null) {
-        val bundle = state as Bundle
-        val keys = bundle.keySet()
-        for (key in keys) {
-          if (key.startsWith("f")) {
-            val index = Integer.parseInt(key.substring(1))
-            val f = fragmentManager.getFragment(bundle, key)
-            if (f != null && f is SlideFragment) {
-              storeNewFragment(index, f)
-            }
-          }
-        }
-      }
-    }
-
-    private fun storeNewFragment(index: Int, fragment: SlideFragment) {
-      fragment.initData = result
-      retainedFragments.put(index, fragment)
-    }
   }
 
   override fun onBackPressed() {

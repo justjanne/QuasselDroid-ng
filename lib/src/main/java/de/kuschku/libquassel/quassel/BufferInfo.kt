@@ -19,6 +19,7 @@
 
 package de.kuschku.libquassel.quassel
 
+import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Buffer_Types
 import de.kuschku.libquassel.util.flag.Flag
 import de.kuschku.libquassel.util.flag.Flags
@@ -26,11 +27,11 @@ import de.kuschku.libquassel.util.flag.ShortFlag
 import de.kuschku.libquassel.util.flag.ShortFlags
 
 data class BufferInfo(
-  var bufferId: Int,
-  var networkId: Int,
-  var type: Buffer_Types,
-  var groupId: Int,
-  var bufferName: String?
+  var bufferId: Int = -1,
+  var networkId: Int = -1,
+  var type: Buffer_Types = Buffer_Type.of(),
+  var groupId: Int = -1,
+  var bufferName: String? = null
 ) {
   enum class Type(override val bit: Short) : ShortFlag<Type> {
     InvalidBuffer(0x00),

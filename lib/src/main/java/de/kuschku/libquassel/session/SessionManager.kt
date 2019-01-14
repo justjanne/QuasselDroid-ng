@@ -23,6 +23,7 @@ import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.connection.HostnameVerifier
 import de.kuschku.libquassel.connection.SocketAddress
 import de.kuschku.libquassel.protocol.ClientData
+import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
@@ -103,6 +104,10 @@ class SessionManager(
 
   fun login(user: String, pass: String) {
     inProgressSession.value.login(user, pass)
+  }
+
+  fun setupCore(setupData: HandshakeMessage.CoreSetupData) {
+    inProgressSession.value.setupCore(setupData)
   }
 
   fun connect(
