@@ -26,7 +26,7 @@ interface Backend {
   fun connect(address: SocketAddress, user: String, pass: String, reconnect: Boolean)
   fun reconnect()
   fun disconnect(forever: Boolean = false)
-  fun sessionManager(): SessionManager
+  fun sessionManager(): SessionManager?
   fun updateUserDataAndLogin(user: String, pass: String)
   fun requestConnectNewNetwork()
 }

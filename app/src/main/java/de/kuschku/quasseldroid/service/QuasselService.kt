@@ -270,7 +270,7 @@ class QuasselService : DaggerLifecycleService(),
       }
     }
 
-    override fun sessionManager() = service!!.sessionManager
+    override fun sessionManager() = service?.sessionManager
 
     override fun connectUnlessConnected(address: SocketAddress, user: String, pass: String,
                                         reconnect: Boolean) {

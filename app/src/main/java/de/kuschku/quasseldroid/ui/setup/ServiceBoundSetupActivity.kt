@@ -85,13 +85,13 @@ abstract class ServiceBoundSetupActivity :
 
   protected fun runInBackground(f: () -> Unit) {
     connection.backend.value.ifPresent {
-      it.sessionManager().handlerService.backend(f)
+      it.sessionManager()?.handlerService?.backend(f)
     }
   }
 
   protected fun runInBackgroundDelayed(delayMillis: Long, f: () -> Unit) {
     connection.backend.value.ifPresent {
-      it.sessionManager().handlerService.backendDelayed(delayMillis, f)
+      it.sessionManager()?.handlerService?.backendDelayed(delayMillis, f)
     }
   }
 
