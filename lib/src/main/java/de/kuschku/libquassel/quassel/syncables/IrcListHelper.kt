@@ -24,17 +24,33 @@ import de.kuschku.libquassel.protocol.QStringList
 import de.kuschku.libquassel.protocol.QVariantList
 import de.kuschku.libquassel.quassel.syncables.interfaces.IIrcListHelper
 import de.kuschku.libquassel.session.SignalProxy
+import de.kuschku.libquassel.util.rxjava.ReusableUnicastSubject
 
 class IrcListHelper constructor(
   proxy: SignalProxy
 ) : SyncableObject(proxy, "IrcListHelper"), IIrcListHelper {
+  sealed class Event {
+    data class ChannelList(val netId: NetworkId, val channelFilters: QStringList,
+                           val data: QVariantList) : Event()
+
+    data class Finished(val netId: NetworkId) : Event()
+
+    data class Error(val error: String) : Event()
+  }
+
+  private val subject = ReusableUnicastSubject.create<Event>()
+  val observable = subject.publish().refCount()
+
   override fun receiveChannelList(netId: NetworkId, channelFilters: QStringList,
                                   data: QVariantList) {
+    subject.onNext(Event.ChannelList(netId, channelFilters, data))
   }
 
   override fun reportFinishedList(netId: NetworkId) {
+    subject.onNext(Event.Finished(netId))
   }
 
   override fun reportError(error: String) {
+    subject.onNext(Event.Error(error))
   }
 }
