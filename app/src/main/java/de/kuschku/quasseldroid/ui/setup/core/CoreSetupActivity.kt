@@ -51,17 +51,14 @@ class CoreSetupActivity : ServiceBoundSetupActivity() {
     val authenticatorBackend = data.getSerializable("authenticator") as? CoreSetupBackend
     val authenticatorBackendSetup = data.getSerializable("authenticatorSetup") as? HashMap<String, QVariant_>
 
-    val setupData = HandshakeMessage.CoreSetupData(
+    viewModel.sessionManager.value?.orNull()?.setupCore(HandshakeMessage.CoreSetupData(
       adminUser = user,
       adminPassword = pass,
       backend = storageBackend?.backendId,
       setupData = storageBackendSetup.orEmpty(),
       authenticator = authenticatorBackend?.backendId,
       authSetupData = authenticatorBackendSetup.orEmpty()
-    )
-
-    viewModel.sessionManager.value?.orNull()?.setupCore(setupData)
-    println(setupData)
+    ))
 
     setResult(Activity.RESULT_OK)
     finish()

@@ -28,6 +28,7 @@ import de.kuschku.libquassel.session.BacklogStorage
 import de.kuschku.libquassel.session.NotificationManager
 import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.util.helpers.deserializeString
+import de.kuschku.libquassel.util.rxjava.ReusableUnicastSubject
 import java.nio.ByteBuffer
 
 class RpcHandler(
@@ -48,7 +49,11 @@ class RpcHandler(
   override fun networkCreated(networkId: NetworkId) = session.addNetwork(networkId)
   override fun networkRemoved(networkId: NetworkId) = session.removeNetwork(networkId)
 
+  private val passwordChangedSubject = ReusableUnicastSubject.create<Boolean>()
+  val passwordChanged = passwordChangedSubject.publish().refCount()
+
   override fun passwordChanged(ignored: Long, success: Boolean) {
+    passwordChangedSubject.onNext(success)
   }
 
   override fun disconnectFromCore() {

@@ -211,5 +211,19 @@
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/label_info_core" />
     </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/passwordchange"
+      style="@style/Widget.CoreSettings.PrimaryItemGroupHeader"
+      android:focusable="true">
+
+      <androidx.appcompat.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_key_variant" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/label_password_change" />
+    </LinearLayout>
   </LinearLayout>
 </androidx.core.widget.NestedScrollView>

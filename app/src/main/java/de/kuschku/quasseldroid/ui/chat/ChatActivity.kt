@@ -319,7 +319,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         }
       }
     }
-
     // If we connect to a new network without statusbuffer, the bufferid may be -networkId.
     // In that case, once we’re connected (and a status buffer exists), we want to switch to it.
     combineLatest(viewModel.allBuffers, viewModel.buffer).map { (buffers, current) ->

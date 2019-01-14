@@ -99,6 +99,11 @@
       android:exported="false"
       android:label="@string/label_topic"
       android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.chat.passwordchange.PasswordChangeActivity"
+      android:exported="false"
+      android:label="@string/label_password_change"
+      android:windowSoftInputMode="adjustResize" />
 
     <!-- Core Settings -->
     <activity

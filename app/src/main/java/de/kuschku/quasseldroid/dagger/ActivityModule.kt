@@ -32,6 +32,8 @@ import de.kuschku.quasseldroid.ui.chat.info.core.CoreInfoActivity
 import de.kuschku.quasseldroid.ui.chat.info.core.CoreInfoFragmentProvider
 import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoActivity
 import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoFragmentProvider
+import de.kuschku.quasseldroid.ui.chat.passwordchange.PasswordChangeActivity
+import de.kuschku.quasseldroid.ui.chat.passwordchange.PasswordChangeFragmentProvider
 import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
 import de.kuschku.quasseldroid.ui.chat.topic.TopicFragmentProvider
 import de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity
@@ -108,6 +110,10 @@ abstract class ActivityModule {
   @ActivityScope
   @ContributesAndroidInjector(modules = [TopicFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
   abstract fun bindTopicActivity(): TopicActivity
+
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [PasswordChangeFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
+  abstract fun bindPasswordChangeActivity(): PasswordChangeActivity
 
   @ActivityScope
   @ContributesAndroidInjector(modules = [ClientSettingsFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])

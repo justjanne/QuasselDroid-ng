@@ -23,12 +23,12 @@ import android.app.Activity
 import android.text.Editable
 import android.text.TextWatcher
 
-abstract class TextValidator(private val activity: Activity,
+abstract class TextValidator(private val activity: Activity?,
                              private val errorListener: (String?) -> Unit,
                              private val error: String) : TextWatcher {
   override fun afterTextChanged(p0: Editable) {
     isValid = validate(p0)
-    activity.runOnUiThread {
+    activity?.runOnUiThread {
       errorListener(if (isValid) null else error)
     }
     onChanged()
