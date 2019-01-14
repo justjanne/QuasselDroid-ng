@@ -21,6 +21,7 @@ package de.kuschku.quasseldroid.ui.chat.info.user
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.view.LayoutInflater
@@ -42,6 +43,7 @@ import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
+import de.kuschku.quasseldroid.util.ShortcutCreationHelper
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.avatars.MatrixApi
 import de.kuschku.quasseldroid.util.avatars.MatrixAvatarInfo
@@ -76,6 +78,9 @@ class UserInfoFragment : ServiceBoundFragment() {
 
   @BindView(R.id.action_mention)
   lateinit var actionMention: Button
+
+  @BindView(R.id.action_shortcut)
+  lateinit var actionShortcut: Button
 
   @BindView(R.id.away_container)
   lateinit var awayContainer: ViewGroup
@@ -127,27 +132,41 @@ class UserInfoFragment : ServiceBoundFragment() {
 
     val networkId2 = arguments?.getInt("networkId")
     val nickName2 = arguments?.getString("nick")
+
+    var currentBufferInfo: BufferInfo? = null
+    var currentIrcUser: IrcUser? = null
+
+    fun updateShortcutVisibility() {
+      actionShortcut.visibleIf(currentBufferInfo != null)
+    }
+
     combineLatest(viewModel.session, viewModel.networks).switchMap { (sessionOptional, networks) ->
-      fun processUser(user: IrcUser, info: BufferInfo? = null) = when {
-        user == IrcUser.NULL && info != null -> Optional.of(IrcUserInfo(
-          networkId = info.networkId,
-          nick = info.bufferName ?: "",
-          knownToCore = true
-        ))
-        user == IrcUser.NULL                 -> Optional.empty()
-        else                                 -> Optional.of(IrcUserInfo(
-          networkId = user.network().networkId(),
-          nick = user.nick(),
-          user = user.user(),
-          host = user.host(),
-          account = user.account(),
-          server = user.server(),
-          realName = user.realName(),
-          isAway = user.isAway(),
-          awayMessage = user.awayMessage(),
-          network = user.network(),
-          knownToCore = true
-        ))
+      fun processUser(user: IrcUser, info: BufferInfo? = null): Optional<IrcUserInfo> {
+        updateShortcutVisibility()
+        return when {
+          user == IrcUser.NULL && info != null -> Optional.of(IrcUserInfo(
+            networkId = info.networkId,
+            nick = info.bufferName ?: "",
+            knownToCore = true,
+            info = info
+          ))
+          user == IrcUser.NULL                 -> Optional.empty()
+          else                                 -> Optional.of(IrcUserInfo(
+            networkId = user.network().networkId(),
+            nick = user.nick(),
+            user = user.user(),
+            host = user.host(),
+            account = user.account(),
+            server = user.server(),
+            realName = user.realName(),
+            isAway = user.isAway(),
+            awayMessage = user.awayMessage(),
+            network = user.network(),
+            knownToCore = true,
+            info = info,
+            ircUser = user
+          ))
+        }
       }
 
       if (openBuffer == true) {
@@ -166,7 +185,12 @@ class UserInfoFragment : ServiceBoundFragment() {
           ?.map { user -> processUser(user) }
       } ?: Observable.just(IrcUser.NULL).map { user -> processUser(user) }
     }.toLiveData().observe(this, Observer {
-      val processUser = { user: IrcUserInfo ->
+      val user = it.orNull()
+      if (user != null) {
+        currentBufferInfo = user.info
+        currentIrcUser = user.ircUser
+        actionShortcut.visibleIf(currentBufferInfo != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+
         avatar.post {
           avatar.visibility = View.GONE
           actualUrl = null
@@ -279,8 +303,21 @@ class UserInfoFragment : ServiceBoundFragment() {
             }
           }
         }
+
+        actionShortcut.setOnClickListener {
+          this.context?.let { context ->
+            currentBufferInfo?.let { info ->
+              ShortcutCreationHelper.create(
+                context = context,
+                messageSettings = messageSettings,
+                accountId = accountId,
+                info = info,
+                ircUser = currentIrcUser
+              )
+            }
+          }
+        }
       }
-      it?.orNull()?.let(processUser)
     })
 
     avatar.setOnClickListener {
@@ -330,6 +367,15 @@ class UserInfoFragment : ServiceBoundFragment() {
       null
     )
     actionMention.retint()
+
+    actionShortcut.setTooltip()
+    actionShortcut.setCompoundDrawablesWithIntrinsicBounds(
+      null,
+      requireContext().getVectorDrawableCompat(R.drawable.ic_link),
+      null,
+      null
+    )
+    actionShortcut.retint()
 
     return view
   }

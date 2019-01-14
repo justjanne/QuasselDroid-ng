@@ -19,6 +19,8 @@
 
 package de.kuschku.quasseldroid.ui.chat.info.user
 
+import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.quassel.syncables.Network
 
 data class IrcUserInfo(
@@ -32,5 +34,7 @@ data class IrcUserInfo(
   val isAway: Boolean? = false,
   val awayMessage: String? = null,
   val network: Network? = null,
-  val knownToCore: Boolean = false
+  val knownToCore: Boolean = false,
+  val info: BufferInfo? = null,
+  val ircUser: IrcUser? = null
 )

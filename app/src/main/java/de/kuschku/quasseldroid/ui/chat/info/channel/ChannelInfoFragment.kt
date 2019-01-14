@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.chat.info.channel
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,10 +30,13 @@ import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
+import de.kuschku.quasseldroid.util.ShortcutCreationHelper
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
@@ -60,8 +64,14 @@ class ChannelInfoFragment : ServiceBoundFragment() {
   @BindView(R.id.action_join)
   lateinit var actionJoin: Button
 
+  @BindView(R.id.action_shortcut)
+  lateinit var actionShortcut: Button
+
   @Inject
   lateinit var contentFormatter: ContentFormatter
+
+  @Inject
+  lateinit var messageSettings: MessageSettings
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
@@ -70,50 +80,74 @@ class ChannelInfoFragment : ServiceBoundFragment() {
 
     val openBuffer = arguments?.getBoolean("openBuffer")
 
+    var currentBufferInfo: BufferInfo? = null
+
     combineLatest(viewModel.session, viewModel.networks).map { (sessionOptional, networks) ->
       if (openBuffer == true) {
         val session = sessionOptional?.orNull()
         val bufferSyncer = session?.bufferSyncer
         val bufferInfo = bufferSyncer?.bufferInfo(arguments?.getInt("bufferId") ?: -1)
-        bufferInfo?.let {
-          networks[it.networkId]?.ircChannel(it.bufferName)
-        }
-      } else {
-        networks[arguments?.getInt("networkId")]?.ircChannel(arguments?.getString("nick"))
-      } ?: IrcChannel.NULL
-    }.filter {
-      it != IrcChannel.NULL
-    }.switchMap(IrcChannel::updates).toLiveData().observe(this, Observer { channel ->
-      if (channel != null) {
-        name.text = channel.name()
-        topic.text = contentFormatter.formatContent(channel.topic(),
-                                                    networkId = channel.network().networkId())
-
-        actionEditTopic.setOnClickListener {
-          TopicActivity.launch(requireContext(), buffer = arguments?.getInt("bufferId") ?: -1)
-        }
-
-        actionPart.setOnClickListener {
-          viewModel.session.value?.orNull()?.let { session ->
-            session.bufferSyncer?.find(
-              networkId = channel.network().networkId(),
-              type = Buffer_Type.of(Buffer_Type.StatusBuffer)
-            )?.let { statusInfo ->
-              session.rpcHandler?.sendInput(statusInfo, "/part ${channel.name()}")
-              requireActivity().finish()
-            }
+        bufferInfo?.let { info ->
+          networks[info.networkId]?.ircChannel(info.bufferName)?.let {
+            Pair(info, it)
           }
         }
+      } else {
+        networks[arguments?.getInt("networkId")]?.ircChannel(arguments?.getString("nick"))?.let {
+          Pair(null, it)
+        }
+      } ?: Pair(null, IrcChannel.NULL)
+    }.filter {
+      it.second != IrcChannel.NULL
+    }.switchMap { (info, channel) ->
+      channel.updates().map {
+        Pair(info, it)
+      }
+    }.toLiveData().observe(this, Observer { (info, channel) ->
+      name.text = channel.name()
+      topic.text = contentFormatter.formatContent(channel.topic(),
+                                                  networkId = channel.network().networkId())
 
-        actionWho.setOnClickListener {
-          viewModel.session.value?.orNull()?.let { session ->
-            session.bufferSyncer?.find(
-              networkId = channel.network().networkId(),
-              type = Buffer_Type.of(Buffer_Type.StatusBuffer)
-            )?.let { statusInfo ->
-              session.rpcHandler?.sendInput(statusInfo, "/who ${channel.name()}")
-              requireActivity().finish()
-            }
+      currentBufferInfo = info
+      actionShortcut.visibleIf(info != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+
+      actionEditTopic.setOnClickListener {
+        TopicActivity.launch(requireContext(), buffer = arguments?.getInt("bufferId") ?: -1)
+      }
+
+      actionPart.setOnClickListener {
+        viewModel.session.value?.orNull()?.let { session ->
+          session.bufferSyncer?.find(
+            networkId = channel.network().networkId(),
+            type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+          )?.let { statusInfo ->
+            session.rpcHandler?.sendInput(statusInfo, "/part ${channel.name()}")
+            requireActivity().finish()
+          }
+        }
+      }
+
+      actionWho.setOnClickListener {
+        viewModel.session.value?.orNull()?.let { session ->
+          session.bufferSyncer?.find(
+            networkId = channel.network().networkId(),
+            type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+          )?.let { statusInfo ->
+            session.rpcHandler?.sendInput(statusInfo, "/who ${channel.name()}")
+            requireActivity().finish()
+          }
+        }
+      }
+
+      actionShortcut.setOnClickListener {
+        this.context?.let { context ->
+          currentBufferInfo?.let { info ->
+            ShortcutCreationHelper.create(
+              context = context,
+              messageSettings = messageSettings,
+              accountId = accountId,
+              info = info
+            )
           }
         }
       }
@@ -158,6 +192,15 @@ class ChannelInfoFragment : ServiceBoundFragment() {
       null
     )
     actionPart.retint()
+
+    actionShortcut.setTooltip()
+    actionShortcut.setCompoundDrawablesWithIntrinsicBounds(
+      null,
+      requireContext().getVectorDrawableCompat(R.drawable.ic_link),
+      null,
+      null
+    )
+    actionShortcut.retint()
 
     return view
   }

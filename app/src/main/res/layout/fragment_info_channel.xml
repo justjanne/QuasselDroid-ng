@@ -66,6 +66,7 @@
           style="@style/Widget.Info.ActionButton"
           android:contentDescription="@string/label_edit_topic_long"
           android:text="@string/label_edit_topic"
+          tools:drawableTop="@drawable/ic_pencil"
           tools:drawableTint="?colorTextSecondary" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -73,13 +74,7 @@
           style="@style/Widget.Info.ActionButton"
           android:contentDescription="@string/label_who_long"
           android:text="@string/label_who"
-          tools:drawableTint="?colorTextSecondary" />
-
-        <androidx.appcompat.widget.AppCompatButton
-          android:id="@+id/action_part"
-          style="@style/Widget.Info.ActionButton"
-          android:contentDescription="@string/label_part_long"
-          android:text="@string/label_part"
+          tools:drawableTop="@drawable/ic_info"
           tools:drawableTint="?colorTextSecondary" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -89,7 +84,24 @@
           android:text="@string/label_join"
           android:visibility="gone"
           tools:drawableTint="?colorTextSecondary"
+          tools:drawableTop="@drawable/ic_account_plus"
           tools:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatButton
+          android:id="@+id/action_part"
+          style="@style/Widget.Info.ActionButton"
+          android:contentDescription="@string/label_part_long"
+          android:text="@string/label_part"
+          tools:drawableTop="@drawable/ic_account_minus"
+          tools:drawableTint="?colorTextSecondary" />
+
+        <androidx.appcompat.widget.AppCompatButton
+          android:id="@+id/action_shortcut"
+          style="@style/Widget.Info.ActionButton"
+          android:contentDescription="@string/label_shortcut_long"
+          android:text="@string/label_shortcut"
+          tools:drawableTint="?colorTextSecondary"
+          tools:drawableTop="@drawable/ic_link" />
       </LinearLayout>
     </HorizontalScrollView>
 

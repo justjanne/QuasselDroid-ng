@@ -107,6 +107,7 @@
             style="@style/Widget.Info.ActionButton"
             android:contentDescription="@string/label_query_long"
             android:text="@string/label_query"
+            tools:drawableTop="@drawable/ic_message_bulleted"
             tools:drawableTint="?colorTextSecondary" />
 
           <androidx.appcompat.widget.AppCompatButton
@@ -115,6 +116,7 @@
             android:contentDescription="@string/label_ignore_long"
             android:text="@string/label_ignore"
             android:visibility="gone"
+            tools:drawableTop="@drawable/ic_eye_off"
             tools:drawableTint="?colorTextSecondary"
             tools:visibility="visible" />
 
@@ -123,6 +125,7 @@
             style="@style/Widget.Info.ActionButton"
             android:contentDescription="@string/label_whois_long"
             android:text="@string/label_whois"
+            tools:drawableTop="@drawable/ic_info"
             tools:drawableTint="?colorTextSecondary" />
 
           <androidx.appcompat.widget.AppCompatButton
@@ -130,7 +133,16 @@
             style="@style/Widget.Info.ActionButton"
             android:contentDescription="@string/label_mention_long"
             android:text="@string/label_mention"
+            tools:drawableTop="@drawable/ic_share_alternative"
             tools:drawableTint="?colorTextSecondary" />
+
+          <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/action_shortcut"
+            style="@style/Widget.Info.ActionButton"
+            android:contentDescription="@string/label_shortcut_long"
+            android:text="@string/label_shortcut"
+            tools:drawableTint="?colorTextSecondary"
+            tools:drawableTop="@drawable/ic_link" />
         </LinearLayout>
       </HorizontalScrollView>
 
