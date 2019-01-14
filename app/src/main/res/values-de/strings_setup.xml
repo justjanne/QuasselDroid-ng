@@ -54,6 +54,8 @@
 
   <!-- Core Setup -->
 
+  <string name="setup_core_title">Core Einrichten</string>
+
   <!-- Core Authenticator Select -->
   <string name="slide_core_authenticator_select_title">Authentifizierungsbackend auswählen</string>
   <string name="slide_core_authenticator_select_description">Bitte wähle aus, welches Authentifizierungsbackend der Quassel Core verwenden soll</string>
@@ -62,9 +64,13 @@
   <string name="slide_core_backend_select_title">Datenbank auswählen</string>
   <string name="slide_core_backend_select_description">Bitte wähle aus, in welchem Datenbankbackend der Quassel Core Nachrichten und andere Daten speichern soll</string>
 
+  <string name="label_backend">Backend</string>
+
   <!-- Core Backend Config -->
   <string name="slide_core_backend_setup_title">Datenbank konfigurieren</string>
   <string name="slide_core_backend_setup_description">Bitte konfiguriere das ausgewählte Datenbankbackend</string>
+
+  <string name="setup_core_backend_no_options">Dieses Backend hat keine Einstellungsmöglichkeiten, du kannst also direkt mit dem nächsten Schritt fortfahren.</string>
 
   <!-- User Setup -->
 

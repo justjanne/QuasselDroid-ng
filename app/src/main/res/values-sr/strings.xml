@@ -135,6 +135,9 @@
   <string name="label_feature_richmessages">Potrebno za vidljivost pravih imena ili IRCv3 ili Gravatar avatara u porukama</string>
   <string name="label_feature_backlogfiltertype">Potrebno za primanje prošlih obaveštenja posle povezivanja</string>
 
+  <string name="label_feature_context_missing">Vašem jezgru nedostaju funkcije potrebne za pravilno funkcionisanje Quasseldroid-a.</string>
+  <string name="label_feature_context_missing_button">Detalji</string>
+
   <string name="notification_channel_connection_title">Veza</string>
   <string name="notification_channel_highlight_title">Isticanja</string>
   <string name="notification_channel_old_highlight_title">Stara Isticanja</string>

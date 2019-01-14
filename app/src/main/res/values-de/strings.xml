@@ -50,6 +50,7 @@
   <string name="label_edit_topic">Thema ändern</string>
   <string name="label_edit_topic_long">Open dialog to change the channel topic</string>
   <string name="label_filter_messages">Nachrichten filtern</string>
+  <string name="label_finish">Fertig</string>
   <string name="label_hide_perm">Permanent ausblenden</string>
   <string name="label_hide_temp">Temporär ausblenden</string>
   <string name="label_ignore">Ignorieren</string>
@@ -67,6 +68,7 @@
   <string name="label_mark_read">Gelesen</string>
   <string name="label_mention">Erwähnen</string>
   <string name="label_mention_long">Kopiert den Nutzernamen in die Eingabezeile</string>
+  <string name="label_next">Weiter</string>
   <string name="label_new_account">Account hinzufügen</string>
   <string name="label_new_chatlist">Chatliste hinzufügen</string>
   <string name="label_new_highlight_rule">Neue Hervorhebungsregel</string>
@@ -84,6 +86,12 @@
   <string name="label_open">Öffnen</string>
   <string name="label_part">Verlassen</string>
   <string name="label_part_long">Kanal verlassen</string>
+  <string name="label_password_change">Passwort ändern</string>
+  <string name="label_password_error_wrong">Falsches Passwort</string>
+  <string name="label_password_error_nomatch">Passwörter stimmen nicht überein</string>
+  <string name="label_password_new">Neues Passwort</string>
+  <string name="label_password_old">Altes Passwort</string>
+  <string name="label_password_repeat">Passwort wiederholen</string>
   <string name="label_placeholder_message">Nachricht schreiben…</string>
   <string name="label_placeholder_topic">Beschreib das Thema des Kanals…</string>
   <string name="label_privacy_policy">Datenschutzerklärung</string>
@@ -91,6 +99,9 @@
   <string name="label_query_long">Öffnet einen privaten Chat</string>
   <string name="label_rename">Umbenennen</string>
   <string name="label_save">Speichern</string>
+  <string name="label_saving">Speichern…</string>
+  <string name="label_search">Suchen…</string>
+  <string name="label_search_buffer">Chats suchen</string>
   <string name="label_select">Auswählen</string>
   <string name="label_send">Senden</string>
   <string name="label_set_default">Als Standard setzen</string>
