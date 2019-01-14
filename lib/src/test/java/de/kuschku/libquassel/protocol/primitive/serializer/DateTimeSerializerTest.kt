@@ -37,7 +37,7 @@ class DateTimeSerializerTest {
   fun testEpochAtTimezone() {
     val value = Instant.EPOCH.atOffset(ZoneOffset.ofTotalSeconds(1234))
     assertEquals(
-      value.atZoneSimilarLocal(ZoneOffset.UTC).toInstant(),
+      value,
       roundTrip(DateTimeSerializer, value)
     )
   }

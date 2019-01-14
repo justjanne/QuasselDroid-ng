@@ -29,10 +29,11 @@ import java.nio.ByteBuffer
 
 object DateTimeSerializer : Serializer<Temporal> {
   enum class TimeSpec(val value: Byte) {
-    LocalTime(0),
-    UTC(1),
-    OffsetFromUTC(2),
-    TimeZone(3);
+    LocalUnknown(-1),
+    LocalStandard(0),
+    LocalDST(1),
+    UTC(2),
+    OffsetFromUTC(3);
 
     companion object {
       private val map = TimeSpec.values().associateBy(TimeSpec::value)
@@ -45,7 +46,7 @@ object DateTimeSerializer : Serializer<Temporal> {
       is LocalDateTime  -> {
         IntSerializer.serialize(buffer, data.getLong(JulianFields.JULIAN_DAY).toInt(), features)
         IntSerializer.serialize(buffer, data.getLong(ChronoField.MILLI_OF_DAY).toInt(), features)
-        ByteSerializer.serialize(buffer, TimeSpec.LocalTime.value, features)
+        ByteSerializer.serialize(buffer, TimeSpec.LocalUnknown.value, features)
       }
       is OffsetDateTime -> {
         IntSerializer.serialize(buffer, data.getLong(JulianFields.JULIAN_DAY).toInt(), features)
@@ -76,16 +77,25 @@ object DateTimeSerializer : Serializer<Temporal> {
     val julianDay = IntSerializer.deserialize(buffer, features).toLong()
     val milliOfDay = IntSerializer.deserialize(buffer, features).toLong()
     val timeSpec = TimeSpec.of(ByteSerializer.deserialize(buffer, features))
+                   ?: TimeSpec.LocalUnknown
     if (milliOfDay == -1L || julianDay == -1L)
       return Instant.EPOCH
     return when (timeSpec) {
-      TimeSpec.LocalTime ->
-        Instant.EPOCH.atZone(ZoneOffset.systemDefault())
+      TimeSpec.LocalStandard,
+      TimeSpec.LocalUnknown,
+      TimeSpec.LocalDST      ->
+        Instant.EPOCH
+          .atZone(ZoneOffset.systemDefault())
           .with(JulianFields.JULIAN_DAY, julianDay)
           .with(ChronoField.MILLI_OF_DAY, milliOfDay)
-          .toInstant()
-      else               ->
-        Instant.EPOCH.atOffset(ZoneOffset.UTC)
+      TimeSpec.OffsetFromUTC ->
+        Instant.EPOCH
+          .atOffset(ZoneOffset.ofTotalSeconds(IntSerializer.deserialize(buffer, features)))
+          .with(JulianFields.JULIAN_DAY, julianDay)
+          .with(ChronoField.MILLI_OF_DAY, milliOfDay)
+      TimeSpec.UTC           ->
+        Instant.EPOCH
+          .atOffset(ZoneOffset.UTC)
           .with(JulianFields.JULIAN_DAY, julianDay)
           .with(ChronoField.MILLI_OF_DAY, milliOfDay)
           .toInstant()
