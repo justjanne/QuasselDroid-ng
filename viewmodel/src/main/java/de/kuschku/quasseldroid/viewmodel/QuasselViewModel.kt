@@ -116,6 +116,8 @@ class QuasselViewModel : ViewModel() {
     }.mapSwitchMap(BufferViewConfig::liveUpdates)
   }
 
+  val bufferSearchTemporarilyVisible = BehaviorSubject.createDefault(false)
+
   val errors = sessionManager.switchMap {
     it.orNull()?.error ?: Observable.empty()
   }

@@ -46,6 +46,8 @@ import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.minus
+import de.kuschku.libquassel.util.helpers.mapMap
+import de.kuschku.libquassel.util.helpers.mapOrElse
 import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
@@ -461,8 +463,14 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     })
 
     chatListToolbar.inflateMenu(R.menu.context_bufferlist)
+    chatListToolbar.menu.findItem(R.id.action_search).isChecked = viewModel.bufferSearchTemporarilyVisible.value
     chatListToolbar.setOnMenuItemClickListener { item ->
       when (item.itemId) {
+        R.id.action_search      -> {
+          item.isChecked = !item.isChecked
+          viewModel.bufferSearchTemporarilyVisible.onNext(item.isChecked)
+          true
+        }
         R.id.action_show_hidden -> {
           item.isChecked = !item.isChecked
           viewModel.showHidden.onNext(item.isChecked)
@@ -482,11 +490,21 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       hasSetBufferViewConfigId = false
     })
 
-    viewModel.bufferViewConfig.toLiveData().observe(this, Observer {
-      val visible = it.orNull()?.showSearch() ?: false
-      bufferSearchContainer.visibleIf(visible)
-      if (!visible) bufferSearch.setText("")
-    })
+    val bufferSearchPermanentlyVisible = viewModel.bufferViewConfig
+      .mapMap(BufferViewConfig::showSearch)
+      .mapOrElse(false)
+
+    combineLatest(viewModel.bufferSearchTemporarilyVisible, bufferSearchPermanentlyVisible)
+      .toLiveData().observe(this, Observer { (temporarily, permanently) ->
+        val visible = temporarily || permanently
+
+        val menuItem = chatListToolbar.menu.findItem(R.id.action_search)
+        menuItem.isVisible = !permanently
+        if (permanently) menuItem.isChecked = false
+
+        bufferSearchContainer.visibleIf(visible)
+        if (!visible) bufferSearch.setText("")
+      })
 
     bufferSearch.addTextChangedListener(object : TextWatcher {
       override fun afterTextChanged(s: Editable) {
@@ -515,6 +533,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       longClickListener(bufferId)
     } else {
       context?.let {
+        viewModel.bufferSearchTemporarilyVisible.onNext(false)
         ChatActivity.launch(it, bufferId = bufferId)
       }
     }
