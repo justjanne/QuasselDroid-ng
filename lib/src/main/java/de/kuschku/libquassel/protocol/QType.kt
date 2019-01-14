@@ -38,7 +38,7 @@ enum class QType(val typeName: String, val serializer: Serializer<*>,
   NetworkInfo("NetworkInfo", VariantMapSerializer),
   Network_Server("Network::Server", VariantMapSerializer),
   QHostAddress("QHostAddress", HostAddressSerializer),
-  PeerPtr("PeerPtr", LongSerializer, type = Type.Long);
+  PeerPtr("PeerPtr", LongSerializer);
 
   override fun toString() = "QType($typeName, $type)"
 
