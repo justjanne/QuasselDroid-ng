@@ -19,14 +19,18 @@
 
 package de.kuschku.libquassel.protocol.primitive.serializer
 
+import de.kuschku.libquassel.util.deserialize
 import de.kuschku.libquassel.util.roundTrip
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class BoolSerializerTest {
   @Test
-  fun testFalse() {
+  fun test() {
     assertEquals(true, roundTrip(BoolSerializer, true))
+    assertEquals(true, deserialize(BoolSerializer, byteArrayOf(1)))
+
     assertEquals(false, roundTrip(BoolSerializer, false))
+    assertEquals(false, deserialize(BoolSerializer, byteArrayOf(0)))
   }
 }

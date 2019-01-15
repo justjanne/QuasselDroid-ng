@@ -19,11 +19,13 @@
 
 package de.kuschku.libquassel.protocol.primitive.serializer
 
+import de.kuschku.libquassel.util.deserialize
 import de.kuschku.libquassel.util.roundTrip
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.Month
 import org.threeten.bp.ZoneOffset
 
 class DateTimeSerializerTest {
@@ -31,15 +33,14 @@ class DateTimeSerializerTest {
   fun testEpoch() {
     val value = roundTrip(DateTimeSerializer, Instant.EPOCH)
     assertEquals(Instant.EPOCH, value)
+    assertEquals(Instant.EPOCH, deserialize(DateTimeSerializer, byteArrayOf(0, 37, 61, -116, 0, 0, 0, 0, 2)))
   }
 
   @Test
   fun testEpochAtTimezone() {
     val value = Instant.EPOCH.atOffset(ZoneOffset.ofTotalSeconds(1234))
-    assertEquals(
-      value,
-      roundTrip(DateTimeSerializer, value)
-    )
+    assertEquals(value, roundTrip(DateTimeSerializer, value))
+    assertEquals(value, deserialize(DateTimeSerializer, byteArrayOf(0, 37, 61, -116, 0, 18, -44, 80, 3, 0, 0, 4, -46)))
   }
 
   @Test
@@ -47,11 +48,14 @@ class DateTimeSerializerTest {
     val value = LocalDateTime.of(1970, 1, 1, 0, 0)
       .atZone(ZoneOffset.systemDefault()).toInstant()
     assertEquals(value, roundTrip(DateTimeSerializer, value))
+    assertEquals(value, deserialize(DateTimeSerializer, byteArrayOf(0, 37, 61, -117, 4, -17, 109, -128, 2)))
   }
 
   @Test
   fun testNormalCase() {
-    val value = LocalDateTime.now().atZone(ZoneOffset.systemDefault()).toInstant()
+    val value = LocalDateTime.of(2019, Month.JANUARY, 15, 20, 25)
+      .atZone(ZoneOffset.systemDefault()).toInstant()
     assertEquals(value, roundTrip(DateTimeSerializer, value))
+    assertEquals(value, deserialize(DateTimeSerializer, byteArrayOf(0, 37, -125, -125, 4, 42, -106, -32, 2)))
   }
 }

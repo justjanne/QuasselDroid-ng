@@ -22,6 +22,7 @@ package de.kuschku.libquassel.util
 import de.kuschku.libquassel.protocol.primitive.serializer.Serializer
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
+import java.nio.ByteBuffer
 
 fun <T> roundTrip(serializer: Serializer<T>, value: T,
                   features: QuasselFeatures = QuasselFeatures.all()): T {
@@ -31,4 +32,9 @@ fun <T> roundTrip(serializer: Serializer<T>, value: T,
   serializer.serialize(chainedBuffer, value, features)
   val buffer = chainedBuffer.toBuffer()
   return serializer.deserialize(buffer, features)
+}
+
+fun <T> deserialize(serializer: Serializer<T>, values: ByteArray,
+                    features: QuasselFeatures = QuasselFeatures.all()): T {
+  return serializer.deserialize(ByteBuffer.wrap(byteArrayOf(*values)), features)
 }

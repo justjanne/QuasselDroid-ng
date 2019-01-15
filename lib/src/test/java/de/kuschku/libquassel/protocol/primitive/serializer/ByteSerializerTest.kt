@@ -19,6 +19,7 @@
 
 package de.kuschku.libquassel.protocol.primitive.serializer
 
+import de.kuschku.libquassel.util.deserialize
 import de.kuschku.libquassel.util.roundTrip
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -28,20 +29,24 @@ class ByteSerializerTest {
   @Test
   fun testZero() {
     assertEquals(0.toByte(), roundTrip(ByteSerializer, 0.toByte()))
+    assertEquals(0.toByte(), deserialize(ByteSerializer, byteArrayOf(0)))
   }
 
   @Test
   fun testMinimal() {
     assertEquals(Byte.MIN_VALUE, roundTrip(ByteSerializer, Byte.MIN_VALUE))
+    assertEquals(Byte.MIN_VALUE, deserialize(ByteSerializer, byteArrayOf(-128)))
   }
 
   @Test
   fun testMaximal() {
     assertEquals(Byte.MAX_VALUE, roundTrip(ByteSerializer, Byte.MAX_VALUE))
+    assertEquals(Byte.MAX_VALUE, deserialize(ByteSerializer, byteArrayOf(127)))
   }
 
   @Test
   fun testAllOnes() {
     assertEquals((0.toByte().inv()), roundTrip(ByteSerializer, (0.toByte().inv())))
+    assertEquals((0.toByte().inv()), deserialize(ByteSerializer, byteArrayOf(-1)))
   }
 }
