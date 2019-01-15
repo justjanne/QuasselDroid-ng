@@ -23,10 +23,7 @@ import de.kuschku.libquassel.util.deserialize
 import de.kuschku.libquassel.util.roundTrip
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.threeten.bp.Instant
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.Month
-import org.threeten.bp.ZoneOffset
+import org.threeten.bp.*
 
 class DateTimeSerializerTest {
   @Test
@@ -46,7 +43,7 @@ class DateTimeSerializerTest {
   @Test
   fun testEpochByCalendarAtTimezone() {
     val value = LocalDateTime.of(1970, 1, 1, 0, 0)
-      .atZone(ZoneOffset.systemDefault()).toInstant()
+      .atZone(ZoneId.of("Europe/Berlin")).toInstant()
     assertEquals(value, roundTrip(DateTimeSerializer, value))
     assertEquals(value, deserialize(DateTimeSerializer, byteArrayOf(0, 37, 61, -117, 4, -17, 109, -128, 2)))
   }
@@ -54,7 +51,7 @@ class DateTimeSerializerTest {
   @Test
   fun testNormalCase() {
     val value = LocalDateTime.of(2019, Month.JANUARY, 15, 20, 25)
-      .atZone(ZoneOffset.systemDefault()).toInstant()
+      .atZone(ZoneId.of("Europe/Berlin")).toInstant()
     assertEquals(value, roundTrip(DateTimeSerializer, value))
     assertEquals(value, deserialize(DateTimeSerializer, byteArrayOf(0, 37, -125, -125, 4, 42, -106, -32, 2)))
   }
