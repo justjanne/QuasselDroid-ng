@@ -80,6 +80,7 @@ android {
       isZipAlignEnabled = true
       isMinifyEnabled = true
       isShrinkResources = true
+      isUseProguard = false
 
       proguardFiles(
         getDefaultProguardFile("proguard-android.txt"),
@@ -93,12 +94,18 @@ android {
       isZipAlignEnabled = true
       isMinifyEnabled = true
       isShrinkResources = true
+      isUseProguard = false
 
       proguardFiles(
         getDefaultProguardFile("proguard-android.txt"),
         "proguard-rules.pro"
       )
     }
+  }
+
+  compileOptions {
+    setSourceCompatibility(JavaVersion.VERSION_1_8)
+    setTargetCompatibility(JavaVersion.VERSION_1_8)
   }
 
   lintOptions {
@@ -142,7 +149,7 @@ dependencies {
   implementation("commons-codec", "commons-codec", "1.11")
   implementation("com.squareup.retrofit2", "retrofit", "2.5.0")
   implementation("com.squareup.retrofit2", "converter-gson", "2.5.0")
-  withVersion("9.0.0-rc1") {
+  withVersion("10.0.0") {
     implementation("com.jakewharton", "butterknife", version)
     kapt("com.jakewharton", "butterknife-compiler", version)
   }
@@ -176,7 +183,7 @@ dependencies {
   }
 
   // Dependency Injection
-  withVersion("2.15") {
+  withVersion("2.20") {
     implementation("com.google.dagger", "dagger", version)
     kapt("com.google.dagger", "dagger-compiler", version)
     kapt("com.google.dagger", "dagger-android-processor", version)
