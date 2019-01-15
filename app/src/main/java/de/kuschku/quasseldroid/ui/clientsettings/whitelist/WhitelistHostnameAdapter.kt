@@ -29,6 +29,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.util.helper.setTooltip
 
 class WhitelistHostnameAdapter :
   RecyclerView.Adapter<WhitelistHostnameAdapter.WhitelistItemViewHolder>() {
@@ -108,6 +109,7 @@ class WhitelistHostnameAdapter :
           clickListener?.invoke(it)
         }
       }
+      delete.setTooltip()
     }
 
     fun bind(item: QuasselDatabase.SslHostnameWhitelistEntry) {

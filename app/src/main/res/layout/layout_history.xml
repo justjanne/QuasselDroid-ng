@@ -70,6 +70,7 @@
           android:layout_height="48dp"
           android:layout_gravity="top|end"
           android:background="?attr/selectableItemBackgroundBorderless"
+          android:contentDescription="@string/label_close"
           android:padding="12dp"
           android:scaleType="fitXY"
           app:srcCompat="@drawable/ic_chevron_down"

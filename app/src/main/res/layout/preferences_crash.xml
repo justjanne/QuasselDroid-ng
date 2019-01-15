@@ -17,10 +17,32 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/list"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:scrollbars="vertical"
-  tools:listitem="@layout/widget_crash" />
+  android:layout_height="match_parent">
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="vertical"
+    tools:listitem="@layout/widget_crash" />
+
+  <TextView
+    android:id="@+id/crashes_empty"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:paddingStart="?listPreferredItemPaddingLeft"
+    android:paddingLeft="?listPreferredItemPaddingLeft"
+    android:paddingEnd="?listPreferredItemPaddingRight"
+    android:paddingRight="?listPreferredItemPaddingRight"
+    android:text="@string/label_crashes_empty"
+    android:textColor="?colorTextSecondary"
+    android:textStyle="italic"
+    android:visibility="gone"
+    tools:visibility="visible" />
+</FrameLayout>

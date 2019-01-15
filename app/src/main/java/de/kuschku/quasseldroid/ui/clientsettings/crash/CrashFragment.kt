@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.view.*
+import android.widget.TextView
 import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -37,12 +38,16 @@ import de.kuschku.malheur.data.Report
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.fromJson
+import de.kuschku.quasseldroid.util.helper.visibleIf
 import java.io.File
 import javax.inject.Inject
 
 class CrashFragment : DaggerFragment() {
   @BindView(R.id.list)
   lateinit var list: RecyclerView
+
+  @BindView(R.id.crashes_empty)
+  lateinit var crashesEmpty: TextView
 
   private lateinit var handlerThread: HandlerThread
   private lateinit var handler: Handler
@@ -79,6 +84,10 @@ class CrashFragment : DaggerFragment() {
     list.adapter = adapter
     list.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
     ViewCompat.setNestedScrollingEnabled(list, false)
+
+    adapter?.setOnUpdateListener {
+      crashesEmpty.visibleIf(it.isEmpty())
+    }
 
     handler.post {
       val crashDir = this.crashDir

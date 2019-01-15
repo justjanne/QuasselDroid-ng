@@ -36,6 +36,7 @@
   <string name="label_cancel">Cancel</string>
   <string name="label_update_user_password">Update User/Password</string>
   <string name="label_certificates">Certificates</string>
+  <string name="label_clear_search">Clear Search</string>
   <string name="label_close">Close</string>
   <string name="label_colors_custom">Custom</string>
   <string name="label_colors_mirc">mIRC</string>
@@ -44,12 +45,14 @@
   <string name="label_contributors">Contributors</string>
   <string name="label_copy">Copy</string>
   <string name="label_crashes">Crashes</string>
+  <string name="label_crashes_empty">No crash reports found</string>
   <string name="label_shortcut">Shortcut</string>
   <string name="label_shortcut_long">Create Shortcut on Homescreen</string>
   <string name="label_delete">Delete</string>
   <string name="label_delete_all">Delete All</string>
   <string name="label_disconnect">Disconnect</string>
-  <string name="label_edit_nick">Edit nickname</string>
+  <string name="label_edit_core">Edit Account</string>
+  <string name="label_edit_nick">Edit Nickname</string>
   <string name="label_edit_topic">Edit Topic</string>
   <string name="label_edit_topic_long">Open dialog to change the channel topic</string>
   <string name="label_filter_messages">Filter Messages</string>

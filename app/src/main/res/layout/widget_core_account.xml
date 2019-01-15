@@ -84,6 +84,7 @@
     android:layout_height="48dp"
     android:layout_gravity="center_vertical"
     android:background="?attr/selectableItemBackgroundBorderless"
+    android:contentDescription="@string/label_edit_core"
     android:tint="#757575"
     app:srcCompat="@drawable/ic_pencil" />
 </LinearLayout>

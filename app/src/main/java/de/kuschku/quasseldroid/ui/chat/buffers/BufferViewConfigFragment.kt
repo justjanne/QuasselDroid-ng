@@ -494,13 +494,15 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       .mapMap(BufferViewConfig::showSearch)
       .mapOrElse(false)
 
-    combineLatest(viewModel.bufferSearchTemporarilyVisible, bufferSearchPermanentlyVisible)
+    combineLatest(viewModel.bufferSearchTemporarilyVisible.distinctUntilChanged(),
+                  bufferSearchPermanentlyVisible)
       .toLiveData().observe(this, Observer { (temporarily, permanently) ->
         val visible = temporarily || permanently
 
         val menuItem = chatListToolbar.menu.findItem(R.id.action_search)
         menuItem.isVisible = !permanently
         if (permanently) menuItem.isChecked = false
+        else menuItem.isChecked = temporarily
 
         bufferSearchContainer.visibleIf(visible)
         if (!visible) bufferSearch.setText("")
@@ -515,6 +517,8 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
       override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
     })
+
+    bufferSearchClear.setTooltip()
 
     bufferSearchClear.setOnClickListener {
       bufferSearch.setText("")

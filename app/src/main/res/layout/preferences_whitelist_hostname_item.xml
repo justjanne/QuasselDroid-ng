@@ -66,6 +66,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center_vertical"
     android:background="?selectableItemBackgroundBorderless"
+    android:contentDescription="@string/label_delete"
     android:paddingStart="32dp"
     android:paddingLeft="32dp"
     android:paddingEnd="?listPreferredItemPaddingRight"

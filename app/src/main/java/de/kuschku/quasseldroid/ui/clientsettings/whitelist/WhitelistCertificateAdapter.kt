@@ -29,6 +29,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.util.helper.setTooltip
 import de.kuschku.quasseldroid.util.helper.visibleIf
 
 class WhitelistCertificateAdapter :
@@ -114,6 +115,7 @@ class WhitelistCertificateAdapter :
           clickListener?.invoke(it)
         }
       }
+      delete.setTooltip()
     }
 
     fun bind(item: QuasselDatabase.SslValidityWhitelistEntry) {

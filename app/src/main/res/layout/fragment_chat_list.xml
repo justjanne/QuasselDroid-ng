@@ -32,8 +32,7 @@
     <androidx.appcompat.widget.Toolbar
       android:id="@+id/chatListToolbar"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:minHeight="?attr/actionBarSize"
+      android:layout_height="?attr/actionBarSize"
       app:contentInsetLeft="0dip"
       app:contentInsetStart="0dip"
       app:contentInsetStartWithNavigation="0dip"
@@ -60,9 +59,9 @@
       android:id="@+id/buffer_search_container"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_margin="6dp"
       app:cardBackgroundColor="?colorBackgroundSearch"
-      app:cardElevation="2dp"
-      android:layout_margin="6dp">
+      app:cardElevation="2dp">
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -77,8 +76,8 @@
           android:background="@android:color/transparent"
           android:hint="@string/label_search_buffer"
           android:imeOptions="actionSearch"
-          android:inputType="textNoSuggestions"
           android:importantForAutofill="no"
+          android:inputType="textNoSuggestions"
           android:lines="1"
           android:minHeight="40dp"
           android:paddingLeft="8dp"
@@ -92,6 +91,7 @@
           android:layout_width="40dp"
           android:layout_height="match_parent"
           android:background="?selectableItemBackgroundBorderless"
+          android:contentDescription="@string/label_clear_search"
           app:srcCompat="@drawable/ic_close"
           app:tint="?colorTextSearchSecondary" />
 

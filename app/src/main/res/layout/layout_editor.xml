@@ -46,6 +46,7 @@
         android:padding="12dp"
         android:scaleType="fitXY"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_tab"
         app:tint="?attr/colorTextSecondary" />
 
@@ -90,6 +91,7 @@
         android:padding="12dp"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_send"
         app:tint="?attr/colorAccent"
         tools:ignore="UnusedAttribute" />

@@ -26,12 +26,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.malheur.data.Report
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.util.lists.ListAdapter
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
@@ -45,6 +45,15 @@ class CrashAdapter : ListAdapter<Pair<Report, Uri>, CrashAdapter.CrashViewHolder
       oldItem == newItem
   }
 ) {
+  private var onUpdateListener: ((List<Pair<Report, Uri>>) -> Unit)? = null
+  fun setOnUpdateListener(listener: ((List<Pair<Report, Uri>>) -> Unit)?) {
+    onUpdateListener = listener
+  }
+
+  override fun onUpdateFinished(list: List<Pair<Report, Uri>>) {
+    onUpdateListener?.invoke(list)
+  }
+
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CrashViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.widget_crash, parent, false)
   )

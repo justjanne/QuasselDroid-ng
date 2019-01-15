@@ -157,6 +157,7 @@ class ChatlineFragment : ServiceBoundFragment() {
       editorHelper.replaceText(text)
       historyBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
     }
+    close.setTooltip()
     close.setOnClickListener {
       historyBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
     }
@@ -204,6 +205,7 @@ class ChatlineFragment : ServiceBoundFragment() {
     send.setOnClickListener { send() }
     send.setTooltip()
 
+    tabComplete.setTooltip()
     tabComplete.visibleIf(autoCompleteSettings.button)
     tabComplete.setOnClickListener {
       autoCompleteHelper.autoComplete()
