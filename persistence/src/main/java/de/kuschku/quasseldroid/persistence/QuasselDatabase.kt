@@ -131,10 +131,10 @@ abstract class QuasselDatabase : RoomDatabase() {
     @Query("UPDATE filtered SET filtered = :filtered WHERE accountId = :accountId AND bufferId = :bufferId")
     fun setFiltered(accountId: Long, bufferId: Int, filtered: Int)
 
-    @Query("SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT :defaultValue as filtered ORDER BY filtered DESC LIMIT 1")
+    @Query("SELECT IFNULL(t.filtered, :defaultValue) FROM (SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT NULL ORDER BY filtered DESC LIMIT 1) t")
     fun get(accountId: Long, bufferId: Int, defaultValue: Int): Int
 
-    @Query("SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT :defaultValue as filtered ORDER BY filtered DESC LIMIT 1")
+    @Query("SELECT IFNULL(t.filtered, :defaultValue) FROM (SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT NULL ORDER BY filtered DESC LIMIT 1) t")
     fun listen(accountId: Long, bufferId: Int, defaultValue: Int): LiveData<Int>
 
     @Query("SELECT * FROM filtered WHERE accountId = :accountId")
