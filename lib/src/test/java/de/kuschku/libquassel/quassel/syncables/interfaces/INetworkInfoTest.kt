@@ -20,6 +20,7 @@
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
+import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_PLAINTEXT
 import de.kuschku.libquassel.util.roundTrip
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -33,7 +34,7 @@ class INetworkInfoTest {
       serverList = listOf(
         INetwork.Server(
           host = "irc.quakenet.org",
-          port = 6667
+          port = PORT_PLAINTEXT.port
         )
       )
     )
@@ -50,7 +51,7 @@ class INetworkInfoTest {
       serverList = listOf(
         INetwork.Server(
           host = "irc.quakenet.org",
-          port = 6667
+          port = PORT_PLAINTEXT.port
         )
       )
     )

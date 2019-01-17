@@ -59,7 +59,7 @@ class BacklogRequester(
         ) {
           if (it.isNotEmpty()) {
             missing -= it.count {
-              (it.type.value and filtered.inv()) != 0 &&
+              (it.type.value and filtered.toUInt().inv()) != 0u &&
               !QuasselBacklogStorage.isIgnored(session, it)
             }
             val hasLoadedAll = missing == 0

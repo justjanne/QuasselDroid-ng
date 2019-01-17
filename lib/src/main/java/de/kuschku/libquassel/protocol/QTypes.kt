@@ -64,11 +64,6 @@ typealias Buffer_Types = ShortFlags<Buffer_Type>
 typealias Buffer_Activity = BufferInfo.Activity
 typealias Buffer_Activities = Flags<Buffer_Activity>
 
-typealias UByte = Byte
-typealias UShort = Short
-typealias UInt = Int
-typealias ULong = Long
-
 inline fun <T> ARG(data: T?, type: Type) = QVariant.of(data, type)
 inline fun <T> ARG(data: T?, type: QType) = QVariant.of(data, type)
 

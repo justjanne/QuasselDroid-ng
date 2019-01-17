@@ -26,7 +26,7 @@ enum class Type(val id: kotlin.Int, val serializer: Serializer<*>? = null) {
   Void(0, VoidSerializer),
   Bool(1, BoolSerializer),
   Int(2, IntSerializer),
-  UInt(3, IntSerializer),
+  UInt(3, UIntSerializer),
   LongLong(4),
   ULongLong(5),
 
@@ -95,10 +95,10 @@ enum class Type(val id: kotlin.Int, val serializer: Serializer<*>? = null) {
   Long(129, LongSerializer),
   Short(130, ShortSerializer),
   Char(131, ByteSerializer),
-  ULong(132, LongSerializer),
+  ULong(132, ULongSerializer),
 
-  UShort(133, ShortSerializer),
-  UChar(134, ByteSerializer),
+  UShort(133, UShortSerializer),
+  UChar(134, UByteSerializer),
   Float(135),
   QObjectStar(136),
   QWidgetStar(137),

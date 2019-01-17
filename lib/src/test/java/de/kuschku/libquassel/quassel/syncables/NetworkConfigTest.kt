@@ -22,42 +22,49 @@ package de.kuschku.libquassel.quassel.syncables
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.randomBoolean
-import de.kuschku.libquassel.util.randomUInt
+import de.kuschku.libquassel.util.randomInt
 import de.kuschku.libquassel.util.roundTrip
 import org.junit.Test
+import kotlin.math.abs
 
 class NetworkConfigTest {
   @Test
   fun testSerialization() {
     val original = NetworkConfig(SignalProxy.NULL)
     original.setPingTimeoutEnabled(randomBoolean())
-    original.setPingInterval(randomUInt())
-    original.setMaxPingCount(randomUInt())
+    original.setPingInterval(abs(randomInt()))
+    original.setMaxPingCount(abs(randomInt()))
     original.setAutoWhoEnabled(randomBoolean())
-    original.setAutoWhoInterval(randomUInt())
-    original.setAutoWhoNickLimit(randomUInt())
-    original.setAutoWhoDelay(randomUInt())
+    original.setAutoWhoInterval(abs(randomInt()))
+    original.setAutoWhoNickLimit(abs(randomInt()))
+    original.setAutoWhoDelay(abs(randomInt()))
     original.setStandardCtcp(randomBoolean())
 
     val copy = original.copy()
     copy.fromVariantMap(roundTrip(VariantMapSerializer, original.toVariantMap()))
-    assert(original.isEqual(copy))
+    assert(original.isEqual(copy)) {
+      System.err.println("Original:\n$original")
+      System.err.println("Copy:\n$copy")
+    }
   }
 
   @Test
   fun testCopy() {
     val original = NetworkConfig(SignalProxy.NULL)
     original.setPingTimeoutEnabled(randomBoolean())
-    original.setPingInterval(randomUInt())
-    original.setMaxPingCount(randomUInt())
+    original.setPingInterval(abs(randomInt()))
+    original.setMaxPingCount(abs(randomInt()))
     original.setAutoWhoEnabled(randomBoolean())
-    original.setAutoWhoInterval(randomUInt())
-    original.setAutoWhoNickLimit(randomUInt())
-    original.setAutoWhoDelay(randomUInt())
+    original.setAutoWhoInterval(abs(randomInt()))
+    original.setAutoWhoNickLimit(abs(randomInt()))
+    original.setAutoWhoDelay(abs(randomInt()))
     original.setStandardCtcp(randomBoolean())
 
     val copy = original.copy()
     copy.fromVariantMap(original.toVariantMap())
-    assert(original.isEqual(copy))
+    assert(original.isEqual(copy)) {
+      System.err.println("Original:\n$original")
+      System.err.println("Copy:\n$copy")
+    }
   }
 }

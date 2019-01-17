@@ -20,18 +20,15 @@
 package de.kuschku.libquassel.protocol.primitive.serializer
 
 import de.kuschku.libquassel.quassel.QuasselFeatures
-import de.kuschku.libquassel.quassel.syncables.interfaces.IDccConfig
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import java.nio.ByteBuffer
 
-object DccConfig_PortSelectionModeSerializer : Serializer<IDccConfig.PortSelectionMode> {
-  override fun serialize(buffer: ChainedByteBuffer, data: IDccConfig.PortSelectionMode,
-                         features: QuasselFeatures) {
-    UByteSerializer.serialize(buffer, data.value, features)
+object UIntSerializer : Serializer<UInt> {
+  override fun serialize(buffer: ChainedByteBuffer, data: UInt, features: QuasselFeatures) {
+    buffer.putInt(data.toInt())
   }
 
-  override fun deserialize(buffer: ByteBuffer,
-                           features: QuasselFeatures): IDccConfig.PortSelectionMode {
-    return IDccConfig.PortSelectionMode.of(UByteSerializer.deserialize(buffer, features))
+  override fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): UInt {
+    return buffer.int.toUInt()
   }
 }

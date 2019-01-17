@@ -31,37 +31,38 @@ import de.kuschku.libquassel.util.flag.Flags
  *
  * This list should be cleaned up after every protocol break, as we can assume them to be present then.
  */
-enum class LegacyFeature(override val bit: Int) : Flag<LegacyFeature> {
-  SynchronizedMarkerLine(0x0001),
-  SaslAuthentication(0x0002),
-  SaslExternal(0x0004),
-  HideInactiveNetworks(0x0008),
-  PasswordChange(0x0010),
+enum class LegacyFeature(override val bit: UInt) : Flag<LegacyFeature> {
+  SynchronizedMarkerLine(0x0001u),
+  SaslAuthentication(0x0002u),
+  SaslExternal(0x0004u),
+  HideInactiveNetworks(0x0008u),
+  PasswordChange(0x0010u),
   /** IRCv3 capability negotiation, account tracking */
-  CapNegotiation(0x0020),
+  CapNegotiation(0x0020u),
   /** IRC server SSL validation */
-  VerifyServerSSL(0x0040),
+  VerifyServerSSL(0x0040u),
   /** IRC server custom message rate limits */
-  CustomRateLimits(0x0080),
-  DccFileTransfer(0x0100),
+  CustomRateLimits(0x0080u),
+  DccFileTransfer(0x0100u),
   /** Timestamp formatting in away (e.g. %%hh:mm%%) */
-  AwayFormatTimestamp(0x0200),
+  AwayFormatTimestamp(0x0200u),
   /** Whether or not the core supports auth backends. */
-  Authenticators(0x0400),
+  Authenticators(0x0400u),
   /** Sync buffer activity status */
-  BufferActivitySync(0x0800),
+  BufferActivitySync(0x0800u),
   /** Core-Side highlight configuration and matching */
-  CoreSideHighlights(0x1000),
+  CoreSideHighlights(0x1000u),
   /** Show prefixes for senders in backlog */
-  SenderPrefixes(0x2000),
+  SenderPrefixes(0x2000u),
   /** Supports RPC call disconnectFromCore to remotely disconnect a client */
-  RemoteDisconnect(0x4000),
+  RemoteDisconnect(0x4000u),
   /** Transmit features as list of strings */
-  ExtendedFeatures(0x8000);
+  ExtendedFeatures(0x8000u);
 
   companion object : Flags.Factory<LegacyFeature> {
     override val NONE: Flags<LegacyFeature> = LegacyFeature.of()
     override fun of(bit: Int) = Flags.of<LegacyFeature>(bit)
+    override fun of(bit: UInt) = Flags.of<LegacyFeature>(bit)
     override fun of(vararg flags: LegacyFeature) = Flags.of(*flags)
     override fun of(flags: Iterable<LegacyFeature>) = Flags.of(flags)
 

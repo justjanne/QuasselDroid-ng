@@ -21,7 +21,10 @@ package de.kuschku.libquassel.quassel.syncables.interfaces
 
 import de.kuschku.libquassel.annotations.Slot
 import de.kuschku.libquassel.annotations.Syncable
-import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.protocol.ARG
+import de.kuschku.libquassel.protocol.QType
+import de.kuschku.libquassel.protocol.QVariantMap
+import de.kuschku.libquassel.protocol.Type
 import java.net.InetAddress
 
 @Syncable(name = "DccConfig")
@@ -90,9 +93,9 @@ interface IDccConfig : ISyncableObject {
    */
   enum class IpDetectionMode(val value: UByte) {
     /** Automatic detection (network socket or USERHOST) */
-    Automatic(0x00),
+    Automatic(0x00u),
     /** Manually specified IP */
-    Manual(0x01);
+    Manual(0x01u);
 
     companion object {
       private val byId = IpDetectionMode.values().associateBy(IpDetectionMode::value)
@@ -105,9 +108,9 @@ interface IDccConfig : ISyncableObject {
    */
   enum class PortSelectionMode(val value: UByte) {
     /** Automatic port selection */
-    Automatic(0x00),
+    Automatic(0x00u),
     /** Manually specified port range */
-    Manual(0x01);
+    Manual(0x01u);
 
     companion object {
       private val byId = PortSelectionMode.values().associateBy(PortSelectionMode::value)

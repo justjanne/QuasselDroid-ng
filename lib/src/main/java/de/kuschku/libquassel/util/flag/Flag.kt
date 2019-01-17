@@ -19,29 +19,40 @@
 
 package de.kuschku.libquassel.util.flag
 
+import de.kuschku.libquassel.util.helpers.sum
+
 interface Flag<T> where T : Enum<T>, T : Flag<T> {
-  val bit: Int
+  val bit: UInt
   fun toByte() = bit.toByte()
-  fun toChar() = bit.toChar()
-  fun toDouble() = bit.toDouble()
-  fun toFloat() = bit.toFloat()
-  fun toInt() = bit
+  fun toChar() = bit.toLong().toChar()
+  fun toDouble() = bit.toLong().toDouble()
+  fun toFloat() = bit.toLong().toFloat()
+  fun toInt() = bit.toInt()
   fun toLong() = bit.toLong()
   fun toShort() = bit.toShort()
+  fun toUByte() = bit.toUByte()
+  fun toUInt() = bit.toUInt()
+  fun toULong() = bit.toULong()
+  fun toUShort() = bit.toUShort()
 }
 
 data class Flags<E>(
-  val value: Int,
+  val value: UInt,
   val values: Array<E>? = null
-) : Number(), Comparable<Int> where E : Enum<E>, E : Flag<E> {
-  override fun compareTo(other: Int) = value.compareTo(other)
+) : Number(), Comparable<UInt> where E : Enum<E>, E : Flag<E> {
+  override fun compareTo(other: UInt) = value.compareTo(other)
+
   override fun toByte() = value.toByte()
-  override fun toChar() = value.toChar()
-  override fun toDouble() = value.toDouble()
-  override fun toFloat() = value.toFloat()
-  override fun toInt() = value
+  override fun toChar() = value.toLong().toChar()
+  override fun toDouble() = value.toLong().toDouble()
+  override fun toFloat() = value.toLong().toFloat()
+  override fun toInt() = value.toInt()
   override fun toLong() = value.toLong()
   override fun toShort() = value.toShort()
+  fun toUByte() = value.toUByte()
+  fun toUInt() = value.toUInt()
+  fun toULong() = value.toULong()
+  fun toUShort() = value.toUShort()
 
   override fun equals(other: Any?) = when (other) {
     is Flags<*> -> other.value == value
@@ -50,12 +61,12 @@ data class Flags<E>(
   }
 
   override fun hashCode(): Int {
-    return value
+    return value.hashCode()
   }
 
   fun enabledValues() = values?.filter { hasFlag(it) }?.toSet() ?: emptySet()
 
-  fun isEmpty() = value == 0
+  fun isEmpty() = value == 0u
   fun isNotEmpty() = !isEmpty()
 
   override fun toString() = if (values != null) {
@@ -66,6 +77,10 @@ data class Flags<E>(
 
   companion object {
     inline fun <reified T> of(int: Int): Flags<T>
+      where T : Flag<T>, T : Enum<T> =
+      Flags(int.toUInt(), enumValues())
+
+    inline fun <reified T> of(int: UInt): Flags<T>
       where T : Flag<T>, T : Enum<T> =
       Flags(int, enumValues())
 
@@ -81,6 +96,7 @@ data class Flags<E>(
   interface Factory<E> where E : Flag<E>, E : Enum<E> {
     val NONE: Flags<E>
     fun of(bit: Int): Flags<E>
+    fun of(bit: UInt): Flags<E>
     fun of(vararg flags: E): Flags<E>
     fun of(flags: Iterable<E>): Flags<E>
   }
@@ -88,11 +104,11 @@ data class Flags<E>(
 
 infix fun <T> Flags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : Flag<T> {
   // an Undefined flag is a special case.
-  if (value == 0) return false
+  if (value == 0u) return false
   return value and which.bit == which.bit
 }
 
-infix fun <T> Flags<T>.or(other: Int): Flags<T>
+infix fun <T> Flags<T>.or(other: UInt): Flags<T>
   where T : kotlin.Enum<T>, T : Flag<T> =
   Flags(value or other)
 
@@ -104,7 +120,7 @@ infix fun <T> Flags<T>.or(other: Flags<T>): Flags<T>
   where T : kotlin.Enum<T>, T : Flag<T> =
   Flags(value or other.value)
 
-infix fun <T> Flags<T>.and(other: Int): Flags<T>
+infix fun <T> Flags<T>.and(other: UInt): Flags<T>
   where T : kotlin.Enum<T>, T : Flag<T> =
   Flags(value and other)
 
@@ -116,7 +132,7 @@ infix fun <T> Flags<T>.and(other: Flags<T>): Flags<T>
   where T : kotlin.Enum<T>, T : Flag<T> =
   Flags(value and other.value)
 
-infix operator fun <T> Flags<T>.plus(other: Int): Flags<T>
+infix operator fun <T> Flags<T>.plus(other: UInt): Flags<T>
   where T : Enum<T>, T : Flag<T> =
   Flags(value or other)
 
@@ -128,7 +144,7 @@ infix operator fun <T> Flags<T>.plus(other: Flags<T>): Flags<T>
   where T : Enum<T>, T : Flag<T> =
   Flags(value or other.value)
 
-infix operator fun <T> Flags<T>.minus(other: Int): Flags<T>
+infix operator fun <T> Flags<T>.minus(other: UInt): Flags<T>
   where T : Enum<T>, T : Flag<T> =
   Flags(value and other.inv())
 

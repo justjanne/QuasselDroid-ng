@@ -148,10 +148,10 @@ class DccConfig constructor(
   private var _portSelectionMode: IDccConfig.PortSelectionMode = IDccConfig.PortSelectionMode.Automatic
 
   /**  Minimum port to use for incoming connections */
-  private var _minPort: UShort = 1024
+  private var _minPort: UShort = 1024u
 
   /**  Maximum port to use for incoming connections */
-  private var _maxPort: UShort = 32767
+  private var _maxPort: UShort = 32767u
 
   /**  The chunk size to be used */
   private var _chunkSize: Int = 16

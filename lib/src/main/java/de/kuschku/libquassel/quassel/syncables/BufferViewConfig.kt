@@ -99,7 +99,7 @@ class BufferViewConfig constructor(
     _hideInactiveNetworks = properties["hideInactiveNetworks"].valueOr(this::hideInactiveNetworks)
     _disableDecoration = properties["disableDecoration"].valueOr(this::disableDecoration)
     _allowedBufferTypes = Buffer_Type.of(properties["allowedBufferTypes"].value(_allowedBufferTypes.value.toInt()).toShort())
-    _minimumActivity = Buffer_Activity.of(properties["minimumActivity"].value(_minimumActivity.value))
+    _minimumActivity = Buffer_Activity.of(properties["minimumActivity"].value(_minimumActivity.value.toInt()))
     _showSearch = properties["showSearch"].valueOr(this::showSearch)
   }
 
@@ -302,7 +302,7 @@ class BufferViewConfig constructor(
       field = value
       live_config.onNext(Unit)
     }
-  private var _minimumActivity: Buffer_Activities = Buffer_Activities.of(0)
+  private var _minimumActivity: Buffer_Activities = Buffer_Activities.of(0u)
     set(value) {
       field = value
       live_config.onNext(Unit)

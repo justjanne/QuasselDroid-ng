@@ -19,29 +19,40 @@
 
 package de.kuschku.libquassel.util.flag
 
+import de.kuschku.libquassel.util.helpers.sum
+
 interface LongFlag<T> where T : Enum<T>, T : LongFlag<T> {
-  val bit: Long
+  val bit: ULong
   fun toByte() = bit.toByte()
-  fun toChar() = bit.toChar()
-  fun toDouble() = bit.toDouble()
-  fun toFloat() = bit.toFloat()
+  fun toChar() = bit.toLong().toChar()
+  fun toDouble() = bit.toLong().toDouble()
+  fun toFloat() = bit.toLong().toFloat()
   fun toInt() = bit.toInt()
-  fun toLong() = bit
+  fun toLong() = bit.toLong()
   fun toShort() = bit.toShort()
+  fun toUByte() = bit.toUByte()
+  fun toUInt() = bit.toUInt()
+  fun toULong() = bit.toULong()
+  fun toUShort() = bit.toUShort()
 }
 
 data class LongFlags<E>(
-  val value: Long,
+  val value: ULong,
   val values: Array<E>? = null
-) : Number(), Comparable<Long> where E : Enum<E>, E : LongFlag<E> {
-  override fun compareTo(other: Long) = value.compareTo(other)
+) : Number(), Comparable<ULong> where E : Enum<E>, E : LongFlag<E> {
+  override fun compareTo(other: ULong) = value.compareTo(other)
+
   override fun toByte() = value.toByte()
-  override fun toChar() = value.toChar()
-  override fun toDouble() = value.toDouble()
-  override fun toFloat() = value.toFloat()
+  override fun toChar() = value.toLong().toChar()
+  override fun toDouble() = value.toLong().toDouble()
+  override fun toFloat() = value.toLong().toFloat()
   override fun toInt() = value.toInt()
-  override fun toLong() = value
+  override fun toLong() = value.toLong()
   override fun toShort() = value.toShort()
+  fun toUByte() = value.toUByte()
+  fun toUInt() = value.toUInt()
+  fun toULong() = value.toULong()
+  fun toUShort() = value.toUShort()
 
   override fun equals(other: Any?) = when (other) {
     is LongFlags<*> -> other.value == value
@@ -50,12 +61,12 @@ data class LongFlags<E>(
   }
 
   override fun hashCode(): Int {
-    return value.toInt()
+    return value.hashCode()
   }
 
   fun enabledValues() = values?.filter { hasFlag(it) }?.toSet() ?: emptySet()
 
-  fun isEmpty() = value == 0L
+  fun isEmpty() = value == 0uL
   fun isNotEmpty() = !isEmpty()
 
   override fun toString() = if (values != null) {
@@ -67,22 +78,25 @@ data class LongFlags<E>(
   companion object {
     inline fun <reified T> of(int: Long): LongFlags<T>
       where T : LongFlag<T>, T : Enum<T> =
-      LongFlags(int,
-                enumValues())
+      LongFlags(int.toULong(), enumValues())
 
-    inline fun <reified T> of(vararg flags: LongFlag<T>): LongFlags<T>
+    inline fun <reified T> of(int: ULong): LongFlags<T>
       where T : LongFlag<T>, T : Enum<T> =
-      LongFlags(flags.map(LongFlag<T>::bit).distinct().sum(),
-                enumValues())
+      LongFlags(int, enumValues())
+
+    inline fun <reified T> of(vararg flags: T): LongFlags<T>
+      where T : LongFlag<T>, T : Enum<T> =
+      LongFlags(flags.map(LongFlag<T>::bit).distinct().sum(), enumValues())
 
     inline fun <reified T> of(flags: Iterable<T>): LongFlags<T>
       where T : LongFlag<T>, T : Enum<T> =
-      LongFlags(flags.map(LongFlag<T>::bit).distinct().sum(),
-                enumValues())
+      LongFlags(flags.map(LongFlag<T>::bit).distinct().sum(), enumValues())
   }
 
   interface Factory<E> where E : LongFlag<E>, E : Enum<E> {
+    val NONE: LongFlags<E>
     fun of(bit: Long): LongFlags<E>
+    fun of(bit: ULong): LongFlags<E>
     fun of(vararg flags: E): LongFlags<E>
     fun of(flags: Iterable<E>): LongFlags<E>
   }
@@ -90,35 +104,35 @@ data class LongFlags<E>(
 
 infix fun <T> LongFlags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : LongFlag<T> {
   // an Undefined flag is a special case.
-  if (value == 0L) return false
+  if (value == 0uL) return false
   return value and which.bit == which.bit
 }
 
-infix fun <T> LongFlags<T>.or(other: Long): LongFlags<T>
-  where T : Enum<T>, T : LongFlag<T> =
+infix fun <T> LongFlags<T>.or(other: ULong): LongFlags<T>
+  where T : kotlin.Enum<T>, T : LongFlag<T> =
   LongFlags(value or other)
 
 infix fun <T> LongFlags<T>.or(other: LongFlag<T>): LongFlags<T>
-  where T : Enum<T>, T : LongFlag<T> =
+  where T : kotlin.Enum<T>, T : LongFlag<T> =
   LongFlags(value or other.bit)
 
 infix fun <T> LongFlags<T>.or(other: LongFlags<T>): LongFlags<T>
-  where T : Enum<T>, T : LongFlag<T> =
+  where T : kotlin.Enum<T>, T : LongFlag<T> =
   LongFlags(value or other.value)
 
-infix fun <T> LongFlags<T>.and(other: Long): LongFlags<T>
-  where T : Enum<T>, T : LongFlag<T> =
+infix fun <T> LongFlags<T>.and(other: ULong): LongFlags<T>
+  where T : kotlin.Enum<T>, T : LongFlag<T> =
   LongFlags(value and other)
 
 infix fun <T> LongFlags<T>.and(other: LongFlag<T>): LongFlags<T>
-  where T : Enum<T>, T : LongFlag<T> =
+  where T : kotlin.Enum<T>, T : LongFlag<T> =
   LongFlags(value and other.bit)
 
 infix fun <T> LongFlags<T>.and(other: LongFlags<T>): LongFlags<T>
-  where T : Enum<T>, T : LongFlag<T> =
+  where T : kotlin.Enum<T>, T : LongFlag<T> =
   LongFlags(value and other.value)
 
-infix operator fun <T> LongFlags<T>.plus(other: Long): LongFlags<T>
+infix operator fun <T> LongFlags<T>.plus(other: ULong): LongFlags<T>
   where T : Enum<T>, T : LongFlag<T> =
   LongFlags(value or other)
 
@@ -130,7 +144,7 @@ infix operator fun <T> LongFlags<T>.plus(other: LongFlags<T>): LongFlags<T>
   where T : Enum<T>, T : LongFlag<T> =
   LongFlags(value or other.value)
 
-infix operator fun <T> LongFlags<T>.minus(other: Long): LongFlags<T>
+infix operator fun <T> LongFlags<T>.minus(other: ULong): LongFlags<T>
   where T : Enum<T>, T : LongFlag<T> =
   LongFlags(value and other.inv())
 

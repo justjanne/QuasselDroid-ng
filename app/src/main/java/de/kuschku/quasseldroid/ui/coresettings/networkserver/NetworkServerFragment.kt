@@ -31,10 +31,11 @@ import androidx.appcompat.widget.SwitchCompat
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
+import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_PLAINTEXT
+import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_SSL
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.helper.setDependent
-import de.kuschku.quasseldroid.util.irc.IrcPorts
 
 class NetworkServerFragment : SettingsFragment(), SettingsFragment.Savable,
                               SettingsFragment.Changeable {
@@ -116,10 +117,10 @@ class NetworkServerFragment : SettingsFragment(), SettingsFragment.Savable,
     sslEnabled.setOnCheckedChangeListener { _, isChecked ->
       sslVerify.isEnabled = isChecked
       val portValue = port.text.trim().toString()
-      if (isChecked && portValue == IrcPorts.normal.toString()) {
-        port.setText(IrcPorts.secure.toString())
-      } else if (!isChecked && portValue == IrcPorts.secure.toString()) {
-        port.setText(IrcPorts.normal.toString())
+      if (isChecked && portValue == PORT_PLAINTEXT.port.toString()) {
+        port.setText(PORT_SSL.port.toString())
+      } else if (!isChecked && portValue == PORT_SSL.port.toString()) {
+        port.setText(PORT_PLAINTEXT.port.toString())
       }
     }
     sslVerify.isEnabled = sslEnabled.isChecked
@@ -130,14 +131,17 @@ class NetworkServerFragment : SettingsFragment(), SettingsFragment.Savable,
   private fun applyChanges(data: INetwork.Server?): INetwork.Server {
     return INetwork.Server(
       host = host.text.toString(),
-      port = port.text.toString().toIntOrNull() ?: data?.port ?: 0,
+      port = port.text.toString().toUIntOrNull()
+             ?: data?.port
+             ?: PORT_PLAINTEXT.port,
       useSsl = sslEnabled.isChecked,
       sslVerify = sslVerify.isChecked,
       password = password.text.toString(),
       useProxy = proxyEnabled.isChecked,
       proxyType = proxyType.selectedItemId.toInt(),
       proxyHost = proxyHost.text.toString(),
-      proxyPort = proxyPort.text.toString().toIntOrNull() ?: data?.proxyPort ?: 0,
+      proxyPort = proxyPort.text.toString().toUIntOrNull()
+                  ?: data?.proxyPort ?: 0u,
       proxyUser = proxyUser.text.toString(),
       proxyPass = proxyPass.text.toString()
     )

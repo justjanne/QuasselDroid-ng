@@ -27,11 +27,11 @@ import java.nio.ByteBuffer
 object DccConfig_IpDetectionModeSerializer : Serializer<IDccConfig.IpDetectionMode> {
   override fun serialize(buffer: ChainedByteBuffer, data: IDccConfig.IpDetectionMode,
                          features: QuasselFeatures) {
-    buffer.put(data.value)
+    UByteSerializer.serialize(buffer, data.value, features)
   }
 
   override fun deserialize(buffer: ByteBuffer,
                            features: QuasselFeatures): IDccConfig.IpDetectionMode {
-    return IDccConfig.IpDetectionMode.of(buffer.get())
+    return IDccConfig.IpDetectionMode.of(UByteSerializer.deserialize(buffer, features))
   }
 }

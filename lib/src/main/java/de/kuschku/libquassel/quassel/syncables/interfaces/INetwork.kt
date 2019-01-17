@@ -203,18 +203,19 @@ interface INetwork : ISyncableObject {
    * {@see http://www.irc.org/tech_docs/005.html}
    * {@see http://www.irc.org/tech_docs/draft-brocklesby-irc-isupport-03.txt}
    */
-  enum class ChannelModeType(override val bit: Int) :
+  enum class ChannelModeType(override val bit: UInt) :
     Flag<ChannelModeType> {
-    NOT_A_CHANMODE(0x00),
-    A_CHANMODE(0x01),
-    B_CHANMODE(0x02),
-    C_CHANMODE(0x04),
-    D_CHANMODE(0x08);
+    NOT_A_CHANMODE(0x00u),
+    A_CHANMODE(0x01u),
+    B_CHANMODE(0x02u),
+    C_CHANMODE(0x04u),
+    D_CHANMODE(0x08u);
 
     companion object : Flags.Factory<ChannelModeType> {
       override val NONE = ChannelModeType.of()
-      val validValues = values().filter { it.bit != 0 }.toTypedArray()
+      val validValues = values().filter { it.bit != 0u }.toTypedArray()
       override fun of(bit: Int) = Flags.of<ChannelModeType>(bit)
+      override fun of(bit: UInt) = Flags.of<ChannelModeType>(bit)
       override fun of(vararg flags: ChannelModeType) = Flags.of(*flags)
       override fun of(flags: Iterable<ChannelModeType>) = Flags.of(flags)
     }
@@ -227,9 +228,9 @@ interface INetwork : ISyncableObject {
    */
   enum class PortDefaults(val port: UInt) {
     /** Default port for unencrypted connections */
-    PORT_PLAINTEXT(6667),
+    PORT_PLAINTEXT(6667u),
     /** Default port for encrypted connections */
-    PORT_SSL(6697)
+    PORT_SSL(6697u)
   }
 
   data class Server(
@@ -242,7 +243,7 @@ interface INetwork : ISyncableObject {
     val useProxy: Boolean = false,
     val proxyType: Int = ProxyType.Socks5Proxy.value,
     val proxyHost: String = "localhost",
-    val proxyPort: UInt = 8080,
+    val proxyPort: UInt = 8080u,
     val proxyUser: String = "",
     val proxyPass: String = ""
   ) : Serializable {
@@ -272,7 +273,7 @@ interface INetwork : ISyncableObject {
         useProxy = map["UseProxy"].value(false),
         proxyType = map["ProxyType"].value(ProxyType.Socks5Proxy.value),
         proxyHost = map["ProxyHost"].value("localhost"),
-        proxyPort = map["ProxyPort"].value(8080),
+        proxyPort = map["ProxyPort"].value(8080u),
         proxyUser = map["ProxyUser"].value(""),
         proxyPass = map["ProxyPass"].value("")
       )
@@ -312,13 +313,13 @@ interface INetwork : ISyncableObject {
     var saslAccount: String? = null,
     var saslPassword: String? = null,
     var useAutoReconnect: Boolean = true,
-    var autoReconnectInterval: Int = 0,
-    var autoReconnectRetries: Short = 0,
+    var autoReconnectInterval: UInt = 0u,
+    var autoReconnectRetries: UShort = 0u,
     var unlimitedReconnectRetries: Boolean = true,
     var rejoinChannels: Boolean = true,
     var useCustomMessageRate: Boolean = false,
-    var messageRateBurstSize: Int = 0,
-    var messageRateDelay: Int = 0,
+    var messageRateBurstSize: UInt = 0u,
+    var messageRateDelay: UInt = 0u,
     var unlimitedMessageRate: Boolean = false
   ) {
     fun toVariantMap() = mapOf(
@@ -348,7 +349,7 @@ interface INetwork : ISyncableObject {
       "SaslPassword" to QVariant.of(saslPassword, Type.QString),
       "UseAutoReconnect" to QVariant.of(useAutoReconnect, Type.Bool),
       "AutoReconnectInterval" to QVariant.of(autoReconnectInterval, Type.UInt),
-      "AutoReconnectRetries" to QVariant.of(autoReconnectRetries, Type.Int),
+      "AutoReconnectRetries" to QVariant.of(autoReconnectRetries, Type.UShort),
       "UnlimitedReconnectRetries" to QVariant.of(unlimitedReconnectRetries, Type.Bool),
       "RejoinChannels" to QVariant.of(rejoinChannels, Type.Bool),
       "UseCustomMessageRate" to QVariant.of(useCustomMessageRate, Type.Bool),

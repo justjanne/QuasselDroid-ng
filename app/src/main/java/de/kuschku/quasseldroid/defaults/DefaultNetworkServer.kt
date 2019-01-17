@@ -23,6 +23,6 @@ import java.io.Serializable
 
 data class DefaultNetworkServer(
   val host: String,
-  val port: Int,
+  val port: UInt,
   val secure: Boolean
 ) : Serializable

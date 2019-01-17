@@ -19,9 +19,6 @@
 
 package de.kuschku.libquassel.util
 
-import de.kuschku.libquassel.protocol.UByte
-import de.kuschku.libquassel.protocol.UInt
-import de.kuschku.libquassel.protocol.UShort
 import org.threeten.bp.Instant
 import java.nio.charset.Charset
 import java.util.*
@@ -30,16 +27,17 @@ val random = Random()
 
 fun Any?.randomBoolean(): Boolean = random.nextBoolean()
 
-fun Any?.randomByte(): Byte = random.nextInt(2 shl 8).toByte()
-fun Any?.randomUByte(): UByte = random.nextInt(Byte.MAX_VALUE.toInt()).toByte()
+fun Any?.randomByte(): Byte = random.nextInt().toByte()
+fun Any?.randomUByte(): UByte = random.nextInt().toUByte()
 
-fun Any?.randomShort(): Short = random.nextInt(2 shl 16).toShort()
-fun Any?.randomUShort(): UShort = random.nextInt(Short.MAX_VALUE.toInt()).toShort()
+fun Any?.randomShort(): Short = random.nextInt().toShort()
+fun Any?.randomUShort(): UShort = random.nextInt().toUShort()
 
 fun Any?.randomInt(): Int = random.nextInt()
-fun Any?.randomUInt(): UInt = random.nextInt(Int.MAX_VALUE)
+fun Any?.randomUInt(): UInt = random.nextInt().toUInt()
 
 fun Any?.randomLong(): Long = random.nextLong()
+fun Any?.randomULong(): ULong = random.nextLong().toULong()
 
 fun Any?.randomString(): String = UUID.randomUUID().toString()
 

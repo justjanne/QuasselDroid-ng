@@ -22,15 +22,16 @@ package de.kuschku.libquassel.quassel
 import de.kuschku.libquassel.util.flag.Flag
 import de.kuschku.libquassel.util.flag.Flags
 
-enum class ProtocolFeature(override val bit: Int) :
+enum class ProtocolFeature(override val bit: UInt) :
   Flag<ProtocolFeature> {
-  None(0x00),
-  TLS(0x01),
-  Compression(0x02);
+  None(0x00u),
+  TLS(0x01u),
+  Compression(0x02u);
 
   companion object : Flags.Factory<ProtocolFeature> {
     override val NONE = ProtocolFeature.of()
     override fun of(bit: Int) = Flags.of<ProtocolFeature>(bit)
+    override fun of(bit: UInt) = Flags.of<ProtocolFeature>(bit)
     override fun of(vararg flags: ProtocolFeature) = Flags.of(*flags)
     override fun of(flags: Iterable<ProtocolFeature>) = Flags.of(flags)
   }

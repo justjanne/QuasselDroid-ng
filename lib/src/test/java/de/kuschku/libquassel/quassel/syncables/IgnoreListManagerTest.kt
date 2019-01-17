@@ -57,7 +57,10 @@ class IgnoreListManagerTest {
 
     val copy = original.copy()
     copy.fromVariantMap(roundTrip(VariantMapSerializer, original.toVariantMap()))
-    assert(original.isEqual(copy))
+    assert(original.isEqual(copy)) {
+      System.err.println("Original:\n$original")
+      System.err.println("Copy:\n$copy")
+    }
   }
 
   @Test
@@ -88,6 +91,9 @@ class IgnoreListManagerTest {
 
     val copy = original.copy()
     copy.fromVariantMap(original.toVariantMap())
-    assert(original.isEqual(copy))
+    assert(original.isEqual(copy)) {
+      System.err.println("Original:\n$original")
+      System.err.println("Copy:\n$copy")
+    }
   }
 }

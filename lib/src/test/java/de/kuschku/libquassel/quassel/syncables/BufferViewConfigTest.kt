@@ -29,9 +29,9 @@ import org.junit.Test
 class BufferViewConfigTest {
   @Test
   fun testSerialization() {
-    val original = BufferViewConfig(randomUInt(), SignalProxy.NULL)
+    val original = BufferViewConfig(randomInt(), SignalProxy.NULL)
     original.setBufferViewName(randomString())
-    original.setNetworkId(randomUInt())
+    original.setNetworkId(randomInt())
     original.setAddNewBuffersAutomatically(randomBoolean())
     original.setSortAlphabetically(randomBoolean())
     original.setHideInactiveNetworks(randomBoolean())
@@ -44,14 +44,17 @@ class BufferViewConfigTest {
 
     val copy = original.copy()
     copy.fromVariantMap(roundTrip(VariantMapSerializer, original.toVariantMap()))
-    assert(original.isEqual(copy))
+    assert(original.isEqual(copy)) {
+      System.err.println("Original:\n$original")
+      System.err.println("Copy:\n$copy")
+    }
   }
 
   @Test
   fun testCopy() {
-    val original = BufferViewConfig(randomUInt(), SignalProxy.NULL)
+    val original = BufferViewConfig(randomInt(), SignalProxy.NULL)
     original.setBufferViewName(randomString())
-    original.setNetworkId(randomUInt())
+    original.setNetworkId(randomInt())
     original.setAddNewBuffersAutomatically(randomBoolean())
     original.setSortAlphabetically(randomBoolean())
     original.setHideInactiveNetworks(randomBoolean())
@@ -64,6 +67,9 @@ class BufferViewConfigTest {
 
     val copy = original.copy()
     copy.fromVariantMap(original.toVariantMap())
-    assert(original.isEqual(copy))
+    assert(original.isEqual(copy)) {
+      System.err.println("Original:\n$original")
+      System.err.println("Copy:\n$copy")
+    }
   }
 }

@@ -319,15 +319,15 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
           val (info, expandedNetworks, selected) = data
           val (config, list) = info ?: Pair(null, emptyList())
           val minimumActivity = config?.minimumActivity() ?: Buffer_Activity.NONE
-          val activities = activityList.associate { it.bufferId to it.filtered }
+          val activities = activityList.associate { it.bufferId to it.filtered.toUInt() }
           val processedList = list.asSequence().sortedBy { props ->
             !props.info.type.hasFlag(Buffer_Type.StatusBuffer)
           }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { props ->
             props.network.networkName
           }).map { props ->
             val activity = props.activity - (activities[props.info.bufferId]
-                                             ?: account?.defaultFiltered
-                                             ?: 0)
+                                             ?: account?.defaultFiltered?.toUInt()
+                                             ?: 0u)
             BufferListItem(
               props.copy(
                 activity = activity,

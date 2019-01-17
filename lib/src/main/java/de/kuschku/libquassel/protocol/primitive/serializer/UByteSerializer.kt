@@ -17,9 +17,18 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.util.irc
+package de.kuschku.libquassel.protocol.primitive.serializer
 
-object IrcPorts {
-  const val normal = 6667
-  const val secure = 6697
+import de.kuschku.libquassel.quassel.QuasselFeatures
+import de.kuschku.libquassel.util.nio.ChainedByteBuffer
+import java.nio.ByteBuffer
+
+object UByteSerializer : Serializer<UByte> {
+  override fun serialize(buffer: ChainedByteBuffer, data: UByte, features: QuasselFeatures) {
+    buffer.put(data.toByte())
+  }
+
+  override fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): UByte {
+    return buffer.get().toUByte()
+  }
 }

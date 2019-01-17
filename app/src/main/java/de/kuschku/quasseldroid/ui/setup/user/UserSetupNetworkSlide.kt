@@ -31,6 +31,8 @@ import androidx.appcompat.widget.SwitchCompat
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputLayout
+import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_PLAINTEXT
+import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_SSL
 import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.DefaultNetwork
@@ -38,7 +40,6 @@ import de.kuschku.quasseldroid.defaults.DefaultNetworkServer
 import de.kuschku.quasseldroid.ui.setup.SlideFragment
 import de.kuschku.quasseldroid.util.Patterns
 import de.kuschku.quasseldroid.util.TextValidator
-import de.kuschku.quasseldroid.util.irc.IrcPorts
 import de.kuschku.quasseldroid.util.ui.AnimationHelper
 import javax.inject.Inject
 
@@ -110,9 +111,9 @@ class UserSetupNetworkSlide : SlideFragment() {
         servers = listOf(
           DefaultNetworkServer(
             host = hostField.text.toString(),
-            port = portField.text.toString().toIntOrNull()
-                   ?: if (sslEnabled.isChecked) 6697
-                   else 6667,
+            port = portField.text.toString().toUIntOrNull()
+                   ?: if (sslEnabled.isChecked) PORT_SSL.port
+                   else PORT_PLAINTEXT.port,
             secure = sslEnabled.isChecked
           )
         )
@@ -178,10 +179,10 @@ class UserSetupNetworkSlide : SlideFragment() {
 
     sslEnabled.setOnCheckedChangeListener { _, isChecked ->
       val portValue = portField.text.trim().toString()
-      if (isChecked && portValue == IrcPorts.normal.toString()) {
-        portField.setText(IrcPorts.secure.toString())
-      } else if (!isChecked && portValue == IrcPorts.secure.toString()) {
-        portField.setText(IrcPorts.normal.toString())
+      if (isChecked && portValue == PORT_PLAINTEXT.port.toString()) {
+        portField.setText(PORT_SSL.port.toString())
+      } else if (!isChecked && portValue == PORT_SSL.port.toString()) {
+        portField.setText(PORT_PLAINTEXT.port.toString())
       }
     }
 

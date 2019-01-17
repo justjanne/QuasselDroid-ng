@@ -36,47 +36,47 @@ data class Message(
   val avatarUrl: String,
   val content: String
 ) {
-  enum class MessageType(override val bit: Int) :
-    Flag<MessageType> {
-    Plain(0x00001),
-    Notice(0x00002),
-    Action(0x00004),
-    Nick(0x00008),
-    Mode(0x00010),
-    Join(0x00020),
-    Part(0x00040),
-    Quit(0x00080),
-    Kick(0x00100),
-    Kill(0x00200),
-    Server(0x00400),
-    Info(0x00800),
-    Error(0x01000),
-    DayChange(0x02000),
-    Topic(0x04000),
-    NetsplitJoin(0x08000),
-    NetsplitQuit(0x10000),
-    Invite(0x20000),
-    Markerline(0x40000);
+  enum class MessageType(override val bit: UInt) : Flag<MessageType> {
+    Plain(0x00001u),
+    Notice(0x00002u),
+    Action(0x00004u),
+    Nick(0x00008u),
+    Mode(0x00010u),
+    Join(0x00020u),
+    Part(0x00040u),
+    Quit(0x00080u),
+    Kick(0x00100u),
+    Kill(0x00200u),
+    Server(0x00400u),
+    Info(0x00800u),
+    Error(0x01000u),
+    DayChange(0x02000u),
+    Topic(0x04000u),
+    NetsplitJoin(0x08000u),
+    NetsplitQuit(0x10000u),
+    Invite(0x20000u),
+    Markerline(0x40000u);
 
     companion object : Flags.Factory<MessageType> {
       override val NONE = MessageType.of()
       override fun of(bit: Int) = Flags.of<MessageType>(bit)
+      override fun of(bit: UInt) = Flags.of<MessageType>(bit)
       override fun of(vararg flags: MessageType) = Flags.of(*flags)
       override fun of(flags: Iterable<MessageType>) = Flags.of(flags)
     }
   }
 
-  enum class MessageFlag(override val bit: Int) :
-    Flag<MessageFlag> {
-    Self(0x01),
-    Highlight(0x02),
-    Redirected(0x04),
-    ServerMsg(0x08),
-    Backlog(0x80);
+  enum class MessageFlag(override val bit: UInt) : Flag<MessageFlag> {
+    Self(0x01u),
+    Highlight(0x02u),
+    Redirected(0x04u),
+    ServerMsg(0x08u),
+    Backlog(0x80u);
 
     companion object : Flags.Factory<MessageFlag> {
       override val NONE = MessageFlag.of()
       override fun of(bit: Int) = Flags.of<MessageFlag>(bit)
+      override fun of(bit: UInt) = Flags.of<MessageFlag>(bit)
       override fun of(vararg flags: MessageFlag) = Flags.of(*flags)
       override fun of(flags: Iterable<MessageFlag>) = Flags.of(flags)
     }

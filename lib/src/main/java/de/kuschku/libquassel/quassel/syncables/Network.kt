@@ -373,7 +373,7 @@ class Network constructor(
   }.distinctUntilChanged()
 
   fun ircUsers() = _ircUsers.values.toList()
-  fun ircUserCount(): UInt = _ircUsers.size
+  fun ircUserCount(): UInt = _ircUsers.size.toUInt()
   fun newIrcChannel(channelName: String, initData: QVariantMap = emptyMap(),
                     index: Int? = null): IrcChannel =
     ircChannel(channelName).let { channel ->
@@ -401,7 +401,7 @@ class Network constructor(
   }.distinctUntilChanged()
 
   fun ircChannels() = _ircChannels.values.toList()
-  fun ircChannelCount(): UInt = _ircChannels.size
+  fun ircChannelCount(): UInt = _ircChannels.size.toUInt()
   fun codecForServer(): String = _codecForServer
   fun codecForEncoding(): String = _codecForEncoding
   fun codecForDecoding(): String = _codecForDecoding
@@ -581,7 +581,7 @@ class Network constructor(
   override fun setMessageRateBurstSize(burstSize: UInt) {
     if (_messageRateBurstSize == burstSize)
       return
-    if (burstSize < 1)
+    if (burstSize == 0u)
       throw IllegalArgumentException("Message Burst Size must be a positive number: $burstSize")
     _messageRateBurstSize = burstSize
   }
@@ -589,7 +589,7 @@ class Network constructor(
   override fun setMessageRateDelay(messageDelay: UInt) {
     if (_messageRateDelay == messageDelay)
       return
-    if (messageDelay < 1)
+    if (messageDelay == 0u)
       throw IllegalArgumentException("Message Delay must be a positive number: $messageDelay")
     _messageRateDelay = messageDelay
   }
@@ -944,12 +944,12 @@ class Network constructor(
       field = value
       live_networkInfo.onNext(Unit)
     }
-  private var _autoReconnectInterval: UInt = 60
+  private var _autoReconnectInterval: UInt = 60u
     set(value) {
       field = value
       live_networkInfo.onNext(Unit)
     }
-  private var _autoReconnectRetries: UShort = 10
+  private var _autoReconnectRetries: UShort = 10u
     set(value) {
       field = value
       live_networkInfo.onNext(Unit)
@@ -972,13 +972,13 @@ class Network constructor(
       live_networkInfo.onNext(Unit)
     }
   /** Maximum number of messages to send without any delays */
-  private var _messageRateBurstSize: UInt = 5
+  private var _messageRateBurstSize: UInt = 5u
     set(value) {
       field = value
       live_networkInfo.onNext(Unit)
     }
   /** Delay in ms. for messages when max. burst messages sent */
-  private var _messageRateDelay: UInt = 2200
+  private var _messageRateDelay: UInt = 2200u
     set(value) {
       field = value
       live_networkInfo.onNext(Unit)

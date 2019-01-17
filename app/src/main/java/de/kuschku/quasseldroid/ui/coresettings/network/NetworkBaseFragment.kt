@@ -41,6 +41,7 @@ import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
+import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.Defaults
 import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
@@ -239,7 +240,7 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
         customratelimitsEnabled.isChecked = data.useCustomMessageRate()
         customratelimitsBurstSize.setText(data.messageRateBurstSize().toString())
         customratelimitsUnlimited.isChecked = data.unlimitedMessageRate()
-        customratelimitsDelay.setText("${data.messageRateDelay() / 1000.0}")
+        customratelimitsDelay.setText("${data.messageRateDelay().toInt() / 1000.0}")
       }
     }
   }
@@ -296,9 +297,9 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
     data.setAutoIdentifyPassword(autoidentifyPassword.text.toString())
 
     data.setUseAutoReconnect(autoreconnectEnabled.isChecked)
-    data.setAutoReconnectInterval(autoreconnectInterval.text.toString().toIntOrNull()
+    data.setAutoReconnectInterval(autoreconnectInterval.text.toString().toUIntOrNull()
                                   ?: data.autoReconnectInterval())
-    data.setAutoReconnectRetries(autoreconnectRetries.text.toString().toShortOrNull()
+    data.setAutoReconnectRetries(autoreconnectRetries.text.toString().toUShortOrNull()
                                  ?: data.autoReconnectRetries())
     data.setUnlimitedReconnectRetries(autoreconnectUnlimited.isChecked)
 
@@ -306,11 +307,13 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
     data.setRejoinChannels(rejoinChannels.isChecked)
 
     data.setUseCustomMessageRate(customratelimitsEnabled.isChecked)
-    data.setMessageRateBurstSize(customratelimitsBurstSize.text.toString().toIntOrNull()
+    data.setMessageRateBurstSize(customratelimitsBurstSize.text.toString().toUIntOrNull()
                                  ?: data.messageRateBurstSize())
     data.setUnlimitedMessageRate(customratelimitsUnlimited.isChecked)
     data.setMessageRateDelay(customratelimitsDelay.toString().toFloatOrNull()
                                ?.let { (it * 1000).roundToInt() }
+                               ?.nullIf { it < 0 }
+                               ?.toUInt()
                              ?: data.messageRateDelay())
   }
 

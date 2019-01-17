@@ -54,6 +54,8 @@ import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.coresetup.CoreSetupData
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
+import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_PLAINTEXT
+import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_SSL
 import de.kuschku.libquassel.session.Error
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
@@ -81,7 +83,6 @@ import de.kuschku.quasseldroid.ui.setup.network.NetworkSetupActivity
 import de.kuschku.quasseldroid.ui.setup.user.UserSetupActivity
 import de.kuschku.quasseldroid.util.backport.OsConstants
 import de.kuschku.quasseldroid.util.helper.*
-import de.kuschku.quasseldroid.util.irc.IrcPorts
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.missingfeatures.MissingFeaturesDialog
 import de.kuschku.quasseldroid.util.missingfeatures.RequiredFeatures
@@ -234,9 +235,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                 name = "",
                 server = DefaultNetworkServer(
                   host = uri.host ?: "",
-                  port = uri.port.nullIf { it == -1 }
-                         ?: if (uri.scheme == "irc") IrcPorts.normal
-                         else IrcPorts.secure,
+                  port = uri.port.nullIf { it < 0 }?.toUInt()
+                         ?: if (uri.scheme == "irc") PORT_PLAINTEXT.port
+                         else PORT_SSL.port,
                   secure = uri.scheme == "ircs"
                 )
               ),
@@ -833,7 +834,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             accountDatabase.accounts().findById(accountId)?.defaultFiltered ?: 0
           )
           val filtered = Message_Type.of(filteredRaw)
-          val flags = intArrayOf(
+          val flags = uintArrayOf(
             Message.MessageType.Join.bit or Message.MessageType.NetsplitJoin.bit,
             Message.MessageType.Part.bit,
             Message.MessageType.Quit.bit or Message.MessageType.NetsplitQuit.bit,
@@ -849,7 +850,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           MaterialDialog.Builder(this)
             .title(R.string.label_filter_messages)
             .items(R.array.message_filter_types)
-            .itemsIds(flags)
+            .itemsIds(flags.toIntArray())
             .itemsCallbackMultiChoice(selectedIndices) { _, _, _ -> false }
             .positiveText(R.string.label_select)
             .negativeText(R.string.label_use_default)
@@ -867,8 +868,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   .map { flags[it] }
                   .fold(Message_Type.of()) { acc, i -> acc or i }
 
-                accountDatabase.accounts().setFiltered(accountId, newlyFiltered.value)
-                database.filtered().setFiltered(accountId, buffer, newlyFiltered.value)
+                accountDatabase.accounts().setFiltered(accountId, newlyFiltered.value.toInt())
+                database.filtered().setFiltered(accountId, buffer, newlyFiltered.value.toInt())
               }
             }
             .onPositive { dialog, _ ->
@@ -880,7 +881,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   .fold(Message_Type.of()) { acc, i -> acc or i }
 
                 database.filtered().replace(
-                  QuasselDatabase.Filtered(accountId, buffer, newlyFiltered.value)
+                  QuasselDatabase.Filtered(accountId, buffer, newlyFiltered.value.toInt())
                 )
               }
             }

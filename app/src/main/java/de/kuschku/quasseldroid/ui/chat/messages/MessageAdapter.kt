@@ -112,7 +112,7 @@ class MessageAdapter @Inject constructor(
   }
 
   override fun getItemViewType(position: Int) = getItem(position)?.let {
-    it.content.type.value or
+    it.content.type.value.toInt() or
       (if (it.content.flag.hasFlag(Message_Flag.Highlight)) MASK_HIGHLIGHT else 0x00) or
       (if (it.isFollowUp) MASK_FOLLOWUP else 0x00) or
       (if (it.isEmoji) MASK_EMOJI else 0x00) or

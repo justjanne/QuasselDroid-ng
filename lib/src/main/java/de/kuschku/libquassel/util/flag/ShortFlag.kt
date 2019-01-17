@@ -19,34 +19,40 @@
 
 package de.kuschku.libquassel.util.flag
 
-import kotlin.experimental.and
-import kotlin.experimental.inv
-import kotlin.experimental.or
-import kotlin.experimental.xor
+import de.kuschku.libquassel.util.helpers.sum
 
 interface ShortFlag<T> where T : Enum<T>, T : ShortFlag<T> {
-  val bit: Short
+  val bit: UShort
   fun toByte() = bit.toByte()
-  fun toChar() = bit.toChar()
-  fun toDouble() = bit.toDouble()
-  fun toFloat() = bit.toFloat()
+  fun toChar() = bit.toLong().toChar()
+  fun toDouble() = bit.toLong().toDouble()
+  fun toFloat() = bit.toLong().toFloat()
   fun toInt() = bit.toInt()
   fun toLong() = bit.toLong()
-  fun toShort() = bit
+  fun toShort() = bit.toShort()
+  fun toUByte() = bit.toUByte()
+  fun toUInt() = bit.toUInt()
+  fun toULong() = bit.toULong()
+  fun toUShort() = bit.toUShort()
 }
 
 data class ShortFlags<E>(
-  val value: Short,
+  val value: UShort,
   val values: Array<E>? = null
-) : Number(), Comparable<Short> where E : Enum<E>, E : ShortFlag<E> {
-  override fun compareTo(other: Short) = value.compareTo(other)
+) : Number(), Comparable<UShort> where E : Enum<E>, E : ShortFlag<E> {
+  override fun compareTo(other: UShort) = value.compareTo(other)
+
   override fun toByte() = value.toByte()
-  override fun toChar() = value.toChar()
-  override fun toDouble() = value.toDouble()
-  override fun toFloat() = value.toFloat()
+  override fun toChar() = value.toLong().toChar()
+  override fun toDouble() = value.toLong().toDouble()
+  override fun toFloat() = value.toLong().toFloat()
   override fun toInt() = value.toInt()
   override fun toLong() = value.toLong()
-  override fun toShort() = value
+  override fun toShort() = value.toShort()
+  fun toUByte() = value.toUByte()
+  fun toUInt() = value.toUInt()
+  fun toULong() = value.toULong()
+  fun toUShort() = value.toUShort()
 
   override fun equals(other: Any?) = when (other) {
     is ShortFlags<*> -> other.value == value
@@ -55,12 +61,12 @@ data class ShortFlags<E>(
   }
 
   override fun hashCode(): Int {
-    return value.toInt()
+    return value.hashCode()
   }
 
   fun enabledValues() = values?.filter { hasFlag(it) }?.toSet() ?: emptySet()
 
-  fun isEmpty() = value == 0.toShort()
+  fun isEmpty() = value == 0u.toUShort()
   fun isNotEmpty() = !isEmpty()
 
   override fun toString() = if (values != null) {
@@ -72,19 +78,25 @@ data class ShortFlags<E>(
   companion object {
     inline fun <reified T> of(int: Short): ShortFlags<T>
       where T : ShortFlag<T>, T : Enum<T> =
+      ShortFlags(int.toUShort(), enumValues())
+
+    inline fun <reified T> of(int: UShort): ShortFlags<T>
+      where T : ShortFlag<T>, T : Enum<T> =
       ShortFlags(int, enumValues())
 
-    inline fun <reified T> of(vararg flags: ShortFlag<T>): ShortFlags<T>
+    inline fun <reified T> of(vararg flags: T): ShortFlags<T>
       where T : ShortFlag<T>, T : Enum<T> =
-      ShortFlags(flags.map(ShortFlag<T>::bit).distinct().sum().toShort(), enumValues())
+      ShortFlags(flags.map(ShortFlag<T>::bit).distinct().sum().toUShort(), enumValues())
 
     inline fun <reified T> of(flags: Iterable<T>): ShortFlags<T>
       where T : ShortFlag<T>, T : Enum<T> =
-      ShortFlags(flags.map(ShortFlag<T>::bit).distinct().sum().toShort(), enumValues())
+      ShortFlags(flags.map(ShortFlag<T>::bit).distinct().sum().toUShort(), enumValues())
   }
 
   interface Factory<E> where E : ShortFlag<E>, E : Enum<E> {
+    val NONE: ShortFlags<E>
     fun of(bit: Short): ShortFlags<E>
+    fun of(bit: UShort): ShortFlags<E>
     fun of(vararg flags: E): ShortFlags<E>
     fun of(flags: Iterable<E>): ShortFlags<E>
   }
@@ -92,12 +104,11 @@ data class ShortFlags<E>(
 
 infix fun <T> ShortFlags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : ShortFlag<T> {
   // an Undefined flag is a special case.
-  if (value == 0.toShort() || (value > 0 && which.bit == 0.toShort())) return false
-
+  if (value == 0u.toUShort()) return false
   return value and which.bit == which.bit
 }
 
-infix fun <T> ShortFlags<T>.or(other: Short): ShortFlags<T>
+infix fun <T> ShortFlags<T>.or(other: UShort): ShortFlags<T>
   where T : kotlin.Enum<T>, T : ShortFlag<T> =
   ShortFlags(value or other)
 
@@ -109,7 +120,7 @@ infix fun <T> ShortFlags<T>.or(other: ShortFlags<T>): ShortFlags<T>
   where T : kotlin.Enum<T>, T : ShortFlag<T> =
   ShortFlags(value or other.value)
 
-infix fun <T> ShortFlags<T>.and(other: Short): ShortFlags<T>
+infix fun <T> ShortFlags<T>.and(other: UShort): ShortFlags<T>
   where T : kotlin.Enum<T>, T : ShortFlag<T> =
   ShortFlags(value and other)
 
@@ -121,7 +132,7 @@ infix fun <T> ShortFlags<T>.and(other: ShortFlags<T>): ShortFlags<T>
   where T : kotlin.Enum<T>, T : ShortFlag<T> =
   ShortFlags(value and other.value)
 
-infix operator fun <T> ShortFlags<T>.plus(other: Short): ShortFlags<T>
+infix operator fun <T> ShortFlags<T>.plus(other: UShort): ShortFlags<T>
   where T : Enum<T>, T : ShortFlag<T> =
   ShortFlags(value or other)
 
@@ -133,7 +144,7 @@ infix operator fun <T> ShortFlags<T>.plus(other: ShortFlags<T>): ShortFlags<T>
   where T : Enum<T>, T : ShortFlag<T> =
   ShortFlags(value or other.value)
 
-infix operator fun <T> ShortFlags<T>.minus(other: Short): ShortFlags<T>
+infix operator fun <T> ShortFlags<T>.minus(other: UShort): ShortFlags<T>
   where T : Enum<T>, T : ShortFlag<T> =
   ShortFlags(value and other.inv())
 

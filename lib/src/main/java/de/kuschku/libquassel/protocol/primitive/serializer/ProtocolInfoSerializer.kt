@@ -28,14 +28,14 @@ import java.nio.ByteBuffer
 object ProtocolInfoSerializer : Serializer<ProtocolInfo> {
   override fun serialize(buffer: ChainedByteBuffer, data: ProtocolInfo,
                          features: QuasselFeatures) {
-    ByteSerializer.serialize(buffer, data.flags.toByte(), features)
+    UByteSerializer.serialize(buffer, data.flags.toUByte(), features)
     ShortSerializer.serialize(buffer, data.data, features)
     ByteSerializer.serialize(buffer, data.version, features)
   }
 
   override fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): ProtocolInfo {
     return ProtocolInfo(
-      Protocol_Features.of(ByteSerializer.deserialize(buffer, features).toInt()),
+      Protocol_Features.of(UByteSerializer.deserialize(buffer, features).toUInt()),
       ShortSerializer.deserialize(buffer, features),
       ByteSerializer.deserialize(buffer, features)
     )

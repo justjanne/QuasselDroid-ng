@@ -28,9 +28,9 @@ import org.junit.Test
 class NetworkTest {
   @Test
   fun testSerialization() {
-    val original = Network(randomUInt(), SignalProxy.NULL)
+    val original = Network(randomInt(), SignalProxy.NULL)
     original.setNetworkName(randomString())
-    original.setIdentity(randomUInt())
+    original.setIdentity(randomInt())
     original.setActualServerList(listOf(
       INetwork.Server(
         host = randomString(),
@@ -84,7 +84,7 @@ class NetworkTest {
     original.addSupport("EXTBAN", ",ABCNOQRSTUcjmprsz")
     original.addSupport("FNC", null)
     original.addSupport("INVEX", "I")
-    for (i in 0 until randomUByte()) {
+    for (i in 0 until 8) {
       original.newIrcUser(randomString() + "!" + randomString() + "@" + randomString()).apply {
         setUser(randomString())
         setHost(randomString())
@@ -108,7 +108,7 @@ class NetworkTest {
         ).toString())
       }
     }
-    for (i in 0 until randomUByte()) {
+    for (i in 0 until 8) {
       original.newIrcChannel(randomString(), mapOf()).apply {
         setTopic(randomString())
         setPassword(randomString())
@@ -147,14 +147,17 @@ class NetworkTest {
 
     val copy = original.copy()
     copy.fromVariantMap(roundTrip(VariantMapSerializer, original.toVariantMap()))
-    assert(original.isEqual(copy))
+    assert(original.isEqual(copy)) {
+      System.err.println("Original:\n$original")
+      System.err.println("Copy:\n$copy")
+    }
   }
 
   @Test
   fun testCopy() {
-    val original = Network(randomUInt(), SignalProxy.NULL)
+    val original = Network(randomInt(), SignalProxy.NULL)
     original.setNetworkName(randomString())
-    original.setIdentity(randomUInt())
+    original.setIdentity(randomInt())
     original.setActualServerList(listOf(
       INetwork.Server(
         host = randomString(),
@@ -208,7 +211,7 @@ class NetworkTest {
     original.addSupport("EXTBAN", ",ABCNOQRSTUcjmprsz")
     original.addSupport("FNC", null)
     original.addSupport("INVEX", "I")
-    for (i in 0 until randomUByte()) {
+    for (i in 0 until 8) {
       original.newIrcUser(randomString() + "!" + randomString() + "@" + randomString()).apply {
         setUser(randomString())
         setHost(randomString())
@@ -232,7 +235,7 @@ class NetworkTest {
         ).toString())
       }
     }
-    for (i in 0 until randomUByte()) {
+    for (i in 0 until 8) {
       original.newIrcChannel(randomString(), mapOf()).apply {
         setTopic(randomString())
         setPassword(randomString())
@@ -271,7 +274,10 @@ class NetworkTest {
 
     val copy = original.copy()
     copy.fromVariantMap(original.toVariantMap())
-    assert(original.isEqual(copy))
+    assert(original.isEqual(copy)) {
+      System.err.println("Original:\n$original")
+      System.err.println("Copy:\n$copy")
+    }
   }
 
   companion object {

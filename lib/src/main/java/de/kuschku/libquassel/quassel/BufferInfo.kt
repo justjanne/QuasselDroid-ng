@@ -33,30 +33,33 @@ data class BufferInfo(
   var groupId: Int = -1,
   var bufferName: String? = null
 ) {
-  enum class Type(override val bit: Short) : ShortFlag<Type> {
-    InvalidBuffer(0x00),
-    StatusBuffer(0x01),
-    ChannelBuffer(0x02),
-    QueryBuffer(0x04),
-    GroupBuffer(0x08);
+  enum class Type(override val bit: UShort) : ShortFlag<Type> {
+    InvalidBuffer(0x00u),
+    StatusBuffer(0x01u),
+    ChannelBuffer(0x02u),
+    QueryBuffer(0x04u),
+    GroupBuffer(0x08u);
 
     companion object : ShortFlags.Factory<Type> {
-      val validValues = values().filter { it.bit != 0.toShort() }.toTypedArray()
+      override val NONE = Buffer_Type.of()
+      val validValues = values().filter { it.bit != 0u.toUShort() }.toTypedArray()
       override fun of(bit: Short) = ShortFlags.of<Type>(bit)
+      override fun of(bit: UShort) = ShortFlags.of<Type>(bit)
       override fun of(vararg flags: Type) = ShortFlags.of(*flags)
       override fun of(flags: Iterable<Type>) = ShortFlags.of(flags)
     }
   }
 
-  enum class Activity(override val bit: Int) : Flag<Activity> {
-    NoActivity(0x00),
-    OtherActivity(0x01),
-    NewMessage(0x02),
-    Highlight(0x04);
+  enum class Activity(override val bit: UInt) : Flag<Activity> {
+    NoActivity(0x00u),
+    OtherActivity(0x01u),
+    NewMessage(0x02u),
+    Highlight(0x04u);
 
     companion object : Flags.Factory<Activity> {
       override val NONE = Activity.of()
       override fun of(bit: Int) = Flags.of<Activity>(bit)
+      override fun of(bit: UInt) = Flags.of<Activity>(bit)
       override fun of(vararg flags: Activity) = Flags.of(*flags)
       override fun of(flags: Iterable<Activity>) = Flags.of(flags)
     }
