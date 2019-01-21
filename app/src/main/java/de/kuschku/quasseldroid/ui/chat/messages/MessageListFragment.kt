@@ -141,7 +141,7 @@ class MessageListFragment : ServiceBoundFragment() {
           true
         } ?: false
       }
-      R.id.action_copy  -> {
+      R.id.action_copy      -> {
         val builder = SpannableStringBuilder()
         viewModel.selectedMessages.value.values.asSequence().sortedBy {
           it.original.messageId
@@ -170,7 +170,7 @@ class MessageListFragment : ServiceBoundFragment() {
         actionMode?.finish()
         true
       }
-      R.id.action_share -> {
+      R.id.action_share     -> {
         val builder = SpannableStringBuilder()
         viewModel.selectedMessages.value.values.asSequence().sortedBy {
           it.original.messageId
@@ -205,7 +205,7 @@ class MessageListFragment : ServiceBoundFragment() {
         actionMode?.finish()
         true
       }
-      else              -> false
+      else                  -> false
     }
 
     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {

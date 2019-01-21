@@ -27,6 +27,7 @@ interface Backend {
 
   fun connect(address: SocketAddress, user: String, pass: String, requireSsl: Boolean,
               reconnect: Boolean)
+
   fun reconnect()
   fun disconnect(forever: Boolean = false)
   fun sessionManager(): SessionManager?
