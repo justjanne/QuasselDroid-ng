@@ -25,6 +25,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.appcompat.widget.SwitchCompat
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputLayout
@@ -46,6 +47,9 @@ class AccountSetupConnectionSlide : SlideFragment() {
   @BindView(R.id.port)
   lateinit var portField: EditText
 
+  @BindView(R.id.require_ssl)
+  lateinit var requireSsl: SwitchCompat
+
   override fun isValid(): Boolean {
     return hostValidator.isValid && portValidator.isValid
   }
@@ -58,12 +62,15 @@ class AccountSetupConnectionSlide : SlideFragment() {
       hostField.setText(data.getString("host"))
     if (data.containsKey("port"))
       portField.setText(data.getInt("port").toString())
+    if (data.containsKey("require_ssl"))
+      requireSsl.isChecked = data.getBoolean("require_ssl", false)
     updateValidity()
   }
 
   override fun getData(data: Bundle) {
     data.putString("host", hostField.text.toString())
     data.putInt("port", portField.text.toString().toIntOrNull() ?: -1)
+    data.putBoolean("require_ssl", requireSsl.isChecked)
   }
 
   override fun onCreateContent(inflater: LayoutInflater, container: ViewGroup?,

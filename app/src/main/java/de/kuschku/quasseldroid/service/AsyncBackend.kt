@@ -40,15 +40,16 @@ class AsyncBackend(
   }
 
   override fun connectUnlessConnected(address: SocketAddress, user: String, pass: String,
-                                      reconnect: Boolean) {
+                                      requireSsl: Boolean, reconnect: Boolean) {
     handler.backend {
-      backend.connectUnlessConnected(address, user, pass, reconnect)
+      backend.connectUnlessConnected(address, user, pass, requireSsl, reconnect)
     }
   }
 
-  override fun connect(address: SocketAddress, user: String, pass: String, reconnect: Boolean) {
+  override fun connect(address: SocketAddress, user: String, pass: String, requireSsl: Boolean,
+                       reconnect: Boolean) {
     handler.backend {
-      backend.connect(address, user, pass, reconnect)
+      backend.connect(address, user, pass, requireSsl, reconnect)
     }
   }
 

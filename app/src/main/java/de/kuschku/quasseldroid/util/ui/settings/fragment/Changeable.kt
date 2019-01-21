@@ -17,19 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.session
+package de.kuschku.quasseldroid.util.ui.settings.fragment
 
-import de.kuschku.libquassel.connection.SocketAddress
-
-interface Backend {
-  fun connectUnlessConnected(address: SocketAddress, user: String, pass: String,
-                             requireSsl: Boolean, reconnect: Boolean)
-
-  fun connect(address: SocketAddress, user: String, pass: String, requireSsl: Boolean,
-              reconnect: Boolean)
-  fun reconnect()
-  fun disconnect(forever: Boolean = false)
-  fun sessionManager(): SessionManager?
-  fun updateUserDataAndLogin(user: String, pass: String)
-  fun requestConnectNewNetwork()
+interface Changeable {
+  fun hasChanged(): Boolean
 }

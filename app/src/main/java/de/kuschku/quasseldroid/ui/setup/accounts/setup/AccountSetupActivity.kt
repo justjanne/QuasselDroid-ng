@@ -38,11 +38,12 @@ class AccountSetupActivity : SetupActivity() {
   override fun onDone(data: Bundle) {
     val account = AccountDatabase.Account(
       id = 0,
-      host = data.getString("host"),
+      host = data.getString("host", ""),
       port = data.getInt("port"),
-      user = data.getString("user"),
-      pass = data.getString("pass"),
-      name = data.getString("name"),
+      requireSsl = data.getBoolean("require_ssl"),
+      user = data.getString("user", ""),
+      pass = data.getString("pass", ""),
+      name = data.getString("name", ""),
       lastUsed = Instant.now().epochSecond,
       acceptedMissingFeatures = false,
       defaultFiltered = 0

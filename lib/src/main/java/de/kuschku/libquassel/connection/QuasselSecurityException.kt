@@ -24,7 +24,7 @@ import java.security.cert.X509Certificate
 
 sealed class QuasselSecurityException(
   val certificateChain: Array<out X509Certificate>?,
-  cause: Throwable
+  cause: Throwable?
 ) : GeneralSecurityException(cause) {
   class Certificate(
     certificateChain: Array<out X509Certificate>?,
@@ -36,4 +36,6 @@ sealed class QuasselSecurityException(
     val address: SocketAddress,
     cause: Exception
   ) : QuasselSecurityException(certificateChain, cause)
+
+  object NoSsl : QuasselSecurityException(emptyArray(), null)
 }

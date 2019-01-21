@@ -33,11 +33,13 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.ui.AnimationHelper
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 
-class IgnoreItemFragment : SettingsFragment(), SettingsFragment.Savable,
-                           SettingsFragment.Changeable {
+class IgnoreItemFragment : ServiceBoundSettingsFragment(), Savable,
+                           Changeable {
   @BindView(R.id.enabled)
   lateinit var enabled: SwitchCompat
 

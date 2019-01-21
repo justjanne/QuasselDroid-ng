@@ -20,9 +20,9 @@
 package de.kuschku.quasseldroid.ui.coresettings.network
 
 import de.kuschku.libquassel.util.helpers.value
-import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Deletable
 
-class NetworkEditFragment : NetworkBaseFragment(false), SettingsFragment.Deletable {
+class NetworkEditFragment : NetworkBaseFragment(false), Deletable {
   override fun onSave() = network?.let { (it, data) ->
     applyChanges(data)
     it?.requestSetNetworkInfo(data.networkInfo())

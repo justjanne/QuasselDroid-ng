@@ -42,12 +42,14 @@ import de.kuschku.libquassel.util.flag.minus
 import de.kuschku.libquassel.util.flag.plus
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.Defaults
-import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 
 abstract class ChatListBaseFragment(private val initDefault: Boolean) :
-  SettingsFragment(), SettingsFragment.Savable, SettingsFragment.Changeable {
+  ServiceBoundSettingsFragment(), Savable, Changeable {
   @BindView(R.id.buffer_view_name)
   lateinit var bufferViewName: EditText
 

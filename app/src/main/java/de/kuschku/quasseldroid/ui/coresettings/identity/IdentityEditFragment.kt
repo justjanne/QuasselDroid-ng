@@ -20,9 +20,9 @@
 package de.kuschku.quasseldroid.ui.coresettings.identity
 
 import de.kuschku.libquassel.util.helpers.value
-import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Deletable
 
-class IdentityEditFragment : IdentityBaseFragment(false), SettingsFragment.Deletable {
+class IdentityEditFragment : IdentityBaseFragment(false), Deletable {
   override fun onSave() = identity?.let { (it, data) ->
     applyChanges(data)
     it?.requestUpdate(data.toVariantMap())

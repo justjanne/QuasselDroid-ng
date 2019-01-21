@@ -17,19 +17,18 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.session
+package de.kuschku.quasseldroid.ui.setup.accounts.edit
 
-import de.kuschku.libquassel.connection.SocketAddress
+import androidx.fragment.app.FragmentActivity
+import dagger.Binds
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
-interface Backend {
-  fun connectUnlessConnected(address: SocketAddress, user: String, pass: String,
-                             requireSsl: Boolean, reconnect: Boolean)
+@Module
+abstract class AccountEditFragmentProvider {
+  @Binds
+  abstract fun bindFragmentActivity(activity: AccountEditActivity): FragmentActivity
 
-  fun connect(address: SocketAddress, user: String, pass: String, requireSsl: Boolean,
-              reconnect: Boolean)
-  fun reconnect()
-  fun disconnect(forever: Boolean = false)
-  fun sessionManager(): SessionManager?
-  fun updateUserDataAndLogin(user: String, pass: String)
-  fun requestConnectNewNetwork()
+  @ContributesAndroidInjector
+  abstract fun bindAccountEditFragment(): AccountEditFragment
 }

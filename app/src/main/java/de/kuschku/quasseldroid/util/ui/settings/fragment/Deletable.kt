@@ -17,14 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.setup.accounts.edit
+package de.kuschku.quasseldroid.util.ui.settings.fragment
 
-import androidx.fragment.app.FragmentActivity
-import dagger.Binds
-import dagger.Module
-
-@Module
-abstract class AccountEditModule {
-  @Binds
-  abstract fun bindFragmentActivity(activity: AccountEditActivity): FragmentActivity
+interface Deletable {
+  fun onDelete()
 }

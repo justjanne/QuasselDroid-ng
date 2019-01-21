@@ -31,12 +31,14 @@ import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.NetworkConfig
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 
-class NetworkConfigFragment : SettingsFragment(), SettingsFragment.Savable,
-                              SettingsFragment.Changeable {
+class NetworkConfigFragment : ServiceBoundSettingsFragment(), Savable,
+                              Changeable {
   @BindView(R.id.ping_timeout_enabled)
   lateinit var pingTimeoutEnabled: SwitchCompat
 

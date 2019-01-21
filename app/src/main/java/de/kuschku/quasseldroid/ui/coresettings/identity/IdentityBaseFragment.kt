@@ -39,12 +39,14 @@ import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.Defaults
-import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 
 abstract class IdentityBaseFragment(private val initDefault: Boolean) :
-  SettingsFragment(), SettingsFragment.Savable, SettingsFragment.Changeable {
+  ServiceBoundSettingsFragment(), Savable, Changeable {
 
   @BindView(R.id.identity_name)
   lateinit var identityName: EditText

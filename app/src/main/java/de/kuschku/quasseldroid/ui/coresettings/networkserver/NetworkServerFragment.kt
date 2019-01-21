@@ -34,11 +34,13 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_PLAINTEXT
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_SSL
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.helper.setDependent
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 
-class NetworkServerFragment : SettingsFragment(), SettingsFragment.Savable,
-                              SettingsFragment.Changeable {
+class NetworkServerFragment : ServiceBoundSettingsFragment(), Savable,
+                              Changeable {
   @BindView(R.id.host)
   lateinit var host: EditText
 

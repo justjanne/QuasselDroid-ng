@@ -55,6 +55,7 @@ import javax.net.ssl.X509TrustManager
 class CoreConnection(
   private val address: SocketAddress,
   private val clientData: ClientData = ClientData.DEFAULT,
+  private val requireSsl: Boolean = false,
   private val features: Features = Features(clientData.clientFeatures, QuasselFeatures.empty()),
   private val handlerService: HandlerService = JavaHandlerService(),
   private val trustManager: X509TrustManager = TrustManagers.default(),
@@ -139,6 +140,9 @@ class CoreConnection(
     // Wrap socket in SSL context if ssl is enabled
     if (protocol.flags.hasFlag(ProtocolFeature.TLS)) {
       channel = channel?.withSSL(trustManager, hostnameVerifier, address)
+    } else if (requireSsl) {
+      securityExceptionCallback?.invoke(QuasselSecurityException.NoSsl)
+      close()
     }
 
     // Wrap socket in deflater if compression is enabled

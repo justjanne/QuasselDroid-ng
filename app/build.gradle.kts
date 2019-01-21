@@ -104,13 +104,13 @@ android {
   }
 
   compileOptions {
-    setSourceCompatibility(JavaVersion.VERSION_1_8)
+    sourceCompatibility = JavaVersion.VERSION_1_8
     setTargetCompatibility(JavaVersion.VERSION_1_8)
   }
 
   lintOptions {
     isWarningsAsErrors = true
-    lintConfig = file("../lint.xml")
+    setLintConfig(file("../lint.xml"))
   }
 }
 

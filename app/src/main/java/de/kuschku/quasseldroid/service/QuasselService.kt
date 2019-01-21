@@ -117,6 +117,7 @@ class QuasselService : DaggerLifecycleService(),
             SocketAddress(account.host, account.port),
             account.user,
             account.pass,
+            account.requireSsl,
             true
           )
         }
@@ -273,19 +274,20 @@ class QuasselService : DaggerLifecycleService(),
     override fun sessionManager() = service?.sessionManager
 
     override fun connectUnlessConnected(address: SocketAddress, user: String, pass: String,
-                                        reconnect: Boolean) {
+                                        requireSsl: Boolean, reconnect: Boolean) {
       service?.apply {
         sessionManager.ifDisconnected {
-          connect(address, user, pass, reconnect)
+          connect(address, user, pass, requireSsl, reconnect)
         }
       }
     }
 
-    override fun connect(address: SocketAddress, user: String, pass: String, reconnect: Boolean) {
+    override fun connect(address: SocketAddress, user: String, pass: String, requireSsl: Boolean,
+                         reconnect: Boolean) {
       service?.apply {
         disconnect()
         sessionManager.connect(
-          clientData, trustManager, hostnameVerifier, address, user to pass, reconnect
+          clientData, trustManager, hostnameVerifier, address, user to pass, requireSsl, reconnect
         )
       }
     }

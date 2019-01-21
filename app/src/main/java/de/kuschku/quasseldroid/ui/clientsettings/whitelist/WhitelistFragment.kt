@@ -34,12 +34,14 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
-import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.helper.visibleIf
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.SettingsFragment
 import javax.inject.Inject
 
-class WhitelistFragment : SettingsFragment(), SettingsFragment.Changeable,
-                          SettingsFragment.Savable {
+class WhitelistFragment : SettingsFragment(), Changeable,
+                          Savable {
   @BindView(R.id.certificate_whitelist)
   lateinit var certificateList: RecyclerView
 

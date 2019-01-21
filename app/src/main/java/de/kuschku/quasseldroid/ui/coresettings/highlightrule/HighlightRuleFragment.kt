@@ -31,10 +31,12 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.syncables.HighlightRuleManager
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 
-class HighlightRuleFragment : SettingsFragment(), SettingsFragment.Savable,
-                              SettingsFragment.Changeable {
+class HighlightRuleFragment : ServiceBoundSettingsFragment(), Savable,
+                              Changeable {
   @BindView(R.id.enabled)
   lateinit var enabled: SwitchCompat
 

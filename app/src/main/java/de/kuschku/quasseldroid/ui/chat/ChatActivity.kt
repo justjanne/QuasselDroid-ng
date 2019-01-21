@@ -417,12 +417,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           }
           is Error.SslError       -> {
             it.exception.let {
-              val leafCertificate = it.certificateChain?.firstOrNull()
-              if (leafCertificate == null) {
-                // No certificate exists in the chain
+              if (it == QuasselSecurityException.NoSsl) {
+                // Ssl is required but not available
                 MaterialDialog.Builder(this)
-                  .title(R.string.label_error_certificate)
-                  .content(R.string.label_error_certificate_no_certificate)
+                  .title(R.string.label_error_ssl)
+                  .content(R.string.label_error_ssl_required_unavailable)
                   .neutralText(R.string.label_close)
                   .titleColorAttr(R.attr.colorTextPrimary)
                   .backgroundColorAttr(R.attr.colorBackgroundCard)
@@ -430,132 +429,146 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   .build()
                   .show()
               } else {
-                when {
-                  // Certificate has expired
-                  it is QuasselSecurityException.Certificate &&
-                  (it.cause is CertificateNotYetValidException ||
-                   it.cause is CertificateExpiredException)  -> {
-                    MaterialDialog.Builder(this)
-                      .title(R.string.label_error_certificate)
-                      .content(
-                        Html.fromHtml(
-                          getString(
-                            R.string.label_error_certificate_invalid,
-                            leafCertificate.fingerprint,
-                            dateTimeFormatter.format(Instant.ofEpochMilli(leafCertificate.notBefore.time)
-                                                       .atZone(ZoneId.systemDefault())),
-                            dateTimeFormatter.format(Instant.ofEpochMilli(leafCertificate.notAfter.time)
-                                                       .atZone(ZoneId.systemDefault()))
-                          )
-                        )
-                      )
-                      .negativeText(R.string.label_disconnect)
-                      .positiveText(R.string.label_whitelist)
-                      .onNegative { _, _ ->
-                        disconnect()
-                      }
-                      .onPositive { _, _ ->
-                        runInBackground {
-                          database.validityWhitelist().save(
-                            QuasselDatabase.SslValidityWhitelistEntry(
-                              fingerprint = leafCertificate.fingerprint,
-                              ignoreDate = true
+                val leafCertificate = it.certificateChain?.firstOrNull()
+                if (leafCertificate == null) {
+                  // No certificate exists in the chain
+                  MaterialDialog.Builder(this)
+                    .title(R.string.label_error_certificate)
+                    .content(R.string.label_error_certificate_no_certificate)
+                    .neutralText(R.string.label_close)
+                    .titleColorAttr(R.attr.colorTextPrimary)
+                    .backgroundColorAttr(R.attr.colorBackgroundCard)
+                    .contentColorAttr(R.attr.colorTextPrimary)
+                    .build()
+                    .show()
+                } else {
+                  when {
+                    // Certificate has expired
+                    it is QuasselSecurityException.Certificate &&
+                    (it.cause is CertificateNotYetValidException ||
+                     it.cause is CertificateExpiredException)  -> {
+                      MaterialDialog.Builder(this)
+                        .title(R.string.label_error_certificate)
+                        .content(
+                          Html.fromHtml(
+                            getString(
+                              R.string.label_error_certificate_invalid,
+                              leafCertificate.fingerprint,
+                              dateTimeFormatter.format(Instant.ofEpochMilli(leafCertificate.notBefore.time)
+                                                         .atZone(ZoneId.systemDefault())),
+                              dateTimeFormatter.format(Instant.ofEpochMilli(leafCertificate.notAfter.time)
+                                                         .atZone(ZoneId.systemDefault()))
                             )
                           )
+                        )
+                        .negativeText(R.string.label_disconnect)
+                        .positiveText(R.string.label_whitelist)
+                        .onNegative { _, _ ->
+                          disconnect()
+                        }
+                        .onPositive { _, _ ->
+                          runInBackground {
+                            database.validityWhitelist().save(
+                              QuasselDatabase.SslValidityWhitelistEntry(
+                                fingerprint = leafCertificate.fingerprint,
+                                ignoreDate = true
+                              )
+                            )
 
-                          runOnUiThread {
-                            backend.value.orNull()?.reconnect()
+                            runOnUiThread {
+                              backend.value.orNull()?.reconnect()
+                            }
                           }
                         }
-                      }
-                      .titleColorAttr(R.attr.colorTextPrimary)
-                      .backgroundColorAttr(R.attr.colorBackgroundCard)
-                      .contentColorAttr(R.attr.colorTextPrimary)
-                      .build()
-                      .show()
-                  }
-                  // Certificate is in any other way invalid
-                  it is QuasselSecurityException.Certificate -> {
-                    MaterialDialog.Builder(this)
-                      .title(R.string.label_error_certificate)
-                      .content(
-                        Html.fromHtml(
-                          getString(
-                            R.string.label_error_certificate_untrusted,
-                            leafCertificate.fingerprint
-                          )
-                        )
-                      )
-                      .negativeText(R.string.label_disconnect)
-                      .positiveText(R.string.label_whitelist)
-                      .onNegative { _, _ ->
-                        disconnect()
-                      }
-                      .onPositive { _, _ ->
-                        runInBackground {
-                          database.validityWhitelist().save(
-                            QuasselDatabase.SslValidityWhitelistEntry(
-                              fingerprint = leafCertificate.fingerprint,
-                              ignoreDate = !leafCertificate.isValid
+                        .titleColorAttr(R.attr.colorTextPrimary)
+                        .backgroundColorAttr(R.attr.colorBackgroundCard)
+                        .contentColorAttr(R.attr.colorTextPrimary)
+                        .build()
+                        .show()
+                    }
+                    // Certificate is in any other way invalid
+                    it is QuasselSecurityException.Certificate -> {
+                      MaterialDialog.Builder(this)
+                        .title(R.string.label_error_certificate)
+                        .content(
+                          Html.fromHtml(
+                            getString(
+                              R.string.label_error_certificate_untrusted,
+                              leafCertificate.fingerprint
                             )
                           )
-                          accountDatabase.accounts().findById(accountId)?.let {
+                        )
+                        .negativeText(R.string.label_disconnect)
+                        .positiveText(R.string.label_whitelist)
+                        .onNegative { _, _ ->
+                          disconnect()
+                        }
+                        .onPositive { _, _ ->
+                          runInBackground {
+                            database.validityWhitelist().save(
+                              QuasselDatabase.SslValidityWhitelistEntry(
+                                fingerprint = leafCertificate.fingerprint,
+                                ignoreDate = !leafCertificate.isValid
+                              )
+                            )
+                            accountDatabase.accounts().findById(accountId)?.let {
+                              database.hostnameWhitelist().save(
+                                QuasselDatabase.SslHostnameWhitelistEntry(
+                                  fingerprint = leafCertificate.fingerprint,
+                                  hostname = it.host
+                                )
+                              )
+                            }
+
+                            runOnUiThread {
+                              backend.value.orNull()?.reconnect()
+                            }
+                          }
+                        }
+                        .titleColorAttr(R.attr.colorTextPrimary)
+                        .backgroundColorAttr(R.attr.colorBackgroundCard)
+                        .contentColorAttr(R.attr.colorTextPrimary)
+                        .build()
+                        .show()
+                    }
+                    // Certificate not valid for this hostname
+                    it is QuasselSecurityException.Hostname    -> {
+                      MaterialDialog.Builder(this)
+                        .title(R.string.label_error_certificate)
+                        .content(
+                          Html.fromHtml(
+                            getString(
+                              R.string.label_error_certificate_no_match,
+                              leafCertificate.fingerprint,
+                              it.address.host
+                            )
+                          )
+                        )
+                        .negativeText(R.string.label_disconnect)
+                        .positiveText(R.string.label_whitelist)
+                        .onNegative { _, _ ->
+                          disconnect()
+                        }
+                        .onPositive { _, _ ->
+                          runInBackground {
                             database.hostnameWhitelist().save(
                               QuasselDatabase.SslHostnameWhitelistEntry(
                                 fingerprint = leafCertificate.fingerprint,
-                                hostname = it.host
+                                hostname = it.address.host
                               )
                             )
-                          }
 
-                          runOnUiThread {
-                            backend.value.orNull()?.reconnect()
+                            runOnUiThread {
+                              backend.value.orNull()?.reconnect()
+                            }
                           }
                         }
-                      }
-                      .titleColorAttr(R.attr.colorTextPrimary)
-                      .backgroundColorAttr(R.attr.colorBackgroundCard)
-                      .contentColorAttr(R.attr.colorTextPrimary)
-                      .build()
-                      .show()
-                  }
-                  // Certificate not valid for this hostname
-                  it is QuasselSecurityException.Hostname    -> {
-                    MaterialDialog.Builder(this)
-                      .title(R.string.label_error_certificate)
-                      .content(
-                        Html.fromHtml(
-                          getString(
-                            R.string.label_error_certificate_no_match,
-                            leafCertificate.fingerprint,
-                            it.address.host
-                          )
-                        )
-                      )
-                      .negativeText(R.string.label_disconnect)
-                      .positiveText(R.string.label_whitelist)
-                      .onNegative { _, _ ->
-                        disconnect()
-                      }
-                      .onPositive { _, _ ->
-                        runInBackground {
-                          database.hostnameWhitelist().save(
-                            QuasselDatabase.SslHostnameWhitelistEntry(
-                              fingerprint = leafCertificate.fingerprint,
-                              hostname = it.address.host
-                            )
-                          )
-
-                          runOnUiThread {
-                            backend.value.orNull()?.reconnect()
-                          }
-                        }
-                      }
-                      .titleColorAttr(R.attr.colorTextPrimary)
-                      .backgroundColorAttr(R.attr.colorBackgroundCard)
-                      .contentColorAttr(R.attr.colorTextPrimary)
-                      .build()
-                      .show()
+                        .titleColorAttr(R.attr.colorTextPrimary)
+                        .backgroundColorAttr(R.attr.colorBackgroundCard)
+                        .contentColorAttr(R.attr.colorTextPrimary)
+                        .build()
+                        .show()
+                    }
                   }
                 }
               }

@@ -77,7 +77,7 @@ import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigFragme
 import de.kuschku.quasseldroid.ui.coresettings.networkserver.NetworkServerActivity
 import de.kuschku.quasseldroid.ui.coresettings.networkserver.NetworkServerFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditActivity
-import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditModule
+import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.accounts.setup.AccountSetupActivity
@@ -204,7 +204,7 @@ abstract class ActivityModule {
   abstract fun bindAccountSelectionActivity(): AccountSelectionActivity
 
   @ActivityScope
-  @ContributesAndroidInjector(modules = [AccountEditModule::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
+  @ContributesAndroidInjector(modules = [AccountEditFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
   abstract fun bindAccountEditActivity(): AccountEditActivity
 
   @ActivityScope

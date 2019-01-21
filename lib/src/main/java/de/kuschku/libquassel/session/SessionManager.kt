@@ -116,6 +116,7 @@ class SessionManager(
     hostnameVerifier: HostnameVerifier,
     address: SocketAddress,
     userData: Pair<String, String>,
+    requireSsl: Boolean,
     shouldReconnect: Boolean = false
   ) {
     log(DEBUG, "SessionManager", "Connecting")
@@ -131,6 +132,7 @@ class SessionManager(
       Session(
         address,
         userData,
+        requireSsl,
         trustManager,
         hostnameVerifier,
         clientData,

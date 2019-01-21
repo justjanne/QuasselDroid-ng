@@ -36,12 +36,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.ui.coresettings.ignoreitem.IgnoreItemActivity
 import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 
-class IgnoreListFragment : SettingsFragment(), SettingsFragment.Savable,
-                           SettingsFragment.Changeable {
+class IgnoreListFragment : ServiceBoundSettingsFragment(), Savable,
+                           Changeable {
   @BindView(R.id.list)
   lateinit var list: RecyclerView
 

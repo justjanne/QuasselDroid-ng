@@ -21,6 +21,8 @@
   <string name="label_error_login">Login Error</string>
   <string name="label_error_setup">Setup Error</string>
   <string name="label_error_init">Connection Error</string>
+  <string name="label_error_ssl">SSL Error</string>
+  <string name="label_error_ssl_required_unavailable">SSL is required for this connection but the core does not support it.</string>
   <string name="label_error_certificate">Certificate Error</string>
   <string name="label_error_certificate_no_certificate">No certificate available</string>
   <string name="label_error_certificate_no_hostname">No hostname available</string>

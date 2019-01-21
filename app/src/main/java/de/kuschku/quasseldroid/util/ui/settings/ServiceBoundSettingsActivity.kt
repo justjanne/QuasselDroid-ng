@@ -27,14 +27,14 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
 
 abstract class ServiceBoundSettingsActivity(private val fragment: Fragment? = null) :
   ServiceBoundActivity() {
   protected open fun fragment(): Fragment? = null
 
-  private var changeable: SettingsFragment.Changeable? = null
+  private var changeable: Changeable? = null
 
   @BindView(R.id.toolbar)
   lateinit var toolbar: Toolbar
@@ -56,7 +56,7 @@ abstract class ServiceBoundSettingsActivity(private val fragment: Fragment? = nu
       transaction.commit()
     }
 
-    this.changeable = fragment as? SettingsFragment.Changeable
+    this.changeable = fragment as? Changeable
   }
 
   private fun shouldNavigateAway(callback: () -> Unit) {

@@ -44,15 +44,17 @@ import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.Defaults
-import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.ui.coresettings.networkserver.NetworkServerActivity
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 import kotlin.math.roundToInt
 
 abstract class NetworkBaseFragment(private val initDefault: Boolean) :
-  SettingsFragment(), SettingsFragment.Savable, SettingsFragment.Changeable {
+  ServiceBoundSettingsFragment(), Savable, Changeable {
   @BindView(R.id.network_name)
   lateinit var networkName: EditText
 

@@ -34,13 +34,14 @@ import de.kuschku.libquassel.quassel.syncables.AliasManager
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.ui.coresettings.aliasitem.AliasItemActivity
 import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 import javax.inject.Inject
 
-class AliasListFragment : SettingsFragment(), SettingsFragment.Savable,
-                          SettingsFragment.Changeable {
+class AliasListFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
   @BindView(R.id.list)
   lateinit var list: RecyclerView
 

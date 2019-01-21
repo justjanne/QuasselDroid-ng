@@ -42,6 +42,7 @@ import javax.net.ssl.X509TrustManager
 class Session(
   address: SocketAddress,
   private var userData: Pair<String, String>,
+  requireSsl: Boolean = false,
   trustManager: X509TrustManager = TrustManagers.default(),
   hostnameVerifier: HostnameVerifier = BrowserCompatibleHostnameVerifier(),
   clientData: ClientData = ClientData.DEFAULT,
@@ -64,6 +65,7 @@ class Session(
   private val coreConnection = CoreConnection(
     address,
     clientData,
+    requireSsl,
     features,
     handlerService,
     trustManager,

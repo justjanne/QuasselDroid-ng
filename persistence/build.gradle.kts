@@ -46,7 +46,7 @@ android {
 
   lintOptions {
     isWarningsAsErrors = true
-    lintConfig = file("../lint.xml")
+    setLintConfig(file("../lint.xml"))
   }
 }
 

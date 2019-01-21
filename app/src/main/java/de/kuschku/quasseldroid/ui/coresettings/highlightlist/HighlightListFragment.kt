@@ -40,13 +40,14 @@ import de.kuschku.libquassel.quassel.syncables.HighlightRuleManager
 import de.kuschku.libquassel.quassel.syncables.interfaces.IHighlightRuleManager
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.ui.coresettings.highlightrule.HighlightRuleActivity
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.ui.WarningBarView
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 
-class HighlightListFragment : SettingsFragment(), SettingsFragment.Savable,
-                              SettingsFragment.Changeable {
+class HighlightListFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
   @BindView(R.id.feature_context_coresidehighlights)
   lateinit var featureContextCoreSideHighlights: WarningBarView
 

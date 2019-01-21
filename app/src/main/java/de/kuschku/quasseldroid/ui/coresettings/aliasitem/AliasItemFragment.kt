@@ -38,15 +38,15 @@ import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.input.*
-import de.kuschku.quasseldroid.ui.coresettings.SettingsFragment
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
+import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import javax.inject.Inject
 
-class AliasItemFragment : SettingsFragment(), SettingsFragment.Savable,
-                          SettingsFragment.Changeable {
-
+class AliasItemFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
   @BindView(R.id.name)
   lateinit var name: EditText
 

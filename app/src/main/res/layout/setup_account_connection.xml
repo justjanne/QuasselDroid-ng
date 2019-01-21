@@ -58,4 +58,11 @@
       android:text="@string/defaultConnectionPort" />
   </com.google.android.material.textfield.TextInputLayout>
 
+  <androidx.appcompat.widget.SwitchCompat
+    android:id="@+id/require_ssl"
+    style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/label_connection_ssl" />
+
 </LinearLayout>

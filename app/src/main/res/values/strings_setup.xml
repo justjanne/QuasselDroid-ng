@@ -31,6 +31,7 @@
 
   <string name="label_connection_host">Host</string>
   <string name="label_connection_port">Port</string>
+  <string name="label_connection_ssl">Require SSL</string>
 
   <string name="hint_invalid_host">Not a valid hostname</string>
   <string name="hint_invalid_port">Not a valid port</string>

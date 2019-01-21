@@ -83,6 +83,7 @@ class Quasseldroid : DaggerApplication() {
               host = it.host,
               port = it.port,
               user = it.user,
+              requireSsl = false,
               pass = it.pass,
               name = it.name,
               lastUsed = 0,
