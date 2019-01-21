@@ -88,6 +88,7 @@
   <string name="preference_language_entry_en" translatable="false">English</string>
   <string name="preference_language_entry_de" translatable="false">Deutsch</string>
   <string name="preference_language_entry_fr_ca" translatable="false">Français (Canadien)</string>
+  <string name="preference_language_entry_it" translatable="false">Italiano</string>
   <string name="preference_language_entry_lt" translatable="false">Lietuvių</string>
   <string name="preference_language_entry_pt" translatable="false">Português</string>
   <string name="preference_language_entry_sr" translatable="false">Srpski (latinica)</string>
@@ -96,6 +97,7 @@
     <item>@string/preference_language_entry_en</item>
     <item>@string/preference_language_entry_de</item>
     <item>@string/preference_language_entry_fr_ca</item>
+    <item>@string/preference_language_entry_it</item>
     <item>@string/preference_language_entry_lt</item>
     <item>@string/preference_language_entry_pt</item>
     <item>@string/preference_language_entry_sr</item>
@@ -105,6 +107,7 @@
     <item>en</item>
     <item>de</item>
     <item>fr-CA</item>
+    <item>it</item>
     <item>lt</item>
     <item>pt</item>
     <item>sr</item>
