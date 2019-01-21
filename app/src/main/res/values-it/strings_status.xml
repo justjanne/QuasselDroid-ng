@@ -17,4 +17,11 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="label_status_disconnected">Disconnesso</string>
+  <string name="label_status_connecting">Connessione</string>
+  <string name="label_status_handshake">Handshake</string>
+  <string name="label_status_init">Inizializzazione</string>
+  <string name="label_status_connected">Connesso</string>
+  <string name="label_status_closed">Connessione Persa</string>
+</resources>

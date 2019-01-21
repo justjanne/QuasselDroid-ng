@@ -17,4 +17,159 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="app_name">Quasseldroid</string>
+  <string name="app_description">Un client basato su Android per il client decentralizzato Quassel IRC.</string>
+  <string name="app_description_long">Quassel è un client IRC distribuito e decentralizzato, scritto usando C++ e Qt. Quasseldroid è un client scritto interamente in kotlin per il core Quassel che ti permette di connetterti al tuo core Quassel usando il tuo telefono Android™.</string>
+
+  <string name="connection_service_title">Servizio di connessione</string>
+  <string name="connection_service_description">Mantieni la connessione al tuo core per permettere le notifiche e trasmettere messaggi.</string>
+
+  <string name="label_about">Informazioni</string>
+  <string name="label_accept">Accetta</string>
+  <string name="label_autocomplete">Autocompletamento</string>
+  <string name="label_avatar">Avatar</string>
+  <string name="label_back">Indietro</string>
+  <string name="label_buffer_name">Nome Buffer</string>
+  <string name="label_cancel">Annulla</string>
+  <string name="label_update_user_password">Aggiorna Utente/Password</string>
+  <string name="label_certificates">Certificati</string>
+  <string name="label_clear_search">Pulisci Cerca</string>
+  <string name="label_close">Chiudi</string>
+  <string name="label_colors_custom">Personalizzato</string>
+  <string name="label_colors_mirc">mIRC</string>
+  <string name="label_configure">Configura</string>
+  <string name="label_connect">Connetti</string>
+  <string name="label_contributors">Collaboratori</string>
+  <string name="label_copy">Copia</string>
+  <string name="label_crashes">Crash</string>
+  <string name="label_crashes_empty">Nessun rapporto crash trovato</string>
+  <string name="label_shortcut">Scorciatoia</string>
+  <string name="label_shortcut_long">Crea scorciatoia alla schermata Home</string>
+  <string name="label_delete">Elimina</string>
+  <string name="label_delete_all">Elimina tutto</string>
+  <string name="label_disconnect">Disconnetti</string>
+  <string name="label_edit_core">Modifica Account</string>
+  <string name="label_edit_nick">Modifica Nickname</string>
+  <string name="label_edit_topic">Modifica Topic</string>
+  <string name="label_edit_topic_long">Apri finestra per cambiare il topic del canale</string>
+  <string name="label_filter_messages">Filtro messaggi</string>
+  <string name="label_finish">Finito</string>
+  <string name="label_hide_perm">Nascondi per sempre</string>
+  <string name="label_hide_temp">Nascondi temporaneamente</string>
+  <string name="label_ignore">Ignora</string>
+  <string name="label_ignore_long">Aggiungi/rimuovi utente a/da lista ignore</string>
+  <string name="label_info">Dettagli</string>
+  <string name="label_info_channel">Dettagli Canale</string>
+  <string name="label_info_core">Dettagli Core</string>
+  <string name="label_info_user">Dettagli Utente</string>
+  <string name="label_input_history">Cronologia input</string>
+  <string name="label_join">Entra</string>
+  <string name="label_join_long">Entra Canale</string>
+  <string name="label_libraries">Librerie</string>
+  <string name="label_license">Licenza</string>
+  <string name="label_match_all">Corrisponde a tutti i messaggi</string>
+  <string name="label_mark_read">Segna come letto</string>
+  <string name="label_mention">Menzione</string>
+  <string name="label_mention_long">Copia nome utente nella linea di input</string>
+  <string name="label_next">Successivo</string>
+  <string name="label_new_account">Nuovo Account</string>
+  <string name="label_new_chatlist">Nuova Chatlist</string>
+  <string name="label_new_highlight_rule">Nuova Regola Evidenziazione</string>
+  <string name="label_new_highlight_ignore_rule">Nuova Regola Esclusione Evidenziazione</string>
+  <string name="label_new_identity">Nuova Identità</string>
+  <string name="label_new_network">Nuovo Network</string>
+  <string name="label_new_nick">Nuovo Nick</string>
+  <string name="label_new_server">Nuovo Server</string>
+  <string name="label_nicklist">Lista Nick</string>
+  <string name="label_no">No</string>
+  <string name="label_no_away_message">Nessun messaggio away disponibile</string>
+  <string name="label_no_sound">Nessuno</string>
+  <string name="label_reply">Rispondi</string>
+  <string name="label_reset">Reimposta</string>
+  <string name="label_open">Apri</string>
+  <string name="label_part">Esci</string>
+  <string name="label_part_long">Esci Canale</string>
+  <string name="label_password_change">Cambia Password</string>
+  <string name="label_password_error_wrong">Password Sbagliata</string>
+  <string name="label_password_error_nomatch">La password non corrisponde</string>
+  <string name="label_password_new">Nuova Password</string>
+  <string name="label_password_old">Vecchia Password</string>
+  <string name="label_password_repeat">Ripeti Password</string>
+  <string name="label_placeholder_message">Scrivi un messaggio...</string>
+  <string name="label_placeholder_topic">Descrivi l\'argomento del canale...</string>
+  <string name="label_privacy_policy">Informativa Privacy</string>
+  <string name="label_query">Query</string>
+  <string name="label_query_long">Apri chat privata con l\'utente</string>
+  <string name="label_rename">Rinomina</string>
+  <string name="label_save">Salva</string>
+  <string name="label_saving">Salvataggio...</string>
+  <string name="label_search">Cerca</string>
+  <string name="label_search_buffer">Cerca Chat</string>
+  <string name="label_select">Scegli</string>
+  <string name="label_send">Invia</string>
+  <string name="label_set_default">Imposta Predefinite</string>
+  <string name="label_settings">Impostazioni</string>
+  <string name="label_settings_client">Impostazioni Client</string>
+  <string name="label_settings_core">Impostazioni Core</string>
+  <string name="label_share">Condividi</string>
+  <string name="label_share_crashreport">Condividi Resoconto Crash</string>
+  <string name="label_show_hidden">Mostra Nascosti</string>
+  <string name="label_source">Sorgente</string>
+  <string name="label_topic">Topic Canale</string>
+  <string name="label_translators">Traduttori</string>
+  <string name="label_unhide">Rendi Visibile</string>
+  <string name="label_unknown_sender">&lt;Sconosciuto&gt;
+</string>
+  <string name="label_use_default">Usa Predefinite</string>
+  <string name="label_website">Sito web</string>
+  <string name="label_whitelist">Ignora</string>
+  <string name="label_whitelist_ignore_date">Data di scadenza ignorata per questo certificato</string>
+  <string name="label_whitelist_certificates">Certificato</string>
+  <string name="label_whitelist_certificates_empty">Nessun certificato in whitelist</string>
+  <string name="label_whitelist_hostnames">Host</string>
+  <string name="label_whitelist_hostnames_empty">Nessun host in whitelist</string>
+  <string name="label_who">Who</string>
+  <string name="label_who_long">Aggiorna informazioni utente per tutti gli utenti</string>
+  <string name="label_whois">Whois</string>
+  <string name="label_whois_long">Aggiorna informazioni utente</string>
+  <string name="label_yes">Sì</string>
+
+  <string name="label_feature_synchronizedmarkerline">Richiesto per sincronizzato l\'ultima posizione nei canali</string>
+  <string name="label_feature_saslauthentication">Richiesto per SASL</string>
+  <string name="label_feature_saslexternal">Richiesto per SASL con certificati</string>
+  <string name="label_feature_hideinactivenetworks">Richiesto per nascondere network non attivi dalla chat list</string>
+  <string name="label_feature_passwordchange">Richiesto per cambiare password dal client</string>
+  <string name="label_feature_capnegotiation">Richiesto per le funzionalità IRCv3</string>
+  <string name="label_feature_verifyserverssl">Richiesto per verificare il certificato SSL del network IRC al quale ti connetti</string>
+  <string name="label_feature_customratelimits">Richiesto per i custom rate limits per i network IRC</string>
+  <string name="label_feature_awayformattimestamp">Richiesto per le formattazioni personalizzate di data ed ora nei messaggi away</string>
+  <string name="label_feature_bufferactivitysync">Richiesto per vedere l\'attività delle chat nella chat list</string>
+  <string name="label_feature_coresidehighlights">Richiesto per evidenziazioni</string>
+  <string name="label_feature_senderprefixes">Richiesto per vedere i prefissi dei modi (+, @) degli utenti nei messaggi</string>
+  <string name="label_feature_remotedisconnect">Richiesto per disconnettere da remoto i tuoi clienti</string>
+  <string name="label_feature_richmessages">Richiesto per vedere i nomi reali oppure IRCv3 oppure avatar Gravatar nei messaggi</string>
+  <string name="label_feature_backlogfiltertype">Richiesto per ricevere le notifiche precedenti dopo la connessione</string>
+
+  <string name="label_feature_context_bufferactivitysync">Quasseldroid non può evidenziare le chat non lette. Aggiorna il tuo core a Quassel v0.13 per risolvere.</string>
+  <string name="label_feature_context_coresidehighlights">Quasseldroid non può configurare le evidenziazioni. Aggiorna il tuo core a Quassel v0.13 per risolvere.</string>
+  <string name="label_feature_context_missing">Il tuo core non ha le funzionalità richieste da Quasseldroid per funzionare correttamente.</string>
+  <string name="label_feature_context_missing_button">Dettagli</string>
+
+  <string name="notification_channel_connection_title">Connessione</string>
+  <string name="notification_channel_highlight_title">Evidenziazioni</string>
+  <string name="notification_channel_old_highlight_title">Vecchie Evidenziazioni</string>
+
+  <string name="label_missing_features">Funzionalità Mancanti</string>
+  <string name="info_missing_features" tools:ignore="StringFormatCount">Il tuo core non ha le funzionalità richieste da Quasseldroid per funzionare correttamente. Dovresti &lt;a href=\"https://quassel-irc.org&gt;aggiornare&lt;/a&gt; il tuo core Quassel core a 1%1$s o superiore.</string>
+
+  <string name="buffer_delete_confirmation">Vuoi davvero eliminare questo buffer per sempre?</string>
+
+  <string name="delete_confirmation">Vuoi davvero eliminarlo per sempre? L\'operazione è irreversibile.</string>
+  <string name="cancel_confirmation">Non hai salvato delle modifiche. Vuoi scartarle?</string>
+
+  <string name="info_copied_version">La versione è stato copiata negli appunti</string>
+
+  <string name="advertisement_support_patreon">Per favore supporta lo sviluppo di questa app su Patreon</string>
+  <string name="advertisement_support_button">Dona</string>
+</resources>
