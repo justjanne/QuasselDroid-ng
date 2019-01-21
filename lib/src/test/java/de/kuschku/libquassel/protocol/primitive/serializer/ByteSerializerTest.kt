@@ -29,24 +29,32 @@ class ByteSerializerTest {
   @Test
   fun testZero() {
     assertEquals(0.toByte(), roundTrip(ByteSerializer, 0.toByte()))
+    // @formatter:off
     assertEquals(0.toByte(), deserialize(ByteSerializer, byteArrayOf(0)))
+    // @formatter:on
   }
 
   @Test
   fun testMinimal() {
     assertEquals(Byte.MIN_VALUE, roundTrip(ByteSerializer, Byte.MIN_VALUE))
+    // @formatter:off
     assertEquals(Byte.MIN_VALUE, deserialize(ByteSerializer, byteArrayOf(-128)))
+    // @formatter:on
   }
 
   @Test
   fun testMaximal() {
     assertEquals(Byte.MAX_VALUE, roundTrip(ByteSerializer, Byte.MAX_VALUE))
+    // @formatter:off
     assertEquals(Byte.MAX_VALUE, deserialize(ByteSerializer, byteArrayOf(127)))
+    // @formatter:on
   }
 
   @Test
   fun testAllOnes() {
     assertEquals((0.toByte().inv()), roundTrip(ByteSerializer, (0.toByte().inv())))
+    // @formatter:off
     assertEquals((0.toByte().inv()), deserialize(ByteSerializer, byteArrayOf(-1)))
+    // @formatter:on
   }
 }

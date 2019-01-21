@@ -30,29 +30,41 @@ class DateTimeSerializerTest {
   fun testEpoch() {
     val value = roundTrip(DateTimeSerializer, Instant.EPOCH)
     assertEquals(Instant.EPOCH, value)
+    // @formatter:off
     assertEquals(Instant.EPOCH, deserialize(DateTimeSerializer, byteArrayOf(0, 37, 61, -116, 0, 0, 0, 0, 2)))
+    // @formatter:on
   }
 
   @Test
   fun testEpochAtTimezone() {
     val value = Instant.EPOCH.atOffset(ZoneOffset.ofTotalSeconds(1234))
     assertEquals(value, roundTrip(DateTimeSerializer, value))
+    // @formatter:off
     assertEquals(value, deserialize(DateTimeSerializer, byteArrayOf(0, 37, 61, -116, 0, 18, -44, 80, 3, 0, 0, 4, -46)))
+    // @formatter:on
   }
 
   @Test
   fun testEpochByCalendarAtTimezone() {
-    val value = LocalDateTime.of(1970, 1, 1, 0, 0)
-      .atZone(ZoneId.of("Europe/Berlin")).toInstant()
+    val value = LocalDateTime
+      .of(1970, 1, 1, 0, 0)
+      .atZone(ZoneId.of("Europe/Berlin"))
+      .toInstant()
     assertEquals(value, roundTrip(DateTimeSerializer, value))
+    // @formatter:off
     assertEquals(value, deserialize(DateTimeSerializer, byteArrayOf(0, 37, 61, -117, 4, -17, 109, -128, 2)))
+    // @formatter:on
   }
 
   @Test
   fun testNormalCase() {
-    val value = LocalDateTime.of(2019, Month.JANUARY, 15, 20, 25)
-      .atZone(ZoneId.of("Europe/Berlin")).toInstant()
+    val value = LocalDateTime
+      .of(2019, Month.JANUARY, 15, 20, 25)
+      .atZone(ZoneId.of("Europe/Berlin"))
+      .toInstant()
     assertEquals(value, roundTrip(DateTimeSerializer, value))
+    // @formatter:off
     assertEquals(value, deserialize(DateTimeSerializer, byteArrayOf(0, 37, -125, -125, 4, 42, -106, -32, 2)))
+    // @formatter:on
   }
 }

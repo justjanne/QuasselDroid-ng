@@ -30,13 +30,17 @@ class ByteArraySerializerTest {
   fun testBaseCase() {
     val value = byteArrayOf()
     assertArrayEquals(value, roundTrip(ByteArraySerializer, ByteBuffer.wrap(value))?.array())
+    // @formatter:off
     assertArrayEquals(value, deserialize(ByteArraySerializer, byteArrayOf(0, 0, 0, 0))?.array())
+    // @formatter:on
   }
 
   @Test
   fun testNormal() {
     val value = byteArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
     assertArrayEquals(value, roundTrip(ByteArraySerializer, ByteBuffer.wrap(value))?.array())
+    // @formatter:off
     assertArrayEquals(value, deserialize(ByteArraySerializer, byteArrayOf(0, 0, 0, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9))?.array())
+    // @formatter:on
   }
 }

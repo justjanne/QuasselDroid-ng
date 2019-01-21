@@ -23,30 +23,37 @@ import de.kuschku.libquassel.util.deserialize
 import de.kuschku.libquassel.util.roundTrip
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import kotlin.experimental.inv
 
 class IntSerializerTest {
   @Test
   fun testZero() {
     assertEquals(0, roundTrip(IntSerializer, 0))
+    // @formatter:off
     assertEquals(0, deserialize(IntSerializer, byteArrayOf(0, 0, 0, 0)))
+    // @formatter:on
   }
 
   @Test
   fun testMinimal() {
     assertEquals(Int.MIN_VALUE, roundTrip(IntSerializer, Int.MIN_VALUE))
+    // @formatter:off
     assertEquals(Int.MIN_VALUE, deserialize(IntSerializer, byteArrayOf(-128, 0, 0, 0)))
+    // @formatter:on
   }
 
   @Test
   fun testMaximal() {
     assertEquals(Int.MAX_VALUE, roundTrip(IntSerializer, Int.MAX_VALUE))
+    // @formatter:off
     assertEquals(Int.MAX_VALUE, deserialize(IntSerializer, byteArrayOf(127, -1, -1, -1)))
+    // @formatter:on
   }
 
   @Test
   fun testAllOnes() {
     assertEquals(0.inv(), roundTrip(IntSerializer, 0.inv()))
+    // @formatter:off
     assertEquals(0.inv(), deserialize(IntSerializer, byteArrayOf(-1, -1, -1, -1)))
+    // @formatter:on
   }
 }

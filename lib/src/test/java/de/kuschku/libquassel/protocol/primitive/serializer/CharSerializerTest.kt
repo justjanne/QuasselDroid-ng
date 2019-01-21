@@ -28,18 +28,28 @@ class CharSerializerTest {
   @Test
   fun testAll() {
     assertEquals(' ', roundTrip(CharSerializer, ' '))
+    // @formatter:off
     assertEquals(' ', deserialize(CharSerializer, byteArrayOf(0, 32)))
+    // @formatter:on
 
     assertEquals('a', roundTrip(CharSerializer, 'a'))
+    // @formatter:off
     assertEquals('a', deserialize(CharSerializer, byteArrayOf(0, 97)))
+    // @formatter:on
 
     assertEquals('ä', roundTrip(CharSerializer, 'ä'))
+    // @formatter:off
     assertEquals('ä', deserialize(CharSerializer, byteArrayOf(0, -28)))
+    // @formatter:on
 
     assertEquals('\u0000', roundTrip(CharSerializer, '\u0000'))
+    // @formatter:off
     assertEquals('\u0000', deserialize(CharSerializer, byteArrayOf(0, 0)))
+    // @formatter:on
 
     assertEquals('\uFFFF', roundTrip(CharSerializer, '\uFFFF'))
+    // @formatter:off
     assertEquals('\uFFFF', deserialize(CharSerializer, byteArrayOf(-1, -1)))
+    // @formatter:on
   }
 }

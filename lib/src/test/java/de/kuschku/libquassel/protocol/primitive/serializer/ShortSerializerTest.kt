@@ -29,24 +29,32 @@ class ShortSerializerTest {
   @Test
   fun testZero() {
     assertEquals(0.toShort(), roundTrip(ShortSerializer, 0.toShort()))
+    // @formatter:off
     assertEquals(0.toShort(), deserialize(ShortSerializer, byteArrayOf(0, 0)))
+    // @formatter:on
   }
 
   @Test
   fun testMinimal() {
     assertEquals(Short.MIN_VALUE, roundTrip(ShortSerializer, Short.MIN_VALUE))
+    // @formatter:off
     assertEquals(Short.MIN_VALUE, deserialize(ShortSerializer, byteArrayOf(-128, 0)))
+    // @formatter:on
   }
 
   @Test
   fun testMaximal() {
     assertEquals(Short.MAX_VALUE, roundTrip(ShortSerializer, Short.MAX_VALUE))
+    // @formatter:off
     assertEquals(Short.MAX_VALUE, deserialize(ShortSerializer, byteArrayOf(127, -1)))
+    // @formatter:on
   }
 
   @Test
   fun testAllOnes() {
     assertEquals((0.toShort().inv()), roundTrip(ShortSerializer, (0.toShort().inv())))
+    // @formatter:off
     assertEquals((0.toShort().inv()), deserialize(ShortSerializer, byteArrayOf(-1, -1)))
+    // @formatter:on
   }
 }

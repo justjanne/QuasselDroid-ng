@@ -51,7 +51,9 @@ class MessageSerializerTest {
     )
     val other = roundTrip(MessageSerializer, value, features = QuasselFeatures.empty())
     assertEquals(value, other)
+    // @formatter:off
     assertEquals(value, deserialize(MessageSerializer, byteArrayOf(-1, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), features = QuasselFeatures.empty()))
+    // @formatter:on
   }
 
   @Test
@@ -76,7 +78,9 @@ class MessageSerializerTest {
     )
     val other = roundTrip(MessageSerializer, value, features = QuasselFeatures.empty())
     assertEquals(value, other)
+    // @formatter:off
     assertEquals(value, deserialize(MessageSerializer, byteArrayOf(127, -1, -1, -1, 90, -33, -109, -106, 0, 7, -1, -1, -113, 127, -1, -1, -1, 127, -1, -1, -1, 0, 15, 127, -1, -1, -1, 0, 0, 0, 9, -61, -92, -31, -70, -98, 0, -17, -65, -65, 0, 0, 0, 9, -61, -92, -31, -70, -98, 0, -17, -65, -65, 0, 0, 0, 9, -61, -92, -31, -70, -98, 0, -17, -65, -65), features = QuasselFeatures.empty()))
+    // @formatter:on
   }
 
   @Test
@@ -101,7 +105,9 @@ class MessageSerializerTest {
     )
     val other = roundTrip(MessageSerializer, value, features = QuasselFeatures.all())
     assertEquals(value, other)
+    // @formatter:off
     assertEquals(value, deserialize(MessageSerializer, byteArrayOf(-1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), features = QuasselFeatures.all()))
+    // @formatter:on
   }
 
   @Test
@@ -126,7 +132,9 @@ class MessageSerializerTest {
     )
     val other = roundTrip(MessageSerializer, value, features = QuasselFeatures.all())
     assertEquals(value, other)
+    // @formatter:off
     assertEquals(value, deserialize(MessageSerializer, byteArrayOf(127, -1, -1, -1, -1, -1, -1, -1, 0, 0, 1, 98, -7, 88, -127, -16, 0, 7, -1, -1, -113, 127, -1, -1, -1, 127, -1, -1, -1, 0, 15, 127, -1, -1, -1, 0, 0, 0, 9, -61, -92, -31, -70, -98, 0, -17, -65, -65, 0, 0, 0, 9, -61, -92, -31, -70, -98, 0, -17, -65, -65, 0, 0, 0, 9, -61, -92, -31, -70, -98, 0, -17, -65, -65, 0, 0, 0, 9, -61, -92, -31, -70, -98, 0, -17, -65, -65, 0, 0, 0, 9, -61, -92, -31, -70, -98, 0, -17, -65, -65, 0, 0, 0, 9, -61, -92, -31, -70, -98, 0, -17, -65, -65), features = QuasselFeatures.all()))
+    // @formatter:on
   }
 
   @Test
@@ -151,6 +159,8 @@ class MessageSerializerTest {
     )
     val other = roundTrip(MessageSerializer, value, features = QuasselFeatures.all())
     assertEquals(value, other)
+    // @formatter:off
     assertEquals(value, deserialize(MessageSerializer, byteArrayOf(127, -1, -1, -1, -1, -1, -1, -1, 0, 0, 19, -121, -1, -1, -40, -16, 0, 7, -1, -1, -113, 127, -1, -1, -1, 127, -1, -1, -1, 0, 15, 127, -1, -1, -1, 0, 0, 0, 9, -61, -92, -31, -70, -98, 0, -17, -65, -65, 0, 0, 0, 9, -61, -92, -31, -70, -98, 0, -17, -65, -65, 0, 0, 0, 9, -61, -92, -31, -70, -98, 0, -17, -65, -65, 0, 0, 0, 9, -61, -92, -31, -70, -98, 0, -17, -65, -65, 0, 0, 0, 9, -61, -92, -31, -70, -98, 0, -17, -65, -65, 0, 0, 0, 9, -61, -92, -31, -70, -98, 0, -17, -65, -65), features = QuasselFeatures.all()))
+    // @formatter:on
   }
 }

@@ -37,7 +37,9 @@ class BufferInfoSerializerTest {
       ""
     )
     assertEquals(value, roundTrip(BufferInfoSerializer, value))
+    // @formatter:off
     assertEquals(value, deserialize(BufferInfoSerializer, byteArrayOf(-1, -1, -1, -1, -1, -1, -1, -1, 0, 0, -1, -1, -1, -1, 0, 0, 0, 0)))
+    // @formatter:on
   }
 
   @Test
@@ -50,6 +52,8 @@ class BufferInfoSerializerTest {
       "äẞ\u0000\uFFFF"
     )
     assertEquals(value, roundTrip(BufferInfoSerializer, value))
+    // @formatter:off
     assertEquals(value, deserialize(BufferInfoSerializer, byteArrayOf(127, -1, -1, -1, 127, -1, -1, -1, 0, 15, 127, -1, -1, -1, 0, 0, 0, 9, -61, -92, -31, -70, -98, 0, -17, -65, -65)))
+    // @formatter:on
   }
 }

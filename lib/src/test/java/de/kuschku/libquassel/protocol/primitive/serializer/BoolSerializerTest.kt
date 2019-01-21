@@ -28,9 +28,13 @@ class BoolSerializerTest {
   @Test
   fun test() {
     assertEquals(true, roundTrip(BoolSerializer, true))
+    // @formatter:off
     assertEquals(true, deserialize(BoolSerializer, byteArrayOf(1)))
+    // @formatter:on
 
     assertEquals(false, roundTrip(BoolSerializer, false))
+    // @formatter:off
     assertEquals(false, deserialize(BoolSerializer, byteArrayOf(0)))
+    // @formatter:on
   }
 }
