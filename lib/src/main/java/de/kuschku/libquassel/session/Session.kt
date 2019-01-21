@@ -71,8 +71,10 @@ class Session(
   )
   override val state = coreConnection.state
 
-  override val error = ReusableUnicastSubject.create<Error>()
-  override val connectionError = ReusableUnicastSubject.create<Throwable>()
+  private val _error = ReusableUnicastSubject.create<Error>()
+  override val error = _error.publish().refCount()
+  private val _connectionError = ReusableUnicastSubject.create<Throwable>()
+  override val connectionError = _connectionError.publish().refCount()
 
   override val aliasManager = AliasManager(this)
   override val backlogManager = BacklogManager(this, backlogStorage)
@@ -116,7 +118,7 @@ class Session(
 
   private fun handleError(error: Error) {
     hasErroredCallback?.invoke(error)
-    this.error.onNext(error)
+    _error.onNext(error)
   }
 
   override fun handle(f: HandshakeMessage.ClientInitAck): Boolean {
@@ -173,7 +175,7 @@ class Session(
   }
 
   fun handleConnectionError(connectionError: Throwable) {
-    this.connectionError.onNext(connectionError)
+    _connectionError.onNext(connectionError)
   }
 
   fun addNetwork(networkId: NetworkId) {
