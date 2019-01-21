@@ -248,8 +248,10 @@ abstract class ServiceBoundSetupActivity :
   override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
     super.onRestoreInstanceState(savedInstanceState)
     if (savedInstanceState != null) {
-      if (savedInstanceState.containsKey(resultKey))
+      if (savedInstanceState.containsKey(resultKey)) {
         adapter.result.putAll(savedInstanceState.getBundle(resultKey))
+        adapter.allChanged()
+      }
       if (savedInstanceState.containsKey(lastValidItemKey))
         adapter.lastValidItem = savedInstanceState.getInt(lastValidItemKey)
       if (savedInstanceState.containsKey(currentItemKey))

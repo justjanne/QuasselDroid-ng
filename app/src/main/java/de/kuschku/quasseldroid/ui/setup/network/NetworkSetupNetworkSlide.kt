@@ -123,6 +123,7 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
           )
         )
       )
+      data.putInt("network_id", -1)
     }
   }
 
@@ -225,16 +226,21 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
       networkAdapter.submitList(listOf(null) + networks)
       val linkNetwork = data.getSerializable("network") as? LinkNetwork
 
-      val existingNetwork = networks.firstOrNull {
-        it.serverList.any {
-          it.host == linkNetwork?.server?.host
+      val selectedNetworkId = if (data.containsKey("network_id")) {
+        data.getInt("network_id")
+      } else {
+        val existingNetwork = networks.firstOrNull {
+          it.serverList.any {
+            it.host == linkNetwork?.server?.host
+          }
         }
+        existingNetwork?.networkId
       }
+      val selectedNetworkPosition = networkAdapter.indexOf(selectedNetworkId ?: -1) ?: -1
 
       if (!hasSetNetwork) {
-        val networkPosition = networkAdapter.indexOf(existingNetwork?.networkId ?: -1) ?: -1
-        if (networkPosition != -1) {
-          network.setSelection(networkPosition)
+        if (selectedNetworkPosition != -1 || selectedNetworkId == -1) {
+          network.setSelection(selectedNetworkPosition)
           hasSetNetwork = true
         }
       }

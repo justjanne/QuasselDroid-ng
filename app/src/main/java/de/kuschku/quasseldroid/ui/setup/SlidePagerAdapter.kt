@@ -49,7 +49,7 @@ class SlidePagerAdapter(private val fragmentManager: FragmentManager) :
     return retainedFragments.get(position) ?: list[position]
   }
 
-  override fun getCount() = Math.min(list.size, lastValidItem + 2)
+  override fun getCount() = minOf(list.size, lastValidItem + 2)
   val totalCount get() = list.size
   fun addFragment(fragment: SlideFragment) {
     list.add(fragment)
@@ -90,9 +90,15 @@ class SlidePagerAdapter(private val fragmentManager: FragmentManager) :
     retainedFragments.put(index, fragment)
   }
 
+  fun allChanged() {
+    for (index in 0 until totalCount) {
+      hasChanged(index, getItem(index))
+    }
+  }
+
   fun hasChanged(index: Int, fragment: SlideFragment) {
     fragment.getData(result)
-    if (index > -1 && index < totalCount) {
+    if (index > -1 && (index + 1) < totalCount) {
       getItem(index + 1).setData(result)
     }
   }
