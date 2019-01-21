@@ -107,8 +107,8 @@
             style="@style/Widget.Info.ActionButton"
             android:contentDescription="@string/label_query_long"
             android:text="@string/label_query"
-            tools:drawableTop="@drawable/ic_message_bulleted"
-            tools:drawableTint="?colorTextSecondary" />
+            tools:drawableTint="?colorTextSecondary"
+            tools:drawableTop="@drawable/ic_message_bulleted" />
 
           <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/action_ignore"
@@ -116,8 +116,8 @@
             android:contentDescription="@string/label_ignore_long"
             android:text="@string/label_ignore"
             android:visibility="gone"
-            tools:drawableTop="@drawable/ic_eye_off"
             tools:drawableTint="?colorTextSecondary"
+            tools:drawableTop="@drawable/ic_eye_off"
             tools:visibility="visible" />
 
           <androidx.appcompat.widget.AppCompatButton
@@ -125,16 +125,16 @@
             style="@style/Widget.Info.ActionButton"
             android:contentDescription="@string/label_whois_long"
             android:text="@string/label_whois"
-            tools:drawableTop="@drawable/ic_info"
-            tools:drawableTint="?colorTextSecondary" />
+            tools:drawableTint="?colorTextSecondary"
+            tools:drawableTop="@drawable/ic_info" />
 
           <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/action_mention"
             style="@style/Widget.Info.ActionButton"
             android:contentDescription="@string/label_mention_long"
             android:text="@string/label_mention"
-            tools:drawableTop="@drawable/ic_share_alternative"
-            tools:drawableTint="?colorTextSecondary" />
+            tools:drawableTint="?colorTextSecondary"
+            tools:drawableTop="@drawable/ic_share_alternative" />
 
           <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/action_shortcut"

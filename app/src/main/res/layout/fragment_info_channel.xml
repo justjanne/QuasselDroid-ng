@@ -66,16 +66,16 @@
           style="@style/Widget.Info.ActionButton"
           android:contentDescription="@string/label_edit_topic_long"
           android:text="@string/label_edit_topic"
-          tools:drawableTop="@drawable/ic_pencil"
-          tools:drawableTint="?colorTextSecondary" />
+          tools:drawableTint="?colorTextSecondary"
+          tools:drawableTop="@drawable/ic_pencil" />
 
         <androidx.appcompat.widget.AppCompatButton
           android:id="@+id/action_who"
           style="@style/Widget.Info.ActionButton"
           android:contentDescription="@string/label_who_long"
           android:text="@string/label_who"
-          tools:drawableTop="@drawable/ic_info"
-          tools:drawableTint="?colorTextSecondary" />
+          tools:drawableTint="?colorTextSecondary"
+          tools:drawableTop="@drawable/ic_info" />
 
         <androidx.appcompat.widget.AppCompatButton
           android:id="@+id/action_join"
@@ -92,8 +92,8 @@
           style="@style/Widget.Info.ActionButton"
           android:contentDescription="@string/label_part_long"
           android:text="@string/label_part"
-          tools:drawableTop="@drawable/ic_account_minus"
-          tools:drawableTint="?colorTextSecondary" />
+          tools:drawableTint="?colorTextSecondary"
+          tools:drawableTop="@drawable/ic_account_minus" />
 
         <androidx.appcompat.widget.AppCompatButton
           android:id="@+id/action_shortcut"

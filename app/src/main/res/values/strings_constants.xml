@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="package_name" translatable="false">com.iskrembilen.quasseldroid</string>
+
+  <string name="notification_channel_background" translatable="false">background</string>
+  <string name="notification_channel_highlight" translatable="false">highlight</string>
+  <string name="notification_channel_old_highlight" translatable="false">old_highlight</string>
+
+  <string name="drag_intercept_bottom_sheet_behavior" translatable="false">de.kuschku.quasseldroid.util.ui.DragInterceptBottomSheetBehavior</string>
+</resources>

@@ -45,7 +45,6 @@
   <string name="label_delete">Apagar</string>
   <string name="label_delete_all">Apagar Todos</string>
   <string name="label_disconnect">Desligar</string>
-  <string name="label_edit_nick">Editar alcunha</string>
   <string name="label_edit_topic">Editar Tópico</string>
   <string name="label_edit_topic_long">Abre a caixa de diálogo para alterar o tópico do canal</string>
   <string name="label_filter_messages">Filtrar Mensagens</string>

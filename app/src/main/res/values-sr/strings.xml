@@ -45,7 +45,6 @@
   <string name="label_delete">Obriši</string>
   <string name="label_delete_all">Obriši sve</string>
   <string name="label_disconnect">Prekini vezu</string>
-  <string name="label_edit_nick">Izmeni nadimak</string>
   <string name="label_edit_topic">Izmeni temu</string>
   <string name="label_edit_topic_long">Otvori dijalog za mijenjanje teme kanala</string>
   <string name="label_filter_messages">Filtriraj poruke</string>

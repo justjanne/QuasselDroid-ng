@@ -22,8 +22,6 @@
   <string name="app_description">An Android-based client for the decentralized Quassel IRC client.</string>
   <string name="app_description_long">Quassel is a distributed, decentralized IRC client, written using C++ and Qt. Quasseldroid is a pure-kotlin client for the Quassel core, allowing you to connect to your Quassel core using your Android™ phone.</string>
 
-  <string name="package_name" translatable="false">com.iskrembilen.quasseldroid</string>
-
   <string name="connection_service_title">Connection Service</string>
   <string name="connection_service_description">Keeps a connection to your core to allow for notifications, and to transmit messages.</string>
 
@@ -157,11 +155,8 @@
   <string name="label_feature_context_missing">Your core is missing features that are required for Quasseldroid to work correctly.</string>
   <string name="label_feature_context_missing_button">Details</string>
 
-  <string name="notification_channel_background" translatable="false">background</string>
   <string name="notification_channel_connection_title">Connection</string>
-  <string name="notification_channel_highlight" translatable="false">highlight</string>
   <string name="notification_channel_highlight_title">Highlights</string>
-  <string name="notification_channel_old_highlight" translatable="false">old_highlight</string>
   <string name="notification_channel_old_highlight_title">Old Highlights</string>
 
   <string name="label_missing_features">Missing Features</string>
@@ -176,6 +171,4 @@
 
   <string name="advertisement_support_patreon">Please help support the development of this app on Patreon</string>
   <string name="advertisement_support_button">Donate</string>
-
-  <string name="drag_intercept_bottom_sheet_behavior" translatable="false">de.kuschku.quasseldroid.util.ui.DragInterceptBottomSheetBehavior</string>
 </resources>

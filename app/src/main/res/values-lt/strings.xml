@@ -44,7 +44,6 @@
   <string name="label_delete">Ištrinti</string>
   <string name="label_delete_all">Ištrinti viską</string>
   <string name="label_disconnect">Atsijungti</string>
-  <string name="label_edit_nick">Keisti slapyvardį</string>
   <string name="label_edit_topic">Keisti temą</string>
   <string name="label_edit_topic_long">Atverti kanalo temos keitimo dialogą</string>
   <string name="label_filter_messages">Filtruoti žinutes</string>

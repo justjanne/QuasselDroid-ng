@@ -34,6 +34,7 @@
   <string name="label_cancel">Abbrechen</string>
   <string name="label_update_user_password">Benutzernamen/Passwort ändern</string>
   <string name="label_certificates">Zertifikate</string>
+  <string name="label_clear_search">Eingabe löschen</string>
   <string name="label_close">Schließen</string>
   <string name="label_colors_custom">Anpassen</string>
   <string name="label_colors_mirc">mIRC</string>
@@ -47,6 +48,7 @@
   <string name="label_delete">Löschen</string>
   <string name="label_delete_all">Alle Löschen</string>
   <string name="label_disconnect">Verbindung trennen</string>
+  <string name="label_edit_core">Account bearbeiten</string>
   <string name="label_edit_nick">Spitznamen bearbeiten</string>
   <string name="label_edit_topic">Thema ändern</string>
   <string name="label_edit_topic_long">Open dialog to change the channel topic</string>
