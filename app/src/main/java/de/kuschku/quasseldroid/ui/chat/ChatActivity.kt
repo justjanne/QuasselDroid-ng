@@ -783,7 +783,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                                         ?: -1)
     connectedAccount = savedInstanceState?.getLong(KEY_CONNECTED_ACCOUNT, -1L) ?: -1L
 
-    if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_START) == true) {
+    if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_START) == true &&
+        resources.getBoolean(R.bool.buffer_drawer_exists)) {
       drawerLayout.openDrawer(GravityCompat.START)
     }
     if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_END) == true) {
