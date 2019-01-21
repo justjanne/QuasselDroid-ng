@@ -22,12 +22,15 @@ package de.kuschku.libquassel.protocol.coresetup
 import de.kuschku.libquassel.protocol.*
 import java.io.Serializable
 
-class CoreSetupBackendConfigElement : Serializable {
-  val key: String
-  val displayName: String
-  private val typeId: Int
-  private val customType: String
-  private val rawDefaultValue: Any?
+class CoreSetupBackendConfigElement(
+  val key: String,
+  val displayName: String,
+  defaultValue: QVariant_
+) : Serializable {
+  private val typeId = defaultValue.type.id
+  private val customType = defaultValue.type.serializableName
+  private val rawDefaultValue = defaultValue.data as? Serializable
+
   val defaultValue: QVariant_
     get() {
       val type = Type.of(typeId)
@@ -40,14 +43,6 @@ class CoreSetupBackendConfigElement : Serializable {
                           type ?: throw IllegalArgumentException("No such type: $type"))
       }
     }
-
-  constructor(key: String, displayName: String, defaultValue: QVariant_) {
-    this.key = key
-    this.displayName = displayName
-    this.typeId = defaultValue.type.id
-    this.customType = defaultValue.type.serializableName
-    this.rawDefaultValue = defaultValue.data
-  }
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

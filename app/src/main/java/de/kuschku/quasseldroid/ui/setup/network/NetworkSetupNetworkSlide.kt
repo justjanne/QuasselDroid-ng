@@ -102,9 +102,9 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
   }
 
   override fun getData(data: Bundle) {
-    data.putSerializable(
+    data.putInt(
       "identity",
-      identityAdapter.getItemId(this.identity.selectedItemPosition)
+      identityAdapter.getItemId(this.identity.selectedItemPosition).toInt()
     )
     val networkId = (network.selectedItem as? INetwork.NetworkInfo)?.networkId
     if (networkId != null) {
