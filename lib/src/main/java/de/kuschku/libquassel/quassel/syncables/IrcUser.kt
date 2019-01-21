@@ -27,6 +27,7 @@ import de.kuschku.libquassel.util.irc.HostmaskHelper
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
+import org.threeten.bp.temporal.Temporal
 import java.nio.charset.Charset
 
 class IrcUser(
@@ -176,16 +177,16 @@ class IrcUser(
     }
   }
 
-  override fun setIdleTime(idleTime: Instant) {
+  override fun setIdleTime(idleTime: Temporal) {
     if (_idleTime != idleTime) {
-      _idleTime = idleTime
+      _idleTime = Instant.from(idleTime)
       _idleTimeSet = Instant.now()
     }
   }
 
-  override fun setLoginTime(loginTime: Instant) {
+  override fun setLoginTime(loginTime: Temporal) {
     if (_loginTime != loginTime) {
-      _loginTime = loginTime
+      _loginTime = Instant.from(loginTime)
     }
   }
 
@@ -202,8 +203,8 @@ class IrcUser(
     }
   }
 
-  override fun setLastAwayMessageTime(lastAwayMessageTime: Instant) {
-    _lastAwayMessageTime = lastAwayMessageTime
+  override fun setLastAwayMessageTime(lastAwayMessageTime: Temporal) {
+    _lastAwayMessageTime = Instant.from(lastAwayMessageTime)
   }
 
   override fun setWhoisServiceReply(whoisServiceReply: String) {

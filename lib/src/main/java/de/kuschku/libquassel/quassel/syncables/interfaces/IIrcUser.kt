@@ -23,7 +23,7 @@ import de.kuschku.libquassel.annotations.Slot
 import de.kuschku.libquassel.annotations.Syncable
 import de.kuschku.libquassel.protocol.QVariantMap
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
-import org.threeten.bp.Instant
+import org.threeten.bp.temporal.Temporal
 
 @Syncable(name = "IrcUser")
 interface IIrcUser : ISyncableObject {
@@ -62,7 +62,7 @@ interface IIrcUser : ISyncableObject {
   fun setHost(host: String)
 
   @Slot
-  fun setIdleTime(idleTime: Instant)
+  fun setIdleTime(idleTime: Temporal)
 
   @Slot
   fun setIrcOperator(ircOperator: String)
@@ -71,10 +71,10 @@ interface IIrcUser : ISyncableObject {
   fun setLastAwayMessage(lastAwayMessage: Int)
 
   @Slot
-  fun setLastAwayMessageTime(lastAwayMessageTime: Instant)
+  fun setLastAwayMessageTime(lastAwayMessageTime: Temporal)
 
   @Slot
-  fun setLoginTime(loginTime: Instant)
+  fun setLoginTime(loginTime: Temporal)
 
   @Slot
   fun setNick(nick: String)
