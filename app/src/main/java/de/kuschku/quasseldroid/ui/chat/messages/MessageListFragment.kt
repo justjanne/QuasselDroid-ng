@@ -141,7 +141,7 @@ class MessageListFragment : ServiceBoundFragment() {
           true
         } ?: false
       }
-      R.id.action_copy      -> {
+      R.id.action_copy  -> {
         val builder = SpannableStringBuilder()
         viewModel.selectedMessages.value.values.asSequence().sortedBy {
           it.original.messageId

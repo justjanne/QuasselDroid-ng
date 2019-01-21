@@ -17,14 +17,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-include ':invokerannotations',
-        ':invokergenerator',
-        ':lib',
-        ':lifecycle-ktx',
-        ':desktop',
-        ":viewmodel",
-        ":persistence",
-        ':malheur',
-        ':app'
-
 rootProject.buildFileName = 'build.gradle.kts'
+
+include ':app',
+    ':desktop',
+    ':invokerannotations',
+    ':invokergenerator',
+    ':lib',
+    ':lifecycle-ktx',
+    ':malheur',
+    ":persistence",
+    ":viewmodel"

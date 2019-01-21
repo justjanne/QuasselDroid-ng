@@ -34,7 +34,8 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.ui.ContextThemeWrapper
 import de.kuschku.quasseldroid.util.ui.RecyclerSpinnerAdapter
 
-class NetworkAdapter(@StringRes private val fallbackName: Int) : RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(),
+class NetworkAdapter(@StringRes private val fallbackName: Int) :
+  RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(),
   ThemedSpinnerAdapter {
   var data = listOf<INetwork.NetworkInfo?>(null)
 
@@ -73,7 +74,8 @@ class NetworkAdapter(@StringRes private val fallbackName: Int) : RecyclerSpinner
   override fun getItemId(position: Int) = getItem(position)?.networkId?.toLong() ?: -1
   override fun hasStableIds() = true
   override fun getCount() = data.size
-  class NetworkViewHolder(@StringRes private val fallbackName: Int, itemView: View) : RecyclerView.ViewHolder(itemView) {
+  class NetworkViewHolder(@StringRes private val fallbackName: Int, itemView: View) :
+    RecyclerView.ViewHolder(itemView) {
     @BindView(android.R.id.text1)
     lateinit var text: TextView
 

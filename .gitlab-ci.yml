@@ -6,36 +6,36 @@ variables:
 cache:
   key: "$CI_PROJECT_NAME"
   paths:
-    - ".gradle/wrapper"
-    - ".gradle/caches"
+  - ".gradle/wrapper"
+  - ".gradle/caches"
 
 before_script:
-  - "export GRADLE_USER_HOME=$(pwd)/.gradle"
-  - "export ANDROID_HOME=/android-sdk-linux"
-  - "export PATH=$PATH:/android-sdk-linux/platform-tools/"
-  - "chmod +x ./gradlew"
+- "export GRADLE_USER_HOME=$(pwd)/.gradle"
+- "export ANDROID_HOME=/android-sdk-linux"
+- "export PATH=$PATH:/android-sdk-linux/platform-tools/"
+- "chmod +x ./gradlew"
 
-  - "echo $SIGNING_KEYSTORE | base64 -d > /root/signing.keystore"
-  - "echo $SIGNING_PROPERTIES | base64 -d > signing.properties"
+- "echo $SIGNING_KEYSTORE | base64 -d > /root/signing.keystore"
+- "echo $SIGNING_PROPERTIES | base64 -d > signing.properties"
 
 stages:
-  - "build"
-  - "test"
-  - "deploy"
+- "build"
+- "test"
+- "deploy"
 
 build:
   stage: "build"
   script:
-    - "./gradlew assembleRelease -x lintRelease -x lintVitalRelease"
-    - "cp app/build/outputs/apk/release/*.apk ."
+  - "./gradlew assembleRelease -x lintRelease -x lintVitalRelease"
+  - "cp app/build/outputs/apk/release/*.apk ."
   artifacts:
     paths:
-      - "*.apk"
+    - "*.apk"
 
 test:
   stage: "test"
   script:
-    - "./gradlew check"
+  - "./gradlew check"
   artifacts:
     reports:
       junit: "*/build/test-results/*/TEST-*.xml"
