@@ -104,7 +104,7 @@ data class ShortFlags<E>(
 
 infix fun <T> ShortFlags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : ShortFlag<T> {
   // an Undefined flag is a special case.
-  if (value == 0u.toUShort()) return false
+  if (which.bit == 0u.toUShort()) return false
   return value and which.bit == which.bit
 }
 

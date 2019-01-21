@@ -104,7 +104,7 @@ data class Flags<E>(
 
 infix fun <T> Flags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : Flag<T> {
   // an Undefined flag is a special case.
-  if (value == 0u) return false
+  if (which.bit == 0u) return false
   return value and which.bit == which.bit
 }
 

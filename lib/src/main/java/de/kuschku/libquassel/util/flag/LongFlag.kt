@@ -104,7 +104,7 @@ data class LongFlags<E>(
 
 infix fun <T> LongFlags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : LongFlag<T> {
   // an Undefined flag is a special case.
-  if (value == 0uL) return false
+  if (which.bit == 0uL) return false
   return value and which.bit == which.bit
 }
 
