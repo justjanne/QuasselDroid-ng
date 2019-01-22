@@ -153,7 +153,11 @@ abstract class ServiceBoundActivity :
       onSelectAccount()
     } else {
       if (!connection.start())
-        Toast.makeText(this, "Could not create QuasselService", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+          this,
+          getString(R.string.label_service_connection_failed),
+          Toast.LENGTH_SHORT
+        ).show()
       connection.bind()
     }
   }

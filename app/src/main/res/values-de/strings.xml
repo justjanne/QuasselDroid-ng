@@ -108,6 +108,7 @@
   <string name="label_search_buffer">Chats suchen</string>
   <string name="label_select">Auswählen</string>
   <string name="label_send">Senden</string>
+  <string name="label_service_connection_failed">Verbindung konnte nicht hergestellt werden, prüfe die Batterie-Spar-Einstellungen. Mehr Info findest du auf dontkillmyapp.com.</string>
   <string name="label_set_default">Als Standard setzen</string>
   <string name="label_settings">Einstellungen</string>
   <string name="label_settings_client">Client-Einstellungen</string>
