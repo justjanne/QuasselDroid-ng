@@ -2,7 +2,8 @@
 .gradle
 /local.properties
 /signing.properties
-/.idea/
+/.idea/*
+!/.idea/copyright/
 .DS_Store
 /captures
 build/
