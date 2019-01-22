@@ -26,6 +26,7 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import de.kuschku.libquassel.session.Backend
@@ -151,7 +152,8 @@ abstract class ServiceBoundActivity :
     if (!reconnect || !accountIdValid) {
       onSelectAccount()
     } else {
-      connection.start()
+      if (!connection.start())
+        Toast.makeText(this, "Could not create QuasselService", Toast.LENGTH_SHORT).show()
       connection.bind()
     }
   }
