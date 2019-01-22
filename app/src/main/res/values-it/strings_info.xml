@@ -17,4 +17,27 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="label_user_away">Away</string>
+  <string name="label_user_away_reason">Motivo</string>
+  <string name="label_user_identity">Identità</string>
+  <string name="label_user_account">Account</string>
+  <string name="label_user_ident">Ident</string>
+  <string name="label_user_host">Host</string>
+  <string name="label_user_server">Server</string>
+
+  <string name="label_core_version">Versione</string>
+  <string name="label_core_uptime">Uptime</string>
+  <string name="label_core_security">Sicurezza</string>
+  <string name="label_core_clients">Client</string>
+  <string name="label_core_online_since">In linea da %1$s</string>
+  <string name="label_core_connected_since">Connesso da %1$s</string>
+  <string name="label_core_connection_verified_by">Connessione verificata da %1$s</string>
+  <string name="label_core_connection_verified_by_unknown">Sconosciuto</string>
+  <string name="label_core_connection_insecure">Connessione non sicura</string>
+
+  <string name="property_group_ircchannel_channel">Canale</string>
+  <string name="property_ircchannel_topic">Topic</string>
+  <string name="property_ircchannel_topic_action_edit">Modifica Topic</string>
+  <string name="property_ircchannel_topic_default">Nessun topic impostato</string>
+</resources>

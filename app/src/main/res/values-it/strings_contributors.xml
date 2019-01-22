@@ -17,4 +17,10 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="contributor_description_freqmod">Iniziali tentativi di deserializzazione qdatastream</string>
+  <string name="contributor_description_sandsmark">Implementazione del protocollo precedente, (de)serializzazioni, (de)moralizzatore progetto</string>
+  <string name="contributor_description_magnuf">UI precedente</string>
+  <string name="contributor_description_kenji">UI precedente</string>
+  <string name="contributor_description_justjanne">Riscrittura, UI, Annotazioni Processori, Backend</string>
+</resources>

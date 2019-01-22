@@ -17,4 +17,148 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="preference_appearance_title">Aspetto</string>
+
+  <string name="preference_theme_title">Tema</string>
+  <string name="preference_theme_entry_material_daynight">Material (Auto)</string>
+  <string name="preference_theme_entry_material_light">Material (Chiaro)</string>
+  <string name="preference_theme_entry_material_dark">Material (Scuro)</string>
+  <string name="preference_theme_entry_quassel_daynight">Quassel (Auto)</string>
+  <string name="preference_theme_entry_quassel_light">Quassel (Chiaro)</string>
+  <string name="preference_theme_entry_quassel_dark">Quassel (Scuro)</string>
+  <string name="preference_theme_entry_amoled">AMOLED</string>
+  <string name="preference_theme_entry_solarized_daynight">Solarized (Auto)</string>
+  <string name="preference_theme_entry_solarized_light">Solarized (Chiaro)</string>
+  <string name="preference_theme_entry_solarized_dark">Solarized (Scuro)</string>
+  <string name="preference_theme_entry_gruvbox_daynight">Gruvbox (Auto)</string>
+  <string name="preference_theme_entry_gruvbox_light">Gruvbox (Chiaro)</string>
+  <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Scuro)</string>
+  <string name="preference_theme_entry_dracula">Dracula</string>
+  <string name="preference_input_enter_title">Tasto invio sulla tastiera</string>
+  <string name="preference_input_enter_entry_emoji">Emoji</string>
+  <string name="preference_input_enter_entry_send">Invia</string>
+  <string name="preference_show_lag_title">Mostra Latenza</string>
+  <string name="preference_show_lag_summary">Mostra la latenza tra il client ed il colore nella barra di azione</string>
+
+  <string name="preference_keep_screen_on_title">Mantieni Schermo Attivo</string>
+  <string name="preference_keep_screen_on_summary">Impedisce al dispositivo di andare in sleep mentre l\'app è in primo piano</string>
+
+  <string name="preference_language_title">Lingua</string>
+  <string name="preference_language_entry_auto">Predefinita di Sistema</string>
+  <string name="preference_notifications_title">Notifiche</string>
+
+  <string name="preference_notification_query_title">Messaggi diretti</string>
+
+  <string name="preference_notification_channel_title">Messaggi canale</string>
+
+  <string name="preference_notification_other_title">Altri Messaggi</string>
+
+  <string name="preference_notification_sound_title">Suoni Notifiche</string>
+
+  <string name="preference_notification_vibration_title">Vibrazione</string>
+
+  <string name="preference_notification_light_title">LED</string>
+
+  <string name="preference_notification_mark_read_on_swipe_title">Imposta il canale come letto quando fai swipe sulla notifiche</string>
+  <string name="preference_notification_mark_read_on_swipe_summary">Imposta tutti i messaggi nel canale come letti quando viene fatto swipe sulla notifica per un canale</string>
+
+  <string name="preference_notification_network_name_in_notification_title_title">Mostra il nome del network nel titolo della notifiche</string>
+
+  <string name="preference_notification_configure_title">Configura Notifiche</string>
+
+  <string name="preference_notifications_level_all">Tutti i messaggi</string>
+  <string name="preference_notifications_level_highlight">Menzioni</string>
+  <string name="preference_notifications_level_none">Mai</string>
+  <string name="preference_messages_title">Messaggi</string>
+
+  <string name="preference_monospace_title">Usa carattere a spaziatura fissa</string>
+
+  <string name="preference_textsize_title">Dimensione testo</string>
+
+  <string name="preference_show_seconds_title">Mostra Secondi</string>
+
+  <string name="preference_use_24h_clock_title">Usa orologio 24 ore</string>
+
+  <string name="preference_colorize_mirc_title">Usa colori mIRC</string>
+  <string name="preference_colorize_mirc_summaryon">Mostra i colori mIRC nei messaggi</string>
+  <string name="preference_colorize_mirc_summaryoff">Ignora i colori mIRC dai messaggi</string>
+
+  <string name="preference_colorize_nicknames_title">Nickname colorati</string>
+  <string name="preference_colorize_nicknames_entry_all">Tutti i nick</string>
+  <string name="preference_colorize_nicknames_entry_all_but_mine">Tutti tranne il proprio nick</string>
+  <string name="preference_colorize_nicknames_entry_none">Nessun nick</string>
+  <string name="preference_show_prefix_title">Mostra i modi di chi invia</string>
+  <string name="preference_show_prefix_entry_all">Tutti i modi</string>
+  <string name="preference_show_prefix_entry_highest">Modo superiore</string>
+  <string name="preference_show_prefix_entry_none">Nessun modo</string>
+  <string name="preference_hostmask_actions_title">Mostra hostmask nelle azioni</string>
+  <string name="preference_hostmask_actions_summary">Mostra interamente nick!ident@host nei messaggi di entrata/uscita/quit</string>
+
+  <string name="preference_nicks_on_new_line_title">Nickname Separati</string>
+  <string name="preference_nicks_on_new_line_summary">Mostra nickname su una riga separata</string>
+
+  <string name="preference_show_realnames_title">Mostra nomi reali</string>
+
+  <string name="preference_show_avatars_title">Mostra Avatar</string>
+
+  <string name="preference_square_avatars_title">Avatar Quadrati</string>
+
+  <string name="preference_show_irccloud_avatars_title">Mostra Avatar IRCCloud</string>
+  <string name="preference_show_irccloud_avatars_summary">Per gli utenti privi di avatar privilegia quanto indicato su IRCCloud, se disponibile</string>
+
+  <string name="preference_show_gravatar_avatars_title">Mostra Avatar Gravatar</string>
+  <string name="preference_show_gravatar_avatars_summary">Per gli utenti privi di avatar privilegia quanto indicato su Gravatar, se disponibile</string>
+
+  <string name="preference_show_matrix_avatars_title">Mostra Avatar Matrix</string>
+  <string name="preference_show_matrix_avatars_summary">Per gli utenti privi di avatar privilegia quanto indicato su Matrix, se disponibile</string>
+
+  <string name="preference_time_at_end_title">Data ed ora allineata a destra</string>
+  <string name="preference_time_at_end_summary">Allinea data ed ora alla fine di ogni messaggio</string>
+
+  <string name="preference_larger_emoji_title">Reazioni più grandi</string>
+  <string name="preference_larger_emoji_summary">Incrementa la dimensioni dei messaggi contenenti unicamente emoji</string>
+
+  <string name="preference_highlight_own_messages_title">Evidenzia i miei messaggi</string>
+  <string name="preference_highlight_own_messages_summary">Mostra i miei messaggi in modo più evidente</string>
+
+
+  <string name="preference_autocomplete_title">Autocompletamento</string>
+
+  <string name="preference_autocomplete_sender_doubleclick_title">Completamento Automatico Mittente</string>
+  <string name="preference_autocomplete_sender_doubleclick_summary">Fai doppio clic su un messaggio per completare automaticamente il mittente</string>
+
+  <string name="preference_autocomplete_button_title">Pulsante di completamento automatico</string>
+  <string name="preference_autocomplete_button_summary">Mostra un pulsante a sinistra della riga di input per attivare il completamento con tabulazione</string>
+
+  <string name="preference_autocomplete_doubletap_title">Tocca due volte per completare automaticamente</string>
+  <string name="preference_autocomplete_doubletap_summary">Suggerisci nick e canali dopo aver fatto doppio clic sul campo di input</string>
+
+  <string name="preference_autocomplete_auto_title">Mostra automaticamente</string>
+  <string name="preference_autocomplete_auto_summary">Suggerisci nick e canali dopo aver inserito i primi 3 caratteri</string>
+
+  <string name="preference_autocomplete_prefix_title">Mostra dopo il prefisso</string>
+  <string name="preference_autocomplete_prefix_summary">Suggerisci nick e canali dopo aver inserito @ o #</string>
+
+  <string name="preference_autocomplete_nicks_title">Completamento Automatico Nickname</string>
+
+  <string name="preference_autocomplete_buffers_title">Completamento Automatico Chat</string>
+
+  <string name="preference_autocomplete_aliases_title">Comandi Completamento Automatico</string>
+
+
+  <string name="preference_backlog_title">Backlog</string>
+
+  <string name="preference_page_size_title">Dimensioni della pagina</string>
+  <string name="preference_page_size_summary">Il numero di messaggi caricati e conservati in memoria alla volta</string>
+
+  <string name="preference_initial_amount_title">Numero Iniziale</string>
+  <string name="preference_initial_amount_summary">Numero di messaggi da caricare all\'apertura di un buffer per la prima volta</string>
+
+
+  <string name="preference_connection_title">Connessione</string>
+
+  <string name="preference_show_notification_title">Mostra notifica</string>
+  <string name="preference_show_notification_summary">Mantiene Quasseldroid sempre collegato mostrando una notifica permanente</string>
+
+</resources>

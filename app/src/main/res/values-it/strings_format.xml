@@ -17,4 +17,13 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="label_bold">Grassetto</string>
+  <string name="label_italic">Corsivo</string>
+  <string name="label_strikethrough">Barrato</string>
+  <string name="label_underline">Sottolineato</string>
+  <string name="label_monospace">Spaziatura fissa</string>
+  <string name="label_foreground">Colore di primo piano</string>
+  <string name="label_background">Colore di sfondo</string>
+  <string name="label_clear_formatting">Cancella formattazione</string>
+</resources>

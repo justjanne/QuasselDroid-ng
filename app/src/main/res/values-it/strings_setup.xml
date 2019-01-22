@@ -17,4 +17,85 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <!-- Account Selection -->
+  <string name="slide_account_select_title">Scegli Account</string>
+  <string name="slide_account_select_description">Per favore scegli un account dalla lista oppure aggiungine uno</string>
+  <string name="label_user_on_host">%1$s su %2$s:%3$d</string>
+
+  <!-- Account Setup -->
+
+  <!-- Account Connection -->
+  <string name="slide_account_connection_title">Connessione</string>
+  <string name="slide_account_connection_description">Innanzitutto, scegli su quale server è ospitato il tuo core.</string>
+
+  <string name="label_connection_host">Host</string>
+  <string name="label_connection_port">Porta</string>
+  <string name="label_connection_ssl">Richiedi SSL</string>
+
+  <string name="hint_invalid_host">Non è un nome host valido</string>
+  <string name="hint_invalid_port">Non è una porta valida</string>
+
+  <!-- Account User -->
+  <string name="slide_account_user_title">Il tuo Account</string>
+  <string name="slide_account_user_description">Ora, inserisci il nome utente e la password per il tuo account sul core. Se hai appena creato il core, configureremo questo account per te</string>
+
+  <string name="label_account_user">Nome utente</string>
+  <string name="label_account_pass">Password</string>
+
+  <string name="hint_invalid_user">Il nome utente non può essere vuoto</string>
+
+  <!-- Account Name -->
+  <string name="slide_account_name_title">Personalizza Account</string>
+  <string name="slide_account_name_description">Dai un nome a questo account</string>
+
+  <string name="label_account_name">Nome account</string>
+
+  <string name="hint_invalid_name">Il nome non può essere vuoto</string>
+
+  <!-- Core Setup -->
+
+  <string name="setup_core_title">Impostazioni Core</string>
+
+  <!-- Core Authenticator Select -->
+  <string name="slide_core_authenticator_select_title">Scegli backend di autenticazione</string>
+  <string name="slide_core_authenticator_select_description">Per favore scegli un backend di autenticazione per il core Quassel da utilizzare per l\'autenticazione degli utenti.</string>
+
+  <!-- Core Backend Select -->
+  <string name="slide_core_backend_select_title">Scegli backend per archiviazione</string>
+  <string name="slide_core_backend_select_description">Per favore seleziona un backend per il database per l\'archiviazione del core Quassel per conservare il backlog ed altri dati.</string>
+
+  <string name="label_backend">Backend</string>
+
+  <!-- Core Backend Config -->
+  <string name="slide_core_backend_setup_title">Configura Backend Archiviazione</string>
+  <string name="slide_core_backend_setup_description">Per favore configura il backend del database selezionato.</string>
+
+  <string name="setup_core_backend_no_options">Questo backend non ha opzioni da configurare, hai finito qui!</string>
+
+  <!-- User Setup -->
+
+  <string name="setup_user_title">Impostazioni Utente</string>
+
+  <!-- User Identity -->
+  <string name="slide_user_identity_title">Impostazioni Identità</string>
+  <string name="slide_user_identity_description">Per favore scegli un nickname</string>
+
+  <string name="hint_invalid_nick">Non è un nick valido</string>
+
+  <!-- User Network -->
+  <string name="slide_user_network_title">Impostazioni Network</string>
+  <string name="slide_user_network_description">Scegli un network al quale connetterti.</string>
+
+  <string name="label_network_custom">Network Personalizzato…</string>
+
+  <!-- User Channels -->
+  <string name="slide_user_channels_title">Impostazioni Canali</string>
+  <string name="slide_user_channels_description">Scegli in quali canali entrare.</string>
+
+  <string name="label_channels">Canali</string>
+
+  <!-- Network Setup -->
+
+  <string name="setup_network_title">Impostazioni Network</string>
+</resources>

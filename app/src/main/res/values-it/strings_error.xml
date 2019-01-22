@@ -17,4 +17,32 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="label_error_login">Errore Login</string>
+  <string name="label_error_setup">Errore Installazione</string>
+  <string name="label_error_init">Errore Connessione</string>
+  <string name="label_error_ssl">Errore SSL</string>
+  <string name="label_error_ssl_required_unavailable">Per questa connessione è obbligatorio SSL ma il core non lo supporta.</string>
+  <string name="label_error_certificate">Errore Certificato</string>
+  <string name="label_error_certificate_no_certificate">Nessun certificato disponibile</string>
+  <string name="label_error_certificate_no_hostname">Nessun nome host disponibile</string>
+  <string name="label_error_certificate_invalid"><![CDATA[
+    <p>Il certificato con l\'impronta<br/>
+    <code>%1$s</code> è valido esclusivamente da %2$s a %3$s</p>
+  ]]></string>
+  <string name="label_error_certificate_untrusted"><![CDATA[
+    <p>Il certificato con impronta<br/>
+    <code>%1$s</code><br/>
+    non è affidabile.</p>
+  ]]></string>
+  <string name="label_error_certificate_no_match"><![CDATA[
+    <p>Il certificato con impronta<br/>
+    <code>%1$s</code><br/>
+    non è valido per %2$s.</p>
+  ]]></string>
+
+  <string name="label_error_unknown_host">Host non trovato: %1$s</string>
+  <string name="label_error_invalid_protocol_version">Protocollo non valido: %1$d</string>
+  <string name="label_error_connection">Errore riscontrato durante la connessione: %1$s (%2$s)</string>
+  <string name="label_error_connection_closed">Errore: La connessione è stata chiusa in modo imprevisto</string>
+</resources>
