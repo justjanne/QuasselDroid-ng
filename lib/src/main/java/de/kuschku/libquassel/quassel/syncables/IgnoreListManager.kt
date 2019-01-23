@@ -98,23 +98,23 @@ class IgnoreListManager constructor(
     }
   }
 
-  override fun addIgnoreListItem(type: Int, ignoreRule: String, isRegEx: Boolean, strictness: Int,
-                                 scope: Int, scopeRule: String, isActive: Boolean) {
+  override fun addIgnoreListItem(type: Int, ignoreRule: String?, isRegEx: Boolean, strictness: Int,
+                                 scope: Int, scopeRule: String?, isActive: Boolean) {
     if (contains(ignoreRule)) return
 
     _ignoreList += IgnoreListItem(type, ignoreRule, isRegEx, strictness, scope, scopeRule, isActive)
   }
 
-  override fun removeIgnoreListItem(ignoreRule: String) = removeAt(indexOf(ignoreRule))
+  override fun removeIgnoreListItem(ignoreRule: String?) = removeAt(indexOf(ignoreRule))
 
-  override fun toggleIgnoreRule(ignoreRule: String) {
+  override fun toggleIgnoreRule(ignoreRule: String?) {
     _ignoreList = _ignoreList.map {
       if (it.ignoreRule == ignoreRule) it.copy(isActive = !it.isActive) else it
     }
   }
 
-  fun indexOf(ignore: String): Int = _ignoreList.indexOfFirst { it.ignoreRule == ignore }
-  fun contains(ignore: String) = _ignoreList.any { it.ignoreRule == ignore }
+  fun indexOf(ignore: String?): Int = _ignoreList.indexOfFirst { it.ignoreRule == ignore }
+  fun contains(ignore: String?) = _ignoreList.any { it.ignoreRule == ignore }
   fun isEmpty() = _ignoreList.isEmpty()
   fun count() = _ignoreList.count()
   fun removeAt(index: Int) {
@@ -177,23 +177,23 @@ class IgnoreListManager constructor(
     val regEx: ExpressionMatch,
     val scopeRegEx: ExpressionMatch
   ) : Serializable {
-    constructor(type: Int, ignoreRule: String, isRegEx: Boolean, strictness: Int, scope: Int,
-                scopeRule: String, isActive: Boolean) : this(
+    constructor(type: Int, ignoreRule: String?, isRegEx: Boolean, strictness: Int, scope: Int,
+                scopeRule: String?, isActive: Boolean) : this(
       IgnoreType.of(type), ignoreRule, isRegEx, StrictnessType.of(strictness), ScopeType.of(scope),
       scopeRule, isActive
     )
 
-    constructor(type: IgnoreType, ignoreRule: String, isRegEx: Boolean, strictness: StrictnessType,
-                scope: ScopeType, scopeRule: String, isActive: Boolean) : this(
-      type, ignoreRule, isRegEx, strictness, scope, scopeRule, isActive,
+    constructor(type: IgnoreType, ignoreRule: String?, isRegEx: Boolean, strictness: StrictnessType,
+                scope: ScopeType, scopeRule: String?, isActive: Boolean) : this(
+      type, ignoreRule ?: "", isRegEx, strictness, scope, scopeRule ?: "", isActive,
       ExpressionMatch(
-        ignoreRule,
+        ignoreRule ?: "",
         if (isRegEx) ExpressionMatch.MatchMode.MatchRegEx
         else ExpressionMatch.MatchMode.MatchWildcard,
         true
       ),
       ExpressionMatch(
-        scopeRule,
+        scopeRule ?: "",
         ExpressionMatch.MatchMode.MatchMultiWildcard,
         true
       )

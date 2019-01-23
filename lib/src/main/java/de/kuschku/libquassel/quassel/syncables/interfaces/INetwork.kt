@@ -46,34 +46,34 @@ interface INetwork : ISyncableObject {
   fun initSetProperties(properties: QVariantMap)
 
   @Slot
-  fun acknowledgeCap(capability: String)
+  fun acknowledgeCap(capability: String?)
 
   @Slot
   fun addCap(capability: String, value: String?)
 
   @Slot
-  fun addIrcChannel(channel: String)
+  fun addIrcChannel(channel: String?)
 
   @Slot
-  fun addIrcUser(hostmask: String)
+  fun addIrcUser(hostmask: String?)
 
   @Slot
-  fun addSupport(param: String, value: String? = null)
+  fun addSupport(param: String?, value: String? = null)
 
   @Slot
   fun clearCaps()
 
   @Slot
-  fun emitConnectionError(error: String)
+  fun emitConnectionError(error: String?)
 
   @Slot
-  fun ircUserNickChanged(old: String, new: String)
+  fun ircUserNickChanged(old: String?, new: String?)
 
   @Slot
-  fun removeCap(capability: String)
+  fun removeCap(capability: String?)
 
   @Slot
-  fun removeSupport(param: String)
+  fun removeSupport(param: String?)
 
   @Slot
   fun requestConnect() {
@@ -91,10 +91,10 @@ interface INetwork : ISyncableObject {
   }
 
   @Slot
-  fun setAutoIdentifyPassword(password: String)
+  fun setAutoIdentifyPassword(password: String?)
 
   @Slot
-  fun setAutoIdentifyService(service: String)
+  fun setAutoIdentifyService(service: String?)
 
   @Slot
   fun setAutoReconnectInterval(interval: UInt)
@@ -136,7 +136,7 @@ interface INetwork : ISyncableObject {
   fun setMyNick(mynick: String?)
 
   @Slot
-  fun setNetworkName(networkName: String)
+  fun setNetworkName(networkName: String?)
 
   @Slot
   fun setNetworkInfo(info: NetworkInfo)
@@ -234,18 +234,18 @@ interface INetwork : ISyncableObject {
   }
 
   data class Server(
-    val host: String = "",
+    val host: String? = "",
     val port: UInt = PortDefaults.PORT_PLAINTEXT.port,
-    val password: String = "",
+    val password: String? = "",
     val useSsl: Boolean = false,
     val sslVerify: Boolean = false,
     val sslVersion: Int = 0,
     val useProxy: Boolean = false,
     val proxyType: Int = ProxyType.Socks5Proxy.value,
-    val proxyHost: String = "localhost",
+    val proxyHost: String? = "localhost",
     val proxyPort: UInt = 8080u,
-    val proxyUser: String = "",
-    val proxyPass: String = ""
+    val proxyUser: String? = "",
+    val proxyPass: String? = ""
   ) : Serializable {
     fun toVariantMap(): QVariantMap = mapOf(
       "Host" to QVariant.of(host, Type.QString),
@@ -310,8 +310,8 @@ interface INetwork : ISyncableObject {
     var autoIdentifyService: String = "",
     var autoIdentifyPassword: String = "",
     var useSasl: Boolean = false,
-    var saslAccount: String? = null,
-    var saslPassword: String? = null,
+    var saslAccount: String = "",
+    var saslPassword: String = "",
     var useAutoReconnect: Boolean = true,
     var autoReconnectInterval: UInt = 0u,
     var autoReconnectRetries: UShort = 0u,

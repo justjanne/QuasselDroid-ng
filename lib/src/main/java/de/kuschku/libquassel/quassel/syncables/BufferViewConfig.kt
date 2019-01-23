@@ -220,8 +220,8 @@ class BufferViewConfig constructor(
     super.setAllowedBufferTypes(bufferTypes)
   }
 
-  override fun setBufferViewName(bufferViewName: String) {
-    _bufferViewName = bufferViewName
+  override fun setBufferViewName(bufferViewName: String?) {
+    _bufferViewName = bufferViewName ?: ""
     super.setBufferViewName(bufferViewName)
   }
 

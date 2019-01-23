@@ -30,42 +30,42 @@ interface IIrcUser : ISyncableObject {
   fun initProperties(): QVariantMap
   fun initSetProperties(properties: QVariantMap, index: Int? = null)
   @Slot
-  fun addUserModes(modes: String)
+  fun addUserModes(modes: String?)
 
   fun joinChannel(channel: IrcChannel, skip_channel_join: Boolean = false)
   @Slot
-  fun joinChannel(channelname: String)
+  fun joinChannel(channelname: String?)
 
   fun partChannel(channel: IrcChannel)
   @Slot
-  fun partChannel(channelname: String)
+  fun partChannel(channelname: String?)
 
   @Slot
   fun quit()
 
   @Slot
-  fun removeUserModes(modes: String)
+  fun removeUserModes(modes: String?)
 
   @Slot
-  fun setAccount(account: String)
+  fun setAccount(account: String?)
 
   @Slot
   fun setAway(away: Boolean)
 
   @Slot
-  fun setAwayMessage(awayMessage: String)
+  fun setAwayMessage(awayMessage: String?)
 
   @Slot
   fun setEncrypted(encrypted: Boolean)
 
   @Slot
-  fun setHost(host: String)
+  fun setHost(host: String?)
 
   @Slot
   fun setIdleTime(idleTime: Temporal)
 
   @Slot
-  fun setIrcOperator(ircOperator: String)
+  fun setIrcOperator(ircOperator: String?)
 
   @Slot
   fun setLastAwayMessage(lastAwayMessage: Int)
@@ -77,28 +77,28 @@ interface IIrcUser : ISyncableObject {
   fun setLoginTime(loginTime: Temporal)
 
   @Slot
-  fun setNick(nick: String)
+  fun setNick(nick: String?)
 
   @Slot
-  fun setRealName(realName: String)
+  fun setRealName(realName: String?)
 
   @Slot
-  fun setServer(server: String)
+  fun setServer(server: String?)
 
   @Slot
-  fun setSuserHost(suserHost: String)
+  fun setSuserHost(suserHost: String?)
 
   @Slot
-  fun setUser(user: String)
+  fun setUser(user: String?)
 
   @Slot
-  fun setUserModes(modes: String)
+  fun setUserModes(modes: String?)
 
   @Slot
-  fun setWhoisServiceReply(whoisServiceReply: String)
+  fun setWhoisServiceReply(whoisServiceReply: String?)
 
   @Slot
-  fun updateHostmask(mask: String)
+  fun updateHostmask(mask: String?)
 
   @Slot
   override fun update(properties: QVariantMap) {

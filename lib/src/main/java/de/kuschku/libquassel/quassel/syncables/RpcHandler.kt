@@ -36,7 +36,7 @@ class RpcHandler(
   private val backlogStorage: BacklogStorage? = null,
   private val notificationManager: NotificationManager? = null
 ) : IRpcHandler {
-  override fun displayStatusMsg(net: String, msg: String) {
+  override fun displayStatusMsg(net: String?, msg: String?) {
   }
 
   override fun bufferInfoUpdated(bufferInfo: BufferInfo) {
@@ -60,8 +60,10 @@ class RpcHandler(
     session.disconnectFromCore?.invoke()
   }
 
-  override fun objectRenamed(classname: ByteBuffer, newname: String, oldname: String) {
-    session.renameObject(classname.deserializeString(StringSerializer.UTF8) ?: "", newname, oldname)
+  override fun objectRenamed(classname: ByteBuffer, newname: String?, oldname: String?) {
+    session.renameObject(classname.deserializeString(StringSerializer.UTF8) ?: "",
+                         newname ?: "",
+                         oldname ?: "")
   }
 
   override fun displayMsg(message: Message) {
@@ -96,7 +98,7 @@ class RpcHandler(
       ARG(networkId, QType.NetworkId)
     )
 
-  override fun changePassword(peerPtr: Long, user: String, old: String, new: String) =
+  override fun changePassword(peerPtr: Long, user: String?, old: String?, new: String?) =
     RPC(
       "2changePassword(PeerPtr,QString,QString,QString)",
       ARG(peerPtr, QType.PeerPtr),
@@ -111,7 +113,7 @@ class RpcHandler(
       ARG(id, Type.Int)
     )
 
-  override fun sendInput(bufferInfo: BufferInfo, message: String) =
+  override fun sendInput(bufferInfo: BufferInfo, message: String?) =
     RPC(
       "2sendInput(BufferInfo,QString)",
       ARG(bufferInfo, QType.BufferInfo),

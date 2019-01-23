@@ -183,7 +183,7 @@ class BufferSyncer constructor(
     notificationManager?.clear(buffer)
   }
 
-  override fun renameBuffer(buffer: BufferId, newName: String) {
+  override fun renameBuffer(buffer: BufferId, newName: String?) {
     val bufferInfo = _bufferInfos[buffer]
     if (bufferInfo != null) {
       _bufferInfos[buffer] = bufferInfo.copy(bufferName = newName)

@@ -117,13 +117,13 @@ class HighlightRuleManager(
     }
   }
 
-  override fun addHighlightRule(id: Int, name: String, isRegEx: Boolean, isCaseSensitive: Boolean,
-                                isEnabled: Boolean, isInverse: Boolean, sender: String,
-                                chanName: String) {
+  override fun addHighlightRule(id: Int, name: String?, isRegEx: Boolean, isCaseSensitive: Boolean,
+                                isEnabled: Boolean, isInverse: Boolean, sender: String?,
+                                chanName: String?) {
     if (contains(id)) return
 
     _highlightRuleList += HighlightRule(
-      id, name, isRegEx, isCaseSensitive, isEnabled, isInverse, sender, chanName
+      id, name ?: "", isRegEx, isCaseSensitive, isEnabled, isInverse, sender ?: "", chanName ?: ""
     )
   }
 

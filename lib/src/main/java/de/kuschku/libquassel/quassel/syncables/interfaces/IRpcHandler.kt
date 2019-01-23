@@ -35,13 +35,13 @@ interface IRpcHandler {
   val session: Session
 
   @Slot("__objectRenamed__")
-  fun objectRenamed(classname: ByteBuffer, newname: String, oldname: String)
+  fun objectRenamed(classname: ByteBuffer, newname: String?, oldname: String?)
 
   @Slot("2displayMsg(Message)")
   fun displayMsg(message: Message)
 
   @Slot("2displayStatusMsg(QString,QString)")
-  fun displayStatusMsg(net: String, msg: String)
+  fun displayStatusMsg(net: String?, msg: String?)
 
   @Slot("2bufferInfoUpdated(BufferInfo)")
   fun bufferInfoUpdated(bufferInfo: BufferInfo)
@@ -68,7 +68,7 @@ interface IRpcHandler {
   fun removeIdentity(identityId: IdentityId)
   fun createNetwork(networkInfo: INetwork.NetworkInfo, channels: List<String> = emptyList())
   fun removeNetwork(networkId: NetworkId)
-  fun changePassword(peerPtr: Long, user: String, old: String, new: String)
+  fun changePassword(peerPtr: Long, user: String?, old: String?, new: String?)
   fun requestKickClient(id: Int)
-  fun sendInput(bufferInfo: BufferInfo, message: String)
+  fun sendInput(bufferInfo: BufferInfo, message: String?)
 }

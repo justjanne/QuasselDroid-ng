@@ -79,17 +79,17 @@ interface IHighlightRuleManager : ISyncableObject {
    * @param chanName The channel in which the rule should apply
    */
   @Slot
-  fun requestAddHighlightRule(id: Int, name: String, isRegEx: Boolean, isCaseSensitive: Boolean,
-                              isEnabled: Boolean, isInverse: Boolean, sender: String,
-                              chanName: String) {
+  fun requestAddHighlightRule(id: Int, name: String?, isRegEx: Boolean, isCaseSensitive: Boolean,
+                              isEnabled: Boolean, isInverse: Boolean, sender: String?,
+                              chanName: String?) {
     REQUEST("requestAddHighlightRule", ARG(id, Type.Int), ARG(name, Type.QString),
             ARG(isRegEx, Type.Bool), ARG(isCaseSensitive, Type.Bool), ARG(isEnabled, Type.Bool),
             ARG(isInverse, Type.Bool), ARG(sender, Type.QString), ARG(chanName, Type.QString))
   }
 
   @Slot
-  fun addHighlightRule(id: Int, name: String, isRegEx: Boolean, isCaseSensitive: Boolean,
-                       isEnabled: Boolean, isInverse: Boolean, sender: String, chanName: String)
+  fun addHighlightRule(id: Int, name: String?, isRegEx: Boolean, isCaseSensitive: Boolean,
+                       isEnabled: Boolean, isInverse: Boolean, sender: String?, chanName: String?)
 
   @Slot
   fun requestSetHighlightNick(highlightNick: Int) {

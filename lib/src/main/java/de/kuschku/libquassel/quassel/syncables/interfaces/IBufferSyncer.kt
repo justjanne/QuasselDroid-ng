@@ -47,7 +47,7 @@ interface IBufferSyncer : ISyncableObject {
   fun removeBuffer(buffer: BufferId)
 
   @Slot
-  fun renameBuffer(buffer: BufferId, newName: String)
+  fun renameBuffer(buffer: BufferId, newName: String?)
 
   @Slot
   fun requestMarkBufferAsRead(buffer: BufferId) {

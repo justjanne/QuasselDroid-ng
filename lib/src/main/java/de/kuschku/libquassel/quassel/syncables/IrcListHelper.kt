@@ -35,7 +35,7 @@ class IrcListHelper constructor(
 
     data class Finished(val netId: NetworkId) : Event()
 
-    data class Error(val error: String) : Event()
+    data class Error(val error: String?) : Event()
   }
 
   private val subject = ReusableUnicastSubject.create<Event>()
@@ -50,7 +50,7 @@ class IrcListHelper constructor(
     subject.onNext(Event.Finished(netId))
   }
 
-  override fun reportError(error: String) {
+  override fun reportError(error: String?) {
     subject.onNext(Event.Error(error))
   }
 }

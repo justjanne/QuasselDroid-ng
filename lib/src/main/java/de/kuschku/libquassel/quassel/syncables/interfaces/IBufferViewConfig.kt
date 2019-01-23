@@ -69,7 +69,7 @@ interface IBufferViewConfig : ISyncableObject {
   }
 
   @Slot
-  fun requestSetBufferViewName(bufferViewName: String) {
+  fun requestSetBufferViewName(bufferViewName: String?) {
     REQUEST("requestSetBufferViewName", ARG(bufferViewName, Type.QString))
   }
 
@@ -84,7 +84,7 @@ interface IBufferViewConfig : ISyncableObject {
   }
 
   @Slot
-  fun setBufferViewName(bufferViewName: String) {
+  fun setBufferViewName(bufferViewName: String?) {
     SYNC("setBufferViewName", ARG(bufferViewName, Type.QString))
   }
 

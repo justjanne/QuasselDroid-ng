@@ -29,7 +29,7 @@ import java.nio.ByteBuffer
 @Syncable(name = "Transfer")
 interface ITransfer : ISyncableObject {
   @Slot
-  fun accept(savePath: String) {
+  fun accept(savePath: String?) {
     SYNC("accept", ARG(savePath, Type.QString))
   }
 
@@ -54,7 +54,7 @@ interface ITransfer : ISyncableObject {
   }
 
   @Slot
-  fun setError(errorString: String) {
+  fun setError(errorString: String?) {
     SYNC("setError", ARG(errorString, Type.QString))
   }
 

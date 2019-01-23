@@ -125,43 +125,43 @@ class IrcUser(
   fun userModes() = _userModes
   fun channels() = _channels.map(IrcChannel::name)
 
-  override fun addUserModes(modes: String) {
-    (_userModes.toSet() + modes.toSet()).joinToString()
+  override fun addUserModes(modes: String?) {
+    (_userModes.toSet() + modes?.toSet().orEmpty()).joinToString()
   }
 
-  override fun removeUserModes(modes: String) {
-    (_userModes.toSet() - modes.toSet()).joinToString()
+  override fun removeUserModes(modes: String?) {
+    (_userModes.toSet() - modes?.toSet().orEmpty()).joinToString()
   }
 
-  override fun setUser(user: String) {
-    if (_user != user) {
-      _user = user
+  override fun setUser(user: String?) {
+    if (_user != user ?: "") {
+      _user = user ?: ""
     }
   }
 
-  override fun setHost(host: String) {
-    if (_host != host) {
-      _host = host
+  override fun setHost(host: String?) {
+    if (_host != host ?: "") {
+      _host = host ?: ""
     }
   }
 
-  override fun setNick(nick: String) {
-    if (nick.isNotEmpty() && _nick != nick) {
+  override fun setNick(nick: String?) {
+    if (!nick.isNullOrEmpty() && _nick != nick) {
       network().ircUserNickChanged(_nick, nick)
       _nick = nick
       updateObjectName()
     }
   }
 
-  override fun setRealName(realName: String) {
-    if (_realName != realName) {
-      _realName = realName
+  override fun setRealName(realName: String?) {
+    if (_realName != realName ?: "") {
+      _realName = realName ?: ""
     }
   }
 
-  override fun setAccount(account: String) {
-    if (_account != account) {
-      _account = account
+  override fun setAccount(account: String?) {
+    if (_account != account ?: "") {
+      _account = account ?: ""
     }
   }
 
@@ -171,9 +171,9 @@ class IrcUser(
     }
   }
 
-  override fun setAwayMessage(awayMessage: String) {
-    if (_awayMessage != awayMessage) {
-      _awayMessage = awayMessage
+  override fun setAwayMessage(awayMessage: String?) {
+    if (_awayMessage != awayMessage ?: "") {
+      _awayMessage = awayMessage ?: ""
     }
   }
 
@@ -190,9 +190,9 @@ class IrcUser(
     }
   }
 
-  override fun setIrcOperator(ircOperator: String) {
-    if (_ircOperator != ircOperator) {
-      _ircOperator = ircOperator
+  override fun setIrcOperator(ircOperator: String?) {
+    if (_ircOperator != ircOperator ?: "") {
+      _ircOperator = ircOperator ?: ""
     }
   }
 
@@ -207,15 +207,15 @@ class IrcUser(
     _lastAwayMessageTime = Instant.from(lastAwayMessageTime)
   }
 
-  override fun setWhoisServiceReply(whoisServiceReply: String) {
-    if (_whoisServiceReply != whoisServiceReply) {
-      _whoisServiceReply = whoisServiceReply
+  override fun setWhoisServiceReply(whoisServiceReply: String?) {
+    if (_whoisServiceReply != whoisServiceReply ?: "") {
+      _whoisServiceReply = whoisServiceReply ?: ""
     }
   }
 
-  override fun setSuserHost(suserHost: String) {
-    if (_suserHost != suserHost) {
-      _suserHost = suserHost
+  override fun setSuserHost(suserHost: String?) {
+    if (_suserHost != suserHost ?: "") {
+      _suserHost = suserHost ?: ""
     }
   }
 
@@ -225,23 +225,23 @@ class IrcUser(
     }
   }
 
-  override fun setServer(server: String) {
-    if (_server != server) {
-      _server = server
+  override fun setServer(server: String?) {
+    if (_server != server ?: "") {
+      _server = server ?: ""
     }
   }
 
-  override fun updateHostmask(mask: String) {
-    if (hostMask() != mask) {
-      val (user, host, _) = HostmaskHelper.split(mask)
+  override fun updateHostmask(mask: String?) {
+    if (hostMask() != mask ?: "") {
+      val (user, host, _) = HostmaskHelper.split(mask ?: "")
       setUser(user)
       setHost(host)
     }
   }
 
-  override fun setUserModes(modes: String) {
-    if (_userModes != modes) {
-      _userModes = modes
+  override fun setUserModes(modes: String?) {
+    if (_userModes != modes ?: "") {
+      _userModes = modes ?: ""
     }
   }
 
@@ -253,8 +253,8 @@ class IrcUser(
     }
   }
 
-  override fun joinChannel(channelname: String) {
-    joinChannel(network().newIrcChannel(channelname))
+  override fun joinChannel(channelname: String?) {
+    joinChannel(network().newIrcChannel(channelname ?: ""))
   }
 
   override fun partChannel(channel: IrcChannel) {
@@ -266,7 +266,7 @@ class IrcUser(
     }
   }
 
-  override fun partChannel(channelname: String) {
+  override fun partChannel(channelname: String?) {
     val channel = network().ircChannel(channelname) ?: throw IllegalArgumentException(
       "Received part for unknown channel : $channelname"
     )

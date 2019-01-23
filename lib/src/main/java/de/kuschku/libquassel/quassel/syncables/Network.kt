@@ -136,7 +136,9 @@ class Network constructor(
   fun nicks() = _ircUsers.values.map(IrcUser::nick)
   fun channels(): Set<String> = _ircChannels.keys
   fun caps(): Set<String> = _caps.keys
+  fun liveCaps() = live_caps.map { caps() }
   fun capsEnabled(): Set<String> = _capsEnabled
+  fun livecapsEnabled() = live_capsEnabled.map { capsEnabled() }
   fun serverList() = _serverList
   fun useRandomServer() = _useRandomServer
   fun perform() = _perform
@@ -186,7 +188,7 @@ class Network constructor(
 
   override fun setNetworkInfo(info: NetworkInfo) {
     // we don't set our ID!
-    if (!info.networkName.isEmpty() && info.networkName != networkName())
+    if (!info.networkName.isNullOrEmpty() && info.networkName != networkName())
       setNetworkName(info.networkName)
     if (info.identity > 0 && info.identity != identity())
       setIdentity(info.identity)
@@ -289,6 +291,7 @@ class Network constructor(
   fun channelModes(): Map<ChannelModeType, Set<Char>>? = _channelModes
 
   fun supports(): Map<String, String?> = _supports
+  fun liveSupports() = live_supports.map { supports() }
   fun supports(param: String) = _supports.contains(param.toUpperCase(Locale.US))
   fun support(param: String) = _supports.getOr(param, "")
   /**
@@ -422,16 +425,16 @@ class Network constructor(
     _autoAwayActive = active
   }
 
-  override fun setNetworkName(networkName: String) {
-    if (_networkName == networkName)
+  override fun setNetworkName(networkName: String?) {
+    if (_networkName == networkName ?: "")
       return
-    _networkName = networkName
+    _networkName = networkName ?: ""
   }
 
   override fun setCurrentServer(currentServer: String?) {
-    if (_currentServer == currentServer)
+    if (_currentServer == currentServer ?: "")
       return
-    _currentServer = currentServer
+    _currentServer = currentServer ?: ""
   }
 
   override fun setConnected(isConnected: Boolean) {
@@ -505,16 +508,16 @@ class Network constructor(
     _useAutoIdentify = autoIdentify
   }
 
-  override fun setAutoIdentifyService(service: String) {
-    if (_autoIdentifyService == service)
+  override fun setAutoIdentifyService(service: String?) {
+    if (_autoIdentifyService == service ?: "")
       return
-    _autoIdentifyService = service
+    _autoIdentifyService = service ?: ""
   }
 
-  override fun setAutoIdentifyPassword(password: String) {
-    if (_autoIdentifyPassword == password)
+  override fun setAutoIdentifyPassword(password: String?) {
+    if (_autoIdentifyPassword == password ?: "")
       return
-    _autoIdentifyPassword = password
+    _autoIdentifyPassword = password ?: ""
   }
 
   override fun setUseSasl(sasl: Boolean) {
@@ -524,15 +527,15 @@ class Network constructor(
   }
 
   override fun setSaslAccount(account: String?) {
-    if (_saslAccount == account)
+    if (_saslAccount == account ?: "")
       return
-    _saslAccount = account
+    _saslAccount = account ?: ""
   }
 
   override fun setSaslPassword(password: String?) {
-    if (_saslPassword == password)
+    if (_saslPassword == password ?: "")
       return
-    _saslPassword = password
+    _saslPassword = password ?: ""
   }
 
   override fun setUseAutoReconnect(autoReconnect: Boolean) {
@@ -615,33 +618,33 @@ class Network constructor(
       setCodecForServer(Charsets.ISO_8859_1.decode(codecName).toString())
   }
 
-  override fun addSupport(param: String, value: String?) {
-    _supports[param] = value
+  override fun addSupport(param: String?, value: String?) {
+    _supports[param ?: ""] = value
   }
 
-  override fun removeSupport(param: String) {
-    if (!_supports.contains(param))
+  override fun removeSupport(param: String?) {
+    if (!_supports.contains(param ?: ""))
       return
-    _supports.remove(param)
+    _supports.remove(param ?: "")
   }
 
   override fun addCap(capability: String, value: String?) {
     _caps[capability.toLowerCase(Locale.US)] = value
   }
 
-  override fun acknowledgeCap(capability: String) {
-    val lowerCase = capability.toLowerCase(Locale.US)
-    if (!_capsEnabled.contains(lowerCase))
+  override fun acknowledgeCap(capability: String?) {
+    val lowerCase = capability?.toLowerCase(Locale.US)
+    if (!_capsEnabled.contains(lowerCase ?: ""))
       return
-    _capsEnabled.add(lowerCase)
+    _capsEnabled.add(lowerCase ?: "")
   }
 
-  override fun removeCap(capability: String) {
-    val lowerCase = capability.toLowerCase(Locale.US)
-    if (!_caps.contains(lowerCase))
+  override fun removeCap(capability: String?) {
+    val lowerCase = capability?.toLowerCase(Locale.US)
+    if (!_caps.contains(lowerCase ?: ""))
       return
-    _caps.remove(lowerCase)
-    _capsEnabled.remove(lowerCase)
+    _caps.remove(lowerCase ?: "")
+    _capsEnabled.remove(lowerCase ?: "")
   }
 
   override fun clearCaps() {
@@ -651,12 +654,12 @@ class Network constructor(
     _capsEnabled.clear()
   }
 
-  override fun addIrcUser(hostmask: String) {
-    newIrcUser(hostmask)
+  override fun addIrcUser(hostmask: String?) {
+    newIrcUser(hostmask ?: "")
   }
 
-  override fun addIrcChannel(channel: String) {
-    newIrcChannel(channel)
+  override fun addIrcChannel(channel: String?) {
+    newIrcChannel(channel ?: "")
   }
 
   override fun initSupports(): QVariantMap = _supports.entries.map { (key, value) ->
@@ -817,14 +820,14 @@ class Network constructor(
     }
   }
 
-  override fun ircUserNickChanged(old: String, new: String) {
-    val value = _ircUsers.remove(caseMapper.toLowerCase(old))
+  override fun ircUserNickChanged(old: String?, new: String?) {
+    val value = _ircUsers.remove(caseMapper.toLowerCase(old ?: ""))
     if (value != null) {
-      _ircUsers[caseMapper.toLowerCase(new)] = value
+      _ircUsers[caseMapper.toLowerCase(new ?: "")] = value
     }
   }
 
-  override fun emitConnectionError(error: String) {
+  override fun emitConnectionError(error: String?) {
   }
 
   fun removeChansAndUsers() {
@@ -862,12 +865,22 @@ class Network constructor(
     }
   private var _myNick: String? = null
   private var _latency: Int = 0
+    set (value) {
+      field = value
+      live_latency.onNext(value)
+    }
+  private val live_latency = BehaviorSubject.createDefault(0)
   private var _networkName: String = "<not initialized>"
     set(value) {
       field = value
       live_networkInfo.onNext(Unit)
     }
-  private var _currentServer: String? = null
+  private var _currentServer: String = ""
+    set (value) {
+      field = value
+      live_currentServer.onNext(value)
+    }
+  private val live_currentServer = BehaviorSubject.createDefault("")
   private var _connected: Boolean = false
   private var _connectionState: ConnectionState = ConnectionState.Disconnected
   private val live_connectionState = BehaviorSubject.createDefault(ConnectionState.Disconnected)
@@ -882,6 +895,11 @@ class Network constructor(
   private val live_ircChannels = BehaviorSubject.createDefault(emptyMap<String, IrcChannel>())
   // stores results from RPL_ISUPPORT
   private var _supports: MutableMap<String, String?> = mutableMapOf()
+    set (value) {
+      field = value
+      live_caps.onNext(Unit)
+    }
+  private val live_supports = BehaviorSubject.createDefault(Unit)
   /**
    * Capabilities supported by the IRC server
    * By synchronizing the supported capabilities, the client could suggest certain behaviors, e.g.
@@ -889,11 +907,21 @@ class Network constructor(
    * SASL EXTERNAL isn't available.
    */
   private var _caps: MutableMap<String, String?> = mutableMapOf()
+    set (value) {
+      field = value
+      live_caps.onNext(Unit)
+    }
+  private val live_caps = BehaviorSubject.createDefault(Unit)
   /**
    * Enabled capabilities that received 'CAP ACK'
    * _capsEnabled uses the same values from the <name>=<value> pairs stored in _caps
    */
   private var _capsEnabled: MutableSet<String> = mutableSetOf()
+    set (value) {
+      field = value
+      live_capsEnabled.onNext(Unit)
+    }
+  private val live_capsEnabled = BehaviorSubject.createDefault(Unit)
   private var _serverList: List<Server> = listOf()
     set(value) {
       field = value
@@ -929,12 +957,12 @@ class Network constructor(
       field = value
       live_networkInfo.onNext(Unit)
     }
-  private var _saslAccount: String? = null
+  private var _saslAccount: String = ""
     set(value) {
       field = value
       live_networkInfo.onNext(Unit)
     }
-  private var _saslPassword: String? = null
+  private var _saslPassword: String = ""
     set(value) {
       field = value
       live_networkInfo.onNext(Unit)

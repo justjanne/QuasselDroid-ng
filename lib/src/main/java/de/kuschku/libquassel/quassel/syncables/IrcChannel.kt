@@ -221,16 +221,16 @@ class IrcChannel(
     _codecForDecoding = codec
   }
 
-  override fun setTopic(topic: String) {
-    if (_topic == topic)
+  override fun setTopic(topic: String?) {
+    if (_topic == topic ?: "")
       return
-    _topic = topic
+    _topic = topic ?: ""
   }
 
-  override fun setPassword(password: String) {
-    if (_password == password)
+  override fun setPassword(password: String?) {
+    if (_password == password ?: "")
       return
-    _password = password
+    _password = password ?: ""
   }
 
   override fun setEncrypted(encrypted: Boolean) {
@@ -285,7 +285,7 @@ class IrcChannel(
     updateUsers()
   }
 
-  override fun part(nick: String) {
+  override fun part(nick: String?) {
     part(network().ircUser(nick))
   }
 
@@ -296,8 +296,8 @@ class IrcChannel(
     updateUsers()
   }
 
-  override fun setUserModes(nick: String, modes: String) {
-    setUserModes(network().ircUser(nick), modes)
+  override fun setUserModes(nick: String?, modes: String?) {
+    setUserModes(network().ircUser(nick), modes ?: "")
   }
 
   fun addUserMode(ircuser: IrcUser, mode: Char) {
@@ -313,8 +313,8 @@ class IrcChannel(
     updateUsers()
   }
 
-  override fun addUserMode(nick: String, mode: String) {
-    addUserMode(network().ircUser(nick), mode)
+  override fun addUserMode(nick: String?, mode: String?) {
+    addUserMode(network().ircUser(nick), mode ?: "")
   }
 
   override fun removeUserMode(ircuser: IrcUser?, mode: String) {
@@ -327,8 +327,8 @@ class IrcChannel(
     updateUsers()
   }
 
-  override fun removeUserMode(nick: String, mode: String) {
-    removeUserMode(network().ircUser(nick), mode)
+  override fun removeUserMode(nick: String?, mode: String?) {
+    removeUserMode(network().ircUser(nick), mode ?: "")
   }
 
   override fun addChannelMode(mode: Char, value: String?) {

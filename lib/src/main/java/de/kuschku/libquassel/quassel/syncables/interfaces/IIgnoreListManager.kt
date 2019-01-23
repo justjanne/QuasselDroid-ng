@@ -31,15 +31,15 @@ interface IIgnoreListManager : ISyncableObject {
   fun initSetIgnoreList(ignoreList: QVariantMap)
 
   @Slot
-  fun addIgnoreListItem(type: Int, ignoreRule: String, isRegEx: Boolean, strictness: Int,
-                        scope: Int, scopeRule: String, isActive: Boolean)
+  fun addIgnoreListItem(type: Int, ignoreRule: String?, isRegEx: Boolean, strictness: Int,
+                        scope: Int, scopeRule: String?, isActive: Boolean)
 
   @Slot
-  fun removeIgnoreListItem(ignoreRule: String)
+  fun removeIgnoreListItem(ignoreRule: String?)
 
   @Slot
-  fun requestAddIgnoreListItem(type: Int, ignoreRule: String, isRegEx: Boolean, strictness: Int,
-                               scope: Int, scopeRule: String, isActive: Boolean) {
+  fun requestAddIgnoreListItem(type: Int, ignoreRule: String?, isRegEx: Boolean, strictness: Int,
+                               scope: Int, scopeRule: String?, isActive: Boolean) {
     REQUEST(
       "requestAddIgnoreListItem", ARG(type, Type.Int), ARG(ignoreRule, Type.QString),
       ARG(isRegEx, Type.Bool),
@@ -49,17 +49,17 @@ interface IIgnoreListManager : ISyncableObject {
   }
 
   @Slot
-  fun requestRemoveIgnoreListItem(ignoreRule: String) {
+  fun requestRemoveIgnoreListItem(ignoreRule: String?) {
     REQUEST("requestRemoveIgnoreListItem", ARG(ignoreRule, Type.QString))
   }
 
   @Slot
-  fun requestToggleIgnoreRule(ignoreRule: String) {
+  fun requestToggleIgnoreRule(ignoreRule: String?) {
     REQUEST("requestToggleIgnoreRule", ARG(ignoreRule, Type.QString))
   }
 
   @Slot
-  fun toggleIgnoreRule(ignoreRule: String)
+  fun toggleIgnoreRule(ignoreRule: String?)
 
   @Slot
   override fun update(properties: QVariantMap) {
