@@ -18,9 +18,9 @@
   -->
 
 <resources>
-  <string name="contributor_description_freqmod">Iniziali tentativi di deserializzazione qdatastream</string>
-  <string name="contributor_description_sandsmark">Implementazione del protocollo precedente, (de)serializzazioni, (de)moralizzatore progetto</string>
-  <string name="contributor_description_magnuf">UI precedente</string>
-  <string name="contributor_description_kenji">UI precedente</string>
-  <string name="contributor_description_justjanne">Riscrittura, UI, Annotazioni Processori, Backend</string>
+  <string name="contributor_description_freqmod">Tentativi di deserializzazione iniziale del QDataStream</string>
+  <string name="contributor_description_sandsmark">Implementazione del protocollo precedente, (de)serializzazioni, (de)moralizzatore del progetto</string>
+  <string name="contributor_description_magnuf">Interfaccia precedente</string>
+  <string name="contributor_description_kenji">Interfaccia precedente</string>
+  <string name="contributor_description_justjanne">Riscrittura, interfaccia, processori di annotazione, backend</string>
 </resources>

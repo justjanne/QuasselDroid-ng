@@ -19,8 +19,8 @@
 
 <resources>
   <!-- Account Selection -->
-  <string name="slide_account_select_title">Scegli Account</string>
-  <string name="slide_account_select_description">Per favore scegli un account dalla lista oppure aggiungine uno</string>
+  <string name="slide_account_select_title">Scegli account</string>
+  <string name="slide_account_select_description">Seleziona un account dall’elenco o aggiungine uno</string>
   <string name="label_user_on_host">%1$s su %2$s:%3$d</string>
 
   <!-- Account Setup -->
@@ -31,14 +31,14 @@
 
   <string name="label_connection_host">Host</string>
   <string name="label_connection_port">Porta</string>
-  <string name="label_connection_ssl">Richiedi SSL</string>
+  <string name="label_connection_ssl">Utilizza SSL</string>
 
   <string name="hint_invalid_host">Non è un nome host valido</string>
   <string name="hint_invalid_port">Non è una porta valida</string>
 
   <!-- Account User -->
-  <string name="slide_account_user_title">Il tuo Account</string>
-  <string name="slide_account_user_description">Ora, inserisci il nome utente e la password per il tuo account sul core. Se hai appena creato il core, configureremo questo account per te</string>
+  <string name="slide_account_user_title">Il tuo account</string>
+  <string name="slide_account_user_description">Adesso, inserisci il nome utente e la password per il tuo account sul core. Se hai appena creato il core, andremo ad eseguire la configurazione per te</string>
 
   <string name="label_account_user">Nome utente</string>
   <string name="label_account_pass">Password</string>
@@ -46,7 +46,7 @@
   <string name="hint_invalid_user">Il nome utente non può essere vuoto</string>
 
   <!-- Account Name -->
-  <string name="slide_account_name_title">Personalizza Account</string>
+  <string name="slide_account_name_title">Personalizza account</string>
   <string name="slide_account_name_description">Dai un nome a questo account</string>
 
   <string name="label_account_name">Nome account</string>
@@ -55,47 +55,47 @@
 
   <!-- Core Setup -->
 
-  <string name="setup_core_title">Impostazioni Core</string>
+  <string name="setup_core_title">Configura core</string>
 
   <!-- Core Authenticator Select -->
-  <string name="slide_core_authenticator_select_title">Scegli backend di autenticazione</string>
-  <string name="slide_core_authenticator_select_description">Per favore scegli un backend di autenticazione per il core Quassel da utilizzare per l\'autenticazione degli utenti.</string>
+  <string name="slide_core_authenticator_select_title">Scegli protocollo di autenticazione</string>
+  <string name="slide_core_authenticator_select_description">Per favore scegli quale protocollo di autenticazione deve utilizzare il core Quassel per l’autenticazione degli utenti.</string>
 
   <!-- Core Backend Select -->
-  <string name="slide_core_backend_select_title">Scegli backend per archiviazione</string>
-  <string name="slide_core_backend_select_description">Per favore seleziona un backend per il database per l\'archiviazione del core Quassel per conservare il backlog ed altri dati.</string>
+  <string name="slide_core_backend_select_title">Scegli tipologia di gestione dati</string>
+  <string name="slide_core_backend_select_description">Per favore scegli quale banca dati deve utilizzare il core Quassel per archiviare i messaggi ricevuti e gli altri dati.</string>
 
-  <string name="label_backend">Backend</string>
+  <string name="label_backend">Tipo</string>
 
   <!-- Core Backend Config -->
-  <string name="slide_core_backend_setup_title">Configura Backend Archiviazione</string>
-  <string name="slide_core_backend_setup_description">Per favore configura il backend del database selezionato.</string>
+  <string name="slide_core_backend_setup_title">Configura tipologia di gestione dati</string>
+  <string name="slide_core_backend_setup_description">Per favore configura la banca dati scelta per la gestione.</string>
 
-  <string name="setup_core_backend_no_options">Questo backend non ha opzioni da configurare, hai finito qui!</string>
+  <string name="setup_core_backend_no_options">Non ci sono altre opzioni da configurare, hai finito qui!</string>
 
   <!-- User Setup -->
 
-  <string name="setup_user_title">Impostazioni Utente</string>
+  <string name="setup_user_title">Configura utente</string>
 
   <!-- User Identity -->
-  <string name="slide_user_identity_title">Impostazioni Identità</string>
+  <string name="slide_user_identity_title">Configura identità</string>
   <string name="slide_user_identity_description">Per favore scegli un nickname</string>
 
   <string name="hint_invalid_nick">Non è un nick valido</string>
 
   <!-- User Network -->
-  <string name="slide_user_network_title">Impostazioni Network</string>
-  <string name="slide_user_network_description">Scegli un network al quale connetterti.</string>
+  <string name="slide_user_network_title">Configura rete</string>
+  <string name="slide_user_network_description">Scegli una rete alla quale connetterti.</string>
 
-  <string name="label_network_custom">Network Personalizzato…</string>
+  <string name="label_network_custom">Altra rete…</string>
 
   <!-- User Channels -->
-  <string name="slide_user_channels_title">Impostazioni Canali</string>
+  <string name="slide_user_channels_title">Configura canali</string>
   <string name="slide_user_channels_description">Scegli in quali canali entrare.</string>
 
   <string name="label_channels">Canali</string>
 
   <!-- Network Setup -->
 
-  <string name="setup_network_title">Impostazioni Network</string>
+  <string name="setup_network_title">Configura rete</string>
 </resources>

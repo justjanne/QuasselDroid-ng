@@ -19,9 +19,9 @@
 
 <resources>
   <string name="label_status_disconnected">Disconnesso</string>
-  <string name="label_status_connecting">Connessione</string>
-  <string name="label_status_handshake">Handshake</string>
+  <string name="label_status_connecting">Connessione in corso</string>
+  <string name="label_status_handshake">Negoziazione</string>
   <string name="label_status_init">Inizializzazione</string>
   <string name="label_status_connected">Connesso</string>
-  <string name="label_status_closed">Connessione Persa</string>
+  <string name="label_status_closed">Connessione caduta</string>
 </resources>

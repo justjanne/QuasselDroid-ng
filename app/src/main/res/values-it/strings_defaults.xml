@@ -20,12 +20,12 @@
 <resources>
   <string name="default_bufferviewconfig_name">Tutte le chat</string>
 
-  <string name="default_identity_identity_name">Identità Predefinita</string>
+  <string name="default_identity_identity_name">Identità predefinita</string>
   <string name="default_identity_realname">Utente Quassel IRC</string>
   <string name="default_identity_awayreason">Sono andato a pescare.</string>
-  <string name="default_identity_autoawayreason">Non sono qui. No, davvero. non sono qui!</string>
+  <string name="default_identity_autoawayreason">Non sono qui. No, davvero. Non sono qui!</string>
   <string name="default_identity_detachawayreason">Tutti i client Quassel sono spariti dalla faccia della terra…</string>
-  <string name="default_identity_kickreason">L\'asilo è altrove!</string>
-  <string name="default_identity_partreason">https://quassel-irc.org - Chatta comodamente. In qualunque posto.</string>
-  <string name="default_identity_quitreason">https://quassel-irc.org - Chatta comodamente. In qualunque posto.</string>
+  <string name="default_identity_kickreason">L’asilo è altrove!</string>
+  <string name="default_identity_partreason">https://quassel-irc.org - Chat comoda. Ovunque.</string>
+  <string name="default_identity_quitreason">https://quassel-irc.org - Chat comoda. Ovunque.</string>
 </resources>

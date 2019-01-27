@@ -18,12 +18,12 @@
   -->
 
 <resources>
-  <string name="message_type_join">Entra</string>
-  <string name="message_type_part">Esci</string>
-  <string name="message_type_quit">Quit</string>
+  <string name="message_type_join">Entrato</string>
+  <string name="message_type_part">Uscito</string>
+  <string name="message_type_quit">Disconnesso</string>
   <string name="message_type_nick">Nick</string>
   <string name="message_type_mode">Modo</string>
-  <string name="message_type_topic">Topic</string>
+  <string name="message_type_topic">Argomento</string>
   <string name="message_format_copy">[%1$s] %2$s</string>
   <string name="message_format_copy_complex">[%1$s] &lt;%2$s&gt; %3$s</string>
 
@@ -35,18 +35,18 @@
   <string name="message_format_join">%1$s%2$s è entrato in %3$s</string>
   <string name="message_format_part_1">%1$s%2$s è uscito</string>
   <string name="message_format_part_2">%1$s%2$s è uscito (%3$s)</string>
-  <string name="message_format_quit_1">%1$s%2$s quit</string>
-  <string name="message_format_quit_2">%1$s%2$s quit (%3$s)</string>
+  <string name="message_format_quit_1">%1$s%2$s si è disconnesso</string>
+  <string name="message_format_quit_2">%1$s%2$s si è disconnesso (%3$s)</string>
   <string name="message_format_kick_1">%1$s è stato espulso da %2$s%3$s</string>
   <string name="message_format_kick_2">%1$s è stato espulso da %2$s%3$s (%4$s)</string>
-  <string name="message_format_kill_1">%1$s ha ricevuto un kill da %2$s%3$s</string>
-  <string name="message_format_kill_2">%1$s ha ricevuto un kill da %2$s%3$s (%4$s)</string>
+  <string name="message_format_kill_1">%1$s è stato disconnesso forzatamente da %2$s%3$s</string>
+  <string name="message_format_kill_2">%1$s è stato disconnesso forzatamente da %2$s%3$s (%4$s)</string>
   <plurals name="message_netsplit_join">
     <item quantity="one">Netsplit tra %1$s e %2$s terminato: %3$d utente entrato: %4$s</item>
     <item quantity="other">Netsplit tra %1$s e %2$s terminato: %3$d utenti entrati: %4$s</item>
   </plurals>
   <plurals name="message_netsplit_quit">
     <item quantity="one">Netsplit tra %1$s e%2$s: %3$d utente quit: %4$s</item>
-    <item quantity="other">Netsplit tra %1$s e%2$s: %3$d utenti quit: %4$s</item>
+    <item quantity="other">Netsplit tra %1$s e%2$s: %3$d utenti disconnessi: %4$s</item>
   </plurals>
 </resources>
