@@ -69,6 +69,8 @@ import de.kuschku.quasseldroid.ui.coresettings.networkserver.NetworkServerActivi
 import de.kuschku.quasseldroid.ui.coresettings.networkserver.NetworkServerFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.passwordchange.PasswordChangeActivity
 import de.kuschku.quasseldroid.ui.coresettings.passwordchange.PasswordChangeFragmentProvider
+import de.kuschku.quasseldroid.ui.info.certificate.CertificateInfoActivity
+import de.kuschku.quasseldroid.ui.info.certificate.CertificateInfoFragmentProvider
 import de.kuschku.quasseldroid.ui.info.channel.ChannelInfoActivity
 import de.kuschku.quasseldroid.ui.info.channel.ChannelInfoFragmentProvider
 import de.kuschku.quasseldroid.ui.info.channellist.ChannelListActivity
@@ -116,6 +118,10 @@ abstract class ActivityModule {
   @ActivityScope
   @ContributesAndroidInjector(modules = [ChannelListFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
   abstract fun bindChannelListActivity(): ChannelListActivity
+
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [CertificateInfoFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
+  abstract fun bindCertificateInfoActivity(): CertificateInfoActivity
 
   // Client Settings
 

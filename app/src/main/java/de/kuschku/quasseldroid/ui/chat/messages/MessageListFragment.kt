@@ -236,7 +236,7 @@ class MessageListFragment : ServiceBoundFragment() {
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val view = inflater.inflate(R.layout.fragment_messages, container, false)
+    val view = inflater.inflate(R.layout.chat_messages, container, false)
     ButterKnife.bind(this, view)
 
     linearLayoutManager = LinearLayoutManager(context)

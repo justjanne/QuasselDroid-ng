@@ -60,6 +60,7 @@
   <string name="label_ignore">Ignorieren</string>
   <string name="label_ignore_long">Add/remove user to/from ignore list</string>
   <string name="label_info">Info</string>
+  <string name="label_info_certificate">Zertifikat</string>
   <string name="label_info_channel">Kanalinformationen</string>
   <string name="label_info_channellist">Kanalliste</string>
   <string name="label_info_core">Core-Details</string>

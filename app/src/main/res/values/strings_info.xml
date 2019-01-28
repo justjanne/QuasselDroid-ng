@@ -33,6 +33,8 @@
   <string name="label_core_online_since">Online since %1$s</string>
   <string name="label_core_connected_since">Connected since %1$s</string>
   <string name="label_core_connection_verified_by">Connection verified by %1$s</string>
+  <string name="label_core_connection_protocol">The connection uses %1$s</string>
+  <string name="label_core_connection_ciphersuite">The connection is encrypted and authenticated using %1$s and uses %2$s as the key exchange mechanism</string>
   <string name="label_core_connection_verified_by_unknown">Unknown</string>
   <string name="label_core_connection_insecure">Insecure Connection</string>
 

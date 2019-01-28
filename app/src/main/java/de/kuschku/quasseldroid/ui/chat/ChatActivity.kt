@@ -453,7 +453,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                           Html.fromHtml(
                             getString(
                               R.string.label_error_certificate_invalid,
-                              leafCertificate.fingerprint,
+                              leafCertificate.sha1Fingerprint,
                               dateTimeFormatter.format(Instant.ofEpochMilli(leafCertificate.notBefore.time)
                                                          .atZone(ZoneId.systemDefault())),
                               dateTimeFormatter.format(Instant.ofEpochMilli(leafCertificate.notAfter.time)
@@ -470,7 +470,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                           runInBackground {
                             database.validityWhitelist().save(
                               QuasselDatabase.SslValidityWhitelistEntry(
-                                fingerprint = leafCertificate.fingerprint,
+                                fingerprint = leafCertificate.sha1Fingerprint,
                                 ignoreDate = true
                               )
                             )
@@ -494,7 +494,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                           Html.fromHtml(
                             getString(
                               R.string.label_error_certificate_untrusted,
-                              leafCertificate.fingerprint
+                              leafCertificate.sha1Fingerprint
                             )
                           )
                         )
@@ -507,14 +507,14 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                           runInBackground {
                             database.validityWhitelist().save(
                               QuasselDatabase.SslValidityWhitelistEntry(
-                                fingerprint = leafCertificate.fingerprint,
+                                fingerprint = leafCertificate.sha1Fingerprint,
                                 ignoreDate = !leafCertificate.isValid
                               )
                             )
                             accountDatabase.accounts().findById(accountId)?.let {
                               database.hostnameWhitelist().save(
                                 QuasselDatabase.SslHostnameWhitelistEntry(
-                                  fingerprint = leafCertificate.fingerprint,
+                                  fingerprint = leafCertificate.sha1Fingerprint,
                                   hostname = it.host
                                 )
                               )
@@ -539,7 +539,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                           Html.fromHtml(
                             getString(
                               R.string.label_error_certificate_no_match,
-                              leafCertificate.fingerprint,
+                              leafCertificate.sha1Fingerprint,
                               it.address.host
                             )
                           )
@@ -553,7 +553,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                           runInBackground {
                             database.hostnameWhitelist().save(
                               QuasselDatabase.SslHostnameWhitelistEntry(
-                                fingerprint = leafCertificate.fingerprint,
+                                fingerprint = leafCertificate.sha1Fingerprint,
                                 hostname = it.address.host
                               )
                             )

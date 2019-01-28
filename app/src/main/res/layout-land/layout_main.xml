@@ -42,7 +42,7 @@
         android:name="de.kuschku.quasseldroid.ui.chat.messages.MessageListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_messages" />
+        tools:layout="@layout/chat_messages" />
 
       <de.kuschku.quasseldroid.util.ui.WarningBarView
         android:id="@+id/connection_status"
@@ -88,6 +88,6 @@
     app:behavior_hideable="false"
     app:behavior_peekHeight="?actionBarSize"
     app:layout_behavior="@string/drag_intercept_bottom_sheet_behavior"
-    tools:layout="@layout/fragment_chatline" />
+    tools:layout="@layout/chat_chatline" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

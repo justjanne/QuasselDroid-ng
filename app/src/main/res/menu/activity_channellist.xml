@@ -25,30 +25,39 @@
     android:title="@string/label_sort"
     app:showAsAction="always">
     <menu>
-      <item android:id="@+id/channel_name"
+      <item
+        android:id="@+id/channel_name"
         android:title="@string/label_channel_name">
         <menu>
-          <item android:id="@+id/channel_name_asc"
+          <item
+            android:id="@+id/channel_name_asc"
             android:title="@string/label_ascending" />
-          <item android:id="@+id/channel_name_desc"
+          <item
+            android:id="@+id/channel_name_desc"
             android:title="@string/label_descending" />
         </menu>
       </item>
-      <item android:id="@+id/user_count"
+      <item
+        android:id="@+id/user_count"
         android:title="@string/label_user_count">
         <menu>
-          <item android:id="@+id/user_count_asc"
+          <item
+            android:id="@+id/user_count_asc"
             android:title="@string/label_ascending" />
-          <item android:id="@+id/user_count_desc"
+          <item
+            android:id="@+id/user_count_desc"
             android:title="@string/label_descending" />
         </menu>
       </item>
-      <item android:id="@+id/topic"
+      <item
+        android:id="@+id/topic"
         android:title="@string/label_topic">
         <menu>
-          <item android:id="@+id/topic_asc"
+          <item
+            android:id="@+id/topic_asc"
             android:title="@string/label_ascending" />
-          <item android:id="@+id/topic_desc"
+          <item
+            android:id="@+id/topic_desc"
             android:title="@string/label_descending" />
         </menu>
       </item>

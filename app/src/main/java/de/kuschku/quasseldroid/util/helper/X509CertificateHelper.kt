@@ -34,12 +34,12 @@ val X509Certificate.isValid: Boolean
     false
   }
 
-val X509Certificate.fingerprint: String
+val X509Certificate.sha1Fingerprint: String
   get() = DigestUtils.sha1(encoded).joinToString(":") {
     (it.toInt() and 0xff).toString(16)
   }
 
-val javax.security.cert.X509Certificate.fingerprint: String
-  get() = DigestUtils.sha1(encoded).joinToString(":") {
+val X509Certificate.sha256Fingerprint: String
+  get() = DigestUtils.sha256(encoded).joinToString(":") {
     (it.toInt() and 0xff).toString(16)
   }

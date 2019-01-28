@@ -17,19 +17,18 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ssl.custom
+package de.kuschku.quasseldroid.ui.info.certificate
 
-import de.kuschku.libquassel.connection.SocketAddress
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
-import de.kuschku.quasseldroid.util.helper.sha1Fingerprint
-import java.security.cert.X509Certificate
+import androidx.fragment.app.FragmentActivity
+import dagger.Binds
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
-class QuasselHostnameManager(
-  private val hostnameWhitelist: QuasselDatabase.SslHostnameWhitelistDao
-) {
-  fun isValid(address: SocketAddress, chain: Array<out X509Certificate>): Boolean {
-    val leafCertificate = chain.firstOrNull() ?: return false
-    val whitelistEntry = hostnameWhitelist.find(leafCertificate.sha1Fingerprint, address.host)
-    return whitelistEntry != null
-  }
+@Module
+abstract class CertificateInfoFragmentProvider {
+  @Binds
+  abstract fun bindFragmentActivity(activity: CertificateInfoActivity): FragmentActivity
+
+  @ContributesAndroidInjector
+  abstract fun bindCertificateInfoFragment(): CertificateInfoFragment
 }

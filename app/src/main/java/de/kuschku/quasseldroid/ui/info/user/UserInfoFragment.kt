@@ -125,7 +125,7 @@ class UserInfoFragment : ServiceBoundFragment() {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-    val view = inflater.inflate(R.layout.fragment_info_user, container, false)
+    val view = inflater.inflate(R.layout.info_user, container, false)
     ButterKnife.bind(this, view)
 
     val openBuffer = arguments?.getBoolean("openBuffer")

@@ -73,7 +73,7 @@ class NickListFragment : ServiceBoundFragment() {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-    val view = inflater.inflate(R.layout.fragment_nick_list, container, false)
+    val view = inflater.inflate(R.layout.chat_nicklist, container, false)
     ButterKnife.bind(this, view)
 
     val nickListAdapter = NickListAdapter(messageSettings, clickListener)

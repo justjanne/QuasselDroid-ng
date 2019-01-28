@@ -1,6 +1,17 @@
 [main]
 host = https://www.transifex.com
 
+[quasseldroid-1.strings_certificatesxml]
+type = ANDROID
+source_file = app/src/main/res/values/strings_certificates.xml
+source_lang = en
+trans.de = app/src/main/res/values-de/strings_certificates.xml
+trans.fr_CA = app/src/main/res/values-fr-rCA/strings_certificates.xml
+trans.it = app/src/main/res/values-it/strings_certificates.xml
+trans.lt = app/src/main/res/values-lt/strings_certificates.xml
+trans.pt = app/src/main/res/values-pt/strings_certificates.xml
+trans.sr = app/src/main/res/values-sr/strings_certificates.xml
+
 [quasseldroid-1.strings_statusxml]
 type = ANDROID
 source_file = app/src/main/res/values/strings_status.xml

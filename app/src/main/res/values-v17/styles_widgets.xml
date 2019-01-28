@@ -89,6 +89,35 @@
     <item name="android:textColor">?colorTextSecondary</item>
   </style>
 
+  <style name="Widget.CoreSettings.SubHeader" parent="Widget.RtlConformTextView">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:paddingTop">10dp</item>
+    <item name="android:paddingBottom">10dp</item>
+    <item name="android:paddingRight">16dp</item>
+    <item name="android:paddingEnd">16dp</item>
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:textAppearance">?android:textAppearanceMedium</item>
+    <item name="android:textSize">14sp</item>
+    <item name="android:textColor">?colorTextPrimary</item>
+    <item name="android:textStyle">bold</item>
+  </style>
+
+  <style name="Widget.CoreSettings.TextView" parent="Widget.RtlConformTextView">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:paddingTop">10dp</item>
+    <item name="android:paddingBottom">10dp</item>
+    <item name="android:paddingRight">16dp</item>
+    <item name="android:paddingEnd">16dp</item>
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:textAppearance">?android:textAppearanceMedium</item>
+    <item name="android:textSize">14sp</item>
+    <item name="android:textColor">?colorTextSecondary</item>
+  </style>
+
   <style name="Widget.Info.Header" parent="">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>

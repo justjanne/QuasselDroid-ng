@@ -35,7 +35,7 @@
       android:name="de.kuschku.quasseldroid.ui.chat.buffers.BufferViewConfigFragment"
       android:layout_width="320dp"
       android:layout_height="match_parent"
-      tools:layout="@layout/fragment_chat_list" />
+      tools:layout="@layout/chat_chatlist" />
 
     <LinearLayout
       android:layout_width="1dp"
@@ -71,5 +71,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="end"
-    tools:layout="@layout/fragment_nick_list" />
+    tools:layout="@layout/chat_nicklist" />
 </androidx.drawerlayout.widget.DrawerLayout>

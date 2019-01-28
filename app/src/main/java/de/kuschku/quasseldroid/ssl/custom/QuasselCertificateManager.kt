@@ -20,8 +20,8 @@
 package de.kuschku.quasseldroid.ssl.custom
 
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
-import de.kuschku.quasseldroid.util.helper.fingerprint
 import de.kuschku.quasseldroid.util.helper.isValid
+import de.kuschku.quasseldroid.util.helper.sha1Fingerprint
 import java.security.cert.X509Certificate
 
 class QuasselCertificateManager(
@@ -36,7 +36,7 @@ class QuasselCertificateManager(
 
   private fun isServerTrusted(leafCertificate: X509Certificate): Boolean {
     // Verify if a whitelist entry exists
-    return validityWhitelist.find(leafCertificate.fingerprint)?.let {
+    return validityWhitelist.find(leafCertificate.sha1Fingerprint)?.let {
       it.ignoreDate || leafCertificate.isValid
     } ?: false
   }

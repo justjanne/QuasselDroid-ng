@@ -41,7 +41,7 @@
         android:name="de.kuschku.quasseldroid.ui.chat.ToolbarFragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        tools:layout="@layout/fragment_toolbar" />
+        tools:layout="@layout/chat_toolbar" />
 
     </androidx.appcompat.widget.Toolbar>
 

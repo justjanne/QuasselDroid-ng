@@ -17,19 +17,24 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ssl.custom
+package de.kuschku.libquassel.ssl
 
-import de.kuschku.libquassel.connection.SocketAddress
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
-import de.kuschku.quasseldroid.util.helper.sha1Fingerprint
-import java.security.cert.X509Certificate
+import javax.security.auth.x500.X500Principal
 
-class QuasselHostnameManager(
-  private val hostnameWhitelist: QuasselDatabase.SslHostnameWhitelistDao
-) {
-  fun isValid(address: SocketAddress, chain: Array<out X509Certificate>): Boolean {
-    val leafCertificate = chain.firstOrNull() ?: return false
-    val whitelistEntry = hostnameWhitelist.find(leafCertificate.sha1Fingerprint, address.host)
-    return whitelistEntry != null
-  }
-}
+val X500Principal.commonName
+  get() = commonName(name)
+
+fun commonName(distinguishedName: String) =
+  X509Helper.COMMON_NAME.find(distinguishedName)?.groups?.get(1)?.value
+
+val X500Principal.organization
+  get() = organization(name)
+
+fun organization(distinguishedName: String) =
+  X509Helper.ORGANIZATION.find(distinguishedName)?.groups?.get(1)?.value
+
+val X500Principal.organizationalUnit
+  get() = organizationalUnit(name)
+
+fun organizationalUnit(distinguishedName: String) =
+  X509Helper.ORGANIZATIONAL_UNIT.find(distinguishedName)?.groups?.get(1)?.value

@@ -89,7 +89,7 @@ class ToolbarFragment : ServiceBoundFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val view = inflater.inflate(R.layout.fragment_toolbar, container, false)
+    val view = inflater.inflate(R.layout.chat_toolbar, container, false)
     ButterKnife.bind(this, view)
 
     fun colorizeDescription(description: String?) = ircFormatDeserializer.formatString(

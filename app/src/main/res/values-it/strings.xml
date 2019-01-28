@@ -128,7 +128,7 @@
   <string name="label_unknown_sender">&lt;Sconosciuto&gt;</string>
   <string name="label_update_user_password">Aggiorna il nome utente e la password</string>
   <string name="label_use_default">Utilizza i valori predefiniti</string>
-  <string name="label_user_count">Utenti totali</string>
+  <string name="label_user_count">Numero di utenti</string>
   <string name="label_website">Sito web</string>
   <string name="label_whitelist">Ignora</string>
   <string name="label_whitelist_certificates">Certificati</string>
@@ -141,6 +141,11 @@
   <string name="label_whois">Whois</string>
   <string name="label_whois_long">Aggiorna le informazioni dell’utente</string>
   <string name="label_yes">Sì</string>
+
+  <plurals name="label_user_count">
+    <item quantity="one">%1$d utente</item>
+    <item quantity="other">%1$d utenti</item>
+  </plurals>
 
   <string name="label_feature_synchronizedmarkerline">Necessario per sincronizzare l’ultima posizione nei canali</string>
   <string name="label_feature_saslauthentication">Necessario per SASL</string>

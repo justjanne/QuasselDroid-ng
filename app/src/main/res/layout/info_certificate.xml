@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2019 Janne Koschinski
+  Copyright (c) 2019 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <androidx.core.widget.NestedScrollView
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+      <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
+
+        <androidx.appcompat.widget.AppCompatImageView
+          style="@style/Widget.CoreSettings.PrimaryItemIcon"
+          app:srcCompat="@drawable/ic_account" />
+
+        <TextView
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/certificate_subject" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/subject_common_name_wrapper"
+        style="@style/Widget.CoreSettings.PrimaryItemGroup">
+
+        <TextView
+          style="@style/Widget.CoreSettings.SubHeader"
+          android:text="@string/certificate_common_name" />
+
+        <TextView
+          android:id="@+id/subject_common_name"
+          style="@style/Widget.CoreSettings.SelectableTextView"
+          tools:text="*.reddit.com" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/subject_hostnames_wrapper"
+        style="@style/Widget.CoreSettings.PrimaryItemGroup">
+
+        <TextView
+          style="@style/Widget.CoreSettings.SubHeader"
+          android:text="@string/certificate_hostnames" />
+
+        <TextView
+          android:id="@+id/subject_hostnames"
+          style="@style/Widget.CoreSettings.SelectableTextView"
+          tools:text="*.reddit.com, reddit.com, *.redditmedia.com, redditmedia.com, *.redd.it, redd.it, www.redditstatic.com, i.reddituploads.com, *.thumbs.redditmedia.com, www.redditinc.com, redditinc.com" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/subject_organization_wrapper"
+        style="@style/Widget.CoreSettings.PrimaryItemGroup">
+
+        <TextView
+          style="@style/Widget.CoreSettings.SubHeader"
+          android:text="@string/certificate_organization" />
+
+        <TextView
+          android:id="@+id/subject_organization"
+          style="@style/Widget.CoreSettings.SelectableTextView"
+          tools:text="Reddit Inc." />
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/subject_organizational_unit_wrapper"
+        style="@style/Widget.CoreSettings.PrimaryItemGroup">
+
+        <TextView
+          style="@style/Widget.CoreSettings.SubHeader"
+          android:text="@string/certificate_organizational_unit" />
+
+        <TextView
+          android:id="@+id/subject_organizational_unit"
+          style="@style/Widget.CoreSettings.SelectableTextView"
+          tools:text="&lt;Not Part Of Certificate&gt;" />
+      </LinearLayout>
+
+      <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
+
+        <androidx.appcompat.widget.AppCompatImageView
+          style="@style/Widget.CoreSettings.PrimaryItemIcon"
+          app:srcCompat="@drawable/ic_domain" />
+
+        <TextView
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/certificate_issuer" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/issuer_common_name_wrapper"
+        style="@style/Widget.CoreSettings.PrimaryItemGroup">
+
+        <TextView
+          style="@style/Widget.CoreSettings.SubHeader"
+          android:text="@string/certificate_common_name" />
+
+        <TextView
+          android:id="@+id/issuer_common_name"
+          style="@style/Widget.CoreSettings.SelectableTextView"
+          tools:text="DigiCert SHA2 Secure Server CA" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/issuer_organization_wrapper"
+        style="@style/Widget.CoreSettings.PrimaryItemGroup">
+
+        <TextView
+          style="@style/Widget.CoreSettings.SubHeader"
+          android:text="@string/certificate_organization" />
+
+        <TextView
+          android:id="@+id/issuer_organization"
+          style="@style/Widget.CoreSettings.SelectableTextView"
+          tools:text="DigiCert Inc" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/issuer_organizational_unit_wrapper"
+        style="@style/Widget.CoreSettings.PrimaryItemGroup">
+
+        <TextView
+          style="@style/Widget.CoreSettings.SubHeader"
+          android:text="@string/certificate_organizational_unit" />
+
+        <TextView
+          android:id="@+id/issuer_organizational_unit"
+          style="@style/Widget.CoreSettings.SelectableTextView"
+          tools:text="&lt;Not Part Of Certificate&gt;" />
+      </LinearLayout>
+
+      <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
+
+        <androidx.appcompat.widget.AppCompatImageView
+          style="@style/Widget.CoreSettings.PrimaryItemIcon"
+          app:srcCompat="@drawable/ic_clock" />
+
+        <TextView
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/certificate_validity" />
+      </LinearLayout>
+
+      <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroup">
+
+        <TextView
+          style="@style/Widget.CoreSettings.SubHeader"
+          android:text="@string/certificate_not_before" />
+
+        <TextView
+          android:id="@+id/not_before"
+          style="@style/Widget.CoreSettings.SelectableTextView"
+          tools:text="17. August 2018" />
+      </LinearLayout>
+
+      <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroup">
+
+        <TextView
+          style="@style/Widget.CoreSettings.SubHeader"
+          android:text="@string/certificate_not_after" />
+
+        <TextView
+          android:id="@+id/not_after"
+          style="@style/Widget.CoreSettings.SelectableTextView"
+          tools:text="2. September 2020" />
+      </LinearLayout>
+
+      <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
+
+        <androidx.appcompat.widget.AppCompatImageView
+          style="@style/Widget.CoreSettings.PrimaryItemIcon"
+          app:srcCompat="@drawable/ic_fingerprint" />
+
+        <TextView
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/certificate_fingerprints" />
+      </LinearLayout>
+
+      <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroup">
+
+        <TextView
+          style="@style/Widget.CoreSettings.SubHeader"
+          android:text="@string/certificate_fingerprint_sha256" />
+
+        <TextView
+          android:id="@+id/fingerprint_sha256"
+          style="@style/Widget.CoreSettings.SelectableTextView"
+          tools:text="77:C7:6C:11:70:33:25:EE:F0:6C:3B:E3:0F:15:C2:CB:2A:73:7A:56:F3:40:FD:76:29:1E:06:CB:0D:45:48:2C" />
+      </LinearLayout>
+
+      <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroup">
+
+        <TextView
+          style="@style/Widget.CoreSettings.SubHeader"
+          android:text="@string/certificate_fingerprint_sha1" />
+
+        <TextView
+          android:id="@+id/fingerprint_sha1"
+          style="@style/Widget.CoreSettings.SelectableTextView"
+          tools:text="E3:C0:F1:CF:CB:A4:61:09:02:1A:74:06:71:83:CD:A8:59:28:B4:0D" />
+      </LinearLayout>
+
+      <Space
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+    </LinearLayout>
+  </androidx.core.widget.NestedScrollView>
+
+  <TextView
+    android:id="@+id/error"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:paddingStart="?listPreferredItemPaddingLeft"
+    android:paddingLeft="?listPreferredItemPaddingLeft"
+    android:paddingEnd="?listPreferredItemPaddingRight"
+    android:paddingRight="?listPreferredItemPaddingRight"
+    android:text="@string/label_error_certificate_no_certificate"
+    android:textColor="?colorTextSecondary"
+    android:textStyle="italic"
+    android:visibility="gone"
+    tools:visibility="visible" />
+</FrameLayout>

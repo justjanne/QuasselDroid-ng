@@ -108,6 +108,11 @@
       android:exported="false"
       android:label="@string/label_info_channellist"
       android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name="de.kuschku.quasseldroid.ui.info.certificate.CertificateInfoActivity"
+      android:exported="false"
+      android:label="@string/label_info_certificate"
+      android:windowSoftInputMode="adjustResize" />
 
     <!-- Core Settings -->
     <activity

@@ -29,6 +29,7 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.SessionManager
+import de.kuschku.libquassel.ssl.X509Helper
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.and
 import de.kuschku.libquassel.util.flag.hasFlag
@@ -40,6 +41,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
+import javax.net.ssl.SSLSession
 
 class QuasselViewModel : ViewModel() {
   fun resetAccount() {
@@ -128,6 +130,10 @@ class QuasselViewModel : ViewModel() {
   }
 
   val sslSession = session.flatMapSwitchMap(ISession::sslSession)
+  val peerCertificateChain = sslSession.mapMap(SSLSession::getPeerCertificateChain).mapMap {
+    it.mapNotNull(X509Helper::convert)
+  }.mapOrElse(emptyList())
+  val leafCertificate = peerCertificateChain.map { Optional.ofNullable(it.firstOrNull()) }
 
   val coreInfo = session.mapMapNullable(ISession::coreInfo).mapSwitchMap(CoreInfo::liveInfo)
   val coreInfoClients = coreInfo.mapMap(CoreInfo.CoreData::sessionConnectedClientData)

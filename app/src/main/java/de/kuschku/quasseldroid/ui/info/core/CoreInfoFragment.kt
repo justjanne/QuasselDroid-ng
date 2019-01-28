@@ -34,8 +34,10 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.ssl.X509Helper
+import de.kuschku.libquassel.ssl.commonName
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.ui.info.certificate.CertificateInfoActivity
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.missingfeatures.MissingFeature
 import de.kuschku.quasseldroid.util.missingfeatures.MissingFeaturesDialog
@@ -65,11 +67,20 @@ class CoreInfoFragment : ServiceBoundFragment() {
   @BindView(R.id.uptime)
   lateinit var uptime: TextView
 
-  @BindView(R.id.secure)
-  lateinit var secureText: TextView
+  @BindView(R.id.secure_certificate)
+  lateinit var secureCertificate: TextView
 
-  @BindView(R.id.secure_icon)
-  lateinit var secureIcon: ImageView
+  @BindView(R.id.secure_certificate_icon)
+  lateinit var secureCertificateIcon: ImageView
+
+  @BindView(R.id.secure_connection_protocol)
+  lateinit var secureConnectionProtocol: TextView
+
+  @BindView(R.id.secure_connection_ciphersuite)
+  lateinit var secureConnectionCiphersuite: TextView
+
+  @BindView(R.id.secure_details)
+  lateinit var secureDetails: Button
 
   @BindView(R.id.clients_title)
   lateinit var clientsTitle: View
@@ -82,13 +93,15 @@ class CoreInfoFragment : ServiceBoundFragment() {
 
   private val movementMethod = BetterLinkMovementMethod.newInstance()
 
+  private val cipherSuiteRegex = Regex("TLS_(.*)_WITH_(.*)")
+
   init {
     movementMethod.setOnLinkLongClickListener(LinkLongClickMenuHelper())
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-    val view = inflater.inflate(R.layout.fragment_info_core, container, false)
+    val view = inflater.inflate(R.layout.info_core, container, false)
     ButterKnife.bind(this, view)
 
     var missingFeatureList: List<MissingFeature> = emptyList()
@@ -137,20 +150,48 @@ class CoreInfoFragment : ServiceBoundFragment() {
       insecure?.tint(getColor(2, 0))
     }
 
-    viewModel.sslSession.toLiveData().observe(this, Observer {
-      val sslSession = it?.orNull()
-      val leafCertificate = sslSession?.peerCertificateChain?.firstOrNull()
-      val issuerName = leafCertificate?.issuerDN?.name?.let(X509Helper::commonName)
-                       ?: requireContext().getString(R.string.label_core_connection_verified_by_unknown)
+    secureDetails.setOnClickListener {
+      CertificateInfoActivity.launch(it.context)
+    }
 
-      if (sslSession == null) {
-        secureText.text = requireContext().getString(R.string.label_core_connection_insecure)
-        secureIcon.setImageDrawable(insecure)
-      } else {
-        secureText.text = requireContext().getString(
-          R.string.label_core_connection_verified_by, issuerName
+    viewModel.sslSession.toLiveData().observe(this, Observer {
+      val certificateChain = it?.orNull()?.peerCertificateChain?.map(X509Helper::convert).orEmpty()
+      val leafCertificate = certificateChain.firstOrNull()
+      if (leafCertificate != null) {
+        secureCertificate.text = requireContext().getString(
+          R.string.label_core_connection_verified_by,
+          leafCertificate.issuerX500Principal.commonName
         )
-        secureIcon.setImageDrawable(secure)
+        if (leafCertificate.isValid) {
+          secureCertificateIcon.setImageDrawable(secure)
+        } else {
+          secureCertificateIcon.setImageDrawable(partiallySecure)
+        }
+        secureDetails.visibility = View.VISIBLE
+      } else {
+        secureCertificate.text = context?.getString(R.string.label_core_connection_insecure)
+        secureCertificateIcon.setImageDrawable(insecure)
+        secureDetails.visibility = View.GONE
+      }
+
+      val (keyExchangeMechanism, cipherSuite) = it.orNull()?.cipherSuite?.let { cipherSuite ->
+        cipherSuiteRegex.matchEntire(cipherSuite)?.destructured
+      }?.let { (keyExchangeMechanism, cipherSuite) ->
+        Pair(keyExchangeMechanism, cipherSuite)
+      } ?: Pair(null, null)
+
+      val protocol = it.orNull()?.protocol
+      if (cipherSuite != null && keyExchangeMechanism != null && protocol != null) {
+        secureConnectionProtocol.text = context?.getString(R.string.label_core_connection_protocol,
+                                                           protocol)
+        secureConnectionCiphersuite.text = context?.getString(R.string.label_core_connection_ciphersuite,
+                                                              cipherSuite,
+                                                              keyExchangeMechanism)
+        secureConnectionProtocol.visibility = View.VISIBLE
+        secureConnectionCiphersuite.visibility = View.VISIBLE
+      } else {
+        secureConnectionProtocol.visibility = View.GONE
+        secureConnectionCiphersuite.visibility = View.GONE
       }
     })
 

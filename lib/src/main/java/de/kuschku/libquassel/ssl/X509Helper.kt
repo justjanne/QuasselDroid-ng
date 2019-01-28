@@ -19,21 +19,18 @@
 
 package de.kuschku.libquassel.ssl
 
+import java.io.ByteArrayInputStream
+import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 
 // FIXME: re-read RFC and check it's actually secure
 object X509Helper {
+  val certificateFactory = CertificateFactory.getInstance("X.509")
+
   fun hostnames(certificate: X509Certificate): Sequence<String> =
-    (sequenceOf(commonName(certificate)) + subjectAlternativeNames(
-      certificate))
+    (sequenceOf(certificate.subjectX500Principal.commonName) + subjectAlternativeNames(certificate))
       .filterNotNull()
       .distinct()
-
-  fun commonName(certificate: X509Certificate) =
-    commonName(certificate.subjectX500Principal.name)
-
-  fun commonName(distinguishedName: String) =
-    COMMON_NAME.find(distinguishedName)?.groups?.get(1)?.value
 
   fun subjectAlternativeNames(certificate: X509Certificate): Sequence<String> =
     certificate.subjectAlternativeNames.orEmpty().asSequence().mapNotNull {
@@ -48,5 +45,11 @@ object X509Helper {
       name
     }
 
-  private val COMMON_NAME = Regex("""(?:^|,\s?)(?:CN=("(?:[^"]|"")+"|[^,]+))""")
+  fun convert(certificate: javax.security.cert.X509Certificate) =
+    certificateFactory.generateCertificate(ByteArrayInputStream(certificate.encoded)) as? X509Certificate
+
+
+  val COMMON_NAME = Regex("""(?:^|,\s?)(?:CN=("(?:[^"]|"")+"|[^,]+))""")
+  val ORGANIZATION = Regex("""(?:^|,\s?)(?:O=("(?:[^"]|"")+"|[^,]+))""")
+  val ORGANIZATIONAL_UNIT = Regex("""(?:^|,\s?)(?:OU=("(?:[^"]|"")+"|[^,]+))""")
 }

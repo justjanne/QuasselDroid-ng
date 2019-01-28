@@ -28,7 +28,7 @@
   android:paddingRight="16dp"
   android:paddingBottom="4dp"
   android:textAppearance="?android:attr/textAppearanceListItemSmall"
-  tools:showIn="@layout/fragment_nick_list">
+  tools:showIn="@layout/chat_nicklist">
 
   <ImageView
     android:id="@+id/avatar"
