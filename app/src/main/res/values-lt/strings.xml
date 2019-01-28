@@ -31,7 +31,6 @@
   <string name="label_back">Atgal</string>
   <string name="label_buffer_name">Buferio pavadinimas</string>
   <string name="label_cancel">Nutraukti</string>
-  <string name="label_update_user_password">Atnaujinti Vartotoją/Slaptažodį</string>
   <string name="label_certificates">Certifikatai</string>
   <string name="label_close">Uždaryti</string>
   <string name="label_colors_custom">Rinktis</string>
@@ -64,8 +63,8 @@
   <string name="label_mention_long">Kopijuoti slapyvardį į įvedimo eilutę</string>
   <string name="label_new_account">Nauja paskyra</string>
   <string name="label_new_chatlist">Naujas pokalbių sąrašas</string>
-  <string name="label_new_highlight_rule">Nauja žymėjimo taisyklė</string>
   <string name="label_new_highlight_ignore_rule">Nauja nežymėjimo taisyklė</string>
+  <string name="label_new_highlight_rule">Nauja žymėjimo taisyklė</string>
   <string name="label_new_identity">Nauja tapatybė</string>
   <string name="label_new_network">Naujas tinklas</string>
   <string name="label_new_nick">Naujas slapyvardis</string>
@@ -74,8 +73,6 @@
   <string name="label_no">Ne</string>
   <string name="label_no_away_message">Nėra pasišalinimo žinutės</string>
   <string name="label_no_sound">Nėra</string>
-  <string name="label_reply">Atsakyti</string>
-  <string name="label_reset">Atstatyti</string>
   <string name="label_open">Atidaryti</string>
   <string name="label_part">Išeiti</string>
   <string name="label_part_long">Palikti kanalą</string>
@@ -85,6 +82,8 @@
   <string name="label_query">Užklausa</string>
   <string name="label_query_long">Atverti privatų pokalbį su vartotoju</string>
   <string name="label_rename">Pervardinti</string>
+  <string name="label_reply">Atsakyti</string>
+  <string name="label_reset">Atstatyti</string>
   <string name="label_save">Išsaugoti</string>
   <string name="label_select">Pasirinkti</string>
   <string name="label_set_default">Nustatyti numatytą</string>
@@ -98,12 +97,13 @@
   <string name="label_translators">Vertėjai</string>
   <string name="label_unhide">Rodyti</string>
   <string name="label_unknown_sender">&lt;Nežinoma&gt;</string>
+  <string name="label_update_user_password">Atnaujinti Vartotoją/Slaptažodį</string>
   <string name="label_use_default">Naudoti numatytas parinktis</string>
   <string name="label_website">Tinklalapis</string>
   <string name="label_whitelist">Ignoruoti</string>
-  <string name="label_whitelist_ignore_date">Galiojimo data yra ignoruojama šiam certifikatui</string>
   <string name="label_whitelist_certificates">Certifikatai</string>
   <string name="label_whitelist_hostnames">Host sąrašas</string>
+  <string name="label_whitelist_ignore_date">Galiojimo data yra ignoruojama šiam certifikatui</string>
   <string name="label_who">Who</string>
   <string name="label_who_long">Atnaujinti visų vartotojų informaciją</string>
   <string name="label_whois">Whois</string>

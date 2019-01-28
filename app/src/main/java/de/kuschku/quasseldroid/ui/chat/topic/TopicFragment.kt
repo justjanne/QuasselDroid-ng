@@ -79,7 +79,7 @@ class TopicFragment : ServiceBoundSettingsFragment(), Savable {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-    val view = inflater.inflate(R.layout.fragment_topic, container, false)
+    val view = inflater.inflate(R.layout.fragment_info_topic, container, false)
     ButterKnife.bind(this, view)
 
     editorViewModel.quasselViewModel.onNext(viewModel)

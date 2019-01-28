@@ -17,7 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.chat.info.user
+package de.kuschku.quasseldroid.ui.info.user
 
 import android.content.Intent
 import android.net.Uri

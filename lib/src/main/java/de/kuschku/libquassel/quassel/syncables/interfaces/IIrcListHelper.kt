@@ -36,7 +36,7 @@ interface IIrcListHelper : ISyncableObject {
   }
 
   @Slot
-  fun receiveChannelList(netId: NetworkId, channelFilters: QStringList, data: QVariantList)
+  fun receiveChannelList(netId: NetworkId, channelFilters: QStringList, channels: QVariantList)
 
   @Slot
   fun reportError(error: String?) {

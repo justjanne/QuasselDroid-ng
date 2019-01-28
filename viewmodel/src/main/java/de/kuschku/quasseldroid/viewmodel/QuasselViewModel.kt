@@ -84,6 +84,7 @@ class QuasselViewModel : ViewModel() {
   val sessionManager = backend.mapMapNullable(Backend::sessionManager)
   val session = sessionManager.mapSwitchMap(SessionManager::session)
   val rpcHandler = session.mapMapNullable(ISession::rpcHandler)
+  val ircListHelper = session.mapMapNullable(ISession::ircListHelper)
   val features = sessionManager.mapSwitchMap { manager ->
     manager.state.switchMap { state ->
       if (state != ConnectionState.CONNECTED) {

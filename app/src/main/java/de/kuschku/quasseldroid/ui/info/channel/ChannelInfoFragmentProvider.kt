@@ -17,7 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.chat.info.channel
+package de.kuschku.quasseldroid.ui.info.channel
 
 import androidx.fragment.app.FragmentActivity
 import dagger.Binds

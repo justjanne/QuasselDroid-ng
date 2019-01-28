@@ -28,8 +28,12 @@ import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.ui.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
+import javax.inject.Inject
 
-class ColorContext(context: Context, private val messageSettings: MessageSettings) {
+class ColorContext @Inject constructor(
+  context: Context,
+  private val messageSettings: MessageSettings
+) {
   private val senderColors = context.theme.styledAttributes(
     R.attr.senderColor0, R.attr.senderColor1, R.attr.senderColor2, R.attr.senderColor3,
     R.attr.senderColor4, R.attr.senderColor5, R.attr.senderColor6, R.attr.senderColor7,

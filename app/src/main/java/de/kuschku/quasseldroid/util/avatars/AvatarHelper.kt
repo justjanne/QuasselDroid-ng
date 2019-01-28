@@ -24,7 +24,7 @@ import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.MessageSettings
-import de.kuschku.quasseldroid.ui.chat.info.user.IrcUserInfo
+import de.kuschku.quasseldroid.ui.info.user.IrcUserInfo
 import de.kuschku.quasseldroid.util.Patterns
 import de.kuschku.quasseldroid.util.backport.codec.Hex
 import de.kuschku.quasseldroid.util.helper.letIf

@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentActivity
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import de.kuschku.quasseldroid.ui.info.topic.TopicActivity
 
 @Module
 abstract class TopicFragmentProvider {

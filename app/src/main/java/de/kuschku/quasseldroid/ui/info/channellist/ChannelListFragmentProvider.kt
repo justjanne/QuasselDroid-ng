@@ -17,7 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.chat.info.core
+package de.kuschku.quasseldroid.ui.info.channellist
 
 import androidx.fragment.app.FragmentActivity
 import dagger.Binds
@@ -25,10 +25,10 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
-abstract class CoreInfoFragmentProvider {
+abstract class ChannelListFragmentProvider {
   @Binds
-  abstract fun bindFragmentActivity(activity: CoreInfoActivity): FragmentActivity
+  abstract fun bindFragmentActivity(activity: ChannelListActivity): FragmentActivity
 
   @ContributesAndroidInjector
-  abstract fun bindCoreInfoFragment(): CoreInfoFragment
+  abstract fun bindChannelListFragment(): ChannelListFragment
 }

@@ -76,33 +76,37 @@
         <data android:scheme="ircs" />
       </intent-filter>
     </activity>
+
+    <!-- Info -->
+
+
     <activity
-      android:name=".ui.chat.info.user.UserInfoActivity"
+      android:name="de.kuschku.quasseldroid.ui.info.user.UserInfoActivity"
       android:exported="false"
       android:label="@string/label_info_user"
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.chat.info.channel.ChannelInfoActivity"
+      android:name="de.kuschku.quasseldroid.ui.info.channel.ChannelInfoActivity"
       android:exported="false"
       android:label="@string/label_info_channel"
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.chat.info.core.CoreInfoActivity"
+      android:name="de.kuschku.quasseldroid.ui.info.core.CoreInfoActivity"
       android:exported="false"
       android:label="@string/label_info_core"
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.chat.topic.TopicActivity"
+      android:name="de.kuschku.quasseldroid.ui.info.topic.TopicActivity"
       android:exported="false"
       android:label="@string/label_topic"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name=".ui.chat.passwordchange.PasswordChangeActivity"
+      android:name="de.kuschku.quasseldroid.ui.info.channellist.ChannelListActivity"
       android:exported="false"
-      android:label="@string/label_password_change"
+      android:label="@string/label_info_channellist"
       android:windowSoftInputMode="adjustResize" />
 
     <!-- Core Settings -->
@@ -194,6 +198,11 @@
       android:exported="false"
       android:label="@string/settings_networkconfig_title"
       android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name="de.kuschku.quasseldroid.ui.coresettings.passwordchange.PasswordChangeActivity"
+      android:exported="false"
+      android:label="@string/label_password_change"
       android:windowSoftInputMode="adjustResize" />
 
     <!-- Client Settings -->

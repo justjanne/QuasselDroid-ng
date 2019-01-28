@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2019 Janne Koschinski
+  Copyright (c) 2019 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp"
+    app:cardBackgroundColor="?colorBackgroundCard"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+          android:id="@+id/search_input"
+          android:layout_width="0dip"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:background="@android:color/transparent"
+          android:hint="@string/label_search_channels"
+          android:imeOptions="actionSearch"
+          android:importantForAutofill="no"
+          android:inputType="textNoSuggestions"
+          android:lines="1"
+          android:minHeight="40dp"
+          android:paddingLeft="8dp"
+          android:paddingRight="8dp"
+          android:textColor="?colorTextPrimary"
+          android:textColorHint="?colorTextSecondary"
+          android:textSize="16sp" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+          android:id="@+id/search_button"
+          android:layout_width="40dp"
+          android:layout_height="match_parent"
+          android:background="?selectableItemBackgroundBorderless"
+          android:contentDescription="@string/label_search"
+          app:srcCompat="@drawable/ic_search"
+          app:tint="?colorTextSecondary" />
+
+      </LinearLayout>
+
+      <de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
+        android:id="@+id/progress"
+        style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal.NoPadding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:visibility="gone"
+        app:mpb_progressStyle="horizontal"
+        app:mpb_setBothDrawables="true"
+        app:mpb_useIntrinsicPadding="false"
+        tools:indeterminate="true" />
+
+    </LinearLayout>
+
+  </androidx.cardview.widget.CardView>
+
+  <de.kuschku.quasseldroid.util.ui.WarningBarView
+    android:id="@+id/error"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:icon="@drawable/ic_alert"
+    app:mode="none" />
+
+  <de.kuschku.quasseldroid.util.ui.fastscroll.views.FastScrollRecyclerView
+    android:id="@+id/search_results"
+    style="@style/Widget.FastScroller"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:listitem="@layout/widget_channel_search" />
+
+</LinearLayout>

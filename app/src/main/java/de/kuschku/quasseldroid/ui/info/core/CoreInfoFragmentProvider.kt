@@ -17,27 +17,18 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.chat.info.channel
+package de.kuschku.quasseldroid.ui.info.core
 
-import android.content.Context
-import android.content.Intent
-import de.kuschku.quasseldroid.util.ui.settings.ServiceBoundSettingsActivity
+import androidx.fragment.app.FragmentActivity
+import dagger.Binds
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
-class ChannelInfoActivity : ServiceBoundSettingsActivity(ChannelInfoFragment()) {
-  companion object {
-    fun launch(
-      context: Context,
-      openBuffer: Boolean,
-      bufferId: Int
-    ) = context.startActivity(intent(context, openBuffer, bufferId))
+@Module
+abstract class CoreInfoFragmentProvider {
+  @Binds
+  abstract fun bindFragmentActivity(activity: CoreInfoActivity): FragmentActivity
 
-    fun intent(
-      context: Context,
-      openBuffer: Boolean,
-      bufferId: Int
-    ) = Intent(context, ChannelInfoActivity::class.java).apply {
-      putExtra("bufferId", bufferId)
-      putExtra("openBuffer", openBuffer)
-    }
-  }
+  @ContributesAndroidInjector
+  abstract fun bindCoreInfoFragment(): CoreInfoFragment
 }

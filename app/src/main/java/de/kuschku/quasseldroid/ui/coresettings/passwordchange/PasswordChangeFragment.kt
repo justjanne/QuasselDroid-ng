@@ -17,7 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.chat.passwordchange
+package de.kuschku.quasseldroid.ui.coresettings.passwordchange
 
 import android.os.Bundle
 import android.text.Editable
@@ -80,7 +80,7 @@ class PasswordChangeFragment : ServiceBoundFragment() {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-    val view = inflater.inflate(R.layout.fragment_passwordchange, container, false)
+    val view = inflater.inflate(R.layout.settings_passwordchange, container, false)
     ButterKnife.bind(this, view)
 
     val account = accountDatabase.accounts().findById(accountId)

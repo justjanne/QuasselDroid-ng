@@ -50,56 +50,7 @@
 
   </com.google.android.material.appbar.AppBarLayout>
 
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?colorBackgroundSnackbar">
-
-    <androidx.cardview.widget.CardView
-      android:id="@+id/buffer_search_container"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_margin="6dp"
-      app:cardBackgroundColor="?colorBackgroundSearch"
-      app:cardElevation="2dp">
-
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-          android:id="@+id/buffer_search"
-          android:layout_width="0dip"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:background="@android:color/transparent"
-          android:hint="@string/label_search_buffer"
-          android:imeOptions="actionSearch"
-          android:importantForAutofill="no"
-          android:inputType="textNoSuggestions"
-          android:lines="1"
-          android:minHeight="40dp"
-          android:paddingLeft="8dp"
-          android:paddingRight="8dp"
-          android:textColor="?colorTextSearch"
-          android:textColorHint="?colorTextSearchSecondary"
-          android:textSize="16sp" />
-
-        <androidx.appcompat.widget.AppCompatImageButton
-          android:id="@+id/buffer_search_clear"
-          android:layout_width="40dp"
-          android:layout_height="match_parent"
-          android:background="?selectableItemBackgroundBorderless"
-          android:contentDescription="@string/label_clear_search"
-          app:srcCompat="@drawable/ic_close"
-          app:tint="?colorTextSearchSecondary" />
-
-      </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-  </LinearLayout>
+  <include layout="@layout/widget_search" />
 
   <de.kuschku.quasseldroid.util.ui.WarningBarView
     android:id="@+id/feature_context_bufferactivitysync"

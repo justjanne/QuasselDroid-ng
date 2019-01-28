@@ -17,16 +17,20 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.chat.passwordchange
+package de.kuschku.quasseldroid.ui.info.channellist
 
-import android.content.Context
-import android.content.Intent
-import de.kuschku.quasseldroid.util.ui.settings.ServiceBoundSettingsActivity
+data class Sort(
+  val field: Field,
+  val direction: Direction
+) {
+  enum class Field {
+    CHANNEL_NAME,
+    USER_COUNT,
+    TOPIC
+  }
 
-class PasswordChangeActivity : ServiceBoundSettingsActivity(PasswordChangeFragment()) {
-  companion object {
-    fun launch(context: Context) = context.startActivity(intent(context))
-
-    fun intent(context: Context) = Intent(context, PasswordChangeActivity::class.java)
+  enum class Direction {
+    ASC,
+    DESC
   }
 }

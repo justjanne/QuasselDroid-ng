@@ -57,6 +57,7 @@ import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
+import de.kuschku.quasseldroid.ui.info.channellist.ChannelListActivity
 import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.*
@@ -119,6 +120,13 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
       return if (info != null && session != null) {
         when (item?.itemId) {
+          R.id.action_channellist  -> {
+            network?.let {
+              ChannelListActivity.launch(requireContext(), network = it.networkId())
+            }
+            actionMode?.finish()
+            true
+          }
           R.id.action_configure  -> {
             network?.let {
               NetworkEditActivity.launch(requireContext(), network = it.networkId())
@@ -394,6 +402,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
         val menu = actionMode?.menu
         if (menu != null) {
           val allActions = setOf(
+            R.id.action_channellist,
             R.id.action_configure,
             R.id.action_connect,
             R.id.action_disconnect,
@@ -428,7 +437,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                   R.id.action_configure, R.id.action_connect
                 )
                 INetwork.ConnectionState.Initialized  -> setOf(
-                  R.id.action_configure, R.id.action_disconnect
+                  R.id.action_channellist, R.id.action_configure, R.id.action_disconnect
                 )
                 else                                  -> setOf(
                   R.id.action_configure, R.id.action_connect, R.id.action_disconnect

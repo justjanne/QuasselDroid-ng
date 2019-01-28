@@ -17,20 +17,16 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.chat.info.core
+package de.kuschku.quasseldroid.ui.coresettings.passwordchange
 
 import android.content.Context
 import android.content.Intent
 import de.kuschku.quasseldroid.util.ui.settings.ServiceBoundSettingsActivity
 
-class CoreInfoActivity : ServiceBoundSettingsActivity(CoreInfoFragment()) {
+class PasswordChangeActivity : ServiceBoundSettingsActivity(PasswordChangeFragment()) {
   companion object {
-    fun launch(
-      context: Context
-    ) = context.startActivity(intent(context))
+    fun launch(context: Context) = context.startActivity(intent(context))
 
-    fun intent(
-      context: Context
-    ) = Intent(context, CoreInfoActivity::class.java)
+    fun intent(context: Context) = Intent(context, PasswordChangeActivity::class.java)
   }
 }

@@ -17,10 +17,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.chat.topic
+package de.kuschku.quasseldroid.ui.info.topic
 
 import android.content.Context
 import android.content.Intent
+import de.kuschku.quasseldroid.ui.chat.topic.TopicFragment
 import de.kuschku.quasseldroid.util.ui.settings.ServiceBoundSettingsActivity
 
 class TopicActivity : ServiceBoundSettingsActivity(TopicFragment()) {
@@ -28,7 +29,9 @@ class TopicActivity : ServiceBoundSettingsActivity(TopicFragment()) {
     fun launch(
       context: Context,
       buffer: Int
-    ) = context.startActivity(intent(context, buffer))
+    ) = context.startActivity(intent(
+      context,
+      buffer))
 
     fun intent(
       context: Context,

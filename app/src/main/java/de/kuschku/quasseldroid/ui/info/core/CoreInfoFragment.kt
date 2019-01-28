@@ -17,7 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.chat.info.core
+package de.kuschku.quasseldroid.ui.info.core
 
 import android.os.Bundle
 import android.text.Html

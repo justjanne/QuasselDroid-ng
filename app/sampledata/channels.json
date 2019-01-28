@@ -1,0 +1,34 @@
+{
+  "data": [
+    {
+      "name": "#fdroid",
+      "topic": "Due to spam you temporarily need to be registered to speak. | https://f-droid.org | https://forum.f-droid.org | https://mastodon.technology/@fdroidorg | For development discussion use #fdroid-dev | This channel is logged via matrix at https://view.matrix.org/alias/%23fdroid:f-droid.org",
+      "users": "673 users"
+    },
+    {
+      "name": "#fdroid-dev",
+      "topic": "Due to spam you temporarily need to be registered to speak. | | F-Droid development discussion only, use #fdroid for general, app and repo-related matters | This channel is logged via matrix at https://view.matrix.org/alias/%23fdroid-dev:f-droid.org",
+      "users": "59 users"
+    },
+    {
+      "name": "#ircdocs",
+      "topic": "http://ircdocs.horse/ and associated projects - http://defs.ircdocs.horse/ - http://stats.ircdocs.horse/ - http://modern.ircdocs.horse/ - https://wooooms.ircdocs.horse/ - https://github.com/irc-archive/ - combating IRC spec nonsense, one document at a time <3        👌😩 < merivingian~",
+      "users": "54 users"
+    },
+    {
+      "name": "#ircv3",
+      "topic": "https://ircv3.net | Roadmap: https://git.io/IRCv3-Roadmap | Code of conduct: https://ircv3.net/conduct",
+      "users": "202 users"
+    },
+    {
+      "name": "#quassel",
+      "topic": "Quassel IRC - https://quassel-irc.org || Latest: 0.13.0 || Mailing Lists: https://lists.quassel-irc.org || Tracker: https://bugs.quassel-irc.org || Activity RSS: #quassel-announce || German: #quassel.de || Quassel on Android: #quasseldroid; on iOS: #woboquassel",
+      "users": "667 users"
+    },
+    {
+      "name": "#quasseldroid",
+      "topic": "Quasseldroid is an Android client for #quassel ♥ https://quasseldroid.info/ ♥ Requires a Quassel 0.13 Core for full functionality: https://quasseldroid.info/releases/ ♥ https://git.kuschku.de/justjanne/Quasseldroid-NG/",
+      "users": "165 users"
+    }
+  ]
+}

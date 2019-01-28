@@ -17,24 +17,18 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.chat.info.user
+package de.kuschku.quasseldroid.ui.info.user
 
-import de.kuschku.libquassel.quassel.BufferInfo
-import de.kuschku.libquassel.quassel.syncables.IrcUser
-import de.kuschku.libquassel.quassel.syncables.Network
+import androidx.fragment.app.FragmentActivity
+import dagger.Binds
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
-data class IrcUserInfo(
-  val networkId: Int,
-  val nick: String,
-  val user: String? = null,
-  val host: String? = null,
-  val account: String? = null,
-  val server: String? = null,
-  val realName: String? = null,
-  val isAway: Boolean? = false,
-  val awayMessage: String? = null,
-  val network: Network? = null,
-  val knownToCore: Boolean = false,
-  val info: BufferInfo? = null,
-  val ircUser: IrcUser? = null
-)
+@Module
+abstract class UserInfoFragmentProvider {
+  @Binds
+  abstract fun bindFragmentActivity(activity: UserInfoActivity): FragmentActivity
+
+  @ContributesAndroidInjector
+  abstract fun bindUserInfoFragment(): UserInfoFragment
+}

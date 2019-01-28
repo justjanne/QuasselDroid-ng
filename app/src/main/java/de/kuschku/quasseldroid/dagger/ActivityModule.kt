@@ -26,15 +26,6 @@ import de.kuschku.quasseldroid.service.QuasselServiceModule
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.ui.chat.ChatActivityModule
 import de.kuschku.quasseldroid.ui.chat.ChatFragmentProvider
-import de.kuschku.quasseldroid.ui.chat.info.channel.ChannelInfoActivity
-import de.kuschku.quasseldroid.ui.chat.info.channel.ChannelInfoFragmentProvider
-import de.kuschku.quasseldroid.ui.chat.info.core.CoreInfoActivity
-import de.kuschku.quasseldroid.ui.chat.info.core.CoreInfoFragmentProvider
-import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoActivity
-import de.kuschku.quasseldroid.ui.chat.info.user.UserInfoFragmentProvider
-import de.kuschku.quasseldroid.ui.chat.passwordchange.PasswordChangeActivity
-import de.kuschku.quasseldroid.ui.chat.passwordchange.PasswordChangeFragmentProvider
-import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
 import de.kuschku.quasseldroid.ui.chat.topic.TopicFragmentProvider
 import de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity
 import de.kuschku.quasseldroid.ui.clientsettings.about.AboutFragmentProvider
@@ -76,6 +67,17 @@ import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivi
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigFragmentProvider
 import de.kuschku.quasseldroid.ui.coresettings.networkserver.NetworkServerActivity
 import de.kuschku.quasseldroid.ui.coresettings.networkserver.NetworkServerFragmentProvider
+import de.kuschku.quasseldroid.ui.coresettings.passwordchange.PasswordChangeActivity
+import de.kuschku.quasseldroid.ui.coresettings.passwordchange.PasswordChangeFragmentProvider
+import de.kuschku.quasseldroid.ui.info.channel.ChannelInfoActivity
+import de.kuschku.quasseldroid.ui.info.channel.ChannelInfoFragmentProvider
+import de.kuschku.quasseldroid.ui.info.channellist.ChannelListActivity
+import de.kuschku.quasseldroid.ui.info.channellist.ChannelListFragmentProvider
+import de.kuschku.quasseldroid.ui.info.core.CoreInfoActivity
+import de.kuschku.quasseldroid.ui.info.core.CoreInfoFragmentProvider
+import de.kuschku.quasseldroid.ui.info.topic.TopicActivity
+import de.kuschku.quasseldroid.ui.info.user.UserInfoActivity
+import de.kuschku.quasseldroid.ui.info.user.UserInfoFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity
@@ -112,8 +114,10 @@ abstract class ActivityModule {
   abstract fun bindTopicActivity(): TopicActivity
 
   @ActivityScope
-  @ContributesAndroidInjector(modules = [PasswordChangeFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
-  abstract fun bindPasswordChangeActivity(): PasswordChangeActivity
+  @ContributesAndroidInjector(modules = [ChannelListFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
+  abstract fun bindChannelListActivity(): ChannelListActivity
+
+  // Client Settings
 
   @ActivityScope
   @ContributesAndroidInjector(modules = [ClientSettingsFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
@@ -134,6 +138,8 @@ abstract class ActivityModule {
   @ActivityScope
   @ContributesAndroidInjector(modules = [LicenseFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
   abstract fun bindLicenseActivity(): LicenseActivity
+
+  // Core Settings
 
   @ActivityScope
   @ContributesAndroidInjector(modules = [CoreSettingsFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
@@ -196,6 +202,12 @@ abstract class ActivityModule {
   abstract fun bindNetworkConfigActivity(): NetworkConfigActivity
 
   @ActivityScope
+  @ContributesAndroidInjector(modules = [PasswordChangeFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
+  abstract fun bindPasswordChangeActivity(): PasswordChangeActivity
+
+  // Setup
+
+  @ActivityScope
   @ContributesAndroidInjector(modules = [AccountSetupFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
   abstract fun bindAccountSetupActivity(): AccountSetupActivity
 
@@ -218,6 +230,8 @@ abstract class ActivityModule {
   @ActivityScope
   @ContributesAndroidInjector(modules = [CoreSetupFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
   abstract fun bindCoreSetupActivity(): CoreSetupActivity
+
+   // Service
 
   @ActivityScope
   @ContributesAndroidInjector(modules = [QuasselServiceModule::class, SettingsModule::class, DatabaseModule::class])

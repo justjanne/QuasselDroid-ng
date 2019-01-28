@@ -17,23 +17,18 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-plugins {
-  application
-  kotlin("jvm")
-  kotlin("kapt")
-}
+package de.kuschku.quasseldroid.ui.coresettings.passwordchange
 
-application {
-  mainClassName = "de.kuschku.cli.MainKt"
-}
+import androidx.fragment.app.FragmentActivity
+import dagger.Binds
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
-dependencies {
-  implementation(kotlin("stdlib", "1.3.20"))
+@Module
+abstract class PasswordChangeFragmentProvider {
+  @Binds
+  abstract fun bindFragmentActivity(activity: PasswordChangeActivity): FragmentActivity
 
-  implementation("io.reactivex.rxjava2", "rxjava", "2.1.9")
-  implementation("info.picocli", "picocli", "3.9.0")
-
-  implementation(project(":lib"))
-
-  testImplementation("junit", "junit", "4.12")
+  @ContributesAndroidInjector
+  abstract fun bindPasswordChangeFragment(): PasswordChangeFragment
 }

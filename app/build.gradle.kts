@@ -17,16 +17,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.gradle.api.Project
-import java.io.FileInputStream
-import java.util.*
-import org.gradle.api.artifacts.ExternalModuleDependency
-import org.gradle.kotlin.dsl.*
-import org.jetbrains.kotlin.gradle.plugin.KaptExtension
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.ByteArrayOutputStream
-import java.util.*
-
 plugins {
   id("com.android.application")
   kotlin("android")
@@ -115,7 +105,7 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.11"))
+  implementation(kotlin("stdlib", "1.3.20"))
 
   // App Compat
   implementation("com.google.android.material", "material", "1.0.0-rc01")

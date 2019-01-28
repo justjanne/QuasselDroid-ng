@@ -17,41 +17,25 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.chat.info.user
+package de.kuschku.quasseldroid.ui.info.channellist
 
 import android.content.Context
 import android.content.Intent
-import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.quasseldroid.util.ui.settings.ServiceBoundSettingsActivity
 
-class UserInfoActivity : ServiceBoundSettingsActivity(UserInfoFragment()) {
+class ChannelListActivity : ServiceBoundSettingsActivity(ChannelListFragment()) {
   companion object {
     fun launch(
       context: Context,
-      openBuffer: Boolean,
-      bufferId: BufferId? = null,
-      nick: String? = null,
-      networkId: NetworkId? = null
-    ) = context.startActivity(intent(context, openBuffer, bufferId, nick, networkId))
+      network: NetworkId
+    ) = context.startActivity(intent(context, network))
 
     fun intent(
       context: Context,
-      openBuffer: Boolean,
-      bufferId: BufferId? = null,
-      nick: String? = null,
-      networkId: NetworkId? = null
-    ) = Intent(context, UserInfoActivity::class.java).apply {
-      putExtra("openBuffer", openBuffer)
-      if (bufferId != null) {
-        putExtra("bufferId", bufferId)
-      }
-      if (nick != null) {
-        putExtra("nick", nick)
-      }
-      if (networkId != null) {
-        putExtra("networkId", networkId)
-      }
+      network: NetworkId
+    ) = Intent(context, ChannelListActivity::class.java).apply {
+      putExtra("network_id", network)
     }
   }
 }

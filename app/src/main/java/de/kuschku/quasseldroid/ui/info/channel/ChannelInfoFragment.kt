@@ -17,7 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.chat.info.channel
+package de.kuschku.quasseldroid.ui.info.channel
 
 import android.os.Build
 import android.os.Bundle
@@ -35,7 +35,7 @@ import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
-import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
+import de.kuschku.quasseldroid.ui.info.topic.TopicActivity
 import de.kuschku.quasseldroid.util.ShortcutCreationHelper
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter

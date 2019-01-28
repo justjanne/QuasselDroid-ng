@@ -20,6 +20,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
   <item
+    android:id="@+id/action_channellist"
+    android:title="@string/label_info_channellist" />
+  <item
     android:id="@+id/action_configure"
     android:title="@string/label_configure" />
   <item

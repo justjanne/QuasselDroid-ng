@@ -17,18 +17,20 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.chat.passwordchange
+package de.kuschku.quasseldroid.ui.info.core
 
-import androidx.fragment.app.FragmentActivity
-import dagger.Binds
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
+import android.content.Context
+import android.content.Intent
+import de.kuschku.quasseldroid.util.ui.settings.ServiceBoundSettingsActivity
 
-@Module
-abstract class PasswordChangeFragmentProvider {
-  @Binds
-  abstract fun bindFragmentActivity(activity: PasswordChangeActivity): FragmentActivity
+class CoreInfoActivity : ServiceBoundSettingsActivity(CoreInfoFragment()) {
+  companion object {
+    fun launch(
+      context: Context
+    ) = context.startActivity(intent(context))
 
-  @ContributesAndroidInjector
-  abstract fun bindPasswordChangeFragment(): PasswordChangeFragment
+    fun intent(
+      context: Context
+    ) = Intent(context, CoreInfoActivity::class.java)
+  }
 }

@@ -22,6 +22,7 @@ package de.kuschku.libquassel.quassel.syncables
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.QStringList
 import de.kuschku.libquassel.protocol.QVariantList
+import de.kuschku.libquassel.protocol.value
 import de.kuschku.libquassel.quassel.syncables.interfaces.IIrcListHelper
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.rxjava.ReusableUnicastSubject
@@ -29,9 +30,18 @@ import de.kuschku.libquassel.util.rxjava.ReusableUnicastSubject
 class IrcListHelper constructor(
   proxy: SignalProxy
 ) : SyncableObject(proxy, "IrcListHelper"), IIrcListHelper {
+  private var waitingNetwork: NetworkId = 0
+
+  data class ChannelDescription(
+    val netId: NetworkId,
+    val channelName: String,
+    val userCount: UInt,
+    val topic: String
+  )
+
   sealed class Event {
     data class ChannelList(val netId: NetworkId, val channelFilters: QStringList,
-                           val data: QVariantList) : Event()
+                           val data: List<ChannelDescription>) : Event()
 
     data class Finished(val netId: NetworkId) : Event()
 
@@ -41,13 +51,34 @@ class IrcListHelper constructor(
   private val subject = ReusableUnicastSubject.create<Event>()
   val observable = subject.publish().refCount()
 
+  override fun requestChannelList(netId: NetworkId, channelFilters: QStringList): QVariantList {
+    waitingNetwork = netId
+    return super.requestChannelList(netId, channelFilters)
+  }
+
   override fun receiveChannelList(netId: NetworkId, channelFilters: QStringList,
-                                  data: QVariantList) {
-    subject.onNext(Event.ChannelList(netId, channelFilters, data))
+                                  channels: QVariantList) {
+    subject.onNext(Event.ChannelList(netId, channelFilters, channels.mapNotNull {
+      val list = it.value<QVariantList>(emptyList())
+      if (list.size == 3) {
+        ChannelDescription(
+          netId,
+          list[0].value(""),
+          list[1].value(0u),
+          list[2].value("")
+        )
+      } else {
+        null
+      }
+    }))
   }
 
   override fun reportFinishedList(netId: NetworkId) {
-    subject.onNext(Event.Finished(netId))
+    if (waitingNetwork == netId) {
+      waitingNetwork = 0
+      requestChannelList(netId, emptyList())
+      subject.onNext(Event.Finished(netId))
+    }
   }
 
   override fun reportError(error: String?) {

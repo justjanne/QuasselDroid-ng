@@ -35,8 +35,6 @@ import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.ui.chat.info.core.CoreInfoActivity
-import de.kuschku.quasseldroid.ui.chat.passwordchange.PasswordChangeActivity
 import de.kuschku.quasseldroid.ui.coresettings.aliaslist.AliasListActivity
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistCreateActivity
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistEditActivity
@@ -47,6 +45,8 @@ import de.kuschku.quasseldroid.ui.coresettings.ignorelist.IgnoreListActivity
 import de.kuschku.quasseldroid.ui.coresettings.network.NetworkCreateActivity
 import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivity
+import de.kuschku.quasseldroid.ui.coresettings.passwordchange.PasswordChangeActivity
+import de.kuschku.quasseldroid.ui.info.core.CoreInfoActivity
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.helper.visibleIf

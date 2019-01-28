@@ -31,7 +31,6 @@
   <string name="label_back">Retour</string>
   <string name="label_buffer_name">Nom du Tchat</string>
   <string name="label_cancel">Annuler</string>
-  <string name="label_update_user_password">Mettre à Jour l\'Utilisateur ou le Mot de Passe</string>
   <string name="label_certificates">Certificats</string>
   <string name="label_close">Fermer</string>
   <string name="label_colors_custom">Personnalisé</string>
@@ -64,8 +63,8 @@
   <string name="label_mention_long">Copier le nom d\'utilisateur dans la zone de texte</string>
   <string name="label_new_account">Nouveau Compte</string>
   <string name="label_new_chatlist">Nouvelle Liste de Tchats</string>
-  <string name="label_new_highlight_rule">Nouvelle Règle de Highlight</string>
   <string name="label_new_highlight_ignore_rule">Nouvelle Règle de Highlight à Ignorer</string>
+  <string name="label_new_highlight_rule">Nouvelle Règle de Highlight</string>
   <string name="label_new_identity">Nouvelle Identité</string>
   <string name="label_new_network">Nouveau Réseau</string>
   <string name="label_new_nick">Nouveau Nom d\'Utilisateur</string>
@@ -74,8 +73,6 @@
   <string name="label_no">Non</string>
   <string name="label_no_away_message">Aucuns Messages d\'Absence Disponibles</string>
   <string name="label_no_sound">Aucun</string>
-  <string name="label_reply">Répondre</string>
-  <string name="label_reset">Réinitialiser</string>
   <string name="label_open">Ouvrir</string>
   <string name="label_part">Partir</string>
   <string name="label_part_long">Partir de la Chaîne</string>
@@ -85,6 +82,8 @@
   <string name="label_query">Requêter</string>
   <string name="label_query_long">Ouvrir une session privée avec cet utilisateur</string>
   <string name="label_rename">Renommer</string>
+  <string name="label_reply">Répondre</string>
+  <string name="label_reset">Réinitialiser</string>
   <string name="label_save">Enregistrer</string>
   <string name="label_select">Sélectionner</string>
   <string name="label_set_default">Définir par défaut</string>
@@ -98,12 +97,13 @@
   <string name="label_translators">Traducteurs</string>
   <string name="label_unhide">Rendre Visible</string>
   <string name="label_unknown_sender">&lt;Inconnu&gt;</string>
+  <string name="label_update_user_password">Mettre à Jour l\'Utilisateur ou le Mot de Passe</string>
   <string name="label_use_default">Utiliser les paramètres par défaut</string>
   <string name="label_website">Site Web</string>
   <string name="label_whitelist">Ignorer</string>
-  <string name="label_whitelist_ignore_date">La date d\'expiration est ignorée pour ce certificat</string>
   <string name="label_whitelist_certificates">Certificats</string>
   <string name="label_whitelist_hostnames">Hosts</string>
+  <string name="label_whitelist_ignore_date">La date d\'expiration est ignorée pour ce certificat</string>
   <string name="label_who">Who</string>
   <string name="label_who_long">Mettre à jour les informations sur tous les utilisateurs</string>
   <string name="label_whois">Whois</string>
