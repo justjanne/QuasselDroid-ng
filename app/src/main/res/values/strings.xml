@@ -128,7 +128,6 @@
   <string name="label_unknown_sender">&lt;Unknown&gt;</string>
   <string name="label_update_user_password">Update User/Password</string>
   <string name="label_use_default">Use Default</string>
-  <string name="label_user_count_display">%1$d users</string>
   <string name="label_user_count">User Count</string>
   <string name="label_website">Website</string>
   <string name="label_whitelist">Ignore</string>
@@ -142,6 +141,11 @@
   <string name="label_whois">Whois</string>
   <string name="label_whois_long">Update user information</string>
   <string name="label_yes">Yes</string>
+
+  <plurals name="label_user_count">
+    <item quantity="one">%1$d user</item>
+    <item quantity="other">%1$d users</item>
+  </plurals>
 
   <string name="label_feature_synchronizedmarkerline">Required for synchronizing the last position in channels</string>
   <string name="label_feature_saslauthentication">Required for SASL</string>

@@ -128,7 +128,6 @@
   <string name="label_unknown_sender">&lt;Unbekannt&gt;</string>
   <string name="label_update_user_password">Benutzernamen/Passwort ändern</string>
   <string name="label_use_default">Standardwerte benutzen</string>
-  <string name="label_user_count_display">%1$d Nutzer</string>
   <string name="label_user_count">Anzahl Nutzer</string>
   <string name="label_website">Webseite</string>
   <string name="label_whitelist">Ignorieren</string>
@@ -142,6 +141,11 @@
   <string name="label_whois">Whois</string>
   <string name="label_whois_long">Nutzerinformationen aktualisieren</string>
   <string name="label_yes">Ja</string>
+
+  <plurals name="label_user_count">
+    <item quantity="one">%1$d Benutzer</item>
+    <item quantity="other">%1$d Benutzer</item>
+  </plurals>
 
   <string name="label_feature_synchronizedmarkerline">Benötigt um die vorherige Position in Chats zu synchronisieren</string>
   <string name="label_feature_saslauthentication">Benötigt für SASL</string>

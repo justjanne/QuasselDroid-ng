@@ -27,12 +27,14 @@
 
   <string name="label_about">Informazioni</string>
   <string name="label_accept">Accetta</string>
+  <string name="label_ascending">Ascendente</string>
   <string name="label_autocomplete">Completamento automatico</string>
   <string name="label_avatar">Avatar</string>
   <string name="label_back">Indietro</string>
   <string name="label_buffer_name">Nome della chat</string>
   <string name="label_cancel">Annulla</string>
   <string name="label_certificates">Certificati</string>
+  <string name="label_channel_name">Nome del canale</string>
   <string name="label_clear_search">Pulisci cerca</string>
   <string name="label_close">Chiudi</string>
   <string name="label_colors_custom">Personalizzato</string>
@@ -45,6 +47,7 @@
   <string name="label_crashes_empty">Nessun rapporto di arresto anomalo trovato</string>
   <string name="label_delete">Elimina</string>
   <string name="label_delete_all">Elimina tutto</string>
+  <string name="label_descending">Discendente</string>
   <string name="label_disconnect">Disconnetti</string>
   <string name="label_edit_core">Modifica account</string>
   <string name="label_edit_nick">Modifica nickname</string>
@@ -58,6 +61,7 @@
   <string name="label_ignore_long">Aggiungi o rimuovi un utente dalla lista ignorati</string>
   <string name="label_info">Dettagli</string>
   <string name="label_info_channel">Dettagli del canale</string>
+  <string name="label_info_channellist">Elenco dei canali</string>
   <string name="label_info_core">Dettagli del core</string>
   <string name="label_info_user">Dettagli dell’utente</string>
   <string name="label_input_history">Storico dei messaggi</string>
@@ -103,6 +107,7 @@
   <string name="label_saving">Salvataggio…</string>
   <string name="label_search">Cerca…</string>
   <string name="label_search_buffer">Cerca chat</string>
+  <string name="label_search_channels">Cerca canali</string>
   <string name="label_select">Seleziona</string>
   <string name="label_send">Invia</string>
   <string name="label_service_connection_failed">Impossibile stabilire la connessione, controlla le impostazioni di risparmio della batteria. Consulta dontkillmyapp.com per maggiori informazioni.</string>
@@ -115,6 +120,7 @@
   <string name="label_shortcut">Scorciatoia</string>
   <string name="label_shortcut_long">Crea scorciatoia nella schermata Home</string>
   <string name="label_show_hidden">Mostra nascosti</string>
+  <string name="label_sort">Ordina</string>
   <string name="label_source">Sorgente</string>
   <string name="label_topic">Argomento del canale</string>
   <string name="label_translators">Traduttori</string>
@@ -122,6 +128,7 @@
   <string name="label_unknown_sender">&lt;Sconosciuto&gt;</string>
   <string name="label_update_user_password">Aggiorna il nome utente e la password</string>
   <string name="label_use_default">Utilizza i valori predefiniti</string>
+  <string name="label_user_count">Utenti totali</string>
   <string name="label_website">Sito web</string>
   <string name="label_whitelist">Ignora</string>
   <string name="label_whitelist_certificates">Certificati</string>
