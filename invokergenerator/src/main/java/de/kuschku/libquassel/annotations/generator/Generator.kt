@@ -67,18 +67,20 @@ class Generator(
                 beginControlFlow("when (method)")
                 for (method in parsedClass.methods) {
                   beginControlFlow("%S ->", method.quasselName)
-                  addStatement("on.${method.name}(")
-                  indent()
-                  val lastIndex = method.parameters.size - 1
-                  for ((i, parameter) in method.parameters.withIndex()) {
-                    if (i == lastIndex) {
-                      addStatement("${parameter.name} = params[$i].data as %T", parameter.type)
-                    } else {
-                      addStatement("${parameter.name} = params[$i].data as %T,", parameter.type)
+                  if (method.parameters.isEmpty()) {
+                    addStatement("on.${method.name}()")
+                  } else {
+                    addStatement("on.${method.name}(")
+                    indent()
+                    val lastIndex = method.parameters.size - 1
+                    for ((i, parameter) in method.parameters.withIndex()) {
+                      val suffix = if (i != lastIndex) "," else ""
+                      addStatement("${parameter.name} = params[$i].data as %T$suffix",
+                                   parameter.type)
                     }
+                    unindent()
+                    addStatement(")")
                   }
-                  unindent()
-                  addStatement(")")
                   endControlFlow()
                 }
                 endControlFlow()
