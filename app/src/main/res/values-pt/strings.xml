@@ -27,12 +27,15 @@
 
   <string name="label_about">Sobre</string>
   <string name="label_accept">Aceitar</string>
+  <string name="label_ascending">Ascendente</string>
   <string name="label_autocomplete">Auto completar</string>
   <string name="label_avatar">Avatar</string>
   <string name="label_back">Voltar</string>
   <string name="label_buffer_name">Nome da Janela</string>
   <string name="label_cancel">Cancelar</string>
   <string name="label_certificates">Certificados</string>
+  <string name="label_channel_name">Nome do Canal</string>
+  <string name="label_clear_search">Limpar Pesquisa</string>
   <string name="label_close">Fechar</string>
   <string name="label_colors_custom">Personalizado</string>
   <string name="label_colors_mirc">mIRC</string>
@@ -41,18 +44,25 @@
   <string name="label_contributors">Contribuidores</string>
   <string name="label_copy">Copiar</string>
   <string name="label_crashes">Crashes</string>
+  <string name="label_crashes_empty">Nenhum relatório de erros foi encontrado</string>
   <string name="label_delete">Apagar</string>
   <string name="label_delete_all">Apagar Todos</string>
+  <string name="label_descending">Descendente</string>
   <string name="label_disconnect">Desligar</string>
+  <string name="label_edit_core">Editar Conta</string>
+  <string name="label_edit_nick">Editar Alcunha</string>
   <string name="label_edit_topic">Editar Tópico</string>
   <string name="label_edit_topic_long">Abre a caixa de diálogo para alterar o tópico do canal</string>
   <string name="label_filter_messages">Filtrar Mensagens</string>
+  <string name="label_finish">Terminar</string>
   <string name="label_hide_perm">Ocultar Permanentemente</string>
   <string name="label_hide_temp">Ocultar Temporariamente</string>
   <string name="label_ignore">Ignorar</string>
   <string name="label_ignore_long">Adiciona/remove o utilizador na/da lista de ignorados</string>
   <string name="label_info">Detalhes</string>
+  <string name="label_info_certificate">Certificado</string>
   <string name="label_info_channel">Detalhes do Canal</string>
+  <string name="label_info_channellist">Lista de Canais</string>
   <string name="label_info_core">Detalhes do nucleo</string>
   <string name="label_info_user">Detalhes do Utilizador</string>
   <string name="label_input_history">Histórico de Mensagens</string>
@@ -72,6 +82,7 @@
   <string name="label_new_network">Adicionar Rede</string>
   <string name="label_new_nick">Adicionar Alcunha</string>
   <string name="label_new_server">Adicionar Servidor</string>
+  <string name="label_next">Próximo</string>
   <string name="label_nicklist">Lista de Alcunhas</string>
   <string name="label_no">Não</string>
   <string name="label_no_away_message">Sem mensagem de ausência disponível</string>
@@ -79,6 +90,12 @@
   <string name="label_open">Abrir</string>
   <string name="label_part">Sair</string>
   <string name="label_part_long">Sair do Canal</string>
+  <string name="label_password_change">Alterar palavra-passe</string>
+  <string name="label_password_error_nomatch">As palavras-passe não correspondem</string>
+  <string name="label_password_error_wrong">Palavra-passe errada</string>
+  <string name="label_password_new">Nova palavra-passe</string>
+  <string name="label_password_old">Antiga palavra-passe</string>
+  <string name="label_password_repeat">Confirme a palavra-passe</string>
   <string name="label_placeholder_message">Escrever uma mensagem…</string>
   <string name="label_placeholder_topic">Descreva o tópico do canal…</string>
   <string name="label_privacy_policy">Política de Privacidade</string>
@@ -88,15 +105,23 @@
   <string name="label_reply">Responder</string>
   <string name="label_reset">Restabelecer</string>
   <string name="label_save">Guardar</string>
+  <string name="label_saving">Salvando…</string>
+  <string name="label_search">Pesquisa…</string>
+  <string name="label_search_buffer">Pesquisar Chats</string>
+  <string name="label_search_channels">Pesquisar Canais</string>
   <string name="label_select">Selecionar</string>
   <string name="label_send">Enviar</string>
+  <string name="label_service_connection_failed">Não foi possível criar a ligação, verifique as opções de economia de bateria. Visite dontkillmyapp.com para mais informação.</string>
   <string name="label_set_default">Definir Como Padrão</string>
   <string name="label_settings">Configurações</string>
   <string name="label_settings_client">Configurações do Cliente</string>
   <string name="label_settings_core">Configurações do Núcleo</string>
   <string name="label_share">Partilhar</string>
   <string name="label_share_crashreport">Partilhar Relatório de Crash</string>
+  <string name="label_shortcut">Atalho</string>
+  <string name="label_shortcut_long">Criar atalho no ecrã principal</string>
   <string name="label_show_hidden">Mostrar oculto</string>
+  <string name="label_sort">Ordenar</string>
   <string name="label_source">Fonte</string>
   <string name="label_topic">Tópico do Canal</string>
   <string name="label_translators">Tradutores</string>
@@ -104,6 +129,7 @@
   <string name="label_unknown_sender">&lt;Desconhecido&gt;</string>
   <string name="label_update_user_password">Actualizar Utilizador/Senha</string>
   <string name="label_use_default">Utilizar Padrão</string>
+  <string name="label_user_count">Contagem de utilizadores</string>
   <string name="label_website">Site</string>
   <string name="label_whitelist">Ignorar</string>
   <string name="label_whitelist_certificates">Certificados</string>
@@ -117,6 +143,11 @@
   <string name="label_whois_long">Atualizar informações de utilizador</string>
   <string name="label_yes">Sim</string>
 
+  <plurals name="label_user_count">
+    <item quantity="one">%1$d utilizadores</item>
+    <item quantity="other">%1$d utilizadores</item>
+  </plurals>
+
   <string name="label_feature_synchronizedmarkerline">Necessário para sincronizar a última posição nos canais</string>
   <string name="label_feature_saslauthentication">Necessario para SASL</string>
   <string name="label_feature_saslexternal">Necessário para SASL com certificados</string>
@@ -125,13 +156,18 @@
   <string name="label_feature_capnegotiation">Necessário para recursos do IRCv3</string>
   <string name="label_feature_verifyserverssl">Necessário para verificar o certificado SSL das redes de IRC às quais você se conecta</string>
   <string name="label_feature_customratelimits">Necessário para limites personalizados para redes de IRC</string>
-  <string name="label_feature_awayformattimestamp">Necessário para personalização de data/hora em mensagens de ausencia</string>
+  <string name="label_feature_awayformattimestamp">Necessário para personalização de data/hora em mensagens de ausência</string>
   <string name="label_feature_bufferactivitysync">Obrigatório para ver a atividade de chats na lista de chats</string>
   <string name="label_feature_coresidehighlights">Obrigatório para menções</string>
   <string name="label_feature_senderprefixes">Necessário para ver os modos de prefixo (+, @) dos utilizadores nas mensagens</string>
   <string name="label_feature_remotedisconnect">Necessário para desconexões remotas de seus próprios clientes</string>
   <string name="label_feature_richmessages">Necessário para ver nomes reais ou avatares do IRCV3 ou do Gravatar em mensagens</string>
   <string name="label_feature_backlogfiltertype">Obrigatório para receber notificações passadas após a conexão</string>
+
+  <string name="label_feature_context_bufferactivitysync">O Quasseldroid não pode destacar mensagens não lidas. Actualize seu núcleo para o Quassel v0.13 para resolver isso.</string>
+  <string name="label_feature_context_coresidehighlights">O Quasseldroid não pode configurar menções. Actualize seu núcleo para o Quassel v0.13 para resolver isso.</string>
+  <string name="label_feature_context_missing">Faltam alguns recursos no seu núcleo para o Quasseldroid funcionar correctamente.</string>
+  <string name="label_feature_context_missing_button">Detalhes</string>
 
   <string name="notification_channel_connection_title">Ligação</string>
   <string name="notification_channel_highlight_title">Menções</string>

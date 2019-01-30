@@ -31,6 +31,7 @@
 
   <string name="label_connection_host">Anfitrião</string>
   <string name="label_connection_port">Porta</string>
+  <string name="label_connection_ssl">Requer SSL</string>
 
   <string name="hint_invalid_host">Não é um anfitrião válido</string>
   <string name="hint_invalid_port">Não é uma porta válida</string>
@@ -54,6 +55,8 @@
 
   <!-- Core Setup -->
 
+  <string name="setup_core_title">Configurar Núcleo</string>
+
   <!-- Core Authenticator Select -->
   <string name="slide_core_authenticator_select_title">Selecione o tipo de autenticação</string>
   <string name="slide_core_authenticator_select_description">Selecione um tipo de autenticação para o núcleo Quassel utilizar para autenticar usuários.</string>
@@ -62,9 +65,17 @@
   <string name="slide_core_backend_select_title">Selecione o Tipo de Armazenamento</string>
   <string name="slide_core_backend_select_description">Selecione um um tipo de base de dados para o núcleo do Quassel armazenar o histórico e outros dados.</string>
 
+  <string name="label_backend">Backend</string>
+
   <!-- Core Backend Config -->
   <string name="slide_core_backend_setup_title">Configurar Tipo de Armazenamento</string>
   <string name="slide_core_backend_setup_description">Por favor, configure o tipo de base de dados selecionado.</string>
+
+  <string name="setup_core_backend_no_options">Este backend não tem opções de configuração, você terminou aqui!</string>
+
+  <!-- User Setup -->
+
+  <string name="setup_user_title">Configurar Utilizador</string>
 
   <!-- User Identity -->
   <string name="slide_user_identity_title">Configurar Identidade</string>
@@ -83,4 +94,8 @@
   <string name="slide_user_channels_description">Escolha os canais para entrar.</string>
 
   <string name="label_channels">Canais</string>
+
+  <!-- Network Setup -->
+
+  <string name="setup_network_title">Configurar Rede</string>
 </resources>

@@ -17,4 +17,23 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="certificate_subject">Emitido Para</string>
+  <string name="certificate_issuer">Emitido Por</string>
+
+  <string name="certificate_common_name">Nome comum (CN)</string>
+  <string name="certificate_organization">Organização (O)</string>
+  <string name="certificate_organizational_unit">Unidade Organizacional (OU)</string>
+
+  <string name="certificate_hostnames">Hostnames</string>
+
+  <string name="certificate_validity">Período de Validade</string>
+
+  <string name="certificate_not_before">Não Antes</string>
+  <string name="certificate_not_after">Não Depois</string>
+
+  <string name="certificate_fingerprints">Impressões digitais</string>
+
+  <string name="certificate_fingerprint_sha256">Impressão digital SHA-256</string>
+  <string name="certificate_fingerprint_sha1">Impressão digital SHA-1</string>
+</resources>

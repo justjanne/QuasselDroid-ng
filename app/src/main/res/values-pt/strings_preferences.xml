@@ -60,6 +60,11 @@
 
   <string name="preference_notification_light_title">LED</string>
 
+  <string name="preference_notification_mark_read_on_swipe_title">Marcar canal como lido ao desmarcar notificações</string>
+  <string name="preference_notification_mark_read_on_swipe_summary">Marca todas as mensagens como lidas quando uma notificação do canal é desmarcada</string>
+
+  <string name="preference_notification_network_name_in_notification_title_title">Mostra o nome da rede nas notificações</string>
+
   <string name="preference_notification_configure_title">Configurar Notificações</string>
 
   <string name="preference_notifications_level_all">Todas as Mensagens</string>
@@ -155,4 +160,5 @@
 
   <string name="preference_show_notification_title">Mostrar notificação</string>
   <string name="preference_show_notification_summary">Mantém o Quasseldroid sempre conectado, mostrando uma notificação persistente</string>
+
 </resources>
