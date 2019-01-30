@@ -45,9 +45,7 @@ import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.Defaults
-import de.kuschku.quasseldroid.persistence.AccountDatabase
-import de.kuschku.quasseldroid.persistence.QuasselBacklogStorage
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.*
 import de.kuschku.quasseldroid.settings.ConnectionSettings
 import de.kuschku.quasseldroid.settings.NotificationSettings
 import de.kuschku.quasseldroid.settings.Settings
@@ -172,10 +170,10 @@ class QuasselService : DaggerLifecycleService(),
       }
     }
 
-    val bufferId = intent.getIntExtra("buffer", -1)
+    val bufferId = BufferId(intent.getIntExtra("buffer", -1))
 
     val inputResults = RemoteInput.getResultsFromIntent(intent)?.getCharSequence("reply_content")
-    if (inputResults != null && bufferId != -1) {
+    if (inputResults != null && bufferId.isValidId()) {
       if (inputResults.isNotBlank()) {
         val lines = inputResults.lineSequence().map {
           it.toString() to ircFormatSerializer.toEscapeCodes(SpannableString(it))
@@ -197,14 +195,14 @@ class QuasselService : DaggerLifecycleService(),
         }
       }
     } else {
-      val clearMessageId = intent.getLongExtra("mark_read_message", -1)
-      if (bufferId != -1 && clearMessageId != -1L) {
+      val clearMessageId = MsgId(intent.getLongExtra("mark_read_message", -1))
+      if (bufferId.isValidId() && clearMessageId.isValidId()) {
         sessionManager.session.value?.bufferSyncer?.requestSetLastSeenMsg(bufferId, clearMessageId)
         sessionManager.session.value?.bufferSyncer?.requestMarkBufferAsRead(bufferId)
       }
 
-      val hideMessageId = intent.getLongExtra("hide_message", -1)
-      if (bufferId != -1 && hideMessageId != -1L) {
+      val hideMessageId = MsgId(intent.getLongExtra("hide_message", -1))
+      if (bufferId.isValidId() && hideMessageId.isValidId()) {
         if (notificationSettings.markReadOnSwipe) {
           sessionManager.session.value?.bufferSyncer?.requestSetLastSeenMsg(bufferId, hideMessageId)
           sessionManager.session.value?.bufferSyncer?.requestMarkBufferAsRead(bufferId)
@@ -501,7 +499,7 @@ class QuasselService : DaggerLifecycleService(),
     val deletedBuffersMessage = database.message().buffers().toSet() - buffers
     log(INFO, "QuasselService", "Buffers deleted from message storage: $deletedBuffersMessage")
     for (deletedBuffer in deletedBuffersMessage) {
-      database.message().clearMessages(deletedBuffer)
+      database.message().clearMessages(deletedBuffer.id)
     }
 
     val deletedBuffersFiltered = database.filtered().buffers(accountId).toSet() - buffers
@@ -546,13 +544,13 @@ class QuasselService : DaggerLifecycleService(),
         putExtra("disconnect", disconnect)
       }
       if (bufferId != null) {
-        putExtra("buffer", bufferId)
+        putExtra("buffer", bufferId.id)
       }
       if (markReadMessage != null) {
-        putExtra("mark_read_message", markReadMessage)
+        putExtra("mark_read_message", markReadMessage.id)
       }
       if (hideMessage != null) {
-        putExtra("hide_message", hideMessage)
+        putExtra("hide_message", hideMessage.id)
       }
     }
   }

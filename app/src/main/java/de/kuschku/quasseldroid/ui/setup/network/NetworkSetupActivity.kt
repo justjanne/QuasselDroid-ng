@@ -25,6 +25,7 @@ import android.content.Intent
 import android.os.Bundle
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.IdentityId
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.ui.setup.ServiceBoundSetupActivity
@@ -41,15 +42,15 @@ class NetworkSetupActivity : ServiceBoundSetupActivity() {
 
   override fun onDone(data: Bundle) {
     val network = data.getSerializable("network") as? LinkNetwork
-    val networkId = data.getInt("network_id", -1)
-    val identity = data.getInt("identity", -1)
-    if (networkId != -1 || (network != null && identity != -1)) {
+    val networkId = NetworkId(data.getInt("network_id", -1))
+    val identity = IdentityId(data.getInt("identity", -1))
+    if (networkId.isValidId() || (network != null && identity.isValidId())) {
       viewModel.backend?.value?.ifPresent { backend ->
         val session = viewModel.session.value?.orNull()
         session?.apply {
           rpcHandler?.apply {
             when {
-              networkId != -1                  -> {
+              networkId.isValidId()            -> {
                 val buffer = bufferSyncer?.find(networkId = networkId,
                                                 type = Buffer_Type.of(Buffer_Type.StatusBuffer))
                 if (buffer != null) {
@@ -107,7 +108,7 @@ class NetworkSetupActivity : ServiceBoundSetupActivity() {
           bundle.putSerializable("network", network)
         }
         if (identity != null) {
-          bundle.putInt("identity", identity)
+          bundle.putInt("identity", identity.id)
         }
         if (channels != null) {
           bundle.putStringArray("channels", channels)

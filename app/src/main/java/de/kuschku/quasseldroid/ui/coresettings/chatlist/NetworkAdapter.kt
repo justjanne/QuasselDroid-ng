@@ -71,7 +71,7 @@ class NetworkAdapter(@StringRes private val fallbackName: Int) :
   }
 
   override fun getItem(position: Int): INetwork.NetworkInfo? = data[position]
-  override fun getItemId(position: Int) = getItem(position)?.networkId?.toLong() ?: -1
+  override fun getItemId(position: Int) = getItem(position)?.networkId?.id?.toLong() ?: -1
   override fun hasStableIds() = true
   override fun getCount() = data.size
   class NetworkViewHolder(@StringRes private val fallbackName: Int, itemView: View) :

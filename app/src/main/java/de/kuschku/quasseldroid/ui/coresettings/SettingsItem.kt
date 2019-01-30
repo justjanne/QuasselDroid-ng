@@ -19,7 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.coresettings
 
-data class SettingsItem(
-  val id: Int,
+data class SettingsItem<T>(
+  val id: T,
   val name: String
 )

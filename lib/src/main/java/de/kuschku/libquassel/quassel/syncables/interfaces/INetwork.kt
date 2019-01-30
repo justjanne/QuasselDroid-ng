@@ -295,9 +295,9 @@ interface INetwork : ISyncableObject {
   }
 
   data class NetworkInfo(
-    var networkId: NetworkId = -1,
+    var networkId: NetworkId = NetworkId(-1),
     var networkName: String = "",
-    var identity: IdentityId = -1,
+    var identity: IdentityId = IdentityId(-1),
     // unused
     var useCustomEncodings: Boolean = false,
     var codecForServer: String = "UTF_8",

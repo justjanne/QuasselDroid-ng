@@ -46,10 +46,12 @@ class ChannelListAdapter @Inject constructor(
 ) :
   ListAdapter<IrcListHelper.ChannelDescription, ChannelListAdapter.ChannelViewHolder>(
     object : DiffUtil.ItemCallback<IrcListHelper.ChannelDescription>() {
-      override fun areItemsTheSame(oldItem: IrcListHelper.ChannelDescription, newItem: IrcListHelper.ChannelDescription) =
+      override fun areItemsTheSame(oldItem: IrcListHelper.ChannelDescription,
+                                   newItem: IrcListHelper.ChannelDescription) =
         oldItem.channelName == newItem.channelName
 
-      override fun areContentsTheSame(oldItem: IrcListHelper.ChannelDescription, newItem: IrcListHelper.ChannelDescription) =
+      override fun areContentsTheSame(oldItem: IrcListHelper.ChannelDescription,
+                                      newItem: IrcListHelper.ChannelDescription) =
         oldItem == newItem
     }
   ) {

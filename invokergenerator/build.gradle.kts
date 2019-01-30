@@ -17,16 +17,16 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.gradle.kotlin.dsl.DependencyHandlerScope
-import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.project
-
 plugins {
-  id("java")
+  kotlin("jvm")
+  kotlin("kapt")
 }
 
 dependencies {
+  implementation(kotlin("stdlib", "1.3.20"))
   implementation(project(":invokerannotations"))
+  implementation("org.jetbrains.kotlin", "kotlin-compiler-embeddable", "1.3.20")
+  implementation("com.squareup", "kotlinpoet", "1.0.1")
   implementation("com.google.auto.service:auto-service:1.0-rc4")
-  implementation("com.squareup:javapoet:1.11.1")
+  kapt("com.google.auto.service:auto-service:1.0-rc4")
 }

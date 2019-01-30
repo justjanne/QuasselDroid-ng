@@ -34,7 +34,7 @@ class Identity constructor(
   }
 
   override fun init() {
-    renameObject("${id()}")
+    renameObject("${id().id}")
   }
 
   override fun initProperties(): QVariantMap = mapOf(
@@ -210,7 +210,7 @@ class Identity constructor(
 
   private val _change = BehaviorSubject.createDefault(Unit)
 
-  private var _identityId: IdentityId = -1
+  private var _identityId: IdentityId = IdentityId(-1)
     set(value) {
       field = value
       _change.onNext(Unit)

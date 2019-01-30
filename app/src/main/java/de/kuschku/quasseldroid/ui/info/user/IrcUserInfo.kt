@@ -19,12 +19,13 @@
 
 package de.kuschku.quasseldroid.ui.info.user
 
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.quassel.syncables.Network
 
 data class IrcUserInfo(
-  val networkId: Int,
+  val networkId: NetworkId,
   val nick: String,
   val user: String? = null,
   val host: String? = null,

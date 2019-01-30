@@ -29,7 +29,9 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.util.helpers.value
@@ -79,21 +81,23 @@ class ChannelInfoFragment : ServiceBoundFragment() {
     ButterKnife.bind(this, view)
 
     val openBuffer = arguments?.getBoolean("openBuffer")
+    val bufferId = BufferId(arguments?.getInt("bufferId") ?: -1)
+    val networkId = NetworkId(arguments?.getInt("networkId") ?: -1)
 
-    var currentBufferInfo: BufferInfo? = null
+    var currentBufferInfo: BufferInfo?
 
     combineLatest(viewModel.session, viewModel.networks).map { (sessionOptional, networks) ->
       if (openBuffer == true) {
         val session = sessionOptional?.orNull()
         val bufferSyncer = session?.bufferSyncer
-        val bufferInfo = bufferSyncer?.bufferInfo(arguments?.getInt("bufferId") ?: -1)
+        val bufferInfo = bufferSyncer?.bufferInfo(bufferId)
         bufferInfo?.let { info ->
           networks[info.networkId]?.ircChannel(info.bufferName)?.let {
             Pair(info, it)
           }
         }
       } else {
-        networks[arguments?.getInt("networkId")]?.ircChannel(arguments?.getString("nick"))?.let {
+        networks[networkId]?.ircChannel(arguments?.getString("nick"))?.let {
           Pair(null, it)
         }
       } ?: Pair(null, IrcChannel.NULL)

@@ -68,7 +68,7 @@ class QuasselViewModel : ViewModel() {
 
   val expandedMessages = BehaviorSubject.createDefault(emptySet<MsgId>())
 
-  val buffer = BehaviorSubject.createDefault(Int.MAX_VALUE)
+  val buffer = BehaviorSubject.createDefault(BufferId.MAX_VALUE)
   val bufferOpened = PublishSubject.create<Unit>()
 
   val bufferViewConfigId = BehaviorSubject.createDefault(-1)
@@ -301,7 +301,7 @@ class QuasselViewModel : ViewModel() {
 
   val showHidden = BehaviorSubject.createDefault(false)
   val expandedNetworks = BehaviorSubject.createDefault(emptyMap<NetworkId, Boolean>())
-  val selectedBufferId = BehaviorSubject.createDefault(Int.MAX_VALUE)
+  val selectedBufferId = BehaviorSubject.createDefault(BufferId.MAX_VALUE)
   val selectedBuffer = combineLatest(session, selectedBufferId, bufferViewConfig)
     .switchMap { (sessionOptional, buffer, bufferViewConfigOptional) ->
       val session = sessionOptional.orNull()
@@ -318,7 +318,7 @@ class QuasselViewModel : ViewModel() {
               BufferHiddenState.VISIBLE
           }
 
-          val info = if (buffer < 0) networks[-buffer]?.let {
+          val info = if (!buffer.isValidId()) networks[NetworkId(-buffer.id)]?.let {
             BufferInfo(
               bufferId = buffer,
               networkId = it.networkId(),
@@ -386,10 +386,10 @@ class QuasselViewModel : ViewModel() {
                       it.type.hasFlag(Buffer_Type.StatusBuffer) ||
                       it.bufferName?.contains(bufferSearch, ignoreCase = true) == true
                     }.filter {
-                      currentConfig.networkId() <= 0 || currentConfig.networkId() == it.networkId
+                      !currentConfig.networkId().isValidId() || currentConfig.networkId() == it.networkId
                     }.filter {
                       (currentConfig.allowedBufferTypes() and it.type).isNotEmpty() ||
-                      (it.type.hasFlag(Buffer_Type.StatusBuffer) && currentConfig.networkId() < 0)
+                      (it.type.hasFlag(Buffer_Type.StatusBuffer) && !currentConfig.networkId().isValidId())
                     }.mapNotNull {
                       val network = networks[it.networkId]
                       if (network == null) {
@@ -489,7 +489,7 @@ class QuasselViewModel : ViewModel() {
                   fun missingStatusBuffers(
                     list: Collection<BufferId>): Sequence<Observable<BufferProps>?> {
                     val totalNetworks = networks.keys
-                    val wantedNetworks = if (currentConfig.networkId() <= 0) totalNetworks
+                    val wantedNetworks = if (!currentConfig.networkId().isValidId()) totalNetworks
                     else listOf(currentConfig.networkId())
 
                     val availableNetworks = list.asSequence().mapNotNull { id ->
@@ -503,7 +503,7 @@ class QuasselViewModel : ViewModel() {
                     val missingNetworks = wantedNetworks - availableNetworks
 
                     return missingNetworks.asSequence().filter {
-                      currentConfig.networkId() <= 0 || currentConfig.networkId() == it
+                      !currentConfig.networkId().isValidId() || currentConfig.networkId() == it
                     }.filter {
                       currentConfig.allowedBufferTypes().hasFlag(Buffer_Type.StatusBuffer)
                     }.mapNotNull {
@@ -515,7 +515,7 @@ class QuasselViewModel : ViewModel() {
                         network.liveConnectionState().map { connectionState ->
                           BufferProps(
                             info = BufferInfo(
-                              bufferId = -networkInfo.networkId,
+                              bufferId = BufferId(-networkInfo.networkId.id),
                               networkId = networkInfo.networkId,
                               groupId = 0,
                               bufferName = networkInfo.networkName,

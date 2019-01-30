@@ -35,7 +35,7 @@ class IdentityEditActivity : ServiceBoundSettingsActivity(IdentityEditFragment()
       context: Context,
       identity: IdentityId
     ) = Intent(context, IdentityEditActivity::class.java).apply {
-      putExtra("identity", identity)
+      putExtra("identity", identity.id)
     }
   }
 }

@@ -27,7 +27,7 @@ import androidx.appcompat.widget.ThemedSpinnerAdapter
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
-import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.ui.ContextThemeWrapper
@@ -55,7 +55,7 @@ class IdentityAdapter : RecyclerSpinnerAdapter<IdentityAdapter.NetworkViewHolder
     return NetworkViewHolder(inflater.inflate(R.layout.widget_spinner_item_inline, parent, false))
   }
 
-  fun indexOf(id: NetworkId): Int? {
+  fun indexOf(id: IdentityId): Int? {
     for ((key, item) in data.withIndex()) {
       if (item.id() == id) {
         return key
@@ -67,7 +67,7 @@ class IdentityAdapter : RecyclerSpinnerAdapter<IdentityAdapter.NetworkViewHolder
   override fun getItem(position: Int): Identity? =
     if (position in 0 until data.size) data[position] else null
 
-  override fun getItemId(position: Int) = getItem(position)?.id()?.toLong() ?: -1
+  override fun getItemId(position: Int) = getItem(position)?.id()?.id?.toLong() ?: -1
 
   override fun hasStableIds() = true
 

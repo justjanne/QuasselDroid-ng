@@ -27,16 +27,16 @@ import java.nio.ByteBuffer
 
 object BufferInfoSerializer : Serializer<BufferInfo> {
   override fun serialize(buffer: ChainedByteBuffer, data: BufferInfo, features: QuasselFeatures) {
-    IntSerializer.serialize(buffer, data.bufferId, features)
-    IntSerializer.serialize(buffer, data.networkId, features)
+    BufferIdSerializer.serialize(buffer, data.bufferId, features)
+    NetworkIdSerializer.serialize(buffer, data.networkId, features)
     ShortSerializer.serialize(buffer, data.type.toShort(), features)
     IntSerializer.serialize(buffer, data.groupId, features)
     StringSerializer.UTF8.serialize(buffer, data.bufferName, features)
   }
 
   override fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): BufferInfo {
-    val bufferId = IntSerializer.deserialize(buffer, features)
-    val networkId = IntSerializer.deserialize(buffer, features)
+    val bufferId = BufferIdSerializer.deserialize(buffer, features)
+    val networkId = NetworkIdSerializer.deserialize(buffer, features)
     val type = Buffer_Type.of(ShortSerializer.deserialize(buffer, features))
     val groupId = IntSerializer.deserialize(buffer, features)
     val bufferName = StringSerializer.UTF8.deserialize(buffer, features)

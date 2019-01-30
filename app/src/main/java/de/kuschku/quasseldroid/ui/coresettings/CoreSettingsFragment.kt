@@ -31,6 +31,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.protocol.IdentityId
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.quassel.syncables.Network
@@ -102,15 +104,15 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     val view = inflater.inflate(R.layout.settings_list, container, false)
     ButterKnife.bind(this, view)
 
-    val networkAdapter = SettingsItemAdapter {
+    val networkAdapter = SettingsItemAdapter<NetworkId> {
       NetworkEditActivity.launch(requireContext(), network = it)
     }
 
-    val identityAdapter = SettingsItemAdapter {
+    val identityAdapter = SettingsItemAdapter<IdentityId> {
       IdentityEditActivity.launch(requireContext(), identity = it)
     }
 
-    val chatListAdapter = SettingsItemAdapter {
+    val chatListAdapter = SettingsItemAdapter<Int> {
       ChatlistEditActivity.launch(requireContext(), chatlist = it)
     }
 
@@ -136,7 +138,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
         combineLatest(it.values.map(Network::liveNetworkInfo)).map {
           it.map {
             SettingsItem(it.networkId, it.networkName)
-          }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, SettingsItem::name))
+          }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, SettingsItem<NetworkId>::name))
         }
       }
     }.toLiveData().observe(this, Observer {
@@ -155,7 +157,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
         combineLatest(it.values.map(Identity::liveUpdates)).map {
           it.map {
             SettingsItem(it.id(), it.identityName() ?: "")
-          }.sortedBy(SettingsItem::name)
+          }.sortedBy(SettingsItem<IdentityId>::name)
         }
       }
     }.toLiveData().observe(this, Observer {
@@ -171,7 +173,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
       combineLatest(it.values.map(BufferViewConfig::liveUpdates)).map {
         it.map {
           SettingsItem(it.bufferViewId(), it.bufferViewName())
-        }.sortedBy(SettingsItem::name)
+        }.sortedBy(SettingsItem<Int>::name)
       }
     }.toLiveData().observe(this, Observer {
       chatListAdapter.submitList(it.orEmpty())

@@ -215,7 +215,7 @@ class Session(
       bufferSyncer.initSetBufferInfos(f.bufferInfos)
 
       f.networkIds?.forEach {
-        val network = Network(it.value(-1), this)
+        val network = Network(it.value(NetworkId(-1)), this)
         networks[network.networkId()] = network
       }
       live_networks.onNext(Unit)

@@ -27,8 +27,8 @@ import de.kuschku.libquassel.protocol.Type
 @Syncable(name = "BacklogManager")
 interface IBacklogManager : ISyncableObject {
   @Slot
-  fun requestBacklog(bufferId: BufferId, first: MsgId = -1, last: MsgId = -1, limit: Int = -1,
-                     additional: Int = 0) {
+  fun requestBacklog(bufferId: BufferId, first: MsgId = MsgId(-1), last: MsgId = MsgId(-1),
+                     limit: Int = -1, additional: Int = 0) {
     REQUEST(
       "requestBacklog", ARG(bufferId, QType.BufferId), ARG(first, QType.MsgId),
       ARG(last, QType.MsgId), ARG(limit, Type.Int), ARG(additional, Type.Int)
@@ -36,9 +36,9 @@ interface IBacklogManager : ISyncableObject {
   }
 
   @Slot
-  fun requestBacklogFiltered(bufferId: BufferId, first: MsgId = -1, last: MsgId = -1,
-                             limit: Int = -1, additional: Int = 0, type: Int = -1,
-                             flags: Int = -1) {
+  fun requestBacklogFiltered(bufferId: BufferId, first: MsgId = MsgId(-1),
+                             last: MsgId = MsgId(-1), limit: Int = -1, additional: Int = 0,
+                             type: Int = -1, flags: Int = -1) {
     REQUEST(
       "requestBacklogFiltered", ARG(bufferId, QType.BufferId), ARG(first, QType.MsgId),
       ARG(last, QType.MsgId), ARG(limit, Type.Int), ARG(additional, Type.Int), ARG(type, Type.Int),
@@ -47,7 +47,7 @@ interface IBacklogManager : ISyncableObject {
   }
 
   @Slot
-  fun requestBacklogAll(first: MsgId = -1, last: MsgId = -1, limit: Int = -1,
+  fun requestBacklogAll(first: MsgId = MsgId(-1), last: MsgId = MsgId(-1), limit: Int = -1,
                         additional: Int = 0) {
     REQUEST(
       "requestBacklogAll", ARG(first, QType.MsgId), ARG(last, QType.MsgId),
@@ -56,8 +56,9 @@ interface IBacklogManager : ISyncableObject {
   }
 
   @Slot
-  fun requestBacklogAllFiltered(first: MsgId = -1, last: MsgId = -1, limit: Int = -1,
-                                additional: Int = 0, type: Int = -1, flags: Int = -1) {
+  fun requestBacklogAllFiltered(first: MsgId = MsgId(-1), last: MsgId = MsgId(-1),
+                                limit: Int = -1, additional: Int = 0, type: Int = -1,
+                                flags: Int = -1) {
     REQUEST(
       "requestBacklogAllFiltered", ARG(first, QType.MsgId), ARG(last, QType.MsgId),
       ARG(limit, Type.Int), ARG(additional, Type.Int), ARG(type, Type.Int), ARG(flags, Type.Int)
@@ -77,8 +78,8 @@ interface IBacklogManager : ISyncableObject {
                         messages: QVariantList)
 
   @Slot
-  fun receiveBacklogAllFiltered(first: MsgId, last: MsgId, limit: Int, additional: Int,
-                                type: Int, flags: Int, messages: QVariantList)
+  fun receiveBacklogAllFiltered(first: MsgId, last: MsgId, limit: Int, additional: Int, type: Int,
+                                flags: Int, messages: QVariantList)
 
   @Slot
   override fun update(properties: QVariantMap) {

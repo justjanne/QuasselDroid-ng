@@ -19,6 +19,8 @@
 
 package de.kuschku.libquassel.quassel.syncables
 
+import de.kuschku.libquassel.protocol.IdentityId
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.session.SignalProxy
@@ -28,9 +30,9 @@ import org.junit.Test
 class NetworkTest {
   @Test
   fun testSerialization() {
-    val original = Network(randomInt(), SignalProxy.NULL)
+    val original = Network(NetworkId(randomInt()), SignalProxy.NULL)
     original.setNetworkName(randomString())
-    original.setIdentity(randomInt())
+    original.setIdentity(IdentityId(randomInt()))
     original.setActualServerList(listOf(
       INetwork.Server(
         host = randomString(),
@@ -155,9 +157,9 @@ class NetworkTest {
 
   @Test
   fun testCopy() {
-    val original = Network(randomInt(), SignalProxy.NULL)
+    val original = Network(NetworkId(randomInt()), SignalProxy.NULL)
     original.setNetworkName(randomString())
-    original.setIdentity(randomInt())
+    original.setIdentity(IdentityId(randomInt()))
     original.setActualServerList(listOf(
       INetwork.Server(
         host = randomString(),

@@ -19,7 +19,9 @@
 
 package de.kuschku.libquassel.protocol.primitive.serializer
 
+import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.deserialize
 import de.kuschku.libquassel.util.roundTrip
@@ -30,8 +32,8 @@ class BufferInfoSerializerTest {
   @Test
   fun testBaseCase() {
     val value = BufferInfo(
-      -1,
-      -1,
+      BufferId(-1),
+      NetworkId(-1),
       Buffer_Type.of(),
       -1,
       ""
@@ -45,8 +47,8 @@ class BufferInfoSerializerTest {
   @Test
   fun testNormal() {
     val value = BufferInfo(
-      Int.MAX_VALUE,
-      Int.MAX_VALUE,
+      BufferId.MAX_VALUE,
+      NetworkId.MAX_VALUE,
       Buffer_Type.of(*Buffer_Type.validValues),
       Int.MAX_VALUE,
       "äẞ\u0000\uFFFF"

@@ -19,8 +19,7 @@
 
 package de.kuschku.quasseldroid.util
 
-import de.kuschku.libquassel.protocol.Message_Flag
-import de.kuschku.libquassel.protocol.Message_Type
+import de.kuschku.libquassel.protocol.*
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
@@ -31,13 +30,13 @@ import org.threeten.bp.Instant
 class AvatarHelperTest {
   @Test
   fun testGravatarAvatars() {
-    val message = QuasselDatabase.MessageData(
-      messageId = 1,
+    val message = QuasselDatabase.MessageData.of(
+      messageId = MsgId(1),
       time = Instant.now(),
       type = Message_Type.of(Message_Type.Plain),
       flag = Message_Flag.of(),
-      bufferId = 0,
-      networkId = 0,
+      bufferId = BufferId(0),
+      networkId = NetworkId(0),
       sender = "justJanne",
       senderPrefixes = "",
       realName = "Janne Koschinski <janne@kuschku.de>",
@@ -71,13 +70,13 @@ class AvatarHelperTest {
 
   @Test
   fun testIrcCloudAvatars() {
-    val message = QuasselDatabase.MessageData(
-      messageId = 1,
+    val message = QuasselDatabase.MessageData.of(
+      messageId = MsgId(1),
       time = Instant.now(),
       type = Message_Type.of(Message_Type.Plain),
       flag = Message_Flag.of(),
-      bufferId = 0,
-      networkId = 0,
+      bufferId = BufferId(0),
+      networkId = NetworkId(0),
       sender = "jwheare!sid2@irccloud.com",
       senderPrefixes = "",
       realName = "James Wheare",
@@ -111,13 +110,13 @@ class AvatarHelperTest {
 
   @Test
   fun testActualAvatars() {
-    val message = QuasselDatabase.MessageData(
-      messageId = 1,
+    val message = QuasselDatabase.MessageData.of(
+      messageId = MsgId(1),
       time = Instant.now(),
       type = Message_Type.of(Message_Type.Plain),
       flag = Message_Flag.of(),
-      bufferId = 0,
-      networkId = 0,
+      bufferId = BufferId(0),
+      networkId = NetworkId(0),
       sender = "jwheare!sid2@irccloud.com",
       senderPrefixes = "",
       realName = "James Wheare",

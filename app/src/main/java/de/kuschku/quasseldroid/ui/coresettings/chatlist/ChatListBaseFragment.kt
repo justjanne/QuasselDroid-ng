@@ -32,6 +32,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
@@ -224,7 +225,7 @@ abstract class ChatListBaseFragment(private val initDefault: Boolean) :
     else allowedBufferTypes -= Buffer_Type.StatusBuffer
     data.setAllowedBufferTypes(allowedBufferTypes)
 
-    data.setNetworkId(networkId.selectedItemId.toInt())
+    data.setNetworkId(NetworkId(networkId.selectedItemId.toInt()))
     data.setMinimumActivity(minimumActivity.selectedItemId.toInt())
 
     if (old != null) {

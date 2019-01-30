@@ -38,6 +38,9 @@ import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.GlideRequest
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.all
+import de.kuschku.quasseldroid.persistence.buffers
+import de.kuschku.quasseldroid.persistence.markRead
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.NotificationSettings
@@ -122,7 +125,7 @@ class QuasselNotificationBackend @Inject constructor(
                 activity.hasFlag(Message_Type.Action) ||
                 activity.hasFlag(Message_Type.Notice))
               session.backlogManager.requestBacklogFiltered(
-                buffer.bufferId, lastSeenId, -1, 20, 0,
+                buffer.bufferId, lastSeenId, MsgId(-1), 20, 0,
                 Message_Type.of(Message_Type.Plain,
                                 Message_Type.Action,
                                 Message_Type.Notice).toInt(),
@@ -136,7 +139,7 @@ class QuasselNotificationBackend @Inject constructor(
             val highlightCount = session.bufferSyncer.highlightCount(buffer.bufferId)
             if (highlightCount != 0) {
               session.backlogManager.requestBacklogFiltered(
-                buffer.bufferId, lastSeenId, -1, 20, 0,
+                buffer.bufferId, lastSeenId, MsgId(-1), 20, 0,
                 Message_Type.of(Message_Type.Plain,
                                 Message_Type.Action,
                                 Message_Type.Notice).toInt(),
@@ -224,7 +227,7 @@ class QuasselNotificationBackend @Inject constructor(
     }.map {
       val network = session.network(it.bufferInfo.networkId)
       val me = network?.me()
-      QuasselDatabase.NotificationData(
+      QuasselDatabase.NotificationData.of(
         messageId = it.messageId,
         creationTime = now,
         time = it.time,
@@ -369,7 +372,7 @@ class QuasselNotificationBackend @Inject constructor(
         notificationSettings, buffer, selfInfo, notificationData, isLoud, isConnected
       )
       notificationHandler.notify(notification)
-    } ?: notificationHandler.remove(buffer)
+    } ?: notificationHandler.remove(buffer.id)
   }
 
   @Synchronized

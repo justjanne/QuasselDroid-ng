@@ -37,7 +37,7 @@ class ChannelInfoActivity : ServiceBoundSettingsActivity(ChannelInfoFragment()) 
       openBuffer: Boolean,
       bufferId: BufferId
     ) = Intent(context, ChannelInfoActivity::class.java).apply {
-      putExtra("bufferId", bufferId)
+      putExtra("bufferId", bufferId.id)
       putExtra("openBuffer", openBuffer)
     }
   }

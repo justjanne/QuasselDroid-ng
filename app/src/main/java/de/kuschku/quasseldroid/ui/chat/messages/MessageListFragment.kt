@@ -55,8 +55,7 @@ import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.persistence.AccountDatabase
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.*
 import de.kuschku.quasseldroid.service.BacklogRequester
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
@@ -290,11 +289,11 @@ class MessageListFragment : ServiceBoundFragment() {
     }
     adapter.setOnUrlLongClickListener(LinkLongClickMenuHelper())
 
-    adapter.setOnExpansionListener { (messageId) ->
+    adapter.setOnExpansionListener {
       val value = viewModel.expandedMessages.value
       viewModel.expandedMessages.onNext(
-        if (value.contains(messageId)) value - messageId
-        else value + messageId
+        if (value.contains(it.messageId)) value - it.messageId
+        else value + it.messageId
       )
     }
 
@@ -392,7 +391,7 @@ class MessageListFragment : ServiceBoundFragment() {
     }
 
     viewModel.buffer.toLiveData().observe(this, Observer { bufferId ->
-      swipeRefreshLayout.isEnabled = (bufferId != null || bufferId != -1)
+      swipeRefreshLayout.isEnabled = (bufferId != null || bufferId?.isValidId() == true)
     })
 
     viewModel.sessionManager.mapSwitchMap(SessionManager::state).distinctUntilChanged().toLiveData().observe(
@@ -407,7 +406,7 @@ class MessageListFragment : ServiceBoundFragment() {
             // Try loading messages when switching to isEmpty buffer
             val hasVisibleMessages = database.message().hasVisibleMessages(bufferId, filtered)
             if (!hasVisibleMessages) {
-              if (bufferId > 0 && bufferId != Int.MAX_VALUE) {
+              if (bufferId.isValidId() && bufferId != BufferId.MAX_VALUE) {
                 loadMore(initial = true)
               }
             }
@@ -484,7 +483,7 @@ class MessageListFragment : ServiceBoundFragment() {
       (messageList.layoutManager as RecyclerView.LayoutManager).onRestoreInstanceState(getParcelable(
         KEY_STATE_LIST))
       previousLoadKey = getInt(KEY_STATE_PAGING).nullIf { it == -1 }
-      lastBuffer = getInt(KEY_STATE_BUFFER).nullIf { it == -1 }
+      lastBuffer = BufferId(getInt(KEY_STATE_BUFFER)).nullIf { !it.isValidId() }
     }
 
     data.observe(this, Observer { list ->
@@ -496,7 +495,8 @@ class MessageListFragment : ServiceBoundFragment() {
           list?.let(adapter::submitList)
         }
 
-        val buffer = viewModel.buffer.value ?: -1
+        val buffer = viewModel.buffer.value
+                     ?: BufferId(-1)
         if (buffer != lastBuffer) {
           adapter.clearCache()
           viewModel.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
@@ -514,7 +514,7 @@ class MessageListFragment : ServiceBoundFragment() {
     super.onSaveInstanceState(outState)
     outState.putParcelable(KEY_STATE_LIST, messageList.layoutManager?.onSaveInstanceState())
     outState.putInt(KEY_STATE_PAGING, previousLoadKey ?: -1)
-    outState.putInt(KEY_STATE_BUFFER, lastBuffer ?: -1)
+    outState.putInt(KEY_STATE_BUFFER, lastBuffer?.id ?: -1)
   }
 
   private fun markAsRead(bufferSyncer: BufferSyncer, buffer: BufferId, lastMessageId: MsgId?) {
@@ -537,7 +537,7 @@ class MessageListFragment : ServiceBoundFragment() {
                                            ?: 0)
     val hasVisibleMessages = database.message().hasVisibleMessages(current, filtered)
     if (!hasVisibleMessages) {
-      if (current > 0 && current != Int.MAX_VALUE) {
+      if (current.isValidId() && current != BufferId.MAX_VALUE) {
         loadMore(initial = true)
       }
     }
@@ -559,7 +559,7 @@ class MessageListFragment : ServiceBoundFragment() {
     // This can be called *after* we’re already detached from the activity
     activity?.runOnUiThread {
       viewModel.buffer { bufferId ->
-        if (bufferId > 0 && bufferId != Int.MAX_VALUE) {
+        if (bufferId.isValidId() && bufferId != BufferId.MAX_VALUE) {
           if (initial) swipeRefreshLayout.isRefreshing = true
           runInBackground {
             backlogRequester.loadMore(
@@ -568,7 +568,8 @@ class MessageListFragment : ServiceBoundFragment() {
               amount = if (initial) backlogSettings.initialAmount else backlogSettings.pageSize,
               pageSize = backlogSettings.pageSize,
               lastMessageId = lastMessageId
-                              ?: database.message().findFirstByBufferId(bufferId)?.messageId ?: -1,
+                              ?: database.message().findFirstByBufferId(bufferId)?.messageId
+                              ?: MsgId(-1),
               untilAllVisible = initial
             ) {
               activity?.runOnUiThread {

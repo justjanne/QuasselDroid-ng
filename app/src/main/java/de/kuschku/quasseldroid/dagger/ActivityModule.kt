@@ -237,7 +237,7 @@ abstract class ActivityModule {
   @ContributesAndroidInjector(modules = [CoreSetupFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
   abstract fun bindCoreSetupActivity(): CoreSetupActivity
 
-   // Service
+  // Service
 
   @ActivityScope
   @ContributesAndroidInjector(modules = [QuasselServiceModule::class, SettingsModule::class, DatabaseModule::class])

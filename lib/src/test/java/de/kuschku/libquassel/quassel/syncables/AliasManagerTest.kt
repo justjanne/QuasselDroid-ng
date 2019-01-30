@@ -19,8 +19,10 @@
 
 package de.kuschku.libquassel.quassel.syncables
 
+import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Buffer_Types
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
@@ -64,8 +66,8 @@ class AliasManagerTest {
       manager.setAliasList(manager.defaults() + aliases)
 
       val bufferInfo = BufferInfo(
-        bufferId = -1,
-        networkId = -1,
+        bufferId = BufferId(-1),
+        networkId = NetworkId(-1),
         type = Buffer_Types.of(Buffer_Type.StatusBuffer),
         bufferName = "#quassel-test",
         groupId = -1

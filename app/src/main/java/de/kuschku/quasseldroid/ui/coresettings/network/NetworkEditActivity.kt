@@ -35,7 +35,7 @@ class NetworkEditActivity : ServiceBoundSettingsActivity(NetworkEditFragment()) 
       context: Context,
       network: NetworkId
     ) = Intent(context, NetworkEditActivity::class.java).apply {
-      putExtra("network", network)
+      putExtra("network", network.id)
     }
   }
 }

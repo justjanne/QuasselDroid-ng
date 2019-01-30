@@ -53,7 +53,7 @@ abstract class ServiceBoundFragment : DaggerFragment() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     accountId = context?.getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
-      ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
+                  ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
 
     connection.context = context
     lifecycle.addObserver(connection)
@@ -63,7 +63,7 @@ abstract class ServiceBoundFragment : DaggerFragment() {
   override fun onStart() {
     super.onStart()
     accountId = context?.getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
-      ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
+                  ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
   }
 
   override fun onDestroy() {

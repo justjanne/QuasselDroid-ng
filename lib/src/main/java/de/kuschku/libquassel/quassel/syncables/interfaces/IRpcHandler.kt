@@ -34,7 +34,7 @@ import java.nio.ByteBuffer
 interface IRpcHandler {
   val session: Session
 
-  @Slot("__objectRenamed__")
+  @Slot(value = "__objectRenamed__")
   fun objectRenamed(classname: ByteBuffer, newname: String?, oldname: String?)
 
   @Slot("2displayMsg(Message)")

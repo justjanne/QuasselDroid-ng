@@ -32,13 +32,13 @@ class MessageSerializerTest {
   @Test
   fun testBaseCaseNoFeatures() {
     val value = Message(
-      -1,
+      MsgId(-1),
       Instant.EPOCH,
       Message_Type.of(),
       Message_Flag.of(),
       BufferInfo(
-        -1,
-        -1,
+        BufferId(-1),
+        NetworkId(-1),
         Buffer_Type.of(),
         -1,
         ""
@@ -59,7 +59,7 @@ class MessageSerializerTest {
   @Test
   fun testNormalNoFeatures() {
     val value = Message(
-      Int.MAX_VALUE.toLong(),
+      MsgId(Int.MAX_VALUE.toLong()),
       Instant.ofEpochMilli(1524601750000),
       Message_Type.of(*Message_Type.values()),
       Message_Flag.of(*Message_Flag.values()),
@@ -86,13 +86,13 @@ class MessageSerializerTest {
   @Test
   fun testBaseCaseAllFeatures() {
     val value = Message(
-      -1,
+      MsgId(-1),
       Instant.EPOCH,
       Message_Type.of(),
       Message_Flag.of(),
       BufferInfo(
-        -1,
-        -1,
+        BufferId(-1),
+        NetworkId(-1),
         Buffer_Type.of(),
         -1,
         ""

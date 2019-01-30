@@ -120,41 +120,41 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
       return if (info != null && session != null) {
         when (item?.itemId) {
-          R.id.action_channellist  -> {
+          R.id.action_channellist -> {
             network?.let {
               ChannelListActivity.launch(requireContext(), network = it.networkId())
             }
             actionMode?.finish()
             true
           }
-          R.id.action_configure  -> {
+          R.id.action_configure   -> {
             network?.let {
               NetworkEditActivity.launch(requireContext(), network = it.networkId())
             }
             actionMode?.finish()
             true
           }
-          R.id.action_connect    -> {
+          R.id.action_connect     -> {
             network?.requestConnect()
             actionMode?.finish()
             true
           }
-          R.id.action_disconnect -> {
+          R.id.action_disconnect  -> {
             network?.requestDisconnect()
             actionMode?.finish()
             true
           }
-          R.id.action_join       -> {
+          R.id.action_join        -> {
             session.rpcHandler?.sendInput(info, "/join ${info.bufferName}")
             actionMode?.finish()
             true
           }
-          R.id.action_part       -> {
+          R.id.action_part        -> {
             session.rpcHandler?.sendInput(info, "/part ${info.bufferName}")
             actionMode?.finish()
             true
           }
-          R.id.action_delete     -> {
+          R.id.action_delete      -> {
             MaterialDialog.Builder(activity!!)
               .content(R.string.buffer_delete_confirmation)
               .positiveText(R.string.label_yes)
@@ -174,7 +174,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
               .show()
             true
           }
-          R.id.action_rename     -> {
+          R.id.action_rename      -> {
             MaterialDialog.Builder(activity!!)
               .input(
                 getString(R.string.label_buffer_name),
@@ -197,24 +197,24 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
               .show()
             true
           }
-          R.id.action_unhide     -> {
+          R.id.action_unhide      -> {
             bufferSyncer?.let {
               bufferViewConfig?.orNull()?.insertBufferSorted(info, bufferSyncer)
             }
             actionMode?.finish()
             true
           }
-          R.id.action_hide_temp  -> {
+          R.id.action_hide_temp   -> {
             bufferViewConfig?.orNull()?.requestRemoveBuffer(info.bufferId)
             actionMode?.finish()
             true
           }
-          R.id.action_hide_perm  -> {
+          R.id.action_hide_perm   -> {
             bufferViewConfig?.orNull()?.requestRemoveBufferPermanently(info.bufferId)
             actionMode?.finish()
             true
           }
-          else                   -> false
+          else                    -> false
         }
       } else {
         false

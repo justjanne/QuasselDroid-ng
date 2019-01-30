@@ -35,7 +35,7 @@ class ChannelListActivity : ServiceBoundSettingsActivity(ChannelListFragment()) 
       context: Context,
       network: NetworkId
     ) = Intent(context, ChannelListActivity::class.java).apply {
-      putExtra("network_id", network)
+      putExtra("network_id", network.id)
     }
   }
 }

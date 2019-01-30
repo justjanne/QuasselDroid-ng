@@ -28,16 +28,15 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
-import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.quasseldroid.R
 
-class SettingsItemAdapter(private val clickListener: (Int) -> Unit) :
-  ListAdapter<SettingsItem, SettingsItemAdapter.SettingsItemViewHolder>(
-    object : DiffUtil.ItemCallback<SettingsItem>() {
-      override fun areItemsTheSame(oldItem: SettingsItem, newItem: SettingsItem) =
+class SettingsItemAdapter<T>(private val clickListener: (T) -> Unit) :
+  ListAdapter<SettingsItem<T>, SettingsItemAdapter.SettingsItemViewHolder<T>>(
+    object : DiffUtil.ItemCallback<SettingsItem<T>>() {
+      override fun areItemsTheSame(oldItem: SettingsItem<T>, newItem: SettingsItem<T>) =
         oldItem.id == newItem.id
 
-      override fun areContentsTheSame(oldItem: SettingsItem, newItem: SettingsItem) =
+      override fun areContentsTheSame(oldItem: SettingsItem<T>, newItem: SettingsItem<T>) =
         oldItem == newItem
     }
   ) {
@@ -46,16 +45,16 @@ class SettingsItemAdapter(private val clickListener: (Int) -> Unit) :
     clickListener
   )
 
-  override fun onBindViewHolder(holder: SettingsItemViewHolder, position: Int) {
+  override fun onBindViewHolder(holder: SettingsItemViewHolder<T>, position: Int) {
     holder.bind(getItem(position))
   }
 
-  class SettingsItemViewHolder(itemView: View, clickListener: (Int) -> Unit) :
+  class SettingsItemViewHolder<T>(itemView: View, clickListener: (T) -> Unit) :
     RecyclerView.ViewHolder(itemView) {
     @BindView(R.id.title)
     lateinit var title: TextView
 
-    var id: IdentityId? = null
+    var id: T? = null
 
     init {
       ButterKnife.bind(this, itemView)
@@ -64,7 +63,7 @@ class SettingsItemAdapter(private val clickListener: (Int) -> Unit) :
       }
     }
 
-    fun bind(item: SettingsItem) {
+    fun bind(item: SettingsItem<T>) {
       this.id = item.id
       this.title.text = item.name
     }

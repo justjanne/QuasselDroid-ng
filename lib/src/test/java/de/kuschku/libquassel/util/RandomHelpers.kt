@@ -23,7 +23,7 @@ import org.threeten.bp.Instant
 import java.nio.charset.Charset
 import java.util.*
 
-val random = Random()
+private val random = Random()
 
 fun Any?.randomBoolean(): Boolean = random.nextBoolean()
 

@@ -48,10 +48,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.connection.ProtocolVersionException
 import de.kuschku.libquassel.connection.QuasselSecurityException
-import de.kuschku.libquassel.protocol.Buffer_Type
-import de.kuschku.libquassel.protocol.Message
-import de.kuschku.libquassel.protocol.Message_Type
-import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.protocol.coresetup.CoreSetupData
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_PLAINTEXT
@@ -67,8 +64,7 @@ import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.DefaultNetworkServer
-import de.kuschku.quasseldroid.persistence.AccountDatabase
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.*
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.Settings
@@ -161,7 +157,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           }
         }
         intent.hasExtra(KEY_BUFFER_ID)                                  -> {
-          viewModel.buffer.onNext(intent.getIntExtra(KEY_BUFFER_ID, -1))
+          viewModel.buffer.onNext(BufferId(intent.getIntExtra(KEY_BUFFER_ID, -1)))
           viewModel.bufferOpened.onNext(Unit)
           if (intent.hasExtra(KEY_ACCOUNT_ID)) {
             val accountId = intent.getLongExtra(ChatActivity.KEY_ACCOUNT_ID, -1)
@@ -183,7 +179,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           drawerLayout.closeDrawers()
         }
         intent.hasExtra(KEY_NETWORK_ID) && intent.hasExtra(KEY_CHANNEL) -> {
-          val networkId = intent.getIntExtra(KEY_NETWORK_ID, -1)
+          val networkId = NetworkId(intent.getIntExtra(KEY_NETWORK_ID, -1))
           val channel = intent.getStringExtra(KEY_CHANNEL)
 
           viewModel.session.filter(Optional<ISession>::isPresent).firstElement().subscribe {
@@ -310,9 +306,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     // If we connect to a new network without statusbuffer, the bufferid may be -networkId.
     // In that case, once we’re connected (and a status buffer exists), we want to switch to it.
     combineLatest(viewModel.allBuffers, viewModel.buffer).map { (buffers, current) ->
-      if (current > 0) Optional.empty()
+      if (current.isValidId()) Optional.empty()
       else Optional.ofNullable(buffers.firstOrNull {
-        it.networkId == -current && it.type.hasFlag(Buffer_Type.StatusBuffer)
+        it.networkId == NetworkId(-current.id) && it.type.hasFlag(Buffer_Type.StatusBuffer)
       })
     }.toLiveData().observe(this, Observer { info ->
       info?.orNull()?.let {
@@ -632,7 +628,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       .observe(this, Observer {
         if (connectedAccount != accountId) {
           if (resources.getBoolean(R.bool.buffer_drawer_exists) &&
-              viewModel.buffer.value == Int.MAX_VALUE &&
+              viewModel.buffer.value == BufferId.MAX_VALUE &&
               !restoredDrawerState) {
             drawerLayout.openDrawer(GravityCompat.START)
           }
@@ -782,7 +778,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onSaveInstanceState(outState: Bundle?) {
     super.onSaveInstanceState(outState)
-    outState?.putInt(KEY_OPEN_BUFFER, viewModel.buffer.value ?: -1)
+    outState?.putInt(KEY_OPEN_BUFFER, viewModel.buffer.value.id ?: -1)
     outState?.putInt(KEY_OPEN_BUFFERVIEWCONFIG, viewModel.bufferViewConfigId.value ?: -1)
     outState?.putLong(KEY_CONNECTED_ACCOUNT, connectedAccount)
     outState?.putBoolean(KEY_OPEN_DRAWER_START, drawerLayout.isDrawerOpen(GravityCompat.START))
@@ -791,7 +787,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
     super.onRestoreInstanceState(savedInstanceState)
-    viewModel.buffer.onNext(savedInstanceState?.getInt(KEY_OPEN_BUFFER, -1) ?: -1)
+    viewModel.buffer.onNext(BufferId(savedInstanceState?.getInt(KEY_OPEN_BUFFER, -1) ?: -1))
     viewModel.bufferViewConfigId.onNext(savedInstanceState?.getInt(KEY_OPEN_BUFFERVIEWCONFIG, -1)
                                         ?: -1)
     connectedAccount = savedInstanceState?.getLong(KEY_CONNECTED_ACCOUNT, -1L) ?: -1L
@@ -816,7 +812,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     }
 
     menuInflater.inflate(R.menu.activity_main, menu)
-    menu?.findItem(R.id.action_nicklist)?.isVisible = bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) ?: false
+    menu?.findItem(R.id.action_nicklist)?.isVisible = bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer)
+                                                      ?: false
     menu?.findItem(R.id.action_filter_messages)?.isVisible =
       (bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) ?: false ||
        bufferData?.info?.type?.hasFlag(Buffer_Type.QueryBuffer) ?: false)
@@ -895,7 +892,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   .fold(Message_Type.of()) { acc, i -> acc or i }
 
                 database.filtered().replace(
-                  QuasselDatabase.Filtered(accountId, buffer, newlyFiltered.value.toInt())
+                  QuasselDatabase.Filtered.of(accountId, buffer, newlyFiltered.value.toInt())
                 )
               }
             }
@@ -964,7 +961,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     startedSelection = true
     connectedAccount = -1L
     restoredDrawerState = false
-    ChatActivity.launch(this, bufferId = Int.MAX_VALUE)
+    ChatActivity.launch(this, bufferId = BufferId.MAX_VALUE)
     viewModel.resetAccount()
   }
 
@@ -998,7 +995,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       autoCompleteSuffix: String? = null,
       channel: String? = null,
       networkId: NetworkId? = null,
-      bufferId: Int? = null,
+      bufferId: BufferId? = null,
       accountId: Long? = null
     ) = context.startActivity(
       intent(context,
@@ -1018,7 +1015,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       autoCompleteSuffix: String? = null,
       channel: String? = null,
       networkId: NetworkId? = null,
-      bufferId: Int? = null,
+      bufferId: BufferId? = null,
       accountId: Long? = null
     ) = Intent(context, ChatActivity::class.java).apply {
       if (sharedText != null) {
@@ -1032,13 +1029,13 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         }
       }
       if (bufferId != null) {
-        putExtra(KEY_BUFFER_ID, bufferId)
+        putExtra(KEY_BUFFER_ID, bufferId.id)
         if (accountId != null) {
           putExtra(KEY_ACCOUNT_ID, accountId)
         }
       }
       if (networkId != null && channel != null) {
-        putExtra(KEY_NETWORK_ID, networkId)
+        putExtra(KEY_NETWORK_ID, networkId.id)
         putExtra(KEY_CHANNEL, channel)
       }
     }

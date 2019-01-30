@@ -36,6 +36,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.protocol.IdentityId
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
@@ -137,7 +139,7 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
     val view = inflater.inflate(R.layout.settings_network, container, false)
     ButterKnife.bind(this, view)
 
-    val networkId = arguments?.getInt("network", -1) ?: -1
+    val networkId = NetworkId(arguments?.getInt("network", -1) ?: -1)
 
     adapter = NetworkServerAdapter(::serverClick, ::startDrag)
     servers.layoutManager = LinearLayoutManager(requireContext())
@@ -286,7 +288,7 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
   protected fun applyChanges(data: Network) {
     data.setNetworkName(networkName.text.toString())
 
-    data.setIdentity(identity.selectedItemId.toInt())
+    data.setIdentity(IdentityId(identity.selectedItemId.toInt()))
 
     data.setActualServerList(adapter.list)
 

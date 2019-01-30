@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
@@ -117,7 +118,7 @@ class TopicFragment : ServiceBoundSettingsFragment(), Savable {
       }
     }
 
-    val bufferId = arguments?.getInt("buffer", -1) ?: -1
+    val bufferId = BufferId(arguments?.getInt("buffer", -1) ?: -1)
     viewModel.buffer.onNext(bufferId)
     viewModel.bufferData.filter {
       it.info != null

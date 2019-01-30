@@ -120,7 +120,7 @@ class MessageAdapter @Inject constructor(
   } ?: 0
 
   override fun getItemId(position: Int): Long {
-    return getItem(position)?.content?.messageId ?: 0L
+    return getItem(position)?.content?.messageId?.id ?: 0L
   }
 
   private fun messageType(viewType: Int): Message_Type? =

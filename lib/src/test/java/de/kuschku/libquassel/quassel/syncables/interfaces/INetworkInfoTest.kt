@@ -19,6 +19,7 @@
 
 package de.kuschku.libquassel.quassel.syncables.interfaces
 
+import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_PLAINTEXT
 import de.kuschku.libquassel.util.roundTrip
@@ -30,7 +31,7 @@ class INetworkInfoTest {
   fun testSerialization() {
     val original = INetwork.NetworkInfo(
       networkName = "QuakeNet",
-      identity = 5,
+      identity = IdentityId(5),
       serverList = listOf(
         INetwork.Server(
           host = "irc.quakenet.org",
@@ -47,7 +48,7 @@ class INetworkInfoTest {
   fun testCopy() {
     val original = INetwork.NetworkInfo(
       networkName = "QuakeNet",
-      identity = 5,
+      identity = IdentityId(5),
       serverList = listOf(
         INetwork.Server(
           host = "irc.quakenet.org",

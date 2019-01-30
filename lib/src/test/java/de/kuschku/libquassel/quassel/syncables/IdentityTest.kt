@@ -19,6 +19,7 @@
 
 package de.kuschku.libquassel.quassel.syncables
 
+import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.randomInt
@@ -30,7 +31,7 @@ class IdentityTest {
   @Test
   fun testSerialization() {
     val original = Identity(SignalProxy.NULL)
-    original.setId(randomInt())
+    original.setId(IdentityId(randomInt()))
     original.setIdentityName(randomString())
     original.setRealName(randomString())
     original.setNicks(listOf(
@@ -50,7 +51,7 @@ class IdentityTest {
   @Test
   fun testCopy() {
     val original = Identity(SignalProxy.NULL)
-    original.setId(randomInt())
+    original.setId(IdentityId(randomInt()))
     original.setIdentityName(randomString())
     original.setRealName(randomString())
     original.setNicks(listOf(

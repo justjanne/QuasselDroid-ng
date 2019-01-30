@@ -28,7 +28,7 @@ interface BacklogStorage {
   fun storeMessages(session: ISession, vararg messages: Message)
   fun storeMessages(session: ISession, messages: Iterable<Message>)
 
-  fun clearMessages(bufferId: BufferId, idRange: IntRange)
+  fun clearMessages(bufferId: BufferId, idRange: LongRange)
 
   fun clearMessages(bufferId: BufferId)
 

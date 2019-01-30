@@ -237,7 +237,7 @@ class QuasseldroidNotificationManager @Inject constructor(private val context: C
           }
         }
       }
-    return Handle(buffer.id, notification)
+    return Handle(buffer.id.id, notification)
   }
 
   fun notificationBackground(): Handle {

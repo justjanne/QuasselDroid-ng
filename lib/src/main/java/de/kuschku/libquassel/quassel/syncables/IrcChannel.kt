@@ -40,7 +40,7 @@ class IrcChannel(
     if (name().isEmpty()) {
       log(ERROR, "IrcChannel", "Error: channelName is empty")
     }
-    renameObject("${network().networkId()}/${name()}")
+    renameObject("${network().networkId().id}/${name()}")
   }
 
   override fun toVariantMap(): QVariantMap = mapOf(

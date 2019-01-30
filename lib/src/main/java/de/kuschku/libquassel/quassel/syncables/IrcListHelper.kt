@@ -30,7 +30,7 @@ import de.kuschku.libquassel.util.rxjava.ReusableUnicastSubject
 class IrcListHelper constructor(
   proxy: SignalProxy
 ) : SyncableObject(proxy, "IrcListHelper"), IIrcListHelper {
-  private var waitingNetwork: NetworkId = 0
+  private var waitingNetwork: NetworkId = NetworkId(0)
 
   data class ChannelDescription(
     val netId: NetworkId,
@@ -75,7 +75,7 @@ class IrcListHelper constructor(
 
   override fun reportFinishedList(netId: NetworkId) {
     if (waitingNetwork == netId) {
-      waitingNetwork = 0
+      waitingNetwork = NetworkId(0)
       requestChannelList(netId, emptyList())
       subject.onNext(Event.Finished(netId))
     }

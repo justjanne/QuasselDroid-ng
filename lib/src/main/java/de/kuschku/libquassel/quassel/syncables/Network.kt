@@ -39,7 +39,7 @@ class Network constructor(
   proxy: SignalProxy
 ) : SyncableObject(proxy, "Network"), INetwork {
   override fun init() {
-    renameObject("$_networkId")
+    renameObject("${_networkId.id}")
   }
 
   override fun fromVariantMap(properties: QVariantMap) {
@@ -190,7 +190,7 @@ class Network constructor(
     // we don't set our ID!
     if (!info.networkName.isNullOrEmpty() && info.networkName != networkName())
       setNetworkName(info.networkName)
-    if (info.identity > 0 && info.identity != identity())
+    if (info.identity.isValidId() && info.identity != identity())
       setIdentity(info.identity)
     if (info.codecForServer != codecForServer())
       setCodecForServer(info.codecForServer)
@@ -858,7 +858,7 @@ class Network constructor(
       field = value
       live_networkInfo.onNext(Unit)
     }
-  private var _identity: IdentityId = -1
+  private var _identity: IdentityId = IdentityId(-1)
     set(value) {
       field = value
       live_networkInfo.onNext(Unit)
@@ -1063,6 +1063,6 @@ class Network constructor(
   }
 
   companion object {
-    val NULL = Network(-1, SignalProxy.NULL)
+    val NULL = Network(NetworkId(-1), SignalProxy.NULL)
   }
 }

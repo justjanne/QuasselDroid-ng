@@ -29,7 +29,7 @@ class CertManager constructor(
   proxy: SignalProxy
 ) : SyncableObject(proxy, "CertManager"), ICertManager {
   override fun init() {
-    renameObject("$_identityId")
+    renameObject("${_identityId.id}")
   }
 
   override fun toVariantMap() = initProperties()

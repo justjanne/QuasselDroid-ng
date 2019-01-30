@@ -20,6 +20,7 @@
 package de.kuschku.quasseldroid.viewmodel
 
 import androidx.lifecycle.ViewModel
+import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.syncables.AliasManager
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
@@ -45,7 +46,7 @@ class EditorViewModel : ViewModel() {
 
   val lastWord = BehaviorSubject.create<Observable<Pair<String, IntRange>>>()
 
-  val rawAutoCompleteData: Observable<Triple<Optional<ISession>, Int, Pair<String, IntRange>>> =
+  val rawAutoCompleteData: Observable<Triple<Optional<ISession>, BufferId, Pair<String, IntRange>>> =
     combineLatest(session, buffer, lastWord).switchMap { (sessionOptional, id, lastWordWrapper) ->
       lastWordWrapper
         .distinctUntilChanged()

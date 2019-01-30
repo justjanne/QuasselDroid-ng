@@ -69,21 +69,21 @@ class QuasselSetupEntry : FrameLayout {
           wrapper.isPasswordVisibilityToggleEnabled = true
           field.inputType =
             InputType.TYPE_CLASS_TEXT or
-            InputType.TYPE_TEXT_VARIATION_PASSWORD
+              InputType.TYPE_TEXT_VARIATION_PASSWORD
           field.setText(data.defaultValue.value(""))
         }
         data.defaultValue.type == Type.QString &&
         data.key.contains("hostname", ignoreCase = true) -> {
           field.inputType =
             InputType.TYPE_CLASS_TEXT or
-            InputType.TYPE_TEXT_VARIATION_URI
+              InputType.TYPE_TEXT_VARIATION_URI
           field.setText(data.defaultValue.value(""))
         }
         data.defaultValue.type == Type.QString           -> {
           field.inputType =
             InputType.TYPE_CLASS_TEXT or
-            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or
-            InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+              InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or
+              InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
           field.setText(data.defaultValue.value(""))
         }
         data.defaultValue.type == Type.Int               -> {

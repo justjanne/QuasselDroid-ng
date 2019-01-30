@@ -130,12 +130,12 @@ class BufferViewConfig constructor(
 
     if (currentPos > targetPos) {
       _buffers.removeAt(currentPos)
-      _buffers.add(bufferId, targetPos)
+      _buffers.add(targetPos, bufferId)
     }
 
     if (currentPos < targetPos) {
       _buffers.removeAt(currentPos)
-      _buffers.add(bufferId, targetPos - 1)
+      _buffers.add(targetPos - 1, bufferId)
     }
 
     live_buffers.onNext(Unit)
@@ -267,7 +267,7 @@ class BufferViewConfig constructor(
       field = value
       live_config.onNext(Unit)
     }
-  private var _networkId: NetworkId = 0
+  private var _networkId: NetworkId = NetworkId(0)
     set(value) {
       field = value
       live_config.onNext(Unit)

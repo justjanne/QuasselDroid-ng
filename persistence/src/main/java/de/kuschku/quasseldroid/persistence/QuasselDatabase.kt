@@ -20,7 +20,6 @@
 package de.kuschku.quasseldroid.persistence
 
 import android.content.Context
-import androidx.annotation.IntRange
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import androidx.room.*
@@ -43,19 +42,60 @@ abstract class QuasselDatabase : RoomDatabase() {
 
   @Entity(tableName = "message", indices = [Index("bufferId"), Index("ignored")])
   data class MessageData(
-    @PrimaryKey var messageId: MsgId,
+    @PrimaryKey
+    @ColumnInfo(name = "messageId")
+    var rawMessageId: MsgId_Type,
     var time: Instant,
     var type: Message_Types,
     var flag: Message_Flags,
-    var bufferId: BufferId,
-    var networkId: NetworkId,
+    @ColumnInfo(name = "bufferId")
+    var rawBufferId: BufferId_Type,
+    @ColumnInfo(name = "networkId")
+    var rawNetworkId: NetworkId_Type,
     var sender: String,
     var senderPrefixes: String,
     var realName: String,
     var avatarUrl: String,
     var content: String,
     var ignored: Boolean
-  )
+  ) {
+    inline val messageId
+      get() = MsgId(rawMessageId)
+    inline val bufferId
+      get() = BufferId(rawBufferId)
+    inline val networkId
+      get() = NetworkId(rawNetworkId)
+
+    companion object {
+      inline fun of(
+        messageId: MsgId,
+        time: Instant,
+        type: Message_Types,
+        flag: Message_Flags,
+        bufferId: BufferId,
+        networkId: NetworkId,
+        sender: String,
+        senderPrefixes: String,
+        realName: String,
+        avatarUrl: String,
+        content: String,
+        ignored: Boolean
+      ) = MessageData(
+        messageId.id,
+        time,
+        type,
+        flag,
+        bufferId.id,
+        networkId.id,
+        sender,
+        senderPrefixes,
+        realName,
+        avatarUrl,
+        content,
+        ignored
+      )
+    }
+  }
 
   @Dao
   interface MessageDao {
@@ -63,79 +103,96 @@ abstract class QuasselDatabase : RoomDatabase() {
     fun all(): List<MessageData>
 
     @Query("SELECT DISTINCT bufferId FROM message")
-    fun buffers(): List<BufferId>
+    fun _buffers(): List<BufferId_Type>
 
     @Query("SELECT * FROM message WHERE messageId = :messageId")
-    fun find(messageId: Int): MessageData?
+    fun find(messageId: MsgId_Type): MessageData?
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC")
-    fun findByBufferId(bufferId: Int): List<MessageData>
+    fun _findByBufferId(bufferId: BufferId_Type): List<MessageData>
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId AND type & ~ :type > 0 AND ignored = 0 ORDER BY messageId DESC")
-    fun findByBufferIdPaged(bufferId: Int, type: Int): DataSource.Factory<Int, MessageData>
+    fun _findByBufferIdPaged(bufferId: BufferId_Type,
+                             type: Int): DataSource.Factory<Int, MessageData>
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId DESC LIMIT 1")
-    fun findLastByBufferId(bufferId: Int): MessageData?
+    fun _findLastByBufferId(bufferId: BufferId_Type): MessageData?
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId DESC LIMIT 1")
-    fun lastMsgId(bufferId: Int): LiveData<MessageData>
+    fun _lastMsgId(bufferId: BufferId_Type): LiveData<MessageData>
 
     @Query("SELECT messageId FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC LIMIT 1")
-    fun firstMsgId(bufferId: Int): Flowable<MsgId>
+    fun _firstMsgId(bufferId: BufferId_Type): Flowable<MsgId_Type>
 
     @Query("SELECT messageId FROM message WHERE bufferId = :bufferId AND type & ~ :type > 0 AND ignored = 0 ORDER BY messageId ASC LIMIT 1")
-    fun firstVisibleMsgId(bufferId: Int, type: Int): MsgId?
+    fun _firstVisibleMsgId(bufferId: BufferId_Type, type: Int): MsgId_Type?
 
     @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC LIMIT 1")
-    fun findFirstByBufferId(bufferId: Int): MessageData?
+    fun _findFirstByBufferId(bufferId: BufferId_Type): MessageData?
 
     @Query("SELECT EXISTS(SELECT 1 FROM message WHERE bufferId = :bufferId AND type & ~ :type > 0 AND ignored = 0)")
-    fun hasVisibleMessages(bufferId: Int, type: Int): Boolean
+    fun _hasVisibleMessages(bufferId: BufferId_Type, type: Int): Boolean
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun save(vararg entities: MessageData)
 
     @Query("UPDATE message SET bufferId = :bufferId1 WHERE bufferId = :bufferId2")
-    fun merge(@IntRange(from = 0) bufferId1: Int, @IntRange(from = 0) bufferId2: Int)
+    fun _merge(bufferId1: BufferId_Type, bufferId2: BufferId_Type)
 
     @Query("SELECT count(*) FROM message WHERE bufferId = :bufferId")
-    fun bufferSize(@IntRange(from = 0) bufferId: Int): Int
+    fun _bufferSize(bufferId: BufferId_Type): Int
 
     @Query("DELETE FROM message")
     fun clearMessages()
 
     @Query("DELETE FROM message WHERE bufferId = :bufferId")
-    fun clearMessages(@IntRange(from = 0) bufferId: Int)
+    fun clearMessages(bufferId: BufferId_Type)
 
     @Query(
       "DELETE FROM message WHERE bufferId = :bufferId AND messageId >= :first AND messageId <= :last"
     )
-    fun clearMessages(@IntRange(from = 0) bufferId: Int, first: Int, last: Int)
+    fun clearMessages(bufferId: BufferId_Type, first: MsgId_Type, last: MsgId_Type)
   }
 
   @Entity(tableName = "filtered", primaryKeys = ["accountId", "bufferId"])
   data class Filtered(
     var accountId: Long,
-    var bufferId: BufferId,
+    @ColumnInfo(name = "bufferId")
+    var rawBufferId: BufferId_Type,
     var filtered: Int
-  )
+  ) {
+    inline val bufferId
+      get() = BufferId(rawBufferId)
+
+    companion object {
+      inline fun of(
+        accountId: Long,
+        bufferId: BufferId,
+        filtered: Int
+      ) = Filtered(
+        accountId,
+        bufferId.id,
+        filtered
+      )
+    }
+  }
 
   @Dao
   interface FilteredDao {
     @Query("SELECT DISTINCT bufferId FROM filtered WHERE accountId = :accountId")
-    fun buffers(accountId: Long): List<BufferId>
+    fun _buffers(accountId: Long): List<BufferId_Type>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun replace(vararg entities: Filtered)
 
     @Query("UPDATE filtered SET filtered = :filtered WHERE accountId = :accountId AND bufferId = :bufferId")
-    fun setFiltered(accountId: Long, bufferId: Int, filtered: Int)
+    fun _setFiltered(accountId: Long, bufferId: BufferId_Type, filtered: Int)
 
     @Query("SELECT IFNULL(t.filtered, :defaultValue) FROM (SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT NULL ORDER BY filtered DESC LIMIT 1) t")
-    fun get(accountId: Long, bufferId: Int, defaultValue: Int): Int
+    fun _get(accountId: Long, bufferId: BufferId_Type, defaultValue: Int): Int
 
     @Query("SELECT IFNULL(t.filtered, :defaultValue) FROM (SELECT filtered FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId UNION SELECT NULL ORDER BY filtered DESC LIMIT 1) t")
-    fun listen(accountId: Long, bufferId: Int, defaultValue: Int): LiveData<Int>
+    fun _listen(accountId: Long, bufferId: BufferId_Type, defaultValue: Int): LiveData<Int>
 
     @Query("SELECT * FROM filtered WHERE accountId = :accountId")
     fun listen(accountId: Long): LiveData<List<Filtered>>
@@ -147,7 +204,7 @@ abstract class QuasselDatabase : RoomDatabase() {
     fun clear(accountId: Long)
 
     @Query("DELETE FROM filtered WHERE bufferId = :bufferId AND accountId = :accountId")
-    fun clear(accountId: Long, bufferId: Int)
+    fun _clear(accountId: Long, bufferId: BufferId_Type)
   }
 
   @Entity(tableName = "ssl_validity_whitelist")
@@ -201,15 +258,19 @@ abstract class QuasselDatabase : RoomDatabase() {
 
   @Entity(tableName = "notification", indices = [Index("bufferId")])
   data class NotificationData(
-    @PrimaryKey var messageId: MsgId,
+    @PrimaryKey
+    @ColumnInfo(name = "messageId")
+    var rawMessageId: MsgId_Type,
     var creationTime: Instant,
     var time: Instant,
     var type: Message_Types,
     var flag: Message_Flags,
-    var bufferId: BufferId,
+    @ColumnInfo(name = "bufferId")
+    var rawBufferId: BufferId_Type,
     var bufferName: String,
     var bufferType: Buffer_Types,
-    var networkId: NetworkId,
+    @ColumnInfo(name = "networkId")
+    var rawNetworkId: NetworkId_Type,
     var networkName: String,
     var sender: String,
     var senderPrefixes: String,
@@ -221,7 +282,62 @@ abstract class QuasselDatabase : RoomDatabase() {
     var ownRealName: String,
     var ownAvatarUrl: String,
     var hidden: Boolean
-  )
+  ) {
+    inline val messageId
+      get() = MsgId(rawMessageId)
+
+    inline val bufferId
+      get() = BufferId(rawBufferId)
+
+    inline val networkId
+      get() = NetworkId(rawNetworkId)
+
+    companion object {
+      inline fun of(
+        messageId: MsgId,
+        creationTime: Instant,
+        time: Instant,
+        type: Message_Types,
+        flag: Message_Flags,
+        bufferId: BufferId,
+        bufferName: String,
+        bufferType: Buffer_Types,
+        networkId: NetworkId,
+        networkName: String,
+        sender: String,
+        senderPrefixes: String,
+        realName: String,
+        avatarUrl: String,
+        content: String,
+        ownNick: String,
+        ownIdent: String,
+        ownRealName: String,
+        ownAvatarUrl: String,
+        hidden: Boolean
+      ) = NotificationData(
+        messageId.id,
+        creationTime,
+        time,
+        type,
+        flag,
+        bufferId.id,
+        bufferName,
+        bufferType,
+        networkId.id,
+        networkName,
+        sender,
+        senderPrefixes,
+        realName,
+        avatarUrl,
+        content,
+        ownNick,
+        ownIdent,
+        ownRealName,
+        ownAvatarUrl,
+        hidden
+      )
+    }
+  }
 
   @Dao
   interface NotificationDao {
@@ -229,25 +345,25 @@ abstract class QuasselDatabase : RoomDatabase() {
     fun save(vararg entities: NotificationData)
 
     @Query("SELECT DISTINCT bufferId FROM notification")
-    fun buffers(): List<BufferId>
+    fun _buffers(): List<BufferId_Type>
 
     @Query("SELECT * FROM notification WHERE hidden = 0 ORDER BY time ASC")
     fun all(): List<NotificationData>
 
     @Query("SELECT * FROM notification WHERE bufferId = :bufferId AND hidden = 0 ORDER BY time ASC")
-    fun all(bufferId: BufferId): List<NotificationData>
+    fun _all(bufferId: BufferId_Type): List<NotificationData>
 
     @Query("UPDATE notification SET hidden = 1 WHERE bufferId = :bufferId AND messageId <= :messageId")
-    fun markHidden(bufferId: BufferId, messageId: MsgId)
+    fun _markHidden(bufferId: BufferId_Type, messageId: MsgId_Type)
 
     @Query("UPDATE notification SET hidden = 1 WHERE bufferId = :bufferId AND flag & 2 = 0")
-    fun markHiddenNormal(bufferId: BufferId)
+    fun _markHiddenNormal(bufferId: BufferId_Type)
 
     @Query("DELETE FROM notification WHERE bufferId = :bufferId AND messageId <= :messageId")
-    fun markRead(bufferId: BufferId, messageId: MsgId)
+    fun _markRead(bufferId: BufferId_Type, messageId: MsgId_Type)
 
     @Query("DELETE FROM notification WHERE bufferId = :bufferId AND flag & 2 = 0")
-    fun markReadNormal(bufferId: BufferId)
+    fun _markReadNormal(bufferId: BufferId_Type)
 
     @Query("DELETE FROM notification")
     fun clear()

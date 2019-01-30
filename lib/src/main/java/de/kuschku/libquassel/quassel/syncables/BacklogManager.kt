@@ -44,33 +44,34 @@ class BacklogManager(
 
   fun updateIgnoreRules() = backlogStorage?.updateIgnoreRules(session)
 
-  fun requestBacklog(bufferId: BufferId, first: MsgId = -1, last: MsgId = -1, limit: Int = -1,
-                     additional: Int = 0, callback: (List<Message>) -> Boolean) {
+  fun requestBacklog(bufferId: BufferId, first: MsgId = MsgId(-1), last: MsgId = MsgId(-1),
+                     limit: Int = -1, additional: Int = 0, callback: (List<Message>) -> Boolean) {
     if (loading.contains(bufferId)) return
     loading[bufferId] = callback
     requestBacklog(bufferId, first, last, limit, additional)
   }
 
-  fun requestBacklogFiltered(bufferId: BufferId, first: MsgId = -1, last: MsgId = -1,
-                             limit: Int = -1, additional: Int = 0, type: Int = -1, flags: Int = -1,
+  fun requestBacklogFiltered(bufferId: BufferId, first: MsgId = MsgId(-1),
+                             last: MsgId = MsgId(-1), limit: Int = -1, additional: Int = 0,
+                             type: Int = -1, flags: Int = -1,
                              callback: (List<Message>) -> Boolean) {
     if (loadingFiltered.contains(bufferId)) return
     loadingFiltered[bufferId] = callback
     requestBacklogFiltered(bufferId, first, last, limit, additional, type, flags)
   }
 
-  fun requestBacklogAll(first: MsgId = -1, last: MsgId = -1, limit: Int = -1, additional: Int = 0,
-                        callback: (List<Message>) -> Boolean) {
-    if (loading.contains(-1)) return
-    loading[-1] = callback
+  fun requestBacklogAll(first: MsgId = MsgId(-1), last: MsgId = MsgId(-1), limit: Int = -1,
+                        additional: Int = 0, callback: (List<Message>) -> Boolean) {
+    if (loading.contains(BufferId(-1))) return
+    loading[BufferId(-1)] = callback
     requestBacklogAll(first, last, limit, additional)
   }
 
-  fun requestBacklogAllFiltered(first: MsgId = -1, last: MsgId = -1, limit: Int = -1,
-                                additional: Int = 0, type: Int = -1, flags: Int = -1,
-                                callback: (List<Message>) -> Boolean) {
-    if (loading.contains(-1)) return
-    loadingFiltered[-1] = callback
+  fun requestBacklogAllFiltered(first: MsgId = MsgId(-1), last: MsgId = MsgId(-1),
+                                limit: Int = -1, additional: Int = 0, type: Int = -1,
+                                flags: Int = -1, callback: (List<Message>) -> Boolean) {
+    if (loadingFiltered.contains(BufferId(-1))) return
+    loadingFiltered[BufferId(-1)] = callback
     requestBacklogAllFiltered(first, last, limit, additional, type, flags)
   }
 
@@ -86,7 +87,7 @@ class BacklogManager(
   override fun receiveBacklogAll(first: MsgId, last: MsgId, limit: Int, additional: Int,
                                  messages: QVariantList) {
     val list = messages.mapNotNull<QVariant_, Message>(QVariant_::value)
-    if (loading.remove(-1)?.invoke(list) != false) {
+    if (loading.remove(BufferId(-1))?.invoke(list) != false) {
       log(DEBUG, "BacklogManager", "storeMessages(${list.size})")
       backlogStorage?.storeMessages(session, list)
     }
@@ -105,7 +106,7 @@ class BacklogManager(
   override fun receiveBacklogAllFiltered(first: MsgId, last: MsgId, limit: Int, additional: Int,
                                          type: Int, flags: Int, messages: QVariantList) {
     val list = messages.mapNotNull<QVariant_, Message>(QVariant_::value)
-    if (loadingFiltered.remove(-1)?.invoke(list) != false) {
+    if (loadingFiltered.remove(BufferId(-1))?.invoke(list) != false) {
       log(DEBUG, "BacklogManager", "storeMessages(${list.size})")
       backlogStorage?.storeMessages(session, list)
     }

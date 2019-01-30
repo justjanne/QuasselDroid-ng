@@ -21,6 +21,7 @@ package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.*
@@ -31,7 +32,7 @@ class BufferViewConfigTest {
   fun testSerialization() {
     val original = BufferViewConfig(randomInt(), SignalProxy.NULL)
     original.setBufferViewName(randomString())
-    original.setNetworkId(randomInt())
+    original.setNetworkId(NetworkId(randomInt()))
     original.setAddNewBuffersAutomatically(randomBoolean())
     original.setSortAlphabetically(randomBoolean())
     original.setHideInactiveNetworks(randomBoolean())
@@ -54,7 +55,7 @@ class BufferViewConfigTest {
   fun testCopy() {
     val original = BufferViewConfig(randomInt(), SignalProxy.NULL)
     original.setBufferViewName(randomString())
-    original.setNetworkId(randomInt())
+    original.setNetworkId(NetworkId(randomInt()))
     original.setAddNewBuffersAutomatically(randomBoolean())
     original.setSortAlphabetically(randomBoolean())
     original.setHideInactiveNetworks(randomBoolean())

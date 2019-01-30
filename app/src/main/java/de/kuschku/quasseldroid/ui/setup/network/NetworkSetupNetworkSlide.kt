@@ -32,6 +32,8 @@ import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputLayout
+import de.kuschku.libquassel.protocol.IdentityId
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
@@ -108,7 +110,7 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
     )
     val networkId = (network.selectedItem as? INetwork.NetworkInfo)?.networkId
     if (networkId != null) {
-      data.putInt("network_id", networkId)
+      data.putInt("network_id", networkId.id)
     } else {
       data.putSerializable(
         "network",
@@ -227,7 +229,7 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
       val linkNetwork = data.getSerializable("network") as? LinkNetwork
 
       val selectedNetworkId = if (data.containsKey("network_id")) {
-        data.getInt("network_id")
+        NetworkId(data.getInt("network_id"))
       } else {
         val existingNetwork = networks.firstOrNull {
           it.serverList.any {
@@ -236,10 +238,10 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
         }
         existingNetwork?.networkId
       }
-      val selectedNetworkPosition = networkAdapter.indexOf(selectedNetworkId ?: -1) ?: -1
+      val selectedNetworkPosition = networkAdapter.indexOf(selectedNetworkId ?: NetworkId(-1)) ?: -1
 
       if (!hasSetNetwork) {
-        if (selectedNetworkPosition != -1 || selectedNetworkId == -1) {
+        if (selectedNetworkPosition != -1 || selectedNetworkId?.isValidId() != true) {
           network.setSelection(selectedNetworkPosition)
           hasSetNetwork = true
         }
@@ -254,8 +256,8 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
         }
 
         if (data.containsKey("identity")) {
-          val identity = data.getInt("identity", -1)
-          if (identity != -1) {
+          val identity = IdentityId(data.getInt("identity", -1))
+          if (identity.isValidId()) {
             val position = identityAdapter.indexOf(identity)
             if (position == -1) {
               this.identity.setSelection(-1)

@@ -34,7 +34,9 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.util.Optional
@@ -130,11 +132,12 @@ class UserInfoFragment : ServiceBoundFragment() {
 
     val openBuffer = arguments?.getBoolean("openBuffer")
 
-    val networkId2 = arguments?.getInt("networkId")
-    val nickName2 = arguments?.getString("nick")
+    val bufferId = BufferId(arguments?.getInt("bufferId") ?: -1)
+    val networkId = NetworkId(arguments?.getInt("networkId") ?: -1)
+    val nickName = arguments?.getString("nick")
 
     var currentBufferInfo: BufferInfo? = null
-    var currentIrcUser: IrcUser? = null
+    var currentIrcUser: IrcUser?
 
     fun updateShortcutVisibility() {
       actionShortcut.visibleIf(currentBufferInfo != null)
@@ -172,15 +175,15 @@ class UserInfoFragment : ServiceBoundFragment() {
       if (openBuffer == true) {
         val session = sessionOptional?.orNull()
         val bufferSyncer = session?.bufferSyncer
-        val bufferInfo = bufferSyncer?.bufferInfo(arguments?.getInt("bufferId") ?: -1)
+        val bufferInfo = bufferSyncer?.bufferInfo(bufferId)
         bufferInfo?.let {
           networks[it.networkId]?.liveIrcUser(it.bufferName)?.switchMap(IrcUser::updates)?.map {
             processUser(it, bufferInfo)
           }
         }
       } else {
-        networks[networkId2]
-          ?.liveIrcUser(nickName2)
+        networks[networkId]
+          ?.liveIrcUser(nickName)
           ?.switchMap(IrcUser::updates)
           ?.map { user -> processUser(user) }
       } ?: Observable.just(IrcUser.NULL).map { user -> processUser(user) }

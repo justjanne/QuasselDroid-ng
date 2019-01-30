@@ -143,7 +143,7 @@ abstract class ServiceBoundActivity :
 
   protected fun checkConnection() {
     accountId = getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE)
-      ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
+                  ?.getLong(Keys.Status.selectedAccount, -1) ?: -1
 
     val reconnect = sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
       getBoolean(Keys.Status.reconnect, false)

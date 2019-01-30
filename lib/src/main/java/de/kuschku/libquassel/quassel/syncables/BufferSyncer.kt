@@ -39,7 +39,7 @@ class BufferSyncer constructor(
     session = ISession.NULL
   }
 
-  fun lastSeenMsg(buffer: BufferId): MsgId = _lastSeenMsg[buffer] ?: 0
+  fun lastSeenMsg(buffer: BufferId): MsgId = _lastSeenMsg[buffer] ?: MsgId(0)
   fun liveLastSeenMsg(buffer: BufferId): Observable<MsgId> = live_lastSeenMsg.map {
     markerLine(buffer)
   }.distinctUntilChanged()
@@ -47,7 +47,7 @@ class BufferSyncer constructor(
   fun liveLastSeenMsgs(): Observable<Map<BufferId, MsgId>> =
     live_lastSeenMsg.map { _lastSeenMsg.toMap() }
 
-  fun markerLine(buffer: BufferId): MsgId = _markerLines[buffer] ?: 0
+  fun markerLine(buffer: BufferId): MsgId = _markerLines[buffer] ?: MsgId(0)
   fun liveMarkerLine(buffer: BufferId): Observable<MsgId> =
     live_markerLines.map { markerLine(buffer) }.distinctUntilChanged()
 
@@ -129,7 +129,7 @@ class BufferSyncer constructor(
 
   override fun initSetActivities(data: QVariantList) {
     (0 until data.size step 2).map {
-      data[it].value(0) to data[it + 1].value(0)
+      data[it].value(BufferId(0)) to data[it + 1].value(0)
     }.forEach { (buffer, activity) ->
       setBufferActivity(buffer, activity)
     }
@@ -138,7 +138,7 @@ class BufferSyncer constructor(
 
   override fun initSetHighlightCounts(data: QVariantList) {
     (0 until data.size step 2).map {
-      data[it].value(0) to data[it + 1].value(0)
+      data[it].value(BufferId(0)) to data[it + 1].value(0)
     }.forEach { (buffer, count) ->
       setHighlightCount(buffer, count)
     }
@@ -147,7 +147,7 @@ class BufferSyncer constructor(
 
   override fun initSetLastSeenMsg(data: QVariantList) {
     (0 until data.size step 2).map {
-      data[it].value(0) to data[it + 1].value(0L)
+      data[it].value(BufferId(0)) to data[it + 1].value(MsgId(0L))
     }.forEach { (buffer, msgId) ->
       setLastSeenMsg(buffer, msgId)
     }
@@ -156,7 +156,7 @@ class BufferSyncer constructor(
 
   override fun initSetMarkerLines(data: QVariantList) {
     (0 until data.size step 2).map {
-      data[it].value(0) to data[it + 1].value(0L)
+      data[it].value(BufferId(0)) to data[it + 1].value(MsgId(0L))
     }.forEach { (buffer, msgId) ->
       setMarkerLine(buffer, msgId)
     }
@@ -204,7 +204,7 @@ class BufferSyncer constructor(
   }
 
   override fun setLastSeenMsg(buffer: BufferId, msgId: MsgId) {
-    if (msgId < 0)
+    if (msgId < MsgId(0))
       return
 
     val oldLastSeenMsg = lastSeenMsg(buffer)
@@ -217,7 +217,7 @@ class BufferSyncer constructor(
   }
 
   override fun setMarkerLine(buffer: BufferId, msgId: MsgId) {
-    if (msgId < 0 || markerLine(buffer) == msgId)
+    if (msgId < MsgId(0) || markerLine(buffer) == msgId)
       return
 
     _markerLines[buffer] = msgId
@@ -260,7 +260,7 @@ class BufferSyncer constructor(
   }.filter {
     groupId == null || it.groupId == groupId
   }.filter {
-    val caseMapper = IrcCaseMappers[session.networks[it.bufferId]?.support("CASEMAPPING")]
+    val caseMapper = IrcCaseMappers[session.networks[it.networkId]?.support("CASEMAPPING")]
     bufferName == null || caseMapper.equalsIgnoreCaseNullable(it.bufferName, bufferName)
   }
 

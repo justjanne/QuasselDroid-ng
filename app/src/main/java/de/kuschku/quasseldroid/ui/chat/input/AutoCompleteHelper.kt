@@ -25,6 +25,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
+import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.quassel.syncables.IrcUser
@@ -168,7 +169,7 @@ class AutoCompleteHelper(
     this.dataListeners += listener
   }
 
-  private fun fullAutoComplete(sessionOptional: Optional<ISession>, id: Int,
+  private fun fullAutoComplete(sessionOptional: Optional<ISession>, id: BufferId,
                                lastWord: Pair<String, IntRange>): List<AutoCompleteItem> {
     val session = sessionOptional.orNull()
     val bufferSyncer = session?.bufferSyncer

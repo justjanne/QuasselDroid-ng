@@ -26,9 +26,7 @@ import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.helpers.value
-import de.kuschku.quasseldroid.persistence.AccountDatabase
-import de.kuschku.quasseldroid.persistence.QuasselBacklogStorage
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.*
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 
 class BacklogRequester(
@@ -52,9 +50,9 @@ class BacklogRequester(
                                                ?: 0)
         it.requestBacklog(
           bufferId = buffer,
-          last = lastMessageId ?: database.message().findFirstByBufferId(
-            buffer
-          )?.messageId ?: -1,
+          last = lastMessageId
+                 ?: database.message().findFirstByBufferId(buffer)?.messageId
+                 ?: MsgId(-1),
           limit = amount
         ) {
           if (it.isNotEmpty()) {

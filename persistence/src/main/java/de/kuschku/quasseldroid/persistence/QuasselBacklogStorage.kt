@@ -21,6 +21,7 @@ package de.kuschku.quasseldroid.persistence
 
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Message
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.libquassel.session.BacklogStorage
 import de.kuschku.libquassel.session.ISession
@@ -39,7 +40,7 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
 
   override fun storeMessages(session: ISession, messages: Iterable<Message>) {
     db.message().save(*messages.map {
-      QuasselDatabase.MessageData(
+      QuasselDatabase.MessageData.of(
         messageId = it.messageId,
         time = it.time,
         type = it.type,
@@ -56,12 +57,12 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
     }.toTypedArray())
   }
 
-  override fun clearMessages(bufferId: BufferId, idRange: IntRange) {
-    db.message().clearMessages(bufferId, idRange.first, idRange.last)
+  override fun clearMessages(bufferId: BufferId, idRange: LongRange) {
+    db.message().clearMessages(bufferId.id, idRange.first, idRange.last)
   }
 
   override fun clearMessages(bufferId: BufferId) {
-    db.message().clearMessages(bufferId)
+    db.message().clearMessages(bufferId.id)
   }
 
   override fun clearMessages() {
@@ -82,7 +83,7 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
     fun isIgnored(session: ISession, message: QuasselDatabase.MessageData): Boolean {
       val bufferInfo = session.bufferSyncer?.bufferInfo(message.bufferId)
       val bufferName = bufferInfo?.bufferName ?: ""
-      val networkId = bufferInfo?.networkId ?: -1
+      val networkId = bufferInfo?.networkId ?: NetworkId(-1)
       val networkName = session.network(networkId)?.networkName() ?: ""
 
       return session.ignoreListManager?.match(

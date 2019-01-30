@@ -84,13 +84,13 @@ class BufferListAdapter(
   }
 
   fun toggleSelection(buffer: BufferId): Boolean {
-    val next = if (selectedBuffer.value == buffer) Int.MAX_VALUE else buffer
+    val next = if (selectedBuffer.value == buffer) BufferId.MAX_VALUE else buffer
     selectedBuffer.onNext(next)
-    return next != Int.MAX_VALUE
+    return next != BufferId.MAX_VALUE
   }
 
   fun unselectAll() {
-    selectedBuffer.onNext(Int.MAX_VALUE)
+    selectedBuffer.onNext(BufferId.MAX_VALUE)
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BufferViewHolder {

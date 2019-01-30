@@ -109,7 +109,7 @@ class ChannelListFragment : ServiceBoundSettingsFragment() {
     val view = inflater.inflate(R.layout.info_channellist, container, false)
     ButterKnife.bind(this, view)
 
-    val networkId = arguments?.getInt("network_id", -1) ?: -1
+    val networkId = NetworkId(arguments?.getInt("network_id", -1) ?: -1)
 
     searchResults.adapter = adapter
     searchResults.layoutManager = LinearLayoutManager(view.context)

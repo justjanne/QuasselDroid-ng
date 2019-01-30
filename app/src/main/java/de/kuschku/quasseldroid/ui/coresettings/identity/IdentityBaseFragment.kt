@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
+import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
@@ -94,7 +95,7 @@ abstract class IdentityBaseFragment(private val initDefault: Boolean) :
     val view = inflater.inflate(R.layout.settings_identity, container, false)
     ButterKnife.bind(this, view)
 
-    val identityId = arguments?.getInt("identity", -1) ?: -1
+    val identityId = IdentityId(arguments?.getInt("identity", -1) ?: -1)
 
     adapter = IdentityNicksAdapter(::nickClick, ::startDrag)
     nicks.layoutManager = LinearLayoutManager(requireContext())

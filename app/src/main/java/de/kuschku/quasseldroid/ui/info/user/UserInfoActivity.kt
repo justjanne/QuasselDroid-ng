@@ -44,13 +44,13 @@ class UserInfoActivity : ServiceBoundSettingsActivity(UserInfoFragment()) {
     ) = Intent(context, UserInfoActivity::class.java).apply {
       putExtra("openBuffer", openBuffer)
       if (bufferId != null) {
-        putExtra("bufferId", bufferId)
+        putExtra("bufferId", bufferId.id)
       }
       if (nick != null) {
         putExtra("nick", nick)
       }
       if (networkId != null) {
-        putExtra("networkId", networkId)
+        putExtra("networkId", networkId.id)
       }
     }
   }

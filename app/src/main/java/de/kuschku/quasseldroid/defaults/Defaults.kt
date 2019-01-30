@@ -22,6 +22,7 @@ package de.kuschku.quasseldroid.defaults
 import android.content.Context
 import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.quassel.syncables.Network
@@ -72,7 +73,7 @@ object Defaults {
     }
 
   fun network(context: Context, proxy: SignalProxy = SignalProxy.NULL) =
-    Network(-1, proxy).apply {
+    Network(NetworkId(-1), proxy).apply {
       setNetworkName("")
     }
 }

@@ -283,7 +283,7 @@ class IrcUser(
   }
 
   fun updateObjectName() {
-    val identifier = "${network().networkId()}/${nick()}"
+    val identifier = "${network().networkId().id}/${nick()}"
     renameObject(identifier)
   }
 
