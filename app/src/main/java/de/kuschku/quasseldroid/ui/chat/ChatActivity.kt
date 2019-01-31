@@ -184,7 +184,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
           viewModel.session.filter(Optional<ISession>::isPresent).firstElement().subscribe {
             it.orNull()?.also { session ->
-              val info = session.bufferSyncer?.find(
+              val info = session.bufferSyncer.find(
                 bufferName = channel,
                 networkId = networkId,
                 type = Buffer_Type.of(Buffer_Type.ChannelBuffer)
@@ -207,11 +207,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   }
                 }
 
-                session.bufferSyncer?.find(
+                session.bufferSyncer.find(
                   networkId = networkId,
                   type = Buffer_Type.of(Buffer_Type.StatusBuffer)
                 )?.let { statusInfo ->
-                  session.rpcHandler?.sendInput(
+                  session.rpcHandler.sendInput(
                     statusInfo, "/join $channel"
                   )
                 }
@@ -394,7 +394,6 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                           .build()
                         dialog.customView?.run {
                           val userField = findViewById<EditText>(R.id.user)
-                          val passField = findViewById<EditText>(R.id.pass)
 
                           account?.let {
                             userField.setText(it.user)
@@ -778,7 +777,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onSaveInstanceState(outState: Bundle?) {
     super.onSaveInstanceState(outState)
-    outState?.putInt(KEY_OPEN_BUFFER, viewModel.buffer.value.id ?: -1)
+    outState?.putInt(KEY_OPEN_BUFFER, viewModel.buffer.value.id)
     outState?.putInt(KEY_OPEN_BUFFERVIEWCONFIG, viewModel.bufferViewConfigId.value ?: -1)
     outState?.putLong(KEY_CONNECTED_ACCOUNT, connectedAccount)
     outState?.putBoolean(KEY_OPEN_DRAWER_START, drawerLayout.isDrawerOpen(GravityCompat.START))

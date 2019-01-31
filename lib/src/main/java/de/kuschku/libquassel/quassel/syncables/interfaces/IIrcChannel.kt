@@ -36,12 +36,12 @@ interface IIrcChannel : ISyncableObject {
   fun initSetProperties(properties: QVariantMap, i: Int? = null)
 
   @Slot
-  fun addChannelMode(mode: Char, value: String?)
+  fun addChannelMode(mode: Char, value: String? = null)
 
-  fun addUserMode(ircuser: IrcUser?, mode: String)
+  fun addUserMode(ircuser: IrcUser?, mode: String? = null)
 
   @Slot
-  fun addUserMode(nick: String?, mode: String?)
+  fun addUserMode(nick: String?, mode: String? = null)
 
   @Slot
   fun joinIrcUser(ircuser: IrcUser)
@@ -55,12 +55,12 @@ interface IIrcChannel : ISyncableObject {
   fun part(nick: String?)
 
   @Slot
-  fun removeChannelMode(mode: Char, value: String?)
+  fun removeChannelMode(mode: Char, value: String? = null)
 
-  fun removeUserMode(ircuser: IrcUser?, mode: String)
+  fun removeUserMode(ircuser: IrcUser?, mode: String? = null)
 
   @Slot
-  fun removeUserMode(nick: String?, mode: String?)
+  fun removeUserMode(nick: String?, mode: String? = null)
 
   @Slot
   fun setEncrypted(encrypted: Boolean)
@@ -71,10 +71,10 @@ interface IIrcChannel : ISyncableObject {
   @Slot
   fun setTopic(topic: String?)
 
-  fun setUserModes(ircuser: IrcUser?, modes: String)
+  fun setUserModes(ircuser: IrcUser?, modes: String? = null)
 
   @Slot
-  fun setUserModes(nick: String?, modes: String?)
+  fun setUserModes(nick: String?, modes: String? = null)
 
   @Slot
   override fun update(properties: QVariantMap)

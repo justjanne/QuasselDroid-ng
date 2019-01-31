@@ -25,6 +25,7 @@ import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import java.nio.ByteBuffer
 
 object VariantSerializer : Serializer<QVariant_> {
+  @Suppress("UNCHECKED_CAST")
   override fun serialize(buffer: ChainedByteBuffer, data: QVariant_, features: QuasselFeatures) {
     IntSerializer.serialize(buffer, data.type.id, features)
     BoolSerializer.serialize(buffer, false, features)
@@ -37,6 +38,7 @@ object VariantSerializer : Serializer<QVariant_> {
   override fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): QVariant_ {
     val rawType = IntSerializer.deserialize(buffer, features)
     val type = Type.of(rawType)
+    @Suppress("UNUSED_VARIABLE")
     val isNull = BoolSerializer.deserialize(buffer, features)
 
     return if (type == Type.UserType) {

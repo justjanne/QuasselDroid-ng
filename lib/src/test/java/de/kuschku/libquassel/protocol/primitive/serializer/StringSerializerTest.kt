@@ -33,8 +33,19 @@ class StringSerializerTest {
     this::class.java.getResourceAsStream("/blns.txt").bufferedReader(Charsets.UTF_8).forEachLine {
       // Ignore comments
       if (!it.startsWith('#')) {
-        assertThat<String>(roundTrip(StringSerializer.UTF16, it), BomMatcher(it))
         assertThat<String>(roundTrip(StringSerializer.UTF8, it), BomMatcher(it))
+        assertThat<String>(roundTrip(StringSerializer.UTF16, it), BomMatcher(it))
+      }
+    }
+  }
+
+  @Test
+  fun testNaughtyStrings() {
+    this::class.java.getResourceAsStream("/naughty_strings.txt").bufferedReader(Charsets.UTF_8).forEachLine {
+      // Ignore comments
+      if (!it.startsWith('#')) {
+        assertEquals(it, roundTrip(StringSerializer.UTF8, it))
+        assertEquals(it, roundTrip(StringSerializer.UTF16, it))
       }
     }
   }

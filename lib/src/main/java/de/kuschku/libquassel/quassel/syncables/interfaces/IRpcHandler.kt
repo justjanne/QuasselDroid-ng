@@ -27,13 +27,10 @@ import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.QVariantMap
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.Identity
-import de.kuschku.libquassel.session.Session
 import java.nio.ByteBuffer
 
 @Syncable(name = "RpcHandler")
 interface IRpcHandler {
-  val session: Session
-
   @Slot(value = "__objectRenamed__")
   fun objectRenamed(classname: ByteBuffer, newname: String?, oldname: String?)
 

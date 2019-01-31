@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
+@file:Suppress("NOTHING_TO_INLINE")
 package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.protocol.*
@@ -76,25 +76,25 @@ class IrcUser(
     } ?: it
   }
 
-  override fun initSetProperties(properties: QVariantMap, i: Int?) {
-    setUser(properties["user"].indexed(i).valueOr(this::user))
-    setHost(properties["host"].indexed(i).valueOr(this::host))
-    setNick(properties["nick"].indexed(i).valueOr(this::nick))
-    setRealName(properties["realName"].indexed(i).valueOr(this::realName))
-    setAccount(properties["account"].indexed(i).valueOr(this::account))
-    setAway(properties["away"].indexed(i).valueOr(this::isAway))
-    setAwayMessage(properties["awayMessage"].indexed(i).valueOr(this::awayMessage))
-    setIdleTime(properties["idleTime"].indexed(i).valueOr(this::idleTime))
-    setLoginTime(properties["loginTime"].indexed(i).valueOr(this::loginTime))
-    setServer(properties["server"].indexed(i).valueOr(this::server))
-    setIrcOperator(properties["ircOperator"].indexed(i).valueOr(this::ircOperator))
-    setLastAwayMessageTime(properties["lastAwayMessageTime"].indexed(i).valueOr {
-      Instant.ofEpochSecond(properties["lastAwayMessage"].indexed(i).valueOr(this::lastAwayMessage).toLong())
+  override fun initSetProperties(properties: QVariantMap, index: Int?) {
+    setUser(properties["user"].indexed(index).valueOr(this::user))
+    setHost(properties["host"].indexed(index).valueOr(this::host))
+    setNick(properties["nick"].indexed(index).valueOr(this::nick))
+    setRealName(properties["realName"].indexed(index).valueOr(this::realName))
+    setAccount(properties["account"].indexed(index).valueOr(this::account))
+    setAway(properties["away"].indexed(index).valueOr(this::isAway))
+    setAwayMessage(properties["awayMessage"].indexed(index).valueOr(this::awayMessage))
+    setIdleTime(properties["idleTime"].indexed(index).valueOr(this::idleTime))
+    setLoginTime(properties["loginTime"].indexed(index).valueOr(this::loginTime))
+    setServer(properties["server"].indexed(index).valueOr(this::server))
+    setIrcOperator(properties["ircOperator"].indexed(index).valueOr(this::ircOperator))
+    setLastAwayMessageTime(properties["lastAwayMessageTime"].indexed(index).valueOr {
+      Instant.ofEpochSecond(properties["lastAwayMessage"].indexed(index).valueOr(this::lastAwayMessage).toLong())
     })
-    setWhoisServiceReply(properties["whoisServiceReply"].indexed(i).valueOr(this::whoisServiceReply))
-    setSuserHost(properties["suserHost"].indexed(i).valueOr(this::suserHost))
-    setEncrypted(properties["encrypted"].indexed(i).valueOr(this::encrypted))
-    setUserModes(properties["userModes"].indexed(i).valueOr(this::userModes))
+    setWhoisServiceReply(properties["whoisServiceReply"].indexed(index).valueOr(this::whoisServiceReply))
+    setSuserHost(properties["suserHost"].indexed(index).valueOr(this::suserHost))
+    setEncrypted(properties["encrypted"].indexed(index).valueOr(this::encrypted))
+    setUserModes(properties["userModes"].indexed(index).valueOr(this::userModes))
   }
 
   fun updates(): Observable<IrcUser> = hasChangedNotification.map { this }

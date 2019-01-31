@@ -121,11 +121,11 @@ class ChannelInfoFragment : ServiceBoundFragment() {
 
       actionPart.setOnClickListener {
         viewModel.session.value?.orNull()?.let { session ->
-          session.bufferSyncer?.find(
+          session.bufferSyncer.find(
             networkId = channel.network().networkId(),
             type = Buffer_Type.of(Buffer_Type.StatusBuffer)
           )?.let { statusInfo ->
-            session.rpcHandler?.sendInput(statusInfo, "/part ${channel.name()}")
+            session.rpcHandler.sendInput(statusInfo, "/part ${channel.name()}")
             requireActivity().finish()
           }
         }
@@ -133,11 +133,11 @@ class ChannelInfoFragment : ServiceBoundFragment() {
 
       actionWho.setOnClickListener {
         viewModel.session.value?.orNull()?.let { session ->
-          session.bufferSyncer?.find(
+          session.bufferSyncer.find(
             networkId = channel.network().networkId(),
             type = Buffer_Type.of(Buffer_Type.StatusBuffer)
           )?.let { statusInfo ->
-            session.rpcHandler?.sendInput(statusInfo, "/who ${channel.name()}")
+            session.rpcHandler.sendInput(statusInfo, "/who ${channel.name()}")
             requireActivity().finish()
           }
         }

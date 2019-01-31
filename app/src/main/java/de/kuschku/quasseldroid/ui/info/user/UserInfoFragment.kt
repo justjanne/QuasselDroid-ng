@@ -252,7 +252,7 @@ class UserInfoFragment : ServiceBoundFragment() {
 
         actionQuery.setOnClickListener {
           viewModel.session.value?.orNull()?.let { session ->
-            val info = session.bufferSyncer?.find(
+            val info = session.bufferSyncer.find(
               bufferName = user.nick,
               networkId = user.networkId,
               type = Buffer_Type.of(Buffer_Type.QueryBuffer)
@@ -275,12 +275,12 @@ class UserInfoFragment : ServiceBoundFragment() {
                 }
               })
 
-              session.bufferSyncer?.find(
+              session.bufferSyncer.find(
                 networkId = user.networkId,
                 type = Buffer_Type.of(Buffer_Type.StatusBuffer)
               )?.let { statusInfo ->
-                session.rpcHandler?.sendInput(statusInfo,
-                                              "/query ${user.nick}")
+                session.rpcHandler.sendInput(statusInfo,
+                                             "/query ${user.nick}")
               }
             }
           }
@@ -297,11 +297,11 @@ class UserInfoFragment : ServiceBoundFragment() {
         actionWhois.setOnClickListener {
           viewModel.session {
             it.orNull()?.let { session ->
-              session.bufferSyncer?.find(
+              session.bufferSyncer.find(
                 networkId = user.networkId,
                 type = Buffer_Type.of(Buffer_Type.StatusBuffer)
               )?.let { statusInfo ->
-                session.rpcHandler?.sendInput(statusInfo, "/whois ${user.nick} ${user.nick}")
+                session.rpcHandler.sendInput(statusInfo, "/whois ${user.nick} ${user.nick}")
               }
             }
           }

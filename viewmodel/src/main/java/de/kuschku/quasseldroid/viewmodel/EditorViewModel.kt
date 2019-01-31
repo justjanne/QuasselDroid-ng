@@ -65,8 +65,7 @@ class EditorViewModel : ViewModel() {
       if (bufferSyncer != null) {
         session.liveNetworks().switchMap { networks ->
           bufferSyncer.liveBufferInfos().switchMap { infos ->
-            (session.aliasManager?.updates()?.map(AliasManager::aliasList)
-             ?: Observable.just(emptyList())).switchMap { aliases ->
+            session.aliasManager.updates().map(AliasManager::aliasList).switchMap { aliases ->
               val network = networks[bufferInfo?.networkId] ?: Network.NULL
               val ircChannel = if (bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
                 network.ircChannel(bufferInfo.bufferName) ?: IrcChannel.NULL

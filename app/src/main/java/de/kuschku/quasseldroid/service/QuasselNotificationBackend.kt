@@ -28,8 +28,8 @@ import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
+import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.NotificationManager
-import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helpers.clampOf
 import de.kuschku.libquassel.util.irc.HostmaskHelper
@@ -102,7 +102,7 @@ class QuasselNotificationBackend @Inject constructor(
     }
   }
 
-  override fun init(session: Session) {
+  override fun init(session: ISession) {
     initTime = Instant.now()
     if (session.features.negotiated.hasFeature(ExtendedFeature.BacklogFilterType)) {
       val buffers = session.bufferSyncer.bufferInfos()
@@ -192,7 +192,7 @@ class QuasselNotificationBackend @Inject constructor(
   }
 
   @Synchronized
-  override fun processMessages(session: Session, show: Boolean, vararg messages: Message) {
+  override fun processMessages(session: ISession, show: Boolean, vararg messages: Message) {
     val now = Instant.now()
     val results = messages.filter {
       val level = it.bufferInfo.type.let {

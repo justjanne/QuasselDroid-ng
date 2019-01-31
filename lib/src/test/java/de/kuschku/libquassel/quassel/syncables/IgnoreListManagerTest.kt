@@ -21,7 +21,6 @@ package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.protocol.primitive.serializer.VariantMapSerializer
 import de.kuschku.libquassel.session.ISession
-import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.randomBoolean
 import de.kuschku.libquassel.util.randomOf
 import de.kuschku.libquassel.util.randomString
@@ -31,7 +30,7 @@ import org.junit.Test
 class IgnoreListManagerTest {
   @Test
   fun testSerialization() {
-    val original = IgnoreListManager(ISession.NULL, SignalProxy.NULL)
+    val original = IgnoreListManager(ISession.NULL)
     original.setIgnoreList(listOf(
       IgnoreListManager.IgnoreListItem(
         type = randomOf(*IgnoreListManager.IgnoreType.values()),
@@ -65,7 +64,7 @@ class IgnoreListManagerTest {
 
   @Test
   fun testCopy() {
-    val original = IgnoreListManager(ISession.NULL, SignalProxy.NULL)
+    val original = IgnoreListManager(ISession.NULL)
     original.setIgnoreList(listOf(
       IgnoreListManager.IgnoreListItem(
         type = randomOf(*IgnoreListManager.IgnoreType.values()),

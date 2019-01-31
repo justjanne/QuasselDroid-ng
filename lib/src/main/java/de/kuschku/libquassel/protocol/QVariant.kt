@@ -67,10 +67,12 @@ sealed class QVariant<T> constructor(val data: T?, val type: Type, val serialize
   }
 
   companion object {
+    @Suppress("UNCHECKED_CAST")
     fun <T> of(data: T?, type: Type): QVariant<T> {
       return QVariant.Typed(data, type, type.serializer as Serializer<T>)
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun <T> of(data: T?, type: QType) =
       QVariant.Custom(data, type, type.serializer as Serializer<T>)
   }

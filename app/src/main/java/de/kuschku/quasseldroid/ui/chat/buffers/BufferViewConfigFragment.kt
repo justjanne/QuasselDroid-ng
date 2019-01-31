@@ -145,12 +145,12 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
             true
           }
           R.id.action_join        -> {
-            session.rpcHandler?.sendInput(info, "/join ${info.bufferName}")
+            session.rpcHandler.sendInput(info, "/join ${info.bufferName}")
             actionMode?.finish()
             true
           }
           R.id.action_part        -> {
-            session.rpcHandler?.sendInput(info, "/part ${info.bufferName}")
+            session.rpcHandler.sendInput(info, "/part ${info.bufferName}")
             actionMode?.finish()
             true
           }
@@ -164,7 +164,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
               .contentColorAttr(R.attr.colorTextPrimary)
               .onPositive { _, _ ->
                 selected.info?.let {
-                  session.bufferSyncer?.requestRemoveBuffer(info.bufferId)
+                  session.bufferSyncer.requestRemoveBuffer(info.bufferId)
                 }
               }
               .onAny { _, _ ->
@@ -182,7 +182,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                 false
               ) { _, input ->
                 selected.info?.let {
-                  session.bufferSyncer?.requestRenameBuffer(info.bufferId, input.toString())
+                  session.bufferSyncer.requestRenameBuffer(info.bufferId, input.toString())
                 }
               }
               .positiveText(R.string.label_save)

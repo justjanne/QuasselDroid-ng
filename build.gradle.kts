@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 /*
  * Quasseldroid - Quassel client for Android
  *
@@ -33,5 +36,14 @@ allprojects {
     google()
     jcenter()
     maven(url = "https://jitpack.io")
+  }
+
+  tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions {
+      freeCompilerArgs += listOf(
+        "-XXLanguage:+InlineClasses",
+        "-Xuse-experimental=kotlin.ExperimentalUnsignedTypes"
+      )
+    }
   }
 }

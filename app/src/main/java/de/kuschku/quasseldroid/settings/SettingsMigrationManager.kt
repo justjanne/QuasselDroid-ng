@@ -21,13 +21,11 @@ package de.kuschku.quasseldroid.settings
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.annotation.XmlRes
 import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceManager.KEY_HAS_SET_DEFAULT_VALUES
 import de.kuschku.quasseldroid.R.xml.preferences
 
 class SettingsMigrationManager(
-  @XmlRes preferences: Int,
   migrations: List<SettingsMigration>
 ) {
   private val migrationMap = migrations.associateBy(SettingsMigration::from)

@@ -23,6 +23,7 @@ import android.app.Application
 import android.content.res.Configuration
 import android.util.SparseArray
 import de.kuschku.malheur.CrashContext
+import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 
 class ConfigurationCollector(private val application: Application) :
@@ -85,10 +86,13 @@ class ConfigurationCollector(private val application: Application) :
     }
   }
 
-  override fun collect(context: CrashContext, config: Boolean) = configurationFields.map {
-    it to Configuration::class.java.getDeclaredField(it.fieldName)
+  override fun collect(context: CrashContext, config: Boolean) = configurationFields.mapNotNull { info ->
+    val field : Field? = Configuration::class.java.getDeclaredField(info.fieldName)
+    field?.let {
+      Pair(info, it)
+    }
   }.filter { (_, field) ->
-    field != null && !Modifier.isStatic(field.modifiers)
+    !Modifier.isStatic(field.modifiers)
   }.map { (info, field) ->
     val groupInfo = configValueInfo[info.enumPrefix]
     if (groupInfo != null) {

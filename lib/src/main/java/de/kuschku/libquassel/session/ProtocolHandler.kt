@@ -36,7 +36,7 @@ abstract class ProtocolHandler(
 ) : SignalProxy, AuthHandler, Closeable {
   protected var closed = false
   protected abstract val objectStorage: ObjectStorage
-  protected open var rpcHandler: RpcHandler? = null
+  protected abstract val rpcHandler: RpcHandler
 
   private val toInit = mutableMapOf<ISyncableObject, MutableList<SignalProxyMessage.SyncMessage>>()
   private val syncQueue = mutableListOf<SignalProxyMessage.SyncMessage>()

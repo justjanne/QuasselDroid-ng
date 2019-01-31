@@ -68,7 +68,6 @@ class Quasseldroid : DaggerApplication() {
 
     // Migrate preferences
     SettingsMigrationManager(
-      R.xml.preferences,
       listOf(
         SettingsMigration.migrationOf(0, 1) { prefs, edit ->
           // Migrating database
@@ -110,7 +109,8 @@ class Quasseldroid : DaggerApplication() {
           }
 
           if (prefs.contains("timestamp")) {
-            prefs.getString("timestamp", "").let { timestamp ->
+            prefs.getString("timestamp", "").let {
+              val timestamp = it ?: ""
               edit.putBoolean(getString(R.string.preference_show_seconds_key),
                               timestamp.contains("ss"))
               edit.putBoolean(getString(R.string.preference_show_seconds_key),
@@ -120,7 +120,7 @@ class Quasseldroid : DaggerApplication() {
           }
 
           if (prefs.contains("fontsizeChannelList")) {
-            prefs.getString("fontsizeChannelList", "").toIntOrNull()?.let { fontSize ->
+            prefs.getString("fontsizeChannelList", "")?.toIntOrNull()?.let { fontSize ->
               edit.putInt(getString(R.string.preference_textsize_key), fontSize)
             }
             edit.remove("fontsizeChannelList")

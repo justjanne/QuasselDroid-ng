@@ -83,6 +83,7 @@ object Invokers {
       return null
     }
 
+    @Suppress("UNCHECKED_CAST")
     return invoker as Invoker<T>?
   }
 

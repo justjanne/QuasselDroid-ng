@@ -177,7 +177,7 @@ class AutoCompleteHelper(
     return if (bufferSyncer != null) {
       val networks = session.networks
       val infos = bufferSyncer.bufferInfos()
-      val aliases = session.aliasManager?.aliasList().orEmpty()
+      val aliases = session.aliasManager.aliasList()
       val network = networks[bufferInfo?.networkId] ?: Network.NULL
       val ircChannel = if (bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
         network.ircChannel(bufferInfo.bufferName) ?: IrcChannel.NULL

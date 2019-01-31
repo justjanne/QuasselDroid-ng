@@ -49,7 +49,7 @@ interface INetwork : ISyncableObject {
   fun acknowledgeCap(capability: String?)
 
   @Slot
-  fun addCap(capability: String, value: String?)
+  fun addCap(capability: String, value: String? = null)
 
   @Slot
   fun addIrcChannel(channel: String?)
@@ -115,7 +115,8 @@ interface INetwork : ISyncableObject {
   fun setConnected(isConnected: Boolean)
 
   @Slot
-  fun setConnectionState(state: Int)
+  fun setConnectionState(state: Int) = setConnectionState(ConnectionState.of(state))
+  fun setConnectionState(state: ConnectionState)
 
   @Slot
   fun setCurrentServer(currentServer: String?)
@@ -154,7 +155,12 @@ interface INetwork : ISyncableObject {
   fun setSaslPassword(password: String?)
 
   @Slot
-  fun setServerList(serverList: QVariantList)
+  fun setServerList(serverList: QVariantList) {
+    setActualServerList(serverList.map {
+      it.valueOrThrow<QVariantMap>()
+    }.map(Server.Companion::fromVariantMap))
+  }
+  fun setActualServerList(serverList: List<INetwork.Server>)
 
   @Slot
   fun setUnlimitedMessageRate(unlimitedRate: Boolean)

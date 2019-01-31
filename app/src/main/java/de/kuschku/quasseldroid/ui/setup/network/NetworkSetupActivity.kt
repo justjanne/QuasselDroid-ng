@@ -48,11 +48,11 @@ class NetworkSetupActivity : ServiceBoundSetupActivity() {
       viewModel.backend?.value?.ifPresent { backend ->
         val session = viewModel.session.value?.orNull()
         session?.apply {
-          rpcHandler?.apply {
+          rpcHandler.apply {
             when {
               networkId.isValidId()            -> {
-                val buffer = bufferSyncer?.find(networkId = networkId,
-                                                type = Buffer_Type.of(Buffer_Type.StatusBuffer))
+                val buffer = bufferSyncer.find(networkId = networkId,
+                                               type = Buffer_Type.of(Buffer_Type.StatusBuffer))
                 if (buffer != null) {
                   data.getStringArray("channels")?.toList().orEmpty().forEach {
                     sendInput(buffer, "/join $it")

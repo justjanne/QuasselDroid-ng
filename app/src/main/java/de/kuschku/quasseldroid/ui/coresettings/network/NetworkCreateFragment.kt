@@ -27,7 +27,7 @@ class NetworkCreateFragment : NetworkBaseFragment(true) {
     network?.let { (_, data) ->
       applyChanges(data)
       viewModel.backend.value?.ifPresent(Backend::requestConnectNewNetwork)
-      session.rpcHandler?.createNetwork(data.networkInfo(), emptyList())
+      session.rpcHandler.createNetwork(data.networkInfo(), emptyList())
       true
     }
   } ?: false

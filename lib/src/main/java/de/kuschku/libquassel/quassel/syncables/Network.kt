@@ -188,7 +188,7 @@ class Network constructor(
 
   override fun setNetworkInfo(info: NetworkInfo) {
     // we don't set our ID!
-    if (!info.networkName.isNullOrEmpty() && info.networkName != networkName())
+    if (!info.networkName.isEmpty() && info.networkName != networkName())
       setNetworkName(info.networkName)
     if (info.identity.isValidId() && info.identity != identity())
       setIdentity(info.identity)
@@ -448,11 +448,10 @@ class Network constructor(
     }
   }
 
-  override fun setConnectionState(state: Int) {
-    val actualConnectionState = ConnectionState.of(state)
-    if (_connectionState == actualConnectionState)
+  override fun setConnectionState(state: ConnectionState) {
+    if (_connectionState == state)
       return
-    _connectionState = actualConnectionState
+    _connectionState = state
     live_connectionState.onNext(_connectionState)
   }
 
@@ -477,13 +476,7 @@ class Network constructor(
     _identity = identity
   }
 
-  override fun setServerList(serverList: QVariantList) {
-    setActualServerList(serverList.map {
-      it.valueOrThrow<QVariantMap>()
-    }.map(Server.Companion::fromVariantMap))
-  }
-
-  fun setActualServerList(serverList: List<INetwork.Server>) {
+  override fun setActualServerList(serverList: List<INetwork.Server>) {
     if (_serverList == serverList)
       return
     _serverList = serverList
@@ -753,13 +746,11 @@ class Network constructor(
     if (initialized)
       throw IllegalArgumentException("Received init data for network ${networkId()} after init")
     val users: Map<String, QVariant_> = usersAndChannels["Users"].valueOr(::emptyMap)
-    val userKeys = users.keys
     users["nick"].valueOr<QVariantList>(::emptyList).forEachIndexed { index, nick ->
       newIrcUser(nick.value(""), users, index)
     }
 
     val channels: Map<String, QVariant_> = usersAndChannels["Channels"].valueOr(::emptyMap)
-    val channelKeys = channels.keys
     channels["name"].valueOr<QVariantList>(::emptyList).forEachIndexed { index, nick ->
       newIrcChannel(nick.value(""), channels, index)
     }

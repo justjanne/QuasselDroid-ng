@@ -179,7 +179,7 @@ class BufferSyncer constructor(
     _bufferActivities.remove(buffer);live_bufferActivities.onNext(Unit)
     _highlightCounts.remove(buffer);live_highlightCounts.onNext(Unit)
     _bufferInfos.remove(buffer);live_bufferInfos.onNext(Unit)
-    session.backlogManager?.removeBuffer(buffer)
+    session.backlogManager.removeBuffer(buffer)
     notificationManager?.clear(buffer)
   }
 
@@ -198,7 +198,7 @@ class BufferSyncer constructor(
       live_bufferInfos.onNext(Unit)
 
       if (oldInfo == null) {
-        session.bufferViewManager?.handleBuffer(info, this)
+        session.bufferViewManager.handleBuffer(info, this)
       }
     }
   }
@@ -232,7 +232,7 @@ class BufferSyncer constructor(
         flags hasFlag Message_Type.Notice ||
         flags hasFlag Message_Type.Action) {
       bufferInfo(buffer)?.let {
-        session.bufferViewManager?.handleBuffer(it, this, true)
+        session.bufferViewManager.handleBuffer(it, this, true)
       }
     }
     _bufferActivities[buffer] = flags

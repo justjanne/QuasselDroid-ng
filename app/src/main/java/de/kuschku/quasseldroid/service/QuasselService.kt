@@ -180,13 +180,13 @@ class QuasselService : DaggerLifecycleService(),
         }
 
         sessionManager.session.value?.let { session ->
-          session.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
+          session.bufferSyncer.bufferInfo(bufferId)?.also { bufferInfo ->
             val output = mutableListOf<IAliasManager.Command>()
             for ((_, formatted) in lines) {
-              session.aliasManager?.processInput(bufferInfo, formatted, output)
+              session.aliasManager.processInput(bufferInfo, formatted, output)
             }
             for (command in output) {
-              session.rpcHandler?.sendInput(command.buffer, command.message)
+              session.rpcHandler.sendInput(command.buffer, command.message)
             }
           }
           handlerService.backend {

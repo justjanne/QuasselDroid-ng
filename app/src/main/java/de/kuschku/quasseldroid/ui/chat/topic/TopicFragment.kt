@@ -135,7 +135,7 @@ class TopicFragment : ServiceBoundSettingsFragment(), Savable {
       viewModel.buffer { bufferId ->
         session?.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
           val topic = formatSerializer.toEscapeCodes(chatline.safeText)
-          session.rpcHandler?.sendInput(bufferInfo, "/topic $topic")
+          session.rpcHandler.sendInput(bufferInfo, "/topic $topic")
           return true
         }
       }

@@ -75,18 +75,18 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
       val networkId = message.bufferInfo.networkId
       val networkName = session.network(networkId)?.networkName() ?: ""
 
-      return session.ignoreListManager?.match(
+      return session.ignoreListManager.match(
         message.content, message.sender, message.type, networkName, bufferName
       ) != IgnoreListManager.StrictnessType.UnmatchedStrictness
     }
 
     fun isIgnored(session: ISession, message: QuasselDatabase.MessageData): Boolean {
-      val bufferInfo = session.bufferSyncer?.bufferInfo(message.bufferId)
+      val bufferInfo = session.bufferSyncer.bufferInfo(message.bufferId)
       val bufferName = bufferInfo?.bufferName ?: ""
       val networkId = bufferInfo?.networkId ?: NetworkId(-1)
       val networkName = session.network(networkId)?.networkName() ?: ""
 
-      return session.ignoreListManager?.match(
+      return session.ignoreListManager.match(
         message.content, message.sender, message.type, networkName, bufferName
       ) != IgnoreListManager.StrictnessType.UnmatchedStrictness
     }

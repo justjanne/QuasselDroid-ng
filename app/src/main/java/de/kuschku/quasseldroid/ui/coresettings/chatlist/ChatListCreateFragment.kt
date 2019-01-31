@@ -22,11 +22,9 @@ package de.kuschku.quasseldroid.ui.coresettings.chatlist
 import de.kuschku.libquassel.util.helpers.value
 
 class ChatListCreateFragment : ChatListBaseFragment(true) {
-  override fun onSave() = viewModel.session.value?.orNull()?.let { session ->
-    chatlist?.let { (_, data) ->
-      applyChanges(data, null)
-      viewModel.bufferViewManager.value?.orNull()?.requestCreateBufferView(data.toVariantMap())
-      true
-    }
+  override fun onSave() = chatlist?.let { (_, data) ->
+    applyChanges(data, null)
+    viewModel.bufferViewManager.value?.orNull()?.requestCreateBufferView(data.toVariantMap())
+    true
   } ?: false
 }

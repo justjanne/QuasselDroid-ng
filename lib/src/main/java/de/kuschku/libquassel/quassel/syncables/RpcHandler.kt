@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
+@file:Suppress("NOTHING_TO_INLINE")
 package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.protocol.*
@@ -25,17 +25,21 @@ import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.quassel.syncables.interfaces.IRpcHandler
 import de.kuschku.libquassel.session.BacklogStorage
+import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.NotificationManager
-import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.util.helpers.deserializeString
 import de.kuschku.libquassel.util.rxjava.ReusableUnicastSubject
 import java.nio.ByteBuffer
 
 class RpcHandler(
-  override val session: Session,
+  var session: ISession,
   private val backlogStorage: BacklogStorage? = null,
   private val notificationManager: NotificationManager? = null
 ) : IRpcHandler {
+  fun deinit() {
+    session = ISession.NULL
+  }
+
   override fun displayStatusMsg(net: String?, msg: String?) {
   }
 
@@ -57,13 +61,13 @@ class RpcHandler(
   }
 
   override fun disconnectFromCore() {
-    session.disconnectFromCore?.invoke()
+    session.disconnectFromCore()
   }
 
   override fun objectRenamed(classname: ByteBuffer, newname: String?, oldname: String?) {
-    session.renameObject(classname.deserializeString(StringSerializer.UTF8) ?: "",
-                         newname ?: "",
-                         oldname ?: "")
+    session.proxy.renameObject(classname.deserializeString(StringSerializer.UTF8) ?: "",
+                               newname ?: "",
+                               oldname ?: "")
   }
 
   override fun displayMsg(message: Message) {
@@ -122,7 +126,7 @@ class RpcHandler(
 
   inline fun RPC(function: String, vararg arg: QVariant_) {
     // Don’t transmit calls back that we just got from the network
-    if (session.shouldRpc(function))
-      session.callRpc(function, arg.toList())
+    if (session.proxy.shouldRpc(function))
+      session.proxy.callRpc(function, arg.toList())
   }
 }

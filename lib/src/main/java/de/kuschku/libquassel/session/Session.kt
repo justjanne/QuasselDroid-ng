@@ -103,7 +103,7 @@ class Session(
 
   override val networkConfig = NetworkConfig(this)
 
-  override var rpcHandler: RpcHandler? = RpcHandler(this, backlogStorage, notificationManager)
+  override val rpcHandler = RpcHandler(this, backlogStorage, notificationManager)
 
   override val initStatus = BehaviorSubject.createDefault(0 to 0)
 
@@ -180,7 +180,7 @@ class Session(
     _connectionError.onNext(connectionError)
   }
 
-  fun addNetwork(networkId: NetworkId) {
+  override fun addNetwork(networkId: NetworkId) {
     val network = Network(networkId, this)
     networks[networkId] = network
     synchronize(network)
@@ -188,13 +188,13 @@ class Session(
     network_added.onNext(networkId)
   }
 
-  fun removeNetwork(networkId: NetworkId) {
+  override fun removeNetwork(networkId: NetworkId) {
     val network = networks.remove(networkId)
     stopSynchronize(network)
     live_networks.onNext(Unit)
   }
 
-  fun addIdentity(initData: QVariantMap) {
+  override fun addIdentity(initData: QVariantMap) {
     val identity = Identity(this)
     identity.fromVariantMap(initData)
     identities[identity.id()] = identity
@@ -202,10 +202,14 @@ class Session(
     live_identities.onNext(Unit)
   }
 
-  fun removeIdentity(identityId: IdentityId) {
+  override fun removeIdentity(identityId: IdentityId) {
     val identity = identities.remove(identityId)
     stopSynchronize(identity)
     live_identities.onNext(Unit)
+  }
+
+  override fun disconnectFromCore() {
+    disconnectFromCore?.invoke()
   }
 
   override fun handle(f: HandshakeMessage.SessionInit): Boolean {
@@ -311,8 +315,7 @@ class Session(
     ircListHelper.deinit()
     networkConfig.deinit()
     backlogManager.deinit()
-
-    rpcHandler = null
+    rpcHandler.deinit()
 
     certManagers.clear()
     identities.clear()

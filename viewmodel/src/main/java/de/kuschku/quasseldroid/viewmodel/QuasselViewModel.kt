@@ -85,8 +85,8 @@ class QuasselViewModel : ViewModel() {
   val backend = backendWrapper.switchMap { it }
   val sessionManager = backend.mapMapNullable(Backend::sessionManager)
   val session = sessionManager.mapSwitchMap(SessionManager::session)
-  val rpcHandler = session.mapMapNullable(ISession::rpcHandler)
-  val ircListHelper = session.mapMapNullable(ISession::ircListHelper)
+  val rpcHandler = session.mapMap(ISession::rpcHandler)
+  val ircListHelper = session.mapMap(ISession::ircListHelper)
   val features = sessionManager.mapSwitchMap { manager ->
     manager.state.switchMap { state ->
       if (state != ConnectionState.CONNECTED) {
@@ -111,7 +111,7 @@ class QuasselViewModel : ViewModel() {
   val connectionProgress = sessionManager.mapSwitchMap(SessionManager::connectionProgress)
     .mapOrElse(Triple(ConnectionState.DISCONNECTED, 0, 0))
 
-  val bufferViewManager = session.mapMapNullable(ISession::bufferViewManager)
+  val bufferViewManager = session.mapMap(ISession::bufferViewManager)
 
   val bufferViewConfig = bufferViewManager.flatMapSwitchMap { manager ->
     bufferViewConfigId.map { id ->
@@ -135,17 +135,17 @@ class QuasselViewModel : ViewModel() {
   }.mapOrElse(emptyList())
   val leafCertificate = peerCertificateChain.map { Optional.ofNullable(it.firstOrNull()) }
 
-  val coreInfo = session.mapMapNullable(ISession::coreInfo).mapSwitchMap(CoreInfo::liveInfo)
+  val coreInfo = session.mapMap(ISession::coreInfo).mapSwitchMap(CoreInfo::liveInfo)
   val coreInfoClients = coreInfo.mapMap(CoreInfo.CoreData::sessionConnectedClientData)
     .mapOrElse(emptyList())
 
-  val networkConfig = session.mapMapNullable(ISession::networkConfig)
+  val networkConfig = session.mapMap(ISession::networkConfig)
 
-  val ignoreListManager = session.mapMapNullable(ISession::ignoreListManager)
+  val ignoreListManager = session.mapMap(ISession::ignoreListManager)
 
-  val highlightRuleManager = session.mapMapNullable(ISession::highlightRuleManager)
+  val highlightRuleManager = session.mapMap(ISession::highlightRuleManager)
 
-  val aliasManager = session.mapMapNullable(ISession::aliasManager)
+  val aliasManager = session.mapMap(ISession::aliasManager)
 
   val networks = session.switchMap {
     it.map(ISession::liveNetworks).orElse(Observable.just(emptyMap()))
@@ -155,7 +155,7 @@ class QuasselViewModel : ViewModel() {
     it.map(ISession::liveIdentities).orElse(Observable.just(emptyMap()))
   }
 
-  val bufferSyncer = session.mapMapNullable(ISession::bufferSyncer)
+  val bufferSyncer = session.mapMap(ISession::bufferSyncer)
   val allBuffers = bufferSyncer.mapSwitchMap {
     it.liveBufferInfos().map(Map<BufferId, BufferInfo>::values)
   }.mapOrElse(emptyList())
@@ -170,7 +170,7 @@ class QuasselViewModel : ViewModel() {
   val markerLine = session.mapSwitchMap { currentSession ->
     buffer.switchMap { currentBuffer ->
       // Get a stream of the latest marker line
-      currentSession.bufferSyncer?.liveMarkerLine(currentBuffer) ?: Observable.empty()
+      currentSession.bufferSyncer.liveMarkerLine(currentBuffer)
     }
   }
 

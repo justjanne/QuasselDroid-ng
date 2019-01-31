@@ -23,6 +23,7 @@ import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.connection.Features
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.protocol.QVariantMap
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.*
@@ -38,23 +39,23 @@ interface ISession : Closeable {
   val features: Features
   val sslSession: Observable<Optional<SSLSession>>
 
-  val aliasManager: AliasManager?
-  val backlogManager: BacklogManager?
-  val bufferSyncer: BufferSyncer?
-  val bufferViewManager: BufferViewManager?
+  val aliasManager: AliasManager
+  val backlogManager: BacklogManager
+  val bufferSyncer: BufferSyncer
+  val bufferViewManager: BufferViewManager
   val certManagers: Map<IdentityId, CertManager>
-  val coreInfo: CoreInfo?
-  val dccConfig: DccConfig?
+  val coreInfo: CoreInfo
+  val dccConfig: DccConfig
   val identities: Map<IdentityId, Identity>
   fun liveIdentities(): Observable<Map<IdentityId, Identity>>
-  val ignoreListManager: IgnoreListManager?
-  val highlightRuleManager: HighlightRuleManager?
-  val ircListHelper: IrcListHelper?
+  val ignoreListManager: IgnoreListManager
+  val highlightRuleManager: HighlightRuleManager
+  val ircListHelper: IrcListHelper
   val networks: Map<NetworkId, Network>
   fun liveNetworks(): Observable<Map<NetworkId, Network>>
   fun liveNetworkAdded(): Observable<NetworkId>
-  val networkConfig: NetworkConfig?
-  val rpcHandler: RpcHandler?
+  val networkConfig: NetworkConfig
+  val rpcHandler: RpcHandler
   val initStatus: Observable<Pair<Int, Int>>
 
   fun network(id: NetworkId): Network?
@@ -63,10 +64,17 @@ interface ISession : Closeable {
   val proxy: SignalProxy
   val error: Observable<Error>
   val connectionError: Observable<Throwable>
-  val lag: Observable<Long>
+  val lag: BehaviorSubject<Long>
 
   fun login(user: String, pass: String)
-  fun setupCore(setupData: HandshakeMessage.CoreSetupData)
+  fun setupCore(setupData: HandshakeMessage.CoreSetupData) {
+    proxy.dispatch(setupData)
+  }
+  fun disconnectFromCore()
+  fun addNetwork(networkId: NetworkId)
+  fun removeNetwork(networkId: NetworkId)
+  fun addIdentity(initData: QVariantMap)
+  fun removeIdentity(identityId: IdentityId)
 
   companion object {
     val NULL = object : ISession {
@@ -79,31 +87,36 @@ interface ISession : Closeable {
         QuasselFeatures.empty())
       override val sslSession: Observable<Optional<SSLSession>> = Observable.empty()
 
-      override val rpcHandler: RpcHandler? = null
-      override val aliasManager: AliasManager? = null
-      override val backlogManager: BacklogManager? = null
-      override val bufferSyncer: BufferSyncer? = null
-      override val bufferViewManager: BufferViewManager? = null
+      override val rpcHandler = RpcHandler(this)
+      override val aliasManager = AliasManager(proxy)
+      override val backlogManager = BacklogManager(this)
+      override val bufferSyncer = BufferSyncer(this)
+      override val bufferViewManager = BufferViewManager(proxy)
       override val certManagers: Map<IdentityId, CertManager> = emptyMap()
-      override val coreInfo: CoreInfo? = null
-      override val dccConfig: DccConfig? = null
+      override val coreInfo = CoreInfo(proxy)
+      override val dccConfig = DccConfig(proxy)
       override val identities: Map<IdentityId, Identity> = emptyMap()
       override fun liveIdentities() = Observable.empty<Map<IdentityId, Identity>>()
-      override val ignoreListManager: IgnoreListManager? = null
-      override val highlightRuleManager: HighlightRuleManager? = null
-      override val ircListHelper: IrcListHelper? = null
+      override val ignoreListManager = IgnoreListManager(this)
+      override val highlightRuleManager = HighlightRuleManager(proxy)
+      override val ircListHelper = IrcListHelper(proxy)
       override val networks: Map<NetworkId, Network> = emptyMap()
       override fun liveNetworks() = Observable.empty<Map<NetworkId, Network>>()
       override fun liveNetworkAdded(): Observable<NetworkId> = PublishSubject.create()
-      override val networkConfig: NetworkConfig? = null
+      override val networkConfig = NetworkConfig(proxy)
       override val initStatus: Observable<Pair<Int, Int>> = Observable.just(0 to 0)
-      override val lag: Observable<Long> = Observable.just(0L)
+      override val lag = BehaviorSubject.createDefault(0L)
 
       override fun network(id: NetworkId): Network? = null
       override fun identity(id: IdentityId): Identity? = null
 
       override fun login(user: String, pass: String) = Unit
       override fun setupCore(setupData: HandshakeMessage.CoreSetupData) = Unit
+      override fun disconnectFromCore() = Unit
+      override fun addNetwork(networkId: NetworkId) = Unit
+      override fun removeNetwork(networkId: NetworkId) = Unit
+      override fun addIdentity(initData: QVariantMap) = Unit
+      override fun removeIdentity(identityId: IdentityId) = Unit
       override fun close() = Unit
     }
   }

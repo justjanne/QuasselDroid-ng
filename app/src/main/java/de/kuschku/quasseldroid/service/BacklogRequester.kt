@@ -43,7 +43,7 @@ class BacklogRequester(
         "requested(buffer: $buffer, amount: $amount, pageSize: $pageSize, lastMessageId: $lastMessageId, untilAllVisible: $untilAllVisible)")
     var missing = amount
     viewModel.session.value?.orNull()?.let { session: ISession ->
-      session.backlogManager?.let {
+      session.backlogManager.let {
         val filtered = database.filtered().get(accountId,
                                                buffer,
                                                accountDatabase.accounts().findById(accountId)?.defaultFiltered

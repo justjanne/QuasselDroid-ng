@@ -22,19 +22,14 @@ package de.kuschku.libquassel.quassel.syncables
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.IIgnoreListManager
 import de.kuschku.libquassel.session.ISession
-import de.kuschku.libquassel.session.Session
-import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.ExpressionMatch
 import de.kuschku.libquassel.util.flag.and
 import io.reactivex.subjects.BehaviorSubject
 import java.io.Serializable
 
 class IgnoreListManager constructor(
-  var session: ISession,
-  proxy: SignalProxy
-) : SyncableObject(proxy, "IgnoreListManager"), IIgnoreListManager {
-  constructor(session: Session) : this(session, session)
-
+  var session: ISession
+) : SyncableObject(session.proxy, "IgnoreListManager"), IIgnoreListManager {
   override fun deinit() {
     super.deinit()
     session = ISession.NULL
@@ -129,7 +124,7 @@ class IgnoreListManager constructor(
 
   fun updates() = live_updates.map { this }
 
-  fun copy() = IgnoreListManager(session, proxy).also {
+  fun copy() = IgnoreListManager(session).also {
     it.fromVariantMap(toVariantMap())
   }
 
@@ -287,7 +282,7 @@ class IgnoreListManager constructor(
     set(value) {
       field = value
       live_updates.onNext(Unit)
-      if (initialized) session.backlogManager?.updateIgnoreRules()
+      if (initialized) session.backlogManager.updateIgnoreRules()
     }
 
   fun isEqual(other: IgnoreListManager): Boolean =

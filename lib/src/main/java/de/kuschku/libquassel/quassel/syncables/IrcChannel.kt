@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
+@file:Suppress("NOTHING_TO_INLINE")
 package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.protocol.*
@@ -135,7 +135,7 @@ class IrcChannel(
   fun network() = _network
   fun ircUsers() = _userModes.keys
   fun liveIrcUsers(): Observable<MutableSet<IrcUser>> =
-    live_userModes.map(MutableMap<IrcUser, String>::keys)
+    live_userModes.map { _userModes }.map(MutableMap<IrcUser, String>::keys)
 
   fun userModes(ircUser: IrcUser) = _userModes.getOr(ircUser, "")
   fun liveUserModes(ircUser: IrcUser) = live_userModes.map {
@@ -289,10 +289,10 @@ class IrcChannel(
     part(network().ircUser(nick))
   }
 
-  override fun setUserModes(ircuser: IrcUser?, modes: String) {
+  override fun setUserModes(ircuser: IrcUser?, modes: String?) {
     if (ircuser == null || !isKnownUser(ircuser))
       return
-    _userModes[ircuser] = modes
+    _userModes[ircuser] = modes ?: ""
     updateUsers()
   }
 
@@ -304,12 +304,13 @@ class IrcChannel(
     addUserMode(ircuser, String(charArrayOf(mode)))
   }
 
-  override fun addUserMode(ircuser: IrcUser?, mode: String) {
-    if (ircuser == null || !isKnownUser(ircuser) || !isValidChannelUserMode(mode))
+  override fun addUserMode(ircuser: IrcUser?, mode: String?) {
+    val userMode = mode ?: ""
+    if (ircuser == null || !isKnownUser(ircuser) || !isValidChannelUserMode(userMode))
       return
-    if (_userModes.getOr(ircuser, "").contains(mode, ignoreCase = true))
+    if (_userModes.getOr(ircuser, "").contains(userMode, ignoreCase = true))
       return
-    _userModes[ircuser] = _userModes.getOr(ircuser, "") + mode
+    _userModes[ircuser] = _userModes.getOr(ircuser, "") + userMode
     updateUsers()
   }
 
@@ -317,13 +318,14 @@ class IrcChannel(
     addUserMode(network().ircUser(nick), mode ?: "")
   }
 
-  override fun removeUserMode(ircuser: IrcUser?, mode: String) {
-    if (ircuser == null || !isKnownUser(ircuser) || !isValidChannelUserMode(mode))
+  override fun removeUserMode(ircuser: IrcUser?, mode: String?) {
+    val userMode = mode ?: ""
+    if (ircuser == null || !isKnownUser(ircuser) || !isValidChannelUserMode(userMode))
       return
-    if (!_userModes.getOr(ircuser, "").contains(mode, ignoreCase = true))
+    if (!_userModes.getOr(ircuser, "").contains(userMode, ignoreCase = true))
       return
     _userModes[ircuser] = _userModes.getOr(ircuser, "")
-      .replace(mode, "", ignoreCase = true)
+      .replace(userMode, "", ignoreCase = true)
     updateUsers()
   }
 
@@ -398,15 +400,11 @@ class IrcChannel(
 
   private fun updateUsers() {
     _userCount = _userModes.size
-    live_userModes.onNext(_userModes)
+    live_userModes.onNext(Unit)
   }
 
-  private val live_userModes = BehaviorSubject.createDefault(mutableMapOf<IrcUser, String>())
-  private var _userModes: MutableMap<IrcUser, String>
-    get() = live_userModes.value!!
-    set(value) {
-      updateUsers()
-    }
+  private val live_userModes = BehaviorSubject.createDefault(Unit)
+  private val _userModes = mutableMapOf<IrcUser, String>()
 
   private var _network: Network = network
 
