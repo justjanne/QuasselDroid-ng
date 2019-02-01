@@ -70,6 +70,7 @@ import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.chat.input.AutoCompleteAdapter
 import de.kuschku.quasseldroid.ui.chat.input.ChatlineFragment
+import de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity
 import de.kuschku.quasseldroid.ui.clientsettings.client.ClientSettingsActivity
 import de.kuschku.quasseldroid.ui.coresettings.CoreSettingsActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity
@@ -912,6 +913,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     }
     R.id.action_client_settings -> {
       ClientSettingsActivity.launch(this)
+      true
+    }
+    R.id.action_about           -> {
+      AboutActivity.launch(this)
       true
     }
     R.id.action_disconnect      -> {

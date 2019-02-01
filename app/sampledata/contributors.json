@@ -1,6 +1,11 @@
 {
   "data": [
     {
+      "name": "Janne Koschinski",
+      "nickname": "justJanne",
+      "description": "Rewrite, UI, Annotation Processors, Backend"
+    },
+    {
       "name": "Frederik M. J. Vestre",
       "nickname": "freqmod",
       "description": "Initial qdatastream deserialization attempts"
@@ -19,11 +24,6 @@
       "name": "Ken Børge Viktil",
       "nickname": "Kenji",
       "description": "Legacy UI"
-    },
-    {
-      "name": "Janne Koschinski",
-      "nickname": "justJanne",
-      "description": "Rewrite, UI, Annotation Processors, Backend"
     }
   ]
 }

@@ -33,16 +33,34 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="?listPreferredItemHeight"
       android:descendantFocusability="blocksDescendants"
       android:orientation="vertical">
 
       <TextView
         style="@style/Widget.Subhead"
-        android:text="@string/label_contributors" />
+        android:text="@string/label_authors" />
 
       <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/contributors"
+        android:id="@+id/authors"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:itemCount="1"
+        tools:listitem="@layout/widget_contributor" />
+
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:descendantFocusability="blocksDescendants"
+      android:orientation="vertical">
+
+      <TextView
+        style="@style/Widget.Subhead"
+        android:text="@string/label_acknowledgements" />
+
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/acknowledgements"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:itemCount="5"
@@ -53,7 +71,6 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="?listPreferredItemHeight"
       android:descendantFocusability="blocksDescendants"
       android:orientation="vertical">
 
@@ -73,7 +90,6 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="?listPreferredItemHeight"
       android:orientation="vertical">
 
       <TextView

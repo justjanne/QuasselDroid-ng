@@ -61,8 +61,11 @@ class AboutFragment : DaggerFragment() {
   @BindView(R.id.action_privacy_policy)
   lateinit var privacyPolicy: Button
 
-  @BindView(R.id.contributors)
-  lateinit var contributors: RecyclerView
+  @BindView(R.id.authors)
+  lateinit var authors: RecyclerView
+
+  @BindView(R.id.acknowledgements)
+  lateinit var acknowledgements: RecyclerView
 
   @BindView(R.id.translators)
   lateinit var translators: RecyclerView
@@ -296,9 +299,21 @@ class AboutFragment : DaggerFragment() {
     libraries.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
     ViewCompat.setNestedScrollingEnabled(libraries, false)
 
-    contributors.layoutManager = LinearLayoutManager(context)
-    contributors.itemAnimator = null
-    contributors.adapter = ContributorAdapter(listOf(
+    authors.layoutManager = LinearLayoutManager(context)
+    authors.itemAnimator = null
+    authors.adapter = ContributorAdapter(listOf(
+      Contributor(
+        name = "Janne Koschinski",
+        nickName = "justJanne",
+        description = getString(R.string.contributor_description_justjanne)
+      )
+    ))
+    authors.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+    ViewCompat.setNestedScrollingEnabled(authors, false)
+
+    acknowledgements.layoutManager = LinearLayoutManager(context)
+    acknowledgements.itemAnimator = null
+    acknowledgements.adapter = ContributorAdapter(listOf(
       Contributor(
         name = "Frederik M. J. Vestre",
         nickName = "freqmod",
@@ -318,15 +333,10 @@ class AboutFragment : DaggerFragment() {
         name = "Ken Børge Viktil",
         nickName = "Kenji",
         description = getString(R.string.contributor_description_kenji)
-      ),
-      Contributor(
-        name = "Janne Koschinski",
-        nickName = "justJanne",
-        description = getString(R.string.contributor_description_justjanne)
       )
     ))
-    contributors.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
-    ViewCompat.setNestedScrollingEnabled(contributors, false)
+    acknowledgements.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+    ViewCompat.setNestedScrollingEnabled(acknowledgements, false)
 
     translators.layoutManager = LinearLayoutManager(context)
     translators.itemAnimator = null

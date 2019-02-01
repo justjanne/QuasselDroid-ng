@@ -34,6 +34,9 @@
     android:id="@+id/action_client_settings"
     android:title="@string/label_settings_client" />
   <item
+    android:id="@+id/action_about"
+    android:title="@string/label_about" />
+  <item
     android:id="@+id/action_disconnect"
     android:title="@string/label_disconnect" />
 </menu>
