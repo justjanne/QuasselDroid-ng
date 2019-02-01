@@ -37,7 +37,6 @@
   <string name="label_colors_mirc">mIRC</string>
   <string name="label_configure">Konfigūruoti</string>
   <string name="label_connect">Prisijungti</string>
-  <string name="label_contributors">Prisidėję asmenys</string>
   <string name="label_copy">Kopijuoti</string>
   <string name="label_crashes">Klaidos</string>
   <string name="label_delete">Ištrinti</string>
@@ -141,4 +140,4 @@
   <string name="info_copied_version">Versija nukopijuota į atmintinę</string>
 
   <string name="advertisement_support_patreon">Padėkite mums toliau plėtoti šią programėlę prisidėdami per Patreon</string>
-</resources>
+  </resources>

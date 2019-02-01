@@ -41,7 +41,6 @@
   <string name="label_colors_mirc">mIRC</string>
   <string name="label_configure">Configura</string>
   <string name="label_connect">Connetti</string>
-  <string name="label_contributors">Collaboratori</string>
   <string name="label_copy">Copia</string>
   <string name="label_crashes">Arresti anomali</string>
   <string name="label_crashes_empty">Nessun rapporto di arresto anomalo trovato</string>
@@ -60,6 +59,7 @@
   <string name="label_ignore">Ignora</string>
   <string name="label_ignore_long">Aggiungi o rimuovi un utente dalla lista ignorati</string>
   <string name="label_info">Dettagli</string>
+  <string name="label_info_certificate">Certificato</string>
   <string name="label_info_channel">Dettagli del canale</string>
   <string name="label_info_channellist">Elenco dei canali</string>
   <string name="label_info_core">Dettagli del core</string>

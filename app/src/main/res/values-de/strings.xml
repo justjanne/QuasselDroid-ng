@@ -41,7 +41,6 @@
   <string name="label_colors_mirc">mIRC</string>
   <string name="label_configure">Konfigurieren</string>
   <string name="label_connect">Verbinden</string>
-  <string name="label_contributors">Mitwirkende</string>
   <string name="label_copy">Kopieren</string>
   <string name="label_crashes">Absturzberichte</string>
   <string name="label_crashes_empty">Keine Absturzberichte gefunden</string>

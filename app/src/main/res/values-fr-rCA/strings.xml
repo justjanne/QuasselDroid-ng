@@ -17,7 +17,7 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Un client Android pour Quassel, un client IRC décentralisé.</string>
   <string name="app_description_long">Quassel est un client IRC distribué et décentralisé, écrit en C++ et en Qt. Quasseldroid est un client pour le Quassel Core écrit purement en Kotlin, vous offrant la possibilité de vous connecter à un Quassel Core avec votre téléphone Android™.</string>
@@ -37,7 +37,6 @@
   <string name="label_colors_mirc">mIRC</string>
   <string name="label_configure">Configurer</string>
   <string name="label_connect">Connecter</string>
-  <string name="label_contributors">Contributeurs</string>
   <string name="label_copy">Copier</string>
   <string name="label_crashes">Crashes</string>
   <string name="label_delete">Supprimer</string>
@@ -135,4 +134,4 @@
 
   <string name="info_copied_version">Version copiée au clipboard</string>
 
-</resources>
+  </resources>
