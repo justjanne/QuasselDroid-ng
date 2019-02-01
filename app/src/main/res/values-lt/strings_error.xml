@@ -26,7 +26,8 @@
   <string name="label_error_certificate_no_hostname">Nėra tinkamo hostname</string>
   <string name="label_error_certificate_invalid"><![CDATA[
     <p>Certifikatas su atspaudu<br/>
-    <code>%1$s</code> galioja tik nuo %2$s iki %3$s</p>
+    <code>%1$s</code><br/>
+    galioja tik nuo %2$s iki %3$s</p>
   ]]></string>
   <string name="label_error_certificate_untrusted"><![CDATA[
     <p>Certifikatas su atspaudu<br/>

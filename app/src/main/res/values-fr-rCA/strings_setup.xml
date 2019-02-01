@@ -31,7 +31,6 @@
 
   <string name="label_connection_host">Hôte</string>
   <string name="label_connection_port">Port</string>
-
   <string name="hint_invalid_host">Pas un nom d\'hôte valide</string>
   <string name="hint_invalid_port">Pas un port valide</string>
 
@@ -51,8 +50,6 @@
   <string name="label_account_name">Nom de compte</string>
 
   <string name="hint_invalid_name">Le nom ne peut pas être vide</string>
-
-  <!-- Core Setup -->
 
   <!-- Core Authenticator Select -->
   <string name="slide_core_authenticator_select_title">Sélectionnez un protocole d\'authentication</string>
@@ -83,4 +80,5 @@
   <string name="slide_user_channels_description">Sélectionnez les chaînes que vous voulez joindre.</string>
 
   <string name="label_channels">Chaînes</string>
+
 </resources>

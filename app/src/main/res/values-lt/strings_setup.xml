@@ -31,7 +31,6 @@
 
   <string name="label_connection_host">Host</string>
   <string name="label_connection_port">Port</string>
-
   <string name="hint_invalid_host">Netinkamas Hostname</string>
   <string name="hint_invalid_port">Netinkamas Port</string>
 
@@ -51,8 +50,6 @@
   <string name="label_account_name">Paskyros pavadinimas</string>
 
   <string name="hint_invalid_name">Pavadinimas negali būti tuščias</string>
-
-  <!-- Core Setup -->
 
   <!-- Core Authenticator Select -->
   <string name="slide_core_authenticator_select_title">Pasirinkite autentifikacijos Backend</string>
@@ -83,4 +80,5 @@
   <string name="slide_user_channels_description">Pasirinkite į kuriuos kanalus jungtis.</string>
 
   <string name="label_channels">Kanalai</string>
+
 </resources>

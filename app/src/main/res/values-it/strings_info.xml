@@ -33,6 +33,8 @@
   <string name="label_core_online_since">In linea da %1$s</string>
   <string name="label_core_connected_since">Connesso da %1$s</string>
   <string name="label_core_connection_verified_by">Connessione verificata da %1$s</string>
+  <string name="label_core_connection_protocol">La connessione utilizza %1$s</string>
+  <string name="label_core_connection_ciphersuite">La connessione è crittografata ed autenticata con %1$s ed utilizza %2$s come meccanismo di scambio delle chiavi</string>
   <string name="label_core_connection_verified_by_unknown">Sconosciuto</string>
   <string name="label_core_connection_insecure">Connessione insicura</string>
 

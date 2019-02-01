@@ -28,7 +28,8 @@
   <string name="label_error_certificate_no_hostname">No hostname available</string>
   <string name="label_error_certificate_invalid"><![CDATA[
     <p>The certificate with fingerprint<br/>
-    <code>%1$s</code> is only valid from %2$s to %3$s</p>
+    <code>%1$s</code><br/>
+    is only valid from %2$s to %3$s</p>
   ]]></string>
   <string name="label_error_certificate_untrusted"><![CDATA[
     <p>The certificate with fingerprint<br/>

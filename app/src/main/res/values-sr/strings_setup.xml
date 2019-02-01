@@ -31,7 +31,6 @@
 
   <string name="label_connection_host">Host</string>
   <string name="label_connection_port">Port</string>
-
   <string name="hint_invalid_host">Neispravan hostname</string>
   <string name="hint_invalid_port">Port nije validan</string>
 
@@ -51,8 +50,6 @@
   <string name="label_account_name">Ime naloga</string>
 
   <string name="hint_invalid_name">Ime ne može biti prazno</string>
-
-  <!-- Core Setup -->
 
   <!-- Core Authenticator Select -->
   <string name="slide_core_authenticator_select_title">Odaberi backend za proveru identiteta</string>
@@ -83,4 +80,5 @@
   <string name="slide_user_channels_description">Odaberite kojim kanalima želite da se pridružite.</string>
 
   <string name="label_channels">Kanali</string>
+
 </resources>

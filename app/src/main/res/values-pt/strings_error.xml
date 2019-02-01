@@ -28,7 +28,8 @@
   <string name="label_error_certificate_no_hostname">Nenhum anfitrião disponível</string>
   <string name="label_error_certificate_invalid"><![CDATA[
     <p>O certificado com impressão digital<br/>
-    <code>%1$s</code> só é válido a partir de %2$s até %3$s</p>
+    <code>%1$s</code><br/>
+    só é válido a partir de %2$s até %3$s</p>
   ]]></string>
   <string name="label_error_certificate_untrusted"><![CDATA[
     <p>O certificado com impressão digital<br/>

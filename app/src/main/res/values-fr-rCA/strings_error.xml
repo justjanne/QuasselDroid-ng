@@ -26,7 +26,8 @@
   <string name="label_error_certificate_no_hostname">Aucuns hostnames disponibles</string>
   <string name="label_error_certificate_invalid"><![CDATA[
     <p>Le certificat avec l\'emprunte <br/>
-    <code>%1$s</code>est seulement valide de %2$sà %3$s</p>
+    <code>%1$s</code><br/>
+    est seulement valide de %2$sà %3$s</p>
 ]]></string>
   <string name="label_error_certificate_untrusted"><![CDATA[
     <p>Le certificat avec l\'emprunte<br/>

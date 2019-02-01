@@ -28,7 +28,8 @@
   <string name="label_error_certificate_no_hostname">Nessun nome host disponibile</string>
   <string name="label_error_certificate_invalid"><![CDATA[
     <p>Il certificato con l’impronta<br/>
-    <code>%1$s</code> è valido esclusivamente da %2$s a %3$s</p>
+    <code>%1$s</code><br/>
+    è valido esclusivamente dal %2$s al %3$s</p>
   ]]></string>
   <string name="label_error_certificate_untrusted"><![CDATA[
     <p>Il certificato con l’impronta<br/>

@@ -26,7 +26,8 @@
   <string name="label_error_certificate_no_hostname">Hostname nije dostupno</string>
   <string name="label_error_certificate_invalid"><![CDATA[
     <p>Sertifikat sa otiskom<br/>
-    <code>%1$s</code> je važeći od %2$s do %3$s</p>
+    <code>%1$s</code><br/>
+    je važeći od %2$s do %3$s</p>
   ]]></string>
   <string name="label_error_certificate_untrusted"><![CDATA[
     <p>Sertifikat sa otiskom<br/>
