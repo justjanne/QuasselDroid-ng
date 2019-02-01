@@ -38,12 +38,11 @@ import de.kuschku.quasseldroid.util.compatibility.AndroidLoggingHandler
 import de.kuschku.quasseldroid.util.compatibility.AndroidStreamChannelFactory
 import de.kuschku.quasseldroid.util.ui.LocaleHelper
 
-class Quasseldroid : DaggerApplication() {
+open class Quasseldroid : DaggerApplication() {
   override fun applicationInjector(): AndroidInjector<Quasseldroid> =
     DaggerAppComponent.builder().create(this)
 
-  override fun onCreate() {
-    super.onCreate()
+  protected open fun init() {
     if (LeakCanary.isInAnalyzerProcess(this)) {
       // This process is dedicated to LeakCanary for heap analysis.
       // You should not init your app in this process.
@@ -230,6 +229,11 @@ class Quasseldroid : DaggerApplication() {
           .build()
       )
     }
+  }
+
+  override fun onCreate() {
+    super.onCreate()
+    init()
   }
 
   override fun attachBaseContext(base: Context) {

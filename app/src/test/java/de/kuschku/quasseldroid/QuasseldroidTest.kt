@@ -17,11 +17,10 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.util.irc.format.spans
+package de.kuschku.quasseldroid
 
-import android.text.style.StrikethroughSpan
-
-class IrcStrikethroughSpan : StrikethroughSpan(), Copyable<IrcStrikethroughSpan> {
-  override fun copy() = IrcStrikethroughSpan()
-  override fun equals(other: Any?) = other is IrcBoldSpan
+class QuasseldroidTest : Quasseldroid() {
+  override fun init() {
+    applicationInjector().inject(this)
+  }
 }

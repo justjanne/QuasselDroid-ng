@@ -32,34 +32,37 @@ import javax.inject.Inject
  * A helper class to turn mIRC formatted Strings into Android’s SpannableStrings with the same
  * color and format codes
  */
-class IrcFormatDeserializer @Inject constructor(context: Context) {
-  private val mircColors = listOf(
-    R.color.mircColor00, R.color.mircColor01, R.color.mircColor02, R.color.mircColor03,
-    R.color.mircColor04, R.color.mircColor05, R.color.mircColor06, R.color.mircColor07,
-    R.color.mircColor08, R.color.mircColor09, R.color.mircColor10, R.color.mircColor11,
-    R.color.mircColor12, R.color.mircColor13, R.color.mircColor14, R.color.mircColor15,
-    R.color.mircColor16, R.color.mircColor17, R.color.mircColor18, R.color.mircColor19,
-    R.color.mircColor20, R.color.mircColor21, R.color.mircColor22, R.color.mircColor23,
-    R.color.mircColor24, R.color.mircColor25, R.color.mircColor26, R.color.mircColor27,
-    R.color.mircColor28, R.color.mircColor29, R.color.mircColor30, R.color.mircColor31,
-    R.color.mircColor32, R.color.mircColor33, R.color.mircColor34, R.color.mircColor35,
-    R.color.mircColor36, R.color.mircColor37, R.color.mircColor38, R.color.mircColor39,
-    R.color.mircColor40, R.color.mircColor41, R.color.mircColor42, R.color.mircColor43,
-    R.color.mircColor44, R.color.mircColor45, R.color.mircColor46, R.color.mircColor47,
-    R.color.mircColor48, R.color.mircColor49, R.color.mircColor50, R.color.mircColor51,
-    R.color.mircColor52, R.color.mircColor53, R.color.mircColor54, R.color.mircColor55,
-    R.color.mircColor56, R.color.mircColor57, R.color.mircColor58, R.color.mircColor59,
-    R.color.mircColor60, R.color.mircColor61, R.color.mircColor62, R.color.mircColor63,
-    R.color.mircColor64, R.color.mircColor65, R.color.mircColor66, R.color.mircColor67,
-    R.color.mircColor68, R.color.mircColor69, R.color.mircColor70, R.color.mircColor71,
-    R.color.mircColor72, R.color.mircColor73, R.color.mircColor74, R.color.mircColor75,
-    R.color.mircColor76, R.color.mircColor77, R.color.mircColor78, R.color.mircColor79,
-    R.color.mircColor80, R.color.mircColor81, R.color.mircColor82, R.color.mircColor83,
-    R.color.mircColor84, R.color.mircColor85, R.color.mircColor86, R.color.mircColor87,
-    R.color.mircColor88, R.color.mircColor89, R.color.mircColor90, R.color.mircColor91,
-    R.color.mircColor92, R.color.mircColor93, R.color.mircColor94, R.color.mircColor95,
-    R.color.mircColor96, R.color.mircColor97, R.color.mircColor98
-  ).map(context::getColorCompat).toIntArray()
+class IrcFormatDeserializer(private val mircColors: IntArray) {
+  @Inject
+  constructor(context: Context) : this(
+    mircColors = listOf(
+      R.color.mircColor00, R.color.mircColor01, R.color.mircColor02, R.color.mircColor03,
+      R.color.mircColor04, R.color.mircColor05, R.color.mircColor06, R.color.mircColor07,
+      R.color.mircColor08, R.color.mircColor09, R.color.mircColor10, R.color.mircColor11,
+      R.color.mircColor12, R.color.mircColor13, R.color.mircColor14, R.color.mircColor15,
+      R.color.mircColor16, R.color.mircColor17, R.color.mircColor18, R.color.mircColor19,
+      R.color.mircColor20, R.color.mircColor21, R.color.mircColor22, R.color.mircColor23,
+      R.color.mircColor24, R.color.mircColor25, R.color.mircColor26, R.color.mircColor27,
+      R.color.mircColor28, R.color.mircColor29, R.color.mircColor30, R.color.mircColor31,
+      R.color.mircColor32, R.color.mircColor33, R.color.mircColor34, R.color.mircColor35,
+      R.color.mircColor36, R.color.mircColor37, R.color.mircColor38, R.color.mircColor39,
+      R.color.mircColor40, R.color.mircColor41, R.color.mircColor42, R.color.mircColor43,
+      R.color.mircColor44, R.color.mircColor45, R.color.mircColor46, R.color.mircColor47,
+      R.color.mircColor48, R.color.mircColor49, R.color.mircColor50, R.color.mircColor51,
+      R.color.mircColor52, R.color.mircColor53, R.color.mircColor54, R.color.mircColor55,
+      R.color.mircColor56, R.color.mircColor57, R.color.mircColor58, R.color.mircColor59,
+      R.color.mircColor60, R.color.mircColor61, R.color.mircColor62, R.color.mircColor63,
+      R.color.mircColor64, R.color.mircColor65, R.color.mircColor66, R.color.mircColor67,
+      R.color.mircColor68, R.color.mircColor69, R.color.mircColor70, R.color.mircColor71,
+      R.color.mircColor72, R.color.mircColor73, R.color.mircColor74, R.color.mircColor75,
+      R.color.mircColor76, R.color.mircColor77, R.color.mircColor78, R.color.mircColor79,
+      R.color.mircColor80, R.color.mircColor81, R.color.mircColor82, R.color.mircColor83,
+      R.color.mircColor84, R.color.mircColor85, R.color.mircColor86, R.color.mircColor87,
+      R.color.mircColor88, R.color.mircColor89, R.color.mircColor90, R.color.mircColor91,
+      R.color.mircColor92, R.color.mircColor93, R.color.mircColor94, R.color.mircColor95,
+      R.color.mircColor96, R.color.mircColor97, R.color.mircColor98
+    ).map(context::getColorCompat).toIntArray()
+  )
 
   /**
    * Function to handle mIRC formatted strings
@@ -274,6 +277,8 @@ class IrcFormatDeserializer @Inject constructor(context: Context) {
       i++
     }
 
+    plainText.append(str.substring(str.length - normalCount, str.length))
+
     // End all formatting tags
     if (bold != null) {
       if (colorize) bold.apply(plainText, plainText.length)
@@ -296,7 +301,6 @@ class IrcFormatDeserializer @Inject constructor(context: Context) {
     if (hexColor != null) {
       if (colorize) hexColor.apply(plainText, plainText.length)
     }
-    plainText.append(str.substring(str.length - normalCount, str.length))
     return plainText
   }
 

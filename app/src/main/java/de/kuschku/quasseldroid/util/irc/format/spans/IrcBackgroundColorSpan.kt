@@ -27,10 +27,26 @@ sealed class IrcBackgroundColorSpan<T : IrcBackgroundColorSpan<T>>(@ColorInt col
   class MIRC(private val mircColor: Int, @ColorInt color: Int) :
     IrcBackgroundColorSpan<MIRC>(color), Copyable<MIRC> {
     override fun copy() = MIRC(mircColor, backgroundColor)
+    override fun toString(): String {
+      return "IrcBackgroundColorSpan.MIRC(mircColor=$mircColor, color=${backgroundColor.toString(16)})"
+    }
+
+    override fun equals(other: Any?) = when (other) {
+      is IrcBackgroundColorSpan.MIRC -> other.mircColor == mircColor
+      else                           -> false
+    }
   }
 
   class HEX(@ColorInt color: Int) :
     IrcBackgroundColorSpan<HEX>(color), Copyable<HEX> {
     override fun copy() = HEX(backgroundColor)
+    override fun toString(): String {
+      return "IrcBackgroundColorSpan.HEX(color=${backgroundColor.toString(16)})"
+    }
+
+    override fun equals(other: Any?) = when (other) {
+      is IrcBackgroundColorSpan.HEX -> other.backgroundColor == backgroundColor
+      else                          -> false
+    }
   }
 }

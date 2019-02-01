@@ -24,4 +24,5 @@ import android.text.style.StyleSpan
 
 class IrcItalicSpan : StyleSpan(Typeface.ITALIC), Copyable<IrcItalicSpan> {
   override fun copy() = IrcItalicSpan()
+  override fun equals(other: Any?) = other is IrcBoldSpan
 }

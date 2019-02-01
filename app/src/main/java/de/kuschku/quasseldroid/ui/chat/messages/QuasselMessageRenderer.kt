@@ -259,6 +259,7 @@ class QuasselMessageRenderer @Inject constructor(
         }
         val content = contentFormatter.formatContent(message.content.content,
                                                      monochromeForeground,
+                                                     message.isExpanded,
                                                      message.content.networkId)
         val nickName = HostmaskHelper.nick(message.content.sender)
         val senderColorIndex = SenderColorUtil.senderColor(nickName)
@@ -317,6 +318,7 @@ class QuasselMessageRenderer @Inject constructor(
             contentFormatter.formatNick(message.content.sender, self, monochromeForeground, false),
             contentFormatter.formatContent(message.content.content,
                                            monochromeForeground,
+                                           message.isExpanded,
                                            message.content.networkId)
           ),
           avatarUrls = AvatarHelper.avatar(messageSettings, message.content, avatarSize),
@@ -337,6 +339,7 @@ class QuasselMessageRenderer @Inject constructor(
           contentFormatter.formatNick(message.content.sender, self, monochromeForeground, false),
           contentFormatter.formatContent(message.content.content,
                                          monochromeForeground,
+                                         message.isExpanded,
                                          message.content.networkId)
         ),
         hasDayChange = message.hasDayChange,
@@ -448,6 +451,7 @@ class QuasselMessageRenderer @Inject constructor(
             ),
             contentFormatter.formatContent(message.content.content,
                                            monochromeForeground,
+                                           message.isExpanded,
                                            message.content.networkId)
           )
         },
@@ -483,6 +487,7 @@ class QuasselMessageRenderer @Inject constructor(
             ),
             contentFormatter.formatContent(message.content.content,
                                            monochromeForeground,
+                                           message.isExpanded,
                                            message.content.networkId)
           )
         },
@@ -518,6 +523,7 @@ class QuasselMessageRenderer @Inject constructor(
                                           false),
               contentFormatter.formatContent(reason,
                                              monochromeForeground,
+                                             message.isExpanded,
                                              message.content.networkId)
             )
           },
@@ -554,6 +560,7 @@ class QuasselMessageRenderer @Inject constructor(
                                           false),
               contentFormatter.formatContent(reason,
                                              monochromeForeground,
+                                             message.isExpanded,
                                              message.content.networkId)
             )
           },
@@ -623,6 +630,7 @@ class QuasselMessageRenderer @Inject constructor(
         dayChange = formatDayChange(message),
         combined = contentFormatter.formatContent(message.content.content,
                                                   monochromeForeground,
+                                                  message.isExpanded,
                                                   message.content.networkId),
         hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
@@ -635,6 +643,7 @@ class QuasselMessageRenderer @Inject constructor(
         dayChange = formatDayChange(message),
         combined = contentFormatter.formatContent(message.content.content,
                                                   monochromeForeground,
+                                                  message.isExpanded,
                                                   message.content.networkId),
         hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
@@ -657,6 +666,7 @@ class QuasselMessageRenderer @Inject constructor(
         dayChange = formatDayChange(message),
         combined = contentFormatter.formatContent(message.content.content,
                                                   monochromeForeground,
+                                                  message.isExpanded,
                                                   message.content.networkId),
         hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,

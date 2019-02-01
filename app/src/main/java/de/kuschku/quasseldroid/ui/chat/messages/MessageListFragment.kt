@@ -250,6 +250,12 @@ class MessageListFragment : ServiceBoundFragment() {
           1    -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = true
           else -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = false
         }
+      } else {
+        val value = viewModel.expandedMessages.value
+        viewModel.expandedMessages.onNext(
+          if (value.contains(msg.original.messageId)) value - msg.original.messageId
+          else value + msg.original.messageId
+        )
       }
     }
     adapter.setOnLongClickListener { msg ->
@@ -288,14 +294,6 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     }
     adapter.setOnUrlLongClickListener(LinkLongClickMenuHelper())
-
-    adapter.setOnExpansionListener {
-      val value = viewModel.expandedMessages.value
-      viewModel.expandedMessages.onNext(
-        if (value.contains(it.messageId)) value - it.messageId
-        else value + it.messageId
-      )
-    }
 
     messageList.adapter = adapter
     messageList.layoutManager = linearLayoutManager

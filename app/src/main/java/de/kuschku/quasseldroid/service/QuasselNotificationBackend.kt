@@ -351,7 +351,7 @@ class QuasselNotificationBackend @Inject constructor(
             selfColor = selfColor
           ))
         }
-        val content = contentFormatter.formatContent(it.content, false, it.networkId)
+        val content = contentFormatter.formatContent(it.content, false, false, it.networkId)
 
         NotificationMessage(
           messageId = it.messageId,

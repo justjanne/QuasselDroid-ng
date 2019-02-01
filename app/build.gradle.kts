@@ -98,6 +98,10 @@ android {
     setTargetCompatibility(JavaVersion.VERSION_1_8)
   }
 
+  testOptions {
+    unitTests.isIncludeAndroidResources = true
+  }
+
   lintOptions {
     isWarningsAsErrors = true
     setLintConfig(file("../lint.xml"))
@@ -182,4 +186,7 @@ dependencies {
   }
 
   testImplementation("junit", "junit", "4.12")
+  testImplementation("org.robolectric", "robolectric", "4.1") {
+    exclude(group = "org.threeten", module = "threetenbp")
+  }
 }

@@ -24,10 +24,7 @@ import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
-import android.text.style.ClickableSpan
-import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
-import android.text.style.URLSpan
+import android.text.style.*
 import android.view.View
 import androidx.annotation.ColorInt
 import de.kuschku.libquassel.protocol.NetworkId
@@ -37,6 +34,8 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.util.helper.styledAttributes
+import de.kuschku.quasseldroid.util.irc.format.spans.IrcBackgroundColorSpan
+import de.kuschku.quasseldroid.util.irc.format.spans.IrcForegroundColorSpan
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import org.intellij.lang.annotations.Language
 import javax.inject.Inject
@@ -110,9 +109,33 @@ class ContentFormatter @Inject constructor(
 
   fun formatContent(content: String,
                     highlight: Boolean = false,
+                    showSpoilers: Boolean = false,
                     networkId: NetworkId?): CharSequence {
     val formattedText = ircFormatDeserializer.formatString(content, messageSettings.colorizeMirc)
     val text = SpannableString(formattedText)
+
+    if (showSpoilers) {
+      val spans = mutableMapOf<Triple<Int, Int, Int>, MutableList<Any>>()
+      for (span in text.getSpans(0, text.length, IrcForegroundColorSpan::class.java)) {
+        val from = text.getSpanStart(span)
+        val to = text.getSpanEnd(span)
+        spans.getOrPut(Triple(from, to, span.getForegroundColor()), ::mutableListOf).add(span)
+      }
+      for (span in text.getSpans(0, text.length, IrcBackgroundColorSpan::class.java)) {
+        val from = text.getSpanStart(span)
+        val to = text.getSpanEnd(span)
+        spans.getOrPut(Triple(from, to, span.getBackgroundColor()), ::mutableListOf).add(span)
+      }
+      for (group in spans.values) {
+        if (group.size > 1 &&
+            group.any { it is ForegroundColorSpan } &&
+            group.any { it is BackgroundColorSpan }) {
+          for (span in group) {
+            text.removeSpan(span)
+          }
+        }
+      }
+    }
 
     for (result in urlPattern.findAll(formattedText)) {
       val group = result.groups[1]

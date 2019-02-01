@@ -24,13 +24,31 @@ import androidx.annotation.ColorInt
 
 sealed class IrcForegroundColorSpan<T : IrcForegroundColorSpan<T>>(@ColorInt color: Int) :
   ForegroundColorSpan(color), Copyable<T> {
+
+
   class MIRC(private val mircColor: Int, @ColorInt color: Int) :
     IrcForegroundColorSpan<MIRC>(color), Copyable<MIRC> {
     override fun copy() = MIRC(mircColor, foregroundColor)
+    override fun toString(): String {
+      return "IrcForegroundColorSpan.MIRC(mircColor=$mircColor, color=${foregroundColor.toString(16)})"
+    }
+
+    override fun equals(other: Any?) = when (other) {
+      is MIRC -> other.mircColor == mircColor
+      else    -> false
+    }
   }
 
   class HEX(@ColorInt color: Int) :
     IrcForegroundColorSpan<HEX>(color), Copyable<HEX> {
     override fun copy() = HEX(foregroundColor)
+    override fun toString(): String {
+      return "IrcBackgroundColorSpan.HEX(color=${foregroundColor.toString(16)})"
+    }
+
+    override fun equals(other: Any?) = when (other) {
+      is HEX -> other.foregroundColor == foregroundColor
+      else   -> false
+    }
   }
 }
