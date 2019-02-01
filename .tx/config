@@ -9,6 +9,7 @@ trans.de = app/src/main/res/values-de/strings_certificates.xml
 trans.fr_CA = app/src/main/res/values-fr-rCA/strings_certificates.xml
 trans.it = app/src/main/res/values-it/strings_certificates.xml
 trans.lt = app/src/main/res/values-lt/strings_certificates.xml
+trans.nl = app/src/main/res/values-nl/strings_certificates.xml
 trans.pt = app/src/main/res/values-pt/strings_certificates.xml
 trans.sr = app/src/main/res/values-sr/strings_certificates.xml
 
@@ -20,6 +21,7 @@ trans.de = app/src/main/res/values-de/strings_status.xml
 trans.fr_CA = app/src/main/res/values-fr-rCA/strings_status.xml
 trans.it = app/src/main/res/values-it/strings_status.xml
 trans.lt = app/src/main/res/values-lt/strings_status.xml
+trans.nl = app/src/main/res/values-nl/strings_status.xml
 trans.pt = app/src/main/res/values-pt/strings_status.xml
 trans.sr = app/src/main/res/values-sr/strings_status.xml
 
@@ -31,6 +33,7 @@ trans.de = app/src/main/res/values-de/strings_error.xml
 trans.fr_CA = app/src/main/res/values-fr-rCA/strings_error.xml
 trans.it = app/src/main/res/values-it/strings_error.xml
 trans.lt = app/src/main/res/values-lt/strings_error.xml
+trans.nl = app/src/main/res/values-nl/strings_error.xml
 trans.pt = app/src/main/res/values-pt/strings_error.xml
 trans.sr = app/src/main/res/values-sr/strings_error.xml
 
@@ -42,6 +45,7 @@ trans.de = app/src/main/res/values-de/strings_defaults.xml
 trans.fr_CA = app/src/main/res/values-fr-rCA/strings_defaults.xml
 trans.it = app/src/main/res/values-it/strings_defaults.xml
 trans.lt = app/src/main/res/values-lt/strings_defaults.xml
+trans.nl = app/src/main/res/values-nl/strings_defaults.xml
 trans.pt = app/src/main/res/values-pt/strings_defaults.xml
 trans.sr = app/src/main/res/values-sr/strings_defaults.xml
 
@@ -53,6 +57,7 @@ trans.de = app/src/main/res/values-de/strings_format.xml
 trans.fr_CA = app/src/main/res/values-fr-rCA/strings_format.xml
 trans.it = app/src/main/res/values-it/strings_format.xml
 trans.lt = app/src/main/res/values-lt/strings_format.xml
+trans.nl = app/src/main/res/values-nl/strings_format.xml
 trans.pt = app/src/main/res/values-pt/strings_format.xml
 trans.sr = app/src/main/res/values-sr/strings_format.xml
 
@@ -64,6 +69,7 @@ trans.de = app/src/main/res/values-de/strings_preferences.xml
 trans.fr_CA = app/src/main/res/values-fr-rCA/strings_preferences.xml
 trans.it = app/src/main/res/values-it/strings_preferences.xml
 trans.lt = app/src/main/res/values-lt/strings_preferences.xml
+trans.nl = app/src/main/res/values-nl/strings_preferences.xml
 trans.pt = app/src/main/res/values-pt/strings_preferences.xml
 trans.sr = app/src/main/res/values-sr/strings_preferences.xml
 
@@ -75,6 +81,7 @@ trans.de = app/src/main/res/values-de/strings_messages.xml
 trans.fr_CA = app/src/main/res/values-fr-rCA/strings_messages.xml
 trans.it = app/src/main/res/values-it/strings_messages.xml
 trans.lt = app/src/main/res/values-lt/strings_messages.xml
+trans.nl = app/src/main/res/values-nl/strings_messages.xml
 trans.pt = app/src/main/res/values-pt/strings_messages.xml
 trans.sr = app/src/main/res/values-sr/strings_messages.xml
 
@@ -86,6 +93,7 @@ trans.de = app/src/main/res/values-de/strings.xml
 trans.fr_CA = app/src/main/res/values-fr-rCA/strings.xml
 trans.it = app/src/main/res/values-it/strings.xml
 trans.lt = app/src/main/res/values-lt/strings.xml
+trans.nl = app/src/main/res/values-nl/strings.xml
 trans.pt = app/src/main/res/values-pt/strings.xml
 trans.sr = app/src/main/res/values-sr/strings.xml
 
@@ -97,6 +105,7 @@ trans.de = app/src/main/res/values-de/strings_setup.xml
 trans.fr_CA = app/src/main/res/values-fr-rCA/strings_setup.xml
 trans.it = app/src/main/res/values-it/strings_setup.xml
 trans.lt = app/src/main/res/values-lt/strings_setup.xml
+trans.nl = app/src/main/res/values-nl/strings_setup.xml
 trans.pt = app/src/main/res/values-pt/strings_setup.xml
 trans.sr = app/src/main/res/values-sr/strings_setup.xml
 
@@ -108,6 +117,7 @@ trans.de = app/src/main/res/values-de/strings_contributors.xml
 trans.fr_CA = app/src/main/res/values-fr-rCA/strings_contributors.xml
 trans.it = app/src/main/res/values-it/strings_contributors.xml
 trans.lt = app/src/main/res/values-lt/strings_contributors.xml
+trans.nl = app/src/main/res/values-nl/strings_contributors.xml
 trans.pt = app/src/main/res/values-pt/strings_contributors.xml
 trans.sr = app/src/main/res/values-sr/strings_contributors.xml
 
@@ -119,6 +129,7 @@ trans.de = app/src/main/res/values-de/strings_info.xml
 trans.fr_CA = app/src/main/res/values-fr-rCA/strings_info.xml
 trans.it = app/src/main/res/values-it/strings_info.xml
 trans.lt = app/src/main/res/values-lt/strings_info.xml
+trans.nl = app/src/main/res/values-nl/strings_info.xml
 trans.pt = app/src/main/res/values-pt/strings_info.xml
 trans.sr = app/src/main/res/values-sr/strings_info.xml
 
@@ -130,5 +141,6 @@ trans.de = app/src/main/res/values-de/strings_settings.xml
 trans.fr_CA = app/src/main/res/values-fr-rCA/strings_settings.xml
 trans.it = app/src/main/res/values-it/strings_settings.xml
 trans.lt = app/src/main/res/values-lt/strings_settings.xml
+trans.nl = app/src/main/res/values-nl/strings_settings.xml
 trans.pt = app/src/main/res/values-pt/strings_settings.xml
 trans.sr = app/src/main/res/values-sr/strings_settings.xml
