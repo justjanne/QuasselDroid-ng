@@ -74,22 +74,6 @@ class AliasManager constructor(
 
   fun contains(name: String?) = _aliases.map(Alias::name).contains(name)
 
-  fun defaults() = listOf(
-    Alias("j", "/join $0"),
-    Alias("ns", "/msg nickserv $0"),
-    Alias("nickserv", "/msg nickserv $0"),
-    Alias("cs", "/msg chanserv $0"),
-    Alias("chanserv", "/msg chanserv $0"),
-    Alias("hs", "/msg hostserv $0"),
-    Alias("hostserv", "/msg hostserv $0"),
-    Alias("wii", "/whois $0 $0"),
-    Alias("back", "/quote away"),
-
-    // let's add aliases for scripts that only run on linux
-    Alias("inxi", "/exec inxi $0"),
-    Alias("sysinfo", "/exec inxi -d")
-  )
-
   fun aliasList() = _aliases
 
   fun setAliasList(list: List<Alias>) {
@@ -100,6 +84,12 @@ class AliasManager constructor(
 
   fun copy() = AliasManager(proxy).also {
     it.fromVariantMap(toVariantMap())
+  }
+
+  fun processInput(info: BufferInfo, message: String): List<IAliasManager.Command> {
+    val result = mutableListOf<IAliasManager.Command>()
+    processInput(info, message, result)
+    return result
   }
 
   fun processInput(info: BufferInfo, message: String,
@@ -232,5 +222,23 @@ class AliasManager constructor(
 
   override fun toString(): String {
     return "AliasManager(_aliases=$_aliases)"
+  }
+
+  companion object {
+    fun defaults() = listOf(
+      Alias("j", "/join $0"),
+      Alias("ns", "/msg nickserv $0"),
+      Alias("nickserv", "/msg nickserv $0"),
+      Alias("cs", "/msg chanserv $0"),
+      Alias("chanserv", "/msg chanserv $0"),
+      Alias("hs", "/msg hostserv $0"),
+      Alias("hostserv", "/msg hostserv $0"),
+      Alias("wii", "/whois $0 $0"),
+      Alias("back", "/quote away"),
+
+      // let's add aliases for scripts that only run on linux
+      Alias("inxi", "/exec inxi $0"),
+      Alias("sysinfo", "/exec inxi -d")
+    )
   }
 }

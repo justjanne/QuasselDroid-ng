@@ -19,15 +19,19 @@
 
 package de.kuschku.libquassel.protocol
 
-enum class Protocol(private val value: Byte) {
-  Legacy(0x01),
-  Datastream(0x02);
+enum class Protocol(private val value: UByte) {
+  Legacy(0x01u),
+  Datastream(0x02u);
 
-  fun toDouble(): Double = value.toDouble()
-  fun toFloat(): Float = value.toFloat()
-  fun toLong(): Long = value.toLong()
-  fun toInt(): Int = value.toInt()
-  fun toChar(): Char = value.toChar()
-  fun toShort(): Short = value.toShort()
-  fun toByte(): Byte = value
+  fun toByte() = value.toByte()
+  fun toChar() = value.toInt().toChar()
+  fun toDouble() = value.toInt().toDouble()
+  fun toFloat() = value.toInt().toFloat()
+  fun toInt() = value.toInt()
+  fun toLong() = value.toLong()
+  fun toShort() = value.toShort()
+  fun toUByte() = value.toUByte()
+  fun toUInt() = value.toUInt()
+  fun toULong() = value.toULong()
+  fun toUShort() = value.toUShort()
 }

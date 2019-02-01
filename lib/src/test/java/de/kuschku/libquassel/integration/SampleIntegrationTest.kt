@@ -17,7 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel
+package de.kuschku.libquassel.integration
 
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.QType
@@ -26,7 +26,7 @@ import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.util.withTestSession
 import org.junit.Test
 
-class IntegrationTest {
+class SampleIntegrationTest {
   @Test
   fun test() = withTestSession {
     ensure {

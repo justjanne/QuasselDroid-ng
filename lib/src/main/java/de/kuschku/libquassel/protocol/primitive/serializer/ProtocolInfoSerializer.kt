@@ -29,15 +29,15 @@ object ProtocolInfoSerializer : Serializer<ProtocolInfo> {
   override fun serialize(buffer: ChainedByteBuffer, data: ProtocolInfo,
                          features: QuasselFeatures) {
     UByteSerializer.serialize(buffer, data.flags.toUByte(), features)
-    ShortSerializer.serialize(buffer, data.data, features)
-    ByteSerializer.serialize(buffer, data.version, features)
+    UShortSerializer.serialize(buffer, data.data, features)
+    UByteSerializer.serialize(buffer, data.version, features)
   }
 
   override fun deserialize(buffer: ByteBuffer, features: QuasselFeatures): ProtocolInfo {
     return ProtocolInfo(
       Protocol_Features.of(UByteSerializer.deserialize(buffer, features).toUInt()),
-      ShortSerializer.deserialize(buffer, features),
-      ByteSerializer.deserialize(buffer, features)
+      UShortSerializer.deserialize(buffer, features),
+      UByteSerializer.deserialize(buffer, features)
     )
   }
 }

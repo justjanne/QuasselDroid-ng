@@ -19,16 +19,21 @@
 
 package de.kuschku.libquassel.util
 
+import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.quassel.syncables.AliasManager
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
+
+fun TestSession.with(f: TestSession.() -> Unit) = f.invoke(this)
 
 fun withTestSession(f: TestSession.() -> Unit) = f.invoke(setupTestSession())
 
 fun setupTestSession() = TestSession().provideTestData {
   identities = listOf(
-    buildIdentity {
-      setId(IdentityId(1))
+    buildIdentity(IdentityId(1)) {
       setIdentityName("Default Identity")
       setRealName("Janne Mareike Koschinski <janne@kuschku.de>")
       setNicks(listOf(
@@ -40,6 +45,7 @@ fun setupTestSession() = TestSession().provideTestData {
       setIdent("justJanne")
     }
   )
+
   networks = listOf(
     buildNetwork(NetworkId(1)) {
       setNetworkName("FreeNode")
@@ -135,4 +141,41 @@ fun setupTestSession() = TestSession().provideTestData {
       }
     }
   )
+
+  buffers = listOf(
+    TestSession.BufferTestData(
+      bufferInfo = BufferInfo(
+        bufferId = BufferId(1),
+        networkId = NetworkId(1),
+        bufferName = "FreeNode",
+        type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+      )
+    ),
+    TestSession.BufferTestData(
+      bufferInfo = BufferInfo(
+        bufferId = BufferId(2),
+        networkId = NetworkId(1),
+        bufferName = "#quassel-test",
+        type = Buffer_Type.of(Buffer_Type.ChannelBuffer)
+      )
+    ),
+    TestSession.BufferTestData(
+      bufferInfo = BufferInfo(
+        bufferId = BufferId(3),
+        networkId = NetworkId(1),
+        bufferName = "digitalcircuit",
+        type = Buffer_Type.of(Buffer_Type.QueryBuffer)
+      )
+    ),
+    TestSession.BufferTestData(
+      bufferInfo = BufferInfo(
+        bufferId = BufferId(4),
+        networkId = NetworkId(1),
+        bufferName = "ChanServ",
+        type = Buffer_Type.of(Buffer_Type.QueryBuffer)
+      )
+    )
+  )
+
+  aliases = AliasManager.defaults()
 }

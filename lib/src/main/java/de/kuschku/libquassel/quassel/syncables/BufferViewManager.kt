@@ -37,6 +37,13 @@ class BufferViewManager constructor(
     initSetBufferViewIds(properties["BufferViewIds"].valueOr(::emptyList))
   }
 
+  fun copy() = BufferViewManager(proxy).also {
+    it.fromVariantMap(toVariantMap())
+  }
+
+  fun isEqual(other: BufferViewManager) =
+    _bufferViewConfigs.keys == other._bufferViewConfigs.keys
+
   override fun initBufferViewIds(): QVariantList = _bufferViewConfigs.keys.map {
     QVariant.of(it, Type.Int)
   }
@@ -48,9 +55,13 @@ class BufferViewManager constructor(
   fun liveBufferViewConfigs(): Observable<Set<Int>> = live_bufferViewConfigs
 
   override fun initSetBufferViewIds(bufferViewIds: QVariantList) {
-    bufferViewIds
-      .mapNotNull { it.value<Int>() }
-      .forEach { addBufferViewConfig(it) }
+    setBufferViewIds(bufferViewIds.mapNotNull { it.value<Int>() })
+  }
+
+  fun setBufferViewIds(ids: List<Int>) {
+    for (id in ids) {
+      addBufferViewConfig(id)
+    }
   }
 
   override fun addBufferViewConfig(config: BufferViewConfig) {
@@ -91,4 +102,10 @@ class BufferViewManager constructor(
   override fun deinit() {
     _bufferViewConfigs.values.map(BufferViewConfig::deinit)
   }
+
+  override fun toString(): String {
+    return "BufferViewManager(_bufferViewConfigs=${_bufferViewConfigs.keys})"
+  }
+
+
 }

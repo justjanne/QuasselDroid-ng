@@ -24,11 +24,11 @@ import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.roundTrip
 import org.junit.Test
 
-class AliasManagerTest {
+class BufferViewManagerTest {
   @Test
   fun testSerialization() {
-    val original = AliasManager(SignalProxy.NULL)
-    original.setAliasList(AliasManager.defaults())
+    val original = BufferViewManager(SignalProxy.NULL)
+    original.setBufferViewIds(listOf(-1, 0, 9999, Int.MIN_VALUE, Int.MAX_VALUE))
 
     val copy = original.copy()
     copy.fromVariantMap(roundTrip(VariantMapSerializer, original.toVariantMap()))
@@ -40,8 +40,8 @@ class AliasManagerTest {
 
   @Test
   fun testCopy() {
-    val original = AliasManager(SignalProxy.NULL)
-    original.setAliasList(AliasManager.defaults())
+    val original = BufferViewManager(SignalProxy.NULL)
+    original.setBufferViewIds(listOf(-1, 0, 9999, Int.MIN_VALUE, Int.MAX_VALUE))
 
     val copy = original.copy()
     copy.fromVariantMap(original.toVariantMap())

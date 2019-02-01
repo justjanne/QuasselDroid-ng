@@ -91,11 +91,23 @@ class BufferSyncer constructor(
     initSetMarkerLines(properties["MarkerLines"].valueOr(::emptyList))
   }
 
+  fun copy() = BufferSyncer(session).also {
+    it.fromVariantMap(toVariantMap())
+  }
+
+  fun isEqual(other: BufferSyncer) =
+    _bufferInfos == other._bufferInfos &&
+    _lastSeenMsg == other._lastSeenMsg &&
+    _markerLines == other._markerLines &&
+    _bufferActivities == other._bufferActivities &&
+    _highlightCounts == other._highlightCounts
+
+
   override fun initActivities(): QVariantList {
     val list: MutableList<QVariant_> = mutableListOf()
     for ((key, value) in _bufferActivities) {
       list.add(QVariant.of(key, QType.BufferId))
-      list.add(QVariant.of(value, Type.Int))
+      list.add(QVariant.of(value.toInt(), Type.Int))
     }
     return list
   }
@@ -111,7 +123,7 @@ class BufferSyncer constructor(
 
   override fun initLastSeenMsg(): QVariantList {
     val list: MutableList<QVariant_> = mutableListOf()
-    for ((key, value) in _bufferActivities) {
+    for ((key, value) in _lastSeenMsg) {
       list.add(QVariant.of(key, QType.BufferId))
       list.add(QVariant.of(value, QType.MsgId))
     }
@@ -120,7 +132,7 @@ class BufferSyncer constructor(
 
   override fun initMarkerLines(): QVariantList {
     val list: MutableList<QVariant_> = mutableListOf()
-    for ((key, value) in _bufferActivities) {
+    for ((key, value) in _markerLines) {
       list.add(QVariant.of(key, QType.BufferId))
       list.add(QVariant.of(value, QType.MsgId))
     }
@@ -128,44 +140,78 @@ class BufferSyncer constructor(
   }
 
   override fun initSetActivities(data: QVariantList) {
-    (0 until data.size step 2).map {
-      data[it].value(BufferId(0)) to data[it + 1].value(0)
-    }.forEach { (buffer, activity) ->
+    setActivities((0 until data.size step 2).map {
+      Pair(
+        data[it].value(BufferId(0)),
+        Message_Type.of(data[it + 1].value(0))
+      )
+    })
+  }
+
+  fun setActivities(data: List<Pair<BufferId, Message_Types>>) {
+    for ((buffer, activity) in data) {
       setBufferActivity(buffer, activity)
     }
     live_bufferActivities.onNext(Unit)
   }
 
   override fun initSetHighlightCounts(data: QVariantList) {
-    (0 until data.size step 2).map {
-      data[it].value(BufferId(0)) to data[it + 1].value(0)
-    }.forEach { (buffer, count) ->
+    setHighlightCounts((0 until data.size step 2).map {
+      Pair(
+        data[it].value(BufferId(0)),
+        data[it + 1].value(0)
+      )
+    })
+  }
+
+  fun setHighlightCounts(data: List<Pair<BufferId, Int>>) {
+    for ((buffer, count) in data) {
       setHighlightCount(buffer, count)
     }
     live_highlightCounts.onNext(Unit)
   }
 
   override fun initSetLastSeenMsg(data: QVariantList) {
-    (0 until data.size step 2).map {
-      data[it].value(BufferId(0)) to data[it + 1].value(MsgId(0L))
-    }.forEach { (buffer, msgId) ->
+    setLastSeenMsg((0 until data.size step 2).map {
+      Pair(
+        data[it].value(BufferId(0)),
+        data[it + 1].value(MsgId(0L))
+      )
+    })
+  }
+
+  fun setLastSeenMsg(data: List<Pair<BufferId, MsgId>>) {
+    for ((buffer, msgId) in data) {
       setLastSeenMsg(buffer, msgId)
     }
     live_lastSeenMsg.onNext(Unit)
   }
 
   override fun initSetMarkerLines(data: QVariantList) {
-    (0 until data.size step 2).map {
-      data[it].value(BufferId(0)) to data[it + 1].value(MsgId(0L))
-    }.forEach { (buffer, msgId) ->
+    setMarkerLines((0 until data.size step 2).map {
+      Pair(
+        data[it].value(BufferId(0)),
+        data[it + 1].value(MsgId(0L))
+      )
+    })
+  }
+
+  fun setMarkerLines(data: List<Pair<BufferId, MsgId>>) {
+    for ((buffer, msgId) in data) {
       setMarkerLine(buffer, msgId)
     }
     live_markerLines.onNext(Unit)
   }
 
   fun initSetBufferInfos(infos: QVariantList?) {
+    setBufferInfos(infos?.mapNotNull { it.value<BufferInfo>() }.orEmpty())
+  }
+
+  fun setBufferInfos(infos: List<BufferInfo>) {
     _bufferInfos.clear()
-    infos?.mapNotNull { it.value<BufferInfo>() }?.forEach { _bufferInfos[it.bufferId] = it }
+    for (info in infos) {
+      _bufferInfos[info.bufferId] = info
+    }
     live_bufferInfos.onNext(Unit)
   }
 
@@ -226,16 +272,19 @@ class BufferSyncer constructor(
   }
 
   override fun setBufferActivity(buffer: BufferId, activity: Int) {
-    val flags = Message_Types.of<Message_Type>(activity)
-    super.setBufferActivity(buffer, activity)
-    if (flags hasFlag Message_Type.Plain ||
-        flags hasFlag Message_Type.Notice ||
-        flags hasFlag Message_Type.Action) {
+    setBufferActivity(buffer, Message_Type.of(activity))
+  }
+
+  fun setBufferActivity(buffer: BufferId, activity: Message_Types) {
+    super.setBufferActivity(buffer, activity.toInt())
+    if (activity hasFlag Message_Type.Plain ||
+        activity hasFlag Message_Type.Notice ||
+        activity hasFlag Message_Type.Action) {
       bufferInfo(buffer)?.let {
         session.bufferViewManager.handleBuffer(it, this, true)
       }
     }
-    _bufferActivities[buffer] = flags
+    _bufferActivities[buffer] = activity
     live_bufferActivities.onNext(Unit)
   }
 
@@ -271,6 +320,10 @@ class BufferSyncer constructor(
     type: Buffer_Types? = null,
     groupId: Int? = null
   ) = all(bufferName, bufferId, networkId, type, groupId).firstOrNull()
+
+  override fun toString(): String {
+    return "BufferSyncer(_lastSeenMsg=$_lastSeenMsg, _markerLines=$_markerLines, _bufferActivities=$_bufferActivities, _highlightCounts=$_highlightCounts, _bufferInfos=$_bufferInfos)"
+  }
 
   private val _lastSeenMsg: MutableMap<BufferId, MsgId> = mutableMapOf()
   private val live_lastSeenMsg = BehaviorSubject.createDefault(Unit)

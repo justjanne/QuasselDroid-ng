@@ -21,13 +21,12 @@ package de.kuschku.libquassel.util
 
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.connection.Features
-import de.kuschku.libquassel.protocol.IdentityId
-import de.kuschku.libquassel.protocol.NetworkId
-import de.kuschku.libquassel.protocol.QVariantList
-import de.kuschku.libquassel.protocol.QVariantMap
+import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
+import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.*
+import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
 import de.kuschku.libquassel.session.Error
 import de.kuschku.libquassel.session.ISession
@@ -66,8 +65,13 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
         it.objectName == target.objectName
       }
       assertTrue(
-        "SYNC No calls were made on ${target.className}:${target.objectName}",
-        matchingTargetTypes.isNotEmpty()
+        if (matchingTargetTypes.isNotEmpty()) {
+          "SYNC No calls were made on ${target.className}:${target.objectName}, instead only on:\n  ${matchingTargetTypes.map { "${it.className}:${it.objectName}" }.joinToString(
+            "\n  ")}"
+        } else {
+          "SYNC No calls were made on ${target.className}:${target.objectName}"
+        },
+        matchingTargets.isNotEmpty()
       )
 
       val matchingNames = matchingTargets.filter {
@@ -80,7 +84,8 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
       if (!params.isNullOrEmpty()) {
         val calledParams = matchingNames.map(SignalProxyMessage.SyncMessage::params)
         assertTrue(
-          "SYNC ${target.className}:${target.objectName}:$slotName was called with the wrong parameters:\nExpected:\n  $params\nActual:\n  ${calledParams.joinToString("\n  ")}",
+          "SYNC ${target.className}:${target.objectName}:$slotName was called with the wrong parameters:\nExpected:\n  $params\nActual:\n  ${calledParams.joinToString(
+            "\n  ")}",
           calledParams.contains(params)
         )
       }
@@ -97,10 +102,29 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
       if (!params.isNullOrEmpty()) {
         val calledParams = matchingNames.map(SignalProxyMessage.RpcCall::params)
         assertTrue(
-          "RPC $slotName was called with the wrong parameters:\nExpected:\n  $params\nActual:\n  ${calledParams.joinToString("\n  ")}",
+          "RPC $slotName was called with the wrong parameters:\nExpected:\n  $params\nActual:\n  ${calledParams.joinToString(
+            "\n  ")}",
           calledParams.contains(params)
         )
       }
+    }
+
+    fun requestInit(className: String, objectName: String) {
+      val matchingType = initRequest.filter {
+        it.className == className
+      }
+      assertTrue(
+        "InitRequest No data was requested for objects of type $className",
+        matchingType.isNotEmpty()
+      )
+      val matchingCalls = matchingType.filter {
+        it.objectName == objectName
+      }
+      assertTrue(
+        "InitRequest No data was requested for object $className:$objectName, instead only for:\n  ${matchingType.map { "${it.className}:${it.objectName}" }.joinToString(
+          "\n  ")}",
+        matchingCalls.isNotEmpty()
+      )
     }
   }
 
@@ -108,7 +132,7 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
     SubmissionCallback {
     private val submittedCalls = mutableListOf<SignalProxyMessage>()
 
-    fun run(f: ISession.() -> Unit) : TestEnvironment {
+    fun run(f: ISession.() -> Unit): TestEnvironment {
       session.submissionCallbacks.add(this)
       f.invoke(session)
       session.submissionCallbacks.remove(this)
@@ -156,6 +180,13 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
     live_identities.onNext(Unit)
   }
 
+  fun addIdentity(identity: Identity, initialize: Boolean = false) {
+    identities[identity.id()] = identity
+    if (!initialize)
+      identity.initialized = true
+    synchronize(identity)
+  }
+
   override fun removeIdentity(identityId: IdentityId) {
     val identity = identities.remove(identityId)
     stopSynchronize(identity)
@@ -180,6 +211,13 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
     network_added.onNext(networkId)
   }
 
+  fun addNetwork(network: Network, initialize: Boolean = false) {
+    networks[network.networkId()] = network
+    if (!initialize)
+      network.initialized = true
+    synchronize(network)
+  }
+
   override fun removeNetwork(networkId: NetworkId) {
     val network = networks.remove(networkId)
     stopSynchronize(network)
@@ -194,21 +232,40 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
 
   override val lag = BehaviorSubject.createDefault(0L)
 
+  fun buildNetwork(networkId: NetworkId, f: (Network.() -> Unit)? = null): Network {
+    val network = Network(networkId, proxy)
+    f?.invoke(network)
+    return network
+  }
+
+  fun buildIdentity(identityId: IdentityId, f: (Identity.() -> Unit)? = null): Identity {
+    val identity = Identity(proxy)
+    identity.setId(identityId)
+    f?.invoke(identity)
+    return identity
+  }
+
+  data class BufferTestData(
+    val bufferInfo: BufferInfo,
+    val activity: Message_Types = Message_Type.of(),
+    val lastSeenMsg: MsgId = MsgId(-1),
+    val markerLine: MsgId = MsgId(-1),
+    val highlightCount: Int = 0
+  )
+
   data class TestData(
     val session: TestSession,
     var networks: List<Network> = emptyList(),
-    var identities: List<Identity> = emptyList()
+    var identities: List<Identity> = emptyList(),
+    var buffers: List<BufferTestData> = emptyList(),
+    var aliases: List<IAliasManager.Alias> = emptyList()
   ) {
-    fun buildNetwork(networkId: NetworkId, f: Network.() -> Unit): Network {
-      val network = Network(networkId, session.proxy)
-      f.invoke(network)
-      return network
+    fun buildNetwork(networkId: NetworkId, f: (Network.() -> Unit)? = null): Network {
+      return session.buildNetwork(networkId, f)
     }
 
-    fun buildIdentity(f: Identity.() -> Unit): Identity {
-      val identity = Identity(session.proxy)
-      f.invoke(identity)
-      return identity
+    fun buildIdentity(identityId: IdentityId, f: (Identity.() -> Unit)? = null): Identity {
+      return session.buildIdentity(identityId, f)
     }
 
     fun Network.buildIrcChannel(name: String, f: IrcChannel.() -> Unit): IrcChannel {
@@ -232,13 +289,27 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
     val data = TestData(this)
     f.invoke(data)
     for (network in data.networks) {
-      network.initialized = true
-      networks[network.networkId()] = network
+      addNetwork(network)
     }
     for (identity in data.identities) {
-      identity.initialized = true
-      identities[identity.id()] = identity
+      addIdentity(identity)
     }
+    bufferSyncer.setBufferInfos(data.buffers.map {
+      it.bufferInfo
+    })
+    bufferSyncer.setActivities(data.buffers.map {
+      Pair(it.bufferInfo.bufferId, it.activity)
+    })
+    bufferSyncer.setMarkerLines(data.buffers.map {
+      Pair(it.bufferInfo.bufferId, it.markerLine)
+    })
+    bufferSyncer.setLastSeenMsg(data.buffers.map {
+      Pair(it.bufferInfo.bufferId, it.lastSeenMsg)
+    })
+    bufferSyncer.setHighlightCounts(data.buffers.map {
+      Pair(it.bufferInfo.bufferId, it.highlightCount)
+    })
+    aliasManager.setAliasList(data.aliases)
     return this
   }
 
