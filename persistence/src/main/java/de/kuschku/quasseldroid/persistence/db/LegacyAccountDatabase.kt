@@ -17,33 +17,20 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.persistence
+package de.kuschku.quasseldroid.persistence.db
 
 import android.content.Context
-import androidx.room.*
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import de.kuschku.quasseldroid.persistence.dao.LegacyAccountDao
+import de.kuschku.quasseldroid.persistence.models.LegacyAccount
 
-@Database(entities = [(LegacyAccountDatabase.Account::class)], version = 4)
+@Database(entities = [(LegacyAccount::class)], version = 4)
 abstract class LegacyAccountDatabase : RoomDatabase() {
-  abstract fun accounts(): AccountDao
-
-  @Entity
-  data class Account(
-    @PrimaryKey
-    var id: Long,
-    var host: String,
-    var port: Int,
-    var user: String,
-    var pass: String,
-    var name: String
-  )
-
-  @Dao
-  interface AccountDao {
-    @Query("SELECT * FROM account")
-    fun all(): List<Account>
-  }
+  abstract fun accounts(): LegacyAccountDao
 
   object Creator {
     private var database: LegacyAccountDatabase? = null
@@ -57,7 +44,8 @@ abstract class LegacyAccountDatabase : RoomDatabase() {
           if (database == null) {
             database = Room.databaseBuilder(
               context.applicationContext,
-              LegacyAccountDatabase::class.java, DATABASE_NAME
+              LegacyAccountDatabase::class.java,
+              DATABASE_NAME
             ).addMigrations(
               object : Migration(0, 1) {
                 override fun migrate(database: SupportSQLiteDatabase) {

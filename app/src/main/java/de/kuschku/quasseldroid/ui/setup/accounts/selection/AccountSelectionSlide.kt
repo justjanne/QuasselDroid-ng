@@ -32,7 +32,7 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.persistence.AccountDatabase
+import de.kuschku.quasseldroid.persistence.models.Account
 import de.kuschku.quasseldroid.ui.setup.SlideFragment
 import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditActivity
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountSelectionActivity.Companion.REQUEST_CREATE_FIRST
@@ -66,8 +66,8 @@ class AccountSelectionSlide : SlideFragment() {
                                savedInstanceState: Bundle?): View {
     val view = inflater.inflate(R.layout.setup_select_account, container, false)
     ButterKnife.bind(this, view)
-    val firstObserver = object : Observer<List<AccountDatabase.Account>?> {
-      override fun onChanged(t: List<AccountDatabase.Account>?) {
+    val firstObserver = object : Observer<List<Account>?> {
+      override fun onChanged(t: List<Account>?) {
         if (t?.isEmpty() != false)
           startActivityForResult(
             AccountSetupActivity.intent(requireContext()),

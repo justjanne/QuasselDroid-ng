@@ -55,7 +55,10 @@ import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.persistence.*
+import de.kuschku.quasseldroid.persistence.dao.*
+import de.kuschku.quasseldroid.persistence.db.AccountDatabase
+import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.models.MessageData
 import de.kuschku.quasseldroid.service.BacklogRequester
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
@@ -333,9 +336,9 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     })
 
-    fun processMessages(list: List<QuasselDatabase.MessageData>, selected: Set<MsgId>,
+    fun processMessages(list: List<MessageData>, selected: Set<MsgId>,
                         expanded: Set<MsgId>, markerLine: MsgId?): List<DisplayMessage> {
-      var previous: QuasselDatabase.MessageData? = null
+      var previous: MessageData? = null
       var previousDate: ZonedDateTime? = null
       return list.mapReverse {
         val date = it.time.atZone(ZoneId.systemDefault()).truncatedTo(ChronoUnit.DAYS)

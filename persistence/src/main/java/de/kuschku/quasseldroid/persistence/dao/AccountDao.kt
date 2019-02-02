@@ -17,19 +17,35 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.setup.accounts.selection
+package de.kuschku.quasseldroid.persistence.dao
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import de.kuschku.quasseldroid.persistence.db.AccountDatabase
+import androidx.room.*
 import de.kuschku.quasseldroid.persistence.models.Account
 
-class AccountViewModel(application: Application) : AndroidViewModel(application) {
-  private val database: AccountDatabase = AccountDatabase.Creator.init(
-    getApplication()
-  )
-  val accounts: LiveData<List<Account>> = database.accounts().all()
-  val selectedItem = MutableLiveData<Pair<Long, Long>>()
+@Dao
+interface AccountDao {
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  fun save(vararg entities: Account)
+
+  @Insert(onConflict = OnConflictStrategy.IGNORE)
+  fun create(vararg entities: Account): Array<Long>
+
+  @Query("SELECT * FROM account WHERE id = :id")
+  fun findById(id: Long): Account?
+
+  @Query("SELECT * FROM account WHERE id = :id")
+  fun listen(id: Long): LiveData<Account?>
+
+  @Query("SELECT * FROM account ORDER BY lastUsed DESC")
+  fun all(): LiveData<List<Account>>
+
+  @Delete
+  fun delete(account: Account)
+
+  @Query("UPDATE account SET defaultFiltered = :defaultFiltered WHERE id = :id")
+  fun setFiltered(id: Long, defaultFiltered: Int)
+
+  @Query("DELETE FROM account")
+  fun clear()
 }

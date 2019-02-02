@@ -17,14 +17,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.util.helper
+package de.kuschku.quasseldroid.persistence.models
 
-import de.kuschku.quasseldroid.persistence.dao.AccountDao
-import de.kuschku.quasseldroid.persistence.models.Account
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-fun AccountDao.new(vararg entities: Account) {
-  val ids = create(*entities)
-  for (i in 0 until entities.size) {
-    entities[i].id = ids[i]
-  }
-}
+@Entity(tableName = "ssl_validity_whitelist")
+data class SslValidityWhitelistEntry(
+  @PrimaryKey
+  var fingerprint: String,
+  var ignoreDate: Boolean
+)

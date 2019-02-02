@@ -35,7 +35,8 @@ import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.persistence.AccountDatabase
+import de.kuschku.quasseldroid.persistence.db.AccountDatabase
+import de.kuschku.quasseldroid.persistence.models.Account
 import de.kuschku.quasseldroid.util.Patterns
 import de.kuschku.quasseldroid.util.TextValidator
 import de.kuschku.quasseldroid.util.helper.editCommit
@@ -77,7 +78,7 @@ class AccountEditFragment : SettingsFragment(), Changeable, Savable, Deletable {
   @Inject
   lateinit var database: AccountDatabase
 
-  private var account: AccountDatabase.Account? = null
+  private var account: Account? = null
   private var accountId: Long = -1L
 
   private lateinit var handlerThread: HandlerThread

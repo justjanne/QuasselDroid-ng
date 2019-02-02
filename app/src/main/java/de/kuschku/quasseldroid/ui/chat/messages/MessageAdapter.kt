@@ -35,7 +35,7 @@ import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.models.MessageData
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.helper.getOrPut
 import de.kuschku.quasseldroid.util.helper.loadAvatars
@@ -58,9 +58,9 @@ class MessageAdapter @Inject constructor(
   private val movementMethod = BetterLinkMovementMethod.newInstance()
   private var clickListener: ((FormattedMessage) -> Unit)? = null
   private var longClickListener: ((FormattedMessage) -> Unit)? = null
-  private var doubleClickListener: ((QuasselDatabase.MessageData) -> Unit)? = null
-  private var senderIconClickListener: ((QuasselDatabase.MessageData) -> Unit)? = null
-  private var expansionListener: ((QuasselDatabase.MessageData) -> Unit)? = null
+  private var doubleClickListener: ((MessageData) -> Unit)? = null
+  private var senderIconClickListener: ((MessageData) -> Unit)? = null
+  private var expansionListener: ((MessageData) -> Unit)? = null
   private var urlLongClickListener: ((TextView, String) -> Boolean)? = null
 
   fun setOnClickListener(listener: ((FormattedMessage) -> Unit)?) {
@@ -71,15 +71,15 @@ class MessageAdapter @Inject constructor(
     this.longClickListener = listener
   }
 
-  fun setOnDoubleClickListener(listener: ((QuasselDatabase.MessageData) -> Unit)?) {
+  fun setOnDoubleClickListener(listener: ((MessageData) -> Unit)?) {
     this.doubleClickListener = listener
   }
 
-  fun setOnSenderIconClickListener(listener: ((QuasselDatabase.MessageData) -> Unit)?) {
+  fun setOnSenderIconClickListener(listener: ((MessageData) -> Unit)?) {
     this.senderIconClickListener = listener
   }
 
-  fun setOnExpansionListener(listener: ((QuasselDatabase.MessageData) -> Unit)?) {
+  fun setOnExpansionListener(listener: ((MessageData) -> Unit)?) {
     this.expansionListener = listener
   }
 
@@ -180,9 +180,9 @@ class MessageAdapter @Inject constructor(
     itemView: View,
     clickListener: ((FormattedMessage) -> Unit)? = null,
     longClickListener: ((FormattedMessage) -> Unit)? = null,
-    doubleClickListener: ((QuasselDatabase.MessageData) -> Unit)? = null,
-    senderIconClickListener: ((QuasselDatabase.MessageData) -> Unit)? = null,
-    expansionListener: ((QuasselDatabase.MessageData) -> Unit)? = null,
+    doubleClickListener: ((MessageData) -> Unit)? = null,
+    senderIconClickListener: ((MessageData) -> Unit)? = null,
+    expansionListener: ((MessageData) -> Unit)? = null,
     movementMethod: BetterLinkMovementMethod
   ) : RecyclerView.ViewHolder(itemView) {
     @BindView(R.id.daychange_container)
@@ -226,7 +226,7 @@ class MessageAdapter @Inject constructor(
     var combined: TextView? = null
 
     private var message: FormattedMessage? = null
-    private var original: QuasselDatabase.MessageData? = null
+    private var original: MessageData? = null
 
     private val localClickListener = View.OnClickListener {
       message?.let {
@@ -266,7 +266,7 @@ class MessageAdapter @Inject constructor(
       avatar?.setOnClickListener(localSenderIconClickListener)
     }
 
-    fun bind(message: FormattedMessage, original: QuasselDatabase.MessageData,
+    fun bind(message: FormattedMessage, original: MessageData,
              hasDayChange: Boolean, messageSettings: MessageSettings) {
       this.message = message
       this.original = original

@@ -37,7 +37,7 @@ import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.models.MessageData
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
@@ -228,7 +228,7 @@ class QuasselMessageRenderer @Inject constructor(
   }
 
   override fun bind(holder: MessageAdapter.QuasselMessageViewHolder, message: FormattedMessage,
-                    original: QuasselDatabase.MessageData) =
+                    original: MessageData) =
     holder.bind(message,
                 original,
                 hasDayChange = message.hasDayChange,

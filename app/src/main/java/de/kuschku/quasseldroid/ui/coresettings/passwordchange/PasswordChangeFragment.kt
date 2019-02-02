@@ -38,7 +38,8 @@ import de.kuschku.libquassel.util.helpers.mapMapNullable
 import de.kuschku.libquassel.util.helpers.mapSwitchMap
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.persistence.AccountDatabase
+import de.kuschku.quasseldroid.persistence.db.AccountDatabase
+import de.kuschku.quasseldroid.persistence.models.Account
 import de.kuschku.quasseldroid.util.TextValidator
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
@@ -76,7 +77,7 @@ class PasswordChangeFragment : ServiceBoundFragment() {
   @Inject
   lateinit var accountDatabase: AccountDatabase
 
-  private var waiting: AccountDatabase.Account? = null
+  private var waiting: Account? = null
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {

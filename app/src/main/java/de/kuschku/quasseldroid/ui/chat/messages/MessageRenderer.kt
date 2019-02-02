@@ -22,7 +22,7 @@ package de.kuschku.quasseldroid.ui.chat.messages
 import android.content.Context
 import androidx.annotation.LayoutRes
 import de.kuschku.libquassel.protocol.Message_Type
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.models.MessageData
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 
 interface MessageRenderer {
@@ -34,7 +34,7 @@ interface MessageRenderer {
              isSelf: Boolean): Int
 
   fun bind(holder: MessageAdapter.QuasselMessageViewHolder, message: FormattedMessage,
-           original: QuasselDatabase.MessageData)
+           original: MessageData)
 
   fun render(context: Context, message: DisplayMessage): FormattedMessage
 

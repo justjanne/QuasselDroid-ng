@@ -22,8 +22,8 @@ package de.kuschku.quasseldroid.dagger
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import de.kuschku.quasseldroid.persistence.AccountDatabase
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.db.AccountDatabase
+import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
 
 @Module
 class DatabaseModule {

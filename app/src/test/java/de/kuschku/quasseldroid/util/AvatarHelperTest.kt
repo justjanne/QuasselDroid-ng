@@ -20,7 +20,7 @@
 package de.kuschku.quasseldroid.util
 
 import de.kuschku.libquassel.protocol.*
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.models.MessageData
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.viewmodel.data.Avatar
@@ -30,7 +30,7 @@ import org.threeten.bp.Instant
 class AvatarHelperTest {
   @Test
   fun testGravatarAvatars() {
-    val message = QuasselDatabase.MessageData.of(
+    val message = MessageData.of(
       messageId = MsgId(1),
       time = Instant.now(),
       type = Message_Type.of(Message_Type.Plain),
@@ -70,7 +70,7 @@ class AvatarHelperTest {
 
   @Test
   fun testIrcCloudAvatars() {
-    val message = QuasselDatabase.MessageData.of(
+    val message = MessageData.of(
       messageId = MsgId(1),
       time = Instant.now(),
       type = Message_Type.of(Message_Type.Plain),
@@ -110,7 +110,7 @@ class AvatarHelperTest {
 
   @Test
   fun testActualAvatars() {
-    val message = QuasselDatabase.MessageData.of(
+    val message = MessageData.of(
       messageId = MsgId(1),
       time = Instant.now(),
       type = Message_Type.of(Message_Type.Plain),

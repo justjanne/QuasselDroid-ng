@@ -20,12 +20,12 @@
 package de.kuschku.quasseldroid.ssl.custom
 
 import de.kuschku.libquassel.connection.SocketAddress
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.dao.SslHostnameWhitelistDao
 import de.kuschku.quasseldroid.util.helper.sha1Fingerprint
 import java.security.cert.X509Certificate
 
 class QuasselHostnameManager(
-  private val hostnameWhitelist: QuasselDatabase.SslHostnameWhitelistDao
+  private val hostnameWhitelist: SslHostnameWhitelistDao
 ) {
   fun isValid(address: SocketAddress, chain: Array<out X509Certificate>): Boolean {
     val leafCertificate = chain.firstOrNull() ?: return false

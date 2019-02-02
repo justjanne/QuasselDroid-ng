@@ -28,19 +28,19 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.models.SslHostnameWhitelistEntry
 import de.kuschku.quasseldroid.util.helper.setTooltip
 
 class WhitelistHostnameAdapter :
   RecyclerView.Adapter<WhitelistHostnameAdapter.WhitelistItemViewHolder>() {
-  private var updateListener: ((List<QuasselDatabase.SslHostnameWhitelistEntry>) -> Unit)? = null
+  private var updateListener: ((List<SslHostnameWhitelistEntry>) -> Unit)? = null
 
-  fun setOnUpdateListener(listener: ((List<QuasselDatabase.SslHostnameWhitelistEntry>) -> Unit)?) {
+  fun setOnUpdateListener(listener: ((List<SslHostnameWhitelistEntry>) -> Unit)?) {
     updateListener = listener
   }
 
-  private val data = mutableListOf<QuasselDatabase.SslHostnameWhitelistEntry>()
-  var list: List<QuasselDatabase.SslHostnameWhitelistEntry>
+  private val data = mutableListOf<SslHostnameWhitelistEntry>()
+  var list: List<SslHostnameWhitelistEntry>
     get() = data
     set(value) {
       val length = data.size
@@ -51,20 +51,20 @@ class WhitelistHostnameAdapter :
       updateListener?.invoke(list)
     }
 
-  fun add(item: QuasselDatabase.SslHostnameWhitelistEntry) {
+  fun add(item: SslHostnameWhitelistEntry) {
     val index = data.size
     data.add(item)
     notifyItemInserted(index)
     updateListener?.invoke(list)
   }
 
-  fun replace(index: Int, item: QuasselDatabase.SslHostnameWhitelistEntry) {
+  fun replace(index: Int, item: SslHostnameWhitelistEntry) {
     data[index] = item
     notifyItemChanged(index)
     updateListener?.invoke(list)
   }
 
-  fun indexOf(item: QuasselDatabase.SslHostnameWhitelistEntry) = data.indexOf(item)
+  fun indexOf(item: SslHostnameWhitelistEntry) = data.indexOf(item)
 
   fun remove(index: Int) {
     data.removeAt(index)
@@ -72,7 +72,7 @@ class WhitelistHostnameAdapter :
     updateListener?.invoke(list)
   }
 
-  fun remove(item: QuasselDatabase.SslHostnameWhitelistEntry) = remove(indexOf(item))
+  fun remove(item: SslHostnameWhitelistEntry) = remove(indexOf(item))
 
   override fun getItemCount() = data.size
 
@@ -89,7 +89,7 @@ class WhitelistHostnameAdapter :
 
   class WhitelistItemViewHolder(
     itemView: View,
-    clickListener: ((QuasselDatabase.SslHostnameWhitelistEntry) -> Unit)?
+    clickListener: ((SslHostnameWhitelistEntry) -> Unit)?
   ) : RecyclerView.ViewHolder(itemView) {
     @BindView(R.id.hostname)
     lateinit var hostname: TextView
@@ -100,7 +100,7 @@ class WhitelistHostnameAdapter :
     @BindView(R.id.action_delete)
     lateinit var delete: AppCompatImageButton
 
-    private var item: QuasselDatabase.SslHostnameWhitelistEntry? = null
+    private var item: SslHostnameWhitelistEntry? = null
 
     init {
       ButterKnife.bind(this, itemView)
@@ -112,7 +112,7 @@ class WhitelistHostnameAdapter :
       delete.setTooltip()
     }
 
-    fun bind(item: QuasselDatabase.SslHostnameWhitelistEntry) {
+    fun bind(item: SslHostnameWhitelistEntry) {
       this.item = item
       hostname.text = item.hostname
       fingerprint.text = item.fingerprint

@@ -17,7 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.persistence
+package de.kuschku.quasseldroid.persistence.util
 
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Message
@@ -25,12 +25,16 @@ import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.libquassel.session.BacklogStorage
 import de.kuschku.libquassel.session.ISession
+import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.models.MessageData
 
 class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
   override fun updateIgnoreRules(session: ISession) {
     db.message().save(
       *db.message().all().map {
-        it.copy(ignored = isIgnored(session, it))
+        it.copy(ignored = isIgnored(
+          session,
+          it))
       }.toTypedArray()
     )
   }
@@ -40,7 +44,7 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
 
   override fun storeMessages(session: ISession, messages: Iterable<Message>) {
     db.message().save(*messages.map {
-      QuasselDatabase.MessageData.of(
+      MessageData.of(
         messageId = it.messageId,
         time = it.time,
         type = it.type,
@@ -52,7 +56,9 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
         realName = it.realName,
         avatarUrl = it.avatarUrl,
         content = it.content,
-        ignored = isIgnored(session, it)
+        ignored = isIgnored(
+          session,
+          it)
       )
     }.toTypedArray())
   }
@@ -80,7 +86,7 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
       ) != IgnoreListManager.StrictnessType.UnmatchedStrictness
     }
 
-    fun isIgnored(session: ISession, message: QuasselDatabase.MessageData): Boolean {
+    fun isIgnored(session: ISession, message: MessageData): Boolean {
       val bufferInfo = session.bufferSyncer.bufferInfo(message.bufferId)
       val bufferName = bufferInfo?.bufferName ?: ""
       val networkId = bufferInfo?.networkId ?: NetworkId(-1)

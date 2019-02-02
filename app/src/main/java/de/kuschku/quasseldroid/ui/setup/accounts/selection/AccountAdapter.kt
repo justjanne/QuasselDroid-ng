@@ -35,12 +35,12 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.persistence.AccountDatabase
+import de.kuschku.quasseldroid.persistence.models.Account
 import de.kuschku.quasseldroid.util.helper.zip
 
 class AccountAdapter(
   owner: LifecycleOwner,
-  liveData: LiveData<List<AccountDatabase.Account>>,
+  liveData: LiveData<List<Account>>,
   private val selectedItem: MutableLiveData<Pair<Long, Long>>
 ) : RecyclerView.Adapter<AccountAdapter.AccountViewHolder>() {
   private val actionListeners = mutableSetOf<(Long) -> Unit>()
@@ -77,7 +77,7 @@ class AccountAdapter(
   val selectedItemId
     get() = selectedItem.value?.second
 
-  private var list: List<Pair<Boolean, AccountDatabase.Account>> = emptyList()
+  private var list: List<Pair<Boolean, Account>> = emptyList()
 
   init {
     selectedItem.value = Pair(-1, -1)
@@ -88,7 +88,7 @@ class AccountAdapter(
       val selected = it?.second?.second ?: -1
 
       val oldList = this.list
-      val newList: List<Pair<Boolean, AccountDatabase.Account>> = list.orEmpty().map {
+      val newList: List<Pair<Boolean, Account>> = list.orEmpty().map {
         Pair(selected == it.id, it)
       }
       this.list = newList
@@ -220,7 +220,7 @@ class AccountAdapter(
         }
       }
 
-      fun bind(account: AccountDatabase.Account, selected: Boolean) {
+      fun bind(account: Account, selected: Boolean) {
         id = account.id
         accountName.text = account.name
         accountDescription.text = itemView.context.resources.getString(

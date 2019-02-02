@@ -29,7 +29,7 @@ import de.kuschku.libquassel.protocol.coresetup.CoreSetupData
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.util.helpers.value
-import de.kuschku.quasseldroid.persistence.AccountDatabase
+import de.kuschku.quasseldroid.persistence.models.Account
 import de.kuschku.quasseldroid.ui.setup.ServiceBoundSetupActivity
 
 class CoreSetupActivity : ServiceBoundSetupActivity() {
@@ -84,13 +84,13 @@ class CoreSetupActivity : ServiceBoundSetupActivity() {
   companion object {
     fun launch(
       context: Context,
-      account: AccountDatabase.Account? = null,
+      account: Account? = null,
       data: CoreSetupData? = null
     ) = context.startActivity(intent(context, account, data))
 
     fun intent(
       context: Context,
-      account: AccountDatabase.Account? = null,
+      account: Account? = null,
       data: CoreSetupData? = null
     ) = Intent(context, CoreSetupActivity::class.java).apply {
       if (account != null) {

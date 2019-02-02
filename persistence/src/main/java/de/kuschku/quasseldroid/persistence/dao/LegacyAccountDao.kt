@@ -17,14 +17,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.util.helper
+package de.kuschku.quasseldroid.persistence.dao
 
-import de.kuschku.quasseldroid.persistence.dao.AccountDao
-import de.kuschku.quasseldroid.persistence.models.Account
+import androidx.room.Dao
+import androidx.room.Query
+import de.kuschku.quasseldroid.persistence.models.LegacyAccount
 
-fun AccountDao.new(vararg entities: Account) {
-  val ids = create(*entities)
-  for (i in 0 until entities.size) {
-    entities[i].id = ids[i]
-  }
+@Dao
+interface LegacyAccountDao {
+  @Query("SELECT * FROM account")
+  fun all(): List<LegacyAccount>
 }

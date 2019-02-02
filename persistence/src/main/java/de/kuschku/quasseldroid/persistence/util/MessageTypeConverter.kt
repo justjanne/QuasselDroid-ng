@@ -17,7 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.persistence
+package de.kuschku.quasseldroid.persistence.util
 
 import androidx.room.TypeConverter
 import de.kuschku.libquassel.protocol.*

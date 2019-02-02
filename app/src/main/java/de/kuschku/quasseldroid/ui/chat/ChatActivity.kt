@@ -64,7 +64,14 @@ import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.DefaultNetworkServer
-import de.kuschku.quasseldroid.persistence.*
+import de.kuschku.quasseldroid.persistence.dao.clear
+import de.kuschku.quasseldroid.persistence.dao.get
+import de.kuschku.quasseldroid.persistence.dao.setFiltered
+import de.kuschku.quasseldroid.persistence.db.AccountDatabase
+import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.models.Filtered
+import de.kuschku.quasseldroid.persistence.models.SslHostnameWhitelistEntry
+import de.kuschku.quasseldroid.persistence.models.SslValidityWhitelistEntry
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.Settings
@@ -465,7 +472,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                         .onPositive { _, _ ->
                           runInBackground {
                             database.validityWhitelist().save(
-                              QuasselDatabase.SslValidityWhitelistEntry(
+                              SslValidityWhitelistEntry(
                                 fingerprint = leafCertificate.sha1Fingerprint,
                                 ignoreDate = true
                               )
@@ -502,14 +509,14 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                         .onPositive { _, _ ->
                           runInBackground {
                             database.validityWhitelist().save(
-                              QuasselDatabase.SslValidityWhitelistEntry(
+                              SslValidityWhitelistEntry(
                                 fingerprint = leafCertificate.sha1Fingerprint,
                                 ignoreDate = !leafCertificate.isValid
                               )
                             )
                             accountDatabase.accounts().findById(accountId)?.let {
                               database.hostnameWhitelist().save(
-                                QuasselDatabase.SslHostnameWhitelistEntry(
+                                SslHostnameWhitelistEntry(
                                   fingerprint = leafCertificate.sha1Fingerprint,
                                   hostname = it.host
                                 )
@@ -548,7 +555,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                         .onPositive { _, _ ->
                           runInBackground {
                             database.hostnameWhitelist().save(
-                              QuasselDatabase.SslHostnameWhitelistEntry(
+                              SslHostnameWhitelistEntry(
                                 fingerprint = leafCertificate.sha1Fingerprint,
                                 hostname = it.address.host
                               )
@@ -892,7 +899,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   .fold(Message_Type.of()) { acc, i -> acc or i }
 
                 database.filtered().replace(
-                  QuasselDatabase.Filtered.of(accountId, buffer, newlyFiltered.value.toInt())
+                  Filtered.of(accountId, buffer, newlyFiltered.value.toInt())
                 )
               }
             }

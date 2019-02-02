@@ -23,7 +23,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import de.kuschku.quasseldroid.persistence.AccountDatabase
+import de.kuschku.quasseldroid.persistence.db.AccountDatabase
+import de.kuschku.quasseldroid.persistence.models.Account
 import de.kuschku.quasseldroid.ui.setup.SetupActivity
 import de.kuschku.quasseldroid.util.AndroidHandlerThread
 import org.threeten.bp.Instant
@@ -36,7 +37,7 @@ class AccountSetupActivity : SetupActivity() {
   lateinit var database: AccountDatabase
 
   override fun onDone(data: Bundle) {
-    val account = AccountDatabase.Account(
+    val account = Account(
       id = 0,
       host = data.getString("host", ""),
       port = data.getInt("port"),

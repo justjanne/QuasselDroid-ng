@@ -17,59 +17,20 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.persistence
+package de.kuschku.quasseldroid.persistence.db
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import de.kuschku.quasseldroid.persistence.dao.AccountDao
+import de.kuschku.quasseldroid.persistence.models.Account
 
-@Database(entities = [(AccountDatabase.Account::class)], version = 4)
+@Database(entities = [(Account::class)], version = 4)
 abstract class AccountDatabase : RoomDatabase() {
   abstract fun accounts(): AccountDao
-
-  @Entity
-  data class Account(
-    @PrimaryKey(autoGenerate = true)
-    var id: Long,
-    var host: String,
-    var port: Int,
-    var requireSsl: Boolean,
-    var user: String,
-    var pass: String,
-    var name: String,
-    var lastUsed: Long,
-    var acceptedMissingFeatures: Boolean,
-    var defaultFiltered: Int
-  )
-
-  @Dao
-  interface AccountDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(vararg entities: AccountDatabase.Account)
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun create(vararg entities: AccountDatabase.Account): Array<Long>
-
-    @Query("SELECT * FROM account WHERE id = :id")
-    fun findById(id: Long): AccountDatabase.Account?
-
-    @Query("SELECT * FROM account WHERE id = :id")
-    fun listen(id: Long): LiveData<AccountDatabase.Account?>
-
-    @Query("SELECT * FROM account ORDER BY lastUsed DESC")
-    fun all(): LiveData<List<Account>>
-
-    @Delete
-    fun delete(account: AccountDatabase.Account)
-
-    @Query("UPDATE account SET defaultFiltered = :defaultFiltered WHERE id = :id")
-    fun setFiltered(id: Long, defaultFiltered: Int)
-
-    @Query("DELETE FROM account")
-    fun clear()
-  }
 
   object Creator {
     private var database: AccountDatabase? = null
@@ -83,7 +44,8 @@ abstract class AccountDatabase : RoomDatabase() {
           if (database == null) {
             database = Room.databaseBuilder(
               context.applicationContext,
-              AccountDatabase::class.java, DATABASE_NAME
+              AccountDatabase::class.java,
+              DATABASE_NAME
             ).addMigrations(
               object : Migration(1, 2) {
                 override fun migrate(database: SupportSQLiteDatabase) {

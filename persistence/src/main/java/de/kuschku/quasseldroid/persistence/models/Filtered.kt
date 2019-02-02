@@ -17,14 +17,32 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.util.helper
+package de.kuschku.quasseldroid.persistence.models
 
-import de.kuschku.quasseldroid.persistence.dao.AccountDao
-import de.kuschku.quasseldroid.persistence.models.Account
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.protocol.BufferId_Type
 
-fun AccountDao.new(vararg entities: Account) {
-  val ids = create(*entities)
-  for (i in 0 until entities.size) {
-    entities[i].id = ids[i]
+@Entity(tableName = "filtered", primaryKeys = ["accountId", "bufferId"])
+data class Filtered(
+  var accountId: Long,
+  @ColumnInfo(name = "bufferId")
+  var rawBufferId: BufferId_Type,
+  var filtered: Int
+) {
+  inline val bufferId
+    get() = BufferId(rawBufferId)
+
+  companion object {
+    inline fun of(
+      accountId: Long,
+      bufferId: BufferId,
+      filtered: Int
+    ) = Filtered(
+      accountId,
+      bufferId.id,
+      filtered
+    )
   }
 }

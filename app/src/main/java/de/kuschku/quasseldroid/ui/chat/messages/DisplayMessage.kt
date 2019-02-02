@@ -22,10 +22,10 @@ package de.kuschku.quasseldroid.ui.chat.messages
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.util.flag.hasFlag
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.models.MessageData
 
 data class DisplayMessage(
-  val content: QuasselDatabase.MessageData,
+  val content: MessageData,
   val hasDayChange: Boolean,
   val isFollowUp: Boolean,
   val isSelected: Boolean,

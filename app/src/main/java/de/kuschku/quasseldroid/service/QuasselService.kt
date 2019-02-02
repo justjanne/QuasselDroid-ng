@@ -45,7 +45,13 @@ import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.Defaults
-import de.kuschku.quasseldroid.persistence.*
+import de.kuschku.quasseldroid.persistence.dao.buffers
+import de.kuschku.quasseldroid.persistence.dao.clear
+import de.kuschku.quasseldroid.persistence.dao.markHidden
+import de.kuschku.quasseldroid.persistence.dao.markReadNormal
+import de.kuschku.quasseldroid.persistence.db.AccountDatabase
+import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.util.QuasselBacklogStorage
 import de.kuschku.quasseldroid.settings.ConnectionSettings
 import de.kuschku.quasseldroid.settings.NotificationSettings
 import de.kuschku.quasseldroid.settings.Settings

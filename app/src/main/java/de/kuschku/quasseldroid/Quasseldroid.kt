@@ -27,8 +27,9 @@ import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
 import de.kuschku.malheur.CrashHandler
 import de.kuschku.quasseldroid.dagger.DaggerAppComponent
-import de.kuschku.quasseldroid.persistence.AccountDatabase
-import de.kuschku.quasseldroid.persistence.LegacyAccountDatabase
+import de.kuschku.quasseldroid.persistence.db.AccountDatabase
+import de.kuschku.quasseldroid.persistence.db.LegacyAccountDatabase
+import de.kuschku.quasseldroid.persistence.models.Account
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.SettingsMigration
 import de.kuschku.quasseldroid.settings.SettingsMigrationManager
@@ -76,7 +77,7 @@ open class Quasseldroid : DaggerApplication() {
 
           val accountDatabase = AccountDatabase.Creator.init(this)
           accountDatabase.accounts().create(*accounts.map {
-            AccountDatabase.Account(
+            Account(
               id = it.id,
               host = it.host,
               port = it.port,

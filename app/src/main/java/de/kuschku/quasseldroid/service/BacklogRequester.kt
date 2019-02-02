@@ -26,7 +26,11 @@ import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.helpers.value
-import de.kuschku.quasseldroid.persistence.*
+import de.kuschku.quasseldroid.persistence.dao.findFirstByBufferId
+import de.kuschku.quasseldroid.persistence.dao.get
+import de.kuschku.quasseldroid.persistence.db.AccountDatabase
+import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.util.QuasselBacklogStorage
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 
 class BacklogRequester(

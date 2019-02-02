@@ -17,12 +17,28 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.clientsettings.whitelist
+package de.kuschku.quasseldroid.persistence.dao
 
-import de.kuschku.quasseldroid.persistence.models.SslHostnameWhitelistEntry
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import de.kuschku.quasseldroid.persistence.models.SslValidityWhitelistEntry
 
-data class Whitelist(
-  val certificates: List<SslValidityWhitelistEntry>,
-  val hostnames: List<SslHostnameWhitelistEntry>
-)
+@Dao
+interface SslValidityWhitelistDao {
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  fun save(vararg entities: SslValidityWhitelistEntry)
+
+  @Query("SELECT * FROM ssl_validity_whitelist")
+  fun all(): List<SslValidityWhitelistEntry>
+
+  @Query("SELECT * FROM ssl_validity_whitelist WHERE fingerprint = :fingerprint")
+  fun find(fingerprint: String): SslValidityWhitelistEntry?
+
+  @Query("DELETE FROM ssl_validity_whitelist WHERE fingerprint = :fingerprint")
+  fun delete(fingerprint: String)
+
+  @Query("DELETE FROM ssl_validity_whitelist")
+  fun clear()
+}

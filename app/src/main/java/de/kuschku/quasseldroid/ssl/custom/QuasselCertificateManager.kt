@@ -19,13 +19,13 @@
 
 package de.kuschku.quasseldroid.ssl.custom
 
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.dao.SslValidityWhitelistDao
 import de.kuschku.quasseldroid.util.helper.isValid
 import de.kuschku.quasseldroid.util.helper.sha1Fingerprint
 import java.security.cert.X509Certificate
 
 class QuasselCertificateManager(
-  private val validityWhitelist: QuasselDatabase.SslValidityWhitelistDao
+  private val validityWhitelist: SslValidityWhitelistDao
 ) {
   fun isServerTrusted(chain: Array<out X509Certificate>?): Boolean {
     // Verify input conditions

@@ -37,10 +37,11 @@ import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.GlideRequest
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
-import de.kuschku.quasseldroid.persistence.all
-import de.kuschku.quasseldroid.persistence.buffers
-import de.kuschku.quasseldroid.persistence.markRead
+import de.kuschku.quasseldroid.persistence.dao.all
+import de.kuschku.quasseldroid.persistence.dao.buffers
+import de.kuschku.quasseldroid.persistence.dao.markRead
+import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.models.NotificationData
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.settings.NotificationSettings
@@ -227,7 +228,7 @@ class QuasselNotificationBackend @Inject constructor(
     }.map {
       val network = session.network(it.bufferInfo.networkId)
       val me = network?.me()
-      QuasselDatabase.NotificationData.of(
+      NotificationData.of(
         messageId = it.messageId,
         creationTime = now,
         time = it.time,
@@ -254,7 +255,7 @@ class QuasselNotificationBackend @Inject constructor(
     if (show) {
       executor.schedule(
         {
-          results.map(QuasselDatabase.NotificationData::bufferId).distinct().forEach { buffer ->
+          results.map(NotificationData::bufferId).distinct().forEach { buffer ->
             this.showNotification(buffer)
           }
         },

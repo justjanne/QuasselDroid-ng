@@ -22,7 +22,8 @@ package de.kuschku.quasseldroid.util.avatars
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.models.MessageData
+import de.kuschku.quasseldroid.persistence.models.NotificationData
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.info.user.IrcUserInfo
 import de.kuschku.quasseldroid.util.Patterns
@@ -50,11 +51,11 @@ object AvatarHelper {
       }
     ).flatten()
 
-  fun avatar(settings: MessageSettings, message: QuasselDatabase.NotificationData,
+  fun avatar(settings: MessageSettings, message: NotificationData,
              size: Int? = null) =
     avatar(settings, HostmaskHelper.user(message.sender), message.realName, message.avatarUrl, size)
 
-  fun avatar(settings: MessageSettings, message: QuasselDatabase.MessageData, size: Int? = null) =
+  fun avatar(settings: MessageSettings, message: MessageData, size: Int? = null) =
     avatar(settings, HostmaskHelper.user(message.sender), message.realName, message.avatarUrl, size)
 
   fun avatar(settings: MessageSettings, user: IrcUserItem, size: Int? = null) =

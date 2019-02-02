@@ -28,25 +28,25 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.models.SslValidityWhitelistEntry
 import de.kuschku.quasseldroid.util.helper.setTooltip
 import de.kuschku.quasseldroid.util.helper.visibleIf
 
 class WhitelistCertificateAdapter :
   RecyclerView.Adapter<WhitelistCertificateAdapter.WhitelistItemViewHolder>() {
-  private var clickListener: ((QuasselDatabase.SslValidityWhitelistEntry) -> Unit)? = null
-  private var updateListener: ((List<QuasselDatabase.SslValidityWhitelistEntry>) -> Unit)? = null
+  private var clickListener: ((SslValidityWhitelistEntry) -> Unit)? = null
+  private var updateListener: ((List<SslValidityWhitelistEntry>) -> Unit)? = null
 
-  fun setOnClickListener(listener: ((QuasselDatabase.SslValidityWhitelistEntry) -> Unit)?) {
+  fun setOnClickListener(listener: ((SslValidityWhitelistEntry) -> Unit)?) {
     clickListener = listener
   }
 
-  fun setOnUpdateListener(listener: ((List<QuasselDatabase.SslValidityWhitelistEntry>) -> Unit)?) {
+  fun setOnUpdateListener(listener: ((List<SslValidityWhitelistEntry>) -> Unit)?) {
     updateListener = listener
   }
 
-  private val data = mutableListOf<QuasselDatabase.SslValidityWhitelistEntry>()
-  var list: List<QuasselDatabase.SslValidityWhitelistEntry>
+  private val data = mutableListOf<SslValidityWhitelistEntry>()
+  var list: List<SslValidityWhitelistEntry>
     get() = data
     set(value) {
       val length = data.size
@@ -57,20 +57,20 @@ class WhitelistCertificateAdapter :
       updateListener?.invoke(list)
     }
 
-  fun add(item: QuasselDatabase.SslValidityWhitelistEntry) {
+  fun add(item: SslValidityWhitelistEntry) {
     val index = data.size
     data.add(item)
     notifyItemInserted(index)
     updateListener?.invoke(list)
   }
 
-  fun replace(index: Int, item: QuasselDatabase.SslValidityWhitelistEntry) {
+  fun replace(index: Int, item: SslValidityWhitelistEntry) {
     data[index] = item
     notifyItemChanged(index)
     updateListener?.invoke(list)
   }
 
-  fun indexOf(item: QuasselDatabase.SslValidityWhitelistEntry) = data.indexOf(item)
+  fun indexOf(item: SslValidityWhitelistEntry) = data.indexOf(item)
 
   fun remove(index: Int) {
     data.removeAt(index)
@@ -78,7 +78,7 @@ class WhitelistCertificateAdapter :
     updateListener?.invoke(list)
   }
 
-  fun remove(item: QuasselDatabase.SslValidityWhitelistEntry) = remove(indexOf(item))
+  fun remove(item: SslValidityWhitelistEntry) = remove(indexOf(item))
 
   override fun getItemCount() = data.size
 
@@ -95,7 +95,7 @@ class WhitelistCertificateAdapter :
 
   class WhitelistItemViewHolder(
     itemView: View,
-    clickListener: ((QuasselDatabase.SslValidityWhitelistEntry) -> Unit)?
+    clickListener: ((SslValidityWhitelistEntry) -> Unit)?
   ) : RecyclerView.ViewHolder(itemView) {
     @BindView(R.id.fingerprint)
     lateinit var fingerprint: TextView
@@ -106,7 +106,7 @@ class WhitelistCertificateAdapter :
     @BindView(R.id.action_delete)
     lateinit var delete: AppCompatImageButton
 
-    private var item: QuasselDatabase.SslValidityWhitelistEntry? = null
+    private var item: SslValidityWhitelistEntry? = null
 
     init {
       ButterKnife.bind(this, itemView)
@@ -118,7 +118,7 @@ class WhitelistCertificateAdapter :
       delete.setTooltip()
     }
 
-    fun bind(item: QuasselDatabase.SslValidityWhitelistEntry) {
+    fun bind(item: SslValidityWhitelistEntry) {
       this.item = item
       fingerprint.text = item.fingerprint
       ignoreDate.visibleIf(item.ignoreDate)

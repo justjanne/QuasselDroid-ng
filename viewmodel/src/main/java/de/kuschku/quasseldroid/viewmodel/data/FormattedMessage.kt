@@ -20,10 +20,10 @@
 package de.kuschku.quasseldroid.viewmodel.data
 
 import android.graphics.drawable.Drawable
-import de.kuschku.quasseldroid.persistence.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.models.MessageData
 
 class FormattedMessage(
-  val original: QuasselDatabase.MessageData,
+  val original: MessageData,
   val time: CharSequence,
   val dayChange: CharSequence? = null,
   val name: CharSequence? = null,
