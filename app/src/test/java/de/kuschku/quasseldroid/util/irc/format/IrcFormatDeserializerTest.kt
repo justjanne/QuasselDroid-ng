@@ -19,11 +19,9 @@
 
 package de.kuschku.quasseldroid.util.irc.format
 
-import android.text.Spanned
-import android.text.SpannedString
 import de.kuschku.quasseldroid.QuasseldroidTest
-import de.kuschku.quasseldroid.util.irc.format.spans.IrcBackgroundColorSpan
-import de.kuschku.quasseldroid.util.irc.format.spans.IrcForegroundColorSpan
+import de.kuschku.quasseldroid.util.irc.format.model.FormatInfo
+import de.kuschku.quasseldroid.util.irc.format.model.IrcFormat
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -34,7 +32,7 @@ import org.robolectric.annotation.Config
 @Config(application = QuasseldroidTest::class)
 @RunWith(RobolectricTestRunner::class)
 class IrcFormatDeserializerTest {
-  lateinit var deserializer: IrcFormatDeserializer
+  private lateinit var deserializer: IrcFormatDeserializer
 
   @Before
   fun setUp() {
@@ -43,45 +41,24 @@ class IrcFormatDeserializerTest {
 
   @Test
   fun testMissingEndTag() {
-    val text = SpannedString.valueOf(deserializer.formatString(
-      "\u000301,01weeeeeeeeee",
-      colorize = true
-    ))
+    val spans = mutableListOf<FormatInfo>()
+    val text = deserializer.formatString(
+      content = "\u000301,01weeeeeeeeee",
+      colorize = true,
+      output = spans
+    )
+    assertEquals("weeeeeeeeee", text.toString())
     assertEquals(
       listOf(
-        SpanInfo(
-          from = 0,
-          to = 11,
-          flags = Spanned.SPAN_INCLUSIVE_EXCLUSIVE,
-          span = IrcForegroundColorSpan.MIRC(mircColor = 1, color = colors[1])
-        ),
-        SpanInfo(
-          from = 0,
-          to = 11,
-          flags = Spanned.SPAN_INCLUSIVE_EXCLUSIVE,
-          span = IrcBackgroundColorSpan.MIRC(mircColor = 1, color = colors[1])
+        FormatInfo(
+          start = 0,
+          end = 11,
+          format = IrcFormat.Color(1, 1, colors)
         )
       ),
-      text.allSpans<Any>()
+      spans
     )
   }
-
-  inline fun <reified T> Spanned.allSpans(): List<SpanInfo> =
-    getSpans(0, length, T::class.java).map {
-      SpanInfo(
-        from = getSpanStart(it),
-        to = getSpanEnd(it),
-        flags = getSpanFlags(it),
-        span = it
-      )
-    }
-
-  data class SpanInfo(
-    val from: Int,
-    val to: Int,
-    val flags: Int,
-    val span: Any?
-  )
 
   companion object {
     val colors = intArrayOf(

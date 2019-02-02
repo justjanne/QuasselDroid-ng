@@ -21,11 +21,12 @@ package de.kuschku.quasseldroid.util.irc.format
 
 import android.content.Context
 import android.text.SpannableStringBuilder
-import android.text.Spanned
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.compatibility.AndroidCrashFixer
 import de.kuschku.quasseldroid.util.helper.getColorCompat
-import de.kuschku.quasseldroid.util.irc.format.spans.*
+import de.kuschku.quasseldroid.util.irc.format.model.FormatDescription
+import de.kuschku.quasseldroid.util.irc.format.model.FormatInfo
+import de.kuschku.quasseldroid.util.irc.format.model.IrcFormat
 import javax.inject.Inject
 
 /**
@@ -70,19 +71,28 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
    * @param content mIRC formatted String
    * @return a CharSequence with Android’s span format representing the input string
    */
-  fun formatString(content: String?, colorize: Boolean): CharSequence {
+  fun formatString(content: String?, colorize: Boolean,
+                   output: MutableList<FormatInfo>? = null): CharSequence {
     if (content == null) return ""
 
     val str = AndroidCrashFixer.removeCrashableCharacters(content)
 
     val plainText = SpannableStringBuilder()
-    var bold: FormatDescription<BoldIrcFormat>? = null
-    var italic: FormatDescription<ItalicIrcFormat>? = null
-    var underline: FormatDescription<UnderlineIrcFormat>? = null
-    var strikethrough: FormatDescription<StrikethroughIrcFormat>? = null
-    var monospace: FormatDescription<MonospaceIrcFormat>? = null
-    var color: FormatDescription<ColorIrcFormat>? = null
-    var hexColor: FormatDescription<HexIrcFormat>? = null
+    var bold: FormatDescription<IrcFormat.Bold>? = null
+    var italic: FormatDescription<IrcFormat.Italic>? = null
+    var underline: FormatDescription<IrcFormat.Underline>? = null
+    var strikethrough: FormatDescription<IrcFormat.Strikethrough>? = null
+    var monospace: FormatDescription<IrcFormat.Monospace>? = null
+    var color: FormatDescription<IrcFormat.Color>? = null
+    var hexColor: FormatDescription<IrcFormat.Hex>? = null
+
+    fun applyFormat(desc: FormatDescription<IrcFormat>) {
+      if (output != null) {
+        output.add(FormatInfo(desc.start, plainText.length, desc.format))
+      } else {
+        desc.apply(plainText, plainText.length)
+      }
+    }
 
     // Iterating over every character
     var normalCount = 0
@@ -96,11 +106,12 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
 
           // If there is an element on stack with the same code, close it
           bold = if (bold != null) {
-            if (colorize) bold.apply(plainText, plainText.length)
+            if (colorize) applyFormat(bold)
             null
             // Otherwise create a new one
           } else {
-            FormatDescription(plainText.length, BoldIrcFormat())
+            FormatDescription(plainText.length,
+                              IrcFormat.Bold)
           }
         }
         CODE_ITALIC        -> {
@@ -109,11 +120,12 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
 
           // If there is an element on stack with the same code, close it
           italic = if (italic != null) {
-            if (colorize) italic.apply(plainText, plainText.length)
+            if (colorize) applyFormat(italic)
             null
             // Otherwise create a new one
           } else {
-            FormatDescription(plainText.length, ItalicIrcFormat())
+            FormatDescription(plainText.length,
+                              IrcFormat.Italic)
           }
         }
         CODE_UNDERLINE     -> {
@@ -122,11 +134,12 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
 
           // If there is an element on stack with the same code, close it
           underline = if (underline != null) {
-            if (colorize) underline.apply(plainText, plainText.length)
+            if (colorize) applyFormat(underline)
             null
             // Otherwise create a new one
           } else {
-            FormatDescription(plainText.length, UnderlineIrcFormat())
+            FormatDescription(plainText.length,
+                              IrcFormat.Underline)
           }
         }
         CODE_STRIKETHROUGH -> {
@@ -135,11 +148,12 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
 
           // If there is an element on stack with the same code, close it
           strikethrough = if (strikethrough != null) {
-            if (colorize) strikethrough.apply(plainText, plainText.length)
+            if (colorize) applyFormat(strikethrough)
             null
             // Otherwise create a new one
           } else {
-            FormatDescription(plainText.length, StrikethroughIrcFormat())
+            FormatDescription(plainText.length,
+                              IrcFormat.Strikethrough)
           }
         }
         CODE_MONOSPACE     -> {
@@ -148,11 +162,12 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
 
           // If there is an element on stack with the same code, close it
           monospace = if (monospace != null) {
-            if (colorize) monospace.apply(plainText, plainText.length)
+            if (colorize) applyFormat(monospace)
             null
             // Otherwise create a new one
           } else {
-            FormatDescription(plainText.length, MonospaceIrcFormat())
+            FormatDescription(plainText.length,
+                              IrcFormat.Monospace)
           }
         }
         CODE_COLOR         -> {
@@ -175,14 +190,14 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
             // If previous element was also a color element, try to reuse background
             if (color != null) {
               // Apply old format
-              if (colorize) color.apply(plainText, plainText.length)
+              if (colorize) applyFormat(color)
               // Reuse old background, if possible
               if (background.toInt() == -1)
                 background = color.format.background
             }
             // Add new format
             color = FormatDescription(
-              plainText.length, ColorIrcFormat(foreground, background, this.mircColors)
+              plainText.length, IrcFormat.Color(foreground, background, this.mircColors)
             )
 
             // i points in front of the next character
@@ -190,7 +205,7 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
 
             // Otherwise assume this is a closing tag
           } else if (color != null) {
-            if (colorize) color.apply(plainText, plainText.length)
+            if (colorize) applyFormat(color)
             color = null
           }
         }
@@ -214,20 +229,23 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
             // If previous element was also a color element, try to reuse background
             if (hexColor != null) {
               // Apply old format
-              if (colorize) hexColor.apply(plainText, plainText.length)
+              if (colorize) applyFormat(hexColor)
               // Reuse old background, if possible
               if (background == -1)
                 background = hexColor.format.background
             }
             // Add new format
-            hexColor = FormatDescription(plainText.length, HexIrcFormat(foreground, background))
+            hexColor = FormatDescription(plainText.length,
+                                         IrcFormat.Hex(
+                                           foreground,
+                                           background))
 
             // i points in front of the next character
             i = (if (backgroundEnd == -1) foregroundEnd else backgroundEnd) - 1
 
             // Otherwise assume this is a closing tag
           } else if (hexColor != null) {
-            if (colorize) hexColor.apply(plainText, plainText.length)
+            if (colorize) applyFormat(hexColor)
             hexColor = null
           }
         }
@@ -237,7 +255,7 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
 
           // If we have a color tag before, apply it, and create a new one with swapped colors
           if (color != null) {
-            if (colorize) color.apply(plainText, plainText.length)
+            if (colorize) applyFormat(color)
             color = FormatDescription(
               plainText.length, color.format.copySwapped()
             )
@@ -249,23 +267,23 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
 
           // End all formatting tags
           if (bold != null) {
-            if (colorize) bold.apply(plainText, plainText.length)
+            if (colorize) applyFormat(bold)
             bold = null
           }
           if (italic != null) {
-            if (colorize) italic.apply(plainText, plainText.length)
+            if (colorize) applyFormat(italic)
             italic = null
           }
           if (underline != null) {
-            if (colorize) underline.apply(plainText, plainText.length)
+            if (colorize) applyFormat(underline)
             underline = null
           }
           if (color != null) {
-            if (colorize) color.apply(plainText, plainText.length)
+            if (colorize) applyFormat(color)
             color = null
           }
           if (hexColor != null) {
-            if (colorize) hexColor.apply(plainText, plainText.length)
+            if (colorize) applyFormat(hexColor)
             hexColor = null
           }
         }
@@ -281,106 +299,27 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
 
     // End all formatting tags
     if (bold != null) {
-      if (colorize) bold.apply(plainText, plainText.length)
+      if (colorize) applyFormat(bold)
     }
     if (italic != null) {
-      if (colorize) italic.apply(plainText, plainText.length)
+      if (colorize) applyFormat(italic)
     }
     if (underline != null) {
-      if (colorize) underline.apply(plainText, plainText.length)
+      if (colorize) applyFormat(underline)
     }
     if (strikethrough != null) {
-      if (colorize) strikethrough.apply(plainText, plainText.length)
+      if (colorize) applyFormat(strikethrough)
     }
     if (monospace != null) {
-      if (colorize) monospace.apply(plainText, plainText.length)
+      if (colorize) applyFormat(monospace)
     }
     if (color != null) {
-      if (colorize) color.apply(plainText, plainText.length)
+      if (colorize) applyFormat(color)
     }
     if (hexColor != null) {
-      if (colorize) hexColor.apply(plainText, plainText.length)
+      if (colorize) applyFormat(hexColor)
     }
     return plainText
-  }
-
-  private interface IrcFormat {
-    fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int)
-  }
-
-  private class FormatDescription<out U : IrcFormat>(val start: Int, val format: U) {
-    fun apply(editable: SpannableStringBuilder, end: Int) {
-      format.applyTo(editable, start, end)
-    }
-  }
-
-  private class ItalicIrcFormat : IrcFormat {
-    override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
-      editable.setSpan(IrcItalicSpan(), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-    }
-  }
-
-  private class UnderlineIrcFormat : IrcFormat {
-    override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
-      editable.setSpan(IrcUnderlineSpan(), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-    }
-  }
-
-  private class StrikethroughIrcFormat : IrcFormat {
-    override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
-      editable.setSpan(IrcStrikethroughSpan(), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-    }
-  }
-
-  private class MonospaceIrcFormat : IrcFormat {
-    override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
-      editable.setSpan(IrcMonospaceSpan(), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-    }
-  }
-
-  private class BoldIrcFormat : IrcFormat {
-    override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
-      editable.setSpan(IrcBoldSpan(), from, to, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-    }
-  }
-
-  private inner class HexIrcFormat(val foreground: Int, val background: Int) : IrcFormat {
-    override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
-      if (foreground >= 0) {
-        editable.setSpan(
-          IrcForegroundColorSpan.HEX(foreground or 0xFFFFFF.inv()), from, to,
-          Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-        )
-      }
-      if (background >= 0) {
-        editable.setSpan(
-          IrcBackgroundColorSpan.HEX(background or 0xFFFFFF.inv()), from, to,
-          Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-        )
-      }
-    }
-  }
-
-  private inner class ColorIrcFormat(val foreground: Byte, val background: Byte,
-                                     val mircColors: IntArray) : IrcFormat {
-    override fun applyTo(editable: SpannableStringBuilder, from: Int, to: Int) {
-      if (foreground.toInt() >= 0 && foreground.toInt() < mircColors.size) {
-        editable.setSpan(
-          IrcForegroundColorSpan.MIRC(foreground.toInt(), mircColors[foreground.toInt()]), from, to,
-          Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-        )
-      }
-      if (background.toInt() >= 0 && background.toInt() < mircColors.size) {
-        editable.setSpan(
-          IrcBackgroundColorSpan.MIRC(background.toInt(), mircColors[background.toInt()]), from, to,
-          Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-        )
-      }
-    }
-
-    fun copySwapped(): ColorIrcFormat {
-      return ColorIrcFormat(background, foreground, mircColors)
-    }
   }
 
   companion object {

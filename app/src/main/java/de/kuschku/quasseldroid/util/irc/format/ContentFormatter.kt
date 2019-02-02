@@ -22,20 +22,17 @@ package de.kuschku.quasseldroid.util.irc.format
 import android.content.Context
 import android.graphics.Typeface
 import android.text.SpannableString
-import android.text.Spanned
-import android.text.TextPaint
-import android.text.style.*
-import android.view.View
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import androidx.annotation.ColorInt
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
-import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.util.helper.styledAttributes
-import de.kuschku.quasseldroid.util.irc.format.spans.IrcBackgroundColorSpan
-import de.kuschku.quasseldroid.util.irc.format.spans.IrcForegroundColorSpan
+import de.kuschku.quasseldroid.util.irc.format.model.FormatInfo
+import de.kuschku.quasseldroid.util.irc.format.model.IrcFormat
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import org.intellij.lang.annotations.Language
 import javax.inject.Inject
@@ -80,59 +77,28 @@ class ContentFormatter @Inject constructor(
     getColor(0, 0)
   }
 
-  class QuasselURLSpan(text: String, private val highlight: Boolean) : URLSpan(text) {
-    override fun updateDrawState(ds: TextPaint?) {
-      if (ds != null) {
-        if (!highlight) ds.color = ds.linkColor
-        ds.isUnderlineText = true
-      }
-    }
-  }
-
-  class ChannelLinkSpan(private val networkId: NetworkId, private val text: String,
-                        private val highlight: Boolean) : ClickableSpan() {
-    override fun updateDrawState(ds: TextPaint?) {
-      if (ds != null) {
-        if (!highlight) ds.color = ds.linkColor
-        ds.isUnderlineText = true
-      }
-    }
-
-    override fun onClick(widget: View) {
-      ChatActivity.launch(
-        widget.context,
-        networkId = networkId,
-        channel = text
-      )
-    }
-  }
-
   fun formatContent(content: String,
                     highlight: Boolean = false,
                     showSpoilers: Boolean = false,
                     networkId: NetworkId?): CharSequence {
-    val formattedText = ircFormatDeserializer.formatString(content, messageSettings.colorizeMirc)
-    val text = SpannableString(formattedText)
+    val spans = mutableListOf<FormatInfo>()
+    val formattedText = SpannableString(
+      ircFormatDeserializer.formatString(
+        content,
+        messageSettings.colorizeMirc,
+        spans
+      )
+    )
 
     if (showSpoilers) {
-      val spans = mutableMapOf<Triple<Int, Int, Int>, MutableList<Any>>()
-      for (span in text.getSpans(0, text.length, IrcForegroundColorSpan::class.java)) {
-        val from = text.getSpanStart(span)
-        val to = text.getSpanEnd(span)
-        spans.getOrPut(Triple(from, to, span.getForegroundColor()), ::mutableListOf).add(span)
-      }
-      for (span in text.getSpans(0, text.length, IrcBackgroundColorSpan::class.java)) {
-        val from = text.getSpanStart(span)
-        val to = text.getSpanEnd(span)
-        spans.getOrPut(Triple(from, to, span.getBackgroundColor()), ::mutableListOf).add(span)
-      }
-      for (group in spans.values) {
-        if (group.size > 1 &&
-            group.any { it is ForegroundColorSpan } &&
-            group.any { it is BackgroundColorSpan }) {
-          for (span in group) {
-            text.removeSpan(span)
-          }
+      spans.removeAll {
+        when {
+          it.format is IrcFormat.Color ->
+            it.format.foreground == it.format.background
+          it.format is IrcFormat.Hex   ->
+            it.format.foreground == it.format.background
+          else                         ->
+            false
         }
       }
     }
@@ -140,11 +106,11 @@ class ContentFormatter @Inject constructor(
     for (result in urlPattern.findAll(formattedText)) {
       val group = result.groups[1]
       if (group != null) {
-        text.setSpan(
-          QuasselURLSpan(group.value, highlight), group.range.start,
+        spans.add(FormatInfo(
+          group.range.start,
           group.range.start + group.value.length,
-          Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-        )
+          IrcFormat.Url(group.value, highlight)
+        ))
       }
     }
 
@@ -152,15 +118,21 @@ class ContentFormatter @Inject constructor(
       for (result in channelPattern.findAll(formattedText)) {
         val group = result.groups[1]
         if (group != null) {
-          text.setSpan(ChannelLinkSpan(networkId, group.value, highlight),
-                       group.range.start,
-                       group.range.endInclusive + 1,
-                       Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+          spans.add(FormatInfo(
+            group.range.start,
+            group.range.start + group.value.length,
+            IrcFormat.Channel(networkId, group.value, highlight)
+          ))
         }
       }
     }
 
-    return text
+    spans.reverse()
+    for (span in spans) {
+      span.apply(formattedText)
+    }
+
+    return formattedText
   }
 
   private fun formatNickNickImpl(nick: String, self: Boolean, colorize: Boolean,
