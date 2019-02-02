@@ -17,4 +17,12 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="label_bold">Vet</string>
+  <string name="label_italic">Cursief</string>
+  <string name="label_strikethrough">Doorhalen</string>
+  <string name="label_underline">Onderstrepen</string>
+  <string name="label_foreground">Voorgrondkleur</string>
+  <string name="label_background">Achtergrondkleur</string>
+  <string name="label_clear_formatting">Opmaak wissen</string>
+</resources>

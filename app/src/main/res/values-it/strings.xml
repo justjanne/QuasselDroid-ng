@@ -27,7 +27,9 @@
 
   <string name="label_about">Informazioni</string>
   <string name="label_accept">Accetta</string>
+  <string name="label_acknowledgements">Ringraziamenti</string>
   <string name="label_ascending">Ascendente</string>
+  <string name="label_authors">Autori</string>
   <string name="label_autocomplete">Completamento automatico</string>
   <string name="label_avatar">Avatar</string>
   <string name="label_back">Indietro</string>
@@ -49,7 +51,7 @@
   <string name="label_descending">Discendente</string>
   <string name="label_disconnect">Disconnetti</string>
   <string name="label_edit_core">Modifica account</string>
-  <string name="label_edit_nick">Modifica nickname</string>
+  <string name="label_edit_nick">Modifica nick</string>
   <string name="label_edit_topic">Modifica argomento</string>
   <string name="label_edit_topic_long">Apri finestra di dialogo per cambiare l’argomento del canale</string>
   <string name="label_filter_messages">Filtro messaggi</string>

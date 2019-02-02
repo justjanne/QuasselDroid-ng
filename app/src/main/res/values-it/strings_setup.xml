@@ -58,20 +58,20 @@
   <string name="setup_core_title">Configura core</string>
 
   <!-- Core Authenticator Select -->
-  <string name="slide_core_authenticator_select_title">Scegli protocollo di autenticazione</string>
-  <string name="slide_core_authenticator_select_description">Per favore scegli quale protocollo di autenticazione deve utilizzare il core Quassel per l’autenticazione degli utenti.</string>
+  <string name="slide_core_authenticator_select_title">Scegli motore di autenticazione</string>
+  <string name="slide_core_authenticator_select_description">Per favore scegli quale motore di autenticazione deve utilizzare il core Quassel per l’autenticazione degli utenti.</string>
 
   <!-- Core Backend Select -->
-  <string name="slide_core_backend_select_title">Scegli tipologia di gestione dati</string>
-  <string name="slide_core_backend_select_description">Per favore scegli quale banca dati deve utilizzare il core Quassel per archiviare i messaggi ricevuti e gli altri dati.</string>
+  <string name="slide_core_backend_select_title">Scegli motore di archivazione</string>
+  <string name="slide_core_backend_select_description">Per favore scegli quale motore per il database deve utilizzare il core Quassel per archiviare il registro storico e gli altri dati.</string>
 
-  <string name="label_backend">Tipo</string>
+  <string name="label_backend">Motore</string>
 
   <!-- Core Backend Config -->
-  <string name="slide_core_backend_setup_title">Configura tipologia di gestione dati</string>
-  <string name="slide_core_backend_setup_description">Per favore configura la banca dati scelta per la gestione.</string>
+  <string name="slide_core_backend_setup_title">Configura motore di archiviazione</string>
+  <string name="slide_core_backend_setup_description">Per favore configura il motore scelto per il database.</string>
 
-  <string name="setup_core_backend_no_options">Non ci sono altre opzioni da configurare, hai finito qui!</string>
+  <string name="setup_core_backend_no_options">Il motore non ha altre opzioni da configurare, hai finito qui!</string>
 
   <!-- User Setup -->
 
@@ -79,7 +79,7 @@
 
   <!-- User Identity -->
   <string name="slide_user_identity_title">Configura identità</string>
-  <string name="slide_user_identity_description">Per favore scegli un nickname</string>
+  <string name="slide_user_identity_description">Per favore scegli un nick</string>
 
   <string name="hint_invalid_nick">Non è un nick valido</string>
 

@@ -29,14 +29,14 @@
   <string name="settings_network_autoidentify_service">Servizio</string>
   <string name="settings_network_autoidentify_password">Password</string>
   <string name="settings_network_connection">Connessione</string>
-  <string name="settings_network_perform">Comandi eseguiti alla connessione</string>
+  <string name="settings_network_perform">Comandi da eseguire alla connessione</string>
   <string name="settings_network_rejoin_channels">Rientra nei canali</string>
   <string name="settings_network_autoreconnect_enabled">Riconessione automatica</string>
   <string name="settings_network_autoreconnect_interval">Intervallo</string>
   <string name="settings_network_autoreconnect_interval_unit">secondi</string>
   <string name="settings_network_autoreconnect_attempts">Massimo di tentativi</string>
   <string name="settings_network_autoreconnect_unlimited">Tentativi illimitati</string>
-  <string name="settings_network_customratelimits_enabled">Limite di frequenza personalizzato</string>
+  <string name="settings_network_customratelimits_enabled">Limite di velocità personalizzato</string>
   <string name="settings_network_customratelimits_burstsize">Dimensione del burst</string>
   <string name="settings_network_customratelimits_unlimited">Illimitato</string>
   <string name="settings_network_customratelimits_delay">Ritardo</string>
@@ -64,8 +64,8 @@
   <string name="settings_identity_identity_name">Nome identità</string>
   <string name="settings_identity_real_name">Nome reale</string>
   <string name="settings_identity_ident">Ident</string>
-  <string name="settings_identity_nick">Nickname</string>
-  <string name="settings_identity_nicks">Nickname</string>
+  <string name="settings_identity_nick">Nick</string>
+  <string name="settings_identity_nicks">Nick</string>
   <string name="settings_identity_messages">Messaggi</string>
   <string name="settings_identity_kick_reason">Motivo dell’espulsione</string>
   <string name="settings_identity_part_reason">Motivo dell’uscita</string>

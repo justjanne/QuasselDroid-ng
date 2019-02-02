@@ -22,5 +22,5 @@
   <string name="contributor_description_sandsmark">Implementazione del protocollo precedente, (de)serializzazioni, (de)moralizzatore del progetto</string>
   <string name="contributor_description_magnuf">Interfaccia precedente</string>
   <string name="contributor_description_kenji">Interfaccia precedente</string>
-  <string name="contributor_description_justjanne">Riscrittura, interfaccia, processori di annotazione, backend</string>
+  <string name="contributor_description_justjanne">Riscrittura, interfaccia, processori di annotazione, motore</string>
 </resources>

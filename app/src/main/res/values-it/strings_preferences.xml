@@ -84,7 +84,7 @@
   <string name="preference_colorize_mirc_summaryon">Mostra i colori di mIRC nei messaggi</string>
   <string name="preference_colorize_mirc_summaryoff">Rimuovi i colori di mIRC dai messaggi</string>
 
-  <string name="preference_colorize_nicknames_title">Nickname colorati</string>
+  <string name="preference_colorize_nicknames_title">Nick colorati</string>
   <string name="preference_colorize_nicknames_entry_all">Tutti i nick</string>
   <string name="preference_colorize_nicknames_entry_all_but_mine">Tutti tranne il proprio nick</string>
   <string name="preference_colorize_nicknames_entry_none">Nessun nick</string>
@@ -140,14 +140,14 @@
   <string name="preference_autocomplete_prefix_title">Mostra dopo il prefisso</string>
   <string name="preference_autocomplete_prefix_summary">Suggerisci nick e canali dopo aver scritto @ o #</string>
 
-  <string name="preference_autocomplete_nicks_title">Completa automaticamente nickname</string>
+  <string name="preference_autocomplete_nicks_title">Completa nick automaticamente</string>
 
   <string name="preference_autocomplete_buffers_title">Completa automaticamente chat</string>
 
   <string name="preference_autocomplete_aliases_title">Completa automaticamente comandi</string>
 
 
-  <string name="preference_backlog_title">Storico</string>
+  <string name="preference_backlog_title">Registro storico</string>
 
   <string name="preference_page_size_title">Dimensioni della pagina</string>
   <string name="preference_page_size_summary">Il numero di messaggi caricati e conservati in memoria contemporaneamente</string>

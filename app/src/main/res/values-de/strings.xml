@@ -27,7 +27,9 @@
 
   <string name="label_about">Über</string>
   <string name="label_accept">Akzeptieren</string>
+  <string name="label_acknowledgements">Danksagungen</string>
   <string name="label_ascending">Aufsteigend</string>
+  <string name="label_authors">Autoren</string>
   <string name="label_autocomplete">Autovervollständigung</string>
   <string name="label_avatar">Avatar</string>
   <string name="label_back">Zurück</string>
