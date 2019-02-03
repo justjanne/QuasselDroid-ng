@@ -88,12 +88,14 @@ class NickCountDrawable(
     }
 
     val smallestDimension = Math.min(bounds.width(), bounds.height())
-    icon.transform(Matrix().apply {
+
+    tmpPath.set(icon)
+    tmpPath.transform(Matrix().apply {
       preScale(smallestDimension / 24f, smallestDimension / 24f, 0f, 0f)
       if (showText) {
         preTranslate(0f, -8f)
       }
-    }, tmpPath)
+    })
 
     paint.textSize = smallestDimension * 0.6f
 
