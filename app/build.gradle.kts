@@ -57,8 +57,6 @@ android {
 
     setProperty("archivesBaseName", "Quasseldroid-$versionName")
 
-    multiDexEnabled = false
-
     // Disable test runner analytics
     testInstrumentationRunnerArguments = mapOf(
       "disableAnalytics" to "true"
@@ -72,6 +70,8 @@ android {
       isShrinkResources = true
       isUseProguard = false
 
+      multiDexEnabled = false
+
       proguardFiles(
         getDefaultProguardFile("proguard-android.txt"),
         "proguard-rules.pro"
@@ -81,15 +81,7 @@ android {
     getByName("debug") {
       applicationIdSuffix = ".debug"
 
-      isZipAlignEnabled = true
-      isMinifyEnabled = true
-      isShrinkResources = true
-      isUseProguard = false
-
-      proguardFiles(
-        getDefaultProguardFile("proguard-android.txt"),
-        "proguard-rules.pro"
-      )
+      multiDexEnabled = true
     }
   }
 
@@ -133,6 +125,8 @@ dependencies {
   testImplementation("androidx.room", "room-testing", "2.0.0-rc01")
 
   implementation("androidx.paging", "paging-runtime", "2.0.0-rc01")
+
+  implementation("androidx.multidex", "multidex", "2.0.0")
 
   // Utility
   implementation("io.reactivex.rxjava2", "rxandroid", "2.0.2")

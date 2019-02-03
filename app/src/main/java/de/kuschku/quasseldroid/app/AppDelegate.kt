@@ -17,10 +17,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid
+package de.kuschku.quasseldroid.app
 
-import de.kuschku.quasseldroid.app.QuasseldroidTestDelegate
-
-class QuasseldroidTest : Quasseldroid() {
-  override val delegate = QuasseldroidTestDelegate()
+interface AppDelegate {
+  fun shouldInit(): Boolean
+  fun onInstallMultidex()
+  fun onInit()
+  fun onPostInit()
 }
