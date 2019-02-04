@@ -127,7 +127,6 @@ class ContentFormatter @Inject constructor(
       }
     }
 
-    spans.reverse()
     for (span in spans) {
       span.apply(formattedText)
     }

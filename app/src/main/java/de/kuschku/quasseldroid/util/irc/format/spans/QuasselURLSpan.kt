@@ -17,31 +17,16 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.util.irc.format
+package de.kuschku.quasseldroid.util.irc.format.spans
 
 import android.text.TextPaint
-import android.text.style.ClickableSpan
-import android.view.View
-import de.kuschku.libquassel.protocol.NetworkId
-import de.kuschku.quasseldroid.ui.chat.ChatActivity
+import android.text.style.URLSpan
 
-class ChannelLinkSpan(
-  private val networkId: NetworkId,
-  private val text: String,
-  private val highlight: Boolean
-) : ClickableSpan() {
+class QuasselURLSpan(text: String, private val highlight: Boolean) : URLSpan(text) {
   override fun updateDrawState(ds: TextPaint?) {
     if (ds != null) {
       if (!highlight) ds.color = ds.linkColor
       ds.isUnderlineText = true
     }
-  }
-
-  override fun onClick(widget: View) {
-    ChatActivity.launch(
-      widget.context,
-      networkId = networkId,
-      channel = text
-    )
   }
 }

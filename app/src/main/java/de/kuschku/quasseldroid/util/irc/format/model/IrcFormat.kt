@@ -22,8 +22,6 @@ package de.kuschku.quasseldroid.util.irc.format.model
 import android.text.Spannable
 import android.text.Spanned
 import de.kuschku.libquassel.protocol.NetworkId
-import de.kuschku.quasseldroid.util.irc.format.ChannelLinkSpan
-import de.kuschku.quasseldroid.util.irc.format.QuasselURLSpan
 import de.kuschku.quasseldroid.util.irc.format.spans.*
 
 sealed class IrcFormat {

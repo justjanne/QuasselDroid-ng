@@ -19,18 +19,26 @@
 
 package de.kuschku.quasseldroid.util.irc.format.spans
 
+import android.text.TextPaint
 import android.text.style.ForegroundColorSpan
 import androidx.annotation.ColorInt
 
 sealed class IrcForegroundColorSpan<T : IrcForegroundColorSpan<T>>(@ColorInt color: Int) :
   ForegroundColorSpan(color), Copyable<T> {
 
+  override fun updateDrawState(ds: TextPaint?) {
+    if (ds != null) {
+      ds.color = foregroundColor
+      ds.linkColor = foregroundColor
+    }
+  }
 
   class MIRC(private val mircColor: Int, @ColorInt color: Int) :
     IrcForegroundColorSpan<MIRC>(color), Copyable<MIRC> {
     override fun copy() = MIRC(mircColor, foregroundColor)
     override fun toString(): String {
-      return "IrcForegroundColorSpan.MIRC(mircColor=$mircColor, color=${foregroundColor.toString(16)})"
+      return "IrcForegroundColorSpan.MIRC(mircColor=$mircColor, color=${foregroundColor.toUInt().toString(
+        16)})"
     }
 
     override fun equals(other: Any?) = when (other) {
@@ -43,7 +51,7 @@ sealed class IrcForegroundColorSpan<T : IrcForegroundColorSpan<T>>(@ColorInt col
     IrcForegroundColorSpan<HEX>(color), Copyable<HEX> {
     override fun copy() = HEX(foregroundColor)
     override fun toString(): String {
-      return "IrcBackgroundColorSpan.HEX(color=${foregroundColor.toString(16)})"
+      return "IrcBackgroundColorSpan.HEX(color=${foregroundColor.toUInt().toString(16)})"
     }
 
     override fun equals(other: Any?) = when (other) {
