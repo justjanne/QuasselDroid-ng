@@ -22,7 +22,7 @@
   <string name="label_error_setup">Errore di configurazione</string>
   <string name="label_error_init">Errore di connessione</string>
   <string name="label_error_ssl">Errore SSL</string>
-  <string name="label_error_ssl_required_unavailable">Per stabilire la connessione è necessario SSL ma il core non lo supporta.</string>
+  <string name="label_error_ssl_required_unavailable">Per stabilire la connessione è richiesto SSL ma il core non lo supporta.</string>
   <string name="label_error_certificate">Errore del certificato</string>
   <string name="label_error_certificate_no_certificate">Nessun certificato disponibile</string>
   <string name="label_error_certificate_no_hostname">Nessun nome host disponibile</string>

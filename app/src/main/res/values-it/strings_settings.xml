@@ -107,14 +107,14 @@
   <string name="settings_ignoreitem_type_sender">Mittente</string>
   <string name="settings_ignoreitem_type_message">Messaggio</string>
   <string name="settings_ignoreitem_type_ctcp">Ctcp</string>
-  <string name="settings_ignoreitem_strictness">Rigore</string>
-  <string name="settings_ignoreitem_strictness_soft">Dinamico</string>
+  <string name="settings_ignoreitem_strictness">Severità</string>
+  <string name="settings_ignoreitem_strictness_soft">Dinamica</string>
   <string name="settings_ignoreitem_strictness_hard">Permanente</string>
-  <string name="settings_ignoreitem_scope">Efficacia</string>
+  <string name="settings_ignoreitem_scope">Ambito</string>
   <string name="settings_ignoreitem_scope_global">Globale</string>
   <string name="settings_ignoreitem_scope_network">Soltanto sulla rete</string>
   <string name="settings_ignoreitem_scope_channel">Soltanto sul canale</string>
-  <string name="settings_ignoreitem_scoperule">Regola per efficacia</string>
+  <string name="settings_ignoreitem_scoperule">Regola per ambito</string>
 
   <string name="settings_highlightlist_title">Menzioni</string>
   <string name="settings_highlightlist_highlight_nick">Menzione del nick</string>
