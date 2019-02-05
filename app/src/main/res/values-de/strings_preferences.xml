@@ -65,6 +65,9 @@
 
   <string name="preference_notification_network_name_in_notification_title_title">Netzwerknamen in Benachrichtigungstitel anzeigen</string>
 
+  <string name="preference_notification_show_all_activities_in_toolbar_title">Alle Aktivitäten in Toolbar markieren</string>
+  <string name="preference_notification_show_all_activities_in_toolbar_summary">Zeigt eine farbige Meldung für alle Aktivitäten in der Toolbar</string>
+
   <string name="preference_notification_configure_title">Benachrichtigungen konfigurieren</string>
 
   <string name="preference_notifications_level_all">Alle Nachrichten</string>
