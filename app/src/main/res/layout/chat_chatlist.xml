@@ -52,7 +52,7 @@
 
   <include layout="@layout/widget_search" />
 
-  <de.kuschku.quasseldroid.util.ui.WarningBarView
+  <de.kuschku.quasseldroid.util.ui.view.WarningBarView
     android:id="@+id/feature_context_bufferactivitysync"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

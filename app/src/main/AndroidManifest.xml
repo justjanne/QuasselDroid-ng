@@ -79,7 +79,6 @@
 
     <!-- Info -->
 
-
     <activity
       android:name="de.kuschku.quasseldroid.ui.info.user.UserInfoActivity"
       android:exported="false"

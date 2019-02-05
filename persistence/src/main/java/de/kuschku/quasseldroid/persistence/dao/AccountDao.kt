@@ -22,6 +22,7 @@ package de.kuschku.quasseldroid.persistence.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import de.kuschku.quasseldroid.persistence.models.Account
+import io.reactivex.Flowable
 
 @Dao
 interface AccountDao {
@@ -36,6 +37,9 @@ interface AccountDao {
 
   @Query("SELECT * FROM account WHERE id = :id")
   fun listen(id: Long): LiveData<Account?>
+
+  @Query("SELECT IFNULL(t.defaultFiltered, :defaultValue) FROM (SELECT defaultFiltered FROM account WHERE id = :id UNION SELECT NULL ORDER BY defaultFiltered DESC LIMIT 1) t")
+  fun listenDefaultFiltered(id: Long, defaultValue: Int): Flowable<Int>
 
   @Query("SELECT * FROM account ORDER BY lastUsed DESC")
   fun all(): LiveData<List<Account>>

@@ -174,7 +174,6 @@ class QuasselViewModel : ViewModel() {
     }
   }
 
-  // Remove orElse
   val lag: Observable<Long> = session.mapSwitchMap(ISession::lag).mapOrElse(0)
 
   val bufferData = combineLatest(session, buffer).switchMap { (sessionOptional, id) ->

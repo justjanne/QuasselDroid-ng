@@ -142,6 +142,10 @@
   <string name="preference_notification_network_name_in_notification_title_key" translatable="false">network_name_in_notification_title</string>
   <string name="preference_notification_network_name_in_notification_title_title">Show network name in notifications title</string>
 
+  <string name="preference_notification_show_all_activities_in_toolbar_key" translatable="false">show_all_activities_in_toolbar</string>
+  <string name="preference_notification_show_all_activities_in_toolbar_title">Mark all activities in toolbar</string>
+  <string name="preference_notification_show_all_activities_in_toolbar_summary">Displays a colored bubble in the toolbar for all chat activities</string>
+
   <string name="preference_notification_configure_key" translatable="false">notification_configure</string>
   <string name="preference_notification_configure_title">Configure Notifications</string>
 

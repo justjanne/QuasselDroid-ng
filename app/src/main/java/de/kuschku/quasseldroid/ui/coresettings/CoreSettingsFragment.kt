@@ -56,7 +56,7 @@ import de.kuschku.quasseldroid.util.missingfeatures.MissingFeature
 import de.kuschku.quasseldroid.util.missingfeatures.MissingFeaturesDialog
 import de.kuschku.quasseldroid.util.missingfeatures.RequiredFeatures
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
-import de.kuschku.quasseldroid.util.ui.BannerView
+import de.kuschku.quasseldroid.util.ui.view.BannerView
 import io.reactivex.Observable
 
 class CoreSettingsFragment : ServiceBoundFragment() {

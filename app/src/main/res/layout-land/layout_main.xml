@@ -44,7 +44,7 @@
         android:layout_height="match_parent"
         tools:layout="@layout/chat_messages" />
 
-      <de.kuschku.quasseldroid.util.ui.WarningBarView
+      <de.kuschku.quasseldroid.util.ui.view.WarningBarView
         android:id="@+id/connection_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
     app:layout_anchor="@id/fragment_chatline"
     app:layout_anchorGravity="top">
 
-    <de.kuschku.quasseldroid.util.ui.ShadowView
+    <de.kuschku.quasseldroid.util.ui.view.ShadowView
       android:layout_width="match_parent"
       android:layout_height="@dimen/shadow_height"
       android:gravity="bottom" />

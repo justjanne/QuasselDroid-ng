@@ -70,7 +70,7 @@
 
       </LinearLayout>
 
-      <de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
+      <de.kuschku.quasseldroid.util.ui.view.MaterialContentLoadingProgressBar
         android:id="@+id/progress"
         style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal.NoPadding"
         android:layout_width="match_parent"
@@ -86,7 +86,7 @@
 
   </androidx.cardview.widget.CardView>
 
-  <de.kuschku.quasseldroid.util.ui.WarningBarView
+  <de.kuschku.quasseldroid.util.ui.view.WarningBarView
     android:id="@+id/error"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

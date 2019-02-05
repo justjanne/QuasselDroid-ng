@@ -58,6 +58,7 @@ import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.and
 import de.kuschku.libquassel.util.flag.hasFlag
+import de.kuschku.libquassel.util.flag.minus
 import de.kuschku.libquassel.util.flag.or
 import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.libquassel.util.helpers.value
@@ -74,6 +75,7 @@ import de.kuschku.quasseldroid.persistence.models.SslHostnameWhitelistEntry
 import de.kuschku.quasseldroid.persistence.models.SslValidityWhitelistEntry
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.settings.NotificationSettings
 import de.kuschku.quasseldroid.settings.Settings
 import de.kuschku.quasseldroid.ui.chat.input.AutoCompleteAdapter
 import de.kuschku.quasseldroid.ui.chat.input.ChatlineFragment
@@ -92,9 +94,10 @@ import de.kuschku.quasseldroid.util.missingfeatures.MissingFeaturesDialog
 import de.kuschku.quasseldroid.util.missingfeatures.RequiredFeatures
 import de.kuschku.quasseldroid.util.service.ServiceBoundActivity
 import de.kuschku.quasseldroid.util.ui.DragInterceptBottomSheetBehavior
-import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
-import de.kuschku.quasseldroid.util.ui.NickCountDrawable
-import de.kuschku.quasseldroid.util.ui.WarningBarView
+import de.kuschku.quasseldroid.util.ui.drawable.DrawerToggleActivityDrawable
+import de.kuschku.quasseldroid.util.ui.drawable.NickCountDrawable
+import de.kuschku.quasseldroid.util.ui.view.MaterialContentLoadingProgressBar
+import de.kuschku.quasseldroid.util.ui.view.WarningBarView
 import de.kuschku.quasseldroid.viewmodel.data.BufferData
 import io.reactivex.BackpressureStrategy
 import org.threeten.bp.Instant
@@ -134,6 +137,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   @Inject
   lateinit var messageSettings: MessageSettings
+
+  @Inject
+  lateinit var notificationSettings: NotificationSettings
 
   @Inject
   lateinit var ircFormatDeserializer: IrcFormatDeserializer
@@ -295,6 +301,84 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         actionMode?.finish()
       }
     })
+
+    val maxBufferActivity = combineLatest(
+      viewModel.bufferList,
+      database.filtered().listenRx(accountId).toObservable().map {
+        it.associateBy(Filtered::bufferId, Filtered::filtered)
+      },
+      accountDatabase.accounts().listenDefaultFiltered(accountId, 0).toObservable()
+    ).map { (info, filteredList, defaultFiltered) ->
+      val (config, bufferList) = info
+
+      val minimumActivity = config?.minimumActivity()?.enabledValues()?.max()
+                            ?: Buffer_Activity.NoActivity
+
+      val maxActivity = bufferList.asSequence().map { props ->
+        val activity = props.activity - Message_Type.of(filteredList[props.info.bufferId]?.toUInt()
+                                                        ?: defaultFiltered?.toUInt()
+                                                        ?: 0u)
+        when {
+          props.highlights > 0                  -> Buffer_Activity.Highlight
+          activity.hasFlag(Message_Type.Plain) ||
+          activity.hasFlag(Message_Type.Notice) ||
+          activity.hasFlag(Message_Type.Action) -> Buffer_Activity.NewMessage
+          activity.isNotEmpty()                 -> Buffer_Activity.OtherActivity
+          else                                  -> Buffer_Activity.NoActivity
+        }
+      }.max() ?: Buffer_Activity.NoActivity
+
+      val hasNotifications = bufferList.any { props ->
+        val activity = props.activity - Message_Type.of(filteredList[props.info.bufferId]?.toUInt()
+                                                        ?: defaultFiltered?.toUInt()
+                                                        ?: 0u)
+        when {
+          props.info.type hasFlag Buffer_Type.QueryBuffer   ->
+            activity.hasFlag(Message_Type.Plain) ||
+            activity.hasFlag(Message_Type.Notice) ||
+            activity.hasFlag(Message_Type.Action)
+          props.info.type hasFlag Buffer_Type.ChannelBuffer ->
+            props.highlights > 0
+          else                                              -> false
+        }
+      }
+
+      Pair(
+        if (maxActivity < minimumActivity) Buffer_Activity.NoActivity
+        else maxActivity,
+        hasNotifications
+      )
+    }
+
+    supportActionBar?.apply {
+      val toggleDefault = DrawerToggleActivityDrawable(themedContext, 0)
+      val toggleOtherActivity = DrawerToggleActivityDrawable(themedContext,
+                                                             R.attr.colorTintActivity)
+      val toggleNewMessage = DrawerToggleActivityDrawable(themedContext, R.attr.colorTintMessage)
+      val toggleHighlight = DrawerToggleActivityDrawable(themedContext, R.attr.colorTintHighlight)
+      val toggleNotification = DrawerToggleActivityDrawable(themedContext,
+                                                            R.attr.colorTintNotification)
+      maxBufferActivity.toLiveData().observe(this@ChatActivity,
+                                             Observer { (activity, hasNotifications) ->
+        setHomeAsUpIndicator(
+          when {
+            notificationSettings.showAllActivitiesInToolbar &&
+            activity == Buffer_Activity.Highlight     ->
+              toggleHighlight
+            notificationSettings.showAllActivitiesInToolbar &&
+            activity == Buffer_Activity.NewMessage    ->
+              toggleNewMessage
+            notificationSettings.showAllActivitiesInToolbar &&
+            activity == Buffer_Activity.OtherActivity ->
+              toggleOtherActivity
+            hasNotifications                          ->
+              toggleNotification
+            else                                      ->
+              toggleDefault
+          }
+        )
+      })
+    }
 
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
       val autoCompleteBottomSheet = BottomSheetBehavior.from(autoCompleteList)
@@ -780,6 +864,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     if (Settings.message(this) != messageSettings) {
       recreate()
     }
+    if (Settings.notification(this) != notificationSettings) {
+      recreate()
+    }
     super.onStart()
   }
 
@@ -825,9 +912,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       (bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) ?: false ||
        bufferData?.info?.type?.hasFlag(Buffer_Type.QueryBuffer) ?: false)
     menu?.retint(toolbar.context)
-    menu?.findItem(R.id.action_nicklist)?.icon = NickCountDrawable(bufferData?.userCount ?: 0,
-                                                                   nickCountDrawableSize,
-                                                                   nickCountDrawableColor)
+    menu?.findItem(R.id.action_nicklist)?.icon = NickCountDrawable(
+      bufferData?.userCount ?: 0,
+      nickCountDrawableSize,
+      nickCountDrawableColor)
     return super.onCreateOptionsMenu(menu)
   }
 

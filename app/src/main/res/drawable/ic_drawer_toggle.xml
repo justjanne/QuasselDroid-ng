@@ -17,10 +17,18 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<de.kuschku.quasseldroid.util.ui.view.BannerView xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  app:buttonText="@string/advertisement_support_button"
-  app:icon="@drawable/ic_splash"
-  app:text="@string/advertisement_support_patreon" />
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:width="24dp"
+  android:height="24dp"
+  android:viewportWidth="24"
+  android:viewportHeight="24">
+  <path
+    android:fillColor="#000"
+    android:pathData="
+    M20,6 a-1,1 0 0,0 1,1 a-1,1 0 0,0 -1,1 l -16,0 a-1,1 0 0,0 -1,-1 a-1,1 0 0,0 1,-1Z
+    M20,11 a-1,1 0 0,0 1,1 a-1,1 0 0,0 -1,1 l -16,0 a-1,1 0 0,0 -1,-1 a-1,1 0 0,0 1,-1Z
+    M20,16 a-1,1 0 0,0 1,1 a-1,1 0 0,0 -1,1 l -16,0 a-1,1 0 0,0 -1,-1 a-1,1 0 0,0 1,-1Z" />
+  <path
+    android:fillColor="#f00"
+    android:pathData="M16,17 16,23 A1,1 0 0,0 17,24 L 23,24 A1,1 0 0,0 24,23 L 24,17 A1,1 0 0,0 23,16 L 17,16 A1,1 0 0,0 16,17" />
+</vector>

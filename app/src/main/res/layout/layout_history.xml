@@ -17,7 +17,7 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<de.kuschku.quasseldroid.util.ui.TouchInterceptingFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<de.kuschku.quasseldroid.util.ui.view.TouchInterceptingFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/card_panel"
@@ -84,4 +84,4 @@
         tools:listitem="@layout/widget_history_message" />
     </LinearLayout>
   </com.google.android.material.card.MaterialCardView>
-</de.kuschku.quasseldroid.util.ui.TouchInterceptingFrameLayout>
+</de.kuschku.quasseldroid.util.ui.view.TouchInterceptingFrameLayout>

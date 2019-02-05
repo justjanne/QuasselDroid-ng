@@ -95,6 +95,12 @@
       android:key="@string/preference_notification_network_name_in_notification_title_key"
       android:title="@string/preference_notification_network_name_in_notification_title_title" />
 
+    <SwitchPreference
+      android:defaultValue="false"
+      android:key="@string/preference_notification_show_all_activities_in_toolbar_key"
+      android:summary="@string/preference_notification_show_all_activities_in_toolbar_summary"
+      android:title="@string/preference_notification_show_all_activities_in_toolbar_title" />
+
     <de.kuschku.quasseldroid.util.ui.settings.RingtonePreference
       android:defaultValue="content://settings/system/notification_sound"
       android:key="@string/preference_notification_sound_key"

@@ -77,6 +77,7 @@
     <item name="colorTintActivity">#98971a</item>
     <item name="colorTintMessage">#458588</item>
     <item name="colorTintHighlight">#d65d0e</item>
+    <item name="colorTintNotification">#cc241d</item>
 
     <item name="colorTintSecure">#98971a</item>
     <item name="colorTintPartiallySecure">#d79921</item>
@@ -140,6 +141,7 @@
     <item name="colorTintActivity">#98971a</item>
     <item name="colorTintMessage">#458588</item>
     <item name="colorTintHighlight">#d65d0e</item>
+    <item name="colorTintNotification">#cc241d</item>
 
     <item name="colorTintSecure">#98971a</item>
     <item name="colorTintPartiallySecure">#d79921</item>

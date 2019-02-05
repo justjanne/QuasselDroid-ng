@@ -28,6 +28,7 @@ import androidx.room.Query
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.BufferId_Type
 import de.kuschku.quasseldroid.persistence.models.Filtered
+import io.reactivex.Flowable
 
 @Dao
 interface FilteredDao {
@@ -48,6 +49,9 @@ interface FilteredDao {
 
   @Query("SELECT * FROM filtered WHERE accountId = :accountId")
   fun listen(accountId: Long): LiveData<List<Filtered>>
+
+  @Query("SELECT * FROM filtered WHERE accountId = :accountId")
+  fun listenRx(accountId: Long): Flowable<List<Filtered>>
 
   @Query("DELETE FROM filtered")
   fun clear()

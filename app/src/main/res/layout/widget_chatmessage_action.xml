@@ -82,7 +82,7 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <de.kuschku.quasseldroid.util.ui.RipplePassthroughTextView
+        <de.kuschku.quasseldroid.util.ui.view.RipplePassthroughTextView
           android:id="@+id/combined"
           style="@style/Widget.RtlConformTextView"
           android:layout_width="match_parent"

@@ -68,6 +68,7 @@
     <item name="colorTintActivity">#AFB42B</item>
     <item name="colorTintMessage">#1976D2</item>
     <item name="colorTintHighlight">#FFAB00</item>
+    <item name="colorTintNotification">#D32F2F</item>
 
     <item name="colorTintSecure">#4CAF50</item>
     <item name="colorTintPartiallySecure">#FFC107</item>
@@ -123,6 +124,7 @@
     <item name="colorTintActivity">#AFB42B</item>
     <item name="colorTintMessage">#42A5F5</item>
     <item name="colorTintHighlight">#FFAB00</item>
+    <item name="colorTintNotification">#D32F2F</item>
 
     <item name="colorTintSecure">#4CAF50</item>
     <item name="colorTintPartiallySecure">#FFC107</item>

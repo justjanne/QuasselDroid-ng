@@ -59,7 +59,7 @@
       android:layout_marginRight="@dimen/message_horizontal"
       android:visibility="gone" />
 
-    <de.kuschku.quasseldroid.util.ui.RipplePassthroughTextView
+    <de.kuschku.quasseldroid.util.ui.view.RipplePassthroughTextView
       android:id="@+id/combined"
       style="@style/Widget.RtlConformTextView"
       android:layout_width="0dip"

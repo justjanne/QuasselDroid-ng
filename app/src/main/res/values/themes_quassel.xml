@@ -70,6 +70,7 @@
     <item name="colorTintActivity">#88cc33</item>
     <item name="colorTintMessage">#2277dd</item>
     <item name="colorTintHighlight">#ff8811</item>
+    <item name="colorTintNotification">#BB2222</item>
 
     <item name="colorTintSecure">#88cc33</item>
     <item name="colorTintPartiallySecure">#ffaf3b</item>
@@ -127,6 +128,7 @@
     <item name="colorTintActivity">#88cc33</item>
     <item name="colorTintMessage">#2277dd</item>
     <item name="colorTintHighlight">#ff8811</item>
+    <item name="colorTintNotification">#BB2222</item>
 
     <item name="colorTintSecure">#88cc33</item>
     <item name="colorTintPartiallySecure">#ffaf3b</item>

@@ -63,7 +63,7 @@ import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
-import de.kuschku.quasseldroid.util.ui.WarningBarView
+import de.kuschku.quasseldroid.util.ui.view.WarningBarView
 import de.kuschku.quasseldroid.viewmodel.data.BufferHiddenState
 import de.kuschku.quasseldroid.viewmodel.data.BufferListItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferState
@@ -317,24 +317,22 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
     combineLatest(viewModel.bufferList,
                   viewModel.expandedNetworks,
-                  viewModel.selectedBuffer).toLiveData().switchMapNotNull { a ->
-      database.filtered().listen(accountId).zip(accountDatabase.accounts().listen(accountId)).map { (b, c) ->
-        Triple(a, b, c)
-      }
-    }.observe(this, Observer { it ->
-      it?.let { (data, activityList, account) ->
+                  viewModel.selectedBuffer,
+                  database.filtered().listenRx(accountId).toObservable(),
+                  accountDatabase.accounts().listenDefaultFiltered(accountId, 0).toObservable()
+    ).toLiveData().observe(this, Observer { it ->
+      it?.let { (info, expandedNetworks, selected, filteredList, defaultFiltered) ->
         runInBackground {
-          val (info, expandedNetworks, selected) = data
           val (config, list) = info ?: Pair(null, emptyList())
           val minimumActivity = config?.minimumActivity() ?: Buffer_Activity.NONE
-          val activities = activityList.associate { it.bufferId to it.filtered.toUInt() }
+          val activities = filteredList.associate { it.bufferId to it.filtered.toUInt() }
           val processedList = list.asSequence().sortedBy { props ->
             !props.info.type.hasFlag(Buffer_Type.StatusBuffer)
           }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { props ->
             props.network.networkName
           }).map { props ->
             val activity = props.activity - (activities[props.info.bufferId]
-                                             ?: account?.defaultFiltered?.toUInt()
+                                             ?: defaultFiltered?.toUInt()
                                              ?: 0u)
             BufferListItem(
               props.copy(

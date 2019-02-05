@@ -55,8 +55,8 @@ inline fun <reified A, B, C> combineLatest(
   b: ObservableSource<B>,
   c: ObservableSource<C>
 ): Observable<Triple<A, B, C>> =
-  Observable.combineLatest(listOf(a, b, c)) { (t0, t1, t2) ->
-    Triple(t0, t1, t2) as Triple<A, B, C>
+  Observable.combineLatest(listOf(a, b, c)) {
+    Triple(it[0], it[1], it[2]) as Triple<A, B, C>
   }
 
 inline fun <reified A, B, C, D> combineLatest(
@@ -65,8 +65,31 @@ inline fun <reified A, B, C, D> combineLatest(
   c: ObservableSource<C>,
   d: ObservableSource<D>
 ): Observable<Tuple4<A, B, C, D>> =
-  Observable.combineLatest(listOf(a, b, c, d)) { (t0, t1, t2, t3) ->
-    Tuple4(t0, t1, t2, t3) as Tuple4<A, B, C, D>
+  Observable.combineLatest(listOf(a, b, c, d)) {
+    Tuple4(it[0], it[1], it[2], it[3]) as Tuple4<A, B, C, D>
+  }
+
+inline fun <reified A, B, C, D, E> combineLatest(
+  a: ObservableSource<A>,
+  b: ObservableSource<B>,
+  c: ObservableSource<C>,
+  d: ObservableSource<D>,
+  e: ObservableSource<E>
+): Observable<Tuple5<A, B, C, D, E>> =
+  Observable.combineLatest(listOf(a, b, c, d, e)) {
+    Tuple5(it[0], it[1], it[2], it[3], it[4]) as Tuple5<A, B, C, D, E>
+  }
+
+inline fun <reified A, B, C, D, E, F> combineLatest(
+  a: ObservableSource<A>,
+  b: ObservableSource<B>,
+  c: ObservableSource<C>,
+  d: ObservableSource<D>,
+  e: ObservableSource<E>,
+  f: ObservableSource<F>
+): Observable<Tuple6<A, B, C, D, E, F>> =
+  Observable.combineLatest(listOf(a, b, c, d, e, f)) {
+    Tuple6(it[0], it[1], it[2], it[3], it[4], it[5]) as Tuple6<A, B, C, D, E, F>
   }
 
 inline fun <reified T> combineLatest(sources: Iterable<ObservableSource<out T>?>) =
@@ -80,4 +103,21 @@ data class Tuple4<out A, out B, out C, out D>(
   val second: B,
   val third: C,
   val fourth: D
+)
+
+data class Tuple5<out A, out B, out C, out D, out E>(
+  val first: A,
+  val second: B,
+  val third: C,
+  val fourth: D,
+  val fifth: E
+)
+
+data class Tuple6<out A, out B, out C, out D, out E, out F>(
+  val first: A,
+  val second: B,
+  val third: C,
+  val fourth: D,
+  val fifth: E,
+  val sixth: F
 )

@@ -40,9 +40,9 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.retint
 import de.kuschku.quasseldroid.util.helper.toLiveData
-import de.kuschku.quasseldroid.util.ui.MaterialContentLoadingProgressBar
-import de.kuschku.quasseldroid.util.ui.WarningBarView
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
+import de.kuschku.quasseldroid.util.ui.view.MaterialContentLoadingProgressBar
+import de.kuschku.quasseldroid.util.ui.view.WarningBarView
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 

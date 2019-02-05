@@ -29,7 +29,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <de.kuschku.quasseldroid.util.ui.BannerView
+    <de.kuschku.quasseldroid.util.ui.view.BannerView
       android:id="@+id/feature_context_missing"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

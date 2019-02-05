@@ -27,7 +27,8 @@ data class NotificationSettings(
   val vibrate: Boolean = true,
   val light: Boolean = true,
   val markReadOnSwipe: Boolean = true,
-  val networkNameInNotificationTitle: Boolean = false
+  val networkNameInNotificationTitle: Boolean = false,
+  val showAllActivitiesInToolbar: Boolean = false
 ) {
   enum class Level {
     ALL,

@@ -71,6 +71,7 @@
   <attr name="colorTintActivity" format="color" />
   <attr name="colorTintMessage" format="color" />
   <attr name="colorTintHighlight" format="color" />
+  <attr name="colorTintNotification" format="color" />
 
   <!-- Icons -->
   <attr name="colorOffline" format="color" />

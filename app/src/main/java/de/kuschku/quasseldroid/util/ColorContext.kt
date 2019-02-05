@@ -26,7 +26,7 @@ import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.helper.styledAttributes
-import de.kuschku.quasseldroid.util.ui.TextDrawable
+import de.kuschku.quasseldroid.util.ui.drawable.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import javax.inject.Inject
 

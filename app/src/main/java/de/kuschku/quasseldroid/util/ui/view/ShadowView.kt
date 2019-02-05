@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.kuschku.quasseldroid.util.ui
+package de.kuschku.quasseldroid.util.ui.view
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -153,7 +153,12 @@ class ShadowView : View {
       }
     }
 
-    paintDrawable.shaderFactory = ShadowShaderFactory(x0, y0, x1, y1, stopColors)
+    paintDrawable.shaderFactory = ShadowShaderFactory(
+      x0,
+      y0,
+      x1,
+      y1,
+      stopColors)
     cubicGradientScrimCache.put(cacheKeyHash, paintDrawable)
     return paintDrawable
   }

@@ -54,7 +54,7 @@ import de.kuschku.quasseldroid.util.helper.letIf
 import de.kuschku.quasseldroid.util.helper.loadWithFallbacks
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
-import de.kuschku.quasseldroid.util.ui.TextDrawable
+import de.kuschku.quasseldroid.util.ui.drawable.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import org.threeten.bp.Instant
 import java.util.concurrent.Executors

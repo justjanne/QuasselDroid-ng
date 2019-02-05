@@ -42,10 +42,10 @@ import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.coresettings.highlightrule.HighlightRuleActivity
 import de.kuschku.quasseldroid.util.helper.toLiveData
-import de.kuschku.quasseldroid.util.ui.WarningBarView
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
+import de.kuschku.quasseldroid.util.ui.view.WarningBarView
 
 class HighlightListFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
   @BindView(R.id.feature_context_coresidehighlights)

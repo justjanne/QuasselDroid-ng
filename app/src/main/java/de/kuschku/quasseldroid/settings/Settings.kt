@@ -175,6 +175,10 @@ object Settings {
       networkNameInNotificationTitle = getBoolean(
         context.getString(R.string.preference_notification_network_name_in_notification_title_key),
         NotificationSettings.DEFAULT.networkNameInNotificationTitle
+      ),
+      showAllActivitiesInToolbar = getBoolean(
+        context.getString(R.string.preference_notification_show_all_activities_in_toolbar_key),
+        NotificationSettings.DEFAULT.showAllActivitiesInToolbar
       )
     )
   }

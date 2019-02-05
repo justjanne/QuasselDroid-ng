@@ -74,6 +74,7 @@
     <item name="colorTintActivity">#88cc33</item>
     <item name="colorTintMessage">#2277dd</item>
     <item name="colorTintHighlight">#ff8811</item>
+    <item name="colorTintNotification">#D32F2F</item>
 
     <item name="colorTintSecure">#88cc33</item>
     <item name="colorTintPartiallySecure">#ffaf3b</item>
