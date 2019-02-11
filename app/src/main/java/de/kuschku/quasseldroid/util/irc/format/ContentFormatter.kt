@@ -79,8 +79,8 @@ class ContentFormatter @Inject constructor(
 
   fun formatContent(content: String,
                     highlight: Boolean = false,
-                    showSpoilers: Boolean = false,
-                    networkId: NetworkId?): CharSequence {
+                    unhideSpoilers: Boolean = false,
+                    networkId: NetworkId?): Pair<CharSequence, Boolean> {
     val spans = mutableListOf<FormatInfo>()
     val formattedText = SpannableString(
       ircFormatDeserializer.formatString(
@@ -90,8 +90,19 @@ class ContentFormatter @Inject constructor(
       )
     )
 
-    if (showSpoilers) {
+    val hasSpoilers = if (unhideSpoilers) {
       spans.removeAll {
+        when {
+          it.format is IrcFormat.Color ->
+            it.format.foreground == it.format.background
+          it.format is IrcFormat.Hex   ->
+            it.format.foreground == it.format.background
+          else                         ->
+            false
+        }
+      }
+    } else {
+      spans.any {
         when {
           it.format is IrcFormat.Color ->
             it.format.foreground == it.format.background
@@ -131,7 +142,7 @@ class ContentFormatter @Inject constructor(
       span.apply(formattedText)
     }
 
-    return formattedText
+    return Pair(formattedText, hasSpoilers)
   }
 
   private fun formatNickNickImpl(nick: String, self: Boolean, colorize: Boolean,

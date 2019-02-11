@@ -253,7 +253,7 @@ class MessageListFragment : ServiceBoundFragment() {
           1    -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = true
           else -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = false
         }
-      } else {
+      } else if (msg.hasSpoilers) {
         val value = viewModel.expandedMessages.value
         viewModel.expandedMessages.onNext(
           if (value.contains(msg.original.messageId)) value - msg.original.messageId

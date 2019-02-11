@@ -36,7 +36,8 @@ class FormattedMessage(
   val hasDayChange: Boolean,
   val isSelected: Boolean,
   val isExpanded: Boolean,
-  val isMarkerLine: Boolean
+  val isMarkerLine: Boolean,
+  val hasSpoilers: Boolean
 ) {
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

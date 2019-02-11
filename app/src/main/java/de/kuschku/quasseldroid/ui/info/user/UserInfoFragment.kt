@@ -225,8 +225,11 @@ class UserInfoFragment : ServiceBoundFragment() {
         }
 
         nick.text = user.nick
-        realName.text = contentFormatter.formatContent(user.realName ?: "",
-                                                       networkId = user.networkId)
+        val (content, hasSpoilers) = contentFormatter.formatContent(
+          user.realName ?: "",
+          networkId = user.networkId
+        )
+        realName.text = content
         realName.visibleIf(!user.realName.isNullOrBlank() && user.realName != user.nick)
 
         awayMessage.text = user.awayMessage.nullIf { it.isNullOrBlank() } ?: SpannableString(

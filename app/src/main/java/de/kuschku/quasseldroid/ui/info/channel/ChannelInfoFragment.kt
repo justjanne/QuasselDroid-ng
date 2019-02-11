@@ -109,8 +109,11 @@ class ChannelInfoFragment : ServiceBoundFragment() {
       }
     }.toLiveData().observe(this, Observer { (info, channel) ->
       name.text = channel.name()
-      topic.text = contentFormatter.formatContent(channel.topic(),
-                                                  networkId = channel.network().networkId())
+      val (content, hasSpoilers) = contentFormatter.formatContent(
+        channel.topic(),
+        networkId = channel.network().networkId()
+      )
+      topic.text = content
 
       currentBufferInfo = info
       actionShortcut.visibleIf(info != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)

@@ -108,7 +108,11 @@ class ChannelListAdapter @Inject constructor(
 
     fun bind(data: IrcListHelper.ChannelDescription) {
       name.text = data.channelName
-      topic.text = contentFormatter.formatContent(data.topic, networkId = data.netId)
+      val (content, hasSpoilers) = contentFormatter.formatContent(
+        data.topic,
+        networkId = data.netId
+      )
+      topic.text = content
       users.text = itemView.context.resources.getQuantityString(R.plurals.label_user_count,
                                                                 data.userCount.toInt(),
                                                                 data.userCount.toInt())

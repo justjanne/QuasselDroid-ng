@@ -257,10 +257,10 @@ class QuasselMessageRenderer @Inject constructor(
             false
           ))
         }
-        val content = contentFormatter.formatContent(message.content.content,
-                                                     monochromeForeground,
-                                                     message.isExpanded,
-                                                     message.content.networkId)
+        val (content, hasSpoilers) = contentFormatter.formatContent(message.content.content,
+                                                                    monochromeForeground,
+                                                                    message.isExpanded,
+                                                                    message.content.networkId)
         val nickName = HostmaskHelper.nick(message.content.sender)
         val senderColorIndex = SenderColorUtil.senderColor(nickName)
         val rawInitial = nickName.trimStart(*EditorViewModel.IGNORED_CHARS)
@@ -291,7 +291,8 @@ class QuasselMessageRenderer @Inject constructor(
           hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
-          isSelected = message.isSelected
+          isSelected = message.isSelected,
+          hasSpoilers = hasSpoilers
         )
       }
       Message_Type.Action       -> {
@@ -308,6 +309,11 @@ class QuasselMessageRenderer @Inject constructor(
         }
         val senderColor = if (useSelfColor) selfColor else senderColors[senderColorIndex]
 
+        val (content, hasSpoilers) = contentFormatter.formatContent(message.content.content,
+                                                                    monochromeForeground,
+                                                                    message.isExpanded,
+                                                                    message.content.networkId)
+
         FormattedMessage(
           original = message.content,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
@@ -316,37 +322,39 @@ class QuasselMessageRenderer @Inject constructor(
             context.getString(R.string.message_format_action),
             contentFormatter.formatPrefix(message.content.senderPrefixes),
             contentFormatter.formatNick(message.content.sender, self, monochromeForeground, false),
-            contentFormatter.formatContent(message.content.content,
-                                           monochromeForeground,
-                                           message.isExpanded,
-                                           message.content.networkId)
+            content
           ),
           avatarUrls = AvatarHelper.avatar(messageSettings, message.content, avatarSize),
           fallbackDrawable = colorContext.buildTextDrawable(initial, senderColor),
           hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
-          isSelected = message.isSelected
+          isSelected = message.isSelected,
+          hasSpoilers = hasSpoilers
         )
       }
-      Message_Type.Notice       -> FormattedMessage(
-        original = message.content,
-        time = timeFormatter.format(message.content.time.atZone(zoneId)),
-        dayChange = formatDayChange(message),
-        combined = SpanFormatter.format(
-          context.getString(R.string.message_format_notice),
-          contentFormatter.formatPrefix(message.content.senderPrefixes),
-          contentFormatter.formatNick(message.content.sender, self, monochromeForeground, false),
-          contentFormatter.formatContent(message.content.content,
-                                         monochromeForeground,
-                                         message.isExpanded,
-                                         message.content.networkId)
-        ),
-        hasDayChange = message.hasDayChange,
-        isMarkerLine = message.isMarkerLine,
-        isExpanded = message.isExpanded,
-        isSelected = message.isSelected
-      )
+      Message_Type.Notice       -> {
+        val (content, hasSpoilers) = contentFormatter.formatContent(message.content.content,
+                                                                    monochromeForeground,
+                                                                    message.isExpanded,
+                                                                    message.content.networkId)
+        FormattedMessage(
+          original = message.content,
+          time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          dayChange = formatDayChange(message),
+          combined = SpanFormatter.format(
+            context.getString(R.string.message_format_notice),
+            contentFormatter.formatPrefix(message.content.senderPrefixes),
+            contentFormatter.formatNick(message.content.sender, self, monochromeForeground, false),
+            content
+          ),
+          hasDayChange = message.hasDayChange,
+          isMarkerLine = message.isMarkerLine,
+          isExpanded = message.isExpanded,
+          isSelected = message.isSelected,
+          hasSpoilers = hasSpoilers
+        )
+      }
       Message_Type.Nick         -> {
         val nickSelf = message.content.sender == message.content.content || self
         FormattedMessage(
@@ -386,7 +394,8 @@ class QuasselMessageRenderer @Inject constructor(
           hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
-          isSelected = message.isSelected
+          isSelected = message.isSelected,
+          hasSpoilers = false
         )
       }
       Message_Type.Mode         -> FormattedMessage(
@@ -402,7 +411,8 @@ class QuasselMessageRenderer @Inject constructor(
         hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
-        isSelected = message.isSelected
+        isSelected = message.isSelected,
+        hasSpoilers = false
       )
       Message_Type.Join         -> FormattedMessage(
         original = message.content,
@@ -422,87 +432,109 @@ class QuasselMessageRenderer @Inject constructor(
         hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
-        isSelected = message.isSelected
+        isSelected = message.isSelected,
+        hasSpoilers = false
       )
-      Message_Type.Part         -> FormattedMessage(
-        original = message.content,
-        time = timeFormatter.format(message.content.time.atZone(zoneId)),
-        dayChange = formatDayChange(message),
-        combined = if (message.content.content.isBlank()) {
-          SpanFormatter.format(
-            context.getString(R.string.message_format_part_1),
-            contentFormatter.formatPrefix(message.content.senderPrefixes),
-            contentFormatter.formatNick(
-              message.content.sender,
-              self,
-              monochromeForeground,
-              messageSettings.showHostmaskActions
-            )
+      Message_Type.Part         -> {
+        val (content, hasSpoilers) = if (message.content.content.isBlank()) {
+          Pair(
+            SpanFormatter.format(
+              context.getString(R.string.message_format_part_1),
+              contentFormatter.formatPrefix(message.content.senderPrefixes),
+              contentFormatter.formatNick(
+                message.content.sender,
+                self,
+                monochromeForeground,
+                messageSettings.showHostmaskActions
+              )
+            ),
+            false
           )
         } else {
-          SpanFormatter.format(
-            context.getString(R.string.message_format_part_2),
-            contentFormatter.formatPrefix(message.content.senderPrefixes),
-            contentFormatter.formatNick(
-              message.content.sender,
-              self,
-              monochromeForeground,
-              messageSettings.showHostmaskActions
+          val (content, hasSpoilers) = contentFormatter.formatContent(message.content.content,
+                                                                      monochromeForeground,
+                                                                      message.isExpanded,
+                                                                      message.content.networkId)
+          Pair(
+            SpanFormatter.format(
+              context.getString(R.string.message_format_part_2),
+              contentFormatter.formatPrefix(message.content.senderPrefixes),
+              contentFormatter.formatNick(
+                message.content.sender,
+                self,
+                monochromeForeground,
+                messageSettings.showHostmaskActions
+              ),
+              content
             ),
-            contentFormatter.formatContent(message.content.content,
-                                           monochromeForeground,
-                                           message.isExpanded,
-                                           message.content.networkId)
+            hasSpoilers
           )
-        },
-        hasDayChange = message.hasDayChange,
-        isMarkerLine = message.isMarkerLine,
-        isExpanded = message.isExpanded,
-        isSelected = message.isSelected
-      )
-      Message_Type.Quit         -> FormattedMessage(
-        original = message.content,
-        time = timeFormatter.format(message.content.time.atZone(zoneId)),
-        dayChange = formatDayChange(message),
-        combined = if (message.content.content.isBlank()) {
-          SpanFormatter.format(
-            context.getString(R.string.message_format_quit_1),
-            contentFormatter.formatPrefix(message.content.senderPrefixes),
-            contentFormatter.formatNick(
-              message.content.sender,
-              self,
-              monochromeForeground,
-              messageSettings.showHostmaskActions
-            )
-          )
-        } else {
-          SpanFormatter.format(
-            context.getString(R.string.message_format_quit_2),
-            contentFormatter.formatPrefix(message.content.senderPrefixes),
-            contentFormatter.formatNick(
-              message.content.sender,
-              self,
-              monochromeForeground,
-              messageSettings.showHostmaskActions
-            ),
-            contentFormatter.formatContent(message.content.content,
-                                           monochromeForeground,
-                                           message.isExpanded,
-                                           message.content.networkId)
-          )
-        },
-        hasDayChange = message.hasDayChange,
-        isMarkerLine = message.isMarkerLine,
-        isExpanded = message.isExpanded,
-        isSelected = message.isSelected
-      )
-      Message_Type.Kick         -> {
-        val (user, reason) = message.content.content.split(' ', limit = 2) + listOf("", "")
+        }
+
         FormattedMessage(
           original = message.content,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
           dayChange = formatDayChange(message),
-          combined = if (reason.isBlank()) {
+          combined = content,
+          hasDayChange = message.hasDayChange,
+          isMarkerLine = message.isMarkerLine,
+          isExpanded = message.isExpanded,
+          isSelected = message.isSelected,
+          hasSpoilers = hasSpoilers
+        )
+      }
+      Message_Type.Quit         -> {
+        val (content, hasSpoilers) = if (message.content.content.isBlank()) {
+          Pair(
+            SpanFormatter.format(
+              context.getString(R.string.message_format_quit_1),
+              contentFormatter.formatPrefix(message.content.senderPrefixes),
+              contentFormatter.formatNick(
+                message.content.sender,
+                self,
+                monochromeForeground,
+                messageSettings.showHostmaskActions
+              )
+            ),
+            false
+          )
+        } else {
+          val (content, hasSpoilers) = contentFormatter.formatContent(message.content.content,
+                                                                      monochromeForeground,
+                                                                      message.isExpanded,
+                                                                      message.content.networkId)
+          Pair(
+            SpanFormatter.format(
+              context.getString(R.string.message_format_quit_2),
+              contentFormatter.formatPrefix(message.content.senderPrefixes),
+              contentFormatter.formatNick(
+                message.content.sender,
+                self,
+                monochromeForeground,
+                messageSettings.showHostmaskActions
+              ),
+              content
+            ),
+            hasSpoilers
+          )
+        }
+
+        FormattedMessage(
+          original = message.content,
+          time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          dayChange = formatDayChange(message),
+          combined = content,
+          hasDayChange = message.hasDayChange,
+          isMarkerLine = message.isMarkerLine,
+          isExpanded = message.isExpanded,
+          isSelected = message.isSelected,
+          hasSpoilers = hasSpoilers
+        )
+      }
+      Message_Type.Kick         -> {
+        val (user, reason) = message.content.content.split(' ', limit = 2) + listOf("", "")
+        val (content, hasSpoilers) = if (reason.isBlank()) {
+          Pair(
             SpanFormatter.format(
               context.getString(R.string.message_format_kick_1),
               contentFormatter.formatNick(user, false, monochromeForeground, false),
@@ -511,8 +543,15 @@ class QuasselMessageRenderer @Inject constructor(
                                           self,
                                           monochromeForeground,
                                           false)
-            )
-          } else {
+            ),
+            false
+          )
+        } else {
+          val (content, hasSpoilers) = contentFormatter.formatContent(reason,
+                                                                      monochromeForeground,
+                                                                      message.isExpanded,
+                                                                      message.content.networkId)
+          Pair(
             SpanFormatter.format(
               context.getString(R.string.message_format_kick_2),
               contentFormatter.formatNick(user, false, monochromeForeground, false),
@@ -521,25 +560,28 @@ class QuasselMessageRenderer @Inject constructor(
                                           self,
                                           monochromeForeground,
                                           false),
-              contentFormatter.formatContent(reason,
-                                             monochromeForeground,
-                                             message.isExpanded,
-                                             message.content.networkId)
-            )
-          },
-          hasDayChange = message.hasDayChange,
-          isMarkerLine = message.isMarkerLine,
-          isExpanded = message.isExpanded,
-          isSelected = message.isSelected
-        )
-      }
-      Message_Type.Kill         -> {
-        val (user, reason) = message.content.content.split(' ', limit = 2) + listOf("", "")
+              content
+            ),
+            hasSpoilers
+          )
+        }
+
         FormattedMessage(
           original = message.content,
           time = timeFormatter.format(message.content.time.atZone(zoneId)),
           dayChange = formatDayChange(message),
-          combined = if (reason.isBlank()) {
+          combined = content,
+          hasDayChange = message.hasDayChange,
+          isMarkerLine = message.isMarkerLine,
+          isExpanded = message.isExpanded,
+          isSelected = message.isSelected,
+          hasSpoilers = hasSpoilers
+        )
+      }
+      Message_Type.Kill         -> {
+        val (user, reason) = message.content.content.split(' ', limit = 2) + listOf("", "")
+        val (content, hasSpoilers) = if (reason.isBlank()) {
+          Pair(
             SpanFormatter.format(
               context.getString(R.string.message_format_kill_1),
               contentFormatter.formatNick(user, false, monochromeForeground, false),
@@ -548,8 +590,15 @@ class QuasselMessageRenderer @Inject constructor(
                                           self,
                                           monochromeForeground,
                                           false)
-            )
-          } else {
+            ),
+            false
+          )
+        } else {
+          val (content, hasSpoilers) = contentFormatter.formatContent(reason,
+                                                                      monochromeForeground,
+                                                                      message.isExpanded,
+                                                                      message.content.networkId)
+          Pair(
             SpanFormatter.format(
               context.getString(R.string.message_format_kill_2),
               contentFormatter.formatNick(user, false, monochromeForeground, false),
@@ -558,16 +607,22 @@ class QuasselMessageRenderer @Inject constructor(
                                           self,
                                           monochromeForeground,
                                           false),
-              contentFormatter.formatContent(reason,
-                                             monochromeForeground,
-                                             message.isExpanded,
-                                             message.content.networkId)
-            )
-          },
+              content
+            ),
+            hasSpoilers
+          )
+        }
+
+        FormattedMessage(
+          original = message.content,
+          time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          dayChange = formatDayChange(message),
+          combined = content,
           hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
-          isSelected = message.isSelected
+          isSelected = message.isSelected,
+          hasSpoilers = hasSpoilers
         )
       }
       Message_Type.NetsplitJoin -> {
@@ -593,7 +648,8 @@ class QuasselMessageRenderer @Inject constructor(
           hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
-          isSelected = message.isSelected
+          isSelected = message.isSelected,
+          hasSpoilers = false
         )
       }
       Message_Type.NetsplitQuit -> {
@@ -619,37 +675,46 @@ class QuasselMessageRenderer @Inject constructor(
           hasDayChange = message.hasDayChange,
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
-          isSelected = message.isSelected
+          isSelected = message.isSelected,
+          hasSpoilers = false
         )
       }
       Message_Type.Server,
       Message_Type.Info,
-      Message_Type.Error        -> FormattedMessage(
-        original = message.content,
-        time = timeFormatter.format(message.content.time.atZone(zoneId)),
-        dayChange = formatDayChange(message),
-        combined = contentFormatter.formatContent(message.content.content,
-                                                  monochromeForeground,
-                                                  message.isExpanded,
-                                                  message.content.networkId),
-        hasDayChange = message.hasDayChange,
-        isMarkerLine = message.isMarkerLine,
-        isExpanded = message.isExpanded,
-        isSelected = message.isSelected
-      )
-      Message_Type.Topic        -> FormattedMessage(
-        original = message.content,
-        time = timeFormatter.format(message.content.time.atZone(zoneId)),
-        dayChange = formatDayChange(message),
-        combined = contentFormatter.formatContent(message.content.content,
-                                                  monochromeForeground,
-                                                  message.isExpanded,
-                                                  message.content.networkId),
-        hasDayChange = message.hasDayChange,
-        isMarkerLine = message.isMarkerLine,
-        isExpanded = message.isExpanded,
-        isSelected = message.isSelected
-      )
+      Message_Type.Error        -> {
+        val (content, hasSpoilers) = contentFormatter.formatContent(message.content.content,
+                                                                    monochromeForeground,
+                                                                    message.isExpanded,
+                                                                    message.content.networkId)
+        FormattedMessage(
+          original = message.content,
+          time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          dayChange = formatDayChange(message),
+          combined = content,
+          hasDayChange = message.hasDayChange,
+          isMarkerLine = message.isMarkerLine,
+          isExpanded = message.isExpanded,
+          isSelected = message.isSelected,
+          hasSpoilers = hasSpoilers
+        )
+      }
+      Message_Type.Topic        -> {
+        val (content, hasSpoilers) = contentFormatter.formatContent(message.content.content,
+                                                                    monochromeForeground,
+                                                                    message.isExpanded,
+                                                                    message.content.networkId)
+        FormattedMessage(
+          original = message.content,
+          time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          dayChange = formatDayChange(message),
+          combined = content,
+          hasDayChange = message.hasDayChange,
+          isMarkerLine = message.isMarkerLine,
+          isExpanded = message.isExpanded,
+          isSelected = message.isSelected,
+          hasSpoilers = hasSpoilers
+        )
+      }
       Message_Type.DayChange    -> FormattedMessage(
         original = message.content,
         time = "",
@@ -658,21 +723,26 @@ class QuasselMessageRenderer @Inject constructor(
         hasDayChange = message.hasDayChange,
         isMarkerLine = false,
         isExpanded = false,
-        isSelected = false
+        isSelected = false,
+        hasSpoilers = false
       )
-      Message_Type.Invite       -> FormattedMessage(
-        original = message.content,
-        time = timeFormatter.format(message.content.time.atZone(zoneId)),
-        dayChange = formatDayChange(message),
-        combined = contentFormatter.formatContent(message.content.content,
-                                                  monochromeForeground,
-                                                  message.isExpanded,
-                                                  message.content.networkId),
-        hasDayChange = message.hasDayChange,
-        isMarkerLine = message.isMarkerLine,
-        isExpanded = message.isExpanded,
-        isSelected = message.isSelected
-      )
+      Message_Type.Invite       -> {
+        val (content, hasSpoilers) = contentFormatter.formatContent(message.content.content,
+                                                                    monochromeForeground,
+                                                                    message.isExpanded,
+                                                                    message.content.networkId)
+        FormattedMessage(
+          original = message.content,
+          time = timeFormatter.format(message.content.time.atZone(zoneId)),
+          dayChange = formatDayChange(message),
+          combined = content,
+          hasDayChange = message.hasDayChange,
+          isMarkerLine = message.isMarkerLine,
+          isExpanded = message.isExpanded,
+          isSelected = message.isSelected,
+          hasSpoilers = hasSpoilers
+        )
+      }
       else                      -> FormattedMessage(
         original = message.content,
         time = timeFormatter.format(message.content.time.atZone(zoneId)),
@@ -692,7 +762,8 @@ class QuasselMessageRenderer @Inject constructor(
         hasDayChange = message.hasDayChange,
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
-        isSelected = message.isSelected
+        isSelected = message.isSelected,
+        hasSpoilers = false
       )
     }
   }
