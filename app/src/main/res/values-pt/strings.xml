@@ -167,15 +167,15 @@
 
   <string name="label_feature_context_bufferactivitysync">O Quasseldroid não pode destacar mensagens não lidas. Actualize seu núcleo para o Quassel v0.13 para resolver isso.</string>
   <string name="label_feature_context_coresidehighlights">O Quasseldroid não pode configurar menções. Actualize seu núcleo para o Quassel v0.13 para resolver isso.</string>
-  <string name="label_feature_context_missing">Faltam alguns recursos no seu núcleo para o Quasseldroid funcionar correctamente.</string>
+  <string name="label_feature_context_missing">Faltam algumas funcionalidades no seu núcleo para o Quasseldroid funcionar correctamente.</string>
   <string name="label_feature_context_missing_button">Detalhes</string>
 
   <string name="notification_channel_connection_title">Ligação</string>
   <string name="notification_channel_highlight_title">Menções</string>
   <string name="notification_channel_old_highlight_title">Menções Antigas</string>
 
-  <string name="label_missing_features">Recursos Ausentes</string>
-  <string name="info_missing_features" tools:ignore="StringFormatCount">O seu núcleo tem em falta alguns recursos que são necessários para o Quasseldroid funcionar corretamente. Deve &lt;a href=\"https://quassel-irc.org&gt;actualizar&lt;/a&gt; o seu núcleo Quassel para a versão %1$s ou superior.</string>
+  <string name="label_missing_features">Funcionalidades Ausentes</string>
+  <string name="info_missing_features" tools:ignore="StringFormatCount">O seu núcleo tem em falta algumas funcionalidades que são necessárias para o Quasseldroid funcionar corretamente. Deve &lt;a href=\"https://quassel-irc.org&gt;upgrade&lt;/a&gt; o seu núcleo Quassel para a versão %1$s ou superior.</string>
 
   <string name="buffer_delete_confirmation">Você deseja excluir esta janela permanentemente?</string>
 

@@ -65,6 +65,9 @@
 
   <string name="preference_notification_network_name_in_notification_title_title">Mostra il nome della rete nel titolo delle notifiche</string>
 
+  <string name="preference_notification_show_all_activities_in_toolbar_title">Segna tutte le attività nella barra degli strumenti</string>
+  <string name="preference_notification_show_all_activities_in_toolbar_summary">Mostra una bolla colorata nella barra degli strumenti per l’attività di qualunque chat</string>
+
   <string name="preference_notification_configure_title">Configura notifiche</string>
 
   <string name="preference_notifications_level_all">Tutti i messaggi</string>
