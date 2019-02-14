@@ -77,6 +77,8 @@ import de.kuschku.quasseldroid.ui.info.channellist.ChannelListActivity
 import de.kuschku.quasseldroid.ui.info.channellist.ChannelListFragmentProvider
 import de.kuschku.quasseldroid.ui.info.core.CoreInfoActivity
 import de.kuschku.quasseldroid.ui.info.core.CoreInfoFragmentProvider
+import de.kuschku.quasseldroid.ui.info.message.MessageInfoActivity
+import de.kuschku.quasseldroid.ui.info.message.MessageInfoFragmentProvider
 import de.kuschku.quasseldroid.ui.info.topic.TopicActivity
 import de.kuschku.quasseldroid.ui.info.user.UserInfoActivity
 import de.kuschku.quasseldroid.ui.info.user.UserInfoFragmentProvider
@@ -122,6 +124,10 @@ abstract class ActivityModule {
   @ActivityScope
   @ContributesAndroidInjector(modules = [CertificateInfoFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
   abstract fun bindCertificateInfoActivity(): CertificateInfoActivity
+
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [MessageInfoFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
+  abstract fun bindMessageInfoActivity(): MessageInfoActivity
 
   // Client Settings
 

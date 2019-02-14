@@ -55,6 +55,7 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
         senderPrefixes = it.senderPrefixes,
         realName = it.realName,
         avatarUrl = it.avatarUrl,
+        attachments = it.attachments,
         content = it.content,
         ignored = isIgnored(
           session,

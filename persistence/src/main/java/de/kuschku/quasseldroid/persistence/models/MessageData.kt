@@ -43,6 +43,7 @@ data class MessageData(
   var senderPrefixes: String,
   var realName: String,
   var avatarUrl: String,
+  var attachments: String,
   var content: String,
   var ignored: Boolean
 ) {
@@ -65,6 +66,7 @@ data class MessageData(
       senderPrefixes: String,
       realName: String,
       avatarUrl: String,
+      attachments: String,
       content: String,
       ignored: Boolean
     ) = MessageData(
@@ -78,6 +80,7 @@ data class MessageData(
       senderPrefixes,
       realName,
       avatarUrl,
+      attachments,
       content,
       ignored
     )

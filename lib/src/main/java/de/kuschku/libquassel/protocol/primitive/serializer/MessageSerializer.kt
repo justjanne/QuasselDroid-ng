@@ -43,6 +43,8 @@ object MessageSerializer : Serializer<Message> {
       StringSerializer.UTF8.serialize(buffer, data.realName, features)
     if (features.hasFeature(ExtendedFeature.RichMessages))
       StringSerializer.UTF8.serialize(buffer, data.avatarUrl, features)
+    if (features.hasFeature(ExtendedFeature.MessageAttachments))
+      StringSerializer.UTF8.serialize(buffer, data.attachments, features)
     StringSerializer.UTF8.serialize(buffer, data.content, features)
   }
 
@@ -64,6 +66,8 @@ object MessageSerializer : Serializer<Message> {
       realName = if (features.hasFeature(ExtendedFeature.RichMessages))
         StringSerializer.UTF8.deserialize(buffer, features) ?: "" else "",
       avatarUrl = if (features.hasFeature(ExtendedFeature.RichMessages))
+        StringSerializer.UTF8.deserialize(buffer, features) ?: "" else "",
+      attachments = if (features.hasFeature(ExtendedFeature.MessageAttachments))
         StringSerializer.UTF8.deserialize(buffer, features) ?: "" else "",
       content = StringSerializer.UTF8.deserialize(buffer, features) ?: ""
     )

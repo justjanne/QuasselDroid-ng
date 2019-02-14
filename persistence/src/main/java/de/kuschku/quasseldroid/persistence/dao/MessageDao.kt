@@ -42,7 +42,7 @@ interface MessageDao {
   fun _buffers(): List<BufferId_Type>
 
   @Query("SELECT * FROM message WHERE messageId = :messageId")
-  fun find(messageId: MsgId_Type): MessageData?
+  fun _find(messageId: MsgId_Type): MessageData?
 
   @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC")
   fun _findByBufferId(bufferId: BufferId_Type): List<MessageData>
@@ -92,6 +92,9 @@ interface MessageDao {
 
 inline fun MessageDao.buffers() =
   _buffers().map { BufferId(it) }
+
+inline fun MessageDao.find(messageId: MsgId) =
+  _find(messageId.id)
 
 inline fun MessageDao.findByBufferId(bufferId: BufferId) =
   _findByBufferId(bufferId.id)

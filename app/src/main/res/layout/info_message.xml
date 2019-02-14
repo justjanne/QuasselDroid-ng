@@ -17,22 +17,7 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-  <item
-    android:id="@+id/action_message_info"
-    android:icon="@drawable/ic_info"
-    android:title="@string/label_info_message"
-    android:visible="false" />
-  <item
-    android:id="@+id/action_user_info"
-    android:icon="@drawable/ic_account"
-    android:title="@string/label_info_user" />
-  <item
-    android:id="@+id/action_copy"
-    android:icon="@drawable/ic_copy"
-    android:title="@string/label_copy" />
-  <item
-    android:id="@+id/action_share"
-    android:icon="@drawable/ic_share"
-    android:title="@string/label_share" />
-</menu>
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/list"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" />

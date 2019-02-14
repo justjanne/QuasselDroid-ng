@@ -34,6 +34,7 @@ data class Message(
   val senderPrefixes: String,
   val realName: String,
   val avatarUrl: String,
+  val attachments: String,
   val content: String
 ) {
   enum class MessageType(override val bit: UInt) : Flag<MessageType> {
@@ -84,6 +85,6 @@ data class Message(
 
 
   override fun toString(): String {
-    return "Message(messageId=$messageId, time=$time, type=$type, flag=$flag, bufferInfo=$bufferInfo, sender='$sender', senderPrefixes='$senderPrefixes', content='$content')"
+    return "Message(messageId=$messageId, time=$time, type=$type, flag=$flag, bufferInfo=$bufferInfo, sender='$sender', senderPrefixes='$senderPrefixes', attachments='$attachments', content='$content')"
   }
 }

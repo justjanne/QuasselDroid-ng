@@ -65,6 +65,7 @@ import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.BacklogSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
+import de.kuschku.quasseldroid.ui.info.message.MessageInfoActivity
 import de.kuschku.quasseldroid.ui.info.user.UserInfoActivity
 import de.kuschku.quasseldroid.util.Patterns
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
@@ -122,7 +123,16 @@ class MessageListFragment : ServiceBoundFragment() {
 
   private val actionModeCallback = object : ActionMode.Callback {
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?) = when (item?.itemId) {
-      R.id.action_user_info -> {
+      R.id.action_message_info -> {
+        viewModel.selectedMessages.value.values.firstOrNull()?.let { msg ->
+          MessageInfoActivity.launch(
+            requireContext(),
+            messageId = msg.original.messageId
+          )
+          true
+        } ?: false
+      }
+      R.id.action_user_info    -> {
         viewModel.selectedMessages.value.values.firstOrNull()?.let { msg ->
           viewModel.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
             viewModel.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
@@ -143,7 +153,7 @@ class MessageListFragment : ServiceBoundFragment() {
           true
         } ?: false
       }
-      R.id.action_copy      -> {
+      R.id.action_copy         -> {
         val builder = SpannableStringBuilder()
         viewModel.selectedMessages.value.values.asSequence().sortedBy {
           it.original.messageId
@@ -172,7 +182,7 @@ class MessageListFragment : ServiceBoundFragment() {
         actionMode?.finish()
         true
       }
-      R.id.action_share     -> {
+      R.id.action_share        -> {
         val builder = SpannableStringBuilder()
         viewModel.selectedMessages.value.values.asSequence().sortedBy {
           it.original.messageId
@@ -207,7 +217,7 @@ class MessageListFragment : ServiceBoundFragment() {
         actionMode?.finish()
         true
       }
-      else                  -> false
+      else                     -> false
     }
 
     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
@@ -250,8 +260,14 @@ class MessageListFragment : ServiceBoundFragment() {
       if (actionMode != null) {
         when (viewModel.selectedMessagesToggle(msg.original.messageId, msg)) {
           0    -> actionMode?.finish()
-          1    -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = true
-          else -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = false
+          1    -> {
+            actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = true
+            //actionMode?.menu?.findItem(R.id.action_message_info)?.isVisible = true
+          }
+          else -> {
+            actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = false
+            //actionMode?.menu?.findItem(R.id.action_message_info)?.isVisible = false
+          }
         }
       } else if (msg.hasSpoilers) {
         val value = viewModel.expandedMessages.value
@@ -267,8 +283,14 @@ class MessageListFragment : ServiceBoundFragment() {
       }
       when (viewModel.selectedMessagesToggle(msg.original.messageId, msg)) {
         0    -> actionMode?.finish()
-        1    -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = true
-        else -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = false
+        1    -> {
+          actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = true
+          actionMode?.menu?.findItem(R.id.action_message_info)?.isVisible = true
+        }
+        else -> {
+          actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = false
+          actionMode?.menu?.findItem(R.id.action_message_info)?.isVisible = false
+        }
       }
     }
     if (autoCompleteSettings.senderDoubleClick)

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2019 Janne Koschinski
+  Copyright (c) 2019 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_margin="8dp"
+  app:cardBackgroundColor="?colorBackgroundCard">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/attachment_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:orientation="horizontal">
+
+    <View
+      android:id="@+id/attachment_color_bar"
+      android:layout_width="4dp"
+      android:layout_height="0dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:background="@android:color/holo_red_dark" />
+
+    <ImageView
+      android:id="@+id/attachment_author_icon"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginLeft="8dp"
+      android:adjustViewBounds="true"
+      android:maxWidth="16dp"
+      android:maxHeight="16dp"
+      app:layout_constraintBottom_toBottomOf="@+id/attachment_author"
+      app:layout_constraintStart_toEndOf="@+id/attachment_color_bar"
+      app:layout_constraintTop_toTopOf="@+id/attachment_author"
+      tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+      android:id="@+id/attachment_author"
+      android:layout_width="0dip"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginTop="4dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginRight="8dp"
+      android:textColor="?colorTextSecondary"
+      app:layout_constraintEnd_toStartOf="@+id/attachment_thumbnail"
+      app:layout_constraintStart_toEndOf="@id/attachment_author_icon"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:text="MrDomigruber" />
+
+    <TextView
+      android:id="@+id/attachment_title"
+      android:layout_width="0dip"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginTop="4dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginRight="8dp"
+      android:textColor="?colorTextPrimary"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toStartOf="@+id/attachment_thumbnail"
+      app:layout_constraintStart_toEndOf="@id/attachment_color_bar"
+      app:layout_constraintTop_toBottomOf="@+id/attachment_author"
+      tools:text="Ein sprechender Elch will meine Kreditkartennummer" />
+
+    <TextView
+      android:id="@+id/attachment_description"
+      android:layout_width="0dip"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginTop="4dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginRight="8dp"
+      android:textColor="?colorTextPrimary"
+      app:layout_constraintEnd_toStartOf="@+id/attachment_thumbnail"
+      app:layout_constraintStart_toEndOf="@id/attachment_color_bar"
+      app:layout_constraintTop_toBottomOf="@id/attachment_title"
+      tools:text="Homer Simpson gibt einen Elch seine Kreditkarten nummer" />
+
+    <ImageView
+      android:id="@+id/attachment_thumbnail"
+      android:layout_width="wrap_content"
+      android:layout_height="0dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginRight="8dp"
+      android:layout_marginBottom="8dp"
+      android:adjustViewBounds="true"
+      android:maxWidth="80dp"
+      android:scaleType="fitStart"
+      app:layout_constraintBottom_toTopOf="@+id/attachment_preview"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.0"
+      tools:background="#ff0000"
+      tools:minHeight="60dp"
+      tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageView
+      android:id="@+id/attachment_preview"
+      android:layout_width="0dip"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginRight="8dp"
+      android:adjustViewBounds="true"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@id/attachment_color_bar"
+      app:layout_constraintTop_toBottomOf="@+id/attachment_description"
+      tools:background="#00ff00"
+      tools:minHeight="160dp" />
+
+    <ImageView
+      android:id="@+id/attachment_service_icon"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginLeft="8dp"
+      android:adjustViewBounds="true"
+      android:maxWidth="16dp"
+      android:maxHeight="16dp"
+      app:layout_constraintBottom_toBottomOf="@+id/attachment_service"
+      app:layout_constraintStart_toEndOf="@id/attachment_color_bar"
+      app:layout_constraintTop_toTopOf="@+id/attachment_service"
+      tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+      android:id="@+id/attachment_service"
+      android:layout_width="0dip"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginTop="4dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginRight="8dp"
+      android:layout_marginBottom="4dp"
+      android:textColor="?colorTextSecondary"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/attachment_service_icon"
+      app:layout_constraintTop_toBottomOf="@+id/attachment_preview"
+      app:layout_constraintVertical_bias="0.0"
+      tools:text="YouTube" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

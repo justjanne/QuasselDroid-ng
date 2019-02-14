@@ -56,6 +56,7 @@ dependencies {
   implementation("io.reactivex.rxjava2", "rxjava", "2.1.9")
   implementation("org.threeten", "threetenbp", "1.3.8", classifier = "no-tzdb")
   implementation("org.jetbrains", "annotations", "16.0.3")
+  implementation("com.google.code.gson", "gson", "2.8.5")
 
   // Quassel
   implementation(project(":persistence"))

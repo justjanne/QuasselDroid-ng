@@ -31,9 +31,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.util.flag.hasFlag
+import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.models.MessageData
 import de.kuschku.quasseldroid.settings.MessageSettings
@@ -42,6 +44,7 @@ import de.kuschku.quasseldroid.util.helper.loadAvatars
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 import de.kuschku.quasseldroid.util.ui.DoubleClickHelper
+import de.kuschku.quasseldroid.util.ui.view.MessageAttachmentView
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 import javax.inject.Inject
 
@@ -225,6 +228,10 @@ class MessageAdapter @Inject constructor(
     @JvmField
     var combined: TextView? = null
 
+    @BindView(R.id.attachment)
+    @JvmField
+    var attachment: MessageAttachmentView? = null
+
     private var message: FormattedMessage? = null
     private var original: MessageData? = null
 
@@ -277,6 +284,46 @@ class MessageAdapter @Inject constructor(
       realname?.text = message.realName
       content?.text = message.content
       combined?.text = message.combined
+
+      attachment?.visibleIf(message.attachment != null)
+      attachment?.post {
+        attachment?.apply {
+          val attachment = message.attachment
+          reinitViews()
+
+          if (attachment != null) {
+            setLink(attachment.fromUrl)
+            setColor(attachment.color)
+            GlideApp.with(itemView)
+              .load(attachment.authorIcon)
+              .diskCacheStrategy(DiskCacheStrategy.ALL)
+              .into(authorIconTarget)
+            setAuthor(attachment.authorName)
+            setTitle(attachment.title)
+            setDescription(attachment.text)
+            if (false) {
+              GlideApp.with(itemView)
+                .clear(thumbnailTarget)
+              GlideApp.with(itemView)
+                .load(attachment.imageUrl)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(previewTarget)
+            } else {
+              GlideApp.with(itemView)
+                .clear(previewTarget)
+              GlideApp.with(itemView)
+                .load(attachment.imageUrl)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(thumbnailTarget)
+            }
+            GlideApp.with(itemView)
+              .load(attachment.serviceIcon)
+              .diskCacheStrategy(DiskCacheStrategy.ALL)
+              .into(serviceIconTarget)
+            setService(attachment.serviceName)
+          }
+        }
+      }
 
       this.messageContainer?.isSelected = message.isSelected
 

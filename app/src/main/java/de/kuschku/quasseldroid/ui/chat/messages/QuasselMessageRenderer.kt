@@ -30,6 +30,8 @@ import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonSyntaxException
 import de.kuschku.libquassel.protocol.Message.MessageType.*
 import de.kuschku.libquassel.protocol.Message_Flag
 import de.kuschku.libquassel.protocol.Message_Type
@@ -40,7 +42,9 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.models.MessageData
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.ColorContext
+import de.kuschku.quasseldroid.util.attachment.AttachmentData
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
+import de.kuschku.quasseldroid.util.helper.fromJson
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
@@ -102,6 +106,8 @@ class QuasselMessageRenderer @Inject constructor(
   private val colorContext = ColorContext(context, messageSettings)
 
   private val zoneId = ZoneId.systemDefault()
+
+  private val gson = GsonBuilder().setLenient().create()
 
   override fun layout(type: Message_Type?,
                       hasHighlight: Boolean,
@@ -244,6 +250,13 @@ class QuasselMessageRenderer @Inject constructor(
     val self = message.content.flag.hasFlag(Message_Flag.Self)
     val highlight = message.content.flag.hasFlag(Message_Flag.Highlight)
     val monochromeForeground = highlight && monochromeHighlights
+
+    val parsedAttachment: AttachmentData? = try {
+      gson.fromJson<AttachmentData>(message.content.attachments)
+    } catch (ignored: JsonSyntaxException) {
+      null
+    }
+
     return when (message.content.type.enabledValues().firstOrNull()) {
       Message_Type.Plain        -> {
         val realName = ircFormatDeserializer.formatString(message.content.realName,
@@ -292,7 +305,8 @@ class QuasselMessageRenderer @Inject constructor(
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected,
-          hasSpoilers = hasSpoilers
+          hasSpoilers = hasSpoilers,
+          attachment = parsedAttachment
         )
       }
       Message_Type.Action       -> {
@@ -330,7 +344,8 @@ class QuasselMessageRenderer @Inject constructor(
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected,
-          hasSpoilers = hasSpoilers
+          hasSpoilers = hasSpoilers,
+          attachment = parsedAttachment
         )
       }
       Message_Type.Notice       -> {
@@ -352,7 +367,8 @@ class QuasselMessageRenderer @Inject constructor(
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected,
-          hasSpoilers = hasSpoilers
+          hasSpoilers = hasSpoilers,
+          attachment = parsedAttachment
         )
       }
       Message_Type.Nick         -> {
@@ -395,7 +411,8 @@ class QuasselMessageRenderer @Inject constructor(
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected,
-          hasSpoilers = false
+          hasSpoilers = false,
+          attachment = parsedAttachment
         )
       }
       Message_Type.Mode         -> FormattedMessage(
@@ -412,7 +429,8 @@ class QuasselMessageRenderer @Inject constructor(
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected,
-        hasSpoilers = false
+        hasSpoilers = false,
+        attachment = parsedAttachment
       )
       Message_Type.Join         -> FormattedMessage(
         original = message.content,
@@ -433,7 +451,8 @@ class QuasselMessageRenderer @Inject constructor(
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected,
-        hasSpoilers = false
+        hasSpoilers = false,
+        attachment = parsedAttachment
       )
       Message_Type.Part         -> {
         val (content, hasSpoilers) = if (message.content.content.isBlank()) {
@@ -480,7 +499,8 @@ class QuasselMessageRenderer @Inject constructor(
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected,
-          hasSpoilers = hasSpoilers
+          hasSpoilers = hasSpoilers,
+          attachment = parsedAttachment
         )
       }
       Message_Type.Quit         -> {
@@ -528,7 +548,8 @@ class QuasselMessageRenderer @Inject constructor(
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected,
-          hasSpoilers = hasSpoilers
+          hasSpoilers = hasSpoilers,
+          attachment = parsedAttachment
         )
       }
       Message_Type.Kick         -> {
@@ -575,7 +596,8 @@ class QuasselMessageRenderer @Inject constructor(
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected,
-          hasSpoilers = hasSpoilers
+          hasSpoilers = hasSpoilers,
+          attachment = parsedAttachment
         )
       }
       Message_Type.Kill         -> {
@@ -622,7 +644,8 @@ class QuasselMessageRenderer @Inject constructor(
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected,
-          hasSpoilers = hasSpoilers
+          hasSpoilers = hasSpoilers,
+          attachment = parsedAttachment
         )
       }
       Message_Type.NetsplitJoin -> {
@@ -649,7 +672,8 @@ class QuasselMessageRenderer @Inject constructor(
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected,
-          hasSpoilers = false
+          hasSpoilers = false,
+          attachment = parsedAttachment
         )
       }
       Message_Type.NetsplitQuit -> {
@@ -676,7 +700,8 @@ class QuasselMessageRenderer @Inject constructor(
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected,
-          hasSpoilers = false
+          hasSpoilers = false,
+          attachment = parsedAttachment
         )
       }
       Message_Type.Server,
@@ -695,7 +720,8 @@ class QuasselMessageRenderer @Inject constructor(
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected,
-          hasSpoilers = hasSpoilers
+          hasSpoilers = hasSpoilers,
+          attachment = parsedAttachment
         )
       }
       Message_Type.Topic        -> {
@@ -712,7 +738,8 @@ class QuasselMessageRenderer @Inject constructor(
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected,
-          hasSpoilers = hasSpoilers
+          hasSpoilers = hasSpoilers,
+          attachment = parsedAttachment
         )
       }
       Message_Type.DayChange    -> FormattedMessage(
@@ -724,7 +751,8 @@ class QuasselMessageRenderer @Inject constructor(
         isMarkerLine = false,
         isExpanded = false,
         isSelected = false,
-        hasSpoilers = false
+        hasSpoilers = false,
+        attachment = parsedAttachment
       )
       Message_Type.Invite       -> {
         val (content, hasSpoilers) = contentFormatter.formatContent(message.content.content,
@@ -740,7 +768,8 @@ class QuasselMessageRenderer @Inject constructor(
           isMarkerLine = message.isMarkerLine,
           isExpanded = message.isExpanded,
           isSelected = message.isSelected,
-          hasSpoilers = hasSpoilers
+          hasSpoilers = hasSpoilers,
+          attachment = parsedAttachment
         )
       }
       else                      -> FormattedMessage(
@@ -763,13 +792,15 @@ class QuasselMessageRenderer @Inject constructor(
         isMarkerLine = message.isMarkerLine,
         isExpanded = message.isExpanded,
         isSelected = message.isSelected,
-        hasSpoilers = false
+        hasSpoilers = false,
+        attachment = parsedAttachment
       )
     }
   }
 
-  private fun formatDayChange(
-    message: DisplayMessage) =
-    if (message.hasDayChange) dateFormatter.format(message.content.time.atZone(zoneId).truncatedTo(
-      ChronoUnit.DAYS)) else null
+  private fun formatDayChange(message: DisplayMessage) =
+    if (message.hasDayChange)
+      dateFormatter.format(message.content.time.atZone(zoneId).truncatedTo(ChronoUnit.DAYS))
+    else
+      null
 }

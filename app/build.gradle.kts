@@ -137,6 +137,7 @@ dependencies {
   implementation("commons-codec", "commons-codec", "1.11")
   implementation("com.squareup.retrofit2", "retrofit", "2.5.0")
   implementation("com.squareup.retrofit2", "converter-gson", "2.5.0")
+  implementation("com.squareup.retrofit2", "adapter-rxjava2", "2.5.0")
   withVersion("10.0.0") {
     implementation("com.jakewharton", "butterknife", version)
     kapt("com.jakewharton", "butterknife-compiler", version)
