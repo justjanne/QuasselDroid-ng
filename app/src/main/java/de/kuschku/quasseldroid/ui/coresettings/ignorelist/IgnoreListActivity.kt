@@ -25,7 +25,18 @@ import de.kuschku.quasseldroid.util.ui.settings.ServiceBoundSettingsActivity
 
 class IgnoreListActivity : ServiceBoundSettingsActivity(IgnoreListFragment()) {
   companion object {
-    fun launch(context: Context) = context.startActivity(intent(context))
-    fun intent(context: Context) = Intent(context, IgnoreListActivity::class.java)
+    fun launch(
+      context: Context,
+      addRule: String? = null
+    ) = context.startActivity(intent(context, addRule))
+
+    fun intent(
+      context: Context,
+      addRule: String? = null
+    ) = Intent(context, IgnoreListActivity::class.java).apply {
+      if (addRule != null) {
+        putExtra("add_rule", addRule)
+      }
+    }
   }
 }

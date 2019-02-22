@@ -47,6 +47,7 @@ class MessageSerializerTest {
       "",
       "",
       "",
+      "",
       ""
     )
     val other = roundTrip(MessageSerializer, value, features = QuasselFeatures.empty())
@@ -74,6 +75,7 @@ class MessageSerializerTest {
       "",
       "",
       "",
+      "",
       "äẞ\u0000\uFFFF"
     )
     val other = roundTrip(MessageSerializer, value, features = QuasselFeatures.empty())
@@ -97,6 +99,7 @@ class MessageSerializerTest {
         -1,
         ""
       ),
+      "",
       "",
       "",
       "",
@@ -128,6 +131,7 @@ class MessageSerializerTest {
       "äẞ\u0000\uFFFF",
       "äẞ\u0000\uFFFF",
       "äẞ\u0000\uFFFF",
+      "",
       "äẞ\u0000\uFFFF"
     )
     val other = roundTrip(MessageSerializer, value, features = QuasselFeatures.all())
@@ -155,6 +159,7 @@ class MessageSerializerTest {
       "äẞ\u0000\uFFFF",
       "äẞ\u0000\uFFFF",
       "äẞ\u0000\uFFFF",
+      "",
       "äẞ\u0000\uFFFF"
     )
     val other = roundTrip(MessageSerializer, value, features = QuasselFeatures.all())

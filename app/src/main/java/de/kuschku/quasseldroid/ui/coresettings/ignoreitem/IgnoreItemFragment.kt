@@ -119,7 +119,9 @@ class IgnoreItemFragment : ServiceBoundSettingsFragment(), Savable,
     ))
     scope.adapter = scopeAdapter
 
-    item?.let { data ->
+    val addRule = arguments?.getString("add_rule")
+    val data = item
+    if (data != null) {
       enabled.isChecked = data.isActive
       ignoreRule.setText(data.ignoreRule)
       isRegEx.isChecked = data.isRegEx
@@ -127,6 +129,8 @@ class IgnoreItemFragment : ServiceBoundSettingsFragment(), Savable,
       strictness.setSelection(strictnessAdapter.indexOf(data.strictness) ?: 0)
       scope.setSelection(scopeAdapter.indexOf(data.scope) ?: 0)
       scopeRule.setText(data.scopeRule)
+    } else if (addRule != null) {
+      ignoreRule.setText(addRule)
     }
 
     scope.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

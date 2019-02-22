@@ -115,10 +115,8 @@
             style="@style/Widget.Info.ActionButton"
             android:contentDescription="@string/label_ignore_long"
             android:text="@string/label_ignore"
-            android:visibility="gone"
             tools:drawableTint="?colorTextSecondary"
-            tools:drawableTop="@drawable/ic_eye_off"
-            tools:visibility="visible" />
+            tools:drawableTop="@drawable/ic_eye_off" />
 
           <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/action_whois"

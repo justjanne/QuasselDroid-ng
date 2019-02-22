@@ -28,15 +28,20 @@ class IgnoreItemActivity : ServiceBoundSettingsActivity(IgnoreItemFragment()) {
   companion object {
     fun launch(
       context: Context,
-      item: IgnoreListManager.IgnoreListItem? = null
+      item: IgnoreListManager.IgnoreListItem? = null,
+      addRule: String? = null
     ) = context.startActivity(intent(context, item))
 
     fun intent(
       context: Context,
-      item: IgnoreListManager.IgnoreListItem? = null
+      item: IgnoreListManager.IgnoreListItem? = null,
+      addRule: String? = null
     ) = Intent(context, IgnoreItemActivity::class.java).apply {
       if (item != null) {
         putExtra("item", item)
+      }
+      if (addRule != null) {
+        putExtra("add_rule", addRule)
       }
     }
   }

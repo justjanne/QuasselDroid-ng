@@ -77,7 +77,7 @@ object AvatarHelper {
     if (size != null) {
       return listOf(
         Avatar.IRCCloudAvatar(
-          "https://static.irccloud-cdn.com/avatar-redirect/s${truncateSize(size)}/$userId"
+          "https://static.irccloud-cdn.com/avatar-redirect/s$size/$userId"
         )
       )
     }
@@ -99,7 +99,7 @@ object AvatarHelper {
         if (size == null) {
           "https://www.gravatar.com/avatar/$hash?d=404"
         } else {
-          "https://www.gravatar.com/avatar/$hash?d=404&s=${truncateSize(size)}"
+          "https://www.gravatar.com/avatar/$hash?d=404&s=${size}"
         }
       }.map { Avatar.GravatarAvatar(it) }.toList()
   }
@@ -107,12 +107,10 @@ object AvatarHelper {
   private fun matrixFallback(realname: String, size: Int?): List<Avatar> {
     return if (Patterns.MATRIX_REALNAME.matches(realname)) {
       listOf(
-        Avatar.MatrixAvatar(realname, size?.let(this::truncateSize))
+        Avatar.MatrixAvatar(realname, size)
       )
     } else {
       emptyList()
     }
   }
-
-  private fun truncateSize(originalSize: Int) = originalSize //if (originalSize > 72) 512 else 72
 }
