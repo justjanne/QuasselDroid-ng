@@ -30,7 +30,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -42,9 +41,11 @@ import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
+import de.kuschku.quasseldroid.ui.coresettings.ignorelist.IgnoreListActivity
 import de.kuschku.quasseldroid.util.ShortcutCreationHelper
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.avatars.MatrixApi
@@ -225,7 +226,7 @@ class UserInfoFragment : ServiceBoundFragment() {
         }
 
         nick.text = user.nick
-        val (content, hasSpoilers) = contentFormatter.formatContent(
+        val (content, _) = contentFormatter.formatContent(
           user.realName ?: "",
           networkId = user.networkId
         )
@@ -253,7 +254,7 @@ class UserInfoFragment : ServiceBoundFragment() {
 
         actionWhois.visibleIf(user.knownToCore)
 
-        actionQuery.setOnClickListener {
+        actionQuery.setOnClickListener { view ->
           viewModel.session.value?.orNull()?.let { session ->
             val info = session.bufferSyncer.find(
               bufferName = user.nick,
@@ -262,8 +263,7 @@ class UserInfoFragment : ServiceBoundFragment() {
             )
 
             if (info != null) {
-              ChatActivity.launch(requireContext(),
-                                  bufferId = info.bufferId)
+              ChatActivity.launch(view.context, bufferId = info.bufferId)
             } else {
               viewModel.allBuffers.map {
                 listOfNotNull(it.find {
@@ -273,8 +273,7 @@ class UserInfoFragment : ServiceBoundFragment() {
                 it.isNotEmpty()
               }.firstElement().toLiveData().observe(this, Observer {
                 it?.firstOrNull()?.let { info ->
-                  ChatActivity.launch(requireContext(),
-                                      bufferId = info.bufferId)
+                  ChatActivity.launch(view.context, bufferId = info.bufferId)
                 }
               })
 
@@ -282,22 +281,22 @@ class UserInfoFragment : ServiceBoundFragment() {
                 networkId = user.networkId,
                 type = Buffer_Type.of(Buffer_Type.StatusBuffer)
               )?.let { statusInfo ->
-                session.rpcHandler.sendInput(statusInfo,
-                                             "/query ${user.nick}")
+                session.rpcHandler.sendInput(statusInfo, "/query ${user.nick}")
               }
             }
           }
         }
 
-        actionIgnore.setOnClickListener {
-          Toast.makeText(requireContext(), "Not Implemented", Toast.LENGTH_SHORT).show()
+        actionIgnore.setOnClickListener { view ->
+          IgnoreListActivity.launch(view.context,
+                                    addRule = HostmaskHelper.build(user.nick, user.user, user.host))
         }
 
-        actionMention.setOnClickListener {
-          ChatActivity.launch(requireContext(), sharedText = "${user.nick}: ")
+        actionMention.setOnClickListener { view ->
+          ChatActivity.launch(view.context, sharedText = "${user.nick}: ")
         }
 
-        actionWhois.setOnClickListener {
+        actionWhois.setOnClickListener { view ->
           viewModel.session {
             it.orNull()?.let { session ->
               session.bufferSyncer.find(

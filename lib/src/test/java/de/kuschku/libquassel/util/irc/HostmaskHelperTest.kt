@@ -39,6 +39,10 @@ class HostmaskHelperTest {
                  HostmaskHelper.host("justJanne!kuschku@lithium.kuschku.de"))
     assertEquals("lithium.kuschku.de",
                  HostmaskHelper.split("justJanne!kuschku@lithium.kuschku.de").third)
+
+    assertEquals("justJanne!kuschku@lithium.kuschku.de", HostmaskHelper.build(
+      "justJanne", "kuschku", "lithium.kuschku.de"
+    ))
   }
 
   @Test
@@ -57,6 +61,10 @@ class HostmaskHelperTest {
                  HostmaskHelper.host("justJanne!~kuschku@lithium.kuschku.de"))
     assertEquals("lithium.kuschku.de",
                  HostmaskHelper.split("justJanne!~kuschku@lithium.kuschku.de").third)
+
+    assertEquals("justJanne!~kuschku@lithium.kuschku.de", HostmaskHelper.build(
+      "justJanne", "~kuschku", "lithium.kuschku.de"
+    ))
   }
 
   @Test
@@ -75,6 +83,10 @@ class HostmaskHelperTest {
                  HostmaskHelper.host("bärlauch!maße@flüge.de"))
     assertEquals("flüge.de",
                  HostmaskHelper.split("bärlauch!maße@flüge.de").third)
+
+    assertEquals("bärlauch!maße@flüge.de", HostmaskHelper.build(
+      "bärlauch", "maße", "flüge.de"
+    ))
   }
 
   @Test
@@ -93,6 +105,10 @@ class HostmaskHelperTest {
                  HostmaskHelper.host("irc.freenode.org"))
     assertEquals("",
                  HostmaskHelper.split("irc.freenode.org").third)
+
+    assertEquals("irc.freenode.org", HostmaskHelper.build(
+      "irc.freenode.org", "", ""
+    ))
   }
 
   @Test
@@ -111,6 +127,10 @@ class HostmaskHelperTest {
                  HostmaskHelper.host("@nick!~ident@example.org"))
     assertEquals("example.org",
                  HostmaskHelper.split("@nick!~ident@example.org").third)
+
+    assertEquals("@nick!~ident@example.org", HostmaskHelper.build(
+      "@nick", "~ident", "example.org"
+    ))
   }
 
   @Test
@@ -129,6 +149,10 @@ class HostmaskHelperTest {
                  HostmaskHelper.host("a@a!"))
     assertEquals("a!",
                  HostmaskHelper.split("a@a!").third)
+
+    assertEquals("a@a!", HostmaskHelper.build(
+      "a", "", "a!"
+    ))
   }
 
   @Test
@@ -147,5 +171,9 @@ class HostmaskHelperTest {
                  HostmaskHelper.host("Gin_!Gin_!♡♅ƸӜƷ♅♡!@discord"))
     assertEquals("discord",
                  HostmaskHelper.split("Gin_!Gin_!♡♅ƸӜƷ♅♡!@discord").third)
+
+    assertEquals("Gin_!Gin_!♡♅ƸӜƷ♅♡!@discord", HostmaskHelper.build(
+      "Gin_", "Gin_!♡♅ƸӜƷ♅♡!", "discord"
+    ))
   }
 }

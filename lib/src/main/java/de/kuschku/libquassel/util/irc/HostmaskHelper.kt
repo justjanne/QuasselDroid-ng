@@ -40,4 +40,14 @@ object HostmaskHelper {
 
     return Triple(nick, user, host)
   }
+
+  fun build(nick: String, user: String?, host: String?) = buildString {
+    append(nick)
+    if (!user.isNullOrEmpty()) {
+      append("!$user")
+    }
+    if (!host.isNullOrEmpty()) {
+      append("@$host")
+    }
+  }
 }

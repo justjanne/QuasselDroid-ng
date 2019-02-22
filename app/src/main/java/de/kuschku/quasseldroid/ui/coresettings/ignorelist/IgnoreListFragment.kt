@@ -69,8 +69,15 @@ class IgnoreListFragment : ServiceBoundSettingsFragment(), Savable,
     helper = ItemTouchHelper(callback)
     helper.attachToRecyclerView(list)
 
+    val addRule = arguments?.getString("add_rule")
+
     add.setOnClickListener {
       startActivityForResult(IgnoreItemActivity.intent(requireContext()), REQUEST_CREATE_RULE)
+    }
+
+    if (addRule != null) {
+      startActivityForResult(IgnoreItemActivity.intent(requireContext(), addRule = addRule),
+                             REQUEST_CREATE_RULE)
     }
 
     viewModel.ignoreListManager
