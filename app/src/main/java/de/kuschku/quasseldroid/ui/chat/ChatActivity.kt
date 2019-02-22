@@ -680,7 +680,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           it is ProtocolVersionException     -> {
             Toast.makeText(this,
                            getString(R.string.label_error_invalid_protocol_version,
-                                     it.protocol.version),
+                                     it.protocol.version.toInt()),
                            Toast.LENGTH_LONG).show()
           }
           it is ConnectException &&
