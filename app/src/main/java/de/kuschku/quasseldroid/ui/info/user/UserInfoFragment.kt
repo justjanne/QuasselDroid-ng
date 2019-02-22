@@ -146,7 +146,7 @@ class UserInfoFragment : ServiceBoundFragment() {
 
     combineLatest(viewModel.session, viewModel.networks).switchMap { (sessionOptional, networks) ->
       fun processUser(user: IrcUser, info: BufferInfo? = null): Optional<IrcUserInfo> {
-        updateShortcutVisibility()
+        actionShortcut.post(::updateShortcutVisibility)
         return when {
           user == IrcUser.NULL && info != null -> Optional.of(IrcUserInfo(
             networkId = info.networkId,
