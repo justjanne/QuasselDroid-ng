@@ -74,7 +74,7 @@ class AliasManager constructor(
 
   fun contains(name: String?) = _aliases.map(Alias::name).contains(name)
 
-  fun aliasList() = _aliases
+  fun aliasList() = _aliases.toList()
 
   fun setAliasList(list: List<Alias>) {
     _aliases = list
