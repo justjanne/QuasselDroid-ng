@@ -22,7 +22,6 @@ package de.kuschku.quasseldroid.util.irc.format
 import android.content.Context
 import android.text.SpannableStringBuilder
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.util.compatibility.AndroidCrashFixer
 import de.kuschku.quasseldroid.util.helper.getColorCompat
 import de.kuschku.quasseldroid.util.irc.format.model.FormatDescription
 import de.kuschku.quasseldroid.util.irc.format.model.FormatInfo
@@ -71,11 +70,9 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
    * @param content mIRC formatted String
    * @return a CharSequence with Android’s span format representing the input string
    */
-  fun formatString(content: String?, colorize: Boolean,
+  fun formatString(str: String?, colorize: Boolean,
                    output: MutableList<FormatInfo>? = null): CharSequence {
-    if (content == null) return ""
-
-    val str = AndroidCrashFixer.removeCrashableCharacters(content)
+    if (str == null) return ""
 
     val plainText = SpannableStringBuilder()
     var bold: FormatDescription<IrcFormat.Bold>? = null
@@ -371,12 +368,14 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
      * @return Index of first character that is not a digit
      */
     private fun findEndOfNumber(str: String, start: Int): Int {
-      val validCharCodes = setOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
       val searchFrame = str.substring(start)
       var i = 0
-      while (i < 2 && i < searchFrame.length) {
-        if (!validCharCodes.contains(searchFrame[i])) {
-          break
+      loop@ while (i < 2 && i < searchFrame.length) {
+        when (searchFrame[i]) {
+          '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> {
+            // Do nothing
+          }
+          else -> break@loop
         }
         i++
       }
@@ -389,15 +388,15 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
      * @return Index of first character that is not a digit
      */
     private fun findEndOfHexNumber(str: String, start: Int): Int {
-      val validCharCodes = setOf(
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'a', 'b',
-        'c', 'd', 'e', 'f'
-      )
       val searchFrame = str.substring(start)
       var i = 0
-      while (i < 6 && i < searchFrame.length) {
-        if (!validCharCodes.contains(searchFrame[i])) {
-          break
+      loop@ while (i < 6 && i < searchFrame.length) {
+        when (searchFrame[i]) {
+          '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'a', 'b',
+          'c', 'd', 'e', 'f' -> {
+            // Do nothing
+          }
+          else -> break@loop
         }
         i++
       }
