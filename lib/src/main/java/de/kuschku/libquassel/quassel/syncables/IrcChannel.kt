@@ -17,6 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 @file:Suppress("NOTHING_TO_INLINE")
+
 package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.protocol.*
@@ -79,9 +80,11 @@ class IrcChannel(
     "D" to QVariant.of(_D_channelModes.joinToString(), Type.QString)
   )
 
-  override fun initUserModes(): QVariantMap = _userModes.entries.map { (key, value) ->
-    key.nick() to QVariant.of(value, Type.QString)
-  }.toMap()
+  override fun initUserModes(): QVariantMap = synchronized(_userModes) {
+    _userModes.entries.map { (key, value) ->
+      key.nick() to QVariant.of(value, Type.QString)
+    }.toMap()
+  }
 
   override fun initProperties(): QVariantMap = mapOf(
     "name" to QVariant.of(name(), Type.QString),
@@ -120,8 +123,8 @@ class IrcChannel(
     setEncrypted(properties["encrypted"].indexed(i).valueOr(this::encrypted))
   }
 
-  fun isKnownUser(ircUser: IrcUser): Boolean {
-    return _userModes.contains(ircUser)
+  fun isKnownUser(ircUser: IrcUser) = synchronized(_userModes) {
+    _userModes.contains(ircUser)
   }
 
   fun isValidChannelUserMode(mode: String): Boolean {
@@ -133,13 +136,21 @@ class IrcChannel(
   fun password() = _password
   fun encrypted() = _encrypted
   fun network() = _network
-  fun ircUsers() = _userModes.keys
-  fun liveIrcUsers(): Observable<MutableSet<IrcUser>> =
-    live_userModes.map { _userModes }.map(MutableMap<IrcUser, String>::keys)
+  fun ircUsers() = synchronized(_userModes) {
+    _userModes.keys.toSet()
+  }
 
-  fun userModes(ircUser: IrcUser) = _userModes.getOr(ircUser, "")
-  fun liveUserModes(ircUser: IrcUser) = live_userModes.map {
+  fun liveIrcUsers(): Observable<Set<IrcUser>> =
+    live_userModes.map { ircUsers() }
+
+  fun userModes(ircUser: IrcUser) = synchronized(_userModes) {
     _userModes.getOr(ircUser, "")
+  }
+
+  fun liveUserModes(ircUser: IrcUser) = live_userModes.map {
+    synchronized(_userModes) {
+      _userModes.getOr(ircUser, "")
+    }
   }
 
   fun userCount() = _userCount
@@ -159,7 +170,7 @@ class IrcChannel(
       _C_channelModes.contains(mode)
     INetwork.ChannelModeType.D_CHANMODE ->
       _D_channelModes.contains(mode)
-    else                                ->
+    else ->
       false
   }
 
@@ -168,14 +179,14 @@ class IrcChannel(
       _B_channelModes.getOr(mode, "")
     INetwork.ChannelModeType.C_CHANMODE ->
       _C_channelModes.getOr(mode, "")
-    else                                ->
+    else ->
       ""
   }
 
   fun modeValueList(mode: Char): Set<String> = when (network().channelModeType(mode)) {
     INetwork.ChannelModeType.A_CHANMODE ->
       _A_channelModes.getOrElse(mode, ::emptySet)
-    else                                ->
+    else ->
       emptySet()
   }
 
@@ -248,19 +259,21 @@ class IrcChannel(
   }
 
   private fun joinIrcUsersInternal(rawUsers: List<IrcUser>, rawModes: List<String>) {
-    val users = rawUsers.zip(rawModes)
-    val newNicks = users.filter { !_userModes.contains(it.first) }
-    val oldNicks = users.filter { _userModes.contains(it.first) }
-    for ((user, modes) in oldNicks) {
-      modes.forEach { mode ->
-        addUserMode(user, mode)
+    synchronized(_userModes) {
+      val users = rawUsers.zip(rawModes)
+      val newNicks = users.filter { !_userModes.contains(it.first) }
+      val oldNicks = users.filter { _userModes.contains(it.first) }
+      for ((user, modes) in oldNicks) {
+        modes.forEach { mode ->
+          addUserMode(user, mode)
+        }
       }
+      for ((user, modes) in newNicks) {
+        _userModes[user] = modes
+        user.joinChannel(this, true)
+      }
+      updateUsers()
     }
-    for ((user, modes) in newNicks) {
-      _userModes[user] = modes
-      user.joinChannel(this, true)
-    }
-    updateUsers()
   }
 
   override fun joinIrcUser(ircuser: IrcUser) {
@@ -268,21 +281,23 @@ class IrcChannel(
   }
 
   override fun part(ircuser: IrcUser?) {
-    if (ircuser == null)
-      return
-    if (!isKnownUser(ircuser))
-      return
-    _userModes.remove(ircuser)
-    ircuser.partChannel(this)
-    if (network().isMe(ircuser) || _userModes.isEmpty()) {
-      for (user in _userModes.keys) {
-        user.partChannel(this)
+    synchronized(_userModes) {
+      if (ircuser == null)
+        return
+      if (!isKnownUser(ircuser))
+        return
+      _userModes.remove(ircuser)
+      ircuser.partChannel(this)
+      if (network().isMe(ircuser) || _userModes.isEmpty()) {
+        for (user in _userModes.keys) {
+          user.partChannel(this)
+        }
+        _userModes.clear()
+        network().removeIrcChannel(this)
+        proxy.stopSynchronize(this)
       }
-      _userModes.clear()
-      network().removeIrcChannel(this)
-      proxy.stopSynchronize(this)
+      updateUsers()
     }
-    updateUsers()
   }
 
   override fun part(nick: String?) {
@@ -290,10 +305,12 @@ class IrcChannel(
   }
 
   override fun setUserModes(ircuser: IrcUser?, modes: String?) {
-    if (ircuser == null || !isKnownUser(ircuser))
-      return
-    _userModes[ircuser] = modes ?: ""
-    updateUsers()
+    synchronized(_userModes) {
+      if (ircuser == null || !isKnownUser(ircuser))
+        return
+      _userModes[ircuser] = modes ?: ""
+      updateUsers()
+    }
   }
 
   override fun setUserModes(nick: String?, modes: String?) {
@@ -305,13 +322,15 @@ class IrcChannel(
   }
 
   override fun addUserMode(ircuser: IrcUser?, mode: String?) {
-    val userMode = mode ?: ""
-    if (ircuser == null || !isKnownUser(ircuser) || !isValidChannelUserMode(userMode))
-      return
-    if (_userModes.getOr(ircuser, "").contains(userMode, ignoreCase = true))
-      return
-    _userModes[ircuser] = _userModes.getOr(ircuser, "") + userMode
-    updateUsers()
+    synchronized(_userModes) {
+      val userMode = mode ?: ""
+      if (ircuser == null || !isKnownUser(ircuser) || !isValidChannelUserMode(userMode))
+        return
+      if (_userModes.getOr(ircuser, "").contains(userMode, ignoreCase = true))
+        return
+      _userModes[ircuser] = _userModes.getOr(ircuser, "") + userMode
+      updateUsers()
+    }
   }
 
   override fun addUserMode(nick: String?, mode: String?) {
@@ -319,14 +338,16 @@ class IrcChannel(
   }
 
   override fun removeUserMode(ircuser: IrcUser?, mode: String?) {
-    val userMode = mode ?: ""
-    if (ircuser == null || !isKnownUser(ircuser) || !isValidChannelUserMode(userMode))
-      return
-    if (!_userModes.getOr(ircuser, "").contains(userMode, ignoreCase = true))
-      return
-    _userModes[ircuser] = _userModes.getOr(ircuser, "")
-      .replace(userMode, "", ignoreCase = true)
-    updateUsers()
+    synchronized(_userModes) {
+      val userMode = mode ?: ""
+      if (ircuser == null || !isKnownUser(ircuser) || !isValidChannelUserMode(userMode))
+        return
+      if (!_userModes.getOr(ircuser, "").contains(userMode, ignoreCase = true))
+        return
+      _userModes[ircuser] = _userModes.getOr(ircuser, "")
+        .replace(userMode, "", ignoreCase = true)
+      updateUsers()
+    }
   }
 
   override fun removeUserMode(nick: String?, mode: String?) {
@@ -335,13 +356,13 @@ class IrcChannel(
 
   override fun addChannelMode(mode: Char, value: String?) {
     when (network().channelModeType(mode)) {
-      INetwork.ChannelModeType.A_CHANMODE     ->
+      INetwork.ChannelModeType.A_CHANMODE ->
         _A_channelModes.getOrPut(mode, ::mutableSetOf).add(value!!)
-      INetwork.ChannelModeType.B_CHANMODE     ->
+      INetwork.ChannelModeType.B_CHANMODE ->
         _B_channelModes[mode] = value!!
-      INetwork.ChannelModeType.C_CHANMODE     ->
+      INetwork.ChannelModeType.C_CHANMODE ->
         _C_channelModes[mode] = value!!
-      INetwork.ChannelModeType.D_CHANMODE     ->
+      INetwork.ChannelModeType.D_CHANMODE ->
         _D_channelModes.add(mode)
       INetwork.ChannelModeType.NOT_A_CHANMODE ->
         throw IllegalArgumentException("Received invalid channel mode: $mode $value")
@@ -350,13 +371,13 @@ class IrcChannel(
 
   override fun removeChannelMode(mode: Char, value: String?) {
     when (network().channelModeType(mode)) {
-      INetwork.ChannelModeType.A_CHANMODE     ->
+      INetwork.ChannelModeType.A_CHANMODE ->
         _A_channelModes.getOrPut(mode, ::mutableSetOf).remove(value)
-      INetwork.ChannelModeType.B_CHANMODE     ->
+      INetwork.ChannelModeType.B_CHANMODE ->
         _B_channelModes.remove(mode)
-      INetwork.ChannelModeType.C_CHANMODE     ->
+      INetwork.ChannelModeType.C_CHANMODE ->
         _C_channelModes.remove(mode)
-      INetwork.ChannelModeType.D_CHANMODE     ->
+      INetwork.ChannelModeType.D_CHANMODE ->
         _D_channelModes.remove(mode)
       INetwork.ChannelModeType.NOT_A_CHANMODE ->
         throw IllegalArgumentException("Received invalid channel mode: $mode $value")
@@ -398,7 +419,7 @@ class IrcChannel(
       live_updates.onNext(Unit)
     }
 
-  private fun updateUsers() {
+  private fun updateUsers() = synchronized(_userModes) {
     _userCount = _userModes.size
     live_userModes.onNext(Unit)
   }

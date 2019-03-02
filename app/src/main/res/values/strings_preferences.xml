@@ -299,6 +299,8 @@
   <string name="preference_initial_amount_title">Initial Amount</string>
   <string name="preference_initial_amount_summary">Number of messages to load when opening a buffer for the first time</string>
 
+  <string name="preference_clear_cache_key" translatable="false">clear_cache_key</string>
+  <string name="preference_clear_cache_title">Clear Backlog Cache</string>
 
   <string name="preference_connection_title">Connection</string>
 
