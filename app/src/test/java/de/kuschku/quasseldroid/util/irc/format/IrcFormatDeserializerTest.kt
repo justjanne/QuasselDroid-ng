@@ -43,7 +43,7 @@ class IrcFormatDeserializerTest {
   fun testMissingEndTag() {
     val spans = mutableListOf<FormatInfo>()
     val text = deserializer.formatString(
-      content = "\u000301,01weeeeeeeeee",
+      str = "\u000301,01weeeeeeeeee",
       colorize = true,
       output = spans
     )
