@@ -17,10 +17,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.gradle.kotlin.dsl.`kotlin-dsl`
-
 plugins {
   `kotlin-dsl`
+}
+
+kotlinDslPluginOptions {
+  experimentalWarning.set(false)
 }
 
 repositories {

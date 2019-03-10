@@ -144,13 +144,13 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Butter Knife",
-        version = "8.9.0",
+        version = "10.1.0",
         license = apache2,
         url = "http://jakewharton.github.io/butterknife/"
       ),
       Library(
         name = "Dagger 2",
-        version = "2.15",
+        version = "2.21",
         license = apache2,
         url = "https://google.github.io/dagger/"
       ),
@@ -165,13 +165,13 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Glide",
-        version = "4.8.0",
+        version = "4.9.0",
         license = apache2,
         url = "https://bumptech.github.io/glide/"
       ),
       Library(
         name = "Gson",
-        version = "2.8.2",
+        version = "2.8.5",
         license = apache2,
         url = "https://github.com/google/gson"
       ),
@@ -185,26 +185,26 @@ class AboutFragment : DaggerFragment() {
         url = "https://github.com/morhetz/gruvbox"
       ),
       Library(
-        name = "JavaPoet",
-        version = "1.10.0",
+        name = "KotlinPoet",
+        version = "1.1.0",
         license = apache2,
-        url = "https://github.com/square/javapoet"
+        url = "https://github.com/square/kotlinpoet"
       ),
       Library(
         name = "JetBrains Java Annotations",
-        version = "16.0.1",
+        version = "17.0.0",
         license = apache2,
         url = "https://github.com/JetBrains/java-annotations"
       ),
       Library(
         name = "Kotlin Standard Library",
-        version = "1.3.20",
+        version = "1.3.21",
         license = apache2,
         url = "https://kotlinlang.org/"
       ),
       Library(
         name = "LeakCanary",
-        version = "1.5.4",
+        version = "1.6.3",
         license = apache2,
         url = "https://github.com/square/leakcanary"
       ),
@@ -241,7 +241,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Quassel",
-        version = "0.13.0",
+        version = "0.13.1",
         license = License(
           shortName = "GPLv3",
           fullName = "GNU GENERAL PUBLIC LICENSE",
@@ -257,17 +257,17 @@ class AboutFragment : DaggerFragment() {
           fullName = "Creative Commons CC0 1.0 Universal",
           text = R.raw.license_cc_0
         ),
-        url = "https://github.com/ReactiveX/RxJava"
+        url = "http://www.reactive-streams.org/"
       ),
       Library(
         name = "RecyclerView-FastScroll",
-        version = "1.0.18",
+        version = "2.0.",
         license = apache2,
         url = "https://github.com/timusus/RecyclerView-FastScroll"
       ),
       Library(
         name = "Retrofit",
-        version = "2.4.0",
+        version = "2.5.0",
         license = apache2,
         url = "https://square.github.io/retrofit/"
       ),
@@ -288,7 +288,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "ThreeTen backport project",
-        version = "1.3.6",
+        version = "1.3.8",
         license = License(
           shortName = "BSD 3-clause",
           text = R.raw.license_threetenbp

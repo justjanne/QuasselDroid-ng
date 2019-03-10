@@ -23,10 +23,10 @@ plugins {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.20"))
+  implementation(kotlin("stdlib", "1.3.21"))
   implementation(project(":invokerannotations"))
-  implementation("org.jetbrains.kotlin", "kotlin-compiler-embeddable", "1.3.20")
-  implementation("com.squareup", "kotlinpoet", "1.0.1")
+  implementation("org.jetbrains.kotlin", "kotlin-compiler-embeddable", "1.3.21")
+  implementation("com.squareup", "kotlinpoet", "1.1.0")
   implementation("com.google.auto.service:auto-service:1.0-rc4")
   kapt("com.google.auto.service:auto-service:1.0-rc4")
 }

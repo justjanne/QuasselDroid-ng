@@ -17,10 +17,10 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-data class VersionContext(val version: String)
+data class VersionContext<T>(val version: T)
 
-inline fun withVersion(version: Any?, f: VersionContext.() -> Unit) {
-  (version as? String)?.let {
-    VersionContext(version).f()
+inline fun <T> withVersion(version: T?, f: VersionContext<T>.() -> Unit) {
+  version?.let {
+    f.invoke(VersionContext(version))
   }
 }

@@ -28,7 +28,7 @@ application {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.20"))
+  implementation(kotlin("stdlib", "1.3.21"))
 
   implementation("io.reactivex.rxjava2", "rxjava", "2.1.9")
   implementation("info.picocli", "picocli", "3.9.0")

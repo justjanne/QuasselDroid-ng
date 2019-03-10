@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 /*
  * Quasseldroid - Quassel client for Android
  *
@@ -53,20 +51,22 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.20"))
+  implementation(kotlin("stdlib", "1.3.21"))
 
   implementation("androidx.appcompat", "appcompat", "1.0.0")
 
-  implementation("androidx.room", "room-runtime", "2.0.0-rc01")
-  kapt("androidx.room", "room-compiler", "2.0.0-rc01")
-  implementation("androidx.room", "room-rxjava2", "2.0.0-rc01")
-  testImplementation("androidx.room", "room-testing", "2.0.0-rc01")
+  withVersion("2.0.0") {
+    implementation("androidx.room", "room-runtime", version)
+    kapt("androidx.room", "room-compiler", version)
+    implementation("androidx.room", "room-rxjava2", version)
+    testImplementation("androidx.room", "room-testing", version)
+  }
 
-  implementation("androidx.paging", "paging-runtime", "2.0.0-rc01")
+  implementation("androidx.paging", "paging-runtime", "2.1.0")
 
   // Utility
   implementation("org.threeten", "threetenbp", "1.3.8", classifier = "no-tzdb")
-  implementation("org.jetbrains", "annotations", "16.0.3")
+  implementation("org.jetbrains", "annotations", "17.0.0")
 
   // Quassel
   implementation(project(":lib")) {

@@ -101,10 +101,10 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.20"))
+  implementation(kotlin("stdlib", "1.3.21"))
 
   // App Compat
-  implementation("com.google.android.material", "material", "1.0.0-rc01")
+  implementation("com.google.android.material", "material", "1.0.0")
 
   implementation("androidx.appcompat", "appcompat", "1.0.0")
   implementation("androidx.browser", "browser", "1.0.0")
@@ -114,30 +114,32 @@ dependencies {
   implementation("androidx.legacy", "legacy-preference-v14", "1.0.0")
   implementation("androidx.constraintlayout", "constraintlayout", "1.1.2")
 
-  implementation("androidx.lifecycle", "lifecycle-extensions", "2.0.0-rc01")
-  implementation("androidx.lifecycle", "lifecycle-reactivestreams", "2.0.0-rc01")
-  testImplementation("androidx.arch.core", "core-testing", "2.0.0-rc01")
+  withVersion("2.0.0") {
+    implementation("androidx.room", "room-runtime", version)
+    kapt("androidx.room", "room-compiler", version)
+    implementation("androidx.room", "room-rxjava2", version)
+    testImplementation("androidx.room", "room-testing", version)
+
+    implementation("androidx.lifecycle", "lifecycle-extensions", version)
+    implementation("androidx.lifecycle", "lifecycle-reactivestreams", version)
+    testImplementation("androidx.arch.core", "core-testing", version)
+  }
   implementation(project(":lifecycle-ktx"))
 
-  implementation("androidx.room", "room-runtime", "2.0.0-rc01")
-  kapt("androidx.room", "room-compiler", "2.0.0-rc01")
-  implementation("androidx.room", "room-rxjava2", "2.0.0-rc01")
-  testImplementation("androidx.room", "room-testing", "2.0.0-rc01")
+  implementation("androidx.paging", "paging-runtime", "2.1.0")
 
-  implementation("androidx.paging", "paging-runtime", "2.0.0-rc01")
-
-  implementation("androidx.multidex", "multidex", "2.0.0")
+  implementation("androidx.multidex", "multidex", "2.0.1")
 
   // Utility
   implementation("io.reactivex.rxjava2", "rxandroid", "2.0.2")
   implementation("io.reactivex.rxjava2", "rxjava", "2.1.9")
   implementation("org.threeten", "threetenbp", "1.3.8", classifier = "no-tzdb")
-  implementation("org.jetbrains", "annotations", "16.0.3")
+  implementation("org.jetbrains", "annotations", "17.0.0")
   implementation("com.google.code.gson", "gson", "2.8.5")
-  implementation("commons-codec", "commons-codec", "1.11")
+  implementation("commons-codec", "commons-codec", "1.12")
   implementation("com.squareup.retrofit2", "retrofit", "2.5.0")
   implementation("com.squareup.retrofit2", "converter-gson", "2.5.0")
-  withVersion("10.0.0") {
+  withVersion("10.1.0") {
     implementation("com.jakewharton", "butterknife", version)
     kapt("com.jakewharton", "butterknife-compiler", version)
   }
@@ -150,12 +152,12 @@ dependencies {
   }
 
   // UI
-  implementation("me.zhanghai.android.materialprogressbar", "library", "1.6.0")
+  implementation("me.zhanghai.android.materialprogressbar", "library", "1.6.1")
   withVersion("0.9.6.0") {
     implementation("com.afollestad.material-dialogs", "core", version)
     implementation("com.afollestad.material-dialogs", "commons", version)
   }
-  withVersion("4.8.0") {
+  withVersion("4.9.0") {
     implementation("com.github.bumptech.glide", "glide", version)
     implementation("com.github.bumptech.glide", "recyclerview-integration", version)
     kapt("com.github.bumptech.glide", "compiler", version)
@@ -163,7 +165,7 @@ dependencies {
 
   // Quality Assurance
   implementation(project(":malheur"))
-  withVersion("1.6.2") {
+  withVersion("1.6.3") {
     debugImplementation("com.squareup.leakcanary", "leakcanary-android", version)
     releaseImplementation("com.squareup.leakcanary", "leakcanary-android-no-op", version)
     testImplementation("com.squareup.leakcanary", "leakcanary-android-no-op", version)
@@ -171,7 +173,7 @@ dependencies {
   }
 
   // Dependency Injection
-  withVersion("2.20") {
+  withVersion("2.21") {
     implementation("com.google.dagger", "dagger", version)
     kapt("com.google.dagger", "dagger-compiler", version)
     kapt("com.google.dagger", "dagger-android-processor", version)
@@ -180,7 +182,7 @@ dependencies {
   }
 
   testImplementation("junit", "junit", "4.12")
-  testImplementation("org.robolectric", "robolectric", "4.1") {
+  testImplementation("org.robolectric", "robolectric", "4.2") {
     exclude(group = "org.threeten", module = "threetenbp")
   }
 }

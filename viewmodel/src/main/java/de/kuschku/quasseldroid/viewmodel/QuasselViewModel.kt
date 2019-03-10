@@ -77,6 +77,7 @@ class QuasselViewModel : ViewModel() {
   fun addRecentlySentMessage(message: CharSequence) {
     recentlySentMessages.onNext(
       listOf(message) + recentlySentMessages.value
+        .orEmpty()
         .filter { it != message }
         .take(MAX_RECENT_MESSAGES - 1)
     )

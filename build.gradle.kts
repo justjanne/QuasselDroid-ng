@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /*
@@ -26,8 +25,8 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath("com.android.tools.build:gradle:3.3.0")
-    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.20")
+    classpath("com.android.tools.build:gradle:3.3.2")
+    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.21")
   }
 }
 

@@ -44,18 +44,19 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.20"))
+  implementation(kotlin("stdlib", "1.3.21"))
 
   implementation("androidx.appcompat", "appcompat", "1.0.0")
-
-  implementation("androidx.lifecycle", "lifecycle-extensions", "2.0.0-rc01")
-  implementation("androidx.lifecycle", "lifecycle-reactivestreams", "2.0.0-rc01")
+  withVersion("2.0.0") {
+    implementation("androidx.lifecycle", "lifecycle-extensions", version)
+    implementation("androidx.lifecycle", "lifecycle-reactivestreams", version)
+  }
 
   // Utility
   implementation("io.reactivex.rxjava2", "rxandroid", "2.0.2")
   implementation("io.reactivex.rxjava2", "rxjava", "2.1.9")
   implementation("org.threeten", "threetenbp", "1.3.8", classifier = "no-tzdb")
-  implementation("org.jetbrains", "annotations", "16.0.3")
+  implementation("org.jetbrains", "annotations", "17.0.0")
 
   // Quassel
   implementation(project(":persistence"))
