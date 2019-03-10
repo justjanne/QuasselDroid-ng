@@ -261,10 +261,23 @@ public class FastScroller {
     }
     // do not create new objects here, this is called quite often
     mInvalidateRect.set(mRecyclerView.getPaddingLeft() + mThumbPosition.x + mOffset.x, mRecyclerView.getPaddingTop() + mOffset.y, mThumbPosition.x + mOffset.x + mWidth - mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingTop() + mRecyclerView.getHeight() - mRecyclerView.getPaddingBottom() + mOffset.y);
-    mThumbPosition.set(
-      x * (mRecyclerView.getWidth() - mRecyclerView.getPaddingLeft() - mRecyclerView.getPaddingLeft()) / mRecyclerView.getWidth() + mRecyclerView.getPaddingLeft(),
-      y * (mRecyclerView.getHeight() - mRecyclerView.getPaddingTop() - mRecyclerView.getPaddingBottom()) / mRecyclerView.getHeight() + mRecyclerView.getPaddingTop()
-    );
+    int totalWidth = mRecyclerView.getWidth() + mRecyclerView.getPaddingLeft();
+    int totalHeight = mRecyclerView.getHeight() + mRecyclerView.getPaddingTop();
+
+    int dx;
+    if (totalWidth == 0) {
+      dx = 0;
+    } else {
+      dx = x * (mRecyclerView.getWidth() - mRecyclerView.getPaddingLeft() - mRecyclerView.getPaddingLeft()) / totalWidth;
+    }
+
+    int dy;
+    if (totalHeight == 0) {
+      dy = 0;
+    } else {
+      dy = y * (mRecyclerView.getHeight() - mRecyclerView.getPaddingTop() - mRecyclerView.getPaddingBottom()) / totalHeight;
+    }
+    mThumbPosition.set(dx, dy);
     mInvalidateTmpRect.set(mRecyclerView.getPaddingLeft() + mThumbPosition.x + mOffset.x, mRecyclerView.getPaddingTop() + mOffset.y, mThumbPosition.x + mOffset.x + mWidth - mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingTop() + mRecyclerView.getHeight() - mRecyclerView.getPaddingBottom() + mOffset.y);
     mInvalidateRect.union(mInvalidateTmpRect);
     mRecyclerView.invalidate(mInvalidateRect);
