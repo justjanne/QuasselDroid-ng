@@ -326,9 +326,11 @@ class UserInfoFragment : ServiceBoundFragment() {
     })
 
     avatar.setOnClickListener {
-      context?.startActivity(Intent(Intent.ACTION_VIEW).apply {
-        data = Uri.parse(actualUrl)
-      })
+      actualUrl?.let {
+        context?.startActivity(Intent(Intent.ACTION_VIEW).apply {
+          data = Uri.parse(it)
+        })
+      }
     }
 
     actionMention.visibleIf(arguments?.getBoolean("openBuffer") == false)
