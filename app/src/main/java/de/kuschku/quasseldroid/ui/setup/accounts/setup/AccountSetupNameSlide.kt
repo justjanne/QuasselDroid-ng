@@ -39,7 +39,7 @@ class AccountSetupNameSlide : SlideFragment() {
   lateinit var nameField: EditText
 
   override fun isValid(): Boolean {
-    return nameValidator.isValid
+    return nameValidator?.isValid == true
   }
 
   override val title = R.string.slide_account_name_title
@@ -67,9 +67,9 @@ class AccountSetupNameSlide : SlideFragment() {
       override fun onChanged() = updateValidity()
     }
     nameField.addTextChangedListener(nameValidator)
-    nameValidator.afterTextChanged(nameField.text)
+    nameValidator?.afterTextChanged(nameField.text)
     return view
   }
 
-  private lateinit var nameValidator: TextValidator
+  private var nameValidator: TextValidator? = null
 }
