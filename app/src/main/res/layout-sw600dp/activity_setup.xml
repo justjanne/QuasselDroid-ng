@@ -37,6 +37,7 @@
 
   <com.google.android.material.floatingactionbutton.FloatingActionButton
     android:id="@+id/next_button"
+    style="@style/Widget.MaterialComponents.FloatingActionButton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="right|bottom"
@@ -46,6 +47,8 @@
     app:elevation="0dip"
     app:fabSize="normal"
     app:pressedTranslationZ="0dip"
+    app:srcCompat="@drawable/ic_forward"
+    app:tint="#ffffffff"
     tools:ignore="RtlHardcoded" />
 
 </merge>

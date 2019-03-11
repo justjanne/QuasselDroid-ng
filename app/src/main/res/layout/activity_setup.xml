@@ -37,12 +37,15 @@
 
   <com.google.android.material.floatingactionbutton.FloatingActionButton
     android:id="@+id/next_button"
+    style="@style/Widget.MaterialComponents.FloatingActionButton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="right|bottom"
     android:layout_marginRight="16dp"
     android:layout_marginBottom="16dp"
     app:fabSize="normal"
+    app:srcCompat="@drawable/ic_forward"
+    app:tint="#ffffffff"
     tools:ignore="RtlHardcoded"
     tools:src="@drawable/ic_arrow_right" />
 

@@ -21,13 +21,11 @@ package de.kuschku.quasseldroid.ui.setup
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.ActionMenuView
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
@@ -91,9 +89,10 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
       if (finish) descriptionFinish
       else descriptionNext
     button.setTooltip()
-    button.setImageDrawable(
-      if (finish) drawableFinish
-      else drawableNext
+    button.setImageState(
+      if (finish) intArrayOf(android.R.attr.state_checked)
+      else intArrayOf(-android.R.attr.state_checked),
+      true
     )
 
     page.requestFocus()
@@ -110,9 +109,6 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
     updateRecentsHeader()
   }
 
-  private var drawableFinish: Drawable? = null
-  private var drawableNext: Drawable? = null
-
   private var descriptionFinish: String? = null
   private var descriptionNext: String? = null
 
@@ -123,13 +119,6 @@ abstract class SetupActivity : DaggerAppCompatActivity() {
       .nullIf { it == 0 }?.let(this::setTitle)
     setContentView(R.layout.activity_setup)
     ButterKnife.bind(this)
-
-    drawableFinish = getVectorDrawableCompat(R.drawable.ic_check)?.mutate()?.also {
-      DrawableCompat.setTint(it, -1)
-    }
-    drawableNext = getVectorDrawableCompat(R.drawable.ic_arrow_right)?.mutate()?.also {
-      DrawableCompat.setTint(it, -1)
-    }
 
     descriptionFinish = getString(R.string.label_finish)
     descriptionNext = getString(R.string.label_next)
