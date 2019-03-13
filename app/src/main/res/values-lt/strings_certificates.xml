@@ -17,4 +17,9 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources></resources>
+<resources>
+  <string name="certificate_validity">Galiojimo laikas</string>
+
+  <string name="certificate_fingerprint_sha256">SHA-256 Raktas</string>
+  <string name="certificate_fingerprint_sha1">SHA-1 Raktas</string>
+</resources>

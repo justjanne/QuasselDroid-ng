@@ -21,6 +21,8 @@
   <string name="label_error_login">Prisijungimo Klaida</string>
   <string name="label_error_setup">Sąrankos Klaida</string>
   <string name="label_error_init">Ryšio Klaida</string>
+  <string name="label_error_ssl">SSL Klaida</string>
+  <string name="label_error_ssl_required_unavailable">Šiam ryšiui yra reikalingas SSL, bet branduolys jo nepalaiko.</string>
   <string name="label_error_certificate">Certifikato Klaida</string>
   <string name="label_error_certificate_no_certificate">Nėra certifikatų</string>
   <string name="label_error_certificate_no_hostname">Nėra tinkamo hostname</string>
@@ -40,4 +42,7 @@
     negalioja %2$s.</p>
   ]]></string>
 
+  <string name="label_error_invalid_protocol_version">Netinkamas protokolas: %1$d</string>
+  <string name="label_error_connection">Bandant jungtis įvyko klaida: %1$s (%2$s)</string>
+  <string name="label_error_connection_closed">Klaida: Ryšys netikėtai nutrūko</string>
 </resources>

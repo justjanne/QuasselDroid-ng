@@ -21,13 +21,17 @@
   <string name="preference_appearance_title">Išvaizda</string>
 
   <string name="preference_theme_title">Tema</string>
+  <string name="preference_theme_entry_material_daynight">Material (Auto)</string>
   <string name="preference_theme_entry_material_light">Material (Šviesi)</string>
   <string name="preference_theme_entry_material_dark">Material (Tamsi)</string>
+  <string name="preference_theme_entry_quassel_daynight">Quassel (Auto)</string>
   <string name="preference_theme_entry_quassel_light">Quassel (Šviesi)</string>
   <string name="preference_theme_entry_quassel_dark">Quassel (Tamsi)</string>
   <string name="preference_theme_entry_amoled">AMOLED</string>
+  <string name="preference_theme_entry_solarized_daynight">Solarized (Auto)</string>
   <string name="preference_theme_entry_solarized_light">Solarized (Šviesi)</string>
   <string name="preference_theme_entry_solarized_dark">Solarized (Tamsi)</string>
+  <string name="preference_theme_entry_gruvbox_daynight">Gruvbox (Auto)</string>
   <string name="preference_theme_entry_gruvbox_light">Gruvbox (Šviesi)</string>
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Tamsi)</string>
   <string name="preference_theme_entry_dracula">Dracula</string>
@@ -55,6 +59,11 @@
   <string name="preference_notification_vibration_title">Vibracija</string>
 
   <string name="preference_notification_light_title">LED Lemputė</string>
+
+  <string name="preference_notification_mark_read_on_swipe_title">Pažymėti kaip perskaitytą nubraukus pranešimus</string>
+  <string name="preference_notification_mark_read_on_swipe_summary">Pažymi visas kanalo žinutes kaip perskaitytas, kai yra nubraukiamas pranešimas iš kanalo</string>
+
+  <string name="preference_notification_network_name_in_notification_title_title">Rodyti tinklo pavadinimą pranešimų antraštėje</string>
 
   <string name="preference_notification_configure_title">Pranešimų nustatymai</string>
 

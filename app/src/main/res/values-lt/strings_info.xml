@@ -33,6 +33,8 @@
   <string name="label_core_online_since">Serveris veikia nuo %1$s</string>
   <string name="label_core_connected_since">Klientas prisijungęs nuo %1$s</string>
   <string name="label_core_connection_verified_by">Ryšys patvirtintas %1$s</string>
+  <string name="label_core_connection_protocol">Šis ryšys naudoja %1$s</string>
+  <string name="label_core_connection_ciphersuite">Šis ryšys yra užkoduotas ir autentifikuotas naudojant %1$s, ir naudoja %2$s raktų apsikeitimui</string>
   <string name="label_core_connection_verified_by_unknown">Nežinoma</string>
   <string name="label_core_connection_insecure">Nesaugus ryšys</string>
 

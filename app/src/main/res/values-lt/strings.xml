@@ -27,11 +27,15 @@
 
   <string name="label_about">Apie</string>
   <string name="label_accept">Priimti</string>
+  <string name="label_ascending">Didėjančia tvarka</string>
+  <string name="label_authors">Autoriai</string>
   <string name="label_avatar">Avataras</string>
   <string name="label_back">Atgal</string>
   <string name="label_buffer_name">Buferio pavadinimas</string>
   <string name="label_cancel">Nutraukti</string>
   <string name="label_certificates">Certifikatai</string>
+  <string name="label_channel_name">Kanalo pavadinimas</string>
+  <string name="label_clear_search">Išvalyti paiešką</string>
   <string name="label_close">Uždaryti</string>
   <string name="label_colors_custom">Rinktis</string>
   <string name="label_colors_mirc">mIRC</string>
@@ -39,17 +43,25 @@
   <string name="label_connect">Prisijungti</string>
   <string name="label_copy">Kopijuoti</string>
   <string name="label_crashes">Klaidos</string>
+  <string name="label_crashes_empty">Nerasta klaidų ataskaitų</string>
   <string name="label_delete">Ištrinti</string>
   <string name="label_delete_all">Ištrinti viską</string>
+  <string name="label_descending">Mažėjančia tvarka</string>
   <string name="label_disconnect">Atsijungti</string>
+  <string name="label_edit_core">Redaguoti paskyrą</string>
+  <string name="label_edit_nick">Keisti slapyvardį</string>
   <string name="label_edit_topic">Keisti temą</string>
   <string name="label_edit_topic_long">Atverti kanalo temos keitimo dialogą</string>
   <string name="label_filter_messages">Filtruoti žinutes</string>
+  <string name="label_finish">Užbaigti</string>
   <string name="label_hide_perm">Slėpti visam laikui</string>
   <string name="label_hide_temp">Slėpti trumpam</string>
   <string name="label_ignore">Ignoruoti</string>
   <string name="label_ignore_long">Pridėti/panaiktinti vartotoją į/iš ignoruojamų sarašo</string>
+  <string name="label_info">Plačiau</string>
+  <string name="label_info_certificate">Sertifikatas</string>
   <string name="label_info_channel">Kanalo aprašas</string>
+  <string name="label_info_channellist">Kanalų sąrašas</string>
   <string name="label_info_core">Branduolio aprašas</string>
   <string name="label_info_user">Vartotojo aprašas</string>
   <string name="label_input_history">Įvesties istorija</string>
@@ -58,6 +70,7 @@
   <string name="label_libraries">Bibliotekos</string>
   <string name="label_license">Licenzija</string>
   <string name="label_mark_read">Pažymėti kaip skaitytą</string>
+  <string name="label_match_all">Atitinka visas žinutes</string>
   <string name="label_mention">Paminėti</string>
   <string name="label_mention_long">Kopijuoti slapyvardį į įvedimo eilutę</string>
   <string name="label_new_account">Nauja paskyra</string>
@@ -75,6 +88,12 @@
   <string name="label_open">Atidaryti</string>
   <string name="label_part">Išeiti</string>
   <string name="label_part_long">Palikti kanalą</string>
+  <string name="label_password_change">Pakeisti slaptažodį</string>
+  <string name="label_password_error_nomatch">Slaptažodžiai neatitinka</string>
+  <string name="label_password_error_wrong">Neteisingas slaptažodis</string>
+  <string name="label_password_new">Naujas slaptažodis</string>
+  <string name="label_password_old">Senas slaptažodis</string>
+  <string name="label_password_repeat">Pakartokite slaptažodį</string>
   <string name="label_placeholder_message">Rašyti žinutę…</string>
   <string name="label_placeholder_topic">Apibūdinti kanalo temą…</string>
   <string name="label_privacy_policy">Privatumo politika</string>
@@ -84,23 +103,34 @@
   <string name="label_reply">Atsakyti</string>
   <string name="label_reset">Atstatyti</string>
   <string name="label_save">Išsaugoti</string>
+  <string name="label_saving">Išsaugoma…</string>
+  <string name="label_search">Paieška…</string>
+  <string name="label_search_channels">Ieškoti kanalų</string>
   <string name="label_select">Pasirinkti</string>
+  <string name="label_send">Siųsti</string>
+  <string name="label_service_connection_failed">Nepavyko užmegzti ryšio, patikrinkite baterijos taupymo nustatymus. Daugiau informacijos - dontkillmyapp.com</string>
   <string name="label_set_default">Nustatyti numatytą</string>
   <string name="label_settings">Nustatymai</string>
   <string name="label_settings_client">Kliento nustatymai</string>
   <string name="label_settings_core">Branduolio nustatymai</string>
   <string name="label_share">Dalintis</string>
   <string name="label_share_crashreport">Dalintis klaidos ataskaita</string>
+  <string name="label_shortcut">Nuoroda</string>
+  <string name="label_shortcut_long">Sukurti nuorodą pagrindiniame ekrane</string>
   <string name="label_show_hidden">Rodyti paslėptus</string>
+  <string name="label_sort">Rūšiuoti</string>
+  <string name="label_source">Šaltinis</string>
   <string name="label_topic">Kanalo tema</string>
   <string name="label_translators">Vertėjai</string>
   <string name="label_unhide">Rodyti</string>
   <string name="label_unknown_sender">&lt;Nežinoma&gt;</string>
   <string name="label_update_user_password">Atnaujinti Vartotoją/Slaptažodį</string>
   <string name="label_use_default">Naudoti numatytas parinktis</string>
+  <string name="label_user_count">Vartotojų skaičius</string>
   <string name="label_website">Tinklalapis</string>
   <string name="label_whitelist">Ignoruoti</string>
   <string name="label_whitelist_certificates">Certifikatai</string>
+  <string name="label_whitelist_certificates_empty">Nėra patvirtintų sertifikatų</string>
   <string name="label_whitelist_hostnames">Host sąrašas</string>
   <string name="label_whitelist_ignore_date">Galiojimo data yra ignoruojama šiam certifikatui</string>
   <string name="label_who">Who</string>
@@ -108,6 +138,13 @@
   <string name="label_whois">Whois</string>
   <string name="label_whois_long">Atnaujinti vartotojo informaciją</string>
   <string name="label_yes">Taip</string>
+
+  <plurals name="label_user_count" tools:ignore="UnusedQuantity">
+    <item quantity="one">%1$d vartotojas</item>
+    <item quantity="few">%1$d vartotojai</item>
+    <item quantity="many">%1$d vartotojų</item>
+    <item quantity="other">%1$d vartotojų</item>
+  </plurals>
 
   <string name="label_feature_synchronizedmarkerline">Reikalinga norint sinchronizuoti poziciją kanaluose</string>
   <string name="label_feature_saslauthentication">Reikalinga SASL</string>
@@ -125,6 +162,11 @@
   <string name="label_feature_richmessages">Reikalinga norint matyti tikruosius vardus ar IRCv3/Gravatar avatarus žinutėse</string>
   <string name="label_feature_backlogfiltertype">Reikalinga norint gauti senus pranešimus po prisijungimo</string>
 
+  <string name="label_feature_context_bufferactivitysync">Quasseldroid negali pažymėti neskaitytų pokalbių. Atnaujinkite branduolį į Quassel v0.13, jog tai ištaisytumėte.</string>
+  <string name="label_feature_context_coresidehighlights">Quasseldroid negali konfigūruoti žymėjimo. Atnaujinkite branduolį į Quassel v0.13, jog tai ištaisytumėte.</string>
+  <string name="label_feature_context_missing">Jūsų branduolyje trūksta funkcijų, reikalingų Quasseldroid veikimui užtikrinti.</string>
+  <string name="label_feature_context_missing_button">Plačiau</string>
+
   <string name="notification_channel_connection_title">Ryšys</string>
   <string name="notification_channel_highlight_title">Žymėjimai</string>
   <string name="notification_channel_old_highlight_title">Seni žymėjimai</string>
@@ -140,4 +182,5 @@
   <string name="info_copied_version">Versija nukopijuota į atmintinę</string>
 
   <string name="advertisement_support_patreon">Padėkite mums toliau plėtoti šią programėlę prisidėdami per Patreon</string>
+  <string name="advertisement_support_button">Parama</string>
 </resources>

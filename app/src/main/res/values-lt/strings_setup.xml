@@ -51,6 +51,10 @@
 
   <string name="hint_invalid_name">Pavadinimas negali būti tuščias</string>
 
+  <!-- Core Setup -->
+
+  <string name="setup_core_title">Branduolio sąranka</string>
+
   <!-- Core Authenticator Select -->
   <string name="slide_core_authenticator_select_title">Pasirinkite autentifikacijos Backend</string>
   <string name="slide_core_authenticator_select_description">Pasirinkite autentifikacijos backend Quassel Branduoliui naudoti autentifikuojant vartotojus.</string>
@@ -62,6 +66,10 @@
   <!-- Core Backend Config -->
   <string name="slide_core_backend_setup_title">Konfigūruoti talpyklos Backend</string>
   <string name="slide_core_backend_setup_description">Sukonfigūruokite pasirinktos duomenų bazės backend.</string>
+
+  <!-- User Setup -->
+
+  <string name="setup_user_title">Vartotojo sąranka</string>
 
   <!-- User Identity -->
   <string name="slide_user_identity_title">Tapatybės sąranka</string>
@@ -81,4 +89,7 @@
 
   <string name="label_channels">Kanalai</string>
 
+  <!-- Network Setup -->
+
+  <string name="setup_network_title">Tinklo sąranka</string>
 </resources>
