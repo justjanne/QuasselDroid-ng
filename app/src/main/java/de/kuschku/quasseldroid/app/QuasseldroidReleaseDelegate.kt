@@ -21,6 +21,7 @@ package de.kuschku.quasseldroid.app
 
 import android.os.Build
 import android.os.StrictMode
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import com.squareup.leakcanary.LeakCanary
 import de.kuschku.malheur.CrashHandler
@@ -55,6 +56,8 @@ class QuasseldroidReleaseDelegate(private val app: Quasseldroid) :
     AndroidCompatibilityUtils.inject()
     AndroidLoggingHandler.inject()
     AndroidStreamChannelFactory.inject()
+
+    AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 
     AndroidThreeTenBackport.init(app)
   }
