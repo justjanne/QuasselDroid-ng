@@ -870,13 +870,13 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     super.onStart()
   }
 
-  override fun onSaveInstanceState(outState: Bundle?) {
+  override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
-    outState?.putInt(KEY_OPEN_BUFFER, viewModel.buffer.value.id)
-    outState?.putInt(KEY_OPEN_BUFFERVIEWCONFIG, viewModel.bufferViewConfigId.value ?: -1)
-    outState?.putLong(KEY_CONNECTED_ACCOUNT, connectedAccount)
-    outState?.putBoolean(KEY_OPEN_DRAWER_START, drawerLayout.isDrawerOpen(GravityCompat.START))
-    outState?.putBoolean(KEY_OPEN_DRAWER_END, drawerLayout.isDrawerOpen(GravityCompat.END))
+    outState.putInt(KEY_OPEN_BUFFER, viewModel.buffer.value.id)
+    outState.putInt(KEY_OPEN_BUFFERVIEWCONFIG, viewModel.bufferViewConfigId.value ?: -1)
+    outState.putLong(KEY_CONNECTED_ACCOUNT, connectedAccount)
+    outState.putBoolean(KEY_OPEN_DRAWER_START, drawerLayout.isDrawerOpen(GravityCompat.START))
+    outState.putBoolean(KEY_OPEN_DRAWER_END, drawerLayout.isDrawerOpen(GravityCompat.END))
   }
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle?) {

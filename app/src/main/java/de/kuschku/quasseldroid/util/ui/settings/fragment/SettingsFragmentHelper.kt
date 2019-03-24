@@ -30,13 +30,13 @@ class SettingsFragmentHelper(
   private val saveable: Savable?,
   private val deletable: Deletable?
 ) {
-  fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-    inflater?.inflate(R.menu.context_setting, menu)
-    menu?.findItem(R.id.action_save)?.isVisible = saveable != null
-    menu?.findItem(R.id.action_delete)?.isVisible = deletable != null
+  fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.context_setting, menu)
+    menu.findItem(R.id.action_save)?.isVisible = saveable != null
+    menu.findItem(R.id.action_delete)?.isVisible = deletable != null
   }
 
-  fun onOptionsItemSelected(activity: Activity?, item: MenuItem?) = when (item?.itemId) {
+  fun onOptionsItemSelected(activity: Activity?, item: MenuItem) = when (item.itemId) {
     R.id.action_save   -> {
       saveable?.let {
         if (it.onSave()) activity?.finish()

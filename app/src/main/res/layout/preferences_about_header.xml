@@ -74,21 +74,21 @@
     android:layout_marginBottom="8dp"
     android:orientation="horizontal">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
       android:id="@+id/action_website"
       style="@style/Widget.Button.Colored"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/label_website" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
       android:id="@+id/action_source"
       style="@style/Widget.Button"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/label_source" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
       android:id="@+id/action_donate"
       style="@style/Widget.Button"
       android:layout_width="wrap_content"
@@ -106,7 +106,7 @@
     android:text="@string/app_description_long"
     android:textAlignment="gravity" />
 
-  <Button
+  <com.google.android.material.button.MaterialButton
     android:id="@+id/action_privacy_policy"
     style="@style/Widget.Button.Borderless.Colored"
     android:layout_width="wrap_content"

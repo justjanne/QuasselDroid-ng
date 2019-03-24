@@ -29,13 +29,14 @@
 
   <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/hostWrapper"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:hint="@string/label_connection_host"
     app:errorEnabled="true"
     tools:ignore="LabelFor">
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
       android:id="@+id/host"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -47,10 +48,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:hint="@string/label_connection_port"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
     app:errorEnabled="true"
     tools:ignore="LabelFor">
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
       android:id="@+id/port"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

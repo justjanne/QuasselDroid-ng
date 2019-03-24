@@ -19,7 +19,7 @@
 
 <resources>
 
-  <style name="Theme.AppTheme" parent="Theme.AppCompat">
+  <style name="Theme.AppTheme" parent="Theme.MaterialComponents.Bridge">
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
@@ -28,7 +28,7 @@
     <item name="backgroundMenuItemRounded">@drawable/bg_menuitem_rounded_dark</item>
   </style>
 
-  <style name="Theme.AppTheme.Light" parent="Theme.AppCompat.Light.DarkActionBar">
+  <style name="Theme.AppTheme.Light" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>

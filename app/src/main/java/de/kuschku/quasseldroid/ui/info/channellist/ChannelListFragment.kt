@@ -184,15 +184,15 @@ class ChannelListFragment : ServiceBoundSettingsFragment() {
     return view
   }
 
-  override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-    inflater?.inflate(R.menu.activity_channellist, menu)
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.activity_channellist, menu)
     (activity as? AppCompatActivity)?.supportActionBar?.themedContext?.let {
-      menu?.retint(it)
+      menu.retint(it)
     }
     super.onCreateOptionsMenu(menu, inflater)
   }
 
-  override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+  override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
     R.id.channel_name_asc  -> {
       sort.onNext(Sort(Sort.Field.CHANNEL_NAME, Sort.Direction.ASC))
       true

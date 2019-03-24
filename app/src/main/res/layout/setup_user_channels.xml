@@ -28,11 +28,12 @@
   <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/channelsWrapper"
     android:layout_width="match_parent"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
     android:layout_height="wrap_content"
     android:hint="@string/label_channels"
     tools:ignore="LabelFor">
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
       android:id="@+id/channels"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

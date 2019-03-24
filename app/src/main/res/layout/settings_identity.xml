@@ -45,7 +45,9 @@
       android:visibility="visible">
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/settings_identity_identity_name">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -55,7 +57,9 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/settings_identity_real_name">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -65,7 +69,9 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/settings_identity_ident">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -100,10 +106,11 @@
         tools:listitem="@layout/settings_identity_nick" />
 
       <LinearLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
           android:id="@+id/new_nick"
           style="@style/Widget.Button.Borderless.Colored"
           android:layout_width="wrap_content"
@@ -131,7 +138,9 @@
       android:visibility="visible">
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/settings_identity_kick_reason">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -141,7 +150,9 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/settings_identity_part_reason">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -151,7 +162,9 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/settings_identity_quit_reason">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -180,7 +193,9 @@
       android:visibility="visible">
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/settings_identity_away_reason">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -200,7 +215,9 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.CoreSettings.EditTextLayout"
+          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
           android:hint="@string/settings_identity_detach_away_reason">
 
           <com.google.android.material.textfield.TextInputEditText

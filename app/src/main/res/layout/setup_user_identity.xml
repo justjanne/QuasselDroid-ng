@@ -30,9 +30,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:hint="@string/settings_identity_nick"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
     tools:ignore="LabelFor">
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
       android:id="@+id/nick"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -45,10 +46,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:hint="@string/settings_identity_real_name"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
     app:passwordToggleEnabled="true"
     tools:ignore="LabelFor">
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
       android:id="@+id/realname"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

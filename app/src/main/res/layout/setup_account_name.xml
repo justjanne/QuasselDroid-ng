@@ -29,11 +29,12 @@
     android:id="@+id/nameWrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
     android:hint="@string/label_account_name"
     app:errorEnabled="true"
     tools:ignore="LabelFor">
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
       android:id="@+id/name"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

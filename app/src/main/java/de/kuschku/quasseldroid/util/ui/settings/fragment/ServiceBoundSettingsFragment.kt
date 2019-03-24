@@ -37,12 +37,12 @@ abstract class ServiceBoundSettingsFragment : ServiceBoundFragment() {
     )
   }
 
-  override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     helper.onCreateOptionsMenu(menu, inflater)
     super.onCreateOptionsMenu(menu, inflater)
   }
 
-  override fun onOptionsItemSelected(item: MenuItem?) =
+  override fun onOptionsItemSelected(item: MenuItem) =
     helper.onOptionsItemSelected(activity, item)
     ?: super.onOptionsItemSelected(item)
 }

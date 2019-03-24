@@ -47,9 +47,10 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:hint="@string/settings_network_network_name"
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
       tools:ignore="LabelFor">
 
-      <EditText
+      <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,9 +63,10 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:hint="@string/settings_networkserver_host"
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
       tools:ignore="LabelFor">
 
-      <EditText
+      <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/host"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -78,9 +80,10 @@
       android:layout_height="wrap_content"
       android:hint="@string/settings_networkserver_port"
       app:passwordToggleEnabled="true"
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
       tools:ignore="LabelFor">
 
-      <EditText
+      <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/port"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

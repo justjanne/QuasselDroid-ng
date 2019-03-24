@@ -45,7 +45,9 @@
       android:visibility="visible">
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/settings_networkserver_host">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -55,7 +57,9 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/settings_networkserver_port">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -76,7 +80,9 @@
         android:text="@string/settings_networkserver_ssl_verify" />
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/settings_networkserver_password"
         app:passwordToggleEnabled="true">
 
@@ -118,7 +124,9 @@
         tools:listitem="@layout/widget_spinner_item_inline" />
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/settings_networkserver_proxy_host">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -128,7 +136,9 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/settings_networkserver_proxy_port">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -139,7 +149,9 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/settings_networkserver_proxy_user">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -149,7 +161,9 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/settings_networkserver_proxy_pass"
         app:passwordToggleEnabled="true">
 

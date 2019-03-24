@@ -47,7 +47,9 @@
             android:minHeight="48dp">
 
             <com.google.android.material.textfield.TextInputLayout
-              style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+              style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
               android:hint="@string/settings_aliasitem_name">
 
               <com.google.android.material.textfield.TextInputEditText
@@ -61,7 +63,9 @@
         <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
 
           <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:hint="@string/settings_aliasitem_expansion">
 
             <de.kuschku.quasseldroid.ui.chat.input.RichEditText

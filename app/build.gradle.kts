@@ -104,7 +104,7 @@ dependencies {
   implementation(kotlin("stdlib", "1.3.21"))
 
   // App Compat
-  implementation("com.google.android.material", "material", "1.0.0")
+  implementation("com.google.android.material", "material", "1.1.0-alpha04")
 
   implementation("androidx.appcompat", "appcompat", "1.0.0")
   implementation("androidx.browser", "browser", "1.0.0")

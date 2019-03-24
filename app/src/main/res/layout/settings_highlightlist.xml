@@ -94,10 +94,11 @@
           tools:listitem="@layout/settings_highlightlist_rule" />
 
         <LinearLayout
-          style="@style/Widget.CoreSettings.EditTextLayout"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
           android:orientation="horizontal">
 
-          <Button
+          <com.google.android.material.button.MaterialButton
             android:id="@+id/new_highlight_rule"
             style="@style/Widget.Button.Borderless.Colored"
             android:layout_width="wrap_content"
@@ -132,10 +133,11 @@
           tools:listitem="@layout/settings_highlightlist_rule" />
 
         <LinearLayout
-          style="@style/Widget.CoreSettings.EditTextLayout"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
           android:orientation="horizontal">
 
-          <Button
+          <com.google.android.material.button.MaterialButton
             android:id="@+id/new_highlight_ignore_rule"
             style="@style/Widget.Button.Borderless.Colored"
             android:layout_width="wrap_content"

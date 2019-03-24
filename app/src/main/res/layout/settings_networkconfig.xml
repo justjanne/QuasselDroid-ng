@@ -51,7 +51,9 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.CoreSettings.EditTextLayout"
+          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
           android:hint="@string/settings_networkconfig_ping_interval">
 
           <com.google.android.material.textfield.TextInputEditText
@@ -71,7 +73,9 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.CoreSettings.EditTextLayout"
+          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
           android:hint="@string/settings_networkconfig_max_ping_count">
 
           <com.google.android.material.textfield.TextInputEditText
@@ -112,7 +116,9 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.CoreSettings.EditTextLayout"
+          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
           android:hint="@string/settings_networkconfig_auto_who_interval">
 
           <com.google.android.material.textfield.TextInputEditText
@@ -132,7 +138,9 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.CoreSettings.EditTextLayout"
+          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
           android:hint="@string/settings_networkconfig_auto_who_nick_limit">
 
           <com.google.android.material.textfield.TextInputEditText
@@ -152,7 +160,9 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.CoreSettings.EditTextLayout"
+          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
           android:hint="@string/settings_networkconfig_auto_who_delay">
 
           <com.google.android.material.textfield.TextInputEditText

@@ -114,12 +114,12 @@ class CrashFragment : DaggerFragment() {
     return view
   }
 
-  override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-    inflater?.inflate(R.menu.activity_crashes, menu)
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.activity_crashes, menu)
     super.onCreateOptionsMenu(menu, inflater)
   }
 
-  override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+  override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
     R.id.action_delete_all -> {
       handler.post {
         crashDir?.mkdirs()

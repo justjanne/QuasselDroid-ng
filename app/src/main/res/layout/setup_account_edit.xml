@@ -53,12 +53,13 @@
 
       <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameWrapper"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/label_account_name"
         tools:ignore="LabelFor">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/name"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -97,12 +98,13 @@
 
         <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/hostWrapper"
+          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:hint="@string/label_connection_host"
           tools:ignore="LabelFor">
 
-          <EditText
+          <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/host"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -112,12 +114,13 @@
 
         <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/portWrapper"
+          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:hint="@string/label_connection_port"
           tools:ignore="LabelFor">
 
-          <EditText
+          <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/port"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -167,11 +170,12 @@
         <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/userWrapper"
           android:layout_width="match_parent"
+          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
           android:layout_height="wrap_content"
           android:hint="@string/label_account_user"
           tools:ignore="LabelFor">
 
-          <EditText
+          <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -182,12 +186,13 @@
         <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/passWrapper"
           android:layout_width="match_parent"
+          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
           android:layout_height="wrap_content"
           android:hint="@string/label_account_pass"
           app:passwordToggleEnabled="true"
           tools:ignore="LabelFor">
 
-          <EditText
+          <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

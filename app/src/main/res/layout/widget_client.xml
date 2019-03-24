@@ -53,7 +53,7 @@
       android:textIsSelectable="true"
       tools:text="Kiel, Germany" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
       android:id="@+id/disconnect"
       style="@style/Widget.Button.Borderless.Colored"
       android:layout_width="wrap_content"

@@ -48,7 +48,7 @@
         android:textIsSelectable="true"
         tools:text="June 8, 2018" />
 
-      <Button
+      <com.google.android.material.button.MaterialButton
         android:id="@+id/missing_features"
         style="@style/Widget.Button.Borderless.Colored"
         android:layout_width="wrap_content"
@@ -123,7 +123,7 @@
         style="@style/Widget.CoreSettings.TextView"
         tools:text="The connection is encrypted and authenticated using CHACHA20_POLY1305 and uses ECDHE_RSA as the key exchange mechanism" />
 
-      <Button
+      <com.google.android.material.button.MaterialButton
         android:id="@+id/secure_details"
         style="@style/Widget.Button.Borderless.Colored"
         android:layout_width="wrap_content"

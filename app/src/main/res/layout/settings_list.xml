@@ -59,10 +59,11 @@
         tools:listitem="@layout/settings_item" />
 
       <LinearLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
           android:id="@+id/new_network"
           style="@style/Widget.Button.Borderless.Colored"
           android:layout_width="wrap_content"
@@ -97,10 +98,11 @@
         tools:listitem="@layout/settings_item" />
 
       <LinearLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
           android:id="@+id/new_identity"
           style="@style/Widget.Button.Borderless.Colored"
           android:layout_width="wrap_content"
@@ -130,10 +132,11 @@
         tools:listitem="@layout/settings_item" />
 
       <LinearLayout
-        style="@style/Widget.CoreSettings.EditTextLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
           android:id="@+id/new_chatlist"
           style="@style/Widget.Button.Borderless.Colored"
           android:layout_width="wrap_content"
