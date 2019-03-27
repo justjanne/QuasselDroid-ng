@@ -155,7 +155,6 @@
   <string name="preference_initial_amount_title">Pradinis dydis</string>
   <string name="preference_initial_amount_summary">Žinučių kiekis, kuris bus užkraunamas pirmą kartą atvėrus buferį</string>
 
-
   <string name="preference_connection_title">Ryšys</string>
 
   <string name="preference_show_notification_title">Rodyti aktyvųjį pranešimą</string>

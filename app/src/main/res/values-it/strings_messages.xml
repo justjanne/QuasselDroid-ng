@@ -46,7 +46,7 @@
     <item quantity="other">Netsplit tra %1$s e %2$s terminato: %3$d utenti entrati: %4$s</item>
   </plurals>
   <plurals name="message_netsplit_quit">
-    <item quantity="one">Netsplit tra %1$s e%2$s: %3$d utente quit: %4$s</item>
-    <item quantity="other">Netsplit tra %1$s e%2$s: %3$d utenti disconnessi: %4$s</item>
+    <item quantity="one">Netsplit tra %1$s e %2$s: %3$d utente disconnesso: %4$s</item>
+    <item quantity="other">Netsplit tra %1$s e %2$s: %3$d utenti disconnessi: %4$s</item>
   </plurals>
 </resources>

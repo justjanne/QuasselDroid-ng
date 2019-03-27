@@ -158,7 +158,6 @@
   <string name="preference_initial_amount_title">Quantidade inicial</string>
   <string name="preference_initial_amount_summary">Número de mensagens para carregar ao abrir uma janela pela primeira vez</string>
 
-
   <string name="preference_connection_title">Ligação</string>
 
   <string name="preference_show_notification_title">Mostrar notificação</string>

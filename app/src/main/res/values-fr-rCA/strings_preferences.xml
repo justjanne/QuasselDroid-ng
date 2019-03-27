@@ -142,7 +142,6 @@
   <string name="preference_initial_amount_title">Montant Initial</string>
   <string name="preference_initial_amount_summary">Nombre de messages à montrer quand le tchat est initialement ouvert</string>
 
-
   <string name="preference_connection_title">Connection</string>
 
   <string name="preference_show_notification_title">Montrer la notification</string>

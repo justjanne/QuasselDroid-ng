@@ -153,7 +153,6 @@
   <string name="preference_initial_amount_title">Početna količina</string>
   <string name="preference_initial_amount_summary">Broj poruka koje će biti učitane pri prvom otvaranju bafera</string>
 
-
   <string name="preference_connection_title">Veza</string>
 
   <string name="preference_show_notification_title">Prikazuj obavještenja</string>

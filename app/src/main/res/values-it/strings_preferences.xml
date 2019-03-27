@@ -158,7 +158,6 @@
   <string name="preference_initial_amount_title">Quantità iniziale</string>
   <string name="preference_initial_amount_summary">Numero di messaggi da caricare all’apertura di una chat la prima volta</string>
 
-
   <string name="preference_connection_title">Connessione</string>
 
   <string name="preference_show_notification_title">Mostra notifica</string>

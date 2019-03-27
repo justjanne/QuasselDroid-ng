@@ -25,7 +25,6 @@
   <string name="label_user_ident">Identité</string>
   <string name="label_user_host">Hôte</string>
   <string name="label_user_server">Serveur</string>
-
   <string name="label_core_version">Version</string>
   <string name="label_core_uptime">Durée de Fonctionnement</string>
   <string name="label_core_security">Sécurité</string>

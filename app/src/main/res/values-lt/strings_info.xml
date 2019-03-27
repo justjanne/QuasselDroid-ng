@@ -25,7 +25,6 @@
   <string name="label_user_ident">Ident</string>
   <string name="label_user_host">Host</string>
   <string name="label_user_server">Serveris</string>
-
   <string name="label_core_version">Versija</string>
   <string name="label_core_uptime">Veikimo laikas</string>
   <string name="label_core_security">Saugumas</string>

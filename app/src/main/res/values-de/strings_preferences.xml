@@ -158,6 +158,7 @@
   <string name="preference_initial_amount_title">Anfängliche Verlaufsgröße</string>
   <string name="preference_initial_amount_summary">Anzahl an Nachrichten die beim ersten Öffnen eines Chats geladen werden</string>
 
+  <string name="preference_clear_cache_title">Nachrichten-Cache leeren</string>
 
   <string name="preference_connection_title">Verbindung</string>
 

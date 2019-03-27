@@ -25,6 +25,7 @@
   <string name="label_user_ident">Ident</string>
   <string name="label_user_host">Host</string>
   <string name="label_user_server">Server</string>
+  <string name="label_user_common_channels">Gemeinsame Channels</string>
 
   <string name="label_core_version">Version</string>
   <string name="label_core_uptime">Betriebsdauer</string>
