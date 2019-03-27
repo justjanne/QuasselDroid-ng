@@ -753,6 +753,14 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         }
       })
 
+    connectionStatusDisplay.setOnClickListener {
+      viewModel.sessionManager.value?.orNull()?.apply {
+        ifDisconnected {
+          autoReconnect()
+        }
+      }
+    }
+
     // Show Connection Progress Bar
     viewModel.connectionProgress.toLiveData().observe(this, Observer {
       val (state, progress, max) = it ?: Triple(ConnectionState.DISCONNECTED, 0, 0)
@@ -790,6 +798,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         }
         ConnectionState.CONNECTED  -> {
           progressBar.visibility = View.INVISIBLE
+
           connectionStatusDisplay.setMode(WarningBarView.MODE_NONE)
         }
       }
