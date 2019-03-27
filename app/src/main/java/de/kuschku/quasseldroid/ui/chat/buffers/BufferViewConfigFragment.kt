@@ -91,6 +91,10 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
   @BindView(R.id.buffer_search_container)
   lateinit var bufferSearchContainer: ViewGroup
+/*
+  @BindView(R.id.fab)
+  lateinit var fab: SpeedDialView
+  */
 
   @Inject
   lateinit var appearanceSettings: AppearanceSettings
@@ -530,6 +534,42 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     bufferSearchClear.setOnClickListener {
       bufferSearch.setText("")
     }
+
+    /*
+    @ColorInt var colorLabel = 0
+    @ColorInt var colorLabelBackground = 0
+    view.context.theme.styledAttributes(R.attr.colorTextPrimary, R.attr.colorBackgroundCard) {
+      colorLabel = getColor(0, 0)
+      colorLabelBackground = getColor(1, 0)
+    }
+
+    fab.addActionItem(
+      SpeedDialActionItem.Builder(R.id.fab_create, R.drawable.ic_add)
+        .setFabImageTintColor(0xffffffffu.toInt())
+        .setLabel(R.string.label_create_channel)
+        .setLabelBackgroundColor(colorLabelBackground)
+        .setLabelColor(colorLabel)
+        .create()
+    )
+
+    fab.addActionItem(
+      SpeedDialActionItem.Builder(R.id.fab_join, R.drawable.ic_channel)
+        .setFabImageTintColor(0xffffffffu.toInt())
+        .setLabel(R.string.label_join_long)
+        .setLabelBackgroundColor(colorLabelBackground)
+        .setLabelColor(colorLabel)
+        .create()
+    )
+
+    fab.addActionItem(
+      SpeedDialActionItem.Builder(R.id.fab_query, R.drawable.ic_account)
+        .setFabImageTintColor(0xffffffffu.toInt())
+        .setLabel(R.string.label_query_medium)
+        .setLabelBackgroundColor(colorLabelBackground)
+        .setLabelColor(colorLabel)
+        .create()
+    )
+    */
 
     return view
   }

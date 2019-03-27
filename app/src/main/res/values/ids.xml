@@ -23,4 +23,8 @@
   <item name="tag_daychange_content" type="id" />
 
   <item name="tag_markerline" type="id" />
+
+  <item name="fab_query" type="id" />
+  <item name="fab_join" type="id" />
+  <item name="fab_create" type="id" />
 </resources>

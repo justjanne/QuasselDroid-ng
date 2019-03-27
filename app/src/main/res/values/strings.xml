@@ -46,6 +46,7 @@
   <string name="label_copy">Copy</string>
   <string name="label_crashes">Crashes</string>
   <string name="label_crashes_empty">No crash reports found</string>
+  <string name="label_create_channel">Create Channel</string>
   <string name="label_delete">Delete</string>
   <string name="label_delete_all">Delete All</string>
   <string name="label_descending">Descending</string>
@@ -102,6 +103,7 @@
   <string name="label_privacy_policy">Privacy Policy</string>
   <string name="label_query">Query</string>
   <string name="label_query_long">Open private chat with user</string>
+  <string name="label_query_medium">Open private chat</string>
   <string name="label_rename">Rename</string>
   <string name="label_reply">Reply</string>
   <string name="label_reset">Reset</string>

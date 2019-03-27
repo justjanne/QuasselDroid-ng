@@ -17,12 +17,11 @@
   with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical">
+  android:layout_height="match_parent">
 
   <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
@@ -48,21 +47,46 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+      <include layout="@layout/widget_search" />
+
+      <de.kuschku.quasseldroid.util.ui.view.WarningBarView
+        android:id="@+id/feature_context_bufferactivitysync"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_alert"
+        app:text="@string/label_feature_context_bufferactivitysync" />
+    </LinearLayout>
+
   </com.google.android.material.appbar.AppBarLayout>
-
-  <include layout="@layout/widget_search" />
-
-  <de.kuschku.quasseldroid.util.ui.view.WarningBarView
-    android:id="@+id/feature_context_bufferactivitysync"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:icon="@drawable/ic_alert"
-    app:text="@string/label_feature_context_bufferactivitysync" />
 
   <de.kuschku.quasseldroid.util.ui.fastscroll.views.FastScrollRecyclerView
     android:id="@+id/chatList"
     style="@style/Widget.FastScroller"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:listitem="@layout/widget_buffer" />
-</LinearLayout>
+
+  <!--
+  <com.leinardi.android.speeddial.SpeedDialOverlayLayout
+    android:id="@+id/overlay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+  <com.leinardi.android.speeddial.SpeedDialView
+    android:id="@+id/fab"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|end"
+    app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
+    app:sdMainFabClosedSrc="@drawable/ic_add"
+    app:sdOverlayLayout="@id/overlay" />
+  -->
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
