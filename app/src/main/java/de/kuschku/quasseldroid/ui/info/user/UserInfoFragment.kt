@@ -31,12 +31,18 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.quassel.syncables.BufferSyncer
+import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.helpers.nullIf
@@ -46,6 +52,7 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.ui.coresettings.ignorelist.IgnoreListActivity
+import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.ShortcutCreationHelper
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.avatars.MatrixApi
@@ -57,6 +64,9 @@ import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
 import de.kuschku.quasseldroid.viewmodel.data.Avatar
+import de.kuschku.quasseldroid.viewmodel.data.BufferHiddenState
+import de.kuschku.quasseldroid.viewmodel.data.BufferProps
+import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -115,6 +125,9 @@ class UserInfoFragment : ServiceBoundFragment() {
   @BindView(R.id.server)
   lateinit var server: TextView
 
+  @BindView(R.id.common_channels)
+  lateinit var commonChannels: RecyclerView
+
   @Inject
   lateinit var contentFormatter: ContentFormatter
 
@@ -144,32 +157,83 @@ class UserInfoFragment : ServiceBoundFragment() {
       actionShortcut.visibleIf(currentBufferInfo != null)
     }
 
+    val commonChannelsAdapter = ChannelAdapter()
+    commonChannels.layoutManager = LinearLayoutManager(context)
+    commonChannels.itemAnimator = DefaultItemAnimator()
+    commonChannels.adapter = commonChannelsAdapter
+
+    val colorContext = ColorContext(requireContext(), messageSettings)
+
+    val colorAccent = requireContext().theme.styledAttributes(R.attr.colorAccent) {
+      getColor(0, 0)
+    }
+
+    val colorAway = requireContext().theme.styledAttributes(R.attr.colorAway) {
+      getColor(0, 0)
+    }
+
     combineLatest(viewModel.session, viewModel.networks).switchMap { (sessionOptional, networks) ->
-      fun processUser(user: IrcUser, info: BufferInfo? = null): Optional<IrcUserInfo> {
+      fun processUser(user: IrcUser, bufferSyncer: BufferSyncer? = null,
+                      info: BufferInfo? = null): Observable<Optional<IrcUserInfo>> {
         actionShortcut.post(::updateShortcutVisibility)
         return when {
-          user == IrcUser.NULL && info != null -> Optional.of(IrcUserInfo(
+          user == IrcUser.NULL && info != null -> Observable.just(Optional.of(IrcUserInfo(
             networkId = info.networkId,
             nick = info.bufferName ?: "",
             knownToCore = true,
             info = info
-          ))
-          user == IrcUser.NULL                 -> Optional.empty()
-          else                                 -> Optional.of(IrcUserInfo(
-            networkId = user.network().networkId(),
-            nick = user.nick(),
-            user = user.user(),
-            host = user.host(),
-            account = user.account(),
-            server = user.server(),
-            realName = user.realName(),
-            isAway = user.isAway(),
-            awayMessage = user.awayMessage(),
-            network = user.network(),
-            knownToCore = true,
-            info = info,
-            ircUser = user
-          ))
+          )))
+          user == IrcUser.NULL                 -> Observable.just(Optional.empty())
+          else                                 -> {
+            combineLatest(user.channels().map { channelName ->
+              user.network().liveIrcChannel(
+                channelName
+              ).switchMap { channel ->
+                channel.updates().map {
+                  bufferSyncer?.find(
+                    bufferName = channelName,
+                    networkId = user.network().networkId()
+                  )?.let { info ->
+                    val bufferStatus =
+                      if (it == IrcChannel.NULL) BufferStatus.OFFLINE
+                      else BufferStatus.ONLINE
+                    val color =
+                      if (bufferStatus == BufferStatus.ONLINE) colorAccent
+                      else colorAway
+                    val fallbackDrawable = colorContext.buildTextDrawable("#", color)
+
+                    BufferProps(
+                      info = info,
+                      network = user.network().networkInfo(),
+                      description = it.topic(),
+                      activity = Message_Type.of(),
+                      bufferStatus = bufferStatus,
+                      hiddenState = BufferHiddenState.VISIBLE,
+                      networkConnectionState = user.network().connectionState(),
+                      fallbackDrawable = fallbackDrawable
+                    )
+                  }
+                }
+              }
+            }).map {
+              Optional.of(IrcUserInfo(
+                networkId = user.network().networkId(),
+                nick = user.nick(),
+                user = user.user(),
+                host = user.host(),
+                account = user.account(),
+                server = user.server(),
+                realName = user.realName(),
+                isAway = user.isAway(),
+                awayMessage = user.awayMessage(),
+                network = user.network(),
+                knownToCore = true,
+                info = info,
+                ircUser = user,
+                channels = it.filterNotNull()
+              ))
+            }
+          }
         }
       }
 
@@ -178,16 +242,16 @@ class UserInfoFragment : ServiceBoundFragment() {
         val bufferSyncer = session?.bufferSyncer
         val bufferInfo = bufferSyncer?.bufferInfo(bufferId)
         bufferInfo?.let {
-          networks[it.networkId]?.liveIrcUser(it.bufferName)?.switchMap(IrcUser::updates)?.map {
-            processUser(it, bufferInfo)
+          networks[it.networkId]?.liveIrcUser(it.bufferName)?.switchMap(IrcUser::updates)?.switchMap {
+            processUser(it, bufferSyncer, bufferInfo)
           }
         }
       } else {
         networks[networkId]
           ?.liveIrcUser(nickName)
           ?.switchMap(IrcUser::updates)
-          ?.map { user -> processUser(user) }
-      } ?: Observable.just(IrcUser.NULL).map { user -> processUser(user) }
+          ?.switchMap { user -> processUser(user, sessionOptional?.orNull()?.bufferSyncer) }
+      } ?: Observable.just(IrcUser.NULL).switchMap { user -> processUser(user, null, null) }
     }.toLiveData().observe(this, Observer {
       val user = it.orNull()
       if (user != null) {
@@ -322,6 +386,8 @@ class UserInfoFragment : ServiceBoundFragment() {
             }
           }
         }
+
+        commonChannelsAdapter.submitList(user.channels)
       }
     })
 

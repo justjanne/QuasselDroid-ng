@@ -23,6 +23,7 @@ import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.quassel.syncables.Network
+import de.kuschku.quasseldroid.viewmodel.data.BufferProps
 
 data class IrcUserInfo(
   val networkId: NetworkId,
@@ -37,5 +38,6 @@ data class IrcUserInfo(
   val network: Network? = null,
   val knownToCore: Boolean = false,
   val info: BufferInfo? = null,
-  val ircUser: IrcUser? = null
+  val ircUser: IrcUser? = null,
+  val channels: List<BufferProps> = emptyList()
 )

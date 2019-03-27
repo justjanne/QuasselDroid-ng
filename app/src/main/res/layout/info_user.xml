@@ -251,6 +251,15 @@
           style="@style/Widget.Info.Item.Description"
           android:text="@string/label_user_server" />
       </LinearLayout>
+
+      <TextView
+        style="@style/Widget.Info.Section"
+        android:text="@string/label_user_common_channels" />
+
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/common_channels"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     </LinearLayout>
   </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
