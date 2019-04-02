@@ -1052,6 +1052,7 @@ public class MaterialSpinnerLayout extends LinearLayout {
         bounds.top = rect.top + boxCollapsedPaddingTopPx;
         bounds.right = rect.right - spinner.getPaddingRight();
         return bounds;
+      case BOX_BACKGROUND_NONE:
       default:
         bounds.left = rect.left + spinner.getPaddingLeft();
         bounds.top = getPaddingTop();
