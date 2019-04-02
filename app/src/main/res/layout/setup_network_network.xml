@@ -77,10 +77,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/hostWrapper"
+      style="@style/Widget.CustomTextInput"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:hint="@string/settings_networkserver_host"
-      style="@style/Widget.CustomTextInput"
       tools:ignore="LabelFor">
 
       <com.google.android.material.textfield.TextInputEditText
@@ -93,10 +93,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/portWrapper"
+      style="@style/Widget.CustomTextInput"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:hint="@string/settings_networkserver_port"
-      style="@style/Widget.CustomTextInput"
       app:passwordToggleEnabled="true"
       tools:ignore="LabelFor">
 

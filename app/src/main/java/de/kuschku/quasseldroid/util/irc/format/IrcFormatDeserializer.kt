@@ -375,7 +375,7 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
           '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> {
             // Do nothing
           }
-          else -> break@loop
+          else                                             -> break@loop
         }
         i++
       }
@@ -396,7 +396,7 @@ class IrcFormatDeserializer(private val mircColors: IntArray) {
           'c', 'd', 'e', 'f' -> {
             // Do nothing
           }
-          else -> break@loop
+          else               -> break@loop
         }
         i++
       }

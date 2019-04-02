@@ -41,7 +41,7 @@ import de.kuschku.quasseldroid.util.ui.settings.DaggerPreferenceFragmentCompat
 import javax.inject.Inject
 
 class ClientSettingsFragment : DaggerPreferenceFragmentCompat(),
-  SharedPreferences.OnSharedPreferenceChangeListener {
+                               SharedPreferences.OnSharedPreferenceChangeListener {
 
   @Inject
   lateinit var appearanceSettings: AppearanceSettings
@@ -97,7 +97,7 @@ class ClientSettingsFragment : DaggerPreferenceFragmentCompat(),
     updateSummary(findPreference(key))
     val appearanceSettings = Settings.appearance(context!!)
     if (this.appearanceSettings.theme != appearanceSettings.theme ||
-      this.appearanceSettings.language != appearanceSettings.language) {
+        this.appearanceSettings.language != appearanceSettings.language) {
       activity?.recreate()
     }
   }
@@ -126,14 +126,14 @@ class ClientSettingsFragment : DaggerPreferenceFragmentCompat(),
       WhitelistActivity.launch(requireContext())
       true
     }
-    R.id.action_crashes -> {
+    R.id.action_crashes      -> {
       CrashActivity.launch(requireContext())
       true
     }
-    R.id.action_about -> {
+    R.id.action_about        -> {
       AboutActivity.launch(requireContext())
       true
     }
-    else -> super.onOptionsItemSelected(item)
+    else                     -> super.onOptionsItemSelected(item)
   }
 }

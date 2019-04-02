@@ -103,8 +103,8 @@
       android:visibility="visible">
 
       <de.kuschku.ui.spinner.MaterialSpinnerLayout
-        android:layout_width="match_parent"
         style="@style/Widget.CustomSpinnerLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_network_identity">
 

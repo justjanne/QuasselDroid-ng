@@ -27,10 +27,10 @@
 
   <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/nickWrapper"
+    style="@style/Widget.CustomTextInput"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:hint="@string/settings_identity_nick"
-    style="@style/Widget.CustomTextInput"
     tools:ignore="LabelFor">
 
     <com.google.android.material.textfield.TextInputEditText
@@ -43,10 +43,10 @@
 
   <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/realnameWrapper"
+    style="@style/Widget.CustomTextInput"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:hint="@string/settings_identity_real_name"
-    style="@style/Widget.CustomTextInput"
     app:passwordToggleEnabled="true"
     tools:ignore="LabelFor">
 

@@ -27,10 +27,10 @@
 
   <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/userWrapper"
+    style="@style/Widget.CustomTextInput"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:hint="@string/label_account_user"
-    style="@style/Widget.CustomTextInput"
     tools:ignore="LabelFor">
 
     <com.google.android.material.textfield.TextInputEditText
@@ -43,10 +43,10 @@
 
   <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/passWrapper"
+    style="@style/Widget.CustomTextInput"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:hint="@string/label_account_pass"
-    style="@style/Widget.CustomTextInput"
     app:passwordToggleEnabled="true"
     tools:ignore="LabelFor">
 

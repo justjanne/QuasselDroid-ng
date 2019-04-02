@@ -18,6 +18,7 @@
   -->
 
 <resources>
+
   <style name="Widget" />
 
   <style name="Widget.RtlConformTextView" parent="" />

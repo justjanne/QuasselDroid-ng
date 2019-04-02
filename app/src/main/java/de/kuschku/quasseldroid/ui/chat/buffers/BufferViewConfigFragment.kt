@@ -591,11 +591,11 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
     fab.setOnActionSelectedListener {
       when (it.id) {
-        R.id.fab_query -> {
+        R.id.fab_query  -> {
           context?.let(QueryCreateActivity.Companion::launch)
           true
         }
-        R.id.fab_join -> {
+        R.id.fab_join   -> {
           context?.let(ChannelJoinActivity.Companion::launch)
           true
         }
@@ -603,7 +603,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
           context?.let(ChannelCreateActivity.Companion::launch)
           true
         }
-        else -> false
+        else            -> false
       }
     }
 

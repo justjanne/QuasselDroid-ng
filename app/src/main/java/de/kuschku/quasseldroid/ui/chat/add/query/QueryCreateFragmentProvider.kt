@@ -23,7 +23,6 @@ import androidx.fragment.app.FragmentActivity
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import de.kuschku.quasseldroid.ui.chat.add.query.QueryCreateActivity
 
 @Module
 abstract class QueryCreateFragmentProvider {

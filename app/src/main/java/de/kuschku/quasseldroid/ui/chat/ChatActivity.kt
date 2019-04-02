@@ -358,26 +358,26 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       val toggleHighlight = DrawerToggleActivityDrawable(themedContext, R.attr.colorTintHighlight)
       val toggleNotification = DrawerToggleActivityDrawable(themedContext,
                                                             R.attr.colorTintNotification)
-      maxBufferActivity.toLiveData().observe(this@ChatActivity,
-                                             Observer { (activity, hasNotifications) ->
-        setHomeAsUpIndicator(
-          when {
-            notificationSettings.showAllActivitiesInToolbar &&
-            activity == Buffer_Activity.Highlight     ->
-              toggleHighlight
-            notificationSettings.showAllActivitiesInToolbar &&
-            activity == Buffer_Activity.NewMessage    ->
-              toggleNewMessage
-            notificationSettings.showAllActivitiesInToolbar &&
-            activity == Buffer_Activity.OtherActivity ->
-              toggleOtherActivity
-            hasNotifications                          ->
-              toggleNotification
-            else                                      ->
-              toggleDefault
-          }
-        )
-      })
+      maxBufferActivity.toLiveData()
+        .observe(this@ChatActivity, Observer { (activity, hasNotifications) ->
+          setHomeAsUpIndicator(
+            when {
+              notificationSettings.showAllActivitiesInToolbar &&
+              activity == Buffer_Activity.Highlight     ->
+                toggleHighlight
+              notificationSettings.showAllActivitiesInToolbar &&
+              activity == Buffer_Activity.NewMessage    ->
+                toggleNewMessage
+              notificationSettings.showAllActivitiesInToolbar &&
+              activity == Buffer_Activity.OtherActivity ->
+                toggleOtherActivity
+              hasNotifications                          ->
+                toggleNotification
+              else                                      ->
+                toggleDefault
+            }
+          )
+        })
     }
 
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {

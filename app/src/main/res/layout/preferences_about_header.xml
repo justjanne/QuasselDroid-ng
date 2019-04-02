@@ -79,8 +79,8 @@
       style="@style/Widget.Button.Colored"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      app:backgroundTint="?colorPrimary"
-      android:text="@string/label_website" />
+      android:text="@string/label_website"
+      app:backgroundTint="?colorPrimary" />
 
     <Space
       android:layout_width="8dp"

@@ -46,6 +46,7 @@
   <string name="label_copy">Copia</string>
   <string name="label_crashes">Arresti anomali</string>
   <string name="label_crashes_empty">Nessun rapporto di arresto anomalo trovato</string>
+  <string name="label_create_channel">Crea canale</string>
   <string name="label_delete">Elimina</string>
   <string name="label_delete_all">Elimina tutto</string>
   <string name="label_descending">Discendente</string>
@@ -102,6 +103,7 @@
   <string name="label_privacy_policy">Informativa privacy</string>
   <string name="label_query">Privato</string>
   <string name="label_query_long">Apri conversazione privata con l’utente</string>
+  <string name="label_query_medium">Apri conversazione privata</string>
   <string name="label_rename">Rinomina</string>
   <string name="label_reply">Rispondi</string>
   <string name="label_reset">Reimposta</string>

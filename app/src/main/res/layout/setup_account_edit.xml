@@ -169,8 +169,8 @@
 
         <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/userWrapper"
-          android:layout_width="match_parent"
           style="@style/Widget.CustomTextInput"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:hint="@string/label_account_user"
           tools:ignore="LabelFor">
@@ -185,8 +185,8 @@
 
         <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/passWrapper"
-          android:layout_width="match_parent"
           style="@style/Widget.CustomTextInput"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:hint="@string/label_account_pass"
           app:passwordToggleEnabled="true"
