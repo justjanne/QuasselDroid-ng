@@ -72,7 +72,8 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:theme="?attr/actionBarTheme">
 
     <com.google.android.material.button.MaterialButton
       android:id="@+id/action_website"
@@ -80,6 +81,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/label_website"
+      android:textColor="?colorControlNormal"
       app:backgroundTint="?colorPrimary" />
 
     <Space
