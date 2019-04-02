@@ -26,6 +26,12 @@ import de.kuschku.quasseldroid.service.QuasselServiceModule
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.ui.chat.ChatActivityModule
 import de.kuschku.quasseldroid.ui.chat.ChatFragmentProvider
+import de.kuschku.quasseldroid.ui.chat.add.create.ChannelCreateActivity
+import de.kuschku.quasseldroid.ui.chat.add.create.ChannelCreateFragmentProvider
+import de.kuschku.quasseldroid.ui.chat.add.join.ChannelJoinActivity
+import de.kuschku.quasseldroid.ui.chat.add.join.ChannelJoinFragmentProvider
+import de.kuschku.quasseldroid.ui.chat.add.query.QueryCreateActivity
+import de.kuschku.quasseldroid.ui.chat.add.query.QueryCreateFragmentProvider
 import de.kuschku.quasseldroid.ui.chat.topic.TopicFragmentProvider
 import de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity
 import de.kuschku.quasseldroid.ui.clientsettings.about.AboutFragmentProvider
@@ -99,6 +105,8 @@ abstract class ActivityModule {
   @ContributesAndroidInjector(modules = [ChatActivityModule::class, ChatFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
   abstract fun bindChatActivity(): ChatActivity
 
+  // Info
+
   @ActivityScope
   @ContributesAndroidInjector(modules = [UserInfoFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
   abstract fun bindUserInfoActivity(): UserInfoActivity
@@ -122,6 +130,20 @@ abstract class ActivityModule {
   @ActivityScope
   @ContributesAndroidInjector(modules = [CertificateInfoFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
   abstract fun bindCertificateInfoActivity(): CertificateInfoActivity
+
+  // Add
+
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [ChannelCreateFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
+  abstract fun bindChannelCreateActivity(): ChannelCreateActivity
+
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [ChannelJoinFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
+  abstract fun bindChannelJoinActivity(): ChannelJoinActivity
+
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [QueryCreateFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
+  abstract fun bindQueryCreateActivity(): QueryCreateActivity
 
   // Client Settings
 

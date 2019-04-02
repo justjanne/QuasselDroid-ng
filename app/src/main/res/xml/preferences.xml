@@ -178,7 +178,7 @@
       android:title="@string/preference_show_prefix_title" />
 
     <SwitchPreference
-      android:defaultValue="false"
+      android:defaultValue="true"
       android:key="@string/preference_square_avatars_key"
       android:title="@string/preference_square_avatars_title" />
 

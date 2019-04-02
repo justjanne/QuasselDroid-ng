@@ -78,7 +78,6 @@
     </activity>
 
     <!-- Info -->
-
     <activity
       android:name="de.kuschku.quasseldroid.ui.info.user.UserInfoActivity"
       android:exported="false"
@@ -111,6 +110,23 @@
       android:name="de.kuschku.quasseldroid.ui.info.certificate.CertificateInfoActivity"
       android:exported="false"
       android:label="@string/label_info_certificate"
+      android:windowSoftInputMode="adjustResize" />
+
+    <!-- Add -->
+    <activity
+      android:name="de.kuschku.quasseldroid.ui.chat.add.create.ChannelCreateActivity"
+      android:exported="false"
+      android:label="@string/label_create_channel"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name="de.kuschku.quasseldroid.ui.chat.add.join.ChannelJoinActivity"
+      android:exported="false"
+      android:label="@string/label_join_long"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name="de.kuschku.quasseldroid.ui.chat.add.query.QueryCreateActivity"
+      android:exported="false"
+      android:label="@string/label_query_medium"
       android:windowSoftInputMode="adjustResize" />
 
     <!-- Core Settings -->
@@ -264,6 +280,7 @@
       android:label="@string/setup_core_title"
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
+
     <!-- Core User Setup Flow -->
     <activity
       android:name=".ui.setup.user.UserSetupActivity"
@@ -271,6 +288,7 @@
       android:label="@string/setup_user_title"
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
+
     <!-- Network Setup Flow -->
     <activity
       android:name=".ui.setup.network.NetworkSetupActivity"

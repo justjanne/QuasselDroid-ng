@@ -47,7 +47,7 @@
       android:visibility="visible">
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_highlightrule_name">
@@ -69,7 +69,7 @@
         android:text="@string/settings_highlightrule_case_sensitive" />
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_highlightrule_sender">
@@ -81,7 +81,7 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_highlightrule_channel">

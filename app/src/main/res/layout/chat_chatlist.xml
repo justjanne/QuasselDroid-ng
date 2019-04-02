@@ -73,20 +73,20 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:listitem="@layout/widget_buffer" />
 
-  <!--
   <com.leinardi.android.speeddial.SpeedDialOverlayLayout
-    android:id="@+id/overlay"
+    android:id="@+id/fab_chatlist_overlay"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?colorBackgroundAlpha"
     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
   <com.leinardi.android.speeddial.SpeedDialView
-    android:id="@+id/fab"
+    android:id="@+id/fab_chatlist"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom|end"
-    app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
+    app:layout_behavior="@string/speedial_behavior"
     app:sdMainFabClosedSrc="@drawable/ic_add"
-    app:sdOverlayLayout="@id/overlay" />
-  -->
+    app:sdOverlayLayout="@id/fab_chatlist_overlay" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

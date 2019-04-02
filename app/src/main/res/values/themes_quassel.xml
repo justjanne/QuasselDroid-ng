@@ -60,6 +60,7 @@
 
     <item name="android:windowBackground">@color/quassel_light_background</item>
     <item name="colorBackground">#FAFAFA</item>
+    <item name="colorBackgroundAlpha">#aaFAFAFA</item>
     <item name="colorBackgroundHighlight">#ffaf3b</item>
     <item name="colorBackgroundSecondary">#F0F0F0</item>
     <item name="colorBackgroundCard">#FFFFFF</item>
@@ -117,6 +118,7 @@
 
     <item name="android:windowBackground">@color/quassel_dark_background</item>
     <item name="colorBackground">#303030</item>
+    <item name="colorBackgroundAlpha">#aa303030</item>
     <item name="colorBackgroundHighlight">#ffaf3b</item>
     <item name="colorBackgroundSecondary">#424242</item>
     <item name="colorBackgroundCard">#424242</item>

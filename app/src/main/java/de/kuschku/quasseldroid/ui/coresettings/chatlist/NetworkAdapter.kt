@@ -57,7 +57,7 @@ class NetworkAdapter(@StringRes private val fallbackName: Int) :
       else
         parent.context
     )
-    val view = inflater.inflate(R.layout.widget_spinner_item_inline, parent, false)
+    val view = inflater.inflate(R.layout.widget_spinner_item_material, parent, false)
     return NetworkViewHolder(fallbackName, view)
   }
 

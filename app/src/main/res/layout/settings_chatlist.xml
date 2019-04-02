@@ -45,7 +45,7 @@
       android:visibility="visible">
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_chatlist_buffer_view_name">
@@ -93,10 +93,19 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
 
-      <Spinner
-        android:id="@+id/network_id"
-        style="@style/Widget.FullWidthSpinner"
-        tools:listitem="@layout/widget_spinner_item_inline" />
+      <de.kuschku.ui.spinner.MaterialSpinnerLayout
+        style="@style/Widget.CustomSpinnerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/settings_chatlist_network">
+
+        <androidx.appcompat.widget.AppCompatSpinner
+          android:id="@+id/network_id"
+          style="@style/Widget.MaterialSpinner"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          tools:listitem="@layout/widget_spinner_item_material" />
+      </de.kuschku.ui.spinner.MaterialSpinnerLayout>
 
       <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/show_status_buffer"
@@ -154,10 +163,19 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
 
-      <Spinner
-        android:id="@+id/minimum_activity"
-        style="@style/Widget.FullWidthSpinner"
-        tools:listitem="@layout/widget_spinner_item_inline" />
+      <de.kuschku.ui.spinner.MaterialSpinnerLayout
+        style="@style/Widget.CustomSpinnerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/settings_chatlist_activity">
+
+        <androidx.appcompat.widget.AppCompatSpinner
+          android:id="@+id/minimum_activity"
+          style="@style/Widget.MaterialSpinner"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          tools:listitem="@layout/widget_spinner_item_material" />
+      </de.kuschku.ui.spinner.MaterialSpinnerLayout>
 
       <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/hide_inactive_buffers"

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:padding="16dp">
+
+  <de.kuschku.ui.spinner.MaterialSpinnerLayout
+    style="@style/Widget.CustomSpinnerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="@string/label_network">
+
+    <androidx.appcompat.widget.AppCompatSpinner
+      android:id="@+id/network"
+      style="@style/Widget.MaterialSpinner"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      tools:listitem="@layout/widget_spinner_item_material" />
+  </de.kuschku.ui.spinner.MaterialSpinnerLayout>
+
+  <com.google.android.material.textfield.TextInputLayout
+    style="@style/Widget.CustomTextInput"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="@string/settings_aliasitem_name">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/name"
+      style="@style/Widget.CoreSettings.EditText"
+      tools:text="back" />
+  </com.google.android.material.textfield.TextInputLayout>
+</LinearLayout>

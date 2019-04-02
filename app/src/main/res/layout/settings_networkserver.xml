@@ -45,7 +45,7 @@
       android:visibility="visible">
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_networkserver_host">
@@ -57,7 +57,7 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_networkserver_port">
@@ -80,7 +80,7 @@
         android:text="@string/settings_networkserver_ssl_verify" />
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_networkserver_password"
@@ -114,17 +114,22 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       tools:visibility="visible">
 
-      <TextView
-        style="@style/Widget.CoreSettings.EditTextHeader"
-        android:text="@string/settings_networkserver_proxy_type" />
+      <de.kuschku.ui.spinner.MaterialSpinnerLayout
+        style="@style/Widget.CustomSpinnerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/settings_networkserver_proxy_type">
 
-      <Spinner
-        android:id="@+id/proxy_type"
-        style="@style/Widget.FullWidthSpinner"
-        tools:listitem="@layout/widget_spinner_item_inline" />
+        <androidx.appcompat.widget.AppCompatSpinner
+          android:id="@+id/proxy_type"
+          style="@style/Widget.MaterialSpinner"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          tools:listitem="@layout/widget_spinner_item_material" />
+      </de.kuschku.ui.spinner.MaterialSpinnerLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_networkserver_proxy_host">
@@ -136,7 +141,7 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_networkserver_proxy_port">
@@ -149,7 +154,7 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_networkserver_proxy_user">
@@ -161,7 +166,7 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_networkserver_proxy_pass"

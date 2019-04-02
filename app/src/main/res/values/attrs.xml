@@ -58,6 +58,7 @@
   <attr name="colorDivider" format="color" />
 
   <attr name="colorBackground" format="color" />
+  <attr name="colorBackgroundAlpha" format="color" />
   <attr name="colorBackgroundHighlight" format="color" />
   <attr name="colorBackgroundSecondary" format="color" />
   <attr name="colorBackgroundCard" format="color" />

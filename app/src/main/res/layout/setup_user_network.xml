@@ -25,16 +25,19 @@
   android:orientation="vertical"
   android:padding="32dp">
 
-  <TextView
-    style="@style/Widget.CoreSettings.EditTextHeader"
-    android:text="@string/settings_network_title" />
-
-  <Spinner
-    android:id="@+id/network"
-    style="@style/Widget.FullWidthSpinner"
+  <de.kuschku.ui.spinner.MaterialSpinnerLayout
+    style="@style/Widget.CustomSpinnerLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:listitem="@layout/widget_spinner_item_inline" />
+    android:hint="@string/settings_network_title">
+
+    <androidx.appcompat.widget.AppCompatSpinner
+      android:id="@+id/network"
+      style="@style/Widget.MaterialSpinner"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      tools:listitem="@layout/widget_spinner_item_material" />
+  </de.kuschku.ui.spinner.MaterialSpinnerLayout>
 
   <LinearLayout
     android:id="@+id/network_group"
@@ -47,7 +50,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:hint="@string/settings_network_network_name"
-      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+      style="@style/Widget.CustomTextInput"
       tools:ignore="LabelFor">
 
       <com.google.android.material.textfield.TextInputEditText
@@ -63,7 +66,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:hint="@string/settings_networkserver_host"
-      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+      style="@style/Widget.CustomTextInput"
       tools:ignore="LabelFor">
 
       <com.google.android.material.textfield.TextInputEditText
@@ -80,7 +83,7 @@
       android:layout_height="wrap_content"
       android:hint="@string/settings_networkserver_port"
       app:passwordToggleEnabled="true"
-      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+      style="@style/Widget.CustomTextInput"
       tools:ignore="LabelFor">
 
       <com.google.android.material.textfield.TextInputEditText

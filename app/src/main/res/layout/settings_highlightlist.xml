@@ -57,10 +57,19 @@
         style="@style/Widget.CoreSettings.DependentGroup"
         android:visibility="visible">
 
-        <Spinner
-          android:id="@+id/highlight_nick_type"
-          style="@style/Widget.FullWidthSpinner"
-          tools:listitem="@layout/widget_spinner_item_inline" />
+        <de.kuschku.ui.spinner.MaterialSpinnerLayout
+          style="@style/Widget.CustomSpinnerLayout"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/settings_highlightlist_highlight_nick">
+
+          <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/highlight_nick_type"
+            style="@style/Widget.MaterialSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/widget_spinner_item_material" />
+        </de.kuschku.ui.spinner.MaterialSpinnerLayout>
 
         <androidx.appcompat.widget.SwitchCompat
           android:id="@+id/is_case_sensitive"

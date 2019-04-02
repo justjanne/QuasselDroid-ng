@@ -45,7 +45,7 @@
       android:visibility="visible">
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_network_network_name">
@@ -102,16 +102,19 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
 
-      <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+      <de.kuschku.ui.spinner.MaterialSpinnerLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/Widget.CustomSpinnerLayout"
+        android:layout_height="wrap_content"
+        android:hint="@string/settings_network_identity">
 
-        <Spinner
+        <androidx.appcompat.widget.AppCompatSpinner
           android:id="@+id/identity"
-          style="@style/Widget.FullWidthSpinner"
-          tools:listitem="@layout/widget_spinner_item_inline" />
-      </com.google.android.material.textfield.TextInputLayout>
+          style="@style/Widget.MaterialSpinner"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          tools:listitem="@layout/widget_spinner_item_material" />
+      </de.kuschku.ui.spinner.MaterialSpinnerLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -135,7 +138,7 @@
       tools:visibility="gone">
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_network_sasl_account">
@@ -147,7 +150,7 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_network_sasl_password"
@@ -184,7 +187,7 @@
       tools:visibility="gone">
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_network_autoidentify_service">
@@ -196,7 +199,7 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_network_autoidentify_password"
@@ -229,7 +232,7 @@
       android:visibility="visible">
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_network_perform">
@@ -272,7 +275,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+          style="@style/Widget.CustomTextInput"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:hint="@string/settings_network_autoreconnect_interval">
@@ -289,7 +292,7 @@
       </FrameLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_network_autoreconnect_attempts">
@@ -332,7 +335,7 @@
         android:text="@string/settings_network_customratelimits_unlimited" />
 
       <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_network_customratelimits_burstsize">
@@ -348,7 +351,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+          style="@style/Widget.CustomTextInput"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:hint="@string/settings_network_customratelimits_delay">

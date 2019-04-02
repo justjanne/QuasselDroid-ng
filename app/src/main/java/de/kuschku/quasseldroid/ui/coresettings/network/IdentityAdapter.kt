@@ -52,7 +52,7 @@ class IdentityAdapter : RecyclerSpinnerAdapter<IdentityAdapter.NetworkViewHolder
     val inflater = LayoutInflater.from(
       if (dropDown) ContextThemeWrapper(parent.context, dropDownViewTheme) else parent.context
     )
-    return NetworkViewHolder(inflater.inflate(R.layout.widget_spinner_item_inline, parent, false))
+    return NetworkViewHolder(inflater.inflate(R.layout.widget_spinner_item_material, parent, false))
   }
 
   fun indexOf(id: IdentityId): Int? {

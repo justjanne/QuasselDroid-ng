@@ -51,7 +51,7 @@ class DefaultNetworkAdapter @Inject constructor(defaultNetworks: DefaultNetworks
       else
         parent.context
     )
-    val view = inflater.inflate(R.layout.widget_spinner_item_inline, parent, false)
+    val view = inflater.inflate(R.layout.widget_spinner_item_material, parent, false)
     return DefaultNetworkViewHolder(view)
   }
 

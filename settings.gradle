@@ -26,5 +26,6 @@ include ':app',
     ':lib',
     ':lifecycle-ktx',
     ':malheur',
-    ":persistence",
-    ":viewmodel"
+    ':persistence',
+    ':viewmodel',
+    ':ui_spinner'

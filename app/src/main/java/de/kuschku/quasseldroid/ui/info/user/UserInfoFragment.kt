@@ -48,6 +48,7 @@ import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.libquassel.util.irc.HostmaskHelper
+import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
@@ -185,53 +186,67 @@ class UserInfoFragment : ServiceBoundFragment() {
           )))
           user == IrcUser.NULL                 -> Observable.just(Optional.empty())
           else                                 -> {
-            combineLatest(user.channels().map { channelName ->
-              user.network().liveIrcChannel(
-                channelName
-              ).switchMap { channel ->
-                channel.updates().map {
-                  bufferSyncer?.find(
-                    bufferName = channelName,
-                    networkId = user.network().networkId()
-                  )?.let { info ->
-                    val bufferStatus =
-                      if (it == IrcChannel.NULL) BufferStatus.OFFLINE
-                      else BufferStatus.ONLINE
-                    val color =
-                      if (bufferStatus == BufferStatus.ONLINE) colorAccent
-                      else colorAway
-                    val fallbackDrawable = colorContext.buildTextDrawable("#", color)
+            fun buildUserInfo(channels: List<BufferProps>) = IrcUserInfo(
+              networkId = user.network().networkId(),
+              nick = user.nick(),
+              user = user.user(),
+              host = user.host(),
+              account = user.account(),
+              server = user.server(),
+              realName = user.realName(),
+              isAway = user.isAway(),
+              awayMessage = user.awayMessage(),
+              network = user.network(),
+              knownToCore = true,
+              info = info,
+              ircUser = user,
+              channels = channels.sortedBy {
+                IrcCaseMappers.unicode.toLowerCaseNullable(it.info.bufferName)
+              }
+            )
 
-                    BufferProps(
-                      info = info,
-                      network = user.network().networkInfo(),
-                      description = it.topic(),
-                      activity = Message_Type.of(),
-                      bufferStatus = bufferStatus,
-                      hiddenState = BufferHiddenState.VISIBLE,
-                      networkConnectionState = user.network().connectionState(),
-                      fallbackDrawable = fallbackDrawable
+            if (user.channels().isEmpty()) {
+              Observable.just(Optional.of(
+                buildUserInfo(emptyList())
+              ))
+            } else {
+              combineLatest(user.channels().map { channelName ->
+                user.network().liveIrcChannel(
+                  channelName
+                ).switchMap { channel ->
+                  channel.updates().map {
+                    Optional.ofNullable(
+                      bufferSyncer?.find(
+                        bufferName = channelName,
+                        networkId = user.network().networkId()
+                      )?.let { info ->
+                        val bufferStatus =
+                          if (it == IrcChannel.NULL) BufferStatus.OFFLINE
+                          else BufferStatus.ONLINE
+                        val color =
+                          if (bufferStatus == BufferStatus.ONLINE) colorAccent
+                          else colorAway
+                        val fallbackDrawable = colorContext.buildTextDrawable("#", color)
+
+                        BufferProps(
+                          info = info,
+                          network = user.network().networkInfo(),
+                          description = it.topic(),
+                          activity = Message_Type.of(),
+                          bufferStatus = bufferStatus,
+                          hiddenState = BufferHiddenState.VISIBLE,
+                          networkConnectionState = user.network().connectionState(),
+                          fallbackDrawable = fallbackDrawable
+                        )
+                      }
                     )
                   }
                 }
+              }).map {
+                it.mapNotNull(Optional<BufferProps>::orNull)
+              }.map {
+                Optional.of(buildUserInfo(it))
               }
-            }).map {
-              Optional.of(IrcUserInfo(
-                networkId = user.network().networkId(),
-                nick = user.nick(),
-                user = user.user(),
-                host = user.host(),
-                account = user.account(),
-                server = user.server(),
-                realName = user.realName(),
-                isAway = user.isAway(),
-                awayMessage = user.awayMessage(),
-                network = user.network(),
-                knownToCore = true,
-                info = info,
-                ircUser = user,
-                channels = it.filterNotNull()
-              ))
             }
           }
         }

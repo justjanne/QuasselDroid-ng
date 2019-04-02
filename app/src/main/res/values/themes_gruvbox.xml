@@ -64,6 +64,7 @@
 
     <item name="android:windowBackground">@color/gruvbox_light_background</item>
     <item name="colorBackground">#fbf1c7</item>
+    <item name="colorBackgroundAlpha">#aafbf1c7</item>
     <item name="colorBackgroundHighlight">#40d65d0e</item>
     <item name="colorBackgroundSecondary">#ebdbb2</item>
     <item name="colorBackgroundCard">#ebdbb2</item>
@@ -128,6 +129,7 @@
 
     <item name="android:windowBackground">@color/gruvbox_dark_background</item>
     <item name="colorBackground">#282828</item>
+    <item name="colorBackgroundAlpha">#aa282828</item>
     <item name="colorBackgroundHighlight">#40d65d0e</item>
     <item name="colorBackgroundSecondary">#504945</item>
     <item name="colorBackgroundCard">#504945</item>

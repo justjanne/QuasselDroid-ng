@@ -62,8 +62,9 @@
 
     <item name="colorForegroundMirc">0x0</item>
 
-    <item name="colorBackground">#000000</item>
     <item name="android:windowBackground">@color/amoled_background</item>
+    <item name="colorBackground">#000000</item>
+    <item name="colorBackgroundAlpha">#aa000000</item>
     <item name="colorBackgroundHighlight">#40ffaf3b</item>
     <item name="colorBackgroundSecondary">#10ffaf3b</item>
     <item name="colorBackgroundCard">#000000</item>

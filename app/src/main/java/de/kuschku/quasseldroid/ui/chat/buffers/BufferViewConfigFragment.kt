@@ -26,6 +26,7 @@ import android.text.TextWatcher
 import android.view.*
 import android.widget.AdapterView
 import android.widget.EditText
+import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.Toolbar
@@ -36,6 +37,8 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
+import com.leinardi.android.speeddial.SpeedDialActionItem
+import com.leinardi.android.speeddial.SpeedDialView
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.Buffer_Type
@@ -50,12 +53,16 @@ import de.kuschku.libquassel.util.helpers.mapMap
 import de.kuschku.libquassel.util.helpers.mapOrElse
 import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
+import de.kuschku.quasseldroid.ui.chat.add.create.ChannelCreateActivity
+import de.kuschku.quasseldroid.ui.chat.add.join.ChannelJoinActivity
+import de.kuschku.quasseldroid.ui.chat.add.query.QueryCreateActivity
 import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
 import de.kuschku.quasseldroid.ui.info.channellist.ChannelListActivity
 import de.kuschku.quasseldroid.util.ColorContext
@@ -91,10 +98,9 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
   @BindView(R.id.buffer_search_container)
   lateinit var bufferSearchContainer: ViewGroup
-/*
-  @BindView(R.id.fab)
+
+  @BindView(R.id.fab_chatlist)
   lateinit var fab: SpeedDialView
-  */
 
   @Inject
   lateinit var appearanceSettings: AppearanceSettings
@@ -535,16 +541,27 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       bufferSearch.setText("")
     }
 
-    /*
     @ColorInt var colorLabel = 0
     @ColorInt var colorLabelBackground = 0
-    view.context.theme.styledAttributes(R.attr.colorTextPrimary, R.attr.colorBackgroundCard) {
+
+    @ColorInt var fabBackground0 = 0
+    @ColorInt var fabBackground1 = 0
+    @ColorInt var fabBackground2 = 0
+    view.context.theme.styledAttributes(
+      R.attr.colorTextPrimary, R.attr.colorBackgroundCard,
+      R.attr.senderColorF, R.attr.senderColorE, R.attr.senderColorD
+    ) {
       colorLabel = getColor(0, 0)
       colorLabelBackground = getColor(1, 0)
+
+      fabBackground0 = getColor(2, 0)
+      fabBackground1 = getColor(3, 0)
+      fabBackground2 = getColor(4, 0)
     }
 
     fab.addActionItem(
       SpeedDialActionItem.Builder(R.id.fab_create, R.drawable.ic_add)
+        .setFabBackgroundColor(fabBackground0)
         .setFabImageTintColor(0xffffffffu.toInt())
         .setLabel(R.string.label_create_channel)
         .setLabelBackgroundColor(colorLabelBackground)
@@ -554,6 +571,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
     fab.addActionItem(
       SpeedDialActionItem.Builder(R.id.fab_join, R.drawable.ic_channel)
+        .setFabBackgroundColor(fabBackground1)
         .setFabImageTintColor(0xffffffffu.toInt())
         .setLabel(R.string.label_join_long)
         .setLabelBackgroundColor(colorLabelBackground)
@@ -563,13 +581,33 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
     fab.addActionItem(
       SpeedDialActionItem.Builder(R.id.fab_query, R.drawable.ic_account)
+        .setFabBackgroundColor(fabBackground2)
         .setFabImageTintColor(0xffffffffu.toInt())
         .setLabel(R.string.label_query_medium)
         .setLabelBackgroundColor(colorLabelBackground)
         .setLabelColor(colorLabel)
         .create()
     )
-    */
+
+    fab.setOnActionSelectedListener {
+      when (it.id) {
+        R.id.fab_query -> {
+          context?.let(QueryCreateActivity.Companion::launch)
+          true
+        }
+        R.id.fab_join -> {
+          context?.let(ChannelJoinActivity.Companion::launch)
+          true
+        }
+        R.id.fab_create -> {
+          context?.let(ChannelCreateActivity.Companion::launch)
+          true
+        }
+        else -> false
+      }
+    }
+
+    fab.visibleIf(BuildConfig.DEBUG)
 
     return view
   }

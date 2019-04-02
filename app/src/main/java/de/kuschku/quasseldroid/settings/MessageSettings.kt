@@ -32,7 +32,7 @@ data class MessageSettings(
   val timeAtEnd: Boolean = false,
   val showRealNames: Boolean = false,
   val showAvatars: Boolean = true,
-  val squareAvatars: Boolean = false,
+  val squareAvatars: Boolean = true,
   val showIRCCloudAvatars: Boolean = false,
   val showGravatarAvatars: Boolean = false,
   val showMatrixAvatars: Boolean = false,

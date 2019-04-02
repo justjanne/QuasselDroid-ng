@@ -47,4 +47,6 @@
 
   <dimen name="drawer_toggle_size">24dp</dimen>
   <dimen name="drawer_toggle_thickness">2dp</dimen>
+
+  <dimen name="hint_text_size">12sp</dimen>
 </resources>

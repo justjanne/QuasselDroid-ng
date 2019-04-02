@@ -51,7 +51,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+          style="@style/Widget.CustomTextInput"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:hint="@string/settings_networkconfig_ping_interval">
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+          style="@style/Widget.CustomTextInput"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:hint="@string/settings_networkconfig_max_ping_count">
@@ -116,7 +116,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+          style="@style/Widget.CustomTextInput"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:hint="@string/settings_networkconfig_auto_who_interval">
@@ -138,7 +138,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+          style="@style/Widget.CustomTextInput"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:hint="@string/settings_networkconfig_auto_who_nick_limit">
@@ -160,7 +160,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+          style="@style/Widget.CustomTextInput"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:hint="@string/settings_networkconfig_auto_who_delay">

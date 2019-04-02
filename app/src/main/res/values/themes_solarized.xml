@@ -64,6 +64,7 @@
 
     <item name="android:windowBackground">@color/solarized_light_background</item>
     <item name="colorBackground">#FDF6E3</item>
+    <item name="colorBackgroundAlpha">#aaFDF6E3</item>
     <item name="colorBackgroundHighlight">#40B58900</item>
     <item name="colorBackgroundSecondary">#EEE8D5</item>
     <item name="colorBackgroundCard">#EEE8D5</item>
@@ -128,6 +129,7 @@
 
     <item name="android:windowBackground">@color/solarized_dark_background</item>
     <item name="colorBackground">#002B36</item>
+    <item name="colorBackgroundAlpha">#aa002B36</item>
     <item name="colorBackgroundHighlight">#30268BD2</item>
     <item name="colorBackgroundSecondary">#073642</item>
     <item name="colorBackgroundCard">#073642</item>

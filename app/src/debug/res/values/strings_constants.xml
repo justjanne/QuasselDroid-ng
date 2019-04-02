@@ -19,4 +19,5 @@
 
 <resources>
   <string name="package_name" translatable="false">com.iskrembilen.quasseldroid.debug</string>
+  <string name="speedial_behavior" translatable="false">com.leinardi.android.speeddial.SpeedDialView$ScrollingViewSnackbarBehavior</string>
 </resources>
