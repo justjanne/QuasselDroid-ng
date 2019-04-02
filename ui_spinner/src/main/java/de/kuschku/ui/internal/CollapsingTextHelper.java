@@ -16,6 +16,7 @@
 
 package de.kuschku.ui.internal;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -133,17 +134,16 @@ public final class CollapsingTextHelper {
 
   public void setCollapsedTextAppearance(int resId) {
     Context context = view.getContext();
-    TypedArray a = context.obtainStyledAttributes(resId, R.styleable.TextAppearance);
-    ColorStateList textColor = MaterialResources.getColorStateList(context, a, R.styleable.TextAppearance_android_textColor);
+    TypedArray a = context.obtainStyledAttributes(resId, R.styleable.md_TextAppearance);
+    ColorStateList textColor = MaterialResources.getColorStateList(context, a, R.styleable.md_TextAppearance_android_textColor);
     if (textColor != null) {
       collapsedTextColor = textColor;
     }
-    float textSize = a.getDimension(R.styleable.TextAppearance_android_textSize, 0f);
+    float textSize = a.getDimension(R.styleable.md_TextAppearance_android_textSize, 0f);
     if (textSize != 0) {
       collapsedTextSize = textSize;
     }
     a.recycle();
-
 
     recalculate();
   }
@@ -212,6 +212,7 @@ public final class CollapsingTextHelper {
     return colorStateList.getDefaultColor();
   }
 
+  @SuppressLint("RtlHardcoded")
   private void calculateBaseOffsets() {
     // We then calculate the collapsed text size, using the same logic
     calculateUsingTextSize();
