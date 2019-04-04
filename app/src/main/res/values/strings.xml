@@ -82,6 +82,7 @@
   <string name="label_new_highlight_ignore_rule">New Highlight Ignore Rule</string>
   <string name="label_new_highlight_rule">New Highlight Rule</string>
   <string name="label_new_identity">New Identity</string>
+  <string name="label_new_ignore_rule">New Ignore Rule</string>
   <string name="label_new_network">New Network</string>
   <string name="label_new_nick">New Nick</string>
   <string name="label_new_server">New Server</string>
