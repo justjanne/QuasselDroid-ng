@@ -1,34 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:padding="16dp">
+  android:layout_height="match_parent">
 
-  <de.kuschku.ui.spinner.MaterialSpinnerLayout
-    style="@style/Widget.CustomSpinnerLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="@string/label_network">
+  <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
 
-    <androidx.appcompat.widget.AppCompatSpinner
-      android:id="@+id/network"
-      style="@style/Widget.MaterialSpinner"
+    <de.kuschku.ui.spinner.MaterialSpinnerLayout
+      style="@style/Widget.CustomSpinnerLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      tools:listitem="@layout/widget_spinner_item_material" />
-  </de.kuschku.ui.spinner.MaterialSpinnerLayout>
+      android:hint="@string/label_network">
 
-  <com.google.android.material.textfield.TextInputLayout
-    style="@style/Widget.CustomTextInput"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="@string/settings_aliasitem_name">
+      <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/network"
+        style="@style/Widget.MaterialSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/widget_spinner_item_material" />
+    </de.kuschku.ui.spinner.MaterialSpinnerLayout>
 
-    <com.google.android.material.textfield.TextInputEditText
-      android:id="@+id/name"
-      style="@style/Widget.CoreSettings.EditText"
-      tools:text="back" />
-  </com.google.android.material.textfield.TextInputLayout>
-</LinearLayout>
+    <com.google.android.material.textfield.TextInputLayout
+      style="@style/Widget.CustomTextInput"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/label_channel_name">
+
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/name"
+        style="@style/Widget.CoreSettings.EditText"
+        tools:text="#trees" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <androidx.appcompat.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_eye_off" />
+
+      <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/hidden"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/addchat_channel_hidden" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <androidx.appcompat.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_account_card" />
+
+      <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/invite_only"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/addchat_channel_invite_only" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp">
+
+      <androidx.appcompat.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_key_variant" />
+
+      <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/password_protected"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/addchat_channel_password_protected" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/password_group"
+      style="@style/Widget.CoreSettings.DependentGroup"
+      tools:visibility="visible">
+
+      <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.CustomTextInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/addchat_channel_password"
+        app:passwordToggleEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/password"
+          style="@style/Widget.CoreSettings.EditText"
+          android:inputType="textPassword"
+          tools:text="NickServ" />
+      </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+  </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="addchat_channel_hidden">Hidden</string>
+
+  <string name="addchat_channel_invite_only">Invite Only</string>
+
+  <string name="addchat_channel_password_protected">Password Protected</string>
+  <string name="addchat_channel_password">Password</string>
+</resources>
