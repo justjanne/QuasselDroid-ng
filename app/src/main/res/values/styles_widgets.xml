@@ -134,6 +134,7 @@
     <item name="android:textColorHint">?colorTextSecondary</item>
     <item name="hintTextColor">?colorAccent</item>
     <item name="boxStrokeColor">@color/color_outlined_stroke</item>
+    <item name="passwordToggleTint">@color/color_icons</item>
   </style>
 
   <style name="Widget.CoreSettings.Wrapper" parent="">
