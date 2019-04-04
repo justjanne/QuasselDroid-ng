@@ -37,6 +37,7 @@ import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.coresettings.ignoreitem.IgnoreItemActivity
+import de.kuschku.quasseldroid.util.helper.setTooltip
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
@@ -74,6 +75,7 @@ class IgnoreListFragment : ServiceBoundSettingsFragment(), Savable,
     add.setOnClickListener {
       startActivityForResult(IgnoreItemActivity.intent(requireContext()), REQUEST_CREATE_RULE)
     }
+    add.setTooltip()
 
     if (addRule != null) {
       startActivityForResult(IgnoreItemActivity.intent(requireContext(), addRule = addRule),
