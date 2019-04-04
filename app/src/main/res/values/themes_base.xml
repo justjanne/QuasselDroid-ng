@@ -122,6 +122,10 @@
     <item name="android:textColorSecondary">?colorTextSecondary</item>
     <item name="colorControlNormal">?colorTextPrimary</item>
 
+    <item name="colorSecondary">?colorAccent</item>
+    <item name="colorOnPrimary">?colorTextPrimary</item>
+    <item name="colorOnSecondary">?colorTextPrimaryInverse</item>
+
     <item name="colorBackgroundSnackbar">?colorPrimaryDark</item>
     <item name="colorBackgroundSearch">?colorBackgroundCard</item>
   </style>
@@ -167,6 +171,10 @@
     <item name="android:textColorSecondary">?colorTextSecondary</item>
     <item name="colorControlNormal">?colorTextPrimary</item>
 
+    <item name="colorSecondary">?colorAccent</item>
+    <item name="colorOnPrimary">?colorTextPrimary</item>
+    <item name="colorOnSecondary">?colorTextPrimaryInverse</item>
+
     <item name="colorBackgroundSnackbar">?colorPrimary</item>
     <item name="colorBackgroundSearch">?colorBackgroundCard</item>
   </style>
@@ -181,6 +189,10 @@
     <item name="android:textColorPrimary">?colorTextPrimary</item>
     <item name="android:textColorSecondary">?colorTextSecondary</item>
     <item name="colorControlNormal">?colorTextPrimary</item>
+
+    <item name="colorSecondary">?colorAccent</item>
+    <item name="colorOnPrimary">?colorTextPrimaryInverse</item>
+    <item name="colorOnSecondary">?colorTextPrimaryInverse</item>
 
     <item name="colorBackgroundSnackbar">?colorPrimaryDark</item>
     <item name="colorBackgroundSearch">?colorBackgroundCard</item>

@@ -32,6 +32,8 @@
     <item name="android:paddingLeft">?listPreferredItemPaddingLeft</item>
     <item name="android:paddingEnd">?listPreferredItemPaddingRight</item>
     <item name="android:paddingRight">?listPreferredItemPaddingRight</item>
+    <item name="android:paddingTop">8dp</item>
+    <item name="android:paddingBottom">8dp</item>
   </style>
 
   <style name="Widget.CoreSettings.PrimaryItemGroupHeader" parent="">
