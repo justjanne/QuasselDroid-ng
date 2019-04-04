@@ -76,6 +76,7 @@
   <string name="label_match_all">Corrisponde a tutti i messaggi</string>
   <string name="label_mention">Menzionare</string>
   <string name="label_mention_long">Copia il nome utente nella casella di digitazione</string>
+  <string name="label_network">Rete</string>
   <string name="label_new_account">Nuovo account</string>
   <string name="label_new_chatlist">Nuovo elenco chat</string>
   <string name="label_new_highlight_ignore_rule">Nuova regola per ignorare menzione</string>
