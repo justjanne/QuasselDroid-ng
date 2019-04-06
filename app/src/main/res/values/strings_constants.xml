@@ -25,5 +25,4 @@
   <string name="notification_channel_old_highlight" translatable="false">old_highlight</string>
 
   <string name="drag_intercept_bottom_sheet_behavior" translatable="false">de.kuschku.quasseldroid.util.ui.DragInterceptBottomSheetBehavior</string>
-  <string name="speedial_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
 </resources>

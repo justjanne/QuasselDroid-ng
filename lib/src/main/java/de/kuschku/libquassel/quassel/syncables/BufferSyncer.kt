@@ -25,6 +25,7 @@ import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferSyncer
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.NotificationManager
+import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import io.reactivex.Observable
@@ -313,6 +314,27 @@ class BufferSyncer constructor(
     bufferName == null || caseMapper.equalsIgnoreCaseNullable(it.bufferName, bufferName)
   }
 
+  fun liveAll(
+    bufferName: String? = null,
+    bufferId: BufferId? = null,
+    networkId: NetworkId? = null,
+    type: Buffer_Types? = null,
+    groupId: Int? = null
+  ) = liveBufferInfos().map {
+    it.values.filter {
+      bufferId == null || it.bufferId == bufferId
+    }.filter {
+      networkId == null || it.networkId == networkId
+    }.filter {
+      type == null || it.type == type
+    }.filter {
+      groupId == null || it.groupId == groupId
+    }.filter {
+      val caseMapper = IrcCaseMappers[session.networks[it.networkId]?.support("CASEMAPPING")]
+      bufferName == null || caseMapper.equalsIgnoreCaseNullable(it.bufferName, bufferName)
+    }
+  }
+
   fun find(
     bufferName: String? = null,
     bufferId: BufferId? = null,
@@ -320,6 +342,16 @@ class BufferSyncer constructor(
     type: Buffer_Types? = null,
     groupId: Int? = null
   ) = all(bufferName, bufferId, networkId, type, groupId).firstOrNull()
+
+  fun liveFind(
+    bufferName: String? = null,
+    bufferId: BufferId? = null,
+    networkId: NetworkId? = null,
+    type: Buffer_Types? = null,
+    groupId: Int? = null
+  ) = liveAll(bufferName, bufferId, networkId, type, groupId).map {
+    Optional.ofNullable(it.firstOrNull())
+  }
 
   override fun toString(): String {
     return "BufferSyncer(_lastSeenMsg=$_lastSeenMsg, _markerLines=$_markerLines, _bufferActivities=$_bufferActivities, _highlightCounts=$_highlightCounts, _bufferInfos=$_bufferInfos)"

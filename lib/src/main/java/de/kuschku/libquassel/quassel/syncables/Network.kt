@@ -729,7 +729,7 @@ class Network constructor(
   }
 
   override fun initSetCaps(caps: QVariantMap) {
-    caps.entries.map { (key, value) -> key to value.value("") }.toMap(_supports)
+    caps.entries.map { (key, value) -> key to value.value("") }.toMap(_caps)
   }
 
   override fun initSetCapsEnabled(capsEnabled: QVariantList) {

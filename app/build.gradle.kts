@@ -154,6 +154,7 @@ dependencies {
   // UI
   implementation("com.leinardi.android", "speed-dial", "2.0.1")
   implementation("me.zhanghai.android.materialprogressbar", "library", "1.6.1")
+  implementation("com.google.android", "flexbox", "1.1.0")
   implementation(project(":ui_spinner"))
   withVersion("0.9.6.0") {
     implementation("com.afollestad.material-dialogs", "core", version)

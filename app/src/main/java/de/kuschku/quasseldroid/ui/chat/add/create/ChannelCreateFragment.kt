@@ -23,22 +23,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.quassel.syncables.Network
-import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
+import de.kuschku.libquassel.util.helpers.nullIf
+import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
-import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
+import io.reactivex.Observable
 
-class ChannelCreateFragment : ServiceBoundSettingsFragment(), Savable {
+class ChannelCreateFragment : ServiceBoundSettingsFragment() {
   @BindView(R.id.network)
   lateinit var network: AppCompatSpinner
 
@@ -60,6 +66,9 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment(), Savable {
   @BindView(R.id.password)
   lateinit var password: EditText
 
+  @BindView(R.id.save)
+  lateinit var save: Button
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.add_create, container, false)
@@ -70,7 +79,12 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment(), Savable {
 
     viewModel.networks.switchMap {
       combineLatest(it.values.map(Network::liveNetworkInfo)).map {
-        it.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, INetwork.NetworkInfo::networkName))
+        it.map {
+          NetworkItem(
+            it.networkId,
+            it.networkName
+          )
+        }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, NetworkItem::name))
       }
     }.toLiveData().observe(this, Observer {
       if (it != null) {
@@ -80,11 +94,83 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment(), Savable {
 
     passwordProtected.setDependent(passwordGroup)
 
-    return view
-  }
+    save.setOnClickListener {
+      save.setText(R.string.label_saving)
+      save.isEnabled = false
 
-  override fun onSave(): Boolean {
-    // TODO: Implement
-    return false
+      val networkId = NetworkId(network.selectedItemId.toInt())
+      val channelName = name.text.toString().trim()
+
+      val isInviteOnly = inviteOnly.isChecked
+      val isHidden = hidden.isChecked
+      val isPasswordProtected = passwordProtected.isChecked
+      val channelPassword = password.text.toString().trim()
+
+      viewModel.bufferSyncer.value?.orNull()?.let { bufferSyncer ->
+        val existingBuffer = bufferSyncer.find(
+          networkId = networkId,
+          type = Buffer_Type.of(Buffer_Type.ChannelBuffer),
+          bufferName = channelName
+        )
+        val existingChannel = viewModel.networks.value?.get(networkId)?.ircChannel(channelName)
+          .nullIf { it == IrcChannel.NULL }
+        if (existingBuffer != null) {
+          if (existingChannel == null) {
+            bufferSyncer.find(
+              networkId = networkId,
+              type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+            )?.let { statusBuffer ->
+              viewModel.session.value?.orNull()?.rpcHandler?.apply {
+                sendInput(statusBuffer, "/join $channelName")
+              }
+            }
+          }
+
+          activity?.let {
+            it.finish()
+            ChatActivity.launch(it,
+              bufferId = existingBuffer.bufferId
+            )
+          }
+        } else {
+          bufferSyncer.find(
+            networkId = networkId,
+            type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+          )?.let { statusBuffer ->
+            viewModel.session.value?.orNull()?.rpcHandler?.apply {
+              sendInput(statusBuffer, "/join $channelName")
+              viewModel.networks.switchMap {
+                it[networkId]?.liveIrcChannel(channelName)
+                  ?: Observable.empty()
+              }.subscribe {
+                if (it.ircUsers().size <= 1) {
+                  if (isInviteOnly) {
+                    sendInput(statusBuffer, "/mode $channelName +i")
+                  }
+
+                  if (isHidden) {
+                    sendInput(statusBuffer, "/mode $channelName +s")
+                  }
+
+                  if (isPasswordProtected) {
+                    sendInput(statusBuffer, "/mode $channelName +k $channelPassword")
+                  }
+                }
+
+                activity?.let {
+                  it.finish()
+                  ChatActivity.launch(it,
+                    networkId = networkId,
+                    channel = channelName
+                  )
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return view
   }
 }

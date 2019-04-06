@@ -44,15 +44,18 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.helpers.nullIf
+import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.Defaults
 import de.kuschku.quasseldroid.ui.coresettings.networkserver.NetworkServerActivity
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
+import de.kuschku.quasseldroid.util.ui.view.InlineSnackBar
 import kotlin.math.roundToInt
 
 abstract class NetworkBaseFragment(private val initDefault: Boolean) :
@@ -86,6 +89,9 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
 
   @BindView(R.id.autoidentify_group)
   lateinit var autoidentifyGroup: ViewGroup
+
+  @BindView(R.id.autoidentify_warning)
+  lateinit var autoidentifyWarning: InlineSnackBar
 
   @BindView(R.id.autoidentify_service)
   lateinit var autoidentifyService: EditText
@@ -191,11 +197,31 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
         .filter(Optional<Network>::isPresent)
         .map(Optional<Network>::get)
         .firstElement()
-        .toLiveData().observe(this, Observer {
+        .toLiveData()
+        .observe(this, Observer {
           it?.let {
             update(it, identityAdapter)
           }
         })
+      viewModel.networks.map { Optional.ofNullable(it[networkId]) }
+        .filter(Optional<Network>::isPresent)
+        .map(Optional<Network>::get)
+        .switchMap(Network::liveCaps)
+        .toLiveData()
+        .observe(this, Observer {
+          autoidentifyWarning.visibleIf(it.contains("sasl"))
+        })
+    }
+
+
+    autoidentifyWarning.setOnClickListener {
+      val identity = viewModel.identities.value?.get(IdentityId(identity.selectedItemId.toInt()))
+      if (identity != null) {
+        saslEnabled.isChecked = true
+        saslAccount.setText(identity.nicks().firstOrNull())
+        saslPassword.setText(autoidentifyPassword.text.toString())
+        autoidentifyEnabled.isChecked = false
+      }
     }
 
     saslEnabled.setDependent(saslGroup)
@@ -302,9 +328,9 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
 
     data.setUseAutoReconnect(autoreconnectEnabled.isChecked)
     data.setAutoReconnectInterval(autoreconnectInterval.text.toString().toUIntOrNull()
-                                  ?: data.autoReconnectInterval())
+      ?: data.autoReconnectInterval())
     data.setAutoReconnectRetries(autoreconnectRetries.text.toString().toUShortOrNull()
-                                 ?: data.autoReconnectRetries())
+      ?: data.autoReconnectRetries())
     data.setUnlimitedReconnectRetries(autoreconnectUnlimited.isChecked)
 
     data.setPerform(perform.text.lines())
@@ -312,13 +338,13 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
 
     data.setUseCustomMessageRate(customratelimitsEnabled.isChecked)
     data.setMessageRateBurstSize(customratelimitsBurstSize.text.toString().toUIntOrNull()
-                                 ?: data.messageRateBurstSize())
+      ?: data.messageRateBurstSize())
     data.setUnlimitedMessageRate(customratelimitsUnlimited.isChecked)
     data.setMessageRateDelay(customratelimitsDelay.toString().toFloatOrNull()
-                               ?.let { (it * 1000).roundToInt() }
-                               ?.nullIf { it < 0 }
-                               ?.toUInt()
-                             ?: data.messageRateDelay())
+      ?.let { (it * 1000).roundToInt() }
+      ?.nullIf { it < 0 }
+      ?.toUInt()
+      ?: data.messageRateDelay())
   }
 
   companion object {

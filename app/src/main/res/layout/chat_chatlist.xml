@@ -85,7 +85,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom|end"
-    app:layout_behavior="@string/speedial_behavior"
+    app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
     app:sdMainFabClosedSrc="@drawable/ic_add"
     app:sdOverlayLayout="@id/fab_chatlist_overlay" />
 

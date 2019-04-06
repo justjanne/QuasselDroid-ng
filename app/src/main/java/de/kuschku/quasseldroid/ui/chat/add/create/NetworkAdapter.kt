@@ -28,18 +28,19 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.NetworkId
-import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.util.ui.ContextThemeWrapper
 import de.kuschku.quasseldroid.util.ui.RecyclerSpinnerAdapter
 
 class NetworkAdapter : RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(),
                        ThemedSpinnerAdapter {
-  var data = listOf<INetwork.NetworkInfo>()
+  var data = listOf<NetworkItem>()
 
-  fun submitList(list: List<INetwork.NetworkInfo>) {
-    data = list
-    notifyDataSetChanged()
+  fun submitList(list: List<NetworkItem>) {
+    if (data != list) {
+      data = list
+      notifyDataSetChanged()
+    }
   }
 
   override fun isEmpty() = data.isEmpty()
@@ -61,15 +62,15 @@ class NetworkAdapter : RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(
 
   fun indexOf(id: NetworkId): Int? {
     for ((key, item) in data.withIndex()) {
-      if (item.networkId == id) {
+      if (item.id == id) {
         return key
       }
     }
     return null
   }
 
-  override fun getItem(position: Int): INetwork.NetworkInfo = data[position]
-  override fun getItemId(position: Int) = getItem(position).networkId.id.toLong()
+  override fun getItem(position: Int): NetworkItem = data[position]
+  override fun getItemId(position: Int) = getItem(position).id.id.toLong()
   override fun hasStableIds() = true
   override fun getCount() = data.size
   class NetworkViewHolder(itemView: View) :
@@ -81,8 +82,8 @@ class NetworkAdapter : RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(
       ButterKnife.bind(this, itemView)
     }
 
-    fun bind(network: INetwork.NetworkInfo) {
-      text.text = network.networkName
+    fun bind(network: NetworkItem) {
+      text.text = network.name
     }
   }
 }
