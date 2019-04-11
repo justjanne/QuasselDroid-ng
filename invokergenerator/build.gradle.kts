@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 /*
  * Quasseldroid - Quassel client for Android
  *
@@ -22,10 +24,14 @@ plugins {
   kotlin("kapt")
 }
 
+tasks.withType<KotlinCompile> {
+  kotlinOptions.jvmTarget = "1.8"
+}
+
 dependencies {
-  implementation(kotlin("stdlib", "1.3.21"))
+  implementation(kotlin("stdlib", "1.3.30"))
   implementation(project(":invokerannotations"))
-  implementation("org.jetbrains.kotlin", "kotlin-compiler-embeddable", "1.3.21")
+  implementation("org.jetbrains.kotlin", "kotlin-compiler-embeddable", "1.3.30")
   implementation("com.squareup", "kotlinpoet", "1.1.0")
   implementation("com.google.auto.service:auto-service:1.0-rc4")
   kapt("com.google.auto.service:auto-service:1.0-rc4")

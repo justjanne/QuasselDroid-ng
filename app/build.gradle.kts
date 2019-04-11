@@ -101,7 +101,7 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.21"))
+  implementation(kotlin("stdlib", "1.3.30"))
 
   // App Compat
   implementation("com.google.android.material", "material", "1.1.0-alpha04")
