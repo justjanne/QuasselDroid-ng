@@ -21,6 +21,7 @@ package de.kuschku.quasseldroid.ui.info.user
 
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
+import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.quasseldroid.viewmodel.data.BufferProps
@@ -39,5 +40,6 @@ data class IrcUserInfo(
   val knownToCore: Boolean = false,
   val info: BufferInfo? = null,
   val ircUser: IrcUser? = null,
-  val channels: List<BufferProps> = emptyList()
+  val channels: List<BufferProps> = emptyList(),
+  val ignoreListItems: List<IgnoreListManager.IgnoreListItem> = emptyList()
 )

@@ -122,6 +122,15 @@ class IgnoreListManager constructor(
     _ignoreList = list
   }
 
+  fun matchingRules(sender: String) = _ignoreList.filter {
+    it.type == IgnoreType.SenderIgnore &&
+    it.regEx.match(sender)
+  }
+
+  fun liveMatchingRules(sender: String) = live_updates.map {
+    matchingRules(sender)
+  }
+
   fun updates() = live_updates.map { this }
 
   fun copy() = IgnoreListManager(session).also {

@@ -30,6 +30,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,6 +43,7 @@ import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.BufferSyncer
+import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.util.Optional
@@ -174,8 +176,8 @@ class UserInfoFragment : ServiceBoundFragment() {
     }
 
     combineLatest(viewModel.session, viewModel.networks).switchMap { (sessionOptional, networks) ->
-      fun processUser(user: IrcUser, bufferSyncer: BufferSyncer? = null,
-                      info: BufferInfo? = null): Observable<Optional<IrcUserInfo>> {
+      fun processUser(user: IrcUser, bufferSyncer: BufferSyncer? = null, info: BufferInfo? = null,
+                      ignoreItems: List<IgnoreListManager.IgnoreListItem>? = null): Observable<Optional<IrcUserInfo>> {
         actionShortcut.post(::updateShortcutVisibility)
         return when {
           user == IrcUser.NULL && info != null -> Observable.just(Optional.of(IrcUserInfo(
@@ -202,7 +204,8 @@ class UserInfoFragment : ServiceBoundFragment() {
               ircUser = user,
               channels = channels.sortedBy {
                 IrcCaseMappers.unicode.toLowerCaseNullable(it.info.bufferName)
-              }
+              },
+              ignoreListItems = ignoreItems.orEmpty()
             )
 
             if (user.channels().isEmpty()) {
@@ -252,8 +255,8 @@ class UserInfoFragment : ServiceBoundFragment() {
         }
       }
 
+      val session = sessionOptional?.orNull()
       if (openBuffer == true) {
-        val session = sessionOptional?.orNull()
         val bufferSyncer = session?.bufferSyncer
         val bufferInfo = bufferSyncer?.bufferInfo(bufferId)
         bufferInfo?.let {
@@ -262,10 +265,20 @@ class UserInfoFragment : ServiceBoundFragment() {
           }
         }
       } else {
+        val ignoreListManager = session?.ignoreListManager
+
         networks[networkId]
           ?.liveIrcUser(nickName)
           ?.switchMap(IrcUser::updates)
-          ?.switchMap { user -> processUser(user, sessionOptional?.orNull()?.bufferSyncer) }
+          ?.switchMap { user ->
+            ignoreListManager?.liveMatchingRules(user.hostMask())?.map {
+              Pair(user, it)
+            } ?: Observable.just(Pair(user, emptyList()))
+          }?.switchMap { (user, ignoreItems) ->
+            processUser(user,
+                        sessionOptional?.orNull()?.bufferSyncer,
+                        ignoreItems = ignoreItems)
+          }
       } ?: Observable.just(IrcUser.NULL).switchMap { user -> processUser(user, null, null) }
     }.toLiveData().observe(this, Observer {
       val user = it.orNull()
@@ -366,9 +379,48 @@ class UserInfoFragment : ServiceBoundFragment() {
           }
         }
 
+        var ignoreMenu: PopupMenu? = null
         actionIgnore.setOnClickListener { view ->
-          IgnoreListActivity.launch(view.context,
-                                    addRule = HostmaskHelper.build(user.nick, user.user, user.host))
+          PopupMenu(actionIgnore.context, actionIgnore).also { menu ->
+            ignoreMenu?.dismiss()
+            menu.menuInflater.inflate(R.menu.context_ignore, menu.menu)
+            for (ignoreItem in user.ignoreListItems) {
+              menu.menu.add(ignoreItem.ignoreRule).apply {
+                isCheckable = true
+                isChecked = ignoreItem.isActive
+              }
+            }
+            menu.setOnMenuItemClickListener {
+              when {
+                it.itemId == R.id.action_create -> {
+                  IgnoreListActivity.launch(
+                    view.context,
+                    addRule = HostmaskHelper.build(user.nick, user.user, user.host)
+                  )
+                  menu.dismiss()
+                  ignoreMenu = null
+                  true
+                }
+                it.itemId == R.id.action_show -> {
+                  IgnoreListActivity.launch(
+                    view.context
+                  )
+                  menu.dismiss()
+                  ignoreMenu = null
+                  true
+                }
+                it.isCheckable -> {
+                  viewModel.ignoreListManager.value?.orNull()?.requestToggleIgnoreRule(it.title.toString())
+                  true
+                }
+                else               -> false
+              }
+            }
+            menu.setOnDismissListener {
+              ignoreMenu = null
+            }
+            menu.show()
+          }
         }
 
         actionMention.setOnClickListener { view ->
