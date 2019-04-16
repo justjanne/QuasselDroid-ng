@@ -185,7 +185,7 @@ class QuasselMessageRenderer @Inject constructor(
     viewHolder.timeRight?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize * 0.9f)
     viewHolder.name?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
     viewHolder.realname?.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
-    val contentSize = if (messageSettings.largerEmoji && isEmoji) textSize * 2f else textSize
+    val contentSize = if (messageSettings.nicksOnNewLine && messageSettings.largerEmoji && isEmoji) textSize * 2f else textSize
     viewHolder.content?.setTextSize(TypedValue.COMPLEX_UNIT_SP, contentSize)
     viewHolder.combined?.setTextSize(TypedValue.COMPLEX_UNIT_SP, contentSize)
     val avatarContainerSize = TypedValue.applyDimension(
