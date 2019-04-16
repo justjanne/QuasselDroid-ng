@@ -46,6 +46,7 @@
   <string name="label_copy">Copiar</string>
   <string name="label_crashes">Crashes</string>
   <string name="label_crashes_empty">Nenhum relatório de erros foi encontrado</string>
+  <string name="label_create_channel">Criar Canal</string>
   <string name="label_delete">Apagar</string>
   <string name="label_delete_all">Apagar Todos</string>
   <string name="label_descending">Descendente</string>
@@ -75,11 +76,13 @@
   <string name="label_match_all">Corresponde a todas as mensagens</string>
   <string name="label_mention">Mencionar</string>
   <string name="label_mention_long">Copia o nome de utilizador para a caixa de digitação</string>
+  <string name="label_network">Rede</string>
   <string name="label_new_account">Adicionar Conta</string>
   <string name="label_new_chatlist">Adicionar Lista de Chats</string>
   <string name="label_new_highlight_ignore_rule">Nova Regra para Ignorar Menções</string>
   <string name="label_new_highlight_rule">Nova Regra de Menções</string>
   <string name="label_new_identity">Adicionar Identidade</string>
+  <string name="label_new_ignore_rule">Nova Regra de Ignore</string>
   <string name="label_new_network">Adicionar Rede</string>
   <string name="label_new_nick">Adicionar Alcunha</string>
   <string name="label_new_server">Adicionar Servidor</string>
@@ -102,6 +105,7 @@
   <string name="label_privacy_policy">Política de Privacidade</string>
   <string name="label_query">Abrir conversa privada</string>
   <string name="label_query_long">Abrir conversa privada com o utilizador</string>
+  <string name="label_query_medium">Abrir chat privado</string>
   <string name="label_rename">Renomear</string>
   <string name="label_reply">Responder</string>
   <string name="label_reset">Restabelecer</string>

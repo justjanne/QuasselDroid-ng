@@ -25,6 +25,8 @@
   <string name="settings_network_sasl_enabled">SASL</string>
   <string name="settings_network_sasl_account">Conta</string>
   <string name="settings_network_sasl_password">Senha</string>
+  <string name="settings_network_sasl_supported">Esta rede suporta SASL</string>
+  <string name="settings_network_sasl_upgrade">Utilizar SASL</string>
   <string name="settings_network_autoidentify_enabled">Identificação Automática</string>
   <string name="settings_network_autoidentify_service">Serviço</string>
   <string name="settings_network_autoidentify_password">Senha</string>

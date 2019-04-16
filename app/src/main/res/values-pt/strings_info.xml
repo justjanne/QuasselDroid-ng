@@ -25,6 +25,8 @@
   <string name="label_user_ident">Identidade</string>
   <string name="label_user_host">Anfitrião</string>
   <string name="label_user_server">Servidor</string>
+  <string name="label_user_common_channels">Canais em comum</string>
+
   <string name="label_core_version">Versão</string>
   <string name="label_core_uptime">Tempo de atividade</string>
   <string name="label_core_security">Segurança</string>

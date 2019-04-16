@@ -82,6 +82,7 @@
   <string name="label_new_highlight_ignore_rule">Nuova regola per ignorare menzione</string>
   <string name="label_new_highlight_rule">Nuova regola per menzione</string>
   <string name="label_new_identity">Nuova identità</string>
+  <string name="label_new_ignore_rule">Nuova regola per ignorare</string>
   <string name="label_new_network">Nuova rete</string>
   <string name="label_new_nick">Nuovo nick</string>
   <string name="label_new_server">Nuovo server</string>
