@@ -17,7 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.ui.chat.add.create
+package de.kuschku.quasseldroid.ui.chat.add
 
 import android.view.LayoutInflater
 import android.view.View

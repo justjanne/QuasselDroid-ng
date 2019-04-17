@@ -38,6 +38,8 @@ import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
+import de.kuschku.quasseldroid.ui.chat.add.NetworkAdapter
+import de.kuschku.quasseldroid.ui.chat.add.NetworkItem
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
@@ -79,21 +81,30 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
     val view = inflater.inflate(R.layout.add_create, container, false)
     ButterKnife.bind(this, view)
 
+    val networkId = NetworkId(arguments?.getInt("network_id", 0) ?: 0)
+
     val networkAdapter = NetworkAdapter()
     network.adapter = networkAdapter
 
+    var hasSetNetwork = false
     modelHelper.networks.switchMap {
       combineLatest(it.values.map(Network::liveNetworkInfo)).map {
         it.map {
-          NetworkItem(
-            it.networkId,
-            it.networkName
-          )
+          NetworkItem(it.networkId, it.networkName)
         }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, NetworkItem::name))
       }
     }.toLiveData().observe(this, Observer {
       if (it != null) {
         networkAdapter.submitList(it)
+        if (!hasSetNetwork && networkId.isValidId() && it.isNotEmpty()) {
+          network.post {
+            val index = networkAdapter.indexOf(networkId)
+            if (index != null) {
+              network.setSelection(index)
+            }
+          }
+          hasSetNetwork = true
+        }
       }
     })
 

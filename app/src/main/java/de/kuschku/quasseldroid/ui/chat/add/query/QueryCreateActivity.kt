@@ -21,11 +21,23 @@ package de.kuschku.quasseldroid.ui.chat.add.query
 
 import android.content.Context
 import android.content.Intent
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.quasseldroid.util.ui.settings.ServiceBoundSettingsActivity
 
 class QueryCreateActivity : ServiceBoundSettingsActivity(QueryCreateFragment()) {
   companion object {
-    fun launch(context: Context) = context.startActivity(intent(context))
-    fun intent(context: Context) = Intent(context, QueryCreateActivity::class.java)
+    fun launch(
+      context: Context,
+      networkId: NetworkId? = null
+    ) = context.startActivity(intent(context, networkId))
+
+    fun intent(
+      context: Context,
+      networkId: NetworkId? = null
+    ) = Intent(context, QueryCreateActivity::class.java).apply {
+      if (networkId != null) {
+        putExtra("network_id", networkId.id)
+      }
+    }
   }
 }

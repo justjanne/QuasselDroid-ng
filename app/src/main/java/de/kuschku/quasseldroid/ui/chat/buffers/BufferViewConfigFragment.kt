@@ -311,14 +311,16 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       getColor(0, 0)
     }
 
+    var chatListState: Parcelable? = savedInstanceState?.getParcelable(KEY_STATE_LIST)
     var hasRestoredChatListState = false
     listAdapter.setOnUpdateFinishedListener {
-      if (!hasRestoredChatListState && it.isNotEmpty()) {
+      if (it.isNotEmpty()) {
         chatList.layoutManager?.let {
-          savedInstanceState?.getParcelable<Parcelable>(KEY_STATE_LIST)
-            ?.let(it::onRestoreInstanceState)
+          if (chatListState != null) {
+            it.onRestoreInstanceState(chatListState)
+            hasRestoredChatListState = true
+          }
         }
-        hasRestoredChatListState = true
       }
     }
 
@@ -335,76 +337,74 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       modelHelper.selectedBuffer,
       database.filtered().listenRx(accountId).toObservable(),
       accountDatabase.accounts().listenDefaultFiltered(accountId, 0).toObservable()
-    ).toLiveData().observe(this, Observer { it ->
-      it?.let { (info, expandedNetworks, selected, filteredList, defaultFiltered) ->
-        runInBackground {
-          val (config, list) = info ?: Pair(null, emptyList())
-          val minimumActivity = config?.minimumActivity() ?: Buffer_Activity.NONE
-          val activities = filteredList.associate { it.bufferId to it.filtered.toUInt() }
-          val processedList = list.asSequence().sortedBy { props ->
-            !props.info.type.hasFlag(Buffer_Type.StatusBuffer)
-          }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { props ->
-            props.network.networkName
-          }).map { props ->
-            val activity = props.activity - (activities[props.info.bufferId]
-                                             ?: defaultFiltered?.toUInt()
-                                             ?: 0u)
-            BufferListItem(
-              props.copy(
-                activity = activity,
-                description = ircFormatDeserializer.formatString(
-                  props.description.toString(),
-                  colorize = messageSettings.colorizeMirc
-                ),
-                bufferActivity = Buffer_Activity.of(
-                  when {
-                    props.highlights > 0                  -> Buffer_Activity.Highlight
-                    activity.hasFlag(Message_Type.Plain) ||
-                    activity.hasFlag(Message_Type.Notice) ||
-                    activity.hasFlag(Message_Type.Action) -> Buffer_Activity.NewMessage
-                    activity.isNotEmpty()                 -> Buffer_Activity.OtherActivity
-                    else                                  -> Buffer_Activity.NoActivity
-                  }
-                ),
-                fallbackDrawable = if (props.info.type.hasFlag(Buffer_Type.QueryBuffer)) {
-                  props.ircUser?.let {
-                    val nickName = it.nick()
-                    val useSelfColor = when (messageSettings.colorizeNicknames) {
-                      MessageSettings.ColorizeNicknamesMode.ALL          -> false
-                      MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
-                        props.ircUser?.network()?.isMyNick(nickName) == true
-                      MessageSettings.ColorizeNicknamesMode.NONE         -> true
-                    }
+    ).map { (info, expandedNetworks, selected, filteredList, defaultFiltered) ->
+      val (config, list) = info ?: Pair(null, emptyList())
+      val minimumActivity = config?.minimumActivity() ?: Buffer_Activity.NONE
+      val activities = filteredList.associate { it.bufferId to it.filtered.toUInt() }
+      list.asSequence().sortedBy { props ->
+        !props.info.type.hasFlag(Buffer_Type.StatusBuffer)
+      }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { props ->
+        props.network.networkName
+      }).map { props ->
+        val activity = props.activity - (activities[props.info.bufferId]
+                                         ?: defaultFiltered?.toUInt()
+                                         ?: 0u)
+        BufferListItem(
+          props.copy(
+            activity = activity,
+            description = ircFormatDeserializer.formatString(
+              props.description.toString(),
+              colorize = messageSettings.colorizeMirc
+            ),
+            bufferActivity = Buffer_Activity.of(
+              when {
+                props.highlights > 0                  -> Buffer_Activity.Highlight
+                activity.hasFlag(Message_Type.Plain) ||
+                activity.hasFlag(Message_Type.Notice) ||
+                activity.hasFlag(Message_Type.Action) -> Buffer_Activity.NewMessage
+                activity.isNotEmpty()                 -> Buffer_Activity.OtherActivity
+                else                                  -> Buffer_Activity.NoActivity
+              }
+            ),
+            fallbackDrawable = if (props.info.type.hasFlag(Buffer_Type.QueryBuffer)) {
+              props.ircUser?.let {
+                val nickName = it.nick()
+                val useSelfColor = when (messageSettings.colorizeNicknames) {
+                  MessageSettings.ColorizeNicknamesMode.ALL          -> false
+                  MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+                    props.ircUser?.network()?.isMyNick(nickName) == true
+                  MessageSettings.ColorizeNicknamesMode.NONE         -> true
+                }
 
-                    colorContext.buildTextDrawable(it.nick(), useSelfColor)
-                  } ?: colorContext.buildTextDrawable("", colorAway)
-                } else {
-                  val color = if (props.bufferStatus == BufferStatus.ONLINE) colorAccent
-                  else colorAway
+                colorContext.buildTextDrawable(it.nick(), useSelfColor)
+              } ?: colorContext.buildTextDrawable("", colorAway)
+            } else {
+              val color = if (props.bufferStatus == BufferStatus.ONLINE) colorAccent
+              else colorAway
 
-                  colorContext.buildTextDrawable("#", color)
-                },
-                avatarUrls = props.ircUser?.let {
-                  AvatarHelper.avatar(messageSettings, it, avatarSize)
-                } ?: emptyList()
-              ),
-              BufferState(
-                networkExpanded = expandedNetworks[props.network.networkId]
-                                  ?: (props.networkConnectionState == INetwork.ConnectionState.Initialized),
-                selected = selected.info?.bufferId == props.info.bufferId
-              )
-            )
-          }.filter { (props, state) ->
-            (props.info.type.hasFlag(BufferInfo.Type.StatusBuffer) || state.networkExpanded) &&
-            (minimumActivity.toInt() <= props.bufferActivity.toInt() ||
-             props.info.type.hasFlag(Buffer_Type.StatusBuffer))
-          }.toList()
-
-          activity?.runOnUiThread {
-            listAdapter.submitList(processedList)
-          }
-        }
+              colorContext.buildTextDrawable("#", color)
+            },
+            avatarUrls = props.ircUser?.let {
+              AvatarHelper.avatar(messageSettings, it, avatarSize)
+            } ?: emptyList()
+          ),
+          BufferState(
+            networkExpanded = expandedNetworks[props.network.networkId]
+                              ?: (props.networkConnectionState == INetwork.ConnectionState.Initialized),
+            selected = selected.info?.bufferId == props.info.bufferId
+          )
+        )
+      }.filter { (props, state) ->
+        (props.info.type.hasFlag(BufferInfo.Type.StatusBuffer) || state.networkExpanded) &&
+        (minimumActivity.toInt() <= props.bufferActivity.toInt() ||
+         props.info.type.hasFlag(Buffer_Type.StatusBuffer))
+      }.toList()
+    }.toLiveData().observe(this, Observer { processedList ->
+      if (hasRestoredChatListState) {
+        chatListState = chatList.layoutManager?.onSaveInstanceState()
+        hasRestoredChatListState = false
       }
+      listAdapter.submitList(processedList)
     })
     listAdapter.setOnClickListener(this@BufferViewConfigFragment::clickListener)
     listAdapter.setOnLongClickListener(this@BufferViewConfigFragment::longClickListener)
@@ -501,9 +501,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
         else                    -> false
       }
     }
-    chatList.layoutManager = object : LinearLayoutManager(context) {
-      override fun supportsPredictiveItemAnimations() = false
-    }
+    chatList.layoutManager = LinearLayoutManager(context)
     chatList.itemAnimator = DefaultItemAnimator()
     chatList.setItemViewCacheSize(10)
 
@@ -554,7 +552,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     @ColorInt var fabBackground2 = 0
     view.context.theme.styledAttributes(
       R.attr.colorTextPrimary, R.attr.colorBackgroundCard,
-      R.attr.senderColorF, R.attr.senderColorE, R.attr.senderColorD
+      R.attr.senderColorE, R.attr.senderColorD, R.attr.senderColorC
     ) {
       colorLabel = getColor(0, 0)
       colorLabelBackground = getColor(1, 0)
@@ -574,17 +572,17 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
         .create()
     )
 
-    if (BuildConfig.DEBUG) {
-      fab.addActionItem(
-        SpeedDialActionItem.Builder(R.id.fab_join, R.drawable.ic_channel)
-          .setFabBackgroundColor(fabBackground1)
-          .setFabImageTintColor(0xffffffffu.toInt())
-          .setLabel(R.string.label_join_long)
-          .setLabelBackgroundColor(colorLabelBackground)
-          .setLabelColor(colorLabel)
-          .create()
-      )
+    fab.addActionItem(
+      SpeedDialActionItem.Builder(R.id.fab_join, R.drawable.ic_channel)
+        .setFabBackgroundColor(fabBackground1)
+        .setFabImageTintColor(0xffffffffu.toInt())
+        .setLabel(R.string.label_join_long)
+        .setLabelBackgroundColor(colorLabelBackground)
+        .setLabelColor(colorLabel)
+        .create()
+    )
 
+    if (BuildConfig.DEBUG) {
       fab.addActionItem(
         SpeedDialActionItem.Builder(R.id.fab_query, R.drawable.ic_account)
           .setFabBackgroundColor(fabBackground2)
@@ -597,19 +595,26 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     }
 
     fab.setOnActionSelectedListener {
+      val networkId = modelHelper.bufferData?.value?.network?.networkId()
       when (it.id) {
         R.id.fab_query  -> {
-          context?.let(QueryCreateActivity.Companion::launch)
+          context?.let {
+            QueryCreateActivity.launch(it, networkId = networkId)
+          }
           fab.close(false)
           true
         }
         R.id.fab_join   -> {
-          context?.let(ChannelJoinActivity.Companion::launch)
+          context?.let {
+            ChannelJoinActivity.launch(it, networkId = networkId)
+          }
           fab.close(false)
           true
         }
         R.id.fab_create -> {
-          context?.let(ChannelCreateActivity.Companion::launch)
+          context?.let {
+            ChannelCreateActivity.launch(it, networkId = networkId)
+          }
           fab.close(false)
           true
         }

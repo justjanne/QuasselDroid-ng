@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   Quasseldroid - Quassel client for Android
 
@@ -22,32 +23,68 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:padding="16dp">
+  android:orientation="vertical">
 
-  <de.kuschku.ui.spinner.MaterialSpinnerLayout
-    style="@style/Widget.CustomSpinnerLayout"
+  <FrameLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="@string/label_network">
+    android:layout_height="0dip"
+    android:layout_weight="1">
 
-    <androidx.appcompat.widget.AppCompatSpinner
-      android:id="@+id/network"
-      style="@style/Widget.MaterialSpinner"
+    <androidx.core.widget.NestedScrollView
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      tools:listitem="@layout/widget_spinner_item_material" />
-  </de.kuschku.ui.spinner.MaterialSpinnerLayout>
+      android:layout_height="match_parent">
 
-  <com.google.android.material.textfield.TextInputLayout
-    style="@style/Widget.CustomTextInput"
+      <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
+
+        <de.kuschku.ui.spinner.MaterialSpinnerLayout
+          style="@style/Widget.CustomSpinnerLayout"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/label_network">
+
+          <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/network"
+            style="@style/Widget.MaterialSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/widget_spinner_item_material" />
+        </de.kuschku.ui.spinner.MaterialSpinnerLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+          style="@style/Widget.CustomTextInput"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/label_channel_name">
+
+          <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name"
+            style="@style/Widget.CoreSettings.EditText"
+            tools:text="#trees" />
+        </com.google.android.material.textfield.TextInputLayout>
+      </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <de.kuschku.quasseldroid.util.ui.view.ShadowView
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/shadow_height"
+      android:layout_gravity="bottom"
+      android:gravity="bottom" />
+  </FrameLayout>
+
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:hint="@string/settings_aliasitem_name">
+    android:gravity="end"
+    android:paddingLeft="16dp"
+    android:paddingTop="4dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="4dp">
 
-    <com.google.android.material.textfield.TextInputEditText
-      android:id="@+id/name"
-      style="@style/Widget.CoreSettings.EditText"
-      tools:text="back" />
-  </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/join"
+      style="@style/Widget.Button.Colored"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/label_join" />
+  </LinearLayout>
 </LinearLayout>
