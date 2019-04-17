@@ -47,10 +47,7 @@ class QuasseldroidReleaseDelegate(private val app: Quasseldroid) :
     LeakCanary.install(app)
     // Normal app init code...
 
-    CrashHandler.init(
-      application = app,
-      buildConfig = BuildConfig::class.java
-    )
+    CrashHandler.init<BuildConfig>(application = app)
 
     // Init compatibility utils
     AndroidCompatibilityUtils.inject()

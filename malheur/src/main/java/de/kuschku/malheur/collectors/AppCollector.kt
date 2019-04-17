@@ -20,6 +20,7 @@
 package de.kuschku.malheur.collectors
 
 import android.app.Application
+import android.os.Build
 import de.kuschku.malheur.CrashContext
 import de.kuschku.malheur.config.AppConfig
 import de.kuschku.malheur.data.AppInfo
@@ -31,7 +32,12 @@ class AppCollector(private val application: Application) : Collector<AppInfo, Ap
       application.packageManager.getPackageInfo(application.packageName, 0).versionName
     },
     versionCode = collectIf(config.versionCode) {
-      application.packageManager.getPackageInfo(application.packageName, 0).versionCode
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        application.packageManager.getPackageInfo(application.packageName, 0).longVersionCode
+      } else {
+        @Suppress("DEPRECATION")
+        application.packageManager.getPackageInfo(application.packageName, 0).versionCode.toLong()
+      }
     },
     buildConfig = collectIf(config.buildConfig) {
       reflectionCollectConstants(

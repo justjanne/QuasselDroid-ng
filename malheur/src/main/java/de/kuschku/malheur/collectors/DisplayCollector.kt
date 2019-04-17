@@ -21,6 +21,7 @@ package de.kuschku.malheur.collectors
 
 import android.app.Application
 import android.content.Context
+import android.graphics.Point
 import android.os.Build
 import android.util.SparseArray
 import android.view.Display
@@ -37,7 +38,6 @@ class DisplayCollector(application: Application) :
     Context.WINDOW_SERVICE
   ) as WindowManager
 
-  @Suppress("DEPRECATION")
   override fun collect(context: CrashContext, config: Boolean): DisplayInfo? {
     val display = windowManager.defaultDisplay
     val hdrCapabilities = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -46,10 +46,18 @@ class DisplayCollector(application: Application) :
     } else {
       null
     }
+
+    val size = Point().also {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        display.getRealSize(it)
+      } else {
+        display.getSize(it)
+      }
+    }
+
     return DisplayInfo(
-      width = display.width,
-      height = display.height,
-      pixelFormat = display.pixelFormat,
+      width = size.x,
+      height = size.y,
       refreshRate = display.refreshRate,
       hdr = hdrCapabilities,
       isWideGamut = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

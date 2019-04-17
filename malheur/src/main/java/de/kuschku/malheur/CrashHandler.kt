@@ -39,6 +39,10 @@ object CrashHandler {
 
   private lateinit var handler: Handler
 
+  inline fun <reified T> init(application: Application, config: ReportConfig = ReportConfig()) {
+    init(application, config, T::class.java)
+  }
+
   fun init(application: Application, config: ReportConfig = ReportConfig(),
            buildConfig: Class<*>?) {
     if (myHandler == null) {
@@ -92,9 +96,16 @@ object CrashHandler {
         }
       }.start()
     }
+
     Thread.setDefaultUncaughtExceptionHandler { currentThread, throwable ->
       myHandler?.uncaughtException(currentThread, throwable)
       originalHandler?.uncaughtException(currentThread, throwable)
+    }
+
+    val oldHandler = Thread.currentThread().uncaughtExceptionHandler
+    Thread.currentThread().setUncaughtExceptionHandler { currentThread, throwable ->
+      myHandler?.uncaughtException(currentThread, throwable)
+      oldHandler?.uncaughtException(currentThread, throwable)
     }
   }
 
