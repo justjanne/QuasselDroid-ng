@@ -45,6 +45,8 @@ import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
+import javax.inject.Inject
 
 abstract class IdentityBaseFragment(private val initDefault: Boolean) :
   ServiceBoundSettingsFragment(), Savable, Changeable {
@@ -85,6 +87,9 @@ abstract class IdentityBaseFragment(private val initDefault: Boolean) :
   @BindView(R.id.detach_away_reason)
   lateinit var detachAwayReason: EditText
 
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
+
   protected var identity: Pair<Identity?, Identity>? = null
 
   private lateinit var adapter: IdentityNicksAdapter
@@ -122,7 +127,7 @@ abstract class IdentityBaseFragment(private val initDefault: Boolean) :
     }
 
     if (initDefault) {
-      viewModel.session
+      modelHelper.session
         .filter(Optional<ISession>::isPresent)
         .map(Optional<ISession>::get)
         .firstElement()
@@ -132,7 +137,7 @@ abstract class IdentityBaseFragment(private val initDefault: Boolean) :
           }
         })
     } else {
-      viewModel.identities.map { Optional.ofNullable(it[identityId]) }
+      modelHelper.identities.map { Optional.ofNullable(it[identityId]) }
         .filter(Optional<Identity>::isPresent)
         .map(Optional<Identity>::get)
         .firstElement()

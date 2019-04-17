@@ -31,7 +31,7 @@ import javax.inject.Inject
 
 abstract class ServiceBoundFragment : DaggerFragment() {
   @Inject
-  lateinit var viewModel: QuasselViewModel
+  lateinit var quasselViewModel: QuasselViewModel
 
   private val connection = BackendServiceConnection()
   protected val backend: BehaviorSubject<Optional<Backend>>

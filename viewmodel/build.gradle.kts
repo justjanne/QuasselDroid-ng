@@ -58,6 +58,8 @@ dependencies {
   implementation("org.threeten", "threetenbp", "1.3.8", classifier = "no-tzdb")
   implementation("org.jetbrains", "annotations", "17.0.0")
 
+  implementation("javax.inject", "javax.inject", "1")
+
   // Quassel
   implementation(project(":persistence"))
   implementation(project(":lib")) {

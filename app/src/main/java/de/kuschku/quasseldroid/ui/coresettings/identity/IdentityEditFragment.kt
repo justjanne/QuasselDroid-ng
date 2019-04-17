@@ -32,7 +32,7 @@ class IdentityEditFragment : IdentityBaseFragment(false), Deletable {
   override fun onDelete() {
     identity?.let { (it, _) ->
       it?.let {
-        viewModel.session.value?.orNull()?.rpcHandler?.removeIdentity(it.id())
+        modelHelper.session.value?.orNull()?.rpcHandler?.removeIdentity(it.id())
       }
     }
   }

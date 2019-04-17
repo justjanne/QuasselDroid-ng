@@ -29,8 +29,13 @@ import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.ui.setup.ServiceBoundSetupActivity
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
+import javax.inject.Inject
 
 class NetworkSetupActivity : ServiceBoundSetupActivity() {
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
+
   private lateinit var arguments: Bundle
   override val initData: Bundle
     get() = arguments
@@ -45,8 +50,8 @@ class NetworkSetupActivity : ServiceBoundSetupActivity() {
     val networkId = NetworkId(data.getInt("network_id", -1))
     val identity = IdentityId(data.getInt("identity", -1))
     if (networkId.isValidId() || (network != null && identity.isValidId())) {
-      viewModel.backend?.value?.ifPresent { backend ->
-        val session = viewModel.session.value?.orNull()
+      modelHelper.backend?.value?.ifPresent { backend ->
+        val session = modelHelper.session.value?.orNull()
         session?.apply {
           rpcHandler.apply {
             when {

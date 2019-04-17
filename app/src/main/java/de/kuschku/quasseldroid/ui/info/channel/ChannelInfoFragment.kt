@@ -37,13 +37,14 @@ import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
-import de.kuschku.quasseldroid.ui.info.topic.TopicActivity
+import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
 import de.kuschku.quasseldroid.util.ShortcutCreationHelper
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import javax.inject.Inject
 
 class ChannelInfoFragment : ServiceBoundFragment() {
@@ -75,6 +76,9 @@ class ChannelInfoFragment : ServiceBoundFragment() {
   @Inject
   lateinit var messageSettings: MessageSettings
 
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.info_channel, container, false)
@@ -86,7 +90,7 @@ class ChannelInfoFragment : ServiceBoundFragment() {
 
     var currentBufferInfo: BufferInfo?
 
-    combineLatest(viewModel.session, viewModel.networks).map { (sessionOptional, networks) ->
+    combineLatest(modelHelper.session, modelHelper.networks).map { (sessionOptional, networks) ->
       if (openBuffer == true) {
         val session = sessionOptional?.orNull()
         val bufferSyncer = session?.bufferSyncer
@@ -123,7 +127,7 @@ class ChannelInfoFragment : ServiceBoundFragment() {
       }
 
       actionPart.setOnClickListener {
-        viewModel.session.value?.orNull()?.let { session ->
+        modelHelper.session.value?.orNull()?.let { session ->
           session.bufferSyncer.find(
             networkId = channel.network().networkId(),
             type = Buffer_Type.of(Buffer_Type.StatusBuffer)
@@ -135,7 +139,7 @@ class ChannelInfoFragment : ServiceBoundFragment() {
       }
 
       actionWho.setOnClickListener {
-        viewModel.session.value?.orNull()?.let { session ->
+        modelHelper.session.value?.orNull()?.let { session ->
           session.bufferSyncer.find(
             networkId = channel.network().networkId(),
             type = Buffer_Type.of(Buffer_Type.StatusBuffer)

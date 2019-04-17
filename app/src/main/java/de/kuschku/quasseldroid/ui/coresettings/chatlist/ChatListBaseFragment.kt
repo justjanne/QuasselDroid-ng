@@ -48,6 +48,8 @@ import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
+import javax.inject.Inject
 
 abstract class ChatListBaseFragment(private val initDefault: Boolean) :
   ServiceBoundSettingsFragment(), Savable, Changeable {
@@ -84,6 +86,9 @@ abstract class ChatListBaseFragment(private val initDefault: Boolean) :
   @BindView(R.id.hide_inactive_networks)
   lateinit var hideInactiveNetworks: SwitchCompat
 
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
+
   protected var chatlist: Pair<BufferViewConfig?, BufferViewConfig>? = null
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -116,7 +121,7 @@ abstract class ChatListBaseFragment(private val initDefault: Boolean) :
     val networkAdapter = NetworkAdapter(R.string.settings_chatlist_network_all)
     networkId.adapter = networkAdapter
 
-    viewModel.networks.switchMap {
+    modelHelper.networks.switchMap {
       combineLatest(it.values.map(Network::liveNetworkInfo)).map {
         it.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, INetwork.NetworkInfo::networkName))
       }
@@ -133,7 +138,7 @@ abstract class ChatListBaseFragment(private val initDefault: Boolean) :
     })
 
     if (initDefault) {
-      viewModel.session
+      modelHelper.session
         .filter(Optional<ISession>::isPresent)
         .map(Optional<ISession>::get)
         .firstElement()
@@ -145,7 +150,7 @@ abstract class ChatListBaseFragment(private val initDefault: Boolean) :
           }
         })
     } else {
-      viewModel.bufferViewConfigMap.map { Optional.ofNullable(it[chatlistId]) }
+      modelHelper.bufferViewConfigMap.map { Optional.ofNullable(it[chatlistId]) }
         .filter(Optional<BufferViewConfig>::isPresent)
         .map(Optional<BufferViewConfig>::get)
         .firstElement()

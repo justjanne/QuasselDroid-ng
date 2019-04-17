@@ -39,6 +39,8 @@ import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
+import de.kuschku.quasseldroid.viewmodel.helper.QuasselViewModelHelper
 import javax.inject.Inject
 
 class AliasListFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
@@ -50,6 +52,9 @@ class AliasListFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
 
   @Inject
   lateinit var adapter: AliasListAdapter
+
+  @Inject
+  lateinit var modelHelper: QuasselViewModelHelper
 
   private var aliasManager: Pair<AliasManager, AliasManager>? = null
 
@@ -76,7 +81,7 @@ class AliasListFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
       startActivityForResult(AliasItemActivity.intent(requireContext()), REQUEST_CREATE_ITEM)
     }
 
-    viewModel.aliasManager
+    modelHelper.aliasManager
       .filter(Optional<AliasManager>::isPresent)
       .map(Optional<AliasManager>::get)
       .toLiveData().observe(this, Observer {

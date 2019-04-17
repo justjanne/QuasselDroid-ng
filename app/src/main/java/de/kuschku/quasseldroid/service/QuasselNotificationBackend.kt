@@ -56,6 +56,7 @@ import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.ui.drawable.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper.Companion.IGNORED_CHARS
 import org.threeten.bp.Instant
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -299,7 +300,7 @@ class QuasselNotificationBackend @Inject constructor(
       fun obtainAvatar(nickName: String, ident: String, realName: String, avatarUrl: String,
                        self: Boolean): Drawable {
         val senderColorIndex = SenderColorUtil.senderColor(nickName)
-        val rawInitial = nickName.trimStart(*EditorViewModel.IGNORED_CHARS)
+        val rawInitial = nickName.trimStart(*IGNORED_CHARS)
                            .firstOrNull() ?: nickName.firstOrNull()
         val initial = rawInitial?.toUpperCase().toString()
         val senderColor = when (messageSettings.colorizeNicknames) {

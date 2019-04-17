@@ -43,6 +43,7 @@ import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 import de.kuschku.quasseldroid.util.ui.view.MaterialContentLoadingProgressBar
 import de.kuschku.quasseldroid.util.ui.view.WarningBarView
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
@@ -64,6 +65,9 @@ class ChannelListFragment : ServiceBoundSettingsFragment() {
 
   @Inject
   lateinit var adapter: ChannelListAdapter
+
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
 
   private var query: Query? = null
   private var state: State = State()
@@ -146,7 +150,7 @@ class ChannelListFragment : ServiceBoundSettingsFragment() {
       })
     })
 
-    viewModel.ircListHelper
+    modelHelper.ircListHelper
       .mapSwitchMap(IrcListHelper::observable)
       .filter(Optional<IrcListHelper.Event>::isPresent)
       .map(Optional<IrcListHelper.Event>::get)
@@ -169,7 +173,7 @@ class ChannelListFragment : ServiceBoundSettingsFragment() {
       })
 
     searchButton.setOnClickListener {
-      viewModel.ircListHelper.value?.orNull()?.let { ircListHelper ->
+      modelHelper.ircListHelper.value?.orNull()?.let { ircListHelper ->
         val query = Query(
           networkId,
           listOf(searchInput.text.toString())

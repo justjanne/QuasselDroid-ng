@@ -54,8 +54,9 @@ import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
-import de.kuschku.quasseldroid.viewmodel.EditorViewModel.Companion.IGNORED_CHARS
 import de.kuschku.quasseldroid.viewmodel.data.Avatar
+import de.kuschku.quasseldroid.viewmodel.helper.ChatViewModelHelper
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper.Companion.IGNORED_CHARS
 import javax.inject.Inject
 
 class NickListFragment : ServiceBoundFragment() {
@@ -70,6 +71,9 @@ class NickListFragment : ServiceBoundFragment() {
 
   @Inject
   lateinit var ircFormatDeserializer: IrcFormatDeserializer
+
+  @Inject
+  lateinit var modelHelper: ChatViewModelHelper
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
@@ -101,7 +105,7 @@ class NickListFragment : ServiceBoundFragment() {
     val colorContext = ColorContext(requireContext(), messageSettings)
 
     val avatarSize = resources.getDimensionPixelSize(R.dimen.avatar_size)
-    viewModel.nickDataThrottled.toLiveData().observe(this, Observer {
+    modelHelper.nickDataThrottled.toLiveData().observe(this, Observer {
       runInBackground {
         it?.asSequence()?.map {
           val nickName = it.nick
@@ -188,8 +192,8 @@ class NickListFragment : ServiceBoundFragment() {
   }
 
   private val clickListener: ((String) -> Unit)? = { nick ->
-    viewModel.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
-      viewModel.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
+    modelHelper.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
+      modelHelper.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
         UserInfoActivity.launch(
           requireContext(),
           openBuffer = false,

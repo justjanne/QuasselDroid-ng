@@ -97,7 +97,7 @@
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
     <activity
-      android:name="de.kuschku.quasseldroid.ui.info.topic.TopicActivity"
+      android:name="de.kuschku.quasseldroid.ui.chat.topic.TopicActivity"
       android:exported="false"
       android:label="@string/label_topic"
       android:windowSoftInputMode="adjustResize" />

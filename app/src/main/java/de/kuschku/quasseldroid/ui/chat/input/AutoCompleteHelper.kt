@@ -45,16 +45,17 @@ import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
-import de.kuschku.quasseldroid.viewmodel.EditorViewModel.Companion.IGNORED_CHARS
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper.Companion.IGNORED_CHARS
 
 class AutoCompleteHelper(
   activity: FragmentActivity,
   private val autoCompleteSettings: AutoCompleteSettings,
   private val messageSettings: MessageSettings,
   private val ircFormatDeserializer: IrcFormatDeserializer,
-  private val viewModel: EditorViewModel
+  private val helper: EditorViewModelHelper
 ) {
   private var autocompleteListener: ((AutoCompletionState) -> Unit)? = null
   private var dataListeners: List<((List<AutoCompleteItem>) -> Unit)> = emptyList()
@@ -85,7 +86,7 @@ class AutoCompleteHelper(
   private val colorContext = ColorContext(activity, messageSettings)
 
   init {
-    viewModel.autoCompleteData.toLiveData().observe(activity, Observer {
+    helper.autoCompleteData.toLiveData().observe(activity, Observer {
       val query = it?.first ?: ""
       val shouldShowResults =
         (autoCompleteSettings.auto && query.length >= 3) ||
@@ -260,10 +261,10 @@ class AutoCompleteHelper(
   }
 
   fun autoComplete(reverse: Boolean = false) {
-    viewModel.lastWord.switchMap { it }.value?.let { originalWord ->
+    helper.editor.lastWord.switchMap { it }.value?.let { originalWord ->
       val previous = autoCompletionState
       if (!originalWord.second.isEmpty()) {
-        val autoCompletedWords = viewModel.rawAutoCompleteData.value?.let { (sessionOptional, id, lastWord) ->
+        val autoCompletedWords = helper.rawAutoCompleteData.value?.let { (sessionOptional, id, lastWord) ->
           fullAutoComplete(sessionOptional, id, lastWord)
         }?.filter {
           it is AutoCompleteItem.AliasItem && autoCompleteSettings.aliases ||

@@ -43,6 +43,7 @@ import de.kuschku.quasseldroid.persistence.models.Account
 import de.kuschku.quasseldroid.util.TextValidator
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import javax.inject.Inject
 
@@ -77,6 +78,9 @@ class PasswordChangeFragment : ServiceBoundFragment() {
   @Inject
   lateinit var accountDatabase: AccountDatabase
 
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
+
   private var waiting: Account? = null
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -88,7 +92,7 @@ class PasswordChangeFragment : ServiceBoundFragment() {
 
     user.setText(account?.user)
 
-    viewModel.session
+    modelHelper.session
       .mapMapNullable(ISession::rpcHandler)
       .mapSwitchMap(RpcHandler::passwordChanged)
       .filter(Optional<Boolean>::isPresent)
@@ -140,10 +144,12 @@ class PasswordChangeFragment : ServiceBoundFragment() {
 
       waiting = account?.copy(pass = pass)
 
-      viewModel.session.value?.orNull()?.rpcHandler?.changePassword(0L,
-                                                                    user.text.toString(),
-                                                                    oldPassword.text.toString(),
-                                                                    pass)
+      modelHelper.session.value?.orNull()?.rpcHandler?.changePassword(
+        0L,
+        user.text.toString(),
+        oldPassword.text.toString(),
+        pass
+      )
     }
 
     return view

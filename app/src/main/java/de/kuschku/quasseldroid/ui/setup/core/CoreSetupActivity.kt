@@ -31,8 +31,13 @@ import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.persistence.models.Account
 import de.kuschku.quasseldroid.ui.setup.ServiceBoundSetupActivity
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
+import javax.inject.Inject
 
 class CoreSetupActivity : ServiceBoundSetupActivity() {
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
+
   override val initData = Bundle()
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +56,7 @@ class CoreSetupActivity : ServiceBoundSetupActivity() {
     val authenticatorBackend = data.getSerializable("authenticator") as? CoreSetupBackend
     val authenticatorBackendSetup = data.getSerializable("authenticatorSetup") as? HashMap<String, QVariant_>
 
-    viewModel.sessionManager.value?.orNull()?.setupCore(HandshakeMessage.CoreSetupData(
+    modelHelper.sessionManager.value?.orNull()?.setupCore(HandshakeMessage.CoreSetupData(
       adminUser = user,
       adminPassword = pass,
       backend = storageBackend?.backendId,

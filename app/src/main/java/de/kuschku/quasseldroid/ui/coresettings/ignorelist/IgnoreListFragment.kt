@@ -42,6 +42,8 @@ import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
+import javax.inject.Inject
 
 class IgnoreListFragment : ServiceBoundSettingsFragment(), Savable,
                            Changeable {
@@ -50,6 +52,9 @@ class IgnoreListFragment : ServiceBoundSettingsFragment(), Savable,
 
   @BindView(R.id.add)
   lateinit var add: FloatingActionButton
+
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
 
   private var ignoreListManager: Pair<IgnoreListManager, IgnoreListManager>? = null
 
@@ -82,7 +87,7 @@ class IgnoreListFragment : ServiceBoundSettingsFragment(), Savable,
                              REQUEST_CREATE_RULE)
     }
 
-    viewModel.ignoreListManager
+    modelHelper.ignoreListManager
       .filter(Optional<IgnoreListManager>::isPresent)
       .map(Optional<IgnoreListManager>::get)
       .toLiveData().observe(this, Observer {

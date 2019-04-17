@@ -46,6 +46,8 @@ import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 import de.kuschku.quasseldroid.util.ui.view.WarningBarView
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
+import javax.inject.Inject
 
 class HighlightListFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
   @BindView(R.id.feature_context_coresidehighlights)
@@ -68,6 +70,9 @@ class HighlightListFragment : ServiceBoundSettingsFragment(), Savable, Changeabl
 
   @BindView(R.id.new_highlight_ignore_rule)
   lateinit var newHighlightIgnoreRule: Button
+
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
 
   private var ruleManager: Pair<HighlightRuleManager, HighlightRuleManager>? = null
 
@@ -128,7 +133,7 @@ class HighlightListFragment : ServiceBoundSettingsFragment(), Savable, Changeabl
     ))
     highlightNickType.adapter = highlightNickTypeAdapter
 
-    viewModel.highlightRuleManager
+    modelHelper.highlightRuleManager
       .filter(Optional<HighlightRuleManager>::isPresent)
       .map(Optional<HighlightRuleManager>::get)
       .toLiveData().observe(this, Observer {
@@ -146,7 +151,7 @@ class HighlightListFragment : ServiceBoundSettingsFragment(), Savable, Changeabl
         }
       })
 
-    viewModel.negotiatedFeatures.toLiveData().observe(this, Observer { (connected, features) ->
+    modelHelper.negotiatedFeatures.toLiveData().observe(this, Observer { (connected, features) ->
       featureContextCoreSideHighlights.setMode(
         if (!connected || features.hasFeature(ExtendedFeature.CoreSideHighlights)) WarningBarView.MODE_NONE
         else WarningBarView.MODE_ICON

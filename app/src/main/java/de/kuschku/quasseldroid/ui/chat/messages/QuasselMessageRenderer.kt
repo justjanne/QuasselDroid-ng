@@ -48,6 +48,7 @@ import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper.Companion.IGNORED_CHARS
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
@@ -263,7 +264,7 @@ class QuasselMessageRenderer @Inject constructor(
                                                                     message.content.networkId)
         val nickName = HostmaskHelper.nick(message.content.sender)
         val senderColorIndex = SenderColorUtil.senderColor(nickName)
-        val rawInitial = nickName.trimStart(*EditorViewModel.IGNORED_CHARS)
+        val rawInitial = nickName.trimStart(*IGNORED_CHARS)
                            .firstOrNull() ?: nickName.firstOrNull()
         val initial = rawInitial?.toUpperCase().toString()
         val useSelfColor = when (messageSettings.colorizeNicknames) {
@@ -298,7 +299,7 @@ class QuasselMessageRenderer @Inject constructor(
       Message_Type.Action       -> {
         val nickName = HostmaskHelper.nick(message.content.sender)
         val senderColorIndex = SenderColorUtil.senderColor(nickName)
-        val rawInitial = nickName.trimStart(*EditorViewModel.IGNORED_CHARS)
+        val rawInitial = nickName.trimStart(*IGNORED_CHARS)
                            .firstOrNull() ?: nickName.firstOrNull()
         val initial = rawInitial?.toUpperCase().toString()
         val useSelfColor = when (messageSettings.colorizeNicknames) {

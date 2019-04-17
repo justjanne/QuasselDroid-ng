@@ -83,7 +83,7 @@ import de.kuschku.quasseldroid.ui.info.channellist.ChannelListActivity
 import de.kuschku.quasseldroid.ui.info.channellist.ChannelListFragmentProvider
 import de.kuschku.quasseldroid.ui.info.core.CoreInfoActivity
 import de.kuschku.quasseldroid.ui.info.core.CoreInfoFragmentProvider
-import de.kuschku.quasseldroid.ui.info.topic.TopicActivity
+import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
 import de.kuschku.quasseldroid.ui.info.user.UserInfoActivity
 import de.kuschku.quasseldroid.ui.info.user.UserInfoFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditActivity

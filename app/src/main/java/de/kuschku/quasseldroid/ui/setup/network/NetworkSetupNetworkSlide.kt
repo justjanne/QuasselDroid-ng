@@ -49,6 +49,8 @@ import de.kuschku.quasseldroid.util.TextValidator
 import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.ui.AnimationHelper
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
+import javax.inject.Inject
 
 class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
   @BindView(R.id.identity)
@@ -80,6 +82,9 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
 
   @BindView(R.id.ssl_enabled)
   lateinit var sslEnabled: SwitchCompat
+
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
 
   private val identityAdapter = IdentityAdapter()
   private val networkAdapter = NetworkAdapter(R.string.settings_chatlist_network_create)
@@ -182,7 +187,7 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
 
     identity.adapter = identityAdapter
 
-    viewModel.identities.switchMap {
+    modelHelper.identities.switchMap {
       combineLatest(it.values.map(Identity::liveUpdates)).map {
         it.sortedBy(Identity::identityName)
       }
@@ -192,7 +197,7 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
       }
     })
 
-    viewModel.networks.switchMap {
+    modelHelper.networks.switchMap {
       combineLatest(it.values.map(Network::liveNetworkInfo)).map {
         it.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, INetwork.NetworkInfo::networkName))
       }

@@ -43,6 +43,7 @@ import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import javax.inject.Inject
 
 class TopicFragment : ServiceBoundSettingsFragment(), Savable {
@@ -74,7 +75,7 @@ class TopicFragment : ServiceBoundSettingsFragment(), Savable {
   lateinit var autoCompleteAdapter: AutoCompleteAdapter
 
   @Inject
-  lateinit var editorViewModel: EditorViewModel
+  lateinit var modelHelper: EditorViewModelHelper
 
   private lateinit var editorHelper: EditorHelper
 
@@ -83,14 +84,12 @@ class TopicFragment : ServiceBoundSettingsFragment(), Savable {
     val view = inflater.inflate(R.layout.info_topic, container, false)
     ButterKnife.bind(this, view)
 
-    editorViewModel.quasselViewModel.onNext(viewModel)
-
     val autoCompleteHelper = AutoCompleteHelper(
       requireActivity(),
       autoCompleteSettings,
       messageSettings,
       formatDeserializer,
-      editorViewModel
+      modelHelper
     )
 
     editorHelper = EditorHelper(
@@ -102,7 +101,7 @@ class TopicFragment : ServiceBoundSettingsFragment(), Savable {
       appearanceSettings
     )
 
-    editorViewModel.lastWord.onNext(editorHelper.lastWord)
+    modelHelper.editor.lastWord.onNext(editorHelper.lastWord)
 
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
       val autoCompleteBottomSheet = BottomSheetBehavior.from(autoCompleteList)
@@ -119,8 +118,8 @@ class TopicFragment : ServiceBoundSettingsFragment(), Savable {
     }
 
     val bufferId = BufferId(arguments?.getInt("buffer", -1) ?: -1)
-    viewModel.buffer.onNext(bufferId)
-    viewModel.bufferData.filter {
+    modelHelper.chat.buffer.onNext(bufferId)
+    modelHelper.bufferData.filter {
       it.info != null
     }.firstElement().toLiveData().observe(this, Observer {
       chatline.setText(formatDeserializer.formatString(it?.description, true))
@@ -130,9 +129,9 @@ class TopicFragment : ServiceBoundSettingsFragment(), Savable {
   }
 
   override fun onSave(): Boolean {
-    viewModel.session { sessionOptional ->
+    modelHelper.session { sessionOptional ->
       val session = sessionOptional.orNull()
-      viewModel.buffer { bufferId ->
+      modelHelper.chat.buffer { bufferId ->
         session?.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
           val topic = formatSerializer.toEscapeCodes(chatline.safeText)
           session.rpcHandler.sendInput(bufferInfo, "/topic $topic")

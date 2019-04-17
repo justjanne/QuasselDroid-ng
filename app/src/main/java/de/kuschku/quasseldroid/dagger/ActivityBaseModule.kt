@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModelProviders
 import dagger.Module
 import dagger.Provides
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountViewModel
+import de.kuschku.quasseldroid.viewmodel.ChatViewModel
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 
@@ -50,12 +51,18 @@ object ActivityBaseModule {
   @ActivityScope
   @Provides
   @JvmStatic
-  fun provideAccountViewModel(viewModelProvider: ViewModelProvider) =
-    viewModelProvider[AccountViewModel::class.java]
+  fun provideChatViewModel(viewModelProvider: ViewModelProvider) =
+    viewModelProvider[ChatViewModel::class.java]
 
   @ActivityScope
   @Provides
   @JvmStatic
   fun provideEditorViewModel(viewModelProvider: ViewModelProvider) =
     viewModelProvider[EditorViewModel::class.java]
+
+  @ActivityScope
+  @Provides
+  @JvmStatic
+  fun provideAccountViewModel(viewModelProvider: ViewModelProvider) =
+    viewModelProvider[AccountViewModel::class.java]
 }

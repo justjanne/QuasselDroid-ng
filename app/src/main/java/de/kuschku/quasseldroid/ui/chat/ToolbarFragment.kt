@@ -44,6 +44,7 @@ import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import javax.inject.Inject
 
 class ToolbarFragment : ServiceBoundFragment() {
@@ -58,6 +59,9 @@ class ToolbarFragment : ServiceBoundFragment() {
 
   @BindView(R.id.toolbar_action_area)
   lateinit var actionArea: View
+
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
 
   @Inject
   lateinit var ircFormatDeserializer: IrcFormatDeserializer
@@ -100,7 +104,7 @@ class ToolbarFragment : ServiceBoundFragment() {
 
     val colorContext = ColorContext(requireContext(), messageSettings)
 
-    combineLatest(viewModel.bufferDataThrottled, viewModel.lag).map {
+    combineLatest(modelHelper.bufferDataThrottled, modelHelper.lag).map {
       val avatarInfo = it.first?.ircUser?.let { user ->
         val avatarUrls = AvatarHelper.avatar(messageSettings, user, avatarSize)
 
@@ -156,7 +160,7 @@ class ToolbarFragment : ServiceBoundFragment() {
       })
 
     actionArea.setOnClickListener {
-      val bufferData = viewModel.bufferData.value
+      val bufferData = modelHelper.bufferData.value
       bufferData?.info?.let { info ->
         when (info.type.toInt()) {
           BufferInfo.Type.QueryBuffer.toInt()   -> {

@@ -36,6 +36,8 @@ import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
+import javax.inject.Inject
 
 class NetworkConfigFragment : ServiceBoundSettingsFragment(), Savable,
                               Changeable {
@@ -69,6 +71,9 @@ class NetworkConfigFragment : ServiceBoundSettingsFragment(), Savable,
   @BindView(R.id.standard_ctcp)
   lateinit var standardCtcp: SwitchCompat
 
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
+
   private var networkConfig: Pair<NetworkConfig, NetworkConfig>? = null
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -76,7 +81,7 @@ class NetworkConfigFragment : ServiceBoundSettingsFragment(), Savable,
     val view = inflater.inflate(R.layout.settings_networkconfig, container, false)
     ButterKnife.bind(this, view)
 
-    viewModel.networkConfig
+    modelHelper.networkConfig
       .filter(Optional<NetworkConfig>::isPresent)
       .map(Optional<NetworkConfig>::get)
       .firstElement()

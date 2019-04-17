@@ -23,6 +23,7 @@ import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.session.ISession
+import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.helpers.value
@@ -31,10 +32,10 @@ import de.kuschku.quasseldroid.persistence.dao.get
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
 import de.kuschku.quasseldroid.persistence.util.QuasselBacklogStorage
-import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
+import io.reactivex.Observable
 
 class BacklogRequester(
-  private val viewModel: QuasselViewModel,
+  private val session: Observable<Optional<ISession>>,
   private val database: QuasselDatabase,
   private val accountDatabase: AccountDatabase
 ) {
@@ -46,7 +47,7 @@ class BacklogRequester(
         "BacklogRequester",
         "requested(buffer: $buffer, amount: $amount, pageSize: $pageSize, lastMessageId: $lastMessageId, untilAllVisible: $untilAllVisible)")
     var missing = amount
-    viewModel.session.value?.orNull()?.let { session: ISession ->
+    session.value?.orNull()?.let { session: ISession ->
       session.backlogManager.let {
         val filtered = database.filtered().get(accountId,
                                                buffer,

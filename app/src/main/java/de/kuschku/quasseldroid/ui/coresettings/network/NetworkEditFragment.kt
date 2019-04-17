@@ -32,7 +32,7 @@ class NetworkEditFragment : NetworkBaseFragment(false), Deletable {
   override fun onDelete() {
     network?.let { (it, _) ->
       it?.let {
-        viewModel.session.value?.orNull()?.rpcHandler?.removeNetwork(it.networkId())
+        modelHelper.session.value?.orNull()?.rpcHandler?.removeNetwork(it.networkId())
       }
     }
   }

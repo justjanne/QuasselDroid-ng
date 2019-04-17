@@ -24,7 +24,7 @@ import de.kuschku.libquassel.util.helpers.value
 class ChatListCreateFragment : ChatListBaseFragment(true) {
   override fun onSave() = chatlist?.let { (_, data) ->
     applyChanges(data, null)
-    viewModel.bufferViewManager.value?.orNull()?.requestCreateBufferView(data.toVariantMap())
+    modelHelper.bufferViewManager.value?.orNull()?.requestCreateBufferView(data.toVariantMap())
     true
   } ?: false
 }

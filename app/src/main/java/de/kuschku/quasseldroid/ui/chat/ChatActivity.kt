@@ -98,7 +98,9 @@ import de.kuschku.quasseldroid.util.ui.drawable.DrawerToggleActivityDrawable
 import de.kuschku.quasseldroid.util.ui.drawable.NickCountDrawable
 import de.kuschku.quasseldroid.util.ui.view.MaterialContentLoadingProgressBar
 import de.kuschku.quasseldroid.util.ui.view.WarningBarView
+import de.kuschku.quasseldroid.viewmodel.ChatViewModel
 import de.kuschku.quasseldroid.viewmodel.data.BufferData
+import de.kuschku.quasseldroid.viewmodel.helper.ChatViewModelHelper
 import io.reactivex.BackpressureStrategy
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
@@ -125,6 +127,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   @BindView(R.id.autocomplete_list)
   lateinit var autoCompleteList: RecyclerView
+
+  @Inject
+  lateinit var modelHelper: ChatViewModelHelper
+
+  @Inject
+  lateinit var chatViewModel: ChatViewModel
 
   @Inject
   lateinit var database: QuasselDatabase
@@ -171,8 +179,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           }
         }
         intent.hasExtra(KEY_BUFFER_ID)                                  -> {
-          viewModel.buffer.onNext(BufferId(intent.getIntExtra(KEY_BUFFER_ID, -1)))
-          viewModel.bufferOpened.onNext(Unit)
+          chatViewModel.buffer.onNext(BufferId(intent.getIntExtra(KEY_BUFFER_ID, -1)))
+          chatViewModel.bufferOpened.onNext(Unit)
           if (intent.hasExtra(KEY_ACCOUNT_ID)) {
             val accountId = intent.getLongExtra(ChatActivity.KEY_ACCOUNT_ID, -1)
             if (accountId != this.accountId) {
@@ -196,7 +204,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           val networkId = NetworkId(intent.getIntExtra(KEY_NETWORK_ID, -1))
           val channel = intent.getStringExtra(KEY_CHANNEL)
 
-          viewModel.session.filter(Optional<ISession>::isPresent).firstElement().subscribe {
+          modelHelper.session.filter(Optional<ISession>::isPresent).firstElement().subscribe {
             it.orNull()?.also { session ->
               val info = session.bufferSyncer.find(
                 bufferName = channel,
@@ -207,7 +215,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
               if (info != null) {
                 ChatActivity.launch(this, bufferId = info.bufferId)
               } else {
-                viewModel.allBuffers.map {
+                modelHelper.allBuffers.map {
                   listOfNotNull(it.find {
                     it.networkId == networkId &&
                     it.bufferName == channel &&
@@ -268,7 +276,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     setSupportActionBar(toolbar)
 
-    viewModel.bufferOpened.toLiveData().observe(this, Observer {
+    chatViewModel.bufferOpened.toLiveData().observe(this, Observer {
       actionMode?.finish()
       if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
         drawerLayout.closeDrawer(GravityCompat.START, true)
@@ -303,7 +311,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     })
 
     val maxBufferActivity = combineLatest(
-      viewModel.bufferList,
+      modelHelper.bufferList,
       database.filtered().listenRx(accountId).toObservable().map {
         it.associateBy(Filtered::bufferId, Filtered::filtered)
       },
@@ -397,7 +405,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     }
     // If we connect to a new network without statusbuffer, the bufferid may be -networkId.
     // In that case, once we’re connected (and a status buffer exists), we want to switch to it.
-    combineLatest(viewModel.allBuffers, viewModel.buffer).map { (buffers, current) ->
+    combineLatest(modelHelper.allBuffers, chatViewModel.buffer).map { (buffers, current) ->
       if (current.isValidId()) Optional.empty()
       else Optional.ofNullable(buffers.firstOrNull {
         it.networkId == NetworkId(-current.id) && it.type.hasFlag(Buffer_Type.StatusBuffer)
@@ -409,7 +417,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     })
 
     // User-actionable errors that require immediate action, and should show up as dialog
-    viewModel.errors.toLiveData(BackpressureStrategy.BUFFER).observe(this, Observer { error ->
+    modelHelper.errors.toLiveData(BackpressureStrategy.BUFFER).observe(this, Observer { error ->
       error?.let {
         when (it) {
           is Error.HandshakeError -> it.message.let {
@@ -666,7 +674,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     })
 
     // Connection errors that should show up as toast
-    viewModel.connectionErrors.toLiveData().observe(this, Observer { error ->
+    modelHelper.connectionErrors.toLiveData().observe(this, Observer { error ->
       error?.let {
         val cause = it.cause
         when {
@@ -712,19 +720,19 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     })
 
     // After initial connect, open the drawer
-    viewModel.connectionProgress
+    modelHelper.connectionProgress
       .filter { (it, _, _) -> it == ConnectionState.CONNECTED }
       .firstElement()
       .toLiveData()
       .observe(this, Observer {
         if (connectedAccount != accountId) {
           if (resources.getBoolean(R.bool.buffer_drawer_exists) &&
-              viewModel.buffer.value == BufferId.MAX_VALUE &&
+              chatViewModel.buffer.value == BufferId.MAX_VALUE &&
               !restoredDrawerState) {
             drawerLayout.openDrawer(GravityCompat.START)
           }
           connectedAccount = accountId
-          viewModel.session.value?.orNull()?.let { session ->
+          modelHelper.session.value?.orNull()?.let { session ->
             if (session.identities.isEmpty()) {
               UserSetupActivity.launch(this)
             }
@@ -754,7 +762,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       })
 
     connectionStatusDisplay.setOnClickListener {
-      viewModel.sessionManager.value?.orNull()?.apply {
+      modelHelper.sessionManager.value?.orNull()?.apply {
         ifDisconnected {
           autoReconnect()
         }
@@ -762,7 +770,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     }
 
     // Show Connection Progress Bar
-    viewModel.connectionProgress.toLiveData().observe(this, Observer {
+    modelHelper.connectionProgress.toLiveData().observe(this, Observer {
       val (state, progress, max) = it ?: Triple(ConnectionState.DISCONNECTED, 0, 0)
       when (state) {
         ConnectionState.DISCONNECTED,
@@ -805,7 +813,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     })
 
     // Only show nick list when we’re in a channel buffer
-    viewModel.bufferDataThrottled.toLiveData().observe(this, Observer {
+    modelHelper.bufferDataThrottled.toLiveData().observe(this, Observer {
       bufferData = it
       if (bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END)
@@ -881,8 +889,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
-    outState.putInt(KEY_OPEN_BUFFER, viewModel.buffer.value.id)
-    outState.putInt(KEY_OPEN_BUFFERVIEWCONFIG, viewModel.bufferViewConfigId.value ?: -1)
+    // TODO: store entire chatviewmodel
+    outState.putInt(KEY_OPEN_BUFFER, chatViewModel.buffer.value.id)
+    outState.putInt(KEY_OPEN_BUFFERVIEWCONFIG, chatViewModel.bufferViewConfigId.value ?: -1)
     outState.putLong(KEY_CONNECTED_ACCOUNT, connectedAccount)
     outState.putBoolean(KEY_OPEN_DRAWER_START, drawerLayout.isDrawerOpen(GravityCompat.START))
     outState.putBoolean(KEY_OPEN_DRAWER_END, drawerLayout.isDrawerOpen(GravityCompat.END))
@@ -890,8 +899,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
     super.onRestoreInstanceState(savedInstanceState)
-    viewModel.buffer.onNext(BufferId(savedInstanceState?.getInt(KEY_OPEN_BUFFER, -1) ?: -1))
-    viewModel.bufferViewConfigId.onNext(savedInstanceState?.getInt(KEY_OPEN_BUFFERVIEWCONFIG, -1)
+    // TODO: restore entire chatviewmodel
+    chatViewModel.buffer.onNext(BufferId(savedInstanceState?.getInt(KEY_OPEN_BUFFER, -1) ?: -1))
+    chatViewModel.bufferViewConfigId.onNext(savedInstanceState?.getInt(KEY_OPEN_BUFFERVIEWCONFIG, -1)
                                         ?: -1)
     connectedAccount = savedInstanceState?.getLong(KEY_CONNECTED_ACCOUNT, -1L) ?: -1L
 
@@ -942,7 +952,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     }
     R.id.action_filter_messages -> {
       runInBackground {
-        viewModel.buffer { buffer ->
+        chatViewModel.buffer { buffer ->
           val filteredRaw = database.filtered().get(
             accountId,
             buffer,
@@ -1070,7 +1080,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     connectedAccount = -1L
     restoredDrawerState = false
     ChatActivity.launch(this, bufferId = BufferId.MAX_VALUE)
-    viewModel.resetAccount()
+    chatViewModel.resetAccount()
   }
 
   override fun onSelectAccount() {

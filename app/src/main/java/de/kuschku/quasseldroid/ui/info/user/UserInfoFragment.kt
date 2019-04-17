@@ -70,6 +70,7 @@ import de.kuschku.quasseldroid.viewmodel.data.Avatar
 import de.kuschku.quasseldroid.viewmodel.data.BufferHiddenState
 import de.kuschku.quasseldroid.viewmodel.data.BufferProps
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -140,6 +141,9 @@ class UserInfoFragment : ServiceBoundFragment() {
   @Inject
   lateinit var matrixApi: MatrixApi
 
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
+
   private var actualUrl: String? = null
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -175,7 +179,7 @@ class UserInfoFragment : ServiceBoundFragment() {
       getColor(0, 0)
     }
 
-    combineLatest(viewModel.session, viewModel.networks).switchMap { (sessionOptional, networks) ->
+    combineLatest(modelHelper.session, modelHelper.networks).switchMap { (sessionOptional, networks) ->
       fun processUser(user: IrcUser, bufferSyncer: BufferSyncer? = null, info: BufferInfo? = null,
                       ignoreItems: List<IgnoreListManager.IgnoreListItem>? = null): Observable<Optional<IrcUserInfo>> {
         actionShortcut.post(::updateShortcutVisibility)
@@ -347,7 +351,7 @@ class UserInfoFragment : ServiceBoundFragment() {
         actionWhois.visibleIf(user.knownToCore)
 
         actionQuery.setOnClickListener { view ->
-          viewModel.session.value?.orNull()?.let { session ->
+          modelHelper.session.value?.orNull()?.let { session ->
             val info = session.bufferSyncer.find(
               bufferName = user.nick,
               networkId = user.networkId,
@@ -357,7 +361,7 @@ class UserInfoFragment : ServiceBoundFragment() {
             if (info != null) {
               ChatActivity.launch(view.context, bufferId = info.bufferId)
             } else {
-              viewModel.allBuffers.map {
+              modelHelper.allBuffers.map {
                 listOfNotNull(it.find {
                   it.networkId == user.networkId && it.bufferName == user.nick
                 })
@@ -410,7 +414,7 @@ class UserInfoFragment : ServiceBoundFragment() {
                   true
                 }
                 it.isCheckable -> {
-                  viewModel.ignoreListManager.value?.orNull()?.requestToggleIgnoreRule(it.title.toString())
+                  modelHelper.ignoreListManager.value?.orNull()?.requestToggleIgnoreRule(it.title.toString())
                   true
                 }
                 else               -> false
@@ -428,7 +432,7 @@ class UserInfoFragment : ServiceBoundFragment() {
         }
 
         actionWhois.setOnClickListener { view ->
-          viewModel.session {
+          modelHelper.session {
             it.orNull()?.let { session ->
               session.bufferSyncer.find(
                 networkId = user.networkId,

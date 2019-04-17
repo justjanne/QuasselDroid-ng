@@ -42,7 +42,9 @@ import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
+import de.kuschku.quasseldroid.viewmodel.helper.QuasselViewModelHelper
 import io.reactivex.Observable
+import javax.inject.Inject
 
 class ChannelCreateFragment : ServiceBoundSettingsFragment() {
   @BindView(R.id.network)
@@ -69,6 +71,9 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
   @BindView(R.id.save)
   lateinit var save: Button
 
+  @Inject
+  lateinit var modelHelper: QuasselViewModelHelper
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.add_create, container, false)
@@ -77,7 +82,7 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
     val networkAdapter = NetworkAdapter()
     network.adapter = networkAdapter
 
-    viewModel.networks.switchMap {
+    modelHelper.networks.switchMap {
       combineLatest(it.values.map(Network::liveNetworkInfo)).map {
         it.map {
           NetworkItem(
@@ -106,13 +111,13 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
       val isPasswordProtected = passwordProtected.isChecked
       val channelPassword = password.text.toString().trim()
 
-      viewModel.bufferSyncer.value?.orNull()?.let { bufferSyncer ->
+      modelHelper.bufferSyncer.value?.orNull()?.let { bufferSyncer ->
         val existingBuffer = bufferSyncer.find(
           networkId = networkId,
           type = Buffer_Type.of(Buffer_Type.ChannelBuffer),
           bufferName = channelName
         )
-        val existingChannel = viewModel.networks.value?.get(networkId)?.ircChannel(channelName)
+        val existingChannel = modelHelper.networks.value?.get(networkId)?.ircChannel(channelName)
           .nullIf { it == IrcChannel.NULL }
         if (existingBuffer != null) {
           if (existingChannel == null) {
@@ -120,7 +125,7 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
               networkId = networkId,
               type = Buffer_Type.of(Buffer_Type.StatusBuffer)
             )?.let { statusBuffer ->
-              viewModel.session.value?.orNull()?.rpcHandler?.apply {
+              modelHelper.session.value?.orNull()?.rpcHandler?.apply {
                 sendInput(statusBuffer, "/join $channelName")
               }
             }
@@ -137,9 +142,9 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
             networkId = networkId,
             type = Buffer_Type.of(Buffer_Type.StatusBuffer)
           )?.let { statusBuffer ->
-            viewModel.session.value?.orNull()?.rpcHandler?.apply {
+            modelHelper.session.value?.orNull()?.rpcHandler?.apply {
               sendInput(statusBuffer, "/join $channelName")
-              viewModel.networks.switchMap {
+              modelHelper.networks.switchMap {
                 it[networkId]?.liveIrcChannel(channelName)
                   ?: Observable.empty()
               }.subscribe {

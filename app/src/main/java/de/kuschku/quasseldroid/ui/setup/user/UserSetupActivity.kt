@@ -33,9 +33,14 @@ import de.kuschku.quasseldroid.defaults.DefaultNetwork
 import de.kuschku.quasseldroid.defaults.Defaults
 import de.kuschku.quasseldroid.ui.setup.ServiceBoundSetupActivity
 import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import java.util.*
+import javax.inject.Inject
 
 class UserSetupActivity : ServiceBoundSetupActivity() {
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
+
   override val initData
     get() = Bundle().apply {
       putString("nick", getString(R.string.default_identity_nick, Random().nextInt(16)))
@@ -45,15 +50,15 @@ class UserSetupActivity : ServiceBoundSetupActivity() {
   override fun onDone(data: Bundle) {
     val network = data.getSerializable("network") as? DefaultNetwork
     if (network != null) {
-      viewModel.backend?.value?.ifPresent { backend ->
-        viewModel.session.value?.orNull()?.rpcHandler?.apply {
+      modelHelper.backend?.value?.ifPresent { backend ->
+        modelHelper.session.value?.orNull()?.rpcHandler?.apply {
           createIdentity(Defaults.identity(this@UserSetupActivity).apply {
             setIdentityName(this@UserSetupActivity.getString(R.string.default_identity_identity_name))
             setNicks(listOf(data.getString("nick")))
             setRealName(data.getString("realname"))
           }, emptyMap())
 
-          viewModel.identities
+          modelHelper.identities
             .map(Map<IdentityId, Identity>::values)
             .filter(Collection<Identity>::isNotEmpty)
             .map(Collection<Identity>::first)

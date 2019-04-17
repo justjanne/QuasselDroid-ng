@@ -37,10 +37,12 @@ import de.kuschku.quasseldroid.util.helper.sha256Fingerprint
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
+import javax.inject.Inject
 
 class CertificateInfoFragment : ServiceBoundSettingsFragment() {
 
@@ -95,6 +97,8 @@ class CertificateInfoFragment : ServiceBoundSettingsFragment() {
   @BindView(R.id.fingerprint_sha1)
   lateinit var fingerprintSha1: TextView
 
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
@@ -103,7 +107,7 @@ class CertificateInfoFragment : ServiceBoundSettingsFragment() {
 
     val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 
-    viewModel.peerCertificateChain.toLiveData().observe(this, Observer {
+    modelHelper.peerCertificateChain.toLiveData().observe(this, Observer {
       val leafCertificate = it.firstOrNull()
       if (leafCertificate != null) {
         content.visibility = View.VISIBLE

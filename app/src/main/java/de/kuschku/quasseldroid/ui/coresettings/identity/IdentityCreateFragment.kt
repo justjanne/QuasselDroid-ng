@@ -22,7 +22,7 @@ package de.kuschku.quasseldroid.ui.coresettings.identity
 import de.kuschku.libquassel.util.helpers.value
 
 class IdentityCreateFragment : IdentityBaseFragment(true) {
-  override fun onSave() = viewModel.session.value?.orNull()?.let { session ->
+  override fun onSave() = modelHelper.session.value?.orNull()?.let { session ->
     identity?.let { (_, data) ->
       applyChanges(data)
       session.rpcHandler.createIdentity(data, mapOf())

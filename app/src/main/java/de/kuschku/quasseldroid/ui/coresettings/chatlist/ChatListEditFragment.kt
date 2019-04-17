@@ -32,7 +32,7 @@ class ChatListEditFragment : ChatListBaseFragment(false), Deletable {
   override fun onDelete() {
     chatlist?.let { (it, _) ->
       it?.let {
-        viewModel.bufferViewManager.value?.orNull()?.requestDeleteBufferView(it.bufferViewId())
+        modelHelper.bufferViewManager.value?.orNull()?.requestDeleteBufferView(it.bufferViewId())
       }
     }
   }

@@ -57,7 +57,9 @@ import de.kuschku.quasseldroid.util.missingfeatures.MissingFeaturesDialog
 import de.kuschku.quasseldroid.util.missingfeatures.RequiredFeatures
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.view.BannerView
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import io.reactivex.Observable
+import javax.inject.Inject
 
 class CoreSettingsFragment : ServiceBoundFragment() {
   @BindView(R.id.feature_context_missing)
@@ -99,6 +101,9 @@ class CoreSettingsFragment : ServiceBoundFragment() {
   @BindView(R.id.networkconfig)
   lateinit var networkconfig: View
 
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.settings_list, container, false)
@@ -131,7 +136,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     networks.addItemDecoration(itemDecoration)
     ViewCompat.setNestedScrollingEnabled(networks, false)
 
-    viewModel.networks.switchMap {
+    modelHelper.networks.switchMap {
       if (it.isEmpty()) {
         Observable.just(emptyList())
       } else {
@@ -150,7 +155,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     identities.addItemDecoration(itemDecoration)
     ViewCompat.setNestedScrollingEnabled(identities, false)
 
-    viewModel.identities.switchMap {
+    modelHelper.identities.switchMap {
       if (it.isEmpty()) {
         Observable.just(emptyList())
       } else {
@@ -169,7 +174,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     chatlists.addItemDecoration(itemDecoration)
     ViewCompat.setNestedScrollingEnabled(chatlists, false)
 
-    viewModel.bufferViewConfigMap.switchMap {
+    modelHelper.bufferViewConfigMap.switchMap {
       combineLatest(it.values.map(BufferViewConfig::liveUpdates)).map {
         it.map {
           SettingsItem(it.bufferViewId(), it.bufferViewName())
@@ -180,7 +185,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     })
 
     var missingFeatureList: List<MissingFeature> = emptyList()
-    viewModel.negotiatedFeatures.toLiveData().observe(this, Observer { (connected, features) ->
+    modelHelper.negotiatedFeatures.toLiveData().observe(this, Observer { (connected, features) ->
       missingFeatureList = RequiredFeatures.features.filter {
         it.feature !in features.enabledFeatures
       }

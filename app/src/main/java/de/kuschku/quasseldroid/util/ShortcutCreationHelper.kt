@@ -42,6 +42,7 @@ import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.loadWithFallbacks
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper.Companion.IGNORED_CHARS
 
 object ShortcutCreationHelper {
   fun create(context: Context,
@@ -91,7 +92,7 @@ object ShortcutCreationHelper {
     if (info.type.hasFlag(Buffer_Type.QueryBuffer)) {
       val nickName = info.bufferName ?: ""
       val senderColorIndex = SenderColorUtil.senderColor(nickName)
-      val rawInitial = nickName.trimStart(*EditorViewModel.IGNORED_CHARS).firstOrNull()
+      val rawInitial = nickName.trimStart(*IGNORED_CHARS).firstOrNull()
                        ?: nickName.firstOrNull()
       val initial = rawInitial?.toUpperCase().toString()
       val senderColor = senderColors[senderColorIndex]

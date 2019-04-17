@@ -72,7 +72,9 @@ import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
+import de.kuschku.quasseldroid.viewmodel.ChatViewModel
 import de.kuschku.quasseldroid.viewmodel.data.Avatar
+import de.kuschku.quasseldroid.viewmodel.helper.ChatViewModelHelper
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.temporal.ChronoUnit
@@ -110,6 +112,12 @@ class MessageListFragment : ServiceBoundFragment() {
   @Inject
   lateinit var adapter: MessageAdapter
 
+  @Inject
+  lateinit var chatViewModel: ChatViewModel
+
+  @Inject
+  lateinit var modelHelper: ChatViewModelHelper
+
   private lateinit var linearLayoutManager: LinearLayoutManager
 
   private lateinit var backlogRequester: BacklogRequester
@@ -123,9 +131,9 @@ class MessageListFragment : ServiceBoundFragment() {
   private val actionModeCallback = object : ActionMode.Callback {
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?) = when (item?.itemId) {
       R.id.action_user_info -> {
-        viewModel.selectedMessages.value.values.firstOrNull()?.let { msg ->
-          viewModel.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
-            viewModel.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
+        modelHelper.chat.selectedMessages.value.values.firstOrNull()?.let { msg ->
+          modelHelper.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
+            modelHelper.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
               UserInfoActivity.launch(
                 requireContext(),
                 openBuffer = false,
@@ -145,7 +153,7 @@ class MessageListFragment : ServiceBoundFragment() {
       }
       R.id.action_copy      -> {
         val builder = SpannableStringBuilder()
-        viewModel.selectedMessages.value.values.asSequence().sortedBy {
+        modelHelper.chat.selectedMessages.value.values.asSequence().sortedBy {
           it.original.messageId
         }.map {
           if (it.name != null && it.content != null) {
@@ -174,7 +182,7 @@ class MessageListFragment : ServiceBoundFragment() {
       }
       R.id.action_share     -> {
         val builder = SpannableStringBuilder()
-        viewModel.selectedMessages.value.values.asSequence().sortedBy {
+        modelHelper.chat.selectedMessages.value.values.asSequence().sortedBy {
           it.original.messageId
         }.map {
           if (it.name != null && it.content != null) {
@@ -223,7 +231,7 @@ class MessageListFragment : ServiceBoundFragment() {
 
     override fun onDestroyActionMode(mode: ActionMode?) {
       actionMode = null
-      viewModel.selectedMessages.onNext(emptyMap())
+      modelHelper.chat.selectedMessages.onNext(emptyMap())
     }
   }
 
@@ -244,18 +252,18 @@ class MessageListFragment : ServiceBoundFragment() {
     linearLayoutManager = LinearLayoutManager(context)
     linearLayoutManager.reverseLayout = true
 
-    backlogRequester = BacklogRequester(viewModel, database, accountDatabase)
+    backlogRequester = BacklogRequester(modelHelper.session, database, accountDatabase)
 
     adapter.setOnClickListener { msg ->
       if (actionMode != null) {
-        when (viewModel.selectedMessagesToggle(msg.original.messageId, msg)) {
+        when (modelHelper.chat.selectedMessagesToggle(msg.original.messageId, msg)) {
           0    -> actionMode?.finish()
           1    -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = true
           else -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = false
         }
       } else if (msg.hasSpoilers) {
-        val value = viewModel.expandedMessages.value
-        viewModel.expandedMessages.onNext(
+        val value = modelHelper.chat.expandedMessages.value
+        modelHelper.chat.expandedMessages.onNext(
           if (value.contains(msg.original.messageId)) value - msg.original.messageId
           else value + msg.original.messageId
         )
@@ -265,7 +273,7 @@ class MessageListFragment : ServiceBoundFragment() {
       if (actionMode == null) {
         activity?.startActionMode(actionModeCallback)
       }
-      when (viewModel.selectedMessagesToggle(msg.original.messageId, msg)) {
+      when (modelHelper.chat.selectedMessagesToggle(msg.original.messageId, msg)) {
         0    -> actionMode?.finish()
         1    -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = true
         else -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = false
@@ -280,8 +288,8 @@ class MessageListFragment : ServiceBoundFragment() {
         )
       }
     adapter.setOnSenderIconClickListener { msg ->
-      viewModel.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
-        viewModel.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
+      modelHelper.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
+        modelHelper.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
           UserInfoActivity.launch(
             requireContext(),
             openBuffer = false,
@@ -361,10 +369,10 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     }
 
-    val data = combineLatest(viewModel.buffer,
-                             viewModel.selectedMessages,
-                             viewModel.expandedMessages,
-                             viewModel.markerLine)
+    val data = combineLatest(modelHelper.chat.buffer,
+                             modelHelper.chat.selectedMessages,
+                             modelHelper.chat.expandedMessages,
+                             modelHelper.markerLine)
       .toLiveData().switchMapNotNull { (buffer, selected, expanded, markerLine) ->
         accountDatabase.accounts().listen(accountId).switchMap {
           database.filtered().listen(accountId,
@@ -387,19 +395,19 @@ class MessageListFragment : ServiceBoundFragment() {
         }
       }
 
-    val lastMessageId = viewModel.buffer.toLiveData().switchMapNotNull {
+    val lastMessageId = modelHelper.chat.buffer.toLiveData().switchMapNotNull {
       database.message().lastMsgId(it)
     }
 
-    viewModel.buffer.toLiveData().observe(this, Observer { bufferId ->
+    modelHelper.chat.buffer.toLiveData().observe(this, Observer { bufferId ->
       swipeRefreshLayout.isEnabled = (bufferId != null || bufferId?.isValidId() == true)
     })
 
-    viewModel.sessionManager.mapSwitchMap(SessionManager::state).distinctUntilChanged().toLiveData().observe(
+    modelHelper.sessionManager.mapSwitchMap(SessionManager::state).distinctUntilChanged().toLiveData().observe(
       this, Observer {
       if (it?.orNull() == ConnectionState.CONNECTED) {
         runInBackgroundDelayed(16) {
-          viewModel.buffer { bufferId ->
+          modelHelper.chat.buffer { bufferId ->
             val filtered = database.filtered().get(accountId,
                                                    bufferId,
                                                    accountDatabase.accounts().findById(accountId)?.defaultFiltered
@@ -416,7 +424,7 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     })
 
-    viewModel.session.toLiveData().zip(lastMessageId).observe(
+    modelHelper.session.toLiveData().zip(lastMessageId).observe(
       this, Observer {
       runInBackground {
         val session = it?.first?.orNull()
@@ -496,11 +504,11 @@ class MessageListFragment : ServiceBoundFragment() {
           list?.let(adapter::submitList)
         }
 
-        val buffer = viewModel.buffer.value
+        val buffer = modelHelper.chat.buffer.value
                      ?: BufferId(-1)
         if (buffer != lastBuffer) {
           adapter.clearCache()
-          viewModel.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
+          modelHelper.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
             onBufferChange(lastBuffer, buffer, firstVisibleMessageId, bufferSyncer)
           }
           lastBuffer = buffer
@@ -549,7 +557,7 @@ class MessageListFragment : ServiceBoundFragment() {
     val previous = lastBuffer
     val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
     val messageId = adapter[firstVisibleItemPosition]?.content?.messageId
-    val bufferSyncer = viewModel.session.value?.orNull()?.bufferSyncer
+    val bufferSyncer = modelHelper.session.value?.orNull()?.bufferSyncer
     if (previous != null && messageId != null) {
       bufferSyncer?.requestSetMarkerLine(previous, messageId)
     }
@@ -559,7 +567,7 @@ class MessageListFragment : ServiceBoundFragment() {
   private fun loadMore(initial: Boolean = false, lastMessageId: MsgId? = null) {
     // This can be called *after* we’re already detached from the activity
     activity?.runOnUiThread {
-      viewModel.buffer { bufferId ->
+      modelHelper.chat.buffer { bufferId ->
         if (bufferId.isValidId() && bufferId != BufferId.MAX_VALUE) {
           if (initial) swipeRefreshLayout.isRefreshing = true
           runInBackground {

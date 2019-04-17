@@ -75,6 +75,7 @@ import de.kuschku.quasseldroid.viewmodel.data.BufferHiddenState
 import de.kuschku.quasseldroid.viewmodel.data.BufferListItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferState
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
+import de.kuschku.quasseldroid.viewmodel.helper.ChatViewModelHelper
 import javax.inject.Inject
 
 class BufferViewConfigFragment : ServiceBoundFragment() {
@@ -117,16 +118,19 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   @Inject
   lateinit var ircFormatDeserializer: IrcFormatDeserializer
 
+  @Inject
+  lateinit var modelHelper: ChatViewModelHelper
+
   private var actionMode: ActionMode? = null
 
   private val actionModeCallback = object : ActionMode.Callback {
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-      val selected = viewModel.selectedBuffer.value
+      val selected = modelHelper.selectedBuffer.value
       val info = selected?.info
-      val session = viewModel.session.value?.orNull()
+      val session = modelHelper.session.value?.orNull()
       val bufferSyncer = session?.bufferSyncer
       val network = session?.networks?.get(selected?.info?.networkId)
-      val bufferViewConfig = viewModel.bufferViewConfig.value
+      val bufferViewConfig = modelHelper.bufferViewConfig.value
 
       return if (info != null && session != null) {
         when (item?.itemId) {
@@ -258,7 +262,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     ButterKnife.bind(this, view)
 
     val adapter = BufferViewConfigAdapter()
-    viewModel.bufferViewConfigs.switchMap {
+    modelHelper.bufferViewConfigs.switchMap {
       combineLatest(it.map(BufferViewConfig::liveUpdates))
     }.toLiveData().observe(this, Observer {
       if (it != null) {
@@ -269,30 +273,30 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     var hasSetBufferViewConfigId = false
     adapter.setOnUpdateFinishedListener {
       if (!hasSetBufferViewConfigId) {
-        chatListSpinner.setSelection(adapter.indexOf(viewModel.bufferViewConfigId.value).nullIf { it == -1 }
-          ?: 0)
-        viewModel.bufferViewConfigId.onNext(chatListSpinner.selectedItemId.toInt())
+        chatListSpinner.setSelection(adapter.indexOf(modelHelper.chat.bufferViewConfigId.value).nullIf { it == -1 }
+                                     ?: 0)
+        modelHelper.chat.bufferViewConfigId.onNext(chatListSpinner.selectedItemId.toInt())
         hasSetBufferViewConfigId = true
       }
     }
     chatListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
       override fun onNothingSelected(adapter: AdapterView<*>?) {
         if (hasSetBufferViewConfigId)
-          viewModel.bufferViewConfigId.onNext(-1)
+          modelHelper.chat.bufferViewConfigId.onNext(-1)
       }
 
       override fun onItemSelected(adapter: AdapterView<*>?, element: View?, position: Int,
                                   id: Long) {
         if (hasSetBufferViewConfigId)
-          viewModel.bufferViewConfigId.onNext(id.toInt())
+          modelHelper.chat.bufferViewConfigId.onNext(id.toInt())
       }
     }
     chatListSpinner.adapter = adapter
 
     listAdapter = BufferListAdapter(
       messageSettings,
-      viewModel.selectedBufferId,
-      viewModel.expandedNetworks
+      modelHelper.chat.selectedBufferId,
+      modelHelper.chat.expandedNetworks
     )
 
     val avatarSize = resources.getDimensionPixelSize(R.dimen.avatar_size_buffer)
@@ -318,16 +322,17 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       }
     }
 
-    viewModel.negotiatedFeatures.toLiveData().observe(this, Observer { (connected, features) ->
+    modelHelper.negotiatedFeatures.toLiveData().observe(this, Observer { (connected, features) ->
       featureContextBufferActivitySync.setMode(
         if (!connected || features.hasFeature(ExtendedFeature.BufferActivitySync)) WarningBarView.MODE_NONE
         else WarningBarView.MODE_ICON
       )
     })
 
-    combineLatest(viewModel.bufferList,
-      viewModel.expandedNetworks,
-      viewModel.selectedBuffer,
+    combineLatest(
+      modelHelper.bufferList,
+      modelHelper.chat.expandedNetworks,
+      modelHelper.selectedBuffer,
       database.filtered().listenRx(accountId).toObservable(),
       accountDatabase.accounts().listenDefaultFiltered(accountId, 0).toObservable()
     ).toLiveData().observe(this, Observer { it ->
@@ -405,7 +410,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     listAdapter.setOnLongClickListener(this@BufferViewConfigFragment::longClickListener)
     chatList.adapter = listAdapter
 
-    viewModel.selectedBuffer.toLiveData().observe(this, Observer { buffer ->
+    modelHelper.selectedBuffer.toLiveData().observe(this, Observer { buffer ->
       if (buffer != null) {
         val menu = actionMode?.menu
         if (menu != null) {
@@ -480,17 +485,17 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     })
 
     chatListToolbar.inflateMenu(R.menu.context_bufferlist)
-    chatListToolbar.menu.findItem(R.id.action_search).isChecked = viewModel.bufferSearchTemporarilyVisible.value
+    chatListToolbar.menu.findItem(R.id.action_search).isChecked = modelHelper.chat.bufferSearchTemporarilyVisible.value
     chatListToolbar.setOnMenuItemClickListener { item ->
       when (item.itemId) {
         R.id.action_search -> {
           item.isChecked = !item.isChecked
-          viewModel.bufferSearchTemporarilyVisible.onNext(item.isChecked)
+          modelHelper.chat.bufferSearchTemporarilyVisible.onNext(item.isChecked)
           true
         }
         R.id.action_show_hidden -> {
           item.isChecked = !item.isChecked
-          viewModel.showHidden.onNext(item.isChecked)
+          modelHelper.chat.showHidden.onNext(item.isChecked)
           true
         }
         else -> false
@@ -502,17 +507,17 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     chatList.itemAnimator = DefaultItemAnimator()
     chatList.setItemViewCacheSize(10)
 
-    viewModel.stateReset.toLiveData().observe(this, Observer {
+    modelHelper.chat.stateReset.toLiveData().observe(this, Observer {
       listAdapter.submitList(emptyList())
       hasSetBufferViewConfigId = false
     })
 
-    val bufferSearchPermanentlyVisible = viewModel.bufferViewConfig
+    val bufferSearchPermanentlyVisible = modelHelper.bufferViewConfig
       .mapMap(BufferViewConfig::showSearch)
       .mapOrElse(false)
 
-    combineLatest(viewModel.bufferSearchTemporarilyVisible.distinctUntilChanged(),
-      bufferSearchPermanentlyVisible)
+    combineLatest(modelHelper.chat.bufferSearchTemporarilyVisible.distinctUntilChanged(),
+                  bufferSearchPermanentlyVisible)
       .toLiveData().observe(this, Observer { (temporarily, permanently) ->
         val visible = temporarily || permanently
 
@@ -527,7 +532,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
     bufferSearch.addTextChangedListener(object : TextWatcher {
       override fun afterTextChanged(s: Editable) {
-        viewModel.bufferSearch.onNext(s.toString())
+        modelHelper.chat.bufferSearch.onNext(s.toString())
       }
 
       override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
@@ -627,7 +632,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       longClickListener(bufferId)
     } else {
       context?.let {
-        viewModel.bufferSearchTemporarilyVisible.onNext(false)
+        modelHelper.chat.bufferSearchTemporarilyVisible.onNext(false)
         ChatActivity.launch(it, bufferId = bufferId)
       }
     }

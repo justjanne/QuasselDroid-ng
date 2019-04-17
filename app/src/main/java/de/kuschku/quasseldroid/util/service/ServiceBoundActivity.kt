@@ -83,13 +83,13 @@ abstract class ServiceBoundActivity :
   lateinit var connectionSettings: ConnectionSettings
 
   @Inject
-  lateinit var viewModel: QuasselViewModel
+  lateinit var quasselViewModel: QuasselViewModel
 
   protected var accountId: Long = -1
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    viewModel.backendWrapper.onNext(this.backend)
+    quasselViewModel.backendWrapper.onNext(this.backend)
     updateRecentsHeader()
     connection.context = this
     lifecycle.addObserver(connection)

@@ -30,9 +30,6 @@ import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 abstract class ServiceBoundSlideFragment : SlideFragment() {
-  @Inject
-  lateinit var viewModel: QuasselViewModel
-
   private val connection = BackendServiceConnection()
   protected val backend: BehaviorSubject<Optional<Backend>>
     get() = connection.backend

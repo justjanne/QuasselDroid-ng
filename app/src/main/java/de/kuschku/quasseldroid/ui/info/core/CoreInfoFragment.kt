@@ -45,10 +45,12 @@ import de.kuschku.quasseldroid.util.missingfeatures.RequiredFeatures
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
+import javax.inject.Inject
 
 class CoreInfoFragment : ServiceBoundFragment() {
 
@@ -88,6 +90,9 @@ class CoreInfoFragment : ServiceBoundFragment() {
   @BindView(R.id.clients)
   lateinit var clients: RecyclerView
 
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
+
   private val dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
   private val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 
@@ -105,18 +110,21 @@ class CoreInfoFragment : ServiceBoundFragment() {
     ButterKnife.bind(this, view)
 
     var missingFeatureList: List<MissingFeature> = emptyList()
-    viewModel.coreInfo.toLiveData().observe(this, Observer {
-      it?.orNull().let { data ->
-        version.text = data?.quasselVersion?.let(Html::fromHtml)
+    combineLatest(modelHelper.coreInfo, modelHelper.coreFeatures).toLiveData()
+      .observe(this, Observer {
+        val data = it?.first?.orNull()
+        val connected = it?.second?.first
+                        ?: false
+        val features = it?.second?.second
+                       ?: QuasselFeatures.empty()
+
+        version.text = data?.quasselVersion.let(Html::fromHtml)
         val versionTime = data?.quasselBuildDate?.toLongOrNull()
         val formattedVersionTime = if (versionTime != null)
           dateFormatter.format(Instant.ofEpochSecond(versionTime).atZone(ZoneId.systemDefault()))
         else
           data?.quasselBuildDate?.let(Html::fromHtml)
         versionDate.text = formattedVersionTime
-
-        val (connected, features) = viewModel.coreFeatures.value ?: Pair(false,
-                                                                         QuasselFeatures.empty())
         missingFeatureList = RequiredFeatures.features.filter {
           it.feature !in features.enabledFeatures
         }
@@ -126,7 +134,6 @@ class CoreInfoFragment : ServiceBoundFragment() {
         uptime.text = requireContext().getString(R.string.label_core_online_since,
                                                  startTime.toString())
         uptimeContainer.visibleIf(startTime != null)
-      }
     })
     missingFeatures.setOnClickListener {
       MissingFeaturesDialog.Builder(requireActivity())
@@ -154,7 +161,7 @@ class CoreInfoFragment : ServiceBoundFragment() {
       CertificateInfoActivity.launch(it.context)
     }
 
-    viewModel.sslSession.toLiveData().observe(this, Observer {
+    modelHelper.sslSession.toLiveData().observe(this, Observer {
       val certificateChain = it?.orNull()?.peerCertificateChain?.map(X509Helper::convert).orEmpty()
       val leafCertificate = certificateChain.firstOrNull()
       if (leafCertificate != null) {
@@ -198,13 +205,13 @@ class CoreInfoFragment : ServiceBoundFragment() {
     clients.layoutManager = LinearLayoutManager(requireContext())
     val adapter = ClientAdapter()
     adapter.setDisconnectListener {
-      val sessionOptional = viewModel.session.value
+      val sessionOptional = modelHelper.session.value
       val session = sessionOptional?.orNull()
       val rpcHandler = session?.rpcHandler
       rpcHandler?.requestKickClient(it)
     }
     clients.adapter = adapter
-    viewModel.coreInfoClients.toLiveData().observe(this, Observer {
+    modelHelper.coreInfoClients.toLiveData().observe(this, Observer {
       clientsTitle.visibleIf(it?.isNotEmpty() == true)
       adapter.submitList(it)
     })

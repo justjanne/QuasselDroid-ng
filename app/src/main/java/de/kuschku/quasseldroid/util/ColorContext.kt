@@ -28,6 +28,7 @@ import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.ui.drawable.TextDrawable
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper.Companion.IGNORED_CHARS
 import javax.inject.Inject
 
 class ColorContext @Inject constructor(
@@ -71,7 +72,7 @@ class ColorContext @Inject constructor(
 
   fun buildTextDrawable(nickName: String, self: Boolean): TextDrawable {
     val senderColorIndex = SenderColorUtil.senderColor(nickName)
-    val rawInitial = nickName.trimStart(*EditorViewModel.IGNORED_CHARS).firstOrNull()
+    val rawInitial = nickName.trimStart(*IGNORED_CHARS).firstOrNull()
                      ?: nickName.firstOrNull()
     val initial = rawInitial?.toUpperCase().toString()
     val senderColor = if (self) selfColor else senderColors[senderColorIndex]

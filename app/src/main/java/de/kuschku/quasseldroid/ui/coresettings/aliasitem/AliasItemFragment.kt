@@ -44,6 +44,7 @@ import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import javax.inject.Inject
 
 class AliasItemFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
@@ -78,7 +79,7 @@ class AliasItemFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
   lateinit var autoCompleteAdapter: AutoCompleteAdapter
 
   @Inject
-  lateinit var editorViewModel: EditorViewModel
+  lateinit var modelHelper: EditorViewModelHelper
 
   private lateinit var editorHelper: EditorHelper
 
@@ -94,14 +95,12 @@ class AliasItemFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
       rule = it
     }
 
-    editorViewModel.quasselViewModel.onNext(viewModel)
-
     val autoCompleteHelper = AutoCompleteHelper(
       requireActivity(),
       autoCompleteSettings,
       messageSettings,
       formatDeserializer,
-      editorViewModel
+      modelHelper
     )
 
     editorHelper = EditorHelper(
@@ -113,7 +112,7 @@ class AliasItemFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
       appearanceSettings
     )
 
-    editorViewModel.lastWord.onNext(editorHelper.lastWord)
+    modelHelper.editor.lastWord.onNext(editorHelper.lastWord)
 
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
       val autoCompleteBottomSheet = BottomSheetBehavior.from(autoCompleteList)

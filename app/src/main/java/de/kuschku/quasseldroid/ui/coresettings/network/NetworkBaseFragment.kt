@@ -56,6 +56,8 @@ import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
 import de.kuschku.quasseldroid.util.ui.view.InlineSnackBar
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
+import javax.inject.Inject
 import kotlin.math.roundToInt
 
 abstract class NetworkBaseFragment(private val initDefault: Boolean) :
@@ -135,6 +137,9 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
   @BindView(R.id.customratelimits_delay)
   lateinit var customratelimitsDelay: EditText
 
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
+
   protected var network: Pair<Network?, Network>? = null
 
   private lateinit var adapter: NetworkServerAdapter
@@ -166,7 +171,7 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
     val identityAdapter = IdentityAdapter()
     identity.adapter = identityAdapter
 
-    viewModel.identities.switchMap {
+    modelHelper.identities.switchMap {
       combineLatest(it.values.map(Identity::liveUpdates)).map {
         it.sortedBy(Identity::identityName)
       }
@@ -183,7 +188,7 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
     })
 
     if (initDefault) {
-      viewModel.session
+      modelHelper.session
         .filter(Optional<ISession>::isPresent)
         .map(Optional<ISession>::get)
         .firstElement()
@@ -193,7 +198,7 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
           }
         })
     } else {
-      viewModel.networks.map { Optional.ofNullable(it[networkId]) }
+      modelHelper.networks.map { Optional.ofNullable(it[networkId]) }
         .filter(Optional<Network>::isPresent)
         .map(Optional<Network>::get)
         .firstElement()
@@ -203,7 +208,7 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
             update(it, identityAdapter)
           }
         })
-      viewModel.networks.map { Optional.ofNullable(it[networkId]) }
+      modelHelper.networks.map { Optional.ofNullable(it[networkId]) }
         .filter(Optional<Network>::isPresent)
         .map(Optional<Network>::get)
         .switchMap(Network::liveCaps)
@@ -215,7 +220,7 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
 
 
     autoidentifyWarning.setOnClickListener {
-      val identity = viewModel.identities.value?.get(IdentityId(identity.selectedItemId.toInt()))
+      val identity = modelHelper.identities.value?.get(IdentityId(identity.selectedItemId.toInt()))
       if (identity != null) {
         saslEnabled.isChecked = true
         saslAccount.setText(identity.nicks().firstOrNull())

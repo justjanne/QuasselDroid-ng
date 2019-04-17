@@ -42,7 +42,9 @@ import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
+import de.kuschku.quasseldroid.viewmodel.ChatViewModel
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
+import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import javax.inject.Inject
 
 class ChatlineFragment : ServiceBoundFragment() {
@@ -91,14 +93,14 @@ class ChatlineFragment : ServiceBoundFragment() {
   @Inject
   lateinit var autoCompleteAdapter: AutoCompleteAdapter
 
-  @Inject
-  lateinit var editorViewModel: EditorViewModel
-
   lateinit var editorHelper: EditorHelper
 
   lateinit var autoCompleteHelper: AutoCompleteHelper
 
   lateinit var historyBottomSheet: BottomSheetBehavior<View>
+
+  @Inject
+  lateinit var modelHelper: EditorViewModelHelper
 
   val panelSlideListener = object : BottomSheetBehavior.BottomSheetCallback() {
     override fun onSlide(bottomSheet: View, slideOffset: Float) = Unit
@@ -113,14 +115,12 @@ class ChatlineFragment : ServiceBoundFragment() {
     val view = inflater.inflate(R.layout.chat_chatline, container, false)
     ButterKnife.bind(this, view)
 
-    editorViewModel.quasselViewModel.onNext(viewModel)
-
     autoCompleteHelper = AutoCompleteHelper(
       requireActivity(),
       autoCompleteSettings,
       messageSettings,
       ircFormatDeserializer,
-      editorViewModel
+      modelHelper
     )
 
     editorHelper = EditorHelper(
@@ -132,7 +132,7 @@ class ChatlineFragment : ServiceBoundFragment() {
       appearanceSettings
     )
 
-    editorViewModel.lastWord.onNext(editorHelper.lastWord)
+    modelHelper.editor.lastWord.onNext(editorHelper.lastWord)
 
     val autoCompleteBottomSheet = BottomSheetBehavior.from(autoCompleteList)
     if (autoCompleteSettings.prefix || autoCompleteSettings.auto) {
@@ -162,7 +162,7 @@ class ChatlineFragment : ServiceBoundFragment() {
       historyBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
     }
     messageHistory.adapter = messageHistoryAdapter
-    viewModel.recentlySentMessages.toLiveData()
+    modelHelper.chat.recentlySentMessages.toLiveData()
       .observe(this, Observer(messageHistoryAdapter::submitList))
     messageHistoryAdapter.setOnUpdateFinishedListener {
       messageHistory.scrollToPosition(0)
@@ -181,11 +181,11 @@ class ChatlineFragment : ServiceBoundFragment() {
         }
 
         for ((stripped, _) in lines) {
-          viewModel.addRecentlySentMessage(stripped)
+          modelHelper.chat.addRecentlySentMessage(stripped)
         }
-        viewModel.session { sessionOptional ->
+        modelHelper.session { sessionOptional ->
           val session = sessionOptional.orNull()
-          viewModel.buffer { bufferId ->
+          modelHelper.chat.buffer { bufferId ->
             session?.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
               val output = mutableListOf<IAliasManager.Command>()
               for ((_, formatted) in lines) {
@@ -228,7 +228,7 @@ class ChatlineFragment : ServiceBoundFragment() {
 
   fun replaceText(text: CharSequence) {
     if (chatline.safeText.isNotEmpty()) {
-      chatline.safeText.lineSequence().forEach(viewModel::addRecentlySentMessage)
+      chatline.safeText.lineSequence().forEach(modelHelper.chat::addRecentlySentMessage)
     }
     editorHelper.replaceText(text)
   }
