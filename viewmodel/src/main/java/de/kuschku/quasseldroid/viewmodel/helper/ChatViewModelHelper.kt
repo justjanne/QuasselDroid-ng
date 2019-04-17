@@ -36,7 +36,7 @@ open class ChatViewModelHelper @Inject constructor(
     }.mapSwitchMap(BufferViewConfig::liveUpdates)
   }
 
-  val network = combineLatest(bufferSyncer, networks, chat.buffer)
+  val network = combineLatest(bufferSyncer, networks, chat.bufferId)
     .map { (syncer, networks, buffer) ->
       Optional.ofNullable(syncer.orNull()?.bufferInfo(buffer)?.let { networks[it.networkId] })
     }
@@ -45,13 +45,13 @@ open class ChatViewModelHelper @Inject constructor(
    * An observable of the changes of the markerline, as pairs of `(old, new)`
    */
   val markerLine = session.mapSwitchMap { currentSession ->
-    chat.buffer.switchMap { currentBuffer ->
+    chat.bufferId.switchMap { currentBuffer ->
       // Get a stream of the latest marker line
       currentSession.bufferSyncer.liveMarkerLine(currentBuffer)
     }
   }
 
-  val bufferData = combineLatest(session, chat.buffer)
+  val bufferData = combineLatest(session, chat.bufferId)
     .switchMap { (sessionOptional, id) ->
       val session = sessionOptional.orNull()
       val bufferSyncer = session?.bufferSyncer
@@ -116,7 +116,7 @@ open class ChatViewModelHelper @Inject constructor(
   val bufferDataThrottled =
     bufferData.distinctUntilChanged().throttleLast(100, TimeUnit.MILLISECONDS)
 
-  val nickData: Observable<List<IrcUserItem>> = combineLatest(session, chat.buffer)
+  val nickData: Observable<List<IrcUserItem>> = combineLatest(session, chat.bufferId)
     .switchMap { (sessionOptional, buffer) ->
       val session = sessionOptional.orNull()
       val bufferSyncer = session?.bufferSyncer

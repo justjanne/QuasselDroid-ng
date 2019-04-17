@@ -36,7 +36,7 @@ class TopicActivity : ServiceBoundSettingsActivity(TopicFragment()) {
       context: Context,
       buffer: Int
     ) = Intent(context, TopicActivity::class.java).apply {
-      putExtra("buffer", buffer)
+      putExtra("bufferId", buffer)
     }
   }
 }

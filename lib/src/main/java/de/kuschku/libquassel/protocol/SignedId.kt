@@ -19,12 +19,14 @@
 @file:Suppress("NOTHING_TO_INLINE")
 package de.kuschku.libquassel.protocol
 
+import java.io.Serializable
+
 typealias SignedId = Int
 typealias SignedId64 = Long
 
 typealias MsgId_Type = SignedId64
 
-inline class MsgId(val id: MsgId_Type) : Comparable<MsgId> {
+inline class MsgId(val id: MsgId_Type) : Comparable<MsgId>, Serializable {
   override fun compareTo(other: MsgId) = id.compareTo(other.id)
   inline fun isValidId() = id > 0
 
@@ -40,7 +42,7 @@ inline class MsgId(val id: MsgId_Type) : Comparable<MsgId> {
 
 typealias NetworkId_Type = SignedId
 
-inline class NetworkId(val id: NetworkId_Type) : Comparable<NetworkId> {
+inline class NetworkId(val id: NetworkId_Type) : Comparable<NetworkId>, Serializable {
   override fun compareTo(other: NetworkId) = id.compareTo(other.id)
   inline fun isValidId() = id > 0
 
@@ -56,7 +58,7 @@ inline class NetworkId(val id: NetworkId_Type) : Comparable<NetworkId> {
 
 typealias BufferId_Type = SignedId
 
-inline class BufferId(val id: BufferId_Type) : Comparable<BufferId> {
+inline class BufferId(val id: BufferId_Type) : Comparable<BufferId>, Serializable {
   override fun compareTo(other: BufferId) = id.compareTo(other.id)
   inline fun isValidId() = id > 0
 
@@ -72,7 +74,7 @@ inline class BufferId(val id: BufferId_Type) : Comparable<BufferId> {
 
 typealias IdentityId_Type = SignedId
 
-inline class IdentityId(val id: IdentityId_Type) : Comparable<IdentityId> {
+inline class IdentityId(val id: IdentityId_Type) : Comparable<IdentityId>, Serializable {
   override fun compareTo(other: IdentityId) = id.compareTo(other.id)
   inline fun isValidId() = id > 0
 

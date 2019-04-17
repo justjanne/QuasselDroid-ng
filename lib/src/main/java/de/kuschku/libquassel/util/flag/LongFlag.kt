@@ -20,8 +20,9 @@
 package de.kuschku.libquassel.util.flag
 
 import de.kuschku.libquassel.util.helpers.sum
+import java.io.Serializable
 
-interface LongFlag<T> where T : Enum<T>, T : LongFlag<T> {
+interface LongFlag<T> : Serializable where T : Enum<T>, T : LongFlag<T> {
   val bit: ULong
   fun toByte() = bit.toByte()
   fun toChar() = bit.toLong().toChar()
@@ -39,7 +40,7 @@ interface LongFlag<T> where T : Enum<T>, T : LongFlag<T> {
 data class LongFlags<E>(
   val value: ULong,
   val values: Array<E>? = null
-) : Number(), Comparable<ULong> where E : Enum<E>, E : LongFlag<E> {
+) : Number(), Serializable, Comparable<ULong> where E : Enum<E>, E : LongFlag<E> {
   override fun compareTo(other: ULong) = value.compareTo(other)
 
   override fun toByte() = value.toByte()
@@ -109,27 +110,27 @@ infix fun <T> LongFlags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : Lon
 }
 
 infix fun <T> LongFlags<T>.or(other: ULong): LongFlags<T>
-  where T : kotlin.Enum<T>, T : LongFlag<T> =
+  where T : Enum<T>, T : LongFlag<T> =
   LongFlags(value or other)
 
 infix fun <T> LongFlags<T>.or(other: LongFlag<T>): LongFlags<T>
-  where T : kotlin.Enum<T>, T : LongFlag<T> =
+  where T : Enum<T>, T : LongFlag<T> =
   LongFlags(value or other.bit)
 
 infix fun <T> LongFlags<T>.or(other: LongFlags<T>): LongFlags<T>
-  where T : kotlin.Enum<T>, T : LongFlag<T> =
+  where T : Enum<T>, T : LongFlag<T> =
   LongFlags(value or other.value)
 
 infix fun <T> LongFlags<T>.and(other: ULong): LongFlags<T>
-  where T : kotlin.Enum<T>, T : LongFlag<T> =
+  where T : Enum<T>, T : LongFlag<T> =
   LongFlags(value and other)
 
 infix fun <T> LongFlags<T>.and(other: LongFlag<T>): LongFlags<T>
-  where T : kotlin.Enum<T>, T : LongFlag<T> =
+  where T : Enum<T>, T : LongFlag<T> =
   LongFlags(value and other.bit)
 
 infix fun <T> LongFlags<T>.and(other: LongFlags<T>): LongFlags<T>
-  where T : kotlin.Enum<T>, T : LongFlag<T> =
+  where T : Enum<T>, T : LongFlag<T> =
   LongFlags(value and other.value)
 
 infix operator fun <T> LongFlags<T>.plus(other: ULong): LongFlags<T>

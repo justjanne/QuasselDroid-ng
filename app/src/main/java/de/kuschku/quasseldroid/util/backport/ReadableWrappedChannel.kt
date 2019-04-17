@@ -50,11 +50,11 @@ class ReadableWrappedChannel(
         try {
           // begin blocking operation, this handles interruption etc. properly
           begin()
-          // prepare buffer for reading by resetting position and limit
+          // prepare bufferId for reading by resetting position and limit
           buffer.clear()
-          // read data into buffer
+          // read data into bufferId
           readData = backingStream.read(buffer.array(), 0, toReadOnce)
-          // accurately set buffer info
+          // accurately set bufferId info
           buffer.position(readData)
         } finally {
           // end blocking operation, this handles interruption etc. properly
@@ -74,7 +74,7 @@ class ReadableWrappedChannel(
         // mark that we’ve read data (to only block once)
         hasRead = true
 
-        // flip buffer to prepare for reading
+        // flip bufferId to prepare for reading
         buffer.flip()
         dst.put(buffer)
       }

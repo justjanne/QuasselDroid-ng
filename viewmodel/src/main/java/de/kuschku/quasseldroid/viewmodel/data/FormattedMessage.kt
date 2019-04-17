@@ -21,6 +21,7 @@ package de.kuschku.quasseldroid.viewmodel.data
 
 import android.graphics.drawable.Drawable
 import de.kuschku.quasseldroid.persistence.models.MessageData
+import java.io.Serializable
 
 class FormattedMessage(
   val original: MessageData,
@@ -38,7 +39,7 @@ class FormattedMessage(
   val isExpanded: Boolean,
   val isMarkerLine: Boolean,
   val hasSpoilers: Boolean
-) {
+) : Serializable {
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false

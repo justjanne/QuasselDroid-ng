@@ -39,10 +39,10 @@ class WritableWrappedChannel(
         // Data to be written, always the minimum of available data and the page size
         val writtenData = Math.min(remainingData, PAGE_SIZE)
 
-        // Set new buffer info
+        // Set new bufferId info
         buffer.clear()
         buffer.limit(writtenData)
-        // Read data into buffer
+        // Read data into bufferId
         buffer.put(src)
 
         try {

@@ -176,7 +176,7 @@ class QuasselService : DaggerLifecycleService(),
       }
     }
 
-    val bufferId = BufferId(intent.getIntExtra("buffer", -1))
+    val bufferId = BufferId(intent.getIntExtra("bufferId", -1))
 
     val inputResults = RemoteInput.getResultsFromIntent(intent)?.getCharSequence("reply_content")
     if (inputResults != null && bufferId.isValidId()) {
@@ -550,7 +550,7 @@ class QuasselService : DaggerLifecycleService(),
         putExtra("disconnect", disconnect)
       }
       if (bufferId != null) {
-        putExtra("buffer", bufferId.id)
+        putExtra("bufferId", bufferId.id)
       }
       if (markReadMessage != null) {
         putExtra("mark_read_message", markReadMessage.id)

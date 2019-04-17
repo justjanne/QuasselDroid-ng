@@ -26,6 +26,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import de.kuschku.libquassel.protocol.*
 import org.threeten.bp.Instant
+import java.io.Serializable
 
 @Entity(tableName = "message", indices = [Index("bufferId"), Index("ignored")])
 data class MessageData(
@@ -45,7 +46,7 @@ data class MessageData(
   var avatarUrl: String,
   var content: String,
   var ignored: Boolean
-) {
+) : Serializable {
   inline val messageId
     get() = MsgId(rawMessageId)
   inline val bufferId

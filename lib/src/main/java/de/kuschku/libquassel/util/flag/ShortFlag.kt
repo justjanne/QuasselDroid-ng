@@ -20,8 +20,9 @@
 package de.kuschku.libquassel.util.flag
 
 import de.kuschku.libquassel.util.helpers.sum
+import java.io.Serializable
 
-interface ShortFlag<T> where T : Enum<T>, T : ShortFlag<T> {
+interface ShortFlag<T> : Serializable where T : Enum<T>, T : ShortFlag<T> {
   val bit: UShort
   fun toByte() = bit.toByte()
   fun toChar() = bit.toLong().toChar()
@@ -39,7 +40,7 @@ interface ShortFlag<T> where T : Enum<T>, T : ShortFlag<T> {
 data class ShortFlags<E>(
   val value: UShort,
   val values: Array<E>? = null
-) : Number(), Comparable<UShort> where E : Enum<E>, E : ShortFlag<E> {
+) : Number(), Serializable, Comparable<UShort> where E : Enum<E>, E : ShortFlag<E> {
   override fun compareTo(other: UShort) = value.compareTo(other)
 
   override fun toByte() = value.toByte()
@@ -109,27 +110,27 @@ infix fun <T> ShortFlags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : Sh
 }
 
 infix fun <T> ShortFlags<T>.or(other: UShort): ShortFlags<T>
-  where T : kotlin.Enum<T>, T : ShortFlag<T> =
+  where T : Enum<T>, T : ShortFlag<T> =
   ShortFlags(value or other)
 
 infix fun <T> ShortFlags<T>.or(other: ShortFlag<T>): ShortFlags<T>
-  where T : kotlin.Enum<T>, T : ShortFlag<T> =
+  where T : Enum<T>, T : ShortFlag<T> =
   ShortFlags(value or other.bit)
 
 infix fun <T> ShortFlags<T>.or(other: ShortFlags<T>): ShortFlags<T>
-  where T : kotlin.Enum<T>, T : ShortFlag<T> =
+  where T : Enum<T>, T : ShortFlag<T> =
   ShortFlags(value or other.value)
 
 infix fun <T> ShortFlags<T>.and(other: UShort): ShortFlags<T>
-  where T : kotlin.Enum<T>, T : ShortFlag<T> =
+  where T : Enum<T>, T : ShortFlag<T> =
   ShortFlags(value and other)
 
 infix fun <T> ShortFlags<T>.and(other: ShortFlag<T>): ShortFlags<T>
-  where T : kotlin.Enum<T>, T : ShortFlag<T> =
+  where T : Enum<T>, T : ShortFlag<T> =
   ShortFlags(value and other.bit)
 
 infix fun <T> ShortFlags<T>.and(other: ShortFlags<T>): ShortFlags<T>
-  where T : kotlin.Enum<T>, T : ShortFlag<T> =
+  where T : Enum<T>, T : ShortFlag<T> =
   ShortFlags(value and other.value)
 
 infix operator fun <T> ShortFlags<T>.plus(other: UShort): ShortFlags<T>

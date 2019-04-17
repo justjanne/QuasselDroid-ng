@@ -179,7 +179,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
           }
         }
         intent.hasExtra(KEY_BUFFER_ID)                                  -> {
-          chatViewModel.buffer.onNext(BufferId(intent.getIntExtra(KEY_BUFFER_ID, -1)))
+          chatViewModel.bufferId.onNext(BufferId(intent.getIntExtra(KEY_BUFFER_ID, -1)))
           chatViewModel.bufferOpened.onNext(Unit)
           if (intent.hasExtra(KEY_ACCOUNT_ID)) {
             val accountId = intent.getLongExtra(ChatActivity.KEY_ACCOUNT_ID, -1)
@@ -404,8 +404,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
     }
     // If we connect to a new network without statusbuffer, the bufferid may be -networkId.
-    // In that case, once we’re connected (and a status buffer exists), we want to switch to it.
-    combineLatest(modelHelper.allBuffers, chatViewModel.buffer).map { (buffers, current) ->
+    // In that case, once we’re connected (and a status bufferId exists), we want to switch to it.
+    combineLatest(modelHelper.allBuffers, chatViewModel.bufferId).map { (buffers, current) ->
       if (current.isValidId()) Optional.empty()
       else Optional.ofNullable(buffers.firstOrNull {
         it.networkId == NetworkId(-current.id) && it.type.hasFlag(Buffer_Type.StatusBuffer)
@@ -727,7 +727,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       .observe(this, Observer {
         if (connectedAccount != accountId) {
           if (resources.getBoolean(R.bool.buffer_drawer_exists) &&
-              chatViewModel.buffer.value == BufferId.MAX_VALUE &&
+              chatViewModel.bufferId.value == BufferId.MAX_VALUE &&
               !restoredDrawerState) {
             drawerLayout.openDrawer(GravityCompat.START)
           }
@@ -812,7 +812,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
     })
 
-    // Only show nick list when we’re in a channel buffer
+    // Only show nick list when we’re in a channel bufferId
     modelHelper.bufferDataThrottled.toLiveData().observe(this, Observer {
       bufferData = it
       if (bufferData?.info?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
@@ -889,9 +889,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
-    // TODO: store entire chatviewmodel
-    outState.putInt(KEY_OPEN_BUFFER, chatViewModel.buffer.value.id)
-    outState.putInt(KEY_OPEN_BUFFERVIEWCONFIG, chatViewModel.bufferViewConfigId.value ?: -1)
+    chatViewModel.onSaveInstanceState(outState)
+
     outState.putLong(KEY_CONNECTED_ACCOUNT, connectedAccount)
     outState.putBoolean(KEY_OPEN_DRAWER_START, drawerLayout.isDrawerOpen(GravityCompat.START))
     outState.putBoolean(KEY_OPEN_DRAWER_END, drawerLayout.isDrawerOpen(GravityCompat.END))
@@ -899,10 +898,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
     super.onRestoreInstanceState(savedInstanceState)
-    // TODO: restore entire chatviewmodel
-    chatViewModel.buffer.onNext(BufferId(savedInstanceState?.getInt(KEY_OPEN_BUFFER, -1) ?: -1))
-    chatViewModel.bufferViewConfigId.onNext(savedInstanceState?.getInt(KEY_OPEN_BUFFERVIEWCONFIG, -1)
-                                        ?: -1)
+    if (savedInstanceState != null) {
+      chatViewModel.onRestoreInstanceState(savedInstanceState)
+    }
+
     connectedAccount = savedInstanceState?.getLong(KEY_CONNECTED_ACCOUNT, -1L) ?: -1L
 
     if (savedInstanceState?.getBoolean(KEY_OPEN_DRAWER_START) == true &&
@@ -952,7 +951,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     }
     R.id.action_filter_messages -> {
       runInBackground {
-        chatViewModel.buffer { buffer ->
+        chatViewModel.bufferId { buffer ->
           val filteredRaw = database.filtered().get(
             accountId,
             buffer,

@@ -57,7 +57,7 @@ public class FastScroller {
   private Rect mTmpRect = new Rect();
   private Rect mInvalidateRect = new Rect();
   private Rect mInvalidateTmpRect = new Rect();
-  // The inset is the buffer around which a point will still register as a click on the scrollbar
+  // The inset is the bufferId around which a point will still register as a click on the scrollbar
   private int mTouchInset;
   // This is the offset from the top of the scrollbar when the user first starts touching.  To
   // prevent jumping, this offset is applied as the user scrolls.

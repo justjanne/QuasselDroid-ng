@@ -369,7 +369,7 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     }
 
-    val data = combineLatest(modelHelper.chat.buffer,
+    val data = combineLatest(modelHelper.chat.bufferId,
                              modelHelper.chat.selectedMessages,
                              modelHelper.chat.expandedMessages,
                              modelHelper.markerLine)
@@ -395,11 +395,11 @@ class MessageListFragment : ServiceBoundFragment() {
         }
       }
 
-    val lastMessageId = modelHelper.chat.buffer.toLiveData().switchMapNotNull {
+    val lastMessageId = modelHelper.chat.bufferId.toLiveData().switchMapNotNull {
       database.message().lastMsgId(it)
     }
 
-    modelHelper.chat.buffer.toLiveData().observe(this, Observer { bufferId ->
+    modelHelper.chat.bufferId.toLiveData().observe(this, Observer { bufferId ->
       swipeRefreshLayout.isEnabled = (bufferId != null || bufferId?.isValidId() == true)
     })
 
@@ -407,12 +407,12 @@ class MessageListFragment : ServiceBoundFragment() {
       this, Observer {
       if (it?.orNull() == ConnectionState.CONNECTED) {
         runInBackgroundDelayed(16) {
-          modelHelper.chat.buffer { bufferId ->
+          modelHelper.chat.bufferId { bufferId ->
             val filtered = database.filtered().get(accountId,
                                                    bufferId,
                                                    accountDatabase.accounts().findById(accountId)?.defaultFiltered
                                                    ?: 0)
-            // Try loading messages when switching to isEmpty buffer
+            // Try loading messages when switching to isEmpty bufferId
             val hasVisibleMessages = database.message().hasVisibleMessages(bufferId, filtered)
             if (!hasVisibleMessages) {
               if (bufferId.isValidId() && bufferId != BufferId.MAX_VALUE) {
@@ -504,7 +504,7 @@ class MessageListFragment : ServiceBoundFragment() {
           list?.let(adapter::submitList)
         }
 
-        val buffer = modelHelper.chat.buffer.value
+        val buffer = modelHelper.chat.bufferId.value
                      ?: BufferId(-1)
         if (buffer != lastBuffer) {
           adapter.clearCache()
@@ -539,7 +539,7 @@ class MessageListFragment : ServiceBoundFragment() {
     if (previous != null && lastMessageId != null) {
       bufferSyncer.requestSetMarkerLine(previous, lastMessageId)
     }
-    // Try loading messages when switching to isEmpty buffer
+    // Try loading messages when switching to isEmpty bufferId
     val filtered = database.filtered().get(accountId,
                                            current,
                                            accountDatabase.accounts().findById(accountId)?.defaultFiltered
@@ -567,7 +567,7 @@ class MessageListFragment : ServiceBoundFragment() {
   private fun loadMore(initial: Boolean = false, lastMessageId: MsgId? = null) {
     // This can be called *after* we’re already detached from the activity
     activity?.runOnUiThread {
-      modelHelper.chat.buffer { bufferId ->
+      modelHelper.chat.bufferId { bufferId ->
         if (bufferId.isValidId() && bufferId != BufferId.MAX_VALUE) {
           if (initial) swipeRefreshLayout.isRefreshing = true
           runInBackground {

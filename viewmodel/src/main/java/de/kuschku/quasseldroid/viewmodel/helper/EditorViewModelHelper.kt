@@ -28,7 +28,7 @@ open class EditorViewModelHelper @Inject constructor(
 ) : ChatViewModelHelper(chat, quassel) {
   val rawAutoCompleteData: Observable<Triple<Optional<ISession>, BufferId, Pair<String, IntRange>>> =
     combineLatest(session,
-                  chat.buffer,
+                  chat.bufferId,
                   editor.lastWord).switchMap { (sessionOptional, id, lastWordWrapper) ->
       lastWordWrapper
         .distinctUntilChanged()

@@ -98,7 +98,7 @@ class Hex : BinaryEncoder, BinaryDecoder {
   }
 
   /**
-   * Converts a buffer of character bytes representing hexadecimal values into an array of bytes of those same values.
+   * Converts a bufferId of character bytes representing hexadecimal values into an array of bytes of those same values.
    * The returned array will be half the length of the passed array, as it takes two characters to represent any given
    * byte. An exception is thrown if the passed char array has an odd number of elements.
    *
@@ -160,7 +160,7 @@ class Hex : BinaryEncoder, BinaryDecoder {
   }
 
   /**
-   * Converts byte buffer into an array of bytes for the characters representing the hexadecimal values of each
+   * Converts byte bufferId into an array of bytes for the characters representing the hexadecimal values of each
    * byte in order. The returned array will be double the length of the passed array, as it takes two characters to
    * represent any given byte.
    *
@@ -170,7 +170,7 @@ class Hex : BinaryEncoder, BinaryDecoder {
    *
    *
    * @param array
-   * a byte buffer to convert to Hex characters
+   * a byte bufferId to convert to Hex characters
    * @return A byte[] containing the bytes of the lower-case hexadecimal characters
    * @see .encodeHex
    * @since 1.11
@@ -343,12 +343,12 @@ class Hex : BinaryEncoder, BinaryDecoder {
     }
 
     /**
-     * Converts a byte buffer into an array of characters representing the hexadecimal values of each byte in order.
+     * Converts a byte bufferId into an array of characters representing the hexadecimal values of each byte in order.
      * The returned array will be double the length of the passed array, as it takes two characters to represent any
      * given byte.
      *
      * @param data
-     * a byte buffer to convert to Hex characters
+     * a byte bufferId to convert to Hex characters
      * @param toLowerCase
      * `true` converts to lowercase, `false` to uppercase
      * @return A char[] containing hexadecimal characters in the selected case
@@ -387,12 +387,12 @@ class Hex : BinaryEncoder, BinaryDecoder {
     }
 
     /**
-     * Converts a byte buffer into an array of characters representing the hexadecimal values of each byte in order.
+     * Converts a byte bufferId into an array of characters representing the hexadecimal values of each byte in order.
      * The returned array will be double the length of the passed array, as it takes two characters to represent any
      * given byte.
      *
      * @param data
-     * a byte buffer to convert to Hex characters
+     * a byte bufferId to convert to Hex characters
      * @param toDigits
      * the output alphabet (must be at least 16 characters)
      * @return A char[] containing the appropriate characters from the alphabet
@@ -432,11 +432,11 @@ class Hex : BinaryEncoder, BinaryDecoder {
     }
 
     /**
-     * Converts a byte buffer into a String representing the hexadecimal values of each byte in order. The returned
+     * Converts a byte bufferId into a String representing the hexadecimal values of each byte in order. The returned
      * String will be double the length of the passed array, as it takes two characters to represent any given byte.
      *
      * @param data
-     * a byte buffer to convert to Hex characters
+     * a byte bufferId to convert to Hex characters
      * @return A String containing lower-case hexadecimal characters
      * @since 1.11
      */
@@ -445,11 +445,11 @@ class Hex : BinaryEncoder, BinaryDecoder {
     }
 
     /**
-     * Converts a byte buffer into a String representing the hexadecimal values of each byte in order. The returned
+     * Converts a byte bufferId into a String representing the hexadecimal values of each byte in order. The returned
      * String will be double the length of the passed array, as it takes two characters to represent any given byte.
      *
      * @param data
-     * a byte buffer to convert to Hex characters
+     * a byte bufferId to convert to Hex characters
      * @param toLowerCase
      * `true` converts to lowercase, `false` to uppercase
      * @return A String containing lower-case hexadecimal characters

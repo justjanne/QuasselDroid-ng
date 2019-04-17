@@ -20,8 +20,9 @@
 package de.kuschku.libquassel.util.flag
 
 import de.kuschku.libquassel.util.helpers.sum
+import java.io.Serializable
 
-interface Flag<T> where T : Enum<T>, T : Flag<T> {
+interface Flag<T> : Serializable where T : Enum<T>, T : Flag<T> {
   val bit: UInt
   fun toByte() = bit.toByte()
   fun toChar() = bit.toLong().toChar()
@@ -39,7 +40,7 @@ interface Flag<T> where T : Enum<T>, T : Flag<T> {
 data class Flags<E>(
   val value: UInt,
   val values: Array<E>? = null
-) : Number(), Comparable<UInt> where E : Enum<E>, E : Flag<E> {
+) : Number(), Serializable, Comparable<UInt> where E : Enum<E>, E : Flag<E> {
   override fun compareTo(other: UInt) = value.compareTo(other)
 
   override fun toByte() = value.toByte()
@@ -109,27 +110,27 @@ infix fun <T> Flags<T>.hasFlag(which: T): Boolean where T : Enum<T>, T : Flag<T>
 }
 
 infix fun <T> Flags<T>.or(other: UInt): Flags<T>
-  where T : kotlin.Enum<T>, T : Flag<T> =
+  where T : Enum<T>, T : Flag<T> =
   Flags(value or other)
 
 infix fun <T> Flags<T>.or(other: Flag<T>): Flags<T>
-  where T : kotlin.Enum<T>, T : Flag<T> =
+  where T : Enum<T>, T : Flag<T> =
   Flags(value or other.bit)
 
 infix fun <T> Flags<T>.or(other: Flags<T>): Flags<T>
-  where T : kotlin.Enum<T>, T : Flag<T> =
+  where T : Enum<T>, T : Flag<T> =
   Flags(value or other.value)
 
 infix fun <T> Flags<T>.and(other: UInt): Flags<T>
-  where T : kotlin.Enum<T>, T : Flag<T> =
+  where T : Enum<T>, T : Flag<T> =
   Flags(value and other)
 
 infix fun <T> Flags<T>.and(other: Flag<T>): Flags<T>
-  where T : kotlin.Enum<T>, T : Flag<T> =
+  where T : Enum<T>, T : Flag<T> =
   Flags(value and other.bit)
 
 infix fun <T> Flags<T>.and(other: Flags<T>): Flags<T>
-  where T : kotlin.Enum<T>, T : Flag<T> =
+  where T : Enum<T>, T : Flag<T> =
   Flags(value and other.value)
 
 infix operator fun <T> Flags<T>.plus(other: UInt): Flags<T>

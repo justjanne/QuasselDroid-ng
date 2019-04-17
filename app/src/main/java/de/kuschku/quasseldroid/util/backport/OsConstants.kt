@@ -400,7 +400,7 @@ object OsConstants {
     ENETRESET       -> "Network dropped connection on reset"
     ECONNABORTED    -> "Software caused connection abort"
     ECONNRESET      -> "Connection reset by peer"
-    ENOBUFS         -> "No buffer space available"
+    ENOBUFS         -> "No bufferId space available"
     EISCONN         -> "Transport endpoint is already connected"
     ENOTCONN        -> "Transport endpoint is not connected"
     ESHUTDOWN       -> "Cannot send after transport endpoint shutdown"

@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.viewmodel
 
+import android.os.Bundle
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.protocol.NetworkId
@@ -27,18 +28,92 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
 open class ChatViewModel : QuasselViewModel() {
-  val stateReset = BehaviorSubject.create<Unit>()
   val selectedMessages = BehaviorSubject.createDefault(emptyMap<MsgId, FormattedMessage>())
   val bufferSearch = BehaviorSubject.createDefault("")
   val expandedMessages = BehaviorSubject.createDefault(emptySet<MsgId>())
-  val buffer = BehaviorSubject.createDefault(BufferId.MAX_VALUE)
-  val bufferOpened = PublishSubject.create<Unit>()
+  val bufferId = BehaviorSubject.createDefault(BufferId.MAX_VALUE)
   val bufferViewConfigId = BehaviorSubject.createDefault(-1)
   val recentlySentMessages = BehaviorSubject.createDefault(emptyList<CharSequence>())
   val showHidden = BehaviorSubject.createDefault(false)
   val bufferSearchTemporarilyVisible = BehaviorSubject.createDefault(false)
   val expandedNetworks = BehaviorSubject.createDefault(emptyMap<NetworkId, Boolean>())
   val selectedBufferId = BehaviorSubject.createDefault(BufferId.MAX_VALUE)
+
+  val stateReset = BehaviorSubject.create<Unit>()
+  val bufferOpened = PublishSubject.create<Unit>()
+
+  fun onSaveInstanceState(outState: Bundle) {
+    outState.putSerializable(
+      KEY_SELECTED_MESSAGES,
+      HashMap(selectedMessages.value))
+    outState.putString(
+      KEY_BUFFER_SEARCH,
+      bufferSearch.value)
+    outState.putLongArray(
+      KEY_EXPANDED_MESSAGES,
+      expandedMessages.value.map(MsgId::id).toLongArray())
+    outState.putInt(
+      KEY_BUFFER_ID,
+      bufferId.value.id)
+    outState.putInt(
+      KEY_BUFFER_VIEW_CONFIG_ID,
+      bufferViewConfigId.value)
+    outState.putCharSequenceArray(
+      KEY_RECENTLY_SENT_MESSAGES,
+      recentlySentMessages.value.toTypedArray())
+    outState.putBoolean(
+      KEY_SHOW_HIDDEN,
+      showHidden.value)
+    outState.putBoolean(
+      KEY_BUFFER_SEARCH_TEMPORARILY_VISIBLE,
+      bufferSearchTemporarilyVisible.value)
+    outState.putSerializable(
+      KEY_EXPANDED_NETWORKS,
+      HashMap(expandedNetworks.value))
+    outState.putInt(
+      KEY_SELECTED_BUFFER_ID,
+      selectedBufferId.value.id)
+  }
+
+  fun onRestoreInstanceState(savedInstanceState: Bundle) {
+    if (savedInstanceState.containsKey(KEY_SELECTED_MESSAGES)) {
+      selectedMessages.onNext(
+        savedInstanceState.getSerializable(KEY_SELECTED_MESSAGES) as? HashMap<MsgId, FormattedMessage>
+        ?: emptyMap()
+      )
+    }
+
+    if (savedInstanceState.containsKey(KEY_BUFFER_SEARCH))
+      bufferSearch.onNext(savedInstanceState.getString(KEY_BUFFER_SEARCH, null))
+
+    if (savedInstanceState.containsKey(KEY_EXPANDED_MESSAGES))
+      expandedMessages.onNext(savedInstanceState.getLongArray(KEY_EXPANDED_MESSAGES)?.map(::MsgId)?.toSet().orEmpty())
+
+    if (savedInstanceState.containsKey(KEY_BUFFER_ID))
+      bufferId.onNext(BufferId(savedInstanceState.getInt(KEY_BUFFER_ID)))
+
+    if (savedInstanceState.containsKey(KEY_BUFFER_VIEW_CONFIG_ID))
+      bufferViewConfigId.onNext(savedInstanceState.getInt(KEY_BUFFER_VIEW_CONFIG_ID))
+
+    if (savedInstanceState.containsKey(KEY_RECENTLY_SENT_MESSAGES))
+      recentlySentMessages.onNext(savedInstanceState.getCharSequenceArray(KEY_RECENTLY_SENT_MESSAGES)?.toList().orEmpty())
+
+    if (savedInstanceState.containsKey(KEY_SHOW_HIDDEN))
+      showHidden.onNext(savedInstanceState.getBoolean(KEY_SHOW_HIDDEN))
+
+    if (savedInstanceState.containsKey(KEY_BUFFER_SEARCH_TEMPORARILY_VISIBLE))
+      bufferSearchTemporarilyVisible.onNext(savedInstanceState.getBoolean(KEY_BUFFER_SEARCH_TEMPORARILY_VISIBLE))
+
+    if (savedInstanceState.containsKey(KEY_EXPANDED_NETWORKS)) {
+      expandedNetworks.onNext(
+        savedInstanceState.getSerializable(KEY_EXPANDED_NETWORKS) as? HashMap<NetworkId, Boolean>
+        ?: emptyMap()
+      )
+    }
+
+    if (savedInstanceState.containsKey(KEY_SELECTED_BUFFER_ID))
+      selectedBufferId.onNext(BufferId(savedInstanceState.getInt(KEY_SELECTED_BUFFER_ID)))
+  }
 
   fun resetAccount() {
     bufferViewConfigId.onNext(-1)
@@ -65,6 +140,17 @@ open class ChatViewModel : QuasselViewModel() {
   }
 
   companion object {
+    const val KEY_SELECTED_MESSAGES = "model_chat_selectedMessages"
+    const val KEY_BUFFER_SEARCH = "model_chat_bufferSearch"
+    const val KEY_EXPANDED_MESSAGES = "model_chat_expandedMessages"
+    const val KEY_BUFFER_ID = "model_chat_bufferId"
+    const val KEY_BUFFER_VIEW_CONFIG_ID = "model_chat_bufferViewConfigId"
+    const val KEY_RECENTLY_SENT_MESSAGES = "model_chat_recentlySentMessages"
+    const val KEY_SHOW_HIDDEN = "model_chat_showHidden"
+    const val KEY_BUFFER_SEARCH_TEMPORARILY_VISIBLE = "model_chat_bufferSearchTemporarilyVisible"
+    const val KEY_EXPANDED_NETWORKS = "model_chat_expandedNetworks"
+    const val KEY_SELECTED_BUFFER_ID = "model_chat_selectedBufferId"
+
     const val MAX_RECENT_MESSAGES = 20
   }
 }

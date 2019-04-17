@@ -19,7 +19,9 @@
 
 package de.kuschku.quasseldroid.viewmodel.data
 
-sealed class Avatar {
+import java.io.Serializable
+
+sealed class Avatar : Serializable {
   data class NativeAvatar(val url: String) : Avatar()
   data class IRCCloudAvatar(val url: String) : Avatar()
   data class GravatarAvatar(val url: String) : Avatar()

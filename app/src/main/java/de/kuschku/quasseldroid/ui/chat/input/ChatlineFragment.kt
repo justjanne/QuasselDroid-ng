@@ -42,8 +42,6 @@ import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
-import de.kuschku.quasseldroid.viewmodel.ChatViewModel
-import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import javax.inject.Inject
 
@@ -185,7 +183,7 @@ class ChatlineFragment : ServiceBoundFragment() {
         }
         modelHelper.session { sessionOptional ->
           val session = sessionOptional.orNull()
-          modelHelper.chat.buffer { bufferId ->
+          modelHelper.chat.bufferId { bufferId ->
             session?.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
               val output = mutableListOf<IAliasManager.Command>()
               for ((_, formatted) in lines) {

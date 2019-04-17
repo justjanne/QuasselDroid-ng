@@ -42,7 +42,6 @@ import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
-import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
 import javax.inject.Inject
 
@@ -117,8 +116,8 @@ class TopicFragment : ServiceBoundSettingsFragment(), Savable {
       }
     }
 
-    val bufferId = BufferId(arguments?.getInt("buffer", -1) ?: -1)
-    modelHelper.chat.buffer.onNext(bufferId)
+    val bufferId = BufferId(arguments?.getInt("bufferId", -1) ?: -1)
+    modelHelper.chat.bufferId.onNext(bufferId)
     modelHelper.bufferData.filter {
       it.info != null
     }.firstElement().toLiveData().observe(this, Observer {
@@ -131,7 +130,7 @@ class TopicFragment : ServiceBoundSettingsFragment(), Savable {
   override fun onSave(): Boolean {
     modelHelper.session { sessionOptional ->
       val session = sessionOptional.orNull()
-      modelHelper.chat.buffer { bufferId ->
+      modelHelper.chat.bufferId { bufferId ->
         session?.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->
           val topic = formatSerializer.toEscapeCodes(chatline.safeText)
           session.rpcHandler.sendInput(bufferInfo, "/topic $topic")

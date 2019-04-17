@@ -45,7 +45,7 @@ class BacklogRequester(
                finishCallback: () -> Unit) {
     log(DEBUG,
         "BacklogRequester",
-        "requested(buffer: $buffer, amount: $amount, pageSize: $pageSize, lastMessageId: $lastMessageId, untilAllVisible: $untilAllVisible)")
+        "requested(bufferId: $buffer, amount: $amount, pageSize: $pageSize, lastMessageId: $lastMessageId, untilAllVisible: $untilAllVisible)")
     var missing = amount
     session.value?.orNull()?.let { session: ISession ->
       session.backlogManager.let {
