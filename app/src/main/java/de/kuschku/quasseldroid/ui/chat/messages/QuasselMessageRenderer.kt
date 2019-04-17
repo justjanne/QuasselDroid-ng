@@ -46,7 +46,6 @@ import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.ui.SpanFormatter
-import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper.Companion.IGNORED_CHARS
 import org.threeten.bp.ZoneId
@@ -70,13 +69,12 @@ class QuasselMessageRenderer @Inject constructor(
 
   private val monospaceItalic = Typeface.create(Typeface.MONOSPACE, Typeface.ITALIC)
 
-  private fun timePattern(showSeconds: Boolean,
-                          use24hClock: Boolean) = when (use24hClock to showSeconds) {
-    false to true  -> "hh:mm:ss a"
-    false to false -> "hh:mm a"
+  private fun timePattern(showSeconds: Boolean, use24hClock: Boolean) = when {
+    !use24hClock and showSeconds  -> "hh:mm:ss a"
+    !use24hClock and !showSeconds -> "hh:mm a"
 
-    true to true   -> "HH:mm:ss"
-    else           -> "HH:mm"
+    use24hClock and showSeconds   -> "HH:mm:ss"
+    else                          -> "HH:mm"
   }
 
   private val senderColors: IntArray = context.theme.styledAttributes(
