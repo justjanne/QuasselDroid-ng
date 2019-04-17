@@ -20,6 +20,7 @@
 package de.kuschku.quasseldroid.util.ui.view
 
 import android.content.Context
+import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -29,6 +30,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.use
 
 class BannerView : FrameLayout {
@@ -50,8 +52,16 @@ class BannerView : FrameLayout {
   constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     super(context, attrs, defStyleAttr) {
 
-    LayoutInflater.from(context).inflate(R.layout.widget_banner, this, true)
+    val content = LayoutInflater.from(context).inflate(R.layout.widget_banner, this, true)
     ButterKnife.bind(this)
+
+    context.theme.styledAttributes(R.attr.colorBackgroundSnackbar,
+                                   R.attr.selectableItemBackground) {
+      content.background = LayerDrawable(arrayOf(
+        getDrawable(0),
+        getDrawable(1)
+      ))
+    }
 
     context.theme.obtainStyledAttributes(attrs, R.styleable.BannerView, 0, 0).use {
       if (it.hasValue(R.styleable.BannerView_icon))
