@@ -19,14 +19,15 @@
 
 package de.kuschku.libquassel.util.nio
 
+import de.kuschku.libquassel.connection.CoreConnection
 import de.kuschku.libquassel.connection.HostnameVerifier
 import de.kuschku.libquassel.connection.SocketAddress
 import de.kuschku.libquassel.util.compatibility.CompatibilityUtils
+import de.kuschku.libquassel.util.compatibility.LoggingHandler
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.*
 import de.kuschku.libquassel.util.compatibility.StreamChannelFactory
-import java.io.Flushable
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
+import java.io.*
 import java.net.Socket
 import java.net.SocketException
 import java.nio.ByteBuffer
@@ -42,11 +43,12 @@ import javax.net.ssl.SSLSocket
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.X509TrustManager
 
-class WrappedChannel(
+class WrappedChannel private constructor(
   private val socket: Socket,
   private var rawInStream: InputStream? = null,
   private var rawOutStream: OutputStream? = null,
-  private var flusher: (() -> Unit)? = null
+  private var flusher: (() -> Unit)? = null,
+  private val closeListeners: List<Closeable> = emptyList()
 ) : Flushable, ByteChannel, InterruptibleChannel {
   private var rawIn: ReadableByteChannel? = null
   private var rawOut: WritableByteChannel? = null
@@ -62,10 +64,12 @@ class WrappedChannel(
   }
 
   companion object {
-    fun ofSocket(s: Socket): WrappedChannel {
+    fun ofSocket(s: Socket, closeListeners: List<Closeable> = emptyList()): WrappedChannel {
       return WrappedChannel(
-        s, s.getInputStream(),
-        s.getOutputStream()
+        s,
+        s.getInputStream(),
+        s.getOutputStream(),
+        closeListeners = closeListeners + s.getInputStream() + s.getOutputStream()
       )
     }
   }
@@ -74,7 +78,8 @@ class WrappedChannel(
     val deflaterOutputStream = CompatibilityUtils.createDeflaterOutputStream(rawOutStream)
     return WrappedChannel(
       socket, InflaterInputStream(rawInStream), deflaterOutputStream,
-      deflaterOutputStream::flush
+      deflaterOutputStream::flush,
+      closeListeners = closeListeners + deflaterOutputStream
     )
   }
 
@@ -96,7 +101,7 @@ class WrappedChannel(
       )
     }
     socket.startHandshake()
-    return WrappedChannel.ofSocket(socket)
+    return ofSocket(socket)
   }
 
   /**
@@ -206,6 +211,16 @@ class WrappedChannel(
     rawOut?.close()
     rawOut = null
     socket.close()
+    /*
+    for (listener in closeListeners + socket) {
+      try {
+        log(INFO, "WrappedChannel", "Closing: ${listener::class.java}")
+        listener.close()
+      } catch (e: Throwable) {
+        log(WARN, "WrappedChannel", "Error encountered while closing connection: $e")
+      }
+    }
+    */
   }
 
   /**

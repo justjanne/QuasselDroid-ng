@@ -172,13 +172,12 @@ class CoreConnection(
   override fun close() {
     try {
       setState(ConnectionState.CLOSED)
-      channel?.flush()
       channel?.close()
-      setHandlers(null, null, null)
-      interrupt()
     } catch (e: Throwable) {
       log(WARN, TAG, "Error encountered while closing connection: $e")
     }
+    setHandlers(null, null, null)
+    interrupt()
   }
 
   fun dispatch(message: HandshakeMessage) {
@@ -218,7 +217,7 @@ class CoreConnection(
       connect()
       sendHandshake()
       readHandshake()
-      while (!isInterrupted && state != ConnectionState.CLOSED) {
+      while (!isInterrupted && state.value != ConnectionState.CLOSED) {
         sizeBuffer.clear()
         if (channel?.read(sizeBuffer) == -1)
           break
