@@ -97,18 +97,14 @@ object CrashHandler {
     }
 
     Thread.setDefaultUncaughtExceptionHandler { currentThread, throwable ->
-      Thread {
-        myHandler?.invoke(currentThread, throwable)
-        originalHandler?.uncaughtException(currentThread, throwable)
-      }.start()
+      myHandler?.invoke(currentThread, throwable)
+      originalHandler?.uncaughtException(currentThread, throwable)
     }
 
     val oldHandler = Thread.currentThread().uncaughtExceptionHandler
     Thread.currentThread().setUncaughtExceptionHandler { currentThread, throwable ->
-      Thread {
-        myHandler?.invoke(currentThread, throwable)
-        oldHandler?.uncaughtException(currentThread, throwable)
-      }.start()
+      myHandler?.invoke(currentThread, throwable)
+      oldHandler?.uncaughtException(currentThread, throwable)
     }
   }
 

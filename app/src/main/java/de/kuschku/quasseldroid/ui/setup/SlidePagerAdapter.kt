@@ -33,7 +33,7 @@ class SlidePagerAdapter(private val fragmentManager: FragmentManager) :
   val result = Bundle()
     get() {
       (0 until retainedFragments.size()).map(retainedFragments::valueAt).forEach {
-        it.getData(field)
+        it.save(field)
       }
       return field
     }
@@ -62,7 +62,7 @@ class SlidePagerAdapter(private val fragmentManager: FragmentManager) :
   }
 
   override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-    retainedFragments.get(position)?.getData(result)
+    retainedFragments.get(position)?.save(result)
     retainedFragments.remove(position)
     super.destroyItem(container, position, `object`)
   }
@@ -97,9 +97,9 @@ class SlidePagerAdapter(private val fragmentManager: FragmentManager) :
   }
 
   fun hasChanged(index: Int, fragment: SlideFragment) {
-    fragment.getData(result)
+    fragment.save(result)
     if (index > -1 && (index + 1) < totalCount) {
-      getItem(index + 1).setData(result)
+      getItem(index + 1).save(result)
     }
   }
 }

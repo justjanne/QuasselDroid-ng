@@ -40,6 +40,8 @@ abstract class SlideFragment : DaggerFragment() {
 
   protected abstract fun isValid(): Boolean
 
+  private var initialized = false
+
   val valid = object : MutableLiveData<Boolean>() {
     override fun observe(owner: LifecycleOwner, observer: Observer<in Boolean>) {
       super.observe(owner, observer)
@@ -67,6 +69,8 @@ abstract class SlideFragment : DaggerFragment() {
       resources.getString(title)
     view.findViewById<TextView>(R.id.description).setText(description)
 
+    initialized = true
+
     initData?.let(this::setData)
     savedInstanceState?.let(this::setData)
     updateValidity()
@@ -76,16 +80,25 @@ abstract class SlideFragment : DaggerFragment() {
 
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
-    getData(outState)
+    if (initialized) getData(outState)
   }
 
   override fun onViewStateRestored(savedInstanceState: Bundle?) {
     super.onViewStateRestored(savedInstanceState)
-    updateValidity()
+    if (initialized) updateValidity()
   }
 
-  abstract fun setData(data: Bundle)
-  abstract fun getData(data: Bundle)
+  protected abstract fun setData(data: Bundle)
+  protected abstract fun getData(data: Bundle)
+
+  fun save(data: Bundle) {
+    if (initialized) getData(data)
+  }
+
+  fun load(data: Bundle) {
+    if (initialized) setData(data)
+  }
+
   var initData: Bundle? = null
 
   fun requestFocus() {
