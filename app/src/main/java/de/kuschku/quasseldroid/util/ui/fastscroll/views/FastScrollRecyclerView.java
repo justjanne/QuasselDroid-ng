@@ -32,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import de.kuschku.quasseldroid.R;
 import de.kuschku.quasseldroid.util.ui.fastscroll.interfaces.OnFastScrollStateChangeListener;
 import de.kuschku.quasseldroid.util.ui.fastscroll.utils.Utils;

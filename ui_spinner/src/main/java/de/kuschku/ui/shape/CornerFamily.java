@@ -16,10 +16,10 @@
 
 package de.kuschku.ui.shape;
 
+import androidx.annotation.IntDef;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-
-import androidx.annotation.IntDef;
 
 /**
  * CornerFamily enum that holds which family to be used to create a {@link CornerTreatment}

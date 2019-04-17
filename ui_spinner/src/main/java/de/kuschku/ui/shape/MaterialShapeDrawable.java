@@ -35,13 +35,13 @@ import android.graphics.Region;
 import android.graphics.Region.Op;
 import android.graphics.drawable.Drawable;
 
-import org.jetbrains.annotations.NotNull;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.ObjectsCompat;
+
+import org.jetbrains.annotations.NotNull;
 
 import de.kuschku.ui.graphics.drawable.TintAwareDrawable;
 

@@ -35,6 +35,7 @@ import androidx.annotation.Nullable;
 import androidx.core.text.TextDirectionHeuristicsCompat;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
+
 import de.kuschku.ui.resources.MaterialResources;
 import de.kuschku.ui.spinner.R;
 

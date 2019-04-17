@@ -21,10 +21,10 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
-import org.jetbrains.annotations.NotNull;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A class to convert a {@link ShapeAppearanceModel to a {@link android.graphics.Path}}.

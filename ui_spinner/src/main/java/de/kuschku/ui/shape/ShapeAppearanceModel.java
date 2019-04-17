@@ -24,13 +24,14 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.ContextThemeWrapper;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import androidx.annotation.AttrRes;
 import androidx.annotation.Dimension;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import de.kuschku.ui.spinner.R;
 
 /**

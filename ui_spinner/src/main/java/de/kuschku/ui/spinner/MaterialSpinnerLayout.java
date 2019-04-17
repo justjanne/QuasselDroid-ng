@@ -43,12 +43,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.util.LinkedHashSet;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.DimenRes;
@@ -64,6 +58,13 @@ import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.widget.TextViewCompat;
 import androidx.customview.view.AbsSavedState;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.util.LinkedHashSet;
+
 import de.kuschku.ui.color.MaterialColors;
 import de.kuschku.ui.internal.CollapsingTextHelper;
 import de.kuschku.ui.internal.DescendantOffsetUtils;

@@ -31,14 +31,15 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 
-import java.lang.annotation.Retention;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.IntDef;
 import androidx.annotation.Keep;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.lang.annotation.Retention;
+
 import de.kuschku.quasseldroid.R;
 import de.kuschku.quasseldroid.util.ui.fastscroll.interfaces.OnFastScrollStateChangeListener;
 import de.kuschku.quasseldroid.util.ui.fastscroll.utils.Utils;

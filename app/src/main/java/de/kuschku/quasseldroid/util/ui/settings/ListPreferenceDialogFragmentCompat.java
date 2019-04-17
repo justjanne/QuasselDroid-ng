@@ -19,13 +19,13 @@ package de.kuschku.quasseldroid.util.ui.settings;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.preference.ListPreference;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
-
-import androidx.annotation.NonNull;
-import androidx.preference.ListPreference;
 
 public class ListPreferenceDialogFragmentCompat extends PreferenceDialogFragmentCompat {
 

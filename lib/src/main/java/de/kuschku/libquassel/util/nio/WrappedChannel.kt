@@ -19,13 +19,9 @@
 
 package de.kuschku.libquassel.util.nio
 
-import de.kuschku.libquassel.connection.CoreConnection
 import de.kuschku.libquassel.connection.HostnameVerifier
 import de.kuschku.libquassel.connection.SocketAddress
 import de.kuschku.libquassel.util.compatibility.CompatibilityUtils
-import de.kuschku.libquassel.util.compatibility.LoggingHandler
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.*
 import de.kuschku.libquassel.util.compatibility.StreamChannelFactory
 import java.io.*
 import java.net.Socket

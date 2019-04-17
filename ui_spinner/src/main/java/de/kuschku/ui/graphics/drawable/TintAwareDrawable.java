@@ -16,20 +16,19 @@
 
 package de.kuschku.ui.graphics.drawable;
 
-import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP;
-
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 
 import androidx.annotation.ColorInt;
-import androidx.annotation.RestrictTo;
 
 /**
  * Interface which allows a {@link android.graphics.drawable.Drawable} to receive tinting calls
  * from {@code DrawableCompat}.
  */
 public interface TintAwareDrawable {
-    void setTint(@ColorInt int tint);
-    void setTintList(ColorStateList tint);
-    void setTintMode(PorterDuff.Mode tintMode);
+  void setTint(@ColorInt int tint);
+
+  void setTintList(ColorStateList tint);
+
+  void setTintMode(PorterDuff.Mode tintMode);
 }

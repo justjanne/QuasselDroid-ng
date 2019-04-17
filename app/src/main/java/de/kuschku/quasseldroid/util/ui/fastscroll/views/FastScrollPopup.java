@@ -28,6 +28,7 @@ import android.graphics.Typeface;
 import android.text.TextUtils;
 
 import androidx.annotation.Keep;
+
 import de.kuschku.quasseldroid.util.ui.fastscroll.utils.Utils;
 
 public class FastScrollPopup {

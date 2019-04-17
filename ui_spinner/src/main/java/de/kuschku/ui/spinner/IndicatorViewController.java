@@ -32,11 +32,6 @@ import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
@@ -44,6 +39,12 @@ import androidx.annotation.StyleRes;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.view.ViewCompat;
 import androidx.core.widget.TextViewCompat;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
+import java.util.List;
+
 import de.kuschku.ui.animation.AnimationUtils;
 import de.kuschku.ui.animation.AnimatorSetCompat;
 

@@ -22,7 +22,6 @@ package de.kuschku.libquassel.util.compatibility
 import de.kuschku.libquassel.util.compatibility.backport.BackportedSyncFlushDeflaterOutputStream
 import de.kuschku.libquassel.util.compatibility.backport.ProperlyClosingSyncFlushDeflaterOutputStream
 import java.io.OutputStream
-import java.util.zip.Deflater
 import java.util.zip.DeflaterOutputStream
 
 object CompatibilityUtils {
