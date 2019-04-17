@@ -41,8 +41,9 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.graphics.drawable.TintAwareDrawable;
 import androidx.core.util.ObjectsCompat;
+
+import de.kuschku.ui.graphics.drawable.TintAwareDrawable;
 
 /**
  * Base drawable class for Material Shapes that handles shadows, elevation, scale and color for a

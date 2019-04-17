@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.chat.input
 
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,7 +37,7 @@ class MessageHistoryAdapter : ListAdapter<CharSequence, MessageHistoryAdapter.Me
       oldItem === newItem
 
     override fun areContentsTheSame(oldItem: CharSequence, newItem: CharSequence) =
-      oldItem == newItem
+      TextUtils.equals(oldItem, newItem)
   }) {
   private var clickListener: ((CharSequence) -> Unit)? = null
   private var updateFinishedListener: (() -> Unit)? = null

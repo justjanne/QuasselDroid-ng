@@ -30,6 +30,25 @@ sealed class AutoCompleteItem(open val name: String, val suffix: String, private
     else                    -> this.name.compareTo(other.name)
   }
 
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is AutoCompleteItem) return false
+
+    if (name != other.name) return false
+    if (suffix != other.suffix) return false
+    if (type != other.type) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = name.hashCode()
+    result = 31 * result + suffix.hashCode()
+    result = 31 * result + type
+    return result
+  }
+
+
   data class UserItem(
     val nick: String,
     val hostMask: String,
