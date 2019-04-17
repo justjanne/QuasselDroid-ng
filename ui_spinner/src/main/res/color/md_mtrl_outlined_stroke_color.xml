@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2018 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +14,8 @@
      limitations under the License.
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-  <item android:color="?attr/colorPrimary" android:state_focused="true"/>
-  <item android:alpha="0.87" android:color="?attr/colorOnSurface" android:state_hovered="true"/>
-  <item android:alpha="0.12" android:color="?attr/colorOnSurface" android:state_enabled="false"/>
-  <item android:alpha="0.38" android:color="?attr/colorOnSurface"/>
+  <item android:color="?attr/colorPrimary" android:state_focused="true" />
+  <item android:alpha="0.87" android:color="?attr/colorOnSurface" android:state_hovered="true" />
+  <item android:alpha="0.12" android:color="?attr/colorOnSurface" android:state_enabled="false" />
+  <item android:alpha="0.38" android:color="?attr/colorOnSurface" />
 </selector>

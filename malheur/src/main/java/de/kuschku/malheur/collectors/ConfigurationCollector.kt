@@ -86,8 +86,9 @@ class ConfigurationCollector(private val application: Application) :
     }
   }
 
-  override fun collect(context: CrashContext, config: Boolean) = configurationFields.mapNotNull { info ->
-    val field : Field? = Configuration::class.java.getDeclaredField(info.fieldName)
+  override fun collect(context: CrashContext,
+                       config: Boolean) = configurationFields.mapNotNull { info ->
+    val field: Field? = Configuration::class.java.getDeclaredField(info.fieldName)
     field?.let {
       Pair(info, it)
     }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2017 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +15,7 @@
 -->
 <resources>
 
-  <attr name="materialThemeOverlay" format="reference"/>
+  <attr name="materialThemeOverlay" format="reference" />
 
   <declare-styleable name="ThemeEnforcement">
     <!-- Internal flag used to denote that a style uses new attributes defined by
@@ -27,29 +26,29 @@
          should only use this flag if a particular usage is known to cause a visual glitch or crash.
          For example, tinting a vector drawable with a non-existent theme attribute is known to
          crash on pre-21 devices. -->
-    <attr name="md_enforceMaterialTheme" format="boolean"/>
+    <attr name="md_enforceMaterialTheme" format="boolean" />
     <!-- Internal flag used to denote that a style requires that the textAppearance attribute is
          specified and evaluates to a valid text appearance. -->
-    <attr name="md_enforceTextAppearance" format="boolean"/>
+    <attr name="md_enforceTextAppearance" format="boolean" />
     <!-- Attribute used to check that a component has a TextAppearance specified on it. -->
-    <attr name="android:textAppearance"/>
+    <attr name="android:textAppearance" />
   </declare-styleable>
 
   <declare-styleable name="ForegroundLinearLayout">
-    <attr name="android:foreground"/>
-    <attr name="android:foregroundGravity"/>
-    <attr name="md_foregroundInsidePadding" format="boolean"/>
+    <attr name="android:foreground" />
+    <attr name="android:foregroundGravity" />
+    <attr name="md_foregroundInsidePadding" format="boolean" />
   </declare-styleable>
 
   <declare-styleable name="ScrimInsetsFrameLayout">
-    <attr name="md_insetForeground" format="color|reference"/>
+    <attr name="md_insetForeground" format="color|reference" />
   </declare-styleable>
 
   <declare-styleable name="FlowLayout">
     <!-- Horizontal spacing between two items being laid out. -->
-    <attr name="md_itemSpacing" format="dimension"/>
+    <attr name="md_itemSpacing" format="dimension" />
     <!-- Vertical Spacing between two lines of items being laid out. -->
-    <attr name="md_lineSpacing" format="dimension"/>
+    <attr name="md_lineSpacing" format="dimension" />
   </declare-styleable>
 
 </resources>

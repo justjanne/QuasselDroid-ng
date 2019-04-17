@@ -134,7 +134,7 @@ class CoreInfoFragment : ServiceBoundFragment() {
         uptime.text = requireContext().getString(R.string.label_core_online_since,
                                                  startTime.toString())
         uptimeContainer.visibleIf(startTime != null)
-    })
+      })
     missingFeatures.setOnClickListener {
       MissingFeaturesDialog.Builder(requireActivity())
         .missingFeatures(missingFeatureList)

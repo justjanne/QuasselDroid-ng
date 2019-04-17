@@ -102,7 +102,8 @@ open class ChatViewModel : QuasselViewModel() {
       showHidden.onNext(savedInstanceState.getBoolean(KEY_SHOW_HIDDEN))
 
     if (savedInstanceState.containsKey(KEY_BUFFER_SEARCH_TEMPORARILY_VISIBLE))
-      bufferSearchTemporarilyVisible.onNext(savedInstanceState.getBoolean(KEY_BUFFER_SEARCH_TEMPORARILY_VISIBLE))
+      bufferSearchTemporarilyVisible.onNext(savedInstanceState.getBoolean(
+        KEY_BUFFER_SEARCH_TEMPORARILY_VISIBLE))
 
     if (savedInstanceState.containsKey(KEY_EXPANDED_NETWORKS)) {
       expandedNetworks.onNext(

@@ -333,9 +333,9 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
 
     data.setUseAutoReconnect(autoreconnectEnabled.isChecked)
     data.setAutoReconnectInterval(autoreconnectInterval.text.toString().toUIntOrNull()
-      ?: data.autoReconnectInterval())
+                                  ?: data.autoReconnectInterval())
     data.setAutoReconnectRetries(autoreconnectRetries.text.toString().toUShortOrNull()
-      ?: data.autoReconnectRetries())
+                                 ?: data.autoReconnectRetries())
     data.setUnlimitedReconnectRetries(autoreconnectUnlimited.isChecked)
 
     data.setPerform(perform.text.lines())
@@ -343,13 +343,13 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
 
     data.setUseCustomMessageRate(customratelimitsEnabled.isChecked)
     data.setMessageRateBurstSize(customratelimitsBurstSize.text.toString().toUIntOrNull()
-      ?: data.messageRateBurstSize())
+                                 ?: data.messageRateBurstSize())
     data.setUnlimitedMessageRate(customratelimitsUnlimited.isChecked)
     data.setMessageRateDelay(customratelimitsDelay.toString().toFloatOrNull()
-      ?.let { (it * 1000).roundToInt() }
-      ?.nullIf { it < 0 }
-      ?.toUInt()
-      ?: data.messageRateDelay())
+                               ?.let { (it * 1000).roundToInt() }
+                               ?.nullIf { it < 0 }
+                               ?.toUInt()
+                             ?: data.messageRateDelay())
   }
 
   companion object {

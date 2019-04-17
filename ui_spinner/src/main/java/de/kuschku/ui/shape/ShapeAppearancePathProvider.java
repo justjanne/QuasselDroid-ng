@@ -40,6 +40,7 @@ class ShapeAppearancePathProvider {
   private final ShapePath shapePath = new ShapePath();
   private final float[] scratch = new float[2];
   private final float[] scratch2 = new float[2];
+
   public ShapeAppearancePathProvider() {
     for (int i = 0; i < 4; i++) {
       cornerPaths[i] = new ShapePath();

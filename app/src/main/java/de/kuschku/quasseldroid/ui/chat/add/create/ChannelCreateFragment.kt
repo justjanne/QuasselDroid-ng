@@ -134,7 +134,7 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
           activity?.let {
             it.finish()
             ChatActivity.launch(it,
-              bufferId = existingBuffer.bufferId
+                                bufferId = existingBuffer.bufferId
             )
           }
         } else {
@@ -146,7 +146,7 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
               sendInput(statusBuffer, "/join $channelName")
               modelHelper.networks.switchMap {
                 it[networkId]?.liveIrcChannel(channelName)
-                  ?: Observable.empty()
+                ?: Observable.empty()
               }.subscribe {
                 if (it.ircUsers().size <= 1) {
                   if (isInviteOnly) {
@@ -165,8 +165,8 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
                 activity?.let {
                   it.finish()
                   ChatActivity.launch(it,
-                    networkId = networkId,
-                    channel = channelName
+                                      networkId = networkId,
+                                      channel = channelName
                   )
                 }
               }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2017 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,52 +15,52 @@
 -->
 <resources>
   <!-- A tonal variation of the primary color. -->
-  <attr name="colorPrimaryVariant" format="color"/>
+  <attr name="colorPrimaryVariant" format="color" />
   <!-- The secondary branding color for the app, usually a bright complement to the primary
        branding color. -->
-  <attr name="colorSecondary" format="color"/>
+  <attr name="colorSecondary" format="color" />
   <!-- A tonal variation of the secondary color. -->
-  <attr name="colorSecondaryVariant" format="color"/>
+  <attr name="colorSecondaryVariant" format="color" />
   <!-- The color of surfaces such as cards, sheets, menus. -->
-  <attr name="colorSurface" format="color"/>
+  <attr name="colorSurface" format="color" />
   <!-- A color that passes accessibility guidelines for text/iconography when drawn on top of
        primary. -->
-  <attr name="colorOnPrimary" format="color"/>
+  <attr name="colorOnPrimary" format="color" />
   <!-- A color that passes accessibility guidelines for text/iconography when drawn on top of
        secondary. -->
-  <attr name="colorOnSecondary" format="color"/>
+  <attr name="colorOnSecondary" format="color" />
   <!-- A color that passes accessibility guidelines for text/iconography when drawn on top of
        background. -->
-  <attr name="colorOnBackground"/>
+  <attr name="colorOnBackground" />
   <!-- A color that passes accessibility guidelines for text/iconography when drawn on top of
        error. -->
-  <attr name="colorOnError" format="color"/>
+  <attr name="colorOnError" format="color" />
   <!-- A color that passes accessibility guidelines for text/iconography when drawn on top of
        surface. -->
-  <attr name="colorOnSurface" format="color"/>
+  <attr name="colorOnSurface" format="color" />
 
   <!-- Private color attributes that help facilitate switching these pre-23 compatibility
        values for the light and dark themes. -->
-  <attr name="colorOnPrimaryDisabled" format="color"/>
-  <attr name="colorOnPrimaryEmphasisHighType" format="color"/>
-  <attr name="colorOnPrimaryEmphasisMedium" format="color"/>
-  <attr name="colorOnSurfaceDisabled" format="color"/>
-  <attr name="colorOnSurfaceEmphasisHighType" format="color"/>
-  <attr name="colorOnSurfaceEmphasisMedium" format="color"/>
+  <attr name="colorOnPrimaryDisabled" format="color" />
+  <attr name="colorOnPrimaryEmphasisHighType" format="color" />
+  <attr name="colorOnPrimaryEmphasisMedium" format="color" />
+  <attr name="colorOnSurfaceDisabled" format="color" />
+  <attr name="colorOnSurfaceEmphasisHighType" format="color" />
+  <attr name="colorOnSurfaceEmphasisMedium" format="color" />
 
   <!-- The scrim background that appears below modals and expanded navigation menus.
        The background can either be a color or a bitmap drawable with tileMode set to repeat. -->
-  <attr name="scrimBackground" format="color|reference"/>
+  <attr name="scrimBackground" format="color|reference" />
 
   <!-- Internal flag used to denote that a theme is a Theme.MaterialComponents theme or a
        Theme.MaterialComponents.Bridge theme. -->
-  <attr name="isMaterialTheme" format="boolean"/>
+  <attr name="isMaterialTheme" format="boolean" />
 
   <!-- When set to true, the material selection controls will tint themselves according to
        Material Theme colors. When set to false, Material Theme colors will
        be ignored. This value should be set to false when using custom drawables
        that should not be tinted. This value is ignored if a buttonTint is set.
        Set this attribute on your styles for each selection control.-->
-  <attr name="useMaterialThemeColors" format="boolean"/>
+  <attr name="useMaterialThemeColors" format="boolean" />
 
 </resources>

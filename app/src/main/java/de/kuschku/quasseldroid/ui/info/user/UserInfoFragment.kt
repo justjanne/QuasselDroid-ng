@@ -179,7 +179,8 @@ class UserInfoFragment : ServiceBoundFragment() {
       getColor(0, 0)
     }
 
-    combineLatest(modelHelper.session, modelHelper.networks).switchMap { (sessionOptional, networks) ->
+    combineLatest(modelHelper.session,
+                  modelHelper.networks).switchMap { (sessionOptional, networks) ->
       fun processUser(user: IrcUser, bufferSyncer: BufferSyncer? = null, info: BufferInfo? = null,
                       ignoreItems: List<IgnoreListManager.IgnoreListItem>? = null): Observable<Optional<IrcUserInfo>> {
         actionShortcut.post(::updateShortcutVisibility)
@@ -405,7 +406,7 @@ class UserInfoFragment : ServiceBoundFragment() {
                   ignoreMenu = null
                   true
                 }
-                it.itemId == R.id.action_show -> {
+                it.itemId == R.id.action_show   -> {
                   IgnoreListActivity.launch(
                     view.context
                   )
@@ -413,11 +414,11 @@ class UserInfoFragment : ServiceBoundFragment() {
                   ignoreMenu = null
                   true
                 }
-                it.isCheckable -> {
+                it.isCheckable                  -> {
                   modelHelper.ignoreListManager.value?.orNull()?.requestToggleIgnoreRule(it.title.toString())
                   true
                 }
-                else               -> false
+                else                            -> false
               }
             }
             menu.setOnDismissListener {

@@ -32,6 +32,7 @@ import de.kuschku.quasseldroid.ui.chat.add.join.ChannelJoinActivity
 import de.kuschku.quasseldroid.ui.chat.add.join.ChannelJoinFragmentProvider
 import de.kuschku.quasseldroid.ui.chat.add.query.QueryCreateActivity
 import de.kuschku.quasseldroid.ui.chat.add.query.QueryCreateFragmentProvider
+import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
 import de.kuschku.quasseldroid.ui.chat.topic.TopicFragmentProvider
 import de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity
 import de.kuschku.quasseldroid.ui.clientsettings.about.AboutFragmentProvider
@@ -83,7 +84,6 @@ import de.kuschku.quasseldroid.ui.info.channellist.ChannelListActivity
 import de.kuschku.quasseldroid.ui.info.channellist.ChannelListFragmentProvider
 import de.kuschku.quasseldroid.ui.info.core.CoreInfoActivity
 import de.kuschku.quasseldroid.ui.info.core.CoreInfoFragmentProvider
-import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
 import de.kuschku.quasseldroid.ui.info.user.UserInfoActivity
 import de.kuschku.quasseldroid.ui.info.user.UserInfoFragmentProvider
 import de.kuschku.quasseldroid.ui.setup.accounts.edit.AccountEditActivity

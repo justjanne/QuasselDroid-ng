@@ -17,6 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 @file:Suppress("NOTHING_TO_INLINE")
+
 package de.kuschku.libquassel.util.compatibility
 
 import de.kuschku.libquassel.util.compatibility.reference.JavaLoggingHandler

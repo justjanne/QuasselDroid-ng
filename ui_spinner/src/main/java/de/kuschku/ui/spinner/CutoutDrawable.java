@@ -27,11 +27,10 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.view.View;
 
-import de.kuschku.ui.shape.MaterialShapeDrawable;
-import de.kuschku.ui.shape.ShapeAppearanceModel;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import de.kuschku.ui.shape.MaterialShapeDrawable;
+import de.kuschku.ui.shape.ShapeAppearanceModel;
 
 /**
  * A {@link MaterialShapeDrawable} that can draw a cutout for the label in {@link MaterialSpinnerLayout}'s

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2018 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,29 +15,29 @@
 -->
 <resources>
   <!-- Text appearance for the Headline 1 style. -->
-  <attr name="textAppearanceHeadline1" format="reference"/>
+  <attr name="textAppearanceHeadline1" format="reference" />
   <!-- Text appearance for the Headline 2 style. -->
-  <attr name="textAppearanceHeadline2" format="reference"/>
+  <attr name="textAppearanceHeadline2" format="reference" />
   <!-- Text appearance for the Headline 3 style. -->
-  <attr name="textAppearanceHeadline3" format="reference"/>
+  <attr name="textAppearanceHeadline3" format="reference" />
   <!-- Text appearance for the Headline 4 style. -->
-  <attr name="textAppearanceHeadline4" format="reference"/>
+  <attr name="textAppearanceHeadline4" format="reference" />
   <!-- Text appearance for the Headline 5 style. -->
-  <attr name="textAppearanceHeadline5" format="reference"/>
+  <attr name="textAppearanceHeadline5" format="reference" />
   <!-- Text appearance for the Headline 6 style. -->
-  <attr name="textAppearanceHeadline6" format="reference"/>
+  <attr name="textAppearanceHeadline6" format="reference" />
   <!-- Text appearance for the Subtitle 1 style. -->
-  <attr name="textAppearanceSubtitle1" format="reference"/>
+  <attr name="textAppearanceSubtitle1" format="reference" />
   <!-- Text appearance for the Subtitle 2 style. -->
-  <attr name="textAppearanceSubtitle2" format="reference"/>
+  <attr name="textAppearanceSubtitle2" format="reference" />
   <!-- Text appearance for the Body 1 style. -->
-  <attr name="textAppearanceBody1" format="reference"/>
+  <attr name="textAppearanceBody1" format="reference" />
   <!-- Text appearance for the Body 2 style. -->
-  <attr name="textAppearanceBody2" format="reference"/>
+  <attr name="textAppearanceBody2" format="reference" />
   <!-- Text appearance for the Caption style. -->
-  <attr name="textAppearanceCaption" format="reference"/>
+  <attr name="textAppearanceCaption" format="reference" />
   <!-- Text appearance for the Button style. -->
-  <attr name="textAppearanceButton" format="reference"/>
+  <attr name="textAppearanceButton" format="reference" />
   <!-- Text appearance for the Overline style. -->
-  <attr name="textAppearanceOverline" format="reference"/>
+  <attr name="textAppearanceOverline" format="reference" />
 </resources>

@@ -30,14 +30,12 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 
-import de.kuschku.ui.resources.MaterialResources;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
-import androidx.core.math.MathUtils;
 import androidx.core.text.TextDirectionHeuristicsCompat;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
+import de.kuschku.ui.resources.MaterialResources;
 import de.kuschku.ui.spinner.R;
 
 /**

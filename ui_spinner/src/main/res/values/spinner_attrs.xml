@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,75 +16,75 @@
 <resources>
 
   <!-- Style to use for spinnerLayout in the theme. -->
-  <attr name="md_materialSpinnerStyle" format="reference"/>
+  <attr name="md_materialSpinnerStyle" format="reference" />
 
   <declare-styleable name="MaterialSpinnerLayout">
     <!-- The text color for input text. -->
-    <attr name="android:textColorHint"/>
+    <attr name="android:textColorHint" />
 
     <!-- The hint to display in the floating label. -->
-    <attr name="android:hint"/>
+    <attr name="android:hint" />
     <!-- Whether the layout's floating label functionality is enabled. -->
-    <attr name="md_hintEnabled" format="boolean"/>
+    <attr name="md_hintEnabled" format="boolean" />
     <!-- Whether to animate hint state changes. -->
-    <attr name="md_hintAnimationEnabled" format="boolean"/>
+    <attr name="md_hintAnimationEnabled" format="boolean" />
     <!-- TextAppearance of the hint in the collapsed floating label. -->
-    <attr name="md_hintTextAppearance" format="reference"/>
+    <attr name="md_hintTextAppearance" format="reference" />
     <!-- Text color of the hint in the collapsed floating label.
          If set, this takes precedence over hintTextAppearance. -->
-    <attr name="md_hintTextColor" format="color"/>
+    <attr name="md_hintTextColor" format="color" />
 
     <!-- The text to display as helper text underneath the text input area. -->
-    <attr name="md_helperText" format="string"/>
+    <attr name="md_helperText" format="string" />
     <!-- Whether the layout's helper text functionality is enabled. -->
-    <attr name="md_helperTextEnabled" format="boolean"/>
+    <attr name="md_helperTextEnabled" format="boolean" />
     <!-- TextAppearance of the helper text displayed underneath the text input area. -->
-    <attr name="md_helperTextTextAppearance" format="reference"/>
+    <attr name="md_helperTextTextAppearance" format="reference" />
     <!-- Text color of the helper text displayed underneath the text input area.
          If set, this takes precedence over helperTextTextAppearance. -->
-    <attr name="md_helperTextTextColor" format="color"/>
+    <attr name="md_helperTextTextColor" format="color" />
 
     <!-- Whether the layout is laid out as if an error will be displayed. -->
-    <attr name="md_errorEnabled" format="boolean"/>
+    <attr name="md_errorEnabled" format="boolean" />
     <!-- TextAppearance of any error message displayed. -->
-    <attr name="md_errorTextAppearance" format="reference"/>
+    <attr name="md_errorTextAppearance" format="reference" />
     <!-- Text color for any error message displayed.
          If set, this takes precedence over errorTextAppearance. -->
-    <attr name="md_errorTextColor" format="color"/>
+    <attr name="md_errorTextColor" format="color" />
 
     <!-- Whether the text input area should be drawn as a filled box, an outline box, or not as a box.-->
     <attr name="md_boxBackgroundMode">
       <!-- Specifies that there should be no box set on the text input area. -->
-      <enum name="md_none" value="0"/>
+      <enum name="md_none" value="0" />
       <!-- Filled box mode for the text input box. -->
-      <enum name="md_filled" value="1"/>
+      <enum name="md_filled" value="1" />
       <!-- Outline box mode for the text input box. -->
-      <enum name="md_outline" value="2"/>
+      <enum name="md_outline" value="2" />
     </attr>
     <!-- Value to use for the EditText's collapsed top padding in box mode. -->
-    <attr name="md_boxCollapsedPaddingTop" format="dimension"/>
+    <attr name="md_boxCollapsedPaddingTop" format="dimension" />
     <!-- The value to use for the box's top start corner radius when in box mode. -->
-    <attr name="md_boxCornerRadiusTopStart" format="dimension"/>
+    <attr name="md_boxCornerRadiusTopStart" format="dimension" />
     <!-- The value to use for the box's top end corner radius when in box mode. -->
-    <attr name="md_boxCornerRadiusTopEnd" format="dimension"/>
+    <attr name="md_boxCornerRadiusTopEnd" format="dimension" />
     <!-- The value to use for the box's bottom start corner radius when in box mode. -->
-    <attr name="md_boxCornerRadiusBottomStart" format="dimension"/>
+    <attr name="md_boxCornerRadiusBottomStart" format="dimension" />
     <!-- The value to use for the box's bottom end corner radius when in box mode. -->
-    <attr name="md_boxCornerRadiusBottomEnd" format="dimension"/>
+    <attr name="md_boxCornerRadiusBottomEnd" format="dimension" />
     <!-- The color to use for the box's stroke when in outline box mode. -->
-    <attr name="md_boxStrokeColor" format="color"/>
+    <attr name="md_boxStrokeColor" format="color" />
     <!-- The color to use for the box's background color when in filled box mode. -->
-    <attr name="md_boxBackgroundColor" format="color"/>
+    <attr name="md_boxBackgroundColor" format="color" />
     <!-- The value to use for the box's stroke when in outline box mode. -->
-    <attr name="md_boxStrokeWidth" format="dimension"/>
+    <attr name="md_boxStrokeWidth" format="dimension" />
 
     <!-- Shape appearance style reference for MaterialSpinnerLayout. Attribute declaration is in the Shape
         package. -->
-    <attr name="md_shapeAppearance"/>
+    <attr name="md_shapeAppearance" />
     <!-- Shape appearance overlay style reference for MaterialSpinnerLayout. To be used to augment
          attributes declared in the shapeAppearance. Attribute declaration is in the Shape
          package. -->
-    <attr name="md_shapeAppearanceOverlay"/>
+    <attr name="md_shapeAppearanceOverlay" />
   </declare-styleable>
 
 </resources>

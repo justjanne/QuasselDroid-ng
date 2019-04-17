@@ -17,6 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 @file:Suppress("NOTHING_TO_INLINE")
+
 package de.kuschku.libquassel.util.helpers
 
 inline fun clampOf(value: Int, lowerBound: Int, upperBound: Int): Int =

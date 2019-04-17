@@ -16,16 +16,11 @@
 package de.kuschku.ui.color
 
 import android.content.Context
-import android.graphics.Color
-import android.util.TypedValue
 import android.view.View
-
-import de.kuschku.ui.resources.MaterialAttributes
-
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
-import androidx.annotation.FloatRange
 import androidx.core.graphics.ColorUtils
+import de.kuschku.ui.resources.MaterialAttributes
 
 /**
  * A utility class for common color variants used in Material themes.

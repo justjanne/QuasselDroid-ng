@@ -70,6 +70,7 @@ interface ISession : Closeable {
   fun setupCore(setupData: HandshakeMessage.CoreSetupData) {
     proxy.dispatch(setupData)
   }
+
   fun disconnectFromCore()
   fun addNetwork(networkId: NetworkId)
   fun removeNetwork(networkId: NetworkId)

@@ -116,6 +116,7 @@ interface INetwork : ISyncableObject {
 
   @Slot
   fun setConnectionState(state: Int) = setConnectionState(ConnectionState.of(state))
+
   fun setConnectionState(state: ConnectionState)
 
   @Slot
@@ -160,6 +161,7 @@ interface INetwork : ISyncableObject {
       it.valueOrThrow<QVariantMap>()
     }.map(Server.Companion::fromVariantMap))
   }
+
   fun setActualServerList(serverList: List<INetwork.Server>)
 
   @Slot

@@ -141,34 +141,34 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
             actionMode?.finish()
             true
           }
-          R.id.action_configure -> {
+          R.id.action_configure   -> {
             network?.let {
               NetworkEditActivity.launch(requireContext(), network = it.networkId())
             }
             actionMode?.finish()
             true
           }
-          R.id.action_connect -> {
+          R.id.action_connect     -> {
             network?.requestConnect()
             actionMode?.finish()
             true
           }
-          R.id.action_disconnect -> {
+          R.id.action_disconnect  -> {
             network?.requestDisconnect()
             actionMode?.finish()
             true
           }
-          R.id.action_join -> {
+          R.id.action_join        -> {
             session.rpcHandler.sendInput(info, "/join ${info.bufferName}")
             actionMode?.finish()
             true
           }
-          R.id.action_part -> {
+          R.id.action_part        -> {
             session.rpcHandler.sendInput(info, "/part ${info.bufferName}")
             actionMode?.finish()
             true
           }
-          R.id.action_delete -> {
+          R.id.action_delete      -> {
             MaterialDialog.Builder(activity!!)
               .content(R.string.buffer_delete_confirmation)
               .positiveText(R.string.label_yes)
@@ -188,7 +188,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
               .show()
             true
           }
-          R.id.action_rename -> {
+          R.id.action_rename      -> {
             MaterialDialog.Builder(activity!!)
               .input(
                 getString(R.string.label_buffer_name),
@@ -211,24 +211,24 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
               .show()
             true
           }
-          R.id.action_unhide -> {
+          R.id.action_unhide      -> {
             bufferSyncer?.let {
               bufferViewConfig?.orNull()?.insertBufferSorted(info, bufferSyncer)
             }
             actionMode?.finish()
             true
           }
-          R.id.action_hide_temp -> {
+          R.id.action_hide_temp   -> {
             bufferViewConfig?.orNull()?.requestRemoveBuffer(info.bufferId)
             actionMode?.finish()
             true
           }
-          R.id.action_hide_perm -> {
+          R.id.action_hide_perm   -> {
             bufferViewConfig?.orNull()?.requestRemoveBufferPermanently(info.bufferId)
             actionMode?.finish()
             true
           }
-          else -> false
+          else                    -> false
         }
       } else {
         false
@@ -347,8 +347,8 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
             props.network.networkName
           }).map { props ->
             val activity = props.activity - (activities[props.info.bufferId]
-              ?: defaultFiltered?.toUInt()
-              ?: 0u)
+                                             ?: defaultFiltered?.toUInt()
+                                             ?: 0u)
             BufferListItem(
               props.copy(
                 activity = activity,
@@ -358,22 +358,22 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                 ),
                 bufferActivity = Buffer_Activity.of(
                   when {
-                    props.highlights > 0 -> Buffer_Activity.Highlight
+                    props.highlights > 0                  -> Buffer_Activity.Highlight
                     activity.hasFlag(Message_Type.Plain) ||
-                      activity.hasFlag(Message_Type.Notice) ||
-                      activity.hasFlag(Message_Type.Action) -> Buffer_Activity.NewMessage
-                    activity.isNotEmpty() -> Buffer_Activity.OtherActivity
-                    else -> Buffer_Activity.NoActivity
+                    activity.hasFlag(Message_Type.Notice) ||
+                    activity.hasFlag(Message_Type.Action) -> Buffer_Activity.NewMessage
+                    activity.isNotEmpty()                 -> Buffer_Activity.OtherActivity
+                    else                                  -> Buffer_Activity.NoActivity
                   }
                 ),
                 fallbackDrawable = if (props.info.type.hasFlag(Buffer_Type.QueryBuffer)) {
                   props.ircUser?.let {
                     val nickName = it.nick()
                     val useSelfColor = when (messageSettings.colorizeNicknames) {
-                      MessageSettings.ColorizeNicknamesMode.ALL -> false
+                      MessageSettings.ColorizeNicknamesMode.ALL          -> false
                       MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
                         props.ircUser?.network()?.isMyNick(nickName) == true
-                      MessageSettings.ColorizeNicknamesMode.NONE -> true
+                      MessageSettings.ColorizeNicknamesMode.NONE         -> true
                     }
 
                     colorContext.buildTextDrawable(it.nick(), useSelfColor)
@@ -390,14 +390,14 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
               ),
               BufferState(
                 networkExpanded = expandedNetworks[props.network.networkId]
-                  ?: (props.networkConnectionState == INetwork.ConnectionState.Initialized),
+                                  ?: (props.networkConnectionState == INetwork.ConnectionState.Initialized),
                 selected = selected.info?.bufferId == props.info.bufferId
               )
             )
           }.filter { (props, state) ->
             (props.info.type.hasFlag(BufferInfo.Type.StatusBuffer) || state.networkExpanded) &&
-              (minimumActivity.toInt() <= props.bufferActivity.toInt() ||
-                props.info.type.hasFlag(Buffer_Type.StatusBuffer))
+            (minimumActivity.toInt() <= props.bufferActivity.toInt() ||
+             props.info.type.hasFlag(Buffer_Type.StatusBuffer))
           }.toList()
 
           activity?.runOnUiThread {
@@ -429,7 +429,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
           )
 
           val visibilityActions = when (buffer.hiddenState) {
-            BufferHiddenState.VISIBLE -> setOf(
+            BufferHiddenState.VISIBLE          -> setOf(
               R.id.action_hide_temp,
               R.id.action_hide_perm
             )
@@ -444,15 +444,15 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
           }
 
           val availableActions = when (buffer.info?.type?.enabledValues()?.firstOrNull()) {
-            Buffer_Type.StatusBuffer -> {
+            Buffer_Type.StatusBuffer  -> {
               when (buffer.connectionState) {
                 INetwork.ConnectionState.Disconnected -> setOf(
                   R.id.action_configure, R.id.action_connect
                 )
-                INetwork.ConnectionState.Initialized -> setOf(
+                INetwork.ConnectionState.Initialized  -> setOf(
                   R.id.action_channellist, R.id.action_configure, R.id.action_disconnect
                 )
-                else -> setOf(
+                else                                  -> setOf(
                   R.id.action_configure, R.id.action_connect, R.id.action_disconnect
                 )
               }
@@ -464,10 +464,10 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
                 setOf(R.id.action_join, R.id.action_delete)
               } + visibilityActions
             }
-            Buffer_Type.QueryBuffer -> {
+            Buffer_Type.QueryBuffer   -> {
               setOf(R.id.action_delete, R.id.action_rename) + visibilityActions
             }
-            else -> visibilityActions
+            else                      -> visibilityActions
           }
 
           val unavailableActions = allActions - availableActions
@@ -488,7 +488,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     chatListToolbar.menu.findItem(R.id.action_search).isChecked = modelHelper.chat.bufferSearchTemporarilyVisible.value
     chatListToolbar.setOnMenuItemClickListener { item ->
       when (item.itemId) {
-        R.id.action_search -> {
+        R.id.action_search      -> {
           item.isChecked = !item.isChecked
           modelHelper.chat.bufferSearchTemporarilyVisible.onNext(item.isChecked)
           true
@@ -498,7 +498,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
           modelHelper.chat.showHidden.onNext(item.isChecked)
           true
         }
-        else -> false
+        else                    -> false
       }
     }
     chatList.layoutManager = object : LinearLayoutManager(context) {
@@ -598,12 +598,12 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
     fab.setOnActionSelectedListener {
       when (it.id) {
-        R.id.fab_query -> {
+        R.id.fab_query  -> {
           context?.let(QueryCreateActivity.Companion::launch)
           fab.close(false)
           true
         }
-        R.id.fab_join -> {
+        R.id.fab_join   -> {
           context?.let(ChannelJoinActivity.Companion::launch)
           fab.close(false)
           true
@@ -613,7 +613,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
           fab.close(false)
           true
         }
-        else -> false
+        else            -> false
       }
     }
 

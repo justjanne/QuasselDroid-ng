@@ -25,9 +25,7 @@ import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.util.service.BackendServiceConnection
-import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import io.reactivex.subjects.BehaviorSubject
-import javax.inject.Inject
 
 abstract class ServiceBoundSlideFragment : SlideFragment() {
   private val connection = BackendServiceConnection()

@@ -170,7 +170,7 @@ class IrcChannel(
       _C_channelModes.contains(mode)
     INetwork.ChannelModeType.D_CHANMODE ->
       _D_channelModes.contains(mode)
-    else ->
+    else                                ->
       false
   }
 
@@ -179,14 +179,14 @@ class IrcChannel(
       _B_channelModes.getOr(mode, "")
     INetwork.ChannelModeType.C_CHANMODE ->
       _C_channelModes.getOr(mode, "")
-    else ->
+    else                                ->
       ""
   }
 
   fun modeValueList(mode: Char): Set<String> = when (network().channelModeType(mode)) {
     INetwork.ChannelModeType.A_CHANMODE ->
       _A_channelModes.getOrElse(mode, ::emptySet)
-    else ->
+    else                                ->
       emptySet()
   }
 
@@ -356,13 +356,13 @@ class IrcChannel(
 
   override fun addChannelMode(mode: Char, value: String?) {
     when (network().channelModeType(mode)) {
-      INetwork.ChannelModeType.A_CHANMODE ->
+      INetwork.ChannelModeType.A_CHANMODE     ->
         _A_channelModes.getOrPut(mode, ::mutableSetOf).add(value!!)
-      INetwork.ChannelModeType.B_CHANMODE ->
+      INetwork.ChannelModeType.B_CHANMODE     ->
         _B_channelModes[mode] = value!!
-      INetwork.ChannelModeType.C_CHANMODE ->
+      INetwork.ChannelModeType.C_CHANMODE     ->
         _C_channelModes[mode] = value!!
-      INetwork.ChannelModeType.D_CHANMODE ->
+      INetwork.ChannelModeType.D_CHANMODE     ->
         _D_channelModes.add(mode)
       INetwork.ChannelModeType.NOT_A_CHANMODE ->
         throw IllegalArgumentException("Received invalid channel mode: $mode $value")
@@ -371,13 +371,13 @@ class IrcChannel(
 
   override fun removeChannelMode(mode: Char, value: String?) {
     when (network().channelModeType(mode)) {
-      INetwork.ChannelModeType.A_CHANMODE ->
+      INetwork.ChannelModeType.A_CHANMODE     ->
         _A_channelModes.getOrPut(mode, ::mutableSetOf).remove(value)
-      INetwork.ChannelModeType.B_CHANMODE ->
+      INetwork.ChannelModeType.B_CHANMODE     ->
         _B_channelModes.remove(mode)
-      INetwork.ChannelModeType.C_CHANMODE ->
+      INetwork.ChannelModeType.C_CHANMODE     ->
         _C_channelModes.remove(mode)
-      INetwork.ChannelModeType.D_CHANMODE ->
+      INetwork.ChannelModeType.D_CHANMODE     ->
         _D_channelModes.remove(mode)
       INetwork.ChannelModeType.NOT_A_CHANMODE ->
         throw IllegalArgumentException("Received invalid channel mode: $mode $value")
