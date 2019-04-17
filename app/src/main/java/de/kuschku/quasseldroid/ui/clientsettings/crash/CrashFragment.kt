@@ -34,6 +34,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.gson.Gson
 import dagger.android.support.DaggerFragment
+import de.kuschku.malheur.CrashHandler
 import de.kuschku.malheur.data.Report
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.R
@@ -70,6 +71,29 @@ class CrashFragment : DaggerFragment() {
     handlerThread.quit()
   }
 
+  private fun reload() {
+    val crashDir = this.crashDir
+    val gson = this.gson
+    val context = this.context
+
+    if (crashDir != null && context != null) {
+      crashDir.mkdirs()
+      val list: List<Pair<Report, Uri>> = crashDir.listFiles()
+        .orEmpty()
+        .map {
+          Pair<Report, Uri>(
+            gson.fromJson(it.readText()),
+            FileProvider.getUriForFile(context, "${BuildConfig.APPLICATION_ID}.fileprovider", it)
+          )
+        }
+        .sortedByDescending { it.first.environment?.crashTime }
+
+      activity?.runOnUiThread {
+        this.adapter?.submitList(list)
+      }
+    }
+  }
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.preferences_crash, container, false)
@@ -89,49 +113,33 @@ class CrashFragment : DaggerFragment() {
       crashesEmpty.visibleIf(it.isEmpty())
     }
 
-    handler.post {
-      val crashDir = this.crashDir
-      val gson = this.gson
-      val context = this.context
-
-      if (crashDir != null && context != null) {
-        crashDir.mkdirs()
-        val list: List<Pair<Report, Uri>> = crashDir.listFiles()
-          .orEmpty()
-          .map {
-            Pair<Report, Uri>(
-              gson.fromJson(it.readText()),
-              FileProvider.getUriForFile(context, "${BuildConfig.APPLICATION_ID}.fileprovider", it)
-            )
-          }
-          .sortedByDescending { it.first.environment?.crashTime }
-
-        activity?.runOnUiThread {
-          this.adapter?.submitList(list)
-        }
-      }
-    }
+    handler.post(this::reload)
     return view
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.activity_crashes, menu)
+    menu.findItem(R.id.action_generate_crash_report).isVisible = BuildConfig.DEBUG
     super.onCreateOptionsMenu(menu, inflater)
   }
 
   override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-    R.id.action_delete_all -> {
+    R.id.action_generate_crash_report -> {
+      handler.post {
+        CrashHandler.handleSync(Exception("User requested generation of report"))
+        reload()
+      }
+    }
+    R.id.action_delete_all            -> {
       handler.post {
         crashDir?.mkdirs()
         crashDir?.listFiles()?.forEach {
           it.delete()
         }
-        activity?.runOnUiThread {
-          this.adapter?.submitList(emptyList())
-        }
+        reload()
       }
       true
     }
-    else                   -> super.onOptionsItemSelected(item)
+    else                              -> super.onOptionsItemSelected(item)
   }
 }

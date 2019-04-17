@@ -26,6 +26,7 @@ import android.os.Build
 import android.util.SparseArray
 import android.view.Display
 import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import de.kuschku.malheur.CrashContext
 import de.kuschku.malheur.data.DisplayInfo
 import de.kuschku.malheur.data.MetricsInfo
@@ -69,6 +70,7 @@ class DisplayCollector(application: Application) :
     )
   }
 
+  @RequiresApi(Build.VERSION_CODES.N)
   private fun getHdrCapabilitiesEnum(): SparseArray<String> {
     val hdrCapabilityEnums = SparseArray<String>()
     Display.HdrCapabilities::class.java.declaredFields.filter {

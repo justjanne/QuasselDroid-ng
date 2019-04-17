@@ -57,6 +57,7 @@
   <string name="label_edit_topic_long">Open dialog to change the channel topic</string>
   <string name="label_filter_messages">Filter Messages</string>
   <string name="label_finish">Finish</string>
+  <string name="label_generate_crash_report">Generate Crash Report</string>
   <string name="label_hide_perm">Hide Permanently</string>
   <string name="label_hide_temp">Hide Temporarily</string>
   <string name="label_ignore">Ignore</string>

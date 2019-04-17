@@ -43,6 +43,9 @@ class AppCollector(private val application: Application) : Collector<AppInfo, Ap
       reflectionCollectConstants(
         context.buildConfig ?: getBuildConfigClass(application.packageName)
       )
+    },
+    installationSource = collectIf(config.installationSource) {
+      application.packageManager.getInstallerPackageName(application.packageName)
     }
   )
 

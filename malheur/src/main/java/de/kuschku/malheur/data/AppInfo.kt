@@ -22,5 +22,6 @@ package de.kuschku.malheur.data
 data class AppInfo(
   val versionName: String?,
   val versionCode: Long?,
-  val buildConfig: Map<String, Any?>?
+  val buildConfig: Map<String, Any?>?,
+  val installationSource: String?
 )

@@ -47,4 +47,5 @@ dependencies {
   implementation(kotlin("stdlib", "1.3.30"))
 
   implementation("com.google.code.gson", "gson", "2.8.5")
+  implementation("androidx.annotation", "annotation", "1.0.1")
 }

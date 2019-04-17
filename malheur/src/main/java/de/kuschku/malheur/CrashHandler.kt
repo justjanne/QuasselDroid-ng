@@ -36,6 +36,7 @@ object CrashHandler {
 
   private val startTime = Date()
   private var originalHandler: Thread.UncaughtExceptionHandler? = null
+  private var myHandler: ((Thread, Throwable) -> Unit)? = null
 
   private lateinit var handler: Handler
 
@@ -54,64 +55,71 @@ object CrashHandler {
     handler = Handler(handlerThread.looper)
 
     val reportCollector = ReportCollector(application)
-    myHandler = Thread.UncaughtExceptionHandler { activeThread, throwable ->
+    myHandler = { activeThread, throwable ->
       val crashTime = Date()
       val stackTraces = Thread.getAllStackTraces()
       Log.e("Malheur", "Creating crash report")
       handler.post {
         Toast.makeText(application, "Creating crash report", Toast.LENGTH_LONG).show()
       }
-      Thread {
-        try {
-          val json = gson.toJson(
-            reportCollector.collect(
-              CrashContext(
-                application = application,
-                config = config,
-                crashingThread = activeThread,
-                throwable = throwable,
-                startTime = startTime,
-                crashTime = crashTime,
-                buildConfig = buildConfig,
-                stackTraces = stackTraces
-              ), config
-            )
+      try {
+        val json = gson.toJson(
+          reportCollector.collect(
+            CrashContext(
+              application = application,
+              config = config,
+              crashingThread = activeThread,
+              throwable = throwable,
+              startTime = startTime,
+              crashTime = crashTime,
+              buildConfig = buildConfig,
+              stackTraces = stackTraces
+            ), config
           )
-          val crashDirectory = File(application.cacheDir, "crashes")
-          crashDirectory.mkdirs()
-          val crashFile = File(crashDirectory, "${System.currentTimeMillis()}.json")
-          crashFile.createNewFile()
-          crashFile.writeText(json)
-          Log.e("Malheur", "Crash report saved: $crashFile", throwable)
-          handler.post {
-            Toast.makeText(
-              application, "Crash report saved: ${crashFile.name}", Toast.LENGTH_LONG
-            ).show()
-          }
-        } catch (e: Throwable) {
-          e.printStackTrace()
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            throwable.addSuppressed(e)
-          }
+        )
+        val crashDirectory = File(application.cacheDir, "crashes")
+        crashDirectory.mkdirs()
+        val crashFile = File(crashDirectory, "${System.currentTimeMillis()}.json")
+        crashFile.createNewFile()
+        crashFile.writeText(json)
+        Log.e("Malheur", "Crash report saved: $crashFile", throwable)
+        handler.post {
+          Toast.makeText(
+            application, "Crash report saved: ${crashFile.name}", Toast.LENGTH_LONG
+          ).show()
         }
-      }.start()
+      } catch (e: Throwable) {
+        e.printStackTrace()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+          throwable.addSuppressed(e)
+        }
+      }
     }
 
     Thread.setDefaultUncaughtExceptionHandler { currentThread, throwable ->
-      myHandler?.uncaughtException(currentThread, throwable)
-      originalHandler?.uncaughtException(currentThread, throwable)
+      Thread {
+        myHandler?.invoke(currentThread, throwable)
+        originalHandler?.uncaughtException(currentThread, throwable)
+      }.start()
     }
 
     val oldHandler = Thread.currentThread().uncaughtExceptionHandler
     Thread.currentThread().setUncaughtExceptionHandler { currentThread, throwable ->
-      myHandler?.uncaughtException(currentThread, throwable)
-      oldHandler?.uncaughtException(currentThread, throwable)
+      Thread {
+        myHandler?.invoke(currentThread, throwable)
+        oldHandler?.uncaughtException(currentThread, throwable)
+      }.start()
     }
   }
 
   fun handle(throwable: Throwable) {
-    myHandler?.uncaughtException(Thread.currentThread(), throwable)
+    val thread = Thread.currentThread()
+    Thread {
+      myHandler?.invoke(thread, throwable)
+    }.start()
   }
 
-  private var myHandler: Thread.UncaughtExceptionHandler? = null
+  fun handleSync(throwable: Throwable) {
+    myHandler?.invoke(Thread.currentThread(), throwable)
+  }
 }
