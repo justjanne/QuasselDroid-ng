@@ -57,6 +57,7 @@
   <string name="label_edit_topic_long">Open dialog to change the channel topic</string>
   <string name="label_filter_messages">Nachrichten filtern</string>
   <string name="label_finish">Fertig</string>
+  <string name="label_generate_crash_report">Crash Report erzeugen</string>
   <string name="label_hide_perm">Permanent ausblenden</string>
   <string name="label_hide_temp">Temporär ausblenden</string>
   <string name="label_ignore">Ignorieren</string>
@@ -87,6 +88,7 @@
   <string name="label_new_nick">Spitzname hinzufügen</string>
   <string name="label_new_server">Server hinzufügen</string>
   <string name="label_next">Weiter</string>
+  <string name="label_nick">Spitzname</string>
   <string name="label_nicklist">Benutzerliste</string>
   <string name="label_no">Nein</string>
   <string name="label_no_away_message">Kein Abwesenheitsgrund verfügbar</string>

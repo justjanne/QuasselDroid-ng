@@ -68,6 +68,7 @@
   <string name="label_new_network">Nouveau Réseau</string>
   <string name="label_new_nick">Nouveau Nom d\'Utilisateur</string>
   <string name="label_new_server">Nouveau Serveur</string>
+  <string name="label_nick">Nom d\'Utilisateur</string>
   <string name="label_nicklist">Liste de Noms</string>
   <string name="label_no">Non</string>
   <string name="label_no_away_message">Aucuns Messages d\'Absence Disponibles</string>

@@ -57,6 +57,7 @@
   <string name="label_edit_topic_long">Apri finestra di dialogo per cambiare l’argomento del canale</string>
   <string name="label_filter_messages">Filtro messaggi</string>
   <string name="label_finish">Finito</string>
+  <string name="label_generate_crash_report">Genera rapporto dell’arresto anomalo</string>
   <string name="label_hide_perm">Nascondi sempre</string>
   <string name="label_hide_temp">Nascondi temporaneamente</string>
   <string name="label_ignore">Ignora</string>
@@ -87,6 +88,7 @@
   <string name="label_new_nick">Nuovo nick</string>
   <string name="label_new_server">Nuovo server</string>
   <string name="label_next">Successivo</string>
+  <string name="label_nick">Nick</string>
   <string name="label_nicklist">Elenco nick</string>
   <string name="label_no">No</string>
   <string name="label_no_away_message">Nessun messaggio d’assenza disponibile</string>

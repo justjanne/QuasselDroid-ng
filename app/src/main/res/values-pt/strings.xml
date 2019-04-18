@@ -87,6 +87,7 @@
   <string name="label_new_nick">Adicionar Alcunha</string>
   <string name="label_new_server">Adicionar Servidor</string>
   <string name="label_next">Próximo</string>
+  <string name="label_nick">Alcunha</string>
   <string name="label_nicklist">Lista de Alcunhas</string>
   <string name="label_no">Não</string>
   <string name="label_no_away_message">Sem mensagem de ausência disponível</string>

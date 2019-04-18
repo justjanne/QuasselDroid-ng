@@ -71,6 +71,7 @@
   <string name="label_new_network">Nova mreža</string>
   <string name="label_new_nick">Novi nadimak</string>
   <string name="label_new_server">Novi server</string>
+  <string name="label_nick">Nadimak</string>
   <string name="label_nicklist">Lista nadimaka</string>
   <string name="label_no">Ne</string>
   <string name="label_no_away_message">Poruka iz odsustva nije dostupna</string>
