@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.util.helpers.nullIf
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
@@ -41,7 +42,7 @@ import de.kuschku.quasseldroid.viewmodel.data.IrcUserItem
 
 class NickListAdapter(
   private val messageSettings: MessageSettings,
-  private val clickListener: ((String) -> Unit)? = null
+  private val clickListener: ((NetworkId, String) -> Unit)? = null
 ) : ListAdapter<IrcUserItem, NickListAdapter.NickViewHolder>(
   object : DiffUtil.ItemCallback<IrcUserItem>() {
     override fun areItemsTheSame(oldItem: IrcUserItem, newItem: IrcUserItem) =
@@ -84,7 +85,7 @@ class NickListAdapter(
 
   class NickViewHolder(
     itemView: View,
-    private val clickListener: ((String) -> Unit)? = null
+    private val clickListener: ((NetworkId, String) -> Unit)? = null
   ) : RecyclerView.ViewHolder(itemView) {
     @BindView(R.id.avatar)
     lateinit var avatar: ImageView
@@ -95,19 +96,19 @@ class NickListAdapter(
     @BindView(R.id.realname)
     lateinit var realname: TextView
 
-    var user: String? = null
+    var user: IrcUserItem? = null
 
     init {
       ButterKnife.bind(this, itemView)
       itemView.setOnClickListener {
         val nick = user
         if (nick != null)
-          clickListener?.invoke(nick)
+          clickListener?.invoke(nick.networkId, nick.nick)
       }
     }
 
     fun bind(data: IrcUserItem, messageSettings: MessageSettings) {
-      user = data.nick
+      user = data
 
       nick.text = SpanFormatter.format("%s%s", data.modes, data.displayNick ?: data.nick)
       realname.text = data.realname

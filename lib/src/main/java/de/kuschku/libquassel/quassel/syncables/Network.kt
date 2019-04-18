@@ -363,7 +363,7 @@ class Network constructor(
       }
       proxy.synchronize(ircUser)
       _ircUsers[nick] = ircUser
-      live_ircUsers.onNext(_ircUsers)
+      live_ircUsers.onNext(Unit)
       ircUser
     } else {
       user
@@ -376,7 +376,15 @@ class Network constructor(
   }.distinctUntilChanged()
 
   fun ircUsers() = _ircUsers.values.toList()
+  fun liveIrcUsers() = live_ircUsers.map {
+    ircUsers()
+  }
+
   fun ircUserCount(): UInt = _ircUsers.size.toUInt()
+  fun liveIrcUserCount() = live_ircUsers.map {
+    ircUserCount()
+  }
+
   fun newIrcChannel(channelName: String, initData: QVariantMap = emptyMap(),
                     index: Int? = null): IrcChannel =
     ircChannel(channelName).let { channel ->
@@ -389,7 +397,7 @@ class Network constructor(
         }
         proxy.synchronize(ircChannel)
         _ircChannels[caseMapper.toLowerCase(channelName)] = ircChannel
-        live_ircChannels.onNext(_ircChannels)
+        live_ircChannels.onNext(Unit)
         ircChannel
       } else {
         channel
@@ -404,7 +412,15 @@ class Network constructor(
   }.distinctUntilChanged()
 
   fun ircChannels() = _ircChannels.values.toList()
+  fun liveIrcChannels() = live_ircChannels.map {
+    ircChannels()
+  }
+
   fun ircChannelCount(): UInt = _ircChannels.size.toUInt()
+  fun liveIrcChannelCount() = live_ircChannels.map {
+    ircChannelCount()
+  }
+
   fun codecForServer(): String = _codecForServer
   fun codecForEncoding(): String = _codecForEncoding
   fun codecForDecoding(): String = _codecForDecoding
@@ -824,18 +840,18 @@ class Network constructor(
   fun removeChansAndUsers() {
     _ircUsers.clear()
     _ircChannels.clear()
-    live_ircChannels.onNext(_ircChannels)
-    live_ircUsers.onNext(_ircUsers)
+    live_ircChannels.onNext(Unit)
+    live_ircUsers.onNext(Unit)
   }
 
   fun removeIrcUser(user: IrcUser) {
     _ircUsers.remove(caseMapper.toLowerCase(user.nick()))
-    live_ircUsers.onNext(_ircUsers)
+    live_ircUsers.onNext(Unit)
   }
 
   fun removeIrcChannel(channel: IrcChannel) {
     _ircChannels.remove(caseMapper.toLowerCase(channel.name()))
-    live_ircChannels.onNext(_ircChannels)
+    live_ircChannels.onNext(Unit)
   }
 
   fun copy(): Network {
@@ -880,10 +896,10 @@ class Network constructor(
   private var _channelModes: Map<ChannelModeType, Set<Char>>? = null
   // stores all known nicks for the server
   private var _ircUsers: MutableMap<String, IrcUser> = mutableMapOf()
-  private val live_ircUsers = BehaviorSubject.createDefault(emptyMap<String, IrcUser>())
+  private val live_ircUsers = BehaviorSubject.createDefault(Unit)
   // stores all known channels
   private var _ircChannels: MutableMap<String, IrcChannel> = mutableMapOf()
-  private val live_ircChannels = BehaviorSubject.createDefault(emptyMap<String, IrcChannel>())
+  private val live_ircChannels = BehaviorSubject.createDefault(Unit)
   // stores results from RPL_ISUPPORT
   private var _supports: MutableMap<String, String?> = mutableMapOf()
     set (value) {

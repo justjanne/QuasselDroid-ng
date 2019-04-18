@@ -171,14 +171,14 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     super.onNewIntent(intent)
     if (intent != null) {
       when {
-        intent.type == "text/plain"                                     -> {
+        intent.type == "text/plain"    -> {
           val text = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)
           if (text != null) {
             chatlineFragment?.replaceText(text)
             drawerLayout.closeDrawers()
           }
         }
-        intent.hasExtra(KEY_BUFFER_ID)                                  -> {
+        intent.hasExtra(KEY_BUFFER_ID) -> {
           chatViewModel.bufferId.onNext(BufferId(intent.getIntExtra(KEY_BUFFER_ID, -1)))
           chatViewModel.bufferOpened.onNext(Unit)
           if (intent.hasExtra(KEY_ACCOUNT_ID)) {
@@ -193,16 +193,18 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             }
           }
         }
-        intent.hasExtra(KEY_AUTOCOMPLETE_TEXT)                          -> {
+        intent.hasExtra(KEY_AUTOCOMPLETE_TEXT)                            -> {
           chatlineFragment?.editorHelper?.appendText(
             intent.getStringExtra(KEY_AUTOCOMPLETE_TEXT),
             intent.getStringExtra(KEY_AUTOCOMPLETE_SUFFIX)
           )
           drawerLayout.closeDrawers()
         }
-        intent.hasExtra(KEY_NETWORK_ID) && intent.hasExtra(KEY_CHANNEL) -> {
+        intent.hasExtra(KEY_NETWORK_ID) && intent.hasExtra(KEY_CHANNEL)   -> {
           val networkId = NetworkId(intent.getIntExtra(KEY_NETWORK_ID, -1))
           val channel = intent.getStringExtra(KEY_CHANNEL)
+
+          val forceJoin = intent.getBooleanExtra(KEY_FORCE_JOIN, false)
 
           modelHelper.session.filter(Optional<ISession>::isPresent).firstElement().subscribe {
             it.orNull()?.also { session ->
@@ -212,7 +214,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                 type = Buffer_Type.of(Buffer_Type.ChannelBuffer)
               )
 
-              if (info != null) {
+              if (info != null && !forceJoin) {
                 ChatActivity.launch(this, bufferId = info.bufferId)
               } else {
                 modelHelper.allBuffers.map {
@@ -241,8 +243,51 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             }
           }
         }
+        intent.hasExtra(KEY_NETWORK_ID) && intent.hasExtra(KEY_NICK_NAME) -> {
+          val networkId = NetworkId(intent.getIntExtra(KEY_NETWORK_ID, -1))
+          val channel = intent.getStringExtra(KEY_NICK_NAME)
+
+          val forceJoin = intent.getBooleanExtra(KEY_FORCE_JOIN, false)
+
+          modelHelper.session.filter(Optional<ISession>::isPresent).firstElement().subscribe {
+            it.orNull()?.also { session ->
+              val info = session.bufferSyncer.find(
+                bufferName = channel,
+                networkId = networkId,
+                type = Buffer_Type.of(Buffer_Type.QueryBuffer)
+              )
+
+              if (info != null && !forceJoin) {
+                ChatActivity.launch(this, bufferId = info.bufferId)
+              } else {
+                modelHelper.allBuffers.map {
+                  listOfNotNull(it.find {
+                    it.networkId == networkId &&
+                    it.bufferName == channel &&
+                    it.type.hasFlag(Buffer_Type.QueryBuffer)
+                  })
+                }.filter {
+                  it.isNotEmpty()
+                }.firstElement().toLiveData().observeForever {
+                  it?.firstOrNull()?.let { info ->
+                    ChatActivity.launch(this, bufferId = info.bufferId)
+                  }
+                }
+
+                session.bufferSyncer.find(
+                  networkId = networkId,
+                  type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+                )?.let { statusInfo ->
+                  session.rpcHandler.sendInput(
+                    statusInfo, "/query $channel"
+                  )
+                }
+              }
+            }
+          }
+        }
         intent.scheme == "irc" ||
-        intent.scheme == "ircs"                                         -> {
+        intent.scheme == "ircs"                                           -> {
           val uri = intent.data
           if (uri != null) {
             val channelString = (uri.path.let { it ?: "" }.trimStart('/')) +
@@ -1097,6 +1142,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     private const val KEY_ACCOUNT_ID = "account_id"
     private const val KEY_NETWORK_ID = "network_id"
     private const val KEY_CHANNEL = "channel"
+    private const val KEY_NICK_NAME = "nick_name"
+    private const val KEY_FORCE_JOIN = "force_join"
 
     // Instance state keys
     private const val KEY_OPEN_BUFFER = "open_buffer"
@@ -1111,18 +1158,22 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       autoCompleteText: CharSequence? = null,
       autoCompleteSuffix: String? = null,
       channel: String? = null,
+      nickName: String? = null,
       networkId: NetworkId? = null,
       bufferId: BufferId? = null,
-      accountId: Long? = null
+      accountId: Long? = null,
+      forceJoin: Boolean? = null
     ) = context.startActivity(
       intent(context,
              sharedText,
              autoCompleteText,
              autoCompleteSuffix,
              channel,
+             nickName,
              networkId,
              bufferId,
-             accountId)
+             accountId,
+             forceJoin)
     )
 
     fun intent(
@@ -1131,9 +1182,11 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       autoCompleteText: CharSequence? = null,
       autoCompleteSuffix: String? = null,
       channel: String? = null,
+      nickName: String? = null,
       networkId: NetworkId? = null,
       bufferId: BufferId? = null,
-      accountId: Long? = null
+      accountId: Long? = null,
+      forceJoin: Boolean? = null
     ) = Intent(context, ChatActivity::class.java).apply {
       if (sharedText != null) {
         type = "text/plain"
@@ -1154,6 +1207,12 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       if (networkId != null && channel != null) {
         putExtra(KEY_NETWORK_ID, networkId.id)
         putExtra(KEY_CHANNEL, channel)
+      } else if (networkId != null && nickName != null) {
+        putExtra(KEY_NETWORK_ID, networkId.id)
+        putExtra(KEY_NICK_NAME, nickName)
+        if (forceJoin != null) {
+          putExtra(KEY_NICK_NAME, nickName)
+        }
       }
     }
   }

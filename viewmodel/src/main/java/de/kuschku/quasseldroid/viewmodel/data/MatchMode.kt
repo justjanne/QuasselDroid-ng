@@ -19,21 +19,8 @@
 
 package de.kuschku.quasseldroid.viewmodel.data
 
-import android.graphics.drawable.Drawable
-import de.kuschku.libquassel.protocol.NetworkId
-
-data class IrcUserItem(
-  val networkId: NetworkId,
-  val nick: String,
-  val modes: String,
-  val lowestMode: Int,
-  val realname: CharSequence,
-  val hostmask: String,
-  val away: Boolean,
-  val self: Boolean,
-  val networkCasemapping: String?,
-  val avatarUrls: List<Avatar> = emptyList(),
-  val initial: String? = "",
-  val fallbackDrawable: Drawable? = null,
-  val displayNick: CharSequence? = null
-)
+enum class MatchMode(val priority: Int) {
+  EXACT(0),
+  START(1),
+  CONTAINS(2);
+}

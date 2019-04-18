@@ -156,6 +156,7 @@ open class ChatViewModelHelper @Inject constructor(
                     }.min() ?: prefixModes.size
 
                     IrcUserItem(
+                      bufferInfo.networkId,
                       user.nick(),
                       network.modesToPrefixes(userModes),
                       lowestMode,
@@ -282,12 +283,9 @@ open class ChatViewModelHelper @Inject constructor(
                         val name = info.bufferName?.trim() ?: ""
                         val search = bufferSearch.trim()
                         val matchMode = when {
-                          name.equals(search, ignoreCase = true)     ->
-                            BufferProps.BufferMatchMode.EXACT
-                          name.startsWith(search, ignoreCase = true) ->
-                            BufferProps.BufferMatchMode.START
-                          else                                       ->
-                            BufferProps.BufferMatchMode.CONTAINS
+                          name.equals(search, ignoreCase = true)     -> MatchMode.EXACT
+                          name.startsWith(search, ignoreCase = true) -> MatchMode.START
+                          else                                       -> MatchMode.CONTAINS
                         }
                         when (info.type.toInt()) {
                           BufferInfo.Type.QueryBuffer.toInt()   -> {

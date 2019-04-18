@@ -114,7 +114,7 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
       save.setText(R.string.label_saving)
       save.isEnabled = false
 
-      val networkId = NetworkId(network.selectedItemId.toInt())
+      val selectedNetworkId = NetworkId(network.selectedItemId.toInt())
       val channelName = name.text.toString().trim()
 
       val isInviteOnly = inviteOnly.isChecked
@@ -124,16 +124,17 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
 
       modelHelper.bufferSyncer.value?.orNull()?.let { bufferSyncer ->
         val existingBuffer = bufferSyncer.find(
-          networkId = networkId,
+          networkId = selectedNetworkId,
           type = Buffer_Type.of(Buffer_Type.ChannelBuffer),
           bufferName = channelName
         )
-        val existingChannel = modelHelper.networks.value?.get(networkId)?.ircChannel(channelName)
+        val existingChannel = modelHelper.networks.value?.get(selectedNetworkId)?.ircChannel(
+          channelName)
           .nullIf { it == IrcChannel.NULL }
         if (existingBuffer != null) {
           if (existingChannel == null) {
             bufferSyncer.find(
-              networkId = networkId,
+              networkId = selectedNetworkId,
               type = Buffer_Type.of(Buffer_Type.StatusBuffer)
             )?.let { statusBuffer ->
               modelHelper.session.value?.orNull()?.rpcHandler?.apply {
@@ -150,13 +151,13 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
           }
         } else {
           bufferSyncer.find(
-            networkId = networkId,
+            networkId = selectedNetworkId,
             type = Buffer_Type.of(Buffer_Type.StatusBuffer)
           )?.let { statusBuffer ->
             modelHelper.session.value?.orNull()?.rpcHandler?.apply {
               sendInput(statusBuffer, "/join $channelName")
               modelHelper.networks.switchMap {
-                it[networkId]?.liveIrcChannel(channelName)
+                it[selectedNetworkId]?.liveIrcChannel(channelName)
                 ?: Observable.empty()
               }.subscribe {
                 if (it.ircUsers().size <= 1) {
@@ -176,7 +177,7 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
                 activity?.let {
                   it.finish()
                   ChatActivity.launch(it,
-                                      networkId = networkId,
+                                      networkId = selectedNetworkId,
                                       channel = channelName
                   )
                 }

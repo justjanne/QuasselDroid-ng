@@ -17,23 +17,13 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.viewmodel.data
+package de.kuschku.quasseldroid.viewmodel
 
-import android.graphics.drawable.Drawable
+import androidx.lifecycle.ViewModel
 import de.kuschku.libquassel.protocol.NetworkId
+import io.reactivex.subjects.BehaviorSubject
 
-data class IrcUserItem(
-  val networkId: NetworkId,
-  val nick: String,
-  val modes: String,
-  val lowestMode: Int,
-  val realname: CharSequence,
-  val hostmask: String,
-  val away: Boolean,
-  val self: Boolean,
-  val networkCasemapping: String?,
-  val avatarUrls: List<Avatar> = emptyList(),
-  val initial: String? = "",
-  val fallbackDrawable: Drawable? = null,
-  val displayNick: CharSequence? = null
-)
+class QueryCreateViewModel : ViewModel() {
+  val networkId = BehaviorSubject.createDefault(NetworkId(0))
+  val nickName = BehaviorSubject.createDefault("")
+}

@@ -29,6 +29,7 @@ import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountViewModel
 import de.kuschku.quasseldroid.viewmodel.ChatViewModel
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
+import de.kuschku.quasseldroid.viewmodel.QueryCreateViewModel
 
 @Module
 object ActivityBaseModule {
@@ -65,4 +66,10 @@ object ActivityBaseModule {
   @JvmStatic
   fun provideAccountViewModel(viewModelProvider: ViewModelProvider) =
     viewModelProvider[AccountViewModel::class.java]
+
+  @ActivityScope
+  @Provides
+  @JvmStatic
+  fun provideQueryCreateViewModel(viewModelProvider: ViewModelProvider) =
+    viewModelProvider[QueryCreateViewModel::class.java]
 }

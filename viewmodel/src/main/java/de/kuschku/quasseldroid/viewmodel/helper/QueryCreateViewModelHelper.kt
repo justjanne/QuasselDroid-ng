@@ -17,23 +17,13 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.viewmodel.data
+package de.kuschku.quasseldroid.viewmodel.helper
 
-import android.graphics.drawable.Drawable
-import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
+import de.kuschku.quasseldroid.viewmodel.QueryCreateViewModel
+import javax.inject.Inject
 
-data class IrcUserItem(
-  val networkId: NetworkId,
-  val nick: String,
-  val modes: String,
-  val lowestMode: Int,
-  val realname: CharSequence,
-  val hostmask: String,
-  val away: Boolean,
-  val self: Boolean,
-  val networkCasemapping: String?,
-  val avatarUrls: List<Avatar> = emptyList(),
-  val initial: String? = "",
-  val fallbackDrawable: Drawable? = null,
-  val displayNick: CharSequence? = null
-)
+open class QueryCreateViewModelHelper @Inject constructor(
+  val queryCreate: QueryCreateViewModel,
+  quassel: QuasselViewModel
+) : QuasselViewModelHelper(quassel)

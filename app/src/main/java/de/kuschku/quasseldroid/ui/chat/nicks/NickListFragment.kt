@@ -38,6 +38,7 @@ import com.bumptech.glide.ListPreloader
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.util.FixedPreloadSizeProvider
 import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
@@ -191,21 +192,19 @@ class NickListFragment : ServiceBoundFragment() {
     outState.putParcelable(KEY_STATE_LIST, nickList.layoutManager?.onSaveInstanceState())
   }
 
-  private val clickListener: ((String) -> Unit)? = { nick ->
+  private val clickListener: ((NetworkId, String) -> Unit) = { networkId, nick ->
     modelHelper.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
-      modelHelper.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
-        UserInfoActivity.launch(
-          requireContext(),
-          openBuffer = false,
-          bufferId = bufferSyncer.find(
-            bufferName = nick,
-            networkId = networkId,
-            type = Buffer_Type.of(Buffer_Type.QueryBuffer)
-          )?.let(BufferInfo::bufferId),
-          nick = nick,
-          networkId = networkId
-        )
-      }
+      UserInfoActivity.launch(
+        requireContext(),
+        openBuffer = false,
+        bufferId = bufferSyncer.find(
+          bufferName = nick,
+          networkId = networkId,
+          type = Buffer_Type.of(Buffer_Type.QueryBuffer)
+        )?.let(BufferInfo::bufferId),
+        nick = nick,
+        networkId = networkId
+      )
     }
   }
 

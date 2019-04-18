@@ -582,17 +582,15 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
         .create()
     )
 
-    if (BuildConfig.DEBUG) {
-      fab.addActionItem(
-        SpeedDialActionItem.Builder(R.id.fab_query, R.drawable.ic_account)
-          .setFabBackgroundColor(fabBackground2)
-          .setFabImageTintColor(0xffffffffu.toInt())
-          .setLabel(R.string.label_query_medium)
-          .setLabelBackgroundColor(colorLabelBackground)
-          .setLabelColor(colorLabel)
-          .create()
-      )
-    }
+    fab.addActionItem(
+      SpeedDialActionItem.Builder(R.id.fab_query, R.drawable.ic_account)
+        .setFabBackgroundColor(fabBackground2)
+        .setFabImageTintColor(0xffffffffu.toInt())
+        .setLabel(R.string.label_query_medium)
+        .setLabelBackgroundColor(colorLabelBackground)
+        .setLabelColor(colorLabel)
+        .create()
+    )
 
     fab.setOnActionSelectedListener {
       val networkId = modelHelper.bufferData?.value?.network?.networkId()

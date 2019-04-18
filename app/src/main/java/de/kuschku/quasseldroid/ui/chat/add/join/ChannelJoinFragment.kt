@@ -29,10 +29,8 @@ import androidx.appcompat.widget.AppCompatSpinner
 import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
-import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.Network
-import de.kuschku.libquassel.util.helpers.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.ui.chat.add.NetworkAdapter
@@ -92,23 +90,17 @@ class ChannelJoinFragment : ServiceBoundFragment() {
       join.setText(R.string.label_saving)
       join.isEnabled = false
 
-      val networkId = NetworkId(network.selectedItemId.toInt())
+      val selectedNetworkId = NetworkId(network.selectedItemId.toInt())
       val channelName = name.text.toString().trim()
-
-      modelHelper.bufferSyncer.value?.orNull()?.let { bufferSyncer ->
-        bufferSyncer.find(
-          networkId = networkId,
-          type = Buffer_Type.of(Buffer_Type.StatusBuffer)
-        )?.let { statusBuffer ->
-          modelHelper.session.value?.orNull()?.rpcHandler?.apply {
-            sendInput(statusBuffer, "/join $channelName")
-          }
-        }
-      }
 
       activity?.let {
         it.finish()
-        ChatActivity.launch(it, networkId = networkId, channel = channelName)
+        ChatActivity.launch(
+          it,
+          networkId = selectedNetworkId,
+          channel = channelName,
+          forceJoin = true
+        )
       }
     }
 
