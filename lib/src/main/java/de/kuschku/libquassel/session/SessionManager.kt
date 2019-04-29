@@ -56,12 +56,17 @@ class SessionManager(
 
   fun close() = session.or(lastSession).close()
 
-  private var lastClientData: ClientData? = null
-  private var lastTrustManager: X509TrustManager? = null
-  private var lastHostnameVerifier: HostnameVerifier? = null
-  private var lastAddress: SocketAddress? = null
-  private var lastUserData: Pair<String, String>? = null
-  private var lastShouldReconnect = false
+  data class ConnectionInfo(
+    val clientData: ClientData,
+    val trustManager: X509TrustManager,
+    val hostnameVerifier: HostnameVerifier,
+    val address: SocketAddress,
+    val userData: Pair<String, String>,
+    val requireSsl: Boolean,
+    val shouldReconnect: Boolean
+  )
+
+  private var lastConnectionInfo: ConnectionInfo? = null
 
   private var inProgressSession = BehaviorSubject.createDefault(ISession.NULL)
   private var lastSession: ISession = offlineSession
@@ -111,31 +116,20 @@ class SessionManager(
   }
 
   fun connect(
-    clientData: ClientData,
-    trustManager: X509TrustManager,
-    hostnameVerifier: HostnameVerifier,
-    address: SocketAddress,
-    userData: Pair<String, String>,
-    requireSsl: Boolean,
-    shouldReconnect: Boolean = false
+    connectionInfo: ConnectionInfo
   ) {
     log(DEBUG, "SessionManager", "Connecting")
     inProgressSession.value.close()
-    lastClientData = clientData
-    lastTrustManager = trustManager
-    lastHostnameVerifier = hostnameVerifier
-    lastAddress = address
-    lastUserData = userData
-    lastShouldReconnect = shouldReconnect
+    lastConnectionInfo = connectionInfo
     hasErrored = false
     inProgressSession.onNext(
       Session(
-        address,
-        userData,
-        requireSsl,
-        trustManager,
-        hostnameVerifier,
-        clientData,
+        connectionInfo.address,
+        connectionInfo.userData,
+        connectionInfo.requireSsl,
+        connectionInfo.trustManager,
+        connectionInfo.hostnameVerifier,
+        connectionInfo.clientData,
         handlerService,
         heartBeatFactory,
         disconnectFromCore,
@@ -173,15 +167,11 @@ class SessionManager(
   }
 
   fun reconnect(forceReconnect: Boolean = false) {
-    if (lastShouldReconnect || forceReconnect) {
-      val clientData = lastClientData
-      val trustManager = lastTrustManager
-      val hostnameVerifier = lastHostnameVerifier
-      val address = lastAddress
-      val userData = lastUserData
+    if (lastConnectionInfo?.shouldReconnect == true || forceReconnect) {
+      val connectionInfo = lastConnectionInfo
 
-      if (clientData != null && trustManager != null && hostnameVerifier != null && address != null && userData != null) {
-        connect(clientData, trustManager, hostnameVerifier, address, userData, forceReconnect)
+      if (connectionInfo != null) {
+        connect(connectionInfo)
       } else {
         log(INFO, "SessionManager", "Reconnect failed: not enough data available")
       }

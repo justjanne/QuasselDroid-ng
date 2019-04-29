@@ -291,7 +291,15 @@ class QuasselService : DaggerLifecycleService(),
       service?.apply {
         disconnect()
         sessionManager.connect(
-          clientData, trustManager, hostnameVerifier, address, user to pass, requireSsl, reconnect
+          SessionManager.ConnectionInfo(
+            clientData = clientData,
+            trustManager = trustManager,
+            hostnameVerifier = hostnameVerifier,
+            address = address,
+            userData = Pair(user, pass),
+            requireSsl = requireSsl,
+            shouldReconnect = reconnect
+          )
         )
       }
     }
