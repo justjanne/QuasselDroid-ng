@@ -48,7 +48,9 @@ abstract class ServiceBoundSettingsActivity(private val fragment: Fragment? = nu
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-    val fragment = this.fragment ?: this.fragment()
+    val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+                   ?: this.fragment
+                   ?: this.fragment()
     if (fragment != null) {
       val transaction = supportFragmentManager.beginTransaction()
       fragment.arguments = arguments

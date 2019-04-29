@@ -47,7 +47,9 @@ abstract class SettingsActivity(protected val fragment: Fragment? = null) : Them
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-    val fragment = this.fragment ?: this.fragment()
+    val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+                   ?: this.fragment
+                   ?: this.fragment()
     if (fragment != null) {
       val transaction = supportFragmentManager.beginTransaction()
       fragment.arguments = arguments
