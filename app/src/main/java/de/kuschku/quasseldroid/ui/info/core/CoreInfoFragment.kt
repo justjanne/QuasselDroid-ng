@@ -118,7 +118,7 @@ class CoreInfoFragment : ServiceBoundFragment() {
         val features = it?.second?.second
                        ?: QuasselFeatures.empty()
 
-        version.text = data?.quasselVersion.let(Html::fromHtml)
+        version.text = data?.quasselVersion?.let(Html::fromHtml)
         val versionTime = data?.quasselBuildDate?.toLongOrNull()
         val formattedVersionTime = if (versionTime != null)
           dateFormatter.format(Instant.ofEpochSecond(versionTime).atZone(ZoneId.systemDefault()))
