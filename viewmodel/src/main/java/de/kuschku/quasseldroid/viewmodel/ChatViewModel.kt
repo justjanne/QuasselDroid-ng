@@ -43,9 +43,11 @@ open class ChatViewModel : QuasselViewModel() {
   val bufferOpened = PublishSubject.create<Unit>()
 
   fun onSaveInstanceState(outState: Bundle) {
+    /*
     outState.putSerializable(
       KEY_SELECTED_MESSAGES,
       HashMap(selectedMessages.value))
+    */
     outState.putString(
       KEY_BUFFER_SEARCH,
       bufferSearch.value)
@@ -76,12 +78,14 @@ open class ChatViewModel : QuasselViewModel() {
   }
 
   fun onRestoreInstanceState(savedInstanceState: Bundle) {
+    /*
     if (savedInstanceState.containsKey(KEY_SELECTED_MESSAGES)) {
       selectedMessages.onNext(
         savedInstanceState.getSerializable(KEY_SELECTED_MESSAGES) as? HashMap<MsgId, FormattedMessage>
         ?: emptyMap()
       )
     }
+    */
 
     if (savedInstanceState.containsKey(KEY_BUFFER_SEARCH))
       bufferSearch.onNext(savedInstanceState.getString(KEY_BUFFER_SEARCH, null))
