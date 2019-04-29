@@ -97,23 +97,33 @@ class QueryCreateFragment : ServiceBoundFragment() {
   @Inject
   lateinit var modelHelper: QueryCreateViewModelHelper
 
+  private var hasSelectedNetwork = false
+  private var networkId = NetworkId(0)
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.add_query, container, false)
     ButterKnife.bind(this, view)
 
-    val networkId = NetworkId(arguments?.getInt("network_id", 0) ?: 0)
+    networkId = NetworkId(
+      savedInstanceState?.getInt("network_id", 0)
+      ?: arguments?.getInt("network_id", 0)
+      ?: 0
+    )
 
     val networkAdapter = NetworkAdapter()
     network.adapter = networkAdapter
 
     network.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
       override fun onNothingSelected(parent: AdapterView<*>?) {
-        modelHelper.queryCreate.networkId.onNext(NetworkId(0))
+        networkId = NetworkId(0)
+        modelHelper.queryCreate.networkId.onNext(networkId)
       }
 
       override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        modelHelper.queryCreate.networkId.onNext(networkAdapter.getItem(position).id)
+        networkId = networkAdapter.getItem(position).id
+        hasSelectedNetwork = true
+        modelHelper.queryCreate.networkId.onNext(networkId)
       }
     }
 
@@ -132,6 +142,7 @@ class QueryCreateFragment : ServiceBoundFragment() {
             val index = networkAdapter.indexOf(networkId)
             if (index != null) {
               network.setSelection(index)
+              hasSelectedNetwork = true
             }
           }
           hasSetNetwork = true
@@ -316,6 +327,13 @@ class QueryCreateFragment : ServiceBoundFragment() {
         nickName = nickName,
         forceJoin = true
       )
+    }
+  }
+
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    if (networkId.isValidId() && hasSelectedNetwork) {
+      outState.putInt("network_id", networkId.id)
     }
   }
 }

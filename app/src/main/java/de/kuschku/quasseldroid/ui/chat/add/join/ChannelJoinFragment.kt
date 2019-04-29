@@ -23,6 +23,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.widget.AppCompatSpinner
@@ -54,15 +55,33 @@ class ChannelJoinFragment : ServiceBoundFragment() {
   @Inject
   lateinit var modelHelper: QuasselViewModelHelper
 
+  private var hasSelectedNetwork = false
+  private var networkId = NetworkId(0)
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.add_join, container, false)
     ButterKnife.bind(this, view)
 
-    val networkId = NetworkId(arguments?.getInt("network_id", 0) ?: 0)
+    networkId = NetworkId(
+      savedInstanceState?.getInt("network_id", 0)
+      ?: arguments?.getInt("network_id", 0)
+      ?: 0
+    )
 
     val networkAdapter = NetworkAdapter()
     network.adapter = networkAdapter
+
+    network.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+      override fun onNothingSelected(parent: AdapterView<*>?) {
+        networkId = NetworkId(0)
+      }
+
+      override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        networkId = networkAdapter.getItem(position).id
+        hasSelectedNetwork = true
+      }
+    }
 
     var hasSetNetwork = false
     modelHelper.networks.switchMap {
@@ -79,6 +98,7 @@ class ChannelJoinFragment : ServiceBoundFragment() {
             val index = networkAdapter.indexOf(networkId)
             if (index != null) {
               network.setSelection(index)
+              hasSelectedNetwork = true
             }
           }
           hasSetNetwork = true
@@ -105,5 +125,12 @@ class ChannelJoinFragment : ServiceBoundFragment() {
     }
 
     return view
+  }
+
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    if (networkId.isValidId() && hasSelectedNetwork) {
+      outState.putInt("network_id", networkId.id)
+    }
   }
 }
