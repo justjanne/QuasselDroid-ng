@@ -46,7 +46,10 @@ class NetworkAdapter : RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(
   override fun isEmpty() = data.isEmpty()
 
   override fun onBindViewHolder(holder: NetworkViewHolder, position: Int) =
-    holder.bind(getItem(position))
+    holder.bind(
+      getItem(position)
+      ?: throw IndexOutOfBoundsException("Index: $position, Size: ${data.size}")
+    )
 
   override fun onCreateViewHolder(parent: ViewGroup, dropDown: Boolean)
     : NetworkViewHolder {
@@ -69,8 +72,8 @@ class NetworkAdapter : RecyclerSpinnerAdapter<NetworkAdapter.NetworkViewHolder>(
     return null
   }
 
-  override fun getItem(position: Int): NetworkItem = data[position]
-  override fun getItemId(position: Int) = getItem(position).id.id.toLong()
+  override fun getItem(position: Int): NetworkItem? = data.getOrNull(position)
+  override fun getItemId(position: Int) = getItem(position)?.id?.id?.toLong() ?: 0L
   override fun hasStableIds() = true
   override fun getCount() = data.size
   class NetworkViewHolder(itemView: View) :
