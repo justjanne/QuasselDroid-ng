@@ -33,7 +33,7 @@ class ClientSettingsActivity : SettingsActivity(ClientSettingsFragment()),
     when (pref) {
       is ListPreference -> {
         val f = ListPreferenceDialogFragmentCompat.newInstance(pref.getKey())
-        f.setTargetFragment(fragment, 0)
+        f.setTargetFragment(actualFragment, 0)
         f.show(supportFragmentManager, DIALOG_FRAGMENT_TAG)
         true
       }

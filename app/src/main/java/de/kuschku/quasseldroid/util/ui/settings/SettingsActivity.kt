@@ -34,6 +34,7 @@ abstract class SettingsActivity(protected val fragment: Fragment? = null) : Them
   protected open fun fragment(): Fragment? = null
 
   private var changeable: Changeable? = null
+  protected var actualFragment: Fragment? = null
 
   @BindView(R.id.toolbar)
   lateinit var toolbar: Toolbar
@@ -47,17 +48,28 @@ abstract class SettingsActivity(protected val fragment: Fragment? = null) : Them
     setSupportActionBar(toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-    val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-                   ?: this.fragment
-                   ?: this.fragment()
-    if (fragment != null) {
-      val transaction = supportFragmentManager.beginTransaction()
-      fragment.arguments = arguments
-      transaction.replace(R.id.fragment_container, fragment)
-      transaction.commit()
+    val existingFragment = savedInstanceState?.let {
+      supportFragmentManager.getFragment(it, "settings_content")
+    }
+
+    actualFragment = existingFragment ?: this.fragment ?: this.fragment()
+    if (existingFragment == null) {
+      actualFragment?.let {
+        val transaction = supportFragmentManager.beginTransaction()
+        it.arguments = arguments
+        transaction.replace(R.id.fragment_container, it)
+        transaction.commit()
+      }
     }
 
     this.changeable = fragment as? Changeable
+  }
+
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    actualFragment?.let {
+      supportFragmentManager.putFragment(outState, "settings_content", it)
+    }
   }
 
   private fun shouldNavigateAway(callback: () -> Unit) {
