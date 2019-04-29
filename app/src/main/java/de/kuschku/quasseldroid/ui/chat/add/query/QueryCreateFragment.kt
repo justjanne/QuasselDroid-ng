@@ -121,7 +121,8 @@ class QueryCreateFragment : ServiceBoundFragment() {
       }
 
       override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        networkId = networkAdapter.getItem(position).id
+        networkId = networkAdapter.getItem(position)?.id
+                    ?: NetworkId(0)
         hasSelectedNetwork = true
         modelHelper.queryCreate.networkId.onNext(networkId)
       }
