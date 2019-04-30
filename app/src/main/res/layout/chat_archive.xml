@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2019 Janne Koschinski
+  Copyright (c) 2019 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
+
+      <androidx.appcompat.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_clock" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/label_temporarily_archived" />
+    </LinearLayout>
+
+    <TextView
+      style="@style/Widget.CoreSettings.TextView"
+      android:layout_marginStart="72dp"
+      android:layout_marginLeft="72dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginRight="16dp"
+      android:text="@string/label_temporarily_archived_long" />
+
+    <androidx.recyclerview.widget.RecyclerView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      tools:listitem="@layout/widget_buffer_reorder" />
+
+    <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
+
+      <androidx.appcompat.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_eye_off" />
+
+      <TextView
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/label_permanently_archived" />
+    </LinearLayout>
+
+    <TextView
+      style="@style/Widget.CoreSettings.TextView"
+      android:layout_marginStart="72dp"
+      android:layout_marginLeft="72dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginRight="16dp"
+      android:text="@string/label_permanently_archived_long" />
+
+    <androidx.recyclerview.widget.RecyclerView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      tools:listitem="@layout/widget_buffer_reorder" />
+  </LinearLayout>
+</androidx.core.widget.NestedScrollView>

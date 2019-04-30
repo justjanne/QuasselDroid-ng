@@ -112,6 +112,13 @@
       android:label="@string/label_info_certificate"
       android:windowSoftInputMode="adjustResize" />
 
+    <!-- Archive -->
+    <activity
+      android:name="de.kuschku.quasseldroid.ui.chat.archive.ArchiveActivity"
+      android:exported="false"
+      android:label="@string/label_archived_chats"
+      android:windowSoftInputMode="adjustResize" />
+
     <!-- Add -->
     <activity
       android:name="de.kuschku.quasseldroid.ui.chat.add.create.ChannelCreateActivity"

@@ -28,6 +28,7 @@
   <string name="label_about">About</string>
   <string name="label_accept">Accept</string>
   <string name="label_acknowledgements">Acknowledgements</string>
+  <string name="label_archived_chats">Archived Chats</string>
   <string name="label_ascending">Ascending</string>
   <string name="label_authors">Authors</string>
   <string name="label_autocomplete">Autocomplete</string>
@@ -102,6 +103,8 @@
   <string name="label_password_new">New Password</string>
   <string name="label_password_old">Old Password</string>
   <string name="label_password_repeat">Repeat Password</string>
+  <string name="label_permanently_archived">Permanently Archived</string>
+  <string name="label_permanently_archived_long">Permanently archived chats stay hidden until you manually choose to un-archive them.</string>
   <string name="label_placeholder_message">Write a message…</string>
   <string name="label_placeholder_topic">Describe the channel topic…</string>
   <string name="label_privacy_policy">Privacy Policy</string>
@@ -109,6 +112,7 @@
   <string name="label_query_long">Open private chat with user</string>
   <string name="label_query_medium">Open private chat</string>
   <string name="label_rename">Rename</string>
+  <string name="label_reorder">Reorder</string>
   <string name="label_reply">Reply</string>
   <string name="label_reset">Reset</string>
   <string name="label_save">Save</string>
@@ -130,6 +134,8 @@
   <string name="label_show_hidden">Show Hidden</string>
   <string name="label_sort">Sort</string>
   <string name="label_source">Source</string>
+  <string name="label_temporarily_archived">Temporarily Archived</string>
+  <string name="label_temporarily_archived_long">Chats which are temporarily archived will be shown again once they get a new message.</string>
   <string name="label_topic">Channel Topic</string>
   <string name="label_translators">Translators</string>
   <string name="label_unhide">Make Visible</string>

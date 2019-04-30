@@ -45,7 +45,7 @@
   <string name="label_connect">Connetti</string>
   <string name="label_copy">Copia</string>
   <string name="label_crashes">Arresti anomali</string>
-  <string name="label_crashes_empty">Nessun rapporto di arresto anomalo trovato</string>
+  <string name="label_crashes_empty">Nessun rapporto d’arresto anomalo trovato</string>
   <string name="label_create_channel">Crea canale</string>
   <string name="label_delete">Elimina</string>
   <string name="label_delete_all">Elimina tutto</string>
@@ -57,7 +57,7 @@
   <string name="label_edit_topic_long">Apri finestra di dialogo per cambiare l’argomento del canale</string>
   <string name="label_filter_messages">Filtro messaggi</string>
   <string name="label_finish">Finito</string>
-  <string name="label_generate_crash_report">Genera rapporto dell’arresto anomalo</string>
+  <string name="label_generate_crash_report">Genera rapporto d’arresto anomalo</string>
   <string name="label_hide_perm">Nascondi sempre</string>
   <string name="label_hide_temp">Nascondi temporaneamente</string>
   <string name="label_ignore">Ignora</string>
@@ -124,7 +124,7 @@
   <string name="label_settings_client">Impostazioni del client</string>
   <string name="label_settings_core">Impostazioni del core</string>
   <string name="label_share">Condividi</string>
-  <string name="label_share_crashreport">Condividi rapporto dell’arresto anomalo</string>
+  <string name="label_share_crashreport">Condividi rapporto d’arresto anomalo</string>
   <string name="label_shortcut">Scorciatoia</string>
   <string name="label_shortcut_long">Crea scorciatoia nella schermata Home</string>
   <string name="label_show_hidden">Mostra nascosti</string>

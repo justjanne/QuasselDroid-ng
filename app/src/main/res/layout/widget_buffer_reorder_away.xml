@@ -18,9 +18,12 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
+  android:layout_marginStart="56dp"
+  android:layout_marginLeft="56dp"
   android:background="?attr/backgroundMenuItem"
   android:minHeight="?listPreferredItemHeightSmall"
   android:orientation="horizontal"
@@ -41,9 +44,10 @@
     tools:src="@tools:sample/avatars" />
 
   <LinearLayout
-    android:layout_width="match_parent"
+    android:layout_width="0dip"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
+    android:layout_weight="1"
     android:orientation="vertical">
 
     <TextView
@@ -55,8 +59,9 @@
       android:ellipsize="marquee"
       android:fontFamily="sans-serif-medium"
       android:singleLine="true"
-      android:textColor="?attr/colorTextPrimary"
+      android:textColor="?attr/colorTextSecondary"
       android:textSize="13sp"
+      android:textStyle="italic"
       tools:text="@sample/messages.json/data/sender" />
 
     <TextView
@@ -68,7 +73,29 @@
       android:singleLine="true"
       android:textColor="?attr/colorTextSecondary"
       android:textSize="12sp"
+      android:textStyle="italic"
       tools:text="@sample/messages.json/data/sender"
       tools:visibility="visible" />
   </LinearLayout>
+
+  <androidx.appcompat.widget.AppCompatImageView
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_gravity="center_vertical"
+    android:layout_marginStart="16dp"
+    android:layout_marginLeft="16dp"
+    android:contentDescription="@string/label_user_away"
+    app:srcCompat="@drawable/ic_clock"
+    app:tint="?colorTextSecondary" />
+
+  <androidx.appcompat.widget.AppCompatImageView
+    android:id="@+id/reorder"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_gravity="center_vertical"
+    android:layout_marginStart="16dp"
+    android:layout_marginLeft="16dp"
+    android:contentDescription="@string/label_reorder"
+    app:srcCompat="@drawable/ic_reorder"
+    app:tint="?colorTextSecondary" />
 </LinearLayout>
