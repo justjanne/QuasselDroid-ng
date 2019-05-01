@@ -1,0 +1,20 @@
+La chat diventa comoda. Ovunque.
+
+
+È NECESSARIO UN CORE QUASSEL – NON FUNZIONA COME CLIENT IRC A SÉ STANTE
+
+• <b>Usa IRC in movimento</b> – grazie al core Quassel core non perderai mai nulla
+• <b>Avrai sempre a disposizione il registro storico delle chat</b> – basta scorrere verso l’alto per caricare i messaggi meno recenti, il core li conserva per te
+• <b>Ricevi una notifica quando qualcuno ti scrive un messaggio</b> – anche se nel frattempo non avevi connessione
+
+<b>Requisiti:</b>
+
+È necessario disporre di un account su un core Quassel per utilizzare questa app. Se non lo hai, puoi configurare tu stesso un core, oppure potresti avere la possibilità di avere un account sul core di qualcun altro.
+
+Questa app funziona solo con core che eseguono almeno Quassel v0.10, per usufruire di tutte le funzionalità disponibili avrai bisogno di Quassel v0.13
+
+Per saperne di più su come configurare un core quassel, consulta <a href="http://bugs.quassel-irc.org/projects/quassel-irc/wiki">la wiki</a>
+
+<b>Contatti:</b>
+
+Puoi trovarci su #quasseldroid su Freenode oppure contattarci all’indirizzo support@kuschku.de

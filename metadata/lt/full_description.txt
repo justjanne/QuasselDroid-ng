@@ -1,0 +1,20 @@
+Chat comfortably. Everywhere.
+
+
+REIKALINGAS QUASSEL BRANDUOLYS - PROGRAMA NEVEIKS KAIP VISIŠKAI SAVARANKIŠKAS IRC KLIENTAS
+
+• <b>Naudokite IRC bet kur</b> – Quassel branduolio dėka, niekada nieko nepraleisite
+• <b>Visada prieinama jūsų pokalbių istorija</b> – tiesiog slinkite į viršų, jog branduolys jums rodytų senas žinutes
+• <b>Gaukite pranešimus</b> – net jeigu tuo metu neturėjote interneto ryšio
+
+<b>Reikalavimai:</b>
+
+Jums reikia turėti Quassel branduolio paskyrą norint naudotis šia programa. Jeigu jos neturite, galite susikurti savo branduolį, arba pasiteirauti paskyros pas tuos kurie turi jau egzistuojantį branduolį.
+
+Ši programa veikia tik su branduoliais kurie yra ne senesni nei Quassel v0.10. Norint naudotis visomis funkcijomis reikalingas Quassel v0.13
+
+Norint išmokti kaip susikurti savo branduolį, paskaitykite <a href="http://bugs.quassel-irc.org/projects/quassel-irc/wiki">wiki</a>
+
+<b>Kontaktai:</b>
+
+Mus galite rasti Freenode kanale #quasseldroid, arba paštu support@kuschku.de

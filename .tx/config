@@ -1,6 +1,31 @@
 [main]
 host = https://www.transifex.com
 
+[quasseldroid-1.descriptiontxt]
+type = TXT
+source_file = metadata/en-US/full_description.txt
+source_lang = en
+trans.de = metadata/de-DE/full_description.txt
+trans.fr_CA = metadata/fr-CA/full_description.txt
+trans.it = metadata/it-IT/full_description.txt
+trans.lt = metadata/lt/full_description.txt
+trans.nl = metadata/nl/full_description.txt
+trans.pt = metadata/pt-PT/full_description.txt
+trans.sr = metadata/sr/full_description.txt
+
+[quasseldroid-1.short_descriptiontxt]
+type = TXT
+source_file = metadata/en-US/short_description.txt
+source_lang = en
+trans.de = metadata/de-DE/short_description.txt
+trans.fr_CA = metadata/fr-CA/short_description.txt
+trans.it = metadata/it-IT/short_description.txt
+trans.lt = metadata/lt/short_description.txt
+trans.nl = metadata/nl/short_description.txt
+trans.pt = metadata/pt-PT/short_description.txt
+trans.sr = metadata/sr/short_description.txt
+
+
 [quasseldroid-1.strings_certificatesxml]
 type = ANDROID
 source_file = app/src/main/res/values/strings_certificates.xml

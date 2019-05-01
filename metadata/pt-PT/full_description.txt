@@ -1,0 +1,20 @@
+Converse confortavelmente. Em qualquer lugar.
+
+
+REQUER UM NÚCLEO  QUASSEL - NÃO FUNCIONA COMO CLIENTE DE IRC SOZINHO
+
+• <b>Use o IRC em movimento</b> – graças ao núcleo Quassel, você nunca perderá nada
+• <b>Tenha sempre todo o seu histórico de chat disponível</b> – basta rolar para cima para carregar mensagens mais antigas, o núcleo guarda-as para si
+• <b>Seja notificado quando alguém lhe enviar uma mensagem</b> – mesmo se você não tivesse conexão nesse meio tempo
+
+<b>Requisitos:</b>
+
+Você precisa ter uma conta num núcleo Quassel para usar esta aplicação. Se você não tem nenhum, pode criar o seu próprio núcleo ou tentar onter uma conta no núcleo de outra pessoa.
+
+Esta aplicação só funciona com núcleos que utilizam pelo menos o Quassel v0.10. Para que todas as funcionalidades estejam disponíveis, você precisará do Quassel v0.13
+
+Para aprender sobre como configurar um núcleo quassel, veja <a href="http://bugs.quassel-irc.org/projects/quassel-irc/wiki">a wiki</a>
+
+<b>Contacto:</b>
+
+Você pode nos encontrar no #quasseldroid na Freenode ou entrar em contato conosco através do support@kuschku.de

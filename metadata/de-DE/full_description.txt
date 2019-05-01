@@ -1,0 +1,20 @@
+Chat comfortably. Everywhere.
+
+
+BENÖTIGT EINEN QUASSEL CORE – FUNKTIONIERT NICHT OHNE
+
+• <b>Benutze IRC unterwegs</b> – dank des Quassel Cores wirst du nichts verpassen
+• <b>Habe immer alle deine Chats in der Hosentasche</b> – einfach hochscrollen um das zu laden, was du verpasst hast
+• <b>Benachrichtigungen, wenn dich jemand anschreibt oder erwähnt</b> – selbst wenn du währenddessen offline warst
+
+<b>Anforderungen:</b>
+
+Du benötigst einen Account auf einem Quassel Core, um diese App zu nutzen. Wenn du noch keinen hast, kannst du dir entweder einen eigenen Core aufsetzen, oder versuchen, einen Account auf dem Core von jemand anderem zu bekommen.
+
+Diese App benötigt einen Quassel Core Version 0.10 oder neuer, damit alle Features verfügbar sind wird Quassel Version 0.13 benötigt.
+
+Um zu lernen, wie du einen Quassel Core selber aufsetzt, lies <a href="http://bugs.quassel-irc.org/projects/quassel-irc/wiki">das Wiki</a>.
+
+<b>Kontakt:</b>
+
+Du kannst uns in #quasseldroid auf Freenode finden, oder uns eine E-Mail an support@kuschku.de schicken

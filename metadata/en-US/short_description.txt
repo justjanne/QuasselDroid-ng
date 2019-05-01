@@ -1,0 +1,3 @@
+Chat comfortably. Everywhere.
+
+REQUIRES A QUASSEL CORE
