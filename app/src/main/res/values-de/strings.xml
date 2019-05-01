@@ -28,6 +28,7 @@
   <string name="label_about">Über</string>
   <string name="label_accept">Akzeptieren</string>
   <string name="label_acknowledgements">Danksagungen</string>
+  <string name="label_archived_chats">Archivierte Chats</string>
   <string name="label_ascending">Aufsteigend</string>
   <string name="label_authors">Autoren</string>
   <string name="label_autocomplete">Autovervollständigung</string>
@@ -102,6 +103,8 @@
   <string name="label_password_new">Neues Passwort</string>
   <string name="label_password_old">Altes Passwort</string>
   <string name="label_password_repeat">Passwort wiederholen</string>
+  <string name="label_permanently_archived">Dauerhaft Archiviert</string>
+  <string name="label_permanently_archived_long">Dauerhaft archivierte Chats werden erst wieder angezeigt, wenn du sie manuell wieder aktivierst.</string>
   <string name="label_placeholder_message">Nachricht schreiben…</string>
   <string name="label_placeholder_topic">Beschreib das Thema des Kanals…</string>
   <string name="label_privacy_policy">Datenschutzerklärung</string>
@@ -109,6 +112,7 @@
   <string name="label_query_long">Öffnet einen privaten Chat</string>
   <string name="label_query_medium">Privaten Chat öffnen</string>
   <string name="label_rename">Umbenennen</string>
+  <string name="label_reorder">Sortieren</string>
   <string name="label_reply">Antworten</string>
   <string name="label_reset">Zurücksetzen</string>
   <string name="label_save">Speichern</string>
@@ -130,6 +134,8 @@
   <string name="label_show_hidden">Alle anzeigen</string>
   <string name="label_sort">Sortieren</string>
   <string name="label_source">Quellcode</string>
+  <string name="label_temporarily_archived">Temporär Archiviert</string>
+  <string name="label_temporarily_archived_long">Chats die nur temporär archiviert wurden werden wieder angezeigt, sobald sie eine neue Nachricht haben</string>
   <string name="label_topic">Kanal-Thema</string>
   <string name="label_translators">Übersetzer</string>
   <string name="label_unhide">Nicht mehr ausblenden</string>

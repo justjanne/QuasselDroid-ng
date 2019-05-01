@@ -7,7 +7,7 @@ BENÖTIGT EINEN QUASSEL CORE – FUNKTIONIERT NICHT OHNE
 • <b>Habe immer alle deine Chats in der Hosentasche</b> – einfach hochscrollen um das zu laden, was du verpasst hast
 • <b>Benachrichtigungen, wenn dich jemand anschreibt oder erwähnt</b> – selbst wenn du währenddessen offline warst
 
-Wenn du nach dem Komfort suchst, den du von modernen Chat Apps wie Slack kennst, ist Quasseldroid der beste freie Android IRC Client für dich — mit Profilbildern, einem UI basierend auf Material Design, und all den Features die du liebst.
+Wenn du nach dem Komfort suchst, den du von modernen Chat Apps wie Slack kennst, ist Quasseldroid der beste freie Android IRC Client für dich — mit Profilbildern, einem UI basierend auf Material Design, und all den Features, die du liebst.
 
 Und das Beste an all dem: Es ist komplett umsonst und Open Source.
 
@@ -19,4 +19,4 @@ Diese App benötigt einen Quassel Core Version 0.10 oder neuer, damit alle Featu
 
 Um zu lernen, wie du einen Quassel Core selber aufsetzt, lies <a href="http://bugs.quassel-irc.org/projects/quassel-irc/wiki">das Wiki</a>.
 
-<b>Hast du Probleme oder Anregungen?</b> Schreib uns eine email an support@kuschku.de
+<b>Hast du Probleme oder Anregungen?</b> Schreib uns eine E-Mail an support@kuschku.de
