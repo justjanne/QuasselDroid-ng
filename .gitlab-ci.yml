@@ -71,4 +71,4 @@ deploy-beta:
   script:
   - "echo $FASTLANE_CONFIG | base64 -d > $HOME/key.json"
   - "export VERSION=$(ls *.apk)"
-  - "fastlane supply --apk $VERSION --track beta --json_key $HOME/key.json --package_name com.iskrembilen.quasseldroid"
+  - "fastlane supply --apk $VERSION --track beta --json_key $HOME/key.json --package_name com.iskrembilen.quasseldroid --skip_upload_metadata=true --skip_upload_images=true --skip_upload_screenshots=true"
