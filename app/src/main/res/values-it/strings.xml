@@ -28,6 +28,7 @@
   <string name="label_about">Informazioni</string>
   <string name="label_accept">Accetta</string>
   <string name="label_acknowledgements">Ringraziamenti</string>
+  <string name="label_archived_chats">Chat archiviate</string>
   <string name="label_ascending">Ascendente</string>
   <string name="label_authors">Autori</string>
   <string name="label_autocomplete">Completamento automatico</string>
@@ -102,6 +103,8 @@
   <string name="label_password_new">Nuova password</string>
   <string name="label_password_old">Vecchia password</string>
   <string name="label_password_repeat">Ripeti password</string>
+  <string name="label_permanently_archived">Archiviate permanentemente</string>
+  <string name="label_permanently_archived_long">Le chat che sono state archiviate permanentemente rimarranno nascoste finché non si provvederà manualmente a toglierle da questo stato.</string>
   <string name="label_placeholder_message">Scrivi un messaggio…</string>
   <string name="label_placeholder_topic">Descrivi l’argomento del canale…</string>
   <string name="label_privacy_policy">Informativa privacy</string>
@@ -109,6 +112,7 @@
   <string name="label_query_long">Apri conversazione privata con l’utente</string>
   <string name="label_query_medium">Apri conversazione privata</string>
   <string name="label_rename">Rinomina</string>
+  <string name="label_reorder">Riordina</string>
   <string name="label_reply">Rispondi</string>
   <string name="label_reset">Reimposta</string>
   <string name="label_save">Salva</string>
@@ -130,6 +134,8 @@
   <string name="label_show_hidden">Mostra nascosti</string>
   <string name="label_sort">Ordina</string>
   <string name="label_source">Sorgente</string>
+  <string name="label_temporarily_archived">Archiviate temporaneamente</string>
+  <string name="label_temporarily_archived_long">Le chat che sono state archiviate temporaneamente torneranno visibili alla ricezione di un nuovo messaggio.</string>
   <string name="label_topic">Argomento del canale</string>
   <string name="label_translators">Traduttori</string>
   <string name="label_unhide">Rendi visibile</string>

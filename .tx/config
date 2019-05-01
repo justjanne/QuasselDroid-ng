@@ -9,7 +9,7 @@ trans.de = metadata/de-DE/full_description.txt
 trans.fr_CA = metadata/fr-CA/full_description.txt
 trans.it = metadata/it-IT/full_description.txt
 trans.lt = metadata/lt/full_description.txt
-trans.nl = metadata/nl/full_description.txt
+trans.nl = metadata/nl-NL/full_description.txt
 trans.pt = metadata/pt-PT/full_description.txt
 trans.sr = metadata/sr/full_description.txt
 
@@ -21,7 +21,7 @@ trans.de = metadata/de-DE/short_description.txt
 trans.fr_CA = metadata/fr-CA/short_description.txt
 trans.it = metadata/it-IT/short_description.txt
 trans.lt = metadata/lt/short_description.txt
-trans.nl = metadata/nl/short_description.txt
+trans.nl = metadata/nl-NL/short_description.txt
 trans.pt = metadata/pt-PT/short_description.txt
 trans.sr = metadata/sr/short_description.txt
 
