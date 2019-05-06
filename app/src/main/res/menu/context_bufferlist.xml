@@ -19,6 +19,9 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
   <item
+    android:id="@+id/action_archived_chats"
+    android:title="@string/label_archived_chats" />
+  <item
     android:id="@+id/action_search"
     android:checkable="true"
     android:title="@string/label_search_buffer" />

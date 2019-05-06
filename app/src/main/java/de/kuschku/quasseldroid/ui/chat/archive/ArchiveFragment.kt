@@ -23,20 +23,36 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
+import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
+import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.viewmodel.helper.QuasselViewModelHelper
 import javax.inject.Inject
 
 class ArchiveFragment : ServiceBoundFragment() {
+  @BindView(R.id.list_temporary)
+  lateinit var listTemporary: RecyclerView
+
+  @BindView(R.id.list_permanently)
+  lateinit var listPermanently: RecyclerView
+
   @Inject
   lateinit var modelHelper: QuasselViewModelHelper
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-    val view = inflater.inflate(R.layout.add_join, container, false)
+    val view = inflater.inflate(R.layout.chat_archive, container, false)
     ButterKnife.bind(this, view)
+
+    val chatlistId = arguments?.getInt("chatlist_id", -1)
+
+    val chatlist = modelHelper.bufferViewConfigMap.map {
+      it[chatlistId]
+    }
 
     return view
   }

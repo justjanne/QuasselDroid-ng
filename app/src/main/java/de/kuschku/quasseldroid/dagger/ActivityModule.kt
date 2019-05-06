@@ -32,6 +32,8 @@ import de.kuschku.quasseldroid.ui.chat.add.join.ChannelJoinActivity
 import de.kuschku.quasseldroid.ui.chat.add.join.ChannelJoinFragmentProvider
 import de.kuschku.quasseldroid.ui.chat.add.query.QueryCreateActivity
 import de.kuschku.quasseldroid.ui.chat.add.query.QueryCreateFragmentProvider
+import de.kuschku.quasseldroid.ui.chat.archive.ArchiveActivity
+import de.kuschku.quasseldroid.ui.chat.archive.ArchiveFragmentProvider
 import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
 import de.kuschku.quasseldroid.ui.chat.topic.TopicFragmentProvider
 import de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity
@@ -104,6 +106,10 @@ abstract class ActivityModule {
   @ActivityScope
   @ContributesAndroidInjector(modules = [ChatActivityModule::class, ChatFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
   abstract fun bindChatActivity(): ChatActivity
+
+  @ActivityScope
+  @ContributesAndroidInjector(modules = [ArchiveFragmentProvider::class, SettingsModule::class, DatabaseModule::class, ActivityBaseModule::class])
+  abstract fun bindArchiveActivity(): ArchiveActivity
 
   // Info
 

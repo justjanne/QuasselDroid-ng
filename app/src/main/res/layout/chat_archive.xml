@@ -50,6 +50,7 @@
       android:text="@string/label_temporarily_archived_long" />
 
     <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/list_temporary"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       tools:listitem="@layout/widget_buffer_reorder" />
@@ -74,6 +75,7 @@
       android:text="@string/label_permanently_archived_long" />
 
     <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/list_permanently"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       tools:listitem="@layout/widget_buffer_reorder" />

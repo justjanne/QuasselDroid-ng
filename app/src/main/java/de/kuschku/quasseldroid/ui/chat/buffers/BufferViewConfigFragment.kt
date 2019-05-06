@@ -63,6 +63,7 @@ import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.ui.chat.add.create.ChannelCreateActivity
 import de.kuschku.quasseldroid.ui.chat.add.join.ChannelJoinActivity
 import de.kuschku.quasseldroid.ui.chat.add.query.QueryCreateActivity
+import de.kuschku.quasseldroid.ui.chat.archive.ArchiveActivity
 import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
 import de.kuschku.quasseldroid.ui.info.channellist.ChannelListActivity
 import de.kuschku.quasseldroid.util.ColorContext
@@ -488,6 +489,10 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     chatListToolbar.menu.findItem(R.id.action_search).isChecked = modelHelper.chat.bufferSearchTemporarilyVisible.value
     chatListToolbar.setOnMenuItemClickListener { item ->
       when (item.itemId) {
+        R.id.action_archived_chats -> {
+          ArchiveActivity.launch(requireContext(), chatlistId = modelHelper.chat.bufferViewConfigId.value)
+          true
+        }
         R.id.action_search      -> {
           item.isChecked = !item.isChecked
           modelHelper.chat.bufferSearchTemporarilyVisible.onNext(item.isChecked)
