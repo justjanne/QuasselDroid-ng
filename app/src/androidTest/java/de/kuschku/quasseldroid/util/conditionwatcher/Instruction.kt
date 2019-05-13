@@ -17,12 +17,22 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.app
+package de.kuschku.quasseldroid.util.conditionwatcher
 
-interface AppDelegate {
-  fun shouldInit(): Boolean
-  fun onAttachBaseContext()
-  fun onPreInit()
-  fun onInit()
-  fun onPostInit()
+import androidx.test.platform.app.InstrumentationRegistry
+import de.kuschku.quasseldroid.QuasseldroidAndroidTest
+
+class Instruction(
+  val description: String,
+  private val condition: InstructionContext.() -> Boolean
+) {
+  fun checkCondition(): Boolean = condition.invoke(InstructionContext)
+
+  object InstructionContext {
+    val application
+      get() = (InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as QuasseldroidAndroidTest)
+
+    val activity
+      get() = application.activityLifecycleHandler.currentActivity
+  }
 }

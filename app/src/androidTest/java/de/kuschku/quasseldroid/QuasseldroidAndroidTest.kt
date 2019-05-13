@@ -17,12 +17,17 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.app
+package de.kuschku.quasseldroid
 
-interface AppDelegate {
-  fun shouldInit(): Boolean
-  fun onAttachBaseContext()
-  fun onPreInit()
-  fun onInit()
-  fun onPostInit()
+import de.kuschku.quasseldroid.app.QuasseldroidBaseDelegate
+
+class QuasseldroidAndroidTest : Quasseldroid() {
+  val activityLifecycleHandler = ActivityLifecycleHandler()
+
+  override val delegate = QuasseldroidBaseDelegate(this)
+
+  override fun onCreate() {
+    super.onCreate()
+    registerActivityLifecycleCallbacks(activityLifecycleHandler)
+  }
 }

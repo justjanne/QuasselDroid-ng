@@ -194,6 +194,8 @@ class AccountAdapter(
   }
 
   sealed class AccountViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    internal var data: Account? = null
+
     class Item(itemView: View, actionListener: ItemListener, clickListener: ItemListener)
       : AccountViewHolder(itemView) {
       @BindView(R.id.account_name)
@@ -208,20 +210,18 @@ class AccountAdapter(
       @BindView(R.id.account_edit)
       lateinit var accountEdit: AppCompatImageButton
 
-      private var id = -1L
-
       init {
         ButterKnife.bind(this, itemView)
         accountEdit.setOnClickListener {
-          actionListener.onAction(id, adapterPosition)
+          actionListener.onAction(data?.id ?: -1L, adapterPosition)
         }
         itemView.setOnClickListener {
-          clickListener.onAction(id, adapterPosition)
+          clickListener.onAction(data?.id ?: -1L, adapterPosition)
         }
       }
 
       fun bind(account: Account, selected: Boolean) {
-        id = account.id
+        data = account
         accountName.text = account.name
         accountDescription.text = itemView.context.resources.getString(
           R.string.label_user_on_host, account.user, account.host, account.port
@@ -230,7 +230,7 @@ class AccountAdapter(
       }
 
       fun clear() {
-        id = -1L
+        data = null
         accountName.text = ""
         accountDescription.text = ""
         accountSelect.isChecked = false

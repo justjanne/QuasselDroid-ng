@@ -34,6 +34,7 @@ open class Quasseldroid : DaggerApplication() {
     super.onCreate()
     if (delegate.shouldInit()) {
       delegate.onInit()
+      delegate.onPreInit()
       applicationInjector().inject(this)
       delegate.onPostInit()
     }
@@ -41,6 +42,6 @@ open class Quasseldroid : DaggerApplication() {
 
   override fun attachBaseContext(base: Context) {
     super.attachBaseContext(LocaleHelper.setLocale(base))
-    delegate.onInstallMultidex()
+    delegate.onAttachBaseContext()
   }
 }

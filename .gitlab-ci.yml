@@ -35,7 +35,7 @@ build:
 test:
   stage: "test"
   script:
-  - "./gradlew check"
+    - "./gradlew check -x connectedCheck"
   artifacts:
     reports:
       junit: "*/build/test-results/*/TEST-*.xml"

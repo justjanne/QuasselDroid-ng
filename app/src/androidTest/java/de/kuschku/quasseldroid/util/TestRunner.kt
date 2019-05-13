@@ -17,12 +17,22 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.app
+package de.kuschku.quasseldroid.util
 
-interface AppDelegate {
-  fun shouldInit(): Boolean
-  fun onAttachBaseContext()
-  fun onPreInit()
-  fun onInit()
-  fun onPostInit()
+import android.app.Application
+import android.content.Context
+import androidx.test.runner.AndroidJUnitRunner
+import de.kuschku.quasseldroid.Quasseldroid
+import de.kuschku.quasseldroid.QuasseldroidAndroidTest
+
+class TestRunner : AndroidJUnitRunner() {
+  override fun newApplication(cl: ClassLoader?, className: String?,
+                              context: Context?): Application {
+    return super.newApplication(
+      cl,
+      if (className == Quasseldroid::class.java.canonicalName) QuasseldroidAndroidTest::class.java.canonicalName
+      else className,
+      context
+    )
+  }
 }

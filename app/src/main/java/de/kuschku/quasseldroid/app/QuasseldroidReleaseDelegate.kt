@@ -21,8 +21,6 @@ package de.kuschku.quasseldroid.app
 
 import android.os.Build
 import android.os.StrictMode
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.multidex.MultiDex
 import com.squareup.leakcanary.LeakCanary
 import de.kuschku.malheur.CrashHandler
 import de.kuschku.quasseldroid.BuildConfig
@@ -34,45 +32,26 @@ import de.kuschku.quasseldroid.persistence.models.Account
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.SettingsMigration
 import de.kuschku.quasseldroid.settings.SettingsMigrationManager
-import de.kuschku.quasseldroid.util.backport.AndroidThreeTenBackport
-import de.kuschku.quasseldroid.util.compatibility.AndroidCompatibilityUtils
-import de.kuschku.quasseldroid.util.compatibility.AndroidLoggingHandler
-import de.kuschku.quasseldroid.util.compatibility.AndroidStreamChannelFactory
 
-class QuasseldroidReleaseDelegate(private val app: Quasseldroid) :
-  AppDelegate {
+class QuasseldroidReleaseDelegate(private val app: Quasseldroid) : QuasseldroidBaseDelegate(app) {
   override fun shouldInit() = !LeakCanary.isInAnalyzerProcess(app)
 
-  override fun onInit() {
+  override fun onPreInit() {
     LeakCanary.install(app)
-    // Normal app init code...
-
     CrashHandler.init<BuildConfig>(application = app)
-
-    // Init compatibility utils
-    AndroidCompatibilityUtils.inject()
-    AndroidLoggingHandler.inject()
-    AndroidStreamChannelFactory.inject()
-
-    AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-
-    AndroidThreeTenBackport.init(app)
   }
 
   override fun onPostInit() {
     // Migrate preferences
     SettingsMigrationManager(
       listOf(
-        SettingsMigration.migrationOf(0,
-                                      1) { prefs, edit ->
+        SettingsMigration.migrationOf(0, 1) { prefs, edit ->
           // Migrating database
-          val database = LegacyAccountDatabase.Creator.init(
-            app)
+          val database = LegacyAccountDatabase.Creator.init(app)
           val accounts = database.accounts().all()
           database.close()
 
-          val accountDatabase = AccountDatabase.Creator.init(
-            app)
+          val accountDatabase = AccountDatabase.Creator.init(app)
           accountDatabase.accounts().create(*accounts.map {
             Account(
               id = it.id,
@@ -203,12 +182,6 @@ class QuasseldroidReleaseDelegate(private val app: Quasseldroid) :
           .penaltyLog()
           .build()
       )
-    }
-  }
-
-  override fun onInstallMultidex() {
-    if (BuildConfig.DEBUG) {
-      MultiDex.install(app)
     }
   }
 }

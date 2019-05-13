@@ -21,7 +21,8 @@ package de.kuschku.quasseldroid.app
 
 class QuasseldroidTestDelegate : AppDelegate {
   override fun shouldInit() = true
-  override fun onInstallMultidex() = Unit
+  override fun onAttachBaseContext() = Unit
+  override fun onPreInit() = Unit
   override fun onInit() = Unit
   override fun onPostInit() = Unit
 }

@@ -61,6 +61,7 @@ android {
     testInstrumentationRunnerArguments = mapOf(
       "disableAnalytics" to "true"
     )
+    testInstrumentationRunner = "de.kuschku.quasseldroid.util.TestRunner"
   }
 
   buildTypes {
@@ -188,4 +189,11 @@ dependencies {
   testImplementation("org.robolectric", "robolectric", "4.2") {
     exclude(group = "org.threeten", module = "threetenbp")
   }
+
+  androidTestImplementation("junit", "junit", "4.12")
+  androidTestImplementation("androidx.test.espresso", "espresso-core", "3.1.0")
+  androidTestImplementation("androidx.test.espresso", "espresso-contrib", "3.1.0")
+  androidTestImplementation("androidx.test.ext", "junit", "1.1.0")
+  androidTestImplementation("androidx.test", "runner", "1.1.0")
+  androidTestImplementation("androidx.test", "rules", "1.1.0")
 }

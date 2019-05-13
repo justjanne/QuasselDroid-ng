@@ -17,12 +17,10 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.app
+package de.kuschku.quasseldroid.util
 
-interface AppDelegate {
-  fun shouldInit(): Boolean
-  fun onAttachBaseContext()
-  fun onPreInit()
-  fun onInit()
-  fun onPostInit()
+import org.hamcrest.Matcher
+
+fun <T> T?.matches(vararg matchers: Matcher<T>): Boolean = this != null && matchers.all {
+  it.matches(this)
 }
