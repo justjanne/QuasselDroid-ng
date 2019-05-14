@@ -28,7 +28,6 @@ import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
-import de.kuschku.libquassel.session.Error
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.ObjectStorage
 import de.kuschku.libquassel.session.ProtocolHandler
@@ -153,10 +152,12 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
   override val proxy = this
   override val objectStorage = ObjectStorage(this)
 
-  override val error: Observable<Error> = Observable.empty()
-  override val connectionError: Observable<Throwable> = Observable.empty()
+  override val progress = ISession.ProgressData(
+    state = BehaviorSubject.createDefault(ConnectionState.CONNECTED),
+    progress = BehaviorSubject.createDefault(Pair(0, 0)),
+    error = Observable.empty()
+  )
 
-  override val state = BehaviorSubject.createDefault(ConnectionState.CONNECTED)
   override val features = Features.all()
   override val sslSession = BehaviorSubject.createDefault(Optional.empty<SSLSession>())
 
@@ -227,8 +228,6 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
   override val networkConfig = NetworkConfig(this)
 
   override val rpcHandler = RpcHandler(this)
-
-  override val initStatus = BehaviorSubject.createDefault(0 to 0)
 
   override val lag = BehaviorSubject.createDefault(0L)
 
