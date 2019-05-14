@@ -19,7 +19,7 @@
 
 package de.kuschku.libquassel.util.flag
 
-import de.kuschku.libquassel.util.helpers.sum
+import de.kuschku.libquassel.util.helper.sum
 import java.io.Serializable
 
 interface Flag<T> : Serializable where T : Enum<T>, T : Flag<T> {

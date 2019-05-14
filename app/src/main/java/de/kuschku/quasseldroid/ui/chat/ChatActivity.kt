@@ -56,12 +56,16 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.
 import de.kuschku.libquassel.session.Error
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import de.kuschku.libquassel.util.flag.and
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.minus
 import de.kuschku.libquassel.util.flag.or
-import de.kuschku.libquassel.util.helpers.nullIf
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.invoke
+import de.kuschku.libquassel.util.helper.nullIf
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.DefaultNetworkServer
@@ -206,7 +210,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
           val forceJoin = intent.getBooleanExtra(KEY_FORCE_JOIN, false)
 
-          modelHelper.session.filter(Optional<ISession>::isPresent).firstElement().subscribe {
+          modelHelper.connectedSession.filter(Optional<ISession>::isPresent).firstElement().subscribe {
             it.orNull()?.also { session ->
               val info = session.bufferSyncer.find(
                 bufferName = channel,
@@ -249,7 +253,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
           val forceJoin = intent.getBooleanExtra(KEY_FORCE_JOIN, false)
 
-          modelHelper.session.filter(Optional<ISession>::isPresent).firstElement().subscribe {
+          modelHelper.connectedSession.filter(Optional<ISession>::isPresent).firstElement().subscribe {
             it.orNull()?.also { session ->
               val info = session.bufferSyncer.find(
                 bufferName = channel,
@@ -465,7 +469,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     modelHelper.errors.toLiveData(BackpressureStrategy.BUFFER).observe(this, Observer { error ->
       error?.let {
         when (it) {
-          is Error.HandshakeError -> it.message.let {
+          is Error.HandshakeError  -> it.message.let {
             when (it) {
               is HandshakeMessage.ClientInitAck     ->
                 if (it.coreConfigured == false)
@@ -530,7 +534,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                               val user = userField.text.toString()
                               val pass = passField.text.toString()
 
-                              backend.value.orNull()?.updateUserDataAndLogin(user, pass)
+                              backend.value?.orNull()?.updateUserDataAndLogin(user, pass)
                             }
                           }
                           .titleColorAttr(R.attr.colorTextPrimary)
@@ -555,7 +559,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                   .show()
             }
           }
-          is Error.SslError       -> {
+          is Error.SslError        -> {
             it.exception.let {
               if (it == QuasselSecurityException.NoSsl) {
                 // Ssl is required but not available
@@ -616,7 +620,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                             )
 
                             runOnUiThread {
-                              backend.value.orNull()?.reconnect()
+                              log(INFO, "ChatActivity", "Reconnect triggered: User action")
+                              backend.value?.orNull()?.autoConnect(ignoreErrors = true)
                             }
                           }
                         }
@@ -661,7 +666,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                             }
 
                             runOnUiThread {
-                              backend.value.orNull()?.reconnect()
+                              log(INFO, "ChatActivity", "Reconnect triggered: User action")
+                              backend.value?.orNull()?.autoConnect(ignoreErrors = true)
                             }
                           }
                         }
@@ -699,7 +705,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                             )
 
                             runOnUiThread {
-                              backend.value.orNull()?.reconnect()
+                              log(INFO, "ChatActivity", "Reconnect triggered: User action")
+                              backend.value?.orNull()?.autoConnect(ignoreErrors = true)
                             }
                           }
                         }
@@ -714,51 +721,49 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
               }
             }
           }
-        }
-      }
-    })
+          is Error.ConnectionError -> {
+            it.throwable.let {
+              val cause = it.cause
+              when {
+                it is UnknownHostException         -> {
+                  val host = it.message?.replace("Host is unresolved: ", "")
 
-    // Connection errors that should show up as toast
-    modelHelper.connectionErrors.toLiveData().observe(this, Observer { error ->
-      error?.let {
-        val cause = it.cause
-        when {
-          it is UnknownHostException         -> {
-            val host = it.message?.replace("Host is unresolved: ", "")
+                  Toast.makeText(this,
+                                 getString(R.string.label_error_unknown_host, host),
+                                 Toast.LENGTH_LONG).show()
+                }
+                it is ProtocolVersionException     -> {
+                  Toast.makeText(this,
+                                 getString(R.string.label_error_invalid_protocol_version,
+                                           it.protocol.version.toInt()),
+                                 Toast.LENGTH_LONG).show()
+                }
+                it is ConnectException &&
+                cause is libcore.io.ErrnoException -> {
+                  val errorCode = OsConstants.errnoName(cause.errno)
+                  val errorName = OsConstants.strerror(cause.errno)
 
-            Toast.makeText(this,
-                           getString(R.string.label_error_unknown_host, host),
-                           Toast.LENGTH_LONG).show()
-          }
-          it is ProtocolVersionException     -> {
-            Toast.makeText(this,
-                           getString(R.string.label_error_invalid_protocol_version,
-                                     it.protocol.version.toInt()),
-                           Toast.LENGTH_LONG).show()
-          }
-          it is ConnectException &&
-          cause is libcore.io.ErrnoException -> {
-            val errorCode = OsConstants.errnoName(cause.errno)
-            val errorName = OsConstants.strerror(cause.errno)
+                  Toast.makeText(this,
+                                 getString(R.string.label_error_connection, errorName, errorCode),
+                                 Toast.LENGTH_LONG).show()
+                }
+                it is ConnectException &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
+                cause is ErrnoException            -> {
+                  val errorCode = OsConstants.errnoName(cause.errno)
+                  val errorName = OsConstants.strerror(cause.errno)
 
-            Toast.makeText(this,
-                           getString(R.string.label_error_connection, errorName, errorCode),
-                           Toast.LENGTH_LONG).show()
-          }
-          it is ConnectException &&
-          Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-          cause is ErrnoException            -> {
-            val errorCode = OsConstants.errnoName(cause.errno)
-            val errorName = OsConstants.strerror(cause.errno)
-
-            Toast.makeText(this,
-                           getString(R.string.label_error_connection, errorName, errorCode),
-                           Toast.LENGTH_LONG).show()
-          }
-          else                               -> {
-            Toast.makeText(this,
-                           getString(R.string.label_error_connection_closed),
-                           Toast.LENGTH_LONG).show()
+                  Toast.makeText(this,
+                                 getString(R.string.label_error_connection, errorName, errorCode),
+                                 Toast.LENGTH_LONG).show()
+                }
+                else                               -> {
+                  Toast.makeText(this,
+                                 getString(R.string.label_error_connection_closed),
+                                 Toast.LENGTH_LONG).show()
+                }
+              }
+            }
           }
         }
       }
@@ -777,7 +782,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
             drawerLayout.openDrawer(GravityCompat.START)
           }
           connectedAccount = accountId
-          modelHelper.session.value?.orNull()?.let { session ->
+          modelHelper.connectedSession.value?.orNull()?.let { session ->
             if (session.identities.isEmpty()) {
               UserSetupActivity.launch(this)
             }
@@ -808,9 +813,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
     connectionStatusDisplay.setOnClickListener {
       modelHelper.sessionManager.value?.orNull()?.apply {
-        ifDisconnected {
-          autoReconnect()
-        }
+        log(INFO, "ChatActivity", "Reconnect triggered: User action")
+        backend.value?.orNull()?.autoConnect(ignoreErrors = true, ignoreSetting = true)
       }
     }
 

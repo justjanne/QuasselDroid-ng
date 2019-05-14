@@ -26,7 +26,7 @@ import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.persistence.dao.findFirstByBufferId
 import de.kuschku.quasseldroid.persistence.dao.get
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase

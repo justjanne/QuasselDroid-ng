@@ -40,7 +40,7 @@ import com.bumptech.glide.util.FixedPreloadSizeProvider
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.GlideApp
@@ -193,7 +193,7 @@ class NickListFragment : ServiceBoundFragment() {
   }
 
   private val clickListener: ((NetworkId, String) -> Unit) = { networkId, nick ->
-    modelHelper.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
+    modelHelper.connectedSession.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
       UserInfoActivity.launch(
         requireContext(),
         openBuffer = false,

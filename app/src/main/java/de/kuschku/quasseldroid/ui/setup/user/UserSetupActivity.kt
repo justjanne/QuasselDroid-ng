@@ -27,7 +27,7 @@ import androidx.lifecycle.Observer
 import de.kuschku.libquassel.protocol.IdentityId
 import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.DefaultNetwork
 import de.kuschku.quasseldroid.defaults.Defaults
@@ -51,7 +51,7 @@ class UserSetupActivity : ServiceBoundSetupActivity() {
     val network = data.getSerializable("network") as? DefaultNetwork
     if (network != null) {
       modelHelper.backend?.value?.ifPresent { backend ->
-        modelHelper.session.value?.orNull()?.rpcHandler?.apply {
+        modelHelper.connectedSession.value?.orNull()?.rpcHandler?.apply {
           createIdentity(Defaults.identity(this@UserSetupActivity).apply {
             setIdentityName(this@UserSetupActivity.getString(R.string.default_identity_identity_name))
             setNicks(listOf(data.getString("nick")))

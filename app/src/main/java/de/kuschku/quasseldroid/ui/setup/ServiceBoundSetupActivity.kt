@@ -34,9 +34,9 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.android.support.DaggerAppCompatActivity
-import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.util.Optional
-import de.kuschku.libquassel.util.helpers.nullIf
+import de.kuschku.libquassel.util.helper.nullIf
+import de.kuschku.quasseldroid.Backend
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
@@ -82,13 +82,13 @@ abstract class ServiceBoundSetupActivity :
   protected open val initData: Bundle = Bundle()
 
   protected fun runInBackground(f: () -> Unit) {
-    connection.backend.value.ifPresent {
+    connection.backend.value?.ifPresent {
       it.sessionManager()?.handlerService?.backend(f)
     }
   }
 
   protected fun runInBackgroundDelayed(delayMillis: Long, f: () -> Unit) {
-    connection.backend.value.ifPresent {
+    connection.backend.value?.ifPresent {
       it.sessionManager()?.handlerService?.backendDelayed(delayMillis, f)
     }
   }

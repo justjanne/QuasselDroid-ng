@@ -20,20 +20,18 @@
 package de.kuschku.libquassel.session
 
 import de.kuschku.libquassel.connection.ConnectionState
-import de.kuschku.libquassel.connection.HostnameVerifier
-import de.kuschku.libquassel.connection.SocketAddress
-import de.kuschku.libquassel.protocol.ClientData
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.quassel.syncables.interfaces.invokers.Invokers
+import de.kuschku.libquassel.session.manager.ConnectionInfo
+import de.kuschku.libquassel.session.manager.SessionState
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.*
-import de.kuschku.libquassel.util.helpers.or
+import de.kuschku.libquassel.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.or
+import de.kuschku.libquassel.util.helper.value
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
-import io.reactivex.subjects.BehaviorSubject
-import javax.net.ssl.X509TrustManager
 
 class SessionManager(
   offlineSession: ISession,
@@ -42,7 +40,21 @@ class SessionManager(
   val handlerService: HandlerService,
   private val heartBeatFactory: () -> HeartBeatRunner,
   private val exceptionHandler: (Throwable) -> Unit
-) {
+) : SessionStateHandler(SessionState(offlineSession, null, null)) {
+  // Stateful fields
+  private var lastConnectionInfo: ConnectionInfo? = null
+  private var hasErrored: Boolean = false
+
+  private val disposables = mutableListOf<Disposable>()
+
+  // Helping Rx Mappers
+  val connectionProgress: Observable<Triple<ConnectionState, Int, Int>> = progressData.switchMap {
+    combineLatest(it.state, it.progress).map { (state, progress) ->
+      Triple(state, progress.first, progress.second)
+    }
+  }
+
+  // Listeners
   private var disconnectFromCore: (() -> Unit)? = null
   private var initCallback: ((Session) -> Unit)? = null
 
@@ -54,52 +66,12 @@ class SessionManager(
     this.initCallback = callback
   }
 
-  fun close() = session.or(lastSession).close()
-
-  data class ConnectionInfo(
-    val clientData: ClientData,
-    val trustManager: X509TrustManager,
-    val hostnameVerifier: HostnameVerifier,
-    val address: SocketAddress,
-    val userData: Pair<String, String>,
-    val requireSsl: Boolean,
-    val shouldReconnect: Boolean
-  )
-
-  private var lastConnectionInfo: ConnectionInfo? = null
-
-  private var inProgressSession = BehaviorSubject.createDefault(ISession.NULL)
-  private var lastSession: ISession = offlineSession
-  val state: Observable<ConnectionState> = inProgressSession.switchMap(ISession::state)
-
-  private val initStatus: Observable<Pair<Int, Int>> = inProgressSession.switchMap(ISession::initStatus)
-  val session: Observable<ISession> = state.map { connectionState ->
-    if (connectionState == ConnectionState.CONNECTED)
-      inProgressSession.value
-    else
-      lastSession
-  }
-
-  private var hasErrored: Boolean = false
-
-  val error = inProgressSession.switchMap(ISession::error)
-
-  val connectionError = inProgressSession.switchMap(ISession::connectionError)
-
-  val connectionProgress: Observable<Triple<ConnectionState, Int, Int>> = Observable.combineLatest(
-    state, initStatus,
-    BiFunction<ConnectionState, Pair<Int, Int>, Triple<ConnectionState, Int, Int>> { t1, t2 ->
-      Triple(t1, t2.first, t2.second)
-    })
-
-  val disposables = mutableListOf<Disposable>()
-
   init {
     log(INFO, "Session", "Session created")
 
-    disposables.add(state.subscribe {
+    disposables.add(state.distinctUntilChanged().subscribe {
       if (it == ConnectionState.CONNECTED) {
-        lastSession.close()
+        updateStateConnected()
       }
     })
 
@@ -108,38 +80,35 @@ class SessionManager(
   }
 
   fun login(user: String, pass: String) {
-    inProgressSession.value.login(user, pass)
+    connectingSession.value?.login(user, pass)
   }
 
   fun setupCore(setupData: HandshakeMessage.CoreSetupData) {
-    inProgressSession.value.setupCore(setupData)
+    connectingSession.value?.setupCore(setupData)
   }
 
   fun connect(
     connectionInfo: ConnectionInfo
   ) {
     log(DEBUG, "SessionManager", "Connecting")
-    inProgressSession.value.close()
     lastConnectionInfo = connectionInfo
     hasErrored = false
-    inProgressSession.onNext(
-      Session(
-        connectionInfo.address,
-        connectionInfo.userData,
-        connectionInfo.requireSsl,
-        connectionInfo.trustManager,
-        connectionInfo.hostnameVerifier,
-        connectionInfo.clientData,
-        handlerService,
-        heartBeatFactory,
-        disconnectFromCore,
-        initCallback,
-        exceptionHandler,
-        ::hasErroredCallback,
-        notificationManager,
-        backlogStorage
-      )
-    )
+    updateStateConnecting(Session(
+      connectionInfo.address,
+      connectionInfo.userData,
+      connectionInfo.requireSsl,
+      connectionInfo.trustManager,
+      connectionInfo.hostnameVerifier,
+      connectionInfo.clientData,
+      handlerService,
+      heartBeatFactory,
+      disconnectFromCore,
+      initCallback,
+      exceptionHandler,
+      ::hasErroredCallback,
+      notificationManager,
+      backlogStorage
+    ))
   }
 
   fun hasErroredCallback(error: Error) {
@@ -147,52 +116,41 @@ class SessionManager(
     hasErrored = true
   }
 
-  /**
-   * @return if an autoreconnect has been necessary
-   */
-  fun autoReconnect(forceReconnect: Boolean = false) = if (!hasErrored) {
-    state.or(ConnectionState.DISCONNECTED).let {
-      if (it == ConnectionState.CLOSED) {
-        log(INFO, "SessionManager", "Autoreconnect triggered")
-        reconnect(forceReconnect)
-        true
-      } else {
-        log(INFO, "SessionManager", "Autoreconnect failed: state is $it")
-        false
-      }
+  fun autoConnect(
+    ignoreConnectionState: Boolean = false,
+    ignoreSetting: Boolean = false,
+    ignoreErrors: Boolean = false,
+    connectionInfo: ConnectionInfo? = lastConnectionInfo
+  ): Boolean {
+    if (connectionInfo == null) {
+      log(INFO, "SessionManager", "Reconnect failed: not enough data available")
+      return false
     }
-  } else {
-    log(INFO, "SessionManager", "Autoreconnect failed: hasErrored")
-    false
-  }
 
-  fun reconnect(forceReconnect: Boolean = false) {
-    if (lastConnectionInfo?.shouldReconnect == true || forceReconnect) {
-      val connectionInfo = lastConnectionInfo
-
-      if (connectionInfo != null) {
-        connect(connectionInfo)
-      } else {
-        log(INFO, "SessionManager", "Reconnect failed: not enough data available")
-      }
-    } else {
+    if (!connectionInfo.shouldReconnect && !ignoreSetting) {
       log(INFO, "SessionManager", "Reconnect failed: reconnect not allowed")
+      return false
     }
+
+    val connectionState = state.or(ConnectionState.DISCONNECTED)
+    if (connectionState != ConnectionState.DISCONNECTED && !ignoreConnectionState) {
+      log(INFO, "SessionManager", "Reconnect failed: connection state is $connectionState")
+      return false
+    }
+
+    if (hasErrored && !ignoreErrors) {
+      log(INFO, "SessionManager", "Reconnect failed: errors have been thrown")
+      return false
+    }
+
+    log(INFO, "SessionManager", "Reconnect successful")
+    connect(connectionInfo)
+    return true
   }
 
   fun disconnect(forever: Boolean) {
-    if (forever)
-      backlogStorage.clearMessages()
-    inProgressSession.value.close()
-    inProgressSession.onNext(ISession.NULL)
-  }
-
-  fun ifDisconnected(closure: (ISession) -> Unit) {
-    state.or(ConnectionState.DISCONNECTED).let {
-      if (it == ConnectionState.CLOSED || it == ConnectionState.DISCONNECTED) {
-        closure(inProgressSession.value)
-      }
-    }
+    if (forever) backlogStorage.clearMessages()
+    updateStateOffline()
   }
 
   fun dispose() {

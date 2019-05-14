@@ -36,6 +36,7 @@ import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.quassel.syncables.Network
+import de.kuschku.libquassel.util.helper.combineLatest
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.coresettings.aliaslist.AliasListActivity
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistCreateActivity
@@ -49,7 +50,6 @@ import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
 import de.kuschku.quasseldroid.ui.coresettings.networkconfig.NetworkConfigActivity
 import de.kuschku.quasseldroid.ui.coresettings.passwordchange.PasswordChangeActivity
 import de.kuschku.quasseldroid.ui.info.core.CoreInfoActivity
-import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.missingfeatures.MissingFeature

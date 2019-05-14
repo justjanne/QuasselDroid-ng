@@ -19,11 +19,14 @@
 
 package de.kuschku.quasseldroid.service
 
-import android.content.*
-import android.net.ConnectivityManager
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.text.SpannableString
 import androidx.core.app.RemoteInput
 import androidx.lifecycle.Observer
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.connection.HostnameVerifier
 import de.kuschku.libquassel.connection.SocketAddress
@@ -31,16 +34,16 @@ import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
-import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.Session
 import de.kuschku.libquassel.session.SessionManager
-import de.kuschku.libquassel.util.compatibility.LoggingHandler
+import de.kuschku.libquassel.session.manager.ConnectionInfo
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
-import de.kuschku.libquassel.util.helpers.clampOf
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.clampOf
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.malheur.CrashHandler
+import de.kuschku.quasseldroid.Backend
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
@@ -64,9 +67,7 @@ import de.kuschku.quasseldroid.util.compatibility.AndroidHandlerService
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid.util.ui.LocaleHelper
-import io.reactivex.subjects.PublishSubject
 import org.threeten.bp.Instant
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.net.ssl.X509TrustManager
 
@@ -117,12 +118,14 @@ class QuasselService : DaggerLifecycleService(),
           backendImplementation.disconnect(true)
           stopSelf()
         } else {
-          backendImplementation.connectUnlessConnected(
-            SocketAddress(account.host, account.port),
-            account.user,
-            account.pass,
-            account.requireSsl,
-            true
+          backendImplementation.autoConnect(
+            connectionInfo = Backend.ConnectionInfo(
+              SocketAddress(account.host, account.port),
+              account.user,
+              account.pass,
+              account.requireSsl,
+              true
+            )
           )
         }
       }
@@ -185,7 +188,7 @@ class QuasselService : DaggerLifecycleService(),
           it.toString() to ircFormatSerializer.toEscapeCodes(SpannableString(it))
         }
 
-        sessionManager.session.value?.let { session ->
+        sessionManager.connectedSession.value?.let { session ->
           session.bufferSyncer.bufferInfo(bufferId)?.also { bufferInfo ->
             val output = mutableListOf<IAliasManager.Command>()
             for ((_, formatted) in lines) {
@@ -203,15 +206,17 @@ class QuasselService : DaggerLifecycleService(),
     } else {
       val clearMessageId = MsgId(intent.getLongExtra("mark_read_message", -1))
       if (bufferId.isValidId() && clearMessageId.isValidId()) {
-        sessionManager.session.value?.bufferSyncer?.requestSetLastSeenMsg(bufferId, clearMessageId)
-        sessionManager.session.value?.bufferSyncer?.requestMarkBufferAsRead(bufferId)
+        sessionManager.connectedSession.value?.bufferSyncer?.requestSetLastSeenMsg(bufferId,
+                                                                                   clearMessageId)
+        sessionManager.connectedSession.value?.bufferSyncer?.requestMarkBufferAsRead(bufferId)
       }
 
       val hideMessageId = MsgId(intent.getLongExtra("hide_message", -1))
       if (bufferId.isValidId() && hideMessageId.isValidId()) {
         if (notificationSettings.markReadOnSwipe) {
-          sessionManager.session.value?.bufferSyncer?.requestSetLastSeenMsg(bufferId, hideMessageId)
-          sessionManager.session.value?.bufferSyncer?.requestMarkBufferAsRead(bufferId)
+          sessionManager.connectedSession.value?.bufferSyncer?.requestSetLastSeenMsg(bufferId,
+                                                                                     hideMessageId)
+          sessionManager.connectedSession.value?.bufferSyncer?.requestMarkBufferAsRead(bufferId)
         } else {
           handlerService.backend {
             database.notifications().markHidden(bufferId, hideMessageId)
@@ -277,36 +282,32 @@ class QuasselService : DaggerLifecycleService(),
 
     override fun sessionManager() = service?.sessionManager
 
-    override fun connectUnlessConnected(address: SocketAddress, user: String, pass: String,
-                                        requireSsl: Boolean, reconnect: Boolean) {
+    override fun autoConnect(
+      ignoreConnectionState: Boolean,
+      ignoreSetting: Boolean,
+      ignoreErrors: Boolean,
+      connectionInfo: Backend.ConnectionInfo?
+    ) {
       service?.apply {
-        sessionManager.ifDisconnected {
-          connect(address, user, pass, requireSsl, reconnect)
-        }
-      }
-    }
-
-    override fun connect(address: SocketAddress, user: String, pass: String, requireSsl: Boolean,
-                         reconnect: Boolean) {
-      service?.apply {
-        disconnect()
-        sessionManager.connect(
-          SessionManager.ConnectionInfo(
-            clientData = clientData,
-            trustManager = trustManager,
-            hostnameVerifier = hostnameVerifier,
-            address = address,
-            userData = Pair(user, pass),
-            requireSsl = requireSsl,
-            shouldReconnect = reconnect
+        if (connectionInfo != null) {
+          sessionManager.autoConnect(
+            ignoreConnectionState,
+            ignoreSetting,
+            ignoreErrors,
+            ConnectionInfo(
+              clientData = clientData,
+              trustManager = trustManager,
+              hostnameVerifier = hostnameVerifier,
+              address = connectionInfo.address,
+              userData = Pair(connectionInfo.username,
+                              connectionInfo.password),
+              requireSsl = connectionInfo.requireSsl,
+              shouldReconnect = connectionInfo.shouldReconnect
+            )
           )
-        )
-      }
-    }
-
-    override fun reconnect() {
-      service?.apply {
-        sessionManager.reconnect()
+        } else {
+          sessionManager.autoConnect(ignoreConnectionState, ignoreSetting, ignoreErrors)
+        }
       }
     }
 
@@ -318,8 +319,8 @@ class QuasselService : DaggerLifecycleService(),
 
     override fun requestConnectNewNetwork() {
       service?.apply {
-        sessionManager.session.flatMap(ISession::liveNetworkAdded).firstElement().flatMap { id ->
-          sessionManager.session.flatMap(ISession::liveNetworks)
+        sessionManager.connectedSession.flatMap(ISession::liveNetworkAdded).firstElement().flatMap { id ->
+          sessionManager.connectedSession.flatMap(ISession::liveNetworks)
             .map { it[id] }
             .flatMap { network ->
               network.liveInitialized
@@ -344,18 +345,6 @@ class QuasselService : DaggerLifecycleService(),
 
   @Inject
   lateinit var accountDatabase: AccountDatabase
-
-  class CustomConnectivityReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-      if (context != null && intent != null) {
-        connectivity.onNext(Unit)
-      }
-    }
-
-    val connectivity = PublishSubject.create<Unit>()
-  }
-
-  private val connectivityReceiver = CustomConnectivityReceiver()
 
   private fun disconnectFromCore() {
     getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editCommit {
@@ -413,14 +402,17 @@ class QuasselService : DaggerLifecycleService(),
       }
     })
 
-    connectivityReceiver.connectivity
-      .delay(200, TimeUnit.MILLISECONDS)
-      .throttleFirst(1, TimeUnit.SECONDS)
+    ReactiveNetwork
+      .observeNetworkConnectivity(applicationContext)
       .toLiveData()
-      .observe(this, Observer {
+      .observe(this, Observer { connectivity ->
+        log(INFO, "QuasselService", "Connectivity changed: $connectivity")
         handlerService.backend {
-          LoggingHandler.log(INFO, "QuasselService", "Autoreconnect: Network changed")
-          sessionManager.autoReconnect(true)
+          log(INFO, "QuasselService", "Reconnect triggered: Network changed")
+          sessionManager.autoConnect(
+            ignoreConnectionState = true,
+            ignoreSetting = true
+          )
         }
       })
 
@@ -448,8 +440,6 @@ class QuasselService : DaggerLifecycleService(),
       registerOnSharedPreferenceChangeListener(this@QuasselService)
     }
 
-    registerReceiver(connectivityReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
-
     notificationManager.init()
 
     update()
@@ -467,7 +457,7 @@ class QuasselService : DaggerLifecycleService(),
         scheduled = false
 
         backoff = clampOf(backoff * 2, BACKOFF_MIN, BACKOFF_MAX)
-        sessionManager.autoReconnect(true)
+        sessionManager.autoConnect(ignoreSetting = true)
       }
     }
   }
@@ -479,8 +469,6 @@ class QuasselService : DaggerLifecycleService(),
     sharedPreferences {
       unregisterOnSharedPreferenceChangeListener(this@QuasselService)
     }
-
-    unregisterReceiver(connectivityReceiver)
 
     sessionManager.dispose()
     asyncBackend.setDisconnectCallback(null)

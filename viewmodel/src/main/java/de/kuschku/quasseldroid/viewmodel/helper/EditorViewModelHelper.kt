@@ -28,9 +28,9 @@ import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.hasFlag
-import de.kuschku.libquassel.util.helpers.mapNullable
-import de.kuschku.libquassel.util.helpers.nullIf
-import de.kuschku.quasseldroid.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.mapNullable
+import de.kuschku.libquassel.util.helper.nullIf
 import de.kuschku.quasseldroid.viewmodel.ChatViewModel
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
@@ -46,15 +46,14 @@ open class EditorViewModelHelper @Inject constructor(
   quassel: QuasselViewModel
 ) : ChatViewModelHelper(chat, quassel) {
   val rawAutoCompleteData: Observable<Triple<Optional<ISession>, BufferId, Pair<String, IntRange>>> =
-    combineLatest(session,
-                  chat.bufferId,
-                  editor.lastWord).switchMap { (sessionOptional, id, lastWordWrapper) ->
-      lastWordWrapper
-        .distinctUntilChanged()
-        .map { lastWord ->
-          Triple(sessionOptional, id, lastWord)
-        }
-    }
+    combineLatest(connectedSession, chat.bufferId, editor.lastWord)
+      .switchMap { (sessionOptional, id, lastWordWrapper) ->
+        lastWordWrapper
+          .distinctUntilChanged()
+          .map { lastWord ->
+            Triple(sessionOptional, id, lastWord)
+          }
+      }
 
   val autoCompleteData: Observable<Pair<String, List<AutoCompleteItem>>> = rawAutoCompleteData
     .distinctUntilChanged()

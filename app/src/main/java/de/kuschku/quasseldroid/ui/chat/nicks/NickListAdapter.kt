@@ -30,7 +30,7 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.NetworkId
-import de.kuschku.libquassel.util.helpers.nullIf
+import de.kuschku.libquassel.util.helper.nullIf
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.helper.letIf

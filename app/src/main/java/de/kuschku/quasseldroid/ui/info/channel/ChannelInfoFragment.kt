@@ -34,7 +34,8 @@ import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.topic.TopicActivity
@@ -90,7 +91,8 @@ class ChannelInfoFragment : ServiceBoundFragment() {
 
     var currentBufferInfo: BufferInfo?
 
-    combineLatest(modelHelper.session, modelHelper.networks).map { (sessionOptional, networks) ->
+    combineLatest(modelHelper.connectedSession,
+                  modelHelper.networks).map { (sessionOptional, networks) ->
       if (openBuffer == true) {
         val session = sessionOptional?.orNull()
         val bufferSyncer = session?.bufferSyncer
@@ -127,7 +129,7 @@ class ChannelInfoFragment : ServiceBoundFragment() {
       }
 
       actionPart.setOnClickListener {
-        modelHelper.session.value?.orNull()?.let { session ->
+        modelHelper.connectedSession.value?.orNull()?.let { session ->
           session.bufferSyncer.find(
             networkId = channel.network().networkId(),
             type = Buffer_Type.of(Buffer_Type.StatusBuffer)
@@ -139,7 +141,7 @@ class ChannelInfoFragment : ServiceBoundFragment() {
       }
 
       actionWho.setOnClickListener {
-        modelHelper.session.value?.orNull()?.let { session ->
+        modelHelper.connectedSession.value?.orNull()?.let { session ->
           session.bufferSyncer.find(
             networkId = channel.network().networkId(),
             type = Buffer_Type.of(Buffer_Type.StatusBuffer)

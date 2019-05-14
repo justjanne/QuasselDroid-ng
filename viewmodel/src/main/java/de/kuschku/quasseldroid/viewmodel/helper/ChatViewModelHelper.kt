@@ -32,12 +32,8 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.and
 import de.kuschku.libquassel.util.flag.hasFlag
-import de.kuschku.libquassel.util.helpers.flatMapSwitchMap
-import de.kuschku.libquassel.util.helpers.mapNullable
-import de.kuschku.libquassel.util.helpers.mapSwitchMap
-import de.kuschku.libquassel.util.helpers.switchMapNullable
+import de.kuschku.libquassel.util.helper.*
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
-import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.viewmodel.ChatViewModel
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid.viewmodel.data.*
@@ -63,14 +59,14 @@ open class ChatViewModelHelper @Inject constructor(
   /**
    * An observable of the changes of the markerline, as pairs of `(old, new)`
    */
-  val markerLine = session.mapSwitchMap { currentSession ->
+  val markerLine = connectedSession.mapSwitchMap { currentSession ->
     chat.bufferId.switchMap { currentBuffer ->
       // Get a stream of the latest marker line
       currentSession.bufferSyncer.liveMarkerLine(currentBuffer)
     }
   }
 
-  val bufferData = combineLatest(session, chat.bufferId)
+  val bufferData = combineLatest(connectedSession, chat.bufferId)
     .switchMap { (sessionOptional, id) ->
       val session = sessionOptional.orNull()
       val bufferSyncer = session?.bufferSyncer
@@ -135,7 +131,7 @@ open class ChatViewModelHelper @Inject constructor(
   val bufferDataThrottled =
     bufferData.distinctUntilChanged().throttleLast(100, TimeUnit.MILLISECONDS)
 
-  val nickData: Observable<List<IrcUserItem>> = combineLatest(session, chat.bufferId)
+  val nickData: Observable<List<IrcUserItem>> = combineLatest(connectedSession, chat.bufferId)
     .switchMap { (sessionOptional, buffer) ->
       val session = sessionOptional.orNull()
       val bufferSyncer = session?.bufferSyncer
@@ -179,7 +175,7 @@ open class ChatViewModelHelper @Inject constructor(
   val nickDataThrottled =
     nickData.distinctUntilChanged().throttleLast(100, TimeUnit.MILLISECONDS)
 
-  val selectedBuffer = combineLatest(session, chat.selectedBufferId, bufferViewConfig)
+  val selectedBuffer = combineLatest(connectedSession, chat.selectedBufferId, bufferViewConfig)
     .switchMap { (sessionOptional, buffer, bufferViewConfigOptional) ->
       val session = sessionOptional.orNull()
       val bufferSyncer = session?.bufferSyncer
@@ -238,7 +234,7 @@ open class ChatViewModelHelper @Inject constructor(
     }
 
   val bufferList: Observable<Pair<BufferViewConfig?, List<BufferProps>>> =
-    combineLatest(session, bufferViewConfig, chat.showHidden, chat.bufferSearch)
+    combineLatest(connectedSession, bufferViewConfig, chat.showHidden, chat.bufferSearch)
       .switchMap { (sessionOptional, configOptional, showHiddenRaw, bufferSearch) ->
         val session = sessionOptional.orNull()
         val bufferSyncer = session?.bufferSyncer

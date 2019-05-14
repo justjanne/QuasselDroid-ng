@@ -34,9 +34,9 @@ import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.libquassel.quassel.syncables.RpcHandler
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
-import de.kuschku.libquassel.util.helpers.mapMapNullable
-import de.kuschku.libquassel.util.helpers.mapSwitchMap
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.mapMapNullable
+import de.kuschku.libquassel.util.helper.mapSwitchMap
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.models.Account
@@ -92,7 +92,7 @@ class PasswordChangeFragment : ServiceBoundFragment() {
 
     user.setText(account?.user)
 
-    modelHelper.session
+    modelHelper.connectedSession
       .mapMapNullable(ISession::rpcHandler)
       .mapSwitchMap(RpcHandler::passwordChanged)
       .filter(Optional<Boolean>::isPresent)
@@ -144,7 +144,7 @@ class PasswordChangeFragment : ServiceBoundFragment() {
 
       waiting = account?.copy(pass = pass)
 
-      modelHelper.session.value?.orNull()?.rpcHandler?.changePassword(
+      modelHelper.connectedSession.value?.orNull()?.rpcHandler?.changePassword(
         0L,
         user.text.toString(),
         oldPassword.text.toString(),

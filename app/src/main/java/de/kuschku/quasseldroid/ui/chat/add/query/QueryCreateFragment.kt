@@ -47,8 +47,9 @@ import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.util.Optional
-import de.kuschku.libquassel.util.helpers.mapOrElse
-import de.kuschku.libquassel.util.helpers.mapSwitchMap
+import de.kuschku.libquassel.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.mapOrElse
+import de.kuschku.libquassel.util.helper.mapSwitchMap
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.GlideApp
@@ -60,7 +61,6 @@ import de.kuschku.quasseldroid.ui.chat.add.NetworkItem
 import de.kuschku.quasseldroid.ui.chat.nicks.NickListAdapter
 import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
-import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.loadWithFallbacks
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.toLiveData

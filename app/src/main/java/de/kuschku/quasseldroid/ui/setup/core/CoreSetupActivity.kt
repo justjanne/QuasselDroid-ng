@@ -28,7 +28,7 @@ import de.kuschku.libquassel.protocol.coresetup.CoreSetupBackend
 import de.kuschku.libquassel.protocol.coresetup.CoreSetupData
 import de.kuschku.libquassel.protocol.message.HandshakeMessage
 import de.kuschku.libquassel.quassel.ExtendedFeature
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.persistence.models.Account
 import de.kuschku.quasseldroid.ui.setup.ServiceBoundSetupActivity
 import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper

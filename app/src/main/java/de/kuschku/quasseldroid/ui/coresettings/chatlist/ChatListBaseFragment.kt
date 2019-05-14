@@ -41,9 +41,9 @@ import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.minus
 import de.kuschku.libquassel.util.flag.plus
+import de.kuschku.libquassel.util.helper.combineLatest
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.Defaults
-import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Savable
@@ -138,7 +138,7 @@ abstract class ChatListBaseFragment(private val initDefault: Boolean) :
     })
 
     if (initDefault) {
-      modelHelper.session
+      modelHelper.connectedSession
         .filter(Optional<ISession>::isPresent)
         .map(Optional<ISession>::get)
         .firstElement()

@@ -24,13 +24,13 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 object JavaLoggingHandler : LoggingHandler() {
-  override fun isLoggable(logLevel: LogLevel, tag: String): Boolean {
+  override fun _isLoggable(logLevel: LogLevel, tag: String): Boolean {
     return Logger.getLogger(tag).isLoggable(
       priority(logLevel)
     )
   }
 
-  override fun log(logLevel: LogLevel, tag: String, message: String?, throwable: Throwable?) {
+  override fun _log(logLevel: LogLevel, tag: String, message: String?, throwable: Throwable?) {
     val priority = priority(
       logLevel
     )

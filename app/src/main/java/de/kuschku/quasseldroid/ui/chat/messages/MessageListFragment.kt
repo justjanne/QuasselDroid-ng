@@ -49,9 +49,7 @@ import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.BufferSyncer
 import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.util.flag.hasFlag
-import de.kuschku.libquassel.util.helpers.mapSwitchMap
-import de.kuschku.libquassel.util.helpers.nullIf
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.*
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.quasseldroid.GlideApp
 import de.kuschku.quasseldroid.R
@@ -131,8 +129,8 @@ class MessageListFragment : ServiceBoundFragment() {
   private val actionModeCallback = object : ActionMode.Callback {
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?) = when (item?.itemId) {
       R.id.action_user_info -> {
-        modelHelper.chat.selectedMessages.value.values.firstOrNull()?.let { msg ->
-          modelHelper.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
+        modelHelper.chat.selectedMessages.value?.values?.firstOrNull()?.let { msg ->
+          modelHelper.connectedSession.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
             modelHelper.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
               UserInfoActivity.launch(
                 requireContext(),
@@ -153,7 +151,7 @@ class MessageListFragment : ServiceBoundFragment() {
       }
       R.id.action_copy      -> {
         val builder = SpannableStringBuilder()
-        modelHelper.chat.selectedMessages.value.values.asSequence().sortedBy {
+        modelHelper.chat.selectedMessages.value?.values.orEmpty().asSequence().sortedBy {
           it.original.messageId
         }.map {
           if (it.name != null && it.content != null) {
@@ -182,7 +180,7 @@ class MessageListFragment : ServiceBoundFragment() {
       }
       R.id.action_share     -> {
         val builder = SpannableStringBuilder()
-        modelHelper.chat.selectedMessages.value.values.asSequence().sortedBy {
+        modelHelper.chat.selectedMessages.value?.values.orEmpty().asSequence().sortedBy {
           it.original.messageId
         }.map {
           if (it.name != null && it.content != null) {
@@ -252,7 +250,7 @@ class MessageListFragment : ServiceBoundFragment() {
     linearLayoutManager = LinearLayoutManager(context)
     linearLayoutManager.reverseLayout = true
 
-    backlogRequester = BacklogRequester(modelHelper.session, database, accountDatabase)
+    backlogRequester = BacklogRequester(modelHelper.connectedSession, database, accountDatabase)
 
     adapter.setOnClickListener { msg ->
       if (actionMode != null) {
@@ -262,7 +260,7 @@ class MessageListFragment : ServiceBoundFragment() {
           else -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = false
         }
       } else if (msg.hasSpoilers) {
-        val value = modelHelper.chat.expandedMessages.value
+        val value = modelHelper.chat.expandedMessages.value.orEmpty()
         modelHelper.chat.expandedMessages.onNext(
           if (value.contains(msg.original.messageId)) value - msg.original.messageId
           else value + msg.original.messageId
@@ -288,7 +286,7 @@ class MessageListFragment : ServiceBoundFragment() {
         )
       }
     adapter.setOnSenderIconClickListener { msg ->
-      modelHelper.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
+      modelHelper.connectedSession.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
         modelHelper.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
           UserInfoActivity.launch(
             requireContext(),
@@ -424,7 +422,7 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     })
 
-    modelHelper.session.toLiveData().zip(lastMessageId).observe(
+    modelHelper.connectedSession.toLiveData().zip(lastMessageId).observe(
       this, Observer {
       runInBackground {
         val session = it?.first?.orNull()
@@ -508,7 +506,7 @@ class MessageListFragment : ServiceBoundFragment() {
                      ?: BufferId(-1)
         if (buffer != lastBuffer) {
           adapter.clearCache()
-          modelHelper.session.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
+          modelHelper.connectedSession.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
             onBufferChange(lastBuffer, buffer, firstVisibleMessageId, bufferSyncer)
           }
           lastBuffer = buffer
@@ -557,7 +555,7 @@ class MessageListFragment : ServiceBoundFragment() {
     val previous = lastBuffer
     val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
     val messageId = adapter[firstVisibleItemPosition]?.content?.messageId
-    val bufferSyncer = modelHelper.session.value?.orNull()?.bufferSyncer
+    val bufferSyncer = modelHelper.connectedSession.value?.orNull()?.bufferSyncer
     if (previous != null && messageId != null) {
       bufferSyncer?.requestSetMarkerLine(previous, messageId)
     }

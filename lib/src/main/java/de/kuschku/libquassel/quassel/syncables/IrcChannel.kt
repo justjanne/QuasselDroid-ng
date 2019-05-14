@@ -27,7 +27,7 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.ERROR
-import de.kuschku.libquassel.util.helpers.getOr
+import de.kuschku.libquassel.util.helper.getOr
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.nio.charset.Charset

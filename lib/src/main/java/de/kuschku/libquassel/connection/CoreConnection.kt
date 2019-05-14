@@ -39,8 +39,8 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.DEBUG
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
 import de.kuschku.libquassel.util.compatibility.reference.JavaHandlerService
 import de.kuschku.libquassel.util.flag.hasFlag
-import de.kuschku.libquassel.util.helpers.hexDump
-import de.kuschku.libquassel.util.helpers.write
+import de.kuschku.libquassel.util.helper.hexDump
+import de.kuschku.libquassel.util.helper.write
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import de.kuschku.libquassel.util.nio.WrappedChannel
 import io.reactivex.subjects.BehaviorSubject

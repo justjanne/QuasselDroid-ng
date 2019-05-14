@@ -25,7 +25,7 @@ import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferViewConfig
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.flag.hasFlag
-import de.kuschku.libquassel.util.helpers.clampOf
+import de.kuschku.libquassel.util.helper.clampOf
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 

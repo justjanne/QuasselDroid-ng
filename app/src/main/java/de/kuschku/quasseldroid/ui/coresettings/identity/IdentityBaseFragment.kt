@@ -127,7 +127,7 @@ abstract class IdentityBaseFragment(private val initDefault: Boolean) :
     }
 
     if (initDefault) {
-      modelHelper.session
+      modelHelper.connectedSession
         .filter(Optional<ISession>::isPresent)
         .map(Optional<ISession>::get)
         .firstElement()

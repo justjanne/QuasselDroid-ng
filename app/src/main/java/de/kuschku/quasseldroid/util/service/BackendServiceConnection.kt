@@ -26,8 +26,8 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.util.Optional
+import de.kuschku.quasseldroid.Backend
 import de.kuschku.quasseldroid.service.QuasselBinder
 import de.kuschku.quasseldroid.service.QuasselService
 import io.reactivex.subjects.BehaviorSubject

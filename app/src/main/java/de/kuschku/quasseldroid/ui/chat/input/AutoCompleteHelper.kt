@@ -33,8 +33,8 @@ import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.hasFlag
-import de.kuschku.libquassel.util.helpers.nullIf
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.nullIf
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings

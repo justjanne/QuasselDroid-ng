@@ -43,12 +43,12 @@ import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
-import de.kuschku.libquassel.util.helpers.nullIf
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.nullIf
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.Defaults
 import de.kuschku.quasseldroid.ui.coresettings.networkserver.NetworkServerActivity
-import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.helper.visibleIf
@@ -188,7 +188,7 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
     })
 
     if (initDefault) {
-      modelHelper.session
+      modelHelper.connectedSession
         .filter(Optional<ISession>::isPresent)
         .map(Optional<ISession>::get)
         .firstElement()

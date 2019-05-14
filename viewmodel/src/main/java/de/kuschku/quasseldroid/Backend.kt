@@ -17,27 +17,29 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.util.helpers
+package de.kuschku.quasseldroid
 
-import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
-import java.nio.ByteBuffer
+import de.kuschku.libquassel.connection.SocketAddress
+import de.kuschku.libquassel.session.SessionManager
 
-fun ByteBuffer.copyTo(target: ByteBuffer) {
-  while (target.remaining() > 8)
-    target.putLong(this.long)
-  while (target.hasRemaining())
-    target.put(this.get())
-}
+interface Backend {
+  fun autoConnect(
+    ignoreConnectionState: Boolean = false,
+    ignoreSetting: Boolean = false,
+    ignoreErrors: Boolean = false,
+    connectionInfo: ConnectionInfo? = null
+  )
 
-fun ByteBuffer?.deserializeString(serializer: StringSerializer) = if (this == null) {
-  null
-} else {
-  serializer.deserializeAll(this)
-}
+  fun disconnect(forever: Boolean = false)
+  fun sessionManager(): SessionManager?
+  fun updateUserDataAndLogin(user: String, pass: String)
+  fun requestConnectNewNetwork()
 
-fun ByteBuffer.hexDump() {
-  val target = ByteBuffer.allocate(this.capacity())
-  this.clear()
-  this.copyTo(target)
-  target.array().hexDump()
+  data class ConnectionInfo(
+    val address: SocketAddress,
+    val username: String,
+    val password: String,
+    val requireSsl: Boolean,
+    val shouldReconnect: Boolean
+  )
 }

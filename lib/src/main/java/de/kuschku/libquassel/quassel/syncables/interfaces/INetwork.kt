@@ -25,7 +25,7 @@ import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
 import de.kuschku.libquassel.util.flag.Flag
 import de.kuschku.libquassel.util.flag.Flags
-import de.kuschku.libquassel.util.helpers.serializeString
+import de.kuschku.libquassel.util.helper.serializeString
 import java.io.Serializable
 import java.nio.ByteBuffer
 

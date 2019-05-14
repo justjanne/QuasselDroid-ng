@@ -19,7 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.identity
 
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Deletable
 
 class IdentityEditFragment : IdentityBaseFragment(false), Deletable {
@@ -32,7 +32,7 @@ class IdentityEditFragment : IdentityBaseFragment(false), Deletable {
   override fun onDelete() {
     identity?.let { (it, _) ->
       it?.let {
-        modelHelper.session.value?.orNull()?.rpcHandler?.removeIdentity(it.id())
+        modelHelper.connectedSession.value?.orNull()?.rpcHandler?.removeIdentity(it.id())
       }
     }
   }

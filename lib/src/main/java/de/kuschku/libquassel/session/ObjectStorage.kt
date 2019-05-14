@@ -25,7 +25,7 @@ import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.protocol.message.SignalProxyMessage
 import de.kuschku.libquassel.quassel.exceptions.ObjectNotFoundException
 import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
-import de.kuschku.libquassel.util.helpers.removeIfEqual
+import de.kuschku.libquassel.util.helper.removeIfEqual
 
 class ObjectStorage(private var proxy: SignalProxy) {
   fun deinit() {

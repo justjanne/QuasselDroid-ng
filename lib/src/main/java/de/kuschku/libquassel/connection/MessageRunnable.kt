@@ -23,7 +23,7 @@ import de.kuschku.libquassel.protocol.primitive.serializer.Serializer
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
-import de.kuschku.libquassel.util.helpers.write
+import de.kuschku.libquassel.util.helper.write
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import de.kuschku.libquassel.util.nio.WrappedChannel
 import java.nio.ByteBuffer

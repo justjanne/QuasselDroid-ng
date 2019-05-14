@@ -17,7 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.util.helpers
+package de.kuschku.libquassel.util.helper
 
 
 /**

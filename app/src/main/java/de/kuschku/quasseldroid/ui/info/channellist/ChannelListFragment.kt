@@ -34,10 +34,10 @@ import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.protocol.QStringList
 import de.kuschku.libquassel.quassel.syncables.IrcListHelper
 import de.kuschku.libquassel.util.Optional
-import de.kuschku.libquassel.util.helpers.mapSwitchMap
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.mapSwitchMap
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.retint
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment

@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+@file:Suppress("NOTHING_TO_INLINE")
 
-package de.kuschku.quasseldroid.service
+package de.kuschku.libquassel.util.helper
 
-import android.os.Binder
-import de.kuschku.quasseldroid.Backend
+inline fun clampOf(value: Int, lowerBound: Int, upperBound: Int): Int =
+  maxOf(lowerBound, minOf(value, upperBound))
 
-class QuasselBinder(val backend: Backend) : Binder()
+inline fun clampOf(value: Long, lowerBound: Long, upperBound: Long): Long =
+  maxOf(lowerBound, minOf(value, upperBound))

@@ -19,7 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.chatlist
 
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.value
 
 class ChatListCreateFragment : ChatListBaseFragment(true) {
   override fun onSave() = chatlist?.let { (_, data) ->

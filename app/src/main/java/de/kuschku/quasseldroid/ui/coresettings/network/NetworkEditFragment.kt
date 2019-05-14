@@ -19,7 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.network
 
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Deletable
 
 class NetworkEditFragment : NetworkBaseFragment(false), Deletable {
@@ -32,7 +32,7 @@ class NetworkEditFragment : NetworkBaseFragment(false), Deletable {
   override fun onDelete() {
     network?.let { (it, _) ->
       it?.let {
-        modelHelper.session.value?.orNull()?.rpcHandler?.removeNetwork(it.networkId())
+        modelHelper.connectedSession.value?.orNull()?.rpcHandler?.removeNetwork(it.networkId())
       }
     }
   }

@@ -25,8 +25,8 @@ import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.*
 import de.kuschku.libquassel.session.SignalProxy
-import de.kuschku.libquassel.util.helpers.getOr
-import de.kuschku.libquassel.util.helpers.serializeString
+import de.kuschku.libquassel.util.helper.getOr
+import de.kuschku.libquassel.util.helper.serializeString
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import io.reactivex.Observable

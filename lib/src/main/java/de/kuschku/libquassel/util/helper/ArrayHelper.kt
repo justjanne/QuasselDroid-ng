@@ -17,9 +17,18 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.quasseldroid.service
+package de.kuschku.libquassel.util.helper
 
-import android.os.Binder
-import de.kuschku.quasseldroid.Backend
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
+import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
 
-class QuasselBinder(val backend: Backend) : Binder()
+fun ByteArray.hexDump() {
+  for (i in 0 until this.size step 33) {
+    log(
+      WARN, "HexDump",
+      (0 until 33).map { it + i }.filter { it < this.size }.joinToString(" ") {
+        String.format("%02x", this[it])
+      }
+    )
+  }
+}

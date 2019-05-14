@@ -71,12 +71,15 @@ class Session(
     trustManager,
     hostnameVerifier
   )
-  override val state = coreConnection.state
 
-  private val _error = ReusableUnicastSubject.create<Error>()
-  override val error = _error.publish().refCount()
-  private val _connectionError = ReusableUnicastSubject.create<Throwable>()
-  override val connectionError = _connectionError.publish().refCount()
+  private val __error = ReusableUnicastSubject.create<Error>()
+  private val __connectionError = ReusableUnicastSubject.create<Throwable>()
+  private val __initProgress = BehaviorSubject.createDefault(0 to 0)
+  override val progress = ISession.ProgressData(
+    coreConnection.state,
+    __initProgress,
+    __error.publish().refCount()
+  )
 
   override val aliasManager = AliasManager(this)
   override val backlogManager = BacklogManager(this, backlogStorage)
@@ -105,8 +108,6 @@ class Session(
 
   override val rpcHandler = RpcHandler(this, backlogStorage, notificationManager)
 
-  override val initStatus = BehaviorSubject.createDefault(0 to 0)
-
   override val lag = BehaviorSubject.createDefault(0L)
 
   private val heartBeatThread = heartBeatFactory()
@@ -120,7 +121,7 @@ class Session(
 
   private fun handleError(error: Error) {
     hasErroredCallback?.invoke(error)
-    _error.onNext(error)
+    __error.onNext(error)
   }
 
   override fun handle(f: HandshakeMessage.ClientInitAck): Boolean {
@@ -177,7 +178,7 @@ class Session(
   }
 
   fun handleConnectionError(connectionError: Throwable) {
-    _connectionError.onNext(connectionError)
+    __connectionError.onNext(connectionError)
   }
 
   override fun addNetwork(networkId: NetworkId) {
@@ -261,7 +262,7 @@ class Session(
   }
 
   override fun onInitStatusChanged(progress: Int, total: Int) {
-    initStatus.onNext(progress to total)
+    __initProgress.onNext(Pair(progress, total))
   }
 
   override fun onInitDone() {

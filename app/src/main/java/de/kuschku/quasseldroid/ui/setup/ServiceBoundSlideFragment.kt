@@ -21,8 +21,8 @@ package de.kuschku.quasseldroid.ui.setup
 
 import android.content.Context
 import android.os.Bundle
-import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.util.Optional
+import de.kuschku.quasseldroid.Backend
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.util.service.BackendServiceConnection
 import io.reactivex.subjects.BehaviorSubject
@@ -33,13 +33,13 @@ abstract class ServiceBoundSlideFragment : SlideFragment() {
     get() = connection.backend
 
   protected fun runInBackground(f: () -> Unit) {
-    connection.backend.value.ifPresent {
+    connection.backend.value?.ifPresent {
       it.sessionManager()?.handlerService?.backend(f)
     }
   }
 
   protected fun runInBackgroundDelayed(delayMillis: Long, f: () -> Unit) {
-    connection.backend.value.ifPresent {
+    connection.backend.value?.ifPresent {
       it.sessionManager()?.handlerService?.backendDelayed(delayMillis, f)
     }
   }

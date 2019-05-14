@@ -20,8 +20,8 @@
 package de.kuschku.quasseldroid.viewmodel
 
 import androidx.lifecycle.ViewModel
-import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.util.Optional
+import de.kuschku.quasseldroid.Backend
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 

@@ -17,18 +17,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.util.helpers
+package de.kuschku.libquassel.util.helper
 
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
-import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
+import de.kuschku.libquassel.util.nio.ChainedByteBuffer
+import java.nio.channels.WritableByteChannel
 
-fun ByteArray.hexDump() {
-  for (i in 0 until this.size step 33) {
-    log(
-      WARN, "HexDump",
-      (0 until 33).map { it + i }.filter { it < this.size }.joinToString(" ") {
-        String.format("%02x", this[it])
-      }
-    )
-  }
+fun WritableByteChannel.write(buffer: ChainedByteBuffer) {
+  buffer.write(this)
+  buffer.clear()
 }

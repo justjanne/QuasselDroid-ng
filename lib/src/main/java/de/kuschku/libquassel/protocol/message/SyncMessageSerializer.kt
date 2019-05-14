@@ -24,8 +24,8 @@ import de.kuschku.libquassel.protocol.QVariantList
 import de.kuschku.libquassel.protocol.Type
 import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
 import de.kuschku.libquassel.protocol.value
-import de.kuschku.libquassel.util.helpers.deserializeString
-import de.kuschku.libquassel.util.helpers.serializeString
+import de.kuschku.libquassel.util.helper.deserializeString
+import de.kuschku.libquassel.util.helper.serializeString
 import java.nio.ByteBuffer
 
 object SyncMessageSerializer : SignalProxyMessageSerializer<SignalProxyMessage.SyncMessage> {

@@ -19,7 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.chatlist
 
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Deletable
 
 class ChatListEditFragment : ChatListBaseFragment(false), Deletable {

@@ -20,7 +20,7 @@
 package de.kuschku.libquassel.protocol.coresetup
 
 import de.kuschku.libquassel.protocol.*
-import de.kuschku.libquassel.util.helpers.getOr
+import de.kuschku.libquassel.util.helper.getOr
 import java.io.Serializable
 
 data class CoreSetupBackend(

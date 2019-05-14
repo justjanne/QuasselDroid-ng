@@ -21,7 +21,7 @@
 package de.kuschku.libquassel.protocol.primitive.serializer
 
 import de.kuschku.libquassel.quassel.QuasselFeatures
-import de.kuschku.libquassel.util.helpers.hexDump
+import de.kuschku.libquassel.util.helper.hexDump
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import java.nio.ByteBuffer
 import java.nio.CharBuffer

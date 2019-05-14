@@ -29,7 +29,7 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasFragmentInjector
 import dagger.android.support.HasSupportFragmentInjector
-import de.kuschku.libquassel.util.helpers.nullIf
+import de.kuschku.libquassel.util.helper.nullIf
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import javax.inject.Inject
 

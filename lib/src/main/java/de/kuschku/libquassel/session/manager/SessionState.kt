@@ -17,17 +17,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.util.helpers
+package de.kuschku.libquassel.session.manager
 
-fun <K, V> Map<K, V>.getOr(key: K, defValue: V) = this[key] ?: defValue
+import de.kuschku.libquassel.session.ISession
 
-fun <K, V> MutableMap<K, V>.removeIfEqual(key: K, value: V): Boolean {
-  if (!this.containsKey(key))
-    return false
-
-  if (this[key] != value)
-    return false
-
-  this.remove(key)
-  return true
-}
+data class SessionState(
+  val offline: ISession,
+  val connecting: ISession?,
+  val connected: ISession?
+)

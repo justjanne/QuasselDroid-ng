@@ -33,7 +33,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.android.support.DaggerAppCompatActivity
-import de.kuschku.libquassel.util.helpers.nullIf
+import de.kuschku.libquassel.util.helper.nullIf
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.clientsettings.about.AboutActivity
 import de.kuschku.quasseldroid.ui.clientsettings.client.ClientSettingsActivity

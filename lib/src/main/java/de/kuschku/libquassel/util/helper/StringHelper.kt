@@ -17,12 +17,19 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.util.helpers
+package de.kuschku.libquassel.util.helper
 
-import de.kuschku.libquassel.util.nio.ChainedByteBuffer
-import java.nio.channels.WritableByteChannel
+import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
 
-fun WritableByteChannel.write(buffer: ChainedByteBuffer) {
-  buffer.write(this)
-  buffer.clear()
+/**
+ * Because Android’s String::split is broken
+ *
+ * @return A list with all substrings of length 1, in order
+ */
+fun String.split() = Array(length) { this.substring(it, it + 1) }
+
+fun String?.serializeString(serializer: StringSerializer) = if (this == null) {
+  null
+} else {
+  serializer.serialize(this)
 }

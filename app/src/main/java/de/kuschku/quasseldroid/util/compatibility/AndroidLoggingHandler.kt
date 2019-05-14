@@ -24,11 +24,11 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler
 import de.kuschku.quasseldroid.BuildConfig
 
 object AndroidLoggingHandler : LoggingHandler() {
-  override fun isLoggable(logLevel: LogLevel, tag: String): Boolean {
+  override fun _isLoggable(logLevel: LogLevel, tag: String): Boolean {
     return BuildConfig.DEBUG || Log.isLoggable(tag, priority(logLevel))
   }
 
-  override fun log(logLevel: LogLevel, tag: String, message: String?, throwable: Throwable?) {
+  override fun _log(logLevel: LogLevel, tag: String, message: String?, throwable: Throwable?) {
     val priority = priority(
       logLevel
     )

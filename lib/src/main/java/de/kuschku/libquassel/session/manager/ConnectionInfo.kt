@@ -17,20 +17,19 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.session
+package de.kuschku.libquassel.session.manager
 
+import de.kuschku.libquassel.connection.HostnameVerifier
 import de.kuschku.libquassel.connection.SocketAddress
+import de.kuschku.libquassel.protocol.ClientData
+import javax.net.ssl.X509TrustManager
 
-interface Backend {
-  fun connectUnlessConnected(address: SocketAddress, user: String, pass: String,
-                             requireSsl: Boolean, reconnect: Boolean)
-
-  fun connect(address: SocketAddress, user: String, pass: String, requireSsl: Boolean,
-              reconnect: Boolean)
-
-  fun reconnect()
-  fun disconnect(forever: Boolean = false)
-  fun sessionManager(): SessionManager?
-  fun updateUserDataAndLogin(user: String, pass: String)
-  fun requestConnectNewNetwork()
-}
+data class ConnectionInfo(
+  val clientData: ClientData,
+  val trustManager: X509TrustManager,
+  val hostnameVerifier: HostnameVerifier,
+  val address: SocketAddress,
+  val userData: Pair<String, String>,
+  val requireSsl: Boolean,
+  val shouldReconnect: Boolean
+)

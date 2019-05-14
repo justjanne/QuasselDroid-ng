@@ -35,13 +35,13 @@ import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.quassel.syncables.Network
-import de.kuschku.libquassel.util.helpers.nullIf
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.nullIf
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.ui.chat.add.NetworkAdapter
 import de.kuschku.quasseldroid.ui.chat.add.NetworkItem
-import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.setDependent
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFragment
@@ -158,7 +158,7 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
               networkId = selectedNetworkId,
               type = Buffer_Type.of(Buffer_Type.StatusBuffer)
             )?.let { statusBuffer ->
-              modelHelper.session.value?.orNull()?.rpcHandler?.apply {
+              modelHelper.connectedSession.value?.orNull()?.rpcHandler?.apply {
                 sendInput(statusBuffer, "/join $channelName")
               }
             }
@@ -175,7 +175,7 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
             networkId = selectedNetworkId,
             type = Buffer_Type.of(Buffer_Type.StatusBuffer)
           )?.let { statusBuffer ->
-            modelHelper.session.value?.orNull()?.rpcHandler?.apply {
+            modelHelper.connectedSession.value?.orNull()?.rpcHandler?.apply {
               sendInput(statusBuffer, "/join $channelName")
               modelHelper.networks.switchMap {
                 it[selectedNetworkId]?.liveIrcChannel(channelName)

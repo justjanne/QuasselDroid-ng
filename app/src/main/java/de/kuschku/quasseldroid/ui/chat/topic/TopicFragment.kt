@@ -31,12 +31,12 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.util.helper.invoke
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.input.*
-import de.kuschku.quasseldroid.util.helper.invoke
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
@@ -128,7 +128,7 @@ class TopicFragment : ServiceBoundSettingsFragment(), Savable {
   }
 
   override fun onSave(): Boolean {
-    modelHelper.session { sessionOptional ->
+    modelHelper.connectedSession { sessionOptional ->
       val session = sessionOptional.orNull()
       modelHelper.chat.bufferId { bufferId ->
         session?.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->

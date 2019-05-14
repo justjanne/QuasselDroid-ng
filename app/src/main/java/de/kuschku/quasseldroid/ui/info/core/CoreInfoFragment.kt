@@ -35,7 +35,8 @@ import butterknife.ButterKnife
 import de.kuschku.libquassel.quassel.QuasselFeatures
 import de.kuschku.libquassel.ssl.X509Helper
 import de.kuschku.libquassel.ssl.commonName
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.info.certificate.CertificateInfoActivity
 import de.kuschku.quasseldroid.util.helper.*
@@ -205,7 +206,7 @@ class CoreInfoFragment : ServiceBoundFragment() {
     clients.layoutManager = LinearLayoutManager(requireContext())
     val adapter = ClientAdapter()
     adapter.setDisconnectListener {
-      val sessionOptional = modelHelper.session.value
+      val sessionOptional = modelHelper.connectedSession.value
       val session = sessionOptional?.orNull()
       val rpcHandler = session?.rpcHandler
       rpcHandler?.requestKickClient(it)

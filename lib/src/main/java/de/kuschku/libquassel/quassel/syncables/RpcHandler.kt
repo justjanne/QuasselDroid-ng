@@ -28,7 +28,7 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.IRpcHandler
 import de.kuschku.libquassel.session.BacklogStorage
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.NotificationManager
-import de.kuschku.libquassel.util.helpers.deserializeString
+import de.kuschku.libquassel.util.helper.deserializeString
 import de.kuschku.libquassel.util.rxjava.ReusableUnicastSubject
 import java.nio.ByteBuffer
 

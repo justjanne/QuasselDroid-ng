@@ -17,19 +17,17 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.util.helpers
+package de.kuschku.libquassel.util.helper
 
-import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
+fun <K, V> Map<K, V>.getOr(key: K, defValue: V) = this[key] ?: defValue
 
-/**
- * Because Android’s String::split is broken
- *
- * @return A list with all substrings of length 1, in order
- */
-fun String.split() = Array(length) { this.substring(it, it + 1) }
+fun <K, V> MutableMap<K, V>.removeIfEqual(key: K, value: V): Boolean {
+  if (!this.containsKey(key))
+    return false
 
-fun String?.serializeString(serializer: StringSerializer) = if (this == null) {
-  null
-} else {
-  serializer.serialize(this)
+  if (this[key] != value)
+    return false
+
+  this.remove(key)
+  return true
 }

@@ -19,9 +19,8 @@
 
 package de.kuschku.quasseldroid.service
 
-import de.kuschku.libquassel.connection.SocketAddress
-import de.kuschku.libquassel.session.Backend
 import de.kuschku.libquassel.util.compatibility.HandlerService
+import de.kuschku.quasseldroid.Backend
 
 class AsyncBackend(
   private val handler: HandlerService,
@@ -39,23 +38,19 @@ class AsyncBackend(
     }
   }
 
-  override fun connectUnlessConnected(address: SocketAddress, user: String, pass: String,
-                                      requireSsl: Boolean, reconnect: Boolean) {
+  override fun autoConnect(
+    ignoreConnectionState: Boolean,
+    ignoreSetting: Boolean,
+    ignoreErrors: Boolean,
+    connectionInfo: Backend.ConnectionInfo?
+  ) {
     handler.backend {
-      backend.connectUnlessConnected(address, user, pass, requireSsl, reconnect)
-    }
-  }
-
-  override fun connect(address: SocketAddress, user: String, pass: String, requireSsl: Boolean,
-                       reconnect: Boolean) {
-    handler.backend {
-      backend.connect(address, user, pass, requireSsl, reconnect)
-    }
-  }
-
-  override fun reconnect() {
-    handler.backend {
-      backend.reconnect()
+      backend.autoConnect(
+        ignoreConnectionState,
+        ignoreSetting,
+        ignoreErrors,
+        connectionInfo
+      )
     }
   }
 

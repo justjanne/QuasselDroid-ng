@@ -27,7 +27,7 @@ import de.kuschku.libquassel.quassel.ProtocolFeature
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.flag.Flags
 import de.kuschku.libquassel.util.flag.ShortFlags
-import de.kuschku.libquassel.util.helpers.deserializeString
+import de.kuschku.libquassel.util.helper.deserializeString
 import java.nio.ByteBuffer
 
 typealias QStringList = List<String?>

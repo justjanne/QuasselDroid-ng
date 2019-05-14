@@ -17,6 +17,27 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kuschku.libquassel.util.helpers
+package de.kuschku.libquassel.util.helper
 
-inline fun <T> T.nullIf(f: (T) -> Boolean): T? = if (f(this)) null else this
+import de.kuschku.libquassel.protocol.primitive.serializer.StringSerializer
+import java.nio.ByteBuffer
+
+fun ByteBuffer.copyTo(target: ByteBuffer) {
+  while (target.remaining() > 8)
+    target.putLong(this.long)
+  while (target.hasRemaining())
+    target.put(this.get())
+}
+
+fun ByteBuffer?.deserializeString(serializer: StringSerializer) = if (this == null) {
+  null
+} else {
+  serializer.deserializeAll(this)
+}
+
+fun ByteBuffer.hexDump() {
+  val target = ByteBuffer.allocate(this.capacity())
+  this.clear()
+  this.copyTo(target)
+  target.array().hexDump()
+}

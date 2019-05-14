@@ -35,9 +35,11 @@ import java.io.Closeable
 import javax.net.ssl.SSLSession
 
 interface ISession : Closeable {
-  val state: Observable<ConnectionState>
   val features: Features
   val sslSession: Observable<Optional<SSLSession>>
+  val lag: BehaviorSubject<Long>
+
+  val proxy: SignalProxy
 
   val aliasManager: AliasManager
   val backlogManager: BacklogManager
@@ -56,15 +58,8 @@ interface ISession : Closeable {
   fun liveNetworkAdded(): Observable<NetworkId>
   val networkConfig: NetworkConfig
   val rpcHandler: RpcHandler
-  val initStatus: Observable<Pair<Int, Int>>
-
   fun network(id: NetworkId): Network?
   fun identity(id: IdentityId): Identity?
-
-  val proxy: SignalProxy
-  val error: Observable<Error>
-  val connectionError: Observable<Throwable>
-  val lag: BehaviorSubject<Long>
 
   fun login(user: String, pass: String)
   fun setupCore(setupData: HandshakeMessage.CoreSetupData) {
@@ -77,16 +72,23 @@ interface ISession : Closeable {
   fun addIdentity(initData: QVariantMap)
   fun removeIdentity(identityId: IdentityId)
 
+  val progress: ProgressData
+
+  data class ProgressData(
+    val state: Observable<ConnectionState>,
+    val progress: Observable<Pair<Int, Int>>,
+    val error: Observable<Error>
+  )
+
   companion object {
     val NULL = object : ISession {
-      override val proxy: SignalProxy = SignalProxy.NULL
-      override val error = Observable.empty<Error>()
-      override val connectionError = Observable.empty<Throwable>()
-      override val state = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED)
       override val features: Features = Features(
         QuasselFeatures.empty(),
         QuasselFeatures.empty())
       override val sslSession: Observable<Optional<SSLSession>> = Observable.empty()
+      override val lag = BehaviorSubject.createDefault(0L)
+
+      override val proxy: SignalProxy = SignalProxy.NULL
 
       override val rpcHandler = RpcHandler(this)
       override val aliasManager = AliasManager(proxy)
@@ -105,8 +107,6 @@ interface ISession : Closeable {
       override fun liveNetworks() = Observable.empty<Map<NetworkId, Network>>()
       override fun liveNetworkAdded(): Observable<NetworkId> = PublishSubject.create()
       override val networkConfig = NetworkConfig(proxy)
-      override val initStatus: Observable<Pair<Int, Int>> = Observable.just(0 to 0)
-      override val lag = BehaviorSubject.createDefault(0L)
 
       override fun network(id: NetworkId): Network? = null
       override fun identity(id: IdentityId): Identity? = null
@@ -118,6 +118,13 @@ interface ISession : Closeable {
       override fun removeNetwork(networkId: NetworkId) = Unit
       override fun addIdentity(initData: QVariantMap) = Unit
       override fun removeIdentity(identityId: IdentityId) = Unit
+
+      override val progress = ProgressData(
+        state = BehaviorSubject.createDefault(ConnectionState.DISCONNECTED),
+        progress = BehaviorSubject.createDefault(Pair(0, 0)),
+        error = Observable.empty()
+      )
+
       override fun close() = Unit
     }
   }

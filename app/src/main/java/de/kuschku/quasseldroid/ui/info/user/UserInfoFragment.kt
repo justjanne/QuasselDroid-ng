@@ -47,8 +47,10 @@ import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.util.Optional
-import de.kuschku.libquassel.util.helpers.nullIf
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.invoke
+import de.kuschku.libquassel.util.helper.nullIf
+import de.kuschku.libquassel.util.helper.value
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.R
@@ -179,7 +181,7 @@ class UserInfoFragment : ServiceBoundFragment() {
       getColor(0, 0)
     }
 
-    combineLatest(modelHelper.session,
+    combineLatest(modelHelper.connectedSession,
                   modelHelper.networks).switchMap { (sessionOptional, networks) ->
       fun processUser(user: IrcUser, bufferSyncer: BufferSyncer? = null, info: BufferInfo? = null,
                       ignoreItems: List<IgnoreListManager.IgnoreListItem>? = null): Observable<Optional<IrcUserInfo>> {
@@ -352,7 +354,7 @@ class UserInfoFragment : ServiceBoundFragment() {
         actionWhois.visibleIf(user.knownToCore)
 
         actionQuery.setOnClickListener { view ->
-          modelHelper.session.value?.orNull()?.let { session ->
+          modelHelper.connectedSession.value?.orNull()?.let { session ->
             val info = session.bufferSyncer.find(
               bufferName = user.nick,
               networkId = user.networkId,
@@ -433,7 +435,7 @@ class UserInfoFragment : ServiceBoundFragment() {
         }
 
         actionWhois.setOnClickListener { view ->
-          modelHelper.session {
+          modelHelper.connectedSession {
             it.orNull()?.let { session ->
               session.bufferSyncer.find(
                 networkId = user.networkId,

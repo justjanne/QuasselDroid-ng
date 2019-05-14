@@ -31,7 +31,8 @@ import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.NotificationManager
 import de.kuschku.libquassel.util.flag.hasFlag
-import de.kuschku.libquassel.util.helpers.clampOf
+import de.kuschku.libquassel.util.helper.clampOf
+import de.kuschku.libquassel.util.helper.or
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.GlideApp
@@ -259,7 +260,7 @@ class QuasselNotificationBackend @Inject constructor(
             this.showNotification(buffer)
           }
         },
-        clampOf(session.lag.value * 3 + 100, 16, 3_000),
+        clampOf(session.lag.or(0) * 3 + 100, 16, 3_000),
         TimeUnit.MILLISECONDS
       )
     }

@@ -34,6 +34,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
+import de.kuschku.libquassel.util.helper.invoke
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
@@ -181,7 +182,7 @@ class ChatlineFragment : ServiceBoundFragment() {
         for ((stripped, _) in lines) {
           modelHelper.chat.addRecentlySentMessage(stripped)
         }
-        modelHelper.session { sessionOptional ->
+        modelHelper.connectedSession { sessionOptional ->
           val session = sessionOptional.orNull()
           modelHelper.chat.bufferId { bufferId ->
             session?.bufferSyncer?.bufferInfo(bufferId)?.also { bufferInfo ->

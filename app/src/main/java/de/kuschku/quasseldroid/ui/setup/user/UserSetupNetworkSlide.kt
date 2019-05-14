@@ -33,7 +33,7 @@ import butterknife.ButterKnife
 import com.google.android.material.textfield.TextInputLayout
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_PLAINTEXT
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_SSL
-import de.kuschku.libquassel.util.helpers.nullIf
+import de.kuschku.libquassel.util.helper.nullIf
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.DefaultNetwork
 import de.kuschku.quasseldroid.defaults.DefaultNetworkServer

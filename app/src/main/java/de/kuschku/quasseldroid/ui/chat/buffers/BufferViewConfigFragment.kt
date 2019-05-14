@@ -49,10 +49,7 @@ import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.minus
-import de.kuschku.libquassel.util.helpers.mapMap
-import de.kuschku.libquassel.util.helpers.mapOrElse
-import de.kuschku.libquassel.util.helpers.nullIf
-import de.kuschku.libquassel.util.helpers.value
+import de.kuschku.libquassel.util.helper.*
 import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
@@ -68,7 +65,10 @@ import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
 import de.kuschku.quasseldroid.ui.info.channellist.ChannelListActivity
 import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
-import de.kuschku.quasseldroid.util.helper.*
+import de.kuschku.quasseldroid.util.helper.setTooltip
+import de.kuschku.quasseldroid.util.helper.styledAttributes
+import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.util.helper.visibleIf
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.view.WarningBarView
@@ -128,7 +128,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
       val selected = modelHelper.selectedBuffer.value
       val info = selected?.info
-      val session = modelHelper.session.value?.orNull()
+      val session = modelHelper.connectedSession.value?.orNull()
       val bufferSyncer = session?.bufferSyncer
       val network = session?.networks?.get(selected?.info?.networkId)
       val bufferViewConfig = modelHelper.bufferViewConfig.value
@@ -274,7 +274,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     var hasSetBufferViewConfigId = false
     adapter.setOnUpdateFinishedListener {
       if (!hasSetBufferViewConfigId) {
-        chatListSpinner.setSelection(adapter.indexOf(modelHelper.chat.bufferViewConfigId.value).nullIf { it == -1 }
+        chatListSpinner.setSelection(adapter.indexOf(modelHelper.chat.bufferViewConfigId.or(-1)).nullIf { it == -1 }
                                      ?: 0)
         modelHelper.chat.bufferViewConfigId.onNext(chatListSpinner.selectedItemId.toInt())
         hasSetBufferViewConfigId = true
@@ -486,11 +486,13 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     })
 
     chatListToolbar.inflateMenu(R.menu.context_bufferlist)
-    chatListToolbar.menu.findItem(R.id.action_search).isChecked = modelHelper.chat.bufferSearchTemporarilyVisible.value
+    chatListToolbar.menu.findItem(R.id.action_search).isChecked = modelHelper.chat.bufferSearchTemporarilyVisible.or(
+      false)
     chatListToolbar.setOnMenuItemClickListener { item ->
       when (item.itemId) {
         R.id.action_archived_chats -> {
-          ArchiveActivity.launch(requireContext(), chatlistId = modelHelper.chat.bufferViewConfigId.value)
+          ArchiveActivity.launch(requireContext(),
+                                 chatlistId = modelHelper.chat.bufferViewConfigId.or(-1))
           true
         }
         R.id.action_search      -> {

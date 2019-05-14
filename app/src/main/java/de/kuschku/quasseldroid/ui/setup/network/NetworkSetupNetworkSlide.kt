@@ -39,6 +39,7 @@ import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_PLAINTEXT
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_SSL
+import de.kuschku.libquassel.util.helper.combineLatest
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.DefaultNetworkServer
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.NetworkAdapter
@@ -46,7 +47,6 @@ import de.kuschku.quasseldroid.ui.coresettings.network.IdentityAdapter
 import de.kuschku.quasseldroid.ui.setup.ServiceBoundSlideFragment
 import de.kuschku.quasseldroid.util.Patterns
 import de.kuschku.quasseldroid.util.TextValidator
-import de.kuschku.quasseldroid.util.helper.combineLatest
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.ui.AnimationHelper
 import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
