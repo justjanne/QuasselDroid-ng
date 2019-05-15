@@ -22,7 +22,6 @@ package de.kuschku.quasseldroid.util.helper
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.*
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 
 @MainThread
@@ -62,33 +61,6 @@ inline fun <X, Y> LiveData<X>.switchMapNotNull(
 
     override fun onChanged(x: X?) {
       val newLiveData = if (x == null) null else func(x)
-      if (mSource === newLiveData) {
-        return
-      }
-      mSource?.let(result::removeSource)
-      mSource = newLiveData
-      if (newLiveData != null) {
-        result.addSource(newLiveData) { y -> result.value = y }
-      } else {
-        result.value = null
-      }
-    }
-  })
-  return result
-}
-
-@MainThread
-inline fun <X, Y> LiveData<X?>.switchMapRx(
-  strategy: BackpressureStrategy,
-  crossinline func: (X) -> Observable<Y>?
-): LiveData<Y?> {
-  val result = MediatorLiveData<Y>()
-  result.addSource(
-    this, object : Observer<X?> {
-    var mSource: LiveData<Y>? = null
-
-    override fun onChanged(x: X?) {
-      val newLiveData = if (x == null) null else func(x)?.toLiveData(strategy)
       if (mSource === newLiveData) {
         return
       }
