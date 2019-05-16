@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Koschinski
+  Copyright (c) 2019 Janne Mareike Koschinski
   Copyright (c) 2019 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
@@ -65,7 +65,7 @@
         <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/real_name"
           style="@style/Widget.CoreSettings.EditText"
-          tools:text="Janne Koschinski" />
+          tools:text="Janne Mareike Koschinski" />
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout

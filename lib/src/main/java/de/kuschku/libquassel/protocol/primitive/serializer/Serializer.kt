@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2017 Janne Koschinski
+ *  Copyright (C) 2017 Janne Mareike Koschinski
  *
  *  This program is free software: you can redistribute it and/or modify it
  *  under the terms of the GNU General Public License as published by the Free

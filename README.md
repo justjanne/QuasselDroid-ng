@@ -34,7 +34,7 @@ keyPassword=passwordofyourkeyhere
 
 ## Authors
 
-* **Janne Koschinski** (justJanne)
+* **Janne Mareike Koschinski** (justJanne)
   Rewrite, UI, Annotation Processors, Backend
   
 ## Acknowledgements

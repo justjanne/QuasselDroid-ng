@@ -1,7 +1,7 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Koschinski
+ * Copyright (c) 2019 Janne Mareike Koschinski
  * Copyright (c) 2019 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -303,7 +303,7 @@ class AboutFragment : DaggerFragment() {
     authors.itemAnimator = null
     authors.adapter = ContributorAdapter(listOf(
       Contributor(
-        name = "Janne Koschinski",
+        name = "Janne Mareike Koschinski",
         nickName = "justJanne",
         description = getString(R.string.contributor_description_justjanne)
       )
@@ -342,7 +342,7 @@ class AboutFragment : DaggerFragment() {
     translators.itemAnimator = null
     translators.adapter = TranslatorAdapter(listOf(
       Translator(
-        name = "Janne Koschinski",
+        name = "Janne Mareike Koschinski",
         language = R.string.preference_language_entry_de
       ),
       Translator(

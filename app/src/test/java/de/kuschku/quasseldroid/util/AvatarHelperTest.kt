@@ -1,7 +1,7 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Koschinski
+ * Copyright (c) 2019 Janne Mareike Koschinski
  * Copyright (c) 2019 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -39,7 +39,7 @@ class AvatarHelperTest {
       networkId = NetworkId(0),
       sender = "justJanne",
       senderPrefixes = "",
-      realName = "Janne Koschinski <janne@kuschku.de>",
+      realName = "Janne Mareike Koschinski <janne@kuschku.de>",
       avatarUrl = "",
       content = "Lorem Ipsum I Dolor Sit Amet",
       ignored = false

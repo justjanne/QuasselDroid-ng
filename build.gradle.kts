@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2018 Janne Koschinski
+ * Copyright (c) 2018 Janne Mareike Koschinski
  * Copyright (c) 2018 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it

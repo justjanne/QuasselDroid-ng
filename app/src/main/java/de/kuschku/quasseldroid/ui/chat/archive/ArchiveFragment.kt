@@ -1,7 +1,7 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Koschinski
+ * Copyright (c) 2019 Janne Mareike Koschinski
  * Copyright (c) 2019 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -23,12 +23,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.quasseldroid.R
-import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.viewmodel.helper.QuasselViewModelHelper
 import javax.inject.Inject
