@@ -60,19 +60,19 @@ open class ChatViewModelHelper @Inject constructor(
    * An observable of the changes of the markerline, as pairs of `(old, new)`
    */
   val markerLine = connectedSession.mapSwitchMap { currentSession ->
-    chat.bufferId.switchMap { currentBuffer ->
+    chat.bufferId.safeSwitchMap { currentBuffer ->
       // Get a stream of the latest marker line
       currentSession.bufferSyncer.liveMarkerLine(currentBuffer)
     }
   }
 
   val bufferData = combineLatest(connectedSession, chat.bufferId)
-    .switchMap { (sessionOptional, id) ->
+    .safeSwitchMap { (sessionOptional, id) ->
       val session = sessionOptional.orNull()
       val bufferSyncer = session?.bufferSyncer
       if (bufferSyncer != null) {
-        session.liveNetworks().switchMap { networks ->
-          bufferSyncer.liveBufferInfos().switchMap {
+        session.liveNetworks().safeSwitchMap { networks ->
+          bufferSyncer.liveBufferInfos().safeSwitchMap {
             val info = bufferSyncer.bufferInfo(id)
             val network = networks[info?.networkId]
             if (info == null || network == null) {
@@ -80,7 +80,7 @@ open class ChatViewModelHelper @Inject constructor(
             } else {
               when (info.type.toInt()) {
                 BufferInfo.Type.QueryBuffer.toInt()   -> {
-                  network.liveIrcUser(info.bufferName).switchMap {
+                  network.liveIrcUser(info.bufferName).safeSwitchMap {
                     it.updates().map { user ->
                       BufferData(
                         info = info,
@@ -96,7 +96,7 @@ open class ChatViewModelHelper @Inject constructor(
                 BufferInfo.Type.ChannelBuffer.toInt() -> {
                   network.liveIrcChannel(
                     info.bufferName
-                  ).switchMap { channel ->
+                  ).safeSwitchMap { channel ->
                     channel.updates().map {
                       BufferData(
                         info = info,
@@ -132,15 +132,15 @@ open class ChatViewModelHelper @Inject constructor(
     bufferData.distinctUntilChanged().throttleLast(100, TimeUnit.MILLISECONDS)
 
   val nickData: Observable<List<IrcUserItem>> = combineLatest(connectedSession, chat.bufferId)
-    .switchMap { (sessionOptional, buffer) ->
+    .safeSwitchMap { (sessionOptional, buffer) ->
       val session = sessionOptional.orNull()
       val bufferSyncer = session?.bufferSyncer
       val bufferInfo = bufferSyncer?.bufferInfo(buffer)
       if (bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
-        session.liveNetworks().switchMap { networks ->
+        session.liveNetworks().safeSwitchMap { networks ->
           val network = networks[bufferInfo.networkId]
           network?.liveIrcChannel(bufferInfo.bufferName)?.switchMapNullable(IrcChannel.NULL) { ircChannel ->
-            ircChannel?.liveIrcUsers()?.switchMap { users ->
+            ircChannel?.liveIrcUsers()?.safeSwitchMap { users ->
               combineLatest<IrcUserItem>(
                 users.map<IrcUser, Observable<IrcUserItem>?> {
                   it.updates().map { user ->
@@ -166,7 +166,7 @@ open class ChatViewModelHelper @Inject constructor(
                 }
               )
             } ?: Observable.just(emptyList())
-          }
+          } ?: Observable.just(emptyList())
         }
       } else {
         Observable.just(emptyList())
@@ -176,12 +176,12 @@ open class ChatViewModelHelper @Inject constructor(
     nickData.distinctUntilChanged().throttleLast(100, TimeUnit.MILLISECONDS)
 
   val selectedBuffer = combineLatest(connectedSession, chat.selectedBufferId, bufferViewConfig)
-    .switchMap { (sessionOptional, buffer, bufferViewConfigOptional) ->
+    .safeSwitchMap { (sessionOptional, buffer, bufferViewConfigOptional) ->
       val session = sessionOptional.orNull()
       val bufferSyncer = session?.bufferSyncer
       val bufferViewConfig = bufferViewConfigOptional.orNull()
       if (bufferSyncer != null && bufferViewConfig != null) {
-        session.liveNetworks().switchMap { networks ->
+        session.liveNetworks().safeSwitchMap { networks ->
           val hiddenState = when {
             bufferViewConfig.removedBuffers().contains(buffer)            ->
               BufferHiddenState.HIDDEN_PERMANENT
@@ -235,22 +235,22 @@ open class ChatViewModelHelper @Inject constructor(
 
   val bufferList: Observable<Pair<BufferViewConfig?, List<BufferProps>>> =
     combineLatest(connectedSession, bufferViewConfig, chat.showHidden, chat.bufferSearch)
-      .switchMap { (sessionOptional, configOptional, showHiddenRaw, bufferSearch) ->
+      .safeSwitchMap { (sessionOptional, configOptional, showHiddenRaw, bufferSearch) ->
         val session = sessionOptional.orNull()
         val bufferSyncer = session?.bufferSyncer
         val showHidden = showHiddenRaw ?: false
         val config = configOptional.orNull()
         if (bufferSyncer != null && config != null) {
-          session.liveNetworks().switchMap { networks ->
+          session.liveNetworks().safeSwitchMap { networks ->
             config.liveUpdates()
-              .switchMap { currentConfig ->
+              .safeSwitchMap { currentConfig ->
                 combineLatest<Collection<BufferId>>(
                   listOf(
                     config.liveBuffers(),
                     config.liveTemporarilyRemovedBuffers(),
                     config.liveRemovedBuffers()
                   )
-                ).switchMap { (ids, temp, perm) ->
+                ).safeSwitchMap { (ids, temp, perm) ->
                   fun transformIds(ids: Collection<BufferId>, state: BufferHiddenState) =
                     ids.asSequence().mapNotNull { id ->
                       bufferSyncer.bufferInfo(id)
@@ -271,11 +271,11 @@ open class ChatViewModelHelper @Inject constructor(
                         it to network
                       }
                     }.map<Pair<BufferInfo, Network>, Observable<BufferProps>?> { (info, network) ->
-                      bufferSyncer.liveActivity(info.bufferId).switchMap { activity ->
+                      bufferSyncer.liveActivity(info.bufferId).safeSwitchMap { activity ->
                         bufferSyncer.liveHighlightCount(info.bufferId).map { highlights ->
                           activity to highlights
                         }
-                      }.switchMap { (activity, highlights) ->
+                      }.safeSwitchMap { (activity, highlights) ->
                         val name = info.bufferName?.trim() ?: ""
                         val search = bufferSearch.trim()
                         val matchMode = when {
@@ -285,9 +285,9 @@ open class ChatViewModelHelper @Inject constructor(
                         }
                         when (info.type.toInt()) {
                           BufferInfo.Type.QueryBuffer.toInt()   -> {
-                            network.liveNetworkInfo().switchMap { networkInfo ->
-                              network.liveConnectionState().switchMap { connectionState ->
-                                network.liveIrcUser(info.bufferName).switchMap {
+                            network.liveNetworkInfo().safeSwitchMap { networkInfo ->
+                              network.liveConnectionState().safeSwitchMap { connectionState ->
+                                network.liveIrcUser(info.bufferName).safeSwitchMap {
                                   it.updates().mapNullable(IrcUser.NULL) { user ->
                                     BufferProps(
                                       info = info,
@@ -311,9 +311,9 @@ open class ChatViewModelHelper @Inject constructor(
                             }
                           }
                           BufferInfo.Type.ChannelBuffer.toInt() -> {
-                            network.liveNetworkInfo().switchMap { networkInfo ->
-                              network.liveConnectionState().switchMap { connectionState ->
-                                network.liveIrcChannel(info.bufferName).switchMap { channel ->
+                            network.liveNetworkInfo().safeSwitchMap { networkInfo ->
+                              network.liveConnectionState().safeSwitchMap { connectionState ->
+                                network.liveIrcChannel(info.bufferName).safeSwitchMap { channel ->
                                   channel.updates().mapNullable(IrcChannel.NULL) {
                                     BufferProps(
                                       info = info,
@@ -335,7 +335,7 @@ open class ChatViewModelHelper @Inject constructor(
                             }
                           }
                           BufferInfo.Type.StatusBuffer.toInt()  -> {
-                            network.liveNetworkInfo().switchMap { networkInfo ->
+                            network.liveNetworkInfo().safeSwitchMap { networkInfo ->
                               network.liveConnectionState().map { connectionState ->
                                 BufferProps(
                                   info = info,
@@ -381,7 +381,7 @@ open class ChatViewModelHelper @Inject constructor(
                     }.filter {
                       !config.hideInactiveNetworks() || it.isConnected()
                     }.map<Network, Observable<BufferProps>?> { network ->
-                      network.liveNetworkInfo().switchMap { networkInfo ->
+                      network.liveNetworkInfo().safeSwitchMap { networkInfo ->
                         network.liveConnectionState().map { connectionState ->
                           BufferProps(
                             info = BufferInfo(
@@ -404,7 +404,7 @@ open class ChatViewModelHelper @Inject constructor(
                     }
                   }
 
-                  bufferSyncer.liveBufferInfos().switchMap {
+                  bufferSyncer.liveBufferInfos().safeSwitchMap {
                     val buffers = if (showHidden || bufferSearch.isNotBlank()) {
                       transformIds(ids, BufferHiddenState.VISIBLE) +
                       transformIds(temp - ids, BufferHiddenState.HIDDEN_TEMPORARY) +

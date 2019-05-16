@@ -31,6 +31,7 @@ import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helper.combineLatest
 import de.kuschku.libquassel.util.helper.mapNullable
 import de.kuschku.libquassel.util.helper.nullIf
+import de.kuschku.libquassel.util.helper.safeSwitchMap
 import de.kuschku.quasseldroid.viewmodel.ChatViewModel
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
@@ -47,7 +48,7 @@ open class EditorViewModelHelper @Inject constructor(
 ) : ChatViewModelHelper(chat, quassel) {
   val rawAutoCompleteData: Observable<Triple<Optional<ISession>, BufferId, Pair<String, IntRange>>> =
     combineLatest(connectedSession, chat.bufferId, editor.lastWord)
-      .switchMap { (sessionOptional, id, lastWordWrapper) ->
+      .safeSwitchMap { (sessionOptional, id, lastWordWrapper) ->
         lastWordWrapper
           .distinctUntilChanged()
           .map { lastWord ->
@@ -58,19 +59,19 @@ open class EditorViewModelHelper @Inject constructor(
   val autoCompleteData: Observable<Pair<String, List<AutoCompleteItem>>> = rawAutoCompleteData
     .distinctUntilChanged()
     .debounce(300, TimeUnit.MILLISECONDS)
-    .switchMap { (sessionOptional, id, lastWord) ->
+    .safeSwitchMap { (sessionOptional, id, lastWord) ->
       val session = sessionOptional.orNull()
       val bufferSyncer = session?.bufferSyncer
       val bufferInfo = bufferSyncer?.bufferInfo(id)
       if (bufferSyncer != null) {
-        session.liveNetworks().switchMap { networks ->
-          bufferSyncer.liveBufferInfos().switchMap { infos ->
-            session.aliasManager.updates().map(AliasManager::aliasList).switchMap { aliases ->
+        session.liveNetworks().safeSwitchMap { networks ->
+          bufferSyncer.liveBufferInfos().safeSwitchMap { infos ->
+            session.aliasManager.updates().map(AliasManager::aliasList).safeSwitchMap { aliases ->
               val network = networks[bufferInfo?.networkId] ?: Network.NULL
               val ircChannel = if (bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true) {
                 network.ircChannel(bufferInfo.bufferName) ?: IrcChannel.NULL
               } else IrcChannel.NULL
-              ircChannel.liveIrcUsers().switchMap { users ->
+              ircChannel.liveIrcUsers().safeSwitchMap { users ->
                 fun processResults(results: List<Observable<out AutoCompleteItem>>) =
                   combineLatest<AutoCompleteItem>(results)
                     .map { list ->
@@ -102,7 +103,7 @@ open class EditorViewModelHelper @Inject constructor(
                   }.map { (info, network) ->
                     network.liveIrcChannel(
                       info.bufferName
-                    ).switchMap { channel ->
+                    ).safeSwitchMap { channel ->
                       channel.updates().mapNullable(IrcChannel.NULL) {
                         AutoCompleteItem.ChannelItem(
                           info = info,

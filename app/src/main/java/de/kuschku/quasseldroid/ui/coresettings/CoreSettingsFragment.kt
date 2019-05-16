@@ -37,6 +37,7 @@ import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.Identity
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.safeSwitchMap
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.coresettings.aliaslist.AliasListActivity
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.ChatlistCreateActivity
@@ -136,7 +137,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     networks.addItemDecoration(itemDecoration)
     ViewCompat.setNestedScrollingEnabled(networks, false)
 
-    modelHelper.networks.switchMap {
+    modelHelper.networks.safeSwitchMap {
       if (it.isEmpty()) {
         Observable.just(emptyList())
       } else {
@@ -155,7 +156,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     identities.addItemDecoration(itemDecoration)
     ViewCompat.setNestedScrollingEnabled(identities, false)
 
-    modelHelper.identities.switchMap {
+    modelHelper.identities.safeSwitchMap {
       if (it.isEmpty()) {
         Observable.just(emptyList())
       } else {
@@ -174,7 +175,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
     chatlists.addItemDecoration(itemDecoration)
     ViewCompat.setNestedScrollingEnabled(chatlists, false)
 
-    modelHelper.bufferViewConfigMap.switchMap {
+    modelHelper.bufferViewConfigMap.safeSwitchMap {
       combineLatest(it.values.map(BufferViewConfig::liveUpdates)).map {
         it.map {
           SettingsItem(it.bufferViewId(), it.bufferViewName())

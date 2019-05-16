@@ -50,6 +50,7 @@ import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.helper.combineLatest
 import de.kuschku.libquassel.util.helper.mapOrElse
 import de.kuschku.libquassel.util.helper.mapSwitchMap
+import de.kuschku.libquassel.util.helper.safeSwitchMap
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.GlideApp
@@ -129,7 +130,7 @@ class QueryCreateFragment : ServiceBoundFragment() {
     }
 
     var hasSetNetwork = false
-    modelHelper.networks.switchMap {
+    modelHelper.networks.safeSwitchMap {
       combineLatest(it.values.map(Network::liveNetworkInfo)).map {
         it.map {
           NetworkItem(it.networkId, it.networkName)
@@ -206,7 +207,7 @@ class QueryCreateFragment : ServiceBoundFragment() {
         Optional.ofNullable(networks[networkId])
       }.mapSwitchMap {
         it.liveIrcUsers()
-      }.mapOrElse(emptyList()).switchMap {
+      }.mapOrElse(emptyList()).safeSwitchMap {
         combineLatest<IrcUserItem>(
           it.map<IrcUser, Observable<IrcUserItem>?> {
             it.updates().map { user ->

@@ -43,6 +43,10 @@ fun <T : Any, U : Any> Observable<Optional<T>>.mapMapNullable(
   }
 }
 
+inline fun <T : Any, R : Any> Observable<T>.safeSwitchMap(
+  noinline mapper: (T) -> ObservableSource<R>): Observable<R> =
+  switchMap(mapper)
+
 fun <T : Any, U : Any> Observable<T>.mapNullable(
   nullableValue: T,
   mapper: (T?) -> U): Observable<U> = map {

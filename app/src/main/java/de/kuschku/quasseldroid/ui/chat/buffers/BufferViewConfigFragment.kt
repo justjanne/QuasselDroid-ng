@@ -263,7 +263,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     ButterKnife.bind(this, view)
 
     val adapter = BufferViewConfigAdapter()
-    modelHelper.bufferViewConfigs.switchMap {
+    modelHelper.bufferViewConfigs.safeSwitchMap {
       combineLatest(it.map(BufferViewConfig::liveUpdates))
     }.toLiveData().observe(this, Observer {
       if (it != null) {

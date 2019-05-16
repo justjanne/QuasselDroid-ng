@@ -40,6 +40,7 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_PLAINTEXT
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork.PortDefaults.PORT_SSL
 import de.kuschku.libquassel.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.safeSwitchMap
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.DefaultNetworkServer
 import de.kuschku.quasseldroid.ui.coresettings.chatlist.NetworkAdapter
@@ -187,7 +188,7 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
 
     identity.adapter = identityAdapter
 
-    modelHelper.identities.switchMap {
+    modelHelper.identities.safeSwitchMap {
       combineLatest(it.values.map(Identity::liveUpdates)).map {
         it.sortedBy(Identity::identityName)
       }
@@ -197,7 +198,7 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
       }
     })
 
-    modelHelper.networks.switchMap {
+    modelHelper.networks.safeSwitchMap {
       combineLatest(it.values.map(Network::liveNetworkInfo)).map {
         it.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, INetwork.NetworkInfo::networkName))
       }

@@ -42,6 +42,7 @@ import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.minus
 import de.kuschku.libquassel.util.flag.plus
 import de.kuschku.libquassel.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.safeSwitchMap
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.Defaults
 import de.kuschku.quasseldroid.util.helper.toLiveData
@@ -121,7 +122,7 @@ abstract class ChatListBaseFragment(private val initDefault: Boolean) :
     val networkAdapter = NetworkAdapter(R.string.settings_chatlist_network_all)
     networkId.adapter = networkAdapter
 
-    modelHelper.networks.switchMap {
+    modelHelper.networks.safeSwitchMap {
       combineLatest(it.values.map(Network::liveNetworkInfo)).map {
         it.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, INetwork.NetworkInfo::networkName))
       }

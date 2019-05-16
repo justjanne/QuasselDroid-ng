@@ -25,7 +25,7 @@ import androidx.lifecycle.*
 import io.reactivex.Observable
 
 @MainThread
-inline fun <X, Y> LiveData<X?>.switchMap(
+inline fun <X, Y> LiveData<X?>.safeSwitchMap(
   crossinline func: (X) -> LiveData<Y>?
 ): LiveData<Y> {
   val result = MediatorLiveData<Y>()

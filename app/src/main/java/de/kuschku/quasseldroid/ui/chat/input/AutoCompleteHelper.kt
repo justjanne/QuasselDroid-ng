@@ -34,6 +34,7 @@ import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helper.nullIf
+import de.kuschku.libquassel.util.helper.safeSwitchMap
 import de.kuschku.libquassel.util.helper.value
 import de.kuschku.libquassel.util.irc.SenderColorUtil
 import de.kuschku.quasseldroid.R
@@ -260,7 +261,7 @@ class AutoCompleteHelper(
   }
 
   fun autoComplete(reverse: Boolean = false) {
-    helper.editor.lastWord.switchMap { it }.value?.let { originalWord ->
+    helper.editor.lastWord.safeSwitchMap { it }.value?.let { originalWord ->
       val previous = autoCompletionState
       if (!originalWord.second.isEmpty()) {
         val autoCompletedWords = helper.rawAutoCompleteData.value?.let { (sessionOptional, id, lastWord) ->

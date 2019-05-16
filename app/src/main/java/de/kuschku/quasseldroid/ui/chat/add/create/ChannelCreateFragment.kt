@@ -37,6 +37,7 @@ import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.util.helper.combineLatest
 import de.kuschku.libquassel.util.helper.nullIf
+import de.kuschku.libquassel.util.helper.safeSwitchMap
 import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
@@ -107,7 +108,7 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
     }
 
     var hasSetNetwork = false
-    modelHelper.networks.switchMap {
+    modelHelper.networks.safeSwitchMap {
       combineLatest(it.values.map(Network::liveNetworkInfo)).map {
         it.map {
           NetworkItem(it.networkId, it.networkName)
@@ -177,7 +178,7 @@ class ChannelCreateFragment : ServiceBoundSettingsFragment() {
           )?.let { statusBuffer ->
             modelHelper.connectedSession.value?.orNull()?.rpcHandler?.apply {
               sendInput(statusBuffer, "/join $channelName")
-              modelHelper.networks.switchMap {
+              modelHelper.networks.safeSwitchMap {
                 it[selectedNetworkId]?.liveIrcChannel(channelName)
                 ?: Observable.empty()
               }.subscribe {

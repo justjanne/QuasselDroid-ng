@@ -68,7 +68,7 @@ abstract class ServiceBoundSetupActivity :
   protected abstract val fragments: List<SlideFragment>
 
   private val currentPage = MutableLiveData<SlideFragment?>()
-  private val isValid = currentPage.switchMap(SlideFragment::valid).or(false)
+  private val isValid = currentPage.safeSwitchMap(SlideFragment::valid).or(false)
 
   @DrawableRes
   protected val icon: Int = R.mipmap.ic_launcher_recents

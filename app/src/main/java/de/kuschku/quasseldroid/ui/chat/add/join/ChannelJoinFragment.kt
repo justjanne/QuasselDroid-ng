@@ -33,6 +33,7 @@ import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.Network
 import de.kuschku.libquassel.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.safeSwitchMap
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.ui.chat.add.NetworkAdapter
@@ -85,7 +86,7 @@ class ChannelJoinFragment : ServiceBoundFragment() {
     }
 
     var hasSetNetwork = false
-    modelHelper.networks.switchMap {
+    modelHelper.networks.safeSwitchMap {
       combineLatest(it.values.map(Network::liveNetworkInfo)).map {
         it.map {
           NetworkItem(it.networkId, it.networkName)

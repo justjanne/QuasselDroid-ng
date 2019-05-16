@@ -45,6 +45,7 @@ import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.helper.combineLatest
 import de.kuschku.libquassel.util.helper.nullIf
+import de.kuschku.libquassel.util.helper.safeSwitchMap
 import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.Defaults
@@ -171,7 +172,7 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
     val identityAdapter = IdentityAdapter()
     identity.adapter = identityAdapter
 
-    modelHelper.identities.switchMap {
+    modelHelper.identities.safeSwitchMap {
       combineLatest(it.values.map(Identity::liveUpdates)).map {
         it.sortedBy(Identity::identityName)
       }
@@ -211,7 +212,7 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
       modelHelper.networks.map { Optional.ofNullable(it[networkId]) }
         .filter(Optional<Network>::isPresent)
         .map(Optional<Network>::get)
-        .switchMap(Network::liveCaps)
+        .safeSwitchMap(Network::liveCaps)
         .toLiveData()
         .observe(this, Observer {
           autoidentifyWarning.visibleIf(it.contains("sasl"))

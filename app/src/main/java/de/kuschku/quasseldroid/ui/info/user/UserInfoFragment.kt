@@ -47,10 +47,7 @@ import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.quassel.syncables.IrcUser
 import de.kuschku.libquassel.util.Optional
-import de.kuschku.libquassel.util.helper.combineLatest
-import de.kuschku.libquassel.util.helper.invoke
-import de.kuschku.libquassel.util.helper.nullIf
-import de.kuschku.libquassel.util.helper.value
+import de.kuschku.libquassel.util.helper.*
 import de.kuschku.libquassel.util.irc.HostmaskHelper
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.R
@@ -182,7 +179,7 @@ class UserInfoFragment : ServiceBoundFragment() {
     }
 
     combineLatest(modelHelper.connectedSession,
-                  modelHelper.networks).switchMap { (sessionOptional, networks) ->
+                  modelHelper.networks).safeSwitchMap { (sessionOptional, networks) ->
       fun processUser(user: IrcUser, bufferSyncer: BufferSyncer? = null, info: BufferInfo? = null,
                       ignoreItems: List<IgnoreListManager.IgnoreListItem>? = null): Observable<Optional<IrcUserInfo>> {
         actionShortcut.post(::updateShortcutVisibility)
@@ -223,7 +220,7 @@ class UserInfoFragment : ServiceBoundFragment() {
               combineLatest(user.channels().map { channelName ->
                 user.network().liveIrcChannel(
                   channelName
-                ).switchMap { channel ->
+                ).safeSwitchMap { channel ->
                   channel.updates().map {
                     Optional.ofNullable(
                       bufferSyncer?.find(
@@ -267,7 +264,7 @@ class UserInfoFragment : ServiceBoundFragment() {
         val bufferSyncer = session?.bufferSyncer
         val bufferInfo = bufferSyncer?.bufferInfo(bufferId)
         bufferInfo?.let {
-          networks[it.networkId]?.liveIrcUser(it.bufferName)?.switchMap(IrcUser::updates)?.switchMap {
+          networks[it.networkId]?.liveIrcUser(it.bufferName)?.safeSwitchMap(IrcUser::updates)?.safeSwitchMap {
             processUser(it, bufferSyncer, bufferInfo)
           }
         }
@@ -276,17 +273,17 @@ class UserInfoFragment : ServiceBoundFragment() {
 
         networks[networkId]
           ?.liveIrcUser(nickName)
-          ?.switchMap(IrcUser::updates)
-          ?.switchMap { user ->
+          ?.safeSwitchMap(IrcUser::updates)
+          ?.safeSwitchMap { user ->
             ignoreListManager?.liveMatchingRules(user.hostMask())?.map {
               Pair(user, it)
             } ?: Observable.just(Pair(user, emptyList()))
-          }?.switchMap { (user, ignoreItems) ->
+          }?.safeSwitchMap { (user, ignoreItems) ->
             processUser(user,
                         sessionOptional?.orNull()?.bufferSyncer,
                         ignoreItems = ignoreItems)
           }
-      } ?: Observable.just(IrcUser.NULL).switchMap { user -> processUser(user, null, null) }
+      } ?: Observable.just(IrcUser.NULL).safeSwitchMap { user -> processUser(user, null, null) }
     }.toLiveData().observe(this, Observer {
       val user = it.orNull()
       if (user != null) {

@@ -29,6 +29,7 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.*
 import de.kuschku.libquassel.util.helper.combineLatest
 import de.kuschku.libquassel.util.helper.or
+import de.kuschku.libquassel.util.helper.safeSwitchMap
 import de.kuschku.libquassel.util.helper.value
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -48,7 +49,7 @@ class SessionManager(
   private val disposables = mutableListOf<Disposable>()
 
   // Helping Rx Mappers
-  val connectionProgress: Observable<Triple<ConnectionState, Int, Int>> = progressData.switchMap {
+  val connectionProgress: Observable<Triple<ConnectionState, Int, Int>> = progressData.safeSwitchMap {
     combineLatest(it.state, it.progress).map { (state, progress) ->
       Triple(state, progress.first, progress.second)
     }
@@ -69,8 +70,8 @@ class SessionManager(
   init {
     log(INFO, "Session", "Session created")
 
-    disposables.add(state.distinctUntilChanged().subscribe {
-      if (it == ConnectionState.CONNECTED) {
+    disposables.add(state.distinctUntilChanged().subscribe { state: ConnectionState ->
+      if (state == ConnectionState.CONNECTED) {
         updateStateConnected()
       }
     })

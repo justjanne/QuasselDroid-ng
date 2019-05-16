@@ -372,7 +372,7 @@ class MessageListFragment : ServiceBoundFragment() {
                              modelHelper.chat.expandedMessages,
                              modelHelper.markerLine)
       .toLiveData().switchMapNotNull { (buffer, selected, expanded, markerLine) ->
-        accountDatabase.accounts().listen(accountId).switchMap {
+        accountDatabase.accounts().listen(accountId).safeSwitchMap {
           database.filtered().listen(accountId,
                                      buffer,
                                      it.defaultFiltered).switchMapNotNull { filtered ->

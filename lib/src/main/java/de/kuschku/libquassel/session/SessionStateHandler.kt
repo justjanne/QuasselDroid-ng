@@ -20,6 +20,7 @@
 package de.kuschku.libquassel.session
 
 import de.kuschku.libquassel.session.manager.SessionState
+import de.kuschku.libquassel.util.helper.safeSwitchMap
 import io.reactivex.subjects.BehaviorSubject
 
 open class SessionStateHandler constructor(
@@ -42,15 +43,15 @@ open class SessionStateHandler constructor(
     it.progress
   }
 
-  val errors = progressData.switchMap {
+  val errors = progressData.safeSwitchMap {
     it.error
   }
 
-  val progress = progressData.switchMap {
+  val progress = progressData.safeSwitchMap {
     it.progress
   }
 
-  val state = progressData.switchMap {
+  val state = progressData.safeSwitchMap {
     it.state
   }
 

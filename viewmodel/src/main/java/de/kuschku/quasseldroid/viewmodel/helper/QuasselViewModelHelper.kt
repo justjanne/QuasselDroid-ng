@@ -39,13 +39,13 @@ import javax.net.ssl.SSLSession
 open class QuasselViewModelHelper @Inject constructor(
   val quassel: QuasselViewModel
 ) {
-  val backend = quassel.backendWrapper.switchMap { it }
+  val backend = quassel.backendWrapper.safeSwitchMap { it }
   val sessionManager = backend.mapMapNullable(Backend::sessionManager)
   val connectedSession = sessionManager.mapSwitchMap(SessionManager::connectedSession)
   val rpcHandler = connectedSession.mapMap(ISession::rpcHandler)
   val ircListHelper = connectedSession.mapMap(ISession::ircListHelper)
   val features = sessionManager.mapSwitchMap { manager ->
-    manager.state.switchMap { state ->
+    manager.state.safeSwitchMap { state ->
       if (state != ConnectionState.CONNECTED) {
         Observable.just(Pair(false, Features.empty()))
       } else {
@@ -70,7 +70,7 @@ open class QuasselViewModelHelper @Inject constructor(
 
   val bufferViewManager = connectedSession.mapMap(ISession::bufferViewManager)
 
-  val errors = sessionManager.switchMap {
+  val errors = sessionManager.safeSwitchMap {
     it.orNull()?.errors ?: Observable.empty()
   }
 
@@ -92,11 +92,11 @@ open class QuasselViewModelHelper @Inject constructor(
 
   val aliasManager = connectedSession.mapMap(ISession::aliasManager)
 
-  val networks = connectedSession.switchMap {
+  val networks = connectedSession.safeSwitchMap {
     it.map(ISession::liveNetworks).orElse(Observable.just(emptyMap()))
   }
 
-  val identities = connectedSession.switchMap {
+  val identities = connectedSession.safeSwitchMap {
     it.map(ISession::liveIdentities).orElse(Observable.just(emptyMap()))
   }
 
@@ -115,7 +115,7 @@ open class QuasselViewModelHelper @Inject constructor(
     }
   }.mapOrElse(emptyList())
 
-  val bufferViewConfigMap = bufferViewManager.switchMap {
+  val bufferViewConfigMap = bufferViewManager.safeSwitchMap {
     it.map { manager ->
       manager.liveBufferViewConfigs().map {
         it.mapNotNull(manager::bufferViewConfig).associateBy(BufferViewConfig::bufferViewId)

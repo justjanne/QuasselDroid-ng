@@ -35,6 +35,7 @@ import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.IrcChannel
 import de.kuschku.libquassel.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.safeSwitchMap
 import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
@@ -109,7 +110,7 @@ class ChannelInfoFragment : ServiceBoundFragment() {
       } ?: Pair(null, IrcChannel.NULL)
     }.filter {
       it.second != IrcChannel.NULL
-    }.switchMap { (info, channel) ->
+    }.safeSwitchMap { (info, channel) ->
       channel.updates().map {
         Pair(info, it)
       }
