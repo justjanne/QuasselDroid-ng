@@ -194,12 +194,12 @@ class IgnoreListManager constructor(
         ignoreRule ?: "",
         if (isRegEx) ExpressionMatch.MatchMode.MatchRegEx
         else ExpressionMatch.MatchMode.MatchWildcard,
-        true
+        caseSensitive = false
       ),
       ExpressionMatch(
         scopeRule ?: "",
         ExpressionMatch.MatchMode.MatchMultiWildcard,
-        true
+        caseSensitive = false
       )
     )
 
@@ -223,12 +223,12 @@ class IgnoreListManager constructor(
         ignoreRule,
         if (isRegEx) ExpressionMatch.MatchMode.MatchRegEx
         else ExpressionMatch.MatchMode.MatchWildcard,
-        true
+        caseSensitive = false
       ),
       scopeRegEx = ExpressionMatch(
         scopeRule,
         ExpressionMatch.MatchMode.MatchMultiWildcard,
-        true
+        caseSensitive = false
       )
     )
 
