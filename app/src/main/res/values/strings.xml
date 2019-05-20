@@ -61,8 +61,6 @@
   <string name="label_filter_messages">Filter Messages</string>
   <string name="label_finish">Finish</string>
   <string name="label_generate_crash_report">Generate Crash Report</string>
-  <string name="label_hide_perm">Archive Permanently</string>
-  <string name="label_hide_temp">Archive Temporarily</string>
   <string name="label_ignore">Ignore</string>
   <string name="label_ignore_long">Add/remove user to/from ignore list</string>
   <string name="label_info">Details</string>
@@ -190,8 +188,8 @@
   <string name="label_missing_features">Missing Features</string>
   <string name="info_missing_features" tools:ignore="StringFormatCount">Your core is missing features that are required for Quasseldroid to work correctly. You should &lt;a href="https://quassel-irc.org&gt;upgrade&lt;/a&gt; your Quassel core to %1$s or newer.</string>
 
-  <string name="buffer_delete_confirmation">Do you want to delete this buffer permanently?</string>
-  <string name="buffer_archive_confirmation">Do you want to archive this buffer?</string>
+  <string name="buffer_delete_confirmation">Do you want to delete this chat permanently?</string>
+  <string name="buffer_archive_confirmation">Do you want to archive this chat?</string>
   <string name="buffer_archive_temporarily">Automatically unhide this chat once it has new messages</string>
 
   <string name="delete_confirmation">Are you sure you want to delete this permanently? This can not be undone.</string>
