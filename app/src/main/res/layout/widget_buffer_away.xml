@@ -85,4 +85,15 @@
     android:contentDescription="@string/label_user_away"
     app:srcCompat="@drawable/ic_clock"
     app:tint="?colorTextSecondary" />
+
+  <androidx.appcompat.widget.AppCompatImageView
+    android:id="@+id/handle"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_gravity="center_vertical"
+    android:layout_marginStart="16dp"
+    android:layout_marginLeft="16dp"
+    android:contentDescription="@string/label_reorder"
+    app:srcCompat="@drawable/ic_reorder"
+    app:tint="?colorTextSecondary" />
 </LinearLayout>

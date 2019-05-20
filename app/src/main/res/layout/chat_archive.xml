@@ -23,6 +23,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:scrollbars="vertical"
   android:orientation="vertical">
 
   <LinearLayout
@@ -53,7 +54,9 @@
       android:id="@+id/list_temporary"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      tools:listitem="@layout/widget_buffer_reorder" />
+      android:layout_marginStart="56dp"
+      android:layout_marginLeft="56dp"
+      tools:listitem="@layout/widget_buffer" />
 
     <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
@@ -78,6 +81,8 @@
       android:id="@+id/list_permanently"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      tools:listitem="@layout/widget_buffer_reorder" />
+      android:layout_marginStart="56dp"
+      android:layout_marginLeft="56dp"
+      tools:listitem="@layout/widget_buffer" />
   </LinearLayout>
 </androidx.core.widget.NestedScrollView>

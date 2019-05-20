@@ -26,10 +26,7 @@ import androidx.lifecycle.ViewModelProviders
 import dagger.Module
 import dagger.Provides
 import de.kuschku.quasseldroid.ui.setup.accounts.selection.AccountViewModel
-import de.kuschku.quasseldroid.viewmodel.ChatViewModel
-import de.kuschku.quasseldroid.viewmodel.EditorViewModel
-import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
-import de.kuschku.quasseldroid.viewmodel.QueryCreateViewModel
+import de.kuschku.quasseldroid.viewmodel.*
 
 @Module
 object ActivityBaseModule {
@@ -72,4 +69,10 @@ object ActivityBaseModule {
   @JvmStatic
   fun provideQueryCreateViewModel(viewModelProvider: ViewModelProvider) =
     viewModelProvider[QueryCreateViewModel::class.java]
+
+  @ActivityScope
+  @Provides
+  @JvmStatic
+  fun provideArchiveViewModel(viewModelProvider: ViewModelProvider) =
+    viewModelProvider[ArchiveViewModel::class.java]
 }

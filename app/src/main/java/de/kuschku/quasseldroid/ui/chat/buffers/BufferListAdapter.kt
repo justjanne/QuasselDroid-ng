@@ -21,6 +21,7 @@ package de.kuschku.quasseldroid.ui.chat.buffers
 
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -61,16 +62,21 @@ class BufferListAdapter(
   override fun getSectionName(position: Int) = getItem(position).props.network.networkName
 
   private var clickListener: ((BufferId) -> Unit)? = null
-  private var longClickListener: ((BufferId) -> Unit)? = null
-  private var updateFinishedListener: ((List<BufferListItem>) -> Unit)? = null
   fun setOnClickListener(listener: ((BufferId) -> Unit)?) {
     this.clickListener = listener
   }
 
+  private var longClickListener: ((BufferId) -> Unit)? = null
   fun setOnLongClickListener(listener: ((BufferId) -> Unit)?) {
     this.longClickListener = listener
   }
 
+  private var dragListener: ((BufferViewHolder) -> Unit)? = null
+  fun setOnDragListener(listener: ((BufferViewHolder) -> Unit)?) {
+    dragListener = listener
+  }
+
+  private var updateFinishedListener: ((List<BufferListItem>) -> Unit)? = null
   fun setOnUpdateFinishedListener(listener: ((List<BufferListItem>) -> Unit)?) {
     this.updateFinishedListener = listener
   }
@@ -81,12 +87,6 @@ class BufferListAdapter(
 
   fun expandListener(networkId: NetworkId, expand: Boolean) {
     expandedNetworks.onNext(expandedNetworks.value.orEmpty() + Pair(networkId, expand))
-  }
-
-  fun toggleSelection(buffer: BufferId): Boolean {
-    val next = if (selectedBuffer.value == buffer) BufferId.MAX_VALUE else buffer
-    selectedBuffer.onNext(next)
-    return next != BufferId.MAX_VALUE
   }
 
   fun unselectAll() {
@@ -102,7 +102,8 @@ class BufferListAdapter(
           R.layout.widget_buffer, parent, false
         ),
         clickListener = clickListener,
-        longClickListener = longClickListener
+        longClickListener = longClickListener,
+        dragListener = dragListener
       )
       BufferInfo.Type.QueryBuffer.toInt()   -> BufferViewHolder.QueryBuffer(
         LayoutInflater.from(parent.context).inflate(
@@ -111,14 +112,16 @@ class BufferListAdapter(
           , parent, false
         ),
         clickListener = clickListener,
-        longClickListener = longClickListener
+        longClickListener = longClickListener,
+        dragListener = dragListener
       )
       BufferInfo.Type.GroupBuffer.toInt()   -> BufferViewHolder.GroupBuffer(
         LayoutInflater.from(parent.context).inflate(
           R.layout.widget_buffer, parent, false
         ),
         clickListener = clickListener,
-        longClickListener = longClickListener
+        longClickListener = longClickListener,
+        dragListener = dragListener
       )
       BufferInfo.Type.StatusBuffer.toInt()  -> BufferViewHolder.StatusBuffer(
         LayoutInflater.from(parent.context).inflate(
@@ -230,7 +233,8 @@ class BufferListAdapter(
     class GroupBuffer(
       itemView: View,
       private val clickListener: ((BufferId) -> Unit)? = null,
-      private val longClickListener: ((BufferId) -> Unit)? = null
+      private val longClickListener: ((BufferId) -> Unit)? = null,
+      private val dragListener: ((BufferViewHolder) -> Unit)? = null
     ) : BufferViewHolder(itemView) {
       @BindView(R.id.status)
       lateinit var status: ImageView
@@ -240,6 +244,9 @@ class BufferListAdapter(
 
       @BindView(R.id.description)
       lateinit var description: TextView
+
+      @BindView(R.id.handle)
+      lateinit var handle: View
 
       var bufferId: BufferId? = null
 
@@ -267,6 +274,13 @@ class BufferListAdapter(
           } else {
             false
           }
+        }
+
+        handle.setOnTouchListener { _, event ->
+          if (event.action == MotionEvent.ACTION_DOWN) {
+            dragListener?.invoke(this)
+          }
+          false
         }
 
         online = itemView.context.getVectorDrawableCompat(R.drawable.ic_status)?.mutate()
@@ -304,6 +318,8 @@ class BufferListAdapter(
 
         itemView.isSelected = state.selected
 
+        handle.visibleIf(state.showHandle)
+
         description.visibleIf(props.description.isNotBlank())
 
         status.setImageDrawable(
@@ -318,7 +334,8 @@ class BufferListAdapter(
     class ChannelBuffer(
       itemView: View,
       private val clickListener: ((BufferId) -> Unit)? = null,
-      private val longClickListener: ((BufferId) -> Unit)? = null
+      private val longClickListener: ((BufferId) -> Unit)? = null,
+      private val dragListener: ((BufferViewHolder) -> Unit)? = null
     ) : BufferViewHolder(itemView) {
       @BindView(R.id.status)
       lateinit var status: ImageView
@@ -328,6 +345,9 @@ class BufferListAdapter(
 
       @BindView(R.id.description)
       lateinit var description: TextView
+
+      @BindView(R.id.handle)
+      lateinit var handle: View
 
       var bufferId: BufferId? = null
 
@@ -352,6 +372,13 @@ class BufferListAdapter(
           } else {
             false
           }
+        }
+
+        handle.setOnTouchListener { _, event ->
+          if (event.action == MotionEvent.ACTION_DOWN) {
+            dragListener?.invoke(this)
+          }
+          false
         }
 
         itemView.context.theme.styledAttributes(
@@ -381,6 +408,8 @@ class BufferListAdapter(
         )
 
         itemView.isSelected = state.selected
+
+        handle.visibleIf(state.showHandle)
 
         description.visibleIf(props.description.isNotBlank())
 
@@ -391,7 +420,8 @@ class BufferListAdapter(
     class QueryBuffer(
       itemView: View,
       private val clickListener: ((BufferId) -> Unit)? = null,
-      private val longClickListener: ((BufferId) -> Unit)? = null
+      private val longClickListener: ((BufferId) -> Unit)? = null,
+      private val dragListener: ((BufferViewHolder) -> Unit)? = null
     ) : BufferViewHolder(itemView) {
       @BindView(R.id.status)
       lateinit var status: ImageView
@@ -401,6 +431,9 @@ class BufferListAdapter(
 
       @BindView(R.id.description)
       lateinit var description: TextView
+
+      @BindView(R.id.handle)
+      lateinit var handle: View
 
       var bufferId: BufferId? = null
 
@@ -425,6 +458,13 @@ class BufferListAdapter(
           } else {
             false
           }
+        }
+
+        handle.setOnTouchListener { _, event ->
+          if (event.action == MotionEvent.ACTION_DOWN) {
+            dragListener?.invoke(this)
+          }
+          false
         }
 
         itemView.context.theme.styledAttributes(
@@ -454,6 +494,8 @@ class BufferListAdapter(
         )
 
         itemView.isSelected = state.selected
+
+        handle.visibleIf(state.showHandle)
 
         description.visibleIf(props.description.isNotBlank())
 

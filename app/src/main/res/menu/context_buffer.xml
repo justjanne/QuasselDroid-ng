@@ -48,11 +48,7 @@
     android:title="@string/label_unhide"
     app:showAsAction="never" />
   <item
-    android:id="@+id/action_hide_temp"
-    android:title="@string/label_hide_temp"
-    app:showAsAction="never" />
-  <item
-    android:id="@+id/action_hide_perm"
-    android:title="@string/label_hide_perm"
+    android:id="@+id/action_archive"
+    android:title="@string/label_archive"
     app:showAsAction="never" />
 </menu>

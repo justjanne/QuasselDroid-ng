@@ -53,19 +53,27 @@ class ColorContext @Inject constructor(
     getColor(0, 0)
   }
 
-  private val radius = context.resources.getDimensionPixelSize(R.dimen.avatar_radius)
+  val colorAccent = context.theme.styledAttributes(R.attr.colorAccent) {
+    getColor(0, 0)
+  }
 
+  val colorAway = context.theme.styledAttributes(R.attr.colorAway) {
+    getColor(0, 0)
+  }
 
-  fun prepareTextDrawable(@ColorInt textColor: Int = this.textColor) =
+  val avatarRadius = context.resources.getDimensionPixelSize(R.dimen.avatar_radius)
+  val avatarSize = context.resources.getDimensionPixelSize(R.dimen.avatar_size_buffer)
+
+  fun prepareTextDrawable(@ColorInt textColor: Int = this.textColor): TextDrawable.IShapeBuilder =
     TextDrawable.builder()
       .beginConfig()
       .textColor(setAlpha(textColor, 0x8A))
       .useFont(Typeface.DEFAULT_BOLD)
       .endConfig()
 
-  fun buildTextDrawable(initial: String, @ColorInt backgroundColor: Int) =
+  fun buildTextDrawable(initial: String, @ColorInt backgroundColor: Int): TextDrawable =
     prepareTextDrawable(textColor).let {
-      if (messageSettings.squareAvatars) it.buildRoundRect(initial, backgroundColor, radius)
+      if (messageSettings.squareAvatars) it.buildRoundRect(initial, backgroundColor, avatarRadius)
       else it.buildRound(initial, backgroundColor)
     }
 
@@ -79,6 +87,8 @@ class ColorContext @Inject constructor(
     return buildTextDrawable(initial, senderColor)
   }
 
-  @ColorInt
-  private fun setAlpha(@ColorInt color: Int, alpha: Int) = (color and 0xFFFFFF) or (alpha shl 24)
+  companion object {
+    @ColorInt
+    private fun setAlpha(@ColorInt color: Int, alpha: Int) = (color and 0xFFFFFF) or (alpha shl 24)
+  }
 }

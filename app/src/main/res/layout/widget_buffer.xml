@@ -18,6 +18,7 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
@@ -41,9 +42,10 @@
     tools:src="@tools:sample/avatars" />
 
   <LinearLayout
-    android:layout_width="match_parent"
+    android:layout_width="0dip"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
+    android:layout_weight="1"
     android:orientation="vertical">
 
     <TextView
@@ -71,4 +73,15 @@
       tools:text="@sample/messages.json/data/sender"
       tools:visibility="visible" />
   </LinearLayout>
+
+  <androidx.appcompat.widget.AppCompatImageView
+    android:id="@+id/handle"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_gravity="center_vertical"
+    android:layout_marginStart="16dp"
+    android:layout_marginLeft="16dp"
+    android:contentDescription="@string/label_reorder"
+    app:srcCompat="@drawable/ic_reorder"
+    app:tint="?colorTextSecondary" />
 </LinearLayout>
