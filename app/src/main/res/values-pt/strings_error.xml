@@ -25,7 +25,7 @@
   <string name="label_error_ssl_required_unavailable">SSL é requerido para esta ligação mas o núcleo não tem suporte a essa função</string>
   <string name="label_error_certificate">Erro de Certificado</string>
   <string name="label_error_certificate_no_certificate">Sem certificado disponível</string>
-  <string name="label_error_certificate_no_hostname">Nenhum anfitrião disponível</string>
+  <string name="label_error_certificate_no_hostname">Nenhum hostname disponível</string>
   <string name="label_error_certificate_invalid"><![CDATA[
     <p>O certificado com impressão digital<br/>
     <code>%1$s</code><br/>

@@ -28,6 +28,8 @@
   <string name="label_about">Über</string>
   <string name="label_accept">Akzeptieren</string>
   <string name="label_acknowledgements">Danksagungen</string>
+  <string name="label_archive">Archivieren</string>
+  <string name="label_archive_chat">Chat Archivieren</string>
   <string name="label_archived_chats">Archivierte Chats</string>
   <string name="label_ascending">Aufsteigend</string>
   <string name="label_authors">Autoren</string>
@@ -186,7 +188,9 @@
   <string name="label_missing_features">Fehlende Features</string>
   <string name="info_missing_features" tools:ignore="StringFormatCount">Deinem Core fehlen bestimmte Features die benötigt werden damit Quasseldroid korrekt funktionieren kann. Du solltest deinen Quassel Core auf Version %1$s oder neuer &lt;a href="https://quassel-irc.org&gt;updaten&lt;/a&gt;.</string>
 
-  <string name="buffer_delete_confirmation">Bist du sicher, dass du diesen Chat auf ewig löschen möchtest?</string>
+  <string name="buffer_delete_confirmation">Bist du sicher, dass du diesen Chat auf ewig löschen möchtest? </string>
+  <string name="buffer_archive_confirmation">Willst du diesen Chat archivieren?</string>
+  <string name="buffer_archive_temporarily">Chat wieder anzeigen, sobald er neue Nachrichten hat</string>
 
   <string name="delete_confirmation">Bist du sicher, dass du dies auf ewig löschen möchtest? Dies kann nicht Rückgängig gemacht werden.</string>
   <string name="cancel_confirmation">Du hast nicht gespeicherte Änderungen. Möchtest du sie verwerfen?</string>

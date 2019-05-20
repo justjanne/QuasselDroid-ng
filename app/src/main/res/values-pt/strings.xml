@@ -28,12 +28,15 @@
   <string name="label_about">Sobre</string>
   <string name="label_accept">Aceitar</string>
   <string name="label_acknowledgements">Agradecimentos</string>
+  <string name="label_archive">Arquivar</string>
+  <string name="label_archive_chat">Arquivar Chat</string>
+  <string name="label_archived_chats">Chats Arquivados</string>
   <string name="label_ascending">Ascendente</string>
   <string name="label_authors">Autores</string>
   <string name="label_autocomplete">Auto completar</string>
   <string name="label_avatar">Avatar</string>
   <string name="label_back">Voltar</string>
-  <string name="label_buffer_name">Nome da Janela</string>
+  <string name="label_buffer_name">Nome do Chat</string>
   <string name="label_cancel">Cancelar</string>
   <string name="label_certificates">Certificados</string>
   <string name="label_channel_name">Nome do Canal</string>
@@ -52,11 +55,12 @@
   <string name="label_descending">Descendente</string>
   <string name="label_disconnect">Desligar</string>
   <string name="label_edit_core">Editar Conta</string>
-  <string name="label_edit_nick">Editar Alcunha</string>
+  <string name="label_edit_nick">Editar Nick</string>
   <string name="label_edit_topic">Editar Tópico</string>
   <string name="label_edit_topic_long">Abre a caixa de diálogo para alterar o tópico do canal</string>
   <string name="label_filter_messages">Filtrar Mensagens</string>
   <string name="label_finish">Terminar</string>
+  <string name="label_generate_crash_report">Criar relatório de erros. </string>
   <string name="label_ignore">Ignorar</string>
   <string name="label_ignore_long">Adiciona/remove o utilizador na/da lista de ignorados</string>
   <string name="label_info">Detalhes</string>
@@ -82,11 +86,11 @@
   <string name="label_new_identity">Adicionar Identidade</string>
   <string name="label_new_ignore_rule">Nova Regra de Ignore</string>
   <string name="label_new_network">Adicionar Rede</string>
-  <string name="label_new_nick">Adicionar Alcunha</string>
+  <string name="label_new_nick">Adicionar Nick</string>
   <string name="label_new_server">Adicionar Servidor</string>
   <string name="label_next">Próximo</string>
-  <string name="label_nick">Alcunha</string>
-  <string name="label_nicklist">Lista de Alcunhas</string>
+  <string name="label_nick">Nick</string>
+  <string name="label_nicklist">Lista de Nicks</string>
   <string name="label_no">Não</string>
   <string name="label_no_away_message">Sem mensagem de ausência disponível</string>
   <string name="label_no_sound">Nenhum</string>
@@ -99,6 +103,8 @@
   <string name="label_password_new">Nova palavra-passe</string>
   <string name="label_password_old">Antiga palavra-passe</string>
   <string name="label_password_repeat">Confirme a palavra-passe</string>
+  <string name="label_permanently_archived">Arquivado Permanentemente</string>
+  <string name="label_permanently_archived_long"> Chats permanentemente arquivados ficam escondidos até que escolha desarquiva-los manualmente.</string>
   <string name="label_placeholder_message">Escrever uma mensagem…</string>
   <string name="label_placeholder_topic">Descreva o tópico do canal…</string>
   <string name="label_privacy_policy">Política de Privacidade</string>
@@ -106,6 +112,7 @@
   <string name="label_query_long">Abrir conversa privada com o utilizador</string>
   <string name="label_query_medium">Abrir chat privado</string>
   <string name="label_rename">Renomear</string>
+  <string name="label_reorder">Reordenar</string>
   <string name="label_reply">Responder</string>
   <string name="label_reset">Restabelecer</string>
   <string name="label_save">Guardar</string>
@@ -126,6 +133,8 @@
   <string name="label_shortcut_long">Criar atalho no ecrã principal</string>
   <string name="label_sort">Ordenar</string>
   <string name="label_source">Fonte</string>
+  <string name="label_temporarily_archived">Arquivado temporariamente</string>
+  <string name="label_temporarily_archived_long">  Chats arquivados temporariamente serão mostrados novamente assim que tenham uma mensagem nova.</string>
   <string name="label_topic">Tópico do Canal</string>
   <string name="label_translators">Tradutores</string>
   <string name="label_unhide">Tornar Visível</string>
@@ -179,7 +188,9 @@
   <string name="label_missing_features">Funcionalidades Ausentes</string>
   <string name="info_missing_features" tools:ignore="StringFormatCount">O seu núcleo tem em falta algumas funcionalidades que são necessárias para o Quasseldroid funcionar corretamente. Deve &lt;a href=\"https://quassel-irc.org&gt;upgrade&lt;/a&gt; o seu núcleo Quassel para a versão %1$s ou superior.</string>
 
-  <string name="buffer_delete_confirmation">Você deseja excluir esta janela permanentemente?</string>
+  <string name="buffer_delete_confirmation">Deseja eliminar este chat permanentemente?</string>
+  <string name="buffer_archive_confirmation">Deseja arquivar este chat?</string>
+  <string name="buffer_archive_temporarily">Mostrar este chat automaticamente assim que tenha mensagens novas</string>
 
   <string name="delete_confirmation">Tem certeza de que deseja excluir isto permanentemente? Isto não pode ser revertido.</string>
   <string name="cancel_confirmation">Você tem alterações não guardadas. Você deseja descartá-las?</string>

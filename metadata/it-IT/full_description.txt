@@ -7,9 +7,9 @@ La chat diventa comoda. Ovunque.
 • <b>Avrai sempre a disposizione il registro storico delle chat</b> – basta scorrere verso l’alto per caricare i messaggi meno recenti, il core li conserva per te
 • <b>Ricevi una notifica quando qualcuno ti scrive un messaggio</b> – anche se nel frattempo non avevi connessione
 
-If you are looking for the comfort you’re used to from modern chat apps such as Slack, Quasseldroid is the best free android IRC client for you — you’ll get profile pictures, a beautiful UI based on Material Design, and all the features you love.
+Se cerchi un’app di chat comoda e moderna come Slack, Quasseldroid è la tua miglior scelta per avere su android un client IRC gratuito — troverai avatar, una bellissima interfaccia grafica basata sul Material Design e tutte le funzionalità che già ami.
 
-And best of all, it’s fully free and open source.
+E, qui arriva il bello, è completamente gratuita ed open source.
 
 <b>Requisiti:</b>
 
@@ -19,4 +19,4 @@ Questa app funziona solo con core che eseguono almeno Quassel v0.10, per usufrui
 
 Per saperne di più su come configurare un core quassel, consulta <a href="http://bugs.quassel-irc.org/projects/quassel-irc/wiki">la wiki</a>
 
-<b>Having trouble or feedback?:</b> Send us an email at support@kuschku.de
+<b>Vuoi segnalare un malfunzionamento o darci un suggerimento?:</b> Inviaci un'email a support@kuschku.de

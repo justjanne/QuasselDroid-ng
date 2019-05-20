@@ -31,7 +31,6 @@
   <string name="label_authors">Autoriai</string>
   <string name="label_avatar">Avataras</string>
   <string name="label_back">Atgal</string>
-  <string name="label_buffer_name">Buferio pavadinimas</string>
   <string name="label_cancel">Nutraukti</string>
   <string name="label_certificates">Certifikatai</string>
   <string name="label_channel_name">Kanalo pavadinimas</string>
@@ -171,8 +170,6 @@
 
   <string name="label_missing_features">Trūkstamos funkcijos</string>
   <string name="info_missing_features" tools:ignore="StringFormatCount">Jūsų branduolyje trūksta funkcijų, kurių reikia norint užtikrinti, jog Quasseldroid veiktų sklandžiai. &lt;a href="https://quassel-irc.org&gt;Atnaujinkite&lt;/a&gt; savo Quassel branduolį į %1$s ar naujesnį.</string>
-
-  <string name="buffer_delete_confirmation">Ar norite ištrinti šį buferį visam laikui?</string>
 
   <string name="delete_confirmation">Ar tikrai norite ištrinti visam laikui? Šio veiksmo anuliuoti negalima.</string>
   <string name="cancel_confirmation">Yra neišsaugotų pakeitimų. Ar norite juos atstatyti?</string>

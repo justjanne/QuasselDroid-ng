@@ -79,9 +79,9 @@
 
   <!-- User Identity -->
   <string name="slide_user_identity_title">Configurar Identidade</string>
-  <string name="slide_user_identity_description">Por favor escolha uma alcunha</string>
+  <string name="slide_user_identity_description">Por favor escolha um nickname</string>
 
-  <string name="hint_invalid_nick">Não é uma alcunha válida</string>
+  <string name="hint_invalid_nick">Não é um nick válido</string>
 
   <!-- User Network -->
   <string name="slide_user_network_title">Configurar Rede</string>

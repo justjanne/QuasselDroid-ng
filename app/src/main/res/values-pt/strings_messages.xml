@@ -21,7 +21,7 @@
   <string name="message_type_join">Entrar</string>
   <string name="message_type_part">Sair</string>
   <string name="message_type_quit">Desligar</string>
-  <string name="message_type_nick">Alcunha</string>
+  <string name="message_type_nick">Nick</string>
   <string name="message_type_mode">Modo</string>
   <string name="message_type_topic">Tópico</string>
   <string name="message_format_copy">[%1$s] %2$s</string>

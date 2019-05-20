@@ -30,7 +30,6 @@
   <string name="label_autocomplete">Automatsko dovršavanje</string>
   <string name="label_avatar">Avatar</string>
   <string name="label_back">Nazad</string>
-  <string name="label_buffer_name">Ime bafera</string>
   <string name="label_cancel">Otkaži</string>
   <string name="label_certificates">Sertifikati</string>
   <string name="label_close">Zatvori</string>
@@ -139,8 +138,6 @@
 
   <string name="label_missing_features">Funkcije koje nedostaju</string>
   <string name="info_missing_features" tools:ignore="StringFormatCount">Vašem jezgru nedostaju funkcije potrebne za ispravan rad Quasseldroida. Trebalo bi da &lt;a href=\"https://quassel-irc.org&gt;ažurirate&lt;/a&gt; svoje Quassel jezgro na %1$s ili noviju verziju.</string>
-
-  <string name="buffer_delete_confirmation">Želite li trajno obrisati ovaj bafer?</string>
 
   <string name="delete_confirmation">Da li ste sigurni da želite ovo trajno obrisati? Ovaj postupak se kasnije ne može poništiti.</string>
   <string name="cancel_confirmation">Imate nesačuvane promene. Da li ih želite odbaciti?</string>

@@ -29,7 +29,6 @@
   <string name="label_accept">Accepter</string>
   <string name="label_avatar">Avatar</string>
   <string name="label_back">Retour</string>
-  <string name="label_buffer_name">Nom du Tchat</string>
   <string name="label_cancel">Annuler</string>
   <string name="label_certificates">Certificats</string>
   <string name="label_close">Fermer</string>
@@ -125,8 +124,6 @@
 
   <string name="notification_channel_connection_title">Connection</string>
   <string name="label_missing_features">Fonctionnalités Manquantes</string>
-  <string name="buffer_delete_confirmation">Voulez-vous supprimer ce tchat en permanence?</string>
-
   <string name="delete_confirmation">Êtes-vous surs que vous voulez supprimer ceci en permanence? Cette action ne peut pas être réparée.</string>
   <string name="cancel_confirmation">Vous avez des changements non-sauvegardés. Voulez-vous les abandonner?</string>
 
