@@ -21,11 +21,8 @@ package de.kuschku.quasseldroid.viewmodel
 
 import android.os.Bundle
 import de.kuschku.libquassel.protocol.BufferId
-import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.protocol.NetworkId
-import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 
 open class ArchiveViewModel : QuasselViewModel() {
   val bufferViewConfigId = BehaviorSubject.createDefault(-1)

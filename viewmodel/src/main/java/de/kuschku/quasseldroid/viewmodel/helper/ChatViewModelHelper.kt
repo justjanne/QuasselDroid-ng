@@ -22,7 +22,6 @@ package de.kuschku.quasseldroid.viewmodel.helper
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message_Type
-import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.quassel.syncables.IrcChannel

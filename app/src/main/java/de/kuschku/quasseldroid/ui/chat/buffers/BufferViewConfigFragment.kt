@@ -36,7 +36,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.afollestad.materialdialogs.MaterialDialog
 import com.leinardi.android.speeddial.SpeedDialActionItem
 import com.leinardi.android.speeddial.SpeedDialView
 import de.kuschku.libquassel.protocol.BufferId
@@ -54,8 +53,6 @@ import de.kuschku.quasseldroid.ui.chat.add.create.ChannelCreateActivity
 import de.kuschku.quasseldroid.ui.chat.add.join.ChannelJoinActivity
 import de.kuschku.quasseldroid.ui.chat.add.query.QueryCreateActivity
 import de.kuschku.quasseldroid.ui.chat.archive.ArchiveActivity
-import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
-import de.kuschku.quasseldroid.ui.info.channellist.ChannelListActivity
 import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.helper.setTooltip
 import de.kuschku.quasseldroid.util.helper.styledAttributes

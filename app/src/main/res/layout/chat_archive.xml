@@ -23,8 +23,8 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:scrollbars="vertical"
-  android:orientation="vertical">
+  android:orientation="vertical"
+  android:scrollbars="vertical">
 
   <LinearLayout
     android:layout_width="match_parent"

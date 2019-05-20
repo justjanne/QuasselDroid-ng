@@ -21,7 +21,10 @@ package de.kuschku.quasseldroid.viewmodel.helper
 
 import de.kuschku.libquassel.connection.ConnectionState
 import de.kuschku.libquassel.connection.Features
-import de.kuschku.libquassel.protocol.*
+import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.protocol.Buffer_Activity
+import de.kuschku.libquassel.protocol.Buffer_Type
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.*
 import de.kuschku.libquassel.quassel.syncables.interfaces.INetwork
@@ -32,7 +35,6 @@ import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.flag.and
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helper.*
-import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import de.kuschku.quasseldroid.Backend
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid.viewmodel.data.*
@@ -127,7 +129,9 @@ open class QuasselViewModelHelper @Inject constructor(
     }.orElse(Observable.empty())
   }
 
-  fun processRawBufferList(ids: Collection<BufferId>, state: BufferHiddenState, bufferSyncer: BufferSyncer, networks: Map<NetworkId, Network>, currentConfig: BufferViewConfig, bufferSearch: String = "") =
+  fun processRawBufferList(ids: Collection<BufferId>, state: BufferHiddenState,
+                           bufferSyncer: BufferSyncer, networks: Map<NetworkId, Network>,
+                           currentConfig: BufferViewConfig, bufferSearch: String = "") =
     ids.asSequence().mapNotNull { id ->
       bufferSyncer.bufferInfo(id)
     }.filter {

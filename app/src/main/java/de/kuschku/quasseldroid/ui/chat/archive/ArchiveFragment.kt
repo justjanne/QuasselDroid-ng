@@ -28,7 +28,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.afollestad.materialdialogs.MaterialDialog
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.util.helper.combineLatest
 import de.kuschku.libquassel.util.helper.value
@@ -38,8 +37,6 @@ import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.ui.chat.buffers.BufferListAdapter
-import de.kuschku.quasseldroid.ui.coresettings.network.NetworkEditActivity
-import de.kuschku.quasseldroid.ui.info.channellist.ChannelListActivity
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.presenter.BufferContextPresenter
