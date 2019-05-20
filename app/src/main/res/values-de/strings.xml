@@ -59,8 +59,6 @@
   <string name="label_filter_messages">Nachrichten filtern</string>
   <string name="label_finish">Fertig</string>
   <string name="label_generate_crash_report">Crash Report erzeugen</string>
-  <string name="label_hide_perm">Permanent ausblenden</string>
-  <string name="label_hide_temp">Temporär ausblenden</string>
   <string name="label_ignore">Ignorieren</string>
   <string name="label_ignore_long">Add/remove user to/from ignore list</string>
   <string name="label_info">Info</string>
@@ -131,7 +129,6 @@
   <string name="label_share_crashreport">Absturzbericht Teilen</string>
   <string name="label_shortcut">Verknüpfung</string>
   <string name="label_shortcut_long">Erstellt eine Verknüpfung auf dem Startbildschirm</string>
-  <string name="label_show_hidden">Alle anzeigen</string>
   <string name="label_sort">Sortieren</string>
   <string name="label_source">Quellcode</string>
   <string name="label_temporarily_archived">Temporär Archiviert</string>

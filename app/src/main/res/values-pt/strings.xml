@@ -57,8 +57,6 @@
   <string name="label_edit_topic_long">Abre a caixa de diálogo para alterar o tópico do canal</string>
   <string name="label_filter_messages">Filtrar Mensagens</string>
   <string name="label_finish">Terminar</string>
-  <string name="label_hide_perm">Ocultar Permanentemente</string>
-  <string name="label_hide_temp">Ocultar Temporariamente</string>
   <string name="label_ignore">Ignorar</string>
   <string name="label_ignore_long">Adiciona/remove o utilizador na/da lista de ignorados</string>
   <string name="label_info">Detalhes</string>
@@ -126,7 +124,6 @@
   <string name="label_share_crashreport">Partilhar Relatório de Crash</string>
   <string name="label_shortcut">Atalho</string>
   <string name="label_shortcut_long">Criar atalho no ecrã principal</string>
-  <string name="label_show_hidden">Mostrar oculto</string>
   <string name="label_sort">Ordenar</string>
   <string name="label_source">Fonte</string>
   <string name="label_topic">Tópico do Canal</string>

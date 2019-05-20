@@ -41,8 +41,6 @@
   <string name="label_descending">Aflopend</string>
   <string name="label_edit_core">Account Aanpassen</string>
   <string name="label_finish">Voltooien</string>
-  <string name="label_hide_perm">Permanent Verbergen</string>
-  <string name="label_hide_temp">Tijdelijk Verbergen</string>
   <string name="label_ignore">Negeren</string>
   <string name="label_info">Details</string>
   <string name="label_info_channellist">Kanaal Lijst</string>
@@ -74,7 +72,6 @@
   <string name="label_search_channels">Doorzoek kanalen</string>
   <string name="label_select">Selecteer</string>
   <string name="label_settings">Instellingen</string>
-  <string name="label_show_hidden">Toon Verborgen</string>
   <string name="label_sort">Sorteren</string>
   <string name="label_source">Bron</string>
   <string name="label_topic">Kanaalonderwerp</string>

@@ -45,8 +45,6 @@
   <string name="label_edit_topic">Changer le Topique</string>
   <string name="label_edit_topic_long">Ouvrir un dialogue pour changer le topique de la chaîne</string>
   <string name="label_filter_messages">Filtrer les Messages</string>
-  <string name="label_hide_perm">Cacher en Permanence</string>
-  <string name="label_hide_temp">Cacher Temporairement</string>
   <string name="label_ignore">Ignorer</string>
   <string name="label_ignore_long">Ajouter ou Supprimer des utilisateurs de la liste des utilisateurs ignorés</string>
   <string name="label_info_channel">Détails de la Chaîne</string>
@@ -92,7 +90,6 @@
   <string name="label_settings_core">Paramètres du Core</string>
   <string name="label_share">Partager</string>
   <string name="label_share_crashreport">Partager le Rapport du Crash</string>
-  <string name="label_show_hidden">Montrer les Objets Cachés</string>
   <string name="label_topic">Topique de la Chaîne</string>
   <string name="label_translators">Traducteurs</string>
   <string name="label_unhide">Rendre Visible</string>

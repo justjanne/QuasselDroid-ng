@@ -59,8 +59,6 @@
   <string name="label_filter_messages">Filtro messaggi</string>
   <string name="label_finish">Finito</string>
   <string name="label_generate_crash_report">Genera rapporto d’arresto anomalo</string>
-  <string name="label_hide_perm">Nascondi sempre</string>
-  <string name="label_hide_temp">Nascondi temporaneamente</string>
   <string name="label_ignore">Ignora</string>
   <string name="label_ignore_long">Aggiungi o rimuovi un utente dalla lista ignorati</string>
   <string name="label_info">Dettagli</string>
@@ -131,7 +129,6 @@
   <string name="label_share_crashreport">Condividi rapporto d’arresto anomalo</string>
   <string name="label_shortcut">Scorciatoia</string>
   <string name="label_shortcut_long">Crea scorciatoia nella schermata Home</string>
-  <string name="label_show_hidden">Mostra nascosti</string>
   <string name="label_sort">Ordina</string>
   <string name="label_source">Sorgente</string>
   <string name="label_temporarily_archived">Archiviate temporaneamente</string>
