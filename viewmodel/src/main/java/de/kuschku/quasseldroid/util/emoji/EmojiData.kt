@@ -20,6 +20,8 @@
 package de.kuschku.quasseldroid.util.emoji
 
 import android.os.Build
+import android.text.Editable
+import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 
 object EmojiData {
   val rawEmojiMap = mapOf(
@@ -1637,7 +1639,7 @@ object EmojiData {
     "secret" to "\u3299\uFE0F"
   )
 
-  val emojiMap = rawEmojiMap + mapOf(
+  val emojiReplacementMap = mapOf(
     // Aliases imported from IRCCloud and Slack
     "like" to rawEmojiMap["+1"],
     "doge" to rawEmojiMap["dog"],
@@ -1646,20 +1648,9 @@ object EmojiData {
     "party_popper" to rawEmojiMap["tada"],
     "shock" to rawEmojiMap["scream"],
     "atom" to rawEmojiMap["atom_symbol"],
-    "<3" to rawEmojiMap["heart"],
-    "</3" to rawEmojiMap["broken_heart"],
-    ")" to rawEmojiMap["smiley"],
-    "')" to rawEmojiMap["smiley"],
-    "-)" to rawEmojiMap["disappointed"],
-    "(" to rawEmojiMap["cry"],
-    "_(" to rawEmojiMap["sob"],
     "loudly_crying_face" to rawEmojiMap["sob"],
     "sad_tears" to rawEmojiMap["sob"],
     "bawl" to rawEmojiMap["sob"],
-    ";)" to rawEmojiMap["wink"],
-    ";p" to rawEmojiMap["stuck_out_tongue_winking_eye"],
-    "simple_smile" to ":)",
-    "slightly_smiling_face" to ":)",
     "ufo" to rawEmojiMap["flying_saucer"],
     "throwing_up" to rawEmojiMap["face_with_open_mouth_vomiting"],
     "being_sick" to rawEmojiMap["face_with_open_mouth_vomiting"],
@@ -1698,6 +1689,24 @@ object EmojiData {
     "mad" to rawEmojiMap["angry"],
     "steam_train" to rawEmojiMap["steam_locomotive"]
   )
+
+  val emojiAsciiMap = mapOf(
+    "<3" to rawEmojiMap["heart"],
+    "</3" to rawEmojiMap["broken_heart"],
+    ")" to rawEmojiMap["smiley"],
+    "')" to rawEmojiMap["smiley"],
+    "-)" to rawEmojiMap["disappointed"],
+    "(" to rawEmojiMap["cry"],
+    "_(" to rawEmojiMap["sob"],
+    ";)" to rawEmojiMap["wink"],
+    ";p" to rawEmojiMap["stuck_out_tongue_winking_eye"]
+  )
+
+  val processedEmojiMap = (rawEmojiMap + emojiReplacementMap).toList()
+    .groupBy(Pair<String, String?>::second, Pair<String, String?>::first)
+    .map { (replacement, shortCodes) ->
+      AutoCompleteItem.EmojiItem(shortCodes.sorted(), replacement ?: "")
+    }
 
   val conversionMap = mapOf(
     "\u0030\u20E3" to "\uDBBA\uDC37", // ZERO
@@ -1741,5 +1750,22 @@ object EmojiData {
     )
   } else emptyMap()
 
-  val emojis = EmojiData.conversionMap.values.toSet() + EmojiData.rawEmojiMap.values.toSet() + "\u200d" + "\ufe0f"
+  val emojis = conversionMap.values.toSet() + rawEmojiMap.values.toSet() + "\u200d" + "\ufe0f"
+
+  fun replaceShortCodes(source: Editable): Editable {
+    var result = source
+    for (emoji in processedEmojiMap) {
+      for (rawShortCode in emoji.shortCodes) {
+        val shortCode = ":$rawShortCode:"
+        var index: Int
+        while (true) {
+          index = result.indexOf(shortCode)
+          if (index == -1) break
+
+          result = result.replace(index, index + shortCode.length, emoji.replacement)
+        }
+      }
+    }
+    return result
+  }
 }

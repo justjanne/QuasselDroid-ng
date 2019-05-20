@@ -32,6 +32,7 @@ import de.kuschku.libquassel.util.helper.combineLatest
 import de.kuschku.libquassel.util.helper.mapNullable
 import de.kuschku.libquassel.util.helper.nullIf
 import de.kuschku.libquassel.util.helper.safeSwitchMap
+import de.kuschku.quasseldroid.util.emoji.EmojiData
 import de.kuschku.quasseldroid.viewmodel.ChatViewModel
 import de.kuschku.quasseldroid.viewmodel.EditorViewModel
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
@@ -47,14 +48,13 @@ open class EditorViewModelHelper @Inject constructor(
   quassel: QuasselViewModel
 ) : ChatViewModelHelper(chat, quassel) {
   val rawAutoCompleteData: Observable<Triple<Optional<ISession>, BufferId, Pair<String, IntRange>>> =
-    combineLatest(connectedSession, chat.bufferId, editor.lastWord)
-      .safeSwitchMap { (sessionOptional, id, lastWordWrapper) ->
-        lastWordWrapper
-          .distinctUntilChanged()
-          .map { lastWord ->
-            Triple(sessionOptional, id, lastWord)
-          }
-      }
+    combineLatest(
+      connectedSession,
+      chat.bufferId,
+      editor.lastWord.safeSwitchMap {
+        it
+      }.distinctUntilChanged()
+    )
 
   val autoCompleteData: Observable<Pair<String, List<AutoCompleteItem>>> = rawAutoCompleteData
     .distinctUntilChanged()
@@ -72,51 +72,63 @@ open class EditorViewModelHelper @Inject constructor(
                 network.ircChannel(bufferInfo.bufferName) ?: IrcChannel.NULL
               } else IrcChannel.NULL
               ircChannel.liveIrcUsers().safeSwitchMap { users ->
+                fun filterStart(name: String): Boolean {
+                  return name.trimStart(*IGNORED_CHARS)
+                    .startsWith(
+                      lastWord.first.trimStart(*IGNORED_CHARS),
+                      ignoreCase = true
+                    )
+                }
+
+                fun filter(name: String): Boolean {
+                  return name.trim(*IGNORED_CHARS)
+                    .contains(
+                      lastWord.first.trim(*IGNORED_CHARS),
+                      ignoreCase = true
+                    )
+                }
+
                 fun processResults(results: List<Observable<out AutoCompleteItem>>) =
                   combineLatest<AutoCompleteItem>(results)
                     .map { list ->
-                      val filtered = list.filter {
-                        it.name.trimStart(*IGNORED_CHARS)
-                          .startsWith(
-                            lastWord.first.trimStart(*IGNORED_CHARS),
-                            ignoreCase = true
-                          )
-                      }
                       Pair(
                         lastWord.first,
-                        filtered.sorted()
+                        list.sorted()
                       )
                     }
 
-                fun getAliases() = aliases.map {
+                fun getAliases() = aliases.filter {
+                  filterStart(it.name ?: "")
+                }.map {
                   Observable.just(AutoCompleteItem.AliasItem(
                     "/${it.name}",
                     it.expansion
                   ))
                 }
 
-                fun getBuffers() = infos.values
-                  .filter {
-                    it.type.toInt() == Buffer_Type.ChannelBuffer.toInt()
-                  }.mapNotNull { info ->
-                    networks[info.networkId]?.let { info to it }
-                  }.map { (info, network) ->
-                    network.liveIrcChannel(
-                      info.bufferName
-                    ).safeSwitchMap { channel ->
-                      channel.updates().mapNullable(IrcChannel.NULL) {
-                        AutoCompleteItem.ChannelItem(
-                          info = info,
-                          network = network.networkInfo(),
-                          bufferStatus = when (it) {
-                            null -> BufferStatus.OFFLINE
-                            else -> BufferStatus.ONLINE
-                          },
-                          description = it?.topic() ?: ""
-                        )
-                      }
+                fun getBuffers() = infos.values.filter {
+                  filterStart(it.bufferName ?: "")
+                }.filter {
+                  it.type.toInt() == Buffer_Type.ChannelBuffer.toInt()
+                }.mapNotNull { info ->
+                  networks[info.networkId]?.let { info to it }
+                }.map { (info, network) ->
+                  network.liveIrcChannel(
+                    info.bufferName
+                  ).safeSwitchMap { channel ->
+                    channel.updates().mapNullable(IrcChannel.NULL) {
+                      AutoCompleteItem.ChannelItem(
+                        info = info,
+                        network = network.networkInfo(),
+                        bufferStatus = when (it) {
+                          null -> BufferStatus.OFFLINE
+                          else -> BufferStatus.ONLINE
+                        },
+                        description = it?.topic() ?: ""
+                      )
                     }
                   }
+                }
 
                 fun getUsers(): Set<IrcUser> = when {
                   bufferInfo?.type?.hasFlag(Buffer_Type.ChannelBuffer) == true ->
@@ -129,7 +141,9 @@ open class EditorViewModelHelper @Inject constructor(
                     emptySet()
                 }
 
-                fun getNicks() = getUsers().map<IrcUser, Observable<AutoCompleteItem.UserItem>> {
+                fun getNicks() = getUsers().filter {
+                  filterStart(it.nick())
+                }.map<IrcUser, Observable<AutoCompleteItem.UserItem>> {
                   it.updates().map { user ->
                     val userModes = ircChannel.userModes(user)
                     val prefixModes = network.prefixModes()
@@ -150,12 +164,21 @@ open class EditorViewModelHelper @Inject constructor(
                   }
                 }
 
-                when (lastWord.first.firstOrNull()) {
-                  '/'  -> processResults(getAliases())
-                  '@'  -> processResults(getNicks())
-                  '#'  -> processResults(getBuffers())
-                  else -> processResults(getAliases() + getNicks() + getBuffers())
+                fun getEmojis() = EmojiData.processedEmojiMap.filter {
+                  it.shortCodes.any {
+                    it.contains(lastWord.first.trim(':'))
+                  }
+                }.map {
+                  Observable.just(it)
                 }
+
+                processResults(when (lastWord.first.firstOrNull()) {
+                                 '/'  -> getAliases()
+                                 '@'  -> getNicks()
+                                 '#'  -> getBuffers()
+                                 ':'  -> getEmojis()
+                                 else -> getAliases() + getNicks() + getBuffers() + getEmojis()
+                               })
               }
             }
           }

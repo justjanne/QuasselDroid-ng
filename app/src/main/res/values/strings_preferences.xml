@@ -256,6 +256,10 @@
   <string name="preference_highlight_own_messages_title">Highlight own messages</string>
   <string name="preference_highlight_own_messages_summary">Shows your own messages more prominently</string>
 
+  <string name="preference_replace_emoji_key" translatable="false">replace_emoji</string>
+  <string name="preference_replace_emoji_title">Replace Emoji Shortcodes</string>
+  <string name="preference_replace_emoji_summary">Automatically replaces shortcodes such as :+1: or :like: with emoji</string>
+
 
   <string name="preference_autocomplete_title">Autocomplete</string>
 
@@ -287,6 +291,9 @@
 
   <string name="preference_autocomplete_aliases_key" translatable="false">autocomplete_aliases</string>
   <string name="preference_autocomplete_aliases_title">Autocomplete Commands</string>
+
+  <string name="preference_autocomplete_emoji_key" translatable="false">autocomplete_emoji</string>
+  <string name="preference_autocomplete_emoji_title">Autocomplete Emoji</string>
 
 
   <string name="preference_backlog_title">Backlog</string>

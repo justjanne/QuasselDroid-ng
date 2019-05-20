@@ -39,6 +39,7 @@ import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.util.emoji.EmojiData
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
@@ -168,8 +169,12 @@ class ChatlineFragment : ServiceBoundFragment() {
     }
 
     fun send() {
-      if (chatline.safeText.isNotEmpty()) {
-        val lines = chatline.safeText.lineSequence().map {
+      val safeText =
+        if (messageSettings.replaceEmoji) EmojiData.replaceShortCodes(chatline.safeText)
+        else chatline.safeText
+
+      if (safeText.isNotEmpty()) {
+        val lines = safeText.lineSequence().map {
           SpannableString(it).apply {
             for (span in getSpans(0, length, Any::class.java)) {
               if (getSpanFlags(span) and Spanned.SPAN_COMPOSING != 0) {

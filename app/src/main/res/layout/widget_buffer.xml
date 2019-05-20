@@ -76,6 +76,8 @@
 
   <androidx.appcompat.widget.AppCompatImageView
     android:id="@+id/handle"
+    android:visibility="gone"
+    tools:visibility="visible"
     android:layout_width="24dp"
     android:layout_height="24dp"
     android:layout_gravity="center_vertical"

@@ -131,4 +131,27 @@ sealed class AutoCompleteItem(open val name: String, val suffix: String, private
       return result
     }
   }
+
+  data class EmojiItem(
+    val shortCodes: List<String>,
+    val replacement: String
+  ) : AutoCompleteItem(replacement, " ", 3) {
+    override fun equals(other: Any?): Boolean {
+      if (this === other) return true
+      if (javaClass != other?.javaClass) return false
+
+      other as EmojiItem
+
+      if (shortCodes != other.shortCodes) return false
+      if (replacement != other.replacement) return false
+
+      return true
+    }
+
+    override fun hashCode(): Int {
+      var result = shortCodes.hashCode()
+      result = 31 * result + replacement.hashCode()
+      return result
+    }
+  }
 }

@@ -27,7 +27,8 @@ data class AutoCompleteSettings(
   val prefix: Boolean = true,
   val nicks: Boolean = true,
   val buffers: Boolean = true,
-  val aliases: Boolean = true
+  val aliases: Boolean = true,
+  val emoji: Boolean = true
 ) {
   companion object {
     val DEFAULT = AutoCompleteSettings()

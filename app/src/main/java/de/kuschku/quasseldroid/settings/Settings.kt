@@ -132,6 +132,10 @@ object Settings {
       highlightOwnMessages = getBoolean(
         context.getString(R.string.preference_highlight_own_messages_key),
         MessageSettings.DEFAULT.highlightOwnMessages
+      ),
+      replaceEmoji = getBoolean(
+        context.getString(R.string.preference_replace_emoji_key),
+        MessageSettings.DEFAULT.replaceEmoji
       )
     )
   }
@@ -216,6 +220,10 @@ object Settings {
       aliases = getBoolean(
         context.getString(R.string.preference_autocomplete_aliases_key),
         AutoCompleteSettings.DEFAULT.aliases
+      ),
+      emoji = getBoolean(
+        context.getString(R.string.preference_autocomplete_emoji_key),
+        AutoCompleteSettings.DEFAULT.emoji
       )
     )
   }

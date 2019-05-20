@@ -42,6 +42,7 @@ import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
+import de.kuschku.quasseldroid.util.emoji.EmojiData
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
@@ -92,12 +93,14 @@ class AutoCompleteHelper(
         (autoCompleteSettings.auto && query.length >= 3) ||
         (autoCompleteSettings.prefix && autoCompleteSettings.nicks && query.startsWith('@')) ||
         (autoCompleteSettings.prefix && autoCompleteSettings.buffers && query.startsWith('#')) ||
-        (autoCompleteSettings.prefix && autoCompleteSettings.aliases && query.startsWith('/'))
+        (autoCompleteSettings.prefix && autoCompleteSettings.aliases && query.startsWith('/')) ||
+        (autoCompleteSettings.prefix && autoCompleteSettings.emoji && query.startsWith(':'))
       val list = if (shouldShowResults) it?.second.orEmpty() else emptyList()
       val data = list.filter {
         it is AutoCompleteItem.AliasItem && autoCompleteSettings.aliases ||
         it is AutoCompleteItem.UserItem && autoCompleteSettings.nicks ||
-        it is AutoCompleteItem.ChannelItem && autoCompleteSettings.buffers
+        it is AutoCompleteItem.ChannelItem && autoCompleteSettings.buffers ||
+        it is AutoCompleteItem.EmojiItem && autoCompleteSettings.emoji
       }.map {
         when (it) {
           is AutoCompleteItem.UserItem    -> {
@@ -184,15 +187,25 @@ class AutoCompleteHelper(
         network.ircChannel(bufferInfo.bufferName) ?: IrcChannel.NULL
       } else IrcChannel.NULL
       val users = ircChannel.ircUsers()
-      fun processResults(list: List<AutoCompleteItem>) = list.filter {
-        it.name.trimStart(*IGNORED_CHARS)
+      fun filterStart(name: String): Boolean {
+        return name.trimStart(*IGNORED_CHARS)
           .startsWith(
             lastWord.first.trimStart(*IGNORED_CHARS),
             ignoreCase = true
           )
-      }.sorted()
+      }
 
-      fun getAliases() = aliases.map {
+      fun filter(name: String): Boolean {
+        return name.trim(*IGNORED_CHARS)
+          .contains(
+            lastWord.first.trim(*IGNORED_CHARS),
+            ignoreCase = true
+          )
+      }
+
+      fun getAliases() = aliases.filter {
+        filterStart(it.name ?: "")
+      }.map {
         AutoCompleteItem.AliasItem(
           "/${it.name}",
           it.expansion
@@ -200,6 +213,8 @@ class AutoCompleteHelper(
       }
 
       fun getBuffers() = infos.filter {
+        filterStart(it.bufferName ?: "")
+      }.filter {
         it.type.toInt() == Buffer_Type.ChannelBuffer.toInt()
       }.mapNotNull { info ->
         networks[info.networkId]?.let { info to it }
@@ -230,7 +245,9 @@ class AutoCompleteHelper(
           emptySet()
       }
 
-      fun getNicks() = getUsers().map { user ->
+      fun getNicks() = getUsers().filter {
+        filterStart(it.nick())
+      }.map { user ->
         val userModes = ircChannel.userModes(user)
         val prefixModes = network.prefixModes()
 
@@ -249,12 +266,19 @@ class AutoCompleteHelper(
         )
       }
 
-      when (lastWord.first.firstOrNull()) {
-        '/'  -> processResults(getAliases())
-        '@'  -> processResults(getNicks())
-        '#'  -> processResults(getBuffers())
-        else -> processResults(getNicks())
+      fun getEmojis() = EmojiData.processedEmojiMap.filter {
+        it.shortCodes.any {
+          it.contains(lastWord.first.trim(':'))
+        }
       }
+
+      when (lastWord.first.firstOrNull()) {
+        '/'  -> getAliases()
+        '@'  -> getNicks()
+        '#'  -> getBuffers()
+        ':'  -> getEmojis()
+        else -> getNicks()
+      }.sorted()
     } else {
       emptyList()
     }
@@ -269,7 +293,8 @@ class AutoCompleteHelper(
         }?.filter {
           it is AutoCompleteItem.AliasItem && autoCompleteSettings.aliases ||
           it is AutoCompleteItem.UserItem && autoCompleteSettings.nicks ||
-          it is AutoCompleteItem.ChannelItem && autoCompleteSettings.buffers
+          it is AutoCompleteItem.ChannelItem && autoCompleteSettings.buffers ||
+          it is AutoCompleteItem.EmojiItem && autoCompleteSettings.emoji
         }.orEmpty()
 
         if (previous != null && originalWord.first == previous.originalWord && originalWord.second.start == previous.range.start) {

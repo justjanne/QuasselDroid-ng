@@ -80,6 +80,11 @@ class AutoCompleteAdapter @Inject constructor(
         .inflate(R.layout.widget_alias, parent, false),
       clickListener = clickListener
     )
+    VIEWTYPE_EMOJI                           -> AutoCompleteViewHolder.EmojiViewHolder(
+      LayoutInflater.from(parent.context)
+        .inflate(R.layout.widget_emoji, parent, false),
+      clickListener = clickListener
+    )
     else                                     -> throw IllegalArgumentException(
       "Invoked with wrong item type"
     )
@@ -92,6 +97,7 @@ class AutoCompleteAdapter @Inject constructor(
     when {
       it is AutoCompleteItem.ChannelItem         -> VIEWTYPE_CHANNEL
       it is AutoCompleteItem.AliasItem           -> VIEWTYPE_ALIAS
+      it is AutoCompleteItem.EmojiItem           -> VIEWTYPE_EMOJI
       it is AutoCompleteItem.UserItem && it.away -> VIEWTYPE_NICK_AWAY
       else                                       -> VIEWTYPE_NICK_ACTIVE
     }
@@ -104,6 +110,8 @@ class AutoCompleteAdapter @Inject constructor(
       data is AutoCompleteItem.ChannelItem && this is ChannelViewHolder ->
         this.bindImpl(data, messageSettings)
       data is AutoCompleteItem.AliasItem && this is AliasViewHolder     ->
+        this.bindImpl(data, messageSettings)
+      data is AutoCompleteItem.EmojiItem && this is EmojiViewHolder     ->
         this.bindImpl(data, messageSettings)
       else                                                              ->
         throw IllegalArgumentException("Invoked with wrong item type")
@@ -209,6 +217,35 @@ class AutoCompleteAdapter @Inject constructor(
         expansion.text = data.expansion
       }
     }
+
+    class EmojiViewHolder(
+      itemView: View,
+      private val clickListener: ((String, String) -> Unit)? = null
+    ) : AutoCompleteViewHolder(itemView) {
+      @BindView(R.id.emoji)
+      lateinit var emoji: TextView
+
+      @BindView(R.id.shortCode)
+      lateinit var shortCode: TextView
+
+      var value: AutoCompleteItem? = null
+
+      init {
+        ButterKnife.bind(this, itemView)
+        itemView.setOnClickListener {
+          val value = value
+          if (value != null)
+            clickListener?.invoke(value.name, value.suffix)
+        }
+      }
+
+      fun bindImpl(data: AutoCompleteItem.EmojiItem, messageSettings: MessageSettings) {
+        value = data
+
+        emoji.text = data.replacement
+        shortCode.text = data.shortCodes.joinToString(", ")
+      }
+    }
   }
 
   companion object {
@@ -216,5 +253,6 @@ class AutoCompleteAdapter @Inject constructor(
     const val VIEWTYPE_NICK_ACTIVE = 1
     const val VIEWTYPE_NICK_AWAY = 2
     const val VIEWTYPE_ALIAS = 3
+    const val VIEWTYPE_EMOJI = 4
   }
 }

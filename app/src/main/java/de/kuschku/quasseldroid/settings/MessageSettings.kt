@@ -37,7 +37,8 @@ data class MessageSettings(
   val showGravatarAvatars: Boolean = false,
   val showMatrixAvatars: Boolean = false,
   val largerEmoji: Boolean = false,
-  val highlightOwnMessages: Boolean = false
+  val highlightOwnMessages: Boolean = false,
+  val replaceEmoji: Boolean = true
 ) {
 
   enum class ColorizeNicknamesMode {

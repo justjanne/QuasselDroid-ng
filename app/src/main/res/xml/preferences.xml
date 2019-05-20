@@ -239,6 +239,11 @@
       android:key="@string/preference_highlight_own_messages_key"
       android:summary="@string/preference_highlight_own_messages_summary"
       android:title="@string/preference_highlight_own_messages_title" />
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="@string/preference_replace_emoji_key"
+      android:summary="@string/preference_replace_emoji_summary"
+      android:title="@string/preference_replace_emoji_title" />
   </PreferenceCategory>
 
   <PreferenceCategory android:layout="@layout/widget_preference_divider" />
@@ -289,6 +294,11 @@
       android:defaultValue="true"
       android:key="@string/preference_autocomplete_aliases_key"
       android:title="@string/preference_autocomplete_aliases_title" />
+
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="@string/preference_autocomplete_emoji_key"
+      android:title="@string/preference_autocomplete_emoji_title" />
   </PreferenceCategory>
 
   <PreferenceCategory android:layout="@layout/widget_preference_divider" />
