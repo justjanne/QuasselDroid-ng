@@ -109,8 +109,10 @@ class WhitelistFragment : SettingsFragment(), Changeable,
     handler.post {
       whitelist = Whitelist(database.validityWhitelist().all(), database.hostnameWhitelist().all())
       whitelist?.let {
-        certificateAdapter.list = it.certificates
-        hostnameAdapter.list = it.hostnames
+        activity?.runOnUiThread {
+          certificateAdapter.list = it.certificates
+          hostnameAdapter.list = it.hostnames
+        }
       }
     }
     return view
