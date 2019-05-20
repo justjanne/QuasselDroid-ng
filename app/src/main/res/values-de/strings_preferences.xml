@@ -125,7 +125,6 @@
   <string name="preference_highlight_own_messages_title">Eigene Nachrichten hervorheben</string>
   <string name="preference_highlight_own_messages_summary">Hebt eigene Nachrichten besser sichtbar hervor</string>
 
-
   <string name="preference_autocomplete_title">Autovervollständigung</string>
 
   <string name="preference_autocomplete_sender_doubleclick_title">Sender-Autovervollständigung</string>
@@ -148,7 +147,6 @@
   <string name="preference_autocomplete_buffers_title">Vervollständige Chats</string>
 
   <string name="preference_autocomplete_aliases_title">Vervollständige Aliase</string>
-
 
   <string name="preference_backlog_title">Verlauf</string>
 

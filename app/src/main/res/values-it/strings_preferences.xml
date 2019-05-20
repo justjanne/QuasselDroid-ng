@@ -125,7 +125,6 @@
   <string name="preference_highlight_own_messages_title">Evidenzia i miei messaggi</string>
   <string name="preference_highlight_own_messages_summary">Mostra i miei messaggi in modo più evidente</string>
 
-
   <string name="preference_autocomplete_title">Completamento automatico</string>
 
   <string name="preference_autocomplete_sender_doubleclick_title">Completa automaticamente il mittente</string>
@@ -148,7 +147,6 @@
   <string name="preference_autocomplete_buffers_title">Completa automaticamente chat</string>
 
   <string name="preference_autocomplete_aliases_title">Completa automaticamente comandi</string>
-
 
   <string name="preference_backlog_title">Registro storico</string>
 

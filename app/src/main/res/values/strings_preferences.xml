@@ -65,6 +65,7 @@
   <string name="preference_input_enter_title">Enter key on keyboard</string>
   <string name="preference_input_enter_entry_emoji">Emoji</string>
   <string name="preference_input_enter_entry_send">Send</string>
+  <string name="preference_input_enter_entry_newline">New Line</string>
   <string-array name="preference_input_enter_entries" translatable="false">
     <item>@string/preference_input_enter_entry_emoji</item>
     <item>@string/preference_input_enter_entry_send</item>

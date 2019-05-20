@@ -120,7 +120,6 @@
   <string name="preference_highlight_own_messages_title">Istakni sopstvene poruke</string>
   <string name="preference_highlight_own_messages_summary">Prikazuje vaše poruke upadljivije</string>
 
-
   <string name="preference_autocomplete_title">Automatsko dovršavanje</string>
 
   <string name="preference_autocomplete_sender_doubleclick_title">Automatsko dovršavanje pošiljaoca</string>
@@ -143,7 +142,6 @@
   <string name="preference_autocomplete_buffers_title">Automatski dovrši razgovore</string>
 
   <string name="preference_autocomplete_aliases_title">Automatski dovrši komande</string>
-
 
   <string name="preference_backlog_title">Zaostale poruke</string>
 

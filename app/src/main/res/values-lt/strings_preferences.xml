@@ -122,7 +122,6 @@
   <string name="preference_highlight_own_messages_title">Žymėti savo žinutes</string>
   <string name="preference_highlight_own_messages_summary">Lengviau atskirsite savo išsiųstas žinutes</string>
 
-
   <string name="preference_autocomplete_title">Auto-užbaigimas</string>
 
   <string name="preference_autocomplete_sender_doubleclick_title">Siuntėjo auto-įvedimas</string>
@@ -145,7 +144,6 @@
   <string name="preference_autocomplete_buffers_title">Auto-užbaigti pokalbius</string>
 
   <string name="preference_autocomplete_aliases_title">Auto-užbaigti komandas</string>
-
 
   <string name="preference_backlog_title">Žinučių žurnalas</string>
 
