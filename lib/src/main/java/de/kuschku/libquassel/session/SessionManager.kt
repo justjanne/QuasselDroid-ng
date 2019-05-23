@@ -134,7 +134,9 @@ class SessionManager(
     }
 
     val connectionState = state.or(ConnectionState.DISCONNECTED)
-    if (connectionState != ConnectionState.DISCONNECTED && !ignoreConnectionState) {
+    if (connectionState != ConnectionState.DISCONNECTED &&
+        connectionState != ConnectionState.CLOSED &&
+        !ignoreConnectionState) {
       log(INFO, "SessionManager", "Reconnect failed: connection state is $connectionState")
       return false
     }
