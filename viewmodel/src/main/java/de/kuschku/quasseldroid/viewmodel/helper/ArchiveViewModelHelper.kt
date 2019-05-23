@@ -45,7 +45,12 @@ open class ArchiveViewModelHelper @Inject constructor(
     showHandle: Boolean,
     filtered: Observable<Pair<Map<BufferId, Int>, Int>>
   ) = filterBufferList(
-    processRawBufferList(bufferViewConfig, filtered, bufferListType = bufferListType),
+    processRawBufferList(
+      bufferViewConfig,
+      filtered,
+      bufferListType = bufferListType,
+      showAllNetworks = false
+    ),
     when (bufferListType) {
       BufferHiddenState.VISIBLE          -> archive.visibleExpandedNetworks
       BufferHiddenState.HIDDEN_TEMPORARY -> archive.temporarilyExpandedNetworks

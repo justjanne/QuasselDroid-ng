@@ -30,9 +30,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
-import de.kuschku.libquassel.protocol.BufferId
-import de.kuschku.libquassel.protocol.Buffer_Activity
-import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.quasseldroid.R
@@ -41,8 +39,6 @@ import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.lists.ListAdapter
 import de.kuschku.quasseldroid.util.ui.fastscroll.views.FastScrollRecyclerView
 import de.kuschku.quasseldroid.viewmodel.data.BufferListItem
-import de.kuschku.quasseldroid.viewmodel.data.BufferProps
-import de.kuschku.quasseldroid.viewmodel.data.BufferState
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
 import io.reactivex.subjects.BehaviorSubject
 
@@ -94,10 +90,9 @@ class BufferListAdapter(
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BufferViewHolder {
-    val bufferType = viewType and 0xFFFF
-    val bufferStatus = BufferStatus.of(((viewType ushr 16) and 0xFFFF).toShort())
-    return when (bufferType) {
-      BufferInfo.Type.ChannelBuffer.toInt() -> BufferViewHolder.ChannelBuffer(
+    val viewType = ViewType(viewType.toUInt())
+    return when (viewType.bufferType?.enabledValues()?.firstOrNull()) {
+      BufferInfo.Type.ChannelBuffer -> BufferViewHolder.ChannelBuffer(
         LayoutInflater.from(parent.context).inflate(
           R.layout.widget_buffer, parent, false
         ),
@@ -105,17 +100,16 @@ class BufferListAdapter(
         longClickListener = longClickListener,
         dragListener = dragListener
       )
-      BufferInfo.Type.QueryBuffer.toInt()   -> BufferViewHolder.QueryBuffer(
+      BufferInfo.Type.QueryBuffer   -> BufferViewHolder.QueryBuffer(
         LayoutInflater.from(parent.context).inflate(
-          if (bufferStatus == BufferStatus.AWAY) R.layout.widget_buffer_away
-          else R.layout.widget_buffer
-          , parent, false
+          if (viewType.bufferStatus == BufferStatus.AWAY) R.layout.widget_buffer_away
+          else R.layout.widget_buffer, parent, false
         ),
         clickListener = clickListener,
         longClickListener = longClickListener,
         dragListener = dragListener
       )
-      BufferInfo.Type.GroupBuffer.toInt()   -> BufferViewHolder.GroupBuffer(
+      BufferInfo.Type.GroupBuffer   -> BufferViewHolder.GroupBuffer(
         LayoutInflater.from(parent.context).inflate(
           R.layout.widget_buffer, parent, false
         ),
@@ -123,7 +117,7 @@ class BufferListAdapter(
         longClickListener = longClickListener,
         dragListener = dragListener
       )
-      BufferInfo.Type.StatusBuffer.toInt()  -> BufferViewHolder.StatusBuffer(
+      BufferInfo.Type.StatusBuffer  -> BufferViewHolder.StatusBuffer(
         LayoutInflater.from(parent.context).inflate(
           R.layout.widget_network, parent, false
         ),
@@ -131,21 +125,40 @@ class BufferListAdapter(
         longClickListener = longClickListener,
         expansionListener = ::expandListener
       )
-      else                                  -> throw IllegalArgumentException(
-        "No such viewType: ${viewType.toString(16)}"
-      )
+      else                          ->
+        throw IllegalArgumentException("No such viewType: $viewType")
     }
   }
 
   override fun onBindViewHolder(holder: BufferViewHolder, position: Int) =
-    holder.bind(getItem(position).props, getItem(position).state, messageSettings)
+    holder.bind(getItem(position), messageSettings)
 
-  override fun getItemViewType(position: Int) = getItem(position).let {
-    (it.props.bufferStatus.ordinal shl 16) + (it.props.info.type.toInt() and 0xFFFF)
+  data class ViewType(
+    val bufferStatus: BufferStatus?,
+    val bufferType: Buffer_Types?
+  ) {
+    constructor(item: BufferListItem) : this(
+      bufferStatus = item.props.bufferStatus,
+      bufferType = item.props.info.type
+    )
+
+    constructor(viewType: UInt) : this(
+      bufferStatus = BufferStatus.of(viewType.shr(16).and(0xFFu).toUByte()),
+      bufferType = Buffer_Type.of(viewType.and(0xFFFFu).toUShort())
+    )
+
+    fun compute(): UInt {
+      val bufferStatusValue = bufferStatus?.value ?: 0xFFu
+      val bufferTypeValue = bufferType?.value ?: 0xFFu
+      return bufferStatusValue.toUInt().shl(16) +
+             bufferTypeValue
+    }
   }
 
+  override fun getItemViewType(position: Int) = ViewType(getItem(position)).compute().toInt()
+
   abstract class BufferViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    abstract fun bind(props: BufferProps, state: BufferState, messageSettings: MessageSettings)
+    abstract fun bind(item: BufferListItem, messageSettings: MessageSettings)
 
     class StatusBuffer(
       itemView: View,
@@ -204,25 +217,25 @@ class BufferListAdapter(
         }
       }
 
-      override fun bind(props: BufferProps, state: BufferState, messageSettings: MessageSettings) {
-        name.text = props.network.networkName
-        bufferId = props.info.bufferId
-        networkId = props.info.networkId
+      override fun bind(item: BufferListItem, messageSettings: MessageSettings) {
+        name.text = item.props.network.networkName
+        bufferId = item.props.info.bufferId
+        networkId = item.props.info.networkId
 
         name.setTextColor(
           when {
-            props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
-            props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
-            props.bufferActivity.hasFlag(Buffer_Activity.OtherActivity) -> activity
-            else                                                        -> none
+            item.props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
+            item.props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
+            item.props.bufferActivity.hasFlag(Buffer_Activity.OtherActivity) -> activity
+            else                                                             -> none
           }
         )
 
-        this.expanded = state.networkExpanded
+        this.expanded = item.state.networkExpanded
 
-        itemView.isSelected = state.selected
+        itemView.isSelected = item.state.selected
 
-        if (state.networkExpanded) {
+        if (item.state.networkExpanded) {
           status.setImageResource(R.drawable.ic_chevron_up)
         } else {
           status.setImageResource(R.drawable.ic_chevron_down)
@@ -301,29 +314,29 @@ class BufferListAdapter(
         }
       }
 
-      override fun bind(props: BufferProps, state: BufferState, messageSettings: MessageSettings) {
-        bufferId = props.info.bufferId
+      override fun bind(item: BufferListItem, messageSettings: MessageSettings) {
+        bufferId = item.props.info.bufferId
 
-        name.text = props.info.bufferName
-        description.text = props.description
+        name.text = item.props.info.bufferName
+        description.text = item.props.description
 
         name.setTextColor(
           when {
-            props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
-            props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
-            props.bufferActivity.hasFlag(Buffer_Activity.OtherActivity) -> activity
-            else                                                        -> none
+            item.props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
+            item.props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
+            item.props.bufferActivity.hasFlag(Buffer_Activity.OtherActivity) -> activity
+            else                                                             -> none
           }
         )
 
-        itemView.isSelected = state.selected
+        itemView.isSelected = item.state.selected
 
-        handle.visibleIf(state.showHandle)
+        handle.visibleIf(item.state.showHandle)
 
-        description.visibleIf(props.description.isNotBlank())
+        description.visibleIf(item.props.description.isNotBlank())
 
         status.setImageDrawable(
-          when (props.bufferStatus) {
+          when (item.props.bufferStatus) {
             BufferStatus.ONLINE -> online
             else                -> offline
           }
@@ -392,28 +405,28 @@ class BufferListAdapter(
         }
       }
 
-      override fun bind(props: BufferProps, state: BufferState, messageSettings: MessageSettings) {
-        bufferId = props.info.bufferId
+      override fun bind(item: BufferListItem, messageSettings: MessageSettings) {
+        bufferId = item.props.info.bufferId
 
-        name.text = props.info.bufferName
-        description.text = props.description
+        name.text = item.props.info.bufferName
+        description.text = item.props.description
 
         name.setTextColor(
           when {
-            props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
-            props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
-            props.bufferActivity.hasFlag(Buffer_Activity.OtherActivity) -> activity
-            else                                                        -> none
+            item.props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
+            item.props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
+            item.props.bufferActivity.hasFlag(Buffer_Activity.OtherActivity) -> activity
+            else                                                             -> none
           }
         )
 
-        itemView.isSelected = state.selected
+        itemView.isSelected = item.state.selected
 
-        handle.visibleIf(state.showHandle)
+        handle.visibleIf(item.state.showHandle)
 
-        description.visibleIf(props.description.isNotBlank())
+        description.visibleIf(item.props.description.isNotBlank())
 
-        status.setImageDrawable(props.fallbackDrawable)
+        status.setImageDrawable(item.props.fallbackDrawable)
       }
     }
 
@@ -478,29 +491,29 @@ class BufferListAdapter(
         }
       }
 
-      override fun bind(props: BufferProps, state: BufferState, messageSettings: MessageSettings) {
-        bufferId = props.info.bufferId
+      override fun bind(item: BufferListItem, messageSettings: MessageSettings) {
+        bufferId = item.props.info.bufferId
 
-        name.text = props.info.bufferName
-        description.text = props.description
+        name.text = item.props.info.bufferName
+        description.text = item.props.description
 
         name.setTextColor(
           when {
-            props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
-            props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
-            props.bufferActivity.hasFlag(Buffer_Activity.OtherActivity) -> activity
-            else                                                        -> none
+            item.props.bufferActivity.hasFlag(Buffer_Activity.Highlight)     -> highlight
+            item.props.bufferActivity.hasFlag(Buffer_Activity.NewMessage)    -> message
+            item.props.bufferActivity.hasFlag(Buffer_Activity.OtherActivity) -> activity
+            else                                                             -> none
           }
         )
 
-        itemView.isSelected = state.selected
+        itemView.isSelected = item.state.selected
 
-        handle.visibleIf(state.showHandle)
+        handle.visibleIf(item.state.showHandle)
 
-        description.visibleIf(props.description.isNotBlank())
+        description.visibleIf(item.props.description.isNotBlank())
 
-        status.loadAvatars(props.avatarUrls,
-                           props.fallbackDrawable,
+        status.loadAvatars(item.props.avatarUrls,
+                           item.props.fallbackDrawable,
                            crop = !messageSettings.squareAvatars)
       }
     }

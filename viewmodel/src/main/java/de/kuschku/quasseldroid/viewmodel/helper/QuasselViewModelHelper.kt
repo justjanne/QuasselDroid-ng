@@ -137,8 +137,7 @@ open class QuasselViewModelHelper @Inject constructor(
     filtered: Map<BufferId, Int>,
     defaultFiltered: Int,
     bufferSearch: String = ""
-  ) =
-    ids.asSequence().mapNotNull { id ->
+  ): Sequence<Observable<BufferProps>> = ids.asSequence().mapNotNull { id ->
       bufferSyncer.bufferInfo(id)
     }.filter {
       bufferSearch.isBlank() ||
@@ -156,7 +155,7 @@ open class QuasselViewModelHelper @Inject constructor(
       } else {
         it to network
       }
-    }.map<Pair<BufferInfo, Network>, Observable<BufferProps>?> { (info, network) ->
+    }.mapNotNull<Pair<BufferInfo, Network>, Observable<BufferProps>> { (info, network) ->
       bufferSyncer.liveActivity(info.bufferId).safeSwitchMap { activity ->
         bufferSyncer.liveHighlightCount(info.bufferId).map { highlights ->
           Pair(activity, highlights)
@@ -284,7 +283,8 @@ open class QuasselViewModelHelper @Inject constructor(
     bufferViewConfig: Observable<Optional<BufferViewConfig>>,
     filteredTypes: Observable<Pair<Map<BufferId, Int>, Int>>,
     bufferSearch: Observable<String> = Observable.just(""),
-    bufferListType: BufferHiddenState = BufferHiddenState.VISIBLE
+    bufferListType: BufferHiddenState = BufferHiddenState.VISIBLE,
+    showAllNetworks: Boolean = true
   ): Observable<Pair<BufferViewConfig?, List<BufferProps>>> =
     combineLatest(connectedSession, bufferViewConfig, filteredTypes, bufferSearch)
       .safeSwitchMap { (sessionOptional, configOptional, rawFiltered, bufferSearch) ->
@@ -316,18 +316,28 @@ open class QuasselViewModelHelper @Inject constructor(
                     )
 
                   fun missingStatusBuffers(
-                    list: Collection<BufferId>): Sequence<Observable<BufferProps>?> {
-                    val totalNetworks = networks.keys
-                    val wantedNetworks = if (!currentConfig.networkId().isValidId()) totalNetworks
-                    else listOf(currentConfig.networkId())
-
-                    val availableNetworks = list.asSequence().mapNotNull { id ->
+                    list: Collection<BufferId>
+                  ): Sequence<Observable<BufferProps>> {
+                    val buffers = list.asSequence().mapNotNull { id ->
                       bufferSyncer.bufferInfo(id)
-                    }.filter {
+                    }
+
+                    val totalNetworks =
+                      if (showAllNetworks) networks.keys
+                      else buffers.filter {
+                        !it.type.hasFlag(Buffer_Type.StatusBuffer)
+                      }.map {
+                        it.networkId
+                      }.toList()
+
+                    val availableNetworks = buffers.filter {
                       it.type.hasFlag(Buffer_Type.StatusBuffer)
                     }.map {
                       it.networkId
-                    }
+                    }.toList()
+
+                    val wantedNetworks = if (!currentConfig.networkId().isValidId()) totalNetworks
+                    else listOf(currentConfig.networkId())
 
                     val missingNetworks = wantedNetworks - availableNetworks
 
@@ -339,7 +349,7 @@ open class QuasselViewModelHelper @Inject constructor(
                       networks[it]
                     }.filter {
                       !config.hideInactiveNetworks() || it.isConnected()
-                    }.map<Network, Observable<BufferProps>?> { network ->
+                    }.mapNotNull<Network, Observable<BufferProps>> { network ->
                       network.liveNetworkInfo().safeSwitchMap { networkInfo ->
                         network.liveConnectionState().map { connectionState ->
                           BufferProps(

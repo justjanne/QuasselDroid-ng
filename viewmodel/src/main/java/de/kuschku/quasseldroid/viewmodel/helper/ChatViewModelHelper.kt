@@ -137,7 +137,7 @@ open class ChatViewModelHelper @Inject constructor(
           network?.liveIrcChannel(bufferInfo.bufferName)?.switchMapNullable(IrcChannel.NULL) { ircChannel ->
             ircChannel?.liveIrcUsers()?.safeSwitchMap { users ->
               combineLatest<IrcUserItem>(
-                users.map<IrcUser, Observable<IrcUserItem>?> {
+                users.mapNotNull<IrcUser, Observable<IrcUserItem>> {
                   it.updates().map { user ->
                     val userModes = ircChannel.userModes(user)
                     val prefixModes = network.prefixModes()
@@ -158,7 +158,7 @@ open class ChatViewModelHelper @Inject constructor(
                       network.support("CASEMAPPING")
                     )
                   }
-                }
+                }.toList()
               )
             } ?: Observable.just(emptyList())
           } ?: Observable.just(emptyList())

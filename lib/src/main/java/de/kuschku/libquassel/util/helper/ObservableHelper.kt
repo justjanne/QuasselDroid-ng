@@ -125,8 +125,11 @@ inline fun <reified A, B, C, D, E, F> combineLatest(
     Tuple6(it[0], it[1], it[2], it[3], it[4], it[5]) as Tuple6<A, B, C, D, E, F>
   }
 
-inline fun <reified T> combineLatest(sources: Iterable<ObservableSource<out T>?>) =
-  Observable.combineLatest(sources) { t -> t.toList() as List<T> }
+inline fun <reified T> combineLatest(
+  sources: Collection<ObservableSource<out T>>
+): Observable<List<T>> =
+  if (sources.isEmpty()) Observable.just(emptyList())
+  else Observable.combineLatest(sources) { t -> t.toList() as List<T> }
 
 inline operator fun <T, U> Observable<T>.invoke(f: (T) -> U?) =
   blockingLatest().firstOrNull()?.let(f)

@@ -209,7 +209,7 @@ class QueryCreateFragment : ServiceBoundFragment() {
         it.liveIrcUsers()
       }.mapOrElse(emptyList()).safeSwitchMap {
         combineLatest<IrcUserItem>(
-          it.map<IrcUser, Observable<IrcUserItem>?> {
+          it.mapNotNull<IrcUser, Observable<IrcUserItem>> {
             it.updates().map { user ->
               IrcUserItem(
                 user.network().networkId(),

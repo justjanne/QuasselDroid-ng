@@ -18,71 +18,10 @@
   -->
 
 
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
+<de.kuschku.quasseldroid.util.ui.fastscroll.views.FastScrollRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:scrollbars="vertical">
-
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
-
-      <androidx.appcompat.widget.AppCompatImageView
-        style="@style/Widget.CoreSettings.PrimaryItemIcon"
-        app:srcCompat="@drawable/ic_clock" />
-
-      <TextView
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/label_temporarily_archived" />
-    </LinearLayout>
-
-    <TextView
-      style="@style/Widget.CoreSettings.TextView"
-      android:layout_marginStart="72dp"
-      android:layout_marginLeft="72dp"
-      android:layout_marginEnd="16dp"
-      android:layout_marginRight="16dp"
-      android:text="@string/label_temporarily_archived_long" />
-
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/list_temporary"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="56dp"
-      android:layout_marginLeft="56dp"
-      tools:listitem="@layout/widget_buffer" />
-
-    <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
-
-      <androidx.appcompat.widget.AppCompatImageView
-        style="@style/Widget.CoreSettings.PrimaryItemIcon"
-        app:srcCompat="@drawable/ic_eye_off" />
-
-      <TextView
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/label_permanently_archived" />
-    </LinearLayout>
-
-    <TextView
-      style="@style/Widget.CoreSettings.TextView"
-      android:layout_marginStart="72dp"
-      android:layout_marginLeft="72dp"
-      android:layout_marginEnd="16dp"
-      android:layout_marginRight="16dp"
-      android:text="@string/label_permanently_archived_long" />
-
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/list_permanently"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="56dp"
-      android:layout_marginLeft="56dp"
-      tools:listitem="@layout/widget_buffer" />
-  </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+  android:id="@+id/list"
+  style="@style/Widget.FastScroller"
+  tools:listitem="@layout/widget_buffer" />

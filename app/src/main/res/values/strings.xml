@@ -104,6 +104,7 @@
   <string name="label_password_old">Old Password</string>
   <string name="label_password_repeat">Repeat Password</string>
   <string name="label_permanently_archived">Permanently Archived</string>
+  <string name="label_permanently_archived_empty">You have no permanently archived chats</string>
   <string name="label_permanently_archived_long">Permanently archived chats stay hidden until you manually choose to un-archive them.</string>
   <string name="label_placeholder_message">Write a message…</string>
   <string name="label_placeholder_topic">Describe the channel topic…</string>
@@ -134,6 +135,7 @@
   <string name="label_sort">Sort</string>
   <string name="label_source">Source</string>
   <string name="label_temporarily_archived">Temporarily Archived</string>
+  <string name="label_temporarily_archived_empty">You have no temporarily archived chats</string>
   <string name="label_temporarily_archived_long">Chats which are temporarily archived will be shown again once they get a new message.</string>
   <string name="label_topic">Channel Topic</string>
   <string name="label_translators">Translators</string>

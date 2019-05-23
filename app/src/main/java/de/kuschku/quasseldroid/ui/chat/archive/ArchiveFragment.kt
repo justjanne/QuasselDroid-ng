@@ -37,7 +37,6 @@ import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
 import de.kuschku.quasseldroid.persistence.models.Filtered
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
-import de.kuschku.quasseldroid.ui.chat.buffers.BufferListAdapter
 import de.kuschku.quasseldroid.util.helper.toLiveData
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.presenter.BufferContextPresenter
@@ -47,11 +46,8 @@ import de.kuschku.quasseldroid.viewmodel.helper.ArchiveViewModelHelper
 import javax.inject.Inject
 
 class ArchiveFragment : ServiceBoundFragment() {
-  @BindView(R.id.list_temporary)
-  lateinit var listTemporary: RecyclerView
-
-  @BindView(R.id.list_permanently)
-  lateinit var listPermanently: RecyclerView
+  @BindView(R.id.list)
+  lateinit var list: RecyclerView
 
   @Inject
   lateinit var modelHelper: ArchiveViewModelHelper
@@ -68,9 +64,7 @@ class ArchiveFragment : ServiceBoundFragment() {
   @Inject
   lateinit var messageSettings: MessageSettings
 
-  private lateinit var listTemporaryAdapter: BufferListAdapter
-
-  private lateinit var listPermanentlyAdapter: BufferListAdapter
+  private lateinit var listAdapter: ArchiveListAdapter
 
   private var actionMode: ActionMode? = null
 
@@ -112,8 +106,7 @@ class ArchiveFragment : ServiceBoundFragment() {
 
     override fun onDestroyActionMode(mode: ActionMode?) {
       actionMode = null
-      listTemporaryAdapter.unselectAll()
-      listPermanentlyAdapter.unselectAll()
+      listAdapter.unselectAll()
     }
   }
 
@@ -125,27 +118,16 @@ class ArchiveFragment : ServiceBoundFragment() {
     val chatlistId = arguments?.getInt("chatlist_id", -1) ?: -1
     modelHelper.archive.bufferViewConfigId.onNext(chatlistId)
 
-    listTemporaryAdapter = BufferListAdapter(
+    listAdapter = ArchiveListAdapter(
       messageSettings,
       modelHelper.archive.selectedBufferId,
       modelHelper.archive.temporarilyExpandedNetworks
     )
-    listTemporaryAdapter.setOnClickListener(::clickListener)
-    listTemporaryAdapter.setOnLongClickListener(::longClickListener)
-    listTemporary.adapter = listTemporaryAdapter
-    listTemporary.layoutManager = LinearLayoutManager(listTemporary.context)
-    listTemporary.itemAnimator = DefaultItemAnimator()
-
-    listPermanentlyAdapter = BufferListAdapter(
-      messageSettings,
-      modelHelper.archive.selectedBufferId,
-      modelHelper.archive.permanentlyExpandedNetworks
-    )
-    listPermanentlyAdapter.setOnClickListener(::clickListener)
-    listPermanentlyAdapter.setOnLongClickListener(::longClickListener)
-    listPermanently.adapter = listPermanentlyAdapter
-    listPermanently.layoutManager = LinearLayoutManager(listPermanently.context)
-    listPermanently.itemAnimator = DefaultItemAnimator()
+    listAdapter.setOnClickListener(::clickListener)
+    listAdapter.setOnLongClickListener(::longClickListener)
+    list.adapter = listAdapter
+    list.layoutManager = LinearLayoutManager(list.context)
+    list.itemAnimator = DefaultItemAnimator()
 
     val filtered = combineLatest(
       database.filtered().listenRx(accountId).toObservable().map {
@@ -154,20 +136,36 @@ class ArchiveFragment : ServiceBoundFragment() {
       accountDatabase.accounts().listenDefaultFiltered(accountId, 0).toObservable()
     )
 
-    fun processArchiveBufferList(bufferListType: BufferHiddenState, showHandle: Boolean) =
-      modelHelper.processArchiveBufferList(bufferListType, showHandle, filtered).map { buffers ->
-        bufferPresenter.render(buffers)
+    combineLatest(
+      modelHelper.processArchiveBufferList(BufferHiddenState.HIDDEN_TEMPORARY, false, filtered),
+      modelHelper.processArchiveBufferList(BufferHiddenState.HIDDEN_PERMANENT, false, filtered)
+    ).map { (temporary, permanently) ->
+      listOf(ArchiveListItem.Header(
+        title = getString(R.string.label_temporarily_archived),
+        content = getString(R.string.label_temporarily_archived_long)
+      )) + temporary.map {
+        ArchiveListItem.Buffer(it.copy(
+          props = bufferPresenter.render(it.props)
+        ))
+      }.ifEmpty {
+        listOf(ArchiveListItem.Placeholder(
+          content = getString(R.string.label_temporarily_archived_empty)
+        ))
+      } + listOf(ArchiveListItem.Header(
+        title = getString(R.string.label_permanently_archived),
+        content = getString(R.string.label_permanently_archived_long)
+      )) + permanently.map {
+        ArchiveListItem.Buffer(it.copy(
+          props = bufferPresenter.render(it.props)
+        ))
+      }.ifEmpty {
+        listOf(ArchiveListItem.Placeholder(
+          content = getString(R.string.label_permanently_archived_empty)
+        ))
       }
-
-    processArchiveBufferList(BufferHiddenState.HIDDEN_TEMPORARY, false)
-      .toLiveData().observe(this, Observer { processedList ->
-        listTemporaryAdapter.submitList(processedList)
-      })
-
-    processArchiveBufferList(BufferHiddenState.HIDDEN_PERMANENT, false)
-      .toLiveData().observe(this, Observer { processedList ->
-        listPermanentlyAdapter.submitList(processedList)
-      })
+    }.toLiveData().observe(this, Observer { processedList ->
+      listAdapter.submitList(processedList)
+    })
 
     modelHelper.selectedBuffer.toLiveData().observe(this, Observer { buffer ->
       actionMode?.let {
