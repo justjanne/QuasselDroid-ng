@@ -172,13 +172,15 @@ open class EditorViewModelHelper @Inject constructor(
                   Observable.just(it)
                 }
 
-                processResults(when (lastWord.first.firstOrNull()) {
+                processResults(
+                  when (lastWord.first.firstOrNull()) {
                                  '/'  -> getAliases()
                                  '@'  -> getNicks()
                                  '#'  -> getBuffers()
                                  ':'  -> getEmojis()
                                  else -> getAliases() + getNicks() + getBuffers() + getEmojis()
-                               })
+                  }
+                )
               }
             }
           }

@@ -19,13 +19,8 @@
 
 package de.kuschku.quasseldroid.util.ui.presenter
 
-import de.kuschku.libquassel.protocol.BufferId
-import de.kuschku.libquassel.protocol.Buffer_Activity
 import de.kuschku.libquassel.protocol.Buffer_Type
-import de.kuschku.libquassel.protocol.Message_Type
 import de.kuschku.libquassel.util.flag.hasFlag
-import de.kuschku.libquassel.util.flag.minus
-import de.kuschku.quasseldroid.persistence.models.Filtered
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.ColorContext
@@ -42,29 +37,11 @@ class BufferPresenter @Inject constructor(
   val ircFormatDeserializer: IrcFormatDeserializer,
   val colorContext: ColorContext
 ) {
-  fun render(props: BufferProps,
-             activities: Map<BufferId, UInt>,
-             defaultFiltered: UInt
-  ): BufferProps {
-    val activity = props.activity - (activities[props.info.bufferId]
-                                     ?: defaultFiltered
-                                     ?: 0u)
-
+  fun render(props: BufferProps): BufferProps {
     return props.copy(
-      activity = activity,
       description = ircFormatDeserializer.formatString(
         props.description.toString(),
         colorize = messageSettings.colorizeMirc
-      ),
-      bufferActivity = Buffer_Activity.of(
-        when {
-          props.highlights > 0                  -> Buffer_Activity.Highlight
-          activity.hasFlag(Message_Type.Plain) ||
-          activity.hasFlag(Message_Type.Notice) ||
-          activity.hasFlag(Message_Type.Action) -> Buffer_Activity.NewMessage
-          activity.isNotEmpty()                 -> Buffer_Activity.OtherActivity
-          else                                  -> Buffer_Activity.NoActivity
-        }
       ),
       fallbackDrawable = if (props.info.type.hasFlag(Buffer_Type.QueryBuffer)) {
         props.ircUser?.let {
@@ -90,12 +67,8 @@ class BufferPresenter @Inject constructor(
     )
   }
 
-  fun render(buffers: List<BufferListItem>, filteredList: List<Filtered>, defaultFiltered: UInt) =
+  fun render(buffers: List<BufferListItem>) =
     buffers.map {
-      it.copy(props = render(
-        it.props,
-        filteredList.associate { it.bufferId to it.filtered.toUInt() },
-        defaultFiltered
-      ))
+      it.copy(props = render(it.props))
     }
 }

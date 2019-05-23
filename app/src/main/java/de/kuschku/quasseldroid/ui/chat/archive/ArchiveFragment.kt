@@ -34,6 +34,7 @@ import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.models.Filtered
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.ui.chat.buffers.BufferListAdapter
@@ -146,13 +147,16 @@ class ArchiveFragment : ServiceBoundFragment() {
     listPermanently.layoutManager = LinearLayoutManager(listPermanently.context)
     listPermanently.itemAnimator = DefaultItemAnimator()
 
+    val filtered = combineLatest(
+      database.filtered().listenRx(accountId).toObservable().map {
+        it.associateBy(Filtered::bufferId, Filtered::filtered)
+      },
+      accountDatabase.accounts().listenDefaultFiltered(accountId, 0).toObservable()
+    )
+
     fun processArchiveBufferList(bufferListType: BufferHiddenState, showHandle: Boolean) =
-      combineLatest(
-        modelHelper.processArchiveBufferList(bufferListType, showHandle),
-        database.filtered().listenRx(accountId).toObservable(),
-        accountDatabase.accounts().listenDefaultFiltered(accountId, 0).toObservable()
-      ).map { (buffers, filteredList, defaultFiltered) ->
-        bufferPresenter.render(buffers, filteredList, defaultFiltered.toUInt())
+      modelHelper.processArchiveBufferList(bufferListType, showHandle, filtered).map { buffers ->
+        bufferPresenter.render(buffers)
       }
 
     processArchiveBufferList(BufferHiddenState.HIDDEN_TEMPORARY, false)

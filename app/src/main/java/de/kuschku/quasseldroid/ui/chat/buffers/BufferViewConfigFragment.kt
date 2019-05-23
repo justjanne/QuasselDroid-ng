@@ -46,6 +46,7 @@ import de.kuschku.quasseldroid.BuildConfig
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
+import de.kuschku.quasseldroid.persistence.models.Filtered
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
@@ -226,12 +227,15 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       )
     })
 
-    combineLatest(
-      modelHelper.processedBufferList,
-      database.filtered().listenRx(accountId).toObservable(),
+    val filtered = combineLatest(
+      database.filtered().listenRx(accountId).toObservable().map {
+        it.associateBy(Filtered::bufferId, Filtered::filtered)
+      },
       accountDatabase.accounts().listenDefaultFiltered(accountId, 0).toObservable()
-    ).map { (buffers, filteredList, defaultFiltered) ->
-      bufferPresenter.render(buffers, filteredList, defaultFiltered.toUInt())
+    )
+
+    modelHelper.processChatBufferList(filtered).map { buffers ->
+      bufferPresenter.render(buffers)
     }.toLiveData().observe(this, Observer { processedList ->
       if (hasRestoredChatListState) {
         chatListState = chatList.layoutManager?.onSaveInstanceState()

@@ -60,7 +60,6 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import de.kuschku.libquassel.util.flag.and
 import de.kuschku.libquassel.util.flag.hasFlag
-import de.kuschku.libquassel.util.flag.minus
 import de.kuschku.libquassel.util.flag.or
 import de.kuschku.libquassel.util.helper.combineLatest
 import de.kuschku.libquassel.util.helper.invoke
@@ -359,41 +358,26 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       }
     })
 
-    val maxBufferActivity = combineLatest(
-      modelHelper.bufferList,
+    val filtered = combineLatest(
       database.filtered().listenRx(accountId).toObservable().map {
         it.associateBy(Filtered::bufferId, Filtered::filtered)
       },
       accountDatabase.accounts().listenDefaultFiltered(accountId, 0).toObservable()
-    ).map { (info, filteredList, defaultFiltered) ->
-      val (config, bufferList) = info
+    )
 
-      val minimumActivity = config?.minimumActivity()?.enabledValues()?.max()
-                            ?: Buffer_Activity.NoActivity
+    val maxBufferActivity = modelHelper.processRawBufferList(modelHelper.bufferViewConfig,
+                                                             filtered).map { (config, bufferList) ->
+      val minimumActivity: Buffer_Activity = config?.minimumActivity()?.enabledValues()?.max()
+                                             ?: Buffer_Activity.NoActivity
 
-      val maxActivity = bufferList.asSequence().map { props ->
-        val activity = props.activity - Message_Type.of(filteredList[props.info.bufferId]?.toUInt()
-                                                        ?: defaultFiltered?.toUInt()
-                                                        ?: 0u)
-        when {
-          props.highlights > 0                  -> Buffer_Activity.Highlight
-          activity.hasFlag(Message_Type.Plain) ||
-          activity.hasFlag(Message_Type.Notice) ||
-          activity.hasFlag(Message_Type.Action) -> Buffer_Activity.NewMessage
-          activity.isNotEmpty()                 -> Buffer_Activity.OtherActivity
-          else                                  -> Buffer_Activity.NoActivity
-        }
+      val maxActivity: Buffer_Activity = bufferList.mapNotNull {
+        it.bufferActivity.enabledValues().max()
       }.max() ?: Buffer_Activity.NoActivity
 
       val hasNotifications = bufferList.any { props ->
-        val activity = props.activity - Message_Type.of(filteredList[props.info.bufferId]?.toUInt()
-                                                        ?: defaultFiltered?.toUInt()
-                                                        ?: 0u)
         when {
           props.info.type hasFlag Buffer_Type.QueryBuffer   ->
-            activity.hasFlag(Message_Type.Plain) ||
-            activity.hasFlag(Message_Type.Notice) ||
-            activity.hasFlag(Message_Type.Action)
+            props.bufferActivity hasFlag Buffer_Activity.NewMessage
           props.info.type hasFlag Buffer_Type.ChannelBuffer ->
             props.highlights > 0
           else                                              -> false
