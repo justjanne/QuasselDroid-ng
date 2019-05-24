@@ -365,8 +365,8 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       accountDatabase.accounts().listenDefaultFiltered(accountId, 0).toObservable()
     )
 
-    val maxBufferActivity = modelHelper.processRawBufferList(modelHelper.bufferViewConfig,
-                                                             filtered).map { (config, bufferList) ->
+    val maxBufferActivity = modelHelper.processBufferList(modelHelper.bufferViewConfig,
+                                                          filtered).map { (config, bufferList) ->
       val minimumActivity: Buffer_Activity = config?.minimumActivity()?.enabledValues()?.max()
                                              ?: Buffer_Activity.NoActivity
 

@@ -45,7 +45,7 @@ open class ArchiveViewModelHelper @Inject constructor(
     showHandle: Boolean,
     filtered: Observable<Pair<Map<BufferId, Int>, Int>>
   ) = filterBufferList(
-    processRawBufferList(
+    processBufferList(
       bufferViewConfig,
       filtered,
       bufferListType = bufferListType,
@@ -60,5 +60,5 @@ open class ArchiveViewModelHelper @Inject constructor(
     showHandle
   )
 
-  val selectedBuffer = processSelectedBuffer(archive.selectedBufferId, bufferViewConfig)
+  val selectedBuffer = processSelectedBuffer(archive.selectedBufferId)
 }

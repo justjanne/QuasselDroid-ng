@@ -37,7 +37,6 @@ data class BufferProps(
   val bufferActivity: Buffer_Activities = BufferInfo.Activity.of(
     BufferInfo.Activity.NoActivity
   ),
-  val hiddenState: BufferHiddenState,
   val ircUser: IrcUser? = null,
   val avatarUrls: List<Avatar> = emptyList(),
   val fallbackDrawable: Drawable? = null,
@@ -57,7 +56,6 @@ data class BufferProps(
     if (activity != other.activity) return false
     if (highlights != other.highlights) return false
     if (bufferActivity != other.bufferActivity) return false
-    if (hiddenState != other.hiddenState) return false
     if (ircUser != other.ircUser) return false
     if (avatarUrls != other.avatarUrls) return false
 
@@ -73,7 +71,6 @@ data class BufferProps(
     result = 31 * result + activity.hashCode()
     result = 31 * result + highlights
     result = 31 * result + bufferActivity.hashCode()
-    result = 31 * result + hiddenState.hashCode()
     result = 31 * result + (ircUser?.hashCode() ?: 0)
     result = 31 * result + avatarUrls.hashCode()
     return result

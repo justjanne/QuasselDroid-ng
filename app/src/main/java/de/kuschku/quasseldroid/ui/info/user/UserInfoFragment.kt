@@ -66,7 +66,6 @@ import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
 import de.kuschku.quasseldroid.util.ui.LinkLongClickMenuHelper
 import de.kuschku.quasseldroid.viewmodel.data.Avatar
-import de.kuschku.quasseldroid.viewmodel.data.BufferHiddenState
 import de.kuschku.quasseldroid.viewmodel.data.BufferProps
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
 import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
@@ -241,7 +240,6 @@ class UserInfoFragment : ServiceBoundFragment() {
                           description = it.topic(),
                           activity = Message_Type.of(),
                           bufferStatus = bufferStatus,
-                          hiddenState = BufferHiddenState.VISIBLE,
                           networkConnectionState = user.network().connectionState(),
                           fallbackDrawable = fallbackDrawable
                         )

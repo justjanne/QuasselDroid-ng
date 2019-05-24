@@ -128,158 +128,10 @@ open class QuasselViewModelHelper @Inject constructor(
     }.orElse(Observable.empty())
   }
 
-  fun generateBufferProps(
-    ids: Collection<BufferId>,
-    state: BufferHiddenState,
-    bufferSyncer: BufferSyncer,
-    networks: Map<NetworkId, Network>,
-    currentConfig: BufferViewConfig,
-    filtered: Map<BufferId, Int>,
-    defaultFiltered: Int,
-    bufferSearch: String = ""
-  ): Sequence<Observable<BufferProps>> = ids.asSequence().mapNotNull { id ->
-      bufferSyncer.bufferInfo(id)
-    }.filter {
-      bufferSearch.isBlank() ||
-      it.type.hasFlag(Buffer_Type.StatusBuffer) ||
-      it.bufferName?.contains(bufferSearch, ignoreCase = true) == true
-    }.filter {
-      !currentConfig.networkId().isValidId() || currentConfig.networkId() == it.networkId
-    }.filter {
-      (currentConfig.allowedBufferTypes() and it.type).isNotEmpty() ||
-      (it.type.hasFlag(Buffer_Type.StatusBuffer) && !currentConfig.networkId().isValidId())
-    }.mapNotNull {
-      val network = networks[it.networkId]
-      if (network == null) {
-        null
-      } else {
-        it to network
-      }
-    }.mapNotNull<Pair<BufferInfo, Network>, Observable<BufferProps>> { (info, network) ->
-      bufferSyncer.liveActivity(info.bufferId).safeSwitchMap { activity ->
-        bufferSyncer.liveHighlightCount(info.bufferId).map { highlights ->
-          Pair(activity, highlights)
-        }
-      }.safeSwitchMap { (rawActivity, highlights) ->
-        val name = info.bufferName?.trim() ?: ""
-        val search = bufferSearch.trim()
-        val matchMode = when {
-          name.equals(search, ignoreCase = true)     -> MatchMode.EXACT
-          name.startsWith(search, ignoreCase = true) -> MatchMode.START
-          else                                       -> MatchMode.CONTAINS
-        }
-        val activity = rawActivity - Message_Type.of(filtered[info.bufferId]?.toUInt()
-                                                     ?: defaultFiltered.toUInt())
-        when (info.type.toInt()) {
-          BufferInfo.Type.QueryBuffer.toInt()   -> {
-            network.liveNetworkInfo().safeSwitchMap { networkInfo ->
-              network.liveConnectionState().safeSwitchMap { connectionState ->
-                network.liveIrcUser(info.bufferName).safeSwitchMap {
-                  it.updates().mapNullable(IrcUser.NULL) { user ->
-                    BufferProps(
-                      info = info,
-                      network = networkInfo,
-                      networkConnectionState = connectionState,
-                      bufferStatus = when {
-                        user == null  -> BufferStatus.OFFLINE
-                        user.isAway() -> BufferStatus.AWAY
-                        else          -> BufferStatus.ONLINE
-                      },
-                      description = user?.realName() ?: "",
-                      activity = activity,
-                      highlights = highlights,
-                      bufferActivity = when {
-                        highlights > 0                       ->
-                          Buffer_Activity.of(Buffer_Activity.Highlight)
-                        activity hasFlag Message_Type.Plain ||
-                        activity hasFlag Message_Type.Notice ||
-                        activity hasFlag Message_Type.Action ->
-                          Buffer_Activity.of(Buffer_Activity.NewMessage)
-                        activity.isNotEmpty()                ->
-                          Buffer_Activity.of(Buffer_Activity.OtherActivity)
-                        else                                 ->
-                          Buffer_Activity.of(Buffer_Activity.NoActivity)
-                      },
-                      hiddenState = state,
-                      ircUser = user,
-                      matchMode = matchMode
-                    )
-                  }
-                }
-              }
-            }
-          }
-          BufferInfo.Type.ChannelBuffer.toInt() -> {
-            network.liveNetworkInfo().safeSwitchMap { networkInfo ->
-              network.liveConnectionState().safeSwitchMap { connectionState ->
-                network.liveIrcChannel(info.bufferName).safeSwitchMap { channel ->
-                  channel.updates().mapNullable(IrcChannel.NULL) {
-                    BufferProps(
-                      info = info,
-                      network = networkInfo,
-                      networkConnectionState = connectionState,
-                      bufferStatus = when (it) {
-                        null -> BufferStatus.OFFLINE
-                        else -> BufferStatus.ONLINE
-                      },
-                      description = it?.topic() ?: "",
-                      activity = activity,
-                      highlights = highlights,
-                      bufferActivity = when {
-                        highlights > 0                       ->
-                          Buffer_Activity.of(Buffer_Activity.Highlight)
-                        activity hasFlag Message_Type.Plain ||
-                        activity hasFlag Message_Type.Notice ||
-                        activity hasFlag Message_Type.Action ->
-                          Buffer_Activity.of(Buffer_Activity.NewMessage)
-                        activity.isNotEmpty()                ->
-                          Buffer_Activity.of(Buffer_Activity.OtherActivity)
-                        else                                 ->
-                          Buffer_Activity.of(Buffer_Activity.NoActivity)
-                      },
-                      hiddenState = state,
-                      matchMode = matchMode
-                    )
-                  }
-                }
-              }
-            }
-          }
-          BufferInfo.Type.StatusBuffer.toInt()  -> {
-            network.liveNetworkInfo().safeSwitchMap { networkInfo ->
-              network.liveConnectionState().map { connectionState ->
-                BufferProps(
-                  info = info,
-                  network = networkInfo,
-                  networkConnectionState = connectionState,
-                  bufferStatus = BufferStatus.OFFLINE,
-                  description = "",
-                  activity = activity,
-                  highlights = highlights,
-                  bufferActivity = when {
-                    highlights > 0                       ->
-                      Buffer_Activity.of(Buffer_Activity.Highlight)
-                    activity hasFlag Message_Type.Plain ||
-                    activity hasFlag Message_Type.Notice ||
-                    activity hasFlag Message_Type.Action ->
-                      Buffer_Activity.of(Buffer_Activity.NewMessage)
-                    activity.isNotEmpty()                ->
-                      Buffer_Activity.of(Buffer_Activity.OtherActivity)
-                    else                                 ->
-                      Buffer_Activity.of(Buffer_Activity.NoActivity)
-                  },
-                  hiddenState = state,
-                  matchMode = matchMode
-                )
-              }
-            }
-          }
-          else                                  -> Observable.empty()
-        }
-      }
-    }
-
-  fun processRawBufferList(
+  /**
+   * Builds a buffer list for a given bufferViewConfig
+   */
+  fun processBufferList(
     bufferViewConfig: Observable<Optional<BufferViewConfig>>,
     filteredTypes: Observable<Pair<Map<BufferId, Int>, Int>>,
     bufferSearch: Observable<String> = Observable.just(""),
@@ -289,138 +141,293 @@ open class QuasselViewModelHelper @Inject constructor(
     combineLatest(connectedSession, bufferViewConfig, filteredTypes, bufferSearch)
       .safeSwitchMap { (sessionOptional, configOptional, rawFiltered, bufferSearch) ->
         val session = sessionOptional.orNull()
-        val bufferSyncer = session?.bufferSyncer
-        val config = configOptional.orNull()
+        val bufferView = configOptional.orNull()
         val (filtered, defaultFiltered) = rawFiltered
-        if (bufferSyncer != null && config != null) {
-          session.liveNetworks().safeSwitchMap { networks ->
-            config.liveUpdates()
-              .safeSwitchMap { currentConfig ->
-                combineLatest<Collection<BufferId>>(
-                  listOf(
-                    config.liveBuffers(),
-                    config.liveTemporarilyRemovedBuffers(),
-                    config.liveRemovedBuffers()
-                  )
-                ).safeSwitchMap { (ids, temp, perm) ->
-                  fun transformIds(ids: Collection<BufferId>, state: BufferHiddenState) =
-                    generateBufferProps(
-                      ids,
-                      state,
-                      bufferSyncer,
-                      networks,
-                      currentConfig,
-                      filtered,
-                      defaultFiltered,
-                      bufferSearch
-                    )
+        val search = bufferSearch.trim()
+        if (session != null && bufferView != null) {
+          bufferView.liveUpdates().safeSwitchMap { config ->
+            val minimumActivity = config.minimumActivity()
 
-                  fun missingStatusBuffers(
-                    list: Collection<BufferId>
-                  ): Sequence<Observable<BufferProps>> {
-                    val buffers = list.asSequence().mapNotNull { id ->
-                      bufferSyncer.bufferInfo(id)
+            combineLatest<Collection<BufferId>>(listOf(
+              config.liveBuffers(),
+              config.liveTemporarilyRemovedBuffers(),
+              config.liveRemovedBuffers()
+            )).safeSwitchMap { (ids, temp, perm) ->
+              val bufferIds = if (search.isNotBlank()) {
+                ids + temp + perm
+              } else when (bufferListType) {
+                BufferHiddenState.VISIBLE          -> ids
+                BufferHiddenState.HIDDEN_TEMPORARY -> temp - ids
+                BufferHiddenState.HIDDEN_PERMANENT -> perm - temp - ids
+              }
+
+              combineLatest(
+                session.bufferSyncer.liveBufferInfos(),
+                session.liveNetworks()
+              ).safeSwitchMap { (bufferInfos, networks) ->
+                val prefiltered = bufferIds.asSequence().mapNotNull { id ->
+                  bufferInfos[id]
+                }.filter {
+                  search.isBlank() ||
+                  it.type.hasFlag(Buffer_Type.StatusBuffer) ||
+                  it.bufferName?.contains(search, ignoreCase = true) == true
+                }
+
+                fun transformIds(
+                  ids: Sequence<BufferInfo>
+                ): Sequence<Observable<BufferProps>> = ids.mapNotNull {
+                  val network = networks[it.networkId]
+                  if (network == null) {
+                    null
+                  } else {
+                    it to network
+                  }
+                }.mapNotNull<Pair<BufferInfo, Network>, Observable<BufferProps>> { (info, network) ->
+                  session.bufferSyncer.liveActivity(info.bufferId).safeSwitchMap { activity ->
+                    session.bufferSyncer.liveHighlightCount(info.bufferId).map { highlights ->
+                      Pair(activity, highlights)
                     }
+                  }.safeSwitchMap { (rawActivity, highlights) ->
+                    val name = info.bufferName?.trim() ?: ""
+                    val matchMode = when {
+                      name.equals(search, ignoreCase = true)     -> MatchMode.EXACT
+                      name.startsWith(search, ignoreCase = true) -> MatchMode.START
+                      else                                       -> MatchMode.CONTAINS
+                    }
+                    val activity = rawActivity - Message_Type.of(filtered[info.bufferId]?.toUInt()
+                                                                 ?: defaultFiltered.toUInt())
+                    when (info.type.toInt()) {
+                      BufferInfo.Type.QueryBuffer.toInt()   -> {
+                        network.liveNetworkInfo().safeSwitchMap { networkInfo ->
+                          network.liveConnectionState().safeSwitchMap { connectionState ->
+                            network.liveIrcUser(info.bufferName).safeSwitchMap {
+                              it.updates().mapNullable(IrcUser.NULL) { user ->
+                                BufferProps(
+                                  info = info,
+                                  network = networkInfo,
+                                  networkConnectionState = connectionState,
+                                  bufferStatus = when {
+                                    user == null  -> BufferStatus.OFFLINE
+                                    user.isAway() -> BufferStatus.AWAY
+                                    else          -> BufferStatus.ONLINE
+                                  },
+                                  description = user?.realName() ?: "",
+                                  activity = activity,
+                                  highlights = highlights,
+                                  bufferActivity = when {
+                                    highlights > 0                       ->
+                                      Buffer_Activity.of(Buffer_Activity.Highlight)
+                                    activity hasFlag Message_Type.Plain ||
+                                    activity hasFlag Message_Type.Notice ||
+                                    activity hasFlag Message_Type.Action ->
+                                      Buffer_Activity.of(Buffer_Activity.NewMessage)
+                                    activity.isNotEmpty()                ->
+                                      Buffer_Activity.of(Buffer_Activity.OtherActivity)
+                                    else                                 ->
+                                      Buffer_Activity.of(Buffer_Activity.NoActivity)
+                                  },
+                                  ircUser = user,
+                                  matchMode = matchMode
+                                )
+                              }
+                            }
+                          }
+                        }
+                      }
+                      BufferInfo.Type.ChannelBuffer.toInt() -> {
+                        network.liveNetworkInfo().safeSwitchMap { networkInfo ->
+                          network.liveConnectionState().safeSwitchMap { connectionState ->
+                            network.liveIrcChannel(info.bufferName).safeSwitchMap { channel ->
+                              channel.updates().mapNullable(IrcChannel.NULL) {
+                                BufferProps(
+                                  info = info,
+                                  network = networkInfo,
+                                  networkConnectionState = connectionState,
+                                  bufferStatus = when (it) {
+                                    null -> BufferStatus.OFFLINE
+                                    else -> BufferStatus.ONLINE
+                                  },
+                                  description = it?.topic() ?: "",
+                                  activity = activity,
+                                  highlights = highlights,
+                                  bufferActivity = when {
+                                    highlights > 0                       ->
+                                      Buffer_Activity.of(Buffer_Activity.Highlight)
+                                    activity hasFlag Message_Type.Plain ||
+                                    activity hasFlag Message_Type.Notice ||
+                                    activity hasFlag Message_Type.Action ->
+                                      Buffer_Activity.of(Buffer_Activity.NewMessage)
+                                    activity.isNotEmpty()                ->
+                                      Buffer_Activity.of(Buffer_Activity.OtherActivity)
+                                    else                                 ->
+                                      Buffer_Activity.of(Buffer_Activity.NoActivity)
+                                  },
+                                  matchMode = matchMode
+                                )
+                              }
+                            }
+                          }
+                        }
+                      }
+                      BufferInfo.Type.StatusBuffer.toInt()  -> {
+                        network.liveNetworkInfo().safeSwitchMap { networkInfo ->
+                          network.liveConnectionState().map { connectionState ->
+                            BufferProps(
+                              info = info,
+                              network = networkInfo,
+                              networkConnectionState = connectionState,
+                              bufferStatus = BufferStatus.OFFLINE,
+                              description = "",
+                              activity = activity,
+                              highlights = highlights,
+                              bufferActivity = when {
+                                highlights > 0                       ->
+                                  Buffer_Activity.of(Buffer_Activity.Highlight)
+                                activity hasFlag Message_Type.Plain ||
+                                activity hasFlag Message_Type.Notice ||
+                                activity hasFlag Message_Type.Action ->
+                                  Buffer_Activity.of(Buffer_Activity.NewMessage)
+                                activity.isNotEmpty()                ->
+                                  Buffer_Activity.of(Buffer_Activity.OtherActivity)
+                                else                                 ->
+                                  Buffer_Activity.of(Buffer_Activity.NoActivity)
+                              },
+                              matchMode = matchMode
+                            )
+                          }
+                        }
+                      }
+                      else                                  -> Observable.empty()
+                    }
+                  }
+                }
 
-                    val totalNetworks =
-                      if (showAllNetworks) networks.keys
-                      else buffers.filter {
-                        !it.type.hasFlag(Buffer_Type.StatusBuffer)
-                      }.map {
-                        it.networkId
-                      }.toList()
-
-                    val availableNetworks = buffers.filter {
-                      it.type.hasFlag(Buffer_Type.StatusBuffer)
+                /**
+                 * Takes a list of buffers and determines if the status buffers for the networks
+                 * each buffer belongs to exist, if not, adds pseudo-buffers for them.
+                 */
+                /**
+                 * Takes a list of buffers and determines if the status buffers for the networks
+                 * each buffer belongs to exist, if not, adds pseudo-buffers for them.
+                 */
+                fun missingStatusBuffers(
+                  buffers: Sequence<BufferInfo>
+                ): Sequence<Observable<BufferProps>> {
+                  val totalNetworks =
+                    if (showAllNetworks && search.isEmpty()) networks.keys
+                    else buffers.filter {
+                      !it.type.hasFlag(Buffer_Type.StatusBuffer)
                     }.map {
                       it.networkId
                     }.toList()
 
-                    val wantedNetworks = if (!currentConfig.networkId().isValidId()) totalNetworks
-                    else listOf(currentConfig.networkId())
+                  val availableNetworks = buffers.filter {
+                    it.type.hasFlag(Buffer_Type.StatusBuffer)
+                  }.map {
+                    it.networkId
+                  }.toList()
 
-                    val missingNetworks = wantedNetworks - availableNetworks
+                  val wantedNetworks = if (!config.networkId().isValidId()) totalNetworks
+                  else listOf(config.networkId())
 
-                    return missingNetworks.asSequence().filter {
-                      !currentConfig.networkId().isValidId() || currentConfig.networkId() == it
-                    }.filter {
-                      currentConfig.allowedBufferTypes().hasFlag(Buffer_Type.StatusBuffer)
-                    }.mapNotNull {
-                      networks[it]
-                    }.filter {
-                      !config.hideInactiveNetworks() || it.isConnected()
-                    }.mapNotNull<Network, Observable<BufferProps>> { network ->
-                      network.liveNetworkInfo().safeSwitchMap { networkInfo ->
-                        network.liveConnectionState().map { connectionState ->
-                          BufferProps(
-                            info = BufferInfo(
-                              bufferId = BufferId(-networkInfo.networkId.id),
-                              networkId = networkInfo.networkId,
-                              groupId = 0,
-                              bufferName = networkInfo.networkName,
-                              type = Buffer_Type.of(Buffer_Type.StatusBuffer)
-                            ),
-                            network = networkInfo,
-                            networkConnectionState = connectionState,
-                            bufferStatus = BufferStatus.OFFLINE,
-                            description = "",
-                            activity = Message_Type.of(),
-                            highlights = 0,
-                            hiddenState = BufferHiddenState.VISIBLE
-                          )
-                        }
+                  val missingNetworks = wantedNetworks - availableNetworks
+
+                  return missingNetworks.asSequence().filter {
+                    !config.networkId().isValidId() || config.networkId() == it
+                  }.filter {
+                    config.allowedBufferTypes().hasFlag(Buffer_Type.StatusBuffer)
+                  }.mapNotNull {
+                    networks[it]
+                  }.filter {
+                    !config.hideInactiveNetworks() || it.isConnected()
+                  }.mapNotNull<Network, Observable<BufferProps>> { network ->
+                    network.liveNetworkInfo().safeSwitchMap { networkInfo ->
+                      network.liveConnectionState().map { connectionState ->
+                        BufferProps(
+                          info = BufferInfo(
+                            bufferId = BufferId(-networkInfo.networkId.id),
+                            networkId = networkInfo.networkId,
+                            groupId = 0,
+                            bufferName = networkInfo.networkName,
+                            type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+                          ),
+                          network = networkInfo,
+                          networkConnectionState = connectionState,
+                          bufferStatus = BufferStatus.OFFLINE,
+                          description = "",
+                          activity = Message_Type.of(),
+                          highlights = 0
+                        )
                       }
                     }
                   }
+                }
 
-                  bufferSyncer.liveBufferInfos().safeSwitchMap {
-                    val buffers = if (bufferSearch.isNotBlank()) {
-                      transformIds(ids, BufferHiddenState.VISIBLE) +
-                      transformIds(temp - ids, BufferHiddenState.HIDDEN_TEMPORARY) +
-                      transformIds(perm - temp - ids, BufferHiddenState.HIDDEN_PERMANENT) +
-                      missingStatusBuffers(ids + temp + perm)
-                    } else when (bufferListType) {
-                      BufferHiddenState.VISIBLE          ->
-                        transformIds(ids, BufferHiddenState.VISIBLE) +
-                        missingStatusBuffers(ids)
-                      BufferHiddenState.HIDDEN_TEMPORARY ->
-                        transformIds(temp - ids, BufferHiddenState.HIDDEN_TEMPORARY) +
-                        missingStatusBuffers(temp - ids)
-                      BufferHiddenState.HIDDEN_PERMANENT ->
-                        transformIds(perm - temp - ids, BufferHiddenState.HIDDEN_PERMANENT) +
-                        missingStatusBuffers(perm - temp - ids)
-                    }
+                val buffers = transformIds(prefiltered) + missingStatusBuffers(prefiltered)
+                combineLatest(buffers.toList()).map { list ->
+                  val wantedNetworks = list.filter {
+                    !it.info.type.hasFlag(Buffer_Type.StatusBuffer)
+                  }.map {
+                    it.info.networkId
+                  }.toList()
 
-                    combineLatest<BufferProps>(buffers.toList()).map { list ->
-                      Pair<BufferViewConfig?, List<BufferProps>>(
-                        config,
-                        list.asSequence().filter {
-                          !config.hideInactiveNetworks() ||
-                          it.networkConnectionState == INetwork.ConnectionState.Initialized
-                        }.filter {
-                          (!config.hideInactiveBuffers()) ||
-                          it.bufferStatus != BufferStatus.OFFLINE ||
-                          it.info.type.hasFlag(Buffer_Type.StatusBuffer)
-                        }.let {
-                          if (config.sortAlphabetically())
-                            it.sortedBy { IrcCaseMappers.unicode.toLowerCaseNullable(it.info.bufferName) }
-                              .sortedBy { it.matchMode.priority }
-                              .sortedByDescending { it.hiddenState == BufferHiddenState.VISIBLE }
-                          else it
-                        }.distinctBy {
-                          it.info.bufferId
-                        }.toList()
-                      )
-                    }
-                  }
+                  list.asSequence().filter {
+                    // Only show the currently selected network
+                    !config.networkId().isValidId() ||
+                    config.networkId() == it.info.networkId
+                  }.filter {
+                    // Only show buffers which are allowed, or network status buffers
+                    (!config.networkId().isValidId() && it.info.type.hasFlag(Buffer_Type.StatusBuffer)) ||
+                    (config.allowedBufferTypes() and it.info.type).isNotEmpty()
+                  }.filter {
+                    // If we’re searching for buffers, only include the networks with results
+                    search.isEmpty() ||
+                    it.info.networkId in wantedNetworks
+                  }.filter {
+                    // If the config is set to hide inactive networks, only show initialized
+                    // networks
+                    !config.hideInactiveNetworks() ||
+                    it.networkConnectionState == INetwork.ConnectionState.Initialized
+                  }.filter {
+                    // If the config is set to hide inactive buffers, only show ones that are
+                    // online or are network status buffers
+                    !config.hideInactiveBuffers() ||
+                    it.bufferStatus != BufferStatus.OFFLINE ||
+                    it.info.type.hasFlag(Buffer_Type.StatusBuffer)
+                  }.filter {
+                    // Only show buffers which fulfill the minimum activity requirement or are
+                    // network status buffers
+                    minimumActivity.toInt() <= it.bufferActivity.toInt() ||
+                    it.info.type.hasFlag(Buffer_Type.StatusBuffer)
+                  }.let {
+                    // If the config is set to sort buffers, they are sorted by matchmode, and
+                    // within of each match mode, by name (case insensitive)
+                    if (config.sortAlphabetically())
+                      it.sortedBy { IrcCaseMappers.unicode.toLowerCaseNullable(it.info.bufferName) }
+                        .sortedBy { it.matchMode.priority }
+                    else it
+                  }.sortedBy { props ->
+                    !props.info.type.hasFlag(Buffer_Type.StatusBuffer)
+                  }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { props ->
+                    props.network.networkName
+                  }).distinctBy {
+                    it.info.bufferId
+                  }.toList()
+                }.map {
+                  Pair<BufferViewConfig?, List<BufferProps>>(config, it)
                 }
               }
+            }
           }
         } else {
           Observable.just(Pair<BufferViewConfig?, List<BufferProps>>(null, emptyList()))
         }
       }
 
+  /**
+   * Prepares a buffer list for display by configuring the current expansion and selection state as
+   * well as UI elements
+   */
   fun filterBufferList(
     buffers: Observable<Pair<BufferViewConfig?, List<BufferProps>>>,
     expandedNetworks: Observable<Map<NetworkId, Boolean>>,
@@ -433,12 +440,7 @@ open class QuasselViewModelHelper @Inject constructor(
       selected
     ).map { (info, expandedNetworks, selected) ->
       val (config, list) = info ?: Pair(null, emptyList())
-      val minimumActivity = config?.minimumActivity() ?: Buffer_Activity.NONE
-      list.asSequence().sortedBy { props ->
-        !props.info.type.hasFlag(Buffer_Type.StatusBuffer)
-      }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { props ->
-        props.network.networkName
-      }).map { props ->
+      list.asSequence().map { props ->
         BufferListItem(
           props,
           BufferState(
@@ -449,31 +451,18 @@ open class QuasselViewModelHelper @Inject constructor(
           )
         )
       }.filter { (props, state) ->
-        (props.info.type.hasFlag(BufferInfo.Type.StatusBuffer) || state.networkExpanded) &&
-        (minimumActivity.toInt() <= props.bufferActivity.toInt() ||
-         props.info.type.hasFlag(Buffer_Type.StatusBuffer))
+        (props.info.type.hasFlag(BufferInfo.Type.StatusBuffer) || state.networkExpanded)
       }.toList()
     }
 
   fun processSelectedBuffer(
-    selectedBufferId: Observable<BufferId>,
-    bufferViewConfig: Observable<Optional<BufferViewConfig>>
-  ) = combineLatest(connectedSession, selectedBufferId, bufferViewConfig)
-    .safeSwitchMap { (sessionOptional, buffer, bufferViewConfigOptional) ->
+    selectedBufferId: Observable<BufferId>
+  ) = combineLatest(connectedSession, selectedBufferId)
+    .safeSwitchMap { (sessionOptional, buffer) ->
       val session = sessionOptional.orNull()
       val bufferSyncer = session?.bufferSyncer
-      val bufferViewConfig = bufferViewConfigOptional.orNull()
-      if (bufferSyncer != null && bufferViewConfig != null) {
+      if (bufferSyncer != null) {
         session.liveNetworks().safeSwitchMap { networks ->
-          val hiddenState = when {
-            bufferViewConfig.removedBuffers().contains(buffer)            ->
-              BufferHiddenState.HIDDEN_PERMANENT
-            bufferViewConfig.temporarilyRemovedBuffers().contains(buffer) ->
-              BufferHiddenState.HIDDEN_TEMPORARY
-            else                                                          ->
-              BufferHiddenState.VISIBLE
-          }
-
           val info = if (!buffer.isValidId()) networks[NetworkId(-buffer.id)]?.let {
             BufferInfo(
               bufferId = buffer,
@@ -490,22 +479,20 @@ open class QuasselViewModelHelper @Inject constructor(
                 network?.liveConnectionState()?.map {
                   SelectedBufferItem(
                     info,
-                    connectionState = it,
-                    hiddenState = hiddenState
+                    connectionState = it
                   )
-                } ?: Observable.just(SelectedBufferItem(info, hiddenState = hiddenState))
+                } ?: Observable.just(SelectedBufferItem(info))
               }
               Buffer_Type.ChannelBuffer -> {
                 network?.liveIrcChannel(info.bufferName)?.mapNullable(IrcChannel.NULL) {
                   SelectedBufferItem(
                     info,
-                    joined = it != null,
-                    hiddenState = hiddenState
+                    joined = it != null
                   )
-                } ?: Observable.just(SelectedBufferItem(info, hiddenState = hiddenState))
+                } ?: Observable.just(SelectedBufferItem(info))
               }
               else                      ->
-                Observable.just(SelectedBufferItem(info, hiddenState = hiddenState))
+                Observable.just(SelectedBufferItem(info))
             }
           } else {
             Observable.just(SelectedBufferItem())
