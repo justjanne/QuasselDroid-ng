@@ -25,155 +25,182 @@ import org.junit.Test
 class HostmaskHelperTest {
   @Test
   fun testNormal() {
-    assertEquals("justJanne",
-                 HostmaskHelper.nick("justJanne!kuschku@lithium.kuschku.de"))
-    assertEquals("justJanne",
-                 HostmaskHelper.split("justJanne!kuschku@lithium.kuschku.de").first)
-
-    assertEquals("kuschku",
-                 HostmaskHelper.user("justJanne!kuschku@lithium.kuschku.de"))
-    assertEquals("kuschku",
-                 HostmaskHelper.split("justJanne!kuschku@lithium.kuschku.de").second)
-
-    assertEquals("lithium.kuschku.de",
-                 HostmaskHelper.host("justJanne!kuschku@lithium.kuschku.de"))
-    assertEquals("lithium.kuschku.de",
-                 HostmaskHelper.split("justJanne!kuschku@lithium.kuschku.de").third)
-
-    assertEquals("justJanne!kuschku@lithium.kuschku.de", HostmaskHelper.build(
-      "justJanne", "kuschku", "lithium.kuschku.de"
-    ))
+    runTest(
+      source = "justJanne!kuschku@lithium.kuschku.de",
+      nick = "justJanne",
+      user = "kuschku",
+      host = "lithium.kuschku.de"
+    )
+    assertEquals(
+      "justJanne!kuschku@lithium.kuschku.de",
+      HostmaskHelper.build(nick = "justJanne", user = "kuschku", host = "lithium.kuschku.de")
+    )
   }
 
   @Test
   fun testUnvalidatedIdent() {
-    assertEquals("justJanne",
-                 HostmaskHelper.nick("justJanne!~kuschku@lithium.kuschku.de"))
-    assertEquals("justJanne",
-                 HostmaskHelper.split("justJanne!~kuschku@lithium.kuschku.de").first)
-
-    assertEquals("~kuschku",
-                 HostmaskHelper.user("justJanne!~kuschku@lithium.kuschku.de"))
-    assertEquals("~kuschku",
-                 HostmaskHelper.split("justJanne!~kuschku@lithium.kuschku.de").second)
-
-    assertEquals("lithium.kuschku.de",
-                 HostmaskHelper.host("justJanne!~kuschku@lithium.kuschku.de"))
-    assertEquals("lithium.kuschku.de",
-                 HostmaskHelper.split("justJanne!~kuschku@lithium.kuschku.de").third)
-
-    assertEquals("justJanne!~kuschku@lithium.kuschku.de", HostmaskHelper.build(
-      "justJanne", "~kuschku", "lithium.kuschku.de"
-    ))
+    runTest(
+      source = "justJanne!~kuschku@lithium.kuschku.de",
+      nick = "justJanne",
+      user = "~kuschku",
+      host = "lithium.kuschku.de"
+    )
+    assertEquals(
+      "justJanne!~kuschku@lithium.kuschku.de",
+      HostmaskHelper.build(nick = "justJanne", user = "~kuschku", host = "lithium.kuschku.de")
+    )
   }
 
   @Test
   fun testUnicode() {
-    assertEquals("bärlauch",
-                 HostmaskHelper.nick("bärlauch!maße@flüge.de"))
-    assertEquals("bärlauch",
-                 HostmaskHelper.split("bärlauch!maße@flüge.de").first)
-
-    assertEquals("maße",
-                 HostmaskHelper.user("bärlauch!maße@flüge.de"))
-    assertEquals("maße",
-                 HostmaskHelper.split("bärlauch!maße@flüge.de").second)
-
-    assertEquals("flüge.de",
-                 HostmaskHelper.host("bärlauch!maße@flüge.de"))
-    assertEquals("flüge.de",
-                 HostmaskHelper.split("bärlauch!maße@flüge.de").third)
-
-    assertEquals("bärlauch!maße@flüge.de", HostmaskHelper.build(
-      "bärlauch", "maße", "flüge.de"
-    ))
+    runTest(
+      source = "bärlauch!maße@flüge.de",
+      nick = "bärlauch",
+      user = "maße",
+      host = "flüge.de"
+    )
+    assertEquals(
+      "bärlauch!maße@flüge.de",
+      HostmaskHelper.build(nick = "bärlauch", user = "maße", host = "flüge.de")
+    )
   }
 
   @Test
   fun testServer() {
-    assertEquals("irc.freenode.org",
-                 HostmaskHelper.nick("irc.freenode.org"))
-    assertEquals("irc.freenode.org",
-                 HostmaskHelper.split("irc.freenode.org").first)
-
-    assertEquals("",
-                 HostmaskHelper.user("irc.freenode.org"))
-    assertEquals("",
-                 HostmaskHelper.split("irc.freenode.org").second)
-
-    assertEquals("",
-                 HostmaskHelper.host("irc.freenode.org"))
-    assertEquals("",
-                 HostmaskHelper.split("irc.freenode.org").third)
-
-    assertEquals("irc.freenode.org", HostmaskHelper.build(
-      "irc.freenode.org", "", ""
-    ))
+    runTest(
+      source = "irc.freenode.org",
+      nick = "irc.freenode.org",
+      user = "",
+      host = ""
+    )
+    assertEquals(
+      "irc.freenode.org",
+      HostmaskHelper.build(nick = "irc.freenode.org", user = "", host = "")
+    )
   }
 
   @Test
   fun testAtNick() {
-    assertEquals("@nick",
-                 HostmaskHelper.nick("@nick!~ident@example.org"))
-    assertEquals("@nick",
-                 HostmaskHelper.split("@nick!~ident@example.org").first)
-
-    assertEquals("~ident",
-                 HostmaskHelper.user("@nick!~ident@example.org"))
-    assertEquals("~ident",
-                 HostmaskHelper.split("@nick!~ident@example.org").second)
-
-    assertEquals("example.org",
-                 HostmaskHelper.host("@nick!~ident@example.org"))
-    assertEquals("example.org",
-                 HostmaskHelper.split("@nick!~ident@example.org").third)
-
-    assertEquals("@nick!~ident@example.org", HostmaskHelper.build(
-      "@nick", "~ident", "example.org"
-    ))
+    runTest(
+      source = "@nick!~ident@example.org",
+      nick = "@nick",
+      user = "~ident",
+      host = "example.org"
+    )
+    assertEquals(
+      "@nick!~ident@example.org",
+      HostmaskHelper.build(nick = "@nick", user = "~ident", host = "example.org")
+    )
   }
 
   @Test
   fun testReversedDelimiters() {
-    assertEquals("a",
-                 HostmaskHelper.nick("a@a!"))
-    assertEquals("a",
-                 HostmaskHelper.split("a@a!").first)
-
-    assertEquals("",
-                 HostmaskHelper.user("a@a!"))
-    assertEquals("",
-                 HostmaskHelper.split("a@a!").second)
-
-    assertEquals("a!",
-                 HostmaskHelper.host("a@a!"))
-    assertEquals("a!",
-                 HostmaskHelper.split("a@a!").third)
-
-    assertEquals("a@a!", HostmaskHelper.build(
-      "a", "", "a!"
-    ))
+    runTest(
+      source = "a@a!",
+      nick = "a",
+      user = "",
+      host = "a!"
+    )
+    assertEquals(
+      "a@a!",
+      HostmaskHelper.build(nick = "a", user = "", host = "a!")
+    )
   }
 
   @Test
   fun testDiscord() {
-    assertEquals("Gin_",
-                 HostmaskHelper.nick("Gin_!Gin_!♡♅ƸӜƷ♅♡!@discord"))
-    assertEquals("Gin_",
-                 HostmaskHelper.split("Gin_!Gin_!♡♅ƸӜƷ♅♡!@discord").first)
+    runTest(
+      source = "Gin_!Gin_!♡♅ƸӜƷ♅♡!@discord",
+      nick = "Gin_",
+      user = "Gin_!♡♅ƸӜƷ♅♡!",
+      host = "discord"
+    )
+    assertEquals(
+      "Gin_!Gin_!♡♅ƸӜƷ♅♡!@discord",
+      HostmaskHelper.build(nick = "Gin_", user = "Gin_!♡♅ƸӜƷ♅♡!", host = "discord")
+    )
+  }
 
-    assertEquals("Gin_!♡♅ƸӜƷ♅♡!",
-                 HostmaskHelper.user("Gin_!Gin_!♡♅ƸӜƷ♅♡!@discord"))
-    assertEquals("Gin_!♡♅ƸӜƷ♅♡!",
-                 HostmaskHelper.split("Gin_!Gin_!♡♅ƸӜƷ♅♡!@discord").second)
+  @Test
+  fun testDan() {
+    runTest(
+      source = "coolguy!ag@127.0.0.1",
+      nick = "coolguy",
+      user = "ag",
+      host = "127.0.0.1"
+    )
 
-    assertEquals("discord",
-                 HostmaskHelper.host("Gin_!Gin_!♡♅ƸӜƷ♅♡!@discord"))
-    assertEquals("discord",
-                 HostmaskHelper.split("Gin_!Gin_!♡♅ƸӜƷ♅♡!@discord").third)
+    runTest(
+      source = "coolguy!~ag@localhost",
+      nick = "coolguy",
+      user = "~ag",
+      host = "localhost"
+    )
+  }
 
-    assertEquals("Gin_!Gin_!♡♅ƸӜƷ♅♡!@discord", HostmaskHelper.build(
-      "Gin_", "Gin_!♡♅ƸӜƷ♅♡!", "discord"
-    ))
+  @Test
+  fun testDanMissingAtoms() {
+    runTest(
+      source = "!ag@127.0.0.1",
+      nick = "",
+      user = "ag",
+      host = "127.0.0.1"
+    )
+
+    runTest(
+      source = "coolguy!@127.0.0.1",
+      nick = "coolguy",
+      user = "",
+      host = "127.0.0.1"
+    )
+
+    runTest(
+      source = "coolguy@127.0.0.1",
+      nick = "coolguy",
+      user = "",
+      host = "127.0.0.1"
+    )
+
+    runTest(
+      source = "coolguy!ag@",
+      nick = "coolguy",
+      user = "ag",
+      host = ""
+    )
+
+    runTest(
+      source = "coolguy!ag",
+      nick = "coolguy",
+      user = "ag",
+      host = ""
+    )
+  }
+
+  @Test
+  fun testDanWeirdControlCodes() {
+    runTest(
+      source = "coolguy!ag@net\u00035w\u0003ork.admin",
+      nick = "coolguy",
+      user = "ag",
+      host = "net\u00035w\u0003ork.admin"
+    )
+
+    runTest(
+      source = "coolguy!~ag@n\u0002et\u000305w\u000fork.admin",
+      nick = "coolguy",
+      user = "~ag",
+      host = "n\u0002et\u000305w\u000fork.admin"
+    )
+  }
+
+  private fun runTest(source: String, nick: String, user: String, host: String) {
+    assertEquals(nick, HostmaskHelper.nick(source))
+    assertEquals(nick, HostmaskHelper.split(source).first)
+
+    assertEquals(user, HostmaskHelper.user(source))
+    assertEquals(user, HostmaskHelper.split(source).second)
+
+    assertEquals(host, HostmaskHelper.host(source))
+    assertEquals(host, HostmaskHelper.split(source).third)
   }
 }

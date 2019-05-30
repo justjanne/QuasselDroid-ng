@@ -428,4 +428,45 @@ class ExpressionMatchTest {
     assertFalse(invalidRegex.match("network"))
     assertFalse(invalidRegex.match("testnetwork"))
   }
+
+  // Tests imported from https://github.com/ircdocs/parser-tests/blob/master/tests/mask-match.yaml
+  @Test
+  fun testDan() {
+    val mask1 = ExpressionMatch("*@127.0.0.1",
+                                ExpressionMatch.MatchMode.MatchWildcard,
+                                caseSensitive = false)
+    assertTrue(mask1.match("coolguy!ab@127.0.0.1"))
+    assertTrue(mask1.match("cooldud3!~bc@127.0.0.1"))
+    assertFalse(mask1.match("coolguy!ab@127.0.0.5"))
+    assertFalse(mask1.match("cooldud3!~d@124.0.0.1"))
+
+    val mask2 = ExpressionMatch("cool*@*",
+                                ExpressionMatch.MatchMode.MatchWildcard,
+                                caseSensitive = false)
+    assertTrue(mask2.match("coolguy!ab@127.0.0.1"))
+    assertTrue(mask2.match("cooldud3!~bc@127.0.0.1"))
+    assertTrue(mask2.match("cool132!ab@example.com"))
+    assertFalse(mask2.match("koolguy!ab@127.0.0.5"))
+    assertFalse(mask2.match("cooodud3!~d@124.0.0.1"))
+
+    val mask3 = ExpressionMatch("cool!*@*",
+                                ExpressionMatch.MatchMode.MatchWildcard,
+                                caseSensitive = false)
+    assertTrue(mask3.match("cool!guyab@127.0.0.1"))
+    assertTrue(mask3.match("cool!~dudebc@127.0.0.1"))
+    assertTrue(mask3.match("cool!312ab@example.com"))
+    assertFalse(mask3.match("coolguy!ab@127.0.0.1"))
+    assertFalse(mask3.match("cooldud3!~bc@127.0.0.1"))
+    assertFalse(mask3.match("koolguy!ab@127.0.0.5"))
+    assertFalse(mask3.match("cooodud3!~d@124.0.0.1"))
+
+    // Cause failures in fnmatch/glob based matchers
+    val mask4 = ExpressionMatch("cool[guy]!*@*",
+                                ExpressionMatch.MatchMode.MatchWildcard,
+                                caseSensitive = false)
+    assertTrue(mask4.match("cool[guy]!guy@127.0.0.1"))
+    assertTrue(mask4.match("cool[guy]!a@example.com"))
+    assertFalse(mask4.match("coolg!ab@127.0.0.1"))
+    assertFalse(mask4.match("cool[!ac@127.0.1.1"))
+  }
 }
