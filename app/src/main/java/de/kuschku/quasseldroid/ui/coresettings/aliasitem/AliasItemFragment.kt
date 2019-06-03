@@ -38,6 +38,7 @@ import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.ui.chat.input.*
+import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid.util.ui.settings.fragment.Changeable
@@ -72,6 +73,9 @@ class AliasItemFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
   lateinit var formatDeserializer: IrcFormatDeserializer
 
   @Inject
+  lateinit var contentFormatter: ContentFormatter
+
+  @Inject
   lateinit var formatSerializer: IrcFormatSerializer
 
   @Inject
@@ -99,6 +103,7 @@ class AliasItemFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
       autoCompleteSettings,
       messageSettings,
       formatDeserializer,
+      contentFormatter,
       modelHelper
     )
 

@@ -41,6 +41,7 @@ import de.kuschku.quasseldroid.settings.AutoCompleteSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.emoji.EmojiData
 import de.kuschku.quasseldroid.util.helper.*
+import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
@@ -88,6 +89,9 @@ class ChatlineFragment : ServiceBoundFragment() {
   lateinit var ircFormatDeserializer: IrcFormatDeserializer
 
   @Inject
+  lateinit var contentFormatter: ContentFormatter
+
+  @Inject
   lateinit var ircFormatSerializer: IrcFormatSerializer
 
   @Inject
@@ -120,6 +124,7 @@ class ChatlineFragment : ServiceBoundFragment() {
       autoCompleteSettings,
       messageSettings,
       ircFormatDeserializer,
+      contentFormatter,
       modelHelper
     )
 

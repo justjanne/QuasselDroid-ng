@@ -19,13 +19,9 @@
 
 package de.kuschku.quasseldroid.ui.chat.add.query
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Editable
-import android.text.SpannableString
 import android.text.TextWatcher
-import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,6 +61,7 @@ import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.helper.loadWithFallbacks
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.viewmodel.data.Avatar
@@ -97,6 +94,9 @@ class QueryCreateFragment : ServiceBoundFragment() {
 
   @Inject
   lateinit var modelHelper: QueryCreateViewModelHelper
+
+  @Inject
+  lateinit var contentFormatter: ContentFormatter
 
   private var hasSelectedNetwork = false
   private var networkId = NetworkId(0)
@@ -260,30 +260,13 @@ class QueryCreateFragment : ServiceBoundFragment() {
                            .firstOrNull() ?: nickName.firstOrNull()
         val initial = rawInitial?.toUpperCase().toString()
         val useSelfColor = when (messageSettings.colorizeNicknames) {
-          MessageSettings.ColorizeNicknamesMode.ALL          -> false
-          MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE -> it.self
-          MessageSettings.ColorizeNicknamesMode.NONE         -> true
+          MessageSettings.SenderColorMode.ALL          -> false
+          MessageSettings.SenderColorMode.ALL_BUT_MINE -> it.self
+          MessageSettings.SenderColorMode.NONE         -> true
         }
         val senderColor = if (useSelfColor) selfColor else senderColors[senderColorIndex]
-
-        fun formatNick(nick: CharSequence): CharSequence {
-          val spannableString = SpannableString(nick)
-          spannableString.setSpan(
-            ForegroundColorSpan(senderColor),
-            0,
-            nick.length,
-            SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
-          )
-          spannableString.setSpan(
-            StyleSpan(Typeface.BOLD),
-            0,
-            nick.length,
-            SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
-          )
-          return spannableString
-        }
         it.copy(
-          displayNick = formatNick(it.nick),
+          displayNick = contentFormatter.formatNick(it.nick),
           fallbackDrawable = colorContext.buildTextDrawable(initial, senderColor),
           initial = initial,
           modes = when (messageSettings.showPrefix) {

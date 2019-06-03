@@ -19,10 +19,6 @@
 
 package de.kuschku.quasseldroid.ui.chat.input
 
-import android.graphics.Typeface
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import de.kuschku.libquassel.protocol.BufferId
@@ -45,6 +41,7 @@ import de.kuschku.quasseldroid.util.avatars.AvatarHelper
 import de.kuschku.quasseldroid.util.emoji.EmojiData
 import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.toLiveData
+import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.viewmodel.data.AutoCompleteItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
@@ -56,6 +53,7 @@ class AutoCompleteHelper(
   private val autoCompleteSettings: AutoCompleteSettings,
   private val messageSettings: MessageSettings,
   private val ircFormatDeserializer: IrcFormatDeserializer,
+  private val contentFormatter: ContentFormatter,
   private val helper: EditorViewModelHelper
 ) {
   private var autocompleteListener: ((AutoCompletionState) -> Unit)? = null
@@ -110,31 +108,13 @@ class AutoCompleteHelper(
                              ?: nickName.firstOrNull()
             val initial = rawInitial?.toUpperCase().toString()
             val useSelfColor = when (messageSettings.colorizeNicknames) {
-              MessageSettings.ColorizeNicknamesMode.ALL          -> false
-              MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE -> it.self
-              MessageSettings.ColorizeNicknamesMode.NONE         -> true
+              MessageSettings.SenderColorMode.ALL          -> false
+              MessageSettings.SenderColorMode.ALL_BUT_MINE -> it.self
+              MessageSettings.SenderColorMode.NONE         -> true
             }
             val senderColor = if (useSelfColor) selfColor else senderColors[senderColorIndex]
-
-            fun formatNick(nick: CharSequence): CharSequence {
-              val spannableString = SpannableString(nick)
-              spannableString.setSpan(
-                ForegroundColorSpan(senderColor),
-                0,
-                nick.length,
-                SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
-              )
-              spannableString.setSpan(
-                StyleSpan(Typeface.BOLD),
-                0,
-                nick.length,
-                SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
-              )
-              return spannableString
-            }
-
             it.copy(
-              displayNick = formatNick(it.nick),
+              displayNick = contentFormatter.formatNick(it.nick),
               fallbackDrawable = colorContext.buildTextDrawable(initial, senderColor),
               modes = when (messageSettings.showPrefix) {
                 MessageSettings.ShowPrefixMode.ALL ->

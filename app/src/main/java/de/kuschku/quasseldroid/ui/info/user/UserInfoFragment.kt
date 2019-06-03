@@ -61,6 +61,7 @@ import de.kuschku.quasseldroid.util.avatars.MatrixApi
 import de.kuschku.quasseldroid.util.avatars.MatrixAvatarInfo
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
+import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.util.irc.format.spans.IrcItalicSpan
 import de.kuschku.quasseldroid.util.service.ServiceBoundFragment
 import de.kuschku.quasseldroid.util.ui.BetterLinkMovementMethod
@@ -132,6 +133,9 @@ class UserInfoFragment : ServiceBoundFragment() {
 
   @Inject
   lateinit var contentFormatter: ContentFormatter
+
+  @Inject
+  lateinit var ircFormatDeserializer: IrcFormatDeserializer
 
   @Inject
   lateinit var messageSettings: MessageSettings
@@ -318,8 +322,7 @@ class UserInfoFragment : ServiceBoundFragment() {
             }
           }
         }
-
-        nick.text = user.nick
+        nick.text = ircFormatDeserializer.formatString(user.nick, messageSettings.colorizeMirc)
         val (content, _) = contentFormatter.formatContent(
           user.realName ?: "",
           networkId = user.networkId
@@ -337,11 +340,19 @@ class UserInfoFragment : ServiceBoundFragment() {
         account.text = user.account
         accountContainer.visibleIf(!user.account.isNullOrBlank())
 
-        ident.text = user.user
-        identContainer.visibleIf(!user.user.isNullOrBlank())
+        val (userIdent, _) = contentFormatter.formatContent(
+          user.user ?: "",
+          networkId = user.networkId
+        )
+        ident.text = userIdent
+        identContainer.visibleIf(userIdent.isNotBlank())
 
-        host.text = user.host
-        hostContainer.visibleIf(!user.host.isNullOrBlank())
+        val (userHost, _) = contentFormatter.formatContent(
+          user.host ?: "",
+          networkId = user.networkId
+        )
+        host.text = userHost
+        hostContainer.visibleIf(userHost.isNotBlank())
 
         server.text = user.server
         serverContainer.visibleIf(!user.server.isNullOrBlank())

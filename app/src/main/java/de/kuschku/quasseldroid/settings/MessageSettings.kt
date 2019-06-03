@@ -21,7 +21,7 @@ package de.kuschku.quasseldroid.settings
 
 data class MessageSettings(
   val showPrefix: ShowPrefixMode = ShowPrefixMode.HIGHEST,
-  val colorizeNicknames: ColorizeNicknamesMode = ColorizeNicknamesMode.ALL_BUT_MINE,
+  val colorizeNicknames: SenderColorMode = SenderColorMode.ALL_BUT_MINE,
   val colorizeMirc: Boolean = true,
   val useMonospace: Boolean = false,
   val textSize: Int = 14,
@@ -41,7 +41,7 @@ data class MessageSettings(
   val replaceEmoji: Boolean = true
 ) {
 
-  enum class ColorizeNicknamesMode {
+  enum class SenderColorMode {
     ALL,
     ALL_BUT_MINE,
     NONE;

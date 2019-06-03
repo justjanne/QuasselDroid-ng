@@ -114,10 +114,10 @@ class ToolbarFragment : ServiceBoundFragment() {
 
         val nickName = user.nick()
         val useSelfColor = when (messageSettings.colorizeNicknames) {
-          MessageSettings.ColorizeNicknamesMode.ALL          -> false
-          MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+          MessageSettings.SenderColorMode.ALL          -> false
+          MessageSettings.SenderColorMode.ALL_BUT_MINE ->
             user.network().isMyNick(nickName)
-          MessageSettings.ColorizeNicknamesMode.NONE         -> true
+          MessageSettings.SenderColorMode.NONE         -> true
         }
 
         val fallbackDrawable = colorContext.buildTextDrawable(user.nick(), useSelfColor)

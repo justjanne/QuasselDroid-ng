@@ -266,10 +266,10 @@ class QuasselMessageRenderer @Inject constructor(
                            .firstOrNull() ?: nickName.firstOrNull()
         val initial = rawInitial?.toUpperCase().toString()
         val useSelfColor = when (messageSettings.colorizeNicknames) {
-          MessageSettings.ColorizeNicknamesMode.ALL          -> false
-          MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+          MessageSettings.SenderColorMode.ALL          -> false
+          MessageSettings.SenderColorMode.ALL_BUT_MINE ->
             message.content.flag.hasFlag(Message_Flag.Self)
-          MessageSettings.ColorizeNicknamesMode.NONE         -> true
+          MessageSettings.SenderColorMode.NONE         -> true
         }
         val senderColor = if (useSelfColor) selfColor else senderColors[senderColorIndex]
 
@@ -301,10 +301,10 @@ class QuasselMessageRenderer @Inject constructor(
                            .firstOrNull() ?: nickName.firstOrNull()
         val initial = rawInitial?.toUpperCase().toString()
         val useSelfColor = when (messageSettings.colorizeNicknames) {
-          MessageSettings.ColorizeNicknamesMode.ALL          -> false
-          MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+          MessageSettings.SenderColorMode.ALL          -> false
+          MessageSettings.SenderColorMode.ALL_BUT_MINE ->
             message.content.flag.hasFlag(Message_Flag.Self)
-          MessageSettings.ColorizeNicknamesMode.NONE         -> true
+          MessageSettings.SenderColorMode.NONE         -> true
         }
         val senderColor = if (useSelfColor) selfColor else senderColors[senderColorIndex]
 

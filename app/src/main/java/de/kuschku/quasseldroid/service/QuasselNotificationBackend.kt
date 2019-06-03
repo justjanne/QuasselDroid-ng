@@ -304,11 +304,11 @@ class QuasselNotificationBackend @Inject constructor(
                            .firstOrNull() ?: nickName.firstOrNull()
         val initial = rawInitial?.toUpperCase().toString()
         val senderColor = when (messageSettings.colorizeNicknames) {
-          MessageSettings.ColorizeNicknamesMode.ALL          -> senderColors[senderColorIndex]
-          MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+          MessageSettings.SenderColorMode.ALL          -> senderColors[senderColorIndex]
+          MessageSettings.SenderColorMode.ALL_BUT_MINE ->
             if (self) selfColor
             else senderColors[senderColorIndex]
-          MessageSettings.ColorizeNicknamesMode.NONE         -> selfColor
+          MessageSettings.SenderColorMode.NONE         -> selfColor
         }
 
         val avatarList = AvatarHelper.avatar(messageSettings, ident, realName, avatarUrl, size)

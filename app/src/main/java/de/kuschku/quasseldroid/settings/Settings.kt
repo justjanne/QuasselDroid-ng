@@ -79,7 +79,7 @@ object Settings {
           ""
         ) ?: ""
       ) ?: MessageSettings.DEFAULT.showPrefix,
-      colorizeNicknames = MessageSettings.ColorizeNicknamesMode.of(
+      colorizeNicknames = MessageSettings.SenderColorMode.of(
         getString(
           context.getString(R.string.preference_colorize_nicknames_key),
           ""

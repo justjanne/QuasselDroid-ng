@@ -183,11 +183,11 @@ class ContentFormatter @Inject constructor(
                  showHostmask: Boolean = false, senderColors: IntArray = this.senderColors,
                  @ColorInt selfColor: Int = this.selfColor) =
     when (messageSettings.colorizeNicknames) {
-      MessageSettings.ColorizeNicknamesMode.ALL          ->
+      MessageSettings.SenderColorMode.ALL          ->
         formatNickImpl(sender, false, !highlight, showHostmask, senderColors, selfColor)
-      MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+      MessageSettings.SenderColorMode.ALL_BUT_MINE ->
         formatNickImpl(sender, self, !highlight, showHostmask, senderColors, selfColor)
-      MessageSettings.ColorizeNicknamesMode.NONE         ->
+      MessageSettings.SenderColorMode.NONE         ->
         formatNickImpl(sender, false, false, showHostmask, senderColors, selfColor)
     }
 

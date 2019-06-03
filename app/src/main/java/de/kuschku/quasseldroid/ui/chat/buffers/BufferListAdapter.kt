@@ -218,7 +218,7 @@ class BufferListAdapter(
       }
 
       override fun bind(item: BufferListItem, messageSettings: MessageSettings) {
-        name.text = item.props.network.networkName
+        name.text = item.props.name
         bufferId = item.props.info.bufferId
         networkId = item.props.info.networkId
 
@@ -317,7 +317,7 @@ class BufferListAdapter(
       override fun bind(item: BufferListItem, messageSettings: MessageSettings) {
         bufferId = item.props.info.bufferId
 
-        name.text = item.props.info.bufferName
+        name.text = item.props.name
         description.text = item.props.description
 
         name.setTextColor(
@@ -408,7 +408,7 @@ class BufferListAdapter(
       override fun bind(item: BufferListItem, messageSettings: MessageSettings) {
         bufferId = item.props.info.bufferId
 
-        name.text = item.props.info.bufferName
+        name.text = item.props.name
         description.text = item.props.description
 
         name.setTextColor(

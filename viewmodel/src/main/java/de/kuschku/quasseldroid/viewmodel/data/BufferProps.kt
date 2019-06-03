@@ -37,6 +37,7 @@ data class BufferProps(
   val bufferActivity: Buffer_Activities = BufferInfo.Activity.of(
     BufferInfo.Activity.NoActivity
   ),
+  val name: CharSequence = "",
   val ircUser: IrcUser? = null,
   val avatarUrls: List<Avatar> = emptyList(),
   val fallbackDrawable: Drawable? = null,

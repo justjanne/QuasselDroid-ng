@@ -25,6 +25,7 @@ import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.ColorContext
 import de.kuschku.quasseldroid.util.avatars.AvatarHelper
+import de.kuschku.quasseldroid.util.irc.format.ContentFormatter
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatDeserializer
 import de.kuschku.quasseldroid.viewmodel.data.BufferListItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferProps
@@ -35,10 +36,19 @@ class BufferPresenter @Inject constructor(
   val appearanceSettings: AppearanceSettings,
   val messageSettings: MessageSettings,
   val ircFormatDeserializer: IrcFormatDeserializer,
+  val contentFormatter: ContentFormatter,
   val colorContext: ColorContext
 ) {
   fun render(props: BufferProps): BufferProps {
     return props.copy(
+      name = when {
+        props.info.type.hasFlag(Buffer_Type.QueryBuffer)  ->
+          ircFormatDeserializer.formatString(props.info.bufferName, messageSettings.colorizeMirc)
+        props.info.type.hasFlag(Buffer_Type.StatusBuffer) ->
+          props.network.networkName
+        else                                              ->
+          props.info.bufferName ?: ""
+      },
       description = ircFormatDeserializer.formatString(
         props.description.toString(),
         colorize = messageSettings.colorizeMirc
@@ -47,10 +57,10 @@ class BufferPresenter @Inject constructor(
         props.ircUser?.let {
           val nickName = it.nick()
           val useSelfColor = when (messageSettings.colorizeNicknames) {
-            MessageSettings.ColorizeNicknamesMode.ALL          -> false
-            MessageSettings.ColorizeNicknamesMode.ALL_BUT_MINE ->
+            MessageSettings.SenderColorMode.ALL          -> false
+            MessageSettings.SenderColorMode.ALL_BUT_MINE ->
               props.ircUser?.network()?.isMyNick(nickName) == true
-            MessageSettings.ColorizeNicknamesMode.NONE         -> true
+            MessageSettings.SenderColorMode.NONE         -> true
           }
 
           colorContext.buildTextDrawable(it.nick(), useSelfColor)
