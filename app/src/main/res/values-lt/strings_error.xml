@@ -19,29 +19,30 @@
 
 <resources>
   <string name="label_error_login">Prisijungimo Klaida</string>
-  <string name="label_error_setup">Sąrankos Klaida</string>
-  <string name="label_error_init">Ryšio Klaida</string>
+  <string name="label_error_setup">Sąrankos klaida</string>
+  <string name="label_error_init">Ryšio klaida</string>
   <string name="label_error_ssl">SSL Klaida</string>
   <string name="label_error_ssl_required_unavailable">Šiam ryšiui yra reikalingas SSL, bet branduolys jo nepalaiko.</string>
-  <string name="label_error_certificate">Certifikato Klaida</string>
-  <string name="label_error_certificate_no_certificate">Nėra certifikatų</string>
+  <string name="label_error_certificate">Sertifikato Klaida</string>
+  <string name="label_error_certificate_no_certificate">Nėra sertifikatų</string>
   <string name="label_error_certificate_no_hostname">Nėra tinkamo hostname</string>
   <string name="label_error_certificate_invalid"><![CDATA[
-    <p>Certifikatas su atspaudu<br/>
+    <p>Sertifikatas su atspaudu<br/>
     <code>%1$s</code><br/>
     galioja tik nuo %2$s iki %3$s</p>
   ]]></string>
   <string name="label_error_certificate_untrusted"><![CDATA[
-    <p>Certifikatas su atspaudu<br/>
+    <p>Sertifikatas su atspaudu<br/>
     <code>%1$s</code><br/>
     yra nepatikimas.</p>
   ]]></string>
   <string name="label_error_certificate_no_match"><![CDATA[
-    <p>Certifikatas su atspaudu<br/>
+    <p>Sertifikatas su atspaudu<br/>
     <code>%1$s</code><br/>
     negalioja %2$s.</p>
   ]]></string>
 
+  <string name="label_error_unknown_host">Nerastas Host: %1$s</string>
   <string name="label_error_invalid_protocol_version">Netinkamas protokolas: %1$d</string>
   <string name="label_error_connection">Bandant jungtis įvyko klaida: %1$s (%2$s)</string>
   <string name="label_error_connection_closed">Klaida: Ryšys netikėtai nutrūko</string>

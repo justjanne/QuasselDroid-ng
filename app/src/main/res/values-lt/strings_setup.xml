@@ -31,6 +31,8 @@
 
   <string name="label_connection_host">Host</string>
   <string name="label_connection_port">Port</string>
+  <string name="label_connection_ssl">Reikalauti SSL</string>
+
   <string name="hint_invalid_host">Netinkamas Hostname</string>
   <string name="hint_invalid_port">Netinkamas Port</string>
 
@@ -63,9 +65,13 @@
   <string name="slide_core_backend_select_title">Pasirinkite talpyklos Backend</string>
   <string name="slide_core_backend_select_description">Pasirinkite duomenų bazės backend Quassel Branduolio talpyklai laikyti senas žinutes ir kitus duomenis.</string>
 
+  <string name="label_backend">Backend</string>
+
   <!-- Core Backend Config -->
   <string name="slide_core_backend_setup_title">Konfigūruoti talpyklos Backend</string>
   <string name="slide_core_backend_setup_description">Sukonfigūruokite pasirinktos duomenų bazės backend.</string>
+
+  <string name="setup_core_backend_no_options">Šis Backend neturi konfigūravimo pasirinkimų, daugiau nieko atlikti nereikia!</string>
 
   <!-- User Setup -->
 

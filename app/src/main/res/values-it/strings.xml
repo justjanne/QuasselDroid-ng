@@ -28,12 +28,15 @@
   <string name="label_about">Informazioni</string>
   <string name="label_accept">Accetta</string>
   <string name="label_acknowledgements">Ringraziamenti</string>
+  <string name="label_archive">Archivia</string>
+  <string name="label_archive_chat">Archivia chat</string>
   <string name="label_archived_chats">Chat archiviate</string>
   <string name="label_ascending">Ascendente</string>
   <string name="label_authors">Autori</string>
   <string name="label_autocomplete">Completamento automatico</string>
   <string name="label_avatar">Avatar</string>
   <string name="label_back">Indietro</string>
+  <string name="label_buffer_name">Nome chat</string>
   <string name="label_cancel">Annulla</string>
   <string name="label_certificates">Certificati</string>
   <string name="label_channel_name">Nome del canale</string>
@@ -101,6 +104,7 @@
   <string name="label_password_old">Vecchia password</string>
   <string name="label_password_repeat">Ripeti password</string>
   <string name="label_permanently_archived">Archiviate permanentemente</string>
+  <string name="label_permanently_archived_empty">Non hai chat archiviate in modo permanente</string>
   <string name="label_permanently_archived_long">Le chat che sono state archiviate permanentemente rimarranno nascoste finché non si provvederà manualmente a toglierle da questo stato.</string>
   <string name="label_placeholder_message">Scrivi un messaggio…</string>
   <string name="label_placeholder_topic">Descrivi l’argomento del canale…</string>
@@ -131,6 +135,7 @@
   <string name="label_sort">Ordina</string>
   <string name="label_source">Sorgente</string>
   <string name="label_temporarily_archived">Archiviate temporaneamente</string>
+  <string name="label_temporarily_archived_empty">Non hai chat archiviate in modo temporaneo</string>
   <string name="label_temporarily_archived_long">Le chat che sono state archiviate temporaneamente torneranno visibili alla ricezione di un nuovo messaggio.</string>
   <string name="label_topic">Argomento del canale</string>
   <string name="label_translators">Traduttori</string>
@@ -184,6 +189,10 @@
 
   <string name="label_missing_features">Funzionalità assenti</string>
   <string name="info_missing_features" tools:ignore="StringFormatCount">Il tuo core non ha le funzionalità richieste da Quasseldroid per funzionare correttamente. Dovresti &lt;a href=\"https://quassel-irc.org\"&gt;aggiornare&lt;/a&gt; il tuo core Quassel a %1$s o superiore.</string>
+
+  <string name="buffer_delete_confirmation">Vuoi eliminare questa chat per sempre?</string>
+  <string name="buffer_archive_confirmation">Vuoi archiviare questa chat?</string>
+  <string name="buffer_archive_temporarily">Fai riapparire automaticamente questa chat all’arrivo di nuovi messaggi</string>
 
   <string name="delete_confirmation">Sei sicuro di voler eliminare questa chat per sempre? L’operazione è irreversibile.</string>
   <string name="cancel_confirmation">Ci sono delle modifiche non salvate. Sei sicuro di voler continuare senza salvarle?</string>

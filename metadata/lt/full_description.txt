@@ -1,4 +1,4 @@
-Chat comfortably. Everywhere.
+Bendraukite patogiai. Visur ir visada.
 
 
 REIKALINGAS QUASSEL BRANDUOLYS - PROGRAMA NEVEIKS KAIP VISIŠKAI SAVARANKIŠKAS IRC KLIENTAS
@@ -7,9 +7,9 @@ REIKALINGAS QUASSEL BRANDUOLYS - PROGRAMA NEVEIKS KAIP VISIŠKAI SAVARANKIŠKAS 
 • <b>Visada prieinama jūsų pokalbių istorija</b> – tiesiog slinkite į viršų, jog branduolys jums rodytų senas žinutes
 • <b>Gaukite pranešimus</b> – net jeigu tuo metu neturėjote interneto ryšio
 
-If you are looking for the comfort you’re used to from modern chat apps such as Slack, Quasseldroid is the best free android IRC client for you — you’ll get profile pictures, a beautiful UI based on Material Design, and all the features you love.
+Jei jūs ieškote programėlės kuria patogu naudotis kaip ir kitomis moderniomis pokalbių programėlėmis, tokiomis kaip Slack, Quasseldroid yra geriausias nemokamas Android IRC klientas jums. Naudokitės profilio paveikslėliais, stilinga vartotojo sąsaja, pagrįsta Material dizainu, ir daugeliu kitų funkcijų, kurios jums labiausiai patinka.
 
-And best of all, it’s fully free and open source.
+Ir geriausia tai, jog programa visiškai nemokama ir atviro kodo.
 
 <b>Reikalavimai:</b>
 
@@ -19,4 +19,4 @@ Jums reikia turėti Quassel branduolio paskyrą norint naudotis šia programa. J
 
 Norint išmokti kaip susikurti savo branduolį, paskaitykite <a href="http://bugs.quassel-irc.org/projects/quassel-irc/wiki">wiki</a>
 
-<b>Having trouble or feedback?:</b> Send us an email at support@kuschku.de
+<b>Radote problemų ar turite pasiūlymų?:</b> Susisiekite su mumis elektroniniu paštu - support@kuschku.de

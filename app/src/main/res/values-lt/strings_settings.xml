@@ -25,6 +25,8 @@
   <string name="settings_network_sasl_enabled">SASL</string>
   <string name="settings_network_sasl_account">Paskyra</string>
   <string name="settings_network_sasl_password">Slaptažodis</string>
+  <string name="settings_network_sasl_supported">Šis tinklas palaiko SASL</string>
+  <string name="settings_network_sasl_upgrade">Naudoti SASL</string>
   <string name="settings_network_autoidentify_enabled">Automatiškai atpažinti</string>
   <string name="settings_network_autoidentify_service">Paslauga</string>
   <string name="settings_network_autoidentify_password">Slaptažodis</string>

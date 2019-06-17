@@ -104,6 +104,7 @@
   <string name="label_password_old">Altes Passwort</string>
   <string name="label_password_repeat">Passwort wiederholen</string>
   <string name="label_permanently_archived">Dauerhaft Archiviert</string>
+  <string name="label_permanently_archived_empty">Keine permanent archivierten Chats vorhanden</string>
   <string name="label_permanently_archived_long">Dauerhaft archivierte Chats werden erst wieder angezeigt, wenn du sie manuell wieder aktivierst.</string>
   <string name="label_placeholder_message">Nachricht schreiben…</string>
   <string name="label_placeholder_topic">Beschreib das Thema des Kanals…</string>
@@ -134,6 +135,7 @@
   <string name="label_sort">Sortieren</string>
   <string name="label_source">Quellcode</string>
   <string name="label_temporarily_archived">Temporär Archiviert</string>
+  <string name="label_temporarily_archived_empty">Keine temporär archivierten Chats vorhanden</string>
   <string name="label_temporarily_archived_long">Chats die nur temporär archiviert wurden werden wieder angezeigt, sobald sie eine neue Nachricht haben</string>
   <string name="label_topic">Kanal-Thema</string>
   <string name="label_translators">Übersetzer</string>

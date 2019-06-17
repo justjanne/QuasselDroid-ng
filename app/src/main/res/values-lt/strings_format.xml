@@ -23,7 +23,7 @@
   <string name="label_strikethrough">Perbrauktas</string>
   <string name="label_underline">Pabrauktas</string>
   <string name="label_monospace">Monospace</string>
-  <string name="label_foreground">Teksto Spalva</string>
-  <string name="label_background">Fono Spalva</string>
-  <string name="label_clear_formatting">Išvalyti Formatavimą</string>
+  <string name="label_foreground">Teksto spalva</string>
+  <string name="label_background">Fono spalva</string>
+  <string name="label_clear_formatting">Išvalyti formatavimą</string>
 </resources>

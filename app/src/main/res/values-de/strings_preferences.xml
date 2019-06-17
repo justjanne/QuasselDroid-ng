@@ -38,6 +38,7 @@
   <string name="preference_input_enter_title">Eingabetaste auf Tastatur</string>
   <string name="preference_input_enter_entry_emoji">Emoji-Auswahl</string>
   <string name="preference_input_enter_entry_send">Senden</string>
+  <string name="preference_input_enter_entry_newline">Neue Zeile</string>
   <string name="preference_show_lag_title">Latenz anzeigen</string>
   <string name="preference_show_lag_summary">Zeigt die Gerät-Core-Latenz in der Statusleiste</string>
 
@@ -46,6 +47,18 @@
 
   <string name="preference_language_title">Sprache</string>
   <string name="preference_language_entry_auto">System-Standardsprache</string>
+  <string name="preference_redirection_title">Nachrichtenumleitung</string>
+
+  <string name="preference_redirection_user_notices_title">Benutzernotizen umleiten</string>
+  <string name="preference_redirection_user_notices_summary">Zeigt Benutzernotizen im momentan geöffneten Chat an</string>
+
+  <string name="preference_redirection_server_notices_title">Servernotizen umleiten</string>
+  <string name="preference_redirection_server_notices_summary">Zeigt Servernotizen im momentan geöffneten Chat an</string>
+
+  <string name="preference_redirection_errors_title">Fehler umleiten</string>
+  <string name="preference_redirection_errors_summary">Zeigt Fehler im momentan geöffneten Chat an</string>
+
+
   <string name="preference_notifications_title">Benachrichtigungen</string>
 
   <string name="preference_notification_query_title">Direktnachrichten</string>
@@ -125,6 +138,10 @@
   <string name="preference_highlight_own_messages_title">Eigene Nachrichten hervorheben</string>
   <string name="preference_highlight_own_messages_summary">Hebt eigene Nachrichten besser sichtbar hervor</string>
 
+  <string name="preference_replace_emoji_title">Emoji Shortcodes ersetzen</string>
+  <string name="preference_replace_emoji_summary">Ersetzt Shortcodes wie :+1: oder :like: durch Emoji</string>
+
+
   <string name="preference_autocomplete_title">Autovervollständigung</string>
 
   <string name="preference_autocomplete_sender_doubleclick_title">Sender-Autovervollständigung</string>
@@ -142,11 +159,14 @@
   <string name="preference_autocomplete_prefix_title">Nach Präfix anzeigen</string>
   <string name="preference_autocomplete_prefix_summary">Vervollständigt Namen und Chats automatisch nach einem @ oder #</string>
 
-  <string name="preference_autocomplete_nicks_title">Vervollständige Spitznamen</string>
+  <string name="preference_autocomplete_nicks_title">Autovervollständigung für  Spitznamen</string>
 
-  <string name="preference_autocomplete_buffers_title">Vervollständige Chats</string>
+  <string name="preference_autocomplete_buffers_title">Autovervollständigung für  Chats</string>
 
-  <string name="preference_autocomplete_aliases_title">Vervollständige Aliase</string>
+  <string name="preference_autocomplete_aliases_title">Autovervollständigung für  Aliase</string>
+
+  <string name="preference_autocomplete_emoji_title">Autovervollständigung für Emoji</string>
+
 
   <string name="preference_backlog_title">Verlauf</string>
 

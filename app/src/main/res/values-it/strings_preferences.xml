@@ -38,6 +38,7 @@
   <string name="preference_input_enter_title">Tasto invio della tastiera</string>
   <string name="preference_input_enter_entry_emoji">Emoji</string>
   <string name="preference_input_enter_entry_send">Invio</string>
+  <string name="preference_input_enter_entry_newline">A capo</string>
   <string name="preference_show_lag_title">Mostra latenza</string>
   <string name="preference_show_lag_summary">Mostra il ritardo tra il client ed il core nella barra delle azioni</string>
 
@@ -125,6 +126,10 @@
   <string name="preference_highlight_own_messages_title">Evidenzia i miei messaggi</string>
   <string name="preference_highlight_own_messages_summary">Mostra i miei messaggi in modo più evidente</string>
 
+  <string name="preference_replace_emoji_title">Sostitiuisci abbreviazioni con emoji</string>
+  <string name="preference_replace_emoji_summary">Sostituisci automaticamente le abbreviazioni come :+1: o :like: con emoji</string>
+
+
   <string name="preference_autocomplete_title">Completamento automatico</string>
 
   <string name="preference_autocomplete_sender_doubleclick_title">Completa automaticamente il mittente</string>
@@ -147,6 +152,9 @@
   <string name="preference_autocomplete_buffers_title">Completa automaticamente chat</string>
 
   <string name="preference_autocomplete_aliases_title">Completa automaticamente comandi</string>
+
+  <string name="preference_autocomplete_emoji_title">Completa automaticamente emoji</string>
+
 
   <string name="preference_backlog_title">Registro storico</string>
 

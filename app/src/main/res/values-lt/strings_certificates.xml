@@ -18,8 +18,22 @@
   -->
 
 <resources>
-  <string name="certificate_validity">Galiojimo laikas</string>
+  <string name="certificate_subject">Kam išduotas</string>
+  <string name="certificate_issuer">Kas išdavė</string>
 
-  <string name="certificate_fingerprint_sha256">SHA-256 Raktas</string>
-  <string name="certificate_fingerprint_sha1">SHA-1 Raktas</string>
+  <string name="certificate_common_name">Pavadinimas (CN)</string>
+  <string name="certificate_organization">Organizacija (O)</string>
+  <string name="certificate_organizational_unit">Organizacijos padalinys (OU)</string>
+
+  <string name="certificate_hostnames">Hostname sąrašas</string>
+
+  <string name="certificate_validity">Galiojimo periodas</string>
+
+  <string name="certificate_not_before">Ne anksčiau</string>
+  <string name="certificate_not_after">Ne vėliau</string>
+
+  <string name="certificate_fingerprints">Kontroliniai kodai</string>
+
+  <string name="certificate_fingerprint_sha256">SHA-256 kontrolinis kodas</string>
+  <string name="certificate_fingerprint_sha1">SHA-1 kontrolinis kodas</string>
 </resources>
