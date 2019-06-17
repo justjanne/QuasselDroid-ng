@@ -32,6 +32,15 @@ fun TestSession.with(f: TestSession.() -> Unit) = f.invoke(this)
 fun withTestSession(f: TestSession.() -> Unit) = f.invoke(setupTestSession())
 
 fun setupTestSession() = TestSession().provideTestData {
+  bufferViewConfigs = listOf(
+    buildBufferViewConfig(0) {
+      setBufferViewName("All Chats")
+      addBuffer(BufferId(1), 0)
+      addBuffer(BufferId(2), 1)
+      addBuffer(BufferId(3), 2)
+    }
+  )
+
   identities = listOf(
     buildIdentity(IdentityId(1)) {
       setIdentityName("Default Identity")

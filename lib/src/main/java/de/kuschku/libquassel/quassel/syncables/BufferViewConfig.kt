@@ -26,6 +26,7 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferViewConfig
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helper.clampOf
+import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -327,12 +328,12 @@ class BufferViewConfig constructor(
 
   fun insertBufferSorted(info: BufferInfo, bufferSyncer: BufferSyncer) {
     if (!_buffers.contains(info.bufferId)) {
-      val position = if (_sortAlphabetically) {
-        val sortedBuffers = _buffers.mapNotNull { bufferSyncer.bufferInfo(it)?.bufferName }
-        -sortedBuffers.binarySearch(info.bufferName)
-      } else {
-        _buffers.size
-      }
+      val element = IrcCaseMappers.unicode.toLowerCaseNullable(info.bufferName)
+      val position =
+        if (_sortAlphabetically) -_buffers.mapNotNull {
+          IrcCaseMappers.unicode.toLowerCaseNullable(bufferSyncer.bufferInfo(it)?.bufferName)
+        }.binarySearch(element) - 1
+        else _buffers.size
       requestAddBuffer(info.bufferId, position)
     }
   }

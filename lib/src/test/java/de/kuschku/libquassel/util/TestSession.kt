@@ -219,6 +219,13 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
     synchronize(network)
   }
 
+  fun addBufferViewConfig(bufferViewConfig: BufferViewConfig, initialize: Boolean = false) {
+    if (!initialize)
+      bufferViewConfig.initialized = true
+    bufferViewManager.addBufferViewConfig(bufferViewConfig)
+    synchronize(bufferViewConfig)
+  }
+
   override fun removeNetwork(networkId: NetworkId) {
     val network = networks.remove(networkId)
     stopSynchronize(network)
@@ -244,6 +251,13 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
     return identity
   }
 
+  fun buildBufferViewConfig(bufferViewConfigId: Int,
+                            f: (BufferViewConfig.() -> Unit)? = null): BufferViewConfig {
+    val bufferViewConfig = BufferViewConfig(bufferViewConfigId, proxy)
+    f?.invoke(bufferViewConfig)
+    return bufferViewConfig
+  }
+
   data class BufferTestData(
     val bufferInfo: BufferInfo,
     val activity: Message_Types = Message_Type.of(),
@@ -254,11 +268,17 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
 
   data class TestData(
     val session: TestSession,
+    var bufferViewConfigs: List<BufferViewConfig> = emptyList(),
     var networks: List<Network> = emptyList(),
     var identities: List<Identity> = emptyList(),
     var buffers: List<BufferTestData> = emptyList(),
     var aliases: List<IAliasManager.Alias> = emptyList()
   ) {
+    fun buildBufferViewConfig(bufferViewConfigId: Int,
+                              f: (BufferViewConfig.() -> Unit)? = null): BufferViewConfig {
+      return session.buildBufferViewConfig(bufferViewConfigId, f)
+    }
+
     fun buildNetwork(networkId: NetworkId, f: (Network.() -> Unit)? = null): Network {
       return session.buildNetwork(networkId, f)
     }
@@ -287,6 +307,9 @@ class TestSession : ProtocolHandler({ throw it }), ISession {
   fun provideTestData(f: TestData.() -> Unit): TestSession {
     val data = TestData(this)
     f.invoke(data)
+    for (bufferViewConfig in data.bufferViewConfigs) {
+      addBufferViewConfig(bufferViewConfig)
+    }
     for (network in data.networks) {
       addNetwork(network)
     }
