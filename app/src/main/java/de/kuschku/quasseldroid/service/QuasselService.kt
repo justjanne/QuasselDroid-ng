@@ -449,7 +449,7 @@ class QuasselService : DaggerLifecycleService(),
   private var backoff = BACKOFF_MIN
   private var scheduled = false
   private fun scheduleReconnect() {
-    if (!scheduled) {
+    if (!scheduled && sessionManager.canAutoReconnect(ignoreSetting = true)) {
       log(INFO, "QuasselService", "Reconnect: Scheduling backoff in ${backoff / 1_000} seconds")
       scheduled = true
       handlerService.backendDelayed(backoff) {

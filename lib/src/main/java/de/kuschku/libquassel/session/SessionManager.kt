@@ -45,6 +45,7 @@ class SessionManager(
   // Stateful fields
   private var lastConnectionInfo: ConnectionInfo? = null
   private var hasErrored: Boolean = false
+  private var hasBeenDisconnected: Boolean = false
 
   private val disposables = mutableListOf<Disposable>()
 
@@ -117,19 +118,24 @@ class SessionManager(
     hasErrored = true
   }
 
-  fun autoConnect(
+  fun canAutoReconnect(
     ignoreConnectionState: Boolean = false,
     ignoreSetting: Boolean = false,
     ignoreErrors: Boolean = false,
     connectionInfo: ConnectionInfo? = lastConnectionInfo
   ): Boolean {
+    if (hasBeenDisconnected) {
+      log(DEBUG, "SessionManager", "Reconnect not possible: manually disconnected")
+      return false
+    }
+
     if (connectionInfo == null) {
-      log(INFO, "SessionManager", "Reconnect failed: not enough data available")
+      log(DEBUG, "SessionManager", "Reconnect not possible: not enough data available")
       return false
     }
 
     if (!connectionInfo.shouldReconnect && !ignoreSetting) {
-      log(INFO, "SessionManager", "Reconnect failed: reconnect not allowed")
+      log(DEBUG, "SessionManager", "Reconnect not possible: reconnect not allowed")
       return false
     }
 
@@ -137,21 +143,34 @@ class SessionManager(
     if (connectionState != ConnectionState.DISCONNECTED &&
         connectionState != ConnectionState.CLOSED &&
         !ignoreConnectionState) {
-      log(INFO, "SessionManager", "Reconnect failed: connection state is $connectionState")
+      log(DEBUG, "SessionManager", "Reconnect not possible: connection state is $connectionState")
       return false
     }
 
     if (hasErrored && !ignoreErrors) {
-      log(INFO, "SessionManager", "Reconnect failed: errors have been thrown")
+      log(DEBUG, "SessionManager", "Reconnect not possible: errors have been thrown")
       return false
     }
 
-    log(INFO, "SessionManager", "Reconnect successful")
-    connect(connectionInfo)
+    return true
+  }
+
+  fun autoConnect(
+    ignoreConnectionState: Boolean = false,
+    ignoreSetting: Boolean = false,
+    ignoreErrors: Boolean = false,
+    connectionInfo: ConnectionInfo? = lastConnectionInfo
+  ): Boolean {
+    if (!canAutoReconnect(ignoreConnectionState, ignoreSetting, ignoreErrors, connectionInfo))
+      return false
+
+    log(DEBUG, "SessionManager", "Reconnect successful")
+    connect(connectionInfo!!)
     return true
   }
 
   fun disconnect(forever: Boolean) {
+    hasBeenDisconnected = true
     if (forever) backlogStorage.clearMessages()
     updateStateOffline()
   }
