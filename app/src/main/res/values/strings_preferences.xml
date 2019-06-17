@@ -69,10 +69,12 @@
   <string-array name="preference_input_enter_entries" translatable="false">
     <item>@string/preference_input_enter_entry_emoji</item>
     <item>@string/preference_input_enter_entry_send</item>
+    <item>@string/preference_input_enter_entry_newline</item>
   </string-array>
   <string-array name="preference_input_enter_entryvalues" translatable="false">
     <item>EMOJI</item>
     <item>SEND</item>
+    <item>NEWLINE</item>
   </string-array>
 
   <string name="preference_show_lag_key" translatable="false">show_lag</string>

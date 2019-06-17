@@ -290,11 +290,9 @@ class RichEditText : EditTextSelectionChange {
     val selectionStart = selectionStart
     val selectionEnd = selectionEnd
 
-    inputType = if (enabled) {
-      inputType or InputType.TYPE_TEXT_FLAG_MULTI_LINE
-    } else {
-      inputType and InputType.TYPE_TEXT_FLAG_MULTI_LINE.inv()
-    }
+    inputType =
+      if (enabled) inputType or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+      else inputType and InputType.TYPE_TEXT_FLAG_MULTI_LINE.inv()
 
     setSelection(selectionStart, selectionEnd)
   }

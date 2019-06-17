@@ -23,7 +23,7 @@ import androidx.annotation.StyleRes
 import de.kuschku.quasseldroid.R
 
 data class AppearanceSettings(
-  val inputEnter: InputEnterMode = InputEnterMode.EMOJI,
+  val inputEnter: InputEnterMode = InputEnterMode.NEWLINE,
   val showLag: Boolean = true,
   val theme: Theme = Theme.MATERIAL_LIGHT,
   val language: String = "",
@@ -31,7 +31,8 @@ data class AppearanceSettings(
 ) {
   enum class InputEnterMode {
     EMOJI,
-    SEND;
+    SEND,
+    NEWLINE;
 
     companion object {
       private val map = values().associateBy { it.name }

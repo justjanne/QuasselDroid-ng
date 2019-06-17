@@ -36,7 +36,7 @@
       android:title="@string/preference_theme_title" />
 
     <DropDownPreference
-      android:defaultValue="EMOJI"
+      android:defaultValue="NEWLINE"
       android:entries="@array/preference_input_enter_entries"
       android:entryValues="@array/preference_input_enter_entryvalues"
       android:key="@string/preference_input_enter_key"

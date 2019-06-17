@@ -172,12 +172,16 @@ class EditorHelper(
     }
 
     editText.imeOptions = when (appearanceSettings.inputEnter) {
-      AppearanceSettings.InputEnterMode.EMOJI -> listOf(
+      AppearanceSettings.InputEnterMode.EMOJI   -> listOf(
         EditorInfo.IME_ACTION_NONE,
         EditorInfo.IME_FLAG_NO_EXTRACT_UI
       )
-      AppearanceSettings.InputEnterMode.SEND  -> listOf(
+      AppearanceSettings.InputEnterMode.SEND    -> listOf(
         EditorInfo.IME_ACTION_SEND,
+        EditorInfo.IME_FLAG_NO_EXTRACT_UI
+      )
+      AppearanceSettings.InputEnterMode.NEWLINE -> listOf(
+        EditorInfo.IME_ACTION_UNSPECIFIED,
         EditorInfo.IME_FLAG_NO_EXTRACT_UI
       )
     }.fold(0, Int::or)
