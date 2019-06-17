@@ -67,6 +67,7 @@ import de.kuschku.quasseldroid.util.compatibility.AndroidHandlerService
 import de.kuschku.quasseldroid.util.helper.*
 import de.kuschku.quasseldroid.util.irc.format.IrcFormatSerializer
 import de.kuschku.quasseldroid.util.ui.LocaleHelper
+import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.Instant
 import javax.inject.Inject
 import javax.net.ssl.X509TrustManager
@@ -332,6 +333,10 @@ class QuasselService : DaggerLifecycleService(),
         })
       }
     }
+
+    override fun setCurrentBuffer(id: BufferId) {
+      service?.currentBuffer?.onNext(id)
+    }
   }
 
   private val backendImplementation = BackendImplementation()
@@ -345,6 +350,8 @@ class QuasselService : DaggerLifecycleService(),
 
   @Inject
   lateinit var accountDatabase: AccountDatabase
+
+  lateinit var currentBuffer: BehaviorSubject<BufferId>
 
   private fun disconnectFromCore() {
     getSharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE).editCommit {
@@ -364,9 +371,11 @@ class QuasselService : DaggerLifecycleService(),
     hostnameVerifier = QuasselHostnameVerifier(QuasselHostnameManager(database.hostnameWhitelist()))
     trustManager = QuasselTrustManager(certificateManager)
 
+    val backlogStorage = QuasselBacklogStorage(database)
+    currentBuffer = backlogStorage.currentBuffer
     sessionManager = SessionManager(
       ISession.NULL,
-      QuasselBacklogStorage(database),
+      backlogStorage,
       notificationBackend,
       handlerService,
       ::AndroidHeartBeatRunner,

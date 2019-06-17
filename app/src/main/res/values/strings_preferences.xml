@@ -118,6 +118,21 @@
   </string-array>
 
 
+  <string name="preference_redirection_title">Message Redirection</string>
+
+  <string name="preference_redirection_user_notices_key" translatable="false">redirection_user_notices</string>
+  <string name="preference_redirection_user_notices_title">Redirect User Notices</string>
+  <string name="preference_redirection_user_notices_summary">Displays user notices in the currently open channel</string>
+
+  <string name="preference_redirection_server_notices_key" translatable="false">redirection_user_notices</string>
+  <string name="preference_redirection_server_notices_title">Redirect Server Notices</string>
+  <string name="preference_redirection_server_notices_summary">Displays server notices in the currently open channel</string>
+
+  <string name="preference_redirection_errors_key" translatable="false">redirection_errors</string>
+  <string name="preference_redirection_errors_title">Redirect Errors</string>
+  <string name="preference_redirection_errors_summary">Displays errors in the currently open channel</string>
+
+
   <string name="preference_notifications_title">Notifications</string>
 
   <string name="preference_notification_query_key" translatable="false">notification_query</string>

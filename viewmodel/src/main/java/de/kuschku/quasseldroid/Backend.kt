@@ -20,6 +20,7 @@
 package de.kuschku.quasseldroid
 
 import de.kuschku.libquassel.connection.SocketAddress
+import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.session.SessionManager
 
 interface Backend {
@@ -34,6 +35,8 @@ interface Backend {
   fun sessionManager(): SessionManager?
   fun updateUserDataAndLogin(user: String, pass: String)
   fun requestConnectNewNetwork()
+
+  fun setCurrentBuffer(id: BufferId)
 
   data class ConnectionInfo(
     val address: SocketAddress,

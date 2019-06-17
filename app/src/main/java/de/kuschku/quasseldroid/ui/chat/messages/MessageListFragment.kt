@@ -41,10 +41,7 @@ import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.util.FixedPreloadSizeProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.kuschku.libquassel.connection.ConnectionState
-import de.kuschku.libquassel.protocol.BufferId
-import de.kuschku.libquassel.protocol.Buffer_Type
-import de.kuschku.libquassel.protocol.Message_Type
-import de.kuschku.libquassel.protocol.MsgId
+import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.syncables.BufferSyncer
 import de.kuschku.libquassel.session.SessionManager
@@ -58,10 +55,7 @@ import de.kuschku.quasseldroid.persistence.db.AccountDatabase
 import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
 import de.kuschku.quasseldroid.persistence.models.MessageData
 import de.kuschku.quasseldroid.service.BacklogRequester
-import de.kuschku.quasseldroid.settings.AppearanceSettings
-import de.kuschku.quasseldroid.settings.AutoCompleteSettings
-import de.kuschku.quasseldroid.settings.BacklogSettings
-import de.kuschku.quasseldroid.settings.MessageSettings
+import de.kuschku.quasseldroid.settings.*
 import de.kuschku.quasseldroid.ui.chat.ChatActivity
 import de.kuschku.quasseldroid.ui.info.user.UserInfoActivity
 import de.kuschku.quasseldroid.util.Patterns
@@ -100,6 +94,9 @@ class MessageListFragment : ServiceBoundFragment() {
 
   @Inject
   lateinit var messageSettings: MessageSettings
+
+  @Inject
+  lateinit var redirectionSettings: RedirectionSettings
 
   @Inject
   lateinit var database: QuasselDatabase
@@ -367,17 +364,30 @@ class MessageListFragment : ServiceBoundFragment() {
       }
     }
 
-    val data = combineLatest(modelHelper.chat.bufferId,
+    val data = combineLatest(modelHelper.bufferSyncer,
+                             modelHelper.chat.bufferId,
                              modelHelper.chat.selectedMessages,
                              modelHelper.chat.expandedMessages,
                              modelHelper.markerLine)
-      .toLiveData().switchMapNotNull { (buffer, selected, expanded, markerLine) ->
+      .toLiveData().switchMapNotNull { (bufferSyncer, buffer, selected, expanded, markerLine) ->
+        val network = bufferSyncer.orNull()?.bufferInfo(buffer)?.networkId ?: NetworkId(0)
+        val serverBuffer = bufferSyncer.orNull()?.find(
+          networkId = network,
+          type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+        )?.bufferId ?: BufferId(0)
+
         accountDatabase.accounts().listen(accountId).safeSwitchMap {
           database.filtered().listen(accountId,
                                      buffer,
                                      it.defaultFiltered).switchMapNotNull { filtered ->
             LivePagedListBuilder(
-              database.message().findByBufferIdPaged(buffer, filtered).mapByPage {
+              database.message().findByBufferIdPaged(network,
+                                                     serverBuffer,
+                                                     buffer,
+                                                     filtered,
+                                                     redirectionSettings.userNotices,
+                                                     redirectionSettings.serverNotices,
+                                                     redirectionSettings.errors).mapByPage {
                 processMessages(it, selected.keys, expanded, markerLine.orNull())
               },
               PagedList.Config.Builder()
@@ -401,17 +411,31 @@ class MessageListFragment : ServiceBoundFragment() {
       swipeRefreshLayout.isEnabled = (bufferId != null || bufferId?.isValidId() == true)
     })
 
-    modelHelper.sessionManager.mapSwitchMap(SessionManager::state).distinctUntilChanged().toLiveData().observe(
-      this, Observer {
-      if (it?.orNull() == ConnectionState.CONNECTED) {
+    combineLatest(modelHelper.bufferSyncer,
+                  modelHelper.sessionManager.mapSwitchMap(SessionManager::state).distinctUntilChanged())
+      .toLiveData().observe(this, Observer { (bufferSyncer, state) ->
+        if (state?.orNull() == ConnectionState.CONNECTED) {
         runInBackgroundDelayed(16) {
           modelHelper.chat.bufferId { bufferId ->
+            val currentNetwork = bufferSyncer.orNull()?.bufferInfo(bufferId)?.networkId
+                                 ?: NetworkId(0)
+            val currentServerBuffer = bufferSyncer.orNull()?.find(
+              networkId = currentNetwork,
+              type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+            )?.bufferId ?: BufferId(0)
+
             val filtered = database.filtered().get(accountId,
                                                    bufferId,
                                                    accountDatabase.accounts().findById(accountId)?.defaultFiltered
                                                    ?: 0)
             // Try loading messages when switching to isEmpty bufferId
-            val hasVisibleMessages = database.message().hasVisibleMessages(bufferId, filtered)
+            val hasVisibleMessages = database.message().hasVisibleMessages(currentNetwork,
+                                                                           currentServerBuffer,
+                                                                           bufferId,
+                                                                           filtered,
+                                                                           redirectionSettings.userNotices,
+                                                                           redirectionSettings.serverNotices,
+                                                                           redirectionSettings.errors)
             if (!hasVisibleMessages) {
               if (bufferId.isValidId() && bufferId != BufferId.MAX_VALUE) {
                 loadMore(initial = true)
@@ -504,11 +528,23 @@ class MessageListFragment : ServiceBoundFragment() {
 
         val buffer = modelHelper.chat.bufferId.value
                      ?: BufferId(-1)
+        val network = modelHelper.bufferSyncer.value?.orNull()?.bufferInfo(buffer)?.networkId
+                      ?: NetworkId(0)
+        val serverBuffer = modelHelper.bufferSyncer.value?.orNull()?.find(
+          networkId = network,
+          type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+        )?.bufferId ?: BufferId(0)
         if (buffer != lastBuffer) {
           adapter.clearCache()
           modelHelper.connectedSession.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
-            onBufferChange(lastBuffer, buffer, firstVisibleMessageId, bufferSyncer)
+            onBufferChange(lastBuffer,
+                           network,
+                           buffer,
+                           serverBuffer,
+                           firstVisibleMessageId,
+                           bufferSyncer)
           }
+          modelHelper.backend.value?.orNull()?.setCurrentBuffer(buffer)
           lastBuffer = buffer
         }
       }
@@ -531,7 +567,11 @@ class MessageListFragment : ServiceBoundFragment() {
   }
 
   private fun onBufferChange(
-    previous: BufferId?, current: BufferId, lastMessageId: MsgId?,
+    previous: BufferId?,
+    currentNetwork: NetworkId,
+    current: BufferId,
+    currentServerBuffer: BufferId,
+    lastMessageId: MsgId?,
     bufferSyncer: BufferSyncer
   ) {
     if (previous != null && lastMessageId != null) {
@@ -542,7 +582,13 @@ class MessageListFragment : ServiceBoundFragment() {
                                            current,
                                            accountDatabase.accounts().findById(accountId)?.defaultFiltered
                                            ?: 0)
-    val hasVisibleMessages = database.message().hasVisibleMessages(current, filtered)
+    val hasVisibleMessages = database.message().hasVisibleMessages(currentNetwork,
+                                                                   currentServerBuffer,
+                                                                   current,
+                                                                   filtered,
+                                                                   redirectionSettings.userNotices,
+                                                                   redirectionSettings.serverNotices,
+                                                                   redirectionSettings.errors)
     if (!hasVisibleMessages) {
       if (current.isValidId() && current != BufferId.MAX_VALUE) {
         loadMore(initial = true)

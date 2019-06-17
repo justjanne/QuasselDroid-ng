@@ -63,6 +63,25 @@
   </PreferenceCategory>
 
   <PreferenceCategory android:layout="@layout/widget_preference_divider" />
+  <PreferenceCategory android:title="@string/preference_redirection_title">
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="@string/preference_redirection_user_notices_key"
+      android:summary="@string/preference_redirection_user_notices_summary"
+      android:title="@string/preference_redirection_user_notices_title" />
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="@string/preference_redirection_server_notices_key"
+      android:summary="@string/preference_redirection_server_notices_summary"
+      android:title="@string/preference_redirection_server_notices_title" />
+    <SwitchPreference
+      android:defaultValue="false"
+      android:key="@string/preference_redirection_errors_key"
+      android:summary="@string/preference_redirection_errors_summary"
+      android:title="@string/preference_redirection_errors_title" />
+  </PreferenceCategory>
+
+  <PreferenceCategory android:layout="@layout/widget_preference_divider" />
 
   <PreferenceCategory android:title="@string/preference_notifications_title">
     <DropDownPreference

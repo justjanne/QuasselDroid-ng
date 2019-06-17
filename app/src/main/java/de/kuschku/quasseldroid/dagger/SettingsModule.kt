@@ -30,6 +30,9 @@ class SettingsModule {
   fun provideAppearanceSettings(context: Context) = Settings.appearance(context)
 
   @Provides
+  fun provideRedirectionSettings(context: Context) = Settings.redirection(context)
+
+  @Provides
   fun provideMessageSettings(context: Context) = Settings.message(context)
 
   @Provides

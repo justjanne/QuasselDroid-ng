@@ -28,7 +28,7 @@ import de.kuschku.libquassel.protocol.*
 import org.threeten.bp.Instant
 import java.io.Serializable
 
-@Entity(tableName = "message", indices = [Index("bufferId"), Index("ignored")])
+@Entity(tableName = "message", indices = [Index("bufferId"), Index("ignored"), Index("currentBufferId"), Index("networkId")])
 data class MessageData(
   @PrimaryKey
   @ColumnInfo(name = "messageId")
@@ -38,6 +38,8 @@ data class MessageData(
   var flag: Message_Flags,
   @ColumnInfo(name = "bufferId")
   var rawBufferId: BufferId_Type,
+  @ColumnInfo(name = "currentBufferId")
+  var rawCurrentBufferId: BufferId_Type,
   @ColumnInfo(name = "networkId")
   var rawNetworkId: NetworkId_Type,
   var sender: String,
@@ -51,6 +53,8 @@ data class MessageData(
     get() = MsgId(rawMessageId)
   inline val bufferId
     get() = BufferId(rawBufferId)
+  inline val currentBufferId
+    get() = BufferId(rawCurrentBufferId)
   inline val networkId
     get() = NetworkId(rawNetworkId)
 
@@ -62,6 +66,7 @@ data class MessageData(
       flag: Message_Flags,
       bufferId: BufferId,
       networkId: NetworkId,
+      currentBufferId: BufferId,
       sender: String,
       senderPrefixes: String,
       realName: String,
@@ -74,6 +79,7 @@ data class MessageData(
       type,
       flag,
       bufferId.id,
+      currentBufferId.id,
       networkId.id,
       sender,
       senderPrefixes,

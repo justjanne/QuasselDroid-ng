@@ -30,7 +30,7 @@ import de.kuschku.quasseldroid.persistence.models.*
 import de.kuschku.quasseldroid.persistence.util.MessageTypeConverter
 
 @Database(entities = [MessageData::class, Filtered::class, SslValidityWhitelistEntry::class, SslHostnameWhitelistEntry::class, NotificationData::class],
-          version = 19)
+          version = 20)
 @TypeConverters(MessageTypeConverter::class)
 abstract class QuasselDatabase : RoomDatabase() {
   abstract fun message(): MessageDao
@@ -156,6 +156,13 @@ abstract class QuasselDatabase : RoomDatabase() {
               object : Migration(18, 19) {
                 override fun migrate(database: SupportSQLiteDatabase) {
                   database.execSQL("ALTER TABLE `notification` ADD `networkName` TEXT DEFAULT '' NOT NULL;")
+                }
+              },
+              object : Migration(19, 20) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                  database.execSQL("ALTER TABLE message ADD currentBufferId INT DEFAULT 0 NOT NULL;")
+                  database.execSQL("CREATE INDEX index_message_currentBufferId ON message(currentBufferId);")
+                  database.execSQL("CREATE INDEX index_message_networkId ON message(networkId);")
                 }
               }
             ).build()

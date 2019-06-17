@@ -27,8 +27,11 @@ import de.kuschku.libquassel.session.BacklogStorage
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
 import de.kuschku.quasseldroid.persistence.models.MessageData
+import io.reactivex.subjects.BehaviorSubject
 
 class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
+  val currentBuffer = BehaviorSubject.createDefault(BufferId(0))
+
   override fun updateIgnoreRules(session: ISession) {
     db.message().save(
       *db.message().all().map {
@@ -50,15 +53,14 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
         type = it.type,
         flag = it.flag,
         bufferId = it.bufferInfo.bufferId,
+        currentBufferId = currentBuffer.value,
         networkId = it.bufferInfo.networkId,
         sender = it.sender,
         senderPrefixes = it.senderPrefixes,
         realName = it.realName,
         avatarUrl = it.avatarUrl,
         content = it.content,
-        ignored = isIgnored(
-          session,
-          it)
+        ignored = isIgnored(session, it)
       )
     }.toTypedArray())
   }

@@ -55,6 +55,23 @@ object Settings {
     )
   }
 
+  fun redirection(context: Context) = context.sharedPreferences {
+    RedirectionSettings(
+      userNotices = getBoolean(
+        context.getString(R.string.preference_redirection_user_notices_key),
+        RedirectionSettings.DEFAULT.userNotices
+      ),
+      serverNotices = getBoolean(
+        context.getString(R.string.preference_redirection_server_notices_key),
+        RedirectionSettings.DEFAULT.serverNotices
+      ),
+      errors = getBoolean(
+        context.getString(R.string.preference_redirection_errors_key),
+        RedirectionSettings.DEFAULT.errors
+      )
+    )
+  }
+
   fun message(context: Context) = context.sharedPreferences {
     MessageSettings(
       useMonospace = getBoolean(

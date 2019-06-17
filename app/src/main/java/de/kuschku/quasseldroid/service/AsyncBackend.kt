@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.service
 
+import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.util.compatibility.HandlerService
 import de.kuschku.quasseldroid.Backend
 
@@ -68,4 +69,6 @@ class AsyncBackend(
   override fun requestConnectNewNetwork() {
     backend.requestConnectNewNetwork()
   }
+
+  override fun setCurrentBuffer(id: BufferId) = backend.setCurrentBuffer(id)
 }
