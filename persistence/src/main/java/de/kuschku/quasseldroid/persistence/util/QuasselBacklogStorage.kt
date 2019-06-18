@@ -20,13 +20,11 @@
 package de.kuschku.quasseldroid.persistence.util
 
 import de.kuschku.libquassel.protocol.BufferId
-import de.kuschku.libquassel.protocol.Buffer_Type
 import de.kuschku.libquassel.protocol.Message
 import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.syncables.IgnoreListManager
 import de.kuschku.libquassel.session.BacklogStorage
 import de.kuschku.libquassel.session.ISession
-import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.quasseldroid.persistence.db.QuasselDatabase
 import de.kuschku.quasseldroid.persistence.models.MessageData
 import io.reactivex.subjects.BehaviorSubject
@@ -55,10 +53,8 @@ class QuasselBacklogStorage(private val db: QuasselDatabase) : BacklogStorage {
         type = it.type,
         flag = it.flag,
         bufferId = it.bufferInfo.bufferId,
-        currentBufferId =
-        if (it.bufferInfo.type.hasFlag(Buffer_Type.QueryBuffer) ||
-            it.bufferInfo.type.hasFlag(Buffer_Type.StatusBuffer)) currentBuffer.value
-        else BufferId(0),
+        currentBufferId = currentBuffer.value,
+        currentBufferType = it.bufferInfo.type,
         networkId = it.bufferInfo.networkId,
         sender = it.sender,
         senderPrefixes = it.senderPrefixes,

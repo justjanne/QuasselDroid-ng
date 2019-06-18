@@ -44,7 +44,7 @@ interface MessageDao {
   @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC")
   fun _findByBufferId(bufferId: BufferId_Type): List<MessageData>
 
-  @Query("SELECT * FROM message WHERE (bufferId = :bufferId AND type & ~ :type > 0 AND ignored = 0) OR (networkId = :networkId AND type & 2 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND :showUserNotices != 0) OR (bufferId = :serverBufferId AND type & 2 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND :showServerNotices != 0) OR (bufferId = :serverBufferId AND type & 4096 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND :showErrors != 0) ORDER BY messageId DESC")
+  @Query("SELECT * FROM message WHERE (bufferId = :bufferId AND type & ~ :type > 0 AND ignored = 0) OR (networkId = :networkId AND type & 2 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND currentBufferType = 4 AND :showUserNotices != 0) OR (bufferId = :serverBufferId AND type & 2 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND currentBufferType = 1 AND :showServerNotices != 0) OR (bufferId = :serverBufferId AND type & 4096 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND :showErrors != 0) ORDER BY messageId DESC")
   fun _findByBufferIdPaged(networkId: NetworkId_Type, serverBufferId: BufferId_Type,
                            bufferId: BufferId_Type, type: Int,
                            showUserNotices: Boolean, showServerNotices: Boolean,
@@ -59,7 +59,7 @@ interface MessageDao {
   @Query("SELECT messageId FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC LIMIT 1")
   fun _firstMsgId(bufferId: BufferId_Type): Flowable<MsgId_Type>
 
-  @Query("SELECT messageId FROM message WHERE (bufferId = :bufferId AND type & ~ :type > 0 AND ignored = 0) OR (networkId = :networkId AND type & 2 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND :showUserNotices != 0) OR (bufferId = :serverBufferId AND type & 2 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND :showServerNotices != 0) OR (bufferId = :serverBufferId AND type & 4096 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND :showErrors != 0) ORDER BY messageId ASC LIMIT 1")
+  @Query("SELECT messageId FROM message WHERE (bufferId = :bufferId AND type & ~ :type > 0 AND ignored = 0) OR (networkId = :networkId AND type & 2 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND currentBufferType = 4 AND :showUserNotices != 0) OR (bufferId = :serverBufferId AND type & 2 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND currentBufferType = 1 AND :showServerNotices != 0) OR (bufferId = :serverBufferId AND type & 4096 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND :showErrors != 0) ORDER BY messageId ASC LIMIT 1")
   fun _firstVisibleMsgId(networkId: NetworkId_Type, serverBufferId: BufferId_Type,
                          bufferId: BufferId_Type, type: Int,
                          showUserNotices: Boolean, showServerNotices: Boolean,
@@ -68,7 +68,7 @@ interface MessageDao {
   @Query("SELECT * FROM message WHERE bufferId = :bufferId ORDER BY messageId ASC LIMIT 1")
   fun _findFirstByBufferId(bufferId: BufferId_Type): MessageData?
 
-  @Query("SELECT EXISTS(SELECT 1 FROM message WHERE (bufferId = :bufferId AND type & ~ :type > 0 AND ignored = 0) OR (networkId = :networkId AND type & 2 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND :showUserNotices != 0) OR (bufferId = :serverBufferId AND type & 2 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND :showServerNotices != 0) OR (bufferId = :serverBufferId AND type & 4096 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND :showErrors != 0))")
+  @Query("SELECT EXISTS(SELECT 1 FROM message WHERE (bufferId = :bufferId AND type & ~ :type > 0 AND ignored = 0) OR (networkId = :networkId AND type & 2 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND currentBufferType = 4 AND :showUserNotices != 0) OR (bufferId = :serverBufferId AND type & 2 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND currentBufferType = 1 AND :showServerNotices != 0) OR (bufferId = :serverBufferId AND type & 4096 > 0 AND ignored = 0 AND currentBufferId = :bufferId AND :showErrors != 0))")
   fun _hasVisibleMessages(networkId: NetworkId_Type, serverBufferId: BufferId_Type,
                           bufferId: BufferId_Type, type: Int,
                           showUserNotices: Boolean, showServerNotices: Boolean,
