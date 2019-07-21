@@ -132,7 +132,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "AutoService",
-        version = "1.0-rc4",
+        version = "1.0-rc6",
         license = apache2,
         url = "https://github.com/google/auto/tree/master/service"
       ),
@@ -150,7 +150,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Dagger 2",
-        version = "2.21",
+        version = "2.23.2",
         license = apache2,
         url = "https://google.github.io/dagger/"
       ),
@@ -186,7 +186,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "KotlinPoet",
-        version = "1.1.0",
+        version = "1.3.0",
         license = apache2,
         url = "https://github.com/square/kotlinpoet"
       ),
@@ -198,7 +198,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Kotlin Standard Library",
-        version = "1.3.30",
+        version = "1.3.41",
         license = apache2,
         url = "https://kotlinlang.org/"
       ),
@@ -235,7 +235,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "MaterialProgressBar",
-        version = "1.4.2",
+        version = "1.6.1",
         license = apache2,
         url = "https://github.com/DreaminginCodeZH/MaterialProgressBar"
       ),
@@ -267,13 +267,13 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Retrofit",
-        version = "2.5.0",
+        version = "2.6.0",
         license = apache2,
         url = "https://square.github.io/retrofit/"
       ),
       Library(
         name = "RxJava",
-        version = "2.1.9",
+        version = "2.2.10",
         license = apache2,
         url = "https://github.com/ReactiveX/RxJava"
       ),
@@ -288,7 +288,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "ThreeTen backport project",
-        version = "1.3.8",
+        version = "1.4.10",
         license = License(
           shortName = "BSD 3-clause",
           text = R.raw.license_threetenbp

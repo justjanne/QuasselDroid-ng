@@ -240,7 +240,7 @@
     },
     {
       "name": "ThreeTen backport project",
-      "version": "1.3.6",
+      "version": "1.4.0",
       "license": {
         "short_name": "BSD 3-clause"
       },

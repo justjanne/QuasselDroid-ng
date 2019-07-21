@@ -23,12 +23,12 @@ plugins {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.30"))
+  implementation(kotlin("stdlib", "1.3.41"))
 
   implementation("androidx.annotation", "annotation", "1.0.0")
 
-  implementation("org.threeten", "threetenbp", "1.3.8")
-  implementation("io.reactivex.rxjava2", "rxjava", "2.1.9")
+  implementation("org.threeten", "threetenbp", "1.4.0")
+  implementation("io.reactivex.rxjava2", "rxjava", "2.2.10")
 
   implementation(project(":invokerannotations"))
   kapt(project(":invokergenerator"))
