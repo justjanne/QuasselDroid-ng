@@ -21,36 +21,32 @@ package de.kuschku.quasseldroid.util.backport
 
 import android.content.Context
 import org.threeten.bp.zone.TzdbZoneRulesProvider
+import org.threeten.bp.zone.ZoneRulesInitializer
 import org.threeten.bp.zone.ZoneRulesProvider
 import java.io.IOException
-import java.io.InputStream
 import java.util.concurrent.atomic.AtomicBoolean
 
 object AndroidThreeTenBackport {
   private val initialized = AtomicBoolean()
 
-  fun init(context: Context) {
-    if (initialized.getAndSet(true)) {
-      return
+  fun init(context: Context, assetPath: String = "TZDB.dat") {
+    if (!initialized.getAndSet(true)) {
+      ZoneRulesInitializer.setInitializer(AndroidThreeTenBackportInitializer(context, assetPath))
     }
+  }
 
-    val provider: TzdbZoneRulesProvider
-    var inputStream: InputStream? = null
-    try {
-      inputStream = context.assets.open("TZDB.dat")
-      provider = TzdbZoneRulesProvider(inputStream)
-    } catch (e: IOException) {
-      throw IllegalStateException("TZDB.dat missing from assets.", e)
-    } finally {
-      if (inputStream != null) {
-        try {
-          inputStream.close()
-        } catch (ignored: IOException) {
-        }
-
+  class AndroidThreeTenBackportInitializer(
+    private val context: Context,
+    private val assetPath: String
+  ) : ZoneRulesInitializer() {
+    override fun initializeProviders() {
+      try {
+        ZoneRulesProvider.registerProvider(context.assets.open(assetPath).use {
+          TzdbZoneRulesProvider(it)
+        })
+      } catch (exception: IOException) {
+        throw IllegalStateException("$assetPath missing from assets", exception)
       }
     }
-
-    ZoneRulesProvider.registerProvider(provider)
   }
 }

@@ -41,9 +41,10 @@ class BackportedSyncFlushDeflaterOutputStream(
     private fun createSyncFlushDeflater(): Deflater? {
       val def = Deflater()
       try {
-        val f = def.javaClass.getDeclaredField("flushParm")
-        f.isAccessible = true
-        f.setInt(def, 2) // Z_SYNC_FLUSH
+        def.javaClass.getDeclaredField("flushParm").apply {
+          isAccessible = true
+          setInt(def, 2) // Z_SYNC_FLUSH
+        }
       } catch (e: Exception) {
         return null
       }
