@@ -39,6 +39,7 @@ import butterknife.ButterKnife
 import com.leinardi.android.speeddial.SpeedDialActionItem
 import com.leinardi.android.speeddial.SpeedDialView
 import de.kuschku.libquassel.protocol.BufferId
+import de.kuschku.libquassel.protocol.NetworkId
 import de.kuschku.libquassel.quassel.ExtendedFeature
 import de.kuschku.libquassel.quassel.syncables.BufferViewConfig
 import de.kuschku.libquassel.util.helper.*
@@ -120,11 +121,14 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
   private val actionModeCallback = object : ActionMode.Callback {
     override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
-      val selected = modelHelper.chat.selectedBufferId.value ?: BufferId(-1)
+      val selected = modelHelper.chat.selectedBufferId.safeValue ?: BufferId(-1)
       val session = modelHelper.connectedSession.value?.orNull()
       val bufferSyncer = session?.bufferSyncer
       val info = bufferSyncer?.bufferInfo(selected)
-      val network = session?.networks?.get(info?.networkId)
+      val networkId =
+        if (!selected.isValidId()) NetworkId(-selected.id)
+        else info?.networkId
+      val network = session?.networks?.get(networkId)
       val bufferViewConfig = modelHelper.bufferViewConfig.value?.orNull()
 
       return if (info != null) {
@@ -261,7 +265,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       when (item.itemId) {
         R.id.action_archived_chats -> {
           context?.let {
-            modelHelper.chat.bufferViewConfigId.value?.let { chatlistId ->
+            modelHelper.chat.bufferViewConfigId.safeValue?.let { chatlistId ->
               ArchiveActivity.launch(
                 it,
                 chatlistId = chatlistId
@@ -408,7 +412,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
   }
 
   private fun toggleSelection(buffer: BufferId): Boolean {
-    val next = if (modelHelper.chat.selectedBufferId.value == buffer) BufferId.MAX_VALUE else buffer
+    val next = if (modelHelper.chat.selectedBufferId.safeValue == buffer) BufferId.MAX_VALUE else buffer
     modelHelper.chat.selectedBufferId.onNext(next)
     return next != BufferId.MAX_VALUE
   }

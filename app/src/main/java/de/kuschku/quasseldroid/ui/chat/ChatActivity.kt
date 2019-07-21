@@ -61,10 +61,7 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
 import de.kuschku.libquassel.util.flag.and
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.flag.or
-import de.kuschku.libquassel.util.helper.combineLatest
-import de.kuschku.libquassel.util.helper.invoke
-import de.kuschku.libquassel.util.helper.nullIf
-import de.kuschku.libquassel.util.helper.value
+import de.kuschku.libquassel.util.helper.*
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.defaults.DefaultNetworkServer
@@ -518,7 +515,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                               val user = userField.text.toString()
                               val pass = passField.text.toString()
 
-                              backend.value?.orNull()?.updateUserDataAndLogin(user, pass)
+                              backend.safeValue.orNull()?.updateUserDataAndLogin(user, pass)
                             }
                           }
                           .titleColorAttr(R.attr.colorTextPrimary)
@@ -605,7 +602,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
                             runOnUiThread {
                               log(INFO, "ChatActivity", "Reconnect triggered: User action")
-                              backend.value?.orNull()?.autoConnect(ignoreErrors = true)
+                              backend.safeValue.orNull()?.autoConnect(ignoreErrors = true)
                             }
                           }
                         }
@@ -651,7 +648,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
                             runOnUiThread {
                               log(INFO, "ChatActivity", "Reconnect triggered: User action")
-                              backend.value?.orNull()?.autoConnect(ignoreErrors = true)
+                              backend.safeValue.orNull()?.autoConnect(ignoreErrors = true)
                             }
                           }
                         }
@@ -690,7 +687,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
 
                             runOnUiThread {
                               log(INFO, "ChatActivity", "Reconnect triggered: User action")
-                              backend.value?.orNull()?.autoConnect(ignoreErrors = true)
+                              backend.safeValue.orNull()?.autoConnect(ignoreErrors = true)
                             }
                           }
                         }
@@ -761,7 +758,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
       .observe(this, Observer {
         if (connectedAccount != accountId) {
           if (resources.getBoolean(R.bool.buffer_drawer_exists) &&
-              chatViewModel.bufferId.value == BufferId.MAX_VALUE &&
+              chatViewModel.bufferId.safeValue == BufferId.MAX_VALUE &&
               !restoredDrawerState) {
             drawerLayout.openDrawer(GravityCompat.START)
           }
@@ -798,7 +795,7 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
     connectionStatusDisplay.setOnClickListener {
       modelHelper.sessionManager.value?.orNull()?.apply {
         log(INFO, "ChatActivity", "Reconnect triggered: User action")
-        backend.value?.orNull()?.autoConnect(ignoreErrors = true, ignoreSetting = true)
+        backend.safeValue.orNull()?.autoConnect(ignoreErrors = true, ignoreSetting = true)
       }
     }
 

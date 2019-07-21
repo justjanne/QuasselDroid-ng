@@ -33,6 +33,7 @@ import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.util.flag.hasFlag
+import de.kuschku.libquassel.util.helper.safeValue
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.MessageSettings
 import de.kuschku.quasseldroid.util.helper.*
@@ -100,7 +101,7 @@ class ArchiveListAdapter(
   }
 
   fun expandListener(networkId: NetworkId, expand: Boolean) {
-    expandedNetworks.onNext(expandedNetworks.value.orEmpty() + Pair(networkId, expand))
+    expandedNetworks.onNext(expandedNetworks.safeValue + Pair(networkId, expand))
   }
 
   fun unselectAll() {

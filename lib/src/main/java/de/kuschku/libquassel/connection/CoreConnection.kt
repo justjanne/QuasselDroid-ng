@@ -40,6 +40,7 @@ import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.WARN
 import de.kuschku.libquassel.util.compatibility.reference.JavaHandlerService
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helper.hexDump
+import de.kuschku.libquassel.util.helper.safeValue
 import de.kuschku.libquassel.util.helper.write
 import de.kuschku.libquassel.util.nio.ChainedByteBuffer
 import de.kuschku.libquassel.util.nio.WrappedChannel
@@ -105,7 +106,7 @@ class CoreConnection(
   }
 
   fun setState(value: ConnectionState) {
-    val current = state.value
+    val current = state.safeValue
     if (current != ConnectionState.CLOSED) {
       log(DEBUG, TAG, value.name)
       state.onNext(value)
@@ -217,7 +218,7 @@ class CoreConnection(
       connect()
       sendHandshake()
       readHandshake()
-      while (!isInterrupted && state.value != ConnectionState.CLOSED) {
+      while (!isInterrupted && state.safeValue != ConnectionState.CLOSED) {
         sizeBuffer.clear()
         if (channel?.read(sizeBuffer) == -1)
           break
@@ -232,7 +233,7 @@ class CoreConnection(
         dataBuffer.flip()
 
         handlerService.deserialize {
-          when (state.value) {
+          when (state.safeValue) {
             ConnectionState.CLOSED    ->
               // Connection closed, do nothing
               Unit
@@ -246,7 +247,7 @@ class CoreConnection(
       }
       channel?.close()
     } catch (e: Throwable) {
-      val closed = state.value == ConnectionState.CLOSED
+      val closed = state.safeValue == ConnectionState.CLOSED
 
       var cause: Throwable? = e
       var exception: QuasselSecurityException?

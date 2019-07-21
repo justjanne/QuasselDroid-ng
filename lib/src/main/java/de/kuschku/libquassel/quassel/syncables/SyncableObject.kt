@@ -21,6 +21,7 @@ package de.kuschku.libquassel.quassel.syncables
 
 import de.kuschku.libquassel.quassel.syncables.interfaces.ISyncableObject
 import de.kuschku.libquassel.session.SignalProxy
+import de.kuschku.libquassel.util.helper.safeValue
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -32,7 +33,7 @@ abstract class SyncableObject(
     private set
   override var identifier = Pair(className, objectName)
   override var initialized: Boolean
-    get() = _liveInitialized.value
+    get() = _liveInitialized.safeValue
     set(value) {
       _liveInitialized.onNext(value)
     }

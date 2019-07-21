@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 /*
  * Quasseldroid - Quassel client for Android
  *
@@ -19,20 +17,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-plugins {
-  kotlin("jvm")
-  kotlin("kapt")
-}
+package de.kuschku.libquassel.util.helper
 
-tasks.withType<KotlinCompile> {
-  kotlinOptions.jvmTarget = "1.8"
-}
+import io.reactivex.subjects.BehaviorSubject
 
-dependencies {
-  implementation(kotlin("stdlib", "1.3.41"))
-  implementation(project(":invokerannotations"))
-  implementation("org.jetbrains.kotlin", "kotlin-compiler-embeddable", "1.3.41")
-  implementation("com.squareup", "kotlinpoet", "1.1.0")
-  implementation("com.google.auto.service:auto-service:1.0-rc6")
-  kapt("com.google.auto.service:auto-service:1.0-rc6")
-}
+val <T : Any> BehaviorSubject<T>.safeValue : T
+  get() = value!!

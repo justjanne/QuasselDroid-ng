@@ -22,6 +22,7 @@ package de.kuschku.quasseldroid.viewmodel
 import android.os.Bundle
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.util.helper.safeValue
 import io.reactivex.subjects.BehaviorSubject
 
 open class ArchiveViewModel : QuasselViewModel() {
@@ -34,19 +35,19 @@ open class ArchiveViewModel : QuasselViewModel() {
   fun onSaveInstanceState(outState: Bundle) {
     outState.putInt(
       KEY_BUFFER_VIEW_CONFIG_ID,
-      bufferViewConfigId.value)
+      bufferViewConfigId.safeValue)
     outState.putSerializable(
       KEY_VISIBLE_EXPANDED_NETWORKS,
-      HashMap(visibleExpandedNetworks.value))
+      HashMap(visibleExpandedNetworks.safeValue))
     outState.putSerializable(
       KEY_TEMPORARILY_EXPANDED_NETWORKS,
-      HashMap(temporarilyExpandedNetworks.value))
+      HashMap(temporarilyExpandedNetworks.safeValue))
     outState.putSerializable(
       KEY_PERMANENTLY_EXPANDED_NETWORKS,
-      HashMap(permanentlyExpandedNetworks.value))
+      HashMap(permanentlyExpandedNetworks.safeValue))
     outState.putInt(
       KEY_SELECTED_BUFFER_ID,
-      selectedBufferId.value.id)
+      selectedBufferId.safeValue.id)
   }
 
   fun onRestoreInstanceState(savedInstanceState: Bundle) {

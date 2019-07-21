@@ -30,6 +30,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.util.helper.combineLatest
+import de.kuschku.libquassel.util.helper.safeValue
 import de.kuschku.libquassel.util.helper.value
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.persistence.db.AccountDatabase
@@ -70,7 +71,7 @@ class ArchiveFragment : ServiceBoundFragment() {
 
   private val actionModeCallback = object : ActionMode.Callback {
     override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
-      val selected = modelHelper.archive.selectedBufferId.value ?: BufferId(-1)
+      val selected = modelHelper.archive.selectedBufferId.safeValue
       val session = modelHelper.connectedSession.value?.orNull()
       val bufferSyncer = session?.bufferSyncer
       val info = bufferSyncer?.bufferInfo(selected)
@@ -177,7 +178,9 @@ class ArchiveFragment : ServiceBoundFragment() {
   }
 
   private fun toggleSelection(buffer: BufferId): Boolean {
-    val next = if (modelHelper.archive.selectedBufferId.value == buffer) BufferId.MAX_VALUE else buffer
+    val next =
+      if (modelHelper.archive.selectedBufferId.safeValue == buffer) BufferId.MAX_VALUE
+      else buffer
     modelHelper.archive.selectedBufferId.onNext(next)
     return next != BufferId.MAX_VALUE
   }

@@ -186,7 +186,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "KotlinPoet",
-        version = "1.3.0",
+        version = "1.1.0",
         license = apache2,
         url = "https://github.com/square/kotlinpoet"
       ),

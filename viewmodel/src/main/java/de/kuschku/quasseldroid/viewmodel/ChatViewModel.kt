@@ -23,6 +23,7 @@ import android.os.Bundle
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.util.helper.safeValue
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -50,31 +51,31 @@ open class ChatViewModel : QuasselViewModel() {
     */
     outState.putString(
       KEY_BUFFER_SEARCH,
-      bufferSearch.value)
+      bufferSearch.safeValue)
     outState.putLongArray(
       KEY_EXPANDED_MESSAGES,
-      expandedMessages.value.map(MsgId::id).toLongArray())
+      expandedMessages.safeValue.map(MsgId::id).toLongArray())
     outState.putInt(
       KEY_BUFFER_ID,
-      bufferId.value.id)
+      bufferId.safeValue.id)
     outState.putInt(
       KEY_BUFFER_VIEW_CONFIG_ID,
-      bufferViewConfigId.value)
+      bufferViewConfigId.safeValue)
     outState.putCharSequenceArray(
       KEY_RECENTLY_SENT_MESSAGES,
-      recentlySentMessages.value.toTypedArray())
+      recentlySentMessages.safeValue.toTypedArray())
     outState.putBoolean(
       KEY_SHOW_HIDDEN,
-      showHidden.value)
+      showHidden.safeValue)
     outState.putBoolean(
       KEY_BUFFER_SEARCH_TEMPORARILY_VISIBLE,
-      bufferSearchTemporarilyVisible.value)
+      bufferSearchTemporarilyVisible.safeValue)
     outState.putSerializable(
       KEY_EXPANDED_NETWORKS,
-      HashMap(expandedNetworks.value))
+      HashMap(expandedNetworks.safeValue))
     outState.putInt(
       KEY_SELECTED_BUFFER_ID,
-      selectedBufferId.value.id)
+      selectedBufferId.safeValue.id)
   }
 
   fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -129,7 +130,7 @@ open class ChatViewModel : QuasselViewModel() {
   }
 
   fun selectedMessagesToggle(key: MsgId, value: FormattedMessage): Int {
-    val set = selectedMessages.value.orEmpty()
+    val set = selectedMessages.safeValue
     val result = if (set.containsKey(key)) set - key else set + Pair(key, value)
     selectedMessages.onNext(result)
     return result.size
@@ -137,7 +138,7 @@ open class ChatViewModel : QuasselViewModel() {
 
   fun addRecentlySentMessage(message: CharSequence) {
     recentlySentMessages.onNext(
-      listOf(message) + recentlySentMessages.value
+      listOf(message) + recentlySentMessages.safeValue
         .orEmpty()
         .filter { it != message }
         .take(MAX_RECENT_MESSAGES - 1)

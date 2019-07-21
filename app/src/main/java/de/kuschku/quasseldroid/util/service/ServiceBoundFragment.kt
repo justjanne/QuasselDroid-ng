@@ -23,6 +23,7 @@ import android.content.Context
 import android.os.Bundle
 import dagger.android.support.DaggerFragment
 import de.kuschku.libquassel.util.Optional
+import de.kuschku.libquassel.util.helper.safeValue
 import de.kuschku.quasseldroid.Backend
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
@@ -38,13 +39,13 @@ abstract class ServiceBoundFragment : DaggerFragment() {
     get() = connection.backend
 
   protected fun runInBackground(f: () -> Unit) {
-    connection.backend.value?.ifPresent {
+    connection.backend.safeValue.ifPresent {
       it.sessionManager()?.handlerService?.backend(f)
     }
   }
 
   protected fun runInBackgroundDelayed(delayMillis: Long, f: () -> Unit) {
-    connection.backend.value?.ifPresent {
+    connection.backend.safeValue.ifPresent {
       it.sessionManager()?.handlerService?.backendDelayed(delayMillis, f)
     }
   }

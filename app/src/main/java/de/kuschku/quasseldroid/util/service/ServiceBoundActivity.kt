@@ -30,6 +30,7 @@ import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import de.kuschku.libquassel.util.Optional
+import de.kuschku.libquassel.util.helper.safeValue
 import de.kuschku.quasseldroid.Backend
 import de.kuschku.quasseldroid.Keys
 import de.kuschku.quasseldroid.R
@@ -58,13 +59,13 @@ abstract class ServiceBoundActivity :
   private var nightMode: Int? = null
 
   protected fun runInBackground(f: () -> Unit) {
-    connection.backend.value?.ifPresent {
+    connection.backend.safeValue.ifPresent {
       it.sessionManager()?.handlerService?.backend(f)
     }
   }
 
   protected fun runInBackgroundDelayed(delayMillis: Long, f: () -> Unit) {
-    connection.backend.value?.ifPresent {
+    connection.backend.safeValue.ifPresent {
       it.sessionManager()?.handlerService?.backendDelayed(delayMillis, f)
     }
   }

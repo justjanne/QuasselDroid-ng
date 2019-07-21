@@ -126,7 +126,7 @@ class MessageListFragment : ServiceBoundFragment() {
   private val actionModeCallback = object : ActionMode.Callback {
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?) = when (item?.itemId) {
       R.id.action_user_info -> {
-        modelHelper.chat.selectedMessages.value?.values?.firstOrNull()?.let { msg ->
+        modelHelper.chat.selectedMessages.safeValue?.values?.firstOrNull()?.let { msg ->
           modelHelper.connectedSession.value?.orNull()?.bufferSyncer?.let { bufferSyncer ->
             modelHelper.bufferData.value?.info?.let(BufferInfo::networkId)?.let { networkId ->
               UserInfoActivity.launch(
@@ -148,7 +148,7 @@ class MessageListFragment : ServiceBoundFragment() {
       }
       R.id.action_copy      -> {
         val builder = SpannableStringBuilder()
-        modelHelper.chat.selectedMessages.value?.values.orEmpty().asSequence().sortedBy {
+        modelHelper.chat.selectedMessages.safeValue?.values.orEmpty().asSequence().sortedBy {
           it.original.messageId
         }.map {
           if (it.name != null && it.content != null) {
@@ -177,7 +177,7 @@ class MessageListFragment : ServiceBoundFragment() {
       }
       R.id.action_share     -> {
         val builder = SpannableStringBuilder()
-        modelHelper.chat.selectedMessages.value?.values.orEmpty().asSequence().sortedBy {
+        modelHelper.chat.selectedMessages.safeValue?.values.orEmpty().asSequence().sortedBy {
           it.original.messageId
         }.map {
           if (it.name != null && it.content != null) {
@@ -257,7 +257,7 @@ class MessageListFragment : ServiceBoundFragment() {
           else -> actionMode?.menu?.findItem(R.id.action_user_info)?.isVisible = false
         }
       } else if (msg.hasSpoilers) {
-        val value = modelHelper.chat.expandedMessages.value.orEmpty()
+        val value = modelHelper.chat.expandedMessages.safeValue
         modelHelper.chat.expandedMessages.onNext(
           if (value.contains(msg.original.messageId)) value - msg.original.messageId
           else value + msg.original.messageId
@@ -526,7 +526,7 @@ class MessageListFragment : ServiceBoundFragment() {
           list?.let(adapter::submitList)
         }
 
-        val buffer = modelHelper.chat.bufferId.value
+        val buffer = modelHelper.chat.bufferId.safeValue
                      ?: BufferId(-1)
         val network = modelHelper.bufferSyncer.value?.orNull()?.bufferInfo(buffer)?.networkId
                       ?: NetworkId(0)

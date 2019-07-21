@@ -21,6 +21,7 @@ package de.kuschku.libquassel.session
 
 import de.kuschku.libquassel.session.manager.SessionState
 import de.kuschku.libquassel.util.helper.safeSwitchMap
+import de.kuschku.libquassel.util.helper.safeValue
 import io.reactivex.subjects.BehaviorSubject
 
 open class SessionStateHandler constructor(
@@ -56,7 +57,7 @@ open class SessionStateHandler constructor(
   }
 
   private fun updateState(f: SessionState.() -> SessionState) {
-    sessions.onNext(f(sessions.value))
+    sessions.onNext(f(sessions.safeValue))
   }
 
   protected fun updateStateConnecting(connectingSession: ISession) = updateState {
