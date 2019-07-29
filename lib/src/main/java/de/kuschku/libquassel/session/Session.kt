@@ -85,21 +85,24 @@ class Session(
   override val backlogManager = BacklogManager(this, backlogStorage)
   override val bufferViewManager = BufferViewManager(this)
   override val bufferSyncer = BufferSyncer(this, notificationManager)
-  override val certManagers = mutableMapOf<IdentityId, CertManager>()
+  override var certManagers = emptyMap<IdentityId, CertManager>()
+    private set
   override val coreInfo = CoreInfo(this)
   override val dccConfig = DccConfig(this)
 
-  override val identities = mutableMapOf<IdentityId, Identity>()
+  override var identities = emptyMap<IdentityId, Identity>()
+    private set
   private val live_identities = BehaviorSubject.createDefault(Unit)
-  override fun liveIdentities(): Observable<Map<IdentityId, Identity>> = live_identities.map { identities.toMap() }
+  override fun liveIdentities(): Observable<Map<IdentityId, Identity>> = live_identities.map { identities }
 
   override val ignoreListManager = IgnoreListManager(this)
   override val highlightRuleManager = HighlightRuleManager(this)
   override val ircListHelper = IrcListHelper(this)
 
-  override val networks = mutableMapOf<NetworkId, Network>()
+  override var networks = emptyMap<NetworkId, Network>()
+    private set
   private val live_networks = BehaviorSubject.createDefault(Unit)
-  override fun liveNetworks(): Observable<Map<NetworkId, Network>> = live_networks.map { networks.toMap() }
+  override fun liveNetworks(): Observable<Map<NetworkId, Network>> = live_networks.map { networks }
 
   private val network_added = PublishSubject.create<NetworkId>()
   override fun liveNetworkAdded(): Observable<NetworkId> = network_added
@@ -183,14 +186,15 @@ class Session(
 
   override fun addNetwork(networkId: NetworkId) {
     val network = Network(networkId, this)
-    networks[networkId] = network
+    networks = networks + Pair(networkId, network)
     synchronize(network)
     live_networks.onNext(Unit)
     network_added.onNext(networkId)
   }
 
   override fun removeNetwork(networkId: NetworkId) {
-    val network = networks.remove(networkId)
+    val network = networks[networkId]
+    networks = networks - networkId
     stopSynchronize(network)
     live_networks.onNext(Unit)
   }
@@ -198,13 +202,14 @@ class Session(
   override fun addIdentity(initData: QVariantMap) {
     val identity = Identity(this)
     identity.fromVariantMap(initData)
-    identities[identity.id()] = identity
+    identities = identities + Pair(identity.id(), identity)
     synchronize(identity)
     live_identities.onNext(Unit)
   }
 
   override fun removeIdentity(identityId: IdentityId) {
-    val identity = identities.remove(identityId)
+    val identity = identities[identityId]
+    identities = identities - identityId
     stopSynchronize(identity)
     live_identities.onNext(Unit)
   }
@@ -219,23 +224,29 @@ class Session(
     handlerService.backend {
       bufferSyncer.initSetBufferInfos(f.bufferInfos)
 
-      f.networkIds?.forEach {
-        val network = Network(it.value(NetworkId(-1)), this)
-        networks[network.networkId()] = network
-      }
+      networks = f.networkIds?.map {
+        Pair(it.value(NetworkId(-1)), Network(it.value(NetworkId(-1)), this))
+      }?.toMap().orEmpty()
       live_networks.onNext(Unit)
 
-      f.identities?.forEach {
+      val identityCertmanagerPairs = f.identities?.map {
         val identity = Identity(this)
         identity.fromVariantMap(it.valueOr(::emptyMap))
         identity.initialized = true
         identity.init()
-        identities[identity.id()] = identity
         synchronize(identity)
 
         val certManager = CertManager(identity.id(), this)
-        certManagers[identity.id()] = certManager
-      }
+        Pair(identity, certManager)
+      }?.toMap().orEmpty()
+
+      identities = identityCertmanagerPairs.map { (identity, _) ->
+        Pair(identity.id(), identity)
+      }.toMap()
+
+      certManagers = identityCertmanagerPairs.map { (identity, certManager) ->
+        Pair(identity.id(), certManager)
+      }.toMap()
 
       isInitializing = true
       networks.values.forEach { syncableObject -> this.synchronize(syncableObject, true) }
@@ -318,10 +329,10 @@ class Session(
     backlogManager.deinit()
     rpcHandler.deinit()
 
-    certManagers.clear()
-    identities.clear()
+    certManagers = emptyMap()
+    identities = emptyMap()
     live_identities.onNext(Unit)
-    networks.clear()
+    networks = emptyMap()
     live_networks.onNext(Unit)
   }
 
