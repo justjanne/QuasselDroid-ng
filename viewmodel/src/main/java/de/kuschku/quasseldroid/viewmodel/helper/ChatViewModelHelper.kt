@@ -170,7 +170,7 @@ open class ChatViewModelHelper @Inject constructor(
   val nickDataThrottled =
     nickData.distinctUntilChanged().throttleLast(100, TimeUnit.MILLISECONDS)
 
-  val selectedBuffer = processSelectedBuffer(chat.selectedBufferId)
+  val selectedBuffer = processSelectedBuffer(bufferViewConfig, chat.selectedBufferId)
 
   fun processChatBufferList(
     filtered: Observable<Pair<Map<BufferId, Int>, Int>>

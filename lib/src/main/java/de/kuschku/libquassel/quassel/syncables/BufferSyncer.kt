@@ -245,7 +245,7 @@ class BufferSyncer constructor(
       live_bufferInfos.onNext(Unit)
 
       if (oldInfo == null) {
-        session.bufferViewManager.handleBuffer(info, this)
+        session.bufferViewManager.handleBuffer(info, this, session.networks)
       }
     }
   }
@@ -282,7 +282,7 @@ class BufferSyncer constructor(
         activity hasFlag Message_Type.Notice ||
         activity hasFlag Message_Type.Action) {
       bufferInfo(buffer)?.let {
-        session.bufferViewManager.handleBuffer(it, this, true)
+        session.bufferViewManager.handleBuffer(it, this, session.networks, true)
       }
     }
     _bufferActivities[buffer] = activity

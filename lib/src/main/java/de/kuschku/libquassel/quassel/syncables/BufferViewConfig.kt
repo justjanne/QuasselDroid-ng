@@ -26,7 +26,6 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferViewConfig
 import de.kuschku.libquassel.session.SignalProxy
 import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.helper.clampOf
-import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -326,28 +325,33 @@ class BufferViewConfig constructor(
       (a?.bufferViewName() ?: "").compareTo((b?.bufferViewName() ?: ""), true)
   }
 
-  fun insertBufferSorted(info: BufferInfo, bufferSyncer: BufferSyncer) {
+  fun insertBufferSorted(info: BufferInfo, bufferSyncer: BufferSyncer,
+                         networks: Map<NetworkId, Network>) {
     if (!_buffers.contains(info.bufferId)) {
-      val element = IrcCaseMappers.unicode.toLowerCaseNullable(info.bufferName)
-      val position =
-        if (_sortAlphabetically) -_buffers.mapNotNull {
-          IrcCaseMappers.unicode.toLowerCaseNullable(bufferSyncer.bufferInfo(it)?.bufferName)
-        }.binarySearch(element) - 1
-        else _buffers.size
-      requestAddBuffer(info.bufferId, position)
+      requestAddBuffer(
+        info.bufferId,
+        sortBuffers(
+          _buffers.mapNotNull { bufferSyncer.bufferInfo(it) } + info,
+          sortAlphabetically(),
+          { it.bufferName ?: "" },
+          { networks[it.networkId]?.networkName() ?: "" },
+          { it.type }
+        ).indexOf(info)
+      )
     }
   }
 
-  fun handleBuffer(info: BufferInfo, bufferSyncer: BufferSyncer, unhide: Boolean = false) {
+  fun handleBuffer(info: BufferInfo, bufferSyncer: BufferSyncer, networks: Map<NetworkId, Network>,
+                   unhide: Boolean = false) {
     if (_addNewBuffersAutomatically &&
         !_buffers.contains(info.bufferId) &&
         !_temporarilyRemovedBuffers.contains(info.bufferId) &&
         !_removedBuffers.contains(info.bufferId) &&
         !info.type.hasFlag(Buffer_Type.StatusBuffer)) {
-      insertBufferSorted(info, bufferSyncer)
+      insertBufferSorted(info, bufferSyncer, networks)
     } else if (unhide && !_buffers.contains(info.bufferId) &&
                _temporarilyRemovedBuffers.contains(info.bufferId)) {
-      insertBufferSorted(info, bufferSyncer)
+      insertBufferSorted(info, bufferSyncer, networks)
     }
   }
 
@@ -364,5 +368,19 @@ class BufferViewConfig constructor(
 
   override fun toString(): String {
     return "BufferViewConfig(_bufferViewId=$_bufferViewId, _bufferViewName='$_bufferViewName', _networkId=$_networkId, _addNewBuffersAutomatically=$_addNewBuffersAutomatically, _sortAlphabetically=$_sortAlphabetically, _hideInactiveBuffers=$_hideInactiveBuffers, _hideInactiveNetworks=$_hideInactiveNetworks, _disableDecoration=$_disableDecoration, _allowedBufferTypes=$_allowedBufferTypes, _minimumActivity=$_minimumActivity, _showSearch=$_showSearch)"
+  }
+
+  companion object {
+    inline fun <T> sortBuffers(list: List<T>, sortAlphabetically: Boolean,
+                               crossinline bufferName: (T) -> String,
+                               crossinline networkName: (T) -> String,
+                               crossinline type: (T) -> Buffer_Types) =
+      list.let {
+        if (sortAlphabetically) list.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER,
+                                                          bufferName))
+        else list
+      }.sortedBy {
+        !type(it).hasFlag(Buffer_Type.StatusBuffer)
+      }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, networkName))
   }
 }

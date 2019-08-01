@@ -60,5 +60,5 @@ open class ArchiveViewModelHelper @Inject constructor(
     showHandle
   )
 
-  val selectedBuffer = processSelectedBuffer(archive.selectedBufferId)
+  val selectedBuffer = processSelectedBuffer(bufferViewConfig, archive.selectedBufferId)
 }

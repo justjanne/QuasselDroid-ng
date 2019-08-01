@@ -43,7 +43,7 @@ class BufferViewConfigTest {
     val bufferViewConfig = bufferViewManager.bufferViewConfig(0)!!
 
     ensure {
-      bufferViewConfig.insertBufferSorted(bufferSyncer.bufferInfo(BufferId(4))!!, bufferSyncer)
+      bufferViewConfig.insertBufferSorted(bufferSyncer.bufferInfo(BufferId(4))!!, bufferSyncer, networks)
     }.does {
       callSync(bufferViewConfig, "requestAddBuffer", listOf(
         QVariant_.of(BufferId(4), QType.BufferId),

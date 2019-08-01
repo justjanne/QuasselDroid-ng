@@ -497,7 +497,7 @@ class QuasselService : DaggerLifecycleService(),
       session.bufferViewManager.requestCreateBufferView(
         Defaults.bufferViewConfigInitial(translatedLocale).apply {
           for (info in session.bufferSyncer.bufferInfos()) {
-            handleBuffer(info, session.bufferSyncer)
+            handleBuffer(info, session.bufferSyncer, session.networks)
           }
         }.toVariantMap()
       )
