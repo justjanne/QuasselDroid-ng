@@ -23,6 +23,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
@@ -44,6 +45,8 @@ class EditorHelper(
   appearanceSettings: AppearanceSettings
 ) {
   private var enterListener: (() -> Unit)? = null
+  private var upListener: (() -> Unit)? = null
+  private var downListener: (() -> Unit)? = null
 
   private val mircColors = listOf(
     R.color.mircColor00, R.color.mircColor01, R.color.mircColor02, R.color.mircColor03,
@@ -124,8 +127,28 @@ class EditorHelper(
       )
     }
     editText.addTextChangedListener(textWatcher)
-    editText.setOnKeyListener { _, keyCode, event: KeyEvent? ->
-      if (event?.action == KeyEvent.ACTION_DOWN) {
+    editText.setOnKeyListener { _, keyCode, event: KeyEvent ->
+      val action = when (event.action) {
+        KeyEvent.ACTION_UP       -> "up"
+        KeyEvent.ACTION_DOWN     -> "down"
+        KeyEvent.ACTION_MULTIPLE -> "multiple"
+        else                     -> "unknown"
+      }
+      val key = when (keyCode) {
+        KeyEvent.KEYCODE_ENTER        -> "enter"
+        KeyEvent.KEYCODE_NUMPAD_ENTER -> "numpad_enter"
+        KeyEvent.KEYCODE_DPAD_DOWN    -> "down"
+        KeyEvent.KEYCODE_DPAD_UP      -> "up"
+        else                          -> "#$keyCode"
+      }
+      val modifiers = listOfNotNull(
+        if (event.isCtrlPressed) "ctrl" else null,
+        if (event.isAltPressed) "alt" else null,
+        if (event.isShiftPressed) "shift" else null
+      ).joinToString(", ")
+
+      Toast.makeText(editText.context, "$key $action $modifiers", Toast.LENGTH_SHORT).show()
+      if (event.action == KeyEvent.ACTION_DOWN) {
         if (event.isCtrlPressed && !event.isAltPressed) when (keyCode) {
           KeyEvent.KEYCODE_B -> {
             editText.toggleBold()
@@ -148,6 +171,14 @@ class EditorHelper(
             enterListener?.invoke()
             true
           }
+          KeyEvent.KEYCODE_DPAD_DOWN    -> {
+            downListener?.invoke()
+            true
+          }
+          KeyEvent.KEYCODE_DPAD_UP      -> {
+            upListener?.invoke()
+            true
+          }
           KeyEvent.KEYCODE_TAB          -> {
             if (!event.isAltPressed && !event.isCtrlPressed) {
               autoCompleteHelper.autoComplete(event.isShiftPressed)
@@ -159,7 +190,7 @@ class EditorHelper(
           else                          -> false
         }
       } else if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER) {
-        !(event?.isShiftPressed ?: false)
+        !event.isShiftPressed
       } else {
         false
       }
@@ -189,6 +220,14 @@ class EditorHelper(
 
   fun setOnEnterListener(listener: (() -> Unit)?) {
     this.enterListener = listener
+  }
+
+  fun setOnUpListener(listener: (() -> Unit)?) {
+    this.upListener = listener
+  }
+
+  fun setOnDownListener(listener: (() -> Unit)?) {
+    this.downListener = listener
   }
 
   fun setMultiLine(enabled: Boolean) = editText.setMultiLine(enabled)

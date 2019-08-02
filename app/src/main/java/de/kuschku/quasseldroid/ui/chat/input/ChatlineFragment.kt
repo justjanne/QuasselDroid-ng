@@ -211,6 +211,12 @@ class ChatlineFragment : ServiceBoundFragment() {
     }
 
     editorHelper.setOnEnterListener(::send)
+    editorHelper.setOnDownListener {
+      chatline.setText(modelHelper.chat.recentMessagesIndexDown(chatline.safeText))
+    }
+    editorHelper.setOnUpListener {
+      chatline.setText(modelHelper.chat.recentMessagesIndexUp())
+    }
     send.setOnClickListener { send() }
     send.setTooltip()
 

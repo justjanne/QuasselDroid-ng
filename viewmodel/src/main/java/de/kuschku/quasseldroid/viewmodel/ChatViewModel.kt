@@ -35,6 +35,8 @@ open class ChatViewModel : QuasselViewModel() {
   val bufferId = BehaviorSubject.createDefault(BufferId.MAX_VALUE)
   val bufferViewConfigId = BehaviorSubject.createDefault(-1)
   val recentlySentMessages = BehaviorSubject.createDefault(emptyList<CharSequence>())
+  val recentlySentMessageIndex = BehaviorSubject.createDefault(-1)
+  val inputCache = BehaviorSubject.createDefault<CharSequence>("")
   val showHidden = BehaviorSubject.createDefault(false)
   val bufferSearchTemporarilyVisible = BehaviorSubject.createDefault(false)
   val expandedNetworks = BehaviorSubject.createDefault(emptyMap<NetworkId, Boolean>())
@@ -143,6 +145,40 @@ open class ChatViewModel : QuasselViewModel() {
         .filter { it != message }
         .take(MAX_RECENT_MESSAGES - 1)
     )
+  }
+
+  private fun recentMessagesChange(value: Int) {
+    val current = recentlySentMessageIndex.safeValue
+    val size = recentlySentMessages.safeValue.size
+    val nextValue = current + value
+    recentlySentMessageIndex.onNext(
+      if (nextValue < 0) -1
+      else (size + current + value) % size
+    )
+  }
+
+  fun recentMessagesValue() =
+    if (recentlySentMessageIndex.safeValue == -1) inputCache.safeValue
+    else recentlySentMessages.safeValue[recentlySentMessageIndex.safeValue]
+
+  fun recentMessagesIndexDown(content: CharSequence): CharSequence {
+    if (recentlySentMessageIndex.safeValue == -1) {
+      inputCache.onNext(content)
+    }
+    recentMessagesChange(+1)
+    return recentMessagesValue()
+  }
+
+  fun recentMessagesIndexUp(): CharSequence? {
+    if (recentlySentMessageIndex.safeValue > -1) {
+      recentMessagesChange(-1)
+    }
+    return recentMessagesValue()
+  }
+
+  fun recentMessagesIndexReset(): CharSequence? {
+    recentlySentMessageIndex.onNext(-1)
+    return recentMessagesValue()
   }
 
   companion object {
