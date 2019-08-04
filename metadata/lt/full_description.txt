@@ -7,7 +7,7 @@ REIKALINGAS QUASSEL BRANDUOLYS - PROGRAMA NEVEIKS KAIP VISIŠKAI SAVARANKIŠKAS 
 • <b>Visada prieinama jūsų pokalbių istorija</b> – tiesiog slinkite į viršų, jog branduolys jums rodytų senas žinutes
 • <b>Gaukite pranešimus</b> – net jeigu tuo metu neturėjote interneto ryšio
 
-Jei jūs ieškote programėlės kuria patogu naudotis kaip ir kitomis moderniomis pokalbių programėlėmis, tokiomis kaip Slack, Quasseldroid yra geriausias nemokamas Android IRC klientas jums. Naudokitės profilio paveikslėliais, stilinga vartotojo sąsaja, pagrįsta Material dizainu, ir daugeliu kitų funkcijų, kurios jums labiausiai patinka.
+If you are looking for the comfort you’re used to from modern chat apps, Quasseldroid is the best free android IRC client for you — you’ll get profile pictures, a beautiful UI based on Material Design, and all the features you love.
 
 Ir geriausia tai, jog programa visiškai nemokama ir atviro kodo.
 

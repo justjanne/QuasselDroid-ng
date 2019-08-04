@@ -7,7 +7,7 @@ REQUIRES A QUASSEL CORE – DOES NOT WORK AS STANDALONE IRC CLIENT
 • <b>Always have your entire chat history available</b> – just scroll up to load older messages, the core keeps them for you
 • <b>Be notified when someone messages you</b> – even if you had no connection in the meantime
 
-If you are looking for the comfort you’re used to from modern chat apps such as Slack, Quasseldroid is the best free android IRC client for you — you’ll get profile pictures, a beautiful UI based on Material Design, and all the features you love.
+If you are looking for the comfort you’re used to from modern chat apps, Quasseldroid is the best free android IRC client for you — you’ll get profile pictures, a beautiful UI based on Material Design, and all the features you love.
 
 And best of all, it’s fully free and open source.
 

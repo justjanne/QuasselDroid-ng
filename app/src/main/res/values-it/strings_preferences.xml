@@ -47,6 +47,18 @@
 
   <string name="preference_language_title">Lingua</string>
   <string name="preference_language_entry_auto">Predefinita di sistema</string>
+  <string name="preference_redirection_title">Reindirizzamento messaggi</string>
+
+  <string name="preference_redirection_user_notices_title">Reindirizzare avvisi utente</string>
+  <string name="preference_redirection_user_notices_summary">Mostra gli avvisi utente nel canale in uso</string>
+
+  <string name="preference_redirection_server_notices_title">Reindirizzare avvisi server</string>
+  <string name="preference_redirection_server_notices_summary">Mostra gli avvisi del server nel canale in uso</string>
+
+  <string name="preference_redirection_errors_title">Reindirizzare errori</string>
+  <string name="preference_redirection_errors_summary">Mostra gli errori nel canale in uso</string>
+
+
   <string name="preference_notifications_title">Notifiche</string>
 
   <string name="preference_notification_query_title">Messaggi privati</string>

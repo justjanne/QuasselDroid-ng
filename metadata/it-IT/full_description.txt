@@ -7,7 +7,7 @@ La chat diventa comoda. Ovunque.
 • <b>Avrai sempre a disposizione il registro storico delle chat</b> – basta scorrere verso l’alto per caricare i messaggi meno recenti, il core li conserva per te
 • <b>Ricevi una notifica quando qualcuno ti scrive un messaggio</b> – anche se nel frattempo non avevi connessione
 
-Se cerchi un’app di chat comoda e moderna come Slack, Quasseldroid è la tua miglior scelta per avere su android un client IRC gratuito — troverai avatar, una bellissima interfaccia grafica basata sul Material Design e tutte le funzionalità che già ami.
+If you are looking for the comfort you’re used to from modern chat apps, Quasseldroid is the best free android IRC client for you — you’ll get profile pictures, a beautiful UI based on Material Design, and all the features you love.
 
 E, qui arriva il bello, è completamente gratuita ed open source.
 
