@@ -52,6 +52,7 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 import javax.inject.Inject
+import javax.net.ssl.SSLPeerUnverifiedException
 
 class CoreInfoFragment : ServiceBoundFragment() {
 
@@ -163,7 +164,12 @@ class CoreInfoFragment : ServiceBoundFragment() {
     }
 
     modelHelper.sslSession.toLiveData().observe(this, Observer {
-      val certificateChain = it?.orNull()?.peerCertificateChain?.map(X509Helper::convert).orEmpty()
+      val peerCertificateChain = try {
+        it?.orNull()?.peerCertificateChain
+      } catch (ignored: SSLPeerUnverifiedException) {
+        null
+      }
+      val certificateChain = peerCertificateChain?.mapNotNull(X509Helper::convert).orEmpty()
       val leafCertificate = certificateChain.firstOrNull()
       if (leafCertificate != null) {
         secureCertificate.text = requireContext().getString(

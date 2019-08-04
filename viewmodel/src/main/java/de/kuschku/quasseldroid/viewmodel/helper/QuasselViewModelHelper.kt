@@ -39,7 +39,7 @@ import de.kuschku.quasseldroid.viewmodel.QuasselViewModel
 import de.kuschku.quasseldroid.viewmodel.data.*
 import io.reactivex.Observable
 import javax.inject.Inject
-import javax.net.ssl.SSLSession
+import javax.net.ssl.SSLPeerUnverifiedException
 
 open class QuasselViewModelHelper @Inject constructor(
   val quassel: QuasselViewModel
@@ -80,8 +80,12 @@ open class QuasselViewModelHelper @Inject constructor(
   }
 
   val sslSession = connectedSession.flatMapSwitchMap(ISession::sslSession)
-  val peerCertificateChain = sslSession.mapMap(SSLSession::getPeerCertificateChain).mapMap {
-    it.mapNotNull(X509Helper::convert)
+  val peerCertificateChain = sslSession.mapMapNullable {
+    try {
+      it.peerCertificateChain.mapNotNull(X509Helper::convert)
+    } catch (ignored: SSLPeerUnverifiedException) {
+      null
+    }
   }.mapOrElse(emptyList())
   val leafCertificate = peerCertificateChain.map { Optional.ofNullable(it.firstOrNull()) }
 
