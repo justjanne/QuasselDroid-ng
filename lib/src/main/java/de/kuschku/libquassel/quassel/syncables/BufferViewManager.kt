@@ -93,10 +93,9 @@ class BufferViewManager constructor(
   private val live_bufferViewConfigs: BehaviorSubject<Set<Int>> = BehaviorSubject.createDefault(
     emptySet())
 
-  fun handleBuffer(info: BufferInfo, bufferSyncer: BufferSyncer, networks: Map<NetworkId, Network>,
-                   unhide: Boolean = false) {
+  fun handleBuffer(info: BufferInfo, bufferSyncer: BufferSyncer, unhide: Boolean = false) {
     for (bufferViewConfig in bufferViewConfigs()) {
-      bufferViewConfig.handleBuffer(info, bufferSyncer, networks, unhide)
+      bufferViewConfig.handleBuffer(info, bufferSyncer, unhide)
     }
   }
 

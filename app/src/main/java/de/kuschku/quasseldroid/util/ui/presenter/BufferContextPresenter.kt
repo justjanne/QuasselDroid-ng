@@ -191,7 +191,7 @@ object BufferContextPresenter {
       true
     }
     R.id.action_unhide      -> {
-      bufferViewConfig?.insertBufferSorted(info, bufferSyncer, session.networks)
+      bufferViewConfig?.insertBufferSorted(info, bufferSyncer)
       actionMode.finish()
       true
     }

@@ -280,7 +280,7 @@ class Session(
     initCallback?.invoke(this)
     for (config in bufferViewManager.bufferViewConfigs()) {
       for (info in bufferSyncer.bufferInfos()) {
-        config.handleBuffer(info, bufferSyncer, networks)
+        config.handleBuffer(info, bufferSyncer)
       }
     }
     notificationManager?.init(this)

@@ -325,33 +325,34 @@ class BufferViewConfig constructor(
       (a?.bufferViewName() ?: "").compareTo((b?.bufferViewName() ?: ""), true)
   }
 
-  fun insertBufferSorted(info: BufferInfo, bufferSyncer: BufferSyncer,
-                         networks: Map<NetworkId, Network>) {
-    if (!_buffers.contains(info.bufferId)) {
-      requestAddBuffer(
-        info.bufferId,
-        sortBuffers(
-          _buffers.mapNotNull { bufferSyncer.bufferInfo(it) } + info,
-          sortAlphabetically(),
-          { it.bufferName ?: "" },
-          { networks[it.networkId]?.networkName() ?: "" },
-          { it.type }
-        ).indexOf(info)
-      )
+  fun insertBufferSorted(info: BufferInfo, bufferSyncer: BufferSyncer) {
+    if (sortAlphabetically()) {
+      var maxBuffer = -1
+      for (i in 0 until _buffers.size) {
+        val buffer = bufferSyncer.bufferInfo(_buffers[i])
+                     ?: continue
+        if (buffer.networkId != info.networkId)
+          continue
+        if (String.CASE_INSENSITIVE_ORDER.compare(buffer.bufferName, info.bufferName) > 0)
+          continue
+        maxBuffer = i
+      }
+      requestAddBuffer(info.bufferId, maxBuffer + 1)
+    } else {
+      requestAddBuffer(info.bufferId, _buffers.size)
     }
   }
 
-  fun handleBuffer(info: BufferInfo, bufferSyncer: BufferSyncer, networks: Map<NetworkId, Network>,
-                   unhide: Boolean = false) {
+  fun handleBuffer(info: BufferInfo, bufferSyncer: BufferSyncer, unhide: Boolean = false) {
     if (_addNewBuffersAutomatically &&
         !_buffers.contains(info.bufferId) &&
         !_temporarilyRemovedBuffers.contains(info.bufferId) &&
         !_removedBuffers.contains(info.bufferId) &&
         !info.type.hasFlag(Buffer_Type.StatusBuffer)) {
-      insertBufferSorted(info, bufferSyncer, networks)
+      insertBufferSorted(info, bufferSyncer)
     } else if (unhide && !_buffers.contains(info.bufferId) &&
                _temporarilyRemovedBuffers.contains(info.bufferId)) {
-      insertBufferSorted(info, bufferSyncer, networks)
+      insertBufferSorted(info, bufferSyncer)
     }
   }
 
