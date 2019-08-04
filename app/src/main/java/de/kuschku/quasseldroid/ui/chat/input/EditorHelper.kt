@@ -23,7 +23,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
@@ -128,26 +127,6 @@ class EditorHelper(
     }
     editText.addTextChangedListener(textWatcher)
     editText.setOnKeyListener { _, keyCode, event: KeyEvent ->
-      val action = when (event.action) {
-        KeyEvent.ACTION_UP       -> "up"
-        KeyEvent.ACTION_DOWN     -> "down"
-        KeyEvent.ACTION_MULTIPLE -> "multiple"
-        else                     -> "unknown"
-      }
-      val key = when (keyCode) {
-        KeyEvent.KEYCODE_ENTER        -> "enter"
-        KeyEvent.KEYCODE_NUMPAD_ENTER -> "numpad_enter"
-        KeyEvent.KEYCODE_DPAD_DOWN    -> "down"
-        KeyEvent.KEYCODE_DPAD_UP      -> "up"
-        else                          -> "#$keyCode"
-      }
-      val modifiers = listOfNotNull(
-        if (event.isCtrlPressed) "ctrl" else null,
-        if (event.isAltPressed) "alt" else null,
-        if (event.isShiftPressed) "shift" else null
-      ).joinToString(", ")
-
-      Toast.makeText(editText.context, "$key $action $modifiers", Toast.LENGTH_SHORT).show()
       if (event.action == KeyEvent.ACTION_DOWN) {
         if (event.isCtrlPressed && !event.isAltPressed) when (keyCode) {
           KeyEvent.KEYCODE_B -> {
