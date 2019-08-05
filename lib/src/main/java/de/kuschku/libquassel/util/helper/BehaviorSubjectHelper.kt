@@ -21,5 +21,5 @@ package de.kuschku.libquassel.util.helper
 
 import io.reactivex.subjects.BehaviorSubject
 
-val <T : Any> BehaviorSubject<T>.safeValue : T
+val <T : Any> BehaviorSubject<T>.safeValue: T
   get() = value!!

@@ -872,7 +872,7 @@ class Network constructor(
     }
   private var _myNick: String? = null
   private var _latency: Int = 0
-    set (value) {
+    set(value) {
       field = value
       live_latency.onNext(value)
     }
@@ -883,7 +883,7 @@ class Network constructor(
       live_networkInfo.onNext(Unit)
     }
   private var _currentServer: String = ""
-    set (value) {
+    set(value) {
       field = value
       live_currentServer.onNext(value)
     }
@@ -902,7 +902,7 @@ class Network constructor(
   private val live_ircChannels = BehaviorSubject.createDefault(Unit)
   // stores results from RPL_ISUPPORT
   private var _supports: MutableMap<String, String?> = mutableMapOf()
-    set (value) {
+    set(value) {
       field = value
       live_caps.onNext(Unit)
     }
@@ -914,7 +914,7 @@ class Network constructor(
    * SASL EXTERNAL isn't available.
    */
   private var _caps: MutableMap<String, String?> = mutableMapOf()
-    set (value) {
+    set(value) {
       field = value
       live_caps.onNext(Unit)
     }
@@ -924,7 +924,7 @@ class Network constructor(
    * _capsEnabled uses the same values from the <name>=<value> pairs stored in _caps
    */
   private var _capsEnabled: MutableSet<String> = mutableSetOf()
-    set (value) {
+    set(value) {
       field = value
       live_capsEnabled.onNext(Unit)
     }

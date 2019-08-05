@@ -415,36 +415,36 @@ class MessageListFragment : ServiceBoundFragment() {
                   modelHelper.sessionManager.mapSwitchMap(SessionManager::state).distinctUntilChanged())
       .toLiveData().observe(this, Observer { (bufferSyncer, state) ->
         if (state?.orNull() == ConnectionState.CONNECTED) {
-        runInBackgroundDelayed(16) {
-          modelHelper.chat.bufferId { bufferId ->
-            val currentNetwork = bufferSyncer.orNull()?.bufferInfo(bufferId)?.networkId
-                                 ?: NetworkId(0)
-            val currentServerBuffer = bufferSyncer.orNull()?.find(
-              networkId = currentNetwork,
-              type = Buffer_Type.of(Buffer_Type.StatusBuffer)
-            )?.bufferId ?: BufferId(0)
+          runInBackgroundDelayed(16) {
+            modelHelper.chat.bufferId { bufferId ->
+              val currentNetwork = bufferSyncer.orNull()?.bufferInfo(bufferId)?.networkId
+                                   ?: NetworkId(0)
+              val currentServerBuffer = bufferSyncer.orNull()?.find(
+                networkId = currentNetwork,
+                type = Buffer_Type.of(Buffer_Type.StatusBuffer)
+              )?.bufferId ?: BufferId(0)
 
-            val filtered = database.filtered().get(accountId,
-                                                   bufferId,
-                                                   accountDatabase.accounts().findById(accountId)?.defaultFiltered
-                                                   ?: 0)
-            // Try loading messages when switching to isEmpty bufferId
-            val hasVisibleMessages = database.message().hasVisibleMessages(currentNetwork,
-                                                                           currentServerBuffer,
-                                                                           bufferId,
-                                                                           filtered,
-                                                                           redirectionSettings.userNotices,
-                                                                           redirectionSettings.serverNotices,
-                                                                           redirectionSettings.errors)
-            if (!hasVisibleMessages) {
-              if (bufferId.isValidId() && bufferId != BufferId.MAX_VALUE) {
-                loadMore(initial = true)
+              val filtered = database.filtered().get(accountId,
+                                                     bufferId,
+                                                     accountDatabase.accounts().findById(accountId)?.defaultFiltered
+                                                     ?: 0)
+              // Try loading messages when switching to isEmpty bufferId
+              val hasVisibleMessages = database.message().hasVisibleMessages(currentNetwork,
+                                                                             currentServerBuffer,
+                                                                             bufferId,
+                                                                             filtered,
+                                                                             redirectionSettings.userNotices,
+                                                                             redirectionSettings.serverNotices,
+                                                                             redirectionSettings.errors)
+              if (!hasVisibleMessages) {
+                if (bufferId.isValidId() && bufferId != BufferId.MAX_VALUE) {
+                  loadMore(initial = true)
+                }
               }
             }
           }
         }
-      }
-    })
+      })
 
     modelHelper.connectedSession.toLiveData().zip(lastMessageId).observe(
       this, Observer {

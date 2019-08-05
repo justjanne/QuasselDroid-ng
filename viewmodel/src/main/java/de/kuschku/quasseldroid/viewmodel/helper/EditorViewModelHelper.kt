@@ -174,11 +174,11 @@ open class EditorViewModelHelper @Inject constructor(
 
                 processResults(
                   when (lastWord.first.firstOrNull()) {
-                                 '/'  -> getAliases()
-                                 '@'  -> getNicks()
-                                 '#'  -> getBuffers()
-                                 ':'  -> getEmojis()
-                                 else -> getAliases() + getNicks() + getBuffers() + getEmojis()
+                    '/'  -> getAliases()
+                    '@'  -> getNicks()
+                    '#'  -> getBuffers()
+                    ':'  -> getEmojis()
+                    else -> getAliases() + getNicks() + getBuffers() + getEmojis()
                   }
                 )
               }
