@@ -183,4 +183,7 @@
   <string name="preference_show_notification_title">Benachrichtigung anzeigen</string>
   <string name="preference_show_notification_summary">Zeigt eine permanente Benachrichtigung an, damit Quasseldroid durchgehend verbunden bleiben kann</string>
 
+  <string name="preference_ignore_network_changes_title">Netzwerkänderung ignorieren</string>
+  <string name="preference_ignore_network_changes_summary">Hindert Quasseldroid daran, bei Netzwerkänderungen automatisch die Verbindung neu herzustellen</string>
+
 </resources>
