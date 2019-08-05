@@ -263,6 +263,10 @@ object Settings {
       showNotification = getBoolean(
         context.getString(R.string.preference_show_notification_key),
         ConnectionSettings.DEFAULT.showNotification
+      ),
+      ignoreNetworkChanges = getBoolean(
+        context.getString(R.string.preference_ignore_network_changes_key),
+        ConnectionSettings.DEFAULT.ignoreNetworkChanges
       )
     )
   }

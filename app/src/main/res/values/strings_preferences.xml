@@ -333,5 +333,9 @@
   <string name="preference_show_notification_title">Show notification</string>
   <string name="preference_show_notification_summary">Keeps Quasseldroid always connected by showing a persistent notification</string>
 
+  <string name="preference_ignore_network_changes_key" translatable="false">ignore_network_changes</string>
+  <string name="preference_ignore_network_changes_title">Ignore network changes</string>
+  <string name="preference_ignore_network_changes_summary">Stops Quasseldroid from reconnecting automatically if the network changes</string>
+
   <string name="preference_notification_id_key" translatable="false">notification_id</string>
 </resources>

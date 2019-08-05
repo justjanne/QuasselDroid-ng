@@ -20,7 +20,8 @@
 package de.kuschku.quasseldroid.settings
 
 data class ConnectionSettings(
-  val showNotification: Boolean = true
+  val showNotification: Boolean = true,
+  val ignoreNetworkChanges: Boolean = false
 ) {
   companion object {
     val DEFAULT = ConnectionSettings()

@@ -93,10 +93,9 @@ class QuasselService : DaggerLifecycleService(),
     val connectionSettings = Settings.connection(this)
 
     if (this.connectionSettings.showNotification != connectionSettings.showNotification) {
-      this.connectionSettings = connectionSettings
-
       updateNotificationStatus(this.progress)
     }
+    this.connectionSettings = connectionSettings
 
     val (accountId, reconnect) = this.sharedPreferences(Keys.Status.NAME, Context.MODE_PRIVATE) {
       Pair(
@@ -415,13 +414,15 @@ class QuasselService : DaggerLifecycleService(),
       .observeNetworkConnectivity(applicationContext)
       .toLiveData()
       .observe(this, Observer { connectivity ->
-        log(INFO, "QuasselService", "Connectivity changed: $connectivity")
-        handlerService.backend {
-          log(INFO, "QuasselService", "Reconnect triggered: Network changed")
-          sessionManager.autoConnect(
-            ignoreConnectionState = true,
-            ignoreSetting = true
-          )
+        if (!connectionSettings.ignoreNetworkChanges) {
+          log(INFO, "QuasselService", "Connectivity changed: $connectivity")
+          handlerService.backend {
+            log(INFO, "QuasselService", "Reconnect triggered: Network changed")
+            sessionManager.autoConnect(
+              ignoreConnectionState = true,
+              ignoreSetting = true
+            )
+          }
         }
       })
 
