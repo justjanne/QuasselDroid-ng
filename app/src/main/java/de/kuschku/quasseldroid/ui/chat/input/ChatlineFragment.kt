@@ -34,6 +34,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
+import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.helper.invoke
 import de.kuschku.quasseldroid.R
 import de.kuschku.quasseldroid.settings.AppearanceSettings
@@ -199,6 +200,19 @@ class ChatlineFragment : ServiceBoundFragment() {
               val output = mutableListOf<IAliasManager.Command>()
               for ((_, formatted) in lines) {
                 session.aliasManager.processInput(bufferInfo, formatted, output)
+              }
+              for (command in output) {
+                if (command.message.startsWith("/join", ignoreCase = true)) {
+                  val channel = command.message
+                    .substringAfter(' ')
+                    .substringBefore(' ')
+                    .split(",")
+                    .last()
+
+                  modelHelper.chat.chatToJoin.onNext(Optional.of(
+                    Pair(command.buffer.networkId, channel)
+                  ))
+                }
               }
               for (command in output) {
                 session.rpcHandler.sendInput(command.buffer, command.message)

@@ -23,6 +23,7 @@ import android.os.Bundle
 import de.kuschku.libquassel.protocol.BufferId
 import de.kuschku.libquassel.protocol.MsgId
 import de.kuschku.libquassel.protocol.NetworkId
+import de.kuschku.libquassel.util.Optional
 import de.kuschku.libquassel.util.helper.safeValue
 import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 import io.reactivex.subjects.BehaviorSubject
@@ -41,6 +42,8 @@ open class ChatViewModel : QuasselViewModel() {
   val bufferSearchTemporarilyVisible = BehaviorSubject.createDefault(false)
   val expandedNetworks = BehaviorSubject.createDefault(emptyMap<NetworkId, Boolean>())
   val selectedBufferId = BehaviorSubject.createDefault(BufferId.MAX_VALUE)
+
+  val chatToJoin = BehaviorSubject.createDefault(Optional.empty<Pair<NetworkId, String>>())
 
   val stateReset = BehaviorSubject.create<Unit>()
   val bufferOpened = PublishSubject.create<Unit>()

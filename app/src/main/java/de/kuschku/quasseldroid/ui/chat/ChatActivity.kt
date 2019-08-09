@@ -217,19 +217,9 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
               if (info != null && !forceJoin) {
                 ChatActivity.launch(this, bufferId = info.bufferId)
               } else {
-                modelHelper.allBuffers.map {
-                  listOfNotNull(it.find {
-                    it.networkId == networkId &&
-                    it.bufferName == channel &&
-                    it.type.hasFlag(Buffer_Type.ChannelBuffer)
-                  })
-                }.filter {
-                  it.isNotEmpty()
-                }.firstElement().toLiveData().observeForever {
-                  it?.firstOrNull()?.let { info ->
-                    ChatActivity.launch(this, bufferId = info.bufferId)
-                  }
-                }
+                modelHelper.chat.chatToJoin.onNext(Optional.of(
+                  Pair(networkId, channel)
+                ))
 
                 session.bufferSyncer.find(
                   networkId = networkId,
@@ -870,6 +860,28 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
         }
       }
     )
+
+    combineLatest(modelHelper.allBuffers,
+                  modelHelper.chat.chatToJoin).map { (buffers, chatToJoinOptional) ->
+      val chatToJoin = chatToJoinOptional.orNull()
+      if (chatToJoin == null) {
+        emptyList()
+      } else {
+        val (networkId, channel) = chatToJoin
+
+        listOfNotNull(buffers.find {
+          it.networkId == networkId &&
+          it.bufferName == channel &&
+          it.type.hasFlag(Buffer_Type.ChannelBuffer)
+        })
+      }
+    }.filter {
+      it.isNotEmpty()
+    }.firstElement().toLiveData().observeForever {
+      it?.firstOrNull()?.let { info ->
+        launch(this, bufferId = info.bufferId)
+      }
+    }
 
     onNewIntent(intent)
   }

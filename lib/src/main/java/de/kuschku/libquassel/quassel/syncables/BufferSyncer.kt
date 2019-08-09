@@ -26,7 +26,6 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferSyncer
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.NotificationManager
 import de.kuschku.libquassel.util.Optional
-import de.kuschku.libquassel.util.flag.hasFlag
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -278,13 +277,6 @@ class BufferSyncer constructor(
 
   fun setBufferActivity(buffer: BufferId, activity: Message_Types) {
     super.setBufferActivity(buffer, activity.toInt())
-    if (activity hasFlag Message_Type.Plain ||
-        activity hasFlag Message_Type.Notice ||
-        activity hasFlag Message_Type.Action) {
-      bufferInfo(buffer)?.let {
-        session.bufferViewManager.handleBuffer(it, this, true)
-      }
-    }
     _bufferActivities[buffer] = activity
     live_bufferActivities.onNext(Unit)
   }
