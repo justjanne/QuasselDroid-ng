@@ -33,7 +33,6 @@ import de.kuschku.libquassel.connection.SocketAddress
 import de.kuschku.libquassel.protocol.*
 import de.kuschku.libquassel.quassel.BufferInfo
 import de.kuschku.libquassel.quassel.QuasselFeatures
-import de.kuschku.libquassel.quassel.syncables.BufferSyncer
 import de.kuschku.libquassel.quassel.syncables.interfaces.IAliasManager
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.Session
@@ -41,11 +40,7 @@ import de.kuschku.libquassel.session.SessionManager
 import de.kuschku.libquassel.session.manager.ConnectionInfo
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.Companion.log
 import de.kuschku.libquassel.util.compatibility.LoggingHandler.LogLevel.INFO
-import de.kuschku.libquassel.util.flag.Flags
-import de.kuschku.libquassel.util.flag.minus
 import de.kuschku.libquassel.util.helper.clampOf
-import de.kuschku.libquassel.util.helper.combineLatest
-import de.kuschku.libquassel.util.helper.getOr
 import de.kuschku.libquassel.util.helper.value
 import de.kuschku.malheur.CrashHandler
 import de.kuschku.quasseldroid.Backend
@@ -417,38 +412,6 @@ class QuasselService : DaggerLifecycleService(),
       if (handle != null) {
         updateNotification(handle, rawProgress)
         notificationManager.notify(handle)
-      }
-    })
-
-    var buffersWithNewActivity = emptySet<BufferId>()
-    combineLatest(
-      liveAccountId.switchMap { database.filtered().listenRx(it).toObservable() },
-      sessionManager.connectedSession
-        .map(ISession::bufferSyncer)
-        .switchMap(BufferSyncer::liveActivities)
-    ).map { (filteredList, bufferActivities) ->
-      val filtered = filteredList.map {
-        Pair(it.bufferId, it.filtered)
-      }.toMap()
-
-      bufferActivities.mapValues { (bufferId, activities) ->
-        activities.minus(filtered.getOr(bufferId, 0).toUInt())
-      }.filterValues(Flags<Message_Type>::isNotEmpty).keys
-    }.map {
-      val newlyChangedBuffers = it - buffersWithNewActivity
-      buffersWithNewActivity = it
-      newlyChangedBuffers
-    }.map {
-      val bufferSyncer = sessionManager.connectedSession.value?.bufferSyncer
-      Pair(bufferSyncer, it.mapNotNull {
-        bufferSyncer?.bufferInfo(it)
-      })
-    }.toLiveData().observe(this, Observer { (bufferSyncer, bufferInfos) ->
-      val bufferViewManager = sessionManager.connectedSession.value?.bufferViewManager
-      if (bufferSyncer != null && bufferViewManager != null) {
-        for (bufferInfo in bufferInfos) {
-          bufferViewManager.handleBuffer(bufferInfo, bufferSyncer, unhide = true)
-        }
       }
     })
 

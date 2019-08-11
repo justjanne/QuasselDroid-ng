@@ -26,6 +26,7 @@ import de.kuschku.libquassel.quassel.syncables.interfaces.IBufferSyncer
 import de.kuschku.libquassel.session.ISession
 import de.kuschku.libquassel.session.NotificationManager
 import de.kuschku.libquassel.util.Optional
+import de.kuschku.libquassel.util.flag.minus
 import de.kuschku.libquassel.util.irc.IrcCaseMappers
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -150,7 +151,7 @@ class BufferSyncer constructor(
 
   fun setActivities(data: List<Pair<BufferId, Message_Types>>) {
     for ((buffer, activity) in data) {
-      setBufferActivity(buffer, activity)
+      setBufferActivityInternal(buffer, activity)
     }
     live_bufferActivities.onNext(Unit)
   }
@@ -275,10 +276,20 @@ class BufferSyncer constructor(
     setBufferActivity(buffer, Message_Type.of(activity))
   }
 
-  fun setBufferActivity(buffer: BufferId, activity: Message_Types) {
+  fun setBufferActivityInternal(buffer: BufferId, activity: Message_Types) {
     super.setBufferActivity(buffer, activity.toInt())
     _bufferActivities[buffer] = activity
     live_bufferActivities.onNext(Unit)
+  }
+
+  fun setBufferActivity(buffer: BufferId, activity: Message_Types) {
+    val oldActivity = activity(buffer)
+    setBufferActivityInternal(buffer, activity)
+    if ((activity - oldActivity).isNotEmpty()) {
+      bufferInfo(buffer)?.let {
+        session.bufferViewManager.handleBuffer(it, this, true)
+      }
+    }
   }
 
   override fun setHighlightCount(buffer: BufferId, count: Int) {
