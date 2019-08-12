@@ -39,7 +39,7 @@ android {
 
   lintOptions {
     isWarningsAsErrors = true
-    setLintConfig(file("../lint.xml"))
+    lintConfig = file("../lint.xml")
   }
 }
 
@@ -65,4 +65,6 @@ dependencies {
   implementation(project(":lib")) {
     exclude(group = "org.threeten", module = "threetenbp")
   }
+
+  testImplementation("junit", "junit", "4.12")
 }

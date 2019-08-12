@@ -150,14 +150,12 @@ open class ChatViewModel : QuasselViewModel() {
     )
   }
 
-  private fun recentMessagesChange(value: Int) {
-    val current = recentlySentMessageIndex.safeValue
-    val size = recentlySentMessages.safeValue.size
-    val nextValue = current + value
-    recentlySentMessageIndex.onNext(
-      if (nextValue < 0) -1
-      else (size + current + value) % size
-    )
+  private fun recentMessagesChange(change: Int) {
+    recentlySentMessageIndex.onNext(recentMessagesChangeInternal(
+      recentlySentMessageIndex.safeValue,
+      recentlySentMessages.safeValue.size,
+      change
+    ))
   }
 
   fun recentMessagesValue() =
@@ -197,5 +195,9 @@ open class ChatViewModel : QuasselViewModel() {
     const val KEY_SELECTED_BUFFER_ID = "model_chat_selectedBufferId"
 
     const val MAX_RECENT_MESSAGES = 20
+
+    fun recentMessagesChangeInternal(current: Int, size: Int, change: Int) =
+      if (current + change < 0 || size == 0) -1
+      else (size + current + change) % size
   }
 }
