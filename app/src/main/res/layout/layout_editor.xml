@@ -31,9 +31,10 @@
     android:layout_weight="1"
     android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
+      android:layout_height="match_parent"
+      android:orientation="horizontal">
 
       <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/tab_complete"
@@ -50,15 +51,11 @@
         app:srcCompat="@drawable/ic_tab"
         app:tint="?attr/colorTextSecondary" />
 
-      <ScrollView
+      <de.kuschku.quasseldroid.util.ui.FixedNestingScrollView
         android:id="@+id/chatline_scroller"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/send"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/tab_complete"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
         <de.kuschku.quasseldroid.ui.chat.input.RichEditText
           android:id="@+id/chatline"
@@ -77,7 +74,7 @@
           android:paddingBottom="8dp"
           android:textColor="?attr/colorForeground"
           android:textSize="16sp" />
-      </ScrollView>
+      </de.kuschku.quasseldroid.util.ui.FixedNestingScrollView>
 
       <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/send"
@@ -95,7 +92,7 @@
         app:srcCompat="@drawable/ic_send"
         app:tint="?attr/colorAccent"
         tools:ignore="UnusedAttribute" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/autocomplete_list"
