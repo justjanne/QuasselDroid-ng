@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2019 Janne Mareike Koschinski
+  Copyright (c) 2019 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+  <string name="preference_notification_show_all_activities_in_toolbar_summary">Displays a coloured bubble in the toolbar for all chat activities</string>
+
+  <string name="preference_colorize_mirc_title">Use mIRC Colours</string>
+  <string name="preference_colorize_mirc_summaryon">Show mIRC colours in messages</string>
+  <string name="preference_colorize_mirc_summaryoff">Strip mIRC colours from messages</string>
+
+  <string name="preference_colorize_nicknames_title">Colourise nicknames</string>
+</resources>

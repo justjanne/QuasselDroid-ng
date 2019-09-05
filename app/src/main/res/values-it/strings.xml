@@ -200,4 +200,5 @@
   <string name="info_copied_version">La versione è stato copiata negli appunti</string>
 
   <string name="advertisement_support_patreon">Per favore supporta lo sviluppo di questa app su Patreon</string>
+  <string name="advertisement_support_button">Supporta lo sviluppo</string>
 </resources>

@@ -1,0 +1,22 @@
+Chat comfortably. Everywhere.
+
+
+REQUIRES A QUASSEL CORE – DOES NOT WORK AS STANDALONE IRC CLIENT
+
+• <b>Use IRC on the go</b> – thanks to the Quassel core, you’ll never miss anything
+• <b>Always have your entire chat history available</b> – just scroll up to load older messages, the core keeps them for you
+• <b>Be notified when someone messages you</b> – even if you had no connection in the meantime
+
+If you are looking for the comfort you’re used to from modern chat apps, Quasseldroid is the best free android IRC client for you — you’ll get profile pictures, a beautiful UI based on Material Design, and all the features you love.
+
+And best of all, it’s fully free and open source.
+
+<b>Requirements:</b>
+
+You need to have an account on a Quassel core to use this app. If you have none, you can either set a core up yourself, or check if you can get an account on someone else’s core.
+
+This app only works with cores that run at least Quassel v0.10, for all features to be available you’ll need Quassel v0.13
+
+To learn about how to set up a quassel core, see <a href="http://bugs.quassel-irc.org/projects/quassel-irc/wiki">the wiki</a>
+
+<b>Having trouble or feedback?:</b> Send us an email at support@kuschku.de

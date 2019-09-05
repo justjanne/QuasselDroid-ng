@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Quasseldroid - Quassel client for Android
+
+  Copyright (c) 2019 Janne Mareike Koschinski
+  Copyright (c) 2019 The Quassel Project
+
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License version 3 as published
+  by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+  <string name="app_name">Quasseldroid</string>
+  <string name="app_description">Un client basé sur Android pour décentraliser le client Quassel IRC.</string>
+  <string name="app_description_long">Quassel est un client IRC distribué et décentralisé, écrit en C++ et en Qt. Quasseldroid est un client pour Quassel core en pure kotlin, vous permettant de vous connecter à votre Quassel core en utilisant votre téléphone Android™.</string>
+
+  <string name="connection_service_title">Service de connexion</string>
+  <string name="connection_service_description">Garder une connexion au core pour permettre les notifications et transmettre des messages.</string>
+
+  <string name="label_about">À propos</string>
+  <string name="label_accept">Accepter</string>
+  <string name="label_acknowledgements">Remerciements</string>
+  <string name="label_archive">Archive</string>
+  <string name="label_archive_chat">Archiver la discussion</string>
+  <string name="label_archived_chats">Discussions archivées</string>
+  <string name="label_ascending">Croissant</string>
+  <string name="label_authors">Auteurs</string>
+  <string name="label_autocomplete">Autocomplétion</string>
+  <string name="label_avatar">Avatar</string>
+  <string name="label_back">Retour</string>
+  <string name="label_buffer_name">Nom de la discussion</string>
+  <string name="label_cancel">Annuler</string>
+  <string name="label_certificates">Certificats</string>
+  <string name="label_channel_name">Nom du salon</string>
+  <string name="label_clear_search">Effacer la recherche</string>
+  <string name="label_close">Fermer</string>
+  <string name="label_colors_custom">Modifier</string>
+  <string name="label_colors_mirc">mIRC</string>
+  <string name="label_configure">Configuration</string>
+  <string name="label_connect">Connecter</string>
+  <string name="label_copy">Copier</string>
+  <string name="label_crashes">Crashs</string>
+  <string name="label_crashes_empty">Pas de rapports de crash trouvés</string>
+  <string name="label_create_channel">Créer un salon</string>
+  <string name="label_delete">Supprimer</string>
+  <string name="label_delete_all">Tout supprimer</string>
+  <string name="label_descending">Décroissant</string>
+  <string name="label_disconnect">Déconnecter</string>
+  <string name="label_edit_core">Éditer le compte</string>
+  <string name="label_edit_nick">Éditer le pseudo</string>
+  <string name="label_edit_topic">Éditer le topic</string>
+  <string name="label_edit_topic_long">Ouvrir le dialogue pour changer le topic du salon</string>
+  <string name="label_filter_messages">Filtrer les messages</string>
+  <string name="label_finish">Finir</string>
+  <string name="label_generate_crash_report">Générer un rapport de crash</string>
+  <string name="label_ignore">Ignorer</string>
+  <string name="label_ignore_long">Ajouter/Retirer un utilisateur dans/de la liste des ignorés</string>
+  <string name="label_info">Détails</string>
+  <string name="label_info_certificate">Certificates</string>
+  <string name="label_info_channel">Détails des salons</string>
+  <string name="label_info_channellist">Liste des salons</string>
+  <string name="label_info_core">Détails du core</string>
+  <string name="label_info_user">Détails de l\'utilisateur</string>
+  <string name="label_input_history">Historique des entrées</string>
+  <string name="label_join">Joindre</string>
+  <string name="label_join_long">Joindre le salon</string>
+  <string name="label_libraries">Librairies</string>
+  <string name="label_license">Licence</string>
+</resources>
