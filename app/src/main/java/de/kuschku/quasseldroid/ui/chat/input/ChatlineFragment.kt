@@ -221,6 +221,7 @@ class ChatlineFragment : ServiceBoundFragment() {
           }
         }
       }
+      modelHelper.chat.recentMessagesIndexReset()
       chatline.setText("")
     }
 
