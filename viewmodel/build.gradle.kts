@@ -39,22 +39,22 @@ android {
 
   lintOptions {
     isWarningsAsErrors = true
-    lintConfig = file("../lint.xml")
+    setLintConfig(file("../lint.xml"))
   }
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.41"))
+  implementation(kotlin("stdlib", "1.3.50"))
 
-  implementation("androidx.appcompat", "appcompat", "1.0.2")
-  withVersion("2.0.0") {
+  implementation("androidx.appcompat", "appcompat", "1.1.0")
+  withVersion("2.1.0") {
     implementation("androidx.lifecycle", "lifecycle-extensions", version)
     implementation("androidx.lifecycle", "lifecycle-reactivestreams", version)
   }
 
   // Utility
   implementation("io.reactivex.rxjava2", "rxandroid", "2.1.1")
-  implementation("io.reactivex.rxjava2", "rxjava", "2.2.10")
+  implementation("io.reactivex.rxjava2", "rxjava", "2.2.12")
   implementation("org.threeten", "threetenbp", "1.4.0", classifier = "no-tzdb")
   implementation("org.jetbrains", "annotations", "17.0.0")
 

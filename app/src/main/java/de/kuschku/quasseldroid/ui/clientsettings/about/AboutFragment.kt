@@ -131,6 +131,12 @@ class AboutFragment : DaggerFragment() {
         url = "https://code.google.com/archive/p/atinject/"
       ),
       Library(
+        name = "Apache Commons Codec",
+        version = "1.13",
+        license = apache2,
+        url = "https://commons.apache.org/proper/commons-codec/"
+      ),
+      Library(
         name = "AutoService",
         version = "1.0-rc6",
         license = apache2,
@@ -150,7 +156,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Dagger 2",
-        version = "2.23.2",
+        version = "2.24",
         license = apache2,
         url = "https://google.github.io/dagger/"
       ),
@@ -162,6 +168,12 @@ class AboutFragment : DaggerFragment() {
           text = R.raw.license_dracula
         ),
         url = "https://draculatheme.com/"
+      ),
+      Library(
+        name = "FloatingActionButtonSpeedDial",
+        version = "3.0.0",
+        license = apache2,
+        url = "https://github.com/leinardi/FloatingActionButtonSpeedDial"
       ),
       Library(
         name = "Glide",
@@ -186,7 +198,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "KotlinPoet",
-        version = "1.1.0",
+        version = "1.3.0",
         license = apache2,
         url = "https://github.com/square/kotlinpoet"
       ),
@@ -198,7 +210,7 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Kotlin Standard Library",
-        version = "1.3.41",
+        version = "1.3.50",
         license = apache2,
         url = "https://kotlinlang.org/"
       ),
@@ -207,6 +219,12 @@ class AboutFragment : DaggerFragment() {
         version = "1.6.3",
         license = apache2,
         url = "https://github.com/square/leakcanary"
+      ),
+      Library(
+        name = "Material Components",
+        version = "1.1.0-alpha10",
+        license = apache2,
+        url = "https://github.com/material-components/material-components-android"
       ),
       Library(
         name = "Material Design Icons: Community",
@@ -260,6 +278,12 @@ class AboutFragment : DaggerFragment() {
         url = "http://www.reactive-streams.org/"
       ),
       Library(
+        name = "ReactiveNetwork",
+        version = "3.0.6",
+        license = apache2,
+        url = "https://github.com/pwittchen/ReactiveNetwork"
+      ),
+      Library(
         name = "RecyclerView-FastScroll",
         version = "2.0.",
         license = apache2,
@@ -267,13 +291,13 @@ class AboutFragment : DaggerFragment() {
       ),
       Library(
         name = "Retrofit",
-        version = "2.6.0",
+        version = "2.6.1",
         license = apache2,
         url = "https://square.github.io/retrofit/"
       ),
       Library(
         name = "RxJava",
-        version = "2.2.10",
+        version = "2.2.12",
         license = apache2,
         url = "https://github.com/ReactiveX/RxJava"
       ),

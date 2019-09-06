@@ -169,9 +169,9 @@ class QuasselService : DaggerLifecycleService(),
     }
   }
 
-  override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+  override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
     val result = super.onStartCommand(intent, flags, startId)
-    intent?.let(this@QuasselService::handleIntent)
+    handleIntent(intent)
     return result
   }
 
@@ -493,7 +493,7 @@ class QuasselService : DaggerLifecycleService(),
     super.onDestroy()
   }
 
-  override fun onBind(intent: Intent?): QuasselBinder {
+  override fun onBind(intent: Intent): QuasselBinder {
     super.onBind(intent)
     return QuasselBinder(asyncBackend)
   }

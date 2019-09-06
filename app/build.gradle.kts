@@ -102,30 +102,32 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.41"))
+  implementation(kotlin("stdlib", "1.3.50"))
 
   // App Compat
-  implementation("com.google.android.material", "material", "1.1.0-alpha09")
+  implementation("com.google.android.material", "material", "1.1.0-alpha10")
 
-  implementation("androidx.appcompat", "appcompat", "1.0.2")
-  implementation("androidx.browser", "browser", "1.0.0")
+  implementation("androidx.appcompat", "appcompat", "1.1.0")
+  implementation("androidx.browser", "browser", "1.2.0-alpha07")
   implementation("androidx.cardview", "cardview", "1.0.0")
-  implementation("androidx.recyclerview", "recyclerview", "1.0.0")
+  implementation("androidx.recyclerview", "recyclerview", "1.1.0-beta04")
+  implementation("androidx.swiperefreshlayout", "swiperefreshlayout", "1.1.0-alpha02")
   implementation("androidx.preference", "preference", "1.0.0")
+  // Only needed for ringtone preference
   implementation("androidx.legacy", "legacy-preference-v14", "1.0.0")
-  implementation("androidx.constraintlayout", "constraintlayout", "1.1.3")
+  implementation("androidx.constraintlayout", "constraintlayout", "2.0.0-beta1")
 
-  withVersion("2.1.0") {
+  withVersion("2.2.0-rc01") {
     implementation("androidx.room", "room-runtime", version)
     kapt("androidx.room", "room-compiler", version)
     implementation("androidx.room", "room-rxjava2", version)
     testImplementation("androidx.room", "room-testing", version)
   }
-  withVersion("2.0.0") {
+  withVersion("2.1.0") {
     implementation("androidx.lifecycle", "lifecycle-extensions", version)
     implementation("androidx.lifecycle", "lifecycle-reactivestreams", version)
   }
-  testImplementation("androidx.arch.core", "core-testing", "2.0.1")
+  testImplementation("androidx.arch.core", "core-testing", "2.1.0")
   implementation(project(":lifecycle-ktx"))
 
   implementation("androidx.paging", "paging-runtime", "2.1.0")
@@ -134,14 +136,14 @@ dependencies {
 
   // Utility
   implementation("io.reactivex.rxjava2", "rxandroid", "2.1.1")
-  implementation("io.reactivex.rxjava2", "rxjava", "2.2.10")
+  implementation("io.reactivex.rxjava2", "rxjava", "2.2.12")
   implementation("org.threeten", "threetenbp", "1.4.0", classifier = "no-tzdb")
   implementation("org.jetbrains", "annotations", "17.0.0")
   implementation("com.google.code.gson", "gson", "2.8.5")
-  implementation("commons-codec", "commons-codec", "1.12")
-  implementation("com.squareup.retrofit2", "retrofit", "2.6.0")
-  implementation("com.squareup.retrofit2", "converter-gson", "2.6.0")
-  implementation("com.github.pwittchen", "reactivenetwork-rx2", "3.0.3")
+  implementation("commons-codec", "commons-codec", "1.13")
+  implementation("com.squareup.retrofit2", "retrofit", "2.6.1")
+  implementation("com.squareup.retrofit2", "converter-gson", "2.6.1")
+  implementation("com.github.pwittchen", "reactivenetwork-rx2", "3.0.6")
   withVersion("10.1.0") {
     implementation("com.jakewharton", "butterknife", version)
     kapt("com.jakewharton", "butterknife-compiler", version)
@@ -155,7 +157,7 @@ dependencies {
   }
 
   // UI
-  implementation("com.leinardi.android", "speed-dial", "2.0.1")
+  implementation("com.leinardi.android", "speed-dial", "3.0.0")
   implementation("me.zhanghai.android.materialprogressbar", "library", "1.6.1")
   implementation("com.google.android", "flexbox", "1.1.0")
   implementation(project(":ui_spinner"))
@@ -179,7 +181,7 @@ dependencies {
   }
 
   // Dependency Injection
-  withVersion("2.23.2") {
+  withVersion("2.24") {
     implementation("com.google.dagger", "dagger", version)
     kapt("com.google.dagger", "dagger-compiler", version)
     kapt("com.google.dagger", "dagger-android-processor", version)
@@ -193,9 +195,9 @@ dependencies {
   }
 
   androidTestImplementation("junit", "junit", "4.12")
-  androidTestImplementation("androidx.test.espresso", "espresso-core", "3.1.0")
-  androidTestImplementation("androidx.test.espresso", "espresso-contrib", "3.1.0")
-  androidTestImplementation("androidx.test.ext", "junit", "1.0.0")
-  androidTestImplementation("androidx.test", "runner", "1.2.0")
-  androidTestImplementation("androidx.test", "rules", "1.2.0")
+  androidTestImplementation("androidx.test.espresso", "espresso-core", "3.3.0-alpha02")
+  androidTestImplementation("androidx.test.espresso", "espresso-contrib", "3.3.0-alpha02")
+  androidTestImplementation("androidx.test.ext", "junit", "1.1.2-alpha02")
+  androidTestImplementation("androidx.test", "runner", "1.3.0-alpha02")
+  androidTestImplementation("androidx.test", "rules", "1.3.0-alpha02")
 }

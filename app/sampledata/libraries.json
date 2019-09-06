@@ -1,58 +1,12 @@
 {
   "data": [
     {
-      "name": "Android Architecture Components: Lifecycle",
-      "version": "1.1.1",
+      "name": "AndroidX",
       "license": {
         "short_name": "Apache-2.0",
         "full_name": "Apache License"
       },
-      "url": "https://android.googlesource.com/platform/frameworks/support/+/master/lifecycle"
-    },
-    {
-      "name": "Android Architecture Components: Paging",
-      "version": "1.0.0-alpha7",
-      "license": {
-        "short_name": "Apache-2.0",
-        "full_name": "Apache License"
-      },
-      "url": "https://android.googlesource.com/platform/frameworks/support/+/master/paging"
-    },
-    {
-      "name": "Android Architecture Components: Persistence",
-      "version": "1.1.0-rc1",
-      "license": {
-        "short_name": "Apache-2.0",
-        "full_name": "Apache License"
-      },
-      "url": "https://android.googlesource.com/platform/frameworks/support/+/master/persistence"
-    },
-    {
-      "name": "Android Architecture Components: Room",
-      "version": "1.1.0-rc1",
-      "license": {
-        "short_name": "Apache-2.0",
-        "full_name": "Apache License"
-      },
-      "url": "https://android.googlesource.com/platform/frameworks/support/+/master/persistence"
-    },
-    {
-      "name": "Android Support Library",
-      "version": "27.1.1",
-      "license": {
-        "short_name": "Apache-2.0",
-        "full_name": "Apache License"
-      },
-      "url": "https://android.googlesource.com/platform/frameworks/support/+/master"
-    },
-    {
-      "name": "Android Support Library: Constraint Layout",
-      "version": "1.1.0-beta6",
-      "license": {
-        "short_name": "Apache-2.0",
-        "full_name": "Apache License"
-      },
-      "url": "https://android.googlesource.com/platform/frameworks/opt/sherpa/+/studio-3.0/constraintlayout"
+      "url": "https://developer.android.com/jetpack/androidx"
     },
     {
       "name": "atinject",

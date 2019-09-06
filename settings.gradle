@@ -20,7 +20,6 @@
 rootProject.buildFileName = 'build.gradle.kts'
 
 include ':app',
-    ':desktop',
     ':invokerannotations',
     ':invokergenerator',
     ':lib',

@@ -20,24 +20,23 @@
 package de.kuschku.quasseldroid.util.ui.settings
 
 import android.content.Context
-import androidx.fragment.app.Fragment
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
-import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
 abstract class DaggerPreferenceFragmentCompat : AttachingPreferenceFragmentCompat(),
-                                                HasSupportFragmentInjector {
+                                                HasAndroidInjector {
   @Inject
-  lateinit var childFragmentInjector: DispatchingAndroidInjector<Fragment>
+  lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
   override fun onAttach(context: Context) {
     AndroidSupportInjection.inject(this)
     super.onAttach(context)
   }
 
-  override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
-    return childFragmentInjector
+  override fun androidInjector(): AndroidInjector<Any> {
+    return androidInjector
   }
 }

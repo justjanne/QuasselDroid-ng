@@ -251,5 +251,20 @@ class Parser(
   }
 
   private fun buildImports(wildcard: List<String>, named: List<Pair<String, String>>) =
-    (wildcard.flatMap(this::resolveWildcardImport) + named).toMap()
+    (
+      wildcard.flatMap(this::resolveWildcardImport) +
+      named +
+      listOf(
+        "Boolean",
+        "Byte",
+        "UByte",
+        "Short",
+        "UShort",
+        "Int",
+        "UInt",
+        "Long",
+        "ULong",
+        "Char"
+      ).map { Pair(it, "kotlin.$it") }
+    ).toMap()
 }

@@ -51,11 +51,11 @@ android {
 }
 
 dependencies {
-  implementation(kotlin("stdlib", "1.3.41"))
+  implementation(kotlin("stdlib", "1.3.50"))
 
-  implementation("androidx.appcompat", "appcompat", "1.0.2")
+  implementation("androidx.appcompat", "appcompat", "1.1.0")
 
-  withVersion("2.1.0") {
+  withVersion("2.2.0-rc01") {
     implementation("androidx.room", "room-runtime", version)
     kapt("androidx.room", "room-compiler", version)
     implementation("androidx.room", "room-rxjava2", version)

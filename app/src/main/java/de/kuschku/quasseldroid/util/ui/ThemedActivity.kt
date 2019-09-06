@@ -23,23 +23,17 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasFragmentInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import de.kuschku.libquassel.util.helper.nullIf
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import javax.inject.Inject
 
-abstract class ThemedActivity : AppCompatActivity(), HasSupportFragmentInjector,
-                                HasFragmentInjector {
+abstract class ThemedActivity : AppCompatActivity(), HasAndroidInjector {
   @Inject
-  lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
-
-  @Inject
-  lateinit var frameworkFragmentInjector: DispatchingAndroidInjector<android.app.Fragment>
+  lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
   @Inject
   lateinit var appearanceSettings: AppearanceSettings
@@ -56,11 +50,7 @@ abstract class ThemedActivity : AppCompatActivity(), HasSupportFragmentInjector,
     super.attachBaseContext(LocaleHelper.setLocale(newBase))
   }
 
-  override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
-    return supportFragmentInjector
-  }
-
-  override fun fragmentInjector(): AndroidInjector<android.app.Fragment>? {
-    return frameworkFragmentInjector
+  override fun androidInjector(): AndroidInjector<Any> {
+    return androidInjector
   }
 }

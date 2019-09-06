@@ -28,7 +28,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class DragInterceptBottomSheetBehavior<V : View> : BottomSheetBehavior<V> {
   constructor() : super()
-  constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+  constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
   var allowDragging = true
 
