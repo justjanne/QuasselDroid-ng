@@ -89,7 +89,9 @@
   <string name="preference_language_title">Language</string>
   <string name="preference_language_entry_auto">System Default</string>
   <string name="preference_language_entry_en" translatable="false">English</string>
+  <string name="preference_language_entry_en_gb" translatable="false">English (Great Britain)</string>
   <string name="preference_language_entry_de" translatable="false">Deutsch</string>
+  <string name="preference_language_entry_fr" translatable="false">Français</string>
   <string name="preference_language_entry_fr_ca" translatable="false">Français (Canadien)</string>
   <string name="preference_language_entry_it" translatable="false">Italiano</string>
   <string name="preference_language_entry_lt" translatable="false">Lietuvių</string>
@@ -99,7 +101,9 @@
   <string-array name="preference_language_entries" translatable="false">
     <item>@string/preference_language_entry_auto</item>
     <item>@string/preference_language_entry_en</item>
+    <item>@string/preference_language_entry_en_gb</item>
     <item>@string/preference_language_entry_de</item>
+    <item>@string/preference_language_entry_fr</item>
     <item>@string/preference_language_entry_fr_ca</item>
     <item>@string/preference_language_entry_it</item>
     <item>@string/preference_language_entry_lt</item>
@@ -109,7 +113,9 @@
   <string-array name="preference_language_entryvalues" translatable="false">
     <item />
     <item>en</item>
+    <item>en_gb</item>
     <item>de</item>
+    <item>fr</item>
     <item>fr-CA</item>
     <item>it</item>
     <item>lt</item>
