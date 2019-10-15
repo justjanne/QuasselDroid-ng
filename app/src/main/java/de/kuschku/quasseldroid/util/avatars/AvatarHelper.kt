@@ -99,10 +99,11 @@ object AvatarHelper {
         it.groups[1]?.value
       }.map { email ->
         val hash = Hex.encodeHexString(DigestUtils.md5(IrcCaseMappers.unicode.toLowerCase(email)))
+        val base = "https://seccdn.libravatar.org/avatar"
         if (size == null) {
-          "https://seccdn.libravatar.org/avatar/$hash?d=404"
+          "$base/$hash?d=404"
         } else {
-          "https://seccdn.libravatar.org/avatar/$hash?d=404&s=${size}"
+          "$base/$hash?d=404&s=${size}"
         }
       }.map { Avatar.LibravatarAvatar(it) }.toList()
   }
