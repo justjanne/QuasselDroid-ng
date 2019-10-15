@@ -175,7 +175,7 @@
   <string name="label_feature_coresidehighlights">Required for highlights</string>
   <string name="label_feature_senderprefixes">Required for seeing prefix modes (+, @) of users in messages</string>
   <string name="label_feature_remotedisconnect">Required for remote disconnects of your own clients</string>
-  <string name="label_feature_richmessages">Required for seeing real names or IRCv3 or Gravatar avatars in messages</string>
+  <string name="label_feature_richmessages">Required for seeing real names or IRCv3, Gravatar, or Libravatar avatars in messages</string>
   <string name="label_feature_backlogfiltertype">Required for receiving past notifications after connecting</string>
 
   <string name="label_feature_context_bufferactivitysync">Quasseldroid cannot highlight unread chats. Upgrade your core to Quassel v0.13 to resolve this.</string>
