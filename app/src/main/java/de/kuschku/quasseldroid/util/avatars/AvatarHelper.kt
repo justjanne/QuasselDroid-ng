@@ -99,6 +99,7 @@ object AvatarHelper {
         it.groups[1]?.value
       }.map { email ->
         val hash = Hex.encodeHexString(DigestUtils.md5(IrcCaseMappers.unicode.toLowerCase(email)))
+        val domain = IrcCaseMappers.unicode.toLowerCase(email).split('@')[1]
         val base = "https://seccdn.libravatar.org/avatar"
         if (size == null) {
           "$base/$hash?d=404"
