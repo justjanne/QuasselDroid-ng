@@ -175,7 +175,7 @@
   <string name="label_feature_coresidehighlights">Benötigt für Hervorhebungen</string>
   <string name="label_feature_senderprefixes">Benötigt um die Präfixe (+, @) von Nutzern in Nachrichten zu sehen</string>
   <string name="label_feature_remotedisconnect">Benötigt um die Verbindung eigener Clients aus der Ferne zu trennen</string>
-  <string name="label_feature_richmessages">Benötigt um Echtnamen oder IRCv3 oder Gravatar-Avatare in Nachrichten zu sehen.</string>
+  <string name="label_feature_richmessages">Benötigt um Echtnamen oder IRCv3, Gravatar-Avatare, oder Libravatar-Avatare in Nachrichten zu sehen.</string>
   <string name="label_feature_backlogfiltertype">Benötigt um vergangene Benachrichtigungen nach dem Verbinden zu erhalten</string>
 
   <string name="label_feature_context_bufferactivitysync">Quasseldroid kann ungelesene Chats nicht hervorheben. Update deinen Core auf Quassel v0.13 um dies zu beheben.</string>
