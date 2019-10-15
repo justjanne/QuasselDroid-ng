@@ -24,6 +24,7 @@ import java.io.Serializable
 sealed class Avatar : Serializable {
   data class NativeAvatar(val url: String) : Avatar()
   data class IRCCloudAvatar(val url: String) : Avatar()
+  data class LibravatarAvatar(val url: String) : Avatar()
   data class GravatarAvatar(val url: String) : Avatar()
   data class MatrixAvatar(val userId: String, val size: Int?) : Avatar()
 }
