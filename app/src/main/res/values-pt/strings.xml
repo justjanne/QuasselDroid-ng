@@ -173,7 +173,7 @@
   <string name="label_feature_coresidehighlights">Obrigatório para menções</string>
   <string name="label_feature_senderprefixes">Necessário para ver os modos de prefixo (+, @) dos utilizadores nas mensagens</string>
   <string name="label_feature_remotedisconnect">Necessário para desconexões remotas de seus próprios clientes</string>
-  <string name="label_feature_richmessages">Necessário para ver nomes reais ou avatares do IRCV3 ou do Gravatar em mensagens</string>
+  <string name="label_feature_richmessages">Necessário para ver nomes reais ou avatares do IRCV3, do Gravatar, ou do Libravatar em mensagens</string>
   <string name="label_feature_backlogfiltertype">Obrigatório para receber notificações passadas após a conexão</string>
 
   <string name="label_feature_context_bufferactivitysync">O Quasseldroid não pode destacar mensagens não lidas. Actualize seu núcleo para o Quassel v0.13 para resolver isso.</string>
