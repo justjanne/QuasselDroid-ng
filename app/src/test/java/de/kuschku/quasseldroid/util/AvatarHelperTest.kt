@@ -71,6 +71,48 @@ class AvatarHelperTest {
   }
 
   @Test
+  fun testLibravatarAvatars() {
+    val message = MessageData.of(
+      messageId = MsgId(1),
+      time = Instant.now(),
+      type = Message_Type.of(Message_Type.Plain),
+      flag = Message_Flag.of(),
+      bufferId = BufferId(0),
+      networkId = NetworkId(0),
+      currentBufferId = BufferId(0),
+      currentBufferType = Buffer_Type.of(),
+      sender = "justJanne",
+      senderPrefixes = "",
+      realName = "Janne Mareike Koschinski <janne@kuschku.de>",
+      avatarUrl = "",
+      content = "Lorem Ipsum I Dolor Sit Amet",
+      ignored = false
+    )
+
+    assert(
+      AvatarHelper.avatar(
+        MessageSettings(
+          showLibravatarAvatars = true,
+          showIRCCloudAvatars = true
+        ),
+        message
+      ).contains(
+        Avatar.LibravatarAvatar("https://seccdn.libravatar.org/avatar/81128f11cae692bc486e3f88b854ddf1?d=404")
+      )
+    )
+
+    assert(
+      AvatarHelper.avatar(
+        MessageSettings(
+          showLib2568217a2207f06de59d0fcc1f14b8bc?s=160&d=404ravatarAvatars = false,
+          showIRCCloudAvatars = false
+        ),
+        message
+      ).isEmpty()
+    )
+  }
+
+  @Test
   fun testIrcCloudAvatars() {
     val message = MessageData.of(
       messageId = MsgId(1),
