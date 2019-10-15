@@ -104,7 +104,7 @@ object AvatarHelper {
         } else {
           "https://seccdn.libravatar.org/avatar/$hash?d=404&s=${size}"
         }
-      }.map { Avatar.GravatarAvatar(it) }.toList()
+      }.map { Avatar.LibravatarAvatar(it) }.toList()
   }
 
   private fun gravatarFallback(realname: String, size: Int?): List<Avatar> {
