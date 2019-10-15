@@ -105,6 +105,9 @@
   <string name="preference_show_irccloud_avatars_title">Prikazuj IRCCloud avatare</string>
   <string name="preference_show_irccloud_avatars_summary">Prikazuje korisnicima bez avatara njihov IRCCloud avatar, ako je dostupan</string>
 
+  <string name="preference_show_libravatar_avatars_title">Prikazuj Libravatar avatare</string>
+  <string name="preference_show_libravatar_avatars_summary">Prikazuje korisnicima bez avatara njihov Libravatar, ako je dostupan</string>
+
   <string name="preference_show_gravatar_avatars_title">Prikazuj Gravatar avatare</string>
   <string name="preference_show_gravatar_avatars_summary">Prikazuje korisnicima bez avatara njihov Gravatar, ako je dostupan</string>
 
