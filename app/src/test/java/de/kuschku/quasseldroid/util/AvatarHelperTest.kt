@@ -104,7 +104,7 @@ class AvatarHelperTest {
     assert(
       AvatarHelper.avatar(
         MessageSettings(
-          showLib2568217a2207f06de59d0fcc1f14b8bc?s=160&d=404ravatarAvatars = false,
+          showLibravatarAvatars = false,
           showIRCCloudAvatars = false
         ),
         message
