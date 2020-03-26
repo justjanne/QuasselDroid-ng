@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -131,7 +131,7 @@ abstract class IdentityBaseFragment(private val initDefault: Boolean) :
         .filter(Optional<ISession>::isPresent)
         .map(Optional<ISession>::get)
         .firstElement()
-        .toLiveData().observe(this, Observer {
+        .toLiveData().observe(viewLifecycleOwner, Observer {
           it?.let {
             update(Defaults.identity(requireContext(), it.proxy))
           }
@@ -141,7 +141,7 @@ abstract class IdentityBaseFragment(private val initDefault: Boolean) :
         .filter(Optional<Identity>::isPresent)
         .map(Optional<Identity>::get)
         .firstElement()
-        .toLiveData().observe(this, Observer {
+        .toLiveData().observe(viewLifecycleOwner, Observer {
           it?.let {
             update(it)
           }

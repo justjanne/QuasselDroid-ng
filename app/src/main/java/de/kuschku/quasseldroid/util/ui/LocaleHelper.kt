@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -21,7 +21,6 @@ package de.kuschku.quasseldroid.util.ui
 
 import android.content.Context
 import android.content.res.Configuration
-import android.os.Build
 import de.kuschku.quasseldroid.settings.Settings
 import java.util.*
 
@@ -43,15 +42,8 @@ object LocaleHelper {
   private fun updateResources(context: Context, language: String) = if (language.isNotEmpty()) {
     val locale = parseLanguageCode(language)
     Locale.setDefault(locale)
-
-    val config = Configuration(context.resources.configuration)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-      config.setLocale(locale)
-      context.createConfigurationContext(config)
-    } else {
-      config.locale = locale
-      context.resources.updateConfiguration(config, context.resources.displayMetrics)
-      context
-    }
+    context.createConfigurationContext(Configuration(context.resources.configuration).apply {
+      setLocale(locale)
+    })
   } else context
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -31,13 +31,13 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <androidx.appcompat.widget.AppCompatImageView
-        style="@style/Widget.CoreSettings.PrimaryItemIcon"
-        app:srcCompat="@drawable/ic_account_card" />
-
       <TextView
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_identity_names" />
+
+      <androidx.appcompat.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_account_card" />
     </LinearLayout>
 
     <LinearLayout
@@ -98,13 +98,6 @@
       android:orientation="vertical"
       android:visibility="visible">
 
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/nicks"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:itemCount="4"
-        tools:listitem="@layout/settings_identity_nick" />
-
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -117,6 +110,13 @@
           android:layout_height="wrap_content"
           android:text="@string/label_new_nick" />
       </LinearLayout>
+
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/nicks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:itemCount="4"
+        tools:listitem="@layout/settings_identity_nick" />
     </LinearLayout>
 
     <LinearLayout
@@ -124,13 +124,13 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <androidx.appcompat.widget.AppCompatImageView
-        style="@style/Widget.CoreSettings.PrimaryItemIcon"
-        app:srcCompat="@drawable/ic_message_bulleted" />
-
       <TextView
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_identity_messages" />
+
+      <androidx.appcompat.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_message_bulleted" />
     </LinearLayout>
 
     <LinearLayout
@@ -179,35 +179,18 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <androidx.appcompat.widget.AppCompatImageView
-        style="@style/Widget.CoreSettings.PrimaryItemIcon"
-        app:srcCompat="@drawable/ic_clock" />
-
       <TextView
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_identity_away" />
+
+      <androidx.appcompat.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_clock" />
     </LinearLayout>
 
     <LinearLayout
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
-
-      <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CustomTextInput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/settings_identity_away_reason">
-
-        <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/away_reason"
-          style="@style/Widget.CoreSettings.EditText"
-          tools:text="Gone Fishing." />
-      </com.google.android.material.textfield.TextInputLayout>
-
-      <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/detach_away"
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_identity_detach_away" />
 
       <LinearLayout
         android:id="@+id/detach_away_group"
@@ -226,6 +209,23 @@
             tools:text="Gone Fishing." />
         </com.google.android.material.textfield.TextInputLayout>
       </LinearLayout>
+
+      <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/detach_away"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_identity_detach_away" />
+
+      <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.CustomTextInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/settings_identity_away_reason">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/away_reason"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="Gone Fishing." />
+      </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
   </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -98,7 +98,7 @@ class PasswordChangeFragment : ServiceBoundFragment() {
       .mapSwitchMap(RpcHandler::passwordChanged)
       .filter(Optional<Boolean>::isPresent)
       .map(Optional<Boolean>::get)
-      .toLiveData().observe(this, Observer {
+      .toLiveData().observe(viewLifecycleOwner, Observer {
         val waiting = this.waiting
         if (waiting != null) {
           if (it) {

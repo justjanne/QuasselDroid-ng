@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.chat.archive
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -43,6 +44,7 @@ import de.kuschku.quasseldroid.viewmodel.data.BufferListItem
 import de.kuschku.quasseldroid.viewmodel.data.BufferStatus
 import io.reactivex.subjects.BehaviorSubject
 
+@SuppressLint("ClickableViewAccessibility", "ResourceType")
 class ArchiveListAdapter(
   private val messageSettings: MessageSettings,
   private val selectedBuffer: BehaviorSubject<BufferId>,
@@ -517,8 +519,8 @@ class ArchiveListAdapter(
           binding.description.visibleIf(item.props.description.isNotBlank())
 
           binding.status.loadAvatars(item.props.avatarUrls,
-                             item.props.fallbackDrawable,
-                             crop = !messageSettings.squareAvatars)
+                                     item.props.fallbackDrawable,
+                                     crop = !messageSettings.squareAvatars)
         }
       }
     }

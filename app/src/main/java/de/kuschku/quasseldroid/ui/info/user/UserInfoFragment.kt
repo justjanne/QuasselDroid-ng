@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -286,7 +286,7 @@ class UserInfoFragment : ServiceBoundFragment() {
                         ignoreItems = ignoreItems)
           }
       } ?: Observable.just(IrcUser.NULL).safeSwitchMap { user -> processUser(user, null, null) }
-    }.toLiveData().observe(this, Observer {
+    }.toLiveData().observe(viewLifecycleOwner, Observer {
       val user = it.orNull()
       if (user != null) {
         currentBufferInfo = user.info
@@ -312,7 +312,7 @@ class UserInfoFragment : ServiceBoundFragment() {
                       val avatarInfo = MatrixAvatarInfo(it, model.size)
                       val url = Uri.parse(avatarInfo.avatarUrl)
 
-                      val imageUrl = matrixApi.avatarImage(server = url.host,
+                      val imageUrl = matrixApi.avatarImage(server = url.host ?: "",
                                                            id = url.pathSegments.first()).request().url()
                       actualUrl = imageUrl.toString()
                     }
@@ -376,7 +376,7 @@ class UserInfoFragment : ServiceBoundFragment() {
                 })
               }.filter {
                 it.isNotEmpty()
-              }.firstElement().toLiveData().observe(this, Observer {
+              }.firstElement().toLiveData().observe(viewLifecycleOwner, Observer {
                 it?.firstOrNull()?.let { info ->
                   ChatActivity.launch(view.context, bufferId = info.bufferId)
                 }

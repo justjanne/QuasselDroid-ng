@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.app
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.StrictMode
 import com.squareup.leakcanary.LeakCanary
@@ -34,6 +35,7 @@ import de.kuschku.quasseldroid.persistence.util.AccountId
 import de.kuschku.quasseldroid.settings.AppearanceSettings
 import de.kuschku.quasseldroid.settings.SettingsMigration
 import de.kuschku.quasseldroid.settings.SettingsMigrationManager
+import de.kuschku.quasseldroid.util.helper.letIf
 
 class QuasseldroidReleaseDelegate(private val app: Quasseldroid) : QuasseldroidBaseDelegate(app) {
   override fun shouldInit() = !LeakCanary.isInAnalyzerProcess(app)
@@ -43,6 +45,7 @@ class QuasseldroidReleaseDelegate(private val app: Quasseldroid) : QuasseldroidB
     CrashHandler.init<BuildConfig>(application = app)
   }
 
+  @SuppressLint("NewApi")
   override fun onPostInit() {
     // Migrate preferences
     SettingsMigrationManager(
@@ -146,18 +149,10 @@ class QuasseldroidReleaseDelegate(private val app: Quasseldroid) : QuasseldroidB
         StrictMode.ThreadPolicy.Builder()
           .detectNetwork()
           .detectCustomSlowCalls()
-          .let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-              it.detectResourceMismatches()
-            } else {
-              it
-            }
-          }.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-              it.detectUnbufferedIo()
-            } else {
-              it
-            }
+          .letIf(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            it.detectResourceMismatches()
+          }.letIf(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            it.detectUnbufferedIo()
           }
           .penaltyLog()
           .build()
@@ -168,18 +163,9 @@ class QuasseldroidReleaseDelegate(private val app: Quasseldroid) : QuasseldroidB
           .detectActivityLeaks()
           .detectLeakedClosableObjects()
           .detectLeakedRegistrationObjects()
-          .let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-              it.detectFileUriExposure()
-            } else {
-              it
-            }
-          }.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-              it.detectContentUriWithoutPermission()
-            } else {
-              it
-            }
+          .detectFileUriExposure()
+          .letIf(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            it.detectContentUriWithoutPermission()
           }
           .penaltyLog()
           .build()

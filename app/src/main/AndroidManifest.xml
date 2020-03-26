@@ -20,17 +20,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="de.kuschku.quasseldroid">
 
-  <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
-  <uses-feature
-    android:name="android.hardware.touchscreen"
-    android:required="false" />
-  <uses-feature
-    android:name="android.hardware.type.pc"
-    android:required="false" />
-
   <application
     android:name=".Quasseldroid"
     android:allowBackup="true"
@@ -41,14 +30,6 @@
     android:supportsRtl="true"
     android:theme="@style/Theme.SplashTheme">
 
-    <meta-data
-      android:name="WindowManagerPreference:FreeformWindowSize"
-      android:value="tablet" />
-    <meta-data
-      android:name="WindowManagerPreference:FreeformWindowOrientation"
-      android:value="landscape" />
-
-    <!-- Normal Chat -->
     <activity
       android:name=".ui.chat.ChatActivity"
       android:exported="true"
@@ -76,20 +57,22 @@
         <data android:scheme="ircs" />
       </intent-filter>
     </activity>
-
-    <!-- Info -->
     <activity
       android:name="de.kuschku.quasseldroid.ui.info.user.UserInfoActivity"
       android:exported="false"
       android:label="@string/label_info_user"
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
+
+    <!-- Normal Chat -->
     <activity
       android:name="de.kuschku.quasseldroid.ui.info.channel.ChannelInfoActivity"
       android:exported="false"
       android:label="@string/label_info_channel"
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
+
+    <!-- Info -->
     <activity
       android:name="de.kuschku.quasseldroid.ui.info.core.CoreInfoActivity"
       android:exported="false"
@@ -111,32 +94,30 @@
       android:exported="false"
       android:label="@string/label_info_certificate"
       android:windowSoftInputMode="adjustResize" />
-
-    <!-- Archive -->
     <activity
       android:name="de.kuschku.quasseldroid.ui.chat.archive.ArchiveActivity"
       android:exported="false"
       android:label="@string/label_archived_chats"
       android:windowSoftInputMode="adjustResize" />
-
-    <!-- Add -->
     <activity
       android:name="de.kuschku.quasseldroid.ui.chat.add.create.ChannelCreateActivity"
       android:exported="false"
       android:label="@string/label_create_channel"
       android:windowSoftInputMode="adjustResize" />
+
+    <!-- Archive -->
     <activity
       android:name="de.kuschku.quasseldroid.ui.chat.add.join.ChannelJoinActivity"
       android:exported="false"
       android:label="@string/label_join_long"
       android:windowSoftInputMode="adjustResize" />
+
+    <!-- Add -->
     <activity
       android:name="de.kuschku.quasseldroid.ui.chat.add.query.QueryCreateActivity"
       android:exported="false"
       android:label="@string/label_query_medium"
       android:windowSoftInputMode="adjustResize" />
-
-    <!-- Core Settings -->
     <activity
       android:name=".ui.coresettings.CoreSettingsActivity"
       android:exported="false"
@@ -149,6 +130,8 @@
       android:label="@string/settings_network_title"
       android:parentActivityName=".ui.coresettings.CoreSettingsActivity"
       android:windowSoftInputMode="adjustResize" />
+
+    <!-- Core Settings -->
     <activity
       android:name=".ui.coresettings.network.NetworkEditActivity"
       android:exported="false"
@@ -231,8 +214,6 @@
       android:exported="false"
       android:label="@string/label_password_change"
       android:windowSoftInputMode="adjustResize" />
-
-    <!-- Client Settings -->
     <activity
       android:name=".ui.clientsettings.client.ClientSettingsActivity"
       android:exported="false"
@@ -243,6 +224,8 @@
       android:exported="false"
       android:label="@string/label_crashes"
       android:windowSoftInputMode="adjustResize" />
+
+    <!-- Client Settings -->
     <activity
       android:name=".ui.clientsettings.whitelist.WhitelistActivity"
       android:exported="false"
@@ -259,8 +242,6 @@
       android:label="@string/label_license"
       android:parentActivityName=".ui.clientsettings.about.AboutActivity"
       android:windowSoftInputMode="adjustResize" />
-
-    <!-- Client Setup Flow -->
     <activity
       android:name=".ui.setup.accounts.selection.AccountSelectionActivity"
       android:exported="false"
@@ -273,22 +254,20 @@
       android:label="@string/app_name"
       android:parentActivityName=".ui.setup.accounts.selection.AccountSelectionActivity"
       android:windowSoftInputMode="adjustResize" />
+
+    <!-- Client Setup Flow -->
     <activity
       android:name=".ui.setup.accounts.edit.AccountEditActivity"
       android:exported="false"
       android:label="@string/app_name"
       android:parentActivityName=".ui.setup.accounts.selection.AccountSelectionActivity"
       android:windowSoftInputMode="adjustResize" />
-
-    <!-- Core Setup Flow -->
     <activity
       android:name=".ui.setup.core.CoreSetupActivity"
       android:exported="false"
       android:label="@string/setup_core_title"
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
-
-    <!-- Core User Setup Flow -->
     <activity
       android:name=".ui.setup.user.UserSetupActivity"
       android:exported="false"
@@ -296,7 +275,7 @@
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
 
-    <!-- Network Setup Flow -->
+    <!-- Core Setup Flow -->
     <activity
       android:name=".ui.setup.network.NetworkSetupActivity"
       android:exported="false"
@@ -304,13 +283,17 @@
       android:parentActivityName=".ui.chat.ChatActivity"
       android:windowSoftInputMode="adjustResize" />
 
-    <!-- Services -->
-    <service
-      android:name=".service.QuasselService"
-      android:description="@string/connection_service_description"
-      android:exported="false"
-      android:label="@string/connection_service_title" />
+    <!-- Core User Setup Flow -->
+    <meta-data
+      android:name="WindowManagerPreference:FreeformWindowSize"
+      android:value="tablet" />
 
+    <!-- Network Setup Flow -->
+    <meta-data
+      android:name="WindowManagerPreference:FreeformWindowOrientation"
+      android:value="landscape" />
+
+    <!-- Services -->
     <provider
       android:name="androidx.core.content.FileProvider"
       android:authorities="${applicationId}.fileprovider"
@@ -320,6 +303,24 @@
         android:name="android.support.FILE_PROVIDER_PATHS"
         android:resource="@xml/filepaths" />
     </provider>
+
+    <service
+      android:name=".service.QuasselService"
+      android:description="@string/connection_service_description"
+      android:exported="false"
+      android:label="@string/connection_service_title" />
   </application>
+
+  <uses-feature
+    android:name="android.hardware.type.pc"
+    android:required="false" />
+  <uses-feature
+    android:name="android.hardware.touchscreen"
+    android:required="false" />
+
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 </manifest>

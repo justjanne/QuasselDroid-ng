@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -18,13 +18,19 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <plurals name="label_user_count" tools:ignore="UnusedQuantity">
+    <item quantity="one">%1$d vartotojas</item>
+    <item quantity="few">%1$d vartotojai</item>
+    <item quantity="many">%1$d vartotojų</item>
+    <item quantity="other">%1$d vartotojų</item>
+  </plurals>
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Android klientas decentralizuotam Quassel IRC klientui.</string>
+
   <string name="app_description_long">Quassel yra išskirstytas, decentralizuotas IRC klientas, parašytas C++ ir Qt kalbomis. Quasseldroid yra klientas Quassel branduoliui, leidžiantis jums prisijungti prie Quassel branduolio naudojantis jūsų Android™ įrenginiu.</string>
-
   <string name="connection_service_title">Ryšio tarnyba</string>
-  <string name="connection_service_description">Palaiko ryšį su jūsų branduoliu, jog būtų galima siųsti žinutes ir gauti pranešimus.</string>
 
+  <string name="connection_service_description">Palaiko ryšį su jūsų branduoliu, jog būtų galima siųsti žinutes ir gauti pranešimus.</string>
   <string name="label_about">Apie</string>
   <string name="label_accept">Priimti</string>
   <string name="label_acknowledgements">Padėkos</string>
@@ -153,14 +159,8 @@
   <string name="label_who_long">Atnaujinti visų vartotojų informaciją</string>
   <string name="label_whois">Whois</string>
   <string name="label_whois_long">Atnaujinti vartotojo informaciją</string>
-  <string name="label_yes">Taip</string>
 
-  <plurals name="label_user_count" tools:ignore="UnusedQuantity">
-    <item quantity="one">%1$d vartotojas</item>
-    <item quantity="few">%1$d vartotojai</item>
-    <item quantity="many">%1$d vartotojų</item>
-    <item quantity="other">%1$d vartotojų</item>
-  </plurals>
+  <string name="label_yes">Taip</string>
 
   <string name="label_feature_synchronizedmarkerline">Reikalinga norint sinchronizuoti poziciją kanaluose</string>
   <string name="label_feature_saslauthentication">Reikalinga SASL</string>

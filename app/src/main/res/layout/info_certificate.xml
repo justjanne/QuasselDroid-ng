@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -24,6 +24,21 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
+  <TextView
+    android:id="@+id/error"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:paddingStart="?listPreferredItemPaddingLeft"
+    android:paddingEnd="?listPreferredItemPaddingRight"
+    android:text="@string/label_error_certificate_no_certificate"
+    android:textColor="?colorTextSecondary"
+    android:textStyle="italic"
+    android:visibility="gone"
+    tools:visibility="visible" />
+
   <androidx.core.widget.NestedScrollView
     android:id="@+id/content"
     android:layout_width="match_parent"
@@ -37,13 +52,13 @@
 
       <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
-        <androidx.appcompat.widget.AppCompatImageView
-          style="@style/Widget.CoreSettings.PrimaryItemIcon"
-          app:srcCompat="@drawable/ic_account" />
-
         <TextView
           style="@style/Widget.CoreSettings.PrimaryItemSwitch"
           android:text="@string/certificate_subject" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+          style="@style/Widget.CoreSettings.PrimaryItemIcon"
+          app:srcCompat="@drawable/ic_account" />
       </LinearLayout>
 
       <LinearLayout
@@ -104,13 +119,13 @@
 
       <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
-        <androidx.appcompat.widget.AppCompatImageView
-          style="@style/Widget.CoreSettings.PrimaryItemIcon"
-          app:srcCompat="@drawable/ic_domain" />
-
         <TextView
           style="@style/Widget.CoreSettings.PrimaryItemSwitch"
           android:text="@string/certificate_issuer" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+          style="@style/Widget.CoreSettings.PrimaryItemIcon"
+          app:srcCompat="@drawable/ic_domain" />
       </LinearLayout>
 
       <LinearLayout
@@ -157,13 +172,13 @@
 
       <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
-        <androidx.appcompat.widget.AppCompatImageView
-          style="@style/Widget.CoreSettings.PrimaryItemIcon"
-          app:srcCompat="@drawable/ic_clock" />
-
         <TextView
           style="@style/Widget.CoreSettings.PrimaryItemSwitch"
           android:text="@string/certificate_validity" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+          style="@style/Widget.CoreSettings.PrimaryItemIcon"
+          app:srcCompat="@drawable/ic_clock" />
       </LinearLayout>
 
       <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroup">
@@ -192,13 +207,13 @@
 
       <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
-        <androidx.appcompat.widget.AppCompatImageView
-          style="@style/Widget.CoreSettings.PrimaryItemIcon"
-          app:srcCompat="@drawable/ic_fingerprint" />
-
         <TextView
           style="@style/Widget.CoreSettings.PrimaryItemSwitch"
           android:text="@string/certificate_fingerprints" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+          style="@style/Widget.CoreSettings.PrimaryItemIcon"
+          app:srcCompat="@drawable/ic_fingerprint" />
       </LinearLayout>
 
       <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroup">
@@ -230,21 +245,4 @@
         android:layout_height="16dp" />
     </LinearLayout>
   </androidx.core.widget.NestedScrollView>
-
-  <TextView
-    android:id="@+id/error"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:paddingStart="?listPreferredItemPaddingLeft"
-    android:paddingLeft="?listPreferredItemPaddingLeft"
-    android:paddingEnd="?listPreferredItemPaddingRight"
-    android:paddingRight="?listPreferredItemPaddingRight"
-    android:text="@string/label_error_certificate_no_certificate"
-    android:textColor="?colorTextSecondary"
-    android:textStyle="italic"
-    android:visibility="gone"
-    tools:visibility="visible" />
 </FrameLayout>

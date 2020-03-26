@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -23,40 +23,6 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-  <com.google.android.material.appbar.AppBarLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#40000000"
-    app:elevation="0dip">
-
-    <com.google.android.material.appbar.CollapsingToolbarLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:layout_scrollFlags="scroll">
-
-      <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_collapseMode="parallax">
-
-        <ImageView
-          android:id="@+id/avatar"
-          android:layout_width="0dp"
-          android:layout_height="0dp"
-          android:adjustViewBounds="true"
-          android:contentDescription="@string/label_avatar"
-          android:scaleType="centerCrop"
-          app:layout_constraintDimensionRatio="1:1"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          tools:src="@tools:sample/avatars" />
-
-      </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.appbar.CollapsingToolbarLayout>
-  </com.google.android.material.appbar.AppBarLayout>
-
   <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -68,27 +34,8 @@
       android:layout_height="match_parent"
       android:animateLayoutChanges="true"
       android:elevation="4dp"
-      android:orientation="vertical">
-
-      <LinearLayout style="@style/Widget.Info.Header">
-
-        <TextView
-          android:id="@+id/nick"
-          style="@style/Widget.Info.Header.Name"
-          android:textIsSelectable="true"
-          tools:text="justJanne" />
-
-        <TextView
-          android:id="@+id/real_name"
-          style="@style/Widget.Info.Header.Description"
-          android:textIsSelectable="true"
-          tools:text="Janne Mareike Koschinski https://kuschku.de/" />
-      </LinearLayout>
-
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?colorDivider" />
+      android:orientation="vertical"
+      tools:ignore="UnusedAttribute">
 
       <HorizontalScrollView
         android:layout_width="match_parent"
@@ -98,9 +45,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
-          android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
-          android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
-          android:paddingRight="?android:attr/listPreferredItemPaddingRight">
+          android:paddingEnd="?android:attr/listPreferredItemPaddingRight">
 
           <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/action_query"
@@ -144,10 +89,20 @@
         </LinearLayout>
       </HorizontalScrollView>
 
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?colorDivider" />
+      <LinearLayout style="@style/Widget.Info.Header">
+
+        <TextView
+          android:id="@+id/nick"
+          style="@style/Widget.Info.Header.Name"
+          android:textIsSelectable="true"
+          tools:text="justJanne" />
+
+        <TextView
+          android:id="@+id/real_name"
+          style="@style/Widget.Info.Header.Description"
+          android:textIsSelectable="true"
+          tools:text="Janne Mareike Koschinski https://kuschku.de/" />
+      </LinearLayout>
 
       <LinearLayout
         android:id="@+id/away_container"
@@ -156,10 +111,6 @@
         android:orientation="vertical"
         android:visibility="gone"
         tools:visibility="visible">
-
-        <TextView
-          style="@style/Widget.Info.Section"
-          android:text="@string/label_user_away" />
 
         <LinearLayout style="@style/Widget.Info.Item">
 
@@ -174,15 +125,15 @@
             android:text="@string/label_user_away_reason" />
         </LinearLayout>
 
+        <TextView
+          style="@style/Widget.Info.Section"
+          android:text="@string/label_user_away" />
+
         <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
           android:background="?colorDivider" />
       </LinearLayout>
-
-      <TextView
-        style="@style/Widget.Info.Section"
-        android:text="@string/label_user_identity" />
 
       <LinearLayout
         android:id="@+id/account_container"
@@ -254,7 +205,21 @@
 
       <TextView
         style="@style/Widget.Info.Section"
+        android:text="@string/label_user_identity" />
+
+      <TextView
+        style="@style/Widget.Info.Section"
         android:text="@string/label_user_common_channels" />
+
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?colorDivider" />
+
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?colorDivider" />
 
       <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/common_channels"
@@ -262,4 +227,38 @@
         android:layout_height="wrap_content" />
     </LinearLayout>
   </androidx.core.widget.NestedScrollView>
+
+  <com.google.android.material.appbar.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#40000000"
+    app:elevation="0dip">
+
+    <com.google.android.material.appbar.CollapsingToolbarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_scrollFlags="scroll">
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_collapseMode="parallax">
+
+        <ImageView
+          android:id="@+id/avatar"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:adjustViewBounds="true"
+          android:contentDescription="@string/label_avatar"
+          android:scaleType="centerCrop"
+          app:layout_constraintDimensionRatio="1:1"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          tools:src="@tools:sample/avatars" />
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
+  </com.google.android.material.appbar.AppBarLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

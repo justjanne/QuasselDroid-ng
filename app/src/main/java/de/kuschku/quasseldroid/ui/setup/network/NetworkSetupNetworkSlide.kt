@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -192,7 +192,7 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
       combineLatest(it.values.map(Identity::liveUpdates)).map {
         it.sortedBy(Identity::identityName)
       }
-    }.toLiveData().observe(this, Observer {
+    }.toLiveData().observe(viewLifecycleOwner, Observer {
       if (it != null) {
         identityAdapter.submitList(it)
       }
@@ -202,7 +202,7 @@ class NetworkSetupNetworkSlide : ServiceBoundSlideFragment() {
       combineLatest(it.values.map(Network::liveNetworkInfo)).map {
         it.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, INetwork.NetworkInfo::networkName))
       }
-    }.toLiveData().observe(this, Observer {
+    }.toLiveData().observe(viewLifecycleOwner, Observer {
       if (it != null) {
         this.networks = it
         update()

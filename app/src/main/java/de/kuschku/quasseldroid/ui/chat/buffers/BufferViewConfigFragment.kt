@@ -178,7 +178,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     val adapter = BufferViewConfigAdapter()
     modelHelper.bufferViewConfigs.safeSwitchMap {
       combineLatest(it.map(BufferViewConfig::liveUpdates))
-    }.toLiveData().observe(this, Observer {
+    }.toLiveData().observe(viewLifecycleOwner, Observer {
       if (it != null) {
         adapter.submitList(it)
       }
@@ -226,12 +226,14 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
       }
     }
 
-    modelHelper.negotiatedFeatures.toLiveData().observe(this, Observer { (connected, features) ->
-      featureContextBufferActivitySync.setMode(
-        if (!connected || features.hasFeature(ExtendedFeature.BufferActivitySync)) WarningBarView.MODE_NONE
-        else WarningBarView.MODE_ICON
-      )
-    })
+    modelHelper.negotiatedFeatures.toLiveData().observe(viewLifecycleOwner,
+                                                        Observer { (connected, features) ->
+                                                          featureContextBufferActivitySync.setMode(
+                                                            if (!connected || features.hasFeature(
+                                                                ExtendedFeature.BufferActivitySync)) WarningBarView.MODE_NONE
+                                                            else WarningBarView.MODE_ICON
+                                                          )
+                                                        })
 
     val filtered = combineLatest(
       database.filtered().listenRx(accountId).toObservable().map {
@@ -242,7 +244,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
     modelHelper.processChatBufferList(filtered).map { buffers ->
       bufferPresenter.render(buffers)
-    }.toLiveData().observe(this, Observer { processedList ->
+    }.toLiveData().observe(viewLifecycleOwner, Observer { processedList ->
       if (hasRestoredChatListState) {
         chatListState = chatList.layoutManager?.onSaveInstanceState()
         hasRestoredChatListState = false
@@ -254,7 +256,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     listAdapter.setOnLongClickListener(this@BufferViewConfigFragment::longClickListener)
     chatList.adapter = listAdapter
 
-    modelHelper.selectedBuffer.toLiveData().observe(this, Observer { buffer ->
+    modelHelper.selectedBuffer.toLiveData().observe(viewLifecycleOwner, Observer { buffer ->
       actionMode?.let {
         BufferContextPresenter.present(it, buffer)
       }
@@ -288,7 +290,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
     chatList.itemAnimator = DefaultItemAnimator()
     chatList.setItemViewCacheSize(10)
 
-    modelHelper.chat.stateReset.toLiveData().observe(this, Observer {
+    modelHelper.chat.stateReset.toLiveData().observe(viewLifecycleOwner, Observer {
       listAdapter.submitList(emptyList())
       hasSetBufferViewConfigId = false
     })
@@ -299,7 +301,7 @@ class BufferViewConfigFragment : ServiceBoundFragment() {
 
     combineLatest(modelHelper.chat.bufferSearchTemporarilyVisible.distinctUntilChanged(),
                   bufferSearchPermanentlyVisible)
-      .toLiveData().observe(this, Observer { (temporarily, permanently) ->
+      .toLiveData().observe(viewLifecycleOwner, Observer { (temporarily, permanently) ->
         val visible = temporarily || permanently
 
         val menuItem = chatListToolbar.menu.findItem(R.id.action_search)

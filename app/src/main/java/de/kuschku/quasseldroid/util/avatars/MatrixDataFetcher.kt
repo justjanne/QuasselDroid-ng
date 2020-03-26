@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -59,13 +59,13 @@ class MatrixDataFetcher(
   private fun inputStreamFromAvatarInfo(info: MatrixAvatarInfo): InputStream? {
     val url = Uri.parse(info.avatarUrl)
     return if (info.size != null && info.size < 512) {
-      api.avatarThumbnail(server = url.host,
+      api.avatarThumbnail(server = url.host ?: "",
                           id = url.pathSegments.first(),
                           width = info.size,
                           height = info.size,
                           method = if (info.size > 96) "scale" else "crop")
     } else {
-      api.avatarImage(server = url.host, id = url.pathSegments.first())
+      api.avatarImage(server = url.host ?: "", id = url.pathSegments.first())
     }.execute().body()?.byteStream()
   }
 

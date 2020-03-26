@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -83,7 +83,7 @@ class AliasListFragment : ServiceBoundSettingsFragment(), Savable, Changeable {
     modelHelper.aliasManager
       .filter(Optional<AliasManager>::isPresent)
       .map(Optional<AliasManager>::get)
-      .toLiveData().observe(this, Observer {
+      .toLiveData().observe(viewLifecycleOwner, Observer {
         if (it != null) {
           if (this.aliasManager == null) {
             this.aliasManager = Pair(it, it.copy())

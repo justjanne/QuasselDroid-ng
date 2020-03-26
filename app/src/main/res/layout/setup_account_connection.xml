@@ -3,8 +3,8 @@
 <!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -27,21 +27,12 @@
   android:orientation="vertical"
   android:padding="32dp">
 
-  <com.google.android.material.textfield.TextInputLayout
-    android:id="@+id/hostWrapper"
-    style="@style/Widget.CustomTextInput"
+  <androidx.appcompat.widget.SwitchCompat
+    android:id="@+id/require_ssl"
+    style="@style/Widget.CoreSettings.PrimaryItemSwitch"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:hint="@string/label_connection_host"
-    app:errorEnabled="true"
-    tools:ignore="LabelFor">
-
-    <com.google.android.material.textfield.TextInputEditText
-      android:id="@+id/host"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:inputType="textUri" />
-  </com.google.android.material.textfield.TextInputLayout>
+    android:text="@string/label_connection_ssl" />
 
   <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/portWrapper"
@@ -60,11 +51,20 @@
       android:text="@string/defaultConnectionPort" />
   </com.google.android.material.textfield.TextInputLayout>
 
-  <androidx.appcompat.widget.SwitchCompat
-    android:id="@+id/require_ssl"
-    style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/hostWrapper"
+    style="@style/Widget.CustomTextInput"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="@string/label_connection_ssl" />
+    android:hint="@string/label_connection_host"
+    app:errorEnabled="true"
+    tools:ignore="LabelFor">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/host"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:inputType="textUri" />
+  </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

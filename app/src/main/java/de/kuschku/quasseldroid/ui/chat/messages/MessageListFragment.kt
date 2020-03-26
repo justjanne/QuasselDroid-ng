@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -170,8 +170,7 @@ class MessageListFragment : ServiceBoundFragment() {
           builder
 
         val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText(null, data)
-        clipboard.primaryClip = clip
+        clipboard.setPrimaryClip(ClipData.newPlainText(null, data))
         actionMode?.finish()
         true
       }
@@ -407,13 +406,13 @@ class MessageListFragment : ServiceBoundFragment() {
       database.message().lastMsgId(it)
     }
 
-    modelHelper.chat.bufferId.toLiveData().observe(this, Observer { bufferId ->
+    modelHelper.chat.bufferId.toLiveData().observe(viewLifecycleOwner, Observer { bufferId ->
       swipeRefreshLayout.isEnabled = (bufferId != null || bufferId?.isValidId() == true)
     })
 
     combineLatest(modelHelper.bufferSyncer,
                   modelHelper.sessionManager.mapSwitchMap(SessionManager::state).distinctUntilChanged())
-      .toLiveData().observe(this, Observer { (bufferSyncer, state) ->
+      .toLiveData().observe(viewLifecycleOwner, Observer { (bufferSyncer, state) ->
         if (state?.orNull() == ConnectionState.CONNECTED) {
           runInBackgroundDelayed(16) {
             modelHelper.chat.bufferId { bufferId ->
@@ -447,7 +446,7 @@ class MessageListFragment : ServiceBoundFragment() {
       })
 
     modelHelper.connectedSession.toLiveData().zip(lastMessageId).observe(
-      this, Observer {
+      viewLifecycleOwner, Observer {
       runInBackground {
         val session = it?.first?.orNull()
         val message = it?.second
@@ -517,7 +516,7 @@ class MessageListFragment : ServiceBoundFragment() {
       lastBuffer = BufferId(getInt(KEY_STATE_BUFFER)).nullIf { !it.isValidId() }
     }
 
-    data.observe(this, Observer { list ->
+    data.observe(viewLifecycleOwner, Observer { list ->
       previousLoadKey = list?.lastKey as? Int
       val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
       val firstVisibleMessageId = adapter[firstVisibleItemPosition]?.content?.messageId

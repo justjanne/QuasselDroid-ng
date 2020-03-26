@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -50,6 +50,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_networkconfig_ping_interval_unit" />
+
         <com.google.android.material.textfield.TextInputLayout
           style="@style/Widget.CustomTextInput"
           android:layout_width="match_parent"
@@ -62,15 +66,15 @@
             android:inputType="number"
             tools:text="30" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-          style="@style/Widget.CoreSettings.EditTextSuffix"
-          android:text="@string/settings_networkconfig_ping_interval_unit" />
       </FrameLayout>
 
       <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_networkconfig_max_ping_count_unit" />
 
         <com.google.android.material.textfield.TextInputLayout
           style="@style/Widget.CustomTextInput"
@@ -84,10 +88,6 @@
             android:inputType="number"
             tools:text="10" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-          style="@style/Widget.CoreSettings.EditTextSuffix"
-          android:text="@string/settings_networkconfig_max_ping_count_unit" />
       </FrameLayout>
     </LinearLayout>
 
@@ -115,6 +115,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_networkconfig_auto_who_interval_unit" />
+
         <com.google.android.material.textfield.TextInputLayout
           style="@style/Widget.CustomTextInput"
           android:layout_width="match_parent"
@@ -127,15 +131,15 @@
             android:inputType="number"
             tools:text="90" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-          style="@style/Widget.CoreSettings.EditTextSuffix"
-          android:text="@string/settings_networkconfig_auto_who_interval_unit" />
       </FrameLayout>
 
       <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_networkconfig_auto_who_nick_limit_unit" />
 
         <com.google.android.material.textfield.TextInputLayout
           style="@style/Widget.CustomTextInput"
@@ -149,15 +153,15 @@
             android:inputType="number"
             tools:text="100" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-          style="@style/Widget.CoreSettings.EditTextSuffix"
-          android:text="@string/settings_networkconfig_auto_who_nick_limit_unit" />
       </FrameLayout>
 
       <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_networkconfig_auto_who_delay_unit" />
 
         <com.google.android.material.textfield.TextInputLayout
           style="@style/Widget.CustomTextInput"
@@ -171,10 +175,6 @@
             android:inputType="number"
             tools:text="5" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-          style="@style/Widget.CoreSettings.EditTextSuffix"
-          android:text="@string/settings_networkconfig_auto_who_delay_unit" />
       </FrameLayout>
     </LinearLayout>
 

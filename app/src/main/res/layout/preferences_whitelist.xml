@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -39,22 +39,11 @@
       android:gravity="center_vertical"
       android:minHeight="?android:attr/listPreferredItemHeightSmall"
       android:paddingStart="?listPreferredItemPaddingLeft"
-      android:paddingLeft="?listPreferredItemPaddingLeft"
       android:paddingEnd="?listPreferredItemPaddingRight"
-      android:paddingRight="?listPreferredItemPaddingRight"
       android:text="@string/label_whitelist_certificates_empty"
       android:textColor="?colorTextSecondary"
       android:textStyle="italic"
       android:visibility="gone" />
-
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/certificate_whitelist"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:paddingLeft="2dp"
-      android:paddingRight="2dp"
-      tools:itemCount="2"
-      tools:listitem="@layout/preferences_whitelist_certificate_item" />
 
     <TextView
       style="@style/Widget.Subhead"
@@ -67,13 +56,20 @@
       android:gravity="center_vertical"
       android:minHeight="?android:attr/listPreferredItemHeightSmall"
       android:paddingStart="?listPreferredItemPaddingLeft"
-      android:paddingLeft="?listPreferredItemPaddingLeft"
       android:paddingEnd="?listPreferredItemPaddingRight"
-      android:paddingRight="?listPreferredItemPaddingRight"
       android:text="@string/label_whitelist_hostnames_empty"
       android:textColor="?colorTextSecondary"
       android:textStyle="italic"
       android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/certificate_whitelist"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingLeft="2dp"
+      android:paddingRight="2dp"
+      tools:itemCount="2"
+      tools:listitem="@layout/preferences_whitelist_certificate_item" />
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/hostname_whitelist"

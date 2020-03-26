@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -44,6 +44,7 @@ import de.kuschku.quasseldroid.util.ui.settings.fragment.ServiceBoundSettingsFra
 import de.kuschku.quasseldroid.util.ui.view.MaterialContentLoadingProgressBar
 import de.kuschku.quasseldroid.util.ui.view.WarningBarView
 import de.kuschku.quasseldroid.viewmodel.helper.EditorViewModelHelper
+import io.reactivex.BackpressureStrategy
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
@@ -119,42 +120,46 @@ class ChannelListFragment : ServiceBoundSettingsFragment() {
     searchResults.layoutManager = LinearLayoutManager(view.context)
     searchResults.itemAnimator = DefaultItemAnimator()
 
-    combineLatest(results, sort).toLiveData().observe(this, Observer { (results, sort) ->
-      adapter.submitList(results.let {
-        when (sort.field) {
-          Sort.Field.CHANNEL_NAME -> {
-            when (sort.direction) {
-              Sort.Direction.ASC  ->
-                it.sortedBy(IrcListHelper.ChannelDescription::channelName)
-              Sort.Direction.DESC ->
-                it.sortedByDescending(IrcListHelper.ChannelDescription::channelName)
-            }
-          }
-          Sort.Field.USER_COUNT   -> {
-            when (sort.direction) {
-              Sort.Direction.ASC  ->
-                it.sortedBy(IrcListHelper.ChannelDescription::userCount)
-              Sort.Direction.DESC ->
-                it.sortedByDescending(IrcListHelper.ChannelDescription::userCount)
-            }
-          }
-          Sort.Field.TOPIC        -> {
-            when (sort.direction) {
-              Sort.Direction.ASC  ->
-                it.sortedBy(IrcListHelper.ChannelDescription::topic)
-              Sort.Direction.DESC ->
-                it.sortedByDescending(IrcListHelper.ChannelDescription::topic)
-            }
-          }
-        }
-      })
-    })
+    combineLatest(results, sort).toLiveData().observe(viewLifecycleOwner,
+                                                      Observer { (results, sort) ->
+                                                        adapter.submitList(results.let {
+                                                          when (sort.field) {
+                                                            Sort.Field.CHANNEL_NAME -> {
+                                                              when (sort.direction) {
+                                                                Sort.Direction.ASC  ->
+                                                                  it.sortedBy(IrcListHelper.ChannelDescription::channelName)
+                                                                Sort.Direction.DESC ->
+                                                                  it.sortedByDescending(
+                                                                    IrcListHelper.ChannelDescription::channelName)
+                                                              }
+                                                            }
+                                                            Sort.Field.USER_COUNT   -> {
+                                                              when (sort.direction) {
+                                                                Sort.Direction.ASC  ->
+                                                                  it.sortedBy(IrcListHelper.ChannelDescription::userCount)
+                                                                Sort.Direction.DESC ->
+                                                                  it.sortedByDescending(
+                                                                    IrcListHelper.ChannelDescription::userCount)
+                                                              }
+                                                            }
+                                                            Sort.Field.TOPIC        -> {
+                                                              when (sort.direction) {
+                                                                Sort.Direction.ASC  ->
+                                                                  it.sortedBy(IrcListHelper.ChannelDescription::topic)
+                                                                Sort.Direction.DESC ->
+                                                                  it.sortedByDescending(
+                                                                    IrcListHelper.ChannelDescription::topic)
+                                                              }
+                                                            }
+                                                          }
+                                                        })
+                                                      })
 
     modelHelper.ircListHelper
       .mapSwitchMap(IrcListHelper::observable)
       .filter(Optional<IrcListHelper.Event>::isPresent)
       .map(Optional<IrcListHelper.Event>::get)
-      .toLiveData().observe(this, Observer {
+      .toLiveData(BackpressureStrategy.BUFFER).observe(viewLifecycleOwner, Observer {
         when (it) {
           is IrcListHelper.Event.ChannelList -> {
             if (it.netId == query?.networkId) {

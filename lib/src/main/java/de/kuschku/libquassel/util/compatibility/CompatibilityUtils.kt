@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -19,7 +19,6 @@
 
 package de.kuschku.libquassel.util.compatibility
 
-import de.kuschku.libquassel.util.compatibility.backport.BackportedSyncFlushDeflaterOutputStream
 import de.kuschku.libquassel.util.compatibility.backport.ProperlyClosingSyncFlushDeflaterOutputStream
 import java.io.OutputStream
 import java.util.zip.DeflaterOutputStream
@@ -36,10 +35,6 @@ object CompatibilityUtils {
    * @return The wrapping output stream
    */
   fun createDeflaterOutputStream(rawOut: OutputStream?): DeflaterOutputStream {
-    return if (supportsCompression) {
-      ProperlyClosingSyncFlushDeflaterOutputStream(rawOut)
-    } else {
-      BackportedSyncFlushDeflaterOutputStream(rawOut)
-    }
+    return ProperlyClosingSyncFlushDeflaterOutputStream(rawOut)
   }
 }

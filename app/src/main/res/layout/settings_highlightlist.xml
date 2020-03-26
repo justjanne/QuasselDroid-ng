@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -29,14 +29,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <de.kuschku.quasseldroid.util.ui.view.WarningBarView
-      android:id="@+id/feature_context_coresidehighlights"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:icon="@drawable/ic_alert"
-      app:mode="none"
-      app:text="@string/label_feature_context_coresidehighlights" />
-
     <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
 
       <LinearLayout
@@ -44,18 +36,23 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp">
 
-        <androidx.appcompat.widget.AppCompatImageView
-          style="@style/Widget.CoreSettings.PrimaryItemIcon"
-          app:srcCompat="@drawable/ic_server_network" />
-
         <TextView
           style="@style/Widget.CoreSettings.PrimaryItemSwitch"
           android:text="@string/settings_highlightlist_highlight_nick" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+          style="@style/Widget.CoreSettings.PrimaryItemIcon"
+          app:srcCompat="@drawable/ic_server_network" />
       </LinearLayout>
 
       <LinearLayout
         style="@style/Widget.CoreSettings.DependentGroup"
         android:visibility="visible">
+
+        <androidx.appcompat.widget.SwitchCompat
+          android:id="@+id/is_case_sensitive"
+          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+          android:text="@string/settings_highlightlist_nicks_case_sensitive" />
 
         <de.kuschku.ui.spinner.MaterialSpinnerLayout
           style="@style/Widget.CustomSpinnerLayout"
@@ -70,11 +67,6 @@
             android:layout_height="wrap_content"
             tools:listitem="@layout/widget_spinner_item_material" />
         </de.kuschku.ui.spinner.MaterialSpinnerLayout>
-
-        <androidx.appcompat.widget.SwitchCompat
-          android:id="@+id/is_case_sensitive"
-          style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-          android:text="@string/settings_highlightlist_nicks_case_sensitive" />
       </LinearLayout>
 
       <LinearLayout
@@ -82,25 +74,18 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp">
 
-        <androidx.appcompat.widget.AppCompatImageView
-          style="@style/Widget.CoreSettings.PrimaryItemIcon"
-          app:srcCompat="@drawable/ic_server_network" />
-
         <TextView
           style="@style/Widget.CoreSettings.PrimaryItemSwitch"
           android:text="@string/settings_highlightlist_rules" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+          style="@style/Widget.CoreSettings.PrimaryItemIcon"
+          app:srcCompat="@drawable/ic_server_network" />
       </LinearLayout>
 
       <LinearLayout
         style="@style/Widget.CoreSettings.DependentGroup"
         android:visibility="visible">
-
-        <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/highlight_rules"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          tools:itemCount="2"
-          tools:listitem="@layout/settings_highlightlist_rule" />
 
         <LinearLayout
           android:layout_width="match_parent"
@@ -114,6 +99,13 @@
             android:layout_height="wrap_content"
             android:text="@string/label_new_highlight_rule" />
         </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/highlight_rules"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          tools:itemCount="2"
+          tools:listitem="@layout/settings_highlightlist_rule" />
       </LinearLayout>
 
       <LinearLayout
@@ -121,25 +113,18 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp">
 
-        <androidx.appcompat.widget.AppCompatImageView
-          style="@style/Widget.CoreSettings.PrimaryItemIcon"
-          app:srcCompat="@drawable/ic_server_network" />
-
         <TextView
           style="@style/Widget.CoreSettings.PrimaryItemSwitch"
           android:text="@string/settings_highlightlist_ignore_rules" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+          style="@style/Widget.CoreSettings.PrimaryItemIcon"
+          app:srcCompat="@drawable/ic_server_network" />
       </LinearLayout>
 
       <LinearLayout
         style="@style/Widget.CoreSettings.DependentGroup"
         android:visibility="visible">
-
-        <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/highlight_ignore_rules"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          tools:itemCount="2"
-          tools:listitem="@layout/settings_highlightlist_rule" />
 
         <LinearLayout
           android:layout_width="match_parent"
@@ -153,7 +138,22 @@
             android:layout_height="wrap_content"
             android:text="@string/label_new_highlight_ignore_rule" />
         </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/highlight_ignore_rules"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          tools:itemCount="2"
+          tools:listitem="@layout/settings_highlightlist_rule" />
       </LinearLayout>
     </LinearLayout>
+
+    <de.kuschku.quasseldroid.util.ui.view.WarningBarView
+      android:id="@+id/feature_context_coresidehighlights"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:icon="@drawable/ic_alert"
+      app:mode="none"
+      app:text="@string/label_feature_context_coresidehighlights" />
   </LinearLayout>
 </androidx.core.widget.NestedScrollView>

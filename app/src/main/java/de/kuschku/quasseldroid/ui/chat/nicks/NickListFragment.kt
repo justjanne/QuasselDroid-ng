@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -106,7 +106,7 @@ class NickListFragment : ServiceBoundFragment() {
     val colorContext = ColorContext(requireContext(), messageSettings)
 
     val avatarSize = resources.getDimensionPixelSize(R.dimen.avatar_size)
-    modelHelper.nickDataThrottled.toLiveData().observe(this, Observer {
+    modelHelper.nickDataThrottled.toLiveData().observe(viewLifecycleOwner, Observer {
       runInBackground {
         it?.asSequence()?.map {
           val nickName = it.nick

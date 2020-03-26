@@ -3,8 +3,8 @@
 <!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -20,8 +20,6 @@
   -->
 
 <resources>
-  <color name="solarized_light_background">#FDF6E3</color>
-
   <style name="Theme.ChatTheme.Solarized_Light" parent="Theme.ChatTheme.Light.Auto">
     <item name="colorPrimary">?attr/colorBackgroundCard</item>
     <item name="colorPrimaryDark">#b0ac9e</item>
@@ -84,8 +82,6 @@
     <item name="colorTintPartiallySecure">#D5A920</item>
     <item name="colorTintInsecure">#CB4B16</item>
   </style>
-
-  <color name="solarized_dark_background">#002B36</color>
 
   <style name="Theme.ChatTheme.Solarized_Dark" parent="Theme.ChatTheme.Auto">
     <item name="colorPrimary">?attr/colorBackgroundCard</item>
@@ -150,4 +146,8 @@
     <item name="colorTintPartiallySecure">#B58900</item>
     <item name="colorTintInsecure">#CB4B16</item>
   </style>
+
+  <color name="solarized_light_background">#FDF6E3</color>
+
+  <color name="solarized_dark_background">#002B36</color>
 </resources>

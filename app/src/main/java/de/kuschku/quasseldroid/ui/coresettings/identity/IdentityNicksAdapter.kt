@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.identity
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView
 import de.kuschku.quasseldroid.databinding.SettingsIdentityNickBinding
 import java.util.*
 
+@SuppressLint("ClickableViewAccessibility")
 class IdentityNicksAdapter(
   private val clickListener: (Int, String) -> Unit,
   private val dragListener: (IdentityNickViewHolder) -> Unit

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -26,23 +26,21 @@
 
   <LinearLayout style="@style/Widget.CoreSettings.PrimaryItemGroupHeader">
 
-    <androidx.appcompat.widget.AppCompatImageView
-      style="@style/Widget.CoreSettings.PrimaryItemIcon"
-      app:srcCompat="@drawable/ic_clock" />
-
     <TextView
       android:id="@+id/title"
       style="@style/Widget.CoreSettings.PrimaryItemSwitch"
       tools:text="@string/label_temporarily_archived" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+      style="@style/Widget.CoreSettings.PrimaryItemIcon"
+      app:srcCompat="@drawable/ic_clock" />
   </LinearLayout>
 
   <TextView
     android:id="@+id/content"
     style="@style/Widget.CoreSettings.TextView"
     android:layout_marginStart="72dp"
-    android:layout_marginLeft="72dp"
     android:layout_marginEnd="16dp"
-    android:layout_marginRight="16dp"
     tools:text="@string/label_temporarily_archived_long" />
 
 </LinearLayout>

@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -113,7 +113,7 @@ class CoreInfoFragment : ServiceBoundFragment() {
 
     var missingFeatureList: List<MissingFeature> = emptyList()
     combineLatest(modelHelper.coreInfo, modelHelper.coreFeatures).toLiveData()
-      .observe(this, Observer {
+      .observe(viewLifecycleOwner, Observer {
         val data = it?.first?.orNull()
         val connected = it?.second?.first
                         ?: false
@@ -163,7 +163,7 @@ class CoreInfoFragment : ServiceBoundFragment() {
       CertificateInfoActivity.launch(it.context)
     }
 
-    modelHelper.sslSession.toLiveData().observe(this, Observer {
+    modelHelper.sslSession.toLiveData().observe(viewLifecycleOwner, Observer {
       val peerCertificateChain = try {
         it?.orNull()?.peerCertificateChain
       } catch (ignored: SSLPeerUnverifiedException) {
@@ -218,7 +218,7 @@ class CoreInfoFragment : ServiceBoundFragment() {
       rpcHandler?.requestKickClient(it)
     }
     clients.adapter = adapter
-    modelHelper.coreInfoClients.toLiveData().observe(this, Observer {
+    modelHelper.coreInfoClients.toLiveData().observe(viewLifecycleOwner, Observer {
       clientsTitle.visibleIf(it?.isNotEmpty() == true)
       adapter.submitList(it)
     })

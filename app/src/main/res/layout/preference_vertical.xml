@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -29,24 +29,19 @@
   android:gravity="center_vertical"
   android:minHeight="?android:attr/listPreferredItemHeightSmall"
   android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
-  android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
-  android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
-  android:paddingRight="?android:attr/listPreferredItemPaddingRight">
+  android:paddingEnd="?android:attr/listPreferredItemPaddingRight">
 
   <FrameLayout
     android:id="@+id/icon_frame"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="-4dp"
-    android:layout_marginLeft="-4dp"
     android:gravity="start|center_vertical"
     android:minWidth="60dp"
     android:orientation="horizontal"
     android:paddingStart="0dp"
-    android:paddingLeft="0dp"
     android:paddingTop="4dp"
     android:paddingEnd="12dp"
-    android:paddingRight="12dp"
     android:paddingBottom="4dp">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -67,15 +62,11 @@
     android:paddingTop="16dp"
     android:paddingBottom="16dp">
 
-    <TextView
-      android:id="@android:id/title"
-      android:layout_width="wrap_content"
+    <LinearLayout
+      android:id="@android:id/widget_frame"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:ellipsize="marquee"
-      android:singleLine="true"
-      android:textColor="?colorTextPrimary"
-      android:textSize="16sp"
-      tools:text="Font Size" />
+      android:orientation="vertical" />
 
     <TextView
       android:id="@android:id/summary"
@@ -86,10 +77,14 @@
       android:textAppearance="?android:attr/textAppearanceSmall"
       android:textColor="?colorTextSecondary" />
 
-    <LinearLayout
-      android:id="@android:id/widget_frame"
-      android:layout_width="match_parent"
+    <TextView
+      android:id="@android:id/title"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:orientation="vertical" />
+      android:ellipsize="marquee"
+      android:singleLine="true"
+      android:textColor="?colorTextPrimary"
+      android:textSize="16sp"
+      tools:text="Font Size" />
   </LinearLayout>
 </LinearLayout>

@@ -97,8 +97,8 @@ class ChannelListAdapter @Inject constructor(
       )
       binding.topic.text = content
       binding.users.text = itemView.context.resources.getQuantityString(R.plurals.label_user_count,
-                                                                data.userCount.toInt(),
-                                                                data.userCount.toInt())
+                                                                        data.userCount.toInt(),
+                                                                        data.userCount.toInt())
 
       this.data = data
     }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -18,30 +18,6 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="message_type_join">Prisijungimas</string>
-  <string name="message_type_part">Atsijungimas</string>
-  <string name="message_type_quit">Išėjimas</string>
-  <string name="message_type_nick">Slapyvardis</string>
-  <string name="message_type_mode">Rėžimas</string>
-  <string name="message_type_topic">Tema</string>
-  <string name="message_format_copy">[%1$s] %2$s</string>
-  <string name="message_format_copy_complex">[%1$s] &lt;%2$s&gt; %3$s</string>
-
-  <string name="message_format_action">— %1$s%2$s %3$s</string>
-  <string name="message_format_notice">[%1$s%2$s] %3$s</string>
-  <string name="message_format_nick">%1$s%2$s dabar žinomas kaip %3$s%4$s</string>
-  <string name="message_format_nick_self">Jūs dabar žinomas kaip %1$s%2$s</string>
-  <string name="message_format_mode">Naujas rėžimas %1$s parinktas %2$s%3$s</string>
-  <string name="message_format_join">%1$s%2$s prisijungė į %3$s</string>
-  <string name="message_format_part_1">%1$s%2$s paliko kanalą</string>
-  <string name="message_format_part_2">%1$s%2$s paliko (%3$s)</string>
-  <string name="message_format_quit_1">%1$s%2$s išėjo</string>
-  <string name="message_format_quit_2">%1$s%2$s išėjo (%3$s)</string>
-  <string name="message_format_kick_1">%1$s buvo išspirtas %2$s%3$s</string>
-  <string name="message_format_kick_2">%1$s buvo išspirtas %2$s%3$s (%4$s)</string>
-  <string name="message_format_kill_1">%1$s buvo nužudytas %2$s%3$s</string>
-  <string name="message_format_kill_2">%1$s buvo nužudytas %2$s%3$s (%4$s)</string>
-  <!-- Transifex’ quantity handling is different from Android’s. Issue opened on 2018-05-18 -->
   <plurals name="message_netsplit_join" tools:ignore="UnusedQuantity">
     <item quantity="one">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojas prisijungė: %4$s</item>
     <item quantity="few">Netsplit tarp %1$s ir %2$s baigėsi: %3$d vartotojai prisijungė: %4$s</item>
@@ -54,4 +30,28 @@
     <item quantity="many">Netsplit tarp %1$s ir %2$s: %3$d vartotojų išėjo: %4$s</item>
     <item quantity="other">Netsplit tarp %1$s ir %2$s: %3$d vartotojų išėjo: %4$s</item>
   </plurals>
+  <string name="message_type_join">Prisijungimas</string>
+  <string name="message_type_part">Atsijungimas</string>
+  <string name="message_type_quit">Išėjimas</string>
+  <string name="message_type_nick">Slapyvardis</string>
+  <string name="message_type_mode">Rėžimas</string>
+  <string name="message_type_topic">Tema</string>
+
+  <string name="message_format_copy">[%1$s] %2$s</string>
+  <string name="message_format_copy_complex">[%1$s] &lt;%2$s&gt; %3$s</string>
+  <string name="message_format_action">— %1$s%2$s %3$s</string>
+  <string name="message_format_notice">[%1$s%2$s] %3$s</string>
+  <string name="message_format_nick">%1$s%2$s dabar žinomas kaip %3$s%4$s</string>
+  <string name="message_format_nick_self">Jūs dabar žinomas kaip %1$s%2$s</string>
+  <string name="message_format_mode">Naujas rėžimas %1$s parinktas %2$s%3$s</string>
+  <string name="message_format_join">%1$s%2$s prisijungė į %3$s</string>
+  <string name="message_format_part_1">%1$s%2$s paliko kanalą</string>
+  <string name="message_format_part_2">%1$s%2$s paliko (%3$s)</string>
+  <string name="message_format_quit_1">%1$s%2$s išėjo</string>
+  <string name="message_format_quit_2">%1$s%2$s išėjo (%3$s)</string>
+  <string name="message_format_kick_1">%1$s buvo išspirtas %2$s%3$s</string>
+  <string name="message_format_kick_2">%1$s buvo išspirtas %2$s%3$s (%4$s)</string>
+  <!-- Transifex’ quantity handling is different from Android’s. Issue opened on 2018-05-18 -->
+  <string name="message_format_kill_1">%1$s buvo nužudytas %2$s%3$s</string>
+  <string name="message_format_kill_2">%1$s buvo nužudytas %2$s%3$s (%4$s)</string>
 </resources>

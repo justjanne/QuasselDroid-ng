@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -29,6 +29,13 @@
   android:paddingBottom="6dp"
   android:theme="?attr/actionBarTheme">
 
+  <TextView
+    android:id="@+id/text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:textColor="?android:textColorPrimary" />
+
   <androidx.appcompat.widget.AppCompatImageView
     android:id="@+id/icon"
     android:layout_width="20dp"
@@ -45,13 +52,5 @@
     android:indeterminate="true"
     android:visibility="gone"
     app:mpb_indeterminateTint="?android:textColorPrimary" />
-
-  <TextView
-    android:id="@+id/text"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginLeft="16dp"
-    android:textColor="?android:textColorPrimary" />
 
 </LinearLayout>

@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -114,7 +114,7 @@ class ChannelInfoFragment : ServiceBoundFragment() {
       channel.updates().map {
         Pair(info, it)
       }
-    }.toLiveData().observe(this, Observer { (info, channel) ->
+    }.toLiveData().observe(viewLifecycleOwner, Observer { (info, channel) ->
       name.text = channel.name()
       val (content, hasSpoilers) = contentFormatter.formatContent(
         channel.topic(),

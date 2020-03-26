@@ -3,8 +3,8 @@
 <!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -32,6 +32,18 @@
 
     <LinearLayout style="@style/Widget.CoreSettings.Wrapper">
 
+      <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.CustomTextInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/label_channel_name">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/name"
+          style="@style/Widget.CoreSettings.EditText"
+          tools:text="#trees" />
+      </com.google.android.material.textfield.TextInputLayout>
+
       <de.kuschku.ui.spinner.MaterialSpinnerLayout
         style="@style/Widget.CustomSpinnerLayout"
         android:layout_width="match_parent"
@@ -45,18 +57,6 @@
           android:layout_height="wrap_content"
           tools:listitem="@layout/widget_spinner_item_material" />
       </de.kuschku.ui.spinner.MaterialSpinnerLayout>
-
-      <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.CustomTextInput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/label_channel_name">
-
-        <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/name"
-          style="@style/Widget.CoreSettings.EditText"
-          tools:text="#trees" />
-      </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <de.kuschku.quasseldroid.util.ui.view.ShadowView

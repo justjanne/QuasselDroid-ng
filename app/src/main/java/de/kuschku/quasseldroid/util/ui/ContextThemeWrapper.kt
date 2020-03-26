@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -24,7 +24,6 @@ import android.content.ContextWrapper
 import android.content.res.AssetManager
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.os.Build
 import android.view.LayoutInflater
 import androidx.annotation.StyleRes
 import de.kuschku.quasseldroid.R
@@ -119,12 +118,9 @@ open class ContextThemeWrapper : ContextWrapper {
   private val resourcesInternal: Resources?
     get() {
       if (mResources == null) {
-        if (overrideConfiguration == null) {
-          mResources = super.getResources()
-        } else if (Build.VERSION.SDK_INT >= 17) {
-          val resContext = createConfigurationContext(overrideConfiguration)
-          mResources = resContext.resources
-        }
+        mResources = overrideConfiguration?.let {
+          createConfigurationContext(it).resources
+        } ?: super.getResources()
       }
       return mResources
     }

@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -30,11 +30,9 @@ class ChannelLinkSpan(
   private val text: String,
   private val highlight: Boolean
 ) : ClickableSpan() {
-  override fun updateDrawState(ds: TextPaint?) {
-    if (ds != null) {
-      if (!highlight) ds.color = ds.linkColor
-      ds.isUnderlineText = true
-    }
+  override fun updateDrawState(ds: TextPaint) {
+    if (!highlight) ds.color = ds.linkColor
+    ds.isUnderlineText = true
   }
 
   override fun onClick(widget: View) {

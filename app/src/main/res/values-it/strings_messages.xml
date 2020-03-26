@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -18,15 +18,23 @@
   -->
 
 <resources>
+  <plurals name="message_netsplit_join">
+    <item quantity="one">Netsplit tra %1$s e %2$s terminato: %3$d utente entrato: %4$s</item>
+    <item quantity="other">Netsplit tra %1$s e %2$s terminato: %3$d utenti entrati: %4$s</item>
+  </plurals>
+  <plurals name="message_netsplit_quit">
+    <item quantity="one">Netsplit tra %1$s e %2$s: %3$d utente disconnesso: %4$s</item>
+    <item quantity="other">Netsplit tra %1$s e %2$s: %3$d utenti disconnessi: %4$s</item>
+  </plurals>
   <string name="message_type_join">Entrato</string>
   <string name="message_type_part">Uscito</string>
   <string name="message_type_quit">Disconnesso</string>
   <string name="message_type_nick">Nick</string>
   <string name="message_type_mode">Modo</string>
   <string name="message_type_topic">Argomento</string>
+
   <string name="message_format_copy">[%1$s] %2$s</string>
   <string name="message_format_copy_complex">[%1$s] &lt;%2$s&gt; %3$s</string>
-
   <string name="message_format_action">— %1$s%2$s %3$s</string>
   <string name="message_format_notice">[%1$s%2$s] %3$s</string>
   <string name="message_format_nick">%1$s%2$s è ora conosciuto come %3$s%4$s</string>
@@ -41,12 +49,4 @@
   <string name="message_format_kick_2">%1$s è stato espulso da %2$s%3$s (%4$s)</string>
   <string name="message_format_kill_1">%1$s è stato disconnesso forzatamente da %2$s%3$s</string>
   <string name="message_format_kill_2">%1$s è stato disconnesso forzatamente da %2$s%3$s (%4$s)</string>
-  <plurals name="message_netsplit_join">
-    <item quantity="one">Netsplit tra %1$s e %2$s terminato: %3$d utente entrato: %4$s</item>
-    <item quantity="other">Netsplit tra %1$s e %2$s terminato: %3$d utenti entrati: %4$s</item>
-  </plurals>
-  <plurals name="message_netsplit_quit">
-    <item quantity="one">Netsplit tra %1$s e %2$s: %3$d utente disconnesso: %4$s</item>
-    <item quantity="other">Netsplit tra %1$s e %2$s: %3$d utenti disconnessi: %4$s</item>
-  </plurals>
 </resources>

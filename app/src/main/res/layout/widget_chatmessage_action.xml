@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -23,8 +23,6 @@
   android:layout_height="wrap_content"
   android:orientation="vertical">
 
-  <include layout="@layout/widget_chatmessage_daychange" />
-
   <LinearLayout
     android:id="@+id/message_container"
     android:layout_width="match_parent"
@@ -39,24 +37,11 @@
     android:paddingBottom="@dimen/message_vertical"
     android:textAppearance="?android:attr/textAppearanceListItemSmall">
 
-    <TextView
-      android:id="@+id/time_left"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="top"
-      android:layout_marginEnd="@dimen/message_horizontal"
-      android:layout_marginRight="@dimen/message_horizontal"
-      android:textColor="?attr/colorForegroundSecondary"
-      android:typeface="monospace"
-      tools:text="@sample/messages.json/data/time"
-      tools:visibility="gone" />
-
     <FrameLayout
       android:id="@+id/avatar_container"
       android:layout_width="@dimen/avatar_size"
       android:layout_height="@dimen/avatar_size"
       android:layout_marginEnd="@dimen/message_horizontal"
-      android:layout_marginRight="@dimen/message_horizontal"
       android:visibility="gone"
       tools:ignore="UselessParent"
       tools:visibility="visible">
@@ -99,7 +84,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         android:layout_marginStart="@dimen/message_horizontal"
-        android:layout_marginLeft="@dimen/message_horizontal"
         android:textColor="?attr/colorForegroundSecondary"
         android:textStyle="italic"
         android:visibility="gone"
@@ -108,6 +92,19 @@
         tools:textSize="11.9sp"
         tools:visibility="visible" />
     </LinearLayout>
+
+    <TextView
+      android:id="@+id/time_left"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="top"
+      android:layout_marginEnd="@dimen/message_horizontal"
+      android:textColor="?attr/colorForegroundSecondary"
+      android:typeface="monospace"
+      tools:text="@sample/messages.json/data/time"
+      tools:visibility="gone" />
   </LinearLayout>
+
+  <include layout="@layout/widget_chatmessage_daychange" />
 
 </LinearLayout>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -36,6 +36,221 @@
   <string name="preference_theme_entry_gruvbox_light">Gruvbox (Light)</string>
   <string name="preference_theme_entry_gruvbox_dark">Gruvbox (Dark)</string>
   <string name="preference_theme_entry_dracula">Dracula</string>
+  <string name="preference_input_enter_key" translatable="false">input_enter</string>
+  <string name="preference_input_enter_title">Enter key on keyboard</string>
+
+  <string name="preference_input_enter_entry_emoji">Emoji</string>
+  <string name="preference_input_enter_entry_send">Send</string>
+  <string name="preference_input_enter_entry_newline">New Line</string>
+  <string name="preference_show_lag_key" translatable="false">show_lag</string>
+  <string name="preference_show_lag_title">Show Lag</string>
+  <string name="preference_show_lag_summary">Displays the lag between client and core in the action bar</string>
+  <string name="preference_keep_screen_on_key" translatable="false">keep_screen_on</string>
+
+  <string name="preference_keep_screen_on_title">Keep Screen Active</string>
+  <string name="preference_keep_screen_on_summary">Prevents the device from going to sleep while the app is in foreground</string>
+  <string name="preference_language_key" translatable="false">language</string>
+
+  <string name="preference_language_title">Language</string>
+  <string name="preference_language_entry_auto">System Default</string>
+  <string name="preference_language_entry_en" translatable="false">English</string>
+
+  <string name="preference_language_entry_en_gb" translatable="false">English (Great Britain)</string>
+  <string name="preference_language_entry_de" translatable="false">Deutsch</string>
+  <string name="preference_language_entry_fr" translatable="false">Français</string>
+  <string name="preference_language_entry_fr_ca" translatable="false">Français (Canadien)</string>
+  <string name="preference_language_entry_it" translatable="false">Italiano</string>
+  <string name="preference_language_entry_lt" translatable="false">Lietuvių</string>
+  <string name="preference_language_entry_nl" translatable="false">Nederlands</string>
+  <string name="preference_language_entry_pt" translatable="false">Português</string>
+  <string name="preference_language_entry_sr" translatable="false">Srpski (latinica)</string>
+  <string name="preference_redirection_title">Message Redirection</string>
+  <string name="preference_redirection_user_notices_key" translatable="false">redirection_user_notices</string>
+  <string name="preference_redirection_user_notices_title">Redirect User Notices</string>
+  <string name="preference_redirection_user_notices_summary">Displays user notices in the currently open channel</string>
+  <string name="preference_redirection_server_notices_key" translatable="false">redirection_user_notices</string>
+  <string name="preference_redirection_server_notices_title">Redirect Server Notices</string>
+
+
+  <string name="preference_redirection_server_notices_summary">Displays server notices in the currently open channel</string>
+
+  <string name="preference_redirection_errors_key" translatable="false">redirection_errors</string>
+  <string name="preference_redirection_errors_title">Redirect Errors</string>
+  <string name="preference_redirection_errors_summary">Displays errors in the currently open channel</string>
+
+  <string name="preference_notifications_title">Notifications</string>
+  <string name="preference_notification_query_key" translatable="false">notification_query</string>
+  <string name="preference_notification_query_title">Direct Messages</string>
+
+  <string name="preference_notification_channel_key" translatable="false">notification_channel</string>
+  <string name="preference_notification_channel_title">Channel Messages</string>
+  <string name="preference_notification_other_key" translatable="false">notification_other</string>
+
+
+  <string name="preference_notification_other_title">Other Messages</string>
+
+  <string name="preference_notification_sound_key" translatable="false">notification_sound</string>
+  <string name="preference_notification_sound_title">Notification Sound</string>
+
+  <string name="preference_notification_vibration_key" translatable="false">notification_vibration</string>
+  <string name="preference_notification_vibration_title">Vibration</string>
+
+  <string name="preference_notification_light_key" translatable="false">notification_light</string>
+  <string name="preference_notification_light_title">LED</string>
+
+  <string name="preference_notification_mark_read_on_swipe_key" translatable="false">mark_read_on_swipe</string>
+  <string name="preference_notification_mark_read_on_swipe_title">Mark channel read when swiping notifications</string>
+
+  <string name="preference_notification_mark_read_on_swipe_summary">Marks all messages in a channel as read when a notification for the channel is swiped away</string>
+  <string name="preference_notification_network_name_in_notification_title_key" translatable="false">network_name_in_notification_title</string>
+
+  <string name="preference_notification_network_name_in_notification_title_title">Show network name in notifications title</string>
+  <string name="preference_notification_show_all_activities_in_toolbar_key" translatable="false">show_all_activities_in_toolbar</string>
+
+  <string name="preference_notification_show_all_activities_in_toolbar_title">Mark all activities in toolbar</string>
+  <string name="preference_notification_show_all_activities_in_toolbar_summary">Displays a colored bubble in the toolbar for all chat activities</string>
+  <string name="preference_notification_configure_key" translatable="false">notification_configure</string>
+
+  <string name="preference_notification_configure_title">Configure Notifications</string>
+  <string name="preference_notifications_level_all">All Messages</string>
+
+  <string name="preference_notifications_level_highlight">Mentions</string>
+  <string name="preference_notifications_level_none">Never</string>
+  <string name="preference_messages_title">Messages</string>
+
+  <string name="preference_monospace_key" translatable="false">monospace</string>
+  <string name="preference_monospace_title">Use Monospace Font</string>
+
+  <string name="preference_textsize_key" translatable="false">fontsize</string>
+  <string name="preference_textsize_title">Text Size</string>
+  <string name="preference_show_seconds_key" translatable="false">show_seconds</string>
+  <string name="preference_show_seconds_title">Show Seconds</string>
+  <string name="preference_use_24h_clock_key" translatable="false">use_24h_clock</string>
+
+
+  <string name="preference_use_24h_clock_title">Use 24h Clock</string>
+
+  <string name="preference_colorize_mirc_key" translatable="false">colorize_mirc</string>
+  <string name="preference_colorize_mirc_title">Use mIRC Colors</string>
+
+  <string name="preference_colorize_mirc_summaryon">Show mIRC colors in messages</string>
+  <string name="preference_colorize_mirc_summaryoff">Strip mIRC colors from messages</string>
+
+  <string name="preference_colorize_nicknames_key" translatable="false">colorize_nicknames</string>
+  <string name="preference_colorize_nicknames_title">Colorize nicknames</string>
+
+  <string name="preference_colorize_nicknames_entry_all">All nicks</string>
+  <string name="preference_colorize_nicknames_entry_all_but_mine">All but own nick</string>
+
+  <string name="preference_colorize_nicknames_entry_none">No nicks</string>
+  <string name="preference_show_prefix_key" translatable="false">show_prefix</string>
+  <string name="preference_show_prefix_title">Show sendermodes</string>
+  <string name="preference_show_prefix_entry_all">All modes</string>
+
+  <string name="preference_show_prefix_entry_highest">Highest mode</string>
+  <string name="preference_show_prefix_entry_none">No modes</string>
+  <string name="preference_hostmask_actions_key" translatable="false">hostmask_actions</string>
+  <string name="preference_hostmask_actions_title">Show Hostmask in actions</string>
+  <string name="preference_hostmask_actions_summary">Display the full nick!ident@host in join/part/quit messages</string>
+  <string name="preference_nicks_on_new_line_key" translatable="false">nicks_on_new_line</string>
+  <string name="preference_nicks_on_new_line_title">Separate Nicknames</string>
+
+  <string name="preference_nicks_on_new_line_summary">Shows nicknames on a separate line</string>
+  <string name="preference_show_realnames_key" translatable="false">show_realnames</string>
+  <string name="preference_show_realnames_title">Show Realnames</string>
+  <string name="preference_show_avatars_key" translatable="false">show_avatars</string>
+  <string name="preference_show_avatars_title">Show Avatars</string>
+  <string name="preference_square_avatars_key" translatable="false">square_avatars</string>
+  <string name="preference_square_avatars_title">Square Avatars</string>
+
+  <string name="preference_show_irccloud_avatars_key" translatable="false">show_irccloud_avatars</string>
+  <string name="preference_show_irccloud_avatars_title">Show IRCCloud Avatars</string>
+  <string name="preference_show_irccloud_avatars_summary">Shows for users without avatar their IRCCloud fallback, if available</string>
+
+  <string name="preference_show_gravatar_avatars_key" translatable="false">show_gravatar_avatars</string>
+  <string name="preference_show_gravatar_avatars_title">Show Gravatar Avatars</string>
+  <string name="preference_show_gravatar_avatars_summary">Shows for users without avatar their Gravatar fallback, if available</string>
+
+  <string name="preference_show_matrix_avatars_key" translatable="false">show_matrix_avatars</string>
+  <string name="preference_show_matrix_avatars_title">Show Matrix Avatars</string>
+
+  <string name="preference_show_matrix_avatars_summary">Shows for users without avatar their Matrix fallback, if available</string>
+  <string name="preference_time_at_end_key" translatable="false">time_at_end</string>
+
+  <string name="preference_time_at_end_title">Right-Aligned Timestamps</string>
+  <string name="preference_time_at_end_summary">Aligns timestamps at the end of each message</string>
+
+  <string name="preference_larger_emoji_key" translatable="false">larger_emoji</string>
+  <string name="preference_larger_emoji_title">Larger Reactions</string>
+  <string name="preference_larger_emoji_summary">Increase the size of emoji-only messages</string>
+
+  <string name="preference_highlight_own_messages_key" translatable="false">highlight_own_messages</string>
+  <string name="preference_highlight_own_messages_title">Highlight own messages</string>
+  <string name="preference_highlight_own_messages_summary">Shows your own messages more prominently</string>
+
+  <string name="preference_replace_emoji_key" translatable="false">replace_emoji</string>
+  <string name="preference_replace_emoji_title">Replace Emoji Shortcodes</string>
+  <string name="preference_replace_emoji_summary">Automatically replaces shortcodes such as :+1: or :like: with emoji</string>
+
+  <string name="preference_autocomplete_title">Autocomplete</string>
+  <string name="preference_autocomplete_sender_doubleclick_key" translatable="false">autocomplete_sender_doubleclick</string>
+  <string name="preference_autocomplete_sender_doubleclick_title">Sender Autocomplete</string>
+
+  <string name="preference_autocomplete_sender_doubleclick_summary">Doubleclick on a message to autocomplete its sender</string>
+  <string name="preference_autocomplete_button_key" translatable="false">autocomplete_button</string>
+  <string name="preference_autocomplete_button_title">Autocomplete Button</string>
+
+  <string name="preference_autocomplete_button_summary">Shows a button on the left of the input line that triggers tabcomplete</string>
+  <string name="preference_autocomplete_doubletap_key" translatable="false">autocomplete_doubletap</string>
+  <string name="preference_autocomplete_doubletap_title">Double tap to autocomplete</string>
+
+  <string name="preference_autocomplete_doubletap_summary">Suggest nicks and channels after doubleclicking on the input field</string>
+  <string name="preference_autocomplete_auto_key" translatable="false">autocomplete_auto</string>
+  <string name="preference_autocomplete_auto_title">Show automatically</string>
+
+
+  <string name="preference_autocomplete_auto_summary">Suggest nicks and channels after entering the first 3 characters</string>
+
+  <string name="preference_autocomplete_prefix_key" translatable="false">autocomplete_prefix</string>
+  <string name="preference_autocomplete_prefix_title">Show after prefix</string>
+  <string name="preference_autocomplete_prefix_summary">Suggest nicks and channels after entering @ or #</string>
+
+  <string name="preference_autocomplete_nicks_key" translatable="false">autocomplete_nicks</string>
+  <string name="preference_autocomplete_nicks_title">Autocomplete Nicknames</string>
+  <string name="preference_autocomplete_buffers_key" translatable="false">autocomplete_buffers</string>
+
+  <string name="preference_autocomplete_buffers_title">Autocomplete Chats</string>
+  <string name="preference_autocomplete_aliases_key" translatable="false">autocomplete_aliases</string>
+  <string name="preference_autocomplete_aliases_title">Autocomplete Commands</string>
+
+  <string name="preference_autocomplete_emoji_key" translatable="false">autocomplete_emoji</string>
+  <string name="preference_autocomplete_emoji_title">Autocomplete Emoji</string>
+  <string name="preference_backlog_title">Backlog</string>
+
+  <string name="preference_page_size_key" translatable="false">page_size</string>
+  <string name="preference_page_size_title">Page Size</string>
+  <string name="preference_page_size_summary">The number of messages loaded and kept in memory at a time</string>
+
+  <string name="preference_initial_amount_key" translatable="false">initial_amount</string>
+  <string name="preference_initial_amount_title">Initial Amount</string>
+
+  <string name="preference_initial_amount_summary">Number of messages to load when opening a buffer for the first time</string>
+  <string name="preference_clear_cache_key" translatable="false">clear_cache_key</string>
+
+  <string name="preference_clear_cache_title">Clear Backlog Cache</string>
+  <string name="preference_connection_title">Connection</string>
+
+  <string name="preference_show_notification_key" translatable="false">show_notification</string>
+  <string name="preference_show_notification_title">Show notification</string>
+
+
+  <string name="preference_show_notification_summary">Keeps Quasseldroid always connected by showing a persistent notification</string>
+
+  <string name="preference_ignore_network_changes_key" translatable="false">ignore_network_changes</string>
+  <string name="preference_ignore_network_changes_title">Ignore network changes</string>
+  <string name="preference_ignore_network_changes_summary">Stops Quasseldroid from reconnecting automatically if the network changes</string>
+
+  <string name="preference_notification_id_key" translatable="false">notification_id</string>
   <string-array name="preference_theme_entries" translatable="false">
     <item>@string/preference_theme_entry_material_light</item>
     <item>@string/preference_theme_entry_material_dark</item>
@@ -61,11 +276,6 @@
     <item>DRACULA</item>
   </string-array>
 
-  <string name="preference_input_enter_key" translatable="false">input_enter</string>
-  <string name="preference_input_enter_title">Enter key on keyboard</string>
-  <string name="preference_input_enter_entry_emoji">Emoji</string>
-  <string name="preference_input_enter_entry_send">Send</string>
-  <string name="preference_input_enter_entry_newline">New Line</string>
   <string-array name="preference_input_enter_entries" translatable="false">
     <item>@string/preference_input_enter_entry_emoji</item>
     <item>@string/preference_input_enter_entry_send</item>
@@ -77,27 +287,6 @@
     <item>NEWLINE</item>
   </string-array>
 
-  <string name="preference_show_lag_key" translatable="false">show_lag</string>
-  <string name="preference_show_lag_title">Show Lag</string>
-  <string name="preference_show_lag_summary">Displays the lag between client and core in the action bar</string>
-
-  <string name="preference_keep_screen_on_key" translatable="false">keep_screen_on</string>
-  <string name="preference_keep_screen_on_title">Keep Screen Active</string>
-  <string name="preference_keep_screen_on_summary">Prevents the device from going to sleep while the app is in foreground</string>
-
-  <string name="preference_language_key" translatable="false">language</string>
-  <string name="preference_language_title">Language</string>
-  <string name="preference_language_entry_auto">System Default</string>
-  <string name="preference_language_entry_en" translatable="false">English</string>
-  <string name="preference_language_entry_en_gb" translatable="false">English (Great Britain)</string>
-  <string name="preference_language_entry_de" translatable="false">Deutsch</string>
-  <string name="preference_language_entry_fr" translatable="false">Français</string>
-  <string name="preference_language_entry_fr_ca" translatable="false">Français (Canadien)</string>
-  <string name="preference_language_entry_it" translatable="false">Italiano</string>
-  <string name="preference_language_entry_lt" translatable="false">Lietuvių</string>
-  <string name="preference_language_entry_nl" translatable="false">Nederlands</string>
-  <string name="preference_language_entry_pt" translatable="false">Português</string>
-  <string name="preference_language_entry_sr" translatable="false">Srpski (latinica)</string>
   <string-array name="preference_language_entries" translatable="false">
     <item>@string/preference_language_entry_auto</item>
     <item>@string/preference_language_entry_en</item>
@@ -110,6 +299,7 @@
     <item>@string/preference_language_entry_pt</item>
     <item>@string/preference_language_entry_sr</item>
   </string-array>
+
   <string-array name="preference_language_entryvalues" translatable="false">
     <item />
     <item>en</item>
@@ -122,60 +312,6 @@
     <item>pt</item>
     <item>sr</item>
   </string-array>
-
-
-  <string name="preference_redirection_title">Message Redirection</string>
-
-  <string name="preference_redirection_user_notices_key" translatable="false">redirection_user_notices</string>
-  <string name="preference_redirection_user_notices_title">Redirect User Notices</string>
-  <string name="preference_redirection_user_notices_summary">Displays user notices in the currently open channel</string>
-
-  <string name="preference_redirection_server_notices_key" translatable="false">redirection_user_notices</string>
-  <string name="preference_redirection_server_notices_title">Redirect Server Notices</string>
-  <string name="preference_redirection_server_notices_summary">Displays server notices in the currently open channel</string>
-
-  <string name="preference_redirection_errors_key" translatable="false">redirection_errors</string>
-  <string name="preference_redirection_errors_title">Redirect Errors</string>
-  <string name="preference_redirection_errors_summary">Displays errors in the currently open channel</string>
-
-
-  <string name="preference_notifications_title">Notifications</string>
-
-  <string name="preference_notification_query_key" translatable="false">notification_query</string>
-  <string name="preference_notification_query_title">Direct Messages</string>
-
-  <string name="preference_notification_channel_key" translatable="false">notification_channel</string>
-  <string name="preference_notification_channel_title">Channel Messages</string>
-
-  <string name="preference_notification_other_key" translatable="false">notification_other</string>
-  <string name="preference_notification_other_title">Other Messages</string>
-
-  <string name="preference_notification_sound_key" translatable="false">notification_sound</string>
-  <string name="preference_notification_sound_title">Notification Sound</string>
-
-  <string name="preference_notification_vibration_key" translatable="false">notification_vibration</string>
-  <string name="preference_notification_vibration_title">Vibration</string>
-
-  <string name="preference_notification_light_key" translatable="false">notification_light</string>
-  <string name="preference_notification_light_title">LED</string>
-
-  <string name="preference_notification_mark_read_on_swipe_key" translatable="false">mark_read_on_swipe</string>
-  <string name="preference_notification_mark_read_on_swipe_title">Mark channel read when swiping notifications</string>
-  <string name="preference_notification_mark_read_on_swipe_summary">Marks all messages in a channel as read when a notification for the channel is swiped away</string>
-
-  <string name="preference_notification_network_name_in_notification_title_key" translatable="false">network_name_in_notification_title</string>
-  <string name="preference_notification_network_name_in_notification_title_title">Show network name in notifications title</string>
-
-  <string name="preference_notification_show_all_activities_in_toolbar_key" translatable="false">show_all_activities_in_toolbar</string>
-  <string name="preference_notification_show_all_activities_in_toolbar_title">Mark all activities in toolbar</string>
-  <string name="preference_notification_show_all_activities_in_toolbar_summary">Displays a colored bubble in the toolbar for all chat activities</string>
-
-  <string name="preference_notification_configure_key" translatable="false">notification_configure</string>
-  <string name="preference_notification_configure_title">Configure Notifications</string>
-
-  <string name="preference_notifications_level_all">All Messages</string>
-  <string name="preference_notifications_level_highlight">Mentions</string>
-  <string name="preference_notifications_level_none">Never</string>
   <string-array name="preference_notifications_level_entries" translatable="false">
     <item>@string/preference_notifications_level_all</item>
     <item>@string/preference_notifications_level_highlight</item>
@@ -187,31 +323,6 @@
     <item>NONE</item>
   </string-array>
 
-
-  <string name="preference_messages_title">Messages</string>
-
-  <string name="preference_monospace_key" translatable="false">monospace</string>
-  <string name="preference_monospace_title">Use Monospace Font</string>
-
-  <string name="preference_textsize_key" translatable="false">fontsize</string>
-  <string name="preference_textsize_title">Text Size</string>
-
-  <string name="preference_show_seconds_key" translatable="false">show_seconds</string>
-  <string name="preference_show_seconds_title">Show Seconds</string>
-
-  <string name="preference_use_24h_clock_key" translatable="false">use_24h_clock</string>
-  <string name="preference_use_24h_clock_title">Use 24h Clock</string>
-
-  <string name="preference_colorize_mirc_key" translatable="false">colorize_mirc</string>
-  <string name="preference_colorize_mirc_title">Use mIRC Colors</string>
-  <string name="preference_colorize_mirc_summaryon">Show mIRC colors in messages</string>
-  <string name="preference_colorize_mirc_summaryoff">Strip mIRC colors from messages</string>
-
-  <string name="preference_colorize_nicknames_key" translatable="false">colorize_nicknames</string>
-  <string name="preference_colorize_nicknames_title">Colorize nicknames</string>
-  <string name="preference_colorize_nicknames_entry_all">All nicks</string>
-  <string name="preference_colorize_nicknames_entry_all_but_mine">All but own nick</string>
-  <string name="preference_colorize_nicknames_entry_none">No nicks</string>
   <string-array name="preference_colorize_nicknames_entries" translatable="false">
     <item>@string/preference_colorize_nicknames_entry_all</item>
     <item>@string/preference_colorize_nicknames_entry_all_but_mine</item>
@@ -222,126 +333,15 @@
     <item>ALL_BUT_MINE</item>
     <item>NONE</item>
   </string-array>
-
-  <string name="preference_show_prefix_key" translatable="false">show_prefix</string>
-  <string name="preference_show_prefix_title">Show sendermodes</string>
-  <string name="preference_show_prefix_entry_all">All modes</string>
-  <string name="preference_show_prefix_entry_highest">Highest mode</string>
-  <string name="preference_show_prefix_entry_none">No modes</string>
   <string-array name="preference_show_prefix_entries" translatable="false">
     <item>@string/preference_show_prefix_entry_all</item>
     <item>@string/preference_show_prefix_entry_highest</item>
     <item>@string/preference_show_prefix_entry_none</item>
   </string-array>
+
   <string-array name="preference_show_prefix_entryvalues" translatable="false">
     <item>ALL</item>
     <item>HIGHEST</item>
     <item>NONE</item>
   </string-array>
-
-  <string name="preference_hostmask_actions_key" translatable="false">hostmask_actions</string>
-  <string name="preference_hostmask_actions_title">Show Hostmask in actions</string>
-  <string name="preference_hostmask_actions_summary">Display the full nick!ident@host in join/part/quit messages</string>
-
-  <string name="preference_nicks_on_new_line_key" translatable="false">nicks_on_new_line</string>
-  <string name="preference_nicks_on_new_line_title">Separate Nicknames</string>
-  <string name="preference_nicks_on_new_line_summary">Shows nicknames on a separate line</string>
-
-  <string name="preference_show_realnames_key" translatable="false">show_realnames</string>
-  <string name="preference_show_realnames_title">Show Realnames</string>
-
-  <string name="preference_show_avatars_key" translatable="false">show_avatars</string>
-  <string name="preference_show_avatars_title">Show Avatars</string>
-
-  <string name="preference_square_avatars_key" translatable="false">square_avatars</string>
-  <string name="preference_square_avatars_title">Square Avatars</string>
-
-  <string name="preference_show_irccloud_avatars_key" translatable="false">show_irccloud_avatars</string>
-  <string name="preference_show_irccloud_avatars_title">Show IRCCloud Avatars</string>
-  <string name="preference_show_irccloud_avatars_summary">Shows for users without avatar their IRCCloud fallback, if available</string>
-
-  <string name="preference_show_gravatar_avatars_key" translatable="false">show_gravatar_avatars</string>
-  <string name="preference_show_gravatar_avatars_title">Show Gravatar Avatars</string>
-  <string name="preference_show_gravatar_avatars_summary">Shows for users without avatar their Gravatar fallback, if available</string>
-
-  <string name="preference_show_matrix_avatars_key" translatable="false">show_matrix_avatars</string>
-  <string name="preference_show_matrix_avatars_title">Show Matrix Avatars</string>
-  <string name="preference_show_matrix_avatars_summary">Shows for users without avatar their Matrix fallback, if available</string>
-
-  <string name="preference_time_at_end_key" translatable="false">time_at_end</string>
-  <string name="preference_time_at_end_title">Right-Aligned Timestamps</string>
-  <string name="preference_time_at_end_summary">Aligns timestamps at the end of each message</string>
-
-  <string name="preference_larger_emoji_key" translatable="false">larger_emoji</string>
-  <string name="preference_larger_emoji_title">Larger Reactions</string>
-  <string name="preference_larger_emoji_summary">Increase the size of emoji-only messages</string>
-
-  <string name="preference_highlight_own_messages_key" translatable="false">highlight_own_messages</string>
-  <string name="preference_highlight_own_messages_title">Highlight own messages</string>
-  <string name="preference_highlight_own_messages_summary">Shows your own messages more prominently</string>
-
-  <string name="preference_replace_emoji_key" translatable="false">replace_emoji</string>
-  <string name="preference_replace_emoji_title">Replace Emoji Shortcodes</string>
-  <string name="preference_replace_emoji_summary">Automatically replaces shortcodes such as :+1: or :like: with emoji</string>
-
-
-  <string name="preference_autocomplete_title">Autocomplete</string>
-
-  <string name="preference_autocomplete_sender_doubleclick_key" translatable="false">autocomplete_sender_doubleclick</string>
-  <string name="preference_autocomplete_sender_doubleclick_title">Sender Autocomplete</string>
-  <string name="preference_autocomplete_sender_doubleclick_summary">Doubleclick on a message to autocomplete its sender</string>
-
-  <string name="preference_autocomplete_button_key" translatable="false">autocomplete_button</string>
-  <string name="preference_autocomplete_button_title">Autocomplete Button</string>
-  <string name="preference_autocomplete_button_summary">Shows a button on the left of the input line that triggers tabcomplete</string>
-
-  <string name="preference_autocomplete_doubletap_key" translatable="false">autocomplete_doubletap</string>
-  <string name="preference_autocomplete_doubletap_title">Double tap to autocomplete</string>
-  <string name="preference_autocomplete_doubletap_summary">Suggest nicks and channels after doubleclicking on the input field</string>
-
-  <string name="preference_autocomplete_auto_key" translatable="false">autocomplete_auto</string>
-  <string name="preference_autocomplete_auto_title">Show automatically</string>
-  <string name="preference_autocomplete_auto_summary">Suggest nicks and channels after entering the first 3 characters</string>
-
-  <string name="preference_autocomplete_prefix_key" translatable="false">autocomplete_prefix</string>
-  <string name="preference_autocomplete_prefix_title">Show after prefix</string>
-  <string name="preference_autocomplete_prefix_summary">Suggest nicks and channels after entering @ or #</string>
-
-  <string name="preference_autocomplete_nicks_key" translatable="false">autocomplete_nicks</string>
-  <string name="preference_autocomplete_nicks_title">Autocomplete Nicknames</string>
-
-  <string name="preference_autocomplete_buffers_key" translatable="false">autocomplete_buffers</string>
-  <string name="preference_autocomplete_buffers_title">Autocomplete Chats</string>
-
-  <string name="preference_autocomplete_aliases_key" translatable="false">autocomplete_aliases</string>
-  <string name="preference_autocomplete_aliases_title">Autocomplete Commands</string>
-
-  <string name="preference_autocomplete_emoji_key" translatable="false">autocomplete_emoji</string>
-  <string name="preference_autocomplete_emoji_title">Autocomplete Emoji</string>
-
-
-  <string name="preference_backlog_title">Backlog</string>
-
-  <string name="preference_page_size_key" translatable="false">page_size</string>
-  <string name="preference_page_size_title">Page Size</string>
-  <string name="preference_page_size_summary">The number of messages loaded and kept in memory at a time</string>
-
-  <string name="preference_initial_amount_key" translatable="false">initial_amount</string>
-  <string name="preference_initial_amount_title">Initial Amount</string>
-  <string name="preference_initial_amount_summary">Number of messages to load when opening a buffer for the first time</string>
-
-  <string name="preference_clear_cache_key" translatable="false">clear_cache_key</string>
-  <string name="preference_clear_cache_title">Clear Backlog Cache</string>
-
-  <string name="preference_connection_title">Connection</string>
-
-  <string name="preference_show_notification_key" translatable="false">show_notification</string>
-  <string name="preference_show_notification_title">Show notification</string>
-  <string name="preference_show_notification_summary">Keeps Quasseldroid always connected by showing a persistent notification</string>
-
-  <string name="preference_ignore_network_changes_key" translatable="false">ignore_network_changes</string>
-  <string name="preference_ignore_network_changes_title">Ignore network changes</string>
-  <string name="preference_ignore_network_changes_summary">Stops Quasseldroid from reconnecting automatically if the network changes</string>
-
-  <string name="preference_notification_id_key" translatable="false">notification_id</string>
 </resources>

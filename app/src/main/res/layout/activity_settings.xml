@@ -1,8 +1,8 @@
 <!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -29,6 +29,11 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
+    <FrameLayout
+      android:id="@+id/fragment_container"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+
     <com.google.android.material.appbar.AppBarLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -42,11 +47,6 @@
         app:popupTheme="?attr/actionBarPopupTheme" />
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <FrameLayout
-      android:id="@+id/fragment_container"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent" />
   </LinearLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

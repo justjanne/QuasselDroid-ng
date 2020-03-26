@@ -24,7 +24,7 @@ plugins {
 }
 
 android {
-  compileSdkVersion(28)
+  compileSdkVersion(29)
 
   signingConfigs {
     SigningData.of(project.rootProject.properties("signing.properties"))?.let {
@@ -39,7 +39,7 @@ android {
 
   defaultConfig {
     minSdkVersion(20)
-    targetSdkVersion(28)
+    targetSdkVersion(29)
 
     applicationId = "com.iskrembilen.quasseldroid"
     versionCode = cmd("git", "rev-list", "--count", "HEAD")?.toIntOrNull() ?: 1
@@ -193,8 +193,9 @@ dependencies {
   }
 
   testImplementation("junit", "junit", "4.12")
-  testImplementation("org.robolectric", "robolectric", "4.3") {
+  testImplementation("org.robolectric", "robolectric", "4.3.1") {
     exclude(group = "org.threeten", module = "threetenbp")
+    exclude(group = "com.google.auto.service", module = "auto-service")
   }
 
   androidTestImplementation("junit", "junit", "4.12")

@@ -3,8 +3,8 @@
 <!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -20,8 +20,6 @@
   -->
 
 <resources>
-  <color name="quassel_light_background">#fafafa</color>
-
   <style name="Theme.ChatTheme.Quassel_Light" parent="Theme.ChatTheme.Light.DarkHead">
     <item name="senderColor0">#cc0000</item>
     <item name="senderColor1">#006cad</item>
@@ -77,8 +75,6 @@
     <item name="colorTintPartiallySecure">#ffaf3b</item>
     <item name="colorTintInsecure">#BB2222</item>
   </style>
-
-  <color name="quassel_dark_background">#303030</color>
 
   <style name="Theme.ChatTheme.Quassel_Dark" parent="Theme.ChatTheme.Auto">
     <item name="senderColor0">#cc0000</item>
@@ -136,4 +132,8 @@
     <item name="colorTintPartiallySecure">#ffaf3b</item>
     <item name="colorTintInsecure">#BB2222</item>
   </style>
+
+  <color name="quassel_light_background">#fafafa</color>
+
+  <color name="quassel_dark_background">#303030</color>
 </resources>

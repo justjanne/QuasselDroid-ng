@@ -1,8 +1,8 @@
 <!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -25,9 +25,7 @@
   android:layout_height="match_parent"
   android:fitsSystemWindows="true">
 
-  <include layout="@layout/layout_main" />
-
-  <fragment
+  <androidx.fragment.app.FragmentContainerView
     android:id="@+id/fragment_nick_list"
     android:name="de.kuschku.quasseldroid.ui.chat.nicks.NickListFragment"
     android:layout_width="match_parent"
@@ -43,11 +41,13 @@
     android:fitsSystemWindows="true"
     app:insetBackground="?attr/colorPrimaryDark">
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
       android:id="@+id/fragment_chat_list"
       android:name="de.kuschku.quasseldroid.ui.chat.buffers.BufferViewConfigFragment"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       tools:layout="@layout/chat_chatlist" />
   </de.kuschku.quasseldroid.util.ui.view.NavigationDrawerLayout>
+
+  <include layout="@layout/layout_main" />
 </androidx.drawerlayout.widget.DrawerLayout>

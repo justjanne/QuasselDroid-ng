@@ -82,8 +82,7 @@ class AboutFragment : DaggerFragment() {
 
     versionContainer.setOnClickListener {
       val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-      val clip = ClipData.newPlainText(null, BuildConfig.VERSION_NAME)
-      clipboard.primaryClip = clip
+      clipboard.setPrimaryClip(ClipData.newPlainText(null, BuildConfig.VERSION_NAME))
       Toast.makeText(requireContext(), R.string.info_copied_version, Toast.LENGTH_LONG).show()
     }
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -27,18 +27,6 @@
   android:gravity="center_vertical"
   android:minHeight="?listPreferredItemHeightSmall"
   tools:showIn="@layout/settings_ignorelist">
-
-  <androidx.appcompat.widget.AppCompatImageView
-    android:id="@+id/handle"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_gravity="center_vertical"
-    android:paddingStart="?listPreferredItemPaddingRight"
-    android:paddingLeft="?listPreferredItemPaddingRight"
-    android:paddingEnd="32dp"
-    android:paddingRight="32dp"
-    app:srcCompat="@drawable/ic_reorder"
-    app:tint="?colorTextSecondary" />
 
   <LinearLayout
     android:layout_width="0dip"
@@ -74,12 +62,20 @@
 
   </LinearLayout>
 
+  <androidx.appcompat.widget.AppCompatImageView
+    android:id="@+id/handle"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:paddingStart="?listPreferredItemPaddingRight"
+    android:paddingEnd="32dp"
+    app:srcCompat="@drawable/ic_reorder"
+    app:tint="?colorTextSecondary" />
+
   <androidx.appcompat.widget.SwitchCompat
     android:id="@+id/toggle"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:paddingStart="?listPreferredItemPaddingLeft"
-    android:paddingLeft="?listPreferredItemPaddingLeft"
-    android:paddingEnd="?listPreferredItemPaddingRight"
-    android:paddingRight="?listPreferredItemPaddingRight" />
+    android:paddingEnd="?listPreferredItemPaddingRight" />
 </LinearLayout>

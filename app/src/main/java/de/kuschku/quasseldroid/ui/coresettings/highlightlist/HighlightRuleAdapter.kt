@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.highlightlist
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ import de.kuschku.quasseldroid.databinding.SettingsHighlightlistRuleBinding
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import java.util.*
 
+@SuppressLint("ClickableViewAccessibility")
 class HighlightRuleAdapter(
   private val clickListener: (HighlightRuleManager.HighlightRule) -> Unit,
   private val dragListener: (HighlightRuleViewHolder) -> Unit

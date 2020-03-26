@@ -16,13 +16,13 @@
 
 <resources>
 
-  <declare-styleable name="MaterialShape">
-    <!-- Shape appearance style reference to be used to construct a ShapeAppearanceModel. -->
-    <attr name="md_shapeAppearance" format="reference" />
-    <!-- Shape appearance overlay style reference to be used to modify the shapeAppearance. -->
-    <attr name="md_shapeAppearanceOverlay" format="reference" />
-  </declare-styleable>
+  <attr name="md_shapeAppearanceSmallComponent" format="reference" />
 
+  <attr name="md_shapeAppearanceMediumComponent" format="reference" />
+
+  <!-- Shape appearance style reference for small components. -->
+  <attr name="md_shapeAppearanceLargeComponent" format="reference" />
+  <!-- Shape appearance style reference for medium components. -->
   <declare-styleable name="ShapeAppearance">
     <!-- Corner size to be used in the ShapeAppearance. All corners default to this value -->
     <attr name="md_cornerSize" format="dimension" />
@@ -61,12 +61,12 @@
       <enum name="md_cut" value="1" />
     </attr>
   </declare-styleable>
-
-  <!-- Shape appearance style reference for small components. -->
-  <attr name="md_shapeAppearanceSmallComponent" format="reference" />
-  <!-- Shape appearance style reference for medium components. -->
-  <attr name="md_shapeAppearanceMediumComponent" format="reference" />
   <!-- Shape appearance style reference for large components. -->
-  <attr name="md_shapeAppearanceLargeComponent" format="reference" />
+  <declare-styleable name="MaterialShape">
+    <!-- Shape appearance style reference to be used to construct a ShapeAppearanceModel. -->
+    <attr name="md_shapeAppearance" format="reference" />
+    <!-- Shape appearance overlay style reference to be used to modify the shapeAppearance. -->
+    <attr name="md_shapeAppearanceOverlay" format="reference" />
+  </declare-styleable>
 
 </resources>

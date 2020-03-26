@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -125,7 +125,7 @@ class TopicFragment : ServiceBoundSettingsFragment(), Savable {
     modelHelper.chat.bufferId.onNext(bufferId)
     modelHelper.bufferData.filter {
       it.info != null
-    }.firstElement().toLiveData().observe(this, Observer {
+    }.firstElement().toLiveData().observe(viewLifecycleOwner, Observer {
       chatline.setText(formatDeserializer.formatString(it?.description, true))
     })
 

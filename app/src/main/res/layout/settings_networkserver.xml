@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -31,18 +31,28 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <androidx.appcompat.widget.AppCompatImageView
-        style="@style/Widget.CoreSettings.PrimaryItemIcon"
-        app:srcCompat="@drawable/ic_server_network" />
-
       <TextView
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_networkserver_connection" />
+
+      <androidx.appcompat.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_server_network" />
     </LinearLayout>
 
     <LinearLayout
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
+
+      <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/ssl_enabled"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_networkserver_ssl_enabled" />
+
+      <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/ssl_verify"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_networkserver_ssl_verify" />
 
       <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CustomTextInput"
@@ -68,16 +78,6 @@
           android:inputType="number"
           tools:text="6667" />
       </com.google.android.material.textfield.TextInputLayout>
-
-      <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/ssl_enabled"
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_networkserver_ssl_enabled" />
-
-      <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/ssl_verify"
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_networkserver_ssl_verify" />
 
       <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CustomTextInput"
@@ -113,20 +113,6 @@
       android:id="@+id/proxy_group"
       style="@style/Widget.CoreSettings.DependentGroup"
       tools:visibility="visible">
-
-      <de.kuschku.ui.spinner.MaterialSpinnerLayout
-        style="@style/Widget.CustomSpinnerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/settings_networkserver_proxy_type">
-
-        <androidx.appcompat.widget.AppCompatSpinner
-          android:id="@+id/proxy_type"
-          style="@style/Widget.MaterialSpinner"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          tools:listitem="@layout/widget_spinner_item_material" />
-      </de.kuschku.ui.spinner.MaterialSpinnerLayout>
 
       <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CustomTextInput"
@@ -178,6 +164,20 @@
           android:inputType="textPassword"
           tools:text="thisisasecurepassword" />
       </com.google.android.material.textfield.TextInputLayout>
+
+      <de.kuschku.ui.spinner.MaterialSpinnerLayout
+        style="@style/Widget.CustomSpinnerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/settings_networkserver_proxy_type">
+
+        <androidx.appcompat.widget.AppCompatSpinner
+          android:id="@+id/proxy_type"
+          style="@style/Widget.MaterialSpinner"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          tools:listitem="@layout/widget_spinner_item_material" />
+      </de.kuschku.ui.spinner.MaterialSpinnerLayout>
     </LinearLayout>
   </LinearLayout>
 </androidx.core.widget.NestedScrollView>

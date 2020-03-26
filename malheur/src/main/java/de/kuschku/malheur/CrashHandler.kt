@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -20,7 +20,6 @@
 package de.kuschku.malheur
 
 import android.app.Application
-import android.os.Build
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
@@ -90,9 +89,7 @@ object CrashHandler {
         }
       } catch (e: Throwable) {
         e.printStackTrace()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-          throwable.addSuppressed(e)
-        }
+        throwable.addSuppressed(e)
       }
     }
 

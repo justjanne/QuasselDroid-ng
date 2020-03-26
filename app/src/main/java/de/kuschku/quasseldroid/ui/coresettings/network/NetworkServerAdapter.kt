@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.network
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -32,6 +33,7 @@ import de.kuschku.quasseldroid.util.helper.styledAttributes
 import de.kuschku.quasseldroid.util.helper.tint
 import java.util.*
 
+@SuppressLint("ClickableViewAccessibility", "ResourceType")
 class NetworkServerAdapter(
   private val clickListener: (INetwork.Server) -> Unit,
   private val dragListener: (NetworkServerViewHolder) -> Unit

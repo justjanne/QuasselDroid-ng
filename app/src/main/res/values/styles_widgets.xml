@@ -1,8 +1,8 @@
 <!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -21,7 +21,10 @@
 
   <style name="Widget" />
 
-  <style name="Widget.RtlConformTextView" parent="" />
+  <style name="Widget.RtlConformTextView" parent="">
+    <item name="android:textAlignment">gravity</item>
+    <item name="android:textDirection">locale</item>
+  </style>
 
   <style name="Widget.Button.Borderless" parent="Widget.MaterialComponents.Button.TextButton">
     <item name="android:textColor">?attr/colorTextPrimary</item>
@@ -142,7 +145,9 @@
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:orientation">vertical</item>
+    <item name="android:paddingStart">?listPreferredItemPaddingLeft</item>
     <item name="android:paddingLeft">?listPreferredItemPaddingLeft</item>
+    <item name="android:paddingEnd">?listPreferredItemPaddingRight</item>
     <item name="android:paddingRight">?listPreferredItemPaddingRight</item>
     <item name="android:paddingTop">8dp</item>
     <item name="android:paddingBottom">8dp</item>
@@ -154,14 +159,17 @@
     <item name="android:background">?selectableItemBackground</item>
     <item name="android:gravity">center_vertical</item>
     <item name="android:minHeight">?listPreferredItemHeightSmall</item>
+    <item name="android:paddingEnd">?listPreferredItemPaddingRight</item>
     <item name="android:paddingLeft">?listPreferredItemPaddingLeft</item>
     <item name="android:paddingRight">?listPreferredItemPaddingRight</item>
+    <item name="android:paddingStart">?listPreferredItemPaddingLeft</item>
   </style>
 
   <style name="Widget.CoreSettings.PrimaryItemGroup" parent="">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginLeft">72dp</item>
+    <item name="android:layout_marginStart">72dp</item>
     <item name="android:orientation">vertical</item>
   </style>
 
@@ -190,6 +198,7 @@
     <item name="android:layout_height">24dp</item>
     <item name="android:layout_gravity">center_vertical</item>
     <item name="android:layout_marginRight">32dp</item>
+    <item name="android:layout_marginEnd">32dp</item>
     <item name="tint">?colorTextSecondary</item>
   </style>
 
@@ -199,6 +208,7 @@
     <item name="android:orientation">vertical</item>
     <item name="android:visibility">gone</item>
     <item name="android:layout_marginLeft">56dp</item>
+    <item name="android:layout_marginStart">56dp</item>
   </style>
 
   <style name="Widget.CoreSettings.EditText" parent="Widget.RtlConformTextView">
@@ -207,11 +217,12 @@
     <item name="android:textColor">?colorTextPrimary</item>
   </style>
 
-  <style name="Widget.CoreSettings.EditTextSuffix" parent="">
+  <style name="Widget.CoreSettings.EditTextSuffix" parent="Widget.RtlConformTextView">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_gravity">bottom|end</item>
     <item name="android:layout_marginBottom">12dp</item>
+    <item name="android:layout_marginEnd">8dp</item>
     <item name="android:layout_marginRight">8dp</item>
     <item name="android:textColor">?colorTextSecondary</item>
   </style>
@@ -232,6 +243,7 @@
     <item name="android:paddingTop">10dp</item>
     <item name="android:paddingBottom">10dp</item>
     <item name="android:paddingRight">16dp</item>
+    <item name="android:paddingEnd">16dp</item>
     <item name="android:gravity">center_vertical</item>
     <item name="android:textAppearance">?android:textAppearanceMedium</item>
     <item name="android:textSize">14sp</item>
@@ -246,6 +258,7 @@
     <item name="android:paddingTop">10dp</item>
     <item name="android:paddingBottom">10dp</item>
     <item name="android:paddingRight">16dp</item>
+    <item name="android:paddingEnd">16dp</item>
     <item name="android:gravity">center_vertical</item>
     <item name="android:textAppearance">?android:textAppearanceMedium</item>
     <item name="android:textSize">14sp</item>
@@ -263,10 +276,11 @@
     <item name="android:minHeight">?listPreferredItemHeight</item>
     <item name="android:orientation">vertical</item>
     <item name="android:paddingBottom">8dp</item>
+    <item name="android:paddingEnd">?android:attr/listPreferredItemPaddingRight</item>
     <item name="android:paddingLeft">?android:attr/listPreferredItemPaddingLeft</item>
     <item name="android:paddingRight">?android:attr/listPreferredItemPaddingRight</item>
+    <item name="android:paddingStart">?android:attr/listPreferredItemPaddingLeft</item>
     <item name="android:paddingTop">8dp</item>
-    <item name="android:animateLayoutChanges">true</item>
   </style>
 
   <style name="Widget.Info.Header.Name" parent="Widget.RtlConformTextView">
@@ -305,8 +319,10 @@
     <item name="android:gravity">center_vertical</item>
     <item name="android:minHeight">48dp</item>
     <item name="android:paddingBottom">8dp</item>
+    <item name="android:paddingEnd">?android:attr/listPreferredItemPaddingRight</item>
     <item name="android:paddingLeft">?android:attr/listPreferredItemPaddingLeft</item>
     <item name="android:paddingRight">?android:attr/listPreferredItemPaddingRight</item>
+    <item name="android:paddingStart">?android:attr/listPreferredItemPaddingLeft</item>
     <item name="android:paddingTop">8dp</item>
     <item name="android:textColor">?colorTextPrimary</item>
     <item name="android:textStyle">bold</item>
@@ -319,10 +335,11 @@
     <item name="android:minHeight">?android:attr/listPreferredItemHeightSmall</item>
     <item name="android:orientation">vertical</item>
     <item name="android:paddingBottom">16dp</item>
+    <item name="android:paddingEnd">?android:attr/listPreferredItemPaddingRight</item>
     <item name="android:paddingLeft">?android:attr/listPreferredItemPaddingLeft</item>
     <item name="android:paddingRight">?android:attr/listPreferredItemPaddingRight</item>
+    <item name="android:paddingStart">?android:attr/listPreferredItemPaddingLeft</item>
     <item name="android:paddingTop">16dp</item>
-    <item name="android:animateLayoutChanges">true</item>
   </style>
 
   <style name="Widget.Info.Item.Content" parent="Widget.RtlConformTextView">
@@ -348,12 +365,14 @@
   </style>
 
   <style name="Widget.Subhead" parent="Widget.RtlConformTextView">
-    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:gravity">center_vertical</item>
     <item name="android:minHeight">?listPreferredItemHeightSmall</item>
+    <item name="android:paddingEnd">?listPreferredItemPaddingRight</item>
     <item name="android:paddingLeft">?listPreferredItemPaddingLeft</item>
     <item name="android:paddingRight">?listPreferredItemPaddingRight</item>
+    <item name="android:paddingStart">?listPreferredItemPaddingLeft</item>
     <item name="android:textColor">?colorAccent</item>
     <item name="android:textSize">14sp</item>
     <item name="android:textStyle">bold</item>
@@ -374,15 +393,12 @@
   </style>
 
   <!-- NavigationDrawerLayout -->
-  <declare-styleable name="NavigationDrawerLayout">
-    <attr name="insetBackground" />
-  </declare-styleable>
-
   <style name="Widget.NavigationDrawerLayout" parent="">
     <item name="insetBackground">#4000</item>
   </style>
 
   <attr name="icon" format="reference" />
+
   <attr name="text" format="string" />
   <attr name="mode">
     <enum name="none" value="0" />
@@ -391,6 +407,9 @@
     <enum name="progress" value="3" />
   </attr>
   <attr name="buttonText" format="string" />
+  <declare-styleable name="NavigationDrawerLayout">
+    <attr name="insetBackground" />
+  </declare-styleable>
 
   <!-- WarningBarView -->
   <declare-styleable name="WarningBarView">

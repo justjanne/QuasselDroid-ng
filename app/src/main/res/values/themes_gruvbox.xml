@@ -3,8 +3,8 @@
 <!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -20,8 +20,6 @@
   -->
 
 <resources>
-  <color name="gruvbox_light_background">#fbf1c7</color>
-
   <style name="Theme.ChatTheme.Gruvbox_Light" parent="Theme.ChatTheme.Light.Auto">
     <item name="colorPrimary">?attr/colorBackgroundCard</item>
     <item name="colorPrimaryDark">#b6ae91</item>
@@ -85,8 +83,6 @@
     <item name="colorTintInsecure">#9d0006</item>
   </style>
 
-  <color name="gruvbox_dark_background">#282828</color>
-
   <style name="Theme.ChatTheme.Gruvbox_Dark" parent="Theme.ChatTheme.Auto">
     <item name="colorPrimary">?attr/colorBackgroundCard</item>
     <item name="colorPrimaryDark">#3c3734</item>
@@ -149,4 +145,8 @@
     <item name="colorTintPartiallySecure">#d79921</item>
     <item name="colorTintInsecure">#cc241d</item>
   </style>
+
+  <color name="gruvbox_light_background">#fbf1c7</color>
+
+  <color name="gruvbox_dark_background">#282828</color>
 </resources>

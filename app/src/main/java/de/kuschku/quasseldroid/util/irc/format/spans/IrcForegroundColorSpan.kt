@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -26,11 +26,9 @@ import androidx.annotation.ColorInt
 sealed class IrcForegroundColorSpan<T : IrcForegroundColorSpan<T>>(@ColorInt color: Int) :
   ForegroundColorSpan(color), Copyable<T> {
 
-  override fun updateDrawState(ds: TextPaint?) {
-    if (ds != null) {
-      ds.color = foregroundColor
-      ds.linkColor = foregroundColor
-    }
+  override fun updateDrawState(ds: TextPaint) {
+    ds.color = foregroundColor
+    ds.linkColor = foregroundColor
   }
 
   class MIRC(private val mircColor: Int, @ColorInt color: Int) :
@@ -45,6 +43,10 @@ sealed class IrcForegroundColorSpan<T : IrcForegroundColorSpan<T>>(@ColorInt col
       is MIRC -> other.mircColor == mircColor
       else    -> false
     }
+
+    override fun hashCode(): Int {
+      return mircColor
+    }
   }
 
   class HEX(@ColorInt color: Int) :
@@ -57,6 +59,10 @@ sealed class IrcForegroundColorSpan<T : IrcForegroundColorSpan<T>>(@ColorInt col
     override fun equals(other: Any?) = when (other) {
       is HEX -> other.foregroundColor == foregroundColor
       else   -> false
+    }
+
+    override fun hashCode(): Int {
+      return foregroundColor
     }
   }
 }

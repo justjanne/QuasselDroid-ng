@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -30,16 +30,6 @@
   android:paddingRight="16dp"
   android:paddingBottom="4dp"
   android:textAppearance="?android:attr/textAppearanceListItemSmall">
-
-  <androidx.appcompat.widget.AppCompatImageView
-    android:id="@+id/status"
-    android:layout_width="@dimen/avatar_size_buffer"
-    android:layout_height="@dimen/avatar_size_buffer"
-    android:layout_gravity="center_vertical"
-    android:layout_marginEnd="16dp"
-    android:layout_marginRight="16dp"
-    android:contentDescription="@string/label_avatar"
-    tools:src="@tools:sample/avatars" />
 
   <LinearLayout
     android:layout_width="0dip"
@@ -77,11 +67,19 @@
   </LinearLayout>
 
   <androidx.appcompat.widget.AppCompatImageView
+    android:id="@+id/status"
+    android:layout_width="@dimen/avatar_size_buffer"
+    android:layout_height="@dimen/avatar_size_buffer"
+    android:layout_gravity="center_vertical"
+    android:layout_marginEnd="16dp"
+    android:contentDescription="@string/label_avatar"
+    tools:src="@tools:sample/avatars" />
+
+  <androidx.appcompat.widget.AppCompatImageView
     android:layout_width="24dp"
     android:layout_height="24dp"
     android:layout_gravity="center_vertical"
     android:layout_marginStart="16dp"
-    android:layout_marginLeft="16dp"
     android:contentDescription="@string/label_user_away"
     app:srcCompat="@drawable/ic_clock"
     app:tint="?colorTextSecondary" />
@@ -92,7 +90,6 @@
     android:layout_height="24dp"
     android:layout_gravity="center_vertical"
     android:layout_marginStart="16dp"
-    android:layout_marginLeft="16dp"
     android:contentDescription="@string/label_reorder"
     app:srcCompat="@drawable/ic_reorder"
     app:tint="?colorTextSecondary" />

@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -147,7 +147,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
           }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, SettingsItem<NetworkId>::name))
         }
       }
-    }.toLiveData().observe(this, Observer {
+    }.toLiveData().observe(viewLifecycleOwner, Observer {
       networkAdapter.submitList(it.orEmpty())
     })
 
@@ -166,7 +166,7 @@ class CoreSettingsFragment : ServiceBoundFragment() {
           }.sortedBy(SettingsItem<IdentityId>::name)
         }
       }
-    }.toLiveData().observe(this, Observer {
+    }.toLiveData().observe(viewLifecycleOwner, Observer {
       identityAdapter.submitList(it.orEmpty())
     })
 
@@ -181,17 +181,18 @@ class CoreSettingsFragment : ServiceBoundFragment() {
           SettingsItem(it.bufferViewId(), it.bufferViewName())
         }.sortedBy(SettingsItem<Int>::name)
       }
-    }.toLiveData().observe(this, Observer {
+    }.toLiveData().observe(viewLifecycleOwner, Observer {
       chatListAdapter.submitList(it.orEmpty())
     })
 
     var missingFeatureList: List<MissingFeature> = emptyList()
-    modelHelper.negotiatedFeatures.toLiveData().observe(this, Observer { (connected, features) ->
-      missingFeatureList = RequiredFeatures.features.filter {
-        it.feature !in features.enabledFeatures
-      }
-      featureContextMissing.visibleIf(connected && missingFeatureList.isNotEmpty())
-    })
+    modelHelper.negotiatedFeatures.toLiveData().observe(viewLifecycleOwner,
+                                                        Observer { (connected, features) ->
+                                                          missingFeatureList = RequiredFeatures.features.filter {
+                                                            it.feature !in features.enabledFeatures
+                                                          }
+                                                          featureContextMissing.visibleIf(connected && missingFeatureList.isNotEmpty())
+                                                        })
 
     featureContextMissing.setOnClickListener {
       MissingFeaturesDialog.Builder(requireActivity())

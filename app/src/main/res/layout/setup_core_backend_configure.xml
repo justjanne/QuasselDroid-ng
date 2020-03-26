@@ -1,8 +1,8 @@
 <!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -23,15 +23,15 @@
   android:orientation="vertical"
   android:padding="32dp">
 
-  <TextView
-    android:id="@+id/no_options_info"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/setup_core_backend_no_options" />
-
   <LinearLayout
     android:id="@+id/frame"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" />
+
+  <TextView
+    android:id="@+id/no_options_info"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/setup_core_backend_no_options" />
 </LinearLayout>

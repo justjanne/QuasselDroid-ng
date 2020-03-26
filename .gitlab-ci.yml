@@ -1,4 +1,4 @@
-image: "k8r.eu/justjanne/android-sdk:28-28.0.3"
+image: "k8r.eu/justjanne/android-sdk:29-29.0.3"
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
@@ -6,31 +6,31 @@ variables:
 cache:
   key: "$CI_PROJECT_NAME"
   paths:
-  - ".gradle/wrapper"
-  - ".gradle/caches"
+    - ".gradle/wrapper"
+    - ".gradle/caches"
 
 before_script:
-- "export GRADLE_USER_HOME=$(pwd)/.gradle"
-- "export ANDROID_HOME=/android-sdk-linux"
-- "export PATH=$PATH:/android-sdk-linux/platform-tools/"
-- "chmod +x ./gradlew"
+  - "export GRADLE_USER_HOME=$(pwd)/.gradle"
+  - "export ANDROID_HOME=/android-sdk-linux"
+  - "export PATH=$PATH:/android-sdk-linux/platform-tools/"
+  - "chmod +x ./gradlew"
 
-- "echo $SIGNING_KEYSTORE | base64 -d > /root/signing.keystore"
-- "echo $SIGNING_PROPERTIES | base64 -d > signing.properties"
+  - "echo $SIGNING_KEYSTORE | base64 -d > /root/signing.keystore"
+  - "echo $SIGNING_PROPERTIES | base64 -d > signing.properties"
 
 stages:
-- "build"
-- "test"
-- "deploy"
+  - "build"
+  - "test"
+  - "deploy"
 
 build:
   stage: "build"
   script:
-  - "./gradlew assembleRelease -x lintRelease -x lintVitalRelease"
-  - "cp app/build/outputs/apk/release/*.apk ."
+    - "./gradlew assembleRelease -x lintRelease -x lintVitalRelease"
+    - "cp app/build/outputs/apk/release/*.apk ."
   artifacts:
     paths:
-    - "*.apk"
+      - "*.apk"
 
 test:
   stage: "test"
@@ -46,16 +46,16 @@ deploy-local:
   cache: {}
   only:
     refs:
-    - "master"
+      - "master"
     variables:
-    - "$S3_CONFIG"
+      - "$S3_CONFIG"
   dependencies:
-  - "build"
+    - "build"
   script:
-  - "echo $S3_CONFIG | base64 -d > $HOME/.s3cfg"
-  - "export VERSION=$(ls *.apk)"
-  - "s3cmd put $VERSION s3://releases/quasseldroid-ng/$VERSION"
-  - "s3cmd cp s3://releases/quasseldroid-ng/$VERSION s3://releases/quasseldroid-ng/Quasseldroid-latest.apk"
+    - "echo $S3_CONFIG | base64 -d > $HOME/.s3cfg"
+    - "export VERSION=$(ls *.apk)"
+    - "s3cmd put $VERSION s3://releases/quasseldroid-ng/$VERSION"
+    - "s3cmd cp s3://releases/quasseldroid-ng/$VERSION s3://releases/quasseldroid-ng/Quasseldroid-latest.apk"
 
 deploy-beta:
   stage: "deploy"
@@ -63,12 +63,12 @@ deploy-beta:
   cache: {}
   only:
     refs:
-    - "master"
+      - "master"
     variables:
-    - "$FASTLANE_CONFIG"
+      - "$FASTLANE_CONFIG"
   dependencies:
-  - "build"
+    - "build"
   script:
-  - "echo $FASTLANE_CONFIG | base64 -d > $HOME/key.json"
-  - "export VERSION=$(ls *.apk)"
-  - "fastlane supply --apk $VERSION --track beta --json_key $HOME/key.json --package_name com.iskrembilen.quasseldroid --skip_upload_metadata=true --skip_upload_images=true --skip_upload_screenshots=true"
+    - "echo $FASTLANE_CONFIG | base64 -d > $HOME/key.json"
+    - "export VERSION=$(ls *.apk)"
+    - "fastlane supply --apk $VERSION --track beta --json_key $HOME/key.json --package_name com.iskrembilen.quasseldroid --skip_upload_metadata=true --skip_upload_images=true --skip_upload_screenshots=true"

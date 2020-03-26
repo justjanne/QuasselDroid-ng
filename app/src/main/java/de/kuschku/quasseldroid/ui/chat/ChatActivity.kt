@@ -703,9 +703,10 @@ class ChatActivity : ServiceBoundActivity(), SharedPreferences.OnSharedPreferenc
                                  Toast.LENGTH_LONG).show()
                 }
                 it is ProtocolVersionException     -> {
+                  val protocolVersion: Int = it.protocol.version.toInt()
                   Toast.makeText(this,
                                  getString(R.string.label_error_invalid_protocol_version,
-                                           it.protocol.version.toInt()),
+                                           protocolVersion),
                                  Toast.LENGTH_LONG).show()
                 }
                 it is ConnectException &&

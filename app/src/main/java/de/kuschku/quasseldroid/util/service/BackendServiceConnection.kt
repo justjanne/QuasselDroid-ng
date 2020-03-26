@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -55,7 +55,7 @@ class BackendServiceConnection : ServiceConnection, DefaultLifecycleObserver {
 
   override fun onServiceConnected(component: ComponentName?, binder: IBinder?) {
     when (component) {
-      ComponentName(context, QuasselService::class.java) ->
+      ComponentName(context!!, QuasselService::class.java) ->
         if (binder is QuasselBinder) {
           synchronized(this@BackendServiceConnection) {
             state = State.BOUND

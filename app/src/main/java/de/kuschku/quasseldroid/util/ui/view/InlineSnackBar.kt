@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -80,7 +80,7 @@ class InlineSnackBar : FrameLayout {
     button.setOnClickListener(listener)
   }
 
-  override fun setOnClickListener(listener: View.OnClickListener) {
+  override fun setOnClickListener(listener: OnClickListener?) {
     button.setOnClickListener(listener)
   }
 }

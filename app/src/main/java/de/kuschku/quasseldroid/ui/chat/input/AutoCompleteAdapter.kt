@@ -151,8 +151,8 @@ class AutoCompleteAdapter @Inject constructor(
 
         binding.avatar.visibleIf(messageSettings.showAvatars)
         binding.avatar.loadAvatars(data.avatarUrls,
-                           data.fallbackDrawable,
-                           crop = !messageSettings.squareAvatars)
+                                   data.fallbackDrawable,
+                                   crop = !messageSettings.squareAvatars)
       }
     }
 

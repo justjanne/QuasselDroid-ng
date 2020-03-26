@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -18,13 +18,17 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <plurals name="label_user_count">
+    <item quantity="one">%1$d utilizadores</item>
+    <item quantity="other">%1$d utilizadores</item>
+  </plurals>
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Um cliente baseado no Android para o cliente de IRC Quassel descentralizado.</string>
+
   <string name="app_description_long">Quassel é um cliente IRC distribuído e descentralizado, escrito usando C++ e Qt. O Quasseldroid é um cliente escrito puramente em kotlin para o núcleo Quassel, permitindo que você se ligue ao seu núcleo Quassel usando o seu telemóvel Android™.</string>
-
   <string name="connection_service_title">Serviço de Ligação</string>
-  <string name="connection_service_description">Mantém uma ligação com o seu núcleo para permitir notificações e transmissão de mensagens.</string>
 
+  <string name="connection_service_description">Mantém uma ligação com o seu núcleo para permitir notificações e transmissão de mensagens.</string>
   <string name="label_about">Sobre</string>
   <string name="label_accept">Aceitar</string>
   <string name="label_acknowledgements">Agradecimentos</string>
@@ -153,12 +157,8 @@
   <string name="label_who_long">Atualizar as informações de utilizador de todos os utilizadores</string>
   <string name="label_whois">Whois</string>
   <string name="label_whois_long">Atualizar informações de utilizador</string>
-  <string name="label_yes">Sim</string>
 
-  <plurals name="label_user_count">
-    <item quantity="one">%1$d utilizadores</item>
-    <item quantity="other">%1$d utilizadores</item>
-  </plurals>
+  <string name="label_yes">Sim</string>
 
   <string name="label_feature_synchronizedmarkerline">Necessário para sincronizar a última posição nos canais</string>
   <string name="label_feature_saslauthentication">Necessario para SASL</string>

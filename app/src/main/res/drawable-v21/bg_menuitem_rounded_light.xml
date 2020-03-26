@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -20,16 +20,16 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
   <item android:state_selected="true">
     <shape>
-      <solid android:color="@color/ripple_light" />
       <corners android:radius="@dimen/button_corner_radius" />
+      <solid android:color="@color/ripple_light" />
     </shape>
   </item>
   <item>
     <ripple android:color="@color/ripple_light">
       <item android:id="@android:id/mask">
         <shape>
-          <solid android:color="#fff" />
           <corners android:radius="@dimen/button_corner_radius" />
+          <solid android:color="#fff" />
         </shape>
       </item>
     </ripple>

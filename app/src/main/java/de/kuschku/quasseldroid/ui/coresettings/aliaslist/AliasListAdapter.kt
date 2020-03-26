@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.aliaslist
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
@@ -90,6 +91,7 @@ class AliasListAdapter @Inject constructor(
     holder.bind(data[position])
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   class AliasItemViewHolder(
     private val binding: SettingsAliaslistItemBinding,
     private val formatDeserializer: IrcFormatDeserializer,

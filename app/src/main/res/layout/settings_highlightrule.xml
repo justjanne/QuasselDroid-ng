@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -46,6 +46,16 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
 
+      <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/is_regex"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_highlightrule_regular_expression" />
+
+      <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/is_case_sensitive"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_highlightrule_case_sensitive" />
+
       <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
@@ -57,16 +67,6 @@
           style="@style/Widget.CoreSettings.EditText"
           tools:text="https://clbin.com/*.jpg*" />
       </com.google.android.material.textfield.TextInputLayout>
-
-      <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/is_regex"
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_highlightrule_regular_expression" />
-
-      <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/is_case_sensitive"
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_highlightrule_case_sensitive" />
 
       <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CustomTextInput"

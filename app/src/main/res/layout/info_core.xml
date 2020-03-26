@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -30,10 +30,6 @@
     android:animateLayoutChanges="true"
     android:orientation="vertical">
 
-    <TextView
-      style="@style/Widget.Info.Section"
-      android:text="@string/label_core_version" />
-
     <LinearLayout style="@style/Widget.Info.Item">
 
       <TextView
@@ -56,15 +52,6 @@
         android:text="@string/label_missing_features" />
     </LinearLayout>
 
-    <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="?colorDivider" />
-
-    <TextView
-      style="@style/Widget.Info.Section"
-      android:text="@string/label_core_uptime" />
-
     <LinearLayout
       android:id="@+id/uptime_container"
       style="@style/Widget.Info.Item"
@@ -76,15 +63,6 @@
         style="@style/Widget.Info.Item.Content"
         tools:text="30 minutes" />
     </LinearLayout>
-
-    <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="?colorDivider" />
-
-    <TextView
-      style="@style/Widget.Info.Section"
-      android:text="@string/label_core_security" />
 
     <LinearLayout
       style="@style/Widget.Info.Item"
@@ -108,7 +86,6 @@
           android:layout_height="24dp"
           android:layout_gravity="center"
           android:layout_marginStart="16dp"
-          android:layout_marginLeft="16dp"
           app:srcCompat="@drawable/ic_lock" />
 
       </LinearLayout>
@@ -132,10 +109,17 @@
         android:text="@string/label_info" />
     </LinearLayout>
 
-    <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="?colorDivider" />
+    <TextView
+      style="@style/Widget.Info.Section"
+      android:text="@string/label_core_version" />
+
+    <TextView
+      style="@style/Widget.Info.Section"
+      android:text="@string/label_core_uptime" />
+
+    <TextView
+      style="@style/Widget.Info.Section"
+      android:text="@string/label_core_security" />
 
     <TextView
       android:id="@+id/clients_title"
@@ -143,6 +127,21 @@
       android:text="@string/label_core_clients"
       android:visibility="gone"
       tools:visibility="visible" />
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="?colorDivider" />
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="?colorDivider" />
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="?colorDivider" />
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/clients"

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -32,13 +32,13 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <androidx.appcompat.widget.AppCompatImageView
-        style="@style/Widget.CoreSettings.PrimaryItemIcon"
-        app:srcCompat="@drawable/ic_message_bulleted" />
-
       <TextView
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_network_title" />
+
+      <androidx.appcompat.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_message_bulleted" />
     </LinearLayout>
 
     <LinearLayout
@@ -63,14 +63,6 @@
       android:orientation="vertical"
       android:visibility="visible">
 
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/servers"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        tools:itemCount="4"
-        tools:listitem="@layout/settings_network_server" />
-
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,6 +75,14 @@
           android:layout_height="wrap_content"
           android:text="@string/label_new_server" />
       </LinearLayout>
+
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/servers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:itemCount="4"
+        tools:listitem="@layout/settings_network_server" />
     </LinearLayout>
 
     <LinearLayout
@@ -90,13 +90,13 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <androidx.appcompat.widget.AppCompatImageView
-        style="@style/Widget.CoreSettings.PrimaryItemIcon"
-        app:srcCompat="@drawable/ic_account_card" />
-
       <TextView
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_network_identity" />
+
+      <androidx.appcompat.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_account_card" />
     </LinearLayout>
 
     <LinearLayout
@@ -191,15 +191,6 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       tools:visibility="visible">
 
-      <de.kuschku.quasseldroid.util.ui.view.InlineSnackBar
-        android:id="@+id/autoidentify_warning"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        app:buttonText="@string/settings_network_sasl_upgrade"
-        app:text="@string/settings_network_sasl_supported" />
-
       <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CustomTextInput"
         android:layout_width="match_parent"
@@ -227,6 +218,15 @@
           android:inputType="textPassword"
           tools:text="thisisasecurepassword" />
       </com.google.android.material.textfield.TextInputLayout>
+
+      <de.kuschku.quasseldroid.util.ui.view.InlineSnackBar
+        android:id="@+id/autoidentify_warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:buttonText="@string/settings_network_sasl_upgrade"
+        app:text="@string/settings_network_sasl_supported" />
     </LinearLayout>
 
     <LinearLayout
@@ -234,18 +234,23 @@
       android:layout_height="wrap_content"
       android:minHeight="48dp">
 
-      <androidx.appcompat.widget.AppCompatImageView
-        style="@style/Widget.CoreSettings.PrimaryItemIcon"
-        app:srcCompat="@drawable/ic_server_network" />
-
       <TextView
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
         android:text="@string/settings_network_connection" />
+
+      <androidx.appcompat.widget.AppCompatImageView
+        style="@style/Widget.CoreSettings.PrimaryItemIcon"
+        app:srcCompat="@drawable/ic_server_network" />
     </LinearLayout>
 
     <LinearLayout
       style="@style/Widget.CoreSettings.DependentGroup"
       android:visibility="visible">
+
+      <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/rejoin_channels"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_network_rejoin_channels" />
 
       <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CustomTextInput"
@@ -259,11 +264,6 @@
           android:inputType="textMultiLine"
           tools:text="/mode -x" />
       </com.google.android.material.textfield.TextInputLayout>
-
-      <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/rejoin_channels"
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_network_rejoin_channels" />
     </LinearLayout>
 
     <LinearLayout
@@ -290,6 +290,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_network_autoreconnect_interval_unit" />
+
         <com.google.android.material.textfield.TextInputLayout
           style="@style/Widget.CustomTextInput"
           android:layout_width="match_parent"
@@ -301,11 +305,12 @@
             style="@style/Widget.CoreSettings.EditText"
             tools:text="60" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-          style="@style/Widget.CoreSettings.EditTextSuffix"
-          android:text="@string/settings_network_autoreconnect_interval_unit" />
       </FrameLayout>
+
+      <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/autoreconnect_unlimited"
+        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
+        android:text="@string/settings_network_autoreconnect_unlimited" />
 
       <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.CustomTextInput"
@@ -318,11 +323,6 @@
           style="@style/Widget.CoreSettings.EditText"
           tools:text="20" />
       </com.google.android.material.textfield.TextInputLayout>
-
-      <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/autoreconnect_unlimited"
-        style="@style/Widget.CoreSettings.PrimaryItemSwitch"
-        android:text="@string/settings_network_autoreconnect_unlimited" />
     </LinearLayout>
 
     <LinearLayout
@@ -345,6 +345,27 @@
       style="@style/Widget.CoreSettings.DependentGroup"
       tools:visibility="visible">
 
+      <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+          style="@style/Widget.CoreSettings.EditTextSuffix"
+          android:text="@string/settings_network_customratelimits_interval_unit" />
+
+        <com.google.android.material.textfield.TextInputLayout
+          style="@style/Widget.CustomTextInput"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/settings_network_customratelimits_delay">
+
+          <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/customratelimits_delay"
+            style="@style/Widget.CoreSettings.EditText"
+            tools:text="2.20" />
+        </com.google.android.material.textfield.TextInputLayout>
+      </FrameLayout>
+
       <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/customratelimits_unlimited"
         style="@style/Widget.CoreSettings.PrimaryItemSwitch"
@@ -361,27 +382,6 @@
           style="@style/Widget.CoreSettings.EditText"
           tools:text="5" />
       </com.google.android.material.textfield.TextInputLayout>
-
-      <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.CustomTextInput"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:hint="@string/settings_network_customratelimits_delay">
-
-          <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/customratelimits_delay"
-            style="@style/Widget.CoreSettings.EditText"
-            tools:text="2.20" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-          style="@style/Widget.CoreSettings.EditTextSuffix"
-          android:text="@string/settings_network_customratelimits_interval_unit" />
-      </FrameLayout>
     </LinearLayout>
   </LinearLayout>
 </androidx.core.widget.NestedScrollView>

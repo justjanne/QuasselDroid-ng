@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -18,13 +18,17 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <plurals name="label_user_count">
+    <item quantity="one">%1$d user</item>
+    <item quantity="other">%1$d users</item>
+  </plurals>
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">An Android-based client for the decentralized Quassel IRC client.</string>
+
   <string name="app_description_long">Quassel is a distributed, decentralized IRC client, written using C++ and Qt. Quasseldroid is a pure-kotlin client for the Quassel core, allowing you to connect to your Quassel core using your Android™ phone.</string>
-
   <string name="connection_service_title">Connection Service</string>
-  <string name="connection_service_description">Keeps a connection to your core to allow for notifications, and to transmit messages.</string>
 
+  <string name="connection_service_description">Keeps a connection to your core to allow for notifications, and to transmit messages.</string>
   <string name="label_about">About</string>
   <string name="label_accept">Accept</string>
   <string name="label_acknowledgements">Acknowledgements</string>
@@ -155,12 +159,8 @@
   <string name="label_who_long">Update user information of all users</string>
   <string name="label_whois">Whois</string>
   <string name="label_whois_long">Update user information</string>
-  <string name="label_yes">Yes</string>
 
-  <plurals name="label_user_count">
-    <item quantity="one">%1$d user</item>
-    <item quantity="other">%1$d users</item>
-  </plurals>
+  <string name="label_yes">Yes</string>
 
   <string name="label_feature_synchronizedmarkerline">Required for synchronizing the last position in channels</string>
   <string name="label_feature_saslauthentication">Required for SASL</string>

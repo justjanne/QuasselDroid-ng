@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -18,15 +18,23 @@
   -->
 
 <resources>
+  <plurals name="message_netsplit_join">
+    <item quantity="one">Netsplit entre %1$s e %2$s terminou: %3$d utilizadores entraram: %4$s</item>
+    <item quantity="other">Netsplit entre %1$s e %2$s terminou: %3$d utilizadores entraram: %4$s</item>
+  </plurals>
+  <plurals name="message_netsplit_quit">
+    <item quantity="one">Netsplit entre %1$s and %2$s: %3$d user qui: %4$s</item>
+    <item quantity="other">Netsplit entre %1$s e %2$s: %3$d utilizadores saíram: %4$s</item>
+  </plurals>
   <string name="message_type_join">Entrar</string>
   <string name="message_type_part">Sair</string>
   <string name="message_type_quit">Desligar</string>
   <string name="message_type_nick">Nick</string>
   <string name="message_type_mode">Modo</string>
   <string name="message_type_topic">Tópico</string>
+
   <string name="message_format_copy">[%1$s] %2$s</string>
   <string name="message_format_copy_complex">[%1$s] &lt;%2$s&gt; %3$s</string>
-
   <string name="message_format_action">— %1$s%2$s %3$s</string>
   <string name="message_format_notice">[%1$s%2$s] %3$s</string>
   <string name="message_format_nick">%1$s%2$s é agora conhecido/a como %3$s%4$s</string>
@@ -41,12 +49,4 @@
   <string name="message_format_kick_2">%1$s foi kickado por %2$s%3$s (%4$s)</string>
   <string name="message_format_kill_1">%1$s foi killado por %2$s%3$s</string>
   <string name="message_format_kill_2">%1$s foi killado por %2$s%3$s (%4$s)</string>
-  <plurals name="message_netsplit_join">
-    <item quantity="one">Netsplit entre %1$s e %2$s terminou: %3$d utilizadores entraram: %4$s</item>
-    <item quantity="other">Netsplit entre %1$s e %2$s terminou: %3$d utilizadores entraram: %4$s</item>
-  </plurals>
-  <plurals name="message_netsplit_quit">
-    <item quantity="one">Netsplit entre %1$s and %2$s: %3$d user qui: %4$s</item>
-    <item quantity="other">Netsplit entre %1$s e %2$s: %3$d utilizadores saíram: %4$s</item>
-  </plurals>
 </resources>

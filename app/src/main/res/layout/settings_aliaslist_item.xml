@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -26,28 +26,14 @@
   android:orientation="horizontal"
   tools:showIn="@layout/settings_aliaslist">
 
-  <androidx.appcompat.widget.AppCompatImageView
-    android:id="@+id/handle"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_gravity="center_vertical"
-    android:paddingStart="?listPreferredItemPaddingLeft"
-    android:paddingLeft="?listPreferredItemPaddingLeft"
-    android:paddingEnd="32dp"
-    android:paddingRight="32dp"
-    app:srcCompat="@drawable/ic_reorder"
-    app:tint="?colorTextSecondary" />
-
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
     android:orientation="vertical"
     android:paddingStart="0dip"
-    android:paddingLeft="0dip"
     android:paddingTop="16dp"
     android:paddingEnd="?listPreferredItemPaddingRight"
-    android:paddingRight="?listPreferredItemPaddingRight"
     android:paddingBottom="16dp">
 
     <TextView
@@ -72,4 +58,14 @@
       tools:text="/quote away" />
 
   </LinearLayout>
+
+  <androidx.appcompat.widget.AppCompatImageView
+    android:id="@+id/handle"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:paddingStart="?listPreferredItemPaddingLeft"
+    android:paddingEnd="32dp"
+    app:srcCompat="@drawable/ic_reorder"
+    app:tint="?colorTextSecondary" />
 </LinearLayout>

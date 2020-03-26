@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -41,9 +41,7 @@
       android:layout_gravity="center_vertical"
       android:layout_weight="1"
       android:paddingStart="?listPreferredItemPaddingLeft"
-      android:paddingLeft="?listPreferredItemPaddingLeft"
       android:paddingEnd="0dip"
-      android:paddingRight="0dip"
       android:textAppearance="?android:attr/textAppearanceListItemSmall"
       tools:text="@sample/messages.json/data/sender" />
 
@@ -53,9 +51,7 @@
       android:layout_height="match_parent"
       android:layout_gravity="center_vertical"
       android:paddingStart="32dp"
-      android:paddingLeft="32dp"
       android:paddingEnd="?listPreferredItemPaddingRight"
-      android:paddingRight="?listPreferredItemPaddingRight"
       app:srcCompat="@drawable/ic_reorder"
       app:tint="?colorTextSecondary" />
   </LinearLayout>

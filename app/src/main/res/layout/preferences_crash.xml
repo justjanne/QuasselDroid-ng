@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -22,13 +22,6 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-  <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/list"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scrollbars="vertical"
-    tools:listitem="@layout/widget_crash" />
-
   <TextView
     android:id="@+id/crashes_empty"
     android:layout_width="match_parent"
@@ -37,12 +30,17 @@
     android:gravity="center"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:paddingStart="?listPreferredItemPaddingLeft"
-    android:paddingLeft="?listPreferredItemPaddingLeft"
     android:paddingEnd="?listPreferredItemPaddingRight"
-    android:paddingRight="?listPreferredItemPaddingRight"
     android:text="@string/label_crashes_empty"
     android:textColor="?colorTextSecondary"
     android:textStyle="italic"
     android:visibility="gone"
     tools:visibility="visible" />
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="vertical"
+    tools:listitem="@layout/widget_crash" />
 </FrameLayout>

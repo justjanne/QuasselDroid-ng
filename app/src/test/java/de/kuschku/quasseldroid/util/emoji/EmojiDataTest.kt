@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.util.emoji
 
+import android.os.Build
 import android.text.SpannableStringBuilder
 import de.kuschku.quasseldroid.QuasseldroidTest
 import org.junit.Assert.assertEquals
@@ -27,7 +28,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-@Config(application = QuasseldroidTest::class)
+@Config(application = QuasseldroidTest::class, sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
 class EmojiDataTest {
   @Test

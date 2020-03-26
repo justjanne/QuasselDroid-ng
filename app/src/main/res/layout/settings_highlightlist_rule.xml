@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -34,18 +34,6 @@
     android:gravity="center_vertical"
     android:minHeight="?listPreferredItemHeightSmall">
 
-    <androidx.appcompat.widget.AppCompatImageView
-      android:id="@+id/handle"
-      android:layout_width="wrap_content"
-      android:layout_height="match_parent"
-      android:layout_gravity="center_vertical"
-      android:paddingStart="?listPreferredItemPaddingRight"
-      android:paddingLeft="?listPreferredItemPaddingRight"
-      android:paddingEnd="32dp"
-      android:paddingRight="32dp"
-      app:srcCompat="@drawable/ic_reorder"
-      app:tint="?colorTextSecondary" />
-
     <LinearLayout
       android:layout_width="0dip"
       android:layout_height="wrap_content"
@@ -53,6 +41,87 @@
       android:orientation="vertical"
       android:paddingTop="16dp"
       android:paddingBottom="16dp">
+
+      <LinearLayout
+        android:id="@+id/name_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+          android:id="@+id/name"
+          style="@style/Widget.RtlConformTextView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:ellipsize="marquee"
+          android:orientation="vertical"
+          android:singleLine="true"
+          android:textAppearance="?android:textAppearanceMedium"
+          android:textColor="?colorTextPrimary"
+          android:textSize="16sp"
+          tools:text="(janne): " />
+
+        <androidx.appcompat.widget.AppCompatImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="8dp"
+          app:srcCompat="@drawable/ic_message_bulleted"
+          app:tint="?colorTextSecondary" />
+
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/sender_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+          android:id="@+id/sender"
+          style="@style/Widget.RtlConformTextView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:ellipsize="marquee"
+          android:singleLine="true"
+          android:textAppearance="?textAppearanceListItemSecondary"
+          android:textColor="?colorTextSecondary"
+          tools:text="TARS" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="8dp"
+          app:srcCompat="@drawable/ic_account"
+          app:tint="?colorTextSecondary" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/channel_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+          android:id="@+id/channel"
+          style="@style/Widget.RtlConformTextView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:ellipsize="marquee"
+          android:singleLine="true"
+          android:textAppearance="?textAppearanceListItemSecondary"
+          android:textColor="?colorTextSecondary"
+          tools:text="#yepityha" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="8dp"
+          app:srcCompat="@drawable/ic_channel"
+          app:tint="?colorTextSecondary" />
+      </LinearLayout>
 
       <TextView
         android:id="@+id/match_all"
@@ -71,100 +140,24 @@
         android:visibility="gone"
         tools:visibility="visible" />
 
-      <LinearLayout
-        android:id="@+id/name_row"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.AppCompatImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="8dp"
-          android:layout_marginRight="8dp"
-          app:srcCompat="@drawable/ic_message_bulleted"
-          app:tint="?colorTextSecondary" />
-
-        <TextView
-          android:id="@+id/name"
-          style="@style/Widget.RtlConformTextView"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
-          android:ellipsize="marquee"
-          android:orientation="vertical"
-          android:singleLine="true"
-          android:textAppearance="?android:textAppearanceMedium"
-          android:textColor="?colorTextPrimary"
-          android:textSize="16sp"
-          tools:text="(janne): " />
-
-      </LinearLayout>
-
-      <LinearLayout
-        android:id="@+id/sender_row"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.AppCompatImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="8dp"
-          android:layout_marginRight="8dp"
-          app:srcCompat="@drawable/ic_account"
-          app:tint="?colorTextSecondary" />
-
-        <TextView
-          android:id="@+id/sender"
-          style="@style/Widget.RtlConformTextView"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
-          android:ellipsize="marquee"
-          android:singleLine="true"
-          android:textAppearance="?textAppearanceListItemSecondary"
-          android:textColor="?colorTextSecondary"
-          tools:text="TARS" />
-      </LinearLayout>
-
-      <LinearLayout
-        android:id="@+id/channel_row"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.AppCompatImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="8dp"
-          android:layout_marginRight="8dp"
-          app:srcCompat="@drawable/ic_channel"
-          app:tint="?colorTextSecondary" />
-
-        <TextView
-          android:id="@+id/channel"
-          style="@style/Widget.RtlConformTextView"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
-          android:ellipsize="marquee"
-          android:singleLine="true"
-          android:textAppearance="?textAppearanceListItemSecondary"
-          android:textColor="?colorTextSecondary"
-          tools:text="#yepityha" />
-      </LinearLayout>
-
     </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+      android:id="@+id/handle"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_gravity="center_vertical"
+      android:paddingStart="?listPreferredItemPaddingRight"
+      android:paddingEnd="32dp"
+      app:srcCompat="@drawable/ic_reorder"
+      app:tint="?colorTextSecondary" />
 
     <androidx.appcompat.widget.SwitchCompat
       android:id="@+id/toggle"
       android:layout_width="wrap_content"
       android:layout_height="match_parent"
       android:paddingStart="?listPreferredItemPaddingLeft"
-      android:paddingLeft="?listPreferredItemPaddingLeft"
       android:paddingEnd="?listPreferredItemPaddingRight"
-      android:paddingRight="?listPreferredItemPaddingRight"
       android:text="" />
   </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

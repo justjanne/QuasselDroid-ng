@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -136,7 +136,7 @@ class HighlightListFragment : ServiceBoundSettingsFragment(), Savable, Changeabl
     modelHelper.highlightRuleManager
       .filter(Optional<HighlightRuleManager>::isPresent)
       .map(Optional<HighlightRuleManager>::get)
-      .toLiveData().observe(this, Observer {
+      .toLiveData().observe(viewLifecycleOwner, Observer {
         if (it != null) {
           if (this.ruleManager == null) {
             this.ruleManager = Pair(it, it.copy())
@@ -151,12 +151,14 @@ class HighlightListFragment : ServiceBoundSettingsFragment(), Savable, Changeabl
         }
       })
 
-    modelHelper.negotiatedFeatures.toLiveData().observe(this, Observer { (connected, features) ->
-      featureContextCoreSideHighlights.setMode(
-        if (!connected || features.hasFeature(ExtendedFeature.CoreSideHighlights)) WarningBarView.MODE_NONE
-        else WarningBarView.MODE_ICON
-      )
-    })
+    modelHelper.negotiatedFeatures.toLiveData().observe(viewLifecycleOwner,
+                                                        Observer { (connected, features) ->
+                                                          featureContextCoreSideHighlights.setMode(
+                                                            if (!connected || features.hasFeature(
+                                                                ExtendedFeature.CoreSideHighlights)) WarningBarView.MODE_NONE
+                                                            else WarningBarView.MODE_ICON
+                                                          )
+                                                        })
 
     return view
   }

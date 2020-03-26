@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   Quasseldroid - Quassel client for Android
 
-  Copyright (c) 2019 Janne Mareike Koschinski
-  Copyright (c) 2019 The Quassel Project
+  Copyright (c) 2020 Janne Mareike Koschinski
+  Copyright (c) 2020 The Quassel Project
 
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License version 3 as published
@@ -18,13 +18,17 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <plurals name="label_user_count">
+    <item quantity="one">%1$d utente</item>
+    <item quantity="other">%1$d utenti</item>
+  </plurals>
   <string name="app_name">Quasseldroid</string>
   <string name="app_description">Un client Android per utilizzare IRC in modo decentralizzato con Quassel.</string>
+
   <string name="app_description_long">Quassel è un client IRC distribuito e decentralizzato, scritto in C++ e Qt. Quasseldroid è un client per il core Quassel scritto interamente in Kotlin che ti offre la possibilità di connetterti ad un core Quassel con il tuo telefono Android™.</string>
-
   <string name="connection_service_title">Servizio di connessione</string>
-  <string name="connection_service_description">Mantiene la connessione al core per ricevere notifiche e trasmettere messaggi.</string>
 
+  <string name="connection_service_description">Mantiene la connessione al core per ricevere notifiche e trasmettere messaggi.</string>
   <string name="label_about">Informazioni</string>
   <string name="label_accept">Accetta</string>
   <string name="label_acknowledgements">Ringraziamenti</string>
@@ -155,12 +159,8 @@
   <string name="label_who_long">Aggiorna le informazioni per tutti gli utenti</string>
   <string name="label_whois">Whois</string>
   <string name="label_whois_long">Aggiorna le informazioni dell’utente</string>
-  <string name="label_yes">Sì</string>
 
-  <plurals name="label_user_count">
-    <item quantity="one">%1$d utente</item>
-    <item quantity="other">%1$d utenti</item>
-  </plurals>
+  <string name="label_yes">Sì</string>
 
   <string name="label_feature_synchronizedmarkerline">Necessario per sincronizzare l’ultima posizione nei canali</string>
   <string name="label_feature_saslauthentication">Necessario per SASL</string>

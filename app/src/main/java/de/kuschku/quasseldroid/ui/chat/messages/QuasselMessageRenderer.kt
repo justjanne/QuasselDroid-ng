@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -23,7 +23,6 @@ import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.LayerDrawable
-import android.os.Build
 import android.text.SpannableStringBuilder
 import android.util.TypedValue
 import android.view.Gravity
@@ -205,17 +204,13 @@ class QuasselMessageRenderer @Inject constructor(
       LinearLayout.LayoutParams(avatarContainerSize, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
         val margin = viewHolder.itemView.context.resources.getDimensionPixelSize(R.dimen.message_horizontal)
         setMargins(0, 0, margin, 0)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-          marginEnd = margin
-        }
+        marginEnd = margin
       }
     avatarPlaceholder?.layoutParams =
       LinearLayout.LayoutParams(avatarContainerSize, LinearLayout.LayoutParams.MATCH_PARENT).apply {
         val margin = viewHolder.itemView.context.resources.getDimensionPixelSize(R.dimen.message_horizontal)
         setMargins(0, 0, margin, 0)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-          marginEnd = margin
-        }
+        marginEnd = margin
       }
 
     viewHolder.messageContainer?.apply {

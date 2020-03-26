@@ -1,8 +1,8 @@
 /*
  * Quasseldroid - Quassel client for Android
  *
- * Copyright (c) 2019 Janne Mareike Koschinski
- * Copyright (c) 2019 The Quassel Project
+ * Copyright (c) 2020 Janne Mareike Koschinski
+ * Copyright (c) 2020 The Quassel Project
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3 as published
@@ -176,7 +176,7 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
       combineLatest(it.values.map(Identity::liveUpdates)).map {
         it.sortedBy(Identity::identityName)
       }
-    }.toLiveData().observe(this, Observer {
+    }.toLiveData().observe(viewLifecycleOwner, Observer {
       if (it != null) {
         val selectOriginal = identity.selectedItemId == Spinner.INVALID_ROW_ID
         identityAdapter.submitList(it)
@@ -193,7 +193,7 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
         .filter(Optional<ISession>::isPresent)
         .map(Optional<ISession>::get)
         .firstElement()
-        .toLiveData().observe(this, Observer {
+        .toLiveData().observe(viewLifecycleOwner, Observer {
           it?.let {
             update(Defaults.network(requireContext(), it.proxy), identityAdapter)
           }
@@ -204,7 +204,7 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
         .map(Optional<Network>::get)
         .firstElement()
         .toLiveData()
-        .observe(this, Observer {
+        .observe(viewLifecycleOwner, Observer {
           it?.let {
             update(it, identityAdapter)
           }
@@ -214,7 +214,7 @@ abstract class NetworkBaseFragment(private val initDefault: Boolean) :
         .map(Optional<Network>::get)
         .safeSwitchMap(Network::liveCaps)
         .toLiveData()
-        .observe(this, Observer {
+        .observe(viewLifecycleOwner, Observer {
           autoidentifyWarning.visibleIf(it.contains("sasl"))
         })
     }

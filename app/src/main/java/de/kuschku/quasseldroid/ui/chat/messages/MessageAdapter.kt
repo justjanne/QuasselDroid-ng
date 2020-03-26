@@ -44,7 +44,7 @@ import de.kuschku.quasseldroid.viewmodel.data.FormattedMessage
 import javax.inject.Inject
 
 class MessageAdapter @Inject constructor(
-  private val messageRenderer: QuasselMessageRenderer
+  private val messageRenderer: MessageRenderer
 ) : PagedListAdapter<DisplayMessage, MessageAdapter.QuasselMessageViewHolder>(
   object : DiffUtil.ItemCallback<DisplayMessage>() {
     override fun areItemsTheSame(oldItem: DisplayMessage, newItem: DisplayMessage) =

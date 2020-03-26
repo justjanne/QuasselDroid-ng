@@ -19,6 +19,7 @@
 
 package de.kuschku.quasseldroid.ui.coresettings.ignorelist
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ import de.kuschku.quasseldroid.databinding.SettingsIgnorelistItemBinding
 import de.kuschku.quasseldroid.util.helper.visibleIf
 import java.util.*
 
+@SuppressLint("ClickableViewAccessibility")
 class IgnoreListAdapter(
   private val clickListener: (IgnoreListManager.IgnoreListItem) -> Unit,
   private val dragListener: (IgnoreItemViewHolder) -> Unit

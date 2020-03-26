@@ -83,7 +83,7 @@ class AccountSelectionSlide : SlideFragment() {
         accountViewModel.accounts.removeObserver(this)
       }
     }
-    accountViewModel.accounts.observe(this, firstObserver)
+    accountViewModel.accounts.observe(viewLifecycleOwner, firstObserver)
     accountList.layoutManager = LinearLayoutManager(context)
     accountList.itemAnimator = DefaultItemAnimator()
     accountList.adapter = adapter
@@ -100,7 +100,7 @@ class AccountSelectionSlide : SlideFragment() {
 
     accountViewModel.accounts.zip(accountViewModel.selectedItem).map { (accounts, selected) ->
       accounts.map { Pair(it, it.id == selected) }
-    }.observe(this, Observer {
+    }.observe(viewLifecycleOwner, Observer {
       adapter.submitList((it ?: emptyList()) + Pair(null, false))
     })
 
